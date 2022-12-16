@@ -125,10 +125,10 @@ namespace o2
 		// Returns layout height weight with children
 		float GetHeightWeightWithChildren() const override;
 
-		// It is called when child widget was added
+		// Called when child widget was added
 		void OnChildAdded(Widget* child) override;
 
-		// It is called when child widget was removed
+		// Called when child widget was removed
 		void OnChildRemoved(Widget* child) override;
 
 		// Invokes required function for childs arranging

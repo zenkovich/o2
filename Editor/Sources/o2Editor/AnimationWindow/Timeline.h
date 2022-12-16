@@ -22,7 +22,7 @@ namespace Editor
 	class AnimationTimeline : public Widget, public CursorAreaEventsListener
 	{
 	public:
-		Function<void()> onViewChanged; // it is called when scroll or zoom were changed
+		Function<void()> onViewChanged; // Called when scroll or zoom were changed
 
 	public:
 		// Default constructor
@@ -177,22 +177,22 @@ namespace Editor
 		// Updates scroll bar handle size by view width
 		void UpdateScrollBarHandleSize();
 
-		// It is called when transformation was changed and updated. Updates scroll bar handle size
+		// Called when transformation was changed and updated. Updates scroll bar handle size
 		void OnTransformUpdated() override;
 
 		// Sets animation time by cursor screen position
 		void SetAnimationTimeByCursor(const Input::Cursor& cursor);
 
-		// It is called when right mouse button was pressed on this, begin scrolling
+		// Called when right mouse button was pressed on this, begin scrolling
 		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button stay down on this, scrolling
+		// Called when right mouse button stay down on this, scrolling
 		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was released (only when right mouse button pressed this at previous time), ends scrolling
+		// Called when right mouse button was released (only when right mouse button pressed this at previous time), ends scrolling
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// It is called when scrolling
+		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
 		friend class AnimationWindow;

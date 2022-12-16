@@ -33,7 +33,7 @@ namespace o2
 		// Runs timed task
 		void Run(const Function<void(float)>& update, float time);
 
-		// It is called function after delay
+		// Called function after delay
 		void Invoke(const Function<void()> func, float delay = 0.0f);
 
 		// Updates tasks and checking for done

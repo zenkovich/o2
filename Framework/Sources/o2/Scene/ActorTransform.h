@@ -448,7 +448,7 @@ namespace o2
 		// Beginning serialization callback, writes data
 		void OnSerialize(DataValue& node) const override;
 
-		// It is called when object was deserialized, reads data
+		// Called when object was deserialized, reads data
 		void OnDeserialized(const DataValue& node) override;
 
 		// Beginning serialization delta callback

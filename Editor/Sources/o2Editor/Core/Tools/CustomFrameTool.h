@@ -47,10 +47,10 @@ namespace Editor
 		// Returns toggle in menu panel icon name
 		String GetPanelIcon() const override;
 
-		// It is called when tool was enabled
+		// Called when tool was enabled
 		void OnEnabled() override;
 
-		// It is called when tool was disabled
+		// Called when tool was disabled
 		void OnDisabled() override;
 
 	private:

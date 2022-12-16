@@ -261,10 +261,10 @@ namespace o2
 		// Calculates and returns text basis
 		Basis CalculateTextBasis() const;
 
-		// It is called when color was changed
+		// Called when color was changed
 		void ColorChanged() override;
 
-		// It is called when basis was changed
+		// Called when basis was changed
 		void BasisChanged() override;
 
 		// Calling when deserializing

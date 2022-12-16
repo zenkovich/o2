@@ -61,19 +61,19 @@ namespace Editor
 
 
 	protected:
-		// It is called when apply button pressed, and applies changes to prototype
+		// Called when apply button pressed, and applies changes to prototype
 		void OnApplyPrototypePressed();
 
-		// It is called when revert button pressed and reverts actor to prototype
+		// Called when revert button pressed and reverts actor to prototype
 		void OnRevertPrototypePressed();
 
-		// It is called when break prototype buttons pressed and break prototype link
+		// Called when break prototype buttons pressed and break prototype link
 		void OnBreakPrototypePressed();
 
 		// Returns actor applying roots
 		Vector<Actor*> GetRootApplyActors();
 
-		// It is called when some property changed, stores action for undo
+		// Called when some property changed, stores action for undo
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue, 
 							   const Vector<DataDocument>& newValue);
 	};

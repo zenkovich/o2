@@ -96,7 +96,7 @@ namespace o2
 		// Returns position at beginning of dragging
 		Vec2F GetDraggingBeginPosition() const;
 
-		// It is called when handle beginning to drag from outside, for example from selection group. Updates drag position and drag offset
+		// Called when handle beginning to drag from outside, for example from selection group. Updates drag position and drag offset
 		void BeginDrag(const Vec2F& cursor);
 
 		// Sets is this selected
@@ -220,40 +220,40 @@ namespace o2
 		// Draws internal sprites with calculated screen position
 		void DrawInternal();
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released outside this(only when cursor pressed this at previous time)
+		// Called when cursor released outside this(only when cursor pressed this at previous time)
 		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor enters this object
+		// Called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was pressed on this, calls onRightButtonPressed event
+		// Called when right mouse button was pressed on this, calls onRightButtonPressed event
 		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was released (only when right mouse button pressed this at previous time), calls onRightButtonReleased event
+		// Called when right mouse button was released (only when right mouse button pressed this at previous time), calls onRightButtonReleased event
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
 		// Updates sprites positions by handle screen position
 		virtual void UpdateSpritesPositions();
 
-		// It is called when this was selected
+		// Called when this was selected
 		virtual void OnSelected();
 
-		// It is called when this was unselected
+		// Called when this was unselected
 		virtual void OnDeselected();
 
 		friend class ISelectableDragHandlesGroup;
@@ -269,7 +269,7 @@ namespace o2
 		Function<Vec2F(const Vec2F&)> widgetOffsetToLocalTransformFunc; // Widget offset relative to parent to local transformation function
 		Function<Vec2F(const Vec2F&)> localToWidgetOffsetTransformFunc; // Local position to widget offset relative to parent transformation function
 
-		Function<void()> onLayoutUpdated; // It is called when this layout were updated
+		Function<void()> onLayoutUpdated; // Called when this layout were updated
 
 	public:
 		// Default constructor
@@ -320,7 +320,7 @@ namespace o2
 		// Beginning serialization callback
 		void OnSerialize(DataValue& node) const override;
 
-		// It is called when deserialized
+		// Called when deserialized
 		void OnDeserialized(const DataValue& node) override;
 
 		// Completion deserialization delta callback; calls widget's function
@@ -358,19 +358,19 @@ namespace o2
 		virtual void SelectAll();
 
 	protected:
-		// It is called when selectable draggable handle was pressed
+		// Called when selectable draggable handle was pressed
 		virtual void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) { }
 
-		// It is called when selectable draggable handle was released
+		// Called when selectable draggable handle was released
 		virtual void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) { }
 
-		// It is called when selectable handle was began to drag
+		// Called when selectable handle was began to drag
 		virtual void OnHandleBeganDragging(DragHandle* handle) { }
 
-		// It is called when selectable handle moved, moves all selected handles position
+		// Called when selectable handle moved, moves all selected handles position
 		virtual void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) { }
 
-		// It is called when selectable handle completed changing
+		// Called when selectable handle completed changing
 		virtual void OnHandleCompletedChange(DragHandle* handle) { }
 
 		// Sets handle selected state without adding to selected handles array
@@ -418,19 +418,19 @@ namespace o2
 		Vector<DragHandle*> mHandles;
 
 	protected:
-		// It is called when selection is changed - some handle was added or removed from selection
+		// Called when selection is changed - some handle was added or removed from selection
 		virtual void OnSelectionChanged();
 
-		// It is called when selectable draggable handle was pressed
+		// Called when selectable draggable handle was pressed
 		void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) override;
 
-		// It is called when selectable draggable handle was released
+		// Called when selectable draggable handle was released
 		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) override;
 
-		// It is called when selectable handle was began to drag
+		// Called when selectable handle was began to drag
 		void OnHandleBeganDragging(DragHandle* handle) override;
 
-		// It is called when selectable handle moved, moves all selected handles position
+		// Called when selectable handle moved, moves all selected handles position
 		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) override;
 
 		friend class DragHandle;

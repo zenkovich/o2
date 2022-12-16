@@ -12,8 +12,8 @@ namespace o2
 	class AnimationPlayer: public IAnimation
 	{
 	public:
-		Function<void(IAnimationTrack::IPlayer*)> onTrackPlayerAdded;  // It is called when new track added
-		Function<void(IAnimationTrack::IPlayer*)> onTrackPlayerRemove; // It is called when new track removing
+		Function<void(IAnimationTrack::IPlayer*)> onTrackPlayerAdded;  // Called when new track added
+		Function<void(IAnimationTrack::IPlayer*)> onTrackPlayerRemove; // Called when new track removing
 
 	public:
 		// Default constructor
@@ -58,13 +58,13 @@ namespace o2
 		// Binds animation track
 		void BindTrack(const ObjectType* type, void* castedTarget, IAnimationTrack* track, bool errors);
 
-		// It is called when added new track in clip
+		// Called when added new track in clip
 		void OnClipTrackAdded(IAnimationTrack* track);
 
-		// It is called when removing track from clip
+		// Called when removing track from clip
 		void OnClipTrackRemove(IAnimationTrack* track);
 
-		// It is called when clip duration changed
+		// Called when clip duration changed
 		void OnClipDurationChanged(float duration);
 
 		friend class AnimationComponent;

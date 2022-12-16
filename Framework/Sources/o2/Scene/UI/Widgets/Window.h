@@ -132,19 +132,19 @@ namespace o2
 		RectF            mRightBottomDragAreaRect;   //	Right Bottom drag handle rect
 
 	protected:
-		// It is called when widget was selected
+		// Called when widget was selected
 		void OnFocused() override;
 
-		// Is is called when actor enabled in hierarchy, calls onOpened
+		// Called when actor enabled in hierarchy, calls onOpened
 		void OnEnabled() override;
 
-		// It is called when actor disabled in hierarchy, calls onCLosed
+		// Called when actor disabled in hierarchy, calls onCLosed
 		void OnDisabled()override;
 
-		// It is called when widget state was added
+		// Called when widget state was added
 		void OnStateAdded(WidgetState* state) override;
 
-		// It is called when visible was changed
+		// Called when visible was changed
 		void OnEnableInHierarchyChanged() override;
 
 		// Initializes context menu and options button
@@ -165,10 +165,10 @@ namespace o2
 		// Binds all drag handles interactable parameter to window visibility
 		void BindHandlesInteractableToVisibility();
 
-		// It is called when child widget was selected
+		// Called when child widget was selected
 		void OnChildFocused(Widget* child) override;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 	};
 }

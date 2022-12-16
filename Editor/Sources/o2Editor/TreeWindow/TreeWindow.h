@@ -93,76 +93,76 @@ namespace Editor
 		// Creates creation menu for UI layers
 		void InitUILayersCreateMenu();
 
-		// It is called after that all windows was created
+		// Called after that all windows was created
 		void PostInitializeWindow() override;
 
-		// It is called when search button pressed
+		// Called when search button pressed
 		void OnSearchPressed();
 
-		// It is called when list-tree toggle changed value
+		// Called when list-tree toggle changed value
 		void OnListTreeToggled(bool value);
 
-		// It is called when search field was changed
+		// Called when search field was changed
 		void OnSearchEdited(const WString& searchStr);
 
 		// Searches actors
 		void SearchObjectsRecursive(SceneEditableObject* object, const String& searchStr);
 
-		// It is called when tree node clicked by right button (For tree widget)
+		// Called when tree node clicked by right button (For tree widget)
 		void OnTreeRBPressed(TreeNode* node);
 
 		template<typename _type>
 		void CreateObject(const String& name);
 
-		// It is called when some object needs to be created and registers object insert action
+		// Called when some object needs to be created and registers object insert action
 		void OnCreateObject(SceneEditableObject* newObject);
 
-		// It is called when pressed "Create new" in context menu
+		// Called when pressed "Create new" in context menu
 		void OnContextCreateNewPressed();
 
-		// It is called when pressed "Create sprite" in context menu
+		// Called when pressed "Create sprite" in context menu
 		void OnContextCreateSprite();
 
-		// It is called when pressed "Create button" in context menu
+		// Called when pressed "Create button" in context menu
 		void OnContextCreateButton();
 
-		// It is called when pressed "Copy" in context menu
+		// Called when pressed "Copy" in context menu
 		void OnContextCopyPressed();
 
-		// It is called when pressed "Cut" in context menu
+		// Called when pressed "Cut" in context menu
 		void OnContextCutPressed();
 
-		// It is called when pressed "Paste" in context menu
+		// Called when pressed "Paste" in context menu
 		void OnContextPastePressed();
 
-		// It is called when pressed "Delete" in context menu
+		// Called when pressed "Delete" in context menu
 		void OnContextDeletePressed();
 
-		// It is called when pressed "Duplicate" in context menu
+		// Called when pressed "Duplicate" in context menu
 		void OnContextDuplicatePressed();
 
-		// It is called when pressed "Expand all" in context menu
+		// Called when pressed "Expand all" in context menu
 		void OnContextExpandAllPressed();
 
-		// It is called when pressed "Collapse all" in context menu
+		// Called when pressed "Collapse all" in context menu
 		void OnContextCollapseAllPressed();
 
-		// It is called when pressed "Lock/unlock" in context menu
+		// Called when pressed "Lock/unlock" in context menu
 		void OnContextLockPressed();
 
-		// It is called when pressed "Enable/disable" in context menu
+		// Called when pressed "Enable/disable" in context menu
 		void OnContextEnablePressed();
 
-		// It is called when view layers menu item toggled
+		// Called when view layers menu item toggled
 		void OnViewLayersToggled(bool view);
 
-		// It is called when view internal children menu item toggled
+		// Called when view internal children menu item toggled
 		void OnViewInternalChildrenToggled(bool view);
 
-		// It is called when actor was created
+		// Called when actor was created
 		void OnActorCreated(SceneEditableObject* object);
 
-		// It is called when actor was destroyed
+		// Called when actor was destroyed
 		void OnActorDestroyed(SceneEditableObject* object);
 
 		friend class SceneEditWidget;

@@ -19,11 +19,11 @@ namespace o2
 		GETTER(float, duration, GetDuration);   // Duration getter
 
 	public:
-		Function<void()> onChanged; // It is called when some Animation track has changed
+		Function<void()> onChanged; // Called when some Animation track has changed
 
-		Function<void(float)>            onDurationChange; // It is called when duration has changed
-		Function<void(IAnimationTrack*)> onTrackAdded;     // It is called when new track added
-		Function<void(IAnimationTrack*)> onTrackRemove;    // It is called when new track removing
+		Function<void(float)>            onDurationChange; // Called when duration has changed
+		Function<void(IAnimationTrack*)> onTrackAdded;     // Called when new track added
+		Function<void(IAnimationTrack*)> onTrackRemove;    // Called when new track removing
 
 	public:
 		// Default constructor
@@ -116,7 +116,7 @@ namespace o2
 		template<typename _type>
 		AnimationTrack<_type>* FindTrack(const String& path);
 
-		// It is called when some Animation track has changed
+		// Called when some Animation track has changed
 		void OnTrackChanged();
 
 		// Recalculates maximum duration by Animation tracks
@@ -125,7 +125,7 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 
-		// It is called when Animation track was added. Need to register value agent in animation target
+		// Called when Animation track was added. Need to register value agent in animation target
 		void OnTrackAdded(IAnimationTrack* track);
 
 		friend class Animate;

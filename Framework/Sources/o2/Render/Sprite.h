@@ -204,10 +204,10 @@ namespace o2
 		void(Sprite::*mMeshBuildFunc)(); // Mesh building function pointer (by mode)
 
 	protected:
-		// It is called when basis was changed
+		// Called when basis was changed
 		void BasisChanged() override;
 
-		// It is called when color was changed
+		// Called when color was changed
 		void ColorChanged() override;
 
 		// Updates mesh geometry
@@ -243,7 +243,7 @@ namespace o2
 		// Builds mesh for fill 360 counter clock wise mode
 		void BuildFill360CCWMesh();
 
-		// It is called when assets was rebuilded
+		// Called when assets was rebuilded
 		void ReloadImage();
 
 		friend class Render;

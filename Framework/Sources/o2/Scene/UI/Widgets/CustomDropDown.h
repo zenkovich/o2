@@ -17,7 +17,7 @@ namespace o2
 		GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
 
 	public:
-		Function<void()> onBeforeExpand; // It is called before opening 
+		Function<void()> onBeforeExpand; // Called before opening 
 
 		Function<void(int)>     onSelectedPos;   // Select item position event
 		Function<void(Widget*)> onSelectedItem;  // Select item event
@@ -131,32 +131,32 @@ namespace o2
 		// Moves widget's to delta and checks for clipping
 		void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea) override;
 
-		// It is called when cursor pressed on this. Sets state "pressed" to true
+		// Called when cursor pressed on this. Sets state "pressed" to true
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
-		// It is called onClicked if cursor is still above this
+		// Called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
+		// Called onClicked if cursor is still above this
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released outside this(only when cursor pressed this at previous time)
+		// Called when cursor released outside this(only when cursor pressed this at previous time)
 		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor enters this object. Sets state "select" to true
+		// Called when cursor enters this object. Sets state "select" to true
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object. Sets state "select" to false
+		// Called when cursor exits this object. Sets state "select" to false
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when visible was changed
+		// Called when visible was changed
 		void OnEnableInHierarchyChanged() override;
 
-		// It is called when item was selected in list
+		// Called when item was selected in list
 		void OnItemSelected();
 
-		// It is called when selection was changed
+		// Called when selection was changed
 		virtual void OnSelectionChanged();
 	};
 }

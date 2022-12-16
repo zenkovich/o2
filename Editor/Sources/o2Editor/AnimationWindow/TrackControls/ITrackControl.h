@@ -54,10 +54,10 @@ namespace Editor
 		// Inserts new key at time
 		virtual void InsertNewKey(float time);
 
-		// It is called when group of keys began drag
+		// Called when group of keys began drag
 		virtual void BeginKeysDrag();
 
-		// It is called when group of keys completed drag
+		// Called when group of keys completed drag
 		virtual void EndKeysDrag();
 
 		// Serialize key with specified uid into data node

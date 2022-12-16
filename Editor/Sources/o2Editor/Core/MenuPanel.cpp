@@ -65,8 +65,8 @@ namespace Editor
 
 		mMenuPanel->AddItem("Edit/---");
 
-		mMenuPanel->AddItem("Edit/Project/Physics", [&]() { 
-			o2EditorPropertiesWindow.SetTarget(&o2Config.physics); 
+		mMenuPanel->AddItem("Edit/Project/Physics", [&]() {
+			o2EditorPropertiesWindow.SetTarget(&o2Config.physics);
 		});
 
 		// VIEW
@@ -82,7 +82,7 @@ namespace Editor
 
 		// BUILD
 		mMenuPanel->AddItem("Run/Connect scripts debugger", [&]() { o2Scripts.ConnectDebugger(); }, ImageAssetRef(), ShortcutKeys(VK_F5));
-		mMenuPanel->AddItem("Run/---"); 
+		mMenuPanel->AddItem("Run/---");
 		mMenuPanel->AddItem("Run/Build & Run", [&]() { OnBuildAndRunPressed(); }, ImageAssetRef(), ShortcutKeys('R', true));
 		mMenuPanel->AddItem("Run/Build", [&]() { OnBuildPressed(); }, ImageAssetRef(), ShortcutKeys('R', true, true));
 
@@ -94,11 +94,22 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/Curve editor test", [&]() { OnCurveEditorTestPressed(); });
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
 		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
-		mMenuPanel->AddItem("Debug/Add property", [&]() { 
+		mMenuPanel->AddItem("Debug/Add property", [&]() {
 			static float xx = 0, yy = 1;
-			ForcePopEditorScopeOnStack scope; 
-			auto prop = o2UI.CreateWidget<FloatProperty>("with caption"); 
+			ForcePopEditorScopeOnStack scope;
+			auto prop = o2UI.CreateWidget<FloatProperty>("with caption");
 			prop->SetValueAndPrototypeProxy({ { mnew PointerValueProxy(&xx), mnew PointerValueProxy(&yy) } });
+		});
+
+		mMenuPanel->AddItem("Debug/Fix scene", [&]() {
+			Function<void(Actor*)> fixActor = [&fixActor](Actor* actor) {
+				actor->GetComponents<DrawableComponent>().ForEach([](DrawableComponent* x) { x->SetDrawingDepthInheritFromParent(false); });
+
+				actor->GetChildren().ForEach([&](Actor* x) { fixActor(x); });
+			};
+
+			for (auto actor : o2Scene.GetRootActors())
+				fixActor(actor);
 		});
 
 		mMenuPanel->AddToggleItem("Debug/View editor UI tree", false, [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
@@ -109,7 +120,8 @@ namespace Editor
 	}
 
 	MenuPanel::~MenuPanel()
-	{}
+	{
+	}
 
 	Widget* MenuPanel::AddItem(const o2::MenuPanel::Item& item)
 	{
@@ -117,8 +129,8 @@ namespace Editor
 	}
 
 	void MenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
-								 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
-								 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+							const ImageAssetRef& icon /*= ImageAssetRef()*/,
+							const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		mMenuPanel->AddItem(path, clickFunc, icon, shortcut);
 	}

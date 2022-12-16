@@ -49,13 +49,13 @@ namespace Editor
 		DockableWindow* mWindow = nullptr; // Dockable UI window 
 
 	protected:
-		// It is called after that all windows was created
+		// Called after that all windows was created
 		virtual void PostInitializeWindow() {}
 
-		// It is called when editor window has opened
+		// Called when editor window has opened
 		virtual void OnOpened() {}
 
-		// It is called when editor window has closed
+		// Called when editor window has closed
 		virtual void OnClosed() {}
 
 		friend class WindowsManager;

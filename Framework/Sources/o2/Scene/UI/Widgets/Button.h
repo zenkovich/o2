@@ -68,38 +68,38 @@ namespace o2
 		Sprite* mIconSprite = nullptr;  // Icon layer sprite
 
 	protected:
-		// It is called when cursor pressed on this. Sets state "pressed" to true
+		// Called when cursor pressed on this. Sets state "pressed" to true
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
-		// It is called onClicked if cursor is still above this
+		// Called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
+		// Called onClicked if cursor is still above this
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor enters this object. Sets state "select" to true
+		// Called when cursor enters this object. Sets state "select" to true
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object. Sets state "select" to false
+		// Called when cursor exits this object. Sets state "select" to false
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when key was pressed
+		// Called when key was pressed
 		void OnKeyPressed(const Input::Key& key) override;
 
-		// It is called when key was released
+		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
 
-		// It is called when layer added and updates drawing sequence
+		// Called when layer added and updates drawing sequence
 		void OnLayerAdded(WidgetLayer* layer) override;
 
-		// It is called when visible was changed
+		// Called when visible was changed
 		void OnEnableInHierarchyChanged() override;
 
-		// It is called when listener becomes interactable, disabled "inactive" state when exists
+		// Called when listener becomes interactable, disabled "inactive" state when exists
 		void OnBecomeInteractable() override;
 
-		// It is called when listener stops interacting, enables "inactive" state when exists
+		// Called when listener stops interacting, enables "inactive" state when exists
 		void OnBecomeNotInteractable() override;
 	};
 }

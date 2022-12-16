@@ -73,16 +73,16 @@ namespace Editor
 		// Draws tool
 		void DrawScreen() override;
 
-		// It is called when tool was enabled
+		// Called when tool was enabled
 		void OnEnabled() override;
 
-		// It is called when tool was disabled
+		// Called when tool was disabled
 		void OnDisabled() override;
 
-		// It is called when scene objects was changed
+		// Called when scene objects was changed
 		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
 
-		// It is called when objects selection was changed
+		// Called when objects selection was changed
 		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
 
 		// Updates ring and angle meshes
@@ -91,28 +91,28 @@ namespace Editor
 		// Calculates rotate pivot in objects center
 		void CalcPivotByObjectsCenter();
 
-		// It is called when pivot handle moved
+		// Called when pivot handle moved
 		void OnPivotDragHandleMoved(const Vec2F& position);
 
 		// Returns is point inside rotate ring
 		bool IsPointInRotateRing(const Vec2F& point) const;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when key was pressed
+		// Called when key was pressed
 		void OnKeyPressed(const Input::Key& key) override;
 
-		// It is called when key stay down during frame
+		// Called when key stay down during frame
 		void OnKeyStayDown(const Input::Key& key) override;
 
 		// Rotates objects on angle

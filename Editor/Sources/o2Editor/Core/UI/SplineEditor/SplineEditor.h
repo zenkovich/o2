@@ -74,7 +74,7 @@ namespace Editor
 		// Returns true when input events can be handled by down listeners
 		bool IsInputTransparent() const override;
 
-		// It is called when spline was updated and need to refresh handles
+		// Called when spline was updated and need to refresh handles
 		void OnSplineChanged();
 
 	protected:
@@ -148,49 +148,49 @@ namespace Editor
 		// Returns is transform frame visible. it will be visible when 2 or more main handles was selected
 		bool IsTransformFrameVisible() const;
 
-		// It is called when transform frame was transformed
+		// Called when transform frame was transformed
 		void OnTransformFrameTransformed(const Basis& basis);
 
-		// It is called when beginning transforming some handles. Stores selected keys before changing
+		// Called when beginning transforming some handles. Stores selected keys before changing
 		void OnTransformBegin();
 
-		// It is called when transform completed. Checks that selected keys changed, creates action for undo/redo
+		// Called when transform completed. Checks that selected keys changed, creates action for undo/redo
 		void OnTransformCompleted();
 
-		// It is called when previous support handle moved. Updates position of support point, checks symmetric
+		// Called when previous support handle moved. Updates position of support point, checks symmetric
 		void OnPrevHandleMoved(int i, const Vec2F& pos, PointHandles* handles);
 
-		// It is called when next support handle moved. Updates position of support point, checks symmetric
+		// Called when next support handle moved. Updates position of support point, checks symmetric
 		void OnNextHandleMoved(int i, const Vec2F& pos, PointHandles* handles);
 
-		// It is called when main handle moved. Updates support handles positions also
+		// Called when main handle moved. Updates support handles positions also
 		void OnMainHandleMoved(int i, const Vec2F& pos, PointHandles* handles);
 
-		// It is called when previous support handle was released without dragging, just clicking; removes support handle
+		// Called when previous support handle was released without dragging, just clicking; removes support handle
 		void OnPrevHandleReleasedNoDrag(int i, PointHandles* handles);
 
-		// It is called when next support handle was released without dragging, just clicking; removes support handle
+		// Called when next support handle was released without dragging, just clicking; removes support handle
 		void OnNextHandleReleasedNoDrag(int i, PointHandles* handles);
 
-		// It is called when position handle was released without dragging, just clicking; removes both support handles
+		// Called when position handle was released without dragging, just clicking; removes both support handles
 		void OnMainHandleReleasedNoDrag(int i, PointHandles* handles);
 
-		// It is called when cursor double clicked; creates new point
+		// Called when cursor double clicked; creates new point
 		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when selection is changed - some handle was added or removed from selection; checks visible handles
+		// Called when selection is changed - some handle was added or removed from selection; checks visible handles
 		void OnSelectionChanged() override;
 
-		// It is called when key was released
+		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
 	};
 }

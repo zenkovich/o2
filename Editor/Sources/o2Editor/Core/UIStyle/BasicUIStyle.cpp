@@ -1257,6 +1257,33 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "expand");
 	}
 
+	void BasicUIStyleBuilder::RebuildExpandDownButton()
+	{
+		Button* sample = mnew Button();
+		sample->layout->minSize = Vec2F(5, 5);
+		sample->name = "expandBtn";
+
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_Down_icn.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Down_icn_select.png"),
+											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Down_icn_pressed.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "expand down");
+	}
+
 	void BasicUIStyleBuilder::RebuildExpandWhiteButton()
 	{
 		Button* sample = mnew Button();

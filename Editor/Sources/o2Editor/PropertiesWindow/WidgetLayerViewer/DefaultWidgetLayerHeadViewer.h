@@ -49,7 +49,7 @@ namespace Editor
 		BooleanProperty* mLockProperty = nullptr;
 
 	protected:
-		// It is called when some property changed, stores action for undo
+		// Called when some property changed, stores action for undo
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue, 
 							   const Vector<DataDocument>& newValue);
 	};

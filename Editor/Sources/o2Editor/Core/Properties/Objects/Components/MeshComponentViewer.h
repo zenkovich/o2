@@ -58,10 +58,10 @@ namespace Editor
 		// Returns toggle in menu panel icon name
 		String GetPanelIcon() const override;
 
-		// It is called when tool was enabled
+		// Called when tool was enabled
 		void OnEnabled() override;
 
-		// It is called when tool was disabled
+		// Called when tool was disabled
 		void OnDisabled() override;
 
 		// Returns true if point is in this object
@@ -106,19 +106,19 @@ namespace Editor
 		// Returns is transform frame visible. it will be visible when 2 or more main handles was selected
 		bool IsTransformFrameVisible() const;
 
-		// It is called when transform frame was transformed
+		// Called when transform frame was transformed
 		void OnTransformFrameTransformed(const Basis& basis);
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor double clicked; creates new point
+		// Called when cursor double clicked; creates new point
 		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 	};
 
@@ -170,10 +170,10 @@ namespace Editor
 		Button* mFitAndCenterButton = nullptr; // Fit and centerize button
 
 	protected:
-		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
 		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// It is called when viewer is refreshed
+		// Called when viewer is refreshed
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
 		// Enable viewer event function
@@ -182,7 +182,7 @@ namespace Editor
 		// Disable viewer event function
 		void OnDisabled() override;
 
-		// It is called when button pressed
+		// Called when button pressed
 		void FitAndCenterize();
 	};
 }

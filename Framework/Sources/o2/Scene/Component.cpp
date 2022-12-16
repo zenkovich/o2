@@ -14,7 +14,7 @@ namespace o2
 	}
 
 	Component::Component(const Component& other) :
-		mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mId(Math::Random()),
+		mEnabled(other.mEnabled), mEnabledInHierarchy(other.mEnabled), mId(Math::Random()),
 		actor(this), enabled(this), enabledInHierarchy(this)
 	{
 		ActorRefResolver::ComponentCreated(this);
@@ -80,7 +80,7 @@ namespace o2
 
 	bool Component::IsEnabledInHierarchy() const
 	{
-		return mResEnabled;
+		return mEnabledInHierarchy;
 	}
 
 	Component* Component::GetPrototypeLink() const
@@ -132,16 +132,16 @@ namespace o2
 
 	void Component::UpdateEnabled()
 	{
-		bool lastResEnabled = mResEnabled;
+		bool lastEnabledInHierarchy = mEnabledInHierarchy;
 
 		if (mOwner)
-			mResEnabled = mEnabled && mOwner->mResEnabledInHierarchy;
+			mEnabledInHierarchy = mEnabled && mOwner->mResEnabledInHierarchy;
 		else
-			mResEnabled = mEnabled;
+			mEnabledInHierarchy = mEnabled;
 
-		if (lastResEnabled != mResEnabled)
+		if (lastEnabledInHierarchy != mEnabledInHierarchy)
 		{
-			if (mResEnabled)
+			if (mEnabledInHierarchy)
 				OnEnabled();
 			else
 				OnDisabled();
@@ -185,6 +185,8 @@ namespace o2
 
 		if (mOwner)
 			OnTransformUpdated();
+
+		OnParentChanged(nullptr);
 	}
 
 	void Component::OnAddToScene()

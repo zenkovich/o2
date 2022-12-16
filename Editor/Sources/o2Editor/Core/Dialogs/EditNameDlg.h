@@ -51,13 +51,13 @@ namespace Editor
 		// Initializes edit box and buttons
 		void InitializeControls();
 
-		// It is called when Ok button pressed, calls mOnCompletedCallback and closes window
+		// Called when Ok button pressed, calls mOnCompletedCallback and closes window
 		void OnOkPressed();
 
-		// It is called when Cancel button pressed, calls mOnCancelledCallback and closes window
+		// Called when Cancel button pressed, calls mOnCancelledCallback and closes window
 		void OnCancelPressed();
 
-		// It is called when cursor pressed outside from window
+		// Called when cursor pressed outside from window
 		void OnCursorPressedOutside();
 	};
 }

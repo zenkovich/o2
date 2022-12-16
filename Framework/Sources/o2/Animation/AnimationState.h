@@ -52,13 +52,13 @@ namespace o2
 		float               mWeight = 1.0f;   // State weight @SERIALIZABLE @EDITOR_PROPERTY
 
 	protected:
-		// It is called when animation changed from editor
+		// Called when animation changed from editor
 		void OnAnimationChanged();
 
-		// It is called when player has added new track
+		// Called when player has added new track
 		void OnTrackPlayerAdded(IAnimationTrack::IPlayer* trackPlayer);
 
-		// It is called when player is removing track
+		// Called when player is removing track
 		void OnTrackPlayerRemove(IAnimationTrack::IPlayer* trackPlayer);
 
 		friend class AnimationComponent;

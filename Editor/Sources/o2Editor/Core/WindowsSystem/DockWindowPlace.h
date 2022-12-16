@@ -71,10 +71,10 @@ namespace Editor
 		RectF            mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 
 	protected:
-		// It is called when cursor drag handle was moved
+		// Called when cursor drag handle was moved
 		void OnDragHandleMinMoved(const Vec2F& delta);
 
-		// It is called when cursor drag handle was moved
+		// Called when cursor drag handle was moved
 		void OnDragHandleMaxMoved(const Vec2F& delta);
 
 		// Checks interactable. If childs more than 0 this will be not interactable

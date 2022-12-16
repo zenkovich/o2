@@ -71,7 +71,7 @@ namespace o2
 		// Loads and returns asset by path
 		AssetInfo* LoadAssetNode(const String& path, AssetInfo* parent, const TimeStamp& time);
 
-		// It is called when deserializing node, combine all nodes in mAllNodes
+		// Called when deserializing node, combine all nodes in mAllNodes
 		void OnDeserialized(const DataValue& node) override;
 	};
 }

@@ -67,10 +67,10 @@ namespace o2
 		Vector<Widget*> mItemsPool; // Items pool
 
 	protected:
-		// It is called when object was deserialized and trying to reattach states animations target
+		// Called when object was deserialized and trying to reattach states animations target
 		void OnDeserialized(const DataValue& node) override;
 
-		// It is called when visible was changed
+		// Called when visible was changed
 		void OnEnableInHierarchyChanged() override;
 
 		// Calculates scroll area

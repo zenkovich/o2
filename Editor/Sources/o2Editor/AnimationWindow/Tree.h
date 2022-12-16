@@ -39,7 +39,7 @@ namespace Editor
 		// Sets animation and updates tree structure
 		void SetAnimation(AnimationClip* animation);
 
-		// It is called when animation changed, checks count of animation tracks, updates tree structure if needed
+		// Called when animation changed, checks count of animation tracks, updates tree structure if needed
 		void OnAnimationChanged();
 
 		// Sets width of tree part
@@ -122,10 +122,10 @@ namespace Editor
 		// Updates visible nodes (calculates range and initializes nodes), updates tree width on visible nodes
 		void UpdateVisibleNodes() override;
 
-		// It is called when tree node clicked by right button, opening context menu
+		// Called when tree node clicked by right button, opening context menu
 		void OnNodeRBClick(TreeNode* node) override;
 
-		// It is called when list of selected objects was changed
+		// Called when list of selected objects was changed
 		void OnNodesSelectionChanged(Vector<void*> objects) override;
 
 		// Gets tree node from pool or creates new, in editor scope
@@ -162,7 +162,7 @@ namespace Editor
 		// Sets width of tree part and control part
 		void SetTreeWidth(float width);
 
-		// it is called from handles sheet, when user double clicked, creates new key under cursor
+		// Called from handles sheet, when user double clicked, creates new key under cursor
 		void OnDoubleClicked(const Input::Cursor& cursor);
 
 		// Returns create menu category in editor
@@ -187,7 +187,7 @@ namespace Editor
 		static Map<const Type*, Vector<ITrackControl*>> mTrackControlsCache; // Shared track controls cache
 
 	protected:
-		// It is called on deserialization, initializes controls
+		// Called on deserialization, initializes controls
 		void OnDeserialized(const DataValue& node) override;
 
 		// initializes controls and widgets

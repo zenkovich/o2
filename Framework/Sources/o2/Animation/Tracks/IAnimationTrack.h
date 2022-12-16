@@ -64,7 +64,7 @@ namespace o2
 		String path; // Animated property path @SERIALIZABLE
 
 	public:
-		Function<void()> onKeysChanged; // It is called when keys has changed
+		Function<void()> onKeysChanged; // Called when keys has changed
 
 	public:
 		// Default constructor
@@ -76,11 +76,11 @@ namespace o2
 		// Copy operator
 		IAnimationTrack& operator=(const IAnimationTrack& other);
 
-		// It is called when beginning keys batch change. After this call all keys modifications will not be update approximation
+		// Called when beginning keys batch change. After this call all keys modifications will not be update approximation
 		// Used for optimizing many keys change
 		virtual void BeginKeysBatchChange() {}
 
-		// It is called when keys batch change completed. Updates approximation
+		// Called when keys batch change completed. Updates approximation
 		virtual void CompleteKeysBatchingChange() {}
 
 		// Returns track duration

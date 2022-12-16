@@ -44,7 +44,7 @@ namespace Editor
 		IObjectPropertiesViewer* mViewer = nullptr; // Actor properties viewer
 
 	protected:
-		// It is called when some property changed, marks Actor as changed and calls default Undo create callback
+		// Called when some property changed, marks Actor as changed and calls default Undo create callback
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
 							   const Vector<DataDocument>& after);
 

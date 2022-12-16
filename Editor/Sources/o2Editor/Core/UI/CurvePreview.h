@@ -65,7 +65,7 @@ namespace Editor
 		// Redraws image texture
 		void Redraw();
 
-		// It is called when curve keys changed, sets need redraw to true
+		// Called when curve keys changed, sets need redraw to true
 		void OnCurveChanged();
 	};
 }

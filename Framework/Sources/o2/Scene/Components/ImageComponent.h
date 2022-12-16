@@ -73,7 +73,7 @@ namespace o2
 		using Sprite::onDraw;
 
 	protected:
-		// It is called when actor's transform was changed
+		// Called when actor's transform was changed
 		void OnTransformUpdated() override;
 
 		// Sets owner actor

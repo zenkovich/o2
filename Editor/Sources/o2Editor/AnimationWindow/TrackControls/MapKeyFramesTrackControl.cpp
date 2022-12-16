@@ -40,7 +40,7 @@ namespace Editor
 
 		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
 
-		for (auto child : mDrawingChildren)
+		for (auto child : mChildrenInheritedDepth)
 			child->Draw();
 
 		o2Render.DisableScissorTest();

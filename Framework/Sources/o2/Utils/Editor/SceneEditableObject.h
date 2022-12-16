@@ -127,22 +127,22 @@ namespace o2
 		// Returns is that type of object can be deleted from editor
 		virtual bool IsSupportsDeleting() const;
 
-		// It is called when something changed in this object
+		// Called when something changed in this object
 		virtual void OnChanged();
 
-		// It is called when actor's locking was changed
+		// Called when actor's locking was changed
 		virtual void OnLockChanged();
 
-		// It is called when actor's name was changed
+		// Called when actor's name was changed
 		virtual void OnNameChanged();
 
-		// It is called when child changed
+		// Called when child changed
 		virtual void OnChildrenChanged();
 
-		// It is called before making prototype from this object
+		// Called before making prototype from this object
 		virtual void BeginMakePrototype() const {}
 
-		// It is called before instantiate from this object
+		// Called before instantiate from this object
 		virtual void BeginInstantiatePrototype() const {}
 
 		SERIALIZABLE(SceneEditableObject);

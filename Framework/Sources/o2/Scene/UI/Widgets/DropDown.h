@@ -70,10 +70,10 @@ namespace o2
 		Text* mSelectedText = nullptr; // Selected text label, draws separately
 
 	protected:
-		// It is called when selected item index was changed
+		// Called when selected item index was changed
 		void OnSelectionChanged() override;
 
-		// It is called when layer added and updates drawing sequence, searches selected text drawable
+		// Called when layer added and updates drawing sequence, searches selected text drawable
 		void OnLayerAdded(WidgetLayer* layer) override;
 	};
 }

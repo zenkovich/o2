@@ -18,13 +18,13 @@ namespace o2
 		virtual ~KeyboardEventsListener();
 
 	protected:
-		// It is called when key was pressed
+		// Called when key was pressed
 		virtual void OnKeyPressed(const Input::Key& key);
 
-		// It is called when key was released
+		// Called when key was released
 		virtual void OnKeyReleased(const Input::Key& key);
 
-		// It is called when key stay down during frame
+		// Called when key stay down during frame
 		virtual void OnKeyStayDown(const Input::Key& key);
 
 		friend class EventSystem;

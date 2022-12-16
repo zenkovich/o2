@@ -50,7 +50,7 @@ namespace Editor
 		// Draws widget
 		void Draw() override;
 
-		// It is called when required to redraw content. Sets flag and redraws at next frame
+		// Called when required to redraw content. Sets flag and redraws at next frame
 		void NeedRedraw();
 
 		// Updates drawables, states and widget
@@ -129,7 +129,7 @@ namespace Editor
 		// Return color for multiple selected objects
 		const Color4& GetManyObjectsSelectionColor() const;
 
-		// It is called when scene was changed and needs to redraw
+		// Called when scene was changed and needs to redraw
 		void OnSceneChanged();
 
 		// Returns true if point is in this object
@@ -163,58 +163,58 @@ namespace Editor
 		// Returns true if some handle hovered or pressed by cursor
 		bool IsHandleWorking(const Input::Cursor& cursor) const;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor moved on this (or moved outside when this was pressed)
+		// Called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// It is called when cursor enters this object
+		// Called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was pressed on this
+		// Called when right mouse button was pressed on this
 		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button stay down on this
+		// Called when right mouse button stay down on this
 		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
+		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// It is called when middle mouse button was pressed on this
+		// Called when middle mouse button was pressed on this
 		void OnCursorMiddleMousePressed(const Input::Cursor& cursor) override;
 
-		// It is called when middle mouse button stay down on this
+		// Called when middle mouse button stay down on this
 		void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) override;
 
-		// It is called when middle mouse button was released (only when middle mouse button pressed this at previous time)
+		// Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
 		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
 
-		// It is called when scrolling
+		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
-		// It is called when key was pressed
+		// Called when key was pressed
 		void OnKeyPressed(const Input::Key& key) override;
 
-		// It is called when key was released
+		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
 
-		// It is called when key stay down during frame
+		// Called when key stay down during frame
 		void OnKeyStayDown(const Input::Key& key) override;
 
-		// It is called when changed selected objects from this
+		// Called when changed selected objects from this
 		void OnObjectsSelectedFromThis();
 
 		// Redraws scene texture
@@ -229,13 +229,13 @@ namespace Editor
 		// Binds to scene tree selection window
 		void BindSceneTree();
 
-		// It is called when scene tree selection changed
+		// Called when scene tree selection changed
 		void OnTreeSelectionChanged(Vector<SceneEditableObject*> selectedObjects);
 
 		// Updates top selected objects
 		void UpdateTopSelectedObjects();
 
-		// It is called when objects was changed
+		// Called when objects was changed
 		void OnSceneChanged(Vector<SceneEditableObject*> objects);
 
 		// Clears objects selection
@@ -247,16 +247,16 @@ namespace Editor
 		// Selects object
 		void SelectObjectWithoutAction(SceneEditableObject* object, bool additive = true);
 
-		// It is called when some selectable listeners was dropped to this
+		// Called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was entered to this area
+		// Called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was dragged above this area
+		// Called when some drag listeners was dragged above this area
 		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was exited from this area
+		// Called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
 		friend class DeleteAction;

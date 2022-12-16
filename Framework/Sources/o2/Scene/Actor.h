@@ -342,7 +342,7 @@ namespace o2
 		SceneLayer* mLayer = nullptr;       // Scene layer. Empty when actor isn't on scene
 
 		Actor* mParent = nullptr; // Parent actor 
-		Vector<Actor*> mChildren;         // Children actors 
+		Vector<Actor*> mChildren; // Children actors 
 
 		Vector<Component*> mComponents; // Components vector 
 
@@ -357,7 +357,7 @@ namespace o2
 
 		Vector<ActorRef*> mReferences; // References to this actor
 
-		mutable ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. It is called when copying actor and calls on actor or component copying
+		mutable ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. Called when copying actor and calls on actor or component copying
 
 	protected:
 		// Base actor constructor with transform
@@ -424,52 +424,52 @@ namespace o2
 		// Sets parent
 		void SetParentProp(Actor* actor);
 
-		// Is is called when actor has added to scene
+		// Called when actor has added to scene
 		virtual void OnAddToScene();
 
-		// It is called when actor has removed from scene
+		// Called when actor has removed from scene
 		virtual void OnRemoveFromScene();
 
-		// It is called on first update
+		// Called on first update
 		virtual void OnStart();
 
-		// Is is called on update with frame dt
+		// Called on update with frame dt
 		virtual void OnUpdate(float dt);
 
-		// It is called on fixed update with fixed dt
+		// Called on fixed update with fixed dt
 		virtual void OnFixedUpdate(float dt);
 
-		// Is is called when actor enabled in hierarchy
+		// Called when actor enabled in hierarchy
 		virtual void OnEnabled();
 
-		// It is called when actor disabled in hierarchy
+		// Called when actor disabled in hierarchy
 		virtual void OnDisabled();
 
-		// It is called when result enable was changed
+		// Called when result enable was changed
 		virtual void OnEnableInHierarchyChanged();
 
-		// It is called when transformation was updated
+		// Called when transformation was updated
 		virtual void OnTransformUpdated();
 
-		// It is called when transformation was changed 
+		// Called when transformation was changed 
 		virtual void OnTransformChanged();
 
-		// It is called when parent changed
+		// Called when parent changed
 		virtual void OnParentChanged(Actor* oldParent);
 
-		// It is called when child actor was added
+		// Called when child actor was added
 		virtual void OnChildAdded(Actor* child);
 
-		// It is called when child actor was removed
+		// Called when child actor was removed
 		virtual void OnChildRemoved(Actor* child);
 
-		// It is called when layer was changed
+		// Called when layer was changed
 		virtual void OnLayerChanged(SceneLayer* oldLayer);
 
-		// It is called when new component has added to actor
+		// Called when new component has added to actor
 		virtual void OnComponentAdded(Component* component);
 
-		// It is called when component going to be removed from actor
+		// Called when component going to be removed from actor
 		virtual void OnComponentRemoving(Component* component);
 
 #if IS_SCRIPTING_SUPPORTED
@@ -571,16 +571,16 @@ namespace o2
 		// Returns transform pivot
 		Vec2F GetPivot() const override;
 
-		// It is called when some changed in actor
+		// Called when some changed in actor
 		void OnChanged() override;
 
-		// It is called when actor's locking was changed
+		// Called when actor's locking was changed
 		void OnLockChanged() override;
 
-		// It is called when actor's name was changed
+		// Called when actor's name was changed
 		void OnNameChanged() override;
 
-		// It is called when child changed
+		// Called when child changed
 		void OnChildrenChanged() override;
 
 	protected:
@@ -604,10 +604,10 @@ namespace o2
 		// Collects differences between this and prototype
 		virtual void GetDifferences(ActorDifferences& differences) const OPTIONAL_OVERRIDE;
 
-		// It is called before making prototype from this object
+		// Called before making prototype from this object
 		void BeginMakePrototype() const override;
 
-		// It is called before instantiate from this object
+		// Called before instantiate from this object
 		void BeginInstantiatePrototype() const override;
 
 		// Not using prototype setter
@@ -714,8 +714,8 @@ namespace o2
 		Vector<_type*> res;
 		for (auto comp : mComponents)
 		{
-			if (comp->GetType().IsBasedOn(TypeOf(_type)))
-				res.Add(comp);
+			if (auto typeComp = dynamic_cast<_type*>(comp))
+				res.Add(typeComp);
 		}
 
 		return res;

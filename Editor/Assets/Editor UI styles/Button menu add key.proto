@@ -29,18 +29,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 30.0,
-                                    "y": 30.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mImageAsset": {
                                     "id": "445f076b10cc17e92b30538f1c3c0bfc",
                                     "path": "ui/UI4_panel_button.png"
@@ -74,18 +62,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 30.0,
-                                    "y": 30.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -127,18 +103,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 30.0,
-                                    "y": 30.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -180,18 +144,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 30.0,
-                                    "y": 30.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -241,18 +193,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 20.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mImageAsset": {
                                     "id": "79bc326019263d237f137a627d8c1f45",
                                     "path": "ui/UI4_add_key.png"
@@ -306,7 +246,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "0fc341840c2f4f124cf838293d663c44"
+                                    "mId": "11c331e9409f6af347a6799819133dc0"
                                 }
                             }
                         }
@@ -353,7 +293,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "103e3121434878ab79e358320b1a7770"
+                                    "mId": "516e5ea53a325f5912d935876ef77422"
                                 }
                             }
                         }
@@ -400,7 +340,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "797365f05e8f7f250f121b3f7ad145e1"
+                                    "mId": "6c053517572f7acd16e07d8a0f6f28d9"
                                 }
                             }
                         }

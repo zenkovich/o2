@@ -90,19 +90,19 @@ namespace o2
 		// Searches rigid body in parent hierarchy
 		RigidBody* FindRigidBody() const;
 
-		// It is called when shape has changed, updates fixture with new shape
+		// Called when shape has changed, updates fixture with new shape
 		void OnShapeChanged();
 
 		// Returns shape with relative position and angle
 		virtual b2Shape* GetShape(const Basis& transform);
 
-		// It is called when transformation was changed 
+		// Called when transformation was changed 
 		void OnTransformChanged() override;
 
-		// It is called when actor was included to scene
+		// Called when actor was included to scene
 		void OnAddToScene() override;
 
-		// It is called when actor was excluded from scene
+		// Called when actor was excluded from scene
 		void OnRemoveFromScene() override;
 
 		friend class PhysicsWorld;

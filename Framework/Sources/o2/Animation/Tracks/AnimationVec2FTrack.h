@@ -36,11 +36,11 @@ namespace o2
 		Vec2F GetValue(float position, bool direction, int& cacheTimeKey, int& cacheTimeKeyApprox,
 					   int& cacheSplineKey, int& cacheSplineKeyApprox) const;
 
-		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
+		// Called when beginning keys batch change. After this call all keys modifications will not be update pproximation
 		// Used for optimizing many keys change
 		void BeginKeysBatchChange() override;
 
-		// It is called when keys batch change completed. Updates approximation
+		// Called when keys batch change completed. Updates approximation
 		void CompleteKeysBatchingChange() override;
 
 		// Returns track duration
@@ -154,7 +154,7 @@ namespace o2
 		};
 
 	protected:
-		// It is called when curve updated keys and calculated duration
+		// Called when curve updated keys and calculated duration
 		void OnCurveChanged();
 	};
 }

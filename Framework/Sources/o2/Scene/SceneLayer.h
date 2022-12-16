@@ -54,10 +54,10 @@ namespace o2
 		// Unregisters actor in list
 		void UnregisterActor(Actor* actor);
 
-		// Is is called when actor has enabled
+		// Called when actor has enabled
 		void OnActorEnabled(Actor* actor);
 
-		// Is is called when actor has disabled
+		// Called when actor has disabled
 		void OnActorDisabled(Actor* actor);
 
 		// Registers drawable object
@@ -66,13 +66,13 @@ namespace o2
 		// Unregisters drawable object
 		void UnregisterDrawable(ISceneDrawable* drawable);
 
-		// It is called when drawable object depth was changed and sorts all drawable component
+		// Called when drawable object depth was changed and sorts all drawable component
 		void OnDrawableDepthChanged(ISceneDrawable* drawable);
 
-		// It is called when object was enabled
+		// Called when object was enabled
 		void OnDrawableEnabled(ISceneDrawable* drawable);
 
-		// It is called when object was enabled
+		// Called when object was enabled
 		void OnDrawableDisabled(ISceneDrawable* drawable);
 
 		// Sets drawable order as last of all objects with same depth

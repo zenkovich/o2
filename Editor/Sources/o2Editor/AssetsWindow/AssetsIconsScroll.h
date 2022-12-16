@@ -163,37 +163,37 @@ namespace Editor
 		// Updates visible items
 		void UpdateVisibleItems() override;
 
-		// It is called when widget was selected
+		// Called when widget was selected
 		void OnFocused() override;
 
-		// It is called when widget was deselected
+		// Called when widget was deselected
 		void OnUnfocused() override;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor moved on this (or moved outside when this was pressed)
+		// Called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
+		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// It is called when scrolling
+		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
-		// It is called when key was released
+		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
 
-		// It is called when assets selection was changed
+		// Called when assets selection was changed
 		void OnAssetsSelected();
 
 		// Updates cutting assets
@@ -229,34 +229,34 @@ namespace Editor
 		// Returns asset icon if visible
 		AssetIcon* FindVisibleIcon(const AssetInfo* info);
 
-		// It is called when asset icon double clicked, starting editing name
+		// Called when asset icon double clicked, starting editing name
 		void OnAssetDblClick(AssetIcon* icon);
 
 		// Starts asset icon renaming, calls onCompletedwhen completed
 		void StartAssetRenaming(AssetIcon* icon, const String& name, const Function<void(const String&)>& onCompleted);
 
-		// It is called when context copy pressed
+		// Called when context copy pressed
 		void OnContextCopyPressed();
 
-		// It is called when context cut pressed
+		// Called when context cut pressed
 		void OnContextCutPressed();
 
-		// It is called when context paste pressed
+		// Called when context paste pressed
 		void OnContextPastePressed();
 
-		// It is called when context delete pressed
+		// Called when context delete pressed
 		void OnContextDeletePressed();
 
-		// It is called when context open pressed
+		// Called when context open pressed
 		void OnContextOpenPressed();
 
-		// It is called when context show in explorer pressed
+		// Called when context show in explorer pressed
 		void OnContextShowInExplorerPressed();
 
-		// It is called when context create asset pressed
+		// Called when context create asset pressed
 		void OnContextCreateAssetPressed(const Type* assetType);
 
-		// It is called when context create folder pressed
+		// Called when context create folder pressed
 		void OnContextCreateFolderPressed();
 
 		// Instantiates dragging assets
@@ -278,7 +278,7 @@ namespace Editor
 		// Instantiate actor from actor asset
 		Actor* InstantiateAsset(const ActorAssetRef& asset);
 
-		// It is called when assets was changed from properties
+		// Called when assets was changed from properties
 		void OnAssetsPropertiesChanged();
 
 		// Checks preloaded assets for saving
@@ -307,29 +307,29 @@ namespace Editor
 		// Removes selectable object from group
 		void RemoveSelectableObject(SelectableDragableObject* object) override;
 
-		// It is called when selectable draggable object was released
+		// Called when selectable draggable object was released
 		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) override;
 
-		// It is called when selectable object was began to drag
+		// Called when selectable object was began to drag
 		void OnSelectableObjectBeganDragging(SelectableDragableObject* object) override;
 
 // DragDropArea implementation
-		// It is called when some drag listeners was entered to this area
+		// Called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was dragged above this area
+		// Called when some drag listeners was dragged above this area
 		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was exited from this area
+		// Called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some selectable listeners was dropped to this
+		// Called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when dropped dragged scene tree nodes selected and started dragging from scene tree
+		// Called when dropped dragged scene tree nodes selected and started dragging from scene tree
 		void OnDroppedFromSceneTree(SceneTree* sceneTree);
 
-		// It is called when dropped dragged assets icons selected and started dragging from this
+		// Called when dropped dragged assets icons selected and started dragging from this
 		void OnDroppedFromThis();
 
 		// Begins dragging selected items

@@ -69,7 +69,7 @@ namespace o2
 		// Checks widget clipping by area
 		void CheckClipping(const RectF& clipArea) override;
 
-		// It is called when visible was changed
+		// Called when visible was changed
 		void OnEnableInHierarchyChanged() override;
 
 		// Fits position by size and screen
@@ -87,13 +87,13 @@ namespace o2
 		// Special drawing for contexts
 		virtual void SpecialDraw();
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released outside this(only when cursor pressed this at previous time)
+		// Called when cursor released outside this(only when cursor pressed this at previous time)
 		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
-		// It is called when key was released
+		// Called when key was released
 		void OnKeyPressed(const Input::Key& key) override;
 
 		friend class ContextMenu;

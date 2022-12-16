@@ -58,16 +58,16 @@ namespace Editor
 		ComponentsTree* mTree = nullptr;      // Components tree
 
 	private:
-		// It is called when add button pressed. Adds selected component to target actors from viewer
+		// Called when add button pressed. Adds selected component to target actors from viewer
 		void OnAddPressed();
 
 		// Creates component by type
 		void CreateComponent(const ObjectType* objType);
 
-		// It is called when tree node was double clicked
+		// Called when tree node was double clicked
 		void OnNodeDblClick(TreeNode* nodeWidget);
 
-		// It is called when key was released. When returns has pressed, component is creating
+		// Called when key was released. When returns has pressed, component is creating
 		void OnKeyReleased(const Input::Key& key) override;
 	};
 	
@@ -177,7 +177,7 @@ namespace Editor
 		ComponentsTree* mTree = nullptr;
 
 	private:
-		// It is called on deserialization, initializes controls
+		// Called on deserialization, initializes controls
 		void OnDeserialized(const DataValue& node) override;
 
 		// initializes controls and widgets

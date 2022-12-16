@@ -118,13 +118,13 @@ namespace o2
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts() override;
 
-		// It is called when new layer was added. Here searching bar, back and handle layers
+		// Called when new layer was added. Here searching bar, back and handle layers
 		void OnLayerAdded(WidgetLayer* layer) override;
 
-		// It is called when deserialized
+		// Called when deserialized
 		void OnDeserialized(const DataValue& node) override;
 
-		// It is called when visible was changed
+		// Called when visible was changed
 		void OnEnableInHierarchyChanged() override;
 
 		// Updates bar, back and handle layers layout by value
@@ -136,25 +136,25 @@ namespace o2
 		// Sets value and calls callback onUserChange
 		void SetValueFromUser(float value);
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor moved on this (or moved outside when this was pressed)
+		// Called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor enters this object
+		// Called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when scrolling
+		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
 		friend class ContextMenu;

@@ -113,7 +113,7 @@ namespace o2
 
 		IDrawable::OnDrawn();
 
-		for (auto child : mDrawingChildren)
+		for (auto child : mChildrenInheritedDepth)
 			child->Draw();
 
 		mSelectionDrawable->Draw();

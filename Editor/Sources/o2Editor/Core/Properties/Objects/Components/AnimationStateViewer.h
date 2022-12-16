@@ -41,25 +41,25 @@ namespace Editor
 		// Creates spoiler for properties
 		Spoiler* CreateSpoiler() override;
 
-		// It is called when viewer is refreshed
+		// Called when viewer is refreshed
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// This is called when the viewer is freed
+		// ThCalled when the viewer is freed
 		void OnFree() override;
 
-		// It is called when play pause toggled
+		// Called when play pause toggled
 		void OnPlayPauseToggled(bool play);
 
-		// It is called when loop toggled
+		// Called when loop toggled
 		void OnLoopToggled(bool looped);
 
-		// It is called when edit button pressed, sets animation editing
+		// Called when edit button pressed, sets animation editing
 		void OnEditPressed();
 
-		// It is called when time progress changed by user, sets subscribed player time 
+		// Called when time progress changed by user, sets subscribed player time 
 		void OnTimeProgressChanged(float value);
 
-		// It is called when animation updates
+		// Called when animation updates
 		void OnAnimationUpdated(float time);
 	};
 }

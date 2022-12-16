@@ -64,7 +64,7 @@ namespace Editor
 		Vector<IPropertiesViewer*> mViewers;                 // All available object types viewers
 		DefaultPropertiesViewer*   mDefaultViewer = nullptr; // Default properties viewer
 
-		Function<void()> mOnTargetsChangedDelegate; // It is called when targets array changing
+		Function<void()> mOnTargetsChangedDelegate; // Called when targets array changing
 		bool             mTargetsChanged = false;   // True when targets was changed    
 
 		float mRefreshDelay = 0.5f;         // Values refreshing delay
@@ -80,10 +80,10 @@ namespace Editor
 		// Initializes viewers
 		void InitializeViewers();
 
-		// It is called when private fields visibility changed
+		// Called when private fields visibility changed
 		void OnPrivateFieldsVisibleChanged(bool visible);
 
-		// It is called when some property field was changed
+		// Called when some property field was changed
 		void OnPropertyChanged(IPropertyField* field);
 	};
 }

@@ -55,7 +55,7 @@ namespace Editor
 		// Returns true when input events can be handled by down listeners
 		bool IsInputTransparent() const override;
 
-		// It is called when listener was drawn
+		// Called when listener was drawn
 		void OnDrawn() override;
 
 		// Returns create menu category in editor
@@ -77,49 +77,49 @@ namespace Editor
 		// Sets is this selected
 		void SetSelected(bool selected) override;
 
-		// It is called when cursor double clicked
+		// Called when cursor double clicked
 		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
+		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor enters this object, moving hover of tree to this
+		// Called when cursor enters this object, moving hover of tree to this
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object, moving hover of tree to this
+		// Called when cursor exits this object, moving hover of tree to this
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor moved on this (or moved outside when this was pressed)
+		// Called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released outside this(only when cursor pressed this at previous time)
+		// Called when cursor released outside this(only when cursor pressed this at previous time)
 		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when started dragging
+		// Called when started dragging
 		void OnDragStart(const Input::Cursor& cursor) override;
 
-		// It is called when dragged
+		// Called when dragged
 		void OnDragged(const Input::Cursor& cursor, DragDropArea* area) override;
 
-		// It is called when dragging completed
+		// Called when dragging completed
 		void OnDragEnd(const Input::Cursor& cursor) override;
 
-		// It is called when this was selected
+		// Called when this was selected
 		void OnSelected() override;
 
-		// It is called when this was unselected
+		// Called when this was unselected
 		void OnDeselected() override;
 
-		// It is called when some selectable listeners was dropped to this
+		// Called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 		friend class AssetsIconsScrollArea;

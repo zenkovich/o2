@@ -72,10 +72,10 @@ namespace Editor
 		// Returns is viewer empty
 		bool IsEmpty() const;
 
-		// This is called when object viewer enabled
+		// ThCalled when object viewer enabled
 		virtual void OnEnabled() {}
 
-		// This is called when object viewer disabled
+		// ThCalled when object viewer disabled
 		virtual void OnDisabled() {}
 
 		IOBJECT(IObjectPropertiesViewer);
@@ -97,22 +97,22 @@ namespace Editor
 		// Creates spoiler for properties
 		virtual Spoiler* CreateSpoiler();
 
-		// It is called when header enable changed
+		// Called when header enable changed
 		virtual void OnHeaderEnableChanged(bool enabled) {}
 
 		// Checks if properties need to be rebuilt, rebuilds if necessary; returns true when properties was rebuilt
 		virtual bool CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets);
 
-		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
 		virtual void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) {}
 
-		// It is called when viewer is refreshed
+		// Called when viewer is refreshed
 		virtual void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) {}
 
-		// This is called when the viewer is freed
+		// ThCalled when the viewer is freed
 		virtual void OnFree() {}
 
-		// It is called when some child field were changed
+		// Called when some child field were changed
 		void OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before, 
 									const Vector<DataDocument>& after);
 
@@ -138,7 +138,7 @@ namespace Editor
 		Vector<Pair<_object_type*, _object_type*>> mTypeTargetObjects; // Target objects casted to viewer type
 
 	protected:
-		// It is called when viewer is refreshed
+		// Called when viewer is refreshed
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 	};
 

@@ -398,14 +398,6 @@ namespace o2
 		if (!IsOnScene())
 			return;
 
-		if (mLayer)
-		{
-			if (mResEnabledInHierarchy)
-				mLayer->OnActorDisabled(this);
-
-			mLayer->UnregisterActor(this);
-		}
-
 		if (Scene::IsSingletonInitialzed())
 			o2Scene.RemoveActorFromScene(this, keepEditorObjects);
 
@@ -426,17 +418,10 @@ namespace o2
 		if (Scene::IsSingletonInitialzed())
 		{
 			mLayer = o2Scene.GetLayer(mLayerName);
-
-			if (mLayer)
-			{
-				mLayer->RegisterActor(this);
-
-				if (mResEnabledInHierarchy)
-					mLayer->OnActorEnabled(this);
-			}
-
 			o2Scene.AddActorToScene(this);
 		}
+
+		OnAddToScene();
 
 		mState = State::InScene;
 
@@ -553,7 +538,7 @@ namespace o2
 
 		UpdateResEnabledInHierarchy();
 
-		if (mParent && mParent->mState != mState)
+		if (mParent && mParent->IsOnScene() != IsOnScene())
 		{
 			if (mParent->IsOnScene())
 				AddToScene();
@@ -898,7 +883,7 @@ namespace o2
 		{
 			mLayer->RegisterActor(this);
 
-			if (mResEnabledInHierarchy && IsOnScene())
+			if (mResEnabledInHierarchy)
 				mLayer->OnActorEnabled(this);
 		}
 
@@ -908,8 +893,7 @@ namespace o2
 
 	void Actor::OnRemoveFromScene()
 	{
-		if (mLayer)
-		{
+		if (mLayer) {
 			if (mResEnabledInHierarchy)
 				mLayer->OnActorDisabled(this);
 
@@ -1367,6 +1351,7 @@ namespace o2
 		}
 
 		mPrototype = asset;
+
 		if (asset)
 			mPrototypeLink.CopyWithoutRemap(asset->GetActor());
 		else

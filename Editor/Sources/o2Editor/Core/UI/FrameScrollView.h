@@ -66,13 +66,13 @@ namespace Editor
 		// Updates camera limits
 		void UpdateCameraLimits(float dt);
 
-		// It is called when horizontal scroll bar was scrolled
+		// Called when horizontal scroll bar was scrolled
 		void OnHorScrollScrolled(float value);
 
-		// It is called when vertical scroll bar was scrolled
+		// Called when vertical scroll bar was scrolled
 		void OnVerScrollScrolled(float value);
 
-		// It is called when camera position was changed
+		// Called when camera position was changed
 		void OnCameraTransformChanged() override;
 	};
 }

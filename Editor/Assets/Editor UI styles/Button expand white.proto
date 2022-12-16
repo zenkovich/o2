@@ -38,18 +38,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 20.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -90,18 +78,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 20.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -144,18 +120,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 21.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -216,7 +180,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "0746165f7f9007d477831296076f08b2"
+                                    "mId": "42b20100001e720c1cfc55352bc961b5"
                                 }
                             }
                         }
@@ -263,7 +227,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "6744348d3c3a313a4ffb730322055b11"
+                                    "mId": "57025dbc674e5a8c54fb0a9879a4663d"
                                 }
                             }
                         }
@@ -310,7 +274,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "2244392b6d975eaa115532e930381cd5"
+                                    "mId": "73c440582fa11b85355c1ce06217746e"
                                 }
                             }
                         }
@@ -401,7 +365,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "0f244899696a3f8d478124fa655e1e39"
+                                    "mId": "403217c06219634d772935090e70452c"
                                 }
                             }
                         }

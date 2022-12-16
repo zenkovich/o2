@@ -96,7 +96,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mDrawingChildren)
+		for (auto child : mChildrenInheritedDepth)
 			child->Draw();
 
 		mSelectionDrawable->Draw();
@@ -279,7 +279,7 @@ namespace o2
 
 		mChildren.Clear();
 		mChildWidgets.Clear();
-		mDrawingChildren.Clear();
+		mChildrenInheritedDepth.Clear();
 
 		for (int i = mMinVisibleItemIdx; i <= mMaxVisibleItemIdx; i++)
 		{
@@ -313,7 +313,7 @@ namespace o2
 
 		mChildren.Add(itemsWidgets.Cast<Actor*>());
 		mChildWidgets.Add(itemsWidgets);
-		mDrawingChildren.Add(itemsWidgets);
+		mChildrenInheritedDepth.Add(itemsWidgets.DynamicCast<ISceneDrawable*>());
 
 		for (auto child : mChildWidgets)
 		{

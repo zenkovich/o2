@@ -62,8 +62,9 @@ namespace o2
 
 	void Window::Draw()
 	{
-		if (!mResEnabledInHierarchy || mIsClipped) {
-			for (auto child : mDrawingChildren)
+		if (!mResEnabledInHierarchy || mIsClipped) 
+		{
+			for (auto child : mChildrenInheritedDepth)
 				child->Draw();
 
 			return;
@@ -78,7 +79,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mDrawingChildren)
+		for (auto child : mChildrenInheritedDepth)
 			child->Draw();
 
 		o2Render.DisableScissorTest();
@@ -376,7 +377,7 @@ namespace o2
 		{
 			if (element->GetName() == "options context" && element->GetType() == TypeOf(ContextMenu))
 			{
-				mInternalWidgets.Remove(element);
+				element->SetInternalParent(nullptr);
 				delete element;
 				break;
 			}

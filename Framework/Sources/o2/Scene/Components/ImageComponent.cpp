@@ -74,6 +74,7 @@ namespace o2
 	{
 		Sprite::Draw();
 		DrawableComponent::OnDrawn();
+		ISceneDrawable::Draw();
 	}
 
 	void ImageComponent::FitActorByImage() const

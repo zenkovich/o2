@@ -80,16 +80,16 @@ namespace Editor
 		// Updates schemes list
 		void UpdateWndLayoutSchemas();
 
-		// It is called when selected scheme
+		// Called when selected scheme
 		void OnSchemeSelected(const WString& name);
 
-		// Is is called when play/stop toggle changed
+		// Called when play/stop toggle changed
 		void OnPlayStopToggled(bool play);
 
-		// Is is called when pause toggle changed
+		// Called when pause toggle changed
 		void OnPauseToggled(bool pause);
 
-		// It is called when step button has pressed
+		// Called when step button has pressed
 		void OnStepPressed();
 
 		friend class EditorApplication;

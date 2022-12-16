@@ -122,10 +122,10 @@ namespace o2
 		bool         mFitByChildren = false;                  // Fitting by children @SERIALIZABLE
 
 	protected:
-		// It is called when child widget was added
+		// Called when child widget was added
 		void OnChildAdded(Widget* child) override;
 
-		// It is called when child widget was removed
+		// Called when child widget was removed
 		void OnChildRemoved(Widget* child) override;
 
 		// Invokes required function for childs arranging

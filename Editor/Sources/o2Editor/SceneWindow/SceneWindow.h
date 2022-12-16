@@ -39,7 +39,7 @@ namespace Editor
 		// Initializes window and controls
 		void InitializeWindow();
 
-		// It is called after that all windows was created
+		// Called after that all windows was created
 		void PostInitializeWindow() override;
 	};
 }

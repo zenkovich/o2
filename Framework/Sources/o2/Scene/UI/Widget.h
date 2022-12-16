@@ -29,7 +29,7 @@ namespace o2
 
 		PROPERTY(bool, enabledForcibly, SetEnabledForcible, IsEnabled); // Enable property, works forcibly @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
 
-		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property @SCRIPTABLE
+		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property @SCRIPTABLE 
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency @EDITOR_IGNORE @ANIMATABLE
 
 		GETTER(Vector<Widget*>, childrenWidgets, GetChildrenNonConst); // Widget children getter
@@ -188,12 +188,6 @@ namespace o2
 		// Returns all states @SCRIPTABLE
 		const Vector<WidgetState*>& GetStates() const;
 
-		// Sets depth overriding @SCRIPTABLE
-		void SetDepthOverridden(bool overrideDepth);
-
-		// Is sorting depth overridden @SCRIPTABLE
-		bool IsDepthOverriden() const;
-
 		// Sets widget's transparency
 		void SetTransparency(float transparency);
 
@@ -272,10 +266,7 @@ namespace o2
 		Widget*         mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null 
 		Vector<Widget*> mChildWidgets;           // Children widgets, a part of all children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
 		Vector<Widget*> mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
-		Vector<Widget*> mDrawingChildren;        // Children widgets, which drawing depth isn't overridden @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
-
-		bool mOverrideDepth = false; // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
-
+		
 		float mTransparency = 1.0f;	   // Widget transparency @SERIALIZABLE
 		float mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
 
@@ -318,22 +309,22 @@ namespace o2
 		// Updates enabling
 		void UpdateResEnabledInHierarchy() override;
 
-		// It is called when transformation was changed and updated
+		// Called when transformation was changed and updated
 		void OnTransformUpdated() override;
 
-		// It is called when parent changed
+		// Called when parent changed
 		void OnParentChanged(Actor* oldParent) override;
 
-		// It is called when child actor was added
+		// Called when child actor was added
 		void OnChildAdded(Actor* child) override;
 
-		// It is called when child actor was removed
+		// Called when child actor was removed
 		void OnChildRemoved(Actor* child) override;
 
-		// It is called when actor excluding from scene, removes this from layer drawables
+		// Called when actor excluding from scene, removes this from layer drawables
 		void OnRemoveFromScene() override;
 
-		// It is called when actor including from scene, including this to layer drawables
+		// Called when actor including from scene, including this to layer drawables
 		void OnAddToScene() override;
 
 		// Returns current scene layer
@@ -341,6 +332,9 @@ namespace o2
 
 		// Returns is drawable enabled
 		bool IsSceneDrawableEnabled() const override;
+
+		// Returns parent scene drawable
+		ISceneDrawable* GetParentDrawable() override;
 
 		// Updates child widgets list
 		void UpdateChildWidgetsList();
@@ -357,16 +351,16 @@ namespace o2
 		// Moves widget's to delta and checks for clipping
 		virtual void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea);
 
-		// It is called when child widget was added
+		// Called when child widget was added
 		virtual void OnChildAdded(Widget* child);
 
-		// It is called when child widget was removed
+		// Called when child widget was removed
 		virtual void OnChildRemoved(Widget* child);
 
-		// It is called when widget was selected
+		// Called when widget was selected
 		virtual void OnFocused();
 
-		// It is called when widget was deselected
+		// Called when widget was deselected
 		virtual void OnUnfocused();
 
 		// Returns layout width with children
@@ -399,23 +393,20 @@ namespace o2
 		// Updates layers layouts, calls after updating widget layout
 		virtual void UpdateLayersLayouts();
 
-		// It is called when child widget was selected
+		// Called when child widget was selected
 		virtual void OnChildFocused(Widget* child);
 
-		// It is called when layer added and updates drawing sequence
+		// Called when layer added and updates drawing sequence
 		virtual void OnLayerAdded(WidgetLayer* layer);
 
-		// It is called when widget state was added
+		// Called when widget state was added
 		virtual void OnStateAdded(WidgetState* state);
 
-		// It is called from editor, refreshes states
+		// Called from editor, refreshes states
 		void OnStatesListChanged();
 
 		// Draws debug frame by mAbsoluteRect
 		void DrawDebugFrame();
-
-		// Updates drawing children widgets list
-		void UpdateDrawingChildren();
 
 		// Updates layers drawing sequence
 		void UpdateLayersDrawingSequence();
@@ -593,8 +584,8 @@ namespace o2
 		static bool isEditorLayersVisible;           // Is widgets layers visible in hierarchy
 		static bool isEditorInternalChildrenVisible; // Is widgets internal children visible in hierarchy
 
-		LayersEditable                   layersEditable = LayersEditable(this);
-		InternalChildrenEditableEditable internalChildrenEditable = InternalChildrenEditableEditable(this);
+		LayersEditable                   layersEditable = LayersEditable(this);                             // @EDITOR_IGNORE
+		InternalChildrenEditableEditable internalChildrenEditable = InternalChildrenEditableEditable(this); // @EDITOR_IGNORE
 
 	public:
 		// Sets parent object. nullptr means make this object as root
@@ -746,8 +737,6 @@ CLASS_FIELDS_META(o2::Widget)
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentWidget);
 	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().NAME(mChildWidgets);
 	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().NAME(mInternalWidgets);
-	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().NAME(mDrawingChildren);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mOverrideDepth);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mTransparency);
 	FIELD().PROTECTED().DEFAULT_VALUE(1.0f).NAME(mResTransparency);
 	FIELD().PROTECTED().NAME(mDrawingLayers);
@@ -758,8 +747,8 @@ CLASS_FIELDS_META(o2::Widget)
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsClipped);
 	FIELD().PROTECTED().NAME(mBounds);
 	FIELD().PROTECTED().NAME(mBoundsWithChilds);
-	FIELD().PUBLIC().NAME(layersEditable);
-	FIELD().PUBLIC().NAME(internalChildrenEditable);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(layersEditable);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(internalChildrenEditable);
 }
 END_META;
 CLASS_METHODS_META(o2::Widget)
@@ -810,8 +799,6 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, GetState, const String&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetState*, GetStateObject, const String&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<WidgetState*>&, GetStates);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDepthOverridden, bool);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsDepthOverriden);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTransparency, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetTransparency);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetResTransparency);
@@ -846,6 +833,7 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateChildWidgetsList);
 	FUNCTION().PROTECTED().SIGNATURE(WidgetLayoutData&, GetLayoutData);
 	FUNCTION().PROTECTED().SIGNATURE(const WidgetLayoutData&, GetLayoutData);
@@ -870,7 +858,6 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStateAdded, WidgetState*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStatesListChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, DrawDebugFrame);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateDrawingChildren);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersDrawingSequence);
 	FUNCTION().PROTECTED().SIGNATURE(void, RetargetStatesAnimations);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetParentWidget, Widget*);

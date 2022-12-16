@@ -276,7 +276,7 @@ namespace o2
 
 		if (mExpandingNodeState == ExpandState::None)
 		{
-			for (auto child : mDrawingChildren)
+			for (auto child : mChildrenInheritedDepth)
 				child->Draw();
 		}
 		else
@@ -887,7 +887,6 @@ namespace o2
 		mVisibleNodes.Clear();
 		mChildren.Clear();
 		mChildWidgets.Clear();
-		mDrawingChildren.Clear();
 		mSelectedNodes.Clear();
 		mMinVisibleNodeIdx = 0;
 		mMaxVisibleNodeIdx = -1;
@@ -1046,7 +1045,7 @@ namespace o2
 					mNodeWidgetsBuf.Add(node->widget);
 					mChildren.Remove(node->widget);
 					mChildWidgets.Remove(node->widget);
-					mDrawingChildren.Remove(node->widget);
+					mChildrenInheritedDepth.Remove(node->widget);
 
 					node->widget->mParent = nullptr;
 					node->widget->mParentWidget = nullptr;
@@ -1121,7 +1120,7 @@ namespace o2
 
 		mChildren.Add(widget);
 		mChildWidgets.Add(widget);
-		mDrawingChildren.Add(widget);
+		mChildrenInheritedDepth.Add(widget);
 	}
 
 	void Tree::UpdateNodeView(Node* node, TreeNode* widget, int idx)
@@ -1239,7 +1238,7 @@ namespace o2
 					mVisibleNodes.Add(node);
 					mChildren.Add(nodeWidget);
 					mChildWidgets.Add(nodeWidget);
-					mDrawingChildren.Add(nodeWidget);
+					mChildrenInheritedDepth.Add(nodeWidget);
 
 					idx++;
 				}
@@ -1326,7 +1325,7 @@ namespace o2
 						mNodeWidgetsBuf.Add(node->widget);
 						mChildren.Remove(node->widget);
 						mChildWidgets.Remove(node->widget);
-						mDrawingChildren.Remove(node->widget);
+						mChildrenInheritedDepth.Remove(node->widget);
 
 						node->widget->mParent = nullptr;
 						node->widget->mParentWidget = nullptr;

@@ -50,7 +50,7 @@ namespace Editor
 		// Updates root widget
 		void Update(float dt);
 
-		// It is called when application frame was resized, updates root size
+		// Called when application frame was resized, updates root size
 		void OnApplicationSized() override;
 
 		friend class EditorApplication;

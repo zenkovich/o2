@@ -110,7 +110,7 @@ namespace Editor
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mDrawingChildren)
+		for (auto child : mChildrenInheritedDepth)
 			child->Draw();
 
 		if (mSelecting)

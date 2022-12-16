@@ -162,10 +162,10 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 
-		// It is called when child widget was added
+		// Called when child widget was added
 		void OnChildAdded(Widget* child) override;
 
-		// It is called when child widget was removed
+		// Called when child widget was removed
 		void OnChildRemoved(Widget* child) override;
 
 		// Sets children world rectangle. Moves children rectangle to scroll position offset
@@ -174,7 +174,7 @@ namespace o2
 		// Checks widget clipping by area
 		void CheckClipping(const RectF& clipArea) override;
 
-		// It is called when scrolling
+		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
 		// Moves scroll position and updates children widgets clipping and layout
@@ -201,10 +201,10 @@ namespace o2
 		// Checks children clippings
 		void CheckChildrenClipping();
 
-		// It is called when horizontal scroll bar value was changed
+		// Called when horizontal scroll bar value was changed
 		void OnHorScrollChanged(float value);
 
-		// It is called when vertical scroll bar value was changed
+		// Called when vertical scroll bar value was changed
 		void OnVerScrollChanged(float value);
 
 		friend class CustomDropDown;

@@ -46,7 +46,7 @@ namespace Editor
 		const Type*              mDrawableType = nullptr;  // Target actor type
 
 	protected:
-		// Fits layer size by drawable size, it is called when mFitSizeButton were pressed
+		// Fits layer size by drawable size, Called when mFitSizeButton were pressed
 		void FitLayerByDrawable();
 	};
 }

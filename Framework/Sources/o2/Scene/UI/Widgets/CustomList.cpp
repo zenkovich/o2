@@ -116,7 +116,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mDrawingChildren)
+		for (auto child : mChildrenInheritedDepth)
 			child->Draw();
 
 		for (auto& sel : mSelectedItems)

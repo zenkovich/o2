@@ -234,10 +234,10 @@ namespace o2
 		bool mSerializeEnabled = true; // Is serializations fields enabled
 
 	protected:
-		// It is called when basis changed
+		// Called when basis changed
 		virtual void BasisChanged() { }
 
-		// It is called when object was deserialized
+		// Called when object was deserialized
 		void OnDeserialized(const DataValue& node) override;
 
 		// Updates mTransform 

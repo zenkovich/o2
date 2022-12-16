@@ -52,31 +52,31 @@ namespace Editor
 		// Updates tool
 		void Update(float dt) override;
 
-		// It is called when tool was enabled
+		// Called when tool was enabled
 		void OnEnabled() override;
 
-		// It is called when tool was disabled
+		// Called when tool was disabled
 		void OnDisabled() override;
 
-		// It is called when scene objects was changed
+		// Called when scene objects was changed
 		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
 
-		// It is called when objects selection was changed
+		// Called when objects selection was changed
 		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
 
-		// It is called when horizontal drag handle was moved
+		// Called when horizontal drag handle was moved
 		void OnHorDragHandleMoved(const Vec2F& position);
 
-		// It is called when horizontal drag handle was moved
+		// Called when horizontal drag handle was moved
 		void OnVerDragHandleMoved(const Vec2F& position);
 
-		// It is called when horizontal drag handle was moved
+		// Called when horizontal drag handle was moved
 		void OnBothDragHandleMoved(const Vec2F& position);
 
-		// It is called when some handle was pressed, stores before transformations
+		// Called when some handle was pressed, stores before transformations
 		void HandlePressed();
 
-		// It is called when handle was released, completes transformation action
+		// Called when handle was released, completes transformation action
 		void HandleReleased();
 
 		// Handles moved
@@ -85,13 +85,13 @@ namespace Editor
 		// Updates handles position
 		void UpdateHandlesPosition();
 
-		// It is called when key was pressed
+		// Called when key was pressed
 		void OnKeyPressed(const Input::Key& key) override;
 
-		// It is called when key stay down during frame
+		// Called when key stay down during frame
 		void OnKeyStayDown(const Input::Key& key) override;
 
-		// It is called when key was pressed
+		// Called when key was pressed
 		void OnKeyReleased(const Input::Key& key) override;
 
 		// Moves selected objects on delta

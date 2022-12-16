@@ -286,22 +286,22 @@ namespace o2
 		// Returns main cursor delta
 		Vec2F GetMainCursorDelta();
 
-		// It is called when key pressed message apply
+		// Called when key pressed message apply
 		void OnKeyPressedMsgApply(KeyboardKey key);
 
-		// It is called when key released message apply
+		// Called when key released message apply
 		bool OnKeyReleasedMsgApply(KeyboardKey key);
 
-		// It is called when cursor pressed message apply
+		// Called when cursor pressed message apply
 		void OnCursorPressedMsgApply(const Vec2F& pos, CursorId id = 0);
 
-		// It is called when cursor changed position message apply. Id - index of cursor*/
+		// Called when cursor changed position message apply. Id - index of cursor*/
 		void OnCursorMovedMsgApply(const Vec2F& pos, CursorId id = 0, bool withDelta = true);
 
-		// It is called when cursor released message apply
+		// Called when cursor released message apply
 		void OnCursorReleasedMsgApply(CursorId id = 0);
 
-		// It is called when changed mouse wheel delta message apply
+		// Called when changed mouse wheel delta message apply
 		void OnMouseWheelMsgApply(float delta);
 
 		friend class Application;

@@ -33,13 +33,13 @@ namespace o2
 		static String GetIcon();
 
 	protected:
-		// It is called when actor's transform was changed
+		// Called when actor's transform was changed
 		void OnTransformUpdated();
 
 		// Beginning serialization callback
 		void OnSerialize(DataValue& node) const override;
 
-		// It is called when object was deserialized
+		// Called when object was deserialized
 		void OnDeserialized(const DataValue& node) override;
 
 		// Beginning serialization delta callback

@@ -135,7 +135,7 @@ namespace o2
 		ContextMenu* mOpenedContext = nullptr; // Last opened context in menu
 
 	protected:
-		// It is called when visible was changed
+		// Called when visible was changed
 		void OnEnableInHierarchyChanged() override;
 
 		// Creates sub context menus by path
@@ -153,22 +153,22 @@ namespace o2
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor moved on this (or moved outside when this was pressed)
+		// Called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 	};
 }

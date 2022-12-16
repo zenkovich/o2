@@ -57,20 +57,25 @@ namespace o2
 
 	void DrawableComponent::UpdateEnabled()
 	{
-		bool lastResEnabled = mResEnabled;
+		bool lastResEnabled = mEnabledInHierarchy;
 
 		if (mOwner)
-			mResEnabled = mEnabled && mOwner->mResEnabledInHierarchy;
+			mEnabledInHierarchy = mEnabled && mOwner->mResEnabledInHierarchy;
 		else
-			mResEnabled = mEnabled;
+			mEnabledInHierarchy = mEnabled;
 
-		if (lastResEnabled != mResEnabled)
+		if (lastResEnabled != mEnabledInHierarchy)
 		{
-			if (mResEnabled)
+			if (mEnabledInHierarchy)
 				ISceneDrawable::OnEnabled();
 			else
 				ISceneDrawable::OnDisabled();
 		}
+	}
+
+	void DrawableComponent::OnParentChanged(Actor* oldParent)
+	{
+		OnDrawbleParentChanged();
 	}
 
 	SceneLayer* DrawableComponent::GetSceneDrawableSceneLayer() const
@@ -80,16 +85,42 @@ namespace o2
 
 	bool DrawableComponent::IsSceneDrawableEnabled() const
 	{
-		return mResEnabled;
+		return mEnabledInHierarchy;
+	}
+
+	ISceneDrawable* DrawableComponent::GetParentDrawable()
+	{
+		if (!mOwner)
+			return nullptr;
+
+		if (mOwner->mParent)
+		{
+			auto itParent = mOwner->mParent;
+			while (itParent)
+			{
+				if (auto drawable = dynamic_cast<ISceneDrawable*>(itParent))
+					return drawable;
+
+				auto comp = itParent->GetComponent<DrawableComponent>();
+				if (comp)
+					return (ISceneDrawable*)comp;
+
+				itParent = itParent->mParent;
+			}
+		}
+
+		return nullptr;
 	}
 
 	void DrawableComponent::OnAddToScene()
 	{
+		Component::OnAddToScene();
 		ISceneDrawable::OnAddToScene();
 	}
 
 	void DrawableComponent::OnRemoveFromScene()
 	{
+		Component::OnRemoveFromScene();
 		ISceneDrawable::OnRemoveFromScene();
 	}
 

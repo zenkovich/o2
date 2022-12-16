@@ -38,18 +38,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 20.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -90,18 +78,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 20.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -144,18 +120,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 21.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -216,7 +180,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "39b55238763f219016965de2459d7b8e"
+                                    "mId": "2dc670490fa85301573e445a7db378d6"
                                 }
                             }
                         }
@@ -263,7 +227,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4adc1c295d395a2b5ac1778e0f5b0484"
+                                    "mId": "4b1e0833263e30ba08f77e5a5b3a3980"
                                 }
                             }
                         }
@@ -310,7 +274,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "26740b653bcd448379ed43ff67cd6283"
+                                    "mId": "6ee92d51740130e8116377245c2f7cdf"
                                 }
                             }
                         }
@@ -401,7 +365,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "781b280b627e11c150c925a559087385"
+                                    "mId": "57a146d053323c2304cc63f45f256a19"
                                 }
                             }
                         }

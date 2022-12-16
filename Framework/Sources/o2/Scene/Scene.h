@@ -41,7 +41,7 @@ namespace o2
 
 		Function<void(const Vector<SceneEditableObject*>&)> onObjectsChanged; // Actors some change event
 
-		Function<void()> onLayersListChanged; // It is called when layer added, removed or renamed
+		Function<void()> onLayersListChanged; // Called when layer added, removed or renamed
 #endif
 
 	public:
@@ -210,31 +210,31 @@ namespace o2
 		// Draws debug info for actor under cursor
 		void DrawCursorDebugInfo();
 
-		// It is called when actor adding to scene; registers in actors list and events list
+		// Called when actor adding to scene; registers in actors list and events list
 		void AddActorToScene(Actor* actor);
 
-		// It is called when actor constructing and adding to scene. The OnAddToScene will be called on next frame
+		// Called when actor constructing and adding to scene. The OnAddToScene will be called on next frame
 		void AddActorToSceneDeferred(Actor* actor);
 
-		// It is called when actor removing from scene; unregisters from actors list and events list
+		// Called when actor removing from scene; unregisters from actors list and events list
 		void RemoveActorFromScene(Actor* actor, bool keepEditorObjects = false);
 
-		// It is called when actor unique id was changed; updates actors map
+		// Called when actor unique id was changed; updates actors map
 		void OnActorIdChanged(Actor* actor, SceneUID prevId);
 
-		// It is called when component added to actor, registers for calling OnAddOnScene
+		// Called when component added to actor, registers for calling OnAddOnScene
 		void OnComponentAdded(Component* component);
 
-		// It is called when component removed, register for calling OnRemovFromScene
+		// Called when component removed, register for calling OnRemovFromScene
 		void OnComponentRemoved(Component* component);
 
-		// It is called when scene layer renamed, updates layers map
+		// Called when scene layer renamed, updates layers map
 		void OnLayerRenamed(SceneLayer* layer, const String& oldName);
 
-		// It is called when camera was added to scene
+		// Called when camera was added to scene
 		void OnCameraAddedOnScene(CameraActor* camera);
 
-		// It is called when camera was removed from scene
+		// Called when camera was removed from scene
 		void OnCameraRemovedScene(CameraActor* camera);
 
 		friend class Actor;
@@ -290,31 +290,31 @@ namespace o2
 		// Returns cache of linked to prototypes actors
 		Map<ActorAssetRef, Vector<Actor*>>& GetPrototypesLinksCache();
 
-		// It is called when scene started to draw. When scene draw started, drawn scene objects will be collected
+		// Called when scene started to draw. When scene draw started, drawn scene objects will be collected
 		void BeginDrawingScene();
 
-		// It is called when scene finished draw. After scene objects will not be collected 
+		// Called when scene finished draw. After scene objects will not be collected 
 		void EndDrawingScene();
 
-		// It is called when object was created
+		// Called when object was created
 		void OnObjectAddToScene(SceneEditableObject* object);
 
-		// It is called when object is destroying
+		// Called when object is destroying
 		void OnObjectRemoveFromScene(SceneEditableObject* object);
 
-		// It is called when object was changed
+		// Called when object was changed
 		void OnObjectChanged(SceneEditableObject* object);
 
-		// It is called when object was drawn 
+		// Called when object was drawn 
 		void OnObjectDrawn(SceneEditableObject* object);
 
-		// It is called when created actor with prototype, updates cache
+		// Called when created actor with prototype, updates cache
 		void OnActorWithPrototypeCreated(Actor* actor);
 
-		// It is called when some actor created and linked to prototype, updates linked actors cache
+		// Called when some actor created and linked to prototype, updates linked actors cache
 		void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
 
-		// It is called when actor destroying or prototype link broken, updates cache
+		// Called when actor destroying or prototype link broken, updates cache
 		void OnActorPrototypeBroken(Actor* actor);
 
 	protected:

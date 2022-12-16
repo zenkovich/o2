@@ -40,7 +40,7 @@ namespace o2
 
 	String JavaScriptAsset::GetEditorIcon()
 	{
-		return "ui/JSFileIcon.png";
+		return "ui/UI4_big_js_file_icon.png";
 	}
 
 	int JavaScriptAsset::GetEditorSorting()

@@ -146,66 +146,66 @@ namespace Editor
 		// Inserts keys from buffer under cursor
 		void PasteKeys();
 
-		// It is called when selection is changed - some handle was added or removed from selection
+		// Called when selection is changed - some handle was added or removed from selection
 		// Updating selection frame
 		void OnSelectionChanged() override;
 
-		// It is called when selectable draggable handle was pressed, sends to track control that drag has began
+		// Called when selectable draggable handle was pressed, sends to track control that drag has began
 		void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) override;
 
-		// It is called when selectable draggable handle was released, sends to track control that drag has completed
+		// Called when selectable draggable handle was released, sends to track control that drag has completed
 		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) override;
 
-		// It is called when selectable handle moved, moves all selected handles position
+		// Called when selectable handle moved, moves all selected handles position
 		// Enables keys batch change
 		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) override;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressed outside this
+		// Called when cursor pressed outside this
 		void OnCursorPressedOutside(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released outside this(only when cursor pressed this at previous time)
+		// Called when cursor released outside this(only when cursor pressed this at previous time)
 		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor moved on this (or moved outside when this was pressed)
+		// Called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// It is called when cursor enters this object
+		// Called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when cursor double clicked
+		// Called when cursor double clicked
 		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was pressed on this
+		// Called when right mouse button was pressed on this
 		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button stay down on this
+		// Called when right mouse button stay down on this
 		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
+		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// It is called when middle mouse button was pressed on this
+		// Called when middle mouse button was pressed on this
 		void OnCursorMiddleMousePressed(const Input::Cursor& cursor) override;
 
-		// It is called when middle mouse button stay down on this
+		// Called when middle mouse button stay down on this
 		void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) override;
 
-		// It is called when middle mouse button was released (only when middle mouse button pressed this at previous time)
+		// Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
 		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
 
 		friend class AnimationWindow;

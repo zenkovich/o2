@@ -45,10 +45,10 @@ namespace o2
 		Vector<_type*> mChildren; // Children nodes @SERIALIZABLE
 
 	protected:
-		// It is called when added new child
+		// Called when added new child
 		virtual void OnChildAdded(_type* child) {}
 
-		// It is called when child was removed
+		// Called when child was removed
 		virtual void OnChildRemoved(_type* child) {}
 	};
 

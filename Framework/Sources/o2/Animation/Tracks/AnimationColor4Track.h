@@ -35,11 +35,11 @@ namespace o2
 		// Returns value at time
 		Color4 GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
 
-		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
+		// Called when beginning keys batch change. After this call all keys modifications will not be update pproximation
 		// Used for optimizing many keys change
 		void BeginKeysBatchChange() override;
 
-		// It is called when keys batch change completed. Updates approximation
+		// Called when keys batch change completed. Updates approximation
 		void CompleteKeysBatchingChange() override;
 
 		// Returns track duration

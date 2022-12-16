@@ -72,10 +72,10 @@ namespace o2
 		Units mUnits = Units::Centimeters; // Physical camera units @SERIALIZABLE
 
 	protected:
-		// Is is called when actor has added to scene
+		// Called when actor has added to scene
 		void OnAddToScene() override;
 
-		// It is called when actor has removed from scene
+		// Called when actor has removed from scene
 		void OnRemoveFromScene() override;
 	};
 }

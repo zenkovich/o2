@@ -135,13 +135,13 @@ namespace o2
 		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
 
 	protected:
-		// It is called when layer added and updates drawing sequence
+		// Called when layer added and updates drawing sequence
 		void OnLayerAdded(WidgetLayer* layer) override;
 
 		// Creates default text layer
 		void CreateDefaultText();
 
-		// It is called when deserialized
+		// Called when deserialized
 		void OnDeserialized(const DataValue& node) override;
 	};
 }

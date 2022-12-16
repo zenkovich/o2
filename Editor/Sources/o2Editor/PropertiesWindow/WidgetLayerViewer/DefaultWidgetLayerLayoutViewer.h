@@ -39,11 +39,11 @@ namespace Editor
 		Vec2FProperty* mOffsetLeftBottomProperty = nullptr;
 
 	protected:
-		// It is called when some property change completed, stores action for undo
+		// Called when some property change completed, stores action for undo
 		void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue, 
 									   const Vector<DataDocument>& newValue);
 
-		// it is called when some property changed, updates owner widgets
+		// Called when some property changed, updates owner widgets
 		void OnPropertyChanged(IPropertyField* field);
 	};
 }

@@ -79,13 +79,7 @@ namespace o2
 		if (enabledClipping)
 			o2Render.DisableScissorTest();
 
-		OnDrawn();
-
-		for (auto child : mDrawingChildren)
-			child->Draw();
-
-		for (auto layer : mTopDrawingLayers)
-			layer->Draw();
+		ISceneDrawable::Draw();
 
 		DrawDebugFrame();
 	}

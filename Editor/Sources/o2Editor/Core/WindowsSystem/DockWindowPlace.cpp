@@ -165,7 +165,7 @@ namespace Editor
 				tabWindows.Add(dynamic_cast<DockableWindow*>(child));
 		}
 
-		mDrawingChildren.SortBy<int>([](Actor* child) { return dynamic_cast<DockableWindow*>(child)->mTabPosition; });
+		mChildrenInheritedDepth.SortBy<int>([](ISceneDrawable* child) { return dynamic_cast<DockableWindow*>(child)->mTabPosition; });
 
 		for (auto tabWindow : tabWindows)
 		{

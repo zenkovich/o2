@@ -38,18 +38,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 20.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -90,18 +78,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 20.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -144,18 +120,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 20.0,
-                                    "y": 20.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -216,7 +180,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4e384aa06e58265d70f879973673376d"
+                                    "mId": "70f327477d8266843d4e432747066cc5"
                                 }
                             }
                         }
@@ -263,7 +227,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "283b150f3f3d055c1a131e3a15dc6008"
+                                    "mId": "30184fbf42b9446f049e439d684611c4"
                                 }
                             }
                         }
@@ -310,7 +274,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "109842d146f1505c13136e023be76507"
+                                    "mId": "24db025d13a4454e2764034643d5192d"
                                 }
                             }
                         }

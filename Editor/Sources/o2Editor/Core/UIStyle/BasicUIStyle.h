@@ -37,6 +37,7 @@ namespace o2
 		void RebuildSinglelineEditbox();
 		void RebuildBacklessScrollarea();
 		void RebuildExpandButton();
+		void RebuildExpandDownButton();
 		void RebuildExpandWhiteButton();
 		void RebuildSpoiler();
 
@@ -85,6 +86,7 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildSinglelineEditbox);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildBacklessScrollarea);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildExpandButton);
+	FUNCTION().PUBLIC().SIGNATURE(void, RebuildExpandDownButton);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildExpandWhiteButton);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildSpoiler);
 }

@@ -51,31 +51,31 @@ namespace Editor
 		// Updates tool
 		void Update(float dt) override;
 
-		// It is called when tool was enabled
+		// Called when tool was enabled
 		void OnEnabled() override;
 
-		// It is called when tool was disabled
+		// Called when tool was disabled
 		void OnDisabled() override;
 
-		// It is called when objects selection was changed
+		// Called when objects selection was changed
 		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor moved on this (or moved outside when this was pressed)
+		// Called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// It is called when key was pressed
+		// Called when key was pressed
 		void OnKeyPressed(const Input::Key& key) override;
 	};
 

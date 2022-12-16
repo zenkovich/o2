@@ -95,18 +95,18 @@ namespace o2
 		static bool IsAvailableFromCreateMenu();
 
 #if IS_EDITOR
-		// It is called when component added from editor
+		// Called when component added from editor
 		virtual void OnAddedFromEditor() {}
 #endif
 
 		SERIALIZABLE(Component);
 
 	protected:
-		Component* mPrototypeLink = nullptr; // Prototype actor component pointer. Null if no actor prototype
-		SceneUID   mId;                      // Component id @EDITOR_IGNORE
-		Actor*     mOwner = nullptr;         // Owner actor
-		bool       mEnabled = true;          // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
-		bool       mResEnabled = true;       // Is component enabled in hierarchy
+		Component* mPrototypeLink = nullptr;   // Prototype actor component pointer. Null if no actor prototype
+		SceneUID   mId;                        // Component id @EDITOR_IGNORE
+		Actor*     mOwner = nullptr;           // Owner actor
+		bool       mEnabled = true;            // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
+		bool       mEnabledInHierarchy = true; // Is component enabled in hierarchy
 
 		Vector<ComponentRef*> mReferences; // References to this component
 
@@ -126,46 +126,46 @@ namespace o2
 		// Sets owner actor
 		virtual void SetOwnerActor(Actor* actor);
 
-		// It is called when actor was included to scene
+		// Called when actor was included to scene
 		virtual void OnAddToScene();
 
-		// It is called when actor was excluded from scene
+		// Called when actor was excluded from scene
 		virtual void OnRemoveFromScene();
 
-		// It is called when component started working on first update frame
+		// Called when component started working on first update frame
 		virtual void OnStart() {}
 
 		// Updates component enable
 		virtual void UpdateEnabled();
 
-		// Is is called when actor enabled in hierarchy
+		// Called when actor enabled in hierarchy
 		virtual void OnEnabled() {}
 
-		// It is called when actor disabled in hierarchy
+		// Called when actor disabled in hierarchy
 		virtual void OnDisabled() {}
 
-		// It is called when transformation was changed 
+		// Called when transformation was changed 
 		virtual void OnTransformChanged() {}
 
-		// It is called when actor's transform was changed
+		// Called when actor's transform was changed
 		virtual void OnTransformUpdated() {}
 
-		// It is called when parent changed
+		// Called when parent changed
 		virtual void OnParentChanged(Actor* oldParent) {}
 
-		// It is called when child actor was added
+		// Called when child actor was added
 		virtual void OnChildAdded(Actor* child) {}
 
-		// It is called when child actor was removed
+		// Called when child actor was removed
 		virtual void OnChildRemoved(Actor* child) {}
 
-		// It is called when layer was changed
+		// Called when layer was changed
 		virtual void OnLayerChanged(SceneLayer* oldLayer) {}
 
-		// It is called when new component has added to actor
+		// Called when new component has added to actor
 		virtual void OnComponentAdded(Component* component) {}
 
-		// It is called when component going to be removed from actor
+		// Called when component going to be removed from actor
 		virtual void OnComponentRemoving(Component* component) {}
 
 		friend class Actor;
@@ -233,7 +233,7 @@ CLASS_FIELDS_META(o2::Component)
 	FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().NAME(mId);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
 	FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled);
-	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mResEnabled);
+	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabledInHierarchy);
 	FIELD().PROTECTED().NAME(mReferences);
 }
 END_META;

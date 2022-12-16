@@ -164,10 +164,10 @@ namespace Editor
 		Vector<DataDocument> mBeforeChangeValues; // Serialized value data before changes started
 
 	protected:
-		// It is called when type specialized during setting value proxy
+		// Called when type specialized during setting value proxy
 		virtual void OnTypeSpecialized(const Type& type) {}
 
-		// It is called when property puts in buffer. Here you can release your shared resources
+		// Called when property puts in buffer. Here you can release your shared resources
 		virtual void OnFreeProperty();
 
 		// Stores values to data
@@ -182,16 +182,16 @@ namespace Editor
 		// Checks is value can be reverted
 		virtual bool IsValueRevertable() const;
 
-		// It is called when field value changed
+		// Called when field value changed
 		virtual void OnValueChanged();
 
 		// Frees values proxies
 		void FreeValuesProxies();
 
-		// It is called when user began to change value and we need to store initial value data
+		// Called when user began to change value and we need to store initial value data
 		void BeginUserChanging();
 
-		// It is called when user completed changing value and we need to compare current value with previous and call onChangeCompleted
+		// Called when user completed changing value and we need to compare current value with previous and call onChangeCompleted
 		void EndUserChanging();
 
 		// Sets value via proxy
@@ -247,7 +247,7 @@ namespace Editor
 		const Type* mRealType = nullptr;
 
 	protected:
-		// It is called when type specialized during setting value proxy
+		// Called when type specialized during setting value proxy
 		void OnTypeSpecialized(const Type& type) override;
 
 		// Checks is value can be reverted

@@ -64,43 +64,43 @@ namespace Editor
 		// Setups tree node by folder (for folders tree)
 		void SetupFoldersTreeNode(TreeNode* node, void* object);
 
-		// It is called when folder item double clicked (for folders tree)
+		// Called when folder item double clicked (for folders tree)
 		void OnFoldersTreeNodeDblClick(TreeNode* node);
 
-		// It is called when folder item clicked (for folders tree)
+		// Called when folder item clicked (for folders tree)
 		void OnFoldersTreeSelect(Vector<void*> nodes);
 
-		// It is called when folders tree clicked by right button
+		// Called when folders tree clicked by right button
 		void OnFoldersTreeRightClick(TreeNode* node);
 
-		// It is called when context copy pressed
+		// Called when context copy pressed
 		void OnContextCopyPressed();
 
-		// It is called when context cut pressed
+		// Called when context cut pressed
 		void OnContextCutPressed();
 
-		// It is called when context paste pressed
+		// Called when context paste pressed
 		void OnContextPastePressed();
 
-		// It is called when context delete pressed
+		// Called when context delete pressed
 		void OnContextDeletePressed();
 
-		// It is called when context open pressed
+		// Called when context open pressed
 		void OnContextOpenPressed();
 
-		// It is called when context show in explorer pressed
+		// Called when context show in explorer pressed
 		void OnContextShowInExplorerPressed();
 
-		// It is called when context create folder pressed
+		// Called when context create folder pressed
 		void OnContextCreateFolderPressed();
 
-		// It is called when context expand pressed
+		// Called when context expand pressed
 		void OnContextExpandPressed();
 
-		// It is called when context expand pressed
+		// Called when context expand pressed
 		void OnContextCollapsePressed();
 
-		// It is called when key was released
+		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
 
 		friend class AssetsWindow;

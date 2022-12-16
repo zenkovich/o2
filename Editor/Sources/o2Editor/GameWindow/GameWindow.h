@@ -40,7 +40,7 @@ namespace Editor
 			TextureRef mRenderTarget;                 // Render target texture, using for rendering scene
 
 		protected:
-			// It is called when transformation was changed and updated, updates render texture and sprite
+			// Called when transformation was changed and updated, updates render texture and sprite
 			void OnTransformUpdated() override;
 		};
 

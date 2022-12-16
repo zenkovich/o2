@@ -102,7 +102,7 @@ namespace o2
 		bool mNeedUpdateMesh = false; // True, when mesh data is dirty and need to rebuild
 
 	protected:
-		// It is called when actor's transform was changed
+		// Called when actor's transform was changed
 		void OnTransformUpdated() override;
 
 		// Calculates mesh from spline

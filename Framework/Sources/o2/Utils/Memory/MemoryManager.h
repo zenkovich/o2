@@ -86,10 +86,10 @@ namespace o2
 		size_t                     mTotalBytes; // Total managed allocated bytes
 
 	protected:
-		// It is called when memory was allocated and registers allocation
+		// Called when memory was allocated and registers allocation
 		void OnMemoryAllocate(void* memory, size_t size, const char* source, int line);
 
-		// It is called when memory releasing, unregisters allocation
+		// Called when memory releasing, unregisters allocation
 		void OnMemoryRelease(void* memory);
 
 		friend void* ::operator new(size_t size, const char* location, int line);

@@ -17,6 +17,11 @@ namespace Editor
 		InitializeControls();
 	}
 
+	EditBox* FloatProperty::GetEditBox() const
+	{
+		return mEditBox;
+	}
+
 	FloatProperty& FloatProperty::operator=(const FloatProperty& other)
 	{
 		TPropertyField<float>::operator=(other);

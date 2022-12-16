@@ -88,7 +88,7 @@ namespace o2
 
 			mChildren.Clear();
 			mChildWidgets.Clear();
-			mDrawingChildren.Clear();
+			mChildrenInheritedDepth.Clear();
 
 			mMinVisibleItemIdx = -1;
 			mMaxVisibleItemIdx = -1;
@@ -194,7 +194,7 @@ namespace o2
 
 		mChildren.Clear();
 		mChildWidgets.Clear();
-		mDrawingChildren.Clear();
+		mChildrenInheritedDepth.Clear();
 
 		for (int i = mMinVisibleItemIdx; i <= mMaxVisibleItemIdx; i++)
 		{
@@ -229,7 +229,7 @@ namespace o2
 
 		mChildren.Add(itemsWidgets.Cast<Actor*>());
 		mChildWidgets.Add(itemsWidgets);
-		mDrawingChildren.Add(itemsWidgets);
+		mChildrenInheritedDepth.Add(itemsWidgets.DynamicCast<ISceneDrawable*>());
 
 		mPrevItemsInLine = itemsInLine;
 	}

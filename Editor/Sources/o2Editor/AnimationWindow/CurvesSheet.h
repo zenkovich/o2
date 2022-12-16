@@ -23,7 +23,7 @@ namespace Editor
 		// Generates new color for curves and transfers to the tree
 		void UpdateCurvesColors();
 
-		// It is called when animation changed, checks count of animation tracks, updates curves
+		// Called when animation changed, checks count of animation tracks, updates curves
 		void OnAnimationChanged();
 
 		// Returns create menu category in editor
@@ -42,10 +42,10 @@ namespace Editor
 		// Initializes curves edit widget
 		void InitializeControls();
 
-		// It is called when timeline view has changed, updates horizontal view position and scale
+		// Called when timeline view has changed, updates horizontal view position and scale
 		void SetCameraAsTimelineView();
 
-		// It is called when curve editor view has changed, updates timeline scroll position
+		// Called when curve editor view has changed, updates timeline scroll position
 		void OnEditorViewChanged();
 
 		friend class AnimationWindow;

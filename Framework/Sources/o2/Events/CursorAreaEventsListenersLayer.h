@@ -22,13 +22,13 @@ namespace o2
 		// Destructor. Unregisters from events system
 		~CursorAreaEventListenersLayer();
 
-		// It is called when layer sub listeners has began draw with actual camera
+		// Called when layer sub listeners has began draw with actual camera
 		void OnBeginDraw();
 
-		// It is called when layer sub listeners has ended to draw
+		// Called when layer sub listeners has ended to draw
 		void OnEndDraw();
 
-		// It is called when layer has drawn
+		// Called when layer has drawn
 		void OnDrawn(const Basis& transform);
 
 		// Converts point to local coordinates from parent layer
@@ -81,10 +81,10 @@ namespace o2
 		Vector<DragableObject*> mDragListeners; // Drag events listeners
 
 	private:
-		// It is called when cursor enters this object
+		// Called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// Converts cursor to local coordinates

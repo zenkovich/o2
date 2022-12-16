@@ -28,10 +28,10 @@ namespace Editor
 		// Redo next action
 		void RedoAction();
 
-		// It is called when action was done
+		// Called when action was done
 		void DoneAction(IAction* action);
 
-		// It is called when some property changed, stores action for undo
+		// Called when some property changed, stores action for undo
 		void DoneActorPropertyChangeAction(const String& path, 
 										   const Vector<DataDocument>& prevValue, const Vector<DataDocument>& newValue);
 

@@ -78,28 +78,28 @@ namespace o2
 		// Sets owner actor
 		void SetOwnerActor(Actor* actor) override;
 
-		// It is called when actor was included to scene
+		// Called when actor was included to scene
 		void OnAddToScene() override;
 
-		// It is called when actor was excluded from scene
+		// Called when actor was excluded from scene
 		void OnRemoveFromScene() override;
 
-		// It is called when component started working on first update frame
+		// Called when component started working on first update frame
 		void OnStart() override;
 
 		// Updates component enable
 		void UpdateEnabled() override;
 
-		// Is is called when actor enabled in hierarchy
+		// Called when actor enabled in hierarchy
 		void OnEnabled() override;
 
-		// It is called when actor disabled in hierarchy
+		// Called when actor disabled in hierarchy
 		void OnDisabled() override;
 
-		// It is called when transformation was changed 
+		// Called when transformation was changed 
 		void OnTransformChanged() override;
 
-		// It is called when actor's transform was changed
+		// Called when actor's transform was changed
 		void OnTransformUpdated() override;
 	};
 }

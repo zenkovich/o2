@@ -71,10 +71,10 @@ namespace Editor
 		// Updates layers list and fits size
 		void UpdateLayersListAndFit();
 
-		// It is called when item drag began
+		// Called when item drag began
 		void BeginDragging(LayerPopupItem* item);
 
-		// It is called until dragging
+		// Called until dragging
 		void UpdateDragging();
 
 		// Updates drag animation of items
@@ -137,25 +137,25 @@ namespace Editor
 		float mDragTargetInsertCoef = 0.0f;
 
 	private:
-		// It is called when cursor double clicked
+		// Called when cursor double clicked
 		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
-		// It is called when started dragging
+		// Called when started dragging
 		void OnDragStart(const Input::Cursor& cursor) override;
 
-		// It is called when dragged
+		// Called when dragged
 		void OnDragged(const Input::Cursor& cursor, DragDropArea* area) override;
 
-		// It is called when dragging completed
+		// Called when dragging completed
 		void OnDragEnd(const Input::Cursor& cursor) override;
 
-		// it is called when name edit box has changed
+		// Called when name edit box has changed
 		void OnNameEditChanged(const WString& str);
 
-		// It is called when visible toggle changed
+		// Called when visible toggle changed
 		void OnVisibleChanged(bool visible);
 
-		// it is called when remove button has pressed
+		// Called when remove button has pressed
 		void OnRemovePressed();
 
 		friend class LayersPopup;

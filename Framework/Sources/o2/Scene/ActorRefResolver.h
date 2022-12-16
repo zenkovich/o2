@@ -48,16 +48,16 @@ namespace o2
 		// Remaps required refs 
 		static void RemapReferences(const Map<const Actor*, Actor*>& actors, const Map<const Component*, Component*>& components);
 
-		// It is called when new actor was created
+		// Called when new actor was created
 		static void ActorCreated(Actor* actor);
 
-		// It is called when actor id was changed
+		// Called when actor id was changed
 		static void OnActorIdChanged(Actor* actor, SceneUID prevId);
 
-		// It is called when new component was created
+		// Called when new component was created
 		static void ComponentCreated(Component* component);
 
-		// It is called when component id was changed
+		// Called when component id was changed
 		static void OnComponentIdChanged(Component* component, SceneUID prevId);
 
 	protected:

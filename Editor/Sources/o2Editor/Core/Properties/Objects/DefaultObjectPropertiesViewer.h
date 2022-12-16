@@ -24,7 +24,7 @@ namespace Editor
 		// Checks if properties need to be rebuilt, rebuilds if necessary
 		bool CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// It is called when viewer is refreshed, stores real object type
+		// Called when viewer is refreshed, stores real object type
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 	};
 }

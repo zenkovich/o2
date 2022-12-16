@@ -46,7 +46,7 @@ namespace o2
 		static bool IsAvailableFromCreateMenu();
 
 #if IS_EDITOR
-		// It is called when component added from editor; fits collider by actor size
+		// Called when component added from editor; fits collider by actor size
 		void OnAddedFromEditor() override;
 #endif
 
@@ -63,7 +63,7 @@ namespace o2
 		// Returns shape with relative position and angle
 		b2Shape* GetShape(const Basis& transform) override;
 
-		// It is called when transformation was changed; fits size by actor size when required
+		// Called when transformation was changed; fits size by actor size when required
 		void OnTransformChanged() override;
 	};
 }

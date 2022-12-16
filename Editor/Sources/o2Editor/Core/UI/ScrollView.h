@@ -112,7 +112,7 @@ namespace Editor
 		Basis mScreenToLocalTransform; // Screen to local transformation
 
 	protected:
-		// It is called when transformation was changed and updated, updates render texture and sprite
+		// Called when transformation was changed and updated, updates render texture and sprite
 		void OnTransformUpdated() override;
 
 		// Updates transparency for this and children widgets
@@ -136,22 +136,22 @@ namespace Editor
 		// Draws grid
 		virtual void DrawGrid();
 
-		// It is called when camera position was changed
+		// Called when camera position was changed
 		virtual void OnCameraTransformChanged();
 
-		// It is called when scrolling
+		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
 		// Updates camera's scale and position
 		void ChangeCameraScaleRelativeToCursor(const Vec2F& newScale);
 
-		// It is called when right mouse button was pressed on this
+		// Called when right mouse button was pressed on this
 		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button stay down on this
+		// Called when right mouse button stay down on this
 		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
+		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 	};
 }

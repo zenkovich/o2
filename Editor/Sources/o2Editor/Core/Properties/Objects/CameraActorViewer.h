@@ -39,10 +39,10 @@ namespace Editor
 		EnumProperty* mUnitsProperty = nullptr;
 
 	protected:
-		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
 		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// It is called when type enum selected, shows required property spoiler
+		// Called when type enum selected, shows required property spoiler
 		void OnTypeSelected();
 	};
 }

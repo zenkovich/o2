@@ -78,7 +78,7 @@ namespace Editor
 		VerticalLayout* mViewersLayout = nullptr; // Viewers layout
 
 	protected:
-		// It is called when some actors on scene were changed
+		// Called when some actors on scene were changed
 		void OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects);
 
 		// Sets target objects

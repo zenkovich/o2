@@ -32,7 +32,7 @@ namespace Editor
 		Function<void(const Curve::Key& key)> mOnClosed;
 
 	private:
-		// It is called when Ok button pressed, calls onClosed function with new key parameters
+		// Called when Ok button pressed, calls onClosed function with new key parameters
 		void OnOkPressed();
 	};
 }

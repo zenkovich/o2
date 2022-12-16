@@ -115,49 +115,49 @@ namespace Editor
 		// Sets nodeWidget data by object
 		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
 
-		// It is called when tree node was double clicked
+		// Called when tree node was double clicked
 		void OnNodeDblClick(TreeNode* nodeWidget) override;
 
-		// It is called when objects was dragged in new parent in position next of prevObject
+		// Called when objects was dragged in new parent in position next of prevObject
 		void OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject) override;
 
-		// It is called when object was created
+		// Called when object was created
 		void OnObjectCreated(SceneEditableObject* object);
 
-		// It is called when object was destroyed
+		// Called when object was destroyed
 		void OnObjectDestroing(SceneEditableObject* object);
 
-		// It is called when some objects were changed
+		// Called when some objects were changed
 		void OnObjectsChanged(const Vector<SceneEditableObject*>& objects);
 
-		// It is called when object was changed
+		// Called when object was changed
 		void OnObjectChanged(SceneEditableObject* object);
 
-		// It is called when enable objects toggle group pressed
+		// Called when enable objects toggle group pressed
 		void EnableObjectsGroupPressed(bool value);
 
-		// It is called when enable objects toggle group released
+		// Called when enable objects toggle group released
 		void EnableObjectsGroupReleased(bool value);
 
-		// It is called when lock objects toggle group pressed
+		// Called when lock objects toggle group pressed
 		void LockObjectsGroupPressed(bool value);
 
-		// It is called when lock objects toggle group released
+		// Called when lock objects toggle group released
 		void LockObjectsGroupReleased(bool value);
 
-		// It is called when list of selected objects was changed
+		// Called when list of selected objects was changed
 		void OnNodesSelectionChanged(Vector<void*> objects) override;
 
-		// It is called when some drag listeners was entered to this area
+		// Called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was exited from this area
+		// Called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was dragged above this area
+		// Called when some drag listeners was dragged above this area
 		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some selectable listeners was dropped to this
+		// Called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 		friend class SceneTreeNode;
@@ -206,19 +206,19 @@ namespace Editor
 		WidgetState* mEditState = nullptr;    // Object's name edit state
 
 	protected:
-		// It is called on deserialization, initializes controls
+		// Called on deserialization, initializes controls
 		void OnDeserialized(const DataValue& node) override;
 
 		// initializes controls and widgets
 		void InitializeControls();
 
-		// It is called when lock toggle was clicked and changes target object's lock state
+		// Called when lock toggle was clicked and changes target object's lock state
 		void OnLockClicked();
 
-		// It is called when enable toggle was clicked and changes target object's enable state
+		// Called when enable toggle was clicked and changes target object's enable state
 		void OnEnableCkicked();
 
-		// It is called when object name edit box changed
+		// Called when object name edit box changed
 		void OnObjectNameChanged(const WString& text);
 
 		friend class SceneTree;

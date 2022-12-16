@@ -202,19 +202,19 @@ namespace o2
 		// Sets owner widget for this and children
 		void SetOwnerWidget(Widget* owner);
 
-		// It is called when layout was changed, calls owner widget layout updating
+		// Called when layout was changed, calls owner widget layout updating
 		void OnLayoutChanged();
 
 		// Updates drawable rect, calling when widget's layout was changed
 		void UpdateLayout();
 
-		// It is called when transparency was changed and updates children transparencies
+		// Called when transparency was changed and updates children transparencies
 		void UpdateResTransparency();
 
-		// It is called when owner widget including in scene. Registers editable object and it's children
+		// Called when owner widget including in scene. Registers editable object and it's children
 		void OnAddToScene();
 
-		// It is called when owner widget excluding in scene. Unregisters editable object and it's children
+		// Called when owner widget excluding in scene. Unregisters editable object and it's children
 		void OnRemoveFromScene();
 
 		// Returns dictionary with all child layers
@@ -306,7 +306,7 @@ namespace o2
 		// Sets layout of object, override when it's supports
 		void SetLayout(const Layout& layout) override;
 
-		// It is called when something changed in this object
+		// Called when something changed in this object
 		void OnChanged() override;
 
 		// Beginning serialization callback
@@ -319,10 +319,10 @@ namespace o2
 		bool mIsLocked = false; // Is locked
 
 	protected:
-		// It is called before making prototype from this object
+		// Called before making prototype from this object
 		void BeginMakePrototype() const override;
 
-		// It is called before instantiate from this object
+		// Called before instantiate from this object
 		void BeginInstantiatePrototype() const override;
 
 #endif // IS_EDITOR

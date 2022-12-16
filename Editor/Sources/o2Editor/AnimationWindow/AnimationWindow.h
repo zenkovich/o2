@@ -104,7 +104,7 @@ namespace Editor
 		ActionsList mActionsList; // List of actions in animation editor, also injecting into curves editor
 
 	protected:
-		// It is called when editor window has closed
+		// Called when editor window has closed
 		void OnClosed() override;
 
 		// Initializes window
@@ -128,28 +128,28 @@ namespace Editor
 		// Initializes separator handle view and events
 		void InitializeSeparatorHandle();
 
-		// It is called when editing animation changed. Invokes change methods in tree, curves etc
+		// Called when editing animation changed. Invokes change methods in tree, curves etc
 		void OnAnimationChanged();
 
-		// It is called when animation has updated
+		// Called when animation has updated
 		void OnAnimationUpdate(float time);
 
-		// It is called when play/pause button was pressed
+		// Called when play/pause button was pressed
 		void OnPlayPauseToggled(bool play);
 
-		// It is called when loop button was pressed
+		// Called when loop button was pressed
 		void OnLoopToggled(bool loop);
 
-		// It is called when search edit box text was changed
+		// Called when search edit box text was changed
 		void OnSearchEdited(const WString& search);
 
-		// It is called when menu filter button was pressed
+		// Called when menu filter button was pressed
 		void OnMenuFilterPressed();
 
-		// It is called when menu preview button was pressed
+		// Called when menu preview button was pressed
 		void OnMenuPreviewToggle(bool value);
 
-		// It is called when menu record button was pressed
+		// Called when menu record button was pressed
 		void OnMenuRecordToggle(bool value);
 
 		friend class AnimationTimeline;

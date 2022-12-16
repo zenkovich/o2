@@ -127,13 +127,13 @@ namespace o2
 		Vector<ICollider*> mColliders; // Attached colliders list
 
 	protected:
-		// It is called when result enable was changed
+		// Called when result enable was changed
 		void OnEnableInHierarchyChanged() override;
 
-		// Is is called when actor has added to scene; creates rigid body
+		// Called when actor has added to scene; creates rigid body
 		void OnAddToScene() override;
 
-		// It is called when actor has removed from scene; destroys rigid body
+		// Called when actor has removed from scene; destroys rigid body
 		void OnRemoveFromScene() override;
 
 		// Creates box2d body, registers in physics world

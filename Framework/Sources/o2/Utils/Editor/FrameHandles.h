@@ -89,16 +89,16 @@ namespace o2
 		bool mChangedFromThis = false; // Is actors changed from this, needs to break circular updating
 
 	protected:
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
 		// Left top handle moved
@@ -140,10 +140,10 @@ namespace o2
 		// Rotate handle moved
 		void OnRotateHandle(const Vec2F& position, Vec2F lastHandleCoords);
 
-		// It is called when one of handles was pressed, stores frame basis
+		// Called when one of handles was pressed, stores frame basis
 		void OnHandlePressed();
 
-		// It is called when one of handles was released, calls event
+		// Called when one of handles was released, calls event
 		void OnHandleReleased();
 
 		// Sets all handles enable
@@ -152,10 +152,10 @@ namespace o2
 		// Updates handles position and angle
 		void UpdateHandlesTransform();
 
-		// It is called when frame transformed or moved
+		// Called when frame transformed or moved
 		void OnTransformed(const Basis& transform);
 
-		// It is called when handle change completed, calling basis change completed event
+		// Called when handle change completed, calling basis change completed event
 		void OnChangeCompleted();
 	};
 }

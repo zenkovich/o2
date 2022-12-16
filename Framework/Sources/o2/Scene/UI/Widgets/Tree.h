@@ -302,10 +302,10 @@ namespace o2
 		Vector<VisibleWidgetDef> mVisibleWidgetsCache; // Visible widgets cache
 
 	protected:
-		// It is called when widget was selected
+		// Called when widget was selected
 		void OnFocused() override;
 
-		// It is called when widget was deselected
+		// Called when widget was deselected
 		void OnUnfocused() override;
 
 		// Draws zebra back with scroll offset
@@ -326,16 +326,16 @@ namespace o2
 		// Free node data
 		virtual void FreeNodeData(TreeNode* nodeWidget, void* object);
 
-		// It is called when tree node was double clicked
+		// Called when tree node was double clicked
 		virtual void OnNodeDblClick(TreeNode* nodeWidget);
 
-		// It is called when tree node was clicked by right button
+		// Called when tree node was clicked by right button
 		virtual void OnNodeRBClick(TreeNode* nodeWidget);
 
-		// It is called when list of selected objects was changed
+		// Called when list of selected objects was changed
 		virtual void OnNodesSelectionChanged(Vector<void*> objects);
 
-		// It is called when objects was dragged in new parent in position next of prevObject
+		// Called when objects was dragged in new parent in position next of prevObject
 		virtual void OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject);
 
 // ISelectableDragableObjectsGroup implementation
@@ -361,10 +361,10 @@ namespace o2
 		// Removes selectable object from group
 		void RemoveSelectableObject(SelectableDragableObject* object) override;
 
-		// It is called when selectable draggable object was released
+		// Called when selectable draggable object was released
 		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) override;
 
-		// It is called when selectable object was began to drag
+		// Called when selectable object was began to drag
 		void OnSelectableObjectBeganDragging(SelectableDragableObject* object) override;
 
 // -------------
@@ -372,7 +372,7 @@ namespace o2
 		// Checks multiple selection nodes (when Shift key is down) and returns is someone was selected
 		bool CheckMultipleSelection(const Vec2F& point);
 
-		// It is called when items selected
+		// Called when items selected
 		void OnSelectionChanged();
 
 		// Updates highlight animation
@@ -429,25 +429,25 @@ namespace o2
 		// Moves scroll position and updates children widgets clipping and layout
 		void MoveScrollPosition(const Vec2F& delta) override;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor moved on this (or moved outside when this was pressed)
+		// Called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
+		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when scrolling
+		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
 		// Updates hover target rect and visibility
@@ -473,16 +473,16 @@ namespace o2
 		// Updates insertion animation when dragging
 		void UpdateDraggingInsertionAnim(float dt);
 
-		// It is called when some drag listeners was entered to this area
+		// Called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was dragged above this area
+		// Called when some drag listeners was dragged above this area
 		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was exited from this area
+		// Called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some selectable listeners was dropped to this
+		// Called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 // ------------
@@ -548,34 +548,34 @@ namespace o2
 		WidgetState* mSelectedState = nullptr; // Selected state cached
 
 	protected:
-		// It is called when widget state was added, caches selected state
+		// Called when widget state was added, caches selected state
 		void OnStateAdded(WidgetState* state) override;
 
 		// Updates expanding
 		void UpdateTreeLayout(float dt);
 
-		// It is called when cursor double clicked
+		// Called when cursor double clicked
 		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
-		// It is called when cursor enters this object, moving hover of tree to this
+		// Called when cursor enters this object, moving hover of tree to this
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object, moving hover of tree to this
+		// Called when cursor exits this object, moving hover of tree to this
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when started dragging
+		// Called when started dragging
 		void OnDragStart(const Input::Cursor& cursor) override;
 
-		// It is called when dragged
+		// Called when dragged
 		void OnDragged(const Input::Cursor& cursor, DragDropArea* area) override;
 
-		// It is called when dragging completed
+		// Called when dragging completed
 		void OnDragEnd(const Input::Cursor& cursor) override;
 
-		// It is called when this was selected
+		// Called when this was selected
 		void OnSelected() override;
 
-		// It is called when this was unselected
+		// Called when this was unselected
 		void OnDeselected() override;
 
 		friend class Tree;

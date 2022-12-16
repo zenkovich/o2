@@ -43,7 +43,7 @@ namespace Editor
 		FloatProperty*   mLinesDistCoefProperty = nullptr;
 
 	protected:
-		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
 		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 	};
 }

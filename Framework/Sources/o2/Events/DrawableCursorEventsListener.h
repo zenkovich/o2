@@ -36,7 +36,7 @@ namespace o2
 		IDrawable* mEventHandleDrawable;
 
 	protected:
-		// It is called when listener was drawn
+		// Called when listener was drawn
 		void OnDrawn();
 	};
 }

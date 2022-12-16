@@ -30,13 +30,13 @@ namespace Editor
 		AnimationClip* mCurrentAnimation = nullptr;
 
 	private:
-		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
 		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// It is called when viewer is refreshed
+		// Called when viewer is refreshed
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// It is called when edit button has pressed, opens animation editor window
+		// Called when edit button has pressed, opens animation editor window
 		void OnEditPressed();
 	};
 }

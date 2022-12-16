@@ -58,13 +58,13 @@ namespace Editor
 		CurvesEditor* mEditorWidget = nullptr;
 
 	protected:
-		// It is called when hiding, calls completed callback
+		// Called when hiding, calls completed callback
 		void OnHide();
 
 		// Initialize controls
 		void InitializeControls();
 
-		// It is called when cursor was pressed outside, closed dialog
+		// Called when cursor was pressed outside, closed dialog
 		void OnCursorPressedOutside();
 	};
 	 

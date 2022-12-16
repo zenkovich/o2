@@ -131,10 +131,10 @@ namespace Editor
 		// Sets nodeWidget data by object
 		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
 
-		// It is called when tree node was double clicked
+		// Called when tree node was double clicked
 		void OnNodeDblClick(TreeNode* nodeWidget) override;
 
-		// It is called when list of selected objects was changed
+		// Called when list of selected objects was changed
 		void OnNodesSelectionChanged(Vector<void*> objects) override;
 
 		friend class AnimationPropertiesTreeNode;
@@ -174,7 +174,7 @@ namespace Editor
 		AnimationPropertiesTree* mTree = nullptr; // Owner tree
 
 	private:
-		// It is called on deserialization, initializes controls
+		// Called on deserialization, initializes controls
 		void OnDeserialized(const DataValue& node) override;
 
 		// initializes controls and widgets

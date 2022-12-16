@@ -87,10 +87,10 @@ namespace o2
 		// Stops all states
 		void StopAll();
 
-		// It is called when animation started to edit. It means that animation must be deactivated
+		// Called when animation started to edit. It means that animation must be deactivated
 		void BeginAnimationEdit() override;
 
-		// It is called when animation finished editing. ANimation must be reactivated
+		// Called when animation finished editing. ANimation must be reactivated
 		void EndAnimationEdit() override;
 
 		// Returns name of component
@@ -181,13 +181,13 @@ namespace o2
 		// Removes Animation track from agent by path
 		void UnregTrack(IAnimationTrack::IPlayer* player, const String& path);
 
-		// It is called when new track added in animation state, registers track player in mixer
+		// Called when new track added in animation state, registers track player in mixer
 		void OnStateAnimationTrackAdded(AnimationState* state, IAnimationTrack::IPlayer* player);
 
-		// It is called when track is removing from animation state, unregisters track player from mixer
+		// Called when track is removing from animation state, unregisters track player from mixer
 		void OnStateAnimationTrackRemoved(AnimationState* state, IAnimationTrack::IPlayer* player);
 
-		// It is called from editor, refreshes states
+		// Called from editor, refreshes states
 		void OnStatesListChanged();
 
 		friend class AnimationClip;

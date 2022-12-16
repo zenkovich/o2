@@ -142,16 +142,16 @@ namespace Editor
 		// Initializes up search panel
 		void InitializeUpPanel();
 
-		// It is called when search edit box text was changed
+		// Called when search edit box text was changed
 		void OnSearchEdited(const WString& search);
 
-		// It is called when menu filter button was pressed
+		// Called when menu filter button was pressed
 		void OnMenuFilterPressed();
 
-		// It is called when show folders tree button pressed
+		// Called when show folders tree button pressed
 		void OnShowTreePressed();
 
-		// It is called when assets was rebuilt
+		// Called when assets was rebuilt
 		void OnAssetsRebuilt(const Vector<UID>& changedAssets);
 
 		// Shows and highligh asset icon

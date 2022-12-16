@@ -116,10 +116,10 @@ namespace Editor
 		bool  mAutoCalculateTabWidth = true; // Automatically calculating tab width when changing caption
 
 	protected:
-		// It is called when visible was changed, undocks when hiding
+		// Called when visible was changed, undocks when hiding
 		void OnEnableInHierarchyChanged() override;
 
-		// It is called when widget was selected, enables active tab
+		// Called when widget was selected, enables active tab
 		void OnFocused() override;
 
 		//Initialize animation for frame appearance
@@ -128,16 +128,16 @@ namespace Editor
 		// Initializes drag handles
 		void InitializeDragHandles();
 
-		// It is called when head handle double clicked, trying to dock window
+		// Called when head handle double clicked, trying to dock window
 		void OnHeadDblCKicked(const Input::Cursor& cursor);
 
-		// It is called when window was moved
+		// Called when window was moved
 		void OnMoved(const Input::Cursor& cursor);
 
-		// It is called when window moving was completed
+		// Called when window moving was completed
 		void OnMoveCompleted(const Input::Cursor&);
 
-		// It is called when window going to move
+		// Called when window going to move
 		void OnMoveBegin(const Input::Cursor&);
 
 		// Searches dock place under cursor and returns parameters of them

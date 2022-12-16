@@ -177,19 +177,19 @@ namespace o2
 		Vector<Sprite*> mSelectionSpritesPool; // Selection sprites pool
 
 	protected:
-		// It is called when object was deserialized and trying to reattach states animations target
+		// Called when object was deserialized and trying to reattach states animations target
 		void OnDeserialized(const DataValue& node) override;
 
-		// It is called when visible was changed
+		// Called when visible was changed
 		void OnEnableInHierarchyChanged() override;
 
 		// Updates transparency for this and children widgets
 		void UpdateTransparency() override;
 
-		// It is called when transformation was changed and updated
+		// Called when transformation was changed and updated
 		void OnTransformUpdated() override;
 
-		// It is called when selected item index was changed
+		// Called when selected item index was changed
 		virtual void OnSelectionChanged();
 
 		// Moves scroll position and updates children widgets clipping and layout
@@ -198,22 +198,22 @@ namespace o2
 		// Updates selections sprites rectangles
 		void UpdateSelectionSprites();
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when cursor stay down during frame
+		// Called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
-		// It is called when cursor moved on this (or moved outside when this was pressed)
+		// Called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor) override;
 
-		// It is called when cursor released (only when cursor pressed this at previous time)
+		// Called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		// Called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// Returns item widget under point and stores index in idxPtr, if not null

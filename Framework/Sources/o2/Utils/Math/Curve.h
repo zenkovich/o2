@@ -57,11 +57,11 @@ namespace o2
 		// Returns value by position
 		float Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
 
-		// It is called when beginning keys batch change. After this call all keys modifications will not be update approximation
+		// Called when beginning keys batch change. After this call all keys modifications will not be update approximation
 		// Used for optimizing many keys change
 		void BeginKeysBatchChange();
 
-		// It is called when keys batch change completed. Updates approximation
+		// Called when keys batch change completed. Updates approximation
 		void CompleteKeysBatchingChange();
 
 		// Moves all keys positions to offset

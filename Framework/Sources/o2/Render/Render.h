@@ -343,7 +343,7 @@ namespace o2
 		// Deinitializes free type library
 		void DeinitializeFreeType();
 
-		// It is called when target frame or window was resized
+		// Called when target frame or window was resized
 		void OnFrameResized();
 
 		// Send buffers to draw
@@ -367,7 +367,7 @@ namespace o2
 		// Checks font for unloading
 		void CheckFontsUnloading();
 
-		// It is called when assets was rebuilded
+		// Called when assets was rebuilded
 		void OnAssetsRebuilded(const Vector<UID>& changedAssets);
 
 		friend class Application;

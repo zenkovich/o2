@@ -16,19 +16,19 @@ namespace o2
 		// Virtual destructor
 		virtual ~ApplicationEventsListener();
 
-		// It is called when application was started
+		// Called when application was started
 		virtual void OnApplicationStarted();
 
-		// It is called when application began closing
+		// Called when application began closing
 		virtual void OnApplicationClosing();
 
-		// It is called when application was activated
+		// Called when application was activated
 		virtual void OnApplicationActivated();
 
-		// It is called when application was deactivated
+		// Called when application was deactivated
 		virtual void OnApplicationDeactivated();
 
-		// It is called when application frame was resized
+		// Called when application frame was resized
 		virtual void OnApplicationSized();
 	};
 }

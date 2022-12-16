@@ -27,7 +27,7 @@ namespace o2
 		RectF mDrawingScissorRect; // Scissor rectangle at last drawing
 
 	protected:
-		// It is called when drawable was drawn. Storing render scissor rect, calling onDraw callback
+		// Called when drawable was drawn. Storing render scissor rect, calling onDraw callback
 		virtual void OnDrawn();
 	};
 }

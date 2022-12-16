@@ -89,7 +89,7 @@ namespace o2
 		AnimationAssetRef mAnimation; // Widget animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
 
 	protected:
-		// It is called when animation changed from editor
+		// Called when animation changed from editor
 		void OnAnimationChanged();
 
 		// Completion deserialization callback

@@ -44,16 +44,22 @@ namespace o2
 		// Updates component enable
 		void UpdateEnabled() override;
 
+		// Called when parent changed
+		void OnParentChanged(Actor* oldParent) override;
+
 		// Returns current scene layer
 		SceneLayer* GetSceneDrawableSceneLayer() const override;
 
 		// Returns is drawable enabled
 		bool IsSceneDrawableEnabled() const override;
 
-		// It is called when actor was included to scene
+		// Returns parent scene drawable
+		ISceneDrawable* GetParentDrawable() override;
+
+		// Called when actor was included to scene
 		void OnAddToScene() override;
 
-		// It is called when actor was excluded from scene
+		// Called when actor was excluded from scene
 		void OnRemoveFromScene() override;
 
 		friend class Scene;
@@ -87,8 +93,10 @@ CLASS_METHODS_META(o2::DrawableComponent)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);

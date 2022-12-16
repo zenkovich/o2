@@ -69,7 +69,7 @@ namespace o2
 		SERIALIZABLE(List);
 
 	protected:
-		// It is called when selected item index was changed
+		// Called when selected item index was changed
 		void OnSelectionChanged() override;
 	};
 }

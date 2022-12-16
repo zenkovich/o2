@@ -28,6 +28,9 @@ namespace Editor
 		// Copy operator
 		FloatProperty& operator=(const FloatProperty& other);
 
+		// Returns edit box
+		EditBox* GetEditBox() const;
+
 		IOBJECT(FloatProperty);
 
 	protected:
@@ -76,6 +79,7 @@ CLASS_METHODS_META(Editor::FloatProperty)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const FloatProperty&);
+	FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetEditBox);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
