@@ -112,6 +112,14 @@ namespace o2
 		return nullptr;
 	}
 
+	int DrawableComponent::GetIndexInParentDrawable() const
+	{
+		if (mOwner && mOwner->mParent)
+			return mOwner->mParent->mChildren.IndexOf(mOwner);
+
+		return 0;
+	}
+
 	void DrawableComponent::OnAddToScene()
 	{
 		Component::OnAddToScene();

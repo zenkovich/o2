@@ -21,8 +21,8 @@ namespace o2
 	{
 		if (mInheritDrawingDepthFromParent)
 		{
-			if (auto parent = GetParentDrawable())
-				parent->mChildrenInheritedDepth.Remove(this);
+			if (mParentDrawable)
+				mParentDrawable->mChildrenInheritedDepth.Remove(this);
 		}
 	}
 
@@ -64,14 +64,20 @@ namespace o2
 		if (mInheritDrawingDepthFromParent)
 		{
 			if (parent)
+			{
 				parent->mChildrenInheritedDepth.Add(this);
+				parent->SortInheritedDrawables();
+			}
 
 			OnRemoveFromScene(true);
 		}
 		else
 		{
 			if (parent)
+			{
 				parent->mChildrenInheritedDepth.Remove(this);
+				parent->SortInheritedDrawables();
+			}
 
 			OnAddToScene(true);
 		}
@@ -88,55 +94,54 @@ namespace o2
 			return;
 
 		if (mParentDrawable)
+		{
 			mParentDrawable->mChildrenInheritedDepth.Remove(this);
+			mParentDrawable->SortInheritedDrawables();
+		}
 
 		mParentDrawable = GetParentDrawable();
 
 		if (mParentDrawable)
+		{
 			mParentDrawable->mChildrenInheritedDepth.Add(this);
+			mParentDrawable->SortInheritedDrawables();
+		}
+	}
+
+	void ISceneDrawable::SortInheritedDrawables()
+	{
+		mChildrenInheritedDepth.SortBy<int>([](ISceneDrawable* x) { return x->GetIndexInParentDrawable(); });
 	}
 
 	void ISceneDrawable::OnEnabled()
 	{
-		if (mInheritDrawingDepthFromParent)
-			return;
-
 		if (auto layer = GetSceneDrawableSceneLayer())
-			layer->OnDrawableEnabled(this);
+			layer->OnDrawableEnabled(this, mInheritDrawingDepthFromParent && mParentDrawable == nullptr);
 	}
 
 	void ISceneDrawable::OnDisabled()
 	{
-		if (mInheritDrawingDepthFromParent)
-			return;
-
 		if (auto layer = GetSceneDrawableSceneLayer())
-			layer->OnDrawableDisabled(this);
+			layer->OnDrawableDisabled(this, mInheritDrawingDepthFromParent && mParentDrawable == nullptr);
 	}
 
 	void ISceneDrawable::OnAddToScene(bool force /*= false*/)
 	{
-		if (mInheritDrawingDepthFromParent && !force)
-			return;
-
 		if (auto layer = GetSceneDrawableSceneLayer())
 		{
 			layer->RegisterDrawable(this);
 
 			if (IsSceneDrawableEnabled())
-				layer->OnDrawableEnabled(this);
+				layer->OnDrawableEnabled(this, mInheritDrawingDepthFromParent && mParentDrawable == nullptr);
 		}
 	}
 
 	void ISceneDrawable::OnRemoveFromScene(bool force /*= false*/)
 	{
-		if (mInheritDrawingDepthFromParent && !force)
-			return;
-
 		if (auto layer = GetSceneDrawableSceneLayer())
 		{
 			if (IsSceneDrawableEnabled())
-				layer->OnDrawableDisabled(this);
+				layer->OnDrawableDisabled(this, mInheritDrawingDepthFromParent && mParentDrawable == nullptr);
 
 			layer->UnregisterDrawable(this);
 		}

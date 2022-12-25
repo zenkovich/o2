@@ -7,6 +7,11 @@
 
 namespace o2
 {
+	SceneLayer::SceneLayer()
+	{
+		OnDrawableEnabled(&mRootDrawables, false);
+	}
+
 	void SceneLayer::SetName(const String& name)
 	{
 		String oldName = mName;
@@ -75,54 +80,64 @@ namespace o2
 
 	void SceneLayer::OnDrawableDepthChanged(ISceneDrawable* drawable)
 	{
-		OnDrawableDisabled(drawable);
-		OnDrawableEnabled(drawable);
+		OnDrawableDisabled(drawable, false);
+		OnDrawableEnabled(drawable, false);
 	}
 
-	void SceneLayer::OnDrawableEnabled(ISceneDrawable* drawable)
+	void SceneLayer::OnDrawableEnabled(ISceneDrawable* drawable, bool isRootAndInheritedDepth)
 	{
-		const int binSearchRangeSizeStop = 5;
-		int rangeMin = 0, rangeMax = mEnabledDrawables.Count();
-		float targetDepth = drawable->mDrawingDepth;
-		int position = 0;
-		bool skipLinearSearch = false;
-
-		while (rangeMax - rangeMin > binSearchRangeSizeStop)
+		if (!isRootAndInheritedDepth)
 		{
-			int center = (rangeMin + rangeMax) >> 1;
+			const int binSearchRangeSizeStop = 5;
+			int rangeMin = 0, rangeMax = mEnabledDrawables.Count();
+			float targetDepth = drawable->mDrawingDepth;
+			int position = 0;
+			bool skipLinearSearch = false;
 
-			float centerValue = mEnabledDrawables[center]->mDrawingDepth;
-
-			if (targetDepth < centerValue)
-				rangeMax = center;
-			else if (targetDepth > centerValue)
-				rangeMin = center;
-			else
+			while (rangeMax - rangeMin > binSearchRangeSizeStop)
 			{
-				position = center;
-				skipLinearSearch = true;
-				break;
-			}
-		}
+				int center = (rangeMin + rangeMax) >> 1;
 
-		if (!skipLinearSearch)
-		{
-			for (position = rangeMin; position < rangeMax; position++)
-				if (mEnabledDrawables[position]->mDrawingDepth > targetDepth)
+				float centerValue = mEnabledDrawables[center]->mDrawingDepth;
+
+				if (targetDepth < centerValue)
+					rangeMax = center;
+				else if (targetDepth > centerValue)
+					rangeMin = center;
+				else
+				{
+					position = center;
+					skipLinearSearch = true;
 					break;
-		}
+				}
+			}
 
-		mEnabledDrawables.Insert(drawable, position);
+			if (!skipLinearSearch)
+			{
+				for (position = rangeMin; position < rangeMax; position++)
+					if (mEnabledDrawables[position]->mDrawingDepth > targetDepth)
+						break;
+			}
+
+			mEnabledDrawables.Insert(drawable, position);
+		}
+		else
+		{
+			mRootDrawables.drawables.Add(drawable);
+		}
 	}
 
-	void SceneLayer::OnDrawableDisabled(ISceneDrawable* drawable)
+	void SceneLayer::OnDrawableDisabled(ISceneDrawable* drawable, bool isRootAndInheritedDepth)
 	{
-		mEnabledDrawables.Remove(drawable);
+		if (!isRootAndInheritedDepth)
+			mEnabledDrawables.Remove(drawable);
+		else
+			mRootDrawables.drawables.Remove(drawable);
 	}
 
 	void SceneLayer::SetLastByDepth(ISceneDrawable* drawable)
 	{
-		OnDrawableDisabled(drawable);
+		OnDrawableDisabled(drawable, drawable->IsDrawingDepthInheritedFromParent() && drawable->GetParentDrawable() == nullptr);
 
 		for (int position = 0; position < mEnabledDrawables.Count(); position++)
 		{
@@ -136,26 +151,11 @@ namespace o2
 		mEnabledDrawables.Add(drawable);
 	}
 
-
-// 	void LayerDataValueConverter::ToData(void* object, DataValue& data)
-// 	{
-// 		if (object)
-// 		{
-// 			SceneLayer* value = (SceneLayer*)object;
-// 			data = value->name;
-// 		}
-// 	}
-// 
-// 	void LayerDataValueConverter::FromData(void* object, const DataValue& data)
-// 	{
-// 		SceneLayer*& value = *(SceneLayer**)object;
-// 		value = o2Scene.GetLayer(data);
-// 	}
-// 
-// 	bool LayerDataValueConverter::IsConvertsType(const Type* type) const
-// 	{
-// 		return type->IsBasedOn(*TypeOf(SceneLayer).GetPointerType());
-// 	}
+	void SceneLayer::RootDrawablesContainer::Draw()
+	{
+		for (auto drawable : drawables)
+			drawable->Draw();
+	}
 }
 
 DECLARE_CLASS(o2::SceneLayer);

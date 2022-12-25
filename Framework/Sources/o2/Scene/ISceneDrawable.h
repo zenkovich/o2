@@ -73,8 +73,14 @@ namespace o2
 		// Returns parent scene drawable
 		virtual ISceneDrawable* GetParentDrawable() { return nullptr; }
 
+		// Returns the index in the parent's list of children, used to sort the rendering
+		virtual int GetIndexInParentDrawable() const { return 0; }
+
 		// Called when the parent changes
 		virtual void OnDrawbleParentChanged();
+
+		// Sorts depth-inheriting drawables
+		void SortInheritedDrawables();
 
 		// Called when drawable has enabled
 		void OnEnabled();
@@ -131,7 +137,9 @@ CLASS_METHODS_META(o2::ISceneDrawable)
 	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
+	FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawbleParentChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, SortInheritedDrawables);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene, bool);

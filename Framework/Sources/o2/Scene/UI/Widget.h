@@ -336,6 +336,9 @@ namespace o2
 		// Returns parent scene drawable
 		ISceneDrawable* GetParentDrawable() override;
 
+		// Returns the index in the parent's list of children, used to sort the rendering
+		int GetIndexInParentDrawable() const override;
+
 		// Updates child widgets list
 		void UpdateChildWidgetsList();
 
@@ -834,6 +837,7 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
+	FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateChildWidgetsList);
 	FUNCTION().PROTECTED().SIGNATURE(WidgetLayoutData&, GetLayoutData);
 	FUNCTION().PROTECTED().SIGNATURE(const WidgetLayoutData&, GetLayoutData);

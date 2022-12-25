@@ -553,6 +553,14 @@ namespace o2
 		return nullptr;
 	}
 
+	int Widget::GetIndexInParentDrawable() const
+	{
+		if (mParent)
+			return mParent->mChildren.IndexOf((Actor*)this);
+
+		return 0;
+	}
+
 	void Widget::OnFocused()
 	{
 		onFocused();

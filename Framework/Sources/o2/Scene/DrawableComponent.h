@@ -56,6 +56,9 @@ namespace o2
 		// Returns parent scene drawable
 		ISceneDrawable* GetParentDrawable() override;
 
+		// Returns the index in the parent's list of children, used to sort the rendering
+		int GetIndexInParentDrawable() const override;
+
 		// Called when actor was included to scene
 		void OnAddToScene() override;
 
@@ -97,6 +100,7 @@ CLASS_METHODS_META(o2::DrawableComponent)
 	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
+	FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);

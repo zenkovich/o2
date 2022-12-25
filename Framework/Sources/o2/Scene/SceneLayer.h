@@ -1,7 +1,8 @@
 #pragma once
 
-#include "o2/Utils/Types/String.h"
+#include "o2/Scene/ISceneDrawable.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/String.h"
 
 namespace o2
 {
@@ -17,6 +18,10 @@ namespace o2
 #if IS_EDITOR
 		bool visible = true; // Is layer visible in editor
 #endif
+
+	public:
+		// Default constructor
+		SceneLayer();
 
 		// Sets layer name
 		void SetName(const String& name);
@@ -39,6 +44,14 @@ namespace o2
 		SERIALIZABLE(SceneLayer);
 
 	protected:
+		struct RootDrawablesContainer: public ISceneDrawable
+		{
+			Vector<ISceneDrawable*> drawables;
+
+			void Draw() override;
+		};
+
+	protected:
 		String mName; // Name of layer @SERIALIZABLE
 
 		Vector<Actor*>  mActors;        // Actors in layer
@@ -46,6 +59,8 @@ namespace o2
 
 		Vector<ISceneDrawable*> mDrawables;        // Drawable objects in layer
 		Vector<ISceneDrawable*> mEnabledDrawables; // Enabled drawable objects in layer
+
+		RootDrawablesContainer mRootDrawables; // Root drawables with inherited depth. Draws at 0 priority
 
 	protected:
 		// Registers actor in list
@@ -70,10 +85,10 @@ namespace o2
 		void OnDrawableDepthChanged(ISceneDrawable* drawable);
 
 		// Called when object was enabled
-		void OnDrawableEnabled(ISceneDrawable* drawable);
+		void OnDrawableEnabled(ISceneDrawable* drawable, bool isRootAndInheritedDepth);
 
 		// Called when object was enabled
-		void OnDrawableDisabled(ISceneDrawable* drawable);
+		void OnDrawableDisabled(ISceneDrawable* drawable, bool isRootAndInheritedDepth);
 
 		// Sets drawable order as last of all objects with same depth
 		void SetLastByDepth(ISceneDrawable* drawable);
@@ -116,11 +131,13 @@ CLASS_FIELDS_META(o2::SceneLayer)
 	FIELD().PROTECTED().NAME(mEnabledActors);
 	FIELD().PROTECTED().NAME(mDrawables);
 	FIELD().PROTECTED().NAME(mEnabledDrawables);
+	FIELD().PROTECTED().NAME(mRootDrawables);
 }
 END_META;
 CLASS_METHODS_META(o2::SceneLayer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<Actor*>&, GetActors);
@@ -134,8 +151,8 @@ CLASS_METHODS_META(o2::SceneLayer)
 	FUNCTION().PROTECTED().SIGNATURE(void, RegisterDrawable, ISceneDrawable*);
 	FUNCTION().PROTECTED().SIGNATURE(void, UnregisterDrawable, ISceneDrawable*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableDepthChanged, ISceneDrawable*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableEnabled, ISceneDrawable*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableDisabled, ISceneDrawable*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableEnabled, ISceneDrawable*, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableDisabled, ISceneDrawable*, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetLastByDepth, ISceneDrawable*);
 }
 END_META;

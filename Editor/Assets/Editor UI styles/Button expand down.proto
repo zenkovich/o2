@@ -45,8 +45,8 @@
                                     "a": 0
                                 },
                                 "mImageAsset": {
-                                    "id": "3ecc3c09309b6acd07400dab40ba53a5",
-                                    "path": "ui/UI4_Right_icn.png"
+                                    "id": "2b793b1a747167266984178a32e32d37",
+                                    "path": "ui/UI4_Down_icn.png"
                                 }
                             }
                         },
@@ -85,8 +85,8 @@
                                     "a": 0
                                 },
                                 "mImageAsset": {
-                                    "id": "00a120c04e8d576676041a9f78ed6876",
-                                    "path": "ui/UI4_Right_icn_select.png"
+                                    "id": "310c57c01d81514264a35e92147c0695",
+                                    "path": "ui/UI4_Down_icn_select.png"
                                 }
                             }
                         },
@@ -127,8 +127,8 @@
                                     "a": 0
                                 },
                                 "mImageAsset": {
-                                    "id": "4b1576cd389d313448200d037bee454d",
-                                    "path": "ui/UI4_Right_icn_pressed.png"
+                                    "id": "6935315628ef0c881f764b0a5ba74fe7",
+                                    "path": "ui/UI4_Down_icn_pressed.png"
                                 }
                             }
                         },
@@ -180,7 +180,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "2b343a61682f39b63b8d17f337114ac1"
+                                    "mId": "217053633aaa2d7d0c1903591d286f1f"
                                 }
                             }
                         }
@@ -227,7 +227,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "47d72ff0048238de2d9f2a9e6a125350"
+                                    "mId": "3b056612595d08d560b81a063d7f544d"
                                 }
                             }
                         }
@@ -274,49 +274,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "5f5922ba40c22fbc7e220853272341de"
-                                }
-                            }
-                        }
-                    }
-                },
-                {
-                    "Type": "o2::WidgetState",
-                    "Value": {
-                        "name": "expanded",
-                        "offStateAnimationSpeed": 2.5,
-                        "mAnimation": {
-                            "instance": {
-                                "Type": "o2::AnimationAsset",
-                                "Value": {
-                                    "animation": {
-                                        "mTracks": [
-                                            {
-                                                "Type": "o2::AnimationTrack<float>",
-                                                "Value": {
-                                                    "path": "layer/regular/mDrawable/scale"
-                                                }
-                                            },
-                                            {
-                                                "Type": "o2::AnimationTrack<float>",
-                                                "Value": {
-                                                    "path": "layer/hover/mDrawable/scale"
-                                                }
-                                            },
-                                            {
-                                                "Type": "o2::AnimationTrack<float>",
-                                                "Value": {
-                                                    "path": "layer/pressed/mDrawable/scale"
-                                                }
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "meta": {
-                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                "Value": {
-                                    "mId": "1f395f941e7759cd62e510793a9f78f9"
+                                    "mId": "4b5a57b244fb053b0aae79c7080867c5"
                                 }
                             }
                         }
