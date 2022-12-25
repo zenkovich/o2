@@ -276,8 +276,8 @@ namespace o2
 
 		if (mExpandingNodeState == ExpandState::None)
 		{
-			for (auto child : mChildrenInheritedDepth)
-				child->Draw();
+			for (auto node : mVisibleNodes)
+				node->widget->Draw();
 		}
 		else
 		{
