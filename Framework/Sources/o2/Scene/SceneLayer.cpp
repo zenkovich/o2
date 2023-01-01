@@ -9,7 +9,7 @@ namespace o2
 {
 	SceneLayer::SceneLayer()
 	{
-		OnDrawableEnabled(&mRootDrawables, false);
+		OnDrawableEnabled(&mRootDrawables, true);
 	}
 
 	void SceneLayer::SetName(const String& name)
@@ -84,9 +84,9 @@ namespace o2
 		OnDrawableEnabled(drawable, false);
 	}
 
-	void SceneLayer::OnDrawableEnabled(ISceneDrawable* drawable, bool isRootAndInheritedDepth)
+	void SceneLayer::OnDrawableEnabled(ISceneDrawable* drawable, bool force)
 	{
-		if (!isRootAndInheritedDepth)
+		if (force || !drawable->mInheritDrawingDepthFromParent)
 		{
 			const int binSearchRangeSizeStop = 5;
 			int rangeMin = 0, rangeMax = mEnabledDrawables.Count();
@@ -121,17 +121,17 @@ namespace o2
 
 			mEnabledDrawables.Insert(drawable, position);
 		}
-		else
+		else if (drawable->mInheritDrawingDepthFromParent && drawable->mParentDrawable == nullptr)
 		{
 			mRootDrawables.drawables.Add(drawable);
 		}
 	}
 
-	void SceneLayer::OnDrawableDisabled(ISceneDrawable* drawable, bool isRootAndInheritedDepth)
+	void SceneLayer::OnDrawableDisabled(ISceneDrawable* drawable, bool force)
 	{
-		if (!isRootAndInheritedDepth)
+		if (force || !drawable->mInheritDrawingDepthFromParent)
 			mEnabledDrawables.Remove(drawable);
-		else
+		else if (drawable->mInheritDrawingDepthFromParent && drawable->mParentDrawable == nullptr)
 			mRootDrawables.drawables.Remove(drawable);
 	}
 

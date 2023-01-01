@@ -22,7 +22,10 @@ namespace o2
 		if (mInheritDrawingDepthFromParent)
 		{
 			if (mParentDrawable)
+			{
 				mParentDrawable->mChildrenInheritedDepth.Remove(this);
+				mParentDrawable->SortInheritedDrawables();
+			}
 		}
 	}
 
@@ -116,13 +119,13 @@ namespace o2
 	void ISceneDrawable::OnEnabled()
 	{
 		if (auto layer = GetSceneDrawableSceneLayer())
-			layer->OnDrawableEnabled(this, mInheritDrawingDepthFromParent && mParentDrawable == nullptr);
+			layer->OnDrawableEnabled(this, false);
 	}
 
 	void ISceneDrawable::OnDisabled()
 	{
 		if (auto layer = GetSceneDrawableSceneLayer())
-			layer->OnDrawableDisabled(this, mInheritDrawingDepthFromParent && mParentDrawable == nullptr);
+			layer->OnDrawableDisabled(this, false);
 	}
 
 	void ISceneDrawable::OnAddToScene(bool force /*= false*/)
@@ -132,7 +135,7 @@ namespace o2
 			layer->RegisterDrawable(this);
 
 			if (IsSceneDrawableEnabled())
-				layer->OnDrawableEnabled(this, mInheritDrawingDepthFromParent && mParentDrawable == nullptr);
+				layer->OnDrawableEnabled(this, force);
 		}
 	}
 
@@ -141,7 +144,7 @@ namespace o2
 		if (auto layer = GetSceneDrawableSceneLayer())
 		{
 			if (IsSceneDrawableEnabled())
-				layer->OnDrawableDisabled(this, mInheritDrawingDepthFromParent && mParentDrawable == nullptr);
+				layer->OnDrawableDisabled(this, force);
 
 			layer->UnregisterDrawable(this);
 		}

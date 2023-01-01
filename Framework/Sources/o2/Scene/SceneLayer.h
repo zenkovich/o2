@@ -84,11 +84,11 @@ namespace o2
 		// Called when drawable object depth was changed and sorts all drawable component
 		void OnDrawableDepthChanged(ISceneDrawable* drawable);
 
-		// Called when object was enabled
-		void OnDrawableEnabled(ISceneDrawable* drawable, bool isRootAndInheritedDepth);
+		// Called when object was enabled. If force is true, it is added to the scene
+		void OnDrawableEnabled(ISceneDrawable* drawable, bool force);
 
-		// Called when object was enabled
-		void OnDrawableDisabled(ISceneDrawable* drawable, bool isRootAndInheritedDepth);
+		// Called when object was enabled. If force is true, it is removed from the scene
+		void OnDrawableDisabled(ISceneDrawable* drawable, bool force);
 
 		// Sets drawable order as last of all objects with same depth
 		void SetLastByDepth(ISceneDrawable* drawable);
