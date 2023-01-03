@@ -2,8 +2,9 @@
 
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Reflection/TypeTraits.h"
-#include <type_traits>
 #include "o2/Utils/Debug/Debug.h"
+#include <type_traits>
+#include <functional>
 
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 
@@ -85,8 +86,8 @@ namespace o2
 	template<bool isConst, typename _class_type, typename _res_type, typename ... _args>
 	struct ScriptClassFunction
 	{
-		using type = std::conditional<isConst, _res_type(_class_type::*)(_args ... args) const,
-			                                   _res_type(_class_type::*)(_args ... args)>::type;
+		using type = typename std::conditional<isConst, _res_type(_class_type::*)(_args ... args) const,
+			                                            _res_type(_class_type::*)(_args ... args)>::type;
 	};
 
 	template<bool isConst, typename _class_type, typename _res_type, typename ... _args>
@@ -118,12 +119,12 @@ namespace o2
 
 		if constexpr (sizeof...(_args) > 0)
 		{
-			std::tuple<_this_type, RemoveConstAndRef<_args>::type...> argst;
+			std::tuple<_this_type, typename RemoveConstAndRef<_args>::type...> argst;
 
 			if constexpr (!std::is_void<_this_type>::value)
 				std::get<0>(argst) = thisValueObj;
 
-			UnpackArgs<1, 0, _this_type, RemoveConstAndRef<_args>::type...>(argst, args, argsCount);
+			UnpackArgs<1, 0, _this_type, typename RemoveConstAndRef<_args>::type...>(argst, args, argsCount);
 
 			if constexpr (std::is_void<_res_type>::value)
 			{

@@ -18,7 +18,7 @@
 #include "o2/Utils/Math/Geometry.h"
 #include "o2/Utils/Math/Interpolation.h"
 #include "o2/Application/Input.h"
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 
 namespace o2
 {
