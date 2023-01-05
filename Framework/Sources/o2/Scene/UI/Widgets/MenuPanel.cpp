@@ -15,7 +15,7 @@ namespace o2
 		Widget(), DrawableCursorEventsListener(this)
 	{
 		mItemSample = mnew Widget();
-		mItemSample->AddLayer("text", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
+		mItemSample->AddLayer("text", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(200, 0), Vec2F(0, 0)));
 
 		mSelectionDrawable = mnew Sprite();
 

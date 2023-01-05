@@ -18,7 +18,7 @@
 #include "o2/Utils/Math/Geometry.h"
 #include "o2/Utils/Math/Interpolation.h"
 #include "o2/Application/Input.h"
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 
 namespace o2
 {
@@ -100,6 +100,15 @@ namespace o2
 		InitializeLinesTextures();
 
 		mCurrentRenderTarget = TextureRef();
+		
+		NSScreen *screen = [NSScreen mainScreen];
+		NSDictionary *description = [screen deviceDescription];
+		NSSize displayPixelSize = [[description objectForKey:NSDeviceSize] sizeValue];
+		CGSize displayPhysicalSize = CGDisplayScreenSize([[description objectForKey:@"NSScreenNumber"] unsignedIntValue]);
+		
+		const float mmPerInch = 25.4f;
+		mDPI = Vec2I((displayPixelSize.width / displayPhysicalSize.width) * mmPerInch,
+					 (displayPixelSize.height / displayPhysicalSize.height) * mmPerInch);
 
 //		if (IsDevMode())
 //			o2Assets.onAssetsRebuilt += THIS_FUNC(&Render::OnAssetsRebuilded);
