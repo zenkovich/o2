@@ -138,8 +138,8 @@ namespace Editor
 		template<typename _type, typename _object_type>
 		void SelectValueAndPrototypeFunctional(const Vector<_object_type*>& targets,
 											   const Vector<_object_type*>& prototypes,
-											   std::function<const _type&(_object_type*)> getter,
-											   std::function<void(_object_type*, const _type&)> setter);
+											   std::function<_type(_object_type*)> getter,
+											   std::function<void(_object_type*, _type)> setter);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -381,8 +381,8 @@ namespace Editor
 	template<typename _type, typename _object_type>
 	void IPropertyField::SelectValueAndPrototypeFunctional(const Vector<_object_type*>& targets,
 														   const Vector<_object_type*>& prototypes,
-														   std::function<const _type&(_object_type*)> getter,
-														   std::function<void(_object_type*, const _type&)> setter)
+														   std::function<_type(_object_type*)> getter,
+														   std::function<void(_object_type*, _type)> setter)
 	{
 		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
 		targetPairs.Reserve(targets.Count());
@@ -391,10 +391,10 @@ namespace Editor
 		{
 			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
 				mnew FunctionalValueProxy<_type>(
-				[=](const _type& v) { setter(targets[i], v); },
+				[=](_type v) { setter(targets[i], v); },
 				[=]() { return getter(targets[i]); }),
 				prototypes[i] ? mnew FunctionalValueProxy<_type>(
-				[=](const _type& v) { setter(prototypes[i], v); },
+				[=](_type v) { setter(prototypes[i], v); },
 				[=]() { return getter(prototypes[i]); }): nullptr));
 		}
 
