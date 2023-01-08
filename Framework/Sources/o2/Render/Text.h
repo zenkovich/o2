@@ -27,7 +27,7 @@ namespace o2
 		
 		PROPERTY(WString, text, SetText, GetText); // Text property, wstring @SCRIPTABLE
 		
-		PROPERTY(int, height, SetHeight, GetHeight); // Text height @SCRIPTABLE
+		PROPERTY(int, height, SetHeight, GetFontHeight); // Text height @SCRIPTABLE
 		
 		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign); // vertical align property @SCRIPTABLE
 		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign); // Horizontal align property @SCRIPTABLE
@@ -85,7 +85,7 @@ namespace o2
 		void SetHeight(int height);
 
 		// Returns font height
-		int GetHeight() const;
+		int GetFontHeight() const;
 
 		// Sets text
 		void SetText(const WString& text);
@@ -322,7 +322,7 @@ CLASS_METHODS_META(o2::Text)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(FontAssetRef, GetFontAsset);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetHeight, int);
-	FUNCTION().PUBLIC().SIGNATURE(int, GetHeight);
+	FUNCTION().PUBLIC().SIGNATURE(int, GetFontHeight);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);
 	FUNCTION().PUBLIC().SIGNATURE(const WString&, GetText);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetHorAlign, HorAlign);

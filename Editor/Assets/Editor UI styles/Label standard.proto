@@ -4,7 +4,7 @@
         "Value": {
             "mName": "standard",
             "mHorOverflow": "Dots",
-            "Id": 17134334659035912292,
+            "Id": 4272162365707740014,
             "Transform": {
                 "minSize": {
                     "x": 20.0,
@@ -20,14 +20,6 @@
                         "mDrawable": {
                             "Type": "o2::Text",
                             "Value": {
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 96,
                                     "g": 125,
@@ -43,7 +35,7 @@
                                 "mDotsEndings": true
                             }
                         },
-                        "mUID": 10671903703429593787
+                        "mUID": 12527839538318321895
                     }
                 }
             ],

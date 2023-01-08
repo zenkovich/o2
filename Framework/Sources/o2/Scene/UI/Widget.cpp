@@ -387,7 +387,7 @@ namespace o2
 				if (auto protoState = proto->GetStateObject(state->name))
 				{
 					auto& stateNode = statesNode.AddElement();
-					stateNode["mName"] = state->name;
+					stateNode["name"] = state->name;
 					stateNode.SetDelta(*state, *protoState);
 				}
 				else
@@ -462,7 +462,8 @@ namespace o2
 			for (auto& stateNode : *statesNode)
 			{
 				WidgetState* state = mnew WidgetState();
-				stateNode["mName"].Get(state->name);
+				if (auto nameNode = stateNode.FindMember("name"))
+					nameNode->Get(state->name);
 				if (auto protoState = proto->GetStateObject(state->name))
 					stateNode.GetDelta(*state, *protoState);
 				else

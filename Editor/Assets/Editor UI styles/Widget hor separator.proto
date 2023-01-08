@@ -3,7 +3,7 @@
         "Type": "o2::Widget",
         "Value": {
             "mName": "hor separator",
-            "Id": 2999657006842421264,
+            "Id": 9333260132075221257,
             "Transform": {
                 "anchorMin": {
                     "x": 0.0,
@@ -57,18 +57,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 50.0,
-                                    "y": 5.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mImageAsset": {
                                     "id": "71f906b500ad3db16f2e193f720901dd",
                                     "path": "ui/UI4_Separator.png"
@@ -82,7 +70,7 @@
                                 }
                             }
                         },
-                        "mUID": 17704151106938050040
+                        "mUID": 17695803339813000106
                     }
                 }
             ],

@@ -623,7 +623,7 @@ namespace o2
 	{
 		auto fontRef = mTextDrawable->GetFont();
 		if (fontRef)
-			fontRef->CheckCharacters(" ", mTextDrawable->GetHeight());
+			fontRef->CheckCharacters(" ", mTextDrawable->GetFontHeight());
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->worldRect);
 		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
@@ -775,7 +775,7 @@ namespace o2
 
 		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
 		auto font = mTextDrawable->GetFont();
-		float spaceAdvance = font->GetCharacter(' ', mTextDrawable->GetHeight()).mAdvance;
+		float spaceAdvance = font->GetCharacter(' ', mTextDrawable->GetFontHeight()).mAdvance;
 
 		for (auto line : symbolsSet.mLines)
 		{
@@ -864,7 +864,7 @@ namespace o2
 			if (fakeSymbols)
 				mTextDrawable->SetText("");
 
-			return mAbsoluteViewArea.LeftTop() - Vec2F(0, mTextDrawable->GetFont()->GetHeightPx(mTextDrawable->GetHeight()));
+			return mAbsoluteViewArea.LeftTop() - Vec2F(0, mTextDrawable->GetFont()->GetHeightPx(mTextDrawable->GetFontHeight()));
 		}
 
 		return Vec2F();
@@ -874,7 +874,7 @@ namespace o2
 	{
 		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
 		auto font = mTextDrawable->GetFont();
-		float lineHeight = font->GetLineHeightPx(mTextDrawable->GetHeight());
+		float lineHeight = font->GetLineHeightPx(mTextDrawable->GetFontHeight());
 		float lineOffCoef = 0.25f;
 
 		bool checkUp, checkDown, checkLeft, checkRight;
@@ -973,7 +973,7 @@ namespace o2
 		float rightOffs = Math::Max(caretPos.x - clipRect.right + 5.0f, 0.0f);
 		float leftOffs = Math::Max(clipRect.left - caretPos.x + 5.0f, 0.0f);
 
-		float downOffs = Math::Max(caretPos.y - clipRect.top + font->GetHeightPx(mTextDrawable->GetHeight()), 0.0f);
+		float downOffs = Math::Max(caretPos.y - clipRect.top + font->GetHeightPx(mTextDrawable->GetFontHeight()), 0.0f);
 		float topOffs = Math::Max(clipRect.bottom - caretPos.y, 0.0f);
 
 		float horOffs = rightOffs - leftOffs;
@@ -1220,11 +1220,11 @@ namespace o2
 
 		if (key == VK_UP)
 			MoveCaret(GetTextCaretPosition(GetTextCaretPosition(mSelectionEnd) +
-					  Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetHeight())*1.5f)), selecting);
+					  Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetFontHeight())*1.5f)), selecting);
 
 		if (key == VK_DOWN)
 			MoveCaret(GetTextCaretPosition(GetTextCaretPosition(mSelectionEnd) -
-					  Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetHeight())*0.5f)), selecting);
+					  Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetFontHeight())*0.5f)), selecting);
 
 		if (key == VK_END)
 		{

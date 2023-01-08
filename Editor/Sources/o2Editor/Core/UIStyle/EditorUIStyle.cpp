@@ -1202,7 +1202,7 @@ namespace Editor
 
 		Sprite* caretDrawable = nameEditBox->GetCaretDrawable();
 		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight()) * 1.7f);
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetFontHeight()) * 1.7f);
 		caretDrawable->pivot = Vec2F(0, 0.26f);
 		caretDrawable->color = Color4::Black();
 
@@ -1469,7 +1469,7 @@ namespace Editor
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight()) * 1.7f);
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetFontHeight()) * 1.7f);
 		caretDrawable->pivot = Vec2F(0, 0.26f);
 		caretDrawable->color = Color4::Black();
 
@@ -1675,7 +1675,7 @@ namespace Editor
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight()) * 1.7f);
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetFontHeight()) * 1.7f);
 		caretDrawable->pivot = Vec2F(0, 0.26f);
 		caretDrawable->color = Color4::Black();
 
@@ -2300,7 +2300,7 @@ namespace Editor
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight()) * 1.7f);
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetFontHeight()) * 1.7f);
 		caretDrawable->pivot = Vec2F(0, 0.26f);
 		caretDrawable->color = Color4::Black();
 
@@ -2339,7 +2339,7 @@ namespace Editor
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight()) * 1.7f);
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetFontHeight()) * 1.7f);
 		caretDrawable->pivot = Vec2F(0, 0.26f);
 		caretDrawable->color = Color4::Black();
 

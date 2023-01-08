@@ -258,7 +258,7 @@ namespace o2
 	int Label::GetHeight() const
 	{
 		if (mTextDrawable)
-			return mTextDrawable->GetHeight();
+			return mTextDrawable->GetFontHeight();
 
 		return 0;
 	}

@@ -3,11 +3,11 @@
         "Type": "Editor::ColorProperty",
         "Value": {
             "Prototype": {
-                "id": "32be73fa44fe0f8c64083b865d211423",
+                "id": "623806ea0376415d299546801795632b",
                 "path": "Editor UI styles/Color Property standard.proto"
             },
-            "PrototypeLink": 15833813687261013872,
-            "Id": 2218456487303916445,
+            "PrototypeLink": 16572118247318676979,
+            "Id": 7033118097326856825,
             "mName": "with caption",
             "mBorder": {
                 "left": 10.0,
@@ -20,16 +20,12 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "7b7b14e07ff2688973981a6a2c094e38",
+                            "id": "2b8210bb76e91ec464f922ad7b2266be",
                             "path": "Editor UI styles/Label standard.proto"
                         },
-                        "PrototypeLink": 17134334659035912292,
-                        "Id": 7033118097326856825,
+                        "PrototypeLink": 4272162365707740014,
+                        "Id": 2603754618045481903,
                         "Transform": {
-                            "size": {
-                                "x": 20.0,
-                                "y": 20.0
-                            },
                             "weight": {
                                 "x": 0.6000000238418579,
                                 "y": 1.0
@@ -39,18 +35,10 @@
                         "Layers": [
                             {
                                 "mDrawable": {
-                                    "mPosition": {
-                                        "x": 10.0,
-                                        "y": 10.0
-                                    },
-                                    "mSize": {
-                                        "x": 20.0,
-                                        "y": 20.0
-                                    },
                                     "mHorAlign": "Left"
                                 },
-                                "mUID": 4321172770752391672,
-                                "PrototypeLink": 10671903703429593787
+                                "mUID": 17134168424571315961,
+                                "PrototypeLink": 12527839538318321895
                             }
                         ]
                     }
@@ -58,20 +46,20 @@
                 {
                     "Type": "o2::Widget",
                     "Data": {
-                        "PrototypeLink": 12000171985790597237,
-                        "Id": 11537518877287951625,
+                        "PrototypeLink": 17308872247144532038,
+                        "Id": 1197775459062459419,
                         "Children": [
                             {
                                 "Type": "o2::HorizontalLayout",
                                 "Data": {
-                                    "PrototypeLink": 12207616097997470070,
-                                    "Id": 6394539484253306142,
+                                    "PrototypeLink": 17612118779325886885,
+                                    "Id": 6614632766792399056,
                                     "Children": [
                                         {
                                             "Type": "o2::Widget",
                                             "Data": {
-                                                "PrototypeLink": 364593706086913480,
-                                                "Id": 6172638090752010032,
+                                                "PrototypeLink": 17112541177188321803,
+                                                "Id": 4321172770752391672,
                                                 "Transform": {
                                                     "minSize": {
                                                         "x": 0.0,
@@ -83,16 +71,8 @@
                                                         "Type": "o2::Image",
                                                         "Data": {
                                                             "mName": "unnamed",
-                                                            "Id": 9249466725006079501,
+                                                            "Id": 6083361058449425002,
                                                             "Transform": {
-                                                                "position": {
-                                                                    "x": -1.0,
-                                                                    "y": -1.0
-                                                                },
-                                                                "size": {
-                                                                    "x": 2.0,
-                                                                    "y": 2.0
-                                                                },
                                                                 "anchorMax": {
                                                                     "x": 1.0,
                                                                     "y": 1.0
@@ -115,18 +95,6 @@
                                                                         "mDrawable": {
                                                                             "Type": "o2::Sprite",
                                                                             "Value": {
-                                                                                "mSize": {
-                                                                                    "x": 2.0,
-                                                                                    "y": 2.0
-                                                                                },
-                                                                                "mScale": {
-                                                                                    "x": 1.0,
-                                                                                    "y": 1.0
-                                                                                },
-                                                                                "mPivot": {
-                                                                                    "x": 0.5,
-                                                                                    "y": 0.5
-                                                                                },
                                                                                 "mMode": "Tiled",
                                                                                 "mTextureSrcRect": {
                                                                                     "left": 0,
@@ -137,7 +105,7 @@
                                                                                 "textureFileName": ""
                                                                             }
                                                                         },
-                                                                        "mUID": 10593034592476983445
+                                                                        "mUID": 1290776851178708442
                                                                     }
                                                                 }
                                                             ],
@@ -148,16 +116,8 @@
                                                         "Type": "o2::Image",
                                                         "Data": {
                                                             "mName": "unnamed",
-                                                            "Id": 7614897111838710407,
+                                                            "Id": 17525033221534205358,
                                                             "Transform": {
-                                                                "position": {
-                                                                    "x": -1.0,
-                                                                    "y": -1.0
-                                                                },
-                                                                "size": {
-                                                                    "x": 2.0,
-                                                                    "y": 2.0
-                                                                },
                                                                 "anchorMax": {
                                                                     "x": 1.0,
                                                                     "y": 1.0
@@ -180,18 +140,6 @@
                                                                         "mDrawable": {
                                                                             "Type": "o2::Sprite",
                                                                             "Value": {
-                                                                                "mSize": {
-                                                                                    "x": 2.0,
-                                                                                    "y": 2.0
-                                                                                },
-                                                                                "mScale": {
-                                                                                    "x": 1.0,
-                                                                                    "y": 1.0
-                                                                                },
-                                                                                "mPivot": {
-                                                                                    "x": 0.5,
-                                                                                    "y": 0.5
-                                                                                },
                                                                                 "mTextureSrcRect": {
                                                                                     "left": 0,
                                                                                     "bottom": 0,
@@ -201,7 +149,7 @@
                                                                                 "textureFileName": ""
                                                                             }
                                                                         },
-                                                                        "mUID": 9347835092440088746
+                                                                        "mUID": 12675294868015523348
                                                                     }
                                                                 }
                                                             ],
@@ -211,8 +159,8 @@
                                                 ],
                                                 "Layers": [
                                                     {
-                                                        "mUID": 3662842236004234847,
-                                                        "PrototypeLink": 2284823064995776811
+                                                        "mUID": 7257587355128350954,
+                                                        "PrototypeLink": 10912789979028387874
                                                     }
                                                 ]
                                             }

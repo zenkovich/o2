@@ -14,8 +14,8 @@ namespace o2
 	Transform::Transform(const Transform& other):
 		mSize(other.mSize), mPosition(other.mPosition), mAngle(other.mAngle), mScale(other.mScale),
 		mPivot(other.mPivot), mShear(other.mShear), mTransform(other.mTransform),
-		mNonSizedTransform(other.mNonSizedTransform), position(this), size(this), scale(this),
-		pivot(this), worldPivot(this), szPivot(this), angle(this), angleDegree(this), shear(this),
+		mNonSizedTransform(other.mNonSizedTransform), position(this), size(this), width(this), height(this), scale(this),
+		scaleX(this), scaleY(this), pivot(this), worldPivot(this), szPivot(this), angle(this), angleDegree(this), shear(this),
 		basis(this), nonSizedBasis(this), rect(this), AABB(this), leftTop(this), leftBottom(this),
 		rightTop(this), rightBottom(this), right(this), left(this), up(this), down(this),
 		lookAtPoint(this)
@@ -97,6 +97,26 @@ namespace o2
 		return mSize;
 	}
 
+	void Transform::SetWidth(float width)
+	{
+		SetSize(Vec2F(width, GetHeight()));
+	}
+
+	float Transform::GetWidth() const
+	{
+		return GetSize().x;
+	}
+
+	void Transform::SetHeight(float height)
+	{
+		SetSize(Vec2F(GetWidth(), height));
+	}
+
+	float Transform::GetHeight() const
+	{
+		return GetSize().y;
+	}
+
 	void Transform::SetPivot(const Vec2F& pivot)
 	{
 		mPivot = pivot;
@@ -154,6 +174,26 @@ namespace o2
 	Vec2F Transform::GetScale() const
 	{
 		return mScale;
+	}
+
+	void Transform::SetScaleX(float scale)
+	{
+		SetScale(Vec2F(scale, GetScaleY()));
+	}
+
+	float Transform::GetScaleX() const
+	{
+		return GetScale().x;
+	}
+
+	void Transform::SetScaleY(float scale)
+	{
+		SetScale(Vec2F(GetScaleX(), scale));
+	}
+
+	float Transform::GetScaleY() const
+	{
+		return GetScale().y;
 	}
 
 	void Transform::SetAngle(float rad)

@@ -17,8 +17,12 @@ namespace o2
 	public:
 		PROPERTIES(Transform);
 		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
-		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
-		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property @EDITOR_IGNORE @SCRIPTABLE
+		PROPERTY(float, width, SetWidth, GetWidth);                     // Width property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(float, height, SetHeight, GetHeight);                  // Height property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property @EDITOR_IGNORE @SCRIPTABLE
+		PROPERTY(float, scaleX, SetScaleX, GetScaleX);                  // Scale X property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(float, scaleY, SetScaleY, GetScaleY);                  // Scale Y property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
 		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
 		PROPERTY(Vec2F, worldPivot, SetWorldPivot, GetWorldPivot);      // Pivot property, in world space @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
 		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
@@ -77,6 +81,18 @@ namespace o2
 		// Return size
 		virtual Vec2F GetSize() const;
 
+		// Sets width
+		virtual void SetWidth(float width);
+
+		// Returns width
+		virtual float GetWidth() const;
+
+		// Sets height
+		virtual void SetHeight(float height);
+
+		// Returns width
+		virtual float GetHeight() const;
+
 		// Sets pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
 		virtual void SetPivot(const Vec2F& pivot);
 
@@ -106,6 +122,18 @@ namespace o2
 
 		// Returns scale
 		virtual Vec2F GetScale() const;
+
+		// Sets scale by X
+		virtual void SetScaleX(float scale);
+
+		// Returns scale by X
+		virtual float GetScaleX() const;
+
+		// Sets scale by Y
+		virtual void SetScaleY(float scale);
+
+		// Returns scale by Y
+		virtual float GetScaleY() const;
 
 		// Sets rotation angle, in radians
 		virtual void SetAngle(float rad);
@@ -256,8 +284,12 @@ END_META;
 CLASS_FIELDS_META(o2::Transform)
 {
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(position);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(size);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(scale);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(size);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(width);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(height);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(scale);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(scaleX);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(scaleY);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(pivot);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(worldPivot);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(szPivot);
@@ -298,6 +330,10 @@ CLASS_METHODS_META(o2::Transform)
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetPosition);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSize, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetSize);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetWidth, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetWidth);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetHeight, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetHeight);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetPivot, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetPivot);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldPivot, const Vec2F&);
@@ -308,6 +344,10 @@ CLASS_METHODS_META(o2::Transform)
 	FUNCTION().PUBLIC().SIGNATURE(RectF, GetRect);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetScale, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetScale);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetScaleX, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetScaleX);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetScaleY, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetScaleY);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAngle, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetAngle);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAngleDegrees, float);

@@ -19,11 +19,11 @@ namespace o2
 		GETTER(float, duration, GetDuration);   // Duration getter
 
 	public:
-		Function<void()> onChanged; // Called when some Animation track has changed
+		Function<void()> onChanged; // Called when some Animation track has changed @EDITOR_IGNORE
 
-		Function<void(float)>            onDurationChange; // Called when duration has changed
-		Function<void(IAnimationTrack*)> onTrackAdded;     // Called when new track added
-		Function<void(IAnimationTrack*)> onTrackRemove;    // Called when new track removing
+		Function<void(float)>            onDurationChange; // Called when duration has changed @EDITOR_IGNORE
+		Function<void(IAnimationTrack*)> onTrackAdded;     // Called when new track added @EDITOR_IGNORE
+		Function<void(IAnimationTrack*)> onTrackRemove;    // Called when new track removing @EDITOR_IGNORE
 
 	public:
 		// Default constructor
@@ -233,10 +233,10 @@ CLASS_FIELDS_META(o2::AnimationClip)
 {
 	FIELD().PUBLIC().NAME(loop);
 	FIELD().PUBLIC().NAME(duration);
-	FIELD().PUBLIC().NAME(onChanged);
-	FIELD().PUBLIC().NAME(onDurationChange);
-	FIELD().PUBLIC().NAME(onTrackAdded);
-	FIELD().PUBLIC().NAME(onTrackRemove);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onChanged);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onDurationChange);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onTrackAdded);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onTrackRemove);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mTracks);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDuration);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Loop::None).NAME(mLoop);

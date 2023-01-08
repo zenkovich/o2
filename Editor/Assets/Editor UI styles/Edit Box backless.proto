@@ -47,7 +47,7 @@
                 "Value": {
                     "mSize": {
                         "x": 1.0,
-                        "y": 22.100000381469728
+                        "y": 18.700000762939454
                     },
                     "mScale": {
                         "x": 1.0,
@@ -73,7 +73,7 @@
             },
             "mCaretBlinkDelay": 1.149999976158142,
             "mMultiLine": false,
-            "Id": 190676904605619078,
+            "Id": 12774960284875247092,
             "Transform": {
                 "minSize": {
                     "x": 30.0,
@@ -101,12 +101,12 @@
                                                     "curve": {
                                                         "mKeys": [
                                                             {
-                                                                "uid": 11132019407048655639,
+                                                                "uid": 1136147236663755767,
                                                                 "rightSupportPosition": 0.08000000566244126,
                                                                 "supportsType": "Broken"
                                                             },
                                                             {
-                                                                "uid": 9704877554749325946,
+                                                                "uid": 14391698346457099778,
                                                                 "value": 1.0,
                                                                 "position": 0.20000000298023225,
                                                                 "leftSupportPosition": -0.20000000298023225,
@@ -124,7 +124,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "40c071563a2435c4242e1b3250d560b6"
+                                    "mId": "3c3003b45cce24ee6bfc24d6000c2e3e"
                                 }
                             }
                         }

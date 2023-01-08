@@ -147,7 +147,7 @@
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
       <Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
       <Item Name="children rect" ExcludeView="simple">layout->mData->childrenWorldRect</Item>
-      <Item Name="is on scene" ExcludeView="simple">Actor::mSceneStatus</Item>
+      <Item Name="state" ExcludeView="simple">Actor::mState</Item>
 
       <Synthetic Name="prototype">
         <DisplayString>({ mPrototype })</DisplayString>
@@ -308,7 +308,7 @@
       <Item Name="layer" ExcludeView="simple">mLayerName</Item>
       <Item Name="layer ptr" ExcludeView="simple">mLayer</Item>
       <Item Name="tags" ExcludeView="simple">tags</Item>
-      <Item Name="is on scene" ExcludeView="simple">mSceneStatus</Item>
+      <Item Name="state" ExcludeView="simple">mState</Item>
       <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
       <Item Name="asset id" ExcludeView="simple">mAssetId</Item>
 

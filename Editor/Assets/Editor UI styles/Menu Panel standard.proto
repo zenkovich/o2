@@ -8,11 +8,11 @@
                 "Type": "o2::Label",
                 "Value": {
                     "Prototype": {
-                        "id": "7b7b14e07ff2688973981a6a2c094e38",
+                        "id": "2b8210bb76e91ec464f922ad7b2266be",
                         "path": "Editor UI styles/Label standard.proto"
                     },
-                    "PrototypeLink": 17134334659035912292,
-                    "Id": 13040324693766585775,
+                    "PrototypeLink": 4272162365707740014,
+                    "Id": 6634093205073566444,
                     "mName": "unknown label",
                     "mHorOverflow": "Expand",
                     "mExpandBorder": {
@@ -31,8 +31,8 @@
                                 "mText": "unknown",
                                 "mDotsEndings": false
                             },
-                            "mUID": 7646591137813208461,
-                            "PrototypeLink": 10671903703429593787
+                            "mUID": 6195320051928623169,
+                            "PrototypeLink": 12527839538318321895
                         }
                     ]
                 }
@@ -74,7 +74,7 @@
                     "y": 16.0
                 }
             },
-            "Id": 15755363169161729829,
+            "Id": 18233092539257903640,
             "Transform": {},
             "Children": [
                 {
@@ -83,7 +83,7 @@
                         "mBaseCorner": "LeftTop",
                         "mExpandWidth": false,
                         "mFitByChildren": true,
-                        "Id": 16574143963611719132,
+                        "Id": 14092520708925915766,
                         "Transform": {
                             "anchorMax": {
                                 "x": 1.0,
@@ -120,18 +120,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mSize": {
-                                    "x": 50.0,
-                                    "y": 50.0
-                                },
-                                "mScale": {
-                                    "x": 1.0,
-                                    "y": 1.0
-                                },
-                                "mPivot": {
-                                    "x": 0.5,
-                                    "y": 0.5
-                                },
                                 "mColor": {
                                     "r": 255,
                                     "g": 255,
@@ -151,7 +139,7 @@
                                 }
                             }
                         },
-                        "mUID": 9960911622704251432
+                        "mUID": 3285677765020636295
                     }
                 }
             ],
@@ -174,12 +162,12 @@
                                                     "curve": {
                                                         "mKeys": [
                                                             {
-                                                                "uid": 8574783407018242541,
+                                                                "uid": 3240521660734120316,
                                                                 "rightSupportPosition": 0.08000000566244126,
                                                                 "supportsType": "Broken"
                                                             },
                                                             {
-                                                                "uid": 14092520708925915766,
+                                                                "uid": 3854385740524066487,
                                                                 "value": 1.0,
                                                                 "position": 0.20000000298023225,
                                                                 "leftSupportPosition": -0.20000000298023225,
@@ -197,7 +185,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "006b5e2960a3015877f510fc6a9a72ea"
+                                    "mId": "3f831d1503f411970389750448c8444a"
                                 }
                             }
                         }
@@ -220,12 +208,12 @@
                                                     "curve": {
                                                         "mKeys": [
                                                             {
-                                                                "uid": 15093200619961461393,
+                                                                "uid": 16697136099318949700,
                                                                 "rightSupportPosition": 0.08000000566244126,
                                                                 "supportsType": "Broken"
                                                             },
                                                             {
-                                                                "uid": 1848761175361486982,
+                                                                "uid": 12458768260958270773,
                                                                 "value": 1.0,
                                                                 "position": 0.20000000298023225,
                                                                 "leftSupportPosition": -0.20000000298023225,
@@ -243,7 +231,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "1520518804c90fc26959175d078a7a2d"
+                                    "mId": "418852d2475c62d331534e7161061dbc"
                                 }
                             }
                         }

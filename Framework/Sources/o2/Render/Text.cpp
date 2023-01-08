@@ -176,7 +176,7 @@ namespace o2
 		mHeight = height;
 	}
 
-	int Text::GetHeight() const
+	int Text::GetFontHeight() const
 	{
 		return mHeight;
 	}
