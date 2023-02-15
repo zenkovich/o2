@@ -18,6 +18,8 @@ namespace o2
 
 		Vector<CursorAreaEventsListener*> cursorEventAreaListeners;
 
+		bool isTransparent = false; // Is this layer transparent to input other listeners
+
 	public:
 		// Destructor. Unregisters from events system
 		~CursorAreaEventListenersLayer();
@@ -63,6 +65,9 @@ namespace o2
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
+
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
 
 	private:
 		bool mEnabled = false;

@@ -159,12 +159,17 @@ namespace Editor
 
 		ClearHandles();
 
-
 		mSplineWrapper = wrapper;
 		if (!mSplineWrapper)
 			return;
 
 		InitializeHandles();
+	}
+
+	void SplineEditor::Reset()
+	{
+		SetSpline(nullptr);
+		onChanged.Clear();
 	}
 
 	bool SplineEditor::IsUnderPoint(const Vec2F& point)
@@ -193,6 +198,9 @@ namespace Editor
 
 	void SplineEditor::InitializeHandles()
 	{
+		if (!mSplineWrapper)
+			return;
+
 		for (int i = 0; i < mSplineWrapper->GetPointsCount(); i++)
 		{
 			PointHandles* handles = mnew PointHandles();
@@ -437,6 +445,9 @@ namespace Editor
 
 	void SplineEditor::OnKeyReleased(const Input::Key& key)
 	{
+		if (!mSplineWrapper)
+			return;
+
 		if (key.keyCode == VK_DELETE)
 		{
 			auto selectedHandles = mSelectedHandles;

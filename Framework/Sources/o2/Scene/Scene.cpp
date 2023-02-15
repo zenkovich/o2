@@ -79,7 +79,10 @@ namespace o2
 		mStartComponents.Clear();
 
 		for (auto actor : startActors)
+		{
+			actor->UpdateTransform();
 			actor->OnStart();
+		}
 
 		for (auto comp : startComponents)
 			comp->OnStart();
@@ -152,10 +155,10 @@ namespace o2
 
 	void Scene::Draw()
 	{
-		DrawCameras(true);
+		DrawCameras();
 	}
 
-	void Scene::DrawCameras(bool callOnDrawnLayer)
+	void Scene::DrawCameras()
 	{
 		if constexpr (IS_EDITOR)
 			BeginDrawingScene();
@@ -606,10 +609,6 @@ namespace o2
 	}
 
 #if IS_EDITOR
-	void Scene::DrawWithouLayers()
-	{
-		DrawCameras(false);
-	}
 
 	Vector<SceneEditableObject*> Scene::GetRootEditableObjects()
 	{
@@ -718,8 +717,15 @@ namespace o2
 
 	void Scene::CheckChangedObjects()
 	{
-		if (mChangedObjects.Count() > 0) {
+		mChangedObjects.RemoveAll([](auto x) { return x == nullptr; });
+
+		if (mChangedObjects.Count() > 0) 
+		{
 			onObjectsChanged(mChangedObjects);
+
+			for (auto& obj : mChangedObjects)
+				obj->Update(0.0f);
+
 			mChangedObjects.Clear();
 
 			UpdateAddedEntities();

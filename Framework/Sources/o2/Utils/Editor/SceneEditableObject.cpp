@@ -11,6 +11,9 @@ namespace o2
 	SceneEditableObject::~SceneEditableObject()
 	{ }
 
+	void SceneEditableObject::Update(float dt)
+	{ }
+
 	bool SceneEditableObject::IsOnScene() const
 	{
 		return true;

@@ -8,7 +8,7 @@
 #include "o2/Utils/Math/Color.h"
 #include "o2/Utils/Math/Rect.h"
 #include "o2/Utils/Math/Vector2.h"
-#include "o2/Utils/Math/Vertex2.h"
+#include "o2/Utils/Math/Vertex.h"
 #include "o2/Utils/Types/String.h"
 #include "o2/Utils/Types/UID.h"
 
@@ -45,7 +45,7 @@ namespace o2
 	DECLARE_FUNDAMENTAL_TYPE(o2::BorderI);
 	DECLARE_FUNDAMENTAL_TYPE(o2::Vec2F);
 	DECLARE_FUNDAMENTAL_TYPE(o2::Vec2I);
-	DECLARE_FUNDAMENTAL_TYPE(o2::Vertex2);
+	DECLARE_FUNDAMENTAL_TYPE(o2::Vertex);
 	DECLARE_FUNDAMENTAL_TYPE(o2::String);
 	DECLARE_FUNDAMENTAL_TYPE(o2::WString);
 	DECLARE_FUNDAMENTAL_TYPE(o2::DataValue);

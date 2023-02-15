@@ -9,7 +9,7 @@
 
 namespace o2
 {
-	class Sprite;
+	class IRectDrawable;
 	class ISelectableDragHandlesGroup;
 
 	// -----------
@@ -36,7 +36,7 @@ namespace o2
 		Function<void()>             onBeganDragging;   // Drag begin event
 		Function<void()>             onChangeCompleted; // Change completed event
 
-		Function<bool(const Vec2F&)> isPointInside; // Checking point inside function. When this is empty, using sprite inside checking function
+		Function<bool(const Vec2F&)> isPointInside; // Checking point inside function. When this is empty, using IRectDrawable inside checking function
 
 		Function<Vec2F(const Vec2F&)> screenToLocalTransformFunc; // Screen position to local transformation function
 		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc; // Local position to screen transformation function
@@ -51,8 +51,8 @@ namespace o2
 		DragHandle();
 
 		// Constructor with views
-		DragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
-				   Sprite* selected = nullptr, Sprite* selectedHovered = nullptr, Sprite* selectedPressed = nullptr);
+		DragHandle(IRectDrawable* regular, IRectDrawable* hover = nullptr, IRectDrawable* pressed = nullptr,
+				   IRectDrawable* selected = nullptr, IRectDrawable* selectedHovered = nullptr, IRectDrawable* selectedPressed = nullptr);
 
 		// Copy-constructor
 		DragHandle(const DragHandle& other);
@@ -64,13 +64,13 @@ namespace o2
 		DragHandle& operator=(const DragHandle& other);
 
 		// Draws handle
-		void Draw();
+		void Draw() override;
 
 		// Draws handle with clipping check
 		void Draw(const RectF& screenClipRect);
 
 		// Returns true if point is above this
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Sets position
 		void SetPosition(const Vec2F& position);
@@ -129,56 +129,59 @@ namespace o2
 		// Return handle rotation angle in radians
 		float GetAngle() const;
 
+		// Returns cursor position when it was pressed
+		const Vec2F& GetPressedCursorPos() const;
+
 		// Converts point from screen to local space
 		virtual Vec2F ScreenToLocal(const Vec2F& point);
 
 		// Converts point from local to screen space
 		virtual Vec2F LocalToScreen(const Vec2F& point);
 
-		// Sets regular sprite
-		void SetRegularSprite(Sprite* sprite);
+		// Sets regular drawable
+		void SetRegularDrawable(IRectDrawable* IRectDrawable);
 
-		// Returns regular sprite
-		Sprite* GetRegularSprite() const;
+		// Returns regular drawable
+		IRectDrawable* GetRegularDrawable() const;
 
-		// Sets hovered sprite
-		void SetHoverSprite(Sprite* sprite);
+		// Sets hovered drawable
+		void SetHoverDrawable(IRectDrawable* IRectDrawable);
 
-		// Returns hovered sprite
-		Sprite* GetHoverSprite() const;
+		// Returns hovered drawable
+		IRectDrawable* GetHoverDrawable() const;
 
-		// Sets pressed sprite
-		void SetPressedSprite(Sprite* sprite);
+		// Sets pressed drawable
+		void SetPressedDrawable(IRectDrawable* IRectDrawable);
 
-		// Returns pressed sprite
-		Sprite* GetPressedSprite() const;
+		// Returns pressed drawable
+		IRectDrawable* GetPressedDrawable() const;
 
-		// Sets selected sprite
-		void SetSelectedSprite(Sprite* sprite);
+		// Sets selected drawable
+		void SetSelectedDrawable(IRectDrawable* IRectDrawable);
 
-		// Returns selected sprite
-		Sprite* GetSelectedSprite() const;
+		// Returns selected drawable
+		IRectDrawable* GetSelectedDrawable() const;
 
-		// Sets selected hovered sprite
-		void SetSelectedHoveredSprite(Sprite* sprite);
+		// Sets selected hovered drawable
+		void SetSelectedHoveredDrawable(IRectDrawable* IRectDrawable);
 
-		// Returns selected hovered sprite
-		Sprite* GetSelectedHoveredSprite() const;
+		// Returns selected hovered drawable
+		IRectDrawable* GetSelectedHoveredDrawable() const;
 
-		// Sets selected pressed sprite
-		void SetSelectedPressedSprite(Sprite* sprite);
+		// Sets selected pressed drawable
+		void SetSelectedPressedDrawable(IRectDrawable* IRectDrawable);
 
-		// Returns selected pressed sprite
-		Sprite* GetSelectedPressedSprite() const;
+		// Returns selected pressed drawable
+		IRectDrawable* GetSelectedPressedDrawable() const;
 
-		// Sets size to all available sprites
-		void SetSpritesSize(const Vec2F& size);
+		// Sets size to all available drawable
+		void SetDrawablesSize(const Vec2F& size);
 
-		// Sets color to all sprites
-		void SetSpritesColor(const Color4& color);
+		// Sets color to all drawable
+		void SetDrawablesColor(const Color4& color);
 
-		// Sets size to all available sprites
-		void SetSpritesSizePivot(const Vec2F& pivot);
+		// Sets size to all available drawable
+		void SetDrawablesSizePivot(const Vec2F& pivot);
 
 		// Returns is listener scrollable
 		bool IsScrollable() const override;
@@ -186,13 +189,13 @@ namespace o2
 		SERIALIZABLE(DragHandle);
 
 	protected:
-		Sprite* mRegularSprite = nullptr;  // Regular view sprite @SERIALIZABLE
-		Sprite* mHoverSprite = nullptr;    // Hovered view sprite @SERIALIZABLE
-		Sprite* mPressedSprite = nullptr;  // Pressed view sprite @SERIALIZABLE
+		IRectDrawable* mRegularDrawable = nullptr;  // Regular view IRectDrawable @SERIALIZABLE
+		IRectDrawable* mHoverDrawable = nullptr;    // Hovered view IRectDrawable @SERIALIZABLE
+		IRectDrawable* mPressedDrawable = nullptr;  // Pressed view IRectDrawable @SERIALIZABLE
 
-		Sprite* mSelectedSprite = nullptr;        // Selected view sprite @SERIALIZABLE
-		Sprite* mSelectedHoverSprite = nullptr;   // Selected hovered view sprite @SERIALIZABLE
-		Sprite* mSelectedPressedSprite = nullptr; // Selected pressed view sprite @SERIALIZABLE
+		IRectDrawable* mSelectedDrawable = nullptr;        // Selected view IRectDrawable @SERIALIZABLE
+		IRectDrawable* mSelectedHoverDrawable = nullptr;   // Selected hovered view IRectDrawable @SERIALIZABLE
+		IRectDrawable* mSelectedPressedDrawable = nullptr; // Selected pressed view IRectDrawable @SERIALIZABLE
 
 		bool   mEnabled = true; // Is handle enabled. Disabled handle don't drawn and interact
 
@@ -209,7 +212,7 @@ namespace o2
 		int    mPressedCursorId;    // Id of pressed cursor
 		Vec2F  mPressedCursorPos;   // Cursor pressed position
 		bool   mIsDragging = false; // Is handle in dragging mode
-		bool   mIsHovered = false;  // Is handle under cursor, used for hover sprite appearing
+		bool   mIsHovered = false;  // Is handle under cursor, used for hover IRectDrawable appearing
 
 		bool                         mIsSelected = false;    // Is this selected
 		ISelectableDragHandlesGroup* mSelectGroup = nullptr; // Selection group
@@ -217,7 +220,7 @@ namespace o2
 		float  mDragDistanceThreshold = 3.0f; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
 
 	protected:
-		// Draws internal sprites with calculated screen position
+		// Draws internal IRectDrawables with calculated screen position
 		void DrawInternal();
 
 		// Called when cursor pressed on this
@@ -247,8 +250,8 @@ namespace o2
 		// Called when right mouse button was released (only when right mouse button pressed this at previous time), calls onRightButtonReleased event
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
-		// Updates sprites positions by handle screen position
-		virtual void UpdateSpritesPositions();
+		// Updates IRectDrawables positions by handle screen position
+		virtual void UpdateDrawablesPositions();
 
 		// Called when this was selected
 		virtual void OnSelected();
@@ -276,9 +279,9 @@ namespace o2
 		WidgetDragHandle();
 
 		// Constructor with views
-		WidgetDragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
-						 Sprite* selected = nullptr, Sprite* selectedHovered = nullptr,
-						 Sprite* selectedPressed = nullptr);
+		WidgetDragHandle(IRectDrawable* regular, IRectDrawable* hover = nullptr, IRectDrawable* pressed = nullptr,
+						 IRectDrawable* selected = nullptr, IRectDrawable* selectedHovered = nullptr,
+						 IRectDrawable* selectedPressed = nullptr);
 
 		// Copy-constructor
 		WidgetDragHandle(const WidgetDragHandle& other);
@@ -293,10 +296,10 @@ namespace o2
 		void Draw() override;
 
 		// Set handle enabled. Disabled handle don't drawn and interact
-		void SetEnabled(bool enabled);
+		void SetEnabled(bool enabled) override;
 
 		// Returns is handle enabled. Disabled handle don't drawn and interact
-		bool IsEnabled() const;
+		bool IsEnabled() const override;
 
 		// Converts point from screen to local space
 		Vec2F ScreenToLocal(const Vec2F& point) override;
@@ -390,10 +393,10 @@ namespace o2
 		~SelectableDragHandlesGroup();
 
 		// Returns selected handles in group
-		const Vector<DragHandle*>& GetSelectedHandles() const;
+		const Vector<DragHandle*>& GetSelectedHandles() const override;
 
 		// Returns all handles in group 
-		Vector<DragHandle*> GetAllHandles() const;
+		Vector<DragHandle*> GetAllHandles() const override;
 
 		// Selects handle
 		void SelectHandle(DragHandle* handle) override;
@@ -465,12 +468,12 @@ CLASS_FIELDS_META(o2::DragHandle)
 	FIELD().PUBLIC().NAME(checkSnappingFunc);
 	FIELD().PUBLIC().NAME(onRightButtonPressed);
 	FIELD().PUBLIC().NAME(onRightButtonReleased);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mRegularSprite);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHoverSprite);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mPressedSprite);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedSprite);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedHoverSprite);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedPressedSprite);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mRegularDrawable);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHoverDrawable);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mPressedDrawable);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedDrawable);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedHoverDrawable);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedPressedDrawable);
 	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabled);
 	FIELD().PROTECTED().NAME(mPosition);
 	FIELD().PROTECTED().NAME(mScreenPosition);
@@ -493,7 +496,7 @@ CLASS_METHODS_META(o2::DragHandle)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*, Sprite*, Sprite*, Sprite*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const DragHandle&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw, const RectF&);
@@ -517,23 +520,24 @@ CLASS_METHODS_META(o2::DragHandle)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAngle, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetAngle);
+	FUNCTION().PUBLIC().SIGNATURE(const Vec2F&, GetPressedCursorPos);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetRegularSprite, Sprite*);
-	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetRegularSprite);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetHoverSprite, Sprite*);
-	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHoverSprite);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetPressedSprite, Sprite*);
-	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetPressedSprite);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedSprite, Sprite*);
-	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectedSprite);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedHoveredSprite, Sprite*);
-	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectedHoveredSprite);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedPressedSprite, Sprite*);
-	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectedPressedSprite);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSpritesSize, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSpritesColor, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSpritesSizePivot, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetRegularDrawable, IRectDrawable*);
+	FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetRegularDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetHoverDrawable, IRectDrawable*);
+	FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetHoverDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetPressedDrawable, IRectDrawable*);
+	FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetPressedDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedDrawable, IRectDrawable*);
+	FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetSelectedDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedHoveredDrawable, IRectDrawable*);
+	FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetSelectedHoveredDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedPressedDrawable, IRectDrawable*);
+	FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetSelectedPressedDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawablesSize, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawablesColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawablesSizePivot, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
 	FUNCTION().PROTECTED().SIGNATURE(void, DrawInternal);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
@@ -545,7 +549,7 @@ CLASS_METHODS_META(o2::DragHandle)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMousePressed, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateSpritesPositions);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateDrawablesPositions);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSelected);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeselected);
 }
@@ -568,7 +572,7 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*, Sprite*, Sprite*, Sprite*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetDragHandle&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);

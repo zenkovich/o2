@@ -438,7 +438,7 @@ namespace Editor
 
 		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			_type value; mValuesProxies[i].first->GetValuePtr(&value);
+			_type value = GetProxy(mValuesProxies[i].first);
 			if (newCommonValue != value)
 			{
 				newDifferent = true;

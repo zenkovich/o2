@@ -10,6 +10,7 @@
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
+#include "o2/Utils/Editor/DragHandle.h"
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/System/Time/Time.h"
 
@@ -146,6 +147,8 @@ namespace o2
 					name = path + " : " + widget->GetType().GetName();
 					o2Debug.DrawRect(widget->layout->GetWorldRect(), Color4::Red());
 				}
+				else if (auto handle = dynamic_cast<DragHandle*>(listener))
+					o2Debug.DrawRect(handle->GetRegularDrawable()->GetAxisAlignedRect(), Color4::Red());
 
 				o2Debug.DrawText(Vec2F(-o2Render.GetResolution().x*0.5f, o2Render.GetResolution().y*0.5f - (float)line), name);
 

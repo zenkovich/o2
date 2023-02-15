@@ -3,7 +3,7 @@
 
 #include "o2/Application/Application.h"
 #include "o2/Events/EventSystem.h"
-#include "o2/Render/Sprite.h"
+#include "o2/Render/RectDrawable.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 
 namespace o2
@@ -16,11 +16,11 @@ namespace o2
 		checkSnappingFunc = [](const Vec2F& point) { return point; };
 	}
 
-	DragHandle::DragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/,
-						   Sprite* selected /*= nullptr*/, Sprite* selectedHovered /*= nullptr*/, 
-						   Sprite* selectedPressed /*= nullptr*/) :
-		mRegularSprite(regular), mHoverSprite(hover), mPressedSprite(pressed), mSelectedSprite(selected),
-		mSelectedHoverSprite(selectedHovered), mSelectedPressedSprite(selectedPressed)
+	DragHandle::DragHandle(IRectDrawable* regular, IRectDrawable* hover /*= nullptr*/, IRectDrawable* pressed /*= nullptr*/,
+						   IRectDrawable* selected /*= nullptr*/, IRectDrawable* selectedHovered /*= nullptr*/, 
+						   IRectDrawable* selectedPressed /*= nullptr*/) :
+		mRegularDrawable(regular), mHoverDrawable(hover), mPressedDrawable(pressed), mSelectedDrawable(selected),
+		mSelectedHoverDrawable(selectedHovered), mSelectedPressedDrawable(selectedPressed)
 	{
 		screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToScreenTransformFunc = [](const Vec2F& point) { return point; };
@@ -31,23 +31,23 @@ namespace o2
 	DragHandle::DragHandle(const DragHandle& other) :
 		angle(this), position(this), enabled(this)
 	{
-		if (other.mRegularSprite)
-			mRegularSprite = other.mRegularSprite->CloneAs<Sprite>();
+		if (other.mRegularDrawable)
+			mRegularDrawable = other.mRegularDrawable->CloneAs<IRectDrawable>();
 
-		if (other.mHoverSprite)
-			mHoverSprite = other.mHoverSprite->CloneAs<Sprite>();
+		if (other.mHoverDrawable)
+			mHoverDrawable = other.mHoverDrawable->CloneAs<IRectDrawable>();
 
-		if (other.mPressedSprite)
-			mPressedSprite = other.mPressedSprite->CloneAs<Sprite>();
+		if (other.mPressedDrawable)
+			mPressedDrawable = other.mPressedDrawable->CloneAs<IRectDrawable>();
 
-		if (other.mSelectedSprite)
-			mSelectedSprite = other.mSelectedSprite->CloneAs<Sprite>();
+		if (other.mSelectedDrawable)
+			mSelectedDrawable = other.mSelectedDrawable->CloneAs<IRectDrawable>();
 
-		if (other.mSelectedHoverSprite)
-			mSelectedHoverSprite = other.mSelectedHoverSprite->CloneAs<Sprite>();
+		if (other.mSelectedHoverDrawable)
+			mSelectedHoverDrawable = other.mSelectedHoverDrawable->CloneAs<IRectDrawable>();
 
-		if (other.mSelectedPressedSprite)
-			mSelectedPressedSprite = other.mSelectedPressedSprite->CloneAs<Sprite>();
+		if (other.mSelectedPressedDrawable)
+			mSelectedPressedDrawable = other.mSelectedPressedDrawable->CloneAs<IRectDrawable>();
 
 		onChangedPos = other.onChangedPos;
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
@@ -63,23 +63,23 @@ namespace o2
 
 	DragHandle::~DragHandle()
 	{
-		if (mRegularSprite)
-			delete mRegularSprite;
+		if (mRegularDrawable)
+			delete mRegularDrawable;
 
-		if (mHoverSprite)
-			delete mHoverSprite;
+		if (mHoverDrawable)
+			delete mHoverDrawable;
 
-		if (mPressedSprite)
-			delete mPressedSprite;
+		if (mPressedDrawable)
+			delete mPressedDrawable;
 
-		if (mSelectedSprite)
-			delete mSelectedSprite;
+		if (mSelectedDrawable)
+			delete mSelectedDrawable;
 
-		if (mSelectedHoverSprite)
-			delete mSelectedHoverSprite;
+		if (mSelectedHoverDrawable)
+			delete mSelectedHoverDrawable;
 
-		if (mSelectedPressedSprite)
-			delete mSelectedPressedSprite;
+		if (mSelectedPressedDrawable)
+			delete mSelectedPressedDrawable;
 
 		if (mSelectGroup)
 			mSelectGroup->RemoveHandle(this);
@@ -87,53 +87,53 @@ namespace o2
 
 	DragHandle& DragHandle::operator=(const DragHandle& other)
 	{
-		if (mRegularSprite)
-			delete mRegularSprite;
+		if (mRegularDrawable)
+			delete mRegularDrawable;
 
-		if (mHoverSprite)
-			delete mHoverSprite;
+		if (mHoverDrawable)
+			delete mHoverDrawable;
 
-		if (mPressedSprite)
-			delete mPressedSprite;
+		if (mPressedDrawable)
+			delete mPressedDrawable;
 
-		if (mSelectedSprite)
-			delete mSelectedSprite;
+		if (mSelectedDrawable)
+			delete mSelectedDrawable;
 
-		if (mSelectedHoverSprite)
-			delete mSelectedHoverSprite;
+		if (mSelectedHoverDrawable)
+			delete mSelectedHoverDrawable;
 
-		if (mSelectedPressedSprite)
-			delete mSelectedPressedSprite;
+		if (mSelectedPressedDrawable)
+			delete mSelectedPressedDrawable;
 
-		if (other.mRegularSprite)
-			mRegularSprite = other.mRegularSprite->CloneAs<Sprite>();
+		if (other.mRegularDrawable)
+			mRegularDrawable = other.mRegularDrawable->CloneAs<IRectDrawable>();
 		else
-			mRegularSprite = nullptr;
+			mRegularDrawable = nullptr;
 
-		if (other.mHoverSprite)
-			mHoverSprite = other.mHoverSprite->CloneAs<Sprite>();
+		if (other.mHoverDrawable)
+			mHoverDrawable = other.mHoverDrawable->CloneAs<IRectDrawable>();
 		else
-			mHoverSprite = nullptr;
+			mHoverDrawable = nullptr;
 
-		if (other.mPressedSprite)
-			mPressedSprite = other.mPressedSprite->CloneAs<Sprite>();
+		if (other.mPressedDrawable)
+			mPressedDrawable = other.mPressedDrawable->CloneAs<IRectDrawable>();
 		else
-			mPressedSprite = nullptr;
+			mPressedDrawable = nullptr;
 
-		if (other.mSelectedSprite)
-			mSelectedSprite = other.mSelectedSprite->CloneAs<Sprite>();
+		if (other.mSelectedDrawable)
+			mSelectedDrawable = other.mSelectedDrawable->CloneAs<IRectDrawable>();
 		else
-			mSelectedSprite = nullptr;
+			mSelectedDrawable = nullptr;
 
-		if (other.mSelectedHoverSprite)
-			mSelectedHoverSprite = other.mSelectedHoverSprite->CloneAs<Sprite>();
+		if (other.mSelectedHoverDrawable)
+			mSelectedHoverDrawable = other.mSelectedHoverDrawable->CloneAs<IRectDrawable>();
 		else
-			mSelectedHoverSprite = nullptr;
+			mSelectedHoverDrawable = nullptr;
 
-		if (other.mSelectedPressedSprite)
-			mSelectedPressedSprite = other.mSelectedPressedSprite->CloneAs<Sprite>();
+		if (other.mSelectedPressedDrawable)
+			mSelectedPressedDrawable = other.mSelectedPressedDrawable->CloneAs<IRectDrawable>();
 		else
-			mSelectedPressedSprite = nullptr;
+			mSelectedPressedDrawable = nullptr;
 
 		onChangedPos = other.onChangedPos;
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
@@ -198,7 +198,7 @@ namespace o2
 			mLastScreenPosUpdateFrame = o2Time.GetCurrentFrame();
 		}
 
-		UpdateSpritesPositions();
+		UpdateDrawablesPositions();
 		DrawInternal();
 	}
 
@@ -215,7 +215,7 @@ namespace o2
 
 		if (screenClipRect.IsInside(mScreenPosition))
 		{
-			UpdateSpritesPositions();
+			UpdateDrawablesPositions();
 			DrawInternal();
 		}
 	}
@@ -225,8 +225,8 @@ namespace o2
 		if (!isPointInside.IsEmpty())
 			return mDrawingScissorRect.IsInside(point) && isPointInside(point);
 
-		if (mRegularSprite)
-			return mDrawingScissorRect.IsInside(point) && mRegularSprite->IsPointInside(point);
+		if (mRegularDrawable)
+			return mDrawingScissorRect.IsInside(point) && mRegularDrawable->IsPointInside(point);
 
 		return false;
 	}
@@ -383,30 +383,30 @@ namespace o2
 		}
 	}
 
-	void DragHandle::UpdateSpritesPositions()
+	void DragHandle::UpdateDrawablesPositions()
 	{
 		if (mLastDrawnScreenPosition == mScreenPosition)
 			return;
 
 		mLastDrawnScreenPosition = mScreenPosition;
 
-		if (mRegularSprite)
-			mRegularSprite->SetPosition(mScreenPosition);
+		if (mRegularDrawable)
+			mRegularDrawable->SetPosition(mScreenPosition);
 
-		if (mHoverSprite)
-			mHoverSprite->SetPosition(mScreenPosition);
+		if (mHoverDrawable)
+			mHoverDrawable->SetPosition(mScreenPosition);
 
-		if (mPressedSprite)
-			mPressedSprite->SetPosition(mScreenPosition);
+		if (mPressedDrawable)
+			mPressedDrawable->SetPosition(mScreenPosition);
 
-		if (mSelectedSprite)
-			mSelectedSprite->SetPosition(mScreenPosition);
+		if (mSelectedDrawable)
+			mSelectedDrawable->SetPosition(mScreenPosition);
 
-		if (mSelectedHoverSprite)
-			mSelectedHoverSprite->SetPosition(mScreenPosition);
+		if (mSelectedHoverDrawable)
+			mSelectedHoverDrawable->SetPosition(mScreenPosition);
 
-		if (mSelectedPressedSprite)
-			mSelectedPressedSprite->SetPosition(mScreenPosition);
+		if (mSelectedPressedDrawable)
+			mSelectedPressedDrawable->SetPosition(mScreenPosition);
 	}
 
 	void DragHandle::SetDragPosition(const Vec2F& position)
@@ -455,23 +455,23 @@ namespace o2
 	{
 		mAngle = rad;
 
-		if (mRegularSprite)
-			mRegularSprite->angle = rad;
+		if (mRegularDrawable)
+			mRegularDrawable->angle = rad;
 
-		if (mHoverSprite)
-			mHoverSprite->angle = rad;
+		if (mHoverDrawable)
+			mHoverDrawable->angle = rad;
 
-		if (mPressedSprite)
-			mPressedSprite->angle = rad;
+		if (mPressedDrawable)
+			mPressedDrawable->angle = rad;
 
-		if (mSelectedSprite)
-			mSelectedSprite->angle = rad;
+		if (mSelectedDrawable)
+			mSelectedDrawable->angle = rad;
 
-		if (mSelectedHoverSprite)
-			mSelectedHoverSprite->angle = rad;
+		if (mSelectedHoverDrawable)
+			mSelectedHoverDrawable->angle = rad;
 
-		if (mSelectedPressedSprite)
-			mSelectedPressedSprite->angle = rad;
+		if (mSelectedPressedDrawable)
+			mSelectedPressedDrawable->angle = rad;
 	}
 
 	float DragHandle::GetAngle() const
@@ -479,136 +479,141 @@ namespace o2
 		return mAngle;
 	}
 
-	void DragHandle::SetRegularSprite(Sprite* sprite)
+	const Vec2F& DragHandle::GetPressedCursorPos() const
 	{
-		if (mRegularSprite)
-			delete mRegularSprite;
-
-		mRegularSprite = sprite;
+		return mPressedCursorPos;
 	}
 
-	Sprite* DragHandle::GetRegularSprite() const
+	void DragHandle::SetRegularDrawable(IRectDrawable* IRectDrawable)
 	{
-		return mRegularSprite;
+		if (mRegularDrawable)
+			delete mRegularDrawable;
+
+		mRegularDrawable = IRectDrawable;
 	}
 
-	void DragHandle::SetHoverSprite(Sprite* sprite)
+	IRectDrawable* DragHandle::GetRegularDrawable() const
 	{
-		if (mHoverSprite)
-			delete mHoverSprite;
-
-		mHoverSprite = sprite;
+		return mRegularDrawable;
 	}
 
-	Sprite* DragHandle::GetHoverSprite() const
+	void DragHandle::SetHoverDrawable(IRectDrawable* IRectDrawable)
 	{
-		return mHoverSprite;
+		if (mHoverDrawable)
+			delete mHoverDrawable;
+
+		mHoverDrawable = IRectDrawable;
 	}
 
-	void DragHandle::SetPressedSprite(Sprite* sprite)
+	IRectDrawable* DragHandle::GetHoverDrawable() const
 	{
-		if (mPressedSprite)
-			delete mPressedSprite;
-
-		mPressedSprite = sprite;
+		return mHoverDrawable;
 	}
 
-	Sprite* DragHandle::GetPressedSprite() const
+	void DragHandle::SetPressedDrawable(IRectDrawable* IRectDrawable)
 	{
-		return mPressedSprite;
+		if (mPressedDrawable)
+			delete mPressedDrawable;
+
+		mPressedDrawable = IRectDrawable;
 	}
 
-	void DragHandle::SetSelectedSprite(Sprite* sprite)
+	IRectDrawable* DragHandle::GetPressedDrawable() const
 	{
-		if (mSelectedSprite)
-			delete mSelectedSprite;
-
-		mSelectedSprite = sprite;
+		return mPressedDrawable;
 	}
 
-	Sprite* DragHandle::GetSelectedSprite() const
+	void DragHandle::SetSelectedDrawable(IRectDrawable* IRectDrawable)
 	{
-		return mSelectedSprite;
+		if (mSelectedDrawable)
+			delete mSelectedDrawable;
+
+		mSelectedDrawable = IRectDrawable;
 	}
 
-	void DragHandle::SetSelectedHoveredSprite(Sprite* sprite)
+	IRectDrawable* DragHandle::GetSelectedDrawable() const
 	{
-		if (mSelectedHoverSprite)
-			delete mSelectedHoverSprite;
-
-		mSelectedHoverSprite = sprite;
+		return mSelectedDrawable;
 	}
 
-	Sprite* DragHandle::GetSelectedHoveredSprite() const
+	void DragHandle::SetSelectedHoveredDrawable(IRectDrawable* IRectDrawable)
 	{
-		return mSelectedHoverSprite;
+		if (mSelectedHoverDrawable)
+			delete mSelectedHoverDrawable;
+
+		mSelectedHoverDrawable = IRectDrawable;
 	}
 
-	void DragHandle::SetSelectedPressedSprite(Sprite* sprite)
+	IRectDrawable* DragHandle::GetSelectedHoveredDrawable() const
 	{
-		if (mSelectedPressedSprite)
-			delete mSelectedPressedSprite;
-
-		mSelectedPressedSprite = sprite;
+		return mSelectedHoverDrawable;
 	}
 
-	Sprite* DragHandle::GetSelectedPressedSprite() const
+	void DragHandle::SetSelectedPressedDrawable(IRectDrawable* IRectDrawable)
 	{
-		return mSelectedPressedSprite;
+		if (mSelectedPressedDrawable)
+			delete mSelectedPressedDrawable;
+
+		mSelectedPressedDrawable = IRectDrawable;
 	}
 
-	void DragHandle::SetSpritesSize(const Vec2F& size)
+	IRectDrawable* DragHandle::GetSelectedPressedDrawable() const
 	{
-		if (mRegularSprite)
-			mRegularSprite->SetSize(size);
-
-		if (mHoverSprite)
-			mHoverSprite->SetSize(size);
-
-		if (mPressedSprite)
-			mPressedSprite->SetSize(size);
-
-		if (mSelectedSprite)
-			mSelectedSprite->SetSize(size);
-
-		if (mSelectedHoverSprite)
-			mSelectedHoverSprite->SetSize(size);
-
-		if (mSelectedPressedSprite)
-			mSelectedPressedSprite->SetSize(size);
+		return mSelectedPressedDrawable;
 	}
 
-	void DragHandle::SetSpritesColor(const Color4& color)
+	void DragHandle::SetDrawablesSize(const Vec2F& size)
 	{
-		if (mRegularSprite)
-			mRegularSprite->SetColor(color);
+		if (mRegularDrawable)
+			mRegularDrawable->SetSize(size);
 
-		if (mHoverSprite)
-			mHoverSprite->SetColor(color);
+		if (mHoverDrawable)
+			mHoverDrawable->SetSize(size);
 
-		if (mPressedSprite)
-			mPressedSprite->SetColor(color);
+		if (mPressedDrawable)
+			mPressedDrawable->SetSize(size);
+
+		if (mSelectedDrawable)
+			mSelectedDrawable->SetSize(size);
+
+		if (mSelectedHoverDrawable)
+			mSelectedHoverDrawable->SetSize(size);
+
+		if (mSelectedPressedDrawable)
+			mSelectedPressedDrawable->SetSize(size);
 	}
 
-	void DragHandle::SetSpritesSizePivot(const Vec2F& pivot)
+	void DragHandle::SetDrawablesColor(const Color4& color)
 	{
-		if (mRegularSprite)
-			mRegularSprite->SetSizePivot(pivot);
+		if (mRegularDrawable)
+			mRegularDrawable->SetColor(color);
 
-		if (mHoverSprite)
-			mHoverSprite->SetSizePivot(pivot);
+		if (mHoverDrawable)
+			mHoverDrawable->SetColor(color);
 
-		if (mPressedSprite)
-			mPressedSprite->SetSizePivot(pivot);
+		if (mPressedDrawable)
+			mPressedDrawable->SetColor(color);
+	}
 
-		if (mSelectedSprite)
-			mSelectedSprite->SetSizePivot(pivot);
+	void DragHandle::SetDrawablesSizePivot(const Vec2F& pivot)
+	{
+		if (mRegularDrawable)
+			mRegularDrawable->SetSizePivot(pivot);
 
-		if (mSelectedHoverSprite)
-			mSelectedHoverSprite->SetSizePivot(pivot);
+		if (mHoverDrawable)
+			mHoverDrawable->SetSizePivot(pivot);
 
-		if (mSelectedPressedSprite)
-			mSelectedPressedSprite->SetSizePivot(pivot);
+		if (mPressedDrawable)
+			mPressedDrawable->SetSizePivot(pivot);
+
+		if (mSelectedDrawable)
+			mSelectedDrawable->SetSizePivot(pivot);
+
+		if (mSelectedHoverDrawable)
+			mSelectedHoverDrawable->SetSizePivot(pivot);
+
+		if (mSelectedPressedDrawable)
+			mSelectedPressedDrawable->SetSizePivot(pivot);
 	}
 
 	bool DragHandle::IsScrollable() const
@@ -648,63 +653,63 @@ namespace o2
 	{
 		float alphaChangeCoef = 15.0f;
 
-		if (mRegularSprite)
-			mRegularSprite->Draw();
+		if (mRegularDrawable)
+			mRegularDrawable->Draw();
 
-		if (mHoverSprite && !(mIsSelected && mSelectedHoverSprite))
+		if (mHoverDrawable && !(mIsSelected && mSelectedHoverDrawable))
 		{
-			float transparency = Math::Lerp(mHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
+			float transparency = Math::Lerp(mHoverDrawable->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
 											o2Time.GetDeltaTime()*alphaChangeCoef);
 
-			if (!Math::Equals(transparency, mHoverSprite->GetTransparency()))
-				mHoverSprite->SetTransparency(transparency);
+			if (!Math::Equals(transparency, mHoverDrawable->GetTransparency()))
+				mHoverDrawable->SetTransparency(transparency);
 
-			mHoverSprite->Draw();
+			mHoverDrawable->Draw();
 		}
 
-		if (mPressedSprite && !(mIsSelected && mSelectedPressedSprite))
+		if (mPressedDrawable && !(mIsSelected && mSelectedPressedDrawable))
 		{
-			float transparency = Math::Lerp(mPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
+			float transparency = Math::Lerp(mPressedDrawable->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
 											o2Time.GetDeltaTime()*alphaChangeCoef);
 
-			if (!Math::Equals(transparency, mPressedSprite->GetTransparency()))
-				mPressedSprite->SetTransparency(transparency);
+			if (!Math::Equals(transparency, mPressedDrawable->GetTransparency()))
+				mPressedDrawable->SetTransparency(transparency);
 
-			mPressedSprite->Draw();
+			mPressedDrawable->Draw();
 		}
 
-		if (mSelectedSprite)
+		if (mSelectedDrawable)
 		{
-			float transparency = Math::Lerp(mSelectedSprite->GetTransparency(), mIsSelected ? 1.0f : 0.0f,
+			float transparency = Math::Lerp(mSelectedDrawable->GetTransparency(), mIsSelected ? 1.0f : 0.0f,
 											o2Time.GetDeltaTime()*alphaChangeCoef);
 
-			if (!Math::Equals(transparency, mSelectedSprite->GetTransparency()))
-				mSelectedSprite->SetTransparency(transparency);
+			if (!Math::Equals(transparency, mSelectedDrawable->GetTransparency()))
+				mSelectedDrawable->SetTransparency(transparency);
 
-			mSelectedSprite->Draw();
+			mSelectedDrawable->Draw();
 		}
 
-		if (mIsSelected && mSelectedHoverSprite)
+		if (mIsSelected && mSelectedHoverDrawable)
 		{
-			float transparency = Math::Lerp(mSelectedHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
+			float transparency = Math::Lerp(mSelectedHoverDrawable->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
 											o2Time.GetDeltaTime()*alphaChangeCoef);
 
-			if (!Math::Equals(transparency, mSelectedHoverSprite->GetTransparency()))
-				mSelectedHoverSprite->SetTransparency(transparency);
+			if (!Math::Equals(transparency, mSelectedHoverDrawable->GetTransparency()))
+				mSelectedHoverDrawable->SetTransparency(transparency);
 
-			mSelectedHoverSprite->Draw();
+			mSelectedHoverDrawable->Draw();
 		}
 
-		if (mIsSelected && mSelectedPressedSprite)
+		if (mIsSelected && mSelectedPressedDrawable)
 		{
 
-			float transparency = Math::Lerp(mSelectedPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
+			float transparency = Math::Lerp(mSelectedPressedDrawable->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
 											o2Time.GetDeltaTime()*alphaChangeCoef);
 
-			if (!Math::Equals(transparency, mSelectedPressedSprite->GetTransparency()))
-				mSelectedPressedSprite->SetTransparency(transparency);
+			if (!Math::Equals(transparency, mSelectedPressedDrawable->GetTransparency()))
+				mSelectedPressedDrawable->SetTransparency(transparency);
 
-			mSelectedPressedSprite->Draw();
+			mSelectedPressedDrawable->Draw();
 		}
 
 		CursorAreaEventsListener::OnDrawn();
@@ -718,9 +723,9 @@ namespace o2
 		localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
 	}
 
-	WidgetDragHandle::WidgetDragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/, 
-									   Sprite* selected /*= nullptr*/, Sprite* selectedHovered /*= nullptr*/, 
-									   Sprite* selectedPressed /*= nullptr*/) :
+	WidgetDragHandle::WidgetDragHandle(IRectDrawable* regular, IRectDrawable* hover /*= nullptr*/, IRectDrawable* pressed /*= nullptr*/, 
+									   IRectDrawable* selected /*= nullptr*/, IRectDrawable* selectedHovered /*= nullptr*/, 
+									   IRectDrawable* selectedPressed /*= nullptr*/) :
 		DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed), Widget()
 	{
 		widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };

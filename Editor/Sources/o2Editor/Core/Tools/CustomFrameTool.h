@@ -38,11 +38,17 @@ namespace Editor
 		// Default constructor
 		CustomFrameTool();
 
+		// Empty copy operator
+		CustomFrameTool& operator=(const CustomFrameTool& other) { return *this; }
+
 		// Sets frame
 		void SetFrame(const Basis& frame);
 
 		// Returns current frame
 		const Basis& GetFrame() const;
+
+		// Resets callbacks
+		void Reset();
 
 		// Returns toggle in menu panel icon name
 		String GetPanelIcon() const override;
@@ -53,7 +59,37 @@ namespace Editor
 		// Called when tool was disabled
 		void OnDisabled() override;
 
+		IOBJECT(CustomFrameTool);
+
 	private:
 		Basis mBasis; // Current editing basis
 	};
 }
+
+CLASS_BASES_META(Editor::CustomFrameTool)
+{
+	BASE_CLASS(Editor::IEditTool);
+}
+END_META;
+CLASS_FIELDS_META(Editor::CustomFrameTool)
+{
+	FIELD().PUBLIC().NAME(frameHandles);
+	FIELD().PUBLIC().NAME(sceneLayer);
+	FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
+	FIELD().PUBLIC().NAME(onChanged);
+	FIELD().PUBLIC().NAME(getOrigin);
+	FIELD().PRIVATE().NAME(mBasis);
+}
+END_META;
+CLASS_METHODS_META(Editor::CustomFrameTool)
+{
+
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SIGNATURE(void, SetFrame, const Basis&);
+	FUNCTION().PUBLIC().SIGNATURE(const Basis&, GetFrame);
+	FUNCTION().PUBLIC().SIGNATURE(void, Reset);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+}
+END_META;

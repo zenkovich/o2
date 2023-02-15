@@ -8,9 +8,9 @@
 
 namespace o2
 {
-	// ---------------
-	// Image component
-	// ---------------
+	// --------------
+	// Mesh component
+	// --------------
 	class MeshComponent: public DrawableComponent
 	{
 	public:

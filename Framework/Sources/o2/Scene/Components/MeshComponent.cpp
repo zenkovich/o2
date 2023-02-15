@@ -40,6 +40,7 @@ namespace o2
 
 		mMesh.Draw();
 		DrawableComponent::OnDrawn();
+		ISceneDrawable::Draw();
 
 		if (o2Input.IsKeyDown(VK_F3))
 			o2Render.DrawMeshWire(&mMesh, Color4(0, 0, 0, 100));
@@ -69,7 +70,7 @@ namespace o2
 	void MeshComponent::SetExtraPoint(int idx, const Vec2F& pos)
 	{
 		mExtraPoints[idx] = pos;
-		mNeedUpdateMesh = true;
+		mNeedUpdateMesh = true; 
 	}
 
 	void MeshComponent::AddExtraPoint(const Vec2F& point)

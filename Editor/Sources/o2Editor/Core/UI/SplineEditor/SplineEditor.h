@@ -68,6 +68,9 @@ namespace Editor
 		// Sets spline wrapper
 		void SetSpline(ISplineWrapper* wrapper);
 
+		// resets callbacks and spline to null
+		void Reset();
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 

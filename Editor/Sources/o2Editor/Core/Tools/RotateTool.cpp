@@ -130,10 +130,10 @@ namespace Editor
 			if (angle < Math::PI()*0.5f || (angle >= Math::PI() - FLT_EPSILON && angle <= Math::PI()*1.5f + FLT_EPSILON))
 				currFillColor = fillColorUL2;
 
-			mRotateRingFillMesh->vertices[vi] = Vertex2(pinside, currFillColor, 0.0f, 0.0f);
-			mRotateRingFillMesh->vertices[vi + 1] = Vertex2(poutside, currFillColor, 0.0f, 0.0f);
-			mRotateRingFillMesh->vertices[vi + 2] = Vertex2(pinsideNext, currFillColor, 0.0f, 0.0f);
-			mRotateRingFillMesh->vertices[vi + 3] = Vertex2(poutsideNext, currFillColor, 0.0f, 0.0f);
+			mRotateRingFillMesh->vertices[vi] = Vertex(pinside, currFillColor, 0.0f, 0.0f);
+			mRotateRingFillMesh->vertices[vi + 1] = Vertex(poutside, currFillColor, 0.0f, 0.0f);
+			mRotateRingFillMesh->vertices[vi + 2] = Vertex(pinsideNext, currFillColor, 0.0f, 0.0f);
+			mRotateRingFillMesh->vertices[vi + 3] = Vertex(poutsideNext, currFillColor, 0.0f, 0.0f);
 
 			mRotateRingFillMesh->indexes[pi] = vi;
 			mRotateRingFillMesh->indexes[pi + 1] = vi + 1;
@@ -173,10 +173,10 @@ namespace Editor
 			int pi = i * 6;
 			i++;
 
-			mAngleMesh->vertices[vi] = Vertex2(pinside, angleRingColor, 0.0f, 0.0f);
-			mAngleMesh->vertices[vi + 1] = Vertex2(poutside, angleRingColor, 0.0f, 0.0f);
-			mAngleMesh->vertices[vi + 2] = Vertex2(pinsideNext, angleRingColor, 0.0f, 0.0f);
-			mAngleMesh->vertices[vi + 3] = Vertex2(poutsideNext, angleRingColor, 0.0f, 0.0f);
+			mAngleMesh->vertices[vi] = Vertex(pinside, angleRingColor, 0.0f, 0.0f);
+			mAngleMesh->vertices[vi + 1] = Vertex(poutside, angleRingColor, 0.0f, 0.0f);
+			mAngleMesh->vertices[vi + 2] = Vertex(pinsideNext, angleRingColor, 0.0f, 0.0f);
+			mAngleMesh->vertices[vi + 3] = Vertex(poutsideNext, angleRingColor, 0.0f, 0.0f);
 
 			mAngleMesh->indexes[pi] = vi;
 			mAngleMesh->indexes[pi + 1] = vi + 1;
@@ -197,7 +197,7 @@ namespace Editor
 	{
 		auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
 		mScenePivot =
-			selectedObjects.Sum<Vec2F>([](auto x) { return x->GetTransform().origin; }) /
+			selectedObjects.Sum<Vec2F>([](auto x) { return x->GetPivot(); }) /
 			(float)selectedObjects.Count();
 
 		mPivotDragHandle.position = mScenePivot;
@@ -346,6 +346,7 @@ namespace Editor
 		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
 			object->SetTransform(object->GetTransform()*transform);
+			object->UpdateTransform();
 		}
 	}
 

@@ -225,6 +225,7 @@
     <ClInclude Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.h" />
     <ClInclude Include="..\..\Sources\o2\Render\RectDrawable.h" />
     <ClInclude Include="..\..\Sources\o2\Render\Render.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\SkinningMesh.h" />
     <ClInclude Include="..\..\Sources\o2\Render\Sprite.h" />
     <ClInclude Include="..\..\Sources\o2\Render\Text.h" />
     <ClInclude Include="..\..\Sources\o2\Render\Texture.h" />
@@ -252,6 +253,8 @@
     <ClInclude Include="..\..\Sources\o2\Scene\Components\MeshComponent.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Components\ScriptableComponent.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\SkinningMeshBoneComponent.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\SkinningMeshComponent.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ISceneDrawable.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Physics\BoxCollider.h" />
@@ -351,7 +354,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Spline.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Transform.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Vector2.h" />
-    <ClInclude Include="..\..\Sources\o2\Utils\Math\Vertex2.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Vertex.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\IAllocator.h" />
@@ -459,6 +462,7 @@
     <ClCompile Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.cpp" />
     <ClCompile Include="..\..\Sources\o2\Render\RectDrawable.cpp" />
     <ClCompile Include="..\..\Sources\o2\Render\Render.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\SkinningMesh.cpp" />
     <ClCompile Include="..\..\Sources\o2\Render\Sprite.cpp" />
     <ClCompile Include="..\..\Sources\o2\Render\Text.cpp" />
     <ClCompile Include="..\..\Sources\o2\Render\Texture.cpp" />
@@ -483,6 +487,8 @@
     <ClCompile Include="..\..\Sources\o2\Scene\Components\MeshComponent.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Components\ScriptableComponent.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\SkinningMeshBoneComponent.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\SkinningMeshComponent.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\ISceneDrawable.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Physics\BoxCollider.cpp" />
@@ -557,6 +563,7 @@
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Math.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Spline.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Transform.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Vertex.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.cpp" />

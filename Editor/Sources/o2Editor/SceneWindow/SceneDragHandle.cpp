@@ -2,7 +2,7 @@
 #include "SceneDragHandle.h"
 
 #include "o2/Application/Application.h"
-#include "o2/Render/Sprite.h"
+#include "o2/Render/RectDrawable.h"
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/SceneWindow/SceneWindow.h"
@@ -19,7 +19,7 @@ namespace Editor
 		}
 	}
 
-	SceneDragHandle::SceneDragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/):
+	SceneDragHandle::SceneDragHandle(IRectDrawable* regular, IRectDrawable* hover /*= nullptr*/, IRectDrawable* pressed /*= nullptr*/):
 		DragHandle(regular, hover, pressed)
 	{
 		if (WindowsManager::IsSingletonInitialzed())
@@ -61,6 +61,26 @@ namespace Editor
 		return o2EditorSceneScreen.SceneToScreenPoint(DragHandle::LocalToScreen(point));
 	}
 
+	void SceneDragHandle::Draw()
+	{
+		if (mode == Mode::SceneSpace)
+		{
+			Vec2F cameraScale = o2EditorSceneScreen.GetCameraScale();
+			Vec2F drawablesScale(1.0f/cameraScale.x, 1.0f/cameraScale.y);
+
+			if (mRegularDrawable)
+				mRegularDrawable->scale = drawablesScale;
+
+			if (mHoverDrawable)
+				mHoverDrawable->scale = drawablesScale;
+
+			if (mPressedDrawable)
+				mPressedDrawable->scale = drawablesScale;
+		}
+
+		DragHandle::Draw();
+	}
+
 	void SceneDragHandle::SetEnabled(bool enable)
 	{
 		if (mEnabled == enable)
@@ -74,5 +94,12 @@ namespace Editor
 			o2EditorSceneScreen.mDragHandles.Remove(this);
 	}
 }
+
+ENUM_META(Editor::SceneDragHandle::Mode)
+{
+	ENUM_ENTRY(SceneSpace);
+	ENUM_ENTRY(ScreenSpace);
+}
+END_ENUM_META;
 
 DECLARE_CLASS(Editor::SceneDragHandle);

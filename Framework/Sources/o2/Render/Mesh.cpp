@@ -22,7 +22,7 @@ namespace o2
 		vertexCount = mesh.vertexCount;
 		polyCount = mesh.polyCount;
 
-		memcpy(vertices, mesh.vertices, mesh.mMaxVertexCount*sizeof(Vertex2));
+		memcpy(vertices, mesh.vertices, mesh.mMaxVertexCount*sizeof(Vertex));
 		memcpy(indexes, mesh.indexes, mesh.mMaxPolyCount*3*sizeof(UInt16));
 	}
 
@@ -40,7 +40,7 @@ namespace o2
 		vertexCount = other.vertexCount;
 		polyCount = other.polyCount;
 
-		memcpy(vertices, other.vertices, other.mMaxVertexCount*sizeof(Vertex2));
+		memcpy(vertices, other.vertices, other.mMaxVertexCount*sizeof(Vertex));
 		memcpy(indexes, other.indexes, other.mMaxPolyCount*3*sizeof(UInt16));
 
 		return *this;
@@ -51,7 +51,7 @@ namespace o2
 		if (vertices) delete[] vertices;
 		if (indexes) delete[] indexes;
 
-		vertices = new Vertex2[vertexCount];
+		vertices = new Vertex[vertexCount];
 		indexes = new UInt16[polyCount*3];
 
 		mMaxVertexCount = vertexCount;
@@ -80,7 +80,7 @@ namespace o2
 	void Mesh::SetMaxVertexCount(const UInt& count)
 	{
 		delete[] vertices;
-		vertices = new Vertex2[count];
+		vertices = new Vertex[count];
 		mMaxVertexCount = count;
 		vertexCount = 0;
 	}

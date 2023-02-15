@@ -74,6 +74,32 @@ namespace o2
 	{
 		return mDrawingScissorRect.IsInside(point) && Transform::IsPointInside(point);
 	}
+
+	FunctionalRectDrawable::FunctionalRectDrawable(const Function<void(const Basis& transform, const Color4& color)>& draw, 
+												   const Vec2F& size /*= Vec2F()*/, const Vec2F& position /*= Vec2F()*/, 
+												   float angle /*= 0.0f*/, const Vec2F& scale /*= Vec2F(1.0f, 1.0f)*/, 
+												   const Color4& color /*= Color4::White()*/, const Vec2F& pivot /*= Vec2F(0.5f, 0.5f)*/):
+		IRectDrawable(size, position, angle, scale, color, pivot), draw(draw)
+	{}
+
+	FunctionalRectDrawable::FunctionalRectDrawable(const FunctionalRectDrawable& other):
+		IRectDrawable(other), draw(other.draw)
+	{}
+
+	FunctionalRectDrawable::FunctionalRectDrawable() = default;
+
+	void FunctionalRectDrawable::Draw()
+	{
+		if (!mEnabled)
+			return;
+
+		draw(GetBasis(), mColor);
+
+		OnDrawn();
+	}
+
 }
 
 DECLARE_CLASS(o2::IRectDrawable);
+
+DECLARE_CLASS(o2::FunctionalRectDrawable);

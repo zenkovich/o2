@@ -296,6 +296,9 @@
     <ClInclude Include="..\..\Sources\o2\Render\Render.h">
       <Filter>Sources\o2\Render</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\SkinningMesh.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Render\Sprite.h">
       <Filter>Sources\o2\Render</Filter>
     </ClInclude>
@@ -617,6 +620,12 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Function\Function.h">
       <Filter>Sources\o2\Utils\Function</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\FunctionDataValueConverter.h">
+      <Filter>Sources\o2\Utils\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\SerializableFunction.h">
+      <Filter>Sources\o2\Utils\Function</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Math\ApproximationValue.h">
       <Filter>Sources\o2\Utils\Math</Filter>
     </ClInclude>
@@ -668,7 +677,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Vector2.h">
       <Filter>Sources\o2\Utils\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Utils\Math\Vertex2.h">
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Vertex.h">
       <Filter>Sources\o2\Utils\Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.h">
@@ -717,6 +726,9 @@
       <Filter>Sources\o2\Utils\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValue.h">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValueConverters.h">
       <Filter>Sources\o2\Utils\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.h">
@@ -800,14 +812,11 @@
     <ClInclude Include="..\..\Sources\o2\stdafx.h">
       <Filter>Sources\o2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Utils\Function\FunctionDataValueConverter.h">
-      <Filter>Sources\o2\Utils\Function</Filter>
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\SkinningMeshComponent.h">
+      <Filter>Sources\o2\Scene\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValueConverters.h">
-      <Filter>Sources\o2\Utils\Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Utils\Function\SerializableFunction.h">
-      <Filter>Sources\o2\Utils\Function</Filter>
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\SkinningMeshBoneComponent.h">
+      <Filter>Sources\o2\Scene\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -992,6 +1001,9 @@
       <Filter>Sources\o2\Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Render\Render.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\SkinningMesh.cpp">
       <Filter>Sources\o2\Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Render\Sprite.cpp">
@@ -1365,6 +1377,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
       <Filter>Sources\o2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Vertex.cpp">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\SkinningMeshComponent.cpp">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\SkinningMeshBoneComponent.cpp">
+      <Filter>Sources\o2\Scene\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

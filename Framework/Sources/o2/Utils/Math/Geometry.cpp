@@ -5,8 +5,8 @@
 
 namespace o2
 {
-	void Geometry::CreatePolyLineMesh(const Vertex2* points, int pointsCount,
-									  Vertex2*& verticies, UInt& vertexCount, UInt& vertexSize,
+	void Geometry::CreatePolyLineMesh(const Vertex* points, int pointsCount,
+									  Vertex*& verticies, UInt& vertexCount, UInt& vertexSize,
 									  UInt16*& indexes, UInt& polyCount, UInt& polySize,
 									  float width, float texBorderTop, float texBorderBottom, const Vec2F& texSize,
 									  const Vec2F& invCameraScale /*= Vec2F(1, 1)*/)
@@ -19,7 +19,7 @@ namespace o2
 			if (verticies)
 				delete[] verticies;
 
-			verticies = new Vertex2[newVertexCount];
+			verticies = new Vertex[newVertexCount];
 			vertexSize = newVertexCount;
 		}
 

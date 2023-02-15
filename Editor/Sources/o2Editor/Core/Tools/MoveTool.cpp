@@ -41,17 +41,17 @@ namespace Editor
 		mVerDragHandle.onReleased = THIS_FUNC(HandleReleased);
 		mBothDragHandle.onReleased = THIS_FUNC(HandleReleased);
 
-		mHorDragHandle.GetRegularSprite()->SetSizePivot(Vec2F(1, 5));
-		mHorDragHandle.GetHoverSprite()->SetSizePivot(Vec2F(1, 5));
-		mHorDragHandle.GetPressedSprite()->SetSizePivot(Vec2F(1, 5));
+		mHorDragHandle.GetRegularDrawable()->SetSizePivot(Vec2F(1, 5));
+		mHorDragHandle.GetHoverDrawable()->SetSizePivot(Vec2F(1, 5));
+		mHorDragHandle.GetPressedDrawable()->SetSizePivot(Vec2F(1, 5));
 
-		mVerDragHandle.GetRegularSprite()->SetSizePivot(Vec2F(5, 1));
-		mVerDragHandle.GetHoverSprite()->SetSizePivot(Vec2F(5, 1));
-		mVerDragHandle.GetPressedSprite()->SetSizePivot(Vec2F(5, 1));
+		mVerDragHandle.GetRegularDrawable()->SetSizePivot(Vec2F(5, 1));
+		mVerDragHandle.GetHoverDrawable()->SetSizePivot(Vec2F(5, 1));
+		mVerDragHandle.GetPressedDrawable()->SetSizePivot(Vec2F(5, 1));
 
-		mBothDragHandle.GetRegularSprite()->SetSizePivot(Vec2F(1, 1));
-		mBothDragHandle.GetHoverSprite()->SetSizePivot(Vec2F(1, 1));
-		mBothDragHandle.GetPressedSprite()->SetSizePivot(Vec2F(1, 1));
+		mBothDragHandle.GetRegularDrawable()->SetSizePivot(Vec2F(1, 1));
+		mBothDragHandle.GetHoverDrawable()->SetSizePivot(Vec2F(1, 1));
+		mBothDragHandle.GetPressedDrawable()->SetSizePivot(Vec2F(1, 1));
 	}
 
 	MoveTool::~MoveTool()
@@ -159,7 +159,7 @@ namespace Editor
 	{
 		auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
 		mLastSceneHandlesPos =
-			selectedObjects.Sum<Vec2F>([](auto x) { return x->GetTransform().origin; }) /
+			selectedObjects.Sum<Vec2F>([](auto x) { return x->GetPivot(); }) /
 			(float)selectedObjects.Count();
 
 		mVerDragHandle.position = mLastSceneHandlesPos;

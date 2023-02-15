@@ -60,6 +60,12 @@ namespace Editor
 		return mBasis;
 	}
 
+	void CustomFrameTool::Reset()
+	{
+		onChanged.Clear();
+		getOrigin.Clear();
+	}
+
 	String CustomFrameTool::CustomFrameTool::GetPanelIcon() const
 	{
 		return "ui/UI4_frame_tool.png";
@@ -77,3 +83,5 @@ namespace Editor
 		isEnabled = false;
 	}
 }
+
+DECLARE_CLASS(Editor::CustomFrameTool);

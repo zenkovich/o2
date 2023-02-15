@@ -5,7 +5,7 @@
 #include "o2/Utils/Math/Color.h"
 #include "o2/Utils/Math/Rect.h"
 #include "o2/Utils/Math/Vector2.h"
-#include "o2/Utils/Math/Vertex2.h"
+#include "o2/Utils/Math/Vertex.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/UID.h"
@@ -116,7 +116,7 @@ namespace o2
 		std::is_same<T, BorderF>::value ||
 		std::is_same<T, Vec2I>::value ||
 		std::is_same<T, Vec2F>::value ||
-		std::is_same<T, Vertex2>::value ||
+		std::is_same<T, Vertex>::value ||
 		std::is_same<T, String>::value ||
 		std::is_same<T, WString>::value ||
 		std::is_same<T, UID>::value ||

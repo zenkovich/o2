@@ -3,7 +3,7 @@
 #include "o2/Render/IDrawable.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Types/CommonTypes.h"
-#include "o2/Utils/Math/Vertex2.h"
+#include "o2/Utils/Math/Vertex.h"
 
 #include "o2/Utils/Property.h"
 
@@ -21,7 +21,7 @@ namespace o2
 		PROPERTY(UInt, maxPolyCount, SetMaxPolyCount, GetMaxPolyCount);       // Max polygons count property
 
 	public:
-		Vertex2* vertices; // Vertex buffer
+		Vertex* vertices; // Vertex buffer
 		UInt16*  indexes;  // Index buffer
 										  
 		UInt vertexCount; // Current vertices count

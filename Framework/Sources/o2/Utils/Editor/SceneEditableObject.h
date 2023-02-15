@@ -25,6 +25,9 @@ namespace o2
 		// Destructor, unregisters from scene editable objects list
 		~SceneEditableObject() override;
 
+		// Updates object
+		virtual void Update(float dt);
+
 		// Returns true when object is on scene
 		virtual bool IsOnScene() const;
 
@@ -169,6 +172,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsOnScene);
 	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
 	FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);

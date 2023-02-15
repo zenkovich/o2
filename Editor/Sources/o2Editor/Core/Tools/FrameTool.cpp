@@ -15,47 +15,47 @@ namespace Editor
 {
 	FrameTool::FrameTool()
 	{
-		mLeftTopRotateHandle.SetRegularSprite(mnew Sprite("ui/UI3_rotate_regular.png"));
-		mLeftTopRotateHandle.SetHoverSprite(mnew Sprite("ui/UI3_rotate_hover.png"));
-		mLeftTopRotateHandle.SetPressedSprite(mnew Sprite("ui/UI3_rotate_pressed.png"));
-		mLeftTopRotateHandle.GetRegularSprite()->pivot = Vec2F(0, 0);
-		mLeftTopRotateHandle.GetHoverSprite()->pivot = Vec2F(0, 0);
-		mLeftTopRotateHandle.GetPressedSprite()->pivot = Vec2F(0, 0);
+		mLeftTopRotateHandle.SetRegularDrawable(mnew Sprite("ui/UI3_rotate_regular.png"));
+		mLeftTopRotateHandle.SetHoverDrawable(mnew Sprite("ui/UI3_rotate_hover.png"));
+		mLeftTopRotateHandle.SetPressedDrawable(mnew Sprite("ui/UI3_rotate_pressed.png"));
+		mLeftTopRotateHandle.GetRegularDrawable()->pivot = Vec2F(0, 0);
+		mLeftTopRotateHandle.GetHoverDrawable()->pivot = Vec2F(0, 0);
+		mLeftTopRotateHandle.GetPressedDrawable()->pivot = Vec2F(0, 0);
 		mLeftTopRotateHandle.pixelPerfect = false;
 
 		mLeftBottomRotateHandle = mLeftTopRotateHandle;
 		mRightTopRotateHandle = mLeftTopRotateHandle;
 		mRightBottomRotateHandle = mLeftTopRotateHandle;
 
-		mLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI2_handle_regular.png"));
-		mLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI2_handle_select.png"));
-		mLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI2_handle_pressed.png"));
+		mLeftTopHandle.SetRegularDrawable(mnew Sprite("ui/UI2_handle_regular.png"));
+		mLeftTopHandle.SetHoverDrawable(mnew Sprite("ui/UI2_handle_select.png"));
+		mLeftTopHandle.SetPressedDrawable(mnew Sprite("ui/UI2_handle_pressed.png"));
 		mLeftTopHandle.pixelPerfect = false;
 
 		mLeftBottomHandle = mLeftTopHandle;
 		mRightTopHandle = mLeftTopHandle;
 		mRightBottomHandle = mLeftTopHandle;
 
-		mLeftHandle.SetRegularSprite(mnew Sprite("ui/UI2_handle_side_regular.png"));
-		mLeftHandle.SetHoverSprite(mnew Sprite("ui/UI2_handle_side_select.png"));
-		mLeftHandle.SetPressedSprite(mnew Sprite("ui/UI2_handle_side_pressed.png"));
+		mLeftHandle.SetRegularDrawable(mnew Sprite("ui/UI2_handle_side_regular.png"));
+		mLeftHandle.SetHoverDrawable(mnew Sprite("ui/UI2_handle_side_select.png"));
+		mLeftHandle.SetPressedDrawable(mnew Sprite("ui/UI2_handle_side_pressed.png"));
 		mLeftHandle.pixelPerfect = false;
 
 		mTopHandle = mLeftHandle;
 		mBottomHandle = mLeftHandle;
 		mRightHandle = mLeftHandle;
 
-		mPivotHandle.SetRegularSprite(mnew Sprite("ui/UI2_pivot.png"));
-		mPivotHandle.SetHoverSprite(mnew Sprite("ui/UI2_pivot_select.png"));
-		mPivotHandle.SetPressedSprite(mnew Sprite("ui/UI2_pivot_pressed.png"));
+		mPivotHandle.SetRegularDrawable(mnew Sprite("ui/UI2_pivot.png"));
+		mPivotHandle.SetHoverDrawable(mnew Sprite("ui/UI2_pivot_select.png"));
+		mPivotHandle.SetPressedDrawable(mnew Sprite("ui/UI2_pivot_pressed.png"));
 		mPivotHandle.checkSnappingFunc = THIS_FUNC(CheckPivotSnapping);
 
-		mAnchorsLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI3_anchor_pressed.png"));
-		mAnchorsLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI3_anchor_hover.png"));
-		mAnchorsLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI3_anchor_regular.png"));
-		mAnchorsLeftTopHandle.GetRegularSprite()->pivot = Vec2F(1, 0);
-		mAnchorsLeftTopHandle.GetHoverSprite()->pivot = Vec2F(1, 0);
-		mAnchorsLeftTopHandle.GetPressedSprite()->pivot = Vec2F(1, 0);
+		mAnchorsLeftTopHandle.SetRegularDrawable(mnew Sprite("ui/UI3_anchor_pressed.png"));
+		mAnchorsLeftTopHandle.SetHoverDrawable(mnew Sprite("ui/UI3_anchor_hover.png"));
+		mAnchorsLeftTopHandle.SetPressedDrawable(mnew Sprite("ui/UI3_anchor_regular.png"));
+		mAnchorsLeftTopHandle.GetRegularDrawable()->pivot = Vec2F(1, 0);
+		mAnchorsLeftTopHandle.GetHoverDrawable()->pivot = Vec2F(1, 0);
+		mAnchorsLeftTopHandle.GetPressedDrawable()->pivot = Vec2F(1, 0);
 
 		mAnchorsRightBottomHandle = mAnchorsLeftTopHandle;
 		mAnchorsLeftBottomHandle = mAnchorsLeftTopHandle;
@@ -63,9 +63,9 @@ namespace Editor
 
 		auto centerAnchorsRegularSprite = mnew Sprite();
 		centerAnchorsRegularSprite->SetSize(Vec2F(0, 0));
-		mAnchorsCenter.SetRegularSprite(centerAnchorsRegularSprite);
-		mAnchorsCenter.SetHoverSprite(mnew Sprite("ui/UI3_anchors_hover.png"));
-		mAnchorsCenter.SetPressedSprite(mnew Sprite("ui/UI3_anchors_pressed.png"));
+		mAnchorsCenter.SetRegularDrawable(centerAnchorsRegularSprite);
+		mAnchorsCenter.SetHoverDrawable(mnew Sprite("ui/UI3_anchors_hover.png"));
+		mAnchorsCenter.SetPressedDrawable(mnew Sprite("ui/UI3_anchors_pressed.png"));
 
 		mLeftTopHandle.onChangedPos = THIS_FUNC(OnLeftTopHandle);
 		mLeftHandle.onChangedPos = THIS_FUNC(OnLeftHandle);
@@ -268,9 +268,6 @@ namespace Editor
 	{
 		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
-			if (o2Input.IsKeyDown(VK_CONTROL))
-				o2Debug.Log("asd");
-
 			if (object->GetTransform().GetScale() != Vec2F())
 				object->SetTransform(object->GetTransform()*transform);
 			// 			else
@@ -1324,7 +1321,7 @@ namespace Editor
 	bool FrameTool::IsPointInTopHandle(const Vec2F& point)
 	{
 		float camScale = o2EditorSceneScreen.GetCameraScale().x;
-		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x*camScale;
+		float spriteSize = mLeftTopHandle.GetRegularDrawable()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin + mFrame.yv + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
 				mFrame.xv - transformNonScaled.xv*spriteSize,
@@ -1336,7 +1333,7 @@ namespace Editor
 	bool FrameTool::IsPointInLeftHandle(const Vec2F& point)
 	{
 		float camScale = o2EditorSceneScreen.GetCameraScale().x;
-		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x*camScale;
+		float spriteSize = mLeftTopHandle.GetRegularDrawable()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
 				transformNonScaled.xv*spriteSize,
@@ -1348,7 +1345,7 @@ namespace Editor
 	bool FrameTool::IsPointInRightHandle(const Vec2F& point)
 	{
 		float camScale = o2EditorSceneScreen.GetCameraScale().x;
-		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x*camScale;
+		float spriteSize = mLeftTopHandle.GetRegularDrawable()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin + mFrame.xv - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
 				transformNonScaled.xv*spriteSize,
@@ -1360,7 +1357,7 @@ namespace Editor
 	bool FrameTool::IsPointInBottomHandle(const Vec2F& point)
 	{
 		float camScale = o2EditorSceneScreen.GetCameraScale().x;
-		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x*camScale;
+		float spriteSize = mLeftTopHandle.GetRegularDrawable()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
 				mFrame.xv - transformNonScaled.xv*spriteSize,

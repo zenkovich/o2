@@ -196,7 +196,7 @@ namespace o2
 		~Scene();
 
 		// Draws cameras
-		void DrawCameras(bool callOnDrawnLayer);
+		void DrawCameras();
 
 		// Updates root actors and their children
 		void UpdateActors(float dt);
@@ -250,9 +250,6 @@ namespace o2
 
 #if IS_EDITOR	  	
 	public:
-		// Draws scene, but not draws
-		void DrawWithouLayers();
-
 		// Returns root editable objects
 		Vector<SceneEditableObject*> GetRootEditableObjects();
 
@@ -456,7 +453,7 @@ CLASS_METHODS_META(o2::Scene)
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyActor, Actor*);
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, Component*);
 	FUNCTION().PROTECTED().CONSTRUCTOR();
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawCameras, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, DrawCameras);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateActors, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateAddedEntities);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateStartingEntities);
@@ -470,7 +467,6 @@ CLASS_METHODS_META(o2::Scene)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerRenamed, SceneLayer*, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCameraAddedOnScene, CameraActor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCameraRemovedScene, CameraActor*);
-	FUNCTION().PUBLIC().SIGNATURE(void, DrawWithouLayers);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetRootEditableObjects);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEditableObjectToScene, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveEditableObjectFromScene, SceneEditableObject*);

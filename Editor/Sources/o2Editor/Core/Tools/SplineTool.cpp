@@ -10,6 +10,12 @@ namespace Editor
 		sceneLayer.tool = this;
 	}
 
+	void SplineTool::Reset()
+	{
+		splineEditor.Reset();
+		onChanged.Clear();
+	}
+
 	Vec2F SplineTool::SplineWrapper::GetOrigin() const
 	{
 		return getOrigin();
@@ -172,3 +178,5 @@ namespace Editor
 		isEnabled = false;
 	}
 }
+
+DECLARE_CLASS(Editor::SplineTool);

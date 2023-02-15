@@ -76,6 +76,33 @@ namespace o2
 		// Called when enabling changed
 		virtual void EnableChanged() {}
 	};
+
+	// -----------------------------
+	// Functional rectangle drawable
+	// -----------------------------
+	class FunctionalRectDrawable: public IRectDrawable
+	{
+	public:
+		Function<void(const Basis& transform, const Color4& color)> draw; // Draw function
+
+	public:
+		// Default constructor
+		FunctionalRectDrawable();
+
+		// Default constructor woth parameters
+		FunctionalRectDrawable(const Function<void(const Basis& transform, const Color4& color)>& draw,
+							   const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
+							   const Vec2F& scale = Vec2F(1.0f, 1.0f), const Color4& color = Color4::White(),
+							   const Vec2F& pivot = Vec2F(0.5f, 0.5f));
+
+		// Copy constructor
+		FunctionalRectDrawable(const FunctionalRectDrawable& other);
+
+		// Calls draw function to draw
+		void Draw() override;
+
+		SERIALIZABLE(FunctionalRectDrawable);
+	};
 }
 
 CLASS_BASES_META(o2::IRectDrawable)
@@ -108,5 +135,27 @@ CLASS_METHODS_META(o2::IRectDrawable)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PROTECTED().SIGNATURE(void, ColorChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, EnableChanged);
+}
+END_META;
+
+CLASS_BASES_META(o2::FunctionalRectDrawable)
+{
+	BASE_CLASS(o2::IRectDrawable);
+}
+END_META;
+CLASS_FIELDS_META(o2::FunctionalRectDrawable)
+{
+	FIELD().PUBLIC().NAME(draw);
+}
+END_META;
+CLASS_METHODS_META(o2::FunctionalRectDrawable)
+{
+
+	typedef const Function<void(const Basis& transform, const Color4& color)>& _tmp1;
+
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, const Vec2F&, const Vec2F&, float, const Vec2F&, const Color4&, const Vec2F&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const FunctionalRectDrawable&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 }
 END_META;

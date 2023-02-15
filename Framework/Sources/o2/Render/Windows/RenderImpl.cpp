@@ -98,7 +98,7 @@ namespace o2
 		CheckCompatibles();
 
 		// Initialize buffers
-		mVertexData = mnew UInt8[mVertexBufferSize * sizeof(Vertex2)];
+		mVertexData = mnew UInt8[mVertexBufferSize * sizeof(Vertex)];
 
 		mVertexIndexData = mnew UInt16[mIndexBufferSize];
 		mLastDrawVertex = 0;
@@ -110,9 +110,9 @@ namespace o2
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnableClientState(GL_VERTEX_ARRAY);
 
-		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex2), mVertexData + sizeof(float) * 3);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex2), mVertexData + sizeof(float) * 3 + sizeof(unsigned long));
-		glVertexPointer(3, GL_FLOAT, sizeof(Vertex2), mVertexData + 0);
+		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex), mVertexData + sizeof(float) * 3);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), mVertexData + sizeof(float) * 3 + sizeof(unsigned long));
+		glVertexPointer(3, GL_FLOAT, sizeof(Vertex), mVertexData + 0);
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -473,7 +473,7 @@ namespace o2
 		}
 	}
 
-	void Render::DrawBuffer(PrimitiveType primitiveType, Vertex2* vertices, UInt verticesCount,
+	void Render::DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
 							UInt16* indexes, UInt elementsCount, const TextureRef& texture)
 	{
 		if (!mReady)
@@ -515,7 +515,7 @@ namespace o2
 			else glDisable(GL_TEXTURE_2D);
 		}
 
-		memcpy(&mVertexData[mLastDrawVertex * sizeof(Vertex2)], vertices, sizeof(Vertex2)*verticesCount);
+		memcpy(&mVertexData[mLastDrawVertex * sizeof(Vertex)], vertices, sizeof(Vertex)*verticesCount);
 
 		for (UInt i = mLastDrawIdx, j = 0; j < indexesCount; i++, j++)
 			mVertexIndexData[i] = mLastDrawVertex + indexes[j];

@@ -370,6 +370,12 @@ namespace Editor
 	{
 		o2Application.SetCursorInfiniteMode(false);
 	}
+
+	bool ScrollView::IsInputTransparent() const
+	{
+		return true;
+	}
+
 }
 
 DECLARE_CLASS(Editor::ScrollView);

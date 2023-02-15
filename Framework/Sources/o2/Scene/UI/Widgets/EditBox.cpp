@@ -942,10 +942,10 @@ namespace o2
 
 		unsigned long color = mSelectionColor.ABGR();
 
-		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.LeftBottom(), color, 0.0f, 0.0f);
-		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.LeftTop(), color, 0.0f, 0.0f);
-		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.RightTop(), color, 0.0f, 0.0f);
-		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.RightBottom(), color, 0.0f, 0.0f);
+		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex(rect.LeftBottom(), color, 0.0f, 0.0f);
+		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex(rect.LeftTop(), color, 0.0f, 0.0f);
+		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex(rect.RightTop(), color, 0.0f, 0.0f);
+		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex(rect.RightBottom(), color, 0.0f, 0.0f);
 
 		mSelectionMesh->indexes[mSelectionMesh->polyCount * 3] = mSelectionMesh->vertexCount - 4;
 		mSelectionMesh->indexes[mSelectionMesh->polyCount * 3 + 1] = mSelectionMesh->vertexCount - 3;

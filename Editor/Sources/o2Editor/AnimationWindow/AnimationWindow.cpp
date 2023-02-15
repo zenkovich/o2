@@ -271,8 +271,8 @@ namespace Editor
 	void AnimationWindow::InitializeSeparatorHandle()
 	{
 		mTreeSeparatorHandle = mnew WidgetDragHandle(mnew Sprite("ui/UI4_Ver_separator.png"));
-		mTreeSeparatorHandle->GetRegularSprite()->pivot = Vec2F(0.5f, 0.5f);
-		mTreeSeparatorHandle->GetRegularSprite()->szPivot = Vec2F(4, mTreeSeparatorHandle->GetRegularSprite()->szPivot.Get().y);
+		mTreeSeparatorHandle->GetRegularDrawable()->pivot = Vec2F(0.5f, 0.5f);
+		mTreeSeparatorHandle->GetRegularDrawable()->szPivot = Vec2F(4, mTreeSeparatorHandle->GetRegularDrawable()->szPivot.Get().y);
 
 		mTreeSeparatorHandle->onChangedPos = [&](const Vec2F& point) {
 			mTreeViewWidth = Math::Max(point.x, mMinTreeViewWidth);
@@ -288,7 +288,7 @@ namespace Editor
 		};
 
 		mTreeSeparatorHandle->onLayoutUpdated = [&]() {
-			mTreeSeparatorHandle->SetSpritesSize(Vec2F(5.0f, mWorkArea->layout->GetHeight() + 50.0f));
+			mTreeSeparatorHandle->SetDrawablesSize(Vec2F(5.0f, mWorkArea->layout->GetHeight() + 50.0f));
 			mTreeSeparatorHandle->SetPosition(Vec2F(mTreeViewWidth, mWorkArea->layout->GetHeight()*0.5f));
 		};
 

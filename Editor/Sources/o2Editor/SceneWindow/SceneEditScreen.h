@@ -114,6 +114,10 @@ namespace Editor
 		// Removes tool
 		void RemoveTool(IEditTool* tool);
 
+		// Returns tool by type, or null if it doesn't exists
+		template<typename _type>
+		_type* GetTool();
+
 		// Returns all registered tools
 		const Vector<IEditTool*>& GetTools() const;
 
@@ -259,6 +263,9 @@ namespace Editor
 		// Called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
+		// Returns that this has transparent input
+		bool IsInputTransparent() const override;
+
 		friend class DeleteAction;
 		friend class SelectAction;
 		friend class SelectionTool;
@@ -278,6 +285,19 @@ namespace Editor
 	{
 		SelectTool(mTools.FindOrDefault([&](auto x) { return x->GetType() == TypeOf(_type); }));
 	}
+
+	template<typename _type>
+	_type* SceneEditScreen::GetTool()
+	{
+		for (auto tool : mTools)
+		{
+			if (auto typedTool = dynamic_cast<_type*>(tool))
+				return typedTool;
+		}
+
+		return nullptr;
+	}
+
 }
 
 CLASS_BASES_META(Editor::SceneEditScreen)
@@ -372,5 +392,6 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
+	FUNCTION().PROTECTED().SIGNATURE(bool, IsInputTransparent);
 }
 END_META;

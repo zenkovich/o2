@@ -498,6 +498,24 @@ namespace o2
 		}
 	};
 
+	template<typename TKey, typename TValue>
+	struct DataValue::Converter<Pair<TKey, TValue>>
+	{
+		static constexpr bool isSupported = true;
+
+		static void Write(const Pair<TKey, TValue>& value, DataValue& data)
+		{
+			data.AddMember("f") = value.first;
+			data.AddMember("s") = value.second;
+		}
+
+		static void Read(Pair<TKey, TValue>& value, const DataValue& data)
+		{
+			data.GetMember("f").Get(value.first);
+			data.GetMember("s").Get(value.second);
+		}
+	};
+
 	template<typename T>
 	struct DataValue::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value&&
 		std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>

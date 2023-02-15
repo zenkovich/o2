@@ -15,7 +15,7 @@
 
 #include "o2/Render/Camera.h"
 #include "o2/Render/TextureRef.h"
-#include "o2/Utils/Math/Vertex2.h"
+#include "o2/Utils/Math/Vertex.h"
 #include "o2/Utils/Singleton.h"
 
 // Render access macros
@@ -115,7 +115,7 @@ namespace o2
 		void DrawFilledPolygon(const Vector<Vec2F>& points, const Color4& color = Color4::White());
 
 		// Draws polygon
-		void DrawFilledPolygon(const Vertex2* points, int vertexCount);
+		void DrawFilledPolygon(const Vertex* points, int vertexCount);
 
 		// Draws single line with color
 		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White());
@@ -244,17 +244,17 @@ namespace o2
 		void DrawMesh(Mesh* mesh);
 
 		// Draws data from buffer with specified texture and primitive type
-		void DrawBuffer(PrimitiveType primitiveType, Vertex2* vertices, UInt verticesCount,
+		void DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
 						UInt16* indexes, UInt elementsCount, const TextureRef& texture);
 
 		// Draws mesh wire
 		void DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
 
 		// Draws hard poly line. Vertices - buffer of vertex pairs for each line
-		void DrawPolyLine(Vertex2* vertices, int count, float width = 1.0f);
+		void DrawPolyLine(Vertex* vertices, int count, float width = 1.0f);
 
 		// Draws anti-aliased lines
-		void DrawAAPolyLine(Vertex2* vertices, int count, float width = 1.0f, LineType lineType = LineType::Solid,
+		void DrawAAPolyLine(Vertex* vertices, int count, float width = 1.0f, LineType lineType = LineType::Solid,
 							bool scaleToScreenSpace = true);
 
 	    // Binding render target

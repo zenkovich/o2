@@ -238,7 +238,7 @@ namespace Editor
 				info->color = color;
 
 				for (auto handle : info->handles)
-					handle->mainHandle.SetSpritesColor(color);
+					handle->mainHandle.SetDrawablesColor(color);
 
 				break;
 			}
@@ -2172,7 +2172,7 @@ namespace Editor
 										 CurvesEditor* editor, const Color4& color):
 		mainHandle(mainSample), leftSupportHandle(supportSample), rightSupportHandle(supportSample), curveEditor(editor)
 	{
-		mainHandle.SetSpritesColor(color);
+		mainHandle.SetDrawablesColor(color);
 	}
 
 	void CurvesEditor::KeyHandles::Draw(const RectF& camRect)

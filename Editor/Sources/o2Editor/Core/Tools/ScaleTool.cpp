@@ -217,7 +217,10 @@ namespace Editor
 			Basis::Translated(mSceneHandlesPos);
 
 		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+		{
 			object->SetTransform(object->GetTransform()*transform);
+			object->UpdateTransform();
+		}
 	}
 
 	void ScaleTool::HandlePressed()

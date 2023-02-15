@@ -12,11 +12,20 @@ namespace Editor
 	class SceneDragHandle: public DragHandle
 	{
 	public:
+		// Handle drawing type. 
+		// ScreenSpace - draws without zooming, in screen space coordinates
+		// SceneSpace - draws with zooming and depends on camera, in local scene coordinates
+		enum class Mode { ScreenSpace, SceneSpace };
+
+	public:
+		Mode mode = Mode::ScreenSpace; // Handle drawing mode, screen or scene space
+
+	public:
 		// Default constructor
 		SceneDragHandle();
 
 		// Constructor with views
-		SceneDragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr);
+		SceneDragHandle(IRectDrawable* regular, IRectDrawable* hover = nullptr, IRectDrawable* pressed = nullptr);
 
 		// Copy-constructor
 		SceneDragHandle(const SceneDragHandle& other);
@@ -26,6 +35,9 @@ namespace Editor
 
 		// Copy-operator
 		SceneDragHandle& operator=(const SceneDragHandle& other);
+
+		// Draws handle, applies scale if mode is scene space
+		void Draw() override;
 
 		// Set handle enabled. Disabled handle don't drawn and interact
 		void SetEnabled(bool enabled) override;
@@ -43,6 +55,8 @@ namespace Editor
 	};
 }
 
+PRE_ENUM_META(Editor::SceneDragHandle::Mode);
+
 CLASS_BASES_META(Editor::SceneDragHandle)
 {
 	BASE_CLASS(o2::DragHandle);
@@ -50,14 +64,16 @@ CLASS_BASES_META(Editor::SceneDragHandle)
 END_META;
 CLASS_FIELDS_META(Editor::SceneDragHandle)
 {
+	FIELD().PUBLIC().DEFAULT_VALUE(Mode::ScreenSpace).NAME(mode);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneDragHandle)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(IRectDrawable*, IRectDrawable*, IRectDrawable*);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneDragHandle&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);

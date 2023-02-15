@@ -176,10 +176,10 @@ namespace Editor
 		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 
 		mPreviewImage->UpdateTransform();
-		mBorderLeftHandle->GetRegularSprite()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
-		mBorderRightHandle->GetRegularSprite()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
-		mBorderTopHandle->GetRegularSprite()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
-		mBorderBottomHandle->GetRegularSprite()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
+		mBorderLeftHandle->GetRegularDrawable()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
+		mBorderRightHandle->GetRegularDrawable()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
+		mBorderTopHandle->GetRegularDrawable()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
+		mBorderBottomHandle->GetRegularDrawable()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
 
 		mBorderLeftHandle->SetPosition(Vec2F((float)borders.left, 0));
 		mBorderRightHandle->SetPosition(Vec2F(imageSize.x - (float)borders.right, 0));

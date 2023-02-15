@@ -21,7 +21,7 @@
     </Expand>
   </Type>
 
-  <Type Name="o2::Vertex2">
+  <Type Name="o2::Vertex">
     <DisplayString>{{ x: { x } y: { y } z: { z } c: { color } u: { tu } v: { tv }}</DisplayString>
   </Type>
 

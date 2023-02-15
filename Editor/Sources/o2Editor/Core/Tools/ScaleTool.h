@@ -100,7 +100,7 @@ namespace Editor
         void HandlePressed();
 
         // Called when handle was released, completes transformation action
-        void HandleReleased();
+		void HandleReleased();
     };
 
 }

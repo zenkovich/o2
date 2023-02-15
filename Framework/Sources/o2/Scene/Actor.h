@@ -90,7 +90,7 @@ namespace o2
 		Actor& operator=(const Actor& other);
 
 		// Updates actor and components @SCRIPTABLE
-		virtual void Update(float dt);
+		virtual void Update(float dt) OPTIONAL_OVERRIDE;
 
 		// Updates actor and components with fixed delta time @SCRIPTABLE
 		virtual void FixedUpdate(float dt);

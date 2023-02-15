@@ -153,6 +153,9 @@ namespace Editor
 
 		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+
+		// Returns that this scroll area has transparent input
+		bool IsInputTransparent() const override;
 	};
 }
 
@@ -222,5 +225,6 @@ CLASS_METHODS_META(Editor::ScrollView)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMousePressed, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseStayDown, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(bool, IsInputTransparent);
 }
 END_META;

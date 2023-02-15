@@ -87,7 +87,7 @@ namespace o2
 		return mCamera;
 	}
 
-	void Render::DrawFilledPolygon(const Vertex2* verticies, int vertexCount)
+	void Render::DrawFilledPolygon(const Vertex* verticies, int vertexCount)
 	{
 		static Mesh mesh(TextureRef(), 1024, 1024);
 
@@ -95,7 +95,7 @@ namespace o2
 		if (mesh.GetMaxVertexCount() < vertexCount || mesh.GetMaxPolyCount() < polyCount)
 			mesh.Resize(vertexCount, polyCount);
 
-		memcpy(mesh.vertices, verticies, sizeof(Vertex2)*vertexCount);
+		memcpy(mesh.vertices, verticies, sizeof(Vertex)*vertexCount);
 
 		for (int i = 2; i < vertexCount; i++)
 		{
@@ -121,7 +121,7 @@ namespace o2
 
 		ULong dcolor = color.ABGR();
 		for (int i = 0; i < points.Count(); i++)
-			mesh.vertices[i] = Vertex2(points[i], dcolor, 0.0f, 0.0f);
+			mesh.vertices[i] = Vertex(points[i], dcolor, 0.0f, 0.0f);
 
 		for (int i = 2; i < points.Count(); i++)
 		{
@@ -188,7 +188,7 @@ namespace o2
 							float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] = { Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0) };
+		Vertex v[] = { Vertex(a.x, a.y, dcolor, 0, 0), Vertex(b.x, b.y, dcolor, 0, 0) };
 		DrawAAPolyLine(v, 2, width, lineType);
 	}
 
@@ -196,9 +196,9 @@ namespace o2
 							float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2* v = mnew Vertex2[points.Count()];
+		Vertex* v = mnew Vertex[points.Count()];
 		for (int i = 0; i < points.Count(); i++)
-			v[i] = Vertex2(points[i], dcolor, 0, 0);
+			v[i] = Vertex(points[i], dcolor, 0, 0);
 
 		DrawAAPolyLine(v, points.Count(), width, lineType);
 		delete[] v;
@@ -212,10 +212,10 @@ namespace o2
 		Vec2F dir = (b - a).Normalized();
 		Vec2F ndir = dir.Perpendicular();
 
-		Vertex2 v[] = {
-			Vertex2(a, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
-			Vertex2(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
-			Vertex2(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0) };
+		Vertex v[] = {
+			Vertex(a, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
+			Vertex(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
+			Vertex(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0) };
 
 		DrawAAPolyLine(v, 6, width, lineType);
 	}
@@ -224,12 +224,12 @@ namespace o2
 								 float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] = {
-			Vertex2(minp.x, minp.y, dcolor, 0, 0),
-			Vertex2(maxp.x, minp.y, dcolor, 0, 0),
-			Vertex2(maxp.x, maxp.y, dcolor, 0, 0),
-			Vertex2(minp.x, maxp.y, dcolor, 0, 0),
-			Vertex2(minp.x, minp.y, dcolor, 0, 0)
+		Vertex v[] = {
+			Vertex(minp.x, minp.y, dcolor, 0, 0),
+			Vertex(maxp.x, minp.y, dcolor, 0, 0),
+			Vertex(maxp.x, maxp.y, dcolor, 0, 0),
+			Vertex(minp.x, maxp.y, dcolor, 0, 0),
+			Vertex(minp.x, minp.y, dcolor, 0, 0)
 		};
 		DrawAAPolyLine(v, 5, width, lineType);
 	}
@@ -247,11 +247,11 @@ namespace o2
 		DrawAALine(basis.origin, basis.origin + basis.xv, xcolor, width, lineType);
 		DrawAALine(basis.origin, basis.origin + basis.yv, ycolor, width, lineType);
 
-		Vertex2 v[] =
+		Vertex v[] =
 		{
-			Vertex2(basis.origin + basis.xv, color.ABGR(), 0, 0),
-			Vertex2(basis.origin + basis.yv + basis.xv, color.ABGR(), 0, 0),
-			Vertex2(basis.origin + basis.yv, color.ABGR(), 0, 0)
+			Vertex(basis.origin + basis.xv, color.ABGR(), 0, 0),
+			Vertex(basis.origin + basis.yv + basis.xv, color.ABGR(), 0, 0),
+			Vertex(basis.origin + basis.yv, color.ABGR(), 0, 0)
 		};
 
 		DrawAAPolyLine(v, 3, width, lineType);
@@ -268,14 +268,14 @@ namespace o2
 							  int segCount /*= 20*/,
 							  float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
-		Vertex2* v = mnew Vertex2[segCount + 1];
+		Vertex* v = mnew Vertex[segCount + 1];
 		ULong dcolor = color.ABGR();
 
 		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
 		for (int i = 0; i < segCount + 1; i++)
 		{
 			float a = (float)i*angleSeg;
-			v[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+			v[i] = Vertex(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
 		}
 
 		DrawAAPolyLine(v, segCount + 1, width, lineType);
@@ -287,14 +287,14 @@ namespace o2
 								   float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		const int segCount = 20;
-		Vertex2 v[segCount + 1];
+		Vertex v[segCount + 1];
 		ULong dcolor = color.ABGR();
 
 		for (int i = 0; i < segCount + 1; i++)
 		{
 			float coef = (float)i / (float)segCount;
 			Vec2F p = Bezier(p1, p2, p3, p4, coef);
-			v[i] = Vertex2(p, dcolor, 0, 0);
+			v[i] = Vertex(p, dcolor, 0, 0);
 		}
 
 		DrawAAPolyLine(v, segCount + 1, width, lineType);
@@ -305,7 +305,7 @@ namespace o2
 										float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		const int segCount = 20;
-		Vertex2 v[segCount + 1];
+		Vertex v[segCount + 1];
 		ULong dcolor = color.ABGR();
 
 		Vec2F lastp = p1;
@@ -314,7 +314,7 @@ namespace o2
 		{
 			float coef = (float)i / (float)segCount;
 			Vec2F p = Bezier(p1, p2, p3, p4, coef);
-			v[i] = Vertex2(p, dcolor, 0, 0);
+			v[i] = Vertex(p, dcolor, 0, 0);
 			dir = p - lastp;
 			lastp = p;
 		}
@@ -324,11 +324,11 @@ namespace o2
 		dir.Normalize();
 		Vec2F ndir = dir.Perpendicular();
 
-		Vertex2 va[] =
+		Vertex va[] =
 		{
-			Vertex2(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0),
-			Vertex2(p4, dcolor, 0, 0),
-			Vertex2(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0)
+			Vertex(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0),
+			Vertex(p4, dcolor, 0, 0),
+			Vertex(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0)
 		};
 		DrawAAPolyLine(va, 3, width, lineType);
 	}
@@ -336,16 +336,16 @@ namespace o2
 	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] = { Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0) };
+		Vertex v[] = { Vertex(a.x, a.y, dcolor, 0, 0), Vertex(b.x, b.y, dcolor, 0, 0) };
 		DrawPolyLine(v, 2);
 	}
 
 	void Render::DrawLine(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2* v = mnew Vertex2[points.Count()];
+		Vertex* v = mnew Vertex[points.Count()];
 		for (int i = 0; i < points.Count(); i++)
-			v[i] = Vertex2(points[i], dcolor, 0, 0);
+			v[i] = Vertex(points[i], dcolor, 0, 0);
 
 		DrawPolyLine(v, points.Count());
 		delete[] v;
@@ -358,10 +358,10 @@ namespace o2
 		Vec2F dir = (b - a).Normalized();
 		Vec2F ndir = dir.Perpendicular();
 
-		Vertex2 v[] = {
-			Vertex2(a, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
-			Vertex2(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
-			Vertex2(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0) };
+		Vertex v[] = {
+			Vertex(a, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
+			Vertex(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
+			Vertex(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0) };
 
 		DrawPolyLine(v, 6);
 	}
@@ -369,12 +369,12 @@ namespace o2
 	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] = {
-			Vertex2(minp.x, minp.y, dcolor, 0, 0),
-			Vertex2(maxp.x, minp.y, dcolor, 0, 0),
-			Vertex2(maxp.x, maxp.y, dcolor, 0, 0),
-			Vertex2(minp.x, maxp.y, dcolor, 0, 0),
-			Vertex2(minp.x, minp.y, dcolor, 0, 0)
+		Vertex v[] = {
+			Vertex(minp.x, minp.y, dcolor, 0, 0),
+			Vertex(maxp.x, minp.y, dcolor, 0, 0),
+			Vertex(maxp.x, maxp.y, dcolor, 0, 0),
+			Vertex(minp.x, maxp.y, dcolor, 0, 0),
+			Vertex(minp.x, minp.y, dcolor, 0, 0)
 		};
 		DrawPolyLine(v, 5);
 	}
@@ -390,11 +390,11 @@ namespace o2
 		DrawLine(basis.origin, basis.origin + basis.xv, xcolor);
 		DrawLine(basis.origin, basis.origin + basis.yv, ycolor);
 
-		Vertex2 v[] =
+		Vertex v[] =
 		{
-			Vertex2(basis.origin + basis.xv, color.ABGR(), 0, 0),
-			Vertex2(basis.origin + basis.yv + basis.xv, color.ABGR(), 0, 0),
-			Vertex2(basis.origin + basis.yv, color.ABGR(), 0, 0)
+			Vertex(basis.origin + basis.xv, color.ABGR(), 0, 0),
+			Vertex(basis.origin + basis.yv + basis.xv, color.ABGR(), 0, 0),
+			Vertex(basis.origin + basis.yv, color.ABGR(), 0, 0)
 		};
 
 		DrawPolyLine(v, 3);
@@ -410,14 +410,14 @@ namespace o2
 							int segCount /*= 20*/)
 	{
 		static int vertexBufferSize = segCount + 1;
-		static Vertex2* vertexBuffer = mnew Vertex2[vertexBufferSize];
+		static Vertex* vertexBuffer = mnew Vertex[vertexBufferSize];
 
 		int vertexCount = segCount + 1;
 		if (vertexCount > vertexBufferSize)
 		{
 			delete[] vertexBuffer;
 			vertexBufferSize = vertexCount;
-			vertexBuffer = mnew Vertex2[vertexBufferSize];
+			vertexBuffer = mnew Vertex[vertexBufferSize];
 		}
 
 		ULong dcolor = color.ABGR();
@@ -426,7 +426,7 @@ namespace o2
 		for (int i = 0; i < segCount + 1; i++)
 		{
 			float a = (float)i*angleSeg;
-			vertexBuffer[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+			vertexBuffer[i] = Vertex(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
 		}
 
 		DrawPolyLine(vertexBuffer, segCount + 1);
@@ -436,14 +436,14 @@ namespace o2
 								  int segCount /*= 20*/)
 	{
 		static int vertexBufferSize = segCount + 1;
-		static Vertex2* vertexBuffer = mnew Vertex2[vertexBufferSize];
+		static Vertex* vertexBuffer = mnew Vertex[vertexBufferSize];
 
 		int vertexCount = segCount + 1;
 		if (vertexCount > vertexBufferSize)
 		{
 			delete[] vertexBuffer;
 			vertexBufferSize = vertexCount;
-			vertexBuffer = mnew Vertex2[vertexBufferSize];
+			vertexBuffer = mnew Vertex[vertexBufferSize];
 		}
 
 		ULong dcolor = color.ABGR();
@@ -452,7 +452,7 @@ namespace o2
 		for (int i = 0; i < segCount + 1; i++)
 		{
 			float a = (float)i*angleSeg;
-			vertexBuffer[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+			vertexBuffer[i] = Vertex(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
 		}
 
 		DrawFilledPolygon(vertexBuffer, vertexCount);
@@ -462,14 +462,14 @@ namespace o2
 								 const Color4& color /*= Color4::White()*/)
 	{
 		const int segCount = 20;
-		Vertex2 v[segCount + 1];
+		Vertex v[segCount + 1];
 		ULong dcolor = color.ABGR();
 
 		for (int i = 0; i < segCount + 1; i++)
 		{
 			float coef = (float)i / (float)segCount;
 			Vec2F p = Bezier(p1, p2, p3, p4, coef);
-			v[i] = Vertex2(p, dcolor, 0, 0);
+			v[i] = Vertex(p, dcolor, 0, 0);
 		}
 
 		DrawPolyLine(v, segCount + 1);
@@ -479,7 +479,7 @@ namespace o2
 									  const Color4& color /*= Color4::White()*/, const Vec2F& arrowSize /*= Vec2F(10, 10)*/)
 	{
 		const int segCount = 20;
-		Vertex2 v[segCount + 1];
+		Vertex v[segCount + 1];
 		ULong dcolor = color.ABGR();
 
 		Vec2F lastp = p1;
@@ -488,7 +488,7 @@ namespace o2
 		{
 			float coef = (float)i / (float)segCount;
 			Vec2F p = Bezier(p1, p2, p3, p4, coef);
-			v[i] = Vertex2(p, dcolor, 0, 0);
+			v[i] = Vertex(p, dcolor, 0, 0);
 			dir = p - lastp;
 			lastp = p;
 		}
@@ -498,11 +498,11 @@ namespace o2
 		dir.Normalize();
 		Vec2F ndir = dir.Perpendicular();
 
-		Vertex2 va[] =
+		Vertex va[] =
 		{
-			Vertex2(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0),
-			Vertex2(p4, dcolor, 0, 0),
-			Vertex2(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0)
+			Vertex(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0),
+			Vertex(p4, dcolor, 0, 0),
+			Vertex(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0)
 		};
 		DrawPolyLine(va, 3);
 	}
@@ -561,27 +561,29 @@ namespace o2
 
 		for (UInt i = 0; i < mesh->polyCount; i++)
 		{
-			Vertex2 v[] =
+			Vertex v[] =
 			{
 				mesh->vertices[mesh->indexes[i*3]],
 				mesh->vertices[mesh->indexes[i*3 + 1]],
-				mesh->vertices[mesh->indexes[i*3 + 2]]
+				mesh->vertices[mesh->indexes[i*3 + 2]],
+				mesh->vertices[mesh->indexes[i*3]]
 			};
 
 			v[0].color = dcolor;
 			v[1].color = dcolor;
 			v[2].color = dcolor;
+			v[3].color = dcolor;
 
-			DrawPolyLine(v, 3);
+			DrawPolyLine(v, 4);
 		}
 	}
 
-	void Render::DrawPolyLine(Vertex2* vertices, int count, float width /*= 1.0f*/)
+	void Render::DrawPolyLine(Vertex* vertices, int count, float width /*= 1.0f*/)
 	{
 		DrawBuffer(PrimitiveType::Line, vertices, count, mHardLinesIndexData, count - 1, mSolidLineTexture);
 	}
 
-	void Render::DrawAAPolyLine(Vertex2* vertices, int count, float width /*= 1.0f*/,
+	void Render::DrawAAPolyLine(Vertex* vertices, int count, float width /*= 1.0f*/,
 								LineType lineType /*= LineType::Solid*/,
 								bool scaleToScreenSpace /*= true*/)
 	{

@@ -353,10 +353,10 @@ namespace o2
 					transf.Transform(symb.mFrame.LeftBottom() - mSymbolsSet.mPosition)
 				};
 
-				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[0], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.top);
-				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[1], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.top);
-				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[2], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.bottom);
-				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[3], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.bottom);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[0], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.top);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[1], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.top);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[2], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.bottom);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[3], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.bottom);
 
 				int pp = currentMesh->polyCount*3;
 				currentMesh->indexes[pp] = currentMesh->vertexCount - 4;
@@ -467,7 +467,7 @@ namespace o2
 		{
 			for (unsigned int i = 0; i < mesh->vertexCount; i++)
 			{
-				Vertex2* vx = &mesh->vertices[i];
+				Vertex* vx = &mesh->vertices[i];
 				bas.Transform(vx->x, vx->y);
 			}
 		}

@@ -77,7 +77,7 @@ namespace o2
 		Color4 mColor;					                    // @SERIALIZABLE
 		Vec2F mVec2F;					                    // @SERIALIZABLE
 		Vec2I mVec2I;					                    // @SERIALIZABLE
-		Vertex2 mVertex;				                    // @SERIALIZABLE
+		Vertex mVertex;				                    // @SERIALIZABLE
 		RectF mRectF;					                    // @SERIALIZABLE
 		RectI mRectI;					                    // @SERIALIZABLE
 		BorderF mBorderF;					                // @SERIALIZABLE

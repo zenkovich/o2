@@ -25,7 +25,7 @@
 #include "o2/Utils/Math/Rect.h"
 #include "o2/Utils/Math/Transform.h"
 #include "o2/Utils/Math/Vector2.h"
-#include "o2/Utils/Math/Vertex2.h"
+#include "o2/Utils/Math/Vertex.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Reflection/Attributes.h"
 #include "o2/Utils/Reflection/FieldInfo.h"

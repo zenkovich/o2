@@ -12,7 +12,7 @@ namespace Editor
 						   const Color4& color)
 	{
 		const int bufferSize = 50;
-		static Vertex2 buffer[bufferSize];
+		static Vertex buffer[bufferSize];
 
 		if (pointsBounds.Height() < 0.001f)
 		{
@@ -33,7 +33,7 @@ namespace Editor
 								 const Color4& color)
 	{
 		const int bufferSize = 50;
-		static Vertex2 buffer[bufferSize];
+		static Vertex buffer[bufferSize];
 
 		Basis boundsBasis(pointsBounds);
 		Basis boundsBasisInv = boundsBasis.Inverted();
@@ -140,8 +140,8 @@ namespace Editor
 				float keyPos = mTimeline->LocalToWorld(key.position);
 				int nv = i*2;
 
-				mesh.vertices[nv] = Vertex2(keyPos, layout->GetWorldTop() - 5, key.value.ABGR(), 0, 0);
-				mesh.vertices[nv + 1] = Vertex2(keyPos, layout->GetWorldBottom() + 4, key.value.ABGR(), 0, 0);
+				mesh.vertices[nv] = Vertex(keyPos, layout->GetWorldTop() - 5, key.value.ABGR(), 0, 0);
+				mesh.vertices[nv + 1] = Vertex(keyPos, layout->GetWorldBottom() + 4, key.value.ABGR(), 0, 0);
 
 				if (i > 0)
 				{
@@ -211,10 +211,10 @@ namespace Editor
 
 				auto color = (prevKey.value ? trueColor : falseColor).ABGR();
 
-				mesh.vertices[nv] = Vertex2(prevKeyPos, layout->GetWorldTop() - lineOffset, color, 0, 0);
-				mesh.vertices[nv + 1] = Vertex2(keyPos, layout->GetWorldTop() - lineOffset, color, 0, 0);
-				mesh.vertices[nv + 2] = Vertex2(keyPos, layout->GetWorldBottom() + lineOffset, color, 0, 0);
-				mesh.vertices[nv + 3] = Vertex2(prevKeyPos, layout->GetWorldBottom() + lineOffset, color, 0, 0);
+				mesh.vertices[nv] = Vertex(prevKeyPos, layout->GetWorldTop() - lineOffset, color, 0, 0);
+				mesh.vertices[nv + 1] = Vertex(keyPos, layout->GetWorldTop() - lineOffset, color, 0, 0);
+				mesh.vertices[nv + 2] = Vertex(keyPos, layout->GetWorldBottom() + lineOffset, color, 0, 0);
+				mesh.vertices[nv + 3] = Vertex(prevKeyPos, layout->GetWorldBottom() + lineOffset, color, 0, 0);
 
 				mesh.indexes[np*3] = nv;
 				mesh.indexes[np*3 + 1] = nv + 1;

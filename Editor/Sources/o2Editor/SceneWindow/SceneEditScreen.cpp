@@ -57,7 +57,7 @@ namespace Editor
 		if (!mReady)
 			return;
 
-		if (mNeedRedraw || (mEnabledTool && mEnabledTool->mNeedRedraw))
+		if (mNeedRedraw || (mEnabledTool && mEnabledTool->mNeedRedraw) || true)
 			RedrawRenderTarget();
 
 		mRenderTargetSprite->Draw();
@@ -99,8 +99,8 @@ namespace Editor
 				layer->Update(dt);
 		}
 
-		if (mEnabledTool)
-			mEnabledTool->Update(dt);
+		for (auto tool : mTools)
+			tool->Update(dt);
 	}
 
 	bool SceneEditScreen::IsScrollable() const
@@ -338,10 +338,18 @@ namespace Editor
 	{
 		mTools.Add(tool);
 		o2EditorTools.AddToolToggle(tool->GetPanelToggle());
-	}
+	} 
 
 	void SceneEditScreen::RemoveTool(IEditTool* tool)
 	{
+		if (tool == mEnabledTool)
+		{
+			if (!mTools.IsEmpty())
+				SelectTool(mTools[0]);
+			else
+				SelectTool(nullptr);
+		}
+
 		mTools.Remove(tool);
 		o2EditorTools.RemoveToolToggle(tool->GetPanelToggle());
 	}
@@ -539,6 +547,11 @@ namespace Editor
 		o2Application.SetCursor(CursorType::Arrow);
 
 		mNeedRedraw = true;
+	}
+
+	bool SceneEditScreen::IsInputTransparent() const
+	{
+		return true;
 	}
 
 	void SceneEditScreen::OnScrolled(float scroll)

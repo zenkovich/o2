@@ -180,6 +180,11 @@ namespace o2
 		return drawnTransform.IsPointInside(point);
 	}
 
+	bool CursorAreaEventListenersLayer::IsInputTransparent() const
+	{
+		return isTransparent;
+	}
+
 	void CursorAreaEventListenersLayer::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		mEnabled = true;

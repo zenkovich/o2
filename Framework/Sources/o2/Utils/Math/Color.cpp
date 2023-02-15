@@ -343,6 +343,15 @@ namespace o2
 		return Color4(150, 150, 150, 255);
 	}
 
+	Color4 Color4::HSL(float hue, float saturation, float lightness, float alpha /*= 1.0f*/)
+	{
+		Color4 res;
+		res.SetHSL(hue, saturation, lightness);
+		res.SetAF(alpha);
+
+		return res;
+	}
+
 	Color4 Color4::SomeColor(int idx)
 	{
 		Color4 res = Color4::White();
