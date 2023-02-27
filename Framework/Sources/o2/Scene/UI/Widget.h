@@ -315,6 +315,9 @@ namespace o2
 		// Called when parent changed
 		void OnParentChanged(Actor* oldParent) override;
 
+		// Called when actor children has rearranged; updates inherited depth drawables list
+		void OnChildrenRearranged() override;
+
 		// Called when child actor was added
 		void OnChildAdded(Actor* child) override;
 
@@ -830,6 +833,7 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabledInHierarchy);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenRearranged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);

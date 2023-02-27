@@ -47,6 +47,9 @@ namespace o2
 		// Called when parent changed
 		void OnParentChanged(Actor* oldParent) override;
 
+		// Called when actor children has rearranged; updates inherited depth drawables list
+		void OnChildrenRearranged() override;
+
 		// Returns current scene layer
 		SceneLayer* GetSceneDrawableSceneLayer() const override;
 
@@ -97,6 +100,7 @@ CLASS_METHODS_META(o2::DrawableComponent)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenRearranged);
 	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);

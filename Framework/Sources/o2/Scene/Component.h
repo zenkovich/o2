@@ -159,6 +159,9 @@ namespace o2
 		// Called when child actor was removed
 		virtual void OnChildRemoved(Actor* child) {}
 
+		// Called when actor children has rearranged
+		virtual void OnChildrenRearranged() {}
+
 		// Called when layer was changed
 		virtual void OnLayerChanged(SceneLayer* oldLayer) {}
 
@@ -274,6 +277,7 @@ CLASS_METHODS_META(o2::Component)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenRearranged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerChanged, SceneLayer*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);

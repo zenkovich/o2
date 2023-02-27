@@ -489,6 +489,7 @@ namespace o2
 				lastIdx++;
 
 			mParent->mChildren.RemoveAt(lastIdx);
+			mParent->OnChildrenRearranged();
 			mParent->OnChildrenChanged();
 		}
 		else
@@ -929,6 +930,12 @@ namespace o2
 	{
 		for (auto comp : mComponents)
 			comp->OnChildRemoved(child);
+	}
+	
+	void Actor::OnChildrenRearranged()
+	{
+		for (auto comp : mComponents)
+			comp->OnChildrenRearranged();
 	}
 
 	void Actor::OnLayerChanged(SceneLayer* oldLayer)
