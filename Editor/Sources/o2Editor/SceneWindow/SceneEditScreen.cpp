@@ -33,11 +33,23 @@ DECLARE_SINGLETON(Editor::SceneEditScreen);
 
 namespace Editor
 {
-
 	SceneEditScreen::SceneEditScreen()
 	{
 		InitializeTools();
 		SelectTool<MoveTool>();
+
+		mLeftTopWidgetsContainer = InitializeWidgetsContainer(BaseCorner::LeftTop);
+		mRightTopWidgetsContainer = InitializeWidgetsContainer(BaseCorner::RightTop);
+		mLeftBottomWidgetsContainer = InitializeWidgetsContainer(BaseCorner::LeftBottom);
+		mRightBottomWidgetsContainer = InitializeWidgetsContainer(BaseCorner::RightBottom);
+
+		auto testControlWidget = o2UI.CreateButton("test");
+		testControlWidget->layout->minSize = Vec2F(100, 100);
+		mLeftTopWidgetsContainer->AddChild(testControlWidget);
+
+		auto testControlWidget2 = o2UI.CreateButton("test");
+		testControlWidget2->layout->minSize = Vec2F(100, 100);
+		mLeftTopWidgetsContainer->AddChild(testControlWidget2);
 	}
 
 	SceneEditScreen::SceneEditScreen(const SceneEditScreen& other):
@@ -52,8 +64,6 @@ namespace Editor
 
 	void SceneEditScreen::Draw()
 	{
-		Widget::Draw();
-
 		if (!mReady)
 			return;
 
@@ -77,6 +87,8 @@ namespace Editor
 			if (layer->IsEnabled() && IsLayerEnabled(layer->GetName()))
 				layer->DrawOverScene();
 		}
+
+		Widget::Draw();
 	}
 
 	void SceneEditScreen::NeedRedraw()
@@ -135,6 +147,21 @@ namespace Editor
 		mTools.Add(mnew RotateTool());
 		mTools.Add(mnew ScaleTool());
 		mTools.Add(mnew FrameTool());
+	}
+
+	HorizontalLayout* SceneEditScreen::InitializeWidgetsContainer(BaseCorner baseCorner)
+	{
+		auto controlsWidget = mnew HorizontalLayout();
+		*controlsWidget->layout = WidgetLayout::BothStretch();
+		controlsWidget->baseCorner = baseCorner;
+		controlsWidget->spacing = 5;
+		controlsWidget->expandHeight = false;
+		controlsWidget->expandWidth = false;
+		controlsWidget->border = BorderF(5, 5, 5, 5);
+		controlsWidget->layout->pivot = Vec2F(1, 1);
+		AddInternalWidget(controlsWidget);
+
+		return controlsWidget;
 	}
 
 	bool SceneEditScreen::IsHandleWorking(const Input::Cursor& cursor) const
@@ -289,6 +316,26 @@ namespace Editor
 			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
+	}
+
+	HorizontalLayout* SceneEditScreen::GetLeftTopWidgetsContainer()
+	{
+		return mLeftTopWidgetsContainer;
+	}
+
+	HorizontalLayout* SceneEditScreen::GetRightTopWidgetsContainer()
+	{
+		return mRightTopWidgetsContainer;
+	}
+
+	HorizontalLayout* SceneEditScreen::GetLeftBottomWidgetsContainer()
+	{
+		return mLeftBottomWidgetsContainer;
+	}
+
+	HorizontalLayout* SceneEditScreen::GetRightBottomWidgetsContainer()
+	{
+		return mRightBottomWidgetsContainer;
 	}
 
 	void SceneEditScreen::AddEditorLayer(SceneEditorLayer* layer)

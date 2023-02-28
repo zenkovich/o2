@@ -86,6 +86,18 @@ namespace Editor
 		// Clears objects selection
 		void ClearSelection();
 
+		// Returns left top widgets container, can be used for tools additional controls
+		HorizontalLayout* GetLeftTopWidgetsContainer();
+
+		// Returns right top widgets container, can be used for tools additional controls
+		HorizontalLayout* GetRightTopWidgetsContainer();
+
+		// Returns left bottom widgets container, can be used for tools additional controls
+		HorizontalLayout* GetLeftBottomWidgetsContainer();
+
+		// Returns right bottom widgets container, can be used for tools additional controls
+		HorizontalLayout* GetRightBottomWidgetsContainer();
+
 		// Adds editable layer
 		void AddEditorLayer(SceneEditorLayer* layer);
 
@@ -159,10 +171,18 @@ namespace Editor
 
 		Vector<SceneEditorLayer*> mEditorLayers;        // List of editable layers
 		Map<String, bool>         mEditorLayersEnabled; // Map of enabled or disabled layers by user
+
+		HorizontalLayout* mLeftTopWidgetsContainer = nullptr;     // Additional controls widgets container at left top
+		HorizontalLayout* mRightTopWidgetsContainer = nullptr;    // Additional controls widgets container at right top
+		HorizontalLayout* mLeftBottomWidgetsContainer = nullptr;  // Additional controls widgets container at left bottom
+		HorizontalLayout* mRightBottomWidgetsContainer = nullptr; // Additional controls widgets container at right bottom
 		
 	protected:
 		// Initializes tools
 		void InitializeTools();
+
+		// Creates and configures widgets container with specified base corner
+		HorizontalLayout* InitializeWidgetsContainer(BaseCorner baseCorner);
 
 		// Returns true if some handle hovered or pressed by cursor
 		bool IsHandleWorking(const Input::Cursor& cursor) const;
@@ -323,6 +343,10 @@ CLASS_FIELDS_META(Editor::SceneEditScreen)
 	FIELD().PROTECTED().NAME(mDragHandles);
 	FIELD().PROTECTED().NAME(mEditorLayers);
 	FIELD().PROTECTED().NAME(mEditorLayersEnabled);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftTopWidgetsContainer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightTopWidgetsContainer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftBottomWidgetsContainer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightBottomWidgetsContainer);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneEditScreen)
@@ -343,6 +367,10 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	FUNCTION().PUBLIC().SIGNATURE(void, SelectObject, SceneEditableObject*, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, SelectAllObjects);
 	FUNCTION().PUBLIC().SIGNATURE(void, ClearSelection);
+	FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetLeftTopWidgetsContainer);
+	FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetRightTopWidgetsContainer);
+	FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetLeftBottomWidgetsContainer);
+	FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetRightBottomWidgetsContainer);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEditorLayer, SceneEditorLayer*);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveEditorLayer, SceneEditorLayer*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLayerEnabled, const String&, bool);
@@ -359,6 +387,7 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTools);
+	FUNCTION().PROTECTED().SIGNATURE(HorizontalLayout*, InitializeWidgetsContainer, BaseCorner);
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsHandleWorking, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);

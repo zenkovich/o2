@@ -1200,6 +1200,11 @@ namespace o2
 		OnDrawbleParentChanged();
 	}
 
+	void Widget::OnChildrenRearranged()
+	{
+		SortInheritedDrawables();
+	}
+
 	void Widget::OnChildAdded(Actor* child)
 	{
 		layout->SetDirty(false);

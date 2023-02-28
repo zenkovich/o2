@@ -78,6 +78,11 @@ namespace o2
 		OnDrawbleParentChanged();
 	}
 
+	void DrawableComponent::OnChildrenRearranged()
+	{
+		SortInheritedDrawables();
+	}
+
 	SceneLayer* DrawableComponent::GetSceneDrawableSceneLayer() const
 	{
 		return mOwner->mLayer;
