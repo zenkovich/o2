@@ -68,7 +68,7 @@ namespace Editor
 
 	String CustomFrameTool::CustomFrameTool::GetPanelIcon() const
 	{
-		return "ui/UI4_frame_tool.png";
+		return "ui/UI4_image_frame_tool.png";
 	}
 
 	void CustomFrameTool::CustomFrameTool::OnEnabled()

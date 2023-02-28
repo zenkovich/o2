@@ -818,6 +818,9 @@
     <ClInclude Include="..\..\Sources\o2\Scene\Components\SkinningMeshBoneComponent.h">
       <Filter>Sources\o2\Scene\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\ISerializableFunction.h">
+      <Filter>Sources\o2\Utils\Function</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">

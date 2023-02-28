@@ -165,7 +165,7 @@ namespace Editor
 
 	String MeshWeightsTool::MeshWeightsTool::GetPanelIcon() const
 	{
-		return "ui/UI4_frame_tool.png";
+		return "ui/UI4_weight_tool.png";
 	}
 
 	void MeshWeightsTool::MeshWeightsTool::OnEnabled()

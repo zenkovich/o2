@@ -22,6 +22,9 @@ namespace o2
 	Type* IObject::type = mnew TType<IObject>("IObject", 0);
 	Type* Type::Dummy::type = mnew TType<int>("Unknown", 0);
 
+	FunctionType* FunctionType::commonType = Reflection::InitializeFunctionType("Function");
+	FunctionType* FunctionType::serializableType = Reflection::InitializeFunctionType("SerializableFunction");
+
 	DECLARE_FUNDAMENTAL_TYPE(int);
 	DECLARE_FUNDAMENTAL_TYPE(bool);
 	DECLARE_FUNDAMENTAL_TYPE(char);
@@ -115,6 +118,16 @@ namespace o2
 	bool Reflection::IsTypesInitialized()
 	{
 		return mInstance->mTypesInitialized;
+	}
+
+	FunctionType* Reflection::InitializeFunctionType(const char* name)
+	{
+		FunctionType* res = mnew FunctionType(name);
+
+		res->mId = Reflection::Instance().mLastGivenTypeId++;
+		mInstance->mTypes[res->GetName()] = res;
+
+		return res;
 	}
 
 	void Reflection::InitializeFundamentalTypes()

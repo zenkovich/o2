@@ -218,7 +218,7 @@ namespace o2
 	{
 	public:
 		// Constructor
-		FunctionType();
+		FunctionType(const String& name);
 
 		// Returns type usage
 		Usage GetUsage() const override;
@@ -233,7 +233,8 @@ namespace o2
 		IAbstractValueProxy* GetValueProxy(void* object) const override;
 
 	public:
-		static FunctionType* commonType; // Common function type container
+		static FunctionType* commonType;       // Common function type container
+		static FunctionType* serializableType; // Serializable function type container
 
 	};
 

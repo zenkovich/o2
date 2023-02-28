@@ -10,6 +10,7 @@
 #include "o2Editor/Core/Properties/Basic/ActorProperty.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
+#include <o2/Scene/Components/ScriptableComponent.h>
 
 using namespace o2;
 
@@ -20,7 +21,7 @@ namespace Editor
 		InitializeControls();
 	}
 
-	FunctionProperty::FunctionProperty(const FunctionProperty& other) :
+	FunctionProperty::FunctionProperty(const FunctionProperty& other):
 		IPropertyField(other)
 	{
 		InitializeControls();
@@ -155,15 +156,15 @@ namespace Editor
 			funcProxy->GetValuePointer()->ForEachAbstract(
 				Function<void(const IAbstractFunction*)>(
 					[&](const IAbstractFunction* f)
-					{
-						if (auto actorSubscription = dynamic_cast<const IActorSubscription*>(f))
-						{
-							if (idx > mInstances.Count() - 1)
-								mInstances.Add(mnew FunctionInstance());
+			{
+				if (auto actorSubscription = dynamic_cast<const IActorSubscription*>(f))
+				{
+					if (idx > mInstances.Count() - 1)
+						mInstances.Add(mnew FunctionInstance());
 
-							mInstances[idx++]->values.Add({ const_cast<IActorSubscription*>(actorSubscription), nullptr });
-						}
-					}));
+					mInstances[idx++]->values.Add({ const_cast<IActorSubscription*>(actorSubscription), nullptr });
+				}
+			}));
 
 			if (funcProxyProto)
 			{
@@ -171,13 +172,13 @@ namespace Editor
 				funcProxyProto->GetValuePointer()->ForEachAbstract(
 					Function<void(const IAbstractFunction*)>(
 						[&](const IAbstractFunction* f)
-						{
-							if (auto actorSubscription = dynamic_cast<const IActorSubscription*>(f))
-							{
-								if (idx < mInstances.Count() && proxyIdx < mInstances[idx]->values.Count())
-									mInstances[idx]->values[proxyIdx].second = const_cast<IActorSubscription*>(actorSubscription);
-							}
-						}));
+				{
+					if (auto actorSubscription = dynamic_cast<const IActorSubscription*>(f))
+					{
+						if (idx < mInstances.Count() && proxyIdx < mInstances[idx]->values.Count())
+							mInstances[idx]->values[proxyIdx].second = const_cast<IActorSubscription*>(actorSubscription);
+					}
+				}));
 			}
 
 			proxyIdx++;
@@ -217,12 +218,12 @@ namespace Editor
 				instance->values.Convert<IActorSubscription*>([](auto p) { return p.first; }),
 				instance->values.Convert<IActorSubscription*>([](auto p) { return p.second; }),
 				[](IActorSubscription* s)
-				{
-					if (!s->actorRef && s->componentRef)
-						s->actorRef = s->componentRef->GetOwnerActor();
+			{
+				if (!s->actorRef && s->componentRef)
+					s->actorRef = s->componentRef->GetOwnerActor();
 
-					return &s->actorRef;
-				}
+				return &s->actorRef;
+			}
 			);
 
 			instance->refProperty->onChangeCompleted =
@@ -304,17 +305,10 @@ namespace Editor
 
 		int selectedIdx = -1;
 
-		auto addItems = [&](const Type& type, Component* comp)
+		auto collectFunctions = [&](const String& typeName, const String& iconName, const Vector<String>& functionsList, Component* comp)
 		{
-			String typeName = type.InvokeStatic<String>("GetName");
-			if (typeName.IsEmpty())
-				typeName = GetSmartName(type.GetName());
-
-			String iconName = type.InvokeStatic<String>("GetIcon");
-			if (iconName.IsEmpty())
-				iconName = "ui/UI4_component_icon.png";
-
 			auto typeItem = funcDropDown->AddItem();
+			functionsDropdownMap.Add({ nullptr, "" });
 
 			typeItem->AddLayer("back", mnew Sprite(Color4(0, 0, 0, 0)))->transparency = 0.05f;
 
@@ -328,33 +322,95 @@ namespace Editor
 			text->horAlign = HorAlign::Left;
 			typeItem->AddChild(text);
 
+			for (auto funcName : functionsList)
+			{
+				auto funcItem = funcDropDown->AddItem();
+
+				auto text = o2UI.CreateLabel(funcName);
+				*text->layout = WidgetLayout::BothStretch();
+				text->horAlign = HorAlign::Left;
+				text->transparency = 0.8f;
+				funcItem->AddChild(text);
+
+				functionsDropdownMap.Add({ comp, funcName });
+
+				if (comp == selectedComponent && selectedMethod == funcName)
+					selectedIdx = funcDropDown->GetItemsCount() - 1;
+			}
+		};
+
+		auto collectFunctionsByType = [&](const String& typeName, const String& iconName, const Type& type, Component* comp)
+		{
+			Vector<String> functionsList;
+
 			for (auto funcInfo : type.GetFunctions())
 			{
 				if (funcInfo->GetProtectionSection() == ProtectSection::Public && funcInfo->GetParameters().IsEmpty() &&
 					funcInfo->GetReturnType() == &TypeOf(void))
 				{
-					auto funcItem = funcDropDown->AddItem();
-
-					auto text = o2UI.CreateLabel(funcInfo->GetName());
-					*text->layout = WidgetLayout::BothStretch();
-					text->horAlign = HorAlign::Left;
-					text->transparency = 0.8f;
-					funcItem->AddChild(text);
-
-					functionsDropdownMap.Add({ comp, funcInfo->GetName() });
-
-					if (comp == selectedComponent && selectedMethod == funcInfo->GetName())
-						selectedIdx = funcDropDown->GetItemsCount() - 2;
+					functionsList.Add(funcInfo->GetName());
 				}
 			}
+
+			collectFunctions(typeName, iconName, functionsList, comp);
 		};
 
-		addItems(actor->GetType(), nullptr);
+		auto getTypeName = [](const Type& type)
+		{
+			String typeName = type.InvokeStatic<String>("GetName");
+			if (typeName.IsEmpty())
+				typeName = GetSmartName(type.GetName());
+
+			return typeName;
+		};
+
+		auto getIconName = [](const Type& type)
+		{
+			String iconName = type.InvokeStatic<String>("GetIcon");
+			if (iconName.IsEmpty())
+				iconName = "ui/UI4_component_icon.png";
+
+			return iconName;
+		};
+
+		auto& actorType = actor->GetType();
+		collectFunctionsByType(getTypeName(actorType), getIconName(actorType), actorType, nullptr);
 
 		for (auto component : actor->GetComponents())
-			addItems(component->GetType(), component);
+		{
+			auto& componentType = component->GetType();
+			if (auto scriptingComponent = dynamic_cast<ScriptableComponent*>(component))
+			{
+				Vector<String> functionsList;
 
-		funcDropDown->SelectItemAt(selectedIdx);
+				static Vector<String> hiddenFunctions = { 
+					String("constructor"), String("OnStart"), String("Update"), String("toString"), String("valueOf"), 
+					String("toLocaleString"), String("hasOwnProperty"), String("isPrototypeOf"), String("propertyIsEnumerable") };
+
+				ScriptValue instance = scriptingComponent->GetInstance();
+				Vector<ScriptValue> properties = instance.GetPropertyNames();
+				for (auto& prop : properties)
+				{
+					ScriptValue propValue = instance.GetProperty(prop);
+					if (propValue.IsFunction())
+					{
+						String functionName = prop.ToString();
+						bool hidden = hiddenFunctions.Contains(functionName);
+						if (!functionName.StartsWith("_") && !hidden)
+							functionsList.Add(functionName);
+					}
+				}
+
+				collectFunctions(getTypeName(componentType), getIconName(componentType), functionsList, component);
+			}
+			else
+			{
+				collectFunctionsByType(getTypeName(componentType), getIconName(componentType), componentType, component);
+			}
+		}
+
+		if (funcDropDown->GetSelectedItemPosition() != selectedIdx)
+			funcDropDown->SelectItemAt(selectedIdx);
 	}
 
 	void FunctionProperty::FunctionInstance::OnFunctionSelected(int idx)
@@ -373,7 +429,7 @@ namespace Editor
 
 	const Type* FunctionProperty::GetValueTypeStatic()
 	{
-		return FunctionType::commonType;
+		return FunctionType::serializableType;
 	}
 
 	void FunctionProperty::SetFieldInfo(const FieldInfo* fieldInfo)

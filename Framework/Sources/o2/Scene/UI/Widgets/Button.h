@@ -4,6 +4,7 @@
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/UI/Widget.h"
+#include "o2/Utils/Function/SerializableFunction.h"
 #include "o2/Utils/System/ShortcutKeys.h"
 
 namespace o2
@@ -21,7 +22,7 @@ namespace o2
 		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
 	public:
-		Function<void()>             onClick;       // Click event @SERIALIZABLE
+		SerializableFunction<void()> onClick;       // Click event @SERIALIZABLE
 		Function<bool(const Vec2F&)> isPointInside; // Checking pointer function. When this empty using default widget pointer check @EDITOR_IGNORE
 
 	public:

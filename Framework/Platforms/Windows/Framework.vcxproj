@@ -336,6 +336,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Function\ActorSubscription.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Function\Function.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Function\FunctionDataValueConverter.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\ISerializableFunction.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Function\SerializableFunction.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\ApproximationValue.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Basis.h" />

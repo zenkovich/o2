@@ -15,6 +15,7 @@ namespace o2
 	class EnumType;
 	class FieldInfo;
 	class FunctionInfo;
+	class FunctionType;
 	class IAttribute;
 	class IObject;
 	class MapType;
@@ -63,11 +64,16 @@ namespace o2
 		static bool IsTypesInitialized();
 
 	public:
+		// Initializes regular type
 		template<typename _type>
 		static Type* InitializeType(const char* name);
 
+		// Initialized fundamental type
 		template<typename _type>
 		static Type* InitializeFundamentalType(const char* name);
+
+		// Initializes function type
+		static FunctionType* InitializeFunctionType(const char* name);
 
 		// Initializes enum
 		template<typename _type>

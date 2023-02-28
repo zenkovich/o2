@@ -1001,9 +1001,6 @@ namespace o2
 		{
 			return sizeof(*this);
 		}
-
-		// Adds function to list
-		void AddActorSubscription() override;
 	};
 
 	template<typename _res_type, typename ... _args>

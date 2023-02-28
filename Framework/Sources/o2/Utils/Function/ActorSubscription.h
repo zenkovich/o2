@@ -1,8 +1,12 @@
 #pragma once
 #include "o2/Scene/ActorRef.h"
 #include "o2/Utils/Function/Function.h"
-#include "o2/Utils/Function/SerializableFunction.h"
+#include "o2/Utils/Function/ISerializableFunction.h"
 #include "o2/Utils/Serialization/Serializable.h"
+
+#if IS_SCRIPTING_SUPPORTED
+#include <o2/Scene/Components/ScriptableComponent.h>
+#endif
 
 namespace o2
 {
@@ -83,10 +87,18 @@ namespace o2
 				callSource = actor;
 
 			auto& objType = dynamic_cast<const ObjectType&>(callSource->GetType());
+ 			if constexpr (IS_SCRIPTING_SUPPORTED)
+ 			{
+ 				if (auto scriptableComponent = dynamic_cast<const ScriptableComponent*>(callSource))
+ 				{
+ 					ScriptValue scriptMethod = scriptableComponent->GetInstance().GetProperty(method);
+ 					if (scriptMethod.IsFunction())
+ 						return scriptMethod.Invoke<_res_type, _args ...>(scriptableComponent->GetInstance(), args ...);
+ 				}
+ 			}
+
 			void* obj = objType.DynamicCastFromIObject(const_cast<IObject*>(dynamic_cast<const IObject*>(callSource)));
 			return objType.Invoke<_res_type, _args ...>(method, obj, args ...);
-
-			return _res_type();
 		}
 
 		// Returns true if functions is equal
@@ -131,9 +143,9 @@ namespace o2
 	};
 
 	template<typename _res_type, typename ... _args>
-	void Function<_res_type(_args ...)>::AddActorSubscription()
+	void SerializableFunction<_res_type(_args ...)>::AddActorSubscription()
 	{
-		Add(mnew ActorSubscription<_res_type(_args...)>());
+		Base::Add(mnew ActorSubscription<_res_type(_args...)>());
 	}
 }
 

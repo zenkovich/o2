@@ -213,7 +213,8 @@ namespace o2
 		return res;
 	}
 
-	void ScriptValue::ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func) const
+	void ScriptValue::ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func, 
+										bool withPrototypes /*= true*/) const
 	{
 		struct Helper
 		{
@@ -231,6 +232,9 @@ namespace o2
 			return;
 
 		jerry_foreach_object_property(jvalue, &Helper::IterateFunc, (void*)&func);
+
+		if (withPrototypes)
+			GetPrototype().ForEachProperties(func, withPrototypes);
 	}
 
 	ScriptValue ScriptValue::GetProperty(const ScriptValue& name) const
@@ -264,6 +268,15 @@ namespace o2
 			res.AcquireValue(descr.value);
 
 		jerry_free_property_descriptor_fields(&descr);
+
+		return res;
+	}
+
+	ScriptValue ScriptValue::GetPropertyNames() const
+	{
+		ScriptValue res;
+
+		res.AcquireValue(jerry_object_get_property_names(jvalue, JERRY_PROPERTY_FILTER_TRAVERSE_PROTOTYPE_CHAIN));
 
 		return res;
 	}
@@ -357,7 +370,7 @@ namespace o2
 		}
 
 		String res;
-		res.resize(jerry_get_string_length(jvalue) + 1);
+		res.resize(jerry_get_string_length(jvalue));
 		jerry_string_to_char_buffer(jvalue, (jerry_char_t*)res.Data(), res.Capacity());
 		return std::move(res);
 	}

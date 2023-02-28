@@ -113,7 +113,7 @@ namespace o2
 		ScriptValue Construct(_args ... args) const;
 
 		// Iterates properties in object
-		void ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func) const;
+		void ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func, bool withPrototypes = true) const;
 
 		// Returns property value
 		ScriptValue GetProperty(const ScriptValue& name) const;
@@ -123,6 +123,9 @@ namespace o2
 
 		// Returns own property value
 		ScriptValue GetOwnProperty(const ScriptValue& name) const;
+
+		// Returns list of all property names
+		ScriptValue GetPropertyNames() const;
 
 		// Returns property value
 		ScriptValue GetProperty(const char* name) const;

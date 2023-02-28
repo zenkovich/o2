@@ -30,7 +30,10 @@ namespace o2
 	template<typename _type>
 	void* ScriptValueBase::DataContainer<_type>::GetData() const
 	{
-		return data;
+		if constexpr (std::is_const<_type>::value)
+			return nullptr;
+		else
+			return const_cast<_type*>(data);
 	}
 
 	template<typename _type>

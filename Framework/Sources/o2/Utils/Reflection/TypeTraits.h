@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Scripts/ScriptValueDef.h"
+#include "o2/Utils/Function/SerializableFunction.h"
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Math/Color.h"
 #include "o2/Utils/Math/Rect.h"
@@ -32,7 +33,12 @@ namespace o2
 
 	template<class T> struct IsFunctionHelper : std::false_type {};
 	template<typename _res_type, typename ... _args> struct IsFunctionHelper<Function<_res_type(_args ...)>> : std::true_type {};
+	template<typename _res_type, typename ... _args> struct IsFunctionHelper<SerializableFunction<_res_type(_args ...)>> : std::true_type {};
 	template<class T> struct IsFunction : IsFunctionHelper<typename std::remove_cv<T>::type> {};
+
+	template<class T> struct IsSerializableFunctionHelper : std::false_type {};
+	template<typename _res_type, typename ... _args> struct IsSerializableFunctionHelper<SerializableFunction<_res_type(_args ...)>> : std::true_type {};
+	template<class T> struct IsSerializableFunction : IsSerializableFunctionHelper<typename std::remove_cv<T>::type> {};
 	
 	template<typename... Ts> struct make_void { typedef void type; };
 	template<typename... Ts> using void_t = typename make_void<Ts...>::type;
@@ -176,6 +182,10 @@ namespace o2
 		else if constexpr (std::is_enum<_type>::value && IsEnumReflectable<_type>::value)
 		{
 			return *EnumTypeContainer<_type>::type;
+		}
+		else if constexpr (IsSerializableFunction<_type>::value)
+		{
+			return *FunctionType::serializableType;
 		}
 		else if constexpr (IsFunction<_type>::value)
 		{

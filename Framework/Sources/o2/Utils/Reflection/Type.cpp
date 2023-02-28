@@ -457,16 +457,14 @@ namespace o2
 		return Usage::StringAccessor;
 	}
 
-	FunctionType::FunctionType():
-		Type("Function", sizeof(Function<void()>), mnew TypeSerializer<Function<void()>>())
+	FunctionType::FunctionType(const String& name):
+		Type(name, sizeof(Function<void()>), mnew TypeSerializer<Function<void()>>())
 	{}
 
 	Type::Usage FunctionType::GetUsage() const
 	{
 		return Type::Usage::Function;
 	}
-
-	FunctionType* FunctionType::commonType = new FunctionType();
 
 	const Type* FunctionType::GetPointerType() const
 	{

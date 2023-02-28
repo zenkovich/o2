@@ -3,11 +3,11 @@
 namespace o2
 {
 	template<typename _res_type, typename ... _args>
-	struct DataValue::Converter<Function<_res_type(_args ...)>>
+	struct DataValue::Converter<SerializableFunction<_res_type(_args ...)>>
 	{
 		static constexpr bool isSupported = true;
 
-		static void Write(const Function<_res_type(_args ...)>& value, DataValue& data)
+		static void Write(const SerializableFunction<_res_type(_args ...)>& value, DataValue& data)
 		{
 			value.ForEach([&](const IFunction<_res_type(_args ...)>* x)
 						  {
@@ -16,7 +16,7 @@ namespace o2
 						  });
 		}
 
-		static void Read(Function<_res_type(_args ...)>& value, const DataValue& data)
+		static void Read(SerializableFunction<_res_type(_args ...)>& value, const DataValue& data)
 		{
 			if (data.IsArray())
 			{

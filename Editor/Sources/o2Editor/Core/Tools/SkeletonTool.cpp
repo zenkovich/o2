@@ -102,7 +102,7 @@ namespace Editor
 
 	String SkeletonTool::SkeletonTool::GetPanelIcon() const
 	{
-		return "ui/UI4_frame_tool.png";
+		return "ui/UI4_bones_tool.png";
 	}
 
 	void SkeletonTool::SkeletonTool::OnEnabled()
