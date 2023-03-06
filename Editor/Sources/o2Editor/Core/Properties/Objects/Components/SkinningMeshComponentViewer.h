@@ -43,7 +43,7 @@ namespace Editor
 		struct SceneLayer : public SceneEditorLayer
 		{
 			SkinningMeshComponentViewer* viewer = nullptr;
-			Sprite               textureSprite;
+			Sprite                       textureSprite;
 
 		public:
 			void DrawOverScene() override;

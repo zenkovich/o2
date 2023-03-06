@@ -27,7 +27,7 @@ namespace Editor
 	void SkinningMeshComponentViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		o2EditorProperties.BuildObjectProperties(mSpoiler, &TypeOf(SkinningMeshComponent), mPropertiesContext, "",
-												 mOnChildFieldChangeCompleted, onChanged);
+			mOnChildFieldChangeCompleted, onChanged);
 
 		mFitAndCenterButton = o2UI.CreateButton("Fit and centerize image", THIS_FUNC(FitAndCenterize));
 		mEditSkeletonButton = o2UI.CreateButton("Edit skeleton", THIS_FUNC(OnEditSkeletonPressed));
@@ -68,10 +68,10 @@ namespace Editor
 			// Topology tool
 			auto mesh = mTypeTargetObjects[0].first;
 			mTopologyTool.Setup([=]() { return mesh->GetExtraPoints(); },
-								[=](int idx, Vec2F p) { mesh->SetExtraPoint(idx, p); mesh->GetOwnerActor()->OnChanged(); },
-								[=]() { return mesh->GetOwnerActor()->transform->GetWorldNonSizedBasis(); },
-								[=](Vec2F p) { mesh->AddExtraPoint(p); mesh->GetOwnerActor()->OnChanged(); },
-								[=](int idx) { mesh->RemoveExtraPoint(idx); mesh->GetOwnerActor()->OnChanged(); });
+				[=](int idx, Vec2F p) { mesh->SetExtraPoint(idx, p); mesh->GetOwnerActor()->OnChanged(); },
+				[=]() { return mesh->GetOwnerActor()->transform->GetWorldNonSizedBasis(); },
+				[=](Vec2F p) { mesh->AddExtraPoint(p); mesh->GetOwnerActor()->OnChanged(); },
+				[=](int idx) { mesh->RemoveExtraPoint(idx); mesh->GetOwnerActor()->OnChanged(); });
 		}
 	}
 
@@ -113,7 +113,7 @@ namespace Editor
 			auto texture = component->GetImage();
 			auto size = texture->GetSize();
 
-			component->SetMappingFrame(RectF(size*-0.5f, size*0.5f));
+			component->SetMappingFrame(RectF(size * -0.5f, size * 0.5f));
 
 			mFrameTool.SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
 		}
@@ -128,7 +128,7 @@ namespace Editor
 
 		auto component = mTypeTargetObjects[0].first;
 
-		if (mEditingSkeleton) 
+		if (mEditingSkeleton)
 		{
 			mSkeletonTool = o2EditorSceneScreen.GetTool<SkeletonTool>();
 			if (!mSkeletonTool)
@@ -141,7 +141,7 @@ namespace Editor
 
 			o2EditorSceneScreen.SelectTool<SkeletonTool>();
 		}
-		else 
+		else
 		{
 			if (mSkeletonTool)
 			{
@@ -177,17 +177,14 @@ namespace Editor
 	{
 		if (!viewer->mTypeTargetObjects.IsEmpty())
 		{
-			if (viewer->mFrameTool.isEnabled || viewer->mSplineTool.isEnabled || true)
-			{
-				auto obj = viewer->mTypeTargetObjects[0].first;
+			auto obj = viewer->mTypeTargetObjects[0].first;
 
-				textureSprite.SetImageAsset(obj->GetImage());
-				textureSprite.SetBasis(Basis(obj->GetMappingFrame())
-									   *Basis::Translated(obj->GetOwnerActor()->transform->GetWorldPosition())
-									   *o2EditorSceneScreen.GetLocalToScreenTransform());
-				textureSprite.SetTransparency(0.5f);
-				textureSprite.Draw();
-			}
+			textureSprite.SetImageAsset(obj->GetImage());
+			textureSprite.SetBasis(Basis(obj->GetMappingFrame())
+				* Basis::Translated(obj->GetOwnerActor()->transform->GetWorldPosition())
+				* o2EditorSceneScreen.GetLocalToScreenTransform());
+			textureSprite.SetTransparency(0.5f);
+			textureSprite.Draw();
 
 			if (viewer->mTopologyTool.isEnabled || viewer->mSplineTool.isEnabled)
 				DrawMeshWire();
@@ -204,7 +201,7 @@ namespace Editor
 
 	bool SkinningMeshComponentViewer::SceneLayer::IsEnabled() const
 	{
-		return viewer->mFrameTool.isEnabled || viewer->mSplineTool.isEnabled || viewer->mTopologyTool.isEnabled;
+		return true;
 	}
 
 	const String& SkinningMeshComponentViewer::SceneLayer::GetName() const
@@ -228,9 +225,9 @@ namespace Editor
 			Vector<Vertex> verticies;
 			for (int i = 0; i < mesh.polyCount; i++)
 			{
-				auto v = o2EditorSceneScreen.LocalToScreenPoint(mesh.vertices[mesh.indexes[i*3]]);
-				auto v1 = o2EditorSceneScreen.LocalToScreenPoint(mesh.vertices[mesh.indexes[i*3 + 1]]);
-				auto v2 = o2EditorSceneScreen.LocalToScreenPoint(mesh.vertices[mesh.indexes[i*3 + 2]]);
+				auto v = o2EditorSceneScreen.LocalToScreenPoint(mesh.vertices[mesh.indexes[i * 3]]);
+				auto v1 = o2EditorSceneScreen.LocalToScreenPoint(mesh.vertices[mesh.indexes[i * 3 + 1]]);
+				auto v2 = o2EditorSceneScreen.LocalToScreenPoint(mesh.vertices[mesh.indexes[i * 3 + 2]]);
 
 				verticies.Clear();
 				verticies.Add(Vertex(v.x, v.y, 0.0f, wireColor.ABGR(), 0.0f, 0.0f));

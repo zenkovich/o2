@@ -42,14 +42,6 @@ namespace Editor
 		mRightTopWidgetsContainer = InitializeWidgetsContainer(BaseCorner::RightTop);
 		mLeftBottomWidgetsContainer = InitializeWidgetsContainer(BaseCorner::LeftBottom);
 		mRightBottomWidgetsContainer = InitializeWidgetsContainer(BaseCorner::RightBottom);
-
-		auto testControlWidget = o2UI.CreateButton("test");
-		testControlWidget->layout->minSize = Vec2F(100, 100);
-		mLeftTopWidgetsContainer->AddChild(testControlWidget);
-
-		auto testControlWidget2 = o2UI.CreateButton("test");
-		testControlWidget2->layout->minSize = Vec2F(100, 100);
-		mLeftTopWidgetsContainer->AddChild(testControlWidget2);
 	}
 
 	SceneEditScreen::SceneEditScreen(const SceneEditScreen& other):

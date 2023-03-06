@@ -15,7 +15,7 @@ namespace o2
 	public:
 		Vector<Pair<int, float>> vertexWeights; // Weights of vertices dependent on this bone. index - weight @SERIALIZABLE
 
-		float length = 0; // Bone length. Used for visualization @SERIALIZABLE
+		float length = 100; // Bone length. Used for visualization @SERIALIZABLE
 
 	public:
 		// Default constructor

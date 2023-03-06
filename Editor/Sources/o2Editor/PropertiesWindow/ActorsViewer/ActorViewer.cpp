@@ -293,6 +293,8 @@ namespace Editor
 
 		auto lastComponentViewers = mComponentsViewers;
 
+		Vector<IActorComponentViewer*> enableComponentViewers;
+
 		for (auto viewer : mComponentsViewers)
 			mComponentViewersPool[viewer->GetComponentType()].Add(viewer);
 
@@ -327,11 +329,14 @@ namespace Editor
 			if (lastComponentViewers.Contains(componentViewer))
 				lastComponentViewers.Remove(componentViewer);
 			else
-				componentViewer->SetEnabled(true);
+				enableComponentViewers.Add(componentViewer);
 		}
 
 		for (auto viewer : lastComponentViewers)
 			viewer->SetEnabled(false);
+
+		for (auto viewer : enableComponentViewers)
+			viewer->SetEnabled(true);
 	}
 
 	void ActorViewer::OnEnabled()
