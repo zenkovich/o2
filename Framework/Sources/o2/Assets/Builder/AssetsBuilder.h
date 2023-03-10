@@ -34,7 +34,7 @@ namespace o2
 		const String& GetBuiltAssetsPath() const;
 
 	protected:
-		LogStream* mLog; // Asset builder log stream
+		Ref<LogStream> mLog; // Asset builder log stream
 
 		String     mSourceAssetsPath;     // Source assets path
 		AssetsTree mSourceAssetsTree;     // Source assets tree

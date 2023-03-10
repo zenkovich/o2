@@ -16,7 +16,7 @@ namespace o2
 {
 	AssetsBuilder::AssetsBuilder()
 	{
-		mLog = mnew LogStream("Assets builder");
+		mLog = mmake<LogStream>("Assets builder");
 		o2Debug.GetLog()->BindStream(mLog);
 
 		InitializeConverters();

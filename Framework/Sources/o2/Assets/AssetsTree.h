@@ -2,8 +2,9 @@
 
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetInfo.h"
-#include "o2/Utils/FileSystem/FileInfo.h"
 #include "o2/Utils/Basic/ITree.h"
+#include "o2/Utils/FileSystem/FileInfo.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -15,7 +16,7 @@ namespace o2
 	class AssetsTree: public ISerializable
 	{
 	public:
-		LogStream* log;  // Log stream
+		Ref<LogStream> log;  // Log stream
 
 		String assetsPath;      // Assets path @SERIALIZABLE
 		String builtAssetsPath; // Built assets path @SERIALIZABLE

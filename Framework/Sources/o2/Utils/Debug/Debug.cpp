@@ -19,14 +19,13 @@ namespace o2
 {
 	Debug::Debug()
 	{
-		FileLogStream* fileLogStream = mnew FileLogStream("", "log.txt");
-		mLogStream = mnew ConsoleLogStream("");
-		fileLogStream->BindStream(mLogStream);
+		mFileLogStream = mmake<FileLogStream>("", "log.txt");
+		mLogStream = mmake<ConsoleLogStream>("");
+		mFileLogStream->BindStream(mLogStream);
 	}
 
 	Debug::~Debug()
 	{
-		delete mLogStream->GetParentStream();
 		delete mFont;
 		delete mText;
 	}
@@ -102,7 +101,7 @@ namespace o2
 		mInstance->mLogStream->ErrorStr(out);
 	}
 
-	LogStream* Debug::GetLog()
+	const Ref<LogStream>& Debug::GetLog()
 	{
 		return mInstance->mLogStream;
 	}

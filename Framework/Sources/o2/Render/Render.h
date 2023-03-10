@@ -288,7 +288,7 @@ namespace o2
 		UInt     mFrameTrianglesCount;       // Total triangles at current frame
 		UInt     mDIPCount;                  // DrawIndexedPrimitives calls count
 
-		LogStream* mLog; // Render log stream
+		Ref<LogStream> mLog; // Render log stream
 
 		Vector<Texture*> mTextures; // Loaded textures
 		Vector<Font*>    mFonts;    // Loaded fonts

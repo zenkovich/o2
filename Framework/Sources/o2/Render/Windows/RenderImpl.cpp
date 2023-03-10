@@ -25,7 +25,7 @@ namespace o2
 		mIndexBufferSize = USHRT_MAX;
 
 		// Create log stream
-		mLog = mnew LogStream("Render");
+		mLog = mmake<LogStream>("Render");
 		o2Debug.GetLog()->BindStream(mLog);
 
 		// Initialize OpenGL
@@ -90,7 +90,7 @@ namespace o2
 		}
 
 		// Get OpenGL extensions
-		GetGLExtensions(mLog);
+		GetGLExtensions(mLog.Get());
 
 		GL_CHECK_ERROR();
 

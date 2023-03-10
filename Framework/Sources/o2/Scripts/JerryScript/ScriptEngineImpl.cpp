@@ -9,6 +9,8 @@
 
 namespace o2
 {
+	ScriptEngineBase::ScriptEngineBase() = default;
+
 	void ScriptEngineBase::ErrorCallback(const jerry_value_t error_object, void* user_p)
 	{
 		auto strValue = jerry_value_to_string(error_object);
@@ -54,7 +56,7 @@ namespace o2
 
 	ScriptEngine::ScriptEngine()
 	{
-		mLog = mnew LogStream("Scripting");
+		mLog = mmake<LogStream>("Scripting");
 		o2Debug.GetLog()->BindStream(mLog);
 
 		jerry_init(JERRY_INIT_EMPTY);

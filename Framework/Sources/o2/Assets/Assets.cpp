@@ -17,7 +17,7 @@ namespace o2
 
 	Assets::Assets()
 	{
-		mLog = mnew LogStream("Assets");
+		mLog = mmake<LogStream>("Assets");
 		o2Debug.GetLog()->BindStream(mLog);
 
 		mAssetsBuilder = mnew AssetsBuilder();

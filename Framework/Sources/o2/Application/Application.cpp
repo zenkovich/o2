@@ -81,7 +81,7 @@ namespace o2
 
 		mTime = mnew Time();
 
-		mLog = mnew LogStream("Application");
+		mLog = mmake<LogStream>("Application");
 		o2Debug.GetLog()->BindStream(mLog);
 
 		mProjectConfig = mnew ProjectConfig();
@@ -272,7 +272,7 @@ namespace o2
 		return IS_EDITOR;
 	}
 
-	LogStream* Application::GetLog() const
+	const Ref<LogStream>& Application::GetLog() const
 	{
 		return mInstance->mLog;
 	}

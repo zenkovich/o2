@@ -143,7 +143,7 @@ namespace o2
 		const Vector<ActorAssetRef>& GetWidgetStyles() const;
 
 	protected:
-		LogStream * mLog = nullptr; // UI Log stream
+		Ref<LogStream> mLog; // UI Log stream
 
 		Widget*         mFocusedWidget = nullptr; // Current selected widget
 		Vector<Widget*> mLastUnfocusedWidgets;    // Widget that was unfocused on last frame

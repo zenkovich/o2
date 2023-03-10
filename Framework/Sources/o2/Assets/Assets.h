@@ -18,6 +18,8 @@ namespace o2
 	class LogStream;
 	class AssetRef;
 
+	FORWARD_REF(LogStream);
+
 	// ----------------
 	// Assets utilities
 	// ----------------
@@ -146,7 +148,7 @@ namespace o2
 	protected:
 		AssetsTree*         mMainAssetsTree; // Main assets tree
 		Vector<AssetsTree*> mAssetsTrees;    // Assets trees
-		LogStream*          mLog;            // Log stream
+		Ref<LogStream>      mLog;            // Log stream
 		AssetsBuilder*      mAssetsBuilder;  // Assets builder
 
 		Map<String, const Type*> mAssetsTypes;   // Assets types and extensions dictionary

@@ -43,7 +43,7 @@ namespace o2
 	class Ref;
 
 	template<typename _type, typename ... _args>
-	Ref<_type> New(_args&& ... args);
+	Ref<_type> Make(_args&& ... args);
 
 	struct RefCounter
 	{
@@ -65,7 +65,10 @@ namespace o2
 		friend class BaseWeakRef;
 
 		template<typename _type, typename ... _args>
-		friend Ref<_type> New(_args&& ... args);
+		friend Ref<_type> Make(_args&& ... args);
+
+		template<typename _type, typename ... _args>
+		friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args);
 	};
 
 	class RefCounterable
@@ -82,8 +85,14 @@ namespace o2
 		template<typename _type>
 		friend class BaseWeakRef;
 
+		template<typename _type>
+		friend RefCounter* GetRefCounter(_type* ptr);
+
 		template<typename _type, typename ... _args>
-		friend Ref<_type> New(_args&& ... args);
+		friend Ref<_type> Make(_args&& ... args);
+
+		template<typename _type, typename ... _args>
+		friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args);
 	};
 
 	template<typename _type>
@@ -91,32 +100,33 @@ namespace o2
 	{
 	public:
 		BaseRef();
-		BaseRef(_type* ptr);
+		explicit BaseRef(_type* ptr);
 		BaseRef(const BaseRef<_type>& other);
 		BaseRef(BaseRef<_type>&& other);
 
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
+		BaseRef(const BaseRef<_other_type>& other);
+
 		~BaseRef();
 
-		BaseRef& operator=(const BaseRef<_type>& other);
-		BaseRef& operator=(const BaseRef<_type>&& other);
-		BaseRef& operator=(_type* ptr);
+		BaseRef<_type>& operator=(const BaseRef<_type>& other);
+		BaseRef<_type>& operator=(const BaseRef<_type>&& other);
+
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
+		BaseRef<_type>& operator=(const BaseRef<_other_type>& other);
 
 		bool IsValid() const;
+
+		_type* Get() const;
 
 		// Boolean cast operator, true means that reference is valid
 		operator bool() const;
 
 		// Getter operator
-		_type& operator*();
-
-		// Constant getter operator
-		const _type& operator*() const;
+		_type& operator*() const;
 
 		// Asset members and field operator
-		_type* operator->();
-
-		// Constant asset members and field operator
-		const _type* operator->() const;
+		_type* operator->() const;
 
 	protected:
 		_type* mPtr = nullptr;
@@ -127,6 +137,9 @@ namespace o2
 
 		template<typename _type>
 		friend class BaseWeakRef;
+
+		template<typename _other_type>
+		friend class BaseRef;
 	};
 
 	template<typename _type>
@@ -134,7 +147,6 @@ namespace o2
 	{
 	public:
 		BaseWeakRef();
-		BaseWeakRef(_type* ptr);
 		BaseWeakRef(const BaseWeakRef<_type>& other);
 		BaseWeakRef(BaseWeakRef<_type>&& other);
 		BaseWeakRef(const BaseRef<_type>& other);
@@ -146,7 +158,6 @@ namespace o2
 		BaseWeakRef& operator=(const BaseWeakRef<_type>&& other);
 		BaseWeakRef& operator=(const BaseRef<_type>& other);
 		BaseWeakRef& operator=(const BaseRef<_type>&& other);
-		BaseWeakRef& operator=(_type* ptr);
 
 		bool IsValid() const;
 		bool IsExpired() const;
@@ -174,13 +185,18 @@ namespace o2
 	{
 	public:
 		Ref() : BaseRef<_type>() {}
-		Ref(_type* ptr) : BaseRef<_type>(ptr) {}
+		explicit Ref(_type* ptr) : BaseRef<_type>(ptr) {}
 		Ref(const Ref<_type>& other) : BaseRef<_type>(other) {}
 		Ref(Ref<_type>&& other) : BaseRef<_type>(other) {}
 
-		Ref& operator=(const Ref<_type>& other) { BaseRef<_type>::operator=(other); return *this; }
-		Ref& operator=(const Ref<_type>&& other) { BaseRef<_type>::operator=(other); return *this; }
-		Ref& operator=(_type* ptr) { BaseRef<_type>::operator=(ptr); return *this; }
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
+		Ref(const Ref<_other_type>& other) : BaseRef<_type>(other) {}
+
+		Ref<_type>& operator=(const Ref<_type>& other) { BaseRef<_type>::operator=(other); return *this; }
+		Ref<_type>& operator=(const Ref<_type>&& other) { BaseRef<_type>::operator=(other); return *this; }
+
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
+		Ref<_type>& operator=(const Ref<_other_type>& other) { BaseRef<_type>::operator=(other); return *this; }
 
 		bool IsValid() const { return BaseRef<_type>::IsValid(); }
 
@@ -188,16 +204,10 @@ namespace o2
 		operator bool() const { return BaseRef<_type>::operator bool(); }
 
 		// Getter operator
-		_type& operator*() { return BaseRef<_type>::operator*(); }
-
-		// Constant getter operator
-		const _type& operator*() const { return BaseRef<_type>::operator*(); }
+		_type& operator*() const { return BaseRef<_type>::operator*(); }
 
 		// Asset members and field operator
-		_type* operator->() { return BaseRef<_type>::operator->(); }
-
-		// Constant asset members and field operator
-		const _type* operator->() const { return BaseRef<_type>::operator->(); }
+		_type* operator->() const { return BaseRef<_type>::operator->(); }
 	};
 
 	template<typename _type, typename _enable = void>
@@ -205,7 +215,6 @@ namespace o2
 	{
 	public:
 		WeakRef() : BaseWeakRef<_type>() {}
-		WeakRef(_type* ptr) : BaseWeakRef<_type>(ptr) {}
 		WeakRef(const WeakRef<_type>& other) : BaseWeakRef<_type>(other) {}
 		WeakRef(WeakRef<_type>&& other) : BaseWeakRef<_type>(other) {}
 		WeakRef(const Ref<_type>& other) : BaseWeakRef<_type>(other) {}
@@ -215,7 +224,6 @@ namespace o2
 		WeakRef& operator=(const WeakRef<_type>&& other) { BaseWeakRef<_type>::operator=(other); return *this; }
 		WeakRef& operator=(const Ref<_type>& other) { BaseWeakRef<_type>::operator=(other); return *this; }
 		WeakRef& operator=(const Ref<_type>&& other) { BaseWeakRef<_type>::operator=(other); return *this; }
-		WeakRef& operator=(_type* ptr) { BaseWeakRef<_type>::operator=(ptr); return *this; }
 
 		bool IsValid() const { return BaseWeakRef<_type>::IsValid(); }
 		bool IsExpired() const { return BaseWeakRef<_type>::IsExpired(); }
@@ -223,11 +231,21 @@ namespace o2
 		// Boolean cast operator, true means that reference is valid
 		operator bool() const { return BaseWeakRef<_type>::operator bool(); }
 
-		Ref<_type> Lock() const { return BaseWeakRef<_type>::Lock(); }
+		Ref<_type> Lock() const
+		{
+			if (BaseWeakRef<_type>::IsExpired())
+				return Ref<_type>();
+
+			return Ref<_type>(BaseWeakRef<_type>::mPtr);;
+		}
 	};
 
+#define FORWARD_REF(CLASS) \
+	o2::RefCounter* GetRefCounter(CLASS* ptr); \
+	void DestructObject(CLASS* obj) 
+
 	template<typename _type, typename ... _args>
-	Ref<_type> New(_args&& ... args)
+	Ref<_type> Make(_args&& ... args)
 	{
 		std::byte* memory = (std::byte*)malloc(sizeof(RefCounter) + sizeof(_type));
 		auto object = new (memory + sizeof(RefCounter)) _type(std::forward<_args>(args)...);
@@ -235,6 +253,32 @@ namespace o2
 
 		return Ref<_type>(object);
 	}
+
+	template<typename _type, typename ... _args>
+	Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
+	{
+		std::byte* memory = (std::byte*)_mmalloc(sizeof(RefCounter) + sizeof(_type), location, line);
+		auto object = new (memory + sizeof(RefCounter)) _type(std::forward<_args>(args)...);
+		object->mRefCounter = new (memory) RefCounter(&LinkedRefCounterImplementation::Instance);
+
+		return Ref<_type>(object);
+	}
+
+	struct NewPlaceHelper
+	{
+		const char* location;
+		int line;
+
+		NewPlaceHelper(const char* location, int line):location(location), line(line) {}
+
+		template<typename _type, typename ... _args>
+		Ref<_type> Create(_args&& ... args)
+		{
+			return MakePlace<_type, _args...>(location, line, std::forward<_args>(args)...);
+		}
+	};
+
+#define mmake NewPlaceHelper(__FILE__, __LINE__).Create
 
 	// BaseRef implementation
 	template<typename _type>
@@ -262,6 +306,14 @@ namespace o2
 	}
 
 	template<typename _type>
+	template<typename _other_type, typename _enable>
+	BaseRef<_type>::BaseRef(const BaseRef<_other_type>& other) :
+		mPtr(other.mPtr)
+	{
+		IncrementRef();
+	}
+
+	template<typename _type>
 	BaseRef<_type>::~BaseRef()
 	{
 		DecrementRef();
@@ -269,6 +321,19 @@ namespace o2
 
 	template<typename _type>
 	BaseRef<_type>& BaseRef<_type>::operator=(const BaseRef<_type>& other)
+	{
+		DecrementRef();
+
+		mPtr = other.mPtr;
+
+		IncrementRef();
+
+		return *this;
+	}
+
+	template<typename _type>
+	template<typename _other_type, typename _enable>
+	BaseRef<_type>& BaseRef<_type>::operator=(const BaseRef<_other_type>& other)
 	{
 		DecrementRef();
 
@@ -291,15 +356,9 @@ namespace o2
 	}
 
 	template<typename _type>
-	BaseRef<_type>& BaseRef<_type>::operator=(_type* ptr)
+	_type* BaseRef<_type>::Get() const
 	{
-		DecrementRef();
-
-		mPtr = ptr;
-
-		IncrementRef();
-
-		return *this;
+		return mPtr;
 	}
 
 	template<typename _type>
@@ -315,34 +374,34 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type& BaseRef<_type>::operator*()
+	_type& BaseRef<_type>::operator*() const
 	{
 		return *mPtr;
 	}
 
 	template<typename _type>
-	const _type& BaseRef<_type>::operator*() const
-	{
-		return *mPtr;
-	}
-
-	template<typename _type>
-	_type* BaseRef<_type>::operator->()
+	_type* BaseRef<_type>::operator->() const
 	{
 		return mPtr;
 	}
 
 	template<typename _type>
-	const _type* BaseRef<_type>::operator->() const
+	RefCounter* GetRefCounter(_type* ptr)
 	{
-		return mPtr;
+		return ptr->GetRefCounter();
 	}
 
 	template<typename _type>
 	void BaseRef<_type>::IncrementRef()
 	{
 		if (mPtr)
-			mPtr->GetRefCounter()->strongReferences++;
+			GetRefCounter(mPtr)->strongReferences++;
+	}
+
+	template<typename _type>
+	void DestructObject(_type* obj)
+	{
+		obj->~_type();
 	}
 
 	template<typename _type>
@@ -350,12 +409,12 @@ namespace o2
 	{
 		if (mPtr)
 		{
-			auto refCounter = mPtr->GetRefCounter();
+			auto refCounter = GetRefCounter(mPtr);
 
 			refCounter->strongReferences--;
 			if (refCounter->strongReferences == 0)
 			{
-				mPtr->~_type();
+				DestructObject(mPtr);
 				(*refCounter->mImplementation->DestroyObject)(mPtr);
 
 				if (refCounter->weakReferences == 0)
@@ -369,27 +428,18 @@ namespace o2
 	BaseWeakRef<_type>::BaseWeakRef() = default;
 
 	template<typename _type>
-	BaseWeakRef<_type>::BaseWeakRef(_type* ptr) :
-		mPtr(ptr)
-	{
-		CheckRefCounter();
-		IncrementWeakRef();
-	}
-
-	template<typename _type>
 	BaseWeakRef<_type>::BaseWeakRef(const BaseWeakRef<_type>& other) :
-		mPtr(other.mPtr)
+		mPtr(other.mPtr), mRefCounter(other.mRefCounter)
 	{
-		CheckRefCounter();
 		IncrementWeakRef();
 	}
 
 	template<typename _type>
 	BaseWeakRef<_type>::BaseWeakRef(BaseWeakRef<_type>&& other) :
-		mPtr(other.mPtr)
+		mPtr(other.mPtr), mRefCounter(other.mRefCounter)
 	{
-		CheckRefCounter();
 		other.mPtr = nullptr;
+		other.mRefCounter = nullptr;
 	}
 
 	template<typename _type>
@@ -441,18 +491,6 @@ namespace o2
 	}
 
 	template<typename _type>
-	BaseWeakRef<_type>& BaseWeakRef<_type>::operator=(_type* ptr)
-	{
-		DecrementWeakRef();
-
-		mPtr = ptr;
-
-		IncrementWeakRef();
-
-		return *this;
-	}
-
-	template<typename _type>
 	bool BaseWeakRef<_type>::IsValid() const
 	{
 		return !IsExpired();
@@ -482,7 +520,7 @@ namespace o2
 	template<typename _type>
 	void BaseWeakRef<_type>::CheckRefCounter()
 	{
-		mRefCounter = mPtr ? mPtr->GetRefCounter() : nullptr;
+		mRefCounter = mPtr ? GetRefCounter(mPtr) : nullptr;
 	}
 
 	template<typename _type>

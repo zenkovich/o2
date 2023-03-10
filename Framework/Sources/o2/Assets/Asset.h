@@ -8,6 +8,7 @@
 #include "o2/Utils/Editor/Attributes/NoHeaderAttribute.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -122,7 +123,7 @@ namespace o2
 		UID& ID();
 
 		// Returns assets log stream pointer
-		LogStream* GetAssetsLogStream() const;
+		const Ref<LogStream>& GetAssetsLogStream() const;
 
 		// Meta setter, used for property
 		void SetMeta(AssetMeta* meta);
@@ -216,7 +217,7 @@ CLASS_METHODS_META(o2::Asset)
 	FUNCTION().PROTECTED().CONSTRUCTOR(const Asset&);
 	FUNCTION().PROTECTED().SIGNATURE(String, GetMetaFullPath);
 	FUNCTION().PROTECTED().SIGNATURE(UID&, ID);
-	FUNCTION().PROTECTED().SIGNATURE(LogStream*, GetAssetsLogStream);
+	FUNCTION().PROTECTED().SIGNATURE(const Ref<LogStream>&, GetAssetsLogStream);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetMeta, AssetMeta*);
 	FUNCTION().PROTECTED().SIGNATURE(void, Load, const AssetInfo&);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);

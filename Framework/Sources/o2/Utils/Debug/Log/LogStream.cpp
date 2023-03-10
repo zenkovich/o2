@@ -5,18 +5,17 @@
 
 namespace o2
 {
-	LogStream::LogStream():
-		mParentStream(nullptr)
+	LogStream::LogStream()
 	{}
 
 	LogStream::LogStream(const WString& id) :
-		mParentStream(nullptr), mId(id)
+		mId(id)
 	{}
 
 	LogStream::~LogStream()
 	{
 		if (mParentStream)
-			mParentStream.Lock()->UnbindStream(this);
+			mParentStream.Lock()->UnbindStream(Ref(this));
 
 		UnbindAllStreams();
 	}
@@ -28,7 +27,7 @@ namespace o2
 
 	void LogStream::BindStream(const Ref<LogStream>& stream)
 	{
-		stream->mParentStream = this;
+		stream->mParentStream = Ref(this);
 		mChildStreams.Add(stream);
 	}
 

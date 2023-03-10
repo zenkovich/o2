@@ -1,11 +1,12 @@
 #pragma once
 
+#include "o2/Events/CursorAreaEventsListenersLayer.h"
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
-#include "o2/Events/CursorAreaEventsListenersLayer.h"
 
 #if defined PLATFORM_WINDOWS
 #include "o2/Application/Windows/ApplicationBase.h"
@@ -79,7 +80,7 @@ namespace o2
 		void InitializePlatform();
 
 		// Returns pointer to log object
-		virtual LogStream* GetLog() const;
+		virtual const Ref<LogStream>& GetLog() const;
 
 		// Returns pointer to input message object
 		virtual Input* GetInput() const;
@@ -209,7 +210,7 @@ namespace o2
 		EventSystem*   mEventSystem = nullptr;   // Events processing system
 		FileSystem*    mFileSystem = nullptr;    // File system
 		Input*         mInput = nullptr;         // While application user input message
-		LogStream*     mLog = nullptr;           // Log stream with id "app", using only for application messages
+		Ref<LogStream> mLog;                     // Log stream with id "app", using only for application messages
 		PhysicsWorld*  mPhysics = nullptr;       // Physics
 		ProjectConfig* mProjectConfig = nullptr; // Project config
 		Render*        mRender = nullptr;        // Graphics render

@@ -15,6 +15,8 @@ namespace o2
 {
 	class LogStream;
 
+	FORWARD_REF(LogStream);
+
 	// File system access macros
 #define o2FileSystem o2::FileSystem::Instance()
 
@@ -102,6 +104,6 @@ namespace o2
 		static void WriteFile(const String& path, const String& data);
 
 	private:
-		LogStream* mLog; // File system log stream
+		Ref<LogStream> mLog; // File system log stream
 	};
 }
