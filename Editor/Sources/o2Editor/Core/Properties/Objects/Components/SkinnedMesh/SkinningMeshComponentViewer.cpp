@@ -63,7 +63,7 @@ namespace Editor
 				mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged();
 			};
 
-			mFrameTetxureLayer.viewer = this;
+			mFrameTetxureLayer.mesh = mTypeTargetObjects[0].first;
 
 			// Topology tool
 			auto mesh = mTypeTargetObjects[0].first;
@@ -172,73 +172,6 @@ namespace Editor
 	{
 		mEditSkeletonButton->caption = mEditingSkeleton ? "Stop editing skeleton" : "Edit skeleton";
 	}
-
-	void SkinningMeshComponentViewer::SceneLayer::DrawOverScene()
-	{
-		if (!viewer->mTypeTargetObjects.IsEmpty())
-		{
-			auto obj = viewer->mTypeTargetObjects[0].first;
-
-			textureSprite.SetImageAsset(obj->GetImage());
-			textureSprite.SetBasis(Basis(obj->GetMappingFrame())
-				* Basis::Translated(obj->GetOwnerActor()->transform->GetWorldPosition())
-				* o2EditorSceneScreen.GetLocalToScreenTransform());
-			textureSprite.SetTransparency(0.5f);
-			textureSprite.Draw();
-
-			if (viewer->mTopologyTool.isEnabled || viewer->mSplineTool.isEnabled)
-				DrawMeshWire();
-		}
-	}
-
-	void SkinningMeshComponentViewer::SceneLayer::Update(float dt)
-	{}
-
-	int SkinningMeshComponentViewer::SceneLayer::GetOrder() const
-	{
-		return 0;
-	}
-
-	bool SkinningMeshComponentViewer::SceneLayer::IsEnabled() const
-	{
-		return true;
-	}
-
-	const String& SkinningMeshComponentViewer::SceneLayer::GetName() const
-	{
-		static String str("mesh texture overlay");
-		return str;
-	}
-
-	const String& SkinningMeshComponentViewer::SceneLayer::GetIconName() const
-	{
-		return String::empty;
-	}
-
-	void SkinningMeshComponentViewer::SceneLayer::DrawMeshWire()
-	{
-		if (!viewer->mTypeTargetObjects.IsEmpty())
-		{
-			auto& mesh = viewer->mTypeTargetObjects[0].first->GetMesh();
-
-			Color4 wireColor(0, 0, 0, 100);
-			Vector<Vertex> verticies;
-			for (int i = 0; i < mesh.polyCount; i++)
-			{
-				auto v = o2EditorSceneScreen.LocalToScreenPoint(mesh.vertices[mesh.indexes[i * 3]]);
-				auto v1 = o2EditorSceneScreen.LocalToScreenPoint(mesh.vertices[mesh.indexes[i * 3 + 1]]);
-				auto v2 = o2EditorSceneScreen.LocalToScreenPoint(mesh.vertices[mesh.indexes[i * 3 + 2]]);
-
-				verticies.Clear();
-				verticies.Add(Vertex(v.x, v.y, 0.0f, wireColor.ABGR(), 0.0f, 0.0f));
-				verticies.Add(Vertex(v1.x, v1.y, 0.0f, wireColor.ABGR(), 0.0f, 0.0f));
-				verticies.Add(Vertex(v2.x, v2.y, 0.0f, wireColor.ABGR(), 0.0f, 0.0f));
-				verticies.Add(Vertex(v.x, v.y, 0.0f, wireColor.ABGR(), 0.0f, 0.0f));
-				o2Render.DrawPolyLine(verticies.Data(), verticies.Count());
-			}
-		}
-	}
-
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TObjectPropertiesViewer<SkinningMeshComponent>);

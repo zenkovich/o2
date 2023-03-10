@@ -3,6 +3,7 @@
 #include "o2/Scene/Components/SkinningMeshBoneComponent.h"
 #include "o2/Scene/Components/SkinningMeshComponent.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
+#include "o2Editor/Core/Properties/Objects/Components/SkinnedMesh/SkinningMeshEditorLayer.h"
 #include "o2Editor/Core/Tools/CustomFrameTool.h"
 #include "o2Editor/Core/Tools/MeshTopologyTool.h"
 #include "o2Editor/Core/Tools/SplineTool.h"
@@ -40,33 +41,11 @@ namespace Editor
 		IOBJECT(SkinningMeshComponentViewer);
 
 	protected:
-		struct SceneLayer : public SceneEditorLayer
-		{
-			SkinningMeshComponentViewer* viewer = nullptr;
-			Sprite                       textureSprite;
-
-		public:
-			void DrawOverScene() override;
-			void Update(float dt) override;
-
-			int GetOrder() const override;
-
-			bool IsEnabled() const override;
-
-			const String& GetName() const override;
-			const String& GetIconName() const override;
-
-			void DrawMeshWire();
-		};
-
-	protected:
-
-	protected:
-		SplineTool       mSplineTool;             // Spline tool
-		CustomFrameTool  mFrameTool;              // Mapping frame tool
-		MeshTopologyTool mTopologyTool;           // Mesh topology tool
-		SkeletonTool*    mSkeletonTool = nullptr; // Shared skeleton tool
-		SceneLayer       mFrameTetxureLayer;      // Frame texture drawing layer
+		SplineTool              mSplineTool;             // Spline tool
+		CustomFrameTool         mFrameTool;              // Mapping frame tool
+		MeshTopologyTool        mTopologyTool;           // Mesh topology tool
+		SkeletonTool*           mSkeletonTool = nullptr; // Shared skeleton tool
+		SkinningMeshEditorLayer mFrameTetxureLayer;      // Frame texture drawing layer
 
 		Button* mFitAndCenterButton = nullptr; // Fit and centerize button
 		Button* mEditSkeletonButton = nullptr; // Enable/disable skeleton editing button

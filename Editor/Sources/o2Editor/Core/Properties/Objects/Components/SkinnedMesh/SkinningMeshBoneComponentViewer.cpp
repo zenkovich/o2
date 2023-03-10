@@ -32,18 +32,25 @@ namespace Editor
 		TObjectPropertiesViewer<SkinningMeshBoneComponent>::OnRefreshed(targetObjets);
 
 		if (!mTypeTargetObjects.IsEmpty() && prevTargetObjects != mTypeTargetObjects)
+		{
 			mWeightsTool.boneComponent = mTypeTargetObjects[0].first;
+
+			mFrameTetxureLayer.mesh = mTypeTargetObjects[0].first->FindSkinningMesh();
+		}
 	}
 
 	void SkinningMeshBoneComponentViewer::OnEnabled()
 	{
 		o2EditorSceneScreen.AddTool(&mWeightsTool);
 		o2EditorSceneScreen.SelectTool<MeshWeightsTool>();
+
+		o2EditorSceneScreen.AddEditorLayer(&mFrameTetxureLayer);
 	}
 
 	void SkinningMeshBoneComponentViewer::OnDisabled()
 	{
 		o2EditorSceneScreen.RemoveTool(&mWeightsTool);
+		o2EditorSceneScreen.RemoveEditorLayer(&mFrameTetxureLayer);
 	}
 }
 

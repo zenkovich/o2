@@ -1,8 +1,8 @@
 #pragma once
 
 #include "o2/Scene/Components/SkinningMeshBoneComponent.h"
-#include "o2/Scene/Components/SkinningMeshBoneComponent.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
+#include "o2Editor/Core/Properties/Objects/Components/SkinnedMesh/SkinningMeshEditorLayer.h"
 #include "o2Editor/Core/Tools/MeshWeightsTool.h"
 
 using namespace o2;
@@ -36,7 +36,8 @@ namespace Editor
 		IOBJECT(SkinningMeshBoneComponentViewer);
 
 	protected:
-		MeshWeightsTool mWeightsTool; // Mesh weights tool
+		MeshWeightsTool         mWeightsTool;       // Mesh weights tool
+		SkinningMeshEditorLayer mFrameTetxureLayer; // Frame texture drawing layer
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -61,6 +62,7 @@ END_META;
 CLASS_FIELDS_META(Editor::SkinningMeshBoneComponentViewer)
 {
 	FIELD().PROTECTED().NAME(mWeightsTool);
+	FIELD().PROTECTED().NAME(mFrameTetxureLayer);
 }
 END_META;
 CLASS_METHODS_META(Editor::SkinningMeshBoneComponentViewer)
