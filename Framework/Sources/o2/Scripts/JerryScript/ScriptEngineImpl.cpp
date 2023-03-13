@@ -9,6 +9,8 @@
 
 namespace o2
 {
+	FORWARD_REF_IMPL(LogStream);
+
 	ScriptEngineBase::ScriptEngineBase() = default;
 
 	void ScriptEngineBase::ErrorCallback(const jerry_value_t error_object, void* user_p)

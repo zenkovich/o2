@@ -90,7 +90,8 @@ namespace o2
 
 			mReady = true;
 		}
-		else o2Render.mLog->Error("Failed to load atlas texture with " + atlasAssetName + " and page " + (String)page);
+		else 
+			o2Render.mLog->Error("Failed to load atlas texture with " + atlasAssetName + " and page " + (String)page);
 	}
 
 	void Texture::Reload()

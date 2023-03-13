@@ -7,6 +7,8 @@
 
 namespace o2
 {
+	FORWARD_REF_IMPL(LogStream);
+
 	FileSystem::FileSystem()
 	{
 		mLog = mmake<LogStream>("File System");

@@ -14,20 +14,27 @@ namespace o2
 
 namespace Editor
 {
+	// write comment what LogWindow class does
+
 	class LogWindow: public IEditorWindow, public LogStream
 	{
 		IOBJECT(LogWindow);
 
 	public:
+		// -----------
+		// Log message
+		// -----------
 		class LogMessage
 		{
 		public:
+			// Message type
 			enum class Type { Regular, Warning, Error };
 
-			Type   type;
-			String message;
-			int    idx;
+			Type   type;    // Message type
+			String message; // Message text
+			int    idx;	    // Message index
 
+			// Check equals operator
 			bool operator==(const LogMessage& other) const;
 		};
 
@@ -35,22 +42,22 @@ namespace Editor
 		void Update(float dt) override;
 
 	protected:
-		LongList* mList = nullptr;
-		Widget*   mLastMessageView = nullptr;
-		Text*     mMessagesCountLabel = nullptr;
-		Text*     mWarningsCountLabel = nullptr;
-		Text*     mErrorsCountLabel = nullptr;
+		LongList* mList = nullptr;               // List of messages
+		Widget*   mLastMessageView = nullptr;    // Last message view
+		Text*     mMessagesCountLabel = nullptr; // Messages count label
+		Text*     mWarningsCountLabel = nullptr; // Warnings count label
+		Text*     mErrorsCountLabel = nullptr;   // Errors count label
 
-		Vector<LogMessage> mAllMessages;
-		Vector<LogMessage> mVisibleMessages;
+		Vector<LogMessage> mAllMessages;     // All messages
+		Vector<LogMessage> mVisibleMessages; // Visible messages
 
-		bool mRegularMessagesEnabled;
-		bool mWarningMessagesEnabled;
-		bool mErrorMessagesEnabled;
+		bool mRegularMessagesEnabled = true; // Is regular messages enabled
+		bool mWarningMessagesEnabled = true; // Is warning messages enabled
+		bool mErrorMessagesEnabled = true;   // Is error messages enabled
 
-		int mRegularMessagesCount;
-		int mWarningMessagesCount;
-		int mErrorMessagesCount;
+		int mRegularMessagesCount = 0; // Regular messages count
+		int mWarningMessagesCount = 0; // Warning messages count
+		int mErrorMessagesCount = 0;   // Error messages count
 
 	public:
 		// Default constructor
@@ -118,12 +125,12 @@ CLASS_FIELDS_META(Editor::LogWindow)
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mErrorsCountLabel);
 	FIELD().PROTECTED().NAME(mAllMessages);
 	FIELD().PROTECTED().NAME(mVisibleMessages);
-	FIELD().PROTECTED().NAME(mRegularMessagesEnabled);
-	FIELD().PROTECTED().NAME(mWarningMessagesEnabled);
-	FIELD().PROTECTED().NAME(mErrorMessagesEnabled);
-	FIELD().PROTECTED().NAME(mRegularMessagesCount);
-	FIELD().PROTECTED().NAME(mWarningMessagesCount);
-	FIELD().PROTECTED().NAME(mErrorMessagesCount);
+	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mRegularMessagesEnabled);
+	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mWarningMessagesEnabled);
+	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mErrorMessagesEnabled);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mRegularMessagesCount);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mWarningMessagesCount);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mErrorMessagesCount);
 }
 END_META;
 CLASS_METHODS_META(Editor::LogWindow)

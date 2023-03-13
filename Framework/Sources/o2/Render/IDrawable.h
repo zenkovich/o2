@@ -3,13 +3,14 @@
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Math/Rect.h"
 #include "o2/Utils/Math/Vector2.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
 	// -------------------------------
 	// Basic drawable object interface
 	// -------------------------------
-	class IDrawable
+	class IDrawable: public RefCounterable
 	{
 	public:
 		Function<void()> onDraw; // Draw event

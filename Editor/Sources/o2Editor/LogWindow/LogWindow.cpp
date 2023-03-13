@@ -31,7 +31,7 @@ namespace Editor
 		mWarningMessagesCount(0), mErrorMessagesCount(0)
 	{
 		InitializeWindow();
-		BindStream(o2Debug.GetLog());
+		//BindStream(o2Debug.GetLog());
 	}
 
 	LogWindow::~LogWindow()

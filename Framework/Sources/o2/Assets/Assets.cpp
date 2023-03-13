@@ -14,6 +14,7 @@
 namespace o2
 {
 	DECLARE_SINGLETON(Assets);
+	FORWARD_REF_IMPL(LogStream);
 
 	Assets::Assets()
 	{
