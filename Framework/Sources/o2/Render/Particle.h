@@ -5,6 +5,9 @@
 
 namespace o2
 {
+	// ---------------------------------------
+	// Single particle. Used in ParticleSystem
+	// ---------------------------------------
 	class Particle
 	{
 	public:
@@ -17,6 +20,8 @@ namespace o2
 		float  time;       // Estimate life time
 		bool   alive;      // Is particle alive
 
+	public:
+		// Copy operator
 		bool operator==(const Particle& other) const
 		{
 			return position == position && velocity == velocity && Math::Equals(angle, other.angle) &&

@@ -7,145 +7,70 @@
 
 namespace o2
 {
-	TextureRef::TextureRef():
-		mTexture(nullptr)
+	Ref<Texture>::Ref(const Vec2I& size,
+					  PixelFormat format /*= PixelFormat::R8G8B8A8*/,
+					  Texture::Usage usage /*= Texture::Usage::Default*/)
 	{
+		mPtr = mnew Texture(size, format, usage);
+		IncrementRef();
 	}
 
-	TextureRef::TextureRef(const Vec2I& size, 
-						   PixelFormat format /*= PixelFormat::R8G8B8A8*/,
-						   Texture::Usage usage /*= Texture::Usage::Default*/)
+	Ref<Texture>::Ref(const String& fileName)
 	{
-		mTexture = mnew Texture(size, format, usage);
-		mTexture->mRefs++;
+		mPtr = o2Render.mTextures.FindOrDefault([&](const TextureRef& tex) { return tex->GetFileName() == fileName; }).Get();
+
+		if (!mPtr)
+			mPtr = mnew Texture(fileName);
+
+		IncrementRef();
 	}
 
-	TextureRef::TextureRef(const String& fileName)
+	Ref<Texture>::Ref(const Ref<Bitmap>& bitmap)
 	{
-		mTexture = o2Render.mTextures.FindOrDefault([&](Texture* tex) { return tex->GetFileName() == fileName; });
-
-		if (!mTexture)
-			mTexture = mnew Texture(fileName);
-
-		mTexture->mRefs++;
+		mPtr = mnew Texture(bitmap);
+		IncrementRef();
 	}
 
-	TextureRef::TextureRef(Bitmap* bitmap)
+	Ref<Texture>::Ref(UID atlasAssetId, int page)
 	{
-		mTexture = mnew Texture(bitmap);
-		mTexture->mRefs++;
+		mPtr = (o2Render.mTextures.FindOrDefault(
+			[&](const TextureRef& tex)
+			{
+				return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
+			}).Get());
+
+		if (!mPtr)
+			mPtr = mnew Texture(atlasAssetId, page);
+
+		IncrementRef();
 	}
 
-	TextureRef::TextureRef(const TextureRef& other):
-		mTexture(other.mTexture)
-	{
-		if (mTexture)
-			mTexture->mRefs++;
-	}
-
-	TextureRef::TextureRef(Texture* texture):
-		mTexture(texture)
-	{
-		if (mTexture)
-			mTexture->mRefs++;
-	}
-
-	TextureRef::TextureRef(UID atlasAssetId, int page)
-	{
-		mTexture = o2Render.mTextures.FindOrDefault([&](Texture* tex) {
-			return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
-		});
-
-		if (!mTexture)
-			mTexture = mnew Texture(atlasAssetId, page);
-
-		mTexture->mRefs++;
-	}
-
-	TextureRef::TextureRef(const String& atlasAssetName, int page)
+	Ref<Texture>::Ref(const String& atlasAssetName, int page)
 	{
 		UID atlasAssetId = o2Assets.GetAssetId(atlasAssetName);
 		if (atlasAssetId == 0)
 		{
 			o2Render.mLog->Error("Can't load texture for atlas " + atlasAssetName + " and page " + (String)page + ": atlas isn't exist");
-			mTexture = nullptr;
+			mPtr = nullptr;
 			return;
 		}
 
-		mTexture = o2Render.mTextures.FindOrDefault([&](Texture* tex) {
-			return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
-		});
+		mPtr = (o2Render.mTextures.FindOrDefault(
+			[&](const TextureRef& tex)
+			{
+				return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
+			}).Get());
 
-		if (!mTexture)
-			mTexture = mnew Texture(atlasAssetId, page);
+		if (!mPtr)
+			mPtr = mnew Texture(atlasAssetId, page);
 
-		mTexture->mRefs++;
+		IncrementRef();
 	}
 
-	TextureRef::~TextureRef()
+	Ref<Texture> Ref<Texture>::Null()
 	{
-		if (mTexture)
-			mTexture->mRefs--;
+		return Ref<Texture>();
 	}
-
-	TextureRef& TextureRef::operator=(const TextureRef& other)
-	{
-		if (mTexture)
-			mTexture->mRefs--;
-
-		mTexture = other.mTexture;
-
-		if (mTexture)
-			mTexture->mRefs++;
-
-		return *this;
-	}
-
-	Texture* TextureRef::operator->()
-	{
-		return mTexture;
-	}
-
-	const Texture* TextureRef::operator->() const
-	{
-		return mTexture;
-	}
-
-	Texture* TextureRef::Get() const
-	{
-		return mTexture;
-	}
-
-	bool TextureRef::IsValid() const
-	{
-		return mTexture != nullptr;
-	}
-
-	TextureRef::operator bool() const
-	{
-		return mTexture != nullptr;
-	}
-
-	TextureRef TextureRef::Null()
-	{
-		return TextureRef();
-	}
-
-	bool TextureRef::operator!=(const TextureRef& other) const
-	{
-		return mTexture != other.mTexture;
-	}
-
-	bool TextureRef::operator==(const TextureRef& other) const
-	{
-		return mTexture == other.mTexture;
-	}
-
-	TextureRef NoTexture()
-	{
-		return TextureRef();
-	}
-
 }
 
-DECLARE_CLASS(o2::TextureRef);
+DECLARE_CLASS(o2::Ref<o2::Texture>);

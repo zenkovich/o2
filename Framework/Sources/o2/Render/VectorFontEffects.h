@@ -19,13 +19,13 @@ namespace o2
 		FontStrokeEffect(float radius = 1.0f, const Color4& color = Color4(0, 0, 0, 150), int alphaThreshold = 100);
 
 		// Process bitmap with glyph
-		void Process(Bitmap* bitmap) override;
+		void Process(const Ref<Bitmap>& bitmap) override;
 
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const override;
 
 		// Check effects equals
-		bool IsEqual(VectorFont::Effect* other) const override;
+		bool IsEqual(const Ref<VectorFont::Effect>& other) const override;
 
 		SERIALIZABLE(FontStrokeEffect);
 	};
@@ -49,13 +49,13 @@ namespace o2
 						   float angle = 0, float length = 0, Vec2F origin = Vec2F());
 
 		// Process bitmap with glyph
-		void Process(Bitmap* bitmap) override;
+		void Process(const Ref<Bitmap>& bitmap) override;
 
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const override;
 
 		// Check effects equals
-		bool IsEqual(VectorFont::Effect* other) const override;
+		bool IsEqual(const Ref<VectorFont::Effect>& other) const override;
 
 		SERIALIZABLE(FontGradientEffect);
 	};
@@ -70,13 +70,13 @@ namespace o2
 		FontColorEffect(const Color4& color = Color4::White());
 
 		// Process bitmap with glyph
-		void Process(Bitmap* bitmap) override;
+		void Process(const Ref<Bitmap>& bitmap) override;
 
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const override;
 
 		// Check effects equals
-		bool IsEqual(VectorFont::Effect* other) const override;
+		bool IsEqual(const Ref<VectorFont::Effect>& other) const override;
 
 		SERIALIZABLE(FontColorEffect);
 	};
@@ -94,13 +94,13 @@ namespace o2
 						 const Color4& color = Color4(0, 0, 0, 100));
 
 		// Process bitmap with glyph
-		void Process(Bitmap* bitmap) override;
+		void Process(const Ref<Bitmap>& bitmap) override;
 
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const override;
 
 		// Check effects equals
-		bool IsEqual(VectorFont::Effect* other) const override;
+		bool IsEqual(const Ref<VectorFont::Effect>& other) const override;
 
 		SERIALIZABLE(FontShadowEffect);
 	};
@@ -122,9 +122,9 @@ CLASS_METHODS_META(o2::FontStrokeEffect)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR(float, const Color4&, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Process, const Ref<Bitmap>&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, const Ref<VectorFont::Effect>&);
 }
 END_META;
 
@@ -146,9 +146,9 @@ CLASS_METHODS_META(o2::FontGradientEffect)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&, const Color4&, float, float, Vec2F);
-	FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Process, const Ref<Bitmap>&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, const Ref<VectorFont::Effect>&);
 }
 END_META;
 
@@ -166,9 +166,9 @@ CLASS_METHODS_META(o2::FontColorEffect)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Process, const Ref<Bitmap>&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, const Ref<VectorFont::Effect>&);
 }
 END_META;
 
@@ -188,8 +188,8 @@ CLASS_METHODS_META(o2::FontShadowEffect)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR(float, const Vec2I, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Process, const Ref<Bitmap>&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, const Ref<VectorFont::Effect>&);
 }
 END_META;

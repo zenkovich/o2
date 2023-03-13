@@ -15,12 +15,11 @@ namespace o2
 {
 	class Mesh;
 	class Render;
-	class FontRef;
 
 	// -----------------------------------------------------------
 	// Font. Containing array of symbol glyphs, symbol index table
 	// -----------------------------------------------------------
-	class Font
+	class Font: public RefCounterable
 	{
 	protected:
 		struct Character;
@@ -70,8 +69,6 @@ namespace o2
 		};
 
 	protected:
-		Vector<FontRef*>  mRefs; // Array of reference to this font
-
 		Map<int, Map<UInt16, Character>> mCharacters; // Characters map, int - height, uint16 - id
 
 		TextureRef mTexture;        // Texture
@@ -84,7 +81,7 @@ namespace o2
 		void AddCharacter(const Character& character);
 
 		friend class Text;
-		friend class FontRef;
+		friend class Ref<Font>;
 		friend class Render;
 	};
 }

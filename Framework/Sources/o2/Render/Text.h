@@ -15,7 +15,7 @@ namespace o2
 	// ------------------------------------------------------------------------------------------
 	// Text renderer class. Using font, basis and many style parameters. Caching text into meshes
 	// ------------------------------------------------------------------------------------------
-	class Text: public IRectDrawable
+	class Text : public IRectDrawable
 	{
 	public:
 		struct SymbolsSet;
@@ -24,17 +24,17 @@ namespace o2
 		PROPERTIES(Text);
 		PROPERTY(FontRef, font, SetFont, GetFont);                     // Font reference property @SCRIPTABLE
 		PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property @SCRIPTABLE
-		
+
 		PROPERTY(WString, text, SetText, GetText); // Text property, wstring @SCRIPTABLE
-		
+
 		PROPERTY(int, height, SetHeight, GetFontHeight); // Text height @SCRIPTABLE
-		
+
 		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign); // vertical align property @SCRIPTABLE
 		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign); // Horizontal align property @SCRIPTABLE
-		
+
 		PROPERTY(bool, wordWrap, SetWordWrap, GetWordWrap);         // Words wrapping flag property @SCRIPTABLE
 		PROPERTY(bool, dotsEngings, SetDotsEngings, IsDotsEngings); // Dots endings when overflow property @SCRIPTABLE
-		
+
 		PROPERTY(float, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef); // Characters distance coef, 1 is standard @SCRIPTABLE
 		PROPERTY(float, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);       // Lines distance coef, 1 is standard @SCRIPTABLE
 
@@ -43,7 +43,7 @@ namespace o2
 		Text();
 
 		// Constructor
-		Text(FontRef font);
+		Text(const FontRef& font);
 
 		// Constructor
 		Text(const String& fontFileName);
@@ -70,10 +70,10 @@ namespace o2
 		void Draw() override;
 
 		// Sets using font @SCRIPTABLE
-		void SetFont(FontRef font);
+		void SetFont(const FontRef& font);
 
 		// Returns using font @SCRIPTABLE
-		FontRef GetFont() const;
+		const FontRef& GetFont() const;
 
 		// Sets bitmap font asset  @SCRIPTABLE
 		void SetFontAsset(const FontAssetRef& asset);
@@ -139,7 +139,7 @@ namespace o2
 		RectF GetRealRect();
 
 		// Returns text size
-		static Vec2F GetTextSize(const WString& text, Font* font, int height = 11,
+		static Vec2F GetTextSize(const WString& text, const FontRef& font, int height = 11,
 								 const Vec2F& areaSize = Vec2F(),
 								 HorAlign horAlign = HorAlign::Left, VerAlign verAlign = VerAlign::Top,
 								 bool wordWrap = true, bool dotsEngings = false, float charsDistCoef = 1.0f,
@@ -158,11 +158,11 @@ namespace o2
 			// ----------------------------------
 			struct Symbol
 			{
-				RectF  mFrame;   // Frame of symbol layout
-				RectF  mTexSrc;  // Texture source rect
-				UInt16 mCharId;  // Character id
-				Vec2F  mOrigin;  // Character offset
-				float  mAdvance; // Character advance
+				RectF  frame;   // Frame of symbol layout
+				RectF  texSrc;  // Texture source rect
+				UInt16 charId;  // Character id
+				Vec2F  origin;  // Character offset
+				float  advance; // Character advance
 
 			public:
 				// Default constructor
@@ -172,7 +172,7 @@ namespace o2
 				Symbol(const Vec2F& position, const Vec2F& size, const RectF& texSrc, UInt16 charId,
 					   const Vec2F& origin, float advance);
 
-			 // Equals operator
+				// Equals operator
 				bool operator==(const Symbol& other) const;
 			};
 
@@ -181,13 +181,13 @@ namespace o2
 			// -------------------------
 			struct Line
 			{
-				Vector<Symbol> mSymbols;       // Symbols in line
-				WString       mString;        // Line string
-				Vec2F         mSize;          // Size of line in pixels
-				Vec2F         mPosition;      // Position of line
-				int           mLineBegSymbol; // Index of line beginning symbol
-				int           mSpacesCount;   // Spaces count at line
-				bool          mEndedNewLine;  // True, if line ended by new line character
+				Vector<Symbol> symbols;       // Symbols in line
+				WString        string;        // Line string
+				Vec2F          size;          // Size of line in pixels
+				Vec2F          position;      // Position of line
+				int            lineBegSymbol; // Index of line beginning symbol
+				int            spacesCount;   // Spaces count at line
+				bool           endedNewLine;  // True, if line ended by new line character
 
 			public:
 				// Default constructor
@@ -215,7 +215,7 @@ namespace o2
 
 		public:
 			// Calculating characters layout by parameters
-			void Initialize(FontRef font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,
+			void Initialize(const FontRef& font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,
 							HorAlign horAlign, VerAlign verAlign, bool wordWrap, bool dotsEngings, float charsDistCoef,
 							float linesDistCoef);
 
@@ -238,8 +238,8 @@ namespace o2
 		bool     mWordWrap;          // True, when words wrapping @SERIALIZABLE
 		bool     mDotsEndings;       // If true, text will end on '...' @SERIALIZABLE
 
-		Vector<Mesh*> mMeshes;        // Meshes vector
-		Basis         mLastTransform; // Last mesh update transformation
+		Vector<Ref<Mesh>> mMeshes;        // Meshes vector
+		Basis             mLastTransform; // Last mesh update transformation
 
 		SymbolsSet mSymbolsSet; // Symbols set definition
 
@@ -310,15 +310,15 @@ CLASS_METHODS_META(o2::Text)
 {
 
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(FontRef);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const FontRef&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const BitmapFontAssetRef&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const VectorFontAssetRef&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Text&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFont, FontRef);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(FontRef, GetFont);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFont, const FontRef&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const FontRef&, GetFont);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(FontAssetRef, GetFontAsset);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetHeight, int);
@@ -340,7 +340,7 @@ CLASS_METHODS_META(o2::Text)
 	FUNCTION().PUBLIC().SIGNATURE(SymbolsSet&, GetSymbolsSet);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetRealSize);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, GetRealRect);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vec2F, GetTextSize, const WString&, Font*, int, const Vec2F&, HorAlign, VerAlign, bool, bool, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vec2F, GetTextSize, const WString&, const FontRef&, int, const Vec2F&, HorAlign, VerAlign, bool, bool, float, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
 	FUNCTION().PROTECTED().SIGNATURE(void, CheckCharactersAndRebuildMesh);
 	FUNCTION().PROTECTED().SIGNATURE(void, TransformMesh, const Basis&);

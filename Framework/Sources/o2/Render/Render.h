@@ -28,10 +28,13 @@ namespace o2
 	class Sprite;
 	class CursorAreaEventListenersLayer;
 
+	FORWARD_REF(Font);
+	using FontRef = Ref<Font>;
+
 	// ------------------
 	// 2D Graphics render
 	// ------------------
-	class Render: public RenderBase, public Singleton<Render>
+	class Render : public RenderBase, public Singleton<Render>
 	{
 	public:
 		// ---------------------
@@ -257,7 +260,7 @@ namespace o2
 		void DrawAAPolyLine(Vertex* vertices, int count, float width = 1.0f, LineType lineType = LineType::Solid,
 							bool scaleToScreenSpace = true);
 
-	    // Binding render target
+		// Binding render target
 		void BindRenderTexture(TextureRef renderTarget);
 
 		// Unbinding render target
@@ -281,17 +284,17 @@ namespace o2
 	protected:
 		PrimitiveType mCurrentPrimitiveType; // Type of drawing primitives for next DIP
 
-		Texture* mLastDrawTexture = nullptr; // Stored texture ptr from last DIP
-		UInt     mLastDrawVertex;            // Last vertex idx for next DIP
-		UInt     mLastDrawIdx;               // Last vertex index for next DIP
-		UInt     mTrianglesCount;            // Triangles count for next DIP
-		UInt     mFrameTrianglesCount;       // Total triangles at current frame
-		UInt     mDIPCount;                  // DrawIndexedPrimitives calls count
+		TextureRef mLastDrawTexture = nullptr; // Stored texture ptr from last DIP
+		UInt       mLastDrawVertex;            // Last vertex idx for next DIP
+		UInt       mLastDrawIdx;               // Last vertex index for next DIP
+		UInt       mTrianglesCount;            // Triangles count for next DIP
+		UInt       mFrameTrianglesCount;       // Total triangles at current frame
+		UInt       mDIPCount;                  // DrawIndexedPrimitives calls count
 
 		Ref<LogStream> mLog; // Render log stream
 
-		Vector<Texture*> mTextures; // Loaded textures
-		Vector<Font*>    mFonts;    // Loaded fonts
+		Vector<TextureRef> mTextures; // Loaded textures
+		Vector<FontRef>    mFonts;    // Loaded fonts
 
 		Camera mCamera;            // Camera transformation
 		Vec2I  mResolution;        // Primary back buffer size
@@ -316,7 +319,7 @@ namespace o2
 
 		FT_Library mFreeTypeLib; // FreeType library, for rendering fonts
 
-		Vector<Sprite*> mSprites; // All sprites
+		Vector<WeakRef<Sprite>> mSprites; // All sprites
 
 		UInt16*    mHardLinesIndexData; // Index data buffer
 		TextureRef mSolidLineTexture;   // Solid line texture
@@ -334,7 +337,7 @@ namespace o2
 		// Initializes index buffer for drawing lines - pairs of lines beginnings and ends
 		void InitializeLinesIndexBuffer();
 
-		// Initializeslines textures
+		// Initializes lines textures
 		void InitializeLinesTextures();
 
 		// Initializes free type library
@@ -370,13 +373,14 @@ namespace o2
 		// Called when assets was rebuilded
 		void OnAssetsRebuilded(const Vector<UID>& changedAssets);
 
+	protected:
 		friend class Application;
 		friend class BitmapFont;
 		friend class BitmapFontAsset;
 		friend class Font;
 		friend class Sprite;
 		friend class Texture;
-		friend class TextureRef;
+		friend class Ref<Texture>;
 		friend class VectorFont;
 		friend class VectorFontAsset;
 		friend class WndProcFunc;

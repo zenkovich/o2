@@ -1,9 +1,9 @@
 #pragma once
 
-#include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Math/Vector2.h"
-
 #include "o2/Utils/Property.h"
+#include "o2/Utils/Types/CommonTypes.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
 
 namespace o2
@@ -11,7 +11,7 @@ namespace o2
 	// ------------------------------------------------------
 	// Image. Containing formatted pixel data, size, filename
 	// ------------------------------------------------------
-	class Bitmap
+	class Bitmap: public RefCounterable
 	{
 	public:
 		enum class ImageType { Auto = 0, Png };

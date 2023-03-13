@@ -2,8 +2,10 @@
 #include "o2/Render/Render.h"
 
 #include "o2/Application/Application.h"
+#include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Render/Font.h"
+#include "o2/Render/FontRef.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Texture.h"
@@ -11,11 +13,11 @@
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/Math/Geometry.h"
 #include "o2/Utils/Math/Interpolation.h"
-#include "o2/Application/Input.h"
 
 namespace o2
 {
 	DECLARE_SINGLETON(Render);
+	FORWARD_REF_IMPL(Font);
 
 	void Render::OnFrameResized()
 	{
@@ -26,10 +28,10 @@ namespace o2
 	{
 		mHardLinesIndexData = mnew UInt16[mIndexBufferSize];
 
-		for (UInt i = 0; i < mIndexBufferSize/2; i++)
+		for (UInt i = 0; i < mIndexBufferSize / 2; i++)
 		{
-			mHardLinesIndexData[i*2] = i;
-			mHardLinesIndexData[i*2 + 1] = i + 1;
+			mHardLinesIndexData[i * 2] = i;
+			mHardLinesIndexData[i * 2 + 1] = i + 1;
 		}
 	}
 
@@ -40,7 +42,7 @@ namespace o2
 		Bitmap bitmap(PixelFormat::R8G8B8A8, Vec2I(32, 32));
 		bitmap.Fill(Color4(255, 255, 255, 255));
 		bitmap.FillRect(0, 32, 16, 0, Color4(255, 255, 255, 0));
-		mDashLineTexture = new Texture(&bitmap);
+		mDashLineTexture = mmake<Texture>(&bitmap);
 	}
 
 	void Render::InitializeFreeType()
@@ -95,15 +97,15 @@ namespace o2
 		if (mesh.GetMaxVertexCount() < vertexCount || mesh.GetMaxPolyCount() < polyCount)
 			mesh.Resize(vertexCount, polyCount);
 
-		memcpy(mesh.vertices, verticies, sizeof(Vertex)*vertexCount);
+		memcpy(mesh.vertices, verticies, sizeof(Vertex) * vertexCount);
 
 		for (int i = 2; i < vertexCount; i++)
 		{
-			int ii = (i - 2)*3;
+			int ii = (i - 2) * 3;
 			mesh.indexes[ii] = i - 1;
 			mesh.indexes[ii + 1] = i;
 			mesh.indexes[ii + 2] = 0;
- 		}
+		}
 
 		mesh.vertexCount = vertexCount;
 		mesh.polyCount = polyCount;
@@ -125,7 +127,7 @@ namespace o2
 
 		for (int i = 2; i < points.Count(); i++)
 		{
-			int ii = (i - 2)*3;
+			int ii = (i - 2) * 3;
 			mesh.indexes[ii] = i - 1;
 			mesh.indexes[ii + 1] = i;
 			mesh.indexes[ii + 2] = 0;
@@ -138,8 +140,8 @@ namespace o2
 
 	RectI Render::CalculateScreenSpaceScissorRect(const RectF& cameraSpaceScissorRect) const
 	{
-		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F((float)mCurrentResolution.x, 0.0f), Vec2F(0.0f, (float)mCurrentResolution.y));
-		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
+		Basis defaultCameraBasis((Vec2F)mCurrentResolution * -0.5f, Vec2F((float)mCurrentResolution.x, 0.0f), Vec2F(0.0f, (float)mCurrentResolution.y));
+		Basis camTransf = mCamera.GetBasis().Inverted() * defaultCameraBasis;
 		Basis scissorBasis(cameraSpaceScissorRect.LeftBottom(), Vec2F(cameraSpaceScissorRect.Width(), 0.0f), Vec2F(0.0f, cameraSpaceScissorRect.Height()));
 		Basis screenScissorBasis = scissorBasis * camTransf;
 		RectI screenScissorRect = screenScissorBasis.AABB();
@@ -149,24 +151,14 @@ namespace o2
 
 	void Render::CheckTexturesUnloading()
 	{
-		Vector<Texture*> unloadTextures;
-		for (auto texture : mTextures)
-			if (texture->mRefs == 0)
-				unloadTextures.Add(texture);
-
-		unloadTextures.ForEach([](auto texture) { delete texture; });
+		// Remove all textures that keeps only by Render
+		mTextures.RemoveAll([](const TextureRef& tex) { return tex->GetStrongReferencesCount() == 1; });
 	}
 
 	void Render::CheckFontsUnloading()
 	{
-		Vector<Font*> unloadFonts;
-		for (auto font : mFonts)
-		{
-			if (font->mRefs.IsEmpty())
-				unloadFonts.Add(font);
-		}
-
-		unloadFonts.ForEach([](auto fnt) { delete fnt; });
+		// Remove all fonts that keeps only by Render
+		mFonts.RemoveAll([](const FontRef& font) { return font->GetStrongReferencesCount() == 1; });
 	}
 
 	void Render::OnAssetsRebuilded(const Vector<UID>& changedAssets)
@@ -177,10 +169,15 @@ namespace o2
 				tex->Reload();
 		}
 
-		for (auto spr : mSprites)
+		mSprites.RemoveAll([](const WeakRef<Sprite>& spriteRef) { return spriteRef.IsExpired(); });
+
+		for (auto& spriteRef : mSprites)
 		{
-			if (changedAssets.Contains(spr->GetAtlasAssetId()))
-				spr->ReloadImage();
+			if (auto sprite = spriteRef.Lock())
+			{
+				if (changedAssets.Contains(sprite->GetAtlasAssetId()))
+					sprite->ReloadImage();
+			}
 		}
 	}
 
@@ -214,8 +211,8 @@ namespace o2
 
 		Vertex v[] = {
 			Vertex(a, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
-			Vertex(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
-			Vertex(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0) };
+			Vertex(b - dir * arrowSize.x + ndir * arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
+			Vertex(b - dir * arrowSize.x - ndir * arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0) };
 
 		DrawAAPolyLine(v, 6, width, lineType);
 	}
@@ -271,11 +268,11 @@ namespace o2
 		Vertex* v = mnew Vertex[segCount + 1];
 		ULong dcolor = color.ABGR();
 
-		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
+		float angleSeg = 2.0f * Math::PI() / (float)(segCount - 1);
 		for (int i = 0; i < segCount + 1; i++)
 		{
-			float a = (float)i*angleSeg;
-			v[i] = Vertex(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+			float a = (float)i * angleSeg;
+			v[i] = Vertex(Vec2F::Rotated(a) * radius + pos, dcolor, 0, 0);
 		}
 
 		DrawAAPolyLine(v, segCount + 1, width, lineType);
@@ -326,9 +323,9 @@ namespace o2
 
 		Vertex va[] =
 		{
-			Vertex(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0),
+			Vertex(p4 - dir * arrowSize.x + ndir * arrowSize.y, dcolor, 0, 0),
 			Vertex(p4, dcolor, 0, 0),
-			Vertex(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0)
+			Vertex(p4 - dir * arrowSize.x - ndir * arrowSize.y, dcolor, 0, 0)
 		};
 		DrawAAPolyLine(va, 3, width, lineType);
 	}
@@ -360,8 +357,8 @@ namespace o2
 
 		Vertex v[] = {
 			Vertex(a, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
-			Vertex(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
-			Vertex(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0) };
+			Vertex(b - dir * arrowSize.x + ndir * arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0),
+			Vertex(b - dir * arrowSize.x - ndir * arrowSize.y, dcolor, 0, 0), Vertex(b, dcolor, 0, 0) };
 
 		DrawPolyLine(v, 6);
 	}
@@ -422,17 +419,17 @@ namespace o2
 
 		ULong dcolor = color.ABGR();
 
-		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
+		float angleSeg = 2.0f * Math::PI() / (float)(segCount - 1);
 		for (int i = 0; i < segCount + 1; i++)
 		{
-			float a = (float)i*angleSeg;
-			vertexBuffer[i] = Vertex(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+			float a = (float)i * angleSeg;
+			vertexBuffer[i] = Vertex(Vec2F::Rotated(a) * radius + pos, dcolor, 0, 0);
 		}
 
 		DrawPolyLine(vertexBuffer, segCount + 1);
 	}
 
-	void Render::DrawFilledCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/, 
+	void Render::DrawFilledCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/,
 								  int segCount /*= 20*/)
 	{
 		static int vertexBufferSize = segCount + 1;
@@ -448,11 +445,11 @@ namespace o2
 
 		ULong dcolor = color.ABGR();
 
-		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
+		float angleSeg = 2.0f * Math::PI() / (float)(segCount - 1);
 		for (int i = 0; i < segCount + 1; i++)
 		{
-			float a = (float)i*angleSeg;
-			vertexBuffer[i] = Vertex(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+			float a = (float)i * angleSeg;
+			vertexBuffer[i] = Vertex(Vec2F::Rotated(a) * radius + pos, dcolor, 0, 0);
 		}
 
 		DrawFilledPolygon(vertexBuffer, vertexCount);
@@ -500,9 +497,9 @@ namespace o2
 
 		Vertex va[] =
 		{
-			Vertex(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0),
+			Vertex(p4 - dir * arrowSize.x + ndir * arrowSize.y, dcolor, 0, 0),
 			Vertex(p4, dcolor, 0, 0),
-			Vertex(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0)
+			Vertex(p4 - dir * arrowSize.x - ndir * arrowSize.y, dcolor, 0, 0)
 		};
 		DrawPolyLine(va, 3);
 	}
@@ -515,8 +512,8 @@ namespace o2
 	RectI Render::GetScissorRect() const
 	{
 		if (mStackScissors.IsEmpty())
-			return RectI(-(int)(mCurrentResolution.x*0.5f), -(int)(mCurrentResolution.y*0.5f),
-			(int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
+			return RectI(-(int)(mCurrentResolution.x * 0.5f), -(int)(mCurrentResolution.y * 0.5f),
+						 (int)(mCurrentResolution.x * 0.5f), (int)(mCurrentResolution.y * 0.5f));
 
 		return (RectI)(mStackScissors.Last().mScrissorRect);
 	}
@@ -563,10 +560,10 @@ namespace o2
 		{
 			Vertex v[] =
 			{
-				mesh->vertices[mesh->indexes[i*3]],
-				mesh->vertices[mesh->indexes[i*3 + 1]],
-				mesh->vertices[mesh->indexes[i*3 + 2]],
-				mesh->vertices[mesh->indexes[i*3]]
+				mesh->vertices[mesh->indexes[i * 3]],
+				mesh->vertices[mesh->indexes[i * 3 + 1]],
+				mesh->vertices[mesh->indexes[i * 3 + 2]],
+				mesh->vertices[mesh->indexes[i * 3]]
 			};
 
 			v[0].color = dcolor;

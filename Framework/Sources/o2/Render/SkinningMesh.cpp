@@ -5,14 +5,14 @@
 
 namespace o2
 {
-	SkinningMesh::SkinningMesh(TextureRef texture /*= TextureRef()*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/,
-								 UInt bonesCount /*= 16*/)
+	SkinningMesh::SkinningMesh(const TextureRef& texture /*= TextureRef::Null()*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/,
+							   UInt bonesCount /*= 16*/)
 	{
 		SetTexture(texture);
 		Resize(vertexCount, polyCount, bonesCount);
 	}
 
-	SkinningMesh::SkinningMesh(const SkinningMesh& other):
+	SkinningMesh::SkinningMesh(const SkinningMesh& other) :
 		texture(this), maxPolyCount(this), maxVertexCount(this)
 	{
 		SetTexture(other.mTexture);
@@ -22,9 +22,9 @@ namespace o2
 		vertexCount = other.vertexCount;
 		polyCount = other.polyCount;
 
-		memcpy(bones, other.bones, other.mMaxBonesCount*sizeof(Bone));
-		memcpy(vertices, other.vertices, other.mMaxVertexCount*sizeof(SkinningVertex));
-		memcpy(indexes, other.indexes, other.mMaxPolyCount*3*sizeof(UInt16));
+		memcpy(bones, other.bones, other.mMaxBonesCount * sizeof(Bone));
+		memcpy(vertices, other.vertices, other.mMaxVertexCount * sizeof(SkinningVertex));
+		memcpy(indexes, other.indexes, other.mMaxPolyCount * 3 * sizeof(UInt16));
 	}
 
 	SkinningMesh::~SkinningMesh()
@@ -44,9 +44,9 @@ namespace o2
 		vertexCount = other.vertexCount;
 		polyCount = other.polyCount;
 
-		memcpy(bones, other.bones, other.mMaxBonesCount*sizeof(Bone));
-		memcpy(vertices, other.vertices, other.mMaxVertexCount*sizeof(SkinningVertex));
-		memcpy(indexes, other.indexes, other.mMaxPolyCount*3*sizeof(UInt16));
+		memcpy(bones, other.bones, other.mMaxBonesCount * sizeof(Bone));
+		memcpy(vertices, other.vertices, other.mMaxVertexCount * sizeof(SkinningVertex));
+		memcpy(indexes, other.indexes, other.mMaxPolyCount * 3 * sizeof(UInt16));
 
 		return *this;
 	}
@@ -61,7 +61,7 @@ namespace o2
 		bones = mnew Bone[bonesCount];
 		vertices = mnew SkinningVertex[vertexCount];
 		mRenderVertexBuffer = mnew Vertex[vertexCount];
-		indexes = mnew UInt16[polyCount*3];
+		indexes = mnew UInt16[polyCount * 3];
 
 		mMaxBonesCount = bonesCount;
 		mMaxVertexCount = vertexCount;
@@ -78,11 +78,11 @@ namespace o2
 		{
 			auto& v = vertices[i];
 			Vec2F p = Vec2F(v.x, v.y);
-			Vec2F res = 
- 				p*bones[v.bones[0]].releaseTransform*v.boneWeights[0] +
- 				p*bones[v.bones[1]].releaseTransform*v.boneWeights[1] + 
- 				p*bones[v.bones[2]].releaseTransform*v.boneWeights[2] + 
- 				p*bones[v.bones[3]].releaseTransform*v.boneWeights[3];
+			Vec2F res =
+				p * bones[v.bones[0]].releaseTransform * v.boneWeights[0] +
+				p * bones[v.bones[1]].releaseTransform * v.boneWeights[1] +
+				p * bones[v.bones[2]].releaseTransform * v.boneWeights[2] +
+				p * bones[v.bones[3]].releaseTransform * v.boneWeights[3];
 
 			mRenderVertexBuffer[i].Set(res, v.color, v.tu, v.tv);
 		}
@@ -119,7 +119,7 @@ namespace o2
 	{
 		delete[] indexes;
 
-		indexes = new UInt16[count*3];
+		indexes = new UInt16[count * 3];
 		mMaxPolyCount = count;
 		polyCount = 0;
 	}

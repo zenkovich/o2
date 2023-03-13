@@ -155,16 +155,11 @@ namespace o2
 
 		if (mGLContext)
 		{
-			auto fonts = mFonts;
-			for (auto font : fonts)
-				delete font;
-
-			auto textures = mTextures;
-			for (auto texture : textures)
-				delete texture;
+			mFonts.Clear();
+			mTextures.Clear();
 
 			if (!wglMakeCurrent(NULL, NULL))
-				mLog->Error("Release ff DC And RC Failed.\n");
+				mLog->Error("Release of DC And RC Failed.\n");
 
 			if (!wglDeleteContext(mGLContext))
 				mLog->Error("Release Rendering Context Failed.\n");
@@ -200,7 +195,7 @@ namespace o2
 		if (!mReady)
 			return;
 
-		mLastDrawTexture = NULL;
+		mLastDrawTexture = TextureRef::Null();
 		mLastDrawVertex = 0;
 		mLastDrawIdx = 0;
 		mTrianglesCount = 0;
@@ -490,14 +485,14 @@ namespace o2
 		else
 			indexesCount = elementsCount * 3;
 
-		if (mLastDrawTexture != texture.mTexture ||
+		if (mLastDrawTexture != texture ||
 			mLastDrawVertex + verticesCount >= mVertexBufferSize ||
 			mLastDrawIdx + indexesCount >= mIndexBufferSize ||
 			mCurrentPrimitiveType != primitiveType)
 		{
 			DrawPrimitives();
 
-			mLastDrawTexture = texture.mTexture;
+			mLastDrawTexture = texture;
 			mCurrentPrimitiveType = primitiveType;
 
 			if (primitiveType == PrimitiveType::PolygonWire)

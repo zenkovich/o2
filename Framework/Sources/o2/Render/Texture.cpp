@@ -12,54 +12,53 @@ namespace o2
 	Texture::Texture() :
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
-		o2Render.mTextures.Add(this);
+		o2Render.mTextures.Add(Ref(this));
 	}
 
 	Texture::Texture(const Vec2I& size, PixelFormat format /*= Format::R8G8B8A8*/, Usage usage /*= Usage::Default*/) :
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(size, format, usage);
-		o2Render.mTextures.Add(this);
+		o2Render.mTextures.Add(Ref(this));
 	}
 
 	Texture::Texture(const String& fileName) :
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(fileName);
-		o2Render.mTextures.Add(this);
+		o2Render.mTextures.Add(Ref(this));
 	}
 
-	Texture::Texture(Bitmap* bitmap) :
+	Texture::Texture(const Ref<Bitmap>& bitmap) :
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(bitmap);
-		o2Render.mTextures.Add(this);
+		o2Render.mTextures.Add(Ref(this));
 	}
 
 	Texture::Texture(UID atlasAssetId, int page) :
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(atlasAssetId, page);
-		o2Render.mTextures.Add(this);
+		o2Render.mTextures.Add(Ref(this));
 	}
 
 	Texture::Texture(const String& atlasAssetName, int page) :
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(atlasAssetName, page);
-		o2Render.mTextures.Add(this);
+		o2Render.mTextures.Add(Ref(this));
 	}
 
 	void Texture::Create(const String& fileName)
 	{
-		Bitmap* image = mnew Bitmap();
+		Ref<Bitmap> image = mmake<Bitmap>();
 		if (image->Load(fileName, Bitmap::ImageType::Auto))
 		{
 			mFileName = fileName;
 			Create(image);
 		}
 
-		delete image;
 		mReady = true;
 	}
 

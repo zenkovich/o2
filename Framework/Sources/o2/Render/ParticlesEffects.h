@@ -1,7 +1,8 @@
 #pragma once
 
-#include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Render/Particle.h"
+#include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -10,15 +11,21 @@ namespace o2
 	// -------------------------------
 	// Particles effect base interface
 	// -------------------------------
-	class ParticlesEffect: public ISerializable
+	class ParticlesEffect: public ISerializable, public RefCounterable
 	{
 		SERIALIZABLE(ParticlesEffect);
 
 	public:
+		// Updates effect
 		virtual void Update(float dt, ParticlesEmitter* emitter);
+
+		// Returns particles direct access
 		Vector<Particle>& GetParticlesDirect(ParticlesEmitter* emitter);
 	};
 
+	// ------------------------
+	// Particles gravity effect
+	// ------------------------
 	class ParticlesGravityEffect : public ParticlesEffect
 	{
 		SERIALIZABLE(ParticlesGravityEffect);
@@ -27,6 +34,7 @@ namespace o2
 		Vec2F gravity; // Vector of gravity @SERIALIZABLE
 
 	public:
+		// Updates effect, applies gravity
 		void Update(float dt, ParticlesEmitter* emitter) override;
 	};
 }
@@ -34,6 +42,7 @@ namespace o2
 CLASS_BASES_META(o2::ParticlesEffect)
 {
 	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::ParticlesEffect)

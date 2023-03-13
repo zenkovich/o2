@@ -12,7 +12,7 @@
 namespace o2
 {
 	Sprite::Sprite():
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(TextureRef::Null(), 16, 18)
 	{
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = Color4::White();
@@ -20,43 +20,43 @@ namespace o2
 		UpdateMesh();
 
 		if (Render::IsSingletonInitialzed())
-			o2Render.mSprites.Add(this);
+			o2Render.mSprites.Add(WeakRef(this));
 	}
 
 	Sprite::Sprite(const ImageAssetRef& image):
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(TextureRef::Null(), 16, 18)
 	{
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = Color4::White();
 
 		LoadFromImage(image);
 
-		o2Render.mSprites.Add(this);
+		o2Render.mSprites.Add(WeakRef(this));
 	}
 
 	Sprite::Sprite(const String& imagePath):
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(TextureRef::Null(), 16, 18)
 	{
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = Color4::White();
 
 		LoadFromImage(imagePath);
 
-		o2Render.mSprites.Add(this);
+		o2Render.mSprites.Add(WeakRef(this));
 	}
 
 	Sprite::Sprite(UID imageId):
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(TextureRef::Null(), 16, 18)
 	{
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = Color4::White();
 
 		LoadFromImage(imageId);
 
-		o2Render.mSprites.Add(this);
+		o2Render.mSprites.Add(WeakRef(this));
 	}
 
-	Sprite::Sprite(TextureRef texture, const RectI& srcRect):
+	Sprite::Sprite(const TextureRef& texture, const RectI& srcRect):
 		mTextureSrcRect(srcRect), mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(texture, 16, 18)
 	{
 		for (int i = 0; i < 4; i++)
@@ -64,29 +64,29 @@ namespace o2
 
 		UpdateMesh();
 
-		o2Render.mSprites.Add(this);
+		o2Render.mSprites.Add(WeakRef(this));
 	}
 
 	Sprite::Sprite(const Color4& color):
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(TextureRef::Null(), 16, 18)
 	{
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = Color4::White();
 
 		LoadMonoColor(color);
 
-		o2Render.mSprites.Add(this);
+		o2Render.mSprites.Add(WeakRef(this));
 	}
 
-	Sprite::Sprite(Bitmap* bitmap):
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+	Sprite::Sprite(const Ref<Bitmap>& bitmap):
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(TextureRef::Null(), 16, 18)
 	{
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = Color4::White();
 
 		LoadFromBitmap(bitmap);
 
-		o2Render.mSprites.Add(this);
+		o2Render.mSprites.Add(WeakRef(this));
 	}
 
 	Sprite::Sprite(const Sprite& other):
@@ -100,13 +100,13 @@ namespace o2
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = other.mCornersColors[i];
 
-		o2Render.mSprites.Add(this);
+		o2Render.mSprites.Add(WeakRef(this));
 	}
 
 	Sprite::~Sprite()
 	{
 		if (Render::IsSingletonInitialzed())
-			o2Render.mSprites.Remove(this);
+			o2Render.mSprites.Remove(WeakRef(this));
 	}
 
 	Sprite& Sprite::operator=(const Sprite& other)
@@ -137,13 +137,13 @@ namespace o2
 // 		o2Render.DrawBasis(mTransform);
 	}
 
-	void Sprite::SetTexture(TextureRef texture)
+	void Sprite::SetTexture(const TextureRef& texture)
 	{
 		mMesh.SetTexture(texture);
 		mImageAsset = ImageAssetRef();
 	}
 
-	TextureRef Sprite::GetTexture() const
+	const TextureRef& Sprite::GetTexture() const
 	{
 		return mMesh.GetTexture();
 	}
@@ -277,7 +277,7 @@ namespace o2
 		UpdateMesh();
 	}
 
-	BorderI Sprite::GetSliceBorder() const
+	const BorderI& Sprite::GetSliceBorder() const
 	{
 		return mSlices;
 	}
@@ -348,7 +348,7 @@ namespace o2
 		UpdateMesh();
 	}
 
-	void Sprite::LoadFromBitmap(Bitmap* bitmap, bool setSizeByImage /*= true*/)
+	void Sprite::LoadFromBitmap(const Ref<Bitmap>& bitmap, bool setSizeByImage /*= true*/)
 	{
 		if (bitmap)
 		{
@@ -367,7 +367,7 @@ namespace o2
 		LoadFromImage(asset, false);
 	}
 
-	ImageAssetRef Sprite::GetImageAsset() const
+	const ImageAssetRef& Sprite::GetImageAsset() const
 	{
 		return mImageAsset;
 	}

@@ -14,23 +14,28 @@ namespace o2
 	// -----------------
 	// Quad image sprite
 	// -----------------
-	class Sprite: public IRectDrawable
+	class Sprite : public IRectDrawable
 	{
 	public:
 		PROPERTIES(Sprite);
-		PROPERTY(TextureRef, texture, SetTexture, GetTexture);                         // Texture property @SCRIPTABLE
-		PROPERTY(RectI, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);         // Texture source rectangle property @SCRIPTABLE
-		PROPERTY(ImageAssetRef, image, SetImageAsset, GetImageAsset);                  // Sets image asset @SCRIPTABLE
-		PROPERTY(String, imageName, LoadFromImage, GetImageName);                      // Sets image asset path @SCRIPTABLE
+		PROPERTY(TextureRef, texture, SetTexture, GetTexture);                 // Texture property @SCRIPTABLE
+		PROPERTY(RectI, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect); // Texture source rectangle property @SCRIPTABLE
+		
+		PROPERTY(ImageAssetRef, image, SetImageAsset, GetImageAsset); // Sets image asset @SCRIPTABLE
+		PROPERTY(String, imageName, LoadFromImage, GetImageName);     // Sets image asset path @SCRIPTABLE
+
+		SETTER(Ref<Bitmap>, bitmap, LoadFromBitmap); // Sets image from bitmap
+
+		PROPERTY(SpriteMode, mode, SetMode, GetMode);           // Sprite drawing mode property @SCRIPTABLE
+		PROPERTY(float, fill, SetFill, GetFill);                // Sprite fill property @SCRIPTABLE
+		PROPERTY(float, tileScale, SetTileScale, GetTileScale); // Sprite tile scale property, 1.0f is default @SCRIPTABLE
+		
+		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder); // Slice border property @SCRIPTABLE
+
 		PROPERTY(Color4, leftTopColor, SetLeftTopColor, GetLeftTopCorner);	           // Color of left top corner property @SCRIPTABLE
 		PROPERTY(Color4, rightTopColor, SetRightTopColor, GetRightTopCorner);          // Color of right top corner property @SCRIPTABLE
 		PROPERTY(Color4, leftBottomColor, SetLeftBottomColor, GetLeftBottomCorner);    // Color of left bottom corner property @SCRIPTABLE
 		PROPERTY(Color4, rightBottomColor, SetRightBottomColor, GetRightBottomCorner); // Color of right bottom corner property @SCRIPTABLE
-		PROPERTY(SpriteMode, mode, SetMode, GetMode);                                  // Sprite drawing mode property @SCRIPTABLE
-		PROPERTY(float, fill, SetFill, GetFill);                                       // Sprite fill property @SCRIPTABLE
-		PROPERTY(float, tileScale, SetTileScale, GetTileScale);                        // Sprite tile scale property, 1.0f is default @SCRIPTABLE
-		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder);                // Slice border property @SCRIPTABLE
-		SETTER(Bitmap*, bitmap, LoadFromBitmap);                                       // Sets image from bitmap
 
 	public:
 		// Default constructor
@@ -46,13 +51,13 @@ namespace o2
 		Sprite(UID imageId);
 
 		// Constructor from texture and source rectangle
-		Sprite(TextureRef texture, const RectI& srcRect);
+		Sprite(const TextureRef& texture, const RectI& srcRect);
 
 		// Constructor from color
 		Sprite(const Color4& color);
 
 		// Constructor from bitmap
-		Sprite(Bitmap* bitmap);
+		Sprite(const Ref<Bitmap>& bitmap);
 
 		// Copy-constructor
 		Sprite(const Sprite& other);
@@ -82,16 +87,16 @@ namespace o2
 		void LoadMonoColor(const Color4& color);
 
 		// Loads sprite from bitmap
-		void LoadFromBitmap(Bitmap* bitmap, bool setSizeByImage = true);
+		void LoadFromBitmap(const Ref<Bitmap>& bitmap, bool setSizeByImage = true);
 
 		// Draws sprite @SCRIPTABLE
 		void Draw() override;
 
 		// Sets using texture @SCRIPTABLE
-		void SetTexture(TextureRef texture);
+		void SetTexture(const TextureRef& texture);
 
 		// Returns using texture @SCRIPTABLE
-		TextureRef GetTexture() const;
+		const TextureRef& GetTexture() const;
 
 		// Sets texture source rectangle
 		void SetTextureSrcRect(const RectI& rect);
@@ -154,13 +159,13 @@ namespace o2
 		void SetSliceBorder(const BorderI& border);
 
 		// Returns sprite slice border
-		BorderI GetSliceBorder() const;
+		const BorderI& GetSliceBorder() const;
 
 		// Sets asset @SCRIPTABLE
 		void SetImageAsset(const ImageAssetRef& asset);
 
 		// Returns asset @SCRIPTABLE
-		ImageAssetRef GetImageAsset() const;
+		const ImageAssetRef& GetImageAsset() const;
 
 		// Returns image asset name @SCRIPTABLE
 		const String& GetImageName() const;
@@ -201,7 +206,7 @@ namespace o2
 		float         mTileScale = 1.0f;           // Scale of tiles in tiled mode. 1.0f is default and equals to default image size @SERIALIZABLE
 		Mesh          mMesh;                       // Drawing mesh
 
-		void(Sprite::*mMeshBuildFunc)(); // Mesh building function pointer (by mode)
+		void(Sprite::* mMeshBuildFunc)(); // Mesh building function pointer (by mode)
 
 	protected:
 		// Called when basis was changed
@@ -246,6 +251,7 @@ namespace o2
 		// Called when assets was rebuilded
 		void ReloadImage();
 
+	protected:
 		friend class Render;
 	};
 }
@@ -261,15 +267,15 @@ CLASS_FIELDS_META(o2::Sprite)
 	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(textureSrcRect);
 	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(image);
 	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(imageName);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftTopColor);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightTopColor);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftBottomColor);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightBottomColor);
+	FIELD().PUBLIC().NAME(bitmap);
 	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(mode);
 	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(fill);
 	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(tileScale);
 	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(sliceBorder);
-	FIELD().PUBLIC().NAME(bitmap);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftTopColor);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightTopColor);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftBottomColor);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightBottomColor);
 	FIELD().PROTECTED().NAME(mTextureSrcRect);
 	FIELD().PROTECTED().NAME(mCornersColors);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset);
@@ -287,18 +293,18 @@ CLASS_METHODS_META(o2::Sprite)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ImageAssetRef&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(const String&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(UID);
-	FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const TextureRef&, const RectI&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(Bitmap*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Bitmap>&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
 	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(LoadFromImageRef).SIGNATURE(void, LoadFromImage, const ImageAssetRef&, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, LoadFromImage, const String&, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(LoadFromImageUID).SIGNATURE(void, LoadFromImage, UID, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, LoadMonoColor, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromBitmap, Bitmap*, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromBitmap, const Ref<Bitmap>&, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetTexture, TextureRef);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(TextureRef, GetTexture);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetTexture, const TextureRef&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const TextureRef&, GetTexture);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTextureSrcRect, const RectI&);
 	FUNCTION().PUBLIC().SIGNATURE(RectI, GetTextureSrcRect);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetOriginalSize);
@@ -319,9 +325,9 @@ CLASS_METHODS_META(o2::Sprite)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetMode, SpriteMode);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(SpriteMode, GetMode);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSliceBorder, const BorderI&);
-	FUNCTION().PUBLIC().SIGNATURE(BorderI, GetSliceBorder);
+	FUNCTION().PUBLIC().SIGNATURE(const BorderI&, GetSliceBorder);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetImageAsset, const ImageAssetRef&);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ImageAssetRef, GetImageAsset);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const ImageAssetRef&, GetImageAsset);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const String&, GetImageName);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(UID, GetAtlasAssetId);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, NormalizeSize);

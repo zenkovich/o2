@@ -4,13 +4,9 @@
 
 #include "o2/Render/Windows/OpenGL.h"
 #include "o2/Utils/Types/CommonTypes.h"
-#include "o2/Utils/Math/Vector2.h"
-
 
 namespace o2
 {
-	class Texture;
-
 	class RenderBase
 	{
 	protected:

@@ -18,12 +18,11 @@
 namespace o2
 {
 	class Bitmap;
-	class TextureRef;
 
 	// -------
 	// Texture
 	// -------
-	class Texture: public TextureBase
+	class Texture: public TextureBase, public RefCounterable
 	{
 	public:
 		// Texture usage
@@ -56,7 +55,7 @@ namespace o2
 		Texture(const String& atlasAssetName, int page);
 
 		// Constructor from bitmap
-		Texture(Bitmap* bitmap);
+		Texture(const Ref<Bitmap>& bitmap);
 
 		// Destructor
 		~Texture();
@@ -74,19 +73,19 @@ namespace o2
 		void Create(const String& atlasAssetName, int page);
 
 		// Creates texture from bitmap
-		void Create(Bitmap* bitmap);
+		void Create(const Ref<Bitmap>& bitmap);
 
 		// Sets texture's data from bitmap
-		void SetData(Bitmap* bitmap);
+		void SetData(const Ref<Bitmap>& bitmap);
 
 		// Sets sub data from bitmap with offset
-		void SetSubData(const Vec2I& offset, Bitmap* bitmap);
+		void SetSubData(const Vec2I& offset, const Ref<Bitmap>& bitmap);
 
 		// Copies pixels from texture by rect
 		void Copy(const Texture& from, const RectI& rect);
 
 		// Gets texture's data to bitmap and returns it
-		Bitmap* GetData();
+		Ref<Bitmap> GetData();
 
 		// Reloads texture
 		void Reload();
@@ -131,10 +130,8 @@ namespace o2
 		int         mAtlasPage;               // Atlas page
 		bool        mReady;                   // Is texture ready to use
 
-		int mRefs = 0; // Texture references
-
 		friend class Render;
-		friend class TextureRef;
+		friend class Ref<Texture>;
 	};
 }
 

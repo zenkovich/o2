@@ -8,7 +8,7 @@ namespace o2
 {
 	Texture::~Texture()
 	{
-		o2Render.mTextures.Remove(this);
+		o2Render.mTextures.Remove(Ref(this));
 
 		if (!mReady)
 			return;
@@ -84,7 +84,7 @@ namespace o2
 		mReady = true;
 	}
 
-	void Texture::Create(Bitmap* bitmap)
+	void Texture::Create(const Ref<Bitmap>& bitmap)
 	{
 		if (mReady)
 		{
@@ -123,7 +123,7 @@ namespace o2
 		mReady = true;
 	}
 
-	void Texture::SetData(Bitmap* bitmap)
+	void Texture::SetData(const Ref<Bitmap>& bitmap)
 	{
 		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
 		glBindTexture(GL_TEXTURE_2D, mHandle);
@@ -144,7 +144,7 @@ namespace o2
 		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 	}
 
-	void Texture::SetSubData(const Vec2I& offset, Bitmap* bitmap)
+	void Texture::SetSubData(const Vec2I& offset, const Ref<Bitmap>& bitmap)
 	{
 		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
 		glBindTexture(GL_TEXTURE_2D, mHandle);
@@ -178,9 +178,9 @@ namespace o2
 		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 	}
 
-	Bitmap* Texture::GetData()
+	Ref<Bitmap> Texture::GetData()
 	{
-		Bitmap* bitmap = mnew Bitmap(mFormat, mSize);
+		Ref<Bitmap> bitmap = mmake<Bitmap>(mFormat, mSize);
 
 		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
 		glBindTexture(GL_TEXTURE_2D, mHandle);

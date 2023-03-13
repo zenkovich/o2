@@ -44,8 +44,8 @@ namespace o2
 		PROPERTY(Color4, emitParticlesColorA, SetEmitParticlesColorA, GetEmitParticlesColorA); // Emitting particle color A property
 		PROPERTY(Color4, emitParticlesColorB, SetEmitParticlesColorB, GetEmitParticlesColorB); // Emitting particle color B property													   
 
-		PROPERTY(ImageAssetRef, image, SetImage, GetImage);          // Particle image property
-		PROPERTY(ParticlesEmitterShape*, shape, SetShape, GetShape); // Emitting shape property @EDITOR_IGNORE
+		PROPERTY(ImageAssetRef, image, SetImage, GetImage);              // Particle image property
+		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape); // Emitting shape property @EDITOR_IGNORE
 
 	public:
 		// Default constructor
@@ -91,23 +91,23 @@ namespace o2
 		ImageAssetRef GetImage() const;
 
 		// Sets emitting shape
-		void SetShape(ParticlesEmitterShape* shape);
+		void SetShape(const Ref<ParticlesEmitterShape>& shape);
 
 		// Return emitting shape
-		ParticlesEmitterShape* GetShape() const;
+		const Ref<ParticlesEmitterShape>& GetShape() const;
 
 		// Adds effect
-		void AddEffect(ParticlesEffect* effect);
+		void AddEffect(const Ref<ParticlesEffect>& effect);
 
 		// Adds effect
 		template<typename _type, typename ... _args>
 		void AddEffect(_args ... args);
 
 		// Returns list of effects
-		const Vector<ParticlesEffect*>& GetEffects() const;
+		const Vector<Ref<ParticlesEffect>>& GetEffects() const;
 
 		// Removes effect
-		void RemoveEffect(ParticlesEffect* effect);
+		void RemoveEffect(const Ref<ParticlesEffect>& effect);
 
 		// Removes all effects
 		void RemoveAllEffects();
@@ -236,9 +236,9 @@ namespace o2
 		void SetEmitParticlesColor(const Color4& colorA, const Color4& colorB);
 
 	protected:
-		ImageAssetRef          mImageAsset;      // Particle sprite image @SERIALIZABLE
-		ParticlesEmitterShape* mShape = nullptr; // Particles emitting shape @SERIALIZABLE @EDITOR_PROPERTY 
-		Vector<ParticlesEffect*>     mEffects;         // Particles effect @SERIALIZABLE @EDITOR_PROPERTY 
+		ImageAssetRef                mImageAsset;      // Particle sprite image @SERIALIZABLE
+		Ref<ParticlesEmitterShape>   mShape = nullptr; // Particles emitting shape @SERIALIZABLE @EDITOR_PROPERTY 
+		Vector<Ref<ParticlesEffect>> mEffects;         // Particles effect @SERIALIZABLE @EDITOR_PROPERTY 
 														                 
 		int mParticlesNumLimit = 100; // Max available visible particles @SERIALIZABLE
 					           		
@@ -300,7 +300,7 @@ namespace o2
 	template<typename _type, typename ... _args>
 	void ParticlesEmitter::AddEffect(_args ... args)
 	{
-		AddEffect(mnew _type(args ...));
+		AddEffect(mmake<_type>(args ...));
 	}
 }
 
@@ -380,11 +380,11 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
 	FUNCTION().PUBLIC().SIGNATURE(float, GetEmittingCoef);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const ImageAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(ImageAssetRef, GetImage);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetShape, ParticlesEmitterShape*);
-	FUNCTION().PUBLIC().SIGNATURE(ParticlesEmitterShape*, GetShape);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, ParticlesEffect*);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<ParticlesEffect*>&, GetEffects);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveEffect, ParticlesEffect*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetShape, const Ref<ParticlesEmitterShape>&);
+	FUNCTION().PUBLIC().SIGNATURE(const Ref<ParticlesEmitterShape>&, GetShape);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, const Ref<ParticlesEffect>&);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<ParticlesEffect>>&, GetEffects);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveEffect, const Ref<ParticlesEffect>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllEffects);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetMaxParticles, int);
 	FUNCTION().PUBLIC().SIGNATURE(int, GetMaxParticles);

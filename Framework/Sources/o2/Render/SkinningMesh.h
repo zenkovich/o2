@@ -52,7 +52,7 @@ namespace o2
 
 	public:
 		// Constructor
-		SkinningMesh(TextureRef texture = TextureRef(), UInt vertexCount = 4, UInt polyCount = 2, UInt bonesCount = 16);
+		SkinningMesh(const TextureRef& texture = TextureRef::Null(), UInt vertexCount = 4, UInt polyCount = 2, UInt bonesCount = 16);
 
 		// Copy-constructor
 		SkinningMesh(const SkinningMesh& other);
@@ -105,6 +105,7 @@ namespace o2
 
 		Vertex* mRenderVertexBuffer = nullptr; // Vertex list, used for rendering. Obtained from origin vertex skinning
 
+	protected:
 		friend class Render;
 	};
 }

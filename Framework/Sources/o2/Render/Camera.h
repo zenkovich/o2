@@ -7,9 +7,9 @@ namespace o2
 {
 	class Texture;
 
-	// ------
-	// Camera
-	// ------
+	// -------------------------------------------------------------------------------
+	// Camera. It has position, size, angle and zoom. Used to setup view for rendering
+	// -------------------------------------------------------------------------------
 	class Camera: public Transform
 	{
 	public:

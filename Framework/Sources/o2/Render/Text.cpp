@@ -13,7 +13,7 @@ namespace o2
 		mDotsEndings(false), mHeight(11)
 	{}
 
-	Text::Text(FontRef font):
+	Text::Text(const FontRef& font):
 		mFont(font), mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
 		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mUpdatingMesh(false),
 		mFontAssetId(0), mDotsEndings(false), mHeight(11)
@@ -73,9 +73,6 @@ namespace o2
 
 	Text::~Text()
 	{
-		for (auto mesh : mMeshes)
-			delete mesh;
-
 		if (mFont)
 			mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 	}
@@ -122,7 +119,7 @@ namespace o2
 		OnDrawn();
 	}
 
-	void Text::SetFont(FontRef font)
+	void Text::SetFont(const FontRef& font)
 	{
 		if (mFont)
 			mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
@@ -137,7 +134,7 @@ namespace o2
 		UpdateMesh();
 	}
 
-	FontRef Text::GetFont() const
+	const FontRef& Text::GetFont() const
 	{
 		return mFont;
 	}
@@ -280,7 +277,7 @@ namespace o2
 		return RectF(mTransform.origin, mTransform.origin + mSymbolsSet.mRealSize);
 	}
 
-	Vec2F Text::GetTextSize(const WString& text, Font* font, int height /*= 11*/, const Vec2F& areaSize /*= Vec2F()*/,
+	Vec2F Text::GetTextSize(const WString& text, const FontRef& font, int height /*= 11*/, const Vec2F& areaSize /*= Vec2F()*/,
 							HorAlign horAlign /*= HorAlign::Left*/, VerAlign verAlign /*= VerAlign::Top*/,
 							bool wordWrap /*= true*/, bool dotsEngings /*= false*/, float charsDistCoef /*= 1.0f*/,
 							float linesDistCoef /*= 1.0f*/)
@@ -288,6 +285,7 @@ namespace o2
 		SymbolsSet textSet;
 		textSet.Initialize(font, text, height, Vec2F(), areaSize, horAlign, verAlign, wordWrap, dotsEngings, charsDistCoef,
 						   linesDistCoef);
+
 		return textSet.mRealSize;
 	}
 
@@ -329,7 +327,7 @@ namespace o2
 		}
 
 		int currentMeshIdx = 0;
-		Mesh* currentMesh = mMeshes[0];
+		Mesh* currentMesh = mMeshes[0].Get();
 
 		mSymbolsSet.Initialize(mFont, mText, mHeight, mTransform.origin, mSize, mHorAlign, mVerAlign, mWordWrap, mDotsEndings,
 							   mSymbolsDistCoef, mLinesDistanceCoef);
@@ -339,24 +337,24 @@ namespace o2
 
 		for (auto& line : mSymbolsSet.mLines)
 		{
-			for (auto& symb : line.mSymbols)
+			for (auto& symb : line.symbols)
 			{
 				if (currentMesh->polyCount + 2 >= currentMesh->GetMaxPolyCount())
-					currentMesh = mMeshes[++currentMeshIdx];
+					currentMesh = mMeshes[++currentMeshIdx].Get();
 
 				unsigned long color = mColor.ABGR();
 				Vec2F points[4] =
 				{
-					transf.Transform(symb.mFrame.LeftTop() - mSymbolsSet.mPosition),
-					transf.Transform(symb.mFrame.RightTop() - mSymbolsSet.mPosition),
-					transf.Transform(symb.mFrame.RightBottom() - mSymbolsSet.mPosition),
-					transf.Transform(symb.mFrame.LeftBottom() - mSymbolsSet.mPosition)
+					transf.Transform(symb.frame.LeftTop() - mSymbolsSet.mPosition),
+					transf.Transform(symb.frame.RightTop() - mSymbolsSet.mPosition),
+					transf.Transform(symb.frame.RightBottom() - mSymbolsSet.mPosition),
+					transf.Transform(symb.frame.LeftBottom() - mSymbolsSet.mPosition)
 				};
 
-				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[0], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.top);
-				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[1], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.top);
-				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[2], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.bottom);
-				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[3], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.bottom);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[0], color, symb.texSrc.left, 1.0f - symb.texSrc.top);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[1], color, symb.texSrc.right, 1.0f - symb.texSrc.top);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[2], color, symb.texSrc.right, 1.0f - symb.texSrc.bottom);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex(points[3], color, symb.texSrc.left, 1.0f - symb.texSrc.bottom);
 
 				int pp = currentMesh->polyCount*3;
 				currentMesh->indexes[pp] = currentMesh->vertexCount - 4;
@@ -405,7 +403,7 @@ namespace o2
 		{
 			int polyCount = Math::Min<int>(needPolygons, mMeshMaxPolyCount);
 			needPolygons -= polyCount;
-			mMeshes.Add(mnew Mesh(mFont->mTexture, polyCount * 2, polyCount));
+			mMeshes.Add(mmake<Mesh>(mFont->mTexture, polyCount * 2, polyCount));
 		}
 	}
 
@@ -475,7 +473,7 @@ namespace o2
 		mSymbolsSet.Move(bas.origin);
 	}
 
-	void Text::SymbolsSet::Initialize(FontRef font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,
+	void Text::SymbolsSet::Initialize(const FontRef& font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,
 									  HorAlign horAlign, VerAlign verAlign, bool wordWrap, bool dotsEngings,
 									  float charsDistCoef, float linesDistCoef)
 	{
@@ -503,7 +501,7 @@ namespace o2
 
 		mLines.Add(Line());
 		Line* curLine = &mLines.Last();
-		curLine->mSize.y = fontHeight;
+		curLine->size.y = fontHeight;
 
 		float dotsSize = mFont->GetCharacter('.', mHeight).mAdvance*3.0f;
 
@@ -514,19 +512,19 @@ namespace o2
 		{
 			const Font::Character& ch = mFont->GetCharacter(mText[i], mHeight);
 			Vec2F chSize = ch.mSize;
-			Vec2F chPos = Vec2F(curLine->mSize.x - ch.mOrigin.x, -ch.mOrigin.y);
+			Vec2F chPos = Vec2F(curLine->size.x - ch.mOrigin.x, -ch.mOrigin.y);
 
-			if (mDotsEndings && mText[i] != '\n' && curLine->mSize.x + ch.mAdvance*mSymbolsDistCoef > mAreaSize.x - dotsSize)
+			if (mDotsEndings && mText[i] != '\n' && curLine->size.x + ch.mAdvance*mSymbolsDistCoef > mAreaSize.x - dotsSize)
 			{
 				const Font::Character& dotCh = mFont->GetCharacter('.', mHeight);
 				Vec2F dotChSize = dotCh.mSize;
 
 				for (int j = 0; j < 3; j++)
 				{
-					Vec2F dotChPos = Vec2F(curLine->mSize.x - dotCh.mOrigin.x, -dotCh.mOrigin.y);
-					curLine->mSymbols.Add(Symbol(dotChPos, dotChSize, dotCh.mTexSrc, dotCh.mId, dotCh.mOrigin, dotCh.mAdvance));
-					curLine->mString += '.';
-					curLine->mSize.x += dotCh.mAdvance*mSymbolsDistCoef;
+					Vec2F dotChPos = Vec2F(curLine->size.x - dotCh.mOrigin.x, -dotCh.mOrigin.y);
+					curLine->symbols.Add(Symbol(dotChPos, dotChSize, dotCh.mTexSrc, dotCh.mId, dotCh.mOrigin, dotCh.mAdvance));
+					curLine->string += '.';
+					curLine->size.x += dotCh.mAdvance*mSymbolsDistCoef;
 				}
 
 				for (; i < textLen - 1; i++)
@@ -538,69 +536,69 @@ namespace o2
 				continue;
 			}
 
-			curLine->mSymbols.Add(Symbol(chPos, chSize, ch.mTexSrc, ch.mId, ch.mOrigin, ch.mAdvance));
+			curLine->symbols.Add(Symbol(chPos, chSize, ch.mTexSrc, ch.mId, ch.mOrigin, ch.mAdvance));
 
 			if (mText[i] != '\n')
-				curLine->mSize.x += ch.mAdvance*mSymbolsDistCoef;
+				curLine->size.x += ch.mAdvance*mSymbolsDistCoef;
 
-			curLine->mString += mText[i];
+			curLine->string += mText[i];
 
-			bool outOfBounds = checkAreaBounds ? curLine->mSize.x > mAreaSize.x && i > curLine->mLineBegSymbol : false;
+			bool outOfBounds = checkAreaBounds ? curLine->size.x > mAreaSize.x && i > curLine->lineBegSymbol : false;
 
 			if (mText[i] == '\n' || outOfBounds)
 			{
 				if (outOfBounds)
 				{
-					if (wrapCharIdx < 0 || wrapCharIdx == curLine->mLineBegSymbol)
+					if (wrapCharIdx < 0 || wrapCharIdx == curLine->lineBegSymbol)
 						wrapCharIdx = i;
 					else
-						curLine->mSpacesCount--;
+						curLine->spacesCount--;
 
-					int cutLen = wrapCharIdx - curLine->mLineBegSymbol;
+					int cutLen = wrapCharIdx - curLine->lineBegSymbol;
 
-					curLine->mSymbols.RemoveRange(cutLen, curLine->mSymbols.Count());
-					curLine->mString.Erase(cutLen);
+					curLine->symbols.RemoveRange(cutLen, curLine->symbols.Count());
+					curLine->string.Erase(cutLen);
 
 
-					if (curLine->mSymbols.Count() > 0)
-						curLine->mSize.x = curLine->mSymbols.Last().mFrame.right;
+					if (curLine->symbols.Count() > 0)
+						curLine->size.x = curLine->symbols.Last().frame.right;
 					else
-						curLine->mSize.x = 0;
+						curLine->size.x = 0;
 
 					i = wrapCharIdx - 1;
 					wrapCharIdx = -1;
 				}
 				else
 				{
-					curLine->mSymbols.PopBack();
-					curLine->mString.PopBack();
-					curLine->mEndedNewLine = true;
+					curLine->symbols.PopBack();
+					curLine->string.PopBack();
+					curLine->endedNewLine = true;
 				}
 
-				fullSize.x = Math::Max(fullSize.x, curLine->mSize.x);
+				fullSize.x = Math::Max(fullSize.x, curLine->size.x);
 				fullSize.y += linesDist;
 
 				mLines.Add(Line());
 				curLine = &mLines.Last();
-				curLine->mSize.y = linesDist;
-				curLine->mLineBegSymbol = i + 1;
+				curLine->size.y = linesDist;
+				curLine->lineBegSymbol = i + 1;
 			}
 			else if (mText[i] == ' '/* || mFont->mAllSymbolReturn*/)
 			{
-				curLine->mSpacesCount++;
+				curLine->spacesCount++;
 				wrapCharIdx = i;
 			}
 		}
 
-		fullSize.x = Math::Max(fullSize.x, curLine->mSize.x);
+		fullSize.x = Math::Max(fullSize.x, curLine->size.x);
 
 		float lineHeight = linesDist;
-		float yOffset = mAreaSize.y - mLines[0].mSize.y;
+		float yOffset = mAreaSize.y - mLines[0].size.y;
 
 		if (mVerAlign == VerAlign::Both)
 			lineHeight = Math::Max(fontHeight, (mAreaSize.y - fontHeight)/(float)(mLines.Count() - 1));
 		else if (mVerAlign == VerAlign::Bottom)
-			yOffset = fullSize.y - mLines[0].mSize.y;
+			yOffset = fullSize.y - mLines[0].size.y;
 		else if (mVerAlign == VerAlign::Middle)
 			yOffset -= mAreaSize.y*0.5f - fullSize.y*0.5f;
 
@@ -614,24 +612,24 @@ namespace o2
 			float additiveSpaceOffs = 0;
 
 			if (mHorAlign == HorAlign::Middle)
-				xOffset = (mAreaSize.x - line->mSize.x)*0.5f;
+				xOffset = (mAreaSize.x - line->size.x)*0.5f;
 			else if (mHorAlign == HorAlign::Right)
-				xOffset = mAreaSize.x - line->mSize.x;
+				xOffset = mAreaSize.x - line->size.x;
 			else if (mHorAlign == HorAlign::Both)
-				additiveSpaceOffs = Math::Max(0.0f, (mAreaSize.x - line->mSize.x)/(float)line->mSpacesCount);
+				additiveSpaceOffs = Math::Max(0.0f, (mAreaSize.x - line->size.x)/(float)line->spacesCount);
 
 			xOffset += mPosition.x;
 
 			Vec2F locOrigin((float)(int)xOffset, (float)(int)yOffset);
-			line->mPosition = locOrigin;
+			line->position = locOrigin;
 			yOffset -= lineHeight;
 
-			for (Vector<Symbol>::Iterator jt = line->mSymbols.begin(); jt != line->mSymbols.end(); ++jt)
+			for (Vector<Symbol>::Iterator jt = line->symbols.begin(); jt != line->symbols.end(); ++jt)
 			{
-				if (jt->mCharId == ' ')
+				if (jt->charId == ' ')
 					locOrigin.x += additiveSpaceOffs;
 
-				jt->mFrame = jt->mFrame + locOrigin;
+				jt->frame = jt->frame + locOrigin;
 			}
 		}
 
@@ -642,10 +640,10 @@ namespace o2
 	{
 		for (auto& line : mLines)
 		{
-			for (auto& sm : line.mSymbols)
-				sm.mFrame += offs;
+			for (auto& sm : line.symbols)
+				sm.frame += offs;
 
-			line.mPosition += offs;
+			line.position += offs;
 		}
 	}
 
@@ -654,16 +652,16 @@ namespace o2
 
 	Text::SymbolsSet::Symbol::Symbol(const Vec2F& position, const Vec2F& size, const RectF& texSrc,
 									 UInt16 charId, const Vec2F& origin, float advance):
-		mFrame(position, position + size), mTexSrc(texSrc), mCharId(charId), mOrigin(origin), mAdvance(advance)
+		frame(position, position + size), texSrc(texSrc), charId(charId), origin(origin), advance(advance)
 	{}
 
 	bool Text::SymbolsSet::Symbol::operator==(const Symbol& other) const
 	{
-		return mCharId == other.mCharId && mFrame == other.mFrame;
+		return charId == other.charId && frame == other.frame;
 	}
 
 	Text::SymbolsSet::Line::Line():
-		mLineBegSymbol(0), mSpacesCount(0), mEndedNewLine(false)
+		lineBegSymbol(0), spacesCount(0), endedNewLine(false)
 	{}
 
 	bool Text::SymbolsSet::Line::operator==(const Line& other) const

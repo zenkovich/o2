@@ -43,9 +43,6 @@ namespace o2
 	{
 		if (mFreeTypeFace)
 			FT_Done_Face(mFreeTypeFace);
-
-		for (auto effect : mEffects)
-			delete effect;
 	}
 
 	const char* GetFreeTypeErrorMessage(FT_Error err)
@@ -117,11 +114,11 @@ namespace o2
 			return res;
 
 		Vec2I dpi = o2Render.GetDPI();
-		FT_Set_Char_Size(mFreeTypeFace, 0, height*64, dpi.x, dpi.y);
+		FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
 
 		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
 
-		res = mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
+		res = mFreeTypeFace->glyph->metrics.horiBearingY / 64.0f;
 		mHeights.Add(height, res);
 
 		return res;
@@ -129,7 +126,7 @@ namespace o2
 
 	float VectorFont::GetLineHeightPx(int height) const
 	{
-		return GetHeightPx(height)*2.0f;
+		return GetHeightPx(height) * 2.0f;
 	}
 
 	void VectorFont::CheckCharacters(const WString& needChararacters, int height)
@@ -159,40 +156,33 @@ namespace o2
 			UpdateCharacters(needToRenderChars, height);
 	}
 
-	VectorFont::Effect* VectorFont::AddEffect(Effect* effect)
+	const Ref<VectorFont::Effect>& VectorFont::AddEffect(const Ref<Effect>& effect)
 	{
 		mEffects.Add(effect);
 		Reset();
-		
-		return effect;
+
+		return mEffects.Last();
 	}
 
-	void VectorFont::RemoveEffect(Effect* effect)
+	void VectorFont::RemoveEffect(const Ref<Effect>& effect)
 	{
 		mEffects.Remove(effect);
-		delete effect;
 		Reset();
 	}
 
 	void VectorFont::RemoveAllEffects()
 	{
-		for (auto effect : mEffects)
-			delete effect;
-
 		mEffects.Clear();
 		Reset();
 	}
 
-	void VectorFont::SetEffects(const Vector<Effect*>& effects)
+	void VectorFont::SetEffects(const Vector<Ref<Effect>>& effects)
 	{
-		for (auto effect : mEffects)
-			delete effect;
-
 		mEffects = effects;
 		Reset();
 	}
 
-	const Vector<VectorFont::Effect*>& VectorFont::GetEffects() const
+	const Vector<Ref<VectorFont::Effect>>& VectorFont::GetEffects() const
 	{
 		return mEffects;
 	}
@@ -213,7 +203,7 @@ namespace o2
 	{
 		if (!mFreeTypeFace)
 			return;
-		
+
 		Vec2I dpi = o2Render.GetDPI();
 		FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
 
@@ -228,7 +218,7 @@ namespace o2
 		border += Vec2I(2, 2);
 
 		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
-		int symbolsHeight = Math::CeilToInt((mFreeTypeFace->glyph->bitmap.rows + border.y*2)*1.25f);
+		int symbolsHeight = Math::CeilToInt((mFreeTypeFace->glyph->bitmap.rows + border.y * 2) * 1.25f);
 
 		for (auto ch : newCharacters)
 		{
@@ -239,7 +229,7 @@ namespace o2
 
 			Vec2I glyphSize(glyph->bitmap.width, glyph->bitmap.rows);
 
-			Bitmap* newBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, glyphSize + border*2);
+			Ref<Bitmap> newBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, glyphSize + border * 2);
 			newBitmap->Fill(Color4(255, 255, 255, 0));
 			UInt8* newBitmapData = newBitmap->GetData();
 			Vec2I newBitmapSize = newBitmap->GetSize();
@@ -248,9 +238,9 @@ namespace o2
 			{
 				for (int y = 0; y < (int)glyph->bitmap.rows; y++)
 				{
-					Color4 c(255, 255, 255, glyph->bitmap.buffer[y*glyph->bitmap.width + x]);
+					Color4 c(255, 255, 255, glyph->bitmap.buffer[y * glyph->bitmap.width + x]);
 					ULong cl = c.ABGR();
-					memcpy(&newBitmapData[((newBitmapSize.y - y - 1 - border.y)*newBitmapSize.x + x + border.x)*4], &cl, 4);
+					memcpy(&newBitmapData[((newBitmapSize.y - y - 1 - border.y) * newBitmapSize.x + x + border.x) * 4], &cl, 4);
 				}
 			}
 
@@ -261,9 +251,9 @@ namespace o2
 			newCharDef.character.mId = ch;
 			newCharDef.character.mHeight = height;
 			newCharDef.character.mSize = newBitmapSize;
-			newCharDef.character.mAdvance = glyph->advance.x/64.0f;
-			newCharDef.character.mOrigin.x = -glyph->metrics.horiBearingX/64.0f + border.x;
-			newCharDef.character.mOrigin.y = (glyph->metrics.height - glyph->metrics.horiBearingY)/64.0f + border.y;
+			newCharDef.character.mAdvance = glyph->advance.x / 64.0f;
+			newCharDef.character.mOrigin.x = -glyph->metrics.horiBearingX / 64.0f + border.x;
+			newCharDef.character.mOrigin.y = (glyph->metrics.height - glyph->metrics.horiBearingY) / 64.0f + border.y;
 
 			PackCharacter(newCharDef, symbolsHeight);
 		}
@@ -271,18 +261,19 @@ namespace o2
 
 	void VectorFont::PackCharacter(CharDef& character, int height)
 	{
-		PackLine* packLine = nullptr;
+		Ref<PackLine> packLine;
 
 		while (!packLine)
 		{
-			packLine = mPackLines.FindOrDefault([&](PackLine* x) {
-				return x->height >= height && x->length + character.bitmap->GetSize().x < mTexture->GetSize().x; });
+			packLine = mPackLines.FindOrDefault(
+				[&](const Ref<PackLine>& x) { return x->height >= height && x->length + character.bitmap->GetSize().x < mTexture->GetSize().x; }
+			);
 
 			if (!packLine)
 			{
 				if (mLastPackLinePos + height <= mTexture->GetSize().y)
 				{
-					packLine = mnew PackLine();
+					packLine = mmake<PackLine>();
 					packLine->position = mLastPackLinePos;
 					packLine->height = height;
 
@@ -293,7 +284,7 @@ namespace o2
 				else
 				{
 					TextureRef lastTexture = mTexture;
-					mTexture = TextureRef(lastTexture->GetSize()*2, PixelFormat::R8G8B8A8, Texture::Usage::Default);
+					mTexture = TextureRef(lastTexture->GetSize() * 2, PixelFormat::R8G8B8A8, Texture::Usage::Default);
 					mTexture->Copy(*lastTexture.Get(), RectI(Vec2I(0, 0), lastTexture->GetSize()));
 
 					for (auto heightKV : mCharacters)
@@ -310,7 +301,7 @@ namespace o2
 			}
 		}
 
-		character.packLine = packLine;
+		character.packLine = packLine.Get();
 		packLine->characters.Add(character);
 
 		character.rect.left = packLine->length;
@@ -320,18 +311,29 @@ namespace o2
 
 		packLine->length += character.bitmap->GetSize().x;
 
-		Vec2F invTexSize(1.0f/mTexture->GetSize().x, 1.0f/mTexture->GetSize().y);
-		character.character.mTexSrc.left = character.rect.left*invTexSize.x;
-		character.character.mTexSrc.right = character.rect.right*invTexSize.x;
-		character.character.mTexSrc.top = 1.0f - character.rect.top*invTexSize.y;
-		character.character.mTexSrc.bottom = 1.0f - character.rect.bottom*invTexSize.y;
+		Vec2F invTexSize(1.0f / mTexture->GetSize().x, 1.0f / mTexture->GetSize().y);
+		character.character.mTexSrc.left = character.rect.left * invTexSize.x;
+		character.character.mTexSrc.right = character.rect.right * invTexSize.x;
+		character.character.mTexSrc.top = 1.0f - character.rect.top * invTexSize.y;
+		character.character.mTexSrc.bottom = 1.0f - character.rect.bottom * invTexSize.y;
 
 		mTexture->SetSubData(character.rect.LeftBottom(), character.bitmap);
 
 		AddCharacter(character.character);
 
-		delete character.bitmap;
+		character.bitmap = nullptr;
 	}
+
+	Vec2I VectorFont::Effect::GetSizeExtend() const
+	{
+		return Vec2I();
+	}
+
+	bool VectorFont::Effect::IsEqual(const Ref<Effect>& other) const
+	{
+		return GetType() == other->GetType();
+	}
+
 }
 
 DECLARE_CLASS(o2::VectorFont::Effect);

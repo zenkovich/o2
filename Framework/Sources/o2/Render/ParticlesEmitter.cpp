@@ -10,17 +10,14 @@ namespace o2
 	ParticlesEmitter::ParticlesEmitter():
 		IRectDrawable()
 	{
-		mShape = mnew CircleParticlesEmitterShape();
-		mParticlesMesh = mnew Mesh(NoTexture(), mParticlesNumLimit*4, mParticlesNumLimit*2);
+		mShape = mmake<CircleParticlesEmitterShape>();
+		mParticlesMesh = mnew Mesh(TextureRef::Null(), mParticlesNumLimit*4, mParticlesNumLimit*2);
 		mLastTransform = mTransform;
 	}
 
 	ParticlesEmitter::~ParticlesEmitter()
 	{
 		delete mParticlesMesh;
-
-		for (auto effect : mEffects)
-			delete effect;
 	}
 
 	ParticlesEmitter::ParticlesEmitter(const ParticlesEmitter& other):
@@ -40,10 +37,10 @@ namespace o2
 		emitParticlesSpeedRange(this), emitParticlesMoveDir(this), emitParticlesMoveDirRange(this), emitParticlesColorA(this), emitParticlesColorB(this),
 		image(this), shape(this)
 	{
-		mParticlesMesh = mnew Mesh(NoTexture(), mParticlesNumLimit*4, mParticlesNumLimit*2);
+		mParticlesMesh = mnew Mesh(TextureRef::Null(), mParticlesNumLimit*4, mParticlesNumLimit*2);
 
 		for (auto effect : other.mEffects)
-			AddEffect(effect->CloneAs<ParticlesEffect>());
+			AddEffect(Ref(effect->CloneAs<ParticlesEffect>()));
 
 		mLastTransform = mTransform;
 	}
@@ -51,7 +48,7 @@ namespace o2
 	ParticlesEmitter& ParticlesEmitter::operator=(const ParticlesEmitter& other)
 	{
 		RemoveAllEffects();
-		delete mShape;
+		mShape = nullptr;
 
 		int idx = 0;
 		for (auto& particle : mParticles)
@@ -69,13 +66,13 @@ namespace o2
 		IRectDrawable::operator=(other);
 
 		for (auto effect : other.mEffects)
-			AddEffect(effect->CloneAs<ParticlesEffect>());
+			AddEffect(Ref(effect->CloneAs<ParticlesEffect>()));
 
 		mImageAsset = other.mImageAsset;
-		mShape = other.mShape->CloneAs<ParticlesEmitterShape>();
+		mShape = Ref(other.mShape->CloneAs<ParticlesEmitterShape>());
 
 		for (auto effect : other.mEffects)
-			AddEffect(effect->CloneAs<ParticlesEffect>());
+			AddEffect(Ref(effect->CloneAs<ParticlesEffect>()));
 
 		mParticlesNumLimit = other.mParticlesNumLimit;
 
@@ -171,7 +168,7 @@ namespace o2
 				}
 				else p = &mParticles[mDeadParticles.PopBack()];
 
-				p->position = Local2WorldPoint(mShape->GetEmittinPoint());
+				p->position = Local2WorldPoint(mShape->GetEmittingPoint());
 				p->angle = mEmitParticlesAngle + Math::Random(-halfAngleRange, halfAngleRange);
 
 				p->size.Set(mEmitParticlesSize.x + Math::Random(-halfSizeRange.x, halfSizeRange.x),
@@ -333,7 +330,7 @@ namespace o2
 		if (mImageAsset)
 			mParticlesMesh->SetTexture(TextureRef(mImageAsset->GetAtlas(), mImageAsset->GetAtlasPage()));
 		else
-			mParticlesMesh->SetTexture(NoTexture());
+			mParticlesMesh->SetTexture(TextureRef::Null());
 	}
 
 	ImageAssetRef ParticlesEmitter::GetImage() const
@@ -341,40 +338,33 @@ namespace o2
 		return mImageAsset;
 	}
 
-	void ParticlesEmitter::SetShape(ParticlesEmitterShape* shape)
+	void ParticlesEmitter::SetShape(const Ref<ParticlesEmitterShape>& shape)
 	{
-		if (mShape)
-			delete mShape;
-
 		mShape = shape;
 	}
 
-	ParticlesEmitterShape* ParticlesEmitter::GetShape() const
+	const Ref<ParticlesEmitterShape>& ParticlesEmitter::GetShape() const
 	{
 		return mShape;
 	}
 
-	void ParticlesEmitter::AddEffect(ParticlesEffect* effect)
+	void ParticlesEmitter::AddEffect(const Ref<ParticlesEffect>& effect)
 	{
 		mEffects.Add(effect);
 	}
 
-	const Vector<ParticlesEffect*>& ParticlesEmitter::GetEffects() const
+	const Vector<Ref<ParticlesEffect>>& ParticlesEmitter::GetEffects() const
 	{
 		return mEffects;
 	}
 
-	void ParticlesEmitter::RemoveEffect(ParticlesEffect* effect)
+	void ParticlesEmitter::RemoveEffect(const Ref<ParticlesEffect>& effect)
 	{
 		mEffects.Remove(effect);
-		delete effect;
 	}
 
 	void ParticlesEmitter::RemoveAllEffects()
 	{
-		for (auto effect : mEffects)
-			delete effect;
-
 		mEffects.Clear();
 	}
 

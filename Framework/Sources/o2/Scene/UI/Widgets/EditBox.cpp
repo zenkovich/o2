@@ -779,41 +779,41 @@ namespace o2
 
 		for (auto line : symbolsSet.mLines)
 		{
-			if (beg > line.mLineBegSymbol + line.mSymbols.Count() || end < line.mLineBegSymbol)
+			if (beg > line.lineBegSymbol + line.symbols.Count() || end < line.lineBegSymbol)
 				continue;
 
-			if (line.mSymbols.Count() == 0)
+			if (line.symbols.Count() == 0)
 			{
-				Vec2F lb = line.mPosition + Vec2F(0, caretDown);
+				Vec2F lb = line.position + Vec2F(0, caretDown);
 				Vec2F rt = lb + Vec2F(spaceAdvance, caretUp);
 				AddSelectionRect(RectF(lb, rt));
 				continue;
 			}
 
-			int begSymbol = Math::Max(beg - line.mLineBegSymbol, 0);
-			int endSymbol = end - line.mLineBegSymbol;
+			int begSymbol = Math::Max(beg - line.lineBegSymbol, 0);
+			int endSymbol = end - line.lineBegSymbol;
 			float endOffs = 0, begOffs = 0;
-			int lineSymbolsCount = line.mSymbols.Count();
+			int lineSymbolsCount = line.symbols.Count();
 
 			if (begSymbol >= lineSymbolsCount)
 			{
-				begOffs = line.mSymbols.Last().mAdvance;
-				begSymbol = line.mSymbols.Count() - 1;
+				begOffs = line.symbols.Last().advance;
+				begSymbol = line.symbols.Count() - 1;
 			}
 
 			if (endSymbol >= lineSymbolsCount)
 			{
-				endOffs = line.mSymbols.Last().mAdvance;
-				if (line.mEndedNewLine && endSymbol > lineSymbolsCount)
+				endOffs = line.symbols.Last().advance;
+				if (line.endedNewLine && endSymbol > lineSymbolsCount)
 					endOffs += spaceAdvance;
 
 				endSymbol = lineSymbolsCount - 1;
 			}
 
-			Vec2F lb(line.mSymbols[begSymbol].mFrame.left + line.mSymbols[begSymbol].mOrigin.x + begOffs,
-					 line.mPosition.y + caretDown);
-			Vec2F rt(line.mSymbols[endSymbol].mFrame.left + line.mSymbols[endSymbol].mOrigin.x + endOffs,
-					 line.mPosition.y + caretUp);
+			Vec2F lb(line.symbols[begSymbol].frame.left + line.symbols[begSymbol].origin.x + begOffs,
+					 line.position.y + caretDown);
+			Vec2F rt(line.symbols[endSymbol].frame.left + line.symbols[endSymbol].origin.x + endOffs,
+					 line.position.y + caretUp);
 
 			AddSelectionRect(RectF(lb, rt));
 		}
@@ -833,25 +833,25 @@ namespace o2
 		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
 		for (auto line : symbolsSet.mLines)
 		{
-			if (position >= line.mLineBegSymbol && position <= line.mLineBegSymbol + line.mSymbols.Count())
+			if (position >= line.lineBegSymbol && position <= line.lineBegSymbol + line.symbols.Count())
 			{
-				int off = position - line.mLineBegSymbol;
+				int off = position - line.lineBegSymbol;
 
-				if (off < line.mSymbols.Count())
+				if (off < line.symbols.Count())
 				{
-					auto symb = line.mSymbols[off];
-					auto res = symb.mFrame.LeftBottom() + symb.mOrigin;
+					auto symb = line.symbols[off];
+					auto res = symb.frame.LeftBottom() + symb.origin;
 					if (fakeSymbols)
 						mTextDrawable->SetText("");
 					return res;
 				}
 				else
 				{
-					if (line.mSymbols.Count() == 0)
-						return line.mPosition;
+					if (line.symbols.Count() == 0)
+						return line.position;
 
-					auto symb = line.mSymbols.Last();
-					auto res = symb.mFrame.LeftBottom() + symb.mOrigin + Vec2F(symb.mAdvance, 0);
+					auto symb = line.symbols.Last();
+					auto res = symb.frame.LeftBottom() + symb.origin + Vec2F(symb.advance, 0);
 					if (fakeSymbols)
 						mTextDrawable->SetText("");
 					return res;
@@ -884,20 +884,20 @@ namespace o2
 			checkUp = lineIdx > 0;
 			checkDown = lineIdx < (int)symbolsSet.mLines.Count() - 1;
 
-			float lineTop = (line.mSize.y*(1.0f - lineOffCoef) + lineHeight)*0.5f + line.mPosition.y;
-			float lineBottom = -line.mSize.y*lineOffCoef + line.mPosition.y;
+			float lineTop = (line.size.y*(1.0f - lineOffCoef) + lineHeight)*0.5f + line.position.y;
+			float lineBottom = -line.size.y*lineOffCoef + line.position.y;
 
-			if (line.mSymbols.Count() == 0 && point.y > lineBottom && point.y < lineTop)
-				return line.mLineBegSymbol;
+			if (line.symbols.Count() == 0 && point.y > lineBottom && point.y < lineTop)
+				return line.lineBegSymbol;
 
 
 			int idx = 0;
-			for (auto symb : line.mSymbols)
+			for (auto symb : line.symbols)
 			{
 				checkLeft = idx > 0;
-				checkRight = idx < (int)line.mSymbols.Count() - 1;
+				checkRight = idx < (int)line.symbols.Count() - 1;
 
-				RectF sf(symb.mFrame.left, lineTop, symb.mFrame.right, lineBottom);
+				RectF sf(symb.frame.left, lineTop, symb.frame.right, lineBottom);
 
 				bool ls = checkLeft ? sf.left < point.x : true;
 				bool rs = checkRight ? sf.right > point.x : true;
@@ -906,10 +906,10 @@ namespace o2
 
 				if (ls && rs && ts && bs)
 				{
-					if (point.x >(symb.mFrame.left + symb.mFrame.right)*0.5f)
-						return line.mLineBegSymbol + idx + 1;
+					if (point.x >(symb.frame.left + symb.frame.right)*0.5f)
+						return line.lineBegSymbol + idx + 1;
 					else
-						return line.mLineBegSymbol + idx;
+						return line.lineBegSymbol + idx;
 				}
 
 				idx++;

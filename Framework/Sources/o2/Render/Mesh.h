@@ -29,7 +29,7 @@ namespace o2
 
 	public:
 		// Constructor
-		Mesh(TextureRef texture = TextureRef(), UInt vertexCount = 4, UInt polyCount = 2);
+		Mesh(const TextureRef& texture = TextureRef::Null(), UInt vertexCount = 4, UInt polyCount = 2);
 
 		// Copy-constructor
 		Mesh(const Mesh& mesh);
@@ -47,10 +47,10 @@ namespace o2
 		void Draw();
 
 		// Sets texture
-		void SetTexture(TextureRef texture);
+		void SetTexture(const TextureRef& texture);
 
 		// Returns texture ptr
-		TextureRef GetTexture() const;
+		const TextureRef& GetTexture() const;
 
 		// Sets max vertex count buffer
 		void SetMaxVertexCount(const UInt& count);

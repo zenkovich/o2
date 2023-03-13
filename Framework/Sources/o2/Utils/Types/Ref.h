@@ -94,6 +94,13 @@ namespace o2
 	// -------------------------------------------------------------
 	class RefCounterable
 	{
+	public:
+		// Returns strong references count
+		UInt16 GetStrongReferencesCount() const;
+
+		// Returns weak references count
+		UInt16 GetWeakReferencesCount() const;
+
 	protected:
 		mutable RefCounter* mRefCounter = nullptr; // Pointer to reference counter. Creates when first reference created
 
@@ -205,6 +212,9 @@ namespace o2
 
 		// Constructor from nullptr
 		BaseWeakRef(nullptr_t);
+
+		// Constructor from pointer
+		explicit BaseWeakRef(_type* ptr);
 
 		// Copy constructor
 		BaseWeakRef(const BaseWeakRef<_type>& other);
@@ -328,6 +338,9 @@ namespace o2
 		// Constructor from nullptr
 		WeakRef(nullptr_t) : BaseWeakRef<_type>(nullptr) {}
 
+		// Constructor from pointer
+		explicit WeakRef(_type* ptr) : BaseWeakRef<_type>(ptr) {}
+
 		// Copy constructor
 		WeakRef(const WeakRef<_type>& other) : BaseWeakRef<_type>(other) {}
 
@@ -435,6 +448,28 @@ namespace o2
 
 	// Special macro for making new object and returning reference to it with storing location and line of creation for debug
 #define mmake NewPlaceHelper(__FILE__, __LINE__).Create
+
+	// Reference class implementation of BaseRef
+#define BASE_REF_IMPLEMETATION(CLASS) \
+	Ref() : BaseRef<CLASS>() {}																							\
+	Ref(nullptr_t) : BaseRef<CLASS>(nullptr) {}																			\
+	explicit Ref(CLASS* ptr) : BaseRef<CLASS>(ptr) {}																		\
+	Ref(const Ref<CLASS>& other) : BaseRef<CLASS>(other) {}															\
+	Ref(Ref<CLASS>&& other) : BaseRef<CLASS>(other) {}																\
+	template<typename _otherCLASS, typename _enable = std::enable_if<std::is_convertible<_otherCLASS*, CLASS*>::value>::type>	\
+	Ref(const Ref<_otherCLASS>& other) : BaseRef<CLASS>(other) {}													\
+	template<typename _otherCLASS, typename _enable = std::enable_if<std::is_convertible<_otherCLASS*, CLASS*>::value>::type>	\
+	Ref(Ref<_otherCLASS>&& other) : BaseRef<CLASS>(other) {}														\
+	Ref<CLASS>& operator=(const Ref<CLASS>& other) { BaseRef<CLASS>::operator=(other); return *this; }				\
+	Ref<CLASS>& operator=(Ref<CLASS>&& other) { BaseRef<CLASS>::operator=(other); return *this; }					\
+	template<typename _otherCLASS, typename _enable = std::enable_if<std::is_convertible<_otherCLASS*, CLASS*>::value>::type>	\
+	Ref<CLASS>& operator=(const Ref<_otherCLASS>& other) { BaseRef<CLASS>::operator=(other); return *this; }		\
+	template<typename _otherCLASS, typename _enable = std::enable_if<std::is_convertible<_otherCLASS*, CLASS*>::value>::type>	\
+	Ref<CLASS>& operator=(Ref<_otherCLASS>&& other) { BaseRef<CLASS>::operator=(other); return *this; }				\
+	bool IsValid() const { return BaseRef<CLASS>::IsValid(); }																	\
+	operator bool() const { return BaseRef<CLASS>::operator bool(); }															\
+	CLASS& operator*() const { return BaseRef<CLASS>::operator*(); }															\
+	CLASS* operator->() const { return BaseRef<CLASS>::operator->(); }															
 
 	// ------------------------------
 	// Helper struct for mmake macros
@@ -615,6 +650,14 @@ namespace o2
 	template<typename _type>
 	BaseWeakRef<_type>::BaseWeakRef(nullptr_t)
 	{}
+
+	template<typename _type>
+	BaseWeakRef<_type>::BaseWeakRef(_type * ptr):
+		mPtr(ptr)
+	{
+		CheckRefCounter();
+		IncrementWeakRef();
+	}
 
 	template<typename _type>
 	BaseWeakRef<_type>::BaseWeakRef(const BaseWeakRef<_type>& other) :
