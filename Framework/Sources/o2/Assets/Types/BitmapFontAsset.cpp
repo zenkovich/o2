@@ -37,7 +37,7 @@ namespace o2
 		mFont = o2Render.mFonts.FindOrDefault([&](auto fnt) { return fnt->GetFileName() == path; });
 
 		if (!mFont)
-			mFont = mnew BitmapFont(path);
+			mFont = mmake<BitmapFont>(path);
 	}
 }
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::BitmapFontAsset>);

@@ -359,9 +359,18 @@ namespace o2
 		return newType;
 	}
 
+	template<typename _type, typename _ref_type>
+	class Helper
+	{
+		using value = std::is_base_of<BaseRef<_ref_type>, _type>::value;
+	};
+
 	template<typename _object_type, typename _base_type>
 	void ReflectionInitializationTypeProcessor::BaseType(_object_type* object, Type* type, const char* name)
 	{
+		if constexpr (Helper<_base_type>::value)
+			return;
+
 		typedef typename std::conditional<std::is_base_of<IObject, _base_type>::value, _base_type, Type::Dummy>::type _base_under;
 
 		if (std::is_same<_base_under, Type::Dummy>::value)

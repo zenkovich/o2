@@ -433,14 +433,14 @@ namespace o2
 	}
 
 	// Dynamic cast from one reference type to another
-	template<typename _from_type, typename _to_type>
+	template<typename _to_type, typename _from_type>
 	Ref<_to_type> DynamicCast(const Ref<_from_type>& from)
 	{
 		return Ref<_to_type>(dynamic_cast<_to_type*>(from.Get()));
 	}
 
 	// Static cast from one reference type to another
-	template<typename _from_type, typename _to_type>
+	template<typename _to_type, typename _from_type>
 	Ref<_to_type> StaticCast(const Ref<_from_type>& from)
 	{
 		return Ref<_to_type>(static_cast<_to_type*>(from.Get()));

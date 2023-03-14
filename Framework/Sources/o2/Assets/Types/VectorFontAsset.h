@@ -34,17 +34,17 @@ namespace o2
 		Meta* GetMeta() const;
 
 		// Returns font effects array 
-		const Vector<VectorFont::Effect*>& GetEffects() const;
+		const Vector<Ref<VectorFont::Effect>>& GetEffects() const;
 
 		// Adds effect to font
-		void AddEffect(VectorFont::Effect* effect);
+		void AddEffect(const Ref<VectorFont::Effect>& effect);
 
 		// Adds effect to font
 		template<typename _type, typename ... _args>
 		void AddEffect(_args ... args);
 
 		// Removes effect from font
-		void RemoveEffect(VectorFont::Effect* effect);
+		void RemoveEffect(const Ref<VectorFont::Effect>& effect);
 
 		// Removes all effects
 		void RemoveAllEffects();
@@ -73,7 +73,7 @@ namespace o2
 			SERIALIZABLE(Meta);
 
 		protected:
-			Vector<VectorFont::Effect*> mEffects; // Font effects array @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT @INVOKE_ON_CHANGE(UpdateFontEffects)
+			Vector<Ref<VectorFont::Effect>> mEffects; // Font effects array @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT @INVOKE_ON_CHANGE(UpdateFontEffects)
 			
 			VectorFontAsset* mAsset = nullptr; // Asset pointer
 
@@ -102,7 +102,7 @@ namespace o2
 	template<typename _type, typename ... _args>
 	void VectorFontAsset::AddEffect(_args ... args)
 	{
-		AddEffect(mnew _type(args ...));
+		AddEffect(mmake<_type>(args ...));
 	}
 }
 
@@ -122,9 +122,9 @@ CLASS_METHODS_META(o2::VectorFontAsset)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const VectorFontAsset&);
 	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<VectorFont::Effect*>&, GetEffects);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, VectorFont::Effect*);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveEffect, VectorFont::Effect*);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<VectorFont::Effect>>&, GetEffects);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, const Ref<VectorFont::Effect>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveEffect, const Ref<VectorFont::Effect>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllEffects);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

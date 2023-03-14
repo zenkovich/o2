@@ -7,10 +7,7 @@
 namespace o2
 {
 	VectorFontAsset::Meta::~Meta()
-	{
-		for (auto eff : mEffects)
-			delete eff;
-	}
+	{}
 
 	bool VectorFontAsset::Meta::IsEqual(AssetMeta* other) const
 	{
@@ -58,31 +55,27 @@ namespace o2
 		return *this;
 	}
 
-	const Vector<VectorFont::Effect*>& VectorFontAsset::GetEffects() const
+	const Vector<Ref<VectorFont::Effect>>& VectorFontAsset::GetEffects() const
 	{
 		return GetMeta()->mEffects;
 	}
 
-	void VectorFontAsset::AddEffect(VectorFont::Effect* effect)
+	void VectorFontAsset::AddEffect(const Ref<VectorFont::Effect>& effect)
 	{
 		GetMeta()->mEffects.Add(effect);
-		((VectorFont*)mFont.mFont)->AddEffect(effect);
+		StaticCast<VectorFont>(mFont)->AddEffect(effect);
 	}
 
-	void VectorFontAsset::RemoveEffect(VectorFont::Effect* effect)
+	void VectorFontAsset::RemoveEffect(const Ref<VectorFont::Effect>& effect)
 	{
 		GetMeta()->mEffects.Remove(effect);
-		((VectorFont*)mFont.mFont)->RemoveEffect(effect);
+		StaticCast<VectorFont>(mFont)->RemoveEffect(effect);
 	}
 
 	void VectorFontAsset::RemoveAllEffects()
 	{
-		for (auto eff : GetMeta()->mEffects)
-			delete eff;
-
 		GetMeta()->mEffects.Clear();
-
-		((VectorFont*)mFont.mFont)->RemoveAllEffects();
+		StaticCast<VectorFont>(mFont)->RemoveAllEffects();
 	}
 
 	const char* VectorFontAsset::GetFileExtensions()
@@ -101,7 +94,7 @@ namespace o2
 
 		if (!mFont)
 		{
-			mFont = mnew VectorFont(path);
+			mFont = mmake<VectorFont>(path);
 			UpdateFontEffects();
 		}
 		
@@ -113,14 +106,14 @@ namespace o2
 
 	void VectorFontAsset::UpdateFontEffects()
 	{
-		Vector<VectorFont::Effect*> clonedEffects;;
+		Vector<Ref<VectorFont::Effect>> clonedEffects;;
 		for (auto eff : GetMeta()->mEffects)
 		{
 			if (eff)
-				clonedEffects.Add(eff->CloneAs<VectorFont::Effect>());
+				clonedEffects.Add(Ref(eff->CloneAs<VectorFont::Effect>()));
 		}
 
-		dynamic_cast<VectorFont*>(mFont.mFont)->SetEffects(clonedEffects);
+		StaticCast<VectorFont>(mFont)->SetEffects(clonedEffects);
 	}
 }
 

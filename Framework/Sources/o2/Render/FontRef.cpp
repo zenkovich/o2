@@ -1,5 +1,5 @@
 #include "o2/stdafx.h"
-#include "FontRef"
+#include "FontRef.h"
 
 #include "o2/Assets/Assets.h"
 #include "o2/Assets/Types/BitmapFontAsset.h"
