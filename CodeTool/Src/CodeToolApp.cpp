@@ -100,7 +100,7 @@ map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
 {
 	map<string, TimeStamp> res;
 
-	for (const auto& entry: filesystem::directory_iterator(path))
+	for (const auto& entry : filesystem::directory_iterator(path))
 	{
 		if (entry.is_directory())
 		{
@@ -122,14 +122,14 @@ map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
 
 time_t last_write_time_to_time_t(filesystem::file_time_type const& tp)
 {
-    auto sctp = chrono::time_point_cast<chrono::system_clock::duration>(tp - filesystem::file_time_type::clock::now()
-              + chrono::system_clock::now());
-    return chrono::system_clock::to_time_t(sctp);
+	auto sctp = chrono::time_point_cast<chrono::system_clock::duration>(tp - filesystem::file_time_type::clock::now()
+																		+ chrono::system_clock::now());
+	return chrono::system_clock::to_time_t(sctp);
 }
 
 TimeStamp CodeToolApplication::GetFileEditedDate(const string& path)
 {
-	const filesystem::directory_entry file {path};
+	const filesystem::directory_entry file{ path };
 
 	if (!file.exists())
 	{
@@ -138,7 +138,7 @@ TimeStamp CodeToolApplication::GetFileEditedDate(const string& path)
 
 	auto const& lwTime = file.last_write_time();
 	time_t cftime = last_write_time_to_time_t(lwTime);
-    auto const& stLocal = std::localtime(&cftime);
+	auto const& stLocal = std::localtime(&cftime);
 	if (!stLocal)
 	{
 		return TimeStamp();
@@ -200,7 +200,7 @@ string CodeToolApplication::ReadFile(const string& path) const
 
 bool CodeToolApplication::IsFileExist(const string& path) const
 {
-	filesystem::directory_entry entry{path};
+	filesystem::directory_entry entry{ path };
 	if (entry.is_directory()) {
 		return false;
 	}
@@ -210,13 +210,13 @@ bool CodeToolApplication::IsFileExist(const string& path) const
 
 string CodeToolApplication::GetPathWithoutDirectories(const string& path)
 {
-	filesystem::path p{path};
+	filesystem::path p{ path };
 	return p.filename().string();
 }
 
 string CodeToolApplication::GetParentPath(const string& path)
 {
-	filesystem::path p{path};
+	filesystem::path p{ path };
 	return p.parent_path().string();
 }
 
@@ -277,9 +277,11 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 
 		while (!dir.empty() && dir[0] == '.')
 		{
-			auto slashPos = dir.find('/');
+			auto slashPos = std::min(dir.find('/'), dir.find('\\'));
 			if (slashPos != string::npos)
 				dir.erase(0, slashPos + 1);
+			else
+				break;
 		}
 
 		if (dir.find("OSX") != string::npos)
@@ -614,21 +616,21 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	{
 		bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(),
 									   [](SyntaxFunction* x) {
-			return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE" || x->GetName() == "ASSET_TYPE";
-		}) != cls->GetFunctions().end();
+										   return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE" || x->GetName() == "ASSET_TYPE";
+									   }) != cls->GetFunctions().end();
 
-		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || !hasIObject || cls == baseObjectClass)
-			continue;
+									   if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || !hasIObject || cls == baseObjectClass)
+										   continue;
 
-		if (!cls->IsTemplate())
-		{
-			checkCppLoad();
-			cppSource += GetClassDeclaration(cls);
-		}
+									   if (!cls->IsTemplate())
+									   {
+										   checkCppLoad();
+										   cppSource += GetClassDeclaration(cls);
+									   }
 
-		hSource += GetClassMeta(cls);
+									   hSource += GetClassMeta(cls);
 
-		VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
+									   VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
 	}
 
 	// Write
@@ -661,7 +663,7 @@ string CodeToolApplication::GetClassDeclaration(SyntaxClass* cls)
 string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 {
 	string res = "\n";
-	res.reserve(cls->GetData().length()*2);
+	res.reserve(cls->GetData().length() * 2);
 
 	string nspace;
 	int nspaceDelimer = (int)cls->GetFullName().rfind("::");
@@ -693,7 +695,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 			className = newClassName;
 		}
 
-		res += string("\tBASE_CLASS(") + className +  +");\n";
+		res += string("\tBASE_CLASS(") + className + +");\n";
 	}
 	res += "}\nEND_META;\n";
 
@@ -726,7 +728,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		SyntaxComment* synComment = cls->FindCommentNearLine(variable->GetLine());
 
 		if (synComment) {
-			string ignore{"@IGNORE"};
+			string ignore{ "@IGNORE" };
 			auto fnd = synComment->GetData().find(ignore);
 			if (fnd != string::npos)
 			{
@@ -767,7 +769,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	{
 		if (!IsFunctionReflectable(function, cls))
 			continue;
-		
+
 		// try search comment
 		SyntaxComment* synComment = cls->FindCommentNearLine(function->GetLine());
 
@@ -806,15 +808,12 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
 			if (returnTypeName.find(',') != returnTypeName.npos)
 			{
-				char buf[255];
 				supportingTypedefs.push_back(returnTypeName);
-				returnTypeName = (string)"_tmp" + _itoa((int)supportingTypedefs.size(), buf, 10);
+				returnTypeName = (string)"_tmp" + to_string((int)supportingTypedefs.size());
 			}
 
-		if (returnTypeName.find(',') != returnTypeName.npos)
-		{
-			supportingTypedefs.push_back(returnTypeName);
-			returnTypeName = (string)"_tmp" + to_string((int)supportingTypedefs.size());
+			res += returnTypeName;
+			res += string(", ") + function->GetName();
 		}
 
 		bool first = isConstructor;
@@ -932,7 +931,7 @@ string CodeToolApplication::GetAttributes(SyntaxClass* cls, int line, SyntaxComm
 string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)
 {
 	string res;
-	res.reserve(enm->GetEntries().size()*15);
+	res.reserve(enm->GetEntries().size() * 15);
 
 	res += "\nENUM_META(" + enm->GetFullName() + ")\n{\n";
 
@@ -1008,13 +1007,13 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 			case ']': sqBraces--; break;
 			case '<': trBraces++; break;
 			case '>':
-			trBraces--;
-			if (trBraces == 0 && braces == 0 && sqBraces == 0)
-			{
-				stop = true;
-				fnd--;
-			}
-			break;
+				trBraces--;
+				if (trBraces == 0 && braces == 0 && sqBraces == 0)
+				{
+					stop = true;
+					fnd--;
+				}
+				break;
 			}
 		}
 
@@ -1026,7 +1025,7 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 		for (auto& templateParam : templateParams)
 		{
 			Trim(templateParam);
-			string typename_str{"typename "};
+			string typename_str{ "typename " };
 			if (StartsWith(templateParam, typename_str))
 				templateParam.erase(0, typename_str.size());
 
@@ -1064,13 +1063,13 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 
 		if (!allowMultiline)
 		{
-			string keyword_str{keyword};
+			string keyword_str{ keyword };
 			auto newLinePos = data.find("\n", caret + keyword_str.size());
 			if (newLinePos != string::npos && newLinePos < end)
 				return;
 		}
 
-		string endword_str{endword};
+		string endword_str{ endword };
 		data.erase(caret + 1, end + endword_str.size() - caret - 1);
 		caret = data.find(keyword);
 	}
@@ -1085,7 +1084,8 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 
 bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const
 {
-	static vector<string> ignoringNames = { "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
+	static vector<string> ignoringNames = { "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE", 
+		"ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION", "BASE_REF_IMPLEMETATION" };                                                   
 
 	return !StartsWith(function->GetName(), string("~") + owner->GetName()) &&
 		function->GetName().find('~') == string::npos &&
@@ -1361,8 +1361,8 @@ void CodeToolCache::AppendSection(SyntaxSection* currentSection, SyntaxSection* 
 
 		auto fnd = find_if(currentSection->mSections.begin(), currentSection->mSections.end(),
 						   [=](SyntaxSection* x) {
-			return !x->IsClass() && x->GetName() == newSection->GetName();
-		});
+							   return !x->IsClass() && x->GetName() == newSection->GetName();
+						   });
 
 		if (fnd != currentSection->mSections.end())
 			childNamespace = *fnd;
