@@ -42,7 +42,7 @@ namespace o2
 		mSerializeEnabled = false;
 	}
 
-	ImageComponent::ImageComponent(Bitmap* bitmap) :
+	ImageComponent::ImageComponent(const Ref<Bitmap>& bitmap) :
 		DrawableComponent(), Sprite(bitmap)
 	{
 		mSerializeEnabled = false;

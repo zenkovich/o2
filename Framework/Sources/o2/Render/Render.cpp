@@ -39,10 +39,10 @@ namespace o2
 	{
 		mSolidLineTexture = TextureRef::Null();
 
-		Bitmap bitmap(PixelFormat::R8G8B8A8, Vec2I(32, 32));
-		bitmap.Fill(Color4(255, 255, 255, 255));
-		bitmap.FillRect(0, 32, 16, 0, Color4(255, 255, 255, 0));
-		mDashLineTexture = mmake<Texture>(&bitmap);
+		Ref<Bitmap> bitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2I(32, 32));
+		bitmap->Fill(Color4(255, 255, 255, 255));
+		bitmap->FillRect(0, 32, 16, 0, Color4(255, 255, 255, 0));
+		mDashLineTexture = mmake<Texture>(bitmap);
 	}
 
 	void Render::InitializeFreeType()

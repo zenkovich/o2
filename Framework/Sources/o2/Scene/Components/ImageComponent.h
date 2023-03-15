@@ -36,7 +36,7 @@ namespace o2
 		ImageComponent(const Color4& color);
 
 		// Constructor from bitmap
-		ImageComponent(Bitmap* bitmap);
+		ImageComponent(const Ref<Bitmap>& bitmap);
 
 		// Constructor from sprite
 		ImageComponent(const Sprite& sprite);
@@ -112,7 +112,7 @@ CLASS_METHODS_META(o2::ImageComponent)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(Bitmap*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Bitmap>&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ImageComponent&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);

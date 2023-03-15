@@ -109,11 +109,11 @@ namespace Editor
 			if (!chessBackTexture)
 			{
 				Color4 color1(1.0f, 1.0f, 1.0f, 1.0f), color2(0.7f, 0.7f, 0.7f, 1.0f);
-				Bitmap backLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(16, 16));
-				backLayerBitmap.Fill(color1);
-				backLayerBitmap.FillRect(0, 8, 8, 0, color2);
-				backLayerBitmap.FillRect(8, 16, 16, 8, color2);
-				chessBackTexture = TextureRef(&backLayerBitmap);
+				Ref<Bitmap> backLayerBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2I(16, 16));
+				backLayerBitmap->Fill(color1);
+				backLayerBitmap->FillRect(0, 8, 8, 0, color2);
+				backLayerBitmap->FillRect(8, 16, 16, 8, color2);
+				chessBackTexture = TextureRef(backLayerBitmap);
 				chessBackSprite = Sprite(chessBackTexture, RectI(0, 0, 16, 16));
 				chessBackSprite.mode = SpriteMode::Tiled;
 			}

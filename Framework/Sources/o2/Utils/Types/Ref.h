@@ -157,6 +157,12 @@ namespace o2
 		// Destructor
 		~BaseRef();
 
+		// Equality operator
+		bool operator==(const BaseRef<_type>& other) const;
+
+		// Inequality operator
+		bool operator!=(const BaseRef<_type>& other) const;
+
 		// Copy operator
 		BaseRef<_type>& operator=(const BaseRef<_type>& other);
 
@@ -231,6 +237,12 @@ namespace o2
 		// Destructor
 		~BaseWeakRef();
 
+		// Equality operator
+		bool operator==(const BaseWeakRef<_type>& other) const;
+
+		// Inequality operator
+		bool operator!=(const BaseWeakRef<_type>& other) const;
+
 		// Copy operator
 		BaseWeakRef& operator=(const BaseWeakRef<_type>& other);
 
@@ -298,6 +310,12 @@ namespace o2
 		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
 		Ref(Ref<_other_type>&& other) : BaseRef<_type>(other) {}
 
+		// Equality operator
+		bool operator==(const Ref<_type>& other) const { return BaseRef<_type>::operator==(other); }
+
+		// Inequality operator
+		bool operator!=(const Ref<_type>& other) const { return BaseRef<_type>::operator!=(other); }
+
 		// Copy operator 
 		Ref<_type>& operator=(const Ref<_type>& other) { BaseRef<_type>::operator=(other); return *this; }
 
@@ -352,6 +370,12 @@ namespace o2
 
 		// Move constructor from strong reference
 		WeakRef(Ref<_type>&& other) : BaseWeakRef<_type>(other) {}
+
+		// Equality operator
+		bool operator==(const WeakRef<_type>& other) const { return BaseWeakRef<_type>::operator==(other); }
+
+		// Inequality operator
+		bool operator!=(const WeakRef<_type>& other) const { return BaseWeakRef<_type>::operator!=(other); }
 
 		// Copy operator
 		WeakRef& operator=(const WeakRef<_type>& other) { BaseWeakRef<_type>::operator=(other); return *this; }
@@ -450,25 +474,27 @@ namespace o2
 #define mmake NewPlaceHelper(__FILE__, __LINE__).Create
 
 	// Reference class implementation of BaseRef
-#define BASE_REF_IMPLEMETATION(CLASS) \
-	Ref() : BaseRef<CLASS>() {}																							\
-	Ref(nullptr_t) : BaseRef<CLASS>(nullptr) {}																			\
-	explicit Ref(CLASS* ptr) : BaseRef<CLASS>(ptr) {}																		\
-	Ref(const Ref<CLASS>& other) : BaseRef<CLASS>(other) {}															\
-	Ref(Ref<CLASS>&& other) : BaseRef<CLASS>(other) {}																\
-	template<typename _otherCLASS, typename _enable = std::enable_if<std::is_convertible<_otherCLASS*, CLASS*>::value>::type>	\
-	Ref(const Ref<_otherCLASS>& other) : BaseRef<CLASS>(other) {}													\
-	template<typename _otherCLASS, typename _enable = std::enable_if<std::is_convertible<_otherCLASS*, CLASS*>::value>::type>	\
-	Ref(Ref<_otherCLASS>&& other) : BaseRef<CLASS>(other) {}														\
-	Ref<CLASS>& operator=(const Ref<CLASS>& other) { BaseRef<CLASS>::operator=(other); return *this; }				\
-	Ref<CLASS>& operator=(Ref<CLASS>&& other) { BaseRef<CLASS>::operator=(other); return *this; }					\
-	template<typename _otherCLASS, typename _enable = std::enable_if<std::is_convertible<_otherCLASS*, CLASS*>::value>::type>	\
-	Ref<CLASS>& operator=(const Ref<_otherCLASS>& other) { BaseRef<CLASS>::operator=(other); return *this; }		\
-	template<typename _otherCLASS, typename _enable = std::enable_if<std::is_convertible<_otherCLASS*, CLASS*>::value>::type>	\
-	Ref<CLASS>& operator=(Ref<_otherCLASS>&& other) { BaseRef<CLASS>::operator=(other); return *this; }				\
-	bool IsValid() const { return BaseRef<CLASS>::IsValid(); }																	\
-	operator bool() const { return BaseRef<CLASS>::operator bool(); }															\
-	CLASS& operator*() const { return BaseRef<CLASS>::operator*(); }															\
+#define BASE_REF_IMPLEMETATION(CLASS) 																										\
+	Ref() : BaseRef<CLASS>() {}																												\
+	Ref(nullptr_t) : BaseRef<CLASS>(nullptr) {}																								\
+	explicit Ref(CLASS* ptr) : BaseRef<CLASS>(ptr) {}																						\
+	Ref(const Ref<CLASS>& other) : BaseRef<CLASS>(other) {}																					\
+	Ref(Ref<CLASS>&& other) : BaseRef<CLASS>(other) {}																						\
+	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
+	Ref(const Ref<_other_type>& other) : BaseRef<CLASS>(other) {}																			\
+	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
+	Ref(Ref<_other_type>&& other) : BaseRef<CLASS>(other) {}																				\
+	bool operator==(const Ref<CLASS>& other) const { return BaseRef<CLASS>::operator==(other); }											\
+	bool operator!=(const Ref<CLASS>& other) const { return BaseRef<CLASS>::operator!=(other); }											\
+	Ref<CLASS>& operator=(const Ref<CLASS>& other) { BaseRef<CLASS>::operator=(other); return *this; }										\
+	Ref<CLASS>& operator=(Ref<CLASS>&& other) { BaseRef<CLASS>::operator=(other); return *this; }											\
+	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
+	Ref<CLASS>& operator=(const Ref<_other_type>& other) { BaseRef<CLASS>::operator=(other); return *this; }								\
+	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
+	Ref<CLASS>& operator=(Ref<_other_type>&& other) { BaseRef<CLASS>::operator=(other); return *this; }										\
+	bool IsValid() const { return BaseRef<CLASS>::IsValid(); }																				\
+	operator bool() const { return BaseRef<CLASS>::operator bool(); }																		\
+	CLASS& operator*() const { return BaseRef<CLASS>::operator*(); }																		\
 	CLASS* operator->() const { return BaseRef<CLASS>::operator->(); }															
 
 	// ------------------------------
@@ -537,6 +563,18 @@ namespace o2
 	BaseRef<_type>::~BaseRef()
 	{
 		DecrementRef();
+	}
+
+	template<typename _type>
+	bool BaseRef<_type>::operator==(const BaseRef<_type>& other) const
+	{
+		return mPtr == other.mPtr;
+	}
+
+	template<typename _type>
+	bool BaseRef<_type>::operator!=(const BaseRef<_type>& other) const
+	{
+		return mPtr != other.mPtr;
 	}
 
 	template<typename _type>
@@ -637,6 +675,8 @@ namespace o2
 				DestructObject(mPtr);
 				(*refCounter->mImplementation->DestroyObject)(mPtr);
 
+				mPtr = nullptr;
+
 				if (refCounter->weakReferences == 0)
 					(*refCounter->mImplementation->DestroyCounter)(refCounter);
 			}
@@ -694,6 +734,18 @@ namespace o2
 	BaseWeakRef<_type>::~BaseWeakRef()
 	{
 		DecrementWeakRef();
+	}
+
+	template<typename _type>
+	bool BaseWeakRef<_type>::operator==(const BaseWeakRef<_type>& other) const
+	{
+		return mPtr == other.mPtr;
+	}
+
+	template<typename _type>
+	bool BaseWeakRef<_type>::operator!=(const BaseWeakRef<_type>& other) const
+	{
+		return mPtr != other.mPtr;
 	}
 
 	template<typename _type>
@@ -799,6 +851,7 @@ namespace o2
 				{
 					(*mRefCounter->mImplementation->DestroyCounter)(mRefCounter);
 					mRefCounter = nullptr;
+					mPtr = nullptr;
 				}
 			}
 		}
