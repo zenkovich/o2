@@ -15,7 +15,7 @@ namespace o2
 	// -------------------------------------------------------------------------------------------------
 	// Basic asset interface. Contains copy of asset, without caching. For regular use assets references
 	// -------------------------------------------------------------------------------------------------
-	class Asset : public ISerializable
+	class Asset : public ISerializable, public RefCounterable
 	{
 	public:
 		typedef AssetMeta MetaType;
@@ -25,7 +25,7 @@ namespace o2
 		PROPERTY(String, path, SetPath, GetPath); // Asset path property @EDITOR_IGNORE
 		GETTER(String, fullPath, GetFullPath);    // Full asset path getter (from binary path)
 		GETTER(UID, id, GetUID);                  // Asset id getter
-		GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter
+		GETTER(Ref<AssetMeta>, meta, GetMeta);    // Asset meta information pointer getter
 
 	public:
 		// Virtual destructor
@@ -50,7 +50,7 @@ namespace o2
 		const UID& GetUID() const;
 
 		// Returns meta information pointer
-		AssetMeta* GetMeta() const;
+		const Ref<AssetMeta>& GetMeta() const;
 
 		// Returns asset info
 		const AssetInfo& GetInfo() const;
@@ -99,7 +99,7 @@ namespace o2
 		SERIALIZABLE(Asset);
 
 	protected:
-		PROPERTY(AssetMeta*, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE @EXPANDED_BY_DEFAULT @NO_HEADER
+		PROPERTY(Ref<AssetMeta>, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE @EXPANDED_BY_DEFAULT @NO_HEADER
 
 		AssetInfo mInfo; // Asset info 
 
@@ -111,7 +111,7 @@ namespace o2
 
 	protected:
 		// Constructor with meta, use it as default constructor
-		Asset(AssetMeta* meta);
+		Asset(const Ref<AssetMeta>& meta);
 
 		// Copy-constructor
 		Asset(const Asset& asset);
@@ -126,7 +126,7 @@ namespace o2
 		const Ref<LogStream>& GetAssetsLogStream() const;
 
 		// Meta setter, used for property
-		void SetMeta(AssetMeta* meta);
+		void SetMeta(const Ref<AssetMeta>& meta);
 
 		// Loads asset from path
 		void Load(const AssetInfo& info);
@@ -137,7 +137,7 @@ namespace o2
 		// Saves asset data, using DataValue and serialization
 		virtual void SaveData(const String& path) const;
 
-		// Itis called when UID has changed
+		// Called when UID has changed
 		virtual void OnUIDChanged(const UID& oldUID);
 
 		friend class AssetRef;
@@ -162,12 +162,13 @@ typedef META_TYPE MetaType;
 
 	public:
 		PROPERTIES(AssetWithDefaultMeta<T>);
-		GETTER(Meta*, meta, GetMeta);  // Meta information getter
+		GETTER(Ref<Meta>, meta, GetMeta);  // Meta information getter
 
 	public:
-		AssetWithDefaultMeta(): Asset(mnew Meta()) {}
+		AssetWithDefaultMeta(): Asset(mmake<Meta>()) {}
 		AssetWithDefaultMeta(const AssetWithDefaultMeta<T>& other) : Asset(other), meta(this) {}
-		Meta* GetMeta() const { return dynamic_cast<Meta*>(mInfo.meta); }
+
+		const Ref<Meta> GetMeta() const { return DynamicCast<Meta>(mInfo.meta); }
 
 		SERIALIZABLE(AssetWithDefaultMeta<T>);
 	};
@@ -176,6 +177,7 @@ typedef META_TYPE MetaType;
 CLASS_BASES_META(o2::Asset)
 {
 	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Asset)
@@ -197,7 +199,7 @@ CLASS_METHODS_META(o2::Asset)
 	FUNCTION().PUBLIC().SIGNATURE(String, GetFullPath);
 	FUNCTION().PUBLIC().SIGNATURE(String, GetBuiltFullPath);
 	FUNCTION().PUBLIC().SIGNATURE(const UID&, GetUID);
-	FUNCTION().PUBLIC().SIGNATURE(AssetMeta*, GetMeta);
+	FUNCTION().PUBLIC().SIGNATURE(const Ref<AssetMeta>&, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE(const AssetInfo&, GetInfo);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEditorAsset, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEditorAsset);
@@ -213,12 +215,12 @@ CLASS_METHODS_META(o2::Asset)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsReferenceCanOwnInstance);
 	FUNCTION().PRIVATE().CONSTRUCTOR();
-	FUNCTION().PROTECTED().CONSTRUCTOR(AssetMeta*);
+	FUNCTION().PROTECTED().CONSTRUCTOR(const Ref<AssetMeta>&);
 	FUNCTION().PROTECTED().CONSTRUCTOR(const Asset&);
 	FUNCTION().PROTECTED().SIGNATURE(String, GetMetaFullPath);
 	FUNCTION().PROTECTED().SIGNATURE(UID&, ID);
 	FUNCTION().PROTECTED().SIGNATURE(const Ref<LogStream>&, GetAssetsLogStream);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetMeta, AssetMeta*);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetMeta, const Ref<AssetMeta>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, Load, const AssetInfo&);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
@@ -244,6 +246,6 @@ CLASS_METHODS_META(o2::AssetWithDefaultMeta<T>)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetWithDefaultMeta<T>&);
-	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+	FUNCTION().PUBLIC().SIGNATURE(const Ref<Meta>, GetMeta);
 }
 END_META;

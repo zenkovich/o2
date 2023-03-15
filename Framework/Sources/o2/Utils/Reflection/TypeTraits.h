@@ -20,6 +20,12 @@ namespace o2
 	template<class T> struct ExtractRefType { typedef T type; };
 	template<class T> struct ExtractRefType<Ref<T>> { typedef T type; };
 
+	template<class T> struct IsWeakRefHelper : std::false_type {};
+	template<class T> struct IsWeakRefHelper<WeakRef<T>> : std::true_type {};
+	template<class T> struct IsWeakRef : IsWeakRefHelper<typename std::remove_cv<T>::type> {};
+	template<class T> struct ExtractWeakRefType { typedef T type; };
+	template<class T> struct ExtractWeakRefType<WeakRef<T>> { typedef T type; };
+
 	template<class T> struct IsBaseRefHelper : std::false_type {};
 	template<class T> struct IsBaseRefHelper<BaseRef<T>> : std::true_type {};
 	template<class T> struct IsBaseRef : IsBaseRefHelper<typename std::remove_cv<T>::type> {};

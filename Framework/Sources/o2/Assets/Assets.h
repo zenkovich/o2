@@ -125,7 +125,7 @@ namespace o2
 		void RebuildAssets(bool forcible = false);
 
 		// Returns all assets trees
-		const Vector<AssetsTree*>& GetAssetsTrees() const;
+		const Vector<Ref<AssetsTree>>& GetAssetsTrees() const;
 
 		// Returns main tree
 		const AssetsTree& GetAssetsTree() const;

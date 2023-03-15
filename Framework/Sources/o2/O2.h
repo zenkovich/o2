@@ -5,3 +5,9 @@
 
 #define INITIALIZE_O2 \
 o2::Reflection::InitializeTypes()
+
+// TODO:
+// Implement right way to unload textures
+// Implement right way to unload fonts
+// Implement Ref<> serialization which makes objects via mmake
+// Implement Clone and CloneAs to work with Ref<> and mmake

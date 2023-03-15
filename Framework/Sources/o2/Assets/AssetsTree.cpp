@@ -53,29 +53,29 @@ namespace o2
 
 	void AssetsTree::SortAssets()
 	{
-		allAssets.Sort([](AssetInfo* a, AssetInfo* b) { return a->path.Length() < b->path.Length(); });
+		allAssets.Sort([](const Ref<AssetInfo>& a, const Ref<AssetInfo>& b) { return a->path.Length() < b->path.Length(); });
 	}
 
 	void AssetsTree::SortAssetsInverse()
 	{
-		allAssets.Sort([](AssetInfo* a, AssetInfo* b) { return a->path.Length() > b->path.Length(); });
+		allAssets.Sort([](const Ref<AssetInfo>& a, const Ref<AssetInfo>& b) { return a->path.Length() > b->path.Length(); });
 	}
 
-	AssetInfo* AssetsTree::Find(const String& path) const
+	Ref<AssetInfo> AssetsTree::Find(const String& path) const
 	{
-		AssetInfo* res = nullptr;
+		Ref<AssetInfo> res = nullptr;
 		allAssetsByPath.TryGetValue(path, res);
 		return res;
 	}
 
-	AssetInfo* AssetsTree::Find(const UID& id) const
+	Ref<AssetInfo> AssetsTree::Find(const UID& id) const
 	{
-		AssetInfo* res = nullptr;
+		Ref<AssetInfo> res = nullptr;
 		allAssetsByUID.TryGetValue(id, res);
 		return res;
 	}
 
-	AssetInfo* AssetsTree::AddAsset(AssetInfo* asset)
+	Ref<AssetInfo> AssetsTree::AddAsset(const Ref<AssetInfo>& asset)
 	{
 		int delPos = asset->path.FindLast("/");
 		if (delPos < 0 || delPos == asset->path.Length() - 1)
@@ -86,7 +86,7 @@ namespace o2
 		else
 		{
 			String parentPath = asset->path.SubStr(0, delPos);
-			AssetInfo* parent = nullptr;
+			Ref<AssetInfo> parent = nullptr;
 			allAssetsByPath.TryGetValue(parentPath, parent);
 
 			if (!parent)
@@ -94,7 +94,8 @@ namespace o2
 				if (log)
 					log->Out("Failed to add built asset info: " + asset->path);
 			}
-			else parent->AddChild(asset);
+			else 
+				parent->AddChild(asset);
 
 			asset->SetTree(this);
 		}
@@ -102,7 +103,7 @@ namespace o2
 		return asset;
 	}
 
-	void AssetsTree::RemoveAsset(AssetInfo* asset, bool release /*= true*/)
+	void AssetsTree::RemoveAsset(const Ref<AssetInfo>& asset)
 	{
 		if (allAssetsByPath[asset->path] == asset)
 			allAssetsByPath.Remove(asset->path);
@@ -114,31 +115,18 @@ namespace o2
 		rootAssets.Remove(asset);
 
 		if (asset->parent)
-			asset->parent->RemoveChild(asset, false);
-
-		if (asset->meta->GetAssetType() == &TypeOf(FolderAsset) && release)
-		{
-			auto& childs = asset->mChildren;
-			for (auto ch : childs)
-				RemoveAsset(ch, release);
-		}
-
-		if (release)
-			delete asset;
+			asset->parent.Lock()->RemoveChild(asset);
 	}
 
 	void AssetsTree::Clear()
 	{
-		for (auto asset : rootAssets)
-			delete asset;
-
 		allAssets.Clear();
 		rootAssets.Clear();
 		allAssetsByPath.Clear();
 		allAssetsByUID.Clear();
 	}
 
-	void AssetsTree::LoadFolder(const FolderInfo& folder, AssetInfo* parentAsset)
+	void AssetsTree::LoadFolder(const FolderInfo& folder, Ref<AssetInfo> parentAsset)
 	{
 		for (auto fileInfo : folder.files)
 		{
@@ -159,7 +147,7 @@ namespace o2
 
 		for (auto subFolder : folder.folders)
 		{
-			AssetInfo* asset = nullptr;
+			Ref<AssetInfo> asset = nullptr;
 
 			String subFolderPath = subFolder.path;
 			if (subFolderPath.EndsWith("/"))
@@ -183,7 +171,7 @@ namespace o2
 		}
 	}
 
-	AssetInfo* AssetsTree::LoadAssetNode(const String& path, AssetInfo* parent, const TimeStamp& time)
+	Ref<AssetInfo> AssetsTree::LoadAssetNode(const String& path, const Ref<AssetInfo>& parent, const TimeStamp& time)
 	{
 		DataDocument metaData;
 		metaData.LoadFromFile(this->assetsPath + path + ".meta");
@@ -191,7 +179,7 @@ namespace o2
 		AssetMeta* meta = nullptr;
 		meta = metaData;
 
-		AssetInfo* asset = mnew AssetInfo();
+		Ref<AssetInfo> asset = mmake<AssetInfo>();
 
 		asset->meta = meta;
 		asset->path = path;

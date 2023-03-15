@@ -150,9 +150,6 @@ namespace o2
 		if (IsDevMode())
 			o2Assets.onAssetsRebuilt -= MakeFunction(this, &Render::OnAssetsRebuilded);
 
-		mSolidLineTexture = TextureRef::Null();
-		mDashLineTexture = TextureRef::Null();
-
 		if (mGLContext)
 		{
 			mFonts.Clear();

@@ -450,7 +450,7 @@ namespace Editor
 		Text* spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
 		if (spoilerCaptionLayer)
 		{
-			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetFontHeight());
+			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont(), spoilerCaptionLayer->GetFontHeight());
 			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
 		}
 	}

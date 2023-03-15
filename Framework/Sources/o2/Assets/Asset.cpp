@@ -18,7 +18,7 @@ namespace o2
 		o2Assets.AddAssetCache(this);
 	}
 
-	Asset::Asset(AssetMeta* meta)
+	Asset::Asset(const Ref<AssetMeta>& meta)
 	{
 		mInfo.meta = meta;
 		mInfo.meta->mId.Randomize();
@@ -65,7 +65,7 @@ namespace o2
 		return mInfo.meta->mId;
 	}
 
-	AssetMeta* Asset::GetMeta() const
+	const Ref<AssetMeta>& Asset::GetMeta() const
 	{
 		return mInfo.meta;
 	}
@@ -79,13 +79,13 @@ namespace o2
 	void Asset::SetEditorAsset(bool isEditor)
 	{
 		mInfo.tree = !isEditor ?
-			&o2Assets.GetAssetsTree() :
-			o2Assets.GetAssetsTrees().FindOrDefault([](auto x) { return x != &o2Assets.GetAssetsTree(); });
+			Ref(&o2Assets.GetAssetsTree()) :
+			o2Assets.GetAssetsTrees().FindOrDefault([](const Ref<AssetsTree>& x) { return x != Ref(&o2Assets.GetAssetsTree()); });
 	}
 
 	bool Asset::IsEditorAsset() const
 	{
-		return mInfo.tree != &o2Assets.GetAssetsTree();
+		return mInfo.tree != Ref(&o2Assets.GetAssetsTree());
 	}
 #endif
 
@@ -173,12 +173,12 @@ namespace o2
 
 	String Asset::GetFullPath() const
 	{
-		return (mInfo.tree ? mInfo.tree->assetsPath : String()) + mInfo.path;
+		return (mInfo.tree ? mInfo.tree.Lock()->assetsPath : String()) + mInfo.path;
 	}
 
 	String Asset::GetBuiltFullPath() const
 	{
-		return (mInfo.tree ? mInfo.tree->builtAssetsPath : String()) + mInfo.path;
+		return (mInfo.tree ? mInfo.tree.Lock()->builtAssetsPath : String()) + mInfo.path;
 	}
 
 	String Asset::GetMetaFullPath() const
@@ -191,7 +191,7 @@ namespace o2
 		return o2Assets.mLog;
 	}
 
-	void Asset::SetMeta(AssetMeta* meta)
+	void Asset::SetMeta(const Ref<AssetMeta>& meta)
 	{}
 
 	void Asset::LoadData(const String& path)

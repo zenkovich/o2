@@ -8,8 +8,6 @@ namespace o2
 {
 	Texture::~Texture()
 	{
-		o2Render.mTextures.Remove(Ref(this));
-
 		if (!mReady)
 			return;
 

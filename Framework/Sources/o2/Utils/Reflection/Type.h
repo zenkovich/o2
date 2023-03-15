@@ -908,6 +908,7 @@ namespace o2
 	{
 		return mnew _type();
 	}
+
 	template<typename _type>
 	IAbstractValueProxy* TType<_type>::GetValueProxy(void* object) const
 	{

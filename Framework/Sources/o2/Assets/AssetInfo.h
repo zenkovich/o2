@@ -2,6 +2,7 @@
 #include "o2/Assets/Meta.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/System/Time/TimeStamp.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -10,23 +11,23 @@ namespace o2
 	// -----------------
 	// Asset information
 	// -----------------
-	struct AssetInfo : public ISerializable
+	struct AssetInfo : public ISerializable, public RefCounterable
 	{
-		const AssetsTree* tree = nullptr; // Owner asset tree
+		const WeakRef<AssetsTree> tree = nullptr; // Owner asset tree
 		
 		String    path;     // Path of asset @SERIALIZABLE
 		TimeStamp editTime; // Asset edited time @SERIALIZABLE		
 
-		AssetMeta* meta = nullptr; // Asset meta data @SERIALIZABLE
+		Ref<AssetMeta> meta = nullptr; // Asset meta data @SERIALIZABLE
 
-		AssetInfo* parent = nullptr; // Parent asset info
+		WeakRef<AssetInfo> parent = nullptr; // Parent asset info
 
 	public:
 		// Default constructor
 		AssetInfo();
 
 		// Default constructor with meta
-		AssetInfo(AssetMeta* meta);
+		AssetInfo(const Ref<AssetMeta>& meta);
 
 		// Copy-constructor
 		AssetInfo(const AssetInfo& other);
@@ -44,19 +45,19 @@ namespace o2
 		operator bool() const;
 
 		// Adds new child node and returns him
-		AssetInfo* AddChild(AssetInfo* node);
+		const Ref<AssetInfo>& AddChild(const Ref<AssetInfo>& node);
 
 		// Remove child node and releases him if needs
-		void RemoveChild(AssetInfo* node, bool release = true);
+		void RemoveChild(const Ref<AssetInfo>& node);
 
 		// Sets parent node
-		void SetParent(AssetInfo* parent);
+		void SetParent(const Ref<AssetInfo>& parent);
 
 		// Sets asset tree, adds in tree's allAssets map
-		void SetTree(AssetsTree* tree);
+		void SetTree(const Ref<AssetsTree>& tree);
 
 		// Returns children list. if it doesn't own children, then looks for the same in the tree and returns its children
-		const Vector<AssetInfo*>& GetChildren() const;
+		const Vector<Ref<AssetInfo>>& GetChildren() const;
 
 		// Returns is asset valid - checks id for empty
 		bool IsValid() const;
@@ -66,8 +67,7 @@ namespace o2
 		SERIALIZABLE(AssetInfo);
 
 	protected:
-		Vector<AssetInfo*> mChildren;           // Children assets infos @SERIALIZABLE
-		bool               mOwnChildren = true; // Is children assets is owned by this asset info
+		Vector<Ref<AssetInfo>> mChildren; // Children assets infos @SERIALIZABLE
 
 	protected:
 		// Completion deserialization callback, reads asset type name
@@ -82,6 +82,7 @@ namespace o2
 CLASS_BASES_META(o2::AssetInfo)
 {
 	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::AssetInfo)
@@ -92,20 +93,19 @@ CLASS_FIELDS_META(o2::AssetInfo)
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(meta);
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(parent);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mChildren);
-	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mOwnChildren);
 }
 END_META;
 CLASS_METHODS_META(o2::AssetInfo)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(AssetMeta*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<AssetMeta>&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetInfo&);
-	FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, AddChild, AssetInfo*);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveChild, AssetInfo*, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetParent, AssetInfo*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTree, AssetsTree*);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<AssetInfo*>&, GetChildren);
+	FUNCTION().PUBLIC().SIGNATURE(const Ref<AssetInfo>&, AddChild, const Ref<AssetInfo>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveChild, const Ref<AssetInfo>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetParent, const Ref<AssetInfo>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTree, const Ref<AssetsTree>&);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AssetInfo>>&, GetChildren);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
