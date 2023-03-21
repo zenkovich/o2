@@ -4,6 +4,7 @@
 #include "o2/Assets/AssetInfo.h"
 #include "o2/Assets/AssetsTree.h"
 #include "o2/Assets/Builder/StdAssetConverter.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
 
 namespace o2
@@ -14,7 +15,7 @@ namespace o2
 	// -------------
 	// Asset builder
 	// -------------
-	class AssetsBuilder
+	class AssetsBuilder: public RefCounterable
 	{
 	public:
 		// Default constructor
@@ -25,7 +26,7 @@ namespace o2
 
 		// Builds asset from assets path to dataAssetsPath. Removes all built assets if forcible is true
 		const Vector<UID>& BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath, 
-									   AssetsTree* assetsTree, bool forcible = false);
+									   const Ref<AssetsTree>& assetsTree, bool forcible = false);
 
 		// Returns source assets path in building
 		const String& GetSourceAssetsPath() const;

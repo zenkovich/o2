@@ -17,9 +17,9 @@ namespace o2
 		return &TypeOf(Asset);
 	}
 
-	bool AssetMeta::IsEqual(AssetMeta* other) const
+	bool AssetMeta::IsEqual(const AssetMeta& other) const
 	{
-		return GetAssetType() == other->GetAssetType() && mId == other->mId;
+		return GetAssetType() == other.GetAssetType() && mId == other.mId;
 	}
 
 	const UID& AssetMeta::ID() const

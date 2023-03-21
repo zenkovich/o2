@@ -25,7 +25,7 @@ namespace o2
 		virtual const Type* GetAssetType() const;
 
 		// Returns true if other meta is equal to this
-		virtual bool IsEqual(AssetMeta* other) const;
+		virtual bool IsEqual(const AssetMeta& other) const;
 
 		SERIALIZABLE(AssetMeta);
 
@@ -66,7 +66,7 @@ CLASS_METHODS_META(o2::AssetMeta)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(const UID&, ID);
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetAssetType);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, AssetMeta*);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, const AssetMeta&);
 }
 END_META;
 

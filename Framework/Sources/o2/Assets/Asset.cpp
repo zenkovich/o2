@@ -15,7 +15,7 @@ namespace o2
 	{
 		mInfo.meta->mId.Randomize();
 
-		o2Assets.AddAssetCache(this);
+		o2Assets.AddAssetCache(Ref(this));
 	}
 
 	Asset::Asset(const Ref<AssetMeta>& meta)
@@ -23,19 +23,19 @@ namespace o2
 		mInfo.meta = meta;
 		mInfo.meta->mId.Randomize();
 
-		o2Assets.AddAssetCache(this);
+		o2Assets.AddAssetCache(Ref(this));
 	}
 
 	Asset& Asset::operator=(const Asset& other)
 	{
-		o2Assets.RemoveAssetCache(this);
+		o2Assets.RemoveAssetCache(Ref(this));
 		mInfo = other.mInfo;
 		return *this;
 	}
 
 	Asset::~Asset()
 	{
-		o2Assets.RemoveAssetCache(this);
+		o2Assets.RemoveAssetCache(Ref(this));
 	}
 
 	const String& Asset::GetPath() const

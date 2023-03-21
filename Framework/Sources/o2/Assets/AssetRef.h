@@ -1,279 +1,195 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
+#include "o2/Assets/Assets.h"
 #include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
-	// ---------------
-	// Asset reference
-	// ---------------
-	class AssetRef: public ISerializable
+	// -----------------------------------------------------------------------------------
+	// Asset reference. Contains asset pointer. Can contain asset instance owned by itself
+	// -----------------------------------------------------------------------------------
+	template<typename _asset_type>
+	class Ref<_asset_type, typename std::enable_if<std::is_base_of<Asset, _asset_type>::value>::type>: public BaseRef<_asset_type>
 	{
 	public:
-		// Default constructor, references to null
-		AssetRef();
+		using Base = BaseRef<_asset_type>;
 
-		// Copy-constructor
-		AssetRef(const AssetRef& other);
-
-		// Instance reference asset constructor
-		AssetRef(Asset* instance);
+	public:
+		// Base reference implementation
+		BASE_REF_IMPLEMETATION(_asset_type);
 
 		// Constructor from asset path
-		AssetRef(const String& path);
+		Ref(const String& path) :
+			Ref(o2Assets.GetAssetRef(path))
+		{}
 
 		// Constructor from asset id
-		AssetRef(const UID& id);
-
-		// Destructor
-		virtual ~AssetRef();
-
-		// Boolean cast operator, true means that reference is valid
-		operator bool() const;
-
-		// Assign operator
-		AssetRef& operator=(const AssetRef& other);
-
-		// Getter operator
-		Asset& operator*();
-
-		// Constant getter operator
-		const Asset& operator*() const;
-
-		// Asset members and field operator
-		Asset* operator->();
-
-		// Constant asset members and field operator
-		const Asset* operator->() const;
-
-		// Check equals operator
-		bool operator==(const AssetRef& other) const;
-
-		// Check not equals operator
-		bool operator!=(const AssetRef& other) const;
-
-		// Less operator, for map
-		bool operator<(const AssetRef& other) const;
-
-		// Returns is reference is valid
-		bool IsValid() const;
-
-		// Returns asset @SCRIPTABLE
-		Asset* Get();
-
-		// Returns asset
-		const Asset* Get() const;
+		Ref(const UID& id) :
+			Ref(o2Assets.GetAssetRef(id))
+		{}
 
 		// Returns asset type
-		virtual const Type& GetAssetType() const;
+		const Type& GetAssetType() const { return TypeOf(_asset_type); }
 
-		template<typename T, typename E = std::enable_if<std::is_base_of<Asset, T>::value>>
-		Ref<T> Cast() const;
+		// Returns asset type
+		static const Type* GetAssetTypeStatic() { return &TypeOf(_asset_type); }
 
 		// Sets asset instance
-		void SetInstance(Asset* asset);
-
-		// Creates own asset instance. If asset is empty creates empty instance, 
-		// copies asset if else
-		void CreateInstance();
-
-		// Removes own asset instance
-		void RemoveInstance();
-
-		// Saves asset instance
-		void SaveInstance(const String& path);
-
-		// Is asset instance owner
-		bool IsInstance() const;
-
-		SERIALIZABLE(AssetRef);
-
-	protected:
-		bool   mIsInstance = false;   // Is this reference owner of asset
-		int*   mRefCounter = nullptr; // Reference count pointer
-		Asset* mAssetPtr = nullptr;   // Asset pointer   
-
-	protected:
-		// Constructor for Assets manager
-		AssetRef(Asset* assetPtr, int* refCounter);
-
-		// Beginning serialization callback - writes path and id
-		void OnSerialize(DataValue& node) const override;
-
-		// Completion deserialization callback -  reads path and id and searches asset
-		void OnDeserialized(const DataValue& node) override;
-
-		// Beginning serialization delta callback
-		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
-
-		// Completion deserialization delta callback
-		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
-
-		// Updates specialized asset pointer
-		virtual void UpdateSpecAsset() {};
-
-		// It is required to process asset reference as single object when searching deltas for prototypes
-		static bool IsDeltaAsSingleObject();
-
-		friend class Assets;
-	};
-}
-
-#include "o2/Assets/Assets.h"
-
-namespace o2
-{
-	template<typename T>
-	class Ref<T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type>: public AssetRef
-	{
-	public:
-		// Default constructor, references to null
-		Ref(): AssetRef() {}
-
-		// Instance reference asset constructor
-		Ref(T* instance): AssetRef(instance) { mSpecAssetPtr = instance; }
-
-		// Copy-constructor
-		Ref(const AssetRef& other): AssetRef(other) { UpdateSpecAsset(); }
-
-		// Constructor from asset path
-		Ref(const String& path): AssetRef(path) { UpdateSpecAsset(); }
-
-		// Constructor from asset id
-		Ref(const UID& id): AssetRef(id) { UpdateSpecAsset(); }
-
-		// Boolean cast operator, true means that reference is valid
-		operator bool() const { return IsValid(); }
-
-		// Assign operator
-		Ref<T>& operator=(const Ref<T>& other)
+		void SetInstance(Asset* asset)
 		{
-			AssetRef::operator=(other);
-			mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr);
-			return *this;
+			*this = Ref(asset);
+			mIsInstance = true;
 		}
 
-		// Getter operator
-		T& operator*() { return *mSpecAssetPtr; }
+		// Creates own asset instance. If asset is empty creates empty instance, copies asset if else
+		void CreateInstance()
+		{
+			_asset_type* asset;
+			if (Base::mPtr)
+				asset = Base::mPtr->CloneAs<Asset>();
+			else
+			{
+				auto objectType = dynamic_cast<const ObjectType*>(&GetAssetType());
+				asset = dynamic_cast<Asset*>(objectType->DynamicCastToIObject(objectType->CreateSample()));
+			}
 
-		// Constant getter operator
-		const T& operator*() const { return *mSpecAssetPtr; }
+			SetInstance(asset);
+		}
 
-		// Asset members and field operator
-		T* operator->() { return mSpecAssetPtr; }
+		// Removes own asset instance
+		void RemoveInstance()
+		{
+			if (!mIsInstance)
+				return;
 
-		// Constant asset members and field operator
-		const T* operator->() const { return mSpecAssetPtr; }
+			mIsInstance = false;
 
-		// Check equals operator
-		bool operator==(const Ref<T>& other) const { return AssetRef::operator==(other); }
+			*this = nullptr;
+		}
 
-		// Check not equals operator
-		bool operator!=(const Ref<T>& other) const { return AssetRef::operator!=(other); }
+		// Saves asset instance
+		void SaveInstance(const String& path)
+		{
+			if (!mIsInstance)
+				return;
 
-		// Returns asset type
-		const Type& GetAssetType() const override { return TypeOf(T); }
+			Base::mPtr->SetPath(path);
+			Base::mPtr->Save();
 
-		// Returns asset type
-		static const Type* GetAssetTypeStatic() { return &TypeOf(T); }
+			*this = Ref<_asset_type>(path);
+		}
+
+		// Is asset instance owner
+		bool IsInstance() const { return mIsInstance; }
 
 		// Creates asset and returns reference
 		template<typename ... _args>
-		static Ref<T> CreateAsset(_args ... args) { return o2Assets.CreateAsset<T>(args ...); }
+		static Ref<_asset_type> CreateAsset(_args ... args) { return o2Assets.CreateAsset<_asset_type>(args ...); }
+
+	protected:
+		bool mIsInstance = false; // Is this reference owner of asset
+
+	protected:
+		// Beginning serialization callback - writes path and id
+		void OnSerialize(DataValue& node) const override
+		{
+			if (mIsInstance)
+			{
+				if (Base::mPtr)
+				{
+					AssetRef* nonConstThis = const_cast<AssetRef*>(this);
+					*nonConstThis = AssetRef(Base::mPtr->CloneAs<Asset>());
+
+					node["instance"] = Base::mPtr;
+					node["meta"] = Base::mPtr->GetMeta();
+				}
+			}
+			else if (Base::mPtr)
+			{
+				node["id"] = Base::mPtr->GetUID().ToString();
+				node["path"] = Base::mPtr->GetPath();
+			}
+		}
+
+		// Completion deserialization callback -  reads path and id and searches asset
+		void OnDeserialized(const DataValue& node) override
+		{
+			Base::DecrementRef();
+
+			Base::mPtr = nullptr;
+			mIsInstance = false;
+
+			if (auto instanceNode = node.FindMember("instance"))
+			{
+				mIsInstance = true;
+				Base::mPtr = (Asset*)(*instanceNode);
+
+				UID oldUid = Base::mPtr->GetUID();
+				Base::mPtr->mInfo.meta = node.GetMember("meta");
+				o2Assets.UpdateAssetCache(Base::mPtr, "", oldUid);
+
+				Base::IncrementRef();
+			}
+			else if (auto idNode = node.FindMember("id"))
+				*this = o2Assets.GetAssetRef((UID)(*idNode));
+			else if (auto pathNode = node.FindMember("path"))
+				*this = o2Assets.GetAssetRef((String)pathNode);
+		}
+
+		// Beginning serialization delta callback
+		void OnSerializeDelta(DataValue& node, const IObject& origin) const override { OnSerialize(node); }
+
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override { OnDeserialized(node); }
+
+		// It is required to process asset reference as single object when searching deltas for prototypes
+		static bool IsDeltaAsSingleObject() { return true; }
 
 	public:
-		typedef Ref<T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type> _thisType;
+		using _this_type = Ref<_asset_type, typename std::enable_if<std::is_base_of<Asset, _asset_type>::value>::type>;
 
-		SERIALIZABLE_MAIN(_thisType);
+		SERIALIZABLE_MAIN(_this_type);
 
 		template<typename _type_processor>
-		static void ProcessBaseTypes(_thisType* object, _type_processor& processor)
+		static void ProcessBaseTypes(_this_type* object, _type_processor& processor)
 		{
-			typedef _thisType thisclass;
-			processor.template StartBases<_thisType>(object, type);
-
-			BASE_CLASS(o2::AssetRef);
+			typedef _this_type thisclass;
+			processor.template StartBases<_this_type>(object, type);
 		}
 
 		template<typename _type_processor>
-		static void ProcessFields(_thisType* object, _type_processor& processor)
+		static void ProcessFields(_this_type* object, _type_processor& processor)
 		{
-			typedef _thisType thisclass;
-			processor.template StartFields<_thisType>(object, type);
-
-			FIELD().PUBLIC().NAME(mSpecAssetPtr);
+			typedef _this_type thisclass;
+			processor.template StartFields<_this_type>(object, type);
 		}
 
 		template<typename _type_processor>
-		static void ProcessMethods(_thisType* object, _type_processor& processor)
+		static void ProcessMethods(_this_type* object, _type_processor& processor)
 		{
-			typedef _thisType thisclass;
-			processor.template StartMethods<_thisType>(object, type);
+			typedef _this_type thisclass;
+			processor.template StartMethods<_this_type>(object, type);
 
 			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(const String&);
+
+			FUNCTION().PUBLIC().CONSTRUCTOR();
+			FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Asset>&);
+			FUNCTION().PUBLIC().CONSTRUCTOR(Asset*);
+			FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsValid);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Asset*, Get);
 			FUNCTION().PUBLIC().SIGNATURE(const Type&, GetAssetType);
-			FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<T>, CreateAsset);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetInstance, Asset*);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, CreateInstance);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveInstance);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SaveInstance, const String&);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsInstance);
+
+			FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<_asset_type>, CreateAsset);
 			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetAssetTypeStatic);
 		}
-
-	protected:
-		T* mSpecAssetPtr = nullptr;
-
-	protected:
-		// Updates specialized asset pointer
-		void UpdateSpecAsset() override 
-		{
-			mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr);
-
-			if (!mSpecAssetPtr && mAssetPtr)
-				*this = Ref<T>();
-		};
 	};
 
-	template<typename T, typename E>
-	Ref<T> AssetRef::Cast() const
-	{
-		return Ref<T>(*this);
-	}
-
+	using AssetRef = Ref<Asset>;
 }
-
-CLASS_BASES_META(o2::AssetRef)
-{
-	BASE_CLASS(o2::ISerializable);
-}
-END_META;
-CLASS_FIELDS_META(o2::AssetRef)
-{
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsInstance);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRefCounter);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAssetPtr);
-}
-END_META;
-CLASS_METHODS_META(o2::AssetRef)
-{
-
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetRef&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(Asset*);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Asset*, Get);
-	FUNCTION().PUBLIC().SIGNATURE(const Asset*, Get);
-	FUNCTION().PUBLIC().SIGNATURE(const Type&, GetAssetType);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetInstance, Asset*);
-	FUNCTION().PUBLIC().SIGNATURE(void, CreateInstance);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveInstance);
-	FUNCTION().PUBLIC().SIGNATURE(void, SaveInstance, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsInstance);
-	FUNCTION().PROTECTED().CONSTRUCTOR(Asset*, int*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateSpecAsset);
-	FUNCTION().PROTECTED().SIGNATURE_STATIC(bool, IsDeltaAsSingleObject);
-}
-END_META;

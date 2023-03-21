@@ -16,9 +16,10 @@ namespace o2
 {
 	class AssetsBuilder;
 	class LogStream;
-	class AssetRef;
 
 	FORWARD_REF(LogStream);
+	FORWARD_REF(Asset);
+	using AssetRef = Ref<Asset>;
 
 	// ----------------
 	// Assets utilities
@@ -40,10 +41,10 @@ namespace o2
 		~Assets();
 
 		// Returns assets path
-		String GetAssetsPath() const;
+		const String& GetAssetsPath() const;
 
 		// Returns data path
-		String GetBuiltAssetsPath() const;
+		const String& GetBuiltAssetsPath() const;
 
 		// Returns asset path by asset id
 		const String& GetAssetPath(const UID& id) const;
@@ -137,26 +138,17 @@ namespace o2
 		String MakeUniqueAssetName(const String& path);
 
 	protected:
-		struct AssetCache
-		{
-			Asset* asset;
-			int    referencesCount;
-
-			~AssetCache();
-		};
-
-	protected:
-		AssetsTree*         mMainAssetsTree; // Main assets tree
-		Vector<AssetsTree*> mAssetsTrees;    // Assets trees
-		Ref<LogStream>      mLog;            // Log stream
-		AssetsBuilder*      mAssetsBuilder;  // Assets builder
+		Ref<AssetsTree>         mMainAssetsTree; // Main assets tree
+		Vector<Ref<AssetsTree>> mAssetsTrees;    // Assets trees
+		Ref<LogStream>          mLog;            // Log stream
+		Ref<AssetsBuilder>      mAssetsBuilder;  // Assets builder
 
 		Map<String, const Type*> mAssetsTypes;   // Assets types and extensions dictionary
 		const Type*              mStdAssetType;  // Standard asset type
 
-		Vector<AssetCache*>      mCachedAssets;       // Current cached assets
-		Map<String, AssetCache*> mCachedAssetsByPath; // Current cached assets by path
-		Map<UID, AssetCache*>    mCachedAssetsByUID;  // Current cached assets by uid
+		Vector<AssetRef>      mCachedAssets;       // Current cached assets
+		Map<String, AssetRef> mCachedAssetsByPath; // Current cached assets by path
+		Map<UID, AssetRef>    mCachedAssetsByUID;  // Current cached assets by uid
 
 	protected:
 		// Loads asset infos
@@ -166,22 +158,22 @@ namespace o2
 		void LoadAssetTypes();
 
 		// Returns asset cache by path
-		AssetCache* FindAssetCache(const String& path);
+		AssetRef FindAssetCache(const String& path);
 
 		// Returns asset cache by id
-		AssetCache* FindAssetCache(const UID& id);
+		AssetRef FindAssetCache(const UID& id);
 
 		// Clears assets cache
 		void ClearAssetsCache();
 
 		// Adds asset to cache
-		AssetCache* AddAssetCache(Asset* asset);
+		AssetRef AddAssetCache(AssetRef& asset);
 
 		// Removes asset from cache by UID and path
-		void RemoveAssetCache(Asset* asset);
+		void RemoveAssetCache(AssetRef& asset);
 
 		// Updates asset chached path and id
-		AssetCache* UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
+		void UpdateAssetCache(AssetRef& asset, const String& oldPath, const UID& oldUID);
 
 		// Removes asset by info
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
@@ -196,8 +188,8 @@ namespace o2
 		bool RenameAsset(const AssetInfo& info, const String& newName, bool rebuildAssets = true);
 
 		friend class Asset;
-		friend class AssetRef;
 		friend class FolderAsset;
+		friend class Ref<Asset>;
 	};
 }
 
@@ -208,16 +200,12 @@ namespace o2
 	template<typename _asset_type, typename ... _args>
 	AssetRef Assets::CreateAsset(_args ... args)
 	{
-		_asset_type* newAset = mnew _asset_type(args ...);
+		Ref<_asset_type> newAset = mmake<_asset_type>(args ...);
 
-		auto cached = mnew AssetCache();
-		cached->asset = newAset;
-		cached->referencesCount = 0;
+		mCachedAssets.Add(newAset);
+		mCachedAssetsByUID[newAset->GetUID()] = newAset;
 
-		mCachedAssets.Add(cached);
-		mCachedAssetsByUID[cached->asset->GetUID()] = cached;
-
-		return AssetRef(newAset, &cached->referencesCount);
+		return newAset;
 	}
 
 }

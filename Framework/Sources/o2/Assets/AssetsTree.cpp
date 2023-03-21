@@ -29,16 +29,16 @@ namespace o2
 
 		LoadFolder(folderInfo, nullptr);
 
-		for (auto asset : rootAssets)
-			asset->SetTree(this);
+		for (auto& asset : rootAssets)
+			asset->SetTree(Ref(this));
 	}
 
 	void AssetsTree::Build(const FolderInfo& folderInfo)
 	{
 		LoadFolder(folderInfo, nullptr);
 
-		for (auto asset : rootAssets)
-			asset->SetTree(this);
+		for (auto& asset : rootAssets)
+			asset->SetTree(Ref(this));
 	}
 
 	void AssetsTree::Rebuild()
@@ -47,8 +47,8 @@ namespace o2
 		folderInfo.ClampPathNames();
 		LoadFolder(folderInfo, nullptr);
 
-		for (auto asset : rootAssets)
-			asset->SetTree(this);
+		for (auto& asset : rootAssets)
+			asset->SetTree(Ref(this));
 	}
 
 	void AssetsTree::SortAssets()
@@ -81,7 +81,7 @@ namespace o2
 		if (delPos < 0 || delPos == asset->path.Length() - 1)
 		{
 			rootAssets.Add(asset);
-			asset->SetTree(this);
+			asset->SetTree(Ref(this));
 		}
 		else
 		{
@@ -97,7 +97,7 @@ namespace o2
 			else 
 				parent->AddChild(asset);
 
-			asset->SetTree(this);
+			asset->SetTree(Ref(this));
 		}
 
 		return asset;
@@ -128,7 +128,7 @@ namespace o2
 
 	void AssetsTree::LoadFolder(const FolderInfo& folder, Ref<AssetInfo> parentAsset)
 	{
-		for (auto fileInfo : folder.files)
+		for (auto& fileInfo : folder.files)
 		{
 			String extension = o2FileSystem.GetFileExtension(fileInfo.path);
 
@@ -145,7 +145,7 @@ namespace o2
 			}
 		}
 
-		for (auto subFolder : folder.folders)
+		for (auto& subFolder : folder.folders)
 		{
 			Ref<AssetInfo> asset = nullptr;
 
@@ -176,7 +176,7 @@ namespace o2
 		DataDocument metaData;
 		metaData.LoadFromFile(this->assetsPath + path + ".meta");
 
-		AssetMeta* meta = nullptr;
+		Ref<AssetMeta> meta;
 		meta = metaData;
 
 		Ref<AssetInfo> asset = mmake<AssetInfo>();
@@ -194,8 +194,8 @@ namespace o2
 
 	void AssetsTree::OnDeserialized(const DataValue& node)
 	{
-		for (auto asset : rootAssets)
-			asset->SetTree(this);
+		for (auto& asset : rootAssets)
+			asset->SetTree(Ref(this));
 	}
 
 }
