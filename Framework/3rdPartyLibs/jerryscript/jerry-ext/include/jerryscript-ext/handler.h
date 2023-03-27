@@ -16,7 +16,7 @@
 #ifndef JERRYX_HANDLER_H
 #define JERRYX_HANDLER_H
 
-#include "jerryscript/jerry-core/include/jerryscript.h"
+#include "jerryscript.h"
 
 #ifdef __cplusplus
 extern "C"

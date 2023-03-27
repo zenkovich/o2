@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "o2/stdafx.h"
 
 #if defined PLATFORM_ANDROID
 

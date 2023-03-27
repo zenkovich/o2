@@ -16,8 +16,8 @@
 #ifndef JERRYX_DEBUGGER_H
 #define JERRYX_DEBUGGER_H
 
-#include "jerryscript/jerry-core/include/jerryscript.h"
-#include "jerryscript/jerry-core/include/jerryscript-debugger-transport.h"
+#include "jerryscript.h"
+#include "jerryscript-debugger-transport.h"
 
 #ifdef __cplusplus
 extern "C"
