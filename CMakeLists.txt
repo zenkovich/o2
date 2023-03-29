@@ -1,3 +1,5 @@
+add_compile_definitions(PLATFORM_WINDOWS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
+
 # dependencies
 set(BOX2D_BUILD_STATIC TRUE)
 set(BOX2D_VERSION 1)
@@ -15,12 +17,9 @@ add_subdirectory(Framework/3rdPartyLibs/jerryscript)
 add_subdirectory(Framework/3rdPartyLibs/libpng)
 add_subdirectory(Framework/3rdPartyLibs/zlib)
 add_subdirectory(Framework/3rdPartyLibs/FreeType)
-#add_subdirectory(Framework/3rdPartyLibs/pugixml)
 
 # o2 Framework library
 add_library(o2Framework STATIC)
-
-add_compile_definitions(PLATFORM_WINDOWS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
 
 file(GLOB_RECURSE o2Framework_SOURCES "Framework/Sources/*.cpp" "Framework/Sources/*.h")
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${o2Framework_SOURCES})
@@ -46,7 +45,6 @@ target_link_libraries(o2Framework PRIVATE jerry-port-default)
 target_link_libraries(o2Framework PRIVATE libpng)
 target_link_libraries(o2Framework PRIVATE zlib)
 target_link_libraries(o2Framework PRIVATE FreeType)
-#target_link_libraries(o2Framework PRIVATE pugixml)
 target_link_libraries(o2Framework PRIVATE mte::lib::pugixml)        
 
 if(WIN32)
@@ -56,8 +54,10 @@ if(WIN32)
  add_dependencies(o2Framework StackWalker)
  target_link_libraries(o2Framework PRIVATE StackWalker)
  set_target_properties(StackWalker PROPERTIES FOLDER o2/3rdPartyLibs)
-endif()
 
+ add_custom_command(TARGET o2Framework PRE_BUILD
+                   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/CodeTool.exe -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2")
+endif()
 
 if(MSVC)
  target_compile_options(o2Framework PRIVATE "/MP")
@@ -78,6 +78,11 @@ if(MSVC)
  target_compile_options(o2Editor PRIVATE "/MP")
 endif()
 
+if(WIN32)
+    add_custom_command(TARGET o2Editor PRE_BUILD
+                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/CodeTool.exe -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml")
+endif()
+
 # dependency
 add_dependencies(o2Framework Box2D)
 add_dependencies(o2Framework jerry-core)
@@ -86,8 +91,6 @@ add_dependencies(o2Framework jerry-port-default)
 add_dependencies(o2Framework libpng)
 add_dependencies(o2Framework zlib)
 add_dependencies(o2Framework FreeType)
-#add_dependencies(o2Framework pugixml)
-
 add_dependencies(o2Editor o2Framework)
 
 # group in IDe
@@ -101,4 +104,3 @@ set_target_properties(jerry-port-default PROPERTIES FOLDER o2/3rdPartyLibs)
 set_target_properties(libpng PROPERTIES FOLDER o2/3rdPartyLibs)
 set_target_properties(zlib PROPERTIES FOLDER o2/3rdPartyLibs)
 set_target_properties(FreeType PROPERTIES FOLDER o2/3rdPartyLibs)
-#set_target_properties(pugixml PROPERTIES FOLDER o2/3rdPartyLibs)

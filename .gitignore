@@ -16,3 +16,4 @@ Framework/Platforms/Mac/build
 Editor/Platforms/Mac/build
 Framework/Platforms/Mac/3rdPartyLibs.xcodeproj/xcuserdata
 Framework/Platforms/Mac/build
+Editor/Sources/o2Editor/CodeToolCache.xml
