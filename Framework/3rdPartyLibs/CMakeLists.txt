@@ -1,0 +1,16 @@
+set(BOX2D_BUILD_STATIC TRUE)
+set(BOX2D_VERSION 1)
+
+set(ENABLE_AMALGAM OFF)
+set(JERRY_DEBUGGER ON)
+set(JERRY_MEM_STATS ON)
+set(JERRY_LOGGING ON)
+set(JERRY_LINE_INFO ON)
+set(JERRY_ERROR_MESSAGES ON)
+set(JERRY_CMDLINE OFF)
+
+add_subdirectory(Box2D)
+add_subdirectory(jerryscript)
+add_subdirectory(libpng)
+add_subdirectory(zlib)
+add_subdirectory(FreeType)

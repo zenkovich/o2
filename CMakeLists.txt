@@ -1,22 +1,7 @@
 add_compile_definitions(PLATFORM_WINDOWS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
 
 # dependencies
-set(BOX2D_BUILD_STATIC TRUE)
-set(BOX2D_VERSION 1)
-add_subdirectory(Framework/3rdPartyLibs/Box2D)
-
-set(ENABLE_AMALGAM OFF)
-set(JERRY_DEBUGGER ON)
-set(JERRY_MEM_STATS ON)
-set(JERRY_LOGGING ON)
-set(JERRY_LINE_INFO ON)
-set(JERRY_ERROR_MESSAGES ON)
-set(JERRY_CMDLINE OFF)
-add_subdirectory(Framework/3rdPartyLibs/jerryscript)
-
-add_subdirectory(Framework/3rdPartyLibs/libpng)
-add_subdirectory(Framework/3rdPartyLibs/zlib)
-add_subdirectory(Framework/3rdPartyLibs/FreeType)
+add_subdirectory(Framework/3rdPartyLibs)
 
 # o2 Framework library
 add_library(o2Framework STATIC)
@@ -38,29 +23,33 @@ target_sources(o2Framework PRIVATE ${o2Framework_SOURCES})
 target_include_directories(o2Framework PUBLIC ${o2Framework_INCLUDES})
 target_precompile_headers(o2Framework PUBLIC "Framework/Sources/o2/stdafx.h")
 
-target_link_libraries(o2Framework PRIVATE Box2D)
-target_link_libraries(o2Framework PRIVATE jerry-core)
-target_link_libraries(o2Framework PRIVATE jerry-ext)
-target_link_libraries(o2Framework PRIVATE jerry-port-default)
-target_link_libraries(o2Framework PRIVATE libpng)
-target_link_libraries(o2Framework PRIVATE zlib)
-target_link_libraries(o2Framework PRIVATE FreeType)
-target_link_libraries(o2Framework PRIVATE mte::lib::pugixml)        
+target_link_libraries(o2Framework 
+    PRIVATE 
+        Box2D
+        jerry-core
+        jerry-ext
+        jerry-port-default
+        libpng
+        zlib
+        FreeType
+        mte::lib::pugixml
+        mte::library
+)        
 
 if(WIN32)
- target_link_libraries(o2Framework PRIVATE Shlwapi.lib)
+    target_link_libraries(o2Framework PRIVATE Shlwapi.lib)  
 
- add_subdirectory(Framework/3rdPartyLibs/StackWalker)
- add_dependencies(o2Framework StackWalker)
- target_link_libraries(o2Framework PRIVATE StackWalker)
- set_target_properties(StackWalker PROPERTIES FOLDER o2/3rdPartyLibs)
+    add_subdirectory(Framework/3rdPartyLibs/StackWalker)
+    add_dependencies(o2Framework StackWalker)
+    target_link_libraries(o2Framework PRIVATE StackWalker)
+    set_target_properties(StackWalker PROPERTIES FOLDER o2/3rdPartyLibs)  
 
- add_custom_command(TARGET o2Framework PRE_BUILD
-                   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/CodeTool.exe -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2")
+    add_custom_command(TARGET o2Framework PRE_BUILD
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/CodeTool.exe -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2")
 endif()
 
 if(MSVC)
- target_compile_options(o2Framework PRIVATE "/MP")
+    target_compile_options(o2Framework PRIVATE "/MP")
 endif()
 
 # o2 Editor Library
@@ -70,12 +59,16 @@ file(GLOB_RECURSE o2Framework_SOURCES "Editor/Sources/*.cpp" "Editor/Sources/*.h
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${o2Framework_SOURCES})
 
 target_sources(o2Editor PRIVATE ${o2Framework_SOURCES})
-target_include_directories(o2Editor PUBLIC "Editor/Sources")
-target_include_directories(o2Editor PUBLIC ${o2Framework_INCLUDES})
+target_include_directories(o2Editor 
+    PUBLIC 
+        "Editor/Sources"
+        ${o2Framework_INCLUDES}
+)
+
 target_precompile_headers(o2Editor PUBLIC "Editor/Sources/o2Editor/stdafx.h")
 
 if(MSVC)
- target_compile_options(o2Editor PRIVATE "/MP")
+    target_compile_options(o2Editor PRIVATE "/MP")
 endif()
 
 if(WIN32)
@@ -84,13 +77,15 @@ if(WIN32)
 endif()
 
 # dependency
-add_dependencies(o2Framework Box2D)
-add_dependencies(o2Framework jerry-core)
-add_dependencies(o2Framework jerry-ext)
-add_dependencies(o2Framework jerry-port-default)
-add_dependencies(o2Framework libpng)
-add_dependencies(o2Framework zlib)
-add_dependencies(o2Framework FreeType)
+add_dependencies(o2Framework 
+    Box2D
+    jerry-core
+    jerry-ext
+    jerry-port-default
+    libpng
+    zlib
+    FreeType)
+
 add_dependencies(o2Editor o2Framework)
 
 # group in IDe
