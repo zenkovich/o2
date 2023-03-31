@@ -473,12 +473,12 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		o2Render.Clear();
+		//o2Render.Clear();
 
-		mBackground->Draw();
-		mBackSign->Draw();
-		mWindowsManager->Draw();
-		mUIRoot->Draw();
+// 		mBackground->Draw();
+// 		mBackSign->Draw();
+// 		mWindowsManager->Draw();
+// 		mUIRoot->Draw();
 
 		// Debug draw undo actions
 		if (o2Input.IsKeyDown(VK_F6))

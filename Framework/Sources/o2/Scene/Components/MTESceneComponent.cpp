@@ -32,6 +32,7 @@ namespace o2
 
 	void MTESceneComponent::Draw()
 	{
+		m_scene->update(o2Time.GetDeltaTime());
 		m_scene->draw();
 	}
 

@@ -95,7 +95,10 @@ namespace o2
 		CheckCompatibles();
 
 		// Initialize buffers
-		mVertexData = mnew UInt8[mVertexBufferSize * sizeof(Vertex2)];
+		mVertexBufferSize = USHRT_MAX;
+		mIndexBufferSize = USHRT_MAX;
+
+		mVertexData = mnew UInt8[mVertexBufferSize * sizeof(Vertex)];
 		mVertexIndexData = mnew UInt16[mIndexBufferSize * sizeof(UInt16)];
 
 		mLastDrawVertex = 0;
@@ -109,11 +112,9 @@ namespace o2
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glLineWidth(1.0f);
 
-		mVertexBufferSize = USHRT_MAX;
-		mIndexBufferSize = USHRT_MAX;
 		glGenBuffers(1, &mVertexBufferObject);
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
-		glBufferData(GL_ARRAY_BUFFER, mVertexBufferSize * sizeof(Vertex2), mVertexData, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, mVertexBufferSize * sizeof(Vertex), mVertexData, GL_DYNAMIC_DRAW);
 
 		glGenBuffers(1, &mIndexBufferObject);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferObject);
@@ -304,15 +305,15 @@ namespace o2
 		glUseProgram(mStdShader);
 		GL_CHECK_ERROR();
 
-		glVertexAttribPointer((GLuint)mStdShaderPosAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex2), &((Vertex2*)0)->x);
+		glVertexAttribPointer((GLuint)mStdShaderPosAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &((Vertex*)0)->x);
 		glEnableVertexAttribArray((GLuint)mStdShaderPosAttribute);
 		GL_CHECK_ERROR();
 
-		glVertexAttribPointer((GLuint)mStdShaderColorAttribute, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex2), &((Vertex2*)0)->color);
+		glVertexAttribPointer((GLuint)mStdShaderColorAttribute, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), &((Vertex*)0)->color);
 		glEnableVertexAttribArray((GLuint)mStdShaderColorAttribute);
 		GL_CHECK_ERROR();
 
-		glVertexAttribPointer((GLuint)mStdShaderUVAttribute, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2), &((Vertex2*)0)->tu);
+		glVertexAttribPointer((GLuint)mStdShaderUVAttribute, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &((Vertex*)0)->tu);
 		glEnableVertexAttribArray((GLuint)mStdShaderUVAttribute);
 		GL_CHECK_ERROR();
 	}
@@ -359,7 +360,7 @@ namespace o2
 		UpdateCameraTransforms();
 
 		preRender();
-		preRender.Clear();
+		//preRender.Clear();
 	}
 
 	void Render::DrawPrimitives()
@@ -369,7 +370,10 @@ namespace o2
 
 		static const GLenum primitiveType[3]{ GL_TRIANGLES, GL_TRIANGLES, GL_LINES };
 
-		glDrawElements(primitiveType[(int)mCurrentPrimitiveType], mLastDrawIdx, GL_UNSIGNED_SHORT, mVertexIndexData);
+		glBufferData(GL_ARRAY_BUFFER, mLastDrawVertex * sizeof(Vertex), mVertexData, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)(mLastDrawIdx * sizeof(UInt16)), mVertexIndexData, GL_DYNAMIC_DRAW);
+
+		glDrawElements(primitiveType[(int)mCurrentPrimitiveType], mLastDrawIdx, GL_UNSIGNED_SHORT, (void*)0);
 
 		GL_CHECK_ERROR();
 
@@ -383,13 +387,6 @@ namespace o2
 	{
 		mCurrentResolution = viewSize;
 		mCamera = Camera();
-
-		float projMat[16];
-		Math::OrthoProjMatrix(projMat, 0.0f, (float)viewSize.x, (float)viewSize.y, 0.0f, 0.0f, 10.0f);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glViewport(0, 0, viewSize.x, viewSize.y);
-		glLoadMatrixf(projMat);
 
 		UpdateCameraTransforms();
 	}
@@ -419,13 +416,43 @@ namespace o2
 		GL_CHECK_ERROR();
 	}
 
+	void mtxMultiply(float* ret, const float* lhs, const float* rhs)
+	{
+		// [ 0 4  8 12 ]   [ 0 4  8 12 ]
+		// [ 1 5  9 13 ] x [ 1 5  9 13 ]
+		// [ 2 6 10 14 ]   [ 2 6 10 14 ]
+		// [ 3 7 11 15 ]   [ 3 7 11 15 ]
+		ret[0] = lhs[0] * rhs[0] + lhs[4] * rhs[1] + lhs[8] * rhs[2] + lhs[12] * rhs[3];
+		ret[1] = lhs[1] * rhs[0] + lhs[5] * rhs[1] + lhs[9] * rhs[2] + lhs[13] * rhs[3];
+		ret[2] = lhs[2] * rhs[0] + lhs[6] * rhs[1] + lhs[10] * rhs[2] + lhs[14] * rhs[3];
+		ret[3] = lhs[3] * rhs[0] + lhs[7] * rhs[1] + lhs[11] * rhs[2] + lhs[15] * rhs[3];
+
+		ret[4] = lhs[0] * rhs[4] + lhs[4] * rhs[5] + lhs[8] * rhs[6] + lhs[12] * rhs[7];
+		ret[5] = lhs[1] * rhs[4] + lhs[5] * rhs[5] + lhs[9] * rhs[6] + lhs[13] * rhs[7];
+		ret[6] = lhs[2] * rhs[4] + lhs[6] * rhs[5] + lhs[10] * rhs[6] + lhs[14] * rhs[7];
+		ret[7] = lhs[3] * rhs[4] + lhs[7] * rhs[5] + lhs[11] * rhs[6] + lhs[15] * rhs[7];
+
+		ret[8] = lhs[0] * rhs[8] + lhs[4] * rhs[9] + lhs[8] * rhs[10] + lhs[12] * rhs[11];
+		ret[9] = lhs[1] * rhs[8] + lhs[5] * rhs[9] + lhs[9] * rhs[10] + lhs[13] * rhs[11];
+		ret[10] = lhs[2] * rhs[8] + lhs[6] * rhs[9] + lhs[10] * rhs[10] + lhs[14] * rhs[11];
+		ret[11] = lhs[3] * rhs[8] + lhs[7] * rhs[9] + lhs[11] * rhs[10] + lhs[15] * rhs[11];
+
+		ret[12] = lhs[0] * rhs[12] + lhs[4] * rhs[13] + lhs[8] * rhs[14] + lhs[12] * rhs[15];
+		ret[13] = lhs[1] * rhs[12] + lhs[5] * rhs[13] + lhs[9] * rhs[14] + lhs[13] * rhs[15];
+		ret[14] = lhs[2] * rhs[12] + lhs[6] * rhs[13] + lhs[10] * rhs[14] + lhs[14] * rhs[15];
+		ret[15] = lhs[3] * rhs[12] + lhs[7] * rhs[13] + lhs[11] * rhs[14] + lhs[15] * rhs[15];
+	}
+
 	void Render::UpdateCameraTransforms()
 	{
 		DrawPrimitives();
 
-		Vec2F resf = (Vec2F)mCurrentResolution;
+		Vec2F resf = (Vec2F)mCurrentResolution; 
+		
+		float projMat[16];
+		Math::OrthoProjMatrix(projMat, 0.0f, (float)mCurrentResolution.x, (float)mCurrentResolution.y, 0.0f, 0.0f, 10.0f);
+		glViewport(0, 0, mCurrentResolution.x, mCurrentResolution.y);
 
-		glMatrixMode(GL_MODELVIEW);
 		float modelMatrix[16] =
 		{
 			1,           0,            0, 0,
@@ -433,8 +460,6 @@ namespace o2
 			0,           0,            1, 0,
 			Math::Round(resf.x*0.5f), Math::Round(resf.y*0.5f), -1, 1
 		};
-
-		glLoadMatrixf(modelMatrix);
 
 		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F::Right()*resf.x, Vec2F().Up()*resf.y);
 		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
@@ -449,7 +474,14 @@ namespace o2
 			camTransf.origin.x, camTransf.origin.y, 0, 1
 		};
 
-		glMultMatrixf(camTransfMatr);
+		float mvp[16];
+		float finalCamMtx[16];
+		mtxMultiply(finalCamMtx, modelMatrix, camTransfMatr);
+		mtxMultiply(mvp, projMat, finalCamMtx);
+
+		glUniformMatrix4fv(mStdShaderMvpUniform, 1, GL_FALSE, mvp);
+
+		GL_CHECK_ERROR();
 	}
 
 	void Render::BeginRenderToStencilBuffer()
@@ -640,19 +672,22 @@ namespace o2
 			mLastDrawTexture = texture.mTexture;
 			mCurrentPrimitiveType = primitiveType;
 
-			if (primitiveType == PrimitiveType::PolygonWire)
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			else
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
 			if (mLastDrawTexture)
 			{
-				glEnable(GL_TEXTURE_2D);
+				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, mLastDrawTexture->mHandle);
+				glUniform1i(mStdShaderTextureSample, 0);
 
 				GL_CHECK_ERROR();
 			}
-			else glDisable(GL_TEXTURE_2D);
+			else
+			{
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				glUniform1i(mStdShaderTextureSample, 0);
+
+				GL_CHECK_ERROR();
+			}
 		}
 
 		memcpy(&mVertexData[mLastDrawVertex * sizeof(Vertex)], vertices, sizeof(Vertex)*verticesCount);

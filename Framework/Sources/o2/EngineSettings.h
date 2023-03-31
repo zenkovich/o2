@@ -12,7 +12,7 @@
 #if defined DEBUG
 #define RENDER_DEBUG true
 #else
-#define RENDER_DEBUG false
+#define RENDER_DEBUG true
 #endif
 
 // Describes that engine running as editor

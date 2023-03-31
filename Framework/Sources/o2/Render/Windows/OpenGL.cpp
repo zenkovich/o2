@@ -28,15 +28,25 @@ void GetGLExtensions(o2::LogStream* log /*= nullptr*/)
 	glBindBuffer = (PFNGLBINDBUFFERPROC)GetSafeWGLProcAddress("glBindBuffer", log);
 	glBufferData = (PFNGLBUFFERDATAPROC)GetSafeWGLProcAddress("glBufferData", log);
 	glCreateShader = (PFNGLCREATESHADERPROC)GetSafeWGLProcAddress("glCreateShader", log);
+	glDeleteShader = (PFNGLDELETESHADERPROC)GetSafeWGLProcAddress("glDeleteShader", log);
 	glShaderSource = (PFNGLSHADERSOURCEPROC)GetSafeWGLProcAddress("glShaderSource", log);
 	glCompileShader = (PFNGLCOMPILESHADERPROC)GetSafeWGLProcAddress("glCompileShader", log);
 	glGetShaderiv = (PFNGLGETSHADERIVPROC)GetSafeWGLProcAddress("glGetShaderiv", log);
 	glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC)GetSafeWGLProcAddress("glGetShaderInfoLog", log);
-	glDeleteProgram = (PFNGLDELETEPROGRAMPROC)GetSafeWGLProcAddress("glDeleteProgram", log);
 	glCreateProgram = (PFNGLCREATEPROGRAMPROC)GetSafeWGLProcAddress("glCreateProgram", log);
 	glAttachShader = (PFNGLATTACHSHADERPROC)GetSafeWGLProcAddress("glAttachShader", log);
 	glLinkProgram = (PFNGLLINKPROGRAMPROC)GetSafeWGLProcAddress("glLinkProgram", log);
 	glGetProgramiv = (PFNGLGETPROGRAMIVPROC)GetSafeWGLProcAddress("glGetProgramiv", log);
+	glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC)GetSafeWGLProcAddress("glGetProgramInfoLog", log);
+	glUseProgram = (PFNGLUSEPROGRAMPROC)GetSafeWGLProcAddress("glUseProgram", log);
+	glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)GetSafeWGLProcAddress("glGetUniformLocation", log);
+	glGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC)GetSafeWGLProcAddress("glGetAttribLocation", log);
+	glDeleteProgram = (PFNGLDELETEPROGRAMPROC)GetSafeWGLProcAddress("glDeleteProgram", log);
+	glVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC)GetSafeWGLProcAddress("glVertexAttribPointer", log);
+	glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC)GetSafeWGLProcAddress("glEnableVertexAttribArray", log);
+	glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)GetSafeWGLProcAddress("glUniformMatrix4fv", log);
+	glActiveTexture = (PFNGLACTIVETEXTUREPROC)GetSafeWGLProcAddress("glActiveTexture", log);
+	glUniform1i = (PFNGLUNIFORM1IPROC)GetSafeWGLProcAddress("glUniform1i", log);
 }
 
 bool IsGLExtensionSupported(const char *extension)
@@ -113,5 +123,24 @@ extern PFNGLGENBUFFERSPROC                glGenBuffers = NULL;
 extern PFNGLBINDBUFFERPROC                glBindBuffer = NULL;
 extern PFNGLBUFFERDATAPROC                glBufferData = NULL;
 extern PFNGLCREATESHADERPROC              glCreateShader = NULL;
+extern PFNGLDELETESHADERPROC              glDeleteShader = NULL;
+extern PFNGLSHADERSOURCEPROC              glShaderSource = NULL;
+extern PFNGLCOMPILESHADERPROC             glCompileShader = NULL;
+extern PFNGLGETSHADERIVPROC               glGetShaderiv = NULL;
+extern PFNGLGETSHADERINFOLOGPROC          glGetShaderInfoLog = NULL;
+extern PFNGLCREATEPROGRAMPROC             glCreateProgram = NULL;
+extern PFNGLATTACHSHADERPROC              glAttachShader = NULL;
+extern PFNGLLINKPROGRAMPROC               glLinkProgram = NULL;
+extern PFNGLGETPROGRAMIVPROC              glGetProgramiv = NULL;
+extern PFNGLGETPROGRAMINFOLOGPROC         glGetProgramInfoLog = NULL;
+extern PFNGLUSEPROGRAMPROC                glUseProgram = NULL;
+extern PFNGLGETUNIFORMLOCATIONPROC        glGetUniformLocation = NULL;
+extern PFNGLGETATTRIBLOCATIONPROC         glGetAttribLocation = NULL;
+extern PFNGLDELETEPROGRAMPROC             glDeleteProgram = NULL;
+extern PFNGLVERTEXATTRIBPOINTERPROC       glVertexAttribPointer = NULL;
+extern PFNGLENABLEVERTEXATTRIBARRAYPROC   glEnableVertexAttribArray = NULL;
+extern PFNGLUNIFORMMATRIX4FVPROC          glUniformMatrix4fv = NULL;
+extern PFNGLACTIVETEXTUREPROC             glActiveTexture = NULL;
+extern PFNGLUNIFORM1IPROC                 glUniform1i = NULL;
 
 #endif // PLATFORM_WINDOWS
