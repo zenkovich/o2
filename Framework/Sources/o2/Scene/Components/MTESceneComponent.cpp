@@ -11,18 +11,8 @@ namespace o2
 	MTESceneComponent::MTESceneComponent()
 	{}
 
-	MTESceneComponent::MTESceneComponent(const MTESceneComponent& other):
-		DrawableComponent(other)
-	{}
-
 	MTESceneComponent::~MTESceneComponent()
 	{
-	}
-
-	MTESceneComponent& MTESceneComponent::operator=(const MTESceneComponent& other)
-	{
-		DrawableComponent::operator=(other);
-		return *this;
 	}
 
 	void MTESceneComponent::Update(float dt)
@@ -32,8 +22,12 @@ namespace o2
 
 	void MTESceneComponent::Draw()
 	{
-		m_scene->update(o2Time.GetDeltaTime());
+		o2Render.BeginCustomRender();
+
+		//m_scene->update(o2Time.GetDeltaTime());
 		m_scene->draw();
+
+		o2Render.EndCustomRender();
 	}
 
 	void MTESceneComponent::Initialize(SceneFactory sceneFactory, std::string_view options)

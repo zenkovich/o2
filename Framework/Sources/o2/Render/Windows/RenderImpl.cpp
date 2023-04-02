@@ -256,9 +256,9 @@ namespace o2
 
 	void RenderBase::InitializeStdShader()
 	{
-		const char* fragShader = " precision mediump float;             \n \
+		const char* fragShader = " \
                                                                         \n \
-        varying lowp vec4 v_color;                                      \n \
+        varying vec4 v_color;                                           \n \
         varying vec2 v_texCoords;                                       \n \
                                                                         \n \
         uniform sampler2D u_texture;                                    \n \
@@ -268,7 +268,8 @@ namespace o2
             gl_FragColor = v_color * texture2D(u_texture, v_texCoords); \n \
         }";
 
-		const char* vtxShader = " uniform mat4 u_transformMatrix; \n \
+		const char* vtxShader = " \
+	    uniform mat4 u_transformMatrix;                           \n \
                                                                   \n \
         attribute vec4 a_position;                                \n \
         attribute vec4 a_color;                                   \n \
@@ -406,6 +407,59 @@ namespace o2
 
 		CheckTexturesUnloading();
 		CheckFontsUnloading();
+	}
+
+	void Render::BeginCustomRender()
+	{
+		DrawPrimitives();
+	}
+
+	void Render::EndCustomRender()
+	{
+		glEnable(GL_BLEND);
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_CULL_FACE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDisable(GL_SCISSOR_TEST);
+		GL_CHECK_ERROR();
+
+		glClearStencil(0);
+		glClear(GL_STENCIL_BUFFER_BIT);
+		GL_CHECK_ERROR();
+
+// 		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+// 		GL_CHECK_ERROR();
+
+		glUseProgram(mStdShader);
+		GL_CHECK_ERROR();
+
+		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferObject);
+		GL_CHECK_ERROR();
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		GL_CHECK_ERROR();
+
+		glUniform1i(mStdShaderTextureSample, 0);
+		GL_CHECK_ERROR();
+
+		glVertexAttribPointer((GLuint)mStdShaderPosAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &((Vertex*)0)->x);
+		glEnableVertexAttribArray((GLuint)mStdShaderPosAttribute);
+		GL_CHECK_ERROR();
+
+		glVertexAttribPointer((GLuint)mStdShaderColorAttribute, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), &((Vertex*)0)->color);
+		glEnableVertexAttribArray((GLuint)mStdShaderColorAttribute);
+		GL_CHECK_ERROR();
+
+		glVertexAttribPointer((GLuint)mStdShaderUVAttribute, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &((Vertex*)0)->tu);
+		glEnableVertexAttribArray((GLuint)mStdShaderUVAttribute);
+		GL_CHECK_ERROR();
+
+		mLastDrawTexture = nullptr;
+
+		SetupViewMatrix(mResolution);
+		UpdateCameraTransforms();
 	}
 
 	void Render::Clear(const Color4& color /*= Color4::Blur()*/)

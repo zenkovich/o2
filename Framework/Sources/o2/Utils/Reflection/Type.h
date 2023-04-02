@@ -753,14 +753,14 @@ typedef void* (*GetValuePointerFuncPtr)(void*);
         static o2::ScriptValue proto = o2::ScriptValue::EmptyObject();										   \
 		return proto;																						   \
     }																										   \
-	TEMPLATE_OPT void CLASS::SetScriptValueContainer(ScriptValue& value) const 								   \
+	TEMPLATE_OPT void CLASS::SetScriptValueContainer(o2::ScriptValue& value) const 							   \
 	{																										   \
 		value.SetContainingObject(const_cast<CLASS*>(this), false);											   \
 	}                           																			   \
     TEMPLATE_OPT void CLASS::ReflectIntoScriptValue(o2::ScriptValue& scriptValue) const                        \
 	{																										   \
-		ReflectScriptValueTypeProcessor processor(scriptValue);												   \
-		ProcessType<ReflectScriptValueTypeProcessor>(const_cast<CLASS*>(this), processor);					   \
+		o2::ReflectScriptValueTypeProcessor processor(scriptValue);											   \
+		ProcessType<o2::ReflectScriptValueTypeProcessor>(const_cast<CLASS*>(this), processor);				   \
 	}																										   
 #else
 #define DECLARE_SCRIPTING(CLASS, TEMPLATE_OPT)

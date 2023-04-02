@@ -90,6 +90,12 @@ namespace o2
 		// Finishing rendering
 		void End();
 
+		// Flushes current state and gets ready to draw manually
+		void BeginCustomRender();
+
+		// Finishes custom rendering, restores state and cameras
+		void EndCustomRender();
+
 		// Clearing current frame buffer with color
 		void Clear(const Color4& color = Color4::Gray());
 

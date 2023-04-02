@@ -1273,6 +1273,8 @@ namespace o2
 			{
 				String type = componentNode["Type"];
 				Component* newComponent = (Component*)o2Reflection.CreateTypeSample(type);
+				if (!newComponent)
+					continue;
 
 				mComponents.Add(newComponent);
 				newComponent->mOwner = this;

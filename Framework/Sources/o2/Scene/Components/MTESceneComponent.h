@@ -18,17 +18,8 @@ namespace o2
 		// Default constructor
 		MTESceneComponent();
 
-		// Copy-constructor
-		MTESceneComponent(const MTESceneComponent& other);
-
-		// Copy-operator
-		MTESceneComponent& operator=(const MTESceneComponent& other);
-
 		// Destructor
 		~MTESceneComponent();
-
-		// Initializes actor with scene factory
-		void Initialize(SceneFactory sceneFactory, std::string_view options);
 
 		// Updates component and mte scene
 		void Update(float dt) override;
@@ -48,6 +39,10 @@ namespace o2
 		mte::EventManagerPtr m_events;
 
 		std::shared_ptr<mte::Scene> m_scene;
+
+	protected:
+		// Initializes actor with scene factory
+		void Initialize(SceneFactory sceneFactory, std::string_view options);
 	};
 }
 
@@ -71,9 +66,8 @@ CLASS_METHODS_META(o2::MTESceneComponent)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const MTESceneComponent&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, SceneFactory, std::string_view);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PROTECTED().SIGNATURE(void, Initialize, SceneFactory, std::string_view);
 }
 END_META;

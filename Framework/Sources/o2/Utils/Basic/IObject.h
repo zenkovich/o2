@@ -87,12 +87,12 @@ namespace o2
 // -------------------------------
  
 #if IS_SCRIPTING_SUPPORTED
-#define IOBJECT_SCRIPTING()                                                             \
-    void SetScriptValueContainer(ScriptValue& value) const override;                    \
-    void ReflectIntoScriptValue(ScriptValue& scriptValue) const override;               \
-    static ScriptValue GetScriptPrototype();                                            \
-    template<typename __type> 															\
-    friend struct ScriptValueBase::DataContainer
+#define IOBJECT_SCRIPTING()                                                                 \
+    void SetScriptValueContainer(o2::ScriptValue& value) const override;                    \
+    void ReflectIntoScriptValue(o2::ScriptValue& scriptValue) const override;               \
+    static o2::ScriptValue GetScriptPrototype();                                            \
+    template<typename __type> 															    \
+    friend struct o2::ScriptValueBase::DataContainer
 
 #else
 #define IOBJECT_SCRIPTING()
