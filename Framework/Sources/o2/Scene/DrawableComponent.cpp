@@ -7,7 +7,7 @@
 
 namespace o2
 {
-	DrawableComponent::DrawableComponent():
+	DrawableComponent::DrawableComponent() :
 		Component(), ISceneDrawable()
 	{}
 
@@ -119,8 +119,13 @@ namespace o2
 
 	int DrawableComponent::GetIndexInParentDrawable() const
 	{
-		if (mOwner && mOwner->mParent)
-			return mOwner->mParent->mChildren.IndexOf(mOwner);
+		if (mOwner)
+		{
+			if (mOwner->mParent)
+				return mOwner->mParent->mChildren.IndexOf(mOwner);
+			else
+				return o2Scene.mRootActors.IndexOf(mOwner);
+		}
 
 		return 0;
 	}

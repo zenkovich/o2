@@ -218,16 +218,16 @@ namespace Editor
 	{
 		auto styleWidgets = o2UI.GetWidgetStyles();
 
-		for (auto styleWidget : styleWidgets)
+		for (auto styleWidgetAsset : styleWidgets)
 		{
-			auto path = styleWidget->GetType().GetName() + "/" + styleWidget->GetActor()->GetName();
+			auto path = styleWidgetAsset->GetActor()->GetType().GetName() + "/" + styleWidgetAsset->GetActor()->GetName();
 			path.ReplaceAll("o2::", "");
 			path.ReplaceAll("::", "/");
 
 			mTreeContextMenu->AddItem(String("Create/UI/Style/") + path, [=]()
 			{
 				ForcePopEditorScopeOnStack scope;
-				Widget* newWidget = styleWidget->GetActor()->CloneAs<Widget>();
+				Widget* newWidget = styleWidgetAsset->GetActor()->CloneAs<Widget>();
 				newWidget->SetEnabledForcible(true);
 				OnCreateObject(newWidget);
 			});

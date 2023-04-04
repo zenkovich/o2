@@ -171,7 +171,7 @@ namespace o2
 		bool IsEnabledInHierarchy() const OPTIONAL_OVERRIDE;
 
 		// Sets parent @SCRIPTABLE
-		void SetParent(Actor* actor, bool worldPositionStays = true);
+		void SetParent(Actor* actor, bool worldPositionStays = true, int idx = -1);
 
 		// Returns parent @SCRIPTABLE
 		Actor* GetParent() const;
@@ -830,7 +830,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEnabled);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsResEnabled);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEnabledInHierarchy);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetParent, Actor*, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetParent, Actor*, bool, int);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, GetParent);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetIndexInSiblings, int);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, AddChild, Actor*);

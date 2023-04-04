@@ -387,8 +387,6 @@ namespace o2
 	void Render::SetupViewMatrix(const Vec2I& viewSize)
 	{
 		mCurrentResolution = viewSize;
-		mCamera = Camera();
-
 		UpdateCameraTransforms();
 	}
 

@@ -507,7 +507,7 @@ namespace o2
 		}
 	}
 
-	void Actor::SetParent(Actor* actor, bool worldPositionStays /*= true*/)
+	void Actor::SetParent(Actor* actor, bool worldPositionStays /*= true*/, int idx /*= -1*/)
 	{
 		if ((actor && actor->mParent == this) || actor == this || actor == mParent)
 			return;
@@ -525,12 +525,21 @@ namespace o2
 
 		if (mParent)
 		{
-			mParent->mChildren.Add(this);
+			if (idx < 0)
+				mParent->mChildren.Add(this);
+			else
+				mParent->mChildren.Insert(this, idx);
+
 			mParent->OnChildAdded(this);
 			mParent->OnChildrenChanged();
 		}
 		else if (IsOnScene() && Scene::IsSingletonInitialzed())
-			o2Scene.mRootActors.Add(this);
+		{
+			if (idx < 0)
+				o2Scene.mRootActors.Add(this);
+			else
+				o2Scene.mRootActors.Insert(this, idx);
+		}
 
 		if (worldPositionStays)
 			transform->SetWorldBasis(lastParentBasis);
@@ -565,10 +574,9 @@ namespace o2
 
 	Actor* Actor::AddChild(Actor* actor, int index)
 	{
-		AddChild(actor);
-		mChildren.Insert(actor, index);
-		mChildren.PopBack();
+		Assert(actor, "Actor is null");
 
+		actor->SetParent(this, false, index);
 		return actor;
 	}
 

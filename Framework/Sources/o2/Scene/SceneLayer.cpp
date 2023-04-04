@@ -124,6 +124,7 @@ namespace o2
 		else if (drawable->mInheritDrawingDepthFromParent && drawable->mParentDrawable == nullptr)
 		{
 			mRootDrawables.drawables.Add(drawable);
+			mRootDrawables.drawables.SortBy<int>([](ISceneDrawable* x) { return x->GetIndexInParentDrawable(); });
 		}
 	}
 
