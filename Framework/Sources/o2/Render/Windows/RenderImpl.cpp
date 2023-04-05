@@ -402,7 +402,9 @@ namespace o2
 		postRender.Clear();
 
 		DrawPrimitives();
-		SwapBuffers(mHDC);
+
+		if (o2Application.mNeedPlatformInitialization)
+			SwapBuffers(mHDC);
 
 		GL_CHECK_ERROR();
 

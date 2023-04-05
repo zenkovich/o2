@@ -174,6 +174,9 @@ namespace o2
 		bool mInEditMode = false; // True when some state animation is editing now, disables update
 
 	protected:
+		// Called when component started, checks states auto play
+		void OnStart();
+
 		// Registers value by path and state
 		template<typename _type>
 		void RegTrack(typename AnimationTrack< _type >::Player* player, const String& path, AnimationState* state);
@@ -336,6 +339,7 @@ CLASS_METHODS_META(o2::AnimationComponent)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
 	FUNCTION().PROTECTED().SIGNATURE(void, UnregTrack, IAnimationTrack::IPlayer*, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackAdded, AnimationState*, IAnimationTrack::IPlayer*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackRemoved, AnimationState*, IAnimationTrack::IPlayer*);

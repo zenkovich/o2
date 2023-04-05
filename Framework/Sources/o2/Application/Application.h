@@ -236,6 +236,9 @@ namespace o2
 		// Basic initialization for all platforms
 		void BasicInitialize();
 
+		// It is called when application frame resized
+		virtual void OnResized(const Vec2I& size);
+
 		// Updates scene
 		virtual void UpdateScene(float dt);
 

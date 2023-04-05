@@ -18,8 +18,9 @@ namespace o2
 	class AnimationState: public ISerializable
 	{
 	public:
-		String        name; // State name @SERIALIZABLE
-		AnimationMask mask; // Animation mask @SERIALIZABLE
+		String        name;            // State name @SERIALIZABLE
+		AnimationMask mask;            // Animation mask @SERIALIZABLE
+		bool          autoPlay = true; // True, if state should be played automatically @SERIALIZABLE
 
 		float blend = 1.0f; // State blending coefficient in 0..1 Used for blending
 
@@ -78,6 +79,7 @@ CLASS_FIELDS_META(o2::AnimationState)
 {
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(name);
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mask);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(autoPlay);
 	FIELD().PUBLIC().DEFAULT_VALUE(1.0f).NAME(blend);
 	FIELD().PUBLIC().NAME(player);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);

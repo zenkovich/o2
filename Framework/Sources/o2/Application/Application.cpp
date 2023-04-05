@@ -50,6 +50,15 @@ namespace o2
 		mReady = true;
 	}
 
+	void Application::OnResized(const Vec2I& size)
+	{
+		mWindowedSize = size;
+		mRender->OnFrameResized();
+		onResizing.Invoke();
+		OnResizing();
+		o2Events.OnApplicationSized();
+	}
+
 	void Application::UpdateScene(float dt)
 	{
 		mScene->Update(dt);

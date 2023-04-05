@@ -50,6 +50,7 @@ namespace o2
 	AnimationState* AnimationComponent::AddState(AnimationState* state)
 	{
 		state->player.SetTarget(mOwner);
+		state->player.SetPlaying(state->autoPlay);
 		state->player.mAnimationState = state;
 		state->mOwner = this;
 
@@ -237,6 +238,15 @@ namespace o2
 	void AnimationComponent::EndAnimationEdit()
 	{
 		mInEditMode = false;
+	}
+
+	void AnimationComponent::OnStart()
+	{
+		for (auto state : mStates)
+		{
+			if (state->autoPlay)
+				state->player.Play();
+		}
 	}
 
 	void AnimationComponent::UnregTrack(IAnimationTrack::IPlayer* player, const String& path)

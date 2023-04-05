@@ -390,13 +390,8 @@ namespace o2
 			size.x = rt.right - rt.left; size.y = rt.bottom - rt.top;
 
 			if (size.x > 0 && size.y > 0 && size != app->mWindowedSize)
-			{
-				app->mWindowedSize = size;
-				app->mRender->OnFrameResized();
-				app->onResizing.Invoke();
-				app->OnResizing();
-				o2Events.OnApplicationSized();
-			}
+				app->OnResized(size);
+
 			app->ProcessFrame();
 
 			break;
