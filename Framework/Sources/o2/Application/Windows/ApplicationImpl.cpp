@@ -31,41 +31,45 @@ namespace o2
 		mWindowedPos = Vec2I(0, 0);
 		mWindowResizible = true;
 		mActive = false;
-		mLog->Out("Initializing window..");
 
-		mWndStyle = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-
-		WNDCLASSEX wndClass;
-		wndClass.cbSize = sizeof(WNDCLASSEX);
-		wndClass.style = mWndStyle;
-		wndClass.lpfnWndProc = (WNDPROC)WndProcFunc::WndProc;
-		wndClass.cbClsExtra = 0;
-		wndClass.cbWndExtra = 0;
-		wndClass.hInstance = NULL;
-		wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-		wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-		wndClass.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH);
-		wndClass.lpszMenuName = NULL;
-		wndClass.lpszClassName = "o2App";
-		wndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-
-		if (!RegisterClassEx(&wndClass))
+		if (mNeedPlatformInitialization)
 		{
-			mLog->Error("Can't register class");
-			return;
+			mLog->Out("Initializing window..");
+
+			mWndStyle = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
+
+			WNDCLASSEX wndClass;
+			wndClass.cbSize = sizeof(WNDCLASSEX);
+			wndClass.style = mWndStyle;
+			wndClass.lpfnWndProc = (WNDPROC)WndProcFunc::WndProc;
+			wndClass.cbClsExtra = 0;
+			wndClass.cbWndExtra = 0;
+			wndClass.hInstance = NULL;
+			wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+			wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+			wndClass.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH);
+			wndClass.lpszMenuName = NULL;
+			wndClass.lpszClassName = "o2App";
+			wndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+
+			if (!RegisterClassEx(&wndClass))
+			{
+				mLog->Error("Can't register class");
+				return;
+			}
+
+			if (!(mHWnd = CreateWindowEx(NULL, wndClass.lpszClassName, "o2 application",
+										 WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+										 mWindowedPos.x, mWindowedPos.y, mWindowedSize.x, mWindowedSize.y,
+										 NULL, NULL, NULL, NULL)))
+			{
+
+				mLog->Error("Can't create window (CreateWindowEx)");
+				return;
+			}
+
+			mLog->Out("Window initialized!");
 		}
-
-		if (!(mHWnd = CreateWindowEx(NULL, wndClass.lpszClassName, "o2 application",
-									 WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-									 mWindowedPos.x, mWindowedPos.y, mWindowedSize.x, mWindowedSize.y,
-									 NULL, NULL, NULL, NULL)))
-		{
-
-			mLog->Error("Can't create window (CreateWindowEx)");
-			return;
-		}
-
-		mLog->Out("Window initialized!");
 	}
 
 	void Application::Shutdown()

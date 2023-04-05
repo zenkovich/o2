@@ -25,7 +25,9 @@ namespace o2
 		String mWndCaption;      // Window caption
 		bool   mActive;          // True, if window is active
 
-		HCURSOR mCurrentCursor;
+		HCURSOR mCurrentCursor;  // Current cursor type
+
+		bool mNeedPlatformInitialization = true; // True, if need to initialize platform: window and render
 
 	public:
 		// Returns window handle

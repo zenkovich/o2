@@ -156,7 +156,7 @@ namespace o2
 		// Returns application's path
 		virtual String GetBinPath() const;
 		
-		// Returns grahics scale
+		// Returns graphics scale
 		virtual float GetGraphicsScale() const;
 
 		// Returns is application ready to use

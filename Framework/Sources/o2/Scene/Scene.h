@@ -9,7 +9,7 @@
 #include "o2/Utils/Property.h"
 
 // Scene graph access macros
-#define o2Scene Scene::Instance()
+#define o2Scene o2::Scene::Instance()
 
 namespace o2
 {
