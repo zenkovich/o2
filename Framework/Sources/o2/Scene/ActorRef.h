@@ -141,6 +141,12 @@ namespace o2
 		// Check not equals operator
 		bool operator!=(const Ref<T>& other) const { return ActorRef::operator!=(other); }
 
+		// Returns actor pointer 
+		T* Get() { return mSpecActor; }
+
+		// Returns actor pointer
+		const T* Get() const { return mSpecActor; }
+
 		// Returns actor type
 		const Type& GetActorType() const override { return TypeOf(T); }
 

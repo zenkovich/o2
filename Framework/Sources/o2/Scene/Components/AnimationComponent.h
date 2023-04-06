@@ -20,7 +20,7 @@ namespace o2
 	class AnimationComponent: public Component, public IEditableAnimation
 	{
 	public:
-		// Default constructor
+		// Default constructor @SCRIPTABLE
 		AnimationComponent();
 
 		// Copy-constructor
@@ -51,7 +51,7 @@ namespace o2
 		// Removes animation state by name
 		void RemoveState(const String& name);
 
-		// Removes all animation states
+		// Removes all animation states @SCRIPTABLE
 		void RemoveAllStates();
 
 		// Returns state with specified name. Returns nullptr if can't find state with specified name
@@ -66,7 +66,7 @@ namespace o2
 		// Creates new state and plays him
 		AnimationState* Play(const AnimationClip& animation);
 
-		// Searches animation state with name and plays him
+		// Searches animation state with name and plays him @SCRIPTABLE
 		AnimationState* Play(const String& name);
 
 		// Creates new state, and blends animation with duration
@@ -75,16 +75,16 @@ namespace o2
 		// Creates new state, and blends animation with duration
 		AnimationState* BlendTo(const AnimationClip& animation, float duration = 1.0f);
 
-		// Creates new state, and blends animation with duration
+		// Creates new state, and blends animation with duration @SCRIPTABLE
 		AnimationState* BlendTo(const String& name, float duration = 1.0f);
 
 		// Plays state and blends animation with duration
 		AnimationState* BlendTo(AnimationState* state, float duration = 1.0f);
 
-		// Stops animation with name
+		// Stops animation with name @SCRIPTABLE
 		void Stop(const String& animationName);
 
-		// Stops all states
+		// Stops all states @SCRIPTABLE
 		void StopAll();
 
 		// Called when animation started to edit. It means that animation must be deactivated
@@ -191,7 +191,7 @@ namespace o2
 		void OnStateAnimationTrackRemoved(AnimationState* state, IAnimationTrack::IPlayer* player);
 
 		// Called from editor, refreshes states
-		void OnStatesListChanged();
+		void ReattachAnimationStates();
 
 		friend class AnimationClip;
 		friend class AnimationState;
@@ -314,7 +314,7 @@ END_META;
 CLASS_METHODS_META(o2::AnimationComponent)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationComponent&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, AnimationState*);
@@ -322,18 +322,18 @@ CLASS_METHODS_META(o2::AnimationComponent)
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, AnimationState*);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllStates);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllStates);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, GetState, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<AnimationState*>&, GetStates);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, Play, const AnimationClip&, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, Play, const AnimationClip&);
-	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, Play, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(AnimationState*, Play, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, const AnimationClip&, const String&, float);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, const AnimationClip&, float);
-	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, const String&, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(AnimationState*, BlendTo, const String&, float);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, AnimationState*, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, Stop, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, StopAll);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Stop, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, StopAll);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginAnimationEdit);
 	FUNCTION().PUBLIC().SIGNATURE(void, EndAnimationEdit);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
@@ -343,6 +343,6 @@ CLASS_METHODS_META(o2::AnimationComponent)
 	FUNCTION().PROTECTED().SIGNATURE(void, UnregTrack, IAnimationTrack::IPlayer*, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackAdded, AnimationState*, IAnimationTrack::IPlayer*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackRemoved, AnimationState*, IAnimationTrack::IPlayer*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnStatesListChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, ReattachAnimationStates);
 }
 END_META;

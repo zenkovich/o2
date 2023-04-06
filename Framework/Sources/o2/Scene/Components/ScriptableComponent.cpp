@@ -126,7 +126,7 @@ namespace o2
 	{
 		Component::SetOwnerActor(actor);
 
-		if (mInstance.IsObject())
+		//if (mInstance.IsObject())
 			mInstance.SetProperty("_actor", actor);
 	}
 

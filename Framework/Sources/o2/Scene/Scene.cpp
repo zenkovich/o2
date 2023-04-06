@@ -723,7 +723,8 @@ namespace o2
 		{
 			onObjectsChanged(mChangedObjects);
 
-			for (auto& obj : mChangedObjects)
+			auto changedObjectsCopy = mChangedObjects;
+			for (auto& obj : changedObjectsCopy)
 				obj->Update(0.0f);
 
 			mChangedObjects.Clear();

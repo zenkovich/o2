@@ -242,6 +242,8 @@ namespace o2
 
 	void AnimationComponent::OnStart()
 	{
+		ReattachAnimationStates();
+
 		for (auto state : mStates)
 		{
 			if (state->autoPlay)
@@ -278,7 +280,7 @@ namespace o2
 		UnregTrack(player, player->GetTrack()->path);
 	}
 
-	void AnimationComponent::OnStatesListChanged()
+	void AnimationComponent::ReattachAnimationStates()
 	{
 		auto statesCopy = mStates;
 		for (auto state : statesCopy)

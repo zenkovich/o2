@@ -1720,6 +1720,8 @@ namespace o2
 
 }
 
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Widget>);
+
 DECLARE_CLASS(o2::Widget);
 
 DECLARE_CLASS(o2::Widget::LayersEditable);

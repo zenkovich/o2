@@ -83,7 +83,7 @@ namespace o2
 				mLastFocusedWidgets.Add(mFocusedWidget);
 
 			if (mFocusedWidget->mParentWidget)
-				mFocusedWidget->mParentWidget->OnChildFocused(mFocusedWidget);
+				mFocusedWidget->mParentWidget->OnChildFocused(mFocusedWidget.Get());
 
 			if (mFocusedWidget->mFocusedState)
 				mFocusedWidget->mFocusedState->SetState(true);
@@ -92,7 +92,7 @@ namespace o2
 
 	Widget* UIManager::GetFocusedWidget() const
 	{
-		return mFocusedWidget;
+		return const_cast<Widget*>(mFocusedWidget.Get());
 	}
 
 	void UIManager::FocusNextWidget()
@@ -110,7 +110,7 @@ namespace o2
 			{
 				if (widget->IsFocusable())
 				{
-					nextFocusingWidget = widget;
+					nextFocusingWidget = widget.Get();
 					break;
 				}
 			}
@@ -138,9 +138,6 @@ namespace o2
 			asset->SetEditorAsset(true);
 			auto path = stylesPath + "/" + GetSmartName(asset->GetActor()->GetType().GetName()) + " " + 
 				asset->GetActor()->GetName() + ".proto";
-
-			if (path.Contains("Context Menu standard"))
-				o2Debug.Log("asd");
 
 			asset->Save(path, false);
 		}

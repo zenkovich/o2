@@ -50,6 +50,11 @@ namespace o2
 			mOwner->OnStateAnimationTrackRemoved(this, trackPlayer);
 	}
 
+	void AnimationState::OnDeserialized(const DataValue& node)
+	{
+		player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+	}
+
 }
 
 DECLARE_CLASS(o2::AnimationState);

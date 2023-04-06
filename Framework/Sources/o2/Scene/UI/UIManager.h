@@ -145,10 +145,10 @@ namespace o2
 	protected:
 		LogStream * mLog = nullptr; // UI Log stream
 
-		Widget*         mFocusedWidget = nullptr; // Current selected widget
-		Vector<Widget*> mLastUnfocusedWidgets;    // Widget that was unfocused on last frame
-		Vector<Widget*> mLastFocusedWidgets;      // Widget that was focused on last frame
-		Vector<Widget*> mFocusableWidgets;        // List of selectable widgets
+		Ref<Widget>         mFocusedWidget;        // Current selected widget
+		Vector<Ref<Widget>> mLastUnfocusedWidgets; // Widget that was unfocused on last frame
+		Vector<Ref<Widget>> mLastFocusedWidgets;   // Widget that was focused on last frame
+		Vector<Ref<Widget>> mFocusableWidgets;     // List of selectable widgets
 
 		Vector<Widget*> mTopWidgets; // Top widgets, drawing after mScreenWidget 
 

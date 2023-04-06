@@ -62,6 +62,9 @@ namespace o2
 		// Called when player is removing track
 		void OnTrackPlayerRemove(IAnimationTrack::IPlayer* trackPlayer);
 
+		// It is called when object was deserialized; sets animation into player
+		void OnDeserialized(const DataValue& node) override;
+
 		friend class AnimationComponent;
 		friend class AnimationClip;
 
@@ -99,5 +102,6 @@ CLASS_METHODS_META(o2::AnimationState)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAnimationChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTrackPlayerAdded, IAnimationTrack::IPlayer*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTrackPlayerRemove, IAnimationTrack::IPlayer*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
