@@ -197,8 +197,8 @@ namespace o2
 		SetupGraphicsScaledCamera();
 		mMainListenersLayer.camera = o2Render.GetCamera();
 
-		OnDraw();
 		DrawScene();
+		OnDraw();
 
 		DrawUIManager();
 

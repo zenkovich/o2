@@ -96,6 +96,9 @@ namespace o2
 		// Finishes custom rendering, restores state and cameras
 		void EndCustomRender();
 
+		// Resets render's state
+		void ResetState();
+
 		// Clearing current frame buffer with color
 		void Clear(const Color4& color = Color4::Gray());
 

@@ -416,8 +416,8 @@ namespace o2
 	{
 		DrawPrimitives();
 	}
-
-	void Render::EndCustomRender()
+	
+	void Render::ResetState()
 	{
 		glEnable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
@@ -430,8 +430,8 @@ namespace o2
 		glClear(GL_STENCIL_BUFFER_BIT);
 		GL_CHECK_ERROR();
 
-// 		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
-// 		GL_CHECK_ERROR();
+		// 		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+		// 		GL_CHECK_ERROR();
 
 		glUseProgram(mStdShader);
 		GL_CHECK_ERROR();
@@ -463,6 +463,11 @@ namespace o2
 
 		SetupViewMatrix(mResolution);
 		UpdateCameraTransforms();
+	}
+
+	void Render::EndCustomRender()
+	{
+		ResetState();
 	}
 
 	void Render::Clear(const Color4& color /*= Color4::Blur()*/)
