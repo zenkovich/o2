@@ -136,6 +136,10 @@ namespace o2
 		mDPI.y = GetDeviceCaps(dc, LOGPIXELSY);
 		ReleaseDC(0, dc);
 
+		Bitmap b(PixelFormat::R8G8B8A8, Vec2I(16, 16));
+		b.Fill(Color4::White());
+		mWhiteTexture = TextureRef(&b);
+
 		InitializeFreeType();
 		InitializeLinesIndexBuffer();
 		InitializeLinesTextures();
@@ -416,7 +420,7 @@ namespace o2
 	{
 		DrawPrimitives();
 	}
-	
+
 	void Render::ResetState()
 	{
 		glEnable(GL_BLEND);
@@ -509,8 +513,8 @@ namespace o2
 	{
 		DrawPrimitives();
 
-		Vec2F resf = (Vec2F)mCurrentResolution; 
-		
+		Vec2F resf = (Vec2F)mCurrentResolution;
+
 		float projMat[16];
 		Math::OrthoProjMatrix(projMat, 0.0f, (float)mCurrentResolution.x, (float)mCurrentResolution.y, 0.0f, 0.0f, 10.0f);
 		glViewport(0, 0, mCurrentResolution.x, mCurrentResolution.y);
@@ -520,11 +524,11 @@ namespace o2
 			1,           0,            0, 0,
 			0,          -1,            0, 0,
 			0,           0,            1, 0,
-			Math::Round(resf.x*0.5f), Math::Round(resf.y*0.5f), -1, 1
+			Math::Round(resf.x * 0.5f), Math::Round(resf.y * 0.5f), -1, 1
 		};
 
-		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F::Right()*resf.x, Vec2F().Up()*resf.y);
-		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
+		Basis defaultCameraBasis((Vec2F)mCurrentResolution * -0.5f, Vec2F::Right() * resf.x, Vec2F().Up() * resf.y);
+		Basis camTransf = mCamera.GetBasis().Inverted() * defaultCameraBasis;
 		mViewScale = Vec2F(camTransf.xv.Length(), camTransf.yv.Length());
 		mInvViewScale = Vec2F(1.0f / mViewScale.x, 1.0f / mViewScale.y);
 
@@ -644,9 +648,9 @@ namespace o2
 
 		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
 		mStackScissors.Add(ScissorStackEntry(rect, summaryScissorRect));
-		
+
 		RectI screenScissorRect = CalculateScreenSpaceScissorRect(summaryScissorRect);
-		glScissor((int)(screenScissorRect.left + mCurrentResolution.x*0.5f), (int)(screenScissorRect.bottom + mCurrentResolution.y*0.5f),
+		glScissor((int)(screenScissorRect.left + mCurrentResolution.x * 0.5f), (int)(screenScissorRect.bottom + mCurrentResolution.y * 0.5f),
 				  (int)screenScissorRect.Width(), (int)screenScissorRect.Height());
 	}
 
@@ -698,8 +702,8 @@ namespace o2
 				else
 				{
 					RectI screenScissorRect = CalculateScreenSpaceScissorRect(lastClipRect);
-					glScissor((int)(screenScissorRect.left + mCurrentResolution.x*0.5f), (int)(screenScissorRect.bottom + mCurrentResolution.y*0.5f),
-						      (int)screenScissorRect.Width(), (int)screenScissorRect.Height());
+					glScissor((int)(screenScissorRect.left + mCurrentResolution.x * 0.5f), (int)(screenScissorRect.bottom + mCurrentResolution.y * 0.5f),
+							  (int)screenScissorRect.Width(), (int)screenScissorRect.Height());
 
 					mClippingEverything = lastClipRect == RectI();
 				}
@@ -734,25 +738,14 @@ namespace o2
 			mLastDrawTexture = texture.mTexture;
 			mCurrentPrimitiveType = primitiveType;
 
-			if (mLastDrawTexture)
-			{
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, mLastDrawTexture->mHandle);
-				glUniform1i(mStdShaderTextureSample, 0);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, mLastDrawTexture ? mLastDrawTexture->mHandle : mWhiteTexture->mHandle);
+			glUniform1i(mStdShaderTextureSample, 0);
 
-				GL_CHECK_ERROR();
-			}
-			else
-			{
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glUniform1i(mStdShaderTextureSample, 0);
-
-				GL_CHECK_ERROR();
-			}
+			GL_CHECK_ERROR();
 		}
 
-		memcpy(&mVertexData[mLastDrawVertex * sizeof(Vertex)], vertices, sizeof(Vertex)*verticesCount);
+		memcpy(&mVertexData[mLastDrawVertex * sizeof(Vertex)], vertices, sizeof(Vertex) * verticesCount);
 
 		for (UInt i = mLastDrawIdx, j = 0; j < indexesCount; i++, j++)
 			mVertexIndexData[i] = mLastDrawVertex + indexes[j];
@@ -828,8 +821,8 @@ namespace o2
 
 			auto clipRect = mStackScissors.Last().mSummaryScissorRect;
 
-			glScissor((int)(clipRect.left + mCurrentResolution.x*0.5f),
-				(int)(clipRect.bottom + mCurrentResolution.y*0.5f),
+			glScissor((int)(clipRect.left + mCurrentResolution.x * 0.5f),
+					  (int)(clipRect.bottom + mCurrentResolution.y * 0.5f),
 					  (int)clipRect.Width(),
 					  (int)clipRect.Height());
 

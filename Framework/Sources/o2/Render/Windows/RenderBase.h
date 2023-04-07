@@ -2,9 +2,10 @@
 
 #ifdef PLATFORM_WINDOWS
 
+#include "o2/Render/TextureRef.h"
 #include "o2/Render/Windows/OpenGL.h"
-#include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Math/Vector2.h"
+#include "o2/Utils/Types/CommonTypes.h"
 
 
 namespace o2
@@ -31,6 +32,8 @@ namespace o2
 		UInt16* mVertexIndexData = nullptr; // Index data buffer
 		UInt    mVertexBufferSize;          // Maximum size of vertex buffer
 		UInt    mIndexBufferSize;           // Maximum size of index buffer
+
+		TextureRef mWhiteTexture; // Default white texture
 
 	protected:
 		// Builds vertex and fragment shaders
