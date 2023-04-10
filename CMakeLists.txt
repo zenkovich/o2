@@ -1,4 +1,9 @@
-add_compile_definitions(PLATFORM_WINDOWS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
+# Common definitions
+add_compile_definitions(SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
+
+if (WIN32)
+    add_compile_definitions(PLATFORM_WINDOWS)
+endif()
 
 # dependencies
 add_subdirectory(Framework/3rdPartyLibs)
@@ -32,12 +37,12 @@ target_link_libraries(o2Framework
         libpng
         zlib
         FreeType
-        mte::lib::pugixml
-        mte::library
+        pugixml
 )        
 
 if(WIN32)
-    target_link_libraries(o2Framework PRIVATE Shlwapi.lib)  
+    target_link_libraries(o2Framework PRIVATE Shlwapi.lib)
+    target_link_libraries(o2Framework PRIVATE opengl32.lib)  
 
     add_subdirectory(Framework/3rdPartyLibs/StackWalker)
     add_dependencies(o2Framework StackWalker)
@@ -88,14 +93,6 @@ add_dependencies(o2Framework
 
 add_dependencies(o2Editor o2Framework)
 
-# group in IDe
+# group in IDE
 set_target_properties(o2Framework PROPERTIES FOLDER o2)
 set_target_properties(o2Editor PROPERTIES FOLDER o2)
-
-set_target_properties(Box2D PROPERTIES FOLDER o2/3rdPartyLibs)
-set_target_properties(jerry-core PROPERTIES FOLDER o2/3rdPartyLibs)
-set_target_properties(jerry-ext PROPERTIES FOLDER o2/3rdPartyLibs)
-set_target_properties(jerry-port-default PROPERTIES FOLDER o2/3rdPartyLibs)
-set_target_properties(libpng PROPERTIES FOLDER o2/3rdPartyLibs)
-set_target_properties(zlib PROPERTIES FOLDER o2/3rdPartyLibs)
-set_target_properties(FreeType PROPERTIES FOLDER o2/3rdPartyLibs)
