@@ -14,8 +14,6 @@ namespace o2
 	{
 	public:
 		String    path;
-		TimeStamp createdDate;
-		TimeStamp accessDate;
 		TimeStamp editDate;
 		Int64     size;
 
