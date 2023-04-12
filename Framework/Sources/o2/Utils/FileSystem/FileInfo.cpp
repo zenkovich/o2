@@ -7,8 +7,7 @@ namespace o2
 {
 	bool FileInfo::operator==(const FileInfo& other) const
 	{
-		return path == other.path && createdDate == other.createdDate &&
-			accessDate == other.accessDate && editDate == other.editDate && size == other.size;
+		return path == other.path && editDate == other.editDate && size == other.size;
 	}
 
 
