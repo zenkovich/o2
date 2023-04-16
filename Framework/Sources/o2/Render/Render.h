@@ -11,6 +11,8 @@
 #include "o2/Render/Mac/RenderBase.h"
 #elif defined PLATFORM_IOS
 #include "o2/Render/iOS/RenderBase.h"
+#elif defined PLATFORM_LINUX
+#include "o2/Render/Linux/RenderBase.h"
 #endif
 
 #include "o2/Render/Camera.h"

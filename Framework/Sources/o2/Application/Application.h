@@ -17,6 +17,8 @@
 #include "o2/Application/Mac/ApplicationBase.h"
 #elif defined PLATFORM_IOS
 #include "o2/Application/iOS/ApplicationBase.h"
+#elif defined PLATFORM_LINUX
+#include "o2/Application/Linux/ApplicationBase.h"
 #endif
 
 // Application access macros

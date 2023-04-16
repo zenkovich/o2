@@ -1,3 +1,5 @@
+project(3rdParties)
+
 set(BOX2D_BUILD_STATIC TRUE)
 set(BOX2D_VERSION 1)
 

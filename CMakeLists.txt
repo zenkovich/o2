@@ -1,8 +1,14 @@
+project(o2)
+
 # Common definitions
 add_compile_definitions(SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
 
 if (WIN32)
     add_compile_definitions(PLATFORM_WINDOWS)
+endif()
+
+if (UNIX)
+    add_compile_definitions(PLATFORM_LINUX)
 endif()
 
 # dependencies
