@@ -107,6 +107,7 @@ END_ENUM_META;
 ENUM_META(o2::Platform)
 {
 	ENUM_ENTRY(Android);
+	ENUM_ENTRY(Linux);
 	ENUM_ENTRY(Mac);
 	ENUM_ENTRY(Windows);
 	ENUM_ENTRY(iOS);

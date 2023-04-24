@@ -7,7 +7,7 @@ if (WIN32)
     add_compile_definitions(PLATFORM_WINDOWS)
 endif()
 
-if (UNIX)
+if (LINUX)
     add_compile_definitions(PLATFORM_LINUX)
 endif()
 
@@ -34,8 +34,8 @@ target_sources(o2Framework PRIVATE ${o2Framework_SOURCES})
 target_include_directories(o2Framework PUBLIC ${o2Framework_INCLUDES})
 target_precompile_headers(o2Framework PUBLIC "Framework/Sources/o2/stdafx.h")
 
-target_link_libraries(o2Framework 
-    PRIVATE 
+target_link_libraries(o2Framework
+    PUBLIC
         Box2D
         jerry-core
         jerry-ext
@@ -45,6 +45,16 @@ target_link_libraries(o2Framework
         FreeType
         pugixml
 )        
+
+if (LINUX)
+    find_package(OpenGL REQUIRED COMPONENTS GLX)
+
+    target_link_libraries(o2Framework
+        PUBLIC
+            OpenGL::GL 
+            OpenGL::GLX
+    )
+endif()
 
 if(WIN32)
     target_link_libraries(o2Framework PRIVATE Shlwapi.lib)
@@ -59,8 +69,12 @@ if(WIN32)
                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/CodeTool.exe -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2")
 endif()
 
+if (LINUX)
+    add_compile_options(o2Framework PUBLIC -Wno-pedantic)
+endif()
+
 if(MSVC)
-    target_compile_options(o2Framework PRIVATE "/MP")
+    target_compile_options(o2Framework PRIVATE "/MP" "/Zc:__cplusplus")
 endif()
 
 # o2 Editor Library
@@ -79,7 +93,7 @@ target_include_directories(o2Editor
 target_precompile_headers(o2Editor PUBLIC "Editor/Sources/o2Editor/stdafx.h")
 
 if(MSVC)
-    target_compile_options(o2Editor PRIVATE "/MP")
+    target_compile_options(o2Editor PRIVATE "/MP" "/Zc:__cplusplus")
 endif()
 
 if(WIN32)

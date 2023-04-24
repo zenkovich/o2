@@ -8,6 +8,21 @@
 
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 
+#if __cplusplus < 202002L
+namespace std
+{
+	template<typename F, typename... FRONT_ARGS>
+	auto bind_front(F&& f, FRONT_ARGS&&... front_args)
+	{
+		// front_args are copied because multiple invocations of this closure are possible
+		return [captured_f = std::forward<F>(f), front_args...](auto&&... back_args) {
+			return std::invoke(captured_f, front_args...,
+							   std::forward<decltype(back_args)>(back_args)...);
+		};
+	}
+}
+#endif
+
 namespace o2
 {
 	// ------------------------------
