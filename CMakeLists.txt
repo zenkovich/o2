@@ -7,7 +7,7 @@ if (WIN32)
     add_compile_definitions(PLATFORM_WINDOWS)
 endif()
 
-if (LINUX)
+if (UNIX)
     add_compile_definitions(PLATFORM_LINUX)
 endif()
 
@@ -34,8 +34,7 @@ target_sources(o2Framework PRIVATE ${o2Framework_SOURCES})
 target_include_directories(o2Framework PUBLIC ${o2Framework_INCLUDES})
 target_precompile_headers(o2Framework PUBLIC "Framework/Sources/o2/stdafx.h")
 
-target_link_libraries(o2Framework
-    PUBLIC
+target_link_libraries(o2Framework PUBLIC
         Box2D
         jerry-core
         jerry-ext
@@ -46,11 +45,10 @@ target_link_libraries(o2Framework
         pugixml
 )        
 
-if (LINUX)
+if (UNIX)
     find_package(OpenGL REQUIRED COMPONENTS GLX)
 
-    target_link_libraries(o2Framework
-        PUBLIC
+    target_link_libraries(o2Framework PUBLIC
             OpenGL::GL 
             OpenGL::GLX
     )
@@ -69,8 +67,8 @@ if(WIN32)
                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/CodeTool.exe -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2")
 endif()
 
-if (LINUX)
-    add_compile_options(o2Framework PUBLIC -Wno-pedantic)
+if (UNIX)
+    add_compile_options(o2Framework PRIVATE -Wno-pedantic)
 endif()
 
 if(MSVC)
