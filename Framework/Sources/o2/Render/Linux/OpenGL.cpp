@@ -1,6 +1,6 @@
 #include "o2/stdafx.h"
 
-#ifdef PLATFORM_LINUX
+#if defined(PLATFORM_LINUX) && !defined(O2_RENDER_GLES2)
 
 #include "OpenGL.h"
 #include "o2/Utils/Debug/Log/LogStream.h"

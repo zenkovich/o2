@@ -1,6 +1,6 @@
 #include "o2/stdafx.h"
 
-#if defined(PLATFORM_LINUX) && !defined(O2_RENDER_GLES2)
+#if defined(PLATFORM_LINUX) && defined(O2_RENDER_GLES2)
 #include "o2/Render/Render.h"
 
 #include "o2/Application/Application.h"
@@ -32,65 +32,7 @@ namespace o2
 
 		if (o2Application.mNeedPlatformInitialization)
 		{
-			GLuint pixelFormat;
-			static	PIXELFORMATDESCRIPTOR pfd = // pfd Tells Windows How We Want Things To Be
-			{
-				sizeof(PIXELFORMATDESCRIPTOR), // Size Of This Pixel Format Descriptor
-				1,							   // Version Number
-				PFD_DRAW_TO_WINDOW |		   // Format Must Support Window
-				PFD_SUPPORT_OPENGL |		   // Format Must Support OpenGL
-				PFD_DOUBLEBUFFER,			   // Must Support Double Buffering
-				PFD_TYPE_RGBA,				   // Request An RGBA Format
-				32,  						   // Select Our Color Depth
-				0, 0, 0, 0, 0, 0,			   // Color Bits Ignored
-				0,							   // No Alpha Buffer
-				0,							   // Shift Bit Ignored
-				0,							   // No Accumulation Buffer
-				0, 0, 0, 0,					   // Accumulation Bits Ignored
-				16,							   // 16Bit Z-Buffer (Depth Buffer)  
-				1,							   // No Stencil Buffer
-				0,							   // No Auxiliary Buffer
-				PFD_MAIN_PLANE,				   // Main Drawing Layer
-				0,							   // Reserved
-				0, 0, 0						   // Layer Masks Ignored
-			};
-
-			mHDC = GetDC(o2Application.mHWnd);
-			if (!mHDC)
-			{
-				mLog->Error("Can't Create A GL Device Context.\n");
-				return;
-			}
-
-			pixelFormat = ChoosePixelFormat(mHDC, &pfd);
-			if (!pixelFormat)
-			{
-				mLog->Error("Can't Find A Suitable PixelFormat.\n");
-				return;
-			}
-
-			if (!SetPixelFormat(mHDC, pixelFormat, &pfd))
-			{
-				mLog->Error("Can't Set The PixelFormat.\n");
-				return;
-			}
-
-			mGLContext = wglCreateContext(mHDC);
-			if (!mGLContext)
-			{
-				mLog->Error("Can't Create A GL Rendering Context.\n");
-				return;
-			}
-
-			if (!wglMakeCurrent(mHDC, mGLContext))
-			{
-				mLog->Error("Can't Activate The GL Rendering Context.\n");
-				return;
-			}
 		}
-
-		// Get OpenGL extensions
-		GetGLExtensions(mLog);
 
 		GL_CHECK_ERROR();
 
@@ -131,10 +73,8 @@ namespace o2
 		mLog->Out("GL_RENDERER: " + (String)(char*)glGetString(GL_RENDERER));
 		mLog->Out("GL_VERSION: " + (String)(char*)glGetString(GL_VERSION));
 
-		HDC dc = GetDC(0);
-		mDPI.x = GetDeviceCaps(dc, LOGPIXELSX);
-		mDPI.y = GetDeviceCaps(dc, LOGPIXELSY);
-		ReleaseDC(0, dc);
+		mDPI.x = 90;
+		mDPI.y = 90;
 
 		Bitmap b(PixelFormat::R8G8B8A8, Vec2I(16, 16));
 		b.Fill(Color4::White());
@@ -163,24 +103,13 @@ namespace o2
 		mSolidLineTexture = TextureRef::Null();
 		mDashLineTexture = TextureRef::Null();
 
-		if (mGLContext)
-		{
-			auto fonts = mFonts;
-			for (auto font : fonts)
-				delete font;
+		auto fonts = mFonts;
+		for (auto font : fonts)
+			delete font;
 
-			auto textures = mTextures;
-			for (auto texture : textures)
-				delete texture;
-
-			if (!wglMakeCurrent(NULL, NULL))
-				mLog->Error("Release ff DC And RC Failed.\n");
-
-			if (!wglDeleteContext(mGLContext))
-				mLog->Error("Release Rendering Context Failed.\n");
-
-			mGLContext = NULL;
-		}
+		auto textures = mTextures;
+		for (auto texture : textures)
+			delete texture;
 
 		DeinitializeFreeType();
 
@@ -265,8 +194,8 @@ namespace o2
 	{
 		const char* fragShader = " \
                                                                         \n \
-        varying vec4 v_color;                                           \n \
-        varying vec2 v_texCoords;                                       \n \
+        varying mediump vec4 v_color;                                   \n \
+        varying mediump vec2 v_texCoords;                               \n \
                                                                         \n \
         uniform sampler2D u_texture;                                    \n \
                                                                         \n \
@@ -278,12 +207,12 @@ namespace o2
 		const char* vtxShader = " \
 	    uniform mat4 u_transformMatrix;                           \n \
                                                                   \n \
-        attribute vec4 a_position;                                \n \
-        attribute vec4 a_color;                                   \n \
-        attribute vec2 a_texCoords;                               \n \
+        attribute mediump vec4 a_position;                        \n \
+        attribute mediump vec4 a_color;                           \n \
+        attribute mediump vec2 a_texCoords;                       \n \
                                                                   \n \
-        varying vec4 v_color;                                     \n \
-        varying vec2 v_texCoords;                                 \n \
+        varying mediump vec4 v_color;                             \n \
+        varying mediump vec2 v_texCoords;                         \n \
                                                                   \n \
         void main()                                               \n \
         {                                                         \n \
@@ -328,16 +257,7 @@ namespace o2
 
 	void Render::CheckCompatibles()
 	{
-		//check render targets available
-		const char* extensions[] = { "GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
-			"GL_EXT_packed_depth_stencil" };
-
 		mRenderTargetsAvailable = true;
-		for (int i = 0; i < 4; i++)
-		{
-			if (!IsGLExtensionSupported(extensions[i]))
-				mRenderTargetsAvailable = false;
-		}
 
 		//get max texture size
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &mMaxTextureSize.x);
@@ -407,8 +327,8 @@ namespace o2
 
 		DrawPrimitives();
 
-		if (o2Application.mNeedPlatformInitialization)
-			SwapBuffers(mHDC);
+//		if (o2Application.mNeedPlatformInitialization)
+//			SwapBuffers(mHDC);
 
 		GL_CHECK_ERROR();
 
@@ -790,7 +710,7 @@ namespace o2
 
 		mStackScissors.Add(ScissorStackEntry(RectI(), RectI(), true));
 
-		glBindFramebufferEXT(GL_FRAMEBUFFER, renderTarget->mFrameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->mFrameBuffer);
 		GL_CHECK_ERROR();
 
 		SetupViewMatrix(renderTarget->GetSize());
@@ -805,7 +725,7 @@ namespace o2
 
 		DrawPrimitives();
 
-		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		GL_CHECK_ERROR();
 
 		SetupViewMatrix(mResolution);

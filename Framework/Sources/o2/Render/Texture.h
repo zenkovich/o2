@@ -8,6 +8,12 @@
 #include "o2/Render/Mac/TextureBase.h"
 #elif defined PLATFORM_IOS
 #include "o2/Render/iOS/TextureBase.h"
+#elif defined(PLATFORM_LINUX)
+#if defined(O2_RENDER_GLES2)
+#include "o2/Render/Linux GLES2/TextureBase.h"
+#else
+#include "o2/Render/Linux/TextureBase.h"
+#endif
 #endif
 
 #include "o2/Utils/Math/Vector2.h"

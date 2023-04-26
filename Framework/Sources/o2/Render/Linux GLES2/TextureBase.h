@@ -1,8 +1,8 @@
 #pragma once
 
-#if defined(PLATFORM_LINUX) && !defined(O2_RENDER_GLES2)
+#if defined(PLATFORM_LINUX) && defined(O2_RENDER_GLES2)
 
-#include "o2/Render/Linux/OpenGL.h"
+#include "o2/Render/Linux GLES2/OpenGL.h"
 
 namespace o2
 {

@@ -5,10 +5,12 @@ add_compile_definitions(SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
 
 if (WIN32)
     add_compile_definitions(PLATFORM_WINDOWS)
+elseif (UNIX)
+    add_compile_definitions(PLATFORM_LINUX)
 endif()
 
-if (UNIX)
-    add_compile_definitions(PLATFORM_LINUX)
+if (O2_RENDER_API STREQUAL "gles2")
+    add_compile_definitions(O2_RENDER_GLES2)
 endif()
 
 # dependencies

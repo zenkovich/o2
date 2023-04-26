@@ -1,6 +1,6 @@
 #include "o2/stdafx.h"
 
-#if defined(PLATFORM_LINUX) && !defined(O2_RENDER_GLES2)
+#if defined(PLATFORM_LINUX) && defined(O2_RENDER_GLES2)
 #include "o2/Render/Texture.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
 
@@ -14,7 +14,7 @@ namespace o2
 			return;
 
 		if (mUsage == Usage::RenderTarget)
-			glDeleteFramebuffersEXT(1, &mFrameBuffer);
+			glDeleteFramebuffers(1, &mFrameBuffer);
 
 		glDeleteTextures(1, &mHandle);
 	}
@@ -24,7 +24,7 @@ namespace o2
 		if (mReady)
 		{
 			if (mUsage == Usage::RenderTarget)
-				glDeleteFramebuffersEXT(1, &mFrameBuffer);
+				glDeleteFramebuffers(1, &mFrameBuffer);
 
 			glDeleteTextures(1, &mHandle);
 		}
@@ -53,15 +53,12 @@ namespace o2
 
 		if (mUsage == Usage::RenderTarget)
 		{
-			glGenFramebuffersEXT(1, &mFrameBuffer);
-			glBindFramebufferEXT(GL_FRAMEBUFFER, mFrameBuffer);
+            glGenFramebuffers(1, &mFrameBuffer);
+			glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer);
 
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mHandle, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mHandle, 0);
 
-			GLenum DrawBuffers[2] = { GL_COLOR_ATTACHMENT0 };
-			glDrawBuffers(1, DrawBuffers);
-
-			if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			{
 				GLenum glError = glGetError();
 
@@ -76,7 +73,7 @@ namespace o2
 
 			mReady = true;
 
-			glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
 
 		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
@@ -89,7 +86,7 @@ namespace o2
 		if (mReady)
 		{
 			if (mUsage == Usage::RenderTarget)
-				glDeleteFramebuffersEXT(1, &mFrameBuffer);
+				glDeleteFramebuffers(1, &mFrameBuffer);
 
 			glDeleteTextures(1, &mHandle);
 		}
@@ -184,7 +181,7 @@ namespace o2
 
 		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
 		glBindTexture(GL_TEXTURE_2D, mHandle);
-		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap->GetData());
+        glReadPixels(0, 0, mSize.x, mSize.y, GL_RGBA, GL_UNSIGNED_BYTE, bitmap->GetData());
 		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 
 		return bitmap;

@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef PLATFORM_LINUX
+#if defined(PLATFORM_LINUX) && !defined(O2_RENDER_GLES2)
 
 #include <GL/gl.h>
 #include "3rdPartyLibs/OpenGL/glext.h"
