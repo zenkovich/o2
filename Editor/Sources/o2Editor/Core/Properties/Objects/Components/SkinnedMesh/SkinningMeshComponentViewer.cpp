@@ -3,7 +3,7 @@
 
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/Core/Tools/SkeletonTool.h"
-#include "o2Editor/SceneWindow/SceneDraghandle.h"
+#include "o2Editor/SceneWindow/SceneDragHandle.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 
 namespace Editor

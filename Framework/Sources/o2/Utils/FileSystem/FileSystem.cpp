@@ -6,11 +6,17 @@
 #include "o2/Utils/Debug/Log/LogStream.h"
 
 #include <chrono>
+
+#if defined(O2_FILESYSTEM_EXPERIMENTAL)
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#else
 #include <filesystem>
+namespace fs = std::filesystem;
+#endif
 
 namespace o2
 {
-	namespace fs = std::filesystem;
 
 	FileSystem::FileSystem()
 	{
@@ -89,7 +95,7 @@ namespace o2
 
 		for (auto& subPath : fs::directory_iterator(fullPath))
 		{
-			if (subPath.is_directory())
+			if (fs::is_directory(subPath))
 				res.folders.Add(GetFolderInfo(subPath.path().string() + "/"));
 			else
 				res.files.Add(GetFileInfo(subPath.path().string()));
@@ -233,7 +239,11 @@ namespace o2
 
 	String FileSystem::GetPathRelativeToPath(const String& from, const String& to)
 	{
+#if defined(O2_FILESYSTEM_EXPERIMENTAL)
+        return to;
+#else
 		return fs::relative(from.Data(), to.Data()).string();
+#endif
 	}
 
 	String FileSystem::CanonicalizePath(const String& path)

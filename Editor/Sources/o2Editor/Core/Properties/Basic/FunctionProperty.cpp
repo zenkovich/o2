@@ -334,7 +334,7 @@ namespace Editor
 
 				functionsDropdownMap.Add({ comp, funcName });
 
-				if (comp == selectedComponent && selectedMethod == funcName)
+				if (comp == selectedComponent.Get() && selectedMethod == funcName)
 					selectedIdx = funcDropDown->GetItemsCount() - 1;
 			}
 		};

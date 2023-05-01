@@ -40,7 +40,7 @@ namespace o2
 	void WriteJson(String& str, const DataDocument& document)
 	{
 		rapidjson::StringBuffer buffer;
-		rapidjson::PrettyWriter writer(buffer);
+		rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
 		document.Write(writer);
 		str = buffer.GetString();
 	}

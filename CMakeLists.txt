@@ -1,17 +1,24 @@
 project(o2)
 
 # Common definitions
-add_compile_definitions(SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
+set(O2_COMPILE_DEFINITIONS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
 
 if (WIN32)
-    add_compile_definitions(PLATFORM_WINDOWS)
+    list(APPEND O2_COMPILE_DEFINITIONS PLATFORM_WINDOWS)
 elseif (UNIX)
-    add_compile_definitions(PLATFORM_LINUX)
+    list(APPEND O2_COMPILE_DEFINITIONS PLATFORM_LINUX)
 endif()
 
 if (O2_RENDER_API STREQUAL "gles2")
-    add_compile_definitions(O2_RENDER_GLES2)
+    list(APPEND O2_COMPILE_DEFINITIONS O2_RENDER_GLES2)
 endif()
+
+if (O2_IS_FILESYSTEM_EXPERIMENTAL)
+    list(APPEND O2_COMPILE_DEFINITIONS O2_FILESYSTEM_EXPERIMENTAL)
+endif()
+
+set(O2_COMPILE_DEFINITIONS_EXPORT ${O2_COMPILE_DEFINITIONS} PARENT_SCOPE)
+add_compile_definitions(${O2_COMPILE_DEFINITIONS})
 
 # dependencies
 add_subdirectory(Framework/3rdPartyLibs)
@@ -70,10 +77,8 @@ if(WIN32)
 endif()
 
 if (UNIX)
-    add_compile_options(o2Framework PRIVATE -Wno-pedantic)
-endif()
-
-if(MSVC)
+    target_compile_options(o2Framework PRIVATE -Wno-pedantic)
+elseif(MSVC)
     target_compile_options(o2Framework PRIVATE "/MP" "/Zc:__cplusplus")
 endif()
 
