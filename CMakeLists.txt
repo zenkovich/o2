@@ -11,6 +11,7 @@ endif()
 
 if (O2_RENDER_API STREQUAL "gles2")
     list(APPEND O2_COMPILE_DEFINITIONS O2_RENDER_GLES2)
+    list(APPEND O2_COMPILE_DEFINITIONS O2_DISABLE_PLATFORM)
 endif()
 
 set(O2_COMPILE_DEFINITIONS_EXPORT ${O2_COMPILE_DEFINITIONS} PARENT_SCOPE)
@@ -53,10 +54,10 @@ target_link_libraries(o2Framework PUBLIC
 if (UNIX)
     if (O2_RENDER_API STREQUAL "gles2")
         find_package(OpenGL REQUIRED COMPONENTS EGL)
-        target_link_libraries(o2Framework PUBLIC OpenGL::GL OpenGL::GLE)
+        target_link_libraries(o2Framework PUBLIC OpenGL::GL OpenGL::EGL)
     else()
         find_package(OpenGL REQUIRED COMPONENTS GLX)
-        target_link_libraries(o2Framework PUBLIC OpenGL::GL OpenGL::EGL)
+        target_link_libraries(o2Framework PUBLIC OpenGL::GL OpenGL::GLX)
     endif()
 endif()
 

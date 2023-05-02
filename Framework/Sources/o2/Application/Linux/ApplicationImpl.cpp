@@ -25,6 +25,7 @@ namespace o2
 		mWindowResizible = true;
 		mActive = false;
 
+#if !defined(O2_DISABLE_PLATFORM)
 		if (mNeedPlatformInitialization)
 		{
 			mLog->Out("Initializing window..");
@@ -57,7 +58,8 @@ namespace o2
             XMapWindow(mDisplay, mWindow);
 
 			mLog->Out("Window initialized!");
-		}
+        }
+#endif
 	}
 
 	void Application::Shutdown()
@@ -124,6 +126,7 @@ namespace o2
         //mTimer->Reset();
         Vec2I cursorPos;
 
+#if !defined(O2_DISABLE_PLATFORM)
         Atom wmDeleteMessage = XInternAtom(mDisplay, "WM_DELETE_WINDOW", False);
         XSetWMProtocols(mDisplay, mWindow, &wmDeleteMessage, 1);
 
@@ -206,6 +209,7 @@ namespace o2
             if (breakCycle)
                 break;
         }
+#endif
 
 		o2Events.OnApplicationClosing();
 		OnClosing();
@@ -278,7 +282,9 @@ namespace o2
 	void Application::SetWindowCaption(const String& caption)
 	{
 		mWndCaption = caption;
+#if !defined(O2_DISABLE_PLATFORM)
         XStoreName(mDisplay, mWindow, caption.Data());
+#endif
 	}
 
 	String Application::GetWindowCaption() const
@@ -317,8 +323,13 @@ namespace o2
 
 	Vec2I Application::GetScreenResolution() const
 	{
+
+#if !defined(O2_DISABLE_PLATFORM)
         int screen = DefaultScreen(mDisplay);
         return Vec2I(DisplayWidth(mDisplay, screen), DisplayHeight(mDisplay, screen));
+#else
+        return Vec2I(800, 600);
+#endif
 	}
 
 	void Application::SetCursor(CursorType type)

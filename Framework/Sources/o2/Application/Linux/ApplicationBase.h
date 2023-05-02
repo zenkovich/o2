@@ -5,7 +5,9 @@
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Types/String.h"
 
+#if !defined(O2_RENDER_GLES2)
 #include <X11/Xlib.h>
+#endif
 
 namespace o2
 {
@@ -17,9 +19,12 @@ namespace o2
 	class ApplicationBase
 	{
 	protected:
+#if !defined(O2_DISABLE_PLATFORM)
         ::Window mWindow;         // X Window
         Display* mDisplay;        // Display
+
         XVisualInfo* mVisualInfo; // Window visual info
+#endif
 
 		bool   mWindowed;        // True if app in windowed mode, false if in fullscreen mode
 		bool   mWindowResizible; // True, if window can be sized by user
