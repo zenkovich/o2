@@ -129,39 +129,40 @@ namespace o2
 
         while (1)
         {
+            bool breakCycle = false;
             while (XPending(mDisplay) > 0)
             {
                 XEvent xev;
                 XNextEvent( mDisplay, &xev );
 
-                mLog->Out("event type " + (String)xev.type);
+                //mLog->Out("event type " + (String)xev.type);
 
-                if( xev.type == ClientMessage && xev.xclient.data.l[0] == wmDeleteMessage )
+                if(xev.type == ClientMessage && xev.xclient.data.l[0] == wmDeleteMessage)
                 {
                     // Exit the main loop if the close button is clicked
-                    break;
+                    breakCycle = true;
                 }
 
-                if( xev.type == KeyPress )
+                if(xev.type == KeyPress)
                 {
                     int key = XLookupKeysym( &xev.xkey, 0 );
                     mInput->OnKeyPressed( key );
                 }
 
-                if( xev.type == KeyRelease )
+                if (xev.type == KeyRelease)
                 {
                     int key = XLookupKeysym( &xev.xkey, 0 );
                     mInput->OnKeyReleased( key );
                 }
 
-                if( xev.type == ButtonPress )
+                if (xev.type == ButtonPress)
                 {
                     int button = xev.xbutton.button;
-                    if( button == Button1 )
+                    if(button == Button1)
                         mInput->OnCursorPressed( cursorPos );
-                    else if( button == Button2 )
+                    else if(button == Button2)
                         mInput->OnAlt2CursorPressed( cursorPos );
-                    else if( button == Button3 )
+                    else if(button == Button3)
                         mInput->OnAltCursorPressed( cursorPos );
                     if (xev.xbutton.button == Button4)
                         mInput->OnMouseWheel(120);
@@ -169,18 +170,18 @@ namespace o2
                         mInput->OnMouseWheel(-120);
                 }
 
-                if( xev.type == ButtonRelease )
+                if (xev.type == ButtonRelease)
                 {
                     int button = xev.xbutton.button;
-                    if( button == Button1 )
+                    if(button == Button1)
                         mInput->OnCursorReleased();
-                    else if( button == Button2 )
+                    else if(button == Button2)
                         mInput->OnAlt2CursorReleased();
-                    else if( button == Button3 )
+                    else if(button == Button3)
                         mInput->OnAltCursorReleased();
                 }
 
-                if( xev.type == MotionNotify )
+                if (xev.type == MotionNotify)
                 {
                     Vec2I pos( xev.xmotion.x, xev.xmotion.y );
 
@@ -188,18 +189,9 @@ namespace o2
                     mInput->OnCursorMoved( cursorPos );
                 }
 
-                if( xev.type == ResizeRequest )
+                if(xev.type == ResizeRequest)
                 {
                     OnResized( Vec2I( xev.xresizerequest.width, xev.xresizerequest.height ) );
-                }
-
-                if( xev.type == DestroyNotify )
-                    break;
-
-                // If the main loop was broken, exit the while(1) loop
-                if( XCheckTypedWindowEvent( mDisplay, mWindow, DestroyNotify, &xev ) )
-                {
-                    break;
                 }
             }
 
@@ -210,33 +202,9 @@ namespace o2
                 OnResized(windowedSize);
 
             ProcessFrame();
-            continue ;
 
-            //XWindowAttributes gwa;
-
-            XGetWindowAttributes(mDisplay, mWindow, &gwa);
-            mLog->Out("width: " + (String)gwa.width + ", height: " + (String)gwa.height);
-            glViewport(0, 0, gwa.width, gwa.height);
-
-            //ProcessFrame();
-            glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            //gluPerspective(45, 1, 0.1, 100);
-
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-            //gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
-
-            glBegin(GL_TRIANGLES);
-            glColor3f(1, 0, 0); glVertex3f(-1, -1, 0);
-            glColor3f(0, 1, 0); glVertex3f( 1, -1, 0);
-            glColor3f(0, 0, 1); glVertex3f( 0,  1, 0);
-            glEnd();
-
-            glXSwapBuffers(mDisplay, mWindow);
+            if (breakCycle)
+                break;
         }
 
 		o2Events.OnApplicationClosing();

@@ -13,10 +13,6 @@ if (O2_RENDER_API STREQUAL "gles2")
     list(APPEND O2_COMPILE_DEFINITIONS O2_RENDER_GLES2)
 endif()
 
-if (O2_IS_FILESYSTEM_EXPERIMENTAL)
-    list(APPEND O2_COMPILE_DEFINITIONS O2_FILESYSTEM_EXPERIMENTAL)
-endif()
-
 set(O2_COMPILE_DEFINITIONS_EXPORT ${O2_COMPILE_DEFINITIONS} PARENT_SCOPE)
 add_compile_definitions(${O2_COMPILE_DEFINITIONS})
 
@@ -55,12 +51,13 @@ target_link_libraries(o2Framework PUBLIC
 )        
 
 if (UNIX)
-    find_package(OpenGL REQUIRED COMPONENTS GLX)
-
-    target_link_libraries(o2Framework PUBLIC
-            OpenGL::GL 
-            OpenGL::GLX
-    )
+    if (O2_RENDER_API STREQUAL "gles2")
+        find_package(OpenGL REQUIRED COMPONENTS EGL)
+        target_link_libraries(o2Framework PUBLIC OpenGL::GL OpenGL::GLE)
+    else()
+        find_package(OpenGL REQUIRED COMPONENTS GLX)
+        target_link_libraries(o2Framework PUBLIC OpenGL::GL OpenGL::EGL)
+    endif()
 endif()
 
 if(WIN32)

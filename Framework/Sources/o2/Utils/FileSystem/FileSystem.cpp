@@ -7,7 +7,7 @@
 
 #include <chrono>
 
-#if defined(O2_FILESYSTEM_EXPERIMENTAL)
+#if __cplusplus < 201702L
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 #else
