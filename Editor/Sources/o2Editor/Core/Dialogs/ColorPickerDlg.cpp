@@ -21,7 +21,7 @@ namespace Editor
 {
 	ColorPickerDlg::ColorPickerDlg()
 	{
-		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
+		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
 
 		InitializeControls();
 

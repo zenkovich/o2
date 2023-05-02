@@ -18,7 +18,7 @@ namespace Editor
 
 	KeyEditDlg::KeyEditDlg()
 	{
-		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
+		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
 
 		auto verLayout = o2UI.CreateVerLayout();
 		verLayout->spacing = 10;

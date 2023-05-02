@@ -21,7 +21,8 @@ namespace Editor
 		static void Show(const Curve::Key& key, const Function<void(const Curve::Key& key)>& onClosed);
 
 	private:
-		Window*  mWindow;
+		o2::Window* mWindow;
+
 		EditBox* mPosition;
 		EditBox* mValue;
 		EditBox* mLeftSupportPosition;

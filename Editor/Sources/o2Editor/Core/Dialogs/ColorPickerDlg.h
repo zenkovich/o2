@@ -47,8 +47,8 @@ namespace Editor
 		Color4    mColorValue;
 		ColorType mColorType = ColorType::RGB;
 
-		Window* mWindow = nullptr;
-		Image*  mColorSampleImage = nullptr;
+		o2::Window* mWindow = nullptr;
+		Image*      mColorSampleImage = nullptr;
 
 		TextureRef mChessBackTexture;
 

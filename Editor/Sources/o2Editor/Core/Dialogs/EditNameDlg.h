@@ -41,8 +41,8 @@ namespace Editor
 		Function<void()>              mOnCancelledCallback;
 
 
-		Window*  mWindow = nullptr;
-		EditBox* mNameEditBox = nullptr;
+		o2::Window* mWindow = nullptr;
+		EditBox*    mNameEditBox = nullptr;
 
 	protected:
 		// Calls when hiding dialog

@@ -35,7 +35,7 @@ namespace Editor
 
 	void PropertiesListDlg::InitializeWindow()
 	{
-		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Animation properties")));
+		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Animation properties")));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 17));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, -2, 0, 20));
 		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_wnd_icon.png"));

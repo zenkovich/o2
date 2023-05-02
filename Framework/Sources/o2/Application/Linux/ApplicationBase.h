@@ -5,6 +5,8 @@
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Types/String.h"
 
+#include <X11/Xlib.h>
+
 namespace o2
 {
 	class Application;
@@ -15,8 +17,10 @@ namespace o2
 	class ApplicationBase
 	{
 	protected:
-		///HWND   mHWnd;            // Window handle
-		UInt   mWndStyle;        // Window styles data
+        ::Window mWindow;         // X Window
+        Display* mDisplay;        // Display
+        XVisualInfo* mVisualInfo; // Window visual info
+
 		bool   mWindowed;        // True if app in windowed mode, false if in fullscreen mode
 		bool   mWindowResizible; // True, if window can be sized by user
 		Vec2I  mWindowedSize;    // Size of window

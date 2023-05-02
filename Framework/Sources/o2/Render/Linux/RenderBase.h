@@ -15,7 +15,7 @@ namespace o2
 	class RenderBase
 	{
 	protected:
-		//GLRC mGLContext; // OpenGL context
+        GLXContext mGLContext; // OpenGL context
 
 		GLuint mStdShader;               // Standard shader program
 		GLint  mStdShaderMvpUniform;     // Standard shader matrix input parameter

@@ -54,7 +54,7 @@ namespace Editor
 		Function<void()> mOnChangedCallback;
 		Function<void()> mOnChangeCompletedCallback;
 
-		Window*      mWindow = nullptr;
+		o2::Window*   mWindow = nullptr;
 		CurvesEditor* mEditorWidget = nullptr;
 
 	protected:

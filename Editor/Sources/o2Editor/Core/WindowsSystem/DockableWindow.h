@@ -11,7 +11,7 @@ namespace Editor
 	// -----------------------------
 	// Dockable editor window widget
 	// -----------------------------
-	class DockableWindow: public Window
+    class DockableWindow: public o2::Window
 	{
 	public:
 		// Default constructor

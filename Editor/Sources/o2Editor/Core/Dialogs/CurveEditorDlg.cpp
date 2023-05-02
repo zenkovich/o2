@@ -14,7 +14,7 @@ namespace Editor
 {
 	CurveEditorDlg::CurveEditorDlg()
 	{
-		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
+		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
 
 		InitializeControls();
 

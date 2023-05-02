@@ -31,8 +31,8 @@ namespace Editor
 		static void Show(AnimationClip* animation, ActorRef actor);
 
 	private:
-		Window*  mWindow = nullptr;
-		EditBox* mFilter = nullptr;
+		o2::Window* mWindow = nullptr;
+		EditBox*    mFilter = nullptr;
 
 		AnimationPropertiesTree* mPropertiesTree = nullptr;
 

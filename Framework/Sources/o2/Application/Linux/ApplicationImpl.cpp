@@ -7,6 +7,8 @@
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 
+#include <GL/glx.h>
+
 namespace o2
 {
 
@@ -17,50 +19,45 @@ namespace o2
 
 	void Application::InitializePlatform()
 	{
-//		mWindowed = true;
-//		mWindowedSize = Vec2I(800, 600);
-//		mWindowedPos = Vec2I(0, 0);
-//		mWindowResizible = true;
-//		mActive = false;
-//
-//		if (mNeedPlatformInitialization)
-//		{
-//			mLog->Out("Initializing window..");
-//
-//			mWndStyle = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-//
-//			WNDCLASSEX wndClass;
-//			wndClass.cbSize = sizeof(WNDCLASSEX);
-//			wndClass.style = mWndStyle;
-//			wndClass.lpfnWndProc = (WNDPROC)WndProcFunc::WndProc;
-//			wndClass.cbClsExtra = 0;
-//			wndClass.cbWndExtra = 0;
-//			wndClass.hInstance = NULL;
-//			wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-//			wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-//			wndClass.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH);
-//			wndClass.lpszMenuName = NULL;
-//			wndClass.lpszClassName = "o2App";
-//			wndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-//
-//			if (!RegisterClassEx(&wndClass))
-//			{
-//				mLog->Error("Can't register class");
-//				return;
-//			}
-//
-//			if (!(mHWnd = CreateWindowEx(NULL, wndClass.lpszClassName, "o2 application",
-//										 WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-//										 mWindowedPos.x, mWindowedPos.y, mWindowedSize.x, mWindowedSize.y,
-//										 NULL, NULL, NULL, NULL)))
-//			{
-//
-//				mLog->Error("Can't create window (CreateWindowEx)");
-//				return;
-//			}
-//
-//			mLog->Out("Window initialized!");
-//		}
+		mWindowed = true;
+		mWindowedSize = Vec2I(800, 600);
+		mWindowedPos = Vec2I(0, 0);
+		mWindowResizible = true;
+		mActive = false;
+
+		if (mNeedPlatformInitialization)
+		{
+			mLog->Out("Initializing window..");
+
+            mDisplay = XOpenDisplay(NULL);
+            if (!mDisplay)
+            {
+                mLog->Error("Can't open display");
+                return;
+            }
+
+            int screen = DefaultScreen(mDisplay);
+            Window rootWindow = RootWindow(mDisplay, screen);
+
+            GLint att[] = {GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER};
+            mVisualInfo = glXChooseVisual(mDisplay, 0, att);
+
+            Colormap cmap = XCreateColormap(mDisplay, rootWindow, mVisualInfo->visual, AllocNone);
+
+            XSetWindowAttributes winAttrs;
+            winAttrs.colormap = cmap;
+            winAttrs.event_mask = KeyPressMask | KeyReleaseMask | ButtonPressMask |
+                                  ButtonReleaseMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+                                  Button1MotionMask | VisibilityChangeMask | FocusChangeMask;
+
+            mWindow = XCreateWindow(mDisplay, rootWindow, mWindowedPos.x, mWindowedPos.y,
+                mWindowedSize.x, mWindowedSize.y, 0, mVisualInfo->depth, InputOutput, mVisualInfo->visual, CWColormap | CWEventMask, &winAttrs);
+
+            XStoreName(mDisplay, mWindow, "o2 application");
+            XMapWindow(mDisplay, mWindow);
+
+			mLog->Out("Window initialized!");
+		}
 	}
 
 	void Application::Shutdown()
@@ -118,31 +115,129 @@ namespace o2
 
 	void Application::Launch()
 	{
-//		ShowWindow(mHWnd, SW_SHOW);
-
 		mLog->Out("Application launched!");
 
 		OnStarted();
 		onStarted.Invoke();
 		o2Events.OnApplicationStarted();
 
-		MSG msg;
-		memset(&msg, 0, sizeof(msg));
+        //mTimer->Reset();
+        Vec2I cursorPos;
 
-		//mTimer->Reset();
+        Atom wmDeleteMessage = XInternAtom(mDisplay, "WM_DELETE_WINDOW", False);
+        XSetWMProtocols(mDisplay, mWindow, &wmDeleteMessage, 1);
 
-//		while (msg.message != WM_QUIT)
-//		{
-//			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-//			{
-//				TranslateMessage(&msg);
-//				DispatchMessage(&msg);
-//			}
-//			else
-//			{
-//				ProcessFrame();
-//			}
-//		}
+        while (1)
+        {
+            while (XPending(mDisplay) > 0)
+            {
+                XEvent xev;
+                XNextEvent( mDisplay, &xev );
+
+                mLog->Out("event type " + (String)xev.type);
+
+                if( xev.type == ClientMessage && xev.xclient.data.l[0] == wmDeleteMessage )
+                {
+                    // Exit the main loop if the close button is clicked
+                    break;
+                }
+
+                if( xev.type == KeyPress )
+                {
+                    int key = XLookupKeysym( &xev.xkey, 0 );
+                    mInput->OnKeyPressed( key );
+                }
+
+                if( xev.type == KeyRelease )
+                {
+                    int key = XLookupKeysym( &xev.xkey, 0 );
+                    mInput->OnKeyReleased( key );
+                }
+
+                if( xev.type == ButtonPress )
+                {
+                    int button = xev.xbutton.button;
+                    if( button == Button1 )
+                        mInput->OnCursorPressed( cursorPos );
+                    else if( button == Button2 )
+                        mInput->OnAlt2CursorPressed( cursorPos );
+                    else if( button == Button3 )
+                        mInput->OnAltCursorPressed( cursorPos );
+                    if (xev.xbutton.button == Button4)
+                        mInput->OnMouseWheel(120);
+                    else if (xev.xbutton.button == Button5)
+                        mInput->OnMouseWheel(-120);
+                }
+
+                if( xev.type == ButtonRelease )
+                {
+                    int button = xev.xbutton.button;
+                    if( button == Button1 )
+                        mInput->OnCursorReleased();
+                    else if( button == Button2 )
+                        mInput->OnAlt2CursorReleased();
+                    else if( button == Button3 )
+                        mInput->OnAltCursorReleased();
+                }
+
+                if( xev.type == MotionNotify )
+                {
+                    Vec2I pos( xev.xmotion.x, xev.xmotion.y );
+
+                    cursorPos = o2::Vec2I(pos.x - mWindowedSize.x / 2, mWindowedSize.y / 2 - pos.y);
+                    mInput->OnCursorMoved( cursorPos );
+                }
+
+                if( xev.type == ResizeRequest )
+                {
+                    OnResized( Vec2I( xev.xresizerequest.width, xev.xresizerequest.height ) );
+                }
+
+                if( xev.type == DestroyNotify )
+                    break;
+
+                // If the main loop was broken, exit the while(1) loop
+                if( XCheckTypedWindowEvent( mDisplay, mWindow, DestroyNotify, &xev ) )
+                {
+                    break;
+                }
+            }
+
+            XWindowAttributes gwa;
+            XGetWindowAttributes(mDisplay, mWindow, &gwa);
+            Vec2I windowedSize(gwa.width, gwa.height);
+            if (windowedSize != mWindowedSize)
+                OnResized(windowedSize);
+
+            ProcessFrame();
+            continue ;
+
+            //XWindowAttributes gwa;
+
+            XGetWindowAttributes(mDisplay, mWindow, &gwa);
+            mLog->Out("width: " + (String)gwa.width + ", height: " + (String)gwa.height);
+            glViewport(0, 0, gwa.width, gwa.height);
+
+            //ProcessFrame();
+            glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            //gluPerspective(45, 1, 0.1, 100);
+
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+            //gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
+
+            glBegin(GL_TRIANGLES);
+            glColor3f(1, 0, 0); glVertex3f(-1, -1, 0);
+            glColor3f(0, 1, 0); glVertex3f( 1, -1, 0);
+            glColor3f(0, 0, 1); glVertex3f( 0,  1, 0);
+            glEnd();
+
+            glXSwapBuffers(mDisplay, mWindow);
+        }
 
 		o2Events.OnApplicationClosing();
 		OnClosing();
@@ -215,7 +310,7 @@ namespace o2
 	void Application::SetWindowCaption(const String& caption)
 	{
 		mWndCaption = caption;
-		SetWindowText(mHWnd, mWndCaption.Data());
+        XStoreName(mDisplay, mWindow, caption.Data());
 	}
 
 	String Application::GetWindowCaption() const
@@ -254,8 +349,8 @@ namespace o2
 
 	Vec2I Application::GetScreenResolution() const
 	{
-		int hor = GetSystemMetrics(SM_CXSCREEN), ver = GetSystemMetrics(SM_CYSCREEN);
-		return Vec2I(hor, ver);
+        int screen = DefaultScreen(mDisplay);
+        return Vec2I(DisplayWidth(mDisplay, screen), DisplayHeight(mDisplay, screen));
 	}
 
 	void Application::SetCursor(CursorType type)
