@@ -66,7 +66,9 @@ bool IsReleaseBuild()
 
 bool IsAssetsPrebuildEnabled()
 {
-#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC)
+#if defined(O2_DONT_BUILD_ASSETS)
+    return false;
+#elif defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC) || defined(PLATFORM_LINUX)
 	return true;
 #else
 	return false;

@@ -13,6 +13,10 @@ if (O2_IS_FILESYSTEM_EXPERIMENTAL)
     list(APPEND O2_COMPILE_DEFINITIONS O2_FILESYSTEM_EXPERIMENTAL)
 endif()
 
+if (O2_DONT_BUILD_ASSETS)
+    list(APPEND O2_COMPILE_DEFINITIONS O2_DONT_BUILD_ASSETS)
+endif()
+
 if (O2_RENDER_API STREQUAL "gles2")
     list(APPEND O2_COMPILE_DEFINITIONS O2_RENDER_GLES2)
     list(APPEND O2_COMPILE_DEFINITIONS O2_DISABLE_PLATFORM)
@@ -57,8 +61,9 @@ target_link_libraries(o2Framework PUBLIC
 
 if (UNIX)
     if (O2_RENDER_API STREQUAL "gles2")
-        find_package(OpenGL REQUIRED COMPONENTS EGL)
-        target_link_libraries(o2Framework PUBLIC OpenGL::GL OpenGL::EGL)
+        list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
+        find_package(OpenGLES2 REQUIRED)
+        target_link_libraries(o2Framework PRIVATE OpenGLES2::OpenGLES2)
     else()
         find_package(OpenGL REQUIRED COMPONENTS GLX)
         target_link_libraries(o2Framework PUBLIC OpenGL::GL OpenGL::GLX)
