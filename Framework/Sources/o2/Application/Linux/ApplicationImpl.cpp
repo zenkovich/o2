@@ -7,7 +7,9 @@
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 
+#if !defined(O2_RENDER_GLES2)
 #include <GL/glx.h>
+#endif
 
 namespace o2
 {

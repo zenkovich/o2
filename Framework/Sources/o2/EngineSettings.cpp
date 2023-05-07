@@ -165,7 +165,7 @@ const char* GetEditorBuiltAssetsTreePath()
 
 const char* GetBuiltitAssetsPath()
 {
-#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS
+#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS || defined PLATFORM_LINUX
 	return "../../o2/Framework/Assets/";
 #else
 	return "FrameworkAssets/";
