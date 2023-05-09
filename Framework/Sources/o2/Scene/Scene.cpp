@@ -618,12 +618,14 @@ namespace o2
 	void Scene::AddEditableObjectToScene(SceneEditableObject* object)
 	{
 		mEditableObjects.Add(object);
+		mEditableObjectsByUID[object->GetID()] = object;
 	}
 
 	void Scene::RemoveEditableObjectFromScene(SceneEditableObject* object)
 	{
-		mChangedObjects.Remove(object);
-		mEditableObjects.Remove(object);
+		mChangedObjects.RemoveAll([&](auto x) { return x == object; });
+		mEditableObjects.RemoveAll([&](auto x) { return x == object; });
+		mEditableObjectsByUID.Remove(object->GetID());
 	}
 
 	const Vector<SceneEditableObject*>& Scene::GetAllEditableObjects()
@@ -633,7 +635,7 @@ namespace o2
 
 	SceneEditableObject* Scene::GetEditableObjectByID(SceneUID id) const
 	{
-		return mEditableObjects.FindOrDefault([=](SceneEditableObject* x) { return x->GetID() == id; });
+		return mEditableObjectsByUID[id];
 	}
 
 	int Scene::GetObjectHierarchyIdx(SceneEditableObject* object) const

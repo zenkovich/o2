@@ -350,6 +350,12 @@ namespace o2
 		if (auto layersNode = node.FindMember("Layers"))
 			mLayers = *layersNode;
 
+		for (auto layer : mLayers)
+			layer->SetOwnerWidget(this);
+
+		for (auto layer : mLayers)
+			OnLayerAdded(layer);
+
 		if (auto statesNode = node.FindMember("States"))
 			mStates = *statesNode;
 	}
@@ -476,12 +482,6 @@ namespace o2
 
 	void Widget::OnDeserialized(const DataValue& node)
 	{
-		for (auto layer : mLayers)
-			layer->SetOwnerWidget(this);
-
-		for (auto layer : mLayers)
-			OnLayerAdded(layer);
-
 		mChildWidgets.Clear();
 		for (auto child : mChildren)
 		{

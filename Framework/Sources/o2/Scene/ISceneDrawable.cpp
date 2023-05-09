@@ -26,6 +26,16 @@ namespace o2
 				mParentDrawable->mChildrenInheritedDepth.Remove(this);
 				mParentDrawable->SortInheritedDrawables();
 			}
+			else
+			{
+				if (mLayer)
+				{
+					if (mIsEnabled)
+						mLayer->OnDrawableDisabled(this, false);
+
+					mLayer->UnregisterDrawable(this);
+				}
+			}
 		}
 	}
 
@@ -118,36 +128,47 @@ namespace o2
 
 	void ISceneDrawable::OnEnabled()
 	{
-		if (auto layer = GetSceneDrawableSceneLayer())
-			layer->OnDrawableEnabled(this, false);
+		mLayer = GetSceneDrawableSceneLayer();
+		if (mLayer)
+			mLayer->OnDrawableEnabled(this, false);
+
+		mIsEnabled = true;
 	}
 
 	void ISceneDrawable::OnDisabled()
 	{
-		if (auto layer = GetSceneDrawableSceneLayer())
-			layer->OnDrawableDisabled(this, false);
+		if (mLayer)
+			mLayer->OnDrawableDisabled(this, false);
+
+		mLayer = nullptr;
+		mIsEnabled = false;
 	}
 
 	void ISceneDrawable::OnAddToScene(bool force /*= false*/)
 	{
-		if (auto layer = GetSceneDrawableSceneLayer())
+		mLayer = GetSceneDrawableSceneLayer();
+		if (mLayer)
 		{
-			layer->RegisterDrawable(this);
+			mLayer->RegisterDrawable(this);
 
-			if (IsSceneDrawableEnabled())
-				layer->OnDrawableEnabled(this, force);
+			mIsEnabled = IsSceneDrawableEnabled();
+			if (mIsEnabled)
+				mLayer->OnDrawableEnabled(this, force);
 		}
 	}
 
 	void ISceneDrawable::OnRemoveFromScene(bool force /*= false*/)
 	{
-		if (auto layer = GetSceneDrawableSceneLayer())
+		if (mLayer)
 		{
-			if (IsSceneDrawableEnabled())
-				layer->OnDrawableDisabled(this, force);
+			mIsEnabled = IsSceneDrawableEnabled();
+			if (mIsEnabled)
+				mLayer->OnDrawableDisabled(this, force);
 
-			layer->UnregisterDrawable(this);
+			mLayer->UnregisterDrawable(this);
 		}
+
+		mLayer = nullptr;
 	}
 
 	void ISceneDrawable::SetLastOnCurrentDepth()
@@ -155,8 +176,8 @@ namespace o2
 		if (mInheritDrawingDepthFromParent)
 			return;
 
-		if (auto layer = GetSceneDrawableSceneLayer())
-			layer->SetLastByDepth(this);
+		if (mLayer)
+			mLayer->SetLastByDepth(this);
 	}
 
 #if IS_EDITOR

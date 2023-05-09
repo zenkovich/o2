@@ -541,6 +541,9 @@ namespace o2
 						delete value;
 
 					auto type = Reflection::GetType(*typeNode);
+					if (!type)
+						return;
+
 					void* sample = type->CreateSample();
 					if (type->GetUsage() == Type::Usage::Object)
 					{

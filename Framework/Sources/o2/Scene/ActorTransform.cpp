@@ -163,9 +163,31 @@ namespace o2
 		SetDirty();
 	}
 
+	void ActorTransform::SetScaleX(float scaleX)
+	{
+		mData->scale.x = scaleX;
+		SetDirty();
+	}
+
+	void ActorTransform::SetScaleY(float scaleY)
+	{
+		mData->scale.y = scaleY;
+		SetDirty();
+	}
+
 	Vec2F ActorTransform::GetScale() const
 	{
 		return mData->scale;
+	}
+
+	float ActorTransform::GetScaleX() const
+	{
+		return mData->scale.x;
+	}
+
+	float ActorTransform::GetScaleY() const
+	{
+		return mData->scale.y;
 	}
 
 	void ActorTransform::SetAngle(float rad)

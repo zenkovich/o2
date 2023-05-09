@@ -58,6 +58,10 @@ namespace o2
 	protected:
 		ISceneDrawable* mParentDrawable = nullptr; // Parent drawable
 
+		SceneLayer* mLayer = nullptr; // Scene layer
+
+		bool mIsEnabled = false; // Is drawable was enabled
+
 		float mDrawingDepth = 0.0f;                  // Drawing depth. Objects with higher depth will be drawn later @SERIALIZABLE
 		bool  mInheritDrawingDepthFromParent = true; // If parent depth is used @SERIALIZABLE
 
@@ -118,6 +122,8 @@ CLASS_FIELDS_META(o2::ISceneDrawable)
 {
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(drawDepth);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentDrawable);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayer);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsEnabled);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDrawingDepth);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mInheritDrawingDepthFromParent);
 	FIELD().PROTECTED().NAME(mChildrenInheritedDepth);

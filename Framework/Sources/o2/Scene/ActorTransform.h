@@ -27,8 +27,10 @@ namespace o2
 		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property
 		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property
 		PROPERTY(float, width, SetWidth, GetWidth);                     // Width property
-		PROPERTY(float, height, SetHeight, GetHeight);                  // Width property
+		PROPERTY(float, height, SetHeight, GetHeight);                  // Height property
 		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property
+		PROPERTY(float, scaleX, SetScaleX, GetScaleX);                  // Scale property by X
+		PROPERTY(float, scaleY, SetScaleY, GetScaleY);                  // Scale property by Y
 		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space
 		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property
 		PROPERTY(float, angle, SetAngle, GetAngle);                     // Rotation angle in radians
@@ -151,8 +153,20 @@ namespace o2
 		// Sets scale @SCRIPTABLE
 		void SetScale(const Vec2F& scale);
 
+		// Sets scale by X @SCRIPTABLE
+		void SetScaleX(float scaleX);
+
+		// Sets scale by Y @SCRIPTABLE
+		void SetScaleY(float scaleY);
+
 		// Returns scale @SCRIPTABLE
 		Vec2F GetScale() const;
+
+		// Returns scale by X @SCRIPTABLE
+		float GetScaleX() const;
+
+		// Returns scale by Y @SCRIPTABLE
+		float GetScaleY() const;
 
 		// Sets rotation angle, in radians @SCRIPTABLE
 		void SetAngle(float rad);
@@ -514,6 +528,8 @@ CLASS_FIELDS_META(o2::ActorTransform)
 	FIELD().PUBLIC().NAME(width);
 	FIELD().PUBLIC().NAME(height);
 	FIELD().PUBLIC().NAME(scale);
+	FIELD().PUBLIC().NAME(scaleX);
+	FIELD().PUBLIC().NAME(scaleY);
 	FIELD().PUBLIC().NAME(pivot);
 	FIELD().PUBLIC().NAME(szPivot);
 	FIELD().PUBLIC().NAME(angle);
@@ -582,7 +598,11 @@ CLASS_METHODS_META(o2::ActorTransform)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetSizePivot, const Vec2F&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetSizePivot);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetScale, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetScaleX, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetScaleY, float);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetScale);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetScaleX);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetScaleY);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAngle, float);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetAngle);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAngleDegrees, float);
