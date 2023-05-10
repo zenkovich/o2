@@ -285,7 +285,8 @@ namespace o2
 	{
 		mWndCaption = caption;
 #if !defined(O2_DISABLE_PLATFORM)
-        XStoreName(mDisplay, mWindow, caption.Data());
+        if (mDisplay && mWindow)
+            XStoreName(mDisplay, mWindow, caption.Data());
 #endif
 	}
 
