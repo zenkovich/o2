@@ -371,7 +371,9 @@ namespace o2
 	{
 		mModifiedAssets.Clear();
 		mSourceAssetsTree.Clear();
-		mBuiltAssetsTree->Clear();
+
+        if (mBuiltAssetsTree)
+		    mBuiltAssetsTree->Clear();
 
 		for (auto it = mAssetConverters.Begin(); it != mAssetConverters.End(); ++it)
 			it->second->Reset();

@@ -39,9 +39,9 @@ namespace o2
 		String     mSourceAssetsPath;     // Source assets path
 		AssetsTree mSourceAssetsTree;     // Source assets tree
 
-		String      mBuiltAssetsPath;     // Built assets path
-		String      mBuiltAssetsTreePath; // Built assets tree data path
-		AssetsTree* mBuiltAssetsTree;     // Built assets tree
+		String      mBuiltAssetsPath;           // Built assets path
+		String      mBuiltAssetsTreePath;       // Built assets tree data path
+		AssetsTree* mBuiltAssetsTree = nullptr; // Built assets tree
 
 		Vector<UID> mModifiedAssets; // Modified assets infos
 
