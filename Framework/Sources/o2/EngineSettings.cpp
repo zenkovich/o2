@@ -69,7 +69,7 @@ bool IsAssetsPrebuildEnabled()
 #if defined(O2_DONT_BUILD_ASSETS)
     return false;
 #elif defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC) || defined(PLATFORM_LINUX)
-	return true;
+	return false;
 #else
 	return false;
 #endif
@@ -110,7 +110,9 @@ const char* GetBuiltAssetsPath()
 #elif defined PLATFORM_ANDROID
 	return "AndroidAssets/BuiltAssets/";
 #elif defined PLATFORM_MAC
-	return "../../BuiltAssets/Mac/Data/";
+    return "../../BuiltAssets/Mac/Data/";
+#elif defined PLATFORM_LINUX
+    return "BuiltAssets/Linux/Data/";
 #elif defined PLATFORM_IOS
 	return "Data/";
 #endif
@@ -128,7 +130,9 @@ const char* GetBuiltAssetsTreePath()
 #elif defined PLATFORM_ANDROID
 	return "AndroidAssets/AssetsTree.json";
 #elif defined PLATFORM_MAC
-	return "../../BuiltAssets/Mac/Data.json";
+    return "../../BuiltAssets/Mac/Data.json";
+#elif defined PLATFORM_LINUX
+    return "BuiltAssets/Linux/Data.json";
 #elif defined PLATFORM_IOS
 	return "Data.json";
 #endif

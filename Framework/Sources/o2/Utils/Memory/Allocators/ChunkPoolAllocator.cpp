@@ -49,6 +49,11 @@ namespace o2
 
 	void* ChunkPoolAllocator::Allocate(size_t size)
 	{
+        const size_t align = 8;
+        size_t mod = size%align;
+        if (mod != 0)
+            size = size - mod + align;
+
 		if (!mHead || mHead->currentSize + size > mHead->capacity)
 			AddChunk(Math::Max(size, mChunkSize));
 

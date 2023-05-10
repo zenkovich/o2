@@ -425,6 +425,8 @@ namespace o2
 
 		mMainAssetsTree = mnew AssetsTree();
 		mMainAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
+        mMainAssetsTree->assetsPath = ::GetAssetsPath();
+        mMainAssetsTree->builtAssetsPath = ::GetBuiltAssetsPath();
 
 		mAssetsTrees.Add(mMainAssetsTree);
 		mAssetsTrees.Add(editorAssetsTree);
