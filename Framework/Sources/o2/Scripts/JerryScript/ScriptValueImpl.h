@@ -524,6 +524,7 @@ namespace o2
 	struct ScriptPrototypeProcessor : public BaseTypeProcessor
 	{
 		ScriptValue proto = ScriptValue::EmptyObject();
+		bool hasBaseClass = false;
 
 	public:
 		struct BaseFunctionProcessor : public BaseTypeProcessor::FunctionProcessor
@@ -564,8 +565,14 @@ namespace o2
 		template<typename _object_type, typename _base_type>
 		void BaseType(_object_type* object, Type* type, const char* name)
 		{
+			if (hasBaseClass)
+				return;
+
 			if constexpr (std::is_base_of<ISerializable, _base_type>::value && !std::is_same<ISerializable, _base_type>::value)
+			{
 				_object_type::GetScriptPrototype().SetPrototype(_base_type::GetScriptPrototype());
+				hasBaseClass = true;
+			}
 		}
 
 		static void RegisterTypeConstructor(Type* type, ScriptValue& constructorFunc);

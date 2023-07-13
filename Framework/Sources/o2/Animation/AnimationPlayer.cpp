@@ -145,5 +145,7 @@ namespace o2
 			trackPlayer->ForceSetTime(mInDurationTime, mDuration);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AnimationPlayer);
+// --- END META ---

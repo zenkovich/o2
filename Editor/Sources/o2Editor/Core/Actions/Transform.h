@@ -60,6 +60,7 @@ namespace Editor
 		void SetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::TransformAction)
 {
@@ -86,3 +87,4 @@ CLASS_METHODS_META(Editor::TransformAction)
 	FUNCTION().PRIVATE().SIGNATURE(void, SetTransforms, const Vector<SceneUID>&, Vector<Transform>&);
 }
 END_META;
+// --- END META ---

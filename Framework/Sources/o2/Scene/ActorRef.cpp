@@ -16,9 +16,15 @@ namespace o2
 			mActor->mReferences.Add(this);
 	}
 
-	ActorRef::ActorRef(const ActorRef& other):
+	ActorRef::ActorRef(const ActorRef& other) :
 		ActorRef(other.mActor)
 	{
+		if (other.mRequiredResolveData)
+		{
+			mRequiredResolveData = other.mRequiredResolveData->Clone();
+			mRequiredResolveData->RequireResolve(*this);
+		}
+
 		ActorRefResolver::RequireRemap(*this);
 	}
 
@@ -27,8 +33,10 @@ namespace o2
 		if (mActor)
 			mActor->mReferences.Remove(this);
 
-		if (ActorRefResolver::IsLocked())
-			ActorRefResolver::Instance().mRemapActorRefs.Remove(this);
+		if (mRequiredResolveData)
+			delete mRequiredResolveData;
+
+		ActorRefResolver::OnActorRefDestroyed(this);
 	}
 
 	bool ActorRef::operator!=(const ActorRef& other) const
@@ -131,6 +139,12 @@ namespace o2
 		mActor = other.mActor;
 		mWasDeleted = other.mWasDeleted;
 
+		if (mRequiredResolveData)
+		{
+			delete mRequiredResolveData;
+			mRequiredResolveData = nullptr;
+		}
+
 		UpdateSpecActor();
 
 		if (mActor)
@@ -143,7 +157,7 @@ namespace o2
 		{
 			if (mActor->mIsAsset)
 				node.AddMember("AssetId") = mActor->GetAssetID();
-			else 
+			else
 				node.AddMember("ID") = mActor->GetID();
 		}
 	}
@@ -151,13 +165,46 @@ namespace o2
 	void ActorRef::OnDeserialized(const DataValue& node)
 	{
 		if (auto assetIdNode = node.FindMember("AssetId"))
-			ActorRefResolver::RequireResolve(*this, (UID)*assetIdNode);
+		{
+			auto resolveData = mnew AssetRequireResolveData();
+			resolveData->uid = (UID)*assetIdNode;
+			resolveData->RequireResolve(*this);
+			mRequiredResolveData = resolveData;
+		}
 		else if (auto sceneIdNode = node.FindMember("ID"))
-			ActorRefResolver::RequireResolve(*this, (SceneUID)*sceneIdNode);
-		else *this = nullptr;
+		{
+			auto resolveData = mnew SceneRequireResolveData();
+			resolveData->uid = (SceneUID)*sceneIdNode;
+			resolveData->RequireResolve(*this);
+			mRequiredResolveData = resolveData;
+		}
+		else
+			*this = nullptr;
+	}
+
+	void ActorRef::SceneRequireResolveData::RequireResolve(ActorRef& ref)
+	{
+		ActorRefResolver::RequireResolve(ref, uid);
+	}
+
+	ActorRef::IRequiredResolveData* ActorRef::SceneRequireResolveData::Clone() const
+	{
+		return mnew SceneRequireResolveData(*this);
+	}
+
+	void ActorRef::AssetRequireResolveData::RequireResolve(ActorRef& ref)
+	{
+		ActorRefResolver::RequireResolve(ref, uid);
+	}
+
+	ActorRef::IRequiredResolveData* ActorRef::AssetRequireResolveData::Clone() const
+	{
+		return mnew AssetRequireResolveData(*this);
 	}
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Actor>);
+// --- META ---
 
 DECLARE_CLASS(o2::ActorRef);
+// --- END META ---

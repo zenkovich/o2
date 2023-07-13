@@ -49,6 +49,7 @@ namespace Editor
 		void InitializeControls();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SpoilerWithHead)
 {
@@ -74,3 +75,4 @@ CLASS_METHODS_META(Editor::SpoilerWithHead)
 	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }
 END_META;
+// --- END META ---

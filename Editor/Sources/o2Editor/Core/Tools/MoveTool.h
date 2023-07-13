@@ -101,6 +101,7 @@ namespace Editor
 		void MoveSelectedObjectsWithAction(const Vec2F& delta);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::MoveTool)
 {
@@ -145,3 +146,4 @@ CLASS_METHODS_META(Editor::MoveTool)
 	FUNCTION().PROTECTED().SIGNATURE(void, MoveSelectedObjectsWithAction, const Vec2F&);
 }
 END_META;
+// --- END META ---

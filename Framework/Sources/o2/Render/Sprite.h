@@ -46,7 +46,7 @@ namespace o2
 		Sprite(UID imageId);
 
 		// Constructor from texture and source rectangle
-		Sprite(TextureRef texture, const RectI& srcRect);
+		Sprite(TextureRef texture, const RectI& srcRect = RectI());
 
 		// Constructor from color
 		Sprite(const Color4& color);
@@ -249,6 +249,7 @@ namespace o2
 		friend class Render;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Sprite)
 {
@@ -347,3 +348,4 @@ CLASS_METHODS_META(o2::Sprite)
 	FUNCTION().PROTECTED().SIGNATURE(void, ReloadImage);
 }
 END_META;
+// --- END META ---

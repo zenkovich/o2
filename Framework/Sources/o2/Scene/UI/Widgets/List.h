@@ -73,6 +73,7 @@ namespace o2
 		void OnSelectionChanged() override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::List)
 {
@@ -106,3 +107,4 @@ CLASS_METHODS_META(o2::List)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
 }
 END_META;
+// --- END META ---

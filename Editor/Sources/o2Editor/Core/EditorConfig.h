@@ -87,6 +87,7 @@ namespace Editor
 		friend class WindowsManager;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::EditorConfig)
 {
@@ -149,3 +150,4 @@ CLASS_METHODS_META(Editor::EditorConfig::ProjectConfig)
 {
 }
 END_META;
+// --- END META ---

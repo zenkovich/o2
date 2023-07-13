@@ -20,6 +20,7 @@
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
+#include "o2/Utils/Function/ActorSubscription.h"
 #include "o2/Utils/System/Time/Time.h"
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
@@ -35,7 +36,7 @@
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
-#include "o2/Utils/Function/ActorSubscription.h"
+#include "o2Editor/Utils/CommonTextures.h"
 
 namespace Editor
 {
@@ -49,29 +50,40 @@ namespace Editor
 
 	const String& EditorApplication::GetLoadedSceneName() const
 	{
-		return mLoadedScene;
+		if (mLoadedScene)
+			return mLoadedScene->GetPath();
+
+		return String::empty;
 	}
 
-	void EditorApplication::LoadScene(const String& name)
+	void EditorApplication::LoadScene(const SceneAssetRef& scene)
 	{
 		ForcePopEditorScopeOnStack scope;
 
-		mLoadedScene = name;
-		o2Scene.Load(name);
-		o2Scene.Update(0.0f);
+		if (scene)
+			scene->Load();
+
+		mLoadedScene = scene;
 
 		ResetUndoActions();
 	}
 
-	void EditorApplication::SaveScene(const String& name)
+	void EditorApplication::SaveScene()
 	{
-		mLoadedScene = name;
-		o2Scene.Save(name);
+		o2Scene.Save(mLoadedScene->GetFullPath());
+		mLoadedScene->Save();
+	}
+
+	void EditorApplication::SaveSceneAs(const String& path)
+	{
+		o2Scene.Save(GetAssetsPath() + path);
+		mLoadedScene->SetPath(path);
+		mLoadedScene->Save();
 	}
 
 	void EditorApplication::MakeNewScene()
 	{
-		mLoadedScene = "";
+		mLoadedScene = nullptr;
 		o2Scene.Clear();
 
 		ResetUndoActions();
@@ -108,6 +120,8 @@ namespace Editor
 		mBackground = mnew Sprite("ui/UI4_Background.png");
 		mBackSign = mnew Sprite("ui/UI4_o2_sign.png");
 
+		CommonTextures::Initialize();
+
 		mConfig = mnew EditorConfig();
 		mConfig->LoadConfigs();
 
@@ -138,29 +152,9 @@ namespace Editor
 
 		o2EditorAnimationWindow.SetTarget(widget);
 
-		auto button = EditorUIRoot.GetRootWidget()->GetChildByType<Button>("tools panel/play panel/step");
-		button->onClick += ActorSubscription<void()>(ActorRef(widget), "AddToScene");
-		DataDocument d;
-		d = button;
-
-		Button* b = d;
-
 		o2Scripts.CollectGarbage();
 
-		int mem = o2Scripts.GetUsedMemory();
-
-		o2Scripts.GetGlobal().SetProperty("vv", mnew Actor());
-		int mem2 = o2Scripts.GetUsedMemory();
-		int d1 = mem2 - mem;
-
-		o2Scripts.GetGlobal().SetProperty("dd", 5);
-		int mem3 = o2Scripts.GetUsedMemory();
-		int d2 = mem3 - mem2;
-
-		auto v = widget->GetScriptValue();
-		//String tmp = v.Dump();
-
-		mem = o2Scripts.GetUsedMemory();
+		//o2Scripts.GetGlobal().SetProperty("widget", mnew Widget());
 
 		// 		ScriptValue tmp(Vector<int>({ 0, 1, 2, 3, 4 }));
 		// 
@@ -457,7 +451,7 @@ namespace Editor
 
 		CheckPlayingSwitch();
 
-		o2Application.windowCaption = String("o2 Editor: ") + mLoadedScene +
+		o2Application.windowCaption = String("o2 Editor: ") + mLoadedScene ? mLoadedScene->GetPath() : String("") +
 			"; FPS: " + (String)((int)o2Time.GetFPS()) +
 			" DC: " + (String)mDrawCalls +
 			" Cursor: " + (String)o2Input.GetCursorPos() +

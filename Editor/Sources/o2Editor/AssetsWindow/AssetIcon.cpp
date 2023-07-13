@@ -180,5 +180,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AssetIcon);
+// --- END META ---

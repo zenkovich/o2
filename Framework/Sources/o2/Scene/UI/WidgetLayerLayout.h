@@ -159,6 +159,7 @@ namespace o2
 		Vec2F mOffsetMax = Vec2F(0, 0); // @SERIALIZABLE
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::WidgetLayerLayout)
 {
@@ -225,3 +226,4 @@ CLASS_METHODS_META(o2::WidgetLayerLayout)
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetSize);
 }
 END_META;
+// --- END META ---

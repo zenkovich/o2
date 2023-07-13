@@ -79,6 +79,7 @@ namespace Editor
 		void UpdateEditSkeletonButtonCaption();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SkinningMeshComponentViewer)
 {
@@ -115,3 +116,4 @@ CLASS_METHODS_META(Editor::SkinningMeshComponentViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateEditSkeletonButtonCaption);
 }
 END_META;
+// --- END META ---

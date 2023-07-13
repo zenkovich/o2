@@ -27,9 +27,9 @@ namespace o2
 	public:
 		PROPERTIES(Widget);
 
-		PROPERTY(bool, enabledForcibly, SetEnabledForcible, IsEnabled); // Enable property, works forcibly @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(bool, enabledForcibly, SetEnabledForcible, IsEnabled); // Enable property, works forcibly @EDITOR_IGNORE @ANIMATABLE 
 
-		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property @SCRIPTABLE 
+		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property 
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency @EDITOR_IGNORE @ANIMATABLE
 
 		GETTER(Vector<Widget*>, childrenWidgets, GetChildrenNonConst); // Widget children getter
@@ -444,6 +444,12 @@ namespace o2
 		// Returns dictionary of all states by names
 		Map<String, WidgetState*> GetAllStates();
 
+#if IS_SCRIPTING_SUPPORTED
+	public:
+		// Returns layout for scripting @SCRIPTABLE_NAME(GetLayout)
+		WidgetLayout* GetLayoutScript();
+#endif
+
 		friend class ContextMenu;
 		friend class CustomDropDown;
 		friend class CustomList;
@@ -713,6 +719,7 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Widget)
 {
@@ -722,8 +729,8 @@ CLASS_BASES_META(o2::Widget)
 END_META;
 CLASS_FIELDS_META(o2::Widget)
 {
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(enabledForcibly);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(transparency);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(enabledForcibly);
+	FIELD().PUBLIC().NAME(transparency);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(resTransparency);
 	FIELD().PUBLIC().NAME(childrenWidgets);
 	FIELD().PUBLIC().NAME(layers);
@@ -753,8 +760,10 @@ CLASS_FIELDS_META(o2::Widget)
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsClipped);
 	FIELD().PROTECTED().NAME(mBounds);
 	FIELD().PROTECTED().NAME(mBoundsWithChilds);
+#if  IS_EDITOR
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(layersEditable);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(internalChildrenEditable);
+#endif
 }
 END_META;
 CLASS_METHODS_META(o2::Widget)
@@ -876,6 +885,10 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(_tmp2, GetAllChilds);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp3, GetAllInternalWidgets);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp4, GetAllStates);
+#if  IS_SCRIPTING_SUPPORTED
+	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(GetLayout).SIGNATURE(WidgetLayout*, GetLayoutScript);
+#endif
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
@@ -887,9 +900,11 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PUBLIC().SIGNATURE(Layout, GetLayout);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLayout, const Layout&);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
+#endif
 }
 END_META;
 
+#if  IS_EDITOR
 CLASS_BASES_META(o2::Widget::LayersEditable)
 {
 	BASE_CLASS(o2::SceneEditableObject);
@@ -897,14 +912,17 @@ CLASS_BASES_META(o2::Widget::LayersEditable)
 END_META;
 CLASS_FIELDS_META(o2::Widget::LayersEditable)
 {
+#if  IS_EDITOR
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(widget);
 	FIELD().PUBLIC().DEFAULT_VALUE(Math::Random()).NAME(UID);
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(prototypeLink);
+#endif
 }
 END_META;
 CLASS_METHODS_META(o2::Widget::LayersEditable)
 {
 
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(Widget*);
 	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
@@ -919,9 +937,12 @@ CLASS_METHODS_META(o2::Widget::LayersEditable)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDeleting);
 	FUNCTION().PUBLIC().SIGNATURE(Basis, GetTransform);
+#endif
 }
 END_META;
+#endif
 
+#if  IS_EDITOR
 CLASS_BASES_META(o2::Widget::InternalChildrenEditableEditable)
 {
 	BASE_CLASS(o2::SceneEditableObject);
@@ -929,14 +950,17 @@ CLASS_BASES_META(o2::Widget::InternalChildrenEditableEditable)
 END_META;
 CLASS_FIELDS_META(o2::Widget::InternalChildrenEditableEditable)
 {
+#if  IS_EDITOR
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(widget);
 	FIELD().PUBLIC().DEFAULT_VALUE(Math::Random()).NAME(UID);
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(prototypeLink);
+#endif
 }
 END_META;
 CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 {
 
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(Widget*);
 	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
@@ -951,5 +975,8 @@ CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDeleting);
 	FUNCTION().PUBLIC().SIGNATURE(Basis, GetTransform);
+#endif
 }
 END_META;
+#endif
+// --- END META ---

@@ -78,6 +78,7 @@ namespace Editor
 							   const Vector<DataDocument>& newValue);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DefaultActorHeaderViewer)
 {
@@ -113,3 +114,4 @@ CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;
+// --- END META ---

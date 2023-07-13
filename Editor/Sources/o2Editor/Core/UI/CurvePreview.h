@@ -69,6 +69,7 @@ namespace Editor
 		void OnCurveChanged();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::CurvePreview)
 {
@@ -101,3 +102,4 @@ CLASS_METHODS_META(Editor::CurvePreview)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCurveChanged);
 }
 END_META;
+// --- END META ---

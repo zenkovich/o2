@@ -303,6 +303,7 @@ namespace o2
 		AddEffect(mnew _type(args ...));
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(o2::ParticlesEmitter)
 {
@@ -434,3 +435,4 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
 	FUNCTION().PROTECTED().SIGNATURE(void, BasisChanged);
 }
 END_META;
+// --- END META ---

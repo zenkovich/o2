@@ -42,6 +42,7 @@ namespace o2
 		Vec2F GetEmittinPoint() override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::ParticlesEmitterShape)
 {
@@ -92,3 +93,4 @@ CLASS_METHODS_META(o2::SquareParticlesEmitterShape)
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint);
 }
 END_META;
+// --- END META ---

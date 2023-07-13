@@ -52,6 +52,7 @@ namespace o2
 
 	typedef Ref<JavaScriptAsset> JavaScriptAssetRef;
 }
+// --- META ---
 
 CLASS_BASES_META(o2::JavaScriptAsset)
 {
@@ -77,3 +78,4 @@ CLASS_METHODS_META(o2::JavaScriptAsset)
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
 }
 END_META;
+// --- END META ---

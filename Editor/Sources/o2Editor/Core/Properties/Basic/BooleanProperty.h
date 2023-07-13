@@ -40,6 +40,7 @@ namespace Editor
 		void InitializeControls();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::BooleanProperty)
 {
@@ -60,3 +61,4 @@ CLASS_METHODS_META(Editor::BooleanProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;
+// --- END META ---

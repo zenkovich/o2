@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<files>
+	<file path="C:/work/PetStory2/o2/AssetsBuildTool\Sources\o2AssetBuilder\AssetsBuilder.h">
+		<date year="123" month="4" day="28" hour="16" minute="59" second="54" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AssetsBuilder" fullname="o2::AssetsBuilder" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:/work/PetStory2/o2/AssetsBuildTool\Sources\o2AssetBuilder\Converters\AtlasAssetConverter.h">
+		<date year="123" month="5" day="26" hour="21" minute="22" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AtlasAssetConverter" fullname="o2::AtlasAssetConverter" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Image" fullname="o2::AtlasAssetConverter::Image" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+								<section name="ImagePackDef" fullname="o2::AtlasAssetConverter::ImagePackDef" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAssetConverter" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:/work/PetStory2/o2/AssetsBuildTool\Sources\o2AssetBuilder\Converters\FolderAssetConverter.h">
+		<date year="123" month="5" day="26" hour="21" minute="22" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="FolderAssetConverter" fullname="o2::FolderAssetConverter" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAssetConverter" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:/work/PetStory2/o2/AssetsBuildTool\Sources\o2AssetBuilder\Converters\IAssetConverter.h">
+		<date year="123" month="5" day="26" hour="21" minute="22" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="IAssetConverter" fullname="o2::IAssetConverter" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IObject" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:/work/PetStory2/o2/AssetsBuildTool\Sources\o2AssetBuilder\Converters\ImageAssetConverter.h">
+		<date year="123" month="5" day="26" hour="21" minute="22" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="ImageAssetConverter" fullname="o2::ImageAssetConverter" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAssetConverter" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:/work/PetStory2/o2/AssetsBuildTool\Sources\o2AssetBuilder\Converters\StdAssetConverter.h">
+		<date year="123" month="5" day="26" hour="21" minute="22" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="StdAssetConverter" fullname="o2::StdAssetConverter" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAssetConverter" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:/work/PetStory2/o2/AssetsBuildTool\Sources\o2AssetBuilder\ImageCompressor.h">
+		<date year="123" month="5" day="26" hour="21" minute="22" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="ImageCompressor" fullname="o2::ImageCompressor" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Config" fullname="o2::ImageCompressor::Config" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+</files>
+<parentProjects>
+	<project path="C:/work/PetStory2/o2/AssetsBuildTool/../Framework/Sources/o2/CodeToolCache.xml" />
+</parentProjects>

@@ -10,7 +10,7 @@
 #include "o2/Utils/Types/StringDef.h"
 
 // Returns type of TYPE
-#define TypeOf(TYPE) GetTypeOf<TYPE>()
+#define TypeOf(TYPE) o2::GetTypeOf<TYPE>()
 
 namespace o2
 {
@@ -859,6 +859,14 @@ typedef void* (*GetValuePointerFuncPtr)(void*);
     template SignatureStatic<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME)
 
 #define END_META }
+
+#define CHECKUP_TYPE(TYPE) \
+    TypesCheckupHelper::counter += TypeOf(TYPE).ID()
+
+struct TypesCheckupHelper
+{
+	static o2::TypeId counter;
+};
 
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Reflection/FieldInfo.h"

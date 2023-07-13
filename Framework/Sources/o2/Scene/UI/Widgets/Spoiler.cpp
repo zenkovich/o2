@@ -237,5 +237,7 @@ namespace o2
 		return "Dropping";
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::Spoiler);
+// --- END META ---

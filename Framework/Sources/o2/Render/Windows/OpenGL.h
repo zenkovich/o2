@@ -62,5 +62,8 @@ extern PFNGLENABLEVERTEXATTRIBARRAYPROC   glEnableVertexAttribArray;
 extern PFNGLUNIFORMMATRIX4FVPROC          glUniformMatrix4fv;
 extern PFNGLACTIVETEXTUREPROC             glActiveTexture;
 extern PFNGLUNIFORM1IPROC                 glUniform1i;
+extern PFNGLCOMPRESSEDTEXIMAGE2DPROC      glCompressedTexImage2D;
+extern PFNGLBLENDFUNCSEPARATEPROC         glBlendFuncSeparate;
+extern PFNGLBUFFERSUBDATAPROC             glBufferSubData;
 
 #endif // PLATFORM_WINDOWS

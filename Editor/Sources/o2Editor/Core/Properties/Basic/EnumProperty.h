@@ -53,6 +53,7 @@ namespace Editor
 		void OnSelectedItem(const WString& name);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::EnumProperty)
 {
@@ -80,3 +81,4 @@ CLASS_METHODS_META(Editor::EnumProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectedItem, const WString&);
 }
 END_META;
+// --- END META ---

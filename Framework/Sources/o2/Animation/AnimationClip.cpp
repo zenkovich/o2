@@ -169,5 +169,7 @@ namespace o2
 		onChanged();
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AnimationClip);
+// --- END META ---

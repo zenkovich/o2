@@ -526,5 +526,7 @@ namespace Editor
 		proxy->SetValuePtr(data);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::VectorProperty);
+// --- END META ---

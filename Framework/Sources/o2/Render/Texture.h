@@ -29,7 +29,7 @@ namespace o2
 	// -------
 	// Texture
 	// -------
-	class Texture: public TextureBase
+	class Texture : public TextureBase
 	{
 	public:
 		// Texture usage
@@ -38,19 +38,21 @@ namespace o2
 		// Texture filter
 		enum class Filter { Linear, Nearest };
 
+		static const Map<TextureFormat, String> formatFileExtensions; // Texture format file extensions
+
 	public:
 		PROPERTIES(Texture);
-		GETTER(Vec2I,  size, GetSize);          // Size of texture getter
-		GETTER(PixelFormat, format, GetFormat); // texture format getter
-		GETTER(Usage,  usage, GetUsage);        // Texture usage getter
-		GETTER(String, fileName, GetFileName);  // Texture file name getter
+		GETTER(Vec2I, size, GetSize);            // Size of texture getter
+		GETTER(TextureFormat, format, GetFormat); // texture format getter
+		GETTER(Usage, usage, GetUsage);          // Texture usage getter
+		GETTER(String, fileName, GetFileName);    // Texture file name getter
 
 	public:
 		// Default constructor
 		Texture();
 
 		// Constructor
-		Texture(const Vec2I& size, PixelFormat format = PixelFormat::R8G8B8A8, Usage usage = Usage::Default);
+		Texture(const Vec2I& size, TextureFormat format = TextureFormat::R8G8B8A8, Usage usage = Usage::Default);
 
 		// Constructor from file
 		Texture(const String& fileName);
@@ -68,7 +70,10 @@ namespace o2
 		~Texture();
 
 		// Creates texture with size, format and usage
-		void Create(const Vec2I& size, PixelFormat format = PixelFormat::R8G8B8A8, Usage usage = Usage::Default);
+		void Create(const Vec2I& size, TextureFormat format = TextureFormat::R8G8B8A8, Usage usage = Usage::Default);
+
+		// Creates texture with size, data, and format
+		void Create(const Vec2I& size, Byte* data, TextureFormat format = TextureFormat::R8G8B8A8);
 
 		// Creates texture from file
 		void Create(const String& fileName);
@@ -101,7 +106,7 @@ namespace o2
 		Vec2I GetSize() const;
 
 		// Returns format
-		PixelFormat GetFormat() const;
+		TextureFormat GetFormat() const;
 
 		// returns texture usage
 		Usage GetUsage() const;
@@ -128,22 +133,31 @@ namespace o2
 		int GetAtlasPage() const;
 
 	protected:
-		Vec2I       mSize;                    // Size of texture
-		Filter      mFilter = Filter::Linear; // Min/Mag filter
-		PixelFormat mFormat;                  // Texture format
-		Usage       mUsage;                   // Texture usage
-		String      mFileName;                // Source file name
-		UID         mAtlasAssetId;            // Atlas asset id. Equals 0 if it isn't atlas texture
-		int         mAtlasPage;               // Atlas page
-		bool        mReady;                   // Is texture ready to use
+		Vec2I         mSize;                    // Size of texture
+		Filter        mFilter = Filter::Linear; // Min/Mag filter
+		TextureFormat mFormat;                  // Texture format
+		Usage         mUsage;                   // Texture usage
+		String        mFileName;                // Source file name
+		UID           mAtlasAssetId;            // Atlas asset id. Equals 0 if it isn't atlas texture
+		int           mAtlasPage;               // Atlas page
+		bool          mReady;                   // Is texture ready to use
 
 		int mRefs = 0; // Texture references
+
+	protected:
+		// Loads texture from PNG file 
+		void LoadPNG(const String& fileName);
+
+		// Loads texture from DDS file
+		void LoadDDS(const String& fileName);
 
 		friend class Render;
 		friend class TextureRef;
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::Texture::Usage);
 
 PRE_ENUM_META(o2::Texture::Filter);
+// --- END META ---

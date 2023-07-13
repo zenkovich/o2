@@ -336,6 +336,7 @@ namespace Editor
                                   Vector<Basis> basises = Vector<Basis>());
     };
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::FrameTool)
 {
@@ -467,3 +468,4 @@ CLASS_METHODS_META(Editor::FrameTool)
 	FUNCTION().PROTECTED().SIGNATURE(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&, Vector<Basis>);
 }
 END_META;
+// --- END META ---

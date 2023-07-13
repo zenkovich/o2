@@ -78,8 +78,53 @@ namespace o2
 		SERIALIZABLE(ComponentRef);
 
 	protected:
+		// ------------------------------
+		// Reference resolve request data
+		// ------------------------------
+		struct IRequiredResolveData
+		{
+			SceneUID componentUID;
+
+			// Request resolve reference
+			virtual void RequireResolve(ComponentRef& ref) = 0;
+
+			// Clone data
+			virtual IRequiredResolveData* Clone() const = 0;
+		};
+
+		// -------------------------------------------------
+		// Reference resolve request data by actor scene uid
+		// -------------------------------------------------
+		struct SceneRequireResolveData : public IRequiredResolveData
+		{
+			SceneUID uid;
+
+			// Request resolve reference
+			void RequireResolve(ComponentRef& ref) override;
+
+			// Clone data
+			IRequiredResolveData* Clone() const override;
+		};
+
+		// -------------------------------------------
+		// Reference resolve request data by asset uid
+		// -------------------------------------------
+		struct AssetRequireResolveData : public IRequiredResolveData
+		{
+			UID uid;
+
+			// Request resolve reference
+			void RequireResolve(ComponentRef& ref) override;
+
+			// Clone data
+			IRequiredResolveData* Clone() const override;
+		};
+
 		Component* mComponent = nullptr;
 		bool       mWasDeleted = false;
+
+		IRequiredResolveData* mRequiredResolveData = nullptr; // Reference resolve request data. Used for resolving reference after deserialization.
+		                                                      // Not null only when reference is required to resolve. Copies in reference copying.
 
 	protected:
 		// Updates specialized component pointer
@@ -191,6 +236,7 @@ namespace o2
 		void UpdateSpecComponent() override { mSpecComponent = dynamic_cast<T*>(mComponent); };
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::ComponentRef)
 {
@@ -201,6 +247,7 @@ CLASS_FIELDS_META(o2::ComponentRef)
 {
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponent);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mWasDeleted);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRequiredResolveData);
 }
 END_META;
 CLASS_METHODS_META(o2::ComponentRef)
@@ -224,3 +271,4 @@ CLASS_METHODS_META(o2::ComponentRef)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
+// --- END META ---

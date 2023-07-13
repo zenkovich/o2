@@ -307,7 +307,9 @@ namespace o2
 		state->mOwner->RegTrack<float>(this, path, state);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AnimationTrack<float>);
 
 DECLARE_CLASS(o2::AnimationTrack<float>::Player);
+// --- END META ---

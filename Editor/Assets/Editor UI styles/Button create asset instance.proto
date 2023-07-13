@@ -4,7 +4,7 @@
         "Value": {
             "mName": "create asset instance",
             "mTransparency": 0.0,
-            "Id": 2315734751632059248,
+            "Id": 17935871670803058443,
             "Transform": {
                 "minSize": {
                     "x": 5.0,
@@ -50,7 +50,7 @@
                                 }
                             }
                         },
-                        "mUID": 7644863467634120795
+                        "mUID": 7413440127613020596
                     }
                 },
                 {
@@ -90,7 +90,7 @@
                                 }
                             }
                         },
-                        "mUID": 13492086403641873205,
+                        "mUID": 11657065622309689359,
                         "mTransparency": 0.0,
                         "mDepth": 1.0
                     }
@@ -132,7 +132,7 @@
                                 }
                             }
                         },
-                        "mUID": 14413806324498966022,
+                        "mUID": 18174408135792161507,
                         "mTransparency": 0.0,
                         "mDepth": 2.0
                     }
@@ -157,12 +157,12 @@
                                                     "curve": {
                                                         "mKeys": [
                                                             {
-                                                                "uid": 6775229305299030147,
+                                                                "uid": 10320536608021394648,
                                                                 "rightSupportPosition": 0.04000000283122063,
                                                                 "supportsType": "Broken"
                                                             },
                                                             {
-                                                                "uid": 13740386755451971821,
+                                                                "uid": 17221731087014786081,
                                                                 "value": 1.0,
                                                                 "position": 0.10000000149011612,
                                                                 "leftSupportPosition": -0.10000000149011612,
@@ -180,7 +180,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "0eca42e849ce2a880b9b026413f8347c"
+                                    "mId": "3c107f2a55a22c9d465359407a0c7b89"
                                 }
                             }
                         }
@@ -204,12 +204,12 @@
                                                     "curve": {
                                                         "mKeys": [
                                                             {
-                                                                "uid": 16459424453898062802,
+                                                                "uid": 13287986739791142610,
                                                                 "rightSupportPosition": 0.020000001415610315,
                                                                 "supportsType": "Broken"
                                                             },
                                                             {
-                                                                "uid": 4475242656892625580,
+                                                                "uid": 8928934539568673577,
                                                                 "value": 1.0,
                                                                 "position": 0.05000000074505806,
                                                                 "leftSupportPosition": -0.05000000074505806,
@@ -227,7 +227,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "40a255ce7f44565b1c7e40390db273b4"
+                                    "mId": "31f200fc09d84ded49b0113575a674b8"
                                 }
                             }
                         }
@@ -250,12 +250,12 @@
                                                     "curve": {
                                                         "mKeys": [
                                                             {
-                                                                "uid": 2390642253603264713,
+                                                                "uid": 11788043104245469889,
                                                                 "rightSupportPosition": 0.020000001415610315,
                                                                 "supportsType": "Broken"
                                                             },
                                                             {
-                                                                "uid": 4151769572144609432,
+                                                                "uid": 16374010171514560559,
                                                                 "value": 1.0,
                                                                 "position": 0.05000000074505806,
                                                                 "leftSupportPosition": -0.05000000074505806,
@@ -273,7 +273,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "6c4f545e03d81e3f311166c341402e6b"
+                                    "mId": "02b12d8a16f70d734d6063bf553f3cc2"
                                 }
                             }
                         }

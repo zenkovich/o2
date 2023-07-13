@@ -145,6 +145,7 @@ namespace o2
 		void OnDeserialized(const DataValue& node) override;
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::Label::HorOverflow);
 
@@ -212,3 +213,4 @@ CLASS_METHODS_META(o2::Label)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
+// --- END META ---

@@ -232,7 +232,7 @@ namespace o2
 		newAgent->tracks.Add({ state, player });
 
 		const FieldInfo* fieldInfo = nullptr;
-		auto fieldPtr = (_type*)GetType().GetFieldPtr(mOwner, path, fieldInfo);
+		auto fieldPtr = mOwner->GetType().GetFieldPtr(mOwner, path, fieldInfo);
 
 		if (!fieldInfo)
 		{
@@ -296,6 +296,7 @@ namespace o2
 		state->mOwner->RegTrack<_type>(this, path, state);
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AnimationComponent)
 {
@@ -346,3 +347,4 @@ CLASS_METHODS_META(o2::AnimationComponent)
 	FUNCTION().PROTECTED().SIGNATURE(void, ReattachAnimationStates);
 }
 END_META;
+// --- END META ---

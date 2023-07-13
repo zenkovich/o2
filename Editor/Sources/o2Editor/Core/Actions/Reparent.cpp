@@ -3,7 +3,7 @@
 
 #include "o2/Scene/Actor.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 
 namespace Editor
@@ -89,7 +89,7 @@ namespace Editor
 			}
 		}
 
-		o2EditorTree.GetSceneTree()->UpdateNodesView();
+		o2EditorTree.UpdateTreeView();
 	}
 
 	void ReparentAction::Undo()
@@ -116,8 +116,10 @@ namespace Editor
 			}
 		}
 
-		o2EditorTree.GetSceneTree()->UpdateNodesView();
+		o2EditorTree.UpdateTreeView();
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::ReparentAction);
+// --- END META ---

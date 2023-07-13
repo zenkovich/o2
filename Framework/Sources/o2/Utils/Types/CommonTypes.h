@@ -13,6 +13,8 @@ namespace o2
 	typedef unsigned int  UInt;
 	typedef unsigned long ULong;
 
+	typedef unsigned int VertexIndex;
+
 	typedef int KeyboardKey;
 	typedef int CursorId;
 	
@@ -44,7 +46,7 @@ namespace o2
 
 	enum class ProtectSection { Public, Private, Protected };
 	
-	enum class Platform { Windows, Mac, iOS, Android };
+	enum class Platform { Windows, Mac, Linux, iOS, Android };
 	
 	enum class DeviceType { PC, Tablet, Phone };
 
@@ -54,10 +56,13 @@ namespace o2
 
 	enum class PixelFormat { R8G8B8A8, R8G8B8 };
 
+	enum class TextureFormat { R8G8B8A8, DXT5 };
+
 	enum class Loop { None, Repeat, PingPong };
 
 	enum class Units { Pixels, Centimeters, Millimeters, Inches };
 }
+// --- META ---
 
 PRE_ENUM_META(o2::BaseCorner);
 
@@ -87,6 +92,9 @@ PRE_ENUM_META(o2::PrimitiveType);
 
 PRE_ENUM_META(o2::PixelFormat);
 
+PRE_ENUM_META(o2::TextureFormat);
+
 PRE_ENUM_META(o2::Loop);
 
 PRE_ENUM_META(o2::Units);
+// --- END META ---

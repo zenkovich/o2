@@ -14,6 +14,7 @@
 #include "o2/Scene/UI/Widgets/VerticalProgress.h"
 #include "o2/Scene/UI/Widgets/Window.h"
 #include "o2Editor/Core/UIRoot.h"
+#include "o2Editor/Utils/CommonTextures.h"
 
 DECLARE_SINGLETON(Editor::ColorPickerDlg);
 
@@ -69,21 +70,14 @@ namespace Editor
 		Widget* colorPreview = o2UI.CreateWidget<Widget>("colorProperty");
 		*colorPreview->layout = WidgetLayout::BothStretch(5, 5, 5, 5);
 
-		Color4 color1(1.0f, 1.0f, 1.0f, 1.0f), color2(0.7f, 0.7f, 0.7f, 1.0f);
-		Bitmap backLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
-		backLayerBitmap.Fill(color1);
-		backLayerBitmap.FillRect(0, 10, 10, 00, color2);
-		backLayerBitmap.FillRect(10, 20, 20, 10, color2);
-		mChessBackTexture = TextureRef(&backLayerBitmap);
-
 		Image* backImage = mnew Image();
-		backImage->image = mnew Sprite(mChessBackTexture, RectI(0, 0, 20, 20));
+		backImage->image = mnew Sprite(CommonTextures::checkedBackground, RectI(0, 0, 20, 20));
 		backImage->GetImage()->mode = SpriteMode::Tiled;
 		*backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 		colorPreview->AddChild(backImage);
 
 		Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
-		colorLayerBitmap.Fill(color1);
+		colorLayerBitmap.Fill(Color4::White());
 		mColorSampleImage = mnew Image();
 		mColorSampleImage->image = mnew Sprite(&colorLayerBitmap);
 		*mColorSampleImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
@@ -495,6 +489,7 @@ void ColorPickerDlg::OnCursorPressedOutside()
 	mWindow->Hide();
 }
 }
+// --- META ---
 
 ENUM_META(Editor::ColorPickerDlg::ColorType)
 {
@@ -502,3 +497,4 @@ ENUM_META(Editor::ColorPickerDlg::ColorType)
 	ENUM_ENTRY(RGB);
 }
 END_ENUM_META;
+// --- END META ---

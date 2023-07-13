@@ -49,5 +49,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AnimationViewer);
+// --- END META ---

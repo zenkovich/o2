@@ -14,14 +14,13 @@ namespace o2
 
 	Actor::Actor(ActorTransform* transform, State sceneStatus /*= SceneStatus::WaitingAddToScene*/,
 				 const String& name /*= "unnamed"*/, bool enabled /*= true*/, bool resEnabled /*= true*/,
-				 bool locked /*= false*/, bool resLocked /*= false*/, const String& layerName /*= ""*/,
-				 SceneLayer* layer /*= nullptr*/, SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/):
+				 const String& layerName /*= ""*/, SceneLayer* layer /*= nullptr*/, SceneUID id /*= Math::Random()*/, 
+				 UID assetId /*= UID(0)*/) :
 		transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(resEnabled),
-		mLocked(locked), mResLocked(resLocked), mLayerName(layerName), mLayer(layer), mId(id), mAssetId(assetId),
-		mState(sceneStatus)
+		mLayerName(layerName), mLayer(layer), mId(id), mAssetId(assetId), mState(sceneStatus)
 	{}
 
-	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/):
+	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(transform, IsModeOnScene(mode) ? State::WaitingAddToScene : State::NotInScene)
 	{
 		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
@@ -43,9 +42,9 @@ namespace o2
 		ActorRefResolver::ActorCreated(this);
 	}
 
-	Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/):
+	Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(transform, IsModeOnScene(mode) ? State::WaitingAddToScene : State::NotInScene,
-			  other.mName, other.mEnabled, other.mEnabled, other.mLocked, other.mLocked, other.mLayerName, other.mLayer,
+			  other.mName, other.mEnabled, other.mEnabled, other.mLayerName, other.mLayer,
 			  Math::Random(), other.mAssetId)
 	{
 		transform->SetOwner(this);
@@ -76,12 +75,14 @@ namespace o2
 		{
 			mPrototype = other.mPrototype;
 
+#if IS_EDITOR
 			ActorAssetRef proto = other.mPrototype;
 			while (proto)
 			{
 				o2Scene.OnActorLinkedToPrototype(proto, this);
 				proto = proto->GetActor()->GetPrototype();
 			}
+#endif
 		}
 
 		for (auto child : other.mChildren)
@@ -126,7 +127,7 @@ namespace o2
 		}
 	}
 
-	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
+	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(transform, *prototype->GetActor(), mode)
 	{}
 
@@ -139,7 +140,7 @@ namespace o2
 		OnTransformUpdated();
 	}
 
-	Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/):
+	Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/) :
 		Actor(mnew ActorTransform(), mode)
 	{}
 
@@ -225,12 +226,14 @@ namespace o2
 		{
 			mPrototype = other.mPrototype;
 
+#if IS_EDITOR
 			ActorAssetRef proto = other.mPrototype;
 			while (proto)
 			{
 				o2Scene.OnActorLinkedToPrototype(proto, this);
 				proto = proto->GetActor()->GetPrototype();
 			}
+#endif
 		}
 
 		for (auto child : other.mChildren)
@@ -278,7 +281,10 @@ namespace o2
 		}
 
 		UpdateResEnabledInHierarchy();
+
+#if IS_EDITOR
 		OnChanged();
+#endif
 
 		return *this;
 	}
@@ -345,7 +351,10 @@ namespace o2
 	void Actor::SetName(const String& name)
 	{
 		mName = name;
+
+#if IS_EDITOR
 		OnNameChanged();
+#endif
 	}
 
 	const String& Actor::GetName() const
@@ -442,15 +451,14 @@ namespace o2
 		mEnabled = enabled;
 		UpdateResEnabled();
 
+#if IS_EDITOR
 		onEnableChanged(mEnabled);
 
-		if constexpr (IS_EDITOR)
-		{
-			if (IsOnScene())
-				o2Scene.onEnableChanged(this);
-		}
+		if (IsOnScene())
+			o2Scene.onEnableChanged(this);
 
 		OnChanged();
+#endif
 	}
 
 	void Actor::Enable()
@@ -651,6 +659,14 @@ namespace o2
 		return mChildren;
 	}
 
+	void Actor::GetAllChildrenActors(Vector<Actor*>& actors)
+	{
+		actors.Add(mChildren);
+
+		for (auto child : mChildren)
+			child->GetAllChildrenActors(actors);
+	}
+
 	void Actor::RemoveChild(Actor* actor, bool release /*= true*/)
 	{
 		auto oldParent = actor->mParent;
@@ -708,7 +724,10 @@ namespace o2
 		mComponents.Add(component);
 
 		OnComponentAdded(component);
+
+#if IS_EDITOR
 		OnChanged();
+#endif
 
 		return component;
 	}
@@ -723,7 +742,9 @@ namespace o2
 		if (release)
 			delete component;
 
+#if IS_EDITOR
 		OnChanged();
+#endif
 	}
 
 	void Actor::RemoveAllComponents()
@@ -737,7 +758,9 @@ namespace o2
 			delete component;
 		}
 
+#if IS_EDITOR
 		OnChanged();
+#endif
 	}
 
 	Component* Actor::GetComponent(const String& typeName)
@@ -817,17 +840,22 @@ namespace o2
 
 		auto oldLayer = mLayer;
 
-		OnRemoveFromScene();
+        if (mState == State::InScene)
+		    OnRemoveFromScene();
 
 		mLayerName = layerName;
 
 		if (Scene::IsSingletonInitialzed())
 			mLayer = o2Scene.GetLayer(mLayerName);
 
-		OnAddToScene();
+        if (mState == State::InScene)
+            OnAddToScene();
 
 		OnLayerChanged(oldLayer);
+
+#if IS_EDITOR
 		OnChanged();
+#endif
 	}
 
 	SceneLayer* Actor::GetLayer() const
@@ -861,8 +889,10 @@ namespace o2
 		return mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode != ActorCreateMode::NotInScene);
 	}
 
+#if IS_EDITOR
 	void Actor::SetProtytypeDummy(ActorAssetRef asset)
 	{}
+#endif
 
 	void Actor::OnTransformUpdated()
 	{
@@ -939,7 +969,7 @@ namespace o2
 		for (auto comp : mComponents)
 			comp->OnChildRemoved(child);
 	}
-	
+
 	void Actor::OnChildrenRearranged()
 	{
 		for (auto comp : mComponents)
@@ -995,14 +1025,14 @@ namespace o2
 					mLayer->OnActorDisabled(this);
 			}
 
-			if constexpr (IS_EDITOR)
-			{
-				if (IsOnScene())
-					o2Scene.onEnableChanged(this);
-			}
-
 			OnEnableInHierarchyChanged();
+
+#if IS_EDITOR
+			if (IsOnScene())
+				o2Scene.onEnableChanged(this);
+
 			OnChanged();
+#endif
 		}
 
 		for (auto comp : mComponents)
@@ -1085,9 +1115,9 @@ namespace o2
 					Component* component = (Component*)o2Reflection.CreateTypeSample(componentType);
 					if (component)
 					{
-                        component->Deserialize(componentNode.GetMember("Data"));
-                        AddComponent(component);
-                    }
+						component->Deserialize(componentNode.GetMember("Data"));
+						AddComponent(component);
+					}
 					else
 						o2Debug.LogError("Can't create component by type %s", componentType.Data());
 
@@ -1123,7 +1153,9 @@ namespace o2
 		ActorRefResolver::Instance().UnlockResolving();
 		ActorRefResolver::Instance().ResolveRefs();
 
-		SetLayer(layerName);
+		auto layer = mLayerName;
+		mLayerName.Clear();
+		SetLayer(layer);
 	}
 
 	void Actor::SerializeWithProto(DataValue& node) const
@@ -1265,9 +1297,11 @@ namespace o2
 					if (type)
 					{
 						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-						AddChild(child);
+						child->mParent = this;
 						child->mCopyVisitor = mCopyVisitor;
 						child->Deserialize(*dataValue);
+						child->mParent = nullptr;
+						AddChild(child);
 					}
 				}
 			}
@@ -1282,40 +1316,38 @@ namespace o2
 				String type = componentNode["Type"];
 				Component* newComponent = (Component*)o2Reflection.CreateTypeSample(type);
 				if (!newComponent)
-					continue;
-
-				mComponents.Add(newComponent);
-				newComponent->mOwner = this;
-
-				if (newComponent)
 				{
-					auto& componentDataValue = componentNode["Data"];
+					o2Debug.LogError("Can't create component with type:" + type);
+					continue;
+				}
 
-					if (auto prototypeLinkNode = componentDataValue.FindMember("PrototypeLink"))
+				auto& componentDataValue = componentNode["Data"];
+
+				if (auto prototypeLinkNode = componentDataValue.FindMember("PrototypeLink"))
+				{
+					SceneUID id = *prototypeLinkNode;
+					if (mPrototypeLink)
 					{
-						SceneUID id = *prototypeLinkNode;
-						if (mPrototypeLink)
+						for (auto protoLinkComponent : mPrototypeLink->mComponents)
 						{
-							for (auto protoLinkComponent : mPrototypeLink->mComponents)
+							if (protoLinkComponent->mId == id)
 							{
-								if (protoLinkComponent->mId == id)
-								{
-									newComponent->mPrototypeLink = protoLinkComponent;
-									break;
-								}
+								newComponent->mPrototypeLink = protoLinkComponent;
+								break;
 							}
 						}
 					}
-
-					if (!newComponent->mPrototypeLink)
-						newComponent->Deserialize(componentDataValue);
-					else
-					{
-						componentDataValue.GetDelta(*newComponent, *newComponent->mPrototypeLink);
-						mCopyVisitor->OnCopyComponent(newComponent->mPrototypeLink, newComponent);
-					}
 				}
-				else o2Debug.LogError("Can't create component with type:" + type);
+
+				if (!newComponent->mPrototypeLink)
+					newComponent->Deserialize(componentDataValue);
+				else
+				{
+					componentDataValue.GetDelta(*newComponent, *newComponent->mPrototypeLink);
+					mCopyVisitor->OnCopyComponent(newComponent->mPrototypeLink, newComponent);
+				}
+
+				AddComponent(newComponent);
 			}
 		}
 
@@ -1355,14 +1387,18 @@ namespace o2
 
 	void Actor::SetPrototype(ActorAssetRef asset)
 	{
+#if IS_EDITOR
 		if (Scene::IsSingletonInitialzed())
 			o2Scene.OnActorPrototypeBroken(this);
+#endif
 
 		auto linkAsset = asset;
 		while (linkAsset)
 		{
+#if IS_EDITOR
 			if (Scene::IsSingletonInitialzed())
 				o2Scene.OnActorLinkedToPrototype(linkAsset, this);
+#endif
 
 			linkAsset = linkAsset->GetActor()->GetPrototype();
 		}
@@ -1441,7 +1477,7 @@ namespace o2
 
 				auto fields = field->GetType()->GetFieldsWithBaseClasses();
 				CopyFields(fields, (IObject*)field->GetValuePtr(source),
-					(IObject*)field->GetValuePtr(dest),
+						   (IObject*)field->GetValuePtr(dest),
 						   actorsPointers, componentsPointers, serializableObjects);
 			}
 			else field->CopyValue(dest, source);
@@ -1507,7 +1543,7 @@ namespace o2
 				*componentPtr = newComponentPtr;
 		}
 	}
-	
+
 #if IS_SCRIPTING_SUPPORTED
 	ActorTransform* Actor::GetTransform()
 	{
@@ -1554,12 +1590,6 @@ namespace o2
 
 #if !IS_EDITOR
 
-	void Actor::OnChanged() {}
-
-	void Actor::OnLockChanged() {}
-
-	void Actor::OnNameChanged() {}
-
 	void Actor::OnChildrenChanged() {}
 
 	void Actor::OnParentChanged(Actor* oldParent)
@@ -1570,6 +1600,7 @@ namespace o2
 
 #endif // !IS_EDITOR
 }
+// --- META ---
 
 ENUM_META(o2::Actor::State)
 {
@@ -1581,3 +1612,4 @@ ENUM_META(o2::Actor::State)
 END_ENUM_META;
 
 DECLARE_CLASS(o2::Actor);
+// --- END META ---

@@ -217,6 +217,7 @@ namespace Editor
 		friend class KeyFramesTrackControl;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::KeyHandlesSheet)
 {
@@ -306,3 +307,4 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorMiddleMouseReleased, const Input::Cursor&);
 }
 END_META;
+// --- END META ---

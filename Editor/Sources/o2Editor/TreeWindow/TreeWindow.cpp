@@ -29,7 +29,8 @@
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/DrawOrderTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 
 DECLARE_SINGLETON(Editor::TreeWindow);
 
@@ -49,14 +50,52 @@ namespace Editor
 	TreeWindow::~TreeWindow()
 	{}
 
-	SceneTree* TreeWindow::GetSceneTree() const
+	SceneHierarchyTree* TreeWindow::GetSceneTree() const
 	{
 		return mSceneTree;
 	}
 
+	DrawOrderTree* TreeWindow::GetDrawOrderTree() const
+	{
+		return mDrawOrderTree;
+	}
+
+	void TreeWindow::FocusTree()
+	{
+		if (mSceneTree->IsEnabled())
+			mSceneTree->Focus();
+		else
+			mDrawOrderTree->Focus();
+	}
+
+	bool TreeWindow::IsTreeFocused() const
+	{
+		return mSceneTree->IsFocused() || mDrawOrderTree->IsFocused();
+	}
+
+	void TreeWindow::SetSelectedObjects(const Vector<SceneEditableObject*>& objects)
+	{
+		if (mSceneTree->IsEnabled())
+			mSceneTree->SetSelectedObjects(objects);
+		else
+			mDrawOrderTree->SetSelectedObjects(objects);
+	}
+
+	void TreeWindow::UpdateTreeView()
+	{
+		if (mSceneTree->IsEnabled())
+			mSceneTree->UpdateNodesView();
+
+		if (mDrawOrderTree->IsEnabled())
+			mDrawOrderTree->UpdateNodesView();
+	}
+
 	void TreeWindow::HighlightObjectTreeNode(SceneEditableObject* targetObject)
 	{
-		mSceneTree->ScrollToAndHighlight(targetObject);
+		if (mSceneTree->IsEnabled())
+			mSceneTree->ScrollToAndHighlight(targetObject);
+		else
+			mDrawOrderTree->ScrollToAndHighlight(targetObject);
 	}
 
 	void TreeWindow::SetWidgetsLayersVisible(bool visible)
@@ -91,25 +130,39 @@ namespace Editor
 
 		InitializeTopPanel();
 		InitializeSceneTree();
+		InitializeDrawOrderTree();
 		InitializeContextMenu();
 		InitializeTestScene();
+
+		mSceneTree->SetEnabled(true);
+		mDrawOrderTree->SetEnabled(false);
 
 		mSceneTree->UpdateNodesView();
 	}
 
 	void TreeWindow::InitializeTestScene()
 	{
-		o2EditorApplication.LoadScene(GetBuiltAssetsPath() + String("test.scn"));
+		o2EditorApplication.LoadScene(SceneAssetRef("test.scn"));
 	}
 
 	void TreeWindow::InitializeSceneTree()
 	{
-		mSceneTree = o2UI.CreateWidget<SceneTree>("standard");
+		mSceneTree = o2UI.CreateWidget<SceneHierarchyTree>("standard");
 		*mSceneTree->layout = WidgetLayout::BothStretch(2, 0, 0, 18);
 
 		mSceneTree->onNodeRightButtonClicked = THIS_FUNC(OnTreeRBPressed);
 
 		mWindow->AddChild(mSceneTree);
+	}
+
+	void TreeWindow::InitializeDrawOrderTree()
+	{
+		mDrawOrderTree = o2UI.CreateWidget<DrawOrderTree>("standard");
+		*mDrawOrderTree->layout = WidgetLayout::BothStretch(2, 0, 0, 18);
+
+		mDrawOrderTree->onNodeRightButtonClicked = THIS_FUNC(OnTreeRBPressed);
+
+		mWindow->AddChild(mDrawOrderTree);
 	}
 
 	void TreeWindow::InitializeContextMenu()
@@ -269,7 +322,13 @@ namespace Editor
 	{}
 
 	void TreeWindow::OnListTreeToggled(bool value)
-	{}
+	{
+		mSceneTree->SetEnabled(!value);
+		mDrawOrderTree->SetEnabled(value);
+
+		mDrawOrderTree->RebuildOrderTree();
+		mDrawOrderTree->UpdateNodesView();
+	}
 
 	void TreeWindow::OnSearchEdited(const WString& searchStr)
 	{
@@ -454,14 +513,17 @@ namespace Editor
 
 		auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
 
+		Vector<SceneEditableObject*> newObjects;
+
 		for (auto object : selectedObjects)
 		{
 			SceneEditableObject* copy = object->CloneAs<SceneEditableObject>();
 			copy->SetEditableParent(object->GetEditableParent());
+			newObjects.Add(copy);
 		}
 
 		mSceneTree->UpdateNodesView();
-		mSceneTree->SetSelectedObjects(selectedObjects);
+		mSceneTree->SetSelectedObjects(newObjects);
 	}
 
 	void TreeWindow::OnContextExpandAllPressed()
@@ -572,5 +634,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::TreeWindow);
+// --- END META ---

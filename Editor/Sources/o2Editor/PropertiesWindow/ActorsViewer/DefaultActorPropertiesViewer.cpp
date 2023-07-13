@@ -112,5 +112,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::DefaultActorPropertiesViewer);
+// --- END META ---

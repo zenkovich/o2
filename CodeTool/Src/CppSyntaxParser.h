@@ -4,11 +4,11 @@
 
 bool EndsWith(const string& str, const string& ends);
 bool StartsWith(const string& str, const string& starts);
-string Trim(const string &str, const string& chars = " ");
-string TrimEnd(const string &str, const string& chars = " ");
-string TrimStart(const string &str, const string& chars = " ");
-void Split(const string &s, char delim, vector<string> &elems);
-vector<string> Split(const string &s, char delim);
+string& Trim(string& str, const string& chars = " ");
+string& TrimEnd(string& str, const string& chars = " ");
+string& TrimStart(string& str, const string& chars = " ");
+void Split(const string& s, char delim, vector<string>& elems);
+vector<string> Split(const string& s, char delim);
 
 class CppSyntaxParser
 {
@@ -19,11 +19,11 @@ public:
 	void ParseFile(SyntaxFile& file, const string& filePath, const TimeStamp& fileEditDate);
 
 protected:
-	typedef void(CppSyntaxParser::*ParserDelegate)(SyntaxSection&, int&, SyntaxProtectionSection&);
+	typedef void(CppSyntaxParser::* ParserDelegate)(SyntaxSection&, int&, SyntaxProtectionSection&);
 
 	struct ExpressionParser
 	{
-		const char*    keyWord = nullptr;
+		const char* keyWord = nullptr;
 		bool           isPossibleInClass = true;
 		bool           isPossibleInNamespace = true;
 		ParserDelegate parser;
@@ -37,6 +37,8 @@ protected:
 protected:
 	string      mSourcesPath;
 	ParsersVec  mParsers;
+
+	SyntaxDefineIf* mCurrentDefine = nullptr;
 
 protected:
 	void InitializeParsers();

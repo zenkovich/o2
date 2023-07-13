@@ -49,6 +49,7 @@ namespace o2
 		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::ParticlesEmitterComponent)
 {
@@ -77,3 +78,4 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;
+// --- END META ---

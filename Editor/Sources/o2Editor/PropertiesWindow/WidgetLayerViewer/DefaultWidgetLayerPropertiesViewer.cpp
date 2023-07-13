@@ -73,5 +73,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::DefaultWidgetLayerPropertiesViewer);
+// --- END META ---

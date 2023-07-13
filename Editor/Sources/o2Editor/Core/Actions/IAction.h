@@ -27,6 +27,7 @@ namespace Editor
 		SERIALIZABLE(IAction);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::IAction)
 {
@@ -45,3 +46,4 @@ CLASS_METHODS_META(Editor::IAction)
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
+// --- END META ---

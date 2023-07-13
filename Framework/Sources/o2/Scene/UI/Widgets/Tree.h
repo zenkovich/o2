@@ -396,7 +396,7 @@ namespace o2
 		// Updates visible nodes (calculates range and initializes nodes)
 		virtual void UpdateVisibleNodes();
 
-		// Createw UITreeNode for visible node at position i
+		// Creates UITreeNode for visible node at position i
 		void CreateVisibleNodeWidget(Node* node, int i);
 
 		// Updates node view
@@ -581,6 +581,7 @@ namespace o2
 		friend class Tree;
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::Tree::RearrangeType);
 
@@ -809,3 +810,4 @@ CLASS_METHODS_META(o2::TreeNode)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeselected);
 }
 END_META;
+// --- END META ---

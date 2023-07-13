@@ -506,5 +506,7 @@ namespace Editor
 		return values == other.values;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::FunctionProperty);
+// --- END META ---

@@ -46,6 +46,7 @@ namespace o2
 
 	typedef Ref<FontAsset> FontAssetRef;
 }
+// --- META ---
 
 CLASS_BASES_META(o2::FontAsset)
 {
@@ -68,3 +69,4 @@ CLASS_METHODS_META(o2::FontAsset)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
 }
 END_META;
+// --- END META ---

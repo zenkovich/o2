@@ -749,6 +749,9 @@ namespace o2
 	{
 		String data = SaveAsString(format);
 
+		if (!o2FileSystem.IsFolderExist(o2FileSystem.GetParentPath(fileName)))
+			o2FileSystem.FolderCreate(o2FileSystem.GetParentPath(fileName));
+
 		OutFile file(fileName);
 		if (!file.IsOpened())
 			return false;
@@ -807,6 +810,7 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 ENUM_META(o2::DataValue::Flags)
 {
@@ -821,3 +825,4 @@ ENUM_META(o2::DataDocument::Format)
 	ENUM_ENTRY(Xml);
 }
 END_ENUM_META;
+// --- END META ---

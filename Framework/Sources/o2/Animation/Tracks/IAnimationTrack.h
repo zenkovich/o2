@@ -100,6 +100,7 @@ namespace o2
 		friend class AnimationClip;
 	};
 };
+// --- META ---
 
 CLASS_BASES_META(o2::IAnimationTrack)
 {
@@ -152,3 +153,4 @@ CLASS_METHODS_META(o2::IAnimationTrack::IPlayer)
 	FUNCTION().PUBLIC().SIGNATURE(const AnimationPlayer*, GetOwnerPlayer);
 }
 END_META;
+// --- END META ---

@@ -134,6 +134,7 @@ namespace Editor
 		};
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::BorderIProperty)
 {
@@ -172,3 +173,4 @@ CLASS_METHODS_META(Editor::BorderIProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;
+// --- END META ---

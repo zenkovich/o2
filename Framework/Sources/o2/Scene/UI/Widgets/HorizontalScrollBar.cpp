@@ -347,5 +347,7 @@ namespace o2
 		return "Progress";
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::HorizontalScrollBar);
+// --- END META ---

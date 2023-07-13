@@ -160,6 +160,7 @@ namespace o2
 		virtual void OnSelectionChanged();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::CustomDropDown)
 {
@@ -228,3 +229,4 @@ CLASS_METHODS_META(o2::CustomDropDown)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
 }
 END_META;
+// --- END META ---

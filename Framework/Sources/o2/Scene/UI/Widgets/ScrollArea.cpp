@@ -746,5 +746,7 @@ namespace o2
 		return "Basic";
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ScrollArea);
+// --- END META ---

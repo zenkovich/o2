@@ -18,6 +18,12 @@ namespace o2
 	ComponentRef::ComponentRef(const ComponentRef& other):
 		ComponentRef(other.mComponent)
 	{
+		if (other.mRequiredResolveData)
+		{
+			mRequiredResolveData = other.mRequiredResolveData->Clone();
+			mRequiredResolveData->RequireResolve(*this);
+		}
+
 		ActorRefResolver::RequireRemap(*this);
 	}
 
@@ -25,6 +31,11 @@ namespace o2
 	{
 		if (mComponent)
 			mComponent->mReferences.Remove(this);
+
+		if (mRequiredResolveData)
+			delete mRequiredResolveData;
+
+		ActorRefResolver::OnComponentRefDestroyed(this);
 	}
 
 	bool ComponentRef::operator!=(const ComponentRef& other) const
@@ -132,6 +143,12 @@ namespace o2
 		mComponent = other.mComponent;
 		mWasDeleted = other.mWasDeleted;
 
+		if (mRequiredResolveData)
+		{
+			delete mRequiredResolveData;
+			mRequiredResolveData = nullptr;
+		}
+
 		UpdateSpecComponent();
 
 		if (mComponent)
@@ -155,12 +172,47 @@ namespace o2
 	void ComponentRef::OnDeserialized(const DataValue& node)
 	{
 		if (auto assetIdNode = node.FindMember("AssetId"))
-			ActorRefResolver::RequireResolve(*this, (UID)*assetIdNode, (SceneUID)node.GetMember("ComponentId"));
+		{
+			auto resolveData = mnew AssetRequireResolveData();
+			resolveData->uid = (UID)*assetIdNode;
+			resolveData->componentUID = (SceneUID)node.GetMember("ComponentId");
+			resolveData->RequireResolve(*this);
+			mRequiredResolveData = resolveData;
+		}
 		else if (auto sceneIdNode = node.FindMember("ActorID"))
-			ActorRefResolver::RequireResolve(*this, (SceneUID)*sceneIdNode, (SceneUID)node.GetMember("ComponentId"));
-		else *this = nullptr;
+		{
+			auto resolveData = mnew SceneRequireResolveData();
+			resolveData->uid = (SceneUID)*sceneIdNode;
+			resolveData->componentUID = (SceneUID)node.GetMember("ComponentId");
+			resolveData->RequireResolve(*this);
+			mRequiredResolveData = resolveData;
+		}
+		else 
+			*this = nullptr;
+	}
+
+	void ComponentRef::SceneRequireResolveData::RequireResolve(ComponentRef& ref)
+	{
+		ActorRefResolver::RequireResolve(ref, uid, componentUID);
+	}
+
+	ComponentRef::IRequiredResolveData* ComponentRef::SceneRequireResolveData::Clone() const
+	{
+		return mnew SceneRequireResolveData(*this);
+	}
+
+	void ComponentRef::AssetRequireResolveData::RequireResolve(ComponentRef& ref)
+	{
+		ActorRefResolver::RequireResolve(ref, uid, componentUID);
+	}
+
+	ComponentRef::IRequiredResolveData* ComponentRef::AssetRequireResolveData::Clone() const
+	{
+		return mnew AssetRequireResolveData(*this);
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ComponentRef);
+// --- END META ---

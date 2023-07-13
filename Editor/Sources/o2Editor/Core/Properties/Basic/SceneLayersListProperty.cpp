@@ -78,5 +78,7 @@ namespace Editor
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::SceneLayersList>);
+// --- META ---
 
 DECLARE_CLASS(Editor::SceneLayersListProperty);
+// --- END META ---

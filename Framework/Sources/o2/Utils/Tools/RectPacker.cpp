@@ -139,13 +139,13 @@ namespace o2
 
 	bool RectsPacker::TryInsertRectInChilds(Rect& rt, QuadNode* node)
 	{
-		for (auto childNode : node->GetChilds())
+		for (auto childNode : node->GetChildren())
 		{
 			if (TryInsertRect(rt, childNode))
 				return true;
 		}
 
-		for (auto childNode : node->GetChilds())
+		for (auto childNode : node->GetChildren())
 		{
 			if (TryInsertRectInChilds(rt, childNode))
 				return true;

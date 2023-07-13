@@ -47,8 +47,8 @@ namespace o2
 		SkinningVertex* vertices = nullptr; // Vertex buffer
 		UInt            vertexCount = 0;    // Current vertices count
 
-		UInt16* indexes = nullptr;  // Index buffer
-		UInt    polyCount = 0;      // Current polygons in SkinnableMesh										  
+		VertexIndex* indexes = nullptr;  // Index buffer
+		UInt         polyCount = 0;      // Current polygons in SkinnableMesh										  
 
 	public:
 		// Constructor

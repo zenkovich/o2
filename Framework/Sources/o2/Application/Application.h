@@ -67,7 +67,7 @@ namespace o2
 		Function<void()> onMoving;      // On moving app window callbacks. Ignoring on mobiles/tables
 
 	public:
-		int maxFPS = 60;   // Maximum frames per second
+		int maxFPS = 600;   // Maximum frames per second
 		int fixedFPS = 60; // Fixed frames per second
 
 	public:
@@ -193,14 +193,21 @@ namespace o2
 		void Update();
 		
 #elif defined PLATFORM_IOS
-		// Initializes engine and runs it
-		virtual void Run(int argc, char * argv[]);
+        // Initializes engine and runs it
+        virtual void Run(int argc, char * argv[]);
 		
-		// Updates frame
-		void Update();
+        // Updates frame
+        void Update();
 		
-		// Launching application
-		virtual void Launch();
+        // Launching application
+        virtual void Launch();
+
+#elif defined PLATFORM_LINUX
+        // Initializes engine application
+        virtual void Initialize();
+
+        // Launching application cycle
+        virtual void Launch();
 
 #endif
 

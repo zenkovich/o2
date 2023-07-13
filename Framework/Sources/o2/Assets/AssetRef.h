@@ -21,10 +21,10 @@ namespace o2
 		AssetRef(Asset* instance);
 
 		// Constructor from asset path
-		AssetRef(const String& path);
+		explicit AssetRef(const String& path);
 
 		// Constructor from asset id
-		AssetRef(const UID& id);
+		explicit AssetRef(const UID& id);
 
 		// Destructor
 		virtual ~AssetRef();
@@ -138,10 +138,10 @@ namespace o2
 		Ref(const AssetRef& other): AssetRef(other) { UpdateSpecAsset(); }
 
 		// Constructor from asset path
-		Ref(const String& path): AssetRef(path) { UpdateSpecAsset(); }
+		explicit Ref(const String& path): AssetRef(path) { UpdateSpecAsset(); }
 
 		// Constructor from asset id
-		Ref(const UID& id): AssetRef(id) { UpdateSpecAsset(); }
+		explicit Ref(const UID& id): AssetRef(id) { UpdateSpecAsset(); }
 
 		// Boolean cast operator, true means that reference is valid
 		operator bool() const { return IsValid(); }
@@ -238,6 +238,7 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AssetRef)
 {
@@ -277,3 +278,4 @@ CLASS_METHODS_META(o2::AssetRef)
 	FUNCTION().PROTECTED().SIGNATURE_STATIC(bool, IsDeltaAsSingleObject);
 }
 END_META;
+// --- END META ---

@@ -62,6 +62,7 @@ namespace Editor
 		friend class WindowsLayout;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::IEditorWindow)
 {
@@ -90,3 +91,4 @@ CLASS_METHODS_META(Editor::IEditorWindow)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);
 }
 END_META;
+// --- END META ---

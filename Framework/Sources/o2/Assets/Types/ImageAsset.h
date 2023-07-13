@@ -57,37 +57,37 @@ namespace o2
 		// Sets atlas
 		void SetAtlas(const UID& atlas);
 
-		// Sets slice border
+		// Sets slice border @SCRIPTABLE
 		void SetSliceBorder(const BorderI& border);
 
-		// Returns slice border
+		// Returns slice border @SCRIPTABLE
 		BorderI GetSliceBorder() const;
 
-		// Sets default sprite mode
+		// Sets default sprite mode @SCRIPTABLE
 		void SetDefaultMode(SpriteMode mode);
 
-		// Returns default sprite mode
+		// Returns default sprite mode @SCRIPTABLE
 		SpriteMode GetDefaultMode() const;
 
-		// Returns atlas page
+		// Returns atlas page @SCRIPTABLE
 		UInt GetAtlasPage() const;
 
-		// Returns atlas source rectangle
+		// Returns atlas source rectangle @SCRIPTABLE
 		RectI GetAtlasRect() const;
 
-		// Returns image size
+		// Returns image size @SCRIPTABLE
 		Vec2F GetSize() const;
 
-		// Returns image width
+		// Returns image width @SCRIPTABLE
 		float GetWidth() const;
 
-		// Returns image height
+		// Returns image height @SCRIPTABLE
 		float GetHeight() const;
 
-		// Returns atlas texture reference
+		// Returns atlas texture reference @SCRIPTABLE
 		TextureRef GetAtlasTextureRef() const;
 
-		// Returns meta information
+		// Returns meta information @SCRIPTABLE
 		Meta* GetMeta() const;
 
 		// Returns extensions string
@@ -101,9 +101,7 @@ namespace o2
 		// -----------------------
 		struct PlatformMeta: public ISerializable
 		{
-			Vec2I  maxSize; // Maximum image size @SERIALIZABLE
-			Vec2F  scale;   // Image scale ((1; 1) - is default) @SERIALIZABLE
-			String format;  // Image format @SERIALIZABLE
+			TextureFormat format = TextureFormat::R8G8B8A8; // Texture format @SERIALIZABLE
 
 			bool operator==(const PlatformMeta& other) const;
 
@@ -116,15 +114,22 @@ namespace o2
 		class Meta: public DefaultAssetMeta<ImageAsset>
 		{
 		public:
-			UID          atlasId = UID::empty; // Atlas owner id @SERIALIZABLE
-			PlatformMeta ios;                  // IOS specified meta @SERIALIZABLE
-			PlatformMeta android;              // Android specified meta @SERIALIZABLE
-			PlatformMeta macOS;                // MacOS specified meta @SERIALIZABLE
-			PlatformMeta windows;              // Windows specified meta @SERIALIZABLE
-			BorderI      sliceBorder;          // Default slice border @SERIALIZABLE @EDITOR_IGNORE
-			SpriteMode   defaultMode;          // Default sprite mode @SERIALIZABLE @EDITOR_IGNORE
+			UID atlasId = UID::empty; // Atlas owner id @SERIALIZABLE
+
+			PlatformMeta  common;            // Common platform meta @SERIALIZABLE
+			PlatformMeta* ios = nullptr;     // IOS specified meta @SERIALIZABLE
+			PlatformMeta* android = nullptr; // Android specified meta @SERIALIZABLE
+			PlatformMeta* macOS = nullptr;   // MacOS specified meta @SERIALIZABLE
+			PlatformMeta* windows = nullptr; // Windows specified meta @SERIALIZABLE
+			PlatformMeta* linuxOS = nullptr; // Linux specified meta @SERIALIZABLE
+
+			BorderI    sliceBorder;          // Default slice border @SERIALIZABLE @EDITOR_IGNORE
+			SpriteMode defaultMode;          // Default sprite mode @SERIALIZABLE @EDITOR_IGNORE
 
 		public:
+			// Returns platform meta for specified platform
+			PlatformMeta GetResultPlatformMeta(Platform platform) const;
+
 			// Returns true if other meta is equal to this
 			bool IsEqual(AssetMeta* other) const override;
 
@@ -150,6 +155,7 @@ namespace o2
 
 	typedef Ref<ImageAsset> ImageAssetRef;
 }
+// --- META ---
 
 CLASS_BASES_META(o2::ImageAsset)
 {
@@ -182,17 +188,17 @@ CLASS_METHODS_META(o2::ImageAsset)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetBitmap, Bitmap*);
 	FUNCTION().PUBLIC().SIGNATURE(UID, GetAtlas);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAtlas, const UID&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSliceBorder, const BorderI&);
-	FUNCTION().PUBLIC().SIGNATURE(BorderI, GetSliceBorder);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetDefaultMode, SpriteMode);
-	FUNCTION().PUBLIC().SIGNATURE(SpriteMode, GetDefaultMode);
-	FUNCTION().PUBLIC().SIGNATURE(UInt, GetAtlasPage);
-	FUNCTION().PUBLIC().SIGNATURE(RectI, GetAtlasRect);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetSize);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetWidth);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetHeight);
-	FUNCTION().PUBLIC().SIGNATURE(TextureRef, GetAtlasTextureRef);
-	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetSliceBorder, const BorderI&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(BorderI, GetSliceBorder);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDefaultMode, SpriteMode);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(SpriteMode, GetDefaultMode);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(UInt, GetAtlasPage);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectI, GetAtlasRect);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetSize);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWidth);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetHeight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(TextureRef, GetAtlasTextureRef);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Meta*, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadBitmap);
@@ -206,9 +212,7 @@ CLASS_BASES_META(o2::ImageAsset::PlatformMeta)
 END_META;
 CLASS_FIELDS_META(o2::ImageAsset::PlatformMeta)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(maxSize);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(scale);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(format);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(TextureFormat::R8G8B8A8).NAME(format);
 }
 END_META;
 CLASS_METHODS_META(o2::ImageAsset::PlatformMeta)
@@ -224,10 +228,12 @@ END_META;
 CLASS_FIELDS_META(o2::ImageAsset::Meta)
 {
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(UID::empty).NAME(atlasId);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(ios);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(android);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(macOS);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(windows);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(common);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(ios);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(android);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(macOS);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(windows);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(linuxOS);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(sliceBorder);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(defaultMode);
 }
@@ -235,6 +241,8 @@ END_META;
 CLASS_METHODS_META(o2::ImageAsset::Meta)
 {
 
+	FUNCTION().PUBLIC().SIGNATURE(PlatformMeta, GetResultPlatformMeta, Platform);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, AssetMeta*);
 }
 END_META;
+// --- END META ---

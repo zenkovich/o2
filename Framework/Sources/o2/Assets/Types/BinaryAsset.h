@@ -61,6 +61,7 @@ namespace o2
 
 	typedef Ref<BinaryAsset> BinaryAssetRef;
 }
+// --- META ---
 
 CLASS_BASES_META(o2::BinaryAsset)
 {
@@ -89,3 +90,4 @@ CLASS_METHODS_META(o2::BinaryAsset)
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
 }
 END_META;
+// --- END META ---

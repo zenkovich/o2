@@ -33,16 +33,16 @@ namespace o2
 		// Assign operator
 		Asset& operator=(const Asset& asset);
 
-		// Returns path
+		// Returns path @SCRIPTABLE
 		const String& GetPath() const;
 
-		// Sets path
+		// Sets path @SCRIPTABLE
 		void SetPath(const String& path);
 
-		// Returns full asset path (from binary path)
+		// Returns full asset path (from binary path) @SCRIPTABLE
 		String GetFullPath() const;
 
-		// Returns full built asset path (from binary)
+		// Returns full built asset path (from binary) @SCRIPTABLE
 		String GetBuiltFullPath() const;
 
 		// Returns id of asset
@@ -69,10 +69,10 @@ namespace o2
 		void Load(const UID& id);
 
 		// Saves asset by path
-		void Save(const String& path, bool rebuildAssetsImmediately = true);
+		void Save(const String& path);
 
 		// Saves asset
-		void Save(bool rebuildAssetsImmediately = true);
+		void Save();
 
 		// Sets asset dirty
 		void SetDirty(bool dirty = true);
@@ -171,6 +171,7 @@ typedef META_TYPE MetaType;
 		SERIALIZABLE(AssetWithDefaultMeta<T>);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Asset)
 {
@@ -191,19 +192,21 @@ END_META;
 CLASS_METHODS_META(o2::Asset)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(const String&, GetPath);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetPath, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetFullPath);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetBuiltFullPath);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const String&, GetPath);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetPath, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(String, GetFullPath);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(String, GetBuiltFullPath);
 	FUNCTION().PUBLIC().SIGNATURE(const UID&, GetUID);
 	FUNCTION().PUBLIC().SIGNATURE(AssetMeta*, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE(const AssetInfo&, GetInfo);
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEditorAsset, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEditorAsset);
+#endif
 	FUNCTION().PUBLIC().SIGNATURE(void, Load, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Load, const UID&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Save, const String&, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, Save, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, Save, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Save);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDirty, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsDirty);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
@@ -246,3 +249,4 @@ CLASS_METHODS_META(o2::AssetWithDefaultMeta<T>)
 	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
 }
 END_META;
+// --- END META ---

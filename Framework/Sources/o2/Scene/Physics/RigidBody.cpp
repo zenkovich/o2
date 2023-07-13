@@ -268,6 +268,7 @@ namespace o2
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::RigidBody>);
+// --- META ---
 
 ENUM_META(o2::RigidBody::Type)
 {
@@ -278,3 +279,4 @@ ENUM_META(o2::RigidBody::Type)
 END_ENUM_META;
 
 DECLARE_CLASS(o2::RigidBody);
+// --- END META ---

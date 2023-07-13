@@ -6,16 +6,23 @@
 #include "o2/Render/Render.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include "o2/Utils/FileSystem/FileSystem.h"
 
 namespace o2
 {
+	const Map<TextureFormat, String> Texture::formatFileExtensions =
+	{
+		{ TextureFormat::R8G8B8A8, "png" },
+		{ TextureFormat::DXT5, "dds" }
+	};
+
 	Texture::Texture() :
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		o2Render.mTextures.Add(this);
 	}
 
-	Texture::Texture(const Vec2I& size, PixelFormat format /*= Format::R8G8B8A8*/, Usage usage /*= Usage::Default*/) :
+	Texture::Texture(const Vec2I& size, TextureFormat format /*= TextureFormat::R8G8B8A8*/, Usage usage /*= Usage::Default*/) :
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(size, format, usage);
@@ -52,15 +59,14 @@ namespace o2
 
 	void Texture::Create(const String& fileName)
 	{
-		Bitmap* image = mnew Bitmap();
-		if (image->Load(fileName, Bitmap::ImageType::Auto))
-		{
-			mFileName = fileName;
-			Create(image);
-		}
+		String extension = o2FileSystem.GetFileExtension(fileName);
 
-		delete image;
-		mReady = true;
+		if (extension == "png")
+			LoadPNG(fileName);
+		else if (extension == "dds")
+			LoadDDS(fileName);
+		else
+			o2Render.mLog->Error("Failed to load texture from file " + fileName);
 	}
 
 	void Texture::Create(UID atlasAssetId, int page)
@@ -75,7 +81,8 @@ namespace o2
 
 			mReady = true;
 		}
-		else o2Render.mLog->Error("Failed to load atlas texture with id " + (String)atlasAssetId + " and page " + (String)page);
+		else 
+			o2Render.mLog->Error("Failed to load atlas texture with id " + (String)atlasAssetId + " and page " + (String)page);
 	}
 
 	void Texture::Create(const String& atlasAssetName, int page)
@@ -90,7 +97,41 @@ namespace o2
 
 			mReady = true;
 		}
-		else o2Render.mLog->Error("Failed to load atlas texture with " + atlasAssetName + " and page " + (String)page);
+		else 
+			o2Render.mLog->Error("Failed to load atlas texture with " + atlasAssetName + " and page " + (String)page);
+	}
+
+	void Texture::LoadDDS(const String& fileName)
+	{
+		mFileName = fileName;
+
+		InFile file(fileName);
+		if (file.IsOpened())
+		{
+			UInt dataSize = file.GetDataSize();
+			auto data = mnew Byte[dataSize];
+			file.ReadData(data, dataSize);
+			file.Close();
+
+			UInt height = *(UInt*)&(data[12]);
+			UInt width = *(UInt*)&(data[16]);
+			UInt linearSize = *(UInt*)&(data[20]);
+			UInt mipMapCount = *(UInt*)&(data[28]);
+
+			Create(Vec2I(width, height), &data[128], TextureFormat::DXT5);
+
+			delete[] data;
+		}
+	}
+
+	void Texture::LoadPNG(const String& fileName)
+	{
+		Bitmap image;
+		if (image.Load(fileName, Bitmap::ImageType::Auto))
+		{
+			mFileName = fileName;
+			Create(&image);
+		}
 	}
 
 	void Texture::Reload()
@@ -104,7 +145,7 @@ namespace o2
 		return mSize;
 	}
 
-	PixelFormat Texture::GetFormat() const
+	TextureFormat Texture::GetFormat() const
 	{
 		return mFormat;
 	}
@@ -139,6 +180,7 @@ namespace o2
 		return mAtlasPage;
 	}
 }
+// --- META ---
 
 ENUM_META(o2::Texture::Usage)
 {
@@ -153,3 +195,4 @@ ENUM_META(o2::Texture::Filter)
 	ENUM_ENTRY(Nearest);
 }
 END_ENUM_META;
+// --- END META ---

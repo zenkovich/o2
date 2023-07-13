@@ -18,7 +18,7 @@ namespace o2
 
 		// Constructor
 		TextureRef(const Vec2I& size, 
-				   PixelFormat format = PixelFormat::R8G8B8A8,
+				   TextureFormat format = TextureFormat::R8G8B8A8,
 				   Texture::Usage usage = Texture::Usage::Default);
 
 		// Constructor from file @SCRIPTABLE
@@ -75,6 +75,7 @@ namespace o2
 	// Returns reference to null texture
 	TextureRef NoTexture();
 }
+// --- META ---
 
 CLASS_BASES_META(o2::TextureRef)
 {
@@ -91,7 +92,7 @@ CLASS_METHODS_META(o2::TextureRef)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(Texture*);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2I&, PixelFormat, Texture::Usage);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2I&, TextureFormat, Texture::Usage);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(const String&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(Bitmap*);
 	FUNCTION().PUBLIC().CONSTRUCTOR(UID, int);
@@ -102,3 +103,4 @@ CLASS_METHODS_META(o2::TextureRef)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(TextureRef, Null);
 }
 END_META;
+// --- END META ---

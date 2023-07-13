@@ -140,5 +140,7 @@ namespace Editor
 		DrawDebugFrame();
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::Vec2KeyFramesTrackControl);
+// --- END META ---

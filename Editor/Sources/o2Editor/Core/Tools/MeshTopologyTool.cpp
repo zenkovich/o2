@@ -284,5 +284,7 @@ namespace Editor
 		return String::empty;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::MeshTopologyTool);
+// --- END META ---

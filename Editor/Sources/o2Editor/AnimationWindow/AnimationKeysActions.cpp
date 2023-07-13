@@ -82,9 +82,11 @@ namespace Editor
 		mEditor->SetSelectedKeys(keys);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AnimationAddKeysAction);
 
 DECLARE_CLASS(Editor::AnimationDeleteKeysAction);
 
 DECLARE_CLASS(Editor::AnimationKeysChangeAction);
+// --- END META ---

@@ -430,5 +430,7 @@ namespace Editor
 		Refresh();
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::DefaultActorTransformViewer);
+// --- END META ---

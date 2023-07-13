@@ -136,7 +136,7 @@ namespace Editor
 
 	GameWindow::GameView::GameView()
 	{
-		mRenderTarget = TextureRef(Vec2I(256, 256), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
 	}
 
@@ -193,7 +193,7 @@ namespace Editor
 
 		if (size != mRenderTarget->GetSize())
 		{
-			mRenderTarget = TextureRef(size, PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+			mRenderTarget = TextureRef(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 			*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
 			mRenderTargetSprite->SetMode(SpriteMode::FixedAspect);
 		}
@@ -207,9 +207,11 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::GameWindow);
 
 DECLARE_CLASS(Editor::GameWindow::GameView);
 
 DECLARE_CLASS(Editor::GameWindow::SimulationDevice);
+// --- END META ---

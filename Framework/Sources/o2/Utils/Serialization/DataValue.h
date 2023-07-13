@@ -720,7 +720,9 @@ namespace o2
 }
 
 #include "o2/Utils/Serialization/DataValueConverters.h"
+// --- META ---
 
 PRE_ENUM_META(o2::DataValue::Flags);
 
 PRE_ENUM_META(o2::DataDocument::Format);
+// --- END META ---

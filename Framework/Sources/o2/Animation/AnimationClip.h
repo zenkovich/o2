@@ -223,6 +223,7 @@ namespace o2
 		return nullptr;
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AnimationClip)
 {
@@ -262,3 +263,4 @@ CLASS_METHODS_META(o2::AnimationClip)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTrackAdded, IAnimationTrack*);
 }
 END_META;
+// --- END META ---

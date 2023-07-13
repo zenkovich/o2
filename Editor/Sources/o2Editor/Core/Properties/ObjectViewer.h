@@ -46,6 +46,7 @@ namespace Editor
 		IObjectPropertiesViewer* mPropertiesViewer = nullptr; // Object properties viewer
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ObjectViewer)
 {
@@ -73,3 +74,4 @@ CLASS_METHODS_META(Editor::ObjectViewer)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
+// --- END META ---

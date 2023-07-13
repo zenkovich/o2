@@ -6,9 +6,9 @@
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Singleton.h"
 
-#if defined(PLATFORM_ANDROID) || defined(PLATFORM_MAC) || defined(PLATFORM_IOS)
+#if defined(PLATFORM_ANDROID) || defined(PLATFORM_MAC) || defined(PLATFORM_IOS) || defined(PLATFORM_LINUX)
 #include "o2/Application/VKCodes.h"
-#elif PLATFORM_WINDOWS
+#elif defined PLATFORM_WINDOWS
 #include <windows.h>
 #endif
 

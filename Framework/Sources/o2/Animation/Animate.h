@@ -7,7 +7,64 @@
 
 namespace o2
 {
-	// --------------------------------------------
+    // -----------------------
+    // Key container interface
+    // -----------------------
+    struct IKeyContainer
+    {
+        // Virtual destructor
+        virtual ~IKeyContainer()
+        {}
+
+        // Applies stored key to animation
+        virtual void Apply( float time ) = 0;
+    };
+
+    // ----------------------
+    // Template key container
+    // ----------------------
+    template <typename T>
+    struct KeyContainer : public IKeyContainer
+    {
+        typename AnimationTrack<T>::Key key;
+
+        AnimationTrack<T>* animatedValue;
+
+        ~KeyContainer()
+        {}
+
+        void Apply( float time )
+        {
+            key.position = time;
+            animatedValue->AddKey( key );
+        }
+    };
+
+    // ---------------
+    // Vec2F container
+    // ---------------
+    template <>
+    struct KeyContainer<Vec2F> : public IKeyContainer
+    {
+        Curve::Key timeKey;
+
+        AnimationTrack<Vec2F>* animatedValue;
+
+        ~KeyContainer()
+        {}
+
+        void Apply( float time )
+        {
+            timeKey.value = 0.0f;
+            animatedValue->timeCurve.InsertKey( timeKey );
+
+            timeKey.position = time;
+            timeKey.value = 1.0f;
+            animatedValue->timeCurve.InsertKey( timeKey );
+        }
+    };
+
+    // --------------------------------------------
 	// Class for building simple animation sequence
 	// --------------------------------------------
 	class Animate
@@ -73,61 +130,6 @@ namespace o2
 		// Changes specified parameter
 		template<typename T>
 		Animate& Change(T* target, const T& value);
-
-	protected:
-		// -----------------------
-		// Key container interface
-		// -----------------------
-		struct IKeyContainer
-		{
-			// Virtual destructor
-			virtual ~IKeyContainer() {}
-
-			// Applies stored key to animation
-			virtual void Apply(float time) = 0;
-		};
-
-		// ----------------------
-		// Template key container
-		// ----------------------
-		template<typename T>
-		struct KeyContainer: public IKeyContainer
-		{
-			typename AnimationTrack<T>::Key key;
-
-			AnimationTrack<T>* animatedValue;
-
-			~KeyContainer() {}
-
-			void Apply(float time)
-			{
-				key.position = time;
-				animatedValue->AddKey(key);
-			}
-		};
-
-		// ---------------
-		// Vec2F container
-		// ---------------
-		template<>
-		struct KeyContainer<Vec2F>: public IKeyContainer
-		{
-			Curve::Key timeKey;
-
-			AnimationTrack<Vec2F>* animatedValue;
-
-			~KeyContainer() {}
-
-			void Apply(float time)
-			{
-				timeKey.value = 0.0f;
-				animatedValue->timeCurve.InsertKey(timeKey);
-
-				timeKey.position = time;
-				timeKey.value = 1.0f;
-				animatedValue->timeCurve.InsertKey(timeKey);
-			}
-		};
 
 
 	protected:

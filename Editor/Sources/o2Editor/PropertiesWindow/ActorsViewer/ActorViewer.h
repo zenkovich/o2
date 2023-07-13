@@ -103,6 +103,7 @@ namespace Editor
 	};
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ActorViewer)
 {
@@ -148,3 +149,4 @@ CLASS_METHODS_META(Editor::ActorViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
+// --- END META ---

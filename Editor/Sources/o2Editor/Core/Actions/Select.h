@@ -40,6 +40,7 @@ namespace Editor
 		SERIALIZABLE(SelectAction);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SelectAction)
 {
@@ -62,3 +63,4 @@ CLASS_METHODS_META(Editor::SelectAction)
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
+// --- END META ---

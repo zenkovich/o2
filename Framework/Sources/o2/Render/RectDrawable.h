@@ -104,6 +104,7 @@ namespace o2
 		SERIALIZABLE(FunctionalRectDrawable);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::IRectDrawable)
 {
@@ -159,3 +160,4 @@ CLASS_METHODS_META(o2::FunctionalRectDrawable)
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 }
 END_META;
+// --- END META ---

@@ -211,5 +211,7 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AssetsTree);
+// --- END META ---

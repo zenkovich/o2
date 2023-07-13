@@ -12,5 +12,7 @@ namespace o2
 		return 1.0f;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AnimationMask);
+// --- END META ---

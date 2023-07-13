@@ -40,6 +40,7 @@ namespace o2
 		SERIALIZABLE(Camera);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Camera)
 {
@@ -61,3 +62,4 @@ CLASS_METHODS_META(o2::Camera)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, PhysicalCorrect, Units);
 }
 END_META;
+// --- END META ---

@@ -69,6 +69,7 @@ namespace Editor
 		CurvesEditor*    mEditor;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::CurveAddKeysAction)
 {
@@ -135,3 +136,4 @@ CLASS_METHODS_META(Editor::CurveKeysChangeAction)
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
+// --- END META ---

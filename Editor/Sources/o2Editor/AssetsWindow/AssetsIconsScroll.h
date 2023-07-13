@@ -23,7 +23,7 @@ namespace Editor
 {
 	class ActorProperty;
 	class ComponentProperty;
-	class SceneTree;
+	class SceneHierarchyTree;
 	class AssetIcon;
 
 	// ------------------------
@@ -145,8 +145,6 @@ namespace Editor
 		Vector<SceneEditableObject*> mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
 
 		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
-						        
-		bool mNeedRebuildAssets = false; // Is assets needs to rebuild
 						        
 		bool mChangePropertiesTargetsFromThis = false;
 
@@ -327,7 +325,7 @@ namespace Editor
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 		// Called when dropped dragged scene tree nodes selected and started dragging from scene tree
-		void OnDroppedFromSceneTree(SceneTree* sceneTree);
+		void OnDroppedFromSceneTree(SceneHierarchyTree* sceneTree);
 
 		// Called when dropped dragged assets icons selected and started dragging from this
 		void OnDroppedFromThis();
@@ -343,8 +341,9 @@ namespace Editor
 
 		friend class AssetsWindow;
 		friend class SceneEditScreen;
-		friend class SceneTree;
+		friend class SceneHierarchyTree;
 		friend class AssetIcon;
+		friend class SceneTree;
 	};
 
 	template<typename _type>
@@ -353,6 +352,7 @@ namespace Editor
 		return nullptr;
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AssetsIconsScrollArea)
 {
@@ -386,7 +386,6 @@ CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
 	FIELD().PROTECTED().NAME(mDragOffset);
 	FIELD().PROTECTED().NAME(mInstantiatedSceneDragObjects);
 	FIELD().PROTECTED().NAME(mCuttingAssets);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRebuildAssets);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mChangePropertiesTargetsFromThis);
 }
 END_META;
@@ -471,10 +470,11 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromSceneTree, SceneTree*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromSceneTree, SceneHierarchyTree*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromThis);
 	FUNCTION().PROTECTED().SIGNATURE(void, BeginDragging, AssetIcon*);
 	FUNCTION().PROTECTED().SIGNATURE(void, EndDragging, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateDraggingGraphics);
 }
 END_META;
+// --- END META ---

@@ -23,5 +23,7 @@ namespace Editor
 		return mEnabled;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::IActorHeaderViewer);
+// --- END META ---

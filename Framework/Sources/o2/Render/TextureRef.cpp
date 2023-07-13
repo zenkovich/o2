@@ -13,7 +13,7 @@ namespace o2
 	}
 
 	TextureRef::TextureRef(const Vec2I& size, 
-						   PixelFormat format /*= PixelFormat::R8G8B8A8*/,
+						   TextureFormat format /*= TextureFormat::R8G8B8A8*/,
 						   Texture::Usage usage /*= Texture::Usage::Default*/)
 	{
 		mTexture = mnew Texture(size, format, usage);
@@ -147,5 +147,7 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::TextureRef);
+// --- END META ---

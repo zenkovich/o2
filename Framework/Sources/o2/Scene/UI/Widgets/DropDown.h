@@ -77,6 +77,7 @@ namespace o2
 		void OnLayerAdded(WidgetLayer* layer) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::DropDown)
 {
@@ -110,3 +111,4 @@ CLASS_METHODS_META(o2::DropDown)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
 }
 END_META;
+// --- END META ---

@@ -61,6 +61,7 @@ namespace Editor
 		void PushTag(String name);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::TagsProperty)
 {
@@ -89,3 +90,4 @@ CLASS_METHODS_META(Editor::TagsProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, PushTag, String);
 }
 END_META;
+// --- END META ---

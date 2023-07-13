@@ -57,12 +57,16 @@ namespace o2
 		}
 		else if (valType == ValueType::Object)
 		{
-			res += "{\n";
+			res += "\n" + tab + "{\n";
 
 			ForEachProperties([&](const ScriptValue& name, const ScriptValue& value) {
 				res += tab + "  " + name.Dump(tab + "  ") + " : " + value.Dump(tab + "  ") + ",\n";
 				return true;
-			});
+			}, false);
+
+
+			if (GetPrototype().GetValueType() != ValueType::Null)
+				res += tab + "  prototype : " + GetPrototype().Dump(tab + "  ") + ",\n";
 
 			res += tab + "}";
 		}

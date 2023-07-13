@@ -60,6 +60,7 @@ namespace Editor
 		friend class PropertiesWindow;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::IPropertiesViewer)
 {
@@ -86,3 +87,4 @@ CLASS_METHODS_META(Editor::IPropertiesViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, Draw);
 }
 END_META;
+// --- END META ---

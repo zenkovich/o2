@@ -27,8 +27,10 @@ namespace o2
 	{
 		ISceneDrawable::SetDrawingDepth(depth);
 
+#if IS_EDITOR
 		if (mOwner)
 			mOwner->OnChanged();
+#endif
 	}
 
 	void DrawableComponent::OnSerialize(DataValue& node) const
@@ -149,5 +151,7 @@ namespace o2
 	}
 #endif
 }
+// --- META ---
 
 DECLARE_CLASS(o2::DrawableComponent);
+// --- END META ---

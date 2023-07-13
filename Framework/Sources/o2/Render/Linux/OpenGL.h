@@ -3,9 +3,12 @@
 #if defined(PLATFORM_LINUX) && !defined(O2_RENDER_GLES2)
 
 #include <GL/gl.h>
-#include "3rdPartyLibs/OpenGL/glext.h"
-#include "3rdPartyLibs/OpenGL/wglext.h"
+#include <GL/glx.h>
 
+// Undef X-lib shit
+#undef Bool
+#undef None
+#undef CurrentTime
 
 namespace o2
 {
@@ -30,35 +33,36 @@ void glCheckError(const char* filename = nullptr, unsigned int line = 0);
 #	define GL_CHECK_ERROR()
 #endif
 
-//extern PFNGLGENFRAMEBUFFERSEXTPROC        glGenFramebuffersEXT;
-//extern PFNGLBINDFRAMEBUFFEREXTPROC        glBindFramebufferEXT;
-//extern PFNGLFRAMEBUFFERTEXTUREPROC        glFramebufferTexture;
-//extern PFNGLDRAWBUFFERSPROC               glDrawBuffers;
-//extern PFNGLDELETEBUFFERSPROC             glDeleteBuffers;
-//extern PFNGLDELETEFRAMEBUFFERSPROC        glDeleteFramebuffersEXT;
-//extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT;
-//extern PFNGLGENBUFFERSPROC                glGenBuffers;
-//extern PFNGLBINDBUFFERPROC 		          glBindBuffer;
-//extern PFNGLBUFFERDATAPROC                glBufferData;
-//extern PFNGLCREATESHADERPROC              glCreateShader;
-//extern PFNGLDELETESHADERPROC              glDeleteShader;
-//extern PFNGLSHADERSOURCEPROC              glShaderSource;
-//extern PFNGLCOMPILESHADERPROC             glCompileShader;
-//extern PFNGLGETSHADERIVPROC               glGetShaderiv;
-//extern PFNGLGETSHADERINFOLOGPROC          glGetShaderInfoLog;
-//extern PFNGLCREATEPROGRAMPROC             glCreateProgram;
-//extern PFNGLATTACHSHADERPROC              glAttachShader;
-//extern PFNGLLINKPROGRAMPROC               glLinkProgram;
-//extern PFNGLGETPROGRAMIVPROC              glGetProgramiv;
-//extern PFNGLGETPROGRAMINFOLOGPROC         glGetProgramInfoLog;
-//extern PFNGLUSEPROGRAMPROC                glUseProgram;
-//extern PFNGLGETUNIFORMLOCATIONPROC        glGetUniformLocation;
-//extern PFNGLGETATTRIBLOCATIONPROC         glGetAttribLocation;
-//extern PFNGLDELETEPROGRAMPROC             glDeleteProgram;
-//extern PFNGLVERTEXATTRIBPOINTERPROC       glVertexAttribPointer;
-//extern PFNGLENABLEVERTEXATTRIBARRAYPROC   glEnableVertexAttribArray;
-//extern PFNGLUNIFORMMATRIX4FVPROC          glUniformMatrix4fv;
-//extern PFNGLACTIVETEXTUREPROC             glActiveTexture;
-//extern PFNGLUNIFORM1IPROC                 glUniform1i;
+extern PFNGLGENFRAMEBUFFERSEXTPROC        glGenFramebuffersEXT;
+extern PFNGLBINDFRAMEBUFFEREXTPROC        glBindFramebufferEXT;
+extern PFNGLFRAMEBUFFERTEXTUREPROC        glFramebufferTexture;
+extern PFNGLDRAWBUFFERSPROC               glDrawBuffers;
+extern PFNGLDELETEBUFFERSPROC             glDeleteBuffers;
+extern PFNGLDELETEFRAMEBUFFERSPROC        glDeleteFramebuffersEXT;
+extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT;
+extern PFNGLGENBUFFERSPROC                glGenBuffers;
+extern PFNGLBINDBUFFERPROC 		          glBindBuffer;
+extern PFNGLBUFFERDATAPROC                glBufferData;
+extern PFNGLCREATESHADERPROC              glCreateShader;
+extern PFNGLDELETESHADERPROC              glDeleteShader;
+extern PFNGLSHADERSOURCEPROC              glShaderSource;
+extern PFNGLCOMPILESHADERPROC             glCompileShader;
+extern PFNGLGETSHADERIVPROC               glGetShaderiv;
+extern PFNGLGETSHADERINFOLOGPROC          glGetShaderInfoLog;
+extern PFNGLCREATEPROGRAMPROC             glCreateProgram;
+extern PFNGLATTACHSHADERPROC              glAttachShader;
+extern PFNGLLINKPROGRAMPROC               glLinkProgram;
+extern PFNGLGETPROGRAMIVPROC              glGetProgramiv;
+extern PFNGLGETPROGRAMINFOLOGPROC         glGetProgramInfoLog;
+extern PFNGLUSEPROGRAMPROC                glUseProgram;
+extern PFNGLGETUNIFORMLOCATIONPROC        glGetUniformLocation;
+extern PFNGLGETATTRIBLOCATIONPROC         glGetAttribLocation;
+extern PFNGLDELETEPROGRAMPROC             glDeleteProgram;
+extern PFNGLVERTEXATTRIBPOINTERPROC       glVertexAttribPointer;
+extern PFNGLENABLEVERTEXATTRIBARRAYPROC   glEnableVertexAttribArray;
+extern PFNGLUNIFORMMATRIX4FVPROC          glUniformMatrix4fv;
+extern PFNGLUNIFORM1IPROC                 glUniform1i;
+extern PFNGLBLENDFUNCSEPARATEPROC         glBlendFuncSeparate;
+extern PFNGLBUFFERSUBDATAPROC             glBufferSubData;
 
 #endif // PLATFORM_LINUX

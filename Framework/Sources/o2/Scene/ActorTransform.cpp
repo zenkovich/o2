@@ -622,7 +622,7 @@ namespace o2
 
 	float ActorTransform::GetWorldRight() const
 	{
-		return GetRight() + GetParentPosition().x;
+		return GetWorldRect().right;
 	}
 
 	void ActorTransform::SetWorldLeft(float value)
@@ -632,7 +632,7 @@ namespace o2
 
 	float ActorTransform::GetWorldLeft() const
 	{
-		return GetLeft() + GetParentPosition().x;
+		return GetWorldRect().left;
 	}
 
 	void ActorTransform::SetWorldTop(float value)
@@ -642,7 +642,7 @@ namespace o2
 
 	float ActorTransform::GetWorldTop() const
 	{
-		return GetTop() + GetParentPosition().y;
+		return GetWorldRect().top;
 	}
 
 	void ActorTransform::SetWorldBottom(float value)
@@ -652,7 +652,7 @@ namespace o2
 
 	float ActorTransform::GetWorldBottom() const
 	{
-		return GetBottom() + GetParentPosition().y;
+		return GetWorldRect().bottom;
 	}
 
 	Vec2F ActorTransform::World2LocalPoint(const Vec2F& worldPoint) const
@@ -707,7 +707,10 @@ namespace o2
 
 		if (mData->owner && !fromParent)
 		{
+#if IS_EDITOR
 			mData->owner->OnChanged();
+#endif
+
 			mData->owner->OnTransformChanged();
 		}
 	}
@@ -829,7 +832,9 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ActorTransform);
 
 DECLARE_CLASS(o2::ActorTransformData);
+// --- END META ---

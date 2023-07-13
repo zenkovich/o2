@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Application/VKCodes.h"
 #include "o2/Events/CursorAreaEventsListener.h"
 #include "o2/Render/IDrawable.h"
 #include "o2/Scene/UI/Widget.h"
@@ -299,7 +300,7 @@ namespace o2
 		void SetEnabled(bool enabled) override;
 
 		// Returns is handle enabled. Disabled handle don't drawn and interact
-		bool IsEnabled() const override;
+		bool IsEnabled() const OPTIONAL_OVERRIDE;
 
 		// Converts point from screen to local space
 		Vec2F ScreenToLocal(const Vec2F& point) override;
@@ -439,6 +440,7 @@ namespace o2
 		friend class DragHandle;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::DragHandle)
 {
@@ -586,3 +588,4 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;
+// --- END META ---

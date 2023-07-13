@@ -83,5 +83,7 @@ namespace Editor
 		isEnabled = false;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::CustomFrameTool);
+// --- END META ---

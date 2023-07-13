@@ -107,6 +107,7 @@ namespace o2
 			color == otherEff->color;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::FontStrokeEffect);
 
@@ -115,3 +116,4 @@ DECLARE_CLASS(o2::FontGradientEffect);
 DECLARE_CLASS(o2::FontColorEffect);
 
 DECLARE_CLASS(o2::FontShadowEffect);
+// --- END META ---

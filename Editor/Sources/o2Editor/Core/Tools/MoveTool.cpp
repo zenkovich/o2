@@ -6,7 +6,7 @@
 #include "o2Editor/Core/Actions/Transform.h"
 #include "o2Editor/Core/EditorApplication.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 
 namespace Editor
@@ -186,7 +186,7 @@ namespace Editor
 
 	void MoveTool::OnKeyPressed(const Input::Key& key)
 	{
-		if (!o2EditorTree.GetSceneTree()->IsFocused())
+		if (!o2EditorTree.IsTreeFocused())
 			return;
 
 		float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
@@ -216,7 +216,7 @@ namespace Editor
 
 	void MoveTool::OnKeyStayDown(const Input::Key& key)
 	{
-		if (!o2EditorTree.GetSceneTree()->IsFocused())
+		if (!o2EditorTree.IsTreeFocused())
 			return;
 
 		float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
@@ -293,5 +293,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::MoveTool);
+// --- END META ---

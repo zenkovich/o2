@@ -39,6 +39,7 @@
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/String.h"
+#include "o2/Utils/Debug/Profiling/SimpleProfiler.h"
 
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptValue.h"

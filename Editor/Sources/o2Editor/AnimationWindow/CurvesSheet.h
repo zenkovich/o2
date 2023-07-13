@@ -51,6 +51,7 @@ namespace Editor
 		friend class AnimationWindow;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::CurvesSheet)
 {
@@ -78,3 +79,4 @@ CLASS_METHODS_META(Editor::CurvesSheet)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnEditorViewChanged);
 }
 END_META;
+// --- END META ---

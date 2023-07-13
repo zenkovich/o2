@@ -19,15 +19,13 @@ namespace o2
 	VectorFont::VectorFont() :
 		Font(), mFreeTypeFace(nullptr)
 	{
-		mTexture = TextureRef(Vec2I(512, 512));
-		mTextureSrcRect.Set(0, 0, 512, 512);
+        InitializeTexture();
 	}
 
 	VectorFont::VectorFont(const String& fileName) :
 		Font(), mFreeTypeFace(nullptr)
 	{
-		mTexture = TextureRef(Vec2I(512, 512));
-		mTextureSrcRect.Set(0, 0, 512, 512);
+        InitializeTexture();
 
 		Load(fileName);
 	}
@@ -35,9 +33,14 @@ namespace o2
 	VectorFont::VectorFont(const VectorFont& other) :
 		Font(), mFreeTypeFace(other.mFreeTypeFace)
 	{
-		mTexture = TextureRef(Vec2I(512, 512));
-		mTextureSrcRect.Set(0, 0, 512, 512);
+        InitializeTexture();
 	}
+
+    void VectorFont::InitializeTexture()
+    {
+        mTexture = TextureRef(Vec2I(mInitialTextureSize, mInitialTextureSize));
+        mTextureSrcRect.Set(0, 0, mInitialTextureSize, mInitialTextureSize);
+    }
 
 	VectorFont::~VectorFont()
 	{
@@ -266,6 +269,8 @@ namespace o2
 			newCharDef.character.mOrigin.y = (glyph->metrics.height - glyph->metrics.horiBearingY)/64.0f + border.y;
 
 			PackCharacter(newCharDef, symbolsHeight);
+
+            delete newBitmap;
 		}
 	}
 
@@ -293,7 +298,7 @@ namespace o2
 				else
 				{
 					TextureRef lastTexture = mTexture;
-					mTexture = TextureRef(lastTexture->GetSize()*2, PixelFormat::R8G8B8A8, Texture::Usage::Default);
+					mTexture = TextureRef(lastTexture->GetSize()*2, TextureFormat::R8G8B8A8, Texture::Usage::Default);
 					mTexture->Copy(*lastTexture.Get(), RectI(Vec2I(0, 0), lastTexture->GetSize()));
 
 					for (auto heightKV : mCharacters)
@@ -329,9 +334,9 @@ namespace o2
 		mTexture->SetSubData(character.rect.LeftBottom(), character.bitmap);
 
 		AddCharacter(character.character);
-
-		delete character.bitmap;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::VectorFont::Effect);
+// --- END META ---

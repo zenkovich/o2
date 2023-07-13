@@ -15,7 +15,8 @@ namespace o2
 	{
 		mInfo.meta->mId.Randomize();
 
-		o2Assets.AddAssetCache(this);
+		if (Assets::IsSingletonInitialzed())
+			o2Assets.AddAssetCache(this);
 	}
 
 	Asset::Asset(AssetMeta* meta)
@@ -23,19 +24,23 @@ namespace o2
 		mInfo.meta = meta;
 		mInfo.meta->mId.Randomize();
 
-		o2Assets.AddAssetCache(this);
+		if (Assets::IsSingletonInitialzed())
+			o2Assets.AddAssetCache(this);
 	}
 
 	Asset& Asset::operator=(const Asset& other)
 	{
-		o2Assets.RemoveAssetCache(this);
+		if (Assets::IsSingletonInitialzed())
+			o2Assets.RemoveAssetCache(this);
+
 		mInfo = other.mInfo;
 		return *this;
 	}
 
 	Asset::~Asset()
 	{
-		o2Assets.RemoveAssetCache(this);
+		if (Assets::IsSingletonInitialzed())
+			o2Assets.RemoveAssetCache(this);
 	}
 
 	const String& Asset::GetPath() const
@@ -127,13 +132,13 @@ namespace o2
 		LoadData(GetBuiltFullPath());
 	}
 
-	void Asset::Save(const String& path, bool rebuildAssetsImmediately /*= true*/)
+	void Asset::Save(const String& path)
 	{
 		SetPath(path);
-		Save(rebuildAssetsImmediately);
+		Save();
 	}
 
-	void Asset::Save(bool rebuildAssetsImmediately /*= true*/)
+	void Asset::Save()
 	{
 		if (ID() == 0)
 			ID().Randomize();
@@ -151,9 +156,6 @@ namespace o2
 		metaData.SaveToFile(GetMetaFullPath());
 
 		SaveData(GetFullPath());
-
-		if (rebuildAssetsImmediately)
-			o2Assets.RebuildAssets();
 	}
 
 	void Asset::SetDirty(bool dirty /*= true*/)
@@ -212,5 +214,7 @@ namespace o2
 	{}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::Asset);
+// --- END META ---

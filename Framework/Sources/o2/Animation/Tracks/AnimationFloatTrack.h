@@ -218,6 +218,7 @@ namespace o2
 		void OnDeserialized(const DataValue& node) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AnimationTrack<float>)
 {
@@ -311,3 +312,4 @@ CLASS_METHODS_META(o2::AnimationTrack<float>::Player)
 	FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, AnimationState*, const String&);
 }
 END_META;
+// --- END META ---

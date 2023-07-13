@@ -28,6 +28,7 @@ namespace Editor
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DefaultObjectPropertiesViewer)
 {
@@ -52,3 +53,4 @@ CLASS_METHODS_META(Editor::DefaultObjectPropertiesViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
 }
 END_META;
+// --- END META ---

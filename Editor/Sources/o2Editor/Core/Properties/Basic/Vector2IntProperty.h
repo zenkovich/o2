@@ -100,6 +100,7 @@ namespace Editor
 		};
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::Vec2IProperty)
 {
@@ -133,3 +134,4 @@ CLASS_METHODS_META(Editor::Vec2IProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;
+// --- END META ---

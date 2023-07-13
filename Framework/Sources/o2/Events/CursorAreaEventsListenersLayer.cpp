@@ -15,18 +15,24 @@ namespace o2
 
 	void CursorAreaEventListenersLayer::OnBeginDraw()
 	{
+		//PROFILE_SAMPLE_FUNC();
+
 		viewPortBasis = o2Render.GetCamera().GetBasis();
 		o2Events.PushCursorAreaEventsListenersLayer(this);
 	}
 
 	void CursorAreaEventListenersLayer::OnEndDraw()
 	{
+		//PROFILE_SAMPLE_FUNC();
+
 		renderBasis = o2Render.GetCamera().GetBasis();
 		o2Events.PopCursorAreaEventsListenersLayer();
 	}
 
 	void CursorAreaEventListenersLayer::OnDrawn(const Basis& transform)
 	{
+		//PROFILE_SAMPLE_FUNC();
+
 		drawnTransform = transform;
 		mLocalToWorldTransform = camera.GetBasis().Inverted()*renderBasis*viewPortBasis.Inverted()*drawnTransform;
 
@@ -61,6 +67,8 @@ namespace o2
 
 	void CursorAreaEventListenersLayer::Update()
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		cursorEventAreaListeners.Reverse();
 		mDragListeners.Reverse();
 

@@ -144,6 +144,7 @@ namespace o2
 // 		bool IsConvertsType(const Type* type) const;
 // 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Tag)
 {
@@ -197,3 +198,4 @@ CLASS_METHODS_META(o2::TagGroup)
 	FUNCTION().PUBLIC().SIGNATURE(Vector<String>, GetTagsNames);
 }
 END_META;
+// --- END META ---

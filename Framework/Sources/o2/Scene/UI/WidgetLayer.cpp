@@ -154,11 +154,11 @@ namespace o2
 			mOwnerWidget->UpdateLayersDrawingSequence();
 		}
 
-		if constexpr (IS_EDITOR)
-		{
-			o2Scene.OnObjectChanged(this);
-			o2Scene.OnObjectChanged(layer);
-		}
+#if IS_EDITOR
+		o2Scene.OnObjectChanged(this);
+		o2Scene.OnObjectChanged(layer);
+#endif
+
 
 		return layer;
 	}
@@ -180,8 +180,9 @@ namespace o2
 		if (lastOwnerWidget)
 			lastOwnerWidget->UpdateLayersDrawingSequence();
 
-		if constexpr (IS_EDITOR)
-			o2Scene.OnObjectChanged(this);
+#if IS_EDITOR
+		o2Scene.OnObjectChanged(this);
+#endif
 	}
 
 	void WidgetLayer::RemoveAllChildren()
@@ -195,8 +196,9 @@ namespace o2
 
 		mChildren.Clear();
 
-		if constexpr (IS_EDITOR)
-			o2Scene.OnObjectChanged(this);
+#if IS_EDITOR
+		o2Scene.OnObjectChanged(this);
+#endif
 	}
 
 	void WidgetLayer::SetParent(WidgetLayer* parent)
@@ -464,16 +466,15 @@ namespace o2
 	{
 		mOwnerWidget = owner;
 
-		if constexpr (IS_EDITOR)
+#if IS_EDITOR
+		if (Scene::IsSingletonInitialzed())
 		{
-			if (Scene::IsSingletonInitialzed())
-			{
-				if (mOwnerWidget && mOwnerWidget->mState == Actor::State::InScene)
-					o2Scene.AddEditableObjectToScene(this);
-				else
-					o2Scene.RemoveEditableObjectFromScene(this);
-			}
+			if (mOwnerWidget && mOwnerWidget->mState == Actor::State::InScene)
+				o2Scene.AddEditableObjectToScene(this);
+			else
+				o2Scene.RemoveEditableObjectFromScene(this);
 		}
+#endif
 
 		for (auto child : mChildren)
 			child->SetOwnerWidget(owner);
@@ -491,7 +492,10 @@ namespace o2
 		if (mOwnerWidget)
 		{
 			mOwnerWidget->UpdateLayersLayouts();
+
+#if IS_EDITOR
 			mOwnerWidget->OnChanged();
+#endif
 		}
 
 		mUpdatingLayout = false;
@@ -531,8 +535,9 @@ namespace o2
 
 	void WidgetLayer::OnAddToScene()
 	{
-		if constexpr (IS_EDITOR)
-			o2Scene.AddEditableObjectToScene(this);
+#if IS_EDITOR
+		o2Scene.AddEditableObjectToScene(this);
+#endif
 
 		for (auto layer : mChildren)
 			layer->OnAddToScene();
@@ -540,8 +545,9 @@ namespace o2
 
 	void WidgetLayer::OnRemoveFromScene()
 	{
-		if constexpr (IS_EDITOR)
-			o2Scene.RemoveEditableObjectFromScene(this);
+#if IS_EDITOR
+		o2Scene.RemoveEditableObjectFromScene(this);
+#endif
 
 		for (auto layer : mChildren)
 			layer->OnRemoveFromScene();
@@ -768,5 +774,7 @@ namespace o2
 
 #endif // IS_EDITOR
 }
+// --- META ---
 
 DECLARE_CLASS(o2::WidgetLayer);
+// --- END META ---

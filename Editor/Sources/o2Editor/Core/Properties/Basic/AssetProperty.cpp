@@ -357,8 +357,11 @@ namespace Editor
 			return;
 
 		auto lastSelectedAssetIcon = dynamic_cast<const AssetIcon*>(assetIconsScroll->GetDraggingObject());
-		if (!lastSelectedAssetIcon || !lastSelectedAssetIcon->GetAssetInfo().meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
+		if (!lastSelectedAssetIcon ||
+			(mAssetType && !lastSelectedAssetIcon->GetAssetInfo().meta->GetAssetType()->IsBasedOn(*mAssetType)))
+		{
 			return;
+		}
 
 		SetAssetIdByUser(lastSelectedAssetIcon->GetAssetInfo().meta->ID());
 
@@ -368,5 +371,7 @@ namespace Editor
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<AssetRef>);
+// --- META ---
 
 DECLARE_CLASS(Editor::AssetProperty);
+// --- END META ---

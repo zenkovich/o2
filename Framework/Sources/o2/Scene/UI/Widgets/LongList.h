@@ -158,6 +158,7 @@ namespace o2
 		friend class CustomDropDown;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::LongList)
 {
@@ -226,3 +227,4 @@ CLASS_METHODS_META(o2::LongList)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
 }
 END_META;
+// --- END META ---

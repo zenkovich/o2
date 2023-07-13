@@ -210,7 +210,9 @@ namespace o2
 		state->mOwner->RegTrack<Vec2F>(this, path, state);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AnimationTrack<o2::Vec2F>);
 
 DECLARE_CLASS(o2::AnimationTrack<o2::Vec2F>::Player);
+// --- END META ---

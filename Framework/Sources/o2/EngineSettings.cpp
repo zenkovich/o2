@@ -11,13 +11,15 @@ o2::Platform GetEnginePlatform()
 	return o2::Platform::Mac;
 #elif defined PLATFORM_IOS
 	return o2::Platform::iOS;
+#elif defined PLATFORM_LINUX
+    return o2::Platform::Linux;
 #endif
 }
 
 o2::DeviceType GetDeviceType()
 {
 	auto platform = GetEnginePlatform();
-	if (platform == o2::Platform::Windows || platform == o2::Platform::Mac)
+	if (platform == o2::Platform::Windows || platform == o2::Platform::Mac || platform == o2::Platform::Linux)
 		return o2::DeviceType::PC;
 	
 	return o2::DeviceType::Phone;
@@ -33,7 +35,7 @@ const char* GetProjectPath()
 
 const char* GetProjectSettingPath()
 {
-#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS
+#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS || defined PLATFORM_LINUX
 	return "../../ProjectSettings.json";
 #else
 	return "ProjectSettings.json";
@@ -64,20 +66,14 @@ bool IsReleaseBuild()
 #endif
 }
 
-bool IsAssetsPrebuildEnabled()
+bool IsRenderDrawCallsDebugEnabled()
 {
-#if defined(O2_DONT_BUILD_ASSETS)
-    return false;
-#elif defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC) || defined(PLATFORM_LINUX)
 	return false;
-#else
-	return false;
-#endif
 }
 
 const char* GetProjectRootPath()
 {
-#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS
+#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS || defined PLATFORM_LINUX
 	return "../../";
 #else
 	return "";
@@ -110,7 +106,7 @@ const char* GetBuiltAssetsPath()
 #elif defined PLATFORM_ANDROID
 	return "AndroidAssets/BuiltAssets/";
 #elif defined PLATFORM_MAC
-    return "../../BuiltAssets/Mac/Data/";
+    return "BuiltAssets/Mac/Data/";
 #elif defined PLATFORM_LINUX
     return "BuiltAssets/Linux/Data/";
 #elif defined PLATFORM_IOS
@@ -130,7 +126,7 @@ const char* GetBuiltAssetsTreePath()
 #elif defined PLATFORM_ANDROID
 	return "AndroidAssets/AssetsTree.json";
 #elif defined PLATFORM_MAC
-    return "../../BuiltAssets/Mac/Data.json";
+    return "BuiltAssets/Mac/Data.json";
 #elif defined PLATFORM_LINUX
     return "BuiltAssets/Linux/Data.json";
 #elif defined PLATFORM_IOS
@@ -140,7 +136,7 @@ const char* GetBuiltAssetsTreePath()
 
 const char* GetEditorAssetsPath()
 {
-#if defined PLATFORM_WINDOWS || defined PLATFORM_MAC
+#if defined PLATFORM_WINDOWS || defined PLATFORM_MAC || defined PLATFORM_LINUX
 	return "../../o2/Editor/Assets/";
 #else
 	return "";
@@ -152,7 +148,9 @@ const char* GetEditorBuiltAssetsPath()
 #if defined PLATFORM_WINDOWS
 	return "../../BuiltAssets/Windows/EditorData/";
 #elif defined PLATFORM_MAC
-	return "../../BuiltAssets/Mac/EditorData/";
+    return "BuiltAssets/Mac/EditorData/";
+#elif defined PLATFORM_LINUX
+    return "BuiltAssets/Linux/EditorData/";
 #endif
 	return "";
 }
@@ -162,15 +160,21 @@ const char* GetEditorBuiltAssetsTreePath()
 #if defined PLATFORM_WINDOWS
 	return "../../BuiltAssets/Windows/EditorData.json";
 #elif defined PLATFORM_MAC
-	return "../../BuiltAssets/Mac/EditorData.json";
+    return "BuiltAssets/Mac/EditorData.json";
+#elif defined PLATFORM_LINUX
+    return "BuiltAssets/Linux/EditorData.json";
 #endif
 	return "";
 }
 
 const char* GetBuiltitAssetsPath()
 {
-#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS || defined PLATFORM_LINUX
-	return "../../o2/Framework/Assets/";
+#if defined PLATFORM_WINDOWS
+	return "../../BuiltAssets/Windows/FrameworkData/";
+#elif defined PLATFORM_MAC
+	return "BuiltAssets/Max/FrameworkData/";
+#elif defined PLATFORM_LINUX
+	return "BuiltAssets/Linux/FrameworkData/";
 #else
 	return "FrameworkAssets/";
 #endif

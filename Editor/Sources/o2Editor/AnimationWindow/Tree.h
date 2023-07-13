@@ -205,6 +205,7 @@ namespace Editor
 		friend class AnimationTree;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AnimationTree)
 {
@@ -286,3 +287,4 @@ CLASS_METHODS_META(Editor::AnimationTreeNode)
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateTrackControlView);
 }
 END_META;
+// --- END META ---

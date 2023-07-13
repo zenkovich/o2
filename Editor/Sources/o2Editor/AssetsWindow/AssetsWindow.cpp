@@ -385,8 +385,6 @@ namespace Editor
 
 		mCuttingAssets.Clear();
 		mAssetsGridScroll->UpdateCuttingAssets();
-
-		o2Assets.RebuildAssets();
 	}
 
 	void AssetsWindow::DeleteAssets(const Vector<String>& assetsPaths)
@@ -395,9 +393,7 @@ namespace Editor
 		mAssetsGridScroll->UpdateCuttingAssets();
 
 		for (auto& path : assetsPaths)
-			o2Assets.RemoveAsset(path, false);
-
-		o2Assets.RebuildAssets();
+			o2Assets.RemoveAsset(path);
 	}
 
 	Sprite* AssetsWindow::GetAssetIconSprite(const AssetRef& asset)
@@ -442,5 +438,7 @@ namespace Editor
 		mAssetsGridScroll->UpdateAssetsByCurrentPath();
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AssetsWindow);
+// --- END META ---

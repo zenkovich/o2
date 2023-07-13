@@ -65,5 +65,7 @@ namespace Editor
 		return handle == other.handle;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::ITrackControl);
+// --- END META ---

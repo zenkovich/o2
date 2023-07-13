@@ -75,6 +75,7 @@ namespace Editor
 		SERIALIZABLE(ITrackControl);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ITrackControl)
 {
@@ -105,3 +106,4 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
+// --- END META ---

@@ -53,6 +53,12 @@ namespace o2
 		// Returns font file name
 		virtual String GetFileName() const;
 
+		// Returns texture
+		const TextureRef& GetTexture() const;
+
+		// Returns texture source rectangle
+		const RectI& GetTextureSrcRect() const;
+
 	protected:
 		// --------------------
 		// Character definition

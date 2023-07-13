@@ -2259,9 +2259,11 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::CurvesEditor);
 
 DECLARE_CLASS(Editor::CurvesEditor::CurveHandle);
 
 DECLARE_CLASS(Editor::CurvesEditor::CurveCopyInfo);
+// --- END META ---

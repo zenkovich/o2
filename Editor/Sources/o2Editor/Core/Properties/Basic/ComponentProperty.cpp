@@ -10,7 +10,7 @@
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 
 
@@ -192,7 +192,7 @@ namespace Editor
 
 	void ComponentProperty::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneTree*>(group))
+		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
 			OnDroppedFromActorsTree(actorsTree);
 		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
 			OnDroppedFromAssetsScroll(assetsScroll);
@@ -200,7 +200,7 @@ namespace Editor
 
 	void ComponentProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneTree*>(group))
+		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
 			OnDragEnterFromActorsTree(actorsTree);
 		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
 			OnDragEnterFromAssetsScroll(assetsScroll);
@@ -208,13 +208,13 @@ namespace Editor
 
 	void ComponentProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneTree*>(group))
+		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
 			OnDragExitFromActorsTree(actorsTree);
 		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
 			OnDragExitFromAssetsScroll(assetsScroll);
 	}
 
-	void ComponentProperty::OnDroppedFromActorsTree(SceneTree* actorsTree)
+	void ComponentProperty::OnDroppedFromActorsTree(SceneHierarchyTree* actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() > 1)
 			return;
@@ -228,7 +228,7 @@ namespace Editor
 		mBox->Focus();
 	}
 
-	void ComponentProperty::OnDragEnterFromActorsTree(SceneTree* actorsTree)
+	void ComponentProperty::OnDragEnterFromActorsTree(SceneHierarchyTree* actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() != 1)
 			return;
@@ -244,7 +244,7 @@ namespace Editor
 		mBox->SetState("focused", true);
 	}
 
-	void ComponentProperty::OnDragExitFromActorsTree(SceneTree* actorsTree)
+	void ComponentProperty::OnDragExitFromActorsTree(SceneHierarchyTree* actorsTree)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
@@ -287,5 +287,7 @@ namespace Editor
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::ComponentRef>);
+// --- META ---
 
 DECLARE_CLASS(Editor::ComponentProperty);
+// --- END META ---

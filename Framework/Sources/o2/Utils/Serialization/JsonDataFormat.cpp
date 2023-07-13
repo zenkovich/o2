@@ -81,7 +81,7 @@ namespace o2
 
 	bool JsonDataDocumentParseHandler::Uint64(uint64_t value)
 	{
-		new (stack.template Push<DataValue>()) DataValue(value, document);
+		new (stack.template Push<DataValue>()) DataValue((UInt64)value, document);
 		return true;
 	}
 

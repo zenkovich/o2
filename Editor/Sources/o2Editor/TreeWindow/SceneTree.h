@@ -224,6 +224,7 @@ namespace Editor
 		friend class SceneTree;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SceneTree)
 {
@@ -319,3 +320,4 @@ CLASS_METHODS_META(Editor::SceneTreeNode)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnObjectNameChanged, const WString&);
 }
 END_META;
+// --- END META ---

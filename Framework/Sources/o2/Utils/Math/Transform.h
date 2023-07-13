@@ -275,6 +275,7 @@ namespace o2
 		virtual bool IsSerializeEnabled() const;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Transform)
 {
@@ -391,3 +392,4 @@ CLASS_METHODS_META(o2::Transform)
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsSerializeEnabled);
 }
 END_META;
+// --- END META ---

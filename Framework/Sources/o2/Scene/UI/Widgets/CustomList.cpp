@@ -600,5 +600,7 @@ namespace o2
 		return idx == other.idx;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::CustomList);
+// --- END META ---

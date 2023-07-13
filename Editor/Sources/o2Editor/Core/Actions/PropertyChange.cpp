@@ -90,5 +90,7 @@ namespace Editor
 		}
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::PropertyChangeAction);
+// --- END META ---

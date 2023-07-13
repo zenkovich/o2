@@ -53,6 +53,7 @@ namespace Editor
 		void OnDisabled() override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SkinningMeshBoneComponentViewer)
 {
@@ -78,3 +79,4 @@ CLASS_METHODS_META(Editor::SkinningMeshBoneComponentViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
+// --- END META ---

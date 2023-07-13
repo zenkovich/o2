@@ -67,5 +67,7 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::JavaScriptAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::JavaScriptAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::JavaScriptAsset>);
+// --- META ---
 
 DECLARE_CLASS(o2::JavaScriptAsset);
+// --- END META ---

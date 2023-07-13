@@ -73,6 +73,7 @@ namespace o2
 
 	typedef Ref<ActorAsset> ActorAssetRef;
 }
+// --- META ---
 
 CLASS_BASES_META(o2::ActorAsset)
 {
@@ -104,3 +105,4 @@ CLASS_METHODS_META(o2::ActorAsset)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
+// --- END META ---

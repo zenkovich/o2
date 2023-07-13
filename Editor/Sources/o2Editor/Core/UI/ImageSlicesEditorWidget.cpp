@@ -223,7 +223,9 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::ImageSlicesEditorWidget);
 
 DECLARE_CLASS(Editor::ImageSlicesEditorWidget::PreviewImage);
+// --- END META ---

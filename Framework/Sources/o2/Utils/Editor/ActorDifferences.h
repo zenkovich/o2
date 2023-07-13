@@ -3,10 +3,11 @@
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/StringDef.h"
-#include "../Reflection/FieldInfo.h"
+#include "o2/Utils/Reflection/FieldInfo.h"
 
 namespace o2
 {
+#if IS_EDITOR
 	class Actor;
 	class SceneEditableObject;
 	class Component;
@@ -141,4 +142,5 @@ namespace o2
 		// Returns path to field by fields stack
 		static String GetFieldPath(const Vector<const FieldInfo*>& stack);
 	};
+#endif
 }

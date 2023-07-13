@@ -76,6 +76,7 @@ namespace Editor
 		return &TypeOf(_component_type);
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DefaultActorComponentViewer)
 {
@@ -121,3 +122,4 @@ CLASS_METHODS_META(Editor::TActorComponentViewer<_component_type>)
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
 }
 END_META;
+// --- END META ---

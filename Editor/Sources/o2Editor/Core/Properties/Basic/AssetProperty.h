@@ -124,6 +124,7 @@ namespace Editor
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AssetProperty)
 {
@@ -177,3 +178,4 @@ CLASS_METHODS_META(Editor::AssetProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
 }
 END_META;
+// --- END META ---

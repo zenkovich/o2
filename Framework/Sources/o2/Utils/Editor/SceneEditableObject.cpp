@@ -5,6 +5,7 @@
 
 namespace o2
 {
+#if IS_EDITOR
 	SceneEditableObject::SceneEditableObject()
 	{ }
 
@@ -193,7 +194,11 @@ namespace o2
 
 	void SceneEditableObject::GetDifferences(ActorDifferences& differences) const
 	{ }
-
+#endif
 }
+// --- META ---
 
+#if  IS_EDITOR
 DECLARE_CLASS(o2::SceneEditableObject);
+#endif
+// --- END META ---

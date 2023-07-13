@@ -8,11 +8,11 @@
 
 namespace o2
 {
-	BitmapFont::BitmapFont():
+	BitmapFont::BitmapFont() :
 		Font()
 	{}
 
-	BitmapFont::BitmapFont(const String& fileName):
+	BitmapFont::BitmapFont(const String& fileName) :
 		Font()
 	{
 		Load(fileName);
@@ -22,65 +22,79 @@ namespace o2
 	{
 		mFileName = fileName;
 
-// 		pugi::xml_document doc;
-// 		auto res = doc.load_file(fileName.Data());
-// 
-// 		if (res.status != pugi::status_ok)
-// 		{
-// 			o2Render.mLog->Error("Failed to load Bitmap Font file: " + fileName);
-// 			return false;
-// 		}
-// 
-// 		pugi::xml_node root = doc.child(L"font");
-// 
-// 		if (pugi::xml_node commonNode = root.child(L"common"))
-// 		{
-// 			String textureName = commonNode.attribute(L"texture").value();
-// 			ImageAssetRef image(textureName);
-// 			mTexture = image->GetAtlasTextureRef();
-// 			mTextureSrcRect = image->GetAtlasRect();
-// 
-// 			mBaseHeight = commonNode.attribute(L"base").as_float();
-// 			mLineHeight = commonNode.attribute(L"lineHeight").as_float();
-// 		}
-// 		else
-// 		{
-// 			o2Render.mLog->Error("Failed to get common info in font: " + fileName + ". Bad file format");
-// 			return false;
-// 		}
-// 
-// 		if (pugi::xml_node charsNode = root.child(L"chars"))
-// 		{
-// 			Vec2F texOffs = mTextureSrcRect.LeftBottom();
-// 			for (pugi::xml_node charNode = charsNode.child(L"char"); charNode; charNode = charNode.next_sibling(L"char"))
-// 			{
-// 				Character newChar;
-// 
-// 				newChar.mTexSrc.left = charNode.attribute(L"x").as_float();
-// 				newChar.mTexSrc.top = charNode.attribute(L"y").as_float();
-// 				newChar.mTexSrc.right = charNode.attribute(L"width").as_float() + newChar.mTexSrc.left;
-// 				newChar.mTexSrc.bottom = charNode.attribute(L"height").as_float() + newChar.mTexSrc.top;
-// 				newChar.mTexSrc += texOffs;
-// 
-// 				newChar.mOrigin.x = -charNode.attribute(L"xoffset").as_float();
-// 				newChar.mOrigin.y = mLineHeight - mBaseHeight;
-// 
-// 				newChar.mAdvance = charNode.attribute(L"xadvance").as_float();
-// 
-// 				newChar.mId = charNode.attribute(L"id").as_uint();
-// 
-// 				newChar.mHeight = 0;
-// 
-// 				AddCharacter(newChar);
-// 			}
-// 		}
-// 		else
-// 		{
-// 			o2Render.mLog->Error("Failed to get characters node in BMFont file: " + fileName + ". Bad file format");
-// 			return false;
-// 		}
+		DataDocument doc;
+		if (!doc.LoadFromFile(fileName))
+		{
+			o2Render.mLog->Error("Failed to load Bitmap Font file: " + fileName);
+			return false;
+		}
 
-		Vec2F invTexSize(1.0f/mTexture->GetSize().x, 1.0f/mTexture->GetSize().y);
+		if (auto common = doc.FindMember("common"))
+		{
+			String textureName = (*common)["texture"];
+			ImageAssetRef image(textureName);
+			if (image->GetAtlas() != UID::empty)
+			{
+				mTexture = image->GetAtlasTextureRef();
+				mTextureSrcRect = image->GetAtlasRect();
+			}
+			else
+			{
+				mTexture = TextureRef(image->GetBuiltFullPath());
+				mTextureSrcRect = RectF(Vec2F(), mTexture->GetSize());
+			}
+
+
+			mBaseHeight = (*common)["base"];
+			mLineHeight = (*common)["lineHeight"];
+		}
+		else
+		{
+			o2Render.mLog->Error("Failed to get common info in font: " + fileName + ". Bad file format");
+			return false;
+		}
+
+		if (auto chars = doc.FindMember("chars"))
+		{
+			Vec2F invTexSize = Vec2F(1, 1)/mTexture->GetSize();
+			Vec2F texOffs = Vec2F(mTextureSrcRect.LeftBottom())*invTexSize;
+			for (auto child : *chars)
+			{
+				Character newChar;
+
+				newChar.mTexSrc.left = (float)child["x"];
+				newChar.mTexSrc.top = (float)child["y"];
+				newChar.mTexSrc.right = (float)child["width"] + newChar.mTexSrc.left;
+				newChar.mTexSrc.bottom = (float)child["height"] + newChar.mTexSrc.top;
+
+				newChar.mSize = newChar.mTexSrc.Size().InvertedY();
+
+				newChar.mTexSrc.left *= invTexSize.x;
+				newChar.mTexSrc.bottom *= invTexSize.y;
+				newChar.mTexSrc.right *= invTexSize.x;
+				newChar.mTexSrc.top *= invTexSize.y;
+
+				newChar.mTexSrc += texOffs;
+
+				newChar.mOrigin.x = -(float)(child["xoffset"]);
+				newChar.mOrigin.y = mLineHeight - mBaseHeight;
+
+				newChar.mAdvance = child["xadvance"];
+
+				newChar.mId = child["letter"].GetString()[0];
+				 
+				newChar.mHeight = 0;
+
+				AddCharacter(newChar);
+			}
+		}
+		else
+		{
+			o2Render.mLog->Error("Failed to get characters node in BMFont file: " + fileName + ". Bad file format");
+			return false;
+		}
+
+		Vec2F invTexSize(1.0f / mTexture->GetSize().x, 1.0f / mTexture->GetSize().y);
 		for (auto heightKV : mCharacters)
 		{
 			for (auto charKV : heightKV.second)

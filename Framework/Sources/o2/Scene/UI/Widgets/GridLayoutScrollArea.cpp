@@ -274,5 +274,7 @@ namespace o2
 		SetInteractable(mResEnabled);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::GridLayoutScrollArea);
+// --- END META ---

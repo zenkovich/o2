@@ -1086,10 +1086,16 @@ namespace o2
 		return unicode;
 		
 #elif defined PLATFORM_MAC
-		if (code < 0)
-			return 0;
+        if (code < 0)
+            return 0;
 		
-		return (UInt16)code;
+        return (UInt16)code;
+
+#elif defined PLATFORM_LINUX
+        if (code < 0)
+            return 0;
+
+        return (UInt16)code;
 #endif
 		return 0;
 	}
@@ -1317,5 +1323,7 @@ namespace o2
 		mCaretBlinkTime = 0;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::EditBox);
+// --- END META ---

@@ -598,5 +598,7 @@ namespace o2
 		mEmitParticlesColorB = colorB;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ParticlesEmitter);
+// --- END META ---

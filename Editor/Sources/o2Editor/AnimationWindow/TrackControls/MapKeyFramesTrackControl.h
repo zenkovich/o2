@@ -264,6 +264,7 @@ namespace Editor
 			Wrapper::RemoveKeyAt(*track, idx);
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::MapKeyFramesTrackControl)
 {
@@ -301,3 +302,4 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	FUNCTION().PRIVATE().SIGNATURE(Vector<KeyHandle*>, FindHandlesAtPosition, float);
 }
 END_META;
+// --- END META ---

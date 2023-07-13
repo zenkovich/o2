@@ -68,13 +68,13 @@ namespace o2
 		void Draw();
 
 		// Returns is layer enabled @SCRIPTABLE
-		bool IsEnabled() const override;
+		bool IsEnabled() const OPTIONAL_OVERRIDE;
 
 		// Returns is layer enabled and all parent are enabled too @SCRIPTABLE
-		bool IsEnabledInHierarchy() const override;
+		bool IsEnabledInHierarchy() const OPTIONAL_OVERRIDE;
 
 		// Sets enabling of layer @SCRIPTABLE
-		void SetEnabled(bool enabled) override;
+		void SetEnabled(bool enabled) OPTIONAL_OVERRIDE;
 
 		// Sets parent layer @SCRIPTABLE
 		void SetParent(WidgetLayer* parent);
@@ -181,6 +181,12 @@ namespace o2
 		bool mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
 
 	protected:
+		// Beginning serialization callback
+		void SerializeBasicOverride(DataValue& node) const;
+
+		// Completion deserialization callback
+		void DeserializeBasicOverride(const DataValue& node);
+
 		// Regular serializing without prototype
 		void SerializeRaw(DataValue& node) const;
 
@@ -309,12 +315,6 @@ namespace o2
 		// Called when something changed in this object
 		void OnChanged() override;
 
-		// Beginning serialization callback
-		void SerializeBasicOverride(DataValue& node) const;
-
-		// Completion deserialization callback
-		void DeserializeBasicOverride(const DataValue& node);
-
 	protected:
 		bool mIsLocked = false; // Is locked
 
@@ -348,10 +348,11 @@ namespace o2
 		return nullptr;
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(o2::WidgetLayer)
 {
-	BASE_CLASS(o2::SceneEditableObject);
+	BASE_CLASS(WidgetLayerBase);
 }
 END_META;
 CLASS_FIELDS_META(o2::WidgetLayer)
@@ -378,8 +379,10 @@ CLASS_FIELDS_META(o2::WidgetLayer)
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParent);
 	FIELD().PROTECTED().NAME(mChildren);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingLayout);
+#if  IS_EDITOR
 	FIELD().PUBLIC().NAME(locked);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsLocked);
+#endif
 }
 END_META;
 CLASS_METHODS_META(o2::WidgetLayer)
@@ -415,6 +418,8 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetResTransparency);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const RectF&, GetRect);
+	FUNCTION().PROTECTED().SIGNATURE(void, SerializeBasicOverride, DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeBasicOverride, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeWithProto, DataValue&);
@@ -428,6 +433,7 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetAllChildLayers);
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsOnScene);
 	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
 	FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
@@ -456,9 +462,9 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	FUNCTION().PUBLIC().SIGNATURE(Layout, GetLayout);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLayout, const Layout&);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnChanged);
-	FUNCTION().PUBLIC().SIGNATURE(void, SerializeBasicOverride, DataValue&);
-	FUNCTION().PUBLIC().SIGNATURE(void, DeserializeBasicOverride, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, BeginMakePrototype);
 	FUNCTION().PROTECTED().SIGNATURE(void, BeginInstantiatePrototype);
+#endif
 }
 END_META;
+// --- END META ---

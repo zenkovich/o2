@@ -104,6 +104,7 @@ namespace Editor
     };
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ScaleTool)
 {
@@ -152,3 +153,4 @@ CLASS_METHODS_META(Editor::ScaleTool)
 	FUNCTION().PROTECTED().SIGNATURE(void, HandleReleased);
 }
 END_META;
+// --- END META ---

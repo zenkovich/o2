@@ -72,6 +72,7 @@ namespace o2
 		void OnAddToScene() override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::BoxCollider)
 {
@@ -99,10 +100,13 @@ CLASS_METHODS_META(o2::BoxCollider)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableFromCreateMenu);
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().SIGNATURE(void, OnAddedFromEditor);
+#endif
 	FUNCTION().PRIVATE().SIGNATURE(b2Shape*, GetShape, const Basis&);
 	FUNCTION().PRIVATE().SIGNATURE(void, OnTransformChanged);
 	FUNCTION().PRIVATE().SIGNATURE(void, FitSize);
 	FUNCTION().PRIVATE().SIGNATURE(void, OnAddToScene);
 }
 END_META;
+// --- END META ---

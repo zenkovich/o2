@@ -76,8 +76,9 @@ namespace o2
 		// -----------------------------------
 		struct PlatformMeta: public ISerializable
 		{
-			Vec2I  maxSize = Vec2I(2048, 2048); // Maximal atlas size @SERIALIZABLE
-			String format;                      // Atlas format @SERIALIZABLE
+			Vec2I         maxSize = Vec2I(2048, 2048); // Maximal atlas size @SERIALIZABLE
+			TextureFormat format = TextureFormat::R8G8B8A8;  // Atlas format @SERIALIZABLE
+			int           border = 0;                        // Images pack border @SERIALIZABLE
 
 			bool operator==(const PlatformMeta& other) const;
 
@@ -90,13 +91,18 @@ namespace o2
 		class Meta: public DefaultAssetMeta<AtlasAsset>
 		{
 		public:
-			PlatformMeta ios;     // IOS specified meta @SERIALIZABLE
-			PlatformMeta android; // Android specified meta @SERIALIZABLE
-			PlatformMeta macOS;   // MacOS specified meta @SERIALIZABLE
-			PlatformMeta windows; // Windows specified meta @SERIALIZABLE
-			int          border;  // Images pack border @SERIALIZABLE
+			PlatformMeta common; // Common meta @SERIALIZABLE
+
+			PlatformMeta* ios = nullptr;     // IOS specified meta @SERIALIZABLE
+			PlatformMeta* android = nullptr; // Android specified meta @SERIALIZABLE
+			PlatformMeta* macOS = nullptr;   // MacOS specified meta @SERIALIZABLE
+			PlatformMeta* windows = nullptr; // Windows specified meta @SERIALIZABLE
+			PlatformMeta* linuxOS = nullptr; // Linux specified meta @SERIALIZABLE
 
 		public:
+			// Returns platform meta for specified platform
+			PlatformMeta GetResultPlatformMeta(Platform platform) const;
+
 			// Returns true if other meta is equal to this
 			bool IsEqual(AssetMeta* other) const override;
 
@@ -153,6 +159,7 @@ namespace o2
 
 	typedef Ref<AtlasAsset> AtlasAssetRef;
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AtlasAsset)
 {
@@ -197,7 +204,8 @@ END_META;
 CLASS_FIELDS_META(o2::AtlasAsset::PlatformMeta)
 {
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2I(2048, 2048)).NAME(maxSize);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(format);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(TextureFormat::R8G8B8A8).NAME(format);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(border);
 }
 END_META;
 CLASS_METHODS_META(o2::AtlasAsset::PlatformMeta)
@@ -212,16 +220,18 @@ CLASS_BASES_META(o2::AtlasAsset::Meta)
 END_META;
 CLASS_FIELDS_META(o2::AtlasAsset::Meta)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(ios);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(android);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(macOS);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(windows);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(border);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(common);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(ios);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(android);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(macOS);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(windows);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(linuxOS);
 }
 END_META;
 CLASS_METHODS_META(o2::AtlasAsset::Meta)
 {
 
+	FUNCTION().PUBLIC().SIGNATURE(PlatformMeta, GetResultPlatformMeta, Platform);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, AssetMeta*);
 }
 END_META;
@@ -251,3 +261,4 @@ CLASS_METHODS_META(o2::AtlasAsset::Page)
 	FUNCTION().PUBLIC().SIGNATURE(_tmp1, ImagesRects);
 }
 END_META;
+// --- END META ---

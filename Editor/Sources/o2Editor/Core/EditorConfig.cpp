@@ -83,9 +83,11 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::EditorConfig);
 
 DECLARE_CLASS(Editor::EditorConfig::GlobalConfig);
 
 DECLARE_CLASS(Editor::EditorConfig::ProjectConfig);
+// --- END META ---

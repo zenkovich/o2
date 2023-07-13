@@ -5,6 +5,7 @@
 #include "o2/Render/Sprite.h"
 #include "o2Editor/Core/Actions/ActionsList.h"
 #include "o2Editor/Core/EditorConfig.h"
+#include "o2/Assets/Types/SceneAsset.h"
 
 using namespace o2;
 
@@ -46,10 +47,13 @@ namespace Editor
 		const String& GetLoadedSceneName() const;
 
 		// Loads scene from file
-		void LoadScene(const String& name);
+		void LoadScene(const SceneAssetRef& scene);
+
+		// Saves current scene
+		void SaveScene();
 
 		// Saves scene from file
-		void SaveScene(const String& name);
+		void SaveSceneAs(const String& path);
 
 		// Makes new scene
 		void MakeNewScene();
@@ -57,25 +61,25 @@ namespace Editor
 		// Returns is current scene was changed
 		bool IsSceneChanged() const;
 
-		// Runs or stops scene playing. Saving scene into temprorary file before playing, restoring after stopping
+		// Runs or stops scene playing. Saving scene into temporary file before playing, restoring after stopping
 		void SetPlaying(bool playing);
 
 		// Is scene playing
 		bool IsPlaying() const;
 
 	protected:
-		Sprite* mBackground; // Background sprite
-		Sprite* mBackSign;   // Background o2 signature
+		Sprite* mBackground = nullptr; // Background sprite
+		Sprite* mBackSign = nullptr;   // Background o2 signature
 
-		UIRoot*         mUIRoot;         // Root editor UI
-		WindowsManager* mWindowsManager; // Windows manager
-		EditorConfig*   mConfig;         // Application configuration
-		ToolsPanel*     mToolsPanel;     // Tools panel
-		MenuPanel*      mMenuPanel;      // Menu panel
+		UIRoot*         mUIRoot = nullptr;         // Root editor UI
+		WindowsManager* mWindowsManager = nullptr; // Windows manager
+		EditorConfig*   mConfig = nullptr;         // Application configuration
+		ToolsPanel*     mToolsPanel = nullptr;     // Tools panel
+		MenuPanel*      mMenuPanel = nullptr;      // Menu panel
 
-		Properties* mProperties; // Properties manager
+		Properties* mProperties = nullptr; // Properties manager
 
-		String mLoadedScene; // Current loaded scene
+		SceneAssetRef mLoadedScene; // Current loaded scene
 
 		DataDocument mSceneDump; // Scene dump, created before playing
 

@@ -352,7 +352,7 @@ namespace o2
 		return res;
 	}
 
-	Color4 Color4::SomeColor(int idx)
+	Color4 Color4::SomeColor(int idx, int alpha /*= 255*/)
 	{
 		Color4 res = Color4::White();
 
@@ -364,6 +364,7 @@ namespace o2
 		float currCorner = Math::Mod(fi, cornersOnCircle)/cornersOnCircle;
 		float currCycle = Math::Floor(fi/cornersOnCircle);
 		res.SetHSL(Math::Mod(startOffset + currCorner + currCycle*cycleOffset, 1.0f), 0.7f, 0.6f);
+		res.a = alpha;
 		return res;
 	}
 

@@ -364,5 +364,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::ActorViewer);
+// --- END META ---

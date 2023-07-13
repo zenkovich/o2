@@ -335,7 +335,7 @@ namespace o2
 		if (mIsDraggingNodes)
 			UpdateDraggingInsertionAnim(dt);
 
-		if (mIsNeedUpdateView || o2Input.IsKeyPressed('B'))
+		if (mIsNeedUpdateView)
 			UpdateNodesStructure();
 
 		if (mIsNeedUdateLayout)
@@ -511,6 +511,8 @@ namespace o2
 		mSelectedNodes[idx]->SetSelected(false);
 		mSelectedObjects.Remove(mSelectedNodes[idx]->object);
 		mSelectedNodes.RemoveAt(idx);
+
+		OnSelectionChanged();
 	}
 
 	void Tree::AddSelectableObject(SelectableDragableObject* object)
@@ -622,7 +624,8 @@ namespace o2
 					UpdateNodeView(mAllNodes[i], mAllNodes[i]->widget, i);
 			}
 		}
-		else mIsNeedUpdateView = true;
+		else 
+			mIsNeedUpdateView = true;
 	}
 
 	TreeNode* Tree::GetNode(void* object)
@@ -1922,6 +1925,7 @@ namespace o2
 		return "Tree";
 	}
 }
+// --- META ---
 
 ENUM_META(o2::Tree::RearrangeType)
 {
@@ -1942,3 +1946,4 @@ END_ENUM_META;
 DECLARE_CLASS(o2::Tree);
 
 DECLARE_CLASS(o2::TreeNode);
+// --- END META ---

@@ -30,7 +30,7 @@ namespace o2
 #else
 	typedef ISerializable ActorBase;
 
-#define OPTIONAL_OVERRIDE override
+#define OPTIONAL_OVERRIDE
 #endif
 
 	// ---------------------------------------------------------------------------------------------
@@ -362,8 +362,8 @@ namespace o2
 	protected:
 		// Base actor constructor with transform
 		Actor(ActorTransform* transform, State sceneStatus = State::WaitingAddToScene,
-			  const String& name = "unnamed", bool enabled = true, bool resEnabled = true, bool locked = false,
-			  bool resLocked = false, const String& layerName = "", SceneLayer* layer = nullptr,
+			  const String& name = "unnamed", bool enabled = true, bool resEnabled = true, 
+			  const String& layerName = "", SceneLayer* layer = nullptr,
 			  SceneUID id = Math::Random(), UID assetId = UID(0));
 
 		// Default constructor with transform
@@ -456,6 +456,9 @@ namespace o2
 
 		// Called when parent changed
 		virtual void OnParentChanged(Actor* oldParent);
+
+		// Called when child changed
+		virtual void OnChildrenChanged();
 
 		// Called when child actor was added
 		virtual void OnChildAdded(Actor* child);
@@ -583,9 +586,6 @@ namespace o2
 		// Called when actor's name was changed
 		void OnNameChanged() override;
 
-		// Called when child changed
-		void OnChildrenChanged() override;
-
 	protected:
 		bool mLocked = false;    // Is actor locked @SERIALIZABLE
 		bool mResLocked = false; // Is actor locked in hierarchy @SERIALIZABLE
@@ -684,7 +684,7 @@ namespace o2
 	template<typename _type>
 	_type* Actor::GetComponentInChildren() const
 	{
-		_type* res = GetComponent<_type*>();
+		_type* res = GetComponent<_type>();
 
 		if (res)
 			return res;
@@ -737,12 +737,13 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 PRE_ENUM_META(o2::Actor::State);
 
 CLASS_BASES_META(o2::Actor)
 {
-	BASE_CLASS(o2::SceneEditableObject);
+	BASE_CLASS(ActorBase);
 }
 END_META;
 CLASS_FIELDS_META(o2::Actor)
@@ -776,6 +777,7 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().PROTECTED().NAME(mAssetId);
 	FIELD().PROTECTED().NAME(mReferences);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCopyVisitor);
+#if  IS_EDITOR
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(locked);
 	FIELD().PUBLIC().NAME(lockedInHierarchy);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onEnableChanged);
@@ -786,6 +788,7 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onNameChanged);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mLocked);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mResLocked);
+#endif
 }
 END_META;
 CLASS_METHODS_META(o2::Actor)
@@ -850,7 +853,9 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(Component*, GetComponent, const Type*);
 	FUNCTION().PUBLIC().SIGNATURE(Component*, GetComponent, SceneUID);
+#if  IS_SCRIPTING_SUPPORTED
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const ScriptValue&);
+#endif
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Component*>&, GetComponents);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayer, const String&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(SceneLayer*, GetLayer);
@@ -862,7 +867,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsModeOnScene, ActorCreateMode);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, State, const String&, bool, bool, bool, bool, const String&, SceneLayer*, SceneUID, UID);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, State, const String&, bool, bool, const String&, SceneLayer*, SceneUID, UID);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const ActorAssetRef&, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Component*>, ActorCreateMode);
@@ -891,13 +896,17 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenRearranged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerChanged, SceneLayer*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
+#if  IS_SCRIPTING_SUPPORTED
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorTransform*, GetTransform);
+#endif
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLocked, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, Lock);
 	FUNCTION().PUBLIC().SIGNATURE(void, Unlock);
@@ -925,7 +934,6 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnChanged);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnLockChanged);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnNameChanged);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnChildrenChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, SeparateActors, Vector<Actor*>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6, Vector<ISerializable*>&);
@@ -934,5 +942,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PROTECTED().SIGNATURE(void, BeginInstantiatePrototype);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetProtytypeDummy, ActorAssetRef);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLocking);
+#endif
 }
 END_META;
+// --- END META ---

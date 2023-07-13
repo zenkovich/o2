@@ -168,6 +168,7 @@ namespace o2
 		friend class ToggleGroup;
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::ToggleGroup::Type);
 
@@ -222,3 +223,4 @@ CLASS_METHODS_META(o2::Toggle)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
+// --- END META ---

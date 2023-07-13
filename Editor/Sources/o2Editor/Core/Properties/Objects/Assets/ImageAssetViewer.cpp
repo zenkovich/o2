@@ -35,12 +35,16 @@ namespace Editor
 
 		mAtlasProperty = dynamic_cast<AssetProperty*>(o2EditorProperties.CreateRegularField(
 			&TypeOf(AtlasAssetRef), "Atlas", mOnChildFieldChangeCompleted, [&](IPropertyField* field)
-		{
-			for (auto& target : mPropertiesContext.targets)
-				dynamic_cast<ImageAsset*>(target.first)->SetAtlas(mAtlasProperty->GetCommonValue()->GetUID());
+			{
+				for (auto& target : mPropertiesContext.targets)
+				{
+					dynamic_cast<ImageAsset*>(target.first)->SetAtlas(mAtlasProperty->GetCommonValue() ?
+																	  mAtlasProperty->GetCommonValue()->GetUID() :
+																	  UID());
+				}
 
-			onChanged(field);
-		}));
+				onChanged(field);
+			}));
 
 		mSpoiler->AddChild(mAtlasProperty);
 	}
@@ -57,5 +61,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::ImageAssetViewer);
+// --- END META ---

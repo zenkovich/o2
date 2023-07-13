@@ -244,6 +244,7 @@ namespace o2
 		void InternalSmoothKeyAt(int idx, float smoothCoef = 1.0f);
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::Spline::Key::Type);
 
@@ -339,3 +340,4 @@ CLASS_METHODS_META(o2::Spline::Key)
 	FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetGetApproximatedPointsBounds);
 }
 END_META;
+// --- END META ---

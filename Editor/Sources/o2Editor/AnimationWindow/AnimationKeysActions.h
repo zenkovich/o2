@@ -45,8 +45,8 @@ namespace Editor
 	{
 	public:
 		AnimationKeysChangeAction();
-		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys, 
-								  DataDocument& beforeKeysData, DataDocument& afterKeysData, 
+		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,
+								  DataDocument& beforeKeysData, DataDocument& afterKeysData,
 								  KeyHandlesSheet* editor);
 
 		String GetName() const override;
@@ -62,6 +62,7 @@ namespace Editor
 		KeyHandlesSheet*            mEditor;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AnimationAddKeysAction)
 {
@@ -138,3 +139,4 @@ CLASS_METHODS_META(Editor::AnimationKeysChangeAction)
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
+// --- END META ---

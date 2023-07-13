@@ -214,9 +214,6 @@ namespace o2
 		if (!IsFolderExist(path))
 			return false;
 
-		if (!recursive)
-			return RemoveDirectoryA(path.Data()) == TRUE;
-
 		fs::remove_all(path.Data());
 		return true;
 	}

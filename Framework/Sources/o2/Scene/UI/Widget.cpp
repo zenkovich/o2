@@ -52,17 +52,16 @@ namespace o2
 		if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
 			layerCopyVisitor = mnew WidgetLayer::InstantiatePrototypeCloneVisitor();
 
+#if IS_EDITOR
 		if (dynamic_cast<MakePrototypeCloneVisitor*>(other.mCopyVisitor))
 			layerCopyVisitor = mnew WidgetLayer::MakePrototypeCloneVisitor();
 
-		if constexpr (IS_EDITOR)
+		if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
 		{
-			if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
-			{
-				layersEditable.prototypeLink = &other.layersEditable;
-				internalChildrenEditable.prototypeLink = &other.internalChildrenEditable;
-			}
+			layersEditable.prototypeLink = &other.layersEditable;
+			internalChildrenEditable.prototypeLink = &other.internalChildrenEditable;
 		}
+#endif
 
 		for (auto layer : other.mLayers)
 		{
@@ -287,6 +286,8 @@ namespace o2
 
 	void Widget::Draw()
 	{
+		//PROFILE_SAMPLE_FUNC();
+
 		if (!mResEnabledInHierarchy || mIsClipped)
 		{
 			if (mIsClipped)
@@ -618,14 +619,13 @@ namespace o2
 		UpdateLayersDrawingSequence();
 		OnLayerAdded(layer);
 
-		if constexpr (IS_EDITOR)
+#if IS_EDITOR
+		if (Scene::IsSingletonInitialzed() && IsOnScene())
 		{
-			if (Scene::IsSingletonInitialzed() && IsOnScene())
-			{
-				o2Scene.OnObjectChanged(&layersEditable);
-				o2Scene.onChildrenHierarchyChanged(&layersEditable);
-			}
+			o2Scene.OnObjectChanged(&layersEditable);
+			o2Scene.onChildrenHierarchyChanged(&layersEditable);
 		}
+#endif
 
 		return layer;
 	}
@@ -691,7 +691,10 @@ namespace o2
 			delete layer;
 
 		UpdateLayersDrawingSequence();
+
+#if IS_EDITOR
 		OnChildrenChanged();
+#endif
 	}
 
 	void Widget::RemoveLayer(const String& path)
@@ -1245,11 +1248,10 @@ namespace o2
 		Actor::OnRemoveFromScene();
 		ISceneDrawable::OnRemoveFromScene();
 
-		if constexpr (IS_EDITOR)
-		{
-			o2Scene.mEditableObjects.Remove(&layersEditable);
-			o2Scene.mEditableObjects.Remove(&internalChildrenEditable);
-		}
+#if IS_EDITOR
+		o2Scene.mEditableObjects.Remove(&layersEditable);
+		o2Scene.mEditableObjects.Remove(&internalChildrenEditable);
+#endif
 
 		for (auto layer : mLayers)
 			layer->OnRemoveFromScene();
@@ -1270,11 +1272,10 @@ namespace o2
 		for (auto layer : mLayers)
 			layer->OnAddToScene();
 
-		if constexpr (IS_EDITOR)
-		{
-			o2Scene.mEditableObjects.Add(&layersEditable);
-			o2Scene.mEditableObjects.Add(&internalChildrenEditable);
-		}
+#if IS_EDITOR
+		o2Scene.mEditableObjects.Add(&layersEditable);
+		o2Scene.mEditableObjects.Add(&internalChildrenEditable);
+#endif
 	}
 
 	void Widget::UpdateChildWidgetsList()
@@ -1389,14 +1390,16 @@ namespace o2
 
 			layout->SetDirty(false);
 
-			if constexpr (IS_EDITOR)
-			{
-				if (IsOnScene())
-					o2Scene.onEnableChanged(this);
-			}
+#if IS_EDITOR
+			if (IsOnScene())
+				o2Scene.onEnableChanged(this);
+#endif
 
 			OnEnableInHierarchyChanged();
+
+#if IS_EDITOR
 			OnChanged();
+#endif
 		}
 
 		for (auto comp : mComponents)
@@ -1492,6 +1495,13 @@ namespace o2
 		GetLayoutData().childrenWorldRect = childrenWorldRect;
 	}
 
+#if IS_SCRIPTING_SUPPORTED
+	WidgetLayout* Widget::GetLayoutScript()
+	{
+		return layout;
+	}
+#endif
+
 #if IS_EDITOR
 
 	bool Widget::isEditorLayersVisible = true;
@@ -1531,6 +1541,8 @@ namespace o2
 
 	void Widget::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
+		idx -= 2; // Because of internal editable objects layers and internal children
+
 		if (auto actor = dynamic_cast<Actor*>(object))
 		{
 			if (idx < 0)
@@ -1721,9 +1733,15 @@ namespace o2
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Widget>);
+// --- META ---
 
 DECLARE_CLASS(o2::Widget);
 
+#if  IS_EDITOR
 DECLARE_CLASS(o2::Widget::LayersEditable);
+#endif
 
+#if  IS_EDITOR
 DECLARE_CLASS(o2::Widget::InternalChildrenEditableEditable);
+#endif
+// --- END META ---

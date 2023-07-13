@@ -490,7 +490,10 @@ namespace o2
 
 		static void Read(T& value, const ScriptValue& data)
 		{
-			value = Reflection::GetEnumValue<T>(data.GetValue<String>());
+			if (data.GetValueType() == ValueType::Number)
+				value = (T)data.GetValue<int>();
+			else
+				value = Reflection::GetEnumValue<T>(data.GetValue<String>());
 		}
 	};
 

@@ -61,6 +61,8 @@ namespace o2
 
 	void TaskManager::Update(float dt)
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		Vector<Task*> doneTasks;
 		for (auto task : mTasks)
 		{

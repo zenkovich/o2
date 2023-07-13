@@ -441,7 +441,7 @@ namespace o2
 	void* ObjectType::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
 	{
 		IObject* iobject = DynamicCastToIObject(object);
-		const Type* realType = &iobject->GetType();
+		const Type* realType = &(iobject->GetType());
 		if (realType == this)
 			return Type::GetFieldPtr(object, path, fieldInfo);
 
@@ -478,14 +478,15 @@ namespace o2
 
 	IAbstractValueProxy* FunctionType::GetValueProxy(void* object) const
 	{
-		static int offs = (int)((AbstractFunction*)((Function<void()>*)1)) - (int)(Function<void()>*)1;
+		static int offs = (long)((AbstractFunction*)((Function<void()>*)1)) - (long)(Function<void()>*)1;
 		auto btpr = reinterpret_cast<std::byte*>(object);
 		auto ptr = btpr + offs;
 
 		return mnew PointerValueProxy<AbstractFunction>(reinterpret_cast<AbstractFunction*>(ptr));
 	}
-
 }
+
+o2::TypeId TypesCheckupHelper::counter = 0;
 
 ENUM_META(o2::Type::Usage)
 {

@@ -34,10 +34,10 @@ namespace o2
 		virtual _type* GetParent() const;
 
 		// Return child nodes
-		virtual Vector<_type*>& GetChilds();
+		virtual Vector<_type*>& GetChildren();
 
 		// Returns constant child nodes
-		virtual const Vector<_type*>& GetChilds() const;
+		virtual const Vector<_type*>& GetChildren() const;
 
 	protected:
 		_type*         _this;     // Template this pointer
@@ -132,13 +132,13 @@ namespace o2
 	}
 
 	template<typename _type>
-	Vector<_type*>& ITreeNode<_type>::GetChilds()
+	Vector<_type*>& ITreeNode<_type>::GetChildren()
 	{
 		return mChildren;
 	}
 
 	template<typename _type>
-	const Vector<_type*>& ITreeNode<_type>::GetChilds() const
+	const Vector<_type*>& ITreeNode<_type>::GetChildren() const
 	{
 		return mChildren;
 	}

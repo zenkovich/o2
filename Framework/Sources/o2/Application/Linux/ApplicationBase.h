@@ -37,7 +37,7 @@ namespace o2
 
 		bool mNeedPlatformInitialization = true; // True, if need to initialize platform: window and render
 
-	public:
+    public:
 		friend class Render;
 		friend class FileSystem;
 	};

@@ -162,6 +162,7 @@ namespace Editor
 		});
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::IObjectPropertiesViewer)
 {
@@ -237,3 +238,4 @@ CLASS_METHODS_META(Editor::TObjectPropertiesViewer<_object_type>)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp1);
 }
 END_META;
+// --- END META ---

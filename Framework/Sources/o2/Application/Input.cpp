@@ -3,6 +3,7 @@
 
 #include "o2/Utils/System/Time/Time.h"
 #include "o2/Config/ProjectConfig.h"
+#include "o2/Utils/Debug/Profiling/SimpleProfiler.h"
 
 namespace o2
 {
@@ -226,6 +227,8 @@ namespace o2
 
 	void Input::PreUpdate()
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		auto inputQueue = mInputQueue;
 		for (auto msg : inputQueue)
 		{
@@ -276,6 +279,8 @@ namespace o2
 
 	void Input::Update(float dt)
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		mDownKeys.Add(mPressedKeys);
 		mPressedKeys.Clear();
 		mReleasedKeys.Clear();

@@ -149,6 +149,7 @@ namespace Editor
 							   const Vector<DataDocument>& after);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::VectorProperty)
 {
@@ -202,3 +203,4 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;
+// --- END META ---

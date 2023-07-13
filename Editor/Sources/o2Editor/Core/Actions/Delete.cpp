@@ -4,7 +4,7 @@
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Scene.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 
 namespace Editor
@@ -73,7 +73,7 @@ namespace Editor
 		}
 
 		o2EditorSceneScreen.ClearSelectionWithoutAction();
-		o2EditorTree.GetSceneTree()->UpdateNodesView();
+		o2EditorTree.UpdateTreeView();
 	}
 
 	void DeleteAction::Undo()
@@ -108,7 +108,7 @@ namespace Editor
 		}
 
 		o2EditorTree.HighlightObjectTreeNode(lastRestored);
-		o2EditorTree.GetSceneTree()->UpdateNodesView();
+		o2EditorTree.UpdateTreeView();
 	}
 
 	bool DeleteAction::ObjectInfo::operator==(const ObjectInfo& other) const
@@ -116,7 +116,9 @@ namespace Editor
 		return objectData == other.objectData && parentId == other.parentId && prevObjectId == other.prevObjectId;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::DeleteAction);
 
 DECLARE_CLASS(Editor::DeleteAction::ObjectInfo);
+// --- END META ---

@@ -712,5 +712,7 @@ namespace Editor
 
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::KeyHandlesSheet);
+// --- END META ---

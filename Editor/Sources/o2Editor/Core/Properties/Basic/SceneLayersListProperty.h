@@ -47,6 +47,7 @@ namespace Editor
 		void OpenContext();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SceneLayersListProperty)
 {
@@ -70,3 +71,4 @@ CLASS_METHODS_META(Editor::SceneLayersListProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OpenContext);
 }
 END_META;
+// --- END META ---

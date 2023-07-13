@@ -48,6 +48,7 @@ namespace Editor
 		void OnClicked();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::CurveProperty)
 {
@@ -71,3 +72,4 @@ CLASS_METHODS_META(Editor::CurveProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);
 }
 END_META;
+// --- END META ---

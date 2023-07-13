@@ -21,8 +21,8 @@ namespace o2
 		PROPERTY(UInt, maxPolyCount, SetMaxPolyCount, GetMaxPolyCount);       // Max polygons count property
 
 	public:
-		Vertex* vertices; // Vertex buffer
-		UInt16*  indexes;  // Index buffer
+		Vertex*      vertices; // Vertex buffer
+		VertexIndex* indexes;  // Index buffer
 										  
 		UInt vertexCount; // Current vertices count
 		UInt polyCount;   // Current polygons in mesh

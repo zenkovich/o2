@@ -54,6 +54,7 @@ namespace Editor
 							   const Vector<DataDocument>& newValue);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DefaultWidgetLayerHeaderViewer)
 {
@@ -79,3 +80,4 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerHeaderViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;
+// --- END META ---

@@ -140,5 +140,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AnimationStateViewer);
+// --- END META ---

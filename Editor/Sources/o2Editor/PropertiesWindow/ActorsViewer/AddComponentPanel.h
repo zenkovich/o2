@@ -186,6 +186,7 @@ namespace Editor
 		friend class ComponentsTree;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AddComponentPanel)
 {
@@ -273,3 +274,4 @@ CLASS_METHODS_META(Editor::ComponentsTreeNode)
 	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }
 END_META;
+// --- END META ---

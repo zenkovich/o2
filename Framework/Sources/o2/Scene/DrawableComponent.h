@@ -77,6 +77,7 @@ namespace o2
 #endif
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::DrawableComponent)
 {
@@ -107,6 +108,9 @@ CLASS_METHODS_META(o2::DrawableComponent)
 	FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
+#endif
 }
 END_META;
+// --- END META ---

@@ -100,6 +100,7 @@ namespace Editor
 		void UpdateLastMessageView();
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(Editor::LogWindow::LogMessage::Type);
 
@@ -146,3 +147,4 @@ CLASS_METHODS_META(Editor::LogWindow)
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLastMessageView);
 }
 END_META;
+// --- END META ---

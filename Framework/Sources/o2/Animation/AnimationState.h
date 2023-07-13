@@ -72,6 +72,7 @@ namespace o2
 		friend class AnimationTrack;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AnimationState)
 {
@@ -105,3 +106,4 @@ CLASS_METHODS_META(o2::AnimationState)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
+// --- END META ---

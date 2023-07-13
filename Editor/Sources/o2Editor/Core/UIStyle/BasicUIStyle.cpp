@@ -1352,5 +1352,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "expand with caption");
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::BasicUIStyleBuilder);
+// --- END META ---

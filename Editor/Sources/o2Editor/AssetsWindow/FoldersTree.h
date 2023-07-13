@@ -119,6 +119,7 @@ namespace Editor
 		static String GetCreateMenuCategory();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AssetsFoldersTree)
 {
@@ -178,3 +179,4 @@ CLASS_METHODS_META(Editor::FoldersTree)
 	FUNCTION().PROTECTED().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
+// --- END META ---

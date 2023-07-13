@@ -74,5 +74,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::DefaultActorComponentViewer);
+// --- END META ---

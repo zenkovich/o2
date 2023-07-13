@@ -1,9 +1,9 @@
 #pragma once
 
+#include "o2/Utils/Debug/Debug.h"
+
 namespace o2
 {
-
-
 	template<>
 	struct DataValue::Converter<char*>
 	{
@@ -155,33 +155,33 @@ namespace o2
 		}
 	};
 
-	template<>
-	struct DataValue::Converter<UInt>
-	{
-		static constexpr bool isSupported = true;
+    template<>
+    struct DataValue::Converter<UInt>
+    {
+        static constexpr bool isSupported = true;
 
-		static void Write(const UInt& value, DataValue& data)
-		{
-			data.mData.flagsData.flags = Flags::UInt | Flags::Value;
-			data.mData.intData.uintValue = value;
-		}
+        static void Write(const UInt& value, DataValue& data)
+        {
+            data.mData.flagsData.flags = Flags::UInt | Flags::Value;
+            data.mData.intData.uintValue = value;
+        }
 
-		static void Read(UInt& value, const DataValue& data)
-		{
-			if (data.mData.flagsData.Is(Flags::UInt))
-				value = data.mData.intData.uintValue;
-			else if (data.mData.flagsData.Is(Flags::Int))
-				value = (UInt)data.mData.intData.intValue;
-			else if (data.mData.flagsData.Is(Flags::Int64))
-				value = (UInt)data.mData.int64Data.intValue;
-			else if (data.mData.flagsData.Is(Flags::UInt64))
-				value = (UInt)data.mData.int64Data.uintValue;
-			else if (data.mData.flagsData.Is(Flags::Double))
-				value = (UInt)data.mData.doubleData.value;
-			else
-				Assert(false, "Trying to get unsigned int from not number value");
-		}
-	};
+        static void Read(UInt& value, const DataValue& data)
+        {
+            if (data.mData.flagsData.Is(Flags::UInt))
+                value = data.mData.intData.uintValue;
+            else if (data.mData.flagsData.Is(Flags::Int))
+                value = (UInt)data.mData.intData.intValue;
+            else if (data.mData.flagsData.Is(Flags::Int64))
+                value = (UInt)data.mData.int64Data.intValue;
+            else if (data.mData.flagsData.Is(Flags::UInt64))
+                value = (UInt)data.mData.int64Data.uintValue;
+            else if (data.mData.flagsData.Is(Flags::Double))
+                value = (UInt)data.mData.doubleData.value;
+            else
+                Assert(false, "Trying to get unsigned int from not number value");
+        }
+    };
 
 	template<>
 	struct DataValue::Converter<Int64>
@@ -540,9 +540,13 @@ namespace o2
 					if (value)
 						delete value;
 
-					auto type = Reflection::GetType(*typeNode);
+					String typeName = *typeNode;
+                    auto type = Reflection::GetType( typeName );
 					if (!type)
-						return;
+                    {
+                        o2Debug.LogError( "Failed to deserialize unknown type: " + typeName );
+                        return;
+                    }
 
 					void* sample = type->CreateSample();
 					if (type->GetUsage() == Type::Usage::Object)

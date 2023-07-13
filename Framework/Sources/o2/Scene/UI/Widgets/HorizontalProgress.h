@@ -140,6 +140,7 @@ namespace o2
 		void OnScrolled(float scroll) override;
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::HorizontalProgress::Orientation);
 
@@ -203,3 +204,4 @@ CLASS_METHODS_META(o2::HorizontalProgress)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
 }
 END_META;
+// --- END META ---

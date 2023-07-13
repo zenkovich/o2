@@ -43,7 +43,7 @@ namespace o2
 
 		SERIALIZABLE(SceneLayer);
 
-	protected:
+	public:
 		struct RootDrawablesContainer: public ISceneDrawable
 		{
 			Vector<ISceneDrawable*> drawables;
@@ -117,6 +117,7 @@ namespace o2
 // 		bool IsConvertsType(const Type* type) const;
 // 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::SceneLayer)
 {
@@ -125,7 +126,9 @@ CLASS_BASES_META(o2::SceneLayer)
 END_META;
 CLASS_FIELDS_META(o2::SceneLayer)
 {
+#if  IS_EDITOR
 	FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(visible);
+#endif
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mName);
 	FIELD().PROTECTED().NAME(mActors);
 	FIELD().PROTECTED().NAME(mEnabledActors);
@@ -156,3 +159,4 @@ CLASS_METHODS_META(o2::SceneLayer)
 	FUNCTION().PROTECTED().SIGNATURE(void, SetLastByDepth, ISceneDrawable*);
 }
 END_META;
+// --- END META ---

@@ -75,6 +75,7 @@ namespace o2
 		void OnDeserialized(const DataValue& node) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AssetsTree)
 {
@@ -111,3 +112,4 @@ CLASS_METHODS_META(o2::AssetsTree)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
+// --- END META ---

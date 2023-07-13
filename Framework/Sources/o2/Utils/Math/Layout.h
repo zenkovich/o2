@@ -32,6 +32,7 @@ namespace o2
 		SERIALIZABLE(Layout);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Layout)
 {
@@ -59,3 +60,4 @@ CLASS_METHODS_META(o2::Layout)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Layout, VerStretch, HorAlign, float, float, float, float);
 }
 END_META;
+// --- END META ---

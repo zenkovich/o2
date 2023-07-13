@@ -7,6 +7,7 @@
 
 namespace o2
 {
+#if IS_EDITOR
 	ApplyActorInfo::ApplyActorInfo()
 	{}
 
@@ -498,4 +499,5 @@ namespace o2
 	{
 		return mnew MovedChild(*this);
 	}
+#endif
 }

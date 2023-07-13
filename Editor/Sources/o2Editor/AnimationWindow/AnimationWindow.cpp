@@ -361,5 +361,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AnimationWindow);
+// --- END META ---

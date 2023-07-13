@@ -324,5 +324,7 @@ namespace o2
 }
 
 #endif // IS_SCRIPTING_SUPPORTED
+// --- META ---
 
 PRE_ENUM_META(o2::ScriptValue::ValueType);
+// --- END META ---

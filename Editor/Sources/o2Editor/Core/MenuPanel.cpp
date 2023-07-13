@@ -12,6 +12,7 @@
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/Math/Curve.h"
+#include "o2/Utils/Tasks/TaskManager.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
 #include "o2Editor/Core/Dialogs/CurveEditorDlg.h"
@@ -28,9 +29,8 @@
 #include "o2Editor/LogWindow/LogWindow.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneWindow.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
-#include "o2/Utils/Tasks/TaskManager.h"
 
 DECLARE_SINGLETON(Editor::MenuPanel);
 
@@ -93,18 +93,28 @@ namespace Editor
 		// DEBUG
 		mMenuPanel->AddItem("Debug/Curve editor test", [&]() { OnCurveEditorTestPressed(); });
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
-		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
 		mMenuPanel->AddItem("Debug/Add property", [&]() {
 			static float xx = 0, yy = 1;
 			ForcePopEditorScopeOnStack scope;
 			auto prop = o2UI.CreateWidget<FloatProperty>("with caption");
 			prop->SetValueAndPrototypeProxy({ { mnew PointerValueProxy(&xx), mnew PointerValueProxy(&yy) } });
-		});
+							});
 
 		mMenuPanel->AddItem("Debug/Fix scene", [&]() {
 			Function<void(Actor*)> fixActor = [&fixActor](Actor* actor) {
 				actor->GetComponents<DrawableComponent>().ForEach([](DrawableComponent* x) { x->SetDrawingDepthInheritFromParent(false); });
 
+				actor->GetChildren().ForEach([&](Actor* x) { fixActor(x); });
+			};
+
+			for (auto actor : o2Scene.GetRootActors())
+				fixActor(actor);
+							});
+
+		mMenuPanel->AddItem("Debug/Randomize IDs", [&]() {
+			Function<void(Actor*)> fixActor = [&fixActor](Actor* actor) {
+				actor->GenerateNewID();
+				actor->GetComponents().ForEach([](auto comp) { comp->GenerateNewID(); });
 				actor->GetChildren().ForEach([&](Actor* x) { fixActor(x); });
 			};
 
@@ -193,7 +203,7 @@ namespace Editor
 			horLayout->border = BorderF(10, 10, 10, 10);
 			horLayout->spacing = 10;
 			horLayout->AddChild(o2UI.CreateButton("Save", [=]() {
-				o2EditorApplication.SaveScene(o2EditorApplication.GetLoadedSceneName());
+				o2EditorApplication.SaveScene();
 				onCompleted();
 				wnd->Hide();
 			}));
@@ -226,7 +236,7 @@ namespace Editor
 					return;
 
 				ForcePopEditorScopeOnStack scope;
-				o2EditorApplication.LoadScene(fileName);
+				o2EditorApplication.LoadScene(SceneAssetRef(fileName));
 			};
 
 			CheckSceneSaving(openDialog);
@@ -239,7 +249,7 @@ namespace Editor
 			if (o2EditorApplication.GetLoadedSceneName().IsEmpty())
 				OnSaveSceneAsPressed();
 			else
-				o2EditorApplication.SaveScene(o2EditorApplication.GetLoadedSceneName());
+				o2EditorApplication.SaveSceneAs(o2EditorApplication.GetLoadedSceneName());
 		});
 	}
 
@@ -253,7 +263,7 @@ namespace Editor
 		if (!fileName.EndsWith(".scn"))
 			fileName += ".scn";
 
-		o2Tasks.Invoke([=] { o2EditorApplication.SaveScene(fileName); });
+		o2Tasks.Invoke([=] { o2EditorApplication.SaveSceneAs(fileName); });
 	}
 
 	void MenuPanel::OnExitPressed()
@@ -313,7 +323,7 @@ namespace Editor
 			window->Show();
 	}
 
-	void MenuPanel::OnShowGamePressed()
+    void MenuPanel::OnShowGamePressed()
 	{
 		auto window = o2EditorWindows.GetWindow<GameWindow>();
 		if (window)

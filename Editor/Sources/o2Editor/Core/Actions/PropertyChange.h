@@ -49,6 +49,7 @@ namespace Editor
 		void SetProperties(Vector<DataDocument>& value);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::PropertyChangeAction)
 {
@@ -74,3 +75,4 @@ CLASS_METHODS_META(Editor::PropertyChangeAction)
 	FUNCTION().PROTECTED().SIGNATURE(void, SetProperties, Vector<DataDocument>&);
 }
 END_META;
+// --- END META ---

@@ -51,6 +51,7 @@ namespace Editor
 		virtual void OnDisabled() {}
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::IWidgetLayerHeaderViewer)
 {
@@ -74,3 +75,4 @@ CLASS_METHODS_META(Editor::IWidgetLayerHeaderViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
+// --- END META ---

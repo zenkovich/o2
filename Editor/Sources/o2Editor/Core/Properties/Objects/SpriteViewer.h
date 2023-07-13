@@ -62,6 +62,7 @@ namespace Editor
 		void OnModeSelected();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SpriteViewer)
 {
@@ -97,3 +98,4 @@ CLASS_METHODS_META(Editor::SpriteViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnModeSelected);
 }
 END_META;
+// --- END META ---

@@ -278,6 +278,7 @@ namespace o2
 		return "Progress";
 	}
 }
+// --- META ---
 
 ENUM_META(o2::HorizontalProgress::Orientation)
 {
@@ -287,3 +288,4 @@ ENUM_META(o2::HorizontalProgress::Orientation)
 END_ENUM_META;
 
 DECLARE_CLASS(o2::HorizontalProgress);
+// --- END META ---

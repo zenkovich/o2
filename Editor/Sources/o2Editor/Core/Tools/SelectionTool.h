@@ -80,6 +80,7 @@ namespace Editor
 	};
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SelectionTool)
 {
@@ -115,3 +116,4 @@ CLASS_METHODS_META(Editor::SelectionTool)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
 }
 END_META;
+// --- END META ---

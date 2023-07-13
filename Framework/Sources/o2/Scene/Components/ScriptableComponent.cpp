@@ -148,6 +148,8 @@ namespace o2
 
 	void ScriptableComponent::Update(float dt)
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		if (mUpdateFunc.IsFunction())
 			mUpdateFunc.Invoke<void, float>(mInstance, dt);
 	}
@@ -180,5 +182,8 @@ namespace o2
 
 	}
 }
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ScriptableComponent>);
+// --- META ---
 
 DECLARE_CLASS(o2::ScriptableComponent);
+// --- END META ---

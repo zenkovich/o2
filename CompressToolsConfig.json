@@ -1,0 +1,22 @@
+{
+    "formatCommands": [
+        {
+            "Key": "Windows",
+            "Value": [
+                {
+                    "Key": "DXT5",
+                    "Value": "\"../deps/o2/AssetsBuildTool/Bin/nvcompress.exe\" -nomips -bc3 -alpha \"{input}\" \"{output}.dds\""
+                }
+            ]
+        },
+        {
+            "Key": "Linux",
+            "Value": [
+                {
+                    "Key": "DXT5",
+                    "Value": "/home/vboxuser/Desktop/NVIDIA_Texture_Tools_Linux_x86_64_3.2.1/nvcompress -nomips -bc3 -alpha \"{input}\" \"{output}.dds\""
+                }
+            ]
+        }
+    ]
+}

@@ -161,6 +161,7 @@ namespace Editor
 		friend class KeyFramesTrackControl;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AnimationWindow)
 {
@@ -229,3 +230,4 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnMenuRecordToggle, bool);
 }
 END_META;
+// --- END META ---

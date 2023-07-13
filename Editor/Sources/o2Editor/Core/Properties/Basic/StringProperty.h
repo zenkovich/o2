@@ -44,6 +44,7 @@ namespace Editor
 		void OnEdited(const WString& data);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::StringProperty)
 {
@@ -65,3 +66,4 @@ CLASS_METHODS_META(Editor::StringProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);
 }
 END_META;
+// --- END META ---

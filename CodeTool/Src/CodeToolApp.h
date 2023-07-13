@@ -38,13 +38,13 @@ public:
 	bool IsClassBasedOn(SyntaxClass* _class, SyntaxClass* baseClass);
 
 	// Returns section by name in global space
-	SyntaxSection* FindSection(const string& fullName);
+	SyntaxSection* FindSection(const string& fullName, bool withTypedefs = true);
 
 	// Returns section by name in where
-	SyntaxSection* FindSection(const string& what, const string& where);
+	SyntaxSection* FindSection(const string& what, const string& where, bool withTypedefs = true);
 
 	// Returns section by name in where
-	SyntaxSection* FindSection(const string& what, SyntaxSection* where);
+	SyntaxSection* FindSection(const string& what, SyntaxSection* where, bool withTypedefs = true);
 
 	// Saves data to file
 	void Save(const string& file) const;
@@ -56,7 +56,7 @@ protected:
 	void AppendSection(SyntaxSection* currentSection, SyntaxSection* newSection);
 	void ResolveDependencies(SyntaxSection* section);
 	void ResolveBaseClassDependencies(SyntaxSection* section);
-	SyntaxSection* FindSection(const string& what, SyntaxSection* where, SyntaxSectionsVec& processedSections);
+	SyntaxSection* FindSection(const string& what, SyntaxSection* where, SyntaxSectionsVec& processedSections, bool withTypedefs = true);
 	void SearchAttributes(SyntaxSection* section, SyntaxClass* attributeClass);
 };
 
@@ -144,6 +144,12 @@ protected:
 	// Updates reflection for classes in source
 	void UpdateSourceReflection(SyntaxFile* file);
 
+	// Adds meta comment begin section
+	void AddBeginMeta(bool& hasMeta, string& res);
+
+	// Adds meta comment end section
+	void AddEndMeta(bool hasMeta, string& res);
+
 	// Returns class declaration meta
 	string GetClassDeclaration(SyntaxClass* cls);
 
@@ -152,6 +158,12 @@ protected:
 
 	// Returns is comment ignoring
 	bool IsIgnoreComment(SyntaxComment* synComment);
+
+	// Adds #if if required
+	void CheckIfDefines(ISyntaxExpression* item, SyntaxDefineIf*& prevDefine, string& data);
+
+	// Adds #endif if required
+	void CompleteIfDefines(SyntaxDefineIf*& prevDefine, string& data);
 
 	// Returns class field attributes
 	string GetAttributes(SyntaxClass* cls, int line, SyntaxComment* synComment);

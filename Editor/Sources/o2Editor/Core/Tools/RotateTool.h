@@ -128,6 +128,7 @@ namespace Editor
 		void RotateObjectsSeparatedWithAction(float angleDelta);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::RotateTool)
 {
@@ -185,3 +186,4 @@ CLASS_METHODS_META(Editor::RotateTool)
 	FUNCTION().PUBLIC().SIGNATURE(void, RotateObjectsSeparatedWithAction, float);
 }
 END_META;
+// --- END META ---

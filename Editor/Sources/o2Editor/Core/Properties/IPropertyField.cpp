@@ -265,5 +265,7 @@ namespace Editor
 		CheckValueChangeCompleted();
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::IPropertyField);
+// --- END META ---

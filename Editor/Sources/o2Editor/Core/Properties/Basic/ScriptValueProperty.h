@@ -181,6 +181,7 @@ namespace Editor
 		field->SetValueAndPrototypeProxy(proxies);
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ScriptValueProperty)
 {
@@ -237,3 +238,4 @@ CLASS_METHODS_META(Editor::ScriptValueProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;
+// --- END META ---

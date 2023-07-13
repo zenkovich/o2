@@ -43,6 +43,7 @@ namespace Editor
 	};
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::CreateAction)
 {
@@ -67,3 +68,4 @@ CLASS_METHODS_META(Editor::CreateAction)
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
+// --- END META ---

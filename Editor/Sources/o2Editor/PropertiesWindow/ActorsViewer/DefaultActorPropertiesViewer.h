@@ -55,6 +55,7 @@ namespace Editor
 		void OnDisabled() override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DefaultActorPropertiesViewer)
 {
@@ -82,3 +83,4 @@ CLASS_METHODS_META(Editor::DefaultActorPropertiesViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
+// --- END META ---

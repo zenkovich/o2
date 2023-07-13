@@ -168,5 +168,7 @@ namespace Editor
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Vec2F>);
+// --- META ---
 
 DECLARE_CLASS(Editor::Vec2FProperty);
+// --- END META ---

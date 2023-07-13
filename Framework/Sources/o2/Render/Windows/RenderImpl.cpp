@@ -102,7 +102,7 @@ namespace o2
 		mIndexBufferSize = USHRT_MAX;
 
 		mVertexData = mnew UInt8[mVertexBufferSize * sizeof(Vertex)];
-		mVertexIndexData = mnew UInt16[mIndexBufferSize * sizeof(UInt16)];
+		mVertexIndexData = mnew VertexIndex[mIndexBufferSize * sizeof(VertexIndex)];
 
 		mLastDrawVertex = 0;
 		mTrianglesCount = 0;
@@ -112,16 +112,19 @@ namespace o2
 		glEnable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_CULL_FACE);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		glLineWidth(1.0f);
 
-		glGenBuffers(1, &mVertexBufferObject);
-		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
-		glBufferData(GL_ARRAY_BUFFER, mVertexBufferSize * sizeof(Vertex), mVertexData, GL_DYNAMIC_DRAW);
+		for (int i = 0; i < mBuffersPoolsSize; i++)
+		{
+			glGenBuffers(1, &mVertexBuffersPool[i]);
+			glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffersPool[i]);
+			glBufferData(GL_ARRAY_BUFFER, mVertexBufferSize * sizeof(Vertex), mVertexData, GL_DYNAMIC_DRAW);
 
-		glGenBuffers(1, &mIndexBufferObject);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferObject);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)(mIndexBufferSize * sizeof(UInt16)), mVertexIndexData, GL_DYNAMIC_DRAW);
+			glGenBuffers(1, &mIndexBuffersPool[i]);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffersPool[i]);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)(mIndexBufferSize * sizeof(VertexIndex)), mVertexIndexData, GL_DYNAMIC_DRAW);
+		}
 
 		InitializeStdShader();
 
@@ -344,8 +347,36 @@ namespace o2
 		mMaxTextureSize.y = mMaxTextureSize.x;
 	}
 
+	void RenderBase::BindNextPoolBuffers()
+	{
+		mCurrentBufferIdx++;
+		if (mCurrentBufferIdx == mBuffersPoolsSize)
+			mCurrentBufferIdx = 0;
+
+		glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffersPool[mCurrentBufferIdx]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffersPool[mCurrentBufferIdx]);
+		GL_CHECK_ERROR();
+
+		glVertexAttribPointer((GLuint)mStdShaderPosAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), &((Vertex*)0)->x);
+		glEnableVertexAttribArray((GLuint)mStdShaderPosAttribute);
+		GL_CHECK_ERROR();
+
+		glVertexAttribPointer((GLuint)mStdShaderColorAttribute, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), &((Vertex*)0)->color);
+		glEnableVertexAttribArray((GLuint)mStdShaderColorAttribute);
+		GL_CHECK_ERROR();
+
+		glVertexAttribPointer((GLuint)mStdShaderUVAttribute, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &((Vertex*)0)->tu);
+		glEnableVertexAttribArray((GLuint)mStdShaderUVAttribute);
+		GL_CHECK_ERROR();
+
+		mVertexBufferIdx = 0;
+		mIndexBufferIdx = 0;
+	}
+
 	void Render::Begin()
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		if (!mReady)
 			return;
 
@@ -364,31 +395,109 @@ namespace o2
 
 		mClippingEverything = false;
 
+		BindNextPoolBuffers();
+
 		SetupViewMatrix(mResolution);
 		UpdateCameraTransforms();
 
 		preRender();
-		//preRender.Clear();
+
+		if (IsRenderDrawCallsDebugEnabled())
+			mLog->OutStr("==== New Frame ====");
+	}
+
+	void Render::DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
+							VertexIndex* indexes, UInt elementsCount, const TextureRef& texture)
+	{
+		//PROFILE_SAMPLE_FUNC();
+
+		if (!mReady)
+			return;
+
+		mDrawingDepth += 1.0f;
+
+		if (mClippingEverything)
+			return;
+
+		UInt indexesCount;
+		if (primitiveType == PrimitiveType::Line)
+			indexesCount = elementsCount * 2;
+		else
+			indexesCount = elementsCount * 3;
+
+		if (mLastDrawTexture != texture.mTexture ||
+			mLastDrawVertex + verticesCount >= mVertexBufferSize ||
+			mLastDrawIdx + indexesCount >= mIndexBufferSize ||
+			mCurrentPrimitiveType != primitiveType)
+		{
+			DrawPrimitives();
+
+			mLastDrawTexture = texture.mTexture;
+			mCurrentPrimitiveType = primitiveType;
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, mLastDrawTexture ? mLastDrawTexture->mHandle : mWhiteTexture->mHandle);
+			glUniform1i(mStdShaderTextureSample, 0);
+
+			GL_CHECK_ERROR();
+		}
+
+		memcpy(&mVertexData[mLastDrawVertex * sizeof(Vertex)], vertices, sizeof(Vertex) * verticesCount);
+
+		for (UInt i = mLastDrawIdx, j = 0; j < indexesCount; i++, j++)
+			mVertexIndexData[i] = mVertexBufferIdx + mLastDrawVertex + indexes[j];
+
+		if (primitiveType != PrimitiveType::Line)
+			mTrianglesCount += elementsCount;
+
+		mLastDrawVertex += verticesCount;
+		mLastDrawIdx += indexesCount;
 	}
 
 	void Render::DrawPrimitives()
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		if (mLastDrawVertex < 1)
 			return;
 
+		CheckVertexBufferTexCoordFlipByTextureFormat();
+
 		static const GLenum primitiveType[3]{ GL_TRIANGLES, GL_TRIANGLES, GL_LINES };
 
-		glBufferData(GL_ARRAY_BUFFER, mLastDrawVertex * sizeof(Vertex), mVertexData, GL_DYNAMIC_DRAW);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)(mLastDrawIdx * sizeof(UInt16)), mVertexIndexData, GL_DYNAMIC_DRAW);
+		glBufferSubData(GL_ARRAY_BUFFER, mVertexBufferIdx * sizeof(Vertex), mLastDrawVertex * sizeof(Vertex), mVertexData);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferIdx * sizeof(VertexIndex), mLastDrawIdx * sizeof(VertexIndex), mVertexIndexData);
 
-		glDrawElements(primitiveType[(int)mCurrentPrimitiveType], mLastDrawIdx, GL_UNSIGNED_SHORT, (void*)0);
+		glDrawElements(primitiveType[(int)mCurrentPrimitiveType], mLastDrawIdx, GL_UNSIGNED_INT, (void*)(mIndexBufferIdx * sizeof(VertexIndex)));
 
 		GL_CHECK_ERROR();
+
+		mVertexBufferIdx += mLastDrawVertex;
+		mIndexBufferIdx += mLastDrawIdx;
 
 		mFrameTrianglesCount += mTrianglesCount;
 		mLastDrawVertex = mTrianglesCount = mLastDrawIdx = 0;
 
 		mDIPCount++;
+
+		if (IsRenderDrawCallsDebugEnabled())
+			mLog->OutStr("#DC " + (String)mDIPCount + "; with texture\"" + mLastDrawTexture->GetFileName() + "\"");
+	}
+
+	void Render::CheckVertexBufferTexCoordFlipByTextureFormat()
+	{
+		PROFILE_SAMPLE_FUNC();
+
+		static const Vector<TextureFormat> flipFormats = { TextureFormat::DXT5 };
+
+		if (mLastDrawTexture && flipFormats.Contains(mLastDrawTexture->GetFormat()))
+		{
+			for (int i = 0; i < mLastDrawVertex; i++)
+			{
+				Vertex& v = ((Vertex*)mVertexData)[i];
+				v.tv = 1.0f - v.tv;
+			}
+		}
 	}
 
 	void Render::SetupViewMatrix(const Vec2I& viewSize)
@@ -399,6 +508,8 @@ namespace o2
 
 	void Render::End()
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		if (!mReady)
 			return;
 
@@ -423,6 +534,8 @@ namespace o2
 
 	void Render::ResetState()
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		glEnable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_CULL_FACE);
@@ -440,9 +553,7 @@ namespace o2
 		glUseProgram(mStdShader);
 		GL_CHECK_ERROR();
 
-		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferObject);
-		GL_CHECK_ERROR();
+		BindNextPoolBuffers();
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -476,8 +587,10 @@ namespace o2
 
 	void Render::Clear(const Color4& color /*= Color4::Blur()*/)
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		glClearColor(color.RF(), color.GF(), color.BF(), color.AF());
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		GL_CHECK_ERROR();
 	}
@@ -511,6 +624,11 @@ namespace o2
 
 	void Render::UpdateCameraTransforms()
 	{
+		PROFILE_SAMPLE_FUNC();
+
+		if (mCurrentResolution == mPrevResolution && mCamera == mPrevCamera)
+			return;
+
 		DrawPrimitives();
 
 		Vec2F resf = (Vec2F)mCurrentResolution;
@@ -546,6 +664,9 @@ namespace o2
 		mtxMultiply(mvp, projMat, finalCamMtx);
 
 		glUniformMatrix4fv(mStdShaderMvpUniform, 1, GL_FALSE, mvp);
+
+		mPrevCamera = mCamera;
+		mPrevResolution = mCurrentResolution;
 
 		GL_CHECK_ERROR();
 	}
@@ -709,52 +830,6 @@ namespace o2
 				}
 			}
 		}
-	}
-
-	void Render::DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
-							UInt16* indexes, UInt elementsCount, const TextureRef& texture)
-	{
-		if (!mReady)
-			return;
-
-		mDrawingDepth += 1.0f;
-
-		if (mClippingEverything)
-			return;
-
-		UInt indexesCount;
-		if (primitiveType == PrimitiveType::Line)
-			indexesCount = elementsCount * 2;
-		else
-			indexesCount = elementsCount * 3;
-
-		if (mLastDrawTexture != texture.mTexture ||
-			mLastDrawVertex + verticesCount >= mVertexBufferSize ||
-			mLastDrawIdx + indexesCount >= mIndexBufferSize ||
-			mCurrentPrimitiveType != primitiveType)
-		{
-			DrawPrimitives();
-
-			mLastDrawTexture = texture.mTexture;
-			mCurrentPrimitiveType = primitiveType;
-
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, mLastDrawTexture ? mLastDrawTexture->mHandle : mWhiteTexture->mHandle);
-			glUniform1i(mStdShaderTextureSample, 0);
-
-			GL_CHECK_ERROR();
-		}
-
-		memcpy(&mVertexData[mLastDrawVertex * sizeof(Vertex)], vertices, sizeof(Vertex) * verticesCount);
-
-		for (UInt i = mLastDrawIdx, j = 0; j < indexesCount; i++, j++)
-			mVertexIndexData[i] = mLastDrawVertex + indexes[j];
-
-		if (primitiveType != PrimitiveType::Line)
-			mTrianglesCount += elementsCount;
-
-		mLastDrawVertex += verticesCount;
-		mLastDrawIdx += indexesCount;
 	}
 
 	void Render::BindRenderTexture(TextureRef renderTarget)

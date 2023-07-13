@@ -82,6 +82,7 @@ namespace Editor
 		Sprite* CreateGridSprite();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ImageSlicesEditorWidget)
 {
@@ -132,3 +133,4 @@ CLASS_METHODS_META(Editor::ImageSlicesEditorWidget::PreviewImage)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
+// --- END META ---

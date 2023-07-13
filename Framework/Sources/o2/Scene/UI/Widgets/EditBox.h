@@ -285,6 +285,7 @@ namespace o2
 		void MoveCaret(int newPosition, bool selecting);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::EditBox)
 {
@@ -401,3 +402,4 @@ CLASS_METHODS_META(o2::EditBox)
 	FUNCTION().PROTECTED().SIGNATURE(void, MoveCaret, int, bool);
 }
 END_META;
+// --- END META ---

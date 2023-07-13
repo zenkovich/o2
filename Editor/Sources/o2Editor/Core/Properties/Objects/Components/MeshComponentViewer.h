@@ -81,6 +81,7 @@ namespace Editor
 		void FitAndCenterize();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::MeshComponentViewer)
 {
@@ -111,3 +112,4 @@ CLASS_METHODS_META(Editor::MeshComponentViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, FitAndCenterize);
 }
 END_META;
+// --- END META ---

@@ -63,6 +63,7 @@ namespace Editor
 		void OnAnimationUpdated(float time);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AnimationStateViewer)
 {
@@ -95,3 +96,4 @@ CLASS_METHODS_META(Editor::AnimationStateViewer)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnAnimationUpdated, float);
 }
 END_META;
+// --- END META ---

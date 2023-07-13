@@ -55,5 +55,7 @@ namespace o2
 		data.SaveToFile(GetProjectSettingPath());
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ProjectConfig);
+// --- END META ---

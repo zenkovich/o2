@@ -111,14 +111,6 @@ namespace o2
 		mChildren.Clear();
 	}
 
-	void Actor::GetAllChildrenActors(Vector<Actor*>& actors)
-	{
-		actors.Add(mChildren);
-
-		for (auto child : mChildren)
-			child->GetAllChildrenActors(actors);
-	}
-
 	void Actor::ApplyChangesToPrototype()
 	{
 		if (!mPrototype)
@@ -157,7 +149,7 @@ namespace o2
 				if (info.actor != asset->GetActor())
 					asset->SetActor(info.actor, false);
 
-				asset->Save(false);
+				asset->Save();
 			}
 		}
 

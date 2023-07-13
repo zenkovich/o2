@@ -224,7 +224,6 @@ namespace o2
 		};
 
 	protected:
-		static const char* mBasicSymbolsPreset;
 		const UInt mMeshMaxPolyCount = 4096;
 
 		WString  mText;              // Wide char string, containing rendering text @SERIALIZABLE
@@ -246,6 +245,7 @@ namespace o2
 		bool mUpdatingMesh; // True, when mesh is already updating
 
 	protected:
+
 		// Updating meshes
 		void UpdateMesh();
 
@@ -271,6 +271,7 @@ namespace o2
 		void OnDeserialized(const DataValue& node) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Text)
 {
@@ -351,3 +352,4 @@ CLASS_METHODS_META(o2::Text)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
+// --- END META ---

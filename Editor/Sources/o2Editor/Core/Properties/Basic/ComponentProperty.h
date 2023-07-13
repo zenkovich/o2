@@ -14,7 +14,7 @@ namespace o2
 
 namespace Editor
 {
-	class SceneTree;
+	class SceneHierarchyTree;
 	class AssetsIconsScrollArea;
 
 	// -----------------------------------
@@ -84,13 +84,13 @@ namespace Editor
 		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
 
 		// Called when actors tree nodes was dragged and dropped to this
-		void OnDroppedFromActorsTree(SceneTree* actorsTree);
+		void OnDroppedFromActorsTree(SceneHierarchyTree* actorsTree);
 
 		// Called when actors tree nodes was dragged and entered to this
-		void OnDragEnterFromActorsTree(SceneTree* actorsTree);
+		void OnDragEnterFromActorsTree(SceneHierarchyTree* actorsTree);
 
 		// Called when actors tree nodes was dragged and exited from this
-		void OnDragExitFromActorsTree(SceneTree* actorsTree);
+		void OnDragExitFromActorsTree(SceneHierarchyTree* actorsTree);
 
 		// Called when assets scroll icons was dragged and dropped to this
 		void OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
@@ -102,6 +102,7 @@ namespace Editor
 		void OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ComponentProperty)
 {
@@ -136,11 +137,12 @@ CLASS_METHODS_META(Editor::ComponentProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 	FUNCTION().PROTECTED().SIGNATURE(void, RevertoToPrototype, IAbstractValueProxy*, IAbstractValueProxy*, IObject*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromActorsTree, SceneTree*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromActorsTree, SceneTree*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromActorsTree, SceneTree*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromActorsTree, SceneHierarchyTree*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromActorsTree, SceneHierarchyTree*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromActorsTree, SceneHierarchyTree*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromAssetsScroll, AssetsIconsScrollArea*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromAssetsScroll, AssetsIconsScrollArea*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromAssetsScroll, AssetsIconsScrollArea*);
 }
 END_META;
+// --- END META ---

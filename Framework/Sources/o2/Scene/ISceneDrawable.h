@@ -16,7 +16,7 @@ namespace o2
 	// Scene drawable object. Has virtual draw function and sorting depth
 	// Depth shows how later object will be drawn
 	// ------------------------------------------------------------------
-	class ISceneDrawable: virtual public ISerializable, public IDrawable
+	class ISceneDrawable: virtual public ISerializable, virtual public IDrawable
 	{
 	public:
 		PROPERTIES(ISceneDrawable);
@@ -52,6 +52,12 @@ namespace o2
 
 		// Sets this drawable as last drawing object in layer with same depth
 		void SetLastOnCurrentDepth();
+
+        // Returns list of inherited depth drawables
+        const Vector<ISceneDrawable*>& GetChildrenInheritedDepth() const;
+
+		// Returns is drawable enabled
+		bool IsDrawableEnabled() const;
 
 		SERIALIZABLE(ISceneDrawable);
 
@@ -102,6 +108,9 @@ namespace o2
 		friend class SceneLayer;
 
 #if IS_EDITOR
+    public:
+        int drawCallIdx = 0; // Draw call number in frame
+
 	public:
 		// Returns pointer to owner editable object
 		virtual SceneEditableObject* GetEditableOwner();
@@ -111,6 +120,7 @@ namespace o2
 #endif
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::ISceneDrawable)
 {
@@ -127,6 +137,9 @@ CLASS_FIELDS_META(o2::ISceneDrawable)
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDrawingDepth);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mInheritDrawingDepthFromParent);
 	FIELD().PROTECTED().NAME(mChildrenInheritedDepth);
+#if  IS_EDITOR
+	FIELD().PUBLIC().DEFAULT_VALUE(0).NAME(drawCallIdx);
+#endif
 }
 END_META;
 CLASS_METHODS_META(o2::ISceneDrawable)
@@ -140,6 +153,8 @@ CLASS_METHODS_META(o2::ISceneDrawable)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepthInheritFromParent, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsDrawingDepthInheritedFromParent);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLastOnCurrentDepth);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<ISceneDrawable*>&, GetChildrenInheritedDepth);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsDrawableEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
@@ -150,7 +165,10 @@ CLASS_METHODS_META(o2::ISceneDrawable)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene, bool);
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnDrawn);
+#endif
 }
 END_META;
+// --- END META ---

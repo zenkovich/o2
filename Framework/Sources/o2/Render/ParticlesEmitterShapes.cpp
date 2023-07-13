@@ -19,9 +19,11 @@ namespace o2
 		return Vec2F(Math::Random(-hs.x, hs.x), Math::Random(-hs.y, hs.y));
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ParticlesEmitterShape);
 
 DECLARE_CLASS(o2::CircleParticlesEmitterShape);
 
 DECLARE_CLASS(o2::SquareParticlesEmitterShape);
+// --- END META ---

@@ -7,7 +7,7 @@ namespace o2
 {
 	void Geometry::CreatePolyLineMesh(const Vertex* points, int pointsCount,
 									  Vertex*& verticies, UInt& vertexCount, UInt& vertexSize,
-									  UInt16*& indexes, UInt& polyCount, UInt& polySize,
+									  VertexIndex*& indexes, UInt& polyCount, UInt& polySize,
 									  float width, float texBorderTop, float texBorderBottom, const Vec2F& texSize,
 									  const Vec2F& invCameraScale /*= Vec2F(1, 1)*/)
 	{
@@ -28,7 +28,7 @@ namespace o2
 			if (indexes)
 				delete[] indexes;
 
-			indexes = new UInt16[newPolyCount*3];
+			indexes = new VertexIndex[newPolyCount*3];
 			polySize = newPolyCount;
 		}
 
@@ -148,4 +148,150 @@ namespace o2
 		vertexCount = vertex;
 		polyCount = poly/3;
 	}
+
+	// Function that determines if a point is inside the half-space defined by the line
+	bool Inside(const Vec2F& p, const Vec2F& lineBegin, const Vec2F& lineEnd)
+	{
+		return ((lineEnd.x - lineBegin.x) * (p.y - lineBegin.y) - (lineEnd.y - lineBegin.y) * (p.x - lineBegin.x)) < 0;
+	}
+
+	int Geometry::ClipTriangleByLine(const Vertex& a, const Vertex& b, const Vertex& c, const Vec2F& lineBegin, const Vec2F& lineEnd, Vertex* output)
+	{
+		int trianglesCount = 0;
+
+		// Classify vertices as being on one side of the line or the other
+		bool aInside = Inside(a, lineBegin, lineEnd);
+		bool bInside = Inside(b, lineBegin, lineEnd);
+		bool cInside = Inside(c, lineBegin, lineEnd);
+
+		// If all vertices are inside, then return the original triangle
+		if (aInside && bInside && cInside) {
+			output[0] = a;
+			output[1] = b;
+			output[2] = c;
+			trianglesCount = 1;
+		}
+		// If all vertices are outside, return no triangles
+		else if (!aInside && !bInside && !cInside)
+		{
+			trianglesCount = 0;
+		}
+		// If only one vertex is inside, form a new triangle
+		else if (aInside ^ bInside ^ cInside) 
+		{
+			if (aInside) 
+			{
+				Vertex abIntersection = Intersection::LinesVertex(a, b, lineBegin, lineEnd);
+				Vertex acIntersection = Intersection::LinesVertex(a, c, lineBegin, lineEnd);
+				output[0] = a;
+				output[1] = { abIntersection };
+				output[2] = { acIntersection };
+				trianglesCount = 1;
+			}
+			else if (bInside)
+			{
+				Vertex baIntersection = Intersection::LinesVertex(b, a, lineBegin, lineEnd);
+				Vertex bcIntersection = Intersection::LinesVertex(b, c, lineBegin, lineEnd);
+				output[0] = b;
+				output[1] = { baIntersection };
+				output[2] = { bcIntersection };
+				trianglesCount = 1;
+			}
+			else
+			{ // cInside
+				Vertex caIntersection = Intersection::LinesVertex(c, a, lineBegin, lineEnd);
+				Vertex cbIntersection = Intersection::LinesVertex(c, b, lineBegin, lineEnd);
+				output[0] = c;
+				output[1] = { caIntersection };
+				output[2] = { cbIntersection };
+				trianglesCount = 1;
+			}
+		}
+		// If two vertices are inside, form two new triangles
+		else
+		{
+			if (!aInside) 
+			{
+				Vertex baIntersection = Intersection::LinesVertex(b, a, lineBegin, lineEnd);
+				Vertex caIntersection = Intersection::LinesVertex(c, a, lineBegin, lineEnd);
+				output[0] = b;
+				output[1] = c;
+				output[2] = { baIntersection };
+				output[3] = c;
+				output[4] = { baIntersection };
+				output[5] = { caIntersection };
+				trianglesCount = 2;
+			}
+			else if (!bInside) 
+			{
+				Vertex abIntersection = Intersection::LinesVertex(a, b, lineBegin, lineEnd);
+				Vertex cbIntersection = Intersection::LinesVertex(c, b, lineBegin, lineEnd);
+				output[0] = a;
+				output[1] = c;
+				output[2] = { abIntersection };
+				output[3] = c;
+				output[4] = { abIntersection };
+				output[5] = { cbIntersection };
+				trianglesCount = 2;
+			}
+			else
+			{ // !cInside
+				Vertex acIntersection = Intersection::LinesVertex(a, c, lineBegin, lineEnd);
+				Vertex bcIntersection = Intersection::LinesVertex(b, c, lineBegin, lineEnd);
+				output[0] = a;
+				output[1] = b;
+				output[2] = { acIntersection };
+				output[3] = b;
+				output[4] = { acIntersection };
+				output[5] = { bcIntersection };
+				trianglesCount = 2;
+			}
+		}
+
+		return trianglesCount;
+	}
+
+	int Geometry::ClipTriangleByRectangle(const Vertex& a, const Vertex& b, const Vertex& c, Vertex* output, const RectF& clippRect)
+	{
+		// Edges of the rectangle
+		Pair<Vec2F, Vec2F> rectEdges[4] =
+		{
+			{ clippRect.LeftTop(), clippRect.RightTop() },
+			{ clippRect.RightTop(), clippRect.RightBottom() },
+			{ clippRect.RightBottom(), clippRect.LeftBottom() },
+			{ clippRect.LeftBottom(), clippRect.LeftTop() }
+		};
+
+		// Two buffers for algorithm
+		Vertex* inputBuffer = output;
+		Vertex* outputBuffer = output + 16;
+
+		// Start with original triangle
+		inputBuffer[0] = a;
+		inputBuffer[1] = b;
+		inputBuffer[2] = c;
+		int inputTrianglesCount = 1;
+		int outputTrianglesCount = 0;
+
+		// For each edge of the rectangle
+		for (int edgeIdx = 0; edgeIdx < 4; edgeIdx++)
+		{
+			for (int i = 0; i < inputTrianglesCount; i++)
+			{
+				// Clip triangle by edge
+				int idx = i*3;
+				outputTrianglesCount += ClipTriangleByLine(inputBuffer[idx], inputBuffer[idx + 1], inputBuffer[idx + 2],
+														   rectEdges[edgeIdx].first, rectEdges[edgeIdx].second,
+														   outputBuffer + outputTrianglesCount*3);
+			}
+
+			// Swap buffers
+			Math::Swap(inputBuffer, outputBuffer);
+			inputTrianglesCount = outputTrianglesCount;
+			outputTrianglesCount = 0;
+		}
+
+		return inputTrianglesCount;
+	}
+
 }

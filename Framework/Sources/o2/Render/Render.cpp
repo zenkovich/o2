@@ -24,9 +24,9 @@ namespace o2
 
 	void Render::InitializeLinesIndexBuffer()
 	{
-		mHardLinesIndexData = mnew UInt16[mIndexBufferSize];
+		mHardLinesIndexData = mnew VertexIndex[USHRT_MAX];
 
-		for (UInt i = 0; i < mIndexBufferSize/2; i++)
+		for (UInt i = 0; i < USHRT_MAX/2; i++)
 		{
 			mHardLinesIndexData[i*2] = i;
 			mHardLinesIndexData[i*2 + 1] = i + 1;
@@ -70,9 +70,14 @@ namespace o2
 		return mDPI;
 	}
 
-	int Render::GetDrawCallsCount()
+	int Render::GetDrawCallsCount() const
 	{
 		return mDIPCount;
+	}
+
+	int Render::GetDrawnPrimitives() const
+	{
+		return mTrianglesCount;
 	}
 
 	void Render::SetCamera(const Camera& camera)
@@ -551,8 +556,11 @@ namespace o2
 
 	void Render::DrawMesh(Mesh* mesh)
 	{
-		DrawBuffer(PrimitiveType::Polygon, mesh->vertices, mesh->vertexCount,
-				   mesh->indexes, mesh->polyCount, mesh->mTexture);
+		if (mesh->polyCount > 0)
+		{
+			DrawBuffer(PrimitiveType::Polygon, mesh->vertices, mesh->vertexCount,
+					   mesh->indexes, mesh->polyCount, mesh->mTexture);
+		}
 	}
 
 	void Render::DrawMeshWire(Mesh* mesh, const Color4& color /*= Color4::White()*/)

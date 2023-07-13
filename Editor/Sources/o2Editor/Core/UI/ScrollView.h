@@ -158,6 +158,7 @@ namespace Editor
 		bool IsInputTransparent() const override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ScrollView)
 {
@@ -228,3 +229,4 @@ CLASS_METHODS_META(Editor::ScrollView)
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsInputTransparent);
 }
 END_META;
+// --- END META ---

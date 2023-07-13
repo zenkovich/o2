@@ -8,6 +8,7 @@
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Render.h"
 #include "o2/Utils/Debug/Debug.h"
+#include "o2/Utils/Debug/Log/LogStream.h"
 
 namespace o2
 {
@@ -56,9 +57,12 @@ namespace o2
 		o2Render.mSprites.Add(this);
 	}
 
-	Sprite::Sprite(TextureRef texture, const RectI& srcRect):
+	Sprite::Sprite(TextureRef texture, const RectI& srcRect /*= RectI()*/):
 		mTextureSrcRect(srcRect), mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(texture, 16, 18)
 	{
+		if (srcRect == RectI())
+			mTextureSrcRect = RectI(Vec2I(), texture->GetSize());
+
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = Color4::White();
 
@@ -125,15 +129,21 @@ namespace o2
 	}
 
 	void Sprite::Draw()
-	{
+    {
+        //PROFILE_SAMPLE_FUNC();
+
 		if (!mEnabled)
 			return;
+
+		if (IsRenderDrawCallsDebugEnabled())
+			o2Render.mLog->Out("- Draw sprite: " + mImageAsset->GetPath());
 
 		mMesh.Draw();
 		OnDrawn();
 
 		if (o2Input.IsKeyDown(VK_F3))
 			o2Render.DrawMeshWire(&mMesh, Color4(0, 0, 0, 100));
+
 // 		o2Render.DrawBasis(mTransform);
 	}
 
@@ -304,10 +314,19 @@ namespace o2
 			return;
 		}
 
-		mMesh.mTexture = TextureRef(image->GetAtlas(), image->GetAtlasPage());
-		mImageAsset     = image;
-		mTextureSrcRect = image->GetAtlasRect();
-		mSlices         = image->GetMeta()->sliceBorder;
+		if (image->GetAtlas() == UID())
+		{
+			mMesh.mTexture = TextureRef(image->GetBuiltFullPath());
+			mTextureSrcRect = RectI(Vec2I(), image->GetSize());
+		}
+		else
+		{
+			mMesh.mTexture = TextureRef(image->GetAtlas(), image->GetAtlasPage());
+			mTextureSrcRect = image->GetAtlasRect();
+		}
+
+		mImageAsset = image;
+		mSlices = image->GetMeta()->sliceBorder;
 
 		SetMode(image->GetMeta()->defaultMode);
 
@@ -440,7 +459,7 @@ namespace o2
 		for (int i = 0; i < 4; i++)
 			rcc[i] = (mColor*mCornersColors[i]).ABGR();
 
-		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
+		static VertexIndex indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = mTextureSrcRect.left*invTexSize.x;
 		float uvRight = mTextureSrcRect.right*invTexSize.x;
@@ -453,7 +472,7 @@ namespace o2
 		mMesh.vertices[2].Set(mTransform.origin + mTransform.xv, rcc[2], uvRight, uvDown);
 		mMesh.vertices[3].Set(mTransform.origin, rcc[3], uvLeft, uvDown);
 
-		memcpy(mMesh.indexes, indexes, sizeof(UInt16)*6);
+		memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*6);
 
 		mMesh.vertexCount = 4;
 		mMesh.polyCount = 2;
@@ -475,7 +494,7 @@ namespace o2
 		for (int i = 0; i < 4; i++)
 			rcc[i] = (mColor*mCornersColors[i]).ABGR();
 
-		static UInt16 indexes[] ={
+		static VertexIndex indexes[] ={
 			0, 1, 5,    0, 5, 4,    1, 2, 6,    1, 6, 5,    2, 3, 7,    2, 7, 6,
 			4, 5, 9,    4, 9, 8,    5, 6, 10,   5, 10, 9,   6, 7, 11,   6, 11, 10,
 			8, 9, 13,   8, 13, 12,  9, 10, 14,  9, 14, 13,  10, 11, 15, 10, 15, 14
@@ -548,7 +567,7 @@ namespace o2
 		mMesh.vertices[14].Set(o      + r2, rcc[2], u2, v0);
 		mMesh.vertices[15].Set(o      + r3, rcc[2], u3, v0);
 
-		memcpy(mMesh.indexes, indexes, sizeof(UInt16)*18*3);
+		memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*18*3);
 
 		mMesh.vertexCount = 16;
 		mMesh.polyCount = 18;
@@ -649,7 +668,7 @@ namespace o2
 		for (int i = 0; i < 4; i++)
 			rcc[i] = (mColor*mCornersColors[i]).ABGR();
 
-		static UInt16 indexes[] = { 0, 1, 2, 0, 2, 3 };
+		static VertexIndex indexes[] = { 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = mTextureSrcRect.left*invTexSize.x;
 		float uvRight = mTextureSrcRect.right*invTexSize.x;
@@ -680,7 +699,7 @@ namespace o2
 			mMesh.vertices[3].Set(mTransform.origin + offy, rcc[3], uvLeft, uvDown);
 		}
 
-		memcpy(mMesh.indexes, indexes, sizeof(UInt16)*6);
+		memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*6);
 
 		mMesh.vertexCount = 4;
 		mMesh.polyCount = 2;
@@ -700,7 +719,7 @@ namespace o2
 		rcc[2] = (mColor*Math::Lerp(mCornersColors[3], mCornersColors[2], coef)).ABGR();
 		rcc[3] = (mColor*mCornersColors[3]).ABGR();
 
-		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
+		static VertexIndex indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = mTextureSrcRect.left*invTexSize.x;
 		float uvRight = Math::Lerp((float)mTextureSrcRect.left, (float)mTextureSrcRect.right, coef)*invTexSize.x;
@@ -713,7 +732,7 @@ namespace o2
 		mMesh.vertices[2].Set(mTransform.origin + mTransform.xv*coef, rcc[2], uvRight, uvDown);
 		mMesh.vertices[3].Set(mTransform.origin, rcc[3], uvLeft, uvDown);
 
-		memcpy(mMesh.indexes, indexes, sizeof(UInt16)*6);
+		memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*6);
 
 		mMesh.vertexCount = 4;
 		mMesh.polyCount = 2;
@@ -734,7 +753,7 @@ namespace o2
 		rcc[2] = (mColor*mCornersColors[2]).ABGR();
 		rcc[3] = (mColor*Math::Lerp(mCornersColors[2], mCornersColors[3], coef)).ABGR();
 
-		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
+		static VertexIndex indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = Math::Lerp((float)mTextureSrcRect.right, (float)mTextureSrcRect.left, coef)*invTexSize.x;
 		float uvRight = mTextureSrcRect.right*invTexSize.x;
@@ -747,7 +766,7 @@ namespace o2
 		mMesh.vertices[2].Set(mTransform.origin + mTransform.xv, rcc[2], uvRight, uvDown);
 		mMesh.vertices[3].Set(mTransform.origin + mTransform.xv*invCoef, rcc[3], uvLeft, uvDown);
 
-		memcpy(mMesh.indexes, indexes, sizeof(UInt16)*6);
+		memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*6);
 
 		mMesh.vertexCount = 4;
 		mMesh.polyCount = 2;
@@ -768,7 +787,7 @@ namespace o2
 		rcc[2] = (mColor*Math::Lerp(mCornersColors[1], mCornersColors[2], coef)).ABGR();
 		rcc[3] = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[3], coef)).ABGR();
 
-		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
+		static VertexIndex indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = mTextureSrcRect.left*invTexSize.x;
 		float uvRight = mTextureSrcRect.right*invTexSize.x;
@@ -781,7 +800,7 @@ namespace o2
 		mMesh.vertices[2].Set(mTransform.origin + mTransform.xv + mTransform.yv*invCoef, rcc[2], uvRight, uvDown);
 		mMesh.vertices[3].Set(mTransform.origin + mTransform.yv*invCoef, rcc[3], uvLeft, uvDown);
 
-		memcpy(mMesh.indexes, indexes, sizeof(UInt16)*6);
+		memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*6);
 
 		mMesh.vertexCount = 4;
 		mMesh.polyCount = 2;
@@ -801,7 +820,7 @@ namespace o2
 		rcc[2] = (mColor*mCornersColors[2]).ABGR();
 		rcc[3] = (mColor*mCornersColors[3]).ABGR();
 
-		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
+		static VertexIndex indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = mTextureSrcRect.left*invTexSize.x;
 		float uvRight = mTextureSrcRect.right*invTexSize.x;
@@ -814,7 +833,7 @@ namespace o2
 		mMesh.vertices[2].Set(mTransform.origin + mTransform.xv, rcc[2], uvRight, uvDown);
 		mMesh.vertices[3].Set(mTransform.origin, rcc[3], uvLeft, uvDown);
 
-		memcpy(mMesh.indexes, indexes, sizeof(UInt16)*6);
+		memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*6);
 
 		mMesh.vertexCount = 4;
 		mMesh.polyCount = 2;
@@ -860,8 +879,8 @@ namespace o2
 			mMesh.vertices[1].Set(dirPoint, dirColor, uDir, vUp);
 			mMesh.vertices[2].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 0, 1, 2 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3);
+			static VertexIndex indexes[] ={ 0, 1, 2 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3);
 
 			mMesh.vertexCount = 3;
 			mMesh.polyCount = 1;
@@ -880,8 +899,8 @@ namespace o2
 			mMesh.vertices[2].Set(dirPoint, dirColor, uRight, vDir);
 			mMesh.vertices[3].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 0, 1, 3, 1, 2, 3 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3*2);
+			static VertexIndex indexes[] ={ 0, 1, 3, 1, 2, 3 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3*2);
 
 			mMesh.vertexCount = 4;
 			mMesh.polyCount = 2;
@@ -902,8 +921,8 @@ namespace o2
 			mMesh.vertices[3].Set(dirPoint, dirColor, uDir, vDown);
 			mMesh.vertices[4].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 0, 1, 4, 1, 2, 4, 2, 3, 4 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3*3);
+			static VertexIndex indexes[] ={ 0, 1, 4, 1, 2, 4, 2, 3, 4 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3*3);
 
 			mMesh.vertexCount = 5;
 			mMesh.polyCount = 3;
@@ -926,8 +945,8 @@ namespace o2
 			mMesh.vertices[4].Set(dirPoint, dirColor, uLeft, vDir);
 			mMesh.vertices[5].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 0, 1, 5, 1, 2, 5, 2, 3, 5, 3, 4, 5 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3*4);
+			static VertexIndex indexes[] ={ 0, 1, 5, 1, 2, 5, 2, 3, 5, 3, 4, 5 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3*4);
 
 			mMesh.vertexCount = 6;
 			mMesh.polyCount = 4;
@@ -952,8 +971,8 @@ namespace o2
 			mMesh.vertices[5].Set(dirPoint, dirColor, uDir, vUp);
 			mMesh.vertices[6].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 0, 1, 6, 1, 2, 6, 2, 3, 6, 3, 4, 6, 4, 5, 6 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3*5);
+			static VertexIndex indexes[] ={ 0, 1, 6, 1, 2, 6, 2, 3, 6, 3, 4, 6, 4, 5, 6 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3*5);
 
 			mMesh.vertexCount = 7;
 			mMesh.polyCount = 5;
@@ -1000,8 +1019,8 @@ namespace o2
 			mMesh.vertices[1].Set(dirPoint, dirColor, uDir, vUp);
 			mMesh.vertices[2].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 1, 0, 2 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3);
+			static VertexIndex indexes[] ={ 1, 0, 2 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3);
 
 			mMesh.vertexCount = 3;
 			mMesh.polyCount = 1;
@@ -1020,8 +1039,8 @@ namespace o2
 			mMesh.vertices[2].Set(dirPoint, dirColor, uLeft, vDir);
 			mMesh.vertices[3].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 1, 0, 3, 2, 1, 3 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3*2);
+			static VertexIndex indexes[] ={ 1, 0, 3, 2, 1, 3 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3*2);
 
 			mMesh.vertexCount = 4;
 			mMesh.polyCount = 2;
@@ -1042,8 +1061,8 @@ namespace o2
 			mMesh.vertices[3].Set(dirPoint, dirColor, uDir, vDown);
 			mMesh.vertices[4].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 1, 0, 4, 2, 1, 4, 3, 2, 4 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3*3);
+			static VertexIndex indexes[] ={ 1, 0, 4, 2, 1, 4, 3, 2, 4 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3*3);
 
 			mMesh.vertexCount = 5;
 			mMesh.polyCount = 3;
@@ -1066,8 +1085,8 @@ namespace o2
 			mMesh.vertices[4].Set(dirPoint, dirColor, uRight, vDir);
 			mMesh.vertices[5].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 1, 0, 5, 2, 1, 5, 3, 2, 5, 4, 3, 5 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3*4);
+			static VertexIndex indexes[] ={ 1, 0, 5, 2, 1, 5, 3, 2, 5, 4, 3, 5 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3*4);
 
 			mMesh.vertexCount = 6;
 			mMesh.polyCount = 4;
@@ -1092,8 +1111,8 @@ namespace o2
 			mMesh.vertices[5].Set(dirPoint, dirColor, uDir, vUp);
 			mMesh.vertices[6].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={ 1, 0, 6, 2, 1, 6, 3, 2, 6, 4, 3, 6, 5, 4, 6 };
-			memcpy(mMesh.indexes, indexes, sizeof(UInt16)*3*5);
+			static VertexIndex indexes[] ={ 1, 0, 6, 2, 1, 6, 3, 2, 6, 4, 3, 6, 5, 4, 6 };
+			memcpy(mMesh.indexes, indexes, sizeof(VertexIndex)*3*5);
 
 			mMesh.vertexCount = 7;
 			mMesh.polyCount = 5;
@@ -1144,5 +1163,7 @@ namespace o2
 		}
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::Sprite);
+// --- END META ---

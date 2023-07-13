@@ -73,16 +73,16 @@ namespace o2
 	void Scene::UpdateStartingEntities()
 	{
 		auto startActors = mStartActors;
-		auto startComponents = mStartComponents;
-
 		mStartActors.Clear();
-		mStartComponents.Clear();
 
 		for (auto actor : startActors)
 		{
 			actor->UpdateTransform();
 			actor->OnStart();
 		}
+
+		auto startComponents = mStartComponents;
+		mStartComponents.Clear();
 
 		for (auto comp : startComponents)
 			comp->OnStart();
@@ -102,14 +102,13 @@ namespace o2
 		for (auto comp : destroyComponents)
 			delete comp;
 
-		if constexpr (IS_EDITOR)
-		{
-			auto destroyingObjects = mDestroyingObjects;
-			mDestroyingObjects.Clear();
+#if IS_EDITOR
+		auto destroyingObjects = mDestroyingObjects;
+		mDestroyingObjects.Clear();
 
-			for (auto object : destroyingObjects)
-				delete object;
-		}
+		for (auto object : destroyingObjects)
+			delete object;
+#endif
 	}
 
 	void Scene::DestroyActor(Actor* actor)
@@ -137,10 +136,12 @@ namespace o2
 		mActorsMap[actor->mId] = actor;
 	}
 
+#if IS_EDITOR
 	void Scene::DestroyEditableObject(SceneEditableObject* object)
 	{
 		mDestroyingObjects.Add(object);
 	}
+#endif
 
 	void Scene::UpdateActors(float dt)
 	{
@@ -160,8 +161,9 @@ namespace o2
 
 	void Scene::DrawCameras()
 	{
-		if constexpr (IS_EDITOR)
-			BeginDrawingScene();
+#if IS_EDITOR
+		BeginDrawingScene();
+#endif
 
 		if (mCameras.IsEmpty())
 		{
@@ -179,6 +181,8 @@ namespace o2
 		}
 		else
 		{
+			PROFILE_SAMPLE("Draw cameras");
+
 			for (auto camera : mCameras)
 			{
 				camera->SetupAndDraw();
@@ -188,8 +192,9 @@ namespace o2
 
 		DrawCursorDebugInfo();
 
-		if constexpr (IS_EDITOR)
-			EndDrawingScene();
+#if IS_EDITOR
+		EndDrawingScene();
+#endif
 	}
 
 	void Scene::DrawCursorDebugInfo()
@@ -259,12 +264,11 @@ namespace o2
 
 		actor->OnAddToScene();
 
-		if constexpr (IS_EDITOR)
-		{
-			mChangedObjects.Add(actor);
-			AddEditableObjectToScene(actor);
-			onAddedToScene(actor);
-		}
+#if IS_EDITOR
+		mChangedObjects.Add(actor);
+		AddEditableObjectToScene(actor);
+		onAddedToScene(actor);
+#endif
 	}
 
 	void Scene::RemoveActorFromScene(Actor* actor, bool keepEditorObjects /*= false*/)
@@ -278,13 +282,12 @@ namespace o2
 		mStartActors.Remove(actor);
 		mAddedActors.Remove(actor);
 
-		if constexpr (IS_EDITOR)
-		{
-			if (!keepEditorObjects)
-				RemoveEditableObjectFromScene(actor);
+#if IS_EDITOR
+		if (!keepEditorObjects)
+			RemoveEditableObjectFromScene(actor);
 
-			OnObjectRemoveFromScene(actor);
-		}
+		OnObjectRemoveFromScene(actor);
+#endif
 	}
 
 	void Scene::OnComponentAdded(Component* component)
@@ -302,7 +305,9 @@ namespace o2
 		mLayersMap.Remove(oldName);
 		mLayersMap[layer->GetName()] = layer;
 
+#if IS_EDITOR
 		onLayersListChanged();
+#endif
 	}
 
 	void Scene::OnCameraAddedOnScene(CameraActor* camera)
@@ -345,7 +350,9 @@ namespace o2
 		mLayers.Add(newLayer);
 		mLayersMap[name] = newLayer;
 
+#if IS_EDITOR
 		onLayersListChanged();
+#endif
 
 		return newLayer;
 	}
@@ -365,7 +372,9 @@ namespace o2
 		mLayers.Remove(layer);
 		mLayersMap.Remove(layer->mName);
 
+#if IS_EDITOR
 		onLayersListChanged();
+#endif
 
 		delete layer;
 	}
@@ -555,7 +564,9 @@ namespace o2
 		else
 			mDefaultLayer = AddLayer("Default");
 
+#if IS_EDITOR
 		onLayersListChanged();
+#endif
 
 		auto& tagsNode = doc.GetMember("Tags");
 		if (!tagsNode.IsEmpty())
@@ -578,8 +589,7 @@ namespace o2
 		ActorRefResolver::Instance().UnlockResolving();
 		ActorRefResolver::Instance().ResolveRefs();
 
-		for (auto actor : mRootActors)
-			actor->UpdateTransform();
+		Update(0.0f);
 
 #if IS_EDITOR
 		mChangedObjects.Clear();
@@ -823,5 +833,7 @@ namespace o2
 
 #endif
 }
+// --- META ---
 
 DECLARE_CLASS(o2::Scene);
+// --- END META ---

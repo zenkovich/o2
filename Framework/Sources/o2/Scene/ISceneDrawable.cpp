@@ -37,6 +37,8 @@ namespace o2
 				}
 			}
 		}
+
+        mChildrenInheritedDepth.Clear();
 	}
 
 	ISceneDrawable& ISceneDrawable::operator=(const ISceneDrawable& other)
@@ -47,6 +49,8 @@ namespace o2
 
 	void ISceneDrawable::Draw()
 	{
+		//PROFILE_SAMPLE_FUNC();
+
 		OnDrawn();
 
 		for (auto child : mChildrenInheritedDepth)
@@ -180,6 +184,16 @@ namespace o2
 			mLayer->SetLastByDepth(this);
 	}
 
+    const Vector<ISceneDrawable*>& ISceneDrawable::GetChildrenInheritedDepth() const
+    {
+        return mChildrenInheritedDepth;
+    }
+
+	bool ISceneDrawable::IsDrawableEnabled() const
+	{
+		return mIsEnabled;
+	}
+
 #if IS_EDITOR
 	SceneEditableObject* ISceneDrawable::GetEditableOwner()
 	{
@@ -188,12 +202,18 @@ namespace o2
 
 	void ISceneDrawable::OnDrawn()
 	{
+		//PROFILE_SAMPLE_FUNC();
+
 		if (auto obj = GetEditableOwner())
 			o2Scene.OnObjectDrawn(obj);
 
 		IDrawable::OnDrawn();
+
+		drawCallIdx = o2Render.GetDrawCallsCount();
 	}
 #endif
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ISceneDrawable);
+// --- END META ---

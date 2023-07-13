@@ -87,6 +87,7 @@ namespace Editor
 		void OnPropertyChanged(IPropertyField* field);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::PropertiesWindow)
 {
@@ -124,3 +125,4 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;
+// --- END META ---

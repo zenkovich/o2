@@ -40,11 +40,14 @@ namespace o2
 
 	void Debug::Update(float dt)
 	{
+		//PROFILE_SAMPLE_FUNC();
 		mDbgDrawables.ForEach([&](auto drw) { drw->delay -= dt; });
 	}
 
 	void Debug::Draw()
 	{
+		//PROFILE_SAMPLE_FUNC();
+
 		Vector<IDbgDrawable*> freeDrawables;
 		for (auto drw : mDbgDrawables)
 		{

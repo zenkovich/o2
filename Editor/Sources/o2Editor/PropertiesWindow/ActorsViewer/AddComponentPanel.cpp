@@ -336,9 +336,11 @@ namespace Editor
 		return newChild;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AddComponentPanel);
 
 DECLARE_CLASS(Editor::ComponentsTree);
 
 DECLARE_CLASS(Editor::ComponentsTreeNode);
+// --- END META ---

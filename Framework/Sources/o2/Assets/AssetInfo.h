@@ -78,6 +78,7 @@ namespace o2
 		friend class Asset;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AssetInfo)
 {
@@ -110,3 +111,4 @@ CLASS_METHODS_META(o2::AssetInfo)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
+// --- END META ---

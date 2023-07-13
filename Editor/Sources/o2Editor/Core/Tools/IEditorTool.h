@@ -118,6 +118,7 @@ namespace Editor
 		friend class SceneEditScreen;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::IEditTool)
 {
@@ -163,3 +164,4 @@ CLASS_METHODS_META(Editor::IEditTool)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
 }
 END_META;
+// --- END META ---

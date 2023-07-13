@@ -1,5 +1,6 @@
 #include "o2/stdafx.h"
 #include "ScriptValueDef.h"
+// --- META ---
 
 ENUM_META(o2::ScriptValue::ValueType)
 {
@@ -17,3 +18,4 @@ ENUM_META(o2::ScriptValue::ValueType)
 	ENUM_ENTRY(Undefined);
 }
 END_ENUM_META;
+// --- END META ---

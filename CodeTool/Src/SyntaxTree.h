@@ -22,6 +22,7 @@ class SyntaxType;
 class SyntaxTypedef;
 class SyntaxUsingNamespace;
 class SyntaxVariable;
+class SyntaxDefineIf;
 
 typedef map<string, string>           StringStringDict;
 typedef vector<SyntaxAttributes*>     SyntaxAttributesVec;
@@ -34,6 +35,7 @@ typedef vector<SyntaxSection*>        SyntaxSectionsVec;
 typedef vector<SyntaxTypedef*>        SyntaxTypedefsVec;
 typedef vector<SyntaxUsingNamespace*> SyntaxUsingNamespacesVec;
 typedef vector<SyntaxVariable*>       SyntaxVariablesVec;
+typedef vector<SyntaxDefineIf*>         SyntaxDefinesVec;
 typedef vector<string>                StringsVec;
 
 enum class SyntaxProtectionSection { Public, Private, Protected };
@@ -115,12 +117,19 @@ public:
 	// Returns pointer to owner file
 	SyntaxFile* GetOwnerFile() const;
 
+	// Returns pointer to owner define
+	SyntaxDefineIf* GetDefine() const;
+
 protected:
-	int         mBegin = 0;      // Data begin position
-	int         mLength = 0;     // Data length
-	int         mLine = 0;       // Data line number
-	string      mData;           // Expression text
+	int mBegin = 0;  // Data begin position
+	int mLength = 0; // Data length
+	int mLine = 0;   // Data line number
+
+	string mData; // Expression text
+
 	SyntaxFile* mFile = nullptr; // Owner file
+
+	SyntaxDefineIf* mDefine = nullptr; // Owner define
 
 	friend class CppSyntaxParser;
 };
@@ -261,6 +270,7 @@ protected:
 	SyntaxTypedefsVec        mTypedefs;                // List of typedefs
 	SyntaxUsingNamespacesVec mUsingNamespaces;         // List of using namespaces
 	SyntaxAttributesVec      mAttributes;              // List of attributes
+	SyntaxDefinesVec 	     mDefines;                 // List of defines
 
 	friend class CodeToolCache;
 	friend class CppSyntaxParser;
@@ -529,6 +539,19 @@ protected:
 	StringStringDict        mEntries;                // Entries of enum
 	SyntaxSection*          mOwnerSection = nullptr; // Owner syntax section
 	SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
+
+	friend class CppSyntaxParser;
+};
+
+
+// Syntax #define
+class SyntaxDefineIf : public ISyntaxExpression
+{
+public:
+	const string& GetDefinition() const;
+
+protected:
+	string mDefintion; // Definition statement after #define
 
 	friend class CppSyntaxParser;
 };

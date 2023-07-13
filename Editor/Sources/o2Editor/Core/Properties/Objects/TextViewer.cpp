@@ -33,5 +33,7 @@ namespace Editor
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TObjectPropertiesViewer<o2::Text>);
+// --- META ---
 
 DECLARE_CLASS(Editor::TextViewer);
+// --- END META ---

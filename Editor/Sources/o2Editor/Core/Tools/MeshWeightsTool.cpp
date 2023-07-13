@@ -69,7 +69,7 @@ namespace Editor
 				debugMesh.vertices[p.first].color = Color4::HSL(hue, weightMeshSaturation, weightMeshLight, weightMeshAlpha).ABGR();
 			}
 
-			memcpy(debugMesh.indexes, mesh.indexes, sizeof(UInt16)*mesh.polyCount*3);
+			memcpy(debugMesh.indexes, mesh.indexes, sizeof(VertexIndex)*mesh.polyCount*3);
 
 			debugMesh.vertexCount = mesh.vertexCount;
 			debugMesh.polyCount = mesh.polyCount;
@@ -180,5 +180,7 @@ namespace Editor
 		isEnabled = false;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::MeshWeightsTool);
+// --- END META ---

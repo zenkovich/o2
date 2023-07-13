@@ -155,6 +155,7 @@ namespace o2
 		friend class PhysicsWorld;
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::RigidBody::Type);
 
@@ -226,3 +227,4 @@ CLASS_METHODS_META(o2::RigidBody)
 	FUNCTION().PROTECTED().SIGNATURE_STATIC(b2BodyType, GetBodyType, Type);
 }
 END_META;
+// --- END META ---

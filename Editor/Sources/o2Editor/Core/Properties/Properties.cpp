@@ -19,6 +19,16 @@
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
 
+#include "o2Editor/Core/Properties/Objects/Assets/ImageAssetViewer.h"
+#include "o2Editor/Core/Properties/Objects/Assets/VectorFontAssetViewer.h"
+#include "o2Editor/Core/Properties/Objects/Components/AnimationStateViewer.h"
+#include "o2Editor/Core/Properties/Objects/Components/MeshComponentViewer.h"
+#include "o2Editor/Core/Properties/Objects/AnimationViewer.h"
+#include "o2Editor/Core/Properties/Objects/CameraActorViewer.h"
+#include "o2Editor/Core/Properties/Objects/SpriteViewer.h"
+#include "o2Editor/Core/Properties/Objects/TextViewer.h"
+#include "o2Editor/Core/Properties/Basic/ScriptValueProperty.h"
+
 DECLARE_SINGLETON(Editor::Properties);
 
 namespace Editor
@@ -33,6 +43,16 @@ namespace Editor
 		mOnPropertyCompletedChangingUndoCreateDelegate = 
 			MakeFunction<ActionsList, void, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&>(
 			&o2EditorApplication, &EditorApplication::DoneActorPropertyChangeAction);
+
+		CHECKUP_TYPE(ImageAssetViewer);
+		CHECKUP_TYPE(VectorFontAssetViewer);
+		CHECKUP_TYPE(AnimationStateViewer);
+		CHECKUP_TYPE(MeshComponentViewer);
+		CHECKUP_TYPE(AnimationViewer);
+		CHECKUP_TYPE(CameraActorViewer);
+		CHECKUP_TYPE(SpriteViewer);
+		CHECKUP_TYPE(TextViewer);
+		CHECKUP_TYPE(ScriptValueProperty);
 	}
 
 	Properties::~Properties()

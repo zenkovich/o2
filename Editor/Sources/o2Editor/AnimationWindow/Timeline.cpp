@@ -439,5 +439,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AnimationTimeline);
+// --- END META ---

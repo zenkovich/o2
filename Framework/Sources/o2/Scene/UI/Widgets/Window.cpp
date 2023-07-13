@@ -391,5 +391,7 @@ namespace o2
 		return "Window";
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::Window);
+// --- END META ---

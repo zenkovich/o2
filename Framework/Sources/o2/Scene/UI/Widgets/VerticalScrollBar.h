@@ -165,6 +165,7 @@ namespace o2
 		friend class Tree;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::VerticalScrollBar)
 {
@@ -235,3 +236,4 @@ CLASS_METHODS_META(o2::VerticalScrollBar)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
 }
 END_META;
+// --- END META ---

@@ -499,7 +499,9 @@ namespace o2
 		return "Dropping";
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::MenuPanel);
 
 DECLARE_CLASS(o2::MenuPanel::Item);
+// --- END META ---

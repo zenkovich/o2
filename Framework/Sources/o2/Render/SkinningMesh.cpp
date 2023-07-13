@@ -24,7 +24,7 @@ namespace o2
 
 		memcpy(bones, other.bones, other.mMaxBonesCount*sizeof(Bone));
 		memcpy(vertices, other.vertices, other.mMaxVertexCount*sizeof(SkinningVertex));
-		memcpy(indexes, other.indexes, other.mMaxPolyCount*3*sizeof(UInt16));
+		memcpy(indexes, other.indexes, other.mMaxPolyCount*3*sizeof(VertexIndex));
 	}
 
 	SkinningMesh::~SkinningMesh()
@@ -46,7 +46,7 @@ namespace o2
 
 		memcpy(bones, other.bones, other.mMaxBonesCount*sizeof(Bone));
 		memcpy(vertices, other.vertices, other.mMaxVertexCount*sizeof(SkinningVertex));
-		memcpy(indexes, other.indexes, other.mMaxPolyCount*3*sizeof(UInt16));
+		memcpy(indexes, other.indexes, other.mMaxPolyCount*3*sizeof(VertexIndex));
 
 		return *this;
 	}
@@ -61,7 +61,7 @@ namespace o2
 		bones = mnew Bone[bonesCount];
 		vertices = mnew SkinningVertex[vertexCount];
 		mRenderVertexBuffer = mnew Vertex[vertexCount];
-		indexes = mnew UInt16[polyCount*3];
+		indexes = mnew VertexIndex[polyCount*3];
 
 		mMaxBonesCount = bonesCount;
 		mMaxVertexCount = vertexCount;
@@ -119,7 +119,7 @@ namespace o2
 	{
 		delete[] indexes;
 
-		indexes = new UInt16[count*3];
+		indexes = new VertexIndex[count*3];
 		mMaxPolyCount = count;
 		polyCount = 0;
 	}

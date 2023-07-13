@@ -25,6 +25,7 @@ namespace Editor
 	};
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AssetPropertiesViewer)
 {
@@ -42,3 +43,4 @@ CLASS_METHODS_META(Editor::AssetPropertiesViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
 }
 END_META;
+// --- END META ---

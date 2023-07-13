@@ -899,6 +899,7 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 ENUM_META(o2::Curve::Key::Type)
 {
@@ -914,3 +915,4 @@ END_ENUM_META;
 DECLARE_CLASS(o2::Curve);
 
 DECLARE_CLASS(o2::Curve::Key);
+// --- END META ---

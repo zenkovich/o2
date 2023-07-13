@@ -51,6 +51,7 @@ namespace Editor
 		SERIALIZABLE(DeleteAction);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DeleteAction)
 {
@@ -90,3 +91,4 @@ CLASS_METHODS_META(Editor::DeleteAction::ObjectInfo)
 {
 }
 END_META;
+// --- END META ---

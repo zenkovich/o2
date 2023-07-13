@@ -224,7 +224,9 @@ namespace o2
 // 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::Tag);
 
 DECLARE_CLASS(o2::TagGroup);
+// --- END META ---

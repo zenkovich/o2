@@ -40,6 +40,7 @@ namespace Editor
 		void OnEditPressed();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AnimationViewer)
 {
@@ -65,3 +66,4 @@ CLASS_METHODS_META(Editor::AnimationViewer)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnEditPressed);
 }
 END_META;
+// --- END META ---

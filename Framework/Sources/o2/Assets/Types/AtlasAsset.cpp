@@ -6,14 +6,55 @@
 
 namespace o2
 {
+	AtlasAsset::PlatformMeta AtlasAsset::Meta::GetResultPlatformMeta(Platform platform) const
+	{
+		PlatformMeta res = common;
+
+		switch (platform)
+		{
+			case Platform::iOS: if (ios) res = *ios; break;
+			case Platform::Android: if (android) res = *android; break;
+			case Platform::Mac: if (macOS) res = *macOS; break;
+			case Platform::Windows: if (windows) res = *windows; break;
+			case Platform::Linux: if (linuxOS) res = *linuxOS; break;
+		}
+
+		return res;
+	}
+
 	bool AtlasAsset::Meta::IsEqual(AssetMeta* other) const
 	{
 		if (!AssetMeta::IsEqual(other))
 			return false;
 
 		Meta* otherMeta = (Meta*)other;
-		return ios == otherMeta->ios && android == otherMeta->android && macOS == otherMeta->macOS &&
-			windows == otherMeta->windows && Math::Equals(border, otherMeta->border);
+
+		if (!(common == otherMeta->common))
+			return false;
+
+		auto comparePlatformMeta = [](PlatformMeta* a, PlatformMeta* b)
+		{
+			if (a && b)
+			{
+				if (!(*a == *b))
+					return false;
+			}
+			else if (a || b)
+				return false;
+
+			return true;
+		};
+
+		if (!comparePlatformMeta(ios, otherMeta->ios) ||
+			!comparePlatformMeta(android, otherMeta->android) ||
+			!comparePlatformMeta(macOS, otherMeta->macOS) ||
+			!comparePlatformMeta(windows, otherMeta->windows) ||
+			!comparePlatformMeta(linuxOS, otherMeta->linuxOS))
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	UInt AtlasAsset::Page::ID() const
@@ -46,11 +87,11 @@ namespace o2
 		return mId == other.mId;
 	}
 
-	AtlasAsset::AtlasAsset():
+	AtlasAsset::AtlasAsset() :
 		Asset(mnew Meta())
 	{}
 
-	AtlasAsset::AtlasAsset(const AtlasAsset& other):
+	AtlasAsset::AtlasAsset(const AtlasAsset& other) :
 		Asset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
 	{
 		for (auto& page : mPages)
@@ -116,7 +157,9 @@ namespace o2
 
 	String AtlasAsset::GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx)
 	{
-		return (atlasInfo.tree ? atlasInfo.tree->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + ".png";
+		auto meta = dynamic_cast<AtlasAsset::Meta*>(atlasInfo.meta);
+		String extension = Texture::formatFileExtensions.Get(meta->GetResultPlatformMeta(::GetEnginePlatform()).format);
+		return (atlasInfo.tree ? atlasInfo.tree->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + "." + extension;
 	}
 
 	TextureRef AtlasAsset::GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx)
@@ -132,6 +175,7 @@ namespace o2
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::AtlasAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AtlasAsset>);
+// --- META ---
 
 DECLARE_CLASS(o2::AtlasAsset);
 
@@ -140,3 +184,4 @@ DECLARE_CLASS(o2::AtlasAsset::PlatformMeta);
 DECLARE_CLASS(o2::AtlasAsset::Meta);
 
 DECLARE_CLASS(o2::AtlasAsset::Page);
+// --- END META ---

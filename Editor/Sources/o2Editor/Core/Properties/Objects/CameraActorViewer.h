@@ -46,6 +46,7 @@ namespace Editor
 		void OnTypeSelected();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::CameraActorViewer)
 {
@@ -73,3 +74,4 @@ CLASS_METHODS_META(Editor::CameraActorViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSelected);
 }
 END_META;
+// --- END META ---

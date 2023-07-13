@@ -72,6 +72,8 @@ namespace o2
 
 	void ImageComponent::Draw()
 	{
+		//PROFILE_SAMPLE_FUNC();
+
 		Sprite::Draw();
 		DrawableComponent::OnDrawn();
 		ISceneDrawable::Draw();
@@ -140,5 +142,7 @@ namespace o2
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ImageComponent>);
+// --- META ---
 
 DECLARE_CLASS(o2::ImageComponent);
+// --- END META ---

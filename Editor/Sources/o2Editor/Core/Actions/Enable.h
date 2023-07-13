@@ -40,6 +40,7 @@ namespace Editor
 		SERIALIZABLE(EnableAction);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::EnableAction)
 {
@@ -62,3 +63,4 @@ CLASS_METHODS_META(Editor::EnableAction)
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
+// --- END META ---

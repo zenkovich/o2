@@ -117,8 +117,11 @@ namespace o2
 		// Returns device's screen dpi
 		Vec2I GetDPI() const;
 
-		// Returns draw calls count at last frame
-		int GetDrawCallsCount();
+		// Returns current draw calls count 
+		int GetDrawCallsCount() const;
+
+		// Returns current drawn primitives
+		int GetDrawnPrimitives() const;
 
 		// Binding camera. NULL - standard camera
 		void SetCamera(const Camera& camera);
@@ -260,7 +263,7 @@ namespace o2
 
 		// Draws data from buffer with specified texture and primitive type
 		void DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
-						UInt16* indexes, UInt elementsCount, const TextureRef& texture);
+						VertexIndex* indexes, UInt elementsCount, const TextureRef& texture);
 
 		// Draws mesh wire
 		void DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
@@ -315,6 +318,9 @@ namespace o2
 		Vec2F  mInvViewScale;      // Inverted mViewScale
 		Vec2I  mDPI;               // Current device screen DPI
 
+		Vec2I mPrevResolution;
+		Camera mPrevCamera;
+
 		bool  mRenderTargetsAvailable; // True, if render targets is available
 		Vec2I mMaxTextureSize;         // Max texture size
 
@@ -333,9 +339,9 @@ namespace o2
 
 		Vector<Sprite*> mSprites; // All sprites
 
-		UInt16*    mHardLinesIndexData; // Index data buffer
-		TextureRef mSolidLineTexture;   // Solid line texture
-		TextureRef mDashLineTexture;    // Dash line texture
+		VertexIndex* mHardLinesIndexData; // Index data buffer
+		TextureRef   mSolidLineTexture;   // Solid line texture
+		TextureRef   mDashLineTexture;    // Dash line texture
 
 		bool mReady; // True, if render system initialized
 
@@ -364,6 +370,9 @@ namespace o2
 		// Send buffers to draw
 		void DrawPrimitives();
 
+		// Checks vertex buffer for texture coordinate flip by texture format
+		void CheckVertexBufferTexCoordFlipByTextureFormat();
+
 		// Sets orthographic view matrix by view size
 		void SetupViewMatrix(const Vec2I& viewSize);
 
@@ -389,6 +398,7 @@ namespace o2
 		friend class BitmapFont;
 		friend class BitmapFontAsset;
 		friend class Font;
+		friend class RenderBase;
 		friend class Sprite;
 		friend class Texture;
 		friend class TextureRef;

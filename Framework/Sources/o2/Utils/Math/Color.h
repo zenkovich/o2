@@ -84,6 +84,6 @@ namespace o2
 		static Color4 Green();
 		static Color4 Gray();
 		static Color4 HSL(float hue, float saturation, float lightness, float alpha = 1.0f);
-		static Color4 SomeColor(int idx);
+		static Color4 SomeColor(int idx, int alpha = 255);
 	};
 }

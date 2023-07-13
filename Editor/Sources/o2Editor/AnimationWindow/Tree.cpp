@@ -492,7 +492,9 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AnimationTree);
 
 DECLARE_CLASS(Editor::AnimationTreeNode);
+// --- END META ---

@@ -201,6 +201,7 @@ namespace Editor
 		friend class KeyFramesTrackControl;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AnimationTimeline)
 {
@@ -291,3 +292,4 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnScrolled, float);
 }
 END_META;
+// --- END META ---

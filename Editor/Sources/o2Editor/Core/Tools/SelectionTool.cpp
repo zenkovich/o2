@@ -172,5 +172,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::SelectionTool);
+// --- END META ---

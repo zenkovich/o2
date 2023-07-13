@@ -46,7 +46,9 @@ namespace o2
 	}
 
 	void Label::Draw()
-	{
+    {
+        //PROFILE_SAMPLE_FUNC();
+
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
@@ -348,6 +350,9 @@ namespace o2
 	}
 }
 
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Label>);
+// --- META ---
+
 ENUM_META(o2::Label::HorOverflow)
 {
 	ENUM_ENTRY(Cut);
@@ -367,3 +372,4 @@ ENUM_META(o2::Label::VerOverflow)
 END_ENUM_META;
 
 DECLARE_CLASS(o2::Label);
+// --- END META ---

@@ -47,6 +47,7 @@ namespace Editor
 		void OnPropertyChanged(IPropertyField* field);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
@@ -74,3 +75,4 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;
+// --- END META ---

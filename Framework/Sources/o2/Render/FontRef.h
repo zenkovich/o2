@@ -65,6 +65,7 @@ namespace o2
 		friend class VectorFontAsset;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::FontRef)
 {
@@ -88,3 +89,4 @@ CLASS_METHODS_META(o2::FontRef)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsValid);
 }
 END_META;
+// --- END META ---

@@ -79,6 +79,7 @@ namespace o2
 		void OnRemoveFromScene() override;
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::CameraActor::Type);
 
@@ -117,3 +118,4 @@ CLASS_METHODS_META(o2::CameraActor)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
 }
 END_META;
+// --- END META ---

@@ -2,9 +2,9 @@
 #include "EditorUIStyle.h"
 
 #include "o2/Animation/Animate.h"
+#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
-#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Assets/Types/BinaryAsset.h"
 #include "o2/Assets/Types/DataAsset.h"
@@ -65,7 +65,8 @@
 #include "o2Editor/Core/UIStyle/BasicUIStyle.h"
 #include "o2Editor/Core/WindowsSystem/DockableWindow.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/AddComponentPanel.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/DrawOrderTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 
 using namespace o2;
 
@@ -587,7 +588,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildActorsTree()
 	{
 		// basics
-		SceneTree* sample = mnew SceneTree();
+		SceneHierarchyTree* sample = mnew SceneHierarchyTree();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 0, 1));
 		sample->SetViewLayout(Layout::BothStretch(0, 0, 1, 0));
@@ -731,8 +732,169 @@ namespace Editor
 
 		sample->SetStateForcible("hover", false);
 
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5;
+		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
+
+		o2UI.AddWidgetStyle(sample, "standard");
+	}
+
+	void EditorUIStyleBuilder::RebuildDrawOrderTree()
+	{
+		// basics
+		DrawOrderTree* sample = mnew DrawOrderTree();
+		sample->layout->minSize = Vec2F(20, 20);
+		sample->SetClippingLayout(Layout::BothStretch(1, 2, 0, 1));
+		sample->SetViewLayout(Layout::BothStretch(0, 0, 1, 0));
+		sample->SetEnableScrollsHiding(true);
+		sample->SetChildsNodesOffset(10);
+
+		// hover
+		*sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
+		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
+
+		// highlight
+		*sample->GetHighlightDrawable() = Sprite("ui/UI4_selection_frame.png");
+		sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
+		sample->SetHighlightLayout(Layout::BothStretch());
+
+		sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
+									  Hide().Scale(1.5f).Then().
+									  Wait(0.3f).Then().
+									  Show().Scale(1.0f).For(0.2f).Then().
+									  Wait(1.0f).Then().
+									  Hide().For(0.2f));
+
+		// node sample
+		TreeNode* itemSample = sample->GetNodeSample();
+
+		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
+
+		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI4_Context_menu_select.png"),
+																  Layout::BothStretch(-10, -16, -10, -16));
+
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
+																	Layout::BothStretch(-10, -16, -10, -16));
+
+		itemSample->AddLayer("back", mnew Sprite(), Layout::BothStretch())->transparency = 0.15f;
+
+		itemSample->AddLayer("icon", mnew Sprite("ui/UI4_folder_icon_dark.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(13, 0)));
+
+		Text* captionLayerText = mnew Text("stdFont.ttf");
+		captionLayerText->horAlign = HorAlign::Left;
+		captionLayerText->verAlign = VerAlign::Middle;
+		captionLayerText->color = Color4(96, 125, 139);
+		captionLayerText->dotsEngings = true;
+		itemSample->AddLayer("name", captionLayerText, Layout::BothStretch(33, 0, 100, 0));
+
+		Text* batchLayerText = mnew Text("stdFont.ttf");
+		batchLayerText->horAlign = HorAlign::Right;
+		batchLayerText->verAlign = VerAlign::Middle;
+		batchLayerText->color = Color4(96, 125, 139);
+		batchLayerText->dotsEngings = true;
+		batchLayerText->height = 8;
+		batchLayerText->transparency = 0.6f;
+		itemSample->AddLayer("batch", batchLayerText, Layout::VerStretch(HorAlign::Right, 0, 0, 75, 40));
+
+		auto actorNodeEnableToggle = o2UI.CreateWidget<Toggle>("actor node enable");
+		actorNodeEnableToggle->name = "enableToggle";
+		*actorNodeEnableToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-5, 0));
+		itemSample->AddChild(actorNodeEnableToggle);
+
+		auto actorNodeLockToggle = o2UI.CreateWidget<Toggle>("actor node lock");
+		actorNodeLockToggle->name = "lockToggle";
+		*actorNodeLockToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-20, 0));
+		itemSample->AddChild(actorNodeLockToggle);
+
+		auto actorNodeLinkButton = o2UI.CreateWidget<Button>("actor node link");
+		actorNodeLinkButton->name = "linkBtn";
+		*actorNodeLinkButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-35, 0));
+		itemSample->AddChild(actorNodeLinkButton);
+
+		auto actorNodeEditBox = o2UI.CreateWidget<EditBox>("backless");
+		actorNodeEditBox->name = "nameEditBox";
+		*actorNodeEditBox->layout = WidgetLayout::BothStretch(15, 0, 55, 0);
+		actorNodeEditBox->Hide(true);
+		itemSample->AddChild(actorNodeEditBox);
+
+		AnimationClip itemEditStateAnim = AnimationClip::EaseInOut("layer/name/transparency", 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim.AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
+		itemSample->AddState("edit", itemEditStateAnim);
+
+		// node sample button
+		Button* itemSampleExpandBtn = mnew Button();
+		itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
+		itemSampleExpandBtn->name = "expandBtn";
+
+		auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mnew Sprite("ui/UI4_Right_icn.png"),
+														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto selectLayer = itemSampleExpandBtn->AddLayer("hover", mnew Sprite("ui/UI4_Right_icn_select.png"),
+														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI4_Right_icn_pressed.png"),
+														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+
+		itemSampleExpandBtn->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		itemSampleExpandBtn->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		itemSampleExpandBtn->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		itemSampleExpandBtn->layout->anchorMin = Vec2F(0, 1);
+		itemSampleExpandBtn->layout->anchorMax = Vec2F(0, 1);
+		itemSampleExpandBtn->layout->offsetMin = Vec2F(2, -20);
+		itemSampleExpandBtn->layout->offsetMax = Vec2F(12, 0);
+
+		itemSample->AddChild(itemSampleExpandBtn);
+
+		AnimationClip expandedStateAnim;
+		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
+			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+		itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
+
+		AnimationClip focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim.AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		itemSample->AddState("focused", focusedItemAnim);
+
+		// scrollbars
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		horScrollBar->layout->anchorMin = Vec2F(0, 0);
+		horScrollBar->layout->anchorMax = Vec2F(1, 0);
+		horScrollBar->layout->offsetMin = Vec2F(5, 0);
+		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+		sample->SetHorizontalScrollBar(horScrollBar);
+
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		verScrollBar->layout->anchorMin = Vec2F(1, 0);
+		verScrollBar->layout->anchorMax = Vec2F(1, 1);
+		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+		verScrollBar->layout->offsetMax = Vec2F(0, -5);
+		sample->SetVerticalScrollBar(verScrollBar);
+
+		sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
+																  5.0f, 15.0f, 0.2f));
+
+		sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
+																  -5.0f, -15.0f, 0.2f));
+
+		sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->SetStateForcible("hover", false);
+
+		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -1056,11 +1218,8 @@ namespace Editor
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
 		captionLayerText->color = Color4(96, 125, 139);
-		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
-
-		auto nameLayer = itemSample->layer["name"];
-		nameLayer->layout = Layout::BothStretch(30, 0, 5, 0);
-		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
+		captionLayerText->dotsEngings = true;
+		itemSample->AddLayer("name", captionLayerText, Layout::BothStretch(30, 0, 5, 0));
 
 		auto actorNodeEditBox = o2UI.CreateWidget<EditBox>("backless");
 		actorNodeEditBox->name = "nameEditBox";
@@ -4523,5 +4682,7 @@ namespace Editor
 		}
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::EditorUIStyleBuilder);
+// --- END META ---

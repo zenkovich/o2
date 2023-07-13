@@ -72,11 +72,7 @@ namespace o2
 
 	void WidgetLayout::SetPosition(const Vec2F& position)
 	{
-		RectF parentRect = GetParentRectangle();
-		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
-						mData->offsetMax + mData->anchorMax*parentRect.Size());
-
-		Vec2F delta = position - rectangle.LeftBottom() + rectangle.Size()*mData->pivot;
+		Vec2F delta = position - GetPosition();
 		mData->offsetMin += delta;
 		mData->offsetMax += delta;
 
@@ -726,6 +722,13 @@ namespace o2
 	void WidgetLayout::DontCheckMinMax()
 	{}
 
+#if IS_SCRIPTING_SUPPORTED
+	void WidgetLayout::Set(const WidgetLayout& other)
+	{
+		*this = other;
+	}
+#endif
+
 	Vector<float> CalculateExpandedSize(Vector<Widget*>& widgets, bool horizontal, float availableWidth, float spacing)
 	{
 		Vector<float> minSizes; minSizes.Reserve(widgets.Count());
@@ -809,7 +812,9 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::WidgetLayout);
 
 DECLARE_CLASS(o2::WidgetLayoutData);
+// --- END META ---

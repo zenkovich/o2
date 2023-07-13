@@ -43,5 +43,7 @@ namespace Editor
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<bool>);
+// --- META ---
 
 DECLARE_CLASS(Editor::BooleanProperty);
+// --- END META ---

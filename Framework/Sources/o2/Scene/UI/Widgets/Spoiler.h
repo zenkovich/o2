@@ -98,6 +98,7 @@ namespace o2
 		bool IsFullyCollapsed() const;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Spoiler)
 {
@@ -142,3 +143,4 @@ CLASS_METHODS_META(o2::Spoiler)
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsFullyCollapsed);
 }
 END_META;
+// --- END META ---

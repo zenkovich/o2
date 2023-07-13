@@ -47,6 +47,9 @@ void GetGLExtensions(o2::LogStream* log /*= nullptr*/)
 	glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)GetSafeWGLProcAddress("glUniformMatrix4fv", log);
 	glActiveTexture = (PFNGLACTIVETEXTUREPROC)GetSafeWGLProcAddress("glActiveTexture", log);
 	glUniform1i = (PFNGLUNIFORM1IPROC)GetSafeWGLProcAddress("glUniform1i", log);
+	glCompressedTexImage2D = (PFNGLCOMPRESSEDTEXIMAGE2DPROC)GetSafeWGLProcAddress("glCompressedTexImage2D", log);
+	glBlendFuncSeparate = (PFNGLBLENDFUNCSEPARATEPROC)GetSafeWGLProcAddress("glBlendFuncSeparate", log);
+	glBufferSubData = (PFNGLBUFFERSUBDATAPROC)GetSafeWGLProcAddress("glBufferSubData", log);
 }
 
 bool IsGLExtensionSupported(const char *extension)
@@ -142,5 +145,8 @@ extern PFNGLENABLEVERTEXATTRIBARRAYPROC   glEnableVertexAttribArray = NULL;
 extern PFNGLUNIFORMMATRIX4FVPROC          glUniformMatrix4fv = NULL;
 extern PFNGLACTIVETEXTUREPROC             glActiveTexture = NULL;
 extern PFNGLUNIFORM1IPROC                 glUniform1i = NULL;
+extern PFNGLCOMPRESSEDTEXIMAGE2DPROC      glCompressedTexImage2D = NULL;
+extern PFNGLBLENDFUNCSEPARATEPROC         glBlendFuncSeparate = NULL;
+extern PFNGLBUFFERSUBDATAPROC             glBufferSubData = NULL;
 
 #endif // PLATFORM_WINDOWS

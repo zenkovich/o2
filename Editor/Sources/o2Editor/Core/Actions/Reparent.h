@@ -60,6 +60,7 @@ namespace Editor
 		SERIALIZABLE(ReparentAction);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ReparentAction)
 {
@@ -84,3 +85,4 @@ CLASS_METHODS_META(Editor::ReparentAction)
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
+// --- END META ---

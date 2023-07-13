@@ -108,5 +108,7 @@ namespace o2
 		return *this;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::FontRef);
+// --- END META ---

@@ -47,6 +47,7 @@ namespace Editor
 		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::TextViewer)
 {
@@ -76,3 +77,4 @@ CLASS_METHODS_META(Editor::TextViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
 }
 END_META;
+// --- END META ---

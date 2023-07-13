@@ -47,7 +47,9 @@ namespace o2
 #elif PLATFORM_MAC
 		return WString();
 #elif PLATFORM_IOS
-		return WString();
+        return WString();
+#elif PLATFORM_LINUX
+        return WString();
 #endif
 	}
 

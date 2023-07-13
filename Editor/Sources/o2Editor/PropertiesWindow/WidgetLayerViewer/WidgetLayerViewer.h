@@ -75,6 +75,7 @@ namespace Editor
 	};
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::WidgetLayerViewer)
 {
@@ -107,3 +108,4 @@ CLASS_METHODS_META(Editor::WidgetLayerViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, Draw);
 }
 END_META;
+// --- END META ---

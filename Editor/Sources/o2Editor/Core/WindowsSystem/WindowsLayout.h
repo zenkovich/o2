@@ -52,6 +52,7 @@ namespace Editor
 	};
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::WindowsLayout)
 {
@@ -91,3 +92,4 @@ CLASS_METHODS_META(Editor::WindowsLayout::WindowDockPlace)
 	FUNCTION().PUBLIC().SIGNATURE(void, RetrieveLayout, Widget*);
 }
 END_META;
+// --- END META ---

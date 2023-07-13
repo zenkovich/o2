@@ -450,6 +450,7 @@ namespace Editor
 		friend class CurveKeysChangeAction;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::CurvesEditor)
 {
@@ -611,3 +612,4 @@ CLASS_METHODS_META(Editor::CurvesEditor::CurveCopyInfo)
 {
 }
 END_META;
+// --- END META ---

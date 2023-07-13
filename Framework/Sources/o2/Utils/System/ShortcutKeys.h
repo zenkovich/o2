@@ -30,6 +30,7 @@ namespace o2
 		SERIALIZABLE(ShortcutKeys);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::ShortcutKeys)
 {
@@ -55,3 +56,4 @@ CLASS_METHODS_META(o2::ShortcutKeys)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
 }
 END_META;
+// --- END META ---

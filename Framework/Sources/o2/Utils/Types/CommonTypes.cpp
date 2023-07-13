@@ -2,6 +2,7 @@
 #include "CommonTypes.h"
 
 #include "o2/Utils/Reflection/Reflection.h"
+// --- META ---
 
 ENUM_META(o2::BaseCorner)
 {
@@ -144,6 +145,13 @@ ENUM_META(o2::PixelFormat)
 }
 END_ENUM_META;
 
+ENUM_META(o2::TextureFormat)
+{
+	ENUM_ENTRY(DXT5);
+	ENUM_ENTRY(R8G8B8A8);
+}
+END_ENUM_META;
+
 ENUM_META(o2::Loop)
 {
 	ENUM_ENTRY(None);
@@ -160,3 +168,4 @@ ENUM_META(o2::Units)
 	ENUM_ENTRY(Pixels);
 }
 END_ENUM_META;
+// --- END META ---

@@ -79,5 +79,7 @@ namespace o2
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ParticlesEmitterComponent>);
+// --- META ---
 
 DECLARE_CLASS(o2::ParticlesEmitterComponent);
+// --- END META ---

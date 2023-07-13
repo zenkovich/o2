@@ -81,6 +81,7 @@ namespace Editor
 		void OnCursorMoved(const Input::Cursor& cursor) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::MeshWeightsTool)
 {
@@ -113,3 +114,4 @@ CLASS_METHODS_META(Editor::MeshWeightsTool)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
 }
 END_META;
+// --- END META ---

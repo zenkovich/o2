@@ -65,6 +65,7 @@ namespace Editor
 		Basis mBasis; // Current editing basis
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::CustomFrameTool)
 {
@@ -93,3 +94,4 @@ CLASS_METHODS_META(Editor::CustomFrameTool)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
 }
 END_META;
+// --- END META ---

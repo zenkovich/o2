@@ -106,6 +106,7 @@ namespace Editor
 		Vector<SkeletonInstance*> mSkeletons; // List of editing skeletons
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SkeletonTool)
 {
@@ -132,3 +133,4 @@ CLASS_METHODS_META(Editor::SkeletonTool)
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<SkeletonInstance*>&, GetEditingSkeletons);
 }
 END_META;
+// --- END META ---

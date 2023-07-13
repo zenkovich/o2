@@ -404,9 +404,11 @@ namespace o2
 		state->mOwner->RegTrack<Color4>(this, path, state);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AnimationTrack<o2::Color4>);
 
 DECLARE_CLASS(o2::AnimationTrack<o2::Color4>::Player);
 
 DECLARE_CLASS(o2::AnimationTrack<o2::Color4>::Key);
+// --- END META ---

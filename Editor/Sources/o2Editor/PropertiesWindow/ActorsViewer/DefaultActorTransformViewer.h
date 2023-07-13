@@ -61,6 +61,7 @@ namespace Editor
 		void OnDepthInheritanceSelected(bool inherited);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DefaultActorTransformViewer)
 {
@@ -100,3 +101,4 @@ CLASS_METHODS_META(Editor::DefaultActorTransformViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDepthInheritanceSelected, bool);
 }
 END_META;
+// --- END META ---

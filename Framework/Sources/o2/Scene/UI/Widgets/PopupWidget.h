@@ -101,6 +101,7 @@ namespace o2
 		friend class UIManager;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::PopupWidget)
 {
@@ -143,3 +144,4 @@ CLASS_METHODS_META(o2::PopupWidget)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
 }
 END_META;
+// --- END META ---

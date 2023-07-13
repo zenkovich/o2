@@ -42,7 +42,7 @@ namespace o2
 	}
 #endif
 
-#if defined PLATFORM_ANDROID || defined PLATFORM_MAC || defined PLATFORM_IOS
+#if defined PLATFORM_ANDROID || defined PLATFORM_MAC || defined PLATFORM_IOS || defined PLATFORM_LINUX
 	void Timer::Reset()
 	{
 		gettimeofday(&mStartTime, NULL);

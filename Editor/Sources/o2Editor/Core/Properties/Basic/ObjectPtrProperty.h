@@ -126,6 +126,7 @@ namespace Editor
 		void SetProxy(IAbstractValueProxy* proxy, IObject* object);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ObjectPtrProperty)
 {
@@ -179,3 +180,4 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, IObject*);
 }
 END_META;
+// --- END META ---

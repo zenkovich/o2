@@ -20,6 +20,7 @@
 #include "o2/Utils/System/Time/Time.h"
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
+#include "o2/Utils/Debug/Profiling/SimpleProfiler.h"
 
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptEngine.h"
@@ -61,26 +62,31 @@ namespace o2
 
 	void Application::UpdateScene(float dt)
 	{
+		PROFILE_SAMPLE_FUNC();
 		mScene->Update(dt);
 	}
 
 	void Application::FixedUpdateScene(float dt)
 	{
+		PROFILE_SAMPLE_FUNC();
 		mScene->FixedUpdate(dt);
 	}
 
 	void Application::PreUpdatePhysics()
 	{
+		PROFILE_SAMPLE_FUNC();
 		mPhysics->PreUpdate();
 	}
 
 	void Application::UpdatePhysics(float dt)
 	{
+		PROFILE_SAMPLE_FUNC();
 		mPhysics->Update(dt);
 	}
 
 	void Application::PostUpdatePhysics()
 	{
+		PROFILE_SAMPLE_FUNC();
 		mPhysics->PostUpdate();
 	}
 
@@ -140,6 +146,8 @@ namespace o2
 	
 	void Application::SetupGraphicsScaledCamera()
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		Camera camera = Camera::Default();
 		camera.scale = Vec2F(1.0f/mGraphicsScale, 1.0f/mGraphicsScale);
 		o2Render.camera = camera;
@@ -147,27 +155,35 @@ namespace o2
 
 	void Application::ProcessFrame()
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		if (!mReady)
 			return;
 
-		if (mCursorInfiniteModeEnabled)
-			CheckCursorInfiniteMode();
+		float dt = 0, realDt = 0;
 
-		float maxFPSDeltaTime = 1.0f/(float)maxFPS;
-
-		float realdDt = mTimer->GetDeltaTime();
-
-		if (realdDt < maxFPSDeltaTime)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds((int)((maxFPSDeltaTime - realdDt)*1000.0f)));
-			realdDt = maxFPSDeltaTime;
-		}
+			PROFILE_SAMPLE("ProcessFrame:Begin");
 
-		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
+			if (mCursorInfiniteModeEnabled)
+				CheckCursorInfiniteMode();
+
+			float maxFPSDeltaTime = 1.0f/(float)maxFPS;
+
+			realDt = mTimer->GetDeltaTime();
+
+			if (realDt < maxFPSDeltaTime)
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds((int)((maxFPSDeltaTime - realDt)*1000.0f)));
+				realDt = maxFPSDeltaTime;
+			}
+
+			dt = Math::Clamp(realDt, 0.001f, 0.05f);
+		}
 
 		mInput->PreUpdate();
 
-		mTime->Update(realdDt);
+		mTime->Update(realDt);
 		o2Debug.Update(dt);
 		mTaskManager->Update(dt);
 		UpdateEventSystem();
@@ -177,18 +193,22 @@ namespace o2
 		OnUpdate(dt);
 		UpdateScene(dt);
 
-		mAccumulatedDT += dt;
-		float fixedDT = 1.0f/(float)fixedFPS;
-		while (mAccumulatedDT > fixedDT)
 		{
-			OnFixedUpdate(fixedDT);
-			FixedUpdateScene(fixedDT);
+			PROFILE_SAMPLE("ProcessFrame:Fixed update loop");
 
-			PreUpdatePhysics();
-			UpdatePhysics(fixedDT);
-			PostUpdatePhysics();
+			mAccumulatedDT += dt;
+			float fixedDT = 1.0f/(float)fixedFPS;
+			while (mAccumulatedDT > fixedDT)
+			{
+				OnFixedUpdate(fixedDT);
+				FixedUpdateScene(fixedDT);
 
-			mAccumulatedDT -= fixedDT;
+				PreUpdatePhysics();
+				UpdatePhysics(fixedDT);
+				PostUpdatePhysics();
+
+				mAccumulatedDT -= fixedDT;
+			}
 		}
 
 		PostUpdateEventSystem();
@@ -216,21 +236,25 @@ namespace o2
 
 	void Application::DrawScene()
 	{
+		PROFILE_SAMPLE_FUNC();
 		mScene->Draw();
 	}
 
 	void Application::UpdateEventSystem()
 	{
+		PROFILE_SAMPLE_FUNC();
 		mEventSystem->Update();
 	}
 
 	void Application::PostUpdateEventSystem()
 	{
+		PROFILE_SAMPLE_FUNC();
 		mEventSystem->PostUpdate();
 	}
 
 	void Application::DrawUIManager()
 	{
+		PROFILE_SAMPLE_FUNC();
 		mUIManager->Draw();
 	}
 

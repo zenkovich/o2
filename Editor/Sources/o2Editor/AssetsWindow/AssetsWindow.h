@@ -164,6 +164,7 @@ namespace Editor
 		friend class AssetsIconsScrollArea;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AssetsWindow)
 {
@@ -225,3 +226,4 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 	FUNCTION().PROTECTED().SIGNATURE(void, CopyAssetFolder, const String&, const String&);
 }
 END_META;
+// --- END META ---

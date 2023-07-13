@@ -26,7 +26,7 @@
 #include "o2Editor/Core/EditorApplication.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 
 namespace Editor
 {
@@ -159,12 +159,6 @@ namespace Editor
 
 		if (mDragEnded)
 			EndDragging();
-
-		if (mNeedRebuildAssets)
-		{
-			mNeedRebuildAssets = false;
-			o2Assets.RebuildAssets();
-		}
 	}
 
 	void AssetsIconsScrollArea::SetViewingPath(const String& path)
@@ -312,7 +306,7 @@ namespace Editor
 				return x->meta->ID() == (*asset)->GetUID(); }))
 			{
 				mSelectedPreloadedAssets.Remove(asset);
-				(*asset)->Save(false);
+				(*asset)->Save();
 				delete asset;
 			}
 		}
@@ -567,7 +561,7 @@ namespace Editor
 	{
 		if (dynamic_cast<AssetsIconsScrollArea*>(group))
 			OnDroppedFromThis();
-		else if (auto sceneTree = dynamic_cast<SceneTree*>(group))
+		else if (auto sceneTree = dynamic_cast<SceneHierarchyTree*>(group))
 			OnDroppedFromSceneTree(sceneTree);
 	}
 
@@ -578,7 +572,7 @@ namespace Editor
 		{
 			String destPath = iconUnderCursor->GetAssetInfo().path;
 			auto assetsInfos = mSelectedAssets.Convert<UID>([](const AssetInfo* x) { return x->meta->ID(); });
-			o2Assets.MoveAssets(assetsInfos, destPath, true);
+			o2Assets.MoveAssets(assetsInfos, destPath);
 
 			DeselectAllAssets();
 		}
@@ -590,7 +584,7 @@ namespace Editor
 		}
 	}
 
-	void AssetsIconsScrollArea::OnDroppedFromSceneTree(SceneTree* sceneTree)
+	void AssetsIconsScrollArea::OnDroppedFromSceneTree(SceneHierarchyTree* sceneTree)
 	{
 		String destPath = mCurrentPath;
 
@@ -608,13 +602,11 @@ namespace Editor
 					newAsset->GetActor()->name + String(".proto");
 
 				String uniquePath = o2Assets.MakeUniqueAssetName(path);
-				newAsset->Save(uniquePath, false);
+				newAsset->Save(uniquePath);
 
 				newAssets.Add(uniquePath);
 			}
 		}
-
-		o2Assets.RebuildAssets();
 
 		o2EditorAssets.OpenFolder(destPath);
 		o2EditorAssets.SelectAssets(newAssets);
@@ -993,7 +985,7 @@ namespace Editor
 
 		for (auto asset : mSelectedPreloadedAssets)
 		{
-			(*asset)->Save(false);
+			(*asset)->Save();
 			delete asset;
 		}
 
@@ -1140,5 +1132,7 @@ namespace Editor
 		};
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AssetsIconsScrollArea);
+// --- END META ---

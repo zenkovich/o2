@@ -23,6 +23,8 @@ namespace o2
 
 	void Time::Update(float dt)
 	{
+		//PROFILE_SAMPLE_FUNC();
+
 		mCurrentFrame++;
 		mFramesSum += 1.0f;
 
@@ -90,7 +92,9 @@ namespace o2
 #elif defined PLATFORM_MAC
 		return TimeStamp();
 #elif defined PLATFORM_IOS
-		return TimeStamp();
+        return TimeStamp();
+#elif defined PLATFORM_LINUX
+        return TimeStamp();
 #endif
 	}
 

@@ -50,6 +50,7 @@ namespace Editor
 		void FitLayerByDrawable();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
@@ -75,3 +76,4 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, FitLayerByDrawable);
 }
 END_META;
+// --- END META ---

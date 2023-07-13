@@ -91,10 +91,10 @@ namespace Editor
 		void OnShowPropertiesPressed();
 
 		// On View/Animation pressed in menu
-		void OnShowAnimationPressed();
+        void OnShowAnimationPressed();
 
-		// On View/Log pressed in menu
-		void OnShowLogPressed();
+        // On View/Log pressed in menu
+        void OnShowLogPressed();
 
 		// On View/Game pressed in menu
 		void OnShowGamePressed();

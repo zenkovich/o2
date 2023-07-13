@@ -101,5 +101,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::IActorComponentViewer);
+// --- END META ---

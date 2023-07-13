@@ -326,7 +326,6 @@ namespace o2
 		Vector<SceneEditableObject*> mDrawnObjects;           // List of drawn on last frame editable objects
 		bool                         mIsDrawingScene = false; // Sets true when started drawing scene, and false when not
 
-		friend class Scene;
 		friend class SceneEditableObject;
 #endif
 	};
@@ -374,6 +373,7 @@ namespace o2
 		return nullptr;
 	}
 };
+// --- META ---
 
 CLASS_BASES_META(o2::Scene)
 {
@@ -383,6 +383,7 @@ CLASS_BASES_META(o2::Scene)
 END_META;
 CLASS_FIELDS_META(o2::Scene)
 {
+#if  IS_EDITOR
 	FIELD().PUBLIC().NAME(onAddedToScene);
 	FIELD().PUBLIC().NAME(onRemovedFromScene);
 	FIELD().PUBLIC().NAME(onEnableChanged);
@@ -391,6 +392,7 @@ CLASS_FIELDS_META(o2::Scene)
 	FIELD().PUBLIC().NAME(onChildrenHierarchyChanged);
 	FIELD().PUBLIC().NAME(onObjectsChanged);
 	FIELD().PUBLIC().NAME(onLayersListChanged);
+#endif
 	FIELD().PROTECTED().NAME(mCameras);
 	FIELD().PROTECTED().NAME(mRootActors);
 	FIELD().PROTECTED().NAME(mAllActors);
@@ -405,6 +407,7 @@ CLASS_FIELDS_META(o2::Scene)
 	FIELD().PROTECTED().NAME(mDefaultLayer);
 	FIELD().PROTECTED().NAME(mTags);
 	FIELD().PROTECTED().NAME(mCache);
+#if  IS_EDITOR	  	
 	FIELD().PROTECTED().NAME(mPrototypeLinksCache);
 	FIELD().PROTECTED().NAME(mChangedObjects);
 	FIELD().PROTECTED().NAME(mDestroyingObjects);
@@ -412,6 +415,7 @@ CLASS_FIELDS_META(o2::Scene)
 	FIELD().PROTECTED().NAME(mEditableObjectsByUID);
 	FIELD().PROTECTED().NAME(mDrawnObjects);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsDrawingScene);
+#endif
 }
 END_META;
 CLASS_METHODS_META(o2::Scene)
@@ -470,6 +474,7 @@ CLASS_METHODS_META(o2::Scene)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerRenamed, SceneLayer*, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCameraAddedOnScene, CameraActor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCameraRemovedScene, CameraActor*);
+#if  IS_EDITOR	  	
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetRootEditableObjects);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEditableObjectToScene, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveEditableObjectFromScene, SceneEditableObject*);
@@ -491,5 +496,7 @@ CLASS_METHODS_META(o2::Scene)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnActorWithPrototypeCreated, Actor*);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnActorLinkedToPrototype, ActorAssetRef&, Actor*);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnActorPrototypeBroken, Actor*);
+#endif
 }
 END_META;
+// --- END META ---

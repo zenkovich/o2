@@ -3,6 +3,7 @@
 #include <string>
 #include <functional>
 #include <vector>
+#include <cstring>
 #include "o2/Utils/Memory/MemoryManager.h"
 
 namespace o2

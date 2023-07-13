@@ -8,7 +8,7 @@
 #include "o2Editor/Core/Actions/Transform.h"
 #include "o2Editor/Core/EditorApplication.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 
 namespace Editor
@@ -222,7 +222,7 @@ namespace Editor
 
 	void FrameTool::OnKeyPressed(const Input::Key& key)
 	{
-		if (!o2EditorTree.GetSceneTree()->IsFocused())
+		if (!o2EditorTree.IsTreeFocused())
 			return;
 
 		if (key == VK_LEFT)
@@ -242,7 +242,7 @@ namespace Editor
 
 	void FrameTool::OnKeyStayDown(const Input::Key& key)
 	{
-		if (!o2EditorTree.GetSceneTree()->IsFocused())
+		if (!o2EditorTree.IsTreeFocused())
 			return;
 
 		if (key.pressedTime < 0.3f)
@@ -1548,5 +1548,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::FrameTool);
+// --- END META ---

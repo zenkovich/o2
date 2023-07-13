@@ -5,8 +5,10 @@
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
 #include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
+#include "o2Editor/PropertiesWindow/AssetPropertiesViewer.h"
 #include "o2Editor/PropertiesWindow/DefaultPropertiesViewer.h"
 #include "o2Editor/PropertiesWindow/IPropertiesViewer.h"
+#include "o2Editor/PropertiesWindow/WidgetLayerViewer/WidgetLayerViewer.h"
 
 
 DECLARE_SINGLETON(Editor::PropertiesWindow);
@@ -18,6 +20,9 @@ namespace Editor
 	{
 		InitializeWindow();
 		InitializeViewers();
+
+		CHECKUP_TYPE(AssetPropertiesViewer);
+		CHECKUP_TYPE(WidgetLayerViewer);
 	}
 
 	PropertiesWindow::~PropertiesWindow()
@@ -166,5 +171,7 @@ namespace Editor
 		return mTargetsChanged;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::PropertiesWindow);
+// --- END META ---

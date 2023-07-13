@@ -64,6 +64,12 @@ namespace o2
 		class Meta: public DefaultAssetMeta<VectorFontAsset>
 		{
 		public:
+            // Default constructor
+            Meta();
+
+            // Copy-constructor
+            Meta(const Meta& other);
+
 			// Destructor
 			~Meta();
 
@@ -105,6 +111,7 @@ namespace o2
 		AddEffect(mnew _type(args ...));
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(o2::VectorFontAsset)
 {
@@ -148,7 +155,10 @@ END_META;
 CLASS_METHODS_META(o2::VectorFontAsset::Meta)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Meta&);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, AssetMeta*);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateFontEffects);
 }
 END_META;
+// --- END META ---

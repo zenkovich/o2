@@ -48,5 +48,7 @@ namespace Editor
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::String>);
+// --- META ---
 
 DECLARE_CLASS(Editor::StringProperty);
+// --- END META ---

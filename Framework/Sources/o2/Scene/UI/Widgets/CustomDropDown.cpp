@@ -311,5 +311,7 @@ namespace o2
 	void CustomDropDown::OnSelectionChanged()
 	{}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::CustomDropDown);
+// --- END META ---

@@ -6,6 +6,16 @@
 
 namespace o2
 {
+    VectorFontAsset::Meta::Meta()
+    {}
+
+    VectorFontAsset::Meta::Meta(const Meta& other):
+        DefaultAssetMeta<VectorFontAsset>(other)
+    {
+        for (auto eff : other.mEffects)
+            mEffects.Add(eff->CloneAs<VectorFont::Effect>());
+    }
+
 	VectorFontAsset::Meta::~Meta()
 	{
 		for (auto eff : mEffects)
@@ -126,7 +136,9 @@ namespace o2
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::VectorFontAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::VectorFontAsset>);
+// --- META ---
 
 DECLARE_CLASS(o2::VectorFontAsset);
 
 DECLARE_CLASS(o2::VectorFontAsset::Meta);
+// --- END META ---

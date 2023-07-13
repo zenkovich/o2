@@ -509,5 +509,7 @@ namespace Editor
 		onChangeCompleted(path, before, after);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::ScriptValueProperty);
+// --- END META ---

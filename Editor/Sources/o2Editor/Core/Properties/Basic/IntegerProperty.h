@@ -58,6 +58,7 @@ namespace Editor
 		void OnMoveHandleReleased(const Input::Cursor& cursor);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::IntegerProperty)
 {
@@ -85,3 +86,4 @@ CLASS_METHODS_META(Editor::IntegerProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandleReleased, const Input::Cursor&);
 }
 END_META;
+// --- END META ---

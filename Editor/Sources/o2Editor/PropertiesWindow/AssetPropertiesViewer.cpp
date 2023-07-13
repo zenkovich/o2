@@ -15,5 +15,7 @@ namespace Editor
 		}));
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AssetPropertiesViewer);
+// --- END META ---

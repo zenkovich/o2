@@ -80,6 +80,11 @@ SyntaxFile* ISyntaxExpression::GetOwnerFile() const
 	return mFile;
 }
 
+SyntaxDefineIf* ISyntaxExpression::GetDefine() const
+{
+	return mDefine;
+}
+
 SyntaxSection::SyntaxSection()
 {}
 
@@ -104,6 +109,9 @@ SyntaxSection::~SyntaxSection()
 		delete x;
 
 	for (auto x : mUsingNamespaces)
+		delete x;
+
+	for (auto x : mDefines)
 		delete x;
 }
 
@@ -720,4 +728,9 @@ bool TimeStamp::operator==(const TimeStamp& wt) const
 const vector<string>& SyntaxAttributes::GetAttributesList() const
 {
 	return mAttributesList;
+}
+
+const std::string& SyntaxDefineIf::GetDefinition() const
+{
+	return mDefintion;
 }

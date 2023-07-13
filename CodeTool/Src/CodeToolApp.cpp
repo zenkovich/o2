@@ -100,7 +100,7 @@ map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
 {
 	map<string, TimeStamp> res;
 
-	for (const auto& entry: filesystem::directory_iterator(path))
+	for (const auto& entry : filesystem::directory_iterator(path))
 	{
 		if (entry.is_directory())
 		{
@@ -122,14 +122,14 @@ map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
 
 time_t last_write_time_to_time_t(filesystem::file_time_type const& tp)
 {
-    auto sctp = chrono::time_point_cast<chrono::system_clock::duration>(tp - filesystem::file_time_type::clock::now()
-              + chrono::system_clock::now());
-    return chrono::system_clock::to_time_t(sctp);
+	auto sctp = chrono::time_point_cast<chrono::system_clock::duration>(tp - filesystem::file_time_type::clock::now()
+																		+ chrono::system_clock::now());
+	return chrono::system_clock::to_time_t(sctp);
 }
 
 TimeStamp CodeToolApplication::GetFileEditedDate(const string& path)
 {
-	const filesystem::directory_entry file {path};
+	const filesystem::directory_entry file{ path };
 
 	if (!file.exists())
 	{
@@ -138,7 +138,7 @@ TimeStamp CodeToolApplication::GetFileEditedDate(const string& path)
 
 	auto const& lwTime = file.last_write_time();
 	time_t cftime = last_write_time_to_time_t(lwTime);
-    auto const& stLocal = std::localtime(&cftime);
+	auto const& stLocal = std::localtime(&cftime);
 	if (!stLocal)
 	{
 		return TimeStamp();
@@ -200,7 +200,7 @@ string CodeToolApplication::ReadFile(const string& path) const
 
 bool CodeToolApplication::IsFileExist(const string& path) const
 {
-	filesystem::directory_entry entry{path};
+	filesystem::directory_entry entry{ path };
 	if (entry.is_directory()) {
 		return false;
 	}
@@ -210,13 +210,13 @@ bool CodeToolApplication::IsFileExist(const string& path) const
 
 string CodeToolApplication::GetPathWithoutDirectories(const string& path)
 {
-	filesystem::path p{path};
+	filesystem::path p{ path };
 	return p.filename().string();
 }
 
 string CodeToolApplication::GetParentPath(const string& path)
 {
-	filesystem::path p{path};
+	filesystem::path p{ path };
 	return p.parent_path().string();
 }
 
@@ -277,9 +277,11 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 
 		while (!dir.empty() && dir[0] == '.')
 		{
-			auto slashPos = dir.find('/');
+			auto slashPos = std::min(dir.find('/'), dir.find('\\'));
 			if (slashPos != string::npos)
 				dir.erase(0, slashPos + 1);
+			else
+				break;
 		}
 
 		if (dir.find("OSX") != string::npos)
@@ -550,12 +552,16 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	if (hSource.find("@CODETOOLIGNORE") != string::npos)
 		return;
 
+	bool hasHeaderMeta = false;
+	bool hasSourceMeta = false;
+
 	RemoveMetas(hSource, "META_TEMPLATES(", "END_META;");
 	RemoveMetas(hSource, "CLASS_BASES_META(", "END_META;");
 	RemoveMetas(hSource, "CLASS_FIELDS_META(", "END_META;");
 	RemoveMetas(hSource, "CLASS_METHODS_META(", "END_META;");
 	RemoveMetas(hSource, "DECLARE_CLASS(", ");", false);
 	RemoveMetas(hSource, "PRE_ENUM_META(", ");", false);
+	RemoveMetas(hSource, "// --- META ---", "// --- END META ---");
 
 	string cppSourcePath = file->GetPath().substr(0, file->GetPath().rfind('.')) + ".cpp";
 
@@ -578,6 +584,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 				RemoveMetas(cppSource, "CLASS_METHODS_META(", "END_META;");
 				RemoveMetas(cppSource, "DECLARE_CLASS(", ");", false);
 				RemoveMetas(cppSource, "PRE_ENUM_META(", ");", false);
+				RemoveMetas(cppSource, "// --- META ---", "// --- END META ---");
 			}
 			else cppSource = "#include \"" + GetPathWithoutDirectories(file->GetPath()) + "\"\n\n";
 
@@ -603,33 +610,43 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 
 	for (auto enm : metaEnums)
 	{
+		AddBeginMeta(hasSourceMeta, cppSource);
 		cppSource += GetEnumMeta(enm);
+
+		AddBeginMeta(hasHeaderMeta, hSource);
 		hSource += GetEnumPreMeta(enm);
+
 		VerboseLog("Generated meta for enum:%s\n", enm->GetFullName().c_str());
 	}
 
 	// Classes
 	auto classes = file->GetGlobalNamespace()->GetAllClasses();
+
 	for (auto cls : classes)
 	{
-		bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(),
-									   [](SyntaxFunction* x) {
-			return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE" || x->GetName() == "ASSET_TYPE";
-		}) != cls->GetFunctions().end();
+		bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(), [](SyntaxFunction* x) {
+			return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE" || x->GetName() == "ASSET_TYPE"; })
+			!= cls->GetFunctions().end();
 
-		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || !hasIObject || cls == baseObjectClass)
-			continue;
+			if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || !hasIObject || cls == baseObjectClass)
+				continue;
 
-		if (!cls->IsTemplate())
-		{
-			checkCppLoad();
-			cppSource += GetClassDeclaration(cls);
-		}
+			if (!cls->IsTemplate())
+			{
+				checkCppLoad();
 
-		hSource += GetClassMeta(cls);
+				AddBeginMeta(hasSourceMeta, cppSource);
+				cppSource += GetClassDeclaration(cls);
+			}
 
-		VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
+			AddBeginMeta(hasHeaderMeta, hSource);
+			hSource += GetClassMeta(cls);
+
+			VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
 	}
+
+	AddEndMeta(hasSourceMeta, cppSource);
+	AddEndMeta(hasHeaderMeta, hSource);
 
 	// Write
 	if (cppLoaded && cppSource != cppSourceInitial)
@@ -644,6 +661,20 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	VerboseLog("Reflection generated for %s\n", file->GetPath().c_str());
 }
 
+void CodeToolApplication::AddBeginMeta(bool& hasMeta, string& res)
+{
+	if (!hasMeta)
+		res += "// --- META ---\n";
+
+	hasMeta = true;
+}
+
+void CodeToolApplication::AddEndMeta(bool hasMeta, string& res)
+{
+	if (hasMeta)
+		res += "// --- END META ---\n";
+}
+
 string CodeToolApplication::GetClassDeclaration(SyntaxClass* cls)
 {
 	string res = "\n";
@@ -653,7 +684,13 @@ string CodeToolApplication::GetClassDeclaration(SyntaxClass* cls)
 	if (nspaceDelimer != cls->GetFullName().npos)
 		nspace = cls->GetFullName().substr(0, nspaceDelimer);
 
+	if (cls->GetDefine())
+		res += "#if " + cls->GetDefine()->GetDefinition() + "\n";
+
 	res += "DECLARE_CLASS(" + GetClassNormalizedTemplates(cls->GetFullName(), nspace) + ");\n";
+
+	if (cls->GetDefine())
+		res += "#endif\n";
 
 	return res;
 }
@@ -661,7 +698,7 @@ string CodeToolApplication::GetClassDeclaration(SyntaxClass* cls)
 string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 {
 	string res = "\n";
-	res.reserve(cls->GetData().length()*2);
+	res.reserve(cls->GetData().length() * 2);
 
 	string nspace;
 	int nspaceDelimer = (int)cls->GetFullName().rfind("::");
@@ -676,6 +713,10 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	else
 		AggregateTemplates(cls, templates, classDef);
 
+	// defines
+	if (cls->GetDefine())
+		res += "#if " + cls->GetDefine()->GetDefinition() + "\n";
+
 	// base classes
 	res += templates;
 	res += "CLASS_BASES_META(" + classDef + ")\n{\n";
@@ -683,7 +724,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	int typedefs = 0;
 	for (auto x : cls->GetBaseClasses())
 	{
-		auto classInfo = mCache.FindSection(x.GetClassName(), nspace);
+		auto classInfo = mCache.FindSection(x.GetClassName(), nspace, false);
 		auto className = classInfo ? classInfo->GetFullName() : x.GetClassName();
 		if (className.find(',') != string::npos)
 		{
@@ -693,7 +734,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 			className = newClassName;
 		}
 
-		res += string("\tBASE_CLASS(") + className +  +");\n";
+		res += string("\tBASE_CLASS(") + className + +");\n";
 	}
 	res += "}\nEND_META;\n";
 
@@ -701,21 +742,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	res += templates;
 	res += "CLASS_FIELDS_META(" + classDef + ")\n{\n";
 
-	for (auto function : cls->GetFunctions())
-	{
-		if (function->GetName() == "PROPERTY" || function->GetName() == "SETTER" || function->GetName() == "GETTER" || function->GetName() == "ACCESSOR")
-		{
-			if (function->GetParameters().size() > 2)
-			{
-				if (function->GetClassSection() == SyntaxProtectionSection::Public)
-					res += "\tPUBLIC_FIELD(" + function->GetParameters()[2]->GetVariableType().GetName() + ");\n";
-				else if (function->GetClassSection() == SyntaxProtectionSection::Private)
-					res += "\tPRIVATE_FIELD(" + function->GetParameters()[2]->GetVariableType().GetName() + ");\n";
-				else if (function->GetClassSection() == SyntaxProtectionSection::Protected)
-					res += "\tPROTECTED_FIELD(" + function->GetParameters()[2]->GetVariableType().GetName() + ");\n";
-			}
-		}
-	}
+	SyntaxDefineIf* currentIf = nullptr;
 
 	for (auto variable : cls->GetVariables())
 	{
@@ -726,7 +753,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		SyntaxComment* synComment = cls->FindCommentNearLine(variable->GetLine());
 
 		if (synComment) {
-			string ignore{"@IGNORE"};
+			string ignore{ "@IGNORE" };
 			auto fnd = synComment->GetData().find(ignore);
 			if (fnd != string::npos)
 			{
@@ -735,6 +762,8 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 					continue;
 			}
 		}
+
+		CheckIfDefines(variable, currentIf, res);
 
 		res += "\tFIELD()";
 
@@ -753,6 +782,8 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		res += ".NAME(" + variable->GetName() + ");\n";
 
 	}
+
+	CompleteIfDefines(currentIf, res);
 	res += "}\nEND_META;\n";
 
 	// functions
@@ -767,7 +798,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	{
 		if (!IsFunctionReflectable(function, cls))
 			continue;
-		
+
 		// try search comment
 		SyntaxComment* synComment = cls->FindCommentNearLine(function->GetLine());
 
@@ -779,6 +810,8 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 			firstFunction = false;
 			res += "\n";
 		}
+
+		CheckIfDefines(function, currentIf, res);
 
 		res += "\tFUNCTION()";
 
@@ -806,15 +839,12 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
 			if (returnTypeName.find(',') != returnTypeName.npos)
 			{
-				char buf[255];
 				supportingTypedefs.push_back(returnTypeName);
-				returnTypeName = (string)"_tmp" + _itoa((int)supportingTypedefs.size(), buf, 10);
+				returnTypeName = (string)"_tmp" + to_string((int)supportingTypedefs.size());
 			}
 
-		if (returnTypeName.find(',') != returnTypeName.npos)
-		{
-			supportingTypedefs.push_back(returnTypeName);
-			returnTypeName = (string)"_tmp" + to_string((int)supportingTypedefs.size());
+			res += returnTypeName;
+			res += string(", ") + function->GetName();
 		}
 
 		bool first = isConstructor;
@@ -839,6 +869,8 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		res += ");\n";
 	}
 
+	CompleteIfDefines(currentIf, res);
+
 	// supporting typedefs
 	if (!supportingTypedefs.empty())
 	{
@@ -850,6 +882,9 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	}
 
 	res += "}\nEND_META;\n";
+
+	if (cls->GetDefine())
+		res += "#endif\n";
 
 	return res;
 }
@@ -867,6 +902,28 @@ bool CodeToolApplication::IsIgnoreComment(SyntaxComment* synComment)
 	}
 
 	return false;
+}
+
+void CodeToolApplication::CheckIfDefines(ISyntaxExpression* item, SyntaxDefineIf*& prevDefine, string& data)
+{
+	if (item->GetDefine() != prevDefine)
+	{
+		if (prevDefine)
+			data += "#endif\n";
+
+		if (item->GetDefine())
+			data += "#if " + item->GetDefine()->GetDefinition() + "\n";
+
+		prevDefine = item->GetDefine();
+	}
+}
+
+void CodeToolApplication::CompleteIfDefines(SyntaxDefineIf*& prevDefine, string& data)
+{
+	if (prevDefine)
+		data += "#endif\n";
+
+	prevDefine = nullptr;
 }
 
 string CodeToolApplication::GetAttributes(SyntaxClass* cls, int line, SyntaxComment* synComment)
@@ -932,7 +989,7 @@ string CodeToolApplication::GetAttributes(SyntaxClass* cls, int line, SyntaxComm
 string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)
 {
 	string res;
-	res.reserve(enm->GetEntries().size()*15);
+	res.reserve(enm->GetEntries().size() * 15);
 
 	res += "\nENUM_META(" + enm->GetFullName() + ")\n{\n";
 
@@ -1008,13 +1065,13 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 			case ']': sqBraces--; break;
 			case '<': trBraces++; break;
 			case '>':
-			trBraces--;
-			if (trBraces == 0 && braces == 0 && sqBraces == 0)
-			{
-				stop = true;
-				fnd--;
-			}
-			break;
+				trBraces--;
+				if (trBraces == 0 && braces == 0 && sqBraces == 0)
+				{
+					stop = true;
+					fnd--;
+				}
+				break;
 			}
 		}
 
@@ -1026,7 +1083,7 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 		for (auto& templateParam : templateParams)
 		{
 			Trim(templateParam);
-			string typename_str{"typename "};
+			string typename_str{ "typename " };
 			if (StartsWith(templateParam, typename_str))
 				templateParam.erase(0, typename_str.size());
 
@@ -1064,13 +1121,13 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 
 		if (!allowMultiline)
 		{
-			string keyword_str{keyword};
+			string keyword_str{ keyword };
 			auto newLinePos = data.find("\n", caret + keyword_str.size());
 			if (newLinePos != string::npos && newLinePos < end)
 				return;
 		}
 
-		string endword_str{endword};
+		string endword_str{ endword };
 		data.erase(caret + 1, end + endword_str.size() - caret - 1);
 		caret = data.find(keyword);
 	}
@@ -1085,7 +1142,8 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 
 bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const
 {
-	static vector<string> ignoringNames = { "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
+	static vector<string> ignoringNames = { "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE",
+		"ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION", "BASE_REF_IMPLEMETATION" };
 
 	return !StartsWith(function->GetName(), string("~") + owner->GetName()) &&
 		function->GetName().find('~') == string::npos &&
@@ -1149,23 +1207,23 @@ bool CodeToolCache::IsClassBasedOn(SyntaxClass* _class, SyntaxClass* baseClass)
 	return false;
 }
 
-SyntaxSection* CodeToolCache::FindSection(const string& fullName)
+SyntaxSection* CodeToolCache::FindSection(const string& fullName, bool withTypedefs /*= true*/)
 {
-	return FindSection(fullName, &globalNamespace);
+	return FindSection(fullName, &globalNamespace, withTypedefs);
 }
 
-SyntaxSection* CodeToolCache::FindSection(const string& what, const string& where)
+SyntaxSection* CodeToolCache::FindSection(const string& what, const string& where, bool withTypedefs /*= true*/)
 {
-	return FindSection(what, FindSection(where));
+	return FindSection(what, FindSection(where), withTypedefs);
 }
 
-SyntaxSection* CodeToolCache::FindSection(const string& what, SyntaxSection* where)
+SyntaxSection* CodeToolCache::FindSection(const string& what, SyntaxSection* where, bool withTypedefs /*= true*/)
 {
 	SyntaxSectionsVec passed;
-	return FindSection(what, where, passed);
+	return FindSection(what, where, passed, withTypedefs);
 }
 
-SyntaxSection* CodeToolCache::FindSection(const string& what, SyntaxSection* where, SyntaxSectionsVec& processedSections)
+SyntaxSection* CodeToolCache::FindSection(const string& what, SyntaxSection* where, SyntaxSectionsVec& processedSections, bool withTypedefs /*= true*/)
 {
 	if (!where)
 		return nullptr;
@@ -1255,22 +1313,25 @@ SyntaxSection* CodeToolCache::FindSection(const string& what, SyntaxSection* whe
 		}
 	}
 
-	for (auto tdef : where->mTypedefs)
+	if (withTypedefs)
 	{
-		if (tdef->GetNewDefName() != searchName)
-			continue;
+		for (auto tdef : where->mTypedefs)
+		{
+			if (tdef->GetNewDefName() != searchName)
+				continue;
 
-		if (delPos < 0)
-			return tdef->GetWhat();
+			if (delPos < 0)
+				return tdef->GetWhat();
 
-		if (auto res = FindSection(what.substr(delPos + 2), tdef->GetWhat(), processedSections))
-			return res;
-	}
+			if (auto res = FindSection(what.substr(delPos + 2), tdef->GetWhat(), processedSections))
+				return res;
+		}
 
-	for (auto nspace : where->mUsingNamespaces)
-	{
-		if (auto res = FindSection(what, nspace->GetUsingNamespace(), processedSections))
-			return res;
+		for (auto nspace : where->mUsingNamespaces)
+		{
+			if (auto res = FindSection(what, nspace->GetUsingNamespace(), processedSections))
+				return res;
+		}
 	}
 
 	return nullptr;
@@ -1361,8 +1422,8 @@ void CodeToolCache::AppendSection(SyntaxSection* currentSection, SyntaxSection* 
 
 		auto fnd = find_if(currentSection->mSections.begin(), currentSection->mSections.end(),
 						   [=](SyntaxSection* x) {
-			return !x->IsClass() && x->GetName() == newSection->GetName();
-		});
+							   return !x->IsClass() && x->GetName() == newSection->GetName();
+						   });
 
 		if (fnd != currentSection->mSections.end())
 			childNamespace = *fnd;

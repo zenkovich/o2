@@ -273,9 +273,11 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::CurveAddKeysAction);
 
 DECLARE_CLASS(Editor::CurveDeleteKeysAction);
 
 DECLARE_CLASS(Editor::CurveKeysChangeAction);
+// --- END META ---

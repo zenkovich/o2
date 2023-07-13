@@ -26,7 +26,8 @@
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneDragHandle.h"
 #include "o2Editor/SceneWindow/SceneEditorLayer.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/DrawOrderTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 
 DECLARE_SINGLETON(Editor::SceneEditScreen);
@@ -164,7 +165,8 @@ namespace Editor
 	void SceneEditScreen::OnObjectsSelectedFromThis()
 	{
 		mSelectedFromThis = true;
-		mSceneTree->SetSelectedObjects(mSelectedObjects);
+
+		o2EditorTree.SetSelectedObjects(mSelectedObjects);
 
 		if (mEnabledTool)
 			mEnabledTool->OnObjectsSelectionChanged(mSelectedObjects);
@@ -425,9 +427,8 @@ namespace Editor
 
 	void SceneEditScreen::BindSceneTree()
 	{
-		mSceneTree = o2EditorWindows.GetWindow<TreeWindow>()->GetSceneTree();
-
-		mSceneTree->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);
+		o2EditorTree.GetSceneTree()->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);
+		o2EditorTree.GetDrawOrderTree()->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);
 
 		o2Scene.onObjectsChanged += Function<void(Vector<SceneEditableObject*>)>(this, &SceneEditScreen::OnSceneChanged);
 	}
@@ -621,7 +622,7 @@ namespace Editor
 
 	void SceneEditScreen::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		o2UI.FocusWidget(mSceneTree);
+		o2EditorTree.FocusTree();
 
 		if (mEnabledTool && !IsHandleWorking(cursor))
 			mEnabledTool->OnCursorPressed(cursor);
@@ -665,7 +666,7 @@ namespace Editor
 
 	void SceneEditScreen::OnCursorRightMousePressed(const Input::Cursor& cursor)
 	{
-		o2UI.FocusWidget(mSceneTree);
+		o2EditorTree.FocusTree();
 
 		if (mEnabledTool && !IsHandleWorking(cursor))
 			mEnabledTool->OnCursorRightMousePressed(cursor);
@@ -707,5 +708,7 @@ namespace Editor
 			mEnabledTool->OnCursorMiddleMouseReleased(cursor);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::SceneEditScreen);
+// --- END META ---

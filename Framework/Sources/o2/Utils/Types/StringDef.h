@@ -337,7 +337,7 @@ namespace o2
 	};
 
 	template<typename T>
-	__declspec(selectany) TString<T> TString<T>::empty;
+	TString<T> TString<T>::empty;
 
 	// ---------------------------
 	// String with wide characters

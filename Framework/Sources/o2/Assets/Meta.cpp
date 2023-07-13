@@ -27,5 +27,7 @@ namespace o2
 		return mId;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AssetMeta);
+// --- END META ---

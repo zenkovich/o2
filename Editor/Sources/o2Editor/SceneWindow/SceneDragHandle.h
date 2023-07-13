@@ -54,6 +54,7 @@ namespace Editor
 		friend class SceneEditScreen;
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(Editor::SceneDragHandle::Mode);
 
@@ -79,3 +80,4 @@ CLASS_METHODS_META(Editor::SceneDragHandle)
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
 }
 END_META;
+// --- END META ---

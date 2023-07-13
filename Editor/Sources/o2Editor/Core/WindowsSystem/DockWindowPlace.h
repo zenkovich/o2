@@ -87,6 +87,7 @@ namespace Editor
 		friend class WindowsLayout;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DockWindowPlace)
 {
@@ -126,3 +127,4 @@ CLASS_METHODS_META(Editor::DockWindowPlace)
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDragHandle);
 }
 END_META;
+// --- END META ---

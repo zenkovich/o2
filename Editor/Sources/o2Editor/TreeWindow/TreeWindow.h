@@ -21,18 +21,34 @@ using namespace o2;
 
 namespace Editor
 {
-	class SceneTree;
+	class SceneHierarchyTree;
+	class DrawOrderTree;
 
-	// ------------------
-	// Actors tree window
-	// ------------------
+	// -----------------------------------------------------------------
+	// Actors tree window. Shows scene hierarchy tree or draw order tree
+	// -----------------------------------------------------------------
 	class TreeWindow: public IEditorWindow, public Singleton<TreeWindow>
 	{
 		IOBJECT(TreeWindow);
 
 	public:
 		// Returns actors tree widget
-		SceneTree* GetSceneTree() const;
+		SceneHierarchyTree* GetSceneTree() const;
+
+		// Returns draw order tree widget
+		DrawOrderTree* GetDrawOrderTree() const;
+
+		// Enables focus on current tree
+		void FocusTree();
+
+		// Returns is current tree focused
+		bool IsTreeFocused() const;
+
+		// Sets selected objects
+		void SetSelectedObjects(const Vector<SceneEditableObject*>& objects);
+
+		// Updates current tree
+		void UpdateTreeView();
 
 		// Expands all actor's parents nodes in tree and highlights actor
 		void HighlightObjectTreeNode(SceneEditableObject* targetObject);
@@ -50,10 +66,14 @@ namespace Editor
 		bool IsWidgetsInternalChildrenVisible() const;
 
 	protected:
-		Toggle*      mListTreeToggle;		// TOggle between list and tree views
-		EditBox*     mSearchEditBox;		// Search actors edit box
-		SceneTree*   mSceneTree;			// Main actors tree
-		ContextMenu* mTreeContextMenu;	// Context menu
+		Toggle* mListTreeToggle = nullptr; // TOggle between list and tree views
+		EditBox* mSearchEditBox = nullptr; // Search actors edit box
+
+		SceneHierarchyTree* mSceneTree = nullptr; // Scene hierarchy tree
+
+		DrawOrderTree* mDrawOrderTree = nullptr; // Draw order tree
+
+		ContextMenu* mTreeContextMenu = nullptr;// Context menu
 
 		Vector<SceneEditableObject*> mSearchObjects;    // Array of searched objects
 		bool                         mInSearch = false;	// True when searching objects (mSearchEditBox isn't empty)
@@ -77,6 +97,9 @@ namespace Editor
 
 		// Initializes actors tree widget
 		void InitializeSceneTree();
+
+		// Initializes draw order tree widget
+		void InitializeDrawOrderTree();
 
 		// Initializes top panel with filter
 		void InitializeTopPanel();
@@ -179,6 +202,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::TreeWindow)
 {
@@ -188,10 +212,11 @@ CLASS_BASES_META(Editor::TreeWindow)
 END_META;
 CLASS_FIELDS_META(Editor::TreeWindow)
 {
-	FIELD().PROTECTED().NAME(mListTreeToggle);
-	FIELD().PROTECTED().NAME(mSearchEditBox);
-	FIELD().PROTECTED().NAME(mSceneTree);
-	FIELD().PROTECTED().NAME(mTreeContextMenu);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mListTreeToggle);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSearchEditBox);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSceneTree);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDrawOrderTree);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTreeContextMenu);
 	FIELD().PROTECTED().NAME(mSearchObjects);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mInSearch);
 }
@@ -199,7 +224,12 @@ END_META;
 CLASS_METHODS_META(Editor::TreeWindow)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(SceneTree*, GetSceneTree);
+	FUNCTION().PUBLIC().SIGNATURE(SceneHierarchyTree*, GetSceneTree);
+	FUNCTION().PUBLIC().SIGNATURE(DrawOrderTree*, GetDrawOrderTree);
+	FUNCTION().PUBLIC().SIGNATURE(void, FocusTree);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsTreeFocused);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<SceneEditableObject*>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateTreeView);
 	FUNCTION().PUBLIC().SIGNATURE(void, HighlightObjectTreeNode, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetWidgetsLayersVisible, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsWidgetsLayersVisible);
@@ -210,6 +240,7 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTestScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeSceneTree);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDrawOrderTree);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTopPanel);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeContextMenu);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeCreateMenu);
@@ -240,3 +271,4 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnActorDestroyed, SceneEditableObject*);
 }
 END_META;
+// --- END META ---

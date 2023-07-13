@@ -343,6 +343,9 @@ namespace o2
 
 	void Render::UpdateCameraTransforms()
 	{
+		if (mCurrentResolution == mPrevResolution && mCamera == mPrevCamera)
+			return;
+
 		DrawPrimitives();
 
 		float projMat[16];
@@ -374,6 +377,9 @@ namespace o2
 		mtxMultiply(mvp, projMat, finalCamMtx);
 
 		glUniformMatrix4fv(mStdShaderMvpUniform, 1, GL_FALSE, mvp);
+
+		mPrevCamera = mCamera;
+		mPrevResolution = mCurrentResolution;
 
 		GL_CHECK_ERROR();
 

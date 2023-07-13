@@ -41,5 +41,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AnimationKeyDragHandle);
+// --- END META ---

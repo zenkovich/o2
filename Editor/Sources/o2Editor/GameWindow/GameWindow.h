@@ -98,6 +98,7 @@ namespace Editor
 		void SetDeviceMenuCheckedItem(const ContextMenuItem* item);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::GameWindow)
 {
@@ -168,3 +169,4 @@ CLASS_METHODS_META(Editor::GameWindow::SimulationDevice)
 {
 }
 END_META;
+// --- END META ---

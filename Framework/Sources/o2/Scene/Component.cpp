@@ -37,8 +37,10 @@ namespace o2
 		mEnabled = other.mEnabled;
 		UpdateEnabled();
 
+#if IS_EDITOR
 		if (mOwner)
 			mOwner->OnChanged();
+#endif
 
 		return *this;
 	}
@@ -46,6 +48,11 @@ namespace o2
 	SceneUID Component::GetID() const
 	{
 		return mId;
+	}
+
+	void Component::GenerateNewID()
+	{
+		mId = Math::Random();
 	}
 
 	void Component::Update(float dt)
@@ -59,8 +66,10 @@ namespace o2
 		mEnabled = active;
 		UpdateEnabled();
 
+#if IS_EDITOR
 		if (mOwner)
 			mOwner->OnChanged();
+#endif
 	}
 
 	void Component::Enable()
@@ -146,8 +155,10 @@ namespace o2
 			else
 				OnDisabled();
 
+#if IS_EDITOR
 			if (mOwner)
 				mOwner->OnChanged();
+#endif
 		}
 	}
 
@@ -267,5 +278,7 @@ namespace o2
 // 		return type->IsBasedOn(TypeOf(Component));
 // 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::Component);
+// --- END META ---

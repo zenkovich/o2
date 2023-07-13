@@ -183,6 +183,7 @@ namespace Editor
 		friend class AnimationPropertiesTree;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AnimationPropertiesTree)
 {
@@ -248,3 +249,4 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
 	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }
 END_META;
+// --- END META ---

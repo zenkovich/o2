@@ -704,7 +704,9 @@ namespace o2
 
 	void ContextMenu::RebuildItems()
 	{
+#if IS_EDITOR
 		PushEditorScopeOnStack scope(KeyboardEventsListener::mIsEditorMode ? 1 : 0);
+#endif
 
 		Vector<ContextMenuItem*> cache;
 
@@ -940,9 +942,11 @@ namespace o2
 			mSubMenu = (ContextMenu*)child;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ContextMenu);
 
 DECLARE_CLASS(o2::ContextMenuItem);
 
 DECLARE_CLASS(o2::ContextMenu::Item);
+// --- END META ---

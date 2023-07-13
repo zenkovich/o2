@@ -67,6 +67,7 @@ namespace o2
 		void OnTransformChanged() override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::CircleCollider)
 {
@@ -94,8 +95,11 @@ CLASS_METHODS_META(o2::CircleCollider)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableFromCreateMenu);
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().SIGNATURE(void, OnAddedFromEditor);
+#endif
 	FUNCTION().PRIVATE().SIGNATURE(b2Shape*, GetShape, const Basis&);
 	FUNCTION().PRIVATE().SIGNATURE(void, OnTransformChanged);
 }
 END_META;
+// --- END META ---

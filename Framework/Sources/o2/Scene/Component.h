@@ -36,6 +36,9 @@ namespace o2
 		// Returns component id
 		SceneUID GetID() const;
 
+		// Regenerates component id
+		void GenerateNewID();
+
 		// Updates component
 		virtual void Update(float dt);
 
@@ -221,6 +224,7 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Component)
 {
@@ -246,6 +250,7 @@ CLASS_METHODS_META(o2::Component)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Component&);
 	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
+	FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, FixedUpdate, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
@@ -260,7 +265,9 @@ CLASS_METHODS_META(o2::Component)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableFromCreateMenu);
+#if  IS_EDITOR
 	FUNCTION().PUBLIC().SIGNATURE(void, OnAddedFromEditor);
+#endif
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
@@ -283,3 +290,4 @@ CLASS_METHODS_META(o2::Component)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
 }
 END_META;
+// --- END META ---

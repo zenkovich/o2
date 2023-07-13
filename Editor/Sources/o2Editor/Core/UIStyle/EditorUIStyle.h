@@ -22,6 +22,7 @@ namespace Editor
 		void RebuildActorsTreeLockToggle();
 		void RebuildActorsTreeLinkBtn();
 		void RebuildActorsTree();
+		void RebuildDrawOrderTree();
 		void RebuildPanelDownButton();
 		void RebuildTrashDownPanelButton();
 		void RebuildMessagesDownPanelToggle();
@@ -154,6 +155,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(property, propertyWithCaptionStyle);
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::EditorUIStyleBuilder)
 {
@@ -180,6 +182,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorsTreeLockToggle);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorsTreeLinkBtn);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorsTree);
+	FUNCTION().PUBLIC().SIGNATURE(void, RebuildDrawOrderTree);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildPanelDownButton);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildTrashDownPanelButton);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildMessagesDownPanelToggle);
@@ -270,3 +273,4 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildEditorUIManager, const String&, bool, bool);
 }
 END_META;
+// --- END META ---

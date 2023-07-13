@@ -15,8 +15,12 @@
 #define RENDER_DEBUG true
 #endif
 
-// Describes that engine running as editor
+// Describes that engine running as editor or not
+#if defined O2_EDITOR_ENABLED
 #define IS_EDITOR true
+#else
+#define IS_EDITOR false
+#endif
 
 // Is enabled scripting engine
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
@@ -46,12 +50,12 @@ bool IsDevMode();
 // Is build release
 bool IsReleaseBuild();
 
+// Is render draw calls debug enabled; Every drawn entity will be printed in console
+bool IsRenderDrawCallsDebugEnabled();
+
 // ----------------------------
 // Assets configuration section
 // ----------------------------
-
-// Building assets before launching app
-bool IsAssetsPrebuildEnabled();
 
 // Project root path. Relative from executable
 const char* GetProjectRootPath();

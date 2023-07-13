@@ -50,5 +50,7 @@ namespace Editor
 		return mRealObjectType;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::DefaultObjectPropertiesViewer);
+// --- END META ---

@@ -156,7 +156,11 @@ namespace o2
 	{
 		for (auto drawable : drawables)
 			drawable->Draw();
+
+        ISceneDrawable::OnDrawn();
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::SceneLayer);
+// --- END META ---

@@ -50,6 +50,7 @@ namespace o2
 
 	typedef Ref<AnimationAsset> AnimationAssetRef;
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AnimationAsset)
 {
@@ -74,3 +75,4 @@ CLASS_METHODS_META(o2::AnimationAsset)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsReferenceCanOwnInstance);
 }
 END_META;
+// --- END META ---

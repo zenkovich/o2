@@ -891,6 +891,7 @@ namespace o2
 			mTargetProxy->SetValue(mCurrentValue);
 	}
 };
+// --- META ---
 
 META_TEMPLATES(typename _type)
 CLASS_BASES_META(o2::AnimationTrack<_type>)
@@ -1023,3 +1024,4 @@ CLASS_METHODS_META(o2::AnimationTrack<_type>::Key)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Key&);
 }
 END_META;
+// --- END META ---

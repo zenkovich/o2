@@ -41,6 +41,7 @@ namespace Editor
 	};
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DefaultPropertiesViewer)
 {
@@ -63,3 +64,4 @@ CLASS_METHODS_META(Editor::DefaultPropertiesViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
+// --- END META ---

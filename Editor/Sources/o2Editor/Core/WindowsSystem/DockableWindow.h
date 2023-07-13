@@ -168,6 +168,7 @@ namespace Editor
 		friend class DockWindowPlace;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::DockableWindow)
 {
@@ -236,3 +237,4 @@ CLASS_METHODS_META(Editor::DockableWindow)
 	FUNCTION().PROTECTED().SIGNATURE(void, RecalculateTabWidth);
 }
 END_META;
+// --- END META ---

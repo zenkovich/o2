@@ -21,6 +21,7 @@ namespace o2
 		SERIALIZABLE(AnimationMask);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AnimationMask)
 {
@@ -38,3 +39,4 @@ CLASS_METHODS_META(o2::AnimationMask)
 	FUNCTION().PUBLIC().SIGNATURE(float, GetNodeWeight, const String&);
 }
 END_META;
+// --- END META ---

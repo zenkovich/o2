@@ -71,6 +71,7 @@ namespace o2
 		friend class AnimationState;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::AnimationPlayer)
 {
@@ -105,3 +106,4 @@ CLASS_METHODS_META(o2::AnimationPlayer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnClipDurationChanged, float);
 }
 END_META;
+// --- END META ---

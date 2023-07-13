@@ -161,6 +161,7 @@ namespace Editor
 		friend class LayersPopup;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::LayersPopup)
 {
@@ -238,3 +239,4 @@ CLASS_METHODS_META(Editor::LayerPopupItem)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnRemovePressed);
 }
 END_META;
+// --- END META ---

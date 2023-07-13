@@ -482,7 +482,9 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::SceneTree);
 
 DECLARE_CLASS(Editor::SceneTreeNode);
+// --- END META ---

@@ -20,7 +20,9 @@ namespace o2
 			p.velocity += v;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ParticlesEffect);
 
 DECLARE_CLASS(o2::ParticlesGravityEffect);
+// --- END META ---

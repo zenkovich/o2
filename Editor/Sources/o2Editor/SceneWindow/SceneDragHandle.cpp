@@ -94,6 +94,7 @@ namespace Editor
 			o2EditorSceneScreen.mDragHandles.Remove(this);
 	}
 }
+// --- META ---
 
 ENUM_META(Editor::SceneDragHandle::Mode)
 {
@@ -103,3 +104,4 @@ ENUM_META(Editor::SceneDragHandle::Mode)
 END_ENUM_META;
 
 DECLARE_CLASS(Editor::SceneDragHandle);
+// --- END META ---

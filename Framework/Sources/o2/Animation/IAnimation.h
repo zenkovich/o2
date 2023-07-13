@@ -137,7 +137,7 @@ namespace o2
 		virtual Loop GetLoop() const;
 
 		// Adds event on time line
-		virtual void AddTimeEvent(float time, const Function<void()> eventFunc);
+		virtual void AddTimeEvent(float time, const Function<void()>& eventFunc);
 
 		// Removes event by time
 		virtual void RemoveTimeEvent(float time);
@@ -171,6 +171,7 @@ namespace o2
 		virtual void Evaluate();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::IAnimation)
 {
@@ -240,7 +241,7 @@ CLASS_METHODS_META(o2::IAnimation)
 	FUNCTION().PUBLIC().SIGNATURE(float, GetSpeed);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLoop, Loop);
 	FUNCTION().PUBLIC().SIGNATURE(Loop, GetLoop);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddTimeEvent, float, const Function<void()>);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddTimeEvent, float, const Function<void()>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveTimeEvent, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveTimeEvent, const Function<void()>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllTimeEvents);
@@ -248,3 +249,4 @@ CLASS_METHODS_META(o2::IAnimation)
 	FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
 }
 END_META;
+// --- END META ---

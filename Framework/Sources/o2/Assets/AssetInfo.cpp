@@ -153,5 +153,7 @@ namespace o2
 		return path == other.path;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AssetInfo);
+// --- END META ---

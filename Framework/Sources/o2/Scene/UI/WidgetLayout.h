@@ -17,33 +17,33 @@ namespace o2
 	{
 	public:
 		PROPERTIES(WidgetLayout);
-		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin); // Left bottom anchor property @SCRIPTABLE
-		PROPERTY(Vec2F, anchorMax, SetAnchorMax,GetAnchorMax);  // Right top anchor property @SCRIPTABLE
+		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin); // Left bottom anchor property
+		PROPERTY(Vec2F, anchorMax, SetAnchorMax,GetAnchorMax);  // Right top anchor property
 
-		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin); // Left bottom corner offset property @SCRIPTABLE
-		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax); // Right top corner offset property @SCRIPTABLE
+		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin); // Left bottom corner offset property
+		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax); // Right top corner offset property
 
-		PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property @SCRIPTABLE
-		PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property @SCRIPTABLE
-		PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property @SCRIPTABLE
-		PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property @SCRIPTABLE
+		PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property
+		PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property
+		PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property
+		PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property
 
-		PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property @SCRIPTABLE
-		PROPERTY(float, offsetRight, SetoffsetRight, GetoffsetRight);    // Right offset property @SCRIPTABLE
-		PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property @SCRIPTABLE
-		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property @SCRIPTABLE
+		PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property
+		PROPERTY(float, offsetRight, SetoffsetRight, GetoffsetRight);    // Right offset property
+		PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property
+		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property
 
-		PROPERTY(Vec2F, minSize, SetMinimalSize, GetMinimalSize);      // Minimal size property @SCRIPTABLE
-		PROPERTY(float, minWidth, SetMinimalWidth, GetMinWidth);   // Minimal width property @SCRIPTABLE
-		PROPERTY(float, minHeight,SetMinimalHeight, GetMinHeight); // Minimal height property @SCRIPTABLE
+		PROPERTY(Vec2F, minSize, SetMinimalSize, GetMinimalSize);      // Minimal size property
+		PROPERTY(float, minWidth, SetMinimalWidth, GetMinWidth);   // Minimal width property
+		PROPERTY(float, minHeight,SetMinimalHeight, GetMinHeight); // Minimal height property
 
-		PROPERTY(Vec2F, maxSize, SetMaximalSize, GetMaximalSize);       // Maximum size property @SCRIPTABLE
-		PROPERTY(float, maxWidth, SetMaximalWidth, GetMaxWidth);    // Maximum width property @SCRIPTABLE
-		PROPERTY(float, maxHeight, SetMaximalHeight, GetMaxHeight); // Maximum height property @SCRIPTABLE
+		PROPERTY(Vec2F, maxSize, SetMaximalSize, GetMaximalSize);       // Maximum size property
+		PROPERTY(float, maxWidth, SetMaximalWidth, GetMaxWidth);    // Maximum width property
+		PROPERTY(float, maxHeight, SetMaximalHeight, GetMaxHeight); // Maximum height property
 
-		PROPERTY(Vec2F, weight, SetWeight, GetWeight);                   // Layout weight property @SCRIPTABLE
-		PROPERTY(float, widthWeight, SetWidthWeight, GetWidthWeight);    // Width layout weight property @SCRIPTABLE
-		PROPERTY(float, heigthWeight, SetHeightWeight, GetHeightWeight); // Height layout weight property @SCRIPTABLE
+		PROPERTY(Vec2F, weight, SetWeight, GetWeight);                   // Layout weight property
+		PROPERTY(float, widthWeight, SetWidthWeight, GetWidthWeight);    // Width layout weight property
+		PROPERTY(float, heigthWeight, SetHeightWeight, GetHeightWeight); // Height layout weight property
 
 	public:
 		// Default constructor, creates both stretching layout  
@@ -68,10 +68,10 @@ namespace o2
 		// Updates layout and transformation
 		void Update() override;
 
-		// Sets transform dirty and needed to update. Checks is driven by parent and marks parent as dirty too
+		// Sets transform dirty and needed to update. Checks is driven by parent and marks parent as dirty too @SCRIPTABLE
 		void SetDirty(bool fromParent = false) override;
 
-		// Copies data parameters from other layout
+		// Copies data parameters from other layout @SCRIPTABLE
 		void CopyFrom(const ActorTransform& other) override;
 
 		// Sets position
@@ -116,112 +116,112 @@ namespace o2
 		// Sets direction aligned rectangle transformation
 		void SetAxisAlignedRect(const RectF& rect) override;
 
-		// Sets left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top
+		// Sets left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top @SCRIPTABLE
 		void SetAnchorMin(const Vec2F& min);
 
-		// Returns left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top
+		// Returns left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top @SCRIPTABLE
 		Vec2F GetAnchorMin() const;
 
-		// Sets right top anchor. (0, 0) - left bottom of parent, (1, 1) - right top
+		// Sets right top anchor. (0, 0) - left bottom of parent, (1, 1) - right top @SCRIPTABLE
 		void SetAnchorMax(const Vec2F& max);
 
-		// Returns right top anchor. (0, 0) - left bottom of parent, (1, 1) - right top
+		// Returns right top anchor. (0, 0) - left bottom of parent, (1, 1) - right top @SCRIPTABLE
 		Vec2F GetAnchorMax() const;
 
-		// Sets left anchor. 0 - left parent border, 1 - right
+		// Sets left anchor. 0 - left parent border, 1 - right @SCRIPTABLE
 		void SetAnchorLeft(float value);
 
-		// Returns left anchor. 0 - left parent border, 1 - right
+		// Returns left anchor. 0 - left parent border, 1 - right @SCRIPTABLE
 		float GetAnchorLeft() const;
 
-		// Sets right anchor. 0 - left parent border, 1 - right
+		// Sets right anchor. 0 - left parent border, 1 - right @SCRIPTABLE
 		void SetAnchorRight(float value);
 
-		// Returns right anchor. 0 - left parent border, 1 - right
+		// Returns right anchor. 0 - left parent border, 1 - right @SCRIPTABLE
 		float GetAnchorRight() const;
 
-		// Sets bottom anchor. 0 - bottom parent border, 1 - top
+		// Sets bottom anchor. 0 - bottom parent border, 1 - top @SCRIPTABLE
 		void SetAnchorBottom(float value);
 
-		// Returns bottom anchor. 0 - bottom parent border, 1 - top
+		// Returns bottom anchor. 0 - bottom parent border, 1 - top @SCRIPTABLE
 		float GetAnchorBottom() const;
 
-		// Sets top anchor. 0 - bottom parent border, 1 - top
+		// Sets top anchor. 0 - bottom parent border, 1 - top @SCRIPTABLE
 		void SetAnchorTop(float value);
 
-		// Returns top anchor. 0 - bottom parent border, 1 - top
+		// Returns top anchor. 0 - bottom parent border, 1 - top @SCRIPTABLE
 		float GetAnchorTop() const;
 
-		// Sets left bottom offset
+		// Sets left bottom offset @SCRIPTABLE
 		void SetOffsetMin(const Vec2F& min);
 
-		// Returns left bottom offset
+		// Returns left bottom offset @SCRIPTABLE
 		Vec2F GetOffsetMin() const;
 
-		// Sets right top offset
+		// Sets right top offset @SCRIPTABLE
 		void SetOffsetMax(const Vec2F& max);
 
-		// Returns right top offset
+		// Returns right top offset @SCRIPTABLE
 		Vec2F GetOffsetMax() const;
 
-		// Sets left offset
+		// Sets left offset @SCRIPTABLE
 		void SetOffsetLeft(float value);
 
-		// Returns left offset
+		// Returns left offset @SCRIPTABLE
 		float GetOffsetLeft() const;
 
-		// Sets right offset
+		// Sets right offset @SCRIPTABLE
 		void SetoffsetRight(float value);
 
-		// Returns right offset
+		// Returns right offset @SCRIPTABLE
 		float GetoffsetRight() const;
 
-		// Sets bottom offset
+		// Sets bottom offset @SCRIPTABLE
 		void SetOffsetBottom(float value);
 
-		// Returns bottom offset
+		// Returns bottom offset @SCRIPTABLE
 		float GetOffsetBottom() const;
 
-		// Sets top offset
+		// Sets top offset @SCRIPTABLE
 		void SetOffsetTop(float value);
 
-		// Returns top offset
+		// Returns top offset @SCRIPTABLE
 		float GetOffsetTop() const;
 
-		// Sets minimal size, enables size check
+		// Sets minimal size, enables size check @SCRIPTABLE
 		void SetMinimalSize(const Vec2F& minSize);
 
-		// Returns minimal size
+		// Returns minimal size @SCRIPTABLE
 		Vec2F GetMinimalSize() const;
 
-		// Sets minimal width, enables size check
+		// Sets minimal width, enables size check @SCRIPTABLE
 		void SetMinimalWidth(float value);
 
-		// Returns minimal width
+		// Returns minimal width @SCRIPTABLE
 		float GetMinWidth() const;
 
-		// Sets minimal height, enables size check
+		// Sets minimal height, enables size check @SCRIPTABLE
 		void SetMinimalHeight(float value);
 
-		// Returns minimal height
+		// Returns minimal height @SCRIPTABLE
 		float GetMinHeight() const;
 
-		// Sets maximal size, enables size check
+		// Sets maximal size, enables size check @SCRIPTABLE
 		void SetMaximalSize(const Vec2F& maxSize);
 
-		// Returns maximal size
+		// Returns maximal size @SCRIPTABLE
 		Vec2F GetMaximalSize() const;
 
-		// Sets maximal width, enables size check
+		// Sets maximal width, enables size check @SCRIPTABLE
 		void SetMaximalWidth(float value);
 
-		// Returns maximal width
+		// Returns maximal width @SCRIPTABLE
 		float GetMaxWidth() const;
 
-		// Sets maximal height, enables size check
+		// Sets maximal height, enables size check @SCRIPTABLE
 		void SetMaximalHeight(float value);
 
-		// Returns maximal height
+		// Returns maximal height @SCRIPTABLE
 		float GetMaxHeight() const;
 
 		// Disables size checking
@@ -230,22 +230,22 @@ namespace o2
 		// Enables size checking
 		void EnableSizeChecks();
 
-		// Sets layout weight
+		// Sets layout weight @SCRIPTABLE
 		void SetWeight(const Vec2F& weight);
 
-		// Returns layout height
+		// Returns layout height @SCRIPTABLE
 		Vec2F GetWeight() const;
 
-		// Sets width layout weight
+		// Sets width layout weight @SCRIPTABLE
 		void SetWidthWeight(float widthWeigth);
 
-		// Returns width layout weight 
+		// Returns width layout weight  @SCRIPTABLE
 		float GetWidthWeight();
 
-		// Sets height layout weight
+		// Sets height layout weight @SCRIPTABLE
 		void SetHeightWeight(float heigthWeigth);
 
-		// Returns height layout weight
+		// Returns height layout weight @SCRIPTABLE
 		float GetHeightWeight();
 
 		// Returns both axis stretching by parent layout with border offsets @SCRIPTABLE
@@ -285,6 +285,12 @@ namespace o2
 		// Doesn't checks size, dummy function
 		void DontCheckMinMax();
 
+#if IS_SCRIPTING_SUPPORTED
+	public:
+		// Sets layout data? for scripting @SCRIPTABLE
+		void Set(const WidgetLayout& other);
+#endif
+
 		friend class Widget;
 		friend class WidgetLayer;
 	};
@@ -318,6 +324,7 @@ namespace o2
 	// Calculates children widths or heights by weights and min/max sizes
 	Vector<float> CalculateExpandedSize(Vector<Widget*>& widgets, bool horizontal, float availableWidth, float spacing);
 }
+// --- META ---
 
 CLASS_BASES_META(o2::WidgetLayout)
 {
@@ -326,27 +333,27 @@ CLASS_BASES_META(o2::WidgetLayout)
 END_META;
 CLASS_FIELDS_META(o2::WidgetLayout)
 {
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorMin);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorMax);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetMin);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetMax);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorLeft);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorRight);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorBottom);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorTop);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetLeft);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetRight);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetBottom);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetTop);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(minSize);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(minWidth);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(minHeight);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(maxSize);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(maxWidth);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(maxHeight);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(weight);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(widthWeight);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(heigthWeight);
+	FIELD().PUBLIC().NAME(anchorMin);
+	FIELD().PUBLIC().NAME(anchorMax);
+	FIELD().PUBLIC().NAME(offsetMin);
+	FIELD().PUBLIC().NAME(offsetMax);
+	FIELD().PUBLIC().NAME(anchorLeft);
+	FIELD().PUBLIC().NAME(anchorRight);
+	FIELD().PUBLIC().NAME(anchorBottom);
+	FIELD().PUBLIC().NAME(anchorTop);
+	FIELD().PUBLIC().NAME(offsetLeft);
+	FIELD().PUBLIC().NAME(offsetRight);
+	FIELD().PUBLIC().NAME(offsetBottom);
+	FIELD().PUBLIC().NAME(offsetTop);
+	FIELD().PUBLIC().NAME(minSize);
+	FIELD().PUBLIC().NAME(minWidth);
+	FIELD().PUBLIC().NAME(minHeight);
+	FIELD().PUBLIC().NAME(maxSize);
+	FIELD().PUBLIC().NAME(maxWidth);
+	FIELD().PUBLIC().NAME(maxHeight);
+	FIELD().PUBLIC().NAME(weight);
+	FIELD().PUBLIC().NAME(widthWeight);
+	FIELD().PUBLIC().NAME(heigthWeight);
 	FIELD().PROTECTED().NAME(mData);
 }
 END_META;
@@ -358,8 +365,8 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	FUNCTION().PUBLIC().CONSTRUCTOR(float, float, float, float, float, float, float, float);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetLayout&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetDirty, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, CopyFrom, const ActorTransform&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDirty, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, CopyFrom, const ActorTransform&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetPosition, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSize, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetWidth, float);
@@ -374,50 +381,50 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetRect, const RectF&);
 	FUNCTION().PUBLIC().SIGNATURE(RectF, GetChildrenWorldRect);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAxisAlignedRect, const RectF&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorMin, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetAnchorMin);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorMax, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetAnchorMax);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorLeft, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetAnchorLeft);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorRight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetAnchorRight);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorBottom, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetAnchorBottom);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorTop, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetAnchorTop);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetOffsetMin, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetOffsetMin);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetOffsetMax, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetOffsetMax);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetOffsetLeft, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetOffsetLeft);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetoffsetRight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetoffsetRight);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetOffsetBottom, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetOffsetBottom);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetOffsetTop, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetOffsetTop);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMinimalSize, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetMinimalSize);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMinimalWidth, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetMinWidth);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMinimalHeight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetMinHeight);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMaximalSize, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetMaximalSize);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMaximalWidth, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetMaxWidth);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMaximalHeight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetMaxHeight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAnchorMin, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetAnchorMin);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAnchorMax, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetAnchorMax);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAnchorLeft, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetAnchorLeft);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAnchorRight, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetAnchorRight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAnchorBottom, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetAnchorBottom);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAnchorTop, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetAnchorTop);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOffsetMin, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetOffsetMin);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOffsetMax, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetOffsetMax);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOffsetLeft, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetOffsetLeft);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetoffsetRight, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetoffsetRight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOffsetBottom, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetOffsetBottom);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOffsetTop, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetOffsetTop);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetMinimalSize, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetMinimalSize);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetMinimalWidth, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetMinWidth);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetMinimalHeight, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetMinHeight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetMaximalSize, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetMaximalSize);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetMaximalWidth, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetMaxWidth);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetMaximalHeight, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetMaxHeight);
 	FUNCTION().PUBLIC().SIGNATURE(void, DisableSizeChecks);
 	FUNCTION().PUBLIC().SIGNATURE(void, EnableSizeChecks);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWeight, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWeight);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWidthWeight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetWidthWeight);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetHeightWeight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetHeightWeight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWeight, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWeight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWidthWeight, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWidthWeight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetHeightWeight, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetHeightWeight);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, BothStretch, float, float, float, float);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, Based, BaseCorner, const Vec2F&, const Vec2F&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, HorStretch, VerAlign, float, float, float, float);
@@ -428,6 +435,9 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateOffsetsByCurrentTransform);
 	FUNCTION().PROTECTED().SIGNATURE(void, CheckMinMax);
 	FUNCTION().PROTECTED().SIGNATURE(void, DontCheckMinMax);
+#if  IS_SCRIPTING_SUPPORTED
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Set, const WidgetLayout&);
+#endif
 }
 END_META;
 
@@ -456,3 +466,4 @@ CLASS_METHODS_META(o2::WidgetLayoutData)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsSerializeEnabled);
 }
 END_META;
+// --- END META ---

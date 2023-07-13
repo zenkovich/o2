@@ -116,5 +116,7 @@ namespace o2
 	}
 #endif
 }
+// --- META ---
 
 DECLARE_CLASS(o2::BoxCollider);
+// --- END META ---

@@ -60,6 +60,12 @@ namespace o2
 		// Called when component id was changed
 		static void OnComponentIdChanged(Component* component, SceneUID prevId);
 
+		// Called when actor reference was destroyed, removes it from unresolved list
+		static void OnActorRefDestroyed(const ActorRef* ref);
+
+		// Called when component reference was destroyed, removes it from unresolved list
+		static void OnComponentRefDestroyed(const ComponentRef* ref);
+
 	protected:
 		struct UnresolvedActorRef
 		{
@@ -97,11 +103,11 @@ namespace o2
 		};
 
 	protected:
-		Vector<UnresolvedActorRef>      mUnresolvedActors;
-		Vector<UnresolvedAssetActorRef> mUnresolvedAssetActors;
+		Vector<UnresolvedActorRef>      mUnresolvedActorsRefs;
+		Vector<UnresolvedAssetActorRef> mUnresolvedAssetActorsRefs;
 		Map<SceneUID, Actor*>           mNewActors;
 
-		Vector<UnresolvedComponentRef> mUnresolvedComponents;
+		Vector<UnresolvedComponentRef> mUnresolvedComponentsRefs;
 		Map<SceneUID, Component*>      mNewComponents;
 
 		Vector<ActorRef*>     mRemapActorRefs;

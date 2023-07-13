@@ -43,6 +43,7 @@ namespace Editor
 		void PostInitializeWindow() override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SceneWindow)
 {
@@ -67,3 +68,4 @@ CLASS_METHODS_META(Editor::SceneWindow)
 	FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
 }
 END_META;
+// --- END META ---

@@ -83,5 +83,7 @@ namespace Editor
 		SetValueByUser(mEntries->FindValue(name).first);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::EnumProperty);
+// --- END META ---

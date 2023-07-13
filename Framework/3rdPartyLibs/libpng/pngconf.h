@@ -368,8 +368,8 @@
        /* If you encounter a compiler error here, see the explanation
         * near the end of INSTALL.
         */
-           __pngconf.h__ in libpng already includes setjmp.h;
-           __dont__ include it again.;
+           //__pngconf.h__ in libpng already includes setjmp.h;
+           //__dont__ include it again.;
 #      endif
 #    endif /* __linux__ */
 #  endif /* PNG_SKIP_SETJMP_CHECK */

@@ -44,6 +44,7 @@ namespace Editor
 		SERIALIZABLE(AnimationKeyDragHandle);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AnimationKeyDragHandle)
 {
@@ -69,3 +70,4 @@ CLASS_METHODS_META(Editor::AnimationKeyDragHandle)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
+// --- END META ---

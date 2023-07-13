@@ -55,6 +55,16 @@ namespace o2
 		return String();
 	}
 
+	const TextureRef& Font::GetTexture() const
+	{
+		return mTexture;
+	}
+
+	const RectI& Font::GetTextureSrcRect() const
+	{
+		return mTextureSrcRect;
+	}
+
 	void Font::AddCharacter(const Character& character)
 	{
 		mCharacters[character.mHeight][character.mId] = character;

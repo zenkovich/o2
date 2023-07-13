@@ -157,7 +157,23 @@ namespace o2
 
 	bool ImageAsset::PlatformMeta::operator==(const PlatformMeta& other) const
 	{
-		return maxSize == other.maxSize && format == other.format && scale == other.scale;
+		return format == other.format;
+	}
+
+	ImageAsset::PlatformMeta ImageAsset::Meta::GetResultPlatformMeta(Platform platform) const
+	{
+		PlatformMeta res = common;
+
+		switch (platform)
+		{
+			case Platform::iOS: if (ios) res = *ios; break;
+			case Platform::Android: if (android) res = *android; break;
+			case Platform::Mac: if (macOS) res = *macOS; break;
+			case Platform::Windows: if (windows) res = *windows; break;
+			case Platform::Linux: if (linuxOS) res = *linuxOS; break;
+		}
+
+		return res;
 	}
 
 	bool ImageAsset::Meta::IsEqual(AssetMeta* other) const
@@ -166,17 +182,49 @@ namespace o2
 			return false;
 
 		Meta* otherMeta = (Meta*)other;
-		return atlasId == otherMeta->atlasId && ios == otherMeta->ios && windows == otherMeta->windows &&
-			android == otherMeta->android && macOS == otherMeta->macOS && sliceBorder == otherMeta->sliceBorder &&
-			defaultMode == otherMeta->defaultMode;
+		if (atlasId != otherMeta->atlasId ||
+			sliceBorder != otherMeta->sliceBorder ||
+			defaultMode != otherMeta->defaultMode)
+		{
+			return false;
+		}
+
+		if (!(common == otherMeta->common))
+			return false;
+
+		auto comparePlatformMeta = [](PlatformMeta* a, PlatformMeta* b)
+		{
+			if (a && b)
+			{
+				if (!(*a == *b))
+					return false;
+			}
+			else if (a || b)
+				return false;
+
+			return true;
+		};
+
+		if (!comparePlatformMeta(ios, otherMeta->ios) ||
+			!comparePlatformMeta(android, otherMeta->android) ||
+			!comparePlatformMeta(macOS, otherMeta->macOS) ||
+			!comparePlatformMeta(windows, otherMeta->windows) ||
+			!comparePlatformMeta(linuxOS, otherMeta->linuxOS))
+		{
+			return false;
+		}
+
+		return true;
 	}
 }
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::ImageAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ImageAsset>);
+// --- META ---
 
 DECLARE_CLASS(o2::ImageAsset);
 
 DECLARE_CLASS(o2::ImageAsset::PlatformMeta);
 
 DECLARE_CLASS(o2::ImageAsset::Meta);
+// --- END META ---

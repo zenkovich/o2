@@ -47,6 +47,7 @@ namespace Editor
 		void OnClicked();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::ColorProperty)
 {
@@ -70,3 +71,4 @@ CLASS_METHODS_META(Editor::ColorProperty)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);
 }
 END_META;
+// --- END META ---

@@ -306,7 +306,7 @@ namespace o2
 		return mLoop;
 	}
 
-	void IAnimation::AddTimeEvent(float time, const Function<void()> eventFunc)
+	void IAnimation::AddTimeEvent(float time, const Function<void()>& eventFunc)
 	{
 		mTimeEvents.Add({ time, eventFunc });
 	}
@@ -329,5 +329,7 @@ namespace o2
 	void IAnimation::Evaluate()
 	{}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::IAnimation);
+// --- END META ---

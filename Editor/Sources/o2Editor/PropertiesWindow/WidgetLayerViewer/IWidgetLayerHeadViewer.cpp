@@ -20,5 +20,7 @@ namespace Editor
 		return mEnabled;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::IWidgetLayerHeaderViewer);
+// --- END META ---

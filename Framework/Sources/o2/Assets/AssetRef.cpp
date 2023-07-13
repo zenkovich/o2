@@ -282,5 +282,7 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::AssetRef);
+// --- END META ---

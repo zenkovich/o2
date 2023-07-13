@@ -111,5 +111,7 @@ namespace o2
 		return mLayers;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::SceneLayersList);
+// --- END META ---

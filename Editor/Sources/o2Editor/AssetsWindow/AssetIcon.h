@@ -125,6 +125,7 @@ namespace Editor
 		friend class AssetsIconsScrollArea;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::AssetIcon)
 {
@@ -173,3 +174,4 @@ CLASS_METHODS_META(Editor::AssetIcon)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
 }
 END_META;
+// --- END META ---

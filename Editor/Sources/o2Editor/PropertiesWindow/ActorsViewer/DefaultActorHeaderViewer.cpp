@@ -249,5 +249,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::DefaultActorHeaderViewer);
+// --- END META ---

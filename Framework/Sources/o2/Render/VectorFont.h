@@ -120,6 +120,8 @@ namespace o2
 		};
 
 	protected:
+        static const int mInitialTextureSize = 1024;
+
 		String  mFileName;     // Source file name
 		FT_Face mFreeTypeFace; // Free Type font face
 
@@ -131,6 +133,9 @@ namespace o2
 		mutable Map<int, float> mHeights; // Cached line heights
 
 	protected:
+        // Initializes glyphs texture
+        void InitializeTexture();
+
 		// Updates characters set
 		void UpdateCharacters(Vector<wchar_t>& newCharacters, int height);
 
@@ -147,6 +152,7 @@ namespace o2
 		return (_eff_type*)AddEffect(mnew _eff_type(args ...));
 	}
 }
+// --- META ---
 
 CLASS_BASES_META(o2::VectorFont::Effect)
 {
@@ -165,3 +171,4 @@ CLASS_METHODS_META(o2::VectorFont::Effect)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, Effect*);
 }
 END_META;
+// --- END META ---

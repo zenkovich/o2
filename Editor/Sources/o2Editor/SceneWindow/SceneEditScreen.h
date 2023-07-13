@@ -27,7 +27,7 @@ namespace Editor
 	class IEditTool;
 	class SceneDragHandle;
 	class SceneEditorLayer;
-	class SceneTree;
+	class SceneHierarchyTree;
 
 	// --------------------
 	// Scene editing screen
@@ -157,8 +157,6 @@ namespace Editor
 		Color4 mSelectedObjectColor = Color4(220, 220, 220, 255);      // Selected object color
 		Color4 mMultiSelectedObjectColor = Color4(220, 220, 220, 100); // Selected object color
 		float  mObjectMinimalSelectionSize = 10.0f;                    // Minimal object size on pixels
-
-		SceneTree* mSceneTree; // Pointer to object tree widget
 
 		Vector<SceneEditableObject*> mSelectedObjects;          // Current selected objects
 		Vector<SceneEditableObject*> mTopSelectedObjects;       // Current selected objects most top in hierarchy
@@ -319,6 +317,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SceneEditScreen)
 {
@@ -334,7 +333,6 @@ CLASS_FIELDS_META(Editor::SceneEditScreen)
 	FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 255)).NAME(mSelectedObjectColor);
 	FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 100)).NAME(mMultiSelectedObjectColor);
 	FIELD().PROTECTED().DEFAULT_VALUE(10.0f).NAME(mObjectMinimalSelectionSize);
-	FIELD().PROTECTED().NAME(mSceneTree);
 	FIELD().PROTECTED().NAME(mSelectedObjects);
 	FIELD().PROTECTED().NAME(mTopSelectedObjects);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelectedFromThis);
@@ -424,3 +422,4 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsInputTransparent);
 }
 END_META;
+// --- END META ---

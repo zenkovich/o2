@@ -291,7 +291,9 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::AssetsFoldersTree);
 
 DECLARE_CLASS(Editor::FoldersTree);
+// --- END META ---

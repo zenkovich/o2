@@ -586,6 +586,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::IPropertyField)
 {
@@ -683,3 +684,4 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
 }
 END_META;
+// --- END META ---

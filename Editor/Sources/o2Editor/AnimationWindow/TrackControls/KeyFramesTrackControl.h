@@ -513,6 +513,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 META_TEMPLATES(typename AnimationTrackType)
 CLASS_BASES_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
@@ -568,3 +569,4 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnPropertyChanged);
 }
 END_META;
+// --- END META ---

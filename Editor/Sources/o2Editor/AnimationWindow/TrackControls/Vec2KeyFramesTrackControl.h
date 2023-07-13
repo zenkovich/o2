@@ -56,6 +56,7 @@ namespace Editor
 		void OnKeysChanged() override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::Vec2KeyFramesTrackControl)
 {
@@ -83,3 +84,4 @@ CLASS_METHODS_META(Editor::Vec2KeyFramesTrackControl)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnKeysChanged);
 }
 END_META;
+// --- END META ---

@@ -100,6 +100,7 @@ namespace Editor
 		IOBJECT(SplineTool);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::SplineTool)
 {
@@ -125,3 +126,4 @@ CLASS_METHODS_META(Editor::SplineTool)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
 }
 END_META;
+// --- END META ---

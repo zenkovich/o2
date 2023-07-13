@@ -14,7 +14,6 @@
 
 namespace o2
 {
-	class AssetsBuilder;
 	class LogStream;
 	class AssetRef;
 
@@ -56,13 +55,13 @@ namespace o2
 		const AssetInfo& GetAssetInfo(const String& path) const;
 
 		// Returns assets types and extensions dictionary. Key - extension, value - type of asset
-		const Map<String, const Type*> GetAssetsExtensionsTypes() const;
+		static const Map<String, const Type*> GetAssetsExtensionsTypes();
 
 		// Returns standard asset type
-		const Type* GetStdAssetType() const;
+		static const Type* GetStdAssetType();
 
 		// Returns asset type for extension
-		const Type* GetAssetTypeByExtension(const String& extension) const;
+		static const Type* GetAssetTypeByExtension(const String& extension);
 
 		// Returns asset reference by path
 		AssetRef GetAssetRef(const String& path);
@@ -81,46 +80,43 @@ namespace o2
 		bool IsAssetExist(const UID& id) const;
 
 		// Removes asset
-		bool RemoveAsset(const AssetRef& asset, bool rebuildAssets = true);
+		bool RemoveAsset(const AssetRef& asset);
 
 		// Removes asset by path
-		bool RemoveAsset(const String& path, bool rebuildAssets = true);
+		bool RemoveAsset(const String& path);
 
 		// Removes asset by id
-		bool RemoveAsset(const UID& id, bool rebuildAssets = true);
+		bool RemoveAsset(const UID& id);
 
 		// Copies asset
-		bool CopyAsset(const AssetRef& asset, const String& dest, bool rebuildAssets = true);
+		bool CopyAsset(const AssetRef& asset, const String& dest);
 
 		// Copies asset by path
-		bool CopyAsset(const String& path, const String& dest, bool rebuildAssets = true);
+		bool CopyAsset(const String& path, const String& dest);
 
 		// Copies asset by id
-		bool CopyAsset(const UID& id, const String& dest, bool rebuildAssets = true);
+		bool CopyAsset(const UID& id, const String& dest);
 
 		// Moves asset to new path
-		bool MoveAsset(const AssetRef& asset, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(const AssetRef& asset, const String& newPath);
 
 		// Moves asset by path to new path
-		bool MoveAsset(const String& path, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(const String& path, const String& newPath);
 
 		// Moves asset by id to new path
-		bool MoveAsset(const UID& id, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(const UID& id, const String& newPath);
 
 		// Moves assets to new path
-		bool MoveAssets(const Vector<UID>& assets, const String& destPath, bool rebuildAssets = true);
+		bool MoveAssets(const Vector<UID>& assets, const String& destPath);
 
 		// Renames asset to new path
-		bool RenameAsset(const AssetRef& asset, const String& newName, bool rebuildAssets = true);
+		bool RenameAsset(const AssetRef& asset, const String& newName);
 
 		// Renames asset by path to new path
-		bool RenameAsset(const String& path, const String& newName, bool rebuildAssets = true);
+		bool RenameAsset(const String& path, const String& newName);
 
 		// Renames asset by id to new path
-		bool RenameAsset(const UID& id, const String& newName, bool rebuildAssets = true);
-
-		// Rebuilds all assets
-		void RebuildAssets(bool forcible = false);
+		bool RenameAsset(const UID& id, const String& newName);
 
 		// Returns all assets trees
 		const Vector<AssetsTree*>& GetAssetsTrees() const;
@@ -147,10 +143,6 @@ namespace o2
 		AssetsTree*         mMainAssetsTree; // Main assets tree
 		Vector<AssetsTree*> mAssetsTrees;    // Assets trees
 		LogStream*          mLog;            // Log stream
-		AssetsBuilder*      mAssetsBuilder;  // Assets builder
-
-		Map<String, const Type*> mAssetsTypes;   // Assets types and extensions dictionary
-		const Type*              mStdAssetType;  // Standard asset type
 
 		Vector<AssetCache*>      mCachedAssets;       // Current cached assets
 		Map<String, AssetCache*> mCachedAssetsByPath; // Current cached assets by path
@@ -159,9 +151,6 @@ namespace o2
 	protected:
 		// Loads asset infos
 		void LoadAssetsTree();
-
-		// Initializes types extensions dictionary
-		void LoadAssetTypes();
 
 		// Returns asset cache by path
 		AssetCache* FindAssetCache(const String& path);
@@ -182,16 +171,16 @@ namespace o2
 		AssetCache* UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
 
 		// Removes asset by info
-		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
+		bool RemoveAsset(const AssetInfo& info);
 
 		// Copies asset by info
-		bool CopyAsset(const AssetInfo& info, const String& dest, bool rebuildAssets = true);
+		bool CopyAsset(const AssetInfo& info, const String& dest);
 
 		// Moves asset to new path
-		bool MoveAsset(const AssetInfo& info, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(const AssetInfo& info, const String& newPath);
 
 		// Renames asset to new path
-		bool RenameAsset(const AssetInfo& info, const String& newName, bool rebuildAssets = true);
+		bool RenameAsset(const AssetInfo& info, const String& newName);
 
 		friend class Asset;
 		friend class AssetRef;

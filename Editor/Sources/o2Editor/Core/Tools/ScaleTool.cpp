@@ -7,7 +7,7 @@
 #include "o2Editor/Core/Actions/Transform.h"
 #include "o2Editor/Core/EditorApplication.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2Editor/TreeWindow/SceneHierarchyTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 
 namespace Editor
@@ -179,7 +179,7 @@ namespace Editor
 
 	void ScaleTool::OnKeyPressed(const Input::Key& key)
 	{
-		if (!o2EditorTree.GetSceneTree()->IsFocused())
+		if (!o2EditorTree.IsTreeFocused())
 			return;
 
 		if (key == VK_CONTROL)
@@ -193,7 +193,7 @@ namespace Editor
 
 	void ScaleTool::OnKeyReleased(const Input::Key& key)
 	{
-		if (!o2EditorTree.GetSceneTree()->IsFocused())
+		if (!o2EditorTree.IsTreeFocused())
 			return;
 
 		if (key == VK_CONTROL)
@@ -239,5 +239,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::ScaleTool);
+// --- END META ---

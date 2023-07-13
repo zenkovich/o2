@@ -113,7 +113,9 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::IAnimationTrack);
 
 DECLARE_CLASS(o2::IAnimationTrack::IPlayer);
+// --- END META ---

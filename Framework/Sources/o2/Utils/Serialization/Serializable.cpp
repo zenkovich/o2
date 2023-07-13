@@ -17,5 +17,7 @@ namespace o2
 		Deserialize(doc);
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::ISerializable);
+// --- END META ---

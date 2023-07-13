@@ -1,6 +1,7 @@
 #include "o2/stdafx.h"
 #include "Text.h"
 
+#include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Render.h"
@@ -20,8 +21,6 @@ namespace o2
 	{
 		if (mFont)
 			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
-
-		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 	}
 
 	Text::Text(const Text& text):
@@ -41,10 +40,7 @@ namespace o2
 		mHeight = text.mHeight;
 
 		if (mFont)
-		{
 			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
-			mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
-		}
 	}
 
 	Text::Text(const BitmapFontAssetRef& fontAsset):
@@ -68,7 +64,7 @@ namespace o2
 		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mDotsEndings(false), mHeight(11),
 		mUpdatingMesh(false)
 	{
-		SetFontAsset(fontAssetId);
+		SetFontAsset(FontAssetRef(fontAssetId));
 	}
 
 	Text::~Text()
@@ -101,8 +97,6 @@ namespace o2
 		if (mFont)
 			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 
-		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
-
 		UpdateMesh();
 
 		return *this;
@@ -116,7 +110,9 @@ namespace o2
 		for (auto mesh : mMeshes)
 		{
 			mesh->Draw();
-			//o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 150));
+
+			if (o2Input.IsKeyDown(VK_F3))
+				o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 150));
 		}
 
 		OnDrawn();
@@ -131,8 +127,6 @@ namespace o2
 
 		if (mFont)
 			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
-
-		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 
 		UpdateMesh();
 	}
@@ -156,16 +150,15 @@ namespace o2
 			mFont = FontRef();
 
 		if (mFont)
-		{
 			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
-			mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
-		}
+
+		CheckCharactersAndRebuildMesh();
 	}
 
 	FontAssetRef Text::GetFontAsset() const
 	{
 		auto& fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
-		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
+		if (fontAssetInfo.meta->GetAssetType() == &TypeOf(BitmapFontAsset))
 			return BitmapFontAssetRef(mFontAssetId);
 
 		return VectorFontAssetRef(mFontAssetId);
@@ -174,6 +167,7 @@ namespace o2
 	void Text::SetHeight(int height)
 	{
 		mHeight = height;
+		CheckCharactersAndRebuildMesh();
 	}
 
 	int Text::GetFontHeight() const
@@ -184,14 +178,7 @@ namespace o2
 	void Text::SetText(const WString& text)
 	{
 		mText = text;
-
-		if (mFont)
-		{
-			mFont->CheckCharacters(text, height);
-			mFont->CheckCharacters(".", height);
-		}
-
-		UpdateMesh();
+		CheckCharactersAndRebuildMesh();
 	}
 
 	const WString& Text::GetText() const
@@ -291,8 +278,6 @@ namespace o2
 		return textSet.mRealSize;
 	}
 
-	const char* Text::mBasicSymbolsPreset = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-
 	void Text::UpdateMesh()
 	{
 		if (mUpdatingMesh)
@@ -379,8 +364,11 @@ namespace o2
 
 	void Text::CheckCharactersAndRebuildMesh()
 	{
-		mFont->CheckCharacters(mText, height);
-		mFont->CheckCharacters(".", height);
+        if (mFont)
+        {
+            mFont->CheckCharacters(mText, height);
+            mFont->CheckCharacters(".", height);
+        }
 		UpdateMesh();
 	}
 
@@ -439,7 +427,7 @@ namespace o2
 	void Text::BasisChanged()
 	{
 		if (mSymbolsSet.mAreaSize != mSize)
-			UpdateMesh();
+			CheckCharactersAndRebuildMesh();
 		else
 		{
 			Basis transform = CalculateTextBasis();
@@ -455,7 +443,7 @@ namespace o2
 
 	void Text::OnDeserialized(const DataValue& node)
 	{
-		SetFontAsset(mFontAssetId);
+		SetFontAsset(FontAssetRef(mFontAssetId));
 	}
 
 	void Text::TransformMesh(const Basis& bas)
@@ -671,5 +659,7 @@ namespace o2
 		return false;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::Text);
+// --- END META ---

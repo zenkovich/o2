@@ -50,7 +50,7 @@ namespace o2
 
 	void UIManager::FocusWidget(Widget* widget)
 	{
-		if (widget == mFocusedWidget || (widget && !widget->IsFocusable()))
+		if (mFocusedWidget == widget || (widget && !widget->IsFocusable()))
 			return;
 
 		if (mFocusedWidget)
@@ -135,14 +135,15 @@ namespace o2
 	{
 		for (auto& asset : mStyleSamples)
 		{
+#if IS_EDITOR
 			asset->SetEditorAsset(true);
+#endif
+
 			auto path = stylesPath + "/" + GetSmartName(asset->GetActor()->GetType().GetName()) + " " + 
 				asset->GetActor()->GetName() + ".proto";
 
-			asset->Save(path, false);
+			asset->Save(path);
 		}
-
-		o2Assets.RebuildAssets();
 	}
 
 	void UIManager::ClearStyle()
@@ -335,6 +336,8 @@ namespace o2
 
 	void UIManager::Update()
 	{
+		PROFILE_SAMPLE_FUNC();
+
 		for (auto widget : mLastFocusedWidgets)
 			widget->OnFocused();
 

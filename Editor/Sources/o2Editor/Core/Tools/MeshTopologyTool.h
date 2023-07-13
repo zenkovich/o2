@@ -128,6 +128,7 @@ namespace Editor
 		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::MeshTopologyTool)
 {
@@ -187,3 +188,4 @@ CLASS_METHODS_META(Editor::MeshTopologyTool)
 	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
 }
 END_META;
+// --- END META ---

@@ -125,5 +125,7 @@ namespace Editor
 	void WidgetLayerViewer::Draw()
 	{}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::WidgetLayerViewer);
+// --- END META ---

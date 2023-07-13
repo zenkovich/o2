@@ -101,5 +101,7 @@ namespace Editor
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<int>);
+// --- META ---
 
 DECLARE_CLASS(Editor::IntegerProperty);
+// --- END META ---

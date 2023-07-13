@@ -98,7 +98,7 @@ namespace Editor
 		TextureRef texture = mSprite->GetTexture();
 		if (!texture || texture->GetSize() != (Vec2I)layout->GetSize())
 		{
-			texture = TextureRef(layout->GetSize(), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+			texture = TextureRef(layout->GetSize(), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 			mSprite->SetTexture(texture);
 			mSprite->SetTextureSrcRect(RectI(Vec2I(), texture->GetSize()));
 		}
@@ -137,5 +137,7 @@ namespace Editor
 		mNeedRedraw = true;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::CurvePreview);
+// --- END META ---

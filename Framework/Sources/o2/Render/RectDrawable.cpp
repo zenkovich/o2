@@ -99,7 +99,9 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::IRectDrawable);
 
 DECLARE_CLASS(o2::FunctionalRectDrawable);
+// --- END META ---

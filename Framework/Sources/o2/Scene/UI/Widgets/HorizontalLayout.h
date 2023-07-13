@@ -152,6 +152,7 @@ namespace o2
 		void UpdateLayoutParametres();
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::HorizontalLayout)
 {
@@ -219,3 +220,4 @@ CLASS_METHODS_META(o2::HorizontalLayout)
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayoutParametres);
 }
 END_META;
+// --- END META ---

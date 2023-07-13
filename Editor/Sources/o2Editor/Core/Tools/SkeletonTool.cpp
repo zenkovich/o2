@@ -141,7 +141,7 @@ namespace Editor
 		auto drawHandleRegular = [=](const Basis& transform, const Color4& color) {
 			Color4 resultColor = handleRegularColor; resultColor.a = color.a;
 			auto vertices = getHandleVertices(transform, resultColor);
-			UInt16 indexes[] = { 0, 1, 2,  0, 2, 3,  0, 3, 4,  0, 4, 5 };
+			VertexIndex indexes[] = { 0, 1, 2,  0, 2, 3,  0, 3, 4,  0, 4, 5 };
 
 			o2Render.DrawAAPolyLine(vertices.Data(), vertices.Count(), 3.0f);
 			o2Render.DrawBuffer(PrimitiveType::Polygon, vertices.Data(), vertices.Count(), indexes, 4, TextureRef::Null());
@@ -222,5 +222,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::SkeletonTool);
+// --- END META ---

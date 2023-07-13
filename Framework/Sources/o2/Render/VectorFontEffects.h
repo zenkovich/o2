@@ -105,6 +105,7 @@ namespace o2
 		SERIALIZABLE(FontShadowEffect);
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::FontStrokeEffect)
 {
@@ -193,3 +194,4 @@ CLASS_METHODS_META(o2::FontShadowEffect)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
 }
 END_META;
+// --- END META ---

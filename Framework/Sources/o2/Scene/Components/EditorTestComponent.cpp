@@ -13,6 +13,7 @@ void o2::EditorTestComponent::Test()
 {
 	//o2Debug.Log("test");
 }
+// --- META ---
 
 ENUM_META(o2::EditorTestComponent::TestEnum)
 {
@@ -34,3 +35,4 @@ END_ENUM_META;
 DECLARE_CLASS(o2::EditorTestComponent);
 
 DECLARE_CLASS(o2::EditorTestComponent::TestInside);
+// --- END META ---

@@ -103,5 +103,7 @@ namespace o2
 		String      mFilename; // File name. Empty if no file
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::Bitmap::ImageType);
+// --- END META ---

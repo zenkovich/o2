@@ -49,6 +49,7 @@ namespace Editor
 		bool IsAlwaysRefresh() const override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::LayerProperty)
 {
@@ -73,3 +74,4 @@ CLASS_METHODS_META(Editor::LayerProperty)
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
 }
 END_META;
+// --- END META ---

@@ -4,7 +4,6 @@
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/Types/BinaryAsset.h"
 #include "o2/Assets/Types/FolderAsset.h"
-#include "o2/Assets/Builder/AssetsBuilder.h"
 #include "o2/Config/ProjectConfig.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
@@ -20,19 +19,11 @@ namespace o2
 		mLog = mnew LogStream("Assets");
 		o2Debug.GetLog()->BindStream(mLog);
 
-		mAssetsBuilder = mnew AssetsBuilder();
-
-		LoadAssetTypes();
-
-		if (::IsAssetsPrebuildEnabled())
-			RebuildAssets();
-		else
-			LoadAssetsTree();
+		LoadAssetsTree();
 	}
 
 	Assets::~Assets()
 	{
-		delete mAssetsBuilder;
 	}
 
 	String Assets::GetAssetsPath() const
@@ -78,22 +69,46 @@ namespace o2
 		return AssetInfo::empty;
 	}
 
-	const Map<String, const Type*> Assets::GetAssetsExtensionsTypes() const
+	const Map<String, const Type*> Assets::GetAssetsExtensionsTypes()
 	{
-		return mAssetsTypes;
+		static Map<String, const Type*> assetTypes;
+		if (assetTypes.IsEmpty())
+		{
+			auto derivedAssetTypes = TypeOf(Asset).GetDerivedTypes();
+
+			for (auto type : derivedAssetTypes)
+			{
+				String extensions = type->InvokeStatic<const char*>("GetFileExtensions");
+				auto extensionsVec = extensions.Split(" ");
+
+				for (const auto& ext : extensionsVec)
+				{
+					if (assetTypes.ContainsKey(ext))
+					{
+						o2Debug.LogWarning("Assets extensions duplicating: " + ext + ", at " + assetTypes[ext]->GetName() +
+										   " and " + type->GetName());
+						continue;
+					}
+
+					assetTypes.Add(ext, type);
+				}
+			}
+		}
+
+		return assetTypes;
 	}
 
-	const Type* Assets::GetStdAssetType() const
+	const Type* Assets::GetStdAssetType()
 	{
-		return mStdAssetType;
+		return &TypeOf(BinaryAsset);
 	}
 
-	const Type* Assets::GetAssetTypeByExtension(const String& extension) const
+	const Type* Assets::GetAssetTypeByExtension(const String& extension)
 	{
-		if (mAssetsTypes.ContainsKey(extension))
-			return mAssetsTypes.Get(extension);
+		if (GetAssetsExtensionsTypes().ContainsKey(extension))
+			return GetAssetsExtensionsTypes().Get(extension);
 
-		return mStdAssetType;
+		return GetStdAssetType();
 	}
 
 	AssetRef Assets::GetAssetRef(const String& path)
@@ -125,7 +140,7 @@ namespace o2
 			auto& assetInfo = GetAssetInfo(id);
 			if (!assetInfo.IsValid())
 			{
-				Assert(false, "Can't load asset by id - " + (String)id);
+				o2Debug.LogError("Can't load asset by id - " + (String)id);
 				return AssetRef();
 			}
 
@@ -148,22 +163,22 @@ namespace o2
 		return GetAssetInfo(id).meta->ID() != UID::empty;
 	}
 
-	bool Assets::RemoveAsset(const AssetRef& asset, bool rebuildAssets /*= true*/)
+	bool Assets::RemoveAsset(const AssetRef& asset)
 	{
 		return RemoveAsset(asset->GetUID());
 	}
 
-	bool Assets::RemoveAsset(const String& path, bool rebuildAssets /*= true*/)
+	bool Assets::RemoveAsset(const String& path)
 	{
-		return RemoveAsset(GetAssetInfo(path), rebuildAssets);
+		return RemoveAsset(GetAssetInfo(path));
 	}
 
-	bool Assets::RemoveAsset(const UID& id, bool rebuildAssets /*= true*/)
+	bool Assets::RemoveAsset(const UID& id)
 	{
-		return RemoveAsset(GetAssetInfo(id), rebuildAssets);
+		return RemoveAsset(GetAssetInfo(id));
 	}
 
-	bool Assets::RemoveAsset(const AssetInfo& info, bool rebuildAssets /*= true*/)
+	bool Assets::RemoveAsset(const AssetInfo& info)
 	{
 		if (info.meta == nullptr)
 		{
@@ -178,28 +193,25 @@ namespace o2
 		else
 			o2FileSystem.FileDelete(GetAssetsPath() + info.path);
 
-		if (rebuildAssets)
-			RebuildAssets();
-
 		return true;
 	}
 
-	bool Assets::CopyAsset(const AssetRef& asset, const String& dest, bool rebuildAssets /*= true*/)
+	bool Assets::CopyAsset(const AssetRef& asset, const String& dest)
 	{
-		return CopyAsset(asset->GetUID(), dest, rebuildAssets);
+		return CopyAsset(asset->GetUID(), dest);
 	}
 
-	bool Assets::CopyAsset(const String& path, const String& dest, bool rebuildAssets /*= true*/)
+	bool Assets::CopyAsset(const String& path, const String& dest)
 	{
-		return CopyAsset(GetAssetInfo(path), dest, rebuildAssets);
+		return CopyAsset(GetAssetInfo(path), dest);
 	}
 
-	bool Assets::CopyAsset(const UID& id, const String& dest, bool rebuildAssets /*= true*/)
+	bool Assets::CopyAsset(const UID& id, const String& dest)
 	{
-		return CopyAsset(GetAssetInfo(id), dest, rebuildAssets);
+		return CopyAsset(GetAssetInfo(id), dest);
 	}
 
-	bool Assets::CopyAsset(const AssetInfo& info, const String& dest, bool rebuildAssets /*= true*/)
+	bool Assets::CopyAsset(const AssetInfo& info, const String& dest)
 	{
 		if (info.meta == nullptr)
 		{
@@ -219,32 +231,29 @@ namespace o2
 			FolderAssetRef folderAsset(info.path);
 
 			for (auto inInfo : folderAsset->GetChildrenAssets())
-				CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo->GetPath()), false);
+				CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo->GetPath()));
 		}
 		else o2FileSystem.FileCopy(GetAssetsPath() + info.path, GetAssetsPath() + dest);
-
-		if (rebuildAssets)
-			RebuildAssets();
 
 		return true;
 	}
 
-	bool Assets::MoveAsset(const AssetRef& asset, const String& newPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAsset(const AssetRef& asset, const String& newPath)
 	{
 		return MoveAsset(asset->GetUID(), newPath);
 	}
 
-	bool Assets::MoveAsset(const String& path, const String& newPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAsset(const String& path, const String& newPath)
 	{
-		return MoveAsset(GetAssetInfo(path), newPath, rebuildAssets);
+		return MoveAsset(GetAssetInfo(path), newPath);
 	}
 
-	bool Assets::MoveAsset(const UID& id, const String& newPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAsset(const UID& id, const String& newPath)
 	{
-		return MoveAsset(GetAssetInfo(id), newPath, rebuildAssets);
+		return MoveAsset(GetAssetInfo(id), newPath);
 	}
 
-	bool Assets::MoveAsset(const AssetInfo& info, const String& newPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAsset(const AssetInfo& info, const String& newPath)
 	{
 		if (info.meta == nullptr)
 		{
@@ -265,44 +274,38 @@ namespace o2
 		else
 			o2FileSystem.FileMove(GetAssetsPath() + info.path, GetAssetsPath() + newPath);
 
-		if (rebuildAssets)
-			RebuildAssets();
-
 		return true;
 	}
 
-	bool Assets::MoveAssets(const Vector<UID>& assets, const String& destPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAssets(const Vector<UID>& assets, const String& destPath)
 	{
 		bool res = true;
 		for (auto& id : assets)
 		{
 			auto& info = GetAssetInfo(id);
-			if (!o2Assets.MoveAsset(id, destPath + "/" + o2FileSystem.GetPathWithoutDirectories(info.path), false))
+			if (!o2Assets.MoveAsset(id, destPath + "/" + o2FileSystem.GetPathWithoutDirectories(info.path)))
 				res = false;
 		}
-
-		if (rebuildAssets)
-			RebuildAssets();
 
 		return res;
 	}
 
-	bool Assets::RenameAsset(const AssetRef& asset, const String& newName, bool rebuildAssets /*= true*/)
+	bool Assets::RenameAsset(const AssetRef& asset, const String& newName)
 	{
-		return RenameAsset(GetAssetInfo(asset->GetUID()), newName, rebuildAssets);
+		return RenameAsset(GetAssetInfo(asset->GetUID()), newName);
 	}
 
-	bool Assets::RenameAsset(const String& path, const String& newName, bool rebuildAssets /*= true*/)
+	bool Assets::RenameAsset(const String& path, const String& newName)
 	{
-		return RenameAsset(GetAssetInfo(path), newName, rebuildAssets);
+		return RenameAsset(GetAssetInfo(path), newName);
 	}
 
-	bool Assets::RenameAsset(const UID& id, const String& newName, bool rebuildAssets /*= true*/)
+	bool Assets::RenameAsset(const UID& id, const String& newName)
 	{
-		return RenameAsset(GetAssetInfo(id), newName, rebuildAssets);
+		return RenameAsset(GetAssetInfo(id), newName);
 	}
 
-	bool Assets::RenameAsset(const AssetInfo& info, const String& newName, bool rebuildAssets /*= true*/)
+	bool Assets::RenameAsset(const AssetInfo& info, const String& newName)
 	{
 		if (info.meta == nullptr)
 		{
@@ -323,50 +326,7 @@ namespace o2
 		o2FileSystem.Rename(GetAssetsPath() + info.path + ".meta", GetAssetsPath() + newFullName + ".meta");
 		o2FileSystem.Rename(GetAssetsPath() + info.path, GetAssetsPath() + newFullName);
 
-		if (rebuildAssets)
-			RebuildAssets();
-
 		return true;
-	}
-
-	void Assets::RebuildAssets(bool forcible /*= false*/)
-	{
-		auto oldAssetsTrees = mAssetsTrees;
-		mAssetsTrees.Clear();
-
-		auto editorAssetsTree = mnew AssetsTree();
-		auto changedAssetsIds = mAssetsBuilder->BuildAssets(::GetEditorAssetsPath(), ::GetEditorBuiltAssetsPath(),
-															::GetEditorBuiltAssetsTreePath(), editorAssetsTree, forcible);
-
-		mMainAssetsTree = mnew AssetsTree();
-		changedAssetsIds += mAssetsBuilder->BuildAssets(::GetAssetsPath(), ::GetBuiltAssetsPath(),
-														::GetBuiltAssetsTreePath(), mMainAssetsTree, forcible);
-
-		mAssetsTrees.Add(mMainAssetsTree);
-		mAssetsTrees.Add(editorAssetsTree);
-
-		auto cachedAssets = mCachedAssets;
-		for (auto cached : cachedAssets)
-		{
-			cached->asset->mInfo.tree = mAssetsTrees.FindOrDefault([&](AssetsTree* tree) {
-				return tree->assetsPath == cached->asset->mInfo.tree->assetsPath;
-			});
-
-			// 			if (changedAssetsIds.Contains(cached->asset->GetUID()))
-			// 			{
-			// 				auto fnd = mCachedAssetsByUID.find(cached->asset->GetUID());
-			// 				if (fnd != mCachedAssetsByUID.end())
-			// 					mCachedAssetsByUID.erase(fnd);
-			// 
-			// 				auto fnd2 = mCachedAssetsByPath.find(cached->asset->GetPath());
-			// 				if (fnd2 != mCachedAssetsByPath.end())
-			// 					mCachedAssetsByPath.erase(fnd2);
-			// 			}
-		}
-
-		oldAssetsTrees.ForEach([](auto x) { delete x; });
-
-		onAssetsRebuilt(changedAssetsIds);
 	}
 
 	const Vector<AssetsTree*>& Assets::GetAssetsTrees() const
@@ -430,31 +390,6 @@ namespace o2
 
 		mAssetsTrees.Add(mMainAssetsTree);
 		mAssetsTrees.Add(editorAssetsTree);
-	}
-
-	void Assets::LoadAssetTypes()
-	{
-		mStdAssetType = &TypeOf(BinaryAsset);
-
-		auto assetTypes = TypeOf(Asset).GetDerivedTypes();
-
-		for (auto type : assetTypes)
-		{
-			String extensions = type->InvokeStatic<const char*>("GetFileExtensions");
-			auto extensionsVec = extensions.Split(" ");
-
-			for (const auto& ext : extensionsVec)
-			{
-				if (mAssetsTypes.ContainsKey(ext))
-				{
-					mLog->Warning("Assets extensions duplicating: " + ext + ", at " + mAssetsTypes[ext]->GetName() +
-								  " and " + type->GetName());
-					continue;
-				}
-
-				mAssetsTypes.Add(ext, type);
-			}
-		}
 	}
 
 	void Assets::CheckAssetsUnload()

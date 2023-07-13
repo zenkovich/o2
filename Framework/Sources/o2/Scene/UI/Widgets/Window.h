@@ -172,6 +172,7 @@ namespace o2
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(o2::Window)
 {
@@ -253,3 +254,4 @@ CLASS_METHODS_META(o2::Window)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
 }
 END_META;
+// --- END META ---

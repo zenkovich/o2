@@ -112,6 +112,7 @@ namespace o2
 		SERIALIZABLE(EditorTestComponent);
 	};
 }
+// --- META ---
 
 PRE_ENUM_META(o2::EditorTestComponent::TestEnum);
 
@@ -207,3 +208,4 @@ CLASS_METHODS_META(o2::EditorTestComponent::TestInside)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 }
 END_META;
+// --- END META ---

@@ -461,5 +461,7 @@ namespace o2
 		GetLayoutData().offsetMin -= szDelta*relativePivot;
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(o2::HorizontalLayout);
+// --- END META ---

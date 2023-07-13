@@ -76,6 +76,7 @@ namespace Editor
 		void OnCameraTransformChanged() override;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::FrameScrollView)
 {
@@ -109,3 +110,4 @@ CLASS_METHODS_META(Editor::FrameScrollView)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCameraTransformChanged);
 }
 END_META;
+// --- END META ---

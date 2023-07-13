@@ -466,5 +466,7 @@ namespace o2
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(o2::Transform);
+// --- END META ---

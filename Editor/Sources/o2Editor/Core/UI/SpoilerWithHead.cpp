@@ -47,5 +47,7 @@ namespace Editor
 		mIcon = FindInternalWidgetByType<Image>("icon");
 	}
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::SpoilerWithHead);
+// --- END META ---

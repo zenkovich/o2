@@ -74,6 +74,7 @@ namespace Editor
 		friend class ActorViewer;
 	};
 }
+// --- META ---
 
 CLASS_BASES_META(Editor::IActorPropertiesViewer)
 {
@@ -103,3 +104,4 @@ CLASS_METHODS_META(Editor::IActorPropertiesViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
+// --- END META ---

@@ -236,5 +236,7 @@ namespace Editor
 	}
 
 }
+// --- META ---
 
 DECLARE_CLASS(Editor::MapKeyFramesTrackControl);
+// --- END META ---
