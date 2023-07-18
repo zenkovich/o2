@@ -115,17 +115,20 @@ namespace o2
 
 	Vec2F ImageAsset::GetSize() const
 	{
+		if (mTexture)
+			return mTexture->GetSize();
+
 		return mAtlasRect.Size();
 	}
 
 	float ImageAsset::GetWidth() const
 	{
-		return (float)mAtlasRect.Width();
+		return GetSize().x;
 	}
 
 	float ImageAsset::GetHeight() const
 	{
-		return (float)mAtlasRect.Height();
+		return GetSize().y;
 	}
 
 	TextureRef ImageAsset::GetAtlasTextureRef() const
@@ -141,6 +144,14 @@ namespace o2
 	const char* ImageAsset::GetFileExtensions()
 	{
 		return "png jpg bmp";
+	}
+
+	void ImageAsset::LoadData(const String& path)
+	{
+		if (GetAtlas() == UID::empty)
+			mTexture = TextureRef(path);
+		else
+			Asset::LoadData(path);
 	}
 
 	void ImageAsset::SaveData(const String& path) const

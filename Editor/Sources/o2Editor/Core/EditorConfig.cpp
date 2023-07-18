@@ -31,18 +31,18 @@ namespace Editor
 	{
 		DataDocument data;
 
-		mGlobalConfig.mAvailableLayouts = o2EditorWindows.mAvailableLayouts;
+		globalConfig.mAvailableLayouts = o2EditorWindows.mAvailableLayouts;
 
-		data = mGlobalConfig;
+		data = globalConfig;
 		data.SaveToFile(mGlobalConfigPath);
 	}
 
 	void EditorConfig::SaveProjectConfigs()
 	{
-		mProjectConfig.mLayout = o2EditorWindows.GetWindowsLayout();
+		projectConfig.mLayout = o2EditorWindows.GetWindowsLayout();
 
 		DataDocument data;
-		data = mProjectConfig;
+		data = projectConfig;
 		data.SaveToFile(mConfigPath);
 	}
 
@@ -59,10 +59,10 @@ namespace Editor
 		DataDocument data;
 
 		if (data.LoadFromFile(mConfigPath))
-			mProjectConfig = data;
+			projectConfig = data;
 		else
 		{
-			mProjectConfig = ProjectConfig();
+			projectConfig = ProjectConfig();
 		}
 	}
 
@@ -70,16 +70,16 @@ namespace Editor
 	{
 		DataDocument data;
 		if (data.LoadFromFile(mGlobalConfigPath))
-			mGlobalConfig = data;
+			globalConfig = data;
 		else
-			mGlobalConfig = GlobalConfig();
+			globalConfig = GlobalConfig();
 	}
 
 	void EditorConfig::OnWindowChange()
 	{
-		mProjectConfig.mWindowPosition = o2Application.GetWindowPosition();
-		mProjectConfig.mWindowSize = o2Application.GetWindowSize();
-		mProjectConfig.mMaximized = o2Application.IsMaximized();
+		projectConfig.mWindowPosition = o2Application.GetWindowPosition();
+		projectConfig.mWindowSize = o2Application.GetWindowSize();
+		projectConfig.mMaximized = o2Application.IsMaximized();
 	}
 
 }

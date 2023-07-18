@@ -28,11 +28,11 @@ namespace o2
 
 		InitializeConverters();
 
-        // Dumb list of stripped out types
-        dumb += TypeOf(DefaultAssetMeta<SceneAsset>).ID();
-        dumb += TypeOf(DefaultAssetMeta<DataAsset>).ID();
-        dumb += TypeOf(ImageAssetConverter).ID();
-        dumb += TypeOf(AtlasAssetConverter).ID();
+        CHECKUP_TYPE(DefaultAssetMeta<SceneAsset>);
+		CHECKUP_TYPE(DefaultAssetMeta<DataAsset>);
+		CHECKUP_TYPE(ImageAssetConverter);
+		CHECKUP_TYPE(AtlasAssetConverter);
+		CHECKUP_TYPE(AtlasAsset);
 	}
 
 	AssetsBuilder::~AssetsBuilder()

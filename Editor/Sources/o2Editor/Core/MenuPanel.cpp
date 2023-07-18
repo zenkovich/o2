@@ -11,6 +11,7 @@
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2/Utils/Editor/EditorScope.h"
+#include "o2/Utils/FileSystem/FileSystem.h"
 #include "o2/Utils/Math/Curve.h"
 #include "o2/Utils/Tasks/TaskManager.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
@@ -230,13 +231,14 @@ namespace Editor
 	{
 		o2Tasks.Invoke([&] {
 			auto openDialog = []() {
-				String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" }, { "All", "*.*" } });
+				String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" } });
 
 				if (fileName.IsEmpty())
 					return;
 
 				ForcePopEditorScopeOnStack scope;
-				o2EditorApplication.LoadScene(SceneAssetRef(fileName));
+				String assetsPath = o2FileSystem.GetPathRelativeToPath(fileName, ::GetAssetsPath());
+				o2EditorApplication.LoadScene(SceneAssetRef(assetsPath));
 			};
 
 			CheckSceneSaving(openDialog);
@@ -255,7 +257,7 @@ namespace Editor
 
 	void MenuPanel::OnSaveSceneAsPressed()
 	{
-		String fileName = GetSaveFileNameDialog("Save scene", { { "o2 Scene", "*.scn" },{ "All", "*.*" } });
+		String fileName = GetSaveFileNameDialog("Save scene", { { "o2 Scene", "*.scn" } });
 
 		if (fileName.IsEmpty())
 			return;
@@ -362,7 +364,7 @@ namespace Editor
 
 	void MenuPanel::OnSaveDefaultLayoutPressed()
 	{
-		o2EditorConfig.mGlobalConfig.mDefaultLayout = o2EditorWindows.GetWindowsLayout();
+		o2EditorConfig.globalConfig.mDefaultLayout = o2EditorWindows.GetWindowsLayout();
 		o2Debug.Log("Default windows layout saved!");
 	}
 

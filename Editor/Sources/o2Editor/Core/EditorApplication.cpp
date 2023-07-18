@@ -66,19 +66,32 @@ namespace Editor
 		mLoadedScene = scene;
 
 		ResetUndoActions();
+
+		if (mLoadedScene)
+			o2EditorConfig.projectConfig.mLastLoadedScene = mLoadedScene->GetFullPath();
 	}
 
 	void EditorApplication::SaveScene()
 	{
 		o2Scene.Save(mLoadedScene->GetFullPath());
 		mLoadedScene->Save();
+
+		if (mLoadedScene)
+			o2EditorConfig.projectConfig.mLastLoadedScene = mLoadedScene->GetFullPath();
 	}
 
 	void EditorApplication::SaveSceneAs(const String& path)
 	{
-		o2Scene.Save(GetAssetsPath() + path);
-		mLoadedScene->SetPath(path);
+		String relativePath = o2FileSystem.GetPathRelativeToPath(path, ::GetAssetsPath());
+
+		o2Scene.Save(path);
+
+		mLoadedScene = SceneAssetRef::CreateAsset();
+		mLoadedScene->SetPath(relativePath);
 		mLoadedScene->Save();
+
+		if (mLoadedScene)
+			o2EditorConfig.projectConfig.mLastLoadedScene = mLoadedScene->GetFullPath();
 	}
 
 	void EditorApplication::MakeNewScene()
@@ -132,17 +145,19 @@ namespace Editor
 		mMenuPanel = mnew MenuPanel();
 		mToolsPanel = mnew ToolsPanel();
 
-		if (mConfig->mProjectConfig.mMaximized)
+		if (mConfig->projectConfig.mMaximized)
 			o2Application.Maximize();
 		else
 		{
-			Vec2I pos = mConfig->mProjectConfig.mWindowPosition;
-			o2Application.SetWindowSize(mConfig->mProjectConfig.mWindowSize);
+			Vec2I pos = mConfig->projectConfig.mWindowPosition;
+			o2Application.SetWindowSize(mConfig->projectConfig.mWindowSize);
 			o2Application.SetWindowPosition(pos);
-			mConfig->mProjectConfig.mWindowPosition = pos;
+			mConfig->projectConfig.mWindowPosition = pos;
 		}
 
 		OnResizing();
+
+		o2EditorApplication.LoadScene(SceneAssetRef(o2EditorConfig.projectConfig.mLastLoadedScene));
 
 		//FreeConsole();
 
@@ -451,7 +466,9 @@ namespace Editor
 
 		CheckPlayingSwitch();
 
-		o2Application.windowCaption = String("o2 Editor: ") + mLoadedScene ? mLoadedScene->GetPath() : String("") +
+		String currentScene = mLoadedScene ? mLoadedScene->GetPath() : String("");
+
+		o2Application.windowCaption = String("o2 Editor: ") + currentScene +
 			"; FPS: " + (String)((int)o2Time.GetFPS()) +
 			" DC: " + (String)mDrawCalls +
 			" Cursor: " + (String)o2Input.GetCursorPos() +

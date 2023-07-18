@@ -186,7 +186,10 @@ namespace o2
 	AssetInfo* AssetsTree::LoadAssetNode(const String& path, AssetInfo* parent, const TimeStamp& time)
 	{
 		DataDocument metaData;
-		metaData.LoadFromFile(this->assetsPath + path + ".meta");
+		if (!metaData.LoadFromFile(this->assetsPath + path + ".meta"))
+		{
+			o2Debug.LogError("Failed to load asset meta: " + path);
+		}
 
 		AssetMeta* meta = nullptr;
 		meta = metaData;

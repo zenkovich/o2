@@ -742,7 +742,7 @@ namespace o2
 			mChangedObjects.Clear();
 
 			UpdateAddedEntities();
-			UpdateStartingEntities();
+			//UpdateStartingEntities();
 			UpdateDestroyingEntities();
 		}
 	}

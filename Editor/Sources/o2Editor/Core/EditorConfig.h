@@ -26,16 +26,7 @@ namespace Editor
 	class EditorConfig: public ISerializable, public Singleton<EditorConfig>
 	{
 	public:
-		// Default constructor. Loads data and applies to application 
-		EditorConfig();
-
-		// Destructor. Saves application configuration
-		~EditorConfig();
-
-		SERIALIZABLE(EditorConfig);
-
-	public:
-		class GlobalConfig: public ISerializable
+		class GlobalConfig : public ISerializable
 		{
 		public:
 			WindowsLayout  mDefaultLayout; // Default windows layout, using in resetting @SERIALIZABLE
@@ -45,23 +36,36 @@ namespace Editor
 			SERIALIZABLE(GlobalConfig);
 		};
 
-		class ProjectConfig: public ISerializable
+		class ProjectConfig : public ISerializable
 		{
 		public:
 			Vec2I         mWindowSize = Vec2I(800, 600); // Application window size @SERIALIZABLE
 			Vec2I         mWindowPosition;               // Application window position @SERIALIZABLE
 			bool          mMaximized = true;             // Is application window is maximized @SERIALIZABLE
 			WindowsLayout mLayout;                       // Windows layout @SERIALIZABLE
+			String        mLastLoadedScene;              // Last loaded scene @SERIALIZABLE
 
 			SERIALIZABLE(ProjectConfig);
 		};
+
+	public:
+		ProjectConfig projectConfig; // Project editor config
+		GlobalConfig  globalConfig;  // Global editor config for all projects
+
+	public:
+		// Default constructor. Loads data and applies to application 
+		EditorConfig();
+
+		// Destructor. Saves application configuration
+		~EditorConfig();
+
+		SERIALIZABLE(EditorConfig);
+
 	protected:
 		String mConfigPath = "../../EditorConfig.json";
 		String mGlobalConfigPath = "../../Config.json";
 
 		bool          mConfigsLoaded = false; // True if configurations were loaded
-		ProjectConfig mProjectConfig;         // Project editor config
-		GlobalConfig  mGlobalConfig;          // Global editor config for all projects
 
 	protected:
 		// Saves global configs
@@ -97,11 +101,11 @@ CLASS_BASES_META(Editor::EditorConfig)
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig)
 {
+	FIELD().PUBLIC().NAME(projectConfig);
+	FIELD().PUBLIC().NAME(globalConfig);
 	FIELD().PROTECTED().DEFAULT_VALUE("../../EditorConfig.json").NAME(mConfigPath);
 	FIELD().PROTECTED().DEFAULT_VALUE("../../Config.json").NAME(mGlobalConfigPath);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mConfigsLoaded);
-	FIELD().PROTECTED().NAME(mProjectConfig);
-	FIELD().PROTECTED().NAME(mGlobalConfig);
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig)
@@ -144,6 +148,7 @@ CLASS_FIELDS_META(Editor::EditorConfig::ProjectConfig)
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mWindowPosition);
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mMaximized);
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLayout);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLastLoadedScene);
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig::ProjectConfig)

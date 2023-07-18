@@ -139,10 +139,15 @@ namespace o2
 	protected:
 		Bitmap* mBitmap = nullptr; // Image bitmap. Loading only when needs
 
+		TextureRef mTexture; // Texture reference, if image is not in atlas, it loads texture
+
 		UInt  mAtlasPage; // Owner atlas page index @SERIALIZABLE
 		RectI mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
 
 	protected:
+		// Loads texture if image is not in atlas, otherwise loads serializable data
+		void LoadData(const String& path) override;
+
 		// Saves data
 		void SaveData(const String& path) const override;
 
@@ -175,6 +180,7 @@ CLASS_FIELDS_META(o2::ImageAsset)
 	FIELD().PUBLIC().NAME(height);
 	FIELD().PUBLIC().NAME(meta);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBitmap);
+	FIELD().PROTECTED().NAME(mTexture);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mAtlasPage);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mAtlasRect);
 }
@@ -200,6 +206,7 @@ CLASS_METHODS_META(o2::ImageAsset)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(TextureRef, GetAtlasTextureRef);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Meta*, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadBitmap);
 }

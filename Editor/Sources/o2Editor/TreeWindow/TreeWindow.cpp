@@ -132,17 +132,11 @@ namespace Editor
 		InitializeSceneTree();
 		InitializeDrawOrderTree();
 		InitializeContextMenu();
-		InitializeTestScene();
 
 		mSceneTree->SetEnabled(true);
 		mDrawOrderTree->SetEnabled(false);
 
 		mSceneTree->UpdateNodesView();
-	}
-
-	void TreeWindow::InitializeTestScene()
-	{
-		o2EditorApplication.LoadScene(SceneAssetRef("test.scn"));
 	}
 
 	void TreeWindow::InitializeSceneTree()

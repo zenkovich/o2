@@ -314,10 +314,10 @@ namespace o2
 			return;
 		}
 
-		if (image->GetAtlas() == UID())
+		if (image->GetAtlas() == UID::empty)
 		{
 			mMesh.mTexture = TextureRef(image->GetBuiltFullPath());
-			mTextureSrcRect = RectI(Vec2I(), image->GetSize());
+			mTextureSrcRect = RectI(Vec2I(), mMesh.mTexture->GetSize());
 		}
 		else
 		{

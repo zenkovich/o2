@@ -92,9 +92,6 @@ namespace Editor
 		// Initializes window
 		void InitializeWindow();
 
-		// Initializes test scene with test tags and actors
-		void InitializeTestScene();
-
 		// Initializes actors tree widget
 		void InitializeSceneTree();
 
@@ -238,7 +235,6 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const TreeWindow&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTestScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeSceneTree);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDrawOrderTree);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTopPanel);
