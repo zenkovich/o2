@@ -1,9 +1,10 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
+#include "o2/Assets/Types/FolderAsset.h"
+#include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Types/Ref.h"
-#include "o2/Assets/Types/ImageAsset.h"
 
 namespace o2
 {
@@ -146,8 +147,9 @@ namespace o2
 		};
 
 	protected:
-		Vector<ImageAssetRef> mImages; // Loaded image infos @SERIALIZABLE
-		Vector<Page>          mPages;  // Pages @SERIALIZABLE
+		Vector<ImageAssetRef>  mImages; // Loaded image infos @SERIALIZABLE @EDITOR_PROPERTY
+		Vector<FolderAssetRef> mFolders; // Folders, included in atlas @SERIALIZABLE @EDITOR_PROPERTY
+		Vector<Page>           mPages;  // Pages @SERIALIZABLE
 
 	protected:
 		// Completion deserialization callback
@@ -171,7 +173,8 @@ CLASS_FIELDS_META(o2::AtlasAsset)
 	FIELD().PUBLIC().NAME(meta);
 	FIELD().PUBLIC().NAME(images);
 	FIELD().PUBLIC().NAME(pages);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mImages);
+	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mImages);
+	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mFolders);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mPages);
 }
 END_META;

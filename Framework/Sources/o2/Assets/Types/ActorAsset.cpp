@@ -77,7 +77,7 @@ namespace o2
 		return *this;
 	}
 
-	ActorRef ActorAsset::Instantiate()
+	ActorRef ActorAsset::Instantiate() const
 	{
 		if (!mActor)
 			return nullptr;

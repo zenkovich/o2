@@ -251,7 +251,7 @@ namespace Editor
 			if (o2EditorApplication.GetLoadedSceneName().IsEmpty())
 				OnSaveSceneAsPressed();
 			else
-				o2EditorApplication.SaveSceneAs(o2EditorApplication.GetLoadedSceneName());
+				o2EditorApplication.SaveScene();
 		});
 	}
 

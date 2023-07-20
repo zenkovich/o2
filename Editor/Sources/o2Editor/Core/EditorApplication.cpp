@@ -68,7 +68,7 @@ namespace Editor
 		ResetUndoActions();
 
 		if (mLoadedScene)
-			o2EditorConfig.projectConfig.mLastLoadedScene = mLoadedScene->GetFullPath();
+			o2EditorConfig.projectConfig.mLastLoadedScene = mLoadedScene->GetPath();
 	}
 
 	void EditorApplication::SaveScene()
@@ -77,7 +77,7 @@ namespace Editor
 		mLoadedScene->Save();
 
 		if (mLoadedScene)
-			o2EditorConfig.projectConfig.mLastLoadedScene = mLoadedScene->GetFullPath();
+			o2EditorConfig.projectConfig.mLastLoadedScene = mLoadedScene->GetPath();
 	}
 
 	void EditorApplication::SaveSceneAs(const String& path)
@@ -91,7 +91,7 @@ namespace Editor
 		mLoadedScene->Save();
 
 		if (mLoadedScene)
-			o2EditorConfig.projectConfig.mLastLoadedScene = mLoadedScene->GetFullPath();
+			o2EditorConfig.projectConfig.mLastLoadedScene = mLoadedScene->GetPath();
 	}
 
 	void EditorApplication::MakeNewScene()
@@ -428,6 +428,8 @@ namespace Editor
 		}
 		else
 			mScene->UpdateDestroyingEntities();
+
+		CheckPlayingSwitch();
 	}
 
 	void EditorApplication::FixedUpdateScene(float dt)
@@ -463,8 +465,6 @@ namespace Editor
 		mWindowsManager->Update(dt);
 		mUIRoot->Update(dt);
 		mToolsPanel->Update(dt);
-
-		CheckPlayingSwitch();
 
 		String currentScene = mLoadedScene ? mLoadedScene->GetPath() : String("");
 

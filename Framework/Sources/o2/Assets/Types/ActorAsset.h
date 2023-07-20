@@ -29,7 +29,7 @@ namespace o2
 		ActorAsset& operator=(const ActorAsset& asset);
 
 		// Instantiates actor toscene @SCRIPTABLE
-		ActorRef Instantiate();
+		ActorRef Instantiate() const;
 
 		// Returns meta information
 		Meta* GetMeta() const;

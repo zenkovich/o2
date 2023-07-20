@@ -40,7 +40,7 @@ namespace Editor
 				{
 					dynamic_cast<ImageAsset*>(target.first)->SetAtlas(mAtlasProperty->GetCommonValue() ?
 																	  mAtlasProperty->GetCommonValue()->GetUID() :
-																	  UID());
+																	  UID::empty);
 				}
 
 				onChanged(field);

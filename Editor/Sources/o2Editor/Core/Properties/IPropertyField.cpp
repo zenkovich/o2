@@ -221,7 +221,7 @@ namespace Editor
 				mRevertBtn->layout->maxWidth = 0;
 
 				if (auto layout = FindChild("layout"))
-					layout->AddChild(mRevertBtn, 0);
+					layout->AddChild(mRevertBtn);
 				else
 					AddChild(mRevertBtn);
 

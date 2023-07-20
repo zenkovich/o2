@@ -1094,12 +1094,18 @@ namespace o2
 	template<typename _element_type>
 	void* TVectorType<_element_type>::GetObjectVectorElementPtr(void* object, int idx) const
 	{
+		if (idx < 0 || idx >= ((Vector<_element_type>*)object)->Count())
+			return nullptr;
+
 		return &((Vector<_element_type>*)object)->Get(idx);
 	}
 
 	template<typename _element_type>
 	IAbstractValueProxy* TVectorType<_element_type>::GetObjectVectorElementProxy(void* object, int idx) const
 	{
+		if (idx < 0 || idx >= ((Vector<_element_type>*)object)->Count())
+			return nullptr;
+
 		return mElementType->GetValueProxy(&((Vector<_element_type>*)object)->Get(idx));
 	}
 

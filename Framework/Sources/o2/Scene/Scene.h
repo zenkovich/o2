@@ -153,6 +153,9 @@ namespace o2
 		// Updates root actors with fixed delta time
 		void FixedUpdate(float dt);
 
+		// Updates just added actors and components
+		void UpdateAddedEntities();
+
 		// Updates destroying actors and components
 		void UpdateDestroyingEntities();
 
@@ -200,9 +203,6 @@ namespace o2
 
 		// Updates root actors and their children
 		void UpdateActors(float dt);
-
-		// Updates just added actors and components
-		void UpdateAddedEntities();
 
 		// Updates starting actors and components
 		void UpdateStartingEntities();
@@ -456,13 +456,13 @@ CLASS_METHODS_META(o2::Scene)
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, FixedUpdate, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateAddedEntities);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateDestroyingEntities);
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyActor, Actor*);
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, Component*);
 	FUNCTION().PROTECTED().CONSTRUCTOR();
 	FUNCTION().PROTECTED().SIGNATURE(void, DrawCameras);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateActors, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateAddedEntities);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateStartingEntities);
 	FUNCTION().PROTECTED().SIGNATURE(void, DrawCursorDebugInfo);
 	FUNCTION().PROTECTED().SIGNATURE(void, AddActorToScene, Actor*);

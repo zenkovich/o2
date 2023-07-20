@@ -210,6 +210,9 @@ namespace o2
 		// Called when color was changed
 		void ColorChanged() override;
 
+		// Initialized texture by image: uses atlas part or texture
+		void InitializeTexture();
+
 		// Updates mesh geometry
 		void UpdateMesh();
 
@@ -334,6 +337,7 @@ CLASS_METHODS_META(o2::Sprite)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	FUNCTION().PROTECTED().SIGNATURE(void, BasisChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, ColorChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTexture);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
 	FUNCTION().PROTECTED().SIGNATURE(void, BuildDefaultMesh);
 	FUNCTION().PROTECTED().SIGNATURE(void, BuildSlicedMesh);

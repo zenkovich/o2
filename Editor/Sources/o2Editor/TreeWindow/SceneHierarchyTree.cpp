@@ -269,7 +269,8 @@ namespace Editor
 
 			if (!assetsScroll->mInstantiatedSceneDragObjects.IsEmpty())
 			{
-				o2Scene.Update(0.0f);
+				o2Scene.UpdateAddedEntities();
+
 				UpdateNodesView(true);
 				SetLayoutDirty();
 

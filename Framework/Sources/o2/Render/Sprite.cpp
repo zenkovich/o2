@@ -314,18 +314,10 @@ namespace o2
 			return;
 		}
 
-		if (image->GetAtlas() == UID::empty)
-		{
-			mMesh.mTexture = TextureRef(image->GetBuiltFullPath());
-			mTextureSrcRect = RectI(Vec2I(), mMesh.mTexture->GetSize());
-		}
-		else
-		{
-			mMesh.mTexture = TextureRef(image->GetAtlas(), image->GetAtlasPage());
-			mTextureSrcRect = image->GetAtlasRect();
-		}
-
 		mImageAsset = image;
+
+		InitializeTexture();
+
 		mSlices = image->GetMeta()->sliceBorder;
 
 		SetMode(image->GetMeta()->defaultMode);
@@ -1133,11 +1125,7 @@ namespace o2
 	void Sprite::OnDeserialized(const DataValue& node)
 	{
 		if (mImageAsset)
-		{
-			mMesh.mTexture = TextureRef(mImageAsset->GetAtlas(), mImageAsset->GetAtlasPage());
-			mImageAsset     = image;
-			mTextureSrcRect = mImageAsset->GetAtlasRect();
-		}
+			InitializeTexture();
 
 		SpriteMode mode = mMode;
 		mMode = (SpriteMode)((int)mode + 1);
@@ -1155,11 +1143,25 @@ namespace o2
 		{
 			mImageAsset = ImageAssetRef(mImageAsset->GetUID());
 
-			mMesh.mTexture = TextureRef(mImageAsset->GetAtlas(), mImageAsset->GetAtlasPage());
-			mTextureSrcRect = mImageAsset->GetAtlasRect();
-			mSlices         = mImageAsset->GetMeta()->sliceBorder;
+			InitializeTexture();
+
+			mSlices = mImageAsset->GetMeta()->sliceBorder;
 
 			UpdateMesh();
+		}
+	}
+
+	void Sprite::InitializeTexture()
+	{
+		if (mImageAsset->GetAtlas() == UID::empty)
+		{
+			mMesh.mTexture = TextureRef(mImageAsset->GetBuiltFullPath());
+			mTextureSrcRect = RectI(Vec2I(), mMesh.mTexture->GetSize());
+		}
+		else
+		{
+			mMesh.mTexture = TextureRef(mImageAsset->GetAtlas(), mImageAsset->GetAtlasPage());
+			mTextureSrcRect = mImageAsset->GetAtlasRect();
 		}
 	}
 }

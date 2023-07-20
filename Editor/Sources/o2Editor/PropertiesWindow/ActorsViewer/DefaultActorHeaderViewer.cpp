@@ -144,8 +144,8 @@ namespace Editor
 		mLockProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::locked)>(
 			actors, prototypes, [](Actor* x) { return &x->locked; });
 
-// 		mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
-// 			actors, [](Actor* x) { return &x->prototype; });
+		mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
+			actors, [](Actor* x) { return &x->prototype; });
 
 		mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
 

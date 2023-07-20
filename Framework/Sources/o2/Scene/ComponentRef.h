@@ -188,6 +188,12 @@ namespace o2
 		// Check not equals operator
 		bool operator!=(const Ref<T>& other) const { return ComponentRef::operator!=(other); }
 
+		// Returns component pointer @SCRIPTABLE
+		T* Get() { return mSpecComponent; }
+
+		// Returns component pointer
+		const T* Get() const { return mSpecComponent; }
+
 		// Returns component type
 		const Type& GetComponentType() const override { return TypeOf(T); }
 

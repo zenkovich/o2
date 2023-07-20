@@ -589,7 +589,8 @@ namespace o2
 		ActorRefResolver::Instance().UnlockResolving();
 		ActorRefResolver::Instance().ResolveRefs();
 
-		Update(0.0f);
+		UpdateAddedEntities();
+		UpdateDestroyingEntities();
 
 #if IS_EDITOR
 		mChangedObjects.Clear();
