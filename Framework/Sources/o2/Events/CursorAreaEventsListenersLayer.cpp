@@ -243,7 +243,7 @@ namespace o2
 			for (auto listener : underCursorListeners.second)
 			{
 				if (!lastListenersHasSameCursor || !mLastUnderCursorListeners[underCursorListeners.first].Contains(listener))
-					listener->OnCursorEnter(*o2Input.GetCursor(underCursorListeners.first));
+					listener->OnCursorEnter(ConvertLocalCursor(*o2Input.GetCursor(underCursorListeners.first)));
 			}
 		}
 	}
@@ -256,7 +256,7 @@ namespace o2
 			for (auto listener : lastUnderCursorListeners.second)
 			{
 				if (!listenersHasSameCursor || !mUnderCursorListeners[lastUnderCursorListeners.first].Contains(listener))
-					listener->OnCursorExit(*o2Input.GetCursor(lastUnderCursorListeners.first));
+					listener->OnCursorExit(ConvertLocalCursor(*o2Input.GetCursor(lastUnderCursorListeners.first)));
 			}
 		}
 	}

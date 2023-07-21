@@ -448,6 +448,15 @@ namespace Editor
 		Application::DrawUIManager();
 	}
 
+	void EditorApplication::DrawDebug()
+	{}
+
+	void EditorApplication::UpdateDebug(float dt)
+	{
+		if (mUpdateStep)
+			o2Debug.Update(dt);
+	}
+
 	void EditorApplication::UpdateEventSystem()
 	{
 		PushEditorScopeOnStack scope;

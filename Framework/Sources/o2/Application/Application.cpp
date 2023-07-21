@@ -184,7 +184,7 @@ namespace o2
 		mInput->PreUpdate();
 
 		mTime->Update(realDt);
-		o2Debug.Update(dt);
+		UpdateDebug(dt);
 		mTaskManager->Update(dt);
 		UpdateEventSystem();
 
@@ -221,8 +221,7 @@ namespace o2
 		OnDraw();
 
 		DrawUIManager();
-
-		o2Debug.Draw();
+		DrawDebug();
 
 		mMainListenersLayer.OnEndDraw();
 		mMainListenersLayer.OnDrawn(Camera::Default().GetBasis());
@@ -256,6 +255,16 @@ namespace o2
 	{
 		PROFILE_SAMPLE_FUNC();
 		mUIManager->Draw();
+	}
+
+	void Application::DrawDebug()
+	{
+		o2Debug.Draw();
+	}
+
+	void Application::UpdateDebug(float dt)
+	{
+		o2Debug.Update(dt);
 	}
 
 	void Application::OnMoved()

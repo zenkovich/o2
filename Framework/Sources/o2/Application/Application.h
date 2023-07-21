@@ -275,6 +275,12 @@ namespace o2
 		// Draws UI manager
 		virtual void DrawUIManager();
 
+		// Draws debug
+		virtual void DrawDebug();
+
+		// Updates debug
+		virtual void UpdateDebug(float dt);
+
 		// Calling on updating
 		virtual void OnUpdate(float dt);
 

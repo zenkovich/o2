@@ -114,6 +114,12 @@ namespace Editor
 		// Draws UI manager
 		void DrawUIManager() override;
 
+		// Draw debug empty stub
+		void DrawDebug() override;
+
+		// Updates debug inly in play mode
+		void UpdateDebug(float dt) override;
+
 		// Updates event system
 		void UpdateEventSystem() override;
 

@@ -41,23 +41,24 @@ namespace o2
 	void Debug::Update(float dt)
 	{
 		//PROFILE_SAMPLE_FUNC();
-		mDbgDrawables.ForEach([&](auto drw) { drw->delay -= dt; });
+
+		Vector<IDbgDrawable*> freeDrawables;
+		for (auto& drawable : mDbgDrawables)
+		{
+			drawable->delay -= dt;
+			if (drawable->delay <= 0.0f)
+				freeDrawables.Add(drawable);
+		}
+
+		freeDrawables.ForEach([&](auto drw) { mDbgDrawables.Remove(drw); delete drw; });
 	}
 
 	void Debug::Draw()
 	{
 		//PROFILE_SAMPLE_FUNC();
 
-		Vector<IDbgDrawable*> freeDrawables;
 		for (auto drw : mDbgDrawables)
-		{
 			drw->Draw();
-
-			if (drw->delay < 0)
-				freeDrawables.Add(drw);
-		}
-
-		freeDrawables.ForEach([&](auto drw) { mDbgDrawables.Remove(drw); delete drw; });
 	}
 
 	void Debug::Log(WString format, ...)
