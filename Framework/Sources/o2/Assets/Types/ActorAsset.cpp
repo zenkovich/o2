@@ -110,12 +110,7 @@ namespace o2
 
 	void ActorAsset::OnDeserialized(const DataValue& node)
 	{
-		int lockDepth = ActorRefResolver::GetLockDepth();
-		ActorRefResolver::UnlockResolving(lockDepth);
-
 		mActor = node["mActor"];
-
-		ActorRefResolver::LockResolving(lockDepth);
 
 		if (mActor)
 		{
