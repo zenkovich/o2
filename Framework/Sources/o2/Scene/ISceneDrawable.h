@@ -109,7 +109,7 @@ namespace o2
 
 #if IS_EDITOR
     public:
-        int drawCallIdx = 0; // Draw call number in frame
+        int drawCallIdx = 0; // Draw call number in frame @EDITOR_IGNORE
 
 	public:
 		// Returns pointer to owner editable object
@@ -138,7 +138,7 @@ CLASS_FIELDS_META(o2::ISceneDrawable)
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mInheritDrawingDepthFromParent);
 	FIELD().PROTECTED().NAME(mChildrenInheritedDepth);
 #if  IS_EDITOR
-	FIELD().PUBLIC().DEFAULT_VALUE(0).NAME(drawCallIdx);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(drawCallIdx);
 #endif
 }
 END_META;

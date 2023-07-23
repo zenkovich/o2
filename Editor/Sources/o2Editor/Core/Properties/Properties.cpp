@@ -19,15 +19,16 @@
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
 
+#include "o2Editor/Core/Properties/Basic/FunctionProperty.h"
+#include "o2Editor/Core/Properties/Basic/ScriptValueProperty.h"
+#include "o2Editor/Core/Properties/Objects/AnimationViewer.h"
 #include "o2Editor/Core/Properties/Objects/Assets/ImageAssetViewer.h"
 #include "o2Editor/Core/Properties/Objects/Assets/VectorFontAssetViewer.h"
+#include "o2Editor/Core/Properties/Objects/CameraActorViewer.h"
 #include "o2Editor/Core/Properties/Objects/Components/AnimationStateViewer.h"
 #include "o2Editor/Core/Properties/Objects/Components/MeshComponentViewer.h"
-#include "o2Editor/Core/Properties/Objects/AnimationViewer.h"
-#include "o2Editor/Core/Properties/Objects/CameraActorViewer.h"
 #include "o2Editor/Core/Properties/Objects/SpriteViewer.h"
 #include "o2Editor/Core/Properties/Objects/TextViewer.h"
-#include "o2Editor/Core/Properties/Basic/ScriptValueProperty.h"
 
 DECLARE_SINGLETON(Editor::Properties);
 
@@ -53,6 +54,7 @@ namespace Editor
 		CHECKUP_TYPE(SpriteViewer);
 		CHECKUP_TYPE(TextViewer);
 		CHECKUP_TYPE(ScriptValueProperty);
+		CHECKUP_TYPE(FunctionProperty);
 	}
 
 	Properties::~Properties()

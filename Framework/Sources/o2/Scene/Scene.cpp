@@ -70,6 +70,15 @@ namespace o2
 			AddActorToScene(actor);
 	}
 
+	void Scene::UpdateTransforms()
+	{
+		for (auto actor : mRootActors)
+			actor->UpdateSelfTransform();
+
+		for (auto actor : mRootActors)
+			actor->UpdateChildrenTransforms();
+	}
+
 	void Scene::UpdateStartingEntities()
 	{
 		auto startActors = mStartActors;
@@ -590,6 +599,7 @@ namespace o2
 		ActorRefResolver::Instance().ResolveRefs();
 
 		UpdateAddedEntities();
+		UpdateTransforms();
 		UpdateDestroyingEntities();
 
 #if IS_EDITOR

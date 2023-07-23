@@ -156,6 +156,9 @@ namespace o2
 		// Updates just added actors and components
 		void UpdateAddedEntities();
 
+		// Updates actors transforms
+		void UpdateTransforms();
+
 		// Updates destroying actors and components
 		void UpdateDestroyingEntities();
 
@@ -457,6 +460,7 @@ CLASS_METHODS_META(o2::Scene)
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, FixedUpdate, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateAddedEntities);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateTransforms);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateDestroyingEntities);
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyActor, Actor*);
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, Component*);
