@@ -705,14 +705,10 @@ namespace o2
 		mData->dirtyFrame = o2Time.GetCurrentFrame();
 		mData->updateFrame = 0;
 
-		if (mData->owner && !fromParent)
-		{
 #if IS_EDITOR
+		if (mData->owner && !fromParent)
 			mData->owner->OnChanged();
 #endif
-
-			mData->owner->OnTransformChanged();
-		}
 	}
 
 	void ActorTransform::Update()

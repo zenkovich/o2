@@ -3,6 +3,7 @@
 #include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/ISceneDrawable.h"
+#include "o2/Scene/SceneLayerRef.h"
 #include "o2/Scene/UI/WidgetState.h"
 #include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
 #include "o2/Utils/Editor/Attributes/DefaultTypeAttribute.h"
@@ -257,8 +258,9 @@ namespace o2
 		SERIALIZABLE(Widget);
 
 	protected:
-		using Actor::mLayer;
 		using Actor::mState;
+
+		Ref<SceneLayer> mSceneLayer; // Scene layer @SERIALIZABLE @EDITOR_PROPERTY
 
 		Vector<WidgetLayer*> mLayers; // Layers array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 		Vector<WidgetState*> mStates; // States array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
@@ -312,11 +314,17 @@ namespace o2
 		// Called when transformation was changed and updated
 		void OnTransformUpdated() override;
 
+		// Called when actor enabled in hierarchy
+		void OnEnabled() override;
+
+		// Called when actor disabled in hierarchy
+		void OnDisabled() override;
+
 		// Called when parent changed
 		void OnParentChanged(Actor* oldParent) override;
 
 		// Called when actor children has rearranged; updates inherited depth drawables list
-		void OnChildrenRearranged() override;
+		void OnChildrenChanged() override;
 
 		// Called when child actor was added
 		void OnChildAdded(Actor* child) override;
@@ -324,17 +332,14 @@ namespace o2
 		// Called when child actor was removed
 		void OnChildRemoved(Actor* child) override;
 
-		// Called when actor excluding from scene, removes this from layer drawables
-		void OnRemoveFromScene() override;
-
 		// Called when actor including from scene, including this to layer drawables
 		void OnAddToScene() override;
 
+		// Called when actor excluding from scene, removes this from layer drawables
+		void OnRemoveFromScene() override;
+
 		// Returns current scene layer
 		SceneLayer* GetSceneDrawableSceneLayer() const override;
-
-		// Returns is drawable enabled
-		bool IsSceneDrawableEnabled() const override;
 
 		// Returns parent scene drawable
 		ISceneDrawable* GetParentDrawable() override;
@@ -745,6 +750,7 @@ CLASS_FIELDS_META(o2::Widget)
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onUnfocused);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onShow);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onHide);
+	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mSceneLayer);
 	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetLayer).DONT_DELETE_ATTRIBUTE().NAME(mLayers);
 	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).NAME(mStates);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentWidget);
@@ -841,14 +847,15 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabledInHierarchy);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenRearranged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
 	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateChildWidgetsList);

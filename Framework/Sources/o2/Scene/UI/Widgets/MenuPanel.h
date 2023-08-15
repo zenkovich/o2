@@ -136,7 +136,10 @@ namespace o2
 
 	protected:
 		// Called when visible was changed
-		void OnEnableInHierarchyChanged() override;
+		void OnEnabled() override;
+
+		// Called when visible was changed
+		void OnDisabled() override;
 
 		// Creates sub context menus by path
 		ContextMenu* CreateSubContext(WString& path);
@@ -220,7 +223,8 @@ CLASS_METHODS_META(o2::MenuPanel)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionDrawableLayout, const Layout&);
 	FUNCTION().PUBLIC().SIGNATURE(Layout, GetSelectionDrawableLayout);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(ContextMenu*, CreateSubContext, WString&);
 	FUNCTION().PROTECTED().SIGNATURE(Widget*, CreateItem, const Item&);
 	FUNCTION().PROTECTED().SIGNATURE(Item, GetItemDef, int);

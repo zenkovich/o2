@@ -79,7 +79,6 @@ namespace o2
 			mClass = classObj;
 
 			mOnStartFunc = mInstance.GetProperty("OnStart");
-			mUpdateEnabledFunc = mInstance.GetProperty("UpdateEnabled");
 			mOnEnabledFunc = mInstance.GetProperty("OnEnabled");
 			mOnDisabledFunc = mInstance.GetProperty("OnDisabled");
 			mUpdateFunc = mInstance.GetProperty("Update");
@@ -91,7 +90,6 @@ namespace o2
 			mInstance = ScriptValue();
 			mClass = ScriptValue();
 			mOnStartFunc = ScriptValue();
-			mUpdateEnabledFunc = ScriptValue();
 			mOnEnabledFunc = ScriptValue();
 			mOnDisabledFunc = ScriptValue();
 			mUpdateFunc = ScriptValue();
@@ -146,18 +144,12 @@ namespace o2
 			mOnStartFunc.InvokeRaw(mInstance, {});
 	}
 
-	void ScriptableComponent::Update(float dt)
+	void ScriptableComponent::OnUpdate(float dt)
 	{
 		PROFILE_SAMPLE_FUNC();
 
 		if (mUpdateFunc.IsFunction())
 			mUpdateFunc.Invoke<void, float>(mInstance, dt);
-	}
-
-	void ScriptableComponent::UpdateEnabled()
-	{
-		if (mUpdateEnabledFunc.IsFunction())
-			mUpdateEnabledFunc.InvokeRaw(mInstance, {});
 	}
 
 	void ScriptableComponent::OnEnabled()
@@ -170,16 +162,6 @@ namespace o2
 	{
 		if (mOnDisabledFunc.IsFunction())
 			mOnDisabledFunc.InvokeRaw(mInstance, {});
-	}
-
-	void ScriptableComponent::OnTransformChanged()
-	{
-
-	}
-
-	void ScriptableComponent::OnTransformUpdated()
-	{
-
 	}
 }
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ScriptableComponent>);

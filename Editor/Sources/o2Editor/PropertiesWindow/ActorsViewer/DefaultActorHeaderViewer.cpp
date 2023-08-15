@@ -152,9 +152,9 @@ namespace Editor
 		mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
 			actors, prototypes, [](Actor* x) { return &x->tags; });
 
-		mLayerProperty->SelectValueAndPrototypeFunctional<SceneLayer*, Actor>(
-			actors, prototypes, [](Actor* x) { return x->GetLayer(); },
-			[](Actor* x, const SceneLayer* l) { x->SetLayer(l->GetName()); });
+// 		mLayerProperty->SelectValueAndPrototypeFunctional<SceneLayer*, Actor>(
+// 			actors, prototypes, [](Actor* x) { return x->GetLayer(); },
+// 			[](Actor* x, const SceneLayer* l) { x->SetLayer(l->GetName()); });
 	}
 
 	Widget* DefaultActorHeaderViewer::GetWidget() const

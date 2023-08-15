@@ -192,7 +192,10 @@ namespace o2
 		void UpdateLayersLayouts() override;
 
 		// Called when visible was changed
-		void OnEnableInHierarchyChanged() override;
+		void OnEnabled() override;
+
+		// Called when visible was changed
+		void OnDisabled() override;
 
 		// Called when widget was selected
 		void OnFocused() override;
@@ -369,7 +372,8 @@ CLASS_METHODS_META(o2::EditBox)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransparency);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnFocused);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnUnfocused);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateScrollParams);

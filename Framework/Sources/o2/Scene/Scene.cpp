@@ -5,6 +5,7 @@
 #include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Text.h"
+#include "o2/Render/VectorFontEffects.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/CameraActor.h"
@@ -14,8 +15,8 @@
 #include "o2/Scene/Tags.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/WidgetLayout.h"
-#include "o2/Render/VectorFontEffects.h"
 #include "o2/Utils/Debug/Debug.h"
+#include "o2/Utils/Debug/Log/LogStream.h"
 
 namespace o2
 {
@@ -26,6 +27,9 @@ namespace o2
 		mDefaultLayer = AddLayer("Default");
 		auto camera = mnew CameraActor();
 		camera->name = "Camera";
+
+		mLog = mnew LogStream("Scene");
+		o2Debug.GetLog()->BindStream(mLog);
 	}
 
 	Scene::~Scene()
@@ -34,9 +38,15 @@ namespace o2
 		ClearCache();
 
 		delete mDefaultLayer;
+		delete mLog;
 	}
 
-	const o2::Vector<CameraActor*>& Scene::GetCameras() const
+	const LogStream& Scene::GetLogStream() const
+	{
+		return *mLog;
+	}
+
+	const Vector<CameraActor*>& Scene::GetCameras() const
 	{
 		return mCameras;
 	}
@@ -61,13 +71,18 @@ namespace o2
 	void Scene::UpdateAddedEntities()
 	{
 		auto addedActors = mAddedActors;
-
-		mStartActors = mAddedActors;
-
 		mAddedActors.Clear();
+
+		mStartActors = addedActors;
 
 		for (auto actor : addedActors)
 			AddActorToScene(actor);
+
+		for (auto actor : addedActors)
+			actor->OnInitialized();
+
+		for (auto actor : addedActors)
+			actor->OnEnabled();
 	}
 
 	void Scene::UpdateTransforms()
@@ -85,10 +100,7 @@ namespace o2
 		mStartActors.Clear();
 
 		for (auto actor : startActors)
-		{
-			actor->UpdateTransform();
 			actor->OnStart();
-		}
 
 		auto startComponents = mStartComponents;
 		mStartComponents.Clear();
@@ -106,7 +118,10 @@ namespace o2
 		mDestroyComponents.Clear();
 
 		for (auto actor : destroyActors)
+		{
+			actor->OnBeforeDestroy();
 			delete actor;
+		}
 
 		for (auto comp : destroyComponents)
 			delete comp;
@@ -134,23 +149,58 @@ namespace o2
 		mDestroyComponents.Add(component);
 	}
 
-	void Scene::AddActorToSceneDeferred(Actor* actor)
+	void Scene::OnActorCreated(Actor* actor)
 	{
-		mAddedActors.Add(actor);
+		if (!IsSingletonInitialzed())
+			return;
+
+		if (actor->GetName().Contains("Chip"))
+			Instance().mLog->Out("asd");
+
+		if (actor->IsOnScene())
+		{
+			if (Instance().mAddedActors.Contains(actor))
+				Instance().mLog->Out("asd");
+
+			Instance().mAddedActors.Add(actor);
+		}
+	}
+
+	void Scene::OnActorDestroy(Actor* actor)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		if (actor->IsOnScene())
+			Instance().RemoveActorFromScene(actor, false);
+		else if (Instance().mAddedActors.Contains(actor))
+			Instance().mLog->Warning("Actor was destroyed before added to scene");
+
+	}
+
+	void Scene::OnAddActorToScene(Actor* actor)
+	{
+		Assert(IsSingletonInitialzed(), "Cant add actor to scene, because scene not initialized")
+
+		Instance().AddActorToScene(actor);
+	}
+
+	void Scene::OnRemoveActorFromScene(Actor* actor, bool keepEditorObjects /*= false*/)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		Instance().RemoveActorFromScene(actor, keepEditorObjects);
 	}
 
 	void Scene::OnActorIdChanged(Actor* actor, SceneUID prevId)
 	{
-		mActorsMap.Remove(prevId);
-		mActorsMap[actor->mId] = actor;
-	}
+		if (!IsSingletonInitialzed())
+			return
 
-#if IS_EDITOR
-	void Scene::DestroyEditableObject(SceneEditableObject* object)
-	{
-		mDestroyingObjects.Add(object);
+		Instance().mActorsMap.Remove(prevId);
+		Instance().mActorsMap[actor->mId] = actor;
 	}
-#endif
 
 	void Scene::UpdateActors(float dt)
 	{
@@ -236,7 +286,7 @@ namespace o2
 							(String)widget->layout->anchorMax + " " + (String)widget->layout->offsetMax + "\n";
 
 						debugInfo += (widget->mIsClipped ? (String)"clipped, " : (String)"not clipped, ") +
-							(widget->mEnabled ? (String)"visible\n" : ((String)"hidden" + (!widget->mResEnabledInHierarchy ? (String)" fully\n" : (String)"\n")));
+							(widget->IsEnabled() ? (String)"visible\n" : ((String)"hidden" + (!widget->mResEnabledInHierarchy ? (String)" fully\n" : (String)"\n")));
 
 						debugInfo += "alpha: " + (String)widget->mTransparency +
 							", res alpha: " + (String)widget->mResTransparency + "\n";
@@ -291,6 +341,8 @@ namespace o2
 		mStartActors.Remove(actor);
 		mAddedActors.Remove(actor);
 
+		actor->OnRemoveFromScene();
+
 #if IS_EDITOR
 		if (!keepEditorObjects)
 			RemoveEditableObjectFromScene(actor);
@@ -301,6 +353,9 @@ namespace o2
 
 	void Scene::OnComponentAdded(Component* component)
 	{
+		if (mStartComponents.Contains(component))
+			Instance().mLog->Out("asd");
+
 		mStartComponents.Add(component);
 	}
 
@@ -366,17 +421,10 @@ namespace o2
 		return newLayer;
 	}
 
-	void Scene::RemoveLayer(SceneLayer* layer, bool removeActors /*= true*/)
+	void Scene::RemoveLayer(SceneLayer* layer)
 	{
 		if (layer == mDefaultLayer)
 			return;
-
-		if (removeActors)
-		{
-			auto actors = layer->mActors;
-			for (auto actor : actors)
-				delete actor;
-		}
 
 		mLayers.Remove(layer);
 		mLayersMap.Remove(layer->mName);
@@ -388,9 +436,9 @@ namespace o2
 		delete layer;
 	}
 
-	void Scene::RemoveLayer(const String& name, bool removeActors /*= true*/)
+	void Scene::RemoveLayer(const String& name)
 	{
-		RemoveLayer(GetLayer(name), removeActors);
+		RemoveLayer(GetLayer(name));
 	}
 
 	void Scene::SetLayerOrder(SceneLayer* layer, int idx)
@@ -630,6 +678,17 @@ namespace o2
 	}
 
 #if IS_EDITOR
+	void Scene::LinkActorToPrototypesHierarchy(Actor* actor, ActorAssetRef proto)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		while (proto)
+		{
+			o2Scene.OnActorLinkedToPrototype(proto, actor);
+			proto = proto->GetActor()->GetPrototype();
+		}
+	}
 
 	Vector<SceneEditableObject*> Scene::GetRootEditableObjects()
 	{
@@ -647,6 +706,11 @@ namespace o2
 		mChangedObjects.RemoveAll([&](auto x) { return x == object; });
 		mEditableObjects.RemoveAll([&](auto x) { return x == object; });
 		mEditableObjectsByUID.Remove(object->GetID());
+	}
+
+	void Scene::DestroyEditableObject(SceneEditableObject* object)
+	{
+		mDestroyingObjects.Add(object);
 	}
 
 	const Vector<SceneEditableObject*>& Scene::GetAllEditableObjects()
@@ -753,7 +817,6 @@ namespace o2
 			mChangedObjects.Clear();
 
 			UpdateAddedEntities();
-			//UpdateStartingEntities();
 			UpdateDestroyingEntities();
 		}
 	}

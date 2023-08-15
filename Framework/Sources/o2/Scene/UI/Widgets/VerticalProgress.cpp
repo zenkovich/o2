@@ -228,9 +228,14 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void VerticalProgress::OnEnableInHierarchyChanged()
+	void VerticalProgress::OnEnabled()
 	{
-		interactable = mResEnabled;
+		interactable = true;
+	}
+
+	void VerticalProgress::OnDisabled()
+	{
+		interactable = false;
 	}
 
 	void VerticalProgress::UpdateLayersLayouts()

@@ -368,7 +368,7 @@ namespace Editor
 
 	void LayerPopupItem::OnRemovePressed()
 	{
-		o2Scene.RemoveLayer(mLayer, false);
+		o2Scene.RemoveLayer(mLayer);
 		mPopup->UpdateLayersListAndFit();
 	}
 

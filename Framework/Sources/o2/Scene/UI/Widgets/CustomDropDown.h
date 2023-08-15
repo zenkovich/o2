@@ -151,7 +151,10 @@ namespace o2
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// Called when visible was changed
-		void OnEnableInHierarchyChanged() override;
+		void OnEnabled() override;
+
+		// Called when visible was changed
+		void OnDisabled() override;
 
 		// Called when item was selected in list
 		void OnItemSelected();
@@ -224,7 +227,8 @@ CLASS_METHODS_META(o2::CustomDropDown)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnItemSelected);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
 }

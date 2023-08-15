@@ -64,7 +64,7 @@ namespace o2
 		b2Shape* GetShape(const Basis& transform) override;
 
 		// Called when transformation was changed; fits size by actor size when required
-		void OnTransformChanged() override;
+		void OnTransformUpdated() override;
 
 		void FitSize();
 
@@ -104,7 +104,7 @@ CLASS_METHODS_META(o2::BoxCollider)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnAddedFromEditor);
 #endif
 	FUNCTION().PRIVATE().SIGNATURE(b2Shape*, GetShape, const Basis&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnTransformChanged);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnTransformUpdated);
 	FUNCTION().PRIVATE().SIGNATURE(void, FitSize);
 	FUNCTION().PRIVATE().SIGNATURE(void, OnAddToScene);
 }

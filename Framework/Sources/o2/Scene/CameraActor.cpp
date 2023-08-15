@@ -89,7 +89,7 @@ namespace o2
 						printDrawable(inherited, depth + 1);
 				};
 
-				for (auto drawable : layer->mEnabledDrawables)
+				for (auto drawable : layer->mDrawables)
 				{					
 					printDrawable(drawable, 1);
 
@@ -97,7 +97,7 @@ namespace o2
 					{
 						o2Debug.Log("  ROOT:");
 
-						for (auto child : root->drawables)
+						for (auto child : root->GetChildrenInheritedDepth())
 						{
 							printDrawable(child, 2);
 						}
@@ -111,7 +111,7 @@ namespace o2
 
 			for (auto layer : drawLayers.GetLayers())
 			{
-				for (auto comp : layer->mEnabledDrawables)
+				for (auto comp : layer->mDrawables)
 					comp->Draw();
 			}
 		}

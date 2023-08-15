@@ -143,7 +143,7 @@ namespace o2
 		const Vector<ActorAssetRef>& GetWidgetStyles() const;
 
 	protected:
-		LogStream * mLog = nullptr; // UI Log stream
+		LogStream* mLog = nullptr; // UI Log stream
 
 		Ref<Widget>         mFocusedWidget;        // Current selected widget
 		Vector<Ref<Widget>> mLastUnfocusedWidgets; // Widget that was unfocused on last frame
@@ -153,6 +153,13 @@ namespace o2
 		Vector<Widget*> mTopWidgets; // Top widgets, drawing after mScreenWidget 
 
 		Vector<ActorAssetRef> mStyleSamples; // Style widgets
+
+	protected:
+		// Registers focusable widget
+		static void RegisterFocusableWidget(Widget* widget);
+
+		// Unregisters focusable widget
+		static void UnregisterFocusableWidget(Widget* widget);
 
 	protected:
 		// Default constructor

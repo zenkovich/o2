@@ -50,7 +50,7 @@ namespace o2
 			DrawMeshWire();
 	}
 
-	void SkinningMeshComponent::Update(float dt)
+	void SkinningMeshComponent::OnUpdate(float dt)
 	{
 		if (mNeedUpdateBones)
 			UpdateBones();

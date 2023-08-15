@@ -171,7 +171,7 @@ namespace o2
 		return nullptr;
 	}
 
-	void ICollider::OnTransformChanged()
+	void ICollider::OnTransformUpdated()
 	{
 		if (!o2Physics.IsUpdatingPhysicsNow())
 			OnShapeChanged();

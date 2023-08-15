@@ -427,7 +427,10 @@ namespace Editor
 			o2EditorSceneScreen.NeedRedraw();
 		}
 		else
+		{
+			mScene->UpdateAddedEntities();
 			mScene->UpdateDestroyingEntities();
+		}
 
 		CheckPlayingSwitch();
 	}

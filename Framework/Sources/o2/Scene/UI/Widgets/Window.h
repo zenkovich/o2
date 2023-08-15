@@ -144,9 +144,6 @@ namespace o2
 		// Called when widget state was added
 		void OnStateAdded(WidgetState* state) override;
 
-		// Called when visible was changed
-		void OnEnableInHierarchyChanged() override;
-
 		// Initializes context menu and options button
 		void InitializeContextMenu();
 
@@ -243,7 +240,6 @@ CLASS_METHODS_META(o2::Window)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStateAdded, WidgetState*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeContextMenu);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeContextItems);
 	FUNCTION().PROTECTED().SIGNATURE(void, RestoreControls);

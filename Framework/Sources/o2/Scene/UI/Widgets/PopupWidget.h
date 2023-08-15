@@ -70,7 +70,10 @@ namespace o2
 		void CheckClipping(const RectF& clipArea) override;
 
 		// Called when visible was changed
-		void OnEnableInHierarchyChanged() override;
+		void OnEnabled() override;
+
+		// Called when visible was changed
+		void OnDisabled() override;
 
 		// Fits position by size and screen
 		virtual void FitPosition(const Vec2F& position, Vec2F size);
@@ -133,7 +136,8 @@ CLASS_METHODS_META(o2::PopupWidget)
 	FUNCTION().PUBLIC().SIGNATURE(void, FitSizeAndPosition, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
 	FUNCTION().PROTECTED().SIGNATURE(void, CheckClipping, const RectF&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, FitPosition, const Vec2F&, Vec2F);
 	FUNCTION().PROTECTED().SIGNATURE(Vec2F, GetContentSize);
 	FUNCTION().PROTECTED().SIGNATURE(void, HideWithParent);

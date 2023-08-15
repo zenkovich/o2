@@ -83,12 +83,12 @@ namespace o2
 		return &mShape;
 	}
 
-	void BoxCollider::OnTransformChanged()
+	void BoxCollider::OnTransformUpdated()
 	{
 		if (!o2Physics.IsUpdatingPhysicsNow() && mFitByActor)
 			FitSize();
 
-		ICollider::OnTransformChanged();
+		ICollider::OnTransformUpdated();
 	}
 
 	void BoxCollider::OnAddToScene()

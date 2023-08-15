@@ -37,6 +37,22 @@ namespace o2
 {
 	DECLARE_SINGLETON(UIManager);
 
+	void UIManager::RegisterFocusableWidget(Widget* widget)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		Instance().mFocusableWidgets.Add(widget);
+	}
+
+	void UIManager::UnregisterFocusableWidget(Widget* widget)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		Instance().mFocusableWidgets.Remove(widget);
+	}
+
 	UIManager::UIManager()
 	{
 		mLog = mnew LogStream("UI");

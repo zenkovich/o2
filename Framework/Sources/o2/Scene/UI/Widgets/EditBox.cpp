@@ -384,9 +384,14 @@ namespace o2
 		return true;
 	}
 
-	void EditBox::OnEnableInHierarchyChanged()
+	void EditBox::OnEnabled()
 	{
-		interactable = mResEnabled;
+		interactable = true;
+	}
+
+	void EditBox::OnDisabled()
+	{
+		interactable = false;
 	}
 
 	void EditBox::OnFocused()

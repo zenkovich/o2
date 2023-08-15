@@ -110,7 +110,10 @@ namespace o2
 		void OnDeserialized(const DataValue& node) override;
 
 		// Called when visible was changed
-		void OnEnableInHierarchyChanged() override;
+		void OnEnabled() override;
+
+		// Called when visible was changed
+		void OnDisabled() override;
 
 		// Updates transparency for this and children widgets
 		void UpdateTransparency() override;
@@ -210,7 +213,8 @@ CLASS_METHODS_META(o2::LongList)
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransparency);
 	FUNCTION().PROTECTED().SIGNATURE(void, CalculateScrollArea);
 	FUNCTION().PROTECTED().SIGNATURE(void, MoveScrollPosition, const Vec2F&);

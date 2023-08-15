@@ -16,28 +16,22 @@ namespace o2
 	Widget::Widget(ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(mnew WidgetLayout(), mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
-		if (IsFocusable() && UIManager::IsSingletonInitialzed())
-			o2UI.mFocusableWidgets.Add(this);
-
-		layout->SetOwner(this);
+		if (IsFocusable())
+			UIManager::RegisterFocusableWidget(this);
 	}
 
 	Widget::Widget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
-		if (IsFocusable() && UIManager::IsSingletonInitialzed())
-			o2UI.mFocusableWidgets.Add(this);
-
-		layout->SetOwner(this);
+		if (IsFocusable())
+			UIManager::RegisterFocusableWidget(this);
 	}
 
 	Widget::Widget(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
-		if (IsFocusable() && UIManager::IsSingletonInitialzed())
-			o2UI.mFocusableWidgets.Add(this);
-
-		layout->SetOwner(this);
+		if (IsFocusable())
+			UIManager::RegisterFocusableWidget(this);
 	}
 
 	Widget::Widget(const Widget& other) :
@@ -45,65 +39,72 @@ namespace o2
 		mTransparency(other.mTransparency), transparency(this), resTransparency(this),
 		childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
 	{
-		layout->SetOwner(this);
+		if (IsFocusable())
+			UIManager::RegisterFocusableWidget(this);
 
-		WidgetLayer::ICopyVisitor* layerCopyVisitor = nullptr;
+		// Layers
+		{
+			WidgetLayer::ICopyVisitor* layerCopyVisitor = nullptr;
 
-		if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
-			layerCopyVisitor = mnew WidgetLayer::InstantiatePrototypeCloneVisitor();
+			if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
+				layerCopyVisitor = mnew WidgetLayer::InstantiatePrototypeCloneVisitor();
 
 #if IS_EDITOR
-		if (dynamic_cast<MakePrototypeCloneVisitor*>(other.mCopyVisitor))
-			layerCopyVisitor = mnew WidgetLayer::MakePrototypeCloneVisitor();
+			if (dynamic_cast<MakePrototypeCloneVisitor*>(other.mCopyVisitor))
+				layerCopyVisitor = mnew WidgetLayer::MakePrototypeCloneVisitor();
 
-		if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
-		{
-			layersEditable.prototypeLink = &other.layersEditable;
-			internalChildrenEditable.prototypeLink = &other.internalChildrenEditable;
-		}
+			if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
+			{
+				layersEditable.prototypeLink = &other.layersEditable;
+				internalChildrenEditable.prototypeLink = &other.internalChildrenEditable;
+			}
 #endif
 
-		for (auto layer : other.mLayers)
-		{
-			layer->mCopyVisitor = layerCopyVisitor;
-
-			auto newLayer = mnew WidgetLayer(*layer);
-			newLayer->SetOwnerWidget(this);
-			mLayers.Add(newLayer);
-			OnLayerAdded(newLayer);
-		}
-
-		if (layerCopyVisitor)
-			delete layerCopyVisitor;
-
-		for (auto child : mChildren)
-		{
-			Widget* childWidget = dynamic_cast<Widget*>(child);
-			if (childWidget)
+			for (auto layer : other.mLayers)
 			{
-				childWidget->mParentWidget = this;
-				mChildWidgets.Add(childWidget);
-				OnChildAdded(childWidget);
+				layer->mCopyVisitor = layerCopyVisitor;
+
+				auto newLayer = mnew WidgetLayer(*layer);
+				newLayer->SetOwnerWidget(this);
+				mLayers.Add(newLayer);
+				OnLayerAdded(newLayer);
 			}
 
-			child->OnParentChanged(nullptr);
+			if (layerCopyVisitor)
+				delete layerCopyVisitor;
 		}
 
-		for (auto child : other.mInternalWidgets)
+		// Children
 		{
-			auto newChild = child->CloneAs<Widget>();
-			newChild->RemoveFromScene();
-			newChild->SetInternalParent(this, false);
+			for (auto child : mChildren)
+			{
+				Widget* childWidget = dynamic_cast<Widget*>(child);
+				if (childWidget)
+				{
+					childWidget->mParentWidget = this;
+					mChildWidgets.Add(childWidget);
+					OnChildAdded(childWidget);
+				}
+
+				child->OnParentChanged(nullptr);
+			}
+
+			for (auto child : other.mInternalWidgets)
+			{
+				auto newChild = child->CloneAs<Widget>();
+				newChild->RemoveFromScene();
+				newChild->SetInternalParent(this, false);
+			}
 		}
 
-		for (auto state : other.mStates)
+		// States
 		{
-			WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
-			AddState(newState, false);
+			for (auto state : other.mStates)
+			{
+				WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
+				AddState(newState, false);
+			}
 		}
-
-		if (IsFocusable() && UIManager::IsSingletonInitialzed())
-			o2UI.mFocusableWidgets.Add(this);
 
 		UpdateLayersDrawingSequence();
 		RetargetStatesAnimations();
@@ -131,11 +132,8 @@ namespace o2
 			delete child;
 		}
 
-		if (UIManager::IsSingletonInitialzed())
-			o2UI.mFocusableWidgets.Remove(this);
-
-		if (IsOnScene())
-			ISceneDrawable::OnRemoveFromScene();
+		if (IsFocusable())
+			UIManager::UnregisterFocusableWidget(this);
 	}
 
 	Widget& Widget::operator=(const Widget& other)
@@ -224,7 +222,7 @@ namespace o2
 			}
 
 			for (auto comp : mComponents)
-				comp->Update(dt);
+				comp->OnUpdate(dt);
 		}
 	}
 
@@ -521,14 +519,25 @@ namespace o2
 		onLayoutUpdated();
 	}
 
-	SceneLayer* Widget::GetSceneDrawableSceneLayer() const
+	void Widget::OnEnabled()
 	{
-		return mLayer;
+		Actor::OnEnabled();
+
+		layout->SetDirty(false);
+		onShow();
 	}
 
-	bool Widget::IsSceneDrawableEnabled() const
+	void Widget::OnDisabled()
 	{
-		return mResEnabledInHierarchy;
+		Actor::OnDisabled();
+
+		layout->SetDirty(false);
+		onHide();
+	}
+
+	SceneLayer* Widget::GetSceneDrawableSceneLayer() const
+	{
+		return &const_cast<SceneLayer&>(mSceneLayer.Get());
 	}
 
 	ISceneDrawable* Widget::GetParentDrawable()
@@ -1203,7 +1212,7 @@ namespace o2
 		OnDrawbleParentChanged();
 	}
 
-	void Widget::OnChildrenRearranged()
+	void Widget::OnChildrenChanged()
 	{
 		SortInheritedDrawables();
 	}
@@ -1356,57 +1365,7 @@ namespace o2
 
 	void Widget::UpdateResEnabledInHierarchy()
 	{
-		bool lastResEnabledInHierarchy = mResEnabledInHierarchy;
-
-		if (mParent)
-			mResEnabledInHierarchy = mResEnabled && mParent->mResEnabledInHierarchy;
-		else
-			mResEnabledInHierarchy = mResEnabled;
-
-		mIsClipped = false;
-
-		if (lastResEnabledInHierarchy != mResEnabledInHierarchy)
-		{
-			if (mResEnabledInHierarchy)
-			{
-				onShow();
-
-				if (mLayer && mState == Actor::State::InScene)
-				{
-					mLayer->OnActorEnabled(this);
-					ISceneDrawable::OnEnabled();
-				}
-			}
-			else
-			{
-				onHide();
-
-				if (mLayer && mState == Actor::State::InScene)
-				{
-					mLayer->OnActorDisabled(this);
-					ISceneDrawable::OnDisabled();
-				}
-			}
-
-			layout->SetDirty(false);
-
-#if IS_EDITOR
-			if (IsOnScene())
-				o2Scene.onEnableChanged(this);
-#endif
-
-			OnEnableInHierarchyChanged();
-
-#if IS_EDITOR
-			OnChanged();
-#endif
-		}
-
-		for (auto comp : mComponents)
-			comp->UpdateEnabled();
-
-		for (auto child : mChildren)
-			child->UpdateResEnabledInHierarchy();
+		Actor::UpdateResEnabledInHierarchy();
 
 		for (auto child : mInternalWidgets)
 			child->UpdateResEnabledInHierarchy();

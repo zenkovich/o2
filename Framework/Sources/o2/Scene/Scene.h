@@ -29,22 +29,9 @@ namespace o2
 	class Scene : public Singleton<Scene>, public IObject
 	{
 	public:
-		PROPERTIES(Scene);
+		// Returns scene log stream
+		const LogStream& GetLogStream() const;
 
-#if IS_EDITOR
-		Function<void(SceneEditableObject*)> onAddedToScene;             // Actor added to scene event
-		Function<void(SceneEditableObject*)> onRemovedFromScene;         // Actor removed from scene event
-		Function<void(SceneEditableObject*)> onEnableChanged;            // Actor enable changing
-		Function<void(SceneEditableObject*)> onLockChanged;			     // Actor locking change
-		Function<void(SceneEditableObject*)> onNameChanged;			     // Actor name changing event
-		Function<void(SceneEditableObject*)> onChildrenHierarchyChanged; // Actor childs hierarchy change event
-
-		Function<void(const Vector<SceneEditableObject*>&)> onObjectsChanged; // Actors some change event
-
-		Function<void()> onLayersListChanged; // Called when layer added, removed or renamed
-#endif
-
-	public:
 		// Checks is layer exists
 		bool HasLayer(const String& name) const;
 
@@ -58,10 +45,10 @@ namespace o2
 		SceneLayer* AddLayer(const String& name);
 
 		// Removes layer
-		void RemoveLayer(SceneLayer* layer, bool removeActors = true);
+		void RemoveLayer(SceneLayer* layer);
 
 		// Removes layer by name
-		void RemoveLayer(const String& name, bool removeActors = true);
+		void RemoveLayer(const String& name);
 
 		// Sets layer order
 		void SetLayerOrder(SceneLayer* layer, int idx);
@@ -171,6 +158,8 @@ namespace o2
 		IOBJECT(Scene);
 
 	protected:
+		LogStream* mLog = nullptr; // Scene log
+
 		Vector<CameraActor*> mCameras; // List of cameras on scene
 
 		Vector<Actor*> mRootActors; // Scene root actors		
@@ -179,7 +168,7 @@ namespace o2
 		Map<SceneUID, Actor*> mActorsMap; // Actors map by uniquie ID
 
 		Vector<Actor*> mAddedActors; // List of added on previous frame actors. Will receive OnAddToScene at current frame
-		
+
 		Vector<Actor*>     mStartActors;     // List of starting on current frame actors. Will receive OnStart at current frame
 		Vector<Component*> mStartComponents; // List of starting on current frame components. Will receive OnStart at current frame
 
@@ -188,11 +177,27 @@ namespace o2
 
 		Map<String, SceneLayer*> mLayersMap;    // Layers by names map
 		Vector<SceneLayer*>      mLayers;       // Scene layers
-		SceneLayer*              mDefaultLayer; // Default scene layer
+		SceneLayer* mDefaultLayer; // Default scene layer
 
 		Vector<Tag*> mTags; // Scene tags
 
 		Vector<ActorAssetRef> mCache; // Cached actors assets
+
+	protected:
+		// Called when actor added to scene, adds to scene defered
+		static void OnActorCreated(Actor* actor);
+
+		// Called when actor destroyed, removes from scene
+		static void OnActorDestroy(Actor* actor);
+
+		// Called when actor unique id was changed; updates actors map
+		static void OnActorIdChanged(Actor* actor, SceneUID prevId);
+
+		// Called when actor adding to scene; registers in actors list and events list
+		static void OnAddActorToScene(Actor* actor);
+
+		// Called when actor removing from scene; unregisters from actors list and events list
+		static void OnRemoveActorFromScene(Actor* actor, bool keepEditorObjects = false);
 
 	protected:
 		// Default constructor
@@ -216,14 +221,8 @@ namespace o2
 		// Called when actor adding to scene; registers in actors list and events list
 		void AddActorToScene(Actor* actor);
 
-		// Called when actor constructing and adding to scene. The OnAddToScene will be called on next frame
-		void AddActorToSceneDeferred(Actor* actor);
-
 		// Called when actor removing from scene; unregisters from actors list and events list
 		void RemoveActorFromScene(Actor* actor, bool keepEditorObjects = false);
-
-		// Called when actor unique id was changed; updates actors map
-		void OnActorIdChanged(Actor* actor, SceneUID prevId);
 
 		// Called when component added to actor, registers for calling OnAddOnScene
 		void OnComponentAdded(Component* component);
@@ -253,6 +252,21 @@ namespace o2
 
 #if IS_EDITOR	  	
 	public:
+		Function<void(SceneEditableObject*)> onAddedToScene;             // Actor added to scene event
+		Function<void(SceneEditableObject*)> onRemovedFromScene;         // Actor removed from scene event
+		Function<void(SceneEditableObject*)> onEnableChanged;            // Actor enable changing
+		Function<void(SceneEditableObject*)> onLockChanged;			     // Actor locking change
+		Function<void(SceneEditableObject*)> onNameChanged;			     // Actor name changing event
+		Function<void(SceneEditableObject*)> onChildrenHierarchyChanged; // Actor childs hierarchy change event
+
+		Function<void(const Vector<SceneEditableObject*>&)> onObjectsChanged; // Actors some change event
+
+		Function<void()> onLayersListChanged; // Called when layer added, removed or renamed
+
+	public:
+		// Links actor recursively to prototypes and their parent prototypes
+		static void LinkActorToPrototypesHierarchy(Actor* actor, ActorAssetRef proto);
+
 		// Returns root editable objects
 		Vector<SceneEditableObject*> GetRootEditableObjects();
 
@@ -386,16 +400,7 @@ CLASS_BASES_META(o2::Scene)
 END_META;
 CLASS_FIELDS_META(o2::Scene)
 {
-#if  IS_EDITOR
-	FIELD().PUBLIC().NAME(onAddedToScene);
-	FIELD().PUBLIC().NAME(onRemovedFromScene);
-	FIELD().PUBLIC().NAME(onEnableChanged);
-	FIELD().PUBLIC().NAME(onLockChanged);
-	FIELD().PUBLIC().NAME(onNameChanged);
-	FIELD().PUBLIC().NAME(onChildrenHierarchyChanged);
-	FIELD().PUBLIC().NAME(onObjectsChanged);
-	FIELD().PUBLIC().NAME(onLayersListChanged);
-#endif
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLog);
 	FIELD().PROTECTED().NAME(mCameras);
 	FIELD().PROTECTED().NAME(mRootActors);
 	FIELD().PROTECTED().NAME(mAllActors);
@@ -411,6 +416,14 @@ CLASS_FIELDS_META(o2::Scene)
 	FIELD().PROTECTED().NAME(mTags);
 	FIELD().PROTECTED().NAME(mCache);
 #if  IS_EDITOR	  	
+	FIELD().PUBLIC().NAME(onAddedToScene);
+	FIELD().PUBLIC().NAME(onRemovedFromScene);
+	FIELD().PUBLIC().NAME(onEnableChanged);
+	FIELD().PUBLIC().NAME(onLockChanged);
+	FIELD().PUBLIC().NAME(onNameChanged);
+	FIELD().PUBLIC().NAME(onChildrenHierarchyChanged);
+	FIELD().PUBLIC().NAME(onObjectsChanged);
+	FIELD().PUBLIC().NAME(onLayersListChanged);
 	FIELD().PROTECTED().NAME(mPrototypeLinksCache);
 	FIELD().PROTECTED().NAME(mChangedObjects);
 	FIELD().PROTECTED().NAME(mDestroyingObjects);
@@ -427,12 +440,13 @@ CLASS_METHODS_META(o2::Scene)
 	typedef const Map<String, SceneLayer*>& _tmp1;
 	typedef Map<ActorAssetRef, Vector<Actor*>>& _tmp2;
 
+	FUNCTION().PUBLIC().SIGNATURE(const LogStream&, GetLogStream);
 	FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(SceneLayer*, GetLayer, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(SceneLayer*, GetDefaultLayer);
 	FUNCTION().PUBLIC().SIGNATURE(SceneLayer*, AddLayer, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, SceneLayer*, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, const String&, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, SceneLayer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLayerOrder, SceneLayer*, int);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<SceneLayer*>&, GetLayers);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<String>, GetLayersNames);
@@ -464,21 +478,25 @@ CLASS_METHODS_META(o2::Scene)
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateDestroyingEntities);
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyActor, Actor*);
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, Component*);
+	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorCreated, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorDestroy, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorIdChanged, Actor*, SceneUID);
+	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnAddActorToScene, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnRemoveActorFromScene, Actor*, bool);
 	FUNCTION().PROTECTED().CONSTRUCTOR();
 	FUNCTION().PROTECTED().SIGNATURE(void, DrawCameras);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateActors, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateStartingEntities);
 	FUNCTION().PROTECTED().SIGNATURE(void, DrawCursorDebugInfo);
 	FUNCTION().PROTECTED().SIGNATURE(void, AddActorToScene, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, AddActorToSceneDeferred, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, RemoveActorFromScene, Actor*, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnActorIdChanged, Actor*, SceneUID);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoved, Component*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerRenamed, SceneLayer*, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCameraAddedOnScene, CameraActor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCameraRemovedScene, CameraActor*);
 #if  IS_EDITOR	  	
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(void, LinkActorToPrototypesHierarchy, Actor*, ActorAssetRef);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetRootEditableObjects);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEditableObjectToScene, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveEditableObjectFromScene, SceneEditableObject*);

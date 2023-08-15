@@ -45,7 +45,7 @@ namespace Editor
 		mRightBottomWidgetsContainer = InitializeWidgetsContainer(BaseCorner::RightBottom);
 	}
 
-	SceneEditScreen::SceneEditScreen(const SceneEditScreen& other):
+	SceneEditScreen::SceneEditScreen(const SceneEditScreen& other) :
 		SceneEditScreen()
 	{}
 
@@ -125,7 +125,7 @@ namespace Editor
 
 	Vec2F SceneEditScreen::ScreenToSceneVector(const Vec2F& point)
 	{
-		return point*mViewCamera.GetScale();
+		return point * mViewCamera.GetScale();
 	}
 
 	Vec2F SceneEditScreen::SceneToScreenVector(const Vec2F& point)
@@ -178,7 +178,7 @@ namespace Editor
 	void SceneEditScreen::RedrawContent()
 	{
 		DrawGrid();
- 		DrawObjects();
+		DrawObjects();
 		o2Debug.Draw();
 		DrawSelection();
 
@@ -204,7 +204,7 @@ namespace Editor
 			static bool drawing = false;
 			if (drawing)
 				return;
-			
+
 			drawing = true;
 			EditorUIRoot.GetRootWidget()->Draw();
 			drawing = false;
@@ -220,7 +220,7 @@ namespace Editor
 				if (!layer->visible)
 					continue;
 
-				for (auto drw : layer->GetEnabledDrawables())
+				for (auto drw : layer->GetDrawables())
 					drw->Draw();
 			}
 
@@ -282,13 +282,9 @@ namespace Editor
 	{
 		auto prevSelectedObjects = mSelectedObjects;
 
-		mSelectedObjects.Clear();
-		for (auto layer : o2Scene.GetLayers())
-		{
-			mSelectedObjects.Add(layer->GetEnabledActors().
-								 FindAll([](auto x) { return !x->IsLockedInHierarchy(); }).
-								 Convert<SceneEditableObject*>([](auto x) { return dynamic_cast<SceneEditableObject*>(x); }));
-		}
+		mSelectedObjects = o2Scene.GetAllActors().
+			FindAll([](auto x) { return !x->IsLockedInHierarchy(); }).
+			Convert<SceneEditableObject*>([](auto x) { return dynamic_cast<SceneEditableObject*>(x); });
 
 		mNeedRedraw = true;
 		OnObjectsSelectedFromThis();
@@ -380,7 +376,7 @@ namespace Editor
 	{
 		mTools.Add(tool);
 		o2EditorTools.AddToolToggle(tool->GetPanelToggle());
-	} 
+	}
 
 	void SceneEditScreen::RemoveTool(IEditTool* tool)
 	{
@@ -454,7 +450,7 @@ namespace Editor
 
 		auto selectedIObjects = mSelectedObjects.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); });
 
-		if (mSelectedObjects != prevSelectedObjects || 
+		if (mSelectedObjects != prevSelectedObjects ||
 			selectedIObjects != o2EditorPropertiesWindow.GetTargets())
 		{
 			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
@@ -543,10 +539,10 @@ namespace Editor
 			return;
 
 		assetsScroll->RegObjectsCreationAction();
-		
+
 		o2UI.FocusWidget(o2EditorTree.GetSceneTree());
 		o2EditorTree.GetSceneTree()->SetSelectedObjects(assetsScroll->mInstantiatedSceneDragObjects);
-		
+
 		assetsScroll->mInstantiatedSceneDragObjects.Clear();
 
 		o2Application.SetCursor(CursorType::Arrow);
@@ -573,7 +569,7 @@ namespace Editor
 		{
 			object->UpdateTransform();
 			Basis transform = object->GetTransform();
-			transform.origin = ScreenToScenePoint(o2Input.cursorPos) - (transform.xv + transform.yv)*0.5f;
+			transform.origin = ScreenToScenePoint(o2Input.cursorPos) - (transform.xv + transform.yv) * 0.5f;
 			object->SetTransform(transform);
 		}
 	}

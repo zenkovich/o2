@@ -57,22 +57,14 @@ namespace o2
 		ISceneDrawable::OnDeserializedDelta(node, origin);
 	}
 
-	void DrawableComponent::UpdateEnabled()
+	void DrawableComponent::OnEnabled()
 	{
-		bool lastResEnabled = mEnabledInHierarchy;
+		ISceneDrawable::OnEnabled();
+	}
 
-		if (mOwner)
-			mEnabledInHierarchy = mEnabled && mOwner->mResEnabledInHierarchy;
-		else
-			mEnabledInHierarchy = mEnabled;
-
-		if (lastResEnabled != mEnabledInHierarchy)
-		{
-			if (mEnabledInHierarchy)
-				ISceneDrawable::OnEnabled();
-			else
-				ISceneDrawable::OnDisabled();
-		}
+	void DrawableComponent::OnDisabled()
+	{
+		ISceneDrawable::OnDisabled();
 	}
 
 	void DrawableComponent::OnParentChanged(Actor* oldParent)
@@ -80,19 +72,21 @@ namespace o2
 		OnDrawbleParentChanged();
 	}
 
-	void DrawableComponent::OnChildrenRearranged()
+	void DrawableComponent::OnAddToScene()
 	{
-		SortInheritedDrawables();
+		Component::OnAddToScene();
+		ISceneDrawable::OnAddToScene();
 	}
 
-	SceneLayer* DrawableComponent::GetSceneDrawableSceneLayer() const
+	void DrawableComponent::OnRemoveFromScene()
 	{
-		return mOwner->mLayer;
+		Component::OnRemoveFromScene();
+		ISceneDrawable::OnRemoveFromScene();
 	}
 
-	bool DrawableComponent::IsSceneDrawableEnabled() const
+	void DrawableComponent::OnChildrenChanged()
 	{
-		return mEnabledInHierarchy;
+		ISceneDrawable::SortInheritedDrawables();
 	}
 
 	ISceneDrawable* DrawableComponent::GetParentDrawable()
@@ -132,16 +126,9 @@ namespace o2
 		return 0;
 	}
 
-	void DrawableComponent::OnAddToScene()
+	SceneLayer* DrawableComponent::GetSceneDrawableSceneLayer() const
 	{
-		Component::OnAddToScene();
-		ISceneDrawable::OnAddToScene();
-	}
-
-	void DrawableComponent::OnRemoveFromScene()
-	{
-		Component::OnRemoveFromScene();
-		ISceneDrawable::OnRemoveFromScene();
+		return const_cast<SceneLayer*>(&mLayer.Get());
 	}
 
 #if IS_EDITOR

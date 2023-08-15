@@ -125,7 +125,10 @@ namespace o2
 		void OnDeserialized(const DataValue& node) override;
 
 		// Called when visible was changed
-		void OnEnableInHierarchyChanged() override;
+		void OnEnabled() override;
+
+		// Called when visible was changed
+		void OnDisabled() override;
 
 		// Updates bar, back and handle layers layout by value
 		void UpdateProgressLayersLayouts();
@@ -223,7 +226,8 @@ CLASS_METHODS_META(o2::VerticalScrollBar)
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateProgressLayersLayouts);
 	FUNCTION().PROTECTED().SIGNATURE(float, GetValueFromCursor, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetValueFromUser, float);

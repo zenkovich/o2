@@ -320,12 +320,15 @@ namespace Editor
 		return "UI/Editor";
 	}
 
-	void DockableWindow::OnEnableInHierarchyChanged()
+	void DockableWindow::OnEnabled()
 	{
-		Window::OnEnableInHierarchyChanged();
+		Window::OnEnabled();
+	}
 
-		if (!mResEnabled)
-			Undock();
+	void DockableWindow::OnDisabled()
+	{
+		Window::OnDisabled();
+		Undock();
 	}
 
 	void DockableWindow::OnFocused()

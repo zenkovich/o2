@@ -127,8 +127,11 @@ namespace o2
 		Vector<ICollider*> mColliders; // Attached colliders list
 
 	protected:
-		// Called when result enable was changed
-		void OnEnableInHierarchyChanged() override;
+		// Called when enabled, turns on rigid body
+		void OnEnabled() override;
+
+		// Called when enabled, turns off rigid body
+		void OnDisabled() override;
 
 		// Called when actor has added to scene; creates rigid body
 		void OnAddToScene() override;
@@ -217,7 +220,8 @@ CLASS_METHODS_META(o2::RigidBody)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsSleeping);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetIsFixedRotation, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsFixedRotation);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, CreateBody);

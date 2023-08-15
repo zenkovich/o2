@@ -28,7 +28,7 @@ namespace o2
 		ScriptableComponent& operator=(const ScriptableComponent& other);
 
 		// Calls update
-		void Update(float dt) override;
+		void OnUpdate(float dt) override;
 
 		// Sets script
 		void SetScript(const JavaScriptAssetRef& script);
@@ -60,7 +60,6 @@ namespace o2
 		ScriptValue mClass;     // Script instance class
 
 		ScriptValue mOnStartFunc;
-		ScriptValue mUpdateEnabledFunc;
 		ScriptValue mOnEnabledFunc;
 		ScriptValue mOnDisabledFunc;
 		ScriptValue mUpdateFunc;
@@ -87,20 +86,11 @@ namespace o2
 		// Called when component started working on first update frame
 		void OnStart() override;
 
-		// Updates component enable
-		void UpdateEnabled() override;
-
 		// Called when actor enabled in hierarchy
 		void OnEnabled() override;
 
 		// Called when actor disabled in hierarchy
 		void OnDisabled() override;
-
-		// Called when transformation was changed 
-		void OnTransformChanged() override;
-
-		// Called when actor's transform was changed
-		void OnTransformUpdated() override;
 	};
 }
 // --- META ---
@@ -117,7 +107,6 @@ CLASS_FIELDS_META(o2::ScriptableComponent)
 	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().NO_HEADER_ATTRIBUTE().NAME(mInstance);
 	FIELD().PROTECTED().NAME(mClass);
 	FIELD().PROTECTED().NAME(mOnStartFunc);
-	FIELD().PROTECTED().NAME(mUpdateEnabledFunc);
 	FIELD().PROTECTED().NAME(mOnEnabledFunc);
 	FIELD().PROTECTED().NAME(mOnDisabledFunc);
 	FIELD().PROTECTED().NAME(mUpdateFunc);
@@ -128,7 +117,7 @@ CLASS_METHODS_META(o2::ScriptableComponent)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ScriptableComponent&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetScript, const JavaScriptAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(const JavaScriptAssetRef&, GetScript);
 	FUNCTION().PUBLIC().SIGNATURE(ScriptValue, GetInstance);
@@ -143,11 +132,8 @@ CLASS_METHODS_META(o2::ScriptableComponent)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 }
 END_META;
 // --- END META ---

@@ -280,9 +280,14 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void VerticalScrollBar::OnEnableInHierarchyChanged()
+	void VerticalScrollBar::OnEnabled()
 	{
-		interactable = mResEnabled;
+		interactable = true;
+	}
+
+	void VerticalScrollBar::OnDisabled()
+	{
+		interactable = false;
 	}
 
 	void VerticalScrollBar::SetMinimalScrollHandleSize(float pixelSize)
@@ -292,7 +297,7 @@ namespace o2
 	}
 
 	void VerticalScrollBar::UpdateSelfTransform()
-{
+	{
 		layout->Update();
 	}
 

@@ -279,9 +279,14 @@ namespace o2
 			*selectState = false;
 	}
 
-	void CustomDropDown::OnEnableInHierarchyChanged()
+	void CustomDropDown::OnEnabled()
 	{
-		interactable = mResEnabled;
+		interactable = true;
+	}
+
+	void CustomDropDown::OnDisabled()
+	{
+		interactable = false;
 	}
 
 	void CustomDropDown::UpdateSelfTransform()

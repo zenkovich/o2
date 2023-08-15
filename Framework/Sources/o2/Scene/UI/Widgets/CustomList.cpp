@@ -590,9 +590,14 @@ namespace o2
 	void CustomList::OnSelectionChanged()
 	{}
 
-	void CustomList::OnEnableInHierarchyChanged()
+	void CustomList::OnEnabled()
 	{
-		SetInteractable(mResEnabled);
+		SetInteractable(true);
+	}
+
+	void CustomList::OnDisabled()
+	{
+		SetInteractable(false);
 	}
 
 	bool CustomList::Selection::operator==(const Selection& other) const

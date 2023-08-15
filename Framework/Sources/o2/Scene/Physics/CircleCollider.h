@@ -64,7 +64,7 @@ namespace o2
 		b2Shape* GetShape(const Basis& transform) override;
 
 		// Called when transformation was changed; fits size by actor size when required
-		void OnTransformChanged() override;
+		void OnTransformUpdated() override;
 	};
 }
 // --- META ---
@@ -99,7 +99,7 @@ CLASS_METHODS_META(o2::CircleCollider)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnAddedFromEditor);
 #endif
 	FUNCTION().PRIVATE().SIGNATURE(b2Shape*, GetShape, const Basis&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnTransformChanged);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnTransformUpdated);
 }
 END_META;
 // --- END META ---

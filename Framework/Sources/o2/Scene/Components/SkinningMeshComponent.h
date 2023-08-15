@@ -41,7 +41,7 @@ namespace o2
 		void Draw() override;
 
 		// Updates mesh bones and reskins
-		void Update(float dt) override;
+		void OnUpdate(float dt) override;
 
 		// Updates bones transformations
 		void UpdateBonesTransforms();
@@ -177,7 +177,7 @@ CLASS_METHODS_META(o2::SkinningMeshComponent)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const SkinningMeshComponent&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateBonesTransforms);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(const SkinningMesh&, GetMesh);

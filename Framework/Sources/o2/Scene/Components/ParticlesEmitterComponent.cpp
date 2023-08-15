@@ -28,9 +28,14 @@ namespace o2
 		ParticlesEmitter::Draw();
 	}
 
-	void ParticlesEmitterComponent::Update(float dt)
+	void ParticlesEmitterComponent::OnUpdate(float dt)
 	{
 		ParticlesEmitter::Update(dt);
+	}
+
+	bool ParticlesEmitterComponent::IsUnderPoint(const Vec2F& point)
+	{
+		return ParticlesEmitter::IsUnderPoint(point);
 	}
 
 	String ParticlesEmitterComponent::GetName()
@@ -46,6 +51,12 @@ namespace o2
 	String ParticlesEmitterComponent::GetIcon()
 	{
 		return "ui/UI4_emitter_component.png";
+	}
+
+	void ParticlesEmitterComponent::OnDrawn()
+	{
+		DrawableComponent::OnDrawn();
+		ParticlesEmitter::OnDrawn();
 	}
 
 	void ParticlesEmitterComponent::OnTransformUpdated()

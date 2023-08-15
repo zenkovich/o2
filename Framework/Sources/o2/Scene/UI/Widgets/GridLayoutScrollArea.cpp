@@ -269,9 +269,14 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void GridLayoutScrollArea::OnEnableInHierarchyChanged()
+	void GridLayoutScrollArea::OnEnabled()
 	{
-		SetInteractable(mResEnabled);
+		SetInteractable(true);
+	}
+
+	void GridLayoutScrollArea::OnDisabled()
+	{
+		SetInteractable(false);
 	}
 }
 // --- META ---

@@ -164,7 +164,7 @@ namespace Editor
 		for (auto targetPair : mTypeTargetObjects)
 		{
 			targetPair.first->NeedUpdateBones();
-			targetPair.first->Update(0.0f);
+			targetPair.first->OnUpdate(0.0f);
 		}
 	}
 

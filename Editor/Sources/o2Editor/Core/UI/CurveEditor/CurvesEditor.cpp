@@ -316,12 +316,14 @@ namespace Editor
 		mNeedAdjustView = true;
 	}
 
-	void CurvesEditor::OnEnableInHierarchyChanged()
+	void CurvesEditor::OnEnabled()
 	{
-		if (mResEnabled)
-			mContextMenu->SetItemsMaxPriority();
-		else
-			mContextMenu->SetItemsMinPriority();
+		mContextMenu->SetItemsMaxPriority();
+	}
+
+	void CurvesEditor::OnDisabled()
+	{
+		mContextMenu->SetItemsMinPriority();
 	}
 
 	void CurvesEditor::OnScrolled(float scroll)

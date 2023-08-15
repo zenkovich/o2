@@ -73,6 +73,9 @@ namespace o2
 		using Sprite::onDraw;
 
 	protected:
+		// Called when image was drawn
+		void OnDrawn();
+
 		// Called when actor's transform was changed
 		void OnTransformUpdated() override;
 
@@ -89,7 +92,7 @@ namespace o2
 		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
 
 		// Completion deserialization delta callback
-		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;	
 	};
 }
 // --- META ---
@@ -122,6 +125,7 @@ CLASS_METHODS_META(o2::ImageComponent)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawn);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

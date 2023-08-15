@@ -469,7 +469,7 @@ namespace o2
 #if IS_EDITOR
 		if (Scene::IsSingletonInitialzed())
 		{
-			if (mOwnerWidget && mOwnerWidget->mState == Actor::State::InScene)
+			if (mOwnerWidget && mOwnerWidget->mState == Actor::State::Default)
 				o2Scene.AddEditableObjectToScene(this);
 			else
 				o2Scene.RemoveEditableObjectFromScene(this);

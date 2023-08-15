@@ -97,7 +97,7 @@ namespace o2
 		virtual b2Shape* GetShape(const Basis& transform);
 
 		// Called when transformation was changed 
-		void OnTransformChanged() override;
+		void OnTransformUpdated() override;
 
 		// Called when actor was included to scene
 		void OnAddToScene() override;
@@ -153,7 +153,7 @@ CLASS_METHODS_META(o2::ICollider)
 	FUNCTION().PROTECTED().SIGNATURE(RigidBody*, FindRigidBody);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnShapeChanged);
 	FUNCTION().PROTECTED().SIGNATURE(b2Shape*, GetShape, const Basis&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
 }

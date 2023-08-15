@@ -163,9 +163,14 @@ namespace o2
 			mIconSprite = (Sprite*)layer->GetDrawable();
 	}
 
-	void Button::OnEnableInHierarchyChanged()
+	void Button::OnEnabled()
 	{
-		interactable = mResEnabled;
+		interactable = true;
+	}
+
+	void Button::OnDisabled()
+	{
+		interactable = false;
 	}
 
 	void Button::OnBecomeInteractable()

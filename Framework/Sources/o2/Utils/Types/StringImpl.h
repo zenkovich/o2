@@ -602,13 +602,13 @@ namespace o2
 	template<typename T>
 	int TString<T>::Find(const TString& other, int startIdx /*= 0*/) const
 	{
-		return std::basic_string<T>::find(other, startIdx);
+		return (int)std::basic_string<T>::find(other, startIdx);
 	}
 
 	template<typename T>
 	int TString<T>::Find(T symbol, int startIdx /*= 0*/) const
 	{
-		return std::basic_string<T>::find(symbol, startIdx);
+		return (int)std::basic_string<T>::find(symbol, startIdx);
 	}
 
 	template<typename T>
@@ -645,7 +645,7 @@ namespace o2
 	template<typename T>
 	int TString<T>::FindLast(const TString& other, int startIdx /*= -1*/) const
 	{
-		return std::basic_string<T>::rfind(other, startIdx);
+		return (int)std::basic_string<T>::rfind(other, (size_t)startIdx);
 
 	}
 

@@ -39,12 +39,6 @@ namespace o2
 		// Regenerates component id
 		void GenerateNewID();
 
-		// Updates component
-		virtual void Update(float dt);
-
-		// Updates component with fixed delta time
-		virtual void FixedUpdate(float dt);
-
 		// Sets component enable
 		virtual void SetEnabled(bool active);
 
@@ -126,20 +120,38 @@ namespace o2
 		// Completion deserialization delta callback
 		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 
+		// Adds component to scene
+		virtual void AddToScene();
+
+		// Removes component from scene
+		virtual void RemoveFromScene();
+
+		// Updates component enable
+		virtual void UpdateEnabledInHierarchy();
+
 		// Sets owner actor
 		virtual void SetOwnerActor(Actor* actor);
 
 		// Called when actor was included to scene
-		virtual void OnAddToScene();
+		virtual void OnAddToScene() {}
 
 		// Called when actor was excluded from scene
-		virtual void OnRemoveFromScene();
+		virtual void OnRemoveFromScene() {}
+
+		// Called when component, actor and scene was initialized
+		virtual void OnInitialized() {}
 
 		// Called when component started working on first update frame
 		virtual void OnStart() {}
 
-		// Updates component enable
-		virtual void UpdateEnabled();
+		// Called when component will be destroyed
+		virtual void OnDestroy() {}
+
+		// Updates component
+		virtual void OnUpdate(float dt) {}
+
+		// Updates component with fixed delta time
+		virtual void OnFixedUpdate(float dt) {}
 
 		// Called when actor enabled in hierarchy
 		virtual void OnEnabled() {}
@@ -147,26 +159,20 @@ namespace o2
 		// Called when actor disabled in hierarchy
 		virtual void OnDisabled() {}
 
-		// Called when transformation was changed 
-		virtual void OnTransformChanged() {}
-
 		// Called when actor's transform was changed
 		virtual void OnTransformUpdated() {}
 
 		// Called when parent changed
 		virtual void OnParentChanged(Actor* oldParent) {}
 
+		// Called when children list changed
+		virtual void OnChildrenChanged() {}
+
 		// Called when child actor was added
 		virtual void OnChildAdded(Actor* child) {}
 
 		// Called when child actor was removed
 		virtual void OnChildRemoved(Actor* child) {}
-
-		// Called when actor children has rearranged
-		virtual void OnChildrenRearranged() {}
-
-		// Called when layer was changed
-		virtual void OnLayerChanged(SceneLayer* oldLayer) {}
 
 		// Called when new component has added to actor
 		virtual void OnComponentAdded(Component* component) {}
@@ -251,8 +257,6 @@ CLASS_METHODS_META(o2::Component)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Component&);
 	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
 	FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, FixedUpdate, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, Enable);
 	FUNCTION().PUBLIC().SIGNATURE(void, Disable);
@@ -272,20 +276,24 @@ CLASS_METHODS_META(o2::Component)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, AddToScene);
+	FUNCTION().PROTECTED().SIGNATURE(void, RemoveFromScene);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateEnabledInHierarchy);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDestroy);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnUpdate, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnFixedUpdate, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenRearranged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerChanged, SceneLayer*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
 }

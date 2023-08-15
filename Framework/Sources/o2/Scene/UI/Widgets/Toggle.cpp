@@ -317,9 +317,14 @@ namespace o2
 		return "Basic";
 	}
 
-	void Toggle::OnEnableInHierarchyChanged()
+	void Toggle::OnEnabled()
 	{
-		interactable = mResEnabled;
+		interactable = true;
+	}
+
+	void Toggle::OnDisabled()
+	{
+		interactable = false;
 	}
 
 	ToggleGroup::ToggleGroup(Type type):

@@ -21,7 +21,10 @@ namespace o2
 		void Draw() override;
 
 		// Updates component
-		void Update(float dt) override;
+		void OnUpdate(float dt) override;
+
+		// Returns true if point is under drawable
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Returns name of component
 		static String GetName();
@@ -33,8 +36,9 @@ namespace o2
 		static String GetIcon();
 
 	protected:
+
 		// Called when actor's transform was changed
-		void OnTransformUpdated();
+		void OnTransformUpdated() override;
 
 		// Beginning serialization callback
 		void OnSerialize(DataValue& node) const override;
@@ -47,6 +51,9 @@ namespace o2
 
 		// Completion deserialization delta callback
 		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
+		// Called when particles was drawn
+		void OnDrawn() override;
 	};
 }
 // --- META ---
@@ -67,7 +74,8 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ParticlesEmitterComponent&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
@@ -76,6 +84,7 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawn);
 }
 END_META;
 // --- END META ---

@@ -33,7 +33,7 @@ namespace o2
 		AnimationComponent& operator=(const AnimationComponent& other);
 
 		// Updates animations, blendings and assigning blended values
-		void Update(float dt) override;
+		void OnUpdate(float dt) override;
 
 		// Adds new animation state and returns him
 		AnimationState* AddState(AnimationState* state);
@@ -317,7 +317,7 @@ CLASS_METHODS_META(o2::AnimationComponent)
 
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationComponent&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, AnimationState*);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, const String&, const AnimationClip&, const AnimationMask&, float);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, const String&);

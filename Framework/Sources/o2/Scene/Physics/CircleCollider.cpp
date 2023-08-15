@@ -74,7 +74,7 @@ namespace o2
 		return &mShape;
 	}
 
-	void CircleCollider::OnTransformChanged()
+	void CircleCollider::OnTransformUpdated()
 	{
 		if (!o2Physics.IsUpdatingPhysicsNow() && mFitByActor)
 		{
@@ -85,7 +85,7 @@ namespace o2
 				OnShapeChanged();
 		}
 
-		ICollider::OnTransformChanged();
+		ICollider::OnTransformUpdated();
 	}
 
 #if IS_EDITOR

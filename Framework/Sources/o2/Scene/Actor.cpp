@@ -4,7 +4,6 @@
 #include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/Scene.h"
-#include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "Components/ScriptableComponent.h"
 
@@ -12,43 +11,29 @@ namespace o2
 {
 	ActorCreateMode Actor::mDefaultCreationMode = ActorCreateMode::InScene;
 
-	Actor::Actor(ActorTransform* transform, State sceneStatus /*= SceneStatus::WaitingAddToScene*/,
+	Actor::Actor(ActorTransform* transform, bool onScene /*= true*/,
 				 const String& name /*= "unnamed"*/, bool enabled /*= true*/, bool resEnabled /*= true*/,
-				 const String& layerName /*= ""*/, SceneLayer* layer /*= nullptr*/, SceneUID id /*= Math::Random()*/, 
-				 UID assetId /*= UID(0)*/) :
+				 SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/) :
 		transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(resEnabled),
-		mLayerName(layerName), mLayer(layer), mId(id), mAssetId(assetId), mState(sceneStatus)
-	{}
-
-	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, IsModeOnScene(mode) ? State::WaitingAddToScene : State::NotInScene)
+		mId(id), mAssetId(assetId), mState(State::Initializing), mIsOnScene(onScene)
 	{
 		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
 		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
 
 		transform->SetOwner(this);
+	}
 
-		if (Scene::IsSingletonInitialzed())
-		{
-			mLayerName = o2Scene.GetDefaultLayer()->GetName();
-
-			if (IsOnScene())
-			{
-				mLayer = o2Scene.GetLayer(mLayerName);
-				o2Scene.AddActorToSceneDeferred(this);
-			}
-		}
+	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+		Actor(transform, IsModeOnScene(mode))
+	{
+		Scene::OnActorCreated(this);
 
 		ActorRefResolver::ActorCreated(this);
 	}
 
 	Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, IsModeOnScene(mode) ? State::WaitingAddToScene : State::NotInScene,
-			  other.mName, other.mEnabled, other.mEnabled, other.mLayerName, other.mLayer,
-			  Math::Random(), other.mAssetId)
+		Actor(transform, IsModeOnScene(mode), other.mName, other.mEnabled, other.mEnabled, Math::Random(), other.mAssetId)
 	{
-		transform->SetOwner(this);
-
 		ActorRefResolver::LockResolving();
 
 		if (other.mIsAsset)
@@ -76,12 +61,7 @@ namespace o2
 			mPrototype = other.mPrototype;
 
 #if IS_EDITOR
-			ActorAssetRef proto = other.mPrototype;
-			while (proto)
-			{
-				o2Scene.OnActorLinkedToPrototype(proto, this);
-				proto = proto->GetActor()->GetPrototype();
-			}
+			Scene::LinkActorToPrototypesHierarchy(this, mPrototype);
 #endif
 		}
 
@@ -102,29 +82,12 @@ namespace o2
 				other.mCopyVisitor->OnCopyComponent(component, newComponent);
 		}
 
-		if (Scene::IsSingletonInitialzed())
-		{
-			if (IsOnScene())
-			{
-				mLayer = o2Scene.GetLayer(mLayerName);
-				o2Scene.AddActorToSceneDeferred(this);
-			}
-		}
+		Scene::OnActorCreated(this);
 
 		ActorRefResolver::ActorCreated(this);
 		ActorRefResolver::UnlockResolving();
 
-		if (other.mCopyVisitor)
-		{
-			other.mCopyVisitor->depth--;
-
-			if (other.mCopyVisitor->depth == 0)
-			{
-				other.mCopyVisitor->Finalize();
-				delete other.mCopyVisitor;
-				other.mCopyVisitor = nullptr;
-			}
-		}
+		other.CheckCopyVisitorFinalization();
 	}
 
 	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
@@ -136,8 +99,6 @@ namespace o2
 	{
 		for (auto comp : components)
 			AddComponent(comp);
-
-		OnTransformUpdated();
 	}
 
 	Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/) :
@@ -176,21 +137,7 @@ namespace o2
 		RemoveAllChildren();
 		RemoveAllComponents();
 
-		if (Scene::IsSingletonInitialzed())
-		{
-			if (IsOnScene())
-			{
-				if (mLayer)
-				{
-					if (mResEnabledInHierarchy)
-						mLayer->OnActorDisabled(this);
-
-					mLayer->UnregisterActor(this);
-				}
-
-				o2Scene.RemoveActorFromScene(this);
-			}
-		}
+		Scene::OnActorDestroy(this);
 
 		delete transform;
 	}
@@ -227,12 +174,7 @@ namespace o2
 			mPrototype = other.mPrototype;
 
 #if IS_EDITOR
-			ActorAssetRef proto = other.mPrototype;
-			while (proto)
-			{
-				o2Scene.OnActorLinkedToPrototype(proto, this);
-				proto = proto->GetActor()->GetPrototype();
-			}
+			Scene::LinkActorToPrototypesHierarchy(this, mPrototype);
 #endif
 		}
 
@@ -256,30 +198,12 @@ namespace o2
 				newComponent->mPrototypeLink = component->mPrototypeLink;
 		}
 
-		if (Scene::IsSingletonInitialzed())
-		{
-			if (IsOnScene())
-			{
-				mLayer = o2Scene.GetLayer(mLayerName);
-				o2Scene.AddActorToSceneDeferred(this);
-			}
-		}
+		Scene::OnActorCreated(this);
 
 		ActorRefResolver::ActorCreated(this);
 		ActorRefResolver::UnlockResolving();
 
-		if (other.mCopyVisitor)
-		{
-			other.mCopyVisitor->depth--;
-
-			if (other.mCopyVisitor->depth == 0)
-			{
-				other.mCopyVisitor->Finalize();
-				delete other.mCopyVisitor;
-				other.mCopyVisitor = nullptr;
-			}
-		}
-
+		other.CheckCopyVisitorFinalization();
 		UpdateResEnabledInHierarchy();
 
 #if IS_EDITOR
@@ -287,6 +211,29 @@ namespace o2
 #endif
 
 		return *this;
+	}
+
+	void Actor::CheckCopyVisitorFinalization() const
+	{
+		if (mCopyVisitor)
+		{
+			mCopyVisitor->depth--;
+
+			if (mCopyVisitor->depth == 0)
+			{
+				mCopyVisitor->Finalize();
+				delete mCopyVisitor;
+				mCopyVisitor = nullptr;
+			}
+		}
+	}
+
+	void Actor::Destroy()
+	{
+		if (Scene::IsSingletonInitialzed())
+			o2Scene.DestroyActor(this);
+		else
+			o2Debug.LogError("Cant destroy actor in scene, because it's not exists. Delete actor manually");
 	}
 
 	void Actor::Update(float dt)
@@ -302,12 +249,15 @@ namespace o2
 		OnUpdate(dt);
 
 		for (auto comp : mComponents)
-			comp->Update(dt);
+			comp->OnUpdate(dt);
 	}
 
 	void Actor::FixedUpdate(float dt)
 	{
 		OnFixedUpdate(dt);
+
+		for (auto comp : mComponents)
+			comp->OnFixedUpdate(dt);
 	}
 
 	void Actor::UpdateChildren(float dt)
@@ -337,6 +287,9 @@ namespace o2
 	void Actor::UpdateSelfTransform()
 	{
 		transform->Update();
+		
+		for (auto comp : mComponents)
+			comp->OnTransformUpdated();
 	}
 
 	void Actor::UpdateChildrenTransforms()
@@ -372,9 +325,7 @@ namespace o2
 		auto prevId = mId;
 		mId = id;
 
-		if (IsOnScene())
-			o2Scene.OnActorIdChanged(this, prevId);
-
+		Scene::OnActorIdChanged(this, prevId);
 		ActorRefResolver::OnActorIdChanged(this, prevId);
 	}
 
@@ -402,45 +353,35 @@ namespace o2
 		}
 	}
 
-	void Actor::RemoveFromScene(bool keepEditorObjects /*= false*/)
-	{
-		if (!IsOnScene())
-			return;
-
-		if (Scene::IsSingletonInitialzed())
-			o2Scene.RemoveActorFromScene(this, keepEditorObjects);
-
-		OnRemoveFromScene();
-
-		mLayer = nullptr;
-		mState = State::NotInScene;
-
-		for (auto child : mChildren)
-			child->RemoveFromScene();
-	}
-
 	void Actor::AddToScene()
 	{
-		if (IsOnScene())
+		if (mIsOnScene)
 			return;
 
-		if (Scene::IsSingletonInitialzed())
-		{
-			mLayer = o2Scene.GetLayer(mLayerName);
-			o2Scene.AddActorToScene(this);
-		}
+		mIsOnScene = true;;
 
-		OnAddToScene();
-
-		mState = State::InScene;
+		Scene::OnAddActorToScene(this);
 
 		for (auto child : mChildren)
 			child->AddToScene();
 	}
 
+	void Actor::RemoveFromScene(bool keepEditorObjects /*= false*/)
+	{
+		if (!mIsOnScene)
+			return;
+
+		mIsOnScene = false;
+
+		Scene::OnRemoveActorFromScene(this, keepEditorObjects);
+
+		for (auto child : mChildren)
+			child->RemoveFromScene();
+	}
+
 	bool Actor::IsOnScene() const
 	{
-		return mState != State::NotInScene;
+		return mIsOnScene;
 	}
 
 	void Actor::SetEnabled(bool enabled)
@@ -454,7 +395,7 @@ namespace o2
 #if IS_EDITOR
 		onEnableChanged(mEnabled);
 
-		if (IsOnScene())
+		if (mIsOnScene)
 			o2Scene.onEnableChanged(this);
 
 		OnChanged();
@@ -497,12 +438,12 @@ namespace o2
 				lastIdx++;
 
 			mParent->mChildren.RemoveAt(lastIdx);
-			mParent->OnChildrenRearranged();
+
 			mParent->OnChildrenChanged();
 		}
 		else
 		{
-			if (IsOnScene())
+			if (mIsOnScene)
 			{
 				int lastIdx = o2Scene.mRootActors.IndexOf(this);
 				o2Scene.mRootActors.Insert(this, index);
@@ -520,17 +461,21 @@ namespace o2
 		if ((actor && actor->mParent == this) || actor == this || actor == mParent)
 			return;
 
+		// Store initial transform
 		Basis lastParentBasis = transform->GetWorldBasis();
 		auto oldParent = mParent;
 
+		// Remove from parent list or root actors
 		if (mParent)
-			mParent->RemoveChild(this, false);
-		else if (IsOnScene() && Scene::IsSingletonInitialzed())
+			mParent->RemoveChild(this, false, false);
+		else if (mIsOnScene && Scene::IsSingletonInitialzed())
 			o2Scene.mRootActors.Remove(this);
 
+		// Change parent
 		mParent = actor;
 		transform->mData->parentInvTransformActualFrame = 0;
 
+		// Restore in new parent children list or root actors
 		if (mParent)
 		{
 			if (idx < 0)
@@ -538,10 +483,9 @@ namespace o2
 			else
 				mParent->mChildren.Insert(this, idx);
 
-			mParent->OnChildAdded(this);
-			mParent->OnChildrenChanged();
+			mParent->OnChildAdded(actor);
 		}
-		else if (IsOnScene() && Scene::IsSingletonInitialzed())
+		else if (mIsOnScene && Scene::IsSingletonInitialzed())
 		{
 			if (idx < 0)
 				o2Scene.mRootActors.Add(this);
@@ -549,21 +493,25 @@ namespace o2
 				o2Scene.mRootActors.Insert(this, idx);
 		}
 
+		// Restore transform if needed
 		if (worldPositionStays)
 			transform->SetWorldBasis(lastParentBasis);
 		else
 			transform->SetDirty();
 
+		// Update enabled state in hierarchy
 		UpdateResEnabledInHierarchy();
 
-		if (mParent && mParent->IsOnScene() != IsOnScene())
+		// Checks if actor should be added or removed from scene
+		if (mParent && mParent->mIsOnScene != mIsOnScene)
 		{
-			if (mParent->IsOnScene())
+			if (mParent->mIsOnScene && !mIsOnScene)
 				AddToScene();
-			else
+			else if (!mParent->mIsOnScene && mIsOnScene)
 				RemoveFromScene();
 		}
 
+		// Call parent update events
 		OnParentChanged(oldParent);
 	}
 
@@ -667,19 +615,23 @@ namespace o2
 			child->GetAllChildrenActors(actors);
 	}
 
-	void Actor::RemoveChild(Actor* actor, bool release /*= true*/)
+	void Actor::RemoveChild(Actor* actor, bool release /*= true*/, bool withEvent /*= true*/)
 	{
 		auto oldParent = actor->mParent;
 
 		actor->mParent = nullptr;
 		mChildren.Remove(actor);
 
-		actor->OnParentChanged(oldParent);
+		if (withEvent)
+			actor->OnParentChanged(oldParent);
+
 		OnChildRemoved(actor);
-		OnChildrenChanged();
 
 		if (release)
+		{
+			actor->OnBeforeDestroy();
 			delete actor;
+		}
 		else
 		{
 			actor->transform->SetDirty();
@@ -692,6 +644,7 @@ namespace o2
 		for (auto child : mChildren)
 		{
 			child->mParent = nullptr;
+
 			OnChildRemoved(child);
 			child->OnParentChanged(this);
 
@@ -700,8 +653,6 @@ namespace o2
 		}
 
 		mChildren.Clear();
-
-		OnChildrenChanged();
 	}
 
 	Actor* Actor::FindActorById(SceneUID id)
@@ -723,7 +674,12 @@ namespace o2
 		component->SetOwnerActor(this);
 		mComponents.Add(component);
 
+		if (mIsOnScene && mState == State::Default)
+			component->AddToScene();
+
 		OnComponentAdded(component);
+
+		component->OnTransformUpdated();
 
 #if IS_EDITOR
 		OnChanged();
@@ -734,6 +690,9 @@ namespace o2
 
 	void Actor::RemoveComponent(Component* component, bool release /*= true*/)
 	{
+		if (mIsOnScene)
+			component->RemoveFromScene();
+
 		OnComponentRemoving(component);
 
 		mComponents.Remove(component);
@@ -754,7 +713,11 @@ namespace o2
 
 		for (auto component : components)
 		{
+			if (mIsOnScene)
+				component->RemoveFromScene();
+
 			OnComponentRemoving(component);
+
 			delete component;
 		}
 
@@ -822,50 +785,16 @@ namespace o2
 
 		return nullptr;
 	}
-#endif
 
+	ActorTransform* Actor::GetTransform()
+	{
+		return transform;
+	}
+#endif
 
 	const Vector<Component*>& Actor::GetComponents() const
 	{
 		return mComponents;
-	}
-
-	void Actor::SetLayer(const String& layerName)
-	{
-		if (layerName == mLayerName)
-			return;
-
-		if (!IsOnScene())
-			return;
-
-		auto oldLayer = mLayer;
-
-        if (mState == State::InScene)
-		    OnRemoveFromScene();
-
-		mLayerName = layerName;
-
-		if (Scene::IsSingletonInitialzed())
-			mLayer = o2Scene.GetLayer(mLayerName);
-
-        if (mState == State::InScene)
-            OnAddToScene();
-
-		OnLayerChanged(oldLayer);
-
-#if IS_EDITOR
-		OnChanged();
-#endif
-	}
-
-	SceneLayer* Actor::GetLayer() const
-	{
-		return mLayer;
-	}
-
-	const String& Actor::GetLayerName() const
-	{
-		return mLayerName;
 	}
 
 	void Actor::SetDefaultCreationMode(ActorCreateMode mode)
@@ -889,26 +818,6 @@ namespace o2
 		return mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode != ActorCreateMode::NotInScene);
 	}
 
-#if IS_EDITOR
-	void Actor::SetProtytypeDummy(ActorAssetRef asset)
-	{}
-#endif
-
-	void Actor::OnTransformUpdated()
-	{
-		for (auto comp : mComponents)
-			comp->OnTransformUpdated();
-	}
-
-	void Actor::OnTransformChanged()
-	{
-		if (mState == State::WaitingAddToScene)
-			return;
-
-		for (auto comp : mComponents)
-			comp->OnTransformChanged();
-	}
-
 	void Actor::SetParentProp(Actor* actor)
 	{
 		SetParent(actor, false);
@@ -916,34 +825,31 @@ namespace o2
 
 	void Actor::OnAddToScene()
 	{
-		mState = State::InScene;
-
-		if (mLayer)
-		{
-			mLayer->RegisterActor(this);
-
-			if (mResEnabledInHierarchy)
-				mLayer->OnActorEnabled(this);
-		}
-
 		for (auto comp : mComponents)
-			comp->OnAddToScene();
+			comp->AddToScene();
 	}
 
 	void Actor::OnRemoveFromScene()
 	{
-		if (mLayer) {
-			if (mResEnabledInHierarchy)
-				mLayer->OnActorDisabled(this);
+		for (auto comp : mComponents)
+			comp->RemoveFromScene();
+	}
 
-			mLayer->UnregisterActor(this);
-		}
+	void Actor::OnInitialized()
+	{
+		mState = State::Default;
 
 		for (auto comp : mComponents)
-			comp->OnRemoveFromScene();
+			comp->OnInitialized();
 	}
 
 	void Actor::OnStart()
+	{
+		for (auto comp : mComponents)
+			comp->OnStart();
+	}
+
+	void Actor::OnDestroy()
 	{}
 
 	void Actor::OnUpdate(float dt)
@@ -958,47 +864,53 @@ namespace o2
 	void Actor::OnDisabled()
 	{}
 
+	void Actor::OnTransformUpdated()
+	{
+		for (auto comp : mComponents)
+			comp->OnTransformUpdated();
+	}
+
 	void Actor::OnChildAdded(Actor* child)
 	{
 		for (auto comp : mComponents)
 			comp->OnChildAdded(child);
+
+		OnChildrenChanged();
 	}
 
 	void Actor::OnChildRemoved(Actor* child)
 	{
 		for (auto comp : mComponents)
 			comp->OnChildRemoved(child);
-	}
 
-	void Actor::OnChildrenRearranged()
-	{
-		for (auto comp : mComponents)
-			comp->OnChildrenRearranged();
-	}
-
-	void Actor::OnLayerChanged(SceneLayer* oldLayer)
-	{
-		for (auto comp : mComponents)
-			comp->OnLayerChanged(oldLayer);
+		OnChildrenChanged();
 	}
 
 	void Actor::OnComponentAdded(Component* component)
 	{
-		if (mState == State::InScene)
-			component->OnAddToScene();
-
 		for (auto comp : mComponents)
 			comp->OnComponentAdded(component);
 	}
 
 	void Actor::OnComponentRemoving(Component* component)
 	{
-		if (IsOnScene())
-			component->OnRemoveFromScene();
-
 		for (auto comp : mComponents)
 			comp->OnComponentRemoving(component);
 	}
+
+#if !IS_EDITOR
+	void Actor::OnChildrenChanged()
+	{
+		for (auto comp : mComponents)
+			comp->OnChildrenChanged();
+	}
+
+	void Actor::OnParentChanged(Actor* oldParent) 
+	{
+		for (auto comp : mComponents)
+			comp->OnParentChanged(oldParent);
+	}
+#endif
 
 	void Actor::UpdateResEnabled()
 	{
@@ -1017,26 +929,21 @@ namespace o2
 
 		if (lastResEnabledInHierarchy != mResEnabledInHierarchy)
 		{
-			if (mLayer && mState == State::InScene)
-			{
-				if (mResEnabledInHierarchy)
-					mLayer->OnActorEnabled(this);
-				else
-					mLayer->OnActorDisabled(this);
-			}
+			if (mResEnabledInHierarchy)
+				OnEnabled();
+			else
+				OnDisabled();
 
-			OnEnableInHierarchyChanged();
+			for (auto comp : mComponents)
+				comp->UpdateEnabledInHierarchy();
 
 #if IS_EDITOR
-			if (IsOnScene())
+			if (mIsOnScene)
 				o2Scene.onEnableChanged(this);
 
 			OnChanged();
 #endif
 		}
-
-		for (auto comp : mComponents)
-			comp->UpdateEnabled();
 
 		for (auto child : mChildren)
 			child->UpdateResEnabledInHierarchy();
@@ -1152,10 +1059,6 @@ namespace o2
 
 		ActorRefResolver::Instance().UnlockResolving();
 		ActorRefResolver::Instance().ResolveRefs();
-
-		auto layer = mLayerName;
-		mLayerName.Clear();
-		SetLayer(layer);
 	}
 
 	void Actor::SerializeWithProto(DataValue& node) const
@@ -1392,23 +1295,16 @@ namespace o2
 			o2Scene.OnActorPrototypeBroken(this);
 #endif
 
-		auto linkAsset = asset;
-		while (linkAsset)
-		{
-#if IS_EDITOR
-			if (Scene::IsSingletonInitialzed())
-				o2Scene.OnActorLinkedToPrototype(linkAsset, this);
-#endif
-
-			linkAsset = linkAsset->GetActor()->GetPrototype();
-		}
-
 		mPrototype = asset;
 
 		if (asset)
 			mPrototypeLink.CopyWithoutRemap(asset->GetActor());
 		else
 			mPrototypeLink.CopyWithoutRemap(nullptr);
+
+#if IS_EDITOR
+		Scene::LinkActorToPrototypesHierarchy(this, mPrototype);
+#endif
 	}
 
 	ActorRef Actor::GetPrototypeLink() const
@@ -1434,122 +1330,19 @@ namespace o2
 		return res;
 	}
 
-	void Actor::OnEnableInHierarchyChanged()
+	void Actor::OnBeforeDestroy()
 	{
 		if (mResEnabledInHierarchy)
-			OnEnabled();
-		else
 			OnDisabled();
-	}
 
-	void Actor::CopyFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* dest, Vector<Actor**>& actorsPointers,
-						   Vector<Component**>& componentsPointers, Vector<ISerializable*>& serializableObjects)
-	{
-		for (auto field : fields)
+		if (mIsOnScene)
 		{
-			if (!field->HasAttribute<SerializableAttribute>())
-				continue;
-
-			if (*field->GetType() == TypeOf(Actor*))
-			{
-				Actor* sourceValue = field->GetValue<Actor*>(source);
-				Actor** destValuePtr = (Actor**)(field->GetValuePtrStrong(dest));
-
-				*destValuePtr = sourceValue;
-				actorsPointers.Add(destValuePtr);
-			}
-			else if (*field->GetType() == TypeOf(Component*))
-			{
-				Component* sourceValue = field->GetValue<Component*>(source);
-				Component** destValuePtr = (Component**)(field->GetValuePtrStrong(dest));
-
-				*destValuePtr = sourceValue;
-				componentsPointers.Add(destValuePtr);
-			}
-			else if (field->GetType()->IsBasedOn(TypeOf(AssetRef)))
-			{
-				field->CopyValue(dest, source);
-			}
-			else if (field->GetType()->IsBasedOn(TypeOf(IObject)))
-			{
-				if (field->GetType()->IsBasedOn(TypeOf(ISerializable)))
-					serializableObjects.Add((ISerializable*)field->GetValuePtr(dest));
-
-				auto fields = field->GetType()->GetFieldsWithBaseClasses();
-				CopyFields(fields, (IObject*)field->GetValuePtr(source),
-						   (IObject*)field->GetValuePtr(dest),
-						   actorsPointers, componentsPointers, serializableObjects);
-			}
-			else field->CopyValue(dest, source);
-		}
-	}
-
-	void Actor::CollectFixingFields(Component* newComponent, Vector<Component**>& componentsPointers,
-									Vector<Actor**>& actorsPointers)
-	{
-		Vector<const FieldInfo*> fields;
-		GetComponentFields(newComponent, fields);
-
-		for (auto field : fields)
-		{
-			if (field->GetType()->GetUsage() == Type::Usage::Pointer)
-			{
-				const PointerType* fieldType = (const PointerType*)field->GetType();
-
-				if (fieldType->GetUnpointedType()->IsBasedOn(TypeOf(Component)))
-					componentsPointers.Add((Component**)(field->GetValuePtrStrong(newComponent)));
-
-				if (*fieldType == TypeOf(Actor*))
-					actorsPointers.Add((Actor**)(field->GetValuePtrStrong(newComponent)));
-			}
-		}
-	}
-
-	void Actor::GetComponentFields(Component* component, Vector<const FieldInfo*>& fields)
-	{
-		struct helper
-		{
-			static void GetFields(const Type* type, Vector<const FieldInfo*>& fields)
-			{
-				fields.Add(type->GetFields().Convert<const FieldInfo*>([](const auto& x) { return &x; }));
-
-				for (auto baseType : type->GetBaseTypes())
-				{
-					if (*baseType.type != TypeOf(Component))
-						GetFields(baseType.type, fields);
-				}
-			}
-		};
-
-		helper::GetFields(&component->GetType(), fields);
-	}
-
-	void Actor::FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
-										   const Vector<Component**>& componentsPointers,
-										   const Map<const Actor*, Actor*>& actorsMap,
-										   const Map<const Component*, Component*>& componentsMap)
-	{
-		for (auto actorPtr : actorsPointers)
-		{
-			Actor* newActorPtr;
-			if (actorsMap.TryGetValue(*actorPtr, newActorPtr))
-				*actorPtr = newActorPtr;
+			OnRemoveFromScene();
+			mIsOnScene = false;
 		}
 
-		for (auto componentPtr : componentsPointers)
-		{
-			Component* newComponentPtr;
-			if (componentsMap.TryGetValue(*componentPtr, newComponentPtr))
-				*componentPtr = newComponentPtr;
-		}
+		OnDestroy();
 	}
-
-#if IS_SCRIPTING_SUPPORTED
-	ActorTransform* Actor::GetTransform()
-	{
-		return transform;
-	}
-#endif
 
 	String Actor::GetCreateMenuCategory()
 	{
@@ -1587,27 +1380,14 @@ namespace o2
 		SourceToTargetMapCloneVisitor::OnCopyComponent(source, target);
 		target->mPrototypeLink = const_cast<Component*>(source);
 	}
-
-#if !IS_EDITOR
-
-	void Actor::OnChildrenChanged() {}
-
-	void Actor::OnParentChanged(Actor* oldParent)
-	{
-		for (auto comp : mComponents)
-			comp->OnParentChanged(oldParent);
-	}
-
-#endif // !IS_EDITOR
 }
 // --- META ---
 
 ENUM_META(o2::Actor::State)
 {
+	ENUM_ENTRY(Default);
 	ENUM_ENTRY(Destroying);
-	ENUM_ENTRY(InScene);
-	ENUM_ENTRY(NotInScene);
-	ENUM_ENTRY(WaitingAddToScene);
+	ENUM_ENTRY(Initializing);
 }
 END_ENUM_META;
 

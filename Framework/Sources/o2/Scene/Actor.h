@@ -19,7 +19,6 @@ namespace o2
 {
 	class Component;
 	class Scene;
-	class SceneLayer;
 
 #if IS_EDITOR
 	typedef SceneEditableObject ActorBase;
@@ -35,7 +34,7 @@ namespace o2
 
 	// ---------------------------------------------------------------------------------------------
 	// Scene actor. This is a basic scene object. All other scene object types is derived from this.
-	// It has an unique id, name, tags, scene layer, transformation, components and children actors.
+	// It has an unique id, name, tags, transformation, components and children actors.
 	// Can be created from prototype of other actor. 
 	// When editor pragma is enabled, it is derived from SceneEditableObject and support all editor 
 	// features for editing actor
@@ -43,7 +42,7 @@ namespace o2
 	class Actor: virtual public ActorBase
 	{
 	public:
-		enum class State { InScene, NotInScene, WaitingAddToScene, Destroying };
+		enum class State { Default, Initializing, Destroying };
 
 	public:
 		PROPERTIES(Actor);
@@ -51,8 +50,6 @@ namespace o2
 
 		GETTER(SceneUID, id, GetID);              // Actor unique id
 		PROPERTY(String, name, SetName, GetName); // Actor name property @EDITOR_IGNORE @ANIMATABLE
-
-		PROPERTY(String, layerName, SetLayer, GetLayerName); // Layer name property @EDITOR_IGNORE @ANIMATABLE
 
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE @ANIMATABLE
 		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is actor enabled in hierarchy getter
@@ -88,6 +85,9 @@ namespace o2
 
 		// Assign operator
 		Actor& operator=(const Actor& other);
+
+		// Marks actor to destroy, will be destroyed on next frame @SCRIPTABLE
+		void Destroy();
 
 		// Updates actor and components @SCRIPTABLE
 		virtual void Update(float dt) OPTIONAL_OVERRIDE;
@@ -216,7 +216,7 @@ namespace o2
 		virtual void GetAllChildrenActors(Vector<Actor*>& actors);
 
 		// Removes child and destroys him if needed @SCRIPTABLE
-		void RemoveChild(Actor* actor, bool release = true);
+		void RemoveChild(Actor* actor, bool release = true, bool withEvent = true);
 
 		// Removes and destroys all childs @SCRIPTABLE
 		void RemoveAllChildren(bool release = true);
@@ -269,15 +269,6 @@ namespace o2
 
 		// Returns all components @SCRIPTABLE
 		const Vector<Component*>& GetComponents() const;
-
-		// Sets layer by name @SCRIPTABLE
-		void SetLayer(const String& layerName);
-
-		// Returns layer @SCRIPTABLE
-		SceneLayer* GetLayer() const;
-
-		// Returns layer name @SCRIPTABLE
-		const String& GetLayerName() const;
 
 		// Beginning serialization callback
 		void SerializeBasicOverride(DataValue& node) const;
@@ -338,19 +329,19 @@ namespace o2
 		ActorAssetRef mPrototype;               // Prototype asset
 		ActorRef      mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
 
-		String      mLayerName = String("Default"); // Scene layer name @SERIALIZABLE
-		SceneLayer* mLayer = nullptr;       // Scene layer. Empty when actor isn't on scene
-
 		Actor* mParent = nullptr; // Parent actor 
 		Vector<Actor*> mChildren; // Children actors 
 
 		Vector<Component*> mComponents; // Components vector 
 
-		bool mEnabled = true;               // Is actor enabled
+		// Actor can be logically disabled, but actually stay enabled and be in transition to really disabled state
+		bool mEnabled = true;               // Is actor logically enabled. 
 		bool mResEnabled = true;            // Is actor really enabled. 
 		bool mResEnabledInHierarchy = true; // Is actor enabled in hierarchy
 
-		State mState = State::NotInScene; // Actor on scene status
+		State mState = State::Default; // Actor on scene status
+
+		bool mIsOnScene = false; // Is actor on scene
 
 		bool mIsAsset = false; // Is this actor cached asset
 		UID  mAssetId;         // Source asset id
@@ -361,9 +352,8 @@ namespace o2
 
 	protected:
 		// Base actor constructor with transform
-		Actor(ActorTransform* transform, State sceneStatus = State::WaitingAddToScene,
+		Actor(ActorTransform* transform, bool onScene = true,
 			  const String& name = "unnamed", bool enabled = true, bool resEnabled = true, 
-			  const String& layerName = "", SceneLayer* layer = nullptr,
 			  SceneUID id = Math::Random(), UID assetId = UID(0));
 
 		// Default constructor with transform
@@ -377,25 +367,9 @@ namespace o2
 
 		// Copy-constructor with transform
 		Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode = ActorCreateMode::Default);
-
-		// Copies fields from source to dest
-		void CopyFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* dest,
-						Vector<Actor**>& actorsPointers,
-						Vector<Component**>& componentsPointers,
-						Vector<ISerializable*>& serializableObjects);
-
-		// Collects fixing actors and components pointers in new component
-		void CollectFixingFields(Component* newComponent, Vector<Component**>& componentsPointers,
-								 Vector<Actor**>& actorsPointers);
-
-		// Collects component field, except Component class fields
-		void GetComponentFields(Component* component, Vector<const FieldInfo*>& fields);
-
-		// Fixes actors and components pointers by actors map
-		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
-										const Vector<Component**>& componentsPointers,
-										const Map<const Actor*, Actor*>& actorsMap,
-										const Map<const Component*, Component*>& componentsMap);
+		
+		// Checks that copy visitor finished work, calls it finalization
+		void CheckCopyVisitorFinalization() const;
 
 		// Updates result read enable flag
 		virtual void UpdateResEnabled();
@@ -421,17 +395,26 @@ namespace o2
 		// Returns dictionary of all components by type names
 		Map<String, Component*> GetAllComponents();
 
+		// Calls events before destroying: OnDisable, OnDestroy, OnRemoveFromScene
+		void OnBeforeDestroy();
+
 		// Sets parent
 		void SetParentProp(Actor* actor);
 
-		// Called when actor has added to scene
+		// Called when actor has added to scene 
 		virtual void OnAddToScene();
 
 		// Called when actor has removed from scene
 		virtual void OnRemoveFromScene();
 
+		// Called when actor and scene is initialized
+		virtual void OnInitialized();
+
 		// Called on first update
 		virtual void OnStart();
+
+		// Called when actor will be destroyed
+		virtual void OnDestroy();
 
 		// Called on update with frame dt
 		virtual void OnUpdate(float dt);
@@ -445,32 +428,20 @@ namespace o2
 		// Called when actor disabled in hierarchy
 		virtual void OnDisabled();
 
-		// Called when result enable was changed
-		virtual void OnEnableInHierarchyChanged();
-
 		// Called when transformation was updated
 		virtual void OnTransformUpdated();
-
-		// Called when transformation was changed 
-		virtual void OnTransformChanged();
 
 		// Called when parent changed
 		virtual void OnParentChanged(Actor* oldParent);
 
 		// Called when child changed
-		virtual void OnChildrenChanged();
+		virtual void OnChildrenChanged() OPTIONAL_OVERRIDE;
 
 		// Called when child actor was added
 		virtual void OnChildAdded(Actor* child);
 
 		// Called when child actor was removed
 		virtual void OnChildRemoved(Actor* child);
-
-		// Called when children list arrange has changed
-		virtual void OnChildrenRearranged();
-
-		// Called when layer was changed
-		virtual void OnLayerChanged(SceneLayer* oldLayer);
 
 		// Called when new component has added to actor
 		virtual void OnComponentAdded(Component* component);
@@ -604,6 +575,25 @@ namespace o2
 							  Map<const Component*, Component*>& componentsMap,
 							  Vector<ISerializable*>& serializableObjects);
 
+		// Copies fields from source to dest
+		void CopyFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* dest,
+						Vector<Actor**>& actorsPointers,
+						Vector<Component**>& componentsPointers,
+						Vector<ISerializable*>& serializableObjects);
+
+		// Collects fixing actors and components pointers in new component
+		void CollectFixingFields(Component* newComponent, Vector<Component**>& componentsPointers,
+								 Vector<Actor**>& actorsPointers);
+
+		// Fixes actors and components pointers by actors map
+		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
+										const Vector<Component**>& componentsPointers,
+										const Map<const Actor*, Actor*>& actorsMap,
+										const Map<const Component*, Component*>& componentsMap);
+
+		// Collects component field, except Component class fields
+		void GetComponentFields(Component* component, Vector<const FieldInfo*>& fields);
+
 		// Collects differences between this and prototype
 		virtual void GetDifferences(ActorDifferences& differences) const OPTIONAL_OVERRIDE;
 
@@ -630,7 +620,6 @@ namespace o2
 		friend class DrawableComponent;
 		friend class ISceneDrawable;
 		friend class Scene;
-		friend class SceneLayer;
 		friend class Tag;
 		friend class Widget;
 	};
@@ -751,7 +740,6 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(prototype);
 	FIELD().PUBLIC().NAME(id);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(name);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(layerName);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(enabled);
 	FIELD().PUBLIC().NAME(enabledInHierarchy);
 	FIELD().PUBLIC().NAME(children);
@@ -764,15 +752,14 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mName);
 	FIELD().PROTECTED().NAME(mPrototype);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(String("Default")).NAME(mLayerName);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayer);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParent);
 	FIELD().PROTECTED().NAME(mChildren);
 	FIELD().PROTECTED().NAME(mComponents);
 	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabled);
 	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mResEnabled);
 	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mResEnabledInHierarchy);
-	FIELD().PROTECTED().DEFAULT_VALUE(State::NotInScene).NAME(mState);
+	FIELD().PROTECTED().DEFAULT_VALUE(State::Default).NAME(mState);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsOnScene);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsAsset);
 	FIELD().PROTECTED().NAME(mAssetId);
 	FIELD().PROTECTED().NAME(mReferences);
@@ -794,18 +781,19 @@ END_META;
 CLASS_METHODS_META(o2::Actor)
 {
 
-	typedef const Map<const Actor*, Actor*>& _tmp1;
-	typedef const Map<const Component*, Component*>& _tmp2;
-	typedef Map<String, Actor*> _tmp3;
-	typedef Map<String, Component*> _tmp4;
-	typedef Map<const Actor*, Actor*>& _tmp5;
-	typedef Map<const Component*, Component*>& _tmp6;
+	typedef Map<String, Actor*> _tmp1;
+	typedef Map<String, Component*> _tmp2;
+	typedef Map<const Actor*, Actor*>& _tmp3;
+	typedef Map<const Component*, Component*>& _tmp4;
+	typedef const Map<const Actor*, Actor*>& _tmp5;
+	typedef const Map<const Component*, Component*>& _tmp6;
 
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(ActorCreateMode);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAssetRef&, ActorCreateMode);
 	FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Component*>, ActorCreateMode);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&, ActorCreateMode);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Destroy);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, FixedUpdate, float);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, UpdateChildren, float);
@@ -844,7 +832,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE(Actor*, FindChild, const Function<bool(const Actor* child)>&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Actor*>&, GetChildren);
 	FUNCTION().PUBLIC().SIGNATURE(void, GetAllChildrenActors, Vector<Actor*>&);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, Actor*, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, Actor*, bool, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllChildren, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, FindActorById, SceneUID);
 	FUNCTION().PUBLIC().SIGNATURE(Component*, AddComponent, Component*);
@@ -857,9 +845,6 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const ScriptValue&);
 #endif
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Component*>&, GetComponents);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayer, const String&);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(SceneLayer*, GetLayer);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const String&, GetLayerName);
 	FUNCTION().PUBLIC().SIGNATURE(void, SerializeBasicOverride, DataValue&);
 	FUNCTION().PUBLIC().SIGNATURE(void, DeserializeBasicOverride, const DataValue&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(void, SetDefaultCreationMode, ActorCreateMode);
@@ -867,40 +852,36 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsModeOnScene, ActorCreateMode);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, State, const String&, bool, bool, const String&, SceneLayer*, SceneUID, UID);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, bool, const String&, bool, bool, SceneUID, UID);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const ActorAssetRef&, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Component*>, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Actor&, ActorCreateMode);
-	FUNCTION().PROTECTED().SIGNATURE(void, CopyFields, Vector<const FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, GetComponentFields, Component*, Vector<const FieldInfo*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp1, _tmp2);
+	FUNCTION().PROTECTED().SIGNATURE(void, CheckCopyVisitorFinalization);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabledInHierarchy);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeWithProto, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeWithProto, const DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(_tmp3, GetAllChilds);
-	FUNCTION().PROTECTED().SIGNATURE(_tmp4, GetAllComponents);
+	FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetAllChilds);
+	FUNCTION().PROTECTED().SIGNATURE(_tmp2, GetAllComponents);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnBeforeDestroy);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetParentProp, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDestroy);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnUpdate, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnFixedUpdate, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenRearranged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerChanged, SceneLayer*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
 #if  IS_SCRIPTING_SUPPORTED
@@ -936,7 +917,11 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnNameChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, SeparateActors, Vector<Actor*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6, Vector<ISerializable*>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp3, _tmp4, Vector<ISerializable*>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, CopyFields, Vector<const FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp5, _tmp6);
+	FUNCTION().PROTECTED().SIGNATURE(void, GetComponentFields, Component*, Vector<const FieldInfo*>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, GetDifferences, ActorDifferences&);
 	FUNCTION().PROTECTED().SIGNATURE(void, BeginMakePrototype);
 	FUNCTION().PROTECTED().SIGNATURE(void, BeginInstantiatePrototype);

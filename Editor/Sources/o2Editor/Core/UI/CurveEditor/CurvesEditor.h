@@ -280,7 +280,10 @@ namespace Editor
 
 	protected:
 		// Called when visible was changed. Sets context menu items priority
-		void OnEnableInHierarchyChanged() override;
+		void OnEnabled() override;
+
+		// Called when visible was changed. Sets context menu items priority
+		void OnDisabled() override;
 
 		// Called when scrolling
 		void OnScrolled(float scroll) override;
@@ -515,7 +518,8 @@ CLASS_METHODS_META(Editor::CurvesEditor)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAdjustCurvesScale, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
 	FUNCTION().PUBLIC().SIGNATURE(ContextMenu*, GetContextMenu);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
 	FUNCTION().PROTECTED().SIGNATURE(Curve*, FindCurve, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeContextMenu);

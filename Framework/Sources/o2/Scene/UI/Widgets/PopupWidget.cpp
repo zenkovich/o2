@@ -45,7 +45,7 @@ namespace o2
 		if (cursorPressed)
 		{
 			if (!mChildPopup && (cursorPressed || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
-				!layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && mEnabled)
+				!layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && Actor::mEnabled)
 			{
 				HideWithParent();
 			}
@@ -80,9 +80,14 @@ namespace o2
 		Show(nullptr, position);
 	}
 
-	void PopupWidget::OnEnableInHierarchyChanged()
+	void PopupWidget::OnEnabled()
 	{
-		interactable = mResEnabled;
+		interactable = true;
+	}
+
+	void PopupWidget::OnDisabled()
+	{
+		interactable = false;
 	}
 
 	void PopupWidget::OnCursorPressBreak(const Input::Cursor& cursor)

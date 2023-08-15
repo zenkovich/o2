@@ -151,7 +151,7 @@ namespace Editor
 				layerNode->type = OrderTreeNode::Type::Layer;
 				cameraNode->AddChild(layerNode);
 
-				for (auto drawable : layer->GetEnabledDrawables())
+				for (auto drawable : layer->GetDrawables())
 					ProcessDrawableTreeNode(layerNode, drawable);
 			}
 		}
@@ -198,7 +198,7 @@ namespace Editor
 			CheckBatchEnd(drawableNode);
 			parent->AddChild(drawableNode);
 
-			for (auto child : root->drawables)
+			for (auto child : root->GetChildrenInheritedDepth())
 				ProcessDrawableTreeNode(drawableNode, child);
 		}
 		else

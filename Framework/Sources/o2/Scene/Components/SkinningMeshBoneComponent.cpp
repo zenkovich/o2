@@ -32,7 +32,7 @@ namespace o2
 		ISceneDrawable::Draw();
 	}
 
-	void SkinningMeshBoneComponent::Update(float dt)
+	void SkinningMeshBoneComponent::OnUpdate(float dt)
 	{
 	}
 

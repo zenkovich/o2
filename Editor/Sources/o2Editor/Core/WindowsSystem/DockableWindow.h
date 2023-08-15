@@ -116,8 +116,11 @@ namespace Editor
 		bool  mAutoCalculateTabWidth = true; // Automatically calculating tab width when changing caption
 
 	protected:
-		// Called when visible was changed, undocks when hiding
-		void OnEnableInHierarchyChanged() override;
+		// Called when visible was changed
+		void OnEnabled() override;
+
+		// Called when visible was changed, undocks
+		void OnDisabled() override;
 
 		// Called when widget was selected, enables active tab
 		void OnFocused() override;
@@ -219,7 +222,8 @@ CLASS_METHODS_META(Editor::DockableWindow)
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnFocused);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDockFrameAppearanceAnim);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDragHandles);

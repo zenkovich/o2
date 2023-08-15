@@ -105,6 +105,12 @@ namespace o2
 		return "ui/UI4_image_component.png";
 	}
 
+	void ImageComponent::OnDrawn()
+	{
+		DrawableComponent::OnDrawn();
+		Sprite::OnDrawn();
+	}
+
 	void ImageComponent::OnTransformUpdated()
 	{
 		SetBasis(mOwner->transform->GetWorldBasis());

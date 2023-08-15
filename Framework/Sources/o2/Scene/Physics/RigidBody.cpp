@@ -197,12 +197,20 @@ namespace o2
 		return mIsFixedRotation;
 	}
 
-	void RigidBody::OnEnableInHierarchyChanged()
+	void RigidBody::OnEnabled()
 	{
-		Actor::OnEnableInHierarchyChanged();
+		Actor::OnEnabled();
 
 		if (mBody)
-			mBody->SetActive(mResEnabledInHierarchy);
+			mBody->SetActive(true);
+	}
+
+	void RigidBody::OnDisabled()
+	{
+		Actor::OnDisabled();
+
+		if (mBody)
+			mBody->SetActive(false);
 	}
 
 	void RigidBody::OnAddToScene()

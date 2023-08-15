@@ -503,9 +503,14 @@ namespace o2
 	void LongList::OnSelectionChanged()
 	{}
 
-	void LongList::OnEnableInHierarchyChanged()
+	void LongList::OnEnabled()
 	{
-		SetInteractable(mResEnabled);
+		SetInteractable(true);
+	}
+
+	void LongList::OnDisabled()
+	{
+		SetInteractable(false);
 	}
 
 	String LongList::GetCreateMenuGroup()

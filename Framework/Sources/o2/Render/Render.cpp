@@ -97,7 +97,7 @@ namespace o2
 		static Mesh mesh(TextureRef(), 1024, 1024);
 
 		int polyCount = vertexCount - 2;
-		if (mesh.GetMaxVertexCount() < vertexCount || mesh.GetMaxPolyCount() < polyCount)
+		if (mesh.GetMaxVertexCount() < (UInt)vertexCount || mesh.GetMaxPolyCount() < (UInt)polyCount)
 			mesh.Resize(vertexCount, polyCount);
 
 		memcpy(mesh.vertices, verticies, sizeof(Vertex)*vertexCount);

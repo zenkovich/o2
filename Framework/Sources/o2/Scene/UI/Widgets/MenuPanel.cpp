@@ -364,9 +364,14 @@ namespace o2
 		return res;
 	}
 
-	void MenuPanel::OnEnableInHierarchyChanged()
+	void MenuPanel::OnEnabled()
 	{
-		interactable = mResEnabled;
+		interactable = true;
+	}
+
+	void MenuPanel::OnDisabled()
+	{
+		interactable = true;
 	}
 
 	Widget* MenuPanel::GetItemUnderPoint(const Vec2F& point, int* idxPtr)

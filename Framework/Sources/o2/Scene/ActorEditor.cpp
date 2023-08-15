@@ -26,6 +26,9 @@ namespace o2
 		const_cast<Component*>(source)->mPrototypeLink = target;
 	}
 
+	void Actor::SetProtytypeDummy(ActorAssetRef asset)
+	{}
+
 	void Actor::BreakPrototypeLink()
 	{
 		if (!mPrototype && !mPrototypeLink)
@@ -366,6 +369,9 @@ namespace o2
 
 	void Actor::OnChildrenChanged()
 	{
+		for (auto comp : mComponents)
+			comp->OnChildrenChanged();
+
 		onChildHierarchyChanged();
 		onChanged();
 
@@ -453,8 +459,108 @@ namespace o2
 
 			CollectFixingFields(newComponent, componentsPointers, actorsPointers);
 		}
+	}
 
-		dest->SetLayer(source->mLayerName);
+	void Actor::CopyFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* dest, Vector<Actor**>& actorsPointers,
+						   Vector<Component**>& componentsPointers, Vector<ISerializable*>& serializableObjects)
+	{
+		for (auto field : fields)
+		{
+			if (!field->HasAttribute<SerializableAttribute>())
+				continue;
+
+			if (*field->GetType() == TypeOf(Actor*))
+			{
+				Actor* sourceValue = field->GetValue<Actor*>(source);
+				Actor** destValuePtr = (Actor**)(field->GetValuePtrStrong(dest));
+
+				*destValuePtr = sourceValue;
+				actorsPointers.Add(destValuePtr);
+			}
+			else if (*field->GetType() == TypeOf(Component*))
+			{
+				Component* sourceValue = field->GetValue<Component*>(source);
+				Component** destValuePtr = (Component**)(field->GetValuePtrStrong(dest));
+
+				*destValuePtr = sourceValue;
+				componentsPointers.Add(destValuePtr);
+			}
+			else if (field->GetType()->IsBasedOn(TypeOf(AssetRef)))
+			{
+				field->CopyValue(dest, source);
+			}
+			else if (field->GetType()->IsBasedOn(TypeOf(IObject)))
+			{
+				if (field->GetType()->IsBasedOn(TypeOf(ISerializable)))
+					serializableObjects.Add((ISerializable*)field->GetValuePtr(dest));
+
+				auto fields = field->GetType()->GetFieldsWithBaseClasses();
+				CopyFields(fields, (IObject*)field->GetValuePtr(source),
+						   (IObject*)field->GetValuePtr(dest),
+						   actorsPointers, componentsPointers, serializableObjects);
+			}
+			else field->CopyValue(dest, source);
+		}
+	}
+
+	void Actor::CollectFixingFields(Component* newComponent, Vector<Component**>& componentsPointers,
+									Vector<Actor**>& actorsPointers)
+	{
+		Vector<const FieldInfo*> fields;
+		GetComponentFields(newComponent, fields);
+
+		for (auto field : fields)
+		{
+			if (field->GetType()->GetUsage() == Type::Usage::Pointer)
+			{
+				const PointerType* fieldType = (const PointerType*)field->GetType();
+
+				if (fieldType->GetUnpointedType()->IsBasedOn(TypeOf(Component)))
+					componentsPointers.Add((Component**)(field->GetValuePtrStrong(newComponent)));
+
+				if (*fieldType == TypeOf(Actor*))
+					actorsPointers.Add((Actor**)(field->GetValuePtrStrong(newComponent)));
+			}
+		}
+	}
+
+	void Actor::FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
+										   const Vector<Component**>& componentsPointers,
+										   const Map<const Actor*, Actor*>& actorsMap,
+										   const Map<const Component*, Component*>& componentsMap)
+	{
+		for (auto actorPtr : actorsPointers)
+		{
+			Actor* newActorPtr;
+			if (actorsMap.TryGetValue(*actorPtr, newActorPtr))
+				*actorPtr = newActorPtr;
+		}
+
+		for (auto componentPtr : componentsPointers)
+		{
+			Component* newComponentPtr;
+			if (componentsMap.TryGetValue(*componentPtr, newComponentPtr))
+				*componentPtr = newComponentPtr;
+		}
+	}
+
+	void Actor::GetComponentFields(Component* component, Vector<const FieldInfo*>& fields)
+	{
+		struct helper
+		{
+			static void GetFields(const Type* type, Vector<const FieldInfo*>& fields)
+			{
+				fields.Add(type->GetFields().Convert<const FieldInfo*>([](const auto& x) { return &x; }));
+
+				for (auto baseType : type->GetBaseTypes())
+				{
+					if (*baseType.type != TypeOf(Component))
+						GetFields(baseType.type, fields);
+				}
+			}
+		};
+
+		helper::GetFields(&component->GetType(), fields);
 	}
 
 	void Actor::CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds,
@@ -478,9 +584,6 @@ namespace o2
 
 		if (source->mLocked != changed->mLocked && dest->mLocked == source->mLocked)
 			dest->mLocked = changed->mLocked;
-
-		if (source->mLayer != changed->mLayer && dest->mLayer == source->mLayer)
-			dest->SetLayer(changed->mLayerName);
 
 		// transform
 		if (withTransform)

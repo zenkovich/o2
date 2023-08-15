@@ -29,7 +29,7 @@ namespace o2
 		return *this;
 	}
 
-	void AnimationComponent::Update(float dt)
+	void AnimationComponent::OnUpdate(float dt)
 	{
 		if (mInEditMode)
 			return;

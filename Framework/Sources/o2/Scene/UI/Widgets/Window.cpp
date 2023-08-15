@@ -311,11 +311,14 @@ namespace o2
 
 	void Window::OnEnabled()
 	{
+		interactable = true;
+		Focus();
 		onOpened();
 	}
 	 
 	void Window::OnDisabled()
 	{
+		interactable = false;
 		onClosed();
 	}
 
@@ -332,14 +335,6 @@ namespace o2
 	void Window::OnStateAdded(WidgetState* state)
 	{
 		BindHandlesInteractableToVisibility();
-	}
-
-	void Window::OnEnableInHierarchyChanged()
-	{
-		interactable = mResEnabled;
-
-		if (mResEnabled)
-			Focus();
 	}
 
 	void Window::InitializeContextMenu()

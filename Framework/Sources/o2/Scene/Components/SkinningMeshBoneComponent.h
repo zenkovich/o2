@@ -34,7 +34,7 @@ namespace o2
 		void Draw() override;
 
 		// Updates component
-		void Update(float dt) override;
+		void OnUpdate(float dt) override;
 
 		// Searches skinning mesh in parent hierarchy
 		SkinningMeshComponent* FindSkinningMesh() const;
@@ -78,7 +78,7 @@ CLASS_METHODS_META(o2::SkinningMeshBoneComponent)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const SkinningMeshBoneComponent&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
 	FUNCTION().PUBLIC().SIGNATURE(SkinningMeshComponent*, FindSkinningMesh);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
