@@ -319,11 +319,15 @@ namespace o2
 
 	void Toggle::OnEnabled()
 	{
+		Widget::OnEnabled();
+
 		interactable = true;
 	}
 
 	void Toggle::OnDisabled()
 	{
+		Widget::OnDisabled();
+
 		interactable = false;
 	}
 

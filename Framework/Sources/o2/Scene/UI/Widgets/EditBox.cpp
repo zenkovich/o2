@@ -386,11 +386,15 @@ namespace o2
 
 	void EditBox::OnEnabled()
 	{
+		Widget::OnEnabled();
+
 		interactable = true;
 	}
 
 	void EditBox::OnDisabled()
 	{
+		Widget::OnDisabled();
+
 		interactable = false;
 	}
 

@@ -190,6 +190,9 @@ namespace o2
 		// Called when actor destroyed, removes from scene
 		static void OnActorDestroy(Actor* actor);
 
+		// Called when new actor was parented to another actor, removes it from added list
+		static void OnNewActorParented(Actor* actor);
+
 		// Called when actor unique id was changed; updates actors map
 		static void OnActorIdChanged(Actor* actor, SceneUID prevId);
 
@@ -480,6 +483,7 @@ CLASS_METHODS_META(o2::Scene)
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, Component*);
 	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorCreated, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorDestroy, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnNewActorParented, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorIdChanged, Actor*, SceneUID);
 	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnAddActorToScene, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnRemoveActorFromScene, Actor*, bool);

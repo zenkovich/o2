@@ -82,11 +82,15 @@ namespace o2
 
 	void PopupWidget::OnEnabled()
 	{
+		ScrollArea::OnEnabled();
+
 		interactable = true;
 	}
 
 	void PopupWidget::OnDisabled()
 	{
+		ScrollArea::OnDisabled();
+
 		interactable = false;
 	}
 

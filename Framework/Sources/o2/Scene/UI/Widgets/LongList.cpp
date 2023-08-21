@@ -505,11 +505,15 @@ namespace o2
 
 	void LongList::OnEnabled()
 	{
+		Widget::OnEnabled();
+
 		SetInteractable(true);
 	}
 
 	void LongList::OnDisabled()
 	{
+		Widget::OnDisabled();
+
 		SetInteractable(false);
 	}
 

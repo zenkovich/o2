@@ -230,11 +230,15 @@ namespace o2
 
 	void VerticalProgress::OnEnabled()
 	{
+		Widget::OnEnabled();
+
 		interactable = true;
 	}
 
 	void VerticalProgress::OnDisabled()
 	{
+		Widget::OnDisabled();
+
 		interactable = false;
 	}
 

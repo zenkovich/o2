@@ -221,11 +221,13 @@ namespace o2
 	void HorizontalLayout::OnChildAdded(Widget* child)
 	{
 		child->GetLayoutData().drivenByParent = true;
+		Widget::OnChildAdded(child);
 	}
 
 	void HorizontalLayout::OnChildRemoved(Widget* child)
 	{
 		child->GetLayoutData().drivenByParent = false;
+		Widget::OnChildRemoved(child);
 	}
 
 	void HorizontalLayout::RearrangeChilds()

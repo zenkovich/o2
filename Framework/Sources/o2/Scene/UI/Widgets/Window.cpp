@@ -311,6 +311,8 @@ namespace o2
 
 	void Window::OnEnabled()
 	{
+		ScrollArea::OnEnabled();
+
 		interactable = true;
 		Focus();
 		onOpened();
@@ -318,6 +320,8 @@ namespace o2
 	 
 	void Window::OnDisabled()
 	{
+		ScrollArea::OnDisabled();
+
 		interactable = false;
 		onClosed();
 	}

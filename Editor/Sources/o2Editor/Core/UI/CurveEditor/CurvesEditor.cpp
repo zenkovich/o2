@@ -318,11 +318,15 @@ namespace Editor
 
 	void CurvesEditor::OnEnabled()
 	{
+		FrameScrollView::OnEnabled();
+
 		mContextMenu->SetItemsMaxPriority();
 	}
 
 	void CurvesEditor::OnDisabled()
 	{
+		FrameScrollView::OnDisabled();
+
 		mContextMenu->SetItemsMinPriority();
 	}
 

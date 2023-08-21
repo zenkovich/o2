@@ -522,6 +522,7 @@ namespace o2
 	void Widget::OnEnabled()
 	{
 		Actor::OnEnabled();
+		ISceneDrawable::OnEnabled();
 
 		layout->SetDirty(false);
 		onShow();
@@ -530,6 +531,7 @@ namespace o2
 	void Widget::OnDisabled()
 	{
 		Actor::OnDisabled();
+		ISceneDrawable::OnDisabled();
 
 		layout->SetDirty(false);
 		onHide();
@@ -1228,6 +1230,8 @@ namespace o2
 
 			OnChildAdded(widget);
 		}
+
+		Actor::OnChildAdded(child);
 	}
 
 	void Widget::OnChildAdded(Widget* child)
@@ -1246,6 +1250,8 @@ namespace o2
 
 			OnChildRemoved(widget);
 		}
+
+		Actor::OnChildRemoved(child);
 	}
 
 	void Widget::OnChildRemoved(Widget* child)
@@ -1355,20 +1361,20 @@ namespace o2
 		UpdateTransparency();
 	}
 
-	void Widget::UpdateResEnabled()
+	void Widget::UpdateResEnabled(bool withChildren /*= true*/)
 	{
 		if (mVisibleState)
 			mVisibleState->SetState(mEnabled);
 		else
-			Actor::UpdateResEnabled();
+			Actor::UpdateResEnabled(withChildren);
 	}
 
-	void Widget::UpdateResEnabledInHierarchy()
+	void Widget::UpdateResEnabledInHierarchy(bool withChildren /*= true*/)
 	{
-		Actor::UpdateResEnabledInHierarchy();
+		Actor::UpdateResEnabledInHierarchy(withChildren);
 
 		for (auto child : mInternalWidgets)
-			child->UpdateResEnabledInHierarchy();
+			child->UpdateResEnabledInHierarchy(withChildren);
 	}
 
 	void Widget::SetInternalParent(Widget* parent, bool worldPositionStays /*= false*/)

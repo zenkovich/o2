@@ -42,7 +42,7 @@ namespace o2
 	class Actor: virtual public ActorBase
 	{
 	public:
-		enum class State { Default, Initializing, Destroying };
+		enum class State { Default, Initializing, Destroying, Destroyed };
 
 	public:
 		PROPERTIES(Actor);
@@ -335,9 +335,10 @@ namespace o2
 		Vector<Component*> mComponents; // Components vector 
 
 		// Actor can be logically disabled, but actually stay enabled and be in transition to really disabled state
-		bool mEnabled = true;               // Is actor logically enabled. 
-		bool mResEnabled = true;            // Is actor really enabled. 
-		bool mResEnabledInHierarchy = true; // Is actor enabled in hierarchy
+		// mResEnabled and mResEnabledInHierarchy are disabled by default to get enabled afetr initialization
+		bool mEnabled = true;                // Is actor logically enabled. 
+		bool mResEnabled = false;            // Is actor really enabled. 
+		bool mResEnabledInHierarchy = false; // Is actor enabled in hierarchy
 
 		State mState = State::Default; // Actor on scene status
 
@@ -352,8 +353,7 @@ namespace o2
 
 	protected:
 		// Base actor constructor with transform
-		Actor(ActorTransform* transform, bool onScene = true,
-			  const String& name = "unnamed", bool enabled = true, bool resEnabled = true, 
+		Actor(ActorTransform* transform, bool onScene = true, const String& name = "unnamed", bool enabled = true, 
 			  SceneUID id = Math::Random(), UID assetId = UID(0));
 
 		// Default constructor with transform
@@ -372,10 +372,10 @@ namespace o2
 		void CheckCopyVisitorFinalization() const;
 
 		// Updates result read enable flag
-		virtual void UpdateResEnabled();
+		virtual void UpdateResEnabled(bool withChildren = true);
 
 		// Updates enabling
-		virtual void UpdateResEnabledInHierarchy();
+		virtual void UpdateResEnabledInHierarchy(bool withChildren = true);
 
 		// Regular serializing without prototype
 		virtual void SerializeRaw(DataValue& node) const;
@@ -756,8 +756,8 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().PROTECTED().NAME(mChildren);
 	FIELD().PROTECTED().NAME(mComponents);
 	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabled);
-	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mResEnabled);
-	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mResEnabledInHierarchy);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mResEnabled);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mResEnabledInHierarchy);
 	FIELD().PROTECTED().DEFAULT_VALUE(State::Default).NAME(mState);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsOnScene);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsAsset);
@@ -852,14 +852,14 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsModeOnScene, ActorCreateMode);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, bool, const String&, bool, bool, SceneUID, UID);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, bool, const String&, bool, SceneUID, UID);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const ActorAssetRef&, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Component*>, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Actor&, ActorCreateMode);
 	FUNCTION().PROTECTED().SIGNATURE(void, CheckCopyVisitorFinalization);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabledInHierarchy);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabledInHierarchy, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeWithProto, DataValue&);

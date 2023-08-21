@@ -320,9 +320,9 @@ namespace Editor
 		{
 			mAnimation->onDurationChange += THIS_FUNC(UpdateDuration);
 			mViewZoom = Math::Clamp((layout->worldRight - layout->worldLeft)/mOneSecondDefaultSize/mAnimation->GetDuration(), mMinScale, mMaxScale);
-		}
-		
-		UpdateDuration(mAnimation->GetDuration());
+
+			UpdateDuration(mAnimation->GetDuration());
+		}		
 	}
 
 	void AnimationTimeline::UpdateDuration(float duration)

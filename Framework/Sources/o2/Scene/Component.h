@@ -99,11 +99,11 @@ namespace o2
 		SERIALIZABLE(Component);
 
 	protected:
-		Component* mPrototypeLink = nullptr;   // Prototype actor component pointer. Null if no actor prototype
-		SceneUID   mId;                        // Component id @EDITOR_IGNORE
-		Actor*     mOwner = nullptr;           // Owner actor
-		bool       mEnabled = true;            // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
-		bool       mEnabledInHierarchy = true; // Is component enabled in hierarchy
+		Component* mPrototypeLink = nullptr;    // Prototype actor component pointer. Null if no actor prototype
+		SceneUID   mId;                         // Component id @EDITOR_IGNORE
+		Actor*     mOwner = nullptr;            // Owner actor
+		bool       mEnabled = true;             // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
+		bool       mEnabledInHierarchy = false; // Is component enabled in hierarchy
 
 		Vector<ComponentRef*> mReferences; // References to this component
 
@@ -246,7 +246,7 @@ CLASS_FIELDS_META(o2::Component)
 	FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().NAME(mId);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
 	FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled);
-	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabledInHierarchy);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabledInHierarchy);
 	FIELD().PROTECTED().NAME(mReferences);
 }
 END_META;

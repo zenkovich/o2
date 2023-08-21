@@ -223,8 +223,8 @@ namespace o2
 		else
 			res = mnew _type();
 
-		if (TypeOf(_type) != TypeOf(ContextMenu))
-			res->SetEnabledForcible(true);
+// 		if (TypeOf(_type) != TypeOf(ContextMenu))
+// 			res->SetEnabledForcible(true);
 
 		return res;
 	}

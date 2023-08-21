@@ -366,12 +366,14 @@ namespace o2
 
 	void MenuPanel::OnEnabled()
 	{
+		Widget::OnEnabled();
 		interactable = true;
 	}
 
 	void MenuPanel::OnDisabled()
 	{
-		interactable = true;
+		Widget::OnDisabled();
+		interactable = false;
 	}
 
 	Widget* MenuPanel::GetItemUnderPoint(const Vec2F& point, int* idxPtr)

@@ -271,11 +271,15 @@ namespace o2
 
 	void GridLayoutScrollArea::OnEnabled()
 	{
+		Widget::OnEnabled();
+
 		SetInteractable(true);
 	}
 
 	void GridLayoutScrollArea::OnDisabled()
 	{
+		Widget::OnDisabled();
+
 		SetInteractable(false);
 	}
 }

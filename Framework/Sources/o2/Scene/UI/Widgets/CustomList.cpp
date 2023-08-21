@@ -592,11 +592,15 @@ namespace o2
 
 	void CustomList::OnEnabled()
 	{
+		Widget::OnEnabled();
+
 		SetInteractable(true);
 	}
 
 	void CustomList::OnDisabled()
 	{
+		Widget::OnDisabled();
+
 		SetInteractable(false);
 	}
 

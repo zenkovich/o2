@@ -74,8 +74,10 @@ namespace Editor
 		mOwnPlayer = false;
 		mAnimationEditable = nullptr;
 
-		if (mAnimation)
-			mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
+		if (!mAnimation)
+			return;
+
+		mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
 
 		if (mPlayer)
 		{

@@ -281,11 +281,15 @@ namespace o2
 
 	void CustomDropDown::OnEnabled()
 	{
+		Widget::OnEnabled();
+
 		interactable = true;
 	}
 
 	void CustomDropDown::OnDisabled()
 	{
+		Widget::OnDisabled();
+
 		interactable = false;
 	}
 

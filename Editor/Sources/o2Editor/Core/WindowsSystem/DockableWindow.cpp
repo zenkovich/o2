@@ -328,7 +328,7 @@ namespace Editor
 	void DockableWindow::OnDisabled()
 	{
 		Window::OnDisabled();
-		Undock();
+		//Undock();
 	}
 
 	void DockableWindow::OnFocused()
@@ -808,7 +808,8 @@ namespace Editor
 
 				if (parentNeighbors.Count() == 1)
 				{
-					for (auto child : parentNeighbors[0]->GetChildWidgets())
+					auto children = parentNeighbors[0]->GetChildWidgets();
+					for (auto child : children)
 						topDock->AddChild(child);
 
 					topDock->RemoveChild(parentNeighbors[0]);

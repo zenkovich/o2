@@ -289,11 +289,15 @@ namespace o2
 
 	void HorizontalScrollBar::OnEnabled()
 	{
+		Widget::OnEnabled();
+
 		interactable = true;
 	}
 
 	void HorizontalScrollBar::OnDisabled()
 	{
+		Widget::OnDisabled();
+
 		interactable = false;
 	}
 

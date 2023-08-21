@@ -11,28 +11,27 @@ namespace o2
 {
 	ActorCreateMode Actor::mDefaultCreationMode = ActorCreateMode::InScene;
 
-	Actor::Actor(ActorTransform* transform, bool onScene /*= true*/,
-				 const String& name /*= "unnamed"*/, bool enabled /*= true*/, bool resEnabled /*= true*/,
+	Actor::Actor(ActorTransform* transform, bool onScene /*= true*/, const String& name /*= "unnamed"*/, bool enabled /*= true*/,
 				 SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/) :
-		transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(resEnabled),
+		transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(false),
 		mId(id), mAssetId(assetId), mState(State::Initializing), mIsOnScene(onScene)
 	{
 		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
 		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
 
 		transform->SetOwner(this);
+
+		Scene::OnActorCreated(this);
 	}
 
 	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(transform, IsModeOnScene(mode))
 	{
-		Scene::OnActorCreated(this);
-
 		ActorRefResolver::ActorCreated(this);
 	}
 
 	Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, IsModeOnScene(mode), other.mName, other.mEnabled, other.mEnabled, Math::Random(), other.mAssetId)
+		Actor(transform, IsModeOnScene(mode), other.mName, other.mEnabled, Math::Random(), other.mAssetId)
 	{
 		ActorRefResolver::LockResolving();
 
@@ -42,10 +41,6 @@ namespace o2
 			SetPrototype(ActorAssetRef(other.GetAssetID()));
 		}
 
-		mName = other.mName;
-		mEnabled = other.mEnabled;
-		mResEnabled = mEnabled;
-		mResEnabledInHierarchy = mEnabled;
 		transform->CopyFrom(*other.transform);
 		mAssetId = other.mAssetId;
 		mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);
@@ -81,8 +76,6 @@ namespace o2
 			if (other.mCopyVisitor)
 				other.mCopyVisitor->OnCopyComponent(component, newComponent);
 		}
-
-		Scene::OnActorCreated(this);
 
 		ActorRefResolver::ActorCreated(this);
 		ActorRefResolver::UnlockResolving();
@@ -123,6 +116,8 @@ namespace o2
 
 	Actor::~Actor()
 	{
+		mState = State::Destroyed;
+
 		SetPrototype(nullptr);
 
 		for (auto ref : mReferences)
@@ -483,7 +478,7 @@ namespace o2
 			else
 				mParent->mChildren.Insert(this, idx);
 
-			mParent->OnChildAdded(actor);
+			mParent->OnChildAdded(this);
 		}
 		else if (mIsOnScene && Scene::IsSingletonInitialzed())
 		{
@@ -499,16 +494,24 @@ namespace o2
 		else
 			transform->SetDirty();
 
-		// Update enabled state in hierarchy
-		UpdateResEnabledInHierarchy();
-
-		// Checks if actor should be added or removed from scene
-		if (mParent && mParent->mIsOnScene != mIsOnScene)
+		// Call events only when actor was initialized
+		if (mState == State::Default)
 		{
-			if (mParent->mIsOnScene && !mIsOnScene)
-				AddToScene();
-			else if (!mParent->mIsOnScene && mIsOnScene)
-				RemoveFromScene();
+			// Update enabled state in hierarchy
+			UpdateResEnabledInHierarchy();
+
+			// Checks if actor should be added or removed from scene
+			if (mParent && mParent->mIsOnScene != mIsOnScene)
+			{
+				if (mParent->mIsOnScene && !mIsOnScene)
+					AddToScene();
+				else if (!mParent->mIsOnScene && mIsOnScene)
+					RemoveFromScene();
+			}
+		}
+		else if (mState == State::Initializing && mParent && mParent->mState == State::Initializing)
+		{
+			Scene::OnNewActorParented(this);
 		}
 
 		// Call parent update events
@@ -632,7 +635,7 @@ namespace o2
 			actor->OnBeforeDestroy();
 			delete actor;
 		}
-		else
+		else if (actor->mState != State::Destroyed)
 		{
 			actor->transform->SetDirty();
 			actor->UpdateResEnabledInHierarchy();
@@ -912,13 +915,13 @@ namespace o2
 	}
 #endif
 
-	void Actor::UpdateResEnabled()
+	void Actor::UpdateResEnabled(bool withChildren /*= true*/)
 	{
 		mResEnabled = mEnabled;
-		UpdateResEnabledInHierarchy();
+		UpdateResEnabledInHierarchy(withChildren);
 	}
 
-	void Actor::UpdateResEnabledInHierarchy()
+	void Actor::UpdateResEnabledInHierarchy(bool withChildren /*= true*/)
 	{
 		bool lastResEnabledInHierarchy = mResEnabledInHierarchy;
 
@@ -945,8 +948,11 @@ namespace o2
 #endif
 		}
 
-		for (auto child : mChildren)
-			child->UpdateResEnabledInHierarchy();
+		if (withChildren)
+		{
+			for (auto child : mChildren)
+				child->UpdateResEnabledInHierarchy();
+		}
 	}
 
 	void Actor::SerializeBasicOverride(DataValue& node) const
@@ -1386,6 +1392,7 @@ namespace o2
 ENUM_META(o2::Actor::State)
 {
 	ENUM_ENTRY(Default);
+	ENUM_ENTRY(Destroyed);
 	ENUM_ENTRY(Destroying);
 	ENUM_ENTRY(Initializing);
 }

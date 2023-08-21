@@ -14,7 +14,7 @@ namespace o2
 	}
 
 	Component::Component(const Component& other) :
-		mEnabled(other.mEnabled), mEnabledInHierarchy(other.mEnabled), mId(Math::Random()),
+		mEnabled(other.mEnabled), mEnabledInHierarchy(false), mId(Math::Random()),
 		actor(this), enabled(this), enabledInHierarchy(this)
 	{
 		ActorRefResolver::ComponentCreated(this);

@@ -165,11 +165,15 @@ namespace o2
 
 	void Button::OnEnabled()
 	{
+		Widget::OnEnabled();
+
 		interactable = true;
 	}
 
 	void Button::OnDisabled()
 	{
+		Widget::OnDisabled();
+
 		interactable = false;
 	}
 

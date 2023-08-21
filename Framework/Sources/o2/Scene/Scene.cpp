@@ -38,7 +38,7 @@ namespace o2
 		ClearCache();
 
 		delete mDefaultLayer;
-		delete mLog;
+		//delete mLog;
 	}
 
 	const LogStream& Scene::GetLogStream() const
@@ -70,19 +70,36 @@ namespace o2
 
 	void Scene::UpdateAddedEntities()
 	{
+		struct helper
+		{
+			static void RecursiveCall(Actor* actor, const Function<void(Actor*)>& func)
+			{
+				if (actor->mState == Actor::State::Initializing)
+				{
+					func(actor);
+
+					for (auto child : actor->GetChildren())
+						RecursiveCall(child, func);
+				}
+			}
+		};
+
 		auto addedActors = mAddedActors;
 		mAddedActors.Clear();
 
 		mStartActors = addedActors;
 
 		for (auto actor : addedActors)
-			AddActorToScene(actor);
+		{
+			if (actor->IsOnScene())
+				helper::RecursiveCall(actor, [&](Actor* actor) { AddActorToScene(actor); });
+		}
 
 		for (auto actor : addedActors)
-			actor->OnInitialized();
+			helper::RecursiveCall(actor, [&](Actor* actor) { actor->UpdateResEnabledInHierarchy(); });
 
 		for (auto actor : addedActors)
-			actor->OnEnabled();
+			helper::RecursiveCall(actor, [&](Actor* actor) { actor->OnInitialized(); });
 	}
 
 	void Scene::UpdateTransforms()
@@ -141,6 +158,10 @@ namespace o2
 		{
 			actor->mState = Actor::State::Destroying;
 			mDestroyActors.Add(actor);
+
+#if IS_EDITOR
+			mChangedObjects.Remove(actor);
+#endif
 		}
 	}
 
@@ -154,16 +175,7 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		if (actor->GetName().Contains("Chip"))
-			Instance().mLog->Out("asd");
-
-		if (actor->IsOnScene())
-		{
-			if (Instance().mAddedActors.Contains(actor))
-				Instance().mLog->Out("asd");
-
-			Instance().mAddedActors.Add(actor);
-		}
+		Instance().mAddedActors.Add(actor);
 	}
 
 	void Scene::OnActorDestroy(Actor* actor)
@@ -173,9 +185,21 @@ namespace o2
 
 		if (actor->IsOnScene())
 			Instance().RemoveActorFromScene(actor, false);
-		else if (Instance().mAddedActors.Contains(actor))
-			Instance().mLog->Warning("Actor was destroyed before added to scene");
 
+		Instance().mAddedActors.Remove(actor);
+		Instance().mStartActors.Remove(actor);
+
+#if IS_EDITOR
+		Instance().mChangedObjects.Remove(actor);
+#endif
+	}
+
+	void Scene::OnNewActorParented(Actor* actor)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		Instance().mAddedActors.Remove(actor);
 	}
 
 	void Scene::OnAddActorToScene(Actor* actor)
@@ -353,9 +377,6 @@ namespace o2
 
 	void Scene::OnComponentAdded(Component* component)
 	{
-		if (mStartComponents.Contains(component))
-			Instance().mLog->Out("asd");
-
 		mStartComponents.Add(component);
 	}
 

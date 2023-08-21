@@ -306,10 +306,10 @@ namespace o2
 		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 
 		// Updates result read enable flag
-		void UpdateResEnabled() override;
+		void UpdateResEnabled(bool withChildren = true) override;
 
 		// Updates enabling
-		void UpdateResEnabledInHierarchy() override;
+		void UpdateResEnabledInHierarchy(bool withChildren = true) override;
 
 		// Called when transformation was changed and updated
 		void OnTransformUpdated() override;
@@ -844,8 +844,8 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeWithProto, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabledInHierarchy);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabledInHierarchy, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
