@@ -3,7 +3,6 @@
         "Type": "o2::Toggle",
         "Value": {
             "mName": "standard",
-            "mTransparency": 0.0,
             "Id": 85486376371946746,
             "Transform": {
                 "minSize": {
@@ -38,12 +37,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "28ea75e86ebe4d45722a4aa63c471559",
                                     "path": "ui/UI4_Check_bk.png"
@@ -280,7 +273,7 @@
                                     "r": 96,
                                     "g": 125,
                                     "b": 139,
-                                    "a": 0
+                                    "a": 255
                                 },
                                 "mText": "Checkbox",
                                 "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
@@ -338,7 +331,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "080b6c00164c093428064bf942f720d5"
+                                    "mId": "2459021e28ad77010bc155b0713768af"
                                 }
                             }
                         }
@@ -385,7 +378,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "23015ca1133e66c50cff313a180238b3"
+                                    "mId": "0ed06af9086f39846bca398c598566bf"
                                 }
                             }
                         }
@@ -432,7 +425,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7e2d763639301285032120c928a54ce4"
+                                    "mId": "6ade5892231f67d27fd131ae44633664"
                                 }
                             }
                         }
@@ -479,7 +472,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "3c583e7a6935081a5c067b717b410c9e"
+                                    "mId": "54b74d827e99414c449c607e1cbc3551"
                                 }
                             }
                         }
@@ -526,7 +519,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "418a256d4f9d7f680e87404065753754"
+                                    "mId": "38d231a172fc14941b2e71a753bf1474"
                                 }
                             }
                         }
@@ -537,6 +530,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -573,7 +567,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "430c554a73f93c9546bc5c821c246cbc"
+                                    "mId": "23e262097aa44f8a18ce2a1130d86801"
                                 }
                             }
                         }

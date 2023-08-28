@@ -63,7 +63,7 @@ namespace Editor
 	public:
 		struct OrderTreeNode : ITreeNode<OrderTreeNode>
 		{
-			enum class Type { Camera, Layer, Root, Drawable, Widget, DrawableComponent, EndOfBatch };
+			enum class Type { Camera, Layer, Root, Drawable, Actor, EndOfBatch };
 
 			Type   type;
 			String name;

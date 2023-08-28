@@ -3,7 +3,6 @@
         "Type": "o2::Button",
         "Value": {
             "mName": "expand",
-            "mTransparency": 0.0,
             "Id": 6759562583343026413,
             "Transform": {
                 "minSize": {
@@ -38,12 +37,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "3ecc3c09309b6acd07400dab40ba53a5",
                                     "path": "ui/UI4_Right_icn.png"
@@ -180,7 +173,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "5c5b09bf7596531b23e642a5785e3508"
+                                    "mId": "0fea441744096b59158141f14ea94367"
                                 }
                             }
                         }
@@ -227,7 +220,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "08f240081fde3401251659dc710941fa"
+                                    "mId": "51bf2cf17a4a01ba65b10c083b8b6878"
                                 }
                             }
                         }
@@ -238,6 +231,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -274,7 +268,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "398c780051602daf637526b36d7d3d2d"
+                                    "mId": "1d64271f217e01390c113e547ab91e8b"
                                 }
                             }
                         }
@@ -365,7 +359,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7ad23ec4240e7e29307c5f5872fb5639"
+                                    "mId": "47ef779b3f637e9804467b9e6d0146b0"
                                 }
                             }
                         }

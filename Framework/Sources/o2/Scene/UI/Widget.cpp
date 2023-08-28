@@ -469,9 +469,18 @@ namespace o2
 				WidgetState* state = mnew WidgetState();
 				if (auto nameNode = stateNode.FindMember("name"))
 					nameNode->Get(state->name);
-				if (auto protoState = proto->GetStateObject(state->name))
-					stateNode.GetDelta(*state, *protoState);
-				else
+
+				bool delta = false;
+				if (proto)
+				{
+					if (auto protoState = proto->GetStateObject(state->name))
+					{
+						stateNode.GetDelta(*state, *protoState);
+						delta = true;
+					}
+				}
+
+				if (!delta)
 					stateNode.Get(*state);
 
 				AddState(state, false);
@@ -535,43 +544,6 @@ namespace o2
 
 		layout->SetDirty(false);
 		onHide();
-	}
-
-	SceneLayer* Widget::GetSceneDrawableSceneLayer() const
-	{
-		return &const_cast<SceneLayer&>(mSceneLayer.Get());
-	}
-
-	ISceneDrawable* Widget::GetParentDrawable()
-	{
-		if (mParentWidget)
-			return (ISceneDrawable*)mParentWidget;
-
-		if (mParent)
-		{
-			auto itParent = mParent;
-			while (itParent)
-			{
-				if (auto drawable = dynamic_cast<ISceneDrawable*>(itParent))
-					return drawable;
-
-				auto comp = itParent->GetComponent<DrawableComponent>();
-				if (comp)
-					return (ISceneDrawable*)comp;
-
-				itParent = itParent->mParent;
-			}
-		}
-
-		return nullptr;
-	}
-
-	int Widget::GetIndexInParentDrawable() const
-	{
-		if (mParent)
-			return mParent->mChildren.IndexOf((Actor*)this);
-
-		return 0;
 	}
 
 	void Widget::OnFocused()
@@ -1261,7 +1233,6 @@ namespace o2
 	void Widget::OnRemoveFromScene()
 	{
 		Actor::OnRemoveFromScene();
-		ISceneDrawable::OnRemoveFromScene();
 
 #if IS_EDITOR
 		o2Scene.mEditableObjects.Remove(&layersEditable);
@@ -1279,7 +1250,6 @@ namespace o2
 	void Widget::OnAddToScene()
 	{
 		Actor::OnAddToScene();
-		ISceneDrawable::OnAddToScene();
 
 		for (auto child : mInternalWidgets)
 			child->OnAddToScene();

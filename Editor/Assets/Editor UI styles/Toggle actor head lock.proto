@@ -3,7 +3,6 @@
         "Type": "o2::Toggle",
         "Value": {
             "mName": "actor head lock",
-            "mTransparency": 0.0,
             "Id": 10620287631235670556,
             "Transform": {
                 "minSize": {
@@ -61,12 +60,6 @@
                                                         "mPivot": {
                                                             "x": 0.5,
                                                             "y": 0.5
-                                                        },
-                                                        "mColor": {
-                                                            "r": 255,
-                                                            "g": 255,
-                                                            "b": 255,
-                                                            "a": 0
                                                         },
                                                         "mImageAsset": {
                                                             "id": "2cfd7d0d00a7628202907e0d10d33253",
@@ -235,7 +228,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "43372dab680b6d28668523f042940826"
+                                    "mId": "37e6748528251e1a7acd2afa52f910d2"
                                 }
                             }
                         }
@@ -304,7 +297,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "553001eb75d8000f52f943fe48af61f4"
+                                    "mId": "081d64aa4cee3c7b035535e13d003c85"
                                 }
                             }
                         }
@@ -373,7 +366,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "1f4e5f251405315c22e3303f1f20792c"
+                                    "mId": "5c166b80601f38291f25229f133143ee"
                                 }
                             }
                         }
@@ -384,6 +377,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -420,7 +414,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "21d756956d2164343d5f6d000dc73c82"
+                                    "mId": "2084461d3c155f054383161f7cf81b41"
                                 }
                             }
                         }

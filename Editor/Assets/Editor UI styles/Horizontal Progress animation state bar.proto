@@ -3,7 +3,6 @@
         "Type": "o2::HorizontalProgress",
         "Value": {
             "mName": "animation state bar",
-            "mTransparency": 0.0,
             "Id": 8676819576783639775,
             "Transform": {
                 "minSize": {
@@ -56,7 +55,7 @@
                                                 "r": 181,
                                                 "g": 203,
                                                 "b": 204,
-                                                "a": 0
+                                                "a": 255
                                             },
                                             "mTextureSrcRect": {
                                                 "left": 0,
@@ -104,7 +103,7 @@
                                                 "r": 248,
                                                 "g": 93,
                                                 "b": 72,
-                                                "a": 0
+                                                "a": 255
                                             },
                                             "mTextureSrcRect": {
                                                 "left": 0,
@@ -232,7 +231,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "272131924f7d7f8a135006ce51b01e9c"
+                                    "mId": "07a254b764a75ceb6d5a01a007ed04ab"
                                 }
                             }
                         }
@@ -279,7 +278,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4f1610af393c6cd1026011d76f7065e3"
+                                    "mId": "0702138a5b3f5c404a907908036f23c4"
                                 }
                             }
                         }
@@ -290,6 +289,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -326,7 +326,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "3eef24d929230d3a20f96bb972200a61"
+                                    "mId": "581f586376137af357793cce62dd3554"
                                 }
                             }
                         }

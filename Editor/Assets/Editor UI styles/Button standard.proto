@@ -3,7 +3,6 @@
         "Type": "o2::Button",
         "Value": {
             "mName": "standard",
-            "mTransparency": 0.0,
             "Id": 14613645783398929581,
             "Transform": {
                 "minSize": {
@@ -30,12 +29,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "489b66c526fb155d37935e626a35213e",
                                     "path": "ui/UI4_button_regular.png"
@@ -186,7 +179,7 @@
                                     "r": 96,
                                     "g": 125,
                                     "b": 139,
-                                    "a": 0
+                                    "a": 255
                                 },
                                 "mText": "Button",
                                 "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
@@ -246,7 +239,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "262f46f51059493c096b12ea04185977"
+                                    "mId": "1c007a4d139170f71228183360406527"
                                 }
                             }
                         }
@@ -293,7 +286,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "1dff6156469c61f915716baf754d5765"
+                                    "mId": "38cc4373324602d07230184d5d714514"
                                 }
                             }
                         }
@@ -340,7 +333,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "3889687d5891175616df5cad24427aee"
+                                    "mId": "4bf7571542ed701f615575a25d4e4337"
                                 }
                             }
                         }
@@ -351,6 +344,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -387,7 +381,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "38785789462b0556752c6a0f5c3931a6"
+                                    "mId": "10152dab5cc21d2378bd1e7b4a226823"
                                 }
                             }
                         }

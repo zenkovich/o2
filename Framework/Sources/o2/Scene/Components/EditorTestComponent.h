@@ -69,7 +69,7 @@ namespace o2
 		Sprite* mSprite = mnew Sprite();                    // @SERIALIZABLE @DONT_DELETE
 		ActorRef mActor;                                    // @SERIALIZABLE
 		TagGroup mTags;                                     // @SERIALIZABLE
-		SceneLayer* mLayer;                               
+		Ref<SceneLayer> mLayer;                             // @SERIALIZABLE
 		ComponentRef mComponent;                            // @SERIALIZABLE
 		Ref<RigidBody> mRigidBody;                          // @SERIALIZABLE
 		Ref<ImageComponent> mImageComponent;                // @SERIALIZABLE
@@ -139,7 +139,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	FIELD().PUBLIC().DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mnew Sprite()).NAME(mSprite);
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mActor);
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTags);
-	FIELD().PUBLIC().NAME(mLayer);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLayer);
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mComponent);
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mRigidBody);
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mImageComponent);

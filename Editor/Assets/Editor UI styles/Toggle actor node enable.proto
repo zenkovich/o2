@@ -3,7 +3,6 @@
         "Type": "o2::Toggle",
         "Value": {
             "mName": "actor node enable",
-            "mTransparency": 0.0,
             "Id": 4443912790601055903,
             "Transform": {},
             "InternalWidgets": [],
@@ -50,12 +49,6 @@
                                             "mPivot": {
                                                 "x": 0.5,
                                                 "y": 0.5
-                                            },
-                                            "mColor": {
-                                                "r": 255,
-                                                "g": 255,
-                                                "b": 255,
-                                                "a": 0
                                             },
                                             "mImageAsset": {
                                                 "id": "127a2878256c72d05bbc46b313760577",
@@ -129,6 +122,7 @@
                     "Type": "o2::WidgetState",
                     "Value": {
                         "name": "visible",
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -165,7 +159,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "101a1d66137c2440087831740ed954da"
+                                    "mId": "46496808764a2c2b7c126b8d4031780c"
                                 }
                             }
                         }
@@ -233,7 +227,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4d080235271d206b46a17b257b9e4da5"
+                                    "mId": "263b2a5a1920089c678d538d3d470c24"
                                 }
                             }
                         }
@@ -280,7 +274,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "3bd374bf22a835ce0c1d326b0b64004b"
+                                    "mId": "55b12f7074416f0f1f554fb947a960e8"
                                 }
                             }
                         }

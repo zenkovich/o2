@@ -6,11 +6,11 @@
 namespace o2
 {
 	Ref<SceneLayer>::Ref():
-		mLayer(o2Scene.GetDefaultLayer())
+		mLayer(Scene::IsSingletonInitialzed() ? o2Scene.GetDefaultLayer() : nullptr)
 	{}
 	
 	Ref<SceneLayer>::Ref(const String& name):
-		mLayerName(name), mLayer(o2Scene.GetLayer(name))
+		mLayerName(name), mLayer(Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(name) : nullptr)
 	{}
 	
 	Ref<SceneLayer>::Ref(const Ref<SceneLayer>& other):

@@ -27,9 +27,6 @@ namespace o2
 	{
 // 		o2Render.DrawArrow(mOwner->transform->GetWorldPivot(),
 // 						   mOwner->transform->Local2WorldPoint(Vec2F(length, 0) + mOwner->transform->GetSizePivot()));
-
-		DrawableComponent::OnDrawn();
-		ISceneDrawable::Draw();
 	}
 
 	void SkinningMeshBoneComponent::OnUpdate(float dt)

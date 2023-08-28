@@ -46,9 +46,6 @@ namespace o2
 		// Updates bones transformations
 		void UpdateBonesTransforms();
 
-		// Returns true if point is under drawable
-		bool IsUnderPoint(const Vec2F& point) override;
-
 		// Returns mesh
 		const SkinningMesh& GetMesh() const;
 
@@ -179,7 +176,6 @@ CLASS_METHODS_META(o2::SkinningMeshComponent)
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateBonesTransforms);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(const SkinningMesh&, GetMesh);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetExtraPoints, const Vector<Vec2F>&);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<Vec2F>&, GetExtraPoints);

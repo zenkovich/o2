@@ -384,6 +384,8 @@ namespace o2
 
 	void Actor::OnParentChanged(Actor* oldParent)
 	{
+		ISceneDrawable::OnDrawbleParentChanged();
+
 		for (auto comp : mComponents)
 			comp->OnParentChanged(oldParent);
 

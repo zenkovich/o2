@@ -168,24 +168,13 @@ namespace Editor
 		if (drawableNode->batchIdx < mStartBatchIdx)
 			mStartBatchIdx = drawableNode->batchIdx;
 
-		if (auto widget = dynamic_cast<Widget*>(drawable))
+		if (auto actor = dynamic_cast<Actor*>(drawable))
 		{
-			drawableNode->name = widget->name;
-			drawableNode->type = OrderTreeNode::Type::Widget;
-			drawableNode->object = widget;
+			drawableNode->name = actor->name;
+			drawableNode->type = OrderTreeNode::Type::Actor;
+			drawableNode->object = actor;
 
 			mObjectToNodeMap[drawableNode->object] = drawableNode; 
-
-			CheckBatchEnd(drawableNode);
-			parent->AddChild(drawableNode);
-		}
-		else if (auto drawableComponent = dynamic_cast<DrawableComponent*>(drawable))
-		{
-			drawableNode->name = drawableComponent->GetOwnerActor()->name;
-			drawableNode->type = OrderTreeNode::Type::DrawableComponent;
-			drawableNode->object = drawableComponent->GetOwnerActor();
-
-			mObjectToNodeMap[drawableNode->object] = drawableNode;
 
 			CheckBatchEnd(drawableNode);
 			parent->AddChild(drawableNode);
@@ -197,9 +186,6 @@ namespace Editor
 
 			CheckBatchEnd(drawableNode);
 			parent->AddChild(drawableNode);
-
-			for (auto child : root->GetChildrenInheritedDepth())
-				ProcessDrawableTreeNode(drawableNode, child);
 		}
 		else
 		{
@@ -438,9 +424,8 @@ namespace Editor
 			{ DrawOrderTree::OrderTreeNode::Type::Camera, "ui/UI4_camera_icn.png" },
 			{ DrawOrderTree::OrderTreeNode::Type::Layer, "ui/UI4_layer_big.png" },
 			{ DrawOrderTree::OrderTreeNode::Type::Drawable, "ui/UI4_image_icn.png" },
-			{ DrawOrderTree::OrderTreeNode::Type::Widget, "ui/UI4_image_icn.png" },
+			{ DrawOrderTree::OrderTreeNode::Type::Actor, "ui/UI4_image_icn.png" },
 			{ DrawOrderTree::OrderTreeNode::Type::Root, "ui/UI4_folder_icn.png" },
-			{ DrawOrderTree::OrderTreeNode::Type::DrawableComponent, "ui/UI4_image_icn.png" },
 			{ DrawOrderTree::OrderTreeNode::Type::EndOfBatch, "ui/UI4_color_type.png" },
 		};
 
@@ -572,13 +557,12 @@ namespace Editor
 
 ENUM_META(Editor::DrawOrderTree::OrderTreeNode::Type)
 {
+	ENUM_ENTRY(Actor);
 	ENUM_ENTRY(Camera);
 	ENUM_ENTRY(Drawable);
-	ENUM_ENTRY(DrawableComponent);
 	ENUM_ENTRY(EndOfBatch);
 	ENUM_ENTRY(Layer);
 	ENUM_ENTRY(Root);
-	ENUM_ENTRY(Widget);
 }
 END_ENUM_META;
 

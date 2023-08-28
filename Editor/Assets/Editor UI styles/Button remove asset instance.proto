@@ -3,7 +3,6 @@
         "Type": "o2::Button",
         "Value": {
             "mName": "remove asset instance",
-            "mTransparency": 0.0,
             "Id": 3666046056795302555,
             "Transform": {
                 "minSize": {
@@ -38,12 +37,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "72e37ae1388974ad7a993d373ab56ba1",
                                     "path": "ui/UI4_remove_asset_instance.png"
@@ -180,7 +173,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "092c300d537479fc4958220571346e7b"
+                                    "mId": "1f8b633c734259c90f924d2e5ced4e56"
                                 }
                             }
                         }
@@ -227,7 +220,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "5c39743b5ab4170828920e1b1c116b53"
+                                    "mId": "1c9c583958743f7b6e9253b879e81a82"
                                 }
                             }
                         }
@@ -237,6 +230,7 @@
                     "Type": "o2::WidgetState",
                     "Value": {
                         "name": "visible",
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -273,7 +267,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "64c85f9a0aa1525f7602357a27f17d5b"
+                                    "mId": "193562a4760527296a80363749e23d73"
                                 }
                             }
                         }

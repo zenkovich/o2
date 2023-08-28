@@ -3,7 +3,6 @@
         "Type": "o2::ScrollArea",
         "Value": {
             "mName": "backless",
-            "mTransparency": 0.0,
             "mViewAreaLayout": {
                 "offsetMin": {
                     "x": 5.0,
@@ -36,7 +35,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "2ad5530c59a8398b2c7429475c890701",
+                            "id": "5c8f7d693db8769a7f9435933fac014a",
                             "path": "Editor UI styles/Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 9791486626571177538,
@@ -56,7 +55,6 @@
                             }
                         },
                         "mName": "horScrollBar",
-                        "mTransparency": 1.0,
                         "mMaxValue": 0.0,
                         "Layers": [
                             {
@@ -133,7 +131,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "255314ff6f1d100f78d45cdd5d4a237c"
+                                            "mId": "63384d123a281eb367d7670918d07f89"
                                         }
                                     }
                                 }
@@ -176,13 +174,14 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "439727e31f7405716f8e17662ed2314e"
+                                            "mId": "0f7e4845096111414bbf5db802201cf6"
                                         }
                                     }
                                 }
                             },
                             {
                                 "name": "visible",
+                                "mState": false,
                                 "mAnimation": {
                                     "instance": {
                                         "Type": "o2::AnimationAsset",
@@ -219,7 +218,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "0d95248f7c7e7c7134b077275f1c59bb"
+                                            "mId": "45ec4a060ca54be621ae5355785457dc"
                                         }
                                     }
                                 }
@@ -231,7 +230,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "47687aa843e77da52a8f3ae52cb007d3",
+                            "id": "3fc2030e00d7349d249058ba6c7d6b02",
                             "path": "Editor UI styles/Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 12065629680198465916,
@@ -255,7 +254,6 @@
                             }
                         },
                         "mName": "verScrollBar",
-                        "mTransparency": 1.0,
                         "mMaxValue": 0.0,
                         "Layers": [
                             {
@@ -332,7 +330,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "05f8461e462b51166fb1404e79674a57"
+                                            "mId": "59986d4d37b26962434a20a72a3a774c"
                                         }
                                     }
                                 }
@@ -375,13 +373,14 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "08a729ef5fad53a4054c4d47303578f7"
+                                            "mId": "45d66a5368840bb846775fba64df0d97"
                                         }
                                     }
                                 }
                             },
                             {
                                 "name": "visible",
+                                "mState": false,
                                 "mAnimation": {
                                     "instance": {
                                         "Type": "o2::AnimationAsset",
@@ -418,7 +417,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "5acd1f9e5f7418a027785ebf6d4773b1"
+                                            "mId": "7e3b269137596c274d5b7bd4638f084e"
                                         }
                                     }
                                 }
@@ -434,6 +433,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -470,7 +470,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "3ad179071f3248cf65706ba3619e30d9"
+                                    "mId": "3e9d44c146ad6b31565b41811fd84043"
                                 }
                             }
                         }

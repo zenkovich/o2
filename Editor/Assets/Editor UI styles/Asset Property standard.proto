@@ -15,7 +15,7 @@
                 {
                     "Data": {
                         "Prototype": {
-                            "id": "337d0de92e1173d25ea1224d2e9e18ba",
+                            "id": "0d6e0f02496d750203924fae3b47605d",
                             "path": "Editor UI styles/Spoiler expand with caption.proto"
                         },
                         "PrototypeLink": 1095797428277165581,
@@ -36,7 +36,7 @@
                                 "Type": "o2::Button",
                                 "Data": {
                                     "Prototype": {
-                                        "id": "705e5a494bd871363bad7121157a5f04",
+                                        "id": "5b1034db133e20960c1b6e8721870985",
                                         "path": "Editor UI styles/Button expand.proto"
                                     },
                                     "PrototypeLink": 6759562583343026413,
@@ -63,7 +63,6 @@
                                             "y": 0.0
                                         }
                                     },
-                                    "mTransparency": 1.0,
                                     "Layers": [
                                         {
                                             "layout": {
@@ -214,7 +213,7 @@
                                                 "meta": {
                                                     "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                     "Value": {
-                                                        "mId": "7b5d3667248e5cae0fa754260d841e76"
+                                                        "mId": "468319b730613aa52b4b53b53cd73245"
                                                     }
                                                 }
                                             }
@@ -257,13 +256,14 @@
                                                 "meta": {
                                                     "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                     "Value": {
-                                                        "mId": "0d465d676523473813826ecc27a65c7d"
+                                                        "mId": "307b6f6d38ce6c740f7519e1117362c1"
                                                     }
                                                 }
                                             }
                                         },
                                         {
                                             "name": "visible",
+                                            "mState": false,
                                             "mAnimation": {
                                                 "instance": {
                                                     "Type": "o2::AnimationAsset",
@@ -300,7 +300,7 @@
                                                 "meta": {
                                                     "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                     "Value": {
-                                                        "mId": "269d3c4777bb4e4701905cbc46b06fbc"
+                                                        "mId": "5003048d07ea62237967150f70ae5377"
                                                     }
                                                 }
                                             }
@@ -387,7 +387,7 @@
                                                 "meta": {
                                                     "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                     "Value": {
-                                                        "mId": "576c5f0614a525bf3ca979030c4453a8"
+                                                        "mId": "1e9011f16ad14354672511e950b75e59"
                                                     }
                                                 }
                                             }
@@ -422,7 +422,7 @@
                                         {
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "799f68471cdb143f2a566c40355a7377",
+                                                    "id": "71042a560b6d380c07406ad00d456c99",
                                                     "path": "Editor UI styles/Label standard.proto"
                                                 },
                                                 "PrototypeLink": 8464266912148868969,
@@ -490,7 +490,7 @@
                                                                 {
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "6d8352960285602124ee1f522951083f",
+                                                                            "id": "395b5c4e531008437d184f0d7c15275c",
                                                                             "path": "Editor UI styles/Button create asset instance.proto"
                                                                         },
                                                                         "PrototypeLink": 17935871670803058443,
@@ -506,17 +506,8 @@
                                                                             }
                                                                         },
                                                                         "mName": "create",
-                                                                        "mTransparency": 1.0,
                                                                         "Layers": [
                                                                             {
-                                                                                "mDrawable": {
-                                                                                    "mColor": {
-                                                                                        "r": 255,
-                                                                                        "g": 255,
-                                                                                        "b": 255,
-                                                                                        "a": 255
-                                                                                    }
-                                                                                },
                                                                                 "mUID": 5830484497939424489,
                                                                                 "PrototypeLink": 7413440127613020596
                                                                             },
@@ -568,7 +559,7 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "00fb0bde4f740dc65ce70ced794263f6"
+                                                                                            "mId": "75d605b110e216e74af436583dfa0097"
                                                                                         }
                                                                                     }
                                                                                 }
@@ -611,14 +602,13 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "65d3134f26f722c03fa320087dcb2c9b"
+                                                                                            "mId": "5fcc13275bb952fe5b5911852b246aa3"
                                                                                         }
                                                                                     }
                                                                                 }
                                                                             },
                                                                             {
                                                                                 "name": "visible",
-                                                                                "mState": true,
                                                                                 "mAnimation": {
                                                                                     "instance": {
                                                                                         "Type": "o2::AnimationAsset",
@@ -655,7 +645,7 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "39be201315412d5317764821094039cc"
+                                                                                            "mId": "66a542ec2f336cf963192bd94123102e"
                                                                                         }
                                                                                     }
                                                                                 }
@@ -667,7 +657,7 @@
                                                                 {
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "13177491301020d704fa3bab11395cdc",
+                                                                            "id": "7a0b5a5456d059f118fc3d721245227f",
                                                                             "path": "Editor UI styles/Button remove asset instance.proto"
                                                                         },
                                                                         "PrototypeLink": 3666046056795302555,
@@ -683,17 +673,8 @@
                                                                             }
                                                                         },
                                                                         "mName": "remove",
-                                                                        "mTransparency": 1.0,
                                                                         "Layers": [
                                                                             {
-                                                                                "mDrawable": {
-                                                                                    "mColor": {
-                                                                                        "r": 255,
-                                                                                        "g": 255,
-                                                                                        "b": 255,
-                                                                                        "a": 255
-                                                                                    }
-                                                                                },
                                                                                 "mUID": 18401584540889572434,
                                                                                 "PrototypeLink": 7422077187791808091
                                                                             },
@@ -745,7 +726,7 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "31c5072a1fa272647c3879451a4367fd"
+                                                                                            "mId": "64d802d9416c6979113a16fd2f233828"
                                                                                         }
                                                                                     }
                                                                                 }
@@ -788,13 +769,14 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "143017ce66ab03187b0355c04eb433e4"
+                                                                                            "mId": "551836066ac36c5f48ff7dda7a910cc3"
                                                                                         }
                                                                                     }
                                                                                 }
                                                                             },
                                                                             {
                                                                                 "name": "visible",
+                                                                                "mState": false,
                                                                                 "mAnimation": {
                                                                                     "instance": {
                                                                                         "Type": "o2::AnimationAsset",
@@ -831,7 +813,7 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "48886b7f362d0cd3262f7e2073b50a77"
+                                                                                            "mId": "225b44cd75d448cd71ef34994f1a2b6f"
                                                                                         }
                                                                                     }
                                                                                 }
@@ -843,7 +825,7 @@
                                                                 {
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "6ca26ae4234c32a75a415bef2a364ec6",
+                                                                            "id": "3d8901153dd02c334c21531663c930db",
                                                                             "path": "Editor UI styles/Button save asset instance.proto"
                                                                         },
                                                                         "PrototypeLink": 17745115801548235431,
@@ -859,17 +841,8 @@
                                                                             }
                                                                         },
                                                                         "mName": "save",
-                                                                        "mTransparency": 1.0,
                                                                         "Layers": [
                                                                             {
-                                                                                "mDrawable": {
-                                                                                    "mColor": {
-                                                                                        "r": 255,
-                                                                                        "g": 255,
-                                                                                        "b": 255,
-                                                                                        "a": 255
-                                                                                    }
-                                                                                },
                                                                                 "mUID": 1192411430527916914,
                                                                                 "PrototypeLink": 9653426870093374514
                                                                             },
@@ -921,7 +894,7 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "679735f71539293a2557613215a518e9"
+                                                                                            "mId": "77d62cc76f7c112347cd48a34eab34de"
                                                                                         }
                                                                                     }
                                                                                 }
@@ -964,13 +937,14 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "4b65153656202e3445520c0310281cb0"
+                                                                                            "mId": "10fe10cc76d827032aa010a161725d00"
                                                                                         }
                                                                                     }
                                                                                 }
                                                                             },
                                                                             {
                                                                                 "name": "visible",
+                                                                                "mState": false,
                                                                                 "mAnimation": {
                                                                                     "instance": {
                                                                                         "Type": "o2::AnimationAsset",
@@ -1007,7 +981,7 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "1f3c617726747de4083a79e01e1c3381"
+                                                                                            "mId": "098848f70d444b4d6eac3c7b05db7b07"
                                                                                         }
                                                                                     }
                                                                                 }
@@ -1223,7 +1197,7 @@
                                                                                         "meta": {
                                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                             "Value": {
-                                                                                                "mId": "13017c2b1ae87e696d031dfa61851156"
+                                                                                                "mId": "0db8230d717c08e60586464339691369"
                                                                                             }
                                                                                         }
                                                                                     }
@@ -1270,7 +1244,7 @@
                                                                                         "meta": {
                                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                             "Value": {
-                                                                                                "mId": "0be11b21255827870e3c2a492e23003c"
+                                                                                                "mId": "7c7214d4062f01864513257518e91e56"
                                                                                             }
                                                                                         }
                                                                                     }
@@ -1286,7 +1260,7 @@
                                                                     "Type": "o2::Label",
                                                                     "Value": {
                                                                         "Prototype": {
-                                                                            "id": "799f68471cdb143f2a566c40355a7377",
+                                                                            "id": "71042a560b6d380c07406ad00d456c99",
                                                                             "path": "Editor UI styles/Label standard.proto"
                                                                         },
                                                                         "PrototypeLink": 8464266912148868969,
@@ -1390,7 +1364,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "7b2001a7044746562c1158690160131d"
+                                            "mId": "648031702f6f60bc13422e0c7ec01ceb"
                                         }
                                     }
                                 }
@@ -1661,7 +1635,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "5fa86c1a55e7421a3e3c51c838bb06ce"
+                                    "mId": "40b6069846bc4a095d7907914b7d1af9"
                                 }
                             }
                         }

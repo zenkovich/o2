@@ -39,7 +39,7 @@
                                         {
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "741a602f2f5565b20bf743d83ff454d7",
+                                                    "id": "6f8d4ce43c594f571c8a65222ffa1d76",
                                                     "path": "Editor UI styles/Toggle actor head enable.proto"
                                                 },
                                                 "PrototypeLink": 5410331204024413161,
@@ -59,17 +59,8 @@
                                                     }
                                                 },
                                                 "mName": "toggle",
-                                                "mTransparency": 1.0,
                                                 "Layers": [
                                                     {
-                                                        "mDrawable": {
-                                                            "mColor": {
-                                                                "r": 255,
-                                                                "g": 255,
-                                                                "b": 255,
-                                                                "a": 255
-                                                            }
-                                                        },
                                                         "mUID": 4729471449118475437,
                                                         "PrototypeLink": 14174030818624522357
                                                     },
@@ -133,7 +124,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "184b1f0d5b427ec14f2042c332da739d"
+                                                                    "mId": "561a7c203bf746e942da7b5320aa77e1"
                                                                 }
                                                             }
                                                         }
@@ -176,7 +167,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "23935aeb6fa035454ff61ae8143f7a4b"
+                                                                    "mId": "61cd36742ca604bf4f8943af51a50185"
                                                                 }
                                                             }
                                                         }
@@ -219,7 +210,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "367d3b4343cf35b4634a1ae811346b4f"
+                                                                    "mId": "492e7d7f370d6a1d29564df24b412b63"
                                                                 }
                                                             }
                                                         }
@@ -262,7 +253,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "0e713cf128812bd2475654b101ba2ffd"
+                                                                    "mId": "33902579452a150452241024268d43cc"
                                                                 }
                                                             }
                                                         }
@@ -305,14 +296,13 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "321a6f1401a767a46791206f551129ea"
+                                                                    "mId": "408b2fdb7b3a3ab55819518e6ad47451"
                                                                 }
                                                             }
                                                         }
                                                     },
                                                     {
                                                         "name": "visible",
-                                                        "mState": true,
                                                         "mAnimation": {
                                                             "instance": {
                                                                 "Type": "o2::AnimationAsset",
@@ -349,7 +339,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "0160430856712d6f6cb66c8f21bb02eb"
+                                                                    "mId": "57f15b5e07b937b125993aba5da451c3"
                                                                 }
                                                             }
                                                         }

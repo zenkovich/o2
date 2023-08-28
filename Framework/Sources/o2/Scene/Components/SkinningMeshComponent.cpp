@@ -43,8 +43,6 @@ namespace o2
 
 		mMesh.Reskin();
 		mMesh.Draw();
-		DrawableComponent::OnDrawn();
-		ISceneDrawable::Draw();
 
 		if (o2Input.IsKeyDown(VK_F3))
 			DrawMeshWire();
@@ -221,11 +219,6 @@ namespace o2
 		mMesh.SetTexture(texture);
 		mMesh.vertexCount = triangulation.vertices.size();
 		mMesh.polyCount = triangulation.triangles.size();
-	}
-
-	bool SkinningMeshComponent::IsUnderPoint(const Vec2F& point)
-	{
-		return false;
 	}
 
 	const SkinningMesh& SkinningMeshComponent::GetMesh() const

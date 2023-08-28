@@ -75,8 +75,6 @@ namespace o2
 		//PROFILE_SAMPLE_FUNC();
 
 		Sprite::Draw();
-		DrawableComponent::OnDrawn();
-		ISceneDrawable::Draw();
 	}
 
 	void ImageComponent::FitActorByImage() const
@@ -103,12 +101,6 @@ namespace o2
 	String ImageComponent::GetIcon()
 	{
 		return "ui/UI4_image_component.png";
-	}
-
-	void ImageComponent::OnDrawn()
-	{
-		DrawableComponent::OnDrawn();
-		Sprite::OnDrawn();
 	}
 
 	void ImageComponent::OnTransformUpdated()

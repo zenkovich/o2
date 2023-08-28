@@ -3,7 +3,7 @@
         "Type": "Editor::ActorProperty",
         "Value": {
             "Prototype": {
-                "id": "677660a41e297def60b0253c7e00647f",
+                "id": "109050692b5400137a4e5f1e3c233f89",
                 "path": "Editor UI styles/Actor Property standard.proto"
             },
             "PrototypeLink": 1257707085843488634,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "799f68471cdb143f2a566c40355a7377",
+                            "id": "71042a560b6d380c07406ad00d456c99",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 8464266912148868969,
@@ -65,7 +65,7 @@
                                                         "Type": "o2::Button",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "3d9d757a5df77cfd50f16a66184a6bfb",
+                                                                "id": "6ce1344a39c176c84e531bb94a12616e",
                                                                 "path": "Editor UI styles/Button asset link.proto"
                                                             },
                                                             "PrototypeLink": 17465684684290807356,
@@ -133,7 +133,7 @@
                                                                         "meta": {
                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                             "Value": {
-                                                                                "mId": "32ef539e020d0cd427861a570fd10406"
+                                                                                "mId": "49144e8009a10aab73c77a817a5e24b4"
                                                                             }
                                                                         }
                                                                     }
@@ -177,7 +177,7 @@
                                                                         "meta": {
                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                             "Value": {
-                                                                                "mId": "11b336e274272bd4555753b8726751b3"
+                                                                                "mId": "158f6d373c367c5a236f24da46ed2aa1"
                                                                             }
                                                                         }
                                                                     }
@@ -221,7 +221,7 @@
                                                                         "meta": {
                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                             "Value": {
-                                                                                "mId": "12bb49c04dcd10d6733969c472b77cfe"
+                                                                                "mId": "1afe2838280359bb53aa6e9e034d5263"
                                                                             }
                                                                         }
                                                                     }
@@ -265,7 +265,7 @@
                                                                         "meta": {
                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                             "Value": {
-                                                                                "mId": "413219d31b717e5e59253b27508321f9"
+                                                                                "mId": "33776d7a7fc42891151d73934d4a3e0b"
                                                                             }
                                                                         }
                                                                     }
@@ -331,7 +331,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "218036fa2cc34b313c545cce12cc44fb"
+                                                                    "mId": "214e0838207735dc74af50c420f31aeb"
                                                                 }
                                                             }
                                                         }
@@ -374,7 +374,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "414e035024b532543f4069e717d32299"
+                                                                    "mId": "5f1830ea615825dc4b83347a28923192"
                                                                 }
                                                             }
                                                         }

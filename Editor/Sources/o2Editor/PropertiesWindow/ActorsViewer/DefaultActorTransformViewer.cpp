@@ -285,14 +285,6 @@ namespace Editor
 		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> depthTargets;
 		for (auto actor : mTargetActors)
 		{
-			if (auto comp = actor->GetComponent<DrawableComponent>())
-			{
-				DrawableComponent* proto = dynamic_cast<DrawableComponent*>(comp->GetPrototypeLink());
-				depthTargets.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-					mnew PropertyValueProxy<float, decltype(comp->drawDepth)>(&comp->drawDepth),
-					proto ? mnew PropertyValueProxy<float, decltype(comp->drawDepth)>(&proto->drawDepth) : nullptr));
-			}
-
 			if (auto drawable = dynamic_cast<ISceneDrawable*>(actor))
 			{
 				ISceneDrawable* proto = dynamic_cast<ISceneDrawable*>(actor->GetPrototypeLink().Get());
@@ -354,12 +346,7 @@ namespace Editor
 		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> depthTargets;
 		for (auto actor : mTargetActors)
 		{
-			ISceneDrawable* drawable = nullptr;
-			if (auto comp = actor->GetComponent<DrawableComponent>())
-				drawable = comp;
-			else
-				drawable = dynamic_cast<ISceneDrawable*>(actor);
-
+			ISceneDrawable* drawable = dynamic_cast<ISceneDrawable*>(actor);
 			if (drawable)
 			{
 				DepthSelectedType drawableDepthType = drawable->IsDrawingDepthInheritedFromParent() ?

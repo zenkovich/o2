@@ -44,7 +44,7 @@
                                         {
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "1a493ce04f262edd3da566ed07300787",
+                                                    "id": "6bc43ffb327810c01f5e3e3b15002922",
                                                     "path": "Editor UI styles/Edit Box red singleline.proto"
                                                 },
                                                 "PrototypeLink": 16573369051729215137,
@@ -64,7 +64,6 @@
                                                     }
                                                 },
                                                 "mName": "editBox",
-                                                "mTransparency": 1.0,
                                                 "mTextDrawable": {
                                                     "mPosition": {
                                                         "x": -2.5,
@@ -73,12 +72,6 @@
                                                     "mSize": {
                                                         "x": 11.0,
                                                         "y": 0.0
-                                                    },
-                                                    "mColor": {
-                                                        "r": 96,
-                                                        "g": 125,
-                                                        "b": 139,
-                                                        "a": 255
                                                     }
                                                 },
                                                 "mCaretDrawable": {
@@ -89,14 +82,6 @@
                                                 },
                                                 "Layers": [
                                                     {
-                                                        "mDrawable": {
-                                                            "mColor": {
-                                                                "r": 255,
-                                                                "g": 255,
-                                                                "b": 255,
-                                                                "a": 255
-                                                            }
-                                                        },
                                                         "mUID": 7521293951983159327,
                                                         "PrototypeLink": 11006196429134983272
                                                     },
@@ -109,14 +94,6 @@
                                                         "PrototypeLink": 12950840063049268650
                                                     },
                                                     {
-                                                        "mDrawable": {
-                                                            "mColor": {
-                                                                "r": 255,
-                                                                "g": 255,
-                                                                "b": 255,
-                                                                "a": 255
-                                                            }
-                                                        },
                                                         "mUID": 8317318671641994909,
                                                         "PrototypeLink": 6962817736448825323
                                                     }
@@ -124,7 +101,6 @@
                                                 "States": [
                                                     {
                                                         "name": "visible",
-                                                        "mState": true,
                                                         "mAnimation": {
                                                             "instance": {
                                                                 "Type": "o2::AnimationAsset",
@@ -161,7 +137,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "249d31940bd80e971d82153d70715f86"
+                                                                    "mId": "21f001c9329253795d337d1b45ce583f"
                                                                 }
                                                             }
                                                         }
@@ -226,7 +202,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "0caa70a8766f1b95542a7dbf52893006"
+                                                                    "mId": "1670779b1d8a250f5a02560527eb4c30"
                                                                 }
                                                             }
                                                         }

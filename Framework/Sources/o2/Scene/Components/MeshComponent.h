@@ -38,9 +38,6 @@ namespace o2
 		// Draws sprite 
 		void Draw() override;
 
-		// Returns true if point is under drawable
-		bool IsUnderPoint(const Vec2F& point) override;
-
 		// Returns mesh
 		const Mesh& GetMesh() const;
 
@@ -147,7 +144,6 @@ CLASS_METHODS_META(o2::MeshComponent)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const MeshComponent&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(const Mesh&, GetMesh);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetExtraPoints, const Vector<Vec2F>&);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<Vec2F>&, GetExtraPoints);

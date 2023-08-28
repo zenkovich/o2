@@ -176,7 +176,6 @@
                     "Type": "o2::WidgetState",
                     "Value": {
                         "name": "inactive",
-                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -214,7 +213,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "016a14f21a364c7f778742d90cf561e9"
+                                    "mId": "6e2b6b06729a2bf563285d90326b3560"
                                 }
                             }
                         }
@@ -261,7 +260,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "73281e9003ad407908ae534b27256bfb"
+                                    "mId": "42f64e6f6355217a4fee1083215a1f3a"
                                 }
                             }
                         }
@@ -308,7 +307,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "27d8358e0ec16a6e487b7436664809ec"
+                                    "mId": "35f827b7209d7ceb0f5222db26787ecb"
                                 }
                             }
                         }

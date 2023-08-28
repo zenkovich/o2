@@ -39,7 +39,7 @@
                                         {
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "456c5c6a615005b84cbd0dbe357a7d17",
+                                                    "id": "79d933fc73641fb8514a657152ca6c33",
                                                     "path": "Editor UI styles/Edit Box actor head name.proto"
                                                 },
                                                 "PrototypeLink": 11486784227804782605,
@@ -59,7 +59,6 @@
                                                     }
                                                 },
                                                 "mName": "editBox",
-                                                "mTransparency": 1.0,
                                                 "mTextDrawable": {
                                                     "mPosition": {
                                                         "x": -10.0,
@@ -68,12 +67,6 @@
                                                     "mSize": {
                                                         "x": 6.0,
                                                         "y": 0.0
-                                                    },
-                                                    "mColor": {
-                                                        "r": 96,
-                                                        "g": 125,
-                                                        "b": 139,
-                                                        "a": 255
                                                     }
                                                 },
                                                 "mCaretDrawable": {
@@ -84,14 +77,6 @@
                                                 },
                                                 "Layers": [
                                                     {
-                                                        "mDrawable": {
-                                                            "mColor": {
-                                                                "r": 255,
-                                                                "g": 255,
-                                                                "b": 255,
-                                                                "a": 255
-                                                            }
-                                                        },
                                                         "mUID": 3452715284539618002,
                                                         "PrototypeLink": 3066799576538204645
                                                     },
@@ -107,7 +92,6 @@
                                                 "States": [
                                                     {
                                                         "name": "visible",
-                                                        "mState": true,
                                                         "mAnimation": {
                                                             "instance": {
                                                                 "Type": "o2::AnimationAsset",
@@ -144,7 +128,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "7e0504232ff323226dc037b538391bdd"
+                                                                    "mId": "227247f86a595cbf6ff27efc41571adf"
                                                                 }
                                                             }
                                                         }
@@ -209,7 +193,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "0cca6e644b89433655e24e78141a232f"
+                                                                    "mId": "41251e251b984dfe03c0155104f15c11"
                                                                 }
                                                             }
                                                         }

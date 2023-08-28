@@ -3,7 +3,6 @@
         "Type": "o2::Button",
         "Value": {
             "mName": "panel down",
-            "mTransparency": 0.0,
             "Id": 9227270322967965056,
             "Transform": {},
             "InternalWidgets": [],
@@ -25,12 +24,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "445f076b10cc17e92b30538f1c3c0bfc",
                                     "path": "ui/UI4_panel_button.png"
@@ -195,12 +188,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "2b793b1a747167266984178a32e32d37",
                                     "path": "ui/UI4_Down_icn.png"
@@ -228,7 +215,7 @@
                                     "r": 96,
                                     "g": 125,
                                     "b": 139,
-                                    "a": 0
+                                    "a": 255
                                 },
                                 "mText": "Button",
                                 "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
@@ -287,7 +274,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "605056e564fc1a84266c650a44533dd7"
+                                    "mId": "787d75ca27b63c20073b346479e32e86"
                                 }
                             }
                         }
@@ -334,7 +321,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "05c85b616d9946610a86039b58ac1721"
+                                    "mId": "48685b8f53ed79b62dc139d025f41790"
                                 }
                             }
                         }
@@ -381,7 +368,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "6f6e037c6af7588211930d3670ad1b63"
+                                    "mId": "2d742e3872f52477374077da7369713e"
                                 }
                             }
                         }
@@ -392,6 +379,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -428,7 +416,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "1d4c0b35056934ce0e6b0ce71df77612"
+                                    "mId": "23987b1f686b5c836c3d77aa76ec3601"
                                 }
                             }
                         }

@@ -15,8 +15,6 @@ namespace o2
 		if (enableClipping)
 			o2Render.EnableScissorTest(mOwner->transform->GetWorldAxisAlignedRect());
 
-		ISceneDrawable::Draw();
-
 		if (enableClipping)
 			o2Render.DisableScissorTest();
 	}

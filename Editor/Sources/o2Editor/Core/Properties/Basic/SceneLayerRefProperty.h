@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Scene/SceneLayer.h"
+#include "o2/Scene/SceneLayerRef.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
 
 namespace o2
@@ -14,19 +14,19 @@ namespace Editor
 	// -------------------------
 	// Editor layer property box
 	// -------------------------
-	class LayerProperty: public TPropertyField<SceneLayer*>
+	class SceneLayerRefProperty: public TPropertyField<Ref<SceneLayer>>
 	{
 	public:
 		// Default constructor
-		LayerProperty();
+		SceneLayerRefProperty();
 
 		// Copy constructor
-		LayerProperty(const LayerProperty& other);
+		SceneLayerRefProperty(const SceneLayerRefProperty& other);
 
 		// Copy operator
-		LayerProperty& operator=(const LayerProperty& other);
+		SceneLayerRefProperty& operator=(const SceneLayerRefProperty& other);
 
-		IOBJECT(LayerProperty);
+		IOBJECT(SceneLayerRefProperty);
 
 	protected:		       
 		DropDown* mDropDown = nullptr;       // Layer name dropdown
@@ -51,22 +51,22 @@ namespace Editor
 }
 // --- META ---
 
-CLASS_BASES_META(Editor::LayerProperty)
+CLASS_BASES_META(Editor::SceneLayerRefProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<SceneLayer*>);
+	BASE_CLASS(Editor::TPropertyField<Ref<SceneLayer>>);
 }
 END_META;
-CLASS_FIELDS_META(Editor::LayerProperty)
+CLASS_FIELDS_META(Editor::SceneLayerRefProperty)
 {
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
 }
 END_META;
-CLASS_METHODS_META(Editor::LayerProperty)
+CLASS_METHODS_META(Editor::SceneLayerRefProperty)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const LayerProperty&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayerRefProperty&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersList);

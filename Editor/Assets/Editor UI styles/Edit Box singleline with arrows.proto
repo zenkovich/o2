@@ -3,7 +3,7 @@
         "Type": "o2::EditBox",
         "Value": {
             "Prototype": {
-                "id": "0d71052d6e7d073e3a40557b57822ee7",
+                "id": "23e1689932d96e8415166c0b6d372685",
                 "path": "Editor UI styles/Edit Box singleline.proto"
             },
             "PrototypeLink": 10268746037782421877,
@@ -57,12 +57,6 @@
                     "mDrawable": {
                         "Type": "o2::Sprite",
                         "Value": {
-                            "mColor": {
-                                "r": 255,
-                                "g": 255,
-                                "b": 255,
-                                "a": 0
-                            },
                             "mImageAsset": {
                                 "id": "5219235a0fc2622920a3158b12741171",
                                 "path": "ui/UI4_ch_arrows.png"
@@ -112,7 +106,7 @@
                         "meta": {
                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                             "Value": {
-                                "mId": "0ab9412e49df430159361ad420cf247d"
+                                "mId": "6d60112607715617149345d25dfb4713"
                             }
                         }
                     }
@@ -177,7 +171,7 @@
                         "meta": {
                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                             "Value": {
-                                "mId": "58243ea02d3b1e7b7abb4c5f501a427f"
+                                "mId": "33e97d0820a974ea5d173212706d26b9"
                             }
                         }
                     }

@@ -1,32 +1,32 @@
 #include "o2Editor/stdafx.h"
-#include "LayerProperty.h"
+#include "SceneLayerRefProperty.h"
 
 #include "o2/Scene/UI/Widgets/DropDown.h"
 
 
 namespace Editor
 {
-	LayerProperty::LayerProperty()
+	SceneLayerRefProperty::SceneLayerRefProperty()
 	{
-		mCommonValue = nullptr;
+		mCommonValue = Ref<SceneLayer>();
 	}
 
-	LayerProperty::LayerProperty(const LayerProperty& other) :
-		TPropertyField<SceneLayer*>(other)
+	SceneLayerRefProperty::SceneLayerRefProperty(const SceneLayerRefProperty& other) :
+		TPropertyField<Ref<SceneLayer>>(other)
 	{
 		InitializeControls();
 	}
 
-	LayerProperty& LayerProperty::operator=(const LayerProperty& other)
+	SceneLayerRefProperty& SceneLayerRefProperty::operator=(const SceneLayerRefProperty& other)
 	{
-		TPropertyField<SceneLayer*>::operator=(other);
+		TPropertyField<Ref<SceneLayer>>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
 
-	void LayerProperty::InitializeControls()
+	void SceneLayerRefProperty::InitializeControls()
 	{
-		mCommonValue = nullptr;
+		mCommonValue = Ref<SceneLayer>();
 
 		mDropDown = FindChildByType<DropDown>();
 		if (mDropDown)
@@ -37,7 +37,7 @@ namespace Editor
 		}
 	}
 
-	void LayerProperty::UpdateValueView()
+	void SceneLayerRefProperty::UpdateValueView()
 	{
 		mUpdatingValue = true;
 
@@ -50,22 +50,14 @@ namespace Editor
 		}
 		else
 		{
-			if (!mCommonValue)
-			{
-				mDropDown->SelectItemAt(-1);
-				mDropDown->SetState("undefined", false);
-			}
-			else
-			{
-				mDropDown->value = mCommonValue->GetName();
-				mDropDown->SetState("undefined", false);
-			}
+			mDropDown->value = mCommonValue->GetName();
+			mDropDown->SetState("undefined", false);
 		}
 
 		mUpdatingValue = false;
 	}
 
-	void LayerProperty::UpdateLayersList()
+	void SceneLayerRefProperty::UpdateLayersList()
 	{
 		auto layers = o2Scene.GetLayers();
 		auto dropdownLayers = mDropDown->GetAllItemsText();
@@ -82,25 +74,25 @@ namespace Editor
 		}
 	}
 
-	void LayerProperty::SelectLayer(const WString& name)
+	void SceneLayerRefProperty::SelectLayer(const WString& name)
 	{
 		if (mUpdatingValue)
 			return;
 
-		SetValueByUser(o2Scene.GetLayer(name));
+		SetValueByUser(Ref<SceneLayer>(name));
 	}
 
-	bool LayerProperty::IsAlwaysRefresh() const
+	bool SceneLayerRefProperty::IsAlwaysRefresh() const
 	{
-		if (mCommonValue && !mValuesDifferent && mCommonValue->GetName() != (String)mDropDown->GetSelectedItemText())
+		if (!mValuesDifferent && mCommonValue->GetName() != (String)mDropDown->GetSelectedItemText())
 			return true;
 
 		return false;
 	}
 
 }
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::SceneLayer*>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<o2::SceneLayer>>);
 // --- META ---
 
-DECLARE_CLASS(Editor::LayerProperty);
+DECLARE_CLASS(Editor::SceneLayerRefProperty);
 // --- END META ---

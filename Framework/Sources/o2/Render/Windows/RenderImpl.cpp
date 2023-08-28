@@ -492,7 +492,7 @@ namespace o2
 
 		if (mLastDrawTexture && flipFormats.Contains(mLastDrawTexture->GetFormat()))
 		{
-			for (int i = 0; i < mLastDrawVertex; i++)
+			for (UInt i = 0; i < mLastDrawVertex; i++)
 			{
 				Vertex& v = ((Vertex*)mVertexData)[i];
 				v.tv = 1.0f - v.tv;

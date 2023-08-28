@@ -16,7 +16,7 @@
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/AssetProperty.h"
 #include "o2Editor/Core/Properties/Basic/BooleanProperty.h"
-#include "o2Editor/Core/Properties/Basic/LayerProperty.h"
+#include "o2Editor/Core/Properties/Basic/SceneLayerRefProperty.h"
 #include "o2Editor/Core/Properties/Basic/StringProperty.h"
 #include "o2Editor/Core/Properties/Basic/TagProperty.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
@@ -94,7 +94,7 @@ namespace Editor
 		*layerImg->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(20, 20), Vec2F(-169, 1));
 		mDataView->AddChild(layerImg);
 
-		mLayerProperty = o2UI.CreateWidget<LayerProperty>("actor head layer");
+		mLayerProperty = o2UI.CreateWidget<SceneLayerRefProperty>("actor head layer");
 		*mLayerProperty->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(166, 17), Vec2F(-4, 3));
 		mLayerProperty->SetValuePath("layer");
 		mLayerProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);

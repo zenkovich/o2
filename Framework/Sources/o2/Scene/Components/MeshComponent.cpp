@@ -39,16 +39,9 @@ namespace o2
 			UpdateMesh();
 
 		mMesh.Draw();
-		DrawableComponent::OnDrawn();
-		ISceneDrawable::Draw();
 
 		if (o2Input.IsKeyDown(VK_F3))
 			o2Render.DrawMeshWire(&mMesh, Color4(0, 0, 0, 100));
-	}
-
-	bool MeshComponent::IsUnderPoint(const Vec2F& point)
-	{
-		return false;
 	}
 
 	const Mesh& MeshComponent::GetMesh() const

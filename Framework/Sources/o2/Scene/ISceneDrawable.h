@@ -91,6 +91,9 @@ namespace o2
 		// Called when the parent changes
 		virtual void OnDrawbleParentChanged();
 
+		// Called when drawable layer changed
+		virtual void OnDrawableLayerChanged();
+
 		// Called when drawable has enabled
 		void OnEnabled();
 
@@ -102,6 +105,9 @@ namespace o2
 
 		// Called when actor was excluded from scene
 		void OnRemoveFromScene();
+
+		// Refreshing drawable registration
+		void Reregister();
 
 		// Registers drawable in layer or in parent
 		void Register();
@@ -166,10 +172,12 @@ CLASS_METHODS_META(o2::ISceneDrawable)
 	FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(void, SortInheritedDrawables);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawbleParentChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableLayerChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
+	FUNCTION().PROTECTED().SIGNATURE(void, Reregister);
 	FUNCTION().PROTECTED().SIGNATURE(void, Register);
 	FUNCTION().PROTECTED().SIGNATURE(void, Unregister);
 #if  IS_EDITOR

@@ -4,6 +4,8 @@
 #include "o2/Scene/ActorCreationMode.h"
 #include "o2/Scene/ActorRef.h"
 #include "o2/Scene/ActorTransform.h"
+#include "o2/Scene/ISceneDrawable.h"
+#include "o2/Scene/SceneLayerRef.h"
 #include "o2/Scene/Tags.h"
 #include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
@@ -18,6 +20,7 @@
 namespace o2
 {
 	class Component;
+	class DrawableComponent;
 	class Scene;
 
 #if IS_EDITOR
@@ -39,7 +42,7 @@ namespace o2
 	// When editor pragma is enabled, it is derived from SceneEditableObject and support all editor 
 	// features for editing actor
 	// ---------------------------------------------------------------------------------------------
-	class Actor: virtual public ActorBase
+	class Actor: virtual public ActorBase, public ISceneDrawable
 	{
 	public:
 		enum class State { Default, Initializing, Destroying, Destroyed };
@@ -88,6 +91,9 @@ namespace o2
 
 		// Marks actor to destroy, will be destroyed on next frame @SCRIPTABLE
 		void Destroy();
+
+		// Draws actor ant its components
+		void Draw() override;
 
 		// Updates actor and components @SCRIPTABLE
 		virtual void Update(float dt) OPTIONAL_OVERRIDE;
@@ -142,6 +148,15 @@ namespace o2
 
 		// Returns prototype link pointer
 		ActorRef GetPrototypeLink() const;
+
+		// Sets scene layer
+		void SetLayer(const Ref<SceneLayer>& layer);
+
+		// Sets scene layer by name @SCRIPTABLE
+		void SetLayer(const String& name);
+
+		// Returns scene layer @SCRIPTABLE
+		const Ref<SceneLayer>& GetLayer() const;
 
 		// Includes to scene and now will be update and draw automatically from scene @SCRIPTABLE
 		void AddToScene();
@@ -326,6 +341,8 @@ namespace o2
 		SceneUID mId;   // Unique actor id
 		String   mName; // Name of actor @SERIALIZABLE
 
+		Ref<SceneLayer> mSceneLayer; // Scene layer @SERIALIZABLE @EDITOR_IGNORE
+
 		ActorAssetRef mPrototype;               // Prototype asset
 		ActorRef      mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
 
@@ -334,8 +351,10 @@ namespace o2
 
 		Vector<Component*> mComponents; // Components vector 
 
+		Vector<DrawableComponent*> mDrawComponents; // Drawable components vector
+
 		// Actor can be logically disabled, but actually stay enabled and be in transition to really disabled state
-		// mResEnabled and mResEnabledInHierarchy are disabled by default to get enabled afetr initialization
+		// mResEnabled and mResEnabledInHierarchy are disabled by default to get enabled after initialization
 		bool mEnabled = true;                // Is actor logically enabled. 
 		bool mResEnabled = false;            // Is actor really enabled. 
 		bool mResEnabledInHierarchy = false; // Is actor enabled in hierarchy
@@ -388,6 +407,15 @@ namespace o2
 
 		// Regular deserializing with prototype
 		virtual void DeserializeWithProto(const DataValue& node);
+
+		// Returns current scene layer
+		SceneLayer* GetSceneDrawableSceneLayer() const override;
+
+		// Returns parent scene drawable
+		ISceneDrawable* GetParentDrawable() override;
+
+		// Returns the index in the parent's list of children, used to sort the rendering
+		int GetIndexInParentDrawable() const override;
 
 		// Returns dictionary of all children by names
 		Map<String, Actor*> GetAllChilds();
@@ -461,7 +489,7 @@ namespace o2
 		GETTER(bool, lockedInHierarchy, IsLockedInHierarchy); // Is actor locked in hierarchy getter
 
 	public:
-		Function<void(bool)>   onEnableChanged;         // Enable changing event  @EDITOR_IGNORE
+		Function<void(bool)>   onEnableChanged;         // Enable changing event @EDITOR_IGNORE
 		Function<void()>       onChanged;               // Something in actor change event @EDITOR_IGNORE
 		Function<void(Actor*)> onParentChanged;         // Actor change parent event @EDITOR_IGNORE
 		Function<void()>       onChildHierarchyChanged; // Actor childs hierarchy change event @EDITOR_IGNORE
@@ -733,6 +761,7 @@ PRE_ENUM_META(o2::Actor::State);
 CLASS_BASES_META(o2::Actor)
 {
 	BASE_CLASS(ActorBase);
+	BASE_CLASS(o2::ISceneDrawable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Actor)
@@ -750,11 +779,13 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(transform);
 	FIELD().PROTECTED().NAME(mId);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mName);
+	FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mSceneLayer);
 	FIELD().PROTECTED().NAME(mPrototype);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParent);
 	FIELD().PROTECTED().NAME(mChildren);
 	FIELD().PROTECTED().NAME(mComponents);
+	FIELD().PROTECTED().NAME(mDrawComponents);
 	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabled);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mResEnabled);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mResEnabledInHierarchy);
@@ -794,6 +825,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&, ActorCreateMode);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Destroy);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, FixedUpdate, float);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, UpdateChildren, float);
@@ -812,6 +844,9 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorAssetRef, GetPrototype);
 	FUNCTION().PUBLIC().SIGNATURE(ActorAssetRef, GetPrototypeDirectly);
 	FUNCTION().PUBLIC().SIGNATURE(ActorRef, GetPrototypeLink);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const Ref<SceneLayer>&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayer, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Ref<SceneLayer>&, GetLayer);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddToScene);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveFromScene, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsOnScene);
@@ -864,6 +899,9 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeWithProto, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeWithProto, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
+	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
+	FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetAllChilds);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp2, GetAllComponents);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnBeforeDestroy);

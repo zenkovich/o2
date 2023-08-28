@@ -122,7 +122,7 @@ namespace o2
 		SERIALIZABLE(CustomDropDown);
 
 	protected:
-		CustomList* mItemsList = nullptr;                // List view @SERIALIZABLE
+		CustomList* mItemsList = nullptr;                // List view
 		Layout      mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
 		RectF       mAbsoluteClip;                       // Absolute clipping rectangle
 		int         mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
@@ -179,7 +179,7 @@ CLASS_FIELDS_META(o2::CustomDropDown)
 	FIELD().PUBLIC().NAME(onBeforeExpand);
 	FIELD().PUBLIC().NAME(onSelectedPos);
 	FIELD().PUBLIC().NAME(onSelectedItem);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemsList);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mItemsList);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mClipLayout);
 	FIELD().PROTECTED().NAME(mAbsoluteClip);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mMaxListItems);

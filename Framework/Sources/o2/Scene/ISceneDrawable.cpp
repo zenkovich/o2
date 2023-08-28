@@ -54,11 +54,7 @@ namespace o2
 		mDrawingDepth = depth;
 		mInheritDrawingDepthFromParent = false;
 
-		if (mRegistered)
-		{
-			Unregister();
-			Register();
-		}
+		Reregister();
 	}
 
 	float ISceneDrawable::GetDrawingDepth() const
@@ -70,11 +66,7 @@ namespace o2
 	{
 		mInheritDrawingDepthFromParent = inherit;
 
-		if (mRegistered)
-		{
-			Unregister();
-			Register();
-		}
+		Reregister();
 	}
 
 	bool ISceneDrawable::IsDrawingDepthInheritedFromParent() const
@@ -84,11 +76,12 @@ namespace o2
 
 	void ISceneDrawable::OnDrawbleParentChanged()
 	{
-		if (mRegistered)
-			Unregister();
+		Reregister();
+	}
 
-		if (mDrawableEnabled)
-			Register();
+	void ISceneDrawable::OnDrawableLayerChanged()
+	{
+		Reregister();
 	}
 
 	void ISceneDrawable::SortInheritedDrawables()
@@ -117,12 +110,7 @@ namespace o2
 	void ISceneDrawable::OnAddToScene()
 	{
 		mIsOnScene = true;
-
-		if (mRegistered)
-			Unregister();
-
-		if (mDrawableEnabled)
-			Register();
+		Reregister();
 	}
 
 	void ISceneDrawable::OnRemoveFromScene()
@@ -131,6 +119,15 @@ namespace o2
 
 		if (mRegistered)
 			Unregister();
+	}
+
+	void ISceneDrawable::Reregister()
+	{
+		if (mRegistered)
+			Unregister();
+
+		if (mDrawableEnabled)
+			Register();
 	}
 
 	void ISceneDrawable::Register()
@@ -145,6 +142,9 @@ namespace o2
 
 				if (mParentRegistry)
 				{
+					if (mParentRegistry->mChildrenInheritedDepth.Contains(this))
+						o2Debug.Log("asd");
+
 					mParentRegistry->mChildrenInheritedDepth.Add(this);
 					mParentRegistry->SortInheritedDrawables();
 

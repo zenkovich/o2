@@ -101,17 +101,6 @@ namespace Editor
 			prop->SetValueAndPrototypeProxy({ { mnew PointerValueProxy(&xx), mnew PointerValueProxy(&yy) } });
 							});
 
-		mMenuPanel->AddItem("Debug/Fix scene", [&]() {
-			Function<void(Actor*)> fixActor = [&fixActor](Actor* actor) {
-				actor->GetComponents<DrawableComponent>().ForEach([](DrawableComponent* x) { x->SetDrawingDepthInheritFromParent(false); });
-
-				actor->GetChildren().ForEach([&](Actor* x) { fixActor(x); });
-			};
-
-			for (auto actor : o2Scene.GetRootActors())
-				fixActor(actor);
-							});
-
 		mMenuPanel->AddItem("Debug/Randomize IDs", [&]() {
 			Function<void(Actor*)> fixActor = [&fixActor](Actor* actor) {
 				actor->GenerateNewID();

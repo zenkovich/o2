@@ -39,7 +39,7 @@
                                         {
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "7a584b685b4b61c16bb17a08642e1d4b",
+                                                    "id": "1efa533639a72e664487764203ed2fe7",
                                                     "path": "Editor UI styles/Toggle actor head lock.proto"
                                                 },
                                                 "PrototypeLink": 10620287631235670556,
@@ -59,7 +59,6 @@
                                                     }
                                                 },
                                                 "mName": "toggle",
-                                                "mTransparency": 1.0,
                                                 "Layers": [
                                                     {
                                                         "mUID": 5534366028076672556,
@@ -70,14 +69,6 @@
                                                                 "PrototypeLink": 2749617919741137701,
                                                                 "Children": [
                                                                     {
-                                                                        "mDrawable": {
-                                                                            "mColor": {
-                                                                                "r": 255,
-                                                                                "g": 255,
-                                                                                "b": 255,
-                                                                                "a": 255
-                                                                            }
-                                                                        },
                                                                         "mUID": 16951202595238173302,
                                                                         "PrototypeLink": 521663728374537135
                                                                     },
@@ -134,7 +125,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "07941c4c62af385718ac30744f7b039a"
+                                                                    "mId": "2ed715584304620c603a0345383e5aa3"
                                                                 }
                                                             }
                                                         }
@@ -199,7 +190,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "5199404d6c816d2c01f077025e8b5607"
+                                                                    "mId": "43655e661df70639185d54fd57d62b55"
                                                                 }
                                                             }
                                                         }
@@ -264,14 +255,13 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "41ae49f92c086aa026a82dc31dd511e6"
+                                                                    "mId": "7dbd442041a3059978a17d9a47383d34"
                                                                 }
                                                             }
                                                         }
                                                     },
                                                     {
                                                         "name": "visible",
-                                                        "mState": true,
                                                         "mAnimation": {
                                                             "instance": {
                                                                 "Type": "o2::AnimationAsset",
@@ -308,7 +298,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "1e5d5dcd44144118282e7046617a772c"
+                                                                    "mId": "1bd33de163a53a4b2b8b10460d1164b0"
                                                                 }
                                                             }
                                                         }

@@ -15,7 +15,7 @@ namespace Editor
 	using namespace o2;
 
 	class TagsProperty;
-	class LayerProperty;
+	class SceneLayerRefProperty;
 	class BooleanProperty;
 	class StringProperty;
 	class AssetProperty;
@@ -53,7 +53,7 @@ namespace Editor
 		BooleanProperty* mLockProperty = nullptr;
 		AssetProperty*   mPrototypeProperty = nullptr;
 		TagsProperty*    mTagsProperty = nullptr;
-		LayerProperty*   mLayerProperty = nullptr;
+		SceneLayerRefProperty*   mLayerProperty = nullptr;
 
 		Button* mPrototypeApplyBtn = nullptr;
 		Button* mPrototypeRevertBtn = nullptr;

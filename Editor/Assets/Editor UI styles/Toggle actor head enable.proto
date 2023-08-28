@@ -3,7 +3,6 @@
         "Type": "o2::Toggle",
         "Value": {
             "mName": "actor head enable",
-            "mTransparency": 0.0,
             "Id": 5410331204024413161,
             "Transform": {
                 "minSize": {
@@ -38,12 +37,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "1b4e1f836afb6b7a38b32c5d7e8c31aa",
                                     "path": "ui/UI4_enable_toggle_big.png"
@@ -306,7 +299,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "2f161951380a169922df14775efe1ace"
+                                    "mId": "67c9638b18d843136689418f13ba02ad"
                                 }
                             }
                         }
@@ -353,7 +346,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "536c210530094c43377e5e891e906972"
+                                    "mId": "6a0a42207027334f277c1c9a78b56a96"
                                 }
                             }
                         }
@@ -400,7 +393,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "148522270e0250735e0c41fc5cab2819"
+                                    "mId": "1ba512dc1a44440b3f49224c45f60983"
                                 }
                             }
                         }
@@ -447,7 +440,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "6f0b59d65be71130580224fb0e903657"
+                                    "mId": "1a302d38296c30891a154fef50cc6f03"
                                 }
                             }
                         }
@@ -494,7 +487,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "38e5676e46e970be241903f550c03c01"
+                                    "mId": "4b8025ee3a1b5b4a0044040b2cc115e8"
                                 }
                             }
                         }
@@ -505,6 +498,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -541,7 +535,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "313d1c8c2f7815a20e4a419776fb792d"
+                                    "mId": "2da95ef6430e5e0f667c0e6a7ba57444"
                                 }
                             }
                         }

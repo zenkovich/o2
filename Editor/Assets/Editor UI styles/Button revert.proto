@@ -3,7 +3,6 @@
         "Type": "o2::Button",
         "Value": {
             "mName": "revert",
-            "mTransparency": 0.0,
             "Id": 17601412006330578480,
             "Transform": {
                 "minSize": {
@@ -61,12 +60,6 @@
                                                         "mPivot": {
                                                             "x": 0.5,
                                                             "y": 0.5
-                                                        },
-                                                        "mColor": {
-                                                            "r": 255,
-                                                            "g": 255,
-                                                            "b": 255,
-                                                            "a": 0
                                                         },
                                                         "mImageAsset": {
                                                             "id": "44402071050555a124c77e7344733da4",
@@ -181,7 +174,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "1b165f7b207c3b9b68ce1d3b27e634d6"
+                                    "mId": "784e583149674a9e307802cf531c684b"
                                 }
                             }
                         }
@@ -228,7 +221,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "17680dbe6223265a54ab6f9b3b794d48"
+                                    "mId": "063e636e27af02d43c764c3a4a3e4c9e"
                                 }
                             }
                         }
@@ -238,6 +231,7 @@
                     "Type": "o2::WidgetState",
                     "Value": {
                         "name": "visible",
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -274,7 +268,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7ef371486ff06e3c2df572dc69075d40"
+                                    "mId": "1f606d8b374f4207362b6eac5b7a3d5a"
                                 }
                             }
                         }

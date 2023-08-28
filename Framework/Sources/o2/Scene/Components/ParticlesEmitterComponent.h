@@ -51,9 +51,6 @@ namespace o2
 
 		// Completion deserialization delta callback
 		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
-
-		// Called when particles was drawn
-		void OnDrawn() override;
 	};
 }
 // --- META ---
@@ -84,7 +81,6 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawn);
 }
 END_META;
 // --- END META ---

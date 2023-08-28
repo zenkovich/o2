@@ -3,7 +3,6 @@
         "Type": "o2::Button",
         "Value": {
             "mName": "close",
-            "mTransparency": 0.0,
             "Id": 1791765016181687769,
             "Transform": {
                 "minSize": {
@@ -38,12 +37,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "19f1480664de4c0b1d4f58ef04ba19e4",
                                     "path": "ui/UI4_Close_button_regular.png"
@@ -180,7 +173,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "41651500744c1098288b29f868714838"
+                                    "mId": "0ec007d84c2d5b91622942205b2530d6"
                                 }
                             }
                         }
@@ -227,7 +220,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4df504e624f66b233ecf141957742c7c"
+                                    "mId": "27b72ea0037b79bd33b77fbc0b2e7dff"
                                 }
                             }
                         }
@@ -238,6 +231,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -274,7 +268,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "670e3fa4318718e6545829d224fd4cc4"
+                                    "mId": "4e757ec1276d11234c9b2e825fe364b5"
                                 }
                             }
                         }

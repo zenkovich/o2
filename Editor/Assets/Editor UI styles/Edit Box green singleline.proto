@@ -3,7 +3,6 @@
         "Type": "o2::EditBox",
         "Value": {
             "mName": "green singleline",
-            "mTransparency": 0.0,
             "mViewAreaLayout": {
                 "offsetMin": {
                     "x": 3.0,
@@ -42,7 +41,7 @@
                         "r": 96,
                         "g": 125,
                         "b": 139,
-                        "a": 0
+                        "a": 255
                     },
                     "mText": "",
                     "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
@@ -109,12 +108,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "1db20a2430920e752fbe48f84c6c26f4",
                                     "path": "ui/UI4_green_edit_box.png"
@@ -238,12 +231,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "5219235a0fc2622920a3158b12741171",
                                     "path": "ui/UI4_ch_arrows.png"
@@ -261,6 +248,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -297,7 +285,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "79d34ee25dfd5896423667687b7140cd"
+                                    "mId": "013f08501b5079e356b133e9107c3f10"
                                 }
                             }
                         }
@@ -366,7 +354,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4ddc23e70d13582f1efa6d7b5f23628a"
+                                    "mId": "32744b1668c66aaa0b0b652a30a00aae"
                                 }
                             }
                         }

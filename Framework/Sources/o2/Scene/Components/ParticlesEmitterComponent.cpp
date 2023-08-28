@@ -53,12 +53,6 @@ namespace o2
 		return "ui/UI4_emitter_component.png";
 	}
 
-	void ParticlesEmitterComponent::OnDrawn()
-	{
-		DrawableComponent::OnDrawn();
-		ParticlesEmitter::OnDrawn();
-	}
-
 	void ParticlesEmitterComponent::OnTransformUpdated()
 	{
 		basis = mOwner->transform->GetWorldBasis();

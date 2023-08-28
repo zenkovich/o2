@@ -3,9 +3,10 @@
 
 #include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/Component.h"
+#include "o2/Scene/Components/ScriptableComponent.h"
+#include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Utils/Debug/Debug.h"
-#include "Components/ScriptableComponent.h"
 
 namespace o2
 {
@@ -229,6 +230,14 @@ namespace o2
 			o2Scene.DestroyActor(this);
 		else
 			o2Debug.LogError("Cant destroy actor in scene, because it's not exists. Delete actor manually");
+	}
+
+	void Actor::Draw()
+	{
+		for (auto component : mDrawComponents)
+			component->Draw();
+
+		ISceneDrawable::Draw();
 	}
 
 	void Actor::Update(float dt)
@@ -680,6 +689,9 @@ namespace o2
 		if (mIsOnScene && mState == State::Default)
 			component->AddToScene();
 
+		if (auto drawableComponent = dynamic_cast<DrawableComponent*>(component))
+			mDrawComponents.Add(drawableComponent);
+
 		OnComponentAdded(component);
 
 		component->OnTransformUpdated();
@@ -695,6 +707,9 @@ namespace o2
 	{
 		if (mIsOnScene)
 			component->RemoveFromScene();
+
+		if (auto drawableComponent = dynamic_cast<DrawableComponent*>(component))
+			mDrawComponents.Remove(drawableComponent);
 
 		OnComponentRemoving(component);
 
@@ -828,12 +843,16 @@ namespace o2
 
 	void Actor::OnAddToScene()
 	{
+		ISceneDrawable::OnAddToScene();
+
 		for (auto comp : mComponents)
 			comp->AddToScene();
 	}
 
 	void Actor::OnRemoveFromScene()
 	{
+		ISceneDrawable::OnRemoveFromScene();
+
 		for (auto comp : mComponents)
 			comp->RemoveFromScene();
 	}
@@ -862,10 +881,14 @@ namespace o2
 	{}
 
 	void Actor::OnEnabled()
-	{}
+	{
+		ISceneDrawable::OnEnabled();
+	}
 
 	void Actor::OnDisabled()
-	{}
+	{
+		ISceneDrawable::OnDisabled();
+	}
 
 	void Actor::OnTransformUpdated()
 	{
@@ -910,6 +933,8 @@ namespace o2
 
 	void Actor::OnParentChanged(Actor* oldParent) 
 	{
+		ISceneDrawable::OnDrawbleParentChanged();
+
 		for (auto comp : mComponents)
 			comp->OnParentChanged(oldParent);
 	}
@@ -1316,6 +1341,43 @@ namespace o2
 	ActorRef Actor::GetPrototypeLink() const
 	{
 		return mPrototypeLink;
+	}
+
+	void Actor::SetLayer(const Ref<SceneLayer>& layer)
+	{
+		mSceneLayer = layer;
+		ISceneDrawable::OnDrawableLayerChanged();
+	}
+
+	void Actor::SetLayer(const String& name)
+	{
+		SetLayer(Ref<SceneLayer>(name));
+	}
+
+	const Ref<SceneLayer>& Actor::GetLayer() const
+	{
+		return mSceneLayer;
+	}
+
+	SceneLayer* Actor::GetSceneDrawableSceneLayer() const
+	{
+		return &const_cast<SceneLayer&>(mSceneLayer.Get());
+	}
+
+	ISceneDrawable* Actor::GetParentDrawable()
+	{
+		return mParent;
+	}
+
+	int Actor::GetIndexInParentDrawable() const
+	{
+		if (mParent)
+			return mParent->mChildren.IndexOf((Actor*)this);
+
+		if (Scene::IsSingletonInitialzed() && mIsOnScene)
+			return o2Scene.mRootActors.IndexOf((Actor*)this);
+
+		return 0;
 	}
 
 	Map<String, Actor*> Actor::GetAllChilds()

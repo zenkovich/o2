@@ -3,7 +3,6 @@
         "Type": "o2::Toggle",
         "Value": {
             "mName": "actor node lock",
-            "mTransparency": 0.0,
             "Id": 6514316620836518641,
             "Transform": {},
             "InternalWidgets": [],
@@ -104,12 +103,6 @@
                                                 "x": 0.5,
                                                 "y": 0.5
                                             },
-                                            "mColor": {
-                                                "r": 255,
-                                                "g": 255,
-                                                "b": 255,
-                                                "a": 0
-                                            },
                                             "mImageAsset": {
                                                 "id": "5f3057b6579c79624dab3a6e6509044d",
                                                 "path": "ui/UI4_unlock_icon.png"
@@ -129,6 +122,7 @@
                     "Type": "o2::WidgetState",
                     "Value": {
                         "name": "visible",
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -165,7 +159,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "03662c3a68fd3f0e20ad332944b0483c"
+                                    "mId": "3a427f8b431d64bd011d05791c4b7476"
                                 }
                             }
                         }
@@ -233,7 +227,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "797f5f640ba922f656b37cfb5cb970b0"
+                                    "mId": "438546823c511f796c67169f42231763"
                                 }
                             }
                         }
@@ -280,7 +274,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7c1a1cbe6602202901ef551614c61954"
+                                    "mId": "64a2682018c45b3c46920b154c7d633f"
                                 }
                             }
                         }

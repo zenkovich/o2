@@ -3,7 +3,6 @@
         "Type": "o2::Button",
         "Value": {
             "mName": "step",
-            "mTransparency": 0.0,
             "Id": 3262400065126276747,
             "Transform": {},
             "InternalWidgets": [],
@@ -33,12 +32,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "780f085f12c9163638327be949611fc8",
                                     "path": "ui/UI4_step_btn_regular.png"
@@ -175,7 +168,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "34ad602f39265bc80c2b27ab568d42af"
+                                    "mId": "2c9438956e1c416b4ad72d5c20cb1f1f"
                                 }
                             }
                         }
@@ -222,7 +215,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "33c24c304ba90a3d47bb337b6f6b7807"
+                                    "mId": "5714050e11e8033531047f77701c1824"
                                 }
                             }
                         }
@@ -232,6 +225,7 @@
                     "Type": "o2::WidgetState",
                     "Value": {
                         "name": "visible",
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -268,7 +262,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "53d006390e107497727844ea32041fa7"
+                                    "mId": "25280d9a629112d07c8d480d2e4a46a4"
                                 }
                             }
                         }

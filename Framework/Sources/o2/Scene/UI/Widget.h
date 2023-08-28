@@ -23,7 +23,7 @@ namespace o2
 	// Basic UI Widget. Its a simple and basic element of UI, 
 	// everything other UI's are based on this
 	// ------------------------------------------------------
-	class Widget: public Actor, public ISceneDrawable
+	class Widget: public Actor
 	{
 	public:
 		PROPERTIES(Widget);
@@ -260,8 +260,6 @@ namespace o2
 	protected:
 		using Actor::mState;
 
-		Ref<SceneLayer> mSceneLayer; // Scene layer @SERIALIZABLE @EDITOR_PROPERTY
-
 		Vector<WidgetLayer*> mLayers; // Layers array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 		Vector<WidgetState*> mStates; // States array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
 
@@ -337,15 +335,6 @@ namespace o2
 
 		// Called when actor excluding from scene, removes this from layer drawables
 		void OnRemoveFromScene() override;
-
-		// Returns current scene layer
-		SceneLayer* GetSceneDrawableSceneLayer() const override;
-
-		// Returns parent scene drawable
-		ISceneDrawable* GetParentDrawable() override;
-
-		// Returns the index in the parent's list of children, used to sort the rendering
-		int GetIndexInParentDrawable() const override;
 
 		// Updates child widgets list
 		void UpdateChildWidgetsList();
@@ -729,7 +718,6 @@ namespace o2
 CLASS_BASES_META(o2::Widget)
 {
 	BASE_CLASS(o2::Actor);
-	BASE_CLASS(o2::ISceneDrawable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Widget)
@@ -750,7 +738,6 @@ CLASS_FIELDS_META(o2::Widget)
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onUnfocused);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onShow);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onHide);
-	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mSceneLayer);
 	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetLayer).DONT_DELETE_ATTRIBUTE().NAME(mLayers);
 	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).NAME(mStates);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentWidget);
@@ -855,9 +842,6 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
-	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
-	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
-	FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateChildWidgetsList);
 	FUNCTION().PROTECTED().SIGNATURE(WidgetLayoutData&, GetLayoutData);
 	FUNCTION().PROTECTED().SIGNATURE(const WidgetLayoutData&, GetLayoutData);

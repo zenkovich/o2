@@ -21,7 +21,7 @@
                     "Type": "o2::Button",
                     "Value": {
                         "Prototype": {
-                            "id": "5de0270162746aaf7085493e096755ee",
+                            "id": "4f74062a1f8a237409d36bf728731749",
                             "path": "Editor UI styles/Button expand white.proto"
                         },
                         "PrototypeLink": 12815916003396062931,
@@ -49,17 +49,8 @@
                             }
                         },
                         "mName": "expand",
-                        "mTransparency": 1.0,
                         "Layers": [
                             {
-                                "mDrawable": {
-                                    "mColor": {
-                                        "r": 255,
-                                        "g": 255,
-                                        "b": 255,
-                                        "a": 255
-                                    }
-                                },
                                 "mUID": 9828119763846569760,
                                 "PrototypeLink": 12091804499738553047
                             },
@@ -111,7 +102,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "3f9a22af48332ab8320f25f3299d05d7"
+                                            "mId": "742e04b05ddf79e47b033d8402e96fae"
                                         }
                                     }
                                 }
@@ -154,14 +145,13 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "60b055ea37224c192ad73cea51d52776"
+                                            "mId": "6ef7578a12236081223f216a2fa40234"
                                         }
                                     }
                                 }
                             },
                             {
                                 "name": "visible",
-                                "mState": true,
                                 "mAnimation": {
                                     "instance": {
                                         "Type": "o2::AnimationAsset",
@@ -198,7 +188,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "5d4357ad1c9245d5063f31b16ad36d04"
+                                            "mId": "363427847b1a56524d67004676446a89"
                                         }
                                     }
                                 }
@@ -285,7 +275,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "0adb477222537b5024a20ad47fb85975"
+                                            "mId": "7859467442e163f93f7e0fc239f5339e"
                                         }
                                     }
                                 }
@@ -456,7 +446,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "08691b8c5a451c932fc8534d1ad269cd"
+                                    "mId": "7c340c74416b785a4b040e9e4de31242"
                                 }
                             }
                         }

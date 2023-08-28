@@ -52,7 +52,7 @@
 #include "o2Editor/Core/Properties/Basic/EnumProperty.h"
 #include "o2Editor/Core/Properties/Basic/FloatProperty.h"
 #include "o2Editor/Core/Properties/Basic/IntegerProperty.h"
-#include "o2Editor/Core/Properties/Basic/LayerProperty.h"
+#include "o2Editor/Core/Properties/Basic/SceneLayerRefProperty.h"
 #include "o2Editor/Core/Properties/Basic/RectangleFloatProperty.h"
 #include "o2Editor/Core/Properties/Basic/RectangleIntProperty.h"
 #include "o2Editor/Core/Properties/Basic/SceneLayersListProperty.h"
@@ -1926,7 +1926,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorHeadLayerProperty()
 	{
-		auto sample = mnew LayerProperty();
+		auto sample = mnew SceneLayerRefProperty();
 		sample->expandHeight = true;
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
@@ -4227,7 +4227,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildLayerProperty()
 	{
-		auto sample = mnew LayerProperty();
+		auto sample = mnew SceneLayerRefProperty();
 		sample->layout->minHeight = 20;
 		sample->expandHeight = true;
 		sample->expandWidth = true;
@@ -4621,7 +4621,7 @@ namespace Editor
 		BuildPropertyWithCaption<EnumProperty>("standard", "with caption");
 		BuildPropertyWithCaption<FloatProperty>("standard", "with caption");
 		BuildPropertyWithCaption<IntegerProperty>("standard", "with caption");
-		BuildPropertyWithCaption<LayerProperty>("standard", "with caption");
+		BuildPropertyWithCaption<SceneLayerRefProperty>("standard", "with caption");
 		BuildPropertyWithCaption<RectFProperty>("standard", "with caption");
 		BuildPropertyWithCaption<RectIProperty>("standard", "with caption");
 		BuildPropertyWithCaption<StringProperty>("standard", "with caption");

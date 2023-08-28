@@ -3,12 +3,11 @@
         "Type": "o2::MenuPanel",
         "Value": {
             "mName": "standard",
-            "mTransparency": 0.0,
             "mItemSample": {
                 "Type": "o2::Label",
                 "Value": {
                     "Prototype": {
-                        "id": "799f68471cdb143f2a566c40355a7377",
+                        "id": "71042a560b6d380c07406ad00d456c99",
                         "path": "Editor UI styles/Label standard.proto"
                     },
                     "PrototypeLink": 8464266912148868969,
@@ -120,12 +119,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "32d449667c0b255a7aa57d1d3b6f0f44",
                                     "path": "ui/UI4_Up_Menu.png"
@@ -185,7 +178,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "33791a1f08521a8e129260af71102c29"
+                                    "mId": "4ac152f77e6e15f0307801c6480b6ca3"
                                 }
                             }
                         }
@@ -195,6 +188,7 @@
                     "Type": "o2::WidgetState",
                     "Value": {
                         "name": "visible",
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -231,7 +225,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "221c7136357327e9615b36b077921266"
+                                    "mId": "43e669734a6e25b807d664b554706706"
                                 }
                             }
                         }

@@ -169,7 +169,6 @@ namespace o2
 
 	void UIManager::AddWidgetStyle(Widget* widget, const String& style)
 	{
-		widget->Hide(true);
 		widget->SetName(style);
 		mStyleSamples.Add(mnew ActorAsset(widget));
 	}

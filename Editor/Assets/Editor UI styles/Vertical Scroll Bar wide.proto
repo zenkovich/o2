@@ -3,7 +3,6 @@
         "Type": "o2::VerticalScrollBar",
         "Value": {
             "mName": "wide",
-            "mTransparency": 0.0,
             "mScrollSense": 0.25,
             "mScrollhandleMinPxSize": 10.0,
             "Id": 9486017903747980134,
@@ -49,12 +48,6 @@
                                             "mPivot": {
                                                 "x": 0.5,
                                                 "y": 0.5
-                                            },
-                                            "mColor": {
-                                                "r": 255,
-                                                "g": 255,
-                                                "b": 255,
-                                                "a": 0
                                             },
                                             "mImageAsset": {
                                                 "id": "41516f7f0265318f5f6d731f16f66682",
@@ -147,12 +140,6 @@
                                                 "x": 0.5,
                                                 "y": 0.5
                                             },
-                                            "mColor": {
-                                                "r": 255,
-                                                "g": 255,
-                                                "b": 255,
-                                                "a": 0
-                                            },
                                             "mImageAsset": {
                                                 "id": "311766284f1a03f22a5646697a2b6471",
                                                 "path": "ui/hor_hole_handle.png"
@@ -173,6 +160,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -209,7 +197,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "79e629ff68465416352502270ef44e7b"
+                                    "mId": "41dd4fb90630397b60346c5922d23013"
                                 }
                             }
                         }

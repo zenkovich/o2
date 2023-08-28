@@ -3,7 +3,6 @@
         "Type": "o2::EditBox",
         "Value": {
             "mName": "actor head tags",
-            "mTransparency": 0.0,
             "mViewAreaLayout": {
                 "offsetMin": {
                     "x": 7.0,
@@ -46,7 +45,7 @@
                         "r": 96,
                         "g": 125,
                         "b": 139,
-                        "a": 0
+                        "a": 255
                     },
                     "mText": "",
                     "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
@@ -113,12 +112,6 @@
                         "mDrawable": {
                             "Type": "o2::Sprite",
                             "Value": {
-                                "mColor": {
-                                    "r": 255,
-                                    "g": 255,
-                                    "b": 255,
-                                    "a": 0
-                                },
                                 "mImageAsset": {
                                     "id": "749d29bb6c3779a535123773412905ad",
                                     "path": "ui/UI4_round_field_gray.png"
@@ -224,6 +217,7 @@
                     "Value": {
                         "name": "visible",
                         "offStateAnimationSpeed": 0.5,
+                        "mState": true,
                         "mAnimation": {
                             "instance": {
                                 "Type": "o2::AnimationAsset",
@@ -260,7 +254,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "625c6cbd3a9c1ead29f13ada303a0969"
+                                    "mId": "46ab7d6f246e493c1b82311a5cd62972"
                                 }
                             }
                         }
@@ -329,7 +323,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "6e4974c1107503fb114c45050efe46c0"
+                                    "mId": "7d4a3cdd4f5d37a52be346cd61fd44da"
                                 }
                             }
                         }
