@@ -259,12 +259,12 @@ namespace o2
 
 	void Application::DrawDebug()
 	{
-		o2Debug.Draw();
+		o2Debug.Draw(false);
 	}
 
 	void Application::UpdateDebug(float dt)
 	{
-		o2Debug.Update(dt);
+		o2Debug.Update(false, dt);
 	}
 
 	void Application::OnMoved()

@@ -126,6 +126,8 @@ namespace o2
 
 		for (auto child : mInternalWidgets)
 		{
+			child->OnBeforeDestroy();
+
 			child->mParent = nullptr;
 			child->mParentWidget = nullptr;
 

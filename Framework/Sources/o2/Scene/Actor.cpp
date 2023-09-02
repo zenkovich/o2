@@ -655,6 +655,9 @@ namespace o2
 	{
 		for (auto child : mChildren)
 		{
+			if (release)
+				child->OnBeforeDestroy();
+
 			child->mParent = nullptr;
 
 			OnChildRemoved(child);

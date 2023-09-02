@@ -179,7 +179,7 @@ namespace Editor
 	{
 		DrawGrid();
 		DrawObjects();
-		o2Debug.Draw();
+		o2Debug.Draw(false);
 		DrawSelection();
 
 		mEditorLayers.SortBy<int>([](SceneEditorLayer* l) { return l->GetOrder(); });

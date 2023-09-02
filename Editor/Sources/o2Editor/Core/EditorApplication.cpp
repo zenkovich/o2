@@ -452,12 +452,16 @@ namespace Editor
 	}
 
 	void EditorApplication::DrawDebug()
-	{}
+	{
+		o2Debug.Draw(true);
+	}
 
 	void EditorApplication::UpdateDebug(float dt)
 	{
 		if (mUpdateStep)
-			o2Debug.Update(dt);
+			o2Debug.Update(false, dt);
+
+		o2Debug.Update(true, dt);
 	}
 
 	void EditorApplication::UpdateEventSystem()

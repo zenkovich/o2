@@ -3,6 +3,7 @@
 
 #include "o2/Events/EventSystem.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
+#include "o2/Utils/Editor/EditorScope.h"
 
 namespace o2
 {
@@ -32,6 +33,8 @@ namespace o2
 	void CursorAreaEventListenersLayer::OnDrawn(const Basis& transform)
 	{
 		//PROFILE_SAMPLE_FUNC();
+
+		isEditor = EditorScope::IsInScope();
 
 		drawnTransform = transform;
 		mLocalToWorldTransform = camera.GetBasis().Inverted()*renderBasis*viewPortBasis.Inverted()*drawnTransform;
@@ -68,6 +71,10 @@ namespace o2
 	void CursorAreaEventListenersLayer::Update()
 	{
 		PROFILE_SAMPLE_FUNC();
+
+		int editorScopeDepth = EditorScope::GetDepth();
+		if (!isEditor)
+			EditorScope::Exit(editorScopeDepth);
 
 		cursorEventAreaListeners.Reverse();
 		mDragListeners.Reverse();
@@ -122,6 +129,9 @@ namespace o2
 			else if (key.keyCode == -2)
 				ProcessMBReleased();
 		}
+
+		if (!isEditor)
+			EditorScope::Enter(editorScopeDepth);
 	}
 
 	void CursorAreaEventListenersLayer::PostUpdate()

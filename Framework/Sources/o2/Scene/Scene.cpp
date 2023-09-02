@@ -583,7 +583,10 @@ namespace o2
 	{
 		auto allActors = mRootActors;
 		for (auto actor : allActors)
+		{
+			actor->OnBeforeDestroy();
 			delete actor;
+		}
 
 		for (auto layer : mLayers)
 			delete layer;

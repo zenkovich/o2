@@ -18,6 +18,8 @@ namespace o2
 
 		Vector<CursorAreaEventsListener*> cursorEventAreaListeners;
 
+		bool isEditor = false; // Is this layer drawn in editor scope
+
 		bool isTransparent = false; // Is this layer transparent to input other listeners
 
 	public:

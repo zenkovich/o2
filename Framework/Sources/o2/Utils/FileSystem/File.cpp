@@ -74,7 +74,7 @@ namespace o2
 		ReadData(buffer, len);
 		buffer[len] = '\0';
 
-		return WString(buffer);
+		return String(buffer);
 	}
 
 	void InFile::ReadData(void* dataPtr, UInt bytes)

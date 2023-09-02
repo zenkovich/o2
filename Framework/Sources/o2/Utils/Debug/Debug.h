@@ -104,11 +104,11 @@ namespace o2
 		// Draws white debug text with disappearing delay
 		void DrawText(const Vec2F& position, const String& text, float delay);
 
-		// Updates lines delay
-		void Update(float dt);
+		// Updates drawables delay
+		void Update(bool isEditor, float dt);
 
-		// Draws debug lines
-		void Draw();
+		// Draws debug drawables
+		void Draw(bool isEditor);
 
 	protected:
 		// ------------------------------------------------------
@@ -207,10 +207,13 @@ namespace o2
 		};
 
 	protected:
-		LogStream*            mLogStream;    // Main log stream
-		Vector<IDbgDrawable*> mDbgDrawables; // Debug lines array
-		VectorFont*           mFont;		 // Font for debug captions
-		Text*                 mText;		 // Text for one frame debug captions
+		LogStream* mLogStream; // Main log stream
+
+		Vector<IDbgDrawable*> mDbgDrawables;       // Debug drawables array
+		Vector<IDbgDrawable*> mEditorDbgDrawables; // Debug drawables array for editor
+
+		VectorFont* mFont; // Font for debug captions
+		Text*       mText; // Text for one frame debug captions
 
 	private:
 		// Default constructor
@@ -224,6 +227,12 @@ namespace o2
 
 		// Initializes font and text
 		void InitializeFont();
+
+		// Updates drawables list
+		void UpdateDrawables(Vector<IDbgDrawable*>& drawables, float dt);
+
+		// Returns regular or editor drawables by current context
+		Vector<IDbgDrawable*>& GetCurrentScopeDrawables();
 
 		friend class Singleton<Debug>;
 		friend class BaseApplication;

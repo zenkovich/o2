@@ -12,6 +12,7 @@
 #include "o2/Utils/Debug/Log/ConsoleLogStream.h"
 #include "o2/Utils/Debug/Log/FileLogStream.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include "o2/Utils/Editor/EditorScope.h"
 
 #undef DrawText
 
@@ -38,26 +39,36 @@ namespace o2
 		mText = mnew Text(FontRef(mFont));
 	}
 
-	void Debug::Update(float dt)
+	void Debug::Update(bool isEditor, float dt)
 	{
 		//PROFILE_SAMPLE_FUNC();
 
+		UpdateDrawables(isEditor ? mEditorDbgDrawables : mDbgDrawables, dt);
+	}
+
+	void Debug::UpdateDrawables(Vector<IDbgDrawable*>& drawables, float dt)
+	{
 		Vector<IDbgDrawable*> freeDrawables;
-		for (auto& drawable : mDbgDrawables)
+		for (auto& drawable : drawables)
 		{
 			drawable->delay -= dt;
 			if (drawable->delay <= 0.0f)
 				freeDrawables.Add(drawable);
 		}
 
-		freeDrawables.ForEach([&](auto drw) { mDbgDrawables.Remove(drw); delete drw; });
+		freeDrawables.ForEach([&](auto drw) { drawables.Remove(drw); delete drw; });
 	}
 
-	void Debug::Draw()
+	Vector<Debug::IDbgDrawable*>& Debug::GetCurrentScopeDrawables()
+	{
+		return EditorScope::IsInScope() ? mEditorDbgDrawables : mDbgDrawables;
+	}
+
+	void Debug::Draw(bool isEditor)
 	{
 		//PROFILE_SAMPLE_FUNC();
 
-		for (auto drw : mDbgDrawables)
+		for (auto drw : isEditor ? mEditorDbgDrawables : mDbgDrawables)
 			drw->Draw();
 	}
 
@@ -113,107 +124,107 @@ namespace o2
 
 	void Debug::DrawRect(const RectF& rect, const Color4& color, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgRect(rect, color, delay));
+		GetCurrentScopeDrawables().Add(mnew DbgRect(rect, color, delay));
 	}
 
 	void Debug::DrawRect(const RectF& rect, const Color4& color)
 	{
-		mDbgDrawables.Add(mnew DbgRect(rect, color, -1.0f));
+		GetCurrentScopeDrawables().Add(mnew DbgRect(rect, color, -1.0f));
 	}
 
 	void Debug::DrawRect(const RectF& rect, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgRect(rect, Color4::White(), delay));
+		GetCurrentScopeDrawables().Add(mnew DbgRect(rect, Color4::White(), delay));
 	}
 
 	void Debug::DrawLine(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgLine(begin, end, color, delay));
+		GetCurrentScopeDrawables().Add(mnew DbgLine(begin, end, color, delay));
 	}
 
 	void Debug::DrawLine(const Vec2F& begin, const Vec2F& end, const Color4& color)
 	{
-		mDbgDrawables.Add(mnew DbgLine(begin, end, color, -1.0f));
+		GetCurrentScopeDrawables().Add(mnew DbgLine(begin, end, color, -1.0f));
 	}
 
 	void Debug::DrawLine(const Vec2F& begin, const Vec2F& end, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgLine(begin, end, Color4::White(), delay));
+		GetCurrentScopeDrawables().Add(mnew DbgLine(begin, end, Color4::White(), delay));
 	}
 
 	void Debug::DrawLine(const Vector<Vec2F>& points, const Color4& color, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgPolyLine(points, color, delay));
+		GetCurrentScopeDrawables().Add(mnew DbgPolyLine(points, color, delay));
 	}
 
 	void Debug::DrawLine(const Vector<Vec2F>& points, const Color4& color)
 	{
-		mDbgDrawables.Add(mnew DbgPolyLine(points, color, -1.0f));
+		GetCurrentScopeDrawables().Add(mnew DbgPolyLine(points, color, -1.0f));
 	}
 
 	void Debug::DrawLine(const Vector<Vec2F>& points, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgPolyLine(points, Color4::White(), delay));
+		GetCurrentScopeDrawables().Add(mnew DbgPolyLine(points, Color4::White(), delay));
 	}
 
 	void Debug::DrawText(const Vec2F& position, const String& text, const Color4& color, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgText(position, text, mFont, color, delay));
+		GetCurrentScopeDrawables().Add(mnew DbgText(position, text, mFont, color, delay));
 	}
 
 	void Debug::DrawText(const Vec2F& position, const String& text, const Color4& color)
 	{
-		mDbgDrawables.Add(mnew DbgText(position, text, mText, color));
+		GetCurrentScopeDrawables().Add(mnew DbgText(position, text, mText, color));
 	}
 
 	void Debug::DrawText(const Vec2F& position, const String& text, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgText(position, text, mFont, Color4::White(), delay));
+		GetCurrentScopeDrawables().Add(mnew DbgText(position, text, mFont, Color4::White(), delay));
 	}
 
 	void Debug::DrawArrow(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgArrow(begin, end, color, delay));
+		GetCurrentScopeDrawables().Add(mnew DbgArrow(begin, end, color, delay));
 	}
 
 	void Debug::DrawArrow(const Vec2F& begin, const Vec2F& end, const Color4& color /*= Color4::White()*/)
 	{
-		mDbgDrawables.Add(mnew DbgArrow(begin, end, color, -1.0f));
+		GetCurrentScopeDrawables().Add(mnew DbgArrow(begin, end, color, -1.0f));
 	}
 
 	void Debug::DrawArrow(const Vec2F& begin, const Vec2F& end, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgArrow(begin, end, Color4::White(), delay));
+		GetCurrentScopeDrawables().Add(mnew DbgArrow(begin, end, Color4::White(), delay));
 	}
 
 	void Debug::DrawRay(const Vec2F& begin, const Vec2F& dir, const Color4& color, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgLine(begin, begin + dir, color, delay));
+		GetCurrentScopeDrawables().Add(mnew DbgLine(begin, begin + dir, color, delay));
 	}
 
 	void Debug::DrawRay(const Vec2F& begin, const Vec2F& dir, const Color4& color)
 	{
-		mDbgDrawables.Add(mnew DbgLine(begin, begin + dir, color, -1.0f));
+		GetCurrentScopeDrawables().Add(mnew DbgLine(begin, begin + dir, color, -1.0f));
 	}
 
 	void Debug::DrawRay(const Vec2F& begin, const Vec2F& dir, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgLine(begin, begin + dir, Color4::White(), delay));
+		GetCurrentScopeDrawables().Add(mnew DbgLine(begin, begin + dir, Color4::White(), delay));
 	}
 
 	void Debug::DrawCircle(const Vec2F& origin, float radius, const Color4& color, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgCircle(origin, radius, color, delay));
+		GetCurrentScopeDrawables().Add(mnew DbgCircle(origin, radius, color, delay));
 	}
 
 	void Debug::DrawCircle(const Vec2F& origin, float radius, const Color4& color)
 	{
-		mDbgDrawables.Add(mnew DbgCircle(origin, radius, color, -1.0f));
+		GetCurrentScopeDrawables().Add(mnew DbgCircle(origin, radius, color, -1.0f));
 	}
 
 	void Debug::DrawCircle(const Vec2F& origin, float radius, float delay)
 	{
-		mDbgDrawables.Add(mnew DbgCircle(origin, radius, Color4::White(), delay));
+		GetCurrentScopeDrawables().Add(mnew DbgCircle(origin, radius, Color4::White(), delay));
 	}
 
 	Debug::IDbgDrawable::IDbgDrawable():

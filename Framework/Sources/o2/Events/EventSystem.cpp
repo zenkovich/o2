@@ -132,7 +132,7 @@ namespace o2
 
 			for (auto listener : allUnderCursor)
 			{
-				String name = typeid(listener).name();
+				String name = typeid(*listener).name();
 
 				if (auto widget = dynamic_cast<Widget*>(listener))
 				{
