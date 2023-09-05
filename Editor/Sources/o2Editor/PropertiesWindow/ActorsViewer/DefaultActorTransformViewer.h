@@ -35,9 +35,7 @@ namespace Editor
 		Vec2FProperty* mScaleProperty = nullptr;
 		Vec2FProperty* mSizeProperty = nullptr;
 		FloatProperty* mRotationProperty = nullptr;
-		FloatProperty* mDepthProperty = nullptr;
-		Button*        mDepthInheritanceMenuButton = nullptr;
-		ContextMenu*   mDepthInheritanceMenu = nullptr;
+		FloatProperty* mShearProperty = nullptr;
 
 		bool           mLayoutEnabled = false;
 		Spoiler*       mLayoutSpoiler = nullptr;
@@ -53,12 +51,6 @@ namespace Editor
 		// Called when some property changed, stores action for undo
 		void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
 									   const Vector<DataDocument>& newValue);
-
-		// It is called when depth property has changed. Sets custom depth
-		void OnDepthPropertyChanged();
-
-		// Called when a depth inheritance is selected
-		void OnDepthInheritanceSelected(bool inherited);
 	};
 }
 // --- META ---
@@ -76,9 +68,7 @@ CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mScaleProperty);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRotationProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDepthProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDepthInheritanceMenuButton);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDepthInheritanceMenu);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mShearProperty);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mLayoutEnabled);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayoutSpoiler);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty);
@@ -97,8 +87,6 @@ CLASS_METHODS_META(Editor::DefaultActorTransformViewer)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDepthPropertyChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDepthInheritanceSelected, bool);
 }
 END_META;
 // --- END META ---

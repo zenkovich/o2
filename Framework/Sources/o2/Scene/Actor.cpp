@@ -1349,7 +1349,7 @@ namespace o2
 	void Actor::SetLayer(const Ref<SceneLayer>& layer)
 	{
 		mSceneLayer = layer;
-		ISceneDrawable::OnDrawableLayerChanged();
+		ISceneDrawable::SetDrawingDepthInheritFromParent(false); // Reregister inside
 	}
 
 	void Actor::SetLayer(const String& name)

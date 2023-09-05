@@ -19,6 +19,7 @@ namespace Editor
 	class BooleanProperty;
 	class StringProperty;
 	class AssetProperty;
+	class FloatProperty;
 
 	// ---------------------------
 	// Default actor header viewer
@@ -48,19 +49,22 @@ namespace Editor
 
 		Widget* mDataView = nullptr;
 
-		BooleanProperty* mEnableProperty = nullptr;
-		StringProperty*  mNameProperty = nullptr;
-		BooleanProperty* mLockProperty = nullptr;
-		AssetProperty*   mPrototypeProperty = nullptr;
-		TagsProperty*    mTagsProperty = nullptr;
-		SceneLayerRefProperty*   mLayerProperty = nullptr;
+		BooleanProperty*       mEnableProperty = nullptr;
+		StringProperty*        mNameProperty = nullptr;
+		BooleanProperty*       mLockProperty = nullptr;
+		AssetProperty*         mPrototypeProperty = nullptr;
+		TagsProperty*          mTagsProperty = nullptr;
+		SceneLayerRefProperty* mLayerProperty = nullptr;
+		FloatProperty*         mDepthProperty = nullptr;
 
 		Button* mPrototypeApplyBtn = nullptr;
 		Button* mPrototypeRevertBtn = nullptr;
 		Button* mPrototypeBreakBtn = nullptr;
 
-
 	protected:
+		// Refreshes layer property
+		void RefreshLayer();
+
 		// Called when apply button pressed, and applies changes to prototype
 		void OnApplyPrototypePressed();
 
@@ -69,6 +73,9 @@ namespace Editor
 
 		// Called when break prototype buttons pressed and break prototype link
 		void OnBreakPrototypePressed();
+
+		// Called when selected inherit from parent layer
+		void OnSelectedInheritedLayer();
 
 		// Returns actor applying roots
 		Vector<Actor*> GetRootApplyActors();
@@ -95,6 +102,7 @@ CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeProperty);
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mTagsProperty);
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLayerProperty);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDepthProperty);
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeApplyBtn);
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeRevertBtn);
 	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeBreakBtn);
@@ -107,9 +115,11 @@ CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
 	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, RefreshLayer);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnApplyPrototypePressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRevertPrototypePressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnBreakPrototypePressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectedInheritedLayer);
 	FUNCTION().PROTECTED().SIGNATURE(Vector<Actor*>, GetRootApplyActors);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }

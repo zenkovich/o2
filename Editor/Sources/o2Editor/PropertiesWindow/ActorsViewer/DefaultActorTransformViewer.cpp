@@ -89,47 +89,31 @@ namespace Editor
 		scalePropertyContainer->AddChild(mScaleProperty);
 
 		// Rotation
-		auto rotationAndDepthPropertyContainer = mnew Widget();
-		rotationAndDepthPropertyContainer->name = "rotation and depth";
-		rotationAndDepthPropertyContainer->layout->minHeight = 20;
-		mSpoiler->AddChild(rotationAndDepthPropertyContainer);
+		auto rotationAndShearPropertyContainer = mnew Widget();
+		rotationAndShearPropertyContainer->name = "rotation and depth";
+		rotationAndShearPropertyContainer->layout->minHeight = 20;
+		mSpoiler->AddChild(rotationAndShearPropertyContainer);
 
 		auto rotateIcon = o2UI.CreateImage("ui/UI4_rotate_icon.png");
 		*rotateIcon->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
-		rotationAndDepthPropertyContainer->AddChild(rotateIcon);
+		rotationAndShearPropertyContainer->AddChild(rotateIcon);
 
 		mRotationProperty = o2UI.CreateWidget<FloatProperty>();
 		*mRotationProperty->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(40, 0), Vec2F(10, 0));
 		mRotationProperty->SetValuePath("transform/angleDegree");
 		mRotationProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
-		rotationAndDepthPropertyContainer->AddChild(mRotationProperty);
+		rotationAndShearPropertyContainer->AddChild(mRotationProperty);
 
-		// Depth
-		auto depthIcon = o2UI.CreateImage("ui/UI4_layer_icon_t.png");
-		*depthIcon->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(10, 0), Vec2F(30, 0));
-		rotationAndDepthPropertyContainer->AddChild(depthIcon);
+		// Shear
+		auto shearIcon = o2UI.CreateImage("ui/UI4_shear_icon.png");
+		*shearIcon->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(10, 0), Vec2F(30, 0));
+		rotationAndShearPropertyContainer->AddChild(shearIcon);
 
-		mDepthProperty = o2UI.CreateWidget<FloatProperty>();
-		*mDepthProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(30, 0), Vec2F());
-		mDepthProperty->SetValuePath("drawDepth");
-		auto depthEditBox = dynamic_cast<EditBox*>(mDepthProperty->GetChildWidget("container/layout/editBox"));
-		depthEditBox->GetLayer("arrows")->layout = Layout::Based(BaseCorner::Right, Vec2F(10, 20), Vec2F(-20, 0));
-		depthEditBox->SetClippingLayout(Layout::BothStretch(0, 0, 30, 0));
-		depthEditBox->SetViewLayout(Layout::BothStretch(3, 1, 30, -1));
-
-		mDepthProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
-		mDepthProperty->onChanged = [&](IPropertyField* field) { OnDepthPropertyChanged(); };
-		rotationAndDepthPropertyContainer->AddChild(mDepthProperty);
-
-		mDepthInheritanceMenu = o2UI.CreateWidget<ContextMenu>();
-		mDepthInheritanceMenu->AddToggleItem("Custom", true, [&](bool value) { OnDepthInheritanceSelected(false); });
-		mDepthInheritanceMenu->AddToggleItem("Inherit from parent", false, [&](bool value) { OnDepthInheritanceSelected(true); });
-		rotationAndDepthPropertyContainer->AddChild(mDepthInheritanceMenu);
-
-		mDepthInheritanceMenuButton = o2UI.CreateWidget<Button>("expand down");
-		*mDepthInheritanceMenuButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20));
-		rotationAndDepthPropertyContainer->AddChild(mDepthInheritanceMenuButton);
-		mDepthInheritanceMenuButton->onClick = [=]() { mDepthInheritanceMenu->Show(); };
+		mShearProperty = o2UI.CreateWidget<FloatProperty>();
+		*mShearProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(30, 0), Vec2F());
+		mShearProperty->SetValuePath("drawDepth");
+		mShearProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
+		rotationAndShearPropertyContainer->AddChild(mShearProperty);
 
 		// Layout
 		mLayoutSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
@@ -282,19 +266,8 @@ namespace Editor
 		mRotationProperty->SelectValueAndPrototypeProperties<Actor, decltype(ActorTransform::angleDegree)>(
 			actors, prototypes, [](Actor* x) { return &x->transform->angleDegree; });
 
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> depthTargets;
-		for (auto actor : mTargetActors)
-		{
-			if (auto drawable = dynamic_cast<ISceneDrawable*>(actor))
-			{
-				ISceneDrawable* proto = dynamic_cast<ISceneDrawable*>(actor->GetPrototypeLink().Get());
-				depthTargets.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-					mnew PropertyValueProxy<float, decltype(drawable->drawDepth)>(&drawable->drawDepth),
-					proto ? mnew PropertyValueProxy<float, decltype(drawable->drawDepth)>(&proto->drawDepth) : nullptr));
-			}
-		}
-
-		mDepthProperty->SetValueAndPrototypeProxy(depthTargets);
+		mShearProperty->SelectValueAndPrototypeProperties<Actor, decltype(ActorTransform::shear)>(
+			actors, prototypes, [](Actor* x) { return &x->transform->shear; });
 
 		Vector<Widget*> targetWidgets = mTargetActors
 			.FindAll([](Actor* x) { return dynamic_cast<Widget*>(x) != nullptr; })
@@ -339,41 +312,7 @@ namespace Editor
 		mScaleProperty->Refresh();
 		mSizeProperty->Refresh();
 		mRotationProperty->Refresh();
-
-		enum class DepthSelectedType { Custom, Inherited, Different, Unknown };
-
-		DepthSelectedType depthSelected = DepthSelectedType::Unknown;
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> depthTargets;
-		for (auto actor : mTargetActors)
-		{
-			ISceneDrawable* drawable = dynamic_cast<ISceneDrawable*>(actor);
-			if (drawable)
-			{
-				DepthSelectedType drawableDepthType = drawable->IsDrawingDepthInheritedFromParent() ?
-					DepthSelectedType::Inherited : DepthSelectedType::Custom;
-
-				if (depthSelected == DepthSelectedType::Unknown)
-					depthSelected = drawableDepthType;
-				else if (depthSelected != drawableDepthType)
-					depthSelected = DepthSelectedType::Different;
-			}
-		}
-
-		mDepthInheritanceMenu->SetItemChecked(0, depthSelected == DepthSelectedType::Custom);
-		mDepthInheritanceMenu->SetItemChecked(1, depthSelected == DepthSelectedType::Inherited);
-
-		if (depthSelected == DepthSelectedType::Different || depthSelected == DepthSelectedType::Unknown)
-			mDepthProperty->SetUnknownValue(0);
-		else if (depthSelected == DepthSelectedType::Inherited)
-		{
-			mDepthProperty->GetEditBox()->SetFilterNames();
-			mDepthProperty->GetEditBox()->SetText("Inherited");
-		}
-		else
-		{
-			mDepthProperty->GetEditBox()->SetFilterFloat();
-			mDepthProperty->Refresh();
-		}
+		mShearProperty->Refresh();
 
 		if (mLayoutEnabled)
 		{
@@ -395,26 +334,6 @@ namespace Editor
 			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);
-	}
-
-	void DefaultActorTransformViewer::OnDepthPropertyChanged()
-	{
-		//OnDepthInheritanceSelected(false);
-	}
-
-	void DefaultActorTransformViewer::OnDepthInheritanceSelected(bool inherited)
-	{
-		for (auto actor : mTargetActors)
-		{
-			ISceneDrawable* drawable = actor->GetComponent<ISceneDrawable>();
-			if (!drawable)
-				drawable = dynamic_cast<ISceneDrawable*>(actor);
-
-			if (drawable)
-				drawable->SetDrawingDepthInheritFromParent(inherited);
-		}
-
-		Refresh();
 	}
 }
 // --- META ---

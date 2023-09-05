@@ -17,6 +17,36 @@ namespace Editor
 		InitializeControls();
 	}
 
+	void SceneLayerRefProperty::SetSelectedInheritedValue(bool inherited)
+	{
+		if (mSelectedInheritedValue == inherited)
+			return;
+
+		mSelectedInheritedValue = inherited;
+
+		mUpdatingValue = true;
+
+		if (inherited)
+			mDropDown->value = mInheritFromParentName;
+
+		mUpdatingValue = false;
+	}
+
+	bool SceneLayerRefProperty::IsSelectedInheritedValue() const
+	{
+		return mSelectedInheritedValue;
+	}
+
+	void SceneLayerRefProperty::SetUseInheritedValue(bool use)
+	{
+		mUseInheritedValue = use;
+	}
+
+	bool SceneLayerRefProperty::IsUseInheritedValue() const
+	{
+		return mUseInheritedValue;
+	}
+
 	SceneLayerRefProperty& SceneLayerRefProperty::operator=(const SceneLayerRefProperty& other)
 	{
 		TPropertyField<Ref<SceneLayer>>::operator=(other);
@@ -50,7 +80,11 @@ namespace Editor
 		}
 		else
 		{
-			mDropDown->value = mCommonValue->GetName();
+			if (mSelectedInheritedValue)
+				mDropDown->value = mInheritFromParentName;
+			else
+				mDropDown->value = mCommonValue->GetName();
+
 			mDropDown->SetState("undefined", false);
 		}
 
@@ -67,6 +101,9 @@ namespace Editor
 				mDropDown->RemoveItem(itemName);
 		}
 
+		if (mUseInheritedValue)
+			mDropDown->AddItem(mInheritFromParentName);
+
 		for (auto layer : layers)
 		{
 			if (!dropdownLayers.Contains(layer->GetName()))
@@ -79,14 +116,20 @@ namespace Editor
 		if (mUpdatingValue)
 			return;
 
+		if (String(name) == mInheritFromParentName)
+		{
+			mSelectedInheritedValue = true;
+			onSelectedInheritedValue();
+			return;
+		}
+
+		mSelectedInheritedValue = false;
+
 		SetValueByUser(Ref<SceneLayer>(name));
 	}
 
 	bool SceneLayerRefProperty::IsAlwaysRefresh() const
 	{
-		if (!mValuesDifferent && mCommonValue->GetName() != (String)mDropDown->GetSelectedItemText())
-			return true;
-
 		return false;
 	}
 

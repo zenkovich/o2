@@ -17,6 +17,9 @@ namespace Editor
 	class SceneLayerRefProperty: public TPropertyField<Ref<SceneLayer>>
 	{
 	public:
+		Function<void()> onSelectedInheritedValue; // Called when selected "Inherit from parent" value
+
+	public:
 		// Default constructor
 		SceneLayerRefProperty();
 
@@ -26,11 +29,28 @@ namespace Editor
 		// Copy operator
 		SceneLayerRefProperty& operator=(const SceneLayerRefProperty& other);
 
+		// Sets selected "Inherit from parent" value
+		void SetSelectedInheritedValue(bool inherited);
+
+		// Returns is selected "Inherit from parent" value
+		bool IsSelectedInheritedValue() const;
+
+		// Sets use "Inherit from parent" value
+		void SetUseInheritedValue(bool use);
+
+		// Returns is used "Inherit from parent" value
+		bool IsUseInheritedValue() const;
+
 		IOBJECT(SceneLayerRefProperty);
 
 	protected:		       
 		DropDown* mDropDown = nullptr;       // Layer name dropdown
 		bool      mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
+
+		bool mUseInheritedValue = false;      // Is used "Inherit from parent" value
+		bool mSelectedInheritedValue = false; // Is selected "Inherit from parent" value
+
+		String mInheritFromParentName = "Inherit from parent"; // Name of "Inherit from parent" value
 
 	protected:
 		// Updates value view
@@ -58,8 +78,12 @@ CLASS_BASES_META(Editor::SceneLayerRefProperty)
 END_META;
 CLASS_FIELDS_META(Editor::SceneLayerRefProperty)
 {
+	FIELD().PUBLIC().NAME(onSelectedInheritedValue);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUseInheritedValue);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelectedInheritedValue);
+	FIELD().PROTECTED().DEFAULT_VALUE("Inherit from parent").NAME(mInheritFromParentName);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneLayerRefProperty)
@@ -67,6 +91,10 @@ CLASS_METHODS_META(Editor::SceneLayerRefProperty)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayerRefProperty&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedInheritedValue, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsSelectedInheritedValue);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetUseInheritedValue, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsUseInheritedValue);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersList);

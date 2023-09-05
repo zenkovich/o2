@@ -92,6 +92,7 @@ namespace Editor
 
 		void RebuildActorHeadName();
 		void RebuildActorHeadNameProperty();
+		void RebuildActorHeadDepthProperty();
 
 		void RebuildActorHeadLockToggle();
 		void RebuildActorHeadLockProperty();
@@ -244,6 +245,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorHeadEnableProperty);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorHeadName);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorHeadNameProperty);
+	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorHeadDepthProperty);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorHeadLockToggle);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorHeadLockProperty);
 	FUNCTION().PUBLIC().SIGNATURE(void, RebuildActorHeadActorAssetProperty);

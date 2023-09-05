@@ -1660,6 +1660,31 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor head name");
 	}
 
+	void EditorUIStyleBuilder::RebuildActorHeadDepthProperty()
+	{
+		auto sample = mnew FloatProperty();
+		sample->expandHeight = true;
+		sample->expandWidth = true;
+		sample->fitByChildren = false;
+
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
+		layout->name = "layout";
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
+
+		EditBox* editBox = o2UI.CreateEditBox("actor head name");
+		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		editBox->name = "editBox";
+		layout->AddChild(editBox);
+
+		o2UI.AddWidgetStyle(sample, "actor head depth");
+	}
+
 	void EditorUIStyleBuilder::RebuildActorHeadLockToggle()
 	{
 		Toggle* sample = mnew Toggle();
@@ -1781,7 +1806,7 @@ namespace Editor
 		nameText->verAlign = VerAlign::Middle;
 		nameText->dotsEngings = true;
 		nameText->color = Color4(96, 125, 139);;
-		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
+		box->AddLayer("caption", nameText, Layout::BothStretch(7, 2, 7, 2));
 
 		box->SetFocusable(true);
 
@@ -1883,7 +1908,7 @@ namespace Editor
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
 										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
 
-		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
+		sample->SetClippingLayout(Layout::BothStretch(7, -1, 20, 0));
 
 		auto list = sample->GetListView();
 		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
