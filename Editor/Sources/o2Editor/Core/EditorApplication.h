@@ -87,7 +87,8 @@ namespace Editor
 		bool mPlayingChanged = false; // True when need to update playing mode on update
 		bool mUpdateStep = false;     // True when frame updating available on this frame
 
-		int mDrawCalls; // Draw calls count, stored before beginning rendering
+		int mDrawCalls = 0;       // Draw calls count, stored before beginning rendering
+		int mDrawnPrimitives = 0; // DRaw promitives at frame
 
 	protected:
 		// Check style rebuilding and loads editor UI style

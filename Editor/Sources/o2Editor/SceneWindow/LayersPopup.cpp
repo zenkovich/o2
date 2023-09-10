@@ -8,6 +8,7 @@
 #include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/HorizontalLayout.h"
 #include "o2/Scene/UI/Widgets/Toggle.h"
+#include "o2/Utils/Editor/EditorScope.h"
 
 namespace Editor
 {
@@ -108,6 +109,8 @@ namespace Editor
 
 	void LayersPopup::UpdateLayersList()
 	{
+		PushEditorScopeOnStack scope;
+
 		RemoveChild(mAddButtonLayout, false);
 
 		mItemsCache.Add(mChildWidgets.DynamicCast<LayerPopupItem*>());
@@ -128,7 +131,8 @@ namespace Editor
 				else
 					item = mItemsCache.PopBack();
 			}
-			else item = mItemSample->CloneAs<LayerPopupItem>();
+			else 
+				item = mItemSample->CloneAs<LayerPopupItem>();
 
 			item->SetLayer(layer);
 			item->mPopup = this;

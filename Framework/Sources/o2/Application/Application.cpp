@@ -25,6 +25,7 @@
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptEngine.h"
 #endif
+#include "o2/Utils/Editor/EditorScope.h"
 
 namespace o2
 {
@@ -40,6 +41,8 @@ namespace o2
 
 	void Application::BasicInitialize()
 	{
+		mMainListenersLayer.SetEditorMode(true);
+
 		InitalizeSystems();
 		InitializePlatform();
 
@@ -225,6 +228,7 @@ namespace o2
 
 		mMainListenersLayer.OnEndDraw();
 		mMainListenersLayer.OnDrawn(Camera::Default().GetBasis());
+
 		mRender->End();
 
 		mInput->Update(dt);

@@ -21,6 +21,14 @@ namespace o2
 		// Sets listener enabled to listen events
 		void SetListeningEvents(bool isListening);
 
+#if IS_EDITOR
+		// Returns is editor mode
+		bool IsEditorMode() const;
+
+		// Sets editor mode
+		void SetEditorMode(bool isEditorMode);
+#endif
+
 	protected:
 		bool mEnabledListeningEvents = true;
 

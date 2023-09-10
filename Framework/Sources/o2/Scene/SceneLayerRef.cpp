@@ -24,6 +24,11 @@ namespace o2
 
 		return *this;
 	}
+
+	void Ref<SceneLayer>::OnDeserialized(const DataValue& node)
+	{
+		mLayer = o2Scene.GetLayer(mLayerName);
+	}
 	
 	SceneLayer& Ref<SceneLayer>::Get()
 	{

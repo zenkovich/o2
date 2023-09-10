@@ -364,12 +364,15 @@ namespace Editor
 
 	void EditorApplication::ProcessFrame()
 	{
+		PushEditorScopeOnStack scope;
+
 		mUpdateStep = mIsPlaying && (!isPaused || step);
 		step = false;
 
 		Application::ProcessFrame();
 
 		mDrawCalls = mRender->GetDrawCallsCount();
+		mDrawnPrimitives = mRender->GetDrawnPrimitives();
 	}
 
 	void EditorApplication::CheckPlayingSwitch()
@@ -487,6 +490,7 @@ namespace Editor
 		o2Application.windowCaption = String("o2 Editor: ") + currentScene +
 			"; FPS: " + (String)((int)o2Time.GetFPS()) +
 			" DC: " + (String)mDrawCalls +
+			" Tris: " + (String)mDrawnPrimitives +
 			" Cursor: " + (String)o2Input.GetCursorPos() +
 			" JS: " + (String)(o2Scripts.GetUsedMemory() / 1024) + "kb";
 

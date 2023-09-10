@@ -53,6 +53,10 @@ namespace o2
 
 		SceneLayer* mLayer = nullptr; // Layer reference
 
+	protected:
+		// Gets layer by name
+		void OnDeserialized(const DataValue& node) override;
+
 	public:
 		typedef Ref<SceneLayer> _thisType;
 

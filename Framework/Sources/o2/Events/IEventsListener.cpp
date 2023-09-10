@@ -31,4 +31,15 @@ namespace o2
 		mEnabledListeningEvents = isListening;
 	}
 
+#if IS_EDITOR
+	bool IEventsListener::IsEditorMode() const
+	{
+		return mIsEditorMode;
+	}
+
+	void IEventsListener::SetEditorMode(bool isEditorMode)
+	{
+		mIsEditorMode = isEditorMode;
+	}
+#endif
 }

@@ -77,7 +77,7 @@ namespace o2
 
 	int Render::GetDrawnPrimitives() const
 	{
-		return mTrianglesCount;
+		return mFrameTrianglesCount;
 	}
 
 	void Render::SetCamera(const Camera& camera)
