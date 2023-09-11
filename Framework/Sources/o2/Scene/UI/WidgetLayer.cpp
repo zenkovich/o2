@@ -637,14 +637,14 @@ namespace o2
 		return &mOwnerWidget->layersEditable;
 	}
 
-	void WidgetLayer::SetEditableParent(SceneEditableObject* object)
+	void WidgetLayer::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
 	{
 		if (auto layer = dynamic_cast<WidgetLayer*>(object))
 			layer->AddChild(this);
 		else if (auto widget = dynamic_cast<Widget*>(object))
 			widget->AddLayer(this);
 		else if (auto layers = dynamic_cast<Widget::LayersEditable*>(object))
-			layers->AddEditableChild(this);
+			layers->AddEditableChild(this, idx);
 	}
 
 	void WidgetLayer::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)

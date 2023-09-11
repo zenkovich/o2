@@ -62,8 +62,8 @@ namespace o2
 		// Returns object's parent object. Return nullptr when it is a root scene object
 		virtual SceneEditableObject* GetEditableParent() const;
 
-		// Sets parent object. nullptr means make this object as root
-		virtual void SetEditableParent(SceneEditableObject* object);
+		// Sets parent object. nullptr means make this object as root. idx == -1 means last
+		virtual void SetEditableParent(SceneEditableObject* object, int idx = -1);
 
 		// Adds child. idx is place in parent children. idx == -1 means last
 		virtual void AddEditableChild(SceneEditableObject* object, int idx = -1);
@@ -143,6 +143,9 @@ namespace o2
 		// Called when child changed
 		virtual void OnChildrenChanged();
 
+		// Called when parent changed
+		virtual void OnEditableParentChanged(SceneEditableObject* oldParent);
+
 		// Called before making prototype from this object
 		virtual void BeginMakePrototype() const {}
 
@@ -198,7 +201,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
 	FUNCTION().PUBLIC().SIGNATURE(void, GetAllEditableChildren, Vector<SceneEditableObject*>&);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
 	FUNCTION().PUBLIC().SIGNATURE(bool, CanBeParentedTo, const Type&);
@@ -225,6 +228,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnLockChanged);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnNameChanged);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnChildrenChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnEditableParentChanged, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginMakePrototype);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginInstantiatePrototype);
 	FUNCTION().PROTECTED().SIGNATURE(void, GetDifferences, ActorDifferences&);

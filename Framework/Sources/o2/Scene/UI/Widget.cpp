@@ -1444,12 +1444,12 @@ namespace o2
 	bool Widget::isEditorLayersVisible = true;
 	bool Widget::isEditorInternalChildrenVisible = true;
 
-	void Widget::SetEditableParent(SceneEditableObject* object)
+	void Widget::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
 	{
 		if (auto inter = dynamic_cast<InternalChildrenEditableEditable*>(object))
 			SetInternalParent(inter->widget);
 		else
-			Actor::SetEditableParent(object);
+			Actor::SetEditableParent(object, idx);
 	}
 
 	SceneEditableObject* Widget::GetEditableParent() const
@@ -1568,7 +1568,7 @@ namespace o2
 		return dynamic_cast<SceneEditableObject*>(widget);
 	}
 
-	void Widget::LayersEditable::SetEditableParent(SceneEditableObject* object)
+	void Widget::LayersEditable::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
 	{
 	}
 
@@ -1636,7 +1636,7 @@ namespace o2
 		return dynamic_cast<SceneEditableObject*>(widget);
 	}
 
-	void Widget::InternalChildrenEditableEditable::SetEditableParent(SceneEditableObject* object)
+	void Widget::InternalChildrenEditableEditable::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
 	{
 	}
 

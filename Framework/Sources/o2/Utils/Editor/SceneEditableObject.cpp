@@ -7,13 +7,13 @@ namespace o2
 {
 #if IS_EDITOR
 	SceneEditableObject::SceneEditableObject()
-	{ }
+	{}
 
 	SceneEditableObject::~SceneEditableObject()
-	{ }
+	{}
 
 	void SceneEditableObject::Update(float dt)
-	{ }
+	{}
 
 	bool SceneEditableObject::IsOnScene() const
 	{
@@ -26,7 +26,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::GenerateNewID(bool childs /*= true*/)
-	{ }
+	{}
 
 	const String& SceneEditableObject::GetName() const
 	{
@@ -34,7 +34,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetName(const String& name)
-	{ }
+	{}
 
 	const SceneEditableObject* SceneEditableObject::GetEditableLink() const
 	{
@@ -82,14 +82,14 @@ namespace o2
 		return nullptr;
 	}
 
-	void SceneEditableObject::SetEditableParent(SceneEditableObject* object)
-	{ }
+	void SceneEditableObject::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
+	{}
 
 	void SceneEditableObject::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
-	{ }
+	{}
 
 	void SceneEditableObject::SetIndexInSiblings(int idx)
-	{ }
+	{}
 
 	bool SceneEditableObject::CanBeParentedTo(const Type& parentType)
 	{
@@ -113,7 +113,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetEnabled(bool enabled)
-	{ }
+	{}
 
 	bool SceneEditableObject::IsSupportsLocking() const
 	{
@@ -131,7 +131,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetLocked(bool locked)
-	{ }
+	{}
 
 	bool SceneEditableObject::IsSupportsTransforming() const
 	{
@@ -144,10 +144,10 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetTransform(const Basis& transform)
-	{ }
+	{}
 
 	void SceneEditableObject::UpdateTransform()
-	{ }
+	{}
 
 	bool SceneEditableObject::IsSupportsPivot() const
 	{
@@ -155,7 +155,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetPivot(const Vec2F& pivot)
-	{ }
+	{}
 
 	Vec2F SceneEditableObject::GetPivot() const
 	{
@@ -173,7 +173,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetLayout(const Layout& layout)
-	{ }
+	{}
 
 	bool SceneEditableObject::IsSupportsDeleting() const
 	{
@@ -181,19 +181,22 @@ namespace o2
 	}
 
 	void SceneEditableObject::OnChanged()
-	{ }
+	{}
 
 	void SceneEditableObject::OnLockChanged()
-	{ }
+	{}
 
 	void SceneEditableObject::OnNameChanged()
-	{ }
+	{}
 
 	void SceneEditableObject::OnChildrenChanged()
-	{ }
+	{}
+
+	void SceneEditableObject::OnEditableParentChanged(SceneEditableObject* oldParent)
+	{}
 
 	void SceneEditableObject::GetDifferences(ActorDifferences& differences) const
-	{ }
+	{}
 #endif
 }
 // --- META ---

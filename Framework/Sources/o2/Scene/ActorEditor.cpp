@@ -320,9 +320,14 @@ namespace o2
 		return mChildren.DynamicCast<SceneEditableObject*>();
 	}
 
-	void Actor::SetEditableParent(SceneEditableObject* object)
+	void Actor::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
 	{
-		SetParent(dynamic_cast<Actor*>(object), false);
+		SetParent(dynamic_cast<Actor*>(object), false, idx);
+	}
+
+	SceneEditableObject* Actor::GetEditableOwner()
+	{
+		return this;
 	}
 
 	const SceneEditableObject* Actor::GetEditableLink() const
@@ -365,6 +370,11 @@ namespace o2
 			o2Scene.OnObjectChanged(this);
 			o2Scene.onNameChanged(this);
 		}
+	}
+
+	void Actor::OnEditableParentChanged(SceneEditableObject* oldParent)
+	{
+		OnParentChanged(dynamic_cast<Actor*>(oldParent));
 	}
 
 	void Actor::OnChildrenChanged()

@@ -814,6 +814,7 @@ namespace o2
 				if (actorEditableObject)
 				{
 					mRootActors.Insert(actorEditableObject, insertIdx++);
+					def.object->OnEditableParentChanged(nullptr);
 					def.object->SetTransform(def.transform);
 				}
 			}

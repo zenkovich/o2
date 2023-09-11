@@ -142,8 +142,8 @@ namespace o2
 
 				if (mParentRegistry)
 				{
-					if (mParentRegistry->mChildrenInheritedDepth.Contains(this))
-						o2Debug.Log("asd");
+// 					if (mParentRegistry->mChildrenInheritedDepth.Contains(this))
+// 						o2Debug.Log("asd");
 
 					mParentRegistry->mChildrenInheritedDepth.Add(this);
 					mParentRegistry->SortInheritedDrawables();

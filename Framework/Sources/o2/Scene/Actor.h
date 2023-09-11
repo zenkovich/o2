@@ -537,6 +537,9 @@ namespace o2
 		// Searches actor in this, what linked to linkActor
 		Actor* FindLinkedActor(Actor* linkActor);
 
+		// Returns pointer to owner editable object
+		 SceneEditableObject* GetEditableOwner() override;
+
 		// Returns object's link to prototype
 		const SceneEditableObject* GetEditableLink() const override;
 
@@ -547,7 +550,7 @@ namespace o2
 		SceneEditableObject* GetEditableParent() const override;
 
 		// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
-		void SetEditableParent(SceneEditableObject* object) override;
+		void SetEditableParent(SceneEditableObject* object, int idx = -1) override;
 
 		// Adds child. idx is place in parent children. idx == -1 means last
 		void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
@@ -584,6 +587,9 @@ namespace o2
 
 		// Called when actor's name was changed
 		void OnNameChanged() override;
+
+		// Called when actor's parent was changed
+		void OnEditableParentChanged(SceneEditableObject* oldParent) override;
 
 	protected:
 		bool mLocked = false;    // Is actor locked @SERIALIZABLE
@@ -937,10 +943,11 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE(ActorAssetRef, MakePrototype);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToActor, Actor*);
 	FUNCTION().PUBLIC().SIGNATURE(Actor*, FindLinkedActor, Actor*);
+	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
 	FUNCTION().PUBLIC().SIGNATURE(const SceneEditableObject*, GetEditableLink);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDisabling);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsLocking);
@@ -953,6 +960,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE(void, OnChanged);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnLockChanged);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnNameChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnEditableParentChanged, SceneEditableObject*);
 	FUNCTION().PROTECTED().SIGNATURE(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, SeparateActors, Vector<Actor*>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp3, _tmp4, Vector<ISerializable*>&);

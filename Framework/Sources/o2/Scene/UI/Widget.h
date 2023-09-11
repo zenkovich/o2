@@ -511,7 +511,7 @@ namespace o2
 			SceneEditableObject* GetEditableParent() const override;
 
 			// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
-			void SetEditableParent(SceneEditableObject* object) override;
+			void SetEditableParent(SceneEditableObject* object, int idx = -1) override;
 
 			// Adds child. idx is place in parent children. idx == -1 means last
 			void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
@@ -567,7 +567,7 @@ namespace o2
 			SceneEditableObject* GetEditableParent() const override;
 
 			// Sets parent object. nullptr means make this object as root
-			void SetEditableParent(SceneEditableObject* object) override;
+			void SetEditableParent(SceneEditableObject* object, int idx = -1) override;
 
 			// Adds child. idx is place in parent children. idx == -1 means last
 			void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
@@ -595,7 +595,7 @@ namespace o2
 
 	public:
 		// Sets parent object. nullptr means make this object as root
-		void SetEditableParent(SceneEditableObject* object) override;
+		void SetEditableParent(SceneEditableObject* object, int idx = -1) override;
 
 		// Returns object's parent object. Return nullptr when it is a root scene object
 		SceneEditableObject* GetEditableParent() const override;
@@ -880,7 +880,7 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(GetLayout).SIGNATURE(WidgetLayout*, GetLayoutScript);
 #endif
 #if  IS_EDITOR
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
@@ -923,7 +923,7 @@ CLASS_METHODS_META(o2::Widget::LayersEditable)
 	FUNCTION().PUBLIC().SIGNATURE(const SceneEditableObject*, GetEditableLink);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDeleting);
@@ -961,7 +961,7 @@ CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 	FUNCTION().PUBLIC().SIGNATURE(const SceneEditableObject*, GetEditableLink);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDeleting);
