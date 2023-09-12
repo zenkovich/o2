@@ -14,13 +14,13 @@ namespace o2
 	{}
 	
 	Ref<SceneLayer>::Ref(const Ref<SceneLayer>& other):
-		mLayerName(other.mLayerName), mLayer(other.mLayer)
+		mLayerName(other.mLayerName), mLayer(Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(other.mLayerName) : nullptr)
 	{}
 	
 	Ref<SceneLayer>& Ref<SceneLayer>::operator=(const Ref<SceneLayer>& other)
 	{
 		mLayerName = other.mLayerName;
-		mLayer = other.mLayer;
+		mLayer = o2Scene.GetLayer(mLayerName);
 
 		return *this;
 	}

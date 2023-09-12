@@ -24,12 +24,7 @@ namespace Editor
 
 		mSelectedInheritedValue = inherited;
 
-		mUpdatingValue = true;
-
-		if (inherited)
-			mDropDown->value = mInheritFromParentName;
-
-		mUpdatingValue = false;
+		UpdateValueView();
 	}
 
 	bool SceneLayerRefProperty::IsSelectedInheritedValue() const

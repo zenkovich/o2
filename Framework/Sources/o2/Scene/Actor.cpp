@@ -36,6 +36,9 @@ namespace o2
 	{
 		ActorRefResolver::LockResolving();
 
+		ISceneDrawable::operator=(other);
+		mSceneLayer = other.mSceneLayer;
+
 		if (other.mIsAsset)
 		{
 			other.mCopyVisitor = mnew InstantiatePrototypeCloneVisitor();
@@ -151,10 +154,13 @@ namespace o2
 		if (other.mIsAsset)
 			SetPrototype(ActorAssetRef(other.GetAssetID()));
 
+		ISceneDrawable::operator=(other);
+
 		mName = other.mName;
 		mEnabled = other.mEnabled;
 		mResEnabled = mEnabled;
 		mResEnabledInHierarchy = mEnabled;
+		mSceneLayer = other.mSceneLayer;
 		transform->CopyFrom(*other.transform);
 		mAssetId = other.mAssetId;
 		mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);

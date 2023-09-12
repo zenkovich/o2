@@ -407,23 +407,31 @@ namespace Editor
 
 	void EditorApplication::PreUpdatePhysics()
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		Application::PreUpdatePhysics();
 	}
 
 	void EditorApplication::UpdatePhysics(float dt)
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		if (mUpdateStep)
 			Application::UpdatePhysics(dt);
 	}
 
 	void EditorApplication::PostUpdatePhysics()
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		if (mUpdateStep)
 			Application::PostUpdatePhysics();
 	}
 
 	void EditorApplication::UpdateScene(float dt)
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		if (mUpdateStep)
 		{
 			mScene->Update(dt);
@@ -440,6 +448,8 @@ namespace Editor
 
 	void EditorApplication::FixedUpdateScene(float dt)
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		if (mUpdateStep)
 			mScene->FixedUpdate(dt);
 	}
