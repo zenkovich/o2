@@ -1153,16 +1153,9 @@ namespace o2
 
 	void Sprite::InitializeTexture()
 	{
-		if (mImageAsset->GetAtlas() == UID::empty)
-		{
-			mMesh.mTexture = TextureRef(mImageAsset->GetBuiltFullPath());
-			mTextureSrcRect = RectI(Vec2I(), mMesh.mTexture->GetSize());
-		}
-		else
-		{
-			mMesh.mTexture = TextureRef(mImageAsset->GetAtlas(), mImageAsset->GetAtlasPage());
-			mTextureSrcRect = mImageAsset->GetAtlasRect();
-		}
+		auto atlasSpriteSource = mImageAsset->GetAtlasSpriteSource();
+		mMesh.mTexture = atlasSpriteSource.texture;
+		mTextureSrcRect = atlasSpriteSource.sourceRect;
 	}
 }
 // --- META ---

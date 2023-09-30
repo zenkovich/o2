@@ -12,6 +12,11 @@
 // Assets system access macros
 #define  o2Assets o2::Assets::Instance()
 
+namespace Editor
+{
+	class EditorApplication;
+}
+
 namespace o2
 {
 	class LogStream;
@@ -130,6 +135,11 @@ namespace o2
 		// Makes unique asset name from first path variant
 		String MakeUniqueAssetName(const String& path);
 
+#if IS_EDITOR
+		// Rebuilds assets
+		void RebuildAssets(bool resetCache = false);
+#endif
+
 	protected:
 		struct AssetCache
 		{
@@ -167,7 +177,7 @@ namespace o2
 		// Removes asset from cache by UID and path
 		void RemoveAssetCache(Asset* asset);
 
-		// Updates asset chached path and id
+		// Updates asset cached path and id
 		AssetCache* UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
 
 		// Removes asset by info
@@ -185,6 +195,7 @@ namespace o2
 		friend class Asset;
 		friend class AssetRef;
 		friend class FolderAsset;
+		friend class Editor::EditorApplication;
 	};
 }
 

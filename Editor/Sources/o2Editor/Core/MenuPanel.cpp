@@ -117,6 +117,8 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/Dump memory", [&]() { o2Memory.DumpInfo(); });
 
 		mMenuPanel->AddItem("Debug/JS collect garbage", [&]() { o2Scripts.CollectGarbage(); });
+
+		mMenuPanel->AddItem("Debug/Rebuild assets", [&]() { o2Assets.RebuildAssets(); });
 	}
 
 	MenuPanel::~MenuPanel()

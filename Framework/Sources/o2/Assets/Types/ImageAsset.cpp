@@ -136,6 +136,11 @@ namespace o2
 		return AtlasAsset::GetPageTextureRef(o2Assets.GetAssetInfo(GetAtlas()), GetAtlasPage());
 	}
 
+	AtlasSpriteSource ImageAsset::GetAtlasSpriteSource() const
+	{
+		return { mTexture, mAtlasRect };
+	}
+
 	ImageAsset::Meta* ImageAsset::GetMeta() const
 	{
 		return (Meta*)mInfo.meta;

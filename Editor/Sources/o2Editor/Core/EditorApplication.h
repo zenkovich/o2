@@ -91,6 +91,9 @@ namespace Editor
 		int mDrawnPrimitives = 0; // DRaw promitives at frame
 
 	protected:
+		// Initializing all systems and log. Sets up editor settings for some systems
+		void InitalizeSystems() override;
+
 		// Check style rebuilding and loads editor UI style
 		void LoadUIStyle();
 

@@ -101,7 +101,10 @@ namespace o2
 	void AtlasAsset::OnDeserialized(const DataValue& node)
 	{
 		for (auto& page : mPages)
+		{
 			page.mOwner = this;
+			page.mTexture = GetPageTextureRef(mInfo, page.mId);
+		}
 	}
 
 	AtlasAsset& AtlasAsset::operator=(const AtlasAsset& other)
@@ -112,6 +115,20 @@ namespace o2
 		mPages = other.mPages;
 
 		return *this;
+	}
+
+	AtlasSpriteSource AtlasAsset::GetSpriteSource(const ImageAssetRef& image)
+	{
+		for (auto& page : mPages)
+		{
+			auto fnd = page.mImagesRects.find(image->GetUID());
+			if (fnd != page.mImagesRects.end())
+			{
+				return { page.mTexture, fnd->second };
+			}
+		}
+
+		return {};
 	}
 
 	const Vector<ImageAssetRef>& AtlasAsset::GetImages() const

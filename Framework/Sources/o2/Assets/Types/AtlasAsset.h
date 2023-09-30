@@ -3,6 +3,7 @@
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Assets/Types/ImageAsset.h"
+#include "o2/Render/AtlasSpriteSource.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Types/Ref.h"
 
@@ -32,6 +33,9 @@ namespace o2
 
 		// Check equals operator
 		AtlasAsset& operator=(const AtlasAsset& asset);
+
+		// Returns atlas sprite source
+		AtlasSpriteSource GetSpriteSource(const ImageAssetRef& image);
 
 		// Returns containing images assets
 		const Vector<ImageAssetRef>& GetImages() const;
@@ -137,19 +141,23 @@ namespace o2
 			SERIALIZABLE(Page);
 
 		private:
-			UInt            mId;          // Page number @SERIALIZABLE
-			Vec2I           mSize;        // Size of page @SERIALIZABLE
+			UInt  mId;   // Page number @SERIALIZABLE
+			Vec2I mSize; // Size of page @SERIALIZABLE
+
 			Map<UID, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
-			AtlasAsset*     mOwner;       // Owner atlas
+			TextureRef      mTexture;     // Page texture
+
+			AtlasAsset* mOwner; // Owner atlas
 
 			friend class AtlasAssetConverter;
 			friend class AtlasAsset;
 		};
 
 	protected:
-		Vector<ImageAssetRef>  mImages; // Loaded image infos @SERIALIZABLE @EDITOR_PROPERTY
+		Vector<ImageAssetRef>  mImages;  // Loaded image infos @SERIALIZABLE @EDITOR_PROPERTY
 		Vector<FolderAssetRef> mFolders; // Folders, included in atlas @SERIALIZABLE @EDITOR_PROPERTY
-		Vector<Page>           mPages;  // Pages @SERIALIZABLE
+
+		Vector<Page> mPages; // Pages @SERIALIZABLE
 
 	protected:
 		// Completion deserialization callback
@@ -183,6 +191,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const AtlasAsset&);
+	FUNCTION().PUBLIC().SIGNATURE(AtlasSpriteSource, GetSpriteSource, const ImageAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<ImageAssetRef>&, GetImages);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<Page>&, GetPages);
 	FUNCTION().PUBLIC().SIGNATURE(bool, ContainsImage, const ImageAssetRef&);
@@ -249,6 +258,7 @@ CLASS_FIELDS_META(o2::AtlasAsset::Page)
 	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mId);
 	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mSize);
 	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mImagesRects);
+	FIELD().PRIVATE().NAME(mTexture);
 	FIELD().PRIVATE().NAME(mOwner);
 }
 END_META;

@@ -399,6 +399,13 @@ namespace Editor
 		mPlayingChanged = false;
 	}
 
+	void EditorApplication::InitalizeSystems()
+	{
+		mMainListenersLayer.SetEditorMode(true);
+
+		Application::InitalizeSystems();
+	}
+
 	void EditorApplication::LoadUIStyle()
 	{
 		EditorUIStyleBuilder builder;

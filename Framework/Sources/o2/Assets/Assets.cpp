@@ -548,4 +548,29 @@ namespace o2
 		Assert(referencesCount == 0, "Some references not removed for asset");
 	}
 
+#if IS_EDITOR
+	void Assets::RebuildAssets(bool resetCache /*= false*/)
+	{
+#if PLATFORM_WINDOWS
+		String assetsBuilderPath = "AssetsBuilder.exe";
+		String platform = "Windows";
+#endif
+		//-platform ${O2_PLATFORM} -source "${CMAKE_CURRENT_SOURCE_DIR}/Assets/" -target "${CMAKE_CURRENT_SOURCE_DIR}/BuiltAssets/${O2_PLATFORM}/Data/" -target-tree "${CMAKE_CURRENT_SOURCE_DIR}/BuiltAssets/${O2_PLATFORM}/Data.json" -compressor-config "${CMAKE_CURRENT_SOURCE_DIR}/o2/CompressToolsConfig.json"
+		String command = assetsBuilderPath + 
+			" -platform " + platform + 
+			" -source " + GetAssetsPath() + 
+			" -target " + GetBuiltAssetsPath() + 
+			" -target-tree " + GetBuiltAssetsTreePath() + 
+			" -compressor-config " + GetEditorAssetsPath() + "../../CompressToolsConfig.json";
+
+		if (resetCache)
+			command += " -forcible";
+
+		o2Debug.Log("Rebuild assets command: " + command);
+
+		int res = system(command.Data());
+
+		LoadAssetsTree();
+	}
+#endif
 }

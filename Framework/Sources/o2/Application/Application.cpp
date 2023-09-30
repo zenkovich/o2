@@ -41,8 +41,6 @@ namespace o2
 
 	void Application::BasicInitialize()
 	{
-		mMainListenersLayer.SetEditorMode(true);
-
 		InitalizeSystems();
 		InitializePlatform();
 

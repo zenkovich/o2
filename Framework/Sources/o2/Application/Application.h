@@ -243,7 +243,7 @@ namespace o2
 
 	protected:
 		// Basic initialization for all platforms
-		void BasicInitialize();
+		virtual void BasicInitialize();
 
 		// It is called when application frame resized
 		virtual void OnResized(const Vec2I& size);
@@ -312,10 +312,10 @@ namespace o2
 		virtual void OnMoved();
 
 		// Initializing all systems and log. Call it when creating applications
-		void InitalizeSystems();
+		virtual void InitalizeSystems();
 
 		// Deinitializing systems
-		void DeinitializeSystems();
+		virtual void DeinitializeSystems();
 
 		// Processing frame update, drawing and input messages
 		virtual void ProcessFrame();

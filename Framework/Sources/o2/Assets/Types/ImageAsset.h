@@ -2,6 +2,7 @@
 
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetRef.h"
+#include "o2/Render/AtlasSpriteSource.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 
@@ -86,6 +87,9 @@ namespace o2
 
 		// Returns atlas texture reference @SCRIPTABLE
 		TextureRef GetAtlasTextureRef() const;
+
+		// Returns atlas sprite source @SCRIPTABLE
+		AtlasSpriteSource GetAtlasSpriteSource() const;
 
 		// Returns meta information @SCRIPTABLE
 		Meta* GetMeta() const;
@@ -204,6 +208,7 @@ CLASS_METHODS_META(o2::ImageAsset)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWidth);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetHeight);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(TextureRef, GetAtlasTextureRef);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(AtlasSpriteSource, GetAtlasSpriteSource);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Meta*, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
