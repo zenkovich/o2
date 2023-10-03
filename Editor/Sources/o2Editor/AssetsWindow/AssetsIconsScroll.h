@@ -254,9 +254,6 @@ namespace Editor
 		// Called when context create asset pressed
 		void OnContextCreateAssetPressed(const Type* assetType);
 
-		// Called when context create folder pressed
-		void OnContextCreateFolderPressed();
-
 		// Instantiates dragging assets
 		void InstantiateDraggingAssets();
 
@@ -449,7 +446,6 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnContextOpenPressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnContextShowInExplorerPressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateAssetPressed, const Type*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateFolderPressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, InstantiateDraggingAssets);
 	FUNCTION().PROTECTED().SIGNATURE(void, ClearInstantiatedDraggingAssets);
 	FUNCTION().PROTECTED().SIGNATURE(Actor*, InstantiateAsset, const AssetInfo&);

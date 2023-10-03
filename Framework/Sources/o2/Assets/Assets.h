@@ -192,6 +192,11 @@ namespace o2
 		// Renames asset to new path
 		bool RenameAsset(const AssetInfo& info, const String& newName);
 
+#if IS_EDITOR
+		// Reloads asset infos and returns list of changed assets
+		Vector<UID> ReloadAssetsTree();
+#endif
+
 		friend class Asset;
 		friend class AssetRef;
 		friend class FolderAsset;

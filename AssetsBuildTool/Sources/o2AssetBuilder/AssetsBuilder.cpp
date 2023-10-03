@@ -123,6 +123,7 @@ namespace o2
 
 	void AssetsBuilder::RemoveBuiltAssets()
 	{
+		o2FileSystem.FileDelete(mBuiltAssetsTreePath);
 		o2FileSystem.FolderRemove(mBuiltAssetsPath);
 		o2FileSystem.FolderCreate(mBuiltAssetsPath);
 	}

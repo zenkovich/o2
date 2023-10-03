@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	struct AtlasSpriteSource 
+	struct TextureSource 
 	{
 		TextureRef texture;
 		RectF      sourceRect;

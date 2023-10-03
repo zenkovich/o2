@@ -3,7 +3,7 @@
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Assets/Types/ImageAsset.h"
-#include "o2/Render/AtlasSpriteSource.h"
+#include "o2/Render/TextureSource.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Types/Ref.h"
 
@@ -31,11 +31,14 @@ namespace o2
 		// Copy-constructor
 		AtlasAsset(const AtlasAsset& asset);
 
+		// Destructor
+		~AtlasAsset() override;
+
 		// Check equals operator
 		AtlasAsset& operator=(const AtlasAsset& asset);
 
 		// Returns atlas sprite source
-		AtlasSpriteSource GetSpriteSource(const ImageAssetRef& image);
+		TextureSource GetSpriteSource(const ImageAssetRef& image);
 
 		// Returns containing images assets
 		const Vector<ImageAssetRef>& GetImages() const;
@@ -54,6 +57,9 @@ namespace o2
 
 		// Removes all images from atlas
 		void RemoveAllImages();
+
+		// Reloads pages textures
+		void ReloadPages();
 
 		// Returns meta information
 		Meta* GetMeta() const;
@@ -127,7 +133,7 @@ namespace o2
 			Vec2I Size() const;
 
 			// Returns texture reference
-			TextureRef GetTextureRef() const;
+			TextureRef GetTexture() const;
 
 			// Returns texture file name
 			String GetTextureFileName() const;
@@ -191,13 +197,14 @@ CLASS_METHODS_META(o2::AtlasAsset)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const AtlasAsset&);
-	FUNCTION().PUBLIC().SIGNATURE(AtlasSpriteSource, GetSpriteSource, const ImageAssetRef&);
+	FUNCTION().PUBLIC().SIGNATURE(TextureSource, GetSpriteSource, const ImageAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<ImageAssetRef>&, GetImages);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<Page>&, GetPages);
 	FUNCTION().PUBLIC().SIGNATURE(bool, ContainsImage, const ImageAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddImage, const ImageAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveImage, const ImageAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllImages);
+	FUNCTION().PUBLIC().SIGNATURE(void, ReloadPages);
 	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetPageTextureFileName, const AssetInfo&, UInt);
@@ -269,7 +276,7 @@ CLASS_METHODS_META(o2::AtlasAsset::Page)
 
 	FUNCTION().PUBLIC().SIGNATURE(UInt, ID);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, Size);
-	FUNCTION().PUBLIC().SIGNATURE(TextureRef, GetTextureRef);
+	FUNCTION().PUBLIC().SIGNATURE(TextureRef, GetTexture);
 	FUNCTION().PUBLIC().SIGNATURE(String, GetTextureFileName);
 	FUNCTION().PUBLIC().SIGNATURE(_tmp1, ImagesRects);
 }

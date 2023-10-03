@@ -33,17 +33,9 @@ namespace o2
 		{
 			String textureName = (*common)["texture"];
 			ImageAssetRef image(textureName);
-			if (image->GetAtlas() != UID::empty)
-			{
-				mTexture = image->GetAtlasTextureRef();
-				mTextureSrcRect = image->GetAtlasRect();
-			}
-			else
-			{
-				mTexture = TextureRef(image->GetBuiltFullPath());
-				mTextureSrcRect = RectF(Vec2F(), mTexture->GetSize());
-			}
-
+			TextureSource imageSource = image->GetTextureSource();
+			mTexture = imageSource.texture;
+			mTextureSrcRect = imageSource.sourceRect;
 
 			mBaseHeight = (*common)["base"];
 			mLineHeight = (*common)["lineHeight"];

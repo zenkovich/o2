@@ -3,6 +3,7 @@
 
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Assets/Assets.h"
+#include "o2/Render/Render.h"
 
 namespace o2
 {
@@ -67,9 +68,9 @@ namespace o2
 		return mSize;
 	}
 
-	TextureRef AtlasAsset::Page::GetTextureRef() const
+	TextureRef AtlasAsset::Page::GetTexture() const
 	{
-		return AtlasAsset::GetPageTextureRef(mOwner->mInfo, mId);
+		return mTexture;
 	}
 
 	String AtlasAsset::Page::GetTextureFileName() const
@@ -89,13 +90,22 @@ namespace o2
 
 	AtlasAsset::AtlasAsset() :
 		Asset(mnew Meta())
-	{}
+	{
+		o2Render.OnAtlasCreated(this);
+	}
 
 	AtlasAsset::AtlasAsset(const AtlasAsset& other) :
 		Asset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
 	{
 		for (auto& page : mPages)
 			page.mOwner = this;
+
+		o2Render.OnAtlasCreated(this);
+	}
+
+	AtlasAsset::~AtlasAsset()
+	{
+		o2Render.OnAtlasDestroyed(this);
 	}
 
 	void AtlasAsset::OnDeserialized(const DataValue& node)
@@ -117,7 +127,7 @@ namespace o2
 		return *this;
 	}
 
-	AtlasSpriteSource AtlasAsset::GetSpriteSource(const ImageAssetRef& image)
+	TextureSource AtlasAsset::GetSpriteSource(const ImageAssetRef& image)
 	{
 		for (auto& page : mPages)
 		{
@@ -160,6 +170,12 @@ namespace o2
 	void AtlasAsset::RemoveAllImages()
 	{
 		mImages.Clear();
+	}
+
+	void AtlasAsset::ReloadPages()
+	{
+		for (auto& page : mPages)
+			page.mTexture = GetPageTextureRef(mInfo, page.mId);
 	}
 
 	AtlasAsset::Meta* AtlasAsset::GetMeta() const

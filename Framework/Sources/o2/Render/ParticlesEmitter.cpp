@@ -331,7 +331,7 @@ namespace o2
 		mImageAsset = image;
 
 		if (mImageAsset)
-			mParticlesMesh->SetTexture(TextureRef(mImageAsset->GetAtlas(), mImageAsset->GetAtlasPage()));
+			mParticlesMesh->SetTexture(TextureRef(mImageAsset->GetAtlasUID(), mImageAsset->GetAtlasPage()));
 		else
 			mParticlesMesh->SetTexture(NoTexture());
 	}

@@ -2,7 +2,7 @@
 
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetRef.h"
-#include "o2/Render/AtlasSpriteSource.h"
+#include "o2/Render/TextureSource.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 
@@ -23,7 +23,7 @@ namespace o2
 		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder);    // Slice border property
 		PROPERTY(SpriteMode, defaultMode, SetDefaultMode, GetDefaultMode); // Sprite default mode property
 
-		PROPERTY(UID, atlas, SetAtlas, GetAtlas); // Atlas owner asset property
+		PROPERTY(UID, atlas, SetAtlas, GetAtlasUID); // Atlas owner asset property
 		GETTER(UInt, atlasPage, GetAtlasPage);    // Atlas page index getter
 		GETTER(RectI, atlasRect, GetAtlasRect);   // Atlas source image rectangle getter
 
@@ -53,10 +53,13 @@ namespace o2
 		void SetBitmap(Bitmap* bitmap);
 
 		// Returns atlas asset
-		UID GetAtlas() const;
+		UID GetAtlasUID() const;
 
 		// Sets atlas
 		void SetAtlas(const UID& atlas);
+
+		// Returns is in atlas @SCRIPTABLE
+		bool IsInAtlas() const;
 
 		// Sets slice border @SCRIPTABLE
 		void SetSliceBorder(const BorderI& border);
@@ -85,11 +88,8 @@ namespace o2
 		// Returns image height @SCRIPTABLE
 		float GetHeight() const;
 
-		// Returns atlas texture reference @SCRIPTABLE
-		TextureRef GetAtlasTextureRef() const;
-
 		// Returns atlas sprite source @SCRIPTABLE
-		AtlasSpriteSource GetAtlasSpriteSource() const;
+		TextureSource GetTextureSource() const;
 
 		// Returns meta information @SCRIPTABLE
 		Meta* GetMeta() const;
@@ -145,8 +145,10 @@ namespace o2
 
 		TextureRef mTexture; // Texture reference, if image is not in atlas, it loads texture
 
+		AssetRef mAtlas; // Owner atlas
+
 		UInt  mAtlasPage; // Owner atlas page index @SERIALIZABLE
-		RectI mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
+		RectI mSourceRect; // Owner atlas rectangle @SERIALIZABLE
 
 	protected:
 		// Loads texture if image is not in atlas, otherwise loads serializable data
@@ -185,8 +187,9 @@ CLASS_FIELDS_META(o2::ImageAsset)
 	FIELD().PUBLIC().NAME(meta);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBitmap);
 	FIELD().PROTECTED().NAME(mTexture);
+	FIELD().PROTECTED().NAME(mAtlas);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mAtlasPage);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mAtlasRect);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSourceRect);
 }
 END_META;
 CLASS_METHODS_META(o2::ImageAsset)
@@ -196,8 +199,9 @@ CLASS_METHODS_META(o2::ImageAsset)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ImageAsset&);
 	FUNCTION().PUBLIC().SIGNATURE(Bitmap*, GetBitmap);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetBitmap, Bitmap*);
-	FUNCTION().PUBLIC().SIGNATURE(UID, GetAtlas);
+	FUNCTION().PUBLIC().SIGNATURE(UID, GetAtlasUID);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAtlas, const UID&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsInAtlas);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetSliceBorder, const BorderI&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(BorderI, GetSliceBorder);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDefaultMode, SpriteMode);
@@ -207,8 +211,7 @@ CLASS_METHODS_META(o2::ImageAsset)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetSize);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWidth);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetHeight);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(TextureRef, GetAtlasTextureRef);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(AtlasSpriteSource, GetAtlasSpriteSource);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(TextureSource, GetTextureSource);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Meta*, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);

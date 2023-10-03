@@ -56,7 +56,7 @@ namespace Editor
 			mSlicesEditor->Setup(ImageAssetRef(dynamic_cast<ImageAsset*>(targetObjets.Last().first)->GetUID()),
 								 dynamic_cast<BorderIProperty*>(mPropertiesContext.properties[TypeOf(ImageAsset).GetField("sliceBorder")]));
 
-			mAtlasProperty->SetValue(AtlasAssetRef(dynamic_cast<ImageAsset*>(targetObjets[0].first)->GetAtlas()));
+			mAtlasProperty->SetValue(AtlasAssetRef(dynamic_cast<ImageAsset*>(targetObjets[0].first)->GetAtlasUID()));
 		}
 	}
 

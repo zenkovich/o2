@@ -20,8 +20,7 @@ namespace o2
 
 		UpdateMesh();
 
-		if (Render::IsSingletonInitialzed())
-			o2Render.mSprites.Add(this);
+		Render::OnSpriteCreated(this);
 	}
 
 	Sprite::Sprite(const ImageAssetRef& image):
@@ -32,7 +31,7 @@ namespace o2
 
 		LoadFromImage(image);
 
-		o2Render.mSprites.Add(this);
+		Render::OnSpriteCreated(this);
 	}
 
 	Sprite::Sprite(const String& imagePath):
@@ -43,7 +42,7 @@ namespace o2
 
 		LoadFromImage(imagePath);
 
-		o2Render.mSprites.Add(this);
+		Render::OnSpriteCreated(this);
 	}
 
 	Sprite::Sprite(UID imageId):
@@ -54,7 +53,7 @@ namespace o2
 
 		LoadFromImage(imageId);
 
-		o2Render.mSprites.Add(this);
+		Render::OnSpriteCreated(this);
 	}
 
 	Sprite::Sprite(TextureRef texture, const RectI& srcRect /*= RectI()*/):
@@ -68,7 +67,7 @@ namespace o2
 
 		UpdateMesh();
 
-		o2Render.mSprites.Add(this);
+		Render::OnSpriteCreated(this);
 	}
 
 	Sprite::Sprite(const Color4& color):
@@ -79,7 +78,7 @@ namespace o2
 
 		LoadMonoColor(color);
 
-		o2Render.mSprites.Add(this);
+		Render::OnSpriteCreated(this);
 	}
 
 	Sprite::Sprite(Bitmap* bitmap):
@@ -90,7 +89,7 @@ namespace o2
 
 		LoadFromBitmap(bitmap);
 
-		o2Render.mSprites.Add(this);
+		Render::OnSpriteCreated(this);
 	}
 
 	Sprite::Sprite(const Sprite& other):
@@ -104,13 +103,12 @@ namespace o2
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = other.mCornersColors[i];
 
-		o2Render.mSprites.Add(this);
+		Render::OnSpriteCreated(this);
 	}
 
 	Sprite::~Sprite()
 	{
-		if (Render::IsSingletonInitialzed())
-			o2Render.mSprites.Remove(this);
+		Render::OnSpriteDestroyed(this);
 	}
 
 	Sprite& Sprite::operator=(const Sprite& other)
@@ -394,7 +392,7 @@ namespace o2
 	UID Sprite::GetAtlasAssetId() const
 	{
 		if (mImageAsset)
-			return mImageAsset->GetAtlas();
+			return mImageAsset->GetAtlasUID();
 
 		return 0;
 	}
@@ -1141,19 +1139,14 @@ namespace o2
 	{
 		if (mImageAsset)
 		{
-			mImageAsset = ImageAssetRef(mImageAsset->GetUID());
-
 			InitializeTexture();
-
-			mSlices = mImageAsset->GetMeta()->sliceBorder;
-
 			UpdateMesh();
 		}
 	}
 
 	void Sprite::InitializeTexture()
 	{
-		auto atlasSpriteSource = mImageAsset->GetAtlasSpriteSource();
+		auto atlasSpriteSource = mImageAsset->GetTextureSource();
 		mMesh.mTexture = atlasSpriteSource.texture;
 		mTextureSrcRect = atlasSpriteSource.sourceRect;
 	}

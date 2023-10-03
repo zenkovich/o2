@@ -190,12 +190,13 @@ namespace o2
 
 		mMesh.Resize(triangulation.vertices.size(), triangulation.triangles.size(), 1);
 
-		auto texture = mImageAsset ? mImageAsset->GetAtlasTextureRef() : TextureRef::Null();
+		TextureSource imageSource = mImageAsset ? mImageAsset->GetTextureSource() : TextureSource();
+		auto texture = imageSource.texture;
 		Vec2F invTexSize(1.0f, 1.0f);
 		if (texture)
 			invTexSize.Set(1.0f/texture->GetSize().x, 1.0f/texture->GetSize().y);
 
-		RectF imageRect = mImageAsset ? mImageAsset->GetAtlasRect() : RectI();
+		RectF imageRect = imageSource.sourceRect;
 		RectF imageUV = RectF(imageRect.left*invTexSize.x, 1.0f - imageRect.top*invTexSize.y,
 							  imageRect.right*invTexSize.x, 1.0f - imageRect.bottom*invTexSize.y);
 

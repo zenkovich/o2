@@ -119,6 +119,7 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/JS collect garbage", [&]() { o2Scripts.CollectGarbage(); });
 
 		mMenuPanel->AddItem("Debug/Rebuild assets", [&]() { o2Assets.RebuildAssets(); });
+		mMenuPanel->AddItem("Debug/Rebuild assets forcible", [&]() { o2Assets.RebuildAssets(true); });
 	}
 
 	MenuPanel::~MenuPanel()

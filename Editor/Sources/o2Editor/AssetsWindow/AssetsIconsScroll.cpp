@@ -306,7 +306,6 @@ namespace Editor
 				return x->meta->ID() == (*asset)->GetUID(); }))
 			{
 				mSelectedPreloadedAssets.Remove(asset);
-				(*asset)->Save();
 				delete asset;
 			}
 		}
@@ -933,27 +932,9 @@ namespace Editor
 		{
 			String path = !mCurrentPath.IsEmpty() ? mCurrentPath + "/" + name : name;
 			mNewAsset->Save(path);
+			o2Assets.RebuildAssets();
 			o2EditorAssets.SelectAsset(path);
 		});
-	}
-
-	void AssetsIconsScrollArea::OnContextCreateFolderPressed()
-	{
-		// 		AssetIcon* assetIcon = GetAssetIconFromPool("folder");
-		// 
-		// 		assetIcon->SetState("halfHide", false);
-		// 		assetIcon->SetSelectionGroup(this);
-		// 		assetIcon->mOwner = this;
-		// 
-		// 		mGrid->AddChild(assetIcon, 0);
-		// 
-		// 		StartAssetRenaming(assetIcon, "New folder", [&](const String& name)
-		// 		{
-		// 			FolderAssetRef folderAsset = FolderAssetRef::CreateAsset();
-		// 			folderAsset->Save(o2Assets.MakeUniqueAssetName(mCurrentPath + "/" + name));
-		// 
-		// 			o2EditorAssets.SelectAsset(mCurrentPath + "/" + name);
-		// 		});
 	}
 
 	Actor* AssetsIconsScrollArea::InstantiateAsset(const ImageAssetRef& asset)

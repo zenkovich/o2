@@ -77,7 +77,7 @@ namespace o2
 		bool CheckAtlasRebuilding(AssetInfo* atlasInfo);
 
 		// Returns true if atlas needs to rebuild
-		bool IsAtlasNeedRebuild(Vector<Image>& currentImages, Vector<Image>& lastImages);
+		bool ImagesListChanged(Vector<Image>& currentImages, Vector<Image>& lastImages);
 
 		// Rebuilds atlas
 		void RebuildAtlas(AssetInfo* atlasInfo, Vector<Image>& images);
@@ -108,7 +108,7 @@ CLASS_METHODS_META(o2::AtlasAssetConverter)
 	FUNCTION().PUBLIC().SIGNATURE(void, Reset);
 	FUNCTION().PROTECTED().SIGNATURE(Vector<UID>, CheckRebuildingAtlases);
 	FUNCTION().PROTECTED().SIGNATURE(bool, CheckAtlasRebuilding, AssetInfo*);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsAtlasNeedRebuild, Vector<Image>&, Vector<Image>&);
+	FUNCTION().PROTECTED().SIGNATURE(bool, ImagesListChanged, Vector<Image>&, Vector<Image>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, RebuildAtlas, AssetInfo*, Vector<Image>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveImageAsset, ImagePackDef&);
 }

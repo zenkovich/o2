@@ -3,6 +3,8 @@
 
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
+#include "o2Editor/Core/Properties/Objects/Assets/ImageAssetViewer.h"
+#include "o2Editor/Core/Properties/Objects/Assets/VectorFontAssetViewer.h"
 #include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/AssetPropertiesViewer.h"
@@ -23,6 +25,8 @@ namespace Editor
 
 		CHECKUP_TYPE(AssetPropertiesViewer);
 		CHECKUP_TYPE(WidgetLayerViewer);
+		CHECKUP_TYPE(ImageAssetViewer);
+		CHECKUP_TYPE(VectorFontAssetViewer);
 	}
 
 	PropertiesWindow::~PropertiesWindow()

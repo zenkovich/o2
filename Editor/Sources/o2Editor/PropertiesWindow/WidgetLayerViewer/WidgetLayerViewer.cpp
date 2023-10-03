@@ -24,7 +24,7 @@ namespace Editor
 		mPropertiesViewer = mnew DefaultWidgetLayerPropertiesViewer();
 
 		auto scrollArea = o2UI.CreateScrollArea("backless");
-		scrollArea->SetViewLayout(Layout::BothStretch());
+		scrollArea->SetViewLayout(Layout::BothStretch(0, 0, 15, 0));
 		scrollArea->SetClippingLayout(Layout::BothStretch());
 		scrollArea->name = "widget layers scroll area";
 		mContentWidget = scrollArea;

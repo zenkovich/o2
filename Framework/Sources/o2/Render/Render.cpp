@@ -2,7 +2,9 @@
 #include "o2/Render/Render.h"
 
 #include "o2/Application/Application.h"
+#include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
+#include "o2/Assets/Types/AtlasAsset.h"
 #include "o2/Render/Font.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Sprite.h"
@@ -11,7 +13,6 @@
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/Math/Geometry.h"
 #include "o2/Utils/Math/Interpolation.h"
-#include "o2/Application/Input.h"
 
 namespace o2
 {
@@ -174,19 +175,52 @@ namespace o2
 		unloadFonts.ForEach([](auto fnt) { delete fnt; });
 	}
 
-	void Render::OnAssetsRebuilded(const Vector<UID>& changedAssets)
+	void Render::OnAssetsRebuilt(const Vector<UID>& changedAssets)
 	{
 		for (auto tex : mTextures)
-		{
-			if (changedAssets.Contains(tex->GetAtlasAssetId()))
-				tex->Reload();
-		}
+			tex->Reload();
+
+		for (auto atlas : mAtlases)
+			atlas->ReloadPages();
 
 		for (auto spr : mSprites)
-		{
-			if (changedAssets.Contains(spr->GetAtlasAssetId()))
-				spr->ReloadImage();
-		}
+			spr->ReloadImage();
+	}
+
+	void Render::OnSpriteCreated(Sprite* sprite)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		Instance().mSprites.Add(sprite);
+	}
+
+	void Render::OnSpriteDestroyed(Sprite* sprite)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		Instance().mSprites.Remove(sprite);
+	}
+
+	void Render::OnTextureCreated(Texture* texture)
+	{
+		mTextures.Add(texture);
+	}
+
+	void Render::OnTextureDestroyed(Texture* texture)
+	{
+		mTextures.Remove(texture);
+	}
+
+	void Render::OnAtlasCreated(AtlasAsset* atlas)
+	{
+		mAtlases.Add(atlas);
+	}
+
+	void Render::OnAtlasDestroyed(AtlasAsset* atlas)
+	{
+		mAtlases.Remove(atlas);
 	}
 
 	void Render::DrawAALine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/,

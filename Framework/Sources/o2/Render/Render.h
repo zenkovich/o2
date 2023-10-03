@@ -29,10 +29,11 @@
 
 namespace o2
 {
-	class Mesh;
-	class Font;
-	class Sprite;
+	class AtlasAsset;
 	class CursorAreaEventListenersLayer;
+	class Font;
+	class Mesh;
+	class Sprite;
 
 	// ------------------
 	// 2D Graphics render
@@ -339,6 +340,8 @@ namespace o2
 
 		Vector<Sprite*> mSprites; // All sprites
 
+		Vector<AtlasAsset*> mAtlases; // All atlases
+
 		VertexIndex* mHardLinesIndexData; // Index data buffer
 		TextureRef   mSolidLineTexture;   // Solid line texture
 		TextureRef   mDashLineTexture;    // Dash line texture
@@ -392,9 +395,28 @@ namespace o2
 		void CheckFontsUnloading();
 
 		// Called when assets was rebuilded
-		void OnAssetsRebuilded(const Vector<UID>& changedAssets);
+		void OnAssetsRebuilt(const Vector<UID>& changedAssets);
+
+		// Called when sprite created, registers it in render
+		static void OnSpriteCreated(Sprite* sprite);
+
+		// Called when sprite destroyed, unregisters it from render
+		static void OnSpriteDestroyed(Sprite* sprite);
+
+		// Called when texture created, registers it in render
+		void OnTextureCreated(Texture* texture);
+
+		// Called when texture destroyed, unregisters it from render
+		void OnTextureDestroyed(Texture* texture);
+
+		// Called when atlas created, registers it in render
+		void OnAtlasCreated(AtlasAsset* atlas);
+
+		// Called when atlas destroyed, unregisters it from render
+		void OnAtlasDestroyed(AtlasAsset* atlas);
 
 		friend class Application;
+		friend class AtlasAsset;
 		friend class BitmapFont;
 		friend class BitmapFontAsset;
 		friend class Font;

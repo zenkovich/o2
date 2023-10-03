@@ -21,44 +21,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:/work/TestMatch3/o2/AssetsBuildTool\Sources\o2AssetBuilder\Converters\AtlasAssetConverter.h">
-		<date year="123" month="6" day="14" hour="10" minute="28" second="9" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="AtlasAssetConverter" fullname="o2::AtlasAssetConverter" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="Image" fullname="o2::AtlasAssetConverter::Image" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ISerializable" protection="0" />
-									</baseClasses>
-								</section>
-								<section name="ImagePackDef" fullname="o2::AtlasAssetConverter::ImagePackDef" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IAssetConverter" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:/work/TestMatch3/o2/AssetsBuildTool\Sources\o2AssetBuilder\Converters\FolderAssetConverter.h">
 		<date year="123" month="6" day="14" hour="10" minute="28" second="9" />
 		<globalNamespace name="" fullname="">
@@ -171,6 +133,44 @@
 							<typedefs />
 							<usings />
 							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:/work/TestMatch3/o2/AssetsBuildTool\Sources\o2AssetBuilder\Converters\AtlasAssetConverter.h">
+		<date year="123" month="9" day="4" hour="0" minute="2" second="27" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AtlasAssetConverter" fullname="o2::AtlasAssetConverter" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Image" fullname="o2::AtlasAssetConverter::Image" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+								<section name="ImagePackDef" fullname="o2::AtlasAssetConverter::ImagePackDef" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAssetConverter" protection="0" />
+							</baseClasses>
 						</section>
 					</sections>
 					<typedefs />

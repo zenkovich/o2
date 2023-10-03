@@ -81,12 +81,16 @@ namespace Editor
 
 	void ObjectViewer::OnEnabled()
 	{
+		VerticalLayout::OnEnabled();
+
 		if (mPropertiesViewer)
 			mPropertiesViewer->OnEnabled();
 	}
 
 	void ObjectViewer::OnDisabled()
 	{
+		VerticalLayout::OnDisabled();
+
 		if (mPropertiesViewer)
 			mPropertiesViewer->OnDisabled();
 	}

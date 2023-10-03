@@ -5,7 +5,7 @@
             "Value": [
                 {
                     "Key": "DXT5",
-                    "Value": "\"../o2/AssetsBuildTool/Bin/nvcompress.exe\" -nomips -bc3 -alpha \"{input}\" \"{output}.dds\""
+                    "Value": "\"../../o2/AssetsBuildTool/Bin/nvcompress.exe\" -nomips -bc3 -alpha \"{input}\" \"{output}.dds\""
                 }
             ]
         },

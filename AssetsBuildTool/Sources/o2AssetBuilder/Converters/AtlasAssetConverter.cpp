@@ -102,7 +102,8 @@ namespace o2
 			}
 		}
 
-		if (IsAtlasNeedRebuild(currentImages, lastImages))
+		bool isModified = mAssetsBuilder->mModifiedAssets.Contains(atlasInfo->meta->ID());
+		if (isModified || ImagesListChanged(currentImages, lastImages))
 		{
 			RebuildAtlas(atlasInfo, currentImages);
 			return true;
@@ -111,7 +112,7 @@ namespace o2
 		return false;
 	}
 
-	bool AtlasAssetConverter::IsAtlasNeedRebuild(Vector<Image>& currentImages, Vector<Image>& lastImages)
+	bool AtlasAssetConverter::ImagesListChanged(Vector<Image>& currentImages, Vector<Image>& lastImages)
 	{
 		if (currentImages.Count() != lastImages.Count())
 			return true;
@@ -194,7 +195,7 @@ namespace o2
 		// Try to pack
 		if (!packer.Pack())
 		{
-			mAssetsBuilder->mLog->Error("Atlas " + atlasInfo->path + " packing failed");
+			mAssetsBuilder->mLog->Warning("Atlas " + atlasInfo->path + " packing failed");
 			return;
 		}
 		else mAssetsBuilder->mLog->Out("Atlas " + atlasInfo->path + " successfully packed");
@@ -264,7 +265,7 @@ namespace o2
 	{
 		DataDocument imgData;
 		imgData["mAtlasPage"] = imgDef.packRect->page;
-		imgData["mAtlasRect"] = (RectI)(imgDef.packRect->rect);
+		imgData["mSourceRect"] = (RectI)(imgDef.packRect->rect);
 		String imageFullPath = mAssetsBuilder->GetBuiltAssetsPath() + imgDef.assetInfo->path;
 		imgData.SaveToFile(imageFullPath);
 		o2FileSystem.SetFileEditDate(imageFullPath, imgDef.assetInfo->editTime);

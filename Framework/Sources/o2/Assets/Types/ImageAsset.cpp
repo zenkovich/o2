@@ -15,7 +15,7 @@ namespace o2
 	{}
 
 	ImageAsset::ImageAsset(const ImageAsset& other):
-		Asset(other), mAtlasPage(other.mAtlasPage), mAtlasRect(other.mAtlasRect), bitmap(this), atlas(this), sliceBorder(this),
+		Asset(other), mAtlasPage(other.mAtlasPage), mSourceRect(other.mSourceRect), bitmap(this), atlas(this), sliceBorder(this),
 		atlasPage(this), atlasRect(this), size(this), width(this), height(this), meta(this)
 	{
 		if (other.mBitmap)
@@ -24,7 +24,7 @@ namespace o2
 			mBitmap = nullptr;
 
 		mAtlasPage = other.mAtlasPage;
-		mAtlasRect = other.mAtlasRect;
+		mSourceRect = other.mSourceRect;
 	}
 
 	ImageAsset::~ImageAsset()
@@ -44,7 +44,7 @@ namespace o2
 			SetBitmap(asset.mBitmap);
 
 		mAtlasPage = asset.mAtlasPage;
-		mAtlasRect = asset.mAtlasRect;
+		mSourceRect = asset.mSourceRect;
 
 		return *this;
 	}
@@ -65,7 +65,7 @@ namespace o2
 		mBitmap = bitmap;
 	}
 
-	UID ImageAsset::GetAtlas() const
+	UID ImageAsset::GetAtlasUID() const
 	{
 		return GetMeta()->atlasId;
 	}
@@ -81,6 +81,11 @@ namespace o2
 
 		if (auto newAtlas = AtlasAssetRef(GetMeta()->atlasId))
 			newAtlas->AddImage(thisRef);
+	}
+
+	bool ImageAsset::IsInAtlas() const
+	{
+		return GetAtlasUID() != UID::empty;
 	}
 
 	void ImageAsset::SetSliceBorder(const BorderI& border)
@@ -110,15 +115,12 @@ namespace o2
 
 	RectI ImageAsset::GetAtlasRect() const
 	{
-		return mAtlasRect;
+		return mSourceRect;
 	}
 
 	Vec2F ImageAsset::GetSize() const
 	{
-		if (mTexture)
-			return mTexture->GetSize();
-
-		return mAtlasRect.Size();
+		return mSourceRect.Size();
 	}
 
 	float ImageAsset::GetWidth() const
@@ -131,14 +133,23 @@ namespace o2
 		return GetSize().y;
 	}
 
-	TextureRef ImageAsset::GetAtlasTextureRef() const
+	TextureSource ImageAsset::GetTextureSource() const
 	{
-		return AtlasAsset::GetPageTextureRef(o2Assets.GetAssetInfo(GetAtlas()), GetAtlasPage());
-	}
+		TextureRef texture; 
 
-	AtlasSpriteSource ImageAsset::GetAtlasSpriteSource() const
-	{
-		return { mTexture, mAtlasRect };
+		if (!IsInAtlas())
+			texture = mTexture;
+		else
+		{
+			if (auto atlas = dynamic_cast<const AtlasAsset*>(mAtlas.Get()))
+			{
+				auto& pages = atlas->GetPages();
+				if (mAtlasPage < pages.Count())
+					texture = pages[mAtlasPage].GetTexture();
+			}
+		}
+
+		return { texture, mSourceRect };
 	}
 
 	ImageAsset::Meta* ImageAsset::GetMeta() const
@@ -153,10 +164,17 @@ namespace o2
 
 	void ImageAsset::LoadData(const String& path)
 	{
-		if (GetAtlas() == UID::empty)
+		if (!IsInAtlas())
+		{
 			mTexture = TextureRef(path);
+			mSourceRect = RectI(Vec2F(), mTexture->GetSize());
+			mAtlas = nullptr;
+		}
 		else
+		{
 			Asset::LoadData(path);
+			mAtlas = AtlasAssetRef(GetAtlasUID());
+		}
 	}
 
 	void ImageAsset::SaveData(const String& path) const

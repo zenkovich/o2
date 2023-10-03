@@ -73,9 +73,10 @@ namespace o2
 		// Completion deserialization callback, reads asset type name
 		void OnDeserialized(const DataValue& node) override;
 
+		friend class Asset;
+		friend class Assets;
 		friend class AssetsBuilder;
 		friend class AssetsTree;
-		friend class Asset;
 	};
 }
 // --- META ---

@@ -14,7 +14,7 @@ namespace o2
 
     Texture::~Texture()
     {
-        o2Render.mTextures.Remove(this);
+        o2Render.OnTextureDestroyed(this);
 
         if (!mReady)
             return;

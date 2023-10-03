@@ -23,8 +23,7 @@ namespace o2
 	}
 
 	Assets::~Assets()
-	{
-	}
+	{}
 
 	String Assets::GetAssetsPath() const
 	{
@@ -385,8 +384,8 @@ namespace o2
 
 		mMainAssetsTree = mnew AssetsTree();
 		mMainAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
-        mMainAssetsTree->assetsPath = ::GetAssetsPath();
-        mMainAssetsTree->builtAssetsPath = ::GetBuiltAssetsPath();
+		mMainAssetsTree->assetsPath = ::GetAssetsPath();
+		mMainAssetsTree->builtAssetsPath = ::GetBuiltAssetsPath();
 
 		mAssetsTrees.Add(mMainAssetsTree);
 		mAssetsTrees.Add(editorAssetsTree);
@@ -556,21 +555,85 @@ namespace o2
 		String platform = "Windows";
 #endif
 		//-platform ${O2_PLATFORM} -source "${CMAKE_CURRENT_SOURCE_DIR}/Assets/" -target "${CMAKE_CURRENT_SOURCE_DIR}/BuiltAssets/${O2_PLATFORM}/Data/" -target-tree "${CMAKE_CURRENT_SOURCE_DIR}/BuiltAssets/${O2_PLATFORM}/Data.json" -compressor-config "${CMAKE_CURRENT_SOURCE_DIR}/o2/CompressToolsConfig.json"
-		String command = assetsBuilderPath + 
-			" -platform " + platform + 
-			" -source " + GetAssetsPath() + 
-			" -target " + GetBuiltAssetsPath() + 
-			" -target-tree " + GetBuiltAssetsTreePath() + 
+		String command = assetsBuilderPath +
+			" -platform " + platform +
+			" -source " + GetAssetsPath() +
+			" -target " + GetBuiltAssetsPath() +
+			" -target-tree " + GetBuiltAssetsTreePath() +
 			" -compressor-config " + GetEditorAssetsPath() + "../../CompressToolsConfig.json";
 
 		if (resetCache)
-			command += " -forcible";
+			command += " -forcible true";
 
 		o2Debug.Log("Rebuild assets command: " + command);
 
 		int res = system(command.Data());
 
-		LoadAssetsTree();
+		auto changedAssetsUIDs = ReloadAssetsTree();
+
+		onAssetsRebuilt(changedAssetsUIDs);
+	}
+
+	Vector<UID> Assets::ReloadAssetsTree()
+	{
+		AssetsTree newBuiltAssetsTree;
+		newBuiltAssetsTree.DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
+
+		Vector<UID> changedAssetsUIDs;
+		Vector<AssetInfo*> removedAssets;
+
+		Function<void(AssetInfo* oldParent, Vector<AssetInfo*>& oldInfos, AssetInfo* newParent, Vector<AssetInfo*>& newInfos)> processFolder =
+			[&processFolder, this, &changedAssetsUIDs, &removedAssets]
+		(AssetInfo* oldParent, Vector<AssetInfo*>& oldInfos, AssetInfo* newParent, Vector<AssetInfo*>& newInfos)
+		{
+			auto oldInfosCopy = oldInfos;
+			oldInfos.Clear();
+
+			auto copyNewInfos = newInfos;
+			for (auto newAssetInfo : copyNewInfos)
+			{
+				AssetInfo* oldAssetInfo = mMainAssetsTree->allAssetsByUID[newAssetInfo->meta->ID()];
+
+				if (oldAssetInfo)
+				{
+					oldInfos.Add(oldAssetInfo);
+					if (oldParent)
+						oldAssetInfo->parent = oldParent;
+
+					if (newAssetInfo->editTime != oldAssetInfo->editTime || !newAssetInfo->meta->IsEqual(oldAssetInfo->meta))
+						changedAssetsUIDs.Add(newAssetInfo->meta->ID());
+
+					oldInfosCopy.Remove(oldAssetInfo);
+				}
+				else
+				{
+					changedAssetsUIDs.Add(newAssetInfo->meta->ID());
+
+					oldAssetInfo = newAssetInfo;
+
+					newInfos.Remove(newAssetInfo);
+
+					oldInfos.Add(oldAssetInfo);
+					if (oldParent)
+						oldAssetInfo->parent = oldParent;
+				}
+
+				if (!newAssetInfo->GetChildren().IsEmpty())
+					processFolder(oldAssetInfo, oldAssetInfo->mChildren, newAssetInfo, newAssetInfo->mChildren);
+			}
+
+			removedAssets.Add(oldInfosCopy);
+		};
+
+		processFolder(nullptr, mMainAssetsTree->rootAssets, nullptr, newBuiltAssetsTree.rootAssets);
+
+		for (auto info : removedAssets)
+		{
+			changedAssetsUIDs.Add(info->meta->ID());
+			delete info;
+		}
+
+		return changedAssetsUIDs;
 	}
 #endif
 }

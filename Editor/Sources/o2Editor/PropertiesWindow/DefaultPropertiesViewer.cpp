@@ -9,6 +9,7 @@ namespace Editor
 	DefaultPropertiesViewer::DefaultPropertiesViewer()
 	{
 		auto scrollArea = o2UI.CreateScrollArea("backless");
+		*scrollArea->layout = WidgetLayout::BothStretch(0, 0, 15, 0);
 		scrollArea->SetViewLayout(Layout::BothStretch());
 		scrollArea->SetClippingLayout(Layout::BothStretch());
 		scrollArea->name = "scroll area";

@@ -1,5 +1,5 @@
 #include "o2/stdafx.h"
-#include "AtlasSpriteSource.h"
+#include "TextureSource.h"
 
 namespace o2
 {
