@@ -34,17 +34,7 @@ namespace Editor
 		mSpoiler->AddChild(mSlicesEditor);
 
 		mAtlasProperty = dynamic_cast<AssetProperty*>(o2EditorProperties.CreateRegularField(
-			&TypeOf(AtlasAssetRef), "Atlas", mOnChildFieldChangeCompleted, [&](IPropertyField* field)
-			{
-				for (auto& target : mPropertiesContext.targets)
-				{
-					dynamic_cast<ImageAsset*>(target.first)->SetAtlas(mAtlasProperty->GetCommonValue() ?
-																	  mAtlasProperty->GetCommonValue()->GetUID() :
-																	  UID::empty);
-				}
-
-				onChanged(field);
-			}));
+			&TypeOf(AtlasAssetRef), "Atlas", mOnChildFieldChangeCompleted, onChanged));
 
 		mSpoiler->AddChild(mAtlasProperty);
 	}
@@ -55,9 +45,21 @@ namespace Editor
 		{
 			mSlicesEditor->Setup(ImageAssetRef(dynamic_cast<ImageAsset*>(targetObjets.Last().first)->GetUID()),
 								 dynamic_cast<BorderIProperty*>(mPropertiesContext.properties[TypeOf(ImageAsset).GetField("sliceBorder")]));
-
-			mAtlasProperty->SetValue(AtlasAssetRef(dynamic_cast<ImageAsset*>(targetObjets[0].first)->GetAtlasUID()));
 		}
+
+		mAtlasProxies.Clear();
+		for (auto& targets : targetObjets)
+		{
+			ImageAsset* image = dynamic_cast<ImageAsset*>(targets.first);
+			auto proxy = mnew FunctionalValueProxy<AtlasAssetRef>(
+				[image](const AtlasAssetRef& value) { image->SetAtlas(value ? value->GetUID() : UID::empty); },
+				[image]() { return AtlasAssetRef(image->GetAtlasUID()); }
+			);
+
+			mAtlasProxies.Add(proxy);
+		}
+
+		mAtlasProperty->SetValueProxy(mAtlasProxies);
 	}
 
 }

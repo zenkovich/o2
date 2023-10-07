@@ -31,9 +31,10 @@ namespace Editor
 		IOBJECT(ImageAssetViewer);
 
 	private:
-		ImageSlicesEditorWidget* mSlicesEditor = nullptr;
+		ImageSlicesEditorWidget* mSlicesEditor = nullptr; // Slices editor widget
 
-		AssetProperty* mAtlasProperty = nullptr;
+		Vector<IAbstractValueProxy*> mAtlasProxies;            // Atlas proxies for property, converts UID to AtlasAssetRef and back
+		AssetProperty*               mAtlasProperty = nullptr; // Atlas property
 
 	private:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -53,6 +54,7 @@ END_META;
 CLASS_FIELDS_META(Editor::ImageAssetViewer)
 {
 	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSlicesEditor);
+	FIELD().PRIVATE().NAME(mAtlasProxies);
 	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAtlasProperty);
 }
 END_META;

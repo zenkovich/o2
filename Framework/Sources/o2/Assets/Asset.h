@@ -68,6 +68,9 @@ namespace o2
 		// Loads asset by id
 		void Load(const UID& id);
 
+		// Reloads asset
+		void Reload();
+
 		// Saves asset by path
 		void Save(const String& path);
 
@@ -136,7 +139,7 @@ namespace o2
 		// Saves asset data, using DataValue and serialization
 		virtual void SaveData(const String& path) const;
 
-		// Itis called when UID has changed
+		// It is called when UID has changed
 		virtual void OnUIDChanged(const UID& oldUID);
 
 		friend class AssetRef;
@@ -145,8 +148,8 @@ namespace o2
 	};
 
 	// This macro defines asset type
-#define ASSET_TYPE(THIS_TYPE, META_TYPE)                            \
-SERIALIZABLE(THIS_TYPE);                                            \
+#define ASSET_TYPE(THIS_TYPE, META_TYPE) \
+SERIALIZABLE(THIS_TYPE);                 \
 typedef META_TYPE MetaType;                                         
 
 	// ----------------------------
@@ -205,6 +208,7 @@ CLASS_METHODS_META(o2::Asset)
 #endif
 	FUNCTION().PUBLIC().SIGNATURE(void, Load, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Load, const UID&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Reload);
 	FUNCTION().PUBLIC().SIGNATURE(void, Save, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Save);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDirty, bool);

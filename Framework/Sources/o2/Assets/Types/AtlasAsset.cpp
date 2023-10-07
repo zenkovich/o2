@@ -174,8 +174,10 @@ namespace o2
 
 	void AtlasAsset::ReloadPages()
 	{
-		for (auto& page : mPages)
-			page.mTexture = GetPageTextureRef(mInfo, page.mId);
+		Reload();
+
+		for (auto& img : mImages)
+			img->Reload();
 	}
 
 	AtlasAsset::Meta* AtlasAsset::GetMeta() const

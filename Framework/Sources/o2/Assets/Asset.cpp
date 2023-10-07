@@ -132,6 +132,11 @@ namespace o2
 		LoadData(GetBuiltFullPath());
 	}
 
+	void Asset::Reload()
+	{
+		LoadData(GetBuiltFullPath());
+	}
+
 	void Asset::Save(const String& path)
 	{
 		SetPath(path);
