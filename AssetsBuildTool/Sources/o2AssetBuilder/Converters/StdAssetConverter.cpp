@@ -27,7 +27,6 @@ namespace o2
 		}
 		else {
 			o2FileSystem.FileCopy(sourceAssetPath, buildedAssetPath);
-			o2FileSystem.SetFileEditDate(buildedAssetPath, node.editTime);
 		}
 	}
 

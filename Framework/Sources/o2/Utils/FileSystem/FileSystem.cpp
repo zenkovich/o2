@@ -148,10 +148,11 @@ namespace o2
 		auto timePoint = time_point_cast<system_clock::time_point::duration>(writeTime - fs::file_time_type::clock::now() + system_clock::now());
 		std::time_t time = system_clock::to_time_t(timePoint);
 
-		std::tm* timeInfo = std::localtime(&time);
-
-		res.editDate = TimeStamp(timeInfo->tm_sec, timeInfo->tm_min, timeInfo->tm_hour,
-								 timeInfo->tm_mday, timeInfo->tm_mon + 1, timeInfo->tm_year + 1900);
+		if (std::tm* timeInfo = std::localtime(&time))
+		{
+			res.editDate = TimeStamp(timeInfo->tm_sec, timeInfo->tm_min, timeInfo->tm_hour,
+									 timeInfo->tm_mday, timeInfo->tm_mon + 1, timeInfo->tm_year + 1900);
+		}
 
 		res.path = path;
 		res.size = fs::file_size(fullPath);

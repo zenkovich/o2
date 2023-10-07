@@ -257,8 +257,7 @@ namespace o2
 		atlasData.SaveToFile(atlasFullPath);
 		atlasData.SaveToFile(atlasFullBuiltPath);
 
-		o2FileSystem.SetFileEditDate(atlasFullPath, atlasInfo->editTime);
-		o2FileSystem.SetFileEditDate(atlasFullBuiltPath, atlasInfo->editTime);
+		atlasInfo->editTime = o2FileSystem.GetFileInfo(atlasFullPath).editDate;
 	}
 
 	void AtlasAssetConverter::SaveImageAsset(ImagePackDef& imgDef)
@@ -268,7 +267,6 @@ namespace o2
 		imgData["mSourceRect"] = (RectI)(imgDef.packRect->rect);
 		String imageFullPath = mAssetsBuilder->GetBuiltAssetsPath() + imgDef.assetInfo->path;
 		imgData.SaveToFile(imageFullPath);
-		o2FileSystem.SetFileEditDate(imageFullPath, imgDef.assetInfo->editTime);
 
 		DataDocument metaData;
 		metaData = imgDef.assetInfo->meta;

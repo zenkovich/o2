@@ -402,7 +402,7 @@
   </Type>
 
   <Type Name="o2::TimeStamp">
-    <DisplayString>({ mSecond }:{ mMinute}:{ mHour } { mDay }.{ mMonth }.{ mYear })</DisplayString>
+    <DisplayString>({ mHour }:{ mMinute}:{ mSecond } { mDay }.{ mMonth }.{ mYear })</DisplayString>
     <Expand>
       <Item Name="year" ExcludeView="simple">mYear</Item>
       <Item Name="month" ExcludeView="simple">mMonth</Item>

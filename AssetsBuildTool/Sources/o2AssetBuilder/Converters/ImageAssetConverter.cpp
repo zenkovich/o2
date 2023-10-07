@@ -21,7 +21,6 @@ namespace o2
 		String builtAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
 		o2FileSystem.FileCopy(sourceAssetPath, builtAssetPath);
-		o2FileSystem.SetFileEditDate(builtAssetPath, node.editTime);
 	}
 
 	void ImageAssetConverter::RemoveAsset(const AssetInfo& node)
