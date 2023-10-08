@@ -666,10 +666,11 @@ namespace o2
 		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		float fy = mSize.x*invTexSize.x*texSize.y;
+		Vec2 srcRectSize = mTextureSrcRect.Size();
+		float fy = mSize.x/srcRectSize.x*srcRectSize.y;
 		if (fy > mSize.y)
 		{
-			float fx = mSize.y*invTexSize.y*texSize.x;
+			float fx = mSize.y/srcRectSize.y*srcRectSize.x;
 			float off = (mSize.x - fx)*0.5f;
 			Vec2F offx = mNonSizedTransform.xv*off;
 
