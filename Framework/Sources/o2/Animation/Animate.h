@@ -7,64 +7,62 @@
 
 namespace o2
 {
-    // -----------------------
-    // Key container interface
-    // -----------------------
-    struct IKeyContainer
-    {
-        // Virtual destructor
-        virtual ~IKeyContainer()
-        {}
+	// -----------------------
+	// Key container interface
+	// -----------------------
+	struct IKeyContainer
+	{
+		// Virtual destructor
+		virtual ~IKeyContainer() {}
 
-        // Applies stored key to animation
-        virtual void Apply( float time ) = 0;
-    };
+		// Applies stored key to animation
+		virtual void Apply(float time) = 0;
+	};
 
-    // ----------------------
-    // Template key container
-    // ----------------------
-    template <typename T>
-    struct KeyContainer : public IKeyContainer
-    {
-        typename AnimationTrack<T>::Key key;
+	// ----------------------
+	// Template key container
+	// ----------------------
+	template <typename T>
+	struct KeyContainer : public IKeyContainer
+	{
+		typename AnimationTrack<T>::Key key;
 
-        AnimationTrack<T>* animatedValue;
+		AnimationTrack<T>* animatedValue;
 
-        ~KeyContainer()
-        {}
+	public:
+		void Apply(float time);
+	};
 
-        void Apply( float time )
-        {
-            key.position = time;
-            animatedValue->AddKey( key );
-        }
-    };
+	// ---------------
+	// Vec2F container
+	// ---------------
+	template <>
+	struct KeyContainer<Vec2F> : public IKeyContainer
+	{
+		Curve::Key timeKey;
 
-    // ---------------
-    // Vec2F container
-    // ---------------
-    template <>
-    struct KeyContainer<Vec2F> : public IKeyContainer
-    {
-        Curve::Key timeKey;
+		AnimationTrack<Vec2F>* animatedValue;
 
-        AnimationTrack<Vec2F>* animatedValue;
+	public:
+		void Apply(float time);
+	};
 
-        ~KeyContainer()
-        {}
+	// -------------------
+	// Scale key container
+	// -------------------
+	struct ScaleKeyContainer : public IKeyContainer
+	{
+		AnimationTrack<float>::Key keyX;
+		AnimationTrack<float>::Key keyY;
 
-        void Apply( float time )
-        {
-            timeKey.value = 0.0f;
-            animatedValue->timeCurve.InsertKey( timeKey );
+		AnimationTrack<float>* animatedValueX;
+		AnimationTrack<float>* animatedValueY;
 
-            timeKey.position = time;
-            timeKey.value = 1.0f;
-            animatedValue->timeCurve.InsertKey( timeKey );
-        }
-    };
+	public:
+		void Apply(float time);
+	};
 
-    // --------------------------------------------
+	// --------------------------------------------
 	// Class for building simple animation sequence
 	// --------------------------------------------
 	class Animate
@@ -133,17 +131,18 @@ namespace o2
 
 
 	protected:
-		IObject*               mTarget = nullptr;    // Target animating object
+		IObject* mTarget = nullptr;    // Target animating object
 		AnimationClip          mAnimation;           // Building animation
 		bool                   mKeysApplied = false; // Is stored keys was applied
 		float                  mTime = 0.0f;         // Current sequence time
 		Vector<IKeyContainer*> mKeyContainers;       // Stored keys that applies in For()
 		Function<void()>       mFunction;            // Stored callback that applies in For()
 
-		AnimationTrack<Color4>* mColorAnimatedValue = nullptr;    // Color Animation track, stores when needs
-		AnimationTrack<Vec2F>*  mPositionAnimatedValue = nullptr; // Position Animation track, stores when needs
-		AnimationTrack<Vec2F>*  mScaleAnimatedValue = nullptr;    // Scale Animation track, stores when needs
-		AnimationTrack<float>*  mRotationAnimatedValue = nullptr; // Rotation Animation track, stores when needs
+		AnimationTrack<Color4>* mColorAnimatedValue = nullptr;    // Color Animation track, stored when needs
+		AnimationTrack<Vec2F>* mPositionAnimatedValue = nullptr; // Position Animation track, stored when needs
+		AnimationTrack<float>* mScaleXAnimatedValue = nullptr;   // Scale X Animation track, stored when needs
+		AnimationTrack<float>* mScaleYAnimatedValue = nullptr;   // Scale Y Animation track, stored when needs
+		AnimationTrack<float>* mRotationAnimatedValue = nullptr; // Rotation Animation track, stored when needs
 
 	protected:
 		// Checks color Animation track: creates them if needed
@@ -176,6 +175,13 @@ namespace o2
 		mKeyContainers.Add(container);
 
 		return *this;
+	}
+
+	template <typename T>
+	void KeyContainer<T>::Apply(float time)
+	{
+		key.position = time;
+		animatedValue->AddKey(key);
 	}
 
 }

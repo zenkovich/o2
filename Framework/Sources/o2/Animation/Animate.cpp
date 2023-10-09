@@ -136,10 +136,11 @@ namespace o2
 		CheckScaleAnimatedValue();
 		CheckAppliedKeys();
 
-		KeyContainer<Vec2F>* container = mnew KeyContainer<Vec2F>();
-		container->animatedValue = mScaleAnimatedValue;
-		container->animatedValue->spline.AppendKey(scale);
-		container->timeKey.position = mTime;
+		ScaleKeyContainer* container = mnew ScaleKeyContainer();
+		container->animatedValueX = mScaleXAnimatedValue;
+		container->animatedValueY = mScaleYAnimatedValue;
+		container->keyX.value = scale.x;
+		container->keyY.value = scale.y;
 		mKeyContainers.Add(container);
 
 		return *this;
@@ -212,20 +213,31 @@ namespace o2
 
 	void Animate::CheckScaleAnimatedValue()
 	{
-		if (mScaleAnimatedValue)
+		if (mScaleXAnimatedValue)
 			return;
 
-		static Vector<String> nameVariants ={ "scale", "mScale", "m_scale", "_scale" };
+		static Vector<String> nameVariantsX = { "scaleX", "mScaleX", "m_scaleX", "_scaleX" };
+		static Vector<String> nameVariantsY = { "scaleY", "mScaleY", "m_scaleY", "_scaleY" };
 
 		auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
 		void* target = targetObjType.DynamicCastFromIObject(mTarget);
-		for (auto nameVariant : nameVariants)
+		for (auto nameVariant : nameVariantsX)
 		{
 			const FieldInfo* fi;
 			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
-				mScaleAnimatedValue = mAnimation.AddTrack<Vec2F>(nameVariant);
-				return;
+				mScaleXAnimatedValue = mAnimation.AddTrack<float>(nameVariant);
+				break;
+			}
+		}
+
+		for (auto nameVariant : nameVariantsY)
+		{
+			const FieldInfo* fi;
+			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
+			{
+				mScaleYAnimatedValue = mAnimation.AddTrack<float>(nameVariant);
+				break;
 			}
 		}
 	}
@@ -262,6 +274,27 @@ namespace o2
 		mFunction.Clear();
 
 		mKeysApplied = false;
+	}
+
+	void KeyContainer<Vec2F>::Apply(float time)
+	{
+		timeKey.value = 0.0f;
+		animatedValue->timeCurve.InsertKey(timeKey);
+
+		timeKey.position = time;
+		timeKey.value = 1.0f;
+		animatedValue->timeCurve.InsertKey(timeKey);
+	}
+
+	void ScaleKeyContainer::Apply(float time)
+	{
+		keyX.position = time;
+		keyX.supportsType = Curve::Key::Type::Free;
+		animatedValueX->AddKey(keyX);
+
+		keyY.position = time;
+		keyY.supportsType = Curve::Key::Type::Free;
+		animatedValueY->AddKey(keyY);
 	}
 
 }

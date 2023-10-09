@@ -26,7 +26,7 @@ namespace Editor
 		mAssetHeader->AddChild(separatorImg);
 
 		mContentWidget->AddChild(mAssetHeader, 0);
-		*mViewer->layout = WidgetLayout::BothStretch(5, 0, 5, 50);
+		*mViewer->layout = WidgetLayout::BothStretch(5, 0, 5, 35);
 	}
 
 	const Type* AssetPropertiesViewer::GetViewingObjectType() const
