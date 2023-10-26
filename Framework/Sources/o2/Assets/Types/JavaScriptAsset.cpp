@@ -40,9 +40,9 @@ namespace o2
 		return *this;
 	}
 
-	const char* JavaScriptAsset::GetFileExtensions()
+	Vector<String> JavaScriptAsset::GetFileExtensions()
 	{
-		return "js";
+		return { "js" };
 	}
 
 	String JavaScriptAsset::GetEditorIcon()

@@ -185,9 +185,9 @@ namespace o2
 		return (Meta*)mInfo.meta;
 	}
 
-	const char* AtlasAsset::GetFileExtensions()
+	Vector<String> AtlasAsset::GetFileExtensions()
 	{
-		return "atlas";
+		return { "atlas" };
 	}
 
 	String AtlasAsset::GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx)

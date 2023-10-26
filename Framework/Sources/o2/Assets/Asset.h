@@ -84,7 +84,7 @@ namespace o2
 		bool IsDirty() const;
 
 		// Returns extensions string (something like "ext1 ext2 ent asf")
-		static const char* GetFileExtensions();
+		static Vector<String> GetFileExtensions();
 
 		// Returns editor icon
 		static String GetEditorIcon() { return "ui/UI4_big_file_icon.png"; }
@@ -213,7 +213,7 @@ CLASS_METHODS_META(o2::Asset)
 	FUNCTION().PUBLIC().SIGNATURE(void, Save);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDirty, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsDirty);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);

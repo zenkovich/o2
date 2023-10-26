@@ -28,9 +28,9 @@ namespace o2
 		o2Scene.Load(GetBuiltFullPath());
 	}
 
-	const char* SceneAsset::GetFileExtensions()
+	Vector<String> SceneAsset::GetFileExtensions()
 	{
-		return "scn";
+		return { "scn" };
 	}
 
 	void SceneAsset::LoadData(const String& path)

@@ -94,7 +94,8 @@ namespace o2
 				if (log)
 					log->Out("Failed to add built asset info: " + asset->path);
 			}
-			else parent->AddChild(asset);
+			else 
+				parent->AddChild(asset);
 
 			asset->SetTree(this);
 		}

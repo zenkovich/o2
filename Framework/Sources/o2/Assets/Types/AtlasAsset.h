@@ -65,7 +65,7 @@ namespace o2
 		Meta* GetMeta() const;
 
 		// Returns extensions string
-		static const char* GetFileExtensions();
+		static Vector<String> GetFileExtensions();
 
 		// Returns atlas page's texture file name
 		static String GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx);
@@ -206,7 +206,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllImages);
 	FUNCTION().PUBLIC().SIGNATURE(void, ReloadPages);
 	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetPageTextureFileName, const AssetInfo&, UInt);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

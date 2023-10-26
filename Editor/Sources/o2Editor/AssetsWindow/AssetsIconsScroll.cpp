@@ -927,14 +927,18 @@ namespace Editor
 		if (!icon)
 			return;
 
-		String extesions = assetType->InvokeStatic<const char*>("GetFileExtensions");
-		auto extension = extesions.Split(" ")[0];
+		auto extesions = assetType->InvokeStatic<Vector<String>>("GetFileExtensions");
+		auto extension = !extesions.IsEmpty() ? extesions[0] : String("");
 
 		StartAssetRenaming(icon, newAssetName,
 						   [&, extension](const String& name)
 						   {
-							   String path = (!mCurrentPath.IsEmpty() ? mCurrentPath + "/" + name : name) + "." + extension;
+							   String path = (!mCurrentPath.IsEmpty() ? mCurrentPath + "/" + name : name);
+							   if (!extension.IsEmpty())
+								   path += "." + extension;
+
 							   mNewAsset->Save(path);
+
 							   o2Assets.RebuildAssets();
 							   o2EditorAssets.SelectAsset(path);
 						   });

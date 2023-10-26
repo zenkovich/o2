@@ -33,14 +33,7 @@ namespace o2
 		if (parent)
 			parent->RemoveChild(this, false);
 
-		if (mOwnChildren)
-		{
-			for (auto child : mChildren)
-			{
-				child->parent = nullptr;
-				delete child;
-			}
-		}
+		RemoveAllChildren();
 	}
 
 	AssetInfo& AssetInfo::operator=(const AssetInfo& other)
@@ -89,6 +82,21 @@ namespace o2
 
 		if (release && node)
 			delete node;
+	}
+
+	void AssetInfo::RemoveAllChildren()
+	{
+		if (mOwnChildren)
+		{
+			for (auto child : mChildren)
+			{
+				child->parent = nullptr;
+				delete child;
+			}
+		}
+
+		mChildren.Clear();
+		mOwnChildren = true;
 	}
 
 	void AssetInfo::SetParent(AssetInfo* parent)

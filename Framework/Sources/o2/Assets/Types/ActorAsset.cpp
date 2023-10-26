@@ -90,9 +90,9 @@ namespace o2
 		return (Meta*)mInfo.meta;
 	}
 
-	const char* ActorAsset::GetFileExtensions()
+	Vector<String> ActorAsset::GetFileExtensions()
 	{
-		return "proto";
+		return { "proto" };
 	}
 
 	void ActorAsset::OnUIDChanged(const UID& oldUID)

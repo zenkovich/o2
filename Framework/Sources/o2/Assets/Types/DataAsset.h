@@ -24,7 +24,7 @@ namespace o2
 		DataAsset& operator=(const DataAsset& asset);
 
 		// Returns extensions string
-		static const char* GetFileExtensions();
+		static Vector<String> GetFileExtensions();
 
 		// Returns editor icon
 		static String GetEditorIcon() { return "ui/UI4_big_text_file_icon.png"; }
@@ -66,7 +66,7 @@ CLASS_METHODS_META(o2::DataAsset)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const DataAsset&);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);

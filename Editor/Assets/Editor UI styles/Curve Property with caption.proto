@@ -3,7 +3,7 @@
         "Type": "Editor::CurveProperty",
         "Value": {
             "Prototype": {
-                "id": "09a100fe3a270fb737b66eb065b46235",
+                "id": "459d642270a82c4741102d55762f330f",
                 "path": "Editor UI styles/Curve Property standard.proto"
             },
             "PrototypeLink": 3354357458973033390,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "7e7a4141644c4f40219d6cfd4e726510",
+                            "id": "75ed100a05054e3f123a486d45cd5736",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 4272162365707740014,
@@ -165,7 +165,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "1aa50db965a76a862a6d07e7292d1a79"
+                                                                    "mId": "48127c8340047d9e748a0ca10eab7803"
                                                                 }
                                                             }
                                                         }
@@ -208,7 +208,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "027766455d387fb24d1924f07850361b"
+                                                                    "mId": "2f85068d2e3747934c9676d455a10cf3"
                                                                 }
                                                             }
                                                         }

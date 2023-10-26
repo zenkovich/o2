@@ -77,10 +77,9 @@ namespace o2
 
 			for (auto type : derivedAssetTypes)
 			{
-				String extensions = type->InvokeStatic<const char*>("GetFileExtensions");
-				auto extensionsVec = extensions.Split(" ");
+				Vector<String> extensions = type->InvokeStatic<Vector<String>>("GetFileExtensions");
 
-				for (const auto& ext : extensionsVec)
+				for (const auto& ext : extensions)
 				{
 					if (assetTypes.ContainsKey(ext))
 					{
@@ -463,9 +462,6 @@ namespace o2
 
 		if constexpr (IS_EDITOR)
 		{
-			if (asset->GetPath() == "stdFont.ttf")
-				o2Debug.Log("asd");
-
 			if (mCachedAssetsByUID.ContainsKey(asset->GetUID()))
 				mLog->Error("Duplicated asset cache id: " + (String)asset->GetUID() + " - \"" + asset->GetPath() + "\"");
 
@@ -483,21 +479,25 @@ namespace o2
 	{
 		AssetCache* cached = nullptr;
 		auto fnd = mCachedAssetsByUID.find(asset->GetUID());
-		if (fnd != mCachedAssetsByUID.end()) {
+		if (fnd != mCachedAssetsByUID.end())
+		{
 			cached = fnd->second;
 			mCachedAssetsByUID.erase(fnd);
 		}
 
 		auto fnd2 = mCachedAssetsByPath.find(asset->GetPath());
-		if (fnd2 != mCachedAssetsByPath.end()) {
+		if (fnd2 != mCachedAssetsByPath.end())
+		{
 			mCachedAssetsByPath.erase(fnd2);
 		}
 
-		if (cached) {
+		if (cached) 
+		{
 			mCachedAssets.Remove(cached);
 			delete cached;
 		}
-		else {
+		else
+		{
 			for (auto cache : mCachedAssets)
 			{
 				if (cache->asset == asset)
@@ -516,13 +516,15 @@ namespace o2
 		AssetCache* cached = nullptr;
 
 		auto fnd = mCachedAssetsByUID.find(oldUID);
-		if (fnd != mCachedAssetsByUID.end()) {
+		if (fnd != mCachedAssetsByUID.end())
+		{
 			cached = fnd->second;
 			mCachedAssetsByUID.erase(fnd);
 		}
 
 		auto fnd2 = mCachedAssetsByPath.find(oldPath);
-		if (fnd2 != mCachedAssetsByPath.end()) {
+		if (fnd2 != mCachedAssetsByPath.end())
+		{
 			mCachedAssetsByPath.erase(fnd2);
 		}
 
@@ -607,11 +609,20 @@ namespace o2
 				}
 				else
 				{
+					AssetCache* cachedAsset = nullptr;
+					if (mCachedAssetsByUID.TryGetValue(newAssetInfo->meta->ID(), cachedAsset))
+					{
+						oldAssetInfo = cachedAsset->asset->mInfo.CloneAs<AssetInfo>();
+						oldAssetInfo->RemoveAllChildren();
+						cachedAsset->asset->mInfo.mOwnChildren = false;
+					}
+					else
+					{
+						oldAssetInfo = newAssetInfo;
+						newInfos.Remove(newAssetInfo);
+					}
+
 					changedAssetsUIDs.Add(newAssetInfo->meta->ID());
-
-					oldAssetInfo = newAssetInfo;
-
-					newInfos.Remove(newAssetInfo);
 
 					oldInfos.Add(oldAssetInfo);
 					if (oldParent)
@@ -632,6 +643,13 @@ namespace o2
 			changedAssetsUIDs.Add(info->meta->ID());
 			delete info;
 		}
+
+		mMainAssetsTree->allAssets.Clear();
+		mMainAssetsTree->allAssetsByPath.Clear();
+		mMainAssetsTree->allAssetsByUID.Clear();
+
+		for (auto asset : mMainAssetsTree->rootAssets)
+			asset->SetTree(mMainAssetsTree);
 
 		return changedAssetsUIDs;
 	}

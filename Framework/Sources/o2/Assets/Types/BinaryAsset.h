@@ -38,7 +38,7 @@ namespace o2
 		void SetData(char* data, UInt size);
 
 		// Returns extensions string
-		static const char* GetFileExtensions();
+		static Vector<String> GetFileExtensions();
 
 		// Returns editor sorting weight
 		static int GetEditorSorting() { return 96; }
@@ -84,7 +84,7 @@ CLASS_METHODS_META(o2::BinaryAsset)
 	FUNCTION().PUBLIC().SIGNATURE(char*, GetData);
 	FUNCTION().PUBLIC().SIGNATURE(UInt, GetDataSize);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetData, char*, UInt);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);

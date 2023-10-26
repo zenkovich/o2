@@ -122,7 +122,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "68364ea119dc63f94751349d088a5dbd",
+                            "id": "5b826b52317d06b704760cf0623668b4",
                             "path": "Editor UI styles/Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 10492944459780109401,
@@ -218,7 +218,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "2cf65afe582f69b6066b28854ddf5973"
+                                            "mId": "56453ae767da136e3d7659cf5ed5105a"
                                         }
                                     }
                                 }
@@ -261,7 +261,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "12ee100a00e3697933a07f6f4e9c4d05"
+                                            "mId": "05de7e9c7c3645787051564a74e37fe5"
                                         }
                                     }
                                 }
@@ -305,7 +305,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "5ebc3e142cbf054a60d606f250064b23"
+                                            "mId": "2c7203ed33fc1f247b7d599a0c6b600c"
                                         }
                                     }
                                 }
@@ -317,7 +317,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "214a1d1607804f6b3d987fc6789237a8",
+                            "id": "05dd06296e845b0238160c2004413e43",
                             "path": "Editor UI styles/Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 1546231510864932275,
@@ -417,7 +417,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "6b253d8514ae00da5662084965190ecd"
+                                            "mId": "23f50e3440c82694657f02e9681a7141"
                                         }
                                     }
                                 }
@@ -460,7 +460,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "772e700677df731914da39ec1b132a45"
+                                            "mId": "469b360a56766127491c6a9e00de3735"
                                         }
                                     }
                                 }
@@ -504,7 +504,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "761d50806bbe563925124f944970170c"
+                                            "mId": "3eda79487b256381255a326255e308d8"
                                         }
                                     }
                                 }
@@ -556,7 +556,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "5f76031c2bf817aa681f0a3a61ed45e3"
+                                    "mId": "57684b06573161802d7c15203c96205c"
                                 }
                             }
                         }
@@ -603,7 +603,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7efd65436a7b281e6757481740892ecb"
+                                    "mId": "4b38239e05373e471909770030a42b31"
                                 }
                             }
                         }
@@ -650,7 +650,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "44b91d9e1f730b85244e14a57b7e6104"
+                                    "mId": "158010a962141c3673c4756b23fb5a09"
                                 }
                             }
                         }
@@ -697,7 +697,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "14ee2c15594d691168da389c334c1311"
+                                    "mId": "41b545005ce46cef6db4770a4ec670d4"
                                 }
                             }
                         }
@@ -745,7 +745,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "182279d30cb61b33170f49f562ad32b1"
+                                    "mId": "3b8c28bb470601512b1d3bc67f7556c4"
                                 }
                             }
                         }

@@ -49,6 +49,9 @@ namespace o2
 		// Remove child node and releases him if needs
 		void RemoveChild(AssetInfo* node, bool release = true);
 
+		// Removes all children
+		void RemoveAllChildren();
+
 		// Sets parent node
 		void SetParent(AssetInfo* parent);
 
@@ -105,6 +108,7 @@ CLASS_METHODS_META(o2::AssetInfo)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetInfo&);
 	FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, AddChild, AssetInfo*);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveChild, AssetInfo*, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllChildren);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetParent, AssetInfo*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTree, AssetsTree*);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<AssetInfo*>&, GetChildren);

@@ -80,8 +80,12 @@ namespace Editor
 
 	void AssetsFoldersTree::SelectAndExpandFolder(const String& path)
 	{
+		mOpengingFolderFromThis = true;
+
 		mFoldersTree->SelectAndHighlightObject(o2Assets.GetAssetsTree().Find(path));
 		mCurrentPath = path;
+
+		mOpengingFolderFromThis = false;
 	}
 
 	void AssetsFoldersTree::UpdateView()

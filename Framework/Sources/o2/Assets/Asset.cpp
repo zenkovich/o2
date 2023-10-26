@@ -173,9 +173,9 @@ namespace o2
 		return mDirty;
 	}
 
-	const char* Asset::GetFileExtensions()
+	Vector<String> Asset::GetFileExtensions()
 	{
-		return "";
+		return {};
 	}
 
 	String Asset::GetFullPath() const

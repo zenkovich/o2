@@ -95,7 +95,7 @@ namespace o2
 		Meta* GetMeta() const;
 
 		// Returns extensions string
-		static const char* GetFileExtensions();
+		static Vector<String> GetFileExtensions();
 
 		ASSET_TYPE(ImageAsset, Meta);
 
@@ -213,7 +213,7 @@ CLASS_METHODS_META(o2::ImageAsset)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetHeight);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(TextureSource, GetTextureSource);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Meta*, GetMeta);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadBitmap);

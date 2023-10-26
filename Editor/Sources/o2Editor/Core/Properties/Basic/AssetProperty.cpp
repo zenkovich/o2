@@ -253,8 +253,8 @@ namespace Editor
 	void AssetProperty::OnSaveInstancePressed()
 	{
 		String assetTypeName = GetSmartName(mAssetType->GetName());
-		String extesions = mAssetType->InvokeStatic<const char*>("GetFileExtensions");
-		auto extension = extesions.Split(" ")[0];
+		Vector<String> extesions = mAssetType->InvokeStatic<Vector<String>>("GetFileExtensions");
+		auto extension = !extesions.IsEmpty() ? extesions[0] : String("");
 		String defaultPath = o2Application.GetBinPath() + "\\" + o2Assets.GetAssetsPath().ReplacedAll("/", "\\");
 
 		String path = GetSaveFileNameDialog("Save asset", { { assetTypeName, "*." + extension } },

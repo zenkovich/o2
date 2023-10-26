@@ -3,7 +3,7 @@
         "Type": "Editor::BorderIProperty",
         "Value": {
             "Prototype": {
-                "id": "7d5b08c313cc3def7971335a49e96053",
+                "id": "77a746190b4850de3d311aca45eb7ba8",
                 "path": "Editor UI styles/Border IProperty standard.proto"
             },
             "PrototypeLink": 11729974733429293242,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "7e7a4141644c4f40219d6cfd4e726510",
+                            "id": "75ed100a05054e3f123a486d45cd5736",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 4272162365707740014,
@@ -65,7 +65,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "7e7a4141644c4f40219d6cfd4e726510",
+                                                                "id": "75ed100a05054e3f123a486d45cd5736",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 5121021427361586794,
@@ -82,7 +82,7 @@
                                                         "Type": "Editor::IntegerProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "1cb5033e1eec60f7240d4ed0018e4f0e",
+                                                                "id": "05fa35d55e3c22cd77ee0927060a0773",
                                                                 "path": "Editor UI styles/Integer Property standard.proto"
                                                             },
                                                             "PrototypeLink": 17970660927318162801,
@@ -104,7 +104,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "71200f414f401dde5a2e48383b750121",
+                                                                                                    "id": "26fc5686374562096ef1415a0e8e0717",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 5485218460185088947,
@@ -166,7 +166,7 @@
                                                                                                             "meta": {
                                                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                                                 "Value": {
-                                                                                                                    "mId": "77331b37564558c148822f2200be07ec"
+                                                                                                                    "mId": "3991398d1d7f124b5a081caa39d359c0"
                                                                                                                 }
                                                                                                             }
                                                                                                         }
@@ -231,7 +231,7 @@
                                                                                                             "meta": {
                                                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                                                 "Value": {
-                                                                                                                    "mId": "77911a0f389f41fa29201700613d4e6a"
+                                                                                                                    "mId": "4b471efb07eb68280f00725e3afa399a"
                                                                                                                 }
                                                                                                             }
                                                                                                         }
@@ -252,7 +252,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "7e7a4141644c4f40219d6cfd4e726510",
+                                                                "id": "75ed100a05054e3f123a486d45cd5736",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 12150264340293726,
@@ -269,7 +269,7 @@
                                                         "Type": "Editor::IntegerProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "1cb5033e1eec60f7240d4ed0018e4f0e",
+                                                                "id": "05fa35d55e3c22cd77ee0927060a0773",
                                                                 "path": "Editor UI styles/Integer Property standard.proto"
                                                             },
                                                             "PrototypeLink": 779438139672594159,
@@ -291,7 +291,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "71200f414f401dde5a2e48383b750121",
+                                                                                                    "id": "26fc5686374562096ef1415a0e8e0717",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 15379584576969383198,
@@ -353,7 +353,7 @@
                                                                                                             "meta": {
                                                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                                                 "Value": {
-                                                                                                                    "mId": "662e5d175dcd70085acf42734ffe0e43"
+                                                                                                                    "mId": "6c972bd127653dc50f124bf93aa973b7"
                                                                                                                 }
                                                                                                             }
                                                                                                         }
@@ -418,7 +418,7 @@
                                                                                                             "meta": {
                                                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                                                 "Value": {
-                                                                                                                    "mId": "1b6e12d8695c2dba65863ad31c9c4397"
+                                                                                                                    "mId": "0b1747865e2a5e65166336c55e2b27a8"
                                                                                                                 }
                                                                                                             }
                                                                                                         }
@@ -439,7 +439,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "7e7a4141644c4f40219d6cfd4e726510",
+                                                                "id": "75ed100a05054e3f123a486d45cd5736",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 12818148319386793647,
@@ -456,7 +456,7 @@
                                                         "Type": "Editor::IntegerProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "1cb5033e1eec60f7240d4ed0018e4f0e",
+                                                                "id": "05fa35d55e3c22cd77ee0927060a0773",
                                                                 "path": "Editor UI styles/Integer Property standard.proto"
                                                             },
                                                             "PrototypeLink": 14783990608581835316,
@@ -478,7 +478,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "71200f414f401dde5a2e48383b750121",
+                                                                                                    "id": "26fc5686374562096ef1415a0e8e0717",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 9428248384425200437,
@@ -540,7 +540,7 @@
                                                                                                             "meta": {
                                                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                                                 "Value": {
-                                                                                                                    "mId": "1bf75b1c0d19412351785ebb18f669c7"
+                                                                                                                    "mId": "5c9c16d518b63c873d57214a090e603f"
                                                                                                                 }
                                                                                                             }
                                                                                                         }
@@ -605,7 +605,7 @@
                                                                                                             "meta": {
                                                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                                                 "Value": {
-                                                                                                                    "mId": "68ad56eb59107b92771b720269280b74"
+                                                                                                                    "mId": "2f3a0bb51dc601ed48946b522d1e238b"
                                                                                                                 }
                                                                                                             }
                                                                                                         }
@@ -626,7 +626,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "7e7a4141644c4f40219d6cfd4e726510",
+                                                                "id": "75ed100a05054e3f123a486d45cd5736",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 10044656900436826277,
@@ -643,7 +643,7 @@
                                                         "Type": "Editor::IntegerProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "1cb5033e1eec60f7240d4ed0018e4f0e",
+                                                                "id": "05fa35d55e3c22cd77ee0927060a0773",
                                                                 "path": "Editor UI styles/Integer Property standard.proto"
                                                             },
                                                             "PrototypeLink": 7062676344710798972,
@@ -665,7 +665,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "71200f414f401dde5a2e48383b750121",
+                                                                                                    "id": "26fc5686374562096ef1415a0e8e0717",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 6124122227076054699,
@@ -727,7 +727,7 @@
                                                                                                             "meta": {
                                                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                                                 "Value": {
-                                                                                                                    "mId": "4eb7388f0b8f499a4f242dc1538e5280"
+                                                                                                                    "mId": "394675625e581f9778ff75e51a6a02df"
                                                                                                                 }
                                                                                                             }
                                                                                                         }
@@ -792,7 +792,7 @@
                                                                                                             "meta": {
                                                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                                                 "Value": {
-                                                                                                                    "mId": "377853906123430b4288505310c7180c"
+                                                                                                                    "mId": "6955105245a95dc85bbc334d4f3d2acb"
                                                                                                                 }
                                                                                                             }
                                                                                                         }

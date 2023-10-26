@@ -3,7 +3,7 @@
         "Type": "Editor::ComponentProperty",
         "Value": {
             "Prototype": {
-                "id": "5a5a3b162662550223424e2b60ea1e1a",
+                "id": "639f66cc1a510cbd6a2f5fbe36350b1f",
                 "path": "Editor UI styles/Component Property standard.proto"
             },
             "PrototypeLink": 8517559688344064881,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "7e7a4141644c4f40219d6cfd4e726510",
+                            "id": "75ed100a05054e3f123a486d45cd5736",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 4272162365707740014,
@@ -117,7 +117,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "57ba02de079e7abd7e282f2b313f6fb3"
+                                                                    "mId": "0b2a1c364e331ac73d1566194fa77c88"
                                                                 }
                                                             }
                                                         }
@@ -160,7 +160,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "0e4b0faf140720fd2d89757e4ce20b86"
+                                                                    "mId": "7a1911f17de02e98518f6eac1e9b557e"
                                                                 }
                                                             }
                                                         }

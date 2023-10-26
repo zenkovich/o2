@@ -22,9 +22,9 @@ namespace o2
 		return *this;
 	}
 
-	const char* BitmapFontAsset::GetFileExtensions()
+	Vector<String> BitmapFontAsset::GetFileExtensions()
 	{
-		return "fnt";
+		return { "fnt" };
 	}
 
 	BitmapFontAsset::Meta* BitmapFontAsset::GetMeta() const

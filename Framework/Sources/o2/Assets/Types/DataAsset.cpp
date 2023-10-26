@@ -20,9 +20,9 @@ namespace o2
 		return *this;
 	}
 
-	const char* DataAsset::GetFileExtensions()
+	Vector<String> DataAsset::GetFileExtensions()
 	{
-		return "xml";
+		return { "json" };
 	}
 
 	void DataAsset::LoadData(const String& path)

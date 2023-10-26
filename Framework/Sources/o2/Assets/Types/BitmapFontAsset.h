@@ -32,7 +32,7 @@ namespace o2
 		Meta* GetMeta() const;
 
 		// Returns extensions string
-		static const char* GetFileExtensions();
+		static Vector<String> GetFileExtensions();
 
 		// Returns editor sorting weight
 		static int GetEditorSorting() { return 95; }
@@ -76,7 +76,7 @@ CLASS_METHODS_META(o2::BitmapFontAsset)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const BitmapFontAsset&);
 	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
 }

@@ -39,7 +39,7 @@
                                         {
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "0a94559d0edd5aec719d6c0e4c8730f7",
+                                                    "id": "37e65c716893264778620a516ab04cbe",
                                                     "path": "Editor UI styles/Edit Box actor head name.proto"
                                                 },
                                                 "PrototypeLink": 4266327587258100278,
@@ -128,7 +128,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "0571175630cb76b82e4556cd5de038d8"
+                                                                    "mId": "5ed22cb0081c2f0f797566966dad3462"
                                                                 }
                                                             }
                                                         }
@@ -193,7 +193,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "53ad3c062542582031b2385e75fb072f"
+                                                                    "mId": "72ec684a405a0f0965982e5e30ab6683"
                                                                 }
                                                             }
                                                         }

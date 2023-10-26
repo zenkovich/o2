@@ -35,7 +35,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "68364ea119dc63f94751349d088a5dbd",
+                            "id": "5b826b52317d06b704760cf0623668b4",
                             "path": "Editor UI styles/Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 10492944459780109401,
@@ -131,7 +131,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "546a71483d734fe70f7c28b27c9154fd"
+                                            "mId": "56da796666ee00f503a045144e506171"
                                         }
                                     }
                                 }
@@ -174,7 +174,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "56ab4fae3aec11c73f47100759cb0542"
+                                            "mId": "644c701b431714ee115b0162106d5154"
                                         }
                                     }
                                 }
@@ -218,7 +218,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "348c547a3ba114572bd55db5767f6fcf"
+                                            "mId": "5e2a609c7fa716341850638c58395517"
                                         }
                                     }
                                 }
@@ -230,7 +230,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "214a1d1607804f6b3d987fc6789237a8",
+                            "id": "05dd06296e845b0238160c2004413e43",
                             "path": "Editor UI styles/Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 1546231510864932275,
@@ -330,7 +330,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "55b27e746c6074a9305b7f550f8a1704"
+                                            "mId": "2d485ea2541a5e4953e5791c44420e8c"
                                         }
                                     }
                                 }
@@ -373,7 +373,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "5e010da618351b0f384e07c274094c83"
+                                            "mId": "12bc0b26122e3dee6bbf00da41555ac2"
                                         }
                                     }
                                 }
@@ -417,7 +417,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "7d9f1358786f4b190f633f135558412b"
+                                            "mId": "77d9246175df0d2343c27ad05a7f620c"
                                         }
                                     }
                                 }
@@ -470,7 +470,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "40f0021304993397318f32a21716151f"
+                                    "mId": "3e3715cd756b3b2b4c143846090c27f9"
                                 }
                             }
                         }

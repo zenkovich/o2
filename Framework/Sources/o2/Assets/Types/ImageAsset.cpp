@@ -157,9 +157,9 @@ namespace o2
 		return (Meta*)mInfo.meta;
 	}
 
-	const char* ImageAsset::GetFileExtensions()
+	Vector<String> ImageAsset::GetFileExtensions()
 	{
-		return "png jpg bmp";
+		return { "png", "jpg", "bmp" };
 	}
 
 	void ImageAsset::LoadData(const String& path)

@@ -143,8 +143,8 @@ namespace o2
 	protected:
 		struct AssetCache
 		{
-			Asset* asset;
-			int    referencesCount;
+			Asset* asset = nullptr;
+			int    referencesCount = 0;
 
 			~AssetCache();
 		};

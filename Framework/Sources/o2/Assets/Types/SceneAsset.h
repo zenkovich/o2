@@ -27,7 +27,7 @@ namespace o2
 		void Load() const;
 
 		// Returns extensions string
-		static const char* GetFileExtensions();
+		static Vector<String> GetFileExtensions();
 
 		// Returns editor sorting weight
 		static int GetEditorSorting() { return 96; }
@@ -63,7 +63,7 @@ CLASS_METHODS_META(o2::SceneAsset)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneAsset&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Load);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);

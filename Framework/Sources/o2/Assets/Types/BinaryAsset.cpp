@@ -81,9 +81,9 @@ namespace o2
 		}
 	}
 
-	const char* BinaryAsset::GetFileExtensions()
+	Vector<String> BinaryAsset::GetFileExtensions()
 	{
-		return "bin";
+		return { "bin" };
 	}
 
 	void BinaryAsset::LoadData(const String& path)

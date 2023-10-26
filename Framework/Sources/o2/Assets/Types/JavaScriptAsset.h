@@ -27,7 +27,7 @@ namespace o2
 		ScriptValue Run() const;
 
 		// Returns extensions string
-		static const char* GetFileExtensions();
+		static Vector<String> GetFileExtensions();
 
 		// Returns editor icon
 		static String GetEditorIcon();
@@ -70,7 +70,7 @@ CLASS_METHODS_META(o2::JavaScriptAsset)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const JavaScriptAsset&);
 	FUNCTION().PUBLIC().SIGNATURE(ScriptParseResult, Parse);
 	FUNCTION().PUBLIC().SIGNATURE(ScriptValue, Run);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);

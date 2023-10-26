@@ -39,7 +39,7 @@
                                         {
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "2eba7b727c667f07533473680ee26ec5",
+                                                    "id": "34d64d912d2b38060113149101272de2",
                                                     "path": "Editor UI styles/Toggle actor head lock.proto"
                                                 },
                                                 "PrototypeLink": 1227090264643739570,
@@ -125,7 +125,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "206b325517eb2ce741872768538b2ad7"
+                                                                    "mId": "23a534f8168962965252334f18ec77b7"
                                                                 }
                                                             }
                                                         }
@@ -190,7 +190,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "65b63cfb5cce6e5040a006652b8b6a5d"
+                                                                    "mId": "7798469970457d3565ce624906e75cfe"
                                                                 }
                                                             }
                                                         }
@@ -255,7 +255,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "740a4238719a6a31428c37b66d9a73f9"
+                                                                    "mId": "659630d2790d1e410a4d7d33449d50cb"
                                                                 }
                                                             }
                                                         }
@@ -298,7 +298,7 @@
                                                             "meta": {
                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                 "Value": {
-                                                                    "mId": "70aa56f72dbc04ba2220291553344b2b"
+                                                                    "mId": "2a166b7a58fd245970d53fb5133d1410"
                                                                 }
                                                             }
                                                         }
