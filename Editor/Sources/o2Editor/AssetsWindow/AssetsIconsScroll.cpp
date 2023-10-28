@@ -879,6 +879,7 @@ namespace Editor
 	void AssetsIconsScrollArea::OnContextPastePressed()
 	{
 		o2EditorAssets.PasteAssets(mCurrentPath);
+		UpdateAssetsByCurrentPath();
 	}
 
 

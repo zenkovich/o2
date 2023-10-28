@@ -582,10 +582,9 @@ namespace o2
 		newBuiltAssetsTree.DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
 
 		Vector<UID> changedAssetsUIDs;
-		Vector<AssetInfo*> removedAssets;
 
 		Function<void(AssetInfo* oldParent, Vector<AssetInfo*>& oldInfos, AssetInfo* newParent, Vector<AssetInfo*>& newInfos)> processFolder =
-			[&processFolder, this, &changedAssetsUIDs, &removedAssets]
+			[&processFolder, this, &changedAssetsUIDs]
 		(AssetInfo* oldParent, Vector<AssetInfo*>& oldInfos, AssetInfo* newParent, Vector<AssetInfo*>& newInfos)
 		{
 			auto oldInfosCopy = oldInfos;
@@ -632,24 +631,26 @@ namespace o2
 				if (!newAssetInfo->GetChildren().IsEmpty())
 					processFolder(oldAssetInfo, oldAssetInfo->mChildren, newAssetInfo, newAssetInfo->mChildren);
 			}
-
-			removedAssets.Add(oldInfosCopy);
 		};
 
 		processFolder(nullptr, mMainAssetsTree->rootAssets, nullptr, newBuiltAssetsTree.rootAssets);
 
-		for (auto info : removedAssets)
-		{
-			changedAssetsUIDs.Add(info->meta->ID());
-			delete info;
-		}
-
+		auto oldAllAssets = mMainAssetsTree->allAssets;
 		mMainAssetsTree->allAssets.Clear();
 		mMainAssetsTree->allAssetsByPath.Clear();
 		mMainAssetsTree->allAssetsByUID.Clear();
 
 		for (auto asset : mMainAssetsTree->rootAssets)
 			asset->SetTree(mMainAssetsTree);
+
+		for (auto info : oldAllAssets)
+		{
+			if (!mMainAssetsTree->allAssetsByUID.ContainsKey(info->meta->ID()))
+			{
+				changedAssetsUIDs.Add(info->meta->ID());
+				delete info;
+			}
+		}
 
 		return changedAssetsUIDs;
 	}
