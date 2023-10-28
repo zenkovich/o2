@@ -729,7 +729,7 @@ namespace Editor
 		mContextMenu->AddItem("Open", [&]() { OnContextOpenPressed(); });
 		mContextMenu->AddItem("Show in folder", [&]() { OnContextShowInExplorerPressed(); });
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("New folder", [&]() { OnContextCreateAssetPressed(&TypeOf(FolderAsset)); });
+		mContextMenu->AddItem("New folder", [&]() { CreateAsset(&TypeOf(FolderAsset)); });
 
 		InitializeCreateContext();
 
@@ -759,7 +759,7 @@ namespace Editor
 				continue;
 
 			mContextMenu->AddItem("Create/" + GetSmartName(type->GetName()),
-								  [=]() { OnContextCreateAssetPressed(type); });
+								  [=]() { CreateAsset(type); });
 		}
 	}
 
@@ -907,7 +907,7 @@ namespace Editor
 			o2EditorAssets.OpenAsset(mSelectedAssets.Last()->meta->ID());
 	}
 
-	void AssetsIconsScrollArea::OnContextCreateAssetPressed(const Type* assetType)
+	void AssetsIconsScrollArea::CreateAsset(const Type* assetType)
 	{
 		String newAssetName = "New " + GetSmartName(assetType->GetName());
 

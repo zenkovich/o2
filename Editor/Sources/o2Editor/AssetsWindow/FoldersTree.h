@@ -94,12 +94,6 @@ namespace Editor
 		// Called when context create folder pressed
 		void OnContextCreateFolderPressed();
 
-		// Called when context expand pressed
-		void OnContextExpandPressed();
-
-		// Called when context expand pressed
-		void OnContextCollapsePressed();
-
 		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
 

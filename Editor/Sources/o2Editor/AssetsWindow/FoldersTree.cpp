@@ -18,7 +18,7 @@
 
 namespace Editor
 {
-	AssetsFoldersTree::AssetsFoldersTree():
+	AssetsFoldersTree::AssetsFoldersTree() :
 		Widget()
 	{
 		if (!UIManager::IsSingletonInitialzed())
@@ -43,7 +43,7 @@ namespace Editor
 		InitializeContext();
 	}
 
-	AssetsFoldersTree::AssetsFoldersTree(const AssetsFoldersTree& other):
+	AssetsFoldersTree::AssetsFoldersTree(const AssetsFoldersTree& other) :
 		Widget(other)
 	{
 		mFoldersTree = FindChildByType<Tree>();
@@ -106,9 +106,6 @@ namespace Editor
 		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true));
 		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true));
 		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
-		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Expand all", [&]() { OnContextExpandPressed(); });
-		mContextMenu->AddItem("Collapse all", [&]() { OnContextCollapsePressed(); });
 
 		mFoldersTree->onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
 		mFoldersTree->onUnfocused = [&]() { mContextMenu->SetItemsMinPriority(); };
@@ -196,7 +193,8 @@ namespace Editor
 			mCurrentPath = assetTreeNode->path;
 			o2EditorAssets.mAssetsGridScroll->SetViewingPath(mCurrentPath);
 		}
-		else o2EditorAssets.OpenFolder("");
+		else
+			o2EditorAssets.OpenFolder("");
 
 		mOpengingFolderFromThis = false;
 	}
@@ -242,34 +240,7 @@ namespace Editor
 
 	void AssetsFoldersTree::OnContextCreateFolderPressed()
 	{
-		FolderAssetRef folderAsset = FolderAssetRef::CreateAsset();
-		folderAsset->Save(o2Assets.MakeUniqueAssetName(mCurrentPath + "/New folder"));
-	}
-
-	void AssetsFoldersTree::OnContextExpandPressed()
-	{
-		auto selectedObjects = mFoldersTree->GetSelectedObjects();
-
-		for (auto obj : selectedObjects)
-		{
-			auto node = mFoldersTree->GetNode(obj);
-
-// 			if (node)
-// 				node->ExpandAll();
-		}
-	}
-
-	void AssetsFoldersTree::OnContextCollapsePressed()
-	{
-		auto selectedObjects = mFoldersTree->GetSelectedObjects();
-
-		for (auto obj : selectedObjects)
-		{
-			auto node = mFoldersTree->GetNode(obj);
-
-// 			if (node)
-// 				node->CollapseAll();
-		}
+		o2EditorAssets.mAssetsGridScroll->CreateAsset(&TypeOf(FolderAsset));
 	}
 
 	void AssetsFoldersTree::OnKeyReleased(const Input::Key& key)

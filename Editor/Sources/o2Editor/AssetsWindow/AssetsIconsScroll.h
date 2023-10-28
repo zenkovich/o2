@@ -63,8 +63,8 @@ namespace Editor
 		// Updates assets path contents
 		void UpdateAssetsByCurrentPath();
 
-		// Returns is this widget can be selected
-		bool IsFocusable() const override;
+		// Creates asset and starts renaming
+		void CreateAsset(const Type* assetType);
 
 		// Highlights asset
 		void HighlightAsset(const UID& id);
@@ -92,6 +92,9 @@ namespace Editor
 
 		// Returns selecting rectangle drawable
 		Sprite* GetSelectingDrawable() const;
+
+		// Returns is this widget can be selected
+		bool IsFocusable() const override;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -251,9 +254,6 @@ namespace Editor
 		// Called when context show in explorer pressed
 		void OnContextShowInExplorerPressed();
 
-		// Called when context create asset pressed
-		void OnContextCreateAssetPressed(const Type* assetType);
-
 		// Instantiates dragging assets
 		void InstantiateDraggingAssets();
 
@@ -396,7 +396,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetViewingPath, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(const String&, GetViewingPath);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateAssetsByCurrentPath);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
+	FUNCTION().PUBLIC().SIGNATURE(void, CreateAsset, const Type*);
 	FUNCTION().PUBLIC().SIGNATURE(void, HighlightAsset, const UID&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const UID&, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, DeselectAllAssets);
@@ -406,6 +406,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const AnimationClip&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightLayout, const Layout&);
 	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectingDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
@@ -445,7 +446,6 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnContextDeletePressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnContextOpenPressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnContextShowInExplorerPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateAssetPressed, const Type*);
 	FUNCTION().PROTECTED().SIGNATURE(void, InstantiateDraggingAssets);
 	FUNCTION().PROTECTED().SIGNATURE(void, ClearInstantiatedDraggingAssets);
 	FUNCTION().PROTECTED().SIGNATURE(Actor*, InstantiateAsset, const AssetInfo&);
