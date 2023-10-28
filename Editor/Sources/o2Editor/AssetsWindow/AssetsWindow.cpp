@@ -96,7 +96,8 @@ namespace Editor
 		mFoldersTreeVisible = true;
 
 		mFoldersTreeShowAnim.SetTarget(this);
-		mFoldersTreeShowAnim.SetClip(mnew AnimationClip(AnimationClip::EaseInOut("mFoldersTreeShowCoef", 0, 1, 0.4f)), true);
+		mFoldersTreeShowAnim.SetClip(mnew AnimationClip(AnimationClip::EaseInOut("mFoldersTreeShowCoef", 0.0f, 1.0f, 0.4f)), true);
+		mFoldersTreeShowAnim.GoToEnd();
 
 		mFoldersTreeShowAnim.onUpdate = [&](float dt) {
 			mFoldersTree->layout->anchorRight = mSeparatorCoef*mFoldersTreeShowCoef;

@@ -104,7 +104,7 @@ namespace Editor
 		IOBJECT(AssetsWindow);
 
 	protected:
-		float mFoldersTreeShowCoef; // Animating show folders tree coefficient (0...1)
+		float mFoldersTreeShowCoef = 1.0f; // Animating show folders tree coefficient (0...1)
 
 		Button*  mFilterButton;           // Search filter button
 		EditBox* mSearchEditBox;          // Search edit box
@@ -174,7 +174,7 @@ CLASS_BASES_META(Editor::AssetsWindow)
 END_META;
 CLASS_FIELDS_META(Editor::AssetsWindow)
 {
-	FIELD().PROTECTED().NAME(mFoldersTreeShowCoef);
+	FIELD().PROTECTED().DEFAULT_VALUE(1.0f).NAME(mFoldersTreeShowCoef);
 	FIELD().PROTECTED().NAME(mFilterButton);
 	FIELD().PROTECTED().NAME(mSearchEditBox);
 	FIELD().PROTECTED().NAME(mSelectedAssetPathLabel);

@@ -151,8 +151,6 @@ CLASS_METHODS_META(Editor::AssetsFoldersTree)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnContextOpenPressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnContextShowInExplorerPressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateFolderPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextExpandPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCollapsePressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
