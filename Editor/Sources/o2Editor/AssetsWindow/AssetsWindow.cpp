@@ -346,11 +346,12 @@ namespace Editor
 		for (auto path : paths)
 		{
 			String fileName = o2FileSystem.GetPathWithoutDirectories(path);
-			bool isFolder = o2FileSystem.IsFolderExist(path);
-
-			String copyFileName = o2Application.GetBinPath() + "/" + o2Assets.GetAssetsPath() + targetPath + "/" + fileName;
 			String extension = o2FileSystem.GetFileExtension(fileName);
 			String fileNameWithoutExt = o2FileSystem.GetFileNameWithoutExtension(fileName);
+
+			bool isFolder = extension.IsEmpty();
+
+			String copyFileName = o2Application.GetBinPath() + "/" + o2Assets.GetAssetsPath() + targetPath + "/" + fileName;
 			bool endsAsCopy = fileNameWithoutExt.EndsWith("copy");
 			int i = 0;
 			while (o2FileSystem.IsFileExist(copyFileName))

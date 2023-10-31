@@ -22,12 +22,7 @@ namespace o2
 		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
-		if (node.meta->GetAssetType() == &TypeOf(FolderAsset)) {
-			o2FileSystem.FolderCreate(buildedAssetPath, true);
-		}
-		else {
-			o2FileSystem.FileCopy(sourceAssetPath, buildedAssetPath);
-		}
+		o2FileSystem.FileCopy(sourceAssetPath, buildedAssetPath);
 	}
 
 	void StdAssetConverter::RemoveAsset(const AssetInfo& node)

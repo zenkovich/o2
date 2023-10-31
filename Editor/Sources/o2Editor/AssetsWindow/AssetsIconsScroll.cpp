@@ -805,11 +805,14 @@ namespace Editor
 			auto name = o2FileSystem.GetFileNameWithoutExtension(o2FileSystem.GetPathWithoutDirectories(iconAssetInfo.path));
 			StartAssetRenaming(icon, name, [=](const String& name)
 							   {
-								   String ext = o2FileSystem.GetFileExtension(iconAssetInfo.path);
-								   if (ext.IsEmpty())
-									   o2Assets.RenameAsset(iconAssetInfo.meta->ID(), name);
-								   else
-									   o2Assets.RenameAsset(iconAssetInfo.meta->ID(), name + "." + o2FileSystem.GetFileExtension(iconAssetInfo.path));
+								   String extension = o2FileSystem.GetFileExtension(iconAssetInfo.path);
+								   String newName = extension.IsEmpty() ? name : name + "." + extension;
+								   o2Assets.RenameAsset(iconAssetInfo.meta->ID(), newName);
+								   o2Assets.RebuildAssets();
+
+								   String parentPath = o2FileSystem.GetParentPath(iconAssetInfo.path);
+								   String newPath = parentPath.IsEmpty() ? newName : parentPath + "/" + newName;
+								   o2EditorAssets.SelectAsset(newPath);
 							   });
 		}
 		else

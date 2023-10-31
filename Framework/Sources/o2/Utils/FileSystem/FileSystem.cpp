@@ -108,7 +108,9 @@ namespace o2
 	{
 		FileDelete(dest);
 		FolderCreate(ExtractPathStr(dest));
+
 		fs::copy(source.Data(), dest.Data());
+
 		return fs::exists(dest.Data());
 	}
 
@@ -118,6 +120,7 @@ namespace o2
 			return false;
 
 		fs::remove(file.Data());
+
 		return true;
 	}
 
@@ -129,6 +132,7 @@ namespace o2
 			FolderCreate(destFolder);
 
 		fs::rename(source.Data(), dest.Data());
+
 		return fs::exists(dest.Data());
 	}
 

@@ -312,7 +312,6 @@ namespace o2
 		}
 
 		String parentFolder = o2FileSystem.GetParentPath(info.path);
-		String assetShortName = o2FileSystem.GetPathWithoutDirectories(info.path);
 		String newFullName = parentFolder + "/" + newName;
 
 		if (GetAssetId(newFullName) != 0)
@@ -604,6 +603,8 @@ namespace o2
 					if (newAssetInfo->editTime != oldAssetInfo->editTime || !newAssetInfo->meta->IsEqual(oldAssetInfo->meta))
 						changedAssetsUIDs.Add(newAssetInfo->meta->ID());
 
+					oldAssetInfo->path = newAssetInfo->path;
+
 					oldInfosCopy.Remove(oldAssetInfo);
 				}
 				else
@@ -613,6 +614,8 @@ namespace o2
 					{
 						oldAssetInfo = cachedAsset->asset->mInfo.CloneAs<AssetInfo>();
 						oldAssetInfo->RemoveAllChildren();
+						oldAssetInfo->path = newAssetInfo->path;
+
 						cachedAsset->asset->mInfo.mOwnChildren = false;
 					}
 					else
@@ -628,7 +631,7 @@ namespace o2
 						oldAssetInfo->parent = oldParent;
 				}
 
-				if (!newAssetInfo->GetChildren().IsEmpty())
+				if (newAssetInfo->meta->GetAssetType() == &TypeOf(FolderAsset))
 					processFolder(oldAssetInfo, oldAssetInfo->mChildren, newAssetInfo, newAssetInfo->mChildren);
 			}
 		};
@@ -648,6 +651,10 @@ namespace o2
 			if (!mMainAssetsTree->allAssetsByUID.ContainsKey(info->meta->ID()))
 			{
 				changedAssetsUIDs.Add(info->meta->ID());
+
+				info->mChildren.Clear();
+				info->parent = nullptr;
+
 				delete info;
 			}
 		}

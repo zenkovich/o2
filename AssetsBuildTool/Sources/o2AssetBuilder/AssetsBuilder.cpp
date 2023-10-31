@@ -32,6 +32,7 @@ namespace o2
 		CHECKUP_TYPE(DefaultAssetMeta<DataAsset>);
 		CHECKUP_TYPE(ImageAssetConverter);
 		CHECKUP_TYPE(AtlasAssetConverter);
+		CHECKUP_TYPE(FolderAssetConverter);
 		CHECKUP_TYPE(AtlasAsset);
 	}
 
@@ -181,7 +182,7 @@ namespace o2
 
 		mBuiltAssetsTree.SortAssetsInverse();
 
-		// in first pass processing folders, in second - files
+		// in first pass processing files, in second - folders
 		for (int pass = 0; pass < 2; pass++)
 		{
 			for (auto builtAssetInfoIt = mBuiltAssetsTree.allAssets.Begin(); builtAssetInfoIt != mBuiltAssetsTree.allAssets.End(); )
@@ -242,11 +243,9 @@ namespace o2
 				if (skip)
 					continue;
 
-				auto fnd = mBuiltAssetsTree.allAssetsByUID.find(sourceAssetInfo->meta->ID());
-				if (fnd != mBuiltAssetsTree.allAssetsByUID.end()) 
+				AssetInfo* builtAssetInfo = nullptr;
+				if (mBuiltAssetsTree.allAssetsByUID.TryGetValue(sourceAssetInfo->meta->ID(), builtAssetInfo))
 				{
-					auto builtAssetInfo = fnd->second;
-
 					if (sourceAssetInfo->path == builtAssetInfo->path)
 					{
 						if (sourceAssetInfo->editTime != builtAssetInfo->editTime ||
@@ -313,7 +312,7 @@ namespace o2
 
 		mSourceAssetsTree.SortAssets();
 
-		// in first pass skipping files (only folders), in second - folders
+		// in first pass processing folders, in second - files
 		for (int pass = 0; pass < 2; pass++)
 		{
 			for (auto sourceAssetInfoIt = mSourceAssetsTree.allAssets.Begin(); sourceAssetInfoIt != mSourceAssetsTree.allAssets.End(); ++sourceAssetInfoIt)
