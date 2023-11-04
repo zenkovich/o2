@@ -697,8 +697,8 @@ namespace o2
 			{
 				if (auto typeMember = data.FindMember("Type"))
 				{
-					ISerializable* object = data;
-					value = object->GetScriptValue();
+					if (ISerializable* object = data)
+						value = object->GetScriptValue();
 				}
 				else
 				{

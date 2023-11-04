@@ -128,7 +128,7 @@ namespace o2
 		{
 			char source[128];
 			int line = 0;
-			int size = 0;
+			size_t size = 0;
 			int count = 0;
 
 			bool operator<(const allocSrc& other) const

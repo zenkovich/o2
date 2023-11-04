@@ -18,12 +18,18 @@
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
 
+#include "o2/Scene/Physics/BoxCollider.h"
+#include "o2/Scene/Physics/CircleCollider.h"
+
 namespace o2
 {
 	DECLARE_SINGLETON(Scene);
 
 	Scene::Scene()
 	{
+		CHECKUP_TYPE(o2::BoxCollider);
+		CHECKUP_TYPE(o2::CircleCollider);
+
 		mDefaultLayer = AddLayer("Default");
 		auto camera = mnew CameraActor();
 		camera->name = "Camera";

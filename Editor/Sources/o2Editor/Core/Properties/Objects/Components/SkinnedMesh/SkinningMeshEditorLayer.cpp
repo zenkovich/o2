@@ -52,7 +52,7 @@ namespace Editor
 
 			Color4 wireColor(0, 0, 0, 100);
 			Vector<Vertex> verticies;
-			for (int i = 0; i < renderMesh.polyCount; i++)
+			for (UInt i = 0; i < renderMesh.polyCount; i++)
 			{
 				auto v = o2EditorSceneScreen.LocalToScreenPoint(renderMesh.vertices[renderMesh.indexes[i * 3]]);
 				auto v1 = o2EditorSceneScreen.LocalToScreenPoint(renderMesh.vertices[renderMesh.indexes[i * 3 + 1]]);

@@ -37,6 +37,8 @@
 		</Filter>
 		<Filter Include="Sources\o2Editor\Core\Dialogs\System\Mac" />
 		<Filter Include="Sources\o2Editor\Core\Properties\Objects\Components\SkinnedMesh" />
+		<Filter Include="Sources\o2Editor\Core\Dialogs\System\Linux" />
+		<Filter Include="Sources\o2Editor\Utils" />
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.h">
@@ -183,9 +185,6 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.h">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.h">
-			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.h">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClInclude>
@@ -196,6 +195,9 @@
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayerRefProperty.h">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayersListProperty.h">
@@ -237,6 +239,9 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.h">
 			<Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\VectorFontAssetViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\CameraActorViewer.h">
 			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
 		</ClInclude>
@@ -269,6 +274,9 @@
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.h">
 			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\ToolsPanel.h">
+			<Filter>Sources\o2Editor\Core</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\CustomFrameTool.h">
 			<Filter>Sources\o2Editor\Core\Tools</Filter>
@@ -303,8 +311,14 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\SplineTool.h">
 			<Filter>Sources\o2Editor\Core\Tools</Filter>
 		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\Core\ToolsPanel.h">
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UIRoot.h">
 			<Filter>Sources\o2Editor\Core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.h">
+			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.h">
+			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.h">
 			<Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
@@ -330,14 +344,8 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.h">
 			<Filter>Sources\o2Editor\Core\UI</Filter>
 		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\Core\UIRoot.h">
-			<Filter>Sources\o2Editor\Core</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.h">
-			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.h">
-			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\TexturePreview.h">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.h">
 			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
@@ -438,11 +446,20 @@
 		<ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.h">
 			<Filter>Sources\o2Editor\SceneWindow</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\TreeWindow\DrawOrderTree.h">
+			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\TreeWindow\SceneHierarchyTree.h">
+			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.h">
 			<Filter>Sources\o2Editor\TreeWindow</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.h">
 			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Utils\CommonTextures.h">
+			<Filter>Sources\o2Editor\Utils</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\stdafx.h">
 			<Filter>Sources\o2Editor</Filter>
@@ -539,6 +556,9 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.cpp">
 			<Filter>Sources\o2Editor\Core\Dialogs</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\System\Linux\OpenSaveDialog.cpp">
+			<Filter>Sources\o2Editor\Core\Dialogs\System\Linux</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\System\Mac\OpenSaveDialog.cpp">
 			<Filter>Sources\o2Editor\Core\Dialogs\System\Mac</Filter>
 		</ClCompile>
@@ -590,9 +610,6 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.cpp">
-			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClCompile>
@@ -603,6 +620,9 @@
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayerRefProperty.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayersListProperty.cpp">
@@ -644,6 +664,9 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\VectorFontAssetViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\CameraActorViewer.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
 		</ClCompile>
@@ -676,6 +699,9 @@
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.cpp">
 			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\ToolsPanel.cpp">
+			<Filter>Sources\o2Editor\Core</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\CustomFrameTool.cpp">
 			<Filter>Sources\o2Editor\Core\Tools</Filter>
@@ -710,8 +736,14 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\SplineTool.cpp">
 			<Filter>Sources\o2Editor\Core\Tools</Filter>
 		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\Core\ToolsPanel.cpp">
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UIRoot.cpp">
 			<Filter>Sources\o2Editor\Core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.cpp">
+			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.cpp">
+			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.cpp">
 			<Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
@@ -737,14 +769,8 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.cpp">
 			<Filter>Sources\o2Editor\Core\UI</Filter>
 		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\Core\UIRoot.cpp">
-			<Filter>Sources\o2Editor\Core</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.cpp">
-			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.cpp">
-			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\TexturePreview.cpp">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.cpp">
 			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
@@ -842,11 +868,20 @@
 		<ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.cpp">
 			<Filter>Sources\o2Editor\SceneWindow</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\TreeWindow\DrawOrderTree.cpp">
+			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\TreeWindow\SceneHierarchyTree.cpp">
+			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.cpp">
 			<Filter>Sources\o2Editor\TreeWindow</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.cpp">
 			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Utils\CommonTextures.cpp">
+			<Filter>Sources\o2Editor\Utils</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\stdafx.cpp">
 			<Filter>Sources\o2Editor</Filter>

@@ -196,7 +196,7 @@ namespace o2
 		if (mData.flagsData.Is(Flags::ShortString))
 			return strlen(mData.shortStringData.stringValue);
 
-		return mData.stringPtrData.stringLength;
+		return (int)mData.stringPtrData.stringLength;
 	}
 
 	bool DataValue::IsArray() const
@@ -550,14 +550,14 @@ namespace o2
 	DataValue& DataValue::GetElement(int idx)
 	{
 		Assert(IsArray(), "Trying get element, but value isn't array");
-		Assert(idx >= 0 && idx < mData.arrayData.count, "Index is out of range");
+		Assert(idx >= 0 && idx < (int)mData.arrayData.count, "Index is out of range");
 		return mData.arrayData.elements[idx];
 	}
 
 	const DataValue& DataValue::GetElement(int idx) const
 	{
 		Assert(IsArray(), "Trying get element, but value isn't array");
-		Assert(idx >= 0 && idx < mData.arrayData.count, "Index is out of range");
+		Assert(idx >= 0 && idx < (int)mData.arrayData.count, "Index is out of range");
 		return mData.arrayData.elements[idx];
 	}
 

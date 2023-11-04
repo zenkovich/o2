@@ -34,6 +34,9 @@ add_compile_definitions(${O2_COMPILE_DEFINITIONS})
 # dependencies
 add_subdirectory(Framework/3rdPartyLibs)
 
+# code tool
+add_subdirectory(CodeTool)
+
 # o2 copy builtin framework assets
 if (UNIX)
     set(O2_ASSETS_PLATFORM "Linux")
@@ -103,7 +106,7 @@ if(WIN32)
     set_target_properties(StackWalker PROPERTIES FOLDER o2/3rdPartyLibs)  
 
     add_custom_command(TARGET o2Framework PRE_BUILD
-                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/CodeTool.exe -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2")
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2")
 endif()
 
 if (UNIX)
@@ -114,6 +117,7 @@ elseif(MSVC)
 endif()
 
 add_dependencies(o2Framework o2CopyBuiltinAssets)
+add_dependencies(o2Framework o2CodeTool)
 
 # o2 Editor Library
 if (O2_EDITOR)
@@ -137,7 +141,7 @@ if (O2_EDITOR)
 
     if(WIN32)
         add_custom_command(TARGET o2Editor PRE_BUILD
-                           COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/CodeTool.exe -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml")
+                           COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml")
     endif()
 
     # dependency
@@ -161,4 +165,5 @@ add_subdirectory(AssetsBuildTool)
 set_target_properties(o2Framework PROPERTIES FOLDER o2)
 set_target_properties(o2AssetsBuilder PROPERTIES FOLDER o2)
 set_target_properties(o2CopyBuiltinAssets PROPERTIES FOLDER o2)
+set_target_properties(o2CodeTool PROPERTIES FOLDER o2)
 

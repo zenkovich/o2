@@ -20,7 +20,7 @@ namespace o2
 	jerry_value_t ScriptEngineBase::PrintCallback(const jerry_value_t func_obj_val, const jerry_value_t this_p,
 												  const jerry_value_t args_p[], const jerry_length_t args_cnt)
 	{
-		for (int i = 0; i < args_cnt; i++)
+		for (int i = 0; i < (int)args_cnt; i++)
 		{
 			ScriptValue v;
 			v.AcquireValue(args_p[i]);
@@ -136,7 +136,7 @@ namespace o2
 	{
 		jerry_heap_stats_t stats = { 0 };
 		bool get_stats_ret = jerry_get_memory_stats(&stats);
-		return stats.allocated_bytes;
+		return (int)stats.allocated_bytes;
 	}
 
 	void ScriptEngine::ConnectDebugger() const

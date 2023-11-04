@@ -15,7 +15,7 @@ namespace o2
 
 		InFile* file = (InFile*)io_ptr;
 
-		file->ReadData(outBytes, byteCountToRead);
+		file->ReadData(outBytes, (UInt)byteCountToRead);
 	}
 
 	void CustomPngWriteFn(png_structp png_ptr, png_bytep bytes, png_size_t byteCountToWrite)
@@ -25,7 +25,7 @@ namespace o2
 
 		OutFile* file = (OutFile*)io_ptr;
 
-		file->WriteData(bytes, byteCountToWrite);
+		file->WriteData(bytes, (UInt)byteCountToWrite);
 	}
 
 	void CustomPngFlushFn(png_structp png_ptr) {}

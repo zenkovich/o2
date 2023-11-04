@@ -60,7 +60,7 @@ namespace Editor
 			}
 
 			auto zeroWeightColor = Color4::HSL(zeroWeightColorHue, weightMeshSaturation, weightMeshLight, weightMeshAlpha).ABGR();
-			for (int i = 0; i < mesh.vertexCount; i++)
+			for (UInt i = 0; i < mesh.vertexCount; i++)
 				debugMesh.vertices[i].Set(mesh.vertices[i], zeroWeightColor, 0, 0);
 
 			for (auto& p : boneComponent->vertexWeights)
@@ -84,7 +84,7 @@ namespace Editor
 	void MeshWeightsTool::SceneLayer::DrawMeshWire(auto& mesh)
 	{
 		Color4 wireColor = Color4::White();
-		for (int i = 0; i < mesh.polyCount; i++)
+		for (UInt i = 0; i < mesh.polyCount; i++)
 		{
 			Vec2F p0 = mesh.vertices[mesh.indexes[i*3]];
 			Vec2F p1 = mesh.vertices[mesh.indexes[i*3 + 1]];

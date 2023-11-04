@@ -209,12 +209,15 @@ namespace Editor
 	void ImageSlicesEditorWidget::PreviewImage::Draw()
 	{
 		mIsClipped = false;
-		auto prevFilter = mImage->GetTexture()->GetFilter();
-		mImage->GetTexture()->SetFilter(Texture::Filter::Nearest);
+		if (auto texture = mImage->GetTexture())
+		{
+			auto prevFilter = texture->GetFilter();
+			texture->SetFilter(Texture::Filter::Nearest);
 
-		Image::Draw();
+			Image::Draw();
 
-		mImage->GetTexture()->SetFilter(prevFilter);
+			texture->SetFilter(prevFilter);
+		}
 	}
 
 	String ImageSlicesEditorWidget::PreviewImage::GetCreateMenuCategory()

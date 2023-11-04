@@ -1021,7 +1021,7 @@ namespace o2
 	void EditBox::JumpSelection(bool forward, bool selecting)
 	{
 		static char jumpSymbols[] = " \n()-=_+\\|/**&^%$#@!~,.?";
-		int jumpSymbolsCount = strlen(jumpSymbols);
+		int jumpSymbolsCount = (int)strlen(jumpSymbols);
 
 		int jumpIdx = mSelectionEnd + 1;
 

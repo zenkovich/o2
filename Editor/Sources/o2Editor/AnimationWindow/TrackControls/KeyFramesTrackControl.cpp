@@ -126,7 +126,7 @@ namespace Editor
 			int verticies = mTrack->GetKeys().Count()*2;
 			int polygons = (mTrack->GetKeys().Count() - 1)*2;
 
-			if (mesh.GetMaxVertexCount() < verticies)
+			if (mesh.GetMaxVertexCount() < (UInt)verticies)
 				mesh.Resize(verticies, polygons);
 
 			mesh.vertexCount = verticies;
@@ -187,7 +187,7 @@ namespace Editor
 			int verticies = (mTrack->GetKeys().Count() - 1)*4;
 			int polygons = (mTrack->GetKeys().Count() - 1)*2;
 
-			if (mesh.GetMaxVertexCount() < verticies)
+			if (mesh.GetMaxVertexCount() < (UInt)verticies)
 				mesh.Resize(verticies, polygons);
 
 			mesh.vertexCount = verticies;

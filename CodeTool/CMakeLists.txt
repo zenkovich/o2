@@ -1,23 +1,24 @@
-cmake_minimum_required(VERSION 3.10)
+file(GLOB_RECURSE o2CodeTool_SOURCES "Src/*.cpp" "Src/*.h")
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${o2CodeTool_SOURCES})
 
-project(CodeTool LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 17)
+add_executable(o2CodeTool ${o2CodeTool_SOURCES} ${o2CodeTool_SOURCES})
 
-set(SOURCE_FILES
-	Src/CodeToolApp.cpp
-	Src/CodeTool.cpp
-	Src/CppSyntaxParser.cpp
-	Src/SyntaxTree.cpp
-	Src/pugixml/pugixml.cpp
-)
-set(HEADER_FILES
-	Src/CodeToolApp.h
-	Src/CppSyntaxParser.h
-	Src/SyntaxTree.h
-	Src/pugixml/pugixml.hpp
-	Src/pugixml/pugiconfig.hpp
-)
+if(MSVC)
+    target_compile_options(o2CodeTool PUBLIC "/MP" "/Zc:__cplusplus")
+elseif (UNIX)
+    target_compile_options(o2CodeTool PUBLIC ${DEMO_WARNING_OPTION} -Wno-pedantic)
+endif()
 
-add_executable(CodeTool ${HEADER_FILES} ${SOURCE_FILES})
+set(O2CODE_TOOL_BIN_OUTPUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/Bin")
 
+set_target_properties(o2CodeTool PROPERTIES 
+    RUNTIME_OUTPUT_DIRECTORY ${O2CODE_TOOL_BIN_OUTPUTDIR}
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${O2CODE_TOOL_BIN_OUTPUTDIR}
+    RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${O2CODE_TOOL_BIN_OUTPUTDIR}
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${O2CODE_TOOL_BIN_OUTPUTDIR}
+    RUNTIME_OUTPUT_DIRECTORY_RELEASEWITHDEBUGINFO ${O2CODE_TOOL_BIN_OUTPUTDIR}
+)       
 
+if(MSVC)
+  set_property(TARGET o2CodeTool PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:o2CodeTool>")
+endif()
