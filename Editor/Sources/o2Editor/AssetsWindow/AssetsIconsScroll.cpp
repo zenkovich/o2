@@ -566,20 +566,21 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnDroppedFromThis()
 	{
+		for (auto sel : mSelectedAssets)
+		{
+			if (auto icon = FindVisibleIcon(sel))
+				icon->Show();
+		}
+
 		AssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
 		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().meta->GetAssetType() == &TypeOf(FolderAsset))
 		{
 			String destPath = iconUnderCursor->GetAssetInfo().path;
 			auto assetsInfos = mSelectedAssets.Convert<UID>([](const AssetInfo* x) { return x->meta->ID(); });
-			o2Assets.MoveAssets(assetsInfos, destPath);
-
 			DeselectAllAssets();
-		}
 
-		for (auto sel : mSelectedAssets)
-		{
-			if (auto icon = FindVisibleIcon(sel))
-				icon->Show();
+			o2Assets.MoveAssets(assetsInfos, destPath);
+			o2Assets.RebuildAssets();
 		}
 	}
 
@@ -607,6 +608,7 @@ namespace Editor
 			}
 		}
 
+		o2Assets.RebuildAssets();
 		o2EditorAssets.OpenFolder(destPath);
 		o2EditorAssets.SelectAssets(newAssets);
 	}

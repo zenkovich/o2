@@ -225,7 +225,12 @@ namespace Editor
 	void AssetsFoldersTree::OnContextDeletePressed()
 	{
 		if (!mCurrentPath.IsEmpty())
-			o2EditorAssets.DeleteAssets({ mCurrentPath });
+		{
+			auto deletingPath = mCurrentPath;
+
+			o2EditorAssets.OpenFolder("");
+			o2EditorAssets.DeleteAssets({ deletingPath });
+		}
 	}
 
 	void AssetsFoldersTree::OnContextOpenPressed()
