@@ -9,51 +9,51 @@
 
 namespace o2
 {
-	Vector<const Type*> FolderAssetConverter::GetProcessingAssetsTypes() const
-	{
-		Vector<const Type*> res;
-		res.Add(&TypeOf(FolderAsset));
-		return res;
-	}
+    Vector<const Type*> FolderAssetConverter::GetProcessingAssetsTypes() const
+    {
+        Vector<const Type*> res;
+        res.Add(&TypeOf(FolderAsset));
+        return res;
+    }
 
-	void FolderAssetConverter::ConvertAsset(const AssetInfo& node)
-	{
-		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
-		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
+    void FolderAssetConverter::ConvertAsset(const AssetInfo& node)
+    {
+        String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
+        String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
-		o2FileSystem.FolderCreate(buildedAssetPath);
-	}
+        o2FileSystem.FolderCreate(buildedAssetPath);
+    }
 
-	void FolderAssetConverter::RemoveAsset(const AssetInfo& node)
-	{
-		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
+    void FolderAssetConverter::RemoveAsset(const AssetInfo& node)
+    {
+        String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
-		o2FileSystem.FolderRemove(buildedAssetPath);
-	}
+        o2FileSystem.FolderRemove(buildedAssetPath);
+    }
 
-	void FolderAssetConverter::MoveAsset(const AssetInfo& nodeFrom, const AssetInfo& nodeTo)
-	{
-		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
-		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
+    void FolderAssetConverter::MoveAsset(const AssetInfo& nodeFrom, const AssetInfo& nodeTo)
+    {
+        String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
+        String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
 
-		o2FileSystem.FolderCreate(fullPathTo);
+        o2FileSystem.FolderCreate(fullPathTo);
 
-		mRemovedFolders.Add(fullPathFrom);
-		mRemovedFolders.Remove(fullPathTo);
-	}
+        mRemovedFolders.Add(fullPathFrom);
+        mRemovedFolders.Remove(fullPathTo);
+    }
 
-	Vector<UID> FolderAssetConverter::AssetsPostProcess()
-	{
-		for (auto fold : mRemovedFolders)
-			o2FileSystem.FolderRemove(fold);
+    Vector<UID> FolderAssetConverter::AssetsPostProcess()
+    {
+        for (auto fold : mRemovedFolders)
+            o2FileSystem.FolderRemove(fold);
 
-		return Vector<UID>();
-	}
+        return Vector<UID>();
+    }
 
-	void FolderAssetConverter::Reset()
-	{
-		mRemovedFolders.Clear();
-	}
+    void FolderAssetConverter::Reset()
+    {
+        mRemovedFolders.Clear();
+    }
 }
 // --- META ---
 

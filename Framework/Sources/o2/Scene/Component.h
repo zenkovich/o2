@@ -6,296 +6,296 @@
 
 namespace o2
 {
-	class Actor;
-	class ComponentRef;
+    class Actor;
+    class ComponentRef;
 
-	// ---------------------------
-	// Actor's component interface
-	// ---------------------------
-	class Component: virtual public ISerializable
-	{
-	public:
-		PROPERTIES(Component);
-		GETTER(Actor*, actor, GetOwnerActor);                   // Owner actor getter
-		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Enabling property @EDITOR_IGNORE
-		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is enabled in hierarchy property
+    // ---------------------------
+    // Actor's component interface
+    // ---------------------------
+    class Component: virtual public ISerializable
+    {
+    public:
+        PROPERTIES(Component);
+        GETTER(Actor*, actor, GetOwnerActor);                   // Owner actor getter
+        PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Enabling property @EDITOR_IGNORE
+        GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is enabled in hierarchy property
 
-	public:
-		// Default constructor
-		Component();
+    public:
+        // Default constructor
+        Component();
 
-		// Copy-constructor
-		Component(const Component& other);
+        // Copy-constructor
+        Component(const Component& other);
 
-		// Virtual destructor
-		virtual ~Component();
+        // Virtual destructor
+        virtual ~Component();
 
-		// Copy-operator
-		Component& operator=(const Component& other);
+        // Copy-operator
+        Component& operator=(const Component& other);
 
-		// Returns component id
-		SceneUID GetID() const;
+        // Returns component id
+        SceneUID GetID() const;
 
-		// Regenerates component id
-		void GenerateNewID();
+        // Regenerates component id
+        void GenerateNewID();
 
-		// Sets component enable
-		virtual void SetEnabled(bool active);
+        // Sets component enable
+        virtual void SetEnabled(bool active);
 
-		// Enables component
-		void Enable();
+        // Enables component
+        void Enable();
 
-		// Disables component
-		void Disable();
+        // Disables component
+        void Disable();
 
-		// Returns is component enabled
-		bool IsEnabled() const;
+        // Returns is component enabled
+        bool IsEnabled() const;
 
-		// Returns is component enabled in hierarchy
-		bool IsEnabledInHierarchy() const;
+        // Returns is component enabled in hierarchy
+        bool IsEnabledInHierarchy() const;
 
-		// Returns prototype link
-		Component* GetPrototypeLink() const;
+        // Returns prototype link
+        Component* GetPrototypeLink() const;
 
-		// Returns is this linked to specified component with depth links search
-		bool IsLinkedToComponent(Component* component) const;
+        // Returns is this linked to specified component with depth links search
+        bool IsLinkedToComponent(Component* component) const;
 
-		// Returns owner actor
-		Actor* GetOwnerActor() const;
+        // Returns owner actor
+        Actor* GetOwnerActor() const;
 
-		// Returns component with type
-		template<typename _type>
-		_type* GetComponent() const;
+        // Returns component with type
+        template<typename _type>
+        _type* GetComponent() const;
 
-		// Returns component with type in children
-		template<typename _type>
-		_type* GetComponentInChildren() const;
+        // Returns component with type in children
+        template<typename _type>
+        _type* GetComponentInChildren() const;
 
-		// Returns components with type
-		template<typename _type>
-		Vector<_type*> GetComponents() const;
+        // Returns components with type
+        template<typename _type>
+        Vector<_type*> GetComponents() const;
 
-		// Returns components with type in children
-		template<typename _type>
-		Vector<_type*> GetComponentsInChildren() const;
+        // Returns components with type in children
+        template<typename _type>
+        Vector<_type*> GetComponentsInChildren() const;
 
-		// Returns name of component
-		static String GetName();
+        // Returns name of component
+        static String GetName();
 
-		// Returns category of component
-		static String GetCategory();
+        // Returns category of component
+        static String GetCategory();
 
-		// Returns name of component icon
-		static String GetIcon();
+        // Returns name of component icon
+        static String GetIcon();
 
-		// Is component visible in create menu
-		static bool IsAvailableFromCreateMenu();
+        // Is component visible in create menu
+        static bool IsAvailableFromCreateMenu();
 
 #if IS_EDITOR
-		// Called when component added from editor
-		virtual void OnAddedFromEditor() {}
+        // Called when component added from editor
+        virtual void OnAddedFromEditor() {}
 #endif
 
-		SERIALIZABLE(Component);
+        SERIALIZABLE(Component);
 
-	protected:
-		Component* mPrototypeLink = nullptr;    // Prototype actor component pointer. Null if no actor prototype
-		SceneUID   mId;                         // Component id @EDITOR_IGNORE
-		Actor*     mOwner = nullptr;            // Owner actor
-		bool       mEnabled = true;             // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
-		bool       mEnabledInHierarchy = false; // Is component enabled in hierarchy
+    protected:
+        Component* mPrototypeLink = nullptr;    // Prototype actor component pointer. Null if no actor prototype
+        SceneUID   mId;                         // Component id @EDITOR_IGNORE
+        Actor*     mOwner = nullptr;            // Owner actor
+        bool       mEnabled = true;             // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
+        bool       mEnabledInHierarchy = false; // Is component enabled in hierarchy
 
-		Vector<ComponentRef*> mReferences; // References to this component
+        Vector<ComponentRef*> mReferences; // References to this component
 
-	protected:
-		// Beginning serialization callback
-		void OnSerialize(DataValue& node) const override;
+    protected:
+        // Beginning serialization callback
+        void OnSerialize(DataValue& node) const override;
 
-		// Completion deserialization callback
-		void OnDeserialized(const DataValue& node) override;
+        // Completion deserialization callback
+        void OnDeserialized(const DataValue& node) override;
 
-		// Beginning serialization delta callback
-		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
+        // Beginning serialization delta callback
+        void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
 
-		// Completion deserialization delta callback
-		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+        // Completion deserialization delta callback
+        void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 
-		// Adds component to scene
-		virtual void AddToScene();
+        // Adds component to scene
+        virtual void AddToScene();
 
-		// Removes component from scene
-		virtual void RemoveFromScene();
+        // Removes component from scene
+        virtual void RemoveFromScene();
 
-		// Updates component enable
-		virtual void UpdateEnabledInHierarchy();
+        // Updates component enable
+        virtual void UpdateEnabledInHierarchy();
 
-		// Sets owner actor
-		virtual void SetOwnerActor(Actor* actor);
+        // Sets owner actor
+        virtual void SetOwnerActor(Actor* actor);
 
-		// Called when actor was included to scene
-		virtual void OnAddToScene() {}
+        // Called when actor was included to scene
+        virtual void OnAddToScene() {}
 
-		// Called when actor was excluded from scene
-		virtual void OnRemoveFromScene() {}
+        // Called when actor was excluded from scene
+        virtual void OnRemoveFromScene() {}
 
-		// Called when component, actor and scene was initialized
-		virtual void OnInitialized() {}
+        // Called when component, actor and scene was initialized
+        virtual void OnInitialized() {}
 
-		// Called when component started working on first update frame
-		virtual void OnStart() {}
+        // Called when component started working on first update frame
+        virtual void OnStart() {}
 
-		// Called when component will be destroyed
-		virtual void OnDestroy() {}
+        // Called when component will be destroyed
+        virtual void OnDestroy() {}
 
-		// Updates component
-		virtual void OnUpdate(float dt) {}
+        // Updates component
+        virtual void OnUpdate(float dt) {}
 
-		// Updates component with fixed delta time
-		virtual void OnFixedUpdate(float dt) {}
+        // Updates component with fixed delta time
+        virtual void OnFixedUpdate(float dt) {}
 
-		// Called when actor enabled in hierarchy
-		virtual void OnEnabled() {}
+        // Called when actor enabled in hierarchy
+        virtual void OnEnabled() {}
 
-		// Called when actor disabled in hierarchy
-		virtual void OnDisabled() {}
+        // Called when actor disabled in hierarchy
+        virtual void OnDisabled() {}
 
-		// Called when actor's transform was changed
-		virtual void OnTransformUpdated() {}
+        // Called when actor's transform was changed
+        virtual void OnTransformUpdated() {}
 
-		// Called when parent changed
-		virtual void OnParentChanged(Actor* oldParent) {}
+        // Called when parent changed
+        virtual void OnParentChanged(Actor* oldParent) {}
 
-		// Called when children list changed
-		virtual void OnChildrenChanged() {}
+        // Called when children list changed
+        virtual void OnChildrenChanged() {}
 
-		// Called when child actor was added
-		virtual void OnChildAdded(Actor* child) {}
+        // Called when child actor was added
+        virtual void OnChildAdded(Actor* child) {}
 
-		// Called when child actor was removed
-		virtual void OnChildRemoved(Actor* child) {}
+        // Called when child actor was removed
+        virtual void OnChildRemoved(Actor* child) {}
 
-		// Called when new component has added to actor
-		virtual void OnComponentAdded(Component* component) {}
+        // Called when new component has added to actor
+        virtual void OnComponentAdded(Component* component) {}
 
-		// Called when component going to be removed from actor
-		virtual void OnComponentRemoving(Component* component) {}
+        // Called when component going to be removed from actor
+        virtual void OnComponentRemoving(Component* component) {}
 
-		friend class Actor;
-		friend struct ActorDifferences;
-		friend class ActorRefResolver;
-		friend class ComponentRef;
-		friend class Scene;
-		friend class Widget;
-	};
+        friend class Actor;
+        friend struct ActorDifferences;
+        friend class ActorRefResolver;
+        friend class ComponentRef;
+        friend class Scene;
+        friend class Widget;
+    };
 }
 
 #include "o2/Scene/Actor.h"
 
 namespace o2
 {
-	template<typename _type>
-	Vector<_type*> Component::GetComponentsInChildren() const
-	{
-		if (mOwner)
-			return mOwner->GetComponentsInChildren<_type>();
+    template<typename _type>
+    Vector<_type*> Component::GetComponentsInChildren() const
+    {
+        if (mOwner)
+            return mOwner->GetComponentsInChildren<_type>();
 
-		return Vector<_type*>();
-	}
+        return Vector<_type*>();
+    }
 
-	template<typename _type>
-	Vector<_type*> Component::GetComponents() const
-	{
-		if (mOwner)
-			return mOwner->GetComponents();
+    template<typename _type>
+    Vector<_type*> Component::GetComponents() const
+    {
+        if (mOwner)
+            return mOwner->GetComponents();
 
-		return Vector<_type*>();
-	}
+        return Vector<_type*>();
+    }
 
-	template<typename _type>
-	_type* Component::GetComponentInChildren() const
-	{
-		if (mOwner)
-			return mOwner->GetComponentInChildren<_type>();
+    template<typename _type>
+    _type* Component::GetComponentInChildren() const
+    {
+        if (mOwner)
+            return mOwner->GetComponentInChildren<_type>();
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 
-	template<typename _type>
-	_type* Component::GetComponent() const
-	{
-		if (mOwner)
-			return mOwner->GetComponent<_type>();
+    template<typename _type>
+    _type* Component::GetComponent() const
+    {
+        if (mOwner)
+            return mOwner->GetComponent<_type>();
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 
 }
 // --- META ---
 
 CLASS_BASES_META(o2::Component)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Component)
 {
-	FIELD().PUBLIC().NAME(actor);
-	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(enabled);
-	FIELD().PUBLIC().NAME(enabledInHierarchy);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink);
-	FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().NAME(mId);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
-	FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabledInHierarchy);
-	FIELD().PROTECTED().NAME(mReferences);
+    FIELD().PUBLIC().NAME(actor);
+    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(enabled);
+    FIELD().PUBLIC().NAME(enabledInHierarchy);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink);
+    FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().NAME(mId);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
+    FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabledInHierarchy);
+    FIELD().PROTECTED().NAME(mReferences);
 }
 END_META;
 CLASS_METHODS_META(o2::Component)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Component&);
-	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
-	FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, Enable);
-	FUNCTION().PUBLIC().SIGNATURE(void, Disable);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabledInHierarchy);
-	FUNCTION().PUBLIC().SIGNATURE(Component*, GetPrototypeLink);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToComponent, Component*);
-	FUNCTION().PUBLIC().SIGNATURE(Actor*, GetOwnerActor);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableFromCreateMenu);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Component&);
+    FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
+    FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, Enable);
+    FUNCTION().PUBLIC().SIGNATURE(void, Disable);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabledInHierarchy);
+    FUNCTION().PUBLIC().SIGNATURE(Component*, GetPrototypeLink);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToComponent, Component*);
+    FUNCTION().PUBLIC().SIGNATURE(Actor*, GetOwnerActor);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableFromCreateMenu);
 #if  IS_EDITOR
-	FUNCTION().PUBLIC().SIGNATURE(void, OnAddedFromEditor);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnAddedFromEditor);
 #endif
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
-	FUNCTION().PROTECTED().SIGNATURE(void, AddToScene);
-	FUNCTION().PROTECTED().SIGNATURE(void, RemoveFromScene);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateEnabledInHierarchy);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDestroy);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnUpdate, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnFixedUpdate, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
+    FUNCTION().PROTECTED().SIGNATURE(void, AddToScene);
+    FUNCTION().PROTECTED().SIGNATURE(void, RemoveFromScene);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateEnabledInHierarchy);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDestroy);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnUpdate, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFixedUpdate, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
 }
 END_META;
 // --- END META ---

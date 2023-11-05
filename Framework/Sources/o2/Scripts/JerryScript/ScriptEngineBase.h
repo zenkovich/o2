@@ -3,34 +3,34 @@
 
 namespace o2
 {
-	class LogStream;
+    class LogStream;
 
-	class ScriptParseResultBase
-	{
-	public:
-		ScriptParseResultBase() = default;
-		ScriptParseResultBase(const ScriptParseResultBase& other);
-		virtual ~ScriptParseResultBase();
+    class ScriptParseResultBase
+    {
+    public:
+        ScriptParseResultBase() = default;
+        ScriptParseResultBase(const ScriptParseResultBase& other);
+        virtual ~ScriptParseResultBase();
 
-	protected:
-		jerry_value_t mParsedCode;
+    protected:
+        jerry_value_t mParsedCode;
 
-		friend class ScriptEngine;
-	};
+        friend class ScriptEngine;
+    };
 
-	class ScriptEngineBase
-	{
-	protected:
-		LogStream* mLog = nullptr; // Scripting log stream
+    class ScriptEngineBase
+    {
+    protected:
+        LogStream* mLog = nullptr; // Scripting log stream
 
-	protected:
-		static void ErrorCallback(const jerry_value_t error_object, void* user_p);
-		static jerry_value_t PrintCallback(const jerry_value_t func_obj_val, const jerry_value_t this_p,
-										   const jerry_value_t args_p[], const jerry_length_t args_cnt);
+    protected:
+        static void ErrorCallback(const jerry_value_t error_object, void* user_p);
+        static jerry_value_t PrintCallback(const jerry_value_t func_obj_val, const jerry_value_t this_p,
+                                           const jerry_value_t args_p[], const jerry_length_t args_cnt);
 
-		// Initialized basic prototypes for math and other
-		void InitializeBasicPrototypes();
-	};
+        // Initialized basic prototypes for math and other
+        void InitializeBasicPrototypes();
+    };
 }
 
 #endif

@@ -16,122 +16,122 @@ namespace o2
             mEffects.Add(eff->CloneAs<VectorFont::Effect>());
     }
 
-	VectorFontAsset::Meta::~Meta()
-	{
-		for (auto eff : mEffects)
-			delete eff;
-	}
+    VectorFontAsset::Meta::~Meta()
+    {
+        for (auto eff : mEffects)
+            delete eff;
+    }
 
-	bool VectorFontAsset::Meta::IsEqual(AssetMeta* other) const
-	{
-		if (!AssetMeta::IsEqual(other))
-			return false;
+    bool VectorFontAsset::Meta::IsEqual(AssetMeta* other) const
+    {
+        if (!AssetMeta::IsEqual(other))
+            return false;
 
-		Meta* otherMeta = (Meta*)other;
-		for (auto eff : mEffects)
-		{
-			bool found = false;
-			for (auto otherEff : otherMeta->mEffects)
-			{
-				if (eff && eff->IsEqual(otherEff))
-				{
-					found = true;
-					break;
-				}
-			}
+        Meta* otherMeta = (Meta*)other;
+        for (auto eff : mEffects)
+        {
+            bool found = false;
+            for (auto otherEff : otherMeta->mEffects)
+            {
+                if (eff && eff->IsEqual(otherEff))
+                {
+                    found = true;
+                    break;
+                }
+            }
 
-			if (!found)
-				return false;
-		}
+            if (!found)
+                return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	void VectorFontAsset::Meta::UpdateFontEffects()
-	{
-		if (mAsset)
-			mAsset->UpdateFontEffects();
-	}
+    void VectorFontAsset::Meta::UpdateFontEffects()
+    {
+        if (mAsset)
+            mAsset->UpdateFontEffects();
+    }
 
-	VectorFontAsset::VectorFontAsset():
-		FontAsset(mnew Meta())
-	{}
+    VectorFontAsset::VectorFontAsset():
+        FontAsset(mnew Meta())
+    {}
 
-	VectorFontAsset::VectorFontAsset(const VectorFontAsset& asset):
-		FontAsset(asset), meta(this)
-	{}
+    VectorFontAsset::VectorFontAsset(const VectorFontAsset& asset):
+        FontAsset(asset), meta(this)
+    {}
 
-	VectorFontAsset& VectorFontAsset::operator=(const VectorFontAsset& asset)
-	{
-		FontAsset::operator=(asset);
-		mFont = asset.mFont;
-		return *this;
-	}
+    VectorFontAsset& VectorFontAsset::operator=(const VectorFontAsset& asset)
+    {
+        FontAsset::operator=(asset);
+        mFont = asset.mFont;
+        return *this;
+    }
 
-	const Vector<VectorFont::Effect*>& VectorFontAsset::GetEffects() const
-	{
-		return GetMeta()->mEffects;
-	}
+    const Vector<VectorFont::Effect*>& VectorFontAsset::GetEffects() const
+    {
+        return GetMeta()->mEffects;
+    }
 
-	void VectorFontAsset::AddEffect(VectorFont::Effect* effect)
-	{
-		GetMeta()->mEffects.Add(effect);
-		((VectorFont*)mFont.mFont)->AddEffect(effect);
-	}
+    void VectorFontAsset::AddEffect(VectorFont::Effect* effect)
+    {
+        GetMeta()->mEffects.Add(effect);
+        ((VectorFont*)mFont.mFont)->AddEffect(effect);
+    }
 
-	void VectorFontAsset::RemoveEffect(VectorFont::Effect* effect)
-	{
-		GetMeta()->mEffects.Remove(effect);
-		((VectorFont*)mFont.mFont)->RemoveEffect(effect);
-	}
+    void VectorFontAsset::RemoveEffect(VectorFont::Effect* effect)
+    {
+        GetMeta()->mEffects.Remove(effect);
+        ((VectorFont*)mFont.mFont)->RemoveEffect(effect);
+    }
 
-	void VectorFontAsset::RemoveAllEffects()
-	{
-		for (auto eff : GetMeta()->mEffects)
-			delete eff;
+    void VectorFontAsset::RemoveAllEffects()
+    {
+        for (auto eff : GetMeta()->mEffects)
+            delete eff;
 
-		GetMeta()->mEffects.Clear();
+        GetMeta()->mEffects.Clear();
 
-		((VectorFont*)mFont.mFont)->RemoveAllEffects();
-	}
+        ((VectorFont*)mFont.mFont)->RemoveAllEffects();
+    }
 
-	Vector<String> VectorFontAsset::GetFileExtensions()
-	{
-		return { "ttf" };
-	}
+    Vector<String> VectorFontAsset::GetFileExtensions()
+    {
+        return { "ttf" };
+    }
 
-	VectorFontAsset::Meta* VectorFontAsset::GetMeta() const
-	{
-		return (Meta*)mInfo.meta;
-	}
+    VectorFontAsset::Meta* VectorFontAsset::GetMeta() const
+    {
+        return (Meta*)mInfo.meta;
+    }
 
-	void VectorFontAsset::LoadData(const String& path)
-	{
-		mFont = o2Render.mFonts.FindOrDefault([&](auto fnt) { return fnt->GetFileName() == path; });
+    void VectorFontAsset::LoadData(const String& path)
+    {
+        mFont = o2Render.mFonts.FindOrDefault([&](auto fnt) { return fnt->GetFileName() == path; });
 
-		if (!mFont)
-		{
-			mFont = mnew VectorFont(path);
-			UpdateFontEffects();
-		}
-		
-		GetMeta()->mAsset = this;
-	}
+        if (!mFont)
+        {
+            mFont = mnew VectorFont(path);
+            UpdateFontEffects();
+        }
+        
+        GetMeta()->mAsset = this;
+    }
 
-	void VectorFontAsset::SaveData(const String& path) const
-	{}
+    void VectorFontAsset::SaveData(const String& path) const
+    {}
 
-	void VectorFontAsset::UpdateFontEffects()
-	{
-		Vector<VectorFont::Effect*> clonedEffects;;
-		for (auto eff : GetMeta()->mEffects)
-		{
-			if (eff)
-				clonedEffects.Add(eff->CloneAs<VectorFont::Effect>());
-		}
+    void VectorFontAsset::UpdateFontEffects()
+    {
+        Vector<VectorFont::Effect*> clonedEffects;;
+        for (auto eff : GetMeta()->mEffects)
+        {
+            if (eff)
+                clonedEffects.Add(eff->CloneAs<VectorFont::Effect>());
+        }
 
-		dynamic_cast<VectorFont*>(mFont.mFont)->SetEffects(clonedEffects);
-	}
+        dynamic_cast<VectorFont*>(mFont.mFont)->SetEffects(clonedEffects);
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::VectorFontAsset>);

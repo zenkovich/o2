@@ -7,216 +7,216 @@
 
 namespace o2
 {
-	Asset::Asset()
-	{}
+    Asset::Asset()
+    {}
 
-	Asset::Asset(const Asset& other):
-		mInfo(other.mInfo)
-	{
-		mInfo.meta->mId.Randomize();
+    Asset::Asset(const Asset& other):
+        mInfo(other.mInfo)
+    {
+        mInfo.meta->mId.Randomize();
 
-		if (Assets::IsSingletonInitialzed())
-			o2Assets.AddAssetCache(this);
-	}
+        if (Assets::IsSingletonInitialzed())
+            o2Assets.AddAssetCache(this);
+    }
 
-	Asset::Asset(AssetMeta* meta)
-	{
-		mInfo.meta = meta;
-		mInfo.meta->mId.Randomize();
+    Asset::Asset(AssetMeta* meta)
+    {
+        mInfo.meta = meta;
+        mInfo.meta->mId.Randomize();
 
-		if (Assets::IsSingletonInitialzed())
-			o2Assets.AddAssetCache(this);
-	}
+        if (Assets::IsSingletonInitialzed())
+            o2Assets.AddAssetCache(this);
+    }
 
-	Asset& Asset::operator=(const Asset& other)
-	{
-		if (Assets::IsSingletonInitialzed())
-			o2Assets.RemoveAssetCache(this);
+    Asset& Asset::operator=(const Asset& other)
+    {
+        if (Assets::IsSingletonInitialzed())
+            o2Assets.RemoveAssetCache(this);
 
-		mInfo = other.mInfo;
-		return *this;
-	}
+        mInfo = other.mInfo;
+        return *this;
+    }
 
-	Asset::~Asset()
-	{
-		if (Assets::IsSingletonInitialzed())
-			o2Assets.RemoveAssetCache(this);
-	}
+    Asset::~Asset()
+    {
+        if (Assets::IsSingletonInitialzed())
+            o2Assets.RemoveAssetCache(this);
+    }
 
-	const String& Asset::GetPath() const
-	{
-		return mInfo.path;
-	}
+    const String& Asset::GetPath() const
+    {
+        return mInfo.path;
+    }
 
-	void Asset::SetPath(const String& path)
-	{
-		auto oldPath = mInfo.path;
-		auto oldUID = mInfo.meta->mId;
+    void Asset::SetPath(const String& path)
+    {
+        auto oldPath = mInfo.path;
+        auto oldUID = mInfo.meta->mId;
 
-		mInfo.path = path;
-		mInfo.meta->mId.Randomize();
+        mInfo.path = path;
+        mInfo.meta->mId.Randomize();
 
-		o2Assets.UpdateAssetCache(this, oldPath, oldUID);
-		OnUIDChanged(oldUID);
-	}
+        o2Assets.UpdateAssetCache(this, oldPath, oldUID);
+        OnUIDChanged(oldUID);
+    }
 
-	const UID& Asset::GetUID() const
-	{
-		return mInfo.meta->ID();
-	}
+    const UID& Asset::GetUID() const
+    {
+        return mInfo.meta->ID();
+    }
 
-	UID& Asset::ID()
-	{
-		return mInfo.meta->mId;
-	}
+    UID& Asset::ID()
+    {
+        return mInfo.meta->mId;
+    }
 
-	AssetMeta* Asset::GetMeta() const
-	{
-		return mInfo.meta;
-	}
+    AssetMeta* Asset::GetMeta() const
+    {
+        return mInfo.meta;
+    }
 
-	const AssetInfo& Asset::GetInfo() const
-	{
-		return mInfo;
-	}
+    const AssetInfo& Asset::GetInfo() const
+    {
+        return mInfo;
+    }
 
 #if IS_EDITOR
-	void Asset::SetEditorAsset(bool isEditor)
-	{
-		mInfo.tree = !isEditor ?
-			&o2Assets.GetAssetsTree() :
-			o2Assets.GetAssetsTrees().FindOrDefault([](auto x) { return x != &o2Assets.GetAssetsTree(); });
-	}
+    void Asset::SetEditorAsset(bool isEditor)
+    {
+        mInfo.tree = !isEditor ?
+            &o2Assets.GetAssetsTree() :
+            o2Assets.GetAssetsTrees().FindOrDefault([](auto x) { return x != &o2Assets.GetAssetsTree(); });
+    }
 
-	bool Asset::IsEditorAsset() const
-	{
-		return mInfo.tree != &o2Assets.GetAssetsTree();
-	}
+    bool Asset::IsEditorAsset() const
+    {
+        return mInfo.tree != &o2Assets.GetAssetsTree();
+    }
 #endif
 
-	void Asset::Load(const String& path)
-	{
-		auto info = o2Assets.GetAssetInfo(path);
+    void Asset::Load(const String& path)
+    {
+        auto info = o2Assets.GetAssetInfo(path);
 
-		if (info.meta->mId == 0)
-		{
-			GetAssetsLogStream()->Error("Failed to load asset by path (" + path + "): asset isn't exist");
-			return;
-		}
+        if (info.meta->mId == 0)
+        {
+            GetAssetsLogStream()->Error("Failed to load asset by path (" + path + "): asset isn't exist");
+            return;
+        }
 
-		Load(info);
-	}
+        Load(info);
+    }
 
-	void Asset::Load(const UID& id)
-	{
-		auto& info = o2Assets.GetAssetInfo(id);
+    void Asset::Load(const UID& id)
+    {
+        auto& info = o2Assets.GetAssetInfo(id);
 
-		if (info.meta->mId == 0)
-		{
-			GetAssetsLogStream()->Error("Failed to load asset by UID (" + (WString)id + "): asset isn't exist");
-			return;
-		}
+        if (info.meta->mId == 0)
+        {
+            GetAssetsLogStream()->Error("Failed to load asset by UID (" + (WString)id + "): asset isn't exist");
+            return;
+        }
 
-		Load(info);
-	}
+        Load(info);
+    }
 
-	void Asset::Load(const AssetInfo& info)
-	{
-		auto oldPath = mInfo.path;
-		auto oldUID = mInfo.meta->mId;
+    void Asset::Load(const AssetInfo& info)
+    {
+        auto oldPath = mInfo.path;
+        auto oldUID = mInfo.meta->mId;
 
-		mInfo = info;
+        mInfo = info;
 
-		o2Assets.UpdateAssetCache(this, oldPath, oldUID);
+        o2Assets.UpdateAssetCache(this, oldPath, oldUID);
 
-		LoadData(GetBuiltFullPath());
-	}
+        LoadData(GetBuiltFullPath());
+    }
 
-	void Asset::Reload()
-	{
-		LoadData(GetBuiltFullPath());
-	}
+    void Asset::Reload()
+    {
+        LoadData(GetBuiltFullPath());
+    }
 
-	void Asset::Save(const String& path)
-	{
-		SetPath(path);
-		Save();
-	}
+    void Asset::Save(const String& path)
+    {
+        SetPath(path);
+        Save();
+    }
 
-	void Asset::Save()
-	{
-		if (ID() == 0)
-			ID().Randomize();
+    void Asset::Save()
+    {
+        if (ID() == 0)
+            ID().Randomize();
 
-		UID destPathAssetId = o2Assets.GetAssetId(mInfo.path);
-		if (destPathAssetId != 0 && destPathAssetId != mInfo.meta->mId)
-		{
-			GetAssetsLogStream()->Error("Failed to save asset (" + mInfo.path + " - " + (WString)mInfo.meta->mId +
-										"): another asset exist in this path");
-			return;
-		}
+        UID destPathAssetId = o2Assets.GetAssetId(mInfo.path);
+        if (destPathAssetId != 0 && destPathAssetId != mInfo.meta->mId)
+        {
+            GetAssetsLogStream()->Error("Failed to save asset (" + mInfo.path + " - " + (WString)mInfo.meta->mId +
+                                        "): another asset exist in this path");
+            return;
+        }
 
-		DataDocument metaData;
-		metaData.Set(mInfo.meta);
-		metaData.SaveToFile(GetMetaFullPath());
+        DataDocument metaData;
+        metaData.Set(mInfo.meta);
+        metaData.SaveToFile(GetMetaFullPath());
 
-		SaveData(GetFullPath());
-	}
+        SaveData(GetFullPath());
+    }
 
-	void Asset::SetDirty(bool dirty /*= true*/)
-	{
-		mDirty = dirty;
-	}
+    void Asset::SetDirty(bool dirty /*= true*/)
+    {
+        mDirty = dirty;
+    }
 
-	bool Asset::IsDirty() const
-	{
-		return mDirty;
-	}
+    bool Asset::IsDirty() const
+    {
+        return mDirty;
+    }
 
-	Vector<String> Asset::GetFileExtensions()
-	{
-		return {};
-	}
+    Vector<String> Asset::GetFileExtensions()
+    {
+        return {};
+    }
 
-	String Asset::GetFullPath() const
-	{
-		return (mInfo.tree ? mInfo.tree->assetsPath : String()) + mInfo.path;
-	}
+    String Asset::GetFullPath() const
+    {
+        return (mInfo.tree ? mInfo.tree->assetsPath : String()) + mInfo.path;
+    }
 
-	String Asset::GetBuiltFullPath() const
-	{
-		return (mInfo.tree ? mInfo.tree->builtAssetsPath : String()) + mInfo.path;
-	}
+    String Asset::GetBuiltFullPath() const
+    {
+        return (mInfo.tree ? mInfo.tree->builtAssetsPath : String()) + mInfo.path;
+    }
 
-	String Asset::GetMetaFullPath() const
-	{
-		return GetFullPath() + ".meta";
-	}
+    String Asset::GetMetaFullPath() const
+    {
+        return GetFullPath() + ".meta";
+    }
 
-	LogStream* Asset::GetAssetsLogStream() const
-	{
-		return o2Assets.mLog;
-	}
+    LogStream* Asset::GetAssetsLogStream() const
+    {
+        return o2Assets.mLog;
+    }
 
-	void Asset::SetMeta(AssetMeta* meta)
-	{}
+    void Asset::SetMeta(AssetMeta* meta)
+    {}
 
-	void Asset::LoadData(const String& path)
-	{
-		DataDocument data;
-		data.LoadFromFile(path);
-		Deserialize(data);
-	}
+    void Asset::LoadData(const String& path)
+    {
+        DataDocument data;
+        data.LoadFromFile(path);
+        Deserialize(data);
+    }
 
-	void Asset::SaveData(const String& path) const
-	{
-		DataDocument data;
-		Serialize(data);
-		data.SaveToFile(path);
-	}
+    void Asset::SaveData(const String& path) const
+    {
+        DataDocument data;
+        Serialize(data);
+        data.SaveToFile(path);
+    }
 
-	void Asset::OnUIDChanged(const UID& oldUID)
-	{}
+    void Asset::OnUIDChanged(const UID& oldUID)
+    {}
 
 }
 // --- META ---

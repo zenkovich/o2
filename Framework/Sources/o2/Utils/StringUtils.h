@@ -4,5 +4,5 @@
 
 namespace o2
 {
-	String GetSmartName(const String& fieldName);
+    String GetSmartName(const String& fieldName);
 }

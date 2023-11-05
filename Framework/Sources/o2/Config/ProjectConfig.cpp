@@ -6,54 +6,54 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(ProjectConfig);
+    DECLARE_SINGLETON(ProjectConfig);
 
-	ProjectConfig::ProjectConfig():
-		mPlatform(GetEnginePlatform())
-	{
-		Load();
-	}
+    ProjectConfig::ProjectConfig():
+        mPlatform(GetEnginePlatform())
+    {
+        Load();
+    }
 
-	ProjectConfig::~ProjectConfig()
-	{
-		Save();
-	}
+    ProjectConfig::~ProjectConfig()
+    {
+        Save();
+    }
 
-	String ProjectConfig::GetProjectName() const
-	{
-		return mProjectName;
-	}
+    String ProjectConfig::GetProjectName() const
+    {
+        return mProjectName;
+    }
 
-	void ProjectConfig::SetProjectName(const String& name)
-	{
-		mProjectName = name;
-	}
+    void ProjectConfig::SetProjectName(const String& name)
+    {
+        mProjectName = name;
+    }
 
-	Platform ProjectConfig::GetPlatform() const
-	{
-		return mPlatform;
-	}
+    Platform ProjectConfig::GetPlatform() const
+    {
+        return mPlatform;
+    }
 
-	void ProjectConfig::SetPlatform(Platform platform)
-	{
-		mPlatform = platform;
-	}
+    void ProjectConfig::SetPlatform(Platform platform)
+    {
+        mPlatform = platform;
+    }
 
-	void ProjectConfig::Load()
-	{
-		DataDocument data;
-		if (!data.LoadFromFile(GetProjectSettingPath()))
-			return;
+    void ProjectConfig::Load()
+    {
+        DataDocument data;
+        if (!data.LoadFromFile(GetProjectSettingPath()))
+            return;
 
-		Deserialize(data);
-	}
+        Deserialize(data);
+    }
 
-	void ProjectConfig::Save() const
-	{
-		DataDocument data;
-		Serialize(data);
-		data.SaveToFile(GetProjectSettingPath());
-	}
+    void ProjectConfig::Save() const
+    {
+        DataDocument data;
+        Serialize(data);
+        data.SaveToFile(GetProjectSettingPath());
+    }
 }
 // --- META ---
 

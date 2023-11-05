@@ -11,231 +11,231 @@
 
 namespace o2
 {
-	Spoiler::Spoiler():
-		VerticalLayout()
-	{
-		mBaseCorner = BaseCorner::Top;
-		mFitByChildren = true;
-		mExpandWidth = true;
-		mExpandHeight = false;
+    Spoiler::Spoiler():
+        VerticalLayout()
+    {
+        mBaseCorner = BaseCorner::Top;
+        mFitByChildren = true;
+        mExpandWidth = true;
+        mExpandHeight = false;
 
-		CreateExpandAnimation();
-		mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
-		mExpandState->SetState(false);
-		UpdateExpanding(0);
-	}
+        CreateExpandAnimation();
+        mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+        mExpandState->SetState(false);
+        UpdateExpanding(0);
+    }
 
-	Spoiler::Spoiler(const Spoiler& other):
-		VerticalLayout(other), caption(this), headHeight(this), expanded(this), mHeadHeight(other.mHeadHeight)
-	{
-		mExpandState = GetStateObject("expand");
-		if (!mExpandState)
-			CreateExpandAnimation();
+    Spoiler::Spoiler(const Spoiler& other):
+        VerticalLayout(other), caption(this), headHeight(this), expanded(this), mHeadHeight(other.mHeadHeight)
+    {
+        mExpandState = GetStateObject("expand");
+        if (!mExpandState)
+            CreateExpandAnimation();
 
-		mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
-		mExpandState->SetState(false);
+        mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+        mExpandState->SetState(false);
 
-		InitializeControls();
-		RetargetStatesAnimations();
-		UpdateExpanding(0);
-	}
+        InitializeControls();
+        RetargetStatesAnimations();
+        UpdateExpanding(0);
+    }
 
-	Spoiler& Spoiler::operator=(const Spoiler& other)
-	{
-		VerticalLayout::operator=(other);
+    Spoiler& Spoiler::operator=(const Spoiler& other)
+    {
+        VerticalLayout::operator=(other);
 
-		mExpandState = GetStateObject("expand");
-		if (!mExpandState)
-			CreateExpandAnimation();
+        mExpandState = GetStateObject("expand");
+        if (!mExpandState)
+            CreateExpandAnimation();
 
-		mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
-		mExpandState->SetState(false);
+        mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+        mExpandState->SetState(false);
 
-		mHeadHeight = other.mHeadHeight;
+        mHeadHeight = other.mHeadHeight;
 
-		InitializeControls();
-		UpdateExpanding(0);
+        InitializeControls();
+        UpdateExpanding(0);
 
-		return *this;
-	}
+        return *this;
+    }
 
-	void Spoiler::Expand()
-	{
-		SetExpanded(true);
-	}
+    void Spoiler::Expand()
+    {
+        SetExpanded(true);
+    }
 
-	void Spoiler::Collapse()
-	{
-		SetExpanded(false);
-	}
+    void Spoiler::Collapse()
+    {
+        SetExpanded(false);
+    }
 
-	void Spoiler::SetExpanded(bool expand)
-	{
-		if (mExpandState)
-			mExpandState->SetState(expand);
+    void Spoiler::SetExpanded(bool expand)
+    {
+        if (mExpandState)
+            mExpandState->SetState(expand);
 
-		if (expand)
-			onExpand();
+        if (expand)
+            onExpand();
 
-		auto expandBtn = GetExpandButton();
-		if (expandBtn)
-			expandBtn->SetState("expanded", expand);
+        auto expandBtn = GetExpandButton();
+        if (expandBtn)
+            expandBtn->SetState("expanded", expand);
 
-		mTargetHeight = VerticalLayout::GetMinHeightWithChildren();
-	}
+        mTargetHeight = VerticalLayout::GetMinHeightWithChildren();
+    }
 
-	bool Spoiler::IsExpanded() const
-	{
-		return mExpandState ? mExpandState->GetState() : false;
-	}
+    bool Spoiler::IsExpanded() const
+    {
+        return mExpandState ? mExpandState->GetState() : false;
+    }
 
 #undef DrawText
-	void Spoiler::Draw()
-	{
-		if (!mResEnabledInHierarchy || mIsClipped)
-			return;
+    void Spoiler::Draw()
+    {
+        if (!mResEnabledInHierarchy || mIsClipped)
+            return;
 
-		for (auto layer : mDrawingLayers)
-			layer->Draw();
+        for (auto layer : mDrawingLayers)
+            layer->Draw();
 
-		OnDrawn();
+        OnDrawn();
 
-		if (!IsFullyCollapsed())
-		{
-			bool clipping = !IsFullyExpanded();
-			if (clipping)
-				o2Render.EnableScissorTest(mBounds);
+        if (!IsFullyCollapsed())
+        {
+            bool clipping = !IsFullyExpanded();
+            if (clipping)
+                o2Render.EnableScissorTest(mBounds);
 
-			for (auto child : mChildrenInheritedDepth)
-				child->Draw();
+            for (auto child : mChildrenInheritedDepth)
+                child->Draw();
 
-			if (clipping)
-				o2Render.DisableScissorTest();
-		}
+            if (clipping)
+                o2Render.DisableScissorTest();
+        }
 
-		for (auto child : mInternalWidgets)
-			child->Draw();
+        for (auto child : mInternalWidgets)
+            child->Draw();
 
-		for (auto layer : mTopDrawingLayers)
-			layer->Draw();
+        for (auto layer : mTopDrawingLayers)
+            layer->Draw();
 
-		DrawDebugFrame();
-	}
+        DrawDebugFrame();
+    }
 
-	void Spoiler::SetCaption(const WString& caption)
-	{
-		auto textLayer = GetLayerDrawable<Text>("caption");
-		if (textLayer)
-			textLayer->text = caption;
-	}
+    void Spoiler::SetCaption(const WString& caption)
+    {
+        auto textLayer = GetLayerDrawable<Text>("caption");
+        if (textLayer)
+            textLayer->text = caption;
+    }
 
-	const WString& Spoiler::GetCaption() const
-	{
-		auto textLayer = GetLayerDrawable<Text>("caption");
-		if (textLayer)
-			return textLayer->GetText();
+    const WString& Spoiler::GetCaption() const
+    {
+        auto textLayer = GetLayerDrawable<Text>("caption");
+        if (textLayer)
+            return textLayer->GetText();
 
-		return WString::empty;
-	}
+        return WString::empty;
+    }
 
-	void Spoiler::SetHeadHeight(float height)
-	{
-		mHeadHeight = height;
-	}
+    void Spoiler::SetHeadHeight(float height)
+    {
+        mHeadHeight = height;
+    }
 
-	float Spoiler::GetHeadHeight() const
-	{
-		return mHeadHeight;
-	}
+    float Spoiler::GetHeadHeight() const
+    {
+        return mHeadHeight;
+    }
 
-	void Spoiler::RearrangeChilds()
-	{
-		float borderTop = mBorder.top;
-		mBorder.top = borderTop + mHeadHeight;
+    void Spoiler::RearrangeChilds()
+    {
+        float borderTop = mBorder.top;
+        mBorder.top = borderTop + mHeadHeight;
 
-		VerticalLayout::RearrangeChilds();
+        VerticalLayout::RearrangeChilds();
 
-		mBorder.top = borderTop;
-	}
+        mBorder.top = borderTop;
+    }
 
-	void Spoiler::UpdateExpanding(float dt)
-	{
-		layout->SetDirty(false);
-	}
+    void Spoiler::UpdateExpanding(float dt)
+    {
+        layout->SetDirty(false);
+    }
 
-	void Spoiler::CreateExpandAnimation()
-	{
-		mExpandState = AddState("expand", AnimationClip::Parametric("mExpandCoef", 0.0f, 1.0f, 0.4f, 0.0f, 0.4f, 1.0f, 1.0f));
-	}
+    void Spoiler::CreateExpandAnimation()
+    {
+        mExpandState = AddState("expand", AnimationClip::Parametric("mExpandCoef", 0.0f, 1.0f, 0.4f, 0.0f, 0.4f, 1.0f, 1.0f));
+    }
 
-	float Spoiler::GetMinHeightWithChildren() const
-	{
-		if (!mFitByChildren)
-			return Widget::GetMinHeightWithChildren();
+    float Spoiler::GetMinHeightWithChildren() const
+    {
+        if (!mFitByChildren)
+            return Widget::GetMinHeightWithChildren();
 
-		float res = Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing + mBorder.top + mBorder.bottom;
-		for (auto child : mChildWidgets)
-		{
-			if (child->mResEnabledInHierarchy)
-				res += child->GetMinHeightWithChildren();
-		}
+        float res = Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing + mBorder.top + mBorder.bottom;
+        for (auto child : mChildWidgets)
+        {
+            if (child->mResEnabledInHierarchy)
+                res += child->GetMinHeightWithChildren();
+        }
 
-		res = res*Math::Clamp01(mExpandCoef) + mHeadHeight;
-		res = Math::Max(res, GetLayoutData().minSize.y);
+        res = res*Math::Clamp01(mExpandCoef) + mHeadHeight;
+        res = Math::Max(res, GetLayoutData().minSize.y);
 
-		return res;
-	}
+        return res;
+    }
 
-	void Spoiler::UpdateLayoutParametres()
-	{
-		if (IsFullyExpanded())
-			VerticalLayout::UpdateLayoutParametres();
-		else
-		{
-			GetLayoutData().weight.y = 1;
-			GetLayoutData().minSize.y = 0;
-		}
-	}
+    void Spoiler::UpdateLayoutParametres()
+    {
+        if (IsFullyExpanded())
+            VerticalLayout::UpdateLayoutParametres();
+        else
+        {
+            GetLayoutData().weight.y = 1;
+            GetLayoutData().minSize.y = 0;
+        }
+    }
 
-	void Spoiler::InitializeControls()
-	{
-		auto textLayer = GetLayerDrawable<Text>("caption");
-		auto expandBtn = GetExpandButton();
+    void Spoiler::InitializeControls()
+    {
+        auto textLayer = GetLayerDrawable<Text>("caption");
+        auto expandBtn = GetExpandButton();
 
-		if (expandBtn)
-		{
-			expandBtn->onClick = [&]() { SetExpanded(!IsExpanded()); };
-			expandBtn->isPointInside = [=](const Vec2F& point) {
-				return expandBtn->layout->IsPointInside(point) || (textLayer && textLayer->IsPointInside(point));
-			};
-		}
-	}
+        if (expandBtn)
+        {
+            expandBtn->onClick = [&]() { SetExpanded(!IsExpanded()); };
+            expandBtn->isPointInside = [=](const Vec2F& point) {
+                return expandBtn->layout->IsPointInside(point) || (textLayer && textLayer->IsPointInside(point));
+            };
+        }
+    }
 
-	Button* Spoiler::GetExpandButton() const
-	{
-		return FindInternalWidgetByType<Button>("expand");
-	}
+    Button* Spoiler::GetExpandButton() const
+    {
+        return FindInternalWidgetByType<Button>("expand");
+    }
 
-	bool Spoiler::IsFullyExpanded() const
-	{
-		if (!mExpandState)
-			return true;
+    bool Spoiler::IsFullyExpanded() const
+    {
+        if (!mExpandState)
+            return true;
 
-		return mExpandState->GetState() && !mExpandState->player.IsPlaying();
-	}
+        return mExpandState->GetState() && !mExpandState->player.IsPlaying();
+    }
 
-	bool Spoiler::IsFullyCollapsed() const
-	{
-		if (!mExpandState)
-			return false;
+    bool Spoiler::IsFullyCollapsed() const
+    {
+        if (!mExpandState)
+            return false;
 
-		return !mExpandState->GetState() && !mExpandState->player.IsPlaying();
-	}
+        return !mExpandState->GetState() && !mExpandState->player.IsPlaying();
+    }
 
-	String Spoiler::GetCreateMenuGroup()
-	{
-		return "Dropping";
-	}
+    String Spoiler::GetCreateMenuGroup()
+    {
+        return "Dropping";
+    }
 }
 // --- META ---
 

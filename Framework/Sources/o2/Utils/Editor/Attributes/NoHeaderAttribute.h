@@ -5,12 +5,12 @@
 
 namespace o2
 {
-	class NoHeaderAttribute : public IAttribute
-	{
-		ATTRIBUTE_COMMENT_DEFINITION("NO_HEADER");
-		ATTRIBUTE_SHORT_DEFINITION("NO_HEADER_ATTRIBUTE");
-	};
+    class NoHeaderAttribute : public IAttribute
+    {
+        ATTRIBUTE_COMMENT_DEFINITION("NO_HEADER");
+        ATTRIBUTE_SHORT_DEFINITION("NO_HEADER_ATTRIBUTE");
+    };
 
 #define NO_HEADER_ATTRIBUTE() \
-	template AddAttribute<o2::NoHeaderAttribute>()
+    template AddAttribute<o2::NoHeaderAttribute>()
 }

@@ -2,7 +2,7 @@
 
 namespace o2
 {
-	class PolyLine
-	{
-	};
+    class PolyLine
+    {
+    };
 }

@@ -8,212 +8,212 @@
 
 namespace o2
 {
-	ISceneDrawable::ISceneDrawable()
-	{
-	}
+    ISceneDrawable::ISceneDrawable()
+    {
+    }
 
-	ISceneDrawable::ISceneDrawable(const ISceneDrawable& other) :
-		mDrawingDepth(other.mDrawingDepth), mInheritDrawingDepthFromParent(other.mInheritDrawingDepthFromParent), drawDepth(this)
-	{
-	}
+    ISceneDrawable::ISceneDrawable(const ISceneDrawable& other) :
+        mDrawingDepth(other.mDrawingDepth), mInheritDrawingDepthFromParent(other.mInheritDrawingDepthFromParent), drawDepth(this)
+    {
+    }
 
-	ISceneDrawable::~ISceneDrawable()
-	{
-		if (mRegistered)
-			Unregister();
+    ISceneDrawable::~ISceneDrawable()
+    {
+        if (mRegistered)
+            Unregister();
 
-		for (auto child : mChildrenInheritedDepth)
-		{
-			child->mParentRegistry = nullptr;
-			child->mRegistered = false;
-		}
-	}
+        for (auto child : mChildrenInheritedDepth)
+        {
+            child->mParentRegistry = nullptr;
+            child->mRegistered = false;
+        }
+    }
 
-	ISceneDrawable& ISceneDrawable::operator=(const ISceneDrawable& other)
-	{
-		if (other.mInheritDrawingDepthFromParent)
-			SetDrawingDepthInheritFromParent(true);
-		else
-			SetDrawingDepth(other.mDrawingDepth);
+    ISceneDrawable& ISceneDrawable::operator=(const ISceneDrawable& other)
+    {
+        if (other.mInheritDrawingDepthFromParent)
+            SetDrawingDepthInheritFromParent(true);
+        else
+            SetDrawingDepth(other.mDrawingDepth);
 
-		return *this;
-	}
+        return *this;
+    }
 
-	void ISceneDrawable::Draw()
-	{
-		//PROFILE_SAMPLE_FUNC();
+    void ISceneDrawable::Draw()
+    {
+        //PROFILE_SAMPLE_FUNC();
 
-		OnDrawn();
+        OnDrawn();
 
-		for (auto child : mChildrenInheritedDepth)
-			child->Draw();
-	}
+        for (auto child : mChildrenInheritedDepth)
+            child->Draw();
+    }
 
-	void ISceneDrawable::SetDrawingDepth(float depth)
-	{
-		mDrawingDepth = depth;
-		mInheritDrawingDepthFromParent = false;
+    void ISceneDrawable::SetDrawingDepth(float depth)
+    {
+        mDrawingDepth = depth;
+        mInheritDrawingDepthFromParent = false;
 
-		Reregister();
-	}
+        Reregister();
+    }
 
-	float ISceneDrawable::GetDrawingDepth() const
-	{
-		return mDrawingDepth;
-	}
+    float ISceneDrawable::GetDrawingDepth() const
+    {
+        return mDrawingDepth;
+    }
 
-	void ISceneDrawable::SetDrawingDepthInheritFromParent(bool inherit)
-	{
-		mInheritDrawingDepthFromParent = inherit;
+    void ISceneDrawable::SetDrawingDepthInheritFromParent(bool inherit)
+    {
+        mInheritDrawingDepthFromParent = inherit;
 
-		Reregister();
-	}
+        Reregister();
+    }
 
-	bool ISceneDrawable::IsDrawingDepthInheritedFromParent() const
-	{
-		return mInheritDrawingDepthFromParent;
-	}
+    bool ISceneDrawable::IsDrawingDepthInheritedFromParent() const
+    {
+        return mInheritDrawingDepthFromParent;
+    }
 
-	void ISceneDrawable::OnDrawbleParentChanged()
-	{
-		Reregister();
-	}
+    void ISceneDrawable::OnDrawbleParentChanged()
+    {
+        Reregister();
+    }
 
-	void ISceneDrawable::OnDrawableLayerChanged()
-	{
-		Reregister();
-	}
+    void ISceneDrawable::OnDrawableLayerChanged()
+    {
+        Reregister();
+    }
 
-	void ISceneDrawable::SortInheritedDrawables()
-	{
-		mChildrenInheritedDepth.SortBy<int>([](ISceneDrawable* x) { return x->GetIndexInParentDrawable(); });
-	}
+    void ISceneDrawable::SortInheritedDrawables()
+    {
+        mChildrenInheritedDepth.SortBy<int>([](ISceneDrawable* x) { return x->GetIndexInParentDrawable(); });
+    }
 
-	void ISceneDrawable::OnEnabled()
-	{
-		mDrawableEnabled = true;
+    void ISceneDrawable::OnEnabled()
+    {
+        mDrawableEnabled = true;
 
-		if (mRegistered)
-			Unregister();
+        if (mRegistered)
+            Unregister();
 
-		Register();
-	}
+        Register();
+    }
 
-	void ISceneDrawable::OnDisabled()
-	{
-		mDrawableEnabled = false;
+    void ISceneDrawable::OnDisabled()
+    {
+        mDrawableEnabled = false;
 
-		if (mRegistered)
-			Unregister();
-	}
+        if (mRegistered)
+            Unregister();
+    }
 
-	void ISceneDrawable::OnAddToScene()
-	{
-		mIsOnScene = true;
-		Reregister();
-	}
+    void ISceneDrawable::OnAddToScene()
+    {
+        mIsOnScene = true;
+        Reregister();
+    }
 
-	void ISceneDrawable::OnRemoveFromScene()
-	{
-		mIsOnScene = false;
+    void ISceneDrawable::OnRemoveFromScene()
+    {
+        mIsOnScene = false;
 
-		if (mRegistered)
-			Unregister();
-	}
+        if (mRegistered)
+            Unregister();
+    }
 
-	void ISceneDrawable::Reregister()
-	{
-		if (mRegistered)
-			Unregister();
+    void ISceneDrawable::Reregister()
+    {
+        if (mRegistered)
+            Unregister();
 
-		if (mDrawableEnabled)
-			Register();
-	}
+        if (mDrawableEnabled)
+            Register();
+    }
 
-	void ISceneDrawable::Register()
-	{
-		if (mInheritDrawingDepthFromParent)
-		{
-			if (mDrawableEnabled)
-			{
-				mParentRegistry = GetParentDrawable();
-				if (!mParentRegistry && mIsOnScene)
-					mParentRegistry = &GetSceneDrawableSceneLayer()->GetRootDrawables();
+    void ISceneDrawable::Register()
+    {
+        if (mInheritDrawingDepthFromParent)
+        {
+            if (mDrawableEnabled)
+            {
+                mParentRegistry = GetParentDrawable();
+                if (!mParentRegistry && mIsOnScene)
+                    mParentRegistry = &GetSceneDrawableSceneLayer()->GetRootDrawables();
 
-				if (mParentRegistry)
-				{
-// 					if (mParentRegistry->mChildrenInheritedDepth.Contains(this))
-// 						o2Debug.Log("asd");
+                if (mParentRegistry)
+                {
+//                     if (mParentRegistry->mChildrenInheritedDepth.Contains(this))
+//                         o2Debug.Log("asd");
 
-					mParentRegistry->mChildrenInheritedDepth.Add(this);
-					mParentRegistry->SortInheritedDrawables();
+                    mParentRegistry->mChildrenInheritedDepth.Add(this);
+                    mParentRegistry->SortInheritedDrawables();
 
-					mRegistered = true;
-				}
-			}
-		}
-		else
-		{
-			if (mDrawableEnabled && mIsOnScene)
-			{
-				mLayerRegistry = GetSceneDrawableSceneLayer();
-				mLayerRegistry->RegisterDrawable(this);
+                    mRegistered = true;
+                }
+            }
+        }
+        else
+        {
+            if (mDrawableEnabled && mIsOnScene)
+            {
+                mLayerRegistry = GetSceneDrawableSceneLayer();
+                mLayerRegistry->RegisterDrawable(this);
 
-				mRegistered = true;
-			}
-		}
+                mRegistered = true;
+            }
+        }
 
-	}
+    }
 
-	void ISceneDrawable::Unregister()
-	{
-		if (mParentRegistry)
-			mParentRegistry->mChildrenInheritedDepth.Remove(this);
-		else
-			mLayerRegistry->UnregisterDrawable(this);
+    void ISceneDrawable::Unregister()
+    {
+        if (mParentRegistry)
+            mParentRegistry->mChildrenInheritedDepth.Remove(this);
+        else
+            mLayerRegistry->UnregisterDrawable(this);
 
-		mParentRegistry = nullptr;
-		mLayerRegistry = nullptr;
+        mParentRegistry = nullptr;
+        mLayerRegistry = nullptr;
 
-		mRegistered = false;
-	}
+        mRegistered = false;
+    }
 
-	void ISceneDrawable::SetLastOnCurrentDepth()
-	{
-		if (!mRegistered)
-			return;
+    void ISceneDrawable::SetLastOnCurrentDepth()
+    {
+        if (!mRegistered)
+            return;
 
-		if (mParentRegistry)
-		{
-			mParentRegistry->mChildrenInheritedDepth.Remove(this);
-			mParentRegistry->mChildrenInheritedDepth.Add(this);
-		}
-		else
-			mLayerRegistry->SetLastByDepth(this);
-	}
+        if (mParentRegistry)
+        {
+            mParentRegistry->mChildrenInheritedDepth.Remove(this);
+            mParentRegistry->mChildrenInheritedDepth.Add(this);
+        }
+        else
+            mLayerRegistry->SetLastByDepth(this);
+    }
 
-	const Vector<ISceneDrawable*>& ISceneDrawable::GetChildrenInheritedDepth() const
+    const Vector<ISceneDrawable*>& ISceneDrawable::GetChildrenInheritedDepth() const
     {
         return mChildrenInheritedDepth;
     }
 
 #if IS_EDITOR
-	SceneEditableObject* ISceneDrawable::GetEditableOwner()
-	{
-		return nullptr;
-	}
+    SceneEditableObject* ISceneDrawable::GetEditableOwner()
+    {
+        return nullptr;
+    }
 
-	void ISceneDrawable::OnDrawn()
-	{
-		//PROFILE_SAMPLE_FUNC();
+    void ISceneDrawable::OnDrawn()
+    {
+        //PROFILE_SAMPLE_FUNC();
 
-		if (auto obj = GetEditableOwner())
-			o2Scene.OnObjectDrawn(obj);
+        if (auto obj = GetEditableOwner())
+            o2Scene.OnObjectDrawn(obj);
 
-		IDrawable::OnDrawn();
+        IDrawable::OnDrawn();
 
-		drawCallIdx = o2Render.GetDrawCallsCount();
-	}
+        drawCallIdx = o2Render.GetDrawCallsCount();
+    }
 #endif
 }
 // --- META ---

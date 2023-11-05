@@ -5,115 +5,115 @@
 
 namespace o2
 {
-	BoxCollider::BoxCollider()
-	{}
+    BoxCollider::BoxCollider()
+    {}
 
-	BoxCollider::BoxCollider(const BoxCollider& other):
-		ICollider(other), mSize(other.mSize), mFitByActor(other.mFitByActor)
-	{}
+    BoxCollider::BoxCollider(const BoxCollider& other):
+        ICollider(other), mSize(other.mSize), mFitByActor(other.mFitByActor)
+    {}
 
-	void BoxCollider::SetSize(const Vec2F& size)
-	{
-		mSize = size;
-		OnShapeChanged();
-	}
+    void BoxCollider::SetSize(const Vec2F& size)
+    {
+        mSize = size;
+        OnShapeChanged();
+    }
 
-	Vec2F BoxCollider::GetSize() const
-	{
-		return mSize;
-	}
+    Vec2F BoxCollider::GetSize() const
+    {
+        return mSize;
+    }
 
-	void BoxCollider::SetFitByActor(bool fit)
-	{
-		mFitByActor = fit;
+    void BoxCollider::SetFitByActor(bool fit)
+    {
+        mFitByActor = fit;
 
-		if (fit)
-		{
-			mSize = mOwner->transform->GetSize();
-			OnShapeChanged();
-		}
-	}
+        if (fit)
+        {
+            mSize = mOwner->transform->GetSize();
+            OnShapeChanged();
+        }
+    }
 
-	bool BoxCollider::IsFitByActor() const
-	{
-		return mFitByActor;
-	}
+    bool BoxCollider::IsFitByActor() const
+    {
+        return mFitByActor;
+    }
 
-	String BoxCollider::GetName()
-	{
-		return "Box collider";
-	}
+    String BoxCollider::GetName()
+    {
+        return "Box collider";
+    }
 
-	String BoxCollider::GetCategory()
-	{
-		return "Physics";
-	}
+    String BoxCollider::GetCategory()
+    {
+        return "Physics";
+    }
 
-	bool BoxCollider::IsAvailableFromCreateMenu()
-	{
-		return true;
-	}
+    bool BoxCollider::IsAvailableFromCreateMenu()
+    {
+        return true;
+    }
 
-	BoxCollider& BoxCollider::operator=(const BoxCollider& other)
-	{
-		ICollider::operator=(other);
-		mSize = other.mSize;
-		mFitByActor = other.mFitByActor;
-		return *this;
-	}
+    BoxCollider& BoxCollider::operator=(const BoxCollider& other)
+    {
+        ICollider::operator=(other);
+        mSize = other.mSize;
+        mFitByActor = other.mFitByActor;
+        return *this;
+    }
 
-	b2Shape* BoxCollider::GetShape(const Basis& transform)
-	{
-		Vec2F halfSize = mSize*0.5f;
+    b2Shape* BoxCollider::GetShape(const Basis& transform)
+    {
+        Vec2F halfSize = mSize*0.5f;
 
-		if (halfSize.x < 0.001f)
-			halfSize.x = 1.0f;
+        if (halfSize.x < 0.001f)
+            halfSize.x = 1.0f;
 
-		if (halfSize.y < 0.001f)
-			halfSize.y = 1.0f;
+        if (halfSize.y < 0.001f)
+            halfSize.y = 1.0f;
 
-		b2Vec2 verticies[4];
-		verticies[0] = Vec2F(-halfSize.x, -halfSize.y)*transform;
-		verticies[1] = Vec2F(halfSize.x, -halfSize.y)*transform;
-		verticies[2] = Vec2F(halfSize.x, halfSize.y)*transform;
-		verticies[3] = Vec2F(-halfSize.x, halfSize.y)*transform;
+        b2Vec2 verticies[4];
+        verticies[0] = Vec2F(-halfSize.x, -halfSize.y)*transform;
+        verticies[1] = Vec2F(halfSize.x, -halfSize.y)*transform;
+        verticies[2] = Vec2F(halfSize.x, halfSize.y)*transform;
+        verticies[3] = Vec2F(-halfSize.x, halfSize.y)*transform;
 
-		mShape.Set(verticies, 4);
+        mShape.Set(verticies, 4);
 
-		return &mShape;
-	}
+        return &mShape;
+    }
 
-	void BoxCollider::OnTransformUpdated()
-	{
-		if (!o2Physics.IsUpdatingPhysicsNow() && mFitByActor)
-			FitSize();
+    void BoxCollider::OnTransformUpdated()
+    {
+        if (!o2Physics.IsUpdatingPhysicsNow() && mFitByActor)
+            FitSize();
 
-		ICollider::OnTransformUpdated();
-	}
+        ICollider::OnTransformUpdated();
+    }
 
-	void BoxCollider::OnAddToScene()
-	{
-		if (mFitByActor)
-			FitSize();
+    void BoxCollider::OnAddToScene()
+    {
+        if (mFitByActor)
+            FitSize();
 
-		ICollider::OnAddToScene();
-	}
+        ICollider::OnAddToScene();
+    }
 
-	void BoxCollider::FitSize()
-	{
-		Vec2F prevSize = mSize;
-		mSize = mOwner->transform->GetSize();
+    void BoxCollider::FitSize()
+    {
+        Vec2F prevSize = mSize;
+        mSize = mOwner->transform->GetSize();
 
-		if (prevSize != mSize)
-			OnShapeChanged();
-	}
+        if (prevSize != mSize)
+            OnShapeChanged();
+    }
 
 #if IS_EDITOR
-	void BoxCollider::OnAddedFromEditor()
-	{
-		mSize = mOwner->transform->GetSize();
-		OnShapeChanged();
-	}
+    void BoxCollider::OnAddedFromEditor()
+    {
+        mSize = mOwner->transform->GetSize();
+        OnShapeChanged();
+    }
 #endif
 }
 // --- META ---

@@ -10,19 +10,19 @@
 
 namespace o2
 {
-	class Texture;
+    class Texture;
 
-	class RenderBase
-	{
-	protected:
+    class RenderBase
+    {
+    protected:
         GLXContext mGLContext; // OpenGL context
 
-		GLuint mStdShader;               // Standard shader program
-		GLint  mStdShaderMvpUniform;     // Standard shader matrix input parameter
-		GLint  mStdShaderTextureSample;  // Standard shader texture sample input parameter
-		GLint  mStdShaderPosAttribute;   // Standard shader vertex position attribute
-		GLint  mStdShaderColorAttribute; // Standard shader vertex color attribute
-		GLint  mStdShaderUVAttribute;    // Standard shader texture coords attribute
+        GLuint mStdShader;               // Standard shader program
+        GLint  mStdShaderMvpUniform;     // Standard shader matrix input parameter
+        GLint  mStdShaderTextureSample;  // Standard shader texture sample input parameter
+        GLint  mStdShaderPosAttribute;   // Standard shader vertex position attribute
+        GLint  mStdShaderColorAttribute; // Standard shader vertex color attribute
+        GLint  mStdShaderUVAttribute;    // Standard shader texture coords attribute
 
         const static int mBuffersPoolsSize = 3;       // Count of buffers in pools
         GLuint mVertexBuffersPool[mBuffersPoolsSize]; // Batch vertices buffer
@@ -36,21 +36,21 @@ namespace o2
         UInt         mVertexBufferSize;          // Maximum size of vertex buffer
         UInt         mIndexBufferSize;           // Maximum size of index buffer
 
-		TextureRef mWhiteTexture; // Default white texture
+        TextureRef mWhiteTexture; // Default white texture
 
-	protected:
-		// Builds vertex and fragment shaders
-		GLuint LoadShader(GLenum shaderType, const char* source);
+    protected:
+        // Builds vertex and fragment shaders
+        GLuint LoadShader(GLenum shaderType, const char* source);
 
-		// Builds vertex and fragment shaders
-		GLuint BuildShaderProgram(const char* vertexSource, const char* fragmentSource);
+        // Builds vertex and fragment shaders
+        GLuint BuildShaderProgram(const char* vertexSource, const char* fragmentSource);
 
-		// Initializes standard shader
-		void InitializeStdShader();
+        // Initializes standard shader
+        void InitializeStdShader();
 
         // BInds next buffers from pool
         void BindNextPoolBuffers();
-	};
+    };
 };
 
 #endif // PLATFORM_LINUX

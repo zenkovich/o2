@@ -9,149 +9,149 @@
 
 namespace o2
 {
-	void ScriptEngineBase::ErrorCallback(const jerry_value_t error_object, void* user_p)
-	{
-		auto strValue = jerry_value_to_string(error_object);
-		ScriptValue tmp;
-		tmp.AcquireValue(strValue);
-		o2Scripts.mLog->ErrorStr(tmp.GetValue<String>());
-	}
+    void ScriptEngineBase::ErrorCallback(const jerry_value_t error_object, void* user_p)
+    {
+        auto strValue = jerry_value_to_string(error_object);
+        ScriptValue tmp;
+        tmp.AcquireValue(strValue);
+        o2Scripts.mLog->ErrorStr(tmp.GetValue<String>());
+    }
 
-	jerry_value_t ScriptEngineBase::PrintCallback(const jerry_value_t func_obj_val, const jerry_value_t this_p,
-												  const jerry_value_t args_p[], const jerry_length_t args_cnt)
-	{
-		for (int i = 0; i < (int)args_cnt; i++)
-		{
-			ScriptValue v;
-			v.AcquireValue(args_p[i]);
-			o2Scripts.mLog->OutStr(v.GetValue<String>());
-		}
+    jerry_value_t ScriptEngineBase::PrintCallback(const jerry_value_t func_obj_val, const jerry_value_t this_p,
+                                                  const jerry_value_t args_p[], const jerry_length_t args_cnt)
+    {
+        for (int i = 0; i < (int)args_cnt; i++)
+        {
+            ScriptValue v;
+            v.AcquireValue(args_p[i]);
+            o2Scripts.mLog->OutStr(v.GetValue<String>());
+        }
 
-		return jerry_create_undefined();
-	}
+        return jerry_create_undefined();
+    }
 
-	ScriptParseResultBase::~ScriptParseResultBase()
-	{
-		jerry_release_value(mParsedCode);
-	}
+    ScriptParseResultBase::~ScriptParseResultBase()
+    {
+        jerry_release_value(mParsedCode);
+    }
 
-	ScriptParseResultBase::ScriptParseResultBase(const ScriptParseResultBase& other)
-	{
-		mParsedCode = jerry_acquire_value(other.mParsedCode);
-	}
+    ScriptParseResultBase::ScriptParseResultBase(const ScriptParseResultBase& other)
+    {
+        mParsedCode = jerry_acquire_value(other.mParsedCode);
+    }
 
-	bool ScriptParseResult::IsOk() const
-	{
-		return !jerry_value_is_error(mParsedCode);
-	}
+    bool ScriptParseResult::IsOk() const
+    {
+        return !jerry_value_is_error(mParsedCode);
+    }
 
-	String ScriptParseResult::GetError() const
-	{
-		ScriptValue tmp;
-		tmp.AcquireValue(mParsedCode);
-		return tmp.GetError();
-	}
+    String ScriptParseResult::GetError() const
+    {
+        ScriptValue tmp;
+        tmp.AcquireValue(mParsedCode);
+        return tmp.GetError();
+    }
 
-	ScriptEngine::ScriptEngine()
-	{
-		mLog = mnew LogStream("Scripting");
-		o2Debug.GetLog()->BindStream(mLog);
+    ScriptEngine::ScriptEngine()
+    {
+        mLog = mnew LogStream("Scripting");
+        o2Debug.GetLog()->BindStream(mLog);
 
-		jerry_init(JERRY_INIT_EMPTY);
-		jerryx_handler_register_global((const jerry_char_t*)"print", PrintCallback);
-		jerry_set_error_object_created_callback(&ErrorCallback, NULL);
+        jerry_init(JERRY_INIT_EMPTY);
+        jerryx_handler_register_global((const jerry_char_t*)"print", PrintCallback);
+        jerry_set_error_object_created_callback(&ErrorCallback, NULL);
 
-		GetGlobal().SetProperty("Dump", Function<String(const ScriptValue&)>([](const ScriptValue& v) { return v.Dump(); }));
+        GetGlobal().SetProperty("Dump", Function<String(const ScriptValue&)>([](const ScriptValue& v) { return v.Dump(); }));
 
-		RunBuildtinScripts();
-		InitializeBasicPrototypes();
-		RegisterTypes();
+        RunBuildtinScripts();
+        InitializeBasicPrototypes();
+        RegisterTypes();
 
-		jerry_port_default_set_log_level(JERRY_LOG_LEVEL_DEBUG);
+        jerry_port_default_set_log_level(JERRY_LOG_LEVEL_DEBUG);
 
-		//ConnectDebugger();
-	}
+        //ConnectDebugger();
+    }
 
-	ScriptEngine::~ScriptEngine()
-	{
-		delete ScriptValuePrototypes::GetVec2Prototype();
-		delete ScriptValuePrototypes::GetRectPrototype();
-		delete ScriptValuePrototypes::GetBorderPrototype();
-		delete ScriptValuePrototypes::GetColor4Prototype();
-		//jerry_cleanup();
-	}
+    ScriptEngine::~ScriptEngine()
+    {
+        delete ScriptValuePrototypes::GetVec2Prototype();
+        delete ScriptValuePrototypes::GetRectPrototype();
+        delete ScriptValuePrototypes::GetBorderPrototype();
+        delete ScriptValuePrototypes::GetColor4Prototype();
+        //jerry_cleanup();
+    }
 
-	ScriptParseResult ScriptEngine::Parse(const String& script, const String& filename /*= ""*/)
-	{
-		ScriptParseResult res;
-		res.mParsedCode = jerry_parse((jerry_char_t*)filename.Data(), filename.Length(),
-									  (jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_NO_OPTS);
+    ScriptParseResult ScriptEngine::Parse(const String& script, const String& filename /*= ""*/)
+    {
+        ScriptParseResult res;
+        res.mParsedCode = jerry_parse((jerry_char_t*)filename.Data(), filename.Length(),
+                                      (jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_NO_OPTS);
 
-		return res;
-	}
+        return res;
+    }
 
-	ScriptValue ScriptEngine::Run(const ScriptParseResult& parseResult)
-	{
-		ScriptValue res;
-		res.Accept(jerry_run(parseResult.mParsedCode));
-		return res;
-	}
+    ScriptValue ScriptEngine::Run(const ScriptParseResult& parseResult)
+    {
+        ScriptValue res;
+        res.Accept(jerry_run(parseResult.mParsedCode));
+        return res;
+    }
 
-	ScriptValue ScriptEngine::Eval(const String& script, const String& filename /*= ""*/)
-	{
-		auto parseRes = Parse(script, filename);
-		if (parseRes.IsOk())
-			return Run(parseRes);
+    ScriptValue ScriptEngine::Eval(const String& script, const String& filename /*= ""*/)
+    {
+        auto parseRes = Parse(script, filename);
+        if (parseRes.IsOk())
+            return Run(parseRes);
 
-		return ScriptValue();
-	}
+        return ScriptValue();
+    }
 
-	ScriptValue ScriptEngine::GetGlobal() const
-	{
-		ScriptValue res;
-		res.Accept(jerry_get_global_object());
-		return res;
-	}
+    ScriptValue ScriptEngine::GetGlobal() const
+    {
+        ScriptValue res;
+        res.Accept(jerry_get_global_object());
+        return res;
+    }
 
-	ScriptValue ScriptEngine::CreateRealm()
-	{
-		ScriptValue res;
-		res.Accept(jerry_create_realm());
-		return res;
-	}
+    ScriptValue ScriptEngine::CreateRealm()
+    {
+        ScriptValue res;
+        res.Accept(jerry_create_realm());
+        return res;
+    }
 
-	ScriptValue ScriptEngine::SetCurrentRealm(const ScriptValue& realm)
-	{
-		ScriptValue res;
-		res.AcquireValue(jerry_set_realm(realm.jvalue));
-		return res;
-	}
+    ScriptValue ScriptEngine::SetCurrentRealm(const ScriptValue& realm)
+    {
+        ScriptValue res;
+        res.AcquireValue(jerry_set_realm(realm.jvalue));
+        return res;
+    }
 
-	void ScriptEngine::CollectGarbage() const
-	{
-		jerry_gc(JERRY_GC_PRESSURE_HIGH);
-	}
-	
-	int ScriptEngine::GetUsedMemory() const
-	{
-		jerry_heap_stats_t stats = { 0 };
-		bool get_stats_ret = jerry_get_memory_stats(&stats);
-		return (int)stats.allocated_bytes;
-	}
+    void ScriptEngine::CollectGarbage() const
+    {
+        jerry_gc(JERRY_GC_PRESSURE_HIGH);
+    }
+    
+    int ScriptEngine::GetUsedMemory() const
+    {
+        jerry_heap_stats_t stats = { 0 };
+        bool get_stats_ret = jerry_get_memory_stats(&stats);
+        return (int)stats.allocated_bytes;
+    }
 
-	void ScriptEngine::ConnectDebugger() const
-	{
-		jerryx_debugger_after_connect(jerryx_debugger_tcp_create(5001) && jerryx_debugger_ws_create());
-	}
+    void ScriptEngine::ConnectDebugger() const
+    {
+        jerryx_debugger_after_connect(jerryx_debugger_tcp_create(5001) && jerryx_debugger_ws_create());
+    }
 
-	void ScriptEngineBase::InitializeBasicPrototypes()
-	{
-		auto global = o2Scripts.GetGlobal();
-		ScriptValuePrototypes::GetVec2Prototype() = mnew ScriptValue(o2Scripts.Eval("Vec2.prototype"));
-		ScriptValuePrototypes::GetRectPrototype() = mnew ScriptValue(o2Scripts.Eval("Rect.prototype"));
-		ScriptValuePrototypes::GetBorderPrototype() = mnew ScriptValue(o2Scripts.Eval("Border.prototype"));
-		ScriptValuePrototypes::GetColor4Prototype() = mnew ScriptValue(o2Scripts.Eval("Color4.prototype"));
-	}
+    void ScriptEngineBase::InitializeBasicPrototypes()
+    {
+        auto global = o2Scripts.GetGlobal();
+        ScriptValuePrototypes::GetVec2Prototype() = mnew ScriptValue(o2Scripts.Eval("Vec2.prototype"));
+        ScriptValuePrototypes::GetRectPrototype() = mnew ScriptValue(o2Scripts.Eval("Rect.prototype"));
+        ScriptValuePrototypes::GetBorderPrototype() = mnew ScriptValue(o2Scripts.Eval("Border.prototype"));
+        ScriptValuePrototypes::GetColor4Prototype() = mnew ScriptValue(o2Scripts.Eval("Color4.prototype"));
+    }
 }
 
 #endif

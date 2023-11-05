@@ -7,253 +7,253 @@
 
 namespace o2
 {
-	PopupWidget::PopupWidget():
-		ScrollArea()
-	{
-		SetEnabledForcible(false);
-	}
+    PopupWidget::PopupWidget():
+        ScrollArea()
+    {
+        SetEnabledForcible(false);
+    }
 
-	PopupWidget::PopupWidget(const PopupWidget& other):
-		ScrollArea(other), mFitSizeMin(other.mFitSizeMin)
-	{
-		SetEnabledForcible(false);
-	}
+    PopupWidget::PopupWidget(const PopupWidget& other):
+        ScrollArea(other), mFitSizeMin(other.mFitSizeMin)
+    {
+        SetEnabledForcible(false);
+    }
 
-	PopupWidget::~PopupWidget()
-	{}
+    PopupWidget::~PopupWidget()
+    {}
 
-	PopupWidget& PopupWidget::operator=(const PopupWidget& other)
-	{
-		ScrollArea::operator=(other);
+    PopupWidget& PopupWidget::operator=(const PopupWidget& other)
+    {
+        ScrollArea::operator=(other);
 
-		mFitSizeMin = other.mFitSizeMin;
+        mFitSizeMin = other.mFitSizeMin;
 
-		RetargetStatesAnimations();
-		SetLayoutDirty();
+        RetargetStatesAnimations();
+        SetLayoutDirty();
 
-		return *this;
-	}
+        return *this;
+    }
 
-	void PopupWidget::Update(float dt)
-	{
-		if (!mResEnabledInHierarchy)
-			return;
+    void PopupWidget::Update(float dt)
+    {
+        if (!mResEnabledInHierarchy)
+            return;
 
-		ScrollArea::Update(dt);
+        ScrollArea::Update(dt);
 
-		bool cursorPressed = o2Input.IsCursorPressed() || o2Input.IsRightMousePressed();
-		if (cursorPressed)
-		{
-			if (!mChildPopup && (cursorPressed || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
-				!layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && Actor::mEnabled)
-			{
-				HideWithParent();
-			}
-		}
+        bool cursorPressed = o2Input.IsCursorPressed() || o2Input.IsRightMousePressed();
+        if (cursorPressed)
+        {
+            if (!mChildPopup && (cursorPressed || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
+                !layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && Actor::mEnabled)
+            {
+                HideWithParent();
+            }
+        }
 
-		mShownAtFrame = false;
-	}
+        mShownAtFrame = false;
+    }
 
-	void PopupWidget::Draw()
-	{}
+    void PopupWidget::Draw()
+    {}
 
-	void PopupWidget::Show(PopupWidget* parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
-	{
-		if (parent)
-		{
-			mParentPopup = parent;
-			parent->mChildPopup = this;
-		}
-		else mVisiblePopup = this;
+    void PopupWidget::Show(PopupWidget* parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
+    {
+        if (parent)
+        {
+            mParentPopup = parent;
+            parent->mChildPopup = this;
+        }
+        else mVisiblePopup = this;
 
-		Widget::Show();
+        Widget::Show();
 
-		FitSizeAndPosition(position);
-		UpdateSelfTransform();
-		UpdateChildrenTransforms();
+        FitSizeAndPosition(position);
+        UpdateSelfTransform();
+        UpdateChildrenTransforms();
 
-		mShownAtFrame = true;
-	}
+        mShownAtFrame = true;
+    }
 
-	void PopupWidget::Show(const Vec2F& position /*= o2Input.GetCursorPos()*/)
-	{
-		Show(nullptr, position);
-	}
+    void PopupWidget::Show(const Vec2F& position /*= o2Input.GetCursorPos()*/)
+    {
+        Show(nullptr, position);
+    }
 
-	void PopupWidget::OnEnabled()
-	{
-		ScrollArea::OnEnabled();
+    void PopupWidget::OnEnabled()
+    {
+        ScrollArea::OnEnabled();
 
-		interactable = true;
-	}
+        interactable = true;
+    }
 
-	void PopupWidget::OnDisabled()
-	{
-		ScrollArea::OnDisabled();
+    void PopupWidget::OnDisabled()
+    {
+        ScrollArea::OnDisabled();
 
-		interactable = false;
-	}
+        interactable = false;
+    }
 
-	void PopupWidget::OnCursorPressBreak(const Input::Cursor& cursor)
-	{
-		HideWithParent();
-		HideWithChild();
-	}
+    void PopupWidget::OnCursorPressBreak(const Input::Cursor& cursor)
+    {
+        HideWithParent();
+        HideWithChild();
+    }
 
 
-	void PopupWidget::OnCursorReleasedOutside(const Input::Cursor& cursor)
-	{
-		HideWithParent();
-		HideWithChild();
-	}
+    void PopupWidget::OnCursorReleasedOutside(const Input::Cursor& cursor)
+    {
+        HideWithParent();
+        HideWithChild();
+    }
 
-	void PopupWidget::OnKeyPressed(const Input::Key& key)
-	{
-		if (key == VK_ESCAPE)
-		{
-			HideWithParent();
-			HideWithChild();
-		}
-	}
+    void PopupWidget::OnKeyPressed(const Input::Key& key)
+    {
+        if (key == VK_ESCAPE)
+        {
+            HideWithParent();
+            HideWithChild();
+        }
+    }
 
-	void PopupWidget::HideWithParent()
-	{
-		Hide();
+    void PopupWidget::HideWithParent()
+    {
+        Hide();
 
-		if (mParentPopup)
-			mParentPopup->HideWithParent();
+        if (mParentPopup)
+            mParentPopup->HideWithParent();
 
-		mParentPopup = nullptr;
-		mChildPopup = nullptr;
-	}
+        mParentPopup = nullptr;
+        mChildPopup = nullptr;
+    }
 
-	void PopupWidget::HideWithChild()
-	{
-		Hide();
+    void PopupWidget::HideWithChild()
+    {
+        Hide();
 
-		if (mChildPopup)
-			mChildPopup->HideWithChild();
+        if (mChildPopup)
+            mChildPopup->HideWithChild();
 
-		mChildPopup = nullptr;
-	}
+        mChildPopup = nullptr;
+    }
 
-	void PopupWidget::SetMinFitSize(float size)
-	{
-		mFitSizeMin = size;
-	}
+    void PopupWidget::SetMinFitSize(float size)
+    {
+        mFitSizeMin = size;
+    }
 
-	bool PopupWidget::IsScrollable() const
-	{
-		return true;
-	}
+    bool PopupWidget::IsScrollable() const
+    {
+        return true;
+    }
 
-	PopupWidget* PopupWidget::mVisiblePopup = nullptr;
+    PopupWidget* PopupWidget::mVisiblePopup = nullptr;
 
-	bool PopupWidget::IsInputTransparent() const
-	{
-		return false;
-	}
+    bool PopupWidget::IsInputTransparent() const
+    {
+        return false;
+    }
 
-	void PopupWidget::CheckClipping(const RectF& clipArea)
-	{
-		mIsClipped = false;
+    void PopupWidget::CheckClipping(const RectF& clipArea)
+    {
+        mIsClipped = false;
 
-		Vec2F resolution = o2Render.GetCurrentResolution();
-		RectF fullScreenRect(resolution*0.5f, resolution*(-0.5f));
-		for (auto child : mChildWidgets)
-			child->CheckClipping(fullScreenRect);
-	}
+        Vec2F resolution = o2Render.GetCurrentResolution();
+        RectF fullScreenRect(resolution*0.5f, resolution*(-0.5f));
+        for (auto child : mChildWidgets)
+            child->CheckClipping(fullScreenRect);
+    }
 
-	void PopupWidget::FitSizeAndPosition(const Vec2F& position)
-	{
-		UpdateTransform();
+    void PopupWidget::FitSizeAndPosition(const Vec2F& position)
+    {
+        UpdateTransform();
 
-		Vec2F size = fitByChildren ? GetContentSize() : layout->GetSize();
-		FitPosition(position, size);
-	}
+        Vec2F size = fitByChildren ? GetContentSize() : layout->GetSize();
+        FitPosition(position, size);
+    }
 
-	Vec2F PopupWidget::GetContentSize() const
-	{
-		Vec2F size = layout->GetMinimalSize();
+    Vec2F PopupWidget::GetContentSize() const
+    {
+        Vec2F size = layout->GetMinimalSize();
 
-		for (auto child : mChildWidgets)
-		{
-			size.x = Math::Max(size.x, child->GetMinWidthWithChildren());
-			size.y = Math::Max(size.y, child->GetMinHeightWithChildren());
-		}
+        for (auto child : mChildWidgets)
+        {
+            size.x = Math::Max(size.x, child->GetMinWidthWithChildren());
+            size.y = Math::Max(size.y, child->GetMinHeightWithChildren());
+        }
 
-		size.x += mViewAreaLayout.offsetMin.x - mViewAreaLayout.offsetMax.x;
-		size.y += mViewAreaLayout.offsetMin.y - mViewAreaLayout.offsetMax.y;
+        size.x += mViewAreaLayout.offsetMin.x - mViewAreaLayout.offsetMax.x;
+        size.y += mViewAreaLayout.offsetMin.y - mViewAreaLayout.offsetMax.y;
 
-		return size;
-	}
+        return size;
+    }
 
-	void PopupWidget::FitPosition(const Vec2F& position, Vec2F size)
-	{
-		size.x = Math::Min(size.x, (float)o2Render.GetResolution().x);
-		size.y = Math::Min(size.y, (float)o2Render.GetResolution().y);
+    void PopupWidget::FitPosition(const Vec2F& position, Vec2F size)
+    {
+        size.x = Math::Min(size.x, (float)o2Render.GetResolution().x);
+        size.y = Math::Min(size.y, (float)o2Render.GetResolution().y);
 
-		RectF thisRect(position.x, position.y, position.x + size.x, position.y - size.y);
-		RectF screenRect(-o2Render.GetResolution().x*0.5f, o2Render.GetResolution().y*0.5f,
-						 o2Render.GetResolution().x*0.5f, -o2Render.GetResolution().y*0.5f);
+        RectF thisRect(position.x, position.y, position.x + size.x, position.y - size.y);
+        RectF screenRect(-o2Render.GetResolution().x*0.5f, o2Render.GetResolution().y*0.5f,
+                         o2Render.GetResolution().x*0.5f, -o2Render.GetResolution().y*0.5f);
 
-		if (thisRect.left < screenRect.left)
-			thisRect += Vec2F(screenRect.left - thisRect.left, 0);
+        if (thisRect.left < screenRect.left)
+            thisRect += Vec2F(screenRect.left - thisRect.left, 0);
 
-		if (thisRect.right > screenRect.right)
-			thisRect += Vec2F(screenRect.right - thisRect.right, 0);
+        if (thisRect.right > screenRect.right)
+            thisRect += Vec2F(screenRect.right - thisRect.right, 0);
 
-		if (thisRect.top > screenRect.top)
-			thisRect += Vec2F(0, screenRect.top - thisRect.top);
+        if (thisRect.top > screenRect.top)
+            thisRect += Vec2F(0, screenRect.top - thisRect.top);
 
-		if (thisRect.bottom < screenRect.bottom)
-			thisRect += Vec2F(0, screenRect.bottom - thisRect.bottom);
+        if (thisRect.bottom < screenRect.bottom)
+            thisRect += Vec2F(0, screenRect.bottom - thisRect.bottom);
 
-		thisRect.left = Math::Round(thisRect.left);
-		thisRect.right = Math::Round(thisRect.right);
-		thisRect.top = Math::Round(thisRect.top);
-		thisRect.bottom = Math::Round(thisRect.bottom);
+        thisRect.left = Math::Round(thisRect.left);
+        thisRect.right = Math::Round(thisRect.right);
+        thisRect.top = Math::Round(thisRect.top);
+        thisRect.bottom = Math::Round(thisRect.bottom);
 
-		layout->worldRect = thisRect;
-	}
+        layout->worldRect = thisRect;
+    }
 
-	void PopupWidget::SpecialDraw()
-	{
-		if (!mResEnabledInHierarchy)
-			return;
+    void PopupWidget::SpecialDraw()
+    {
+        if (!mResEnabledInHierarchy)
+            return;
 
-		for (auto layer : mDrawingLayers)
-			layer->Draw();
+        for (auto layer : mDrawingLayers)
+            layer->Draw();
 
-		IDrawable::OnDrawn();
-		CursorAreaEventsListener::OnDrawn();
+        IDrawable::OnDrawn();
+        CursorAreaEventsListener::OnDrawn();
 
-		o2Render.EnableScissorTest(mAbsoluteClipArea);
+        o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChildWidgets)
-			child->Draw();
+        for (auto child : mChildWidgets)
+            child->Draw();
 
-		o2Render.DisableScissorTest();
+        o2Render.DisableScissorTest();
 
-		for (auto layer : mTopDrawingLayers)
-			layer->Draw();
+        for (auto layer : mTopDrawingLayers)
+            layer->Draw();
 
-		if (mOwnHorScrollBar)
-			mHorScrollBar->Draw();
+        if (mOwnHorScrollBar)
+            mHorScrollBar->Draw();
 
-		if (mOwnVerScrollBar)
-			mVerScrollBar->Draw();
+        if (mOwnVerScrollBar)
+            mVerScrollBar->Draw();
 
-		DrawDebugFrame();
+        DrawDebugFrame();
 
-		if (mChildPopup)
-			mChildPopup->SpecialDraw();
-	}
+        if (mChildPopup)
+            mChildPopup->SpecialDraw();
+    }
 
-	String PopupWidget::GetCreateMenuGroup()
-	{
-		return "Window";
-	}
+    String PopupWidget::GetCreateMenuGroup()
+    {
+        return "Window";
+    }
 }
 // --- META ---
 

@@ -5,20 +5,20 @@
 
 namespace o2
 {
-	void ParticlesEffect::Update(float dt, ParticlesEmitter* emitter)
-	{}
+    void ParticlesEffect::Update(float dt, ParticlesEmitter* emitter)
+    {}
 
-	Vector<Particle>& ParticlesEffect::GetParticlesDirect(ParticlesEmitter* emitter)
-	{
-		return emitter->mParticles;
-	}
+    Vector<Particle>& ParticlesEffect::GetParticlesDirect(ParticlesEmitter* emitter)
+    {
+        return emitter->mParticles;
+    }
 
-	void ParticlesGravityEffect::Update(float dt, ParticlesEmitter* emitter)
-	{
-		Vec2F v = gravity*dt;
-		for (auto& p : GetParticlesDirect(emitter))
-			p.velocity += v;
-	}
+    void ParticlesGravityEffect::Update(float dt, ParticlesEmitter* emitter)
+    {
+        Vec2F v = gravity*dt;
+        for (auto& p : GetParticlesDirect(emitter))
+            p.velocity += v;
+    }
 }
 // --- META ---
 

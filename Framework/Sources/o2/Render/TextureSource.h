@@ -5,9 +5,9 @@
 
 namespace o2
 {
-	struct TextureSource 
-	{
-		TextureRef texture;
-		RectF      sourceRect;
-	};
+    struct TextureSource 
+    {
+        TextureRef texture;
+        RectF      sourceRect;
+    };
 }

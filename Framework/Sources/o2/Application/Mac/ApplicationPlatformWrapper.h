@@ -9,15 +9,15 @@
 namespace o2
 {
     struct ApplicationPlatformWrapper
-	{
-    	static NSWindow*     window;
-		static MTKView*      view;
-		static RendererView* renderer;
-		
-		static Vec2I resolution;
+    {
+        static NSWindow*     window;
+        static MTKView*      view;
+        static RendererView* renderer;
+        
+        static Vec2I resolution;
 
-		static void OnWindowRsized(const Vec2I& resolution);
-	};
+        static void OnWindowRsized(const Vec2I& resolution);
+    };
 }
 
 #endif

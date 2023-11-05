@@ -5,36 +5,36 @@
 
 namespace o2
 {
-	DataAsset::DataAsset()
-	{}
+    DataAsset::DataAsset()
+    {}
 
-	DataAsset::DataAsset(const DataAsset& other):
-		AssetWithDefaultMeta<DataAsset>(other), data(const_cast<DataDocument&>(other.data))
-	{}
+    DataAsset::DataAsset(const DataAsset& other):
+        AssetWithDefaultMeta<DataAsset>(other), data(const_cast<DataDocument&>(other.data))
+    {}
 
-	DataAsset& DataAsset::operator=(const DataAsset& asset)
-	{
-		Asset::operator=(asset);
-		data = const_cast<DataDocument&>(asset.data);
+    DataAsset& DataAsset::operator=(const DataAsset& asset)
+    {
+        Asset::operator=(asset);
+        data = const_cast<DataDocument&>(asset.data);
 
-		return *this;
-	}
+        return *this;
+    }
 
-	Vector<String> DataAsset::GetFileExtensions()
-	{
-		return { "json" };
-	}
+    Vector<String> DataAsset::GetFileExtensions()
+    {
+        return { "json" };
+    }
 
-	void DataAsset::LoadData(const String& path)
-	{
-		data.Clear();
-		data.LoadFromFile(path);
-	}
+    void DataAsset::LoadData(const String& path)
+    {
+        data.Clear();
+        data.LoadFromFile(path);
+    }
 
-	void DataAsset::SaveData(const String& path) const
-	{
-		data.SaveToFile(path);
-	}
+    void DataAsset::SaveData(const String& path) const
+    {
+        data.SaveToFile(path);
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::DataAsset>);

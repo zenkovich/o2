@@ -45,57 +45,57 @@ void _mfree(void* allocMemory);
 
 namespace o2
 {
-	class LogStream;
+    class LogStream;
 
-	// ------------------------------------------------------------------
-	// Memory manager, using for collecting garbage, tracing memory leaks
-	// ------------------------------------------------------------------
-	class MemoryManager
-	{
-	public:
-		// Constructor
-		MemoryManager();
+    // ------------------------------------------------------------------
+    // Memory manager, using for collecting garbage, tracing memory leaks
+    // ------------------------------------------------------------------
+    class MemoryManager
+    {
+    public:
+        // Constructor
+        MemoryManager();
 
-		// Destructor
-		~MemoryManager();
+        // Destructor
+        ~MemoryManager();
 
-		// Returns instance of memory manager
-		static MemoryManager& Instance();
+        // Returns instance of memory manager
+        static MemoryManager& Instance();
 
-		// Initializes memory manager
-		static void Initialize();
+        // Initializes memory manager
+        static void Initialize();
 
-		// Collects information about allocated memory and prints into console
-		void DumpInfo();
+        // Collects information about allocated memory and prints into console
+        void DumpInfo();
 
-	protected:
-		// ----------------------
-		// Allocation information
-		// ----------------------
-		struct AllocInfo
-		{
-			const char* source;     // Allocation source code file
-			int         sourceLine; // Allocation source code line
-			size_t      size;       // Allocated size in bytes
-			void*       memory;     // Pointer to allocated memory
-		};
+    protected:
+        // ----------------------
+        // Allocation information
+        // ----------------------
+        struct AllocInfo
+        {
+            const char* source;     // Allocation source code file
+            int         sourceLine; // Allocation source code line
+            size_t      size;       // Allocated size in bytes
+            void*       memory;     // Pointer to allocated memory
+        };
 
-		static MemoryManager* mInstance; // Instance pointer
+        static MemoryManager* mInstance; // Instance pointer
 
-		std::map<void*, AllocInfo> mAllocs;     // Allocations info
-		size_t                     mTotalBytes; // Total managed allocated bytes
+        std::map<void*, AllocInfo> mAllocs;     // Allocations info
+        size_t                     mTotalBytes; // Total managed allocated bytes
 
-	protected:
-		// Called when memory was allocated and registers allocation
-		void OnMemoryAllocate(void* memory, size_t size, const char* source, int line);
+    protected:
+        // Called when memory was allocated and registers allocation
+        void OnMemoryAllocate(void* memory, size_t size, const char* source, int line);
 
-		// Called when memory releasing, unregisters allocation
-		void OnMemoryRelease(void* memory);
+        // Called when memory releasing, unregisters allocation
+        void OnMemoryRelease(void* memory);
 
-		friend void* ::operator new(size_t size, const char* location, int line);
-		friend void* ::operator new[](size_t size, const char* location, int line);
-		friend void  ::operator delete(void* allocMemory) noexcept;
-		friend void* ::_mmalloc(size_t size, const char* location, int line);
-		friend void  ::_mfree(void* allocMemory);
-	};
+        friend void* ::operator new(size_t size, const char* location, int line);
+        friend void* ::operator new[](size_t size, const char* location, int line);
+        friend void  ::operator delete(void* allocMemory) noexcept;
+        friend void* ::_mmalloc(size_t size, const char* location, int line);
+        friend void  ::_mfree(void* allocMemory);
+    };
 }

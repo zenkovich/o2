@@ -6,37 +6,37 @@
 
 namespace o2
 {
-	// --------------------------
-	// Animation tree weight mask
-	// --------------------------
-	class AnimationMask: public ISerializable
-	{
-	public:
-		Map<String, float> weights; // Masked nodes weights @SERIALIZABLE
+    // --------------------------
+    // Animation tree weight mask
+    // --------------------------
+    class AnimationMask: public ISerializable
+    {
+    public:
+        Map<String, float> weights; // Masked nodes weights @SERIALIZABLE
 
-	public:
-		// Returns node masked weight. 1.0f is default
-		float GetNodeWeight(const String& node) const;
+    public:
+        // Returns node masked weight. 1.0f is default
+        float GetNodeWeight(const String& node) const;
 
-		SERIALIZABLE(AnimationMask);
-	};
+        SERIALIZABLE(AnimationMask);
+    };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::AnimationMask)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationMask)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(weights);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(weights);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationMask)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(float, GetNodeWeight, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetNodeWeight, const String&);
 }
 END_META;
 // --- END META ---

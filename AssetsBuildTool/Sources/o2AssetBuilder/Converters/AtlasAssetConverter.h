@@ -6,91 +6,91 @@
 
 namespace o2
 {
-	class Bitmap;
+    class Bitmap;
 
-	// -----------------
-	// Atlases converter
-	// -----------------
-	class AtlasAssetConverter : public IAssetConverter
-	{
-	public:
-		// Returns vector of processing assets types
-		Vector<const Type*> GetProcessingAssetsTypes() const;
+    // -----------------
+    // Atlases converter
+    // -----------------
+    class AtlasAssetConverter : public IAssetConverter
+    {
+    public:
+        // Returns vector of processing assets types
+        Vector<const Type*> GetProcessingAssetsTypes() const;
 
-		// Converts atlas by path
-		void ConvertAsset(const AssetInfo& node);
+        // Converts atlas by path
+        void ConvertAsset(const AssetInfo& node);
 
-		// Removes atlas by path
-		void RemoveAsset(const AssetInfo& node);
+        // Removes atlas by path
+        void RemoveAsset(const AssetInfo& node);
 
-		// Moves atlas
-		void MoveAsset(const AssetInfo& nodeFrom, const AssetInfo& nodeTo);
+        // Moves atlas
+        void MoveAsset(const AssetInfo& nodeFrom, const AssetInfo& nodeTo);
 
-		// Post processing atlases. Here checking atlases for rebuild
-		Vector<UID> AssetsPostProcess();
+        // Post processing atlases. Here checking atlases for rebuild
+        Vector<UID> AssetsPostProcess();
 
-		// Resets converter
-		void Reset();
+        // Resets converter
+        void Reset();
 
-		IOBJECT(AtlasAssetConverter);
+        IOBJECT(AtlasAssetConverter);
 
-	public:
-		// ----------------
-		// Atlas image info
-		// ----------------
-		struct Image : public ISerializable
-		{
-			UID       id;   // Image asset id @SERIALIZABLE
-			TimeStamp time; // Image asset edited date @SERIALIZABLE
+    public:
+        // ----------------
+        // Atlas image info
+        // ----------------
+        struct Image : public ISerializable
+        {
+            UID       id;   // Image asset id @SERIALIZABLE
+            TimeStamp time; // Image asset edited date @SERIALIZABLE
 
-		public:
-			// Default constructor
-			Image() {}
+        public:
+            // Default constructor
+            Image() {}
 
-			// Constructor
-			Image(const UID& id, const TimeStamp& time);
+            // Constructor
+            Image(const UID& id, const TimeStamp& time);
 
-			// Check equal operator
-			bool operator==(const Image& other) const;
+            // Check equal operator
+            bool operator==(const Image& other) const;
 
-			SERIALIZABLE(Image);
-		};
+            SERIALIZABLE(Image);
+        };
 
-		// ------------------------
-		// Image packing definition
-		// ------------------------
-		struct ImagePackDef
-		{
-			Bitmap* bitmap = nullptr;    // Image bitmap pointer
-			RectsPacker::Rect* packRect = nullptr;  // Image pack rectangle pointer
-			AssetInfo* assetInfo = nullptr; // Asset information
+        // ------------------------
+        // Image packing definition
+        // ------------------------
+        struct ImagePackDef
+        {
+            Bitmap* bitmap = nullptr;    // Image bitmap pointer
+            RectsPacker::Rect* packRect = nullptr;  // Image pack rectangle pointer
+            AssetInfo* assetInfo = nullptr; // Asset information
 
-			// Check equal operator
-			bool operator==(const ImagePackDef& other) const;
-		};
+            // Check equal operator
+            bool operator==(const ImagePackDef& other) const;
+        };
 
-	protected:
-		// Checks atlases for rebuilding
-		Vector<UID> CheckRebuildingAtlases();
+    protected:
+        // Checks atlases for rebuilding
+        Vector<UID> CheckRebuildingAtlases();
 
-		// Checks atlas for rebuilding
-		bool CheckAtlasRebuilding(AssetInfo* atlasInfo);
+        // Checks atlas for rebuilding
+        bool CheckAtlasRebuilding(AssetInfo* atlasInfo);
 
-		// Returns true if atlas needs to rebuild
-		bool ImagesListChanged(Vector<Image>& currentImages, Vector<Image>& lastImages);
+        // Returns true if atlas needs to rebuild
+        bool ImagesListChanged(Vector<Image>& currentImages, Vector<Image>& lastImages);
 
-		// Rebuilds atlas
-		void RebuildAtlas(AssetInfo* atlasInfo, Vector<Image>& images);
+        // Rebuilds atlas
+        void RebuildAtlas(AssetInfo* atlasInfo, Vector<Image>& images);
 
-		// Saves image asset data
-		void SaveImageAsset(ImagePackDef& imgDef);
-	};
+        // Saves image asset data
+        void SaveImageAsset(ImagePackDef& imgDef);
+    };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::AtlasAssetConverter)
 {
-	BASE_CLASS(o2::IAssetConverter);
+    BASE_CLASS(o2::IAssetConverter);
 }
 END_META;
 CLASS_FIELDS_META(o2::AtlasAssetConverter)
@@ -100,36 +100,36 @@ END_META;
 CLASS_METHODS_META(o2::AtlasAssetConverter)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(Vector<const Type*>, GetProcessingAssetsTypes);
-	FUNCTION().PUBLIC().SIGNATURE(void, ConvertAsset, const AssetInfo&);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAsset, const AssetInfo&);
-	FUNCTION().PUBLIC().SIGNATURE(void, MoveAsset, const AssetInfo&, const AssetInfo&);
-	FUNCTION().PUBLIC().SIGNATURE(Vector<UID>, AssetsPostProcess);
-	FUNCTION().PUBLIC().SIGNATURE(void, Reset);
-	FUNCTION().PROTECTED().SIGNATURE(Vector<UID>, CheckRebuildingAtlases);
-	FUNCTION().PROTECTED().SIGNATURE(bool, CheckAtlasRebuilding, AssetInfo*);
-	FUNCTION().PROTECTED().SIGNATURE(bool, ImagesListChanged, Vector<Image>&, Vector<Image>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, RebuildAtlas, AssetInfo*, Vector<Image>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SaveImageAsset, ImagePackDef&);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<const Type*>, GetProcessingAssetsTypes);
+    FUNCTION().PUBLIC().SIGNATURE(void, ConvertAsset, const AssetInfo&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveAsset, const AssetInfo&);
+    FUNCTION().PUBLIC().SIGNATURE(void, MoveAsset, const AssetInfo&, const AssetInfo&);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<UID>, AssetsPostProcess);
+    FUNCTION().PUBLIC().SIGNATURE(void, Reset);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<UID>, CheckRebuildingAtlases);
+    FUNCTION().PROTECTED().SIGNATURE(bool, CheckAtlasRebuilding, AssetInfo*);
+    FUNCTION().PROTECTED().SIGNATURE(bool, ImagesListChanged, Vector<Image>&, Vector<Image>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildAtlas, AssetInfo*, Vector<Image>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SaveImageAsset, ImagePackDef&);
 }
 END_META;
 
 CLASS_BASES_META(o2::AtlasAssetConverter::Image)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(o2::AtlasAssetConverter::Image)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(id);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(time);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(id);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(time);
 }
 END_META;
 CLASS_METHODS_META(o2::AtlasAssetConverter::Image)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&, const TimeStamp&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const UID&, const TimeStamp&);
 }
 END_META;
 // --- END META ---

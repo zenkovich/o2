@@ -14,23 +14,23 @@
 namespace o2
 {
 
-	void Application::Initialize()
-	{
-		BasicInitialize();
-	}
+    void Application::Initialize()
+    {
+        BasicInitialize();
+    }
 
-	void Application::InitializePlatform()
-	{
-		mWindowed = true;
-		mWindowedSize = Vec2I(800, 600);
-		mWindowedPos = Vec2I(0, 0);
-		mWindowResizible = true;
-		mActive = false;
+    void Application::InitializePlatform()
+    {
+        mWindowed = true;
+        mWindowedSize = Vec2I(800, 600);
+        mWindowedPos = Vec2I(0, 0);
+        mWindowResizible = true;
+        mActive = false;
 
 #if !defined(O2_DISABLE_PLATFORM)
-		if (mNeedPlatformInitialization)
-		{
-			mLog->Out("Initializing window..");
+        if (mNeedPlatformInitialization)
+        {
+            mLog->Out("Initializing window..");
 
             mDisplay = XOpenDisplay(NULL);
             if (!mDisplay)
@@ -59,71 +59,71 @@ namespace o2
             XStoreName(mDisplay, mWindow, "o2 application");
             XMapWindow(mDisplay, mWindow);
 
-			mLog->Out("Window initialized!");
+            mLog->Out("Window initialized!");
         }
 #endif
-	}
+    }
 
-	void Application::Shutdown()
-	{
-		//DestroyWindow(mHWnd);
-	}
+    void Application::Shutdown()
+    {
+        //DestroyWindow(mHWnd);
+    }
 
-	void Application::SetFullscreen(bool fullscreen /*= true*/)
-	{
-//		if (fullscreen)
-//		{
-//			//mRenderSystem->FrameResized();
-//			mLog->Out("Setting full screen");
-//		}
-//		else
-//		{
-//			mLog->Out("Setting windowed..");
+    void Application::SetFullscreen(bool fullscreen /*= true*/)
+    {
+//        if (fullscreen)
+//        {
+//            //mRenderSystem->FrameResized();
+//            mLog->Out("Setting full screen");
+//        }
+//        else
+//        {
+//            mLog->Out("Setting windowed..");
 //
-//			mWindowed = true;
+//            mWindowed = true;
 //
-//			RECT rt = { mWindowedPos.x, mWindowedPos.y, mWindowedPos.x + mWindowedSize.x, mWindowedPos.y + mWindowedSize.y };
-//			AdjustWindowRect(&rt, mWndStyle, false);
-//			SetWindowPos(mHWnd, HWND_NOTOPMOST, mWindowedPos.x, mWindowedPos.y,
-//						 mWindowedSize.x, mWindowedSize.y, SWP_SHOWWINDOW);
+//            RECT rt = { mWindowedPos.x, mWindowedPos.y, mWindowedPos.x + mWindowedSize.x, mWindowedPos.y + mWindowedSize.y };
+//            AdjustWindowRect(&rt, mWndStyle, false);
+//            SetWindowPos(mHWnd, HWND_NOTOPMOST, mWindowedPos.x, mWindowedPos.y,
+//                         mWindowedSize.x, mWindowedSize.y, SWP_SHOWWINDOW);
 //
-//			//mRenderSystem->FrameResized();
-//			mLog->Out("Complete");
-//		}
-	}
+//            //mRenderSystem->FrameResized();
+//            mLog->Out("Complete");
+//        }
+    }
 
-	void Application::CheckCursorInfiniteMode()
-	{
-//		int threshold = 10;
-//		POINT p, lp;
-//		GetCursorPos(&p);
-//		lp = p;
+    void Application::CheckCursorInfiniteMode()
+    {
+//        int threshold = 10;
+//        POINT p, lp;
+//        GetCursorPos(&p);
+//        lp = p;
 //
-//		Vec2I resolution = GetScreenResolution();
+//        Vec2I resolution = GetScreenResolution();
 //
-//		if (p.x > resolution.x - threshold)
-//			p.x = threshold;
-//		else if (p.x < threshold)
-//			p.x = resolution.x - threshold;
+//        if (p.x > resolution.x - threshold)
+//            p.x = threshold;
+//        else if (p.x < threshold)
+//            p.x = resolution.x - threshold;
 //
-//		if (p.y > resolution.y - threshold)
-//			p.y = threshold;
-//		else if (p.y < threshold)
-//			p.y = resolution.y - threshold;
+//        if (p.y > resolution.y - threshold)
+//            p.y = threshold;
+//        else if (p.y < threshold)
+//            p.y = resolution.y - threshold;
 //
-//		SetCursorPos(p.x, p.y);
+//        SetCursorPos(p.x, p.y);
 //
-//		if (p.x != lp.x || p.y != lp.y)
-//			mCursorCorrectionDelta = Vec2F((float)(lp.x - p.x), (float)(lp.y - p.y));
-	}
+//        if (p.x != lp.x || p.y != lp.y)
+//            mCursorCorrectionDelta = Vec2F((float)(lp.x - p.x), (float)(lp.y - p.y));
+    }
 
-	void Application::Launch()
-	{
-		mLog->Out("Application launched!");
+    void Application::Launch()
+    {
+        mLog->Out("Application launched!");
 
-		OnStarted();
-		onStarted.Invoke();
-		o2Events.OnApplicationStarted();
+        OnStarted();
+        onStarted.Invoke();
+        o2Events.OnApplicationStarted();
 
         //mTimer->Reset();
         Vec2I cursorPos;
@@ -213,102 +213,102 @@ namespace o2
         }
 #endif
 
-		o2Events.OnApplicationClosing();
-		OnClosing();
-		onClosing.Invoke();
-	}
+        o2Events.OnApplicationClosing();
+        OnClosing();
+        onClosing.Invoke();
+    }
 
-	bool Application::IsFullScreen() const
-	{
-		return !mWindowed;
-	}
+    bool Application::IsFullScreen() const
+    {
+        return !mWindowed;
+    }
 
-	void Application::Maximize()
-	{
-		//ShowWindow(mHWnd, SW_MAXIMIZE);
-	}
+    void Application::Maximize()
+    {
+        //ShowWindow(mHWnd, SW_MAXIMIZE);
+    }
 
-	bool Application::IsMaximized() const
-	{
-		return false;
-	}
+    bool Application::IsMaximized() const
+    {
+        return false;
+    }
 
-	void Application::SetResizible(bool resizible)
-	{
-		if (resizible == mWindowResizible)
-			return;
+    void Application::SetResizible(bool resizible)
+    {
+        if (resizible == mWindowResizible)
+            return;
 
-		mWindowResizible = resizible;
-		mLog->Out("Set resizible: " + ((mWindowResizible ? (String)"true" : (String)"false")));
-	}
+        mWindowResizible = resizible;
+        mLog->Out("Set resizible: " + ((mWindowResizible ? (String)"true" : (String)"false")));
+    }
 
-	bool Application::IsResizible() const
-	{
-		return mWindowResizible;
-	}
+    bool Application::IsResizible() const
+    {
+        return mWindowResizible;
+    }
 
-	void Application::SetWindowSize(const Vec2I& size)
-	{
-		mWindowedSize = size;
-		mLog->Out("Set sindow size: %ix%i", mWindowedSize.x, mWindowedSize.y);
-		SetFullscreen(!mWindowed);
-	}
+    void Application::SetWindowSize(const Vec2I& size)
+    {
+        mWindowedSize = size;
+        mLog->Out("Set sindow size: %ix%i", mWindowedSize.x, mWindowedSize.y);
+        SetFullscreen(!mWindowed);
+    }
 
-	Vec2I Application::GetWindowSize() const
-	{
-		return mWindowedSize;
-	}
+    Vec2I Application::GetWindowSize() const
+    {
+        return mWindowedSize;
+    }
 
-	void Application::SetWindowPosition(const Vec2I& position)
-	{
-		mWindowedPos = position;
-		mLog->Out("Set window position: %i, %i", mWindowedPos.x, mWindowedPos.y);
-		SetFullscreen(!mWindowed);
-	}
+    void Application::SetWindowPosition(const Vec2I& position)
+    {
+        mWindowedPos = position;
+        mLog->Out("Set window position: %i, %i", mWindowedPos.x, mWindowedPos.y);
+        SetFullscreen(!mWindowed);
+    }
 
-	Vec2I Application::GetWindowPosition() const
-	{
-		return mWindowedPos;
-	}
+    Vec2I Application::GetWindowPosition() const
+    {
+        return mWindowedPos;
+    }
 
-	void Application::SetWindowCaption(const String& caption)
-	{
-		mWndCaption = caption;
+    void Application::SetWindowCaption(const String& caption)
+    {
+        mWndCaption = caption;
 #if !defined(O2_DISABLE_PLATFORM)
         if (mDisplay && mWindow)
             XStoreName(mDisplay, mWindow, caption.Data());
 #endif
-	}
+    }
 
-	String Application::GetWindowCaption() const
-	{
-		return mWndCaption;
-	}
+    String Application::GetWindowCaption() const
+    {
+        return mWndCaption;
+    }
 
-	void Application::SetContentSize(const Vec2I& size)
-	{
-		Vec2I clientRectSize = size;
+    void Application::SetContentSize(const Vec2I& size)
+    {
+        Vec2I clientRectSize = size;
 
         mWindowedSize = size;
 
-//		mWindowedPos = Vec2I(clientRect.left, clientRect.top);
-//		mWindowedSize = Vec2I(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
+//        mWindowedPos = Vec2I(clientRect.left, clientRect.top);
+//        mWindowedSize = Vec2I(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
 
-		mLog->Out("Set Content Size: %ix%i", size.x, size.y);
+        mLog->Out("Set Content Size: %ix%i", size.x, size.y);
 
-		SetFullscreen(!mWindowed);
+        SetFullscreen(!mWindowed);
 
-		mRender->OnFrameResized();
-		onResizing();
-	}
+        mRender->OnFrameResized();
+        onResizing();
+    }
 
-	Vec2I Application::GetContentSize() const
-	{
-		return mWindowedSize;
-	}
+    Vec2I Application::GetContentSize() const
+    {
+        return mWindowedSize;
+    }
 
-	Vec2I Application::GetScreenResolution() const
-	{
+    Vec2I Application::GetScreenResolution() const
+    {
 
 #if !defined(O2_DISABLE_PLATFORM)
         int screen = DefaultScreen(mDisplay);
@@ -316,20 +316,20 @@ namespace o2
 #else
         return Vec2I(800, 600);
 #endif
-	}
+    }
 
-	void Application::SetCursor(CursorType type)
-	{
-	}
+    void Application::SetCursor(CursorType type)
+    {
+    }
 
-	void Application::SetCursorPosition(const Vec2F& position)
-	{
-	}
+    void Application::SetCursorPosition(const Vec2F& position)
+    {
+    }
 
-	String Application::GetBinPath() const
-	{
-		return "";
-	}
+    String Application::GetBinPath() const
+    {
+        return "";
+    }
 }
 
 #endif // PLATFORM_LINUX

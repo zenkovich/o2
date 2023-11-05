@@ -7,181 +7,181 @@
 
 namespace o2
 {
-	// -----------------------
-	// Key container interface
-	// -----------------------
-	struct IKeyContainer
-	{
-		// Virtual destructor
-		virtual ~IKeyContainer() {}
+    // -----------------------
+    // Key container interface
+    // -----------------------
+    struct IKeyContainer
+    {
+        // Virtual destructor
+        virtual ~IKeyContainer() {}
 
-		// Applies stored key to animation
-		virtual void Apply(float time) = 0;
-	};
+        // Applies stored key to animation
+        virtual void Apply(float time) = 0;
+    };
 
-	// ----------------------
-	// Template key container
-	// ----------------------
-	template <typename T>
-	struct KeyContainer : public IKeyContainer
-	{
-		typename AnimationTrack<T>::Key key;
+    // ----------------------
+    // Template key container
+    // ----------------------
+    template <typename T>
+    struct KeyContainer : public IKeyContainer
+    {
+        typename AnimationTrack<T>::Key key;
 
-		AnimationTrack<T>* animatedValue;
+        AnimationTrack<T>* animatedValue;
 
-	public:
-		void Apply(float time);
-	};
+    public:
+        void Apply(float time);
+    };
 
-	// ---------------
-	// Vec2F container
-	// ---------------
-	template <>
-	struct KeyContainer<Vec2F> : public IKeyContainer
-	{
-		Curve::Key timeKey;
+    // ---------------
+    // Vec2F container
+    // ---------------
+    template <>
+    struct KeyContainer<Vec2F> : public IKeyContainer
+    {
+        Curve::Key timeKey;
 
-		AnimationTrack<Vec2F>* animatedValue;
+        AnimationTrack<Vec2F>* animatedValue;
 
-	public:
-		void Apply(float time);
-	};
+    public:
+        void Apply(float time);
+    };
 
-	// -------------------
-	// Scale key container
-	// -------------------
-	struct ScaleKeyContainer : public IKeyContainer
-	{
-		AnimationTrack<float>::Key keyX;
-		AnimationTrack<float>::Key keyY;
+    // -------------------
+    // Scale key container
+    // -------------------
+    struct ScaleKeyContainer : public IKeyContainer
+    {
+        AnimationTrack<float>::Key keyX;
+        AnimationTrack<float>::Key keyY;
 
-		AnimationTrack<float>* animatedValueX;
-		AnimationTrack<float>* animatedValueY;
+        AnimationTrack<float>* animatedValueX;
+        AnimationTrack<float>* animatedValueY;
 
-	public:
-		void Apply(float time);
-	};
+    public:
+        void Apply(float time);
+    };
 
-	// --------------------------------------------
-	// Class for building simple animation sequence
-	// --------------------------------------------
-	class Animate
-	{
-	public:
-		// Constructor. Takes object as parameter
-		Animate(IObject& object);
+    // --------------------------------------------
+    // Class for building simple animation sequence
+    // --------------------------------------------
+    class Animate
+    {
+    public:
+        // Constructor. Takes object as parameter
+        Animate(IObject& object);
 
-		// Destructor
-		~Animate();
+        // Destructor
+        ~Animate();
 
-		// Animation cast operator. Needs to store as animation
-		operator AnimationClip() const;
+        // Animation cast operator. Needs to store as animation
+        operator AnimationClip() const;
 
-		// Inserts delay for seconds
-		Animate& Wait(float seconds);
+        // Inserts delay for seconds
+        Animate& Wait(float seconds);
 
-		// Applies stored transformations after seconds
-		Animate& For(float seconds);
+        // Applies stored transformations after seconds
+        Animate& For(float seconds);
 
-		// Splits sequence
-		Animate& Then();
+        // Splits sequence
+        Animate& Then();
 
-		// Moves object in (x,y)
-		Animate& Move(float x, float y);
+        // Moves object in (x,y)
+        Animate& Move(float x, float y);
 
-		// Moves object into position
-		Animate& Move(const Vec2F& point);
+        // Moves object into position
+        Animate& Move(const Vec2F& point);
 
-		// Moves object by path from points
-		Animate& Move(const Vector<Vec2F>& points);
+        // Moves object by path from points
+        Animate& Move(const Vector<Vec2F>& points);
 
-		// Changes alpha
-		Animate& Alpha(float alpha);
+        // Changes alpha
+        Animate& Alpha(float alpha);
 
-		// Shows object
-		Animate& Show();
+        // Shows object
+        Animate& Show();
 
-		// Hides object
-		Animate& Hide();
+        // Hides object
+        Animate& Hide();
 
-		// Sets color
-		Animate& Color(const Color4& color);
+        // Sets color
+        Animate& Color(const Color4& color);
 
-		// Sets color
-		Animate& Color(int r, int g, int b, int a);
+        // Sets color
+        Animate& Color(int r, int g, int b, int a);
 
-		// Sets scale
-		Animate& Scale(float scale);
+        // Sets scale
+        Animate& Scale(float scale);
 
-		// Sets scale
-		Animate& Scale(const Vec2F& scale);
+        // Sets scale
+        Animate& Scale(const Vec2F& scale);
 
-		// Rotates object
-		Animate& Rotate(float angle);
+        // Rotates object
+        Animate& Rotate(float angle);
 
-		// Sets animation looped
-		Animate& Looped();
+        // Sets animation looped
+        Animate& Looped();
 
-		// Sets pin pong loop
-		Animate& PingPong();
+        // Sets pin pong loop
+        Animate& PingPong();
 
-		// Changes specified parameter
-		template<typename T>
-		Animate& Change(T* target, const T& value);
+        // Changes specified parameter
+        template<typename T>
+        Animate& Change(T* target, const T& value);
 
 
-	protected:
-		IObject* mTarget = nullptr;    // Target animating object
-		AnimationClip          mAnimation;           // Building animation
-		bool                   mKeysApplied = false; // Is stored keys was applied
-		float                  mTime = 0.0f;         // Current sequence time
-		Vector<IKeyContainer*> mKeyContainers;       // Stored keys that applies in For()
-		Function<void()>       mFunction;            // Stored callback that applies in For()
+    protected:
+        IObject* mTarget = nullptr;    // Target animating object
+        AnimationClip          mAnimation;           // Building animation
+        bool                   mKeysApplied = false; // Is stored keys was applied
+        float                  mTime = 0.0f;         // Current sequence time
+        Vector<IKeyContainer*> mKeyContainers;       // Stored keys that applies in For()
+        Function<void()>       mFunction;            // Stored callback that applies in For()
 
-		AnimationTrack<Color4>* mColorAnimatedValue = nullptr;    // Color Animation track, stored when needs
-		AnimationTrack<Vec2F>* mPositionAnimatedValue = nullptr; // Position Animation track, stored when needs
-		AnimationTrack<float>* mScaleXAnimatedValue = nullptr;   // Scale X Animation track, stored when needs
-		AnimationTrack<float>* mScaleYAnimatedValue = nullptr;   // Scale Y Animation track, stored when needs
-		AnimationTrack<float>* mRotationAnimatedValue = nullptr; // Rotation Animation track, stored when needs
+        AnimationTrack<Color4>* mColorAnimatedValue = nullptr;    // Color Animation track, stored when needs
+        AnimationTrack<Vec2F>* mPositionAnimatedValue = nullptr; // Position Animation track, stored when needs
+        AnimationTrack<float>* mScaleXAnimatedValue = nullptr;   // Scale X Animation track, stored when needs
+        AnimationTrack<float>* mScaleYAnimatedValue = nullptr;   // Scale Y Animation track, stored when needs
+        AnimationTrack<float>* mRotationAnimatedValue = nullptr; // Rotation Animation track, stored when needs
 
-	protected:
-		// Checks color Animation track: creates them if needed
-		void CheckColorAnimatedValue();
+    protected:
+        // Checks color Animation track: creates them if needed
+        void CheckColorAnimatedValue();
 
-		// Checks position Animation track: creates them if needed
-		void CheckPositionAnimatedvalue();
+        // Checks position Animation track: creates them if needed
+        void CheckPositionAnimatedvalue();
 
-		// Checks scale Animation track: creates them if needed
-		void CheckScaleAnimatedValue();
+        // Checks scale Animation track: creates them if needed
+        void CheckScaleAnimatedValue();
 
-		// Checks rotate Animation track: creates them if needed
-		void CheckRotateAnimatedValue();
+        // Checks rotate Animation track: creates them if needed
+        void CheckRotateAnimatedValue();
 
-		// Checks applied keys: if keys was applied, clears keys containers
-		void CheckAppliedKeys();
+        // Checks applied keys: if keys was applied, clears keys containers
+        void CheckAppliedKeys();
 
-		// Applies keys and function to animation at current time
-		void ApplyKeys();
-	};
+        // Applies keys and function to animation at current time
+        void ApplyKeys();
+    };
 
-	template<typename T>
-	Animate& Animate::Change(T* target, const T& value)
-	{
-		CheckAppliedKeys();
+    template<typename T>
+    Animate& Animate::Change(T* target, const T& value)
+    {
+        CheckAppliedKeys();
 
-		KeyContainer<T>* container = mnew KeyContainer<T>();
-		container->animatedValue = GetAnimatedValue(target);
-		container->key.value = value;
-		mKeyContainers.Add(container);
+        KeyContainer<T>* container = mnew KeyContainer<T>();
+        container->animatedValue = GetAnimatedValue(target);
+        container->key.value = value;
+        mKeyContainers.Add(container);
 
-		return *this;
-	}
+        return *this;
+    }
 
-	template <typename T>
-	void KeyContainer<T>::Apply(float time)
-	{
-		key.position = time;
-		animatedValue->AddKey(key);
-	}
+    template <typename T>
+    void KeyContainer<T>::Apply(float time)
+    {
+        key.position = time;
+        animatedValue->AddKey(key);
+    }
 
 }

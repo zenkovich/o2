@@ -4,7 +4,7 @@
 
 namespace o2
 {
-	class DrawPolyLine: public IDrawable
-	{
-	};
+    class DrawPolyLine: public IDrawable
+    {
+    };
 }

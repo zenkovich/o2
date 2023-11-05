@@ -5,94 +5,94 @@
 
 namespace o2
 {
-	CircleCollider::CircleCollider()
-	{}
+    CircleCollider::CircleCollider()
+    {}
 
-	CircleCollider::CircleCollider(const CircleCollider& other):
-		ICollider(other), mRadius(other.mRadius), mFitByActor(other.mFitByActor)
-	{}
+    CircleCollider::CircleCollider(const CircleCollider& other):
+        ICollider(other), mRadius(other.mRadius), mFitByActor(other.mFitByActor)
+    {}
 
-	void CircleCollider::SetRadius(float radius)
-	{
-		mRadius = radius;
-		OnShapeChanged();
-	}
+    void CircleCollider::SetRadius(float radius)
+    {
+        mRadius = radius;
+        OnShapeChanged();
+    }
 
-	float CircleCollider::GetRadius() const
-	{
-		return mRadius;
-	}
+    float CircleCollider::GetRadius() const
+    {
+        return mRadius;
+    }
 
-	void CircleCollider::SetFitByActor(bool fit)
-	{
-		mFitByActor = fit;
+    void CircleCollider::SetFitByActor(bool fit)
+    {
+        mFitByActor = fit;
 
-		if (fit)
-		{
-			mRadius = mOwner->transform->GetSize().x*0.5f;
-			OnShapeChanged();
-		}
-	}
+        if (fit)
+        {
+            mRadius = mOwner->transform->GetSize().x*0.5f;
+            OnShapeChanged();
+        }
+    }
 
-	bool CircleCollider::IsFitByActor() const
-	{
-		return mFitByActor;
-	}
+    bool CircleCollider::IsFitByActor() const
+    {
+        return mFitByActor;
+    }
 
-	String CircleCollider::GetName()
-	{
-		return "Circle collider";
-	}
+    String CircleCollider::GetName()
+    {
+        return "Circle collider";
+    }
 
-	String CircleCollider::GetCategory()
-	{
-		return "Physics";
-	}
+    String CircleCollider::GetCategory()
+    {
+        return "Physics";
+    }
 
-	bool CircleCollider::IsAvailableFromCreateMenu()
-	{
-		return true;
-	}
+    bool CircleCollider::IsAvailableFromCreateMenu()
+    {
+        return true;
+    }
 
-	CircleCollider& CircleCollider::operator=(const CircleCollider& other)
-	{
-		ICollider::operator=(other);
-		mRadius = other.mRadius;
-		mFitByActor = other.mFitByActor;
-		return *this;
-	}
+    CircleCollider& CircleCollider::operator=(const CircleCollider& other)
+    {
+        ICollider::operator=(other);
+        mRadius = other.mRadius;
+        mFitByActor = other.mFitByActor;
+        return *this;
+    }
 
-	b2Shape* CircleCollider::GetShape(const Basis& transform)
-	{
-		float radius = mRadius;
-		if (radius < FLT_EPSILON)
-			radius = 1.0f;
+    b2Shape* CircleCollider::GetShape(const Basis& transform)
+    {
+        float radius = mRadius;
+        if (radius < FLT_EPSILON)
+            radius = 1.0f;
 
-		mShape.m_radius = radius*transform.xv.Length();
-		mShape.m_p = transform.origin;
+        mShape.m_radius = radius*transform.xv.Length();
+        mShape.m_p = transform.origin;
 
-		return &mShape;
-	}
+        return &mShape;
+    }
 
-	void CircleCollider::OnTransformUpdated()
-	{
-		if (!o2Physics.IsUpdatingPhysicsNow() && mFitByActor)
-		{
-			float prevRadius = mRadius;
-			mRadius = mOwner->transform->GetSize().x*0.5f;
+    void CircleCollider::OnTransformUpdated()
+    {
+        if (!o2Physics.IsUpdatingPhysicsNow() && mFitByActor)
+        {
+            float prevRadius = mRadius;
+            mRadius = mOwner->transform->GetSize().x*0.5f;
 
-			if (prevRadius != mRadius)
-				OnShapeChanged();
-		}
+            if (prevRadius != mRadius)
+                OnShapeChanged();
+        }
 
-		ICollider::OnTransformUpdated();
-	}
+        ICollider::OnTransformUpdated();
+    }
 
 #if IS_EDITOR
-	void CircleCollider::OnAddedFromEditor()
-	{
-		mRadius = mOwner->transform->GetSize().x*0.5f;
-	}
+    void CircleCollider::OnAddedFromEditor()
+    {
+        mRadius = mOwner->transform->GetSize().x*0.5f;
+    }
 #endif
 }
 // --- META ---

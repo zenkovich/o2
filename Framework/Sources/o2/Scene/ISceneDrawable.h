@@ -10,179 +10,179 @@
 
 namespace o2
 {
-	class SceneLayer;
+    class SceneLayer;
 
-	// --------------------------------------------------------------------------------------------------------------
-	// Scene drawable object. Has virtual draw function and sorting depth. Depth shows how later object will be drawn
-	// Can be used to create your own drawable objects. For that you need to override Draw() function, 
-	// GetSceneDrawableSceneLayer(), GetParentDrawable() and GetIndexInParentDrawable(). And call "on" methods: 
-	// OnDrawbleParentChanged(), OnEnabled(), OnDisabled(), OnAddToScene(), OnRemoveFromScene()
-	// --------------------------------------------------------------------------------------------------------------
-	class ISceneDrawable : virtual public ISerializable, virtual public IDrawable
-	{
-	public:
-		PROPERTIES(ISceneDrawable);
-		PROPERTY(float, drawDepth, SetDrawingDepth, GetDrawingDepth); // Drawing depth property. Objects with higher depth will be drawn later @EDITOR_IGNORE
+    // --------------------------------------------------------------------------------------------------------------
+    // Scene drawable object. Has virtual draw function and sorting depth. Depth shows how later object will be drawn
+    // Can be used to create your own drawable objects. For that you need to override Draw() function, 
+    // GetSceneDrawableSceneLayer(), GetParentDrawable() and GetIndexInParentDrawable(). And call "on" methods: 
+    // OnDrawbleParentChanged(), OnEnabled(), OnDisabled(), OnAddToScene(), OnRemoveFromScene()
+    // --------------------------------------------------------------------------------------------------------------
+    class ISceneDrawable : virtual public ISerializable, virtual public IDrawable
+    {
+    public:
+        PROPERTIES(ISceneDrawable);
+        PROPERTY(float, drawDepth, SetDrawingDepth, GetDrawingDepth); // Drawing depth property. Objects with higher depth will be drawn later @EDITOR_IGNORE
 
-	public:
-		// Default constructor
-		ISceneDrawable();
+    public:
+        // Default constructor
+        ISceneDrawable();
 
-		// Copy-constructor
-		ISceneDrawable(const ISceneDrawable& other);
+        // Copy-constructor
+        ISceneDrawable(const ISceneDrawable& other);
 
-		// Destructor
-		~ISceneDrawable() override;
+        // Destructor
+        ~ISceneDrawable() override;
 
-		// Copy operator
-		ISceneDrawable& operator=(const ISceneDrawable& other);
+        // Copy operator
+        ISceneDrawable& operator=(const ISceneDrawable& other);
 
-		// Draws content
-		void Draw() override;
+        // Draws content
+        void Draw() override;
 
-		// Sets drawing depth. Objects with higher depth will be drawn later
-		virtual void SetDrawingDepth(float depth);
+        // Sets drawing depth. Objects with higher depth will be drawn later
+        virtual void SetDrawingDepth(float depth);
 
-		// Returns drawing depth
-		float GetDrawingDepth() const;
+        // Returns drawing depth
+        float GetDrawingDepth() const;
 
-		// Sets that depth is inherited from the parent
-		void SetDrawingDepthInheritFromParent(bool inherit);
+        // Sets that depth is inherited from the parent
+        void SetDrawingDepthInheritFromParent(bool inherit);
 
-		// Returns whether the depth is inherited from the parent
-		bool IsDrawingDepthInheritedFromParent() const;
+        // Returns whether the depth is inherited from the parent
+        bool IsDrawingDepthInheritedFromParent() const;
 
-		// Sets this drawable as last drawing object in layer with same depth
-		void SetLastOnCurrentDepth();
+        // Sets this drawable as last drawing object in layer with same depth
+        void SetLastOnCurrentDepth();
 
-		// Returns list of inherited depth drawables
-		const Vector<ISceneDrawable*>& GetChildrenInheritedDepth() const;
+        // Returns list of inherited depth drawables
+        const Vector<ISceneDrawable*>& GetChildrenInheritedDepth() const;
 
-		SERIALIZABLE(ISceneDrawable);
+        SERIALIZABLE(ISceneDrawable);
 
-	private:
-		bool mRegistered = false; //  Was the drawable registered in the layer or in the parent
+    private:
+        bool mRegistered = false; //  Was the drawable registered in the layer or in the parent
 
-		bool mDrawableEnabled = false; // Is drawable enabled
-		bool mIsOnScene = false;       // Is drawable on scene
+        bool mDrawableEnabled = false; // Is drawable enabled
+        bool mIsOnScene = false;       // Is drawable on scene
 
-		ISceneDrawable* mParentRegistry = nullptr; // Parent registry drawable if inherited depth is used
-		SceneLayer*     mLayerRegistry = nullptr;  // Layer registry if inherited depth isn't used
+        ISceneDrawable* mParentRegistry = nullptr; // Parent registry drawable if inherited depth is used
+        SceneLayer*     mLayerRegistry = nullptr;  // Layer registry if inherited depth isn't used
 
-	protected:
-		float mDrawingDepth = 0.0f;                  // Drawing depth. Objects with higher depth will be drawn later @SERIALIZABLE
-		bool  mInheritDrawingDepthFromParent = true; // If parent depth is used @SERIALIZABLE
+    protected:
+        float mDrawingDepth = 0.0f;                  // Drawing depth. Objects with higher depth will be drawn later @SERIALIZABLE
+        bool  mInheritDrawingDepthFromParent = true; // If parent depth is used @SERIALIZABLE
 
-		Vector<ISceneDrawable*> mChildrenInheritedDepth; // List of children who inherited depth
+        Vector<ISceneDrawable*> mChildrenInheritedDepth; // List of children who inherited depth
 
-	protected:
-		// Returns current scene layer
-		virtual SceneLayer* GetSceneDrawableSceneLayer() const { return nullptr; }
+    protected:
+        // Returns current scene layer
+        virtual SceneLayer* GetSceneDrawableSceneLayer() const { return nullptr; }
 
-		// Returns parent scene drawable
-		virtual ISceneDrawable* GetParentDrawable() { return nullptr; }
+        // Returns parent scene drawable
+        virtual ISceneDrawable* GetParentDrawable() { return nullptr; }
 
-		// Returns the index in the parent's list of children, used to sort the rendering
-		virtual int GetIndexInParentDrawable() const { return 0; }
+        // Returns the index in the parent's list of children, used to sort the rendering
+        virtual int GetIndexInParentDrawable() const { return 0; }
 
-		// Sorts depth-inheriting drawables
-		void SortInheritedDrawables();
+        // Sorts depth-inheriting drawables
+        void SortInheritedDrawables();
 
-		// Called when the parent changes
-		virtual void OnDrawbleParentChanged();
+        // Called when the parent changes
+        virtual void OnDrawbleParentChanged();
 
-		// Called when drawable layer changed
-		virtual void OnDrawableLayerChanged();
+        // Called when drawable layer changed
+        virtual void OnDrawableLayerChanged();
 
-		// Called when drawable has enabled
-		void OnEnabled();
+        // Called when drawable has enabled
+        void OnEnabled();
 
-		// Called when drawable has enabled
-		void OnDisabled();
+        // Called when drawable has enabled
+        void OnDisabled();
 
-		// Called when actor was included to scene
-		void OnAddToScene();
+        // Called when actor was included to scene
+        void OnAddToScene();
 
-		// Called when actor was excluded from scene
-		void OnRemoveFromScene();
+        // Called when actor was excluded from scene
+        void OnRemoveFromScene();
 
-		// Refreshing drawable registration
-		void Reregister();
+        // Refreshing drawable registration
+        void Reregister();
 
-		// Registers drawable in layer or in parent
-		void Register();
+        // Registers drawable in layer or in parent
+        void Register();
 
-		// Unregisters drawable from layer or from parent
-		void Unregister();
+        // Unregisters drawable from layer or from parent
+        void Unregister();
 
-		friend class Scene;
-		friend class SceneLayer;
+        friend class Scene;
+        friend class SceneLayer;
 
 #if IS_EDITOR
-	public:
-		int drawCallIdx = 0; // Draw call number in frame @EDITOR_IGNORE
+    public:
+        int drawCallIdx = 0; // Draw call number in frame @EDITOR_IGNORE
 
-	public:
-		// Returns pointer to owner editable object
-		virtual SceneEditableObject* GetEditableOwner();
+    public:
+        // Returns pointer to owner editable object
+        virtual SceneEditableObject* GetEditableOwner();
 
-		// Called when drawable was drawn. Storing render scissor rect, calling onDraw callback, adding in drawnEditableObjects
-		void OnDrawn() override;
+        // Called when drawable was drawn. Storing render scissor rect, calling onDraw callback, adding in drawnEditableObjects
+        void OnDrawn() override;
 #endif
-	};
+    };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::ISceneDrawable)
 {
-	BASE_CLASS(o2::ISerializable);
-	BASE_CLASS(o2::IDrawable);
+    BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::IDrawable);
 }
 END_META;
 CLASS_FIELDS_META(o2::ISceneDrawable)
 {
-	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(drawDepth);
-	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mRegistered);
-	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mDrawableEnabled);
-	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mIsOnScene);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mParentRegistry);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLayerRegistry);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDrawingDepth);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mInheritDrawingDepthFromParent);
-	FIELD().PROTECTED().NAME(mChildrenInheritedDepth);
+    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(drawDepth);
+    FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mRegistered);
+    FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mDrawableEnabled);
+    FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mIsOnScene);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mParentRegistry);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLayerRegistry);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDrawingDepth);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mInheritDrawingDepthFromParent);
+    FIELD().PROTECTED().NAME(mChildrenInheritedDepth);
 #if  IS_EDITOR
-	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(drawCallIdx);
+    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(drawCallIdx);
 #endif
 }
 END_META;
 CLASS_METHODS_META(o2::ISceneDrawable)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const ISceneDrawable&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepth, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetDrawingDepth);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepthInheritFromParent, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsDrawingDepthInheritedFromParent);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetLastOnCurrentDepth);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<ISceneDrawable*>&, GetChildrenInheritedDepth);
-	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
-	FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
-	FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
-	FUNCTION().PROTECTED().SIGNATURE(void, SortInheritedDrawables);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawbleParentChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableLayerChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
-	FUNCTION().PROTECTED().SIGNATURE(void, Reregister);
-	FUNCTION().PROTECTED().SIGNATURE(void, Register);
-	FUNCTION().PROTECTED().SIGNATURE(void, Unregister);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ISceneDrawable&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepth, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetDrawingDepth);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepthInheritFromParent, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsDrawingDepthInheritedFromParent);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetLastOnCurrentDepth);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<ISceneDrawable*>&, GetChildrenInheritedDepth);
+    FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
+    FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
+    FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
+    FUNCTION().PROTECTED().SIGNATURE(void, SortInheritedDrawables);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDrawbleParentChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableLayerChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
+    FUNCTION().PROTECTED().SIGNATURE(void, Reregister);
+    FUNCTION().PROTECTED().SIGNATURE(void, Register);
+    FUNCTION().PROTECTED().SIGNATURE(void, Unregister);
 #if  IS_EDITOR
-	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnDrawn);
+    FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnDrawn);
 #endif
 }
 END_META;

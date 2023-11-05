@@ -5,26 +5,26 @@
 
 namespace o2
 {
-	AnimationAsset::AnimationAsset(const AnimationAsset& other):
-		AssetWithDefaultMeta<AnimationAsset>(other), animation(other.animation)
-	{}
+    AnimationAsset::AnimationAsset(const AnimationAsset& other):
+        AssetWithDefaultMeta<AnimationAsset>(other), animation(other.animation)
+    {}
 
-	AnimationAsset::AnimationAsset(const AnimationClip& clip):
-		AssetWithDefaultMeta<AnimationAsset>(), animation(clip)
-	{}
+    AnimationAsset::AnimationAsset(const AnimationClip& clip):
+        AssetWithDefaultMeta<AnimationAsset>(), animation(clip)
+    {}
 
-	AnimationAsset& AnimationAsset::operator=(const AnimationAsset& other)
-	{
-		Asset::operator=(other);
-		animation = other.animation;
+    AnimationAsset& AnimationAsset::operator=(const AnimationAsset& other)
+    {
+        Asset::operator=(other);
+        animation = other.animation;
 
-		return *this;
-	}
+        return *this;
+    }
 
-	Vector<String> AnimationAsset::GetFileExtensions()
-	{
-		return { "anim" };
-	}
+    Vector<String> AnimationAsset::GetFileExtensions()
+    {
+        return { "anim" };
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::AnimationAsset>);

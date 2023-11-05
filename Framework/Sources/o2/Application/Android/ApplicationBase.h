@@ -8,31 +8,31 @@
 
 namespace o2
 {
-	// -------------------------------
-	// Android application base fields
-	// -------------------------------
-	class ApplicationBase
-	{
+    // -------------------------------
+    // Android application base fields
+    // -------------------------------
+    class ApplicationBase
+    {
     protected:
         Vec2I mResolution;
 
-		JavaVM* mJVM;
-		jobject mActivity;
-		AAssetManager* mAssetManager;
-		String mDataPath;
+        JavaVM* mJVM;
+        jobject mActivity;
+        AAssetManager* mAssetManager;
+        String mDataPath;
 
-	public:
-		// Returns android Java virtual machine
-		JavaVM* GetJVM() const;
+    public:
+        // Returns android Java virtual machine
+        JavaVM* GetJVM() const;
 
-		// Returns android activity
-		const jobject* GetActivity() const;
+        // Returns android activity
+        const jobject* GetActivity() const;
 
-		// Returns android asset manager
-		AAssetManager* GetAssetManager() const;
+        // Returns android asset manager
+        AAssetManager* GetAssetManager() const;
 
-		// Returns android data path
-		String GetDataPath() const;
+        // Returns android data path
+        String GetDataPath() const;
     };
 }
 

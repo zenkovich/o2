@@ -5,232 +5,232 @@
 
 namespace o2
 {
-	// ---------------------------------
-	// Custom items drop down ui element
-	// ---------------------------------
-	class CustomDropDown: public Widget, public DrawableCursorEventsListener
-	{
-	public:
-		PROPERTIES(CustomDropDown);
-		PROPERTY(Widget*, selectedItem, SelectItem, GetSelectedItem);       // Selected item widget property
-		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property
-		GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
+    // ---------------------------------
+    // Custom items drop down ui element
+    // ---------------------------------
+    class CustomDropDown: public Widget, public DrawableCursorEventsListener
+    {
+    public:
+        PROPERTIES(CustomDropDown);
+        PROPERTY(Widget*, selectedItem, SelectItem, GetSelectedItem);       // Selected item widget property
+        PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property
+        GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
 
-	public:
-		Function<void()> onBeforeExpand; // Called before opening 
+    public:
+        Function<void()> onBeforeExpand; // Called before opening 
 
-		Function<void(int)>     onSelectedPos;   // Select item position event
-		Function<void(Widget*)> onSelectedItem;  // Select item event
+        Function<void(int)>     onSelectedPos;   // Select item position event
+        Function<void(Widget*)> onSelectedItem;  // Select item event
 
-	public:
-		// Default constructor
-		CustomDropDown();
+    public:
+        // Default constructor
+        CustomDropDown();
 
-		// Copy-constructor
-		CustomDropDown(const CustomDropDown& other);
+        // Copy-constructor
+        CustomDropDown(const CustomDropDown& other);
 
-		// Destructor
-		~CustomDropDown();
+        // Destructor
+        ~CustomDropDown();
 
-		// Copy operator
-		CustomDropDown& operator=(const CustomDropDown& other);
+        // Copy operator
+        CustomDropDown& operator=(const CustomDropDown& other);
 
-		// Draws widget
-		void Draw() override;
+        // Draws widget
+        void Draw() override;
 
-		// Expand list
-		void Expand();
+        // Expand list
+        void Expand();
 
-		// Collapse list
-		void Collapse();
+        // Collapse list
+        void Collapse();
 
-		// Returns is list expanded
-		bool IsExpanded() const;
+        // Returns is list expanded
+        bool IsExpanded() const;
 
-		// Sets item sample widget. WARNING: Removing all old items!
-		void SetItemSample(Widget* sample);
+        // Sets item sample widget. WARNING: Removing all old items!
+        void SetItemSample(Widget* sample);
 
-		// Returns item sample widget
-		Widget* GetItemSample() const;
+        // Returns item sample widget
+        Widget* GetItemSample() const;
 
-		// Returns layout of items
-		VerticalLayout* GetItemsLayout() const;
+        // Returns layout of items
+        VerticalLayout* GetItemsLayout() const;
 
-		// Adds new item and returns it
-		Widget* AddItem();
+        // Adds new item and returns it
+        Widget* AddItem();
 
-		// Adds new item at position and returns it
-		Widget* AddItem(int position);
+        // Adds new item at position and returns it
+        Widget* AddItem(int position);
 
-		// Removes item
-		void RemoveItem(Widget* item);
+        // Removes item
+        void RemoveItem(Widget* item);
 
-		// Removes item in position
-		void RemoveItem(int position);
+        // Removes item in position
+        void RemoveItem(int position);
 
-		// Moves item from position to new position
-		void MoveItem(int position, int newPosition);
+        // Moves item from position to new position
+        void MoveItem(int position, int newPosition);
 
-		// Moves item to new position
-		void MoveItem(Widget* item, int newPosition);
+        // Moves item to new position
+        void MoveItem(Widget* item, int newPosition);
 
-		// Returns item position
-		int GetItemPosition(Widget* item);
+        // Returns item position
+        int GetItemPosition(Widget* item);
 
-		// Returns item by position
-		Widget* GetItem(int position) const;
+        // Returns item by position
+        Widget* GetItem(int position) const;
 
-		// Removes all items
-		void RemoveAllItems();
+        // Removes all items
+        void RemoveAllItems();
 
-		// Sorts items
-		void SortItems(const Function<bool(Widget*, Widget*)>& sortFunc);
+        // Sorts items
+        void SortItems(const Function<bool(Widget*, Widget*)>& sortFunc);
 
-		// Returns items count
-		int GetItemsCount() const;
+        // Returns items count
+        int GetItemsCount() const;
 
-		// Selects item
-		void SelectItem(Widget* item);
+        // Selects item
+        void SelectItem(Widget* item);
 
-		// Selects item at position
-		void SelectItemAt(int position);
+        // Selects item at position
+        void SelectItemAt(int position);
 
-		// Returns selected item
-		Widget* GetSelectedItem() const;
+        // Returns selected item
+        Widget* GetSelectedItem() const;
 
-		// Returns selected item position
-		int GetSelectedItemPosition() const;
+        // Returns selected item position
+        int GetSelectedItemPosition() const;
 
-		// Returns list view 
-		CustomList* GetListView() const;
+        // Returns list view 
+        CustomList* GetListView() const;
 
-		// Sets list view size by items size
-		void SetMaxListSizeInItems(int itemsCount);
+        // Sets list view size by items size
+        void SetMaxListSizeInItems(int itemsCount);
 
-		// Sets clipping layout
-		void SetClippingLayout(const Layout& layout);
+        // Sets clipping layout
+        void SetClippingLayout(const Layout& layout);
 
-		// Returns clipping layout
-		Layout GetClippingLayout();
+        // Returns clipping layout
+        Layout GetClippingLayout();
 
-		// Updates layout
-		void UpdateSelfTransform() override;
+        // Updates layout
+        void UpdateSelfTransform() override;
 
-		// Returns create menu group in editor
-		static String GetCreateMenuGroup();
+        // Returns create menu group in editor
+        static String GetCreateMenuGroup();
 
-		SERIALIZABLE(CustomDropDown);
+        SERIALIZABLE(CustomDropDown);
 
-	protected:
-		CustomList* mItemsList = nullptr;                // List view
-		Layout      mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
-		RectF       mAbsoluteClip;                       // Absolute clipping rectangle
-		int         mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
+    protected:
+        CustomList* mItemsList = nullptr;                // List view
+        Layout      mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
+        RectF       mAbsoluteClip;                       // Absolute clipping rectangle
+        int         mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
 
-	protected:
-		// Moves widget's to delta and checks for clipping
-		void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea) override;
+    protected:
+        // Moves widget's to delta and checks for clipping
+        void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea) override;
 
-		// Called when cursor pressed on this. Sets state "pressed" to true
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+        // Called when cursor pressed on this. Sets state "pressed" to true
+        void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// Called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
-		// Called onClicked if cursor is still above this
-		void OnCursorReleased(const Input::Cursor& cursor) override;
+        // Called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
+        // Called onClicked if cursor is still above this
+        void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// Called when cursor released outside this(only when cursor pressed this at previous time)
-		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
+        // Called when cursor released outside this(only when cursor pressed this at previous time)
+        void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
+        // Called when cursor pressing was broken (when scrolled scroll area or some other)
+        void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// Called when cursor enters this object. Sets state "select" to true
-		void OnCursorEnter(const Input::Cursor& cursor) override;
+        // Called when cursor enters this object. Sets state "select" to true
+        void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// Called when cursor exits this object. Sets state "select" to false
-		void OnCursorExit(const Input::Cursor& cursor) override;
+        // Called when cursor exits this object. Sets state "select" to false
+        void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// Called when visible was changed
-		void OnEnabled() override;
+        // Called when visible was changed
+        void OnEnabled() override;
 
-		// Called when visible was changed
-		void OnDisabled() override;
+        // Called when visible was changed
+        void OnDisabled() override;
 
-		// Called when item was selected in list
-		void OnItemSelected();
+        // Called when item was selected in list
+        void OnItemSelected();
 
-		// Called when selection was changed
-		virtual void OnSelectionChanged();
-	};
+        // Called when selection was changed
+        virtual void OnSelectionChanged();
+    };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::CustomDropDown)
 {
-	BASE_CLASS(o2::Widget);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
+    BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(o2::CustomDropDown)
 {
-	FIELD().PUBLIC().NAME(selectedItem);
-	FIELD().PUBLIC().NAME(selectedItemPos);
-	FIELD().PUBLIC().NAME(itemsCount);
-	FIELD().PUBLIC().NAME(onBeforeExpand);
-	FIELD().PUBLIC().NAME(onSelectedPos);
-	FIELD().PUBLIC().NAME(onSelectedItem);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mItemsList);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mClipLayout);
-	FIELD().PROTECTED().NAME(mAbsoluteClip);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mMaxListItems);
+    FIELD().PUBLIC().NAME(selectedItem);
+    FIELD().PUBLIC().NAME(selectedItemPos);
+    FIELD().PUBLIC().NAME(itemsCount);
+    FIELD().PUBLIC().NAME(onBeforeExpand);
+    FIELD().PUBLIC().NAME(onSelectedPos);
+    FIELD().PUBLIC().NAME(onSelectedItem);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mItemsList);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mClipLayout);
+    FIELD().PROTECTED().NAME(mAbsoluteClip);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mMaxListItems);
 }
 END_META;
 CLASS_METHODS_META(o2::CustomDropDown)
 {
 
-	typedef const Function<bool(Widget*, Widget*)>& _tmp1;
+    typedef const Function<bool(Widget*, Widget*)>& _tmp1;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const CustomDropDown&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
-	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
-	FUNCTION().PUBLIC().SIGNATURE(VerticalLayout*, GetItemsLayout);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, Widget*);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, int, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, Widget*, int);
-	FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, Widget*);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItem, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
-	FUNCTION().PUBLIC().SIGNATURE(void, SortItems, _tmp1);
-	FUNCTION().PUBLIC().SIGNATURE(int, GetItemsCount);
-	FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, Widget*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SelectItemAt, int);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetSelectedItem);
-	FUNCTION().PUBLIC().SIGNATURE(int, GetSelectedItemPosition);
-	FUNCTION().PUBLIC().SIGNATURE(CustomList*, GetListView);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMaxListSizeInItems, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetClippingLayout, const Layout&);
-	FUNCTION().PUBLIC().SIGNATURE(Layout, GetClippingLayout);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-	FUNCTION().PROTECTED().SIGNATURE(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleasedOutside, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnItemSelected);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const CustomDropDown&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, Expand);
+    FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(VerticalLayout*, GetItemsLayout);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, int, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, Widget*, int);
+    FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItem, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
+    FUNCTION().PUBLIC().SIGNATURE(void, SortItems, _tmp1);
+    FUNCTION().PUBLIC().SIGNATURE(int, GetItemsCount);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectItemAt, int);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetSelectedItem);
+    FUNCTION().PUBLIC().SIGNATURE(int, GetSelectedItemPosition);
+    FUNCTION().PUBLIC().SIGNATURE(CustomList*, GetListView);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetMaxListSizeInItems, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetClippingLayout, const Layout&);
+    FUNCTION().PUBLIC().SIGNATURE(Layout, GetClippingLayout);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+    FUNCTION().PROTECTED().SIGNATURE(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleasedOutside, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnItemSelected);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
 }
 END_META;
 // --- END META ---

@@ -5,12 +5,12 @@
 
 namespace o2
 {
-	class DontDeleteAttribute : public IAttribute
-	{
-		ATTRIBUTE_COMMENT_DEFINITION("DONT_DELETE");
-		ATTRIBUTE_SHORT_DEFINITION("DONT_DELETE_ATTRIBUTE");
-	};
+    class DontDeleteAttribute : public IAttribute
+    {
+        ATTRIBUTE_COMMENT_DEFINITION("DONT_DELETE");
+        ATTRIBUTE_SHORT_DEFINITION("DONT_DELETE_ATTRIBUTE");
+    };
 
 #define DONT_DELETE_ATTRIBUTE() \
-	template AddAttribute<o2::DontDeleteAttribute>()
+    template AddAttribute<o2::DontDeleteAttribute>()
 }

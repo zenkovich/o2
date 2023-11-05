@@ -6,9 +6,9 @@
 
 ENUM_META(o2::ActorCreateMode)
 {
-	ENUM_ENTRY(Default);
-	ENUM_ENTRY(InScene);
-	ENUM_ENTRY(NotInScene);
+    ENUM_ENTRY(Default);
+    ENUM_ENTRY(InScene);
+    ENUM_ENTRY(NotInScene);
 }
 END_ENUM_META;
 // --- END META ---

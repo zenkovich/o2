@@ -2,8 +2,8 @@
 
 namespace o2
 {
-	class Ray
-	{
-	public:
-	};
+    class Ray
+    {
+    public:
+    };
 }

@@ -8,346 +8,346 @@
 
 namespace o2
 {
-	Label::Label()
-	{
-		CreateDefaultText();
-	}
+    Label::Label()
+    {
+        CreateDefaultText();
+    }
 
-	Label::Label(const Label& other):
-		Widget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow), 
-		mExpandBorder(other.mExpandBorder), text(this), font(this), height(this), verAlign(this), horAlign(this),
-		horOverflow(this), verOverflow(this), expandBorder(this), symbolsDistanceCoef(this), linesDistanceCoef(this),
-		color(this)
-	{
-		mTextDrawable = GetLayerDrawable<Text>("text");
-		if (!mTextDrawable)
-			CreateDefaultText();
-		
-		RetargetStatesAnimations();
-		SetLayoutDirty();
-	}
+    Label::Label(const Label& other):
+        Widget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow), 
+        mExpandBorder(other.mExpandBorder), text(this), font(this), height(this), verAlign(this), horAlign(this),
+        horOverflow(this), verOverflow(this), expandBorder(this), symbolsDistanceCoef(this), linesDistanceCoef(this),
+        color(this)
+    {
+        mTextDrawable = GetLayerDrawable<Text>("text");
+        if (!mTextDrawable)
+            CreateDefaultText();
+        
+        RetargetStatesAnimations();
+        SetLayoutDirty();
+    }
 
-	Label& Label::operator=(const Label& other)
-	{
-		Widget::operator=(other);
+    Label& Label::operator=(const Label& other)
+    {
+        Widget::operator=(other);
 
-		mTextDrawable = GetLayerDrawable<Text>("text");
-		mHorOverflow = other.mHorOverflow;
-		mVerOverflow = other.mVerOverflow;
-		mExpandBorder = other.mExpandBorder;
+        mTextDrawable = GetLayerDrawable<Text>("text");
+        mHorOverflow = other.mHorOverflow;
+        mVerOverflow = other.mVerOverflow;
+        mExpandBorder = other.mExpandBorder;
 
-		if (!mTextDrawable)
-			CreateDefaultText();
+        if (!mTextDrawable)
+            CreateDefaultText();
 
-		RetargetStatesAnimations();
-		SetLayoutDirty();
+        RetargetStatesAnimations();
+        SetLayoutDirty();
 
-		return *this;
-	}
+        return *this;
+    }
 
-	void Label::Draw()
+    void Label::Draw()
     {
         //PROFILE_SAMPLE_FUNC();
 
-		if (!mResEnabledInHierarchy || mIsClipped)
-			return;
+        if (!mResEnabledInHierarchy || mIsClipped)
+            return;
 
-		bool enabledClipping = false;
-		if (mHorOverflow == HorOverflow::Cut || mVerOverflow == VerOverflow::Cut)
-		{
-			enabledClipping = true;
+        bool enabledClipping = false;
+        if (mHorOverflow == HorOverflow::Cut || mVerOverflow == VerOverflow::Cut)
+        {
+            enabledClipping = true;
 
-			Vec2I halfRes =  (Vec2F)o2Render.GetResolution()*0.5f;
-			RectI cutRect(-halfRes.x, halfRes.y, halfRes.x, -halfRes.y);
+            Vec2I halfRes =  (Vec2F)o2Render.GetResolution()*0.5f;
+            RectI cutRect(-halfRes.x, halfRes.y, halfRes.x, -halfRes.y);
 
-			if (mHorOverflow == HorOverflow::Cut)
-			{
-				cutRect.left = (int)layout->worldLeft;
-				cutRect.right = (int)layout->worldRight;
-			}
+            if (mHorOverflow == HorOverflow::Cut)
+            {
+                cutRect.left = (int)layout->worldLeft;
+                cutRect.right = (int)layout->worldRight;
+            }
 
-			if (mVerOverflow == VerOverflow::Cut)
-			{
-				cutRect.top = (int)layout->worldTop;
-				cutRect.bottom = (int)layout->worldBottom;
-			}
+            if (mVerOverflow == VerOverflow::Cut)
+            {
+                cutRect.top = (int)layout->worldTop;
+                cutRect.bottom = (int)layout->worldBottom;
+            }
 
-			o2Render.EnableScissorTest(cutRect);
-		}
+            o2Render.EnableScissorTest(cutRect);
+        }
 
-		for (auto layer : mDrawingLayers)
-			layer->Draw();
+        for (auto layer : mDrawingLayers)
+            layer->Draw();
 
-		if (enabledClipping)
-			o2Render.DisableScissorTest();
+        if (enabledClipping)
+            o2Render.DisableScissorTest();
 
-		ISceneDrawable::Draw();
+        ISceneDrawable::Draw();
 
-		DrawDebugFrame();
-	}
+        DrawDebugFrame();
+    }
 
-	void Label::SetFont(FontRef font)
-	{
-		if (mTextDrawable)
-			mTextDrawable->SetFont(font);
+    void Label::SetFont(FontRef font)
+    {
+        if (mTextDrawable)
+            mTextDrawable->SetFont(font);
 
-		SetLayoutDirty();
-	}
+        SetLayoutDirty();
+    }
 
-	FontRef Label::GetFont() const
-	{
-		if (mTextDrawable)
-			return mTextDrawable->GetFont();
+    FontRef Label::GetFont() const
+    {
+        if (mTextDrawable)
+            return mTextDrawable->GetFont();
 
-		return FontRef();
-	}
+        return FontRef();
+    }
 
-	void Label::SetFontAsset(const FontAssetRef& asset)
-	{
-		if (mTextDrawable)
-			mTextDrawable->SetFontAsset(asset);
-	}
+    void Label::SetFontAsset(const FontAssetRef& asset)
+    {
+        if (mTextDrawable)
+            mTextDrawable->SetFontAsset(asset);
+    }
 
-	FontAssetRef Label::GetFontAsset() const
-	{
-		if (mTextDrawable)
-			return mTextDrawable->GetFontAsset();
+    FontAssetRef Label::GetFontAsset() const
+    {
+        if (mTextDrawable)
+            return mTextDrawable->GetFontAsset();
 
-		return FontAssetRef();
-	}
+        return FontAssetRef();
+    }
 
-	void Label::SetText(const WString& text)
-	{
-		if (mTextDrawable)
-			mTextDrawable->SetText(text);
+    void Label::SetText(const WString& text)
+    {
+        if (mTextDrawable)
+            mTextDrawable->SetText(text);
 
-		if (mHorOverflow == HorOverflow::Expand || mVerOverflow == VerOverflow::Expand)
-			SetLayoutDirty();
-	}
+        if (mHorOverflow == HorOverflow::Expand || mVerOverflow == VerOverflow::Expand)
+            SetLayoutDirty();
+    }
 
-	const WString& Label::GetText() const
-	{
-		if (mTextDrawable)
-			return mTextDrawable->GetText();
+    const WString& Label::GetText() const
+    {
+        if (mTextDrawable)
+            return mTextDrawable->GetText();
 
-		return WString::empty;
-	}
+        return WString::empty;
+    }
 
-	void Label::SetColor(const Color4& color)
-	{
-		if (mTextDrawable)
-			mTextDrawable->SetColor(color);
-	}
+    void Label::SetColor(const Color4& color)
+    {
+        if (mTextDrawable)
+            mTextDrawable->SetColor(color);
+    }
 
-	Color4 Label::GetColor() const
-	{
-		if (mTextDrawable)
-			return mTextDrawable->GetColor();
+    Color4 Label::GetColor() const
+    {
+        if (mTextDrawable)
+            return mTextDrawable->GetColor();
 
-		return Color4();
-	}
+        return Color4();
+    }
 
-	void Label::SetHorAlign(HorAlign align)
-	{
-		if (mTextDrawable)
-			mTextDrawable->SetHorAlign(align);
+    void Label::SetHorAlign(HorAlign align)
+    {
+        if (mTextDrawable)
+            mTextDrawable->SetHorAlign(align);
 
-		SetLayoutDirty();
-	}
+        SetLayoutDirty();
+    }
 
-	HorAlign Label::GetHorAlign() const
-	{
-		if (mTextDrawable)
-			return mTextDrawable->GetHorAlign();
+    HorAlign Label::GetHorAlign() const
+    {
+        if (mTextDrawable)
+            return mTextDrawable->GetHorAlign();
 
-		return HorAlign::Left;
-	}
+        return HorAlign::Left;
+    }
 
-	void Label::SetVerAlign(VerAlign align)
-	{
-		if (mTextDrawable)
-			mTextDrawable->SetVerAlign(align);
+    void Label::SetVerAlign(VerAlign align)
+    {
+        if (mTextDrawable)
+            mTextDrawable->SetVerAlign(align);
 
-		SetLayoutDirty();
-	}
+        SetLayoutDirty();
+    }
 
-	VerAlign Label::GetVerAlign() const
-	{
-		if (mTextDrawable)
-			return mTextDrawable->GetVerAlign();
+    VerAlign Label::GetVerAlign() const
+    {
+        if (mTextDrawable)
+            return mTextDrawable->GetVerAlign();
 
-		return VerAlign::Top;
-	}
+        return VerAlign::Top;
+    }
 
-	void Label::SetHorOverflow(HorOverflow overflow)
-	{
-		mHorOverflow = overflow;
+    void Label::SetHorOverflow(HorOverflow overflow)
+    {
+        mHorOverflow = overflow;
 
-		if (mTextDrawable)
-		{
-			mTextDrawable->wordWrap = mHorOverflow == HorOverflow::Wrap;
-			mTextDrawable->dotsEngings = mHorOverflow == HorOverflow::Dots;
-		}
+        if (mTextDrawable)
+        {
+            mTextDrawable->wordWrap = mHorOverflow == HorOverflow::Wrap;
+            mTextDrawable->dotsEngings = mHorOverflow == HorOverflow::Dots;
+        }
 
-		SetLayoutDirty();
-	}
+        SetLayoutDirty();
+    }
 
-	Label::HorOverflow Label::GetHorOverflow()
-	{
-		return mHorOverflow;
-	}
+    Label::HorOverflow Label::GetHorOverflow()
+    {
+        return mHorOverflow;
+    }
 
-	void Label::SetVerOverflow(VerOverflow overflow)
-	{
-		mVerOverflow = overflow;
-		SetLayoutDirty();
-	}
+    void Label::SetVerOverflow(VerOverflow overflow)
+    {
+        mVerOverflow = overflow;
+        SetLayoutDirty();
+    }
 
-	Label::VerOverflow Label::GetVerOverflow()
-	{
-		return mVerOverflow;
-	}
+    Label::VerOverflow Label::GetVerOverflow()
+    {
+        return mVerOverflow;
+    }
 
-	void Label::SetSymbolsDistanceCoef(float coef /*= 1*/)
-	{
-		if (mTextDrawable)
-			mTextDrawable->SetSymbolsDistanceCoef(coef);
+    void Label::SetSymbolsDistanceCoef(float coef /*= 1*/)
+    {
+        if (mTextDrawable)
+            mTextDrawable->SetSymbolsDistanceCoef(coef);
 
-		SetLayoutDirty();
-	}
+        SetLayoutDirty();
+    }
 
-	float Label::GetSymbolsDistanceCoef() const
-	{
-		if (mTextDrawable)
-			return mTextDrawable->GetSymbolsDistanceCoef();
+    float Label::GetSymbolsDistanceCoef() const
+    {
+        if (mTextDrawable)
+            return mTextDrawable->GetSymbolsDistanceCoef();
 
-		return 1.0f;
-	}
+        return 1.0f;
+    }
 
-	void Label::SetLinesDistanceCoef(float coef /*= 1*/)
-	{
-		if (mTextDrawable)
-			mTextDrawable->SetLinesDistanceCoef(coef);
+    void Label::SetLinesDistanceCoef(float coef /*= 1*/)
+    {
+        if (mTextDrawable)
+            mTextDrawable->SetLinesDistanceCoef(coef);
 
-		SetLayoutDirty();
-	}
+        SetLayoutDirty();
+    }
 
-	float Label::GetLinesDistanceCoef() const
-	{
-		if (mTextDrawable)
-			return mTextDrawable->GetLinesDistanceCoef();
+    float Label::GetLinesDistanceCoef() const
+    {
+        if (mTextDrawable)
+            return mTextDrawable->GetLinesDistanceCoef();
 
-		return 1.0f;
-	}
+        return 1.0f;
+    }
 
-	void Label::SetExpandBorder(const Vec2F& border)
-	{
-		mExpandBorder = border;
-		SetLayoutDirty();
-	}
+    void Label::SetExpandBorder(const Vec2F& border)
+    {
+        mExpandBorder = border;
+        SetLayoutDirty();
+    }
 
-	Vec2F Label::GetExpandBorder() const
-	{
-		return mExpandBorder;
-	}
+    Vec2F Label::GetExpandBorder() const
+    {
+        return mExpandBorder;
+    }
 
-	void Label::SetHeight(int height)
-	{
-		if (mTextDrawable)
-			mTextDrawable->SetHeight(height);
-	}
+    void Label::SetHeight(int height)
+    {
+        if (mTextDrawable)
+            mTextDrawable->SetHeight(height);
+    }
 
-	int Label::GetHeight() const
-	{
-		if (mTextDrawable)
-			return mTextDrawable->GetFontHeight();
+    int Label::GetHeight() const
+    {
+        if (mTextDrawable)
+            return mTextDrawable->GetFontHeight();
 
-		return 0;
-	}
+        return 0;
+    }
 
-	void Label::UpdateSelfTransform()
+    void Label::UpdateSelfTransform()
 {
-		if (mTextDrawable)
-		{
-			if (mHorOverflow == HorOverflow::Expand)
-			{
-				layout->Update();
+        if (mTextDrawable)
+        {
+            if (mHorOverflow == HorOverflow::Expand)
+            {
+                layout->Update();
 
-				float realSize = mTextDrawable->GetRealSize().x + mExpandBorder.x*2.0f;
-				float thisSize = layout->width;
-				float sizeDelta = realSize - thisSize;
-				GetLayoutData().minSize.x = realSize;
+                float realSize = mTextDrawable->GetRealSize().x + mExpandBorder.x*2.0f;
+                float thisSize = layout->width;
+                float sizeDelta = realSize - thisSize;
+                GetLayoutData().minSize.x = realSize;
 
-				switch (mTextDrawable->GetHorAlign())
-				{
-					case HorAlign::Left:
-					GetLayoutData().offsetMax.x += sizeDelta;
-					break;
+                switch (mTextDrawable->GetHorAlign())
+                {
+                    case HorAlign::Left:
+                    GetLayoutData().offsetMax.x += sizeDelta;
+                    break;
 
-					case HorAlign::Middle:
-					case HorAlign::Both:
-					GetLayoutData().offsetMax.x += sizeDelta*0.5f;
-					GetLayoutData().offsetMin.x -= sizeDelta*0.5f;
-					break;
+                    case HorAlign::Middle:
+                    case HorAlign::Both:
+                    GetLayoutData().offsetMax.x += sizeDelta*0.5f;
+                    GetLayoutData().offsetMin.x -= sizeDelta*0.5f;
+                    break;
 
-					case HorAlign::Right:
-					GetLayoutData().offsetMin.x -= sizeDelta;
-					break;
-				}
-			}
+                    case HorAlign::Right:
+                    GetLayoutData().offsetMin.x -= sizeDelta;
+                    break;
+                }
+            }
 
-			if (mVerOverflow == VerOverflow::Expand)
-			{
-				layout->Update();
+            if (mVerOverflow == VerOverflow::Expand)
+            {
+                layout->Update();
 
-				float realSize = mTextDrawable->GetRealSize().y + mExpandBorder.y*2.0f;
-				float thisSize = layout->height;
-				float sizeDelta = realSize - thisSize;
+                float realSize = mTextDrawable->GetRealSize().y + mExpandBorder.y*2.0f;
+                float thisSize = layout->height;
+                float sizeDelta = realSize - thisSize;
 
-				switch (mTextDrawable->GetVerAlign())
-				{
-					case VerAlign::Top:
-					GetLayoutData().offsetMin.y -= sizeDelta;
-					break;
+                switch (mTextDrawable->GetVerAlign())
+                {
+                    case VerAlign::Top:
+                    GetLayoutData().offsetMin.y -= sizeDelta;
+                    break;
 
-					case VerAlign::Middle:
-					case VerAlign::Both:
-					GetLayoutData().offsetMax.y += sizeDelta*0.5f;
-					GetLayoutData().offsetMin.y -= sizeDelta*0.5f;
-					break;
+                    case VerAlign::Middle:
+                    case VerAlign::Both:
+                    GetLayoutData().offsetMax.y += sizeDelta*0.5f;
+                    GetLayoutData().offsetMin.y -= sizeDelta*0.5f;
+                    break;
 
-					case VerAlign::Bottom:
-					GetLayoutData().offsetMax.y += sizeDelta;
-					break;
-				}
-			}
-		}
+                    case VerAlign::Bottom:
+                    GetLayoutData().offsetMax.y += sizeDelta;
+                    break;
+                }
+            }
+        }
 
-		layout->Update();
-	}
+        layout->Update();
+    }
 
-	void Label::OnLayerAdded(WidgetLayer* layer)
-	{
-		if (layer->name == "text" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
-			mTextDrawable = dynamic_cast<Text*>(layer->GetDrawable());
-	}
+    void Label::OnLayerAdded(WidgetLayer* layer)
+    {
+        if (layer->name == "text" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
+            mTextDrawable = dynamic_cast<Text*>(layer->GetDrawable());
+    }
 
-	void Label::CreateDefaultText()
-	{
-		mTextDrawable = dynamic_cast<Text*>(AddLayer("text", mnew Text())->GetDrawable());
-		mTextDrawable->SetFontAsset(VectorFontAssetRef("stdFont.ttf"));
-	}
+    void Label::CreateDefaultText()
+    {
+        mTextDrawable = dynamic_cast<Text*>(AddLayer("text", mnew Text())->GetDrawable());
+        mTextDrawable->SetFontAsset(VectorFontAssetRef("stdFont.ttf"));
+    }
 
-	void Label::OnDeserialized(const DataValue& node)
-	{
-		Widget::OnDeserialized(node);
-		mTextDrawable = GetLayerDrawable<Text>("text");
-	}
+    void Label::OnDeserialized(const DataValue& node)
+    {
+        Widget::OnDeserialized(node);
+        mTextDrawable = GetLayerDrawable<Text>("text");
+    }
 
-	String Label::GetCreateMenuGroup()
-	{
-		return "Basic";
-	}
+    String Label::GetCreateMenuGroup()
+    {
+        return "Basic";
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Label>);
@@ -355,19 +355,19 @@ DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Label>);
 
 ENUM_META(o2::Label::HorOverflow)
 {
-	ENUM_ENTRY(Cut);
-	ENUM_ENTRY(Dots);
-	ENUM_ENTRY(Expand);
-	ENUM_ENTRY(None);
-	ENUM_ENTRY(Wrap);
+    ENUM_ENTRY(Cut);
+    ENUM_ENTRY(Dots);
+    ENUM_ENTRY(Expand);
+    ENUM_ENTRY(None);
+    ENUM_ENTRY(Wrap);
 }
 END_ENUM_META;
 
 ENUM_META(o2::Label::VerOverflow)
 {
-	ENUM_ENTRY(Cut);
-	ENUM_ENTRY(Expand);
-	ENUM_ENTRY(None);
+    ENUM_ENTRY(Cut);
+    ENUM_ENTRY(Expand);
+    ENUM_ENTRY(None);
 }
 END_ENUM_META;
 

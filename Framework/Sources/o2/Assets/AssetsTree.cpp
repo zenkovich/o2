@@ -8,211 +8,211 @@
 
 namespace o2
 {
-	AssetsTree::AssetsTree() :
-		log(nullptr)
-	{}
+    AssetsTree::AssetsTree() :
+        log(nullptr)
+    {}
 
-	AssetsTree::~AssetsTree()
-	{
-		Clear();
-	}
+    AssetsTree::~AssetsTree()
+    {
+        Clear();
+    }
 
-	void AssetsTree::Build(const String& path)
-	{
-		this->assetsPath = path;
+    void AssetsTree::Build(const String& path)
+    {
+        this->assetsPath = path;
 
-		if (!o2FileSystem.IsFolderExist(path))
-			o2FileSystem.FolderCreate(path);
+        if (!o2FileSystem.IsFolderExist(path))
+            o2FileSystem.FolderCreate(path);
 
-		FolderInfo folderInfo = o2FileSystem.GetFolderInfo(path);
-		folderInfo.ClampPathNames();
+        FolderInfo folderInfo = o2FileSystem.GetFolderInfo(path);
+        folderInfo.ClampPathNames();
 
-		LoadFolder(folderInfo, nullptr);
+        LoadFolder(folderInfo, nullptr);
 
-		for (auto asset : rootAssets)
-			asset->SetTree(this);
-	}
+        for (auto asset : rootAssets)
+            asset->SetTree(this);
+    }
 
-	void AssetsTree::Build(const FolderInfo& folderInfo)
-	{
-		LoadFolder(folderInfo, nullptr);
+    void AssetsTree::Build(const FolderInfo& folderInfo)
+    {
+        LoadFolder(folderInfo, nullptr);
 
-		for (auto asset : rootAssets)
-			asset->SetTree(this);
-	}
+        for (auto asset : rootAssets)
+            asset->SetTree(this);
+    }
 
-	void AssetsTree::Rebuild()
-	{
-		FolderInfo folderInfo = o2FileSystem.GetFolderInfo(assetsPath);
-		folderInfo.ClampPathNames();
-		LoadFolder(folderInfo, nullptr);
+    void AssetsTree::Rebuild()
+    {
+        FolderInfo folderInfo = o2FileSystem.GetFolderInfo(assetsPath);
+        folderInfo.ClampPathNames();
+        LoadFolder(folderInfo, nullptr);
 
-		for (auto asset : rootAssets)
-			asset->SetTree(this);
-	}
+        for (auto asset : rootAssets)
+            asset->SetTree(this);
+    }
 
-	void AssetsTree::SortAssets()
-	{
-		allAssets.Sort([](AssetInfo* a, AssetInfo* b) { return a->path.Length() < b->path.Length(); });
-	}
+    void AssetsTree::SortAssets()
+    {
+        allAssets.Sort([](AssetInfo* a, AssetInfo* b) { return a->path.Length() < b->path.Length(); });
+    }
 
-	void AssetsTree::SortAssetsInverse()
-	{
-		allAssets.Sort([](AssetInfo* a, AssetInfo* b) { return a->path.Length() > b->path.Length(); });
-	}
+    void AssetsTree::SortAssetsInverse()
+    {
+        allAssets.Sort([](AssetInfo* a, AssetInfo* b) { return a->path.Length() > b->path.Length(); });
+    }
 
-	AssetInfo* AssetsTree::Find(const String& path) const
-	{
-		AssetInfo* res = nullptr;
-		allAssetsByPath.TryGetValue(path, res);
-		return res;
-	}
+    AssetInfo* AssetsTree::Find(const String& path) const
+    {
+        AssetInfo* res = nullptr;
+        allAssetsByPath.TryGetValue(path, res);
+        return res;
+    }
 
-	AssetInfo* AssetsTree::Find(const UID& id) const
-	{
-		AssetInfo* res = nullptr;
-		allAssetsByUID.TryGetValue(id, res);
-		return res;
-	}
+    AssetInfo* AssetsTree::Find(const UID& id) const
+    {
+        AssetInfo* res = nullptr;
+        allAssetsByUID.TryGetValue(id, res);
+        return res;
+    }
 
-	AssetInfo* AssetsTree::AddAsset(AssetInfo* asset)
-	{
-		int delPos = asset->path.FindLast("/");
-		if (delPos < 0 || delPos == asset->path.Length() - 1)
-		{
-			rootAssets.Add(asset);
-			asset->SetTree(this);
-		}
-		else
-		{
-			String parentPath = asset->path.SubStr(0, delPos);
-			AssetInfo* parent = nullptr;
-			allAssetsByPath.TryGetValue(parentPath, parent);
+    AssetInfo* AssetsTree::AddAsset(AssetInfo* asset)
+    {
+        int delPos = asset->path.FindLast("/");
+        if (delPos < 0 || delPos == asset->path.Length() - 1)
+        {
+            rootAssets.Add(asset);
+            asset->SetTree(this);
+        }
+        else
+        {
+            String parentPath = asset->path.SubStr(0, delPos);
+            AssetInfo* parent = nullptr;
+            allAssetsByPath.TryGetValue(parentPath, parent);
 
-			if (!parent)
-			{
-				if (log)
-					log->Out("Failed to add built asset info: " + asset->path);
-			}
-			else 
-				parent->AddChild(asset);
+            if (!parent)
+            {
+                if (log)
+                    log->Out("Failed to add built asset info: " + asset->path);
+            }
+            else 
+                parent->AddChild(asset);
 
-			asset->SetTree(this);
-		}
+            asset->SetTree(this);
+        }
 
-		return asset;
-	}
+        return asset;
+    }
 
-	void AssetsTree::RemoveAsset(AssetInfo* asset, bool release /*= true*/)
-	{
-		if (allAssetsByPath[asset->path] == asset)
-			allAssetsByPath.Remove(asset->path);
+    void AssetsTree::RemoveAsset(AssetInfo* asset, bool release /*= true*/)
+    {
+        if (allAssetsByPath[asset->path] == asset)
+            allAssetsByPath.Remove(asset->path);
 
-		if (asset->meta && allAssetsByUID[asset->meta->ID()] == asset)
-			allAssetsByUID.Remove(asset->meta->ID());
+        if (asset->meta && allAssetsByUID[asset->meta->ID()] == asset)
+            allAssetsByUID.Remove(asset->meta->ID());
 
-		allAssets.Remove(asset);
-		rootAssets.Remove(asset);
+        allAssets.Remove(asset);
+        rootAssets.Remove(asset);
 
-		if (asset->parent)
-			asset->parent->RemoveChild(asset, false);
+        if (asset->parent)
+            asset->parent->RemoveChild(asset, false);
 
-		if (asset->meta->GetAssetType() == &TypeOf(FolderAsset) && release)
-		{
-			auto& childs = asset->mChildren;
-			for (auto ch : childs)
-				RemoveAsset(ch, release);
-		}
+        if (asset->meta->GetAssetType() == &TypeOf(FolderAsset) && release)
+        {
+            auto& childs = asset->mChildren;
+            for (auto ch : childs)
+                RemoveAsset(ch, release);
+        }
 
-		if (release)
-			delete asset;
-	}
+        if (release)
+            delete asset;
+    }
 
-	void AssetsTree::Clear()
-	{
-		for (auto asset : rootAssets)
-			delete asset;
+    void AssetsTree::Clear()
+    {
+        for (auto asset : rootAssets)
+            delete asset;
 
-		allAssets.Clear();
-		rootAssets.Clear();
-		allAssetsByPath.Clear();
-		allAssetsByUID.Clear();
-	}
+        allAssets.Clear();
+        rootAssets.Clear();
+        allAssetsByPath.Clear();
+        allAssetsByUID.Clear();
+    }
 
-	void AssetsTree::LoadFolder(const FolderInfo& folder, AssetInfo* parentAsset)
-	{
-		for (auto fileInfo : folder.files)
-		{
-			String extension = o2FileSystem.GetFileExtension(fileInfo.path);
+    void AssetsTree::LoadFolder(const FolderInfo& folder, AssetInfo* parentAsset)
+    {
+        for (auto fileInfo : folder.files)
+        {
+            String extension = o2FileSystem.GetFileExtension(fileInfo.path);
 
-			if (extension != "meta")
-			{
-				String assetFullPath = assetsPath + fileInfo.path;
-				String metaFullPath = assetFullPath + ".meta";
+            if (extension != "meta")
+            {
+                String assetFullPath = assetsPath + fileInfo.path;
+                String metaFullPath = assetFullPath + ".meta";
 
-				bool isExistMetaForAsset = o2FileSystem.IsFileExist(metaFullPath);
-				if (!isExistMetaForAsset)
-					continue;
+                bool isExistMetaForAsset = o2FileSystem.IsFileExist(metaFullPath);
+                if (!isExistMetaForAsset)
+                    continue;
 
-				LoadAssetNode(fileInfo.path, parentAsset, fileInfo.editDate);
-			}
-		}
+                LoadAssetNode(fileInfo.path, parentAsset, fileInfo.editDate);
+            }
+        }
 
-		for (auto subFolder : folder.folders)
-		{
-			AssetInfo* asset = nullptr;
+        for (auto subFolder : folder.folders)
+        {
+            AssetInfo* asset = nullptr;
 
-			String subFolderPath = subFolder.path;
-			if (subFolderPath.EndsWith("/"))
-				subFolderPath.Erase(subFolderPath.Length() - 1);
+            String subFolderPath = subFolder.path;
+            if (subFolderPath.EndsWith("/"))
+                subFolderPath.Erase(subFolderPath.Length() - 1);
 
-			String folderFullPath = assetsPath + subFolderPath;
-			String metaFullPath = folderFullPath + ".meta";
+            String folderFullPath = assetsPath + subFolderPath;
+            String metaFullPath = folderFullPath + ".meta";
 
-			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
-			if (!isExistMetaForFolder)
-			{
-				if (log)
-					log->Warning("Can't load asset info for " + subFolder.path + " - missing meta file");
+            bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
+            if (!isExistMetaForFolder)
+            {
+                if (log)
+                    log->Warning("Can't load asset info for " + subFolder.path + " - missing meta file");
 
-				continue;
-			}
+                continue;
+            }
 
-			asset = LoadAssetNode(subFolderPath, parentAsset, TimeStamp());
+            asset = LoadAssetNode(subFolderPath, parentAsset, TimeStamp());
 
-			LoadFolder(subFolder, asset);
-		}
-	}
+            LoadFolder(subFolder, asset);
+        }
+    }
 
-	AssetInfo* AssetsTree::LoadAssetNode(const String& path, AssetInfo* parent, const TimeStamp& time)
-	{
-		DataDocument metaData;
-		if (!metaData.LoadFromFile(this->assetsPath + path + ".meta"))
-		{
-			o2Debug.LogError("Failed to load asset meta: " + path);
-		}
+    AssetInfo* AssetsTree::LoadAssetNode(const String& path, AssetInfo* parent, const TimeStamp& time)
+    {
+        DataDocument metaData;
+        if (!metaData.LoadFromFile(this->assetsPath + path + ".meta"))
+        {
+            o2Debug.LogError("Failed to load asset meta: " + path);
+        }
 
-		AssetMeta* meta = nullptr;
-		meta = metaData;
+        AssetMeta* meta = nullptr;
+        meta = metaData;
 
-		AssetInfo* asset = mnew AssetInfo();
+        AssetInfo* asset = mnew AssetInfo();
 
-		asset->meta = meta;
-		asset->path = path;
-		asset->editTime = time;
-		asset->SetParent(parent);
+        asset->meta = meta;
+        asset->path = path;
+        asset->editTime = time;
+        asset->SetParent(parent);
 
-		if (!parent)
-			rootAssets.Add(asset);
+        if (!parent)
+            rootAssets.Add(asset);
 
-		return asset;
-	}
+        return asset;
+    }
 
-	void AssetsTree::OnDeserialized(const DataValue& node)
-	{
-		for (auto asset : rootAssets)
-			asset->SetTree(this);
-	}
+    void AssetsTree::OnDeserialized(const DataValue& node)
+    {
+        for (auto asset : rootAssets)
+            asset->SetTree(this);
+    }
 
 }
 // --- META ---

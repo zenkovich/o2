@@ -8,37 +8,37 @@
 
 namespace o2
 {
-	BitmapFontAsset::BitmapFontAsset():
-		FontAsset(mnew Meta())
-	{}
+    BitmapFontAsset::BitmapFontAsset():
+        FontAsset(mnew Meta())
+    {}
 
-	BitmapFontAsset::BitmapFontAsset(const BitmapFontAsset& asset):
-		FontAsset(asset), meta(this)
-	{}
+    BitmapFontAsset::BitmapFontAsset(const BitmapFontAsset& asset):
+        FontAsset(asset), meta(this)
+    {}
 
-	BitmapFontAsset& BitmapFontAsset::operator=(const BitmapFontAsset& asset)
-	{
-		FontAsset::operator=(asset);
-		return *this;
-	}
+    BitmapFontAsset& BitmapFontAsset::operator=(const BitmapFontAsset& asset)
+    {
+        FontAsset::operator=(asset);
+        return *this;
+    }
 
-	Vector<String> BitmapFontAsset::GetFileExtensions()
-	{
-		return { "fnt" };
-	}
+    Vector<String> BitmapFontAsset::GetFileExtensions()
+    {
+        return { "fnt" };
+    }
 
-	BitmapFontAsset::Meta* BitmapFontAsset::GetMeta() const
-	{
-		return (Meta*)mInfo.meta;
-	}
+    BitmapFontAsset::Meta* BitmapFontAsset::GetMeta() const
+    {
+        return (Meta*)mInfo.meta;
+    }
 
-	void BitmapFontAsset::LoadData(const String& path)
-	{
-		mFont = o2Render.mFonts.FindOrDefault([&](auto fnt) { return fnt->GetFileName() == path; });
+    void BitmapFontAsset::LoadData(const String& path)
+    {
+        mFont = o2Render.mFonts.FindOrDefault([&](auto fnt) { return fnt->GetFileName() == path; });
 
-		if (!mFont)
-			mFont = mnew BitmapFont(path);
-	}
+        if (!mFont)
+            mFont = mnew BitmapFont(path);
+    }
 }
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::BitmapFontAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::BitmapFontAsset>);

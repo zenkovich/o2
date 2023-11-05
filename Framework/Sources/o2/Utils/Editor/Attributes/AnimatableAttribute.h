@@ -5,12 +5,12 @@
 
 namespace o2
 {
-	class AnimatableAttribute : public IAttribute
-	{
-		ATTRIBUTE_COMMENT_DEFINITION("ANIMATABLE");
-		ATTRIBUTE_SHORT_DEFINITION("ANIMATABLE_ATTRIBUTE");
-	};
+    class AnimatableAttribute : public IAttribute
+    {
+        ATTRIBUTE_COMMENT_DEFINITION("ANIMATABLE");
+        ATTRIBUTE_SHORT_DEFINITION("ANIMATABLE_ATTRIBUTE");
+    };
 
 #define ANIMATABLE_ATTRIBUTE() \
-	template AddAttribute<o2::AnimatableAttribute>()
+    template AddAttribute<o2::AnimatableAttribute>()
 }

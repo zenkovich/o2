@@ -9,36 +9,36 @@
 
 namespace o2
 {
-	class UID
-	{
-	public:
-		char data[16];
+    class UID
+    {
+    public:
+        char data[16];
 
-	public:
-		UID();
-		UID(const UID& other);
-		UID(int value);
-		UID(const WString& stringData);
+    public:
+        UID();
+        UID(const UID& other);
+        UID(int value);
+        UID(const WString& stringData);
 
-		UID& operator=(const UID& other);
+        UID& operator=(const UID& other);
 
-		bool operator==(const UID& other) const;
-		bool operator!=(const UID& other) const;
+        bool operator==(const UID& other) const;
+        bool operator!=(const UID& other) const;
 
-		bool operator<(const UID& other) const;
+        bool operator<(const UID& other) const;
 
-		void Randomize();
+        void Randomize();
 
-		WString ToString() const;
-		void FromString(const WString& stringData);
+        WString ToString() const;
+        void FromString(const WString& stringData);
 
-		operator WString() const;
-		UID& operator=(const WString& data);
+        operator WString() const;
+        UID& operator=(const WString& data);
 
-		operator String() const;
-		UID& operator=(const String& data);
+        operator String() const;
+        UID& operator=(const String& data);
 
-	public:
-		static UID empty;
-	};
+    public:
+        static UID empty;
+    };
 }

@@ -4,105 +4,105 @@
 
 namespace o2
 {
-	// --------------------
-	// Basic task interface
-	// --------------------
-	class Task
-	{
-	public:
-		// Default constructor. Registering himself in tasks manager and gets id
-		Task();
+    // --------------------
+    // Basic task interface
+    // --------------------
+    class Task
+    {
+    public:
+        // Default constructor. Registering himself in tasks manager and gets id
+        Task();
 
-		// Copy-constructor. Registering himself in tasks manager and gets id
-		Task(const Task& other);
+        // Copy-constructor. Registering himself in tasks manager and gets id
+        Task(const Task& other);
 
-		// Destructor. Removes from tasks manager
-		virtual ~Task();
+        // Destructor. Removes from tasks manager
+        virtual ~Task();
 
-		// Updates task
-		virtual void Update(float dt);
+        // Updates task
+        virtual void Update(float dt);
 
-		// Checks task for complete
-		virtual bool IsDone() const;
+        // Checks task for complete
+        virtual bool IsDone() const;
 
-		// Returns task identificator
-		int ID() const;
+        // Returns task identificator
+        int ID() const;
 
-	protected:
-		int mId; // Task identificator
+    protected:
+        int mId; // Task identificator
 
-		friend class TaskManager;
-	};
+        friend class TaskManager;
+    };
 
-	// ---------------
-	// Functional task
-	// ---------------
-	class FunctionalTask: public Task
-	{
-	public:
-		Function<void(float)> update;
-		Function<bool()> isDone;
+    // ---------------
+    // Functional task
+    // ---------------
+    class FunctionalTask: public Task
+    {
+    public:
+        Function<void(float)> update;
+        Function<bool()> isDone;
 
-		void Update(float dt);
-		bool IsDone() const;
-	};
+        void Update(float dt);
+        bool IsDone() const;
+    };
 
-	// ----------
-	// Timed task
-	// ----------
-	class TimeTask: public Task
-	{
-	public:
-		TimeTask(float time = 1.0f);
+    // ----------
+    // Timed task
+    // ----------
+    class TimeTask: public Task
+    {
+    public:
+        TimeTask(float time = 1.0f);
 
-		void Update(float dt);
-		bool IsDone() const;
+        void Update(float dt);
+        bool IsDone() const;
 
-	protected:
-		float mRemainingTime;
-	};
+    protected:
+        float mRemainingTime;
+    };
 
-	// ---------------------
-	// Functional timed task
-	// ---------------------
-	class FunctionalTimeTask: public TimeTask
-	{
-	public:
-		Function<void(float)> update;
+    // ---------------------
+    // Functional timed task
+    // ---------------------
+    class FunctionalTimeTask: public TimeTask
+    {
+    public:
+        Function<void(float)> update;
 
-		FunctionalTimeTask(float time = 1.0f);
-		void Update(float dt);
-	};
+        FunctionalTimeTask(float time = 1.0f);
+        void Update(float dt);
+    };
 
-	// ------------
-	// Delayed task
-	// ------------
-	class DelayedTask: Task
-	{
-	public:
-		DelayedTask(float delay = 0.0f);
+    // ------------
+    // Delayed task
+    // ------------
+    class DelayedTask: Task
+    {
+    public:
+        DelayedTask(float delay = 0.0f);
 
-		void Update(float dt);
-		bool IsDone() const;
+        void Update(float dt);
+        bool IsDone() const;
 
-	protected:
-		float mRemainingToCallTime;
+    protected:
+        float mRemainingToCallTime;
 
-	protected:
-		virtual void DoTask();
-	};
+    protected:
+        virtual void DoTask();
+    };
 
-	// -----------------------
-	// Functional delayed task
-	// -----------------------
-	class FunctionalDelayedTask: DelayedTask
-	{
-	public:
-		Function<void()> doTask;
+    // -----------------------
+    // Functional delayed task
+    // -----------------------
+    class FunctionalDelayedTask: DelayedTask
+    {
+    public:
+        Function<void()> doTask;
 
-		FunctionalDelayedTask(float delay = 0.0f);
+        FunctionalDelayedTask(float delay = 0.0f);
 
-	protected:
-		void DoTask();
-	};
+    protected:
+        void DoTask();
+    };
 }

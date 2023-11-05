@@ -5,28 +5,28 @@
 
 namespace o2
 {
-	ApplicationEventsListener::ApplicationEventsListener()
-	{
-		EventSystem::RegApplicationListener(this);
-	}
+    ApplicationEventsListener::ApplicationEventsListener()
+    {
+        EventSystem::RegApplicationListener(this);
+    }
 
-	ApplicationEventsListener::~ApplicationEventsListener()
-	{
-		EventSystem::UnregApplicationListener(this);
-	}
+    ApplicationEventsListener::~ApplicationEventsListener()
+    {
+        EventSystem::UnregApplicationListener(this);
+    }
 
-	void ApplicationEventsListener::OnApplicationStarted()
-	{}
+    void ApplicationEventsListener::OnApplicationStarted()
+    {}
 
-	void ApplicationEventsListener::OnApplicationClosing()
-	{}
+    void ApplicationEventsListener::OnApplicationClosing()
+    {}
 
-	void ApplicationEventsListener::OnApplicationActivated()
-	{}
+    void ApplicationEventsListener::OnApplicationActivated()
+    {}
 
-	void ApplicationEventsListener::OnApplicationDeactivated()
-	{}
+    void ApplicationEventsListener::OnApplicationDeactivated()
+    {}
 
-	void ApplicationEventsListener::OnApplicationSized()
-	{}
+    void ApplicationEventsListener::OnApplicationSized()
+    {}
 }

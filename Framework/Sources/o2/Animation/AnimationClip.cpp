@@ -8,166 +8,166 @@
 
 namespace o2
 {
-	AnimationClip::AnimationClip() 
-	{}
+    AnimationClip::AnimationClip() 
+    {}
 
-	AnimationClip::AnimationClip(const AnimationClip& other):
-		loop(this), duration(this)
-	{
-		for (auto track : other.mTracks)
-		{
-			IAnimationTrack* newTrack = track->CloneAs<IAnimationTrack>();
-			mTracks.Add(newTrack);
-			OnTrackAdded(newTrack);
-		}
+    AnimationClip::AnimationClip(const AnimationClip& other):
+        loop(this), duration(this)
+    {
+        for (auto track : other.mTracks)
+        {
+            IAnimationTrack* newTrack = track->CloneAs<IAnimationTrack>();
+            mTracks.Add(newTrack);
+            OnTrackAdded(newTrack);
+        }
 
-		mLoop = other.mLoop;
+        mLoop = other.mLoop;
 
-		RecalculateDuration();
-	}
+        RecalculateDuration();
+    }
 
-	AnimationClip::~AnimationClip()
-	{
-		Clear();
-	}
+    AnimationClip::~AnimationClip()
+    {
+        Clear();
+    }
 
-	AnimationClip& AnimationClip::operator=(const AnimationClip& other)
-	{
-		Clear();
+    AnimationClip& AnimationClip::operator=(const AnimationClip& other)
+    {
+        Clear();
 
-		for (auto track : other.mTracks)
-		{
-			IAnimationTrack* newTrack = track->CloneAs<IAnimationTrack>();
-			mTracks.Add(newTrack);
-			OnTrackAdded(newTrack);
-		}
+        for (auto track : other.mTracks)
+        {
+            IAnimationTrack* newTrack = track->CloneAs<IAnimationTrack>();
+            mTracks.Add(newTrack);
+            OnTrackAdded(newTrack);
+        }
 
-		mLoop = other.mLoop;
+        mLoop = other.mLoop;
 
-		RecalculateDuration();
+        RecalculateDuration();
 
-		return *this;
-	}
+        return *this;
+    }
 
-	void AnimationClip::Clear()
-	{
-		for (auto track : mTracks)
-		{
-			track->onKeysChanged -= THIS_FUNC(OnTrackChanged);
-			delete track;
-		}
+    void AnimationClip::Clear()
+    {
+        for (auto track : mTracks)
+        {
+            track->onKeysChanged -= THIS_FUNC(OnTrackChanged);
+            delete track;
+        }
 
-		mTracks.Clear();
-	}
+        mTracks.Clear();
+    }
 
-	float AnimationClip::GetDuration() const
-	{
-		return mDuration;
-	}
+    float AnimationClip::GetDuration() const
+    {
+        return mDuration;
+    }
 
-	void AnimationClip::SetLoop(Loop loop)
-	{
-		mLoop = loop;
-	}
+    void AnimationClip::SetLoop(Loop loop)
+    {
+        mLoop = loop;
+    }
 
-	Loop AnimationClip::GetLoop() const
-	{
-		return mLoop;
-	}
+    Loop AnimationClip::GetLoop() const
+    {
+        return mLoop;
+    }
 
-	Vector<IAnimationTrack*>& AnimationClip::GetTracks()
-	{
-		return mTracks;
-	}
+    Vector<IAnimationTrack*>& AnimationClip::GetTracks()
+    {
+        return mTracks;
+    }
 
-	const Vector<IAnimationTrack*>& AnimationClip::GetTracks() const
-	{
-		return mTracks;
-	}
+    const Vector<IAnimationTrack*>& AnimationClip::GetTracks() const
+    {
+        return mTracks;
+    }
 
-	bool AnimationClip::ContainsTrack(const String& path) const
-	{
-		for (auto track : mTracks)
-		{
-			if (track->path == path)
-				return true;
-		}
+    bool AnimationClip::ContainsTrack(const String& path) const
+    {
+        for (auto track : mTracks)
+        {
+            if (track->path == path)
+                return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	IAnimationTrack* AnimationClip::AddTrack(const String& path, const Type& type)
-	{
-		auto animTypeName = "o2::AnimationTrack<" + type.GetName() + ">";
-		auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
-		if (!animType)
-		{
-			o2Debug.LogWarning("Can't create Animation track: can't find animation type " + animTypeName);
-			return nullptr;
-		}
+    IAnimationTrack* AnimationClip::AddTrack(const String& path, const Type& type)
+    {
+        auto animTypeName = "o2::AnimationTrack<" + type.GetName() + ">";
+        auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
+        if (!animType)
+        {
+            o2Debug.LogWarning("Can't create Animation track: can't find animation type " + animTypeName);
+            return nullptr;
+        }
 
-		auto track = dynamic_cast<IAnimationTrack*>(animType->DynamicCastToIObject(animType->CreateSample()));
-		track->path = path;
-		track->onKeysChanged += THIS_FUNC(OnTrackChanged);
+        auto track = dynamic_cast<IAnimationTrack*>(animType->DynamicCastToIObject(animType->CreateSample()));
+        track->path = path;
+        track->onKeysChanged += THIS_FUNC(OnTrackChanged);
 
-		mTracks.Add(track);
-		OnTrackAdded(track);
+        mTracks.Add(track);
+        OnTrackAdded(track);
 
-		return track;
-	}
+        return track;
+    }
 
-	void AnimationClip::RemoveTrack(const String& path)
-	{
-		for (auto track : mTracks)
-		{
-			if (track->path == path)
-			{
-				onTrackRemove(track);
+    void AnimationClip::RemoveTrack(const String& path)
+    {
+        for (auto track : mTracks)
+        {
+            if (track->path == path)
+            {
+                onTrackRemove(track);
 
-				delete track;
-				mTracks.Remove(track);
+                delete track;
+                mTracks.Remove(track);
 
-				onChanged();
-				return;
-			}
-		}
-	}
+                onChanged();
+                return;
+            }
+        }
+    }
 
-	void AnimationClip::OnTrackChanged()
-	{
-		RecalculateDuration();
+    void AnimationClip::OnTrackChanged()
+    {
+        RecalculateDuration();
 
-		onChanged();
-	}
+        onChanged();
+    }
 
-	void AnimationClip::RecalculateDuration()
-	{
-		float lastDuration = mDuration;
-		mDuration = 0.0f;
+    void AnimationClip::RecalculateDuration()
+    {
+        float lastDuration = mDuration;
+        mDuration = 0.0f;
 
-		for (auto track : mTracks)
-			mDuration = Math::Max(mDuration, track->GetDuration());
+        for (auto track : mTracks)
+            mDuration = Math::Max(mDuration, track->GetDuration());
 
-		if (!Math::Equals(lastDuration, mDuration))
-			onDurationChange(mDuration);
-	}
+        if (!Math::Equals(lastDuration, mDuration))
+            onDurationChange(mDuration);
+    }
 
-	void AnimationClip::OnDeserialized(const DataValue& node)
-	{
-		for (auto track : mTracks)
-			track->onKeysChanged += THIS_FUNC(OnTrackChanged);
+    void AnimationClip::OnDeserialized(const DataValue& node)
+    {
+        for (auto track : mTracks)
+            track->onKeysChanged += THIS_FUNC(OnTrackChanged);
 
-		OnTrackChanged();
-	}
+        OnTrackChanged();
+    }
 
-	void AnimationClip::OnTrackAdded(IAnimationTrack* track)
-	{
-		track->onKeysChanged += THIS_FUNC(OnTrackChanged);
-		track->mOwnerClip = this;
+    void AnimationClip::OnTrackAdded(IAnimationTrack* track)
+    {
+        track->onKeysChanged += THIS_FUNC(OnTrackChanged);
+        track->mOwnerClip = this;
 
-		onTrackAdded(track);
-		onChanged();
-	}
+        onTrackAdded(track);
+        onChanged();
+    }
 }
 // --- META ---
 

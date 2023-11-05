@@ -14,12 +14,12 @@
 
 - (void)drawInMTKView:(nonnull MTKView *)view
 {
-	o2Application.Update();
+    o2Application.Update();
 }
 
 - (void)mtkView:(nonnull MTKView *)view drawableSizeWillChange:(CGSize)size
 {
-	o2::ApplicationPlatformWrapper::OnWindowRsized(o2::Vec2I(size.width, size.height));
+    o2::ApplicationPlatformWrapper::OnWindowRsized(o2::Vec2I(size.width, size.height));
 }
 
 @end
@@ -32,40 +32,40 @@
 
 - (o2::Vec2F)getTouchPosition:(UITouch *)touch
 {
-	o2::Vec2F res(([touch locationInView:self].x - self.bounds.size.width/2)*self.layer.contentsScale,
-				  -([touch locationInView:self].y - self.bounds.size.height/2)*self.layer.contentsScale);
-	
-	return res;
+    o2::Vec2F res(([touch locationInView:self].x - self.bounds.size.width/2)*self.layer.contentsScale,
+                  -([touch locationInView:self].y - self.bounds.size.height/2)*self.layer.contentsScale);
+    
+    return res;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent*) __unused event
 {
-	for (int i = 0; i < [touches count]; ++i)
-	{
-		UITouch *touch = [[touches allObjects] objectAtIndex:i];
-		o2Input.OnCursorPressed([self getTouchPosition:touch], i);
-	}
+    for (int i = 0; i < [touches count]; ++i)
+    {
+        UITouch *touch = [[touches allObjects] objectAtIndex:i];
+        o2Input.OnCursorPressed([self getTouchPosition:touch], i);
+    }
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent*) __unused event
 {
-	for (int i = 0; i < [touches count]; ++i)
-	{
-		UITouch *touch = [[touches allObjects] objectAtIndex:i];
-		o2Input.OnCursorMoved([self getTouchPosition:touch], i);
-	}
+    for (int i = 0; i < [touches count]; ++i)
+    {
+        UITouch *touch = [[touches allObjects] objectAtIndex:i];
+        o2Input.OnCursorMoved([self getTouchPosition:touch], i);
+    }
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent*) __unused event
 {
-	for (int i = 0; i < [touches count]; ++i)
-		o2Input.OnCursorReleased(i);
+    for (int i = 0; i < [touches count]; ++i)
+        o2Input.OnCursorReleased(i);
 }
 
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent*) __unused event
 {
-	for (int i = 0; i < [touches count]; ++i)
-		o2Input.OnCursorReleased(i);
+    for (int i = 0; i < [touches count]; ++i)
+        o2Input.OnCursorReleased(i);
 }
 
 @end

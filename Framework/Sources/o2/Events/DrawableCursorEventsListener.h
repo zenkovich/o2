@@ -4,39 +4,39 @@
 
 namespace o2
 {
-	// --------------------------------------------------------------------
-	// Drawable cursor events listener. Reacts to something drawable object
-	// --------------------------------------------------------------------
-	class DrawableCursorEventsListener: virtual public CursorAreaEventsListener
-	{
-	public:
-		PROPERTIES(DrawableCursorEventsListener);
-		PROPERTY(IDrawable*, eventHandleDrawable, SetEventHandleDrawable, GetEventHandleDrawable); // Target event handling drawable property
+    // --------------------------------------------------------------------
+    // Drawable cursor events listener. Reacts to something drawable object
+    // --------------------------------------------------------------------
+    class DrawableCursorEventsListener: virtual public CursorAreaEventsListener
+    {
+    public:
+        PROPERTIES(DrawableCursorEventsListener);
+        PROPERTY(IDrawable*, eventHandleDrawable, SetEventHandleDrawable, GetEventHandleDrawable); // Target event handling drawable property
 
-	public:
-		// Default constructor
-		DrawableCursorEventsListener(IDrawable* drawable = nullptr);
+    public:
+        // Default constructor
+        DrawableCursorEventsListener(IDrawable* drawable = nullptr);
 
-		// Copy-constructor
-		DrawableCursorEventsListener(const DrawableCursorEventsListener& other);
+        // Copy-constructor
+        DrawableCursorEventsListener(const DrawableCursorEventsListener& other);
 
-		// Destructor
-		~DrawableCursorEventsListener();
+        // Destructor
+        ~DrawableCursorEventsListener();
 
-		// Sets event handling drawable object
-		void SetEventHandleDrawable(IDrawable* drawable);
+        // Sets event handling drawable object
+        void SetEventHandleDrawable(IDrawable* drawable);
 
-		// Returns current event handling drawable object
-		IDrawable* GetEventHandleDrawable() const;
+        // Returns current event handling drawable object
+        IDrawable* GetEventHandleDrawable() const;
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+        // Returns true if point is in this object
+        bool IsUnderPoint(const Vec2F& point);
 
-	protected:
-		IDrawable* mEventHandleDrawable;
+    protected:
+        IDrawable* mEventHandleDrawable;
 
-	protected:
-		// Called when listener was drawn
-		void OnDrawn();
-	};
+    protected:
+        // Called when listener was drawn
+        void OnDrawn();
+    };
 }

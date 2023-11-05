@@ -4,143 +4,143 @@
 
 namespace o2
 {
-	class Button;
+    class Button;
 
-	// -------------------------------------
-	// UI Spoiler. Can hide children widgets
-	// -------------------------------------
-	class Spoiler: public VerticalLayout
-	{
-	public:
-		PROPERTIES(Spoiler);
-		PROPERTY(WString, caption, SetCaption, GetCaption);        // Head caption property
-		PROPERTY(float, headHeight, SetHeadHeight, GetHeadHeight); // Head height property
-		PROPERTY(bool, expanded, SetExpanded, IsExpanded);         // Expanded state property
+    // -------------------------------------
+    // UI Spoiler. Can hide children widgets
+    // -------------------------------------
+    class Spoiler: public VerticalLayout
+    {
+    public:
+        PROPERTIES(Spoiler);
+        PROPERTY(WString, caption, SetCaption, GetCaption);        // Head caption property
+        PROPERTY(float, headHeight, SetHeadHeight, GetHeadHeight); // Head height property
+        PROPERTY(bool, expanded, SetExpanded, IsExpanded);         // Expanded state property
 
-	public:
-		Function<void()> onExpand;    // Expand starting event
+    public:
+        Function<void()> onExpand;    // Expand starting event
 
-	public:
-		// Default constructor
-		Spoiler();
+    public:
+        // Default constructor
+        Spoiler();
 
-		// Copy-constructor
-		Spoiler(const Spoiler& other);
+        // Copy-constructor
+        Spoiler(const Spoiler& other);
 
-		// Copy-operator
-		Spoiler& operator=(const Spoiler& other);
+        // Copy-operator
+        Spoiler& operator=(const Spoiler& other);
 
-		// Expands spoiler
-		void Expand();
+        // Expands spoiler
+        void Expand();
 
-		// Collapses spoiler
-		void Collapse();
+        // Collapses spoiler
+        void Collapse();
 
-		// Sets expanded state
-		void SetExpanded(bool expand);
+        // Sets expanded state
+        void SetExpanded(bool expand);
 
-		// Returns is expanded
-		bool IsExpanded() const;
+        // Returns is expanded
+        bool IsExpanded() const;
 
-		// Draws spoiler
-		void Draw() override;
+        // Draws spoiler
+        void Draw() override;
 
-		// Sets caption, if text layer exist
-		void SetCaption(const WString& caption);
+        // Sets caption, if text layer exist
+        void SetCaption(const WString& caption);
 
-		// Returns caption, if text layer exist
-		const WString& GetCaption() const;
+        // Returns caption, if text layer exist
+        const WString& GetCaption() const;
 
-		// Sets head height
-		void SetHeadHeight(float height);
+        // Sets head height
+        void SetHeadHeight(float height);
 
-		// Returns head's height
-		float GetHeadHeight() const;
+        // Returns head's height
+        float GetHeadHeight() const;
 
-		// Searches expand button by name and type
-		Button* GetExpandButton() const;
+        // Searches expand button by name and type
+        Button* GetExpandButton() const;
 
-		// Returns create menu group in editor
-		static String GetCreateMenuGroup();
+        // Returns create menu group in editor
+        static String GetCreateMenuGroup();
 
-		SERIALIZABLE(Spoiler);
+        SERIALIZABLE(Spoiler);
 
-	protected:
-		float mHeadHeight = 0.0f; // Spoiler head height @SERIALIZABLE
+    protected:
+        float mHeadHeight = 0.0f; // Spoiler head height @SERIALIZABLE
 
-		WidgetState* mExpandState = nullptr; // Expanding state
-		float        mExpandCoef = 0.0f;     // Expanding animation coefficient 0...1 
-		float        mTargetHeight = 0.0f;   // target expanding height
+        WidgetState* mExpandState = nullptr; // Expanding state
+        float        mExpandCoef = 0.0f;     // Expanding animation coefficient 0...1 
+        float        mTargetHeight = 0.0f;   // target expanding height
 
-	protected:
-		// Invokes required function for childs arranging
-		void RearrangeChilds() override;
+    protected:
+        // Invokes required function for childs arranging
+        void RearrangeChilds() override;
 
-		// Returns layout height
-		float GetMinHeightWithChildren() const override;
+        // Returns layout height
+        float GetMinHeightWithChildren() const override;
 
-		// Updates expanding
-		void UpdateExpanding(float dt);
+        // Updates expanding
+        void UpdateExpanding(float dt);
 
-		// Creates expanding animation
-		void CreateExpandAnimation();
+        // Creates expanding animation
+        void CreateExpandAnimation();
 
-		// Updates layout's weight and minimal size
-		virtual void UpdateLayoutParametres() override;
+        // Updates layout's weight and minimal size
+        virtual void UpdateLayoutParametres() override;
 
-		// Checks is expand button exist and sets click callback, searching caption layer
-		void InitializeControls();
+        // Checks is expand button exist and sets click callback, searching caption layer
+        void InitializeControls();
 
-		// Returns is spoiler fully expanded and not animating
-		bool IsFullyExpanded() const;
+        // Returns is spoiler fully expanded and not animating
+        bool IsFullyExpanded() const;
 
-		// Returns is spoiler fully collapsed and not animating
-		bool IsFullyCollapsed() const;
-	};
+        // Returns is spoiler fully collapsed and not animating
+        bool IsFullyCollapsed() const;
+    };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::Spoiler)
 {
-	BASE_CLASS(o2::VerticalLayout);
+    BASE_CLASS(o2::VerticalLayout);
 }
 END_META;
 CLASS_FIELDS_META(o2::Spoiler)
 {
-	FIELD().PUBLIC().NAME(caption);
-	FIELD().PUBLIC().NAME(headHeight);
-	FIELD().PUBLIC().NAME(expanded);
-	FIELD().PUBLIC().NAME(onExpand);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mHeadHeight);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mExpandState);
-	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mExpandCoef);
-	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mTargetHeight);
+    FIELD().PUBLIC().NAME(caption);
+    FIELD().PUBLIC().NAME(headHeight);
+    FIELD().PUBLIC().NAME(expanded);
+    FIELD().PUBLIC().NAME(onExpand);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mHeadHeight);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mExpandState);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mExpandCoef);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mTargetHeight);
 }
 END_META;
 CLASS_METHODS_META(o2::Spoiler)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Spoiler&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
-	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
-	FUNCTION().PUBLIC().SIGNATURE(const WString&, GetCaption);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetHeadHeight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetHeadHeight);
-	FUNCTION().PUBLIC().SIGNATURE(Button*, GetExpandButton);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-	FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
-	FUNCTION().PROTECTED().SIGNATURE(float, GetMinHeightWithChildren);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateExpanding, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, CreateExpandAnimation);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayoutParametres);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsFullyExpanded);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsFullyCollapsed);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Spoiler&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Expand);
+    FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+    FUNCTION().PUBLIC().SIGNATURE(const WString&, GetCaption);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHeadHeight, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetHeadHeight);
+    FUNCTION().PUBLIC().SIGNATURE(Button*, GetExpandButton);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+    FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
+    FUNCTION().PROTECTED().SIGNATURE(float, GetMinHeightWithChildren);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateExpanding, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, CreateExpandAnimation);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayoutParametres);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsFullyExpanded);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsFullyCollapsed);
 }
 END_META;
 // --- END META ---

@@ -8,96 +8,96 @@
 
 namespace o2
 {
-	// ---------------
-	// Image component
-	// ---------------
-	class ImageComponent: public DrawableComponent, public Sprite
-	{
-	public:
-		PROPERTIES(ImageComponent);
+    // ---------------
+    // Image component
+    // ---------------
+    class ImageComponent: public DrawableComponent, public Sprite
+    {
+    public:
+        PROPERTIES(ImageComponent);
 
-	public:
-		// Default constructor @SCRIPTABLE
-		ImageComponent();
+    public:
+        // Default constructor @SCRIPTABLE
+        ImageComponent();
 
-		// Constructor from image asset
-		ImageComponent(const ImageAssetRef& image);
+        // Constructor from image asset
+        ImageComponent(const ImageAssetRef& image);
 
-		// Constructor from image asset by path
-		ImageComponent(const String& imagePath);
+        // Constructor from image asset by path
+        ImageComponent(const String& imagePath);
 
-		// Constructor from image asset by id
-		ImageComponent(const UID& imageId);
+        // Constructor from image asset by id
+        ImageComponent(const UID& imageId);
 
-		// Constructor from texture and source rectangle
-		ImageComponent(TextureRef texture, const RectI& srcRect);
+        // Constructor from texture and source rectangle
+        ImageComponent(TextureRef texture, const RectI& srcRect);
 
-		// Constructor from color
-		ImageComponent(const Color4& color);
+        // Constructor from color
+        ImageComponent(const Color4& color);
 
-		// Constructor from bitmap
-		ImageComponent(Bitmap* bitmap);
+        // Constructor from bitmap
+        ImageComponent(Bitmap* bitmap);
 
-		// Constructor from sprite
-		ImageComponent(const Sprite& sprite);
+        // Constructor from sprite
+        ImageComponent(const Sprite& sprite);
 
-		// Copy-constructor
-		ImageComponent(const ImageComponent& other);
+        // Copy-constructor
+        ImageComponent(const ImageComponent& other);
 
-		// Destructor
-		~ImageComponent();
+        // Destructor
+        ~ImageComponent();
 
-		// Assign operator
-		ImageComponent& operator=(const ImageComponent& other);
+        // Assign operator
+        ImageComponent& operator=(const ImageComponent& other);
 
-		// Draws sprite 
-		void Draw() override;
+        // Draws sprite 
+        void Draw() override;
 
-		// Sets actor's size as image size
-		void FitActorByImage() const;
+        // Sets actor's size as image size
+        void FitActorByImage() const;
 
-		// Returns true if point is under drawable
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Returns true if point is under drawable
+        bool IsUnderPoint(const Vec2F& point) override;
 
-		// Returns name of component
-		static String GetName();
+        // Returns name of component
+        static String GetName();
 
-		// Returns category of component
-		static String GetCategory();
+        // Returns category of component
+        static String GetCategory();
 
-		// Returns name of component icon
-		static String GetIcon();
+        // Returns name of component icon
+        static String GetIcon();
 
-		SERIALIZABLE(ImageComponent);
+        SERIALIZABLE(ImageComponent);
 
-		using Sprite::onDraw;
+        using Sprite::onDraw;
 
-	protected:
-		// Called when actor's transform was changed
-		void OnTransformUpdated() override;
+    protected:
+        // Called when actor's transform was changed
+        void OnTransformUpdated() override;
 
-		// Sets owner actor
-		void SetOwnerActor(Actor* actor) override;
+        // Sets owner actor
+        void SetOwnerActor(Actor* actor) override;
 
-		// Calling when deserializing
-		void OnDeserialized(const DataValue& node) override;
+        // Calling when deserializing
+        void OnDeserialized(const DataValue& node) override;
 
-		// Calling when serializing
-		void OnSerialize(DataValue& node) const override;
+        // Calling when serializing
+        void OnSerialize(DataValue& node) const override;
 
-		// Beginning serialization delta callback
-		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
+        // Beginning serialization delta callback
+        void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
 
-		// Completion deserialization delta callback
-		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;	
-	};
+        // Completion deserialization delta callback
+        void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;    
+    };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::ImageComponent)
 {
-	BASE_CLASS(o2::DrawableComponent);
-	BASE_CLASS(o2::Sprite);
+    BASE_CLASS(o2::DrawableComponent);
+    BASE_CLASS(o2::Sprite);
 }
 END_META;
 CLASS_FIELDS_META(o2::ImageComponent)
@@ -107,27 +107,27 @@ END_META;
 CLASS_METHODS_META(o2::ImageComponent)
 {
 
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const ImageAssetRef&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(Bitmap*);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const ImageComponent&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, FitActorByImage);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ImageAssetRef&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(Bitmap*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ImageComponent&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, FitActorByImage);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;
 // --- END META ---

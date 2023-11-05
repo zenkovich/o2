@@ -5,62 +5,62 @@
 
 namespace o2
 {
-	typedef unsigned long long UInt64;
-	typedef unsigned short     UInt16;
-	typedef unsigned char      UInt8;
-	typedef long long          Int64;
+    typedef unsigned long long UInt64;
+    typedef unsigned short     UInt16;
+    typedef unsigned char      UInt8;
+    typedef long long          Int64;
 
-	typedef unsigned int  UInt;
-	typedef unsigned long ULong;
+    typedef unsigned int  UInt;
+    typedef unsigned long ULong;
 
-	typedef unsigned int VertexIndex;
+    typedef unsigned int VertexIndex;
 
-	typedef int KeyboardKey;
-	typedef int CursorId;
-	
-	typedef UInt Color32Bit;
+    typedef int KeyboardKey;
+    typedef int CursorId;
+    
+    typedef UInt Color32Bit;
 
-	typedef UInt64 SceneUID;
+    typedef UInt64 SceneUID;
 
-	typedef std::byte Byte;
+    typedef std::byte Byte;
 
-	enum class BaseCorner { Left, Right, Top, Bottom, Center, LeftBottom, LeftTop, RightBottom, RightTop };
+    enum class BaseCorner { Left, Right, Top, Bottom, Center, LeftBottom, LeftTop, RightBottom, RightTop };
 
-	enum class CursorType
-	{
-		AppStarting, Arrow, Cross, Hand, Help, IBeam, Icon, No, SizeAll, SizeNeSw, SizeNS, SizeNwSe,
-		SizeWE, UpArrow, Wait
-	};
+    enum class CursorType
+    {
+        AppStarting, Arrow, Cross, Hand, Help, IBeam, Icon, No, SizeAll, SizeNeSw, SizeNS, SizeNwSe,
+        SizeWE, UpArrow, Wait
+    };
 
-	enum class Side { Left, Bottom, Right, Top, None };
+    enum class Side { Left, Bottom, Right, Top, None };
 
-	enum class Corner { LeftTop, RightTop, RightBottom, LeftBottom };
+    enum class Corner { LeftTop, RightTop, RightBottom, LeftBottom };
 
-	enum class TwoDirection { Horizontal, Vertical };
+    enum class TwoDirection { Horizontal, Vertical };
 
-	enum class SpriteMode { Default, Sliced, Tiled, FixedAspect, FillLeftToRight, FillRightToLeft, FillUpToDown, FillDownToUp, 
-		Fill360CW, Fill360CCW };
+    enum class SpriteMode { Default, Sliced, Tiled, FixedAspect, FillLeftToRight, FillRightToLeft, FillUpToDown, FillDownToUp, 
+        Fill360CW, Fill360CCW };
 
-	enum class VerAlign { Top, Middle, Bottom, Both };
-	enum class HorAlign { Left, Middle, Right, Both };
+    enum class VerAlign { Top, Middle, Bottom, Both };
+    enum class HorAlign { Left, Middle, Right, Both };
 
-	enum class ProtectSection { Public, Private, Protected };
-	
-	enum class Platform { Windows, Mac, Linux, iOS, Android };
-	
-	enum class DeviceType { PC, Tablet, Phone };
+    enum class ProtectSection { Public, Private, Protected };
+    
+    enum class Platform { Windows, Mac, Linux, iOS, Android };
+    
+    enum class DeviceType { PC, Tablet, Phone };
 
-	enum class LineType { Solid, Dash };
+    enum class LineType { Solid, Dash };
 
-	enum class PrimitiveType { Polygon, PolygonWire, Line };
+    enum class PrimitiveType { Polygon, PolygonWire, Line };
 
-	enum class PixelFormat { R8G8B8A8, R8G8B8 };
+    enum class PixelFormat { R8G8B8A8, R8G8B8 };
 
-	enum class TextureFormat { R8G8B8A8, DXT5 };
+    enum class TextureFormat { R8G8B8A8, DXT5 };
 
-	enum class Loop { None, Repeat, PingPong };
+    enum class Loop { None, Repeat, PingPong };
 
-	enum class Units { Pixels, Centimeters, Millimeters, Inches };
+    enum class Units { Pixels, Centimeters, Millimeters, Inches };
 }
 // --- META ---
 

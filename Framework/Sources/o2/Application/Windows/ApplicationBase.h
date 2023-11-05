@@ -8,34 +8,34 @@
 
 namespace o2
 {
-	class Application;
+    class Application;
 
-	// -------------------------------
-	// Windows application base fields
-	// -------------------------------
-	class ApplicationBase
-	{
-	protected:
-		HWND   mHWnd;            // Window handle
-		UInt   mWndStyle;        // Window styles data
-		bool   mWindowed;        // True if app in windowed mode, false if in fullscreen mode
-		bool   mWindowResizible; // True, if window can be sized by user
-		Vec2I  mWindowedSize;    // Size of window
-		Vec2I  mWindowedPos;     // Position of window
-		String mWndCaption;      // Window caption
-		bool   mActive;          // True, if window is active
+    // -------------------------------
+    // Windows application base fields
+    // -------------------------------
+    class ApplicationBase
+    {
+    protected:
+        HWND   mHWnd;            // Window handle
+        UInt   mWndStyle;        // Window styles data
+        bool   mWindowed;        // True if app in windowed mode, false if in fullscreen mode
+        bool   mWindowResizible; // True, if window can be sized by user
+        Vec2I  mWindowedSize;    // Size of window
+        Vec2I  mWindowedPos;     // Position of window
+        String mWndCaption;      // Window caption
+        bool   mActive;          // True, if window is active
 
-		HCURSOR mCurrentCursor;  // Current cursor type
+        HCURSOR mCurrentCursor;  // Current cursor type
 
-		bool mNeedPlatformInitialization = true; // True, if need to initialize platform: window and render
+        bool mNeedPlatformInitialization = true; // True, if need to initialize platform: window and render
 
-	public:
-		// Returns window handle
-		HWND GetWindowHandle() const { return mHWnd; }
+    public:
+        // Returns window handle
+        HWND GetWindowHandle() const { return mHWnd; }
 
-		friend class Render;
-		friend class FileSystem;
-	};
+        friend class Render;
+        friend class FileSystem;
+    };
 }
 
 #endif // PLATFORM_WINDOWS

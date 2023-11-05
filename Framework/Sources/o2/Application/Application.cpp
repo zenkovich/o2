@@ -29,319 +29,319 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(Application);
+    DECLARE_SINGLETON(Application);
 
-	Application::Application()
-	{}
+    Application::Application()
+    {}
 
-	Application::~Application()
-	{
-		DeinitializeSystems();
-	}
+    Application::~Application()
+    {
+        DeinitializeSystems();
+    }
 
-	void Application::BasicInitialize()
-	{
-		InitalizeSystems();
-		InitializePlatform();
+    void Application::BasicInitialize()
+    {
+        InitalizeSystems();
+        InitializePlatform();
 
-		mRender = mnew Render();
+        mRender = mnew Render();
 
-		o2Debug.InitializeFont();
-		o2UI.TryLoadStyle();
+        o2Debug.InitializeFont();
+        o2UI.TryLoadStyle();
 
-		mReady = true;
-	}
+        mReady = true;
+    }
 
-	void Application::OnResized(const Vec2I& size)
-	{
-		mWindowedSize = size;
-		mRender->OnFrameResized();
-		onResizing.Invoke();
-		OnResizing();
-		o2Events.OnApplicationSized();
-	}
+    void Application::OnResized(const Vec2I& size)
+    {
+        mWindowedSize = size;
+        mRender->OnFrameResized();
+        onResizing.Invoke();
+        OnResizing();
+        o2Events.OnApplicationSized();
+    }
 
-	void Application::UpdateScene(float dt)
-	{
-		PROFILE_SAMPLE_FUNC();
-		mScene->Update(dt);
-	}
+    void Application::UpdateScene(float dt)
+    {
+        PROFILE_SAMPLE_FUNC();
+        mScene->Update(dt);
+    }
 
-	void Application::FixedUpdateScene(float dt)
-	{
-		PROFILE_SAMPLE_FUNC();
-		mScene->FixedUpdate(dt);
-	}
+    void Application::FixedUpdateScene(float dt)
+    {
+        PROFILE_SAMPLE_FUNC();
+        mScene->FixedUpdate(dt);
+    }
 
-	void Application::PreUpdatePhysics()
-	{
-		PROFILE_SAMPLE_FUNC();
-		mPhysics->PreUpdate();
-	}
+    void Application::PreUpdatePhysics()
+    {
+        PROFILE_SAMPLE_FUNC();
+        mPhysics->PreUpdate();
+    }
 
-	void Application::UpdatePhysics(float dt)
-	{
-		PROFILE_SAMPLE_FUNC();
-		mPhysics->Update(dt);
-	}
+    void Application::UpdatePhysics(float dt)
+    {
+        PROFILE_SAMPLE_FUNC();
+        mPhysics->Update(dt);
+    }
 
-	void Application::PostUpdatePhysics()
-	{
-		PROFILE_SAMPLE_FUNC();
-		mPhysics->PostUpdate();
-	}
+    void Application::PostUpdatePhysics()
+    {
+        PROFILE_SAMPLE_FUNC();
+        mPhysics->PostUpdate();
+    }
 
-	void Application::InitalizeSystems()
-	{
-		srand((UInt)time(NULL));
+    void Application::InitalizeSystems()
+    {
+        srand((UInt)time(NULL));
 
-		mTime = mnew Time();
+        mTime = mnew Time();
 
-		mLog = mnew LogStream("Application");
-		o2Debug.GetLog()->BindStream(mLog);
+        mLog = mnew LogStream("Application");
+        o2Debug.GetLog()->BindStream(mLog);
 
-		mProjectConfig = mnew ProjectConfig();
+        mProjectConfig = mnew ProjectConfig();
 
-		mAssets = mnew Assets();
+        mAssets = mnew Assets();
 
-		mInput = mnew Input();
+        mInput = mnew Input();
 
-		mTaskManager = mnew TaskManager();
+        mTaskManager = mnew TaskManager();
 
-		mTimer = mnew Timer();
-		mTimer->Reset();
+        mTimer = mnew Timer();
+        mTimer->Reset();
 
-		mEventSystem = mnew EventSystem();
+        mEventSystem = mnew EventSystem();
 
-		mUIManager = mnew UIManager();
+        mUIManager = mnew UIManager();
 
-		mScene = mnew Scene();
+        mScene = mnew Scene();
 
-		mPhysics = mnew PhysicsWorld();
-
-#if IS_SCRIPTING_SUPPORTED
-		mScriptingEngine = mnew ScriptEngine();
-#endif
-
-		mLog->Out("Initialized");
-	}
-
-	void Application::DeinitializeSystems()
-	{
-		delete mUIManager;
-		delete mScene;
-		delete mPhysics;
-		delete mRender;
-		delete mInput;
-		delete mTime;
-		delete mTimer;
-		delete mProjectConfig;
-		delete mAssets;
-		delete mEventSystem;
-		delete mTaskManager;
+        mPhysics = mnew PhysicsWorld();
 
 #if IS_SCRIPTING_SUPPORTED
-		delete mScriptingEngine;
+        mScriptingEngine = mnew ScriptEngine();
 #endif
-	}
-	
-	void Application::SetupGraphicsScaledCamera()
-	{
-		PROFILE_SAMPLE_FUNC();
 
-		Camera camera = Camera::Default();
-		camera.scale = Vec2F(1.0f/mGraphicsScale, 1.0f/mGraphicsScale);
-		o2Render.camera = camera;
-	}
+        mLog->Out("Initialized");
+    }
 
-	void Application::ProcessFrame()
-	{
-		PROFILE_SAMPLE_FUNC();
+    void Application::DeinitializeSystems()
+    {
+        delete mUIManager;
+        delete mScene;
+        delete mPhysics;
+        delete mRender;
+        delete mInput;
+        delete mTime;
+        delete mTimer;
+        delete mProjectConfig;
+        delete mAssets;
+        delete mEventSystem;
+        delete mTaskManager;
 
-		if (!mReady)
-			return;
+#if IS_SCRIPTING_SUPPORTED
+        delete mScriptingEngine;
+#endif
+    }
+    
+    void Application::SetupGraphicsScaledCamera()
+    {
+        PROFILE_SAMPLE_FUNC();
 
-		float dt = 0, realDt = 0;
+        Camera camera = Camera::Default();
+        camera.scale = Vec2F(1.0f/mGraphicsScale, 1.0f/mGraphicsScale);
+        o2Render.camera = camera;
+    }
 
-		{
-			PROFILE_SAMPLE("ProcessFrame:Begin");
+    void Application::ProcessFrame()
+    {
+        PROFILE_SAMPLE_FUNC();
 
-			if (mCursorInfiniteModeEnabled)
-				CheckCursorInfiniteMode();
+        if (!mReady)
+            return;
 
-			float maxFPSDeltaTime = 1.0f/(float)maxFPS;
+        float dt = 0, realDt = 0;
 
-			realDt = mTimer->GetDeltaTime();
+        {
+            PROFILE_SAMPLE("ProcessFrame:Begin");
 
-			if (realDt < maxFPSDeltaTime)
-			{
-				std::this_thread::sleep_for(std::chrono::milliseconds((int)((maxFPSDeltaTime - realDt)*1000.0f)));
-				realDt = maxFPSDeltaTime;
-			}
+            if (mCursorInfiniteModeEnabled)
+                CheckCursorInfiniteMode();
 
-			dt = Math::Clamp(realDt, 0.001f, 0.05f);
-		}
+            float maxFPSDeltaTime = 1.0f/(float)maxFPS;
 
-		mInput->PreUpdate();
+            realDt = mTimer->GetDeltaTime();
 
-		mTime->Update(realDt);
-		UpdateDebug(dt);
-		mTaskManager->Update(dt);
-		UpdateEventSystem();
+            if (realDt < maxFPSDeltaTime)
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds((int)((maxFPSDeltaTime - realDt)*1000.0f)));
+                realDt = maxFPSDeltaTime;
+            }
 
-		mRender->Begin();
+            dt = Math::Clamp(realDt, 0.001f, 0.05f);
+        }
 
-		OnUpdate(dt);
-		UpdateScene(dt);
+        mInput->PreUpdate();
 
-		{
-			PROFILE_SAMPLE("ProcessFrame:Fixed update loop");
+        mTime->Update(realDt);
+        UpdateDebug(dt);
+        mTaskManager->Update(dt);
+        UpdateEventSystem();
 
-			mAccumulatedDT += dt;
-			float fixedDT = 1.0f/(float)fixedFPS;
-			while (mAccumulatedDT > fixedDT)
-			{
-				OnFixedUpdate(fixedDT);
-				FixedUpdateScene(fixedDT);
+        mRender->Begin();
 
-				PreUpdatePhysics();
-				UpdatePhysics(fixedDT);
-				PostUpdatePhysics();
+        OnUpdate(dt);
+        UpdateScene(dt);
 
-				mAccumulatedDT -= fixedDT;
-			}
-		}
+        {
+            PROFILE_SAMPLE("ProcessFrame:Fixed update loop");
 
-		PostUpdateEventSystem();
-		
-		mMainListenersLayer.OnBeginDraw();
-		SetupGraphicsScaledCamera();
-		mMainListenersLayer.camera = o2Render.GetCamera();
+            mAccumulatedDT += dt;
+            float fixedDT = 1.0f/(float)fixedFPS;
+            while (mAccumulatedDT > fixedDT)
+            {
+                OnFixedUpdate(fixedDT);
+                FixedUpdateScene(fixedDT);
 
-		DrawScene();
-		OnDraw();
+                PreUpdatePhysics();
+                UpdatePhysics(fixedDT);
+                PostUpdatePhysics();
 
-		DrawUIManager();
-		DrawDebug();
+                mAccumulatedDT -= fixedDT;
+            }
+        }
 
-		mMainListenersLayer.OnEndDraw();
-		mMainListenersLayer.OnDrawn(Camera::Default().GetBasis());
+        PostUpdateEventSystem();
+        
+        mMainListenersLayer.OnBeginDraw();
+        SetupGraphicsScaledCamera();
+        mMainListenersLayer.camera = o2Render.GetCamera();
 
-		mRender->End();
+        DrawScene();
+        OnDraw();
 
-		mInput->Update(dt);
-		mUIManager->Update();
+        DrawUIManager();
+        DrawDebug();
 
-		mAssets->CheckAssetsUnload();
-	}
+        mMainListenersLayer.OnEndDraw();
+        mMainListenersLayer.OnDrawn(Camera::Default().GetBasis());
 
-	void Application::DrawScene()
-	{
-		PROFILE_SAMPLE_FUNC();
-		mScene->Draw();
-	}
+        mRender->End();
 
-	void Application::UpdateEventSystem()
-	{
-		PROFILE_SAMPLE_FUNC();
-		mEventSystem->Update();
-	}
+        mInput->Update(dt);
+        mUIManager->Update();
 
-	void Application::PostUpdateEventSystem()
-	{
-		PROFILE_SAMPLE_FUNC();
-		mEventSystem->PostUpdate();
-	}
+        mAssets->CheckAssetsUnload();
+    }
 
-	void Application::DrawUIManager()
-	{
-		PROFILE_SAMPLE_FUNC();
-		mUIManager->Draw();
-	}
+    void Application::DrawScene()
+    {
+        PROFILE_SAMPLE_FUNC();
+        mScene->Draw();
+    }
 
-	void Application::DrawDebug()
-	{
-		o2Debug.Draw(false);
-	}
+    void Application::UpdateEventSystem()
+    {
+        PROFILE_SAMPLE_FUNC();
+        mEventSystem->Update();
+    }
 
-	void Application::UpdateDebug(float dt)
-	{
-		o2Debug.Update(false, dt);
-	}
+    void Application::PostUpdateEventSystem()
+    {
+        PROFILE_SAMPLE_FUNC();
+        mEventSystem->PostUpdate();
+    }
 
-	void Application::OnMoved()
-	{}
+    void Application::DrawUIManager()
+    {
+        PROFILE_SAMPLE_FUNC();
+        mUIManager->Draw();
+    }
 
-	void Application::OnResizing()
-	{}
+    void Application::DrawDebug()
+    {
+        o2Debug.Draw(false);
+    }
 
-	void Application::OnClosing()
-	{}
+    void Application::UpdateDebug(float dt)
+    {
+        o2Debug.Update(false, dt);
+    }
 
-	void Application::OnStarted()
-	{}
+    void Application::OnMoved()
+    {}
 
-	void Application::OnDeactivated()
-	{}
+    void Application::OnResizing()
+    {}
 
-	void Application::OnActivated()
-	{}
+    void Application::OnClosing()
+    {}
 
-	void Application::OnUpdate(float dt)
-	{}
+    void Application::OnStarted()
+    {}
 
-	void Application::OnFixedUpdate(float dt)
-	{}
+    void Application::OnDeactivated()
+    {}
 
-	void Application::OnDraw()
-	{}
+    void Application::OnActivated()
+    {}
 
-	bool Application::IsReady()
-	{
-		return IsSingletonInitialzed() && Application::Instance().mReady;
-	}
+    void Application::OnUpdate(float dt)
+    {}
 
-	void Application::SetCursorInfiniteMode(bool enabled)
-	{
-		mCursorInfiniteModeEnabled = enabled;
-	}
+    void Application::OnFixedUpdate(float dt)
+    {}
 
-	bool Application::IsCursorInfiniteModeOn() const
-	{
-		return mCursorInfiniteModeEnabled;
-	}
+    void Application::OnDraw()
+    {}
 
-	bool Application::IsEditor() const
-	{
-		return IS_EDITOR;
-	}
+    bool Application::IsReady()
+    {
+        return IsSingletonInitialzed() && Application::Instance().mReady;
+    }
 
-	LogStream* Application::GetLog() const
-	{
-		return mInstance->mLog;
-	}
+    void Application::SetCursorInfiniteMode(bool enabled)
+    {
+        mCursorInfiniteModeEnabled = enabled;
+    }
 
-	Input* Application::GetInput() const
-	{
-		return mInstance->mInput;
-	}
+    bool Application::IsCursorInfiniteModeOn() const
+    {
+        return mCursorInfiniteModeEnabled;
+    }
 
-	ProjectConfig* Application::GetProjectConfig() const
-	{
-		return mInstance->mProjectConfig;
-	}
+    bool Application::IsEditor() const
+    {
+        return IS_EDITOR;
+    }
 
-	Time* Application::GetTime() const
-	{
-		return mInstance->mTime;
-	}
-	
-	float Application::GetGraphicsScale() const
-	{
-		return mGraphicsScale;
-	}
+    LogStream* Application::GetLog() const
+    {
+        return mInstance->mLog;
+    }
 
-	MemoryManager* MemoryManager::mInstance = new MemoryManager();
-	template<> Debug* Singleton<Debug>::mInstance = mnew Debug();
-	template<> FileSystem* Singleton<FileSystem>::mInstance = mnew FileSystem();
+    Input* Application::GetInput() const
+    {
+        return mInstance->mInput;
+    }
+
+    ProjectConfig* Application::GetProjectConfig() const
+    {
+        return mInstance->mProjectConfig;
+    }
+
+    Time* Application::GetTime() const
+    {
+        return mInstance->mTime;
+    }
+    
+    float Application::GetGraphicsScale() const
+    {
+        return mGraphicsScale;
+    }
+
+    MemoryManager* MemoryManager::mInstance = new MemoryManager();
+    template<> Debug* Singleton<Debug>::mInstance = mnew Debug();
+    template<> FileSystem* Singleton<FileSystem>::mInstance = mnew FileSystem();
 }

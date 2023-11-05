@@ -8,144 +8,144 @@
 
 namespace o2
 {
-	ActorAsset::ActorAsset():
-		mActor(mnew Actor(ActorCreateMode::NotInScene))
-	{
-		mActor->mIsAsset = true;
-		mActor->mAssetId = ID();
-		mOwnActor = true;
-	}
+    ActorAsset::ActorAsset():
+        mActor(mnew Actor(ActorCreateMode::NotInScene))
+    {
+        mActor->mIsAsset = true;
+        mActor->mAssetId = ID();
+        mOwnActor = true;
+    }
 
-	ActorAsset::ActorAsset(const ActorAsset& other):
-		AssetWithDefaultMeta<ActorAsset>(other)
-	{
-		if (other.mOwnActor)
-		{
-			mActor = other.mActor->CloneAs<Actor>();
-			mActor->mIsAsset = true;
-			mActor->mAssetId = ID();
-			mOwnActor = true;
-		}
-		else
-		{
-			mActor = other.mActor;
-			mOwnActor = false;
-		}
-	}
+    ActorAsset::ActorAsset(const ActorAsset& other):
+        AssetWithDefaultMeta<ActorAsset>(other)
+    {
+        if (other.mOwnActor)
+        {
+            mActor = other.mActor->CloneAs<Actor>();
+            mActor->mIsAsset = true;
+            mActor->mAssetId = ID();
+            mOwnActor = true;
+        }
+        else
+        {
+            mActor = other.mActor;
+            mOwnActor = false;
+        }
+    }
 
-	ActorAsset::ActorAsset(Actor* actor):
-		mActor(actor)
-	{
-		if (!actor->IsAsset())
-		{
-			mActor->RemoveFromScene();
-			mActor->mIsAsset = true;
-			mActor->mAssetId = ID();
-		}
-		else
-			ID() = mActor->mAssetId;
+    ActorAsset::ActorAsset(Actor* actor):
+        mActor(actor)
+    {
+        if (!actor->IsAsset())
+        {
+            mActor->RemoveFromScene();
+            mActor->mIsAsset = true;
+            mActor->mAssetId = ID();
+        }
+        else
+            ID() = mActor->mAssetId;
 
-		mOwnActor = false;
-	}
+        mOwnActor = false;
+    }
 
-	ActorAsset::~ActorAsset()
-	{
-		if (mOwnActor)
-			delete mActor;
-	}
+    ActorAsset::~ActorAsset()
+    {
+        if (mOwnActor)
+            delete mActor;
+    }
 
-	ActorAsset& ActorAsset::operator=(const ActorAsset& other)
-	{
-		Asset::operator=(other);
+    ActorAsset& ActorAsset::operator=(const ActorAsset& other)
+    {
+        Asset::operator=(other);
 
-		if (mOwnActor)
-			delete mActor;
-		
-		if (other.mOwnActor)
-		{
-			mActor = other.mActor->CloneAs<Actor>();
-			mActor->mIsAsset = true;
-			mActor->mAssetId = ID();
-			mOwnActor = true;
-		}
-		else
-		{
-			mActor = other.mActor;
-			mOwnActor = false;
-		}
+        if (mOwnActor)
+            delete mActor;
+        
+        if (other.mOwnActor)
+        {
+            mActor = other.mActor->CloneAs<Actor>();
+            mActor->mIsAsset = true;
+            mActor->mAssetId = ID();
+            mOwnActor = true;
+        }
+        else
+        {
+            mActor = other.mActor;
+            mOwnActor = false;
+        }
 
-		return *this;
-	}
+        return *this;
+    }
 
-	ActorRef ActorAsset::Instantiate() const
-	{
-		if (!mActor)
-			return nullptr;
+    ActorRef ActorAsset::Instantiate() const
+    {
+        if (!mActor)
+            return nullptr;
 
-		return mActor->CloneAs<Actor>();
-	}
+        return mActor->CloneAs<Actor>();
+    }
 
-	ActorAsset::Meta* ActorAsset::GetMeta() const
-	{
-		return (Meta*)mInfo.meta;
-	}
+    ActorAsset::Meta* ActorAsset::GetMeta() const
+    {
+        return (Meta*)mInfo.meta;
+    }
 
-	Vector<String> ActorAsset::GetFileExtensions()
-	{
-		return { "proto" };
-	}
+    Vector<String> ActorAsset::GetFileExtensions()
+    {
+        return { "proto" };
+    }
 
-	void ActorAsset::OnUIDChanged(const UID& oldUID)
-	{
-		if (mActor)
-			mActor->mAssetId = ID();
-	}
+    void ActorAsset::OnUIDChanged(const UID& oldUID)
+    {
+        if (mActor)
+            mActor->mAssetId = ID();
+    }
 
-	void ActorAsset::OnSerialize(DataValue& node) const
-	{
-		mActor->mIsAsset = false;
-		node["mActor"] = mActor;
-		mActor->mIsAsset = true;
-	}
+    void ActorAsset::OnSerialize(DataValue& node) const
+    {
+        mActor->mIsAsset = false;
+        node["mActor"] = mActor;
+        mActor->mIsAsset = true;
+    }
 
-	void ActorAsset::OnDeserialized(const DataValue& node)
-	{
-		mActor = node["mActor"];
+    void ActorAsset::OnDeserialized(const DataValue& node)
+    {
+        mActor = node["mActor"];
 
-		if (mActor)
-		{
-			mActor->RemoveFromScene();
-			mActor->mIsAsset = true;
-			mActor->mAssetId = GetUID();
-			mOwnActor = true;
-		}
-	}
+        if (mActor)
+        {
+            mActor->RemoveFromScene();
+            mActor->mIsAsset = true;
+            mActor->mAssetId = GetUID();
+            mOwnActor = true;
+        }
+    }
 
-	Actor* ActorAsset::GetActor() const
-	{
-		return mActor;
-	}
+    Actor* ActorAsset::GetActor() const
+    {
+        return mActor;
+    }
 
-	void ActorAsset::SetActor(Actor* actor, bool own /*= true*/)
-	{
-		if (mActor && mOwnActor)
-			delete mActor;
+    void ActorAsset::SetActor(Actor* actor, bool own /*= true*/)
+    {
+        if (mActor && mOwnActor)
+            delete mActor;
 
-		mActor = actor;
-		mOwnActor = own;
+        mActor = actor;
+        mOwnActor = own;
 
-		if (mActor)
-		{
-			if (!actor->IsAsset())
-			{
-				mActor->RemoveFromScene();
-				mActor->mIsAsset = true;
-				mActor->mAssetId = ID();
-			}
-			else
-				ID() = mActor->mAssetId;
-		}
-	}
+        if (mActor)
+        {
+            if (!actor->IsAsset())
+            {
+                mActor->RemoveFromScene();
+                mActor->mIsAsset = true;
+                mActor->mAssetId = ID();
+            }
+            else
+                ID() = mActor->mAssetId;
+        }
+    }
 
 }
 

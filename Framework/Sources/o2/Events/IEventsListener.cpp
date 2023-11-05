@@ -6,40 +6,40 @@
 
 namespace o2
 {
-	IEventsListener::IEventsListener():
-		mEnabledListeningEvents(EventSystem::eventsListenersEnabledByDefault)
-	{
+    IEventsListener::IEventsListener():
+        mEnabledListeningEvents(EventSystem::eventsListenersEnabledByDefault)
+    {
 #if IS_EDITOR
-		mIsEditorMode = EditorScope::IsInScope();
+        mIsEditorMode = EditorScope::IsInScope();
 #endif
-	}
+    }
 
-	IEventsListener::~IEventsListener()
-	{ }
+    IEventsListener::~IEventsListener()
+    { }
 
-	bool IEventsListener::IsListeningEvents() const
-	{
+    bool IEventsListener::IsListeningEvents() const
+    {
 #if IS_EDITOR
-		return mEnabledListeningEvents && mIsEditorMode == EditorScope::IsInScope();
+        return mEnabledListeningEvents && mIsEditorMode == EditorScope::IsInScope();
 #else
-		return mEnabledListeningEvents;
+        return mEnabledListeningEvents;
 #endif
-	}
+    }
 
-	void IEventsListener::SetListeningEvents(bool isListening)
-	{
-		mEnabledListeningEvents = isListening;
-	}
+    void IEventsListener::SetListeningEvents(bool isListening)
+    {
+        mEnabledListeningEvents = isListening;
+    }
 
 #if IS_EDITOR
-	bool IEventsListener::IsEditorMode() const
-	{
-		return mIsEditorMode;
-	}
+    bool IEventsListener::IsEditorMode() const
+    {
+        return mIsEditorMode;
+    }
 
-	void IEventsListener::SetEditorMode(bool isEditorMode)
-	{
-		mIsEditorMode = isEditorMode;
-	}
+    void IEventsListener::SetEditorMode(bool isEditorMode)
+    {
+        mIsEditorMode = isEditorMode;
+    }
 #endif
 }

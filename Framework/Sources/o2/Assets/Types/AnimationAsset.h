@@ -7,72 +7,72 @@
 
 namespace o2
 {
-	// ---------------
-	// Animation asset
-	// ---------------
-	class AnimationAsset: public AssetWithDefaultMeta<AnimationAsset>
-	{
-	public:
-		AnimationClip animation; // Asset data @SERIALIZABLE @EXPANDED_BY_DEFAULT
+    // ---------------
+    // Animation asset
+    // ---------------
+    class AnimationAsset: public AssetWithDefaultMeta<AnimationAsset>
+    {
+    public:
+        AnimationClip animation; // Asset data @SERIALIZABLE @EXPANDED_BY_DEFAULT
 
-	public:
-		// Default constructor
-		AnimationAsset() = default;
+    public:
+        // Default constructor
+        AnimationAsset() = default;
 
-		// Copy-constructor
-		AnimationAsset(const AnimationAsset& asset);
+        // Copy-constructor
+        AnimationAsset(const AnimationAsset& asset);
 
-		// Constructor with animation clip
-		AnimationAsset(const AnimationClip& clip);
+        // Constructor with animation clip
+        AnimationAsset(const AnimationClip& clip);
 
-		// Check equals operator
-		AnimationAsset& operator=(const AnimationAsset& asset);
+        // Check equals operator
+        AnimationAsset& operator=(const AnimationAsset& asset);
 
-		// Returns extensions string
-		static Vector<String> GetFileExtensions();
+        // Returns extensions string
+        static Vector<String> GetFileExtensions();
 
-		// Returns editor icon
-		static String GetEditorIcon() { return "ui/UI4_anim_file_icon.png"; }
+        // Returns editor icon
+        static String GetEditorIcon() { return "ui/UI4_anim_file_icon.png"; }
 
-		// Returns editor sorting weight
-		static int GetEditorSorting() { return 98; }
+        // Returns editor sorting weight
+        static int GetEditorSorting() { return 98; }
 
-		// Is this asset type is available to create from editor's assets window
-		static bool IsAvailableToCreateFromEditor() { return true; }
+        // Is this asset type is available to create from editor's assets window
+        static bool IsAvailableToCreateFromEditor() { return true; }
 
-		// Is asset reference available to contain instance inside
-		static bool IsReferenceCanOwnInstance() { return true; }
+        // Is asset reference available to contain instance inside
+        static bool IsReferenceCanOwnInstance() { return true; }
 
-		SERIALIZABLE(AnimationAsset);
+        SERIALIZABLE(AnimationAsset);
 
-		friend class Assets;
-	};
+        friend class Assets;
+    };
 
-	typedef Ref<AnimationAsset> AnimationAssetRef;
+    typedef Ref<AnimationAsset> AnimationAssetRef;
 }
 // --- META ---
 
 CLASS_BASES_META(o2::AnimationAsset)
 {
-	BASE_CLASS(o2::AssetWithDefaultMeta<AnimationAsset>);
+    BASE_CLASS(o2::AssetWithDefaultMeta<AnimationAsset>);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationAsset)
 {
-	FIELD().PUBLIC().EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(animation);
+    FIELD().PUBLIC().EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(animation);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationAsset)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationAsset&);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationClip&);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsReferenceCanOwnInstance);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationAsset&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationClip&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsReferenceCanOwnInstance);
 }
 END_META;
 // --- END META ---

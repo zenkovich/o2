@@ -5,28 +5,28 @@
 
 namespace o2
 {
-	// ------------------------
-	// Keyboard events listener
-	// ------------------------
-	class KeyboardEventsListener: public IEventsListener
-	{
-	public:
-		// Default constructor
-		KeyboardEventsListener();
+    // ------------------------
+    // Keyboard events listener
+    // ------------------------
+    class KeyboardEventsListener: public IEventsListener
+    {
+    public:
+        // Default constructor
+        KeyboardEventsListener();
 
-		// Virtual destructor
-		virtual ~KeyboardEventsListener();
+        // Virtual destructor
+        virtual ~KeyboardEventsListener();
 
-	protected:
-		// Called when key was pressed
-		virtual void OnKeyPressed(const Input::Key& key);
+    protected:
+        // Called when key was pressed
+        virtual void OnKeyPressed(const Input::Key& key);
 
-		// Called when key was released
-		virtual void OnKeyReleased(const Input::Key& key);
+        // Called when key was released
+        virtual void OnKeyReleased(const Input::Key& key);
 
-		// Called when key stay down during frame
-		virtual void OnKeyStayDown(const Input::Key& key);
+        // Called when key stay down during frame
+        virtual void OnKeyStayDown(const Input::Key& key);
 
-		friend class EventSystem;
-	};
+        friend class EventSystem;
+    };
 }

@@ -8,46 +8,46 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(ScriptEngine);
+    DECLARE_SINGLETON(ScriptEngine);
 
-	ScriptParseResult::operator bool() const
-	{
-		return IsOk();
-	}
+    ScriptParseResult::operator bool() const
+    {
+        return IsOk();
+    }
 
-	void ScriptEngine::RegisterTypes()
-	{
-		Timer t;
+    void ScriptEngine::RegisterTypes()
+    {
+        Timer t;
 
-		auto global = GetGlobal();
-		for (auto func : GetRegisterConstructorFuncs())
-		{
-			ScriptPrototypeProcessor processor;
-			func(0, processor);
-		}
+        auto global = GetGlobal();
+        for (auto func : GetRegisterConstructorFuncs())
+        {
+            ScriptPrototypeProcessor processor;
+            func(0, processor);
+        }
 
-		GetRegisterConstructorFuncs().Clear();
+        GetRegisterConstructorFuncs().Clear();
 
-		mLog->Out("Registered types in " + (String)t.GetDeltaTime() + " seconds");
-	}
+        mLog->Out("Registered types in " + (String)t.GetDeltaTime() + " seconds");
+    }
 
-	void ScriptEngine::RunBuildtinScripts()
-	{
-		RunBuiltinScript("Scripts/o2.js");
-		RunBuiltinScript("Scripts/Math.js");
-		RunBuiltinScript("Scripts/Component.js");
-	}
+    void ScriptEngine::RunBuildtinScripts()
+    {
+        RunBuiltinScript("Scripts/o2.js");
+        RunBuiltinScript("Scripts/Math.js");
+        RunBuiltinScript("Scripts/Component.js");
+    }
 
-	void ScriptEngine::RunBuiltinScript(const String& filename)
-	{
-		Eval(o2FileSystem.ReadFile(GetBuiltitAssetsPath() + filename), filename);
-	}
+    void ScriptEngine::RunBuiltinScript(const String& filename)
+    {
+        Eval(o2FileSystem.ReadFile(GetBuiltitAssetsPath() + filename), filename);
+    }
 
-	Vector<ScriptEngine::RegisterConstructorFunc>& ScriptEngine::GetRegisterConstructorFuncs()
-	{
-		static Vector<ScriptEngine::RegisterConstructorFunc> funcs;
-		return funcs;
-	}
+    Vector<ScriptEngine::RegisterConstructorFunc>& ScriptEngine::GetRegisterConstructorFuncs()
+    {
+        static Vector<ScriptEngine::RegisterConstructorFunc> funcs;
+        return funcs;
+    }
 
 }
 

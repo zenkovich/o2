@@ -6,15 +6,15 @@
 
 namespace o2
 {
-	JavaScriptAsset::JavaScriptAsset()
-	{}
+    JavaScriptAsset::JavaScriptAsset()
+    {}
 
-	JavaScriptAsset::JavaScriptAsset(const JavaScriptAsset& other):
-		AssetWithDefaultMeta<JavaScriptAsset>(other)
-	{}
+    JavaScriptAsset::JavaScriptAsset(const JavaScriptAsset& other):
+        AssetWithDefaultMeta<JavaScriptAsset>(other)
+    {}
 
-	ScriptParseResult JavaScriptAsset::Parse() const
-	{
+    ScriptParseResult JavaScriptAsset::Parse() const
+    {
         InFile file(GetBuiltFullPath());
         if (!file.IsOpened())
         {
@@ -22,46 +22,46 @@ namespace o2
             return ScriptParseResult();
         }
 
-		return o2Scripts.Parse(file.ReadFullData(), GetAssetsRootPath() + mInfo.path);
-	}
+        return o2Scripts.Parse(file.ReadFullData(), GetAssetsRootPath() + mInfo.path);
+    }
 
-	ScriptValue JavaScriptAsset::Run() const
-	{
-		auto parseRes = Parse();
-		if (parseRes.IsOk())
-			return o2Scripts.Run(parseRes);
+    ScriptValue JavaScriptAsset::Run() const
+    {
+        auto parseRes = Parse();
+        if (parseRes.IsOk())
+            return o2Scripts.Run(parseRes);
 
-		return ScriptValue();
-	}
+        return ScriptValue();
+    }
 
-	JavaScriptAsset& JavaScriptAsset::operator=(const JavaScriptAsset& asset)
-	{
-		Asset::operator=(asset);
-		return *this;
-	}
+    JavaScriptAsset& JavaScriptAsset::operator=(const JavaScriptAsset& asset)
+    {
+        Asset::operator=(asset);
+        return *this;
+    }
 
-	Vector<String> JavaScriptAsset::GetFileExtensions()
-	{
-		return { "js" };
-	}
+    Vector<String> JavaScriptAsset::GetFileExtensions()
+    {
+        return { "js" };
+    }
 
-	String JavaScriptAsset::GetEditorIcon()
-	{
-		return "ui/UI4_big_js_file_icon.png";
-	}
+    String JavaScriptAsset::GetEditorIcon()
+    {
+        return "ui/UI4_big_js_file_icon.png";
+    }
 
-	int JavaScriptAsset::GetEditorSorting()
-	{
-		return 94;
-	}
+    int JavaScriptAsset::GetEditorSorting()
+    {
+        return 94;
+    }
 
-	void JavaScriptAsset::LoadData(const String& path)
-	{
-	}
+    void JavaScriptAsset::LoadData(const String& path)
+    {
+    }
 
-	void JavaScriptAsset::SaveData(const String& path) const
-	{
-	}
+    void JavaScriptAsset::SaveData(const String& path) const
+    {
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::JavaScriptAsset>);

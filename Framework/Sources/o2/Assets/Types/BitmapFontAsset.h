@@ -4,87 +4,87 @@
 
 namespace o2
 {
-	class Font;
+    class Font;
 
-	// -----------------
-	// Bitmap font asset
-	// -----------------
-	class BitmapFontAsset: public FontAsset
-	{
-	public:
-		class Meta;
+    // -----------------
+    // Bitmap font asset
+    // -----------------
+    class BitmapFontAsset: public FontAsset
+    {
+    public:
+        class Meta;
 
-	public:
-		PROPERTIES(BitmapFontAsset);
-		GETTER(Meta*, meta, GetMeta); // Meta information getter
+    public:
+        PROPERTIES(BitmapFontAsset);
+        GETTER(Meta*, meta, GetMeta); // Meta information getter
 
-	public:
-		// Default constructor
-		BitmapFontAsset();
+    public:
+        // Default constructor
+        BitmapFontAsset();
 
-		// Copy-constructor
-		BitmapFontAsset(const BitmapFontAsset& asset);
+        // Copy-constructor
+        BitmapFontAsset(const BitmapFontAsset& asset);
 
-		// Check equals operator
-		BitmapFontAsset& operator=(const BitmapFontAsset& asset);
+        // Check equals operator
+        BitmapFontAsset& operator=(const BitmapFontAsset& asset);
 
-		// Returns meta information
-		Meta* GetMeta() const;
+        // Returns meta information
+        Meta* GetMeta() const;
 
-		// Returns extensions string
-		static Vector<String> GetFileExtensions();
+        // Returns extensions string
+        static Vector<String> GetFileExtensions();
 
-		// Returns editor sorting weight
-		static int GetEditorSorting() { return 95; }
+        // Returns editor sorting weight
+        static int GetEditorSorting() { return 95; }
 
-		ASSET_TYPE(BitmapFontAsset, Meta);
+        ASSET_TYPE(BitmapFontAsset, Meta);
 
-	public:
-		// ----------------
-		// Meta information
-		// ----------------
-		class Meta: public DefaultAssetMeta<BitmapFontAsset>
-		{
-		public:
-			SERIALIZABLE(Meta);
-		};
+    public:
+        // ----------------
+        // Meta information
+        // ----------------
+        class Meta: public DefaultAssetMeta<BitmapFontAsset>
+        {
+        public:
+            SERIALIZABLE(Meta);
+        };
 
-	protected:
-		// Loads data
-		void LoadData(const String& path) override;
+    protected:
+        // Loads data
+        void LoadData(const String& path) override;
 
-		friend class Assets;
-	};
+        friend class Assets;
+    };
 
-	typedef Ref<BitmapFontAsset> BitmapFontAssetRef;
+    typedef Ref<BitmapFontAsset> BitmapFontAssetRef;
 }
 // --- META ---
 
 CLASS_BASES_META(o2::BitmapFontAsset)
 {
-	BASE_CLASS(o2::FontAsset);
+    BASE_CLASS(o2::FontAsset);
 }
 END_META;
 CLASS_FIELDS_META(o2::BitmapFontAsset)
 {
-	FIELD().PUBLIC().NAME(meta);
+    FIELD().PUBLIC().NAME(meta);
 }
 END_META;
 CLASS_METHODS_META(o2::BitmapFontAsset)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const BitmapFontAsset&);
-	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
-	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const BitmapFontAsset&);
+    FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+    FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
 }
 END_META;
 
 CLASS_BASES_META(o2::BitmapFontAsset::Meta)
 {
-	BASE_CLASS(o2::DefaultAssetMeta<BitmapFontAsset>);
+    BASE_CLASS(o2::DefaultAssetMeta<BitmapFontAsset>);
 }
 END_META;
 CLASS_FIELDS_META(o2::BitmapFontAsset::Meta)

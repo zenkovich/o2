@@ -9,206 +9,206 @@
 
 namespace o2
 {
-	AnimationTrack<Vec2F>::AnimationTrack()
-	{
-		timeCurve.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
-		spline.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
-	}
+    AnimationTrack<Vec2F>::AnimationTrack()
+    {
+        timeCurve.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+        spline.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+    }
 
-	AnimationTrack<Vec2F>::AnimationTrack(const AnimationTrack<Vec2F>& other) :
-		IAnimationTrack(other), timeCurve(other.timeCurve), spline(other.spline)
-	{
-		timeCurve.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
-		spline.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
-	}
+    AnimationTrack<Vec2F>::AnimationTrack(const AnimationTrack<Vec2F>& other) :
+        IAnimationTrack(other), timeCurve(other.timeCurve), spline(other.spline)
+    {
+        timeCurve.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+        spline.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+    }
 
-	AnimationTrack<Vec2F>& AnimationTrack<Vec2F>::operator=(const AnimationTrack<Vec2F>& other)
-	{
-		IAnimationTrack::operator =(other);
-		timeCurve = other.timeCurve;
-		spline = other.spline;
+    AnimationTrack<Vec2F>& AnimationTrack<Vec2F>::operator=(const AnimationTrack<Vec2F>& other)
+    {
+        IAnimationTrack::operator =(other);
+        timeCurve = other.timeCurve;
+        spline = other.spline;
 
-		onKeysChanged();
+        onKeysChanged();
 
-		return *this;
-	}
+        return *this;
+    }
 
-	Vec2F AnimationTrack<Vec2F>::GetValue(float position) const
-	{
-		int cacheKey = 0, cacheKeyApporx = 0;
-		return GetValue(position, true, cacheKey, cacheKeyApporx, cacheKey, cacheKeyApporx);
-	}
+    Vec2F AnimationTrack<Vec2F>::GetValue(float position) const
+    {
+        int cacheKey = 0, cacheKeyApporx = 0;
+        return GetValue(position, true, cacheKey, cacheKeyApporx, cacheKey, cacheKeyApporx);
+    }
 
-	Vec2F AnimationTrack<Vec2F>::GetValue(float position, bool direction, int& cacheTimeKey, int& cacheTimeKeyApprox,
-										  int& cacheSplineKey, int& cacheSplineKeyApprox) const
-	{
-		float timePos = timeCurve.Evaluate(position, direction, cacheTimeKey, cacheTimeKeyApprox);
-		return spline.Evaluate(timePos*spline.Length(), direction, cacheSplineKey, cacheTimeKeyApprox);
-	}
+    Vec2F AnimationTrack<Vec2F>::GetValue(float position, bool direction, int& cacheTimeKey, int& cacheTimeKeyApprox,
+                                          int& cacheSplineKey, int& cacheSplineKeyApprox) const
+    {
+        float timePos = timeCurve.Evaluate(position, direction, cacheTimeKey, cacheTimeKeyApprox);
+        return spline.Evaluate(timePos*spline.Length(), direction, cacheSplineKey, cacheTimeKeyApprox);
+    }
 
-	void AnimationTrack<Vec2F>::BeginKeysBatchChange()
-	{
-		timeCurve.BeginKeysBatchChange();
-		spline.BeginKeysBatchChange();
-	}
+    void AnimationTrack<Vec2F>::BeginKeysBatchChange()
+    {
+        timeCurve.BeginKeysBatchChange();
+        spline.BeginKeysBatchChange();
+    }
 
-	void AnimationTrack<Vec2F>::CompleteKeysBatchingChange()
-	{
-		timeCurve.CompleteKeysBatchingChange();
-		spline.CompleteKeysBatchingChange();
-	}
+    void AnimationTrack<Vec2F>::CompleteKeysBatchingChange()
+    {
+        timeCurve.CompleteKeysBatchingChange();
+        spline.CompleteKeysBatchingChange();
+    }
 
-	float AnimationTrack<Vec2F>::GetDuration() const
-	{
-		return timeCurve.Length();
-	}
+    float AnimationTrack<Vec2F>::GetDuration() const
+    {
+        return timeCurve.Length();
+    }
 
-	IAnimationTrack::IPlayer* AnimationTrack<Vec2F>::CreatePlayer() const
-	{
-		return mnew Player();
-	}
+    IAnimationTrack::IPlayer* AnimationTrack<Vec2F>::CreatePlayer() const
+    {
+        return mnew Player();
+    }
 
-	void AnimationTrack<Vec2F>::OnCurveChanged()
-	{
-		onKeysChanged();
-	}
+    void AnimationTrack<Vec2F>::OnCurveChanged()
+    {
+        onKeysChanged();
+    }
 
-	AnimationTrack<Vec2F> AnimationTrack<Vec2F>::Parametric(const Vec2F& begin, const Vec2F& end, float duration,
-														  float beginCoef, float beginCoefPosition,
-														  float endCoef, float endCoefPosition)
-	{
-		AnimationTrack<Vec2F> res;
-		res.spline.SetKeys({ Spline::Key(begin, Vec2F(), Vec2F()), Spline::Key(end, Vec2F(), Vec2F()) });
-		res.timeCurve = Curve::Parametric(0.0f, 1.0f, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition);
-		return res;
-	}
+    AnimationTrack<Vec2F> AnimationTrack<Vec2F>::Parametric(const Vec2F& begin, const Vec2F& end, float duration,
+                                                          float beginCoef, float beginCoefPosition,
+                                                          float endCoef, float endCoefPosition)
+    {
+        AnimationTrack<Vec2F> res;
+        res.spline.SetKeys({ Spline::Key(begin, Vec2F(), Vec2F()), Spline::Key(end, Vec2F(), Vec2F()) });
+        res.timeCurve = Curve::Parametric(0.0f, 1.0f, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition);
+        return res;
+    }
 
-	AnimationTrack<Vec2F> AnimationTrack<Vec2F>::EaseIn(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/,
-														float strongness /*= 0.4f*/)
-	{
-		return Parametric(begin, end, duration, 0.0f, strongness, 1.0f, 1.0f);
-	}
+    AnimationTrack<Vec2F> AnimationTrack<Vec2F>::EaseIn(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/,
+                                                        float strongness /*= 0.4f*/)
+    {
+        return Parametric(begin, end, duration, 0.0f, strongness, 1.0f, 1.0f);
+    }
 
-	AnimationTrack<Vec2F> AnimationTrack<Vec2F>::EaseOut(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/,
-														 float strongness /*= 0.4f*/)
-	{
-		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, strongness);
-	}
+    AnimationTrack<Vec2F> AnimationTrack<Vec2F>::EaseOut(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/,
+                                                         float strongness /*= 0.4f*/)
+    {
+        return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, strongness);
+    }
 
-	AnimationTrack<Vec2F> AnimationTrack<Vec2F>::EaseInOut(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/,
-														   float strongness /*= 0.4f*/)
-	{
-		return Parametric(begin, end, duration, 0.0f, strongness, 1.0f, 1.0f);
-	}
+    AnimationTrack<Vec2F> AnimationTrack<Vec2F>::EaseInOut(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/,
+                                                           float strongness /*= 0.4f*/)
+    {
+        return Parametric(begin, end, duration, 0.0f, strongness, 1.0f, 1.0f);
+    }
 
-	AnimationTrack<Vec2F> AnimationTrack<Vec2F>::Linear(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)
-	{
-		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, 1.0f);
-	}
+    AnimationTrack<Vec2F> AnimationTrack<Vec2F>::Linear(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)
+    {
+        return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, 1.0f);
+    }
 
-	AnimationTrack<Vec2F>::Player::Player():
-		IPlayer()
-	{}
+    AnimationTrack<Vec2F>::Player::Player():
+        IPlayer()
+    {}
 
-	AnimationTrack<Vec2F>::Player::~Player()
-	{
-		if (mTargetProxy)
-			delete mTargetProxy;
-	}
+    AnimationTrack<Vec2F>::Player::~Player()
+    {
+        if (mTargetProxy)
+            delete mTargetProxy;
+    }
 
-	AnimationTrack<Vec2F>::Player::operator Vec2F() const
-	{
-		return mCurrentValue;
-	}
+    AnimationTrack<Vec2F>::Player::operator Vec2F() const
+    {
+        return mCurrentValue;
+    }
 
-	void AnimationTrack<Vec2F>::Player::SetTarget(Vec2F* value)
-	{
-		mTargetProxy = nullptr;
-		mTarget = value;
-		mTargetDelegate.Clear();
-	}
+    void AnimationTrack<Vec2F>::Player::SetTarget(Vec2F* value)
+    {
+        mTargetProxy = nullptr;
+        mTarget = value;
+        mTargetDelegate.Clear();
+    }
 
-	void AnimationTrack<Vec2F>::Player::SetTarget(Vec2F* value, const Function<void()>& changeEvent)
-	{
-		mTargetProxy = nullptr;
-		mTarget = value;
-		mTargetDelegate = changeEvent;
-	}
+    void AnimationTrack<Vec2F>::Player::SetTarget(Vec2F* value, const Function<void()>& changeEvent)
+    {
+        mTargetProxy = nullptr;
+        mTarget = value;
+        mTargetDelegate = changeEvent;
+    }
 
-	void AnimationTrack<Vec2F>::Player::SetTargetDelegate(const Function<void()>& changeEvent)
-	{
-		mTargetDelegate = changeEvent;
-	}
+    void AnimationTrack<Vec2F>::Player::SetTargetDelegate(const Function<void()>& changeEvent)
+    {
+        mTargetDelegate = changeEvent;
+    }
 
-	void AnimationTrack<Vec2F>::Player::SetTargetProxy(IValueProxy<Vec2F>* proxy)
-	{
-		mTarget = nullptr;
-		mTargetDelegate.Clear();
-		mTargetProxy = proxy;
-	}
+    void AnimationTrack<Vec2F>::Player::SetTargetProxy(IValueProxy<Vec2F>* proxy)
+    {
+        mTarget = nullptr;
+        mTargetDelegate.Clear();
+        mTargetProxy = proxy;
+    }
 
-	void AnimationTrack<Vec2F>::Player::SetTrack(AnimationTrack<Vec2F>* track)
-	{
-		mTrack = track;
-		IPlayer::SetTrack(track);
-	}
+    void AnimationTrack<Vec2F>::Player::SetTrack(AnimationTrack<Vec2F>* track)
+    {
+        mTrack = track;
+        IPlayer::SetTrack(track);
+    }
 
-	void AnimationTrack<Vec2F>::Player::SetTargetVoid(void* target)
-	{
-		SetTarget((Vec2F*)target);
-	}
+    void AnimationTrack<Vec2F>::Player::SetTargetVoid(void* target)
+    {
+        SetTarget((Vec2F*)target);
+    }
 
-	void AnimationTrack<Vec2F>::Player::SetTargetVoid(void* target, const Function<void()>& changeEvent)
-	{
-		SetTarget((Vec2F*)target, changeEvent);
-	}
+    void AnimationTrack<Vec2F>::Player::SetTargetVoid(void* target, const Function<void()>& changeEvent)
+    {
+        SetTarget((Vec2F*)target, changeEvent);
+    }
 
-	void AnimationTrack<Vec2F>::Player::SetTargetProxyVoid(void* target)
-	{
-		SetTargetProxy((IValueProxy<Vec2F>*)target);
-	}
+    void AnimationTrack<Vec2F>::Player::SetTargetProxyVoid(void* target)
+    {
+        SetTargetProxy((IValueProxy<Vec2F>*)target);
+    }
 
-	void AnimationTrack<Vec2F>::Player::SetTrack(IAnimationTrack* track)
-	{
-		SetTrack(dynamic_cast<AnimationTrack<Vec2F>*>(track));
-	}
+    void AnimationTrack<Vec2F>::Player::SetTrack(IAnimationTrack* track)
+    {
+        SetTrack(dynamic_cast<AnimationTrack<Vec2F>*>(track));
+    }
 
-	Vec2F AnimationTrack<Vec2F>::Player::GetValue() const
-	{
-		return mCurrentValue;
-	}
+    Vec2F AnimationTrack<Vec2F>::Player::GetValue() const
+    {
+        return mCurrentValue;
+    }
 
-	AnimationTrack<Vec2F>* AnimationTrack<Vec2F>::Player::GetTrackT() const
-	{
-		return mTrack;
-	}
+    AnimationTrack<Vec2F>* AnimationTrack<Vec2F>::Player::GetTrackT() const
+    {
+        return mTrack;
+    }
 
-	IAnimationTrack* AnimationTrack<Vec2F>::Player::GetTrack() const
-	{
-		return mTrack;
-	}
+    IAnimationTrack* AnimationTrack<Vec2F>::Player::GetTrack() const
+    {
+        return mTrack;
+    }
 
-	void AnimationTrack<Vec2F>::Player::Evaluate()
-	{
-		mCurrentValue = mTrack->GetValue(mInDurationTime, mInDurationTime > mPrevInDurationTime, 
-										 mPrevTimeKey, mPrevTimeKeyApproximation,
-										 mPrevSplineKey, mPrevSplineKeyApproximation);
+    void AnimationTrack<Vec2F>::Player::Evaluate()
+    {
+        mCurrentValue = mTrack->GetValue(mInDurationTime, mInDurationTime > mPrevInDurationTime, 
+                                         mPrevTimeKey, mPrevTimeKeyApproximation,
+                                         mPrevSplineKey, mPrevSplineKeyApproximation);
 
-		mPrevInDurationTime = mInDurationTime;
+        mPrevInDurationTime = mInDurationTime;
 
-		if (mTarget)
-		{
-			*mTarget = mCurrentValue;
-			mTargetDelegate();
-		}
-		else if (mTargetProxy)
-			mTargetProxy->SetValue(mCurrentValue);
-	}
+        if (mTarget)
+        {
+            *mTarget = mCurrentValue;
+            mTargetDelegate();
+        }
+        else if (mTargetProxy)
+            mTargetProxy->SetValue(mCurrentValue);
+    }
 
-	void AnimationTrack<Vec2F>::Player::RegMixer(AnimationState* state, const String& path)
-	{
-		state->mOwner->RegTrack<Vec2F>(this, path, state);
-	}
+    void AnimationTrack<Vec2F>::Player::RegMixer(AnimationState* state, const String& path)
+    {
+        state->mOwner->RegTrack<Vec2F>(this, path, state);
+    }
 }
 // --- META ---
 

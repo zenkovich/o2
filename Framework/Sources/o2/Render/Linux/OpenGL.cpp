@@ -7,65 +7,65 @@
 
 bool IsGLExtensionSupported(const char *extension)
 {
-	const GLubyte *extensions = NULL;
-	const GLubyte *start;
+    const GLubyte *extensions = NULL;
+    const GLubyte *start;
 
-	GLubyte *where, *terminator;
-	/* Extension names should not have spaces. */
+    GLubyte *where, *terminator;
+    /* Extension names should not have spaces. */
 
-	where = (GLubyte *)strchr(extension, ' ');
+    where = (GLubyte *)strchr(extension, ' ');
 
-	if (where || *extension == '\0')
-		return 0;
+    if (where || *extension == '\0')
+        return 0;
 
-	extensions = glGetString(GL_EXTENSIONS);
+    extensions = glGetString(GL_EXTENSIONS);
 
-	/* It takes a bit of care to be fool-proof about parsing the
-	OpenGL extensions string. Don't be fooled by sub-strings,
-	etc. */
+    /* It takes a bit of care to be fool-proof about parsing the
+    OpenGL extensions string. Don't be fooled by sub-strings,
+    etc. */
 
-	start = extensions;
-	for (;;)
-	{
-		where = (GLubyte *)strstr((const char *)start, extension);
+    start = extensions;
+    for (;;)
+    {
+        where = (GLubyte *)strstr((const char *)start, extension);
 
-		if (!where)
-			break;
+        if (!where)
+            break;
 
-		terminator = where + strlen(extension);
+        terminator = where + strlen(extension);
 
-		if (where == start || *(where - 1) == ' ')
-			if (*terminator == ' ' || *terminator == '\0')
-				return true;
+        if (where == start || *(where - 1) == ' ')
+            if (*terminator == ' ' || *terminator == '\0')
+                return true;
 
-		start = terminator;
-	}
+        start = terminator;
+    }
 
-	return false;
+    return false;
 }
 
 const char* GetGLErrorDesc(GLenum errorId)
 {
-	if (errorId == GL_NO_ERROR) return "GL_NO_ERROR";
-	if (errorId == GL_INVALID_ENUM) return "GL_INVALID_ENUM";
-	if (errorId == GL_INVALID_VALUE) return "GL_INVALID_VALUE";
-	if (errorId == GL_INVALID_OPERATION) return "GL_INVALID_OPERATION";
-	if (errorId == GL_INVALID_FRAMEBUFFER_OPERATION) return "GL_INVALID_FRAMEBUFFER_OPERATION";
-	if (errorId == GL_OUT_OF_MEMORY) return "GL_OUT_OF_MEMORY";
-	if (errorId == GL_STACK_UNDERFLOW) return "GL_STACK_UNDERFLOW";
-	if (errorId == GL_STACK_OVERFLOW) return "GL_STACK_OVERFLOW";
+    if (errorId == GL_NO_ERROR) return "GL_NO_ERROR";
+    if (errorId == GL_INVALID_ENUM) return "GL_INVALID_ENUM";
+    if (errorId == GL_INVALID_VALUE) return "GL_INVALID_VALUE";
+    if (errorId == GL_INVALID_OPERATION) return "GL_INVALID_OPERATION";
+    if (errorId == GL_INVALID_FRAMEBUFFER_OPERATION) return "GL_INVALID_FRAMEBUFFER_OPERATION";
+    if (errorId == GL_OUT_OF_MEMORY) return "GL_OUT_OF_MEMORY";
+    if (errorId == GL_STACK_UNDERFLOW) return "GL_STACK_UNDERFLOW";
+    if (errorId == GL_STACK_OVERFLOW) return "GL_STACK_OVERFLOW";
 
-	return "UNKNOWN";
+    return "UNKNOWN";
 }
 
 void glCheckError(const char* filename /*= nullptr*/, unsigned int line /*= 0*/)
 {
-	GLenum errId = glGetError();
-	if (errId != GL_NO_ERROR)
-	{
-		o2Debug.LogError("OpenGL ERROR " + (o2::String)errId + ": " + (o2::String)GetGLErrorDesc(errId) +
-						 " at file: " + (o2::String)(filename ? filename : "unknown") + " line: " + (o2::String)line);
-	}
+    GLenum errId = glGetError();
+    if (errId != GL_NO_ERROR)
+    {
+        o2Debug.LogError("OpenGL ERROR " + (o2::String)errId + ": " + (o2::String)GetGLErrorDesc(errId) +
+                         " at file: " + (o2::String)(filename ? filename : "unknown") + " line: " + (o2::String)line);
+    }
 }
 // Returns address of function
 auto GetSafeWGLProcAddress(const char* id, o2::LogStream* log)

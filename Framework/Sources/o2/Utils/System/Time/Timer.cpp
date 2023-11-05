@@ -3,72 +3,72 @@
 
 namespace o2
 {
-	Timer::Timer()
-	{
-		Reset();
-	}
+    Timer::Timer()
+    {
+        Reset();
+    }
 
-	Timer::~Timer()
-	{}
+    Timer::~Timer()
+    {}
 
 #ifdef PLATFORM_WINDOWS
-	void Timer::Reset()
-	{
-		QueryPerformanceFrequency(&mFrequency);
-		QueryPerformanceCounter(&mStartTime);
-		mLastElapsedTime = mStartTime.QuadPart;
-	}
+    void Timer::Reset()
+    {
+        QueryPerformanceFrequency(&mFrequency);
+        QueryPerformanceCounter(&mStartTime);
+        mLastElapsedTime = mStartTime.QuadPart;
+    }
 
-	float Timer::GetTime()
-	{
-		LARGE_INTEGER curTime;
-		QueryPerformanceCounter(&curTime);
+    float Timer::GetTime()
+    {
+        LARGE_INTEGER curTime;
+        QueryPerformanceCounter(&curTime);
 
-		float res = (float)((double)(curTime.QuadPart - (double)mStartTime.QuadPart)/(double)mFrequency.QuadPart);
-		mLastElapsedTime = curTime.QuadPart;
+        float res = (float)((double)(curTime.QuadPart - (double)mStartTime.QuadPart)/(double)mFrequency.QuadPart);
+        mLastElapsedTime = curTime.QuadPart;
 
-		return res;
-	}
+        return res;
+    }
 
-	float Timer::GetDeltaTime()
-	{
-		LARGE_INTEGER curTime;
-		QueryPerformanceCounter(&curTime);
+    float Timer::GetDeltaTime()
+    {
+        LARGE_INTEGER curTime;
+        QueryPerformanceCounter(&curTime);
 
-		float res = (float)((double)(curTime.QuadPart - (double)mLastElapsedTime)/(double)mFrequency.QuadPart);
-		mLastElapsedTime = curTime.QuadPart;
+        float res = (float)((double)(curTime.QuadPart - (double)mLastElapsedTime)/(double)mFrequency.QuadPart);
+        mLastElapsedTime = curTime.QuadPart;
 
-		return res;
-	}
+        return res;
+    }
 #endif
 
 #if defined PLATFORM_ANDROID || defined PLATFORM_MAC || defined PLATFORM_IOS || defined PLATFORM_LINUX
-	void Timer::Reset()
-	{
-		gettimeofday(&mStartTime, NULL);
-		gettimeofday(&mLastElapsedTime, NULL);
-	}
+    void Timer::Reset()
+    {
+        gettimeofday(&mStartTime, NULL);
+        gettimeofday(&mLastElapsedTime, NULL);
+    }
 
-	float Timer::GetTime()
-	{
-		struct timeval now;
-		gettimeofday(&now, NULL);
-		float deltaTime = (now.tv_sec - mStartTime.tv_sec)*1000 + (now.tv_usec - mStartTime.tv_usec)/1000.0f;
-		deltaTime /= 1000.0f;
-		mLastElapsedTime = now;
+    float Timer::GetTime()
+    {
+        struct timeval now;
+        gettimeofday(&now, NULL);
+        float deltaTime = (now.tv_sec - mStartTime.tv_sec)*1000 + (now.tv_usec - mStartTime.tv_usec)/1000.0f;
+        deltaTime /= 1000.0f;
+        mLastElapsedTime = now;
 
-		return deltaTime;
-	}
+        return deltaTime;
+    }
 
-	float Timer::GetDeltaTime()
-	{
-		struct timeval now;
-		gettimeofday(&now, NULL);
-		float deltaTime = (now.tv_sec - mLastElapsedTime.tv_sec)*1000 + (now.tv_usec - mLastElapsedTime.tv_usec)/1000.0f;
-		deltaTime /= 1000.0f;
-		mLastElapsedTime = now;
+    float Timer::GetDeltaTime()
+    {
+        struct timeval now;
+        gettimeofday(&now, NULL);
+        float deltaTime = (now.tv_sec - mLastElapsedTime.tv_sec)*1000 + (now.tv_usec - mLastElapsedTime.tv_usec)/1000.0f;
+        deltaTime /= 1000.0f;
+        mLastElapsedTime = now;
 
-		return deltaTime;
-	}
+        return deltaTime;
+    }
 #endif
 }

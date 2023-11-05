@@ -6,58 +6,58 @@
 class Timer
 {
 public:
-	// Default constructor
-	Timer();
+    // Default constructor
+    Timer();
 
-	// Resets time
-	void Reset();
+    // Resets time
+    void Reset();
 
-	// Returns time in seconds from last Reset() call
-	float GetTime(); //TODO maybe unused
+    // Returns time in seconds from last Reset() call
+    float GetTime(); //TODO maybe unused
 
-	// Returns time in seconds from last Reset() or GetElapsedTime() call
-	float GetDeltaTime();
+    // Returns time in seconds from last Reset() or GetElapsedTime() call
+    float GetDeltaTime();
 
 private:
-	std::chrono::time_point<std::chrono::steady_clock> mLastElapsedTime;
+    std::chrono::time_point<std::chrono::steady_clock> mLastElapsedTime;
 };
 
 class CodeToolCache
 {
 public:
-	SyntaxFilesVec   files;           // All syntax files list, including parent projects
-	SyntaxFilesVec   originalFiles;   // Original syntax files list
-	SyntaxSection    globalNamespace; // Global syntax namespace
-	SyntaxClassesVec attributes;      // Allattribute classes
-	vector<string>   parentProjects;  // Parent projects code tool caches, that used in current project
+    SyntaxFilesVec   files;           // All syntax files list, including parent projects
+    SyntaxFilesVec   originalFiles;   // Original syntax files list
+    SyntaxSection    globalNamespace; // Global syntax namespace
+    SyntaxClassesVec attributes;      // Allattribute classes
+    vector<string>   parentProjects;  // Parent projects code tool caches, that used in current project
 
-	// Updates global namespace
-	void UpdateGlobalNamespace();
+    // Updates global namespace
+    void UpdateGlobalNamespace();
 
-	// Returns is class based on other class
-	bool IsClassBasedOn(SyntaxClass* _class, SyntaxClass* baseClass);
+    // Returns is class based on other class
+    bool IsClassBasedOn(SyntaxClass* _class, SyntaxClass* baseClass);
 
-	// Returns section by name in global space
-	SyntaxSection* FindSection(const string& fullName, bool withTypedefs = true);
+    // Returns section by name in global space
+    SyntaxSection* FindSection(const string& fullName, bool withTypedefs = true);
 
-	// Returns section by name in where
-	SyntaxSection* FindSection(const string& what, const string& where, bool withTypedefs = true);
+    // Returns section by name in where
+    SyntaxSection* FindSection(const string& what, const string& where, bool withTypedefs = true);
 
-	// Returns section by name in where
-	SyntaxSection* FindSection(const string& what, SyntaxSection* where, bool withTypedefs = true);
+    // Returns section by name in where
+    SyntaxSection* FindSection(const string& what, SyntaxSection* where, bool withTypedefs = true);
 
-	// Saves data to file
-	void Save(const string& file) const;
+    // Saves data to file
+    void Save(const string& file) const;
 
-	// Loads data from file
-	void Load(const string& file, bool original = true);
+    // Loads data from file
+    void Load(const string& file, bool original = true);
 
 protected:
-	void AppendSection(SyntaxSection* currentSection, SyntaxSection* newSection);
-	void ResolveDependencies(SyntaxSection* section);
-	void ResolveBaseClassDependencies(SyntaxSection* section);
-	SyntaxSection* FindSection(const string& what, SyntaxSection* where, SyntaxSectionsVec& processedSections, bool withTypedefs = true);
-	void SearchAttributes(SyntaxSection* section, SyntaxClass* attributeClass);
+    void AppendSection(SyntaxSection* currentSection, SyntaxSection* newSection);
+    void ResolveDependencies(SyntaxSection* section);
+    void ResolveBaseClassDependencies(SyntaxSection* section);
+    SyntaxSection* FindSection(const string& what, SyntaxSection* where, SyntaxSectionsVec& processedSections, bool withTypedefs = true);
+    void SearchAttributes(SyntaxSection* section, SyntaxClass* attributeClass);
 };
 
 // ---------------------
@@ -66,123 +66,123 @@ protected:
 class CodeToolApplication
 {
 public:
-	// Default constructor. Initializes all editor components
-	CodeToolApplication();
+    // Default constructor. Initializes all editor components
+    CodeToolApplication();
 
-	// Destructor
-	~CodeToolApplication();
+    // Destructor
+    ~CodeToolApplication();
 
-	// Sets arguments from main()
-	void SetArguments(char** args, int nargs);
+    // Sets arguments from main()
+    void SetArguments(char** args, int nargs);
 
-	// Generates new reflection
-	void Process();
+    // Generates new reflection
+    void Process();
 
-	// Outs string to log
-	static void Log(const char* format, ...);
+    // Outs string to log
+    static void Log(const char* format, ...);
 
-	// Outs string to log if verbose move is enabled
-	static void VerboseLog(const char* format, ...);
-
-protected:
-	string                 mCachePath = "CodeToolCache.xml";
-					       
-	string                 mSourcesPath;
-	string                 mMSVCProjectPath;
-	string                 mXCodeProjectPath;
-	bool                   mNeedReset = true;
-	static bool            mVerbose;
-					       
-	CppSyntaxParser*       mParser;
-	vector<SyntaxFile*>    mParsedFiles;
-	CodeToolCache          mCache;
-	map<string, TimeStamp> mSourceFiles;
+    // Outs string to log if verbose move is enabled
+    static void VerboseLog(const char* format, ...);
 
 protected:
-	// Returns list of all files in path and in sub paths
-	map<string, TimeStamp> GetFolderFiles(const string& path);
+    string                 mCachePath = "CodeToolCache.xml";
+                           
+    string                 mSourcesPath;
+    string                 mMSVCProjectPath;
+    string                 mXCodeProjectPath;
+    bool                   mNeedReset = true;
+    static bool            mVerbose;
+                           
+    CppSyntaxParser*       mParser;
+    vector<SyntaxFile*>    mParsedFiles;
+    CodeToolCache          mCache;
+    map<string, TimeStamp> mSourceFiles;
 
-	// Returns last edited date for file
-	TimeStamp GetFileEditedDate(const string& path);
+protected:
+    // Returns list of all files in path and in sub paths
+    map<string, TimeStamp> GetFolderFiles(const string& path);
 
-	// Parses startup arguments and puts into map
-	map<string, string> ParseArguments(char** args, int nargs);
+    // Returns last edited date for file
+    TimeStamp GetFileEditedDate(const string& path);
 
-	// Returns is file exist
-	bool IsFileExist(const string& path) const;
+    // Parses startup arguments and puts into map
+    map<string, string> ParseArguments(char** args, int nargs);
 
-	// Writes data to file
-	void WriteFile(const string& path, const string& data) const;
+    // Returns is file exist
+    bool IsFileExist(const string& path) const;
 
-	// Reads data from file
-	string ReadFile(const string& path) const;
+    // Writes data to file
+    void WriteFile(const string& path, const string& data) const;
 
-	// Returns path without parent directories
-	string GetPathWithoutDirectories(const string& path);
+    // Reads data from file
+    string ReadFile(const string& path) const;
 
-	// Returns parent path
-	string GetParentPath(const string& path);
+    // Returns path without parent directories
+    string GetPathWithoutDirectories(const string& path);
 
-	// Returns relative path
-	string GetRelativePath(const string& from, const string& to);
+    // Returns parent path
+    string GetParentPath(const string& path);
 
-	// Loads files parsing cache
-	void LoadCache();
+    // Returns relative path
+    string GetRelativePath(const string& from, const string& to);
 
-	// Saves files parsing cache
-	void SaveCache();
+    // Loads files parsing cache
+    void LoadCache();
 
-	// Updates project files structure
-	void UpdateProjectFilesFilter();
+    // Saves files parsing cache
+    void SaveCache();
 
-	// Updates code reflection
-	void UpdateCodeReflection();
+    // Updates project files structure
+    void UpdateProjectFilesFilter();
 
-	// Parses source file
-	void ParseSource(const string& path, const TimeStamp& editDate);
+    // Updates code reflection
+    void UpdateCodeReflection();
 
-	// Updates reflection for classes in source
-	void UpdateSourceReflection(SyntaxFile* file);
+    // Parses source file
+    void ParseSource(const string& path, const TimeStamp& editDate);
 
-	// Adds meta comment begin section
-	void AddBeginMeta(bool& hasMeta, string& res);
+    // Updates reflection for classes in source
+    void UpdateSourceReflection(SyntaxFile* file);
 
-	// Adds meta comment end section
-	void AddEndMeta(bool hasMeta, string& res);
+    // Adds meta comment begin section
+    void AddBeginMeta(bool& hasMeta, string& res);
 
-	// Returns class declaration meta
-	string GetClassDeclaration(SyntaxClass* cls);
+    // Adds meta comment end section
+    void AddEndMeta(bool hasMeta, string& res);
 
-	// Returns class reflection meta
-	string GetClassMeta(SyntaxClass* cls);
+    // Returns class declaration meta
+    string GetClassDeclaration(SyntaxClass* cls);
 
-	// Returns is comment ignoring
-	bool IsIgnoreComment(SyntaxComment* synComment);
+    // Returns class reflection meta
+    string GetClassMeta(SyntaxClass* cls);
 
-	// Adds #if if required
-	void CheckIfDefines(ISyntaxExpression* item, SyntaxDefineIf*& prevDefine, string& data);
+    // Returns is comment ignoring
+    bool IsIgnoreComment(SyntaxComment* synComment);
 
-	// Adds #endif if required
-	void CompleteIfDefines(SyntaxDefineIf*& prevDefine, string& data);
+    // Adds #if if required
+    void CheckIfDefines(ISyntaxExpression* item, SyntaxDefineIf*& prevDefine, string& data);
 
-	// Returns class field attributes
-	string GetAttributes(SyntaxClass* cls, int line, SyntaxComment* synComment);
+    // Adds #endif if required
+    void CompleteIfDefines(SyntaxDefineIf*& prevDefine, string& data);
 
-	// Return enum reflection meta
-	string GetEnumMeta(SyntaxEnum* enm);
+    // Returns class field attributes
+    string GetAttributes(SyntaxClass* cls, int line, SyntaxComment* synComment);
 
-	// Return enum reflection meta for header
-	string GetEnumPreMeta(SyntaxEnum* enm);
+    // Return enum reflection meta
+    string GetEnumMeta(SyntaxEnum* enm);
 
-	// Builds meta templates parameters for template classes
-	void AggregateTemplates(SyntaxSection* sec, string& templates, string& fullName);
+    // Return enum reflection meta for header
+    string GetEnumPreMeta(SyntaxEnum* enm);
 
-	// Returns class full name with template parameters in global space
-	string GetClassNormalizedTemplates(const string& name, const string& nspace);
+    // Builds meta templates parameters for template classes
+    void AggregateTemplates(SyntaxSection* sec, string& templates, string& fullName);
 
-	// Removes class metas from source
-	void RemoveMetas(string& data, const char* keyword, const char* endword, bool allowMultiline = true);
+    // Returns class full name with template parameters in global space
+    string GetClassNormalizedTemplates(const string& name, const string& nspace);
 
-	// Returns is function reflectable
-	bool IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const;
+    // Removes class metas from source
+    void RemoveMetas(string& data, const char* keyword, const char* endword, bool allowMultiline = true);
+
+    // Returns is function reflectable
+    bool IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const;
 };

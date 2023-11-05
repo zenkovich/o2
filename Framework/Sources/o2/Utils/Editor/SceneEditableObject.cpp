@@ -6,197 +6,197 @@
 namespace o2
 {
 #if IS_EDITOR
-	SceneEditableObject::SceneEditableObject()
-	{}
+    SceneEditableObject::SceneEditableObject()
+    {}
 
-	SceneEditableObject::~SceneEditableObject()
-	{}
+    SceneEditableObject::~SceneEditableObject()
+    {}
 
-	void SceneEditableObject::Update(float dt)
-	{}
+    void SceneEditableObject::Update(float dt)
+    {}
 
-	bool SceneEditableObject::IsOnScene() const
-	{
-		return true;
-	}
+    bool SceneEditableObject::IsOnScene() const
+    {
+        return true;
+    }
 
-	SceneUID SceneEditableObject::GetID() const
-	{
-		return 0;
-	}
+    SceneUID SceneEditableObject::GetID() const
+    {
+        return 0;
+    }
 
-	void SceneEditableObject::GenerateNewID(bool childs /*= true*/)
-	{}
+    void SceneEditableObject::GenerateNewID(bool childs /*= true*/)
+    {}
 
-	const String& SceneEditableObject::GetName() const
-	{
-		return String::empty;
-	}
+    const String& SceneEditableObject::GetName() const
+    {
+        return String::empty;
+    }
 
-	void SceneEditableObject::SetName(const String& name)
-	{}
+    void SceneEditableObject::SetName(const String& name)
+    {}
 
-	const SceneEditableObject* SceneEditableObject::GetEditableLink() const
-	{
-		return nullptr;
-	}
+    const SceneEditableObject* SceneEditableObject::GetEditableLink() const
+    {
+        return nullptr;
+    }
 
-	bool SceneEditableObject::IsEditableLinkedTo(SceneEditableObject* link) const
-	{
-		if (auto thisLink = GetEditableLink())
-		{
-			while (thisLink)
-			{
-				if (thisLink == link)
-					return true;
+    bool SceneEditableObject::IsEditableLinkedTo(SceneEditableObject* link) const
+    {
+        if (auto thisLink = GetEditableLink())
+        {
+            while (thisLink)
+            {
+                if (thisLink == link)
+                    return true;
 
-				thisLink = thisLink->GetEditableLink();
-			}
-		}
+                thisLink = thisLink->GetEditableLink();
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	bool SceneEditableObject::IsSupportsLinking() const
-	{
-		return true;
-	}
+    bool SceneEditableObject::IsSupportsLinking() const
+    {
+        return true;
+    }
 
-	Vector<SceneEditableObject*> SceneEditableObject::GetEditableChildren() const
-	{
-		return Vector<SceneEditableObject*>();
-	}
+    Vector<SceneEditableObject*> SceneEditableObject::GetEditableChildren() const
+    {
+        return Vector<SceneEditableObject*>();
+    }
 
-	void SceneEditableObject::GetAllEditableChildren(Vector<SceneEditableObject*>& children)
-	{
-		auto thisChildren = GetEditableChildren();
+    void SceneEditableObject::GetAllEditableChildren(Vector<SceneEditableObject*>& children)
+    {
+        auto thisChildren = GetEditableChildren();
 
-		children.Add(thisChildren);
+        children.Add(thisChildren);
 
-		for (auto child : thisChildren)
-			child->GetAllEditableChildren(children);
-	}
+        for (auto child : thisChildren)
+            child->GetAllEditableChildren(children);
+    }
 
-	SceneEditableObject* SceneEditableObject::GetEditableParent() const
-	{
-		return nullptr;
-	}
+    SceneEditableObject* SceneEditableObject::GetEditableParent() const
+    {
+        return nullptr;
+    }
 
-	void SceneEditableObject::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
-	{}
+    void SceneEditableObject::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
+    {}
 
-	void SceneEditableObject::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
-	{}
+    void SceneEditableObject::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+    {}
 
-	void SceneEditableObject::SetIndexInSiblings(int idx)
-	{}
+    void SceneEditableObject::SetIndexInSiblings(int idx)
+    {}
 
-	bool SceneEditableObject::CanBeParentedTo(const Type& parentType)
-	{
-		return parentType.IsBasedOn(TypeOf(Actor));
-	}
+    bool SceneEditableObject::CanBeParentedTo(const Type& parentType)
+    {
+        return parentType.IsBasedOn(TypeOf(Actor));
+    }
 
-	bool SceneEditableObject::IsSupportsDisabling() const
-	{
-		return false;
-	}
+    bool SceneEditableObject::IsSupportsDisabling() const
+    {
+        return false;
+    }
 
-	bool SceneEditableObject::IsEnabled() const
-	{
-		return true;
-	}
+    bool SceneEditableObject::IsEnabled() const
+    {
+        return true;
+    }
 
-	bool SceneEditableObject::IsEnabledInHierarchy() const
-	{
-		auto parent = GetEditableParent();
-		return IsEnabled() && (parent ? parent->IsEnabledInHierarchy() : true);
-	}
+    bool SceneEditableObject::IsEnabledInHierarchy() const
+    {
+        auto parent = GetEditableParent();
+        return IsEnabled() && (parent ? parent->IsEnabledInHierarchy() : true);
+    }
 
-	void SceneEditableObject::SetEnabled(bool enabled)
-	{}
+    void SceneEditableObject::SetEnabled(bool enabled)
+    {}
 
-	bool SceneEditableObject::IsSupportsLocking() const
-	{
-		return false;
-	}
+    bool SceneEditableObject::IsSupportsLocking() const
+    {
+        return false;
+    }
 
-	bool SceneEditableObject::IsLocked() const
-	{
-		return false;
-	}
+    bool SceneEditableObject::IsLocked() const
+    {
+        return false;
+    }
 
-	bool SceneEditableObject::IsLockedInHierarchy() const
-	{
-		return false;
-	}
+    bool SceneEditableObject::IsLockedInHierarchy() const
+    {
+        return false;
+    }
 
-	void SceneEditableObject::SetLocked(bool locked)
-	{}
+    void SceneEditableObject::SetLocked(bool locked)
+    {}
 
-	bool SceneEditableObject::IsSupportsTransforming() const
-	{
-		return false;
-	}
+    bool SceneEditableObject::IsSupportsTransforming() const
+    {
+        return false;
+    }
 
-	Basis SceneEditableObject::GetTransform() const
-	{
-		return Basis::Identity();
-	}
+    Basis SceneEditableObject::GetTransform() const
+    {
+        return Basis::Identity();
+    }
 
-	void SceneEditableObject::SetTransform(const Basis& transform)
-	{}
+    void SceneEditableObject::SetTransform(const Basis& transform)
+    {}
 
-	void SceneEditableObject::UpdateTransform()
-	{}
+    void SceneEditableObject::UpdateTransform()
+    {}
 
-	bool SceneEditableObject::IsSupportsPivot() const
-	{
-		return false;
-	}
+    bool SceneEditableObject::IsSupportsPivot() const
+    {
+        return false;
+    }
 
-	void SceneEditableObject::SetPivot(const Vec2F& pivot)
-	{}
+    void SceneEditableObject::SetPivot(const Vec2F& pivot)
+    {}
 
-	Vec2F SceneEditableObject::GetPivot() const
-	{
-		return Vec2F();
-	}
+    Vec2F SceneEditableObject::GetPivot() const
+    {
+        return Vec2F();
+    }
 
-	bool SceneEditableObject::IsSupportsLayout() const
-	{
-		return false;
-	}
+    bool SceneEditableObject::IsSupportsLayout() const
+    {
+        return false;
+    }
 
-	Layout SceneEditableObject::GetLayout() const
-	{
-		return Layout();
-	}
+    Layout SceneEditableObject::GetLayout() const
+    {
+        return Layout();
+    }
 
-	void SceneEditableObject::SetLayout(const Layout& layout)
-	{}
+    void SceneEditableObject::SetLayout(const Layout& layout)
+    {}
 
-	bool SceneEditableObject::IsSupportsDeleting() const
-	{
-		return true;
-	}
+    bool SceneEditableObject::IsSupportsDeleting() const
+    {
+        return true;
+    }
 
-	void SceneEditableObject::OnChanged()
-	{}
+    void SceneEditableObject::OnChanged()
+    {}
 
-	void SceneEditableObject::OnLockChanged()
-	{}
+    void SceneEditableObject::OnLockChanged()
+    {}
 
-	void SceneEditableObject::OnNameChanged()
-	{}
+    void SceneEditableObject::OnNameChanged()
+    {}
 
-	void SceneEditableObject::OnChildrenChanged()
-	{}
+    void SceneEditableObject::OnChildrenChanged()
+    {}
 
-	void SceneEditableObject::OnEditableParentChanged(SceneEditableObject* oldParent)
-	{}
+    void SceneEditableObject::OnEditableParentChanged(SceneEditableObject* oldParent)
+    {}
 
-	void SceneEditableObject::GetDifferences(ActorDifferences& differences) const
-	{}
+    void SceneEditableObject::GetDifferences(ActorDifferences& differences) const
+    {}
 #endif
 }
 // --- META ---

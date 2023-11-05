@@ -7,22 +7,22 @@
 
 namespace o2
 {
-	class Clipboard
-	{
-	public:
-		// Sets text into clipboard
-		static void SetText(const WString& text);
+    class Clipboard
+    {
+    public:
+        // Sets text into clipboard
+        static void SetText(const WString& text);
 
-		// Gets text from clipboard
-		static WString GetText();
+        // Gets text from clipboard
+        static WString GetText();
 
-		// Copy file to clipboard
-		static void CopyFile(const WString& path);
+        // Copy file to clipboard
+        static void CopyFile(const WString& path);
 
-		// Copy files to clipboard
-		static void CopyFiles(const Vector<WString>& paths);
+        // Copy files to clipboard
+        static void CopyFiles(const Vector<WString>& paths);
 
-		// Returns copying files
-		static Vector<WString> GetCopyFiles();
-	};
+        // Returns copying files
+        static Vector<WString> GetCopyFiles();
+    };
 }

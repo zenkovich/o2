@@ -7,292 +7,292 @@
 
 namespace o2
 {
-	HorizontalProgress::HorizontalProgress():
-		Widget(), DrawableCursorEventsListener(this)
-	{}
+    HorizontalProgress::HorizontalProgress():
+        Widget(), DrawableCursorEventsListener(this)
+    {}
 
-	HorizontalProgress::HorizontalProgress(const HorizontalProgress& other) :
-		Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
-		mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense), value(this),
-		minValue(this), maxValue(this), scrollSense(this)
-	{
-		mBarLayer = FindLayer("bar");
-		mBackLayer = FindLayer("back");
+    HorizontalProgress::HorizontalProgress(const HorizontalProgress& other) :
+        Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+        mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense), value(this),
+        minValue(this), maxValue(this), scrollSense(this)
+    {
+        mBarLayer = FindLayer("bar");
+        mBackLayer = FindLayer("back");
 
-		RetargetStatesAnimations();
-	}
+        RetargetStatesAnimations();
+    }
 
-	HorizontalProgress::~HorizontalProgress()
-	{}
+    HorizontalProgress::~HorizontalProgress()
+    {}
 
-	HorizontalProgress& HorizontalProgress::operator=(const HorizontalProgress& other)
-	{
-		Widget::operator=(other);
+    HorizontalProgress& HorizontalProgress::operator=(const HorizontalProgress& other)
+    {
+        Widget::operator=(other);
 
-		mValue = other.mValue;
-		mMinValue = other.mMinValue;
-		mMaxValue = other.mMaxValue;
-		mOrientation = other.mOrientation;
-		mScrollSense = other.mScrollSense;
+        mValue = other.mValue;
+        mMinValue = other.mMinValue;
+        mMaxValue = other.mMaxValue;
+        mOrientation = other.mOrientation;
+        mScrollSense = other.mScrollSense;
 
-		mBarLayer = FindLayer("bar");
-		mBackLayer = FindLayer("back");
+        mBarLayer = FindLayer("bar");
+        mBackLayer = FindLayer("back");
 
-		RetargetStatesAnimations();
-		SetLayoutDirty();
+        RetargetStatesAnimations();
+        SetLayoutDirty();
 
-		return *this;
-	}
+        return *this;
+    }
 
-	void HorizontalProgress::Update(float dt)
-	{
-		Widget::Update(dt);
+    void HorizontalProgress::Update(float dt)
+    {
+        Widget::Update(dt);
 
-		if (!mResEnabledInHierarchy || mIsClipped)
-			return;
+        if (!mResEnabledInHierarchy || mIsClipped)
+            return;
 
-		const float threshold = 0.01f;
-		const float smoothCoef = 30.0f;
+        const float threshold = 0.01f;
+        const float smoothCoef = 30.0f;
 
-		if (!Math::Equals(mValue, mSmoothValue, threshold))
-		{
-			mSmoothValue = Math::Clamp(Math::Lerpc(mSmoothValue, mValue, dt*smoothCoef), mMinValue, mMaxValue);
+        if (!Math::Equals(mValue, mSmoothValue, threshold))
+        {
+            mSmoothValue = Math::Clamp(Math::Lerpc(mSmoothValue, mValue, dt*smoothCoef), mMinValue, mMaxValue);
 
-			if (Math::Abs(mValue - mSmoothValue) < threshold)
-				mSmoothValue = mValue;
+            if (Math::Abs(mValue - mSmoothValue) < threshold)
+                mSmoothValue = mValue;
 
-			UpdateProgressLayersLayouts();
-		}
-	}
+            UpdateProgressLayersLayouts();
+        }
+    }
 
-	void HorizontalProgress::SetValue(float value, bool byUser /*= false*/)
-	{
-		mValue = Math::Clamp(value, mMinValue, mMaxValue);
-		UpdateProgressLayersLayouts();
+    void HorizontalProgress::SetValue(float value, bool byUser /*= false*/)
+    {
+        mValue = Math::Clamp(value, mMinValue, mMaxValue);
+        UpdateProgressLayersLayouts();
 
-		onChange(mValue);
+        onChange(mValue);
 
-		if (byUser)
-			onChangeByUser(mValue);
-	}
+        if (byUser)
+            onChangeByUser(mValue);
+    }
 
-	void HorizontalProgress::SetValueForcible(float value)
-	{
-		mValue = Math::Clamp(value, mMinValue, mMaxValue);
-		mSmoothValue = mValue;
-		UpdateProgressLayersLayouts();
+    void HorizontalProgress::SetValueForcible(float value)
+    {
+        mValue = Math::Clamp(value, mMinValue, mMaxValue);
+        mSmoothValue = mValue;
+        UpdateProgressLayersLayouts();
 
-		onChange(mValue);
-	}
+        onChange(mValue);
+    }
 
-	float HorizontalProgress::GetValue() const
-	{
-		return mValue;
-	}
+    float HorizontalProgress::GetValue() const
+    {
+        return mValue;
+    }
 
-	void HorizontalProgress::SetMinValue(float minValue)
-	{
-		mMinValue = minValue;
-		mValue = Math::Max(mMinValue, mValue);
-		UpdateProgressLayersLayouts();
+    void HorizontalProgress::SetMinValue(float minValue)
+    {
+        mMinValue = minValue;
+        mValue = Math::Max(mMinValue, mValue);
+        UpdateProgressLayersLayouts();
 
-		onChange(value);
-	}
+        onChange(value);
+    }
 
-	float HorizontalProgress::GetMinValue() const
-	{
-		return mMinValue;
-	}
+    float HorizontalProgress::GetMinValue() const
+    {
+        return mMinValue;
+    }
 
-	void HorizontalProgress::SetMaxValue(float maxValue)
-	{
-		mMaxValue = maxValue;
-		mValue = Math::Min(mMaxValue, mValue);
-		UpdateProgressLayersLayouts();
+    void HorizontalProgress::SetMaxValue(float maxValue)
+    {
+        mMaxValue = maxValue;
+        mValue = Math::Min(mMaxValue, mValue);
+        UpdateProgressLayersLayouts();
 
-		onChange(value);
-	}
+        onChange(value);
+    }
 
-	float HorizontalProgress::GetMaxValue() const
-	{
-		return mMaxValue;
-	}
+    float HorizontalProgress::GetMaxValue() const
+    {
+        return mMaxValue;
+    }
 
-	void HorizontalProgress::SetValueRange(float minValue, float maxValue)
-	{
-		mMaxValue = maxValue;
-		mValue = Math::Clamp(mValue, mMinValue, mMaxValue);
-		UpdateProgressLayersLayouts();
+    void HorizontalProgress::SetValueRange(float minValue, float maxValue)
+    {
+        mMaxValue = maxValue;
+        mValue = Math::Clamp(mValue, mMinValue, mMaxValue);
+        UpdateProgressLayersLayouts();
 
-		onChange(value);
-	}
+        onChange(value);
+    }
 
-	void HorizontalProgress::SetScrollSense(float coef)
-	{
-		mScrollSense = coef;
-	}
+    void HorizontalProgress::SetScrollSense(float coef)
+    {
+        mScrollSense = coef;
+    }
 
-	float HorizontalProgress::GetScrollSense() const
-	{
-		return mScrollSense;
-	}
+    float HorizontalProgress::GetScrollSense() const
+    {
+        return mScrollSense;
+    }
 
-	void HorizontalProgress::SetOrientation(Orientation orientation)
-	{
-		mOrientation = orientation;
-		UpdateLayersLayouts();
-	}
+    void HorizontalProgress::SetOrientation(Orientation orientation)
+    {
+        mOrientation = orientation;
+        UpdateLayersLayouts();
+    }
 
-	HorizontalProgress::Orientation HorizontalProgress::GetOrientation() const
-	{
-		return mOrientation;
-	}
+    HorizontalProgress::Orientation HorizontalProgress::GetOrientation() const
+    {
+        return mOrientation;
+    }
 
-	bool HorizontalProgress::IsUnderPoint(const Vec2F& point)
-	{
-		if (mBackLayer)
-			return mDrawingScissorRect.IsInside(point) && mBackLayer->IsUnderPoint(point);
+    bool HorizontalProgress::IsUnderPoint(const Vec2F& point)
+    {
+        if (mBackLayer)
+            return mDrawingScissorRect.IsInside(point) && mBackLayer->IsUnderPoint(point);
 
-		return false;
-	}
+        return false;
+    }
 
-	bool HorizontalProgress::IsScrollable() const
-	{
-		return true;
-	}
+    bool HorizontalProgress::IsScrollable() const
+    {
+        return true;
+    }
 
-	void HorizontalProgress::OnCursorPressed(const Input::Cursor& cursor)
-	{
-		auto pressedState = state["pressed"];
-		if (pressedState)
-			*pressedState = true;
+    void HorizontalProgress::OnCursorPressed(const Input::Cursor& cursor)
+    {
+        auto pressedState = state["pressed"];
+        if (pressedState)
+            *pressedState = true;
 
-		GetValueFromCursor(cursor);
-	}
+        GetValueFromCursor(cursor);
+    }
 
-	void HorizontalProgress::OnCursorReleased(const Input::Cursor& cursor)
-	{
-		auto pressedState = state["pressed"];
-		if (pressedState)
-			*pressedState = false;
-	}
+    void HorizontalProgress::OnCursorReleased(const Input::Cursor& cursor)
+    {
+        auto pressedState = state["pressed"];
+        if (pressedState)
+            *pressedState = false;
+    }
 
-	void HorizontalProgress::OnCursorPressBreak(const Input::Cursor& cursor)
-	{
-		auto pressedState = state["pressed"];
-		if (pressedState)
-			*pressedState = false;
-	}
+    void HorizontalProgress::OnCursorPressBreak(const Input::Cursor& cursor)
+    {
+        auto pressedState = state["pressed"];
+        if (pressedState)
+            *pressedState = false;
+    }
 
-	void HorizontalProgress::OnCursorStillDown(const Input::Cursor& cursor)
-	{
-		GetValueFromCursor(cursor);
-	}
+    void HorizontalProgress::OnCursorStillDown(const Input::Cursor& cursor)
+    {
+        GetValueFromCursor(cursor);
+    }
 
-	void HorizontalProgress::GetValueFromCursor(const Input::Cursor &cursor)
-	{
-		float width = layout->width;
-		float d = mMaxValue - mMinValue;
-		if (mOrientation == Orientation::Right)
-			SetValue((cursor.position.x - layout->worldLeft)/width*d + mMinValue, true);
-		else
-			SetValue((width - (cursor.position.x - layout->worldLeft))/width*d + mMinValue, true);
-	}
+    void HorizontalProgress::GetValueFromCursor(const Input::Cursor &cursor)
+    {
+        float width = layout->width;
+        float d = mMaxValue - mMinValue;
+        if (mOrientation == Orientation::Right)
+            SetValue((cursor.position.x - layout->worldLeft)/width*d + mMinValue, true);
+        else
+            SetValue((width - (cursor.position.x - layout->worldLeft))/width*d + mMinValue, true);
+    }
 
-	void HorizontalProgress::OnCursorEnter(const Input::Cursor& cursor)
-	{
-		auto selectState = state["hover"];
-		if (selectState)
-			*selectState = true;
-	}
+    void HorizontalProgress::OnCursorEnter(const Input::Cursor& cursor)
+    {
+        auto selectState = state["hover"];
+        if (selectState)
+            *selectState = true;
+    }
 
-	void HorizontalProgress::OnCursorExit(const Input::Cursor& cursor)
-	{
-		auto selectState = state["hover"];
-		if (selectState)
-			*selectState = false;
-	}
+    void HorizontalProgress::OnCursorExit(const Input::Cursor& cursor)
+    {
+        auto selectState = state["hover"];
+        if (selectState)
+            *selectState = false;
+    }
 
-	void HorizontalProgress::OnScrolled(float scroll)
-	{
-		SetValue(mValue + scroll*mScrollSense);
-	}
+    void HorizontalProgress::OnScrolled(float scroll)
+    {
+        SetValue(mValue + scroll*mScrollSense);
+    }
 
-	void HorizontalProgress::OnDeserialized(const DataValue& node)
-	{
-		Widget::OnDeserialized(node);
+    void HorizontalProgress::OnDeserialized(const DataValue& node)
+    {
+        Widget::OnDeserialized(node);
 
-		mBarLayer = FindLayer("bar");
-		mBackLayer = FindLayer("back");
+        mBarLayer = FindLayer("bar");
+        mBackLayer = FindLayer("back");
 
-		RetargetStatesAnimations();
-	}
+        RetargetStatesAnimations();
+    }
 
-	void HorizontalProgress::OnEnabled()
-	{
-		Widget::OnEnabled();
+    void HorizontalProgress::OnEnabled()
+    {
+        Widget::OnEnabled();
 
-		interactable = true;
-	}
+        interactable = true;
+    }
 
-	void HorizontalProgress::OnDisabled()
-	{
-		Widget::OnDisabled();
+    void HorizontalProgress::OnDisabled()
+    {
+        Widget::OnDisabled();
 
-		interactable = false;
-	}
+        interactable = false;
+    }
 
-	void HorizontalProgress::UpdateLayersLayouts()
-	{
-		UpdateProgressLayersLayouts();
-	}
+    void HorizontalProgress::UpdateLayersLayouts()
+    {
+        UpdateProgressLayersLayouts();
+    }
 
-	void HorizontalProgress::UpdateProgressLayersLayouts()
-	{
-		if (mBarLayer)
-		{
-			mBarLayer->layout.offsetMin = Vec2F();
-			mBarLayer->layout.offsetMax = Vec2F();
+    void HorizontalProgress::UpdateProgressLayersLayouts()
+    {
+        if (mBarLayer)
+        {
+            mBarLayer->layout.offsetMin = Vec2F();
+            mBarLayer->layout.offsetMax = Vec2F();
 
-			if (mOrientation == Orientation::Right)
-			{
-				mBarLayer->layout.anchorMin = Vec2F(0, 0);
-				mBarLayer->layout.anchorMax = Vec2F((mSmoothValue - mMinValue)/(mMaxValue - mMinValue), 1);
-			}
-			else if (mOrientation == Orientation::Left)
-			{
-				mBarLayer->layout.anchorMin = Vec2F(1.0f - (mSmoothValue - mMinValue)/(mMaxValue - mMinValue), 0.0f);
-				mBarLayer->layout.anchorMax = Vec2F(1, 1);
-			}
-		}
+            if (mOrientation == Orientation::Right)
+            {
+                mBarLayer->layout.anchorMin = Vec2F(0, 0);
+                mBarLayer->layout.anchorMax = Vec2F((mSmoothValue - mMinValue)/(mMaxValue - mMinValue), 1);
+            }
+            else if (mOrientation == Orientation::Left)
+            {
+                mBarLayer->layout.anchorMin = Vec2F(1.0f - (mSmoothValue - mMinValue)/(mMaxValue - mMinValue), 0.0f);
+                mBarLayer->layout.anchorMax = Vec2F(1, 1);
+            }
+        }
 
-		if (mBackLayer)
-			mBackLayer->layout = Layout::BothStretch();
+        if (mBackLayer)
+            mBackLayer->layout = Layout::BothStretch();
 
-		Widget::UpdateLayersLayouts();
-	}
+        Widget::UpdateLayersLayouts();
+    }
 
-	void HorizontalProgress::OnLayerAdded(WidgetLayer* layer)
-	{
-		if (layer->name == "back")
-			mBackLayer = layer;
-		else if (layer->name == "bar")
-			mBarLayer = layer;
+    void HorizontalProgress::OnLayerAdded(WidgetLayer* layer)
+    {
+        if (layer->name == "back")
+            mBackLayer = layer;
+        else if (layer->name == "bar")
+            mBarLayer = layer;
 
-		UpdateProgressLayersLayouts();
-	}
+        UpdateProgressLayersLayouts();
+    }
 
-	String HorizontalProgress::GetCreateMenuGroup()
-	{
-		return "Progress";
-	}
+    String HorizontalProgress::GetCreateMenuGroup()
+    {
+        return "Progress";
+    }
 }
 // --- META ---
 
 ENUM_META(o2::HorizontalProgress::Orientation)
 {
-	ENUM_ENTRY(Left);
-	ENUM_ENTRY(Right);
+    ENUM_ENTRY(Left);
+    ENUM_ENTRY(Right);
 }
 END_ENUM_META;
 

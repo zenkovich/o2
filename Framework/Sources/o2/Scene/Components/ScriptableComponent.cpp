@@ -5,164 +5,164 @@
 
 namespace o2
 {
-	ScriptableComponent::ScriptableComponent()
-	{
+    ScriptableComponent::ScriptableComponent()
+    {
 
-	}
+    }
 
-	ScriptableComponent::ScriptableComponent(const ScriptableComponent& other):
-		Component(other)
-	{
-		SetScript(other.mScript);
-	}
+    ScriptableComponent::ScriptableComponent(const ScriptableComponent& other):
+        Component(other)
+    {
+        SetScript(other.mScript);
+    }
 
-	ScriptableComponent::~ScriptableComponent()
-	{
+    ScriptableComponent::~ScriptableComponent()
+    {
 
-	}
+    }
 
-	ScriptableComponent& ScriptableComponent::operator=(const ScriptableComponent& other)
-	{
-		Component::operator=(other);
-		return *this;
-	}
+    ScriptableComponent& ScriptableComponent::operator=(const ScriptableComponent& other)
+    {
+        Component::operator=(other);
+        return *this;
+    }
 
-	void ScriptableComponent::SetScript(const JavaScriptAssetRef& script)
-	{
-		mScript = script;
-		LoadScriptAndCreateObject();
-	}
+    void ScriptableComponent::SetScript(const JavaScriptAssetRef& script)
+    {
+        mScript = script;
+        LoadScriptAndCreateObject();
+    }
 
-	const JavaScriptAssetRef& ScriptableComponent::GetScript() const
-	{
-		return mScript;
-	}
+    const JavaScriptAssetRef& ScriptableComponent::GetScript() const
+    {
+        return mScript;
+    }
 
-	ScriptValue ScriptableComponent::GetInstance() const
-	{
-		return mInstance;
-	}
+    ScriptValue ScriptableComponent::GetInstance() const
+    {
+        return mInstance;
+    }
 
-	ScriptValue ScriptableComponent::GetClass() const
-	{
-		return mClass;
-	}
+    ScriptValue ScriptableComponent::GetClass() const
+    {
+        return mClass;
+    }
 
-	String ScriptableComponent::GetName()
-	{
-		return "Scriptable";
-	}
+    String ScriptableComponent::GetName()
+    {
+        return "Scriptable";
+    }
 
-	String ScriptableComponent::GetCategory()
-	{
-		return "Basic";
-	}
+    String ScriptableComponent::GetCategory()
+    {
+        return "Basic";
+    }
 
-	String ScriptableComponent::GetIcon()
-	{
-		return "ui/UI4_component_icon.png";
-	}
+    String ScriptableComponent::GetIcon()
+    {
+        return "ui/UI4_component_icon.png";
+    }
 
-	void ScriptableComponent::LoadScriptAndCreateObject()
-	{
-		if (!mScript)
-			return;
+    void ScriptableComponent::LoadScriptAndCreateObject()
+    {
+        if (!mScript)
+            return;
 
-		auto parseRes = mScript->Parse();
-		o2Scripts.Run(parseRes);
+        auto parseRes = mScript->Parse();
+        o2Scripts.Run(parseRes);
 
-		auto className = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(mScript->GetPath()));
-		auto classObj = o2Scripts.GetGlobal().GetOwnProperty(ScriptValue(className));
-		if (classObj.IsConstructor())
-		{
-			mInstance = classObj.Construct({});
-			mClass = classObj;
+        auto className = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(mScript->GetPath()));
+        auto classObj = o2Scripts.GetGlobal().GetOwnProperty(ScriptValue(className));
+        if (classObj.IsConstructor())
+        {
+            mInstance = classObj.Construct({});
+            mClass = classObj;
 
-			mOnStartFunc = mInstance.GetProperty("OnStart");
-			mOnEnabledFunc = mInstance.GetProperty("OnEnabled");
-			mOnDisabledFunc = mInstance.GetProperty("OnDisabled");
-			mUpdateFunc = mInstance.GetProperty("Update");
-		}
-		else
-		{
-			o2Debug.LogError("Can't find scripting class '" + className + "' in component file - " + mScript->GetPath());
+            mOnStartFunc = mInstance.GetProperty("OnStart");
+            mOnEnabledFunc = mInstance.GetProperty("OnEnabled");
+            mOnDisabledFunc = mInstance.GetProperty("OnDisabled");
+            mUpdateFunc = mInstance.GetProperty("Update");
+        }
+        else
+        {
+            o2Debug.LogError("Can't find scripting class '" + className + "' in component file - " + mScript->GetPath());
 
-			mInstance = ScriptValue();
-			mClass = ScriptValue();
-			mOnStartFunc = ScriptValue();
-			mOnEnabledFunc = ScriptValue();
-			mOnDisabledFunc = ScriptValue();
-			mUpdateFunc = ScriptValue();
-		}
-	}
+            mInstance = ScriptValue();
+            mClass = ScriptValue();
+            mOnStartFunc = ScriptValue();
+            mOnEnabledFunc = ScriptValue();
+            mOnDisabledFunc = ScriptValue();
+            mUpdateFunc = ScriptValue();
+        }
+    }
 
-	void ScriptableComponent::OnSerialize(DataValue& node) const
-	{
-		Component::OnSerialize(node);
+    void ScriptableComponent::OnSerialize(DataValue& node) const
+    {
+        Component::OnSerialize(node);
 
-		node["mScript"].Set(mScript);
+        node["mScript"].Set(mScript);
 
-		if (mInstance.IsObject())
-			node["mInstance"].Set(mInstance);
-	}
+        if (mInstance.IsObject())
+            node["mInstance"].Set(mInstance);
+    }
 
-	void ScriptableComponent::OnDeserialized(const DataValue& node)
-	{
-		Component::OnDeserialized(node);
+    void ScriptableComponent::OnDeserialized(const DataValue& node)
+    {
+        Component::OnDeserialized(node);
 
-		node["mScript"].Get(mScript);
-		LoadScriptAndCreateObject();
+        node["mScript"].Get(mScript);
+        LoadScriptAndCreateObject();
 
-		if (mInstance.IsObject())
-		{
-			if (auto objectNode = node.FindMember("mInstance"))
-				objectNode->Get(mInstance);
-		}
-	}
+        if (mInstance.IsObject())
+        {
+            if (auto objectNode = node.FindMember("mInstance"))
+                objectNode->Get(mInstance);
+        }
+    }
 
-	void ScriptableComponent::SetOwnerActor(Actor* actor)
-	{
-		Component::SetOwnerActor(actor);
+    void ScriptableComponent::SetOwnerActor(Actor* actor)
+    {
+        Component::SetOwnerActor(actor);
 
-		//if (mInstance.IsObject())
-			mInstance.SetProperty("_actor", actor);
-	}
+        //if (mInstance.IsObject())
+            mInstance.SetProperty("_actor", actor);
+    }
 
-	void ScriptableComponent::OnAddToScene()
-	{
-		Component::OnAddToScene();
-	}
+    void ScriptableComponent::OnAddToScene()
+    {
+        Component::OnAddToScene();
+    }
 
-	void ScriptableComponent::OnRemoveFromScene()
-	{
-		Component::OnRemoveFromScene();
-	}
+    void ScriptableComponent::OnRemoveFromScene()
+    {
+        Component::OnRemoveFromScene();
+    }
 
-	void ScriptableComponent::OnStart()
-	{
-		if (mOnStartFunc.IsFunction())
-			mOnStartFunc.InvokeRaw(mInstance, {});
-	}
+    void ScriptableComponent::OnStart()
+    {
+        if (mOnStartFunc.IsFunction())
+            mOnStartFunc.InvokeRaw(mInstance, {});
+    }
 
-	void ScriptableComponent::OnUpdate(float dt)
-	{
-		PROFILE_SAMPLE_FUNC();
+    void ScriptableComponent::OnUpdate(float dt)
+    {
+        PROFILE_SAMPLE_FUNC();
 
-		if (mUpdateFunc.IsFunction())
-			mUpdateFunc.Invoke<void, float>(mInstance, dt);
-	}
+        if (mUpdateFunc.IsFunction())
+            mUpdateFunc.Invoke<void, float>(mInstance, dt);
+    }
 
-	void ScriptableComponent::OnEnabled()
-	{
-		if (mOnEnabledFunc.IsFunction())
-			mOnEnabledFunc.InvokeRaw(mInstance, {});
-	}
+    void ScriptableComponent::OnEnabled()
+    {
+        if (mOnEnabledFunc.IsFunction())
+            mOnEnabledFunc.InvokeRaw(mInstance, {});
+    }
 
-	void ScriptableComponent::OnDisabled()
-	{
-		if (mOnDisabledFunc.IsFunction())
-			mOnDisabledFunc.InvokeRaw(mInstance, {});
-	}
+    void ScriptableComponent::OnDisabled()
+    {
+        if (mOnDisabledFunc.IsFunction())
+            mOnDisabledFunc.InvokeRaw(mInstance, {});
+    }
 }
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ScriptableComponent>);
 // --- META ---

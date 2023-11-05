@@ -4,20 +4,20 @@
 
 namespace o2
 {
-	class LinearAllocator: public IAllocator
-	{
-	public:
-		LinearAllocator(size_t blockSize, IAllocator* baseAllocator = DefaultAllocator::GetInstance());
+    class LinearAllocator: public IAllocator
+    {
+    public:
+        LinearAllocator(size_t blockSize, IAllocator* baseAllocator = DefaultAllocator::GetInstance());
 
-		void* Allocate(size_t size) override;
-		void Deallocate(void* ptr) override;
-		void* Reallocate(void* ptr, size_t oldSize, size_t newSize) override;
+        void* Allocate(size_t size) override;
+        void Deallocate(void* ptr) override;
+        void* Reallocate(void* ptr, size_t oldSize, size_t newSize) override;
 
-	private:
-		IAllocator* mBaseAllocator;
+    private:
+        IAllocator* mBaseAllocator;
 
-		void* mBlock;
-		size_t mBlockSize;
-		size_t mCurrentSize;
-	};
+        void* mBlock;
+        size_t mBlockSize;
+        size_t mCurrentSize;
+    };
 };

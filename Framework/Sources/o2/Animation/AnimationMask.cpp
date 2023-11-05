@@ -3,14 +3,14 @@
 
 namespace o2
 {
-	float AnimationMask::GetNodeWeight(const String& node) const
-	{
-		auto fnd = weights.find(node);
-		if (fnd != weights.End())
-			return fnd->second;
+    float AnimationMask::GetNodeWeight(const String& node) const
+    {
+        auto fnd = weights.find(node);
+        if (fnd != weights.End())
+            return fnd->second;
 
-		return 1.0f;
-	}
+        return 1.0f;
+    }
 }
 // --- META ---
 

@@ -7,205 +7,205 @@
 
 namespace o2
 {
-	AtlasAsset::PlatformMeta AtlasAsset::Meta::GetResultPlatformMeta(Platform platform) const
-	{
-		PlatformMeta res = common;
+    AtlasAsset::PlatformMeta AtlasAsset::Meta::GetResultPlatformMeta(Platform platform) const
+    {
+        PlatformMeta res = common;
 
-		switch (platform)
-		{
-			case Platform::iOS: if (ios) res = *ios; break;
-			case Platform::Android: if (android) res = *android; break;
-			case Platform::Mac: if (macOS) res = *macOS; break;
-			case Platform::Windows: if (windows) res = *windows; break;
-			case Platform::Linux: if (linuxOS) res = *linuxOS; break;
-		}
+        switch (platform)
+        {
+            case Platform::iOS: if (ios) res = *ios; break;
+            case Platform::Android: if (android) res = *android; break;
+            case Platform::Mac: if (macOS) res = *macOS; break;
+            case Platform::Windows: if (windows) res = *windows; break;
+            case Platform::Linux: if (linuxOS) res = *linuxOS; break;
+        }
 
-		return res;
-	}
+        return res;
+    }
 
-	bool AtlasAsset::Meta::IsEqual(AssetMeta* other) const
-	{
-		if (!AssetMeta::IsEqual(other))
-			return false;
+    bool AtlasAsset::Meta::IsEqual(AssetMeta* other) const
+    {
+        if (!AssetMeta::IsEqual(other))
+            return false;
 
-		Meta* otherMeta = (Meta*)other;
+        Meta* otherMeta = (Meta*)other;
 
-		if (!(common == otherMeta->common))
-			return false;
+        if (!(common == otherMeta->common))
+            return false;
 
-		auto comparePlatformMeta = [](PlatformMeta* a, PlatformMeta* b)
-		{
-			if (a && b)
-			{
-				if (!(*a == *b))
-					return false;
-			}
-			else if (a || b)
-				return false;
+        auto comparePlatformMeta = [](PlatformMeta* a, PlatformMeta* b)
+        {
+            if (a && b)
+            {
+                if (!(*a == *b))
+                    return false;
+            }
+            else if (a || b)
+                return false;
 
-			return true;
-		};
+            return true;
+        };
 
-		if (!comparePlatformMeta(ios, otherMeta->ios) ||
-			!comparePlatformMeta(android, otherMeta->android) ||
-			!comparePlatformMeta(macOS, otherMeta->macOS) ||
-			!comparePlatformMeta(windows, otherMeta->windows) ||
-			!comparePlatformMeta(linuxOS, otherMeta->linuxOS))
-		{
-			return false;
-		}
+        if (!comparePlatformMeta(ios, otherMeta->ios) ||
+            !comparePlatformMeta(android, otherMeta->android) ||
+            !comparePlatformMeta(macOS, otherMeta->macOS) ||
+            !comparePlatformMeta(windows, otherMeta->windows) ||
+            !comparePlatformMeta(linuxOS, otherMeta->linuxOS))
+        {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	UInt AtlasAsset::Page::ID() const
-	{
-		return mId;
-	}
+    UInt AtlasAsset::Page::ID() const
+    {
+        return mId;
+    }
 
-	Vec2I AtlasAsset::Page::Size() const
-	{
-		return mSize;
-	}
+    Vec2I AtlasAsset::Page::Size() const
+    {
+        return mSize;
+    }
 
-	TextureRef AtlasAsset::Page::GetTexture() const
-	{
-		return mTexture;
-	}
+    TextureRef AtlasAsset::Page::GetTexture() const
+    {
+        return mTexture;
+    }
 
-	String AtlasAsset::Page::GetTextureFileName() const
-	{
-		return AtlasAsset::GetPageTextureFileName(mOwner->mInfo, mId);
-	}
+    String AtlasAsset::Page::GetTextureFileName() const
+    {
+        return AtlasAsset::GetPageTextureFileName(mOwner->mInfo, mId);
+    }
 
-	const Map<UID, RectI>& AtlasAsset::Page::ImagesRects() const
-	{
-		return mImagesRects;
-	}
+    const Map<UID, RectI>& AtlasAsset::Page::ImagesRects() const
+    {
+        return mImagesRects;
+    }
 
-	bool AtlasAsset::Page::operator==(const Page& other) const
-	{
-		return mId == other.mId;
-	}
+    bool AtlasAsset::Page::operator==(const Page& other) const
+    {
+        return mId == other.mId;
+    }
 
-	AtlasAsset::AtlasAsset() :
-		Asset(mnew Meta())
-	{
-		o2Render.OnAtlasCreated(this);
-	}
+    AtlasAsset::AtlasAsset() :
+        Asset(mnew Meta())
+    {
+        o2Render.OnAtlasCreated(this);
+    }
 
-	AtlasAsset::AtlasAsset(const AtlasAsset& other) :
-		Asset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
-	{
-		for (auto& page : mPages)
-			page.mOwner = this;
+    AtlasAsset::AtlasAsset(const AtlasAsset& other) :
+        Asset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
+    {
+        for (auto& page : mPages)
+            page.mOwner = this;
 
-		o2Render.OnAtlasCreated(this);
-	}
+        o2Render.OnAtlasCreated(this);
+    }
 
-	AtlasAsset::~AtlasAsset()
-	{
-		o2Render.OnAtlasDestroyed(this);
-	}
+    AtlasAsset::~AtlasAsset()
+    {
+        o2Render.OnAtlasDestroyed(this);
+    }
 
-	void AtlasAsset::OnDeserialized(const DataValue& node)
-	{
-		for (auto& page : mPages)
-		{
-			page.mOwner = this;
-			page.mTexture = GetPageTextureRef(mInfo, page.mId);
-		}
-	}
+    void AtlasAsset::OnDeserialized(const DataValue& node)
+    {
+        for (auto& page : mPages)
+        {
+            page.mOwner = this;
+            page.mTexture = GetPageTextureRef(mInfo, page.mId);
+        }
+    }
 
-	AtlasAsset& AtlasAsset::operator=(const AtlasAsset& other)
-	{
-		Asset::operator=(other);
+    AtlasAsset& AtlasAsset::operator=(const AtlasAsset& other)
+    {
+        Asset::operator=(other);
 
-		mImages = other.mImages;
-		mPages = other.mPages;
+        mImages = other.mImages;
+        mPages = other.mPages;
 
-		return *this;
-	}
+        return *this;
+    }
 
-	TextureSource AtlasAsset::GetSpriteSource(const ImageAssetRef& image)
-	{
-		for (auto& page : mPages)
-		{
-			auto fnd = page.mImagesRects.find(image->GetUID());
-			if (fnd != page.mImagesRects.end())
-			{
-				return { page.mTexture, fnd->second };
-			}
-		}
+    TextureSource AtlasAsset::GetSpriteSource(const ImageAssetRef& image)
+    {
+        for (auto& page : mPages)
+        {
+            auto fnd = page.mImagesRects.find(image->GetUID());
+            if (fnd != page.mImagesRects.end())
+            {
+                return { page.mTexture, fnd->second };
+            }
+        }
 
-		return {};
-	}
+        return {};
+    }
 
-	const Vector<ImageAssetRef>& AtlasAsset::GetImages() const
-	{
-		return mImages;
-	}
+    const Vector<ImageAssetRef>& AtlasAsset::GetImages() const
+    {
+        return mImages;
+    }
 
-	const Vector<AtlasAsset::Page>& AtlasAsset::GetPages() const
-	{
-		return mPages;
-	}
+    const Vector<AtlasAsset::Page>& AtlasAsset::GetPages() const
+    {
+        return mPages;
+    }
 
-	bool AtlasAsset::ContainsImage(const ImageAssetRef& image)
-	{
-		return mImages.Contains(image);
-	}
+    bool AtlasAsset::ContainsImage(const ImageAssetRef& image)
+    {
+        return mImages.Contains(image);
+    }
 
-	void AtlasAsset::AddImage(const ImageAssetRef& image)
-	{
-		if (!mImages.Contains(image))
-			mImages.Add(image);
-	}
+    void AtlasAsset::AddImage(const ImageAssetRef& image)
+    {
+        if (!mImages.Contains(image))
+            mImages.Add(image);
+    }
 
-	void AtlasAsset::RemoveImage(const ImageAssetRef& image)
-	{
-		mImages.Remove(image);
-	}
+    void AtlasAsset::RemoveImage(const ImageAssetRef& image)
+    {
+        mImages.Remove(image);
+    }
 
-	void AtlasAsset::RemoveAllImages()
-	{
-		mImages.Clear();
-	}
+    void AtlasAsset::RemoveAllImages()
+    {
+        mImages.Clear();
+    }
 
-	void AtlasAsset::ReloadPages()
-	{
-		Reload();
+    void AtlasAsset::ReloadPages()
+    {
+        Reload();
 
-		for (auto& img : mImages)
-			img->Reload();
-	}
+        for (auto& img : mImages)
+            img->Reload();
+    }
 
-	AtlasAsset::Meta* AtlasAsset::GetMeta() const
-	{
-		return (Meta*)mInfo.meta;
-	}
+    AtlasAsset::Meta* AtlasAsset::GetMeta() const
+    {
+        return (Meta*)mInfo.meta;
+    }
 
-	Vector<String> AtlasAsset::GetFileExtensions()
-	{
-		return { "atlas" };
-	}
+    Vector<String> AtlasAsset::GetFileExtensions()
+    {
+        return { "atlas" };
+    }
 
-	String AtlasAsset::GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx)
-	{
-		auto meta = dynamic_cast<AtlasAsset::Meta*>(atlasInfo.meta);
-		String extension = Texture::formatFileExtensions.Get(meta->GetResultPlatformMeta(::GetEnginePlatform()).format);
-		return (atlasInfo.tree ? atlasInfo.tree->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + "." + extension;
-	}
+    String AtlasAsset::GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx)
+    {
+        auto meta = dynamic_cast<AtlasAsset::Meta*>(atlasInfo.meta);
+        String extension = Texture::formatFileExtensions.Get(meta->GetResultPlatformMeta(::GetEnginePlatform()).format);
+        return (atlasInfo.tree ? atlasInfo.tree->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + "." + extension;
+    }
 
-	TextureRef AtlasAsset::GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx)
-	{
-		return TextureRef(GetPageTextureFileName(atlasInfo, pageIdx));
-	}
+    TextureRef AtlasAsset::GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx)
+    {
+        return TextureRef(GetPageTextureFileName(atlasInfo, pageIdx));
+    }
 
-	bool AtlasAsset::PlatformMeta::operator==(const PlatformMeta& other) const
-	{
-		return maxSize == other.maxSize && format == other.format;
-	}
+    bool AtlasAsset::PlatformMeta::operator==(const PlatformMeta& other) const
+    {
+        return maxSize == other.maxSize && format == other.format;
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::AtlasAsset>);

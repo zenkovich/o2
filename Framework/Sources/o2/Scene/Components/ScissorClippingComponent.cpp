@@ -4,20 +4,20 @@
 namespace o2
 {
 
-	ScissorClippingComponent::ScissorClippingComponent()
-	{}
+    ScissorClippingComponent::ScissorClippingComponent()
+    {}
 
-	ScissorClippingComponent::~ScissorClippingComponent()
-	{}
+    ScissorClippingComponent::~ScissorClippingComponent()
+    {}
 
-	void ScissorClippingComponent::Draw()
-	{
-		if (enableClipping)
-			o2Render.EnableScissorTest(mOwner->transform->GetWorldAxisAlignedRect());
+    void ScissorClippingComponent::Draw()
+    {
+        if (enableClipping)
+            o2Render.EnableScissorTest(mOwner->transform->GetWorldAxisAlignedRect());
 
-		if (enableClipping)
-			o2Render.DisableScissorTest();
-	}
+        if (enableClipping)
+            o2Render.DisableScissorTest();
+    }
 
 }
 

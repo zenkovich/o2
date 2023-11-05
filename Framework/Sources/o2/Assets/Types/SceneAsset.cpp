@@ -7,37 +7,37 @@
 
 namespace o2
 {
-	SceneAsset::SceneAsset()
-	{}
+    SceneAsset::SceneAsset()
+    {}
 
-	SceneAsset::SceneAsset(const SceneAsset& other):
-		AssetWithDefaultMeta<SceneAsset>(other)
-	{}
+    SceneAsset::SceneAsset(const SceneAsset& other):
+        AssetWithDefaultMeta<SceneAsset>(other)
+    {}
 
-	SceneAsset::~SceneAsset()
-	{}
+    SceneAsset::~SceneAsset()
+    {}
 
-	SceneAsset& SceneAsset::operator=(const SceneAsset& other)
-	{
-		Asset::operator=(other);
-		return *this;
-	}
+    SceneAsset& SceneAsset::operator=(const SceneAsset& other)
+    {
+        Asset::operator=(other);
+        return *this;
+    }
 
-	void SceneAsset::Load() const
-	{
-		o2Scene.Load(GetBuiltFullPath());
-	}
+    void SceneAsset::Load() const
+    {
+        o2Scene.Load(GetBuiltFullPath());
+    }
 
-	Vector<String> SceneAsset::GetFileExtensions()
-	{
-		return { "scn" };
-	}
+    Vector<String> SceneAsset::GetFileExtensions()
+    {
+        return { "scn" };
+    }
 
-	void SceneAsset::LoadData(const String& path)
-	{}
+    void SceneAsset::LoadData(const String& path)
+    {}
 
-	void SceneAsset::SaveData(const String& path) const
-	{}
+    void SceneAsset::SaveData(const String& path) const
+    {}
 }
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::SceneAsset>);

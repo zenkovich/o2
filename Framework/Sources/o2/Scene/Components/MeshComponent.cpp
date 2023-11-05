@@ -8,231 +8,231 @@
 
 namespace o2
 {
-	MeshComponent::MeshComponent():
-		DrawableComponent()
-	{
-		spline.onKeysChanged = THIS_FUNC(UpdateMesh);
-		spline.SetClosed(true);
-	}
+    MeshComponent::MeshComponent():
+        DrawableComponent()
+    {
+        spline.onKeysChanged = THIS_FUNC(UpdateMesh);
+        spline.SetClosed(true);
+    }
 
-	MeshComponent::MeshComponent(const MeshComponent& other):
-		DrawableComponent(other), mMesh(other.mMesh), spline(other.spline)
-	{
-		spline.onKeysChanged = THIS_FUNC(UpdateMesh);
-		spline.SetClosed(true);
-	}
+    MeshComponent::MeshComponent(const MeshComponent& other):
+        DrawableComponent(other), mMesh(other.mMesh), spline(other.spline)
+    {
+        spline.onKeysChanged = THIS_FUNC(UpdateMesh);
+        spline.SetClosed(true);
+    }
 
-	MeshComponent::~MeshComponent()
-	{}
+    MeshComponent::~MeshComponent()
+    {}
 
-	MeshComponent& MeshComponent::operator=(const MeshComponent& other)
-	{
-		DrawableComponent::operator=(other);
-		spline = other.spline;
-		mMesh = other.mMesh;
-		return *this;
-	}
+    MeshComponent& MeshComponent::operator=(const MeshComponent& other)
+    {
+        DrawableComponent::operator=(other);
+        spline = other.spline;
+        mMesh = other.mMesh;
+        return *this;
+    }
 
-	void MeshComponent::Draw()
-	{
-		if (mNeedUpdateMesh)
-			UpdateMesh();
+    void MeshComponent::Draw()
+    {
+        if (mNeedUpdateMesh)
+            UpdateMesh();
 
-		mMesh.Draw();
+        mMesh.Draw();
 
-		if (o2Input.IsKeyDown(VK_F3))
-			o2Render.DrawMeshWire(&mMesh, Color4(0, 0, 0, 100));
-	}
+        if (o2Input.IsKeyDown(VK_F3))
+            o2Render.DrawMeshWire(&mMesh, Color4(0, 0, 0, 100));
+    }
 
-	const Mesh& MeshComponent::GetMesh() const
-	{
-		return mMesh;
-	}
+    const Mesh& MeshComponent::GetMesh() const
+    {
+        return mMesh;
+    }
 
-	void MeshComponent::SetExtraPoints(const Vector<Vec2F>& points)
-	{
-		mExtraPoints = points;
-		mNeedUpdateMesh = true;
-	}
+    void MeshComponent::SetExtraPoints(const Vector<Vec2F>& points)
+    {
+        mExtraPoints = points;
+        mNeedUpdateMesh = true;
+    }
 
-	const Vector<Vec2F>& MeshComponent::GetExtraPoints() const
-	{
-		return mExtraPoints;
-	}
+    const Vector<Vec2F>& MeshComponent::GetExtraPoints() const
+    {
+        return mExtraPoints;
+    }
 
-	void MeshComponent::SetExtraPoint(int idx, const Vec2F& pos)
-	{
-		mExtraPoints[idx] = pos;
-		mNeedUpdateMesh = true; 
-	}
+    void MeshComponent::SetExtraPoint(int idx, const Vec2F& pos)
+    {
+        mExtraPoints[idx] = pos;
+        mNeedUpdateMesh = true; 
+    }
 
-	void MeshComponent::AddExtraPoint(const Vec2F& point)
-	{
-		mExtraPoints.Add(point);
-		mNeedUpdateMesh = true;
-	}
+    void MeshComponent::AddExtraPoint(const Vec2F& point)
+    {
+        mExtraPoints.Add(point);
+        mNeedUpdateMesh = true;
+    }
 
-	void MeshComponent::RemoveExtraPoint(int idx)
-	{
-		mExtraPoints.RemoveAt(idx);
-		mNeedUpdateMesh = true;
-	}
+    void MeshComponent::RemoveExtraPoint(int idx)
+    {
+        mExtraPoints.RemoveAt(idx);
+        mNeedUpdateMesh = true;
+    }
 
-	void MeshComponent::SetImage(const ImageAssetRef& image)
-	{
-		mImageAsset = image;
-		mNeedUpdateMesh = true;
-	}
+    void MeshComponent::SetImage(const ImageAssetRef& image)
+    {
+        mImageAsset = image;
+        mNeedUpdateMesh = true;
+    }
 
-	const ImageAssetRef& MeshComponent::GetImage() const
-	{
-		return mImageAsset;
-	}
+    const ImageAssetRef& MeshComponent::GetImage() const
+    {
+        return mImageAsset;
+    }
 
-	void MeshComponent::SetMappingFrame(const RectF& frame)
-	{
-		mImageMapping = frame;
-		mNeedUpdateMesh = true;
-	}
+    void MeshComponent::SetMappingFrame(const RectF& frame)
+    {
+        mImageMapping = frame;
+        mNeedUpdateMesh = true;
+    }
 
-	const RectF& MeshComponent::GetMappingFrame() const
-	{
-		return mImageMapping;
-	}
+    const RectF& MeshComponent::GetMappingFrame() const
+    {
+        return mImageMapping;
+    }
 
-	void MeshComponent::SetColor(const Color4& color)
-	{
-		mColor = color;
-		mNeedUpdateMesh = true;
-	}
+    void MeshComponent::SetColor(const Color4& color)
+    {
+        mColor = color;
+        mNeedUpdateMesh = true;
+    }
 
-	const Color4& MeshComponent::GetColor() const
-	{
-		return mColor;
-	}
+    const Color4& MeshComponent::GetColor() const
+    {
+        return mColor;
+    }
 
-	String MeshComponent::GetName()
-	{
-		return "Mesh";
-	}
+    String MeshComponent::GetName()
+    {
+        return "Mesh";
+    }
 
-	String MeshComponent::GetCategory()
-	{
-		return "Render";
-	}
+    String MeshComponent::GetCategory()
+    {
+        return "Render";
+    }
 
-	String MeshComponent::GetIcon()
-	{
-		return "ui/UI4_image_component.png";
-	}
+    String MeshComponent::GetIcon()
+    {
+        return "ui/UI4_image_component.png";
+    }
 
-	void MeshComponent::OnTransformUpdated()
-	{
-		auto newTransform = mOwner->transform->GetWorldNonSizedBasis();
-		auto delta = newTransform*mTransform.Inverted();
-		mTransform = newTransform;
+    void MeshComponent::OnTransformUpdated()
+    {
+        auto newTransform = mOwner->transform->GetWorldNonSizedBasis();
+        auto delta = newTransform*mTransform.Inverted();
+        mTransform = newTransform;
 
-		for (int i = 0; i < mMesh.vertexCount; i++)
-		{
-			auto v = mMesh.vertices[i];
-			Vec2F newPos = v*delta;
-			mMesh.vertices[i].Set(newPos, v.z, v.color, v.tu, v.tv);
-		}
-	}
+        for (int i = 0; i < mMesh.vertexCount; i++)
+        {
+            auto v = mMesh.vertices[i];
+            Vec2F newPos = v*delta;
+            mMesh.vertices[i].Set(newPos, v.z, v.color, v.tu, v.tv);
+        }
+    }
 
-	void MeshComponent::UpdateMesh()
-	{
-		mNeedUpdateMesh = false;
+    void MeshComponent::UpdateMesh()
+    {
+        mNeedUpdateMesh = false;
 
-		if (spline.GetKeys().Count() < 3)
-			return;
+        if (spline.GetKeys().Count() < 3)
+            return;
 
-		std::vector<CDT::V2d<float>> verticies;
-		std::vector<CDT::Edge> edges;
+        std::vector<CDT::V2d<float>> verticies;
+        std::vector<CDT::Edge> edges;
 
-		auto pushVertex = [&](const Vec2F& p) {
-			verticies.push_back(CDT::V2d<float>::make(p.x, p.y));
+        auto pushVertex = [&](const Vec2F& p) {
+            verticies.push_back(CDT::V2d<float>::make(p.x, p.y));
 
-			if (verticies.size() > 1)
-				edges.push_back(CDT::Edge(verticies.size() - 2, verticies.size() - 1));
-		};
+            if (verticies.size() > 1)
+                edges.push_back(CDT::Edge(verticies.size() - 2, verticies.size() - 1));
+        };
 
-		int count = spline.GetKeys().Count();
-		for (int i = 0; i < count; i++)
-		{
-			auto key = spline.GetKey(i);
-			auto prevKey = spline.GetKey((i - 1 + count)%count);
+        int count = spline.GetKeys().Count();
+        for (int i = 0; i < count; i++)
+        {
+            auto key = spline.GetKey(i);
+            auto prevKey = spline.GetKey((i - 1 + count)%count);
 
-			const float noSupportsThreshold = 0.01f;
-			if (!(key.prevSupport.Length() < noSupportsThreshold && prevKey.nextSupport.Length() < noSupportsThreshold))
-			{
-				for (int j = 1; j < key.GetApproximatedPointsCount() - 1; j++)
-					pushVertex(key.GetApproximatedPoints()[j].value);
-			}
+            const float noSupportsThreshold = 0.01f;
+            if (!(key.prevSupport.Length() < noSupportsThreshold && prevKey.nextSupport.Length() < noSupportsThreshold))
+            {
+                for (int j = 1; j < key.GetApproximatedPointsCount() - 1; j++)
+                    pushVertex(key.GetApproximatedPoints()[j].value);
+            }
 
-			pushVertex(key.value);
-		}
+            pushVertex(key.value);
+        }
 
-		edges.push_back(CDT::Edge(verticies.size() - 1, 0));
+        edges.push_back(CDT::Edge(verticies.size() - 1, 0));
 
-		for (auto& p : mExtraPoints)
-			verticies.push_back(CDT::V2d<float>::make(p.x, p.y));
+        for (auto& p : mExtraPoints)
+            verticies.push_back(CDT::V2d<float>::make(p.x, p.y));
 
-		CDT::Triangulation<float> triangulation(CDT::VertexInsertionOrder::AsProvided);
-		triangulation.insertVertices(verticies);
-		triangulation.insertEdges(edges);
-		triangulation.eraseOuterTriangles();
+        CDT::Triangulation<float> triangulation(CDT::VertexInsertionOrder::AsProvided);
+        triangulation.insertVertices(verticies);
+        triangulation.insertEdges(edges);
+        triangulation.eraseOuterTriangles();
 
-		mMesh.Resize(triangulation.vertices.size(), triangulation.triangles.size());
+        mMesh.Resize(triangulation.vertices.size(), triangulation.triangles.size());
 
-		TextureSource imageSource = mImageAsset ? mImageAsset->GetTextureSource() : TextureSource();
-		auto texture = imageSource.texture;
-		Vec2F invTexSize(1.0f, 1.0f);
-		if (texture)
-			invTexSize.Set(1.0f/texture->GetSize().x, 1.0f/texture->GetSize().y);
+        TextureSource imageSource = mImageAsset ? mImageAsset->GetTextureSource() : TextureSource();
+        auto texture = imageSource.texture;
+        Vec2F invTexSize(1.0f, 1.0f);
+        if (texture)
+            invTexSize.Set(1.0f/texture->GetSize().x, 1.0f/texture->GetSize().y);
 
-		RectF imageRect = imageSource.sourceRect;
-		RectF imageUV = RectF(imageRect.left*invTexSize.x, 1.0f - imageRect.top*invTexSize.y,
-							  imageRect.right*invTexSize.x, 1.0f - imageRect.bottom*invTexSize.y);
+        RectF imageRect = imageSource.sourceRect;
+        RectF imageUV = RectF(imageRect.left*invTexSize.x, 1.0f - imageRect.top*invTexSize.y,
+                              imageRect.right*invTexSize.x, 1.0f - imageRect.bottom*invTexSize.y);
 
-		for (int i = 0; i < triangulation.vertices.size(); i++)
-		{
-			Vec2F p(triangulation.vertices[i].x, triangulation.vertices[i].y);
-			Vec2F coef((p.x - mImageMapping.left)/mImageMapping.Width(), (p.y - mImageMapping.bottom)/mImageMapping.Height());
-			mMesh.vertices[i].Set(p*mTransform, 1.0f,
-								  mColor.ARGB(),
-								  imageUV.left + coef.x*imageUV.Width(),
-								  imageUV.bottom + coef.y*imageUV.Height());
-		}
+        for (int i = 0; i < triangulation.vertices.size(); i++)
+        {
+            Vec2F p(triangulation.vertices[i].x, triangulation.vertices[i].y);
+            Vec2F coef((p.x - mImageMapping.left)/mImageMapping.Width(), (p.y - mImageMapping.bottom)/mImageMapping.Height());
+            mMesh.vertices[i].Set(p*mTransform, 1.0f,
+                                  mColor.ARGB(),
+                                  imageUV.left + coef.x*imageUV.Width(),
+                                  imageUV.bottom + coef.y*imageUV.Height());
+        }
 
-		for (int i = 0; i < triangulation.triangles.size(); i++)
-		{
-			mMesh.indexes[i*3] = triangulation.triangles[i].vertices[0];
-			mMesh.indexes[i*3 + 1] = triangulation.triangles[i].vertices[1];
-			mMesh.indexes[i*3 + 2] = triangulation.triangles[i].vertices[2];
-		}
+        for (int i = 0; i < triangulation.triangles.size(); i++)
+        {
+            mMesh.indexes[i*3] = triangulation.triangles[i].vertices[0];
+            mMesh.indexes[i*3 + 1] = triangulation.triangles[i].vertices[1];
+            mMesh.indexes[i*3 + 2] = triangulation.triangles[i].vertices[2];
+        }
 
-		mMesh.SetTexture(texture);
-		mMesh.vertexCount = triangulation.vertices.size();
-		mMesh.polyCount = triangulation.triangles.size();
-	}
+        mMesh.SetTexture(texture);
+        mMesh.vertexCount = triangulation.vertices.size();
+        mMesh.polyCount = triangulation.triangles.size();
+    }
 
-	void MeshComponent::SetOwnerActor(Actor* actor)
-	{
-		DrawableComponent::SetOwnerActor(actor);
-	}
+    void MeshComponent::SetOwnerActor(Actor* actor)
+    {
+        DrawableComponent::SetOwnerActor(actor);
+    }
 
-	void MeshComponent::OnDeserialized(const DataValue& node)
-	{
-		DrawableComponent::OnDeserialized(node);
-		UpdateMesh();
-	}
+    void MeshComponent::OnDeserialized(const DataValue& node)
+    {
+        DrawableComponent::OnDeserialized(node);
+        UpdateMesh();
+    }
 
-	void MeshComponent::OnDeserializedDelta(const DataValue& node, const IObject& origin)
-	{
-		DrawableComponent::OnDeserializedDelta(node, origin);
-		UpdateMesh();
-	}
+    void MeshComponent::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+    {
+        DrawableComponent::OnDeserializedDelta(node, origin);
+        UpdateMesh();
+    }
 
 }
 

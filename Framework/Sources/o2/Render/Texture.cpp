@@ -10,189 +10,189 @@
 
 namespace o2
 {
-	const Map<TextureFormat, String> Texture::formatFileExtensions =
-	{
-		{ TextureFormat::R8G8B8A8, "png" },
-		{ TextureFormat::DXT5, "dds" }
-	};
+    const Map<TextureFormat, String> Texture::formatFileExtensions =
+    {
+        { TextureFormat::R8G8B8A8, "png" },
+        { TextureFormat::DXT5, "dds" }
+    };
 
-	Texture::Texture() :
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		o2Render.OnTextureCreated(this);
-	}
+    Texture::Texture() :
+        mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
+    {
+        o2Render.OnTextureCreated(this);
+    }
 
-	Texture::Texture(const Vec2I& size, TextureFormat format /*= TextureFormat::R8G8B8A8*/, Usage usage /*= Usage::Default*/) :
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(size, format, usage);
-		o2Render.OnTextureCreated(this);
-	}
+    Texture::Texture(const Vec2I& size, TextureFormat format /*= TextureFormat::R8G8B8A8*/, Usage usage /*= Usage::Default*/) :
+        mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
+    {
+        Create(size, format, usage);
+        o2Render.OnTextureCreated(this);
+    }
 
-	Texture::Texture(const String& fileName) :
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(fileName);
-		o2Render.OnTextureCreated(this);
-	}
+    Texture::Texture(const String& fileName) :
+        mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
+    {
+        Create(fileName);
+        o2Render.OnTextureCreated(this);
+    }
 
-	Texture::Texture(Bitmap* bitmap) :
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(bitmap);
-		o2Render.OnTextureCreated(this);
-	}
+    Texture::Texture(Bitmap* bitmap) :
+        mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
+    {
+        Create(bitmap);
+        o2Render.OnTextureCreated(this);
+    }
 
-	Texture::Texture(UID atlasAssetId, int page) :
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(atlasAssetId, page);
-		o2Render.OnTextureCreated(this);
-	}
+    Texture::Texture(UID atlasAssetId, int page) :
+        mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
+    {
+        Create(atlasAssetId, page);
+        o2Render.OnTextureCreated(this);
+    }
 
-	Texture::Texture(const String& atlasAssetName, int page) :
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(atlasAssetName, page);
-		o2Render.OnTextureCreated(this);
-	}
+    Texture::Texture(const String& atlasAssetName, int page) :
+        mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
+    {
+        Create(atlasAssetName, page);
+        o2Render.OnTextureCreated(this);
+    }
 
-	void Texture::Create(const String& fileName)
-	{
-		String extension = o2FileSystem.GetFileExtension(fileName);
+    void Texture::Create(const String& fileName)
+    {
+        String extension = o2FileSystem.GetFileExtension(fileName);
 
-		if (extension == "png")
-			LoadPNG(fileName);
-		else if (extension == "dds")
-			LoadDDS(fileName);
-		else
-			o2Render.mLog->Error("Failed to load texture from file " + fileName);
-	}
+        if (extension == "png")
+            LoadPNG(fileName);
+        else if (extension == "dds")
+            LoadDDS(fileName);
+        else
+            o2Render.mLog->Error("Failed to load texture from file " + fileName);
+    }
 
-	void Texture::Create(UID atlasAssetId, int page)
-	{
-		auto& info = o2Assets.GetAssetInfo(atlasAssetId);
-		if (info.IsValid())
-		{
-			mAtlasAssetId = atlasAssetId;
-			mAtlasPage = page;
-			String textureFileName = AtlasAsset::GetPageTextureFileName(info, page);
-			Create(textureFileName);
+    void Texture::Create(UID atlasAssetId, int page)
+    {
+        auto& info = o2Assets.GetAssetInfo(atlasAssetId);
+        if (info.IsValid())
+        {
+            mAtlasAssetId = atlasAssetId;
+            mAtlasPage = page;
+            String textureFileName = AtlasAsset::GetPageTextureFileName(info, page);
+            Create(textureFileName);
 
-			mReady = true;
-		}
-		else 
-			o2Render.mLog->Error("Failed to load atlas texture with id " + (String)atlasAssetId + " and page " + (String)page);
-	}
+            mReady = true;
+        }
+        else 
+            o2Render.mLog->Error("Failed to load atlas texture with id " + (String)atlasAssetId + " and page " + (String)page);
+    }
 
-	void Texture::Create(const String& atlasAssetName, int page)
-	{
-		auto& info = o2Assets.GetAssetInfo(atlasAssetName);
-		if (info.IsValid())
-		{
-			mAtlasAssetId = o2Assets.GetAssetId(atlasAssetName);
-			mAtlasPage = page;
-			String textureFileName = AtlasAsset::GetPageTextureFileName(info, page);
-			Create(textureFileName);
+    void Texture::Create(const String& atlasAssetName, int page)
+    {
+        auto& info = o2Assets.GetAssetInfo(atlasAssetName);
+        if (info.IsValid())
+        {
+            mAtlasAssetId = o2Assets.GetAssetId(atlasAssetName);
+            mAtlasPage = page;
+            String textureFileName = AtlasAsset::GetPageTextureFileName(info, page);
+            Create(textureFileName);
 
-			mReady = true;
-		}
-		else 
-			o2Render.mLog->Error("Failed to load atlas texture with " + atlasAssetName + " and page " + (String)page);
-	}
+            mReady = true;
+        }
+        else 
+            o2Render.mLog->Error("Failed to load atlas texture with " + atlasAssetName + " and page " + (String)page);
+    }
 
-	void Texture::LoadDDS(const String& fileName)
-	{
-		mFileName = fileName;
+    void Texture::LoadDDS(const String& fileName)
+    {
+        mFileName = fileName;
 
-		InFile file(fileName);
-		if (file.IsOpened())
-		{
-			UInt dataSize = file.GetDataSize();
-			auto data = mnew Byte[dataSize];
-			file.ReadData(data, dataSize);
-			file.Close();
+        InFile file(fileName);
+        if (file.IsOpened())
+        {
+            UInt dataSize = file.GetDataSize();
+            auto data = mnew Byte[dataSize];
+            file.ReadData(data, dataSize);
+            file.Close();
 
-			UInt height = *(UInt*)&(data[12]);
-			UInt width = *(UInt*)&(data[16]);
-			UInt linearSize = *(UInt*)&(data[20]);
-			UInt mipMapCount = *(UInt*)&(data[28]);
+            UInt height = *(UInt*)&(data[12]);
+            UInt width = *(UInt*)&(data[16]);
+            UInt linearSize = *(UInt*)&(data[20]);
+            UInt mipMapCount = *(UInt*)&(data[28]);
 
-			Create(Vec2I(width, height), &data[128], TextureFormat::DXT5);
+            Create(Vec2I(width, height), &data[128], TextureFormat::DXT5);
 
-			delete[] data;
-		}
-	}
+            delete[] data;
+        }
+    }
 
-	void Texture::LoadPNG(const String& fileName)
-	{
-		Bitmap image;
-		if (image.Load(fileName, Bitmap::ImageType::Auto))
-		{
-			mFileName = fileName;
-			Create(&image);
-		}
-	}
+    void Texture::LoadPNG(const String& fileName)
+    {
+        Bitmap image;
+        if (image.Load(fileName, Bitmap::ImageType::Auto))
+        {
+            mFileName = fileName;
+            Create(&image);
+        }
+    }
 
-	void Texture::Reload()
-	{
-		if (!mFileName.IsEmpty())
-			Create(mFileName);
-	}
+    void Texture::Reload()
+    {
+        if (!mFileName.IsEmpty())
+            Create(mFileName);
+    }
 
-	Vec2I Texture::GetSize() const
-	{
-		return mSize;
-	}
+    Vec2I Texture::GetSize() const
+    {
+        return mSize;
+    }
 
-	TextureFormat Texture::GetFormat() const
-	{
-		return mFormat;
-	}
+    TextureFormat Texture::GetFormat() const
+    {
+        return mFormat;
+    }
 
-	Texture::Usage Texture::GetUsage() const
-	{
-		return mUsage;
-	}
+    Texture::Usage Texture::GetUsage() const
+    {
+        return mUsage;
+    }
 
-	String Texture::GetFileName() const
-	{
-		return mFileName;
-	}
+    String Texture::GetFileName() const
+    {
+        return mFileName;
+    }
 
-	bool Texture::IsReady() const
-	{
-		return mReady;
-	}
+    bool Texture::IsReady() const
+    {
+        return mReady;
+    }
 
-	bool Texture::IsAtlasPage() const
-	{
-		return mAtlasAssetId != 0;
-	}
+    bool Texture::IsAtlasPage() const
+    {
+        return mAtlasAssetId != 0;
+    }
 
-	UID Texture::GetAtlasAssetId() const
-	{
-		return mAtlasAssetId;
-	}
+    UID Texture::GetAtlasAssetId() const
+    {
+        return mAtlasAssetId;
+    }
 
-	int Texture::GetAtlasPage() const
-	{
-		return mAtlasPage;
-	}
+    int Texture::GetAtlasPage() const
+    {
+        return mAtlasPage;
+    }
 }
 // --- META ---
 
 ENUM_META(o2::Texture::Usage)
 {
-	ENUM_ENTRY(Default);
-	ENUM_ENTRY(RenderTarget);
+    ENUM_ENTRY(Default);
+    ENUM_ENTRY(RenderTarget);
 }
 END_ENUM_META;
 
 ENUM_META(o2::Texture::Filter)
 {
-	ENUM_ENTRY(Linear);
-	ENUM_ENTRY(Nearest);
+    ENUM_ENTRY(Linear);
+    ENUM_ENTRY(Nearest);
 }
 END_ENUM_META;
 // --- END META ---

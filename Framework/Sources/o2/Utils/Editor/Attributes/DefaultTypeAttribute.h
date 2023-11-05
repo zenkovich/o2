@@ -5,19 +5,19 @@
 
 namespace o2
 {
-	class DefaultTypeAttribute : public IAttribute
-	{
-		ATTRIBUTE_COMMENT_DEFINITION("DEFAULT_TYPE");
-		ATTRIBUTE_SHORT_DEFINITION("DEFAULT_TYPE_ATTRIBUTE");
+    class DefaultTypeAttribute : public IAttribute
+    {
+        ATTRIBUTE_COMMENT_DEFINITION("DEFAULT_TYPE");
+        ATTRIBUTE_SHORT_DEFINITION("DEFAULT_TYPE_ATTRIBUTE");
 
-	public:
-		const Type* defaultType = nullptr;
+    public:
+        const Type* defaultType = nullptr;
 
-	public:
-		DefaultTypeAttribute() { }
-		DefaultTypeAttribute(const Type* defaultType) :defaultType(defaultType) { }
-	};
+    public:
+        DefaultTypeAttribute() { }
+        DefaultTypeAttribute(const Type* defaultType) :defaultType(defaultType) { }
+    };
 
 #define DEFAULT_TYPE_ATTRIBUTE(type) \
-	template AddAttribute<o2::DefaultTypeAttribute>(&TypeOf(type))
+    template AddAttribute<o2::DefaultTypeAttribute>(&TypeOf(type))
 }

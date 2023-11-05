@@ -3,19 +3,19 @@
 
 namespace o2
 {
-	String ISerializable::SerializeToString() const
-	{
-		DataDocument doc;
-		Serialize(doc);
-		return doc.SaveAsString();
-	}
+    String ISerializable::SerializeToString() const
+    {
+        DataDocument doc;
+        Serialize(doc);
+        return doc.SaveAsString();
+    }
 
-	void ISerializable::DeserializeFromString(const String& str)
-	{
-		DataDocument doc;
-		doc.LoadFromData(str);
-		Deserialize(doc);
-	}
+    void ISerializable::DeserializeFromString(const String& str)
+    {
+        DataDocument doc;
+        doc.LoadFromData(str);
+        Deserialize(doc);
+    }
 }
 // --- META ---
 

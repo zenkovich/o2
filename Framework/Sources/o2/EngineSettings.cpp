@@ -4,13 +4,13 @@
 o2::Platform GetEnginePlatform()
 {
 #ifdef PLATFORM_WINDOWS
-	return o2::Platform::Windows;
+    return o2::Platform::Windows;
 #elif defined PLATFORM_ANDROID
-	return o2::Platform::Android;
+    return o2::Platform::Android;
 #elif defined PLATFORM_MAC
-	return o2::Platform::Mac;
+    return o2::Platform::Mac;
 #elif defined PLATFORM_IOS
-	return o2::Platform::iOS;
+    return o2::Platform::iOS;
 #elif defined PLATFORM_LINUX
     return o2::Platform::Linux;
 #endif
@@ -18,165 +18,165 @@ o2::Platform GetEnginePlatform()
 
 o2::DeviceType GetDeviceType()
 {
-	auto platform = GetEnginePlatform();
-	if (platform == o2::Platform::Windows || platform == o2::Platform::Mac || platform == o2::Platform::Linux)
-		return o2::DeviceType::PC;
-	
-	return o2::DeviceType::Phone;
+    auto platform = GetEnginePlatform();
+    if (platform == o2::Platform::Windows || platform == o2::Platform::Mac || platform == o2::Platform::Linux)
+        return o2::DeviceType::PC;
+    
+    return o2::DeviceType::Phone;
 }
 
 const char* GetProjectPath()
 {
-	if constexpr (IS_EDITOR)
-		return "../..";
-	else
-		return "AndroidAssets/";
+    if constexpr (IS_EDITOR)
+        return "../..";
+    else
+        return "AndroidAssets/";
 }
 
 const char* GetProjectSettingPath()
 {
 #if defined PLATFORM_MAC || defined PLATFORM_WINDOWS || defined PLATFORM_LINUX
-	return "../../ProjectSettings.json";
+    return "../../ProjectSettings.json";
 #else
-	return "ProjectSettings.json";
+    return "ProjectSettings.json";
 #endif
 }
 
 bool IsStoppingOnLogErrors()
 {
-	return false;
+    return false;
 }
 
 bool IsUIDebugEnabled()
 {
-	return false;
+    return false;
 }
 
 bool IsDevMode()
 {
-	return true;
+    return true;
 }
 
 bool IsReleaseBuild()
 {
 #ifdef DEBUG
-	return false;
+    return false;
 #else
-	return true;
+    return true;
 #endif
 }
 
 bool IsRenderDrawCallsDebugEnabled()
 {
-	return false;
+    return false;
 }
 
 const char* GetProjectRootPath()
 {
 #if defined PLATFORM_MAC || defined PLATFORM_WINDOWS || defined PLATFORM_LINUX
-	return "../../";
+    return "../../";
 #else
-	return "";
+    return "";
 #endif
 }
 
 const char* GetAssetsRootPath()
 {
-	return "Assets/";
+    return "Assets/";
 }
 
 const char* GetAssetsPath()
 {
-	static char path[256] = "";
-	static bool initialized = false;
-	if (!initialized)
-	{
-		initialized = true;
-		strcat(path, GetProjectRootPath());
-		strcat(path, GetAssetsRootPath());
-	}
+    static char path[256] = "";
+    static bool initialized = false;
+    if (!initialized)
+    {
+        initialized = true;
+        strcat(path, GetProjectRootPath());
+        strcat(path, GetAssetsRootPath());
+    }
 
-	return path;
+    return path;
 }
 
 const char* GetBuiltAssetsPath()
 {
 #if defined PLATFORM_WINDOWS
-	return "../../BuiltAssets/Windows/Data/";
+    return "../../BuiltAssets/Windows/Data/";
 #elif defined PLATFORM_ANDROID
-	return "AndroidAssets/BuiltAssets/";
+    return "AndroidAssets/BuiltAssets/";
 #elif defined PLATFORM_MAC
     return "BuiltAssets/Mac/Data/";
 #elif defined PLATFORM_LINUX
     return "BuiltAssets/Linux/Data/";
 #elif defined PLATFORM_IOS
-	return "Data/";
+    return "Data/";
 #endif
 }
 
 const char* GetBasicAtlasPath()
 {
-	return "BasicAtlas.atlas";
+    return "BasicAtlas.atlas";
 }
 
 const char* GetBuiltAssetsTreePath()
 {
 #if defined PLATFORM_WINDOWS
-	return "../../BuiltAssets/Windows/Data.json";
+    return "../../BuiltAssets/Windows/Data.json";
 #elif defined PLATFORM_ANDROID
-	return "AndroidAssets/AssetsTree.json";
+    return "AndroidAssets/AssetsTree.json";
 #elif defined PLATFORM_MAC
     return "BuiltAssets/Mac/Data.json";
 #elif defined PLATFORM_LINUX
     return "BuiltAssets/Linux/Data.json";
 #elif defined PLATFORM_IOS
-	return "Data.json";
+    return "Data.json";
 #endif
 }
 
 const char* GetEditorAssetsPath()
 {
 #if defined PLATFORM_WINDOWS || defined PLATFORM_MAC || defined PLATFORM_LINUX
-	return "../../o2/Editor/Assets/";
+    return "../../o2/Editor/Assets/";
 #else
-	return "";
+    return "";
 #endif
 }
 
 const char* GetEditorBuiltAssetsPath()
 {
 #if defined PLATFORM_WINDOWS
-	return "../../BuiltAssets/Windows/EditorData/";
+    return "../../BuiltAssets/Windows/EditorData/";
 #elif defined PLATFORM_MAC
     return "BuiltAssets/Mac/EditorData/";
 #elif defined PLATFORM_LINUX
     return "BuiltAssets/Linux/EditorData/";
 #endif
-	return "";
+    return "";
 }
 
 const char* GetEditorBuiltAssetsTreePath()
 {
 #if defined PLATFORM_WINDOWS
-	return "../../BuiltAssets/Windows/EditorData.json";
+    return "../../BuiltAssets/Windows/EditorData.json";
 #elif defined PLATFORM_MAC
     return "BuiltAssets/Mac/EditorData.json";
 #elif defined PLATFORM_LINUX
     return "BuiltAssets/Linux/EditorData.json";
 #endif
-	return "";
+    return "";
 }
 
 const char* GetBuiltitAssetsPath()
 {
 #if defined PLATFORM_WINDOWS
-	return "../../BuiltAssets/Windows/FrameworkData/";
+    return "../../BuiltAssets/Windows/FrameworkData/";
 #elif defined PLATFORM_MAC
-	return "BuiltAssets/Max/FrameworkData/";
+    return "BuiltAssets/Max/FrameworkData/";
 #elif defined PLATFORM_LINUX
-	return "BuiltAssets/Linux/FrameworkData/";
+    return "BuiltAssets/Linux/FrameworkData/";
 #else
-	return "FrameworkAssets/";
+    return "FrameworkAssets/";
 #endif
 }
 
@@ -184,7 +184,7 @@ const char* GetBuiltitAssetsPath()
 
 const char* GetAndroidAssetsPath()
 {
-	return "AndroidAssets/";
+    return "AndroidAssets/";
 }
 
 #endif

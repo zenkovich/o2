@@ -6,28 +6,28 @@
 
 namespace o2
 {
-	// -------------------------------
-	// Basic drawable object interface
-	// -------------------------------
-	class IDrawable
-	{
-	public:
-		Function<void()> onDraw; // Draw event
+    // -------------------------------
+    // Basic drawable object interface
+    // -------------------------------
+    class IDrawable
+    {
+    public:
+        Function<void()> onDraw; // Draw event
 
-	public:
-		virtual ~IDrawable() {}
+    public:
+        virtual ~IDrawable() {}
 
-		// Draws drawable
-		virtual void Draw();
+        // Draws drawable
+        virtual void Draw();
 
-		// Returns true if point is under drawable
-		virtual bool IsUnderPoint(const Vec2F& point);
+        // Returns true if point is under drawable
+        virtual bool IsUnderPoint(const Vec2F& point);
 
-	protected:
-		RectF mDrawingScissorRect; // Scissor rectangle at last drawing
+    protected:
+        RectF mDrawingScissorRect; // Scissor rectangle at last drawing
 
-	protected:
-		// Called when drawable was drawn. Storing render scissor rect, calling onDraw callback
-		virtual void OnDrawn();
-	};
+    protected:
+        // Called when drawable was drawn. Storing render scissor rect, calling onDraw callback
+        virtual void OnDrawn();
+    };
 }

@@ -8,186 +8,186 @@
 
 namespace o2
 {
-	Button::Button():
-		Widget(), CursorAreaEventsListener()
-	{}
+    Button::Button():
+        Widget(), CursorAreaEventsListener()
+    {}
 
-	Button::Button(const Button& other) :
-		Widget(other), caption(this), icon(this)
-	{
-		mCaptionText = GetLayerDrawable<Text>("caption");
-		mIconSprite = GetLayerDrawable<Sprite>("icon");
+    Button::Button(const Button& other) :
+        Widget(other), caption(this), icon(this)
+    {
+        mCaptionText = GetLayerDrawable<Text>("caption");
+        mIconSprite = GetLayerDrawable<Sprite>("icon");
 
-		RetargetStatesAnimations();
+        RetargetStatesAnimations();
 
-		if (mInteractable)
-			OnBecomeInteractable();
-		else
-			OnBecomeNotInteractable();
-	}
+        if (mInteractable)
+            OnBecomeInteractable();
+        else
+            OnBecomeNotInteractable();
+    }
 
-	Button& Button::operator=(const Button& other)
-	{
-		Widget::operator=(other);
+    Button& Button::operator=(const Button& other)
+    {
+        Widget::operator=(other);
 
-		mCaptionText = GetLayerDrawable<Text>("caption");
-		mIconSprite = GetLayerDrawable<Sprite>("icon");
-		RetargetStatesAnimations();
+        mCaptionText = GetLayerDrawable<Text>("caption");
+        mIconSprite = GetLayerDrawable<Sprite>("icon");
+        RetargetStatesAnimations();
 
-		return *this;
-	}
+        return *this;
+    }
 
-	void Button::Draw()
-	{
-		Widget::Draw();
-		CursorAreaEventsListener::OnDrawn();
-	}
+    void Button::Draw()
+    {
+        Widget::Draw();
+        CursorAreaEventsListener::OnDrawn();
+    }
 
-	void Button::SetCaption(const WString& text)
-	{
-		if (mCaptionText)
-			mCaptionText->SetText(text);
-	}
+    void Button::SetCaption(const WString& text)
+    {
+        if (mCaptionText)
+            mCaptionText->SetText(text);
+    }
 
-	WString Button::GetCaption() const
-	{
-		if (mCaptionText)
-			return mCaptionText->GetText();
+    WString Button::GetCaption() const
+    {
+        if (mCaptionText)
+            return mCaptionText->GetText();
 
-		return WString();
-	}
+        return WString();
+    }
 
-	void Button::SetIcon(Sprite* sprite)
-	{
-		if (mIconSprite)
-			mIconSprite = sprite;
-	}
+    void Button::SetIcon(Sprite* sprite)
+    {
+        if (mIconSprite)
+            mIconSprite = sprite;
+    }
 
-	Sprite* Button::GetIcon() const
-	{
-		if (mIconSprite)
-			return mIconSprite;
+    Sprite* Button::GetIcon() const
+    {
+        if (mIconSprite)
+            return mIconSprite;
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 
-	bool Button::IsFocusable() const
-	{
-		return true;
-	}
+    bool Button::IsFocusable() const
+    {
+        return true;
+    }
 
-	bool Button::IsUnderPoint(const Vec2F& point)
-	{
-		if (isPointInside.IsEmpty())
-			return Widget::IsUnderPoint(point);
-		
-		return mDrawingScissorRect.IsInside(point) && isPointInside(point);
-	}
+    bool Button::IsUnderPoint(const Vec2F& point)
+    {
+        if (isPointInside.IsEmpty())
+            return Widget::IsUnderPoint(point);
+        
+        return mDrawingScissorRect.IsInside(point) && isPointInside(point);
+    }
 
-	String Button::GetCreateMenuGroup()
-	{
-		return "Basic";
-	}
+    String Button::GetCreateMenuGroup()
+    {
+        return "Basic";
+    }
 
-	void Button::OnCursorPressed(const Input::Cursor& cursor)
-	{
-		auto pressedState = state["pressed"];
-		if (pressedState)
-			*pressedState = true;
+    void Button::OnCursorPressed(const Input::Cursor& cursor)
+    {
+        auto pressedState = state["pressed"];
+        if (pressedState)
+            *pressedState = true;
 
-		o2UI.FocusWidget(this);
-	}
+        o2UI.FocusWidget(this);
+    }
 
-	void Button::OnCursorReleased(const Input::Cursor& cursor)
-	{
-		auto pressedState = state["pressed"];
-		if (pressedState)
-			*pressedState = false;
+    void Button::OnCursorReleased(const Input::Cursor& cursor)
+    {
+        auto pressedState = state["pressed"];
+        if (pressedState)
+            *pressedState = false;
 
-		if (IsUnderPoint(cursor.position))
-			onClick();
-	}
+        if (IsUnderPoint(cursor.position))
+            onClick();
+    }
 
-	void Button::OnCursorPressBreak(const Input::Cursor& cursor)
-	{
-		auto pressedState = state["pressed"];
-		if (pressedState)
-			*pressedState = false;
-	}
+    void Button::OnCursorPressBreak(const Input::Cursor& cursor)
+    {
+        auto pressedState = state["pressed"];
+        if (pressedState)
+            *pressedState = false;
+    }
 
-	void Button::OnCursorEnter(const Input::Cursor& cursor)
-	{
-		auto selectState = state["hover"];
-		if (selectState)
-			*selectState = true;
-	}
+    void Button::OnCursorEnter(const Input::Cursor& cursor)
+    {
+        auto selectState = state["hover"];
+        if (selectState)
+            *selectState = true;
+    }
 
-	void Button::OnCursorExit(const Input::Cursor& cursor)
-	{
-		auto selectState = state["hover"];
-		if (selectState)
-			*selectState = false;
-	}
+    void Button::OnCursorExit(const Input::Cursor& cursor)
+    {
+        auto selectState = state["hover"];
+        if (selectState)
+            *selectState = false;
+    }
 
-	void Button::OnKeyPressed(const Input::Key& key)
-	{
-		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
-		{
-			auto pressedState = state["pressed"];
-			if (pressedState)
-				*pressedState = true;
-		}
+    void Button::OnKeyPressed(const Input::Key& key)
+    {
+        if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
+        {
+            auto pressedState = state["pressed"];
+            if (pressedState)
+                *pressedState = true;
+        }
 
-		if (shortcut.IsPressed())
-			onClick();
-	}
+        if (shortcut.IsPressed())
+            onClick();
+    }
 
-	void Button::OnKeyReleased(const Input::Key& key)
-	{
-		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
-		{
-			auto pressedState = state["pressed"];
-			if (pressedState)
-				*pressedState = false;
+    void Button::OnKeyReleased(const Input::Key& key)
+    {
+        if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
+        {
+            auto pressedState = state["pressed"];
+            if (pressedState)
+                *pressedState = false;
 
-			onClick();
-		}
-	}
+            onClick();
+        }
+    }
 
-	void Button::OnLayerAdded(WidgetLayer* layer)
-	{
-		if (layer->name == "caption" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
-			mCaptionText = (Text*)layer->GetDrawable();
+    void Button::OnLayerAdded(WidgetLayer* layer)
+    {
+        if (layer->name == "caption" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
+            mCaptionText = (Text*)layer->GetDrawable();
 
-		if (layer->name == "icon" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Sprite))
-			mIconSprite = (Sprite*)layer->GetDrawable();
-	}
+        if (layer->name == "icon" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Sprite))
+            mIconSprite = (Sprite*)layer->GetDrawable();
+    }
 
-	void Button::OnEnabled()
-	{
-		Widget::OnEnabled();
+    void Button::OnEnabled()
+    {
+        Widget::OnEnabled();
 
-		interactable = true;
-	}
+        interactable = true;
+    }
 
-	void Button::OnDisabled()
-	{
-		Widget::OnDisabled();
+    void Button::OnDisabled()
+    {
+        Widget::OnDisabled();
 
-		interactable = false;
-	}
+        interactable = false;
+    }
 
-	void Button::OnBecomeInteractable()
-	{
-		if (auto inactiveState = state["inactive"])
-			*inactiveState = false;
-	}
+    void Button::OnBecomeInteractable()
+    {
+        if (auto inactiveState = state["inactive"])
+            *inactiveState = false;
+    }
 
-	void Button::OnBecomeNotInteractable()
-	{
-		if (auto inactiveState = state["inactive"])
-			*inactiveState = true;
-	}
+    void Button::OnBecomeNotInteractable()
+    {
+        if (auto inactiveState = state["inactive"])
+            *inactiveState = true;
+    }
 
 }
 // --- META ---

@@ -3,7 +3,7 @@
 
 namespace o2
 {
-	enum class ActorCreateMode { InScene, NotInScene, Default };
+    enum class ActorCreateMode { InScene, NotInScene, Default };
 }
 // --- META ---
 

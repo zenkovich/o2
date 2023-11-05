@@ -6,12 +6,12 @@
 
 namespace o2
 {
-// 	namespace XmlDataFormat
-// 	{
-// 		bool LoadDataDoc(const WString& data, DataValue& node);
-// 		void LoadDataValue(const pugi::xml_node& xmlNode, DataValue& parentValue);
+//     namespace XmlDataFormat
+//     {
+//         bool LoadDataDoc(const WString& data, DataValue& node);
+//         void LoadDataValue(const pugi::xml_node& xmlNode, DataValue& parentValue);
 // 
-// 		String SaveDataDoc(const DataValue& node);
-// 		void SaveDataValue(pugi::xml_node& xmlNode, const DataValue& DataValue);
-// 	}
+//         String SaveDataDoc(const DataValue& node);
+//         void SaveDataValue(pugi::xml_node& xmlNode, const DataValue& DataValue);
+//     }
 }

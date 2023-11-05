@@ -9,48 +9,48 @@
 
 namespace o2
 {
-	class Task;
-	class AnimationClip;
+    class Task;
+    class AnimationClip;
 
-	// -----------------------
-	// Tasks manager singleton
-	// -----------------------
-	class TaskManager: public Singleton<TaskManager>
-	{
-	public:
-		// Stops task with specified id
-		void StopTask(int id);
+    // -----------------------
+    // Tasks manager singleton
+    // -----------------------
+    class TaskManager: public Singleton<TaskManager>
+    {
+    public:
+        // Stops task with specified id
+        void StopTask(int id);
 
-		// Stops all tasks
-		void StopAllTasks();
+        // Stops all tasks
+        void StopAllTasks();
 
-		// Returns task
-		Task* FindTask(int id);
+        // Returns task
+        Task* FindTask(int id);
 
-		// Runs new functional task
-		void Run(const Function<void(float)>& update, const Function<bool()> isDone);
+        // Runs new functional task
+        void Run(const Function<void(float)>& update, const Function<bool()> isDone);
 
-		// Runs timed task
-		void Run(const Function<void(float)>& update, float time);
+        // Runs timed task
+        void Run(const Function<void(float)>& update, float time);
 
-		// Called function after delay
-		void Invoke(const Function<void()> func, float delay = 0.0f);
+        // Called function after delay
+        void Invoke(const Function<void()> func, float delay = 0.0f);
 
-		// Updates tasks and checking for done
-		void Update(float dt);
+        // Updates tasks and checking for done
+        void Update(float dt);
 
-	protected:
-		Vector<Task*> mTasks;      // All tasks array
-		int           mLastTaskId; // Last given task id
-		
-	protected:
-		// Default constructor
-		TaskManager();
+    protected:
+        Vector<Task*> mTasks;      // All tasks array
+        int           mLastTaskId; // Last given task id
+        
+    protected:
+        // Default constructor
+        TaskManager();
 
-		// Destructor. Destroys all tasks
-		~TaskManager();
+        // Destructor. Destroys all tasks
+        ~TaskManager();
 
-		friend class Task;
-		friend class Application;
-	};
+        friend class Task;
+        friend class Application;
+    };
 }

@@ -35,347 +35,347 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(UIManager);
+    DECLARE_SINGLETON(UIManager);
 
-	void UIManager::RegisterFocusableWidget(Widget* widget)
-	{
-		if (!IsSingletonInitialzed())
-			return;
+    void UIManager::RegisterFocusableWidget(Widget* widget)
+    {
+        if (!IsSingletonInitialzed())
+            return;
 
-		Instance().mFocusableWidgets.Add(widget);
-	}
+        Instance().mFocusableWidgets.Add(widget);
+    }
 
-	void UIManager::UnregisterFocusableWidget(Widget* widget)
-	{
-		if (!IsSingletonInitialzed())
-			return;
+    void UIManager::UnregisterFocusableWidget(Widget* widget)
+    {
+        if (!IsSingletonInitialzed())
+            return;
 
-		Instance().mFocusableWidgets.Remove(widget);
-	}
+        Instance().mFocusableWidgets.Remove(widget);
+    }
 
-	UIManager::UIManager()
-	{
-		mLog = mnew LogStream("UI");
-		o2Debug.GetLog()->BindStream(mLog);
-	}
+    UIManager::UIManager()
+    {
+        mLog = mnew LogStream("UI");
+        o2Debug.GetLog()->BindStream(mLog);
+    }
 
-	UIManager::~UIManager()
-	{
-		ClearStyle();
-	}
+    UIManager::~UIManager()
+    {
+        ClearStyle();
+    }
 
-	void UIManager::FocusWidget(Widget* widget)
-	{
-		if (mFocusedWidget == widget || (widget && !widget->IsFocusable()))
-			return;
+    void UIManager::FocusWidget(Widget* widget)
+    {
+        if (mFocusedWidget == widget || (widget && !widget->IsFocusable()))
+            return;
 
-		if (mFocusedWidget)
-		{
-			auto lastFocusedWidget = mFocusedWidget;
-			mFocusedWidget = nullptr;
+        if (mFocusedWidget)
+        {
+            auto lastFocusedWidget = mFocusedWidget;
+            mFocusedWidget = nullptr;
 
-			lastFocusedWidget->mIsFocused = false;
+            lastFocusedWidget->mIsFocused = false;
 
-			auto focusedIdx = mLastFocusedWidgets.IndexOf(lastFocusedWidget);
-			if (focusedIdx >= 0)
-				mLastFocusedWidgets.RemoveAt(focusedIdx);
-			else
-				mLastUnfocusedWidgets.Add(lastFocusedWidget);
+            auto focusedIdx = mLastFocusedWidgets.IndexOf(lastFocusedWidget);
+            if (focusedIdx >= 0)
+                mLastFocusedWidgets.RemoveAt(focusedIdx);
+            else
+                mLastUnfocusedWidgets.Add(lastFocusedWidget);
 
-			if (lastFocusedWidget->mFocusedState)
-				lastFocusedWidget->mFocusedState->SetState(false);
-		}
+            if (lastFocusedWidget->mFocusedState)
+                lastFocusedWidget->mFocusedState->SetState(false);
+        }
 
-		mFocusedWidget = widget;
+        mFocusedWidget = widget;
 
-		if (mFocusedWidget)
-		{
-			mFocusedWidget->mIsFocused = true;
+        if (mFocusedWidget)
+        {
+            mFocusedWidget->mIsFocused = true;
 
-			auto unfocusedIdx = mLastUnfocusedWidgets.IndexOf(mFocusedWidget);
-			if (unfocusedIdx >= 0)
-				mLastUnfocusedWidgets.RemoveAt(unfocusedIdx);
-			else
-				mLastFocusedWidgets.Add(mFocusedWidget);
+            auto unfocusedIdx = mLastUnfocusedWidgets.IndexOf(mFocusedWidget);
+            if (unfocusedIdx >= 0)
+                mLastUnfocusedWidgets.RemoveAt(unfocusedIdx);
+            else
+                mLastFocusedWidgets.Add(mFocusedWidget);
 
-			if (mFocusedWidget->mParentWidget)
-				mFocusedWidget->mParentWidget->OnChildFocused(mFocusedWidget.Get());
+            if (mFocusedWidget->mParentWidget)
+                mFocusedWidget->mParentWidget->OnChildFocused(mFocusedWidget.Get());
 
-			if (mFocusedWidget->mFocusedState)
-				mFocusedWidget->mFocusedState->SetState(true);
-		}
-	}
+            if (mFocusedWidget->mFocusedState)
+                mFocusedWidget->mFocusedState->SetState(true);
+        }
+    }
 
-	Widget* UIManager::GetFocusedWidget() const
-	{
-		return const_cast<Widget*>(mFocusedWidget.Get());
-	}
+    Widget* UIManager::GetFocusedWidget() const
+    {
+        return const_cast<Widget*>(mFocusedWidget.Get());
+    }
 
-	void UIManager::FocusNextWidget()
-	{
-		bool fnd = mFocusedWidget == nullptr;
-		Widget* nextFocusingWidget = nullptr;
-		for (auto widget : mFocusableWidgets)
-		{
-			if (!fnd)
-			{
-				if (widget == mFocusedWidget)
-					fnd = true;
-			}
-			else
-			{
-				if (widget->IsFocusable())
-				{
-					nextFocusingWidget = widget.Get();
-					break;
-				}
-			}
-		}
+    void UIManager::FocusNextWidget()
+    {
+        bool fnd = mFocusedWidget == nullptr;
+        Widget* nextFocusingWidget = nullptr;
+        for (auto widget : mFocusableWidgets)
+        {
+            if (!fnd)
+            {
+                if (widget == mFocusedWidget)
+                    fnd = true;
+            }
+            else
+            {
+                if (widget->IsFocusable())
+                {
+                    nextFocusingWidget = widget.Get();
+                    break;
+                }
+            }
+        }
 
-		FocusWidget(nextFocusingWidget);
-	}
+        FocusWidget(nextFocusingWidget);
+    }
 
-	void UIManager::LoadStyle(const String& stylesPath)
-	{
-		ClearStyle();
+    void UIManager::LoadStyle(const String& stylesPath)
+    {
+        ClearStyle();
 
-		FolderAssetRef folder(stylesPath);
-		for (auto& subAsset : folder->GetChildrenAssets())
-		{
-			if (auto actorAsset = subAsset.Cast<ActorAsset>())
-				mStyleSamples.Add(actorAsset);
-		}
-	}
+        FolderAssetRef folder(stylesPath);
+        for (auto& subAsset : folder->GetChildrenAssets())
+        {
+            if (auto actorAsset = subAsset.Cast<ActorAsset>())
+                mStyleSamples.Add(actorAsset);
+        }
+    }
 
-	void UIManager::SaveStyle(const String& stylesPath)
-	{
-		for (auto& asset : mStyleSamples)
-		{
+    void UIManager::SaveStyle(const String& stylesPath)
+    {
+        for (auto& asset : mStyleSamples)
+        {
 #if IS_EDITOR
-			asset->SetEditorAsset(true);
+            asset->SetEditorAsset(true);
 #endif
 
-			auto path = stylesPath + "/" + GetSmartName(asset->GetActor()->GetType().GetName()) + " " + 
-				asset->GetActor()->GetName() + ".proto";
+            auto path = stylesPath + "/" + GetSmartName(asset->GetActor()->GetType().GetName()) + " " + 
+                asset->GetActor()->GetName() + ".proto";
 
-			asset->Save(path);
-		}
-	}
+            asset->Save(path);
+        }
+    }
 
-	void UIManager::ClearStyle()
-	{
-		mStyleSamples.Clear();
-	}
+    void UIManager::ClearStyle()
+    {
+        mStyleSamples.Clear();
+    }
 
-	void UIManager::AddWidgetStyle(Widget* widget, const String& style)
-	{
-		widget->SetName(style);
-		mStyleSamples.Add(mnew ActorAsset(widget));
-	}
+    void UIManager::AddWidgetStyle(Widget* widget, const String& style)
+    {
+        widget->SetName(style);
+        mStyleSamples.Add(mnew ActorAsset(widget));
+    }
 
-	Widget* UIManager::CreateWidget(const Type& type, const String& style /*= "standard"*/)
-	{
-		Widget* sample = GetWidgetStyle(type, style);
-		if (!sample)
-			sample = GetWidgetStyle(type, "standard");
+    Widget* UIManager::CreateWidget(const Type& type, const String& style /*= "standard"*/)
+    {
+        Widget* sample = GetWidgetStyle(type, style);
+        if (!sample)
+            sample = GetWidgetStyle(type, "standard");
 
-		Widget* res = nullptr;
+        Widget* res = nullptr;
 
-		if (sample)
-			res = sample->CloneAs<Widget>();
-		else
-			res = (Widget*)type.CreateSample();
+        if (sample)
+            res = sample->CloneAs<Widget>();
+        else
+            res = (Widget*)type.CreateSample();
 
-		if (type != TypeOf(ContextMenu))
-			res->SetEnabledForcible(true);
+        if (type != TypeOf(ContextMenu))
+            res->SetEnabledForcible(true);
 
-		return res;
-	}
+        return res;
+    }
 
-	Widget* UIManager::GetWidgetStyle(const Type& type, const String& style)
-	{
-		for (auto styleWidget : mStyleSamples)
-		{
-			if (type == styleWidget->GetActor()->GetType())
-			{
-				if (style == styleWidget->GetActor()->GetName())
-					return dynamic_cast<Widget*>(styleWidget->GetActor());
-			}
-		}
+    Widget* UIManager::GetWidgetStyle(const Type& type, const String& style)
+    {
+        for (auto styleWidget : mStyleSamples)
+        {
+            if (type == styleWidget->GetActor()->GetType())
+            {
+                if (style == styleWidget->GetActor()->GetName())
+                    return dynamic_cast<Widget*>(styleWidget->GetActor());
+            }
+        }
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 
-	Button* UIManager::CreateButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/,
-									  const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<Button>(style);
-		res->caption = caption;
-		res->name = caption + " button";
-		res->onClick = onClick;
-		return res;
-	}
+    Button* UIManager::CreateButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/,
+                                      const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<Button>(style);
+        res->caption = caption;
+        res->name = caption + " button";
+        res->onClick = onClick;
+        return res;
+    }
 
-	Window* UIManager::CreateWindow(const WString& caption, const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<Window>(style);
-		res->caption = caption;
-		res->name = caption + " window";
-		return res;
-	}
+    Window* UIManager::CreateWindow(const WString& caption, const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<Window>(style);
+        res->caption = caption;
+        res->name = caption + " window";
+        return res;
+    }
 
-	Label* UIManager::CreateLabel(const WString& text, const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<Label>(style);
-		res->text = text;
-		res->name = text + " label";
-		res->horOverflow = Label::HorOverflow::Dots;
-		return res;
-	}
+    Label* UIManager::CreateLabel(const WString& text, const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<Label>(style);
+        res->text = text;
+        res->name = text + " label";
+        res->horOverflow = Label::HorOverflow::Dots;
+        return res;
+    }
 
-	HorizontalLayout* UIManager::CreateHorLayout()
-	{
-		auto res = mnew HorizontalLayout();
-		res->name = "horizontal layout";
-		*res->layout = WidgetLayout::BothStretch();
-		return res;
-	}
+    HorizontalLayout* UIManager::CreateHorLayout()
+    {
+        auto res = mnew HorizontalLayout();
+        res->name = "horizontal layout";
+        *res->layout = WidgetLayout::BothStretch();
+        return res;
+    }
 
-	VerticalLayout* UIManager::CreateVerLayout()
-	{
-		auto res = mnew VerticalLayout();
-		res->name = "vertical layout";
-		*res->layout = WidgetLayout::BothStretch();
-		return res;
-	}
+    VerticalLayout* UIManager::CreateVerLayout()
+    {
+        auto res = mnew VerticalLayout();
+        res->name = "vertical layout";
+        *res->layout = WidgetLayout::BothStretch();
+        return res;
+    }
 
-	HorizontalProgress* UIManager::CreateHorProgress(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<HorizontalProgress>(style);
-		res->name = "horizontal progress";
-		return res;
-	}
+    HorizontalProgress* UIManager::CreateHorProgress(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<HorizontalProgress>(style);
+        res->name = "horizontal progress";
+        return res;
+    }
 
-	VerticalProgress* UIManager::CreateVerProgress(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<VerticalProgress>(style);
-		res->name = "vertical progress";
-		return res;
-	}
+    VerticalProgress* UIManager::CreateVerProgress(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<VerticalProgress>(style);
+        res->name = "vertical progress";
+        return res;
+    }
 
-	HorizontalScrollBar* UIManager::CreateHorScrollBar(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<HorizontalScrollBar>(style);
-		res->name = "horizontal scroll bar";
-		return res;
-	}
+    HorizontalScrollBar* UIManager::CreateHorScrollBar(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<HorizontalScrollBar>(style);
+        res->name = "horizontal scroll bar";
+        return res;
+    }
 
-	VerticalScrollBar* UIManager::CreateVerScrollBar(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<VerticalScrollBar>(style);
-		res->name = "vertical scroll bar";
-		return res;
-	}
+    VerticalScrollBar* UIManager::CreateVerScrollBar(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<VerticalScrollBar>(style);
+        res->name = "vertical scroll bar";
+        return res;
+    }
 
-	ScrollArea* UIManager::CreateScrollArea(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<ScrollArea>(style);
-		res->name = "scroll area";
-		return res;
-	}
+    ScrollArea* UIManager::CreateScrollArea(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<ScrollArea>(style);
+        res->name = "scroll area";
+        return res;
+    }
 
-	EditBox* UIManager::CreateEditBox(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<EditBox>(style);
-		res->name = "edit box";
-		return res;
-	}
+    EditBox* UIManager::CreateEditBox(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<EditBox>(style);
+        res->name = "edit box";
+        return res;
+    }
 
-	CustomList* UIManager::CreateCustomList(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<CustomList>(style);
-		res->name = "custom list";
-		return res;
-	}
+    CustomList* UIManager::CreateCustomList(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<CustomList>(style);
+        res->name = "custom list";
+        return res;
+    }
 
-	List* UIManager::CreateList(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<List>(style);
-		res->name = "list";
-		return res;
-	}
+    List* UIManager::CreateList(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<List>(style);
+        res->name = "list";
+        return res;
+    }
 
-	CustomDropDown* UIManager::CreateCustomDropdown(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<CustomDropDown>(style);
-		res->name = "custom dropdown";
-		return res;
-	}
+    CustomDropDown* UIManager::CreateCustomDropdown(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<CustomDropDown>(style);
+        res->name = "custom dropdown";
+        return res;
+    }
 
-	DropDown* UIManager::CreateDropdown(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<DropDown>(style);
-		res->name = "dropdown";
-		return res;
-	}
+    DropDown* UIManager::CreateDropdown(const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<DropDown>(style);
+        res->name = "dropdown";
+        return res;
+    }
 
-	Toggle* UIManager::CreateToggle(const WString& caption, const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<Toggle>(style);
-		res->caption = caption;
-		res->name = caption + " toggle";
-		return res;
-	}
+    Toggle* UIManager::CreateToggle(const WString& caption, const String& style /*= "standard"*/)
+    {
+        auto res = CreateWidget<Toggle>(style);
+        res->caption = caption;
+        res->name = caption + " toggle";
+        return res;
+    }
 
-	Image* UIManager::CreateImage(const String& name)
-	{
-		auto res = mnew Image();
-		res->name = name;
-		res->SetImageName(name);
-		return res;
-	}
+    Image* UIManager::CreateImage(const String& name)
+    {
+        auto res = mnew Image();
+        res->name = name;
+        res->SetImageName(name);
+        return res;
+    }
 
-	void UIManager::Draw()
-	{
-		for (auto widget : mTopWidgets)
-			widget->Draw();
+    void UIManager::Draw()
+    {
+        for (auto widget : mTopWidgets)
+            widget->Draw();
 
-		mTopWidgets.Clear();
+        mTopWidgets.Clear();
 
-		if (PopupWidget::mVisiblePopup)
-			PopupWidget::mVisiblePopup->SpecialDraw();
+        if (PopupWidget::mVisiblePopup)
+            PopupWidget::mVisiblePopup->SpecialDraw();
 
-		if (o2Input.IsKeyPressed(VK_TAB))
-			FocusNextWidget();
-	}
+        if (o2Input.IsKeyPressed(VK_TAB))
+            FocusNextWidget();
+    }
 
-	void UIManager::Update()
-	{
-		PROFILE_SAMPLE_FUNC();
+    void UIManager::Update()
+    {
+        PROFILE_SAMPLE_FUNC();
 
-		for (auto widget : mLastFocusedWidgets)
-			widget->OnFocused();
+        for (auto widget : mLastFocusedWidgets)
+            widget->OnFocused();
 
-		for (auto widget : mLastUnfocusedWidgets)
-			widget->OnUnfocused();
+        for (auto widget : mLastUnfocusedWidgets)
+            widget->OnUnfocused();
 
-		mLastFocusedWidgets.Clear();
-		mLastUnfocusedWidgets.Clear();
-	}
+        mLastFocusedWidgets.Clear();
+        mLastUnfocusedWidgets.Clear();
+    }
 
-	void UIManager::DrawWidgetAtTop(Widget* widget)
-	{
-		mTopWidgets.Add(widget);
-	}
+    void UIManager::DrawWidgetAtTop(Widget* widget)
+    {
+        mTopWidgets.Add(widget);
+    }
 
-	const Vector<ActorAssetRef>& UIManager::GetWidgetStyles() const
-	{
-		return mStyleSamples;
-	}
+    const Vector<ActorAssetRef>& UIManager::GetWidgetStyles() const
+    {
+        return mStyleSamples;
+    }
 
-	void UIManager::TryLoadStyle()
-	{
-		if (o2Assets.IsAssetExist("ui_style.json"))
-			LoadStyle("ui_style.json");
-	}
+    void UIManager::TryLoadStyle()
+    {
+        if (o2Assets.IsAssetExist("ui_style.json"))
+            LoadStyle("ui_style.json");
+    }
 }

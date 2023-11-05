@@ -6,103 +6,103 @@
 
 namespace o2
 {
-	BinaryAsset::BinaryAsset()
-	{}
+    BinaryAsset::BinaryAsset()
+    {}
 
-	BinaryAsset::BinaryAsset(const BinaryAsset& other):
-		AssetWithDefaultMeta<BinaryAsset>(other), data(this), dataSize(this)
-	{
-		if (other.mDataSize > 0)
-		{
-			mDataSize = other.mDataSize;
-			mData = mnew char[mDataSize];
-			memcpy(mData, other.mData, mDataSize);
-		}
-		else
-		{
-			mDataSize = 0;
-			mData = nullptr;
-		}
-	}
+    BinaryAsset::BinaryAsset(const BinaryAsset& other):
+        AssetWithDefaultMeta<BinaryAsset>(other), data(this), dataSize(this)
+    {
+        if (other.mDataSize > 0)
+        {
+            mDataSize = other.mDataSize;
+            mData = mnew char[mDataSize];
+            memcpy(mData, other.mData, mDataSize);
+        }
+        else
+        {
+            mDataSize = 0;
+            mData = nullptr;
+        }
+    }
 
-	BinaryAsset::~BinaryAsset()
-	{
-		if (mData)
-			delete[] mData;
-	}
+    BinaryAsset::~BinaryAsset()
+    {
+        if (mData)
+            delete[] mData;
+    }
 
-	BinaryAsset& BinaryAsset::operator=(const BinaryAsset& other)
-	{
-		Asset::operator=(other);
+    BinaryAsset& BinaryAsset::operator=(const BinaryAsset& other)
+    {
+        Asset::operator=(other);
 
-		if (mData)
-			delete[] mData;
+        if (mData)
+            delete[] mData;
 
-		if (other.mDataSize > 0)
-		{
-			mDataSize = other.mDataSize;
-			mData = mnew char[mDataSize];
-			memcpy(mData, other.mData, mDataSize);
-		}
-		else
-		{
-			mDataSize = 0;
-			mData = nullptr;
-		}
+        if (other.mDataSize > 0)
+        {
+            mDataSize = other.mDataSize;
+            mData = mnew char[mDataSize];
+            memcpy(mData, other.mData, mDataSize);
+        }
+        else
+        {
+            mDataSize = 0;
+            mData = nullptr;
+        }
 
-		return *this;
-	}
+        return *this;
+    }
 
-	char* BinaryAsset::GetData() const
-	{
-		return mData;
-	}
+    char* BinaryAsset::GetData() const
+    {
+        return mData;
+    }
 
-	UInt BinaryAsset::GetDataSize() const
-	{
-		return mDataSize;
-	}
+    UInt BinaryAsset::GetDataSize() const
+    {
+        return mDataSize;
+    }
 
-	void BinaryAsset::SetData(char* data, UInt size)
-	{
-		if (mData)
-			delete[] mData;
+    void BinaryAsset::SetData(char* data, UInt size)
+    {
+        if (mData)
+            delete[] mData;
 
-		if (size > 0)
-		{
-			mDataSize = size;
-			mData = mnew char[mDataSize];
-			memcpy(mData, data, mDataSize);
-		}
-		else
-		{
-			mDataSize = 0;
-			mData = nullptr;
-		}
-	}
+        if (size > 0)
+        {
+            mDataSize = size;
+            mData = mnew char[mDataSize];
+            memcpy(mData, data, mDataSize);
+        }
+        else
+        {
+            mDataSize = 0;
+            mData = nullptr;
+        }
+    }
 
-	Vector<String> BinaryAsset::GetFileExtensions()
-	{
-		return { "bin" };
-	}
+    Vector<String> BinaryAsset::GetFileExtensions()
+    {
+        return { "bin" };
+    }
 
-	void BinaryAsset::LoadData(const String& path)
-	{
-		InFile file(path);
-		if (!file.IsOpened())
-			GetAssetsLogStream()->Error("Failed to load binary asset data: can't open file " + path);
+    void BinaryAsset::LoadData(const String& path)
+    {
+        InFile file(path);
+        if (!file.IsOpened())
+            GetAssetsLogStream()->Error("Failed to load binary asset data: can't open file " + path);
 
-		mDataSize = file.GetDataSize();
-		mData = mnew char[mDataSize];
-		file.ReadFullData(mData);
-	}
+        mDataSize = file.GetDataSize();
+        mData = mnew char[mDataSize];
+        file.ReadFullData(mData);
+    }
 
-	void BinaryAsset::SaveData(const String& path) const
-	{
-		OutFile file(path);
-		if (mDataSize > 0 && mData)
-			file.WriteData(mData, mDataSize);
-	}
+    void BinaryAsset::SaveData(const String& path) const
+    {
+        OutFile file(path);
+        if (mDataSize > 0 && mData)
+            file.WriteData(mData, mDataSize);
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::BinaryAsset>);

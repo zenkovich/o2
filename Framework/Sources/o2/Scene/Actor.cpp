@@ -10,1462 +10,1462 @@
 
 namespace o2
 {
-	ActorCreateMode Actor::mDefaultCreationMode = ActorCreateMode::InScene;
+    ActorCreateMode Actor::mDefaultCreationMode = ActorCreateMode::InScene;
 
-	Actor::Actor(ActorTransform* transform, bool onScene /*= true*/, const String& name /*= "unnamed"*/, bool enabled /*= true*/,
-				 SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/) :
-		transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(false),
-		mId(id), mAssetId(assetId), mState(State::Initializing), mIsOnScene(onScene)
-	{
-		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
-		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
+    Actor::Actor(ActorTransform* transform, bool onScene /*= true*/, const String& name /*= "unnamed"*/, bool enabled /*= true*/,
+                 SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/) :
+        transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(false),
+        mId(id), mAssetId(assetId), mState(State::Initializing), mIsOnScene(onScene)
+    {
+        tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
+        tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
 
-		transform->SetOwner(this);
+        transform->SetOwner(this);
 
-		Scene::OnActorCreated(this);
-	}
+        Scene::OnActorCreated(this);
+    }
 
-	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, IsModeOnScene(mode))
-	{
-		ActorRefResolver::ActorCreated(this);
-	}
+    Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(transform, IsModeOnScene(mode))
+    {
+        ActorRefResolver::ActorCreated(this);
+    }
 
-	Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, IsModeOnScene(mode), other.mName, other.mEnabled, Math::Random(), other.mAssetId)
-	{
-		ActorRefResolver::LockResolving();
+    Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(transform, IsModeOnScene(mode), other.mName, other.mEnabled, Math::Random(), other.mAssetId)
+    {
+        ActorRefResolver::LockResolving();
 
-		ISceneDrawable::operator=(other);
-		mSceneLayer = other.mSceneLayer;
+        ISceneDrawable::operator=(other);
+        mSceneLayer = other.mSceneLayer;
 
-		if (other.mIsAsset)
-		{
-			other.mCopyVisitor = mnew InstantiatePrototypeCloneVisitor();
-			SetPrototype(ActorAssetRef(other.GetAssetID()));
-		}
+        if (other.mIsAsset)
+        {
+            other.mCopyVisitor = mnew InstantiatePrototypeCloneVisitor();
+            SetPrototype(ActorAssetRef(other.GetAssetID()));
+        }
 
-		transform->CopyFrom(*other.transform);
-		mAssetId = other.mAssetId;
-		mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);
+        transform->CopyFrom(*other.transform);
+        mAssetId = other.mAssetId;
+        mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);
 
-		if (!other.mCopyVisitor)
-			other.mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
+        if (!other.mCopyVisitor)
+            other.mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
 
-		other.mCopyVisitor->OnCopyActor(&other, this);
-		other.mCopyVisitor->depth++;
+        other.mCopyVisitor->OnCopyActor(&other, this);
+        other.mCopyVisitor->depth++;
 
-		if (!mPrototype && other.mPrototype)
-		{
-			mPrototype = other.mPrototype;
-
-#if IS_EDITOR
-			Scene::LinkActorToPrototypesHierarchy(this, mPrototype);
-#endif
-		}
-
-		for (auto child : other.mChildren)
-		{
-			child->mCopyVisitor = other.mCopyVisitor;
-
-			AddChild(child->CloneAs<Actor>());
-
-			child->mCopyVisitor = nullptr;
-		}
-
-		for (auto component : other.mComponents)
-		{
-			Component* newComponent = AddComponent(component->CloneAs<Component>());
-
-			if (other.mCopyVisitor)
-				other.mCopyVisitor->OnCopyComponent(component, newComponent);
-		}
-
-		ActorRefResolver::ActorCreated(this);
-		ActorRefResolver::UnlockResolving();
-
-		other.CheckCopyVisitorFinalization();
-	}
-
-	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, *prototype->GetActor(), mode)
-	{}
-
-	Actor::Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, mode)
-	{
-		for (auto comp : components)
-			AddComponent(comp);
-	}
-
-	Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/) :
-		Actor(mnew ActorTransform(), mode)
-	{}
-
-	Actor::Actor(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(mnew ActorTransform(), components, mode)
-	{}
-
-	Actor::Actor(const ActorAssetRef& prototype, ActorCreateMode mode /*= CreateMode::Default*/) :
-		Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
-	{}
-
-	Actor::Actor(const Actor& other, ActorCreateMode mode) :
-		Actor(mnew ActorTransform(*other.transform), other, mode)
-	{}
-
-	Actor::Actor(const Actor& other) :
-		Actor(other, ActorCreateMode::Default)
-	{}
-
-	Actor::~Actor()
-	{
-		mState = State::Destroyed;
-
-		SetPrototype(nullptr);
-
-		for (auto ref : mReferences)
-		{
-			ref->mActor = nullptr;
-			ref->mWasDeleted = true;
-		}
-
-		if (mParent)
-			mParent->RemoveChild(this, false);
-
-		RemoveAllChildren();
-		RemoveAllComponents();
-
-		Scene::OnActorDestroy(this);
-
-		delete transform;
-	}
-
-	Actor& Actor::operator=(const Actor& other)
-	{
-		RemoveAllChildren();
-		RemoveAllComponents();
-
-		ActorRefResolver::LockResolving();
-
-		if (other.mCopyVisitor)
-			other.mCopyVisitor->OnCopyActor(&other, this);
-
-		if (other.mIsAsset)
-			SetPrototype(ActorAssetRef(other.GetAssetID()));
-
-		ISceneDrawable::operator=(other);
-
-		mName = other.mName;
-		mEnabled = other.mEnabled;
-		mResEnabled = mEnabled;
-		mResEnabledInHierarchy = mEnabled;
-		mSceneLayer = other.mSceneLayer;
-		transform->CopyFrom(*other.transform);
-		mAssetId = other.mAssetId;
-		mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);
-
-		if (!other.mCopyVisitor)
-			other.mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
-
-		other.mCopyVisitor->OnCopyActor(&other, this);
-		other.mCopyVisitor->depth++;
-
-		if (!mPrototype && other.mPrototype)
-		{
-			mPrototype = other.mPrototype;
+        if (!mPrototype && other.mPrototype)
+        {
+            mPrototype = other.mPrototype;
 
 #if IS_EDITOR
-			Scene::LinkActorToPrototypesHierarchy(this, mPrototype);
+            Scene::LinkActorToPrototypesHierarchy(this, mPrototype);
 #endif
-		}
+        }
 
-		for (auto child : other.mChildren)
-		{
-			child->mCopyVisitor = other.mCopyVisitor;
+        for (auto child : other.mChildren)
+        {
+            child->mCopyVisitor = other.mCopyVisitor;
 
-			AddChild(child->CloneAs<Actor>());
+            AddChild(child->CloneAs<Actor>());
 
-			child->mCopyVisitor = nullptr;
-		}
+            child->mCopyVisitor = nullptr;
+        }
 
-		for (auto component : other.mComponents)
-		{
-			Component* newComponent = AddComponent(component->CloneAs<Component>());
+        for (auto component : other.mComponents)
+        {
+            Component* newComponent = AddComponent(component->CloneAs<Component>());
 
-			if (other.mCopyVisitor)
-				other.mCopyVisitor->OnCopyComponent(component, newComponent);
+            if (other.mCopyVisitor)
+                other.mCopyVisitor->OnCopyComponent(component, newComponent);
+        }
 
-			if (mPrototypeLink)
-				newComponent->mPrototypeLink = component->mPrototypeLink;
-		}
+        ActorRefResolver::ActorCreated(this);
+        ActorRefResolver::UnlockResolving();
 
-		Scene::OnActorCreated(this);
+        other.CheckCopyVisitorFinalization();
+    }
 
-		ActorRefResolver::ActorCreated(this);
-		ActorRefResolver::UnlockResolving();
+    Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(transform, *prototype->GetActor(), mode)
+    {}
 
-		other.CheckCopyVisitorFinalization();
-		UpdateResEnabledInHierarchy();
+    Actor::Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(transform, mode)
+    {
+        for (auto comp : components)
+            AddComponent(comp);
+    }
+
+    Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/) :
+        Actor(mnew ActorTransform(), mode)
+    {}
+
+    Actor::Actor(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(mnew ActorTransform(), components, mode)
+    {}
+
+    Actor::Actor(const ActorAssetRef& prototype, ActorCreateMode mode /*= CreateMode::Default*/) :
+        Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
+    {}
+
+    Actor::Actor(const Actor& other, ActorCreateMode mode) :
+        Actor(mnew ActorTransform(*other.transform), other, mode)
+    {}
+
+    Actor::Actor(const Actor& other) :
+        Actor(other, ActorCreateMode::Default)
+    {}
+
+    Actor::~Actor()
+    {
+        mState = State::Destroyed;
+
+        SetPrototype(nullptr);
+
+        for (auto ref : mReferences)
+        {
+            ref->mActor = nullptr;
+            ref->mWasDeleted = true;
+        }
+
+        if (mParent)
+            mParent->RemoveChild(this, false);
+
+        RemoveAllChildren();
+        RemoveAllComponents();
+
+        Scene::OnActorDestroy(this);
+
+        delete transform;
+    }
+
+    Actor& Actor::operator=(const Actor& other)
+    {
+        RemoveAllChildren();
+        RemoveAllComponents();
+
+        ActorRefResolver::LockResolving();
+
+        if (other.mCopyVisitor)
+            other.mCopyVisitor->OnCopyActor(&other, this);
+
+        if (other.mIsAsset)
+            SetPrototype(ActorAssetRef(other.GetAssetID()));
+
+        ISceneDrawable::operator=(other);
+
+        mName = other.mName;
+        mEnabled = other.mEnabled;
+        mResEnabled = mEnabled;
+        mResEnabledInHierarchy = mEnabled;
+        mSceneLayer = other.mSceneLayer;
+        transform->CopyFrom(*other.transform);
+        mAssetId = other.mAssetId;
+        mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);
+
+        if (!other.mCopyVisitor)
+            other.mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
+
+        other.mCopyVisitor->OnCopyActor(&other, this);
+        other.mCopyVisitor->depth++;
+
+        if (!mPrototype && other.mPrototype)
+        {
+            mPrototype = other.mPrototype;
 
 #if IS_EDITOR
-		OnChanged();
+            Scene::LinkActorToPrototypesHierarchy(this, mPrototype);
 #endif
+        }
 
-		return *this;
-	}
+        for (auto child : other.mChildren)
+        {
+            child->mCopyVisitor = other.mCopyVisitor;
 
-	void Actor::CheckCopyVisitorFinalization() const
-	{
-		if (mCopyVisitor)
-		{
-			mCopyVisitor->depth--;
+            AddChild(child->CloneAs<Actor>());
 
-			if (mCopyVisitor->depth == 0)
-			{
-				mCopyVisitor->Finalize();
-				delete mCopyVisitor;
-				mCopyVisitor = nullptr;
-			}
-		}
-	}
+            child->mCopyVisitor = nullptr;
+        }
 
-	void Actor::Destroy()
-	{
-		if (Scene::IsSingletonInitialzed())
-			o2Scene.DestroyActor(this);
-		else
-			o2Debug.LogError("Cant destroy actor in scene, because it's not exists. Delete actor manually");
-	}
+        for (auto component : other.mComponents)
+        {
+            Component* newComponent = AddComponent(component->CloneAs<Component>());
 
-	void Actor::Draw()
-	{
-		for (auto component : mDrawComponents)
-			component->Draw();
+            if (other.mCopyVisitor)
+                other.mCopyVisitor->OnCopyComponent(component, newComponent);
 
-		ISceneDrawable::Draw();
-	}
+            if (mPrototypeLink)
+                newComponent->mPrototypeLink = component->mPrototypeLink;
+        }
 
-	void Actor::Update(float dt)
-	{
-		if (transform->IsDirty())
-		{
-			for (auto child : mChildren)
-				child->transform->SetDirty(true);
+        Scene::OnActorCreated(this);
 
-			UpdateSelfTransform();
-		}
+        ActorRefResolver::ActorCreated(this);
+        ActorRefResolver::UnlockResolving();
 
-		OnUpdate(dt);
-
-		for (auto comp : mComponents)
-			comp->OnUpdate(dt);
-	}
-
-	void Actor::FixedUpdate(float dt)
-	{
-		OnFixedUpdate(dt);
-
-		for (auto comp : mComponents)
-			comp->OnFixedUpdate(dt);
-	}
-
-	void Actor::UpdateChildren(float dt)
-	{
-		for (auto child : mChildren)
-			child->Update(dt);
-
-		for (auto child : mChildren)
-			child->UpdateChildren(dt);
-	}
-
-	void Actor::FixedUpdateChildren(float dt)
-	{
-		for (auto child : mChildren)
-			child->FixedUpdate(dt);
-
-		for (auto child : mChildren)
-			child->FixedUpdateChildren(dt);
-	}
-
-	void Actor::UpdateTransform()
-	{
-		UpdateSelfTransform();
-		UpdateChildrenTransforms();
-	}
-
-	void Actor::UpdateSelfTransform()
-	{
-		transform->Update();
-		
-		for (auto comp : mComponents)
-			comp->OnTransformUpdated();
-	}
-
-	void Actor::UpdateChildrenTransforms()
-	{
-		for (auto child : mChildren)
-			child->UpdateSelfTransform();
-
-		for (auto child : mChildren)
-			child->UpdateChildrenTransforms();
-	}
-
-	void Actor::SetName(const String& name)
-	{
-		mName = name;
+        other.CheckCopyVisitorFinalization();
+        UpdateResEnabledInHierarchy();
 
 #if IS_EDITOR
-		OnNameChanged();
+        OnChanged();
 #endif
-	}
 
-	const String& Actor::GetName() const
-	{
-		return mName;
-	}
+        return *this;
+    }
 
-	SceneUID Actor::GetID() const
-	{
-		return mId;
-	}
+    void Actor::CheckCopyVisitorFinalization() const
+    {
+        if (mCopyVisitor)
+        {
+            mCopyVisitor->depth--;
 
-	void Actor::SetID(SceneUID id)
-	{
-		auto prevId = mId;
-		mId = id;
+            if (mCopyVisitor->depth == 0)
+            {
+                mCopyVisitor->Finalize();
+                delete mCopyVisitor;
+                mCopyVisitor = nullptr;
+            }
+        }
+    }
 
-		Scene::OnActorIdChanged(this, prevId);
-		ActorRefResolver::OnActorIdChanged(this, prevId);
-	}
+    void Actor::Destroy()
+    {
+        if (Scene::IsSingletonInitialzed())
+            o2Scene.DestroyActor(this);
+        else
+            o2Debug.LogError("Cant destroy actor in scene, because it's not exists. Delete actor manually");
+    }
 
-	UID Actor::GetAssetID() const
-	{
-		return mAssetId;
-	}
+    void Actor::Draw()
+    {
+        for (auto component : mDrawComponents)
+            component->Draw();
 
-	bool Actor::IsAsset() const
-	{
-		if (mParent)
-			return mIsAsset || mParent->IsAsset();
+        ISceneDrawable::Draw();
+    }
 
-		return mIsAsset;
-	}
+    void Actor::Update(float dt)
+    {
+        if (transform->IsDirty())
+        {
+            for (auto child : mChildren)
+                child->transform->SetDirty(true);
 
-	void Actor::GenerateNewID(bool withChildren /*= true*/)
-	{
-		SetID(Math::Random());
+            UpdateSelfTransform();
+        }
 
-		if (withChildren)
-		{
-			for (auto child : mChildren)
-				child->GenerateNewID(withChildren);
-		}
-	}
+        OnUpdate(dt);
 
-	void Actor::AddToScene()
-	{
-		if (mIsOnScene)
-			return;
+        for (auto comp : mComponents)
+            comp->OnUpdate(dt);
+    }
 
-		mIsOnScene = true;;
+    void Actor::FixedUpdate(float dt)
+    {
+        OnFixedUpdate(dt);
 
-		Scene::OnAddActorToScene(this);
+        for (auto comp : mComponents)
+            comp->OnFixedUpdate(dt);
+    }
 
-		for (auto child : mChildren)
-			child->AddToScene();
-	}
+    void Actor::UpdateChildren(float dt)
+    {
+        for (auto child : mChildren)
+            child->Update(dt);
 
-	void Actor::RemoveFromScene(bool keepEditorObjects /*= false*/)
-	{
-		if (!mIsOnScene)
-			return;
+        for (auto child : mChildren)
+            child->UpdateChildren(dt);
+    }
 
-		mIsOnScene = false;
+    void Actor::FixedUpdateChildren(float dt)
+    {
+        for (auto child : mChildren)
+            child->FixedUpdate(dt);
 
-		Scene::OnRemoveActorFromScene(this, keepEditorObjects);
+        for (auto child : mChildren)
+            child->FixedUpdateChildren(dt);
+    }
 
-		for (auto child : mChildren)
-			child->RemoveFromScene();
-	}
+    void Actor::UpdateTransform()
+    {
+        UpdateSelfTransform();
+        UpdateChildrenTransforms();
+    }
 
-	bool Actor::IsOnScene() const
-	{
-		return mIsOnScene;
-	}
+    void Actor::UpdateSelfTransform()
+    {
+        transform->Update();
+        
+        for (auto comp : mComponents)
+            comp->OnTransformUpdated();
+    }
 
-	void Actor::SetEnabled(bool enabled)
-	{
-		if (mEnabled == enabled)
-			return;
+    void Actor::UpdateChildrenTransforms()
+    {
+        for (auto child : mChildren)
+            child->UpdateSelfTransform();
 
-		mEnabled = enabled;
-		UpdateResEnabled();
+        for (auto child : mChildren)
+            child->UpdateChildrenTransforms();
+    }
+
+    void Actor::SetName(const String& name)
+    {
+        mName = name;
 
 #if IS_EDITOR
-		onEnableChanged(mEnabled);
-
-		if (mIsOnScene)
-			o2Scene.onEnableChanged(this);
-
-		OnChanged();
+        OnNameChanged();
 #endif
-	}
+    }
 
-	void Actor::Enable()
-	{
-		SetEnabled(true);
-	}
+    const String& Actor::GetName() const
+    {
+        return mName;
+    }
 
-	void Actor::Disable()
-	{
-		SetEnabled(false);
-	}
+    SceneUID Actor::GetID() const
+    {
+        return mId;
+    }
 
-	bool Actor::IsEnabled() const
-	{
-		return mEnabled;
-	}
+    void Actor::SetID(SceneUID id)
+    {
+        auto prevId = mId;
+        mId = id;
 
-	bool Actor::IsResEnabled() const
-	{
-		return mResEnabled;
-	}
+        Scene::OnActorIdChanged(this, prevId);
+        ActorRefResolver::OnActorIdChanged(this, prevId);
+    }
 
-	bool Actor::IsEnabledInHierarchy() const
-	{
-		return mResEnabledInHierarchy;
-	}
+    UID Actor::GetAssetID() const
+    {
+        return mAssetId;
+    }
 
-	void Actor::SetIndexInSiblings(int index)
-	{
-		if (mParent)
-		{
-			int lastIdx = mParent->mChildren.IndexOf(this);
-			mParent->mChildren.Insert(this, index);
+    bool Actor::IsAsset() const
+    {
+        if (mParent)
+            return mIsAsset || mParent->IsAsset();
 
-			if (index <= lastIdx)
-				lastIdx++;
+        return mIsAsset;
+    }
 
-			mParent->mChildren.RemoveAt(lastIdx);
+    void Actor::GenerateNewID(bool withChildren /*= true*/)
+    {
+        SetID(Math::Random());
 
-			mParent->OnChildrenChanged();
-		}
-		else
-		{
-			if (mIsOnScene)
-			{
-				int lastIdx = o2Scene.mRootActors.IndexOf(this);
-				o2Scene.mRootActors.Insert(this, index);
+        if (withChildren)
+        {
+            for (auto child : mChildren)
+                child->GenerateNewID(withChildren);
+        }
+    }
 
-				if (index <= lastIdx)
-					lastIdx++;
+    void Actor::AddToScene()
+    {
+        if (mIsOnScene)
+            return;
 
-				o2Scene.mRootActors.RemoveAt(lastIdx);
-			}
-		}
-	}
+        mIsOnScene = true;;
 
-	void Actor::SetParent(Actor* actor, bool worldPositionStays /*= true*/, int idx /*= -1*/)
-	{
-		if ((actor && actor->mParent == this) || actor == this || actor == mParent)
-			return;
+        Scene::OnAddActorToScene(this);
 
-		// Store initial transform
-		Basis lastParentBasis = transform->GetWorldBasis();
-		auto oldParent = mParent;
+        for (auto child : mChildren)
+            child->AddToScene();
+    }
 
-		// Remove from parent list or root actors
-		if (mParent)
-			mParent->RemoveChild(this, false, false);
-		else if (mIsOnScene && Scene::IsSingletonInitialzed())
-			o2Scene.mRootActors.Remove(this);
+    void Actor::RemoveFromScene(bool keepEditorObjects /*= false*/)
+    {
+        if (!mIsOnScene)
+            return;
 
-		// Change parent
-		mParent = actor;
-		transform->mData->parentInvTransformActualFrame = 0;
+        mIsOnScene = false;
 
-		// Restore in new parent children list or root actors
-		if (mParent)
-		{
-			if (idx < 0)
-				mParent->mChildren.Add(this);
-			else
-				mParent->mChildren.Insert(this, idx);
+        Scene::OnRemoveActorFromScene(this, keepEditorObjects);
 
-			mParent->OnChildAdded(this);
-		}
-		else if (mIsOnScene && Scene::IsSingletonInitialzed())
-		{
-			if (idx < 0)
-				o2Scene.mRootActors.Add(this);
-			else
-				o2Scene.mRootActors.Insert(this, idx);
-		}
+        for (auto child : mChildren)
+            child->RemoveFromScene();
+    }
 
-		// Restore transform if needed
-		if (worldPositionStays)
-			transform->SetWorldBasis(lastParentBasis);
-		else
-			transform->SetDirty();
+    bool Actor::IsOnScene() const
+    {
+        return mIsOnScene;
+    }
 
-		// Call events only when actor was initialized
-		if (mState == State::Default)
-		{
-			// Update enabled state in hierarchy
-			UpdateResEnabledInHierarchy();
+    void Actor::SetEnabled(bool enabled)
+    {
+        if (mEnabled == enabled)
+            return;
 
-			// Checks if actor should be added or removed from scene
-			if (mParent && mParent->mIsOnScene != mIsOnScene)
-			{
-				if (mParent->mIsOnScene && !mIsOnScene)
-					AddToScene();
-				else if (!mParent->mIsOnScene && mIsOnScene)
-					RemoveFromScene();
-			}
-		}
-		else if (mState == State::Initializing && mParent && mParent->mState == State::Initializing)
-		{
-			Scene::OnNewActorParented(this);
-		}
-
-		// Call parent update events
-		OnParentChanged(oldParent);
-	}
-
-	Actor* Actor::GetParent() const
-	{
-		return mParent;
-	}
-
-	Actor* Actor::AddChild(Actor* actor)
-	{
-		Assert(actor, "Actor is null");
-
-		actor->SetParent(this, false);
-		return actor;
-	}
-
-	Actor* Actor::AddChild(Actor* actor, int index)
-	{
-		Assert(actor, "Actor is null");
-
-		actor->SetParent(this, false, index);
-		return actor;
-	}
-
-	void Actor::AddChildren(const Vector<Actor*>& actors)
-	{
-		for (auto actor : actors)
-			AddChild(actor);
-	}
-
-	Actor* Actor::GetChild(const String& path) const
-	{
-		int delPos = path.Find("/");
-		String pathPart = path.SubStr(0, delPos);
-
-		if (pathPart == "..")
-		{
-			if (mParent)
-			{
-				if (delPos == -1)
-					return mParent;
-				else
-					return mParent->GetChild(path.SubStr(delPos + 1));
-			}
-
-			return nullptr;
-		}
-
-		for (auto child : mChildren)
-		{
-			if (child->mName == pathPart)
-			{
-				if (delPos == -1)
-					return child;
-				else
-					return child->GetChild(path.SubStr(delPos + 1));
-			}
-		}
-
-		return nullptr;
-	}
-
-	Actor* Actor::FindChild(const String& name) const
-	{
-		for (auto child : mChildren)
-		{
-			if (child->mName == name)
-				return child;
-
-			if (auto res = child->FindChild(name))
-				return res;
-		}
-
-		return nullptr;
-	}
-
-	Actor* Actor::FindChild(const Function<bool(const Actor* child)>& pred) const
-	{
-		for (auto child : mChildren)
-		{
-			if (pred(child))
-				return child;
-
-			if (auto res = child->FindChild(pred))
-				return res;
-		}
-
-		return nullptr;
-	}
-
-	const Vector<Actor*>& Actor::GetChildren() const
-	{
-		return mChildren;
-	}
-
-	void Actor::GetAllChildrenActors(Vector<Actor*>& actors)
-	{
-		actors.Add(mChildren);
-
-		for (auto child : mChildren)
-			child->GetAllChildrenActors(actors);
-	}
-
-	void Actor::RemoveChild(Actor* actor, bool release /*= true*/, bool withEvent /*= true*/)
-	{
-		auto oldParent = actor->mParent;
-
-		actor->mParent = nullptr;
-		mChildren.Remove(actor);
-
-		if (withEvent)
-			actor->OnParentChanged(oldParent);
-
-		OnChildRemoved(actor);
-
-		if (release)
-		{
-			actor->OnBeforeDestroy();
-			delete actor;
-		}
-		else if (actor->mState != State::Destroyed)
-		{
-			actor->transform->SetDirty();
-			actor->UpdateResEnabledInHierarchy();
-		}
-	}
-
-	void Actor::RemoveAllChildren(bool release /*= true*/)
-	{
-		for (auto child : mChildren)
-		{
-			if (release)
-				child->OnBeforeDestroy();
-
-			child->mParent = nullptr;
-
-			OnChildRemoved(child);
-			child->OnParentChanged(this);
-
-			if (release)
-				delete child;
-		}
-
-		mChildren.Clear();
-	}
-
-	Actor* Actor::FindActorById(SceneUID id)
-	{
-		if (mId == id)
-			return this;
-
-		for (auto child : mChildren)
-		{
-			if (auto res = child->FindActorById(id))
-				return res;
-		}
-
-		return nullptr;
-	}
-
-	Component* Actor::AddComponent(Component* component)
-	{
-		component->SetOwnerActor(this);
-		mComponents.Add(component);
-
-		if (mIsOnScene && mState == State::Default)
-			component->AddToScene();
-
-		if (auto drawableComponent = dynamic_cast<DrawableComponent*>(component))
-			mDrawComponents.Add(drawableComponent);
-
-		OnComponentAdded(component);
-
-		component->OnTransformUpdated();
+        mEnabled = enabled;
+        UpdateResEnabled();
 
 #if IS_EDITOR
-		OnChanged();
+        onEnableChanged(mEnabled);
+
+        if (mIsOnScene)
+            o2Scene.onEnableChanged(this);
+
+        OnChanged();
 #endif
+    }
 
-		return component;
-	}
+    void Actor::Enable()
+    {
+        SetEnabled(true);
+    }
 
-	void Actor::RemoveComponent(Component* component, bool release /*= true*/)
-	{
-		if (mIsOnScene)
-			component->RemoveFromScene();
+    void Actor::Disable()
+    {
+        SetEnabled(false);
+    }
 
-		if (auto drawableComponent = dynamic_cast<DrawableComponent*>(component))
-			mDrawComponents.Remove(drawableComponent);
+    bool Actor::IsEnabled() const
+    {
+        return mEnabled;
+    }
 
-		OnComponentRemoving(component);
+    bool Actor::IsResEnabled() const
+    {
+        return mResEnabled;
+    }
 
-		mComponents.Remove(component);
-		component->mOwner = nullptr;
+    bool Actor::IsEnabledInHierarchy() const
+    {
+        return mResEnabledInHierarchy;
+    }
 
-		if (release)
-			delete component;
+    void Actor::SetIndexInSiblings(int index)
+    {
+        if (mParent)
+        {
+            int lastIdx = mParent->mChildren.IndexOf(this);
+            mParent->mChildren.Insert(this, index);
+
+            if (index <= lastIdx)
+                lastIdx++;
+
+            mParent->mChildren.RemoveAt(lastIdx);
+
+            mParent->OnChildrenChanged();
+        }
+        else
+        {
+            if (mIsOnScene)
+            {
+                int lastIdx = o2Scene.mRootActors.IndexOf(this);
+                o2Scene.mRootActors.Insert(this, index);
+
+                if (index <= lastIdx)
+                    lastIdx++;
+
+                o2Scene.mRootActors.RemoveAt(lastIdx);
+            }
+        }
+    }
+
+    void Actor::SetParent(Actor* actor, bool worldPositionStays /*= true*/, int idx /*= -1*/)
+    {
+        if ((actor && actor->mParent == this) || actor == this || actor == mParent)
+            return;
+
+        // Store initial transform
+        Basis lastParentBasis = transform->GetWorldBasis();
+        auto oldParent = mParent;
+
+        // Remove from parent list or root actors
+        if (mParent)
+            mParent->RemoveChild(this, false, false);
+        else if (mIsOnScene && Scene::IsSingletonInitialzed())
+            o2Scene.mRootActors.Remove(this);
+
+        // Change parent
+        mParent = actor;
+        transform->mData->parentInvTransformActualFrame = 0;
+
+        // Restore in new parent children list or root actors
+        if (mParent)
+        {
+            if (idx < 0)
+                mParent->mChildren.Add(this);
+            else
+                mParent->mChildren.Insert(this, idx);
+
+            mParent->OnChildAdded(this);
+        }
+        else if (mIsOnScene && Scene::IsSingletonInitialzed())
+        {
+            if (idx < 0)
+                o2Scene.mRootActors.Add(this);
+            else
+                o2Scene.mRootActors.Insert(this, idx);
+        }
+
+        // Restore transform if needed
+        if (worldPositionStays)
+            transform->SetWorldBasis(lastParentBasis);
+        else
+            transform->SetDirty();
+
+        // Call events only when actor was initialized
+        if (mState == State::Default)
+        {
+            // Update enabled state in hierarchy
+            UpdateResEnabledInHierarchy();
+
+            // Checks if actor should be added or removed from scene
+            if (mParent && mParent->mIsOnScene != mIsOnScene)
+            {
+                if (mParent->mIsOnScene && !mIsOnScene)
+                    AddToScene();
+                else if (!mParent->mIsOnScene && mIsOnScene)
+                    RemoveFromScene();
+            }
+        }
+        else if (mState == State::Initializing && mParent && mParent->mState == State::Initializing)
+        {
+            Scene::OnNewActorParented(this);
+        }
+
+        // Call parent update events
+        OnParentChanged(oldParent);
+    }
+
+    Actor* Actor::GetParent() const
+    {
+        return mParent;
+    }
+
+    Actor* Actor::AddChild(Actor* actor)
+    {
+        Assert(actor, "Actor is null");
+
+        actor->SetParent(this, false);
+        return actor;
+    }
+
+    Actor* Actor::AddChild(Actor* actor, int index)
+    {
+        Assert(actor, "Actor is null");
+
+        actor->SetParent(this, false, index);
+        return actor;
+    }
+
+    void Actor::AddChildren(const Vector<Actor*>& actors)
+    {
+        for (auto actor : actors)
+            AddChild(actor);
+    }
+
+    Actor* Actor::GetChild(const String& path) const
+    {
+        int delPos = path.Find("/");
+        String pathPart = path.SubStr(0, delPos);
+
+        if (pathPart == "..")
+        {
+            if (mParent)
+            {
+                if (delPos == -1)
+                    return mParent;
+                else
+                    return mParent->GetChild(path.SubStr(delPos + 1));
+            }
+
+            return nullptr;
+        }
+
+        for (auto child : mChildren)
+        {
+            if (child->mName == pathPart)
+            {
+                if (delPos == -1)
+                    return child;
+                else
+                    return child->GetChild(path.SubStr(delPos + 1));
+            }
+        }
+
+        return nullptr;
+    }
+
+    Actor* Actor::FindChild(const String& name) const
+    {
+        for (auto child : mChildren)
+        {
+            if (child->mName == name)
+                return child;
+
+            if (auto res = child->FindChild(name))
+                return res;
+        }
+
+        return nullptr;
+    }
+
+    Actor* Actor::FindChild(const Function<bool(const Actor* child)>& pred) const
+    {
+        for (auto child : mChildren)
+        {
+            if (pred(child))
+                return child;
+
+            if (auto res = child->FindChild(pred))
+                return res;
+        }
+
+        return nullptr;
+    }
+
+    const Vector<Actor*>& Actor::GetChildren() const
+    {
+        return mChildren;
+    }
+
+    void Actor::GetAllChildrenActors(Vector<Actor*>& actors)
+    {
+        actors.Add(mChildren);
+
+        for (auto child : mChildren)
+            child->GetAllChildrenActors(actors);
+    }
+
+    void Actor::RemoveChild(Actor* actor, bool release /*= true*/, bool withEvent /*= true*/)
+    {
+        auto oldParent = actor->mParent;
+
+        actor->mParent = nullptr;
+        mChildren.Remove(actor);
+
+        if (withEvent)
+            actor->OnParentChanged(oldParent);
+
+        OnChildRemoved(actor);
+
+        if (release)
+        {
+            actor->OnBeforeDestroy();
+            delete actor;
+        }
+        else if (actor->mState != State::Destroyed)
+        {
+            actor->transform->SetDirty();
+            actor->UpdateResEnabledInHierarchy();
+        }
+    }
+
+    void Actor::RemoveAllChildren(bool release /*= true*/)
+    {
+        for (auto child : mChildren)
+        {
+            if (release)
+                child->OnBeforeDestroy();
+
+            child->mParent = nullptr;
+
+            OnChildRemoved(child);
+            child->OnParentChanged(this);
+
+            if (release)
+                delete child;
+        }
+
+        mChildren.Clear();
+    }
+
+    Actor* Actor::FindActorById(SceneUID id)
+    {
+        if (mId == id)
+            return this;
+
+        for (auto child : mChildren)
+        {
+            if (auto res = child->FindActorById(id))
+                return res;
+        }
+
+        return nullptr;
+    }
+
+    Component* Actor::AddComponent(Component* component)
+    {
+        component->SetOwnerActor(this);
+        mComponents.Add(component);
+
+        if (mIsOnScene && mState == State::Default)
+            component->AddToScene();
+
+        if (auto drawableComponent = dynamic_cast<DrawableComponent*>(component))
+            mDrawComponents.Add(drawableComponent);
+
+        OnComponentAdded(component);
+
+        component->OnTransformUpdated();
 
 #if IS_EDITOR
-		OnChanged();
+        OnChanged();
 #endif
-	}
 
-	void Actor::RemoveAllComponents()
-	{
-		auto components = mComponents;
-		mComponents.Clear();
+        return component;
+    }
 
-		for (auto component : components)
-		{
-			if (mIsOnScene)
-				component->RemoveFromScene();
+    void Actor::RemoveComponent(Component* component, bool release /*= true*/)
+    {
+        if (mIsOnScene)
+            component->RemoveFromScene();
 
-			OnComponentRemoving(component);
+        if (auto drawableComponent = dynamic_cast<DrawableComponent*>(component))
+            mDrawComponents.Remove(drawableComponent);
 
-			delete component;
-		}
+        OnComponentRemoving(component);
+
+        mComponents.Remove(component);
+        component->mOwner = nullptr;
+
+        if (release)
+            delete component;
 
 #if IS_EDITOR
-		OnChanged();
+        OnChanged();
 #endif
-	}
+    }
 
-	Component* Actor::GetComponent(const String& typeName)
-	{
-		for (auto comp : mComponents)
-			if (comp->GetType().GetName() == typeName)
-				return comp;
+    void Actor::RemoveAllComponents()
+    {
+        auto components = mComponents;
+        mComponents.Clear();
 
-		return nullptr;
-	}
+        for (auto component : components)
+        {
+            if (mIsOnScene)
+                component->RemoveFromScene();
 
-	Component* Actor::GetComponent(const Type* type)
-	{
-		for (auto comp : mComponents)
-			if (comp->GetType().IsBasedOn(*type))
-				return comp;
+            OnComponentRemoving(component);
 
-		return nullptr;
-	}
+            delete component;
+        }
 
-	Component* Actor::GetComponent(SceneUID id)
-	{
-		for (auto comp : mComponents)
-			if (comp->GetID() == id)
-				return comp;
+#if IS_EDITOR
+        OnChanged();
+#endif
+    }
 
-		return nullptr;
-	}
+    Component* Actor::GetComponent(const String& typeName)
+    {
+        for (auto comp : mComponents)
+            if (comp->GetType().GetName() == typeName)
+                return comp;
+
+        return nullptr;
+    }
+
+    Component* Actor::GetComponent(const Type* type)
+    {
+        for (auto comp : mComponents)
+            if (comp->GetType().IsBasedOn(*type))
+                return comp;
+
+        return nullptr;
+    }
+
+    Component* Actor::GetComponent(SceneUID id)
+    {
+        for (auto comp : mComponents)
+            if (comp->GetID() == id)
+                return comp;
+
+        return nullptr;
+    }
 
 #if IS_SCRIPTING_SUPPORTED
-	Component* Actor::GetComponent(const ScriptValue& typeValue)
-	{
-		auto proto = typeValue.GetPrototype();
-		auto protoYpe = proto.GetValueType();
-		if (proto.IsObject())
-		{
-			auto typeProp = proto.GetProperty("type");
-			if (typeProp.IsObjectContainer())
-			{
-				const Type* type = typeProp.GetValue<const Type*>();
-				for (auto component : mComponents)
-				{
-					if (component->GetType().IsBasedOn(*type))
-						return component;
-				}
-			}
-		}
-		else
-		{
-			for (auto component : mComponents)
-			{
-				if (auto scriptComponent = dynamic_cast<ScriptableComponent*>(component))
-				{
-					if (scriptComponent->GetClass() == typeValue)
-						return component;
-				}
-			}
-		}
+    Component* Actor::GetComponent(const ScriptValue& typeValue)
+    {
+        auto proto = typeValue.GetPrototype();
+        auto protoYpe = proto.GetValueType();
+        if (proto.IsObject())
+        {
+            auto typeProp = proto.GetProperty("type");
+            if (typeProp.IsObjectContainer())
+            {
+                const Type* type = typeProp.GetValue<const Type*>();
+                for (auto component : mComponents)
+                {
+                    if (component->GetType().IsBasedOn(*type))
+                        return component;
+                }
+            }
+        }
+        else
+        {
+            for (auto component : mComponents)
+            {
+                if (auto scriptComponent = dynamic_cast<ScriptableComponent*>(component))
+                {
+                    if (scriptComponent->GetClass() == typeValue)
+                        return component;
+                }
+            }
+        }
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 
-	ActorTransform* Actor::GetTransform()
-	{
-		return transform;
-	}
+    ActorTransform* Actor::GetTransform()
+    {
+        return transform;
+    }
 #endif
 
-	const Vector<Component*>& Actor::GetComponents() const
-	{
-		return mComponents;
-	}
+    const Vector<Component*>& Actor::GetComponents() const
+    {
+        return mComponents;
+    }
 
-	void Actor::SetDefaultCreationMode(ActorCreateMode mode)
-	{
-		if (mode == ActorCreateMode::Default)
-			mode = ActorCreateMode::InScene;
+    void Actor::SetDefaultCreationMode(ActorCreateMode mode)
+    {
+        if (mode == ActorCreateMode::Default)
+            mode = ActorCreateMode::InScene;
 
-		if (mode != mDefaultCreationMode)
-			mode = mode;
+        if (mode != mDefaultCreationMode)
+            mode = mode;
 
-		mDefaultCreationMode = mode;
-	}
+        mDefaultCreationMode = mode;
+    }
 
-	ActorCreateMode Actor::GetDefaultCreationMode()
-	{
-		return mDefaultCreationMode;
-	}
+    ActorCreateMode Actor::GetDefaultCreationMode()
+    {
+        return mDefaultCreationMode;
+    }
 
-	bool Actor::IsModeOnScene(ActorCreateMode mode)
-	{
-		return mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode != ActorCreateMode::NotInScene);
-	}
+    bool Actor::IsModeOnScene(ActorCreateMode mode)
+    {
+        return mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode != ActorCreateMode::NotInScene);
+    }
 
-	void Actor::SetParentProp(Actor* actor)
-	{
-		SetParent(actor, false);
-	}
+    void Actor::SetParentProp(Actor* actor)
+    {
+        SetParent(actor, false);
+    }
 
-	void Actor::OnAddToScene()
-	{
-		ISceneDrawable::OnAddToScene();
+    void Actor::OnAddToScene()
+    {
+        ISceneDrawable::OnAddToScene();
 
-		for (auto comp : mComponents)
-			comp->AddToScene();
-	}
+        for (auto comp : mComponents)
+            comp->AddToScene();
+    }
 
-	void Actor::OnRemoveFromScene()
-	{
-		ISceneDrawable::OnRemoveFromScene();
+    void Actor::OnRemoveFromScene()
+    {
+        ISceneDrawable::OnRemoveFromScene();
 
-		for (auto comp : mComponents)
-			comp->RemoveFromScene();
-	}
+        for (auto comp : mComponents)
+            comp->RemoveFromScene();
+    }
 
-	void Actor::OnInitialized()
-	{
-		mState = State::Default;
+    void Actor::OnInitialized()
+    {
+        mState = State::Default;
 
-		for (auto comp : mComponents)
-			comp->OnInitialized();
-	}
+        for (auto comp : mComponents)
+            comp->OnInitialized();
+    }
 
-	void Actor::OnStart()
-	{
-		for (auto comp : mComponents)
-			comp->OnStart();
-	}
+    void Actor::OnStart()
+    {
+        for (auto comp : mComponents)
+            comp->OnStart();
+    }
 
-	void Actor::OnDestroy()
-	{}
+    void Actor::OnDestroy()
+    {}
 
-	void Actor::OnUpdate(float dt)
-	{}
+    void Actor::OnUpdate(float dt)
+    {}
 
-	void Actor::OnFixedUpdate(float dt)
-	{}
+    void Actor::OnFixedUpdate(float dt)
+    {}
 
-	void Actor::OnEnabled()
-	{
-		ISceneDrawable::OnEnabled();
-	}
+    void Actor::OnEnabled()
+    {
+        ISceneDrawable::OnEnabled();
+    }
 
-	void Actor::OnDisabled()
-	{
-		ISceneDrawable::OnDisabled();
-	}
+    void Actor::OnDisabled()
+    {
+        ISceneDrawable::OnDisabled();
+    }
 
-	void Actor::OnTransformUpdated()
-	{
-		for (auto comp : mComponents)
-			comp->OnTransformUpdated();
-	}
+    void Actor::OnTransformUpdated()
+    {
+        for (auto comp : mComponents)
+            comp->OnTransformUpdated();
+    }
 
-	void Actor::OnChildAdded(Actor* child)
-	{
-		for (auto comp : mComponents)
-			comp->OnChildAdded(child);
+    void Actor::OnChildAdded(Actor* child)
+    {
+        for (auto comp : mComponents)
+            comp->OnChildAdded(child);
 
-		OnChildrenChanged();
-	}
+        OnChildrenChanged();
+    }
 
-	void Actor::OnChildRemoved(Actor* child)
-	{
-		for (auto comp : mComponents)
-			comp->OnChildRemoved(child);
+    void Actor::OnChildRemoved(Actor* child)
+    {
+        for (auto comp : mComponents)
+            comp->OnChildRemoved(child);
 
-		OnChildrenChanged();
-	}
+        OnChildrenChanged();
+    }
 
-	void Actor::OnComponentAdded(Component* component)
-	{
-		for (auto comp : mComponents)
-			comp->OnComponentAdded(component);
-	}
+    void Actor::OnComponentAdded(Component* component)
+    {
+        for (auto comp : mComponents)
+            comp->OnComponentAdded(component);
+    }
 
-	void Actor::OnComponentRemoving(Component* component)
-	{
-		for (auto comp : mComponents)
-			comp->OnComponentRemoving(component);
-	}
+    void Actor::OnComponentRemoving(Component* component)
+    {
+        for (auto comp : mComponents)
+            comp->OnComponentRemoving(component);
+    }
 
 #if !IS_EDITOR
-	void Actor::OnChildrenChanged()
-	{
-		for (auto comp : mComponents)
-			comp->OnChildrenChanged();
-	}
+    void Actor::OnChildrenChanged()
+    {
+        for (auto comp : mComponents)
+            comp->OnChildrenChanged();
+    }
 
-	void Actor::OnParentChanged(Actor* oldParent) 
-	{
-		ISceneDrawable::OnDrawbleParentChanged();
+    void Actor::OnParentChanged(Actor* oldParent) 
+    {
+        ISceneDrawable::OnDrawbleParentChanged();
 
-		for (auto comp : mComponents)
-			comp->OnParentChanged(oldParent);
-	}
+        for (auto comp : mComponents)
+            comp->OnParentChanged(oldParent);
+    }
 #endif
 
-	void Actor::UpdateResEnabled(bool withChildren /*= true*/)
-	{
-		mResEnabled = mEnabled;
-		UpdateResEnabledInHierarchy(withChildren);
-	}
+    void Actor::UpdateResEnabled(bool withChildren /*= true*/)
+    {
+        mResEnabled = mEnabled;
+        UpdateResEnabledInHierarchy(withChildren);
+    }
 
-	void Actor::UpdateResEnabledInHierarchy(bool withChildren /*= true*/)
-	{
-		bool lastResEnabledInHierarchy = mResEnabledInHierarchy;
+    void Actor::UpdateResEnabledInHierarchy(bool withChildren /*= true*/)
+    {
+        bool lastResEnabledInHierarchy = mResEnabledInHierarchy;
 
-		if (mParent)
-			mResEnabledInHierarchy = mResEnabled && mParent->mResEnabledInHierarchy;
-		else
-			mResEnabledInHierarchy = mResEnabled;
+        if (mParent)
+            mResEnabledInHierarchy = mResEnabled && mParent->mResEnabledInHierarchy;
+        else
+            mResEnabledInHierarchy = mResEnabled;
 
-		if (lastResEnabledInHierarchy != mResEnabledInHierarchy)
-		{
-			if (mResEnabledInHierarchy)
-				OnEnabled();
-			else
-				OnDisabled();
+        if (lastResEnabledInHierarchy != mResEnabledInHierarchy)
+        {
+            if (mResEnabledInHierarchy)
+                OnEnabled();
+            else
+                OnDisabled();
 
-			for (auto comp : mComponents)
-				comp->UpdateEnabledInHierarchy();
+            for (auto comp : mComponents)
+                comp->UpdateEnabledInHierarchy();
 
 #if IS_EDITOR
-			if (mIsOnScene)
-				o2Scene.onEnableChanged(this);
+            if (mIsOnScene)
+                o2Scene.onEnableChanged(this);
 
-			OnChanged();
+            OnChanged();
 #endif
-		}
+        }
 
-		if (withChildren)
-		{
-			for (auto child : mChildren)
-				child->UpdateResEnabledInHierarchy();
-		}
-	}
+        if (withChildren)
+        {
+            for (auto child : mChildren)
+                child->UpdateResEnabledInHierarchy();
+        }
+    }
 
-	void Actor::SerializeBasicOverride(DataValue& node) const
-	{
-		if (mPrototypeLink)
-			SerializeWithProto(node);
-		else
-			SerializeRaw(node);
+    void Actor::SerializeBasicOverride(DataValue& node) const
+    {
+        if (mPrototypeLink)
+            SerializeWithProto(node);
+        else
+            SerializeRaw(node);
 
-		OnSerialize(node);
-	}
+        OnSerialize(node);
+    }
 
-	void Actor::DeserializeBasicOverride(const DataValue& node)
-	{
-		if (node.FindMember("PrototypeLink") || node.FindMember("Prototype"))
-			DeserializeWithProto(node);
-		else
-			DeserializeRaw(node);
+    void Actor::DeserializeBasicOverride(const DataValue& node)
+    {
+        if (node.FindMember("PrototypeLink") || node.FindMember("Prototype"))
+            DeserializeWithProto(node);
+        else
+            DeserializeRaw(node);
 
-		OnDeserialized(node);
-	}
+        OnDeserialized(node);
+    }
 
-	void Actor::SerializeRaw(DataValue& node) const
-	{
-		SerializeBasic(node);
+    void Actor::SerializeRaw(DataValue& node) const
+    {
+        SerializeBasic(node);
 
-		node["Id"] = mId;
-		node["Transform"].Set(*transform);
+        node["Id"] = mId;
+        node["Transform"].Set(*transform);
 
-		if (!mChildren.IsEmpty())
-		{
-			auto& childsNode = node.AddMember("Children");
-			for (auto child : mChildren)
-			{
-				auto& childNode = childsNode.AddElement();
-				child->Serialize(childNode.AddMember("Data"));
-				childNode.AddMember("Type") = child->GetType().GetName();
-			}
-		}
+        if (!mChildren.IsEmpty())
+        {
+            auto& childsNode = node.AddMember("Children");
+            for (auto child : mChildren)
+            {
+                auto& childNode = childsNode.AddElement();
+                child->Serialize(childNode.AddMember("Data"));
+                childNode.AddMember("Type") = child->GetType().GetName();
+            }
+        }
 
-		if (!mComponents.IsEmpty())
-		{
-			auto& componentsNode = node.AddMember("Components");
-			for (auto component : mComponents)
-			{
-				auto& componentNode = componentsNode.AddElement();
-				componentNode.AddMember("Type") = component->GetType().GetName();
-				component->Serialize(componentNode.AddMember("Data"));
-			}
-		}
-	}
+        if (!mComponents.IsEmpty())
+        {
+            auto& componentsNode = node.AddMember("Components");
+            for (auto component : mComponents)
+            {
+                auto& componentNode = componentsNode.AddElement();
+                componentNode.AddMember("Type") = component->GetType().GetName();
+                component->Serialize(componentNode.AddMember("Data"));
+            }
+        }
+    }
 
-	void Actor::DeserializeRaw(const DataValue& node)
-	{
-		DeserializeBasic(node);
+    void Actor::DeserializeRaw(const DataValue& node)
+    {
+        DeserializeBasic(node);
 
-		ActorRefResolver::Instance().LockResolving();
-		if (ActorRefResolver::Instance().mLockDepth == 0)
-			ActorRefResolver::Instance().ActorCreated(this);
+        ActorRefResolver::Instance().LockResolving();
+        if (ActorRefResolver::Instance().mLockDepth == 0)
+            ActorRefResolver::Instance().ActorCreated(this);
 
-		SetID(node.GetMember("Id"));
-		node.GetMember("Transform").Get(*transform);
+        SetID(node.GetMember("Id"));
+        node.GetMember("Transform").Get(*transform);
 
-		RemoveAllComponents();
+        RemoveAllComponents();
 
-		if (auto componentsNode = node.FindMember("Components"))
-		{
-			if (componentsNode->IsArray())
-			{
-				for (auto& componentNode : *componentsNode)
-				{
-					String componentType = componentNode.GetMember("Type");
-					Component* component = (Component*)o2Reflection.CreateTypeSample(componentType);
-					if (component)
-					{
-						component->Deserialize(componentNode.GetMember("Data"));
-						AddComponent(component);
-					}
-					else
-						o2Debug.LogError("Can't create component by type %s", componentType.Data());
+        if (auto componentsNode = node.FindMember("Components"))
+        {
+            if (componentsNode->IsArray())
+            {
+                for (auto& componentNode : *componentsNode)
+                {
+                    String componentType = componentNode.GetMember("Type");
+                    Component* component = (Component*)o2Reflection.CreateTypeSample(componentType);
+                    if (component)
+                    {
+                        component->Deserialize(componentNode.GetMember("Data"));
+                        AddComponent(component);
+                    }
+                    else
+                        o2Debug.LogError("Can't create component by type %s", componentType.Data());
 
-				}
-			}
-		}
+                }
+            }
+        }
 
-		RemoveAllChildren();
+        RemoveAllChildren();
 
-		if (auto childsNode = node.FindMember("Children"))
-		{
-			if (childsNode->IsArray())
-			{
-				for (auto& childNode : *childsNode)
-				{
-					const DataValue* typeNode = childNode.FindMember("Type");
-					const DataValue* dataValue = childNode.FindMember("Data");
-					if (typeNode && dataValue)
-					{
-						const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
-						if (type)
-						{
-							Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-							child->Deserialize(*dataValue);
-							o2Scene.mRootActors.Remove(child);
-							AddChild(child);
-						}
-					}
-				}
-			}
-		}
+        if (auto childsNode = node.FindMember("Children"))
+        {
+            if (childsNode->IsArray())
+            {
+                for (auto& childNode : *childsNode)
+                {
+                    const DataValue* typeNode = childNode.FindMember("Type");
+                    const DataValue* dataValue = childNode.FindMember("Data");
+                    if (typeNode && dataValue)
+                    {
+                        const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
+                        if (type)
+                        {
+                            Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
+                            child->Deserialize(*dataValue);
+                            o2Scene.mRootActors.Remove(child);
+                            AddChild(child);
+                        }
+                    }
+                }
+            }
+        }
 
-		ActorRefResolver::Instance().UnlockResolving();
-		ActorRefResolver::Instance().ResolveRefs();
-	}
+        ActorRefResolver::Instance().UnlockResolving();
+        ActorRefResolver::Instance().ResolveRefs();
+    }
 
-	void Actor::SerializeWithProto(DataValue& node) const
-	{
-		const Actor* proto = mPrototypeLink.Get();
+    void Actor::SerializeWithProto(DataValue& node) const
+    {
+        const Actor* proto = mPrototypeLink.Get();
 
-		// Prototype data
-		if (mPrototype)
-			node["Prototype"] = mPrototype;
+        // Prototype data
+        if (mPrototype)
+            node["Prototype"] = mPrototype;
 
-		if (mPrototypeLink)
-			node["PrototypeLink"] = proto->GetID();
+        if (mPrototypeLink)
+            node["PrototypeLink"] = proto->GetID();
 
-		// Basic data
-		node["Id"] = mId;
+        // Basic data
+        node["Id"] = mId;
 
-		// Transform data
-		auto& transformNode = node.AddMember("Transform");
-		transform->SerializeDelta(transformNode, *proto->transform);
+        // Transform data
+        auto& transformNode = node.AddMember("Transform");
+        transform->SerializeDelta(transformNode, *proto->transform);
 
-		if (transformNode.IsEmpty() || transformNode.IsNull())
-			node.RemoveMember("Transform");
+        if (transformNode.IsEmpty() || transformNode.IsNull())
+            node.RemoveMember("Transform");
 
-		SerializeDelta(node, *mPrototypeLink.Get());
+        SerializeDelta(node, *mPrototypeLink.Get());
 
-		// Children data
-		if (!mChildren.IsEmpty())
-		{
-			auto& childsNode = node.AddMember("Children");
-			childsNode.SetArray();
-			for (auto child : mChildren)
-			{
-				auto& childNode = childsNode.AddElement();
-				childNode.AddMember("Type") = child->GetType().GetName();
-				child->Serialize(childNode.AddMember("Data"));
-			}
-		}
+        // Children data
+        if (!mChildren.IsEmpty())
+        {
+            auto& childsNode = node.AddMember("Children");
+            childsNode.SetArray();
+            for (auto child : mChildren)
+            {
+                auto& childNode = childsNode.AddElement();
+                childNode.AddMember("Type") = child->GetType().GetName();
+                child->Serialize(childNode.AddMember("Data"));
+            }
+        }
 
-		// Components data
-		if (!mComponents.IsEmpty())
-		{
-			auto& componentsNode = node.AddMember("Components");
-			componentsNode.SetArray();
-			for (auto component : mComponents)
-			{
-				auto& compNode = componentsNode.AddElement();
-				compNode.AddMember("Type") = component->GetType().GetName();
+        // Components data
+        if (!mComponents.IsEmpty())
+        {
+            auto& componentsNode = node.AddMember("Components");
+            componentsNode.SetArray();
+            for (auto component : mComponents)
+            {
+                auto& compNode = componentsNode.AddElement();
+                compNode.AddMember("Type") = component->GetType().GetName();
 
-				auto& dataValue = compNode.AddMember("Data");
-				if (auto componentProtoLink = component->mPrototypeLink)
-				{
-					dataValue["PrototypeLink"] = componentProtoLink->mId;
-					dataValue.SetDelta(*component, *component->mPrototypeLink);
-				}
-				else
-					component->Serialize(dataValue);
-			}
-		}
-	}
+                auto& dataValue = compNode.AddMember("Data");
+                if (auto componentProtoLink = component->mPrototypeLink)
+                {
+                    dataValue["PrototypeLink"] = componentProtoLink->mId;
+                    dataValue.SetDelta(*component, *component->mPrototypeLink);
+                }
+                else
+                    component->Serialize(dataValue);
+            }
+        }
+    }
 
-	void Actor::DeserializeWithProto(const DataValue& node)
-	{
-		RemoveAllChildren();
-		RemoveAllComponents();
+    void Actor::DeserializeWithProto(const DataValue& node)
+    {
+        RemoveAllChildren();
+        RemoveAllComponents();
 
-		ActorRefResolver::Instance().LockResolving();
-		ActorRefResolver::Instance().ActorCreated(this);
+        ActorRefResolver::Instance().LockResolving();
+        ActorRefResolver::Instance().ActorCreated(this);
 
-		if (auto prototypeNode = node.FindMember("Prototype"))
-			SetPrototype(*prototypeNode);
+        if (auto prototypeNode = node.FindMember("Prototype"))
+            SetPrototype(*prototypeNode);
 
-		if (auto prototypeLinkNode = node.FindMember("PrototypeLink"))
-		{
-			SceneUID id = *prototypeLinkNode;
-			Actor* parent = mParent;
-			while (parent && parent->mPrototypeLink)
-			{
-				bool found = false;
+        if (auto prototypeLinkNode = node.FindMember("PrototypeLink"))
+        {
+            SceneUID id = *prototypeLinkNode;
+            Actor* parent = mParent;
+            while (parent && parent->mPrototypeLink)
+            {
+                bool found = false;
 
-				Actor* protoLink = parent->mPrototypeLink.Get();
-				while (protoLink)
-				{
-					if (auto fnd = protoLink->FindActorById(id))
-					{
-						mPrototypeLink.CopyWithoutRemap(fnd);
-						found = true;
-						break;
-					}
+                Actor* protoLink = parent->mPrototypeLink.Get();
+                while (protoLink)
+                {
+                    if (auto fnd = protoLink->FindActorById(id))
+                    {
+                        mPrototypeLink.CopyWithoutRemap(fnd);
+                        found = true;
+                        break;
+                    }
 
-					protoLink = protoLink->mPrototypeLink.Get();
-				}
+                    protoLink = protoLink->mPrototypeLink.Get();
+                }
 
-				if (found)
-					break;
+                if (found)
+                    break;
 
-				parent = parent->mParent;
-			}
-		}
+                parent = parent->mParent;
+            }
+        }
 
-		if (mPrototypeLink)
-			DeserializeDelta(node, *mPrototypeLink.Get());
-		else
-			DeserializeBasic(node);
+        if (mPrototypeLink)
+            DeserializeDelta(node, *mPrototypeLink.Get());
+        else
+            DeserializeBasic(node);
 
-		SetID(node.GetMember("Id"));
+        SetID(node.GetMember("Id"));
 
-		if (!mPrototypeLink)
-		{
-			ActorRefResolver::Instance().UnlockResolving();
-			ActorRefResolver::Instance().ResolveRefs();
-			return;
-		}
+        if (!mPrototypeLink)
+        {
+            ActorRefResolver::Instance().UnlockResolving();
+            ActorRefResolver::Instance().ResolveRefs();
+            return;
+        }
 
-		const Actor* proto = mPrototypeLink.Get();
+        const Actor* proto = mPrototypeLink.Get();
 
-		if (!mCopyVisitor)
-			mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
+        if (!mCopyVisitor)
+            mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
 
-		mCopyVisitor->depth++;
-		mCopyVisitor->OnCopyActor(proto, this);
+        mCopyVisitor->depth++;
+        mCopyVisitor->OnCopyActor(proto, this);
 
-		// Transform data
-		if (auto transformNode = node.FindMember("Transform"))
-			transform->DeserializeDelta(*transformNode, *proto->transform);
-		else
-			transform->CopyFrom(*proto->transform);
+        // Transform data
+        if (auto transformNode = node.FindMember("Transform"))
+            transform->DeserializeDelta(*transformNode, *proto->transform);
+        else
+            transform->CopyFrom(*proto->transform);
 
-		// children
-		auto childrenNode = node.FindMember("Children");
-		if (childrenNode && childrenNode->IsArray())
-		{
-			for (auto& childNode : *childrenNode)
-			{
-				const DataValue* typeNode = childNode.FindMember("Type");
-				const DataValue* dataValue = childNode.FindMember("Data");
-				if (typeNode && dataValue)
-				{
-					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
-					if (type)
-					{
-						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-						child->mParent = this;
-						child->mCopyVisitor = mCopyVisitor;
-						child->Deserialize(*dataValue);
-						child->mParent = nullptr;
-						AddChild(child);
-					}
-				}
-			}
-		}
+        // children
+        auto childrenNode = node.FindMember("Children");
+        if (childrenNode && childrenNode->IsArray())
+        {
+            for (auto& childNode : *childrenNode)
+            {
+                const DataValue* typeNode = childNode.FindMember("Type");
+                const DataValue* dataValue = childNode.FindMember("Data");
+                if (typeNode && dataValue)
+                {
+                    const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
+                    if (type)
+                    {
+                        Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
+                        child->mParent = this;
+                        child->mCopyVisitor = mCopyVisitor;
+                        child->Deserialize(*dataValue);
+                        child->mParent = nullptr;
+                        AddChild(child);
+                    }
+                }
+            }
+        }
 
-		// components
-		auto componentsNode = node.FindMember("Components");
-		if (componentsNode && componentsNode->IsArray())
-		{
-			for (auto& componentNode : *componentsNode)
-			{
-				String type = componentNode["Type"];
-				Component* newComponent = (Component*)o2Reflection.CreateTypeSample(type);
-				if (!newComponent)
-				{
-					o2Debug.LogError("Can't create component with type:" + type);
-					continue;
-				}
+        // components
+        auto componentsNode = node.FindMember("Components");
+        if (componentsNode && componentsNode->IsArray())
+        {
+            for (auto& componentNode : *componentsNode)
+            {
+                String type = componentNode["Type"];
+                Component* newComponent = (Component*)o2Reflection.CreateTypeSample(type);
+                if (!newComponent)
+                {
+                    o2Debug.LogError("Can't create component with type:" + type);
+                    continue;
+                }
 
-				auto& componentDataValue = componentNode["Data"];
+                auto& componentDataValue = componentNode["Data"];
 
-				if (auto prototypeLinkNode = componentDataValue.FindMember("PrototypeLink"))
-				{
-					SceneUID id = *prototypeLinkNode;
-					if (mPrototypeLink)
-					{
-						for (auto protoLinkComponent : mPrototypeLink->mComponents)
-						{
-							if (protoLinkComponent->mId == id)
-							{
-								newComponent->mPrototypeLink = protoLinkComponent;
-								break;
-							}
-						}
-					}
-				}
+                if (auto prototypeLinkNode = componentDataValue.FindMember("PrototypeLink"))
+                {
+                    SceneUID id = *prototypeLinkNode;
+                    if (mPrototypeLink)
+                    {
+                        for (auto protoLinkComponent : mPrototypeLink->mComponents)
+                        {
+                            if (protoLinkComponent->mId == id)
+                            {
+                                newComponent->mPrototypeLink = protoLinkComponent;
+                                break;
+                            }
+                        }
+                    }
+                }
 
-				if (!newComponent->mPrototypeLink)
-					newComponent->Deserialize(componentDataValue);
-				else
-				{
-					componentDataValue.GetDelta(*newComponent, *newComponent->mPrototypeLink);
-					mCopyVisitor->OnCopyComponent(newComponent->mPrototypeLink, newComponent);
-				}
+                if (!newComponent->mPrototypeLink)
+                    newComponent->Deserialize(componentDataValue);
+                else
+                {
+                    componentDataValue.GetDelta(*newComponent, *newComponent->mPrototypeLink);
+                    mCopyVisitor->OnCopyComponent(newComponent->mPrototypeLink, newComponent);
+                }
 
-				AddComponent(newComponent);
-			}
-		}
+                AddComponent(newComponent);
+            }
+        }
 
-		transform->SetDirty();
+        transform->SetDirty();
 
-		ActorRefResolver::Instance().UnlockResolving();
-		ActorRefResolver::Instance().ResolveRefs();
+        ActorRefResolver::Instance().UnlockResolving();
+        ActorRefResolver::Instance().ResolveRefs();
 
-		if (mCopyVisitor)
-		{
-			mCopyVisitor->depth--;
+        if (mCopyVisitor)
+        {
+            mCopyVisitor->depth--;
 
-			if (mCopyVisitor->depth == 0)
-			{
-				mCopyVisitor->Finalize();
-				delete mCopyVisitor;
-				mCopyVisitor = nullptr;
-			}
-		}
-	}
+            if (mCopyVisitor->depth == 0)
+            {
+                mCopyVisitor->Finalize();
+                delete mCopyVisitor;
+                mCopyVisitor = nullptr;
+            }
+        }
+    }
 
-	ActorAssetRef Actor::GetPrototype() const
-	{
-		if (mPrototype)
-			return mPrototype;
+    ActorAssetRef Actor::GetPrototype() const
+    {
+        if (mPrototype)
+            return mPrototype;
 
-		if (mPrototypeLink && mParent)
-			return mParent->GetPrototype();
+        if (mPrototypeLink && mParent)
+            return mParent->GetPrototype();
 
-		return ActorAssetRef();
-	}
+        return ActorAssetRef();
+    }
 
-	ActorAssetRef Actor::GetPrototypeDirectly() const
-	{
-		return mPrototype;
-	}
+    ActorAssetRef Actor::GetPrototypeDirectly() const
+    {
+        return mPrototype;
+    }
 
-	void Actor::SetPrototype(ActorAssetRef asset)
-	{
+    void Actor::SetPrototype(ActorAssetRef asset)
+    {
 #if IS_EDITOR
-		if (Scene::IsSingletonInitialzed())
-			o2Scene.OnActorPrototypeBroken(this);
+        if (Scene::IsSingletonInitialzed())
+            o2Scene.OnActorPrototypeBroken(this);
 #endif
 
-		mPrototype = asset;
+        mPrototype = asset;
 
-		if (asset)
-			mPrototypeLink.CopyWithoutRemap(asset->GetActor());
-		else
-			mPrototypeLink.CopyWithoutRemap(nullptr);
+        if (asset)
+            mPrototypeLink.CopyWithoutRemap(asset->GetActor());
+        else
+            mPrototypeLink.CopyWithoutRemap(nullptr);
 
 #if IS_EDITOR
-		Scene::LinkActorToPrototypesHierarchy(this, mPrototype);
+        Scene::LinkActorToPrototypesHierarchy(this, mPrototype);
 #endif
-	}
+    }
 
-	ActorRef Actor::GetPrototypeLink() const
-	{
-		return mPrototypeLink;
-	}
+    ActorRef Actor::GetPrototypeLink() const
+    {
+        return mPrototypeLink;
+    }
 
-	void Actor::SetLayer(const Ref<SceneLayer>& layer)
-	{
-		mSceneLayer = layer;
-		ISceneDrawable::SetDrawingDepthInheritFromParent(false); // Reregister inside
-	}
+    void Actor::SetLayer(const Ref<SceneLayer>& layer)
+    {
+        mSceneLayer = layer;
+        ISceneDrawable::SetDrawingDepthInheritFromParent(false); // Reregister inside
+    }
 
-	void Actor::SetLayer(const String& name)
-	{
-		SetLayer(Ref<SceneLayer>(name));
-	}
+    void Actor::SetLayer(const String& name)
+    {
+        SetLayer(Ref<SceneLayer>(name));
+    }
 
-	const Ref<SceneLayer>& Actor::GetLayer() const
-	{
-		return mSceneLayer;
-	}
+    const Ref<SceneLayer>& Actor::GetLayer() const
+    {
+        return mSceneLayer;
+    }
 
-	SceneLayer* Actor::GetSceneDrawableSceneLayer() const
-	{
-		return &const_cast<SceneLayer&>(mSceneLayer.Get());
-	}
+    SceneLayer* Actor::GetSceneDrawableSceneLayer() const
+    {
+        return &const_cast<SceneLayer&>(mSceneLayer.Get());
+    }
 
-	ISceneDrawable* Actor::GetParentDrawable()
-	{
-		return mParent;
-	}
+    ISceneDrawable* Actor::GetParentDrawable()
+    {
+        return mParent;
+    }
 
-	int Actor::GetIndexInParentDrawable() const
-	{
-		if (mParent)
-			return mParent->mChildren.IndexOf((Actor*)this);
+    int Actor::GetIndexInParentDrawable() const
+    {
+        if (mParent)
+            return mParent->mChildren.IndexOf((Actor*)this);
 
-		if (Scene::IsSingletonInitialzed() && mIsOnScene)
-			return o2Scene.mRootActors.IndexOf((Actor*)this);
+        if (Scene::IsSingletonInitialzed() && mIsOnScene)
+            return o2Scene.mRootActors.IndexOf((Actor*)this);
 
-		return 0;
-	}
+        return 0;
+    }
 
-	Map<String, Actor*> Actor::GetAllChilds()
-	{
-		Map<String, Actor*> res;
-		for (auto child : mChildren)
-			res.Add(child->GetName(), child);
+    Map<String, Actor*> Actor::GetAllChilds()
+    {
+        Map<String, Actor*> res;
+        for (auto child : mChildren)
+            res.Add(child->GetName(), child);
 
-		return res;
-	}
+        return res;
+    }
 
-	Map<String, Component*> Actor::GetAllComponents()
-	{
-		Map<String, Component*> res;
-		for (auto child : mComponents)
-			res.Add(child->GetType().GetName(), child);
+    Map<String, Component*> Actor::GetAllComponents()
+    {
+        Map<String, Component*> res;
+        for (auto child : mComponents)
+            res.Add(child->GetType().GetName(), child);
 
-		return res;
-	}
+        return res;
+    }
 
-	void Actor::OnBeforeDestroy()
-	{
-		if (mResEnabledInHierarchy)
-			OnDisabled();
+    void Actor::OnBeforeDestroy()
+    {
+        if (mResEnabledInHierarchy)
+            OnDisabled();
 
-		if (mIsOnScene)
-		{
-			OnRemoveFromScene();
-			mIsOnScene = false;
-		}
+        if (mIsOnScene)
+        {
+            OnRemoveFromScene();
+            mIsOnScene = false;
+        }
 
-		OnDestroy();
-	}
+        OnDestroy();
+    }
 
-	String Actor::GetCreateMenuCategory()
-	{
-		return "";
-	}
+    String Actor::GetCreateMenuCategory()
+    {
+        return "";
+    }
 
-	String Actor::GetCreateMenuGroup()
-	{
-		return "";
-	}
+    String Actor::GetCreateMenuGroup()
+    {
+        return "";
+    }
 
-	void Actor::SourceToTargetMapCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
-	{
-		sourceToTargetActors[source] = target;
-	}
+    void Actor::SourceToTargetMapCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
+    {
+        sourceToTargetActors[source] = target;
+    }
 
-	void Actor::SourceToTargetMapCloneVisitor::OnCopyComponent(const Component* source, Component* target)
-	{
-		sourceToTargetComponents[source] = target;
-	}
+    void Actor::SourceToTargetMapCloneVisitor::OnCopyComponent(const Component* source, Component* target)
+    {
+        sourceToTargetComponents[source] = target;
+    }
 
-	void Actor::SourceToTargetMapCloneVisitor::Finalize()
-	{
-		ActorRefResolver::RemapReferences(sourceToTargetActors, sourceToTargetComponents);
-	}
+    void Actor::SourceToTargetMapCloneVisitor::Finalize()
+    {
+        ActorRefResolver::RemapReferences(sourceToTargetActors, sourceToTargetComponents);
+    }
 
-	void Actor::InstantiatePrototypeCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
-	{
-		SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
-		target->mPrototypeLink.CopyWithoutRemap(const_cast<Actor*>(source));
-	}
+    void Actor::InstantiatePrototypeCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
+    {
+        SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
+        target->mPrototypeLink.CopyWithoutRemap(const_cast<Actor*>(source));
+    }
 
-	void Actor::InstantiatePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)
-	{
-		SourceToTargetMapCloneVisitor::OnCopyComponent(source, target);
-		target->mPrototypeLink = const_cast<Component*>(source);
-	}
+    void Actor::InstantiatePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)
+    {
+        SourceToTargetMapCloneVisitor::OnCopyComponent(source, target);
+        target->mPrototypeLink = const_cast<Component*>(source);
+    }
 }
 // --- META ---
 
 ENUM_META(o2::Actor::State)
 {
-	ENUM_ENTRY(Default);
-	ENUM_ENTRY(Destroyed);
-	ENUM_ENTRY(Destroying);
-	ENUM_ENTRY(Initializing);
+    ENUM_ENTRY(Default);
+    ENUM_ENTRY(Destroyed);
+    ENUM_ENTRY(Destroying);
+    ENUM_ENTRY(Initializing);
 }
 END_ENUM_META;
 

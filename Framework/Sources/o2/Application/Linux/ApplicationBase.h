@@ -11,14 +11,14 @@
 
 namespace o2
 {
-	class Application;
+    class Application;
 
-	// -------------------------------
-	// Windows application base fields
-	// -------------------------------
-	class ApplicationBase
-	{
-	protected:
+    // -------------------------------
+    // Windows application base fields
+    // -------------------------------
+    class ApplicationBase
+    {
+    protected:
 #if !defined(O2_DISABLE_PLATFORM)
         ::Window mWindow;         // X Window
         Display* mDisplay;        // Display
@@ -26,21 +26,21 @@ namespace o2
         XVisualInfo* mVisualInfo; // Window visual info
 #endif
 
-		bool   mWindowed;        // True if app in windowed mode, false if in fullscreen mode
-		bool   mWindowResizible; // True, if window can be sized by user
-		Vec2I  mWindowedSize;    // Size of window
-		Vec2I  mWindowedPos;     // Position of window
-		String mWndCaption;      // Window caption
-		bool   mActive;          // True, if window is active
+        bool   mWindowed;        // True if app in windowed mode, false if in fullscreen mode
+        bool   mWindowResizible; // True, if window can be sized by user
+        Vec2I  mWindowedSize;    // Size of window
+        Vec2I  mWindowedPos;     // Position of window
+        String mWndCaption;      // Window caption
+        bool   mActive;          // True, if window is active
 
-		//HCURSOR mCurrentCursor;  // Current cursor type
+        //HCURSOR mCurrentCursor;  // Current cursor type
 
-		bool mNeedPlatformInitialization = true; // True, if need to initialize platform: window and render
+        bool mNeedPlatformInitialization = true; // True, if need to initialize platform: window and render
 
     public:
-		friend class Render;
-		friend class FileSystem;
-	};
+        friend class Render;
+        friend class FileSystem;
+    };
 }
 
 #endif // PLATFORM_LINUX

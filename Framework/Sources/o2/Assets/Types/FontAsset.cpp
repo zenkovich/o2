@@ -7,29 +7,29 @@
 
 namespace o2
 {
-	FontAsset::FontAsset():
-		Asset(nullptr)
-	{}
+    FontAsset::FontAsset():
+        Asset(nullptr)
+    {}
 
-	FontAsset::FontAsset(const FontAsset& other) :
-		Asset(other), mFont(other.mFont), font(this)
-	{}
+    FontAsset::FontAsset(const FontAsset& other) :
+        Asset(other), mFont(other.mFont), font(this)
+    {}
 
-	FontAsset::FontAsset(AssetMeta* meta):
-		Asset(meta)
-	{}
+    FontAsset::FontAsset(AssetMeta* meta):
+        Asset(meta)
+    {}
 
-	FontRef FontAsset::GetFont() const
-	{
-		return mFont;
-	}
+    FontRef FontAsset::GetFont() const
+    {
+        return mFont;
+    }
 
-	FontAsset& FontAsset::operator=(const FontAsset& other)
-	{
-		Asset::operator=(other);
-		mFont = other.mFont;
-		return *this;
-	}
+    FontAsset& FontAsset::operator=(const FontAsset& other)
+    {
+        Asset::operator=(other);
+        mFont = other.mFont;
+        return *this;
+    }
 }
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::FontAsset>);
 // --- META ---

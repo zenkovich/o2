@@ -7,76 +7,76 @@
 namespace o2
 {
 
-	SkinningMeshBoneComponent::SkinningMeshBoneComponent()
-	{}
+    SkinningMeshBoneComponent::SkinningMeshBoneComponent()
+    {}
 
-	SkinningMeshBoneComponent::SkinningMeshBoneComponent(const SkinningMeshBoneComponent& other):
-		DrawableComponent(other)
-	{}
+    SkinningMeshBoneComponent::SkinningMeshBoneComponent(const SkinningMeshBoneComponent& other):
+        DrawableComponent(other)
+    {}
 
-	SkinningMeshBoneComponent::~SkinningMeshBoneComponent()
-	{}
+    SkinningMeshBoneComponent::~SkinningMeshBoneComponent()
+    {}
 
-	SkinningMeshBoneComponent& SkinningMeshBoneComponent::operator=(const SkinningMeshBoneComponent& other)
-	{
-		DrawableComponent::operator=(other);
-		return *this;
-	}
+    SkinningMeshBoneComponent& SkinningMeshBoneComponent::operator=(const SkinningMeshBoneComponent& other)
+    {
+        DrawableComponent::operator=(other);
+        return *this;
+    }
 
-	void SkinningMeshBoneComponent::Draw()
-	{
-// 		o2Render.DrawArrow(mOwner->transform->GetWorldPivot(),
-// 						   mOwner->transform->Local2WorldPoint(Vec2F(length, 0) + mOwner->transform->GetSizePivot()));
-	}
+    void SkinningMeshBoneComponent::Draw()
+    {
+//         o2Render.DrawArrow(mOwner->transform->GetWorldPivot(),
+//                            mOwner->transform->Local2WorldPoint(Vec2F(length, 0) + mOwner->transform->GetSizePivot()));
+    }
 
-	void SkinningMeshBoneComponent::OnUpdate(float dt)
-	{
-	}
+    void SkinningMeshBoneComponent::OnUpdate(float dt)
+    {
+    }
 
-	String SkinningMeshBoneComponent::GetName()
-	{
-		return "Skinning mesh bone";
-	}
+    String SkinningMeshBoneComponent::GetName()
+    {
+        return "Skinning mesh bone";
+    }
 
-	String SkinningMeshBoneComponent::GetCategory()
-	{
-		return "Animation";
-	}
+    String SkinningMeshBoneComponent::GetCategory()
+    {
+        return "Animation";
+    }
 
-	String SkinningMeshBoneComponent::GetIcon()
-	{
-		return "ui/UI4_emitter_component.png";
-	}
+    String SkinningMeshBoneComponent::GetIcon()
+    {
+        return "ui/UI4_emitter_component.png";
+    }
 
-	void SkinningMeshBoneComponent::OnTransformUpdated()
-	{
-	}
+    void SkinningMeshBoneComponent::OnTransformUpdated()
+    {
+    }
 
-	void SkinningMeshBoneComponent::OnAddToScene()
-	{
-		if (auto skinningMesh = FindSkinningMesh())
-			skinningMesh->NeedUpdateBones(true);
-	}
+    void SkinningMeshBoneComponent::OnAddToScene()
+    {
+        if (auto skinningMesh = FindSkinningMesh())
+            skinningMesh->NeedUpdateBones(true);
+    }
 
-	void SkinningMeshBoneComponent::OnRemoveFromScene()
-	{
-		if (auto skinningMesh = FindSkinningMesh())
-			skinningMesh->NeedUpdateBones(true);
-	}
+    void SkinningMeshBoneComponent::OnRemoveFromScene()
+    {
+        if (auto skinningMesh = FindSkinningMesh())
+            skinningMesh->NeedUpdateBones(true);
+    }
 
-	SkinningMeshComponent* SkinningMeshBoneComponent::FindSkinningMesh() const
-	{
-		auto itActor = mOwner;
-		while (itActor)
-		{
-			if (auto mesh = itActor->GetComponent<SkinningMeshComponent>())
-				return mesh;
+    SkinningMeshComponent* SkinningMeshBoneComponent::FindSkinningMesh() const
+    {
+        auto itActor = mOwner;
+        while (itActor)
+        {
+            if (auto mesh = itActor->GetComponent<SkinningMeshComponent>())
+                return mesh;
 
-			itActor = itActor->GetParent();
-		}
+            itActor = itActor->GetParent();
+        }
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::SkinningMeshBoneComponent>);

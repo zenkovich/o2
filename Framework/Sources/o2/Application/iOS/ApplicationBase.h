@@ -4,11 +4,11 @@
 
 namespace o2
 {
-	// -------------------------------
-	// Android application base fields
-	// -------------------------------
-	class ApplicationBase
-	{
+    // -------------------------------
+    // Android application base fields
+    // -------------------------------
+    class ApplicationBase
+    {
     };
 }
 

@@ -13,125 +13,125 @@ vector<string> Split(const string& s, char delim);
 class CppSyntaxParser
 {
 public:
-	CppSyntaxParser();
-	~CppSyntaxParser();
+    CppSyntaxParser();
+    ~CppSyntaxParser();
 
-	void ParseFile(SyntaxFile& file, const string& filePath, const TimeStamp& fileEditDate);
-
-protected:
-	typedef void(CppSyntaxParser::* ParserDelegate)(SyntaxSection&, int&, SyntaxProtectionSection&);
-
-	struct ExpressionParser
-	{
-		const char* keyWord = nullptr;
-		bool           isPossibleInClass = true;
-		bool           isPossibleInNamespace = true;
-		ParserDelegate parser;
-
-		ExpressionParser() {}
-		ExpressionParser(const char* keyWord, ParserDelegate parser, bool isPossibleInClass = true,
-						 bool isPossibleInNamespace = true);
-	};
-	typedef vector<ExpressionParser*> ParsersVec;
+    void ParseFile(SyntaxFile& file, const string& filePath, const TimeStamp& fileEditDate);
 
 protected:
-	string      mSourcesPath;
-	ParsersVec  mParsers;
+    typedef void(CppSyntaxParser::* ParserDelegate)(SyntaxSection&, int&, SyntaxProtectionSection&);
 
-	SyntaxDefineIf* mCurrentDefine = nullptr;
+    struct ExpressionParser
+    {
+        const char* keyWord = nullptr;
+        bool           isPossibleInClass = true;
+        bool           isPossibleInNamespace = true;
+        ParserDelegate parser;
+
+        ExpressionParser() {}
+        ExpressionParser(const char* keyWord, ParserDelegate parser, bool isPossibleInClass = true,
+                         bool isPossibleInNamespace = true);
+    };
+    typedef vector<ExpressionParser*> ParsersVec;
 
 protected:
-	void InitializeParsers();
+    string      mSourcesPath;
+    ParsersVec  mParsers;
 
-	void ParseSyntaxSection(SyntaxSection& section, const string& source, SyntaxFile& file,
-							SyntaxProtectionSection protectionSection);
+    SyntaxDefineIf* mCurrentDefine = nullptr;
 
-	int GetLineNumber(const string& data, int caret);
+protected:
+    void InitializeParsers();
 
-	string ReadWord(const string& data, int& caret,
-					const char* breakSymbols = " \n\r(){}.,;+-*/=@!|&*:~\\",
-					const char* skipSymbols = " \n\r",
-					bool checkBraces = true, bool checkFgBraces = true, bool checkTrBraces = true);
+    void ParseSyntaxSection(SyntaxSection& section, const string& source, SyntaxFile& file,
+                            SyntaxProtectionSection protectionSection);
 
-	string ReadBlock(const string& data, int& caret);
+    int GetLineNumber(const string& data, int caret);
 
-	string ReadBraces(const string& data, int& caret);
+    string ReadWord(const string& data, int& caret,
+                    const char* breakSymbols = " \n\r(){}.,;+-*/=@!|&*:~\\",
+                    const char* skipSymbols = " \n\r",
+                    bool checkBraces = true, bool checkFgBraces = true, bool checkTrBraces = true);
 
-	char GetNextSymbol(const string& data, int begin, const char* skipSymbols = " \n\r\t()[]{}");
+    string ReadBlock(const string& data, int& caret);
 
-	vector<string> Split(const string& data, char splitSymbol);
+    string ReadBraces(const string& data, int& caret);
 
-	void RemoveComments(string& input);
+    char GetNextSymbol(const string& data, int begin, const char* skipSymbols = " \n\r\t()[]{}");
 
-	void TryParseBlock(SyntaxSection& section, const string& block, int blockBegin, int& caret,
-					   SyntaxProtectionSection& protectionSection);
+    vector<string> Split(const string& data, char splitSymbol);
 
-	bool IsFunction(const string& data);
+    void RemoveComments(string& input);
 
-	SyntaxVariable* ParseVariable(const string& data, SyntaxProtectionSection& protectionSection, int begin, int end);
+    void TryParseBlock(SyntaxSection& section, const string& block, int blockBegin, int& caret,
+                       SyntaxProtectionSection& protectionSection);
 
-	SyntaxFunction* ParseFunction(const string& data, SyntaxProtectionSection& protectionSection, int begin, int end);
+    bool IsFunction(const string& data);
 
-	void ParseNamespace(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    SyntaxVariable* ParseVariable(const string& data, SyntaxProtectionSection& protectionSection, int begin, int end);
 
-	void ParseComment(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    SyntaxFunction* ParseFunction(const string& data, SyntaxProtectionSection& protectionSection, int begin, int end);
 
-	void ParseMultilineComment(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseNamespace(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParsePragma(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseComment(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseInclude(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseMultilineComment(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseDefine(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParsePragma(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseIfdefMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseInclude(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseIfMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseDefine(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseEndIfMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseIfdefMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseElifMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseIfMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseElseMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseEndIfMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseMetaClass(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseElifMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseClass(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseElseMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseStruct(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseMetaClass(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseClassOrStruct(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection,
-							bool isClass, bool isMeta, const string& templates);
+    void ParseClass(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseTemplate(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseStruct(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseTypedef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseClassOrStruct(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection,
+                            bool isClass, bool isMeta, const string& templates);
 
-	void ParseEnum(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseTemplate(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseUsing(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseTypedef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParsePublicSection(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseEnum(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParsePrivateSection(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseUsing(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseProtectedSection(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParsePublicSection(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseFriend(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParsePrivateSection(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseAttributeCommentDef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseProtectedSection(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseAttributeShortDef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseFriend(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseAttributes(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseAttributeCommentDef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseProperties(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseAttributeShortDef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseProperty(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseAttributes(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseGetter(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseProperties(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseSetter(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseProperty(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
-	void ParseAccessor(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+    void ParseGetter(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
+    void ParseSetter(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
+    void ParseAccessor(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 };

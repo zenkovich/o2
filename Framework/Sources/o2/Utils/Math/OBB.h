@@ -2,8 +2,8 @@
 
 namespace o2
 {
-	class OBB
-	{
-	public:
-	};
+    class OBB
+    {
+    public:
+    };
 }

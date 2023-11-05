@@ -5,72 +5,72 @@
 #include "o2/Utils/System/Time/Timer.h"
 
 namespace o2
-{	
-	class SimpleProfiler
-	{
-	public:
-		struct ScopeSampler
-		{
-			const char* id;
-			float begin, end;
+{    
+    class SimpleProfiler
+    {
+    public:
+        struct ScopeSampler
+        {
+            const char* id;
+            float begin, end;
 
-			ScopeSampler(const char* id): 
-				id(id), begin(SimpleProfiler::GetProfileTime())
-			{}
+            ScopeSampler(const char* id): 
+                id(id), begin(SimpleProfiler::GetProfileTime())
+            {}
 
-			~ScopeSampler()
-			{
-				end = SimpleProfiler::GetProfileTime();
-				SimpleProfiler::Sample(id, begin, end);
-			}
-		};
+            ~ScopeSampler()
+            {
+                end = SimpleProfiler::GetProfileTime();
+                SimpleProfiler::Sample(id, begin, end);
+            }
+        };
 
-		struct ZoneSampler
-		{
-			const char* id;
-			float begin, end;
+        struct ZoneSampler
+        {
+            const char* id;
+            float begin, end;
 
-			ZoneSampler(const char* id) :
-				id(id), begin(SimpleProfiler::GetProfileTime())
-			{}
+            ZoneSampler(const char* id) :
+                id(id), begin(SimpleProfiler::GetProfileTime())
+            {}
 
-			void End()
-			{
-				end = SimpleProfiler::GetProfileTime();
-				SimpleProfiler::Sample(id, begin, end);
-			}
-		};
+            void End()
+            {
+                end = SimpleProfiler::GetProfileTime();
+                SimpleProfiler::Sample(id, begin, end);
+            }
+        };
 
-		struct SampleInterval
-		{
-			const char* id;
-			float begin, end;
+        struct SampleInterval
+        {
+            const char* id;
+            float begin, end;
 
-			SampleInterval(const char* id, float begin, float end) :
-				id(id), begin(begin), end(end)
-			{}
-		};
+            SampleInterval(const char* id, float begin, float end) :
+                id(id), begin(begin), end(end)
+            {}
+        };
 
-	public:
-		static void Reset();
-		static void Flush();
+    public:
+        static void Reset();
+        static void Flush();
 
-		static void DumpLog();
+        static void DumpLog();
 
-		static void Sample(const char* id, float start, float end);
+        static void Sample(const char* id, float start, float end);
 
-		static const Vector<SampleInterval>& GetSamples();
-		static const std::unordered_map<const char*, Pair<float, int>>& GetAccumulatedSamples();
-		static int GetAccumulatedSamplesCount();
+        static const Vector<SampleInterval>& GetSamples();
+        static const std::unordered_map<const char*, Pair<float, int>>& GetAccumulatedSamples();
+        static int GetAccumulatedSamplesCount();
 
-		static float GetProfileTime();
+        static float GetProfileTime();
 
-	private:
-		static Timer mTimer;
-		static Vector<SampleInterval> mSamples;
-		static std::unordered_map<const char*, Pair<float, int>> mAccumulatedSamples;
-		static int mAccumulatedSamplesCount;
-	};
+    private:
+        static Timer mTimer;
+        static Vector<SampleInterval> mSamples;
+        static std::unordered_map<const char*, Pair<float, int>> mAccumulatedSamples;
+        static int mAccumulatedSamplesCount;
+    };
 
 #if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
 #define __PRETTY_FUNCTION__ __FUNCSIG__

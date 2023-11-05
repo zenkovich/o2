@@ -6,54 +6,54 @@
 
 namespace o2
 {
-	class ShortcutKeys: public ISerializable
-	{
-	public:
-		bool        control; // @SERIALIZABLE
-		bool        shift;	 // @SERIALIZABLE
-		bool        alt;	 // @SERIALIZABLE
-		KeyboardKey key;	 // @SERIALIZABLE
+    class ShortcutKeys: public ISerializable
+    {
+    public:
+        bool        control; // @SERIALIZABLE
+        bool        shift;     // @SERIALIZABLE
+        bool        alt;     // @SERIALIZABLE
+        KeyboardKey key;     // @SERIALIZABLE
 
-	public:
-		ShortcutKeys();
+    public:
+        ShortcutKeys();
 
-		ShortcutKeys(KeyboardKey key, bool control = false, bool shift = false, bool alt = false);
+        ShortcutKeys(KeyboardKey key, bool control = false, bool shift = false, bool alt = false);
 
-		bool IsPressed() const;
-		bool IsDown() const;
-		String AsString() const;
-		bool IsEmpty() const;
+        bool IsPressed() const;
+        bool IsDown() const;
+        String AsString() const;
+        bool IsEmpty() const;
 
-		bool operator==(const ShortcutKeys& other) const;
-		bool operator<(const ShortcutKeys& other) const;
+        bool operator==(const ShortcutKeys& other) const;
+        bool operator<(const ShortcutKeys& other) const;
 
-		SERIALIZABLE(ShortcutKeys);
-	};
+        SERIALIZABLE(ShortcutKeys);
+    };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::ShortcutKeys)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(o2::ShortcutKeys)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(control);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(shift);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(alt);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(key);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(control);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(shift);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(alt);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(key);
 }
 END_META;
 CLASS_METHODS_META(o2::ShortcutKeys)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(KeyboardKey, bool, bool, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsPressed);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsDown);
-	FUNCTION().PUBLIC().SIGNATURE(String, AsString);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(KeyboardKey, bool, bool, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsPressed);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsDown);
+    FUNCTION().PUBLIC().SIGNATURE(String, AsString);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
 }
 END_META;
 // --- END META ---

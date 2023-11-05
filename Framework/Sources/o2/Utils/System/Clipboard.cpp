@@ -9,147 +9,147 @@
 namespace o2
 {
 
-	void Clipboard::SetText(const WString& text)
-	{
+    void Clipboard::SetText(const WString& text)
+    {
 #if defined PLATFORM_WINDOWS
-		if (OpenClipboard(NULL))
-		{
-			HGLOBAL hgBuffer;
-			wchar_t* chBuffer;
-			EmptyClipboard();
-			hgBuffer = GlobalAlloc(GMEM_DDESHARE, (text.Length() + 1)*sizeof(wchar_t));
-			chBuffer = (wchar_t*)GlobalLock(hgBuffer);
-			memcpy(chBuffer, text.Data(), (text.Length() + 1)*sizeof(wchar_t));
-			GlobalUnlock(hgBuffer);
-			SetClipboardData(CF_UNICODETEXT, hgBuffer);
-			CloseClipboard();
-		}
+        if (OpenClipboard(NULL))
+        {
+            HGLOBAL hgBuffer;
+            wchar_t* chBuffer;
+            EmptyClipboard();
+            hgBuffer = GlobalAlloc(GMEM_DDESHARE, (text.Length() + 1)*sizeof(wchar_t));
+            chBuffer = (wchar_t*)GlobalLock(hgBuffer);
+            memcpy(chBuffer, text.Data(), (text.Length() + 1)*sizeof(wchar_t));
+            GlobalUnlock(hgBuffer);
+            SetClipboardData(CF_UNICODETEXT, hgBuffer);
+            CloseClipboard();
+        }
 #endif
-	}
+    }
 
-	WString Clipboard::GetText()
-	{
+    WString Clipboard::GetText()
+    {
 #if defined PLATFORM_WINDOWS
-		WString res;
+        WString res;
 
-		if (OpenClipboard(NULL))
-		{
-			HANDLE hData = GetClipboardData(CF_UNICODETEXT);
-			wchar_t* chBuffer = (wchar_t*)GlobalLock(hData);
-			res = chBuffer;
-			GlobalUnlock(hData);
-			CloseClipboard();
-		}
+        if (OpenClipboard(NULL))
+        {
+            HANDLE hData = GetClipboardData(CF_UNICODETEXT);
+            wchar_t* chBuffer = (wchar_t*)GlobalLock(hData);
+            res = chBuffer;
+            GlobalUnlock(hData);
+            CloseClipboard();
+        }
 
-		return res;
+        return res;
 #elif PLATFORM_ANDROID
-		return WString();
+        return WString();
 #elif PLATFORM_MAC
-		return WString();
+        return WString();
 #elif PLATFORM_IOS
         return WString();
 #elif PLATFORM_LINUX
         return WString();
 #endif
-	}
+    }
 
 #undef CopyFile
 
-	void Clipboard::CopyFile(const WString& path)
-	{
+    void Clipboard::CopyFile(const WString& path)
+    {
 #if defined PLATFORM_WINDOWS
-		if (OpenClipboard(NULL))
-		{
-			EmptyClipboard();
+        if (OpenClipboard(NULL))
+        {
+            EmptyClipboard();
 
-			int size = sizeof(DROPFILES) + (path.Length() + 2)*sizeof(WCHAR);
-			HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, size);
-			DROPFILES *df = (DROPFILES*)GlobalLock(hGlobal);
-			ZeroMemory(df, size);
-			df->pFiles = sizeof(DROPFILES);
-			df->fWide = TRUE;
-			LPWSTR ptr = (LPWSTR)(df + 1);
-			lstrcpyW(ptr, path.Data());
-			GlobalUnlock(hGlobal);
-			SetClipboardData(CF_HDROP, hGlobal);
-			CloseClipboard();
-		}
+            int size = sizeof(DROPFILES) + (path.Length() + 2)*sizeof(WCHAR);
+            HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, size);
+            DROPFILES *df = (DROPFILES*)GlobalLock(hGlobal);
+            ZeroMemory(df, size);
+            df->pFiles = sizeof(DROPFILES);
+            df->fWide = TRUE;
+            LPWSTR ptr = (LPWSTR)(df + 1);
+            lstrcpyW(ptr, path.Data());
+            GlobalUnlock(hGlobal);
+            SetClipboardData(CF_HDROP, hGlobal);
+            CloseClipboard();
+        }
 #endif
-	}
+    }
 
-	void Clipboard::CopyFiles(const Vector<WString>& paths)
-	{
+    void Clipboard::CopyFiles(const Vector<WString>& paths)
+    {
 #if defined PLATFORM_WINDOWS
-		if (OpenClipboard(NULL))
-		{
-			EmptyClipboard();
+        if (OpenClipboard(NULL))
+        {
+            EmptyClipboard();
 
-			int size = sizeof(DROPFILES) + (paths.Sum<int>([](const WString& x) { return x.Length() + 1; }) + 1)*sizeof(WCHAR);
-			HGLOBAL hGlobal = GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, size);
-			DROPFILES *df = (DROPFILES*)GlobalLock(hGlobal);
-			ZeroMemory(df, size);
-			df->pFiles = sizeof(DROPFILES);
-			df->fWide = TRUE;
-			LPWSTR ptr = (LPWSTR)(df + 1);
+            int size = sizeof(DROPFILES) + (paths.Sum<int>([](const WString& x) { return x.Length() + 1; }) + 1)*sizeof(WCHAR);
+            HGLOBAL hGlobal = GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, size);
+            DROPFILES *df = (DROPFILES*)GlobalLock(hGlobal);
+            ZeroMemory(df, size);
+            df->pFiles = sizeof(DROPFILES);
+            df->fWide = TRUE;
+            LPWSTR ptr = (LPWSTR)(df + 1);
 
-			for (auto path : paths)
-			{
-				lstrcpyW(ptr, path.Data());
-				ptr += path.Length();
-				*ptr = '\0';
-				ptr++;
-			}
+            for (auto path : paths)
+            {
+                lstrcpyW(ptr, path.Data());
+                ptr += path.Length();
+                *ptr = '\0';
+                ptr++;
+            }
 
-			*ptr = '\0';
+            *ptr = '\0';
 
-			GlobalUnlock(hGlobal);
-			SetClipboardData(CF_HDROP, hGlobal);
-			CloseClipboard();
-		}
+            GlobalUnlock(hGlobal);
+            SetClipboardData(CF_HDROP, hGlobal);
+            CloseClipboard();
+        }
 #endif
-	}
+    }
 
-	Vector<WString> Clipboard::GetCopyFiles()
-	{
-		Vector<WString> res;
+    Vector<WString> Clipboard::GetCopyFiles()
+    {
+        Vector<WString> res;
 
 #if defined PLATFORM_WINDOWS
-		if (OpenClipboard(NULL))
-		{
-			HANDLE hData = GetClipboardData(CF_HDROP);
-			if (hData)
-			{
-				DROPFILES* df = (DROPFILES*)GlobalLock(hData);
+        if (OpenClipboard(NULL))
+        {
+            HANDLE hData = GetClipboardData(CF_HDROP);
+            if (hData)
+            {
+                DROPFILES* df = (DROPFILES*)GlobalLock(hData);
 
-				wchar_t* files = (wchar_t*)(df + 1);
-				wchar_t buf[MAX_PATH];
-				int bufLen = 0;
-				int i = 0;
+                wchar_t* files = (wchar_t*)(df + 1);
+                wchar_t buf[MAX_PATH];
+                int bufLen = 0;
+                int i = 0;
 
-				while (true)
-				{
-					buf[bufLen++] = files[i];
+                while (true)
+                {
+                    buf[bufLen++] = files[i];
 
-					if (files[i] == '\0')
-					{
-						if (bufLen == 1)
-							break;
+                    if (files[i] == '\0')
+                    {
+                        if (bufLen == 1)
+                            break;
 
-						res.Add(buf);
-						bufLen = 0;
-					}
+                        res.Add(buf);
+                        bufLen = 0;
+                    }
 
-					i++;
-				}
+                    i++;
+                }
 
-				GlobalUnlock(hData);
-			}
+                GlobalUnlock(hData);
+            }
 
-			CloseClipboard();
-		}
+            CloseClipboard();
+        }
 #endif
 
-		return res;
-	}
+        return res;
+    }
 
 }
