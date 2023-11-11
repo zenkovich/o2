@@ -66,7 +66,7 @@ namespace o2
     public:
         // Initializes regular type
         template<typename _type>
-        static Type* InitializeType(const char* name);
+        static Type* InitializeType(const char* name, bool autoDefferedInit = false);
 
         // Initialized fundamental type
         template<typename _type>
@@ -232,13 +232,15 @@ namespace o2
     }
 
     template<typename _type>
-    Type* Reflection::InitializeType(const char* name)
+    Type* Reflection::InitializeType(const char* name, bool autoDefferedInit /*= false*/)
     {
         Type* res = mnew TObjectType<_type>(name, sizeof(_type), &CastFunc<IObject, _type>,
                                             &CastFunc<_type, IObject>);
 
-        Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::template ProcessType<ReflectionInitializationTypeProcessor>);
         res->mId = Reflection::Instance().mLastGivenTypeId++;
+
+        if (autoDefferedInit)
+            Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::template ProcessType<ReflectionInitializationTypeProcessor>);
 
 #if IS_SCRIPTING_SUPPORTED
         ScriptEngine::GetRegisterConstructorFuncs().Add((ScriptEngine::RegisterConstructorFunc)&_type::template ProcessType<ScriptPrototypeProcessor>);

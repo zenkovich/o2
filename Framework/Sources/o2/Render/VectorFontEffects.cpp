@@ -109,11 +109,11 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::FontStrokeEffect);
+DECLARE_CLASS(o2::FontStrokeEffect, o2__FontStrokeEffect);
 
-DECLARE_CLASS(o2::FontGradientEffect);
+DECLARE_CLASS(o2::FontGradientEffect, o2__FontGradientEffect);
 
-DECLARE_CLASS(o2::FontColorEffect);
+DECLARE_CLASS(o2::FontColorEffect, o2__FontColorEffect);
 
-DECLARE_CLASS(o2::FontShadowEffect);
+DECLARE_CLASS(o2::FontShadowEffect, o2__FontShadowEffect);
 // --- END META ---

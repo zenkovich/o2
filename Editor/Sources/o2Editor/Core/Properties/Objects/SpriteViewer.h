@@ -66,36 +66,36 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SpriteViewer)
 {
-	BASE_CLASS(Editor::TObjectPropertiesViewer<Sprite>);
+    BASE_CLASS(Editor::TObjectPropertiesViewer<Sprite>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SpriteViewer)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHiddenProperties);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mImageProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizePivotProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPivotProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mModeProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFillPropertiesSpoiler);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFillProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSlicedPropertiesSpoiler);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSliceBorderProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTiledPropertiesSpoiler);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTileScaleProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSlicesEditor);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHiddenProperties);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mImageProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizePivotProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPivotProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mModeProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFillPropertiesSpoiler);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFillProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSlicedPropertiesSpoiler);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSliceBorderProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTiledPropertiesSpoiler);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTileScaleProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSlicesEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpriteViewer)
 {
 
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnModeSelected);
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnModeSelected);
 }
 END_META;
 // --- END META ---

@@ -611,5 +611,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::CustomList);
+DECLARE_CLASS(o2::CustomList, o2__CustomList);
 // --- END META ---

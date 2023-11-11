@@ -2,5 +2,5 @@
 #include "TimeStamp.h"
 // --- META ---
 
-DECLARE_CLASS(o2::TimeStamp);
+DECLARE_CLASS(o2::TimeStamp, o2__TimeStamp);
 // --- END META ---

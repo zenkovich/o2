@@ -101,7 +101,7 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::IRectDrawable);
+DECLARE_CLASS(o2::IRectDrawable, o2__IRectDrawable);
 
-DECLARE_CLASS(o2::FunctionalRectDrawable);
+DECLARE_CLASS(o2::FunctionalRectDrawable, o2__FunctionalRectDrawable);
 // --- END META ---

@@ -83,37 +83,37 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SkinningMeshComponentViewer)
 {
-	BASE_CLASS(Editor::TObjectPropertiesViewer<SkinningMeshComponent>);
+    BASE_CLASS(Editor::TObjectPropertiesViewer<SkinningMeshComponent>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SkinningMeshComponentViewer)
 {
-	FIELD().PROTECTED().NAME(mSplineTool);
-	FIELD().PROTECTED().NAME(mFrameTool);
-	FIELD().PROTECTED().NAME(mTopologyTool);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSkeletonTool);
-	FIELD().PROTECTED().NAME(mFrameTetxureLayer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitAndCenterButton);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditSkeletonButton);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mReskinButton);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEditingSkeleton);
+    FIELD().PROTECTED().NAME(mSplineTool);
+    FIELD().PROTECTED().NAME(mFrameTool);
+    FIELD().PROTECTED().NAME(mTopologyTool);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSkeletonTool);
+    FIELD().PROTECTED().NAME(mFrameTetxureLayer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitAndCenterButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditSkeletonButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mReskinButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEditingSkeleton);
 }
 END_META;
 CLASS_METHODS_META(Editor::SkinningMeshComponentViewer)
 {
 
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, FitAndCenterize);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEditSkeletonPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnReskinPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateEditSkeletonButtonCaption);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, FitAndCenterize);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEditSkeletonPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnReskinPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateEditSkeletonButtonCaption);
 }
 END_META;
 // --- END META ---

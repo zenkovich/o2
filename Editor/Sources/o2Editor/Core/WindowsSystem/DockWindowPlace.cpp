@@ -256,5 +256,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::DockWindowPlace);
+DECLARE_CLASS(Editor::DockWindowPlace, Editor__DockWindowPlace);
 // --- END META ---

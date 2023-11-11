@@ -87,6 +87,7 @@ public:
 protected:
     string                 mCachePath = "CodeToolCache.xml";
                            
+    string                 mProjectName;
     string                 mSourcesPath;
     string                 mMSVCProjectPath;
     string                 mXCodeProjectPath;
@@ -97,6 +98,8 @@ protected:
     vector<SyntaxFile*>    mParsedFiles;
     CodeToolCache          mCache;
     map<string, TimeStamp> mSourceFiles;
+
+    vector<string>         mRegistatorsList;
 
 protected:
     // Returns list of all files in path and in sub paths
@@ -137,6 +140,9 @@ protected:
 
     // Updates code reflection
     void UpdateCodeReflection();
+
+    // Generates classes registrators list source file
+    void UpdateRegistratorsSource();
 
     // Parses source file
     void ParseSource(const string& path, const TimeStamp& editDate);

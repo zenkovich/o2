@@ -257,5 +257,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::PopupWidget);
+DECLARE_CLASS(o2::PopupWidget, o2__PopupWidget);
 // --- END META ---

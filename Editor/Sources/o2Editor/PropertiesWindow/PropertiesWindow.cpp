@@ -177,5 +177,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::PropertiesWindow);
+DECLARE_CLASS(Editor::PropertiesWindow, Editor__PropertiesWindow);
 // --- END META ---

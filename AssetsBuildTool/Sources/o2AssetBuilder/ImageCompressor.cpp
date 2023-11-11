@@ -58,5 +58,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ImageCompressor::Config);
+DECLARE_CLASS(o2::ImageCompressor::Config, o2__ImageCompressor__Config);
 // --- END META ---

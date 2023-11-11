@@ -162,71 +162,71 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ScrollView)
 {
-	BASE_CLASS(o2::Widget);
-	BASE_CLASS(o2::CursorAreaEventsListener);
+    BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::CursorAreaEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ScrollView)
 {
-	FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(horGridEnabled);
-	FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(verGridEnabled);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mReady);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRenderTargetSprite);
-	FIELD().PROTECTED().NAME(mRenderTarget);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mBackColor);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mGridColor);
-	FIELD().PROTECTED().NAME(mViewArea);
-	FIELD().PROTECTED().NAME(mViewCamera);
-	FIELD().PROTECTED().DEFAULT_VALUE(Vec2F(1, 1)).NAME(mViewCameraTargetScale);
-	FIELD().PROTECTED().DEFAULT_VALUE(0.1f / 120.0f).NAME(mViewCameraScaleSence);
-	FIELD().PROTECTED().DEFAULT_VALUE(30.0f).NAME(mViewCameraScaleElasticyCoef);
-	FIELD().PROTECTED().NAME(mViewCameraTargetPos);
-	FIELD().PROTECTED().NAME(mViewCameraVelocity);
-	FIELD().PROTECTED().DEFAULT_VALUE(30.0f).NAME(mViewCameraPosElasticyCoef);
-	FIELD().PROTECTED().DEFAULT_VALUE(10.0f).NAME(mViewCameraVelocityDampingCoef);
-	FIELD().PROTECTED().DEFAULT_VALUE(0.001f).NAME(mViewCameraMinScale);
-	FIELD().PROTECTED().DEFAULT_VALUE(10000.0f).NAME(mViewCameraMaxScale);
-	FIELD().PROTECTED().NAME(mLocalToScreenTransform);
-	FIELD().PROTECTED().NAME(mScreenToLocalTransform);
+    FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(horGridEnabled);
+    FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(verGridEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mReady);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRenderTargetSprite);
+    FIELD().PROTECTED().NAME(mRenderTarget);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mBackColor);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mGridColor);
+    FIELD().PROTECTED().NAME(mViewArea);
+    FIELD().PROTECTED().NAME(mViewCamera);
+    FIELD().PROTECTED().DEFAULT_VALUE(Vec2F(1, 1)).NAME(mViewCameraTargetScale);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.1f / 120.0f).NAME(mViewCameraScaleSence);
+    FIELD().PROTECTED().DEFAULT_VALUE(30.0f).NAME(mViewCameraScaleElasticyCoef);
+    FIELD().PROTECTED().NAME(mViewCameraTargetPos);
+    FIELD().PROTECTED().NAME(mViewCameraVelocity);
+    FIELD().PROTECTED().DEFAULT_VALUE(30.0f).NAME(mViewCameraPosElasticyCoef);
+    FIELD().PROTECTED().DEFAULT_VALUE(10.0f).NAME(mViewCameraVelocityDampingCoef);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.001f).NAME(mViewCameraMinScale);
+    FIELD().PROTECTED().DEFAULT_VALUE(10000.0f).NAME(mViewCameraMaxScale);
+    FIELD().PROTECTED().NAME(mLocalToScreenTransform);
+    FIELD().PROTECTED().NAME(mScreenToLocalTransform);
 }
 END_META;
 CLASS_METHODS_META(Editor::ScrollView)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const ScrollView&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocalPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreenPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(const Basis&, GetLocalToScreenTransform);
-	FUNCTION().PUBLIC().SIGNATURE(const Basis&, GetScreenToLocalTransform);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetCameraScale);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCamera, const Camera&);
-	FUNCTION().PUBLIC().SIGNATURE(const Camera&, GetCamera);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetBackColor, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetGridColor, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransparency);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateCamera, float);
-	FUNCTION().PROTECTED().SIGNATURE(Basis, GetCameraScreenToLocalTransform, const Camera&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLocalScreenTransforms);
-	FUNCTION().PROTECTED().SIGNATURE(void, RedrawRenderTarget);
-	FUNCTION().PROTECTED().SIGNATURE(void, RedrawContent);
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawGrid);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCameraTransformChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, ChangeCameraScaleRelativeToCursor, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMousePressed, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseStayDown, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsInputTransparent);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ScrollView&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocalPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreenPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(const Basis&, GetLocalToScreenTransform);
+    FUNCTION().PUBLIC().SIGNATURE(const Basis&, GetScreenToLocalTransform);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetCameraScale);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCamera, const Camera&);
+    FUNCTION().PUBLIC().SIGNATURE(const Camera&, GetCamera);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetBackColor, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetGridColor, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransparency);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateCamera, float);
+    FUNCTION().PROTECTED().SIGNATURE(Basis, GetCameraScreenToLocalTransform, const Camera&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateLocalScreenTransforms);
+    FUNCTION().PROTECTED().SIGNATURE(void, RedrawRenderTarget);
+    FUNCTION().PROTECTED().SIGNATURE(void, RedrawContent);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawGrid);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCameraTransformChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, ChangeCameraScaleRelativeToCursor, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMousePressed, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseStayDown, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsInputTransparent);
 }
 END_META;
 // --- END META ---

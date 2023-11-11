@@ -446,5 +446,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AssetsWindow);
+DECLARE_CLASS(Editor::AssetsWindow, Editor__AssetsWindow);
 // --- END META ---

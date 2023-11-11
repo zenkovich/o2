@@ -12,6 +12,8 @@
 #include "o2/Utils/Types/String.h"
 #include "o2/Utils/Types/UID.h"
 
+extern void InitializeTypeso2Framework();
+
 namespace o2
 {
     Reflection* Reflection::mInstance;
@@ -77,6 +79,7 @@ namespace o2
 
     void Reflection::InitializeTypes()
     {
+        InitializeTypeso2Framework();
         InitializeFundamentalTypes();
 
         ReflectionInitializationTypeProcessor processor;

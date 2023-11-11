@@ -57,28 +57,28 @@ namespace Editor
 
 CLASS_BASES_META(Editor::EnumProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<int>);
+    BASE_CLASS(Editor::TPropertyField<int>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::EnumProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEnumType);
-	FIELD().PROTECTED().NAME(mEntries);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEnumType);
+    FIELD().PROTECTED().NAME(mEntries);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
 }
 END_META;
 CLASS_METHODS_META(Editor::EnumProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const EnumProperty&);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-	FUNCTION().PUBLIC().SIGNATURE(void, SpecializeType, const Type*);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectedItem, const WString&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const EnumProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE(void, SpecializeType, const Type*);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectedItem, const WString&);
 }
 END_META;
 // --- END META ---

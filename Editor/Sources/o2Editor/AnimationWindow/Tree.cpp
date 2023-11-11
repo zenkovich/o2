@@ -494,7 +494,7 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AnimationTree);
+DECLARE_CLASS(Editor::AnimationTree, Editor__AnimationTree);
 
-DECLARE_CLASS(Editor::AnimationTreeNode);
+DECLARE_CLASS(Editor::AnimationTreeNode, Editor__AnimationTreeNode);
 // --- END META ---

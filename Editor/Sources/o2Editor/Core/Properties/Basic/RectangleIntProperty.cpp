@@ -252,5 +252,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::RectI>);
 // --- META ---
 
-DECLARE_CLASS(Editor::RectIProperty);
+DECLARE_CLASS(Editor::RectIProperty, Editor__RectIProperty);
 // --- END META ---

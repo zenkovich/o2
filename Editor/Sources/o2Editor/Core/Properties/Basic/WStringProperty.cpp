@@ -50,5 +50,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::WString>);
 // --- META ---
 
-DECLARE_CLASS(Editor::WStringProperty);
+DECLARE_CLASS(Editor::WStringProperty, Editor__WStringProperty);
 // --- END META ---

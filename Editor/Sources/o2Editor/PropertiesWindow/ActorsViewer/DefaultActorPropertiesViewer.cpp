@@ -114,5 +114,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::DefaultActorPropertiesViewer);
+DECLARE_CLASS(Editor::DefaultActorPropertiesViewer, Editor__DefaultActorPropertiesViewer);
 // --- END META ---

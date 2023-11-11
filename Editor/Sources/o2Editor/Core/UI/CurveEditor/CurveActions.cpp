@@ -275,9 +275,9 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::CurveAddKeysAction);
+DECLARE_CLASS(Editor::CurveAddKeysAction, Editor__CurveAddKeysAction);
 
-DECLARE_CLASS(Editor::CurveDeleteKeysAction);
+DECLARE_CLASS(Editor::CurveDeleteKeysAction, Editor__CurveDeleteKeysAction);
 
-DECLARE_CLASS(Editor::CurveKeysChangeAction);
+DECLARE_CLASS(Editor::CurveKeysChangeAction, Editor__CurveKeysChangeAction);
 // --- END META ---

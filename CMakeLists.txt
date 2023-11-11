@@ -106,7 +106,8 @@ if(WIN32)
     set_target_properties(StackWalker PROPERTIES FOLDER o2/3rdPartyLibs)  
 
     add_custom_command(TARGET o2Framework PRE_BUILD
-                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2")
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -project o2Framework -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2"
+                      COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -project o2Framework -sources \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2\"")
 endif()
 
 if (UNIX)
@@ -141,7 +142,14 @@ if (O2_EDITOR)
 
     if(WIN32)
         add_custom_command(TARGET o2Editor PRE_BUILD
-                           COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml")
+                           COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool 
+                                   -project o2Editor 
+                                   -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" 
+                                   -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml"
+                           COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool 
+                                   -project o2Editor 
+                                   -sources \"${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor\" 
+                                   -parent_projects \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml\"")
     endif()
 
     # dependency

@@ -528,5 +528,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::VectorProperty);
+DECLARE_CLASS(Editor::VectorProperty, Editor__VectorProperty);
 // --- END META ---

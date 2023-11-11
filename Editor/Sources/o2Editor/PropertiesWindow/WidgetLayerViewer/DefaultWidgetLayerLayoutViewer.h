@@ -51,28 +51,28 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
-	BASE_CLASS(Editor::IWidgetLayerLayoutViewer);
+    BASE_CLASS(Editor::IWidgetLayerLayoutViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
-	FIELD().PROTECTED().NAME(mLayers);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPositionProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty);
+    FIELD().PROTECTED().NAME(mLayers);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPositionProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, IPropertyField*);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;
 // --- END META ---

@@ -295,5 +295,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::MoveTool);
+DECLARE_CLASS(Editor::MoveTool, Editor__MoveTool);
 // --- END META ---

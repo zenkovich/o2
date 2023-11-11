@@ -71,5 +71,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::Camera);
+DECLARE_CLASS(o2::Camera, o2__Camera);
 // --- END META ---

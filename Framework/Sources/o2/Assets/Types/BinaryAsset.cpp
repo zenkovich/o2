@@ -110,5 +110,5 @@ DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::BinaryAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::BinaryAsset>);
 // --- META ---
 
-DECLARE_CLASS(o2::BinaryAsset);
+DECLARE_CLASS(o2::BinaryAsset, o2__BinaryAsset);
 // --- END META ---

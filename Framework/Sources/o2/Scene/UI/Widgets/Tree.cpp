@@ -1943,7 +1943,7 @@ ENUM_META(o2::Tree::ExpandState)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::Tree);
+DECLARE_CLASS(o2::Tree, o2__Tree);
 
-DECLARE_CLASS(o2::TreeNode);
+DECLARE_CLASS(o2::TreeNode, o2__TreeNode);
 // --- END META ---

@@ -121,5 +121,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TObjectPropertiesViewer<o2::Sprite>);
 // --- META ---
 
-DECLARE_CLASS(Editor::SpriteViewer);
+DECLARE_CLASS(Editor::SpriteViewer, Editor__SpriteViewer);
 // --- END META ---

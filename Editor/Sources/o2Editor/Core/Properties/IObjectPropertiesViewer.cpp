@@ -138,5 +138,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IObjectPropertiesViewer);
+DECLARE_CLASS(Editor::IObjectPropertiesViewer, Editor__IObjectPropertiesViewer);
 // --- END META ---

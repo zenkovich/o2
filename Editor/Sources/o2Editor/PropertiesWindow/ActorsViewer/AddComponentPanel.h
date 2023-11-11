@@ -190,88 +190,88 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AddComponentPanel)
 {
-	BASE_CLASS(o2::Widget);
-	BASE_CLASS(o2::CursorEventsArea);
-	BASE_CLASS(o2::KeyboardEventsListener);
+    BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::CursorEventsArea);
+    BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AddComponentPanel)
 {
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mViewer);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mFilterBox);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAddButton);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mViewer);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mFilterBox);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::AddComponentPanel)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(ActorViewer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetFilter);
-	FUNCTION().PUBLIC().SIGNATURE(ComponentsTree*, GetTree);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnAddPressed);
-	FUNCTION().PRIVATE().SIGNATURE(void, CreateComponent, const ObjectType*);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, TreeNode*);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnKeyReleased, const Input::Key&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(ActorViewer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetFilter);
+    FUNCTION().PUBLIC().SIGNATURE(ComponentsTree*, GetTree);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnAddPressed);
+    FUNCTION().PRIVATE().SIGNATURE(void, CreateComponent, const ObjectType*);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, TreeNode*);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
 
 CLASS_BASES_META(Editor::ComponentsTree)
 {
-	BASE_CLASS(o2::Tree);
+    BASE_CLASS(o2::Tree);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ComponentsTree)
 {
-	FIELD().PRIVATE().NAME(mFilterStr);
-	FIELD().PRIVATE().NAME(mRoot);
+    FIELD().PRIVATE().NAME(mFilterStr);
+    FIELD().PRIVATE().NAME(mRoot);
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentsTree)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTree&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
-	FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
-	FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
-	FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
-	FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
-	FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTree&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
+    FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+    FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
+    FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
+    FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
+    FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
 
 CLASS_BASES_META(Editor::ComponentsTreeNode)
 {
-	BASE_CLASS(o2::TreeNode);
+    BASE_CLASS(o2::TreeNode);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ComponentsTreeNode)
 {
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(data);
-	FIELD().PRIVATE().NAME(mName);
-	FIELD().PRIVATE().NAME(mIcon);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(data);
+    FIELD().PRIVATE().NAME(mName);
+    FIELD().PRIVATE().NAME(mIcon);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentsTreeNode)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTreeNode&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTreeNode&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }
 END_META;
 // --- END META ---

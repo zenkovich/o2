@@ -182,5 +182,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AssetIcon);
+DECLARE_CLASS(Editor::AssetIcon, Editor__AssetIcon);
 // --- END META ---

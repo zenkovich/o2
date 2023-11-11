@@ -136,45 +136,45 @@ namespace Editor
 
 CLASS_BASES_META(Editor::FunctionProperty)
 {
-	BASE_CLASS(Editor::IPropertyField);
+    BASE_CLASS(Editor::IPropertyField);
 }
 END_META;
 CLASS_FIELDS_META(Editor::FunctionProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddButton);
-	FIELD().PROTECTED().NAME(mInstances);
-	FIELD().PROTECTED().NAME(mWidgetSample);
-	FIELD().PROTECTED().NAME(mWidgetsBuffer);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsRefreshing);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+    FIELD().PROTECTED().NAME(mInstances);
+    FIELD().PROTECTED().NAME(mWidgetSample);
+    FIELD().PROTECTED().NAME(mWidgetsBuffer);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsRefreshing);
 }
 END_META;
 CLASS_METHODS_META(Editor::FunctionProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const FunctionProperty&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
-	FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-	FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
-	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
-	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, RefreshInstances);
-	FUNCTION().PROTECTED().SIGNATURE(FunctionInstance*, CreateWidget);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnAddPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRemovePressed, FunctionInstance*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnExpand);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const FunctionProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+    FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
+    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(void, Expand);
+    FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, RefreshInstances);
+    FUNCTION().PROTECTED().SIGNATURE(FunctionInstance*, CreateWidget);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnAddPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRemovePressed, FunctionInstance*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnExpand);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;
 // --- END META ---

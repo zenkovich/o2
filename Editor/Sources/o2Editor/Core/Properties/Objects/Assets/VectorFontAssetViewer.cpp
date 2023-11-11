@@ -46,5 +46,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::VectorFontAssetViewer);
+DECLARE_CLASS(Editor::VectorFontAssetViewer, Editor__VectorFontAssetViewer);
 // --- END META ---

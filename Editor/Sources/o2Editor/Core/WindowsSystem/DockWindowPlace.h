@@ -91,40 +91,40 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DockWindowPlace)
 {
-	BASE_CLASS(o2::Widget);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
+    BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DockWindowPlace)
 {
-	FIELD().PROTECTED().NAME(mResizibleDir);
-	FIELD().PROTECTED().NAME(mNeighborMin);
-	FIELD().PROTECTED().NAME(mDragHandleMin);
-	FIELD().PROTECTED().NAME(mDragHandleLayoutMin);
-	FIELD().PROTECTED().NAME(mDragHandleAreaMin);
-	FIELD().PROTECTED().NAME(mNeighborMax);
-	FIELD().PROTECTED().NAME(mDragHandleMax);
-	FIELD().PROTECTED().NAME(mDragHandleLayoutMax);
-	FIELD().PROTECTED().NAME(mDragHandleAreaMax);
+    FIELD().PROTECTED().NAME(mResizibleDir);
+    FIELD().PROTECTED().NAME(mNeighborMin);
+    FIELD().PROTECTED().NAME(mDragHandleMin);
+    FIELD().PROTECTED().NAME(mDragHandleLayoutMin);
+    FIELD().PROTECTED().NAME(mDragHandleAreaMin);
+    FIELD().PROTECTED().NAME(mNeighborMax);
+    FIELD().PROTECTED().NAME(mDragHandleMax);
+    FIELD().PROTECTED().NAME(mDragHandleLayoutMax);
+    FIELD().PROTECTED().NAME(mDragHandleAreaMax);
 }
 END_META;
 CLASS_METHODS_META(Editor::DockWindowPlace)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const DockWindowPlace&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetResizibleDir, TwoDirection, float, DockWindowPlace*, DockWindowPlace*);
-	FUNCTION().PUBLIC().SIGNATURE(TwoDirection, GetResizibleDir);
-	FUNCTION().PUBLIC().SIGNATURE(void, ArrangeChildWindows);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetActiveTab, DockableWindow*);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMinMoved, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMaxMoved, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, CheckInteractable);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDragHandle);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const DockWindowPlace&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetResizibleDir, TwoDirection, float, DockWindowPlace*, DockWindowPlace*);
+    FUNCTION().PUBLIC().SIGNATURE(TwoDirection, GetResizibleDir);
+    FUNCTION().PUBLIC().SIGNATURE(void, ArrangeChildWindows);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActiveTab, DockableWindow*);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMinMoved, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMaxMoved, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, CheckInteractable);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeDragHandle);
 }
 END_META;
 // --- END META ---

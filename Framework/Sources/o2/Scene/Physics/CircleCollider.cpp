@@ -97,5 +97,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::CircleCollider);
+DECLARE_CLASS(o2::CircleCollider, o2__CircleCollider);
 // --- END META ---

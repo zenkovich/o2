@@ -557,16 +557,16 @@ namespace Editor
 
 ENUM_META(Editor::DrawOrderTree::OrderTreeNode::Type)
 {
-	ENUM_ENTRY(Actor);
-	ENUM_ENTRY(Camera);
-	ENUM_ENTRY(Drawable);
-	ENUM_ENTRY(EndOfBatch);
-	ENUM_ENTRY(Layer);
-	ENUM_ENTRY(Root);
+    ENUM_ENTRY(Actor);
+    ENUM_ENTRY(Camera);
+    ENUM_ENTRY(Drawable);
+    ENUM_ENTRY(EndOfBatch);
+    ENUM_ENTRY(Layer);
+    ENUM_ENTRY(Root);
 }
 END_ENUM_META;
 
-DECLARE_CLASS(Editor::DrawOrderTree);
+DECLARE_CLASS(Editor::DrawOrderTree, Editor__DrawOrderTree);
 
-DECLARE_CLASS(Editor::DrawOrderTreeNode);
+DECLARE_CLASS(Editor::DrawOrderTreeNode, Editor__DrawOrderTreeNode);
 // --- END META ---

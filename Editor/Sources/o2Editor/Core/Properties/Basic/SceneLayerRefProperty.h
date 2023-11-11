@@ -73,33 +73,33 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SceneLayerRefProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<Ref<SceneLayer>>);
+    BASE_CLASS(Editor::TPropertyField<Ref<SceneLayer>>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SceneLayerRefProperty)
 {
-	FIELD().PUBLIC().NAME(onSelectedInheritedValue);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUseInheritedValue);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelectedInheritedValue);
-	FIELD().PROTECTED().DEFAULT_VALUE("Inherit from parent").NAME(mInheritFromParentName);
+    FIELD().PUBLIC().NAME(onSelectedInheritedValue);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUseInheritedValue);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelectedInheritedValue);
+    FIELD().PROTECTED().DEFAULT_VALUE("Inherit from parent").NAME(mInheritFromParentName);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneLayerRefProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayerRefProperty&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedInheritedValue, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsSelectedInheritedValue);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetUseInheritedValue, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUseInheritedValue);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersList);
-	FUNCTION().PROTECTED().SIGNATURE(void, SelectLayer, const WString&);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayerRefProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedInheritedValue, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsSelectedInheritedValue);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetUseInheritedValue, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsUseInheritedValue);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersList);
+    FUNCTION().PROTECTED().SIGNATURE(void, SelectLayer, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
 }
 END_META;
 // --- END META ---

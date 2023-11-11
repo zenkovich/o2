@@ -396,5 +396,5 @@ ENUM_META(o2::ToggleGroup::Type)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::Toggle);
+DECLARE_CLASS(o2::Toggle, o2__Toggle);
 // --- END META ---

@@ -57,5 +57,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::FolderAssetConverter);
+DECLARE_CLASS(o2::FolderAssetConverter, o2__FolderAssetConverter);
 // --- END META ---

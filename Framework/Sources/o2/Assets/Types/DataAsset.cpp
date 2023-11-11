@@ -42,5 +42,5 @@ DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::DataAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::DataAsset>);
 // --- META ---
 
-DECLARE_CLASS(o2::DataAsset);
+DECLARE_CLASS(o2::DataAsset, o2__DataAsset);
 // --- END META ---

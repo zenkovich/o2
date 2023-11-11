@@ -63,7 +63,10 @@ namespace o2
 #endif
 
         template<typename _type>
-        friend const o2::Type& o2::GetTypeOf();
+        friend const Type& GetTypeOf();
+
+        template<typename _type>
+        friend void __SetupType(Type* type);
 
         friend class ReflectionInitializationTypeProcessor;
         friend class Reflection;
@@ -91,19 +94,22 @@ namespace o2
     void SetScriptValueContainer(o2::ScriptValue& value) const override;                    \
     void ReflectIntoScriptValue(o2::ScriptValue& scriptValue) const override;               \
     static o2::ScriptValue GetScriptPrototype();                                            \
-    template<typename __type>                                                                 \
+    template<typename __type>                                                               \
     friend struct o2::ScriptValueBase::DataContainer
 
 #else
 #define IOBJECT_SCRIPTING()
 #endif
 
-#define IOBJECT_MAIN(CLASS)                                                                                      \
+#define IOBJECT_MAIN(CLASS)                                                                                     \
 private:                                                                                                        \
-    static o2::Type* type;                                                                                        \
+    static o2::Type* type;                                                                                      \
                                                                                                                 \
     template<typename __type>                                                                                   \
     friend const o2::Type& o2::GetTypeOf();                                                                     \
+                                                                                                                \
+    template<typename __type>                                                                                   \
+    friend void o2::__SetupType(o2::Type* type);                                                                \
                                                                                                                 \
     template<typename __type>                                                                                   \
     friend class o2::TObjectType;                                                                               \
@@ -111,8 +117,8 @@ private:                                                                        
     template<typename __type>                                                                                   \
     friend class o2::PointerValueProxy;                                                                         \
                                                                                                                 \
-    template<typename __type>                                                                                    \
-    friend class o2::IValueProxy;                                                                                \
+    template<typename __type>                                                                                   \
+    friend class o2::IValueProxy;                                                                               \
                                                                                                                 \
     friend class o2::ReflectionInitializationTypeProcessor;                                                     \
     friend class o2::Reflection;                                                                                \
@@ -132,8 +138,8 @@ public:                                                                         
         ProcessMethods<_type_processor>(object, processor);                                                     \
     }                                                                                                           
 
-#define IOBJECT(CLASS)                                                                                            \
-    IOBJECT_MAIN(CLASS)                                                                                            \
+#define IOBJECT(CLASS)                                                                                          \
+    IOBJECT_MAIN(CLASS)                                                                                         \
                                                                                                                 \
     template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
     template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \

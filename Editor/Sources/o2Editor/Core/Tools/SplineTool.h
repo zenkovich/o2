@@ -104,26 +104,26 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SplineTool)
 {
-	BASE_CLASS(Editor::IEditTool);
+    BASE_CLASS(Editor::IEditTool);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SplineTool)
 {
-	FIELD().PUBLIC().NAME(onChanged);
-	FIELD().PUBLIC().NAME(splineEditor);
-	FIELD().PUBLIC().NAME(sceneLayer);
-	FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(isEnabled);
+    FIELD().PUBLIC().NAME(onChanged);
+    FIELD().PUBLIC().NAME(splineEditor);
+    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(isEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::SplineTool)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSpline, Spline*, const Function<Vec2F()>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Reset);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSpline, Spline*, const Function<Vec2F()>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Reset);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
 }
 END_META;
 // --- END META ---

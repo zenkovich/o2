@@ -742,6 +742,12 @@ namespace o2
 
         FunctionProcessor StartFunction() { return FunctionProcessor(); }
     };
+
+    template<typename _type>
+    void __SetupType(Type* type)
+    {
+        _type::type = type;
+    }
 }
 
 typedef void* (*GetValuePointerFuncPtr)(void*);
@@ -766,12 +772,17 @@ typedef void* (*GetValuePointerFuncPtr)(void*);
 #define DECLARE_SCRIPTING(CLASS, TEMPLATE_OPT)
 #endif
 
-#define DECLARE_CLASS(CLASS)                                                                                   \
-    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS);                                     \
+#define DECLARE_CLASS(CLASS, REGISTRATOR_ID)                                                                   \
+    extern void __RegisterClass__##REGISTRATOR_ID()                                                            \
+    {                                                                                                          \
+        o2::ReflectionInitializationTypeProcessor processor;                                                   \
+        CLASS::template ProcessType<o2::ReflectionInitializationTypeProcessor>(0, processor);                  \
+    }                                                                                                          \
+    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS, false);                              \
     DECLARE_SCRIPTING(CLASS, )
 
 #define DECLARE_TEMPLATE_CLASS(CLASS)                                                                          \
-    template<> o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS);                          \
+    template<> o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS, true);                    \
     DECLARE_SCRIPTING(CLASS, template<>)
 
 #define CLASS_BASES_META(CLASS)                                                                                \
@@ -795,8 +806,8 @@ typedef void* (*GetValuePointerFuncPtr)(void*);
 #define META_TEMPLATES(...) \
     template<__VA_ARGS__>
 
-#define DECLARE_CLASS_MANUAL(CLASS) \
-    DECLARE_CLASS(CLASS)
+#define DECLARE_CLASS_MANUAL(CLASS, REGISTRATOR_ID) \
+    DECLARE_CLASS(CLASS, REGISTRATOR_ID)
 
 #define DECLARE_TEMPLATE_CLASS_MANUAL(CLASS) \
     DECLARE_TEMPLATE_CLASS(CLASS)
@@ -815,7 +826,7 @@ typedef void* (*GetValuePointerFuncPtr)(void*);
 
 #define FUNDAMENTAL_META(NAME) \
     template<>                                                                                                                                \
-    template<typename _type_processor> void FundamentalTypeContainer<NAME>::InitializeType(NAME* object, _type_processor& processor) \
+    template<typename _type_processor> void FundamentalTypeContainer<NAME>::InitializeType(NAME* object, _type_processor& processor)          \
     {                                                                                                                                         \
         typedef NAME thisclass;                                                                                                               \
         processor.template StartFields<NAME>(object, type);

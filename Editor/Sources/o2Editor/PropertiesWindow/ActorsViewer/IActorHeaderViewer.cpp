@@ -25,5 +25,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IActorHeaderViewer);
+DECLARE_CLASS(Editor::IActorHeaderViewer, Editor__IActorHeaderViewer);
 // --- END META ---

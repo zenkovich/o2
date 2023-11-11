@@ -174,5 +174,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::SelectionTool);
+DECLARE_CLASS(Editor::SelectionTool, Editor__SelectionTool);
 // --- END META ---

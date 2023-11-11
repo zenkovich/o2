@@ -65,29 +65,29 @@ namespace Editor
 
 CLASS_BASES_META(Editor::TagsProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<TagGroup>);
+    BASE_CLASS(Editor::TPropertyField<TagGroup>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::TagsProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTagsContext);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPushingTag);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTagsContext);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPushingTag);
 }
 END_META;
 CLASS_METHODS_META(Editor::TagsProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const TagsProperty&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const TagGroup&);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateContextData, const WString&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEditBoxChanged, const WString&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEditBoxChangeCompleted, const WString&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTags, const WString&);
-	FUNCTION().PROTECTED().SIGNATURE(void, PushTag, String);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const TagsProperty&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const TagGroup&);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateContextData, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEditBoxChanged, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEditBoxChangeCompleted, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetTags, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(void, PushTag, String);
 }
 END_META;
 // --- END META ---

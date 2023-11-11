@@ -108,49 +108,49 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ScaleTool)
 {
-	BASE_CLASS(Editor::SelectionTool);
+    BASE_CLASS(Editor::SelectionTool);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ScaleTool)
 {
-	FIELD().PUBLIC().DEFAULT_VALUE(0.01f).NAME(bothScaleSence);
-	FIELD().PROTECTED().NAME(mHorDragHandle);
-	FIELD().PROTECTED().NAME(mVerDragHandle);
-	FIELD().PROTECTED().NAME(mBothDragHandle);
-	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mHandlesAngle);
-	FIELD().PROTECTED().NAME(mSceneHandlesPos);
-	FIELD().PROTECTED().DEFAULT_VALUE(Vec2F(100, 100)).NAME(mHandlesSize);
-	FIELD().PROTECTED().NAME(mLastHorHandlePos);
-	FIELD().PROTECTED().NAME(mLastVerHandlePos);
-	FIELD().PROTECTED().NAME(mLastBothHandlePos);
-	FIELD().PROTECTED().NAME(mBeforeTransforms);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
+    FIELD().PUBLIC().DEFAULT_VALUE(0.01f).NAME(bothScaleSence);
+    FIELD().PROTECTED().NAME(mHorDragHandle);
+    FIELD().PROTECTED().NAME(mVerDragHandle);
+    FIELD().PROTECTED().NAME(mBothDragHandle);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mHandlesAngle);
+    FIELD().PROTECTED().NAME(mSceneHandlesPos);
+    FIELD().PROTECTED().DEFAULT_VALUE(Vec2F(100, 100)).NAME(mHandlesSize);
+    FIELD().PROTECTED().NAME(mLastHorHandlePos);
+    FIELD().PROTECTED().NAME(mLastVerHandlePos);
+    FIELD().PROTECTED().NAME(mLastBothHandlePos);
+    FIELD().PROTECTED().NAME(mBeforeTransforms);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::ScaleTool)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PROTECTED().SIGNATURE(String, GetPanelIcon);
-	FUNCTION().PROTECTED().SIGNATURE(ShortcutKeys, GetShortcut);
-	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawScreen);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnHorDragHandleMoved, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnVerDragHandleMoved, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnBothDragHandleMoved, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesPosition);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesAngleAndPositions, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesPositions);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
-	FUNCTION().PROTECTED().SIGNATURE(void, ScaleSelectedObjects, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, HandlePressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, HandleReleased);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PROTECTED().SIGNATURE(String, GetPanelIcon);
+    FUNCTION().PROTECTED().SIGNATURE(ShortcutKeys, GetShortcut);
+    FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawScreen);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnHorDragHandleMoved, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnVerDragHandleMoved, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnBothDragHandleMoved, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesPosition);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesAngleAndPositions, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesPositions);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
+    FUNCTION().PROTECTED().SIGNATURE(void, ScaleSelectedObjects, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, HandlePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, HandleReleased);
 }
 END_META;
 // --- END META ---

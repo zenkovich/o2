@@ -268,38 +268,38 @@ namespace Editor
 
 CLASS_BASES_META(Editor::MapKeyFramesTrackControl)
 {
-	BASE_CLASS(Editor::ITrackControl);
+    BASE_CLASS(Editor::ITrackControl);
 }
 END_META;
 CLASS_FIELDS_META(Editor::MapKeyFramesTrackControl)
 {
-	FIELD().PRIVATE().NAME(mHandlesGroups);
-	FIELD().PRIVATE().NAME(mTracks);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeline);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
-	FIELD().PRIVATE().NAME(mHandlesCache);
-	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate);
+    FIELD().PRIVATE().NAME(mHandlesGroups);
+    FIELD().PRIVATE().NAME(mTracks);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeline);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
+    FIELD().PRIVATE().NAME(mHandlesCache);
+    FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate);
 }
 END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const MapKeyFramesTrackControl&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
-	FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
-	FUNCTION().PUBLIC().SIGNATURE(Vector<ITrackControl::KeyHandle*>, GetKeyHandles);
-	FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMappedTracks, const AnimationTree::TrackNode&);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandlesForTrack, IAnimationTrack*);
-	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysDrag);
-	FUNCTION().PUBLIC().SIGNATURE(void, EndKeysDrag);
-	FUNCTION().PRIVATE().SIGNATURE(void, CacheHandles);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeNodeHandles, const AnimationTree::TrackNode&);
-	FUNCTION().PRIVATE().SIGNATURE(AnimationKeyDragHandle*, CreateHandle);
-	FUNCTION().PRIVATE().SIGNATURE(Vector<KeyHandle*>, FindHandlesAtPosition, float);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const MapKeyFramesTrackControl&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
+    FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<ITrackControl::KeyHandle*>, GetKeyHandles);
+    FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetMappedTracks, const AnimationTree::TrackNode&);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandlesForTrack, IAnimationTrack*);
+    FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysDrag);
+    FUNCTION().PUBLIC().SIGNATURE(void, EndKeysDrag);
+    FUNCTION().PRIVATE().SIGNATURE(void, CacheHandles);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeNodeHandles, const AnimationTree::TrackNode&);
+    FUNCTION().PRIVATE().SIGNATURE(AnimationKeyDragHandle*, CreateHandle);
+    FUNCTION().PRIVATE().SIGNATURE(Vector<KeyHandle*>, FindHandlesAtPosition, float);
 }
 END_META;
 // --- END META ---

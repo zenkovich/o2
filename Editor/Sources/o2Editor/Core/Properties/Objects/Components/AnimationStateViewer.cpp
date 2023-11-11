@@ -142,5 +142,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AnimationStateViewer);
+DECLARE_CLASS(Editor::AnimationStateViewer, Editor__AnimationStateViewer);
 // --- END META ---

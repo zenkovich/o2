@@ -79,10 +79,10 @@ namespace Editor
 		mContentWidget->AddChild(mAddComponentPanel);
 
 		AnimationClip addComponentAnim = AnimationClip::EaseInOut<float>("child/add component/layout/offsetTop",
-																		 40, 200, 0.4f);
+																		 40, 400, 0.4f);
 
 		*addComponentAnim.AddTrack<float>("child/actors scroll area/layout/offsetBottom") =
-			AnimationTrack<float>::EaseInOut(40, 200, 0.4f);
+			AnimationTrack<float>::EaseInOut(40, 400, 0.4f);
 
 		mContentWidget->AddState("add component", addComponentAnim);
 
@@ -366,5 +366,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::ActorViewer);
+DECLARE_CLASS(Editor::ActorViewer, Editor__ActorViewer);
 // --- END META ---

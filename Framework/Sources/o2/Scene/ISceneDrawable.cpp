@@ -218,5 +218,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ISceneDrawable);
+DECLARE_CLASS(o2::ISceneDrawable, o2__ISceneDrawable);
 // --- END META ---

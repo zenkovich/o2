@@ -45,23 +45,23 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DefaultPropertiesViewer)
 {
-	BASE_CLASS(Editor::IPropertiesViewer);
+    BASE_CLASS(Editor::IPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DefaultPropertiesViewer)
 {
-	FIELD().PROTECTED().NAME(mViewer);
-	FIELD().PROTECTED().NAME(mTargets);
+    FIELD().PROTECTED().NAME(mViewer);
+    FIELD().PROTECTED().NAME(mTargets);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultPropertiesViewer)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
 // --- END META ---

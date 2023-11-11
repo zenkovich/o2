@@ -22,5 +22,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IWidgetLayerHeaderViewer);
+DECLARE_CLASS(Editor::IWidgetLayerHeaderViewer, Editor__IWidgetLayerHeaderViewer);
 // --- END META ---

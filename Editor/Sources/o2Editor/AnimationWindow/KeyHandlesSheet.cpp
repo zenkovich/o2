@@ -714,5 +714,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::KeyHandlesSheet);
+DECLARE_CLASS(Editor::KeyHandlesSheet, Editor__KeyHandlesSheet);
 // --- END META ---

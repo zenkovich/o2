@@ -65,29 +65,29 @@ namespace Editor
 
 CLASS_BASES_META(Editor::FloatProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<float>);
-	BASE_CLASS(o2::KeyboardEventsListener);
+    BASE_CLASS(Editor::TPropertyField<float>);
+    BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::FloatProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-	FIELD().PROTECTED().NAME(mDragHangle);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mDragHangle);
 }
 END_META;
 CLASS_METHODS_META(Editor::FloatProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const FloatProperty&);
-	FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetEditBox);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMoved, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandlePressed, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandleReleased, const Input::Cursor&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const FloatProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetEditBox);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMoved, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandlePressed, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandleReleased, const Input::Cursor&);
 }
 END_META;
 // --- END META ---

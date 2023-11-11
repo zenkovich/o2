@@ -168,7 +168,7 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::WindowsLayout);
+DECLARE_CLASS(Editor::WindowsLayout, Editor__WindowsLayout);
 
-DECLARE_CLASS(Editor::WindowsLayout::WindowDockPlace);
+DECLARE_CLASS(Editor::WindowsLayout::WindowDockPlace, Editor__WindowsLayout__WindowDockPlace);
 // --- END META ---

@@ -180,5 +180,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::SplineTool);
+DECLARE_CLASS(Editor::SplineTool, Editor__SplineTool);
 // --- END META ---

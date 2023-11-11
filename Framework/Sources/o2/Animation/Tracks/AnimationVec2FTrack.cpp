@@ -212,7 +212,7 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AnimationTrack<o2::Vec2F>);
+DECLARE_CLASS(o2::AnimationTrack<o2::Vec2F>, o2__AnimationTrack_o2__Vec2F_);
 
-DECLARE_CLASS(o2::AnimationTrack<o2::Vec2F>::Player);
+DECLARE_CLASS(o2::AnimationTrack<o2::Vec2F>::Player, o2__AnimationTrack_o2__Vec2F___Player);
 // --- END META ---

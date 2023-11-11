@@ -98,10 +98,10 @@ namespace Editor
 
 ENUM_META(Editor::SceneDragHandle::Mode)
 {
-	ENUM_ENTRY(SceneSpace);
-	ENUM_ENTRY(ScreenSpace);
+    ENUM_ENTRY(SceneSpace);
+    ENUM_ENTRY(ScreenSpace);
 }
 END_ENUM_META;
 
-DECLARE_CLASS(Editor::SceneDragHandle);
+DECLARE_CLASS(Editor::SceneDragHandle, Editor__SceneDragHandle);
 // --- END META ---

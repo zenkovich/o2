@@ -85,5 +85,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::EnumProperty);
+DECLARE_CLASS(Editor::EnumProperty, Editor__EnumProperty);
 // --- END META ---

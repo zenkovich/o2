@@ -338,9 +338,9 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AddComponentPanel);
+DECLARE_CLASS(Editor::AddComponentPanel, Editor__AddComponentPanel);
 
-DECLARE_CLASS(Editor::ComponentsTree);
+DECLARE_CLASS(Editor::ComponentsTree, Editor__ComponentsTree);
 
-DECLARE_CLASS(Editor::ComponentsTreeNode);
+DECLARE_CLASS(Editor::ComponentsTreeNode, Editor__ComponentsTreeNode);
 // --- END META ---

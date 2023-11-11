@@ -110,27 +110,27 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SkeletonTool)
 {
-	BASE_CLASS(Editor::IEditTool);
+    BASE_CLASS(Editor::IEditTool);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SkeletonTool)
 {
-	FIELD().PUBLIC().NAME(sceneLayer);
-	FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
-	FIELD().PRIVATE().NAME(mSkeletons);
+    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
+    FIELD().PRIVATE().NAME(mSkeletons);
 }
 END_META;
 CLASS_METHODS_META(Editor::SkeletonTool)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddSkeletonInstance, const Ref<SkinningMeshComponent>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveSkeletonInstance, const Ref<SkinningMeshComponent>&);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEditingSkeleton, const Ref<SkinningMeshComponent>&);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<SkeletonInstance*>&, GetEditingSkeletons);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddSkeletonInstance, const Ref<SkinningMeshComponent>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveSkeletonInstance, const Ref<SkinningMeshComponent>&);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEditingSkeleton, const Ref<SkinningMeshComponent>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<SkeletonInstance*>&, GetEditingSkeletons);
 }
 END_META;
 // --- END META ---

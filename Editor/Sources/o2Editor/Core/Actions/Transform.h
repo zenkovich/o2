@@ -64,27 +64,27 @@ namespace Editor
 
 CLASS_BASES_META(Editor::TransformAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::TransformAction)
 {
-	FIELD().PUBLIC().NAME(objectsIds);
-	FIELD().PUBLIC().NAME(beforeTransforms);
-	FIELD().PUBLIC().NAME(doneTransforms);
+    FIELD().PUBLIC().NAME(objectsIds);
+    FIELD().PUBLIC().NAME(beforeTransforms);
+    FIELD().PUBLIC().NAME(doneTransforms);
 }
 END_META;
 CLASS_METHODS_META(Editor::TransformAction)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Completed);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
-	FUNCTION().PRIVATE().SIGNATURE(void, GetTransforms, const Vector<SceneUID>&, Vector<Transform>&);
-	FUNCTION().PRIVATE().SIGNATURE(void, SetTransforms, const Vector<SceneUID>&, Vector<Transform>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Completed);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PRIVATE().SIGNATURE(void, GetTransforms, const Vector<SceneUID>&, Vector<Transform>&);
+    FUNCTION().PRIVATE().SIGNATURE(void, SetTransforms, const Vector<SceneUID>&, Vector<Transform>&);
 }
 END_META;
 // --- END META ---

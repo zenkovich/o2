@@ -508,7 +508,7 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::MenuPanel);
+DECLARE_CLASS(o2::MenuPanel, o2__MenuPanel);
 
-DECLARE_CLASS(o2::MenuPanel::Item);
+DECLARE_CLASS(o2::MenuPanel::Item, o2__MenuPanel__Item);
 // --- END META ---

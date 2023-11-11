@@ -71,5 +71,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IWidgetLayerPropertiesViewer);
+DECLARE_CLASS(Editor::IWidgetLayerPropertiesViewer, Editor__IWidgetLayerPropertiesViewer);
 // --- END META ---

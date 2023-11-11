@@ -159,5 +159,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::DropDown);
+DECLARE_CLASS(o2::DropDown, o2__DropDown);
 // --- END META ---

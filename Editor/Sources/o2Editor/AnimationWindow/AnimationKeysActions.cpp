@@ -84,9 +84,9 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AnimationAddKeysAction);
+DECLARE_CLASS(Editor::AnimationAddKeysAction, Editor__AnimationAddKeysAction);
 
-DECLARE_CLASS(Editor::AnimationDeleteKeysAction);
+DECLARE_CLASS(Editor::AnimationDeleteKeysAction, Editor__AnimationDeleteKeysAction);
 
-DECLARE_CLASS(Editor::AnimationKeysChangeAction);
+DECLARE_CLASS(Editor::AnimationKeysChangeAction, Editor__AnimationKeysChangeAction);
 // --- END META ---

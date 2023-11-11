@@ -209,82 +209,82 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AnimationTree)
 {
-	BASE_CLASS(o2::Tree);
+    BASE_CLASS(o2::Tree);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTree)
 {
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
-	FIELD().PRIVATE().DEFAULT_VALUE(0).NAME(mAnimationValuesCount);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mRootValue);
-	FIELD().PRIVATE().NAME(mContextMenu);
-	FIELD().PRIVATE().NAME(mPrevSelectedNodes);
-	FIELD().PRIVATE().DEFAULT_VALUE(100.0f).NAME(mTreeWidth);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
+    FIELD().PRIVATE().DEFAULT_VALUE(0).NAME(mAnimationValuesCount);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mRootValue);
+    FIELD().PRIVATE().NAME(mContextMenu);
+    FIELD().PRIVATE().NAME(mPrevSelectedNodes);
+    FIELD().PRIVATE().DEFAULT_VALUE(100.0f).NAME(mTreeWidth);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTree)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTree&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTreeWidth, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationValueColor, String, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetLineNumber, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetLineWorldPosition, float);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeContext);
-	FUNCTION().PRIVATE().SIGNATURE(void, RebuildAnimationTree);
-	FUNCTION().PRIVATE().SIGNATURE(void, AddAnimationTrack, IAnimationTrack*, IAnimationTrack::IPlayer*);
-	FUNCTION().PRIVATE().SIGNATURE(void, UpdateTreeWidth);
-	FUNCTION().PRIVATE().SIGNATURE(void, SetCurveViewMode, bool);
-	FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
-	FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
-	FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
-	FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
-	FUNCTION().PRIVATE().SIGNATURE(void, FreeNodeData, TreeNode*, void*);
-	FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnNodeRBClick, TreeNode*);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnNodesSelectionChanged, Vector<void*>);
-	FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnDeletePropertyPressed);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTree&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTreeWidth, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationValueColor, String, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetLineNumber, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetLineWorldPosition, float);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeContext);
+    FUNCTION().PRIVATE().SIGNATURE(void, RebuildAnimationTree);
+    FUNCTION().PRIVATE().SIGNATURE(void, AddAnimationTrack, IAnimationTrack*, IAnimationTrack::IPlayer*);
+    FUNCTION().PRIVATE().SIGNATURE(void, UpdateTreeWidth);
+    FUNCTION().PRIVATE().SIGNATURE(void, SetCurveViewMode, bool);
+    FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
+    FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
+    FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
+    FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
+    FUNCTION().PRIVATE().SIGNATURE(void, FreeNodeData, TreeNode*, void*);
+    FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnNodeRBClick, TreeNode*);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnNodesSelectionChanged, Vector<void*>);
+    FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDeletePropertyPressed);
 }
 END_META;
 
 CLASS_BASES_META(Editor::AnimationTreeNode)
 {
-	BASE_CLASS(o2::TreeNode);
+    BASE_CLASS(o2::TreeNode);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTreeNode)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(2.0f).NAME(mPropertyBorder);
-	FIELD().PROTECTED().DEFAULT_VALUE(25.0f).NAME(mAddKeyButtonSize);
-	FIELD().PROTECTED().DEFAULT_VALUE(130.0f).NAME(mPropertySize);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mData);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameDrawable);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrackControl);
+    FIELD().PROTECTED().DEFAULT_VALUE(2.0f).NAME(mPropertyBorder);
+    FIELD().PROTECTED().DEFAULT_VALUE(25.0f).NAME(mAddKeyButtonSize);
+    FIELD().PROTECTED().DEFAULT_VALUE(130.0f).NAME(mPropertySize);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mData);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameDrawable);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrackControl);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTreeNode)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTreeNode&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Setup, AnimationTree::TrackNode*, AnimationTimeline*, KeyHandlesSheet*);
-	FUNCTION().PUBLIC().SIGNATURE(void, Free);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTreeWidth, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnDoubleClicked, const Input::Cursor&);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitilizeTrackControl);
-	FUNCTION().PROTECTED().SIGNATURE(void, FreeTrackControl);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateTrackControlView);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTreeNode&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, AnimationTree::TrackNode*, AnimationTimeline*, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Free);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTreeWidth, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnDoubleClicked, const Input::Cursor&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitilizeTrackControl);
+    FUNCTION().PROTECTED().SIGNATURE(void, FreeTrackControl);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateTrackControlView);
 }
 END_META;
 // --- END META ---

@@ -358,5 +358,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::HorizontalScrollBar);
+DECLARE_CLASS(o2::HorizontalScrollBar, o2__HorizontalScrollBar);
 // --- END META ---

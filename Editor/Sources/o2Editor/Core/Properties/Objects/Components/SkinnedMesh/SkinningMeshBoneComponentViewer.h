@@ -57,26 +57,26 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SkinningMeshBoneComponentViewer)
 {
-	BASE_CLASS(Editor::TObjectPropertiesViewer<SkinningMeshBoneComponent>);
+    BASE_CLASS(Editor::TObjectPropertiesViewer<SkinningMeshBoneComponent>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SkinningMeshBoneComponentViewer)
 {
-	FIELD().PROTECTED().NAME(mWeightsTool);
-	FIELD().PROTECTED().NAME(mFrameTetxureLayer);
+    FIELD().PROTECTED().NAME(mWeightsTool);
+    FIELD().PROTECTED().NAME(mFrameTetxureLayer);
 }
 END_META;
 CLASS_METHODS_META(Editor::SkinningMeshBoneComponentViewer)
 {
 
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
 // --- END META ---

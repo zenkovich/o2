@@ -139,5 +139,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::CurvePreview);
+DECLARE_CLASS(Editor::CurvePreview, Editor__CurvePreview);
 // --- END META ---

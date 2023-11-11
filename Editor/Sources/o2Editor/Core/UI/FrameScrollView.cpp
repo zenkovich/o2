@@ -187,5 +187,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::FrameScrollView);
+DECLARE_CLASS(Editor::FrameScrollView, Editor__FrameScrollView);
 // --- END META ---

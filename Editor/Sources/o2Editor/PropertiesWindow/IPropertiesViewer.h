@@ -64,27 +64,27 @@ namespace Editor
 
 CLASS_BASES_META(Editor::IPropertiesViewer)
 {
-	BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::IObject);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IPropertiesViewer)
 {
-	FIELD().PROTECTED().NAME(mContentWidget);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+    FIELD().PROTECTED().NAME(mContentWidget);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::IPropertiesViewer)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, Draw);
 }
 END_META;
 // --- END META ---

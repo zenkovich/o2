@@ -31,7 +31,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::IAction)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IAction)
@@ -41,9 +41,9 @@ END_META;
 CLASS_METHODS_META(Editor::IAction)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 // --- END META ---

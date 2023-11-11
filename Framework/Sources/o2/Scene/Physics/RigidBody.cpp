@@ -286,5 +286,5 @@ ENUM_META(o2::RigidBody::Type)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::RigidBody);
+DECLARE_CLASS(o2::RigidBody, o2__RigidBody);
 // --- END META ---

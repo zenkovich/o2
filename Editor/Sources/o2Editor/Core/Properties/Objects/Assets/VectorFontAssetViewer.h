@@ -42,24 +42,24 @@ namespace Editor
 
 CLASS_BASES_META(Editor::VectorFontAssetViewer)
 {
-	BASE_CLASS(Editor::DefaultObjectPropertiesViewer);
+    BASE_CLASS(Editor::DefaultObjectPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::VectorFontAssetViewer)
 {
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTexturePreview);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTexturePreview);
 }
 END_META;
 CLASS_METHODS_META(Editor::VectorFontAssetViewer)
 {
 
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-	FUNCTION().PRIVATE().SIGNATURE(void, RebuildProperties, _tmp1);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp2);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
+    FUNCTION().PRIVATE().SIGNATURE(void, RebuildProperties, _tmp1);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp2);
 }
 END_META;
 // --- END META ---

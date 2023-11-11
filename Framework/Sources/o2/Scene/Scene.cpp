@@ -940,5 +940,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::Scene);
+DECLARE_CLASS(o2::Scene, o2__Scene);
 // --- END META ---

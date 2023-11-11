@@ -707,5 +707,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::SceneEditScreen);
+DECLARE_CLASS(Editor::SceneEditScreen, Editor__SceneEditScreen);
 // --- END META ---

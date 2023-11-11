@@ -168,62 +168,62 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AssetsWindow)
 {
-	BASE_CLASS(Editor::IEditorWindow);
-	BASE_CLASS(o2::Singleton<AssetsWindow>);
+    BASE_CLASS(Editor::IEditorWindow);
+    BASE_CLASS(o2::Singleton<AssetsWindow>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AssetsWindow)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(1.0f).NAME(mFoldersTreeShowCoef);
-	FIELD().PROTECTED().NAME(mFilterButton);
-	FIELD().PROTECTED().NAME(mSearchEditBox);
-	FIELD().PROTECTED().NAME(mSelectedAssetPathLabel);
-	FIELD().PROTECTED().NAME(mFoldersTree);
-	FIELD().PROTECTED().NAME(mFoldersTreeShowAnim);
-	FIELD().PROTECTED().NAME(mFoldersTreeVisible);
-	FIELD().PROTECTED().NAME(mAssetsGridScroll);
-	FIELD().PROTECTED().NAME(mAssetsTree);
-	FIELD().PROTECTED().NAME(mSeparatorHandle);
-	FIELD().PROTECTED().NAME(mSeparatorCoef);
-	FIELD().PROTECTED().NAME(mCuttingAssets);
+    FIELD().PROTECTED().DEFAULT_VALUE(1.0f).NAME(mFoldersTreeShowCoef);
+    FIELD().PROTECTED().NAME(mFilterButton);
+    FIELD().PROTECTED().NAME(mSearchEditBox);
+    FIELD().PROTECTED().NAME(mSelectedAssetPathLabel);
+    FIELD().PROTECTED().NAME(mFoldersTree);
+    FIELD().PROTECTED().NAME(mFoldersTreeShowAnim);
+    FIELD().PROTECTED().NAME(mFoldersTreeVisible);
+    FIELD().PROTECTED().NAME(mAssetsGridScroll);
+    FIELD().PROTECTED().NAME(mAssetsTree);
+    FIELD().PROTECTED().NAME(mSeparatorHandle);
+    FIELD().PROTECTED().NAME(mSeparatorCoef);
+    FIELD().PROTECTED().NAME(mCuttingAssets);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetsWindow)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const UID&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const Vector<UID>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SelectAssets, const Vector<String>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, DeselectAssets);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<const AssetInfo*>&, GetSelectedAssets);
-	FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const UID&);
-	FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const UID&);
-	FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetOpenedFolderPath);
-	FUNCTION().PUBLIC().SIGNATURE(void, OpenFolder, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, ShowAssetIcon, const UID&);
-	FUNCTION().PUBLIC().SIGNATURE(void, ShowAssetIcon, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, CopyAssets, const Vector<String>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, CutAssets, const Vector<String>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, PasteAssets, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, DeleteAssets, const Vector<String>&);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(Sprite*, GetAssetIconSprite, const AssetRef&);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeSeparator);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeVisibleState);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTree);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDownPanel);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeUpPanel);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSearchEdited, const WString&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnMenuFilterPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnShowTreePressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnAssetsRebuilt, const Vector<UID>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, ShowAssetIcon, const String&, UID);
-	FUNCTION().PROTECTED().SIGNATURE(void, CopyAssetFolder, const String&, const String&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const UID&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const Vector<UID>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectAssets, const Vector<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, DeselectAssets);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<const AssetInfo*>&, GetSelectedAssets);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const UID&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const UID&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetOpenedFolderPath);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenFolder, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, ShowAssetIcon, const UID&);
+    FUNCTION().PUBLIC().SIGNATURE(void, ShowAssetIcon, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, CopyAssets, const Vector<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, CutAssets, const Vector<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, PasteAssets, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, DeleteAssets, const Vector<String>&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Sprite*, GetAssetIconSprite, const AssetRef&);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeSeparator);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeVisibleState);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTree);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeDownPanel);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeUpPanel);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSearchEdited, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMenuFilterPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnShowTreePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnAssetsRebuilt, const Vector<UID>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, ShowAssetIcon, const String&, UID);
+    FUNCTION().PROTECTED().SIGNATURE(void, CopyAssetFolder, const String&, const String&);
 }
 END_META;
 // --- END META ---

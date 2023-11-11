@@ -1550,5 +1550,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::FrameTool);
+DECLARE_CLASS(Editor::FrameTool, Editor__FrameTool);
 // --- END META ---

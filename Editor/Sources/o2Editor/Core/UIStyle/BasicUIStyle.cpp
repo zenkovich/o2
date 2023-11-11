@@ -1354,5 +1354,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::BasicUIStyleBuilder);
+DECLARE_CLASS(o2::BasicUIStyleBuilder, o2__BasicUIStyleBuilder);
 // --- END META ---

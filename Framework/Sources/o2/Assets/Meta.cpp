@@ -29,5 +29,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AssetMeta);
+DECLARE_CLASS(o2::AssetMeta, o2__AssetMeta);
 // --- END META ---

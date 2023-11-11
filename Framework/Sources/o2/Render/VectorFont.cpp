@@ -338,5 +338,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::VectorFont::Effect);
+DECLARE_CLASS(o2::VectorFont::Effect, o2__VectorFont__Effect);
 // --- END META ---

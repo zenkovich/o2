@@ -106,43 +106,43 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ActorProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<ActorRef>);
-	BASE_CLASS(o2::KeyboardEventsListener);
-	BASE_CLASS(o2::DragDropArea);
+    BASE_CLASS(Editor::TPropertyField<ActorRef>);
+    BASE_CLASS(o2::KeyboardEventsListener);
+    BASE_CLASS(o2::DragDropArea);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ActorProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActorType);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBox);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameText);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActorType);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBox);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameText);
 }
 END_META;
 CLASS_METHODS_META(Editor::ActorProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorProperty&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Revert);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, RevertoToPrototype, IAbstractValueProxy*, IAbstractValueProxy*, IObject*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromActorsTree, SceneHierarchyTree*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromActorsTree, SceneHierarchyTree*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromActorsTree, SceneHierarchyTree*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromAssetsScroll, AssetsIconsScrollArea*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromAssetsScroll, AssetsIconsScrollArea*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromAssetsScroll, AssetsIconsScrollArea*);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ActorProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Revert);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, RevertoToPrototype, IAbstractValueProxy*, IAbstractValueProxy*, IObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromActorsTree, SceneHierarchyTree*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromActorsTree, SceneHierarchyTree*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromActorsTree, SceneHierarchyTree*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromAssetsScroll, AssetsIconsScrollArea*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromAssetsScroll, AssetsIconsScrollArea*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromAssetsScroll, AssetsIconsScrollArea*);
 }
 END_META;
 // --- END META ---

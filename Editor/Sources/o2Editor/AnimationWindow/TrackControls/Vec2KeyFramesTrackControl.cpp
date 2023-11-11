@@ -142,5 +142,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::Vec2KeyFramesTrackControl);
+DECLARE_CLASS(Editor::Vec2KeyFramesTrackControl, Editor__Vec2KeyFramesTrackControl);
 // --- END META ---

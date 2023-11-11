@@ -165,69 +165,69 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AnimationWindow)
 {
-	BASE_CLASS(Editor::IEditorWindow);
-	BASE_CLASS(o2::Singleton<AnimationWindow>);
+    BASE_CLASS(Editor::IEditorWindow);
+    BASE_CLASS(o2::Singleton<AnimationWindow>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationWindow)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(325.0f).NAME(mTreeViewWidth);
-	FIELD().PROTECTED().DEFAULT_VALUE(250.0f).NAME(mMinTreeViewWidth);
-	FIELD().PROTECTED().NAME(mTargetActor);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayer);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnPlayer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnimation);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnimationEditable);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDisableTimeTracking);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUpPanel);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWorkArea);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mControlsPanel);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPreviewToggle);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRecordToggle);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRewindLeft);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMoveLeft);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayPauseToggle);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMoveRight);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRewindRight);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLoopToggle);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurvesToggle);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesButton);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeScroll);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTree);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurves);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTreeSeparatorHandle);
-	FIELD().PROTECTED().NAME(mActionsList);
+    FIELD().PROTECTED().DEFAULT_VALUE(325.0f).NAME(mTreeViewWidth);
+    FIELD().PROTECTED().DEFAULT_VALUE(250.0f).NAME(mMinTreeViewWidth);
+    FIELD().PROTECTED().NAME(mTargetActor);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayer);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnPlayer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnimation);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnimationEditable);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDisableTimeTracking);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUpPanel);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWorkArea);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mControlsPanel);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPreviewToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRecordToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRewindLeft);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMoveLeft);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayPauseToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMoveRight);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRewindRight);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLoopToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurvesToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeScroll);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTree);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurves);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTreeSeparatorHandle);
+    FIELD().PROTECTED().NAME(mActionsList);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationWindow)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*, AnimationPlayer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationEditable, IEditableAnimation*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, ActorRef);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCurvesMode, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsCurvesMode);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeHandlesSheet);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTree);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTimeline);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeCurvesSheet);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeUpPanel);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeSeparatorHandle);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnAnimationChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnAnimationUpdate, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnPlayPauseToggled, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnLoopToggled, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSearchEdited, const WString&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnMenuFilterPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnMenuPreviewToggle, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnMenuRecordToggle, bool);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*, AnimationPlayer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationEditable, IEditableAnimation*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, ActorRef);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurvesMode, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsCurvesMode);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeHandlesSheet);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeTree);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeTimeline);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeCurvesSheet);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeUpPanel);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeSeparatorHandle);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnAnimationChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnAnimationUpdate, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPlayPauseToggled, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLoopToggled, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSearchEdited, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMenuFilterPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMenuPreviewToggle, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMenuRecordToggle, bool);
 }
 END_META;
 // --- END META ---

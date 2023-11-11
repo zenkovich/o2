@@ -17,7 +17,14 @@ target_link_libraries(o2AssetsBuilder
 
 if(WIN32)
     add_custom_command(TARGET o2AssetsBuilder PRE_BUILD
-                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../CodeTool/Bin/o2CodeTool -sources "${CMAKE_CURRENT_SOURCE_DIR}" -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/../Framework/Sources/o2/CodeToolCache.xml")
+                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../CodeTool/Bin/o2CodeTool 
+                            -project AssetsBuildTool 
+                            -sources "${CMAKE_CURRENT_SOURCE_DIR}/Sources" 
+                            -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/../Framework/Sources/o2/CodeToolCache.xml"
+                       COMMENT "Run CodeTool:
+                            -project AssetsBuildTool 
+                            -sources \"${CMAKE_CURRENT_SOURCE_DIR}/Sources\" 
+                            -parent_projects \"${CMAKE_CURRENT_SOURCE_DIR}/../Framework/Sources/o2/CodeToolCache.xml\"")
 endif()
 
 add_dependencies(o2AssetsBuilder o2Framework)

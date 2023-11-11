@@ -59,28 +59,28 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DefaultActorPropertiesViewer)
 {
-	BASE_CLASS(Editor::IActorPropertiesViewer);
+    BASE_CLASS(Editor::IActorPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorPropertiesViewer)
 {
-	FIELD().PROTECTED().NAME(mTargetActors);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActorType);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
+    FIELD().PROTECTED().NAME(mTargetActors);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActorType);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorPropertiesViewer)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetActorType);
-	FUNCTION().PUBLIC().SIGNATURE(void, SpecializeActorType, const Type*);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetActorType);
+    FUNCTION().PUBLIC().SIGNATURE(void, SpecializeActorType, const Type*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
 // --- END META ---

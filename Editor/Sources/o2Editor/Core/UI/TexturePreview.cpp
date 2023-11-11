@@ -80,5 +80,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::TexturePreview);
+DECLARE_CLASS(Editor::TexturePreview, Editor__TexturePreview);
 // --- END META ---

@@ -590,98 +590,98 @@ namespace Editor
 
 CLASS_BASES_META(Editor::IPropertyField)
 {
-	BASE_CLASS(o2::HorizontalLayout);
+    BASE_CLASS(o2::HorizontalLayout);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IPropertyField)
 {
-	FIELD().PUBLIC().NAME(onChanged);
-	FIELD().PUBLIC().NAME(onChangeCompleted);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFieldInfo);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentContext);
-	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mRevertable);
-	FIELD().PROTECTED().NAME(mValuesProxies);
-	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mValuesDifferent);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRevertBtn);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaption);
-	FIELD().PROTECTED().NAME(mValuesPath);
-	FIELD().PROTECTED().NAME(mBeforeChangeValues);
+    FIELD().PUBLIC().NAME(onChanged);
+    FIELD().PUBLIC().NAME(onChangeCompleted);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFieldInfo);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentContext);
+    FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mRevertable);
+    FIELD().PROTECTED().NAME(mValuesProxies);
+    FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mValuesDifferent);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRevertBtn);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaption);
+    FIELD().PROTECTED().NAME(mValuesPath);
+    FIELD().PROTECTED().NAME(mBeforeChangeValues);
 }
 END_META;
 CLASS_METHODS_META(Editor::IPropertyField)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const IPropertyField&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
-	FUNCTION().PUBLIC().SIGNATURE(const TargetsVec&, GetValueAndPrototypeProxy);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(void, Revert);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
-	FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-	FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValuePath, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(const String&, GetValuePath);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCaptionLabel, Label*);
-	FUNCTION().PUBLIC().SIGNATURE(Label*, GetCaptionLabel);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetRevertable, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsRevertable);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
-	FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, CheckValueChangeCompleted);
-	FUNCTION().PROTECTED().SIGNATURE(void, CheckRevertableState);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, FreeValuesProxies);
-	FUNCTION().PROTECTED().SIGNATURE(void, BeginUserChanging);
-	FUNCTION().PROTECTED().SIGNATURE(void, EndUserChanging);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const IPropertyField&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+    FUNCTION().PUBLIC().SIGNATURE(const TargetsVec&, GetValueAndPrototypeProxy);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(void, Revert);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+    FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
+    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValuePath, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(const String&, GetValuePath);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCaptionLabel, Label*);
+    FUNCTION().PUBLIC().SIGNATURE(Label*, GetCaptionLabel);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetRevertable, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsRevertable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
+    FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, CheckValueChangeCompleted);
+    FUNCTION().PROTECTED().SIGNATURE(void, CheckRevertableState);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, FreeValuesProxies);
+    FUNCTION().PROTECTED().SIGNATURE(void, BeginUserChanging);
+    FUNCTION().PROTECTED().SIGNATURE(void, EndUserChanging);
 }
 END_META;
 
 META_TEMPLATES(typename _type)
 CLASS_BASES_META(Editor::TPropertyField<_type>)
 {
-	BASE_CLASS(Editor::IPropertyField);
+    BASE_CLASS(Editor::IPropertyField);
 }
 END_META;
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(Editor::TPropertyField<_type>)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(_type()).NAME(mCommonValue);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRealType);
+    FIELD().PROTECTED().DEFAULT_VALUE(_type()).NAME(mCommonValue);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRealType);
 }
 END_META;
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(Editor::TPropertyField<_type>)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const TPropertyField&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(void, Revert);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const _type&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const _type&);
-	FUNCTION().PUBLIC().SIGNATURE(_type, GetCommonValue);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
-	FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
-	FUNCTION().PROTECTED().SIGNATURE(_type, GetProxy, IAbstractValueProxy*);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, const _type&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const _type&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetValueByUser, const _type&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const TPropertyField&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(void, Revert);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const _type&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const _type&);
+    FUNCTION().PUBLIC().SIGNATURE(_type, GetCommonValue);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
+    FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
+    FUNCTION().PROTECTED().SIGNATURE(_type, GetProxy, IAbstractValueProxy*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, const _type&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const _type&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetValueByUser, const _type&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
 }
 END_META;
 // --- END META ---

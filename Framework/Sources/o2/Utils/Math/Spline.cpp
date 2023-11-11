@@ -646,7 +646,7 @@ ENUM_META(o2::Spline::Key::Type)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::Spline);
+DECLARE_CLASS(o2::Spline, o2__Spline);
 
-DECLARE_CLASS(o2::Spline::Key);
+DECLARE_CLASS(o2::Spline::Key, o2__Spline__Key);
 // --- END META ---

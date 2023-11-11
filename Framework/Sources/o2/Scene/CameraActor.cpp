@@ -208,5 +208,5 @@ ENUM_META(o2::CameraActor::Type)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::CameraActor);
+DECLARE_CLASS(o2::CameraActor, o2__CameraActor);
 // --- END META ---

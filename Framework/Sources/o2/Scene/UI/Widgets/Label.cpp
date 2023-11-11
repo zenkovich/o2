@@ -371,5 +371,5 @@ ENUM_META(o2::Label::VerOverflow)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::Label);
+DECLARE_CLASS(o2::Label, o2__Label);
 // --- END META ---

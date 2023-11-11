@@ -267,5 +267,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IPropertyField);
+DECLARE_CLASS(Editor::IPropertyField, Editor__IPropertyField);
 // --- END META ---

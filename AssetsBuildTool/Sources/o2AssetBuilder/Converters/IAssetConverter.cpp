@@ -35,5 +35,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::IAssetConverter);
+DECLARE_CLASS(o2::IAssetConverter, o2__IAssetConverter);
 // --- END META ---

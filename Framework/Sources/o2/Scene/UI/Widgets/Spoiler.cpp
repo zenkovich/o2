@@ -239,5 +239,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::Spoiler);
+DECLARE_CLASS(o2::Spoiler, o2__Spoiler);
 // --- END META ---

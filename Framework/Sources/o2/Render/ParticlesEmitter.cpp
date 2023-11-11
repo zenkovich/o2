@@ -600,5 +600,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ParticlesEmitter);
+DECLARE_CLASS(o2::ParticlesEmitter, o2__ParticlesEmitter);
 // --- END META ---

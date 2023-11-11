@@ -379,5 +379,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::ScrollView);
+DECLARE_CLASS(Editor::ScrollView, Editor__ScrollView);
 // --- END META ---

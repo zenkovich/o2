@@ -241,5 +241,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::ScaleTool);
+DECLARE_CLASS(Editor::ScaleTool, Editor__ScaleTool);
 // --- END META ---

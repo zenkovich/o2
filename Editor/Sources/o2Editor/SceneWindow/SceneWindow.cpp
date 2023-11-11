@@ -62,5 +62,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::SceneWindow);
+DECLARE_CLASS(Editor::SceneWindow, Editor__SceneWindow);
 // --- END META ---

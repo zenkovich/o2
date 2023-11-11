@@ -630,5 +630,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::TreeWindow);
+DECLARE_CLASS(Editor::TreeWindow, Editor__TreeWindow);
 // --- END META ---

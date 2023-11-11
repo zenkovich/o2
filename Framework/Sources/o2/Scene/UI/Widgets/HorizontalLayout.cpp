@@ -465,5 +465,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::HorizontalLayout);
+DECLARE_CLASS(o2::HorizontalLayout, o2__HorizontalLayout);
 // --- END META ---

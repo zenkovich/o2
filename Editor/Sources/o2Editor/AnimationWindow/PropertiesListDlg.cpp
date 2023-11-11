@@ -390,7 +390,7 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AnimationPropertiesTree);
+DECLARE_CLASS(Editor::AnimationPropertiesTree, Editor__AnimationPropertiesTree);
 
-DECLARE_CLASS(Editor::AnimationPropertiesTreeNode);
+DECLARE_CLASS(Editor::AnimationPropertiesTreeNode, Editor__AnimationPropertiesTreeNode);
 // --- END META ---

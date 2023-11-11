@@ -55,24 +55,24 @@ namespace Editor
 
 CLASS_BASES_META(Editor::IWidgetLayerHeaderViewer)
 {
-	BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::IObject);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerHeaderViewer)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerHeaderViewer)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
 // --- END META ---

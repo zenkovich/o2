@@ -52,24 +52,24 @@ namespace Editor
 
 CLASS_BASES_META(Editor::CurveProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<Curve>);
+    BASE_CLASS(Editor::TPropertyField<Curve>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurveProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPreviewImage);
-	FIELD().PROTECTED().NAME(mClickArea);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPreviewImage);
+    FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const CurveProperty&);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const CurveProperty&);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);
 }
 END_META;
 // --- END META ---

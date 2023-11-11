@@ -406,9 +406,9 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AnimationTrack<o2::Color4>);
+DECLARE_CLASS(o2::AnimationTrack<o2::Color4>, o2__AnimationTrack_o2__Color4_);
 
-DECLARE_CLASS(o2::AnimationTrack<o2::Color4>::Player);
+DECLARE_CLASS(o2::AnimationTrack<o2::Color4>::Player, o2__AnimationTrack_o2__Color4___Player);
 
-DECLARE_CLASS(o2::AnimationTrack<o2::Color4>::Key);
+DECLARE_CLASS(o2::AnimationTrack<o2::Color4>::Key, o2__AnimationTrack_o2__Color4___Key);
 // --- END META ---

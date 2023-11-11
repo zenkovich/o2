@@ -10,5 +10,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::DrawableComponent);
+DECLARE_CLASS(o2::DrawableComponent, o2__DrawableComponent);
 // --- END META ---

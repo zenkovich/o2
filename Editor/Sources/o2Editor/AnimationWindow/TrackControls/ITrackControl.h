@@ -79,7 +79,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ITrackControl)
 {
-	BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::Widget);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ITrackControl)
@@ -89,21 +89,21 @@ END_META;
 CLASS_METHODS_META(Editor::ITrackControl)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
-	FUNCTION().PUBLIC().SIGNATURE(Vector<KeyHandle*>, GetKeyHandles);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetTreePartControls);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, InsertNewKey, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysDrag);
-	FUNCTION().PUBLIC().SIGNATURE(void, EndKeysDrag);
-	FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
-	FUNCTION().PUBLIC().SIGNATURE(UInt64, DeserializeKey, const DataValue&, float, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<KeyHandle*>, GetKeyHandles);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetTreePartControls);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, InsertNewKey, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysDrag);
+    FUNCTION().PUBLIC().SIGNATURE(void, EndKeysDrag);
+    FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
+    FUNCTION().PUBLIC().SIGNATURE(UInt64, DeserializeKey, const DataValue&, float, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
 // --- END META ---

@@ -19,5 +19,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ISerializable);
+DECLARE_CLASS(o2::ISerializable, o2__ISerializable);
 // --- END META ---

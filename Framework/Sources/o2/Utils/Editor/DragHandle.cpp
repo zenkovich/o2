@@ -963,7 +963,7 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::DragHandle);
+DECLARE_CLASS(o2::DragHandle, o2__DragHandle);
 
-DECLARE_CLASS(o2::WidgetDragHandle);
+DECLARE_CLASS(o2::WidgetDragHandle, o2__WidgetDragHandle);
 // --- END META ---

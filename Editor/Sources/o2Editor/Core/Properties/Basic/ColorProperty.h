@@ -51,24 +51,24 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ColorProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<Color4>);
+    BASE_CLASS(Editor::TPropertyField<Color4>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ColorProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorSprite);
-	FIELD().PROTECTED().NAME(mClickArea);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorSprite);
+    FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;
 CLASS_METHODS_META(Editor::ColorProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const ColorProperty&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ColorProperty&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);
 }
 END_META;
 // --- END META ---

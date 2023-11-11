@@ -2,5 +2,5 @@
 #include "PhysicsConfig.h"
 // --- META ---
 
-DECLARE_CLASS(o2::PhysicsConfig);
+DECLARE_CLASS(o2::PhysicsConfig, o2__PhysicsConfig);
 // --- END META ---

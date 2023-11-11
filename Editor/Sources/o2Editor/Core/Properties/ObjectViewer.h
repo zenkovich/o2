@@ -50,28 +50,28 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ObjectViewer)
 {
-	BASE_CLASS(o2::VerticalLayout);
+    BASE_CLASS(o2::VerticalLayout);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ObjectViewer)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentContext);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentContext);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectViewer)
 {
 
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh, const Vector<IObject*>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh, const Vector<IObject*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
 // --- END META ---

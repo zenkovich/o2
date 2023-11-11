@@ -206,5 +206,5 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Actor>);
 // --- META ---
 
-DECLARE_CLASS(o2::ActorRef);
+DECLARE_CLASS(o2::ActorRef, o2__ActorRef);
 // --- END META ---

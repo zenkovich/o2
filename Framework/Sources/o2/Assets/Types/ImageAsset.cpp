@@ -256,9 +256,9 @@ DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::ImageAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ImageAsset>);
 // --- META ---
 
-DECLARE_CLASS(o2::ImageAsset);
+DECLARE_CLASS(o2::ImageAsset, o2__ImageAsset);
 
-DECLARE_CLASS(o2::ImageAsset::PlatformMeta);
+DECLARE_CLASS(o2::ImageAsset::PlatformMeta, o2__ImageAsset__PlatformMeta);
 
-DECLARE_CLASS(o2::ImageAsset::Meta);
+DECLARE_CLASS(o2::ImageAsset::Meta, o2__ImageAsset__Meta);
 // --- END META ---

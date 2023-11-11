@@ -162,5 +162,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::WidgetState);
+DECLARE_CLASS(o2::WidgetState, o2__WidgetState);
 // --- END META ---

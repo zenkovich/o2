@@ -302,11 +302,11 @@ namespace Editor
 
 ENUM_META(Editor::LogWindow::LogMessage::Type)
 {
-	ENUM_ENTRY(Error);
-	ENUM_ENTRY(Regular);
-	ENUM_ENTRY(Warning);
+    ENUM_ENTRY(Error);
+    ENUM_ENTRY(Regular);
+    ENUM_ENTRY(Warning);
 }
 END_ENUM_META;
 
-DECLARE_CLASS(Editor::LogWindow);
+DECLARE_CLASS(Editor::LogWindow, Editor__LogWindow);
 // --- END META ---

@@ -212,9 +212,9 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::GameWindow);
+DECLARE_CLASS(Editor::GameWindow, Editor__GameWindow);
 
-DECLARE_CLASS(Editor::GameWindow::GameView);
+DECLARE_CLASS(Editor::GameWindow::GameView, Editor__GameWindow__GameView);
 
-DECLARE_CLASS(Editor::GameWindow::SimulationDevice);
+DECLARE_CLASS(Editor::GameWindow::SimulationDevice, Editor__GameWindow__SimulationDevice);
 // --- END META ---

@@ -1128,5 +1128,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AssetsIconsScrollArea);
+DECLARE_CLASS(Editor::AssetsIconsScrollArea, Editor__AssetsIconsScrollArea);
 // --- END META ---

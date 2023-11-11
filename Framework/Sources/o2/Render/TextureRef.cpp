@@ -149,5 +149,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::TextureRef);
+DECLARE_CLASS(o2::TextureRef, o2__TextureRef);
 // --- END META ---

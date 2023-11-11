@@ -104,34 +104,34 @@ namespace Editor
 
 CLASS_BASES_META(Editor::Vec2FProperty)
 {
-	BASE_CLASS(Editor::IPropertyField);
+    BASE_CLASS(Editor::IPropertyField);
 }
 END_META;
 CLASS_FIELDS_META(Editor::Vec2FProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mXProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mYProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mXProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mYProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::Vec2FProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2FProperty&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(void, Revert);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueX, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueY, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetXUnknownValue, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetYUnknownValue, float);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetCommonValue);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2FProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(void, Revert);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueX, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueY, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetXUnknownValue, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetYUnknownValue, float);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetCommonValue);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;
 // --- END META ---

@@ -65,5 +65,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AssetPropertiesViewer);
+DECLARE_CLASS(Editor::AssetPropertiesViewer, Editor__AssetPropertiesViewer);
 // --- END META ---

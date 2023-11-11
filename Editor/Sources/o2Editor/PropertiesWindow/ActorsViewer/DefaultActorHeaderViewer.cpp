@@ -305,5 +305,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::DefaultActorHeaderViewer);
+DECLARE_CLASS(Editor::DefaultActorHeaderViewer, Editor__DefaultActorHeaderViewer);
 // --- END META ---

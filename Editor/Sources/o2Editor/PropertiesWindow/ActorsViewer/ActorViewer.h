@@ -107,46 +107,46 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ActorViewer)
 {
-	BASE_CLASS(Editor::IPropertiesViewer);
+    BASE_CLASS(Editor::IPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ActorViewer)
 {
-	FIELD().PROTECTED().NAME(mTargetActors);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformViewer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActorPropertiesViewer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultActorPropertiesViewer);
-	FIELD().PROTECTED().NAME(mAvailableActorPropertiesViewers);
-	FIELD().PROTECTED().NAME(mActorPropertiesViewersPool);
-	FIELD().PROTECTED().NAME(mComponentGroupsTypes);
-	FIELD().PROTECTED().NAME(mComponentsViewers);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultComponentViewer);
-	FIELD().PROTECTED().NAME(mAvailableComponentsViewers);
-	FIELD().PROTECTED().NAME(mComponentViewersPool);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddComponentPanel);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewersLayout);
+    FIELD().PROTECTED().NAME(mTargetActors);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActorPropertiesViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultActorPropertiesViewer);
+    FIELD().PROTECTED().NAME(mAvailableActorPropertiesViewers);
+    FIELD().PROTECTED().NAME(mActorPropertiesViewersPool);
+    FIELD().PROTECTED().NAME(mComponentGroupsTypes);
+    FIELD().PROTECTED().NAME(mComponentsViewers);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultComponentViewer);
+    FIELD().PROTECTED().NAME(mAvailableComponentsViewers);
+    FIELD().PROTECTED().NAME(mComponentViewersPool);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddComponentPanel);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewersLayout);
 }
 END_META;
 CLASS_METHODS_META(Editor::ActorViewer)
 {
 
-	typedef Vector<Pair<const Type*, Vector<Component*>>> _tmp1;
+    typedef Vector<Pair<const Type*, Vector<Component*>>> _tmp1;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetActorHeaderViewer, IActorHeaderViewer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetActorTransformViewer, IActorTransformViewer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddComponentViewerType, IActorComponentViewer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddActorPropertiesViewerType, IActorPropertiesViewer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsActorProperties, const Vector<IObject*>&, Vector<Widget*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsComponents, const Vector<IObject*>&, Vector<Widget*>&);
-	FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetGroupedComponents);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActorHeaderViewer, IActorHeaderViewer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActorTransformViewer, IActorTransformViewer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddComponentViewerType, IActorComponentViewer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddActorPropertiesViewerType, IActorPropertiesViewer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsActorProperties, const Vector<IObject*>&, Vector<Widget*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsComponents, const Vector<IObject*>&, Vector<Widget*>&);
+    FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetGroupedComponents);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
 // --- END META ---

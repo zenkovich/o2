@@ -73,33 +73,33 @@ namespace Editor
 
 CLASS_BASES_META(Editor::CurvePreview)
 {
-	BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::Widget);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurvePreview)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurve);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSprite);
-	FIELD().PROTECTED().DEFAULT_VALUE(Color4(225, 232, 232)).NAME(mBackColor);
-	FIELD().PROTECTED().DEFAULT_VALUE(Color4(44, 62, 80)).NAME(mCurveColor);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurve);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSprite);
+    FIELD().PROTECTED().DEFAULT_VALUE(Color4(225, 232, 232)).NAME(mBackColor);
+    FIELD().PROTECTED().DEFAULT_VALUE(Color4(44, 62, 80)).NAME(mCurveColor);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvePreview)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const CurvePreview&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCurve, Curve*);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetBackColor, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(Color4, GetBackColor);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveColor, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(Color4, GetCurveColor);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
-	FUNCTION().PROTECTED().SIGNATURE(void, Redraw);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCurveChanged);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const CurvePreview&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurve, Curve*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetBackColor, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(Color4, GetBackColor);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurveColor, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(Color4, GetCurveColor);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
+    FUNCTION().PROTECTED().SIGNATURE(void, Redraw);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCurveChanged);
 }
 END_META;
 // --- END META ---

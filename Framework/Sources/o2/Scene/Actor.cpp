@@ -1469,5 +1469,5 @@ ENUM_META(o2::Actor::State)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::Actor);
+DECLARE_CLASS(o2::Actor, o2__Actor);
 // --- END META ---

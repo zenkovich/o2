@@ -391,5 +391,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::RotateTool);
+DECLARE_CLASS(Editor::RotateTool, Editor__RotateTool);
 // --- END META ---

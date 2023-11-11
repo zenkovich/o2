@@ -138,39 +138,39 @@ namespace Editor
 
 CLASS_BASES_META(Editor::RectIProperty)
 {
-	BASE_CLASS(Editor::IPropertyField);
+    BASE_CLASS(Editor::IPropertyField);
 }
 END_META;
 CLASS_FIELDS_META(Editor::RectIProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTopProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBottomProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTopProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBottomProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::RectIProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const RectIProperty&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const RectI&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueLeft, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueRight, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueTop, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetValueBottom, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const RectI&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetLeftUnknownValue, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetRightUnknownValue, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTopUnknownValue, int);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetBottomUnknownValue, int);
-	FUNCTION().PUBLIC().SIGNATURE(RectI, GetCommonValue);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const RectIProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const RectI&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueLeft, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueRight, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueTop, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueBottom, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const RectI&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetLeftUnknownValue, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetRightUnknownValue, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTopUnknownValue, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetBottomUnknownValue, int);
+    FUNCTION().PUBLIC().SIGNATURE(RectI, GetCommonValue);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;
 // --- END META ---

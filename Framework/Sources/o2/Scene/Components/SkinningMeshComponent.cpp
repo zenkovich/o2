@@ -358,5 +358,5 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::SkinningMeshComponent>);
 // --- META ---
 
-DECLARE_CLASS(o2::SkinningMeshComponent);
+DECLARE_CLASS(o2::SkinningMeshComponent, o2__SkinningMeshComponent);
 // --- END META ---

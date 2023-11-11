@@ -73,67 +73,67 @@ namespace Editor
 
 CLASS_BASES_META(Editor::CurveAddKeysAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurveAddKeysAction)
 {
-	FIELD().PROTECTED().NAME(mInfos);
-	FIELD().PROTECTED().NAME(mEditor);
+    FIELD().PROTECTED().NAME(mInfos);
+    FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveAddKeysAction)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<CurvesEditor::CurveKeysInfo>&, CurvesEditor*);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<CurvesEditor::CurveKeysInfo>&, CurvesEditor*);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 
 CLASS_BASES_META(Editor::CurveDeleteKeysAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurveDeleteKeysAction)
 {
-	FIELD().PROTECTED().NAME(mInfos);
-	FIELD().PROTECTED().NAME(mEditor);
+    FIELD().PROTECTED().NAME(mInfos);
+    FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveDeleteKeysAction)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<CurvesEditor::CurveKeysInfo>&, CurvesEditor*);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<CurvesEditor::CurveKeysInfo>&, CurvesEditor*);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 
 CLASS_BASES_META(Editor::CurveKeysChangeAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurveKeysChangeAction)
 {
-	FIELD().PROTECTED().NAME(mInfos);
-	FIELD().PROTECTED().NAME(mEditor);
+    FIELD().PROTECTED().NAME(mInfos);
+    FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveKeysChangeAction)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<KeysInfo>&, CurvesEditor*);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<KeysInfo>&, CurvesEditor*);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 // --- END META ---

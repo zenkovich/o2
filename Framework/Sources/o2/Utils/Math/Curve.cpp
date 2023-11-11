@@ -912,7 +912,7 @@ ENUM_META(o2::Curve::Key::Type)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::Curve);
+DECLARE_CLASS(o2::Curve, o2__Curve);
 
-DECLARE_CLASS(o2::Curve::Key);
+DECLARE_CLASS(o2::Curve::Key, o2__Curve__Key);
 // --- END META ---

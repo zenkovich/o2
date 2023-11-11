@@ -212,11 +212,11 @@ DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::AtlasAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AtlasAsset>);
 // --- META ---
 
-DECLARE_CLASS(o2::AtlasAsset);
+DECLARE_CLASS(o2::AtlasAsset, o2__AtlasAsset);
 
-DECLARE_CLASS(o2::AtlasAsset::PlatformMeta);
+DECLARE_CLASS(o2::AtlasAsset::PlatformMeta, o2__AtlasAsset__PlatformMeta);
 
-DECLARE_CLASS(o2::AtlasAsset::Meta);
+DECLARE_CLASS(o2::AtlasAsset::Meta, o2__AtlasAsset__Meta);
 
-DECLARE_CLASS(o2::AtlasAsset::Page);
+DECLARE_CLASS(o2::AtlasAsset::Page, o2__AtlasAsset__Page);
 // --- END META ---

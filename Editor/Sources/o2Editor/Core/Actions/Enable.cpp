@@ -43,5 +43,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::EnableAction);
+DECLARE_CLASS(Editor::EnableAction, Editor__EnableAction);
 // --- END META ---

@@ -289,7 +289,7 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AtlasAssetConverter);
+DECLARE_CLASS(o2::AtlasAssetConverter, o2__AtlasAssetConverter);
 
-DECLARE_CLASS(o2::AtlasAssetConverter::Image);
+DECLARE_CLASS(o2::AtlasAssetConverter::Image, o2__AtlasAssetConverter__Image);
 // --- END META ---

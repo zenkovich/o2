@@ -2,5 +2,5 @@
 #include "IAction.h"
 // --- META ---
 
-DECLARE_CLASS(Editor::IAction);
+DECLARE_CLASS(Editor::IAction, Editor__IAction);
 // --- END META ---

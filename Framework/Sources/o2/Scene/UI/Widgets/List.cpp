@@ -126,5 +126,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::List);
+DECLARE_CLASS(o2::List, o2__List);
 // --- END META ---

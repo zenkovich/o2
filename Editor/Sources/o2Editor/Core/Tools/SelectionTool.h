@@ -84,36 +84,36 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SelectionTool)
 {
-	BASE_CLASS(Editor::IEditTool);
+    BASE_CLASS(Editor::IEditTool);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SelectionTool)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite);
-	FIELD().PROTECTED().NAME(mCurrentSelectingObjects);
-	FIELD().PROTECTED().NAME(mBeforeSelectingObjects);
-	FIELD().PROTECTED().NAME(mPressPoint);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelectingObjects);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite);
+    FIELD().PROTECTED().NAME(mCurrentSelectingObjects);
+    FIELD().PROTECTED().NAME(mBeforeSelectingObjects);
+    FIELD().PROTECTED().NAME(mPressPoint);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelectingObjects);
 }
 END_META;
 CLASS_METHODS_META(Editor::SelectionTool)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PROTECTED().SIGNATURE(String, GetPanelIcon);
-	FUNCTION().PROTECTED().SIGNATURE(ShortcutKeys, GetShortcut);
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawScene);
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawScreen);
-	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PROTECTED().SIGNATURE(String, GetPanelIcon);
+    FUNCTION().PROTECTED().SIGNATURE(ShortcutKeys, GetShortcut);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawScene);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawScreen);
+    FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
 }
 END_META;
 // --- END META ---

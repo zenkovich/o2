@@ -44,23 +44,23 @@ namespace Editor
 
 CLASS_BASES_META(Editor::EnableAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::EnableAction)
 {
-	FIELD().PUBLIC().NAME(objectsIds);
-	FIELD().PUBLIC().NAME(enable);
+    FIELD().PUBLIC().NAME(objectsIds);
+    FIELD().PUBLIC().NAME(enable);
 }
 END_META;
 CLASS_METHODS_META(Editor::EnableAction)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, bool);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, bool);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 // --- END META ---

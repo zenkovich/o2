@@ -383,5 +383,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::ObjectPtrProperty);
+DECLARE_CLASS(Editor::ObjectPtrProperty, Editor__ObjectPtrProperty);
 // --- END META ---

@@ -79,33 +79,33 @@ namespace Editor
 
 CLASS_BASES_META(Editor::WidgetLayerViewer)
 {
-	BASE_CLASS(Editor::IPropertiesViewer);
+    BASE_CLASS(Editor::IPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::WidgetLayerViewer)
 {
-	FIELD().PROTECTED().NAME(mTargetLayers);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayoutViewer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewersLayout);
+    FIELD().PROTECTED().NAME(mTargetLayers);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayoutViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewersLayout);
 }
 END_META;
 CLASS_METHODS_META(Editor::WidgetLayerViewer)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderViewer, IWidgetLayerHeaderViewer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetLayoutViewer, IWidgetLayerLayoutViewer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetActorPropertiesViewer, IWidgetLayerPropertiesViewer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderViewer, IWidgetLayerHeaderViewer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetLayoutViewer, IWidgetLayerLayoutViewer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActorPropertiesViewer, IWidgetLayerPropertiesViewer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, Draw);
 }
 END_META;
 // --- END META ---

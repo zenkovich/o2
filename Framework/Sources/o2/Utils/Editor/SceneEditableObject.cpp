@@ -202,6 +202,6 @@ namespace o2
 // --- META ---
 
 #if  IS_EDITOR
-DECLARE_CLASS(o2::SceneEditableObject);
+DECLARE_CLASS(o2::SceneEditableObject, o2__SceneEditableObject);
 #endif
 // --- END META ---

@@ -14,5 +14,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AnimationMask);
+DECLARE_CLASS(o2::AnimationMask, o2__AnimationMask);
 // --- END META ---

@@ -142,5 +142,5 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ImageComponent>);
 // --- META ---
 
-DECLARE_CLASS(o2::ImageComponent);
+DECLARE_CLASS(o2::ImageComponent, o2__ImageComponent);
 // --- END META ---

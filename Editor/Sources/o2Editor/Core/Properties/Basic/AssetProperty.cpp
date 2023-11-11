@@ -373,5 +373,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<AssetRef>);
 // --- META ---
 
-DECLARE_CLASS(Editor::AssetProperty);
+DECLARE_CLASS(Editor::AssetProperty, Editor__AssetProperty);
 // --- END META ---

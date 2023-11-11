@@ -814,7 +814,7 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::WidgetLayout);
+DECLARE_CLASS(o2::WidgetLayout, o2__WidgetLayout);
 
-DECLARE_CLASS(o2::WidgetLayoutData);
+DECLARE_CLASS(o2::WidgetLayoutData, o2__WidgetLayoutData);
 // --- END META ---

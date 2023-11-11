@@ -837,5 +837,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::DockableWindow);
+DECLARE_CLASS(Editor::DockableWindow, Editor__DockableWindow);
 // --- END META ---

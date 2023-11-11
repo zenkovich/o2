@@ -47,22 +47,22 @@ namespace Editor
 
 CLASS_BASES_META(Editor::WStringProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<WString>);
+    BASE_CLASS(Editor::TPropertyField<WString>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::WStringProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
 }
 END_META;
 CLASS_METHODS_META(Editor::WStringProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const WStringProperty&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const WStringProperty&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);
 }
 END_META;
 // --- END META ---

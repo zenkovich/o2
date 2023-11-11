@@ -944,9 +944,9 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ContextMenu);
+DECLARE_CLASS(o2::ContextMenu, o2__ContextMenu);
 
-DECLARE_CLASS(o2::ContextMenuItem);
+DECLARE_CLASS(o2::ContextMenuItem, o2__ContextMenuItem);
 
-DECLARE_CLASS(o2::ContextMenu::Item);
+DECLARE_CLASS(o2::ContextMenu::Item, o2__ContextMenu__Item);
 // --- END META ---

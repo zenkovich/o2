@@ -98,5 +98,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::ObjectViewer);
+DECLARE_CLASS(Editor::ObjectViewer, Editor__ObjectViewer);
 // --- END META ---

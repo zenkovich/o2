@@ -322,5 +322,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::CustomDropDown);
+DECLARE_CLASS(o2::CustomDropDown, o2__CustomDropDown);
 // --- END META ---

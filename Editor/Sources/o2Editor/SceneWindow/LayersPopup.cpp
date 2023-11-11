@@ -379,7 +379,7 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::LayersPopup);
+DECLARE_CLASS(Editor::LayersPopup, Editor__LayersPopup);
 
-DECLARE_CLASS(Editor::LayerPopupItem);
+DECLARE_CLASS(Editor::LayerPopupItem, Editor__LayerPopupItem);
 // --- END META ---

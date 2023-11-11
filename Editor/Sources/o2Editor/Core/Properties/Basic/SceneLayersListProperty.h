@@ -51,24 +51,24 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SceneLayersListProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<SceneLayersList>);
+    BASE_CLASS(Editor::TPropertyField<SceneLayersList>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SceneLayersListProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyButton);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyText);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersContext);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyText);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersContext);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneLayersListProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayersListProperty&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(void, OpenContext);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayersListProperty&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PROTECTED().SIGNATURE(void, OpenContext);
 }
 END_META;
 // --- END META ---

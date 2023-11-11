@@ -296,5 +296,5 @@ ENUM_META(o2::HorizontalProgress::Orientation)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::HorizontalProgress);
+DECLARE_CLASS(o2::HorizontalProgress, o2__HorizontalProgress);
 // --- END META ---

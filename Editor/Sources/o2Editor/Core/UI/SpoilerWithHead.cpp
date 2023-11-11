@@ -49,5 +49,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::SpoilerWithHead);
+DECLARE_CLASS(Editor::SpoilerWithHead, Editor__SpoilerWithHead);
 // --- END META ---

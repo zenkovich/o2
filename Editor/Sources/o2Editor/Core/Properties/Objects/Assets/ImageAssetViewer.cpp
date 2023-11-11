@@ -65,5 +65,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::ImageAssetViewer);
+DECLARE_CLASS(Editor::ImageAssetViewer, Editor__ImageAssetViewer);
 // --- END META ---

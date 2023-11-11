@@ -511,5 +511,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::ScriptValueProperty);
+DECLARE_CLASS(Editor::ScriptValueProperty, Editor__ScriptValueProperty);
 // --- END META ---

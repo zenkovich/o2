@@ -69,5 +69,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TObjectPropertiesViewer<o2::CameraActor>);
 // --- META ---
 
-DECLARE_CLASS(Editor::CameraActorViewer);
+DECLARE_CLASS(Editor::CameraActorViewer, Editor__CameraActorViewer);
 // --- END META ---

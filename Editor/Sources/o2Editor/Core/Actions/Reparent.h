@@ -64,25 +64,25 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ReparentAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ReparentAction)
 {
-	FIELD().PUBLIC().NAME(objectsInfos);
-	FIELD().PUBLIC().NAME(newParentId);
-	FIELD().PUBLIC().NAME(newPrevObjectId);
+    FIELD().PUBLIC().NAME(objectsInfos);
+    FIELD().PUBLIC().NAME(newParentId);
+    FIELD().PUBLIC().NAME(newPrevObjectId);
 }
 END_META;
 CLASS_METHODS_META(Editor::ReparentAction)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, ObjectsReparented, SceneEditableObject*, SceneEditableObject*);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, ObjectsReparented, SceneEditableObject*, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 // --- END META ---

@@ -55,36 +55,36 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DeleteAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DeleteAction)
 {
-	FIELD().PUBLIC().NAME(objectsInfos);
+    FIELD().PUBLIC().NAME(objectsInfos);
 }
 END_META;
 CLASS_METHODS_META(Editor::DeleteAction)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 
 CLASS_BASES_META(Editor::DeleteAction::ObjectInfo)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DeleteAction::ObjectInfo)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(objectData);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(parentId);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(prevObjectId);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(idx);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(objectData);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(parentId);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(prevObjectId);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(idx);
 }
 END_META;
 CLASS_METHODS_META(Editor::DeleteAction::ObjectInfo)

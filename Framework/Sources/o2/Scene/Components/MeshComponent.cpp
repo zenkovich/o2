@@ -239,5 +239,5 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::MeshComponent>);
 // --- META ---
 
-DECLARE_CLASS(o2::MeshComponent);
+DECLARE_CLASS(o2::MeshComponent, o2__MeshComponent);
 // --- END META ---

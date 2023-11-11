@@ -51,30 +51,30 @@ namespace Editor
 
 CLASS_BASES_META(Editor::TextViewer)
 {
-	BASE_CLASS(Editor::TObjectPropertiesViewer<Text>);
+    BASE_CLASS(Editor::TObjectPropertiesViewer<Text>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::TextViewer)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFontProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeightProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHorAlignProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVerAlignProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWordWrapProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDotsEndingsProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSymbolsDistCoefProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLinesDistCoefProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFontProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeightProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHorAlignProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVerAlignProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWordWrapProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDotsEndingsProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSymbolsDistCoefProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLinesDistCoefProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::TextViewer)
 {
 
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
 }
 END_META;
 // --- END META ---

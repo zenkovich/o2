@@ -75,5 +75,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IActorPropertiesViewer);
+DECLARE_CLASS(Editor::IActorPropertiesViewer, Editor__IActorPropertiesViewer);
 // --- END META ---

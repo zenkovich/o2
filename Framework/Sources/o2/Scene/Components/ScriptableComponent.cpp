@@ -167,5 +167,5 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ScriptableComponent>);
 // --- META ---
 
-DECLARE_CLASS(o2::ScriptableComponent);
+DECLARE_CLASS(o2::ScriptableComponent, o2__ScriptableComponent);
 // --- END META ---

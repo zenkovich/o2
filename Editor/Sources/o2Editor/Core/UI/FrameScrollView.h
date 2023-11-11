@@ -80,34 +80,34 @@ namespace Editor
 
 CLASS_BASES_META(Editor::FrameScrollView)
 {
-	BASE_CLASS(Editor::ScrollView);
+    BASE_CLASS(Editor::ScrollView);
 }
 END_META;
 CLASS_FIELDS_META(Editor::FrameScrollView)
 {
-	FIELD().PUBLIC().NAME(onViewChanged);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHorScrollbar);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mVerScrollbar);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mAvailableArea);
+    FIELD().PUBLIC().NAME(onViewChanged);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHorScrollbar);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mVerScrollbar);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mAvailableArea);
 }
 END_META;
 CLASS_METHODS_META(Editor::FrameScrollView)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const FrameScrollView&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetHorScrollbar, HorizontalScrollBar*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetVerScrollbar, VerticalScrollBar*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetViewArea, const RectF&);
-	FUNCTION().PUBLIC().SIGNATURE(RectF, GetViewArea);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateCameraLimits, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnHorScrollScrolled, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnVerScrollScrolled, float);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCameraTransformChanged);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const FrameScrollView&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHorScrollbar, HorizontalScrollBar*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetVerScrollbar, VerticalScrollBar*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetViewArea, const RectF&);
+    FUNCTION().PUBLIC().SIGNATURE(RectF, GetViewArea);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateCameraLimits, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnHorScrollScrolled, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnVerScrollScrolled, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCameraTransformChanged);
 }
 END_META;
 // --- END META ---

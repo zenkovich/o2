@@ -518,55 +518,55 @@ namespace Editor
 META_TEMPLATES(typename AnimationTrackType)
 CLASS_BASES_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
-	BASE_CLASS(Editor::ITrackControl);
+    BASE_CLASS(Editor::ITrackControl);
 }
 END_META;
 META_TEMPLATES(typename AnimationTrackType)
 CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
-	FIELD().PROTECTED().NAME(mHandles);
-	FIELD().PROTECTED().NAME(mTrackPath);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTreeControls);
-	FIELD().PROTECTED().NAME(mPropertyField);
-	FIELD().PROTECTED().DEFAULT_VALUE(TrackValueType()).NAME(mPropertyValue);
-	FIELD().PROTECTED().NAME(mPropertyValueProxy);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyDotButton);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton);
-	FIELD().PROTECTED().DEFAULT_VALUE(TrackValueType()).NAME(mLastValue);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayer);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate);
+    FIELD().PROTECTED().NAME(mHandles);
+    FIELD().PROTECTED().NAME(mTrackPath);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTreeControls);
+    FIELD().PROTECTED().NAME(mPropertyField);
+    FIELD().PROTECTED().DEFAULT_VALUE(TrackValueType()).NAME(mPropertyValue);
+    FIELD().PROTECTED().NAME(mPropertyValueProxy);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyDotButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(TrackValueType()).NAME(mLastValue);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate);
 }
 END_META;
 META_TEMPLATES(typename AnimationTrackType)
 CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const KeyFramesTrackControl&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(AnimationTrackType*, GetTrack);
-	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
-	FUNCTION().PUBLIC().SIGNATURE(Vector<KeyHandle*>, GetKeyHandles);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetTreePartControls);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
-	FUNCTION().PUBLIC().SIGNATURE(UInt64, DeserializeKey, const DataValue&, float, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
-	FUNCTION().PUBLIC().SIGNATURE(void, InsertNewKey, float);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnSetTrack);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnKeysChanged);
-	FUNCTION().PRIVATE().SIGNATURE(AnimationKeyDragHandle*, CreateHandle);
-	FUNCTION().PRIVATE().SIGNATURE(void, CheckCanCreateKey, float);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnPropertyChanged);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const KeyFramesTrackControl&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(AnimationTrackType*, GetTrack);
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<KeyHandle*>, GetKeyHandles);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetTreePartControls);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
+    FUNCTION().PUBLIC().SIGNATURE(UInt64, DeserializeKey, const DataValue&, float, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
+    FUNCTION().PUBLIC().SIGNATURE(void, InsertNewKey, float);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnSetTrack);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnKeysChanged);
+    FUNCTION().PRIVATE().SIGNATURE(AnimationKeyDragHandle*, CreateHandle);
+    FUNCTION().PRIVATE().SIGNATURE(void, CheckCanCreateKey, float);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnPropertyChanged);
 }
 END_META;
 // --- END META ---

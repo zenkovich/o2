@@ -175,70 +175,70 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DockableWindow)
 {
-	BASE_CLASS(o2::Window);
+    BASE_CLASS(o2::Window);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DockableWindow)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(0.2f).NAME(mDockSizeCoef);
-	FIELD().PROTECTED().DEFAULT_VALUE(1.5f).NAME(mDockBorder);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDocked);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mDockingFrameSample);
-	FIELD().PROTECTED().NAME(mDockingFrameAppearance);
-	FIELD().PROTECTED().NAME(mDockingFrameCurrent);
-	FIELD().PROTECTED().NAME(mDockingFrameTarget);
-	FIELD().PROTECTED().NAME(mNonDockSize);
-	FIELD().PROTECTED().NAME(mDragOffset);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTabState);
-	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mTabPosition);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTabActive);
-	FIELD().PROTECTED().DEFAULT_VALUE(150.0f).NAME(mTabWidth);
-	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mAutoCalculateTabWidth);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.2f).NAME(mDockSizeCoef);
+    FIELD().PROTECTED().DEFAULT_VALUE(1.5f).NAME(mDockBorder);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDocked);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mDockingFrameSample);
+    FIELD().PROTECTED().NAME(mDockingFrameAppearance);
+    FIELD().PROTECTED().NAME(mDockingFrameCurrent);
+    FIELD().PROTECTED().NAME(mDockingFrameTarget);
+    FIELD().PROTECTED().NAME(mNonDockSize);
+    FIELD().PROTECTED().NAME(mDragOffset);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTabState);
+    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mTabPosition);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTabActive);
+    FIELD().PROTECTED().DEFAULT_VALUE(150.0f).NAME(mTabWidth);
+    FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mAutoCalculateTabWidth);
 }
 END_META;
 CLASS_METHODS_META(Editor::DockableWindow)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const DockableWindow&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsDocked);
-	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetDockingFrameSample);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, Sprite*);
-	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetIcon);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetIconLayout, const Layout&);
-	FUNCTION().PUBLIC().SIGNATURE(Layout, GetIconLayout);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
-	FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTabWidth, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetTabWidth);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTabActive);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsTabActive);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAutoCalcuclatingTabWidth, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsAutoCalcuclatingTabWidth);
-	FUNCTION().PUBLIC().SIGNATURE(void, PlaceDock, DockWindowPlace*);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undock);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnFocused);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDockFrameAppearanceAnim);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDragHandles);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnHeadDblCKicked, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnMoved, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnMoveCompleted, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnMoveBegin, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(bool, TraceDock, DockWindowPlace*&, Side&, RectF&);
-	FUNCTION().PROTECTED().SIGNATURE(void, PlaceNonLineDock, DockWindowPlace*, Side);
-	FUNCTION().PROTECTED().SIGNATURE(void, PlaceLineDock, DockWindowPlace*, Side, RectF);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTabState, float, int, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetNonTabState);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetActiveTab);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetDocked, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, RecalculateTabWidth);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const DockableWindow&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsDocked);
+    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetDockingFrameSample);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, Sprite*);
+    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetIconLayout, const Layout&);
+    FUNCTION().PUBLIC().SIGNATURE(Layout, GetIconLayout);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+    FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTabWidth, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetTabWidth);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTabActive);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsTabActive);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAutoCalcuclatingTabWidth, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsAutoCalcuclatingTabWidth);
+    FUNCTION().PUBLIC().SIGNATURE(void, PlaceDock, DockWindowPlace*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undock);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFocused);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeDockFrameAppearanceAnim);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeDragHandles);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnHeadDblCKicked, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMoved, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMoveCompleted, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMoveBegin, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(bool, TraceDock, DockWindowPlace*&, Side&, RectF&);
+    FUNCTION().PROTECTED().SIGNATURE(void, PlaceNonLineDock, DockWindowPlace*, Side);
+    FUNCTION().PROTECTED().SIGNATURE(void, PlaceLineDock, DockWindowPlace*, Side, RectF);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetTabState, float, int, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetNonTabState);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetActiveTab);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetDocked, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, RecalculateTabWidth);
 }
 END_META;
 // --- END META ---

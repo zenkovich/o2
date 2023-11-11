@@ -182,5 +182,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::MeshWeightsTool);
+DECLARE_CLASS(Editor::MeshWeightsTool, Editor__MeshWeightsTool);
 // --- END META ---

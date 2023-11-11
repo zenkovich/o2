@@ -66,77 +66,77 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AnimationAddKeysAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationAddKeysAction)
 {
-	FIELD().PROTECTED().NAME(mKeys);
-	FIELD().PROTECTED().NAME(mKeysData);
-	FIELD().PROTECTED().NAME(mEditor);
+    FIELD().PROTECTED().NAME(mKeys);
+    FIELD().PROTECTED().NAME(mKeysData);
+    FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationAddKeysAction)
 {
 
-	typedef const Map<String, Vector<UInt64>>& _tmp1;
+    typedef const Map<String, Vector<UInt64>>& _tmp1;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, KeyHandlesSheet*);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 
 CLASS_BASES_META(Editor::AnimationDeleteKeysAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationDeleteKeysAction)
 {
-	FIELD().PROTECTED().NAME(mKeys);
-	FIELD().PROTECTED().NAME(mKeysData);
-	FIELD().PROTECTED().NAME(mEditor);
+    FIELD().PROTECTED().NAME(mKeys);
+    FIELD().PROTECTED().NAME(mKeysData);
+    FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationDeleteKeysAction)
 {
 
-	typedef const Map<String, Vector<UInt64>>& _tmp1;
+    typedef const Map<String, Vector<UInt64>>& _tmp1;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, KeyHandlesSheet*);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 
 CLASS_BASES_META(Editor::AnimationKeysChangeAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationKeysChangeAction)
 {
-	FIELD().PROTECTED().NAME(mKeys);
-	FIELD().PROTECTED().NAME(mBeforeKeysData);
-	FIELD().PROTECTED().NAME(mAfterKeysData);
-	FIELD().PROTECTED().NAME(mEditor);
+    FIELD().PROTECTED().NAME(mKeys);
+    FIELD().PROTECTED().NAME(mBeforeKeysData);
+    FIELD().PROTECTED().NAME(mAfterKeysData);
+    FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationKeysChangeAction)
 {
 
-	typedef const Map<String, Vector<UInt64>>& _tmp1;
+    typedef const Map<String, Vector<UInt64>>& _tmp1;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, DataDocument&, KeyHandlesSheet*);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, DataDocument&, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 // --- END META ---

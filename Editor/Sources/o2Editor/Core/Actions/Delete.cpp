@@ -118,7 +118,7 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::DeleteAction);
+DECLARE_CLASS(Editor::DeleteAction, Editor__DeleteAction);
 
-DECLARE_CLASS(Editor::DeleteAction::ObjectInfo);
+DECLARE_CLASS(Editor::DeleteAction::ObjectInfo, Editor__DeleteAction__ObjectInfo);
 // --- END META ---

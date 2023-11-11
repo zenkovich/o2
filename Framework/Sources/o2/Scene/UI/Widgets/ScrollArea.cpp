@@ -748,5 +748,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ScrollArea);
+DECLARE_CLASS(o2::ScrollArea, o2__ScrollArea);
 // --- END META ---

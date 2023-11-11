@@ -63,5 +63,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IWidgetLayerLayoutViewer);
+DECLARE_CLASS(Editor::IWidgetLayerLayoutViewer, Editor__IWidgetLayerLayoutViewer);
 // --- END META ---

@@ -66,29 +66,29 @@ namespace Editor
 
 CLASS_BASES_META(Editor::IEditorWindow)
 {
-	BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::IObject);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IEditorWindow)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWindow);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWindow);
 }
 END_META;
 CLASS_METHODS_META(Editor::IEditorWindow)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const IEditorWindow&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetVisible, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsVisible);
-	FUNCTION().PUBLIC().SIGNATURE(void, Show);
-	FUNCTION().PUBLIC().SIGNATURE(void, Hide);
-	FUNCTION().PUBLIC().SIGNATURE(DockableWindow*, GetWindow);
-	FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnOpened);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const IEditorWindow&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetVisible, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsVisible);
+    FUNCTION().PUBLIC().SIGNATURE(void, Show);
+    FUNCTION().PUBLIC().SIGNATURE(void, Hide);
+    FUNCTION().PUBLIC().SIGNATURE(DockableWindow*, GetWindow);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnOpened);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);
 }
 END_META;
 // --- END META ---

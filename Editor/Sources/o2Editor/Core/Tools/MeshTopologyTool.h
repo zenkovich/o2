@@ -132,60 +132,60 @@ namespace Editor
 
 CLASS_BASES_META(Editor::MeshTopologyTool)
 {
-	BASE_CLASS(Editor::IEditTool);
-	BASE_CLASS(o2::SelectableDragHandlesGroup);
-	BASE_CLASS(o2::CursorAreaEventsListener);
-	BASE_CLASS(o2::KeyboardEventsListener);
+    BASE_CLASS(Editor::IEditTool);
+    BASE_CLASS(o2::SelectableDragHandlesGroup);
+    BASE_CLASS(o2::CursorAreaEventsListener);
+    BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::MeshTopologyTool)
 {
-	FIELD().PUBLIC().NAME(sceneLayer);
-	FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
-	FIELD().PUBLIC().NAME(onChanged);
-	FIELD().PRIVATE().NAME(mGetPoints);
-	FIELD().PRIVATE().NAME(mSetPoint);
-	FIELD().PRIVATE().NAME(mAddPoint);
-	FIELD().PRIVATE().NAME(mRemovePoint);
-	FIELD().PRIVATE().NAME(mGetTransform);
-	FIELD().PRIVATE().NAME(mHandleSample);
-	FIELD().PRIVATE().NAME(mHandles);
-	FIELD().PRIVATE().NAME(mSelectionSprite);
-	FIELD().PRIVATE().NAME(mSelectingPressedPoint);
-	FIELD().PRIVATE().NAME(mSelectingHandlesBuf);
-	FIELD().PRIVATE().NAME(mTransformFrame);
-	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mTransformFrameVisible);
-	FIELD().PRIVATE().NAME(mTransformFrameBasis);
-	FIELD().PRIVATE().DEFAULT_VALUE(Vec2F(10, 10)).NAME(mTransformBasisOffet);
+    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
+    FIELD().PUBLIC().NAME(onChanged);
+    FIELD().PRIVATE().NAME(mGetPoints);
+    FIELD().PRIVATE().NAME(mSetPoint);
+    FIELD().PRIVATE().NAME(mAddPoint);
+    FIELD().PRIVATE().NAME(mRemovePoint);
+    FIELD().PRIVATE().NAME(mGetTransform);
+    FIELD().PRIVATE().NAME(mHandleSample);
+    FIELD().PRIVATE().NAME(mHandles);
+    FIELD().PRIVATE().NAME(mSelectionSprite);
+    FIELD().PRIVATE().NAME(mSelectingPressedPoint);
+    FIELD().PRIVATE().NAME(mSelectingHandlesBuf);
+    FIELD().PRIVATE().NAME(mTransformFrame);
+    FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mTransformFrameVisible);
+    FIELD().PRIVATE().NAME(mTransformFrameBasis);
+    FIELD().PRIVATE().DEFAULT_VALUE(Vec2F(10, 10)).NAME(mTransformBasisOffet);
 }
 END_META;
 CLASS_METHODS_META(Editor::MeshTopologyTool)
 {
 
-	typedef const Function<void(int, Vec2F)>& _tmp1;
+    typedef const Function<void(int, Vec2F)>& _tmp1;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Function<Vector<Vec2F>()>&, _tmp1, const Function<Basis()>&, const Function<void(Vec2F)>&, const Function<void(int)>&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Reset);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
-	FUNCTION().PRIVATE().SIGNATURE(void, ClearHandles);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, int, const Vec2F&);
-	FUNCTION().PRIVATE().SIGNATURE(Vec2F, WorldToLocal, const Vec2F&);
-	FUNCTION().PRIVATE().SIGNATURE(Vec2F, LocalToWorld, const Vec2F&);
-	FUNCTION().PRIVATE().SIGNATURE(void, DrawSelection);
-	FUNCTION().PRIVATE().SIGNATURE(void, DrawTransformFrame);
-	FUNCTION().PRIVATE().SIGNATURE(void, UpdateTransformFrame);
-	FUNCTION().PRIVATE().SIGNATURE(bool, IsTransformFrameVisible);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnTransformFrameTransformed, const Basis&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Function<Vector<Vec2F>()>&, _tmp1, const Function<Basis()>&, const Function<void(Vec2F)>&, const Function<void(int)>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Reset);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
+    FUNCTION().PRIVATE().SIGNATURE(void, ClearHandles);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, int, const Vec2F&);
+    FUNCTION().PRIVATE().SIGNATURE(Vec2F, WorldToLocal, const Vec2F&);
+    FUNCTION().PRIVATE().SIGNATURE(Vec2F, LocalToWorld, const Vec2F&);
+    FUNCTION().PRIVATE().SIGNATURE(void, DrawSelection);
+    FUNCTION().PRIVATE().SIGNATURE(void, DrawTransformFrame);
+    FUNCTION().PRIVATE().SIGNATURE(void, UpdateTransformFrame);
+    FUNCTION().PRIVATE().SIGNATURE(bool, IsTransformFrameVisible);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnTransformFrameTransformed, const Basis&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
 }
 END_META;
 // --- END META ---

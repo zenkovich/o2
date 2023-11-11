@@ -50,28 +50,28 @@ namespace Editor
 
 CLASS_BASES_META(Editor::CameraActorViewer)
 {
-	BASE_CLASS(Editor::TObjectPropertiesViewer<CameraActor>);
+    BASE_CLASS(Editor::TObjectPropertiesViewer<CameraActor>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CameraActorViewer)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTypeProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHiddenTypeProperties);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizePropertySpoiler);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsPropertySpoiler);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTypeProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHiddenTypeProperties);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizePropertySpoiler);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsPropertySpoiler);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::CameraActorViewer)
 {
 
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSelected);
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSelected);
 }
 END_META;
 // --- END META ---

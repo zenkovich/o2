@@ -67,33 +67,33 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AnimationStateViewer)
 {
-	BASE_CLASS(Editor::DefaultObjectPropertiesViewer);
+    BASE_CLASS(Editor::DefaultObjectPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationStateViewer)
 {
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPlayPause);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditBtn);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLooped);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeProgress);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSubscribedPlayer);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPlayPause);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditBtn);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLooped);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeProgress);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSubscribedPlayer);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationStateViewer)
 {
 
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-	FUNCTION().PRIVATE().SIGNATURE(Spoiler*, CreateSpoiler);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp1);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnFree);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnPlayPauseToggled, bool);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnLoopToggled, bool);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnEditPressed);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnTimeProgressChanged, float);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnAnimationUpdated, float);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
+    FUNCTION().PRIVATE().SIGNATURE(Spoiler*, CreateSpoiler);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp1);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnFree);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnPlayPauseToggled, bool);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnLoopToggled, bool);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnEditPressed);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnTimeProgressChanged, float);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnAnimationUpdated, float);
 }
 END_META;
 // --- END META ---

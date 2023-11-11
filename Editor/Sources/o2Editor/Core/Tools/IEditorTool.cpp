@@ -56,5 +56,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IEditTool);
+DECLARE_CLASS(Editor::IEditTool, Editor__IEditTool);
 // --- END META ---

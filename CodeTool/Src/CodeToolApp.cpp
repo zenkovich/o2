@@ -49,10 +49,11 @@ void CodeToolApplication::SetArguments(char** args, int nargs)
 {
     auto argsMap = ParseArguments(args, nargs);
 
+    mProjectName = argsMap["project"];
     mSourcesPath = argsMap["sources"];
     mMSVCProjectPath = argsMap["msvs_project"];
     mXCodeProjectPath = argsMap["xcode_project"];
-    mNeedReset = argsMap.find("reset") != argsMap.end() || argsMap.find("r") != argsMap.end();
+    mNeedReset = argsMap.find("reset") != argsMap.end() || argsMap.find("r") != argsMap.end() || true;
     mVerbose = argsMap.find("verbose") != argsMap.end() || argsMap.find("v") != argsMap.end();
 
     mCache.parentProjects = Split(argsMap["parent_projects"], ' ');
@@ -64,6 +65,7 @@ void CodeToolApplication::Process()
 
     LoadCache();
     UpdateCodeReflection();
+    UpdateRegistratorsSource();
     SaveCache();
 
     UpdateProjectFilesFilter();
@@ -513,6 +515,31 @@ void CodeToolApplication::UpdateCodeReflection()
     delete mParser;
 }
 
+void CodeToolApplication::UpdateRegistratorsSource()
+{
+    string registratorSourceFileName = mProjectName + ".cpp";
+    string registratorSourcePath = mSourcesPath + "/" + registratorSourceFileName;
+
+    string fileData;
+
+    for (auto& regi : mRegistatorsList)
+        fileData += "extern void __RegisterClass__" + regi + "();\n";
+
+    fileData += "\n\n";
+
+    fileData += "extern void InitializeTypes" + mProjectName + "()\n{\n";
+
+    for (auto& regi : mRegistatorsList)
+        fileData += "    __RegisterClass__" + regi + "();\n";
+
+    fileData += "}";
+
+    string oldFileData = ReadFile(registratorSourcePath);
+
+    if (oldFileData != fileData)
+        WriteFile(registratorSourcePath, fileData);
+}
+
 void CodeToolApplication::ParseSource(const string& path, const TimeStamp& editDate)
 {
     // check edit date
@@ -624,25 +651,24 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 
     for (auto cls : classes)
     {
-        bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(), [](SyntaxFunction* x) {
-            return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE" || x->GetName() == "ASSET_TYPE"; })
-            != cls->GetFunctions().end();
+        bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(),
+                                       [](SyntaxFunction* x) { return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE" || x->GetName() == "ASSET_TYPE"; }) != cls->GetFunctions().end();
 
-            if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || !hasIObject || cls == baseObjectClass)
-                continue;
+        if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || !hasIObject || cls == baseObjectClass)
+            continue;
 
-            if (!cls->IsTemplate())
-            {
-                checkCppLoad();
+        if (!cls->IsTemplate())
+        {
+            checkCppLoad();
 
-                AddBeginMeta(hasSourceMeta, cppSource);
-                cppSource += GetClassDeclaration(cls);
-            }
+            AddBeginMeta(hasSourceMeta, cppSource);
+            cppSource += GetClassDeclaration(cls);
+        }
 
-            AddBeginMeta(hasHeaderMeta, hSource);
-            hSource += GetClassMeta(cls);
+        AddBeginMeta(hasHeaderMeta, hSource);
+        hSource += GetClassMeta(cls);
 
-            VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
+        VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
     }
 
     AddEndMeta(hasSourceMeta, cppSource);
@@ -687,7 +713,19 @@ string CodeToolApplication::GetClassDeclaration(SyntaxClass* cls)
     if (cls->GetDefine())
         res += "#if " + cls->GetDefine()->GetDefinition() + "\n";
 
-    res += "DECLARE_CLASS(" + GetClassNormalizedTemplates(cls->GetFullName(), nspace) + ");\n";
+    string className = GetClassNormalizedTemplates(cls->GetFullName(), nspace);
+
+    string classRegisterId = className;
+    for (int i = 0; i < classRegisterId.length(); i++)
+    {
+        auto& c = classRegisterId[i];
+        if (c == '<' || c == '>' || c == ':')
+            c = '_';
+    }
+
+    mRegistatorsList.push_back(classRegisterId);
+
+    res += "DECLARE_CLASS(" + className + ", " + classRegisterId + ");\n";
 
     if (cls->GetDefine())
         res += "#endif\n";
@@ -730,11 +768,11 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
         {
             typedefs++;
             auto newClassName = string("_tmp") + to_string(typedefs);
-            res += string("\ttypedef ") + className + ' ' + newClassName + ";\n";
+            res += string("    typedef ") + className + ' ' + newClassName + ";\n";
             className = newClassName;
         }
 
-        res += string("\tBASE_CLASS(") + className + +");\n";
+        res += string("    BASE_CLASS(") + className + +");\n";
     }
     res += "}\nEND_META;\n";
 
@@ -765,7 +803,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
         CheckIfDefines(variable, currentIf, res);
 
-        res += "\tFIELD()";
+        res += "    FIELD()";
 
         if (variable->GetClassSection() == SyntaxProtectionSection::Public)
             res += ".PUBLIC()";
@@ -813,7 +851,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
         CheckIfDefines(function, currentIf, res);
 
-        res += "\tFUNCTION()";
+        res += "    FUNCTION()";
 
         if (function->GetClassSection() == SyntaxProtectionSection::Public)
             res += ".PUBLIC()";
@@ -876,7 +914,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
     {
         string supportingTypedefsStr = "\n";
         for (int i = 0; i < supportingTypedefs.size(); i++)
-            supportingTypedefsStr += (string)"\ttypedef " + supportingTypedefs[i] + " _tmp" + to_string(i + 1) + ";\n";
+            supportingTypedefsStr += (string)"    typedef " + supportingTypedefs[i] + " _tmp" + to_string(i + 1) + ";\n";
 
         res.insert(supportingTypedefsPos, supportingTypedefsStr);
     }
@@ -994,7 +1032,7 @@ string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)
     res += "\nENUM_META(" + enm->GetFullName() + ")\n{\n";
 
     for (auto e : enm->GetEntries())
-        res += "\tENUM_ENTRY(" + e.first + ");\n";
+        res += "    ENUM_ENTRY(" + e.first + ");\n";
 
     res += "}\nEND_ENUM_META;\n";
 
@@ -1065,13 +1103,13 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
             case ']': sqBraces--; break;
             case '<': trBraces++; break;
             case '>':
-                trBraces--;
-                if (trBraces == 0 && braces == 0 && sqBraces == 0)
-                {
-                    stop = true;
-                    fnd--;
-                }
-                break;
+            trBraces--;
+            if (trBraces == 0 && braces == 0 && sqBraces == 0)
+            {
+                stop = true;
+                fnd--;
+            }
+            break;
             }
         }
 
@@ -1275,19 +1313,20 @@ SyntaxSection* CodeToolCache::FindSection(const string& what, SyntaxSection* whe
         {
             if (templatesPos >= 0)
             {
-                SyntaxClass* newSpectializedClass = new SyntaxClass();
-                newSpectializedClass->mName = what;
+                SyntaxClass* newSpecializedClass = new SyntaxClass();
+                newSpecializedClass->mName = what;
                 if (child->mParentSection)
                 {
-                    newSpectializedClass->mFullName = child->mParentSection->mFullName + "::" + what;
-                    child->mParentSection->mSections.push_back(newSpectializedClass);
+                    newSpecializedClass->mFullName = child->mParentSection->mFullName + "::" + what;
+                    child->mParentSection->mSections.push_back(newSpecializedClass);
                 }
-                else newSpectializedClass->mFullName = what;
+                else
+                    newSpecializedClass->mFullName = what;
 
-                newSpectializedClass->mParentSection = child->mParentSection;
-                newSpectializedClass->mSourceClass = (SyntaxClass*)child;
+                newSpecializedClass->mParentSection = child->mParentSection;
+                newSpecializedClass->mSourceClass = (SyntaxClass*)child;
 
-                return newSpectializedClass;
+                return newSpecializedClass;
             }
 
             return child;

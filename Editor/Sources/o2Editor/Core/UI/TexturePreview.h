@@ -49,24 +49,24 @@ namespace Editor
 
 CLASS_BASES_META(Editor::TexturePreview)
 {
-	BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::Widget);
 }
 END_META;
 CLASS_FIELDS_META(Editor::TexturePreview)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(20.0f).NAME(mLabelHeight);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackgroundSprite);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextureSprite);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextureInfoLabel);
+    FIELD().PROTECTED().DEFAULT_VALUE(20.0f).NAME(mLabelHeight);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackgroundSprite);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextureSprite);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextureInfoLabel);
 }
 END_META;
 CLASS_METHODS_META(Editor::TexturePreview)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const TexturePreview&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTexture, const TextureRef&, const RectI&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const TexturePreview&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTexture, const TextureRef&, const RectI&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
 }
 END_META;
 // --- END META ---

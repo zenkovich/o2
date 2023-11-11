@@ -80,46 +80,46 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DefaultActorComponentViewer)
 {
-	BASE_CLASS(Editor::IActorComponentViewer);
+    BASE_CLASS(Editor::IActorComponentViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorComponentViewer)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponentType);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponentType);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
 
 META_TEMPLATES(typename _component_type)
 CLASS_BASES_META(Editor::TActorComponentViewer<_component_type>)
 {
-	BASE_CLASS(Editor::DefaultActorComponentViewer);
+    BASE_CLASS(Editor::DefaultActorComponentViewer);
 }
 END_META;
 META_TEMPLATES(typename _component_type)
 CLASS_FIELDS_META(Editor::TActorComponentViewer<_component_type>)
 {
-	FIELD().PROTECTED().NAME(mTargetComponents);
+    FIELD().PROTECTED().NAME(mTargetComponents);
 }
 END_META;
 META_TEMPLATES(typename _component_type)
 CLASS_METHODS_META(Editor::TActorComponentViewer<_component_type>)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
 }
 END_META;
 // --- END META ---

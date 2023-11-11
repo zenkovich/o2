@@ -69,29 +69,29 @@ namespace Editor
 
 CLASS_BASES_META(Editor::CustomFrameTool)
 {
-	BASE_CLASS(Editor::IEditTool);
+    BASE_CLASS(Editor::IEditTool);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CustomFrameTool)
 {
-	FIELD().PUBLIC().NAME(frameHandles);
-	FIELD().PUBLIC().NAME(sceneLayer);
-	FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
-	FIELD().PUBLIC().NAME(onChanged);
-	FIELD().PUBLIC().NAME(getOrigin);
-	FIELD().PRIVATE().NAME(mBasis);
+    FIELD().PUBLIC().NAME(frameHandles);
+    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
+    FIELD().PUBLIC().NAME(onChanged);
+    FIELD().PUBLIC().NAME(getOrigin);
+    FIELD().PRIVATE().NAME(mBasis);
 }
 END_META;
 CLASS_METHODS_META(Editor::CustomFrameTool)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, SetFrame, const Basis&);
-	FUNCTION().PUBLIC().SIGNATURE(const Basis&, GetFrame);
-	FUNCTION().PUBLIC().SIGNATURE(void, Reset);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFrame, const Basis&);
+    FUNCTION().PUBLIC().SIGNATURE(const Basis&, GetFrame);
+    FUNCTION().PUBLIC().SIGNATURE(void, Reset);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
 }
 END_META;
 // --- END META ---

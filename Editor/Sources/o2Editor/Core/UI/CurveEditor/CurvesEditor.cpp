@@ -2267,9 +2267,9 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::CurvesEditor);
+DECLARE_CLASS(Editor::CurvesEditor, Editor__CurvesEditor);
 
-DECLARE_CLASS(Editor::CurvesEditor::CurveHandle);
+DECLARE_CLASS(Editor::CurvesEditor::CurveHandle, Editor__CurvesEditor__CurveHandle);
 
-DECLARE_CLASS(Editor::CurvesEditor::CurveCopyInfo);
+DECLARE_CLASS(Editor::CurvesEditor::CurveCopyInfo, Editor__CurvesEditor__CurveCopyInfo);
 // --- END META ---

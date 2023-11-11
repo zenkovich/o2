@@ -138,7 +138,7 @@ DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::VectorFontAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::VectorFontAsset>);
 // --- META ---
 
-DECLARE_CLASS(o2::VectorFontAsset);
+DECLARE_CLASS(o2::VectorFontAsset, o2__VectorFontAsset);
 
-DECLARE_CLASS(o2::VectorFontAsset::Meta);
+DECLARE_CLASS(o2::VectorFontAsset::Meta, o2__VectorFontAsset__Meta);
 // --- END META ---

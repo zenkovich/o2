@@ -121,5 +121,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::ReparentAction);
+DECLARE_CLASS(Editor::ReparentAction, Editor__ReparentAction);
 // --- END META ---

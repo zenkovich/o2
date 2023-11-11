@@ -163,5 +163,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AssetInfo);
+DECLARE_CLASS(o2::AssetInfo, o2__AssetInfo);
 // --- END META ---

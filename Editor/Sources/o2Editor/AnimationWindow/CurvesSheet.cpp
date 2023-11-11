@@ -182,5 +182,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::CurvesSheet);
+DECLARE_CLASS(Editor::CurvesSheet, Editor__CurvesSheet);
 // --- END META ---

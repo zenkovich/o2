@@ -285,5 +285,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::GridLayoutScrollArea);
+DECLARE_CLASS(o2::GridLayoutScrollArea, o2__GridLayoutScrollArea);
 // --- END META ---

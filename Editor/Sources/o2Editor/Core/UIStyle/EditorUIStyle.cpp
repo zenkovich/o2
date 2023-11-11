@@ -4709,5 +4709,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::EditorUIStyleBuilder);
+DECLARE_CLASS(Editor::EditorUIStyleBuilder, Editor__EditorUIStyleBuilder);
 // --- END META ---

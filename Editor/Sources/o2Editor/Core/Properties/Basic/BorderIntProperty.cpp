@@ -252,5 +252,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::BorderI>);
 // --- META ---
 
-DECLARE_CLASS(Editor::BorderIProperty);
+DECLARE_CLASS(Editor::BorderIProperty, Editor__BorderIProperty);
 // --- END META ---

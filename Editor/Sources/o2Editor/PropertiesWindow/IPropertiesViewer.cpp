@@ -40,5 +40,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IPropertiesViewer);
+DECLARE_CLASS(Editor::IPropertiesViewer, Editor__IPropertiesViewer);
 // --- END META ---

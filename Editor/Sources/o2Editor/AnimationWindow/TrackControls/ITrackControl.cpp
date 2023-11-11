@@ -67,5 +67,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::ITrackControl);
+DECLARE_CLASS(Editor::ITrackControl, Editor__ITrackControl);
 // --- END META ---

@@ -73,5 +73,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::TransformAction);
+DECLARE_CLASS(Editor::TransformAction, Editor__TransformAction);
 // --- END META ---

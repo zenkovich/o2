@@ -85,5 +85,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::CustomFrameTool);
+DECLARE_CLASS(Editor::CustomFrameTool, Editor__CustomFrameTool);
 // --- END META ---

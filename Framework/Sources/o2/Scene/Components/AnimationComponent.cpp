@@ -350,5 +350,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AnimationComponent);
+DECLARE_CLASS(o2::AnimationComponent, o2__AnimationComponent);
 // --- END META ---

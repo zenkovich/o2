@@ -147,5 +147,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AnimationPlayer);
+DECLARE_CLASS(o2::AnimationPlayer, o2__AnimationPlayer);
 // --- END META ---

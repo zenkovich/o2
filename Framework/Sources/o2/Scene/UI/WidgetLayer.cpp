@@ -776,5 +776,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::WidgetLayer);
+DECLARE_CLASS(o2::WidgetLayer, o2__WidgetLayer);
 // --- END META ---

@@ -357,5 +357,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::VerticalScrollBar);
+DECLARE_CLASS(o2::VerticalScrollBar, o2__VerticalScrollBar);
 // --- END META ---

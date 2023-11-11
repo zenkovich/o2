@@ -57,5 +57,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ProjectConfig);
+DECLARE_CLASS(o2::ProjectConfig, o2__ProjectConfig);
 // --- END META ---

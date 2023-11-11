@@ -177,5 +177,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TObjectPropertiesViewer<SkinningMeshComponent>);
 // --- META ---
 
-DECLARE_CLASS(Editor::SkinningMeshComponentViewer);
+DECLARE_CLASS(Editor::SkinningMeshComponentViewer, Editor__SkinningMeshComponentViewer);
 // --- END META ---

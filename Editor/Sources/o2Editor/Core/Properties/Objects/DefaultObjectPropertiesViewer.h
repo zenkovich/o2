@@ -32,25 +32,25 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DefaultObjectPropertiesViewer)
 {
-	BASE_CLASS(Editor::IObjectPropertiesViewer);
+    BASE_CLASS(Editor::IObjectPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DefaultObjectPropertiesViewer)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(&TypeOf(IObject)).NAME(mRealObjectType);
-	FIELD().PROTECTED().DEFAULT_VALUE(&TypeOf(IObject)).NAME(mBuiltObjectType);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mBuiltWithHiddenProperties);
+    FIELD().PROTECTED().DEFAULT_VALUE(&TypeOf(IObject)).NAME(mRealObjectType);
+    FIELD().PROTECTED().DEFAULT_VALUE(&TypeOf(IObject)).NAME(mBuiltObjectType);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mBuiltWithHiddenProperties);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultObjectPropertiesViewer)
 {
 
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
-	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
-	FUNCTION().PROTECTED().SIGNATURE(bool, CheckBuildProperties, _tmp1);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+    FUNCTION().PROTECTED().SIGNATURE(bool, CheckBuildProperties, _tmp1);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
 }
 END_META;
 // --- END META ---

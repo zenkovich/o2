@@ -55,28 +55,28 @@ namespace Editor
 
 CLASS_BASES_META(Editor::CurvesSheet)
 {
-	BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::Widget);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurvesSheet)
 {
-	FIELD().PRIVATE().NAME(mCurvesEditor);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
-	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mEditorViewLock);
+    FIELD().PRIVATE().NAME(mCurvesEditor);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
+    FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mEditorViewLock);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesSheet&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateCurvesColors);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
-	FUNCTION().PRIVATE().SIGNATURE(void, SetCameraAsTimelineView);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnEditorViewChanged);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesSheet&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateCurvesColors);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+    FUNCTION().PRIVATE().SIGNATURE(void, SetCameraAsTimelineView);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnEditorViewChanged);
 }
 END_META;
 // --- END META ---

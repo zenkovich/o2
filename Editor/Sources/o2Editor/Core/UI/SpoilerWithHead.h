@@ -53,26 +53,26 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SpoilerWithHead)
 {
-	BASE_CLASS(o2::Spoiler);
+    BASE_CLASS(o2::Spoiler);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SpoilerWithHead)
 {
-	FIELD().PUBLIC().NAME(onOptionsPressed);
-	FIELD().PUBLIC().NAME(onSavePressed);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mOptionsBtn);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSaveBtn);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mIcon);
+    FIELD().PUBLIC().NAME(onOptionsPressed);
+    FIELD().PUBLIC().NAME(onSavePressed);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mOptionsBtn);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSaveBtn);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mIcon);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpoilerWithHead)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const SpoilerWithHead&);
-	FUNCTION().PUBLIC().SIGNATURE(Image*, GetIcon);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const SpoilerWithHead&);
+    FUNCTION().PUBLIC().SIGNATURE(Image*, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }
 END_META;
 // --- END META ---

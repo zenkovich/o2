@@ -171,5 +171,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AnimationClip);
+DECLARE_CLASS(o2::AnimationClip, o2__AnimationClip);
 // --- END META ---

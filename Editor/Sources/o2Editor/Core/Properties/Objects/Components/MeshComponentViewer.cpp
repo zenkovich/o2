@@ -180,5 +180,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TObjectPropertiesViewer<MeshComponent>);
 // --- META ---
 
-DECLARE_CLASS(Editor::MeshComponentViewer);
+DECLARE_CLASS(Editor::MeshComponentViewer, Editor__MeshComponentViewer);
 // --- END META ---

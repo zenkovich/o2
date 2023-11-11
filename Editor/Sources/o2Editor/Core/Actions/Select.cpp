@@ -52,5 +52,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::SelectAction);
+DECLARE_CLASS(Editor::SelectAction, Editor__SelectAction);
 // --- END META ---

@@ -830,7 +830,7 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ActorTransform);
+DECLARE_CLASS(o2::ActorTransform, o2__ActorTransform);
 
-DECLARE_CLASS(o2::ActorTransformData);
+DECLARE_CLASS(o2::ActorTransformData, o2__ActorTransformData);
 // --- END META ---

@@ -224,5 +224,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::SkeletonTool);
+DECLARE_CLASS(Editor::SkeletonTool, Editor__SkeletonTool);
 // --- END META ---

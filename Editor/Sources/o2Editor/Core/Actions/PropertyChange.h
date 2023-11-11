@@ -53,26 +53,26 @@ namespace Editor
 
 CLASS_BASES_META(Editor::PropertyChangeAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::PropertyChangeAction)
 {
-	FIELD().PUBLIC().NAME(objectsIds);
-	FIELD().PUBLIC().NAME(propertyPath);
-	FIELD().PUBLIC().NAME(beforeValues);
-	FIELD().PUBLIC().NAME(afterValues);
+    FIELD().PUBLIC().NAME(objectsIds);
+    FIELD().PUBLIC().NAME(propertyPath);
+    FIELD().PUBLIC().NAME(beforeValues);
+    FIELD().PUBLIC().NAME(afterValues);
 }
 END_META;
 CLASS_METHODS_META(Editor::PropertyChangeAction)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetProperties, Vector<DataDocument>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProperties, Vector<DataDocument>&);
 }
 END_META;
 // --- END META ---

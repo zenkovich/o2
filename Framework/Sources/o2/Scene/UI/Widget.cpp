@@ -1672,13 +1672,13 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Widget>);
 // --- META ---
 
-DECLARE_CLASS(o2::Widget);
+DECLARE_CLASS(o2::Widget, o2__Widget);
 
 #if  IS_EDITOR
-DECLARE_CLASS(o2::Widget::LayersEditable);
+DECLARE_CLASS(o2::Widget::LayersEditable, o2__Widget__LayersEditable);
 #endif
 
 #if  IS_EDITOR
-DECLARE_CLASS(o2::Widget::InternalChildrenEditableEditable);
+DECLARE_CLASS(o2::Widget::InternalChildrenEditableEditable, o2__Widget__InternalChildrenEditableEditable);
 #endif
 // --- END META ---

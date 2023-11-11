@@ -60,28 +60,28 @@ namespace Editor
 
 CLASS_BASES_META(Editor::Vec2KeyFramesTrackControl)
 {
-	BASE_CLASS(Editor::KeyFramesTrackControl<AnimationTrack<Vec2F>>);
+    BASE_CLASS(Editor::KeyFramesTrackControl<AnimationTrack<Vec2F>>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::Vec2KeyFramesTrackControl)
 {
-	FIELD().PRIVATE().NAME(mTool);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTrackOwner);
+    FIELD().PRIVATE().NAME(mTool);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTrackOwner);
 }
 END_META;
 CLASS_METHODS_META(Editor::Vec2KeyFramesTrackControl)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2KeyFramesTrackControl&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
-	FUNCTION().PRIVATE().SIGNATURE(void, TryFindOwnerTrack);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnSetTrack);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnKeysChanged);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2KeyFramesTrackControl&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+    FUNCTION().PRIVATE().SIGNATURE(void, TryFindOwnerTrack);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnSetTrack);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnKeysChanged);
 }
 END_META;
 // --- END META ---

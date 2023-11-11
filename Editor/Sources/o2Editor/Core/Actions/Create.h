@@ -47,25 +47,25 @@ namespace Editor
 
 CLASS_BASES_META(Editor::CreateAction)
 {
-	BASE_CLASS(Editor::IAction);
+    BASE_CLASS(Editor::IAction);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CreateAction)
 {
-	FIELD().PUBLIC().NAME(objectsData);
-	FIELD().PUBLIC().NAME(objectsIds);
-	FIELD().PUBLIC().NAME(insertParentId);
-	FIELD().PUBLIC().NAME(insertPrevObjectId);
+    FIELD().PUBLIC().NAME(objectsData);
+    FIELD().PUBLIC().NAME(objectsIds);
+    FIELD().PUBLIC().NAME(insertParentId);
+    FIELD().PUBLIC().NAME(insertPrevObjectId);
 }
 END_META;
 CLASS_METHODS_META(Editor::CreateAction)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, SceneEditableObject*, SceneEditableObject*);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, SceneEditableObject*, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 // --- END META ---

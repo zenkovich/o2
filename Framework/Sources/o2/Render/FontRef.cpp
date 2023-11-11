@@ -110,5 +110,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::FontRef);
+DECLARE_CLASS(o2::FontRef, o2__FontRef);
 // --- END META ---

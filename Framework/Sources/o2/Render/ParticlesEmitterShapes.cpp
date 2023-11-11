@@ -21,9 +21,9 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ParticlesEmitterShape);
+DECLARE_CLASS(o2::ParticlesEmitterShape, o2__ParticlesEmitterShape);
 
-DECLARE_CLASS(o2::CircleParticlesEmitterShape);
+DECLARE_CLASS(o2::CircleParticlesEmitterShape, o2__CircleParticlesEmitterShape);
 
-DECLARE_CLASS(o2::SquareParticlesEmitterShape);
+DECLARE_CLASS(o2::SquareParticlesEmitterShape, o2__SquareParticlesEmitterShape);
 // --- END META ---

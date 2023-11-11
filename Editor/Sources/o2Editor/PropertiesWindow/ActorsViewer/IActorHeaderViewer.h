@@ -57,24 +57,24 @@ namespace Editor
 
 CLASS_BASES_META(Editor::IActorHeaderViewer)
 {
-	BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::IObject);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IActorHeaderViewer)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorHeaderViewer)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
 // --- END META ---

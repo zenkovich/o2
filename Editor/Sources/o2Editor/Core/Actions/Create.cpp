@@ -71,5 +71,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::CreateAction);
+DECLARE_CLASS(Editor::CreateAction, Editor__CreateAction);
 // --- END META ---

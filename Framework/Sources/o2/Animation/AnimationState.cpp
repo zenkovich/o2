@@ -58,5 +58,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AnimationState);
+DECLARE_CLASS(o2::AnimationState, o2__AnimationState);
 // --- END META ---

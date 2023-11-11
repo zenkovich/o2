@@ -97,5 +97,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::DefaultWidgetLayerHeaderViewer);
+DECLARE_CLASS(Editor::DefaultWidgetLayerHeaderViewer, Editor__DefaultWidgetLayerHeaderViewer);
 // --- END META ---

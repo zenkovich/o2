@@ -22,7 +22,7 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ParticlesEffect);
+DECLARE_CLASS(o2::ParticlesEffect, o2__ParticlesEffect);
 
-DECLARE_CLASS(o2::ParticlesGravityEffect);
+DECLARE_CLASS(o2::ParticlesGravityEffect, o2__ParticlesGravityEffect);
 // --- END META ---

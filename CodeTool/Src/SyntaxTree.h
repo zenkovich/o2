@@ -35,7 +35,7 @@ typedef vector<SyntaxSection*>        SyntaxSectionsVec;
 typedef vector<SyntaxTypedef*>        SyntaxTypedefsVec;
 typedef vector<SyntaxUsingNamespace*> SyntaxUsingNamespacesVec;
 typedef vector<SyntaxVariable*>       SyntaxVariablesVec;
-typedef vector<SyntaxDefineIf*>         SyntaxDefinesVec;
+typedef vector<SyntaxDefineIf*>       SyntaxDefinesVec;
 typedef vector<string>                StringsVec;
 
 enum class SyntaxProtectionSection { Public, Private, Protected };
@@ -86,9 +86,11 @@ public:
     void LoadFrom(const pugi::xml_node& node);
 
 protected:
-    string           mPath;                      // File path
-    string           mData;                      // File data
-    TimeStamp        mLastEditedDate;            // Last file edited date
+    string mPath; // File path
+    string mData; // File data
+
+    TimeStamp mLastEditedDate; // Last file edited date
+
     SyntaxNamespace* mGlobalNamespace = nullptr; // Global syntax namespace in file
 
     friend class CppSyntaxParser;
@@ -156,8 +158,8 @@ public:
     void LoadFrom(const pugi::xml_node& node);
 
 protected:
-    string          mUsingNamespaceName;       // Using namespace name
-    SyntaxSection*  mUsingNamespace = nullptr; // Using namespace (if found)
+    string         mUsingNamespaceName;       // Using namespace name
+    SyntaxSection* mUsingNamespace = nullptr; // Using namespace (if found)
 
     friend class CodeToolCache;
     friend class CppSyntaxParser;
@@ -186,9 +188,9 @@ public:
     void LoadFrom(const pugi::xml_node& node);
 
 protected:
-    string          mWhatName;              // What was used to defined name (X)
-    string          mNewDefName;            // What was new defined name (Y)
-    SyntaxSection*  mWhatSection = nullptr; // What section used to define (X)
+    string         mWhatName;              // What was used to defined name (X)
+    string         mNewDefName;            // What was new defined name (Y)
+    SyntaxSection* mWhatSection = nullptr; // What section used to define (X)
 
     friend class CodeToolCache;
     friend class CppSyntaxParser;
@@ -259,18 +261,20 @@ public:
     virtual void LoadFrom(const pugi::xml_node& node);
 
 protected:
-    string                   mName;                    // Short name of section
-    string                   mFullName;                // Full name of section with all parents names
-    SyntaxSection*           mParentSection = nullptr; // Pointer to parent section (nullptr of section is global)
-    SyntaxFunctionsVec       mFunctions;               // List of functions
-    SyntaxVariablesVec       mVariables;               // List of variables
-    SyntaxSectionsVec        mSections;                // List of nested sections (classes or namespaces)
-    SyntaxEnumsVec           mEnums;                   // List of enum
-    SyntaxCommentsVec        mComments;                // List of comments
-    SyntaxTypedefsVec        mTypedefs;                // List of typedefs
-    SyntaxUsingNamespacesVec mUsingNamespaces;         // List of using namespaces
-    SyntaxAttributesVec      mAttributes;              // List of attributes
-    SyntaxDefinesVec          mDefines;                 // List of defines
+    string mName;     // Short name of section
+    string mFullName; // Full name of section with all parents names
+
+    SyntaxSection* mParentSection = nullptr; // Pointer to parent section (nullptr of section is global)
+
+    SyntaxFunctionsVec       mFunctions;       // List of functions
+    SyntaxVariablesVec       mVariables;       // List of variables
+    SyntaxSectionsVec        mSections;        // List of nested sections (classes or namespaces)
+    SyntaxEnumsVec           mEnums;           // List of enum
+    SyntaxCommentsVec        mComments;        // List of comments
+    SyntaxTypedefsVec        mTypedefs;        // List of typedefs
+    SyntaxUsingNamespacesVec mUsingNamespaces; // List of using namespaces
+    SyntaxAttributesVec      mAttributes;      // List of attributes
+    SyntaxDefinesVec         mDefines;         // List of defines
 
     friend class CodeToolCache;
     friend class CppSyntaxParser;
@@ -386,16 +390,17 @@ public:
     void LoadFrom(const pugi::xml_node& node);
 
 protected:
-    SyntaxClassInheritancsVec mBaseClasses;             // Base classes
-    bool                      mIsMeta = false;          // Is class meta (defined as "meta class name { ... };")
-    string                    mTemplateParameters;      // Template parameters (empty if class isn't template)
+    SyntaxClassInheritancsVec mBaseClasses; // Base classe
 
-    SyntaxProtectionSection   mClassSection = SyntaxProtectionSection::Public; // protection section of parent class
+    string mTemplateParameters; // Template parameters (empty if class isn't template)
 
-    SyntaxClass*              mSourceClass = nullptr;   // Source class for template specialized classes
+    bool mIsMeta = false; // Is class meta (defined as "meta class name { ... };")
+    SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public; // protection section of parent class
 
-    string                    mAttributeCommentDef;     // Attribute comment definition
-    string                    mAttributeShortDef;       // Attribute short definition
+    SyntaxClass* mSourceClass = nullptr; // Source class for template specialized classes
+
+    string  mAttributeCommentDef; // Attribute comment definition
+    string  mAttributeShortDef;   // Attribute short definition
 
     friend class CodeToolCache;
     friend class CppSyntaxParser;
@@ -432,11 +437,12 @@ public:
     bool IsPointer() const;
 
 protected:
-    string mName;               
-    bool   mIsContant = false;  
-    bool   mIsReference = false;
-    bool   mIsPointer = false;  
-    bool   mIsMutable = false;
+    string mName;    
+
+    bool mIsContant = false;
+    bool mIsReference = false;
+    bool mIsPointer = false;
+    bool mIsMutable = false;
 
     friend class CppSyntaxParser;
 };
@@ -461,11 +467,14 @@ public:
     bool IsStatic() const;
 
 protected:
-    SyntaxType              mType;                                           // Type of variable
-    string                  mName;                                           // Name of variable
-    string                  mDefaultValue;                                   // Default variable value
+    SyntaxType mType; // Type of variable
+
+    string mName;         // Name of variable
+    string mDefaultValue; // Default variable value
+
     SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public; // Protection section
-    bool                    mIsStatic = false;                               // Is variable static
+
+    bool mIsStatic = false; // Is variable static
 
     friend class CppSyntaxParser;
 };
@@ -502,14 +511,19 @@ public:
     bool IsStatic() const;
 
 protected:
-    SyntaxType              mReturnType;                                     // Returning type
-    string                  mName;                                             // Name of function
-    SyntaxVariablesVec      mParameters;                                     // List of parameters
+    SyntaxType mReturnType; // Returning type
+
+    string mTemplates; // Function templates
+    string mName; // Name of function
+
+    SyntaxVariablesVec mParameters; // List of parameters
+
     SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public; // Protection Section
-    bool                    mIsStatic = false;                                 // Is function static
-    bool                    mIsVirtual = false;                                 // Is function virtual
-    bool                    mIsContstant = false;                             // Is function constant
-    string                  mTemplates;                                      // Function templates
+
+    bool mIsStatic = false;    // Is function static
+    bool mIsVirtual = false;   // Is function virtual
+    bool mIsContstant = false; // Is function constant
+
 
     friend class CppSyntaxParser;
 };
@@ -534,9 +548,11 @@ public:
     SyntaxSection* GetOwnerSyntaxSection() const;
 
 protected:
-    string                  mName;                     // Name of enum
-    string                  mFullName;               // Full enum name with all parent spaces names
-    StringStringDict        mEntries;                // Entries of enum
+    string mName;     // Name of enum
+    string mFullName; // Full enum name with all parent spaces names
+
+    StringStringDict mEntries; // Entries of enum
+
     SyntaxSection*          mOwnerSection = nullptr; // Owner syntax section
     SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
 

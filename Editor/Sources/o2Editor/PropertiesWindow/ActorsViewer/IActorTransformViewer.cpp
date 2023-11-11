@@ -71,5 +71,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::IActorTransformViewer);
+DECLARE_CLASS(Editor::IActorTransformViewer, Editor__IActorTransformViewer);
 // --- END META ---

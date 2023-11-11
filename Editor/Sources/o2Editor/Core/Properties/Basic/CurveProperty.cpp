@@ -62,5 +62,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Curve>);
 // --- META ---
 
-DECLARE_CLASS(Editor::CurveProperty);
+DECLARE_CLASS(Editor::CurveProperty, Editor__CurveProperty);
 // --- END META ---

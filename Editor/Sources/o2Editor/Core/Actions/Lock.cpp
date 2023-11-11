@@ -43,5 +43,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::LockAction);
+DECLARE_CLASS(Editor::LockAction, Editor__LockAction);
 // --- END META ---

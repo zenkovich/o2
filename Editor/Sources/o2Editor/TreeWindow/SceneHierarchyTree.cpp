@@ -485,7 +485,7 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::SceneHierarchyTree);
+DECLARE_CLASS(Editor::SceneHierarchyTree, Editor__SceneHierarchyTree);
 
-DECLARE_CLASS(Editor::SceneHierarchyTreeNode);
+DECLARE_CLASS(Editor::SceneHierarchyTreeNode, Editor__SceneHierarchyTreeNode);
 // --- END META ---

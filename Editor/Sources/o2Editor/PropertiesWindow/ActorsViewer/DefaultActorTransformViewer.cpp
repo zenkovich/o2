@@ -338,5 +338,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::DefaultActorTransformViewer);
+DECLARE_CLASS(Editor::DefaultActorTransformViewer, Editor__DefaultActorTransformViewer);
 // --- END META ---

@@ -107,7 +107,7 @@ namespace Editor
 
 		SERIALIZABLE(CurvesEditor);
 
-	protected:
+	public:
 		struct CurveInfo;
 
 		struct CurveHandle : public DragHandle
@@ -457,159 +457,159 @@ namespace Editor
 
 CLASS_BASES_META(Editor::CurvesEditor)
 {
-	BASE_CLASS(Editor::FrameScrollView);
-	BASE_CLASS(o2::SelectableDragHandlesGroup);
+    BASE_CLASS(Editor::FrameScrollView);
+    BASE_CLASS(o2::SelectableDragHandlesGroup);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurvesEditor)
 {
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(actionsListDelegate);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mContextMenu);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mMainHandleSample);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSupportHandleSample);
-	FIELD().PROTECTED().NAME(mHandleSamplesStubInfo);
-	FIELD().PROTECTED().NAME(mCurves);
-	FIELD().PROTECTED().NAME(mRanges);
-	FIELD().PROTECTED().NAME(mSupportHandles);
-	FIELD().PROTECTED().NAME(mSupportHandlesGroup);
-	FIELD().PROTECTED().NAME(mSelectingHandlesBuf);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite);
-	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mAdjustCurvesScale);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mTextFont);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextLeft);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextRight);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextTop);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextBottom);
-	FIELD().PROTECTED().NAME(mTextBorder);
-	FIELD().PROTECTED().NAME(mSelectingPressedPoint);
-	FIELD().PROTECTED().NAME(mTransformFrame);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTransformFrameVisible);
-	FIELD().PROTECTED().NAME(mTransformFrameBasis);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsViewScrolling);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedAdjustView);
-	FIELD().PROTECTED().NAME(mBeforeTransformKeys);
-	FIELD().PROTECTED().NAME(mActionsList);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(actionsListDelegate);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mContextMenu);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mMainHandleSample);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSupportHandleSample);
+    FIELD().PROTECTED().NAME(mHandleSamplesStubInfo);
+    FIELD().PROTECTED().NAME(mCurves);
+    FIELD().PROTECTED().NAME(mRanges);
+    FIELD().PROTECTED().NAME(mSupportHandles);
+    FIELD().PROTECTED().NAME(mSupportHandlesGroup);
+    FIELD().PROTECTED().NAME(mSelectingHandlesBuf);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite);
+    FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mAdjustCurvesScale);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mTextFont);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextLeft);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextRight);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextTop);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextBottom);
+    FIELD().PROTECTED().NAME(mTextBorder);
+    FIELD().PROTECTED().NAME(mSelectingPressedPoint);
+    FIELD().PROTECTED().NAME(mTransformFrame);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTransformFrameVisible);
+    FIELD().PROTECTED().NAME(mTransformFrameBasis);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsViewScrolling);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedAdjustView);
+    FIELD().PROTECTED().NAME(mBeforeTransformKeys);
+    FIELD().PROTECTED().NAME(mActionsList);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesEditor)
 {
 
-	typedef Map<String, Curve*> _tmp1;
+    typedef Map<String, Curve*> _tmp1;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesEditor&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-	FUNCTION().PUBLIC().SIGNATURE(_tmp1, GetCurves);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddCurve, const String&, Curve*, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurve, Curve*);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurve, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllCurves);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddCurvesRange, Curve*, Curve*, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurvesRange, Curve*, Curve*);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddCurvesRange, const String&, const String&, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveColor, Curve*, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurvesRange, const String&, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionSpriteImage, const ImageAssetRef&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTextFont, const FontRef&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTextBorder, const BorderF&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAdjustCurvesScale, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
-	FUNCTION().PUBLIC().SIGNATURE(ContextMenu*, GetContextMenu);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
-	FUNCTION().PROTECTED().SIGNATURE(Curve*, FindCurve, const String&);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeContextMenu);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTextDrawables);
-	FUNCTION().PROTECTED().SIGNATURE(void, RecalculateViewArea);
-	FUNCTION().PROTECTED().SIGNATURE(void, RedrawContent);
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawGrid);
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawCurves);
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawHandles);
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawSelection);
-	FUNCTION().PROTECTED().SIGNATURE(void, DrawTransformFrame);
-	FUNCTION().PROTECTED().SIGNATURE(void, AddCurveKeyHandles, CurveInfo*, int);
-	FUNCTION().PROTECTED().SIGNATURE(void, RemoveCurveKeyHandles, CurveInfo*, int);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCurveKeyMainHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCurveKeyLeftSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCurveKeyRightSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(Vec2F, CheckLeftSupportHandlePosition, CurveInfo*, KeyHandles*, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(Vec2F, CheckRightSupportHandlePosition, CurveInfo*, KeyHandles*, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SmoothKey, CurveInfo*, int);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseStayDown, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnHandleBeganDragging, DragHandle*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnHandleMoved, DragHandle*, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnHandleCompletedChange, DragHandle*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
-	FUNCTION().PROTECTED().SIGNATURE(void, CheckHandlesVisible);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransformFrame);
-	FUNCTION().PROTECTED().SIGNATURE(bool, IsTransformFrameVisible);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetSelectedKeysSupportsType, Curve::Key::Type);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformFrameTransformed, const Basis&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformBegin);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformCompleted);
-	FUNCTION().PROTECTED().SIGNATURE(Vec2F, LocalToCurveView, const Vec2F&, const Vec2F&, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(Vec2F, CurveViewToLocal, const Vec2F&, const Vec2F&, const Vec2F&);
-	FUNCTION().PROTECTED().SIGNATURE(void, DoneAction, IAction*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnEditPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnAutoSmoothChecked, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnFlatChecked, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnFreeChecked, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnLinearChecked, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnBrokenChecked, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDiscreteChecked, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCopyPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCutPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnPastePressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDeletePressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnInsertPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnUndoPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRedoPressed);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesEditor&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+    FUNCTION().PUBLIC().SIGNATURE(_tmp1, GetCurves);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddCurve, const String&, Curve*, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurve, Curve*);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurve, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllCurves);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddCurvesRange, Curve*, Curve*, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurvesRange, Curve*, Curve*);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddCurvesRange, const String&, const String&, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurveColor, Curve*, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurvesRange, const String&, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionSpriteImage, const ImageAssetRef&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTextFont, const FontRef&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTextBorder, const BorderF&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAdjustCurvesScale, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
+    FUNCTION().PUBLIC().SIGNATURE(ContextMenu*, GetContextMenu);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
+    FUNCTION().PROTECTED().SIGNATURE(Curve*, FindCurve, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeContextMenu);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeTextDrawables);
+    FUNCTION().PROTECTED().SIGNATURE(void, RecalculateViewArea);
+    FUNCTION().PROTECTED().SIGNATURE(void, RedrawContent);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawGrid);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawCurves);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawHandles);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawSelection);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawTransformFrame);
+    FUNCTION().PROTECTED().SIGNATURE(void, AddCurveKeyHandles, CurveInfo*, int);
+    FUNCTION().PROTECTED().SIGNATURE(void, RemoveCurveKeyHandles, CurveInfo*, int);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCurveKeyMainHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCurveKeyLeftSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCurveKeyRightSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(Vec2F, CheckLeftSupportHandlePosition, CurveInfo*, KeyHandles*, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(Vec2F, CheckRightSupportHandlePosition, CurveInfo*, KeyHandles*, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SmoothKey, CurveInfo*, int);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseStayDown, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnHandleBeganDragging, DragHandle*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnHandleMoved, DragHandle*, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnHandleCompletedChange, DragHandle*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, CheckHandlesVisible);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransformFrame);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsTransformFrameVisible);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetSelectedKeysSupportsType, Curve::Key::Type);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTransformFrameTransformed, const Basis&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTransformBegin);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTransformCompleted);
+    FUNCTION().PROTECTED().SIGNATURE(Vec2F, LocalToCurveView, const Vec2F&, const Vec2F&, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(Vec2F, CurveViewToLocal, const Vec2F&, const Vec2F&, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(void, DoneAction, IAction*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEditPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnAutoSmoothChecked, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFlatChecked, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFreeChecked, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLinearChecked, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnBrokenChecked, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDiscreteChecked, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCopyPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCutPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPastePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeletePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnInsertPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnUndoPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRedoPressed);
 }
 END_META;
 
 CLASS_BASES_META(Editor::CurvesEditor::CurveHandle)
 {
-	BASE_CLASS(o2::DragHandle);
+    BASE_CLASS(o2::DragHandle);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurvesEditor::CurveHandle)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(curveInfo);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(curveInfo);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesEditor::CurveHandle)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*, Sprite*, Sprite*, Sprite*);
-	FUNCTION().PUBLIC().CONSTRUCTOR(const DragHandle&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetLocalPosition);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToCurveView, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, CurveViewToLocal, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*, Sprite*, Sprite*, Sprite*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const DragHandle&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetLocalPosition);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToCurveView, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, CurveViewToLocal, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
 }
 END_META;
 
 CLASS_BASES_META(Editor::CurvesEditor::CurveCopyInfo)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurvesEditor::CurveCopyInfo)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(curveId);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(keys);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(curveId);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(keys);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesEditor::CurveCopyInfo)

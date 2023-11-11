@@ -273,7 +273,7 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AssetsFoldersTree);
+DECLARE_CLASS(Editor::AssetsFoldersTree, Editor__AssetsFoldersTree);
 
-DECLARE_CLASS(Editor::FoldersTree);
+DECLARE_CLASS(Editor::FoldersTree, Editor__FoldersTree);
 // --- END META ---

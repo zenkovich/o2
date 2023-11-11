@@ -32,7 +32,7 @@ ENUM_META(o2::EditorTestComponent::TestEnum)
 }
 END_ENUM_META;
 
-DECLARE_CLASS(o2::EditorTestComponent);
+DECLARE_CLASS(o2::EditorTestComponent, o2__EditorTestComponent);
 
-DECLARE_CLASS(o2::EditorTestComponent::TestInside);
+DECLARE_CLASS(o2::EditorTestComponent::TestInside, o2__EditorTestComponent__TestInside);
 // --- END META ---

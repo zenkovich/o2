@@ -286,5 +286,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::MeshTopologyTool);
+DECLARE_CLASS(Editor::MeshTopologyTool, Editor__MeshTopologyTool);
 // --- END META ---

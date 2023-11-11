@@ -94,5 +94,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::SceneLayer);
+DECLARE_CLASS(o2::SceneLayer, o2__SceneLayer);
 // --- END META ---

@@ -132,5 +132,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<o2::SceneLayer>>);
 // --- META ---
 
-DECLARE_CLASS(Editor::SceneLayerRefProperty);
+DECLARE_CLASS(Editor::SceneLayerRefProperty, Editor__SceneLayerRefProperty);
 // --- END META ---

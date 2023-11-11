@@ -441,5 +441,5 @@ namespace Editor
 }
 // --- META ---
 
-DECLARE_CLASS(Editor::AnimationTimeline);
+DECLARE_CLASS(Editor::AnimationTimeline, Editor__AnimationTimeline);
 // --- END META ---

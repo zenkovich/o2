@@ -661,5 +661,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::Text);
+DECLARE_CLASS(o2::Text, o2__Text);
 // --- END META ---

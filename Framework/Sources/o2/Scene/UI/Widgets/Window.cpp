@@ -392,5 +392,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::Window);
+DECLARE_CLASS(o2::Window, o2__Window);
 // --- END META ---

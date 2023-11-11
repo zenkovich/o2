@@ -524,5 +524,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::LongList);
+DECLARE_CLASS(o2::LongList, o2__LongList);
 // --- END META ---

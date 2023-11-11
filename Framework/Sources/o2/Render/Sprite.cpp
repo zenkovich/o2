@@ -1154,5 +1154,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::Sprite);
+DECLARE_CLASS(o2::Sprite, o2__Sprite);
 // --- END META ---

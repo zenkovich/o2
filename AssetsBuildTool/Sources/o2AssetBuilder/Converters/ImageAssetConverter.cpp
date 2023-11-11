@@ -40,5 +40,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ImageAssetConverter);
+DECLARE_CLASS(o2::ImageAssetConverter, o2__ImageAssetConverter);
 // --- END META ---

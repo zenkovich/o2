@@ -89,39 +89,39 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DefaultActorHeaderViewer)
 {
-	BASE_CLASS(Editor::IActorHeaderViewer);
+    BASE_CLASS(Editor::IActorHeaderViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)
 {
-	FIELD().PUBLIC().NAME(mActors);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDataView);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mEnableProperty);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mNameProperty);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLockProperty);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeProperty);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mTagsProperty);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLayerProperty);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDepthProperty);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeApplyBtn);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeRevertBtn);
-	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeBreakBtn);
+    FIELD().PUBLIC().NAME(mActors);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDataView);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mEnableProperty);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mNameProperty);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLockProperty);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeProperty);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mTagsProperty);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLayerProperty);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDepthProperty);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeApplyBtn);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeRevertBtn);
+    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeBreakBtn);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
-	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PROTECTED().SIGNATURE(void, RefreshLayer);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnApplyPrototypePressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnRevertPrototypePressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnBreakPrototypePressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectedInheritedLayer);
-	FUNCTION().PROTECTED().SIGNATURE(Vector<Actor*>, GetRootApplyActors);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
+    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, RefreshLayer);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnApplyPrototypePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRevertPrototypePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnBreakPrototypePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectedInheritedLayer);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Actor*>, GetRootApplyActors);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;
 // --- END META ---

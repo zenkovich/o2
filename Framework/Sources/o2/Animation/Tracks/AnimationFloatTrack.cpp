@@ -309,7 +309,7 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::AnimationTrack<float>);
+DECLARE_CLASS(o2::AnimationTrack<float>, o2__AnimationTrack_float_);
 
-DECLARE_CLASS(o2::AnimationTrack<float>::Player);
+DECLARE_CLASS(o2::AnimationTrack<float>::Player, o2__AnimationTrack_float___Player);
 // --- END META ---

@@ -117,47 +117,47 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AssetsFoldersTree)
 {
-	BASE_CLASS(o2::Widget);
-	BASE_CLASS(o2::KeyboardEventsListener);
+    BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AssetsFoldersTree)
 {
-	FIELD().PROTECTED().NAME(mFoldersTree);
-	FIELD().PROTECTED().NAME(mContextMenu);
-	FIELD().PROTECTED().NAME(mCurrentPath);
-	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOpengingFolderFromThis);
+    FIELD().PROTECTED().NAME(mFoldersTree);
+    FIELD().PROTECTED().NAME(mContextMenu);
+    FIELD().PROTECTED().NAME(mCurrentPath);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOpengingFolderFromThis);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetsFoldersTree)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsFoldersTree&);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, SelectAndExpandFolder, const String&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateView);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeContext);
-	FUNCTION().PROTECTED().SIGNATURE(void*, GetFoldersTreeNodeParent, void*);
-	FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetFoldersTreeNodeChilds, void*);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, TreeNode*, void*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeNodeDblClick, TreeNode*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, Vector<void*>);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeRightClick, TreeNode*);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCutPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextPastePressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextDeletePressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextOpenPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextShowInExplorerPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateFolderPressed);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsFoldersTree&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, SelectAndExpandFolder, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateView);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeContext);
+    FUNCTION().PROTECTED().SIGNATURE(void*, GetFoldersTreeNodeParent, void*);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetFoldersTreeNodeChilds, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, TreeNode*, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeNodeDblClick, TreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, Vector<void*>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeRightClick, TreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnContextCutPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnContextPastePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnContextDeletePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnContextOpenPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnContextShowInExplorerPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateFolderPressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
 
 CLASS_BASES_META(Editor::FoldersTree)
 {
-	BASE_CLASS(o2::Tree);
+    BASE_CLASS(o2::Tree);
 }
 END_META;
 CLASS_FIELDS_META(Editor::FoldersTree)
@@ -167,8 +167,8 @@ END_META;
 CLASS_METHODS_META(Editor::FoldersTree)
 {
 
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
-	FUNCTION().PROTECTED().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
+    FUNCTION().PROTECTED().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
 // --- END META ---

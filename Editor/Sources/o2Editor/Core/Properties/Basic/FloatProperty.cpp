@@ -113,5 +113,5 @@ namespace Editor
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<float>);
 // --- META ---
 
-DECLARE_CLASS(Editor::FloatProperty);
+DECLARE_CLASS(Editor::FloatProperty, Editor__FloatProperty);
 // --- END META ---

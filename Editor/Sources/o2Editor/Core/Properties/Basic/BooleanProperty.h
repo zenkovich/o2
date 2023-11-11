@@ -44,21 +44,21 @@ namespace Editor
 
 CLASS_BASES_META(Editor::BooleanProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<bool>);
+    BASE_CLASS(Editor::TPropertyField<bool>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::BooleanProperty)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mToggle);
 }
 END_META;
 CLASS_METHODS_META(Editor::BooleanProperty)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const BooleanProperty&);
-	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const BooleanProperty&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;
 // --- END META ---

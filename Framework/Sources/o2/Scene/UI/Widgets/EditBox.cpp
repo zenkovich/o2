@@ -1334,5 +1334,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::EditBox);
+DECLARE_CLASS(o2::EditBox, o2__EditBox);
 // --- END META ---

@@ -240,5 +240,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::WidgetLayerLayout);
+DECLARE_CLASS(o2::WidgetLayerLayout, o2__WidgetLayerLayout);
 // --- END META ---

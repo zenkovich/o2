@@ -904,5 +904,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::GridLayout);
+DECLARE_CLASS(o2::GridLayout, o2__GridLayout);
 // --- END META ---

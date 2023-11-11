@@ -85,33 +85,33 @@ namespace Editor
 
 CLASS_BASES_META(Editor::MeshWeightsTool)
 {
-	BASE_CLASS(Editor::IEditTool);
+    BASE_CLASS(Editor::IEditTool);
 }
 END_META;
 CLASS_FIELDS_META(Editor::MeshWeightsTool)
 {
-	FIELD().PUBLIC().NAME(boneComponent);
-	FIELD().PUBLIC().NAME(sceneLayer);
-	FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
-	FIELD().PRIVATE().NAME(mCursosPos);
-	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mPressed);
-	FIELD().PRIVATE().DEFAULT_VALUE(50).NAME(mBrushReadius);
-	FIELD().PRIVATE().DEFAULT_VALUE(1.0f).NAME(mBrushStrength);
-	FIELD().PRIVATE().NAME(mWeightsDebugMesh);
+    FIELD().PUBLIC().NAME(boneComponent);
+    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
+    FIELD().PRIVATE().NAME(mCursosPos);
+    FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mPressed);
+    FIELD().PRIVATE().DEFAULT_VALUE(50).NAME(mBrushReadius);
+    FIELD().PRIVATE().DEFAULT_VALUE(1.0f).NAME(mBrushStrength);
+    FIELD().PRIVATE().NAME(mWeightsDebugMesh);
 }
 END_META;
 CLASS_METHODS_META(Editor::MeshWeightsTool)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
-	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
-	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
 }
 END_META;
 // --- END META ---

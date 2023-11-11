@@ -468,5 +468,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::VerticalLayout);
+DECLARE_CLASS(o2::VerticalLayout, o2__VerticalLayout);
 // --- END META ---
