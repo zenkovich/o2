@@ -486,8 +486,6 @@ namespace o2
     }
 }
 
-o2::TypeId TypesCheckupHelper::counter = 0;
-
 ENUM_META(o2::Type::Usage)
 {
     ENUM_ENTRY(Map);

@@ -871,14 +871,6 @@ typedef void* (*GetValuePointerFuncPtr)(void*);
 
 #define END_META }
 
-#define CHECKUP_TYPE(TYPE) \
-    TypesCheckupHelper::counter += TypeOf(TYPE).ID()
-
-struct TypesCheckupHelper
-{
-    static o2::TypeId counter;
-};
-
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Reflection/FieldInfo.h"
 #include "o2/Utils/Reflection/FunctionInfo.h"

@@ -10,9 +10,6 @@
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 #include "o2/Utils/System/Time/Timer.h"
-#include "o2AssetBuilder/Converters/AtlasAssetConverter.h"
-#include "o2AssetBuilder/Converters/FolderAssetConverter.h"
-#include "o2AssetBuilder/Converters/ImageAssetConverter.h"
 #include "o2AssetBuilder/ImageCompressor.h"
 
 namespace o2
@@ -27,13 +24,6 @@ namespace o2
         o2Debug.GetLog()->BindStream(mLog);
 
         InitializeConverters();
-
-        CHECKUP_TYPE(DefaultAssetMeta<SceneAsset>);
-        CHECKUP_TYPE(DefaultAssetMeta<DataAsset>);
-        CHECKUP_TYPE(ImageAssetConverter);
-        CHECKUP_TYPE(AtlasAssetConverter);
-        CHECKUP_TYPE(FolderAssetConverter);
-        CHECKUP_TYPE(AtlasAsset);
     }
 
     AssetsBuilder::~AssetsBuilder()

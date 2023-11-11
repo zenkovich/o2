@@ -22,11 +22,6 @@ namespace Editor
 	{
 		InitializeWindow();
 		InitializeViewers();
-
-		CHECKUP_TYPE(AssetPropertiesViewer);
-		CHECKUP_TYPE(WidgetLayerViewer);
-		CHECKUP_TYPE(ImageAssetViewer);
-		CHECKUP_TYPE(VectorFontAssetViewer);
 	}
 
 	PropertiesWindow::~PropertiesWindow()
