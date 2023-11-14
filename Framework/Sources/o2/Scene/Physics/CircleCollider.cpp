@@ -2,6 +2,7 @@
 #include "CircleCollider.h"
 
 #include "o2/Physics/PhysicsWorld.h"
+#include "o2/Scene/Scene.h"
 
 namespace o2
 {
@@ -76,14 +77,13 @@ namespace o2
 
     void CircleCollider::OnTransformUpdated()
     {
-        if (!o2Physics.IsUpdatingPhysicsNow() && mFitByActor)
+#if IS_EDITOR
+        if (mFitByActor && !o2Scene.IsEditorPlaying())
         {
             float prevRadius = mRadius;
             mRadius = mOwner->transform->GetSize().x*0.5f;
-
-            if (prevRadius != mRadius)
-                OnShapeChanged();
         }
+#endif
 
         ICollider::OnTransformUpdated();
     }

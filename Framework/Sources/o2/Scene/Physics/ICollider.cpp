@@ -4,6 +4,7 @@
 #include "o2/Config/ProjectConfig.h"
 #include "o2/Physics/PhysicsWorld.h"
 #include "o2/Scene/Physics/RigidBody.h"
+#include "o2/Scene/Scene.h"
 
 namespace o2
 {
@@ -173,8 +174,10 @@ namespace o2
 
     void ICollider::OnTransformUpdated()
     {
-        if (!o2Physics.IsUpdatingPhysicsNow())
+#if IS_EDITOR
+        if (!o2Scene.IsEditorPlaying())
             OnShapeChanged();
+#endif
     }
 
     void ICollider::OnAddToScene()

@@ -3,6 +3,7 @@
 
 #include "o2/Application/Input.h"
 #include "o2/Assets/Types/ActorAsset.h"
+#include "o2/Physics/PhysicsWorld.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Text.h"
 #include "o2/Render/VectorFontEffects.h"
@@ -53,10 +54,14 @@ namespace o2
 
     void Scene::Update(float dt)
     {
+        mIsUpdatingScene = true;
+
         UpdateAddedEntities();
         UpdateStartingEntities();
         UpdateDestroyingEntities();
         UpdateActors(dt);
+
+        mIsUpdatingScene = false;
     }
 
     void Scene::FixedUpdate(float dt)
@@ -170,6 +175,20 @@ namespace o2
         mDestroyComponents.Add(component);
     }
 
+    bool Scene::IsUpdating() const
+    {
+        return mIsUpdatingScene;
+    }
+
+    bool Scene::IsEditor() const
+    {
+#if IS_EDITOR
+        return true;
+#endif
+
+        return false;
+    }
+
     void Scene::OnActorCreated(Actor* actor)
     {
         if (!IsSingletonInitialzed())
@@ -206,7 +225,7 @@ namespace o2
     {
         Assert(IsSingletonInitialzed(), "Cant add actor to scene, because scene not initialized")
 
-        Instance().AddActorToScene(actor);
+            Instance().AddActorToScene(actor);
     }
 
     void Scene::OnRemoveActorFromScene(Actor* actor, bool keepEditorObjects /*= false*/)
@@ -222,7 +241,7 @@ namespace o2
         if (!IsSingletonInitialzed())
             return
 
-        Instance().mActorsMap.Remove(prevId);
+            Instance().mActorsMap.Remove(prevId);
         Instance().mActorsMap[actor->mId] = actor;
     }
 
@@ -334,7 +353,7 @@ namespace o2
         for (auto actor : mAllActors)
             helper::Process(debugInfo, actor);
 
-        o2Debug.DrawText(((Vec2F)o2Render.GetResolution().InvertedX())*0.5f, debugInfo);
+        o2Debug.DrawText(((Vec2F)o2Render.GetResolution().InvertedX()) * 0.5f, debugInfo);
     }
 
     void Scene::AddActorToScene(Actor* actor)
@@ -714,6 +733,16 @@ namespace o2
         }
     }
 
+    bool Scene::IsEditorPlaying() const
+    {
+        return mIsPlaying;
+    }
+    
+    void Scene::SetEditorPlaying(bool playing)
+    {
+        mIsPlaying = playing;
+    }
+
     Vector<SceneEditableObject*> Scene::GetRootEditableObjects()
     {
         return mRootActors.Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
@@ -831,7 +860,7 @@ namespace o2
     {
         mChangedObjects.RemoveAll([](auto x) { return x == nullptr; });
 
-        if (mChangedObjects.Count() > 0) 
+        if (mChangedObjects.Count() > 0)
         {
             onObjectsChanged(mChangedObjects);
 
@@ -886,13 +915,19 @@ namespace o2
 
     void Scene::OnObjectChanged(SceneEditableObject* object)
     {
-        if (!object || object->changedFrame != o2Time.GetCurrentFrame())
-        {
-            if (object)
-                object->changedFrame = o2Time.GetCurrentFrame();
+        if (mIsUpdatingScene)
+            return;
 
-            mChangedObjects.Add(object);
-        }
+        if (PhysicsWorld::IsSingletonInitialzed() && o2Physics.IsUpdatingPhysicsNow())
+            return;
+
+        if (object && object->changedFrame == o2Time.GetCurrentFrame())
+            return;
+
+        if (object)
+            object->changedFrame = o2Time.GetCurrentFrame();
+
+        mChangedObjects.Add(object);
     }
 
     void Scene::OnObjectDrawn(SceneEditableObject* object)

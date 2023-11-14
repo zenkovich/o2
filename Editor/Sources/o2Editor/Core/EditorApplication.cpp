@@ -115,6 +115,8 @@ namespace Editor
 
 		mPlayingChanged = true;
 		mIsPlaying = playing;
+
+		o2Scene.SetEditorPlaying(mIsPlaying);
 	}
 
 	bool EditorApplication::IsPlaying() const

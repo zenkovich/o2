@@ -2,6 +2,7 @@
 #include "BoxCollider.h"
 
 #include "o2/Physics/PhysicsWorld.h"
+#include "o2/Scene/Scene.h"
 
 namespace o2
 {
@@ -85,8 +86,10 @@ namespace o2
 
     void BoxCollider::OnTransformUpdated()
     {
-        if (!o2Physics.IsUpdatingPhysicsNow() && mFitByActor)
+#if IS_EDITOR
+        if (mFitByActor && !o2Scene.IsEditorPlaying())
             FitSize();
+#endif
 
         ICollider::OnTransformUpdated();
     }

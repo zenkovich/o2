@@ -155,6 +155,12 @@ namespace o2
         // Adds component to destroy list, will be removed at next frame
         void DestroyComponent(Component* component);
 
+        // Returns true if scene updating
+        bool IsUpdating() const;
+
+        // Returns true if scene works in editor
+        bool IsEditor() const;
+
         IOBJECT(Scene);
 
     protected:
@@ -177,11 +183,14 @@ namespace o2
 
         Map<String, SceneLayer*> mLayersMap;    // Layers by names map
         Vector<SceneLayer*>      mLayers;       // Scene layers
+
         SceneLayer* mDefaultLayer; // Default scene layer
 
         Vector<Tag*> mTags; // Scene tags
 
         Vector<ActorAssetRef> mCache; // Cached actors assets
+
+        bool mIsUpdatingScene = false; // Sets true when started updating scene, and false when not
 
     protected:
         // Called when actor added to scene, adds to scene defered
@@ -270,6 +279,12 @@ namespace o2
         // Links actor recursively to prototypes and their parent prototypes
         static void LinkActorToPrototypesHierarchy(Actor* actor, ActorAssetRef proto);
 
+        // Sets scene playing in editor
+        void SetEditorPlaying(bool playing);
+
+        // Returns true if scene in editor in play mode
+        bool IsEditorPlaying() const;
+
         // Returns root editable objects
         Vector<SceneEditableObject*> GetRootEditableObjects();
 
@@ -343,8 +358,11 @@ namespace o2
         Vector<SceneEditableObject*> mEditableObjects;             // All scene editable objects
         mutable Map<SceneUID, SceneEditableObject*> mEditableObjectsByUID; // All scene editable objects by UID
 
-        Vector<SceneEditableObject*> mDrawnObjects;           // List of drawn on last frame editable objects
-        bool                         mIsDrawingScene = false; // Sets true when started drawing scene, and false when not
+        Vector<SceneEditableObject*> mDrawnObjects; // List of drawn on last frame editable objects
+
+        bool mIsDrawingScene = false;  // Sets true when started drawing scene, and false when not
+
+        bool mIsPlaying = false; // Is scene is in play mode
 
         friend class SceneEditableObject;
 #endif
@@ -418,6 +436,7 @@ CLASS_FIELDS_META(o2::Scene)
     FIELD().PROTECTED().NAME(mDefaultLayer);
     FIELD().PROTECTED().NAME(mTags);
     FIELD().PROTECTED().NAME(mCache);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsUpdatingScene);
 #if  IS_EDITOR          
     FIELD().PUBLIC().NAME(onAddedToScene);
     FIELD().PUBLIC().NAME(onRemovedFromScene);
@@ -434,6 +453,7 @@ CLASS_FIELDS_META(o2::Scene)
     FIELD().PROTECTED().NAME(mEditableObjectsByUID);
     FIELD().PROTECTED().NAME(mDrawnObjects);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsDrawingScene);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsPlaying);
 #endif
 }
 END_META;
@@ -481,6 +501,8 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateDestroyingEntities);
     FUNCTION().PUBLIC().SIGNATURE(void, DestroyActor, Actor*);
     FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, Component*);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsUpdating);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEditor);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorCreated, Actor*);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorDestroy, Actor*);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnNewActorParented, Actor*);
@@ -501,6 +523,8 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCameraRemovedScene, CameraActor*);
 #if  IS_EDITOR          
     FUNCTION().PUBLIC().SIGNATURE_STATIC(void, LinkActorToPrototypesHierarchy, Actor*, ActorAssetRef);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEditorPlaying, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEditorPlaying);
     FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetRootEditableObjects);
     FUNCTION().PUBLIC().SIGNATURE(void, AddEditableObjectToScene, SceneEditableObject*);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveEditableObjectFromScene, SceneEditableObject*);
