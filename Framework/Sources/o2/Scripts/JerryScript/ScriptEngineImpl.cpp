@@ -54,7 +54,7 @@ namespace o2
 
     ScriptEngine::ScriptEngine()
     {
-        mLog = mnew LogStream("Scripting");
+        mLog = mmake<LogStream>("Scripting");
         o2Debug.GetLog()->BindStream(mLog);
 
         jerry_init(JERRY_INIT_EMPTY);

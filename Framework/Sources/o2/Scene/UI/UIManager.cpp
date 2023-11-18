@@ -55,7 +55,7 @@ namespace o2
 
     UIManager::UIManager()
     {
-        mLog = mnew LogStream("UI");
+        mLog = mmake<LogStream>("UI");
         o2Debug.GetLog()->BindStream(mLog);
     }
 

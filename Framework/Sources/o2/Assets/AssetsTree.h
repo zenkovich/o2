@@ -15,7 +15,7 @@ namespace o2
     class AssetsTree: public ISerializable
     {
     public:
-        LogStream* log;  // Log stream
+        Ref<LogStream> log;  // Log stream
 
         String assetsPath;      // Assets path @SERIALIZABLE
         String builtAssetsPath; // Built assets path @SERIALIZABLE

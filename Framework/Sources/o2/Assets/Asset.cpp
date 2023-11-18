@@ -193,7 +193,7 @@ namespace o2
         return GetFullPath() + ".meta";
     }
 
-    LogStream* Asset::GetAssetsLogStream() const
+    const Ref<LogStream>& Asset::GetAssetsLogStream() const
     {
         return o2Assets.mLog;
     }

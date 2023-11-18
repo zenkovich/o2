@@ -20,7 +20,7 @@ namespace o2
     {
         srand((UInt)time(NULL));
 
-        mLog = mnew LogStream("Assets builder");
+        mLog = mmake<LogStream>("Assets builder");
         o2Debug.GetLog()->BindStream(mLog);
 
         InitializeConverters();

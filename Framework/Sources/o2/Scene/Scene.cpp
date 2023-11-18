@@ -29,7 +29,7 @@ namespace o2
         auto camera = mnew CameraActor();
         camera->name = "Camera";
 
-        mLog = mnew LogStream("Scene");
+        mLog = mmake<LogStream>("Scene");
         o2Debug.GetLog()->BindStream(mLog);
     }
 

@@ -22,7 +22,7 @@ namespace o2
         mReady(false), mStencilDrawing(false), mStencilTest(false), mClippingEverything(false)
     {
         // Create log stream
-        mLog = mnew LogStream("Render");
+        mLog = mmake<LogStream>("Render");
         o2Debug.GetLog()->BindStream(mLog);
 
         // Initialize OpenGL
@@ -36,23 +36,23 @@ namespace o2
             static    PIXELFORMATDESCRIPTOR pfd = // pfd Tells Windows How We Want Things To Be
             {
                 sizeof(PIXELFORMATDESCRIPTOR), // Size Of This Pixel Format Descriptor
-                1,                               // Version Number
+                1,                             // Version Number
                 PFD_DRAW_TO_WINDOW |           // Format Must Support Window
                 PFD_SUPPORT_OPENGL |           // Format Must Support OpenGL
-                PFD_DOUBLEBUFFER,               // Must Support Double Buffering
-                PFD_TYPE_RGBA,                   // Request An RGBA Format
-                32,                             // Select Our Color Depth
-                0, 0, 0, 0, 0, 0,               // Color Bits Ignored
-                0,                               // No Alpha Buffer
-                0,                               // Shift Bit Ignored
-                0,                               // No Accumulation Buffer
-                0, 0, 0, 0,                       // Accumulation Bits Ignored
-                16,                               // 16Bit Z-Buffer (Depth Buffer)  
-                1,                               // No Stencil Buffer
-                0,                               // No Auxiliary Buffer
-                PFD_MAIN_PLANE,                   // Main Drawing Layer
-                0,                               // Reserved
-                0, 0, 0                           // Layer Masks Ignored
+                PFD_DOUBLEBUFFER,              // Must Support Double Buffering
+                PFD_TYPE_RGBA,                 // Request An RGBA Format
+                32,                            // Select Our Color Depth
+                0, 0, 0, 0, 0, 0,              // Color Bits Ignored
+                0,                             // No Alpha Buffer
+                0,                             // Shift Bit Ignored
+                0,                             // No Accumulation Buffer
+                0, 0, 0, 0,                    // Accumulation Bits Ignored
+                16,                            // 16Bit Z-Buffer (Depth Buffer)  
+                1,                             // No Stencil Buffer
+                0,                             // No Auxiliary Buffer
+                PFD_MAIN_PLANE,                // Main Drawing Layer
+                0,                             // Reserved
+                0, 0, 0                        // Layer Masks Ignored
             };
 
             mHDC = GetDC(o2Application.mHWnd);
@@ -90,7 +90,7 @@ namespace o2
         }
 
         // Get OpenGL extensions
-        GetGLExtensions(mLog);
+        GetGLExtensions(mLog.Get());
 
         GL_CHECK_ERROR();
 

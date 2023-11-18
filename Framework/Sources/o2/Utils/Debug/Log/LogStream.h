@@ -58,8 +58,9 @@ namespace o2
         void WarningStr(const WString& str);
 
     protected:
-        WeakRef<LogStream>     mParentStream; // Parent stream. NULL if no parent
-        WString                mId;           // Name of log stream
+        WString mId; // Name of log stream
+
+        WeakRef<LogStream>     mParentStream; // Parent stream
         Vector<Ref<LogStream>> mChildStreams; // Child streams
 
     protected:

@@ -102,6 +102,6 @@ namespace o2
         static void WriteFile(const String& path, const String& data);
 
     private:
-        LogStream* mLog; // File system log stream
+        Ref<LogStream> mLog; // File system log stream
     };
 }

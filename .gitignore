@@ -17,3 +17,6 @@ Editor/Platforms/Mac/build
 Framework/Platforms/Mac/3rdPartyLibs.xcodeproj/xcuserdata
 Framework/Platforms/Mac/build
 Editor/Sources/o2Editor/CodeToolCache.xml
+CodeTool/Bin/o2CodeTool.exe
+AssetsBuildTool/Sources/CodeToolCache.xml
+Editor/Assets/Editor UI styles/rebuildDate.json

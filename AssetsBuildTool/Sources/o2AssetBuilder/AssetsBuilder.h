@@ -37,7 +37,7 @@ namespace o2
         Platform GetPlatform() const;
 
     protected:
-        LogStream* mLog; // Asset builder log stream
+        Ref<LogStream> mLog; // Asset builder log stream
 
         Platform mPlatform; // Current platform
 

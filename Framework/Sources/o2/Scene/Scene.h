@@ -164,7 +164,7 @@ namespace o2
         IOBJECT(Scene);
 
     protected:
-        LogStream* mLog = nullptr; // Scene log
+        Ref<LogStream> mLog; // Scene log
 
         Vector<CameraActor*> mCameras; // List of cameras on scene
 
@@ -421,7 +421,7 @@ CLASS_BASES_META(o2::Scene)
 END_META;
 CLASS_FIELDS_META(o2::Scene)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLog);
+    FIELD().PROTECTED().NAME(mLog);
     FIELD().PROTECTED().NAME(mCameras);
     FIELD().PROTECTED().NAME(mRootActors);
     FIELD().PROTECTED().NAME(mAllActors);

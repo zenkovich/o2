@@ -125,7 +125,7 @@ namespace o2
         UID& ID();
 
         // Returns assets log stream pointer
-        LogStream* GetAssetsLogStream() const;
+        const Ref<LogStream>& GetAssetsLogStream() const;
 
         // Meta setter, used for property
         void SetMeta(AssetMeta* meta);
@@ -223,7 +223,7 @@ CLASS_METHODS_META(o2::Asset)
     FUNCTION().PROTECTED().CONSTRUCTOR(const Asset&);
     FUNCTION().PROTECTED().SIGNATURE(String, GetMetaFullPath);
     FUNCTION().PROTECTED().SIGNATURE(UID&, ID);
-    FUNCTION().PROTECTED().SIGNATURE(LogStream*, GetAssetsLogStream);
+    FUNCTION().PROTECTED().SIGNATURE(const Ref<LogStream>&, GetAssetsLogStream);
     FUNCTION().PROTECTED().SIGNATURE(void, SetMeta, AssetMeta*);
     FUNCTION().PROTECTED().SIGNATURE(void, Load, const AssetInfo&);
     FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);

@@ -152,7 +152,8 @@ namespace o2
     protected:
         AssetsTree*         mMainAssetsTree; // Main assets tree
         Vector<AssetsTree*> mAssetsTrees;    // Assets trees
-        LogStream*          mLog;            // Log stream
+
+        Ref<LogStream> mLog; // Log stream
 
         Vector<AssetCache*>      mCachedAssets;       // Current cached assets
         Map<String, AssetCache*> mCachedAssetsByPath; // Current cached assets by path

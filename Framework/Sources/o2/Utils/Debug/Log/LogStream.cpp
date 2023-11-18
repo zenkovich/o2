@@ -5,18 +5,17 @@
 
 namespace o2
 {
-    LogStream::LogStream():
-        mParentStream(nullptr)
+    LogStream::LogStream()
     {}
 
     LogStream::LogStream(const WString& id) :
-        mParentStream(nullptr), mId(id)
+        mId(id)
     {}
 
     LogStream::~LogStream()
     {
         if (mParentStream)
-            mParentStream.Lock()->UnbindStream(this);
+            mParentStream.Lock()->UnbindStream(Ref(this));
 
         UnbindAllStreams();
     }
@@ -125,8 +124,8 @@ namespace o2
     {
         OutStrEx("ERROR:" + str);
 
-    if (IsStoppingOnLogErrors())
-        Assert(false, (const char*)((String)str));
+        if (IsStoppingOnLogErrors())
+            Assert(false, (const char*)((String)str));
     }
 
     void LogStream::OutWarningEx(const WString& str)

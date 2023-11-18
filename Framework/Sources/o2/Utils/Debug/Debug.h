@@ -39,7 +39,7 @@ namespace o2
         void LogErrorStr(const WString& out);
 
         // Returns pointer to main log
-        LogStream* GetLog();
+        const Ref<LogStream>& GetLog();
 
         // Draws debug line from begin to end with color and disappearing delay
         void DrawLine(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay);
@@ -207,7 +207,7 @@ namespace o2
         };
 
     protected:
-        LogStream* mLogStream; // Main log stream
+        Ref<LogStream> mLogStream; // Main log stream
 
         Vector<IDbgDrawable*> mDbgDrawables;       // Debug drawables array
         Vector<IDbgDrawable*> mEditorDbgDrawables; // Debug drawables array for editor
