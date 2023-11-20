@@ -1,16 +1,16 @@
 #pragma once
 
+#include "o2/Utils/FileSystem/FileInfo.h"
+#include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
-#include "o2/Utils/FileSystem/FileInfo.h"
-
-#include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
+
 
 #if defined PLATFORM_ANDROID
 #include <android/asset_manager.h>
 #endif
-
 namespace o2
 {
     class LogStream;
@@ -21,7 +21,7 @@ namespace o2
     // ---------------------------------------------------
     // File system. Using for working with files and paths
     // ---------------------------------------------------
-    class FileSystem: public Singleton<FileSystem>
+    class FileSystem: public Singleton<FileSystem>, public RefCounterable
     {
     public:
         // Default constructor

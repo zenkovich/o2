@@ -1,11 +1,12 @@
 #pragma once
 
+#include "o2/Events/CursorAreaEventsListenersLayer.h"
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Types/String.h"
-#include "o2/Events/CursorAreaEventsListenersLayer.h"
 
 #if defined PLATFORM_WINDOWS
 #include "o2/Application/Windows/ApplicationBase.h"
@@ -27,21 +28,44 @@
 namespace o2
 {
     class Assets;
+    FORWARD_REF(Assets);
+
     class EventSystem;
+    FORWARD_REF(EventSystem);
+
     class FileSystem;
+    FORWARD_REF(FileSystem);
+
     class Input;
+    FORWARD_REF(Input);
+
     class LogStream;
+    FORWARD_REF(LogStream);
+
     class PhysicsWorld;
+    FORWARD_REF(PhysicsWorld);
+
     class ProjectConfig;
+    FORWARD_REF(ProjectConfig);
+
     class Render;
+    FORWARD_REF(Render);
+
     class Scene;
+    FORWARD_REF(Scene);
+
     class TaskManager;
+    FORWARD_REF(TaskManager);
+
     class Time;
-    class Timer;
+    FORWARD_REF(Time);
+
     class UIManager;
+    FORWARD_REF(UIManager);
 
 #if IS_SCRIPTING_SUPPORTED
     class ScriptEngine;
+    FORWARD_REF(ScriptEngine);
 #endif
 
     // -----------
@@ -67,7 +91,7 @@ namespace o2
         Function<void()> onMoving;      // On moving app window callbacks. Ignoring on mobiles/tables
 
     public:
-        int maxFPS = 600;   // Maximum frames per second
+        int maxFPS = 600;  // Maximum frames per second
         int fixedFPS = 60; // Fixed frames per second
 
     public:
@@ -82,15 +106,6 @@ namespace o2
 
         // Returns pointer to log object
         virtual const Ref<LogStream>& GetLog() const;
-
-        // Returns pointer to input message object
-        virtual Input* GetInput() const;
-
-        // Returns pointer to project config
-        virtual ProjectConfig* GetProjectConfig() const;
-
-        // Returns pointer to time utilities object
-        virtual Time* GetTime() const;
 
         // Shutting down application
         virtual void Shutdown();
@@ -214,23 +229,24 @@ namespace o2
     protected:
         bool mReady = false; // Is all systems is ready
 
-        Assets*        mAssets = nullptr;        // Assets
-        EventSystem*   mEventSystem = nullptr;   // Events processing system
-        FileSystem*    mFileSystem = nullptr;    // File system
-        Input*         mInput = nullptr;         // While application user input message
-        Ref<LogStream> mLog;                     // Log stream with id "app", using only for application messages
-        PhysicsWorld*  mPhysics = nullptr;       // Physics
-        ProjectConfig* mProjectConfig = nullptr; // Project config
-        Render*        mRender = nullptr;        // Graphics render
-        Scene*         mScene = nullptr;         // Scene
-        TaskManager*   mTaskManager = nullptr;   // Tasks manager
-        Time*          mTime = nullptr;          // Time utilities
-        Timer*         mTimer = nullptr;         // Timer for detecting delta time for update
-        UIManager*     mUIManager = nullptr;     // UI manager
+        Ref<Assets>        mAssets;        // Assets
+        Ref<EventSystem>   mEventSystem;   // Events processing system
+        Ref<FileSystem>    mFileSystem;    // File system
+        Ref<Input>         mInput;         // While application user input message
+        Ref<LogStream>     mLog;           // Log stream with id "app", using only for application messages
+        Ref<PhysicsWorld>  mPhysics;       // Physics
+        Ref<ProjectConfig> mProjectConfig; // Project config
+        Ref<Render>        mRender;        // Graphics render
+        Ref<Scene>         mScene;         // Scene
+        Ref<TaskManager>   mTaskManager;   // Tasks manager
+        Ref<Time>          mTime;          // Time utilities
+        Ref<UIManager>     mUIManager;     // UI manager>
 
 #if IS_SCRIPTING_SUPPORTED
-        ScriptEngine*  mScriptingEngine = nullptr; // Scripting engine
+        Ref<ScriptEngine>  mScriptingEngine; // Scripting engine
 #endif
+
+        Timer mTimer; // Timer for detecting delta time for update
 
         bool  mCursorInfiniteModeEnabled = false; // Is cursor infinite mode enabled
         Vec2F mCursorCorrectionDelta;             // Cursor corrections delta - result of infinite cursors offset

@@ -1,10 +1,11 @@
 #pragma once
 
-#include "o2/Utils/Types/CommonTypes.h"
-#include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/CommonTypes.h"
+#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 
 #if defined(PLATFORM_ANDROID) || defined(PLATFORM_MAC) || defined(PLATFORM_IOS) || defined(PLATFORM_LINUX)
 #include "o2/Application/VKCodes.h"
@@ -20,7 +21,7 @@ namespace o2
     // -------------------------------------------------------------------------
     // Input message. Containing pressed, down, released keys, cursors positions
     // -------------------------------------------------------------------------
-    class Input : public Singleton<Input>
+    class Input : public Singleton<Input>, public RefCounterable
     {
     public:
         struct Cursor;

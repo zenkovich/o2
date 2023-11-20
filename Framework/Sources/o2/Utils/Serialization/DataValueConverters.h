@@ -516,6 +516,9 @@ namespace o2
         }
     };
 
+    // ----------------------
+    // Raw pointers converter
+    // ----------------------
     template<typename T>
     struct DataValue::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value&&
         std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
@@ -556,6 +559,52 @@ namespace o2
                     }
                     else
                         value = static_cast<T>(sample);
+
+                    if (value)
+                        valueNode->Get(*value);
+                }
+            }
+        }
+    };
+
+    // ---------------------
+    // Ref<> types converter
+    // ---------------------
+    template<typename T>
+    struct DataValue::Converter<T, typename std::enable_if<IsRef<T>::value && !std::is_const<T>::value &&
+        !std::is_base_of<ISerializable, T>::value&&
+        std::is_base_of<o2::IObject, typename ExtractRefType<T>::type>::value>::type>
+    {
+        static constexpr bool isSupported = true;
+
+        using _ref_type = typename ExtractRefType<T>::type;
+
+        static void Write(const T& value, DataValue& data)
+        {
+            if (value)
+            {
+                data.AddMember("Type").Set(value->GetType().GetName());
+                data.AddMember("Value").Set(*value);
+            }
+        }
+
+        static void Read(T& value, const DataValue& data)
+        {
+            if (auto typeNode = data.FindMember("Type"))
+            {
+                if (auto valueNode = data.FindMember("Value"))
+                {
+                    value = nullptr;
+
+                    auto type = Reflection::GetType(*typeNode);
+                    void* sample = type->CreateSample();
+                    if (type->GetUsage() == Type::Usage::Object)
+                    {
+                        auto objectType = dynamic_cast<const ObjectType*>(type);
+                        value = Ref(dynamic_cast<_ref_type*>(objectType->DynamicCastToIObject(sample)));
+                    }
+                    else
+                        value = Ref(static_cast<_ref_type*>(sample));
 
                     if (value)
                         valueNode->Get(*value);
@@ -638,6 +687,9 @@ namespace o2
         }
     };
 
+    // ---------------
+    // Enums converter
+    // ---------------
     template<typename T>
     struct DataValue::Converter<T, typename std::enable_if<std::is_enum<T>::value>::type>
     {

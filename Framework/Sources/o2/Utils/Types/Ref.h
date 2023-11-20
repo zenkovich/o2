@@ -424,7 +424,6 @@ namespace o2
 
     // Forward declaration of class and reference counter implementation
 #define FORWARD_REF(CLASS)                                \
-	class CLASS;                                          \
 	template<> o2::RefCounter* GetRefCounter(CLASS* ptr); \
 	template<> void DestructObject(CLASS* obj) 
 

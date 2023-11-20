@@ -1,11 +1,11 @@
 #pragma once
 
-#include "o2/Utils/Types/String.h"
+#include "o2/Config/PhysicsConfig.h"
+#include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
-
-#include "o2/Utils/Property.h"
-#include "PhysicsConfig.h"
+#include "o2/Utils/Types/Ref.h"
+#include "o2/Utils/Types/String.h"
 
 // Project configuration access macros
 #define o2Config o2::ProjectConfig::Instance()
@@ -17,7 +17,7 @@ namespace o2
     // ---------------------
     // Project configuration
     // ---------------------
-    class ProjectConfig: public ISerializable, public Singleton<ProjectConfig>
+    class ProjectConfig: public ISerializable, public Singleton<ProjectConfig>, public RefCounterable
     {
     public:
         PROPERTIES(ProjectConfig);
@@ -68,6 +68,7 @@ CLASS_BASES_META(o2::ProjectConfig)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::Singleton<ProjectConfig>);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::ProjectConfig)

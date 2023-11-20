@@ -1,8 +1,9 @@
 #pragma once
 
-#include "o2/Utils/Types/Containers/Vector.h"
-#include "o2/Utils/Singleton.h"
 #include "o2/Utils/Function/Function.h"
+#include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 
 // Task manager access macros
 #define o2Tasks o2::TaskManager::Instance()
@@ -15,9 +16,12 @@ namespace o2
     // -----------------------
     // Tasks manager singleton
     // -----------------------
-    class TaskManager: public Singleton<TaskManager>
+    class TaskManager: public Singleton<TaskManager>, public RefCounterable
     {
     public:
+        // Destructor. Destroys all tasks
+        ~TaskManager();
+
         // Stops task with specified id
         void StopTask(int id);
 
@@ -46,9 +50,6 @@ namespace o2
     protected:
         // Default constructor
         TaskManager();
-
-        // Destructor. Destroys all tasks
-        ~TaskManager();
 
         friend class Task;
         friend class Application;

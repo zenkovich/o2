@@ -23,6 +23,7 @@
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Math/Vertex.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Ref.h"
 
 // Render access macros
 #define o2Render o2::Render::Instance()
@@ -38,7 +39,7 @@ namespace o2
     // ------------------
     // 2D Graphics render
     // ------------------
-    class Render: public RenderBase, public Singleton<Render>
+    class Render: public RenderBase, public Singleton<Render>, public RefCounterable
     {
     public:
         // ---------------------

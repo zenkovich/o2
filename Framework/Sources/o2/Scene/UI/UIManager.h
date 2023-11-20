@@ -6,6 +6,7 @@
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Ref.h"
 
 // User interfaces manager access macros
 #define o2UI UIManager::Instance()
@@ -36,9 +37,12 @@ namespace o2
     // ------------------------------------------------
     // UI manager, contains all root widgets and styles
     // ------------------------------------------------
-    class UIManager : public Singleton<UIManager>
+    class UIManager : public Singleton<UIManager>, public RefCounterable
     {
     public:
+        // Destructor
+        ~UIManager();
+
         // Loads widgets style
         void LoadStyle(const String& stylesPath);
 
@@ -164,9 +168,6 @@ namespace o2
     protected:
         // Default constructor
         UIManager();
-
-        // Destructor
-        ~UIManager();
 
         // Tries to load style "ui_style.json"
         void TryLoadStyle();

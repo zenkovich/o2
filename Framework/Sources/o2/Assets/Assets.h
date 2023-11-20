@@ -8,6 +8,7 @@
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 
 // Assets system access macros
 #define  o2Assets o2::Assets::Instance()
@@ -25,7 +26,7 @@ namespace o2
     // ----------------
     // Assets utilities
     // ----------------
-    class Assets : public Singleton<Assets>
+    class Assets : public Singleton<Assets>, public RefCounterable
     {
     public:
         PROPERTIES(Assets);

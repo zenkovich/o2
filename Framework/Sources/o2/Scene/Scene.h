@@ -1,12 +1,13 @@
 #pragma once
 
 #include "o2/Assets/Types/ActorAsset.h"
+#include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
 #include "o2/Utils/Types/UID.h"
-#include "o2/Utils/Property.h"
 
 // Scene graph access macros
 #define o2Scene o2::Scene::Instance()
@@ -26,9 +27,12 @@ namespace o2
     // -------------------------------------------------------
     // Actors scene. Contains and manages actors, tags, layers
     // -------------------------------------------------------
-    class Scene : public Singleton<Scene>, public IObject
+    class Scene : public Singleton<Scene>, public IObject, public RefCounterable
     {
     public:
+        // Destructor
+        ~Scene();
+
         // Returns scene log stream
         const LogStream& GetLogStream() const;
 
@@ -214,9 +218,6 @@ namespace o2
     protected:
         // Default constructor
         Scene();
-
-        // Destructor
-        ~Scene();
 
         // Draws cameras
         void DrawCameras();
@@ -417,6 +418,7 @@ CLASS_BASES_META(o2::Scene)
 {
     BASE_CLASS(o2::Singleton<Scene>);
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Scene)

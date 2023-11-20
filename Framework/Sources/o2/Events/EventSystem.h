@@ -5,6 +5,7 @@
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 
 // Events system accessor macros
 #define o2Events o2::EventSystem::Instance()
@@ -21,12 +22,15 @@ namespace o2
     // -----------------------
     // Event processing system
     // -----------------------
-    class EventSystem: public Singleton<EventSystem>
+    class EventSystem: public Singleton<EventSystem>, public RefCounterable
     {
     public:
         static bool eventsListenersEnabledByDefault; // Then it is true, new events listeners will be enabled on initialization
 
     public:
+        // Destructor
+        ~EventSystem();
+
         // Returns all cursor listeners under cursor arranged by depth
         Vector<CursorAreaEventsListener*> GetAllCursorListenersUnderCursor(CursorId cursorId) const;
 
@@ -42,9 +46,6 @@ namespace o2
     protected:
         // Default constructor
         EventSystem();
-
-        // Destructor
-        ~EventSystem();
 
         // Returns time between clicks for double click reaction
         float GetDoubleClickTime() const;

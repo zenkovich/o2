@@ -361,18 +361,34 @@ namespace o2
         return newType;
     }
 
+    template<typename _source_type, typename _target_type>
+    struct CastSelector
+    {
+        struct DefaultCast
+        {
+            static void* CastFunc(void* obj) { return Reflection::CastFunc<_source_type, _target_type>(obj); }
+        };
+
+        struct NoCast
+        {
+            static void* CastFunc(void* obj) { return nullptr; }
+        };
+
+        using CastType = std::conditional<std::is_polymorphic<_source_type>::value, DefaultCast, NoCast>::type;
+    };
+
     template<typename _object_type, typename _base_type>
     void ReflectionInitializationTypeProcessor::BaseType(_object_type* object, Type* type, const char* name)
     {
-        typedef typename std::conditional<std::is_base_of<IObject, _base_type>::value, _base_type, Type::Dummy>::type _base_under;
+        using _base_under = typename std::conditional<std::is_base_of<IObject, _base_type>::value, _base_type, Type::Dummy>::type;
 
-        if (std::is_same<_base_under, Type::Dummy>::value)
+        if constexpr (std::is_same<_base_under, Type::Dummy>::value)
             return;
 
         Type::BaseType baseTypeInfo;
         baseTypeInfo.type = _base_under::type;
-        baseTypeInfo.dynamicCastUpFunc = &Reflection::CastFunc<_object_type, _base_type>;
-        baseTypeInfo.dynamicCastDownFunc = &Reflection::CastFunc<_base_type, _object_type>;
+        baseTypeInfo.dynamicCastUpFunc = &CastSelector<_object_type, _base_type>::CastType::CastFunc;
+        baseTypeInfo.dynamicCastDownFunc = &CastSelector<_base_type, _object_type>::CastType::CastFunc;
 
         type->mBaseTypes.Add(baseTypeInfo);
     }
