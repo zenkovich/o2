@@ -31,6 +31,13 @@ endif()
 set(O2_COMPILE_DEFINITIONS_EXPORT ${O2_COMPILE_DEFINITIONS} PARENT_SCOPE)
 add_compile_definitions(${O2_COMPILE_DEFINITIONS})
 
+# warings and errors
+if (MSVC)
+    add_compile_options(/W2)
+else()
+    add_compile_options(-Wall)
+endif()
+
 # dependencies
 add_subdirectory(Framework/3rdPartyLibs)
 
