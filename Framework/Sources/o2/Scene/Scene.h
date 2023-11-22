@@ -30,6 +30,9 @@ namespace o2
     class Scene : public Singleton<Scene>, public IObject, public RefCounterable
     {
     public:
+        // Default constructor
+        Scene();
+
         // Destructor
         ~Scene();
 
@@ -216,9 +219,6 @@ namespace o2
         static void OnRemoveActorFromScene(Actor* actor, bool keepEditorObjects = false);
 
     protected:
-        // Default constructor
-        Scene();
-
         // Draws cameras
         void DrawCameras();
 
@@ -465,6 +465,7 @@ CLASS_METHODS_META(o2::Scene)
     typedef const Map<String, SceneLayer*>& _tmp1;
     typedef Map<ActorAssetRef, Vector<Actor*>>& _tmp2;
 
+    FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(const LogStream&, GetLogStream);
     FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, const String&);
     FUNCTION().PUBLIC().SIGNATURE(SceneLayer*, GetLayer, const String&);
@@ -511,7 +512,6 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorIdChanged, Actor*, SceneUID);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnAddActorToScene, Actor*);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnRemoveActorFromScene, Actor*, bool);
-    FUNCTION().PROTECTED().CONSTRUCTOR();
     FUNCTION().PROTECTED().SIGNATURE(void, DrawCameras);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateActors, float);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateStartingEntities);

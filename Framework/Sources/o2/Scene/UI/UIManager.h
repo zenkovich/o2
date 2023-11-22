@@ -40,6 +40,9 @@ namespace o2
     class UIManager : public Singleton<UIManager>, public RefCounterable
     {
     public:
+        // Default constructor
+        UIManager();
+
         // Destructor
         ~UIManager();
 
@@ -166,9 +169,6 @@ namespace o2
         static void UnregisterFocusableWidget(Widget* widget);
 
     protected:
-        // Default constructor
-        UIManager();
-
         // Tries to load style "ui_style.json"
         void TryLoadStyle();
 

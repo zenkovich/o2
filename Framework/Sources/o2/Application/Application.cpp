@@ -112,7 +112,7 @@ namespace o2
     {
         srand((UInt)time(NULL));
 
-        mTime = mmake<Time>();
+        mTime = Make<Time>();
 
         mLog = mmake<LogStream>("Application");
         o2Debug.GetLog()->BindStream(mLog);

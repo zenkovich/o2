@@ -147,7 +147,7 @@ namespace o2
     // Reference on derived from component classes
     // ---------------------------------------
     template<typename T>
-    class Ref<T, typename std::enable_if<std::is_base_of<Component, T>::value>::type>: public ComponentRef
+    class Ref<T, typename std::enable_if<IsBaseOf<Component, T>::value>::type>: public ComponentRef
     {
     public:
         // Default constructor, no reference

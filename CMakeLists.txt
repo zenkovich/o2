@@ -35,7 +35,7 @@ add_compile_definitions(${O2_COMPILE_DEFINITIONS})
 if (MSVC)
     add_compile_options(/W2)
 else()
-    add_compile_options(-Wall)
+    add_compile_options(-Wall -Wno-reorder)
 endif()
 
 # dependencies

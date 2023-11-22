@@ -56,6 +56,18 @@ namespace o2
     template<typename... Ts> struct make_void { typedef void type; };
     template<typename... Ts> using void_t = typename make_void<Ts...>::type;
 
+    template<typename T, typename = void>
+    struct IsComplete : std::false_type {};
+
+    template<typename T>
+    struct IsComplete<T, std::void_t<decltype(sizeof(T))>> : std::true_type {};
+
+    template<typename Base, typename T>
+    struct IsBaseOf
+    {
+        static constexpr auto value = std::conditional<IsComplete<T>::value, std::is_base_of<Base, T>, std::false_type>::type::value;
+    };
+
     template<class T, class = void_t<>>
     struct IsCloneable: std::false_type { };
 

@@ -28,6 +28,9 @@ namespace o2
         static bool eventsListenersEnabledByDefault; // Then it is true, new events listeners will be enabled on initialization
 
     public:
+        // Default constructor
+        EventSystem();
+
         // Destructor
         ~EventSystem();
 
@@ -44,9 +47,6 @@ namespace o2
         void PostUpdate();
 
     protected:
-        // Default constructor
-        EventSystem();
-
         // Returns time between clicks for double click reaction
         float GetDoubleClickTime() const;
 

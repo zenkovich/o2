@@ -1,13 +1,11 @@
 #include "CppSyntaxParser.h"
 
-#include <algorithm> 
-#include <cctype>
+#include <algorithm>
 #include <fstream>
-#include <functional> 
-#include <iosfwd>
+#include <functional>
 #include <locale>
-#include <iostream>
 #include <sstream>
+#include <cstring>
 
 string& TrimStart(string& str, const string& chars /*= " "*/)
 {

@@ -143,7 +143,7 @@ namespace o2
     // Reference on derived from actor classes
     // ---------------------------------------
     template<typename T>
-    class Ref<T, typename std::enable_if<std::is_base_of<Actor, T>::value>::type>: public ActorRef
+    class Ref<T, typename std::enable_if<IsBaseOf<Actor, T>::value>::type>: public ActorRef
     {
     public:
         // Default constructor, no reference

@@ -125,7 +125,7 @@ namespace o2
 namespace o2
 {
     template<typename T>
-    class Ref<T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type>: public AssetRef
+    class Ref<T, typename std::enable_if<IsBaseOf<Asset, T>::value>::type>: public AssetRef
     {
     public:
         // Default constructor, references to null

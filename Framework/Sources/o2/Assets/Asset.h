@@ -8,13 +8,14 @@
 #include "o2/Utils/Editor/Attributes/NoHeaderAttribute.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
     // -------------------------------------------------------------------------------------------------
     // Basic asset interface. Contains copy of asset, without caching. For regular use assets references
     // -------------------------------------------------------------------------------------------------
-    class Asset : public ISerializable
+    class Asset : public ISerializable, public RefCounterable
     {
     public:
         typedef AssetMeta MetaType;
@@ -179,6 +180,7 @@ typedef META_TYPE MetaType;
 CLASS_BASES_META(o2::Asset)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Asset)

@@ -1,15 +1,12 @@
 #include "CodeToolApp.h"
 
 #include <algorithm>
-#include <cctype>
 #include <fstream>
 #include <functional> 
 #include <iostream>
-#include <locale>
-#include <sstream>
-#include <iostream>
 #include <filesystem>
 #include <cstdarg>
+#include <cstring>
 
 #undef GetClassName
 

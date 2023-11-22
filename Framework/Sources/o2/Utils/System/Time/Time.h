@@ -17,6 +17,9 @@ namespace o2
     class Time: public Singleton<Time>, public RefCounterable
     {
     public:
+        // Default constructor
+        Time();
+
         // Destructor
         ~Time();
 
@@ -60,9 +63,5 @@ namespace o2
         float mFPSSum;              // Summary of fps
         float mFramesSum;           // Frames summary
         float mLastFPSCheckingTime; // Last average fps checking time
-
-    protected:
-        // Default constructor
-        Time();
     };
 }

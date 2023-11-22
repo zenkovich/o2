@@ -1,5 +1,13 @@
 project(3rdParties)
 
+# warings and errors
+if (MSVC)
+    add_compile_options(/W2)
+else()
+    add_compile_options(-Wall -Wno-error=format -Wno-error=format-extra-args -Wno-error=conversion
+            -Wno-error=incompatible-pointer-types -Wno-error=sign-conversion -Wno-error=pointer-sign)
+endif()
+
 set(BOX2D_BUILD_STATIC TRUE)
 set(BOX2D_VERSION 1)
 

@@ -19,6 +19,9 @@ namespace o2
     class TaskManager: public Singleton<TaskManager>, public RefCounterable
     {
     public:
+        // Default constructor
+        TaskManager();
+
         // Destructor. Destroys all tasks
         ~TaskManager();
 
@@ -48,9 +51,6 @@ namespace o2
         int           mLastTaskId; // Last given task id
         
     protected:
-        // Default constructor
-        TaskManager();
-
         friend class Task;
         friend class Application;
     };

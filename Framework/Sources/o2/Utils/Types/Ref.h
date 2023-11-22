@@ -121,7 +121,7 @@ namespace o2
         friend Ref<_type> Make(_args&& ... args);
 
         template<typename _type, typename ... _args>
-        friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args);
+        friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args); 
     };
 
     // -------------------------------
@@ -138,7 +138,7 @@ namespace o2
         explicit BaseRef(_type* ptr);
 
         // Constructor from nullptr
-        BaseRef(nullptr_t);
+        BaseRef(std::nullptr_t);
 
         // Copy constructor
         BaseRef(const BaseRef<_type>& other);
@@ -199,7 +199,7 @@ namespace o2
         void IncrementRef(); // Increments reference counter
         void DecrementRef(); // Decrements reference counter
 
-        template<typename _type>
+        template<typename _other_type>
         friend class BaseWeakRef;
 
         template<typename _other_type>
@@ -217,7 +217,7 @@ namespace o2
         BaseWeakRef();
 
         // Constructor from nullptr
-        BaseWeakRef(nullptr_t);
+        BaseWeakRef(std::nullptr_t);
 
         // Constructor from pointer
         explicit BaseWeakRef(_type* ptr);
@@ -276,7 +276,7 @@ namespace o2
         void IncrementWeakRef(); // Increments weak reference counter
         void DecrementWeakRef(); // Decrements weak reference counter
 
-        template<typename _type>
+        template<typename _other_type>
         friend class BaseRef;
     };
 
@@ -291,7 +291,7 @@ namespace o2
         Ref() : BaseRef<_type>() {}
 
         // Constructor from nullptr
-        Ref(nullptr_t) : BaseRef<_type>(nullptr) {}
+        Ref(std::nullptr_t) : BaseRef<_type>(nullptr) {}
 
         // Constructor from pointer
         explicit Ref(_type* ptr) : BaseRef<_type>(ptr) {}
@@ -303,11 +303,11 @@ namespace o2
         Ref(Ref<_type>&& other) : BaseRef<_type>(other) {}
 
         // Copy constructor from other type
-        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
+        template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
         Ref(const Ref<_other_type>& other) : BaseRef<_type>(other) {}
 
         // Copy constructor from other type
-        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
+        template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
         Ref(Ref<_other_type>&& other) : BaseRef<_type>(other) {}
 
         // Equality operator
@@ -323,11 +323,11 @@ namespace o2
         Ref<_type>& operator=(Ref<_type>&& other) { BaseRef<_type>::operator=(other); return *this; }
 
         // Copy operator from other type
-        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
+        template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
         Ref<_type>& operator=(const Ref<_other_type>& other) { BaseRef<_type>::operator=(other); return *this; }
 
         // Move operator from other type
-        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
+        template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
         Ref<_type>& operator=(Ref<_other_type>&& other) { BaseRef<_type>::operator=(other); return *this; }
 
         // Returns true if reference is valid
@@ -354,7 +354,7 @@ namespace o2
         WeakRef() : BaseWeakRef<_type>() {}
 
         // Constructor from nullptr
-        WeakRef(nullptr_t) : BaseWeakRef<_type>(nullptr) {}
+        WeakRef(std::nullptr_t) : BaseWeakRef<_type>(nullptr) {}
 
         // Constructor from pointer
         explicit WeakRef(_type* ptr) : BaseWeakRef<_type>(ptr) {}
@@ -504,12 +504,12 @@ namespace o2
         const char* location;
         int line;
 
-        NewPlaceHelper(const char* location, int line) :location(location), line(line) {}
+        NewPlaceHelper(const char* location, int line):location(location), line(line) {}
 
         template<typename _type, typename ... _args>
         Ref<_type> Create(_args&& ... args)
         {
-            return MakePlace<_type, _args...>(location, line, std::forward<_args>(args)...);
+            return MakePlace<_type>(location, line, std::forward<_args>(args)...);
         }
     };
 
@@ -525,7 +525,7 @@ namespace o2
     }
 
     template<typename _type>
-    BaseRef<_type>::BaseRef(nullptr_t)
+    BaseRef<_type>::BaseRef(std::nullptr_t)
     {}
 
     template<typename _type>
@@ -687,7 +687,7 @@ namespace o2
     BaseWeakRef<_type>::BaseWeakRef() = default;
 
     template<typename _type>
-    BaseWeakRef<_type>::BaseWeakRef(nullptr_t)
+    BaseWeakRef<_type>::BaseWeakRef(std::nullptr_t)
     {}
 
     template<typename _type>

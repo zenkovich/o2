@@ -14,8 +14,6 @@
 
 namespace o2
 {
-    static int dumb = 0;
-
     AssetsBuilder::AssetsBuilder()
     {
         srand((UInt)time(NULL));
