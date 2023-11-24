@@ -143,7 +143,20 @@ namespace o2
     }
 
     void Application::DeinitializeSystems()
-    {}
+    {
+        mScene = nullptr;
+        mEventSystem = nullptr;
+        mInput = nullptr;
+        mProjectConfig = nullptr;
+        mPhysics = nullptr;
+        mTaskManager = nullptr;
+        mUIManager = nullptr;
+        mRender = nullptr;
+        mFileSystem = nullptr;
+        mAssets = nullptr;
+        mTime = nullptr;
+        mLog = nullptr;
+    }
     
     void Application::SetupGraphicsScaledCamera()
     {
