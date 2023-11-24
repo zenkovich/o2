@@ -478,7 +478,7 @@ namespace o2
 
     IAbstractValueProxy* FunctionType::GetValueProxy(void* object) const
     {
-        static int offs = (long)((AbstractFunction*)((Function<void()>*)1)) - (long)(Function<void()>*)1;
+        static int offs = (std::ptrdiff_t)((AbstractFunction*)((Function<void()>*)1)) - (std::ptrdiff_t)(Function<void()>*)1;
         auto btpr = reinterpret_cast<std::byte*>(object);
         auto ptr = btpr + offs;
 
