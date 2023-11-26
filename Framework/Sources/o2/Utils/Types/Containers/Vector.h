@@ -132,6 +132,9 @@ namespace o2
         // Removes equal array element
         void Remove(const _type& value);
 
+        // Removes equal array elements from other array
+        void Remove(const Vector<_type>& arr);
+
         // Removes element by iterator
         Iterator Remove(const Iterator& it);
 
@@ -518,6 +521,13 @@ namespace o2
         auto fnd = std::find(std::vector<_type>::begin(), std::vector<_type>::end(), value);
         if (fnd != std::vector<_type>::end())
             std::vector<_type>::erase(fnd);
+    }
+
+    template<typename _type>
+    void Vector<_type>::Remove(const Vector<_type>& arr)
+    {
+        for (auto it = arr.begin(); it != arr.end(); ++it)
+            Remove(*it);
     }
 
     template<typename _type>

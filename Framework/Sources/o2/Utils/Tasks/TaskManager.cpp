@@ -6,27 +6,23 @@
 namespace o2
 {
     DECLARE_SINGLETON(TaskManager);
+    FORWARD_REF_IMPL(Task);
 
     void TaskManager::StopTask(int id)
     {
         for (auto task : mTasks)
         {
             if (task->mId == id)
-            {
-                delete task;
                 return;
-            }
         }
     }
 
     void TaskManager::StopAllTasks()
     {
-        auto tasks = mTasks;
-        for (auto task : tasks)
-            delete task;
+        mTasks.Clear();
     }
 
-    Task* TaskManager::FindTask(int id)
+    Ref<Task> TaskManager::FindTask(int id)
     {
         return mTasks.FindOrDefault([&](auto x) { return x->mId == id; });
     }
@@ -63,7 +59,7 @@ namespace o2
     {
         PROFILE_SAMPLE_FUNC();
 
-        Vector<Task*> doneTasks;
+        Vector<Ref<Task>> doneTasks;
         for (auto task : mTasks)
         {
             task->Update(dt);
@@ -71,7 +67,6 @@ namespace o2
                 doneTasks.Add(task);
         }
 
-        for (auto doneTask : doneTasks)
-            delete doneTask;
+        mTasks.Remove(doneTasks);
     }
 }

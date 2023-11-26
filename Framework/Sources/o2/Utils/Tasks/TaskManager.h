@@ -11,7 +11,7 @@
 namespace o2
 {
     class Task;
-    class AnimationClip;
+    FORWARD_REF(Task);
 
     // -----------------------
     // Tasks manager singleton
@@ -32,7 +32,7 @@ namespace o2
         void StopAllTasks();
 
         // Returns task
-        Task* FindTask(int id);
+        Ref<Task> FindTask(int id);
 
         // Runs new functional task
         void Run(const Function<void(float)>& update, const Function<bool()> isDone);
@@ -47,8 +47,9 @@ namespace o2
         void Update(float dt);
 
     protected:
-        Vector<Task*> mTasks;      // All tasks array
-        int           mLastTaskId; // Last given task id
+        Vector<Ref<Task>> mTasks; // All tasks array
+
+        int mLastTaskId = 0; // Last given task id
         
     protected:
         friend class Task;

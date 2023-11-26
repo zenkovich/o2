@@ -7,7 +7,7 @@ namespace o2
     // --------------------
     // Basic task interface
     // --------------------
-    class Task
+    class Task: public RefCounterable
     {
     public:
         // Default constructor. Registering himself in tasks manager and gets id
