@@ -18,7 +18,7 @@ namespace Editor
 	// -------------------------
 	// Editor asset property box
 	// -------------------------
-	class AssetProperty : public TPropertyField<AssetRef>, public DragDropArea, public KeyboardEventsListener
+	class AssetProperty : public TPropertyField<Ref<Asset>>, public DragDropArea, public KeyboardEventsListener
 	{
 	public:
 		// Default constructor
@@ -91,10 +91,10 @@ namespace Editor
 		void OnTypeSpecialized(const Type& type) override;
 
 		// Returns value from proxy
-		AssetRef GetProxy(IAbstractValueProxy* proxy) const override;
+		Ref<Asset> GetProxy(IAbstractValueProxy* proxy) const override;
 
 		// Sets value to proxy
-		void SetProxy(IAbstractValueProxy* proxy, const AssetRef& value) override;
+		void SetProxy(IAbstractValueProxy* proxy, const Ref<Asset>& value) override;
 
 		// Updates value view
 		void UpdateValueView() override;
@@ -128,7 +128,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AssetProperty)
 {
-    BASE_CLASS(Editor::TPropertyField<AssetRef>);
+    BASE_CLASS(Editor::TPropertyField<Ref<Asset>>);
     BASE_CLASS(o2::DragDropArea);
     BASE_CLASS(o2::KeyboardEventsListener);
 }
@@ -165,8 +165,8 @@ CLASS_METHODS_META(Editor::AssetProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveInstancePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSaveInstancePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
-    FUNCTION().PROTECTED().SIGNATURE(AssetRef, GetProxy, IAbstractValueProxy*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, const AssetRef&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Asset>, GetProxy, IAbstractValueProxy*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, const Ref<Asset>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);

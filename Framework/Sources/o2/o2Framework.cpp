@@ -14,7 +14,6 @@ extern void __RegisterClass__o2__IAnimationTrack();
 extern void __RegisterClass__o2__IAnimationTrack__IPlayer();
 extern void __RegisterClass__o2__Asset();
 extern void __RegisterClass__o2__AssetInfo();
-extern void __RegisterClass__o2__AssetRef();
 extern void __RegisterClass__o2__AssetsTree();
 extern void __RegisterClass__o2__AssetMeta();
 extern void __RegisterClass__o2__ActorAsset();
@@ -153,7 +152,6 @@ extern void InitializeTypeso2Framework()
     __RegisterClass__o2__IAnimationTrack__IPlayer();
     __RegisterClass__o2__Asset();
     __RegisterClass__o2__AssetInfo();
-    __RegisterClass__o2__AssetRef();
     __RegisterClass__o2__AssetsTree();
     __RegisterClass__o2__AssetMeta();
     __RegisterClass__o2__ActorAsset();

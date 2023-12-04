@@ -69,19 +69,20 @@ namespace o2
         Vector<UID> res;
         const Type* atlasAssetType = &TypeOf(AtlasAsset);
 
-        for (auto info : mAssetsBuilder->mBuiltAssetsTree.allAssets)
+        for (auto& info : mAssetsBuilder->mBuiltAssetsTree->allAssets)
         {
-            if (info->meta->GetAssetType() == atlasAssetType)
+            auto infoStrong = info.Lock();
+            if (infoStrong->meta->GetAssetType() == atlasAssetType)
             {
-                if (CheckAtlasRebuilding(info))
-                    res.Add(info->meta->ID());
+                if (CheckAtlasRebuilding(infoStrong))
+                    res.Add(infoStrong->meta->ID());
             }
         }
 
         return res;
     }
 
-    bool AtlasAssetConverter::CheckAtlasRebuilding(AssetInfo* atlasInfo)
+    bool AtlasAssetConverter::CheckAtlasRebuilding(const Ref<AssetInfo>& atlasInfo)
     {
         DataDocument atlasData;
         atlasData.LoadFromFile(mAssetsBuilder->mBuiltAssetsPath + atlasInfo->path);
@@ -92,13 +93,14 @@ namespace o2
         Vector<Image> currentImages;
         const Type* imageType = &TypeOf(ImageAsset);
         const UID& atlasId = atlasInfo->meta->ID();
-        for (auto assetInfo : mAssetsBuilder->mBuiltAssetsTree.allAssets)
+        for (auto& assetInfo : mAssetsBuilder->mBuiltAssetsTree->allAssets)
         {
-            if (assetInfo->meta->GetAssetType() == imageType)
+            auto assetInfoStrong = assetInfo.Lock();
+            if (assetInfoStrong->meta->GetAssetType() == imageType)
             {
-                ImageAsset::Meta* imageMeta = (ImageAsset::Meta*)assetInfo->meta;
+                Ref<ImageAsset::Meta> imageMeta = DynamicCast<ImageAsset::Meta>(assetInfoStrong->meta);
                 if (imageMeta->atlasId == atlasId)
-                    currentImages.Add(Image(imageMeta->ID(), assetInfo->editTime));
+                    currentImages.Add(Image(imageMeta->ID(), assetInfoStrong->editTime));
             }
         }
 
@@ -149,9 +151,9 @@ namespace o2
         return false;
     }
 
-    void AtlasAssetConverter::RebuildAtlas(AssetInfo* atlasInfo, Vector<Image>& images)
+    void AtlasAssetConverter::RebuildAtlas(const Ref<AssetInfo>& atlasInfo, Vector<Image>& images)
     {
-        auto meta = ((AtlasAsset::Meta*)atlasInfo->meta)->GetResultPlatformMeta(mAssetsBuilder->GetPlatform());
+        auto meta = DynamicCast<AtlasAsset::Meta>(atlasInfo->meta)->GetResultPlatformMeta(mAssetsBuilder->GetPlatform());
 
         RectsPacker packer(meta.maxSize);
         float imagesBorder = (float)meta.border;
@@ -161,21 +163,23 @@ namespace o2
         for (auto img : images)
         {
             // Find image info
-            AssetInfo* imgInfo = nullptr;
-            mAssetsBuilder->mBuiltAssetsTree.allAssetsByUID.TryGetValue(img.id, imgInfo);
+            WeakRef<AssetInfo> imgInfo;
+            mAssetsBuilder->mBuiltAssetsTree->allAssetsByUID.TryGetValue(img.id, imgInfo);
             if (!imgInfo)
             {
                 mAssetsBuilder->mLog->Error("Can't find asset info by id: " + (String)img.id);
                 continue;
             }
 
-            String assetFullPath = mAssetsBuilder->GetSourceAssetsPath() + imgInfo->path;
+            auto imgInfoStong = imgInfo.Lock();
+
+            String assetFullPath = mAssetsBuilder->GetSourceAssetsPath() + imgInfoStong->path;
 
             // Load bitmap
             Bitmap* bitmap = mnew Bitmap();
             if (!bitmap->Load(assetFullPath))
             {
-                mAssetsBuilder->mLog->Error("Can't load bitmap for image asset: " + imgInfo->path);
+                mAssetsBuilder->mLog->Error("Can't load bitmap for image asset: " + imgInfoStong->path);
                 delete bitmap;
                 continue;
             }
@@ -185,7 +189,7 @@ namespace o2
                                                          Vec2F(imagesBorder*2.0f, imagesBorder*2.0f));
 
             ImagePackDef imagePackDef;
-            imagePackDef.assetInfo = imgInfo;
+            imagePackDef.assetInfo = imgInfoStong;
             imagePackDef.bitmap = bitmap;
             imagePackDef.packRect = packRect;
 
@@ -228,7 +232,7 @@ namespace o2
             resAtlasBitmaps[imgDef.packRect->page]->CopyImage(imgDef.bitmap,
                                                               imgDef.packRect->rect.LeftBottom());
 
-            resAtlasPages[imgDef.packRect->page].mImagesRects.Add(imgDef.assetInfo->meta->ID(),
+            resAtlasPages[imgDef.packRect->page].mImagesRects.Add(imgDef.assetInfo.Lock()->meta->ID(),
                                                                   imgDef.packRect->rect);
 
             SaveImageAsset(imgDef);
@@ -265,12 +269,12 @@ namespace o2
         DataDocument imgData;
         imgData["mAtlasPage"] = imgDef.packRect->page;
         imgData["mSourceRect"] = (RectI)(imgDef.packRect->rect);
-        String imageFullPath = mAssetsBuilder->GetBuiltAssetsPath() + imgDef.assetInfo->path;
+        String imageFullPath = mAssetsBuilder->GetBuiltAssetsPath() + imgDef.assetInfo.Lock()->path;
         imgData.SaveToFile(imageFullPath);
 
         DataDocument metaData;
-        metaData = imgDef.assetInfo->meta;
-        metaData.SaveToFile(mAssetsBuilder->GetSourceAssetsPath() + imgDef.assetInfo->path + ".meta");
+        metaData = imgDef.assetInfo.Lock()->meta;
+        metaData.SaveToFile(mAssetsBuilder->GetSourceAssetsPath() + imgDef.assetInfo.Lock()->path + ".meta");
     }
 
     AtlasAssetConverter::Image::Image(const UID& id, const TimeStamp& time):

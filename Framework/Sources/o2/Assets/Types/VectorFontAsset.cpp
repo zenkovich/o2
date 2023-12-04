@@ -54,7 +54,7 @@ namespace o2
     }
 
     VectorFontAsset::VectorFontAsset():
-        FontAsset(mnew Meta())
+        FontAsset(mmake<Meta>())
     {}
 
     VectorFontAsset::VectorFontAsset(const VectorFontAsset& asset):
@@ -100,9 +100,9 @@ namespace o2
         return { "ttf" };
     }
 
-    VectorFontAsset::Meta* VectorFontAsset::GetMeta() const
+    Ref<VectorFontAsset::Meta> VectorFontAsset::GetMeta() const
     {
-        return (Meta*)mInfo.meta;
+        return DynamicCast<Meta>(mInfo.meta);
     }
 
     void VectorFontAsset::LoadData(const String& path)

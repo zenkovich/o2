@@ -328,7 +328,7 @@ namespace o2
 
     void Sprite::LoadFromImage(const String& imagePath, bool setSizeByImage /*= true*/)
     {
-        ImageAssetRef assetRef = o2Assets.GetAssetRef(imagePath);
+        ImageAssetRef assetRef = DynamicCast<ImageAsset>(o2Assets.GetAssetRef(imagePath));
         if (assetRef)
             LoadFromImage(assetRef, setSizeByImage);
         else 
@@ -337,7 +337,7 @@ namespace o2
 
     void Sprite::LoadFromImage(UID imageId, bool setSizeByImage /*= true*/)
     {
-        ImageAssetRef assetRef = o2Assets.GetAssetRef(imageId);
+        ImageAssetRef assetRef = DynamicCast<ImageAsset>(o2Assets.GetAssetRef(imageId));
         if (assetRef)
             LoadFromImage(assetRef, setSizeByImage);
         else 

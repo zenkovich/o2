@@ -89,7 +89,7 @@ namespace o2
     }
 
     AtlasAsset::AtlasAsset() :
-        Asset(mnew Meta())
+        Asset(mmake<Meta>())
     {
         o2Render.OnAtlasCreated(this);
     }
@@ -180,9 +180,9 @@ namespace o2
             img->Reload();
     }
 
-    AtlasAsset::Meta* AtlasAsset::GetMeta() const
+    Ref<AtlasAsset::Meta> AtlasAsset::GetMeta() const
     {
-        return (Meta*)mInfo.meta;
+        return DynamicCast<Meta>(mInfo.meta);
     }
 
     Vector<String> AtlasAsset::GetFileExtensions()
@@ -192,9 +192,9 @@ namespace o2
 
     String AtlasAsset::GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx)
     {
-        auto meta = dynamic_cast<AtlasAsset::Meta*>(atlasInfo.meta);
+        auto meta = DynamicCast<AtlasAsset::Meta>(atlasInfo.meta);
         String extension = Texture::formatFileExtensions.Get(meta->GetResultPlatformMeta(::GetEnginePlatform()).format);
-        return (atlasInfo.tree ? atlasInfo.tree->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + "." + extension;
+        return (atlasInfo.tree ? atlasInfo.tree.Lock()->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + "." + extension;
     }
 
     TextureRef AtlasAsset::GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx)

@@ -15,7 +15,7 @@ namespace o2
         Asset(other), mFont(other.mFont), font(this)
     {}
 
-    FontAsset::FontAsset(AssetMeta* meta):
+    FontAsset::FontAsset(const Ref<AssetMeta>& meta):
         Asset(meta)
     {}
 

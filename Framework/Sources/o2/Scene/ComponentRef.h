@@ -204,6 +204,7 @@ namespace o2
         typedef Ref<T, typename std::enable_if<std::is_base_of<Component, T>::value>::type> _thisType;
 
         SERIALIZABLE_MAIN(_thisType);
+        IOBJECT_SCRIPTING();
 
         template<typename _type_processor>
         static void ProcessBaseTypes(_thisType* object, _type_processor& processor)

@@ -20,7 +20,7 @@ namespace o2
 
     public:
         PROPERTIES(AtlasAsset);
-        GETTER(Meta*, meta, GetMeta);                     // Meta information getter
+        GETTER(Ref<Meta>, meta, GetMeta);                 // Meta information getter
         GETTER(Vector<ImageAssetRef>, images, GetImages); // Images assets getter
         GETTER(Vector<Page>, pages, GetPages);            // Pages getter
 
@@ -62,7 +62,7 @@ namespace o2
         void ReloadPages();
 
         // Returns meta information
-        Meta* GetMeta() const;
+        Ref<Meta> GetMeta() const;
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
@@ -205,7 +205,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveImage, const ImageAssetRef&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllImages);
     FUNCTION().PUBLIC().SIGNATURE(void, ReloadPages);
-    FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Meta>, GetMeta);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetPageTextureFileName, const AssetInfo&, UInt);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);

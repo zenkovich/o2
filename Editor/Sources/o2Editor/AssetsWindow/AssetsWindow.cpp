@@ -253,7 +253,7 @@ namespace Editor
 		mAssetsGridScroll->DeselectAllAssets();
 	}
 
-	const Vector<const AssetInfo*>& AssetsWindow::GetSelectedAssets() const
+	const Vector<Ref<AssetInfo>>& AssetsWindow::GetSelectedAssets() const
 	{
 		return mAssetsGridScroll->GetSelectedAssets();
 	}
@@ -402,7 +402,7 @@ namespace Editor
 		o2Assets.RebuildAssets();
 	}
 
-	Sprite* AssetsWindow::GetAssetIconSprite(const AssetRef& asset)
+	Sprite* AssetsWindow::GetAssetIconSprite(const Ref<Asset>& asset)
 	{
 		const Type& type = asset->GetType();
 

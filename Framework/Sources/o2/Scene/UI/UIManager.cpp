@@ -142,7 +142,7 @@ namespace o2
         FolderAssetRef folder(stylesPath);
         for (auto& subAsset : folder->GetChildrenAssets())
         {
-            if (auto actorAsset = subAsset.Cast<ActorAsset>())
+            if (auto actorAsset = DynamicCast<ActorAsset>(subAsset))
                 mStyleSamples.Add(actorAsset);
         }
     }
@@ -170,7 +170,7 @@ namespace o2
     void UIManager::AddWidgetStyle(Widget* widget, const String& style)
     {
         widget->SetName(style);
-        mStyleSamples.Add(mnew ActorAsset(widget));
+        mStyleSamples.Add(mmake<ActorAsset>(widget));
     }
 
     Widget* UIManager::CreateWidget(const Type& type, const String& style /*= "standard"*/)

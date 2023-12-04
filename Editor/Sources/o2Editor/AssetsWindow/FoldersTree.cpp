@@ -82,7 +82,7 @@ namespace Editor
 	{
 		mOpengingFolderFromThis = true;
 
-		mFoldersTree->SelectAndHighlightObject(o2Assets.GetAssetsTree().Find(path));
+		mFoldersTree->SelectAndHighlightObject(o2Assets.GetAssetsTree().Find(path).Get());
 		mCurrentPath = path;
 
 		mOpengingFolderFromThis = false;
@@ -119,29 +119,19 @@ namespace Editor
 			return nullptr;
 
 		AssetInfo* assetTreeNode = (AssetInfo*)(void*)object;
-		return (void*)(void*)(assetTreeNode->parent);
+		return (void*)(assetTreeNode->parent.Lock().Get());
 	}
 
 	Vector<void*> AssetsFoldersTree::GetFoldersTreeNodeChilds(void* object)
 	{
 		AssetInfo* assetTreeNode = (AssetInfo*)object;
 
-		if (assetTreeNode)
-		{
-			return assetTreeNode->GetChildren()
-				.FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
-				.Sorted([](AssetInfo* a, AssetInfo* b) { return a->path < b->path; })
-				.Convert<void*>([](AssetInfo* x) { return (void*)x; });
-		}
-		else
-		{
-			const AssetsTree& assetsTree = o2Assets.GetAssetsTree();
+		auto& infos = assetTreeNode ? assetTreeNode->GetChildren() : o2Assets.GetAssetsTree().rootAssets;
 
-			return assetsTree.rootAssets
-				.FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
-				.Sorted([](AssetInfo* a, AssetInfo* b) { return a->path < b->path; })
-				.Convert<void*>([](AssetInfo* x) { return (void*)x; });
-		}
+		return infos
+            .FindAll([](const Ref<AssetInfo>& x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
+            .Sorted([](const Ref<AssetInfo>& a, const Ref<AssetInfo>& b) { return a->path < b->path; })
+            .Convert<void*>([](const Ref<AssetInfo>& x) { return (void*)x.Get(); });
 	}
 
 	void AssetsFoldersTree::SetupFoldersTreeNode(TreeNode* node, void* object)

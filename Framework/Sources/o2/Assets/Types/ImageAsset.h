@@ -31,7 +31,7 @@ namespace o2
         GETTER(float, width, GetWidth);   // Image width getter
         GETTER(float, height, GetHeight); // Image height getter
 
-        GETTER(Meta*, meta, GetMeta); // Meta information getter
+        GETTER(Ref<Meta>, meta, GetMeta); // Meta information getter
 
     public:
         // Default constructor
@@ -92,7 +92,7 @@ namespace o2
         TextureSource GetTextureSource() const;
 
         // Returns meta information @SCRIPTABLE
-        Meta* GetMeta() const;
+        Ref<Meta> GetMeta() const;
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
@@ -145,7 +145,7 @@ namespace o2
 
         TextureRef mTexture; // Texture reference, if image is not in atlas, it loads texture
 
-        AssetRef mAtlas; // Owner atlas
+        Ref<Asset> mAtlas; // Owner atlas
 
         UInt  mAtlasPage; // Owner atlas page index @SERIALIZABLE
         RectI mSourceRect; // Owner atlas rectangle @SERIALIZABLE
@@ -212,7 +212,7 @@ CLASS_METHODS_META(o2::ImageAsset)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWidth);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetHeight);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(TextureSource, GetTextureSource);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Meta*, GetMeta);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Meta>, GetMeta);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);

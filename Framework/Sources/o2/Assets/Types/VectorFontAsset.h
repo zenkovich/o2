@@ -18,7 +18,7 @@ namespace o2
 
     public:
         PROPERTIES(VectorFontAsset);
-        GETTER(Meta*, meta, GetMeta); // Meta information getter
+        GETTER(Ref<Meta>, meta, GetMeta); // Meta information getter
 
     public:
         // Default constructor
@@ -31,7 +31,7 @@ namespace o2
         VectorFontAsset& operator=(const VectorFontAsset& asset);
 
         // Returns meta information
-        Meta* GetMeta() const;
+        Ref<Meta> GetMeta() const;
 
         // Returns font effects array 
         const Vector<VectorFont::Effect*>& GetEffects() const;
@@ -128,7 +128,7 @@ CLASS_METHODS_META(o2::VectorFontAsset)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const VectorFontAsset&);
-    FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Meta>, GetMeta);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<VectorFont::Effect*>&, GetEffects);
     FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, VectorFont::Effect*);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveEffect, VectorFont::Effect*);

@@ -21,7 +21,7 @@ namespace o2
         FolderAsset& operator=(const FolderAsset& asset);
 
         // Returns containing assets infos
-        Vector<AssetRef> GetChildrenAssets() const;
+        Vector<Ref<Asset>> GetChildrenAssets() const;
 
         // Returns editor icon
         static String GetEditorIcon() { return "ui/UI4_big_folder_icon.png"; }
@@ -62,7 +62,7 @@ CLASS_METHODS_META(o2::FolderAsset)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const FolderAsset&);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<AssetRef>, GetChildrenAssets);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<Asset>>, GetChildrenAssets);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);

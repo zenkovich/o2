@@ -22,7 +22,7 @@ namespace o2
         FontAsset();
 
         // Default constructor
-        FontAsset(AssetMeta* meta);
+        FontAsset(const Ref<AssetMeta>& meta);
 
         // Copy-constructor
         FontAsset(const FontAsset& asset);
@@ -63,7 +63,7 @@ CLASS_METHODS_META(o2::FontAsset)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(AssetMeta*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<AssetMeta>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const FontAsset&);
     FUNCTION().PUBLIC().SIGNATURE(FontRef, GetFont);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

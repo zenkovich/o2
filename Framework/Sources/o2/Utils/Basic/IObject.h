@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Memory/MemoryManager.h"
+#include "o2/Utils/Types/Ref.h"
 
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptValueDef.h"
@@ -37,6 +38,10 @@ namespace o2
         // Cloning as type
         template<typename _cast_type>
         _cast_type* CloneAs() const { return dynamic_cast<_cast_type*>(Clone()); }
+
+        // Cloning as type
+        template<typename _cast_type>
+        Ref<_cast_type> CloneAsRef() const { return Ref(dynamic_cast<_cast_type*>(Clone())); }
 
         // Returns type
         virtual const Type& GetType() const { return *type; }
@@ -128,7 +133,6 @@ public:                                                                         
     typedef CLASS thisclass;                                                                                    \
     o2::IObject* Clone() const override {return o2::SafeClone<CLASS>::Clone(*this); }                           \
     const o2::Type& GetType() const override { return *type; };                                                 \
-    IOBJECT_SCRIPTING();                                                                                        \
                                                                                                                 \
     template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \
     {                                                                                                           \
@@ -140,6 +144,7 @@ public:                                                                         
 
 #define IOBJECT(CLASS)                                                                                          \
     IOBJECT_MAIN(CLASS)                                                                                         \
+    IOBJECT_SCRIPTING();                                                                                        \
                                                                                                                 \
     template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
     template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \

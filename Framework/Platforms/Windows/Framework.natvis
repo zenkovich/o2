@@ -103,6 +103,22 @@
 				<DisplayString>{{{ name }:{ value } }}</DisplayString>
 		</Type>
 
+		<Type Name="o2::BaseRef&lt;*&gt;">
+				<DisplayString>{ mPtr }</DisplayString>
+				<Expand>
+						<ExpandedItem>mPtr</ExpandedItem>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::BaseWeakRef&lt;*&gt;">
+				<DisplayString Condition="(mPtr != 0)">{ mPtr }</DisplayString>
+				<DisplayString Condition="(mPtr == 0)">empty</DisplayString>
+				
+				<Expand>
+						<ExpandedItem Condition="(mPtr != 0)">mPtr</ExpandedItem>
+				</Expand>
+		</Type>
+
 		<Type Name="o2::DataValue">
 				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Null) == o2::DataValue::Flags::Null">null</DisplayString>
 				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::BoolTrue) == o2::DataValue::Flags::BoolTrue">true</DisplayString>

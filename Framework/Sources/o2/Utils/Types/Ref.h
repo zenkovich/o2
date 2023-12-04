@@ -160,8 +160,17 @@ namespace o2
         // Equality operator
         bool operator==(const BaseRef<_type>& other) const;
 
+        // Equality operator
+        bool operator==(const _type* other) const;
+
         // Inequality operator
         bool operator!=(const BaseRef<_type>& other) const;
+
+        // Inequality operator
+        bool operator!=(const _type* other) const;
+
+        // Copy operator from nullptr
+        BaseRef<_type>& operator=(std::nullptr_t);
 
         // Copy operator
         BaseRef<_type>& operator=(const BaseRef<_type>& other);
@@ -240,8 +249,17 @@ namespace o2
         // Equality operator
         bool operator==(const BaseWeakRef<_type>& other) const;
 
+        // Equality operator
+        bool operator==(const _type* other) const;
+
         // Inequality operator
         bool operator!=(const BaseWeakRef<_type>& other) const;
+
+        // Inequality operator
+        bool operator!=(const _type* other) const;
+
+        // Copy from nullptr operator
+        BaseWeakRef& operator=(std::nullptr_t);
 
         // Copy operator
         BaseWeakRef& operator=(const BaseWeakRef<_type>& other);
@@ -313,8 +331,17 @@ namespace o2
         // Equality operator
         bool operator==(const Ref<_type>& other) const { return BaseRef<_type>::operator==(other); }
 
+        // Equality operator
+        bool operator==(const _type* other) const { return BaseRef<_type>::operator==(other); }
+
         // Inequality operator
         bool operator!=(const Ref<_type>& other) const { return BaseRef<_type>::operator!=(other); }
+
+        // Inequality operator
+        bool operator!=(const _type* other) const { return BaseRef<_type>::operator!=(other); }
+
+        // Copy from nullptr operator
+        Ref<_type>& operator=(std::nullptr_t) { BaseRef<_type>::operator=(nullptr); return *this; }
 
         // Copy operator 
         Ref<_type>& operator=(const Ref<_type>& other) { BaseRef<_type>::operator=(other); return *this; }
@@ -374,8 +401,17 @@ namespace o2
         // Equality operator
         bool operator==(const WeakRef<_type>& other) const { return BaseWeakRef<_type>::operator==(other); }
 
+        // Equality operator
+        bool operator==(const _type* other) const { return BaseWeakRef<_type>::operator==(other); }
+
         // Inequality operator
         bool operator!=(const WeakRef<_type>& other) const { return BaseWeakRef<_type>::operator!=(other); }
+
+        // Inequality operator
+        bool operator!=(const _type* other) const { return BaseWeakRef<_type>::operator!=(other); }
+
+        // Copy operator from nullptr
+        WeakRef& operator=(std::nullptr_t) { BaseWeakRef<_type>::operator=(nullptr); return *this; }
 
         // Copy operator
         WeakRef& operator=(const WeakRef<_type>& other) { BaseWeakRef<_type>::operator=(other); return *this; }
@@ -484,7 +520,9 @@ namespace o2
 	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
 	Ref(Ref<_other_type>&& other) : BaseRef<CLASS>(other) {}																				\
 	bool operator==(const Ref<CLASS>& other) const { return BaseRef<CLASS>::operator==(other); }											\
+	bool operator==(const CLASS* other) const { return BaseRef<CLASS>::operator==(other); }											        \
 	bool operator!=(const Ref<CLASS>& other) const { return BaseRef<CLASS>::operator!=(other); }											\
+	bool operator!=(const CLASS* other) const { return BaseRef<CLASS>::operator!=(other); }											        \
 	Ref<CLASS>& operator=(const Ref<CLASS>& other) { BaseRef<CLASS>::operator=(other); return *this; }										\
 	Ref<CLASS>& operator=(Ref<CLASS>&& other) { BaseRef<CLASS>::operator=(other); return *this; }											\
 	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
@@ -571,9 +609,30 @@ namespace o2
     }
 
     template<typename _type>
+    bool BaseRef<_type>::operator==(const _type* other) const
+    {
+        return mPtr == other;
+    }
+
+    template<typename _type>
     bool BaseRef<_type>::operator!=(const BaseRef<_type>& other) const
     {
         return mPtr != other.mPtr;
+    }
+
+    template<typename _type>
+    bool BaseRef<_type>::operator!=(const _type* other) const
+    {
+        return mPtr != other;
+    }
+
+    template<typename _type>
+    BaseRef<_type>& BaseRef<_type>::operator=(std::nullptr_t)
+    {
+        DecrementRef();
+        mPtr = nullptr;
+
+        return *this;
     }
 
     template<typename _type>
@@ -671,8 +730,13 @@ namespace o2
             refCounter->strongReferences--;
             if (refCounter->strongReferences == 0)
             {
+                refCounter->weakReferences++;
+
                 DestructObject(mPtr);
-                (*refCounter->mImplementation->DestroyObject)(mPtr);
+                using _type_no_const = std::remove_const<_type>::type;
+                (*refCounter->mImplementation->DestroyObject)(const_cast<_type_no_const*>(mPtr));
+
+                refCounter->weakReferences--;
 
                 mPtr = nullptr;
 
@@ -742,9 +806,32 @@ namespace o2
     }
 
     template<typename _type>
+    bool BaseWeakRef<_type>::operator==(const _type* other) const
+    {
+        return mPtr == other;
+    }
+
+    template<typename _type>
     bool BaseWeakRef<_type>::operator!=(const BaseWeakRef<_type>& other) const
     {
         return mPtr != other.mPtr;
+    }
+
+    template<typename _type>
+    bool BaseWeakRef<_type>::operator!=(const _type* other) const
+    {
+        return mPtr != other;
+    }
+
+    template<typename _type>
+    BaseWeakRef<_type>& BaseWeakRef<_type>::operator=(std::nullptr_t)
+    {
+        DecrementWeakRef();
+
+        mPtr = nullptr;
+        mRefCounter = nullptr;
+
+        return *this;
     }
 
     template<typename _type>

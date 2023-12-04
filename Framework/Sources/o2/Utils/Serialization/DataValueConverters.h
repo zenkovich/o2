@@ -516,57 +516,6 @@ namespace o2
         }
     };
 
-    // ----------------------
-    // Raw pointers converter
-    // ----------------------
-    template<typename T>
-    struct DataValue::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value&&
-        std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
-    {
-        static constexpr bool isSupported = true;
-
-        static void Write(const T& value, DataValue& data)
-        {
-            if (value)
-            {
-                data.AddMember("Type").Set(value->GetType().GetName());
-                data.AddMember("Value").Set(*value);
-            }
-        }
-
-        static void Read(T& value, const DataValue& data)
-        {
-            if (auto typeNode = data.FindMember("Type"))
-            {
-                if (auto valueNode = data.FindMember("Value"))
-                {
-                    if (value)
-                        delete value;
-
-                    String typeName = *typeNode;
-                    auto type = Reflection::GetType( typeName );
-                    if (!type)
-                    {
-                        o2Debug.LogError( "Failed to deserialize unknown type: " + typeName );
-                        return;
-                    }
-
-                    void* sample = type->CreateSample();
-                    if (type->GetUsage() == Type::Usage::Object)
-                    {
-                        auto objectType = dynamic_cast<const ObjectType*>(type);
-                        value = dynamic_cast<T>(objectType->DynamicCastToIObject(sample));
-                    }
-                    else
-                        value = static_cast<T>(sample);
-
-                    if (value)
-                        valueNode->Get(*value);
-                }
-            }
-        }
-    };
-
     // ---------------------
     // Ref<> types converter
     // ---------------------
@@ -605,6 +554,57 @@ namespace o2
                     }
                     else
                         value = Ref(static_cast<_ref_type*>(sample));
+
+                    if (value)
+                        valueNode->Get(*value);
+                }
+            }
+        }
+    };
+
+    // ----------------------
+    // Raw pointers converter
+    // ----------------------
+    template<typename T>
+    struct DataValue::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value &&
+        std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value && !std::is_same<T, std::nullptr_t>::value>::type>
+    {
+        static constexpr bool isSupported = true;
+
+        static void Write(const T& value, DataValue& data)
+        {
+            if (value)
+            {
+                data.AddMember("Type").Set(value->GetType().GetName());
+                data.AddMember("Value").Set(*value);
+            }
+        }
+
+        static void Read(T& value, const DataValue& data)
+        {
+            if (auto typeNode = data.FindMember("Type"))
+            {
+                if (auto valueNode = data.FindMember("Value"))
+                {
+                    if (value)
+                        delete value;
+
+                    String typeName = *typeNode;
+                    auto type = Reflection::GetType( typeName );
+                    if (!type)
+                    {
+                        o2Debug.LogError( "Failed to deserialize unknown type: " + typeName );
+                        return;
+                    }
+
+                    void* sample = type->CreateSample();
+                    if (type->GetUsage() == Type::Usage::Object)
+                    {
+                        auto objectType = dynamic_cast<const ObjectType*>(type);
+                        value = dynamic_cast<T>(objectType->DynamicCastToIObject(sample));
+                    }
+                    else
+                        value = static_cast<T>(sample);
 
                     if (value)
                         valueNode->Get(*value);

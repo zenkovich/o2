@@ -16,7 +16,7 @@ namespace o2
 
     public:
         PROPERTIES(BitmapFontAsset);
-        GETTER(Meta*, meta, GetMeta); // Meta information getter
+        GETTER(Ref<Meta>, meta, GetMeta); // Meta information getter
 
     public:
         // Default constructor
@@ -29,7 +29,7 @@ namespace o2
         BitmapFontAsset& operator=(const BitmapFontAsset& asset);
 
         // Returns meta information
-        Meta* GetMeta() const;
+        Ref<Meta> GetMeta() const;
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
@@ -75,7 +75,7 @@ CLASS_METHODS_META(o2::BitmapFontAsset)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const BitmapFontAsset&);
-    FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Meta>, GetMeta);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
     FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);

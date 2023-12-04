@@ -38,10 +38,10 @@ namespace Editor
 		AssetIcon& operator=(const AssetIcon& other);
 
 		// Sets asset info
-		void SetAssetInfo(const AssetInfo* info);
+		void SetAssetInfo(const Ref<AssetInfo>& info);
 
 		// Returns asset info
-		const AssetInfo& GetAssetInfo() const;
+		const Ref<AssetInfo>& GetAssetInfo() const;
 
 		// Sets name label text
 		void SetAssetName(const WString& name);
@@ -65,7 +65,7 @@ namespace Editor
 
 	protected:
 		Label*                 mNameText = nullptr;      // Asset name text
-		const AssetInfo*       mAssetInfo;               // Asset information
+		Ref<AssetInfo>         mAssetInfo;               // Asset information
 		WidgetState*           mSelectedState = nullptr; // Node selected state
 		AssetsIconsScrollArea* mOwner = nullptr;         // Owner assets scroll area
 
@@ -148,8 +148,8 @@ CLASS_METHODS_META(Editor::AssetIcon)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AssetIcon&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAssetInfo, const AssetInfo*);
-    FUNCTION().PUBLIC().SIGNATURE(const AssetInfo&, GetAssetInfo);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAssetInfo, const Ref<AssetInfo>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AssetInfo>&, GetAssetInfo);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAssetName, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetAssetName);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);

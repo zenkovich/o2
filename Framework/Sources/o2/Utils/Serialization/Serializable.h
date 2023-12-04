@@ -39,7 +39,7 @@ namespace o2
         ISerializable& operator=(const DataValue& node) { return *this; };
 
         // DataDocument converting operator
-        operator DataDocument() const { return DataDocument(); }
+        explicit operator DataDocument() const { return DataDocument(); }
 
         IOBJECT(ISerializable);
 
@@ -606,7 +606,7 @@ namespace o2
     {                                                                                                                                  \
         Deserialize(node); return *this;                                                                                               \
     }                                                                                                                                  \
-    operator o2::DataDocument() const                                                                                                  \
+    explicit operator o2::DataDocument() const                                                                                         \
     {                                                                                                                                  \
         o2::DataDocument doc;                                                                                                          \
         Serialize(doc);                                                                                                                \
@@ -615,6 +615,7 @@ namespace o2
 
 #define SERIALIZABLE(CLASS)                                                                                     \
     SERIALIZABLE_MAIN(CLASS)                                                                                    \
+    IOBJECT_SCRIPTING();                                                                                        \
                                                                                                                 \
     template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
     template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \

@@ -11,7 +11,7 @@
 namespace o2
 {
     ImageAsset::ImageAsset():
-        Asset(mnew Meta())
+        Asset(mmake<Meta>())
     {}
 
     ImageAsset::ImageAsset(const ImageAsset& other):
@@ -152,9 +152,9 @@ namespace o2
         return { texture, mSourceRect };
     }
 
-    ImageAsset::Meta* ImageAsset::GetMeta() const
+    Ref<ImageAsset::Meta> ImageAsset::GetMeta() const
     {
-        return (Meta*)mInfo.meta;
+        return DynamicCast<Meta>(mInfo.meta);
     }
 
     Vector<String> ImageAsset::GetFileExtensions()

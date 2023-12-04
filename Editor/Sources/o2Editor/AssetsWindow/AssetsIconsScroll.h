@@ -76,7 +76,7 @@ namespace Editor
 		void DeselectAllAssets();
 
 		// Returns selected assets infos
-		const Vector<const AssetInfo*>& GetSelectedAssets() const;
+		const Vector<Ref<AssetInfo>>& GetSelectedAssets() const;
 
 		// Return asset icon under point
 		AssetIcon* GetIconUnderPoint(const Vec2F& point) const;
@@ -118,15 +118,15 @@ namespace Editor
 						        
 		String mCurrentPath = "_"; // Current viewing path
 
-		Vector<const AssetInfo*> mAssetInfos;        // Asset infos in path @IGNORE
-		Vector<AssetIcon*>       mVisibleAssetIcons; // Visible asset icons
+        Vector<Ref<AssetInfo>> mAssetInfos;        // Asset infos in path @IGNORE
+        Vector<AssetIcon*>     mVisibleAssetIcons; // Visible asset icons
 
 		ContextMenu* mContextMenu = nullptr; // Assets Context menu
 						        
-		Vector<const AssetInfo*> mSelectedAssets;          // Selected assets icons @IGNORE
-		Vector<AssetRef*>        mSelectedPreloadedAssets; // Preloaded selected assets
+		Vector<Ref<AssetInfo>> mSelectedAssets;          // Selected assets icons @IGNORE
+		Vector<Ref<Asset>*>    mSelectedPreloadedAssets; // Preloaded selected assets
 
-		AssetRef mNewAsset; // Temporary new asset. Used when creating new asset
+		Ref<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
 						        
 		AssetIcon*      mHighlightIcon = nullptr;   // Current highlighting asset icon
 		AnimationClip   mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
@@ -136,10 +136,10 @@ namespace Editor
 						        
 		Map<String, Vector<AssetIcon*>> mIconsPool; // Assets icons pool
 						        
-		Sprite*                  mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
-		bool                     mSelecting = false;          // Is selecting icons 
-		Vec2F                    mPressedPoint;               // Pressed point
-		Vector<const AssetInfo*> mCurrentSelectingInfos;      // Selecting icons at current selection @IGNORE
+		Sprite*                mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
+		bool                   mSelecting = false;          // Is selecting icons 
+		Vec2F                  mPressedPoint;               // Pressed point
+		Vector<Ref<AssetInfo>> mCurrentSelectingInfos;      // Selecting icons at current selection @IGNORE
 						        
 		bool                         mIsDraggingIcons = false;      // Is dragging icons
 		bool                         mDragEnded = false;            // Is dragging ended
@@ -228,7 +228,7 @@ namespace Editor
 		void FreeAssetIconToPool(AssetIcon* icon);
 
 		// Returns asset icon if visible
-		AssetIcon* FindVisibleIcon(const AssetInfo* info);
+		AssetIcon* FindVisibleIcon(const Ref<AssetInfo>& info);
 
 		// Called when asset icon double clicked, starting editing name
 		void OnAssetDblClick(AssetIcon* icon);
@@ -400,7 +400,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(void, HighlightAsset, const UID&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const UID&, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, DeselectAllAssets);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<const AssetInfo*>&, GetSelectedAssets);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AssetInfo>>&, GetSelectedAssets);
     FUNCTION().PUBLIC().SIGNATURE(AssetIcon*, GetIconUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHighlightDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const AnimationClip&);
@@ -437,7 +437,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeCreateContext);
     FUNCTION().PROTECTED().SIGNATURE(AssetIcon*, GetAssetIconFromPool, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, FreeAssetIconToPool, AssetIcon*);
-    FUNCTION().PROTECTED().SIGNATURE(AssetIcon*, FindVisibleIcon, const AssetInfo*);
+    FUNCTION().PROTECTED().SIGNATURE(AssetIcon*, FindVisibleIcon, const Ref<AssetInfo>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAssetDblClick, AssetIcon*);
     FUNCTION().PROTECTED().SIGNATURE(void, StartAssetRenaming, AssetIcon*, const String&, const Function<void(const String&)>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);

@@ -9,7 +9,7 @@
 namespace o2
 {
     BitmapFontAsset::BitmapFontAsset():
-        FontAsset(mnew Meta())
+        FontAsset(mmake<Meta>())
     {}
 
     BitmapFontAsset::BitmapFontAsset(const BitmapFontAsset& asset):
@@ -27,9 +27,9 @@ namespace o2
         return { "fnt" };
     }
 
-    BitmapFontAsset::Meta* BitmapFontAsset::GetMeta() const
+    Ref<BitmapFontAsset::Meta> BitmapFontAsset::GetMeta() const
     {
-        return (Meta*)mInfo.meta;
+        return DynamicCast<Meta>(mInfo.meta);
     }
 
     void BitmapFontAsset::LoadData(const String& path)

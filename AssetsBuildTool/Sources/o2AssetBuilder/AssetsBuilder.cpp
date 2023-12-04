@@ -26,7 +26,6 @@ namespace o2
 
     AssetsBuilder::~AssetsBuilder()
     {
-        Reset();
     }
 
     const Vector<UID>& AssetsBuilder::BuildAssets(Platform platform, const String& assetsPath, const String& builtAssetsPath,
@@ -38,8 +37,6 @@ namespace o2
         mBuiltAssetsTreePath = dataAssetsTreePath;
 
         ImageCompressor::LoadConfig(compressorConfig);
-
-        Reset();
 
         mLog->Out("Started assets building from: " + mSourceAssetsPath + " to: " + mBuiltAssetsPath);
 
@@ -53,15 +50,18 @@ namespace o2
 
         ProcessMissingMetasCreation(folderInfo);
 
-        mSourceAssetsTree.assetsPath = assetsPath;
-        mSourceAssetsTree.log = mLog;
-        mSourceAssetsTree.Build(folderInfo);
+        mSourceAssetsTree = mmake<AssetsTree>();
+        mSourceAssetsTree->assetsPath = assetsPath;
+        mSourceAssetsTree->log = mLog;
+        mSourceAssetsTree->Build(folderInfo);
 
         DataDocument builtAssetsTreeDoc;
         builtAssetsTreeDoc.LoadFromFile(mBuiltAssetsTreePath);
-        mBuiltAssetsTree.Deserialize(builtAssetsTreeDoc);
 
-        mBuiltAssetsTree.log = mLog;
+        mBuiltAssetsTree = mmake<AssetsTree>();
+        mBuiltAssetsTree->Deserialize(builtAssetsTreeDoc);
+
+        mBuiltAssetsTree->log = mLog;
 
         ProcessRemovedAssets();
         ProcessNewAssets();
@@ -70,9 +70,9 @@ namespace o2
 
         if (!mModifiedAssets.IsEmpty())
         {
-            mBuiltAssetsTree.assetsPath = mSourceAssetsPath;
-            mBuiltAssetsTree.builtAssetsPath = mBuiltAssetsPath;
-            o2FileSystem.WriteFile(mBuiltAssetsTreePath, mBuiltAssetsTree.SerializeToString());
+            mBuiltAssetsTree->assetsPath = mSourceAssetsPath;
+            mBuiltAssetsTree->builtAssetsPath = mBuiltAssetsPath;
+            o2FileSystem.WriteFile(mBuiltAssetsTreePath, mBuiltAssetsTree->SerializeToString());
         }
 
         mLog->Out("Completed for " + (String)timer.GetDeltaTime() + " seconds");
@@ -168,14 +168,14 @@ namespace o2
     {
         const Type* folderTypeId = &TypeOf(FolderAsset);
 
-        mBuiltAssetsTree.SortAssetsInverse();
+        mBuiltAssetsTree->SortAssetsInverse();
 
         // in first pass processing files, in second - folders
         for (int pass = 0; pass < 2; pass++)
         {
-            for (auto builtAssetInfoIt = mBuiltAssetsTree.allAssets.Begin(); builtAssetInfoIt != mBuiltAssetsTree.allAssets.End(); )
+            for (auto builtAssetInfoIt = mBuiltAssetsTree->allAssets.Begin(); builtAssetInfoIt != mBuiltAssetsTree->allAssets.End(); )
             {
-                auto builtAssetInfo = *builtAssetInfoIt;
+                auto builtAssetInfo = (*builtAssetInfoIt).Lock();
                 bool isFolder = builtAssetInfo->meta->GetAssetType() == folderTypeId;
                 bool skip = pass == 0 ? isFolder : !isFolder;
                 if (skip)
@@ -184,8 +184,8 @@ namespace o2
                     continue;
                 }
 
-                auto fnd = mSourceAssetsTree.allAssetsByUID.find(builtAssetInfo->meta->ID());
-                bool needRemove = fnd == mSourceAssetsTree.allAssetsByUID.end();
+                auto fnd = mSourceAssetsTree->allAssetsByUID.find(builtAssetInfo->meta->ID());
+                bool needRemove = fnd == mSourceAssetsTree->allAssetsByUID.end();
 
                 if (!needRemove)
                 {
@@ -199,15 +199,15 @@ namespace o2
 
                 mLog->OutStr("Removed asset: " + builtAssetInfo->path);
 
-                mBuiltAssetsTree.allAssetsByUID.Remove(builtAssetInfo->meta->ID());
-                mBuiltAssetsTree.allAssetsByPath.Remove(builtAssetInfo->path);
+                mBuiltAssetsTree->allAssetsByUID.Remove(builtAssetInfo->meta->ID());
+                mBuiltAssetsTree->allAssetsByPath.Remove(builtAssetInfo->path);
 
-                builtAssetInfoIt = mBuiltAssetsTree.allAssets.Remove(builtAssetInfoIt);
+                builtAssetInfoIt = mBuiltAssetsTree->allAssets.Remove(builtAssetInfoIt);
 
                 if (builtAssetInfo->parent)
-                    builtAssetInfo->parent->RemoveChild(builtAssetInfo);
+                    builtAssetInfo->parent.Lock()->RemoveChild(builtAssetInfo);
                 else
-                    mBuiltAssetsTree.rootAssets.Remove(builtAssetInfo);
+                    mBuiltAssetsTree->rootAssets.Remove(builtAssetInfo);
             }
         }
     }
@@ -216,13 +216,15 @@ namespace o2
     {
         const Type* folderType = &TypeOf(FolderAsset);
 
-        mSourceAssetsTree.SortAssets();
+        mSourceAssetsTree->SortAssets();
 
         // in first pass processing folders, in second - files
         for (int pass = 0; pass < 2; pass++)
         {
-            for (auto sourceAssetInfo : mSourceAssetsTree.allAssets)
+            for (auto sourceAssetInfoWeak : mSourceAssetsTree->allAssets)
             {
+                auto sourceAssetInfo = sourceAssetInfoWeak.Lock();
+
                 if (!sourceAssetInfo->meta)
                     continue;
 
@@ -231,21 +233,22 @@ namespace o2
                 if (skip)
                     continue;
 
-                AssetInfo* builtAssetInfo = nullptr;
-                if (mBuiltAssetsTree.allAssetsByUID.TryGetValue(sourceAssetInfo->meta->ID(), builtAssetInfo))
+                WeakRef<AssetInfo> builtAssetInfoWeak;
+                if (mBuiltAssetsTree->allAssetsByUID.TryGetValue(sourceAssetInfo->meta->ID(), builtAssetInfoWeak))
                 {
+                    auto builtAssetInfo = builtAssetInfoWeak.Lock();
+
                     if (sourceAssetInfo->path == builtAssetInfo->path)
                     {
                         if (sourceAssetInfo->editTime != builtAssetInfo->editTime ||
-                            !sourceAssetInfo->meta->IsEqual(builtAssetInfo->meta))
+                            !sourceAssetInfo->meta->IsEqual(builtAssetInfo->meta.Get()))
                         {
                             GetAssetConverter(sourceAssetInfo->meta->GetAssetType())->ConvertAsset(*sourceAssetInfo);
 
                             mModifiedAssets.Add(sourceAssetInfo->meta->ID());
 
                             builtAssetInfo->editTime = sourceAssetInfo->editTime;
-                            delete builtAssetInfo->meta;
-                            builtAssetInfo->meta = sourceAssetInfo->meta->CloneAs<AssetMeta>();
+                            builtAssetInfo->meta = sourceAssetInfo->meta->CloneAsRef<AssetMeta>();
 
                             mLog->Out("Modified asset: " + sourceAssetInfo->path);
                         }
@@ -253,40 +256,38 @@ namespace o2
                     else
                     {
                         if (sourceAssetInfo->editTime != builtAssetInfo->editTime ||
-                            !sourceAssetInfo->meta->IsEqual(builtAssetInfo->meta))
+                            !sourceAssetInfo->meta->IsEqual(builtAssetInfo->meta.Get()))
                         {
                             GetAssetConverter(builtAssetInfo->meta->GetAssetType())->RemoveAsset(*builtAssetInfo);
 
-                            mBuiltAssetsTree.RemoveAsset(builtAssetInfo, false);
+                            mBuiltAssetsTree->RemoveAsset(builtAssetInfo);
 
                             mLog->Out("Modified and moved to " + sourceAssetInfo->path + " asset: " + builtAssetInfo->path);
 
                             builtAssetInfo->path = sourceAssetInfo->path;
                             builtAssetInfo->editTime = sourceAssetInfo->editTime;
 
-                            delete builtAssetInfo->meta;
-                            builtAssetInfo->meta = sourceAssetInfo->meta->CloneAs<AssetMeta>();
+                            builtAssetInfo->meta = sourceAssetInfo->meta->CloneAsRef<AssetMeta>();
 
                             GetAssetConverter(sourceAssetInfo->meta->GetAssetType())->ConvertAsset(*sourceAssetInfo);
 
                             mModifiedAssets.Add(sourceAssetInfo->meta->ID());
-                            mBuiltAssetsTree.AddAsset(builtAssetInfo);
+                            mBuiltAssetsTree->AddAsset(builtAssetInfo);
                         }
                         else
                         {
                             GetAssetConverter(sourceAssetInfo->meta->GetAssetType())->MoveAsset(*builtAssetInfo, *sourceAssetInfo);
                             mLog->Out("Moved asset from " + builtAssetInfo->path + " to " + sourceAssetInfo->path);
 
-                            mBuiltAssetsTree.RemoveAsset(builtAssetInfo, false);
+                            mBuiltAssetsTree->RemoveAsset(builtAssetInfo);
 
                             builtAssetInfo->path = sourceAssetInfo->path;
                             builtAssetInfo->editTime = sourceAssetInfo->editTime;
 
-                            delete builtAssetInfo->meta;
-                            builtAssetInfo->meta = sourceAssetInfo->meta->CloneAs<AssetMeta>();
+                            builtAssetInfo->meta = sourceAssetInfo->meta->CloneAsRef<AssetMeta>();
 
                             mModifiedAssets.Add(sourceAssetInfo->meta->ID());
-                            mBuiltAssetsTree.AddAsset(builtAssetInfo);
+                            mBuiltAssetsTree->AddAsset(builtAssetInfo);
                         }
                     }
                 }
@@ -298,14 +299,14 @@ namespace o2
     {
         const Type* folderType = &TypeOf(FolderAsset);
 
-        mSourceAssetsTree.SortAssets();
+        mSourceAssetsTree->SortAssets();
 
         // in first pass processing folders, in second - files
         for (int pass = 0; pass < 2; pass++)
         {
-            for (auto sourceAssetInfoIt = mSourceAssetsTree.allAssets.Begin(); sourceAssetInfoIt != mSourceAssetsTree.allAssets.End(); ++sourceAssetInfoIt)
+            for (auto sourceAssetInfoIt = mSourceAssetsTree->allAssets.Begin(); sourceAssetInfoIt != mSourceAssetsTree->allAssets.End(); ++sourceAssetInfoIt)
             {
-                auto sourceAssetInfo = *sourceAssetInfoIt;
+                auto sourceAssetInfo = (*sourceAssetInfoIt).Lock();
 
                 if (!sourceAssetInfo->meta)
                     continue;
@@ -316,8 +317,8 @@ namespace o2
                 if (skip)
                     continue;
 
-                auto fnd = mBuiltAssetsTree.allAssetsByUID.find(sourceAssetInfo->meta->ID());
-                bool isNew = fnd == mBuiltAssetsTree.allAssetsByUID.end();
+                auto fnd = mBuiltAssetsTree->allAssetsByUID.find(sourceAssetInfo->meta->ID());
+                bool isNew = fnd == mBuiltAssetsTree->allAssetsByUID.end();
 
                 if (!isNew)
                     continue;
@@ -328,12 +329,12 @@ namespace o2
 
                 mLog->Out("New asset: " + sourceAssetInfo->path);
 
-                AssetInfo* newBuiltAsset = mnew AssetInfo();
+                Ref<AssetInfo> newBuiltAsset = mmake<AssetInfo>();
                 newBuiltAsset->path = sourceAssetInfo->path;
                 newBuiltAsset->editTime = sourceAssetInfo->editTime;
-                newBuiltAsset->meta = sourceAssetInfo->meta->CloneAs<AssetMeta>();
+                newBuiltAsset->meta = sourceAssetInfo->meta->CloneAsRef<AssetMeta>();
 
-                mBuiltAssetsTree.AddAsset(newBuiltAsset);
+                mBuiltAssetsTree->AddAsset(newBuiltAsset);
             }
         }
     }
@@ -366,17 +367,5 @@ namespace o2
             return mAssetConverters[assetType];
 
         return &mStdAssetConverter;
-    }
-
-    void AssetsBuilder::Reset()
-    {
-        mModifiedAssets.Clear();
-        mSourceAssetsTree.Clear();
-        mBuiltAssetsTree.Clear();
-
-        for (auto it = mAssetConverters.Begin(); it != mAssetConverters.End(); ++it)
-            it->second->Reset();
-
-        mStdAssetConverter.Reset();
     }
 }

@@ -60,7 +60,7 @@ namespace Editor
 		void DeselectAssets();
 
 		// Returns selected assets infos
-		const Vector<const AssetInfo*>& GetSelectedAssets() const;
+		const Vector<Ref<AssetInfo>>& GetSelectedAssets() const;
 
 		// Opens asset in folder
 		void OpenAsset(const UID& id);
@@ -99,7 +99,7 @@ namespace Editor
 		void DeleteAssets(const Vector<String>& assetsPaths);
 
 		// Creates and returns icon sprite for asset
-		static Sprite* GetAssetIconSprite(const AssetRef& asset);
+		static Sprite* GetAssetIconSprite(const Ref<Asset>& asset);
 		 
 		IOBJECT(AssetsWindow);
 
@@ -198,7 +198,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const Vector<UID>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAssets, const Vector<String>&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeselectAssets);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<const AssetInfo*>&, GetSelectedAssets);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AssetInfo>>&, GetSelectedAssets);
     FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const UID&);
     FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const UID&);
@@ -211,7 +211,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, CutAssets, const Vector<String>&);
     FUNCTION().PUBLIC().SIGNATURE(void, PasteAssets, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeleteAssets, const Vector<String>&);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(Sprite*, GetAssetIconSprite, const AssetRef&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Sprite*, GetAssetIconSprite, const Ref<Asset>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeSeparator);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeVisibleState);

@@ -31,9 +31,6 @@ namespace o2
         // Instantiates actor toscene @SCRIPTABLE
         ActorRef Instantiate() const;
 
-        // Returns meta information
-        Meta* GetMeta() const;
-
         // Returns actor
         Actor* GetActor() const;
 
@@ -93,7 +90,6 @@ CLASS_METHODS_META(o2::ActorAsset)
     FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAsset&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorRef, Instantiate);
-    FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
     FUNCTION().PUBLIC().SIGNATURE(Actor*, GetActor);
     FUNCTION().PUBLIC().SIGNATURE(void, SetActor, Actor*, bool);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);

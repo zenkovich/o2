@@ -85,11 +85,6 @@ namespace o2
         return mActor->CloneAs<Actor>();
     }
 
-    ActorAsset::Meta* ActorAsset::GetMeta() const
-    {
-        return (Meta*)mInfo.meta;
-    }
-
     Vector<String> ActorAsset::GetFileExtensions()
     {
         return { "proto" };

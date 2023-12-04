@@ -12,7 +12,7 @@ namespace o2
     // --------------------------------
     // Asset tree structure information
     // --------------------------------
-    class AssetsTree: public ISerializable
+    class AssetsTree: public ISerializable, public RefCounterable
     {
     public:
         Ref<LogStream> log;  // Log stream
@@ -20,10 +20,10 @@ namespace o2
         String assetsPath;      // Assets path @SERIALIZABLE
         String builtAssetsPath; // Built assets path @SERIALIZABLE
 
-        Vector<AssetInfo*>      rootAssets;      // Root path assets @SERIALIZABLE
-        Vector<AssetInfo*>      allAssets;       // All assets
-        Map<String, AssetInfo*> allAssetsByPath; // All assets by path
-        Map<UID, AssetInfo*>    allAssetsByUID;  // All assets by UID
+        Vector<Ref<AssetInfo>>          rootAssets;      // Root path assets @SERIALIZABLE
+        Vector<WeakRef<AssetInfo>>      allAssets;       // All assets
+        Map<String, WeakRef<AssetInfo>> allAssetsByPath; // All assets by path
+        Map<UID, WeakRef<AssetInfo>>    allAssetsByUID;  // All assets by UID
 
     public:
         // Default constructor
@@ -48,16 +48,16 @@ namespace o2
         void SortAssetsInverse();
 
         // Returns asset by path. (nullptr if not asset with path)
-        AssetInfo* Find(const String& path) const;
+        Ref<AssetInfo> Find(const String& path) const;
 
         // Returns asset by id. (nullptr if not asset with id)
-        AssetInfo* Find(const UID& id) const;
+        Ref<AssetInfo> Find(const UID& id) const;
 
         // Adds asset node information into structure
-        AssetInfo* AddAsset(AssetInfo* asset);
+        Ref<AssetInfo> AddAsset(Ref<AssetInfo> asset);
 
         // Removes asset node information from structure
-        void RemoveAsset(AssetInfo* asset, bool release = true);
+        void RemoveAsset(Ref<AssetInfo> asset);
 
         // Clears all information
         void Clear();
@@ -66,10 +66,10 @@ namespace o2
 
     protected:
         // Loads assets nodes from folder
-        void LoadFolder(const FolderInfo& folder, AssetInfo* parentAsset);
+        void LoadFolder(const FolderInfo& folder, Ref<AssetInfo> parentAsset);
 
         // Loads and returns asset by path
-        AssetInfo* LoadAssetNode(const String& path, AssetInfo* parent, const TimeStamp& time);
+        Ref<AssetInfo> LoadAssetNode(const String& path, Ref<AssetInfo> parent, const TimeStamp& time);
 
         // Called when deserializing node, combine all nodes in mAllNodes
         void OnDeserialized(const DataValue& node) override;
@@ -80,6 +80,7 @@ namespace o2
 CLASS_BASES_META(o2::AssetsTree)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::AssetsTree)
@@ -102,13 +103,13 @@ CLASS_METHODS_META(o2::AssetsTree)
     FUNCTION().PUBLIC().SIGNATURE(void, Rebuild);
     FUNCTION().PUBLIC().SIGNATURE(void, SortAssets);
     FUNCTION().PUBLIC().SIGNATURE(void, SortAssetsInverse);
-    FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, Find, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, Find, const UID&);
-    FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, AddAsset, AssetInfo*);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveAsset, AssetInfo*, bool);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AssetInfo>, Find, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AssetInfo>, Find, const UID&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AssetInfo>, AddAsset, Ref<AssetInfo>);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveAsset, Ref<AssetInfo>);
     FUNCTION().PUBLIC().SIGNATURE(void, Clear);
-    FUNCTION().PROTECTED().SIGNATURE(void, LoadFolder, const FolderInfo&, AssetInfo*);
-    FUNCTION().PROTECTED().SIGNATURE(AssetInfo*, LoadAssetNode, const String&, AssetInfo*, const TimeStamp&);
+    FUNCTION().PROTECTED().SIGNATURE(void, LoadFolder, const FolderInfo&, Ref<AssetInfo>);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<AssetInfo>, LoadAssetNode, const String&, Ref<AssetInfo>, const TimeStamp&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
