@@ -271,6 +271,9 @@ bool CppSyntaxParser::IsFunction(const string& data)
     if (firstWord == "inline")
         firstWord = ReadWord(data, locCaret, " \n\r(){}[]");
 
+    if (firstWord == "explicit")
+        firstWord = ReadWord(data, locCaret, " \n\r(){}[]");
+
     if (GetNextSymbol(data, locCaret, " \n\r\t") == '(')
     {
         string braces = ReadBraces(data, locCaret);
