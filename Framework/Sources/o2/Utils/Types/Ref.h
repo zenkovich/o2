@@ -468,17 +468,6 @@ namespace o2
 	template<> inline o2::RefCounter* GetRefCounter(CLASS* ptr) { return ptr->GetRefCounter(); } \
 	template<> inline void DestructObject(CLASS* obj) { obj->~CLASS(); }
 
-    // Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together
-    template<typename _type, typename ... _args>
-    Ref<_type> Make(_args&& ... args)
-    {
-        std::byte* memory = (std::byte*)malloc(sizeof(RefCounter) + sizeof(_type));
-        auto object = new (memory + sizeof(RefCounter)) _type(std::forward<_args>(args)...);
-        object->mRefCounter = new (memory) RefCounter(&LinkedRefCounterImplementation::Instance);
-
-        return Ref<_type>(object);
-    }
-
     // Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together. 
     // Stores location and line of creation for debug
     template<typename _type, typename ... _args>
@@ -486,10 +475,31 @@ namespace o2
     {
         std::byte* memory = (std::byte*)_mmalloc(sizeof(RefCounter) + sizeof(_type), location, line);
         auto object = new (memory + sizeof(RefCounter)) _type(std::forward<_args>(args)...);
-        object->mRefCounter = new (memory) RefCounter(&LinkedRefCounterImplementation::Instance);
+
+		// If object already has reference counter, we need to copy it to new memory block
+        if (object->mRefCounter) 
+        {
+            UInt prevStrongReferences = object->mRefCounter->strongReferences;
+            UInt prevWeakReferences = object->mRefCounter->weakReferences;
+
+			(*object->mRefCounter->mImplementation->DestroyCounter)(object->mRefCounter);
+
+			object->mRefCounter = new (memory) RefCounter(&LinkedRefCounterImplementation::Instance);
+            object->mRefCounter->strongReferences = prevStrongReferences;
+            object->mRefCounter->weakReferences = prevWeakReferences;
+        }
+        else
+            object->mRefCounter = new (memory) RefCounter(&LinkedRefCounterImplementation::Instance);
 
         return Ref<_type>(object);
-    }
+	}
+
+	// Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together
+	template<typename _type, typename ... _args>
+	Ref<_type> Make(_args&& ... args)
+	{
+        return MakePlace<_type>(nullptr, 0, std::forward<_args>(args)...);
+	}
 
     // Dynamic cast from one reference type to another
     template<typename _to_type, typename _from_type>

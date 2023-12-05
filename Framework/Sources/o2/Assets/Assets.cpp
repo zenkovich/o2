@@ -467,37 +467,15 @@ namespace o2
 
     void Assets::RemoveAssetCache(Asset* asset)
     {
-        Ref<Asset> assetRef(asset);
         auto fnd = mCachedAssetsByUID.find(asset->GetUID());
         if (fnd != mCachedAssetsByUID.end())
-        {
-            assetRef = fnd->second;
             mCachedAssetsByUID.erase(fnd);
-        }
 
         auto fnd2 = mCachedAssetsByPath.find(asset->GetPath());
         if (fnd2 != mCachedAssetsByPath.end())
-        {
             mCachedAssetsByPath.erase(fnd2);
-        }
 
-        if (assetRef)
-        {
-            mCachedAssets.Remove(assetRef);
-        }
-        else
-        {
-            for (auto cache : mCachedAssets)
-            {
-                if (assetRef == asset)
-                {
-                    mCachedAssets.Remove(cache);
-                    break;
-                }
-            }
-
-            o2Debug.Log("Asset cache not found!");
-        }
+        mCachedAssets.RemoveFirst([=](const Ref<Asset>& x) { return x == asset; });
     }
 
     Ref<Asset> Assets::UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID)

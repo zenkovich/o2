@@ -377,7 +377,11 @@ namespace Editor
 
     Vector<void*> AssetsIconsScrollArea::GetItemsRange(int start, int end) const
     {
-        return mAssetInfos.Take(start, end).Convert<void*>([](auto& x) { return (void*)&x; });
+        Vector<void*> result;
+        for (int i = start; i < end; i++)
+			result.Add((void*)&mAssetInfos[i]);
+
+        return result;
     }
 
     void AssetsIconsScrollArea::SetupItemWidget(Widget* widget, void* item)
