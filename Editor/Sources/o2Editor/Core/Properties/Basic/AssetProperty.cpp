@@ -281,8 +281,8 @@ namespace Editor
 		auto proxySample = proxyType->CreateSample();
 		proxy->GetValuePtr(proxySample);
 		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
-		Ref<Asset>* assetSample = dynamic_cast<Ref<Asset>*>(objectSample);
-		Ref<Asset> res = *assetSample;
+		BaseAssetRef* assetSample = dynamic_cast<BaseAssetRef*>(objectSample);
+		Ref<Asset> res = Ref(assetSample->GetAssetBase());
 		delete assetSample;
 		return res;
 	}
@@ -292,8 +292,8 @@ namespace Editor
 		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
 		auto proxySample = proxyType->CreateSample();
 		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
-		Ref<Asset>* assetSample = dynamic_cast<Ref<Asset>*>(objectSample);
-		*assetSample = value;
+		BaseAssetRef* assetSample = dynamic_cast<BaseAssetRef*>(objectSample);
+		assetSample->SetAssetBase(value.Get());
 		proxy->SetValuePtr(proxySample);
 		delete assetSample;
 	}

@@ -6,11 +6,47 @@
 
 namespace o2
 {
+    // -----------------------------------------------------------------------
+    // Basic asset reference interface. All Ref<AssetType> are derived from it
+    // -----------------------------------------------------------------------
+    class BaseAssetRef: public ISerializable
+    {
+	public:
+		// Returns asset type
+        virtual const Type& GetAssetType() const { return TypeOf(Asset); }
+
+		// Returns asset raw pointer
+        virtual const Asset* GetAssetBase() const { return nullptr; }
+
+		// Returns asset raw pointer
+        virtual Asset* GetAssetBase() { return nullptr; }
+
+        // Sets asset
+        virtual void SetAssetBase(Asset* asset) {}
+
+		// Sets asset instance
+        virtual void SetInstance(Asset* asset) {}
+
+		// Creates own asset instance. If asset is empty creates empty instance, copies asset if else
+        virtual void CreateInstance() {}
+
+		// Removes own asset instance
+        virtual void RemoveInstance() {}
+
+		// Saves asset instance
+        virtual void SaveInstance(const String& path) {}
+
+		// Is asset instance owner
+        virtual bool IsInstance() const { return false; }
+
+        SERIALIZABLE(BaseAssetRef);
+    };
+
     // -----------------------------------------------------------------------------------
     // Asset reference. Contains asset pointer. Can contain asset instance owned by itself
     // -----------------------------------------------------------------------------------
     template<typename _asset_type>
-    class Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type> : public BaseRef<_asset_type>, public ISerializable
+    class Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type> : public BaseRef<_asset_type>, public BaseAssetRef
     {
     public:
         using Base = BaseRef<_asset_type>;
@@ -32,20 +68,29 @@ namespace o2
         }
 
         // Returns asset type
-        const Type& GetAssetType() const { return TypeOf(_asset_type); }
+        const Type& GetAssetType() const override { return TypeOf(_asset_type); }
 
         // Returns asset type
-        static const Type* GetAssetTypeStatic() { return &TypeOf(_asset_type); }
+		static const Type* GetAssetTypeStatic() { return &TypeOf(_asset_type); }
+
+		// Returns asset raw pointer
+		const Asset* GetAssetBase() const override { return BaseRef<_asset_type>::Get(); }
+
+		// Returns asset raw pointer
+        Asset* GetAssetBase() override { return BaseRef<_asset_type>::Get(); }
+
+		// Sets asset
+		void SetAssetBase(Asset* asset) override { *this = Ref(dynamic_cast<_asset_type*>(asset)); }
 
         // Sets asset instance
-        void SetInstance(Asset* asset)
+        void SetInstance(Asset* asset) override
         {
             *this = Ref(dynamic_cast<_asset_type*>(asset));
             mIsInstance = true;
         }
 
         // Creates own asset instance. If asset is empty creates empty instance, copies asset if else
-        void CreateInstance()
+        void CreateInstance() override
         {
             _asset_type* asset;
             if (Base::mPtr)
@@ -60,7 +105,7 @@ namespace o2
         }
 
         // Removes own asset instance
-        void RemoveInstance()
+        void RemoveInstance() override
         {
             if (!mIsInstance)
                 return;
@@ -71,7 +116,7 @@ namespace o2
         }
 
         // Saves asset instance
-        void SaveInstance(const String& path)
+        void SaveInstance(const String& path) override
         {
             if (!mIsInstance)
                 return;
@@ -83,7 +128,7 @@ namespace o2
         }
 
         // Is asset instance owner
-        bool IsInstance() const { return mIsInstance; }
+        bool IsInstance() const override { return mIsInstance; }
 
         // Creates asset and returns reference
         template<typename ... _args>
@@ -193,3 +238,29 @@ namespace o2
 
     using AssetRef = Ref<o2::Asset>;
 }
+// --- META ---
+
+CLASS_BASES_META(o2::BaseAssetRef)
+{
+    BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::BaseAssetRef)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::BaseAssetRef)
+{
+
+    FUNCTION().PUBLIC().SIGNATURE(const Type&, GetAssetType);
+    FUNCTION().PUBLIC().SIGNATURE(const Asset*, GetAssetBase);
+    FUNCTION().PUBLIC().SIGNATURE(Asset*, GetAssetBase);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAssetBase, Asset*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInstance, Asset*);
+    FUNCTION().PUBLIC().SIGNATURE(void, CreateInstance);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveInstance);
+    FUNCTION().PUBLIC().SIGNATURE(void, SaveInstance, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsInstance);
+}
+END_META;
+// --- END META ---

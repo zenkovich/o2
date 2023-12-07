@@ -8,3 +8,7 @@ DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Asset>);
 namespace o2
 {
 }
+// --- META ---
+
+DECLARE_CLASS(o2::BaseAssetRef, o2__BaseAssetRef);
+// --- END META ---
