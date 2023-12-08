@@ -28,7 +28,13 @@ namespace Editor
 		AssetProperty(const AssetProperty& other);
 
 		// Copy operator
-		AssetProperty& operator=(const AssetProperty& other);
+        AssetProperty& operator=(const AssetProperty& other);
+
+        // Returns editing by this field type
+        const Type* GetValueType() const override;
+
+        // Returns editing by this field type by static function, can't be changed during runtime
+        static const Type* GetValueTypeStatic();
 
 		// Sets value asset id
 		void SetAssetId(const UID& id);
@@ -151,6 +157,8 @@ CLASS_METHODS_META(Editor::AssetProperty)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AssetProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAssetId, const UID&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAssetType, const Type*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);

@@ -18,7 +18,17 @@ namespace Editor
 		InitializeControls();
 	}
 
-	AssetProperty& AssetProperty::operator=(const AssetProperty& other)
+    const Type* AssetProperty::GetValueType() const
+    {
+		return GetValueTypeStatic();
+    }
+
+    const Type* AssetProperty::GetValueTypeStatic()
+    {
+        return &TypeOf(BaseAssetRef);
+    }
+
+    AssetProperty& AssetProperty::operator=(const AssetProperty& other)
 	{
 		TPropertyField::operator =(other);
 		InitializeControls();

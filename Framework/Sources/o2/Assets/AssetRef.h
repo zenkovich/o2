@@ -201,6 +201,8 @@ namespace o2
         {
             typedef _this_type thisclass;
             processor.template StartBases<_this_type>(object, type);
+
+            BASE_CLASS(BaseAssetRef);
         }
 
         template<typename _type_processor>
