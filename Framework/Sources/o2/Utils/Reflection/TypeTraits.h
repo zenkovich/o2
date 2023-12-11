@@ -176,29 +176,33 @@ namespace o2
     template<typename _type>
     const Type& GetTypeOf()
     {
-        if constexpr (std::is_pointer<_type>::value)
+        if constexpr (std::is_base_of<IObject, _type>::value)
         {
-            return *GetTypeOf<typename std::remove_pointer<_type>::type>().GetPointerType();
+            return *_type::type;
+        }
+        else if constexpr (IsRef<_type>::value)
+        {
+            return *Reflection::GetReferenceType<typename std::remove_const<typename ExtractRefType<_type>::type>::type>();
+        }
+        else if constexpr (std::is_pointer<_type>::value)
+        {
+            return *Reflection::GetPointerType<typename std::remove_const<typename std::remove_pointer<_type>::type>::type>();
         }
         else if constexpr (IsVector<_type>::value)
         {
-            return *Reflection::InitializeVectorType<typename ExtractVectorElementType<_type>::type>();
+            return *Reflection::GetVectorType<typename ExtractVectorElementType<_type>::type>();
         }
         else if constexpr (IsStringAccessor<_type>::value)
         {
-            return *Reflection::InitializeAccessorType<typename _type::valueType, _type>();
+            return *Reflection::GetAccessorType<typename _type::valueType, _type>();
         }
         else if constexpr (IsMap<_type>::value)
         {
-            return *Reflection::InitializeMapType<typename ExtractMapKeyType<_type>::type, typename ExtractMapValueType<_type>::type>();
+            return *Reflection::GetMapType<typename ExtractMapKeyType<_type>::type, typename ExtractMapValueType<_type>::type>();
         }
         else if constexpr (IsProperty<_type>::value)
         {
-            return *Reflection::InitializePropertyType<typename _type::valueType, _type>();
-        }
-        else if constexpr (std::is_base_of<IObject, _type>::value)
-        {
-            return *_type::type;
+            return *Reflection::GetPropertyType<typename _type::valueType, _type>();
         }
         else if constexpr (IsFundamental<_type>::value && !std::is_const<_type>::value)
         {

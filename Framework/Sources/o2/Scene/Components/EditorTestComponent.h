@@ -24,7 +24,7 @@ namespace o2
 
         enum class TestEnum { A, B, C, D, E, F, G, H, K, L, M, N };
          
-        class TestInside: public ISerializable
+        class TestInside: public ISerializable, public RefCounterable
         {
         public:
             float mFloat = 1.2f;        // @SERIALIZABLE @SCRIPTABLE
@@ -86,6 +86,7 @@ namespace o2
         TestInside mTestInside;                             // @SERIALIZABLE
         TestEnum mTestEnum;                                 // @SERIALIZABLE
         TestInside* mTestInsidePtr = nullptr;               // @SERIALIZABLE
+        Ref<TestInside> mTestInsideRef;                    // @SERIALIZABLE
 
         Vector<int> mIntVector;                    // @SERIALIZABLE
         Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
@@ -156,6 +157,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestInside);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestEnum);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mTestInsidePtr);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestInsideRef);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mIntVector);
     FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().NAME(mTestInsideVector);
     FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().NAME(mTestInsideptrsVector);
@@ -190,6 +192,7 @@ END_META;
 CLASS_BASES_META(o2::EditorTestComponent::TestInside)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::EditorTestComponent::TestInside)

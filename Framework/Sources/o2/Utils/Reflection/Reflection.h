@@ -79,25 +79,29 @@ namespace o2
         template<typename _type>
         static EnumType* InitializeEnum(const char* name, std::function<Map<int, String>()> func);
 
-        // Initializes pointer type
+        // Returns pointer type
         template<typename _type>
-        static const Type* InitializePointerType(const Type* type);
+        static const Type* GetPointerType();
 
-        // Initializes property type 
+        // Returns reference type
+        template<typename _type>
+        static const Type* GetReferenceType();
+
+        // Returns property type 
         template<typename _value_type, typename _property_type>
-        static const PropertyType* InitializePropertyType();
+        static const PropertyType* GetPropertyType();
 
-        // Initializes vector type
+        // Returns vector type
         template<typename _element_type>
-        static const VectorType* InitializeVectorType();
+        static const VectorType* GetVectorType();
 
-        // Initializes dictionary type
+        // Returns dictionary type
         template<typename _key_type, typename _value_type>
-        static const MapType* InitializeMapType();
+        static const MapType* GetMapType();
 
-        // Initializes accessor type
+        // Returns accessor type
         template<typename _return_type, typename _accessor_type>
-        static const TStringPointerAccessorType<_return_type, _accessor_type>* InitializeAccessorType();
+        static const TStringPointerAccessorType<_return_type, _accessor_type>* GetAccessorType();
 
         // Type dynamic casting function template
         template<typename _source_type, typename _target_type>
@@ -266,15 +270,35 @@ namespace o2
     }
 
     template<typename _type>
-    const Type* Reflection::InitializePointerType(const Type* type)
+    const Type* Reflection::GetPointerType()
     {
-        if (type->mPtrType)
-            return type->mPtrType;
+        const Type* baseType = &TypeOf(_type);
 
-        TPointerType<_type>* newType = mnew TPointerType<_type>(type);
+        if (baseType->mPtrType)
+            return baseType->mPtrType;
+
+        TPointerType<_type>* newType = mnew TPointerType<_type>(baseType);
         newType->mId = mInstance->mLastGivenTypeId++;
 
-        type->mPtrType = newType;
+        baseType->mPtrType = newType;
+
+        mInstance->mTypes[newType->GetName()] = newType;
+
+        return newType;
+    }
+
+    template<typename _type>
+    const Type* Reflection::GetReferenceType()
+    {
+        const Type* baseType = &TypeOf(_type);
+
+        if (baseType->mRefType)
+            return baseType->mRefType;
+
+        TReferenceType<_type>* newType = mnew TReferenceType<_type>(baseType);
+        newType->mId = mInstance->mLastGivenTypeId++;
+
+        baseType->mRefType = newType;
 
         mInstance->mTypes[newType->GetName()] = newType;
 
@@ -294,7 +318,7 @@ namespace o2
     }
 
     template<typename _value_type, typename _property_type>
-    const PropertyType* Reflection::InitializePropertyType()
+    const PropertyType* Reflection::GetPropertyType()
     {
         String typeName = (String)(typeid(_property_type).name()) + (String)"<" + TypeOf(_value_type).GetName() + ">";
 
@@ -311,7 +335,7 @@ namespace o2
     }
 
     template<typename _element_type>
-    const VectorType* Reflection::InitializeVectorType()
+    const VectorType* Reflection::GetVectorType()
     {
         String typeName = "o2::Vector<" + TypeOf(_element_type).GetName() + ">";
 
@@ -328,7 +352,7 @@ namespace o2
     }
 
     template<typename _key_type, typename _value_type>
-    const MapType* Reflection::InitializeMapType()
+    const MapType* Reflection::GetMapType()
     {
         String typeName = "o2::Dictionary<" + TypeOf(_key_type).GetName() + ", " + TypeOf(_value_type).GetName() + ">";
 
@@ -345,7 +369,7 @@ namespace o2
     }
 
     template<typename _return_type, typename _accessor_type>
-    const TStringPointerAccessorType<_return_type, _accessor_type>* Reflection::InitializeAccessorType()
+    const TStringPointerAccessorType<_return_type, _accessor_type>* Reflection::GetAccessorType()
     {
         String typeName = (String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">";
 

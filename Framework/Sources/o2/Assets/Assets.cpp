@@ -23,7 +23,9 @@ namespace o2
     }
 
     Assets::~Assets()
-    {}
+    {
+        mInstance = nullptr;
+    }
 
     String Assets::GetAssetsPath() const
     {

@@ -109,12 +109,6 @@ namespace o2
         if (fnd != mInstance->mTypes.End())
             return fnd->second;
 
-        if (name[name.Length() - 1] == '*')
-        {
-            const Type* unptrType = GetType(name.SubStr(0, name.Length() - 1));
-            return unptrType->GetPointerType();
-        }
-
         return nullptr;
     }
 
@@ -140,7 +134,6 @@ namespace o2
         Type::Dummy::type->mId = mInstance->mLastGivenTypeId++;
 
         mInstance->mTypes[FundamentalTypeContainer<void>::type->GetName()] = FundamentalTypeContainer<void>::type;
-        mInstance->mTypes[Type::Dummy::type->GetName()] = Type::Dummy::type;
     }
 
     ReflectionInitializationTypeProcessor::FieldProcessor ReflectionInitializationTypeProcessor::StartField()

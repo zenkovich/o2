@@ -404,6 +404,39 @@ namespace o2
         return mnew PointerValueProxy<void*>((void**)object);
     }
 
+    ReferenceType::ReferenceType(const Type* baseType, ITypeSerializer* serializer) :
+        Type("Ref<" + baseType->GetName() + ">", sizeof(Ref<Type::Dummy>), serializer),
+        mBaseType(baseType)
+    {}
+
+    Type::Usage ReferenceType::GetUsage() const
+    {
+        return Usage::Reference;
+    }
+
+    const Type* ReferenceType::GetBaseType() const
+    {
+        return mBaseType;
+    }
+
+    void* ReferenceType::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
+    {
+        return mBaseType->GetFieldPtr(*(void**)object, path, fieldInfo);
+    }
+
+    void* ReferenceType::CreateSample() const
+    {
+        return mBaseType->CreateSample();
+    }
+
+    IAbstractValueProxy* ReferenceType::GetValueProxy(void* object) const
+    {
+        if (auto objectUnptrType = dynamic_cast<const ObjectType*>(mBaseType))
+            return objectUnptrType->GetValueProxy(*(void**)object);
+
+        return mnew PointerValueProxy<void*>((void**)object);
+    }
+
     PropertyType::PropertyType(const String& name, int size, ITypeSerializer* serializer):
         Type(name, size, serializer)
     {}
@@ -464,11 +497,6 @@ namespace o2
     Type::Usage FunctionType::GetUsage() const
     {
         return Type::Usage::Function;
-    }
-
-    const Type* FunctionType::GetPointerType() const
-    {
-        return nullptr;
     }
 
     void* FunctionType::CreateSample() const

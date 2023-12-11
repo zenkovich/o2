@@ -45,7 +45,7 @@ namespace o2
     public:
         enum class Usage
         {
-            Regular, Object, Vector, Map, StringAccessor, Enumeration, Pointer, Property, Function
+            Regular, Object, Vector, Map, StringAccessor, Enumeration, Pointer, Reference, Property, Function
         };
 
         struct BaseType
@@ -81,9 +81,6 @@ namespace o2
 
         // Is this type based on other
         bool IsBasedOn(const Type& other) const;
-
-        // Returns pointer of type (type -> type*)
-        virtual const Type* GetPointerType() const = 0;
 
         // Returns type usage
         virtual Usage GetUsage() const;
@@ -177,6 +174,7 @@ namespace o2
         Vector<StaticFunctionInfo*> mStaticFunctions; // Functions informations
 
         mutable Type* mPtrType = nullptr; // Pointer type from this
+        mutable Type* mRefType = nullptr; // Reference type from this
 
         ITypeSerializer* mSerializer = nullptr; // Value serializer
 
@@ -206,9 +204,6 @@ namespace o2
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
     };
 
     // -------------
@@ -222,9 +217,6 @@ namespace o2
 
         // Returns type usage
         Usage GetUsage() const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
 
         // Creates sample copy and returns him
         void* CreateSample() const override;
@@ -279,9 +271,6 @@ namespace o2
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
     };
 
     // ----------------
@@ -298,7 +287,7 @@ namespace o2
     // ------------
     // Pointer type
     // ------------
-    class PointerType: public Type
+    class PointerType : public Type
     {
     public:
         // Constructor
@@ -327,7 +316,7 @@ namespace o2
     // Specialized pointer type
     // ------------------------
     template<typename _type>
-    class TPointerType: public PointerType
+    class TPointerType : public PointerType
     {
     public:
         // Default constructor
@@ -338,9 +327,51 @@ namespace o2
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
+    };
 
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
+    // ----------------------
+    // Reference type (Ref<>)
+    // ----------------------
+    class ReferenceType : public Type
+    {
+    public:
+        // Constructor
+        ReferenceType(const Type* baseType, ITypeSerializer* serializer);
+
+        // Returns type usage
+        Usage GetUsage() const override;
+
+        // Returns base type
+        const Type* GetBaseType() const;
+
+        // Returns filed pointer by path
+        void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
+
+        // Creates sample copy and returns him
+        void* CreateSample() const override;
+
+        // Returns abstract value proxy for object value
+        IAbstractValueProxy* GetValueProxy(void* object) const override;
+
+    protected:
+        const Type* mBaseType;
+    };
+
+    // --------------------------
+    // Specialized reference type
+    // --------------------------
+    template<typename _type>
+    class TReferenceType : public ReferenceType
+    {
+    public:
+        // Default constructor
+        TReferenceType(const Type* baseType);
+
+        // Creates sample copy and returns him
+        void* CreateSample() const override;
+
+        // Returns abstract value proxy for object value
+        IAbstractValueProxy* GetValueProxy(void* object) const override;
     };
 
     // -------------
@@ -383,9 +414,6 @@ namespace o2
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
 
         // Returns filed pointer by path
         void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
@@ -475,9 +503,6 @@ namespace o2
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
     };
 
     // --------------------------
@@ -531,9 +556,6 @@ namespace o2
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
     };
 
     // -------------------------------------------
@@ -572,9 +594,6 @@ namespace o2
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
 
         // Returns value pointer by key
         void* GetValue(void* object, const String& key) const override;
@@ -625,9 +644,6 @@ namespace o2
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
     };
 
     // --------------------------
@@ -925,15 +941,6 @@ namespace o2
         return mnew PointerValueProxy<_type>((_type*)object);
     }
 
-    template<typename _type>
-    const Type* TType<_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_type>(this);
-
-        return mPtrType;
-    }
-
     // --------------------------
     // TObjectType implementation
     // --------------------------
@@ -967,15 +974,6 @@ namespace o2
         }
     }
 
-    template<typename _type>
-    const Type* TObjectType<_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_type>(this);
-
-        return mPtrType;
-    }
-
     // ------------------------------
     // FundamentalType implementation
     // ------------------------------
@@ -990,7 +988,7 @@ namespace o2
     // -----------------------------
 
     template<typename _type>
-    TPointerType<_type>::TPointerType(const Type* unptrType):
+    TPointerType<_type>::TPointerType(const Type * unptrType) :
         PointerType(unptrType, mnew TypeSerializer<_type*>())
     {}
 
@@ -1006,13 +1004,25 @@ namespace o2
         return mnew PointerValueProxy<_type*>((_type**)object);
     }
 
-    template<typename _type>
-    const Type* TPointerType<_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_type>(this);
+    // -------------------------------
+    // TReferenceType<> implementation
+    // -------------------------------
 
-        return mPtrType;
+    template<typename _type>
+    TReferenceType<_type>::TReferenceType(const Type* baseType) :
+        ReferenceType(baseType, mnew TypeSerializer<Ref<_type>>())
+    {}
+
+    template<typename _type>
+    void* TReferenceType<_type>::CreateSample() const
+    {
+        return mnew Ref<_type>();
+    }
+
+    template<typename _type>
+    IAbstractValueProxy* TReferenceType<_type>::GetValueProxy(void* object) const
+    {
+        return mnew PointerValueProxy<_type*>((_type**)object);
     }
 
     // ------------------------------
@@ -1036,15 +1046,6 @@ namespace o2
     IAbstractValueProxy* TPropertyType<_value_type, _property_type>::GetValueProxy(void* object) const
     {
         return mnew PropertyValueProxy<_value_type, _property_type>((_property_type*)object);
-    }
-
-    template<typename _value_type, typename _property_type>
-    const Type* TPropertyType<_value_type, _property_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_property_type>(this);
-
-        return mPtrType;
     }
 
     template<typename _value_type, typename _property_type>
@@ -1160,15 +1161,6 @@ namespace o2
     }
 
     template<typename _element_type>
-    const Type* TVectorType<_element_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<Vector<_element_type>>(this);
-
-        return mPtrType;
-    }
-
-    template<typename _element_type>
     void VectorCountFieldSerializer<_element_type>::Serialize(void* object, DataValue& data) const
     {
         const VectorType& type = (const VectorType&)(GetTypeOf<Vector<_element_type>>());
@@ -1263,15 +1255,6 @@ namespace o2
         return mnew PointerValueProxy<Map<_key_type, _value_type>>((Map<_key_type, _value_type>*)object);
     }
 
-    template<typename _key_type, typename _value_type>
-    const Type* TMapType<_key_type, _value_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<Map<_key_type, _value_type>>(this);
-
-        return mPtrType;
-    }
-
     // ----------------------------------------
     // StringPointerAccessorType implementation
     // ----------------------------------------
@@ -1307,15 +1290,6 @@ namespace o2
             return mReturnType->GetFieldPtr(&value, path.SubStr(delPos + 1), fieldInfo);
 
         return nullptr;
-    }
-
-    template<typename _return_type, typename _accessor_type>
-    const Type* TStringPointerAccessorType<_return_type, _accessor_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_accessor_type>(this);
-
-        return mPtrType;
     }
 
     template<typename _return_type, typename _accessor_type>
@@ -1362,15 +1336,6 @@ namespace o2
     IAbstractValueProxy* TEnumType<_type>::GetValueProxy(void* object) const
     {
         return mnew PointerValueProxy<_type>((_type*)object);
-    }
-
-    template<typename _type>
-    const Type* TEnumType<_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_type>(this);
-
-        return mPtrType;
     }
 
     FUNDAMENTAL_META(RectF)
