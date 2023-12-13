@@ -167,7 +167,7 @@ namespace Editor
 		else if (type->GetUsage() == Type::Usage::Pointer)
 		{
 			auto pointerType = dynamic_cast<const PointerType*>(type);
-			auto unpointedType = pointerType->GetUnpointedType();
+			auto unpointedType = pointerType->GetBaseType();
 			if (unpointedType->GetUsage() == Type::Usage::Object)
 			{
 				auto fieldObjectType = dynamic_cast<const ObjectType*>(unpointedType);

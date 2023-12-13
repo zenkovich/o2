@@ -291,13 +291,13 @@ namespace o2
     {
     public:
         // Constructor
-        PointerType(const Type* unptrType, ITypeSerializer* serializer);
+        PointerType(const Type* baseType, ITypeSerializer* serializer);
 
         // Returns type usage
         Usage GetUsage() const override;
 
-        // Returns unpointed type
-        const Type* GetUnpointedType() const;
+        // Returns base type
+        const Type* GetBaseType() const;
 
         // Returns filed pointer by path
         void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
@@ -309,7 +309,7 @@ namespace o2
         IAbstractValueProxy* GetValueProxy(void* object) const override;
 
     protected:
-        const Type* mUnptrType;
+        const Type* mBaseType;
     };
 
     // ------------------------
@@ -320,7 +320,7 @@ namespace o2
     {
     public:
         // Default constructor
-        TPointerType(const Type* unptrType);
+        TPointerType(const Type* baseType);
 
         // Creates sample copy and returns him
         void* CreateSample() const override;
@@ -988,8 +988,8 @@ namespace o2
     // -----------------------------
 
     template<typename _type>
-    TPointerType<_type>::TPointerType(const Type * unptrType) :
-        PointerType(unptrType, mnew TypeSerializer<_type*>())
+    TPointerType<_type>::TPointerType(const Type * baseType) :
+        PointerType(baseType, mnew TypeSerializer<_type*>())
     {}
 
     template<typename _type>

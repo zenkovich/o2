@@ -480,7 +480,7 @@ namespace Editor
 		{
 			const Type* itemType = &proxies[0].first->GetType();
 			if (auto ptrType = dynamic_cast<const PointerType*>(itemType))
-				itemType = ptrType->GetUnpointedType();
+				itemType = ptrType->GetBaseType();
 
 			if (auto objectType = dynamic_cast<const ObjectType*>(itemType))
 			{

@@ -122,7 +122,7 @@ namespace o2
             return nullptr;
 
         if (mType->GetUsage() == Type::Usage::Pointer)
-            return ((PointerType*)mType)->GetUnpointedType()->GetFieldPtr(obj, path, fieldInfo);
+            return ((PointerType*)mType)->GetBaseType()->GetFieldPtr(obj, path, fieldInfo);
 
         return mType->GetFieldPtr(obj, path, fieldInfo);
     }

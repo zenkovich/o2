@@ -330,22 +330,42 @@ namespace Editor
 		}
 	}
 
+	class DummyObj : public RefCounterable
+	{
+
+	};
+
 	IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy) const
 	{
 		const Type& proxyType = proxy->GetType();
-		if (proxyType.GetUsage() != Type::Usage::Pointer)
-			return nullptr;
+		if (proxyType.GetUsage() == Type::Usage::Pointer)
+		{
+			const Type& baseType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
+			if (baseType.IsBasedOn(TypeOf(IObject)))
+			{
+				const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
 
-		const Type& unptrType = *dynamic_cast<const PointerType&>(proxyType).GetUnpointedType();
-		if (!unptrType.IsBasedOn(TypeOf(IObject)))
-			return nullptr;
+				void* valuePtr;
+				proxy->GetValuePtr(&valuePtr);
 
-		const ObjectType& objectType = dynamic_cast<const ObjectType&>(unptrType);
+				return objectType.DynamicCastToIObject(valuePtr);
+			}
+		}
+		else if (proxyType.GetUsage() == Type::Usage::Reference)
+        {
+            const Type& baseType = *dynamic_cast<const ReferenceType&>(proxyType).GetBaseType();
+            if (baseType.IsBasedOn(TypeOf(IObject)))
+            {
+                const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
 
-		void* valuePtr;
-		proxy->GetValuePtr(&valuePtr);
+                void* valuePtr = proxyType.CreateSample();
+                proxy->GetValuePtr(valuePtr);
 
-		return objectType.DynamicCastToIObject(valuePtr);
+                return objectType.DynamicCastToIObject(valuePtr);
+            }
+		}
+
+		return nullptr;
 	}
 
 	void ObjectPtrProperty::SetProxy(IAbstractValueProxy* proxy, IObject* object)
@@ -354,7 +374,7 @@ namespace Editor
 		if (proxyType.GetUsage() != Type::Usage::Pointer)
 			return;
 
-		const Type& unptrType = *dynamic_cast<const PointerType&>(proxyType).GetUnpointedType();
+		const Type& unptrType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
 		if (!unptrType.IsBasedOn(TypeOf(IObject)))
 			return;
 

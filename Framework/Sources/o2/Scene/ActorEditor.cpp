@@ -527,7 +527,7 @@ namespace o2
             {
                 const PointerType* fieldType = (const PointerType*)field->GetType();
 
-                if (fieldType->GetUnpointedType()->IsBasedOn(TypeOf(Component)))
+                if (fieldType->GetBaseType()->IsBasedOn(TypeOf(Component)))
                     componentsPointers.Add((Component**)(field->GetValuePtrStrong(newComponent)));
 
                 if (*fieldType == TypeOf(Actor*))

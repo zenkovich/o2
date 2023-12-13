@@ -19,7 +19,7 @@ namespace o2
 
     Task::~Task()
     {
-        o2Tasks.mTasks.Remove(Ref(this));
+        //o2Tasks.mTasks.Remove(Ref(this));
     }
 
     void Task::Update(float dt)

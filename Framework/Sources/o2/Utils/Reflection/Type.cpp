@@ -371,9 +371,9 @@ namespace o2
         return mEntries;
     }
 
-    PointerType::PointerType(const Type* unptrType, ITypeSerializer* serializer):
-        Type(unptrType->GetName() + "*", sizeof(void*), serializer),
-        mUnptrType(unptrType)
+    PointerType::PointerType(const Type* baseType, ITypeSerializer* serializer):
+        Type(baseType->GetName() + "*", sizeof(void*), serializer),
+        mBaseType(baseType)
     {}
 
     Type::Usage PointerType::GetUsage() const
@@ -381,24 +381,24 @@ namespace o2
         return Usage::Pointer;
     }
 
-    const Type* PointerType::GetUnpointedType() const
+    const Type* PointerType::GetBaseType() const
     {
-        return mUnptrType;
+        return mBaseType;
     }
 
     void* PointerType::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
     {
-        return mUnptrType->GetFieldPtr(*(void**)object, path, fieldInfo);
+        return mBaseType->GetFieldPtr(*(void**)object, path, fieldInfo);
     }
 
     void* PointerType::CreateSample() const
     {
-        return mUnptrType->CreateSample();
+        return mBaseType->CreateSample();
     }
 
     IAbstractValueProxy* PointerType::GetValueProxy(void* object) const
     {
-        if (auto objectUnptrType = dynamic_cast<const ObjectType*>(mUnptrType))
+        if (auto objectUnptrType = dynamic_cast<const ObjectType*>(mBaseType))
             return objectUnptrType->GetValueProxy(*(void**)object);
 
         return mnew PointerValueProxy<void*>((void**)object);

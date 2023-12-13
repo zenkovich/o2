@@ -247,7 +247,7 @@ namespace o2
         else if (fieldType.GetUsage() == Type::Usage::Pointer)
         {
             auto& pointerType = dynamic_cast<const PointerType&>(fieldType);
-            GetFieldDifference(createDiffFunc, stack, *pointerType.GetUnpointedType(), changedFieldObject, protoFieldObject);
+            GetFieldDifference(createDiffFunc, stack, *pointerType.GetBaseType(), changedFieldObject, protoFieldObject);
         }
         else if (!fieldType.IsValueEquals(changedFieldObject, protoFieldObject))
             createDiffFunc(GetFieldPath(stack));

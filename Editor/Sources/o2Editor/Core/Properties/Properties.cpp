@@ -189,7 +189,7 @@ namespace Editor
 		if (type->IsBasedOn(TypeOf(IObject)))
 			return true;
 
-		if (type->GetUsage() == Type::Usage::Pointer && ((PointerType*)type)->GetUnpointedType()->IsBasedOn((TypeOf(IObject))))
+		if (type->GetUsage() == Type::Usage::Pointer && ((PointerType*)type)->GetBaseType()->IsBasedOn((TypeOf(IObject))))
 			return true;
 
 		if (type->GetUsage() == Type::Usage::Enumeration)
@@ -317,14 +317,28 @@ namespace Editor
 
 		if (type->GetUsage() == Type::Usage::Pointer)
 		{
-			auto pointerType = dynamic_cast<const PointerType*>(type);
-			if (pointerType->GetUnpointedType()->IsBasedOn((TypeOf(IObject))))
+            auto pointerType = dynamic_cast<const PointerType*>(type);
+            auto baseType = pointerType->GetBaseType();
+			if (baseType->IsBasedOn((TypeOf(IObject))))
 			{
-				return CreateObjectPtrField(dynamic_cast<const ObjectType*>(pointerType->GetUnpointedType()), name,
+				return CreateObjectPtrField(dynamic_cast<const ObjectType*>(baseType), name,
 											onChangeCompleted, onChanged);
 			}
 
 			return nullptr;
+		}
+
+		if (type->GetUsage() == Type::Usage::Reference)
+        {
+            auto referenceType = dynamic_cast<const ReferenceType*>(type);
+			auto baseType = referenceType->GetBaseType();
+            if (baseType->IsBasedOn((TypeOf(IObject))))
+            {
+                return CreateObjectPtrField(dynamic_cast<const ObjectType*>(baseType), name,
+                                            onChangeCompleted, onChanged);
+            }
+
+            return nullptr;
 		}
 
 		if (type->GetUsage() == Type::Usage::Enumeration)
@@ -482,7 +496,7 @@ namespace Editor
 		{
 			if (valueType->GetUsage() == Type::Usage::Pointer && kv.first->GetUsage() == Type::Usage::Pointer)
 			{
-				if (((PointerType*)valueType)->GetUnpointedType()->IsBasedOn(*((PointerType*)kv.first)->GetUnpointedType()))
+				if (((PointerType*)valueType)->GetBaseType()->IsBasedOn(*((PointerType*)kv.first)->GetBaseType()))
 					return kv.second;
 			}
 			else if (valueType->IsBasedOn(*kv.first))
