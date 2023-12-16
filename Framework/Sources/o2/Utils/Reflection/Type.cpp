@@ -431,13 +431,10 @@ namespace o2
 
     IAbstractValueProxy* ReferenceType::GetValueProxy(void* object) const
     {
-        if (auto objectUnptrType = dynamic_cast<const ObjectType*>(mBaseType))
-            return objectUnptrType->GetValueProxy(*(void**)object);
-
         return mnew PointerValueProxy<void*>((void**)object);
     }
 
-    PropertyType::PropertyType(const String& name, int size, ITypeSerializer* serializer):
+    PropertyType::PropertyType(const String& name, int size, ITypeSerializer* serializer) :
         Type(name, size, serializer)
     {}
 
@@ -503,6 +500,9 @@ namespace o2
     {
         return nullptr;
     }
+
+    void FunctionType::DestroySample(void* sample) const
+    {}
 
     IAbstractValueProxy* FunctionType::GetValueProxy(void* object) const
     {

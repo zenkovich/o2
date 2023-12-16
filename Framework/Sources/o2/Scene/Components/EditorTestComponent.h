@@ -110,6 +110,8 @@ namespace o2
 
         void Test();
 
+        void OnStart() override;
+
         SERIALIZABLE(EditorTestComponent);
     };
 }
@@ -186,6 +188,7 @@ CLASS_METHODS_META(o2::EditorTestComponent)
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Vec2I>&, GetArray);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE(void, Test);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnStart);
 }
 END_META;
 

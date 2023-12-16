@@ -13,6 +13,11 @@ void o2::EditorTestComponent::Test()
 {
     //o2Debug.Log("test");
 }
+
+void o2::EditorTestComponent::OnStart()
+{
+    mTestInsideRef = mmake<TestInside>();
+}
 // --- META ---
 
 ENUM_META(o2::EditorTestComponent::TestEnum)

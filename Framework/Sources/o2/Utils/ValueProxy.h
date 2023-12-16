@@ -9,7 +9,7 @@
 namespace o2
 {
     class Type;
-    
+
     // ----------------------------------------------------------------------------
     // Abstract value proxy. Accepts by void*, value by pointer must match the type
     // ----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ namespace o2
     // Typed value proxy
     // -----------------
     template<typename _type>
-    class IValueProxy: public IAbstractValueProxy
+    class IValueProxy : public IAbstractValueProxy
     {
     public:
         virtual void SetValue(const _type& value) = 0;
@@ -51,14 +51,14 @@ namespace o2
     // Typed pointer value proxy. Stores the pointer to value and works with it
     // ------------------------------------------------------------------------
     template<typename _type>
-    class PointerValueProxy: public IValueProxy<_type>, public IPointerValueProxy
+    class PointerValueProxy : public IValueProxy<_type>, public IPointerValueProxy
     {
     protected:
         _type* mValuePtr = nullptr;
 
     public:
         PointerValueProxy() {}
-        PointerValueProxy(_type* valuePtr):mValuePtr(valuePtr) {}
+        PointerValueProxy(_type* valuePtr) :mValuePtr(valuePtr) {}
 
         void SetValue(const _type& value) override { *mValuePtr = value; }
         _type GetValue() const override { return *mValuePtr; }
@@ -68,10 +68,38 @@ namespace o2
     };
 
     // ----------------------------------------------------
+    // Reference pointer value proxy. Works with Ref<_type>
+    // ----------------------------------------------------
+    class IRefPointerValueProxy
+    {
+    public:
+        virtual void* GetRefValueVoidPtr() const = 0;
+        virtual void SetRefValuePtr(void* value) = 0;
+    };
+
+    // ----------------------------------------------------
+    // Reference pointer value proxy. Works with Ref<_type>
+    // ----------------------------------------------------
+    template<typename _type>
+    class RefPointerValueProxy : public PointerValueProxy<Ref<_type>>, public IRefPointerValueProxy
+    {
+    public:
+        using Base = PointerValueProxy<Ref<_type>>;
+
+    public:
+        RefPointerValueProxy() {}
+        RefPointerValueProxy(Ref<_type>* valuePtr) :Base(valuePtr) {}
+
+        void* GetRefValueVoidPtr() const override { return Base::GetValuePointer()->Get(); }
+        void SetRefValuePtr(void* value) override { (*Base::GetValuePointer()) = Ref((_type*)value); }
+    };
+
+
+    // ----------------------------------------------------
     // Functional proxy, uses function to set and get value
     // ----------------------------------------------------
     template<typename _type>
-    class FunctionalValueProxy: public IValueProxy<_type>
+    class FunctionalValueProxy : public IValueProxy<_type>
     {
     protected:
         Function<void(_type)> mSetter;
@@ -79,27 +107,28 @@ namespace o2
 
     public:
         FunctionalValueProxy() {}
-        FunctionalValueProxy(const Function<void(_type)> setter, const Function<_type()> getter):
-            mSetter(setter), mGetter(getter) {}
+        FunctionalValueProxy(const Function<void(_type)> setter, const Function<_type()> getter) :
+            mSetter(setter), mGetter(getter)
+        {}
 
         void SetValue(const _type& value) override { mSetter(value); }
         _type GetValue() const override { return mGetter(); }
     };
-    
+
     // -------------------------------------------------------------------------
     // Property proxy, uses setter and getter from property to set and get value
     // -------------------------------------------------------------------------
     template<typename _type, typename _property_type>
-    class PropertyValueProxy: public IValueProxy<_type>
+    class PropertyValueProxy : public IValueProxy<_type>
     {
         _property_type* mProperty;
 
     public:
         PropertyValueProxy() {}
-        PropertyValueProxy(_property_type* ptr):mProperty(ptr) {}
-        
+        PropertyValueProxy(_property_type* ptr) :mProperty(ptr) {}
+
         bool operator==(const PropertyValueProxy<_type, _property_type>& other) const { return mProperty == other.mProperty; }
-        
+
         void SetValue(const _type& value) override { mProperty->Set(value); }
         _type GetValue() const override { return mProperty->Get(); }
     };
@@ -176,13 +205,13 @@ namespace o2
     {
         SetValue(*(_type*)value);
     }
-    
+
     template<typename _type>
     void IValueProxy<_type>::GetValuePtr(void* value) const
     {
         *(_type*)value = GetValue();
     }
-    
+
     template<typename _type>
     const Type& IValueProxy<_type>::GetType() const
     {

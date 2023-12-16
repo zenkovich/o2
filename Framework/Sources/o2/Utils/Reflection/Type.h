@@ -129,6 +129,9 @@ namespace o2
         // Creates sample copy and returns him
         virtual void* CreateSample() const = 0;
 
+        // Destroys sample
+        virtual void DestroySample(void* sample) const = 0;
+
         // Returns filed pointer by path
         virtual void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const;
 
@@ -202,6 +205,9 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
+        // Destroys sample
+        void DestroySample(void* sample) const override;
+
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
     };
@@ -220,6 +226,9 @@ namespace o2
 
         // Creates sample copy and returns him
         void* CreateSample() const override;
+
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
@@ -268,6 +277,9 @@ namespace o2
 
         // Creates sample copy and returns him
         void* CreateSample() const override;
+
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
@@ -325,6 +337,9 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
+        // Destroys sample
+        void DestroySample(void* sample) const override;
+
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
     };
@@ -350,8 +365,17 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
+        // Creates sample reference with object
+        virtual void* CreateSample(void* object) const = 0;
+
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
+
+        // Returns raw pointer from reference pointer
+        virtual void* GetObjectRawPtr(void* refPtr) const = 0;
+
+        // Sets raw pointer to reference
+        virtual void SetObjectRawPtr(void* object, void* refPtr) = 0;
 
     protected:
         const Type* mBaseType;
@@ -370,8 +394,20 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
+        // Destroys sample
+        void DestroySample(void* sample) const override;
+
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
+
+        // Returns raw pointer from reference pointer
+        void* GetObjectRawPtr(void* refPtr) const override;
+
+        // Sets raw pointer to reference
+        void SetObjectRawPtr(void* object, void* refPtr) override;
+
+        // Creates sample reference with object
+        void* CreateSample(void* object) const override;
     };
 
     // -------------
@@ -411,6 +447,9 @@ namespace o2
 
         // Creates sample copy and returns him
         void* CreateSample() const override;
+
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
@@ -501,6 +540,9 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
+        // Destroys sample
+        void DestroySample(void* sample) const override;
+
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
     };
@@ -554,6 +596,9 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
+        // Destroys sample
+        void DestroySample(void* sample) const override;
+
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
     };
@@ -591,6 +636,9 @@ namespace o2
 
         // Creates sample copy and returns him
         void* CreateSample() const override;
+
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
@@ -641,6 +689,9 @@ namespace o2
 
         // Creates sample copy and returns him
         void* CreateSample() const override;
+
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
         IAbstractValueProxy* GetValueProxy(void* object) const override;
@@ -935,6 +986,13 @@ namespace o2
     {
         return mnew _type();
     }
+
+    template<typename _type>
+    void TType<_type>::DestroySample(void* sample) const
+    {
+        delete (_type*)sample;
+    }
+
     template<typename _type>
     IAbstractValueProxy* TType<_type>::GetValueProxy(void* object) const
     {
@@ -960,6 +1018,12 @@ namespace o2
             Assert(false, "Type isn't constructible");
             return nullptr;
         }
+    }
+
+    template<typename _type>
+    void TObjectType<_type>::DestroySample(void* sample) const
+    {
+        delete (_type*)sample;
     }
 
     template<typename _type>
@@ -999,6 +1063,12 @@ namespace o2
     }
 
     template<typename _type>
+    void TPointerType<_type>::DestroySample(void* sample) const
+    {
+        delete (_type**)sample;
+    }
+
+    template<typename _type>
     IAbstractValueProxy* TPointerType<_type>::GetValueProxy(void* object) const
     {
         return mnew PointerValueProxy<_type*>((_type**)object);
@@ -1022,7 +1092,31 @@ namespace o2
     template<typename _type>
     IAbstractValueProxy* TReferenceType<_type>::GetValueProxy(void* object) const
     {
-        return mnew PointerValueProxy<_type*>((_type**)object);
+        return mnew RefPointerValueProxy<_type>((Ref<_type>*)object);
+    }
+
+    template<typename _type>
+    void TReferenceType<_type>::DestroySample(void* sample) const
+    {
+        delete (Ref<_type>*)sample;
+    }
+
+    template<typename _type>
+    void* TReferenceType<_type>::GetObjectRawPtr(void* refPtr) const
+    {
+        return ((Ref<_type>*)refPtr)->Get();
+    }
+
+    template<typename _type>
+    void TReferenceType<_type>::SetObjectRawPtr(void* object, void* refPtr)
+    {
+        *((Ref<_type>*)refPtr) = Ref<_type>((_type*)object);
+    }
+
+    template<typename _type>
+    void* TReferenceType<_type>::CreateSample(void* object) const
+    {
+        return mnew Ref<_type>((_type*)object);
     }
 
     // ------------------------------
@@ -1042,6 +1136,11 @@ namespace o2
     {
         return nullptr;
     }
+
+    template<typename _value_type, typename _property_type>
+    void TPropertyType<_value_type, _property_type>::DestroySample(void* sample) const
+    {}
+
     template<typename _value_type, typename _property_type>
     IAbstractValueProxy* TPropertyType<_value_type, _property_type>::GetValueProxy(void* object) const
     {
@@ -1134,6 +1233,12 @@ namespace o2
     void* TVectorType<_element_type>::CreateSample() const
     {
         return mnew Vector<_element_type>();
+    }
+
+    template<typename _element_type>
+    void TVectorType<_element_type>::DestroySample(void* sample) const
+    {
+        delete (Vector<_element_type>*)sample;
     }
 
     template<typename _element_type>
@@ -1250,6 +1355,12 @@ namespace o2
     }
 
     template<typename _key_type, typename _value_type>
+    void TMapType<_key_type, _value_type>::DestroySample(void* sample) const
+    {
+        delete (Map<_key_type, _value_type>*)sample;
+    }
+
+    template<typename _key_type, typename _value_type>
     IAbstractValueProxy* TMapType<_key_type, _value_type>::GetValueProxy(void* object) const
     {
         return mnew PointerValueProxy<Map<_key_type, _value_type>>((Map<_key_type, _value_type>*)object);
@@ -1272,6 +1383,10 @@ namespace o2
     {
         return nullptr;
     }
+
+    template<typename _return_type, typename _accessor_type>
+    void TStringPointerAccessorType<_return_type, _accessor_type>::DestroySample(void* sample) const
+    {}
 
     template<typename _return_type, typename _accessor_type>
     IAbstractValueProxy* TStringPointerAccessorType<_return_type, _accessor_type>::GetValueProxy(void* object) const
@@ -1330,6 +1445,12 @@ namespace o2
     void* TEnumType<_type>::CreateSample() const
     {
         return mnew _type();
+    }
+
+    template<typename _type>
+    void TEnumType<_type>::DestroySample(void* sample) const
+    {
+        delete (_type*)sample;
     }
 
     template<typename _type>

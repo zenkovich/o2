@@ -357,11 +357,16 @@ namespace Editor
             if (baseType.IsBasedOn(TypeOf(IObject)))
             {
                 const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
+				const ReferenceType& refType = dynamic_cast<const ReferenceType&>(proxyType);
 
                 void* valuePtr = proxyType.CreateSample();
                 proxy->GetValuePtr(valuePtr);
 
-                return objectType.DynamicCastToIObject(valuePtr);
+                IObject* res = objectType.DynamicCastToIObject(refType.GetObjectRawPtr(valuePtr));
+
+				proxyType.DestroySample(valuePtr);
+
+				return res;
             }
 		}
 
@@ -370,18 +375,31 @@ namespace Editor
 
 	void ObjectPtrProperty::SetProxy(IAbstractValueProxy* proxy, IObject* object)
 	{
-		const Type& proxyType = proxy->GetType();
-		if (proxyType.GetUsage() != Type::Usage::Pointer)
-			return;
+        const Type& proxyType = proxy->GetType();
+        if (proxyType.GetUsage() == Type::Usage::Pointer)
+        {
+            const Type& baseType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
+            if (baseType.IsBasedOn(TypeOf(IObject)))
+            {
+                const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
 
-		const Type& unptrType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
-		if (!unptrType.IsBasedOn(TypeOf(IObject)))
-			return;
+                void* valuePtr = objectType.DynamicCastFromIObject(object);
+                proxy->SetValuePtr(&valuePtr);
+            }
+        }
+        else if (proxyType.GetUsage() == Type::Usage::Reference)
+        {
+            const Type& baseType = *dynamic_cast<const ReferenceType&>(proxyType).GetBaseType();
+            if (baseType.IsBasedOn(TypeOf(IObject)))
+            {
+                const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
+                const ReferenceType& refType = dynamic_cast<const ReferenceType&>(proxyType);
 
-		const ObjectType& objectType = dynamic_cast<const ObjectType&>(unptrType);
-
-		void* valuePtr = objectType.DynamicCastFromIObject(object);
-		proxy->SetValuePtr(&valuePtr);
+                void* valuePtr = objectType.DynamicCastFromIObject(object);
+				
+                proxy->SetValuePtr(refType.CreateSample(valuePtr));
+            }
+        }
 	}
 
 	void ObjectPtrProperty::UpdateViewerHeader()
