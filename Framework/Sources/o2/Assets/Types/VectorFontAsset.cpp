@@ -13,13 +13,7 @@ namespace o2
         DefaultAssetMeta<VectorFontAsset>(other)
     {
         for (auto eff : other.mEffects)
-            mEffects.Add(eff->CloneAs<VectorFont::Effect>());
-    }
-
-    VectorFontAsset::Meta::~Meta()
-    {
-        for (auto eff : mEffects)
-            delete eff;
+            mEffects.Add(eff->CloneAsRef<VectorFont::Effect>());
     }
 
     bool VectorFontAsset::Meta::IsEqual(AssetMeta* other) const
@@ -33,7 +27,7 @@ namespace o2
             bool found = false;
             for (auto otherEff : otherMeta->mEffects)
             {
-                if (eff && eff->IsEqual(otherEff))
+                if (eff && eff->IsEqual(otherEff.Get()))
                 {
                     found = true;
                     break;
@@ -50,7 +44,7 @@ namespace o2
     void VectorFontAsset::Meta::UpdateFontEffects()
     {
         if (mAsset)
-            mAsset->UpdateFontEffects();
+            mAsset.Lock()->UpdateFontEffects();
     }
 
     VectorFontAsset::VectorFontAsset():
@@ -68,18 +62,18 @@ namespace o2
         return *this;
     }
 
-    const Vector<VectorFont::Effect*>& VectorFontAsset::GetEffects() const
+    const Vector<Ref<VectorFont::Effect>>& VectorFontAsset::GetEffects() const
     {
         return GetMeta()->mEffects;
     }
 
-    void VectorFontAsset::AddEffect(VectorFont::Effect* effect)
+    void VectorFontAsset::AddEffect(const Ref<VectorFont::Effect>& effect)
     {
         GetMeta()->mEffects.Add(effect);
         ((VectorFont*)mFont.mFont)->AddEffect(effect);
     }
 
-    void VectorFontAsset::RemoveEffect(VectorFont::Effect* effect)
+    void VectorFontAsset::RemoveEffect(const Ref<VectorFont::Effect>& effect)
     {
         GetMeta()->mEffects.Remove(effect);
         ((VectorFont*)mFont.mFont)->RemoveEffect(effect);
@@ -87,9 +81,6 @@ namespace o2
 
     void VectorFontAsset::RemoveAllEffects()
     {
-        for (auto eff : GetMeta()->mEffects)
-            delete eff;
-
         GetMeta()->mEffects.Clear();
 
         ((VectorFont*)mFont.mFont)->RemoveAllEffects();
@@ -115,7 +106,7 @@ namespace o2
             UpdateFontEffects();
         }
         
-        GetMeta()->mAsset = this;
+        GetMeta()->mAsset = Ref(this);
     }
 
     void VectorFontAsset::SaveData(const String& path) const
@@ -123,11 +114,11 @@ namespace o2
 
     void VectorFontAsset::UpdateFontEffects()
     {
-        Vector<VectorFont::Effect*> clonedEffects;;
+        Vector<Ref<VectorFont::Effect>> clonedEffects;;
         for (auto eff : GetMeta()->mEffects)
         {
             if (eff)
-                clonedEffects.Add(eff->CloneAs<VectorFont::Effect>());
+                clonedEffects.Add(eff->CloneAsRef<VectorFont::Effect>());
         }
 
         dynamic_cast<VectorFont*>(mFont.mFont)->SetEffects(clonedEffects);

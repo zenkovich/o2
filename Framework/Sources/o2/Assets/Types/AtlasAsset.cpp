@@ -33,7 +33,7 @@ namespace o2
         if (!(common == otherMeta->common))
             return false;
 
-        auto comparePlatformMeta = [](PlatformMeta* a, PlatformMeta* b)
+        auto comparePlatformMeta = [](const Ref<PlatformMeta>& a, const Ref<PlatformMeta>& b)
         {
             if (a && b)
             {
@@ -75,7 +75,7 @@ namespace o2
 
     String AtlasAsset::Page::GetTextureFileName() const
     {
-        return AtlasAsset::GetPageTextureFileName(mOwner->mInfo, mId);
+        return AtlasAsset::GetPageTextureFileName(mOwner.Lock()->mInfo, mId);
     }
 
     const Map<UID, RectI>& AtlasAsset::Page::ImagesRects() const
@@ -98,7 +98,7 @@ namespace o2
         Asset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
     {
         for (auto& page : mPages)
-            page.mOwner = this;
+            page.mOwner = Ref(this);
 
         o2Render.OnAtlasCreated(this);
     }
@@ -112,7 +112,7 @@ namespace o2
     {
         for (auto& page : mPages)
         {
-            page.mOwner = this;
+            page.mOwner = Ref(this);
             page.mTexture = GetPageTextureRef(mInfo, page.mId);
         }
     }

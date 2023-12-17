@@ -85,7 +85,7 @@ namespace o2
         // -----------------------------------
         // Platform specified meta information
         // -----------------------------------
-        struct PlatformMeta: public ISerializable
+        struct PlatformMeta: public ISerializable, public RefCounterable
         {
             Vec2I         maxSize = Vec2I(2048, 2048); // Maximal atlas size @SERIALIZABLE
             TextureFormat format = TextureFormat::R8G8B8A8;  // Atlas format @SERIALIZABLE
@@ -104,11 +104,11 @@ namespace o2
         public:
             PlatformMeta common; // Common meta @SERIALIZABLE
 
-            PlatformMeta* ios = nullptr;     // IOS specified meta @SERIALIZABLE
-            PlatformMeta* android = nullptr; // Android specified meta @SERIALIZABLE
-            PlatformMeta* macOS = nullptr;   // MacOS specified meta @SERIALIZABLE
-            PlatformMeta* windows = nullptr; // Windows specified meta @SERIALIZABLE
-            PlatformMeta* linuxOS = nullptr; // Linux specified meta @SERIALIZABLE
+            Ref<PlatformMeta> ios = nullptr;     // IOS specified meta @SERIALIZABLE
+            Ref<PlatformMeta> android = nullptr; // Android specified meta @SERIALIZABLE
+            Ref<PlatformMeta> macOS = nullptr;   // MacOS specified meta @SERIALIZABLE
+            Ref<PlatformMeta> windows = nullptr; // Windows specified meta @SERIALIZABLE
+            Ref<PlatformMeta> linuxOS = nullptr; // Linux specified meta @SERIALIZABLE
 
         public:
             // Returns platform meta for specified platform
@@ -153,7 +153,7 @@ namespace o2
             Map<UID, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
             TextureRef      mTexture;     // Page texture
 
-            AtlasAsset* mOwner; // Owner atlas
+            WeakRef<AtlasAsset> mOwner; // Owner atlas
 
             friend class AtlasAssetConverter;
             friend class AtlasAsset;
@@ -218,6 +218,7 @@ END_META;
 CLASS_BASES_META(o2::AtlasAsset::PlatformMeta)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::AtlasAsset::PlatformMeta)

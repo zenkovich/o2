@@ -46,9 +46,6 @@ namespace o2
     {
         if (mFreeTypeFace)
             FT_Done_Face(mFreeTypeFace);
-
-        for (auto effect : mEffects)
-            delete effect;
     }
 
     const char* GetFreeTypeErrorMessage(FT_Error err)
@@ -162,7 +159,7 @@ namespace o2
             UpdateCharacters(needToRenderChars, height);
     }
 
-    VectorFont::Effect* VectorFont::AddEffect(Effect* effect)
+    Ref<VectorFont::Effect> VectorFont::AddEffect(const Ref<Effect>& effect)
     {
         mEffects.Add(effect);
         Reset();
@@ -170,32 +167,25 @@ namespace o2
         return effect;
     }
 
-    void VectorFont::RemoveEffect(Effect* effect)
+    void VectorFont::RemoveEffect(const Ref<Effect>& effect)
     {
         mEffects.Remove(effect);
-        delete effect;
         Reset();
     }
 
     void VectorFont::RemoveAllEffects()
     {
-        for (auto effect : mEffects)
-            delete effect;
-
         mEffects.Clear();
         Reset();
     }
 
-    void VectorFont::SetEffects(const Vector<Effect*>& effects)
+    void VectorFont::SetEffects(const Vector<Ref<Effect>>& effects)
     {
-        for (auto effect : mEffects)
-            delete effect;
-
         mEffects = effects;
         Reset();
     }
 
-    const Vector<VectorFont::Effect*>& VectorFont::GetEffects() const
+    const Vector<Ref<VectorFont::Effect>>& VectorFont::GetEffects() const
     {
         return mEffects;
     }

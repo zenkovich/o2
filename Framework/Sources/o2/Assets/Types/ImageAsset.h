@@ -18,7 +18,7 @@ namespace o2
 
     public:
         PROPERTIES(ImageAsset);
-        PROPERTY(Bitmap*, bitmap, SetBitmap, GetBitmap); // Bitmap data property
+        PROPERTY(Ref<Bitmap>, bitmap, SetBitmap, GetBitmap); // Bitmap data property
 
         PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder);    // Slice border property
         PROPERTY(SpriteMode, defaultMode, SetDefaultMode, GetDefaultMode); // Sprite default mode property
@@ -40,17 +40,14 @@ namespace o2
         // Copy-constructor
         ImageAsset(const ImageAsset& asset);
 
-        // Destructor
-        ~ImageAsset();
-
         // Check equals operator
         ImageAsset& operator=(const ImageAsset& asset);
 
         // Returns bitmap data
-        Bitmap* GetBitmap();
+        const Ref<Bitmap>& GetBitmap();
 
         // Sets bitmap data
-        void SetBitmap(Bitmap* bitmap);
+        void SetBitmap(Ref<Bitmap> bitmap);
 
         // Returns atlas asset
         UID GetAtlasUID() const;
@@ -103,7 +100,7 @@ namespace o2
         // -----------------------
         // Platform specified meta
         // -----------------------
-        struct PlatformMeta: public ISerializable
+        struct PlatformMeta: public ISerializable, public RefCounterable
         {
             TextureFormat format = TextureFormat::R8G8B8A8; // Texture format @SERIALIZABLE
 
@@ -120,12 +117,13 @@ namespace o2
         public:
             UID atlasId = UID::empty; // Atlas owner id @SERIALIZABLE
 
-            PlatformMeta  common;            // Common platform meta @SERIALIZABLE
-            PlatformMeta* ios = nullptr;     // IOS specified meta @SERIALIZABLE
-            PlatformMeta* android = nullptr; // Android specified meta @SERIALIZABLE
-            PlatformMeta* macOS = nullptr;   // MacOS specified meta @SERIALIZABLE
-            PlatformMeta* windows = nullptr; // Windows specified meta @SERIALIZABLE
-            PlatformMeta* linuxOS = nullptr; // Linux specified meta @SERIALIZABLE
+            PlatformMeta common; // Common platform meta @SERIALIZABLE
+
+            Ref<PlatformMeta> ios = nullptr;     // IOS specified meta @SERIALIZABLE
+            Ref<PlatformMeta> android = nullptr; // Android specified meta @SERIALIZABLE
+            Ref<PlatformMeta> macOS = nullptr;   // MacOS specified meta @SERIALIZABLE
+            Ref<PlatformMeta> windows = nullptr; // Windows specified meta @SERIALIZABLE
+            Ref<PlatformMeta> linuxOS = nullptr; // Linux specified meta @SERIALIZABLE
 
             BorderI    sliceBorder;          // Default slice border @SERIALIZABLE @EDITOR_IGNORE
             SpriteMode defaultMode;          // Default sprite mode @SERIALIZABLE @EDITOR_IGNORE
@@ -141,7 +139,7 @@ namespace o2
         };
 
     protected:
-        Bitmap* mBitmap = nullptr; // Image bitmap. Loading only when needs
+        Ref<Bitmap> mBitmap = nullptr; // Image bitmap. Loading only when needs
 
         TextureRef mTexture; // Texture reference, if image is not in atlas, it loads texture
 
@@ -197,8 +195,8 @@ CLASS_METHODS_META(o2::ImageAsset)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const ImageAsset&);
-    FUNCTION().PUBLIC().SIGNATURE(Bitmap*, GetBitmap);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetBitmap, Bitmap*);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Bitmap>&, GetBitmap);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetBitmap, Ref<Bitmap>);
     FUNCTION().PUBLIC().SIGNATURE(UID, GetAtlasUID);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAtlas, const UID&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsInAtlas);
@@ -223,6 +221,7 @@ END_META;
 CLASS_BASES_META(o2::ImageAsset::PlatformMeta)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::ImageAsset::PlatformMeta)

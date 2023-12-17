@@ -19,7 +19,7 @@ namespace o2
         atlasPage(this), atlasRect(this), size(this), width(this), height(this), meta(this)
     {
         if (other.mBitmap)
-            mBitmap = other.mBitmap->Clone();
+            mBitmap = Ref(other.mBitmap->Clone());
         else
             mBitmap = nullptr;
 
@@ -27,18 +27,9 @@ namespace o2
         mSourceRect = other.mSourceRect;
     }
 
-    ImageAsset::~ImageAsset()
-    {
-        if (mBitmap)
-            delete mBitmap;
-    }
-
     ImageAsset& ImageAsset::operator=(const ImageAsset& asset)
     {
         Asset::operator=(asset);
-
-        if (mBitmap)
-            delete mBitmap;
 
         if (asset.mBitmap)
             SetBitmap(asset.mBitmap);
@@ -49,7 +40,7 @@ namespace o2
         return *this;
     }
 
-    Bitmap* ImageAsset::GetBitmap()
+    const Ref<Bitmap>& ImageAsset::GetBitmap()
     {
         if (!mBitmap)
             LoadBitmap();
@@ -57,11 +48,8 @@ namespace o2
         return mBitmap;
     }
 
-    void ImageAsset::SetBitmap(Bitmap* bitmap)
+    void ImageAsset::SetBitmap(Ref<Bitmap> bitmap)
     {
-        if (mBitmap)
-            delete mBitmap;
-
         mBitmap = bitmap;
     }
 
@@ -226,7 +214,7 @@ namespace o2
         if (!(common == otherMeta->common))
             return false;
 
-        auto comparePlatformMeta = [](PlatformMeta* a, PlatformMeta* b)
+        auto comparePlatformMeta = [](const Ref<PlatformMeta>& a, const Ref<PlatformMeta>& b)
         {
             if (a && b)
             {

@@ -8,6 +8,7 @@
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Tools/RectPacker.h"
 #include "o2/Utils/Types/Containers/Map.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -23,7 +24,7 @@ namespace o2
         // ---------------------
         // Font effect interface
         // ---------------------
-        class Effect: public ISerializable
+        class Effect: public ISerializable, public RefCounterable
         {
         public:
             // Processes glyph bitmap
@@ -67,23 +68,23 @@ namespace o2
         void CheckCharacters(const WString& needChararacters, int height);
 
         // Adds effect
-        Effect* AddEffect(Effect* effect);
+        Ref<Effect> AddEffect(const Ref<Effect>& effect);
 
         // Adds effect
         template<typename _eff_type, typename ... _args>
-        _eff_type* AddEffect(_args ... args);
+        Ref<_eff_type> AddEffect(_args ... args);
 
         // Removes effect
-        void RemoveEffect(Effect* effect);
+        void RemoveEffect(const Ref<Effect>& effect);
 
         // Removes all effects
         void RemoveAllEffects();
 
         // Sets effects list
-        void SetEffects(const Vector<Effect*>& effects);
+        void SetEffects(const Vector<Ref<Effect>>& effects);
 
         // Returns effects list
-        const Vector<Effect*>& GetEffects() const;
+        const Vector<Ref<Effect>>& GetEffects() const;
 
         // Removes all cached characters
         void Reset();
@@ -125,7 +126,7 @@ namespace o2
         String  mFileName;     // Source file name
         FT_Face mFreeTypeFace; // Free Type font face
 
-        Vector<Effect*> mEffects; // Font effects
+        Vector<Ref<Effect>> mEffects; // Font effects
 
         Vector<PackLine*> mPackLines;           // Packed symbols lines
         int               mLastPackLinePos = 0; // Last packed line bottom pos
@@ -147,9 +148,9 @@ namespace o2
     };
 
     template<typename _eff_type, typename ... _args>
-    _eff_type* VectorFont::AddEffect(_args ... args)
+    Ref<_eff_type> VectorFont::AddEffect(_args ... args)
     {
-        return (_eff_type*)AddEffect(mnew _eff_type(args ...));
+        return DynamicCast<_eff_type>(AddEffect(mmake<_eff_type>(args ...)));
     }
 }
 // --- META ---
@@ -157,6 +158,7 @@ namespace o2
 CLASS_BASES_META(o2::VectorFont::Effect)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::VectorFont::Effect)
