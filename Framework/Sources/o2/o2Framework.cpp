@@ -50,7 +50,7 @@ extern void __RegisterClass__o2__IRectDrawable();
 extern void __RegisterClass__o2__FunctionalRectDrawable();
 extern void __RegisterClass__o2__Sprite();
 extern void __RegisterClass__o2__Text();
-extern void __RegisterClass__o2__TextureRef();
+extern void __RegisterClass__o2__Ref_o2__Texture_();
 extern void __RegisterClass__o2__VectorFont__Effect();
 extern void __RegisterClass__o2__FontStrokeEffect();
 extern void __RegisterClass__o2__FontGradientEffect();
@@ -189,7 +189,7 @@ extern void InitializeTypeso2Framework()
     __RegisterClass__o2__FunctionalRectDrawable();
     __RegisterClass__o2__Sprite();
     __RegisterClass__o2__Text();
-    __RegisterClass__o2__TextureRef();
+    __RegisterClass__o2__Ref_o2__Texture_();
     __RegisterClass__o2__VectorFont__Effect();
     __RegisterClass__o2__FontStrokeEffect();
     __RegisterClass__o2__FontGradientEffect();

@@ -60,7 +60,7 @@ namespace o2
         UInt8* GetData();
 
         // Returns const data
-        const UInt8* getData() const;
+        const UInt8* GetData() const;
 
         // Returns size of image
         Vec2I GetSize() const;

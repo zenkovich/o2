@@ -128,7 +128,7 @@ namespace o2
         return mFormat;
     }
 
-    const unsigned char* Bitmap::getData() const
+    const unsigned char* Bitmap::GetData() const
     {
         return mData;
     }

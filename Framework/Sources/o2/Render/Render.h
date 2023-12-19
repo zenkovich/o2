@@ -76,7 +76,7 @@ namespace o2
         PROPERTIES(Render);
         PROPERTY(Camera, camera, SetCamera, GetCamera);                          // Current camera property
         PROPERTY(RectI, scissorRect, EnableScissorTest, GetScissorRect);         // Scissor rect property
-        PROPERTY(TextureRef, renderTexture, BindRenderTexture, GetRenderTexture); // Render target texture property
+        PROPERTY(Ref<Texture>, renderTexture, BindRenderTexture, GetRenderTexture); // Render target texture property
         GETTER(Vec2I, resolution, GetResolution);                                // Screen resolution getter
         GETTER(bool, renderTextureAvailable, IsRenderTextureAvailable);          // Render textures available getter
         GETTER(Vec2I, maxTextureSize, GetMaxTextureSize);                        // Maximal texture size getter
@@ -265,7 +265,7 @@ namespace o2
 
         // Draws data from buffer with specified texture and primitive type
         void DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
-                        VertexIndex* indexes, UInt elementsCount, const TextureRef& texture);
+                        VertexIndex* indexes, UInt elementsCount, const Ref<Texture>& texture);
 
         // Draws mesh wire
         void DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
@@ -278,13 +278,13 @@ namespace o2
                             bool scaleToScreenSpace = true);
 
         // Binding render target
-        void BindRenderTexture(TextureRef renderTarget);
+        void BindRenderTexture(Ref<Texture> renderTarget);
 
         // Unbinding render target
         void UnbindRenderTexture();
 
         // Returns current render target. Returns NULL if no render target
-        TextureRef GetRenderTexture() const;
+        Ref<Texture> GetRenderTexture() const;
 
         // Returns true, if render target is can be used with current device
         bool IsRenderTextureAvailable() const;
@@ -301,16 +301,16 @@ namespace o2
     protected:
         PrimitiveType mCurrentPrimitiveType; // Type of drawing primitives for next DIP
 
-        Texture* mLastDrawTexture = nullptr; // Stored texture ptr from last DIP
-        UInt     mLastDrawVertex;            // Last vertex idx for next DIP
-        UInt     mLastDrawIdx;               // Last vertex index for next DIP
-        UInt     mTrianglesCount;            // Triangles count for next DIP
-        UInt     mFrameTrianglesCount;       // Total triangles at current frame
-        UInt     mDIPCount;                  // DrawIndexedPrimitives calls count
+        Ref<Texture> mLastDrawTexture = nullptr; // Stored texture ptr from last DIP
+        UInt         mLastDrawVertex;            // Last vertex idx for next DIP
+        UInt         mLastDrawIdx;               // Last vertex index for next DIP
+        UInt         mTrianglesCount;            // Triangles count for next DIP
+        UInt         mFrameTrianglesCount;       // Total triangles at current frame
+        UInt         mDIPCount;                  // DrawIndexedPrimitives calls count
 
         Ref<LogStream> mLog; // Render log stream
 
-        Vector<Texture*> mTextures; // Loaded textures
+        Vector<Ref<Texture>> mTextures; // Loaded textures
         Vector<Font*>    mFonts;    // Loaded fonts
 
         Camera mCamera;            // Camera transformation
@@ -333,7 +333,7 @@ namespace o2
         Vector<ScissorStackEntry> mStackScissors;      // Stack of scissors clippings
         bool                      mClippingEverything; // Is everything clipped
 
-        TextureRef mCurrentRenderTarget; // Current render target. NULL if rendering in back buffer
+        Ref<Texture> mCurrentRenderTarget; // Current render target. NULL if rendering in back buffer
 
         float mDrawingDepth; // Current drawing depth, increments after each drawing drawables
 
@@ -344,8 +344,8 @@ namespace o2
         Vector<AtlasAsset*> mAtlases; // All atlases
 
         VertexIndex* mHardLinesIndexData; // Index data buffer
-        TextureRef   mSolidLineTexture;   // Solid line texture
-        TextureRef   mDashLineTexture;    // Dash line texture
+        Ref<Texture>   mSolidLineTexture;   // Solid line texture
+        Ref<Texture>   mDashLineTexture;    // Dash line texture
 
         bool mReady; // True, if render system initialized
 
@@ -424,7 +424,7 @@ namespace o2
         friend class RenderBase;
         friend class Sprite;
         friend class Texture;
-        friend class TextureRef;
+        friend class Ref<Texture>;
         friend class VectorFont;
         friend class VectorFontAsset;
         friend class WndProcFunc;

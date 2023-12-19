@@ -66,7 +66,7 @@ namespace o2
         InitializeLinesIndexBuffer();
         InitializeLinesTextures();
 
-        mCurrentRenderTarget = TextureRef();
+        mCurrentRenderTarget = Ref<Texture>();
 
         if (IsDevMode())
             o2Assets.onAssetsRebuilded += Func(this, &Render::OnAssetsRebuilt);
@@ -82,8 +82,8 @@ namespace o2
         if (IsDevMode())
             o2Assets.onAssetsRebuilded -= Func(this, &Render::OnAssetsRebuilt);
 
-        mSolidLineTexture = TextureRef::Null();
-        mDashLineTexture = TextureRef::Null();
+        mSolidLineTexture = Ref<Texture>::Null();
+        mDashLineTexture = Ref<Texture>::Null();
 
         DeinitializeFreeType();
 
@@ -528,7 +528,7 @@ namespace o2
     }
 
     void Render::DrawBuffer(PrimitiveType primitiveType, Vertex2* vertices, UInt verticesCount,
-                            UInt16* indexes, UInt elementsCount, const TextureRef& texture)
+                            UInt16* indexes, UInt elementsCount, const Ref<Texture>& texture)
     {
         if (!mReady)
             return;
@@ -584,7 +584,7 @@ namespace o2
         mLastDrawIdx += indexesCount;
     }
 
-    void Render::SetRenderTexture(TextureRef renderTarget)
+    void Render::SetRenderTexture(Ref<Texture> renderTarget)
     {
         if (!renderTarget)
         {
@@ -637,7 +637,7 @@ namespace o2
 
         SetupViewMatrix(mResolution);
 
-        mCurrentRenderTarget = TextureRef();
+        mCurrentRenderTarget = Ref<Texture>();
 
         DisableScissorTest(true);
         mStackScissors.PopBack();

@@ -24,12 +24,11 @@
 namespace o2
 {
     class Bitmap;
-    class TextureRef;
 
     // -------
     // Texture
     // -------
-    class Texture : public TextureBase
+    class Texture : public TextureBase, public RefCounterable
     {
     public:
         // Texture usage
@@ -42,9 +41,9 @@ namespace o2
 
     public:
         PROPERTIES(Texture);
-        GETTER(Vec2I, size, GetSize);            // Size of texture getter
+        GETTER(Vec2I, size, GetSize);             // Size of texture getter
         GETTER(TextureFormat, format, GetFormat); // texture format getter
-        GETTER(Usage, usage, GetUsage);          // Texture usage getter
+        GETTER(Usage, usage, GetUsage);           // Texture usage getter
         GETTER(String, fileName, GetFileName);    // Texture file name getter
 
     public:
@@ -64,7 +63,7 @@ namespace o2
         Texture(const String& atlasAssetName, int page);
 
         // Constructor from bitmap
-        Texture(Bitmap* bitmap);
+        Texture(const Bitmap& bitmap);
 
         // Destructor
         ~Texture();
@@ -85,13 +84,13 @@ namespace o2
         void Create(const String& atlasAssetName, int page);
 
         // Creates texture from bitmap
-        void Create(Bitmap* bitmap);
+        void Create(const Bitmap& bitmap);
 
         // Sets texture's data from bitmap
-        void SetData(Bitmap* bitmap);
+        void SetData(const Bitmap& bitmap);
 
         // Sets sub data from bitmap with offset
-        void SetSubData(const Vec2I& offset, Bitmap* bitmap);
+        void SetSubData(const Vec2I& offset, const Bitmap& bitmap);
 
         // Copies pixels from texture by rect
         void Copy(const Texture& from, const RectI& rect);
@@ -133,16 +132,18 @@ namespace o2
         int GetAtlasPage() const;
 
     protected:
-        Vec2I         mSize;                    // Size of texture
+        Vec2I mSize; // Size of texture
+
         Filter        mFilter = Filter::Linear; // Min/Mag filter
         TextureFormat mFormat;                  // Texture format
         Usage         mUsage;                   // Texture usage
-        String        mFileName;                // Source file name
-        UID           mAtlasAssetId;            // Atlas asset id. Equals 0 if it isn't atlas texture
-        int           mAtlasPage;               // Atlas page
-        bool          mReady;                   // Is texture ready to use
 
-        int mRefs = 0; // Texture references
+        String mFileName; // Source file name
+
+		UID mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture
+		int mAtlasPage;    // Atlas page
+
+        bool mReady; // Is texture ready to use
 
     protected:
         // Loads texture from PNG file 
@@ -151,8 +152,8 @@ namespace o2
         // Loads texture from DDS file
         void LoadDDS(const String& fileName);
 
-        friend class Render;
-        friend class TextureRef;
+		friend class Render;
+		friend class Ref<Texture>;
     };
 }
 // --- META ---

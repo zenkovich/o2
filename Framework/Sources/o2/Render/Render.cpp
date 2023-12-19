@@ -36,12 +36,12 @@ namespace o2
 
     void Render::InitializeLinesTextures()
     {
-        mSolidLineTexture = TextureRef::Null();
+        mSolidLineTexture = Ref<Texture>::Null();
 
         Bitmap bitmap(PixelFormat::R8G8B8A8, Vec2I(32, 32));
         bitmap.Fill(Color4(255, 255, 255, 255));
         bitmap.FillRect(0, 32, 16, 0, Color4(255, 255, 255, 0));
-        mDashLineTexture = new Texture(&bitmap);
+        mDashLineTexture = mmake<Texture>(bitmap);
     }
 
     void Render::InitializeFreeType()
@@ -95,7 +95,7 @@ namespace o2
 
     void Render::DrawFilledPolygon(const Vertex* verticies, int vertexCount)
     {
-        static Mesh mesh(TextureRef(), 1024, 1024);
+        static Mesh mesh(Ref<Texture>(), 1024, 1024);
 
         int polyCount = vertexCount - 2;
         if (mesh.GetMaxVertexCount() < (UInt)vertexCount || mesh.GetMaxPolyCount() < (UInt)polyCount)
@@ -118,7 +118,7 @@ namespace o2
 
     void Render::DrawFilledPolygon(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/)
     {
-        static Mesh mesh(TextureRef(), 1024, 1024);
+        static Mesh mesh(Ref<Texture>(), 1024, 1024);
 
         int vertexCount = points.Count();
         int polyCount = points.Count() - 2;
@@ -155,12 +155,12 @@ namespace o2
 
     void Render::CheckTexturesUnloading()
     {
-        Vector<Texture*> unloadTextures;
-        for (auto texture : mTextures)
-            if (texture->mRefs == 0)
-                unloadTextures.Add(texture);
-
-        unloadTextures.ForEach([](auto texture) { delete texture; });
+//         Vector<Texture*> unloadTextures;
+//         for (auto texture : mTextures)
+//             if (texture->mRefs == 0)
+//                 unloadTextures.Add(texture);
+// 
+//         unloadTextures.ForEach([](auto texture) { delete texture; });
     }
 
     void Render::CheckFontsUnloading()
@@ -205,12 +205,12 @@ namespace o2
 
     void Render::OnTextureCreated(Texture* texture)
     {
-        mTextures.Add(texture);
+        mTextures.Add(Ref(texture));
     }
 
     void Render::OnTextureDestroyed(Texture* texture)
     {
-        mTextures.Remove(texture);
+        mTextures.Remove(Ref(texture));
     }
 
     void Render::OnAtlasCreated(AtlasAsset* atlas)
@@ -631,7 +631,7 @@ namespace o2
     {
         static Mesh mesh(mSolidLineTexture, 1024, 1024);
 
-        TextureRef texture = lineType == LineType::Solid ? mSolidLineTexture : mDashLineTexture;
+        Ref<Texture> texture = lineType == LineType::Solid ? mSolidLineTexture : mDashLineTexture;
         Vec2I texSize = lineType == LineType::Solid ? Vec2I(1, 1) : mDashLineTexture->GetSize();
 
         if (scaleToScreenSpace)
@@ -653,7 +653,7 @@ namespace o2
         mesh.Draw();
     }
 
-    TextureRef Render::GetRenderTexture() const
+    Ref<Texture> Render::GetRenderTexture() const
     {
         return mCurrentRenderTarget;
     }

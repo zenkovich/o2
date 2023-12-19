@@ -95,10 +95,10 @@ namespace Editor
 		if (!mCurve)
 			return;
 
-		TextureRef texture = mSprite->GetTexture();
+		Ref<Texture> texture = mSprite->GetTexture();
 		if (!texture || texture->GetSize() != (Vec2I)layout->GetSize())
 		{
-			texture = TextureRef(layout->GetSize(), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+			texture = Ref<Texture>(layout->GetSize(), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 			mSprite->SetTexture(texture);
 			mSprite->SetTextureSrcRect(RectI(Vec2I(), texture->GetSize()));
 		}

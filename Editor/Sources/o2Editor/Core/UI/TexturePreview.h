@@ -29,7 +29,7 @@ namespace Editor
 		TexturePreview& operator=(const TexturePreview& other);
 
 		// Sets viewing curve
-		void SetTexture(const TextureRef& texture, const RectI& srcRect = RectI());
+		void SetTexture(const Ref<Texture>& texture, const RectI& srcRect = RectI());
 
 		SERIALIZABLE(TexturePreview);
 
@@ -65,7 +65,7 @@ CLASS_METHODS_META(Editor::TexturePreview)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const TexturePreview&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTexture, const TextureRef&, const RectI&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTexture, const Ref<Texture>&, const RectI&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
 }
 END_META;

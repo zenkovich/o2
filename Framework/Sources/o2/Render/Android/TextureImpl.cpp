@@ -81,7 +81,7 @@ namespace o2
         mReady = true;
     }
 
-    void Texture::Create(Bitmap* bitmap)
+    void Texture::Create(const Bitmap& bitmap)
     {
         if (mReady)
         {
@@ -91,10 +91,10 @@ namespace o2
             glDeleteTextures(1, &mHandle);
         }
 
-        mFormat = bitmap->GetFormat();
+        mFormat = bitmap.GetFormat();
         mUsage = Usage::Default;
-        mSize = bitmap->GetSize();
-        mFileName = bitmap->GetFilename();
+        mSize = bitmap.GetSize();
+        mFileName = bitmap.GetFilename();
 
         glGenTextures(1, &mHandle);
         glBindTexture(GL_TEXTURE_2D, mHandle);
@@ -105,8 +105,8 @@ namespace o2
         else if (mFormat == PixelFormat::R8G8B8)
             texFormat = GL_RGB;
 
-        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
-                     bitmap->GetData());
+        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap.GetSize().x, bitmap.GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
+                     bitmap.GetData());
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -116,7 +116,7 @@ namespace o2
         mReady = true;
     }
 
-    void Texture::SetData(Bitmap* bitmap)
+    void Texture::SetData(const Bitmap& bitmap)
     {
         glBindTexture(GL_TEXTURE_2D, mHandle);
 
@@ -126,13 +126,13 @@ namespace o2
         else if (mFormat == PixelFormat::R8G8B8)
             texFormat = GL_RGB;
 
-        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
-                     bitmap->GetData());
+        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap.GetSize().x, bitmap.GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
+                     bitmap.GetData());
 
         GL_CHECK_ERROR();
     }
 
-    void Texture::SetSubData(const Vec2I& offset, Bitmap* bitmap)
+    void Texture::SetSubData(const Vec2I& offset, const Bitmap& bitmap)
     {
         glBindTexture(GL_TEXTURE_2D, mHandle);
 
@@ -142,8 +142,8 @@ namespace o2
         else if (mFormat == PixelFormat::R8G8B8)
             texFormat = GL_RGB;
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0, offset.x, offset.y, bitmap->GetSize().x, bitmap->GetSize().y, texFormat, GL_UNSIGNED_BYTE,
-                        bitmap->GetData());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, offset.x, offset.y, bitmap.GetSize().x, bitmap.GetSize().y, texFormat, GL_UNSIGNED_BYTE,
+                        bitmap.GetData());
 
         GL_CHECK_ERROR();
     }

@@ -201,7 +201,7 @@ namespace Editor
 		backLayerBitmap.FillRect(0, 10, 10, 0, color2);
 		backLayerBitmap.FillRect(10, 20, 20, 10, color2);
 
-		Sprite* res = mnew Sprite(&backLayerBitmap);
+		Sprite* res = mnew Sprite(backLayerBitmap);
 		res->SetMode(SpriteMode::Tiled);
 		return res;
 	}

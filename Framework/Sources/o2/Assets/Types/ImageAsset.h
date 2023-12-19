@@ -141,7 +141,7 @@ namespace o2
     protected:
         Ref<Bitmap> mBitmap = nullptr; // Image bitmap. Loading only when needs
 
-        TextureRef mTexture; // Texture reference, if image is not in atlas, it loads texture
+        Ref<Texture> mTexture; // Texture reference, if image is not in atlas, it loads texture
 
         Ref<Asset> mAtlas; // Owner atlas
 

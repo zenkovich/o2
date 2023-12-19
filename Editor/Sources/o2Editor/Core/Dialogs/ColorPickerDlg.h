@@ -50,17 +50,17 @@ namespace Editor
 		o2::Window* mWindow = nullptr;
 		Image*      mColorSampleImage = nullptr;
 
-		TextureRef mChessBackTexture;
+		Ref<Texture> mChessBackTexture;
 
 		Image*           mColorPickAreaHandle = nullptr;
 		Bitmap*          mColorPickAreaBitmap = nullptr;
 		WidgetLayer*     mColorPickAreaColor = nullptr;
-		TextureRef       mColorPickAreaTexture;
+		Ref<Texture>       mColorPickAreaTexture;
 		CursorEventsArea mColorPickHandle;
 
 		VerticalProgress* mHUEBar = nullptr;
 		Bitmap*           mHUEBarBitmap = nullptr;
-		TextureRef        mHUEBarTexture;
+		Ref<Texture>        mHUEBarTexture;
 
 		DropDown* mTypeDropdown = nullptr;
 
@@ -68,25 +68,25 @@ namespace Editor
 		HorizontalProgress* mColor1ParamBar = nullptr;
 		EditBox*            mColor1ParamEdit = nullptr;
 		Bitmap*             mColor1ParamBarBitmap = nullptr;
-		TextureRef          mColor1ParamBarTexture;
+		Ref<Texture>          mColor1ParamBarTexture;
 
 		Label*              mColor2ParamName = nullptr;
 		HorizontalProgress* mColor2ParamBar;
 		EditBox*            mColor2ParamEdit = nullptr;
 		Bitmap*             mColor2ParamBarBitmap = nullptr;
-		TextureRef          mColor2ParamBarTexture;
+		Ref<Texture>          mColor2ParamBarTexture;
 
 		Label*              mColor3ParamName = nullptr;
 		HorizontalProgress* mColor3ParamBar;
 		EditBox*            mColor3ParamEdit = nullptr;
 		Bitmap*             mColor3ParamBarBitmap = nullptr;
-		TextureRef          mColor3ParamBarTexture;
+		Ref<Texture>          mColor3ParamBarTexture;
 
 		Label*              mColorAParamName = nullptr;
 		HorizontalProgress* mColorAParamBar;
 		EditBox*            mColorAParamEdit = nullptr;
 		Bitmap*             mColorAParamBarBitmap = nullptr;
-		TextureRef          mColorAParamBarTexture;
+		Ref<Texture>          mColorAParamBarTexture;
 
 
 	protected:
@@ -97,7 +97,7 @@ namespace Editor
 		void InitializeColorParams();
 
 		Widget* InitializeColorParameter(Label*& name, HorizontalProgress*& bar, EditBox*& edit,
-										 Bitmap*& bitmap, TextureRef& texture,
+										 Bitmap*& bitmap, Ref<Texture>& texture,
 										 const Function<void(float)>& onChanged);
 
 		void InitHUEBarBitmap();

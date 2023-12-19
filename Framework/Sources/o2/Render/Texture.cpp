@@ -36,7 +36,7 @@ namespace o2
         o2Render.OnTextureCreated(this);
     }
 
-    Texture::Texture(Bitmap* bitmap) :
+    Texture::Texture(const Bitmap& bitmap) :
         mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
     {
         Create(bitmap);
@@ -130,7 +130,7 @@ namespace o2
         if (image.Load(fileName, Bitmap::ImageType::Auto))
         {
             mFileName = fileName;
-            Create(&image);
+            Create(image);
         }
     }
 

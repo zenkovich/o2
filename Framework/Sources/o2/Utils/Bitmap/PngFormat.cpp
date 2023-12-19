@@ -231,7 +231,7 @@ namespace o2
 
         // set the individual row_pointers to point at the correct offsets of image_data
         for (int i = 0; i < (int)image->GetSize().y; ++i)
-            row_pointers[(unsigned int)image->GetSize().y - 1 - i] = (png_bytep)image->getData() + i * rowbytes;
+            row_pointers[(unsigned int)image->GetSize().y - 1 - i] = (png_bytep)image->GetData() + i * rowbytes;
 
         png_write_image(png_ptr, row_pointers);
 

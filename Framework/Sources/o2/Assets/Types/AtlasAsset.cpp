@@ -68,7 +68,7 @@ namespace o2
         return mSize;
     }
 
-    TextureRef AtlasAsset::Page::GetTexture() const
+    Ref<Texture> AtlasAsset::Page::GetTexture() const
     {
         return mTexture;
     }
@@ -197,9 +197,9 @@ namespace o2
         return (atlasInfo.tree ? atlasInfo.tree.Lock()->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + "." + extension;
     }
 
-    TextureRef AtlasAsset::GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx)
+    Ref<Texture> AtlasAsset::GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx)
     {
-        return TextureRef(GetPageTextureFileName(atlasInfo, pageIdx));
+        return Ref<Texture>(GetPageTextureFileName(atlasInfo, pageIdx));
     }
 
     bool AtlasAsset::PlatformMeta::operator==(const PlatformMeta& other) const

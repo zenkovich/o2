@@ -36,7 +36,7 @@ namespace o2
         UInt         mVertexBufferSize;          // Maximum size of vertex buffer
         UInt         mIndexBufferSize;           // Maximum size of index buffer
 
-        TextureRef mWhiteTexture; // Default white texture
+        Ref<Texture> mWhiteTexture; // Default white texture
 
     protected:
         // Builds vertex and fragment shaders

@@ -38,7 +38,7 @@ namespace o2
 
     void VectorFont::InitializeTexture()
     {
-        mTexture = TextureRef(Vec2I(mInitialTextureSize, mInitialTextureSize));
+        mTexture = Ref<Texture>(Vec2I(mInitialTextureSize, mInitialTextureSize));
         mTextureSrcRect.Set(0, 0, mInitialTextureSize, mInitialTextureSize);
     }
 
@@ -287,8 +287,8 @@ namespace o2
                 }
                 else
                 {
-                    TextureRef lastTexture = mTexture;
-                    mTexture = TextureRef(lastTexture->GetSize()*2, TextureFormat::R8G8B8A8, Texture::Usage::Default);
+                    Ref<Texture> lastTexture = mTexture;
+                    mTexture = Ref<Texture>(lastTexture->GetSize()*2, TextureFormat::R8G8B8A8, Texture::Usage::Default);
                     mTexture->Copy(*lastTexture.Get(), RectI(Vec2I(0, 0), lastTexture->GetSize()));
 
                     for (auto heightKV : mCharacters)
@@ -321,7 +321,7 @@ namespace o2
         character.character.mTexSrc.top = 1.0f - character.rect.top*invTexSize.y;
         character.character.mTexSrc.bottom = 1.0f - character.rect.bottom*invTexSize.y;
 
-        mTexture->SetSubData(character.rect.LeftBottom(), character.bitmap);
+        mTexture->SetSubData(character.rect.LeftBottom(), *character.bitmap);
 
         AddCharacter(character.character);
     }

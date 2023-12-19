@@ -79,7 +79,7 @@ namespace Editor
 		Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 		colorLayerBitmap.Fill(Color4::White());
 		mColorSampleImage = mnew Image();
-		mColorSampleImage->image = mnew Sprite(&colorLayerBitmap);
+		mColorSampleImage->image = mnew Sprite(colorLayerBitmap);
 		*mColorSampleImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 		colorPreview->AddChild(mColorSampleImage);
 		colorPreviewContainer->AddChild(colorPreview);
@@ -100,7 +100,7 @@ namespace Editor
 
 		mColorPickAreaBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(80, 80));
 		mColorPickAreaBitmap->Clear(Color4::White());
-		mColorPickAreaTexture = TextureRef(mColorPickAreaBitmap);
+		mColorPickAreaTexture = Ref<Texture>(*mColorPickAreaBitmap);
 		mColorPickAreaColor = pickArea->AddLayer("color", mnew Sprite(mColorPickAreaTexture, RectI(0, 0, 80, 80)),
 												 Layout::BothStretch(1, 1, 1, 1));
 
@@ -115,7 +115,7 @@ namespace Editor
 
 		mHUEBarBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(20, 256));
 		InitHUEBarBitmap();
-		mHUEBarTexture = TextureRef(mHUEBarBitmap);
+		mHUEBarTexture = Ref<Texture>(*mHUEBarBitmap);
 		mHUEBar->AddLayer("color", mnew Sprite(mHUEBarTexture, RectI(0, 0, 20, 256)), Layout::BothStretch(1, 1, 1, 1),
 						  0.5f);
 
@@ -171,7 +171,7 @@ namespace Editor
 }
 
 Widget* ColorPickerDlg::InitializeColorParameter(Label*& name, HorizontalProgress*& bar,
-												   EditBox*& edit, Bitmap*& bitmap, TextureRef& texture,
+												   EditBox*& edit, Bitmap*& bitmap, Ref<Texture>& texture,
 												   const Function<void(float)>& changeCallback)
 {
 	auto resLayout = mnew Widget();
@@ -185,7 +185,7 @@ Widget* ColorPickerDlg::InitializeColorParameter(Label*& name, HorizontalProgres
 	bar->onChange = changeCallback;
 
 	bitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2F(256, 256));
-	texture = TextureRef(bitmap);
+	texture = Ref<Texture>(*bitmap);
 	bar->AddLayer("color", mnew Sprite(texture, RectI(0, 0, 256, 256)), Layout::BothStretch(1, 1, 1, 1), 0.5f);
 
 	Sprite* backSprite = mnew Sprite(mChessBackTexture, RectI(0, 0, 20, 20));
@@ -394,10 +394,10 @@ void ColorPickerDlg::UpdateRGBABitmaps()
 		memcpy(cA + bpp*w*i, cA, bpp*w);
 	}
 
-	mColor1ParamBarTexture->SetData(mColor1ParamBarBitmap);
-	mColor2ParamBarTexture->SetData(mColor2ParamBarBitmap);
-	mColor3ParamBarTexture->SetData(mColor3ParamBarBitmap);
-	mColorAParamBarTexture->SetData(mColorAParamBarBitmap);
+	mColor1ParamBarTexture->SetData(*mColor1ParamBarBitmap);
+	mColor2ParamBarTexture->SetData(*mColor2ParamBarBitmap);
+	mColor3ParamBarTexture->SetData(*mColor3ParamBarBitmap);
+	mColorAParamBarTexture->SetData(*mColorAParamBarBitmap);
 }
 
 void ColorPickerDlg::UpdateHSLABitmaps()
@@ -435,10 +435,10 @@ void ColorPickerDlg::UpdateHSLABitmaps()
 		memcpy(cA + bpp*w*i, cA, bpp*w);
 	}
 
-	mColor1ParamBarTexture->SetData(mColor1ParamBarBitmap);
-	mColor2ParamBarTexture->SetData(mColor2ParamBarBitmap);
-	mColor3ParamBarTexture->SetData(mColor3ParamBarBitmap);
-	mColorAParamBarTexture->SetData(mColorAParamBarBitmap);
+	mColor1ParamBarTexture->SetData(*mColor1ParamBarBitmap);
+	mColor2ParamBarTexture->SetData(*mColor2ParamBarBitmap);
+	mColor3ParamBarTexture->SetData(*mColor3ParamBarBitmap);
+	mColorAParamBarTexture->SetData(*mColorAParamBarBitmap);
 }
 
 void ColorPickerDlg::UpdateColorPickBitmap()
@@ -457,7 +457,7 @@ void ColorPickerDlg::UpdateColorPickBitmap()
 		}
 	}
 
-	mColorPickAreaTexture->SetData(mColorPickAreaBitmap);
+	mColorPickAreaTexture->SetData(*mColorPickAreaBitmap);
 }
 
 void ColorPickerDlg::UpdateHandlesValues()

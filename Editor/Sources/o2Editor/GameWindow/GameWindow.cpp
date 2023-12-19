@@ -136,7 +136,7 @@ namespace Editor
 
 	GameWindow::GameView::GameView()
 	{
-		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
 	}
 
@@ -196,7 +196,7 @@ namespace Editor
 
 		if (size != mRenderTarget->GetSize())
 		{
-			mRenderTarget = TextureRef(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+			mRenderTarget = Ref<Texture>(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 			*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
 			mRenderTargetSprite->SetMode(SpriteMode::FixedAspect);
 		}

@@ -5,7 +5,7 @@
 
 namespace o2
 {
-    SkinningMesh::SkinningMesh(TextureRef texture /*= TextureRef()*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/,
+    SkinningMesh::SkinningMesh(Ref<Texture> texture /*= TextureRef()*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/,
                                  UInt bonesCount /*= 16*/)
     {
         SetTexture(texture);
@@ -94,12 +94,12 @@ namespace o2
         OnDrawn();
     }
 
-    void SkinningMesh::SetTexture(TextureRef texture)
+    void SkinningMesh::SetTexture(Ref<Texture> texture)
     {
         mTexture = texture;
     }
 
-    TextureRef SkinningMesh::GetTexture() const
+    Ref<Texture> SkinningMesh::GetTexture() const
     {
         return mTexture;
     }

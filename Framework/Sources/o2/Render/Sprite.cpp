@@ -13,7 +13,7 @@
 namespace o2
 {
     Sprite::Sprite():
-        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(nullptr, 16, 18)
     {
         for (int i = 0; i < 4; i++)
             mCornersColors[i] = Color4::White();
@@ -24,7 +24,7 @@ namespace o2
     }
 
     Sprite::Sprite(const ImageAssetRef& image):
-        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(nullptr, 16, 18)
     {
         for (int i = 0; i < 4; i++)
             mCornersColors[i] = Color4::White();
@@ -35,7 +35,7 @@ namespace o2
     }
 
     Sprite::Sprite(const String& imagePath):
-        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(nullptr, 16, 18)
     {
         for (int i = 0; i < 4; i++)
             mCornersColors[i] = Color4::White();
@@ -46,7 +46,7 @@ namespace o2
     }
 
     Sprite::Sprite(UID imageId):
-        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(nullptr, 16, 18)
     {
         for (int i = 0; i < 4; i++)
             mCornersColors[i] = Color4::White();
@@ -56,7 +56,7 @@ namespace o2
         Render::OnSpriteCreated(this);
     }
 
-    Sprite::Sprite(TextureRef texture, const RectI& srcRect /*= RectI()*/):
+    Sprite::Sprite(Ref<Texture> texture, const RectI& srcRect /*= RectI()*/):
         mTextureSrcRect(srcRect), mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(texture, 16, 18)
     {
         if (srcRect == RectI())
@@ -71,7 +71,7 @@ namespace o2
     }
 
     Sprite::Sprite(const Color4& color):
-        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(nullptr, 16, 18)
     {
         for (int i = 0; i < 4; i++)
             mCornersColors[i] = Color4::White();
@@ -81,8 +81,8 @@ namespace o2
         Render::OnSpriteCreated(this);
     }
 
-    Sprite::Sprite(Bitmap* bitmap):
-        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(NoTexture(), 16, 18)
+    Sprite::Sprite(const Bitmap& bitmap):
+        mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(nullptr, 16, 18)
     {
         for (int i = 0; i < 4; i++)
             mCornersColors[i] = Color4::White();
@@ -97,8 +97,7 @@ namespace o2
         mMesh(other.mMesh), mMode(other.mMode), mFill(other.mFill), mSlices(other.mSlices),
         mMeshBuildFunc(other.mMeshBuildFunc), mTileScale(other.mTileScale),
         texture(this), textureSrcRect(this), image(this), imageName(this), leftTopColor(this), rightTopColor(this),
-        leftBottomColor(this), rightBottomColor(this), mode(this), fill(this), tileScale(this), sliceBorder(this), 
-        bitmap(this)
+        leftBottomColor(this), rightBottomColor(this), mode(this), fill(this), tileScale(this), sliceBorder(this)
     {
         for (int i = 0; i < 4; i++)
             mCornersColors[i] = other.mCornersColors[i];
@@ -145,13 +144,13 @@ namespace o2
 //         o2Render.DrawBasis(mTransform);
     }
 
-    void Sprite::SetTexture(TextureRef texture)
+    void Sprite::SetTexture(const Ref<Texture>& texture)
     {
         mMesh.SetTexture(texture);
         mImageAsset = ImageAssetRef();
     }
 
-    TextureRef Sprite::GetTexture() const
+    const Ref<Texture>& Sprite::GetTexture() const
     {
         return mMesh.GetTexture();
     }
@@ -347,7 +346,7 @@ namespace o2
     void Sprite::LoadMonoColor(const Color4& color)
     {
         mImageAsset = ImageAssetRef();
-        mMesh.mTexture = TextureRef();
+        mMesh.mTexture = Ref<Texture>();
         mColor = color;
         mCornersColors[0] = Color4::White();
         mCornersColors[1] = Color4::White();
@@ -357,18 +356,14 @@ namespace o2
         UpdateMesh();
     }
 
-    void Sprite::LoadFromBitmap(Bitmap* bitmap, bool setSizeByImage /*= true*/)
+    void Sprite::LoadFromBitmap(const Bitmap& bitmap, bool setSizeByImage /*= true*/)
     {
-        if (bitmap)
-        {
-            mImageAsset = ImageAssetRef();
-            mMesh.mTexture = TextureRef(bitmap);
-            mTextureSrcRect.Set(Vec2F(), mMesh.mTexture->GetSize());
+		mImageAsset = ImageAssetRef();
+		mMesh.mTexture = Ref<Texture>(bitmap);
+		mTextureSrcRect.Set(Vec2F(), mMesh.mTexture->GetSize());
 
-            if (setSizeByImage)
-                SetSize(mMesh.mTexture->GetSize());
-        }
-        else o2Debug.LogWarningStr("Can't create sprite from bitmap: bitmap is null");
+		if (setSizeByImage)
+			SetSize(mMesh.mTexture->GetSize());
     }
 
     void Sprite::SetImageAsset(const ImageAssetRef& asset)

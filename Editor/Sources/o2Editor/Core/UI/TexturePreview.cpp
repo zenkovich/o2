@@ -30,7 +30,7 @@ namespace Editor
 		mTextureInfoLabel = FindChildByType<Label>();
 	}
 
-	void TexturePreview::SetTexture(const TextureRef& texture, const RectI& srcRect /*= RectI()*/)
+	void TexturePreview::SetTexture(const Ref<Texture>& texture, const RectI& srcRect /*= RectI()*/)
 	{
 		mTextureSprite->SetTexture(texture);
 

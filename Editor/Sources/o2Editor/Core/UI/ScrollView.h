@@ -90,7 +90,7 @@ namespace Editor
 		bool mReady = false; // Is widget initialized and ready to use
 				   								           
 		Sprite*    mRenderTargetSprite = nullptr; // Render target sprite, using for caching graphics
-		TextureRef mRenderTarget;                 // Render target texture, using for caching graphics
+		Ref<Texture> mRenderTarget;                 // Render target texture, using for caching graphics
 		bool       mNeedRedraw = false;           // Is need to redraw render target
 				   								           
 		Color4 mBackColor; // Color of back @SERIALIZABLE

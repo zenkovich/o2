@@ -123,7 +123,7 @@ namespace o2
 
     TextureSource ImageAsset::GetTextureSource() const
     {
-        TextureRef texture; 
+        Ref<Texture> texture; 
 
         if (!IsInAtlas())
             texture = mTexture;
@@ -154,7 +154,7 @@ namespace o2
     {
         if (!IsInAtlas())
         {
-            mTexture = TextureRef(path);
+            mTexture = Ref<Texture>(path);
             mSourceRect = RectI(Vec2F(), mTexture->GetSize());
             mAtlas = nullptr;
         }

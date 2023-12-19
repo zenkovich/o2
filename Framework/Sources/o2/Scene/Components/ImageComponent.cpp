@@ -30,7 +30,7 @@ namespace o2
         mSerializeEnabled = false;
     }
 
-    ImageComponent::ImageComponent(TextureRef texture, const RectI& srcRect) :
+    ImageComponent::ImageComponent(Ref<Texture> texture, const RectI& srcRect) :
         DrawableComponent(), Sprite(texture, srcRect)
     {
         mSerializeEnabled = false;
@@ -42,7 +42,7 @@ namespace o2
         mSerializeEnabled = false;
     }
 
-    ImageComponent::ImageComponent(Bitmap* bitmap) :
+    ImageComponent::ImageComponent(const Bitmap& bitmap) :
         DrawableComponent(), Sprite(bitmap)
     {
         mSerializeEnabled = false;

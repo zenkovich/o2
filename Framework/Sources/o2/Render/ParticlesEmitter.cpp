@@ -11,7 +11,7 @@ namespace o2
         IRectDrawable()
     {
         mShape = mnew CircleParticlesEmitterShape();
-        mParticlesMesh = mnew Mesh(NoTexture(), mParticlesNumLimit*4, mParticlesNumLimit*2);
+        mParticlesMesh = mnew Mesh(Ref<Texture>::Null(), mParticlesNumLimit*4, mParticlesNumLimit*2);
         mLastTransform = mTransform;
     }
 
@@ -40,7 +40,7 @@ namespace o2
         emitParticlesSpeedRange(this), emitParticlesMoveDir(this), emitParticlesMoveDirRange(this), emitParticlesColorA(this), emitParticlesColorB(this),
         image(this), shape(this)
     {
-        mParticlesMesh = mnew Mesh(NoTexture(), mParticlesNumLimit*4, mParticlesNumLimit*2);
+        mParticlesMesh = mnew Mesh(Ref<Texture>::Null(), mParticlesNumLimit*4, mParticlesNumLimit*2);
 
         for (auto effect : other.mEffects)
             AddEffect(effect->CloneAs<ParticlesEffect>());
@@ -331,9 +331,9 @@ namespace o2
         mImageAsset = image;
 
         if (mImageAsset)
-            mParticlesMesh->SetTexture(TextureRef(mImageAsset->GetAtlasUID(), mImageAsset->GetAtlasPage()));
+            mParticlesMesh->SetTexture(Ref<Texture>(mImageAsset->GetAtlasUID(), mImageAsset->GetAtlasPage()));
         else
-            mParticlesMesh->SetTexture(NoTexture());
+            mParticlesMesh->SetTexture(Ref<Texture>::Null());
     }
 
     ImageAssetRef ParticlesEmitter::GetImage() const

@@ -104,7 +104,7 @@ namespace Editor
 
 		if (!mTrack->GetKeys().IsEmpty())
 		{
-			static TextureRef chessBackTexture;
+			static Ref<Texture> chessBackTexture;
 			static Sprite chessBackSprite;
 			if (!chessBackTexture)
 			{
@@ -113,7 +113,7 @@ namespace Editor
 				backLayerBitmap.Fill(color1);
 				backLayerBitmap.FillRect(0, 8, 8, 0, color2);
 				backLayerBitmap.FillRect(8, 16, 16, 8, color2);
-				chessBackTexture = TextureRef(&backLayerBitmap);
+				chessBackTexture = Ref<Texture>(backLayerBitmap);
 				chessBackSprite = Sprite(chessBackTexture, RectI(0, 0, 16, 16));
 				chessBackSprite.mode = SpriteMode::Tiled;
 			}

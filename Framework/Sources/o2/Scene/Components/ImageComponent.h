@@ -21,25 +21,25 @@ namespace o2
         ImageComponent();
 
         // Constructor from image asset
-        ImageComponent(const ImageAssetRef& image);
+        explicit ImageComponent(const ImageAssetRef& image);
 
         // Constructor from image asset by path
-        ImageComponent(const String& imagePath);
+        explicit ImageComponent(const String& imagePath);
 
         // Constructor from image asset by id
-        ImageComponent(const UID& imageId);
-
-        // Constructor from texture and source rectangle
-        ImageComponent(TextureRef texture, const RectI& srcRect);
+        explicit ImageComponent(const UID& imageId);
 
         // Constructor from color
-        ImageComponent(const Color4& color);
+        explicit ImageComponent(const Color4& color);
 
         // Constructor from bitmap
-        ImageComponent(Bitmap* bitmap);
+        explicit ImageComponent(const Bitmap& bitmap);
 
         // Constructor from sprite
-        ImageComponent(const Sprite& sprite);
+		explicit ImageComponent(const Sprite& sprite);
+
+		// Constructor from texture and source rectangle
+		ImageComponent(Ref<Texture> texture, const RectI& srcRect);
 
         // Copy-constructor
         ImageComponent(const ImageComponent& other);
@@ -111,10 +111,10 @@ CLASS_METHODS_META(o2::ImageComponent)
     FUNCTION().PUBLIC().CONSTRUCTOR(const ImageAssetRef&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(Bitmap*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Bitmap&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(Ref<Texture>, const RectI&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ImageComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, FitActorByImage);

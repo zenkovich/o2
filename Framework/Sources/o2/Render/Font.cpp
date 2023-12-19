@@ -55,7 +55,7 @@ namespace o2
         return String();
     }
 
-    const TextureRef& Font::GetTexture() const
+    const Ref<Texture>& Font::GetTexture() const
     {
         return mTexture;
     }

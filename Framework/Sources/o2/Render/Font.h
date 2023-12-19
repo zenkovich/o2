@@ -54,7 +54,7 @@ namespace o2
         virtual String GetFileName() const;
 
         // Returns texture
-        const TextureRef& GetTexture() const;
+        const Ref<Texture>& GetTexture() const;
 
         // Returns texture source rectangle
         const RectI& GetTextureSrcRect() const;
@@ -80,7 +80,7 @@ namespace o2
 
         Map<int, Map<UInt16, Character>> mCharacters; // Characters map, int - height, uint16 - id
 
-        TextureRef mTexture;        // Texture
+        Ref<Texture> mTexture;        // Texture
         RectI      mTextureSrcRect; // Texture source rectangle
 
         bool mReady; // True when font is ready to use

@@ -86,13 +86,13 @@ namespace o2
 
         Bitmap b(PixelFormat::R8G8B8A8, Vec2I(16, 16));
         b.Fill(Color4::White());
-        mWhiteTexture = TextureRef(&b);
+        mWhiteTexture = Ref<Texture>(&b);
 
         InitializeFreeType();
         InitializeLinesIndexBuffer();
         InitializeLinesTextures();
 
-        mCurrentRenderTarget = TextureRef();
+        mCurrentRenderTarget = Ref<Texture>();
 
         if (IsDevMode())
             o2Assets.onAssetsRebuilt += MakeFunction(this, &Render::OnAssetsRebuilt);
@@ -108,8 +108,8 @@ namespace o2
         if (IsDevMode())
             o2Assets.onAssetsRebuilt -= MakeFunction(this, &Render::OnAssetsRebuilt);
 
-        mSolidLineTexture = TextureRef::Null();
-        mDashLineTexture = TextureRef::Null();
+        mSolidLineTexture = Ref<Texture>::Null();
+        mDashLineTexture = Ref<Texture>::Null();
 
         auto fonts = mFonts;
         for (auto font : fonts)
@@ -339,7 +339,7 @@ namespace o2
     }
 
     void Render::DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
-        VertexIndex* indexes, UInt elementsCount, const TextureRef& texture)
+        VertexIndex* indexes, UInt elementsCount, const Ref<Texture>& texture)
     {
         PROFILE_SAMPLE_FUNC();
 
@@ -761,7 +761,7 @@ namespace o2
         }
     }
 
-    void Render::BindRenderTexture(TextureRef renderTarget)
+    void Render::BindRenderTexture(Ref<Texture> renderTarget)
     {
         if (!renderTarget)
         {
@@ -814,7 +814,7 @@ namespace o2
 
         SetupViewMatrix(mResolution);
 
-        mCurrentRenderTarget = TextureRef();
+        mCurrentRenderTarget = Ref<Texture>();
 
         DisableScissorTest(true);
         mStackScissors.PopBack();

@@ -10,7 +10,7 @@ namespace o2
 {
     struct TextureSource 
     {
-        TextureRef texture;
+        Ref<Texture> texture;
         RectF      sourceRect;
     };
 }
