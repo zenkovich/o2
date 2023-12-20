@@ -2,17 +2,17 @@
 
 #include "o2/Render/IDrawable.h"
 #include "o2/Render/TextureRef.h"
-#include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Math/Vertex.h"
-
 #include "o2/Utils/Property.h"
+#include "o2/Utils/Types/CommonTypes.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
     // -----------------------------------------------------------------
     // Triangles mesh. Containing vertices, indexes of polygons, texture
     // -----------------------------------------------------------------
-    class Mesh: public virtual IDrawable
+    class Mesh: public virtual IDrawable, public RefCounterable
     {
     public:
         PROPERTIES(Mesh);

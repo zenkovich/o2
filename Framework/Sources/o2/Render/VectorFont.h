@@ -28,7 +28,7 @@ namespace o2
         {
         public:
             // Processes glyph bitmap
-            virtual void Process(Bitmap* bitmap) {};
+            virtual void Process(Bitmap& bitmap) {};
 
             // Returns needs extending size for glyph bitmap
             virtual Vec2I GetSizeExtend() const { return Vec2I(); };
@@ -97,10 +97,11 @@ namespace o2
         // ------------------------------
         struct CharDef
         {
-            PackLine* packLine;
-            RectI     rect;
-            Character character;
-            Bitmap*   bitmap;
+            WeakRef<PackLine> packLine;
+
+            RectI       rect;
+            Character   character;
+            Ref<Bitmap> bitmap;
 
             bool operator==(const CharDef& other) const { return false; }
         };
@@ -108,7 +109,7 @@ namespace o2
         // -----------------------
         // Characters packing line
         // -----------------------
-        struct PackLine
+        struct PackLine: public RefCounterable
         {
             int position = 0;
             int height = 0;
@@ -128,8 +129,8 @@ namespace o2
 
         Vector<Ref<Effect>> mEffects; // Font effects
 
-        Vector<PackLine*> mPackLines;           // Packed symbols lines
-        int               mLastPackLinePos = 0; // Last packed line bottom pos
+        Vector<Ref<PackLine>> mPackLines;           // Packed symbols lines
+        int                   mLastPackLinePos = 0; // Last packed line bottom pos
 
         mutable Map<int, float> mHeights; // Cached line heights
 
@@ -168,7 +169,7 @@ END_META;
 CLASS_METHODS_META(o2::VectorFont::Effect)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, Effect*);
 }

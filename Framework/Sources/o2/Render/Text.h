@@ -70,10 +70,10 @@ namespace o2
         void Draw() override;
 
         // Sets using font @SCRIPTABLE
-        void SetFont(Ref<Font> font);
+        void SetFont(const Ref<Font>& font);
 
         // Returns using font @SCRIPTABLE
-        Ref<Font> GetFont() const;
+        const Ref<Font>& GetFont() const;
 
         // Sets bitmap font asset  @SCRIPTABLE
         void SetFontAsset(const FontAssetRef& asset);
@@ -237,8 +237,8 @@ namespace o2
         bool      mWordWrap;          // True, when words wrapping @SERIALIZABLE
         bool      mDotsEndings;       // If true, text will end on '...' @SERIALIZABLE
 
-        Vector<Mesh*> mMeshes;        // Meshes vector
-        Basis         mLastTransform; // Last mesh update transformation
+        Vector<Ref<Mesh>> mMeshes;        // Meshes vector
+        Basis             mLastTransform; // Last mesh update transformation
 
         SymbolsSet mSymbolsSet; // Symbols set definition
 
@@ -318,8 +318,8 @@ CLASS_METHODS_META(o2::Text)
     FUNCTION().PUBLIC().CONSTRUCTOR(const VectorFontAssetRef&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Text&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFont, Ref<Font>);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Font>, GetFont);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFont, const Ref<Font>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Ref<Font>&, GetFont);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(FontAssetRef, GetFontAsset);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHeight, int);

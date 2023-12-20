@@ -69,9 +69,6 @@ namespace o2
 
     Text::~Text()
     {
-        for (auto mesh : mMeshes)
-            delete mesh;
-
         if (mFont)
             mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
     }
@@ -112,13 +109,13 @@ namespace o2
             mesh->Draw();
 
             if (o2Input.IsKeyDown(VK_F3))
-                o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 150));
+                o2Render.DrawMeshWire(mesh.Get(), Color4(0, 255, 0, 150));
         }
 
         OnDrawn();
     }
 
-    void Text::SetFont(Ref<Font> font)
+    void Text::SetFont(const Ref<Font>& font)
     {
         if (mFont)
             mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
@@ -131,7 +128,7 @@ namespace o2
         UpdateMesh();
     }
 
-    Ref<Font> Text::GetFont() const
+    const Ref<Font>& Text::GetFont() const
     {
         return mFont;
     }
@@ -315,7 +312,7 @@ namespace o2
         }
 
         int currentMeshIdx = 0;
-        Mesh* currentMesh = mMeshes[0];
+        Ref<Mesh> currentMesh = mMeshes[0];
 
         mSymbolsSet.Initialize(mFont, mText, mHeight, mTransform.origin, mSize, mHorAlign, mVerAlign, mWordWrap, mDotsEndings,
                                mSymbolsDistCoef, mLinesDistanceCoef);
@@ -394,7 +391,7 @@ namespace o2
         {
             int polyCount = Math::Min<int>(needPolygons, mMeshMaxPolyCount);
             needPolygons -= polyCount;
-            mMeshes.Add(mnew Mesh(mFont->mTexture, polyCount * 2, polyCount));
+            mMeshes.Add(mmake<Mesh>(mFont->mTexture, polyCount * 2, polyCount));
         }
     }
 

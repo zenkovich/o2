@@ -1,7 +1,8 @@
 #pragma once
 
-#include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Render/Particle.h"
+#include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -10,7 +11,7 @@ namespace o2
     // -------------------------------
     // Particles effect base interface
     // -------------------------------
-    class ParticlesEffect: public ISerializable
+    class ParticlesEffect: public ISerializable, public RefCounterable
     {
         SERIALIZABLE(ParticlesEffect);
 
@@ -35,6 +36,7 @@ namespace o2
 CLASS_BASES_META(o2::ParticlesEffect)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::ParticlesEffect)

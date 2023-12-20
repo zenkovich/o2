@@ -19,7 +19,7 @@ namespace o2
         FontStrokeEffect(float radius = 1.0f, const Color4& color = Color4(0, 0, 0, 150), int alphaThreshold = 100);
 
         // Process bitmap with glyph
-        void Process(Bitmap* bitmap) override;
+        void Process(Bitmap& bitmap) override;
 
         // Returns bitmap extending size
         Vec2I GetSizeExtend() const override;
@@ -49,7 +49,7 @@ namespace o2
                            float angle = 0, float length = 0, Vec2F origin = Vec2F());
 
         // Process bitmap with glyph
-        void Process(Bitmap* bitmap) override;
+        void Process(Bitmap& bitmap) override;
 
         // Returns bitmap extending size
         Vec2I GetSizeExtend() const override;
@@ -70,7 +70,7 @@ namespace o2
         FontColorEffect(const Color4& color = Color4::White());
 
         // Process bitmap with glyph
-        void Process(Bitmap* bitmap) override;
+        void Process(Bitmap& bitmap) override;
 
         // Returns bitmap extending size
         Vec2I GetSizeExtend() const override;
@@ -94,7 +94,7 @@ namespace o2
                          const Color4& color = Color4(0, 0, 0, 100));
 
         // Process bitmap with glyph
-        void Process(Bitmap* bitmap) override;
+        void Process(Bitmap& bitmap) override;
 
         // Returns bitmap extending size
         Vec2I GetSizeExtend() const override;
@@ -123,7 +123,7 @@ CLASS_METHODS_META(o2::FontStrokeEffect)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR(float, const Color4&, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
 }
@@ -147,7 +147,7 @@ CLASS_METHODS_META(o2::FontGradientEffect)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&, const Color4&, float, float, Vec2F);
-    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
 }
@@ -167,7 +167,7 @@ CLASS_METHODS_META(o2::FontColorEffect)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
 }
@@ -189,7 +189,7 @@ CLASS_METHODS_META(o2::FontShadowEffect)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR(float, const Vec2I, const Color4&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
 }

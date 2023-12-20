@@ -232,7 +232,7 @@ namespace o2
 
             Vec2I glyphSize(glyph->bitmap.width, glyph->bitmap.rows);
 
-            Bitmap* newBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, glyphSize + border*2);
+            Ref<Bitmap> newBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, glyphSize + border*2);
             newBitmap->Fill(Color4(255, 255, 255, 0));
             UInt8* newBitmapData = newBitmap->GetData();
             Vec2I newBitmapSize = newBitmap->GetSize();
@@ -248,7 +248,7 @@ namespace o2
             }
 
             for (auto effect : mEffects)
-                effect->Process(newBitmap);
+                effect->Process(*newBitmap);
 
             newCharDef.bitmap = newBitmap;
             newCharDef.character.mId = ch;
@@ -260,24 +260,24 @@ namespace o2
 
             PackCharacter(newCharDef, symbolsHeight);
 
-            delete newBitmap;
+            newCharDef.bitmap = nullptr;
         }
     }
 
     void VectorFont::PackCharacter(CharDef& character, int height)
     {
-        PackLine* packLine = nullptr;
+        Ref<PackLine> packLine;
 
         while (!packLine)
         {
-            packLine = mPackLines.FindOrDefault([&](PackLine* x) {
+            packLine = mPackLines.FindOrDefault([&](const Ref<PackLine>& x) {
                 return x->height >= height && x->length + character.bitmap->GetSize().x < mTexture->GetSize().x; });
 
             if (!packLine)
             {
                 if (mLastPackLinePos + height <= mTexture->GetSize().y)
                 {
-                    packLine = mnew PackLine();
+                    packLine = mmake<PackLine>();
                     packLine->position = mLastPackLinePos;
                     packLine->height = height;
 
