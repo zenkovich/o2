@@ -168,10 +168,7 @@ namespace o2
 
         if (mGLContext)
         {
-            auto fonts = mFonts;
-            for (auto font : fonts)
-                delete font;
-
+            mFonts.Clear();
             mTextures.Clear();
 
             if (!wglMakeCurrent(NULL, NULL))

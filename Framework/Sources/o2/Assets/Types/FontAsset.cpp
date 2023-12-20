@@ -19,7 +19,7 @@ namespace o2
         Asset(meta)
     {}
 
-    FontRef FontAsset::GetFont() const
+    Ref<Font> FontAsset::GetFont() const
     {
         return mFont;
     }

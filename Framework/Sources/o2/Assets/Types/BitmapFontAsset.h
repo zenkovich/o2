@@ -4,8 +4,6 @@
 
 namespace o2
 {
-    class Font;
-
     // -----------------
     // Bitmap font asset
     // -----------------

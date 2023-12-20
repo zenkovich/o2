@@ -6,8 +6,6 @@
 
 namespace o2
 {
-    class Font;
-
     // ----------
     // Font asset
     // ----------
@@ -15,7 +13,7 @@ namespace o2
     {
     public:
         PROPERTIES(FontAsset);
-        GETTER(FontRef, font, GetFont); // Font getter
+        GETTER(Ref<Font>, font, GetFont); // Font getter
 
     public:
         // Default constructor
@@ -31,7 +29,7 @@ namespace o2
         FontAsset& operator=(const FontAsset& asset);
 
         // Returns font pointer
-        virtual FontRef GetFont() const;
+        virtual Ref<Font> GetFont() const;
 
         // Returns editor sorting weight
         static int GetEditorSorting() { return 93; }
@@ -39,7 +37,7 @@ namespace o2
         SERIALIZABLE(FontAsset);
 
     protected:
-        FontRef mFont;
+        Ref<Font> mFont;
 
         friend class Assets;
     };
@@ -65,7 +63,7 @@ CLASS_METHODS_META(o2::FontAsset)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<AssetMeta>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const FontAsset&);
-    FUNCTION().PUBLIC().SIGNATURE(FontRef, GetFont);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Font>, GetFont);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
 }
 END_META;

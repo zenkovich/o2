@@ -31,6 +31,8 @@
 namespace o2
 {
     class AtlasAsset;
+    FORWARD_REF(AtlasAsset);
+
     class CursorAreaEventListenersLayer;
     class Font;
     class Mesh;
@@ -311,7 +313,7 @@ namespace o2
         Ref<LogStream> mLog; // Render log stream
 
         Vector<Ref<Texture>> mTextures; // Loaded textures
-        Vector<Font*>    mFonts;    // Loaded fonts
+        Vector<Ref<Font>>    mFonts;    // Loaded fonts
 
         Camera mCamera;            // Camera transformation
         Vec2I  mResolution;        // Primary back buffer size
@@ -341,9 +343,9 @@ namespace o2
 
         Vector<Sprite*> mSprites; // All sprites
 
-        Vector<AtlasAsset*> mAtlases; // All atlases
+        Vector<Ref<AtlasAsset>> mAtlases; // All atlases
 
-        VertexIndex* mHardLinesIndexData; // Index data buffer
+        VertexIndex*   mHardLinesIndexData; // Index data buffer
         Ref<Texture>   mSolidLineTexture;   // Solid line texture
         Ref<Texture>   mDashLineTexture;    // Dash line texture
 
@@ -415,6 +417,12 @@ namespace o2
 
         // Called when atlas destroyed, unregisters it from render
         void OnAtlasDestroyed(AtlasAsset* atlas);
+
+        // Called when font created, registers it in render
+        void OnFontCreated(Font* font);
+
+        // Called when font destroyed, unregisters it from render
+        void OnFontDestroyed(Font* font);
 
         friend class Application;
         friend class AtlasAsset;

@@ -144,7 +144,7 @@ namespace Editor
 
 		float mDuration = 0.0f; // Scale length in seconds
 
-		FontRef mTextFont;       // Captions font
+		Ref<Font> mTextFont;       // Captions font
 		Text*   mText = nullptr; // Captions text
 
 		Sprite* mBeginMark = nullptr; // Begin animation mark sprite. Begin is always at zero

@@ -70,20 +70,20 @@ namespace o2
     void VectorFontAsset::AddEffect(const Ref<VectorFont::Effect>& effect)
     {
         GetMeta()->mEffects.Add(effect);
-        ((VectorFont*)mFont.mFont)->AddEffect(effect);
+        DynamicCast<VectorFont>(mFont)->AddEffect(effect);
     }
 
     void VectorFontAsset::RemoveEffect(const Ref<VectorFont::Effect>& effect)
     {
         GetMeta()->mEffects.Remove(effect);
-        ((VectorFont*)mFont.mFont)->RemoveEffect(effect);
+        DynamicCast<VectorFont>(mFont)->RemoveEffect(effect);
     }
 
     void VectorFontAsset::RemoveAllEffects()
     {
         GetMeta()->mEffects.Clear();
 
-        ((VectorFont*)mFont.mFont)->RemoveAllEffects();
+        DynamicCast<VectorFont>(mFont)->RemoveAllEffects();
     }
 
     Vector<String> VectorFontAsset::GetFileExtensions()
@@ -102,7 +102,7 @@ namespace o2
 
         if (!mFont)
         {
-            mFont = mnew VectorFont(path);
+            mFont = mmake<VectorFont>(path);
             UpdateFontEffects();
         }
         
@@ -121,7 +121,7 @@ namespace o2
                 clonedEffects.Add(eff->CloneAsRef<VectorFont::Effect>());
         }
 
-        dynamic_cast<VectorFont*>(mFont.mFont)->SetEffects(clonedEffects);
+        DynamicCast<VectorFont>(mFont)->SetEffects(clonedEffects);
     }
 }
 

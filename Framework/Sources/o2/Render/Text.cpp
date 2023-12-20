@@ -14,7 +14,7 @@ namespace o2
         mDotsEndings(false), mHeight(11)
     {}
 
-    Text::Text(FontRef font):
+    Text::Text(Ref<Font> font):
         mFont(font), mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
         mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mUpdatingMesh(false),
         mFontAssetId(0), mDotsEndings(false), mHeight(11)
@@ -118,7 +118,7 @@ namespace o2
         OnDrawn();
     }
 
-    void Text::SetFont(FontRef font)
+    void Text::SetFont(Ref<Font> font)
     {
         if (mFont)
             mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
@@ -131,7 +131,7 @@ namespace o2
         UpdateMesh();
     }
 
-    FontRef Text::GetFont() const
+    Ref<Font> Text::GetFont() const
     {
         return mFont;
     }
@@ -147,7 +147,7 @@ namespace o2
             mFontAssetId = asset->GetUID();
         }
         else
-            mFont = FontRef();
+            mFont = Ref<Font>();
 
         if (mFont)
             mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
@@ -267,7 +267,7 @@ namespace o2
         return RectF(mTransform.origin, mTransform.origin + mSymbolsSet.mRealSize);
     }
 
-    Vec2F Text::GetTextSize(const WString& text, Font* font, int height /*= 11*/, const Vec2F& areaSize /*= Vec2F()*/,
+    Vec2F Text::GetTextSize(const WString& text, const Ref<Font>& font, int height /*= 11*/, const Vec2F& areaSize /*= Vec2F()*/,
                             HorAlign horAlign /*= HorAlign::Left*/, VerAlign verAlign /*= VerAlign::Top*/,
                             bool wordWrap /*= true*/, bool dotsEngings /*= false*/, float charsDistCoef /*= 1.0f*/,
                             float linesDistCoef /*= 1.0f*/)
@@ -275,6 +275,7 @@ namespace o2
         SymbolsSet textSet;
         textSet.Initialize(font, text, height, Vec2F(), areaSize, horAlign, verAlign, wordWrap, dotsEngings, charsDistCoef,
                            linesDistCoef);
+
         return textSet.mRealSize;
     }
 
@@ -463,7 +464,7 @@ namespace o2
         mSymbolsSet.Move(bas.origin);
     }
 
-    void Text::SymbolsSet::Initialize(FontRef font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,
+    void Text::SymbolsSet::Initialize(const Ref<Font>& font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,
                                       HorAlign horAlign, VerAlign verAlign, bool wordWrap, bool dotsEngings,
                                       float charsDistCoef, float linesDistCoef)
     {

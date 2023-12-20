@@ -6,8 +6,6 @@
 
 namespace o2
 {
-    class Font;
-
     // -----------------
     // Vector font asset
     // -----------------

@@ -18,7 +18,7 @@ namespace o2
         PROPERTIES(Label);
         PROPERTY(WString, text, SetText, GetText);   // Text property, wstring
 
-        PROPERTY(FontRef, font, SetFont, GetFont);                     // Font pointer property
+        PROPERTY(Ref<Font>, font, SetFont, GetFont);                     // Font pointer property
         PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property
         
         PROPERTY(int, height, SetHeight, GetHeight); // Text height property
@@ -49,10 +49,10 @@ namespace o2
         void Draw() override;
 
         // Sets using font
-        void SetFont(FontRef font);
+        void SetFont(Ref<Font> font);
 
         // Returns using font
-        FontRef GetFont() const;
+        Ref<Font> GetFont() const;
 
         // Sets bitmap font asset 
         void SetFontAsset(const FontAssetRef& asset);
@@ -182,8 +182,8 @@ CLASS_METHODS_META(o2::Label)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const Label&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetFont, FontRef);
-    FUNCTION().PUBLIC().SIGNATURE(FontRef, GetFont);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFont, Ref<Font>);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Font>, GetFont);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
     FUNCTION().PUBLIC().SIGNATURE(FontAssetRef, GetFontAsset);
     FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);

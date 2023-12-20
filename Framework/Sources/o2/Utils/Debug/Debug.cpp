@@ -35,7 +35,7 @@ namespace o2
     {
         mFont = mnew VectorFont(o2Assets.GetBuiltAssetsPath() + "debugFont.ttf");
         mFont->AddEffect<FontStrokeEffect>();
-        mText = mnew Text(FontRef(mFont));
+        mText = mnew Text(Ref<Font>(mFont));
     }
 
     void Debug::Update(bool isEditor, float dt)
@@ -298,7 +298,7 @@ namespace o2
                             float delay /*= -1.0f*/):
         position(position), text(text), ownTextDrawable(true), IDbgDrawable(color, delay)
     {
-        textDrawable = mnew Text(FontRef(font));
+        textDrawable = mnew Text(Ref<Font>(font));
     }
 
     Debug::DbgText::~DbgText()

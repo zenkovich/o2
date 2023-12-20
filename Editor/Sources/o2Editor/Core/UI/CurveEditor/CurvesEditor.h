@@ -83,7 +83,7 @@ namespace Editor
 		void SetSelectionSpriteImage(const ImageAssetRef& image);
 
 		// Sets captions text font
-		void SetTextFont(const FontRef& font);
+		void SetTextFont(const Ref<Font>& font);
 
 		// Sets captions offsets 
 		void SetTextBorder(const BorderF& border);
@@ -257,7 +257,7 @@ namespace Editor
 
 		bool mAdjustCurvesScale = true; // When it is true, all curves adopts their size to be in the same view range
 
-		FontRef mTextFont;             // Captions text font @SERIALIZABLE
+		Ref<Font> mTextFont;             // Captions text font @SERIALIZABLE
 		Text*   mTextLeft = nullptr;   // Captions text drawable at left border
 		Text*   mTextRight = nullptr;  // Captions text drawable at right border
 		Text*   mTextTop = nullptr;    // Captions text drawable at top border
@@ -511,7 +511,7 @@ CLASS_METHODS_META(Editor::CurvesEditor)
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveColor, Curve*, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurvesRange, const String&, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionSpriteImage, const ImageAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTextFont, const FontRef&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTextFont, const Ref<Font>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTextBorder, const BorderF&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);

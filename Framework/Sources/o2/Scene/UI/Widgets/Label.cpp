@@ -86,7 +86,7 @@ namespace o2
         DrawDebugFrame();
     }
 
-    void Label::SetFont(FontRef font)
+    void Label::SetFont(Ref<Font> font)
     {
         if (mTextDrawable)
             mTextDrawable->SetFont(font);
@@ -94,12 +94,12 @@ namespace o2
         SetLayoutDirty();
     }
 
-    FontRef Label::GetFont() const
+    Ref<Font> Label::GetFont() const
     {
         if (mTextDrawable)
             return mTextDrawable->GetFont();
 
-        return FontRef();
+        return Ref<Font>();
     }
 
     void Label::SetFontAsset(const FontAssetRef& asset)

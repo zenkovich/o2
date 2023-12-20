@@ -30,7 +30,7 @@ namespace Editor
 		mReady = false;
 
 		mSelectionSprite = mnew Sprite();
-		mTextFont = FontRef("stdFont.ttf");
+		mTextFont = Ref<Font>("stdFont.ttf");
 		mTextFont->CheckCharacters("0123456789.,+-", 10);
 
 		InitializeTextDrawables();
@@ -273,7 +273,7 @@ namespace Editor
 		mSelectionSprite->LoadFromImage(image);
 	}
 
-	void CurvesEditor::SetTextFont(const FontRef& font)
+	void CurvesEditor::SetTextFont(const Ref<Font>& font)
 	{
 		mTextFont = font;
 		mTextLeft->SetFont(mTextFont);

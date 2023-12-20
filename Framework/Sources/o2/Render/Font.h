@@ -4,23 +4,23 @@
 #include FT_FREETYPE_H
 
 #include "o2/Render/TextureRef.h"
-#include "o2/Utils/Types/CommonTypes.h"
-#include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Math/Rect.h"
 #include "o2/Utils/Math/Vector2.h"
+#include "o2/Utils/Types/CommonTypes.h"
+#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
 
 namespace o2
 {
     class Mesh;
     class Render;
-    class FontRef;
 
     // -----------------------------------------------------------
     // Font. Containing array of symbol glyphs, symbol index table
     // -----------------------------------------------------------
-    class Font
+    class Font: public RefCounterable
     {
     protected:
         struct Character;
@@ -76,21 +76,19 @@ namespace o2
         };
 
     protected:
-        Vector<FontRef*>  mRefs; // Array of reference to this font
-
         Map<int, Map<UInt16, Character>> mCharacters; // Characters map, int - height, uint16 - id
 
         Ref<Texture> mTexture;        // Texture
-        RectI      mTextureSrcRect; // Texture source rectangle
+        RectI        mTextureSrcRect; // Texture source rectangle
 
-        bool mReady; // True when font is ready to use
+        bool mReady = false; // True when font is ready to use
 
     protected:
         // Adds character and registers in cache map
         void AddCharacter(const Character& character);
 
         friend class Text;
-        friend class FontRef;
+        friend class Ref<Font>;
         friend class Render;
     };
 }

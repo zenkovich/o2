@@ -165,14 +165,14 @@ namespace o2
 
     void Render::CheckFontsUnloading()
     {
-        Vector<Font*> unloadFonts;
-        for (auto font : mFonts)
-        {
-            if (font->mRefs.IsEmpty())
-                unloadFonts.Add(font);
-        }
-
-        unloadFonts.ForEach([](auto fnt) { delete fnt; });
+//         Vector<Font*> unloadFonts;
+//         for (auto font : mFonts)
+//         {
+//             if (font->mRefs.IsEmpty())
+//                 unloadFonts.Add(font);
+//         }
+// 
+//         unloadFonts.ForEach([](auto fnt) { delete fnt; });
     }
 
     void Render::OnAssetsRebuilt(const Vector<UID>& changedAssets)
@@ -210,17 +210,27 @@ namespace o2
 
     void Render::OnTextureDestroyed(Texture* texture)
     {
-        mTextures.Remove(Ref(texture));
+        mTextures.RemoveFirst([=](const Ref<Texture>& x) { return x == texture; });
     }
 
     void Render::OnAtlasCreated(AtlasAsset* atlas)
     {
-        mAtlases.Add(atlas);
+        mAtlases.Add(Ref(atlas));
     }
 
     void Render::OnAtlasDestroyed(AtlasAsset* atlas)
     {
-        mAtlases.Remove(atlas);
+        mAtlases.RemoveFirst([=](const Ref<AtlasAsset>& x) { return x == atlas; });
+    }
+
+    void Render::OnFontCreated(Font* font)
+    {
+        mFonts.Add(Ref(font));
+    }
+
+    void Render::OnFontDestroyed(Font* font)
+    {
+        mFonts.RemoveFirst([=](const Ref<Font>& x) { return x == font; });
     }
 
     void Render::DrawAALine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/,
