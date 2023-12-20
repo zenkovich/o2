@@ -18,6 +18,8 @@ namespace o2
 {
     DECLARE_SINGLETON(Render);
 
+    FORWARD_REF_IMPL(AtlasAsset);
+
     void Render::OnFrameResized()
     {
         mResolution = o2Application.GetContentSize();

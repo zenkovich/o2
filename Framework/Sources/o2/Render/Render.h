@@ -345,9 +345,9 @@ namespace o2
 
         Vector<Ref<AtlasAsset>> mAtlases; // All atlases
 
-        VertexIndex*   mHardLinesIndexData; // Index data buffer
-        Ref<Texture>   mSolidLineTexture;   // Solid line texture
-        Ref<Texture>   mDashLineTexture;    // Dash line texture
+        VertexIndex* mHardLinesIndexData; // Index data buffer
+        Ref<Texture> mSolidLineTexture;   // Solid line texture
+        Ref<Texture> mDashLineTexture;    // Dash line texture
 
         bool mReady; // True, if render system initialized
 

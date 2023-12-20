@@ -14,7 +14,8 @@ namespace o2
 
     Texture::~Texture()
     {
-        o2Render.OnTextureDestroyed(this);
+        if (Render::IsSingletonInitialzed())
+            o2Render.OnTextureDestroyed(this);
 
         if (!mReady)
             return;
