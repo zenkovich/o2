@@ -423,7 +423,7 @@ namespace o2
         WeakRef& operator=(const Ref<_type>& other) { BaseWeakRef<_type>::operator=(other); return *this; }
 
         // Move operator from strong reference
-        WeakRef& operator=(Ref<_type>&& other) { BaseWeakRef<_type>::operator=(other); return *this; }
+        WeakRef& operator=(Ref<_type>&& other) { BaseWeakRef<_type>::operator=((BaseRef<_type>&)other); return *this; }
 
         // Returns true if reference is valid
         bool IsValid() const { return BaseWeakRef<_type>::IsValid(); }

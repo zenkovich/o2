@@ -37,7 +37,7 @@ namespace o2
         // Returns value at time
         float GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
 
-        // Called when beginning keys batch change. After this call all keys modifications will not be update pproximation
+        // Called when beginning keys batch change. After this call all keys modifications will not be update approximation
         // Used for optimizing many keys change
         void BeginKeysBatchChange() override;
 
@@ -48,7 +48,7 @@ namespace o2
         float GetDuration() const override;
 
         // Creates track-type specific player
-        IPlayer* CreatePlayer() const override;
+        Ref<IPlayer> CreatePlayer() const override;
 
         // Adds key with smoothing
         void AddKeys(Vector<Vec2F> values, float smooth = 1.0f);
@@ -161,10 +161,10 @@ namespace o2
             void SetTargetProxy(IValueProxy<float>* proxy);
 
             // Sets animation track
-            void SetTrack(AnimationTrack<float>* track);
+            void SetTrack(const Ref<AnimationTrack<float>>& track);
 
             // Returns animation track
-            AnimationTrack<float>* GetTrackT() const;
+            const Ref<AnimationTrack<float>>& GetTrackT() const;
 
             // Sets target by void pointer
             void SetTargetVoid(void* target) override;
@@ -176,10 +176,10 @@ namespace o2
             void SetTargetProxyVoid(void* target) override;
 
             // Sets animation track
-            void SetTrack(IAnimationTrack* track) override;
+            void SetTrack(const Ref<IAnimationTrack>& track) override;
 
             // Returns animation track
-            IAnimationTrack* GetTrack() const override;
+            Ref<IAnimationTrack> GetTrack() const override;
 
             // Returns current value
             float GetValue() const;
@@ -187,7 +187,7 @@ namespace o2
             IOBJECT(Player);
 
         protected:
-            AnimationTrack<float>* mTrack = nullptr; // Animation track
+            Ref<AnimationTrack<float>> mTrack = nullptr; // Animation track
 
             float mCurrentValue; // Current animation track
 
@@ -204,7 +204,7 @@ namespace o2
             void Evaluate() override;
 
             // Registering this in value mixer
-            void RegMixer(AnimationState* state, const String& path) override;
+            void RegMixer(const Ref<AnimationState>& state, const String& path) override;
         };
 
     protected:
@@ -241,7 +241,7 @@ CLASS_METHODS_META(o2::AnimationTrack<float>)
     FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
     FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
-    FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IPlayer>, CreatePlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, AddKeys, Vector<Vec2F>, float);
     FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&);
     FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&, float);
@@ -300,16 +300,16 @@ CLASS_METHODS_META(o2::AnimationTrack<float>::Player)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, float*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<float>*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, AnimationTrack<float>*);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationTrack<float>*, GetTrackT);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<AnimationTrack<float>>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationTrack<float>>&, GetTrackT);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
-    FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PUBLIC().SIGNATURE(float, GetValue);
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
-    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, AnimationState*, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, const Ref<AnimationState>&, const String&);
 }
 END_META;
 // --- END META ---

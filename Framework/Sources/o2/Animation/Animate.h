@@ -10,7 +10,7 @@ namespace o2
     // -----------------------
     // Key container interface
     // -----------------------
-    struct IKeyContainer
+    struct IKeyContainer: public RefCounterable
     {
         // Virtual destructor
         virtual ~IKeyContainer() {}
@@ -27,7 +27,7 @@ namespace o2
     {
         typename AnimationTrack<T>::Key key;
 
-        AnimationTrack<T>* animatedValue;
+        Ref<AnimationTrack<T>> animatedValue;
 
     public:
         void Apply(float time);
@@ -41,7 +41,7 @@ namespace o2
     {
         Curve::Key timeKey;
 
-        AnimationTrack<Vec2F>* animatedValue;
+        Ref<AnimationTrack<Vec2F>> animatedValue;
 
     public:
         void Apply(float time);
@@ -55,8 +55,8 @@ namespace o2
         AnimationTrack<float>::Key keyX;
         AnimationTrack<float>::Key keyY;
 
-        AnimationTrack<float>* animatedValueX;
-        AnimationTrack<float>* animatedValueY;
+        Ref<AnimationTrack<float>> animatedValueX;
+        Ref<AnimationTrack<float>> animatedValueY;
 
     public:
         void Apply(float time);
@@ -70,9 +70,6 @@ namespace o2
     public:
         // Constructor. Takes object as parameter
         Animate(IObject& object);
-
-        // Destructor
-        ~Animate();
 
         // Animation cast operator. Needs to store as animation
         operator AnimationClip() const;
@@ -129,20 +126,23 @@ namespace o2
         template<typename T>
         Animate& Change(T* target, const T& value);
 
-
     protected:
-        IObject* mTarget = nullptr;    // Target animating object
-        AnimationClip          mAnimation;           // Building animation
-        bool                   mKeysApplied = false; // Is stored keys was applied
-        float                  mTime = 0.0f;         // Current sequence time
-        Vector<IKeyContainer*> mKeyContainers;       // Stored keys that applies in For()
-        Function<void()>       mFunction;            // Stored callback that applies in For()
+        IObject* mTarget = nullptr; // Target animating object
 
-        AnimationTrack<Color4>* mColorAnimatedValue = nullptr;    // Color Animation track, stored when needs
-        AnimationTrack<Vec2F>* mPositionAnimatedValue = nullptr; // Position Animation track, stored when needs
-        AnimationTrack<float>* mScaleXAnimatedValue = nullptr;   // Scale X Animation track, stored when needs
-        AnimationTrack<float>* mScaleYAnimatedValue = nullptr;   // Scale Y Animation track, stored when needs
-        AnimationTrack<float>* mRotationAnimatedValue = nullptr; // Rotation Animation track, stored when needs
+        AnimationClip mAnimation; // Building animation
+
+        bool  mKeysApplied = false; // Is stored keys was applied
+        float mTime = 0.0f;         // Current sequence time
+
+        Vector<Ref<IKeyContainer>> mKeyContainers; // Stored keys that applies in For()
+
+        Function<void()> mFunction; // Stored callback that applies in For()
+
+        Ref<AnimationTrack<Color4>> mColorAnimatedValue;   // Color Animation track, stored when needs
+        Ref<AnimationTrack<Vec2F>> mPositionAnimatedValue; // Position Animation track, stored when needs
+        Ref<AnimationTrack<float>> mScaleXAnimatedValue;   // Scale X Animation track, stored when needs
+        Ref<AnimationTrack<float>> mScaleYAnimatedValue;   // Scale Y Animation track, stored when needs
+        Ref<AnimationTrack<float>> mRotationAnimatedValue; // Rotation Animation track, stored when needs
 
     protected:
         // Checks color Animation track: creates them if needed

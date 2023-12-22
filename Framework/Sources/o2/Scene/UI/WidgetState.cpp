@@ -13,7 +13,7 @@ namespace o2
         offStateAnimationSpeed(state.offStateAnimationSpeed), state(this), animationAsset(this), animationClip(this)
     {
         mAnimation = state.mAnimation;
-        player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
         player.relTime = mState ? 1.0f:0.0f;
     }
 
@@ -40,7 +40,7 @@ namespace o2
     void WidgetState::SetAnimationAsset(const AnimationAssetRef& asset)
     {
         mAnimation = asset;
-        player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
     const AnimationAssetRef& WidgetState::GetAnimationAsset() const
@@ -51,18 +51,18 @@ namespace o2
     void WidgetState::SetAnimationClip(const AnimationClip& animation)
     {
         if (mAnimation && mAnimation.IsInstance())
-            mAnimation->animation = animation;
+            mAnimation->animation = mmake<AnimationClip>(animation);
         else
         {
-            mAnimation.SetInstance(mnew AnimationAsset(animation));
-            player.SetClip(&mAnimation->animation);
+            mAnimation.SetInstance(mnew AnimationAsset(mmake<AnimationClip>(animation)));
+            player.SetClip(mAnimation->animation);
         }
     }
 
     AnimationClip& WidgetState::GetAnimationClip()
     {
         if (mAnimation)
-            return mAnimation->animation;
+            return *mAnimation->animation;
 
         static AnimationClip empty;
         return empty;
@@ -141,12 +141,12 @@ namespace o2
 
     void WidgetState::OnAnimationChanged()
     {
-        player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
     void WidgetState::OnDeserialized(const DataValue& node)
     {
-        player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
     void WidgetState::OnDeserializedDelta(const DataValue& node, const IObject& origin)

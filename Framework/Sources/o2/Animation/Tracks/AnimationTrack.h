@@ -10,6 +10,7 @@
 namespace o2
 {
     class AnimationState;
+    FORWARD_REF(AnimationState);
     
     // ------------------------
     // Template Animation track
@@ -52,7 +53,7 @@ namespace o2
         float GetDuration() const override;
 
         // Creates track-type specific player
-        IPlayer* CreatePlayer() const override;
+        Ref<IPlayer> CreatePlayer() const override;
 
         // Adds key with smoothing
         void AddKeys(Vector<Key> keys, float smooth = 1.0f);
@@ -168,10 +169,10 @@ namespace o2
             void SetTargetProxy(IValueProxy<_type>* proxy);
 
             // Sets animation track
-            void SetTrack(AnimationTrack<_type>* track);
+            void SetTrack(const Ref<AnimationTrack<_type>>& track);
 
             // Returns animation track
-            AnimationTrack<_type>* GetTrackT() const;
+            const Ref<AnimationTrack<_type>>& GetTrackT() const;
 
             // Sets target by void pointer
             void SetTargetVoid(void* target) override;
@@ -183,10 +184,10 @@ namespace o2
             void SetTargetProxyVoid(void* target) override;
 
             // Sets animation track
-            void SetTrack(IAnimationTrack* track) override;
+            void SetTrack(const Ref<IAnimationTrack>& track) override;
 
             // Returns animation track
-            IAnimationTrack* GetTrack() const override;
+            Ref<IAnimationTrack> GetTrack() const override;
 
             // Returns current value
             _type GetValue() const;
@@ -194,7 +195,7 @@ namespace o2
             IOBJECT(Player);
 
         protected:
-            AnimationTrack<_type>* mTrack = nullptr; // Animation track
+            Ref<AnimationTrack<_type>> mTrack; // Animation track
 
             _type mCurrentValue; // Current animation track
 
@@ -211,7 +212,7 @@ namespace o2
             void Evaluate() override;
 
             // Registering this in animation component values mixer
-            void RegMixer(AnimationState* state, const String& path) override;
+            void RegMixer(const Ref<AnimationState>& state, const String& path) override;
         };
 
         // -------------
@@ -374,9 +375,9 @@ namespace o2
     }
 
     template<typename _type>
-    IAnimationTrack::IPlayer* AnimationTrack<_type>::CreatePlayer() const
+    Ref<IAnimationTrack::IPlayer> AnimationTrack<_type>::CreatePlayer() const
     {
-        return mnew Player();
+        return mmake<Player>();
     }
 
     template<typename _type>
@@ -844,26 +845,26 @@ namespace o2
     }
 
     template<typename _type>
-    void AnimationTrack<_type>::Player::SetTrack(AnimationTrack<_type>* track)
+    void AnimationTrack<_type>::Player::SetTrack(const Ref<AnimationTrack<_type>>& track)
     {
         mTrack = track;
         IPlayer::SetTrack(track);
     }
 
     template<typename _type>
-    void AnimationTrack<_type>::Player::SetTrack(IAnimationTrack* track)
+    void AnimationTrack<_type>::Player::SetTrack(const Ref<IAnimationTrack>& track)
     {
-        SetTrack(dynamic_cast<AnimationTrack<_type>*>(track));
+        SetTrack(DynamicCast<AnimationTrack<_type>>(track));
     }
 
     template<typename _type>
-    IAnimationTrack* AnimationTrack<_type>::Player::GetTrack() const
+    Ref<IAnimationTrack> AnimationTrack<_type>::Player::GetTrack() const
     {
         return mTrack;
     }
 
     template<typename _type>
-    AnimationTrack<_type>* AnimationTrack<_type>::Player::GetTrackT() const
+    const Ref<AnimationTrack<_type>>& AnimationTrack<_type>::Player::GetTrackT() const
     {
         return mTrack;
     }
@@ -919,7 +920,7 @@ CLASS_METHODS_META(o2::AnimationTrack<_type>)
     FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
     FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
-    FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IPlayer>, CreatePlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, AddKeys, Vector<Key>, float);
     FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&);
     FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&, float);
@@ -962,7 +963,7 @@ CLASS_FIELDS_META(o2::AnimationTrack<_type>::Player)
     FIELD().PUBLIC().NAME(target);
     FIELD().PUBLIC().NAME(targetDelegate);
     FIELD().PUBLIC().NAME(targetProxy);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
+    FIELD().PROTECTED().NAME(mTrack);
     FIELD().PROTECTED().NAME(mCurrentValue);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevKey);
@@ -981,16 +982,16 @@ CLASS_METHODS_META(o2::AnimationTrack<_type>::Player)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, _type*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<_type>*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, AnimationTrack<_type>*);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationTrack<_type>*, GetTrackT);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<AnimationTrack<_type>>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationTrack<_type>>&, GetTrackT);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
-    FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PUBLIC().SIGNATURE(_type, GetValue);
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
-    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, AnimationState*, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, const Ref<AnimationState>&, const String&);
 }
 END_META;
 

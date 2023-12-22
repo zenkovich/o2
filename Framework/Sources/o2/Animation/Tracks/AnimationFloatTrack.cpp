@@ -54,9 +54,9 @@ namespace o2
         return curve.Length();
     }
 
-    IAnimationTrack::IPlayer* AnimationTrack<float>::CreatePlayer() const
+    Ref<IAnimationTrack::IPlayer> AnimationTrack<float>::CreatePlayer() const
     {
-        return mnew Player();
+        return mmake<Player>();
     }
 
     void AnimationTrack<float>::AddKeys(Vector<Vec2F> values, float smooth /*= 1.0f*/)
@@ -244,13 +244,13 @@ namespace o2
         mTargetProxy = proxy;
     }
 
-    void AnimationTrack<float>::Player::SetTrack(AnimationTrack<float>* track)
+    void AnimationTrack<float>::Player::SetTrack(const Ref<AnimationTrack<float>>& track)
     {
         mTrack = track;
         IPlayer::SetTrack(track);
     }
 
-    AnimationTrack<float>* AnimationTrack<float>::Player::GetTrackT() const
+    const Ref<AnimationTrack<float>>& AnimationTrack<float>::Player::GetTrackT() const
     {
         return mTrack;
     }
@@ -270,12 +270,12 @@ namespace o2
         SetTargetProxy((IValueProxy<float>*)target);
     }
 
-    void AnimationTrack<float>::Player::SetTrack(IAnimationTrack* track)
+    void AnimationTrack<float>::Player::SetTrack(const Ref<IAnimationTrack>& track)
     {
-        SetTrack(dynamic_cast<AnimationTrack<float>*>(track));
+        SetTrack(DynamicCast<AnimationTrack<float>>(track));
     }
 
-    IAnimationTrack* AnimationTrack<float>::Player::GetTrack() const
+    Ref<IAnimationTrack> AnimationTrack<float>::Player::GetTrack() const
     {
         return mTrack;
     }
@@ -302,9 +302,9 @@ namespace o2
             mTargetProxy->SetValue(mCurrentValue);
     }
 
-    void AnimationTrack<float>::Player::RegMixer(AnimationState* state, const String& path)
+    void AnimationTrack<float>::Player::RegMixer(const Ref<AnimationState>& state, const String& path)
     {
-        state->mOwner->RegTrack<float>(this, path, state);
+        state->mOwner.Lock()->RegTrack<float>(Ref(this), path, state);
     }
 }
 // --- META ---

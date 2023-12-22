@@ -41,9 +41,9 @@ namespace Editor
 
 		for (auto track : animation->GetTracks())
 		{
-			if (auto floatTrack = dynamic_cast<AnimationTrack<float>*>(track))
+			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
 				mCurvesEditor->AddCurve(track->path, &floatTrack->curve);
-			else if (auto vec2Track = dynamic_cast<AnimationTrack<Vec2F>*>(track))
+			else if (auto vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
 				mCurvesEditor->AddCurve(track->path, &vec2Track->timeCurve);
 		}
 
@@ -58,13 +58,13 @@ namespace Editor
 		int colorIdx = 0;
 		for (auto track : mAnimationWindow->mAnimation->GetTracks())
 		{
-			if (auto floatTrack = dynamic_cast<AnimationTrack<float>*>(track))
+			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
 			{
 				mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
 				mCurvesEditor->SetCurveColor(&floatTrack->curve, curveColor);
 				curveColor = Color4::SomeColor(colorIdx++);
 			}
-			else if (auto vec2Track = dynamic_cast<AnimationTrack<Vec2F>*>(track))
+			else if (auto vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
 			{
 				mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
 				mCurvesEditor->SetCurveColor(&vec2Track->timeCurve, curveColor);
@@ -83,9 +83,9 @@ namespace Editor
 		for (auto track : mAnimationWindow->mAnimation->GetTracks())
 		{
 			Curve* curve = nullptr;
-			if (auto floatTrack = dynamic_cast<AnimationTrack<float>*>(track))
+			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
 				curve = &floatTrack->curve;
-			else if (auto vec2Track = dynamic_cast<AnimationTrack<Vec2F>*>(track))
+			else if (auto vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
 				curve = &vec2Track->timeCurve;
 
 			if (curve)

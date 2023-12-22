@@ -1,23 +1,29 @@
 #pragma once
 
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
     class AnimationClip;
+    FORWARD_REF(AnimationClip);
+
     class AnimationPlayer;
+    FORWARD_REF(AnimationPlayer);
+
     class AnimationState;
+    FORWARD_REF(AnimationState);
 
     // -------------------------
     // Animation track interface
     // -------------------------
-    class IAnimationTrack: public ISerializable
+    class IAnimationTrack: public ISerializable, public RefCounterable
     {
     public:
         // --------------------------------
         // Animation track player interface
         // --------------------------------
-        class IPlayer: public IAnimation
+        class IPlayer: public IAnimation, public RefCounterable
         {
         public:
             // Sets target changing delegate
@@ -33,24 +39,24 @@ namespace o2
             virtual void SetTargetProxyVoid(void* target) {}
 
             // Sets animation track
-            virtual void SetTrack(IAnimationTrack* track);
+            virtual void SetTrack(const Ref<IAnimationTrack>& track);
 
             // Returns animation track
-            virtual IAnimationTrack* GetTrack() const { return nullptr; }
+            virtual Ref<IAnimationTrack> GetTrack() const { return nullptr; }
 
             // Registering this in animation track agent
-            virtual void RegMixer(AnimationState* state, const String& path) {}
+            virtual void RegMixer(const Ref<AnimationState>& state, const String& path) {}
 
             // Force setting time (using in Animation): works same as update, but by hard setting time
             void ForceSetTime(float time, float duration);
 
             //Returns owner player
-            const AnimationPlayer* GetOwnerPlayer() const;
+            const WeakRef<AnimationPlayer>& GetOwnerPlayer() const;
 
             IOBJECT(IPlayer);
 
         protected:
-            AnimationPlayer* mOwnerPlayer = nullptr;
+            WeakRef<AnimationPlayer> mOwnerPlayer;
 
             friend class AnimationPlayer;
         };
@@ -87,15 +93,15 @@ namespace o2
         virtual float GetDuration() const { return 0; }
 
         // Creates track-type specific player
-        virtual IPlayer* CreatePlayer() const { return nullptr; }
+        virtual Ref<IPlayer> CreatePlayer() const { return nullptr; }
 
         // Returns owner clip
-        const AnimationClip* GetOwnerClip() const;
+        const WeakRef<AnimationClip>& GetOwnerClip() const;
 
         SERIALIZABLE(IAnimationTrack);
 
     protected:
-        AnimationClip* mOwnerClip = nullptr;
+        WeakRef<AnimationClip> mOwnerClip;
 
         friend class AnimationClip;
     };
@@ -105,6 +111,7 @@ namespace o2
 CLASS_BASES_META(o2::IAnimationTrack)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::IAnimationTrack)
@@ -113,7 +120,7 @@ CLASS_FIELDS_META(o2::IAnimationTrack)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Loop::None).NAME(loop);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(path);
     FIELD().PUBLIC().NAME(onKeysChanged);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwnerClip);
+    FIELD().PROTECTED().NAME(mOwnerClip);
 }
 END_META;
 CLASS_METHODS_META(o2::IAnimationTrack)
@@ -124,19 +131,20 @@ CLASS_METHODS_META(o2::IAnimationTrack)
     FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
     FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
-    FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
-    FUNCTION().PUBLIC().SIGNATURE(const AnimationClip*, GetOwnerClip);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IPlayer>, CreatePlayer);
+    FUNCTION().PUBLIC().SIGNATURE(const WeakRef<AnimationClip>&, GetOwnerClip);
 }
 END_META;
 
 CLASS_BASES_META(o2::IAnimationTrack::IPlayer)
 {
     BASE_CLASS(o2::IAnimation);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::IAnimationTrack::IPlayer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwnerPlayer);
+    FIELD().PROTECTED().NAME(mOwnerPlayer);
 }
 END_META;
 CLASS_METHODS_META(o2::IAnimationTrack::IPlayer)
@@ -146,11 +154,11 @@ CLASS_METHODS_META(o2::IAnimationTrack::IPlayer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
-    FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
-    FUNCTION().PUBLIC().SIGNATURE(void, RegMixer, AnimationState*, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
+    FUNCTION().PUBLIC().SIGNATURE(void, RegMixer, const Ref<AnimationState>&, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, ForceSetTime, float, float);
-    FUNCTION().PUBLIC().SIGNATURE(const AnimationPlayer*, GetOwnerPlayer);
+    FUNCTION().PUBLIC().SIGNATURE(const WeakRef<AnimationPlayer>&, GetOwnerPlayer);
 }
 END_META;
 // --- END META ---

@@ -25,7 +25,7 @@ namespace o2
     void AnimationState::SetAnimation(const AnimationAssetRef& animationAsset)
     {
         mAnimation = animationAsset;
-        player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
     const AnimationAssetRef& AnimationState::GetAnimation() const
@@ -35,24 +35,24 @@ namespace o2
 
     void AnimationState::OnAnimationChanged()
     {
-        player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
-    void AnimationState::OnTrackPlayerAdded(IAnimationTrack::IPlayer* trackPlayer)
+    void AnimationState::OnTrackPlayerAdded(const Ref<IAnimationTrack::IPlayer>& trackPlayer)
     {
         if (mOwner)
-            mOwner->OnStateAnimationTrackAdded(this, trackPlayer);
+            mOwner.Lock()->OnStateAnimationTrackAdded(Ref(this), trackPlayer);
     }
 
-    void AnimationState::OnTrackPlayerRemove(IAnimationTrack::IPlayer* trackPlayer)
+    void AnimationState::OnTrackPlayerRemove(const Ref<IAnimationTrack::IPlayer>& trackPlayer)
     {
         if (mOwner)
-            mOwner->OnStateAnimationTrackRemoved(this, trackPlayer);
+            mOwner.Lock()->OnStateAnimationTrackRemoved(Ref(this), trackPlayer);
     }
 
     void AnimationState::OnDeserialized(const DataValue& node)
     {
-        player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
 }

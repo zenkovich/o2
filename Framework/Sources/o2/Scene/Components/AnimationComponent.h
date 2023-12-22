@@ -36,17 +36,17 @@ namespace o2
         void OnUpdate(float dt) override;
 
         // Adds new animation state and returns him
-        AnimationState* AddState(AnimationState* state);
+        Ref<AnimationState> AddState(const Ref<AnimationState>& state);
 
         // Adds new animation state and returns him
-        AnimationState* AddState(const String& name, const AnimationClip& animation,
-                                 const AnimationMask& mask, float weight);
+        Ref<AnimationState> AddState(const String& name, const Ref<AnimationClip>& animation,
+                                     const AnimationMask& mask, float weight);
 
         // Adds new animation state and returns him
-        AnimationState* AddState(const String& name);
+        Ref<AnimationState> AddState(const String& name);
 
         // Removes animation state
-        void RemoveState(AnimationState* state);
+        void RemoveState(const Ref<AnimationState>& state);
 
         // Removes animation state by name
         void RemoveState(const String& name);
@@ -55,31 +55,31 @@ namespace o2
         void RemoveAllStates();
 
         // Returns state with specified name. Returns nullptr if can't find state with specified name
-        AnimationState* GetState(const String& name);
+        Ref<AnimationState> GetState(const String& name);
 
         // Returns all states array
-        const Vector<AnimationState*>& GetStates() const;
+        const Vector<Ref<AnimationState>>& GetStates() const;
 
         // Creates new state and plays him
-        AnimationState* Play(const AnimationClip& animation, const String& name);
+        Ref<AnimationState> Play(const Ref<AnimationClip>& animation, const String& name);
 
         // Creates new state and plays him
-        AnimationState* Play(const AnimationClip& animation);
+        Ref<AnimationState> Play(const Ref<AnimationClip>& animation);
 
         // Searches animation state with name and plays him @SCRIPTABLE
-        AnimationState* Play(const String& name);
+        Ref<AnimationState> Play(const String& name);
 
         // Creates new state, and blends animation with duration
-        AnimationState* BlendTo(const AnimationClip& animation, const String& name, float duration = 1.0f);
+        Ref<AnimationState> BlendTo(const Ref<AnimationClip>& animation, const String& name, float duration = 1.0f);
 
         // Creates new state, and blends animation with duration
-        AnimationState* BlendTo(const AnimationClip& animation, float duration = 1.0f);
+        Ref<AnimationState> BlendTo(const Ref<AnimationClip>& animation, float duration = 1.0f);
 
         // Creates new state, and blends animation with duration @SCRIPTABLE
-        AnimationState* BlendTo(const String& name, float duration = 1.0f);
+        Ref<AnimationState> BlendTo(const String& name, float duration = 1.0f);
 
         // Plays state and blends animation with duration
-        AnimationState* BlendTo(AnimationState* state, float duration = 1.0f);
+        Ref<AnimationState> BlendTo(const Ref<AnimationState>& state, float duration = 1.0f);
 
         // Stops animation with name @SCRIPTABLE
         void Stop(const String& animationName);
@@ -108,7 +108,7 @@ namespace o2
         // -------------------------------
         // Value assigning agent interface
         // -------------------------------
-        struct ITrackMixer
+        struct ITrackMixer: public RefCounterable
         {
             // Value path
             String path;
@@ -156,18 +156,20 @@ namespace o2
         // ----------------------
         struct BlendState
         {
-            Vector<AnimationState*> blendOffStates;           // Turning off states
-            AnimationState*         blendOnState = nullptr;   // Turning on state
-            float                   duration;                  // Blending duration
-            float                   time = -1.0f;              // Current blending remaining time
+            Vector<Ref<AnimationState>> blendOffStates; // Turning off states
+            Ref<AnimationState>         blendOnState;   // Turning on state
 
+            float duration;     // Blending duration
+            float time = -1.0f; // Current blending remaining time
+
+        public:
             // Updates work weight by time
             void Update(float dt);
         };
 
     protected:
-        Vector<AnimationState*> mStates; // Animation states array @SERIALIZABLE @EDITOR_PROPERTY @DEFAULT_TYPE(o2::AnimationState) @INVOKE_ON_CHANGE(OnStatesListChanged) @DONT_DELETE
-        Vector<ITrackMixer*>    mValues; // Assigning value agents
+        Vector<Ref<AnimationState>> mStates; // Animation states array @SERIALIZABLE @EDITOR_PROPERTY @DEFAULT_TYPE(o2::AnimationState) @INVOKE_ON_CHANGE(OnStatesListChanged) @DONT_DELETE
+        Vector<Ref<ITrackMixer>>    mValues; // Assigning value agents
 
         BlendState mBlend;  // Current blend parameters
 
@@ -179,16 +181,16 @@ namespace o2
 
         // Registers value by path and state
         template<typename _type>
-        void RegTrack(typename AnimationTrack< _type >::Player* player, const String& path, AnimationState* state);
+        void RegTrack(const Ref<typename AnimationTrack<_type>::Player>& player, const String& path, const Ref<AnimationState>& state);
 
         // Removes Animation track from agent by path
-        void UnregTrack(IAnimationTrack::IPlayer* player, const String& path);
+        void UnregTrack(const Ref<IAnimationTrack::IPlayer>& player, const String& path);
 
         // Called when new track added in animation state, registers track player in mixer
-        void OnStateAnimationTrackAdded(AnimationState* state, IAnimationTrack::IPlayer* player);
+        void OnStateAnimationTrackAdded(const Ref<AnimationState>& state, const Ref<IAnimationTrack::IPlayer>& player);
 
         // Called when track is removing from animation state, unregisters track player from mixer
-        void OnStateAnimationTrackRemoved(AnimationState* state, IAnimationTrack::IPlayer* player);
+        void OnStateAnimationTrackRemoved(const Ref<AnimationState>& state, const Ref<IAnimationTrack::IPlayer>& player);
 
         // Called from editor, refreshes states
         void ReattachAnimationStates();
@@ -207,13 +209,13 @@ namespace o2
 namespace o2
 {
     template<typename _type>
-    void AnimationComponent::RegTrack(typename AnimationTrack<_type>::Player* player, const String& path, AnimationState* state)
+    void AnimationComponent::RegTrack(const Ref<typename AnimationTrack<_type>::Player>& player, const String& path, const Ref<AnimationState>& state)
     {
         for (auto val : mValues)
         {
             if (val->path == path)
             {
-                auto* agent = dynamic_cast<TrackMixer<_type>*>(val);
+                auto agent = DynamicCast<TrackMixer<_type>>(val);
 
                 if (!agent)
                 {
@@ -221,15 +223,15 @@ namespace o2
                     return;
                 }
 
-                agent->tracks.Add({ state, player });
+                agent->tracks.Add({ state.Get(), player.Get() });
                 return;
             }
         }
 
-        auto* newAgent = mnew TrackMixer <_type>();
+        auto newAgent = mmake<TrackMixer<_type>>();
         mValues.Add(newAgent);
         newAgent->path = path;
-        newAgent->tracks.Add({ state, player });
+        newAgent->tracks.Add({ state.Get(), player.Get() });
 
         const FieldInfo* fieldInfo = nullptr;
         auto fieldPtr = mOwner->GetType().GetFieldPtr(mOwner, path, fieldInfo);
@@ -291,9 +293,9 @@ namespace o2
     }
     
     template<typename _type>
-    void AnimationTrack<_type>::Player::RegMixer(AnimationState* state, const String& path)
+    void AnimationTrack<_type>::Player::RegMixer(const Ref<AnimationState>& state, const String& path)
     {
-        state->mOwner->RegTrack<_type>(this, path, state);
+        state->mOwner.Lock()->RegTrack<_type>(Ref(this), path, state);
     }
 }
 // --- META ---
@@ -318,21 +320,21 @@ CLASS_METHODS_META(o2::AnimationComponent)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, AnimationState*);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, const String&, const AnimationClip&, const AnimationMask&, float);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, AnimationState*);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, AddState, const Ref<AnimationState>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, AddState, const String&, const Ref<AnimationClip>&, const AnimationMask&, float);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, AddState, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, const Ref<AnimationState>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllStates);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationState*, GetState, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<AnimationState*>&, GetStates);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationState*, Play, const AnimationClip&, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationState*, Play, const AnimationClip&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(AnimationState*, Play, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, const AnimationClip&, const String&, float);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, const AnimationClip&, float);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(AnimationState*, BlendTo, const String&, float);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, AnimationState*, float);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, GetState, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AnimationState>>&, GetStates);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, Play, const Ref<AnimationClip>&, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, Play, const Ref<AnimationClip>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<AnimationState>, Play, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, BlendTo, const Ref<AnimationClip>&, const String&, float);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, BlendTo, const Ref<AnimationClip>&, float);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<AnimationState>, BlendTo, const String&, float);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, BlendTo, const Ref<AnimationState>&, float);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Stop, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, StopAll);
     FUNCTION().PUBLIC().SIGNATURE(void, BeginAnimationEdit);
@@ -341,9 +343,9 @@ CLASS_METHODS_META(o2::AnimationComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
-    FUNCTION().PROTECTED().SIGNATURE(void, UnregTrack, IAnimationTrack::IPlayer*, const String&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackAdded, AnimationState*, IAnimationTrack::IPlayer*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackRemoved, AnimationState*, IAnimationTrack::IPlayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, UnregTrack, const Ref<IAnimationTrack::IPlayer>&, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackAdded, const Ref<AnimationState>&, const Ref<IAnimationTrack::IPlayer>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackRemoved, const Ref<AnimationState>&, const Ref<IAnimationTrack::IPlayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, ReattachAnimationStates);
 }
 END_META;

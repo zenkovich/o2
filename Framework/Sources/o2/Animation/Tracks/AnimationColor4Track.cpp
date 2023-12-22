@@ -70,9 +70,9 @@ namespace o2
         return mKeys.IsEmpty() ? 0.0f : mKeys.Last().position;
     }
 
-    IAnimationTrack::IPlayer* AnimationTrack<Color4>::CreatePlayer() const
+    Ref<IAnimationTrack::IPlayer> AnimationTrack<Color4>::CreatePlayer() const
     {
-        return mnew Player();
+        return mmake<Player>();
     }
 
     void AnimationTrack<Color4>::AddKeys(const Vector<Key>& keys)
@@ -342,7 +342,7 @@ namespace o2
         mTargetProxy = proxy;
     }
 
-    void AnimationTrack<Color4>::Player::SetTrack(AnimationTrack<Color4>* track)
+    void AnimationTrack<Color4>::Player::SetTrack(const Ref<AnimationTrack<Color4>>& track)
     {
         mTrack = track;
         IPlayer::SetTrack(track);
@@ -363,9 +363,9 @@ namespace o2
         SetTargetProxy((IValueProxy<Color4>*)target);
     }
 
-    void AnimationTrack<Color4>::Player::SetTrack(IAnimationTrack* track)
+    void AnimationTrack<Color4>::Player::SetTrack(const Ref<IAnimationTrack>& track)
     {
-        SetTrack(dynamic_cast<AnimationTrack<Color4>*>(track));
+        SetTrack(DynamicCast<AnimationTrack<Color4>>(track));
     }
 
     Color4 AnimationTrack<Color4>::Player::GetValue() const
@@ -373,12 +373,12 @@ namespace o2
         return mCurrentValue;
     }
 
-    AnimationTrack<Color4>* AnimationTrack<Color4>::Player::GetTrackT() const
+    const Ref<AnimationTrack<Color4>>& AnimationTrack<Color4>::Player::GetTrackT() const
     {
         return mTrack;
     }
 
-    IAnimationTrack* AnimationTrack<Color4>::Player::GetTrack() const
+    Ref<IAnimationTrack> AnimationTrack<Color4>::Player::GetTrack() const
     {
         return mTrack;
     }
@@ -399,9 +399,9 @@ namespace o2
             mTargetProxy->SetValue(mCurrentValue);
     }
 
-    void AnimationTrack<Color4>::Player::RegMixer(AnimationState* state, const String& path)
+    void AnimationTrack<Color4>::Player::RegMixer(const Ref<AnimationState>& state, const String& path)
     {
-        state->mOwner->RegTrack<Color4>(this, path, state);
+        state->mOwner.Lock()->RegTrack<Color4>(Ref(this), path, state);
     }
 }
 // --- META ---

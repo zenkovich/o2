@@ -195,9 +195,9 @@ namespace o2
         if (other.mZebraBackLine)
             mZebraBackLine = other.mZebraBackLine->CloneAs<Sprite>();
 
-        mHighlighClip = other.mHighlighClip;
+        mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
         mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+        mHighlightAnim.SetClip(mHighlighClip);
 
         mHoverLayout = other.mHoverLayout;
         mHighlightLayout = other.mHighlightLayout;
@@ -243,9 +243,9 @@ namespace o2
         mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
         mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
 
-        mHighlighClip = other.mHighlighClip;
+        mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
         mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+        mHighlightAnim.SetClip(mHighlighClip);
 
         mHoverLayout = other.mHoverLayout;
         mHighlightLayout = other.mHighlightLayout;
@@ -1767,7 +1767,7 @@ namespace o2
     {
         ScrollArea::OnDeserialized(node);
         mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+        mHighlightAnim.SetClip(mHighlighClip);
     }
 
     void Tree::OnSelectionChanged()
@@ -1796,11 +1796,11 @@ namespace o2
         return mHighlightSprite;
     }
 
-    void Tree::SetHighlightAnimation(const AnimationClip& animation)
+    void Tree::SetHighlightAnimation(const Ref<AnimationClip>& animation)
     {
         mHighlighClip = animation;
         mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+        mHighlightAnim.SetClip(mHighlighClip);
     }
 
     void Tree::SetHighlightLayout(const Layout& layout)

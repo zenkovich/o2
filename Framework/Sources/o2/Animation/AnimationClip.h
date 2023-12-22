@@ -1,5 +1,6 @@
 #pragma once
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -11,7 +12,7 @@ namespace o2
     // -----------------------------------------
     // Animation clip. Contains animation tracks
     // -----------------------------------------
-    class AnimationClip: public ISerializable
+    class AnimationClip: public ISerializable, public RefCounterable
     {
     public:
         PROPERTIES(AnimationClip);
@@ -21,9 +22,10 @@ namespace o2
     public:
         Function<void()> onChanged; // Called when some Animation track has changed @EDITOR_IGNORE
 
-        Function<void(float)>            onDurationChange; // Called when duration has changed @EDITOR_IGNORE
-        Function<void(IAnimationTrack*)> onTrackAdded;     // Called when new track added @EDITOR_IGNORE
-        Function<void(IAnimationTrack*)> onTrackRemove;    // Called when new track removing @EDITOR_IGNORE
+        Function<void(float)> onDurationChange; // Called when duration has changed @EDITOR_IGNORE
+
+        Function<void(const Ref<IAnimationTrack>&)> onTrackAdded;  // Called when new track added @EDITOR_IGNORE
+        Function<void(const Ref<IAnimationTrack>&)> onTrackRemove; // Called when new track removing @EDITOR_IGNORE
 
     public:
         // Default constructor
@@ -51,24 +53,24 @@ namespace o2
         Loop GetLoop() const;
 
         // Returns animation tracks
-        Vector<IAnimationTrack*>& GetTracks();
+        Vector<Ref<IAnimationTrack>>& GetTracks();
 
         // Returns animation tracks
-        const Vector<IAnimationTrack*>& GetTracks() const;
+        const Vector<Ref<IAnimationTrack>>& GetTracks() const;
 
         // Returns is contains Animation track by path (some like "path/abc/cde")
         bool ContainsTrack(const String& path) const;
 
         // Returns Animation track by path (some like "path/abc/cde")
         template<typename _type>
-        AnimationTrack<_type>* GetTrack(const String& path);
+        Ref<AnimationTrack<_type>> GetTrack(const String& path);
 
         // Adds animation track with specified path
         template<typename _type>
-        AnimationTrack<_type>* AddTrack(const String& path);
+        Ref<AnimationTrack<_type>> AddTrack(const String& path);
 
         // Add animation track with specified path and type
-        IAnimationTrack* AddTrack(const String& path, const Type& type);
+        Ref<IAnimationTrack> AddTrack(const String& path, const Type& type);
 
         // Removes Animation track by path
         void RemoveTrack(const String& path);
@@ -106,7 +108,7 @@ namespace o2
         SERIALIZABLE(AnimationClip);
 
     protected:
-        Vector<IAnimationTrack*> mTracks; // Animation track @SERIALIZABLE
+        Vector<Ref<IAnimationTrack>> mTracks; // Animation track @SERIALIZABLE
 
         float mDuration = 0.0f;   // Animation duration @SERIALIZABLE
         Loop  mLoop = Loop::None; // Animation loop type @SERIALIZABLE
@@ -114,7 +116,7 @@ namespace o2
     protected:
         // Returns Animation track by path
         template<typename _type>
-        AnimationTrack<_type>* FindTrack(const String& path);
+        Ref<AnimationTrack<_type>> FindTrack(const String& path);
 
         // Called when some Animation track has changed
         void OnTrackChanged();
@@ -126,7 +128,7 @@ namespace o2
         void OnDeserialized(const DataValue& node) override;
 
         // Called when Animation track was added. Need to register value agent in animation target
-        void OnTrackAdded(IAnimationTrack* track);
+        void OnTrackAdded(const Ref<IAnimationTrack>& track);
 
         friend class Animate;
         friend class AnimationComponent;
@@ -139,7 +141,7 @@ namespace o2
 namespace o2
 {
     template<typename _type>
-    AnimationTrack<_type>* AnimationClip::FindTrack(const String& path)
+    Ref<AnimationTrack<_type>> AnimationClip::FindTrack(const String& path)
     {
         for (auto track : mTracks)
         {
@@ -199,9 +201,9 @@ namespace o2
     }
 
     template<typename _type>
-    AnimationTrack<_type>* AnimationClip::AddTrack(const String& path)
+    Ref<AnimationTrack<_type>> AnimationClip::AddTrack(const String& path)
     {
-        auto track = mnew AnimationTrack<_type>();
+        auto track = mmake<AnimationTrack<_type>>();
         track->onKeysChanged += THIS_FUNC(OnTrackChanged);
         track->path = path;
 
@@ -212,12 +214,12 @@ namespace o2
     }
 
     template<typename _type>
-    AnimationTrack<_type>* AnimationClip::GetTrack(const String& path)
+    Ref<AnimationTrack<_type>> AnimationClip::GetTrack(const String& path)
     {
         for (auto track : mTracks)
         {
             if (track->path == path)
-                return dynamic_cast<AnimationTrack<_type>*>(track);;
+                return DynamicCast<AnimationTrack<_type>>(track);;
         }
 
         return nullptr;
@@ -228,6 +230,7 @@ namespace o2
 CLASS_BASES_META(o2::AnimationClip)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationClip)
@@ -252,15 +255,15 @@ CLASS_METHODS_META(o2::AnimationClip)
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLoop, Loop);
     FUNCTION().PUBLIC().SIGNATURE(Loop, GetLoop);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<IAnimationTrack*>&, GetTracks);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<IAnimationTrack*>&, GetTracks);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<IAnimationTrack>>&, GetTracks);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<IAnimationTrack>>&, GetTracks);
     FUNCTION().PUBLIC().SIGNATURE(bool, ContainsTrack, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, AddTrack, const String&, const Type&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, AddTrack, const String&, const Type&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveTrack, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTrackChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, RecalculateDuration);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnTrackAdded, IAnimationTrack*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTrackAdded, const Ref<IAnimationTrack>&);
 }
 END_META;
 // --- END META ---

@@ -63,9 +63,9 @@ namespace o2
         return timeCurve.Length();
     }
 
-    IAnimationTrack::IPlayer* AnimationTrack<Vec2F>::CreatePlayer() const
+    Ref<IAnimationTrack::IPlayer> AnimationTrack<Vec2F>::CreatePlayer() const
     {
-        return mnew Player();
+        return mmake<Player>();
     }
 
     void AnimationTrack<Vec2F>::OnCurveChanged()
@@ -147,7 +147,7 @@ namespace o2
         mTargetProxy = proxy;
     }
 
-    void AnimationTrack<Vec2F>::Player::SetTrack(AnimationTrack<Vec2F>* track)
+    void AnimationTrack<Vec2F>::Player::SetTrack(const Ref<AnimationTrack<Vec2F>>& track)
     {
         mTrack = track;
         IPlayer::SetTrack(track);
@@ -168,9 +168,9 @@ namespace o2
         SetTargetProxy((IValueProxy<Vec2F>*)target);
     }
 
-    void AnimationTrack<Vec2F>::Player::SetTrack(IAnimationTrack* track)
+    void AnimationTrack<Vec2F>::Player::SetTrack(const Ref<IAnimationTrack>& track)
     {
-        SetTrack(dynamic_cast<AnimationTrack<Vec2F>*>(track));
+        SetTrack(DynamicCast<AnimationTrack<Vec2F>>(track));
     }
 
     Vec2F AnimationTrack<Vec2F>::Player::GetValue() const
@@ -178,12 +178,12 @@ namespace o2
         return mCurrentValue;
     }
 
-    AnimationTrack<Vec2F>* AnimationTrack<Vec2F>::Player::GetTrackT() const
+    const Ref<AnimationTrack<Vec2F>>& AnimationTrack<Vec2F>::Player::GetTrackT() const
     {
         return mTrack;
     }
 
-    IAnimationTrack* AnimationTrack<Vec2F>::Player::GetTrack() const
+    Ref<IAnimationTrack> AnimationTrack<Vec2F>::Player::GetTrack() const
     {
         return mTrack;
     }
@@ -205,9 +205,9 @@ namespace o2
             mTargetProxy->SetValue(mCurrentValue);
     }
 
-    void AnimationTrack<Vec2F>::Player::RegMixer(AnimationState* state, const String& path)
+    void AnimationTrack<Vec2F>::Player::RegMixer(const Ref<AnimationState>& state, const String& path)
     {
-        state->mOwner->RegTrack<Vec2F>(this, path, state);
+        state->mOwner.Lock()->RegTrack<Vec2F>(Ref(this), path, state);
     }
 }
 // --- META ---

@@ -142,7 +142,7 @@ namespace o2
         Sprite* GetHighlightDrawable() const;
 
         // Sets highlight animation
-        void SetHighlightAnimation(const AnimationClip& animation);
+        void SetHighlightAnimation(const Ref<AnimationClip>& animation);
 
         // Sets highlight layout
         void SetHighlightLayout(const Layout& layout);
@@ -290,12 +290,12 @@ namespace o2
         float mNodeExpandTime = 2.0f;   // Node expand time when dragging actors @SERIALIZABLE
         float mNodeDragIntoZone = 0.3f; // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
 
-        AnimationClip   mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
-        AnimationPlayer mHighlightAnim;             // Node highlight animation
-        Sprite*         mHighlightSprite = nullptr; // Node highlight sprite @SERIALIZABLE
-        Layout          mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
-        Node*           mHighlighNode = nullptr;    // Hightlighing node
-        void*           mHighlightObject;           // Highlight object
+        Ref<AnimationClip> mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
+        AnimationPlayer    mHighlightAnim;             // Node highlight animation
+        Sprite*            mHighlightSprite = nullptr; // Node highlight sprite @SERIALIZABLE
+        Layout             mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
+        Node*              mHighlighNode = nullptr;    // Hightlighing node
+        void*              mHighlightObject;           // Highlight object
         
         Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
 
@@ -693,7 +693,7 @@ CLASS_METHODS_META(o2::Tree)
     FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHoverDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHoverLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHighlightDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const AnimationClip&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetZebraBackLine, Sprite*);
     FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetZebraBackLine);

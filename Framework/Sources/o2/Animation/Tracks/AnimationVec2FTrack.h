@@ -47,9 +47,9 @@ namespace o2
         float GetDuration() const override;
 
         // Creates track-type specific player
-        IPlayer* CreatePlayer() const override;
+        Ref<IPlayer> CreatePlayer() const override;
 
-        // Returns parametric specified Animation trackp
+        // Returns parametric specified Animation track
         // Sample: Parametric(someBegin, someEnd, 1.0f, 0.0f, 0.4f, 1.0f, 0.6f) 
         static AnimationTrack<Vec2F> Parametric(const Vec2F& begin, const Vec2F& end, float duration,
                                                 float beginCoef, float beginCoefPosition,
@@ -105,10 +105,10 @@ namespace o2
             void SetTargetProxy(IValueProxy<Vec2F>* setter);
 
             // Sets animation track
-            void SetTrack(AnimationTrack<Vec2F>* track);
+            void SetTrack(const Ref<AnimationTrack<Vec2F>>& track);
 
             // Returns animation track
-            AnimationTrack<Vec2F>* GetTrackT() const;
+            const Ref<AnimationTrack<Vec2F>>& GetTrackT() const;
 
             // Sets target by void pointer
             void SetTargetVoid(void* target) override;
@@ -120,10 +120,10 @@ namespace o2
             void SetTargetProxyVoid(void* target) override;
 
             // Sets animation track
-            void SetTrack(IAnimationTrack* track) override;
+            void SetTrack(const Ref<IAnimationTrack>& track) override;
 
             // Returns animation track
-            IAnimationTrack* GetTrack() const override;
+            Ref<IAnimationTrack> GetTrack() const override;
 
             // Returns current value
             Vec2F GetValue() const;
@@ -131,7 +131,7 @@ namespace o2
             IOBJECT(Player);
 
         protected:
-            AnimationTrack<Vec2F>* mTrack = nullptr; // Animation track
+            Ref<AnimationTrack<Vec2F>> mTrack; // Animation track
 
             Vec2F mCurrentValue; // Current animation track value
 
@@ -150,7 +150,7 @@ namespace o2
             void Evaluate() override;
 
             // Registering this in animatable value agent
-            void RegMixer(AnimationState* state, const String& path) override;
+            void RegMixer(const Ref<AnimationState>& state, const String& path) override;
         };
 
     protected:
@@ -181,7 +181,7 @@ CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>)
     FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
     FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
-    FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IPlayer>, CreatePlayer);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<Vec2F>, Parametric, const Vec2F&, const Vec2F&, float, float, float, float, float);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<Vec2F>, EaseIn, const Vec2F&, const Vec2F&, float, float);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<Vec2F>, EaseOut, const Vec2F&, const Vec2F&, float, float);
@@ -202,7 +202,7 @@ CLASS_FIELDS_META(o2::AnimationTrack<o2::Vec2F>::Player)
     FIELD().PUBLIC().NAME(target);
     FIELD().PUBLIC().NAME(targetDelegate);
     FIELD().PUBLIC().NAME(targetProxy);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
+    FIELD().PROTECTED().NAME(mTrack);
     FIELD().PROTECTED().NAME(mCurrentValue);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevTimeKey);
@@ -222,16 +222,16 @@ CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>::Player)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Vec2F*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<Vec2F>*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, AnimationTrack<Vec2F>*);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationTrack<Vec2F>*, GetTrackT);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<AnimationTrack<Vec2F>>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationTrack<Vec2F>>&, GetTrackT);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
-    FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetValue);
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
-    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, AnimationState*, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, const Ref<AnimationState>&, const String&);
 }
 END_META;
 // --- END META ---

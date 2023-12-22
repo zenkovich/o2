@@ -8,12 +8,6 @@ namespace o2
         mTarget(&object)
     {}
 
-    Animate::~Animate()
-    {
-        for (auto container : mKeyContainers)
-            delete container;
-    }
-
     Animate::operator AnimationClip() const
     {
         return mAnimation;
@@ -58,7 +52,7 @@ namespace o2
         CheckPositionAnimatedvalue();
         CheckAppliedKeys();
 
-        KeyContainer<Vec2F>* container = mnew KeyContainer<Vec2F>();
+        auto container = mmake<KeyContainer<Vec2F>>();
         container->animatedValue = mPositionAnimatedValue;
         container->animatedValue->spline.AppendKey(Vec2F(x, y));
         mKeyContainers.Add(container);
@@ -71,7 +65,7 @@ namespace o2
         CheckPositionAnimatedvalue();
         CheckAppliedKeys();
 
-        KeyContainer<Vec2F>* container = mnew KeyContainer<Vec2F>();
+        auto container = mmake<KeyContainer<Vec2F>>();
         container->animatedValue = mPositionAnimatedValue;
         container->animatedValue->spline.AppendKey(point);
         container->timeKey.position = mTime;
@@ -90,7 +84,7 @@ namespace o2
         CheckColorAnimatedValue();
         CheckAppliedKeys();
 
-        KeyContainer<Color4>* container = mnew KeyContainer<Color4>();
+        auto container = mmake<KeyContainer<Color4>>();
         container->animatedValue = mColorAnimatedValue;
         container->key.value = Color4(1.0f, 1.0f, 1.0f, alpha);
         mKeyContainers.Add(container);
@@ -113,7 +107,7 @@ namespace o2
         CheckColorAnimatedValue();
         CheckAppliedKeys();
 
-        KeyContainer<Color4>* container = mnew KeyContainer<Color4>();
+        auto container = mmake<KeyContainer<Color4>>();
         container->animatedValue = mColorAnimatedValue;
         container->key.value = color;
         mKeyContainers.Add(container);
@@ -136,7 +130,7 @@ namespace o2
         CheckScaleAnimatedValue();
         CheckAppliedKeys();
 
-        ScaleKeyContainer* container = mnew ScaleKeyContainer();
+        auto container = mmake<ScaleKeyContainer>();
         container->animatedValueX = mScaleXAnimatedValue;
         container->animatedValueY = mScaleYAnimatedValue;
         container->keyX.value = scale.x;
@@ -151,7 +145,7 @@ namespace o2
         CheckRotateAnimatedValue();
         CheckAppliedKeys();
 
-        KeyContainer<float>* container = mnew KeyContainer<float>();
+        auto container = mmake<KeyContainer<float>>();
         container->animatedValue = mRotationAnimatedValue;
         container->key.value = angle;
         mKeyContainers.Add(container);
@@ -266,9 +260,6 @@ namespace o2
     {
         if (!mKeysApplied)
             return;
-
-        for (auto container : mKeyContainers)
-            delete container;
 
         mKeyContainers.Clear();
         mFunction.Clear();

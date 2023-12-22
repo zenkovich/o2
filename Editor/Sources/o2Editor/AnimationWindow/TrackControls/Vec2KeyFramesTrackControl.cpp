@@ -67,7 +67,7 @@ namespace Editor
 			return;
 
 		auto path = mTrack->path;
-		Actor* root = dynamic_cast<Actor*>(mPlayer->GetOwnerPlayer()->GetTarget());
+		Actor* root = dynamic_cast<Actor*>(mPlayer->GetOwnerPlayer().Lock()->GetTarget());
 		while (root && path.StartsWith("child"))
 		{
 			int nextSlash = path.Find("/");

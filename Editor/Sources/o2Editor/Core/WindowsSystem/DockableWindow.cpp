@@ -339,7 +339,7 @@ namespace Editor
 
 	void DockableWindow::InitializeDockFrameAppearanceAnim()
 	{
-		mDockingFrameAppearance.SetClip(mnew AnimationClip(), true);
+		mDockingFrameAppearance.SetClip(mmake<AnimationClip>());
 		mDockingFrameAppearance.SetTarget(this);
 
 		*mDockingFrameAppearance.GetClip()->AddTrack<float>("mDockingFrameSample/transparency") =

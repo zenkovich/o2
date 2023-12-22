@@ -33,7 +33,7 @@ namespace Editor
 
 		static auto GetValue(TrackPlayerType& player) 
 		{ 
-			return dynamic_cast<TrackType*>(player.GetTrack())->timeCurve.Evaluate(player.GetTime());
+			return DynamicCast<TrackType>(player.GetTrack())->timeCurve.Evaluate(player.GetTime());
 		}
 
 		static auto GetValue(TrackType& track, float pos) { return track.timeCurve.Evaluate(pos); }

@@ -85,7 +85,7 @@ namespace Editor
 		Sprite* GetHighlightDrawable() const;
 
 		// Sets highlight animation
-		void SetHighlightAnimation(const AnimationClip& animation);
+		void SetHighlightAnimation(const Ref<AnimationClip>& animation);
 
 		// Sets highlight layout
 		void SetHighlightLayout(const Layout& layout);
@@ -128,11 +128,11 @@ namespace Editor
 
 		Ref<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
 						        
-		AssetIcon*      mHighlightIcon = nullptr;   // Current highlighting asset icon
-		AnimationClip   mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
-		AnimationPlayer mHighlightAnim;             // Icon highlight animation
-		Sprite*         mHighlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
-		Layout          mHighlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
+		AssetIcon*         mHighlightIcon = nullptr;   // Current highlighting asset icon
+		Ref<AnimationClip> mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
+		AnimationPlayer    mHighlightAnim;             // Icon highlight animation
+		Sprite*            mHighlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
+		Layout             mHighlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
 						        
 		Map<String, Vector<AssetIcon*>> mIconsPool; // Assets icons pool
 						        
@@ -403,7 +403,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AssetInfo>>&, GetSelectedAssets);
     FUNCTION().PUBLIC().SIGNATURE(AssetIcon*, GetIconUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHighlightDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const AnimationClip&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectingDrawable);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);

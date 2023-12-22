@@ -117,7 +117,7 @@ namespace Editor
 
 		if (!mPlayer && mAnimation)
 		{
-			mPlayer = mnew AnimationPlayer(mTargetActor.Get(), mAnimation);
+			mPlayer = mnew AnimationPlayer(mTargetActor.Get(), Ref(mAnimation));
 			SetAnimation(mAnimation, mPlayer);
 			mOwnPlayer = true;
 		}

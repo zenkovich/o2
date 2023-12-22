@@ -51,9 +51,9 @@ namespace Editor
 
         mDragIcon = o2UI.CreateWidget<AssetIcon>();
 
-        mHighlighClip = other.mHighlighClip;
+        mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
         mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+        mHighlightAnim.SetClip(mHighlighClip);
 
         RetargetStatesAnimations();
         SetLayoutDirty();
@@ -87,9 +87,9 @@ namespace Editor
 
         mHighlightLayout = other.mHighlightLayout;
         mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
-        mHighlighClip = other.mHighlighClip;
+        mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
         mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+        mHighlightAnim.SetClip(mHighlighClip);
 
         mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
 
@@ -848,10 +848,10 @@ namespace Editor
         return mHighlightSprite;
     }
 
-    void AssetsIconsScrollArea::SetHighlightAnimation(const AnimationClip& animation)
+    void AssetsIconsScrollArea::SetHighlightAnimation(const Ref<AnimationClip>& animation)
     {
         mHighlighClip = animation;
-        mHighlightAnim.SetClip(animation.CloneAs<AnimationClip>(), true);
+        mHighlightAnim.SetClip(mHighlighClip);
         mHighlightAnim.SetTarget(mHighlightSprite);
     }
 

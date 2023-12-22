@@ -16,7 +16,7 @@ namespace o2
     {
         for (auto track : other.mTracks)
         {
-            IAnimationTrack* newTrack = track->CloneAs<IAnimationTrack>();
+            Ref<IAnimationTrack> newTrack = track->CloneAsRef<IAnimationTrack>();
             mTracks.Add(newTrack);
             OnTrackAdded(newTrack);
         }
@@ -37,7 +37,7 @@ namespace o2
 
         for (auto track : other.mTracks)
         {
-            IAnimationTrack* newTrack = track->CloneAs<IAnimationTrack>();
+            Ref<IAnimationTrack> newTrack = track->CloneAsRef<IAnimationTrack>();
             mTracks.Add(newTrack);
             OnTrackAdded(newTrack);
         }
@@ -52,10 +52,7 @@ namespace o2
     void AnimationClip::Clear()
     {
         for (auto track : mTracks)
-        {
             track->onKeysChanged -= THIS_FUNC(OnTrackChanged);
-            delete track;
-        }
 
         mTracks.Clear();
     }
@@ -75,12 +72,12 @@ namespace o2
         return mLoop;
     }
 
-    Vector<IAnimationTrack*>& AnimationClip::GetTracks()
+    Vector<Ref<IAnimationTrack>>& AnimationClip::GetTracks()
     {
         return mTracks;
     }
 
-    const Vector<IAnimationTrack*>& AnimationClip::GetTracks() const
+    const Vector<Ref<IAnimationTrack>>& AnimationClip::GetTracks() const
     {
         return mTracks;
     }
@@ -96,7 +93,7 @@ namespace o2
         return false;
     }
 
-    IAnimationTrack* AnimationClip::AddTrack(const String& path, const Type& type)
+    Ref<IAnimationTrack> AnimationClip::AddTrack(const String& path, const Type& type)
     {
         auto animTypeName = "o2::AnimationTrack<" + type.GetName() + ">";
         auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
@@ -106,7 +103,7 @@ namespace o2
             return nullptr;
         }
 
-        auto track = dynamic_cast<IAnimationTrack*>(animType->DynamicCastToIObject(animType->CreateSample()));
+        auto track = Ref(dynamic_cast<IAnimationTrack*>(animType->DynamicCastToIObject(animType->CreateSample())));
         track->path = path;
         track->onKeysChanged += THIS_FUNC(OnTrackChanged);
 
@@ -124,7 +121,6 @@ namespace o2
             {
                 onTrackRemove(track);
 
-                delete track;
                 mTracks.Remove(track);
 
                 onChanged();
@@ -160,10 +156,10 @@ namespace o2
         OnTrackChanged();
     }
 
-    void AnimationClip::OnTrackAdded(IAnimationTrack* track)
+    void AnimationClip::OnTrackAdded(const Ref<IAnimationTrack>& track)
     {
         track->onKeysChanged += THIS_FUNC(OnTrackChanged);
-        track->mOwnerClip = this;
+        track->mOwnerClip = Ref(this);
 
         onTrackAdded(track);
         onChanged();

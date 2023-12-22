@@ -7,7 +7,9 @@
 
 namespace o2
 {
-    AnimationPlayer::AnimationPlayer(IObject* target /*= nullptr*/, AnimationClip* clip /*= nullptr*/):
+    FORWARD_REF_IMPL(AnimationClip);
+
+    AnimationPlayer::AnimationPlayer(IObject* target /*= nullptr*/, const Ref<AnimationClip>& clip /*= nullptr*/):
         mTarget(target), mClip(clip)
     {
         SetTarget(target);
@@ -16,13 +18,7 @@ namespace o2
 
     AnimationPlayer::~AnimationPlayer()
     {
-        for (auto player : mTrackPlayers)
-            delete player;
-
         mTrackPlayers.Clear();
-
-        if (mClip && mClipOwner)
-            delete mClip;
     }
 
     void AnimationPlayer::SetTarget(IObject* target, bool errors /*= true*/)
@@ -36,7 +32,7 @@ namespace o2
         return mTarget;
     }
 
-    void AnimationPlayer::SetClip(AnimationClip* clip, bool owner /*= false*/)
+    void AnimationPlayer::SetClip(const Ref<AnimationClip>& clip)
     {
         if (mClip)
         {
@@ -46,7 +42,6 @@ namespace o2
         }
 
         mClip = clip;
-        mClipOwner = owner;
 
         if (mClip)
         {
@@ -58,12 +53,12 @@ namespace o2
         BindTracks(true);
     }
 
-    AnimationClip* AnimationPlayer::GetClip() const
+    const Ref<AnimationClip>& AnimationPlayer::GetClip() const
     {
         return mClip;
     }
 
-    const Vector<IAnimationTrack::IPlayer*>& AnimationPlayer::GetTrackPlayers() const
+    const Vector<Ref<IAnimationTrack::IPlayer>>& AnimationPlayer::GetTrackPlayers() const
     {
         return mTrackPlayers;
     }
@@ -71,10 +66,7 @@ namespace o2
     void AnimationPlayer::BindTracks(bool errors)
     {
         for (auto player : mTrackPlayers)
-        {
             onTrackPlayerRemove(player);
-            delete player;
-        }
 
         mTrackPlayers.Clear();
 
@@ -93,7 +85,7 @@ namespace o2
         mEndTime = mDuration;
     }
 
-    void AnimationPlayer::BindTrack(const ObjectType* type, void* castedTarget, IAnimationTrack * track, bool errors)
+    void AnimationPlayer::BindTrack(const ObjectType* type, void* castedTarget, const Ref<IAnimationTrack>& track, bool errors)
     {
         const FieldInfo* fieldInfo = nullptr;
         auto targetPtr = type->GetFieldPtr(castedTarget, track->path, fieldInfo);
@@ -107,7 +99,7 @@ namespace o2
         {
             auto trackPlayer = track->CreatePlayer();
             trackPlayer->SetTrack(track);
-            trackPlayer->mOwnerPlayer = this;
+            trackPlayer->mOwnerPlayer = Ref(this);
 
             if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
                 trackPlayer->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(targetPtr));
@@ -120,7 +112,7 @@ namespace o2
         }
     }
 
-    void AnimationPlayer::OnClipTrackAdded(IAnimationTrack* track)
+    void AnimationPlayer::OnClipTrackAdded(const Ref<IAnimationTrack>& track)
     {
         const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
         void* castedTarget = type->DynamicCastFromIObject(mTarget);
@@ -128,7 +120,7 @@ namespace o2
         BindTrack(type, castedTarget, track, false);
     }
 
-    void AnimationPlayer::OnClipTrackRemove(IAnimationTrack* track)
+    void AnimationPlayer::OnClipTrackRemove(const Ref<IAnimationTrack>& track)
     {
         mTrackPlayers.RemoveFirst([track, this](auto& x) { return x->GetTrack() == track; onTrackPlayerRemove(x); });
     }
