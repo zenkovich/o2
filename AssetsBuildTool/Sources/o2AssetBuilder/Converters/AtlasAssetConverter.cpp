@@ -229,7 +229,7 @@ namespace o2
             imgDef.packRect->rect.top -= imagesBorder;
             imgDef.packRect->rect.bottom += imagesBorder;
 
-            resAtlasBitmaps[imgDef.packRect->page]->CopyImage(imgDef.bitmap,
+            resAtlasBitmaps[imgDef.packRect->page]->CopyImage(*imgDef.bitmap,
                                                               imgDef.packRect->rect.LeftBottom());
 
             resAtlasPages[imgDef.packRect->page].mImagesRects.Add(imgDef.assetInfo.Lock()->meta->ID(),

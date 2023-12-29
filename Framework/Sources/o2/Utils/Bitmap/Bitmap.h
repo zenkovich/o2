@@ -72,10 +72,10 @@ namespace o2
         const String& GetFilename() const;
 
         // Copy image to position
-        void CopyImage(Bitmap* img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
+        void CopyImage(const Bitmap& img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
 
         // Blends images by alpha
-        void BlendImage(Bitmap* img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
+        void BlendImage(const Bitmap& img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
 
         // Sets images pixels colors
         void Colorise(const Color4& color);

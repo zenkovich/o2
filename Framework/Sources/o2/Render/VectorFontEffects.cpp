@@ -89,7 +89,7 @@ namespace o2
         Bitmap shadow(bitmap);
         shadow.Colorise(color);
         shadow.Blur(blurRadius);
-        bitmap.BlendImage(&shadow, offset);
+        bitmap.BlendImage(shadow, offset);
     }
 
     Vec2I FontShadowEffect::GetSizeExtend() const
