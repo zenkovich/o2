@@ -114,7 +114,7 @@ namespace Editor
 
 			if (animationRef)
 			{
-				o2EditorAnimationWindow.SetAnimation(animationRef->animation);
+				o2EditorAnimationWindow.SetAnimation(animationRef->animation.Get());
 
 				if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
 					o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));

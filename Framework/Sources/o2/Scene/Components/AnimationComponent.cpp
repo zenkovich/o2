@@ -337,6 +337,8 @@ namespace o2
         target->SetValue(resValue);
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AnimationComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::AnimationComponent, o2__AnimationComponent);

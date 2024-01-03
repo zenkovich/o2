@@ -165,12 +165,12 @@ namespace Editor
 		if (mAnimationWindow->mPlayer)
 		{
 			for (auto trackPlayer : mAnimationWindow->mPlayer->GetTrackPlayers())
-				AddAnimationTrack(trackPlayer->GetTrack(), trackPlayer);
+				AddAnimationTrack(trackPlayer->GetTrack().Get(), trackPlayer.Get());
 		}
 		else
 		{
 			for (auto track : mAnimationWindow->mAnimation->GetTracks())
-				AddAnimationTrack(track, nullptr);
+				AddAnimationTrack(track.Get(), nullptr);
 		}
 
 		UpdateNodesStructure();

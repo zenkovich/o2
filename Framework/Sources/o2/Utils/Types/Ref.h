@@ -115,7 +115,7 @@ namespace o2
         friend class BaseWeakRef;
 
         template<typename _type>
-        friend RefCounter* GetRefCounter(_type* ptr);
+        friend RefCounter* GetRefCounterImpl(_type* ptr);
 
         template<typename _type, typename ... _args>
         friend Ref<_type> Make(_args&& ... args);
@@ -446,27 +446,53 @@ namespace o2
 
     // Returns reference counter
     template<typename _type>
-    inline RefCounter* GetRefCounter(_type* ptr)
+    RefCounter* GetRefCounterImpl(_type* ptr)
     {
         return ptr->GetRefCounter();
     }
 
     // Destructs object
     template<typename _type>
-    inline void DestructObject(_type* obj)
+    void DestructObjectImpl(_type* obj)
     {
         obj->~_type();
     }
 
+    template<typename T, typename = void>
+    struct IsCompleteRef : std::false_type {};
+
+    template<typename T>
+    struct IsCompleteRef<T, std::void_t<decltype(sizeof(T))>> : std::true_type {};
+
+    // Returns reference counter
+    template<typename _type>
+    RefCounter* GetRefCounter(_type* ptr)
+    {
+        if constexpr (IsCompleteRef<_type>::value)
+            return GetRefCounterImpl(ptr);
+        else
+            return GetRefCounterFwd(ptr);
+    }
+
+    // Destructs object
+    template<typename _type>
+    void DestructObject(_type* obj)
+    {
+        if constexpr (IsCompleteRef<_type>::value)
+            return DestructObjectImpl(obj);
+        else
+            return DestructObjectFwd(obj);
+    }
+
     // Forward declaration of class and reference counter implementation
-#define FORWARD_REF(CLASS)                                \
-	template<> o2::RefCounter* GetRefCounter(CLASS* ptr); \
-	template<> void DestructObject(CLASS* obj) 
+#define FORWARD_REF(CLASS)                        \
+	o2::RefCounter* GetRefCounterFwd(CLASS* ptr); \
+	void DestructObjectFwd(CLASS* obj) 
 
     // Implementation of forward declared reference counter 
-#define FORWARD_REF_IMPL(CLASS)                                                                  \
-	template<> inline o2::RefCounter* GetRefCounter(CLASS* ptr) { return ptr->GetRefCounter(); } \
-	template<> inline void DestructObject(CLASS* obj) { obj->~CLASS(); }
+#define FORWARD_REF_IMPL(CLASS)                                                   \
+	o2::RefCounter* GetRefCounterFwd(CLASS* ptr) { return GetRefCounterImpl(ptr); } \
+	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }
 
     // Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together. 
     // Stores location and line of creation for debug

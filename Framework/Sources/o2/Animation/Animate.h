@@ -69,10 +69,10 @@ namespace o2
     {
     public:
         // Constructor. Takes object as parameter
-        Animate(IObject& object);
+        explicit Animate(IObject& object);
 
         // Animation cast operator. Needs to store as animation
-        operator AnimationClip() const;
+        operator Ref<AnimationClip>() const;
 
         // Inserts delay for seconds
         Animate& Wait(float seconds);
@@ -129,7 +129,7 @@ namespace o2
     protected:
         IObject* mTarget = nullptr; // Target animating object
 
-        AnimationClip mAnimation; // Building animation
+        Ref<AnimationClip> mAnimation; // Building animation
 
         bool  mKeysApplied = false; // Is stored keys was applied
         float mTime = 0.0f;         // Current sequence time

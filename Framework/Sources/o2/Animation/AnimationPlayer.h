@@ -8,6 +8,9 @@ namespace o2
     class AnimationClip;
     FORWARD_REF(AnimationClip);
 
+    class AnimationState;
+    FORWARD_REF(AnimationState);
+
     // ---------------------
     // Animation clip player
     // ---------------------

@@ -5,6 +5,8 @@
 
 namespace o2
 {
+    FORWARD_REF_IMPL(AnimationComponent);
+
     AnimationState::AnimationState(const String& name):
         name(name)
     {

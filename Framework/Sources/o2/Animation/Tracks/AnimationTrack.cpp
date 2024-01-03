@@ -4,6 +4,11 @@
 #include "o2/Scene/Components/AnimationComponent.h"
 #include "o2/Utils/Math/Color.h"
 
+namespace o2
+{
+    //FORWARD_REF_IMPL(AnimationState);
+}
+
 DECLARE_TEMPLATE_CLASS_MANUAL(o2::AnimationTrack<bool>);
 DECLARE_TEMPLATE_CLASS_MANUAL(o2::AnimationTrack<bool>::Key);
 DECLARE_TEMPLATE_CLASS_MANUAL(o2::AnimationTrack<bool>::Player);

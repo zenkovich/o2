@@ -8,7 +8,7 @@ namespace o2
         mTarget(&object)
     {}
 
-    Animate::operator AnimationClip() const
+    Animate::operator Ref<AnimationClip>() const
     {
         return mAnimation;
     }
@@ -155,13 +155,13 @@ namespace o2
 
     Animate& Animate::Looped()
     {
-        mAnimation.SetLoop(Loop::Repeat);
+        mAnimation->SetLoop(Loop::Repeat);
         return *this;
     }
 
     Animate& Animate::PingPong()
     {
-        mAnimation.SetLoop(Loop::PingPong);
+        mAnimation->SetLoop(Loop::PingPong);
         return *this;
     }
 
@@ -179,7 +179,7 @@ namespace o2
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mColorAnimatedValue = mAnimation.AddTrack<Color4>(nameVariant);
+                mColorAnimatedValue = mAnimation->AddTrack<Color4>(nameVariant);
                 return;
             }
         }
@@ -199,7 +199,7 @@ namespace o2
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mPositionAnimatedValue = mAnimation.AddTrack<Vec2F>(nameVariant);
+                mPositionAnimatedValue = mAnimation->AddTrack<Vec2F>(nameVariant);
                 return;
             }
         }
@@ -220,7 +220,7 @@ namespace o2
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mScaleXAnimatedValue = mAnimation.AddTrack<float>(nameVariant);
+                mScaleXAnimatedValue = mAnimation->AddTrack<float>(nameVariant);
                 break;
             }
         }
@@ -230,7 +230,7 @@ namespace o2
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mScaleYAnimatedValue = mAnimation.AddTrack<float>(nameVariant);
+                mScaleYAnimatedValue = mAnimation->AddTrack<float>(nameVariant);
                 break;
             }
         }
@@ -250,7 +250,7 @@ namespace o2
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mRotationAnimatedValue = mAnimation.AddTrack<float>(nameVariant);
+                mRotationAnimatedValue = mAnimation->AddTrack<float>(nameVariant);
                 return;
             }
         }

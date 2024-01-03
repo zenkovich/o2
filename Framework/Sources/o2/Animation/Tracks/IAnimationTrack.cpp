@@ -1,13 +1,14 @@
 #include "o2/stdafx.h"
 #include "AnimationTrack.h"
 
+#include "o2/Animation/AnimationPlayer.h"
 #include "o2/Animation/AnimationState.h"
 
 namespace o2
 {
-    FORWARD_REF_IMPL(AnimationClip);
+    //FORWARD_REF_IMPL(AnimationClip);
     FORWARD_REF_IMPL(AnimationPlayer);
-    FORWARD_REF_IMPL(AnimationState);
+    //FORWARD_REF_IMPL(AnimationState);
 
     void IAnimationTrack::IPlayer::SetTrack(const Ref<IAnimationTrack>& track)
     {
