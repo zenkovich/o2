@@ -61,7 +61,7 @@ namespace Editor
 		SERIALIZABLE(DrawOrderTree);
 
 	public:
-		struct OrderTreeNode : ITreeNode<OrderTreeNode>
+		struct OrderTreeNode : public ITreeNode<OrderTreeNode>, public RefCounterable
 		{
 			enum class Type { Camera, Layer, Root, Drawable, Actor, EndOfBatch };
 
@@ -78,7 +78,7 @@ namespace Editor
 		};
 
 	protected:
-		Vector<OrderTreeNode*> mRootOrderNodes; // Root nodes for draw order hierarchy data
+		Vector<Ref<OrderTreeNode>> mRootOrderNodes; // Root nodes for draw order hierarchy data
 
 		int mStartBatchIdx = 0; // Index of first batch
 

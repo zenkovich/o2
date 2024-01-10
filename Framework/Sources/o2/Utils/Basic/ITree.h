@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 
 
 namespace o2
@@ -19,37 +20,37 @@ namespace o2
         virtual ~ITreeNode();
 
         // Adds new child node and returns him
-        virtual _type* AddChild(_type* node);
+        virtual Ref<_type> AddChild(const Ref<_type>& node);
 
         // Remove child node and releases him if needs
-        virtual bool RemoveChild(_type* node, bool release = true);
+        virtual void RemoveChild(const Ref<_type>& node);
 
         // Removes and releases all children nodes
         virtual void RemoveAllChilds();
 
         // Sets parent node
-        virtual void SetParent(_type* parent);
+        virtual void SetParent(const Ref<_type>& parent);
 
         // Returns parent node
-        virtual _type* GetParent() const;
+        virtual const WeakRef<_type>& GetParent() const;
 
         // Return child nodes
-        virtual Vector<_type*>& GetChildren();
+        virtual Vector<Ref<_type>>& GetChildren();
 
         // Returns constant child nodes
-        virtual const Vector<_type*>& GetChildren() const;
+        virtual const Vector<Ref<_type>>& GetChildren() const;
 
     protected:
-        _type*         _this;     // Template this pointer
-        _type*         mParent;   // Pointer to parent node
-        Vector<_type*> mChildren; // Children nodes @SERIALIZABLE
+        _type*             _this;     // Template this pointer
+        WeakRef<_type>     mParent;   // Pointer to parent node
+        Vector<Ref<_type>> mChildren; // Children nodes @SERIALIZABLE
 
     protected:
         // Called when added new child
-        virtual void OnChildAdded(_type* child) {}
+        virtual void OnChildAdded(const Ref<_type>& child) {}
 
         // Called when child was removed
-        virtual void OnChildRemoved(_type* child) {}
+        virtual void OnChildRemoved(const Ref<_type>& child) {}
     };
 
 
@@ -67,13 +68,12 @@ namespace o2
     }
 
     template<typename _type>
-    _type* ITreeNode<_type>::AddChild(_type* node)
+    Ref<_type> ITreeNode<_type>::AddChild(const Ref<_type>& node)
     {
         if (node->GetParent())
-            node->GetParent()->RemoveChild(node, false);
+            node->GetParent().Lock()->RemoveChild(node);
 
-        node->mParent = _this;
-
+        node->mParent = WeakRef(_this);
         mChildren.Add(node);
 
         OnChildAdded(node);
@@ -82,18 +82,12 @@ namespace o2
     }
 
     template<typename _type>
-    bool ITreeNode<_type>::RemoveChild(_type* node, bool release /*= true*/)
+    void ITreeNode<_type>::RemoveChild(const Ref<_type>& node)
     {
         node->mParent = nullptr;
-
         mChildren.Remove(node);
 
         OnChildRemoved(node);
-
-        if (release && node)
-            delete node;
-
-        return true;
     }
 
     template<typename _type>
@@ -102,43 +96,39 @@ namespace o2
         for (auto child : mChildren)
             OnChildRemoved(child);
 
-        for (auto child : mChildren)
-            if (child)
-                delete child;
-
         mChildren.Clear();
     }
 
     template<typename _type>
-    void ITreeNode<_type>::SetParent(_type* parent)
+    void ITreeNode<_type>::SetParent(const Ref<_type>& parent)
     {
         if (parent)
         {
-            parent->AddChild(_this);
+            parent->AddChild(Ref(_this));
         }
         else
         {
             if (mParent)
-                mParent->RemoveChild(_this, false);
+                mParent.Lock()->RemoveChild(Ref(_this));
 
             mParent = nullptr;
         }
     }
 
     template<typename _type>
-    _type* ITreeNode<_type>::GetParent() const
+    const WeakRef<_type>& ITreeNode<_type>::GetParent() const
     {
         return mParent;
     }
 
     template<typename _type>
-    Vector<_type*>& ITreeNode<_type>::GetChildren()
+    Vector<Ref<_type>>& ITreeNode<_type>::GetChildren()
     {
         return mChildren;
     }
 
     template<typename _type>
-    const Vector<_type*>& ITreeNode<_type>::GetChildren() const
+    const Vector<Ref<_type>>& ITreeNode<_type>::GetChildren() const
     {
         return mChildren;
     }

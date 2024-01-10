@@ -61,8 +61,8 @@ namespace o2
         // ------------------------
         struct ImagePackDef
         {
-            Bitmap* bitmap = nullptr;    // Image bitmap pointer
-            RectsPacker::Rect* packRect = nullptr;  // Image pack rectangle pointer
+            Ref<Bitmap>            bitmap;    // Image bitmap pointer
+            Ref<RectsPacker::Rect> packRect;  // Image pack rectangle pointer
 
             WeakRef<AssetInfo> assetInfo; // Asset information
 

@@ -176,17 +176,15 @@ namespace o2
             String assetFullPath = mAssetsBuilder->GetSourceAssetsPath() + imgInfoStong->path;
 
             // Load bitmap
-            Bitmap* bitmap = mnew Bitmap();
+            auto bitmap = mmake<Bitmap>();
             if (!bitmap->Load(assetFullPath))
             {
                 mAssetsBuilder->mLog->Error("Can't load bitmap for image asset: " + imgInfoStong->path);
-                delete bitmap;
                 continue;
             }
 
             // Create packing rect
-            RectsPacker::Rect* packRect = packer.AddRect(bitmap->GetSize() +
-                                                         Vec2F(imagesBorder*2.0f, imagesBorder*2.0f));
+            auto packRect = packer.AddRect(bitmap->GetSize() + Vec2F(imagesBorder*2.0f, imagesBorder*2.0f));
 
             ImagePackDef imagePackDef;
             imagePackDef.assetInfo = imgInfoStong;

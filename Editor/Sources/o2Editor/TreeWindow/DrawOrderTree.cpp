@@ -137,29 +137,29 @@ namespace Editor
 
 		for (auto camera : o2Scene.GetCameras())
 		{
-			OrderTreeNode* cameraNode = mnew OrderTreeNode();
+			Ref<OrderTreeNode> cameraNode = mmake<OrderTreeNode>();
 			cameraNode->name = camera->GetName();
 			cameraNode->type = OrderTreeNode::Type::Camera;
 			cameraNode->object = camera;
-			mObjectToNodeMap[cameraNode->object] = cameraNode;
+			mObjectToNodeMap[cameraNode->object] = cameraNode.Get();
 			mRootOrderNodes.Add(cameraNode);
 
 			for (auto layer : camera->drawLayers.GetLayers())
 			{
-				OrderTreeNode* layerNode = mnew OrderTreeNode();
+				Ref<OrderTreeNode> layerNode = mmake<OrderTreeNode>();
 				layerNode->name = layer->GetName();
 				layerNode->type = OrderTreeNode::Type::Layer;
 				cameraNode->AddChild(layerNode);
 
 				for (auto drawable : layer->GetDrawables())
-					ProcessDrawableTreeNode(layerNode, drawable);
+					ProcessDrawableTreeNode(layerNode.Get(), drawable);
 			}
 		}
 	}
 
 	void DrawOrderTree::ProcessDrawableTreeNode(OrderTreeNode* parent, ISceneDrawable* drawable)
 	{
-		OrderTreeNode* drawableNode = mnew OrderTreeNode();
+		Ref<OrderTreeNode> drawableNode = mmake<OrderTreeNode>();
 
 		drawableNode->inheritedOrderFromParent = drawable->IsDrawingDepthInheritedFromParent();
 		drawableNode->customOrder = drawable->GetDrawingDepth();
@@ -174,9 +174,9 @@ namespace Editor
 			drawableNode->type = OrderTreeNode::Type::Actor;
 			drawableNode->object = actor;
 
-			mObjectToNodeMap[drawableNode->object] = drawableNode; 
+			mObjectToNodeMap[drawableNode->object] = drawableNode.Get(); 
 
-			CheckBatchEnd(drawableNode);
+			CheckBatchEnd(drawableNode.Get());
 			parent->AddChild(drawableNode);
 		}
 		else if (auto root = dynamic_cast<SceneLayer::RootDrawablesContainer*>(drawable))
@@ -184,7 +184,7 @@ namespace Editor
 			drawableNode->type = OrderTreeNode::Type::Root;
 			drawableNode->name = "Layer roots";
 
-			CheckBatchEnd(drawableNode);
+			CheckBatchEnd(drawableNode.Get());
 			parent->AddChild(drawableNode);
 		}
 		else
@@ -192,12 +192,12 @@ namespace Editor
 			drawableNode->name = drawable->GetType().GetName();
 			drawableNode->type = OrderTreeNode::Type::Drawable;
 
-			CheckBatchEnd(drawableNode);
+			CheckBatchEnd(drawableNode.Get());
 			parent->AddChild(drawableNode);
 		}
 
 		for (auto inherited : drawable->GetChildrenInheritedDepth())
-			ProcessDrawableTreeNode(drawableNode, inherited);
+			ProcessDrawableTreeNode(drawableNode.Get(), inherited);
 	}
 
 	void DrawOrderTree::CheckBatchEnd(OrderTreeNode* node)
@@ -206,14 +206,14 @@ namespace Editor
 
 		if (prevDrawableNode && node->object != nullptr && node->batchIdx != prevDrawableNode->batchIdx)
 		{
-			OrderTreeNode* endNode = mnew OrderTreeNode();
+			Ref<OrderTreeNode> endNode = mmake<OrderTreeNode>();
 			endNode->type = OrderTreeNode::Type::EndOfBatch;
 			endNode->batchIdx = prevDrawableNode->batchIdx;
 
 			endNode->name = "End of batch #" + (String)(endNode->batchIdx - mStartBatchIdx);
 
 			auto parent = prevDrawableNode->GetParent();
-			parent->AddChild(endNode);
+			parent.Lock()->AddChild(endNode);
 		}
 
 		if (node->object && node->batchIdx >= 0)
@@ -244,16 +244,16 @@ namespace Editor
 			return nullptr;
 
 		OrderTreeNode* treeNode = (OrderTreeNode*)(void*)object;
-		return (void*)(treeNode->GetParent());
+		return (void*)(treeNode->GetParent().Lock().Get());
 	}
 
 	Vector<void*> DrawOrderTree::GetObjectChilds(void* object)
 	{
 		OrderTreeNode* treeNode = (OrderTreeNode*)object;
 		if (OrderTreeNode* treeNode = (OrderTreeNode*)object)
-			return treeNode->GetChildren().Convert<void*>([](auto x) { return (void*)x; });
+			return treeNode->GetChildren().Convert<void*>([](auto x) { return (void*)x.Get(); });
 
-		return mRootOrderNodes.Convert<void*>([](auto x) { return (void*)x; });
+		return mRootOrderNodes.Convert<void*>([](auto x) { return (void*)x.Get(); });
 	}
 
 	void DrawOrderTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
