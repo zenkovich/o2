@@ -18,6 +18,7 @@ namespace o2
         T right;
         T bottom;
 
+    public:
         inline Rect();
         inline Rect(const Vec2<T>& leftTop, const Vec2<T>& rightDown);
         inline Rect(T left, T top, T right, T bottom);

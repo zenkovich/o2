@@ -14,6 +14,7 @@ namespace o2
         T x;
         T y;
 
+    public:
         inline Vec2();
         inline Vec2(T vx, T vy);
 
