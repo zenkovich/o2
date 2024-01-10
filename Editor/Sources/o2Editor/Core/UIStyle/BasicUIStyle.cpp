@@ -413,20 +413,20 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		AnimationClip enableHorScrollAnim;
-		*enableHorScrollAnim.AddTrack<float>("mVerScrollBar/layout/offsetBottom") =
+		auto enableHorScrollAnim = mmake<AnimationClip>();
+		*enableHorScrollAnim->AddTrack<float>("mVerScrollBar/layout/offsetBottom") =
 			AnimationTrack<float>::EaseInOut(5, 15, 0.2f);
 
-		*enableHorScrollAnim.AddTrack<Vec2F>("mViewAreaLayout/offsetMin") =
+		*enableHorScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMin") =
 			AnimationTrack<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
 
 		auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
 
-		AnimationClip enableVerScrollAnim;
-		*enableVerScrollAnim.AddTrack<float>("mHorScrollBar/layout/offsetRight") =
+		auto enableVerScrollAnim = mmake<AnimationClip>();
+		*enableVerScrollAnim->AddTrack<float>("mHorScrollBar/layout/offsetRight") =
 			AnimationTrack<float>::EaseInOut(-5, -15, 0.2f);
 
-		*enableVerScrollAnim.AddTrack<Vec2F>("mViewAreaLayout/offsetMax") =
+		*enableVerScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMax") =
 			AnimationTrack<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
 
 		auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
@@ -540,20 +540,20 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		AnimationClip enableHorScrollAnim;
-		*enableHorScrollAnim.AddTrack<float>("mVerScrollBar/layout/offsetBottom") =
+		auto enableHorScrollAnim = mmake<AnimationClip>();
+		*enableHorScrollAnim->AddTrack<float>("mVerScrollBar/layout/offsetBottom") =
 			AnimationTrack<float>::EaseInOut(5, 15, 0.2f);
 
-		*enableHorScrollAnim.AddTrack<Vec2F>("mViewAreaLayout/offsetMin") =
+		*enableHorScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMin") =
 			AnimationTrack<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
 
 		auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
 
-		AnimationClip enableVerScrollAnim;
-		*enableVerScrollAnim.AddTrack<float>("mHorScrollBar/layout/offsetRight") =
+		auto enableVerScrollAnim = mmake<AnimationClip>();
+		*enableVerScrollAnim->AddTrack<float>("mHorScrollBar/layout/offsetRight") =
 			AnimationTrack<float>::EaseInOut(-5, -15, 0.2f);
 
-		*enableVerScrollAnim.AddTrack<Vec2F>("mViewAreaLayout/offsetMax") =
+		*enableVerScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMax") =
 			AnimationTrack<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
 
 		auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
@@ -1033,20 +1033,20 @@ namespace o2
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		AnimationClip expandedStateAnim;
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") = 
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") = 
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
 		itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		AnimationClip focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.2f);
+		auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
@@ -1169,8 +1169,8 @@ namespace o2
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		auto focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
+		*focusAnim->AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -1242,14 +1242,14 @@ namespace o2
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip expandedStateAnim;
-		*expandedStateAnim.AddTrack<float>("layer/regular/mDrawable/angle") =
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("layer/regular/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("layer/hover/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("layer/hover/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("layer/pressed/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("layer/pressed/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
@@ -1309,14 +1309,14 @@ namespace o2
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip expandedStateAnim;
-		*expandedStateAnim.AddTrack<float>("layer/regular/mDrawable/angle") =
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("layer/regular/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("layer/hover/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("layer/hover/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("layer/pressed/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("layer/pressed/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;

@@ -106,7 +106,7 @@ namespace o2
             UpdateFontEffects();
         }
         
-        GetMeta()->mAsset = Ref(this);
+        GetMeta()->mAsset = WeakRef(this);
     }
 
     void VectorFontAsset::SaveData(const String& path) const

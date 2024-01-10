@@ -27,7 +27,7 @@ namespace o2
 
     void LogStream::BindStream(const Ref<LogStream>& stream)
     {
-        stream->mParentStream = Ref(this);
+        stream->mParentStream = WeakRef(this);
         mChildStreams.Add(stream);
     }
 

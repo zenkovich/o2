@@ -13,8 +13,8 @@ namespace o2
         offStateAnimationSpeed(state.offStateAnimationSpeed), state(this), animationAsset(this), animationClip(this)
     {
         mAnimation = state.mAnimation;
-        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
-        player.relTime = mState ? 1.0f:0.0f;
+        mPlayer->SetClip(mAnimation ? mAnimation->animation : nullptr);
+        mPlayer->relTime = mState ? 1.0f:0.0f;
     }
 
     WidgetState::~WidgetState()
@@ -33,14 +33,19 @@ namespace o2
     void WidgetState::SetOwner(Widget* owner, bool errors)
     {
         mOwner = owner;
-        player.SetTarget(owner, errors);
-        player.relTime = mState ? 1.0f : 0.0f;
+        mPlayer->SetTarget(owner, errors);
+        mPlayer->relTime = mState ? 1.0f : 0.0f;
     }
 
-    void WidgetState::SetAnimationAsset(const AnimationAssetRef& asset)
+	AnimationPlayer& WidgetState::GetAnimationPlayer()
+	{
+        return *mPlayer;
+	}
+
+	void WidgetState::SetAnimationAsset(const AnimationAssetRef& asset)
     {
         mAnimation = asset;
-        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
+        mPlayer->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
     const AnimationAssetRef& WidgetState::GetAnimationAsset() const
@@ -48,44 +53,44 @@ namespace o2
         return mAnimation;
     }
 
-    void WidgetState::SetAnimationClip(const AnimationClip& animation)
+    void WidgetState::SetAnimationClip(const Ref<AnimationClip>& animation)
     {
         if (mAnimation && mAnimation.IsInstance())
-            mAnimation->animation = mmake<AnimationClip>(animation);
+            mAnimation->animation = animation;
         else
         {
-            mAnimation.SetInstance(mnew AnimationAsset(mmake<AnimationClip>(animation)));
-            player.SetClip(mAnimation->animation);
+            mAnimation.SetInstance(mnew AnimationAsset(animation));
+            mPlayer->SetClip(mAnimation->animation);
         }
     }
 
-    AnimationClip& WidgetState::GetAnimationClip()
+    Ref<AnimationClip>& WidgetState::GetAnimationClip()
     {
         if (mAnimation)
-            return *mAnimation->animation;
+            return mAnimation->animation;
 
-        static AnimationClip empty;
+        static Ref<AnimationClip> empty;
         return empty;
     }
 
     void WidgetState::SetState(bool state)
     {
-         if (mState == state && !player.IsPlaying())
+         if (mState == state && !mPlayer->IsPlaying())
              return;
 
         mState = state;
 
         if (state)
         {
-            player.speed = 1.0f;
-            player.PlayForward();
+            mPlayer->speed = 1.0f;
+            mPlayer->PlayForward();
 
             onStateBecomesTrue();
         }
         else
         {
-            player.speed = offStateAnimationSpeed;
-            player.PlayBack();
+            mPlayer->speed = offStateAnimationSpeed;
+            mPlayer->PlayBack();
 
             onStateBecomesFalse();
         }
@@ -95,8 +100,8 @@ namespace o2
     {
         if (mState == state)
         {
-            if ((state && Math::Equals(player.GetRelTime(), 1.0f)) ||
-                (!state && Math::Equals(player.GetRelTime(), 0.0f)))
+            if ((state && Math::Equals(mPlayer->GetRelTime(), 1.0f)) ||
+                (!state && Math::Equals(mPlayer->GetRelTime(), 0.0f)))
             {
                 return;
             }
@@ -106,15 +111,15 @@ namespace o2
 
         if (mState)
         {
-            player.GoToEnd();
-            player.Stop();
+            mPlayer->GoToEnd();
+            mPlayer->Stop();
             onStateBecomesTrue();
             onStateFullyTrue();
         }
         else
         {
-            player.GoToBegin();
-            player.Stop();
+            mPlayer->GoToBegin();
+            mPlayer->Stop();
             onStateBecomesFalse();
             onStateFullyFalse();
         }
@@ -127,11 +132,11 @@ namespace o2
 
     void WidgetState::Update(float dt)
     {
-        if (player.IsPlaying())
+        if (mPlayer->IsPlaying())
         {
-            player.Update(dt);
+            mPlayer->Update(dt);
 
-            if (!player.IsPlaying())
+            if (!mPlayer->IsPlaying())
             {
                 if (mState) onStateFullyTrue();
                 else onStateFullyFalse();
@@ -141,12 +146,12 @@ namespace o2
 
     void WidgetState::OnAnimationChanged()
     {
-        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
+        mPlayer->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
     void WidgetState::OnDeserialized(const DataValue& node)
     {
-        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
+        mPlayer->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
     void WidgetState::OnDeserializedDelta(const DataValue& node, const IObject& origin)

@@ -52,7 +52,7 @@ namespace o2
         state->player.SetTarget(mOwner);
         state->player.SetPlaying(state->autoPlay);
         state->player.mAnimationState = state;
-        state->mOwner = Ref(this);
+        state->mOwner = WeakRef(this);
 
         for (auto trackPlayer : state->player.mTrackPlayers)
             trackPlayer->RegMixer(state, trackPlayer->GetTrack()->path);

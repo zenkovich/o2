@@ -159,7 +159,7 @@ namespace o2
     void AnimationClip::OnTrackAdded(const Ref<IAnimationTrack>& track)
     {
         track->onKeysChanged += THIS_FUNC(OnTrackChanged);
-        track->mOwnerClip = Ref(this);
+        track->mOwnerClip = WeakRef(this);
 
         onTrackAdded(track);
         onChanged();

@@ -3,7 +3,7 @@
         "Type": "o2::EditBox",
         "Value": {
             "Prototype": {
-                "id": "352b7a5744e02e136cf342dc52c000f7",
+                "id": "35c47152794b334c748e4dfc121e08db",
                 "path": "Editor UI styles/Edit Box singleline.proto"
             },
             "PrototypeLink": 6227323235845158254,
@@ -69,112 +69,10 @@
             ],
             "States": [
                 {
-                    "name": "visible",
-                    "mAnimation": {
-                        "instance": {
-                            "Type": "o2::AnimationAsset",
-                            "Value": {
-                                "animation": {
-                                    "mTracks": [
-                                        {
-                                            "Type": "o2::AnimationTrack<float>",
-                                            "Value": {
-                                                "path": "transparency",
-                                                "curve": {
-                                                    "mKeys": [
-                                                        {
-                                                            "uid": 8950902673606985369,
-                                                            "rightSupportPosition": 0.08000000566244126,
-                                                            "supportsType": "Broken"
-                                                        },
-                                                        {
-                                                            "uid": 16426377007251073767,
-                                                            "value": 1.0,
-                                                            "position": 0.20000000298023225,
-                                                            "leftSupportPosition": -0.20000000298023225,
-                                                            "supportsType": "Broken"
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        }
-                                    ],
-                                    "mDuration": 0.20000000298023225
-                                }
-                            }
-                        },
-                        "meta": {
-                            "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                            "Value": {
-                                "mId": "25f9018c165275e043b16d7b64d95e6b"
-                            }
-                        }
-                    }
+                    "name": "visible"
                 },
                 {
-                    "name": "focused",
-                    "mAnimation": {
-                        "instance": {
-                            "Type": "o2::AnimationAsset",
-                            "Value": {
-                                "animation": {
-                                    "mTracks": [
-                                        {
-                                            "Type": "o2::AnimationTrack<float>",
-                                            "Value": {
-                                                "path": "layer/focus/transparency",
-                                                "curve": {
-                                                    "mKeys": [
-                                                        {
-                                                            "uid": 14738215861679510404,
-                                                            "rightSupportPosition": 0.020000001415610315,
-                                                            "supportsType": "Broken"
-                                                        },
-                                                        {
-                                                            "uid": 13546201940323125245,
-                                                            "value": 1.0,
-                                                            "position": 0.05000000074505806,
-                                                            "leftSupportPosition": -0.05000000074505806,
-                                                            "supportsType": "Broken"
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        },
-                                        {
-                                            "Type": "o2::AnimationTrack<float>",
-                                            "Value": {
-                                                "path": "layer/hover/transparency",
-                                                "curve": {
-                                                    "mKeys": [
-                                                        {
-                                                            "uid": 946906170373819780,
-                                                            "rightSupportPosition": 0.020000001415610315,
-                                                            "supportsType": "Broken"
-                                                        },
-                                                        {
-                                                            "uid": 1344496529052404798,
-                                                            "value": 1.0,
-                                                            "position": 0.05000000074505806,
-                                                            "leftSupportPosition": -0.05000000074505806,
-                                                            "supportsType": "Broken"
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        }
-                                    ],
-                                    "mDuration": 0.05000000074505806
-                                }
-                            }
-                        },
-                        "meta": {
-                            "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                            "Value": {
-                                "mId": "340a50274dae2f0d08d477c1313c0427"
-                            }
-                        }
-                    }
+                    "name": "focused"
                 }
             ]
         }

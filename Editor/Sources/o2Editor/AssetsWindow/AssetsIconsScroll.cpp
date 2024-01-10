@@ -37,7 +37,7 @@ namespace Editor
         mHighlightSprite = mnew Sprite();
         mSelectionSprite = mnew Sprite();
 
-        mHighlightAnim.SetTarget(mHighlightSprite);
+        mHighlightAnim->SetTarget(mHighlightSprite);
     }
 
     AssetsIconsScrollArea::AssetsIconsScrollArea(const AssetsIconsScrollArea& other) :
@@ -51,9 +51,11 @@ namespace Editor
 
         mDragIcon = o2UI.CreateWidget<AssetIcon>();
 
-        mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(mHighlighClip);
+        if (other.mHighlighClip)
+            mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
+
+        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetClip(mHighlighClip);
 
         RetargetStatesAnimations();
         SetLayoutDirty();
@@ -88,8 +90,8 @@ namespace Editor
         mHighlightLayout = other.mHighlightLayout;
         mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
         mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(mHighlighClip);
+        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetClip(mHighlighClip);
 
         mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
 
@@ -143,7 +145,7 @@ namespace Editor
     {
         ScrollArea::Update(dt);
 
-        if (mHighlightAnim.IsPlaying())
+        if (mHighlightAnim->IsPlaying())
         {
             if (mHighlightIcon)
             {
@@ -151,9 +153,9 @@ namespace Editor
                 mHighlightSprite->SetRect(mHighlightLayout.Calculate(mHighlightIcon->layout->worldRect));
             }
 
-            mHighlightAnim.Update(dt);
+            mHighlightAnim->Update(dt);
 
-            if (!mHighlightAnim.IsPlaying())
+            if (!mHighlightAnim->IsPlaying())
                 mHighlightIcon = nullptr;
         }
 
@@ -243,7 +245,7 @@ namespace Editor
             return;
 
         mHighlightIcon = icon;
-        mHighlightAnim.RewindAndPlay();
+        mHighlightAnim->RewindAndPlay();
     }
 
     void AssetsIconsScrollArea::SelectAsset(const UID& id, bool scroll /*= true*/)
@@ -851,8 +853,8 @@ namespace Editor
     void AssetsIconsScrollArea::SetHighlightAnimation(const Ref<AnimationClip>& animation)
     {
         mHighlighClip = animation;
-        mHighlightAnim.SetClip(mHighlighClip);
-        mHighlightAnim.SetTarget(mHighlightSprite);
+        mHighlightAnim->SetClip(mHighlighClip);
+        mHighlightAnim->SetTarget(mHighlightSprite);
     }
 
     void AssetsIconsScrollArea::SetHighlightLayout(const Layout& layout)

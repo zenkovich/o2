@@ -111,13 +111,13 @@ namespace Editor
 		mDepthProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mDepthProperty);
 
-		AnimationClip depthInheritStateAnim = AnimationClip::EaseInOut("child/layer/layout/offsetRight", -75.0f, -3.0f, 0.2f);
-		*depthInheritStateAnim.AddTrack<float>("child/depth/layout/offsetLeft") = AnimationTrack<float>::Linear(-70.0f, 0.0f, 0.2f);
-		*depthInheritStateAnim.AddTrack<bool>("child/depth/enabled") = AnimationTrack<bool>::Linear(true, false, 0.2f);
+		auto depthInheritStateAnim = AnimationClip::EaseInOut("child/layer/layout/offsetRight", -75.0f, -3.0f, 0.2f);
+		*depthInheritStateAnim->AddTrack<float>("child/depth/layout/offsetLeft") = AnimationTrack<float>::Linear(-70.0f, 0.0f, 0.2f);
+		*depthInheritStateAnim->AddTrack<bool>("child/depth/enabled") = AnimationTrack<bool>::Linear(true, false, 0.2f);
 		mDataView->AddState("depth inherit", depthInheritStateAnim);
 
-		AnimationClip protoStateAnim = AnimationClip::EaseInOut("layout/minHeight", 62.0f, 84.0f, 0.1f);
-		*protoStateAnim.AddTrack<bool>("child/prototype/enabled") = AnimationTrack<bool>::Linear(false, true, 0.1f);
+		auto protoStateAnim = AnimationClip::EaseInOut("layout/minHeight", 62.0f, 84.0f, 0.1f);
+		*protoStateAnim->AddTrack<bool>("child/prototype/enabled") = AnimationTrack<bool>::Linear(false, true, 0.1f);
 		mDataView->AddState("prototype", protoStateAnim);
 	}
 

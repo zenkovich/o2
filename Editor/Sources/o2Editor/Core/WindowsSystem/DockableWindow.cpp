@@ -79,7 +79,7 @@ namespace Editor
 			mDockingFrameSample->rect = mDockingFrameCurrent;
 		}
 
-		mDockingFrameAppearance.Update(dt);
+		mDockingFrameAppearance->Update(dt);
 	}
 
 	void DockableWindow::Draw()
@@ -339,16 +339,16 @@ namespace Editor
 
 	void DockableWindow::InitializeDockFrameAppearanceAnim()
 	{
-		mDockingFrameAppearance.SetClip(mmake<AnimationClip>());
-		mDockingFrameAppearance.SetTarget(this);
+		mDockingFrameAppearance->SetClip(mmake<AnimationClip>());
+		mDockingFrameAppearance->SetTarget(this);
 
-		*mDockingFrameAppearance.GetClip()->AddTrack<float>("mDockingFrameSample/transparency") =
+		*mDockingFrameAppearance->GetClip()->AddTrack<float>("mDockingFrameSample/transparency") =
 			AnimationTrack<float>::EaseInOut(0, 1, 0.3f);
 
-		*mDockingFrameAppearance.GetClip()->AddTrack<float>("transparency") =
+		*mDockingFrameAppearance->GetClip()->AddTrack<float>("transparency") =
 			AnimationTrack<float>::EaseInOut(1, 0, 0.15f);
 
-		mDockingFrameAppearance.GoToBegin();
+		mDockingFrameAppearance->GoToBegin();
 	}
 
 	void DockableWindow::InitializeDragHandles()
@@ -419,12 +419,12 @@ namespace Editor
 
 		if (dockPosition != Side::None && tracedDock)
 		{
-			mDockingFrameAppearance.PlayForward();
+			mDockingFrameAppearance->PlayForward();
 			mDockingFrameTarget = dockZoneRect;
 		}
 		else
 		{
-			mDockingFrameAppearance.PlayBack();
+			mDockingFrameAppearance->PlayBack();
 			mDockingFrameTarget = layout->worldRect;
 		}
 	}
@@ -527,7 +527,7 @@ namespace Editor
 		*layout = WidgetLayout::BothStretch();
 		SetDocked(true);
 
-		mDockingFrameAppearance.PlayBack();
+		mDockingFrameAppearance->PlayBack();
 		mDockingFrameTarget = layout->GetWorldRect();
 
 		targetDock->ArrangeChildWindows();
@@ -587,7 +587,7 @@ namespace Editor
 		*layout = WidgetLayout::BothStretch();
 		SetDocked(true);
 
-		mDockingFrameAppearance.PlayBack();
+		mDockingFrameAppearance->PlayBack();
 		mDockingFrameTarget = layout->GetWorldRect();
 	}
 
@@ -678,7 +678,7 @@ namespace Editor
 		*layout = WidgetLayout::BothStretch();
 		SetDocked(true);
 
-		mDockingFrameAppearance.PlayBack();
+		mDockingFrameAppearance->PlayBack();
 		mDockingFrameTarget = layout->GetWorldRect();
 	}
 

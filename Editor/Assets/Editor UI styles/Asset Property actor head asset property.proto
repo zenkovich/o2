@@ -15,7 +15,7 @@
                 {
                     "Data": {
                         "Prototype": {
-                            "id": "442c2c1c14100d9f7d05515013a10ff7",
+                            "id": "6e79354064045c334e604203385a622a",
                             "path": "Editor UI styles/Spoiler expand with caption.proto"
                         },
                         "PrototypeLink": 2311970675964809581,
@@ -36,7 +36,7 @@
                                 "Type": "o2::Button",
                                 "Data": {
                                     "Prototype": {
-                                        "id": "0fa80822114e5e8551196bc6048a1b5c",
+                                        "id": "0baa50c9277f38c056910bae27fd3586",
                                         "path": "Editor UI styles/Button expand.proto"
                                     },
                                     "PrototypeLink": 14561194698756269949,
@@ -176,221 +176,17 @@
                                     ],
                                     "States": [
                                         {
-                                            "name": "hover",
-                                            "mAnimation": {
-                                                "instance": {
-                                                    "Type": "o2::AnimationAsset",
-                                                    "Value": {
-                                                        "animation": {
-                                                            "mTracks": [
-                                                                {
-                                                                    "Type": "o2::AnimationTrack<float>",
-                                                                    "Value": {
-                                                                        "path": "layer/hover/transparency",
-                                                                        "curve": {
-                                                                            "mKeys": [
-                                                                                {
-                                                                                    "uid": 7162347494280848223,
-                                                                                    "rightSupportPosition": 0.04000000283122063,
-                                                                                    "supportsType": "Broken"
-                                                                                },
-                                                                                {
-                                                                                    "uid": 10178517276452529340,
-                                                                                    "value": 1.0,
-                                                                                    "position": 0.10000000149011612,
-                                                                                    "leftSupportPosition": -0.10000000149011612,
-                                                                                    "supportsType": "Broken"
-                                                                                }
-                                                                            ]
-                                                                        }
-                                                                    }
-                                                                }
-                                                            ],
-                                                            "mDuration": 0.10000000149011612
-                                                        }
-                                                    }
-                                                },
-                                                "meta": {
-                                                    "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                    "Value": {
-                                                        "mId": "19ab0bbe3a0906771d503864672d0d04"
-                                                    }
-                                                }
-                                            }
+                                            "name": "hover"
                                         },
                                         {
-                                            "name": "pressed",
-                                            "mAnimation": {
-                                                "instance": {
-                                                    "Type": "o2::AnimationAsset",
-                                                    "Value": {
-                                                        "animation": {
-                                                            "mTracks": [
-                                                                {
-                                                                    "Type": "o2::AnimationTrack<float>",
-                                                                    "Value": {
-                                                                        "path": "layer/pressed/transparency",
-                                                                        "curve": {
-                                                                            "mKeys": [
-                                                                                {
-                                                                                    "uid": 4223442008632735857,
-                                                                                    "rightSupportPosition": 0.020000001415610315,
-                                                                                    "supportsType": "Broken"
-                                                                                },
-                                                                                {
-                                                                                    "uid": 11841714386529233540,
-                                                                                    "value": 1.0,
-                                                                                    "position": 0.05000000074505806,
-                                                                                    "leftSupportPosition": -0.05000000074505806,
-                                                                                    "supportsType": "Broken"
-                                                                                }
-                                                                            ]
-                                                                        }
-                                                                    }
-                                                                }
-                                                            ],
-                                                            "mDuration": 0.05000000074505806
-                                                        }
-                                                    }
-                                                },
-                                                "meta": {
-                                                    "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                    "Value": {
-                                                        "mId": "1eeb6b4b769f7bfe0a8e24235e1674d5"
-                                                    }
-                                                }
-                                            }
+                                            "name": "pressed"
                                         },
                                         {
                                             "name": "visible",
-                                            "mState": false,
-                                            "mAnimation": {
-                                                "instance": {
-                                                    "Type": "o2::AnimationAsset",
-                                                    "Value": {
-                                                        "animation": {
-                                                            "mTracks": [
-                                                                {
-                                                                    "Type": "o2::AnimationTrack<float>",
-                                                                    "Value": {
-                                                                        "path": "transparency",
-                                                                        "curve": {
-                                                                            "mKeys": [
-                                                                                {
-                                                                                    "uid": 8937085356072263263,
-                                                                                    "rightSupportPosition": 0.08000000566244126,
-                                                                                    "supportsType": "Broken"
-                                                                                },
-                                                                                {
-                                                                                    "uid": 2801055536132961273,
-                                                                                    "value": 1.0,
-                                                                                    "position": 0.20000000298023225,
-                                                                                    "leftSupportPosition": -0.20000000298023225,
-                                                                                    "supportsType": "Broken"
-                                                                                }
-                                                                            ]
-                                                                        }
-                                                                    }
-                                                                }
-                                                            ],
-                                                            "mDuration": 0.20000000298023225
-                                                        }
-                                                    }
-                                                },
-                                                "meta": {
-                                                    "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                    "Value": {
-                                                        "mId": "4f002f2c215129962868429f691d3063"
-                                                    }
-                                                }
-                                            }
+                                            "mState": false
                                         },
                                         {
-                                            "name": "expanded",
-                                            "mAnimation": {
-                                                "instance": {
-                                                    "Type": "o2::AnimationAsset",
-                                                    "Value": {
-                                                        "animation": {
-                                                            "mTracks": [
-                                                                {
-                                                                    "Type": "o2::AnimationTrack<float>",
-                                                                    "Value": {
-                                                                        "path": "layer/regular/mDrawable/angle",
-                                                                        "curve": {
-                                                                            "mKeys": [
-                                                                                {
-                                                                                    "uid": 14424098990159698559,
-                                                                                    "rightSupportPosition": 0.04000000283122063,
-                                                                                    "supportsType": "Broken"
-                                                                                },
-                                                                                {
-                                                                                    "uid": 1855859156805360369,
-                                                                                    "value": -1.5707963705062867,
-                                                                                    "position": 0.10000000149011612,
-                                                                                    "leftSupportPosition": -0.10000000149011612,
-                                                                                    "supportsType": "Broken"
-                                                                                }
-                                                                            ]
-                                                                        }
-                                                                    }
-                                                                },
-                                                                {
-                                                                    "Type": "o2::AnimationTrack<float>",
-                                                                    "Value": {
-                                                                        "path": "layer/hover/mDrawable/angle",
-                                                                        "curve": {
-                                                                            "mKeys": [
-                                                                                {
-                                                                                    "uid": 5424566493386411951,
-                                                                                    "rightSupportPosition": 0.04000000283122063,
-                                                                                    "supportsType": "Broken"
-                                                                                },
-                                                                                {
-                                                                                    "uid": 4378759360855453722,
-                                                                                    "value": -1.5707963705062867,
-                                                                                    "position": 0.10000000149011612,
-                                                                                    "leftSupportPosition": -0.10000000149011612,
-                                                                                    "supportsType": "Broken"
-                                                                                }
-                                                                            ]
-                                                                        }
-                                                                    }
-                                                                },
-                                                                {
-                                                                    "Type": "o2::AnimationTrack<float>",
-                                                                    "Value": {
-                                                                        "path": "layer/pressed/mDrawable/angle",
-                                                                        "curve": {
-                                                                            "mKeys": [
-                                                                                {
-                                                                                    "uid": 9792864656536054894,
-                                                                                    "rightSupportPosition": 0.04000000283122063,
-                                                                                    "supportsType": "Broken"
-                                                                                },
-                                                                                {
-                                                                                    "uid": 1687853689136708915,
-                                                                                    "value": -1.5707963705062867,
-                                                                                    "position": 0.10000000149011612,
-                                                                                    "leftSupportPosition": -0.10000000149011612,
-                                                                                    "supportsType": "Broken"
-                                                                                }
-                                                                            ]
-                                                                        }
-                                                                    }
-                                                                }
-                                                            ],
-                                                            "mDuration": 0.10000000149011612
-                                                        }
-                                                    }
-                                                },
-                                                "meta": {
-                                                    "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                    "Value": {
-                                                        "mId": "279f397a2d7c2a204d236dbf18af10dc"
-                                                    }
-                                                }
-                                            }
+                                            "name": "expanded"
                                         }
                                     ]
                                 }
@@ -636,38 +432,41 @@
                                                                                             "Type": "o2::AnimationAsset",
                                                                                             "Value": {
                                                                                                 "animation": {
-                                                                                                    "mTracks": [
-                                                                                                        {
-                                                                                                            "Type": "o2::AnimationTrack<float>",
-                                                                                                            "Value": {
-                                                                                                                "path": "layer/focus/transparency",
-                                                                                                                "curve": {
-                                                                                                                    "mKeys": [
-                                                                                                                        {
-                                                                                                                            "uid": 13268077649104242673,
-                                                                                                                            "rightSupportPosition": 0.020000001415610315,
-                                                                                                                            "supportsType": "Broken"
-                                                                                                                        },
-                                                                                                                        {
-                                                                                                                            "uid": 441114773357366567,
-                                                                                                                            "value": 1.0,
-                                                                                                                            "position": 0.05000000074505806,
-                                                                                                                            "leftSupportPosition": -0.05000000074505806,
-                                                                                                                            "supportsType": "Broken"
-                                                                                                                        }
-                                                                                                                    ]
+                                                                                                    "Type": "o2::AnimationClip",
+                                                                                                    "Value": {
+                                                                                                        "mTracks": [
+                                                                                                            {
+                                                                                                                "Type": "o2::AnimationTrack<float>",
+                                                                                                                "Value": {
+                                                                                                                    "path": "layer/focus/transparency",
+                                                                                                                    "curve": {
+                                                                                                                        "mKeys": [
+                                                                                                                            {
+                                                                                                                                "uid": 13268077649104242673,
+                                                                                                                                "rightSupportPosition": 0.020000001415610315,
+                                                                                                                                "supportsType": "Broken"
+                                                                                                                            },
+                                                                                                                            {
+                                                                                                                                "uid": 441114773357366567,
+                                                                                                                                "value": 1.0,
+                                                                                                                                "position": 0.05000000074505806,
+                                                                                                                                "leftSupportPosition": -0.05000000074505806,
+                                                                                                                                "supportsType": "Broken"
+                                                                                                                            }
+                                                                                                                        ]
+                                                                                                                    }
                                                                                                                 }
                                                                                                             }
-                                                                                                        }
-                                                                                                    ],
-                                                                                                    "mDuration": 0.05000000074505806
+                                                                                                        ],
+                                                                                                        "mDuration": 0.05000000074505806
+                                                                                                    }
                                                                                                 }
                                                                                             }
                                                                                         },
                                                                                         "meta": {
                                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                             "Value": {
-                                                                                                "mId": "5a7a4ded4d34427a4eff61c67ecc6af9"
+                                                                                                "mId": "549172973f6c3d133c1e0f3241d53e8d"
                                                                                             }
                                                                                         }
                                                                                     }
@@ -683,38 +482,41 @@
                                                                                             "Type": "o2::AnimationAsset",
                                                                                             "Value": {
                                                                                                 "animation": {
-                                                                                                    "mTracks": [
-                                                                                                        {
-                                                                                                            "Type": "o2::AnimationTrack<float>",
-                                                                                                            "Value": {
-                                                                                                                "path": "layer/hover/transparency",
-                                                                                                                "curve": {
-                                                                                                                    "mKeys": [
-                                                                                                                        {
-                                                                                                                            "uid": 10605632701176185998,
-                                                                                                                            "rightSupportPosition": 0.020000001415610315,
-                                                                                                                            "supportsType": "Broken"
-                                                                                                                        },
-                                                                                                                        {
-                                                                                                                            "uid": 858409438310424661,
-                                                                                                                            "value": 1.0,
-                                                                                                                            "position": 0.05000000074505806,
-                                                                                                                            "leftSupportPosition": -0.05000000074505806,
-                                                                                                                            "supportsType": "Broken"
-                                                                                                                        }
-                                                                                                                    ]
+                                                                                                    "Type": "o2::AnimationClip",
+                                                                                                    "Value": {
+                                                                                                        "mTracks": [
+                                                                                                            {
+                                                                                                                "Type": "o2::AnimationTrack<float>",
+                                                                                                                "Value": {
+                                                                                                                    "path": "layer/hover/transparency",
+                                                                                                                    "curve": {
+                                                                                                                        "mKeys": [
+                                                                                                                            {
+                                                                                                                                "uid": 10605632701176185998,
+                                                                                                                                "rightSupportPosition": 0.020000001415610315,
+                                                                                                                                "supportsType": "Broken"
+                                                                                                                            },
+                                                                                                                            {
+                                                                                                                                "uid": 858409438310424661,
+                                                                                                                                "value": 1.0,
+                                                                                                                                "position": 0.05000000074505806,
+                                                                                                                                "leftSupportPosition": -0.05000000074505806,
+                                                                                                                                "supportsType": "Broken"
+                                                                                                                            }
+                                                                                                                        ]
+                                                                                                                    }
                                                                                                                 }
                                                                                                             }
-                                                                                                        }
-                                                                                                    ],
-                                                                                                    "mDuration": 0.05000000074505806
+                                                                                                        ],
+                                                                                                        "mDuration": 0.05000000074505806
+                                                                                                    }
                                                                                                 }
                                                                                             }
                                                                                         },
                                                                                         "meta": {
                                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                             "Value": {
-                                                                                                "mId": "34ed534c6068046e5e1f35f26f787bac"
+                                                                                                "mId": "48b765b02e606cc6230960b30d445405"
                                                                                             }
                                                                                         }
                                                                                     }
@@ -747,47 +549,7 @@
                         ],
                         "States": [
                             {
-                                "name": "expand",
-                                "mAnimation": {
-                                    "instance": {
-                                        "Type": "o2::AnimationAsset",
-                                        "Value": {
-                                            "animation": {
-                                                "mTracks": [
-                                                    {
-                                                        "Type": "o2::AnimationTrack<float>",
-                                                        "Value": {
-                                                            "path": "mExpandCoef",
-                                                            "curve": {
-                                                                "mKeys": [
-                                                                    {
-                                                                        "uid": 144259026681649253,
-                                                                        "rightSupportPosition": 0.1600000113248825,
-                                                                        "supportsType": "Broken"
-                                                                    },
-                                                                    {
-                                                                        "uid": 7804990510930148884,
-                                                                        "value": 1.0,
-                                                                        "position": 0.4000000059604645,
-                                                                        "leftSupportPosition": -0.4000000059604645,
-                                                                        "supportsType": "Broken"
-                                                                    }
-                                                                ]
-                                                            }
-                                                        }
-                                                    }
-                                                ],
-                                                "mDuration": 0.4000000059604645
-                                            }
-                                        }
-                                    },
-                                    "meta": {
-                                        "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                        "Value": {
-                                            "mId": "58dc48c719935c8158891f4b68630a10"
-                                        }
-                                    }
-                                }
+                                "name": "expand"
                             }
                         ]
                     },
@@ -806,35 +568,38 @@
                                 "Type": "o2::AnimationAsset",
                                 "Value": {
                                     "animation": {
-                                        "mTracks": [
-                                            {
-                                                "Type": "o2::AnimationTrack<bool>",
-                                                "Value": {
-                                                    "path": "child/spoiler/internalWidget/expand/enabled",
-                                                    "mKeys": [
-                                                        {
-                                                            "uid": 8628174209941380549,
-                                                            "rightSupportPosition": 0.08000000566244126
-                                                        },
-                                                        {
-                                                            "uid": 417412619947360049,
-                                                            "position": 0.04000000283122063,
-                                                            "value": true,
-                                                            "leftSupportValue": 1.0,
-                                                            "leftSupportPosition": 1.0
-                                                        }
-                                                    ]
+                                        "Type": "o2::AnimationClip",
+                                        "Value": {
+                                            "mTracks": [
+                                                {
+                                                    "Type": "o2::AnimationTrack<bool>",
+                                                    "Value": {
+                                                        "path": "child/spoiler/internalWidget/expand/enabled",
+                                                        "mKeys": [
+                                                            {
+                                                                "uid": 8628174209941380549,
+                                                                "rightSupportPosition": 0.08000000566244126
+                                                            },
+                                                            {
+                                                                "uid": 417412619947360049,
+                                                                "position": 0.04000000283122063,
+                                                                "value": true,
+                                                                "leftSupportValue": 1.0,
+                                                                "leftSupportPosition": 1.0
+                                                            }
+                                                        ]
+                                                    }
                                                 }
-                                            }
-                                        ],
-                                        "mDuration": 0.04000000283122063
+                                            ],
+                                            "mDuration": 0.04000000283122063
+                                        }
                                     }
                                 }
                             },
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "631c0617043208326da42f591c1b5bf5"
+                                    "mId": "34cb24e0477a04a4289f144914950b42"
                                 }
                             }
                         }

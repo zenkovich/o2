@@ -18,15 +18,14 @@ namespace o2
     public:
         String name; // State name @SERIALIZABLE @SCRIPTABLE
 
-        AnimationPlayer player;                        // Animation player
-        float           offStateAnimationSpeed = 1.0f; // False state transition animation speed @SERIALIZABLE @SCRIPTABLE
+        float offStateAnimationSpeed = 1.0f; // False state transition animation speed @SERIALIZABLE @SCRIPTABLE
 
     public:
         PROPERTIES(WidgetState);
         PROPERTY(bool, state, SetState, GetState); // State flag property @SCRIPTABLE
 
         PROPERTY(AnimationAssetRef, animationAsset, SetAnimationAsset, GetAnimationAsset); // Animation asset property @EDITOR_IGNORE @SCRIPTABLE
-        PROPERTY(AnimationClip, animationClip, SetAnimationClip, GetAnimationClip);        // animation clip property @EDITOR_IGNORE @SCRIPTABLE
+        PROPERTY(Ref<AnimationClip>, animationClip, SetAnimationClip, GetAnimationClip);        // animation clip property @EDITOR_IGNORE @SCRIPTABLE
 
     public:
         Function<void()> onStateFullyTrue;      // This event calls when state is completely true (at the end of animation)
@@ -56,6 +55,9 @@ namespace o2
         // Sets owner widget @SCRIPTABLE
         void SetOwner(Widget* owner, bool errors);
 
+        // Returns animation player
+        AnimationPlayer& GetAnimationPlayer();
+
         // Sets animation asset
         void SetAnimationAsset(const AnimationAssetRef& asset);
 
@@ -63,10 +65,10 @@ namespace o2
         const AnimationAssetRef& GetAnimationAsset() const;
 
         // Sets animation asset instance clip
-        void SetAnimationClip(const AnimationClip& animation);
+        void SetAnimationClip(const Ref<AnimationClip>& animation);
 
         // Returns animation asset instance clip, if exists
-        AnimationClip& GetAnimationClip();
+        Ref<AnimationClip>& GetAnimationClip();
 
         // Sets current state @SCRIPTABLE
         void SetState(bool state);
@@ -85,6 +87,8 @@ namespace o2
     protected:
         bool    mState = false;   // Current state @SERIALIZABLE
         Widget* mOwner = nullptr; // Owner widget pointer
+
+		Ref<AnimationPlayer> mPlayer = mmake<AnimationPlayer>(); // Animation player
 
         AnimationAssetRef mAnimation; // Widget animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
 
@@ -111,7 +115,6 @@ END_META;
 CLASS_FIELDS_META(o2::WidgetState)
 {
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(name);
-    FIELD().PUBLIC().NAME(player);
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(offStateAnimationSpeed);
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(state);
     FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(animationAsset);
@@ -122,6 +125,7 @@ CLASS_FIELDS_META(o2::WidgetState)
     FIELD().PUBLIC().NAME(onStateBecomesFalse);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mState);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mPlayer);
     FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnAnimationChanged).SERIALIZABLE_ATTRIBUTE().NAME(mAnimation);
 }
 END_META;
@@ -131,10 +135,11 @@ CLASS_METHODS_META(o2::WidgetState)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetState&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOwner, Widget*, bool);
+    FUNCTION().PUBLIC().SIGNATURE(AnimationPlayer&, GetAnimationPlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationAsset, const AnimationAssetRef&);
     FUNCTION().PUBLIC().SIGNATURE(const AnimationAssetRef&, GetAnimationAsset);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationClip, const AnimationClip&);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationClip&, GetAnimationClip);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationClip, const Ref<AnimationClip>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationClip>&, GetAnimationClip);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetState, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetStateForcible, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, GetState);

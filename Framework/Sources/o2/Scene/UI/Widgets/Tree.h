@@ -290,12 +290,12 @@ namespace o2
         float mNodeExpandTime = 2.0f;   // Node expand time when dragging actors @SERIALIZABLE
         float mNodeDragIntoZone = 0.3f; // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
 
-        Ref<AnimationClip> mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
-        AnimationPlayer    mHighlightAnim;             // Node highlight animation
-        Sprite*            mHighlightSprite = nullptr; // Node highlight sprite @SERIALIZABLE
-        Layout             mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
-        Node*              mHighlighNode = nullptr;    // Hightlighing node
-        void*              mHighlightObject;           // Highlight object
+        Ref<AnimationClip>   mHighlighClip;                             // Node highlight animation clip @SERIALIZABLE 
+        Ref<AnimationPlayer> mHighlightAnim = mmake<AnimationPlayer>(); // Node highlight animation
+        Sprite*              mHighlightSprite = nullptr;                // Node highlight sprite @SERIALIZABLE
+        Layout               mHighlightLayout;                          // Node highlight sprite layout @SERIALIZABLE
+        Node*                mHighlighNode = nullptr;                   // Hightlighing node
+        void*                mHighlightObject;                          // Highlight object
         
         Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
 
@@ -649,7 +649,7 @@ CLASS_FIELDS_META(o2::Tree)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(2.0f).NAME(mNodeExpandTime);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.3f).NAME(mNodeDragIntoZone);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlighClip);
-    FIELD().PROTECTED().NAME(mHighlightAnim);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mHighlightAnim);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHighlightSprite);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightLayout);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHighlighNode);

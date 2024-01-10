@@ -129,7 +129,7 @@ namespace o2
     protected:
         IObject* mTarget = nullptr; // Target animating object
 
-        Ref<AnimationClip> mAnimation; // Building animation
+        Ref<AnimationClip> mAnimation = mmake<AnimationClip>(); // Building animation
 
         bool  mKeysApplied = false; // Is stored keys was applied
         float mTime = 0.0f;         // Current sequence time

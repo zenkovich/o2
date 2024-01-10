@@ -110,9 +110,9 @@ namespace Editor
 		EditBox* mSearchEditBox;          // Search edit box
 		Label*   mSelectedAssetPathLabel; // Selected asset path label
 
-		AssetsFoldersTree* mFoldersTree;         // Folders tree			
-		AnimationPlayer    mFoldersTreeShowAnim; // Folders tree visible animation
-		bool               mFoldersTreeVisible;  // Is folders tree visible
+		AssetsFoldersTree*   mFoldersTree;                                    // Folders tree			
+		Ref<AnimationPlayer> mFoldersTreeShowAnim = mmake<AnimationPlayer>(); // Folders tree visible animation
+		bool                 mFoldersTreeVisible;                             // Is folders tree visible
 
 		AssetsIconsScrollArea* mAssetsGridScroll; // Assets grid scroll
 
@@ -179,7 +179,7 @@ CLASS_FIELDS_META(Editor::AssetsWindow)
     FIELD().PROTECTED().NAME(mSearchEditBox);
     FIELD().PROTECTED().NAME(mSelectedAssetPathLabel);
     FIELD().PROTECTED().NAME(mFoldersTree);
-    FIELD().PROTECTED().NAME(mFoldersTreeShowAnim);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mFoldersTreeShowAnim);
     FIELD().PROTECTED().NAME(mFoldersTreeVisible);
     FIELD().PROTECTED().NAME(mAssetsGridScroll);
     FIELD().PROTECTED().NAME(mAssetsTree);

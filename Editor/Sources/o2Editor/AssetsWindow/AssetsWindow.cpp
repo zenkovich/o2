@@ -95,11 +95,11 @@ namespace Editor
 		mFoldersTreeShowCoef = 1.0f;
 		mFoldersTreeVisible = true;
 
-		mFoldersTreeShowAnim.SetTarget(this);
-		mFoldersTreeShowAnim.SetClip(mmake<AnimationClip>(AnimationClip::EaseInOut("mFoldersTreeShowCoef", 0.0f, 1.0f, 0.4f)));
-		mFoldersTreeShowAnim.GoToEnd();
+		mFoldersTreeShowAnim->SetTarget(this);
+		mFoldersTreeShowAnim->SetClip(AnimationClip::EaseInOut("mFoldersTreeShowCoef", 0.0f, 1.0f, 0.4f));
+		mFoldersTreeShowAnim->GoToEnd();
 
-		mFoldersTreeShowAnim.onUpdate = [&](float dt) {
+		mFoldersTreeShowAnim->onUpdate = [&](float dt) {
 			mFoldersTree->layout->anchorRight = mSeparatorCoef*mFoldersTreeShowCoef;
 			mAssetsGridScroll->layout->anchorLeft = mSeparatorCoef*mFoldersTreeShowCoef;
 
@@ -185,7 +185,7 @@ namespace Editor
 	void AssetsWindow::Update(float dt)
 	{
 		IEditorWindow::Update(dt);
-		mFoldersTreeShowAnim.Update(dt);
+		mFoldersTreeShowAnim->Update(dt);
 	}
 
 	void AssetsWindow::SelectAsset(const UID& id)
@@ -431,9 +431,9 @@ namespace Editor
 		mFoldersTreeVisible = !mFoldersTreeVisible;
 
 		if (mFoldersTreeVisible)
-			mFoldersTreeShowAnim.PlayForward();
+			mFoldersTreeShowAnim->PlayForward();
 		else
-			mFoldersTreeShowAnim.PlayBack();
+			mFoldersTreeShowAnim->PlayBack();
 	}
 
 	void AssetsWindow::OnAssetsRebuilt(const Vector<UID>& changedAssets)

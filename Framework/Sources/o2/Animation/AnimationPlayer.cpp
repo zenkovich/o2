@@ -100,7 +100,7 @@ namespace o2
         {
             auto trackPlayer = track->CreatePlayer();
             trackPlayer->SetTrack(track);
-            trackPlayer->mOwnerPlayer = Ref(this);
+            trackPlayer->mOwnerPlayer = WeakRef(this);
 
             if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
                 trackPlayer->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(targetPtr));

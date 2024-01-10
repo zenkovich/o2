@@ -179,7 +179,7 @@ namespace o2
         mHoverDrawable = mnew Sprite();
         mHighlightSprite = mnew Sprite();
 
-        mHighlightAnim.SetTarget(mHighlightSprite);
+        mHighlightAnim->SetTarget(mHighlightSprite);
     }
 
     Tree::Tree(const Tree& other):
@@ -195,9 +195,11 @@ namespace o2
         if (other.mZebraBackLine)
             mZebraBackLine = other.mZebraBackLine->CloneAs<Sprite>();
 
-        mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(mHighlighClip);
+        if (other.mHighlighClip)
+            mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
+
+        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetClip(mHighlighClip);
 
         mHoverLayout = other.mHoverLayout;
         mHighlightLayout = other.mHighlightLayout;
@@ -244,8 +246,8 @@ namespace o2
         mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
 
         mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(mHighlighClip);
+        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetClip(mHighlighClip);
 
         mHoverLayout = other.mHoverLayout;
         mHighlightLayout = other.mHighlightLayout;
@@ -366,7 +368,7 @@ namespace o2
 
     void Tree::UpdateHighlighting(float dt)
     {
-        if (mHighlightAnim.IsPlaying())
+        if (mHighlightAnim->IsPlaying())
         {
             if (mHighlightObject && !mHighlighNode)
                 mHighlighNode = mAllNodes.FindOrDefault([=](Node* x) { return x->object == mHighlightObject; });
@@ -377,9 +379,9 @@ namespace o2
                 mHighlightSprite->SetRect(mHighlightLayout.Calculate(mHighlighNode->widget->layout->worldRect));
             }
 
-            mHighlightAnim.Update(dt);
+            mHighlightAnim->Update(dt);
 
-            if (!mHighlightAnim.IsPlaying())
+            if (!mHighlightAnim->IsPlaying())
             {
                 mHighlighNode = nullptr;
                 mHighlightObject = nullptr;
@@ -790,7 +792,7 @@ namespace o2
 
             mHighlighNode = mAllNodes[idx];
             mHighlightObject = object;
-            mHighlightAnim.RewindAndPlay();
+            mHighlightAnim->RewindAndPlay();
         }
     }
 
@@ -1765,9 +1767,9 @@ namespace o2
 
     void Tree::OnDeserialized(const DataValue& node)
     {
-        ScrollArea::OnDeserialized(node);
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(mHighlighClip);
+		ScrollArea::OnDeserialized(node);
+        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetClip(mHighlighClip);
     }
 
     void Tree::OnSelectionChanged()
@@ -1799,8 +1801,8 @@ namespace o2
     void Tree::SetHighlightAnimation(const Ref<AnimationClip>& animation)
     {
         mHighlighClip = animation;
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(mHighlighClip);
+        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetClip(mHighlighClip);
     }
 
     void Tree::SetHighlightLayout(const Layout& layout)

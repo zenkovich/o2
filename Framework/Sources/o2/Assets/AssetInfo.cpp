@@ -56,7 +56,7 @@ namespace o2
         if (node->parent)
             node->parent.Lock()->RemoveChild(node);
 
-        node->parent = Ref(this);
+        node->parent = WeakRef(this);
 
         mChildren.Add(node);
 
@@ -91,11 +91,11 @@ namespace o2
     void AssetInfo::SetTree(const Ref<AssetsTree>& tree)
     {
         this->tree = tree;
-        tree->allAssets.Add(Ref(this));
-        tree->allAssetsByPath[path] = Ref(this);
+        tree->allAssets.Add(WeakRef(this));
+        tree->allAssetsByPath[path] = WeakRef(this);
 
         if (meta)
-            tree->allAssetsByUID[meta->ID()] = Ref(this);
+            tree->allAssetsByUID[meta->ID()] = WeakRef(this);
 
         for (auto child : mChildren)
             child->SetTree(tree);

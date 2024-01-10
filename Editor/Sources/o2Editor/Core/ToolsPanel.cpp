@@ -42,9 +42,9 @@ namespace Editor
 
 	void ToolsPanel::AddToolToggle(Toggle* toggle)
 	{
-		if (!toggle->GetStateObject("visible")->GetAnimationClip().GetTrack<float>("layout/minWidth"))
+		if (!toggle->GetStateObject("visible")->GetAnimationClip()->GetTrack<float>("layout/minWidth"))
 		{
-			*toggle->GetStateObject("visible")->GetAnimationClip().AddTrack<float>("layout/minWidth") =
+			*toggle->GetStateObject("visible")->GetAnimationClip()->AddTrack<float>("layout/minWidth") =
 				AnimationTrack<float>::EaseInOut(0.0f, 20.0f, 0.2f);
 		}
 
@@ -123,18 +123,18 @@ namespace Editor
 		mDevicesList->AddItems({ "iPhone", "Editor", "Simulator" });
 		mDevicesList->selectedItemPos = 0;
 
-		AnimationClip playPanelPlayStateAnim;
+		auto playPanelPlayStateAnim = mmake<AnimationClip>();
 
-		*playPanelPlayStateAnim.AddTrack<float>("layout/offsetRight") =
+		*playPanelPlayStateAnim->AddTrack<float>("layout/offsetRight") =
 			AnimationTrack<float>::EaseInOut(149.0f, 183.0f, 0.3f);
 
-		auto visiblePauseBtnAnim = playPanelPlayStateAnim.AddTrack<bool>("child/pause/enabled");
+		auto visiblePauseBtnAnim = playPanelPlayStateAnim->AddTrack<bool>("child/pause/enabled");
 		visiblePauseBtnAnim->AddKey(0.0f, false);
 		visiblePauseBtnAnim->AddKey(0.1f, false);
 		visiblePauseBtnAnim->AddKey(0.11f, true);
 		visiblePauseBtnAnim->AddKey(0.3f, true);
 
-		auto visibleStepBtnAnim = playPanelPlayStateAnim.AddTrack<bool>("child/step/enabled");
+		auto visibleStepBtnAnim = playPanelPlayStateAnim->AddTrack<bool>("child/step/enabled");
 		visibleStepBtnAnim->AddKey(0.0f, false);
 		visibleStepBtnAnim->AddKey(0.25f, false);
 		visibleStepBtnAnim->AddKey(0.26f, true);

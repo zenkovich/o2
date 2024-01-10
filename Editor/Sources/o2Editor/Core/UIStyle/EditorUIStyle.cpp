@@ -148,24 +148,24 @@ namespace Editor
 		sample->SetVerticalScrollBar(verScrollBar);
 
 		//states
-		AnimationClip dockedStateAnim;
-		*dockedStateAnim.AddTrack<float>("layer/back/child/dockedBack/transparency") = AnimationTrack<float>::EaseInOut(0, 1, 0.2f);
-		*dockedStateAnim.AddTrack<float>("layer/back/child/regularBack/transparency") = AnimationTrack<float>::EaseInOut(1, 0, 0.2f);
+		auto dockedStateAnim = mmake<AnimationClip>();
+		*dockedStateAnim->AddTrack<float>("layer/back/child/dockedBack/transparency") = AnimationTrack<float>::EaseInOut(0, 1, 0.2f);
+		*dockedStateAnim->AddTrack<float>("layer/back/child/regularBack/transparency") = AnimationTrack<float>::EaseInOut(1, 0, 0.2f);
 
 		auto dockedState = sample->AddState("docked", dockedStateAnim);
 
 
-		AnimationClip tabStateAnim;
-		*tabStateAnim.AddTrack<float>("layer/tab/transparency") = AnimationTrack<float>::EaseInOut(0, 1, 0.2f);
-		*tabStateAnim.AddTrack<float>("layer/back/transparency") = AnimationTrack<float>::EaseInOut(1, 0, 0.2f);
+		auto tabStateAnim = mmake<AnimationClip>();
+		*tabStateAnim->AddTrack<float>("layer/tab/transparency") = AnimationTrack<float>::EaseInOut(0, 1, 0.2f);
+		*tabStateAnim->AddTrack<float>("layer/back/transparency") = AnimationTrack<float>::EaseInOut(1, 0, 0.2f);
 
 		auto tabbedState = sample->AddState("tab", tabStateAnim);
 
 
-		AnimationClip tabActiveStateAnim;
-		*tabActiveStateAnim.AddTrack<float>("layer/tab/child/main/child/active/transparency") = AnimationTrack<float>::EaseInOut(0, 1, 0.2f);
-		*tabActiveStateAnim.AddTrack<float>("layer/tab/child/main/child/inactive/transparency") = AnimationTrack<float>::EaseInOut(1, 0, 0.2f);
-		*tabActiveStateAnim.AddTrack<float>("layer/tab/child/back/transparency") = AnimationTrack<float>::EaseInOut(0, 1, 0.2f);
+		auto tabActiveStateAnim = mmake<AnimationClip>();
+		*tabActiveStateAnim->AddTrack<float>("layer/tab/child/main/child/active/transparency") = AnimationTrack<float>::EaseInOut(0, 1, 0.2f);
+		*tabActiveStateAnim->AddTrack<float>("layer/tab/child/main/child/inactive/transparency") = AnimationTrack<float>::EaseInOut(1, 0, 0.2f);
+		*tabActiveStateAnim->AddTrack<float>("layer/tab/child/back/transparency") = AnimationTrack<float>::EaseInOut(0, 1, 0.2f);
 
 		auto tabActiveState = sample->AddState("tabActive", tabActiveStateAnim);
 
@@ -225,20 +225,20 @@ namespace Editor
 		auto stopPressedIconLayer = stopRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_stop_btn_pressed.png"),
 																	 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		AnimationClip playBtnSelectAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
-		*playBtnSelectAnim.AddTrack<float>("layer/stopRootIcon/child/hover/transparency") =
+		auto playBtnSelectAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnSelectAnim->AddTrack<float>("layer/stopRootIcon/child/hover/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("hover", playBtnSelectAnim)->offStateAnimationSpeed = 0.25f;
 
-		AnimationClip playBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
-		*playBtnPressAnim.AddTrack<float>("layer/stopRootIcon/child/pressed/transparency") =
+		auto playBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnPressAnim->AddTrack<float>("layer/stopRootIcon/child/pressed/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 
 		sample->AddState("pressed", playBtnPressAnim)->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnPressAnim.AddTrack<float>("layer/stopRootIcon/transparency") =
+		auto valueBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnPressAnim->AddTrack<float>("layer/stopRootIcon/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnPressAnim);
@@ -488,8 +488,8 @@ namespace Editor
 		sample->AddState("focused", AnimationClip::EaseInOut("layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueBtnAnim = AnimationClip::EaseInOut("layer/treeIcon/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddTrack<float>("layer/listIcon/transparency") =
+		auto valueBtnAnim = AnimationClip::EaseInOut("layer/treeIcon/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim->AddTrack<float>("layer/listIcon/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -534,8 +534,8 @@ namespace Editor
 
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.1f));
 
-		AnimationClip valueAnim = AnimationClip::EaseInOut("layer/halfHide/child/dot/transparency", 0.0f, 1.0f, 0.1f);
-		*valueAnim.AddTrack<float>("layer/halfHide/child/back/transparency") = AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.1f);
+		auto valueAnim = AnimationClip::EaseInOut("layer/halfHide/child/dot/transparency", 0.0f, 1.0f, 0.1f);
+		*valueAnim->AddTrack<float>("layer/halfHide/child/back/transparency") = AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.1f);
 		sample->AddState("value", valueAnim);
 
 		sample->AddState("halfHide", AnimationClip::EaseInOut("layer/halfHide/transparency", 1.0f, 0.5f, 0.1f));
@@ -557,8 +557,8 @@ namespace Editor
 
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.1f));
 
-		AnimationClip valueStateAnim = AnimationClip::EaseInOut("layer/halfHide/child/locked/transparency", 0.0f, 1.0f, 0.1f);
-		*valueStateAnim.AddTrack<float>("layer/halfHide/child/unlocked/transparency") = AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.1f);
+		auto valueStateAnim = AnimationClip::EaseInOut("layer/halfHide/child/locked/transparency", 0.0f, 1.0f, 0.1f);
+		*valueStateAnim->AddTrack<float>("layer/halfHide/child/unlocked/transparency") = AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.1f);
 		sample->AddState("locked", valueStateAnim);
 
 		sample->AddState("halfHide", AnimationClip::EaseInOut("layer/halfHide/transparency", 1.0f, 0.5f, 0.1f));
@@ -653,8 +653,8 @@ namespace Editor
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
-		AnimationClip itemEditStateAnim = AnimationClip::EaseInOut("layer/name/transparency", 1.0f, 0.0f, 0.15f);
-		*itemEditStateAnim.AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
+		auto itemEditStateAnim = AnimationClip::EaseInOut("layer/name/transparency", 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim->AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
@@ -688,22 +688,22 @@ namespace Editor
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		AnimationClip expandedStateAnim;
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
 		itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		AnimationClip focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
@@ -815,8 +815,8 @@ namespace Editor
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
-		AnimationClip itemEditStateAnim = AnimationClip::EaseInOut("layer/name/transparency", 1.0f, 0.0f, 0.15f);
-		*itemEditStateAnim.AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
+		auto itemEditStateAnim = AnimationClip::EaseInOut("layer/name/transparency", 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim->AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
@@ -850,22 +850,22 @@ namespace Editor
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		AnimationClip expandedStateAnim;
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
 		itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		AnimationClip focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
@@ -1011,8 +1011,8 @@ namespace Editor
 		sample->AddState("focused", AnimationClip::EaseInOut("layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueBtnAnim = AnimationClip::EaseInOut("layer/off/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddTrack<float>("layer/on/transparency") =
+		auto valueBtnAnim = AnimationClip::EaseInOut("layer/off/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim->AddTrack<float>("layer/on/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -1058,8 +1058,8 @@ namespace Editor
 		sample->AddState("focused", AnimationClip::EaseInOut("layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueBtnAnim = AnimationClip::EaseInOut("layer/off/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddTrack<float>("layer/on/transparency") =
+		auto valueBtnAnim = AnimationClip::EaseInOut("layer/off/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim->AddTrack<float>("layer/on/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -1105,8 +1105,8 @@ namespace Editor
 		sample->AddState("focused", AnimationClip::EaseInOut("layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueBtnAnim = AnimationClip::EaseInOut("layer/off/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddTrack<float>("layer/on/transparency") =
+		auto valueBtnAnim = AnimationClip::EaseInOut("layer/off/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim->AddTrack<float>("layer/on/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -1227,8 +1227,8 @@ namespace Editor
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
-		AnimationClip itemEditStateAnim = AnimationClip::EaseInOut("layer/name/transparency", 1.0f, 0.0f, 0.15f);
-		*itemEditStateAnim.AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
+		auto itemEditStateAnim = AnimationClip::EaseInOut("layer/name/transparency", 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim->AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
@@ -1262,22 +1262,22 @@ namespace Editor
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		AnimationClip expandedStateAnim;
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
 		itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		AnimationClip focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
@@ -1370,13 +1370,13 @@ namespace Editor
 		sample->AddChild(nameEditBox);
 
 		// edit state
-		AnimationClip itemEditStateAnim = AnimationClip::EaseInOut("child/nameLabel/enabled", true, false, 0.15f);
-		*itemEditStateAnim.AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
+		auto itemEditStateAnim = AnimationClip::EaseInOut("child/nameLabel/enabled", true, false, 0.15f);
+		*itemEditStateAnim->AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
 		sample->AddState("edit", itemEditStateAnim);
 
 		// focused state
-		AnimationClip focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		sample->AddState("focused", focusedItemAnim);
 
 		sample->AddState("halfHide", AnimationClip::EaseInOut("transparency", 1.0f, 0.5f, 0.1f));
@@ -1518,8 +1518,8 @@ namespace Editor
 		sample->AddChild(dropdown);
 		sample->AddChild(revertBtn);
 
-		AnimationClip revertStateAnim = AnimationClip::EaseInOut("child/dropdown/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddTrack<bool>("child/revert/enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
+		auto revertStateAnim = AnimationClip::EaseInOut("child/dropdown/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim->AddTrack<bool>("child/revert/enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "enum property");
@@ -1615,8 +1615,8 @@ namespace Editor
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		auto focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
+		*focusAnim->AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -1706,12 +1706,12 @@ namespace Editor
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		auto valueAnim = AnimationClip::EaseInOut("layer/root/child/value/child/unlock/transparency", 1.0f, 0.0f, 0.1f);
-		*valueAnim.AddTrack<float>("layer/root/child/value/child/lock/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		*valueAnim->AddTrack<float>("layer/root/child/value/child/lock/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueAnim)->offStateAnimationSpeed = 0.5f;
 
 		auto unknownAnim = AnimationClip::EaseInOut("layer/root/child/value/transparency", 1.0f, 0.0f, 0.1f);
-		*unknownAnim.AddTrack<float>("layer/root/child/unknown/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		*unknownAnim->AddTrack<float>("layer/root/child/unknown/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("unknown", unknownAnim)->offStateAnimationSpeed = 0.5f;
 
@@ -1810,9 +1810,9 @@ namespace Editor
 
 		box->SetFocusable(true);
 
-		AnimationClip instanceAnim;
+		auto instanceAnim = mmake<AnimationClip>();
 
-		*instanceAnim.AddTrack<bool>("child/spoiler/internalWidget/expand/enabled") =
+		*instanceAnim->AddTrack<bool>("child/spoiler/internalWidget/expand/enabled") =
 			AnimationTrack<bool>::EaseInOut(false, true, 0.2f);
 
 		sample->AddState("instance", instanceAnim);
@@ -1846,8 +1846,8 @@ namespace Editor
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		auto focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
+		*focusAnim->AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -2227,8 +2227,8 @@ namespace Editor
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
-		AnimationClip itemEditStateAnim = AnimationClip::EaseInOut("layer/name/transparency", 1.0f, 0.0f, 0.15f);
-		*itemEditStateAnim.AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
+		auto itemEditStateAnim = AnimationClip::EaseInOut("layer/name/transparency", 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim->AddTrack<bool>("child/nameEditBox/enabled") = AnimationTrack<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
@@ -2262,22 +2262,22 @@ namespace Editor
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		AnimationClip expandedStateAnim;
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
 		itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		AnimationClip focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
@@ -2402,22 +2402,22 @@ namespace Editor
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		AnimationClip expandedStateAnim;
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
 		itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		AnimationClip focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
@@ -2471,8 +2471,8 @@ namespace Editor
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		auto focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
+		*focusAnim->AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -2510,8 +2510,8 @@ namespace Editor
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		auto focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
+		*focusAnim->AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -2564,14 +2564,14 @@ namespace Editor
 										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
 
 		// hover
-		AnimationClip hoverAnim = AnimationClip::EaseInOut("layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
-		*hoverAnim.AddTrack<float>("layer/toggled/child/selectBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto hoverAnim = AnimationClip::EaseInOut("layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
+		*hoverAnim->AddTrack<float>("layer/toggled/child/selectBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("hover", hoverAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		// pressed
-		AnimationClip pressedAnim = AnimationClip::EaseInOut("layer/regular/child/pressedBack/transparency", 0.0f, 1.0f, 0.1f);
-		*pressedAnim.AddTrack<float>("layer/toggled/child/pressedBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto pressedAnim = AnimationClip::EaseInOut("layer/regular/child/pressedBack/transparency", 0.0f, 1.0f, 0.1f);
+		*pressedAnim->AddTrack<float>("layer/toggled/child/pressedBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("pressed", pressedAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
 
@@ -2580,8 +2580,8 @@ namespace Editor
 			->offStateAnimationSpeed = 0.5f;
 
 		// value
-		AnimationClip valueBtnAnim = AnimationClip::EaseInOut("layer/regular/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddTrack<float>("layer/toggled/transparency") =
+		auto valueBtnAnim = AnimationClip::EaseInOut("layer/regular/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim->AddTrack<float>("layer/toggled/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -2623,14 +2623,14 @@ namespace Editor
 										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
 
 		// hover
-		AnimationClip hoverAnim = AnimationClip::EaseInOut("layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
-		*hoverAnim.AddTrack<float>("layer/toggled/child/selectBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto hoverAnim = AnimationClip::EaseInOut("layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
+		*hoverAnim->AddTrack<float>("layer/toggled/child/selectBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("hover", hoverAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		// pressed
-		AnimationClip pressedAnim = AnimationClip::EaseInOut("layer/regular/child/pressedBack/transparency", 0.0f, 1.0f, 0.1f);
-		*pressedAnim.AddTrack<float>("layer/toggled/child/pressedBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto pressedAnim = AnimationClip::EaseInOut("layer/regular/child/pressedBack/transparency", 0.0f, 1.0f, 0.1f);
+		*pressedAnim->AddTrack<float>("layer/toggled/child/pressedBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("pressed", pressedAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
 
@@ -2639,8 +2639,8 @@ namespace Editor
 			->offStateAnimationSpeed = 0.5f;
 
 		// value
-		AnimationClip valueBtnAnim = AnimationClip::EaseInOut("layer/regular/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddTrack<float>("layer/toggled/transparency") =
+		auto valueBtnAnim = AnimationClip::EaseInOut("layer/regular/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim->AddTrack<float>("layer/toggled/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -2747,8 +2747,8 @@ namespace Editor
 		sample->AddState("focused", AnimationClip::EaseInOut("layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueBtnAnim = AnimationClip::EaseInOut("layer/pauseIcon/transparency", 0.0f, 1.0f, 0.1f);
-		*valueBtnAnim.AddTrack<float>("layer/playIcon/transparency") =
+		auto valueBtnAnim = AnimationClip::EaseInOut("layer/pauseIcon/transparency", 0.0f, 1.0f, 0.1f);
+		*valueBtnAnim->AddTrack<float>("layer/playIcon/transparency") =
 			AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -2855,8 +2855,8 @@ namespace Editor
 		sample->AddState("focused", AnimationClip::EaseInOut("layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueBtnAnim = AnimationClip::EaseInOut("layer/nonLoop/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddTrack<float>("layer/loop/transparency") =
+		auto valueBtnAnim = AnimationClip::EaseInOut("layer/nonLoop/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim->AddTrack<float>("layer/loop/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -2931,14 +2931,14 @@ namespace Editor
 									 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
 
 		// hover
-		AnimationClip hoverAnim = AnimationClip::EaseInOut("layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
-		*hoverAnim.AddTrack<float>("layer/toggled/child/selectBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto hoverAnim = AnimationClip::EaseInOut("layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
+		*hoverAnim->AddTrack<float>("layer/toggled/child/selectBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("hover", hoverAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		// pressed
-		AnimationClip pressedAnim = AnimationClip::EaseInOut("layer/regular/child/pressedBack/transparency", 0.0f, 1.0f, 0.1f);
-		*pressedAnim.AddTrack<float>("layer/toggled/child/pressedBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto pressedAnim = AnimationClip::EaseInOut("layer/regular/child/pressedBack/transparency", 0.0f, 1.0f, 0.1f);
+		*pressedAnim->AddTrack<float>("layer/toggled/child/pressedBack/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("pressed", pressedAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
 
@@ -2947,8 +2947,8 @@ namespace Editor
 			->offStateAnimationSpeed = 0.5f;
 
 		// value
-		AnimationClip valueBtnAnim = AnimationClip::EaseInOut("layer/regular/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddTrack<float>("layer/toggled/transparency") =
+		auto valueBtnAnim = AnimationClip::EaseInOut("layer/regular/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim->AddTrack<float>("layer/toggled/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -3320,22 +3320,22 @@ namespace Editor
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		AnimationClip expandedStateAnim;
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
+		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
 			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
 		itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		AnimationClip focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
@@ -3470,20 +3470,20 @@ namespace Editor
 		auto stopPressedIconLayer = stopRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_stop_anim_pressed.png"),
 																	 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		AnimationClip playBtnSelectAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
-		*playBtnSelectAnim.AddTrack<float>("layer/stopRootIcon/child/hover/transparency") =
+		auto playBtnSelectAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnSelectAnim->AddTrack<float>("layer/stopRootIcon/child/hover/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("hover", playBtnSelectAnim)->offStateAnimationSpeed = 0.25f;
 
-		AnimationClip playBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
-		*playBtnPressAnim.AddTrack<float>("layer/stopRootIcon/child/pressed/transparency") =
+		auto playBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnPressAnim->AddTrack<float>("layer/stopRootIcon/child/pressed/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 
 		sample->AddState("pressed", playBtnPressAnim)->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/transparency", 1.0f, 0.0f, 0.1f);
-		*valueBtnPressAnim.AddTrack<float>("layer/stopRootIcon/transparency") =
+		auto valueBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnPressAnim->AddTrack<float>("layer/stopRootIcon/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnPressAnim);
@@ -3515,20 +3515,20 @@ namespace Editor
 		nonLoopRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_non_loop_anim_pressed.png"),
 											Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
 
-		AnimationClip hoverAnim = AnimationClip::EaseInOut("layer/loopRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
-		*hoverAnim.AddTrack<float>("layer/nonLoopRootIcon/child/hover/transparency") =
+		auto hoverAnim = AnimationClip::EaseInOut("layer/loopRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
+		*hoverAnim->AddTrack<float>("layer/nonLoopRootIcon/child/hover/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("hover", hoverAnim)->offStateAnimationSpeed = 0.25f;
 
-		AnimationClip pressedAnim = AnimationClip::EaseInOut("layer/loopRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
-		*pressedAnim.AddTrack<float>("layer/nonLoopRootIcon/child/pressed/transparency") =
+		auto pressedAnim = AnimationClip::EaseInOut("layer/loopRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
+		*pressedAnim->AddTrack<float>("layer/nonLoopRootIcon/child/pressed/transparency") =
 			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 
 		sample->AddState("pressed", pressedAnim)->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueAnim = AnimationClip::EaseInOut("layer/loopRootIcon/transparency", 0.0f, 1.0f, 0.1f);
-		*valueAnim.AddTrack<float>("layer/nonLoopRootIcon/transparency") =
+		auto valueAnim = AnimationClip::EaseInOut("layer/loopRootIcon/transparency", 0.0f, 1.0f, 0.1f);
+		*valueAnim->AddTrack<float>("layer/nonLoopRootIcon/transparency") =
 			AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.1f);
 
 		sample->AddState("value", valueAnim);
@@ -3828,38 +3828,38 @@ namespace Editor
 
 		box->SetFocusable(true);
 
-		AnimationClip instanceAnim;
-		*instanceAnim.AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/internalWidget/instanceCaption/transparency") =
+		auto instanceAnim = mmake<AnimationClip>();
+		*instanceAnim->AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/internalWidget/instanceCaption/transparency") =
 			AnimationTrack<float>::EaseInOut(0, 1, 0.2f);
 
-		*instanceAnim.AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/box/transparency") =
+		*instanceAnim->AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/box/transparency") =
 			AnimationTrack<float>::EaseInOut(1, 0, 0.2f);
 
-		*instanceAnim.AddTrack<bool>("child/spoiler/internalWidget/expand/enabled") =
+		*instanceAnim->AddTrack<bool>("child/spoiler/internalWidget/expand/enabled") =
 			AnimationTrack<bool>::EaseInOut(false, true, 0.2f);
 
-		*instanceAnim.AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/create/layout/maxWidth") =
+		*instanceAnim->AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/create/layout/maxWidth") =
 			AnimationTrack<float>::EaseInOut(16, 0, 0.2f);
 
-		auto createAnim = instanceAnim.AddTrack<bool>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/create/enabled");
+		auto createAnim = instanceAnim->AddTrack<bool>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/create/enabled");
 		createAnim->AddKey(0, true);
 		createAnim->AddKey(0.05f, true);
 		createAnim->AddKey(0.055f, false);
 		createAnim->AddKey(0.2f, false);
 
-		*instanceAnim.AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/save/layout/maxWidth") =
+		*instanceAnim->AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/save/layout/maxWidth") =
 			AnimationTrack<float>::EaseInOut(0, 16, 0.2f);
 
-		auto saveAnim = instanceAnim.AddTrack<bool>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/save/enabled");
+		auto saveAnim = instanceAnim->AddTrack<bool>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/save/enabled");
 		saveAnim->AddKey(0, false);
 		saveAnim->AddKey(0.1f, false);
 		saveAnim->AddKey(0.105f, true);
 		saveAnim->AddKey(0.2f, true);
 
-		*instanceAnim.AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/remove/layout/maxWidth") =
+		*instanceAnim->AddTrack<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/remove/layout/maxWidth") =
 			AnimationTrack<float>::EaseInOut(0, 16, 0.2f);
 
-		auto removeAnim = instanceAnim.AddTrack<bool>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/remove/enabled");
+		auto removeAnim = instanceAnim->AddTrack<bool>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/remove/enabled");
 		removeAnim->AddKey(0, false);
 		removeAnim->AddKey(0.1f, false);
 		removeAnim->AddKey(0.105f, true);

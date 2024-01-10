@@ -233,8 +233,8 @@ namespace Editor
 					itActor = itActor->GetParent();
 				}
 
-				AnimationClip revertStateAnim = AnimationClip::EaseInOut(path + "layout/maxWidth", 0.0f, 20.0f, 0.15f);
-				*revertStateAnim.AddTrack<bool>(path + "enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
+				auto revertStateAnim = AnimationClip::EaseInOut(path + "layout/maxWidth", 0.0f, 20.0f, 0.15f);
+				*revertStateAnim->AddTrack<bool>(path + "enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
 				AddState("revert", revertStateAnim);
 			}
 

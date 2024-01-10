@@ -20,7 +20,7 @@ namespace o2
         mExpandHeight = false;
 
         CreateExpandAnimation();
-        mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+        mExpandState->GetAnimationPlayer().onUpdate = THIS_FUNC(UpdateExpanding);
         mExpandState->SetState(false);
         UpdateExpanding(0);
     }
@@ -32,7 +32,7 @@ namespace o2
         if (!mExpandState)
             CreateExpandAnimation();
 
-        mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+        mExpandState->GetAnimationPlayer().onUpdate = THIS_FUNC(UpdateExpanding);
         mExpandState->SetState(false);
 
         InitializeControls();
@@ -48,7 +48,7 @@ namespace o2
         if (!mExpandState)
             CreateExpandAnimation();
 
-        mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+        mExpandState->GetAnimationPlayer().onUpdate = THIS_FUNC(UpdateExpanding);
         mExpandState->SetState(false);
 
         mHeadHeight = other.mHeadHeight;
@@ -221,7 +221,7 @@ namespace o2
         if (!mExpandState)
             return true;
 
-        return mExpandState->GetState() && !mExpandState->player.IsPlaying();
+        return mExpandState->GetState() && !mExpandState->GetAnimationPlayer().IsPlaying();
     }
 
     bool Spoiler::IsFullyCollapsed() const
@@ -229,7 +229,7 @@ namespace o2
         if (!mExpandState)
             return false;
 
-        return !mExpandState->GetState() && !mExpandState->player.IsPlaying();
+        return !mExpandState->GetState() && !mExpandState->GetAnimationPlayer().IsPlaying();
     }
 
     String Spoiler::GetCreateMenuGroup()

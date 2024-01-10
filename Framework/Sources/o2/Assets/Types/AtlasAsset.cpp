@@ -98,7 +98,7 @@ namespace o2
         Asset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
     {
         for (auto& page : mPages)
-            page.mOwner = Ref(this);
+            page.mOwner = WeakRef(this);
 
         o2Render.OnAtlasCreated(this);
     }
@@ -112,7 +112,7 @@ namespace o2
     {
         for (auto& page : mPages)
         {
-            page.mOwner = Ref(this);
+            page.mOwner = WeakRef(this);
             page.mTexture = GetPageTextureRef(mInfo, page.mId);
         }
     }

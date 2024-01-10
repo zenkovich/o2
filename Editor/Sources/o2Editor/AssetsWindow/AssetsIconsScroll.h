@@ -128,11 +128,11 @@ namespace Editor
 
 		Ref<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
 						        
-		AssetIcon*         mHighlightIcon = nullptr;   // Current highlighting asset icon
-		Ref<AnimationClip> mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
-		AnimationPlayer    mHighlightAnim;             // Icon highlight animation
-		Sprite*            mHighlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
-		Layout             mHighlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
+		AssetIcon*           mHighlightIcon = nullptr;                  // Current highlighting asset icon
+		Ref<AnimationClip>   mHighlighClip;                             // Node highlight animation clip @SERIALIZABLE 
+		Ref<AnimationPlayer> mHighlightAnim = mmake<AnimationPlayer>(); // Icon highlight animation
+		Sprite*              mHighlightSprite = nullptr;                // Icon highlight sprite @SERIALIZABLE
+		Layout               mHighlightLayout;                          // Icon highlight sprite layout @SERIALIZABLE
 						        
 		Map<String, Vector<AssetIcon*>> mIconsPool; // Assets icons pool
 						        
@@ -370,7 +370,7 @@ CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
     FIELD().PROTECTED().NAME(mNewAsset);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHighlightIcon);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlighClip);
-    FIELD().PROTECTED().NAME(mHighlightAnim);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mHighlightAnim);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHighlightSprite);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightLayout);
     FIELD().PROTECTED().NAME(mIconsPool);

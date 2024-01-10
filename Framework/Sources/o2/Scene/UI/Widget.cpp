@@ -722,7 +722,7 @@ namespace o2
         return AddState(newState);
     }
 
-    WidgetState* Widget::AddState(const String& name, const AnimationClip& animation)
+    WidgetState* Widget::AddState(const String& name, const Ref<AnimationClip>& animation)
     {
         WidgetState* newState = mnew WidgetState();
         newState->name = name;
@@ -1004,8 +1004,8 @@ namespace o2
     {
         for (auto state : mStates)
         {
-            state->player.SetTarget(this, false);
-            state->player.relTime = state->GetState() ? 1.0f : 0.0f;
+            state->mPlayer->SetTarget(this, false);
+            state->mPlayer->relTime = state->GetState() ? 1.0f : 0.0f;
         }
     }
 

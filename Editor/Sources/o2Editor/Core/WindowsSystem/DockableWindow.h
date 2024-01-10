@@ -101,13 +101,15 @@ namespace Editor
 		const float mDockSizeCoef = 0.2f;
 		const float mDockBorder = 1.5f;
 
-		bool            mDocked = false;               // Is window docked
-		Sprite*         mDockingFrameSample = nullptr; // Docking frame sample @SERIALIZABLE
-		AnimationPlayer mDockingFrameAppearance;       // Docking frame appearance tween
-		RectF           mDockingFrameCurrent;          // Docking sample current frame
-		RectF           mDockingFrameTarget;           // Docking sample target  frame
-		Vec2F           mNonDockSize;                  // Size of widget before docking
-		Vec2F           mDragOffset;                   // Offset from cursor to dragging anchor point
+		bool    mDocked = false;               // Is window docked
+		Sprite* mDockingFrameSample = nullptr; // Docking frame sample @SERIALIZABLE
+		RectF   mDockingFrameCurrent;          // Docking sample current frame
+		RectF   mDockingFrameTarget;           // Docking sample target  frame
+
+		Ref<AnimationPlayer> mDockingFrameAppearance = mmake<AnimationPlayer>(); // Docking frame appearance tween
+
+		Vec2F mNonDockSize; // Size of widget before docking
+		Vec2F mDragOffset;  // Offset from cursor to dragging anchor point
 
 		bool  mTabState = false;             // Is window as tab
 		int   mTabPosition = 0;              // Tab index
@@ -184,9 +186,9 @@ CLASS_FIELDS_META(Editor::DockableWindow)
     FIELD().PROTECTED().DEFAULT_VALUE(1.5f).NAME(mDockBorder);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDocked);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mDockingFrameSample);
-    FIELD().PROTECTED().NAME(mDockingFrameAppearance);
     FIELD().PROTECTED().NAME(mDockingFrameCurrent);
     FIELD().PROTECTED().NAME(mDockingFrameTarget);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mDockingFrameAppearance);
     FIELD().PROTECTED().NAME(mNonDockSize);
     FIELD().PROTECTED().NAME(mDragOffset);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTabState);
