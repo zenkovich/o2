@@ -13,11 +13,22 @@
 namespace o2
 {
     class ApplicationEventsListener;
+    FORWARD_REF(ApplicationEventsListener);
+
     class CursorAreaEventsListener;
+    FORWARD_REF(CursorAreaEventsListener);
+
     class CursorEventsListener;
+    FORWARD_REF(CursorEventsListener);
+
     class DragableObject;
+    FORWARD_REF(DragableObject);
+
     class KeyboardEventsListener;
+    FORWARD_REF(KeyboardEventsListener);
+
     class ShortcutKeysListenersManager;
+    FORWARD_REF(ShortcutKeysListenersManager);
 
     // -----------------------
     // Event processing system
@@ -35,7 +46,7 @@ namespace o2
         ~EventSystem();
 
         // Returns all cursor listeners under cursor arranged by depth
-        Vector<CursorAreaEventsListener*> GetAllCursorListenersUnderCursor(CursorId cursorId) const;
+        Vector<Ref<CursorAreaEventsListener>> GetAllCursorListenersUnderCursor(CursorId cursorId) const;
 
         // Breaks cursor event. All pressed listeners will be unpressed with specific event OnPressBreak
         void BreakCursorEvent();
@@ -77,22 +88,22 @@ namespace o2
     protected:
         float mDblClickTime = 0.3f; // Time between clicks for double click reaction
 
-        Vector<CursorEventsListener*> mCursorListeners; // All cursor non area listeners
+        Vector<Ref<CursorEventsListener>> mCursorListeners; // All cursor non area listeners
 
-        Vector<CursorAreaEventListenersLayer*> mCursorAreaEventsListenersLayers; // Drawn cursor area events listeners layers
+        Vector<Ref<CursorAreaEventListenersLayer>> mCursorAreaEventsListenersLayers; // Drawn cursor area events listeners layers
         
-        CursorAreaEventListenersLayer          mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
-        CursorAreaEventListenersLayer*         mCurrentCursorAreaEventsLayer;  // Current list of area listeners
-        Vector<CursorAreaEventListenersLayer*> mLayersStack;                   // Input layers stack, in order they are pushed
+        Ref<CursorAreaEventListenersLayer>         mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
+        Ref<CursorAreaEventListenersLayer>         mCurrentCursorAreaEventsLayer;  // Current list of area listeners
+        Vector<Ref<CursorAreaEventListenersLayer>> mLayersStack;                   // Input layers stack, in order they are pushed
 
-        Vector<KeyboardEventsListener*>    mKeyboardListeners;    // Keyboard events listeners
-        Vector<ApplicationEventsListener*> mApplicationListeners; // Application events listeners
+        Vector<Ref<KeyboardEventsListener>>    mKeyboardListeners;    // Keyboard events listeners
+        Vector<Ref<ApplicationEventsListener>> mApplicationListeners; // Application events listeners
 
-        ShortcutKeysListenersManager* mShortcutEventsManager; // Shortcut events manager
+        Ref<ShortcutKeysListenersManager> mShortcutEventsManager; // Shortcut events manager
 
     protected:
         // Push current cursor area events listeners layer in layers stack
-        static void PushCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
+        static void PushCursorAreaEventsListenersLayer(const Ref<CursorAreaEventListenersLayer>& layer);
 
         // Pops current cursor area events listeners layer
         static void PopCursorAreaEventsListenersLayer();
@@ -101,7 +112,7 @@ namespace o2
         static void RemoveCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
 
         // Registering cursor area events listener
-        static void DrawnCursorAreaListener(CursorAreaEventsListener* listener);
+        static void DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener);
 
         // Unregistering cursor area events listener
         static void UnregCursorAreaListener(CursorAreaEventsListener* listener);

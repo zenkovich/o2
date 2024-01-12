@@ -7,7 +7,6 @@
 
 namespace o2
 {
-
     CursorAreaEventListenersLayer::~CursorAreaEventListenersLayer()
     {
         if (EventSystem::IsSingletonInitialzed())
@@ -19,7 +18,7 @@ namespace o2
         //PROFILE_SAMPLE_FUNC();
 
         viewPortBasis = o2Render.GetCamera().GetBasis();
-        o2Events.PushCursorAreaEventsListenersLayer(this);
+        o2Events.PushCursorAreaEventsListenersLayer(Ref(this));
     }
 
     void CursorAreaEventListenersLayer::OnEndDraw()
@@ -55,7 +54,7 @@ namespace o2
     Vec2F CursorAreaEventListenersLayer::ScreenToLocal(const Vec2F& point) const
     {
         if (mParentLayer)
-            return ToLocal(mParentLayer->ScreenToLocal(point));
+            return ToLocal(mParentLayer.Lock()->ScreenToLocal(point));
         
         return ToLocal(point);
     }
@@ -63,7 +62,7 @@ namespace o2
     Vec2F CursorAreaEventListenersLayer::ScreenFromLocal(const Vec2F& point) const
     {
         if (mParentLayer)
-            return FromLocal(mParentLayer->ScreenFromLocal(point));
+            return FromLocal(mParentLayer.Lock()->ScreenFromLocal(point));
 
         return FromLocal(point);
     }
@@ -172,19 +171,19 @@ namespace o2
 
     void CursorAreaEventListenersLayer::UnregDragListener(DragableObject* listener)
     {
-        mDragListeners.Remove(listener);
+		mDragListeners.RemoveFirst([&](auto x) { return x == listener; });
     }
 
-    Vector<CursorAreaEventsListener*> CursorAreaEventListenersLayer::GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const
+    Vector<Ref<CursorAreaEventsListener>> CursorAreaEventListenersLayer::GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const
     {
-        Vector<CursorAreaEventsListener*> res;
+        Vector<Ref<CursorAreaEventsListener>> res;
         Vec2F localCursorPos = ToLocal(cursorPos);
         for (auto listener : cursorEventAreaListeners)
         {
             if (!listener->IsUnderPoint(localCursorPos) || !listener->mScissorRect.IsInside(localCursorPos) || !listener->mInteractable)
                 continue;
 
-            if (auto layer = dynamic_cast<CursorAreaEventListenersLayer*>(listener))
+            if (auto layer = DynamicCast<CursorAreaEventListenersLayer>(listener))
                 res += layer->GetAllCursorListenersUnderCursor(localCursorPos);
             else
                 res.Add(listener);
@@ -231,7 +230,7 @@ namespace o2
             if (!listener->IsUnderPoint(localCursor.position) || !listener->mScissorRect.IsInside(localCursor.position))
                 continue;
 
-            auto drag = dynamic_cast<DragableObject*>(listener);
+            auto drag = DynamicCast<DragableObject>(listener);
             if (drag && drag->IsDragging())
                 continue;
 

@@ -59,7 +59,7 @@ namespace o2
             return;
 
         mScissorRect = o2Render.GetResScissorRect();
-        o2Events.DrawnCursorAreaListener(this);
+        o2Events.DrawnCursorAreaListener(Ref(this));
     }
 
     void CursorAreaEventsListener::OnCursorPressed(const Input::Cursor& cursor)

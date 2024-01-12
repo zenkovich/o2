@@ -18,21 +18,28 @@ namespace o2
 {
 #undef DrawText
 
-    DECLARE_SINGLETON(EventSystem);
+	DECLARE_SINGLETON(EventSystem);
+
+	FORWARD_REF_IMPL(ApplicationEventsListener);
+	FORWARD_REF_IMPL(CursorAreaEventsListener);
+	FORWARD_REF_IMPL(CursorEventsListener);
+	FORWARD_REF_IMPL(DragableObject);
+	FORWARD_REF_IMPL(KeyboardEventsListener);
+	FORWARD_REF_IMPL(ShortcutKeysListenersManager);
 
     EventSystem::EventSystem()
     {
         PushEditorScopeOnStack scope;
 
-        mShortcutEventsManager = mnew ShortcutKeysListenersManager();
-        mCurrentCursorAreaEventsLayer = &mCursorAreaListenersBasicLayer;
-        mCursorAreaListenersBasicLayer.mEnabled = true;
+        mCursorAreaListenersBasicLayer = mmake<CursorAreaEventListenersLayer>();
+        mShortcutEventsManager = mmake<ShortcutKeysListenersManager>();
+
+        mCurrentCursorAreaEventsLayer = mCursorAreaListenersBasicLayer;
+        mCursorAreaListenersBasicLayer->mEnabled = true;
     }
 
     EventSystem::~EventSystem()
-    {
-        delete mShortcutEventsManager;
-    }
+    {}
 
     float EventSystem::GetDoubleClickTime() const
     {
@@ -128,13 +135,13 @@ namespace o2
             int line = 0;
             auto allUnderCursor = o2Input.IsKeyDown(VK_CONTROL) ? 
                 GetAllCursorListenersUnderCursor(0) : 
-                mCursorAreaListenersBasicLayer.mUnderCursorListeners[0];
+                mCursorAreaListenersBasicLayer->mUnderCursorListeners[0];
 
             for (auto listener : allUnderCursor)
             {
                 String name = typeid(*listener).name();
 
-                if (auto widget = dynamic_cast<Widget*>(listener))
+                if (auto widget = DynamicCast<Widget>(listener))
                 {
                     String path;
                     auto parent = widget;
@@ -147,7 +154,7 @@ namespace o2
                     name = path + " : " + widget->GetType().GetName();
                     o2Debug.DrawRect(widget->layout->GetWorldRect(), Color4::Red());
                 }
-                else if (auto handle = dynamic_cast<DragHandle*>(listener))
+                else if (auto handle = DynamicCast<DragHandle>(listener))
                     o2Debug.DrawRect(handle->GetRegularDrawable()->GetAxisAlignedRect(), Color4::Red());
 
                 o2Debug.DrawText(Vec2F(-o2Render.GetResolution().x*0.5f, o2Render.GetResolution().y*0.5f - (float)line), name);
@@ -163,7 +170,7 @@ namespace o2
             layer->PostUpdate();
 
         mCursorAreaEventsListenersLayers.Clear();
-        mCursorAreaEventsListenersLayers.Add(&mCursorAreaListenersBasicLayer);
+        mCursorAreaEventsListenersLayers.Add(mCursorAreaListenersBasicLayer);
     }
 
     void EventSystem::OnApplicationStarted()
@@ -213,9 +220,9 @@ namespace o2
 
     bool EventSystem::eventsListenersEnabledByDefault = true;
 
-    Vector<CursorAreaEventsListener*> EventSystem::GetAllCursorListenersUnderCursor(CursorId cursorId) const
+    Vector<Ref<CursorAreaEventsListener>> EventSystem::GetAllCursorListenersUnderCursor(CursorId cursorId) const
     {
-        return mCursorAreaListenersBasicLayer.GetAllCursorListenersUnderCursor(o2Input.GetCursorPos(cursorId));
+        return mCursorAreaListenersBasicLayer->GetAllCursorListenersUnderCursor(o2Input.GetCursorPos(cursorId));
     }
 
     void EventSystem::BreakCursorEvent()
@@ -254,7 +261,7 @@ namespace o2
         }
     }
 
-    void EventSystem::PushCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer)
+    void EventSystem::PushCursorAreaEventsListenersLayer(const Ref<CursorAreaEventListenersLayer>& layer)
     {
         if (layer)
         {
@@ -272,16 +279,16 @@ namespace o2
         if (!mInstance->mLayersStack.IsEmpty())
             mInstance->mCurrentCursorAreaEventsLayer = mInstance->mLayersStack.Last();
         else
-            mInstance->mCurrentCursorAreaEventsLayer = &mInstance->mCursorAreaListenersBasicLayer;
+            mInstance->mCurrentCursorAreaEventsLayer = mInstance->mCursorAreaListenersBasicLayer;
     }
 
     void EventSystem::RemoveCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer)
     {
-        mInstance->mCursorAreaEventsListenersLayers.Remove(layer);
+		mInstance->mCursorAreaEventsListenersLayers.RemoveFirst([&](auto x) { return x == layer; });
     }
 
-    void EventSystem::DrawnCursorAreaListener(CursorAreaEventsListener* listener)
-    {
+	void EventSystem::DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener)
+	{
         if (!IsSingletonInitialzed())
             return;
 
@@ -293,9 +300,10 @@ namespace o2
 
     void EventSystem::UnregCursorAreaListener(CursorAreaEventsListener* listener)
     {
+        auto listenerLayer = dynamic_cast<CursorAreaEventListenersLayer*>(listener);
         for (auto layer : mInstance->mCursorAreaEventsListenersLayers)
         {
-            if (layer != listener)
+            if (layer != listenerLayer)
                 layer->UnregCursorAreaListener(listener);
         }
     }
@@ -306,7 +314,7 @@ namespace o2
             return;
 
         if (mInstance)
-            mInstance->mCursorListeners.Add(listener);
+            mInstance->mCursorListeners.Add(Ref(listener));
     }
 
     void EventSystem::UnregCursorListener(CursorEventsListener* listener)
@@ -315,7 +323,7 @@ namespace o2
             return;
 
         if (mInstance)
-            mInstance->mCursorListeners.Remove(listener);
+            mInstance->mCursorListeners.RemoveFirst([&](auto x) { return x == listener; });
     }
 
     void EventSystem::RegDragListener(DragableObject* listener)
@@ -324,7 +332,7 @@ namespace o2
             return;
 
         if (mInstance)
-            mInstance->mCurrentCursorAreaEventsLayer->mDragListeners.Add(listener);
+            mInstance->mCurrentCursorAreaEventsLayer->mDragListeners.Add(Ref(listener));
     }
 
     void EventSystem::UnregDragListener(DragableObject* listener)
@@ -342,13 +350,13 @@ namespace o2
             return;
 
         if (mInstance)
-            mInstance->mKeyboardListeners.Add(listener);
+            mInstance->mKeyboardListeners.Add(Ref(listener));
     }
 
     void EventSystem::UnregKeyboardListener(KeyboardEventsListener* listener)
     {
         if (mInstance)
-            mInstance->mKeyboardListeners.Remove(listener);
+            mInstance->mKeyboardListeners.RemoveFirst([&](auto x) { return x == listener; });
     }
 
     void EventSystem::RegApplicationListener(ApplicationEventsListener* listener)
@@ -357,12 +365,12 @@ namespace o2
             return;
 
         if (mInstance)
-            mInstance->mApplicationListeners.Add(listener);
+            mInstance->mApplicationListeners.Add(Ref(listener));
     }
 
     void EventSystem::UnregApplicationListener(ApplicationEventsListener* listener)
     {
         if (mInstance)
-            mInstance->mApplicationListeners.Remove(listener);
+            mInstance->mApplicationListeners.RemoveFirst([&](auto x) { return x == listener; });
     }
 }

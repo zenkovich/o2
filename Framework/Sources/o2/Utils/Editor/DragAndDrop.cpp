@@ -20,13 +20,13 @@ namespace o2
             o2Debug.Log("asd");
 
         auto underCursorListeners = o2Events.GetAllCursorListenersUnderCursor(cursorId);
-        DragDropArea* dragDropArea = nullptr;
+        Ref<DragDropArea> dragDropArea = nullptr;
 
         for (auto listener : underCursorListeners)
         {
             if (listener != this)
             {
-                if (auto listenerDragDropArea = dynamic_cast<DragDropArea*>(listener))
+                if (auto listenerDragDropArea = DynamicCast<DragDropArea>(listener))
                 {
                     dragDropArea = listenerDragDropArea;
                     break;
@@ -37,7 +37,7 @@ namespace o2
             }
         }
 
-        return dragDropArea;
+        return dragDropArea.Get();
     }
 
     void DragableObject::OnCursorPressed(const Input::Cursor& cursor)

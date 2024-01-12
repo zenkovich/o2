@@ -14,7 +14,7 @@ namespace o2
     // ----------------------------------------------------------
     // Object, that can be shown in editor's tree view and edited
     // ----------------------------------------------------------
-    class SceneEditableObject: virtual public ISerializable
+    class SceneEditableObject: virtual public ISerializable, virtual public RefCounterable
     {
     public:
         int changedFrame = 0; // Index of frame, when object has changed @EDITOR_IGNORE

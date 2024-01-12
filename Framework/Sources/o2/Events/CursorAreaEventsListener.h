@@ -131,7 +131,7 @@ namespace o2
     // -----------------------
     // Cursors events listener
     // -----------------------
-    class CursorEventsListener
+    class CursorEventsListener: public RefCounterable
     {
     public:
         // Default constructor

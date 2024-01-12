@@ -377,12 +377,12 @@ namespace Editor
 		else
 		{
 			auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
-			auto dockPlaceListener = listenersUnderCursor.FindOrDefault([](CursorAreaEventsListener* x) {
-				return dynamic_cast<DockWindowPlace*>(x) != nullptr;
+			auto dockPlaceListener = listenersUnderCursor.FindOrDefault([](const Ref<CursorAreaEventsListener>& x) {
+				return DynamicCast<DockWindowPlace>(x) != nullptr;
 			});
 
 			if (dockPlaceListener)
-				PlaceDock(dynamic_cast<DockWindowPlace*>(dockPlaceListener));
+				PlaceDock(dynamic_cast<DockWindowPlace*>(dockPlaceListener.Get()));
 		}
 	}
 
@@ -473,13 +473,13 @@ namespace Editor
 	{
 		Vec2F cursorPos = o2Input.cursorPos;
 		auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
-		auto dockPlaceListener = listenersUnderCursor.FindOrDefault([](CursorAreaEventsListener* x) {
-			return dynamic_cast<DockWindowPlace*>(x) != nullptr;
+		auto dockPlaceListener = listenersUnderCursor.FindOrDefault([](const Ref<CursorAreaEventsListener>& x) {
+			return DynamicCast<DockWindowPlace>(x) != nullptr;
 		});
 
 		if (dockPlaceListener)
 		{
-			auto dockPlace = dynamic_cast<DockWindowPlace*>(dockPlaceListener);
+			auto dockPlace = dynamic_cast<DockWindowPlace*>(dockPlaceListener.Get());
 
 			RectF dockPlaceRect = dockPlace->layout->worldRect;
 

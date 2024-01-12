@@ -47,20 +47,20 @@ namespace o2
     class ShortcutKeysListenersManager: public KeyboardEventsListener, public Singleton<ShortcutKeysListenersManager>
     {
     protected:
-        Map<ShortcutKeys, Vector<ShortcutKeysListener*>> mListeners;
+        Map<ShortcutKeys, Vector<Ref<ShortcutKeysListener>>> mListeners;
 
     protected:
         // Registers listener 
-        void Register(const ShortcutKeys& shortcut, ShortcutKeysListener* listener);
+        void Register(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
 
         // Unregisters listener
         void UnRegister(const ShortcutKeys& shortcut, ShortcutKeysListener* listener);
 
         // Set listener minimal priority
-        void SetMinPriority(const ShortcutKeys& shortcut, ShortcutKeysListener* listener);
+        void SetMinPriority(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
 
         // Set listener maximal priority
-        void SetMaxPriority(const ShortcutKeys& shortcut, ShortcutKeysListener* listener);
+        void SetMaxPriority(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
 
         // Called when key was pressed, send event to most priority listener
         void OnKeyPressed(const Input::Key& key) override;

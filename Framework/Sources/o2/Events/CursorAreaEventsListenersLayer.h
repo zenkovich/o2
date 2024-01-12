@@ -7,6 +7,7 @@
 namespace o2
 {
     class DragableObject;
+    FORWARD_REF(DragableObject);
 
     class CursorAreaEventListenersLayer: public CursorAreaEventsListener
     {
@@ -16,10 +17,9 @@ namespace o2
         Basis  renderBasis;
         Camera camera;
 
-        Vector<CursorAreaEventsListener*> cursorEventAreaListeners;
+        Vector<Ref<CursorAreaEventsListener>> cursorEventAreaListeners;
 
-        bool isEditor = false; // Is this layer drawn in editor scope
-
+        bool isEditor      = false; // Is this layer drawn in editor scope
         bool isTransparent = false; // Is this layer transparent to input other listeners
 
     public:
@@ -63,7 +63,7 @@ namespace o2
         void UnregDragListener(DragableObject* listener);
 
         // Returns all cursor listeners under cursor arranged by depth
-        Vector<CursorAreaEventsListener*> GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const;
+        Vector<Ref<CursorAreaEventsListener>> GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const;
 
         // Returns true if point is in this object
         bool IsUnderPoint(const Vec2F& point) override;
@@ -76,16 +76,16 @@ namespace o2
 
         Basis mLocalToWorldTransform = Basis::Identity();
 
-        CursorAreaEventListenersLayer* mParentLayer = nullptr; // Layer in which this
+        WeakRef<CursorAreaEventListenersLayer> mParentLayer; // Layer in which this
 
-        Map<CursorId, Vector<CursorAreaEventsListener*>> mPressedListeners;             // Pressed listeners for all pressed cursors
-        Vector<CursorAreaEventsListener*>                mRightButtonPressedListeners;  // Right mouse button pressed listener
-        Vector<CursorAreaEventsListener*>                mMiddleButtonPressedListeners; // Middle mouse button pressed listener
+        Map<CursorId, Vector<Ref<CursorAreaEventsListener>>> mPressedListeners;             // Pressed listeners for all pressed cursors
+        Vector<Ref<CursorAreaEventsListener>>                mRightButtonPressedListeners;  // Right mouse button pressed listener
+        Vector<Ref<CursorAreaEventsListener>>                mMiddleButtonPressedListeners; // Middle mouse button pressed listener
 
-        Map<CursorId, Vector<CursorAreaEventsListener*>> mUnderCursorListeners;     // Under cursor listeners for each cursor
-        Map<CursorId, Vector<CursorAreaEventsListener*>> mLastUnderCursorListeners; // Under cursor listeners for each cursor on last frame
+        Map<CursorId, Vector<Ref<CursorAreaEventsListener>>> mUnderCursorListeners;     // Under cursor listeners for each cursor
+        Map<CursorId, Vector<Ref<CursorAreaEventsListener>>> mLastUnderCursorListeners; // Under cursor listeners for each cursor on last frame
 
-        Vector<DragableObject*> mDragListeners; // Drag events listeners
+        Vector<Ref<DragableObject>> mDragListeners; // Drag events listeners
 
     private:
         // Called when cursor enters this object
