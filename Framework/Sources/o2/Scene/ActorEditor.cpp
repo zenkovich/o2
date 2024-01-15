@@ -26,7 +26,7 @@ namespace o2
         const_cast<Component*>(source)->mPrototypeLink = target;
     }
 
-    void Actor::SetProtytypeDummy(ActorAssetRef asset)
+    void Actor::SetProtytypeDummy(Ref<ActorAsset> asset)
     {}
 
     void Actor::BreakPrototypeLink()
@@ -34,7 +34,7 @@ namespace o2
         if (!mPrototype && !mPrototypeLink)
             return;
 
-        SetPrototype(ActorAssetRef());
+        SetPrototype(Ref<ActorAsset>());
 
         // remove from cache
 
@@ -52,7 +52,7 @@ namespace o2
         if (!mPrototypeLink)
             return;
 
-        Vector<Actor*> separatedActors;
+        Vector<Ref<Actor>> separatedActors;
         SeparateActors(separatedActors);
 
         for (auto it = separatedActors.Begin(); it != separatedActors.End();)
@@ -60,10 +60,7 @@ namespace o2
             if ((*it)->mPrototypeLink)
                 ++it;
             else
-            {
-                delete *it;
                 it = separatedActors.Remove(it);
-            }
         }
 
         Vector<Actor**> actorPointersFields;
@@ -86,12 +83,12 @@ namespace o2
         OnChanged();
     }
 
-    ActorAssetRef Actor::MakePrototype()
+    Ref<ActorAsset> Actor::MakePrototype()
     {
-        mCopyVisitor = mnew MakePrototypeCloneVisitor();
+        mCopyVisitor = mmake<MakePrototypeCloneVisitor>();
         auto prototype = CloneAs<Actor>();
 
-        ActorAssetRef prototypeAsset = ActorAssetRef::CreateAsset(prototype);
+        Ref<ActorAsset> prototypeAsset = Ref<ActorAsset>::CreateAsset(prototype);
         SetPrototype(prototypeAsset);
 
         prototype->UpdateResEnabledInHierarchy();
@@ -101,7 +98,7 @@ namespace o2
         return prototypeAsset;
     }
 
-    void Actor::SeparateActors(Vector<Actor*>& separatedActors)
+    void Actor::SeparateActors(Vector<Ref<Actor>>& separatedActors)
     {
         for (auto child : mChildren)
         {
@@ -129,7 +126,7 @@ namespace o2
 
         auto& linkedActors = o2Scene.mPrototypeLinksCache[mPrototype];
         linkedActorsApplyInfos.Reserve(linkedActors.Count());
-        linkedActors.ForEach([&](auto x) { if (x != this) linkedActorsApplyInfos.Add(ApplyActorInfo(x)); });
+        linkedActors.ForEach([&](auto x) { if (x != this) linkedActorsApplyInfos.Add(ApplyActorInfo(x.Lock().Get())); });
     
         // Apply differences
         diffs.newChildren.ForEach([&](auto d) { d->Apply(thisApplyInfo, prototypeApplyInfo, linkedActorsApplyInfos); });
@@ -148,7 +145,7 @@ namespace o2
 
             if (info.actor->IsAsset())
             {
-                ActorAssetRef asset(info.actor->GetAssetID());
+                Ref<ActorAsset> asset(info.actor->GetAssetID());
                 if (info.actor != asset->GetActor())
                     asset->SetActor(info.actor, false);
 
@@ -181,15 +178,15 @@ namespace o2
 
     void Actor::BeginMakePrototype() const
     {
-        mCopyVisitor = mnew MakePrototypeCloneVisitor();
+        mCopyVisitor = mmake<MakePrototypeCloneVisitor>();
     }
 
     void Actor::BeginInstantiatePrototype() const
     {
-        mCopyVisitor = mnew InstantiatePrototypeCloneVisitor();
+        mCopyVisitor = mmake<InstantiatePrototypeCloneVisitor>();
     }
 
-    bool Actor::IsLinkedToActor(Actor* actor) const
+    bool Actor::IsLinkedToActor(const Ref<Actor>& actor) const
     {
         if (mPrototypeLink)
         {
@@ -206,10 +203,10 @@ namespace o2
         return false;
     }
 
-    Actor* Actor::FindLinkedActor(Actor* linkActor)
+    Ref<Actor> Actor::FindLinkedActor(const Ref<Actor>& linkActor)
     {
         if (GetPrototypeLink() == linkActor)
-            return this;
+            return Ref(this);
 
         for (auto child : mChildren)
         {
@@ -258,7 +255,7 @@ namespace o2
         bool lastResLocked = mResLocked;
 
         if (mParent)
-            mResLocked = mLocked || mParent->mResLocked;
+            mResLocked = mLocked || mParent.Lock()->mResLocked;
         else
             mResLocked = mLocked;
 
@@ -299,9 +296,9 @@ namespace o2
         return transform->GetWorldPivot();
     }
 
-    void Actor::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+    void Actor::AddEditableChild(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
     {
-        if (Actor* actor = dynamic_cast<Actor*>(object))
+        if (auto actor = DynamicCast<Actor>(object))
         {
             if (idx >= 0)
                 AddChild(actor, idx);
@@ -315,7 +312,7 @@ namespace o2
         return true;
     }
 
-    Vector<SceneEditableObject*> Actor::GetEditableChildren() const
+    Vector<Ref<SceneEditableObject>> Actor::GetEditableChildren() const
     {
         return mChildren.DynamicCast<SceneEditableObject*>();
     }

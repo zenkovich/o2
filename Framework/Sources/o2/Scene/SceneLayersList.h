@@ -13,7 +13,7 @@ namespace o2
         SceneLayersList();
 
         // Constructor from layers list
-        SceneLayersList(const Vector<SceneLayer*>& layers);
+        SceneLayersList(const Vector<Ref<SceneLayer>>& layers);
 
         // Constructor from layers list
         SceneLayersList(const Vector<String>& layers);
@@ -31,25 +31,25 @@ namespace o2
         bool operator!=(const SceneLayersList& other) const;
 
         // Checks has layer
-        bool HasLayer(SceneLayer* layer) const;
+        bool HasLayer(const Ref<SceneLayer>& layer) const;
 
         // Checks has layer
         bool HasLayer(const String& layerName) const;
 
         // Adds layer
-        void AddLayer(SceneLayer* layer);
+        void AddLayer(const Ref<SceneLayer>& layer);
 
         // Adds layer
         void AddLayer(const String& layerName);
 
         // Removes layer
-        void RemoveLayer(SceneLayer* layer);
+        void RemoveLayer(const Ref<SceneLayer>& layer);
 
         // Removes layer
         void RemoveLayer(const String& layerName);
 
         // Sets layers list
-        void SetLayers(const Vector<SceneLayer*>& layers);
+        void SetLayers(const Vector<Ref<SceneLayer>>& layers);
 
         // Sets layers list
         void SetLayers(const Vector<String>& layerNames);
@@ -58,7 +58,7 @@ namespace o2
         void SetAllLayers();
 
         // Returns layers list
-        Vector<SceneLayer*> GetLayers() const;
+        Vector<Ref<SceneLayer>> GetLayers() const;
 
         // Returns layers list
         const Vector<String>& GetLayersNames() const;
@@ -88,19 +88,19 @@ CLASS_METHODS_META(o2::SceneLayersList)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneLayer*>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneLayer>>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<String>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayersList&);
-    FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, SceneLayer*);
+    FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddLayer, SceneLayer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, AddLayer, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, SceneLayer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetLayers, const Vector<SceneLayer*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetLayers, const Vector<Ref<SceneLayer>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLayers, const Vector<String>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAllLayers);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<SceneLayer*>, GetLayers);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneLayer>>, GetLayers);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<String>&, GetLayersNames);
 }
 END_META;

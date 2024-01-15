@@ -331,7 +331,7 @@ namespace Editor
 
             if (mSelectedPreloadedAssets.All([](Ref<Asset>* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
             {
-                targets = mSelectedPreloadedAssets.Convert<IObject*>([](Ref<Asset>* x) { ActorAssetRef asset(DynamicCast<ActorAsset>(*x)); return asset->GetActor(); });
+                targets = mSelectedPreloadedAssets.Convert<IObject*>([](Ref<Asset>* x) { Ref<ActorAsset> asset(DynamicCast<ActorAsset>(*x)); return asset->GetActor(); });
             }
             else if (mSelectedPreloadedAssets.All([](Ref<Asset>* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
                 targets.Clear();
@@ -602,7 +602,7 @@ namespace Editor
         {
             if (Actor* actor = dynamic_cast<Actor*>(object))
             {
-                ActorAssetRef newAsset = actor->MakePrototype();
+                Ref<ActorAsset> newAsset = actor->MakePrototype();
                 String path = destPath.IsEmpty() ? newAsset->GetActor()->name + String(".proto") : destPath + "/" +
                     newAsset->GetActor()->name + String(".proto");
 
@@ -964,7 +964,7 @@ namespace Editor
         return actor;
     }
 
-    Actor* AssetsIconsScrollArea::InstantiateAsset(const ActorAssetRef& asset)
+    Actor* AssetsIconsScrollArea::InstantiateAsset(const Ref<ActorAsset>& asset)
     {
         return asset->GetActor()->CloneAs<Actor>();
     }
@@ -1093,7 +1093,7 @@ namespace Editor
         if (assetInfo.meta->GetAssetType() == &TypeOf(ImageAsset))
             return InstantiateAsset(ImageAssetRef(assetInfo.meta->ID()));
         else if (assetInfo.meta->GetAssetType() == &TypeOf(ActorAsset))
-            return InstantiateAsset(ActorAssetRef(assetInfo.meta->ID()));
+            return InstantiateAsset(Ref<ActorAsset>(assetInfo.meta->ID()));
 
         return nullptr;
     }

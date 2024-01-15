@@ -7,10 +7,10 @@ namespace o2
     SceneLayersList::SceneLayersList()
     {}
 
-    SceneLayersList::SceneLayersList(const Vector<SceneLayer*>& layers)
+    SceneLayersList::SceneLayersList(const Vector<Ref<SceneLayer>>& layers)
     {
         mAllLayers = o2Scene.GetLayers() == layers;
-        mLayers = layers.Convert<String>([](SceneLayer* x) { return x->GetName(); });
+        mLayers = layers.Convert<String>([](const Ref<SceneLayer>& x) { return x->GetName(); });
     }
 
     SceneLayersList::SceneLayersList(const Vector<String>& layers):

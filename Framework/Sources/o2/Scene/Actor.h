@@ -49,7 +49,7 @@ namespace o2
 
     public:
         PROPERTIES(Actor);
-        PROPERTY(ActorAssetRef, prototype, SetPrototype, GetPrototype); // Prototype asset reference property @EDITOR_IGNORE
+        PROPERTY(Ref<ActorAsset>, prototype, SetPrototype, GetPrototype); // Prototype asset reference property @EDITOR_IGNORE
 
         GETTER(SceneUID, id, GetID);              // Actor unique id
         PROPERTY(String, name, SetName, GetName); // Actor name property @EDITOR_IGNORE @ANIMATABLE
@@ -57,11 +57,11 @@ namespace o2
         PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE @ANIMATABLE
         GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is actor enabled in hierarchy getter
 
-        GETTER(Vector<Actor*>, children, GetChildren);         // Children array getter
-        GETTER(Vector<Component*>, components, GetComponents); // Components array getter
+        GETTER(Vector<Ref<Actor>>, children, GetChildren);         // Children array getter
+        GETTER(Vector<Ref<Component>>, components, GetComponents); // Components array getter
 
-        ACCESSOR(Actor*, child, String, GetChild, GetAllChilds);                 // Children accessor
-        ACCESSOR(Component*, component, String, GetComponent, GetAllComponents); // Component accessor by type name
+        ACCESSOR(Ref<Actor>, child, String, GetChild, GetAllChilds);                 // Children accessor
+        ACCESSOR(Ref<Component>, component, String, GetComponent, GetAllComponents); // Component accessor by type name
 
     public:
         TagGroup              tags;      // Tags group @EDITOR_IGNORE
@@ -72,10 +72,10 @@ namespace o2
         Actor(ActorCreateMode mode = ActorCreateMode::Default);
 
         // Actor constructor from prototype
-        Actor(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Constructor with components
-        Actor(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Copy-constructor
         Actor(const Actor& other, ActorCreateMode mode);
@@ -138,13 +138,13 @@ namespace o2
         bool IsAsset() const;
 
         // Sets prototype and links actor to them
-        void SetPrototype(ActorAssetRef asset);
+        void SetPrototype(Ref<ActorAsset> asset);
 
         // Returns prototype from this or this parent @SCRIPTABLE
-        ActorAssetRef GetPrototype() const;
+        Ref<ActorAsset> GetPrototype() const;
 
         // Returns prototype directly from only this
-        ActorAssetRef GetPrototypeDirectly() const;
+        Ref<ActorAsset> GetPrototypeDirectly() const;
 
         // Returns prototype link pointer
         ActorRef GetPrototypeLink() const;
@@ -186,104 +186,104 @@ namespace o2
         bool IsEnabledInHierarchy() const OPTIONAL_OVERRIDE;
 
         // Sets parent @SCRIPTABLE
-        void SetParent(Actor* actor, bool worldPositionStays = true, int idx = -1);
+        void SetParent(const Ref<Actor>& actor, bool worldPositionStays = true, int idx = -1);
 
         // Returns parent @SCRIPTABLE
-        Actor* GetParent() const;
+        const WeakRef<Actor>& GetParent() const;
 
         // Sets index position in parent or scene @SCRIPTABLE
         virtual void SetIndexInSiblings(int index) OPTIONAL_OVERRIDE;
 
         // Add child actor @SCRIPTABLE
-        virtual Actor* AddChild(Actor* actor);
+        virtual Ref<Actor> AddChild(const Ref<Actor>& actor);
 
         // Add children actors @SCRIPTABLE
-        void AddChildren(const Vector<Actor*>& actors);
+        void AddChildren(const Vector<Ref<Actor>>& actors);
 
         // Add child actor @SCRIPTABLE
-        virtual Actor* AddChild(Actor* actor, int index);
+        virtual Ref<Actor> AddChild(const Ref<Actor>& actor, int index);
 
         // Returns child actor by path (ex "root/some node/other node/target node") @SCRIPTABLE
-        Actor* GetChild(const String& path) const;
+        Ref<Actor> GetChild(const String& path) const;
 
         // Returns child actor by name @SCRIPTABLE
-        Actor* FindChild(const String& name) const;
+        Ref<Actor> FindChild(const String& name) const;
 
         // Returns child actor by predicate
-        Actor* FindChild(const Function<bool(const Actor* child)>& pred) const;
+        Ref<Actor> FindChild(const Function<bool(const Ref<Actor>& child)>& pred) const;
 
         // Returns child actor by path (ex "root/some node/other node/target node")
         template<typename _type>
-        _type* GetChildByType(const String& path) const;
+        Ref<_type> GetChildByType(const String& path) const;
 
         // Returns child actor by name
         template<typename _type>
-        _type* FindChildByTypeAndName(const String& name) const;
+        Ref<_type> FindChildByTypeAndName(const String& name) const;
 
         // Searches child with specified type
         template<typename _type>
-        _type* FindChildByType(bool searchInChildren = true);
+        Ref<_type> FindChildByType(bool searchInChildren = true);
 
         // Returns children array @SCRIPTABLE
-        const Vector<Actor*>& GetChildren() const;
+		const Vector<Ref<Actor>>& GetChildren() const;
 
         // Returns all children actors with their children
-        virtual void GetAllChildrenActors(Vector<Actor*>& actors);
+        virtual void GetAllChildrenActors(Vector<Ref<Actor>>& actors);
 
         // Removes child and destroys him if needed @SCRIPTABLE
-        void RemoveChild(Actor* actor, bool release = true, bool withEvent = true);
+        void RemoveChild(Actor* actor, bool withEvent = true);
 
         // Removes and destroys all childs @SCRIPTABLE
-        void RemoveAllChildren(bool release = true);
+        void RemoveAllChildren();
 
         // Searches actor with id in this and this children @SCRIPTABLE
-        virtual Actor* FindActorById(SceneUID id);
+        virtual Ref<Actor> FindActorById(SceneUID id);
 
         // And new component
         template<typename _type>
-        _type* AddComponent();
+        Ref<_type> AddComponent();
 
         // Adds new component
-        Component* AddComponent(Component* component);
+        Ref<Component> AddComponent(const Ref<Component>& component);
 
         // Removes component @SCRIPTABLE
-        void RemoveComponent(Component* component, bool release = true);
+        void RemoveComponent(const Ref<Component>& component);
 
         // Removes all components @SCRIPTABLE
         void RemoveAllComponents();
 
         // Returns component with type name @SCRIPTABLE
-        Component* GetComponent(const String& typeName);
+        Ref<Component> GetComponent(const String& typeName);
 
         // Returns component with type
-        Component* GetComponent(const Type* type);
+        Ref<Component> GetComponent(const Type* type);
 
         // Returns component by id
-        Component* GetComponent(SceneUID id);
+        Ref<Component> GetComponent(SceneUID id);
 
         // Returns component with type
         template<typename _type>
-        _type* GetComponent() const;
+        Ref<_type> GetComponent() const;
 
 #if IS_SCRIPTING_SUPPORTED
         // Returns component with type name @SCRIPTABLE
-        Component* GetComponent(const ScriptValue& typeValue);
+        Ref<Component> GetComponent(const ScriptValue& typeValue);
 #endif
 
         // Returns component with type in this and children
         template<typename _type>
-        _type* GetComponentInChildren() const;
+        Ref<_type> GetComponentInChildren() const;
 
         // Return all components by type
         template<typename _type>
-        Vector<_type*> GetComponents() const;
+        Vector<Ref<_type>> GetComponents() const;
 
         // Returns all components by type in this and children
         template<typename _type>
-        Vector<_type*> GetComponentsInChildren() const;
+        Vector<Ref<_type>> GetComponentsInChildren() const;
 
         // Returns all components @SCRIPTABLE
-        const Vector<Component*>& GetComponents() const;
+        const Vector<Ref<Component>>& GetComponents() const;
 
         // Beginning serialization callback
         void SerializeBasicOverride(DataValue& node) const;
@@ -309,7 +309,7 @@ namespace o2
         SERIALIZABLE(Actor);
 
     protected:
-        struct ICopyVisitor
+        struct ICopyVisitor: public RefCounterable
         {
             int depth = 0;
 
@@ -343,15 +343,15 @@ namespace o2
 
         Ref<SceneLayer> mSceneLayer; // Scene layer @SERIALIZABLE @EDITOR_IGNORE
 
-        ActorAssetRef mPrototype;               // Prototype asset
-        ActorRef      mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
+        Ref<ActorAsset> mPrototype;     // Prototype asset
+        ActorRef        mPrototypeLink; // Prototype link actor. Links to source actor from prototype
 
-        Actor* mParent = nullptr; // Parent actor 
-        Vector<Actor*> mChildren; // Children actors 
+        WeakRef<Actor>     mParent;   // Parent actor 
+        Vector<Ref<Actor>> mChildren; // Children actors 
 
-        Vector<Component*> mComponents; // Components vector 
+        Vector<Ref<Component>> mComponents; // Components vector 
 
-        Vector<DrawableComponent*> mDrawComponents; // Drawable components vector
+        Vector<Ref<DrawableComponent>> mDrawComponents; // Drawable components vector
 
         // Actor can be logically disabled, but actually stay enabled and be in transition to really disabled state
         // mResEnabled and mResEnabledInHierarchy are disabled by default to get enabled after initialization
@@ -366,9 +366,7 @@ namespace o2
         bool mIsAsset = false; // Is this actor cached asset
         UID  mAssetId;         // Source asset id
 
-        Vector<ActorRef*> mReferences; // References to this actor
-
-        mutable ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. Called when copying actor and calls on actor or component copying
+        mutable Ref<ICopyVisitor> mCopyVisitor; // Copy visitor. Called when copying actor and calls on actor or component copying
 
     protected:
         // Base actor constructor with transform
@@ -379,10 +377,10 @@ namespace o2
         Actor(ActorTransform* transform, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Actor constructor from prototype with transform
-        Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(ActorTransform* transform, const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Constructor with components with transform
-        Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Copy-constructor with transform
         Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode = ActorCreateMode::Default);
@@ -409,25 +407,22 @@ namespace o2
         virtual void DeserializeWithProto(const DataValue& node);
 
         // Returns current scene layer
-        SceneLayer* GetSceneDrawableSceneLayer() const override;
+        Ref<SceneLayer> GetSceneDrawableSceneLayer() const override;
 
         // Returns parent scene drawable
-        ISceneDrawable* GetParentDrawable() override;
+        Ref<ISceneDrawable> GetParentDrawable() override;
 
         // Returns the index in the parent's list of children, used to sort the rendering
         int GetIndexInParentDrawable() const override;
 
         // Returns dictionary of all children by names
-        Map<String, Actor*> GetAllChilds();
+        Map<String, Ref<Actor>> GetAllChilds();
 
         // Returns dictionary of all components by type names
-        Map<String, Component*> GetAllComponents();
+        Map<String, Ref<Component>> GetAllComponents();
 
         // Calls events before destroying: OnDisable, OnDestroy, OnRemoveFromScene
         void OnBeforeDestroy();
-
-        // Sets parent
-        void SetParentProp(Actor* actor);
 
         // Called when actor has added to scene 
         virtual void OnAddToScene();
@@ -460,22 +455,22 @@ namespace o2
         virtual void OnTransformUpdated();
 
         // Called when parent changed
-        virtual void OnParentChanged(Actor* oldParent);
+        virtual void OnParentChanged(const Ref<Actor>& oldParent);
 
         // Called when child changed
         virtual void OnChildrenChanged() OPTIONAL_OVERRIDE;
 
         // Called when child actor was added
-        virtual void OnChildAdded(Actor* child);
+        virtual void OnChildAdded(const Ref<Actor>& child);
 
         // Called when child actor was removed
-        virtual void OnChildRemoved(Actor* child);
+        virtual void OnChildRemoved(const Ref<Actor>& child);
 
         // Called when new component has added to actor
-        virtual void OnComponentAdded(Component* component);
+        virtual void OnComponentAdded(const Ref<Component>& component);
 
         // Called when component going to be removed from actor
-        virtual void OnComponentRemoving(Component* component);
+        virtual void OnComponentRemoving(const Ref<Component>& component);
 
 #if IS_SCRIPTING_SUPPORTED
     public:
@@ -489,12 +484,12 @@ namespace o2
         GETTER(bool, lockedInHierarchy, IsLockedInHierarchy); // Is actor locked in hierarchy getter
 
     public:
-        Function<void(bool)>   onEnableChanged;         // Enable changing event @EDITOR_IGNORE
-        Function<void()>       onChanged;               // Something in actor change event @EDITOR_IGNORE
-        Function<void(Actor*)> onParentChanged;         // Actor change parent event @EDITOR_IGNORE
-        Function<void()>       onChildHierarchyChanged; // Actor childs hierarchy change event @EDITOR_IGNORE
-        Function<void(bool)>   onLockChanged;           // Locking changing event @EDITOR_IGNORE
-        Function<void()>       onNameChanged;           // Name changing event @EDITOR_IGNORE
+        Function<void(bool)>       onEnableChanged;         // Enable changing event @EDITOR_IGNORE
+        Function<void()>           onChanged;               // Something in actor change event @EDITOR_IGNORE
+        Function<void(Ref<Actor>)> onParentChanged;         // Actor change parent event @EDITOR_IGNORE
+		Function<void()>           onChildHierarchyChanged; // Actor childs hierarchy change event @EDITOR_IGNORE
+		Function<void(bool)>       onLockChanged;           // Locking changing event @EDITOR_IGNORE
+		Function<void()>           onNameChanged;           // Name changing event @EDITOR_IGNORE
 
     public:
         struct MakePrototypeCloneVisitor: SourceToTargetMapCloneVisitor
@@ -529,31 +524,31 @@ namespace o2
         void RevertToPrototype();
 
         // Makes prototype asset from this actor and links this to new asset
-        ActorAssetRef MakePrototype();
+        Ref<ActorAsset> MakePrototype();
 
         // Returns is this linked to specified actor with depth links search
-        bool IsLinkedToActor(Actor* actor) const;
+        bool IsLinkedToActor(const Ref<Actor>& actor) const;
 
         // Searches actor in this, what linked to linkActor
-        Actor* FindLinkedActor(Actor* linkActor);
+        Ref<Actor> FindLinkedActor(const Ref<Actor>& linkActor);
 
         // Returns pointer to owner editable object
-         SceneEditableObject* GetEditableOwner() override;
+        Ref<SceneEditableObject> GetEditableOwner() override;
 
         // Returns object's link to prototype
-        const SceneEditableObject* GetEditableLink() const override;
+        const Ref<SceneEditableObject>& GetEditableLink() const override;
 
         // Returns list of object's children
-        Vector<SceneEditableObject*> GetEditableChildren() const override;
+        Vector<Ref<SceneEditableObject>> GetEditableChildren() const override;
 
         // Returns object's parent object. Return nullptr when it is a root scene object
-        SceneEditableObject* GetEditableParent() const override;
+        Ref<SceneEditableObject> GetEditableParent() const override;
 
         // Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
-        void SetEditableParent(SceneEditableObject* object, int idx = -1) override;
+        void SetEditableParent(const Ref<SceneEditableObject>& object, int idx = -1) override;
 
         // Adds child. idx is place in parent children. idx == -1 means last
-        void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
+        void AddEditableChild(const Ref<SceneEditableObject>& object, int idx = -1) override;
 
         // Returns is that type of object can be enabled and disabled
         bool IsSupportsDisabling() const override;
@@ -589,7 +584,7 @@ namespace o2
         void OnNameChanged() override;
 
         // Called when actor's parent was changed
-        void OnEditableParentChanged(SceneEditableObject* oldParent) override;
+        void OnEditableParentChanged(const Ref<SceneEditableObject>& oldParent) override;
 
     protected:
         bool mLocked = false;    // Is actor locked @SERIALIZABLE
@@ -600,10 +595,10 @@ namespace o2
         void CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds, bool withTransform);
 
         // Separates children actors to linear array, removes child and parent links
-        void SeparateActors(Vector<Actor*>& separatedActors);
+        void SeparateActors(Vector<Ref<Actor>>& separatedActors);
 
         // Processes reverting actor
-        void ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
+        void ProcessReverting(Actor* dest, const Actor* source, const Vector<Ref<Actor>>& separatedActors,
                               Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
                               Map<const Actor*, Actor*>& actorsMap,
                               Map<const Component*, Component*>& componentsMap,
@@ -626,7 +621,7 @@ namespace o2
                                         const Map<const Component*, Component*>& componentsMap);
 
         // Collects component field, except Component class fields
-        void GetComponentFields(Component* component, Vector<const FieldInfo*>& fields);
+        void GetComponentFields(const Ref<Component>& component, Vector<const FieldInfo*>& fields);
 
         // Collects differences between this and prototype
         virtual void GetDifferences(ActorDifferences& differences) const OPTIONAL_OVERRIDE;
@@ -638,7 +633,7 @@ namespace o2
         void BeginInstantiatePrototype() const override;
 
         // Not using prototype setter
-        void SetProtytypeDummy(ActorAssetRef asset);
+        void SetProtytypeDummy(Ref<ActorAsset> asset);
 
         // Updates locking
         void UpdateLocking();
@@ -665,7 +660,7 @@ namespace o2
 namespace o2
 {
     template<typename _type>
-    _type* Actor::FindChildByType(bool searchInChildren /*= true*/)
+    Ref<_type> Actor::FindChildByType(bool searchInChildren /*= true*/)
     {
         for (auto child : mChildren)
             if (child->GetType() == TypeOf(_type))
@@ -787,8 +782,8 @@ CLASS_FIELDS_META(o2::Actor)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mName);
     FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mSceneLayer);
     FIELD().PROTECTED().NAME(mPrototype);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParent);
+    FIELD().PROTECTED().NAME(mPrototypeLink);
+    FIELD().PROTECTED().NAME(mParent);
     FIELD().PROTECTED().NAME(mChildren);
     FIELD().PROTECTED().NAME(mComponents);
     FIELD().PROTECTED().NAME(mDrawComponents);
@@ -799,8 +794,7 @@ CLASS_FIELDS_META(o2::Actor)
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsOnScene);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsAsset);
     FIELD().PROTECTED().NAME(mAssetId);
-    FIELD().PROTECTED().NAME(mReferences);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCopyVisitor);
+    FIELD().PROTECTED().NAME(mCopyVisitor);
 #if  IS_EDITOR
     FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(locked);
     FIELD().PUBLIC().NAME(lockedInHierarchy);
@@ -818,16 +812,16 @@ END_META;
 CLASS_METHODS_META(o2::Actor)
 {
 
-    typedef Map<String, Actor*> _tmp1;
-    typedef Map<String, Component*> _tmp2;
+    typedef Map<String, Ref<Actor>> _tmp1;
+    typedef Map<String, Ref<Component>> _tmp2;
     typedef Map<const Actor*, Actor*>& _tmp3;
     typedef Map<const Component*, Component*>& _tmp4;
     typedef const Map<const Actor*, Actor*>& _tmp5;
     typedef const Map<const Component*, Component*>& _tmp6;
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAssetRef&, ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Component*>, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<ActorAsset>&, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Ref<Component>>, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Destroy);
@@ -846,9 +840,9 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, GenerateNewID, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(UID, GetAssetID);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsAsset);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetPrototype, ActorAssetRef);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorAssetRef, GetPrototype);
-    FUNCTION().PUBLIC().SIGNATURE(ActorAssetRef, GetPrototypeDirectly);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPrototype, Ref<ActorAsset>);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<ActorAsset>, GetPrototype);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<ActorAsset>, GetPrototypeDirectly);
     FUNCTION().PUBLIC().SIGNATURE(ActorRef, GetPrototypeLink);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayer, const String&);
@@ -862,30 +856,30 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEnabled);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsResEnabled);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEnabledInHierarchy);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetParent, Actor*, bool, int);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, GetParent);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetParent, const Ref<Actor>&, bool, int);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const WeakRef<Actor>&, GetParent);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetIndexInSiblings, int);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, AddChild, Actor*);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddChildren, const Vector<Actor*>&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, AddChild, Actor*, int);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, GetChild, const String&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, FindChild, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(Actor*, FindChild, const Function<bool(const Actor* child)>&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Actor*>&, GetChildren);
-    FUNCTION().PUBLIC().SIGNATURE(void, GetAllChildrenActors, Vector<Actor*>&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, Actor*, bool, bool);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllChildren, bool);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, FindActorById, SceneUID);
-    FUNCTION().PUBLIC().SIGNATURE(Component*, AddComponent, Component*);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveComponent, Component*, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, AddChild, const Ref<Actor>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddChildren, const Vector<Ref<Actor>>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, AddChild, const Ref<Actor>&, int);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, GetChild, const String&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, FindChild, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, FindChild, const Function<bool(const Ref<Actor>& child)>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Ref<Actor>>&, GetChildren);
+    FUNCTION().PUBLIC().SIGNATURE(void, GetAllChildrenActors, Vector<Ref<Actor>>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, Actor*, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllChildren);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, FindActorById, SceneUID);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Component>, AddComponent, const Ref<Component>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveComponent, const Ref<Component>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllComponents);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(Component*, GetComponent, const Type*);
-    FUNCTION().PUBLIC().SIGNATURE(Component*, GetComponent, SceneUID);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Component>, GetComponent, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Component>, GetComponent, const Type*);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Component>, GetComponent, SceneUID);
 #if  IS_SCRIPTING_SUPPORTED
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const ScriptValue&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Component>, GetComponent, const ScriptValue&);
 #endif
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Component*>&, GetComponents);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Ref<Component>>&, GetComponents);
     FUNCTION().PUBLIC().SIGNATURE(void, SerializeBasicOverride, DataValue&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeserializeBasicOverride, const DataValue&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(void, SetDefaultCreationMode, ActorCreateMode);
@@ -895,8 +889,8 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, bool, const String&, bool, SceneUID, UID);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, ActorCreateMode);
-    FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const ActorAssetRef&, ActorCreateMode);
-    FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Component*>, ActorCreateMode);
+    FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Ref<ActorAsset>&, ActorCreateMode);
+    FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Ref<Component>>, ActorCreateMode);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Actor&, ActorCreateMode);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckCopyVisitorFinalization);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled, bool);
@@ -905,13 +899,13 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, SerializeWithProto, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, DeserializeWithProto, const DataValue&);
-    FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
-    FUNCTION().PROTECTED().SIGNATURE(ISceneDrawable*, GetParentDrawable);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<SceneLayer>, GetSceneDrawableSceneLayer);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<ISceneDrawable>, GetParentDrawable);
     FUNCTION().PROTECTED().SIGNATURE(int, GetIndexInParentDrawable);
     FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetAllChilds);
     FUNCTION().PROTECTED().SIGNATURE(_tmp2, GetAllComponents);
     FUNCTION().PROTECTED().SIGNATURE(void, OnBeforeDestroy);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetParentProp, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetParentProp, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
@@ -922,12 +916,12 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, const Ref<Component>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, const Ref<Component>&);
 #if  IS_SCRIPTING_SUPPORTED
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorTransform*, GetTransform);
 #endif
@@ -940,15 +934,15 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE(void, BreakPrototypeLink);
     FUNCTION().PUBLIC().SIGNATURE(void, ApplyChangesToPrototype);
     FUNCTION().PUBLIC().SIGNATURE(void, RevertToPrototype);
-    FUNCTION().PUBLIC().SIGNATURE(ActorAssetRef, MakePrototype);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToActor, Actor*);
-    FUNCTION().PUBLIC().SIGNATURE(Actor*, FindLinkedActor, Actor*);
-    FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
-    FUNCTION().PUBLIC().SIGNATURE(const SceneEditableObject*, GetEditableLink);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
-    FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<ActorAsset>, MakePrototype);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToActor, const Ref<Actor>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, FindLinkedActor, const Ref<Actor>);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableOwner);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<SceneEditableObject>&, GetEditableLink);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableParent);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, const Ref<SceneEditableObject>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, const Ref<SceneEditableObject>&, int);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDisabling);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsLocking);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsTransforming);
@@ -960,18 +954,18 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE(void, OnChanged);
     FUNCTION().PUBLIC().SIGNATURE(void, OnLockChanged);
     FUNCTION().PUBLIC().SIGNATURE(void, OnNameChanged);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnEditableParentChanged, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnEditableParentChanged, const Ref<SceneEditableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, SeparateActors, Vector<Actor*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SeparateActors, Vector<Ref<Actor>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp3, _tmp4, Vector<ISerializable*>&);
     FUNCTION().PROTECTED().SIGNATURE(void, CopyFields, Vector<const FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
     FUNCTION().PROTECTED().SIGNATURE(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
     FUNCTION().PROTECTED().SIGNATURE(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp5, _tmp6);
-    FUNCTION().PROTECTED().SIGNATURE(void, GetComponentFields, Component*, Vector<const FieldInfo*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, GetComponentFields, const Ref<Component>&, Vector<const FieldInfo*>&);
     FUNCTION().PROTECTED().SIGNATURE(void, GetDifferences, ActorDifferences&);
     FUNCTION().PROTECTED().SIGNATURE(void, BeginMakePrototype);
     FUNCTION().PROTECTED().SIGNATURE(void, BeginInstantiatePrototype);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetProtytypeDummy, ActorAssetRef);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProtytypeDummy, Ref<ActorAsset>);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLocking);
 #endif
 }

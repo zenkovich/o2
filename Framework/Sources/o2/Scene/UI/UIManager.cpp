@@ -368,7 +368,7 @@ namespace o2
         mTopWidgets.Add(widget);
     }
 
-    const Vector<ActorAssetRef>& UIManager::GetWidgetStyles() const
+    const Vector<Ref<ActorAsset>>& UIManager::GetWidgetStyles() const
     {
         return mStyleSamples;
     }

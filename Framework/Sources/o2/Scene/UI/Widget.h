@@ -58,7 +58,7 @@ namespace o2
         Widget(ActorCreateMode mode = ActorCreateMode::Default);
 
         // Widget constructor from prototype
-        Widget(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+        Widget(const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Widget constructor with components
         Widget(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::Default);
@@ -768,7 +768,7 @@ CLASS_METHODS_META(o2::Widget)
     typedef Map<String, WidgetState*> _tmp4;
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAssetRef&, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<ActorAsset>&, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Component*>, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Widget&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);

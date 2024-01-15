@@ -20,7 +20,7 @@ namespace o2
             UIManager::RegisterFocusableWidget(this);
     }
 
-    Widget::Widget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+    Widget::Widget(const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
     {
         if (IsFocusable())

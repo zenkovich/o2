@@ -52,8 +52,7 @@ namespace o2
         SERIALIZABLE(ActorAsset);
 
     protected:
-        Actor* mActor = nullptr;  // Asset data 
-        bool   mOwnActor = false; // Is asset owns this actor
+        Ref<Actor> mActor; // Asset data 
 
     protected:
         // Itis called when UID has changed; updates actor asset id
@@ -67,8 +66,6 @@ namespace o2
 
         friend class Assets;
     };
-
-    typedef Ref<ActorAsset> ActorAssetRef;
 }
 // --- META ---
 
@@ -79,8 +76,7 @@ CLASS_BASES_META(o2::ActorAsset)
 END_META;
 CLASS_FIELDS_META(o2::ActorAsset)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActor);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnActor);
+    FIELD().PROTECTED().NAME(mActor);
 }
 END_META;
 CLASS_METHODS_META(o2::ActorAsset)

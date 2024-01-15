@@ -63,7 +63,7 @@ namespace o2
         WString mWString;                                    // @SERIALIZABLE
         bool mBool;                                            // @SERIALIZABLE
         ImageAssetRef mImageAsset;                            // @SERIALIZABLE
-        ActorAssetRef mActorAsset;                            // @SERIALIZABLE
+        Ref<ActorAsset> mActorAsset;                            // @SERIALIZABLE
         DataAssetRef mDataAsset;                            // @SERIALIZABLE
         AnimationAssetRef mAnimationAsset;                  // @SERIALIZABLE
         Sprite* mSprite = mnew Sprite();                    // @SERIALIZABLE @DONT_DELETE

@@ -2,6 +2,7 @@
 
 #include "o2/Scene/ISceneDrawable.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
 
 namespace o2
@@ -12,7 +13,7 @@ namespace o2
     // --------------------------------------------------------------------------------
     // Scene layer. It contains Actors and their Drawable parts, managing sorting order
     // --------------------------------------------------------------------------------
-    class SceneLayer: public ISerializable
+    class SceneLayer: public ISerializable, public RefCounterable
     {
     public:
 #if IS_EDITOR
@@ -37,7 +38,7 @@ namespace o2
         const String& GetName() const;
 
         // Returns all drawable objects of actors in layer
-        const Vector<ISceneDrawable*>& GetDrawables() const;
+        const Vector<WeakRef<ISceneDrawable>>& GetDrawables() const;
 
         // Returns root drawable objects of actors in layer
         RootDrawablesContainer& GetRootDrawables();
@@ -47,7 +48,7 @@ namespace o2
     protected:
         String mName; // Name of layer @SERIALIZABLE
 
-        Vector<ISceneDrawable*> mDrawables; // Drawable objects in layer=
+        Vector<WeakRef<ISceneDrawable>> mDrawables; // Drawable objects in layer
 
         RootDrawablesContainer mRootDrawables; // Root drawables with inherited depth. Draws at 0 priority
 
@@ -59,7 +60,7 @@ namespace o2
         void UnregisterDrawable(ISceneDrawable* drawable);
 
         // Sets drawable order as last of all objects with same depth
-        void SetLastByDepth(ISceneDrawable* drawable);
+        void SetLastByDepth(const Ref<ISceneDrawable>& drawable);
 
         friend class Actor;
         friend class CameraActor;
@@ -74,6 +75,7 @@ namespace o2
 CLASS_BASES_META(o2::SceneLayer)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::SceneLayer)
@@ -92,11 +94,11 @@ CLASS_METHODS_META(o2::SceneLayer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<ISceneDrawable*>&, GetDrawables);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<ISceneDrawable>>&, GetDrawables);
     FUNCTION().PUBLIC().SIGNATURE(RootDrawablesContainer&, GetRootDrawables);
     FUNCTION().PROTECTED().SIGNATURE(void, RegisterDrawable, ISceneDrawable*);
     FUNCTION().PROTECTED().SIGNATURE(void, UnregisterDrawable, ISceneDrawable*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetLastByDepth, ISceneDrawable*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetLastByDepth, const Ref<ISceneDrawable>&);
 }
 END_META;
 // --- END META ---
