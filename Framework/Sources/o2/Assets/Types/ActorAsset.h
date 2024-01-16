@@ -32,10 +32,10 @@ namespace o2
         ActorRef Instantiate() const;
 
         // Returns actor
-        Actor* GetActor() const;
+        const Ref<Actor>& GetActor() const;
 
         // Sets actor
-        void SetActor(Actor* actor, bool own = true);
+        void SetActor(const Ref<Actor>& actor);
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();

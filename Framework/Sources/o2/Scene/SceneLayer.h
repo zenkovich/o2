@@ -41,7 +41,7 @@ namespace o2
         const Vector<WeakRef<ISceneDrawable>>& GetDrawables() const;
 
         // Returns root drawable objects of actors in layer
-        RootDrawablesContainer& GetRootDrawables();
+        const Ref<RootDrawablesContainer>& GetRootDrawables();
 
         SERIALIZABLE(SceneLayer);
 
@@ -50,7 +50,7 @@ namespace o2
 
         Vector<WeakRef<ISceneDrawable>> mDrawables; // Drawable objects in layer
 
-        RootDrawablesContainer mRootDrawables; // Root drawables with inherited depth. Draws at 0 priority
+        Ref<RootDrawablesContainer> mRootDrawables; // Root drawables with inherited depth. Draws at 0 priority
 
     protected:
         // Registers drawable object

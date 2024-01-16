@@ -9,7 +9,8 @@ namespace o2
 {
     SceneLayer::SceneLayer()
     {
-        RegisterDrawable(&mRootDrawables);
+        mRootDrawables = mmake<RootDrawablesContainer>();
+        RegisterDrawable(mRootDrawables.Get());
     }
 
     void SceneLayer::SetName(const String& name)
@@ -25,12 +26,12 @@ namespace o2
         return mName;
     }
 
-    const Vector<ISceneDrawable*>& SceneLayer::GetDrawables() const
+    const Vector<WeakRef<ISceneDrawable>>& SceneLayer::GetDrawables() const
     {
         return mDrawables;
     }
 
-    SceneLayer::RootDrawablesContainer& SceneLayer::GetRootDrawables()
+    const Ref<SceneLayer::RootDrawablesContainer>& SceneLayer::GetRootDrawables()
     {
         return mRootDrawables;
     }
@@ -47,7 +48,7 @@ namespace o2
         {
             int center = (rangeMin + rangeMax) >> 1;
 
-            float centerValue = mDrawables[center]->mDrawingDepth;
+            float centerValue = mDrawables[center].Lock()->mDrawingDepth;
 
             if (targetDepth < centerValue)
                 rangeMax = center;
@@ -64,25 +65,25 @@ namespace o2
         if (!skipLinearSearch)
         {
             for (position = rangeMin; position < rangeMax; position++)
-                if (mDrawables[position]->mDrawingDepth > targetDepth)
+                if (mDrawables[position].Lock()->mDrawingDepth > targetDepth)
                     break;
         }
 
-        mDrawables.Insert(drawable, position);
+        mDrawables.Insert(Ref(drawable), position);
     }
 
     void SceneLayer::UnregisterDrawable(ISceneDrawable* drawable)
     {
-        mDrawables.Remove(drawable);
+        mDrawables.Remove(Ref(drawable));
     }
 
-    void SceneLayer::SetLastByDepth(ISceneDrawable* drawable)
+    void SceneLayer::SetLastByDepth(const Ref<ISceneDrawable>& drawable)
     {
         mDrawables.Remove(drawable);
 
         for (int position = 0; position < mDrawables.Count(); position++)
         {
-            if (mDrawables[position]->mDrawingDepth > drawable->mDrawingDepth)
+            if (mDrawables[position].Lock()->mDrawingDepth > drawable->mDrawingDepth)
             {
                 mDrawables.Insert(drawable, position);
                 return;

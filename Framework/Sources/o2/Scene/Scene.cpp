@@ -26,7 +26,7 @@ namespace o2
     Scene::Scene()
     {
         mDefaultLayer = AddLayer("Default");
-        auto camera = mnew CameraActor();
+        auto camera = mmake<CameraActor>();
         camera->name = "Camera";
 
         mLog = mmake<LogStream>("Scene");
@@ -37,9 +37,6 @@ namespace o2
     {
         Clear();
         ClearCache();
-
-        delete mDefaultLayer;
-        //delete mLog;
     }
 
     const LogStream& Scene::GetLogStream() const
@@ -47,7 +44,7 @@ namespace o2
         return *mLog;
     }
 
-    const Vector<CameraActor*>& Scene::GetCameras() const
+    const Vector<WeakRef<CameraActor>>& Scene::GetCameras() const
     {
         return mCameras;
     }
@@ -77,7 +74,7 @@ namespace o2
     {
         struct helper
         {
-            static void RecursiveCall(Actor* actor, const Function<void(Actor*)>& func)
+            static void RecursiveCall(const Ref<Actor>& actor, const Function<void(const Ref<Actor>&)>& func)
             {
                 if (actor->mState == Actor::State::Initializing)
                 {
@@ -97,14 +94,14 @@ namespace o2
         for (auto actor : addedActors)
         {
             if (actor->IsOnScene())
-                helper::RecursiveCall(actor, [&](Actor* actor) { AddActorToScene(actor); });
+                helper::RecursiveCall(actor, [&](const Ref<Actor>& actor) { AddActorToScene(actor.Get()); });
         }
 
         for (auto actor : addedActors)
-            helper::RecursiveCall(actor, [&](Actor* actor) { actor->UpdateResEnabledInHierarchy(); });
+            helper::RecursiveCall(actor, [&](const Ref<Actor>& actor) { actor->UpdateResEnabledInHierarchy(); });
 
         for (auto actor : addedActors)
-            helper::RecursiveCall(actor, [&](Actor* actor) { actor->OnInitialized(); });
+            helper::RecursiveCall(actor, [&](const Ref<Actor>& actor) { actor->OnInitialized(); });
     }
 
     void Scene::UpdateTransforms()
@@ -134,30 +131,21 @@ namespace o2
     void Scene::UpdateDestroyingEntities()
     {
         auto destroyActors = mDestroyActors;
-        auto destroyComponents = mDestroyComponents;
 
         mDestroyActors.Clear();
         mDestroyComponents.Clear();
 
         for (auto actor : destroyActors)
-        {
             actor->OnBeforeDestroy();
-            delete actor;
-        }
 
-        for (auto comp : destroyComponents)
-            delete comp;
+        destroyActors.Clear();
 
 #if IS_EDITOR
-        auto destroyingObjects = mDestroyingObjects;
         mDestroyingObjects.Clear();
-
-        for (auto object : destroyingObjects)
-            delete object;
 #endif
     }
 
-    void Scene::DestroyActor(Actor* actor)
+    void Scene::DestroyActor(const Ref<Actor>& actor)
     {
         if (actor->mState != Actor::State::Destroying)
         {
@@ -170,7 +158,7 @@ namespace o2
         }
     }
 
-    void Scene::DestroyComponent(Component* component)
+    void Scene::DestroyComponent(const Ref<Component>& component)
     {
         mDestroyComponents.Add(component);
     }
@@ -194,7 +182,7 @@ namespace o2
         if (!IsSingletonInitialzed())
             return;
 
-        Instance().mAddedActors.Add(actor);
+        Instance().mAddedActors.Add(Ref(actor));
     }
 
     void Scene::OnActorDestroy(Actor* actor)
@@ -205,11 +193,12 @@ namespace o2
         if (actor->IsOnScene())
             Instance().RemoveActorFromScene(actor, false);
 
-        Instance().mAddedActors.Remove(actor);
-        Instance().mStartActors.Remove(actor);
+        auto actorRef = Ref(actor);
+        Instance().mAddedActors.Remove(actorRef);
+        Instance().mStartActors.Remove(actorRef);
 
 #if IS_EDITOR
-        Instance().mChangedObjects.Remove(actor);
+        Instance().mChangedObjects.Remove(actorRef);
 #endif
     }
 
@@ -218,7 +207,7 @@ namespace o2
         if (!IsSingletonInitialzed())
             return;
 
-        Instance().mAddedActors.Remove(actor);
+        Instance().mAddedActors.Remove(Ref(actor));
     }
 
     void Scene::OnAddActorToScene(Actor* actor)
@@ -242,7 +231,7 @@ namespace o2
             return
 
             Instance().mActorsMap.Remove(prevId);
-        Instance().mActorsMap[actor->mId] = actor;
+        Instance().mActorsMap[actor->mId] = Ref(actor);
     }
 
     void Scene::UpdateActors(float dt)
@@ -285,10 +274,13 @@ namespace o2
         {
             PROFILE_SAMPLE("Draw cameras");
 
-            for (auto camera : mCameras)
+            for (auto& camera : mCameras)
             {
-                camera->SetupAndDraw();
-                camera->listenersLayer.OnDrawn(Camera().GetBasis());
+                if (auto cameraRef = camera.Lock()) 
+                {
+                    cameraRef->SetupAndDraw();
+                    cameraRef->listenersLayer.OnDrawn(Camera().GetBasis());
+                }
             }
         }
 
@@ -315,7 +307,7 @@ namespace o2
                     while (parent)
                     {
                         path = parent->GetName() + "/" + path;
-                        parent = parent->GetParent();
+                        parent = parent->GetParent().Lock().Get();
                     }
 
                     debugInfo += " -- " + path + " - " + actor->GetType().GetName() + "\n";
@@ -345,52 +337,56 @@ namespace o2
                 }
 
                 for (auto child : actor->mChildren)
-                    Process(debugInfo, child);
+                    Process(debugInfo, child.Get());
             }
         };
 
         String debugInfo;
         for (auto actor : mAllActors)
-            helper::Process(debugInfo, actor);
+            helper::Process(debugInfo, actor.Lock().Get());
 
         o2Debug.DrawText(((Vec2F)o2Render.GetResolution().InvertedX()) * 0.5f, debugInfo);
     }
 
     void Scene::AddActorToScene(Actor* actor)
     {
-        if (!actor->mParent)
-            mRootActors.Add(actor);
+        auto actorRef = Ref(actor);
 
-        mAllActors.Add(actor);
-        mActorsMap[actor->mId] = actor;
+        if (!actor->mParent)
+            mRootActors.Add(actorRef);
+
+        mAllActors.Add(actorRef);
+        mActorsMap[actor->mId] = actorRef;
 
         actor->OnAddToScene();
 
 #if IS_EDITOR
-        mChangedObjects.Add(actor);
-        AddEditableObjectToScene(actor);
-        onAddedToScene(actor);
+        mChangedObjects.Add(actorRef);
+        AddEditableObjectToScene(actorRef);
+        onAddedToScene(actorRef);
 #endif
     }
 
     void Scene::RemoveActorFromScene(Actor* actor, bool keepEditorObjects /*= false*/)
-    {
-        if (!actor->mParent)
-            mRootActors.Remove(actor);
+	{
+		auto actorRef = Ref(actor);
 
-        mAllActors.Remove(actor);
+        if (!actor->mParent)
+            mRootActors.Remove(actorRef);
+
+        mAllActors.Remove(actorRef);
         mActorsMap.Remove(actor->mId);
 
-        mStartActors.Remove(actor);
-        mAddedActors.Remove(actor);
+        mStartActors.Remove(actorRef);
+        mAddedActors.Remove(actorRef);
 
         actor->OnRemoveFromScene();
 
 #if IS_EDITOR
         if (!keepEditorObjects)
-            RemoveEditableObjectFromScene(actor);
+            RemoveEditableObjectFromScene(actorRef);
 
-        OnObjectRemoveFromScene(actor);
+        OnObjectRemoveFromScene(actorRef);
 #endif
     }
 
@@ -407,7 +403,7 @@ namespace o2
     void Scene::OnLayerRenamed(SceneLayer* layer, const String& oldName)
     {
         mLayersMap.Remove(oldName);
-        mLayersMap[layer->GetName()] = layer;
+        mLayersMap[layer->GetName()] = Ref(layer);
 
 #if IS_EDITOR
         onLayersListChanged();
@@ -416,12 +412,12 @@ namespace o2
 
     void Scene::OnCameraAddedOnScene(CameraActor* camera)
     {
-        mCameras.Add(camera);
+        mCameras.Add(Ref(camera));
     }
 
     void Scene::OnCameraRemovedScene(CameraActor* camera)
     {
-        mCameras.Remove(camera);
+        mCameras.Remove(Ref(camera));
     }
 
     bool Scene::HasLayer(const String& name) const
@@ -429,27 +425,27 @@ namespace o2
         return mLayersMap.ContainsKey(name);
     }
 
-    SceneLayer* Scene::GetLayer(const String& name)
+    Ref<SceneLayer> Scene::GetLayer(const String& name)
     {
-        SceneLayer* layer = nullptr;
+        WeakRef<SceneLayer> layer;
         if (mLayersMap.TryGetValue(name, layer))
-            return layer;
+            return layer.Lock();
 
         return AddLayer(name);
     }
 
-    SceneLayer* Scene::GetDefaultLayer() const
+    const Ref<SceneLayer>& Scene::GetDefaultLayer() const
     {
         return mDefaultLayer;
     }
 
-    SceneLayer* Scene::AddLayer(const String& name)
+    Ref<SceneLayer> Scene::AddLayer(const String& name)
     {
-        SceneLayer* layer = nullptr;
+        WeakRef<SceneLayer> layer;
         if (mLayersMap.TryGetValue(name, layer))
-            return layer;
+            return layer.Lock();
 
-        SceneLayer* newLayer = mnew SceneLayer();
+        auto newLayer = mmake<SceneLayer>();
         newLayer->mName = name;
         mLayers.Add(newLayer);
         mLayersMap[name] = newLayer;
@@ -461,7 +457,7 @@ namespace o2
         return newLayer;
     }
 
-    void Scene::RemoveLayer(SceneLayer* layer)
+    void Scene::RemoveLayer(const Ref<SceneLayer>& layer)
     {
         if (layer == mDefaultLayer)
             return;
@@ -472,8 +468,6 @@ namespace o2
 #if IS_EDITOR
         onLayersListChanged();
 #endif
-
-        delete layer;
     }
 
     void Scene::RemoveLayer(const String& name)
@@ -481,18 +475,18 @@ namespace o2
         RemoveLayer(GetLayer(name));
     }
 
-    void Scene::SetLayerOrder(SceneLayer* layer, int idx)
+    void Scene::SetLayerOrder(const Ref<SceneLayer>& layer, int idx)
     {
         mLayers.Remove(layer);
         mLayers.Insert(layer, idx);
     }
 
-    Tag* Scene::GetTag(const String& name) const
+    Ref<Tag> Scene::GetTag(const String& name) const
     {
         return mTags.FindOrDefault([&](auto x) { return x->GetName() == name; });
     }
 
-    Tag* Scene::AddTag(const String& name)
+    Ref<Tag> Scene::AddTag(const String& name)
     {
         if (GetTag(name))
         {
@@ -500,20 +494,16 @@ namespace o2
             return nullptr;
         }
 
-        Tag* newTag = mnew Tag();
+        auto newTag = mmake<Tag>();
         newTag->SetName(name);
         mTags.Add(newTag);
 
         return newTag;
     }
 
-    void Scene::RemoveTag(Tag* tag)
+    void Scene::RemoveTag(const Ref<Tag>& tag)
     {
-        if (!tag)
-            return;
-
         mTags.Remove(tag);
-        delete tag;
     }
 
     void Scene::RemoveTag(const String& name)
@@ -521,52 +511,52 @@ namespace o2
         RemoveTag(GetTag(name));
     }
 
-    const Vector<SceneLayer*>& Scene::GetLayers()const
+    const Vector<Ref<SceneLayer>>& Scene::GetLayers()const
     {
         return mLayers;
     }
 
     Vector<String> Scene::GetLayersNames() const
     {
-        return mLayers.Convert<String>([](SceneLayer* x) { return x->GetName(); });
+        return mLayers.Convert<String>([](auto& x) { return x->GetName(); });
     }
 
-    const Map<String, SceneLayer*>& Scene::GetLayersMap() const
+    const Map<String, WeakRef<SceneLayer>>& Scene::GetLayersMap() const
     {
         return mLayersMap;
     }
 
-    const Vector<Tag*>& Scene::GetTags() const
+    const Vector<Ref<Tag>>& Scene::GetTags() const
     {
         return mTags;
     }
 
-    const Vector<Actor*>& Scene::GetRootActors() const
+    const Vector<Ref<Actor>>& Scene::GetRootActors() const
     {
         return mRootActors;
     }
 
-    Vector<Actor*>& Scene::GetRootActors()
+    Vector<Ref<Actor>>& Scene::GetRootActors()
     {
         return mRootActors;
     }
 
-    const Vector<Actor*>& Scene::GetAllActors() const
+    const Vector<WeakRef<Actor>>& Scene::GetAllActors() const
     {
         return mAllActors;
     }
 
-    Vector<Actor*>& Scene::GetAllActors()
+    Vector<WeakRef<Actor>>& Scene::GetAllActors()
     {
         return mAllActors;
     }
 
-    Actor* Scene::GetActorByID(SceneUID id) const
+    Ref<Actor> Scene::GetActorByID(SceneUID id) const
     {
-        return mActorsMap.FindKey(id).second;
+        return mActorsMap.FindKey(id).second.Lock();
     }
 
-    Actor* Scene::GetAssetActorByID(const UID& id)
+    Ref<Actor> Scene::GetAssetActorByID(const UID& id)
     {
         auto cached = mAssetsCache.FindOrDefault([=](const Ref<ActorAsset>& x) { return x->GetUID() == id; });
 

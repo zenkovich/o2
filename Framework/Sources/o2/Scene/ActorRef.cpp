@@ -12,8 +12,6 @@ namespace o2
     ActorRef::ActorRef(Actor* actor) :
         mActor(actor)
     {
-        if (mActor)
-            mActor->mReferences.Add(this);
     }
 
     ActorRef::ActorRef(const ActorRef& other) :
@@ -30,9 +28,6 @@ namespace o2
 
     ActorRef::~ActorRef()
     {
-        if (mActor)
-            mActor->mReferences.Remove(this);
-
         if (mRequiredResolveData)
             delete mRequiredResolveData;
 
@@ -95,7 +90,7 @@ namespace o2
     void ActorRef::Destroy()
     {
         if (mActor)
-            o2Scene.DestroyActor(mActor);
+            o2Scene.DestroyActor(Ref(mActor));
 
         *this = nullptr;
     }
@@ -133,9 +128,6 @@ namespace o2
 
     void ActorRef::CopyWithoutRemap(const ActorRef& other)
     {
-        if (mActor)
-            mActor->mReferences.Remove(this);
-
         mActor = other.mActor;
         mWasDeleted = other.mWasDeleted;
 
@@ -146,9 +138,6 @@ namespace o2
         }
 
         UpdateSpecActor();
-
-        if (mActor)
-            mActor->mReferences.Add(this);
     }
 
     void ActorRef::OnSerialize(DataValue& node) const

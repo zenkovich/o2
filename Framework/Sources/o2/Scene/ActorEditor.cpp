@@ -314,27 +314,27 @@ namespace o2
 
     Vector<Ref<SceneEditableObject>> Actor::GetEditableChildren() const
     {
-        return mChildren.DynamicCast<SceneEditableObject*>();
+        return DynamicCastVector<SceneEditableObject>(mChildren);
     }
 
-    void Actor::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
+    void Actor::SetEditableParent(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
     {
-        SetParent(dynamic_cast<Actor*>(object), false, idx);
+        SetParent(DynamicCast<Actor>(object), false, idx);
     }
 
-    SceneEditableObject* Actor::GetEditableOwner()
+    Ref<SceneEditableObject> Actor::GetEditableOwner()
     {
-        return this;
+        return Ref(this);
     }
 
-    const SceneEditableObject* Actor::GetEditableLink() const
+    Ref<SceneEditableObject> Actor::GetEditableLink() const
     {
-        return mPrototypeLink.Get();
+        return Ref(const_cast<Actor*>(mPrototypeLink.Get()));
     }
 
-    SceneEditableObject* Actor::GetEditableParent() const
+    Ref<SceneEditableObject> Actor::GetEditableParent() const
     {
-        return mParent;
+        return mParent.Lock();
     }
 
     void Actor::OnChanged()
@@ -342,7 +342,7 @@ namespace o2
         onChanged();
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
-            o2Scene.OnObjectChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
     }
 
     void Actor::OnLockChanged()
@@ -352,8 +352,8 @@ namespace o2
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
         {
-            o2Scene.OnObjectChanged(this);
-            o2Scene.onLockChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
+            o2Scene.onLockChanged(Ref(this));
         }
     }
 
@@ -364,14 +364,14 @@ namespace o2
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
         {
-            o2Scene.OnObjectChanged(this);
-            o2Scene.onNameChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
+            o2Scene.onNameChanged(Ref(this));
         }
     }
 
-    void Actor::OnEditableParentChanged(SceneEditableObject* oldParent)
+    void Actor::OnEditableParentChanged(const Ref<SceneEditableObject>& oldParent)
     {
-        OnParentChanged(dynamic_cast<Actor*>(oldParent));
+        OnParentChanged(DynamicCast<Actor>(oldParent));
     }
 
     void Actor::OnChildrenChanged()
@@ -384,12 +384,12 @@ namespace o2
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
         {
-            o2Scene.OnObjectChanged(this);
-            o2Scene.onChildrenHierarchyChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
+            o2Scene.onChildrenHierarchyChanged(Ref(this));
         }
     }
 
-    void Actor::OnParentChanged(Actor* oldParent)
+    void Actor::OnParentChanged(const Ref<Actor>& oldParent)
     {
         ISceneDrawable::OnDrawbleParentChanged();
 
@@ -401,16 +401,16 @@ namespace o2
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
         {
-            o2Scene.OnObjectChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
             o2Scene.OnObjectChanged(oldParent);
-            o2Scene.OnObjectChanged(mParent);
+            o2Scene.OnObjectChanged(mParent.Lock());
 
             o2Scene.onChildrenHierarchyChanged(oldParent);
-            o2Scene.onChildrenHierarchyChanged(mParent);
+            o2Scene.onChildrenHierarchyChanged(mParent.Lock());
         }
     }
 
-    void Actor::ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
+    void Actor::ProcessReverting(Actor* dest, const Actor* source, const Vector<Ref<Actor>>& separatedActors,
                                  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
                                  Map<const Actor*, Actor*>& actorsMap,
                                  Map<const Component*, Component*>& componentsMap,
@@ -423,18 +423,18 @@ namespace o2
 
         actorsMap.Add(source, dest);
 
-        for (auto child : source->mChildren)
+        for (auto& child : source->mChildren)
         {
-            Actor* newChild = nullptr;
+            Ref<Actor> newChild;
 
-            newChild = separatedActors.FindOrDefault([&](Actor* x) { return x->GetPrototypeLink() == child; });
+            newChild = separatedActors.FindOrDefault([&](const Ref<Actor>& x) { return x->GetPrototypeLink() == child; });
 
             if (!newChild)
-                newChild = mnew Actor(dest->IsOnScene() ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
+                newChild = mmake<Actor>(dest->IsOnScene() ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
 
             dest->AddChild(newChild);
 
-            ProcessReverting(newChild, child, separatedActors, actorsPointers, componentsPointers, actorsMap,
+            ProcessReverting(newChild.Get(), child.Get(), separatedActors, actorsPointers, componentsPointers, actorsMap,
                              componentsMap, serializableObjects);
         }
 
@@ -443,30 +443,29 @@ namespace o2
             if (!(*it)->mPrototypeLink)
             {
                 (*it)->mOwner = nullptr;
-                delete *it;
                 it = dest->mComponents.Remove(it);
             }
             else ++it;
         }
 
-        for (auto component : source->mComponents)
+        for (auto& component : source->mComponents)
         {
-            Component* matchingComponent = dest->mComponents.FindOrDefault([&](Component* x) { return x->GetPrototypeLink() == component; });
+            auto matchingComponent = dest->mComponents.FindOrDefault([&](const Ref<Component>& x) { return x->GetPrototypeLink() == component; });
             if (matchingComponent)
             {
                 Vector<const FieldInfo*> fields;
                 GetComponentFields(matchingComponent, fields);
 
-                CopyFields(fields, component, matchingComponent, actorsPointers, componentsPointers,
+                CopyFields(fields, const_cast<Component*>(component.Get()), matchingComponent.Get(), actorsPointers, componentsPointers,
                            serializableObjects);
 
                 continue;
             }
 
-            Component* newComponent = dest->AddComponent(CloneAs<Component>());
-            componentsMap.Add(component, newComponent);
+            auto newComponent = dest->AddComponent(CloneAsRef<Component>());
+            componentsMap.Add(component.Get(), newComponent.Get());
 
-            CollectFixingFields(newComponent, componentsPointers, actorsPointers);
+            CollectFixingFields(newComponent.Get(), componentsPointers, actorsPointers);
         }
     }
 
@@ -553,7 +552,7 @@ namespace o2
         }
     }
 
-    void Actor::GetComponentFields(Component* component, Vector<const FieldInfo*>& fields)
+    void Actor::GetComponentFields(const Ref<Component>& component, Vector<const FieldInfo*>& fields)
     {
         struct helper
         {
@@ -575,13 +574,17 @@ namespace o2
     void Actor::CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds,
                                        bool withTransform)
     {
-        if (changed->mParent && changed->mParent->mPrototypeLink)
+        if (changed->mParent && changed->mParent.Lock()->mPrototypeLink)
         {
-            if (!changed->mParent->IsLinkedToActor(source->mParent) && dest->mParent &&
-                dest->mParent->IsLinkedToActor(source->mParent))
+            auto changedParent = changed->mParent.Lock();
+            auto destParent = dest->mParent.Lock();
+            auto sourceParent = source->mParent.Lock();
+
+            if (!changedParent->IsLinkedToActor(sourceParent) && dest->mParent &&
+                destParent->IsLinkedToActor(sourceParent))
             {
-                Actor* newParent = allDestChilds.FindOrDefault([&](Actor* x) { return x->IsLinkedToActor(changed->mParent->mPrototypeLink.Get()); });
-                dest->SetParent(newParent);
+                Actor* newParent = allDestChilds.FindOrDefault([&](Actor* x) { return x->IsLinkedToActor(Ref(changedParent->mPrototypeLink.Get())); });
+                dest->SetParent(Ref(newParent));
             }
         }
 

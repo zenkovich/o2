@@ -46,7 +46,7 @@ namespace o2
         Ref<SceneLayer> GetLayer(const String& name);
 
         // Returns default layer
-        Ref<SceneLayer> GetDefaultLayer() const;
+        const Ref<SceneLayer>& GetDefaultLayer() const;
 
         // Adds layer with name
         Ref<SceneLayer> AddLayer(const String& name);
@@ -67,7 +67,7 @@ namespace o2
         Vector<String> GetLayersNames() const;
 
         // Returns layers map by name
-        const Map<String, Ref<SceneLayer>>& GetLayersMap() const;
+        const Map<String, WeakRef<SceneLayer>>& GetLayersMap() const;
 
         // Returns tag with name
         Ref<Tag> GetTag(const String& name) const;

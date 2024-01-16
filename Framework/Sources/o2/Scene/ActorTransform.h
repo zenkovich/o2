@@ -442,7 +442,7 @@ namespace o2
         virtual void CopyFrom(const ActorTransform& other);
 
         // Sets owner and updates transform
-        virtual void SetOwner(Actor* actor);
+        virtual void SetOwner(const Ref<Actor>& actor);
 
         // Returns parent rectange, or zero when no parent
         virtual RectF GetParentRectangle() const;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "Containers/Vector.h"
 
 namespace o2
 {
@@ -527,12 +528,19 @@ namespace o2
         return MakePlace<_type>(nullptr, 0, std::forward<_args>(args)...);
 	}
 
-    // Dynamic cast from one reference type to another
-    template<typename _to_type, typename _from_type>
-    Ref<_to_type> DynamicCast(const Ref<_from_type>& from)
-    {
-        return Ref<_to_type>(dynamic_cast<_to_type*>(from.Get()));
-    }
+	// Dynamic cast from one reference type to another
+	template<typename _to_type, typename _from_type>
+	Ref<_to_type> DynamicCast(const Ref<_from_type>& from)
+	{
+		return Ref<_to_type>(dynamic_cast<_to_type*>(from.Get()));
+	}
+
+	// Dynamic cast from one references vector type to another
+	template<typename _to_type, typename _from_type>
+	Vector<Ref<_to_type>> DynamicCastVector(const _from_type& from)
+	{
+		return from.Convert<Ref<_to_type>>([](const Ref<_from_type::ElementType>& ref) { return DynamicCast<_to_type>(ref); });
+	}
 
     // Static cast from one reference type to another
     template<typename _to_type, typename _from_type>

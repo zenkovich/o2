@@ -23,13 +23,7 @@ namespace o2
     Component::~Component()
     {
         if (mOwner)
-            mOwner->RemoveComponent(this, false);
-
-        for (auto ref : mReferences)
-        {
-            ref->mComponent = nullptr;
-            ref->mWasDeleted = true;
-        }
+            mOwner.Lock()->RemoveComponent(this, false);
     }
 
     Component& Component::operator=(const Component& other)
@@ -39,7 +33,7 @@ namespace o2
 
 #if IS_EDITOR
         if (mOwner)
-            mOwner->OnChanged();
+            mOwner.Lock()->OnChanged();
 #endif
 
         return *this;
@@ -65,7 +59,7 @@ namespace o2
 
 #if IS_EDITOR
         if (mOwner)
-            mOwner->OnChanged();
+            mOwner.Lock()->OnChanged();
 #endif
     }
 
@@ -89,12 +83,12 @@ namespace o2
         return mEnabledInHierarchy;
     }
 
-    Component* Component::GetPrototypeLink() const
+    const WeakRef<Component>& Component::GetPrototypeLink() const
     {
         return mPrototypeLink;
     }
 
-    bool Component::IsLinkedToComponent(Component* component) const
+    bool Component::IsLinkedToComponent(const Ref<Component>& component) const
     {
         if (mPrototypeLink)
         {
@@ -104,16 +98,16 @@ namespace o2
                 if (t == component)
                     return true;
 
-                t = t->mPrototypeLink;
+                t = t.Lock()->mPrototypeLink;
             }
         }
 
         return false;
     }
 
-    Actor* Component::GetOwnerActor() const
+    Ref<Actor> Component::GetOwnerActor() const
     {
-        return mOwner;
+        return mOwner.Lock();
     }
 
     String Component::GetName()
@@ -141,7 +135,7 @@ namespace o2
         bool lastEnabledInHierarchy = mEnabledInHierarchy;
 
         if (mOwner)
-            mEnabledInHierarchy = mEnabled && mOwner->mResEnabledInHierarchy;
+            mEnabledInHierarchy = mEnabled && mOwner.Lock()->mResEnabledInHierarchy;
         else
             mEnabledInHierarchy = mEnabled;
 
@@ -154,7 +148,7 @@ namespace o2
 
 #if IS_EDITOR
             if (mOwner)
-                mOwner->OnChanged();
+                mOwner.Lock()->OnChanged();
 #endif
         }
     }
@@ -193,13 +187,13 @@ namespace o2
         OnRemoveFromScene();
     }
 
-    void Component::SetOwnerActor(Actor* actor)
+    void Component::SetOwnerActor(const Ref<Actor>& actor)
     {
         if (mOwner == actor)
             return;
 
         if (mOwner)
-            mOwner->RemoveComponent(this, false);
+            mOwner.Lock()->RemoveComponent(this, false);
 
         mOwner = actor;
 

@@ -13,24 +13,12 @@ namespace o2
     {
         mActor->mIsAsset = true;
         mActor->mAssetId = ID();
-        mOwnActor = true;
     }
 
     ActorAsset::ActorAsset(const ActorAsset& other):
         AssetWithDefaultMeta<ActorAsset>(other)
     {
-        if (other.mOwnActor)
-        {
-            mActor = other.mActor->CloneAs<Actor>();
-            mActor->mIsAsset = true;
-            mActor->mAssetId = ID();
-            mOwnActor = true;
-        }
-        else
-        {
-            mActor = other.mActor;
-            mOwnActor = false;
-        }
+        mActor = other.mActor;
     }
 
     ActorAsset::ActorAsset(Actor* actor):
@@ -44,35 +32,17 @@ namespace o2
         }
         else
             ID() = mActor->mAssetId;
-
-        mOwnActor = false;
     }
 
     ActorAsset::~ActorAsset()
     {
-        if (mOwnActor)
-            delete mActor;
     }
 
     ActorAsset& ActorAsset::operator=(const ActorAsset& other)
     {
         Asset::operator=(other);
 
-        if (mOwnActor)
-            delete mActor;
-        
-        if (other.mOwnActor)
-        {
-            mActor = other.mActor->CloneAs<Actor>();
-            mActor->mIsAsset = true;
-            mActor->mAssetId = ID();
-            mOwnActor = true;
-        }
-        else
-        {
-            mActor = other.mActor;
-            mOwnActor = false;
-        }
+        mActor = other.mActor;
 
         return *this;
     }
@@ -112,22 +82,17 @@ namespace o2
             mActor->RemoveFromScene();
             mActor->mIsAsset = true;
             mActor->mAssetId = GetUID();
-            mOwnActor = true;
         }
     }
 
-    Actor* ActorAsset::GetActor() const
+    const Ref<Actor>& ActorAsset::GetActor() const
     {
         return mActor;
     }
 
-    void ActorAsset::SetActor(Actor* actor, bool own /*= true*/)
+    void ActorAsset::SetActor(const Ref<Actor>& actor)
     {
-        if (mActor && mOwnActor)
-            delete mActor;
-
         mActor = actor;
-        mOwnActor = own;
 
         if (mActor)
         {

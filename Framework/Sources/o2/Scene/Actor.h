@@ -536,7 +536,7 @@ namespace o2
         Ref<SceneEditableObject> GetEditableOwner() override;
 
         // Returns object's link to prototype
-        const Ref<SceneEditableObject>& GetEditableLink() const override;
+        Ref<SceneEditableObject> GetEditableLink() const override;
 
         // Returns list of object's children
         Vector<Ref<SceneEditableObject>> GetEditableChildren() const override;

@@ -18,6 +18,7 @@ namespace o2
     public:
         typedef typename std::vector<_type>::iterator Iterator;
         typedef typename std::vector<_type>::const_iterator ConstIterator;
+        typedef _type ElementType;
 
     public:
         // Constructor by initial capacity
