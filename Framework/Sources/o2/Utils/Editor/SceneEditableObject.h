@@ -45,7 +45,7 @@ namespace o2
         virtual void SetName(const String& name);
 
         // Returns object's link to prototype
-        virtual const Ref<SceneEditableObject> GetEditableLink() const;
+        virtual Ref<SceneEditableObject> GetEditableLink() const;
 
         // Returns is object linked to another object
         virtual bool IsEditableLinkedTo(const Ref<SceneEditableObject>& link) const;

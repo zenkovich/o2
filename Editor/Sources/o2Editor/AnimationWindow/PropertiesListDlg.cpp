@@ -26,7 +26,7 @@ namespace Editor
 		delete mWindow;
 	}
 
-	void PropertiesListDlg::Show(AnimationClip* animation, ActorRef actor)
+	void PropertiesListDlg::Show(AnimationClip* animation, Ref<Actor> actor)
 	{
 		Instance().mPropertiesTree->Initialize(animation, actor);
 		Instance().mFilter->SetText("");
@@ -86,7 +86,7 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationPropertiesTree::Initialize(AnimationClip* animation, ActorRef actor)
+	void AnimationPropertiesTree::Initialize(AnimationClip* animation, Ref<Actor> actor)
 	{
 		mFilterStr = "";
 		mRoot.Clear();

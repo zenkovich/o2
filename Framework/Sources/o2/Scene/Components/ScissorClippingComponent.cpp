@@ -13,7 +13,7 @@ namespace o2
     void ScissorClippingComponent::Draw()
     {
         if (enableClipping)
-            o2Render.EnableScissorTest(mOwner->transform->GetWorldAxisAlignedRect());
+            o2Render.EnableScissorTest(mOwner.Lock()->transform->GetWorldAxisAlignedRect());
 
         if (enableClipping)
             o2Render.DisableScissorTest();

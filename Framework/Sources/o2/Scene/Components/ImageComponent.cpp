@@ -80,7 +80,7 @@ namespace o2
     void ImageComponent::FitActorByImage() const
     {
         if (mImageAsset)
-            mOwner->transform->size = mImageAsset->GetSize();
+            mOwner.Lock()->transform->size = mImageAsset->GetSize();
     }
 
     bool ImageComponent::IsUnderPoint(const Vec2F& point)
@@ -105,10 +105,10 @@ namespace o2
 
     void ImageComponent::OnTransformUpdated()
     {
-        SetBasis(mOwner->transform->GetWorldBasis());
+        SetBasis(mOwner.Lock()->transform->GetWorldBasis());
     }
 
-    void ImageComponent::SetOwnerActor(Actor* actor)
+    void ImageComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }

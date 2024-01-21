@@ -120,7 +120,7 @@ namespace o2
         }
     }
 
-    void ScriptableComponent::SetOwnerActor(Actor* actor)
+    void ScriptableComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         Component::SetOwnerActor(actor);
 

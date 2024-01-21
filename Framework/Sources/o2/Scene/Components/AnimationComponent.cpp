@@ -49,7 +49,7 @@ namespace o2
 
     Ref<AnimationState> AnimationComponent::AddState(const Ref<AnimationState>& state)
     {
-        state->player.SetTarget(mOwner);
+        state->player.SetTarget(mOwner.Lock().Get());
         state->player.SetPlaying(state->autoPlay);
         state->player.mAnimationState = state;
         state->mOwner = WeakRef(this);

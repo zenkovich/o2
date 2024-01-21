@@ -86,7 +86,7 @@ namespace Editor
 
 		public:
 			// Called when an actor is selected, updates the functions list
-			void UpdateFunctionsList(const ActorRef& actor, const ComponentRef& selectedComponent, const String& selectedMethod);
+			void UpdateFunctionsList(const Ref<Actor>& actor, const Ref<Component>& selectedComponent, const String& selectedMethod);
 
 			// Called when a function is selected, remembers the link to the component and the name from the list of functionsDropdownMap
 			void OnFunctionSelected(int idx);

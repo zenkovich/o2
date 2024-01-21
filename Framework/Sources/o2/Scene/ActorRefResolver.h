@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Scene/ActorRef.h"
 #include "o2/Scene/ComponentRef.h"
 #include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Singleton.h"
@@ -13,22 +14,22 @@ namespace o2
     {
     public:
         // Requires to resolve actor reference by actor id
-        static void RequireResolve(ActorRef& ref, SceneUID actorId);
+        static void RequireResolve(BaseActorRef& ref, SceneUID actorId);
 
         // Requires to resolve actor reference by asset id
-        static void RequireResolve(ActorRef& ref, const UID& assetId);
+        static void RequireResolve(BaseActorRef& ref, const UID& assetId);
 
         // Requires to resolve component reference
-        static void RequireResolve(ComponentRef& ref, SceneUID actorId, SceneUID id);
+        static void RequireResolve(BaseComponentRef& ref, SceneUID actorId, SceneUID id);
 
         // Requires to resolve component reference
-        static void RequireResolve(ComponentRef& ref, const UID& assetId, SceneUID id);
+        static void RequireResolve(BaseComponentRef& ref, const UID& assetId, SceneUID id);
 
         // Requires to remap actor reference
-        static void RequireRemap(ActorRef& ref);
+        static void RequireRemap(BaseActorRef& ref);
 
         // Requires to remap component reference
-        static void RequireRemap(ComponentRef& ref);
+        static void RequireRemap(BaseComponentRef& ref);
 
         // Locks references resolving depth
         static void LockResolving(int depth = 1);
@@ -61,43 +62,43 @@ namespace o2
         static void OnComponentIdChanged(Component* component, SceneUID prevId);
 
         // Called when actor reference was destroyed, removes it from unresolved list
-        static void OnActorRefDestroyed(const ActorRef* ref);
+        static void OnActorRefDestroyed(const BaseActorRef* ref);
 
         // Called when component reference was destroyed, removes it from unresolved list
-        static void OnComponentRefDestroyed(const ComponentRef* ref);
+        static void OnComponentRefDestroyed(const BaseComponentRef* ref);
 
     protected:
         struct UnresolvedActorRef
         {
-            ActorRef* target;
-            SceneUID  sourceId;
+            BaseActorRef* target;
+            SceneUID      sourceId;
 
         public:
             UnresolvedActorRef();
-            UnresolvedActorRef(ActorRef* target, SceneUID actorId);
+            UnresolvedActorRef(BaseActorRef* target, SceneUID actorId);
             bool operator==(const UnresolvedActorRef& other) const;
         };
 
         struct UnresolvedAssetActorRef
         {
-            ActorRef* target;
-            UID       sourceAssetId;
+            BaseActorRef* target;
+            UID           sourceAssetId;
 
         public:
             UnresolvedAssetActorRef();
-            UnresolvedAssetActorRef(ActorRef* target, const UID& assetId);
+            UnresolvedAssetActorRef(BaseActorRef* target, const UID& assetId);
 
             bool operator==(const UnresolvedAssetActorRef& other) const;
         };
 
         struct UnresolvedComponentRef
         {
-            ComponentRef* target;
-            SceneUID      sourceId;
+            BaseComponentRef* target;
+            SceneUID          sourceId;
 
         public:
             UnresolvedComponentRef();
-            UnresolvedComponentRef(ComponentRef* target, SceneUID id);
+            UnresolvedComponentRef(BaseComponentRef* target, SceneUID id);
 
             bool operator==(const UnresolvedComponentRef& other) const;
         };
@@ -110,15 +111,14 @@ namespace o2
         Vector<UnresolvedComponentRef> mUnresolvedComponentsRefs;
         Map<SceneUID, Component*>      mNewComponents;
 
-        Vector<ActorRef*>     mRemapActorRefs;
-        Vector<ComponentRef*> mRemapComponentRefs;
+        Vector<BaseActorRef*>     mRemapActorRefs;
+        Vector<BaseComponentRef*> mRemapComponentRefs;
 
         int mLockDepth = 0;
 
         friend class Actor;
+        friend class ActorRef;
         friend class Component;
         friend class Scene;
-
-        friend class ActorRef;
     };
 }

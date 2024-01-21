@@ -103,10 +103,10 @@ namespace o2
         Widget* GetChildWidget(const String& path) const;
 
         // Add child actor @SCRIPTABLE
-        Actor* AddChild(Actor* actor) override;
+        Ref<Actor> AddChild(const Ref<Actor>& actor) override;
 
         // Add child actor @SCRIPTABLE
-        Actor* AddChild(Actor* actor, int index) override;
+        Ref<Actor> AddChild(const Ref<Actor>& actor, int index) override;
 
         // Adds child widget and returns them @SCRIPTABLE
         Widget* AddChildWidget(Widget* widget);
@@ -250,7 +250,7 @@ namespace o2
         _type* FindInternalWidgetByType() const;
 
         // Searches actor with id in this and this children @SCRIPTABLE
-        Actor* FindActorById(SceneUID id) override;
+        Ref<Actor> FindActorById(SceneUID id) override;
 
         // Returns create menu category in editor
         static String GetCreateMenuCategory();
@@ -260,24 +260,24 @@ namespace o2
     protected:
         using Actor::mState;
 
-        Vector<WidgetLayer*> mLayers; // Layers array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
-        Vector<WidgetState*> mStates; // States array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
+        Vector<Ref<WidgetLayer>> mLayers; // Layers array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+        Vector<Ref<WidgetState>> mStates; // States array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
 
-        Widget*         mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null 
-        Vector<Widget*> mChildWidgets;           // Children widgets, a part of all children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
-        Vector<Widget*> mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
+        WeakRef<Widget>     mParentWidget;    // Parent widget. When parent is not widget, this field will be null 
+        Vector<Ref<Widget>> mChildWidgets;    // Children widgets, a part of all children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
+        Vector<Ref<Widget>> mInternalWidgets; // Internal widgets, used same as children widgets, but not really children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
         
         float mTransparency = 1.0f;       // Widget transparency @SERIALIZABLE
         float mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
 
-        Vector<WidgetLayer*> mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
-        Vector<WidgetLayer*> mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+        Vector<WeakRef<WidgetLayer>> mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+        Vector<WeakRef<WidgetLayer>> mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 
-        WidgetState* mFocusedState = nullptr; // Focused widget state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
-        bool         mIsFocused = false;      // Is widget focused
-        bool         mIsFocusable = false;    // Is widget can be focused @SERIALIZABLE
+        WeakRef<WidgetState> mFocusedState;        // Focused widget state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
+		bool                 mIsFocused = false;   // Is widget focused
+		bool                 mIsFocusable = false; // Is widget can be focused @SERIALIZABLE
 
-        WidgetState* mVisibleState = nullptr; // Widget visibility state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
+        WeakRef<WidgetState> mVisibleState; // Widget visibility state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
 
         bool mIsClipped = false; // Is widget fully clipped by some scissors
 
@@ -319,16 +319,16 @@ namespace o2
         void OnDisabled() override;
 
         // Called when parent changed
-        void OnParentChanged(Actor* oldParent) override;
+        void OnParentChanged(const Ref<Actor>& oldParent) override;
 
         // Called when actor children has rearranged; updates inherited depth drawables list
         void OnChildrenChanged() override;
 
         // Called when child actor was added
-        void OnChildAdded(Actor* child) override;
+        void OnChildAdded(const Ref<Actor>& child) override;
 
         // Called when child actor was removed
-        void OnChildRemoved(Actor* child) override;
+        void OnChildRemoved(const Ref<Actor>& child) override;
 
         // Called when actor including from scene, including this to layer drawables
         void OnAddToScene() override;
@@ -502,19 +502,19 @@ namespace o2
             void SetName(const String& name) override;
 
             // Returns object's link to prototype
-            const SceneEditableObject* GetEditableLink() const override;
+            Ref<SceneEditableObject> GetEditableLink() const override;
 
             // Returns list of object's children
-            Vector<SceneEditableObject*> GetEditableChildren() const override;
+            Vector<Ref<SceneEditableObject>> GetEditableChildren() const override;
 
             // Returns object's parent object. Return nullptr when it is a root scene object
-            SceneEditableObject* GetEditableParent() const override;
+            Ref<SceneEditableObject> GetEditableParent() const override;
 
             // Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
-            void SetEditableParent(SceneEditableObject* object, int idx = -1) override;
+            void SetEditableParent(const Ref<SceneEditableObject>& object, int idx = -1) override;
 
             // Adds child. idx is place in parent children. idx == -1 means last
-            void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
+            void AddEditableChild(const Ref<SceneEditableObject>& object, int idx = -1) override;
 
             // Sets index in siblings - children of parent
             void SetIndexInSiblings(int idx) override;
@@ -558,19 +558,19 @@ namespace o2
             void SetName(const String& name) override;
 
             // Returns object's link to prototype
-            const SceneEditableObject* GetEditableLink() const override;
+            Ref<SceneEditableObject> GetEditableLink() const override;
 
             // Returns list of object's children
-            Vector<SceneEditableObject*> GetEditableChildren() const override;
+            Vector<Ref<SceneEditableObject>> GetEditableChildren() const override;
 
             // Returns object's parent object. Return nullptr when it is a root scene object
-            SceneEditableObject* GetEditableParent() const override;
+            Ref<SceneEditableObject> GetEditableParent() const override;
 
             // Sets parent object. nullptr means make this object as root
-            void SetEditableParent(SceneEditableObject* object, int idx = -1) override;
+            void SetEditableParent(const Ref<SceneEditableObject>& object, int idx = -1) override;
 
             // Adds child. idx is place in parent children. idx == -1 means last
-            void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
+            void AddEditableChild(const Ref<SceneEditableObject>& object, int idx = -1) override;
 
             // Sets index in siblings - children of parent
             void SetIndexInSiblings(int idx) override;
@@ -595,16 +595,16 @@ namespace o2
 
     public:
         // Sets parent object. nullptr means make this object as root
-        void SetEditableParent(SceneEditableObject* object, int idx = -1) override;
+        void SetEditableParent(const Ref<SceneEditableObject>& object, int idx = -1) override;
 
         // Returns object's parent object. Return nullptr when it is a root scene object
-        SceneEditableObject* GetEditableParent() const override;
+        Ref<SceneEditableObject> GetEditableParent() const override;
 
         // Returns list of object's children
-        Vector<SceneEditableObject*> GetEditableChildren() const override;
+        Vector<Ref<SceneEditableObject>> GetEditableChildren() const override;
 
         // Adds child. idx is place in parent children. idx == -1 means last
-        void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
+        void AddEditableChild(const Ref<SceneEditableObject>& object, int idx = -1) override;
 
         // Returns is that type of object can be transformed
         bool IsSupportsTransforming() const override;
@@ -625,7 +625,7 @@ namespace o2
         void SetLayout(const Layout& layout) override;
 
         // Returns pointer to owner editable object
-        SceneEditableObject* GetEditableOwner() override;
+        Ref<SceneEditableObject> GetEditableOwner() override;
 
         friend class LayersEditable;
         friend class InternalChildrenEditableEditable;

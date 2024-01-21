@@ -6,16 +6,10 @@
 
 namespace o2
 {
-    ActorRef::ActorRef()
+    BaseActorRef::BaseActorRef()
     {}
 
-    ActorRef::ActorRef(Actor* actor) :
-        mActor(actor)
-    {
-    }
-
-    ActorRef::ActorRef(const ActorRef& other) :
-        ActorRef(other.mActor)
+    BaseActorRef::BaseActorRef(const BaseActorRef& other)
     {
         if (other.mRequiredResolveData)
         {
@@ -26,25 +20,14 @@ namespace o2
         ActorRefResolver::RequireRemap(*this);
     }
 
-    ActorRef::~ActorRef()
+    BaseActorRef::~BaseActorRef()
     {
-        if (mRequiredResolveData)
-            delete mRequiredResolveData;
+        mRequiredResolveData = nullptr;
 
         ActorRefResolver::OnActorRefDestroyed(this);
     }
 
-    bool ActorRef::operator!=(const ActorRef& other) const
-    {
-        return mActor != other.mActor;
-    }
-
-    bool ActorRef::operator==(const ActorRef& other) const
-    {
-        return mActor == other.mActor;
-    }
-
-    ActorRef& ActorRef::operator=(const ActorRef& other)
+    BaseActorRef& BaseActorRef::operator=(const BaseActorRef& other)
     {
         CopyWithoutRemap(other);
         ActorRefResolver::RequireRemap(*this);
@@ -52,148 +35,107 @@ namespace o2
         return *this;
     }
 
-    ActorRef::operator bool() const
+    Actor* BaseActorRef::Get()
     {
-        return mActor != nullptr;
+        return nullptr;
     }
 
-    Actor& ActorRef::operator*()
+    const Actor* BaseActorRef::Get() const
     {
-        return *mActor;
+        return nullptr;
     }
 
-    const Actor& ActorRef::operator*() const
+	void BaseActorRef::Set(Actor* actor)
+	{}
+
+	void BaseActorRef::Destroy()
     {
-        return *mActor;
+        o2Scene.DestroyActor(Ref(Get()));
     }
 
-    Actor* ActorRef::operator->()
+    bool BaseActorRef::IsValid() const
     {
-        return mActor;
+        return Get() != nullptr;
     }
 
-    const Actor* ActorRef::operator->() const
-    {
-        return mActor;
-    }
-
-    Actor* ActorRef::Get()
-    {
-        return mActor;
-    }
-
-    const Actor* ActorRef::Get() const
-    {
-        return mActor;
-    }
-
-    void ActorRef::Destroy()
-    {
-        if (mActor)
-            o2Scene.DestroyActor(Ref(mActor));
-
-        *this = nullptr;
-    }
-
-    bool ActorRef::IsValid() const
-    {
-        return mActor != nullptr;
-    }
-
-    bool ActorRef::IsWasDeleted() const
-    {
-        return mWasDeleted;
-    }
-
-    const Type& ActorRef::GetActorType() const
+    const Type& BaseActorRef::GetActorType() const
     {
         return TypeOf(Actor);
     }
 
-    const Type* ActorRef::GetActorTypeStatic()
+    const Type* BaseActorRef::GetActorTypeStatic()
     {
         return &TypeOf(Actor);
     }
 
-    bool ActorRef::EqualsDelta(const ActorRef& obj, const ActorRef& origin)
+    bool BaseActorRef::EqualsDelta(const BaseActorRef& obj, const BaseActorRef& origin)
     {
-        if (obj.mActor == origin.mActor)
+        if (obj.Get() == origin.Get())
             return true;
 
-        if (obj.mActor && obj.mActor->mPrototypeLink == origin.mActor)
+        if (obj.Get() && obj.Get()->mPrototypeLink.Get() == origin.Get())
             return true;
 
         return false;
     }
 
-    void ActorRef::CopyWithoutRemap(const ActorRef& other)
+    void BaseActorRef::CopyWithoutRemap(const BaseActorRef& other)
+    {}
+
+    void BaseActorRef::OnSerialize(DataValue& node) const
     {
-        mActor = other.mActor;
-        mWasDeleted = other.mWasDeleted;
-
-        if (mRequiredResolveData)
+        if (auto actor = Get())
         {
-            delete mRequiredResolveData;
-            mRequiredResolveData = nullptr;
-        }
-
-        UpdateSpecActor();
-    }
-
-    void ActorRef::OnSerialize(DataValue& node) const
-    {
-        if (mActor)
-        {
-            if (mActor->mIsAsset)
-                node.AddMember("AssetId") = mActor->GetAssetID();
+            if (actor->mIsAsset)
+                node.AddMember("AssetId") = actor->GetAssetID();
             else
-                node.AddMember("ID") = mActor->GetID();
+                node.AddMember("ID") = actor->GetID();
         }
     }
 
-    void ActorRef::OnDeserialized(const DataValue& node)
+    void BaseActorRef::OnDeserialized(const DataValue& node)
     {
         if (auto assetIdNode = node.FindMember("AssetId"))
         {
-            auto resolveData = mnew AssetRequireResolveData();
+            auto resolveData = mmake<AssetRequireResolveData>();
             resolveData->uid = (UID)*assetIdNode;
             resolveData->RequireResolve(*this);
             mRequiredResolveData = resolveData;
         }
         else if (auto sceneIdNode = node.FindMember("ID"))
         {
-            auto resolveData = mnew SceneRequireResolveData();
+            auto resolveData = mmake<SceneRequireResolveData>();
             resolveData->uid = (SceneUID)*sceneIdNode;
             resolveData->RequireResolve(*this);
             mRequiredResolveData = resolveData;
         }
         else
-            *this = nullptr;
+            Set(nullptr);
     }
 
-    void ActorRef::SceneRequireResolveData::RequireResolve(ActorRef& ref)
+    void BaseActorRef::SceneRequireResolveData::RequireResolve(BaseActorRef& ref)
     {
         ActorRefResolver::RequireResolve(ref, uid);
     }
 
-    ActorRef::IRequiredResolveData* ActorRef::SceneRequireResolveData::Clone() const
+    Ref<BaseActorRef::IRequiredResolveData> BaseActorRef::SceneRequireResolveData::Clone() const
     {
-        return mnew SceneRequireResolveData(*this);
+        return mmake<SceneRequireResolveData>(*this);
     }
 
-    void ActorRef::AssetRequireResolveData::RequireResolve(ActorRef& ref)
+    void BaseActorRef::AssetRequireResolveData::RequireResolve(BaseActorRef& ref)
     {
         ActorRefResolver::RequireResolve(ref, uid);
     }
 
-    ActorRef::IRequiredResolveData* ActorRef::AssetRequireResolveData::Clone() const
+    Ref<BaseActorRef::IRequiredResolveData> BaseActorRef::AssetRequireResolveData::Clone() const
     {
-        return mnew AssetRequireResolveData(*this);
+        return mmake<AssetRequireResolveData>(*this);
     }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Actor>);
 // --- META ---
 
-DECLARE_CLASS(o2::ActorRef, o2__ActorRef);
+DECLARE_CLASS(o2::BaseActorRef, o2__BaseActorRef);
 // --- END META ---

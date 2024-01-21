@@ -55,7 +55,7 @@ namespace o2
 
     void ParticlesEmitterComponent::OnTransformUpdated()
     {
-        basis = mOwner->transform->GetWorldBasis();
+        basis = mOwner.Lock()->transform->GetWorldBasis();
     }
 
     void ParticlesEmitterComponent::OnSerialize(DataValue& node) const

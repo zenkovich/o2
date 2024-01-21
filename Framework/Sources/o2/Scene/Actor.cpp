@@ -1328,7 +1328,7 @@ namespace o2
 #endif
     }
 
-    ActorRef Actor::GetPrototypeLink() const
+    Ref<Actor> Actor::GetPrototypeLink() const
     {
         return mPrototypeLink;
     }

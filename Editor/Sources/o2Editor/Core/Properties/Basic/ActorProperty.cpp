@@ -20,14 +20,14 @@ namespace Editor
 	}
 
 	ActorProperty::ActorProperty(const ActorProperty& other) :
-		TPropertyField<ActorRef>(other)
+		TPropertyField<Ref<Actor>>(other)
 	{
 		InitializeControls();
 	}
 
 	ActorProperty& ActorProperty::operator=(const ActorProperty& other)
 	{
-		TPropertyField<ActorRef>::operator=(other);
+		TPropertyField<Ref<Actor>>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
@@ -69,8 +69,8 @@ namespace Editor
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
 			return;
 
-		ActorRef sourceActor = GetProxy(source);
-		ActorRef topSourceActor = sourceActor;
+		Ref<Actor> sourceActor = GetProxy(source);
+		Ref<Actor> topSourceActor = sourceActor;
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent();
 
@@ -97,7 +97,7 @@ namespace Editor
 
 	void ActorProperty::OnTypeSpecialized(const Type& type)
 	{
-		TPropertyField<ActorRef>::OnTypeSpecialized(type);
+		TPropertyField<Ref<Actor>>::OnTypeSpecialized(type);
 		mActorType = type.InvokeStatic<const Type*>("GetActorTypeStatic");
 	}
 
@@ -109,8 +109,8 @@ namespace Editor
 		{
 			if (ptr.second)
 			{
-				ActorRef value = GetProxy(ptr.first);
-				ActorRef proto = GetProxy(ptr.second);
+				Ref<Actor> value = GetProxy(ptr.first);
+				Ref<Actor> proto = GetProxy(ptr.second);
 
 				if (value && value->GetPrototypeLink())
 				{
@@ -279,7 +279,7 @@ namespace Editor
 		mBox->SetState("focused", false);
 	}
 }
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::ActorRef>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<Actor>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ActorProperty, Editor__ActorProperty);

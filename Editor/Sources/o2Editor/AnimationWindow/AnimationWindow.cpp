@@ -111,7 +111,7 @@ namespace Editor
 		}
 	}
 
-	void AnimationWindow::SetTarget(ActorRef actor)
+	void AnimationWindow::SetTarget(Ref<Actor> actor)
 	{
 		mTargetActor = actor;
 

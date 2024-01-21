@@ -5,18 +5,10 @@
 
 namespace o2
 {
-    ComponentRef::ComponentRef()
+    BaseComponentRef::BaseComponentRef()
     {}
 
-    ComponentRef::ComponentRef(Component* component):
-        mComponent(component)
-    {
-        if (mComponent)
-            mComponent->mReferences.Add(this);
-    }
-
-    ComponentRef::ComponentRef(const ComponentRef& other):
-        ComponentRef(other.mComponent)
+    BaseComponentRef::BaseComponentRef(const BaseComponentRef& other)
     {
         if (other.mRequiredResolveData)
         {
@@ -27,153 +19,73 @@ namespace o2
         ActorRefResolver::RequireRemap(*this);
     }
 
-    ComponentRef::~ComponentRef()
+    BaseComponentRef::~BaseComponentRef()
     {
-        if (mComponent)
-            mComponent->mReferences.Remove(this);
-
-        if (mRequiredResolveData)
-            delete mRequiredResolveData;
-
+        mRequiredResolveData = nullptr;
         ActorRefResolver::OnComponentRefDestroyed(this);
     }
 
-    bool ComponentRef::operator!=(const ComponentRef& other) const
+    void BaseComponentRef::Set(Component* component)
+    {}
+
+    Component* BaseComponentRef::Get()
     {
-        return mComponent != other.mComponent;
+        return nullptr;
     }
 
-    bool ComponentRef::operator==(const ComponentRef& other) const
+    const Component* BaseComponentRef::Get() const
     {
-        return mComponent == other.mComponent;
+        return nullptr;
     }
 
-    ComponentRef& ComponentRef::operator=(const ComponentRef& other)
+    void BaseComponentRef::Destroy()
     {
-        CopyWithoutRemap(other);
-        ActorRefResolver::RequireRemap(*this);
-
-        return *this;
+        o2Scene.DestroyComponent(Ref(Get()));
     }
 
-    ComponentRef::operator bool() const
-    {
-        return mComponent != nullptr;
-    }
-
-    Component& ComponentRef::operator*()
-    {
-        return *mComponent;
-    }
-
-    const Component& ComponentRef::operator*() const
-    {
-        return *mComponent;
-    }
-
-    Component* ComponentRef::operator->()
-    {
-        return mComponent;
-    }
-
-    const Component* ComponentRef::operator->() const
-    {
-        return mComponent;
-    }
-
-    void ComponentRef::Set(Component* component)
-    {
-        *this = ComponentRef(component);
-    }
-
-    Component* ComponentRef::Get()
-    {
-        return mComponent;
-    }
-
-    const Component* ComponentRef::Get() const
-    {
-        return mComponent;
-    }
-
-    void ComponentRef::Destroy()
-    {
-        if (mComponent)
-            o2Scene.DestroyComponent(mComponent);
-
-        *this = nullptr;
-    }
-
-    bool ComponentRef::IsValid() const
-    {
-        return mComponent != nullptr;
-    }
-
-    bool ComponentRef::IsWasDeleted() const
-    {
-        return mWasDeleted;
-    }
-
-    const Type& ComponentRef::GetComponentType() const
+    const Type& BaseComponentRef::GetComponentType() const
     {
         return TypeOf(Component);
     }
 
-    const Type* ComponentRef::GetComponentTypeStatic()
+    const Type* BaseComponentRef::GetComponentTypeStatic()
     {
         return &TypeOf(Component);
     }
 
-    bool ComponentRef::EqualsDelta(const ComponentRef& obj, const ComponentRef& origin)
+    bool BaseComponentRef::EqualsDelta(const BaseComponentRef& obj, const BaseComponentRef& origin)
     {
-        if (obj.mComponent == origin.mComponent)
+        if (obj.Get() == origin.Get())
             return true;
 
-        if (obj.mComponent && obj.mComponent->mPrototypeLink == origin.mComponent)
+        if (obj.Get() && obj.Get()->mPrototypeLink.Lock().Get() == origin.Get())
             return true;
 
         return false;
     }
 
-    void ComponentRef::CopyWithoutRemap(const ComponentRef& other)
+    void BaseComponentRef::CopyWithoutRemap(const BaseComponentRef& other)
+    {}
+
+    void BaseComponentRef::OnSerialize(DataValue& node) const
     {
-        if (mComponent)
-            mComponent->mReferences.Remove(this);
-
-        mComponent = other.mComponent;
-        mWasDeleted = other.mWasDeleted;
-
-        if (mRequiredResolveData)
+        if (auto component = Get())
         {
-            delete mRequiredResolveData;
-            mRequiredResolveData = nullptr;
-        }
-
-        UpdateSpecComponent();
-
-        if (mComponent)
-            mComponent->mReferences.Add(this);
-    }
-
-    void ComponentRef::OnSerialize(DataValue& node) const
-    {
-        if (mComponent)
-        {
-            auto actor = mComponent->mOwner;
+            auto actor = component->mOwner.Lock();
             if (actor->mIsAsset)
                 node.AddMember("AssetID") = actor->GetAssetID();
             else 
                 node.AddMember("ActorID") = actor->GetID();
 
-            node.AddMember("ComponentId") = mComponent->mId;
+            node.AddMember("ComponentId") = component->mId;
         }
     }
 
-    void ComponentRef::OnDeserialized(const DataValue& node)
+    void BaseComponentRef::OnDeserialized(const DataValue& node)
     {
         if (auto assetIdNode = node.FindMember("AssetId"))
         {
-            auto resolveData = mnew AssetRequireResolveData();
+            auto resolveData = mmake<AssetRequireResolveData>();
             resolveData->uid = (UID)*assetIdNode;
             resolveData->componentUID = (SceneUID)node.GetMember("ComponentId");
             resolveData->RequireResolve(*this);
@@ -181,38 +93,38 @@ namespace o2
         }
         else if (auto sceneIdNode = node.FindMember("ActorID"))
         {
-            auto resolveData = mnew SceneRequireResolveData();
+            auto resolveData = mmake<SceneRequireResolveData>();
             resolveData->uid = (SceneUID)*sceneIdNode;
             resolveData->componentUID = (SceneUID)node.GetMember("ComponentId");
             resolveData->RequireResolve(*this);
             mRequiredResolveData = resolveData;
         }
         else 
-            *this = nullptr;
+            Set(nullptr);
     }
 
-    void ComponentRef::SceneRequireResolveData::RequireResolve(ComponentRef& ref)
+    void BaseComponentRef::SceneRequireResolveData::RequireResolve(BaseComponentRef& ref)
     {
         ActorRefResolver::RequireResolve(ref, uid, componentUID);
     }
 
-    ComponentRef::IRequiredResolveData* ComponentRef::SceneRequireResolveData::Clone() const
+    Ref<BaseComponentRef::IRequiredResolveData> BaseComponentRef::SceneRequireResolveData::Clone() const
     {
-        return mnew SceneRequireResolveData(*this);
+        return mmake<SceneRequireResolveData>(*this);
     }
 
-    void ComponentRef::AssetRequireResolveData::RequireResolve(ComponentRef& ref)
+    void BaseComponentRef::AssetRequireResolveData::RequireResolve(BaseComponentRef& ref)
     {
         ActorRefResolver::RequireResolve(ref, uid, componentUID);
     }
 
-    ComponentRef::IRequiredResolveData* ComponentRef::AssetRequireResolveData::Clone() const
+    Ref<BaseComponentRef::IRequiredResolveData> BaseComponentRef::AssetRequireResolveData::Clone() const
     {
-        return mnew AssetRequireResolveData(*this);
+        return mmake<AssetRequireResolveData>(*this);
     }
 
 }
 // --- META ---
 
-DECLARE_CLASS(o2::ComponentRef, o2__ComponentRef);
+DECLARE_CLASS(o2::Ref<Component>, o2__ComponentRef);
 // --- END META ---

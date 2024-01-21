@@ -47,7 +47,7 @@ namespace o2
         return *this;
     }
 
-    ActorRef ActorAsset::Instantiate() const
+    Ref<Actor> ActorAsset::Instantiate() const
     {
         if (!mActor)
             return nullptr;

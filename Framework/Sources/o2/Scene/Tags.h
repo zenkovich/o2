@@ -61,8 +61,8 @@ namespace o2
     class TagGroup: public ISerializable
     {
     public:
-        Function<void(Tag*)> onTagAdded;
-        Function<void(Tag*)> onTagRemoved;
+        Function<void(const Ref<Tag>&)> onTagAdded;
+        Function<void(const Ref<Tag>&)> onTagRemoved;
 
     public:
         // Default constructor

@@ -147,7 +147,7 @@ namespace o2
         Ref<ActorAsset> GetPrototypeDirectly() const;
 
         // Returns prototype link pointer
-        ActorRef GetPrototypeLink() const;
+        Ref<Actor> GetPrototypeLink() const;
 
         // Sets scene layer
         void SetLayer(const Ref<SceneLayer>& layer);
@@ -344,7 +344,7 @@ namespace o2
         Ref<SceneLayer> mSceneLayer; // Scene layer @SERIALIZABLE @EDITOR_IGNORE
 
         Ref<ActorAsset> mPrototype;     // Prototype asset
-        ActorRef        mPrototypeLink; // Prototype link actor. Links to source actor from prototype
+        Ref<Actor>      mPrototypeLink; // Prototype link actor. Links to source actor from prototype
 
         WeakRef<Actor>     mParent;   // Parent actor 
         Vector<Ref<Actor>> mChildren; // Children actors 
@@ -641,9 +641,9 @@ namespace o2
 #endif // IS_EDITOR
 
         friend class ActorAsset;
-        friend class ActorRef;
         friend class ActorRefResolver;
         friend class ActorTransform;
+        friend class BaseActorRef;
         friend class Component;
         friend class ComponentRef;
         friend class DrawableComponent;
@@ -843,7 +843,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE(void, SetPrototype, Ref<ActorAsset>);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<ActorAsset>, GetPrototype);
     FUNCTION().PUBLIC().SIGNATURE(Ref<ActorAsset>, GetPrototypeDirectly);
-    FUNCTION().PUBLIC().SIGNATURE(ActorRef, GetPrototypeLink);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetPrototypeLink);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayer, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Ref<SceneLayer>&, GetLayer);

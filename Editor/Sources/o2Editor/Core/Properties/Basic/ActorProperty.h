@@ -20,7 +20,7 @@ namespace Editor
 	// ---------------------
 	// Editor actor property
 	// ---------------------
-	class ActorProperty: public TPropertyField<ActorRef>, public KeyboardEventsListener, public DragDropArea
+	class ActorProperty: public TPropertyField<Ref<Actor>>, public KeyboardEventsListener, public DragDropArea
 	{
 	public:
 		// Default constructor
@@ -106,7 +106,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ActorProperty)
 {
-    BASE_CLASS(Editor::TPropertyField<ActorRef>);
+    BASE_CLASS(Editor::TPropertyField<Ref<Actor>>);
     BASE_CLASS(o2::KeyboardEventsListener);
     BASE_CLASS(o2::DragDropArea);
 }

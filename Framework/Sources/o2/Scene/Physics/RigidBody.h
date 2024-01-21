@@ -124,7 +124,7 @@ namespace o2
         bool  mIsBullet = false;        // Is using continuous collision detection @SERIALIZABLE
         bool  mIsFixedRotation = false; // Is fixed rotation @SERIALIZABLE
 
-        Vector<ICollider*> mColliders; // Attached colliders list
+        Vector<WeakRef<ICollider>> mColliders; // Attached colliders list
 
     protected:
         // Called when enabled, turns on rigid body

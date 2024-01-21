@@ -10,59 +10,35 @@ namespace o2
     // --------------------------------------------------------------
     // Actor reference, automatically invalidates when actor deleting
     // --------------------------------------------------------------
-    class ActorRef: public ISerializable
+    class BaseActorRef: public ISerializable
     {
     public:
         // Default constructor, no reference
-        ActorRef();
-
-        // Constructor with referencing on actor
-        ActorRef(Actor* actor);
+        BaseActorRef();
 
         // Creates a copy of actor and returns reference on it
-        ActorRef(const ActorRef& other);
+        BaseActorRef(const BaseActorRef& other);
 
         // Destructor
-        ~ActorRef();
-
-        // Boolean cast operator, true means that reference is valid
-        operator bool() const;
+        ~BaseActorRef();
 
         // Assign operator
-        ActorRef& operator=(const ActorRef& other);
-
-        // Getter operator
-        Actor& operator*();
-
-        // Constant getter operator
-        const Actor& operator*() const;
-
-        // Actor members access operator
-        Actor* operator->();
-
-        // Constant actor members access operator
-        const Actor* operator->() const;
-
-        // Check equals operator
-        bool operator==(const ActorRef& other) const;
-
-        // Check not equals operator
-        bool operator!=(const ActorRef& other) const;
+        BaseActorRef& operator=(const BaseActorRef& other);
 
         // Returns actor pointer @SCRIPTABLE
-        Actor* Get();
+        virtual Actor* Get();
 
         // Returns actor pointer
-        const Actor* Get() const;
+        virtual const Actor* Get() const;
+
+        // Sets actor pointer
+        virtual void Set(Actor* actor);
 
         // Destroy the actor @SCRIPTABLE
         void Destroy();
 
         // Returns is reference is valid @SCRIPTABLE
         bool IsValid() const;
-
-        // Returns is actor was deleted @SCRIPTABLE
-        bool IsWasDeleted() const;
 
         // Returns actor type
         virtual const Type& GetActorType() const;
@@ -71,21 +47,21 @@ namespace o2
         static const Type* GetActorTypeStatic();
 
         // Checks refs are equals for serializing delta
-        static bool EqualsDelta(const ActorRef& obj, const ActorRef& origin);
+        static bool EqualsDelta(const BaseActorRef& obj, const BaseActorRef& origin);
 
-        SERIALIZABLE(ActorRef);
+        SERIALIZABLE(BaseActorRef);
 
     protected:
         // ------------------------------
         // Reference resolve request data
         // ------------------------------
-        struct IRequiredResolveData
+        struct IRequiredResolveData: public RefCounterable
         {
             // Request resolve reference
-            virtual void RequireResolve(ActorRef& ref) = 0; 
+            virtual void RequireResolve(BaseActorRef& ref) = 0;
 
             // Clone data
-            virtual IRequiredResolveData* Clone() const = 0;
+            virtual Ref<IRequiredResolveData> Clone() const = 0;
         };
 
         // -------------------------------------------------
@@ -96,10 +72,10 @@ namespace o2
             SceneUID uid;
 
             // Request resolve reference
-            void RequireResolve(ActorRef& ref) override;
+            void RequireResolve(BaseActorRef& ref) override;
 
             // Clone data
-            IRequiredResolveData* Clone() const override;
+            Ref<IRequiredResolveData> Clone() const override;
         };
 
         // -------------------------------------------
@@ -110,24 +86,18 @@ namespace o2
             UID uid;
 
             // Request resolve reference
-            void RequireResolve(ActorRef& ref) override;
+            void RequireResolve(BaseActorRef& ref) override;
 
             // Clone data
-            IRequiredResolveData* Clone() const override;
+            Ref<IRequiredResolveData> Clone() const override;
         };
 
-        Actor* mActor = nullptr;
-        bool   mWasDeleted = false;
-
-        IRequiredResolveData* mRequiredResolveData = nullptr; // Reference resolve request data. Used for resolving reference after deserialization.
-                                                              // Not null only when reference is required to resolve. Copies in reference copying.
+        Ref<IRequiredResolveData> mRequiredResolveData; // Reference resolve request data. Used for resolving reference after deserialization.
+                                                        // Not null only when reference is required to resolve. Copies in reference copying.
 
     protected:
-        // Updates specialized actor pointer
-        virtual void UpdateSpecActor() {}
-
         // Copying ref without requiring remap
-        void CopyWithoutRemap(const ActorRef& other);
+        virtual void CopyWithoutRemap(const BaseActorRef& other);
 
         // Beginning serialization callback
         void OnSerialize(DataValue& node) const override;
@@ -142,62 +112,40 @@ namespace o2
     // ---------------------------------------
     // Reference on derived from actor classes
     // ---------------------------------------
-    template<typename T>
-    class Ref<T, typename std::enable_if<IsBaseOf<Actor, T>::value>::type>: public ActorRef
-    {
-    public:
-        // Default constructor, no reference
-        Ref(): ActorRef() {}
+    template<typename _actor_type>
+    class Ref<_actor_type, typename std::enable_if<IsBaseOf<Actor, _actor_type>::value>::type>: public BaseActorRef, public BaseRef<_actor_type>
+	{
+		using Base = BaseRef<_actor_type>;
 
-        // Constructor with referencing on actor
-        Ref(T* actor): ActorRef(actor), mSpecActor(actor) {}
-
-        // Creates a copy of actor and returns reference on it
-        Ref(const Ref<T>& other): ActorRef(other), mSpecActor(other.mSpecActor) {}
-
-        // Boolean cast operator, true means that reference is valid
-        operator bool() const { return IsValid(); }
-
-        // Assign operator
-        Ref<T>& operator=(const Ref<T>& other)
-        {
-            ActorRef::operator=(other);
-            mSpecActor = other.mSpecActor;
-            return *this;
-        }
-
-        // Getter operator
-        T& operator*() { return *mSpecActor; }
-
-        // Constant getter operator
-        const T& operator*() const { return *mSpecActor; }
-
-        // Asset members and field operator
-        T* operator->() { return mSpecActor; }
-
-        // Constant asset members and field operator
-        const T* operator->() const { return mSpecActor; }
-
-        // Check equals operator
-        bool operator==(const Ref<T>& other) const { return ActorRef::operator==(other); }
-
-        // Check not equals operator
-        bool operator!=(const Ref<T>& other) const { return ActorRef::operator!=(other); }
+	public:
+		// Base reference implementation
+		BASE_REF_IMPLEMETATION(_actor_type);
 
         // Returns actor pointer 
-        T* Get() { return mSpecActor; }
+        _actor_type* Get() override { return Base::Get(); }
 
         // Returns actor pointer
-        const T* Get() const { return mSpecActor; }
+		const _actor_type* Get() const override { return Base::Get(); }
+
+		// Sets actor pointer
+        void Set(Actor* actor) override { *this = Ref(actor); }
 
         // Returns actor type
-        const Type& GetActorType() const override { return TypeOf(T); }
+        const Type& GetActorType() const override { return TypeOf(_actor_type); }
 
         // Returns actor type
-        static const Type* GetActorTypeStatic() { return &TypeOf(T); }
+        static const Type* GetActorTypeStatic() { return &TypeOf(_actor_type); }
+
+	protected:
+		// Copying ref without requiring remap
+        void CopyWithoutRemap(const BaseActorRef& other) override
+		{
+			mPtr = other.mPtr;
+			mRequiredResolveData = nullptr;
+        }
 
     public:
-        typedef Ref<T, typename std::enable_if<std::is_base_of<Actor, T>::value>::type> _thisType;
+        typedef Ref<_actor_type, typename std::enable_if<std::is_base_of<Actor, _actor_type>::value>::type> _thisType;
 
         SERIALIZABLE_MAIN(_thisType);
         IOBJECT_SCRIPTING();
@@ -208,7 +156,7 @@ namespace o2
             typedef _thisType thisclass;
             processor.template StartBases<_thisType>(object, type);
 
-            BASE_CLASS(o2::ActorRef);
+            BASE_CLASS(o2::Ref<Actor>);
         }
 
         template<typename _type_processor>
@@ -230,35 +178,28 @@ namespace o2
             FUNCTION().PUBLIC().SIGNATURE(const Type&, GetActorType);
             FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
         }
-
-    protected:
-        T* mSpecActor = nullptr;
-
-    protected:
-        // Updates specialized actor pointer
-        void UpdateSpecActor() override { mSpecActor = dynamic_cast<T*>(mActor); };
     };
 }
 // --- META ---
 
-CLASS_BASES_META(o2::ActorRef)
+CLASS_BASES_META(o2::Ref<Actor>)
 {
     BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::ActorRef)
+CLASS_FIELDS_META(o2::Ref<Actor>)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActor);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mWasDeleted);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRequiredResolveData);
 }
 END_META;
-CLASS_METHODS_META(o2::ActorRef)
+CLASS_METHODS_META(o2::Ref<Actor>)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ActorRef&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Actor>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, Get);
     FUNCTION().PUBLIC().SIGNATURE(const Actor*, Get);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Destroy);
@@ -266,9 +207,9 @@ CLASS_METHODS_META(o2::ActorRef)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsWasDeleted);
     FUNCTION().PUBLIC().SIGNATURE(const Type&, GetActorType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const ActorRef&, const ActorRef&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const Ref<Actor>&, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateSpecActor);
-    FUNCTION().PROTECTED().SIGNATURE(void, CopyWithoutRemap, const ActorRef&);
+    FUNCTION().PROTECTED().SIGNATURE(void, CopyWithoutRemap, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }

@@ -9,62 +9,32 @@ namespace o2
     // ---------------------------------------------------------------------
     // Component reference, automatically invalidates when component deletes
     // ---------------------------------------------------------------------
-    class ComponentRef: public ISerializable
+    class BaseComponentRef: public ISerializable
     {
     public:
         // Default constructor, no reference
-        ComponentRef();
-
-        // Constructor with referencing on component @SCRIPTABLE
-        ComponentRef(Component* component);
+        BaseComponentRef();
 
         // Creates a copy of component and returns reference on it
-        ComponentRef(const ComponentRef& other);
+        BaseComponentRef(const BaseComponentRef& other);
 
         // Destructor
-        ~ComponentRef();
-
-        // Boolean cast operator, true means that reference is valid
-        operator bool() const;
+        ~BaseComponentRef();
 
         // Assign operator
-        ComponentRef& operator=(const ComponentRef& other);
-
-        // Getter operator
-        Component& operator*();
-
-        // Constant getter operator
-        const Component& operator*() const;
-
-        // Component members access operator
-        Component* operator->();
-
-        // Constant component members access operator
-        const Component* operator->() const;
-
-        // Check equals operator
-        bool operator==(const ComponentRef& other) const;
-
-        // Check not equals operator
-        bool operator!=(const ComponentRef& other) const;
+        BaseComponentRef& operator=(const BaseComponentRef& other);
 
         // Sets component @SCRIPTABLE
-        void Set(Component* component);
+        virtual void Set(Component* component);
 
         // Returns component pointer @SCRIPTABLE
-        Component* Get();
+        virtual Component* Get();
 
         // Returns component pointer
-        const Component* Get() const;
+        virtual const Component* Get() const;
 
         // Destroy the component @SCRIPTABLE
         void Destroy();
-
-        // Returns is reference is valid @SCRIPTABLE
-        bool IsValid() const;
-
-        // Returns is component was deleted @SCRIPTABLE
-        bool IsWasDeleted() const;
 
         // Returns component type
         virtual const Type& GetComponentType() const;
@@ -73,23 +43,23 @@ namespace o2
         static const Type* GetComponentTypeStatic();
 
         // Checks refs are equals for serializing delta
-        static bool EqualsDelta(const ComponentRef& obj, const ComponentRef& origin);
+        static bool EqualsDelta(const BaseComponentRef& obj, const BaseComponentRef& origin);
 
-        SERIALIZABLE(ComponentRef);
+        SERIALIZABLE(BaseComponentRef);
 
     protected:
         // ------------------------------
         // Reference resolve request data
         // ------------------------------
-        struct IRequiredResolveData
+        struct IRequiredResolveData: public RefCounterable
         {
             SceneUID componentUID;
 
             // Request resolve reference
-            virtual void RequireResolve(ComponentRef& ref) = 0;
+            virtual void RequireResolve(BaseComponentRef& ref) = 0;
 
             // Clone data
-            virtual IRequiredResolveData* Clone() const = 0;
+            virtual Ref<IRequiredResolveData> Clone() const = 0;
         };
 
         // -------------------------------------------------
@@ -100,10 +70,10 @@ namespace o2
             SceneUID uid;
 
             // Request resolve reference
-            void RequireResolve(ComponentRef& ref) override;
+            void RequireResolve(BaseComponentRef& ref) override;
 
             // Clone data
-            IRequiredResolveData* Clone() const override;
+            Ref<IRequiredResolveData> Clone() const override;
         };
 
         // -------------------------------------------
@@ -114,24 +84,18 @@ namespace o2
             UID uid;
 
             // Request resolve reference
-            void RequireResolve(ComponentRef& ref) override;
+            void RequireResolve(BaseComponentRef& ref) override;
 
             // Clone data
-            IRequiredResolveData* Clone() const override;
+            Ref<IRequiredResolveData> Clone() const override;
         };
 
-        Component* mComponent = nullptr;
-        bool       mWasDeleted = false;
-
-        IRequiredResolveData* mRequiredResolveData = nullptr; // Reference resolve request data. Used for resolving reference after deserialization.
-                                                              // Not null only when reference is required to resolve. Copies in reference copying.
+        Ref<IRequiredResolveData> mRequiredResolveData; // Reference resolve request data. Used for resolving reference after deserialization.
+                                                        // Not null only when reference is required to resolve. Copies in reference copying.
 
     protected:
-        // Updates specialized component pointer
-        virtual void UpdateSpecComponent() {}
-
         // Copying ref without requiring remap
-        void CopyWithoutRemap(const ComponentRef& other);
+        virtual void CopyWithoutRemap(const BaseComponentRef& other);
 
         // Beginning serialization callback
         void OnSerialize(DataValue& node) const override;
@@ -146,62 +110,41 @@ namespace o2
     // ---------------------------------------
     // Reference on derived from component classes
     // ---------------------------------------
-    template<typename T>
-    class Ref<T, typename std::enable_if<IsBaseOf<Component, T>::value>::type>: public ComponentRef
+    template<typename _component_type>
+    class Ref<_component_type, typename std::enable_if<IsBaseOf<Component, _component_type>::value>::type>: public BaseComponentRef, public BaseRef<_component_type>
     {
-    public:
-        // Default constructor, no reference
-        Ref(): ComponentRef() {}
+	public:
+		using Base = BaseRef<_component_type>;
 
-        // Constructor with referencing on component
-        Ref(T* component): ComponentRef(component), mSpecComponent(component) {}
+	public:
+		// Base reference implementation
+		BASE_REF_IMPLEMETATION(_component_type);
 
-        // Creates a copy of component and returns reference on it
-        Ref(const Ref<T>& other): ComponentRef(other), mSpecComponent(other.mSpecComponent) {}
-
-        // Boolean cast operator, true means that reference is valid
-        operator bool() const { return IsValid(); }
-
-        // Assign operator
-        Ref<T>& operator=(const Ref<T>& other)
-        {
-            ComponentRef::operator=(other);
-            mSpecComponent = other.mSpecComponent;
-            return *this;
-        }
-
-        // Getter operator
-        T& operator*() { return *mSpecComponent; }
-
-        // Constant getter operator
-        const T& operator*() const { return *mSpecComponent; }
-
-        // Asset members and field operator
-        T* operator->() { return mSpecComponent; }
-
-        // Constant asset members and field operator
-        const T* operator->() const { return mSpecComponent; }
-
-        // Check equals operator
-        bool operator==(const Ref<T>& other) const { return ComponentRef::operator==(other); }
-
-        // Check not equals operator
-        bool operator!=(const Ref<T>& other) const { return ComponentRef::operator!=(other); }
+		// Sets component @SCRIPTABLE
+        void Set(Component* component) override { *this = component; }
 
         // Returns component pointer @SCRIPTABLE
-        T* Get() { return mSpecComponent; }
+        _component_type* Get() override { return Base::Get(); }
 
         // Returns component pointer
-        const T* Get() const { return mSpecComponent; }
+        const _component_type* Get() const { return Base::Get(); }
 
         // Returns component type
-        const Type& GetComponentType() const override { return TypeOf(T); }
+        const Type& GetComponentType() const override { return TypeOf(_component_type); }
 
         // Returns component type
-        static const Type* GetComponentTypeStatic() { return &TypeOf(T); }
+        static const Type* GetComponentTypeStatic() { return &TypeOf(_component_type); }
+
+	protected:
+		// Copying ref without requiring remap
+		void CopyWithoutRemap(const BaseComponentRef& other) override
+		{
+			mPtr = other.mPtr;
+			mRequiredResolveData = nullptr;
+		}
 
     public:
-        typedef Ref<T, typename std::enable_if<std::is_base_of<Component, T>::value>::type> _thisType;
+		typedef Ref<_component_type, typename std::enable_if<std::is_base_of<Component, _component_type>::value>::type> _thisType;
 
         SERIALIZABLE_MAIN(_thisType);
         IOBJECT_SCRIPTING();
@@ -212,7 +155,7 @@ namespace o2
             typedef _thisType thisclass;
             processor.template StartBases<_thisType>(object, type);
 
-            BASE_CLASS(o2::ComponentRef);
+            BASE_CLASS(o2::BaseComponentRef);
         }
 
         template<typename _type_processor>
@@ -234,35 +177,28 @@ namespace o2
             FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
             FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
         }
-
-    protected:
-        T* mSpecComponent = nullptr;
-
-    protected:
-        // Updates specialized component pointer
-        void UpdateSpecComponent() override { mSpecComponent = dynamic_cast<T*>(mComponent); };
     };
 }
 // --- META ---
 
-CLASS_BASES_META(o2::ComponentRef)
+CLASS_BASES_META(o2::BaseComponentRef)
 {
     BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::ComponentRef)
+CLASS_FIELDS_META(o2::BaseComponentRef)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponent);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mWasDeleted);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRequiredResolveData);
 }
 END_META;
-CLASS_METHODS_META(o2::ComponentRef)
+CLASS_METHODS_META(o2::BaseComponentRef)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(Component*);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentRef&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const BaseComponentRef&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Set, Component*);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, Get);
     FUNCTION().PUBLIC().SIGNATURE(const Component*, Get);
@@ -271,9 +207,9 @@ CLASS_METHODS_META(o2::ComponentRef)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsWasDeleted);
     FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const ComponentRef&, const ComponentRef&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const BaseComponentRef&, const BaseComponentRef&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateSpecComponent);
-    FUNCTION().PROTECTED().SIGNATURE(void, CopyWithoutRemap, const ComponentRef&);
+    FUNCTION().PROTECTED().SIGNATURE(void, CopyWithoutRemap, const BaseComponentRef&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }

@@ -88,7 +88,7 @@ namespace o2
         void RemoveFromRigidBody();
 
         // Searches rigid body in parent hierarchy
-        RigidBody* FindRigidBody() const;
+        Ref<RigidBody> FindRigidBody() const;
 
         // Called when shape has changed, updates fixture with new shape
         void OnShapeChanged();

@@ -256,13 +256,13 @@ namespace o2
 
     void RigidBody::AddCollider(ICollider* collider)
     {
-        if (mColliders.Contains(collider))
+        if (mColliders.Contains(Ref(collider)))
             return;
 
         if (mBody)
             collider->AddToRigidBody(this);
 
-        mColliders.Add(collider);
+        mColliders.Add(Ref(collider));
     }
 
     void RigidBody::RemoveCollider(ICollider* collider)
@@ -270,7 +270,7 @@ namespace o2
         if (mBody)
             collider->RemoveFromRigidBody();
 
-        mColliders.Remove(collider);
+        mColliders.RemoveFirst([&](auto& x) { return x == collider; });
     }
 
 }

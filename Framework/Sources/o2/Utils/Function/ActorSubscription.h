@@ -13,8 +13,8 @@ namespace o2
     class IActorSubscription : public ISerializableFunction
     {
     public:
-        ActorRef     actorRef;     // Target actor
-        ComponentRef componentRef; // Target component
+        Ref<Actor>     actorRef;     // Target actor
+        Ref<Component> componentRef; // Target component
         String       method;       // Method name
     };
 
@@ -31,7 +31,7 @@ namespace o2
         }
 
         // Constructor
-        ActorSubscription(const ActorRef& actor, const String& method)
+        ActorSubscription(const Ref<Actor>& actor, const String& method)
         {
             this->actorRef = actor;
             this->method = method;

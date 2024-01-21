@@ -75,7 +75,7 @@ namespace o2
         void OnDeserialized(const DataValue& node) override;
 
         // Sets owner actor
-        void SetOwnerActor(Actor* actor) override;
+        void SetOwnerActor(const Ref<Actor>& actor) override;
 
         // Called when actor was included to scene
         void OnAddToScene() override;

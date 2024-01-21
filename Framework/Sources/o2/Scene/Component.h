@@ -7,7 +7,7 @@
 namespace o2
 {
     class Actor;
-    class ComponentRef;
+    class Ref<Component>;
 
     // ---------------------------
     // Actor's component interface
@@ -184,7 +184,7 @@ namespace o2
         friend class Actor;
         friend struct ActorDifferences;
         friend class ActorRefResolver;
-        friend class ComponentRef;
+        friend class BaseComponentRef;
         friend class Scene;
         friend class Widget;
     };

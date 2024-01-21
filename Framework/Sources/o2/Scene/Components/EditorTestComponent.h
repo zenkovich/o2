@@ -27,12 +27,12 @@ namespace o2
         class TestInside: public ISerializable, public RefCounterable
         {
         public:
-            float mFloat = 1.2f;        // @SERIALIZABLE @SCRIPTABLE
+            float mFloat = 1.2f;                // @SERIALIZABLE @SCRIPTABLE
             String mString = String("bla bla"); // @SERIALIZABLE @SCRIPTABLE
-            WString mWString;           // @SERIALIZABLE @SCRIPTABLE
-            bool mBool = true;          // @SERIALIZABLE @SCRIPTABLE
+			WString mWString;                   // @SERIALIZABLE @SCRIPTABLE
+			bool mBool = true;                  // @SERIALIZABLE @SCRIPTABLE
              
-            ComponentRef mComponent;   // @SERIALIZABLE @SCRIPTABLE
+            Ref<Component> mComponent; // @SERIALIZABLE @SCRIPTABLE
             Ref<RigidBody> mRigidBody; // @SERIALIZABLE @SCRIPTABLE
 
             bool operator==(const TestInside& other) const { return false; }
@@ -57,54 +57,54 @@ namespace o2
         PROPERTY(Sprite, spriteProp, SetSprite, GetSprite);
         PROPERTY(Vector<Vec2I>, arr, SetArray, GetArray);
 
-        int mInteger;                                        // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-        float mFloat;                                        // @SERIALIZABLE
-        String mString;                                        // @SERIALIZABLE
-        WString mWString;                                    // @SERIALIZABLE
-        bool mBool;                                            // @SERIALIZABLE
-        ImageAssetRef mImageAsset;                            // @SERIALIZABLE
-        Ref<ActorAsset> mActorAsset;                            // @SERIALIZABLE
+        int mInteger;                                       // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+        float mFloat;                                       // @SERIALIZABLE
+        String mString;                                     // @SERIALIZABLE
+        WString mWString;                                   // @SERIALIZABLE
+        bool mBool;                                         // @SERIALIZABLE
+        ImageAssetRef mImageAsset;                          // @SERIALIZABLE
+        Ref<ActorAsset> mActorAsset;                        // @SERIALIZABLE
         DataAssetRef mDataAsset;                            // @SERIALIZABLE
         AnimationAssetRef mAnimationAsset;                  // @SERIALIZABLE
         Sprite* mSprite = mnew Sprite();                    // @SERIALIZABLE @DONT_DELETE
-        ActorRef mActor;                                    // @SERIALIZABLE
+        Ref<Actor> mActor;                                  // @SERIALIZABLE
         TagGroup mTags;                                     // @SERIALIZABLE
         Ref<SceneLayer> mLayer;                             // @SERIALIZABLE
-        ComponentRef mComponent;                            // @SERIALIZABLE
+        Ref<Component> mComponent;                          // @SERIALIZABLE
         Ref<RigidBody> mRigidBody;                          // @SERIALIZABLE
         Ref<ImageComponent> mImageComponent;                // @SERIALIZABLE
         Ref<ParticlesEmitterComponent> mParticlesComponent; // @SERIALIZABLE
-        Color4 mColor;                                        // @SERIALIZABLE
-        Vec2F mVec2F;                                        // @SERIALIZABLE
-        Vec2I mVec2I;                                        // @SERIALIZABLE
-        Vertex mVertex;                                    // @SERIALIZABLE
-        RectF mRectF;                                        // @SERIALIZABLE
-        RectI mRectI;                                        // @SERIALIZABLE
-        BorderF mBorderF;                                    // @SERIALIZABLE
-        BorderI mBorderI;                                    // @SERIALIZABLE
-        Curve mCurve = Curve::EaseInOut();                  // @SERIALIZABLE
-        TestInside mTestInside;                             // @SERIALIZABLE
-        TestEnum mTestEnum;                                 // @SERIALIZABLE
-        TestInside* mTestInsidePtr = nullptr;               // @SERIALIZABLE
-        Ref<TestInside> mTestInsideRef;                    // @SERIALIZABLE
+        Color4 mColor;                                      // @SERIALIZABLE
+        Vec2F mVec2F;                                       // @SERIALIZABLE
+        Vec2I mVec2I;                                       // @SERIALIZABLE
+        Vertex mVertex;                                     // @SERIALIZABLE
+        RectF mRectF;                                       // @SERIALIZABLE
+        RectI mRectI;                                       // @SERIALIZABLE
+        BorderF mBorderF;                                   // @SERIALIZABLE
+        BorderI mBorderI;                                   // @SERIALIZABLE
+		Curve mCurve = Curve::EaseInOut();                  // @SERIALIZABLE
+		TestInside mTestInside;                             // @SERIALIZABLE
+		TestEnum mTestEnum;                                 // @SERIALIZABLE
+		TestInside* mTestInsidePtr = nullptr;               // @SERIALIZABLE
+        Ref<TestInside> mTestInsideRef;                     // @SERIALIZABLE
 
         Vector<int> mIntVector;                    // @SERIALIZABLE
         Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
         Vector<TestInside*> mTestInsideptrsVector; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-        Vector<ActorRef> mActorVector;             // @SERIALIZABLE
+        Vector<Ref<Actor>> mActorVector;           // @SERIALIZABLE
         Vector<AnimationAssetRef> mAssetsVector;   // @SERIALIZABLE
 
         Vector<Vector<TestInside*>> mVectorOfVector; // @SERIALIZABLE
 
         Map<String, String> mDictionary;    // @SERIALIZABLE
-        float mFloat2;                        // @SERIALIZABLE
-        float mFloat3;                        // @SERIALIZABLE
-        float mFloat4;                        // @SERIALIZABLE
-        float mFloat5;                        // @SERIALIZABLE
-        float mFloat6;                        // @SERIALIZABLE
-        float mFloat7;                        // @SERIALIZABLE
-        float mFloat8;                        // @SERIALIZABLE
-        float mFloat9;                        // @SERIALIZABLE
+		float mFloat2;                      // @SERIALIZABLE
+		float mFloat3;                      // @SERIALIZABLE
+		float mFloat4;                      // @SERIALIZABLE
+		float mFloat5;                      // @SERIALIZABLE
+		float mFloat6;                      // @SERIALIZABLE
+		float mFloat7;                      // @SERIALIZABLE
+		float mFloat8;                      // @SERIALIZABLE
+		float mFloat9;                      // @SERIALIZABLE
 
         static String GetCategory();
 

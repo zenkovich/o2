@@ -106,7 +106,7 @@ namespace o2
         void UpdateMesh();
 
         // Sets owner actor
-        void SetOwnerActor(Actor* actor) override;
+        void SetOwnerActor(const Ref<Actor>& actor) override;
 
         // Calling when deserializing
         void OnDeserialized(const DataValue& node) override;

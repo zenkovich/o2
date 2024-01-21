@@ -36,39 +36,39 @@ namespace o2
         mName = name;
     }
 
-    void Tag::AddActor(Actor* actor)
+    void Tag::AddActor(const Ref<Actor>& actor)
     {
         if (mActors.Contains(actor))
             return;
 
         mActors.Add(actor);
-        actor->tags.mTags.Add(this);
+        actor->tags.mTags.Add(Ref(this));
     }
 
-    void Tag::RemoveActor(Actor* actor)
+    void Tag::RemoveActor(const Ref<Actor>& actor)
     {
         if (!actor)
             return;
 
         mActors.Remove(actor);
-        actor->tags.mTags.Remove(this);
+        actor->tags.mTags.Remove(Ref(this));
     }
 
     void Tag::Clear()
     {
         for (auto actor : mActors)
-            actor->tags.mTags.Remove(this);
+            actor.Lock()->tags.mTags.Remove(Ref(this));
 
         mActors.Clear();
     }
 
-    Tag& Tag::operator-=(Actor* actor)
+    Tag& Tag::operator-=(const Ref<Actor>& actor)
     {
         RemoveActor(actor);
         return *this;
     }
 
-    Tag& Tag::operator+=(Actor* actor)
+    Tag& Tag::operator+=(const Ref<Actor>& actor)
     {
         AddActor(actor);
         return *this;
@@ -91,16 +91,17 @@ namespace o2
         mTags = other.mTags;
 
         for (auto tag : mTags)
-            onTagAdded(tag);
+            onTagAdded(tag.Lock());
 
         return *this;
     }
 
     bool TagGroup::operator==(const TagGroup& other) const
     {
-        for (auto tag : mTags)
-            if (!other.IsHaveTag(tag))
+        for (auto tag : mTags) {
+            if (!other.IsHaveTag(tag.Lock()))
                 return false;
+        }
 
         return true;
     }
@@ -120,7 +121,7 @@ namespace o2
         AddTag(tag);
     }
 
-    void TagGroup::AddTag(Tag* tag)
+    void TagGroup::AddTag(const Ref<Tag>& tag)
     {
         if (!tag || mTags.Contains(tag))
             return;
@@ -142,7 +143,7 @@ namespace o2
         RemoveTag(tag);
     }
 
-    void TagGroup::RemoveTag(Tag* tag)
+    void TagGroup::RemoveTag(const Ref<Tag>& tag)
     {
         if (!tag || !mTags.Contains(tag))
             return;
@@ -154,32 +155,32 @@ namespace o2
     void TagGroup::Clear()
     {
         for (auto tag : mTags)
-            onTagRemoved(tag);
+            onTagRemoved(tag.Lock());
 
         mTags.Clear();
     }
 
     bool TagGroup::IsHaveTag(const String& name) const
     {
-        return mTags.Contains([&](auto x) { return x->GetName() == name; });
+        return mTags.Contains([&](auto x) { return x.Lock()->GetName() == name; });
     }
 
-    bool TagGroup::IsHaveTag(Tag* tag) const
+    bool TagGroup::IsHaveTag(const Ref<Tag>& tag) const
     {
         return mTags.Contains(tag);
     }
 
-    const Vector<Tag*>& TagGroup::GetTags() const
+    const Vector<WeakRef<Tag>>& TagGroup::GetTags() const
     {
         return mTags;
     }
 
     Vector<String> TagGroup::GetTagsNames() const
     {
-        return mTags.Convert<String>([](auto x) { return x->GetName(); });
+        return mTags.Convert<String>([](auto x) { return x.Lock()->GetName(); });
     }
 
-    TagGroup& TagGroup::operator-=(Tag* tag)
+    TagGroup& TagGroup::operator-=(const Ref<Tag>& tag)
     {
         RemoveTag(tag);
         return *this;
@@ -191,7 +192,7 @@ namespace o2
         return *this;
     }
 
-    TagGroup& TagGroup::operator+=(Tag* tag)
+    TagGroup& TagGroup::operator+=(const Ref<Tag>& tag)
     {
         AddTag(tag);
         return *this;

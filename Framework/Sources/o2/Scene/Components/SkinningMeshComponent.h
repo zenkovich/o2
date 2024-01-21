@@ -86,7 +86,7 @@ namespace o2
         void NeedUpdateBones(bool force = false);
 
         // Returns list of bones
-        const Vector<Pair<SkinningMeshBoneComponent*, SkinningMesh::Bone*>>& GetBones() const;
+        const Vector<Pair<WeakRef<SkinningMeshBoneComponent>, SkinningMesh::Bone*>>& GetBones() const;
 
         // Returns name of component
         static String GetName();
@@ -103,7 +103,7 @@ namespace o2
         SkinningMesh mMesh;      // Drawing mesh, built from spline
         Basis        mTransform; // Transform where mesh was built
 
-        Vector<Pair<SkinningMeshBoneComponent*, SkinningMesh::Bone*>> mBonesMapping; // Map of bones to components. Updates in UpdateBones, used in updating mesh
+        Vector<Pair<WeakRef<SkinningMeshBoneComponent>, SkinningMesh::Bone*>> mBonesMapping; // Map of bones to components. Updates in UpdateBones, used in updating mesh
 
         ImageAssetRef mImageAsset;                         // Image asset @SERIALIZABLE
         RectF         mImageMapping = RectF(0, 0, 10, 10); // Image mapping rectangle @SERIALIZABLE
@@ -129,7 +129,7 @@ namespace o2
         void UpdateBones();
 
         // Sets owner actor
-        void SetOwnerActor(Actor* actor) override;
+        void SetOwnerActor(const Ref<Actor>& actor) override;
 
         // Calling when deserializing
         void OnDeserialized(const DataValue& node) override;

@@ -299,13 +299,13 @@ namespace o2
         void DestroyEditableObject(const Ref<SceneEditableObject>& object);
 
         // Returns all editable objects
-		const Vector<Ref<SceneEditableObject>>& GetAllEditableObjects();
+		const Vector<WeakRef<SceneEditableObject>>& GetAllEditableObjects();
 
         // Returns current changed actors
         const Vector<Ref<SceneEditableObject>>& GetChangedObjects() const;
 
         // Returns drawn on last frame editable objects
-        const Vector<Ref<SceneEditableObject>>& GetDrawnEditableObjects() const;
+        const Vector<WeakRef<SceneEditableObject>>& GetDrawnEditableObjects() const;
 
         // Returns actor by id
         Ref<SceneEditableObject> GetEditableObjectByID(SceneUID id) const;

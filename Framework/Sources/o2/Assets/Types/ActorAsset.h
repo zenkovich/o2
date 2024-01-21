@@ -29,7 +29,7 @@ namespace o2
         ActorAsset& operator=(const ActorAsset& asset);
 
         // Instantiates actor toscene @SCRIPTABLE
-        ActorRef Instantiate() const;
+        Ref<Actor> Instantiate() const;
 
         // Returns actor
         const Ref<Actor>& GetActor() const;
@@ -85,7 +85,7 @@ CLASS_METHODS_META(o2::ActorAsset)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAsset&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorRef, Instantiate);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, Instantiate);
     FUNCTION().PUBLIC().SIGNATURE(Actor*, GetActor);
     FUNCTION().PUBLIC().SIGNATURE(void, SetActor, Actor*, bool);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);

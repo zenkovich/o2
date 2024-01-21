@@ -30,7 +30,7 @@ namespace o2
 
         if (fit)
         {
-            mRadius = mOwner->transform->GetSize().x*0.5f;
+            mRadius = mOwner.Lock()->transform->GetSize().x*0.5f;
             OnShapeChanged();
         }
     }
@@ -81,7 +81,7 @@ namespace o2
         if (mFitByActor && !o2Scene.IsEditorPlaying())
         {
             float prevRadius = mRadius;
-            mRadius = mOwner->transform->GetSize().x*0.5f;
+            mRadius = mOwner.Lock()->transform->GetSize().x*0.5f;
         }
 #endif
 
@@ -91,7 +91,7 @@ namespace o2
 #if IS_EDITOR
     void CircleCollider::OnAddedFromEditor()
     {
-        mRadius = mOwner->transform->GetSize().x*0.5f;
+        mRadius = mOwner.Lock()->transform->GetSize().x*0.5f;
     }
 #endif
 }

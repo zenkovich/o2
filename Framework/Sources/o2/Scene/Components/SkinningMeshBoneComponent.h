@@ -37,7 +37,7 @@ namespace o2
         void OnUpdate(float dt) override;
 
         // Searches skinning mesh in parent hierarchy
-        SkinningMeshComponent* FindSkinningMesh() const;
+        Ref<SkinningMeshComponent> FindSkinningMesh() const;
 
         // Returns name of component
         static String GetName();

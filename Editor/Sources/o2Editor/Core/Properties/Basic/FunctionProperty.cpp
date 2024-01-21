@@ -214,7 +214,7 @@ namespace Editor
 				instance->funcDropDown = widget->funcDropDown;
 			}
 
-			instance->refProperty->SelectValueAndPrototypePointers<ActorRef, IActorSubscription>(
+			instance->refProperty->SelectValueAndPrototypePointers<Ref<Actor>, IActorSubscription>(
 				instance->values.Convert<IActorSubscription*>([](auto p) { return p.first; }),
 				instance->values.Convert<IActorSubscription*>([](auto p) { return p.second; }),
 				[](IActorSubscription* s)
@@ -230,7 +230,7 @@ namespace Editor
 				[=](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)
 			{
 				instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-											  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : ComponentRef(),
+											  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
 											  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
 			};
 
@@ -239,7 +239,7 @@ namespace Editor
 			instance->removeBtn->onClick = [=]() { OnRemovePressed(instance); };
 
 			instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-										  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : ComponentRef(),
+										  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
 										  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
 
 			instance->caption->text = "#" + (String)idx;
@@ -294,7 +294,7 @@ namespace Editor
 		return res;
 	}
 
-	void FunctionProperty::FunctionInstance::UpdateFunctionsList(const ActorRef& actor, const ComponentRef& selectedComponent,
+	void FunctionProperty::FunctionInstance::UpdateFunctionsList(const Ref<Actor>& actor, const Ref<Component>& selectedComponent,
 																 const String& selectedMethod)
 	{
 		funcDropDown->RemoveAllItems();

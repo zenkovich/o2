@@ -59,14 +59,14 @@ namespace o2
     void SkinningMeshComponent::UpdateBonesTransforms()
     {
         for (auto& bone : mBonesMapping)
-            bone.second->releaseTransform = bone.second->baseTransform.Inverted()*bone.first->GetOwnerActor()->transform->GetWorldNonSizedBasis();
+            bone.second->releaseTransform = bone.second->baseTransform.Inverted()*bone.first.Lock()->GetOwnerActor()->transform->GetWorldNonSizedBasis();
     }
 
     void SkinningMeshComponent::UpdateBones()
     {
         mBonesMapping.Clear();
 
-        Function<void(Actor*)> searchBones = [&searchBones, this](Actor* actor) {
+        Function<void(const Ref<Actor>)> searchBones = [&searchBones, this](const Ref<Actor>& actor) {
             if (auto boneComp = actor->GetComponent<SkinningMeshBoneComponent>())
                 mBonesMapping.Add({ boneComp, nullptr });
 
@@ -74,7 +74,7 @@ namespace o2
                 searchBones(child);
         };
 
-        searchBones(mOwner);
+        searchBones(mOwner.Lock());
 
         mMesh.SetMaxBonesCount(mBonesMapping.Count() + 1);
         mMesh.bonesCount = mBonesMapping.Count() + 1;
@@ -89,9 +89,9 @@ namespace o2
         {
             mBonesMapping[i].second = &mMesh.bones[i + 1];
             mBonesMapping[i].second->baseTransform = 
-                mBonesMapping[i].first->GetOwnerActor()->transform->GetWorldNonSizedBasis();
+                mBonesMapping[i].first.Lock()->GetOwnerActor()->transform->GetWorldNonSizedBasis();
 
-            for (auto& weightPair : mBonesMapping[i].first->vertexWeights)
+            for (auto& weightPair : mBonesMapping[i].first.Lock()->vertexWeights)
             {
                 auto& vertex = mMesh.vertices[weightPair.first];
 
@@ -133,7 +133,7 @@ namespace o2
 
     void SkinningMeshComponent::OnTransformUpdated()
     {
-        auto newTransform = mOwner->transform->GetWorldNonSizedBasis();
+        auto newTransform = mOwner.Lock()->transform->GetWorldNonSizedBasis();
         auto delta = newTransform*mTransform.Inverted();
         mTransform = newTransform;
 
@@ -297,7 +297,7 @@ namespace o2
             UpdateBones();
     }
 
-    const Vector<Pair<SkinningMeshBoneComponent*, SkinningMesh::Bone*>>& SkinningMeshComponent::GetBones() const
+    const Vector<Pair<WeakRef<SkinningMeshBoneComponent>, SkinningMesh::Bone*>>& SkinningMeshComponent::GetBones() const
     {
         return mBonesMapping;
     }
@@ -317,7 +317,7 @@ namespace o2
         return "ui/UI4_image_component.png";
     }
 
-    void SkinningMeshComponent::SetOwnerActor(Actor* actor)
+    void SkinningMeshComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }

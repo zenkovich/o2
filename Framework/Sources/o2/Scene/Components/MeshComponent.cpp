@@ -128,7 +128,7 @@ namespace o2
 
     void MeshComponent::OnTransformUpdated()
     {
-        auto newTransform = mOwner->transform->GetWorldNonSizedBasis();
+        auto newTransform = mOwner.Lock()->transform->GetWorldNonSizedBasis();
         auto delta = newTransform*mTransform.Inverted();
         mTransform = newTransform;
 
@@ -217,7 +217,7 @@ namespace o2
         mMesh.polyCount = triangulation.triangles.size();
     }
 
-    void MeshComponent::SetOwnerActor(Actor* actor)
+    void MeshComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }
