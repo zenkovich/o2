@@ -43,6 +43,9 @@ namespace o2
         // Returns actor type
         virtual const Type& GetActorType() const;
 
+        // Copying ref without requiring remap
+        virtual void CopyWithoutRemap(const BaseActorRef& other);
+
         // Returns actor type
         static const Type* GetActorTypeStatic();
 
@@ -96,9 +99,6 @@ namespace o2
                                                         // Not null only when reference is required to resolve. Copies in reference copying.
 
     protected:
-        // Copying ref without requiring remap
-        virtual void CopyWithoutRemap(const BaseActorRef& other);
-
         // Beginning serialization callback
         void OnSerialize(DataValue& node) const override;
 
@@ -133,16 +133,15 @@ namespace o2
         // Returns actor type
         const Type& GetActorType() const override { return TypeOf(_actor_type); }
 
+        // Copying ref without requiring remap
+        void CopyWithoutRemap(const BaseActorRef& other) override
+        {
+            mPtr = other.mPtr;
+            mRequiredResolveData = nullptr;
+        }
+
         // Returns actor type
         static const Type* GetActorTypeStatic() { return &TypeOf(_actor_type); }
-
-	protected:
-		// Copying ref without requiring remap
-        void CopyWithoutRemap(const BaseActorRef& other) override
-		{
-			mPtr = other.mPtr;
-			mRequiredResolveData = nullptr;
-        }
 
     public:
         typedef Ref<_actor_type, typename std::enable_if<std::is_base_of<Actor, _actor_type>::value>::type> _thisType;

@@ -91,7 +91,7 @@ namespace o2
 		void ClearStyle();
 
 		// Adds widget style
-		void AddWidgetStyle(const Ref<Widget> widget, const String& style);
+		void AddWidgetStyle(const Ref<Widget>& widget, const String& style);
 
 		// Creates widget by style
 		Ref<Widget> CreateWidget(const Type& type, const String& style = "standard");

@@ -39,6 +39,9 @@ namespace o2
         // Returns component type
         virtual const Type& GetComponentType() const;
 
+        // Copying ref without requiring remap
+        virtual void CopyWithoutRemap(const BaseComponentRef& other);
+
         // Returns component type
         static const Type* GetComponentTypeStatic();
 
@@ -94,9 +97,6 @@ namespace o2
                                                         // Not null only when reference is required to resolve. Copies in reference copying.
 
     protected:
-        // Copying ref without requiring remap
-        virtual void CopyWithoutRemap(const BaseComponentRef& other);
-
         // Beginning serialization callback
         void OnSerialize(DataValue& node) const override;
 
@@ -132,16 +132,15 @@ namespace o2
         // Returns component type
         const Type& GetComponentType() const override { return TypeOf(_component_type); }
 
+        // Copying ref without requiring remap
+        void CopyWithoutRemap(const BaseComponentRef& other) override
+        {
+            mPtr = other.mPtr;
+            mRequiredResolveData = nullptr;
+        }
+
         // Returns component type
         static const Type* GetComponentTypeStatic() { return &TypeOf(_component_type); }
-
-	protected:
-		// Copying ref without requiring remap
-		void CopyWithoutRemap(const BaseComponentRef& other) override
-		{
-			mPtr = other.mPtr;
-			mRequiredResolveData = nullptr;
-		}
 
     public:
 		typedef Ref<_component_type, typename std::enable_if<std::is_base_of<Component, _component_type>::value>::type> _thisType;

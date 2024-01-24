@@ -268,7 +268,7 @@ namespace o2
 
     protected:
         // Sets owner and updates transform
-        void SetOwner(Actor* actor) override;
+        void SetOwner(const Ref<Actor>& actor) override;
 
         // Returns parent rectange, or zero when no parent
         RectF GetParentRectangle() const override;

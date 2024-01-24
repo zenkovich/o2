@@ -53,7 +53,7 @@ namespace o2
         bool operator==(const WidgetState& other) const;
 
         // Sets owner widget @SCRIPTABLE
-        void SetOwner(Widget* owner, bool errors);
+        void SetOwner(const Ref<Widget>& owner, bool errors);
 
         // Returns animation player
         AnimationPlayer& GetAnimationPlayer();
@@ -85,8 +85,9 @@ namespace o2
         SERIALIZABLE(WidgetState);
 
     protected:
-        bool    mState = false;   // Current state @SERIALIZABLE
-        Widget* mOwner = nullptr; // Owner widget pointer
+        bool mState = false; // Current state @SERIALIZABLE
+
+        WeakRef<Widget> mOwner; // Owner widget pointer
 
 		Ref<AnimationPlayer> mPlayer = mmake<AnimationPlayer>(); // Animation player
 

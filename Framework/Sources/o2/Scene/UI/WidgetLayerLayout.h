@@ -151,7 +151,7 @@ namespace o2
         SERIALIZABLE(WidgetLayerLayout);
 
     private:
-        WidgetLayer* mWidgetLayer = nullptr; // 
+        WeakRef<WidgetLayer> mWidgetLayer; // Owner widget layer 
 
         Vec2F mAnchorMin = Vec2F(0, 0); // @SERIALIZABLE
         Vec2F mAnchorMax = Vec2F(1, 1); // @SERIALIZABLE

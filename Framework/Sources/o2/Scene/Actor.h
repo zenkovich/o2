@@ -4,6 +4,7 @@
 #include "o2/Scene/ActorCreationMode.h"
 #include "o2/Scene/ActorRef.h"
 #include "o2/Scene/ActorTransform.h"
+#include "o2/Scene/ComponentRef.h"
 #include "o2/Scene/ISceneDrawable.h"
 #include "o2/Scene/SceneLayerRef.h"
 #include "o2/Scene/Tags.h"
@@ -464,7 +465,7 @@ namespace o2
         virtual void OnChildAdded(const Ref<Actor>& child);
 
         // Called when child actor was removed
-        virtual void OnChildRemoved(const Ref<Actor>& child);
+        virtual void OnChildRemoved(Actor* child);
 
         // Called when new component has added to actor
         virtual void OnComponentAdded(const Ref<Component>& component);
@@ -644,8 +645,8 @@ namespace o2
         friend class ActorRefResolver;
         friend class ActorTransform;
         friend class BaseActorRef;
+        friend class BaseComponentRef;
         friend class Component;
-        friend class ComponentRef;
         friend class DrawableComponent;
         friend class ISceneDrawable;
         friend class Scene;
@@ -677,21 +678,21 @@ namespace o2
     }
 
     template<typename _type>
-    _type* Actor::GetChildByType(const String& path) const
+    Ref<_type> Actor::GetChildByType(const String& path) const
     {
-        return dynamic_cast<_type*>(GetChild(path));
+        return DynamicCast<_type>(GetChild(path));
     }
 
     template<typename _type>
-    _type* Actor::FindChildByTypeAndName(const String& name) const
+    Ref<_type> Actor::FindChildByTypeAndName(const String& name) const
     {
-        return dynamic_cast<_type*>(FindChild(name));
+        return DynamicCast<_type>(FindChild(name));
     }
 
     template<typename _type>
-    Vector<_type*> Actor::GetComponentsInChildren() const
+    Vector<Ref<_type>> Actor::GetComponentsInChildren() const
     {
-        Vector<_type*> res = GetComponents<_type>();
+        auto res = GetComponents<_type>();
 
         for (auto child : mChildren)
             res.Add(child->GetComponentsInChildren<_type>());
@@ -700,9 +701,9 @@ namespace o2
     }
 
     template<typename _type>
-    _type* Actor::GetComponentInChildren() const
+    Ref<_type> Actor::GetComponentInChildren() const
     {
-        _type* res = GetComponent<_type>();
+        auto res = GetComponent<_type>();
 
         if (res)
             return res;
@@ -718,24 +719,24 @@ namespace o2
     }
 
     template<typename _type>
-    _type* Actor::GetComponent() const
+    Ref<_type> Actor::GetComponent() const
     {
         for (auto comp : mComponents)
         {
             if (comp->GetType().IsBasedOn(TypeOf(_type)))
-                return dynamic_cast<_type*>(comp);
+                return DynamicCast<_type>(comp);
         }
 
         return nullptr;
     }
 
     template<typename _type>
-    Vector<_type*> Actor::GetComponents() const
+    Vector<Ref<_type>> Actor::GetComponents() const
     {
-        Vector<_type*> res;
+        Vector<Ref<_type>> res;
         for (auto comp : mComponents)
         {
-            if (auto typeComp = dynamic_cast<_type*>(comp))
+            if (auto typeComp = DynamicCast<_type>(comp))
                 res.Add(typeComp);
         }
 
@@ -743,12 +744,12 @@ namespace o2
     }
 
     template<typename _type>
-    _type* Actor::AddComponent()
+    Ref<_type> Actor::AddComponent()
     {
         if (GetComponent<_type>() != nullptr)
             return nullptr;
 
-        _type* newComponent = mnew _type();
+        auto newComponent = mmake<_type>();
         AddComponent(newComponent);
 
         return newComponent;

@@ -27,7 +27,7 @@ namespace o2
             UIManager::RegisterFocusableWidget(this);
     }
 
-    Widget::Widget(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+    Widget::Widget(Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
     {
         if (IsFocusable())
@@ -44,19 +44,19 @@ namespace o2
 
         // Layers
         {
-            WidgetLayer::ICopyVisitor* layerCopyVisitor = nullptr;
+            Ref<WidgetLayer::ICopyVisitor> layerCopyVisitor;
 
-            if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
-                layerCopyVisitor = mnew WidgetLayer::InstantiatePrototypeCloneVisitor();
+            if (DynamicCast<InstantiatePrototypeCloneVisitor>(other.mCopyVisitor) || other.mIsAsset)
+                layerCopyVisitor = mmake<WidgetLayer::InstantiatePrototypeCloneVisitor>();
 
 #if IS_EDITOR
-            if (dynamic_cast<MakePrototypeCloneVisitor*>(other.mCopyVisitor))
-                layerCopyVisitor = mnew WidgetLayer::MakePrototypeCloneVisitor();
+            if (DynamicCast<MakePrototypeCloneVisitor>(other.mCopyVisitor))
+                layerCopyVisitor = mmake<WidgetLayer::MakePrototypeCloneVisitor>();
 
-            if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
+            if (DynamicCast<InstantiatePrototypeCloneVisitor>(other.mCopyVisitor) || other.mIsAsset)
             {
-                layersEditable.prototypeLink = &other.layersEditable;
-                internalChildrenEditable.prototypeLink = &other.internalChildrenEditable;
+                layersEditable->prototypeLink = other.layersEditable;
+                internalChildrenEditable->prototypeLink = other.internalChildrenEditable;
             }
 #endif
 
@@ -64,24 +64,23 @@ namespace o2
             {
                 layer->mCopyVisitor = layerCopyVisitor;
 
-                auto newLayer = mnew WidgetLayer(*layer);
-                newLayer->SetOwnerWidget(this);
+                auto newLayer = mmake<WidgetLayer>(*layer);
+                newLayer->SetOwnerWidget(Ref(this));
                 mLayers.Add(newLayer);
                 OnLayerAdded(newLayer);
             }
 
-            if (layerCopyVisitor)
-                delete layerCopyVisitor;
+            layerCopyVisitor = nullptr;
         }
 
         // Children
         {
             for (auto child : mChildren)
             {
-                Widget* childWidget = dynamic_cast<Widget*>(child);
+                auto childWidget = DynamicCast<Widget>(child);
                 if (childWidget)
                 {
-                    childWidget->mParentWidget = this;
+                    childWidget->mParentWidget = Ref(this);
                     mChildWidgets.Add(childWidget);
                     OnChildAdded(childWidget);
                 }
@@ -91,9 +90,9 @@ namespace o2
 
             for (auto child : other.mInternalWidgets)
             {
-                auto newChild = child->CloneAs<Widget>();
+                auto newChild = child->CloneAsRef<Widget>();
                 newChild->RemoveFromScene();
-                newChild->SetInternalParent(this, false);
+                newChild->SetInternalParent(Ref(this), false);
             }
         }
 
@@ -101,7 +100,7 @@ namespace o2
         {
             for (auto state : other.mStates)
             {
-                WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
+                auto newState = state->CloneAsRef<WidgetState>();
                 AddState(newState, false);
             }
         }
@@ -113,16 +112,14 @@ namespace o2
     Widget::~Widget()
     {
         if (mParent)
-            mParent->OnChildRemoved(this);
+            mParent.Lock()->OnChildRemoved(this);
 
         for (auto layer : mLayers)
-        {
             layer->mOwnerWidget = nullptr;
-            delete layer;
-        }
 
-        for (auto state : mStates)
-            delete state;
+        mLayers.Clear();
+
+        mStates.Clear();
 
         for (auto child : mInternalWidgets)
         {
@@ -130,9 +127,9 @@ namespace o2
 
             child->mParent = nullptr;
             child->mParentWidget = nullptr;
-
-            delete child;
         }
+
+        mInternalWidgets.Clear();
 
         if (IsFocusable())
             UIManager::UnregisterFocusableWidget(this);
@@ -140,18 +137,6 @@ namespace o2
 
     Widget& Widget::operator=(const Widget& other)
     {
-        auto layers = mLayers;
-        for (auto layer : layers)
-            delete layer;
-
-        auto states = mStates;
-        for (auto state : states)
-            delete state;
-
-        auto internalChildren = mInternalWidgets;
-        for (auto child : internalChildren)
-            delete child;
-
         mInternalWidgets.Clear();
         mLayers.Clear();
         mStates.Clear();
@@ -162,10 +147,12 @@ namespace o2
         mTransparency = other.mTransparency;
         mIsFocusable = other.mIsFocusable;
 
+        auto thisRef = Ref(this);
+
         for (auto layer : other.mLayers)
         {
-            auto newLayer = mnew WidgetLayer(*layer);
-            newLayer->SetOwnerWidget(this);
+            auto newLayer = mmake<WidgetLayer>(*layer);
+            newLayer->SetOwnerWidget(thisRef);
             mLayers.Add(newLayer);
             OnLayerAdded(newLayer);
         }
@@ -173,7 +160,7 @@ namespace o2
         mChildWidgets.Clear();
         for (auto child : mChildren)
         {
-            Widget* childWidget = dynamic_cast<Widget*>(child);
+            auto childWidget = DynamicCast<Widget>(child);
             if (childWidget)
             {
                 mChildWidgets.Add(childWidget);
@@ -183,14 +170,14 @@ namespace o2
 
         for (auto child : other.mInternalWidgets)
         {
-            auto newChild = child->CloneAs<Widget>();
+            auto newChild = child->CloneAsRef<Widget>();
             newChild->RemoveFromScene();
-            newChild->SetInternalParent(this, false);
+            newChild->SetInternalParent(thisRef, false);
         }
 
         for (auto state : other.mStates)
         {
-            WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
+            auto newState = state->CloneAsRef<WidgetState>();
             AddState(newState, false);
         }
 

@@ -17,10 +17,10 @@ namespace o2
         transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(false),
         mId(id), mAssetId(assetId), mState(State::Initializing), mIsOnScene(onScene)
     {
-        tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(WeakRef(this)); };
-        tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(WeakRef(this)); };
+        tags.onTagAdded = [&](const Ref<Tag>& tag) { tag->mActors.Add(WeakRef(this)); };
+        tags.onTagRemoved = [&](const Ref<Tag>& tag) { tag->mActors.Remove(WeakRef(this)); };
 
-        transform->SetOwner(this);
+        transform->SetOwner(Ref(this));
 
         Scene::OnActorCreated(this);
     }
@@ -895,7 +895,7 @@ namespace o2
         OnChildrenChanged();
     }
 
-    void Actor::OnChildRemoved(const Ref<Actor>& child)
+    void Actor::OnChildRemoved(Actor* child)
     {
         for (auto comp : mComponents)
             comp->OnChildRemoved(child);
