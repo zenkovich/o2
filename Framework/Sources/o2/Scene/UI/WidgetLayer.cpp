@@ -131,7 +131,7 @@ namespace o2
 		if (layer->mParent)
 			layer->mParent.Lock()->RemoveChild(layer.Get());
 		else if (layer->mOwnerWidget)
-			layer->mOwnerWidget.Lock()->RemoveLayer(layer.Get());
+			layer->mOwnerWidget.Lock()->RemoveLayer(layer);
 
 		layer->mParent = Ref(this);
 		mChildren.Add(layer);
@@ -139,7 +139,7 @@ namespace o2
 		layer->SetOwnerWidget(mOwnerWidget.Lock());
 
 		if (auto ownerWidget = mOwnerWidget.Lock()) {
-			ownerWidget->OnLayerAdded(layer.Get());
+			ownerWidget->OnLayerAdded(layer);
 			ownerWidget->UpdateLayersDrawingSequence();
 		}
 
@@ -432,10 +432,10 @@ namespace o2
 
 #if IS_EDITOR
 		if (Scene::IsSingletonInitialzed()) {
-			if (mOwnerWidget && mOwnerWidget->mState == Actor::State::Default)
-				o2Scene.AddEditableObjectToScene(this);
+			if (mOwnerWidget && mOwnerWidget.Lock()->mState == Actor::State::Default)
+				o2Scene.AddEditableObjectToScene(Ref(this));
 			else
-				o2Scene.RemoveEditableObjectFromScene(this);
+				o2Scene.RemoveEditableObjectFromScene(Ref(this));
 		}
 #endif
 
@@ -453,10 +453,10 @@ namespace o2
 		mUpdatingLayout = true;
 
 		if (mOwnerWidget) {
-			mOwnerWidget->UpdateLayersLayouts();
+			mOwnerWidget.Lock()->UpdateLayersLayouts();
 
 #if IS_EDITOR
-			mOwnerWidget->OnChanged();
+			mOwnerWidget.Lock()->OnChanged();
 #endif
 		}
 
@@ -466,9 +466,9 @@ namespace o2
 	void WidgetLayer::UpdateLayout()
 	{
 		if (mParent)
-			mAbsolutePosition = layout.Calculate(mParent->mAbsolutePosition);
+			mAbsolutePosition = layout.Calculate(mParent.Lock()->mAbsolutePosition);
 		else
-			mAbsolutePosition = layout.Calculate(mOwnerWidget->layout->GetWorldRect());
+			mAbsolutePosition = layout.Calculate(mOwnerWidget.Lock()->layout->GetWorldRect());
 
 		mInteractableArea = interactableLayout.Calculate(mAbsolutePosition);
 
@@ -482,9 +482,9 @@ namespace o2
 	void WidgetLayer::UpdateResTransparency()
 	{
 		if (mParent)
-			mResTransparency = transparency * mParent->mResTransparency;
+			mResTransparency = transparency * mParent.Lock()->mResTransparency;
 		else if (mOwnerWidget)
-			mResTransparency = transparency * mOwnerWidget->mResTransparency;
+			mResTransparency = transparency * mOwnerWidget.Lock()->mResTransparency;
 		else
 			mResTransparency = mTransparency;
 
@@ -498,7 +498,7 @@ namespace o2
 	void WidgetLayer::OnAddToScene()
 	{
 #if IS_EDITOR
-		o2Scene.AddEditableObjectToScene(this);
+		o2Scene.AddEditableObjectToScene(Ref(this));
 #endif
 
 		for (auto layer : mChildren)
@@ -508,16 +508,16 @@ namespace o2
 	void WidgetLayer::OnRemoveFromScene()
 	{
 #if IS_EDITOR
-		o2Scene.RemoveEditableObjectFromScene(this);
+		o2Scene.RemoveEditableObjectFromScene(Ref(this));
 #endif
 
 		for (auto layer : mChildren)
 			layer->OnRemoveFromScene();
 	}
 
-	Map<String, WidgetLayer*> WidgetLayer::GetAllChildLayers()
+	Map<String, Ref<WidgetLayer>> WidgetLayer::GetAllChildLayers()
 	{
-		Map<String, WidgetLayer*> res;
+		Map<String, Ref<WidgetLayer>> res;
 		for (auto layer : mChildren)
 			res.Add(layer->name, layer);
 
@@ -526,13 +526,13 @@ namespace o2
 
 	void WidgetLayer::InstantiatePrototypeCloneVisitor::OnCopy(const WidgetLayer* source, WidgetLayer* target)
 	{
-		target->mPrototypeLink = source;
+		target->mPrototypeLink = Ref(const_cast<WidgetLayer*>(source));
 	}
 
 	void WidgetLayer::MakePrototypeCloneVisitor::OnCopy(const WidgetLayer* source, WidgetLayer* target)
 	{
 		target->mPrototypeLink = source->mPrototypeLink;
-		const_cast<WidgetLayer*>(source)->mPrototypeLink = target;
+		const_cast<WidgetLayer*>(source)->mPrototypeLink = Ref(target);
 	}
 
 #if IS_EDITOR
@@ -540,7 +540,7 @@ namespace o2
 	bool WidgetLayer::IsOnScene() const
 	{
 		if (mOwnerWidget)
-			return mOwnerWidget->IsOnScene();
+			return mOwnerWidget.Lock()->IsOnScene();
 
 		return false;
 	}
@@ -570,12 +570,12 @@ namespace o2
 		this->name = name;
 	}
 
-	Vector<SceneEditableObject*> WidgetLayer::GetEditableChildren() const
+	Vector<Ref<SceneEditableObject>> WidgetLayer::GetEditableChildren() const
 	{
-		return mChildren.DynamicCast<SceneEditableObject*>();
+		return mChildren.Convert<Ref<SceneEditableObject>>([](auto& x) { return DynamicCast<SceneEditableObject>(x); });
 	}
 
-	const SceneEditableObject* o2::WidgetLayer::GetEditableLink() const
+	const Ref<SceneEditableObject> o2::WidgetLayer::GetEditableLink() const
 	{
 		return mPrototypeLink;
 	}

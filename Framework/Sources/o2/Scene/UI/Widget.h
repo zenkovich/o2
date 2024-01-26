@@ -128,7 +128,7 @@ namespace o2
                                   const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
         // Removes layer @SCRIPTABLE
-        void RemoveLayer(const Ref<WidgetLayer>& layer, bool release = true);
+        void RemoveLayer(const Ref<WidgetLayer>& layer);
 
         // Removes layer @SCRIPTABLE_NAME(RemoveLayerByPath)
         void RemoveLayer(const String& path);
