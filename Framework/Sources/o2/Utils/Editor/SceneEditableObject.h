@@ -144,7 +144,7 @@ namespace o2
         virtual void OnChildrenChanged();
 
         // Called when parent changed
-        virtual void OnEditableParentChanged(const Ref<SceneEditableObject> oldParent);
+        virtual void OnEditableParentChanged(const Ref<SceneEditableObject>& oldParent);
 
         // Called before making prototype from this object
         virtual void BeginMakePrototype() const {}

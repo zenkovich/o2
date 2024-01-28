@@ -64,7 +64,7 @@ namespace o2
 #endif
         }
 
-        for (auto child : other.mChildren)
+        for (auto& child : other.mChildren)
         {
             child->mCopyVisitor = other.mCopyVisitor;
 
@@ -73,7 +73,7 @@ namespace o2
             child->mCopyVisitor = nullptr;
         }
 
-        for (auto component : other.mComponents)
+        for (auto& component : other.mComponents)
         {
             auto newComponent = AddComponent(component->CloneAsRef<Component>());
 
@@ -94,7 +94,7 @@ namespace o2
     Actor::Actor(ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(transform, mode)
     {
-        for (auto comp : components)
+        for (auto& comp : components)
             AddComponent(comp);
     }
 
@@ -174,7 +174,7 @@ namespace o2
 #endif
         }
 
-        for (auto child : other.mChildren)
+        for (auto& child : other.mChildren)
         {
             child->mCopyVisitor = other.mCopyVisitor;
 
@@ -183,7 +183,7 @@ namespace o2
             child->mCopyVisitor = nullptr;
         }
 
-        for (auto component : other.mComponents)
+        for (auto& component : other.mComponents)
         {
             auto newComponent = AddComponent(component->CloneAsRef<Component>());
 
@@ -233,7 +233,7 @@ namespace o2
 
     void Actor::Draw()
     {
-        for (auto component : mDrawComponents)
+        for (auto& component : mDrawComponents)
             component->Draw();
 
         ISceneDrawable::Draw();
@@ -243,7 +243,7 @@ namespace o2
     {
         if (transform->IsDirty())
         {
-            for (auto child : mChildren)
+            for (auto& child : mChildren)
                 child->transform->SetDirty(true);
 
             UpdateSelfTransform();
@@ -251,7 +251,7 @@ namespace o2
 
         OnUpdate(dt);
 
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnUpdate(dt);
     }
 
@@ -259,25 +259,25 @@ namespace o2
     {
         OnFixedUpdate(dt);
 
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnFixedUpdate(dt);
     }
 
     void Actor::UpdateChildren(float dt)
     {
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->Update(dt);
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->UpdateChildren(dt);
     }
 
     void Actor::FixedUpdateChildren(float dt)
     {
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->FixedUpdate(dt);
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->FixedUpdateChildren(dt);
     }
 
@@ -291,16 +291,16 @@ namespace o2
     {
         transform->Update();
         
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnTransformUpdated();
     }
 
     void Actor::UpdateChildrenTransforms()
     {
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->UpdateSelfTransform();
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->UpdateChildrenTransforms();
     }
 
@@ -351,7 +351,7 @@ namespace o2
 
         if (withChildren)
         {
-            for (auto child : mChildren)
+            for (auto& child : mChildren)
                 child->GenerateNewID(withChildren);
         }
     }
@@ -365,7 +365,7 @@ namespace o2
 
         Scene::OnAddActorToScene(this);
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->AddToScene();
     }
 
@@ -378,7 +378,7 @@ namespace o2
 
         Scene::OnRemoveActorFromScene(this, keepEditorObjects);
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->RemoveFromScene();
     }
 
@@ -553,7 +553,7 @@ namespace o2
 
     void Actor::AddChildren(const Vector<Ref<Actor>>& actors)
     {
-        for (auto actor : actors)
+        for (auto& actor : actors)
             AddChild(actor);
     }
 
@@ -575,7 +575,7 @@ namespace o2
             return nullptr;
         }
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
         {
             if (child->mName == pathPart)
             {
@@ -591,7 +591,7 @@ namespace o2
 
     Ref<Actor> Actor::FindChild(const String& name) const
     {
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
         {
             if (child->mName == name)
                 return child;
@@ -605,7 +605,7 @@ namespace o2
 
     Ref<Actor> Actor::FindChild(const Function<bool(const Ref<Actor>& child)>& pred) const
     {
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
         {
             if (pred(child))
                 return child;
@@ -626,7 +626,7 @@ namespace o2
     {
         actors.Add(mChildren);
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->GetAllChildrenActors(actors);
     }
 
@@ -640,7 +640,7 @@ namespace o2
         if (withEvent)
             actor->OnParentChanged(oldParent);
 
-        OnChildRemoved(Ref(actor));
+        OnChildRemoved(actor);
 
         if (actor->mState != State::Destroyed)
         {
@@ -651,11 +651,11 @@ namespace o2
 
     void Actor::RemoveAllChildren()
     {
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
         {
             child->mParent = nullptr;
 
-            OnChildRemoved(child);
+            OnChildRemoved(child.Get());
             child->OnParentChanged(Ref(this));
         }
 
@@ -667,7 +667,7 @@ namespace o2
         if (mId == id)
             return Ref(this);
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
         {
             if (auto res = child->FindActorById(id))
                 return res;
@@ -684,7 +684,7 @@ namespace o2
         if (mIsOnScene && mState == State::Default)
             component->AddToScene();
 
-        if (auto drawableComponent = dynamic_cast<DrawableComponent*>(component))
+        if (auto drawableComponent = DynamicCast<DrawableComponent>(component))
             mDrawComponents.Add(drawableComponent);
 
         OnComponentAdded(component);
@@ -698,17 +698,17 @@ namespace o2
         return component;
     }
 
-    void Actor::RemoveComponent(const Ref<Component>& component)
+    void Actor::RemoveComponent(Component* component)
     {
         if (mIsOnScene)
             component->RemoveFromScene();
 
         if (auto drawableComponent = dynamic_cast<DrawableComponent*>(component))
-            mDrawComponents.Remove(drawableComponent);
+            mDrawComponents.RemoveFirst([&](auto& x) { return x == drawableComponent; });
 
         OnComponentRemoving(component);
 
-        mComponents.Remove(component);
+        mComponents.RemoveFirst([&](auto& x) { return x == component; });
         component->mOwner = nullptr;
 
 #if IS_EDITOR
@@ -721,12 +721,12 @@ namespace o2
         auto components = mComponents;
         mComponents.Clear();
 
-        for (auto component : components)
+        for (auto& component : components)
         {
             if (mIsOnScene)
                 component->RemoveFromScene();
 
-            OnComponentRemoving(component);
+            OnComponentRemoving(component.Get());
         }
 
 #if IS_EDITOR
@@ -736,7 +736,7 @@ namespace o2
 
     Ref<Component> Actor::GetComponent(const String& typeName)
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
         {
             if (comp->GetType().GetName() == typeName)
                 return comp;
@@ -747,7 +747,7 @@ namespace o2
 
     Ref<Component> Actor::GetComponent(const Type* type)
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
         {
             if (comp->GetType().IsBasedOn(*type))
                 return comp;
@@ -758,7 +758,7 @@ namespace o2
 
     Ref<Component> Actor::GetComponent(SceneUID id)
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
         {
             if (comp->GetID() == id)
                 return comp;
@@ -778,7 +778,7 @@ namespace o2
             if (typeProp.IsObjectContainer())
             {
                 const Type* type = typeProp.GetValue<const Type*>();
-                for (auto component : mComponents)
+                for (auto& component : mComponents)
                 {
                     if (component->GetType().IsBasedOn(*type))
                         return component;
@@ -787,7 +787,7 @@ namespace o2
         }
         else
         {
-            for (auto component : mComponents)
+            for (auto& component : mComponents)
             {
                 if (auto scriptComponent = DynamicCast<ScriptableComponent>(component))
                 {
@@ -836,7 +836,7 @@ namespace o2
     {
         ISceneDrawable::OnAddToScene();
 
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->AddToScene();
     }
 
@@ -844,7 +844,7 @@ namespace o2
     {
         ISceneDrawable::OnRemoveFromScene();
 
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->RemoveFromScene();
     }
 
@@ -852,13 +852,13 @@ namespace o2
     {
         mState = State::Default;
 
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnInitialized();
     }
 
     void Actor::OnStart()
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnStart();
     }
 
@@ -883,13 +883,13 @@ namespace o2
 
     void Actor::OnTransformUpdated()
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnTransformUpdated();
     }
 
     void Actor::OnChildAdded(const Ref<Actor>& child)
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnChildAdded(child);
 
         OnChildrenChanged();
@@ -897,7 +897,7 @@ namespace o2
 
     void Actor::OnChildRemoved(Actor* child)
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnChildRemoved(child);
 
         OnChildrenChanged();
@@ -905,20 +905,20 @@ namespace o2
 
     void Actor::OnComponentAdded(const Ref<Component>& component)
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnComponentAdded(component);
     }
 
-    void Actor::OnComponentRemoving(const Ref<Component>& component)
+    void Actor::OnComponentRemoving(Component* component)
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnComponentRemoving(component);
     }
 
 #if !IS_EDITOR
     void Actor::OnChildrenChanged()
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnChildrenChanged();
     }
 
@@ -926,7 +926,7 @@ namespace o2
     {
         ISceneDrawable::OnDrawbleParentChanged();
 
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnParentChanged(oldParent);
     }
 #endif
@@ -953,7 +953,7 @@ namespace o2
             else
                 OnDisabled();
 
-            for (auto comp : mComponents)
+            for (auto& comp : mComponents)
                 comp->UpdateEnabledInHierarchy();
 
 #if IS_EDITOR
@@ -966,7 +966,7 @@ namespace o2
 
         if (withChildren)
         {
-            for (auto child : mChildren)
+            for (auto& child : mChildren)
                 child->UpdateResEnabledInHierarchy();
         }
     }
@@ -1001,7 +1001,7 @@ namespace o2
         if (!mChildren.IsEmpty())
         {
             auto& childsNode = node.AddMember("Children");
-            for (auto child : mChildren)
+            for (auto& child : mChildren)
             {
                 auto& childNode = childsNode.AddElement();
                 child->Serialize(childNode.AddMember("Data"));
@@ -1012,7 +1012,7 @@ namespace o2
         if (!mComponents.IsEmpty())
         {
             auto& componentsNode = node.AddMember("Components");
-            for (auto component : mComponents)
+            for (auto& component : mComponents)
             {
                 auto& componentNode = componentsNode.AddElement();
                 componentNode.AddMember("Type") = component->GetType().GetName();
@@ -1041,7 +1041,7 @@ namespace o2
                 for (auto& componentNode : *componentsNode)
                 {
                     String componentType = componentNode.GetMember("Type");
-                    Component* component = (Component*)o2Reflection.CreateTypeSample(componentType);
+                    auto component = Ref((Component*)o2Reflection.CreateTypeSample(componentType));
                     if (component)
                     {
                         component->Deserialize(componentNode.GetMember("Data"));
@@ -1085,7 +1085,7 @@ namespace o2
 
     void Actor::SerializeWithProto(DataValue& node) const
     {
-        const Actor* proto = mPrototypeLink.Get();
+        const Actor* proto = mPrototypeLink.Lock().Get();
 
         // Prototype data
         if (mPrototype)
@@ -1104,14 +1104,14 @@ namespace o2
         if (transformNode.IsEmpty() || transformNode.IsNull())
             node.RemoveMember("Transform");
 
-        SerializeDelta(node, *mPrototypeLink.Get());
+        SerializeDelta(node, *mPrototypeLink.Lock().Get());
 
         // Children data
         if (!mChildren.IsEmpty())
         {
             auto& childsNode = node.AddMember("Children");
             childsNode.SetArray();
-            for (auto child : mChildren)
+            for (auto& child : mChildren)
             {
                 auto& childNode = childsNode.AddElement();
                 childNode.AddMember("Type") = child->GetType().GetName();
@@ -1124,7 +1124,7 @@ namespace o2
         {
             auto& componentsNode = node.AddMember("Components");
             componentsNode.SetArray();
-            for (auto component : mComponents)
+            for (auto& component : mComponents)
             {
                 auto& compNode = componentsNode.AddElement();
                 compNode.AddMember("Type") = component->GetType().GetName();
@@ -1160,7 +1160,7 @@ namespace o2
             {
                 bool found = false;
 
-                Actor* protoLink = parent->mPrototypeLink.Get();
+                Actor* protoLink = parent->mPrototypeLink.Lock().Get();
                 while (protoLink)
                 {
                     if (auto fnd = protoLink->FindActorById(id))
@@ -1170,7 +1170,7 @@ namespace o2
                         break;
                     }
 
-                    protoLink = protoLink->mPrototypeLink.Get();
+                    protoLink = protoLink->mPrototypeLink.Lock().Get();
                 }
 
                 if (found)
@@ -1181,7 +1181,7 @@ namespace o2
         }
 
         if (mPrototypeLink)
-            DeserializeDelta(node, *mPrototypeLink.Get());
+            DeserializeDelta(node, *mPrototypeLink.Lock().Get());
         else
             DeserializeBasic(node);
 
@@ -1194,7 +1194,7 @@ namespace o2
             return;
         }
 
-        const Actor* proto = mPrototypeLink.Get();
+        const Actor* proto = mPrototypeLink.Lock().Get();
 
         if (!mCopyVisitor)
             mCopyVisitor = mmake<SourceToTargetMapCloneVisitor>();
@@ -1253,7 +1253,7 @@ namespace o2
                     SceneUID id = *prototypeLinkNode;
                     if (mPrototypeLink)
                     {
-                        for (auto protoLinkComponent : mPrototypeLink->mComponents)
+                        for (auto& protoLinkComponent : mPrototypeLink.Lock()->mComponents)
                         {
                             if (protoLinkComponent->mId == id)
                             {
@@ -1268,8 +1268,8 @@ namespace o2
                     newComponent->Deserialize(componentDataValue);
                 else
                 {
-                    componentDataValue.GetDelta(*newComponent, *newComponent->mPrototypeLink);
-                    mCopyVisitor->OnCopyComponent(newComponent->mPrototypeLink, newComponent);
+                    componentDataValue.GetDelta(*newComponent, *newComponent->mPrototypeLink.Lock());
+                    mCopyVisitor->OnCopyComponent(newComponent->mPrototypeLink.Lock().Get(), newComponent.Get());
                 }
 
                 AddComponent(newComponent);
@@ -1330,7 +1330,7 @@ namespace o2
 
     Ref<Actor> Actor::GetPrototypeLink() const
     {
-        return mPrototypeLink;
+        return mPrototypeLink.Lock();
     }
 
     void Actor::SetLayer(const Ref<SceneLayer>& layer)
@@ -1373,7 +1373,7 @@ namespace o2
     Map<String, Ref<Actor>> Actor::GetAllChilds()
     {
         Map<String, Ref<Actor>> res;
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             res.Add(child->GetName(), child);
 
         return res;
@@ -1382,7 +1382,7 @@ namespace o2
     Map<String, Ref<Component>> Actor::GetAllComponents()
     {
         Map<String, Ref<Component>> res;
-        for (auto child : mComponents)
+        for (auto& child : mComponents)
             res.Add(child->GetType().GetName(), child);
 
         return res;
@@ -1436,7 +1436,7 @@ namespace o2
     void Actor::InstantiatePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)
     {
         SourceToTargetMapCloneVisitor::OnCopyComponent(source, target);
-        target->mPrototypeLink = const_cast<Component*>(source);
+        target->mPrototypeLink = Ref(const_cast<Component*>(source));
     }
 }
 // --- META ---

@@ -99,7 +99,7 @@ namespace o2
                 mLastFocusedWidgets.Add(mFocusedWidget);
 
             if (mFocusedWidget->mParentWidget)
-                mFocusedWidget->mParentWidget.Lock()->OnChildFocused(mFocusedWidget.Get());
+                mFocusedWidget->mParentWidget.Lock()->OnChildFocused(mFocusedWidget);
 
             if (mFocusedWidget->mFocusedState)
                 mFocusedWidget->mFocusedState.Lock()->SetState(true);
@@ -115,7 +115,7 @@ namespace o2
     {
         bool fnd = mFocusedWidget == nullptr;
         Ref<Widget> nextFocusingWidget;
-        for (auto widget : mFocusableWidgets)
+        for (auto& widget : mFocusableWidgets)
         {
             if (!fnd)
             {
@@ -194,7 +194,7 @@ namespace o2
 
     Ref<Widget> UIManager::GetWidgetStyle(const Type& type, const String& style)
     {
-        for (auto styleWidget : mStyleSamples)
+        for (auto& styleWidget : mStyleSamples)
         {
             if (type == styleWidget->GetActor()->GetType())
             {
@@ -337,7 +337,7 @@ namespace o2
 
     void UIManager::Draw()
     {
-        for (auto widget : mTopWidgets)
+        for (auto& widget : mTopWidgets)
             widget->Draw();
 
         mTopWidgets.Clear();
@@ -353,10 +353,10 @@ namespace o2
     {
         PROFILE_SAMPLE_FUNC();
 
-        for (auto widget : mLastFocusedWidgets)
+        for (auto& widget : mLastFocusedWidgets)
             widget->OnFocused();
 
-        for (auto widget : mLastUnfocusedWidgets)
+        for (auto& widget : mLastUnfocusedWidgets)
             widget->OnUnfocused();
 
         mLastFocusedWidgets.Clear();

@@ -248,7 +248,7 @@ namespace o2
         Ref<Component> AddComponent(const Ref<Component>& component);
 
         // Removes component @SCRIPTABLE
-        void RemoveComponent(const Ref<Component>& component);
+        void RemoveComponent(Component* component);
 
         // Removes all components @SCRIPTABLE
         void RemoveAllComponents();
@@ -345,7 +345,7 @@ namespace o2
         Ref<SceneLayer> mSceneLayer; // Scene layer @SERIALIZABLE @EDITOR_IGNORE
 
         Ref<ActorAsset> mPrototype;     // Prototype asset
-        Ref<Actor>      mPrototypeLink; // Prototype link actor. Links to source actor from prototype
+        WeakRef<Actor>  mPrototypeLink; // Prototype link actor. Links to source actor from prototype
 
         WeakRef<Actor>     mParent;   // Parent actor 
         Vector<Ref<Actor>> mChildren; // Children actors 
@@ -471,7 +471,7 @@ namespace o2
         virtual void OnComponentAdded(const Ref<Component>& component);
 
         // Called when component going to be removed from actor
-        virtual void OnComponentRemoving(const Ref<Component>& component);
+        virtual void OnComponentRemoving(Component* component);
 
 #if IS_SCRIPTING_SUPPORTED
     public:

@@ -14,7 +14,7 @@ namespace o2
     {
     public:
         PROPERTIES(Image);
-        PROPERTY(Sprite*, image, SetImage, GetImage);                      // Image sprite @SCRIPTABLE
+        PROPERTY(Ref<Sprite>, image, SetImage, GetImage);                  // Image sprite @SCRIPTABLE
         PROPERTY(ImageAssetRef, imageAsset, SetImageAsset, GetImageAsset); // Image asset @SCRIPTABLE
         PROPERTY(String, imageName, SetImageName, GetImageName);           // Image asset name @SCRIPTABLE
 
@@ -29,10 +29,10 @@ namespace o2
         Image& operator=(const Image& other);
 
         // Sets image @SCRIPTABLE
-        void SetImage(Sprite* sprite);
+        void SetImage(const Ref<Sprite>& sprite);
 
         // Returns image sprite @SCRIPTABLE
-        Sprite* GetImage();
+        const Ref<Sprite>& GetImage();
 
         // Sets image asset @SCRIPTABLE
         void SetImageAsset(const ImageAssetRef& asset);
@@ -52,7 +52,7 @@ namespace o2
         SERIALIZABLE(Image);
 
     protected:
-        Sprite* mImage = nullptr; // Image layer drawable
+        WeakRef<Sprite> mImage; // Image layer drawable
 
         friend class UIButtonGroup;
     };

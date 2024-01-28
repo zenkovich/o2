@@ -125,7 +125,7 @@ namespace o2
         float GetWidthWeightWithChildren() const override;
 
         // Called when child widget was added
-        void OnChildAdded(Widget* child) override;
+        void OnChildAdded(const Ref<Widget>& child) override;
 
         // Called when child widget was removed
         void OnChildRemoved(Widget* child) override;

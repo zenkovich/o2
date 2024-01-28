@@ -14,7 +14,8 @@ namespace o2
     public:
         Function<int()>                   getItemsCountFunc; // Items count getting function
         Function<Vector<void*>(int, int)> getItemsRangeFunc; // Items getting in range function
-        Function<void(Widget*, void*)>    setupItemFunc;     // Setup item widget function
+
+        Function<void(const Ref<Widget>&, void*)> setupItemFunc; // Setup item widget function
 
     public:
         // Default constructor
@@ -30,10 +31,10 @@ namespace o2
         GridLayoutScrollArea& operator=(const GridLayoutScrollArea& other);
 
         // Sets item sample widget. WARNING: Removing all old items!
-        void SetItemSample(Widget* sample);
+        void SetItemSample(const Ref<Widget>& sample);
 
         // Returns item sample widget
-        Widget* GetItemSample() const;
+        const Ref<Widget>& GetItemSample() const;
 
         // Sets spacing between cell widgets
         void SetItemsSpacing(const Vec2F& spacing);
@@ -56,15 +57,15 @@ namespace o2
         SERIALIZABLE(GridLayoutScrollArea);
 
     protected:
-        Widget* mItemSample = nullptr; // Item sample widget @SERIALIZABLE
-        Vec2F   mItemsSpacing;         // Spacing between cell widgets @SERIALIZABLE
+        Ref<Widget>         mItemSample; // Item sample widget @SERIALIZABLE
+        Vector<Ref<Widget>> mItemsPool;  // Items pool
+
+        Vec2F mItemsSpacing; // Spacing between cell widgets @SERIALIZABLE
         
         int mMinVisibleItemIdx = -1; // Visible item with minimal index
         int mMaxVisibleItemIdx = -1; // Visible item with maximal index
 
-        int mPrevItemsInLine = 0; // Previous visible items on line count
-                                                 
-        Vector<Widget*> mItemsPool; // Items pool
+        int mPrevItemsInLine = 0; // Previous visible items on line count                                                 
 
     protected:
         // Called when object was deserialized and trying to reattach states animations target
@@ -89,13 +90,13 @@ namespace o2
         virtual Vector<void*> GetItemsRange(int start, int end) const;
 
         // Sets item widget, calls setupItemFunc
-        virtual void SetupItemWidget(Widget* widget, void* item);
+        virtual void SetupItemWidget(const Ref<Widget>& widget, void* item);
 
         // Updates visible items
         virtual void UpdateVisibleItems();
 
         // Returns item widget under point and stores index in idxPtr, if not null
-        Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+        Ref<Widget> GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
         // Returns count of items in one line
         int GetItemsInLine() const;

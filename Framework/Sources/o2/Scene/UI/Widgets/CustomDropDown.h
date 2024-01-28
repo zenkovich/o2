@@ -12,15 +12,15 @@ namespace o2
     {
     public:
         PROPERTIES(CustomDropDown);
-        PROPERTY(Widget*, selectedItem, SelectItem, GetSelectedItem);       // Selected item widget property
+        PROPERTY(Ref<Widget>, selectedItem, SelectItem, GetSelectedItem);      // Selected item widget property
         PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property
         GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
 
     public:
         Function<void()> onBeforeExpand; // Called before opening 
 
-        Function<void(int)>     onSelectedPos;   // Select item position event
-        Function<void(Widget*)> onSelectedItem;  // Select item event
+        Function<void(int)>                onSelectedPos;   // Select item position event
+        Function<void(const Ref<Widget>&)> onSelectedItem;  // Select item event
 
     public:
         // Default constructor
@@ -48,22 +48,22 @@ namespace o2
         bool IsExpanded() const;
 
         // Sets item sample widget. WARNING: Removing all old items!
-        void SetItemSample(Widget* sample);
+        void SetItemSample(const Ref<Widget>& sample);
 
         // Returns item sample widget
-        Widget* GetItemSample() const;
+        const Ref<Widget>& GetItemSample() const;
 
         // Returns layout of items
-        VerticalLayout* GetItemsLayout() const;
+        const Ref<VerticalLayout>& GetItemsLayout() const;
 
         // Adds new item and returns it
-        Widget* AddItem();
+        Ref<Widget> AddItem();
 
         // Adds new item at position and returns it
-        Widget* AddItem(int position);
+        Ref<Widget> AddItem(int position);
 
         // Removes item
-        void RemoveItem(Widget* item);
+        void RemoveItem(const Ref<Widget>& item);
 
         // Removes item in position
         void RemoveItem(int position);
@@ -72,37 +72,37 @@ namespace o2
         void MoveItem(int position, int newPosition);
 
         // Moves item to new position
-        void MoveItem(Widget* item, int newPosition);
+        void MoveItem(const Ref<Widget>& item, int newPosition);
 
         // Returns item position
-        int GetItemPosition(Widget* item);
+        int GetItemPosition(const Ref<Widget>& item);
 
         // Returns item by position
-        Widget* GetItem(int position) const;
+        Ref<Widget> GetItem(int position) const;
 
         // Removes all items
         void RemoveAllItems();
 
         // Sorts items
-        void SortItems(const Function<bool(Widget*, Widget*)>& sortFunc);
+        void SortItems(const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& sortFunc);
 
         // Returns items count
         int GetItemsCount() const;
 
         // Selects item
-        void SelectItem(Widget* item);
+        void SelectItem(const Ref<Widget>& item);
 
         // Selects item at position
         void SelectItemAt(int position);
 
         // Returns selected item
-        Widget* GetSelectedItem() const;
+        Ref<Widget> GetSelectedItem() const;
 
         // Returns selected item position
         int GetSelectedItemPosition() const;
 
         // Returns list view 
-        CustomList* GetListView() const;
+        const Ref<CustomList>& GetListView() const;
 
         // Sets list view size by items size
         void SetMaxListSizeInItems(int itemsCount);
@@ -122,10 +122,12 @@ namespace o2
         SERIALIZABLE(CustomDropDown);
 
     protected:
-        CustomList* mItemsList = nullptr;                // List view
-        Layout      mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
-        RectF       mAbsoluteClip;                       // Absolute clipping rectangle
-        int         mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
+        WeakRef<CustomList> mItemsList; // List view
+
+        Layout mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
+        RectF  mAbsoluteClip;                       // Absolute clipping rectangle
+
+        int mMaxListItems = 10; // Maximum visible items in list @SERIALIZABLE
 
     protected:
         // Moves widget's to delta and checks for clipping

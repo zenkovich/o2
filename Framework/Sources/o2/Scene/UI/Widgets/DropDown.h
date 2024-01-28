@@ -74,7 +74,7 @@ namespace o2
         void OnSelectionChanged() override;
 
         // Called when layer added and updates drawing sequence, searches selected text drawable
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
     };
 }
 // --- META ---

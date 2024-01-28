@@ -343,7 +343,7 @@ namespace Editor
 		mPopup->BeginDragging(this);
 	}
 
-	void LayerPopupItem::OnDragged(const Input::Cursor& cursor, DragDropArea* area)
+	void LayerPopupItem::OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area)
 	{
 		mPopup->UpdateDragging();
 	}

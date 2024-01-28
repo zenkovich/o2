@@ -63,10 +63,10 @@ namespace o2
 
     void Scene::FixedUpdate(float dt)
     {
-        for (auto actor : mRootActors)
+        for (auto& actor : mRootActors)
             actor->FixedUpdate(dt);
 
-        for (auto actor : mRootActors)
+        for (auto& actor : mRootActors)
             actor->FixedUpdateChildren(dt);
     }
 
@@ -80,7 +80,7 @@ namespace o2
                 {
                     func(actor);
 
-                    for (auto child : actor->GetChildren())
+                    for (auto& child : actor->GetChildren())
                         RecursiveCall(child, func);
                 }
             }
@@ -91,25 +91,25 @@ namespace o2
 
         mStartActors = addedActors;
 
-        for (auto actor : addedActors)
+        for (auto& actor : addedActors)
         {
             if (actor->IsOnScene())
                 helper::RecursiveCall(actor, [&](const Ref<Actor>& actor) { AddActorToScene(actor.Get()); });
         }
 
-        for (auto actor : addedActors)
+        for (auto& actor : addedActors)
             helper::RecursiveCall(actor, [&](const Ref<Actor>& actor) { actor->UpdateResEnabledInHierarchy(); });
 
-        for (auto actor : addedActors)
+        for (auto& actor : addedActors)
             helper::RecursiveCall(actor, [&](const Ref<Actor>& actor) { actor->OnInitialized(); });
     }
 
     void Scene::UpdateTransforms()
     {
-        for (auto actor : mRootActors)
+        for (auto& actor : mRootActors)
             actor->UpdateSelfTransform();
 
-        for (auto actor : mRootActors)
+        for (auto& actor : mRootActors)
             actor->UpdateChildrenTransforms();
     }
 
@@ -118,13 +118,13 @@ namespace o2
         auto startActors = mStartActors;
         mStartActors.Clear();
 
-        for (auto actor : startActors)
+        for (auto& actor : startActors)
             actor->OnStart();
 
         auto startComponents = mStartComponents;
         mStartComponents.Clear();
 
-        for (auto comp : startComponents)
+        for (auto& comp : startComponents)
             comp->OnStart();
     }
 
@@ -135,7 +135,7 @@ namespace o2
         mDestroyActors.Clear();
         mDestroyComponents.Clear();
 
-        for (auto actor : destroyActors)
+        for (auto& actor : destroyActors)
             actor->OnBeforeDestroy();
 
         destroyActors.Clear();
@@ -236,10 +236,10 @@ namespace o2
 
     void Scene::UpdateActors(float dt)
     {
-        for (auto actor : mRootActors)
+        for (auto& actor : mRootActors)
             actor->Update(dt);
 
-        for (auto actor : mRootActors)
+        for (auto& actor : mRootActors)
             actor->UpdateChildren(dt);
     }
 
@@ -331,18 +331,18 @@ namespace o2
 
                     if (widget)
                     {
-                        for (auto child : widget->mInternalWidgets)
-                            Process(debugInfo, child);
+                        for (auto& child : widget->mInternalWidgets)
+                            Process(debugInfo, child.Get());
                     }
                 }
 
-                for (auto child : actor->mChildren)
+                for (auto& child : actor->mChildren)
                     Process(debugInfo, child.Get());
             }
         };
 
         String debugInfo;
-        for (auto actor : mAllActors)
+        for (auto& actor : mAllActors)
             helper::Process(debugInfo, actor.Lock().Get());
 
         o2Debug.DrawText(((Vec2F)o2Render.GetResolution().InvertedX()) * 0.5f, debugInfo);
@@ -392,12 +392,12 @@ namespace o2
 
     void Scene::OnComponentAdded(Component* component)
     {
-        mStartComponents.Add(component);
+        mStartComponents.Add(Ref(component));
     }
 
     void Scene::OnComponentRemoved(Component* component)
     {
-        mStartComponents.Remove(component);
+        mStartComponents.RemoveFirst([&](auto& x) { return x == component; });
     }
 
     void Scene::OnLayerRenamed(SceneLayer* layer, const String& oldName)
@@ -574,7 +574,7 @@ namespace o2
         int delPos = path.Find("/");
         String pathPart = path.SubStr(0, delPos);
 
-        for (auto actor : mRootActors)
+        for (auto& actor : mRootActors)
         {
             if (actor->mName == pathPart)
             {
@@ -591,7 +591,7 @@ namespace o2
     void Scene::Clear(bool keepDefaultLayer /*= true*/)
     {
         auto allActors = mRootActors;
-        for (auto actor : allActors)
+        for (auto& actor : allActors)
             actor->OnBeforeDestroy();
 
         mRootActors.Clear();
@@ -693,13 +693,13 @@ namespace o2
     void Scene::Save(DataDocument& doc)
     {
         auto& layersNode = doc.AddMember("Layers");
-        for (auto layer : mLayers)
+        for (auto& layer : mLayers)
             layer->Serialize(layersNode.AddElement());
 
         doc.AddMember("DefaultLayer") = mDefaultLayer->mName;
 
         auto& tagsNode = doc.AddMember("Tags");
-        for (auto tag : mTags)
+        for (auto& tag : mTags)
             tag->Serialize(tagsNode.AddElement());
 
         doc.AddMember("Actors") = mRootActors;
@@ -785,7 +785,7 @@ namespace o2
         };
         Vector<Object> objectsDefs;
 
-        for (auto object : objects)
+        for (auto& object : objects)
         {
             Object def;
             def.object = object;
@@ -803,7 +803,7 @@ namespace o2
         {
             int insertIdx = newParent->GetEditableChildren().IndexOf(prevObject) + 1;
 
-            for (auto def : objectsDefs)
+            for (auto& def : objectsDefs)
             {
                 newParent->AddEditableChild(def.object, insertIdx++);
                 def.object->SetTransform(def.transform);
@@ -823,7 +823,7 @@ namespace o2
                     insertIdx++;
             }
 
-            for (auto def : objectsDefs)
+            for (auto& def : objectsDefs)
             {
                 auto actorEditableObject = DynamicCast<Actor>(def.object);
                 if (actorEditableObject)

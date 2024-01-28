@@ -115,7 +115,7 @@ namespace o2
         return "Tree";
     }
 
-    void TreeNode::OnStateAdded(WidgetState* state)
+    void TreeNode::OnStateAdded(const Ref<WidgetState>& state)
     {
         Widget::OnStateAdded(state);
 
@@ -151,7 +151,7 @@ namespace o2
         mOwnerTree->BeginDragging(this);
     }
 
-    void TreeNode::OnDragged(const Input::Cursor& cursor, DragDropArea* area)
+    void TreeNode::OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area)
     {
         mOwnerTree->UpdateDraggingGraphics();
     }

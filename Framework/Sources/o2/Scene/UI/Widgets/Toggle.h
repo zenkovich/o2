@@ -24,38 +24,38 @@ namespace o2
         Function<void(bool)> onReleased; // Toggle group release event
 
     public:
-        // Contructor by type
+        // Constructor by type
         ToggleGroup(Type type);
 
         // Destructor
         ~ToggleGroup();
 
         // Adds toggle to group
-        void AddToggle(Toggle* toggle);
+        void AddToggle(const Ref<Toggle>& toggle);
 
         // Removes toggle from group
         void RemoveToggle(Toggle* toggle);
 
         // Returns all toggles in group
-        const Vector<Toggle*>& GetToggles() const;
+        const Vector<WeakRef<Toggle>>& GetToggles() const;
 
         // Returns toggled toggles in group
-        const Vector<Toggle*>& GetToggled() const;
+        const Vector<WeakRef<Toggle>>& GetToggled() const;
 
     protected:
         bool mPressed = false;      // Is group in pressed state
         bool mPressedValue = false; // Group pressed value
 
-        Vector<Toggle*> mToggles; // All toggles in group
-        Vector<Toggle*> mToggled; // Toggled toggles in group
+        Vector<WeakRef<Toggle>> mToggles; // All toggles in group
+        Vector<WeakRef<Toggle>> mToggled; // Toggled toggles in group
 
-        Toggle* mOwner = nullptr; // Owner toggle
+        WeakRef<Toggle> mOwner; // Owner toggle
 
         Type mType; // Toggle group type
 
     protected:
         // Called when some toggle was toggled, 
-        void OnToggled(Toggle* toggle);
+        void OnToggled(const Ref<Toggle>& toggle);
 
         friend class Toggle;
     };
@@ -64,9 +64,9 @@ namespace o2
     {
     public:
         PROPERTIES(Toggle);
-        PROPERTY(bool, value, SetValue, GetValue);                           // Current state value property
-        PROPERTY(WString, caption, SetCaption, GetCaption);                  // Caption property. Searches text layer with name "caption" or creates them if he's not exist
-        PROPERTY(ToggleGroup*, toggleGroup, SetToggleGroup, GetToggleGroup); // Toggle group property
+        PROPERTY(bool, value, SetValue, GetValue);                               // Current state value property
+        PROPERTY(WString, caption, SetCaption, GetCaption);                      // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+        PROPERTY(Ref<ToggleGroup>, toggleGroup, SetToggleGroup, GetToggleGroup); // Toggle group property
 
     public:
         Function<void()>     onClick;        // Click event
@@ -111,10 +111,10 @@ namespace o2
         bool GetValue() const;
 
         // Sets toggle group
-        void SetToggleGroup(ToggleGroup* toggleGroup);
+        void SetToggleGroup(const Ref<ToggleGroup>& toggleGroup);
 
         // Returns toggle group
-        ToggleGroup* GetToggleGroup() const;
+        Ref<ToggleGroup> GetToggleGroup() const;
 
         // Returns is this widget can be selected
         bool IsFocusable() const override;
@@ -128,17 +128,17 @@ namespace o2
         bool mValue = false;        // Current value @SERIALIZABLE
         bool mValueUnknown = false; // Is value unknown @SERIALIZABLE
 
-        Text*        mCaptionText = nullptr; // Caption layer text
-        WidgetLayer* mBackLayer = nullptr;   // Background layer
+        WeakRef<Text>        mCaptionText; // Caption layer text
+        WeakRef<WidgetLayer> mBackLayer;   // Background layer
 
-        ToggleGroup* mToggleGroup = nullptr; // Toggle group
+        Ref<ToggleGroup> mToggleGroup; // Toggle group
 
     protected:
         // Called when deserialized
         void OnDeserialized(const DataValue& node) override;
 
         // Called when layer added and updates drawing sequence
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Called when visible was changed
         void OnEnabled() override;

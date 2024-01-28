@@ -142,7 +142,7 @@ namespace o2
         void OnDisabled()override;
 
         // Called when widget state was added
-        void OnStateAdded(WidgetState* state) override;
+        void OnStateAdded(const Ref<WidgetState>& state) override;
 
         // Initializes context menu and options button
         void InitializeContextMenu();

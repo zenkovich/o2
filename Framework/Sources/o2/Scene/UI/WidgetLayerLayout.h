@@ -35,10 +35,10 @@ namespace o2
         WidgetLayerLayout();
 
         // Default constructor
-        WidgetLayerLayout(WidgetLayer* widgetLayer);
+        WidgetLayerLayout(const Ref<WidgetLayer>& widgetLayer);
 
         // Copy constructor
-        WidgetLayerLayout(WidgetLayer* widgetLayer, const WidgetLayerLayout& other);
+        WidgetLayerLayout(const Ref<WidgetLayer>& widgetLayer, const WidgetLayerLayout& other);
 
         // Cast to Layout operator
         operator Layout() const;

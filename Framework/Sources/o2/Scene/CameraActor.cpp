@@ -56,7 +56,7 @@ namespace o2
         {
             o2Debug.Log("==========================Draw dump");
 
-            for (auto layer : drawLayers.GetLayers())
+            for (auto& layer : drawLayers.GetLayers())
             {
                 o2Debug.Log("== Layer " + layer->GetName() + " ==");
 
@@ -97,7 +97,7 @@ namespace o2
                     {
                         o2Debug.Log("  ROOT:");
 
-                        for (auto child : root->GetChildrenInheritedDepth())
+                        for (auto& child : root->GetChildrenInheritedDepth())
                         {
                             printDrawable(child, 2);
                         }
@@ -109,9 +109,9 @@ namespace o2
         {
             PROFILE_SAMPLE("CameraActor::SetupAndDraw - Draw layers");
 
-            for (auto layer : drawLayers.GetLayers())
+            for (auto& layer : drawLayers.GetLayers())
             {
-                for (auto comp : layer->mDrawables)
+                for (auto& comp : layer->mDrawables)
                     comp.Lock()->Draw();
             }
         }

@@ -54,11 +54,10 @@ namespace o2
         void Draw() override;
 
         // Add item
-        Widget* AddItem(const Item& item);
+        Ref<Widget> AddItem(const Item& item);
 
         // Adds item by path ("node/sub node/target")
-        void AddItem(const WString& path, const Function<void()>&
-                     clickFunc = Function<void()>(),
+        void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
                      const ImageAssetRef& icon = ImageAssetRef(),
                      const ShortcutKeys& shortcut = ShortcutKeys());
 
@@ -93,16 +92,16 @@ namespace o2
         void RemoveAllItems();
 
         // Returns items vertical layout
-        HorizontalLayout* GetItemsLayout() const;
+        Ref<HorizontalLayout> GetItemsLayout() const;
 
         // Returns item sample
-        Widget* GetItemSample() const;
+        const Ref<Widget>& GetItemSample() const;
 
         // Sets item sample
         void SetItemSample(Widget* sample);
 
         // Returns selection drawable
-        Sprite* GetSelectionDrawable() const;
+        const Ref<Sprite>& GetSelectionDrawable() const;
 
         // Sets selection drawable layout
         void SetSelectionDrawableLayout(const Layout& layout);
@@ -116,14 +115,14 @@ namespace o2
         SERIALIZABLE(MenuPanel);
 
     protected:
-        HorizontalLayout* mLayout = nullptr; // Items layout
+        WeakRef<HorizontalLayout> mLayout; // Items layout
 
-        Widget* mItemSample = nullptr; // Item sample @SERIALIZABLE
+        Ref<Widget> mItemSample; // Item sample @SERIALIZABLE
 
         Vector<Function<void()>> mClickFunctions; // Items click functions
 
-        Sprite* mSelectionDrawable = nullptr; // Selection sprite @SERIALIZABLE
-        Layout  mSelectionLayout;             // Selection layout, result selection area depends on selected item @SERIALIZABLE
+        Ref<Sprite> mSelectionDrawable; // Selection sprite @SERIALIZABLE
+        Layout      mSelectionLayout;   // Selection layout, result selection area depends on selected item @SERIALIZABLE
 
         RectF mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
         RectF mTargetSelectionRect;   // Target selection rectangle (over selected item)
@@ -132,7 +131,7 @@ namespace o2
         int   mSelectedItem = -1;            // Index of selected item
         float mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
 
-        ContextMenu* mOpenedContext = nullptr; // Last opened context in menu
+        WeakRef<ContextMenu> mOpenedContext; // Last opened context in menu
 
     protected:
         // Called when visible was changed
@@ -142,16 +141,16 @@ namespace o2
         void OnDisabled() override;
 
         // Creates sub context menus by path
-        ContextMenu* CreateSubContext(WString& path);
+        Ref<ContextMenu> CreateSubContext(WString& path);
 
         // Creates item widget
-        Widget* CreateItem(const Item& item);
+        Ref<Widget> CreateItem(const Item& item);
 
         // Returns item info
         Item GetItemDef(int idx) const;
 
         // Returns item widget under point and stores index in idxPtr, if not null
-        Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+        Ref<Widget> GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
         // Updates hover
         void UpdateHover(const Vec2F& point);

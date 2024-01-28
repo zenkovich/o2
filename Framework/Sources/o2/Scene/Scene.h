@@ -178,7 +178,7 @@ namespace o2
         Vector<WeakRef<CameraActor>> mCameras; // List of cameras on scene
    
         Vector<WeakRef<Actor>>        mAllActors; // All scene actors
-        Map<SceneUID, WeakRef<Actor>> mActorsMap; // Actors map by uniquie ID
+        Map<SceneUID, WeakRef<Actor>> mActorsMap; // Actors map by unique ID
 
         Vector<Ref<Actor>> mAddedActors; // List of added on previous frame actors. Will receive OnAddToScene at current frame
 
@@ -188,8 +188,8 @@ namespace o2
         Vector<Ref<Actor>>     mDestroyActors;     // List of destroying on current frame actors
         Vector<Ref<Component>> mDestroyComponents; // List of destroying on current frame components
 
-        Map<String, WeakRef<SceneLayer>> mLayersMap;    // Layers by names map
-        Vector<Ref<SceneLayer>>          mLayers;       // Scene layers
+        Map<String, WeakRef<SceneLayer>> mLayersMap; // Layers by names map
+        Vector<Ref<SceneLayer>>          mLayers;    // Scene layers
 
         Ref<SceneLayer> mDefaultLayer; // Default scene layer
 
@@ -200,7 +200,7 @@ namespace o2
         bool mIsUpdatingScene = false; // Sets true when started updating scene, and false when not
 
     protected:
-        // Called when actor added to scene, adds to scene defered
+        // Called when actor added to scene, adds to scene deffered
         static void OnActorCreated(Actor* actor);
 
         // Called when actor destroyed, removes from scene
@@ -374,19 +374,19 @@ namespace o2
 namespace o2
 {
     template<typename _type>
-    Vector<_type>* Scene::FindAllActorsComponents()
+    Vector<Ref<_type>> Scene::FindAllActorsComponents()
     {
-        Vector<_type>* res = mnew Vector<_type>();
-        for (auto actor : mRootActors)
+        Vector<Ref<_type>> res;
+        for (auto& actor : mRootActors)
             res->Add(actor->GetComponentsInChildren<_type>());
 
         return res;
     }
 
     template<typename _type>
-    _type* Scene::FindActorByType()
+    Ref<_type> Scene::FindActorByType()
     {
-        for (auto actor : mRootActors)
+        for (auto& actor : mRootActors)
         {
             if (auto res = dynamic_cast<_type*>(actor))
                 return res;
@@ -399,9 +399,9 @@ namespace o2
     }
 
     template<typename _type>
-    _type* Scene::FindActorComponent()
+    Ref<_type> Scene::FindActorComponent()
     {
-        for (auto actor : mRootActors)
+        for (auto& actor : mRootActors)
         {
             _type* res = actor->GetComponentInChildren<_type>();
             if (res)

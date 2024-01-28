@@ -79,10 +79,10 @@ namespace o2
         void SelectAll();
 
         // Returns text drawable
-        Text* GetTextDrawable();
+        Ref<Text> GetTextDrawable();
 
         // Returns caret drawable
-        Sprite* GetCaretDrawable();
+        Ref<Sprite> GetCaretDrawable();
 
         // Sets selection color
         void SetSelectionColor(const Color4& color);
@@ -162,9 +162,9 @@ namespace o2
         WString mText;             // Current text @SERIALIZABLE
         WString mAvailableSymbols; // Available symbols @SERIALIZABLE
 
-        Text*   mTextDrawable = nullptr;  // Text drawable @SERIALIZABLE
-        Mesh*   mSelectionMesh = nullptr; // Selection mesh
-        Sprite* mCaretDrawable = nullptr; // Caret drawable @SERIALIZABLE
+        Ref<Text>   mTextDrawable;  // Text drawable @SERIALIZABLE
+        Ref<Mesh>   mSelectionMesh; // Selection mesh
+        Ref<Sprite> mCaretDrawable; // Caret drawable @SERIALIZABLE
 
         float mCaretBlinkDelay = 1.0f; // Caret blinking delay @SERIALIZABLE
         float mCaretBlinkTime = 0.0f;  // Caret blinking timer

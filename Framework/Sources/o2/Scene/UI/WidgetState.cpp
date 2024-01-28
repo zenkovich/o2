@@ -30,10 +30,10 @@ namespace o2
         return false;
     }
 
-    void WidgetState::SetOwner(Widget* owner, bool errors)
+    void WidgetState::SetOwner(const Ref<Widget>& owner, bool errors)
     {
         mOwner = owner;
-        mPlayer->SetTarget(owner, errors);
+        mPlayer->SetTarget(const_cast<Widget*>(owner.Get()), errors);
         mPlayer->relTime = mState ? 1.0f : 0.0f;
     }
 

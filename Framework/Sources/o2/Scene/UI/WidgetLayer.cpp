@@ -8,11 +8,11 @@
 namespace o2
 {
 	WidgetLayer::WidgetLayer() :
-		layout(this), interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mUID(Math::Random())
+		layout(Ref(this)), interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mUID(Math::Random())
 	{}
 
 	WidgetLayer::WidgetLayer(const WidgetLayer& other) :
-		mDepth(other.mDepth), name(other.name), layout(this, other.layout), mTransparency(other.mTransparency),
+		mDepth(other.mDepth), name(other.name), layout(Ref(this), other.layout), mTransparency(other.mTransparency),
 		interactableLayout(other.interactableLayout), mUID(Math::Random()), depth(this), transparency(this)
 	{
 		if (other.mCopyVisitor)
@@ -23,7 +23,7 @@ namespace o2
 			mDrawable->SetSerializeEnabled(false);
 		}
 
-		for (auto child : other.mChildren) {
+		for (auto& child : other.mChildren) {
 			child->mCopyVisitor = other.mCopyVisitor;
 
 			AddChild(child->CloneAsRef<WidgetLayer>());
@@ -41,7 +41,7 @@ namespace o2
 
 		mDrawable = nullptr;
 
-		for (auto child : mChildren) {
+		for (auto& child : mChildren) {
 			child->mParent = nullptr;
 			child->SetOwnerWidget(nullptr);
 		}
@@ -62,7 +62,7 @@ namespace o2
 			mDrawable->SetSerializeEnabled(false);
 		}
 
-		for (auto child : other.mChildren)
+		for (auto& child : other.mChildren)
 			AddChild(child->CloneAsRef<WidgetLayer>());
 
 		SetTransparency(other.mTransparency);
@@ -131,7 +131,7 @@ namespace o2
 		if (layer->mParent)
 			layer->mParent.Lock()->RemoveChild(layer.Get());
 		else if (layer->mOwnerWidget)
-			layer->mOwnerWidget.Lock()->RemoveLayer(layer);
+			layer->mOwnerWidget.Lock()->RemoveLayer(layer.Get());
 
 		layer->mParent = Ref(this);
 		mChildren.Add(layer);
@@ -173,7 +173,7 @@ namespace o2
 
 	void WidgetLayer::RemoveAllChildren()
 	{
-		for (auto child : mChildren) {
+		for (auto& child : mChildren) {
 			child->mParent = nullptr;
 			child->SetOwnerWidget(nullptr);
 		}
@@ -264,7 +264,7 @@ namespace o2
 			auto& childrenNode = node.AddMember("Children");
 			childrenNode.SetArray();
 
-			for (auto child : mChildren)
+			for (auto& child : mChildren)
 				child->Serialize(childrenNode.AddElement());
 		}
 	}
@@ -274,7 +274,7 @@ namespace o2
 		if (auto protoNode = node.FindMember("PrototypeLink")) {
 			SceneUID protoUID = *protoNode;
 			if (mParent && mParent.Lock()->mPrototypeLink) {
-				for (auto protoChild : mParent.Lock()->mPrototypeLink->mChildren) {
+				for (auto& protoChild : mParent.Lock()->mPrototypeLink->mChildren) {
 					if (protoChild->mUID == protoUID) {
 						mPrototypeLink = protoChild;
 						break;
@@ -282,7 +282,7 @@ namespace o2
 				}
 			}
 			else if (mOwnerWidget.Lock()->mPrototypeLink) {
-				for (auto protoChild : dynamic_cast<Widget*>(mOwnerWidget.Lock()->mPrototypeLink.Get())->mLayers) {
+				for (auto& protoChild : dynamic_cast<Widget*>(mOwnerWidget.Lock()->mPrototypeLink.Lock().Get())->mLayers) {
 					if (protoChild->mUID == protoUID) {
 						mPrototypeLink = protoChild;
 						break;
@@ -307,7 +307,7 @@ namespace o2
 
 	void WidgetLayer::OnDeserialized(const DataValue& node)
 	{
-		for (auto child : mChildren) {
+		for (auto& child : mChildren) {
 			child->mParent = Ref(this);
 			child->mOwnerWidget = mOwnerWidget;
 		}
@@ -352,7 +352,7 @@ namespace o2
 			return nullptr;
 		}
 
-		for (auto child : mChildren) {
+		for (auto& child : mChildren) {
 			if (child->name == pathPart) {
 				if (delPos == -1)
 					return child;
@@ -366,7 +366,7 @@ namespace o2
 
 	Ref<WidgetLayer> WidgetLayer::FindChild(const String& name)
 	{
-		for (auto child : mChildren) {
+		for (auto& child : mChildren) {
 			if (child->name == name)
 				return child;
 
@@ -381,7 +381,7 @@ namespace o2
 	Vector<Ref<WidgetLayer>> WidgetLayer::GetAllChilds() const
 	{
 		Vector<Ref<WidgetLayer>> res = mChildren;
-		for (auto child : mChildren) {
+		for (auto& child : mChildren) {
 			res.Add(child->GetAllChilds());
 		}
 
@@ -439,7 +439,7 @@ namespace o2
 		}
 #endif
 
-		for (auto child : mChildren)
+		for (auto& child : mChildren)
 			child->SetOwnerWidget(owner);
 
 		UpdateResTransparency();
@@ -475,7 +475,7 @@ namespace o2
 		if (mDrawable)
 			mDrawable->SetRect(mAbsolutePosition);
 
-		for (auto child : mChildren)
+		for (auto& child : mChildren)
 			child->UpdateLayout();
 	}
 
@@ -491,7 +491,7 @@ namespace o2
 		if (mDrawable)
 			mDrawable->SetTransparency(mResTransparency);
 
-		for (auto child : mChildren)
+		for (auto& child : mChildren)
 			child->UpdateResTransparency();
 	}
 
@@ -501,7 +501,7 @@ namespace o2
 		o2Scene.AddEditableObjectToScene(Ref(this));
 #endif
 
-		for (auto layer : mChildren)
+		for (auto& layer : mChildren)
 			layer->OnAddToScene();
 	}
 
@@ -511,14 +511,14 @@ namespace o2
 		o2Scene.RemoveEditableObjectFromScene(Ref(this));
 #endif
 
-		for (auto layer : mChildren)
+		for (auto& layer : mChildren)
 			layer->OnRemoveFromScene();
 	}
 
 	Map<String, Ref<WidgetLayer>> WidgetLayer::GetAllChildLayers()
 	{
 		Map<String, Ref<WidgetLayer>> res;
-		for (auto layer : mChildren)
+		for (auto& layer : mChildren)
 			res.Add(layer->name, layer);
 
 		return res;
@@ -555,7 +555,7 @@ namespace o2
 		mUID = Math::Random();
 
 		if (childs) {
-			for (auto child : mChildren)
+			for (auto& child : mChildren)
 				child->GenerateNewID(true);
 		}
 	}
@@ -575,66 +575,69 @@ namespace o2
 		return mChildren.Convert<Ref<SceneEditableObject>>([](auto& x) { return DynamicCast<SceneEditableObject>(x); });
 	}
 
-	const Ref<SceneEditableObject> o2::WidgetLayer::GetEditableLink() const
+	Ref<SceneEditableObject> WidgetLayer::GetEditableLink() const
 	{
 		return mPrototypeLink;
 	}
 
 	void WidgetLayer::BeginMakePrototype() const
 	{
-		mCopyVisitor = mnew MakePrototypeCloneVisitor();
+		mCopyVisitor = mmake<MakePrototypeCloneVisitor>();
 	}
 
 	void WidgetLayer::BeginInstantiatePrototype() const
 	{
-		mCopyVisitor = mnew InstantiatePrototypeCloneVisitor();
+		mCopyVisitor = mmake<InstantiatePrototypeCloneVisitor>();
 	}
 
-	SceneEditableObject* WidgetLayer::GetEditableParent() const
+	Ref<SceneEditableObject> WidgetLayer::GetEditableParent() const
 	{
 		if (mParent)
-			return mParent;
+			return mParent.Lock();
 
-		return &mOwnerWidget->layersEditable;
+		return mOwnerWidget.Lock()->layersEditable;
 	}
 
-	void WidgetLayer::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
+	void WidgetLayer::SetEditableParent(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
 	{
-		if (auto layer = dynamic_cast<WidgetLayer*>(object))
-			layer->AddChild(this);
-		else if (auto widget = dynamic_cast<Widget*>(object))
-			widget->AddLayer(this);
-		else if (auto layers = dynamic_cast<Widget::LayersEditable*>(object))
-			layers->AddEditableChild(this, idx);
+		if (auto layer = DynamicCast<WidgetLayer>(object))
+			layer->AddChild(Ref(this));
+		else if (auto widget = DynamicCast<Widget>(object))
+			widget->AddLayer(Ref(this));
+		else if (auto layers = DynamicCast<Widget::LayersEditable>(object))
+			layers->AddEditableChild(Ref(this), idx);
 	}
 
-	void WidgetLayer::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+	void WidgetLayer::AddEditableChild(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
 	{
-		if (auto layer = dynamic_cast<WidgetLayer*>(object))
+		if (auto layer = DynamicCast<WidgetLayer>(object))
 			AddChild(layer);
-		else if (auto actor = dynamic_cast<Actor*>(object))
-			mOwnerWidget->AddEditableChild(object, idx);
+		else if (auto actor = DynamicCast<Actor>(object))
+			mOwnerWidget.Lock()->AddEditableChild(object, idx);
 	}
 
 	void WidgetLayer::SetIndexInSiblings(int idx)
 	{
-		if (mParent) {
-			int lastIdx = mParent->mChildren.IndexOf(this);
-			mParent->mChildren.Insert(this, idx);
+		auto thisRef = Ref(this);
+
+		if (auto parent = mParent.Lock()) {
+			int lastIdx = thisRef->mChildren.IndexOf(thisRef);
+			thisRef->mChildren.Insert(thisRef, idx);
 
 			if (idx <= lastIdx)
 				lastIdx++;
 
-			mParent->mChildren.RemoveAt(lastIdx);
+			thisRef->mChildren.RemoveAt(lastIdx);
 		}
 		else {
-			int lastIdx = mOwnerWidget->mLayers.IndexOf(this);
-			mOwnerWidget->mLayers.Insert(this, idx);
+			auto ownerWidget = mOwnerWidget.Lock();
+			int lastIdx = ownerWidget->mLayers.IndexOf(thisRef);
+			ownerWidget->mLayers.Insert(thisRef, idx);
 
 			if (idx <= lastIdx)
 				lastIdx++;
 
-			mOwnerWidget->mLayers.RemoveAt(lastIdx);
+			ownerWidget->mLayers.RemoveAt(lastIdx);
 		}
 	}
 
@@ -660,7 +663,7 @@ namespace o2
 
 	bool WidgetLayer::IsLockedInHierarchy() const
 	{
-		bool lockedParent = mOwnerWidget ? mOwnerWidget->IsLockedInHierarchy() : mParent->IsLockedInHierarchy();
+		bool lockedParent = mOwnerWidget ? mOwnerWidget.Lock()->IsLockedInHierarchy() : mParent.Lock()->IsLockedInHierarchy();
 		return mIsLocked && lockedParent;
 	}
 
@@ -690,9 +693,10 @@ namespace o2
 
 	void WidgetLayer::UpdateTransform()
 	{
-		if (mOwnerWidget) {
-			mOwnerWidget->UpdateTransform();
-			mOwnerWidget->OnChanged();
+		if (auto ownerWidget = mOwnerWidget.Lock()) 
+		{
+			ownerWidget->UpdateTransform();
+			ownerWidget->OnChanged();
 		}
 	}
 
@@ -727,7 +731,7 @@ namespace o2
 	void WidgetLayer::OnChanged()
 	{
 		if (mOwnerWidget)
-			mOwnerWidget->OnChanged();
+			mOwnerWidget.Lock()->OnChanged();
 	}
 
 #endif // IS_EDITOR

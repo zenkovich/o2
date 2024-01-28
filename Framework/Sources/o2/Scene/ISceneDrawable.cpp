@@ -22,7 +22,7 @@ namespace o2
         if (mRegistered)
             Unregister();
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
         {
             child->mParentRegistry = nullptr;
             child->mRegistered = false;
@@ -45,7 +45,7 @@ namespace o2
 
         OnDrawn();
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
     }
 

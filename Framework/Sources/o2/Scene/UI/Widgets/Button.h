@@ -19,7 +19,7 @@ namespace o2
     public:
         PROPERTIES(Button);
         PROPERTY(WString, caption, SetCaption, GetCaption); // Caption property. Searches "caption" layer and sets text
-        PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
+        PROPERTY(Ref<Sprite>, icon, SetIcon, GetIcon);      // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
     public:
         SerializableFunction<void()> onClick;       // Click event @SERIALIZABLE
@@ -48,10 +48,10 @@ namespace o2
         WString GetCaption() const;
 
         // Sets icon sprite. Searches sprite layer "icon". Creates a new icon if isn't exist
-        void SetIcon(Sprite* sprite);
+        void SetIcon(const Ref<Sprite>& sprite);
 
         // Returns icon sprite
-        Sprite* GetIcon() const;
+        Ref<Sprite> GetIcon() const;
 
         // Returns is this widget can be selected
         bool IsFocusable() const override;
@@ -65,8 +65,8 @@ namespace o2
         SERIALIZABLE(Button);
 
     protected:
-        Text*   mCaptionText = nullptr; // Caption layer text
-        Sprite* mIconSprite = nullptr;  // Icon layer sprite
+        WeakRef<Text>   mCaptionText; // Caption layer text
+        WeakRef<Sprite> mIconSprite;  // Icon layer sprite
 
     protected:
         // Called when cursor pressed on this. Sets state "pressed" to true
@@ -92,7 +92,7 @@ namespace o2
         void OnKeyReleased(const Input::Key& key) override;
 
         // Called when layer added and updates drawing sequence
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Called when visible was changed
         void OnEnabled() override;

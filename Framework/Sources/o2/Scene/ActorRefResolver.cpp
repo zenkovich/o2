@@ -80,14 +80,14 @@ namespace o2
         if (!mInstance)
             return;
 
-        for (auto ref : mInstance->mRemapActorRefs)
+        for (auto& ref : mInstance->mRemapActorRefs)
         {
             Actor* res = nullptr;
             if (actors.TryGetValue(ref->Get(), res))
                 ref->CopyWithoutRemap(Ref(res));
         }
 
-        for (auto ref : mInstance->mRemapComponentRefs)
+        for (auto& ref : mInstance->mRemapComponentRefs)
         {
             Component* res = nullptr;
             if (components.TryGetValue(ref->Get(), res))
@@ -153,7 +153,7 @@ namespace o2
         if (mInstance->mLockDepth > 0)
             return;
 
-        for (auto def : mInstance->mUnresolvedActorsRefs)
+        for (auto& def : mInstance->mUnresolvedActorsRefs)
         {
             Actor* res = nullptr;
             if (mInstance->mNewActors.TryGetValue(def.sourceId, res))
@@ -162,10 +162,10 @@ namespace o2
                 def.target->Set(o2Scene.GetActorByID(def.sourceId).Get());
         }
 
-        for (auto def : mInstance->mUnresolvedAssetActorsRefs)
+        for (auto& def : mInstance->mUnresolvedAssetActorsRefs)
             def.target->Set(o2Scene.GetAssetActorByID(def.sourceAssetId).Get());
 
-        for (auto def : mInstance->mUnresolvedComponentsRefs)
+        for (auto& def : mInstance->mUnresolvedComponentsRefs)
         {
             Component* res = nullptr;
             if (mInstance->mNewComponents.TryGetValue(def.sourceId, res))

@@ -6,11 +6,11 @@
 namespace o2
 {
 
-    WidgetLayerLayout::WidgetLayerLayout(WidgetLayer* widgetLayer) :
+    WidgetLayerLayout::WidgetLayerLayout(const Ref<WidgetLayer>& widgetLayer) :
         mWidgetLayer(widgetLayer)
     {}
 
-    WidgetLayerLayout::WidgetLayerLayout(WidgetLayer* widgetLayer, const WidgetLayerLayout& other) :
+    WidgetLayerLayout::WidgetLayerLayout(const Ref<WidgetLayer>& widgetLayer, const WidgetLayerLayout& other) :
         mWidgetLayer(widgetLayer), mAnchorMin(other.mAnchorMin), mAnchorMax(other.mAnchorMax), mOffsetMin(other.mOffsetMin),
         mOffsetMax(other.mOffsetMax)
     {}
@@ -80,7 +80,7 @@ namespace o2
     void WidgetLayerLayout::SetAnchorMin(const Vec2F& min)
     {
         mAnchorMin = min;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     Vec2F WidgetLayerLayout::GetAnchorMin() const
@@ -91,7 +91,7 @@ namespace o2
     void WidgetLayerLayout::SetAnchorMax(const Vec2F& max)
     {
         mAnchorMax = max;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     Vec2F WidgetLayerLayout::GetAnchorMax() const
@@ -102,7 +102,7 @@ namespace o2
     void WidgetLayerLayout::SetAnchorLeft(float value)
     {
         mAnchorMin.x = value;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     float WidgetLayerLayout::GetAnchorLeft() const
@@ -113,7 +113,7 @@ namespace o2
     void WidgetLayerLayout::SetAnchorRight(float value)
     {
         mAnchorMax.x = value;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     float WidgetLayerLayout::GetAnchorRight() const
@@ -124,7 +124,7 @@ namespace o2
     void WidgetLayerLayout::SetAnchorBottom(float value)
     {
         mAnchorMin.y = value;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     float WidgetLayerLayout::GetAnchorBottom() const
@@ -135,7 +135,7 @@ namespace o2
     void WidgetLayerLayout::SetAnchorTop(float value)
     {
         mAnchorMax.y = value;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     float WidgetLayerLayout::GetAnchorTop() const
@@ -146,7 +146,7 @@ namespace o2
     void WidgetLayerLayout::SetOffsetMin(const Vec2F& min)
     {
         mOffsetMin = min;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     Vec2F WidgetLayerLayout::GetOffsetMin() const
@@ -157,7 +157,7 @@ namespace o2
     void WidgetLayerLayout::SetOffsetMax(const Vec2F& max)
     {
         mOffsetMax = max;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     Vec2F WidgetLayerLayout::GetOffsetMax() const
@@ -168,7 +168,7 @@ namespace o2
     void WidgetLayerLayout::SetOffsetLeft(float value)
     {
         mOffsetMin.x = value;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     float WidgetLayerLayout::GetOffsetLeft() const
@@ -179,7 +179,7 @@ namespace o2
     void WidgetLayerLayout::SetoffsetRight(float value)
     {
         mOffsetMax.x = value;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     float WidgetLayerLayout::GetoffsetRight() const
@@ -190,7 +190,7 @@ namespace o2
     void WidgetLayerLayout::SetOffsetBottom(float value)
     {
         mOffsetMin.y = value;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     float WidgetLayerLayout::GetOffsetBottom() const
@@ -201,7 +201,7 @@ namespace o2
     void WidgetLayerLayout::SetOffsetTop(float value)
     {
         mOffsetMax.y = value;
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     float WidgetLayerLayout::GetOffsetTop() const
@@ -211,30 +211,30 @@ namespace o2
 
     void WidgetLayerLayout::SetPosition(const Vec2F& position)
     {
-        Vec2F delta = position - mWidgetLayer->mAbsolutePosition.LeftBottom();
+        Vec2F delta = position - mWidgetLayer.Lock()->mAbsolutePosition.LeftBottom();
         mOffsetMin += delta;
         mOffsetMax += delta;
 
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     Vec2F WidgetLayerLayout::GetPosition() const
     {
-        return mWidgetLayer->mAbsolutePosition.LeftBottom();
+        return mWidgetLayer.Lock()->mAbsolutePosition.LeftBottom();
     }
 
     void WidgetLayerLayout::SetSize(const Vec2F& size)
     {
-        Vec2F delta = size - mWidgetLayer->mAbsolutePosition.Size();
+        Vec2F delta = size - mWidgetLayer.Lock()->mAbsolutePosition.Size();
         mOffsetMin -= delta*0.5f;
         mOffsetMax += delta*0.5f;
 
-        mWidgetLayer->OnLayoutChanged();
+        mWidgetLayer.Lock()->OnLayoutChanged();
     }
 
     Vec2F WidgetLayerLayout::GetSize() const
     {
-        return mWidgetLayer->mAbsolutePosition.Size();
+        return mWidgetLayer.Lock()->mAbsolutePosition.Size();
     }
 
 }

@@ -144,7 +144,7 @@ namespace Editor
 		void OnDragStart(const Input::Cursor& cursor) override;
 
 		// Called when dragged
-		void OnDragged(const Input::Cursor& cursor, DragDropArea* area) override;
+		void OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area) override;
 
 		// Called when dragging completed
 		void OnDragEnd(const Input::Cursor& cursor) override;

@@ -18,6 +18,9 @@ namespace o2
         // Constructor from layer name
         explicit Ref(const String& name);
 
+        // Constructor from layer pointer
+        explicit Ref(SceneLayer* layer);
+
         // Copy constructor
         Ref(const Ref& other);
 
@@ -25,10 +28,10 @@ namespace o2
         Ref& operator=(const Ref& other);
 
         // Returns layer reference
-        SceneLayer& Get();
+        SceneLayer* Get();
 
         // Returns constant layer reference
-        const SceneLayer& Get() const;
+        const SceneLayer* Get() const;
 
         // Returns layer reference
         SceneLayer& operator*();

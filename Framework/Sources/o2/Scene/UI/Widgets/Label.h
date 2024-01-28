@@ -129,14 +129,14 @@ namespace o2
         SERIALIZABLE(Label);
 
     protected:
-        Text*       mTextDrawable = nullptr;             // Text layer drawable. Getting from layer "text"
-        HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
-        VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
-        Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
+        WeakRef<Text> mTextDrawable;                    // Text layer drawable. Getting from layer "text"
+        HorOverflow   mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
+        VerOverflow   mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
+        Vec2F         mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
 
     protected:
         // Called when layer added and updates drawing sequence
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Creates default text layer
         void CreateDefaultText();

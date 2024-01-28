@@ -36,12 +36,12 @@ namespace o2
     void SceneEditableObject::SetName(const String& name)
     {}
 
-    const SceneEditableObject* SceneEditableObject::GetEditableLink() const
+    Ref<SceneEditableObject> SceneEditableObject::GetEditableLink() const
     {
         return nullptr;
     }
 
-    bool SceneEditableObject::IsEditableLinkedTo(SceneEditableObject* link) const
+    bool SceneEditableObject::IsEditableLinkedTo(const Ref<SceneEditableObject>& link) const
     {
         if (auto thisLink = GetEditableLink())
         {
@@ -62,12 +62,12 @@ namespace o2
         return true;
     }
 
-    Vector<SceneEditableObject*> SceneEditableObject::GetEditableChildren() const
+    Vector<Ref<SceneEditableObject>> SceneEditableObject::GetEditableChildren() const
     {
-        return Vector<SceneEditableObject*>();
+        return Vector<Ref<SceneEditableObject>>();
     }
 
-    void SceneEditableObject::GetAllEditableChildren(Vector<SceneEditableObject*>& children)
+    void SceneEditableObject::GetAllEditableChildren(Vector<Ref<SceneEditableObject>>& children)
     {
         auto thisChildren = GetEditableChildren();
 
@@ -192,7 +192,7 @@ namespace o2
     void SceneEditableObject::OnChildrenChanged()
     {}
 
-    void SceneEditableObject::OnEditableParentChanged(SceneEditableObject* oldParent)
+    void SceneEditableObject::OnEditableParentChanged(const Ref<SceneEditableObject>& oldParent)
     {}
 
     void SceneEditableObject::GetDifferences(ActorDifferences& differences) const

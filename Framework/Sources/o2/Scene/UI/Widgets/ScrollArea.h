@@ -70,16 +70,16 @@ namespace o2
         float GetVerticalScroll() const;
 
         // Sets horizontal scroll bar
-        void SetHorizontalScrollBar(HorizontalScrollBar* scrollbar, bool owner = true);
+        void SetHorizontalScrollBar(const Ref<HorizontalScrollBar>& scrollbar, bool owner = true);
 
         // Returns horizontal scroll bar
-        HorizontalScrollBar* GetHorizontalScrollbar() const;
+        Ref<HorizontalScrollBar> GetHorizontalScrollbar() const;
 
         // Sets Vertical scroll bar
-        void SetVerticalScrollBar(VerticalScrollBar* scrollbar, bool owner = true);
+        void SetVerticalScrollBar(const Ref<VerticalScrollBar>& scrollbar, bool owner = true);
 
         // Returns Vertical scroll bar
-        VerticalScrollBar* GetVerticalScrollbar() const;
+        Ref<VerticalScrollBar> GetVerticalScrollbar() const;
 
         // Sets scroll bars hiding
         void SetEnableScrollsHiding(bool hideScrolls);
@@ -123,8 +123,8 @@ namespace o2
         SERIALIZABLE(ScrollArea);
 
     protected:
-        HorizontalScrollBar*   mHorScrollBar = nullptr; // horizontal scroll bar
-        VerticalScrollBar*     mVerScrollBar = nullptr; // Vertical scroll bar
+        WeakRef<HorizontalScrollBar> mHorScrollBar; // horizontal scroll bar
+        WeakRef<VerticalScrollBar>   mVerScrollBar; // Vertical scroll bar
 
         bool mOwnHorScrollBar = false; // True, if this widget is owner of mHorScrollBar
         bool mOwnVerScrollBar = false; // True, if this widget is owner of mVerScrollBar
@@ -163,7 +163,7 @@ namespace o2
         void OnDeserialized(const DataValue& node) override;
 
         // Called when child widget was added
-        void OnChildAdded(Widget* child) override;
+        void OnChildAdded(const Ref<Widget>& child) override;
 
         // Called when child widget was removed
         void OnChildRemoved(Widget* child) override;

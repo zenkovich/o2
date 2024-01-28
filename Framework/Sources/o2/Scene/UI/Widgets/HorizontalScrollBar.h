@@ -105,11 +105,11 @@ namespace o2
         float mScrollHandleSize = 0.2f;      // Scroll handle size (in value range) @SERIALIZABLE
         float mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels @SERIALIZABLE
 
-        float        mPressHandleOffset = 0.0f; // Value offset when handle was pressed
-        bool         mHandlePressed = false;    // True, when handle was pressed
-        WidgetLayer* mHandleLayer = nullptr;    // Handle layer
+        float                mPressHandleOffset = 0.0f; // Value offset when handle was pressed
+        bool                 mHandlePressed = false;    // True, when handle was pressed
+        WeakRef<WidgetLayer> mHandleLayer;              // Handle layer
 
-        WidgetLayer* mBackLayer = nullptr; // Background layer
+        WeakRef<WidgetLayer> mBackLayer; // Background layer
 
     protected:
         // Called when deserialized
@@ -125,7 +125,7 @@ namespace o2
         void UpdateLayersLayouts() override;
 
         // Called when new layer was added. Here searching bar, back and handle layers
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Updates bar, back and handle layers layout by value
         void UpdateProgressLayersLayouts();

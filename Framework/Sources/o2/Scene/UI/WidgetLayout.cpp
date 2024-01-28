@@ -140,7 +140,7 @@ namespace o2
                                  parentRect.Size()*mData->anchorMax);
 
         RectF localRect = rect;
-        if (auto parent = mData->owner->mParent)
+        if (auto parent = mData->owner->mParent.Lock())
             localRect += parentRect.Size()*parent->transform->mData->pivot;
 
         mData->offsetMin = localRect.LeftBottom() - parentAnchoredRect.LeftBottom();
@@ -593,10 +593,10 @@ namespace o2
         return res;
     }
 
-    void WidgetLayout::SetOwner(Actor* actor)
+    void WidgetLayout::SetOwner(const Ref<Actor>& actor)
     {
         ActorTransform::SetOwner(actor);
-        mData->owner = (Widget*)actor;
+        mData->owner = (Widget*)actor.Get();
         SetDirty();
     }
 
@@ -604,7 +604,7 @@ namespace o2
     {
         if (!fromParent && mData->drivenByParent && mData->owner)
         {
-            if (auto parent = mData->owner->mParent)
+            if (auto parent = mData->owner->mParent.Lock())
                 parent->transform->SetDirty(fromParent);
         }
 
@@ -613,9 +613,9 @@ namespace o2
 
     RectF WidgetLayout::GetParentRectangle() const
     {
-        if (auto parentWidget = mData->owner->mParentWidget)
+        if (auto parentWidget = mData->owner->mParentWidget.Lock())
             return parentWidget->GetLayoutData().childrenWorldRect;
-        else if (auto parent = mData->owner->mParent)
+        else if (auto parent = mData->owner->mParent.Lock())
             return parent->transform->mData->worldRectangle;
 
         return RectF();
@@ -626,7 +626,7 @@ namespace o2
         RectF parentWorldRect;
         Vec2F parentWorldPosition;
 
-        if (auto parentWidget = mData->owner->mParentWidget)
+        if (auto parentWidget = mData->owner->mParentWidget.Lock())
         {
             parentWorldRect = parentWidget->GetLayoutData().childrenWorldRect;
 
@@ -634,7 +634,7 @@ namespace o2
             parentWorldPosition = notWidgetWorldRect.LeftBottom() +
                 parentWidget->transform->mData->pivot*notWidgetWorldRect.Size();
         }
-        else if (auto parent = mData->owner->mParent)
+        else if (auto parent = mData->owner->mParent.Lock())
         {
             parentWorldRect = parent->transform->mData->worldRectangle;
 
@@ -676,7 +676,7 @@ namespace o2
     {
         Vec2F offs;
 
-        if (auto parentWidget = mData->owner->mParentWidget)
+        if (auto parentWidget = mData->owner->mParentWidget.Lock())
         {
             offs = parentWidget->GetLayoutData().childrenWorldRect.LeftBottom() -
                 parentWidget->GetLayoutData().worldRectangle.LeftBottom();
@@ -738,7 +738,7 @@ namespace o2
         float minSizesSum = 0;
         float weightsSum = 0;
 
-        for (auto itChild = widgets.begin(); itChild != widgets.end();)
+        for (auto& itChild = widgets.begin(); itChild != widgets.end();)
         {
             if (!(*itChild)->IsEnabledInHierarchy())
                 itChild = widgets.erase(itChild);

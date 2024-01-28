@@ -121,14 +121,14 @@ namespace o2
         void SetIndexInSiblings(int index) override;
 
         // Adds layer @SCRIPTABLE
-        Ref<WidgetLayer> AddLayer(Ref<WidgetLayer> layer);
+        Ref<WidgetLayer> AddLayer(const Ref<WidgetLayer>& layer);
 
         // Adds layer @SCRIPTABLE_NAME(AddLayerNew)
         Ref<WidgetLayer> AddLayer(const String& name, const Ref<IRectDrawable>& drawable,
                                   const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
         // Removes layer @SCRIPTABLE
-        void RemoveLayer(const Ref<WidgetLayer>& layer);
+        void RemoveLayer(WidgetLayer* layer);
 
         // Removes layer @SCRIPTABLE_NAME(RemoveLayerByPath)
         void RemoveLayer(const String& path);
@@ -270,8 +270,8 @@ namespace o2
         float mTransparency = 1.0f;       // Widget transparency @SERIALIZABLE
         float mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
 
-        Vector<WeakRef<WidgetLayer>> mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
-        Vector<WeakRef<WidgetLayer>> mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+        Vector<Ref<WidgetLayer>> mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+        Vector<Ref<WidgetLayer>> mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 
         WeakRef<WidgetState> mFocusedState;        // Focused widget state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
         bool                 mIsFocused = false;   // Is widget focused
@@ -328,7 +328,7 @@ namespace o2
         void OnChildAdded(const Ref<Actor>& child) override;
 
         // Called when child actor was removed
-        void OnChildRemoved(const Ref<Actor>& child) override;
+        void OnChildRemoved(Actor* child) override;
 
         // Called when actor including from scene, including this to layer drawables
         void OnAddToScene() override;
@@ -352,10 +352,10 @@ namespace o2
         virtual void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea);
 
         // Called when child widget was added
-        virtual void OnChildAdded(Ref<Widget> child);
+        virtual void OnChildAdded(const Ref<Widget>& child);
 
         // Called when child widget was removed
-        virtual void OnChildRemoved(Ref<Widget> child);
+        virtual void OnChildRemoved(Widget* child);
 
         // Called when widget was selected
         virtual void OnFocused();
@@ -366,7 +366,7 @@ namespace o2
         // Returns layout width with children
         virtual float GetMinWidthWithChildren() const;
 
-        // Returns layout height with childer
+        // Returns layout height with children
         virtual float GetMinHeightWithChildren() const;
 
         // Returns layout width weight with children

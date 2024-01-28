@@ -19,9 +19,9 @@ namespace o2
     public:
         Function<void(int)> onFocused; // Select item position event
 
-        Function<int()>                   getItemsCountFunc; // Items count getting function
-        Function<Vector<void*>(int, int)> getItemsRangeFunc; // Items getting in range function
-        Function<void(Widget*, void*)>    setupItemFunc;     // Setup item widget function
+        Function<int()>                           getItemsCountFunc; // Items count getting function
+        Function<Vector<void*>(int, int)>         getItemsRangeFunc; // Items getting in range function
+        Function<void(const Ref<Widget>&, void*)> setupItemFunc;     // Setup item widget function
 
     public:
         // Default constructor
@@ -43,10 +43,10 @@ namespace o2
         void Draw() override;
 
         // Sets item sample widget. WARNING: Removing all old items!
-        void SetItemSample(Widget* sample);
+        void SetItemSample(const Ref<Widget>& sample);
 
         // Returns item sample widget
-        Widget* GetItemSample() const;
+        const Ref<Widget>& GetItemSample() const;
 
         // Selects item at position
         void SelectItemAt(int position);
@@ -55,10 +55,10 @@ namespace o2
         int GetSelectedItemPosition() const;
 
         // Returns selection drawable
-        Sprite* GetSelectionDrawable() const;
+        const Ref<Sprite>& GetSelectionDrawable() const;
 
         // Returns hover drawable
-        Sprite* GetHoverDrawable() const;
+        const Ref<Sprite>& GetHoverDrawable() const;
 
         // Sets selection drawable layout (result rectangle will be calculated by item widget absolute rectangle)
         void SetSelectionDrawableLayout(const Layout& layout);
@@ -84,10 +84,10 @@ namespace o2
         SERIALIZABLE(LongList);
 
     protected:
-        Widget* mItemSample = nullptr; // Item sample widget @SERIALIZABLE
+        Ref<Widget> mItemSample; // Item sample widget @SERIALIZABLE
 
-        Sprite* mSelectionDrawable = nullptr;             // Selection sprite @SERIALIZABLE
-        Sprite* mHoverDrawable = nullptr;                 // Item hover drawable @SERIALIZABLE
+        Ref<Sprite> mSelectionDrawable;                   // Selection sprite @SERIALIZABLE
+        Ref<Sprite> mHoverDrawable;                       // Item hover drawable @SERIALIZABLE
         Layout  mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
         Layout  mHoverLayout = Layout::BothStretch();     // Hover layout, result selection area depends on selected item @SERIALIZABLE
                                                  
@@ -103,7 +103,7 @@ namespace o2
         Vec2F mLastHoverCheckCursor;  // Last cursor position on hover check
         Vec2F mLastSelectCheckCursor; // Last cursor position on selection check
                                                  
-        Vector<Widget*> mItemsPool; // Items pool
+        Vector<Ref<Widget>> mItemsPool; // Items pool
 
     protected:
         // Called when object was deserialized and trying to reattach states animations target
@@ -146,7 +146,7 @@ namespace o2
         void OnCursorExit(const Input::Cursor& cursor) override;
 
         // Returns item widget under point and stores index in idxPtr, if not null
-        Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+        Ref<Widget> GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
         // Updates hover
         void UpdateHover(const Vec2F& point);

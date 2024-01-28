@@ -6,38 +6,42 @@
 namespace o2
 {
     Ref<SceneLayer>::Ref():
-        mLayer(Scene::IsSingletonInitialzed() ? o2Scene.GetDefaultLayer() : nullptr)
+        mLayer(Scene::IsSingletonInitialzed() ? const_cast<SceneLayer*>(o2Scene.GetDefaultLayer().Get()) : nullptr)
     {}
     
     Ref<SceneLayer>::Ref(const String& name):
-        mLayerName(name), mLayer(Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(name) : nullptr)
+        mLayerName(name), mLayer(Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(name).Get() : nullptr)
+    {}
+
+    Ref<SceneLayer>::Ref(SceneLayer* layer):
+        mLayerName(layer ? layer->GetName() : ""), mLayer(layer)
     {}
     
     Ref<SceneLayer>::Ref(const Ref<SceneLayer>& other):
-        mLayerName(other.mLayerName), mLayer(Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(other.mLayerName) : nullptr)
+        mLayerName(other.mLayerName), mLayer(Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(other.mLayerName).Get() : nullptr)
     {}
     
     Ref<SceneLayer>& Ref<SceneLayer>::operator=(const Ref<SceneLayer>& other)
     {
         mLayerName = other.mLayerName;
-        mLayer = o2Scene.GetLayer(mLayerName);
+        mLayer = o2Scene.GetLayer(mLayerName).Get();
 
         return *this;
     }
 
     void Ref<SceneLayer>::OnDeserialized(const DataValue& node)
     {
-        mLayer = o2Scene.GetLayer(mLayerName);
+        mLayer = o2Scene.GetLayer(mLayerName).Get();
     }
     
-    SceneLayer& Ref<SceneLayer>::Get()
+    SceneLayer* Ref<SceneLayer>::Get()
     {
-        return *mLayer;
+        return mLayer;
     }
     
-    const SceneLayer& Ref<SceneLayer>::Get() const
+    const SceneLayer* Ref<SceneLayer>::Get() const
     {
-        return *mLayer;
+        return mLayer;
     }
     
     bool Ref<SceneLayer>::operator!=(const Ref<SceneLayer>& other) const

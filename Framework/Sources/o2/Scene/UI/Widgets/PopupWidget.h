@@ -33,7 +33,7 @@ namespace o2
         void Draw() override;
 
         // Show from parent context
-        virtual void Show(PopupWidget* parent, const Vec2F& position = o2Input.GetCursorPos());
+        virtual void Show(const Ref<PopupWidget>& parent, const Vec2F& position = o2Input.GetCursorPos());
 
         // Shows context
         void Show(const Vec2F& position = o2Input.GetCursorPos());
@@ -56,12 +56,12 @@ namespace o2
         SERIALIZABLE(PopupWidget);
 
     protected:
-        static PopupWidget* mVisiblePopup; // Current visible popup widget
+        static WeakRef<PopupWidget> mVisiblePopup; // Current visible popup widget
 
         float mFitSizeMin = 40.0f;    // Minimal fitting size @SERIALIZABLE
 
-        PopupWidget* mParentPopup = nullptr; // Parent visible popup widget
-        PopupWidget* mChildPopup = nullptr;  // Child visible popup widget
+        WeakRef<PopupWidget> mParentPopup; // Parent visible popup widget
+        WeakRef<PopupWidget> mChildPopup;  // Child visible popup widget
 
         bool mShownAtFrame = false; // Is popup was shown at current frame
 

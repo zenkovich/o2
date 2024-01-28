@@ -101,7 +101,7 @@ namespace o2
 
     protected:
         // Called when new layer was added. Here searching bar, back and handle layers
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Called when deserialized
         void OnDeserialized(const DataValue& node) override;

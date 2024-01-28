@@ -173,13 +173,13 @@ namespace o2
         virtual void OnChildAdded(const Ref<Actor>& child) {}
 
         // Called when child actor was removed
-        virtual void OnChildRemoved(const Ref<Actor>& child) {}
+        virtual void OnChildRemoved(Actor* child) {}
 
         // Called when new component has added to actor
         virtual void OnComponentAdded(const Ref<Component>& component) {}
 
         // Called when component going to be removed from actor
-        virtual void OnComponentRemoving(const Ref<Component>& component) {}
+        virtual void OnComponentRemoving(Component* component) {}
 
         friend class Actor;
         friend struct ActorDifferences;
@@ -195,25 +195,25 @@ namespace o2
 namespace o2
 {
     template<typename _type>
-    Vector<_type*> Component::GetComponentsInChildren() const
+    Vector<Ref<_type>> Component::GetComponentsInChildren() const
     {
         if (mOwner)
             return mOwner->GetComponentsInChildren<_type>();
 
-        return Vector<_type*>();
+        return {};
     }
 
     template<typename _type>
-    Vector<_type*> Component::GetComponents() const
+    Vector<Ref<_type>> Component::GetComponents() const
     {
         if (mOwner)
             return mOwner->GetComponents();
 
-        return Vector<_type*>();
+        return {};
     }
 
     template<typename _type>
-    _type* Component::GetComponentInChildren() const
+    Ref<_type> Component::GetComponentInChildren() const
     {
         if (mOwner)
             return mOwner->GetComponentInChildren<_type>();
@@ -222,7 +222,7 @@ namespace o2
     }
 
     template<typename _type>
-    _type* Component::GetComponent() const
+    Ref<_type> Component::GetComponent() const
     {
         if (mOwner)
             return mOwner->GetComponent<_type>();

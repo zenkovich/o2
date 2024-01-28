@@ -336,7 +336,7 @@ namespace o2
         o2UI.FocusWidget(this);
     }
 
-    void Window::OnStateAdded(WidgetState* state)
+    void Window::OnStateAdded(const Ref<WidgetState>& state)
     {
         BindHandlesInteractableToVisibility();
     }

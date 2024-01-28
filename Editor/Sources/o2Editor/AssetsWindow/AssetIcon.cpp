@@ -152,7 +152,7 @@ namespace Editor
 			mOwner->BeginDragging(this);
 	}
 
-	void AssetIcon::OnDragged(const Input::Cursor& cursor, DragDropArea* area)
+	void AssetIcon::OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area)
 	{
 		if (mOwner)
 			mOwner->UpdateDraggingGraphics();

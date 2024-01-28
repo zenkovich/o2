@@ -58,7 +58,7 @@ namespace o2
         float GetHeadHeight() const;
 
         // Searches expand button by name and type
-        Button* GetExpandButton() const;
+        Ref<Button> GetExpandButton() const;
 
         // Returns create menu group in editor
         static String GetCreateMenuGroup();
@@ -68,9 +68,9 @@ namespace o2
     protected:
         float mHeadHeight = 0.0f; // Spoiler head height @SERIALIZABLE
 
-        WidgetState* mExpandState = nullptr; // Expanding state
-        float        mExpandCoef = 0.0f;     // Expanding animation coefficient 0...1 
-        float        mTargetHeight = 0.0f;   // target expanding height
+        WeakRef<WidgetState> mExpandState;         // Expanding state
+        float                mExpandCoef = 0.0f;   // Expanding animation coefficient 0...1 
+        float                mTargetHeight = 0.0f; // target expanding height
 
     protected:
         // Invokes required function for childs arranging
