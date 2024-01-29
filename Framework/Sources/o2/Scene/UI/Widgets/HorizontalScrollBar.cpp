@@ -341,7 +341,7 @@ namespace o2
         Widget::UpdateLayersLayouts();
     }
 
-    void HorizontalScrollBar::OnLayerAdded(WidgetLayer* layer)
+    void HorizontalScrollBar::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "back")
             mBackLayer = layer;

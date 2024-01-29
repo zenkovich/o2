@@ -335,7 +335,7 @@ namespace o2
         UpdateProgressLayersLayouts();
     }
 
-    void VerticalScrollBar::OnLayerAdded(WidgetLayer* layer)
+    void VerticalScrollBar::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "back")
             mBackLayer = layer;

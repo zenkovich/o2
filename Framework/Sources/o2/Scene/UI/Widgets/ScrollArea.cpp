@@ -424,7 +424,7 @@ namespace o2
         GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
     }
 
-    void ScrollArea::OnChildAdded(Widget* child)
+    void ScrollArea::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }

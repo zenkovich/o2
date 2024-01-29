@@ -180,7 +180,7 @@ namespace o2
         return "Layout";
     }
 
-    void GridLayout::OnChildAdded(Widget* child)
+    void GridLayout::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }

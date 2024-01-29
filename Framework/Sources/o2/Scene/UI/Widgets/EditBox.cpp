@@ -422,7 +422,7 @@ namespace o2
 
     void EditBox::OnCursorPressed(const Input::Cursor& cursor)
     {
-        o2UI.FocusWidget(this);
+        o2UI.FocusWidget(Ref(this));
 
         auto pressedState = state["pressed"];
         if (pressedState)

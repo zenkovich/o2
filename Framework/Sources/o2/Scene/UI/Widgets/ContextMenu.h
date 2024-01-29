@@ -245,7 +245,7 @@ namespace o2
         void RebuildItems();
 
         // Creates context items by path ("node/sub node/target")
-        Vector<Ref<Item>> CreateItemsByPath(WString& path);
+        Vector<Ref<Item>>& CreateItemsByPath(WString& path);
 
         // Returns item info
         Ref<Item> GetItem(int idx) const;

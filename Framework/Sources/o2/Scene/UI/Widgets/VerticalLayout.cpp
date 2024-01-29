@@ -220,7 +220,7 @@ namespace o2
         return res;
     }
 
-    void VerticalLayout::OnChildAdded(Widget* child)
+    void VerticalLayout::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }

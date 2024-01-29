@@ -326,14 +326,14 @@ namespace o2
         onClosed();
     }
 
-    void Window::OnChildFocused(Widget* child)
+    void Window::OnChildFocused(const Ref<Widget>& child)
     {
         OnFocused();
     }
 
     void Window::OnCursorPressed(const Input::Cursor& cursor)
     {
-        o2UI.FocusWidget(this);
+        o2UI.FocusWidget(Ref(this));
     }
 
     void Window::OnStateAdded(const Ref<WidgetState>& state)

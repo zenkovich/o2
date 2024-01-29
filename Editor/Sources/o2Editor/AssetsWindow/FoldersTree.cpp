@@ -191,7 +191,7 @@ namespace Editor
 
 	void AssetsFoldersTree::OnFoldersTreeRightClick(TreeNode* node)
 	{
-		o2UI.FocusWidget(this);
+		o2UI.FocusWidget(Ref(this));
 		mContextMenu->Show();
 	}
 

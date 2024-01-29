@@ -286,7 +286,7 @@ namespace Editor
 
 	void AnimationTree::OnNodeRBClick(TreeNode* node)
 	{
-		o2UI.FocusWidget(this);
+		o2UI.FocusWidget(Ref(this));
 		mContextMenu->Show();
 	}
 

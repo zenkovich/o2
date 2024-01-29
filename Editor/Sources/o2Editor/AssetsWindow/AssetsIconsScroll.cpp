@@ -483,7 +483,7 @@ namespace Editor
         if (!o2Input.IsKeyDown(VK_CONTROL))
             DeselectAllAssets();
 
-        o2UI.FocusWidget(this);
+        o2UI.FocusWidget(Ref(this));
 
         RectF selectionRect(mPressedPoint, mPressedPoint);
         mSelectionSprite->SetRect(selectionRect);
@@ -709,7 +709,7 @@ namespace Editor
             }
         }
 
-        o2UI.FocusWidget(this);
+        o2UI.FocusWidget(Ref(this));
         mContextMenu->Show();
     }
 

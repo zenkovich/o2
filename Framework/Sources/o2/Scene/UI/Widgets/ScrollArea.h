@@ -123,8 +123,8 @@ namespace o2
         SERIALIZABLE(ScrollArea);
 
     protected:
-        WeakRef<HorizontalScrollBar> mHorScrollBar; // horizontal scroll bar
-        WeakRef<VerticalScrollBar>   mVerScrollBar; // Vertical scroll bar
+        Ref<HorizontalScrollBar> mHorScrollBar; // horizontal scroll bar
+        Ref<VerticalScrollBar>   mVerScrollBar; // Vertical scroll bar
 
         bool mOwnHorScrollBar = false; // True, if this widget is owner of mHorScrollBar
         bool mOwnVerScrollBar = false; // True, if this widget is owner of mVerScrollBar

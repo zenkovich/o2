@@ -96,8 +96,9 @@ namespace o2
         float        mMaxValue = 1.0f;                  // Maximal value @SERIALIZABLE
         float        mScrollSense = 1.0f;               // Scroll sense coefficient @SERIALIZABLE
         Orientation  mOrientation = Orientation::Right; // Bar orientation @SERIALIZABLE
-        WidgetLayer* mBarLayer = nullptr;               // Bar layer
-        WidgetLayer* mBackLayer = nullptr;              // background layer
+
+		WeakRef<WidgetLayer> mBarLayer;  // Bar layer
+		WeakRef<WidgetLayer> mBackLayer; // background layer
 
     protected:
         // Called when new layer was added. Here searching bar, back and handle layers

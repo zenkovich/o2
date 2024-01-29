@@ -96,12 +96,13 @@ namespace o2
         float        mMaxValue = 1.0f;                 // Maximal value @SERIALIZABLE
         float        mScrollSense = 1.0f;              // Scroll sense coefficient @SERIALIZABLE
         Orientation  mOrientation = Orientation::Down; // Bar orientation @SERIALIZABLE
-        WidgetLayer* mBarLayer = nullptr;              // Bar layer
-        WidgetLayer* mBackLayer = nullptr;             // Background layer
+
+        WeakRef<WidgetLayer> mBarLayer;  // Bar layer
+        WeakRef<WidgetLayer> mBackLayer; // Background layer
 
     protected:
         // Called when new layer was added. Here searching bar, back and handle layers
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Called when deserialized
         void OnDeserialized(const DataValue& node) override;

@@ -326,7 +326,7 @@ namespace o2
         layout->Update();
     }
 
-    void Label::OnLayerAdded(WidgetLayer* layer)
+    void Label::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "text" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
             mTextDrawable = dynamic_cast<Text*>(layer->GetDrawable());

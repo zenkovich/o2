@@ -193,7 +193,7 @@ namespace o2
         if (pressedState)
             *pressedState = true;
 
-        o2UI.FocusWidget(this);
+        o2UI.FocusWidget(Ref(this));
 
         if (mToggleGroup)
         {
@@ -303,7 +303,7 @@ namespace o2
         RetargetStatesAnimations();
     }
 
-    void Toggle::OnLayerAdded(WidgetLayer* layer)
+    void Toggle::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "caption" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
             mCaptionText = (Text*)layer->GetDrawable();

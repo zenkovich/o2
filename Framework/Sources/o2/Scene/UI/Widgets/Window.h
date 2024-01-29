@@ -17,7 +17,7 @@ namespace o2
     public:
         PROPERTIES(Window);
         PROPERTY(WString, caption, SetCaption, GetCaption); // Window caption property
-        PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Window icon sprite property
+        PROPERTY(Ref<Sprite>, icon, SetIcon, GetIcon);      // Window icon sprite property
 
         Function<void()> onOpened; // On window opened delegate
         Function<void()> onClosed; // On window closed delegate
@@ -42,10 +42,10 @@ namespace o2
         void ShowModal();
 
         // Sets icon sprite
-        virtual void SetIcon(Sprite* icon);
+        virtual void SetIcon(const Ref<Sprite>& icon);
 
         // Returns icon sprite
-        virtual Sprite* GetIcon() const;
+        virtual Ref<Sprite> GetIcon() const;
 
         // Sets icon layer layout
         virtual void SetIconLayout(const Layout& layout);
@@ -88,48 +88,48 @@ namespace o2
         SERIALIZABLE(Window);
 
     protected:
-        const char* mIconLayerPath = "icon";
-        const char* mCaptionLayerPath = "caption";
+        static constexpr auto mIconLayerPath = "icon";
+        static constexpr auto mCaptionLayerPath = "caption";
 
-        ContextMenu* mOptionsMenu; // Window options context menu
+        WeakRef<ContextMenu> mOptionsMenu; // Window options context menu
 
         CursorEventsArea mBackCursorArea; // Cursor area listener at back of window, for catching events
 
-        CursorEventsArea mHeadDragHandle;      // Head drag handle, for moving window
+        CursorEventsArea mHeadDragHandle;     // Head drag handle, for moving window
         Layout           mHeadDragAreaLayout; // Head drag handle layout @SERIALIZABLE
-        RectF            mHeadDragAreaRect;      // Head drag handle rect
+        RectF            mHeadDragAreaRect;   // Head drag handle rect
 
         CursorEventsArea mTopDragHandle;     //    Top drag handle, for resizing window
         Layout           mTopDragAreaLayout; //    Top drag handle layout @SERIALIZABLE
-        RectF            mTopDragAreaRect;     //    Top drag handle rect
+        RectF            mTopDragAreaRect;   //    Top drag handle rect
 
-        CursorEventsArea mBottomDragHandle;        // Bottom drag handle, for resizing window
-        Layout           mBottomDragAreaLayout;    // Bottom drag handle layout @SERIALIZABLE
-        RectF            mBottomDragAreaRect;    // Bottom drag handle rect
+        CursorEventsArea mBottomDragHandle;     // Bottom drag handle, for resizing window
+        Layout           mBottomDragAreaLayout; // Bottom drag handle layout @SERIALIZABLE
+        RectF            mBottomDragAreaRect;   // Bottom drag handle rect
 
-        CursorEventsArea mLeftDragHandle;      // Left drag handle, for resizing window
+        CursorEventsArea mLeftDragHandle;     // Left drag handle, for resizing window
         Layout           mLeftDragAreaLayout; // Left drag handle layout @SERIALIZABLE
-        RectF            mLeftDragAreaRect;      // Left drag handle rect
+        RectF            mLeftDragAreaRect;   // Left drag handle rect
 
-        CursorEventsArea mRightDragHandle;        // Right drag handle, for resizing window
-        Layout           mRightDragAreaLayout;    // Right drag handle layout @SERIALIZABLE
-        RectF            mRightDragAreaRect;    // Right drag handle rect
+        CursorEventsArea mRightDragHandle;     // Right drag handle, for resizing window
+        Layout           mRightDragAreaLayout; // Right drag handle layout @SERIALIZABLE
+        RectF            mRightDragAreaRect;   // Right drag handle rect
 
-        CursorEventsArea mLeftTopDragHandle;    // Left Top drag handle, for resizing window
-        Layout           mLeftTopDragAreaLayout;// Left Top drag handle layout @SERIALIZABLE
-        RectF            mLeftTopDragAreaRect;    // Left Top drag handle rect
+        CursorEventsArea mLeftTopDragHandle;     // Left Top drag handle, for resizing window
+        Layout           mLeftTopDragAreaLayout; // Left Top drag handle layout @SERIALIZABLE
+        RectF            mLeftTopDragAreaRect;   // Left Top drag handle rect
                                                      
-        CursorEventsArea mRightTopDragHandle;      // Right Top drag handle, for resizing window
+        CursorEventsArea mRightTopDragHandle;     // Right Top drag handle, for resizing window
         Layout           mRightTopDragAreaLayout; // Right Top drag handle layout @SERIALIZABLE
-        RectF            mRightTopDragAreaRect;      // Right Top drag handle rect
+        RectF            mRightTopDragAreaRect;   // Right Top drag handle rect
                                                     
-        CursorEventsArea mLeftBottomDragHandle;        // Left Bottom drag handle, for resizing window
-        Layout           mLeftBottomDragAreaLayout;    // Left Bottom drag handle layout @SERIALIZABLE
-        RectF            mLeftBottomDragAreaRect;    // Left Bottom drag handle rect
+        CursorEventsArea mLeftBottomDragHandle;     // Left Bottom drag handle, for resizing window
+        Layout           mLeftBottomDragAreaLayout; // Left Bottom drag handle layout @SERIALIZABLE
+        RectF            mLeftBottomDragAreaRect;   // Left Bottom drag handle rect
                                                      
-        CursorEventsArea mRightBottomDragHandle;     //    Right Bottom drag handle, for resizing window
-        Layout           mRightBottomDragAreaLayout; //    Right Bottom drag handle layout @SERIALIZABLE
-        RectF            mRightBottomDragAreaRect;   //    Right Bottom drag handle rect
+		CursorEventsArea mRightBottomDragHandle;     // Right Bottom drag handle, for resizing window
+		Layout           mRightBottomDragAreaLayout; // Right Bottom drag handle layout @SERIALIZABLE
+		RectF            mRightBottomDragAreaRect;   // Right Bottom drag handle rect
 
     protected:
         // Called when widget was selected
@@ -163,7 +163,7 @@ namespace o2
         void BindHandlesInteractableToVisibility();
 
         // Called when child widget was selected
-        void OnChildFocused(Widget* child) override;
+        void OnChildFocused(const Ref<Widget>& child) override;
 
         // Called when cursor pressed on this
         void OnCursorPressed(const Input::Cursor& cursor) override;

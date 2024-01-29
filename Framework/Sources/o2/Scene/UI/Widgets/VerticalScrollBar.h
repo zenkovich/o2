@@ -111,15 +111,15 @@ namespace o2
         float mPressHandleOffset = 0.0f; // Value offset when handle was pressed
         bool  mHandlePressed = false;    // True, when handle was pressed
 
-        WidgetLayer* mHandleLayer = nullptr; // Handle layer
-        WidgetLayer* mBackLayer = nullptr;   // Background layer
+        WeakRef<WidgetLayer> mHandleLayer; // Handle layer
+        WeakRef<WidgetLayer> mBackLayer;   // Background layer
 
     protected:
         // Updates layers layouts, calls after updating widget layout
         void UpdateLayersLayouts() override;
 
         // Called when new layer was added. Here searching bar, back and handle layers
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Called when deserialized
         void OnDeserialized(const DataValue& node) override;

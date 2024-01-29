@@ -46,27 +46,27 @@ namespace o2
     void Button::SetCaption(const WString& text)
     {
         if (mCaptionText)
-            mCaptionText->SetText(text);
+            mCaptionText.Lock()->SetText(text);
     }
 
     WString Button::GetCaption() const
     {
         if (mCaptionText)
-            return mCaptionText->GetText();
+            return mCaptionText.Lock()->GetText();
 
         return WString();
     }
 
-    void Button::SetIcon(Sprite* sprite)
+    void Button::SetIcon(const Ref<Sprite>& sprite)
     {
         if (mIconSprite)
             mIconSprite = sprite;
     }
 
-    Sprite* Button::GetIcon() const
+    Ref<Sprite> Button::GetIcon() const
     {
         if (mIconSprite)
-            return mIconSprite;
+            return mIconSprite.Lock();
 
         return nullptr;
     }
@@ -95,7 +95,7 @@ namespace o2
         if (pressedState)
             *pressedState = true;
 
-        o2UI.FocusWidget(this);
+        o2UI.FocusWidget(Ref(this));
     }
 
     void Button::OnCursorReleased(const Input::Cursor& cursor)
@@ -154,13 +154,13 @@ namespace o2
         }
     }
 
-    void Button::OnLayerAdded(WidgetLayer* layer)
+    void Button::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "caption" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
-            mCaptionText = (Text*)layer->GetDrawable();
+            mCaptionText = DynamicCast<Text>(layer->GetDrawable());
 
         if (layer->name == "icon" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Sprite))
-            mIconSprite = (Sprite*)layer->GetDrawable();
+            mIconSprite = DynamicCast<Sprite>(layer->GetDrawable());
     }
 
     void Button::OnEnabled()

@@ -272,7 +272,7 @@ namespace o2
         Widget::UpdateLayersLayouts();
     }
 
-    void HorizontalProgress::OnLayerAdded(WidgetLayer* layer)
+    void HorizontalProgress::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "back")
             mBackLayer = layer;

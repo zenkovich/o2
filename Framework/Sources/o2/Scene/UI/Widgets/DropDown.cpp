@@ -150,7 +150,7 @@ namespace o2
             mSelectedText->SetText(GetSelectedItemText());
     }
 
-    void DropDown::OnLayerAdded(WidgetLayer* layer)
+    void DropDown::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "selectedText" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
             mSelectedText = (Text*)layer->GetDrawable();

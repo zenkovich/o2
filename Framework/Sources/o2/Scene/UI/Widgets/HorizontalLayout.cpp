@@ -218,7 +218,7 @@ namespace o2
         return res;
     }
 
-    void HorizontalLayout::OnChildAdded(Widget* child)
+    void HorizontalLayout::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
         Widget::OnChildAdded(child);
