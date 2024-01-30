@@ -229,10 +229,13 @@ namespace o2
 		const Vector<Ref<Actor>>& GetChildren() const;
 
         // Returns all children actors with their children
-        virtual void GetAllChildrenActors(Vector<Ref<Actor>>& actors);
+		virtual void GetAllChildrenActors(Vector<Ref<Actor>>& actors);
 
-        // Removes child and destroys him if needed @SCRIPTABLE
-        void RemoveChild(Actor* actor, bool withEvent = true);
+		// Removes child and destroys him if needed @SCRIPTABLE
+		void RemoveChild(const Ref<Actor>& actor, bool withEvent = true);
+
+		// Removes child and destroys him if needed
+		void RemoveChild(Actor* actor, bool withEvent = true);
 
         // Removes and destroys all childs @SCRIPTABLE
         void RemoveAllChildren();
@@ -245,9 +248,12 @@ namespace o2
         Ref<_type> AddComponent();
 
         // Adds new component
-        Ref<Component> AddComponent(const Ref<Component>& component);
+		Ref<Component> AddComponent(const Ref<Component>& component);
 
-        // Removes component @SCRIPTABLE
+		// Removes component @SCRIPTABLE
+		void RemoveComponent(const Ref<Component>& component);
+
+        // Removes component
         void RemoveComponent(Component* component);
 
         // Removes all components @SCRIPTABLE

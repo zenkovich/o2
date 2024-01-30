@@ -322,7 +322,7 @@ namespace o2
     };
 
     // Calculates children widths or heights by weights and min/max sizes
-    Vector<float> CalculateExpandedSize(Vector<Widget*>& widgets, bool horizontal, float availableWidth, float spacing);
+    Vector<float> CalculateExpandedSize(Vector<Ref<Widget>>& widgets, bool horizontal, float availableWidth, float spacing);
 }
 // --- META ---
 

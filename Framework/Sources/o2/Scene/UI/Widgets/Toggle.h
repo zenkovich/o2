@@ -49,8 +49,6 @@ namespace o2
         Vector<WeakRef<Toggle>> mToggles; // All toggles in group
         Vector<WeakRef<Toggle>> mToggled; // Toggled toggles in group
 
-        WeakRef<Toggle> mOwner; // Owner toggle
-
         Type mType; // Toggle group type
 
     protected:
@@ -114,7 +112,7 @@ namespace o2
         void SetToggleGroup(const Ref<ToggleGroup>& toggleGroup);
 
         // Returns toggle group
-        Ref<ToggleGroup> GetToggleGroup() const;
+        const Ref<ToggleGroup>& GetToggleGroup() const;
 
         // Returns is this widget can be selected
         bool IsFocusable() const override;
@@ -128,8 +126,8 @@ namespace o2
         bool mValue = false;        // Current value @SERIALIZABLE
         bool mValueUnknown = false; // Is value unknown @SERIALIZABLE
 
-        WeakRef<Text>        mCaptionText; // Caption layer text
-        WeakRef<WidgetLayer> mBackLayer;   // Background layer
+        Ref<Text>        mCaptionText; // Caption layer text
+        Ref<WidgetLayer> mBackLayer;   // Background layer
 
         Ref<ToggleGroup> mToggleGroup; // Toggle group
 

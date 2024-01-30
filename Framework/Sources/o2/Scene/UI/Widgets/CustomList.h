@@ -45,10 +45,10 @@ namespace o2
         void SetItemSample(const Ref<Widget>& sample);
 
         // Returns item sample widget
-        Ref<Widget> GetItemSample() const;
+        const Ref<Widget>& GetItemSample() const;
 
         // Returns layout of items
-        VerticalLayout* GetItemsLayout() const;
+       const Ref<VerticalLayout>& GetItemsLayout() const;
 
         // Adds new item and returns it
         Ref<Widget> AddItem();
@@ -156,8 +156,8 @@ namespace o2
         };
 
     protected:
-        WeakRef<VerticalLayout> mVerLayout;  // Child vertical layout
-        Ref<Widget>             mItemSample; // Item sample widget @SERIALIZABLE
+        Ref<VerticalLayout> mVerLayout;  // Child vertical layout
+        Ref<Widget>        mItemSample; // Item sample widget @SERIALIZABLE
 
         bool              mMultiSelection = true; // Is multi selection available @SERIALIZABLE
         Vector<Selection> mSelectedItems;         // Current selected items
@@ -174,7 +174,7 @@ namespace o2
         Vec2F mLastHoverCheckCursor;  // Last cursor position on hover check
         Vec2F mLastSelectCheckCursor; // Last cursor position on selection check
 
-        Vector<Sprite*> mSelectionSpritesPool; // Selection sprites pool
+        Vector<Ref<Sprite>> mSelectionSpritesPool; // Selection sprites pool
 
     protected:
         // Called when object was deserialized and trying to reattach states animations target
@@ -226,7 +226,7 @@ namespace o2
         void UpdateHover(const Vec2F& point);
 
         // Returns selection sprite
-        Ref<Sprite> GetSelectionSprite();
+        const Ref<Sprite>& GetSelectionSprite();
 
         friend class DropDown;
         friend class CustomDropDown;

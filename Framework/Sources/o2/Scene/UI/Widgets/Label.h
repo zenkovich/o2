@@ -49,7 +49,7 @@ namespace o2
         void Draw() override;
 
         // Sets using font
-        void SetFont(Ref<Font> font);
+        void SetFont(const Ref<Font>& font);
 
         // Returns using font
         Ref<Font> GetFont() const;
@@ -129,10 +129,10 @@ namespace o2
         SERIALIZABLE(Label);
 
     protected:
-        WeakRef<Text> mTextDrawable;                    // Text layer drawable. Getting from layer "text"
-        HorOverflow   mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
-        VerOverflow   mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
-        Vec2F         mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
+        Ref<Text>   mTextDrawable;                    // Text layer drawable. Getting from layer "text"
+		HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
+		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
+		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
 
     protected:
         // Called when layer added and updates drawing sequence

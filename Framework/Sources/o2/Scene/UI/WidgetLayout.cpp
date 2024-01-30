@@ -729,7 +729,7 @@ namespace o2
     }
 #endif
 
-    Vector<float> CalculateExpandedSize(Vector<Widget*>& widgets, bool horizontal, float availableWidth, float spacing)
+    Vector<float> CalculateExpandedSize(Vector<Ref<Widget>>& widgets, bool horizontal, float availableWidth, float spacing)
     {
         Vector<float> minSizes; minSizes.Reserve(widgets.Count());
         Vector<float> maxSizes; maxSizes.Reserve(widgets.Count());
@@ -738,7 +738,7 @@ namespace o2
         float minSizesSum = 0;
         float weightsSum = 0;
 
-        for (auto& itChild = widgets.begin(); itChild != widgets.end();)
+        for (auto itChild = widgets.begin(); itChild != widgets.end();)
         {
             if (!(*itChild)->IsEnabledInHierarchy())
                 itChild = widgets.erase(itChild);

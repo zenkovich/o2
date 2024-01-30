@@ -13,8 +13,8 @@ namespace o2
     CustomDropDown::CustomDropDown():
         Widget(), DrawableCursorEventsListener(this)
     {
-        mItemsList = mnew CustomList();
-        mItemsList->SetInternalParent(this, false);
+        mItemsList = mmake<CustomList>();
+        mItemsList->SetInternalParent(Ref(this), false);
         mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
         mItemsList->SetMultiselectionAvailable(false);
     }
@@ -60,7 +60,7 @@ namespace o2
 
         o2UI.DrawWidgetAtTop(mItemsList);
 
-        Widget* selectedItem = mItemsList->GetItem(mItemsList->GetSelectedItemPos());
+        auto selectedItem = mItemsList->GetItem(mItemsList->GetSelectedItemPos());
         if (selectedItem)
         {
             o2Render.EnableScissorTest(mAbsoluteClip);
@@ -106,32 +106,32 @@ namespace o2
         return mItemsList->IsEnabled();
     }
 
-    void CustomDropDown::SetItemSample(Widget* sample)
+    void CustomDropDown::SetItemSample(const Ref<Widget>& sample)
     {
         mItemsList->SetItemSample(sample);
     }
 
-    Widget* CustomDropDown::GetItemSample() const
+    const Ref<Widget>& CustomDropDown::GetItemSample() const
     {
         return mItemsList->GetItemSample();
     }
 
-    VerticalLayout* CustomDropDown::GetItemsLayout() const
+    const Ref<VerticalLayout>& CustomDropDown::GetItemsLayout() const
     {
         return mItemsList->GetItemsLayout();
     }
 
-    Widget* CustomDropDown::AddItem()
+    Ref<Widget> CustomDropDown::AddItem()
     {
         return mItemsList->AddItem();
     }
 
-    Widget* CustomDropDown::AddItem(int position)
+    Ref<Widget> CustomDropDown::AddItem(int position)
     {
         return mItemsList->AddItem(position);
     }
 
-    void CustomDropDown::RemoveItem(Widget* item)
+    void CustomDropDown::RemoveItem(const Ref<Widget>& item)
     {
         mItemsList->RemoveItem(item);
     }
@@ -146,17 +146,17 @@ namespace o2
         mItemsList->MoveItem(position, newPosition);
     }
 
-    void CustomDropDown::MoveItem(Widget* item, int newPosition)
+    void CustomDropDown::MoveItem(const Ref<Widget>& item, int newPosition)
     {
         mItemsList->MoveItem(item, newPosition);
     }
 
-    int CustomDropDown::GetItemPosition(Widget* item)
+    int CustomDropDown::GetItemPosition(const Ref<Widget>& item)
     {
         return mItemsList->GetItemPosition(item);
     }
 
-    Widget* CustomDropDown::GetItem(int position) const
+    Ref<Widget> CustomDropDown::GetItem(int position) const
     {
         return mItemsList->GetItem(position);
     }
@@ -166,7 +166,7 @@ namespace o2
         mItemsList->RemoveAllItems();
     }
 
-    void CustomDropDown::SortItems(const Function<bool(Widget*, Widget*)>& sortFunc)
+    void CustomDropDown::SortItems(const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& sortFunc)
     {
         mItemsList->SortItems(sortFunc);
     }
@@ -176,7 +176,7 @@ namespace o2
         return mItemsList->GetItemsCount();
     }
 
-    void CustomDropDown::SelectItem(Widget* item)
+    void CustomDropDown::SelectItem(const Ref<Widget>& item)
     {
         mItemsList->SelectItem(item);
     }
@@ -186,7 +186,7 @@ namespace o2
         mItemsList->SelectItemAt(position);
     }
 
-    Widget* CustomDropDown::GetSelectedItem() const
+    Ref<Widget> CustomDropDown::GetSelectedItem() const
     {
         return mItemsList->GetSelectedItem();
     }
@@ -196,7 +196,7 @@ namespace o2
         return mItemsList->GetSelectedItemPos();
     }
 
-    CustomList* CustomDropDown::GetListView() const
+    const Ref<CustomList>& CustomDropDown::GetListView() const
     {
         return mItemsList;
     }

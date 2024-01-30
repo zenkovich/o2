@@ -86,7 +86,7 @@ namespace o2
         DrawDebugFrame();
     }
 
-    void Label::SetFont(Ref<Font> font)
+    void Label::SetFont(const Ref<Font>& font)
     {
         if (mTextDrawable)
             mTextDrawable->SetFont(font);
@@ -329,12 +329,12 @@ namespace o2
     void Label::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "text" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
-            mTextDrawable = dynamic_cast<Text*>(layer->GetDrawable());
+            mTextDrawable = DynamicCast<Text>(layer->GetDrawable());
     }
 
     void Label::CreateDefaultText()
     {
-        mTextDrawable = dynamic_cast<Text*>(AddLayer("text", mnew Text())->GetDrawable());
+        mTextDrawable = DynamicCast<Text>(AddLayer("text", mmake<Text>())->GetDrawable());
         mTextDrawable->SetFontAsset(VectorFontAssetRef("stdFont.ttf"));
     }
 

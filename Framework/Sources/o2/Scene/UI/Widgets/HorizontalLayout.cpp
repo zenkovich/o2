@@ -16,7 +16,7 @@ namespace o2
         spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
         borderTop(this), borderBottom(this), fitByChildren(this)
     {
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->GetLayoutData().drivenByParent = true;
 
         RetargetStatesAnimations();
@@ -36,7 +36,7 @@ namespace o2
         mExpandWidth = other.mExpandWidth;
         mExpandHeight = other.mExpandHeight;
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->GetLayoutData().drivenByParent = true;
 
         RetargetStatesAnimations();
@@ -178,7 +178,7 @@ namespace o2
             return Widget::GetMinWidthWithChildren();
 
         float res = mBorder.left + mBorder.right + Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res += child->GetMinWidthWithChildren();
@@ -195,7 +195,7 @@ namespace o2
             return Widget::GetMinHeightWithChildren();
 
         float res = 0;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res = Math::Max(res, child->GetMinHeightWithChildren() + mBorder.top + mBorder.bottom);
@@ -209,7 +209,7 @@ namespace o2
     float HorizontalLayout::GetWidthWeightWithChildren() const
     {
         float res = 0;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res += child->GetWidthWeightWithChildren();
@@ -261,7 +261,7 @@ namespace o2
     {
         GetLayoutData().weight.x = 0;
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 GetLayoutData().weight.x += child->GetWidthWeightWithChildren();
@@ -285,7 +285,7 @@ namespace o2
                 mSpacing);
 
             int i = 0;
-            for (auto child : widgets)
+            for (auto& child : widgets)
             {
                 child->GetLayoutData().offsetMin.x = position;
                 position += widths[i++];
@@ -301,7 +301,7 @@ namespace o2
             float totalWidth = mChildWidgets.Sum<float>([&](Widget* child) { return child->GetMinWidthWithChildren(); });
             totalWidth += (mChildWidgets.Count() - 1)*mSpacing;
             float position = -totalWidth*0.5f;
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -327,7 +327,7 @@ namespace o2
                 mSpacing);
 
             int i = 0;
-            for (auto child : widgets)
+            for (auto& child : widgets)
             {
                 child->GetLayoutData().offsetMin.x = position;
                 position += widths[i++];
@@ -341,7 +341,7 @@ namespace o2
         else
         {
             float position = mBorder.left;
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -367,7 +367,7 @@ namespace o2
                 mSpacing);
 
             int i = 0;
-            for (auto child : widgets)
+            for (auto& child : widgets)
             {
                 child->GetLayoutData().offsetMax.x = -position;
                 position += widths[i++];
@@ -381,7 +381,7 @@ namespace o2
         else
         {
             float position = mBorder.right;
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -397,7 +397,7 @@ namespace o2
         }
     }
 
-    void HorizontalLayout::AlignWidgetByHeight(Widget* child, float widthAnchor)
+    void HorizontalLayout::AlignWidgetByHeight(const Ref<Widget>& child, float widthAnchor)
     {
         if (mExpandHeight)
         {

@@ -122,7 +122,7 @@ namespace o2
         SERIALIZABLE(CustomDropDown);
 
     protected:
-        WeakRef<CustomList> mItemsList; // List view
+        Ref<CustomList> mItemsList; // List view
 
         Layout mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
         RectF  mAbsoluteClip;                       // Absolute clipping rectangle

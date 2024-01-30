@@ -50,10 +50,7 @@ namespace o2
     }
 
     Toggle::~Toggle()
-    {
-        if (mToggleGroup && mToggleGroup->mOwner == this)
-            delete mToggleGroup;
-    }
+    {}
 
     void Toggle::Update(float dt)
     {
@@ -78,7 +75,7 @@ namespace o2
                 SetValue(!mValue);
                 onClick();
                 onToggleByUser(mValue);
-                mToggleGroup->mToggled.Add(this);
+                mToggleGroup->mToggled.Add(Ref(this));
             }
         }
     }
@@ -116,7 +113,7 @@ namespace o2
         onToggle(mValue);
 
         if (mToggleGroup)
-            mToggleGroup->OnToggled(this);
+            mToggleGroup->OnToggled(Ref(this));
     }
 
     void Toggle::SetValueUnknown()
@@ -147,42 +144,19 @@ namespace o2
         return true;
     }
 
-    void Toggle::SetToggleGroup(ToggleGroup* toggleGroup)
+    void Toggle::SetToggleGroup(const Ref<ToggleGroup>& toggleGroup)
     {
         if (mToggleGroup == toggleGroup)
             return;
 
         if (mToggleGroup)
-        {
-            if (mToggleGroup->mOwner == this)
-            {
-                if (mToggleGroup->mToggles.Count() == 1)
-                {
-                    mToggleGroup->mToggles.Clear();
-                    delete mToggleGroup;
-                }
-                else
-                {
-                    mToggleGroup->mToggles.Remove(this);
-                    mToggleGroup->mOwner = mToggleGroup->mToggles[0];
-                }
-            }
-            else mToggleGroup->mToggles.Remove(this);
-        }
+            mToggleGroup->mToggles.Remove(Ref(this));
 
         mToggleGroup = toggleGroup;
-        mToggleGroup->mToggles.Add(this);
-
-        if (!mToggleGroup->mOwner)
-        {
-            mToggleGroup->mOwner = this;
-
-            if (mToggleGroup->mType == ToggleGroup::Type::OnlySingleTrue)
-                SetValue(true);
-        }
+        mToggleGroup->mToggles.Add(Ref(this));
     }
 
-    ToggleGroup* Toggle::GetToggleGroup() const
+    const Ref<ToggleGroup>& Toggle::GetToggleGroup() const
     {
         return mToggleGroup;
     }
@@ -203,7 +177,7 @@ namespace o2
             mToggleGroup->mPressed = true;
             mToggleGroup->mPressedValue = mValue;
             mToggleGroup->mToggled.Clear();
-            mToggleGroup->mToggled.Add(this);
+            mToggleGroup->mToggled.Add(Ref(this));
             mToggleGroup->onPressed(mValue);
         }
     }
@@ -306,7 +280,7 @@ namespace o2
     void Toggle::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "caption" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
-            mCaptionText = (Text*)layer->GetDrawable();
+            mCaptionText = DynamicCast<Text>(layer->GetDrawable());
 
         if (layer->name == "back")
             mBackLayer = layer;
@@ -337,50 +311,50 @@ namespace o2
 
     ToggleGroup::~ToggleGroup()
     {
-        for (auto toggle : mToggles)
-            toggle->mToggleGroup = nullptr;
+        for (auto& toggle : mToggles)
+            toggle.Lock()->mToggleGroup = nullptr;
     }
 
-    void ToggleGroup::AddToggle(Toggle* toggle)
+    void ToggleGroup::AddToggle(const Ref<Toggle>& toggle)
     {
         mToggles.Add(toggle);
-        toggle->mToggleGroup = this;
+        toggle->mToggleGroup = Ref(this);
         toggle->SetValue(true);
     }
 
     void ToggleGroup::RemoveToggle(Toggle* toggle)
     {
-        mToggles.Remove(toggle);
+        mToggles.RemoveFirst([&](auto& x) { return x == toggle; });
         toggle->mToggleGroup = nullptr;
     }
 
-    const Vector<Toggle*>& ToggleGroup::GetToggles() const
+    const Vector<WeakRef<Toggle>>& ToggleGroup::GetToggles() const
     {
         return mToggles;
     }
 
-    const Vector<Toggle*>& ToggleGroup::GetToggled() const
+    const Vector<WeakRef<Toggle>>& ToggleGroup::GetToggled() const
     {
         return mToggled;
     }
 
-    void ToggleGroup::OnToggled(Toggle* toggle)
+    void ToggleGroup::OnToggled(const Ref<Toggle>& toggle)
     {
         if (mType == Type::OnlySingleTrue)
         {
             if (toggle->GetValue())
             {
-                for (auto ctoggle : mToggles)
+                for (auto& ctoggle : mToggles)
                 {
                     if (ctoggle == toggle)
                         continue;
 
-                    ctoggle->SetValue(false);
+                    ctoggle.Lock()->SetValue(false);
                 }
             }
             else
             {
-                if (!mToggles.Any([&](auto x) { return x->GetValue(); }))
+                if (!mToggles.Any([&](auto& x) { return x.Lock()->GetValue(); }))
                     toggle->SetValue(true);
             }
         }

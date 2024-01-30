@@ -73,13 +73,13 @@ namespace o2
         void SetHorizontalScrollBar(const Ref<HorizontalScrollBar>& scrollbar, bool owner = true);
 
         // Returns horizontal scroll bar
-        Ref<HorizontalScrollBar> GetHorizontalScrollbar() const;
+        const Ref<HorizontalScrollBar>& GetHorizontalScrollbar() const;
 
         // Sets Vertical scroll bar
         void SetVerticalScrollBar(const Ref<VerticalScrollBar>& scrollbar, bool owner = true);
 
         // Returns Vertical scroll bar
-        Ref<VerticalScrollBar> GetVerticalScrollbar() const;
+        const Ref<VerticalScrollBar>& GetVerticalScrollbar() const;
 
         // Sets scroll bars hiding
         void SetEnableScrollsHiding(bool hideScrolls);

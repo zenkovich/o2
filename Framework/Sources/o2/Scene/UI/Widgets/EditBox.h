@@ -79,10 +79,10 @@ namespace o2
         void SelectAll();
 
         // Returns text drawable
-        Ref<Text> GetTextDrawable();
+        const Ref<Text>& GetTextDrawable();
 
         // Returns caret drawable
-        Ref<Sprite> GetCaretDrawable();
+        const Ref<Sprite>& GetCaretDrawable();
 
         // Sets selection color
         void SetSelectionColor(const Color4& color);

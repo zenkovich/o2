@@ -12,18 +12,18 @@ namespace o2
         ScrollArea(), mHoverLayout(Layout::BothStretch()),
         mSelectionLayout(Layout::BothStretch())
     {
-        mItemSample = mnew Widget();
-        mSelectionDrawable = mnew Sprite();
-        mHoverDrawable = mnew Sprite();
+        mItemSample = mmake<Widget>();
+        mSelectionDrawable = mmake<Sprite>();
+        mHoverDrawable = mmake<Sprite>();
     }
 
     LongList::LongList(const LongList& other):
         ScrollArea(other), mHoverLayout(other.mHoverLayout),
         mSelectionLayout(other.mSelectionLayout), selectedItemPos(this)
     {
-        mItemSample = other.mItemSample->CloneAs<Widget>();
-        mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-        mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+        mItemSample = other.mItemSample->CloneAsRef<Widget>();
+        mSelectionDrawable = other.mSelectionDrawable->CloneAsRef<Sprite>();
+        mHoverDrawable = other.mHoverDrawable->CloneAsRef<Sprite>();
 
         mItemSample->UpdateTransform();
 
@@ -32,27 +32,19 @@ namespace o2
     }
 
     LongList::~LongList()
-    {
-        delete mItemSample;
-        delete mSelectionDrawable;
-        delete mHoverDrawable;
-    }
+    {}
 
     LongList& LongList::operator=(const LongList& other)
     {
-        delete mItemSample;
-        delete mSelectionDrawable;
-        delete mHoverDrawable;
-
-        mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-        mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+        mSelectionDrawable = other.mSelectionDrawable->CloneAsRef<Sprite>();
+        mHoverDrawable = other.mHoverDrawable->CloneAsRef<Sprite>();
 
         mSelectionLayout = other.mSelectionLayout;
         mHoverLayout = other.mHoverLayout;
 
         ScrollArea::operator=(other);
 
-        mItemSample = other.mItemSample->CloneAs<Widget>();
+        mItemSample = other.mItemSample->CloneAsRef<Widget>();
         mItemSample->UpdateSelfTransform();
         mItemSample->UpdateChildrenTransforms();
 
@@ -89,14 +81,14 @@ namespace o2
         if (!mResEnabledInHierarchy || mIsClipped)
             return;
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         IDrawable::OnDrawn();
 
         o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
 
         mSelectionDrawable->Draw();
@@ -106,7 +98,7 @@ namespace o2
 
         CursorAreaEventsListener::OnDrawn();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         if (mOwnHorScrollBar)
@@ -118,15 +110,14 @@ namespace o2
         DrawDebugFrame();
     }
 
-    void LongList::SetItemSample(Widget* sample)
+    void LongList::SetItemSample(const Ref<Widget>& sample)
     {
-        delete mItemSample;
         mItemSample = sample;
 
         SetLayoutDirty();
     }
 
-    Widget* LongList::GetItemSample() const
+    const Ref<Widget>& LongList::GetItemSample() const
     {
         return mItemSample;
     }
@@ -157,12 +148,12 @@ namespace o2
         return mSelectedItem;
     }
 
-    Sprite* LongList::GetSelectionDrawable() const
+    const Ref<Sprite>& LongList::GetSelectionDrawable() const
     {
         return mSelectionDrawable;
     }
 
-    Sprite* LongList::GetHoverDrawable() const
+    const Ref<Sprite>& LongList::GetHoverDrawable() const
     {
         return mHoverDrawable;
     }
@@ -259,10 +250,10 @@ namespace o2
         mMaxVisibleItemIdx = Math::Min(mMaxVisibleItemIdx, getItemsCountFunc() - 1);
 
         auto itemsInRange = getItemsRangeFunc(mMinVisibleItemIdx, mMaxVisibleItemIdx + 1);
-        Vector<Widget*> itemsWidgets;
+        Vector<Ref<Widget>> itemsWidgets;
         itemsWidgets.Resize(Math::Max(0, mMaxVisibleItemIdx - mMinVisibleItemIdx + 1));
 
-        Vector<Widget*> removingItems;
+        Vector<Ref<Widget>> removingItems;
         for (int i = lastMinItemIdx; i <= lastMaxItemIdx; i++)
         {
             if (i < 0)
@@ -274,12 +265,14 @@ namespace o2
                 itemsWidgets[i - mMinVisibleItemIdx] = mChildWidgets[i - lastMinItemIdx];
         }
 
-        for (auto item : removingItems)
+        for (auto& item : removingItems)
             mItemsPool.Add(item);
 
         mChildren.Clear();
         mChildWidgets.Clear();
         mChildrenInheritedDepth.Clear();
+
+        auto thisRef = Ref(this);
 
         for (int i = mMinVisibleItemIdx; i <= mMaxVisibleItemIdx; i++)
         {
@@ -293,29 +286,29 @@ namespace o2
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    Widget* newItem = mItemSample->CloneAs<Widget>();
+                    auto newItem = mItemSample->CloneAsRef<Widget>();
                     newItem->RemoveFromScene();
                     mItemsPool.Add(newItem);
                 }
             }
 
-            Widget* newItem = mItemsPool.PopBack();
+            auto newItem = mItemsPool.PopBack();
 
             setupItemFunc(newItem, itemsInRange[i - mMinVisibleItemIdx]);
 
             *newItem->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, itemHeight, itemHeight*(float)i);
 
-            newItem->mParent = this;
-            newItem->mParentWidget = this;
+            newItem->mParent = thisRef;
+            newItem->mParentWidget = thisRef;
 
             itemsWidgets[i - mMinVisibleItemIdx] = newItem;
         }
 
-        mChildren.Add(itemsWidgets.Cast<Actor*>());
+        mChildren.Add(DynamicCastVector<Actor>(itemsWidgets));
         mChildWidgets.Add(itemsWidgets);
-        mChildrenInheritedDepth.Add(itemsWidgets.DynamicCast<ISceneDrawable*>());
+        mChildrenInheritedDepth.Add(DynamicCastVector<ISceneDrawable>(itemsWidgets));
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             child->UpdateSelfTransform();
             child->UpdateChildrenTransforms();
@@ -383,10 +376,10 @@ namespace o2
             mHoverDrawable->SetEnabled(false);
     }
 
-    Widget* LongList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+    Ref<Widget> LongList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
     {
         int idx = mMinVisibleItemIdx;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->layout->IsPointInside(point))
             {
@@ -431,7 +424,7 @@ namespace o2
     void LongList::UpdateHover(const Vec2F& point)
     {
         int itemIdx = -1;
-        Widget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
+        auto itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
 
         if (itemIdx < 0)
         {
@@ -462,7 +455,7 @@ namespace o2
     void LongList::UpdateSelection(int position)
     {
         mSelectedItem = position;
-        Widget* item = nullptr;
+        Ref<Widget> item;
         if (position < mMaxVisibleItemIdx && position >= mMinVisibleItemIdx)
             item = mChildWidgets[position - mMinVisibleItemIdx];
 

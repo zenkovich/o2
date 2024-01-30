@@ -9,7 +9,7 @@ namespace o2
     List::List():
         CustomList()
     {
-        Label* itemSample = mnew Label();
+        auto itemSample = mmake<Label>();
         itemSample->horOverflow = Label::HorOverflow::Dots;
         SetItemSample(itemSample);
     }
@@ -31,14 +31,14 @@ namespace o2
 
     int List::AddItem(const WString& text)
     {
-        auto item = (Label*)CustomList::AddItem();
+        auto item = DynamicCast<Label>(CustomList::AddItem());
         item->text = text;
         return GetItemsCount() - 1;
     }
 
     int List::AddItem(const WString& text, int position)
     {
-        auto item = (Label*)CustomList::AddItem(position);
+        auto item = DynamicCast<Label>(CustomList::AddItem(position));
         item->text = text;
         return position;
     }
@@ -61,7 +61,7 @@ namespace o2
         int i = 0;
         for (auto child : mVerLayout->mChildren)
         {
-            if (((Label*)child)->GetText() == text)
+            if (DynamicCast<Label>(child)->GetText() == text)
                 return i;
 
             i++;
@@ -72,7 +72,7 @@ namespace o2
 
     WString List::GetItemText(int position) const
     {
-        auto item = (Label*)GetItem(position);
+        auto item = DynamicCast<Label>(GetItem(position));
         if (item)
             return item->GetText();
 
@@ -83,14 +83,14 @@ namespace o2
     {
         Vector<WString> res;
         for (auto child : mVerLayout->mChildren)
-            res.Add(((Label*)child)->GetText());
+            res.Add(DynamicCast<Label>(child)->GetText());
 
         return res;
     }
 
     WString List::GetSelectedItemText()
     {
-        auto selectedItem = dynamic_cast<Label*>(GetSelectedItem());
+        auto selectedItem = DynamicCast<Label>(GetSelectedItem());
         if (selectedItem)
             return selectedItem->GetText();
 

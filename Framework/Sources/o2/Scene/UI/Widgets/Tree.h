@@ -266,7 +266,7 @@ namespace o2
         RectF             mTargetHoverRect;  // Target selection rectangle (over selected item)    
 
         bool          mIsDraggingNodes = false; // Is nodes moving by cursor
-        Ref<TreeNode> mFakeDragNod;             // Dragging node
+        Ref<TreeNode> mFakeDragNode;            // Dragging node
         Vec2F         mDragOffset;              // Offset from cursor to dragging node's center
         Ref<TreeNode> mInsertNodeCandidate;     // Insertion node candidate when dragging nodes
         Vector<void*> mBeforeDragSelectedItems; // Before drag begin selection
@@ -299,7 +299,7 @@ namespace o2
         WeakRef<Node>        mHighlighNode = nullptr;                   // Hightlighing node
         void*                mHighlightObject;                          // Highlight object
         
-        Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
+        Ref<Sprite> mZebraBackLine; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
 
         Vector<VisibleWidgetDef> mVisibleWidgetsCache; // Visible widgets cache
 
@@ -544,10 +544,11 @@ namespace o2
 
     protected:
         WeakRef<Tree::Node> mNodeDef;   // Node definition
-        WeakRef<Tree>       mOwnerTree; // Owner tree
-        WeakRef<Button>     mExpandBtn; // Node expanding button
 
-        WeakRef<WidgetState>& mSelectedState; // Selected state cached
+        WeakRef<Tree> mOwnerTree; // Owner tree
+        Ref<Button>   mExpandBtn; // Node expanding button
+
+        Ref<WidgetState> mSelectedState; // Selected state cached
 
     protected:
         // Called when widget state was added, caches selected state

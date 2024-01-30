@@ -95,7 +95,7 @@ namespace o2
         if (!mResEnabledInHierarchy || mIsClipped)
             return;
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         OnDrawn();
@@ -106,17 +106,17 @@ namespace o2
             if (clipping)
                 o2Render.EnableScissorTest(mBounds);
 
-            for (auto child : mChildrenInheritedDepth)
+            for (auto& child : mChildrenInheritedDepth)
                 child->Draw();
 
             if (clipping)
                 o2Render.DisableScissorTest();
         }
 
-        for (auto child : mInternalWidgets)
+        for (auto& child : mInternalWidgets)
             child->Draw();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         DrawDebugFrame();
@@ -174,7 +174,7 @@ namespace o2
             return Widget::GetMinHeightWithChildren();
 
         float res = Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing + mBorder.top + mBorder.bottom;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res += child->GetMinHeightWithChildren();
@@ -211,7 +211,7 @@ namespace o2
         }
     }
 
-    Button* Spoiler::GetExpandButton() const
+    Ref<Button> Spoiler::GetExpandButton() const
     {
         return FindInternalWidgetByType<Button>("expand");
     }

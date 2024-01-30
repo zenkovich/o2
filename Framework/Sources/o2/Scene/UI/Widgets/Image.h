@@ -32,7 +32,7 @@ namespace o2
         void SetImage(const Ref<Sprite>& sprite);
 
         // Returns image sprite @SCRIPTABLE
-        const Ref<Sprite>& GetImage();
+        Ref<Sprite> GetImage();
 
         // Sets image asset @SCRIPTABLE
         void SetImageAsset(const ImageAssetRef& asset);

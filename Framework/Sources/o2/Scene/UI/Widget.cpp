@@ -837,7 +837,7 @@ namespace o2
     void Widget::SetEnabledForcible(bool visible)
     {
         if (mVisibleState)
-            mVisibleState.Lock()->SetStateForcible(visible);
+            mVisibleState->SetStateForcible(visible);
 
         mEnabled = visible;
         Widget::UpdateResEnabled();
@@ -1298,7 +1298,7 @@ namespace o2
     void Widget::UpdateResEnabled(bool withChildren /*= true*/)
     {
         if (mVisibleState)
-            mVisibleState.Lock()->SetState(mEnabled);
+            mVisibleState->SetState(mEnabled);
         else
             Actor::UpdateResEnabled(withChildren);
     }

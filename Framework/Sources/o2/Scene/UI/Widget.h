@@ -273,11 +273,11 @@ namespace o2
         Vector<Ref<WidgetLayer>> mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
         Vector<Ref<WidgetLayer>> mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 
-        WeakRef<WidgetState> mFocusedState;        // Focused widget state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
-        bool                 mIsFocused = false;   // Is widget focused
-        bool                 mIsFocusable = false; // Is widget can be focused @SERIALIZABLE
+        Ref<WidgetState> mFocusedState;        // Focused widget state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
+		bool             mIsFocused = false;   // Is widget focused
+		bool             mIsFocusable = false; // Is widget can be focused @SERIALIZABLE
 
-        WeakRef<WidgetState> mVisibleState; // Widget visibility state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
+        Ref<WidgetState> mVisibleState; // Widget visibility state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
 
         bool mIsClipped = false; // Is widget fully clipped by some scissors
 

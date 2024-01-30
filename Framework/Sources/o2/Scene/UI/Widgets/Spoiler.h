@@ -68,9 +68,9 @@ namespace o2
     protected:
         float mHeadHeight = 0.0f; // Spoiler head height @SERIALIZABLE
 
-        WeakRef<WidgetState> mExpandState;         // Expanding state
-        float                mExpandCoef = 0.0f;   // Expanding animation coefficient 0...1 
-        float                mTargetHeight = 0.0f; // target expanding height
+        Ref<WidgetState> mExpandState;         // Expanding state
+        float             mExpandCoef = 0.0f;   // Expanding animation coefficient 0...1 
+        float             mTargetHeight = 0.0f; // target expanding height
 
     protected:
         // Invokes required function for childs arranging

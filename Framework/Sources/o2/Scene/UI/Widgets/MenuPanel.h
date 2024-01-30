@@ -15,20 +15,29 @@ namespace o2
     class MenuPanel: public Widget, public DrawableCursorEventsListener
     {
     public:
-        class Item: public ISerializable
+        // --------------------
+        // Menu panel text item
+        // --------------------
+        class Item: public ISerializable, public RefCounterable
         {
         public:
-            WString text; // @SERIALIZABLE
+            WString text; // Item text @SERIALIZABLE
 
-            Vector<ContextMenu::Item*> subItems; // @SERIALIZABLE
+            Vector<Ref<ContextMenu::Item>> subItems; // Children sub items @SERIALIZABLE
 
-            Function<void()> onClick;
+            Function<void()> onClick; // Click function 
 
         public:
+            // Default constructor
             Item();
-            Item(const WString& text, const Vector<ContextMenu::Item*>& subItems);
+
+            // Constructor with text and sub items
+            Item(const WString& text, const Vector<Ref<ContextMenu::Item>>& subItems);
+
+            // Constructor with text and click function
             Item(const WString& text, const Function<void()> onClick);
 
+            // Copy operator
             bool operator==(const Item& other) const;
 
             SERIALIZABLE(Item);
@@ -92,13 +101,13 @@ namespace o2
         void RemoveAllItems();
 
         // Returns items vertical layout
-        Ref<HorizontalLayout> GetItemsLayout() const;
+        const Ref<HorizontalLayout>& GetItemsLayout() const;
 
         // Returns item sample
         const Ref<Widget>& GetItemSample() const;
 
         // Sets item sample
-        void SetItemSample(Widget* sample);
+        void SetItemSample(const Ref<Widget>& sample);
 
         // Returns selection drawable
         const Ref<Sprite>& GetSelectionDrawable() const;
@@ -115,7 +124,7 @@ namespace o2
         SERIALIZABLE(MenuPanel);
 
     protected:
-        WeakRef<HorizontalLayout> mLayout; // Items layout
+        Ref<HorizontalLayout> mLayout; // Items layout
 
         Ref<Widget> mItemSample; // Item sample @SERIALIZABLE
 

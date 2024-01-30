@@ -9,7 +9,7 @@ namespace o2
     Image::Image():
         Widget()
     {
-        mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
+        mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
     }
 
     Image::Image(const Image& other):
@@ -17,7 +17,7 @@ namespace o2
     {
         mImage = GetLayerDrawable<Sprite>("image");
         if (!mImage)
-            mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
+            mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
     }
 
     Image& Image::operator=(const Image& other)
@@ -26,16 +26,13 @@ namespace o2
 
         mImage = GetLayerDrawable<Sprite>("image");
         if (!mImage)
-            mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
+            mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
 
         return *this;
     }
 
-    void Image::SetImage(Sprite* sprite)
+    void Image::SetImage(const Ref<Sprite>& sprite)
     {
-        if (mImage)
-            delete mImage;
-
         if (auto layer = FindLayer("image"))
         {
             layer->SetDrawable(sprite);
@@ -43,9 +40,9 @@ namespace o2
         }
     }
 
-    Sprite* Image::GetImage()
+    Ref<Sprite> Image::GetImage()
     {
-        return mImage;
+        return mImage.Lock();
     }
 
     void Image::SetImageAsset(const ImageAssetRef& asset)
@@ -54,15 +51,15 @@ namespace o2
             mImage = GetLayerDrawable<Sprite>("image");
 
         if (!mImage)
-            mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
+            mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
 
-        mImage->LoadFromImage(asset);
+        mImage.Lock()->LoadFromImage(asset);
     }
 
     ImageAssetRef Image::GetImageAsset() const
     {
         if (mImage)
-            return mImage->GetImageAsset();
+            return mImage.Lock()->GetImageAsset();
 
         return ImageAssetRef();
     }

@@ -649,7 +649,12 @@ namespace o2
         }
     }
 
-    void Actor::RemoveAllChildren()
+	void Actor::RemoveChild(const Ref<Actor>& actor, bool withEvent /*= true*/)
+	{
+		RemoveChild(actor.Get(), withEvent);
+	}
+
+	void Actor::RemoveAllChildren()
     {
         for (auto& child : mChildren)
         {
@@ -716,7 +721,12 @@ namespace o2
 #endif
     }
 
-    void Actor::RemoveAllComponents()
+	void Actor::RemoveComponent(const Ref<Component>& component)
+	{
+        RemoveComponent(const_cast<Component*>(component.Get()));
+	}
+
+	void Actor::RemoveAllComponents()
     {
         auto components = mComponents;
         mComponents.Clear();

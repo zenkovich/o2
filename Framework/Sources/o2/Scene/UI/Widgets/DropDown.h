@@ -67,7 +67,7 @@ namespace o2
         SERIALIZABLE(DropDown);
 
     protected:
-        Text* mSelectedText = nullptr; // Selected text label, draws separately
+        Ref<Text> mSelectedText; // Selected text label, draws separately
 
     protected:
         // Called when selected item index was changed

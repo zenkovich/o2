@@ -21,9 +21,9 @@ namespace o2
     EditBox::EditBox():
         ScrollArea()
     {
-        mSelectionMesh = mnew Mesh();
-        mTextDrawable  = mnew Text();
-        mCaretDrawable = mnew Sprite();
+        mSelectionMesh = mmake<Mesh>();
+        mTextDrawable  = mmake<Text>();
+        mCaretDrawable = mmake<Sprite>();
     }
 
     EditBox::EditBox(const EditBox& other):
@@ -33,9 +33,9 @@ namespace o2
         mCaretBlinkDelay(other.mCaretBlinkDelay), text(this), caret(this),
         selectionBegin(this), selectionEnd(this)
     {
-        mSelectionMesh = mnew Mesh();
-        mTextDrawable  = other.mTextDrawable->CloneAs<Text>();
-        mCaretDrawable = other.mCaretDrawable->CloneAs<Sprite>();
+        mSelectionMesh = mmake<Mesh>();
+        mTextDrawable  = other.mTextDrawable->CloneAsRef<Text>();
+        mCaretDrawable = other.mCaretDrawable->CloneAsRef<Sprite>();
 
         mTextDrawable->SetText(mText);
 
@@ -44,17 +44,10 @@ namespace o2
     }
 
     EditBox::~EditBox()
-    {
-        delete mSelectionMesh;
-        delete mTextDrawable;
-        delete mCaretDrawable;
-    }
+    {}
 
     EditBox& EditBox::operator=(const EditBox& other)
     {
-        delete mTextDrawable;
-        delete mCaretDrawable;
-
         ScrollArea::operator=(other);
 
         mText = other.mText;
@@ -70,8 +63,8 @@ namespace o2
         mMaxLinesCount = other.mMaxLinesCount;
         mSelectionColor = other.mSelectionColor;
         mCaretBlinkDelay = other.mCaretBlinkDelay;
-        mTextDrawable = other.mTextDrawable->CloneAs<Text>();
-        mCaretDrawable = other.mCaretDrawable->CloneAs<Sprite>();
+        mTextDrawable = other.mTextDrawable->CloneAsRef<Text>();
+        mCaretDrawable = other.mCaretDrawable->CloneAsRef<Sprite>();
 
         mTextDrawable->SetText(mText);
 
@@ -205,12 +198,12 @@ namespace o2
         CheckScrollingToCaret();
     }
 
-    Text* EditBox::GetTextDrawable()
+    const Ref<Text>& EditBox::GetTextDrawable()
     {
         return mTextDrawable;
     }
 
-    Sprite* EditBox::GetCaretDrawable()
+    const Ref<Sprite>& EditBox::GetCaretDrawable()
     {
         return mCaretDrawable;
     }
