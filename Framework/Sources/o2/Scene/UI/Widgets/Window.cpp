@@ -64,7 +64,7 @@ namespace o2
     {
         if (!mResEnabledInHierarchy || mIsClipped) 
         {
-            for (auto child : mChildrenInheritedDepth)
+            for (auto& child : mChildrenInheritedDepth)
                 child->Draw();
 
             return;
@@ -72,14 +72,14 @@ namespace o2
 
         mBackCursorArea.OnDrawn();
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         IDrawable::OnDrawn();
 
         o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
 
         o2Render.DisableScissorTest();
@@ -96,10 +96,10 @@ namespace o2
         mLeftBottomDragHandle.OnDrawn();
         mRightBottomDragHandle.OnDrawn();
 
-        for (auto child : mInternalWidgets)
+        for (auto& child : mInternalWidgets)
             child->Draw();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         DrawDebugFrame();
@@ -111,23 +111,17 @@ namespace o2
         SetModal(true);
     }
 
-    void Window::SetIcon(Sprite* icon)
+    void Window::SetIcon(const Ref<Sprite>& icon)
     {
-        auto iconLayer = GetLayer(mIconLayerPath);
-        if (iconLayer)
-        {
-            if (iconLayer->GetDrawable())
-                delete iconLayer->GetDrawable();
-
+        if (auto iconLayer = GetLayer(mIconLayerPath))
             iconLayer->SetDrawable(icon);
-        }
     }
 
-    Sprite* Window::GetIcon() const
+    Ref<Sprite> Window::GetIcon() const
     {
         auto iconLayer = GetLayer(mIconLayerPath);
         if (iconLayer)
-            return dynamic_cast<Sprite*>(iconLayer->GetDrawable());
+            return DynamicCast<Sprite>(iconLayer->GetDrawable());
 
         return nullptr;
     }
@@ -153,7 +147,7 @@ namespace o2
         auto captionLayer = GetLayer(mCaptionLayerPath);
         if (captionLayer)
         {
-            if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
+            if (auto textDrawable = DynamicCast<Text>(captionLayer->GetDrawable()))
                 textDrawable->SetText(caption);
         }
     }
@@ -163,14 +157,14 @@ namespace o2
         auto captionLayer = GetLayer(mCaptionLayerPath);
         if (captionLayer)
         {
-            if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
+            if (auto textDrawable = DynamicCast<Text>(captionLayer->GetDrawable()))
                 return textDrawable->GetText();
         }
 
         return WString();
     }
 
-    ContextMenu* Window::GetOptionsMenu() const
+    const Ref<ContextMenu>& Window::GetOptionsMenu() const
     {
         return mOptionsMenu;
     }
@@ -302,7 +296,7 @@ namespace o2
     void Window::OnFocused()
     {
         if (mParent)
-            SetIndexInSiblings(mParent->GetChildren().Count() - 1);
+            SetIndexInSiblings(mParent.Lock()->GetChildren().Count() - 1);
 
         SetLastOnCurrentDepth();
 
@@ -352,8 +346,8 @@ namespace o2
         InitializeContextItems();
         AddInternalWidget(mOptionsMenu);
 
-        Button* optionsBtn = dynamic_cast<Button*>(mInternalWidgets.FindOrDefault(
-            [](Widget* x) { return x->GetName() == "optionsButton" && x->GetType() == TypeOf(Button); }));
+        auto optionsBtn = DynamicCast<Button>(mInternalWidgets.FindOrDefault(
+            [](auto& x) { return x->GetName() == "optionsButton" && x->GetType() == TypeOf(Button); }));
 
         if (optionsBtn)
             optionsBtn->onClick += [=]() { mOptionsMenu->Show(optionsBtn->transform->worldCenter); };
@@ -365,19 +359,18 @@ namespace o2
     }
 
     void Window::RestoreControls()
-    {
-        Button* closeBtn = dynamic_cast<Button*>(mInternalWidgets.FindOrDefault(
-            [](Widget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(Button); }));
+	{
+		auto closeBtn = DynamicCast<Button>(mInternalWidgets.FindOrDefault(
+            [](auto& x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(Button); }));
 
         if (closeBtn)
             closeBtn->onClick += [&]() { Hide(); };
 
-        for (auto element : mInternalWidgets)
+        for (auto& element : mInternalWidgets)
         {
             if (element->GetName() == "options context" && element->GetType() == TypeOf(ContextMenu))
             {
                 element->SetInternalParent(nullptr);
-                delete element;
                 break;
             }
         }

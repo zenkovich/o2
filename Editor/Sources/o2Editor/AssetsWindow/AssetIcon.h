@@ -64,10 +64,11 @@ namespace Editor
 		SERIALIZABLE(AssetIcon);
 
 	protected:
-		Label*                 mNameText = nullptr;      // Asset name text
-		Ref<AssetInfo>         mAssetInfo;               // Asset information
-		WidgetState*           mSelectedState = nullptr; // Node selected state
-		AssetsIconsScrollArea* mOwner = nullptr;         // Owner assets scroll area
+		Ref<Label>       mNameText;      // Asset name text
+		Ref<AssetInfo>   mAssetInfo;     // Asset information
+		Ref<WidgetState> mSelectedState; // Node selected state
+
+		WeakRef<AssetsIconsScrollArea> mOwner; // Owner assets scroll area
 
 	protected:
 		using SelectableDragableObject::OnDrawn;
@@ -120,7 +121,7 @@ namespace Editor
 		void OnDeselected() override;
 
 		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		friend class AssetsIconsScrollArea;
 	};

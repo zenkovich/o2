@@ -39,9 +39,9 @@ namespace Editor
 		SERIALIZABLE(AssetsFoldersTree);
 
 	protected:
-		Tree*        mFoldersTree; // Folders tree
-		ContextMenu* mContextMenu; // Context menu
-		String       mCurrentPath; // Current viewing path
+		Ref<Tree>        mFoldersTree; // Folders tree
+		Ref<ContextMenu> mContextMenu; // Context menu
+		String           mCurrentPath; // Current viewing path
 
 		bool mOpengingFolderFromThis = false;
 
@@ -62,16 +62,16 @@ namespace Editor
 		Vector<void*> GetFoldersTreeNodeChilds(void* object);
 
 		// Setups tree node by folder (for folders tree)
-		void SetupFoldersTreeNode(TreeNode* node, void* object);
+		void SetupFoldersTreeNode(const Ref<TreeNode>& node, void* object);
 
 		// Called when folder item double clicked (for folders tree)
-		void OnFoldersTreeNodeDblClick(TreeNode* node);
+		void OnFoldersTreeNodeDblClick(const Ref<TreeNode>& node);
 
 		// Called when folder item clicked (for folders tree)
 		void OnFoldersTreeSelect(Vector<void*> nodes);
 
 		// Called when folders tree clicked by right button
-		void OnFoldersTreeRightClick(TreeNode* node);
+		void OnFoldersTreeRightClick(const Ref<TreeNode>& node);
 
 		// Called when context copy pressed
 		void OnContextCopyPressed();
@@ -138,12 +138,12 @@ CLASS_METHODS_META(Editor::AssetsFoldersTree)
     FUNCTION().PROTECTED().SIGNATURE(void, SelectAndExpandFolder, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeContext);
-    FUNCTION().PROTECTED().SIGNATURE(void*, GetFoldersTreeNodeParent, void*);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetFoldersTreeNodeChilds, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, TreeNode*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeNodeDblClick, TreeNode*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, Vector<void*>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeRightClick, TreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(WeakRef<void>, GetFoldersTreeNodeParent, const WeakRef<void>&);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<WeakRef<void>>, GetFoldersTreeNodeChilds, const WeakRef<void>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, const Ref<TreeNode>&, const WeakRef<void>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeNodeDblClick, const Ref<TreeNode>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, const Vector<WeakRef<void>>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeRightClick, const Ref<TreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCutPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextPastePressed);

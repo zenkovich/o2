@@ -13,7 +13,7 @@ namespace o2
     // ----------------------------------------------------------------------------
     // Abstract value proxy. Accepts by void*, value by pointer must match the type
     // ----------------------------------------------------------------------------
-    class IAbstractValueProxy
+    class IAbstractValueProxy: public RefCounterable
     {
     public:
         virtual ~IAbstractValueProxy() {}

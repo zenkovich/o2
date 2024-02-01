@@ -147,7 +147,7 @@ namespace o2
         virtual void ExpandSizeByChilds();
 
         // Aligns widget by height with base corner
-        void AlignWidgetByWidth(Widget* child, float heightAnchor);
+        void AlignWidgetByWidth(const Ref<Widget>& child, float heightAnchor);
 
         // Updates layout's weight and minimal size
         virtual void UpdateLayoutParametres();

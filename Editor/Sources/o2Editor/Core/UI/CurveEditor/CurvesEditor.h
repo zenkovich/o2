@@ -361,16 +361,16 @@ namespace Editor
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
 		// Called when selectable draggable handle was released
-		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) override;
+		void OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
 
 		// Called when selectable handle was began to drag
-		void OnHandleBeganDragging(DragHandle* handle) override;
+		void OnHandleBeganDragging(const Ref<DragHandle>& handle) override;
 
 		// Called when selectable handle moved, moves all selected handles position
-		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) override;
+		void OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos) override;
 
 		// Called when selectable handle completed changing
-		void OnHandleCompletedChange(DragHandle* handle) override;
+		void OnHandleCompletedChange(const Ref<DragHandle>& handle) override;
 
 		// Called when selection is changed - some handle was added or removed from selection
 		void OnSelectionChanged() override;

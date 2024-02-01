@@ -219,7 +219,7 @@ namespace o2
         void SetSelectionGroup(const Ref<ISelectableDragableObjectsGroup>& group);
 
         // Returns selection group
-        Ref<ISelectableDragableObjectsGroup> GetSelectionGroup() const;
+        const Ref<ISelectableDragableObjectsGroup>& GetSelectionGroup() const;
 
         // Sets dragging available only when selected
         void SetDragOnlySelected(bool value);
@@ -238,7 +238,7 @@ namespace o2
         bool mIsSelected  = false;      // Is this selected
         bool mIsDragAvailable = true;   // Is dragging available
 
-        WeakRef<ISelectableDragableObjectsGroup> mSelectGroup; // Selection group
+        Ref<ISelectableDragableObjectsGroup> mSelectGroup; // Selection group
 
     protected:
         // Called when cursor pressed on this

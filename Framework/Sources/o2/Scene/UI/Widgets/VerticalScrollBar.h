@@ -111,8 +111,8 @@ namespace o2
         float mPressHandleOffset = 0.0f; // Value offset when handle was pressed
         bool  mHandlePressed = false;    // True, when handle was pressed
 
-        WeakRef<WidgetLayer> mHandleLayer; // Handle layer
-        WeakRef<WidgetLayer> mBackLayer;   // Background layer
+       Ref<WidgetLayer> mHandleLayer; // Handle layer
+       Ref<WidgetLayer> mBackLayer;   // Background layer
 
     protected:
         // Updates layers layouts, calls after updating widget layout

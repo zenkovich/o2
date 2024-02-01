@@ -60,7 +60,7 @@ namespace o2
         virtual WString GetCaption() const;
 
         // Returns options context menu
-        ContextMenu* GetOptionsMenu() const;
+        const Ref<ContextMenu>& GetOptionsMenu() const;
 
         // Sets drag handle areas layouts
         void SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout& bottom, const Layout& left,
@@ -91,7 +91,7 @@ namespace o2
         static constexpr auto mIconLayerPath = "icon";
         static constexpr auto mCaptionLayerPath = "caption";
 
-        WeakRef<ContextMenu> mOptionsMenu; // Window options context menu
+        Ref<ContextMenu> mOptionsMenu; // Window options context menu
 
         CursorEventsArea mBackCursorArea; // Cursor area listener at back of window, for catching events
 

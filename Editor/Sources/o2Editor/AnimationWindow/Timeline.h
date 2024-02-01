@@ -44,7 +44,7 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Sets animation. Subscribes on animation duration change, controls playing time
-		void SetAnimation(AnimationClip* animation, AnimationPlayer* player = nullptr);
+		void SetAnimation(const Ref<AnimationClip>& animation, const Ref<AnimationPlayer>& player = nullptr);
 
 		// Sets current time scroll in seconds
 		void SetScroll(float scroll);
@@ -77,13 +77,13 @@ namespace Editor
 		float WorldToLocal(float pos) const;
 
 		// Returns captions text drawable
-		Text* GetText() const;
+		const Ref<Text>& GetText() const;
 
 		// Sets scrollbar widget, used for view scroll
-		void SetScrollBar(HorizontalScrollBar* scrollBar);
+		void SetScrollBar(const Ref<HorizontalScrollBar>& scrollBar);
 
 		// Returns scrollbar widget, used for view scroll
-		HorizontalScrollBar* GetScrollBar() const;
+		const Ref<HorizontalScrollBar>& GetScrollBar() const;
 
 		// Checks is this timeA and timeB are same on screen. Dependent on zoom, thershold - max pixels distance on screen
 		bool IsSameTime(float timeA, float timeB, float threshold = 3.0f) const;
@@ -123,10 +123,10 @@ namespace Editor
 		const float mScrollBorderBounceCoef = 10.0f;  // Smooth scroll bounds bounce coefficient
 
 	private:
-		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+		Ref<AnimationWindow> mAnimationWindow; // Animation window
 
-		AnimationPlayer* mPlayer = nullptr;    // Animation player
-		AnimationClip*   mAnimation = nullptr; // Animation, used for sibscribing on duration change
+		Ref<AnimationPlayer> mPlayer;    // Animation player
+		Ref<AnimationClip>   mAnimation; // Animation, used for sibscribing on duration change
 
 		float mTimeCursor = 0; // Current time of red cursor
 
@@ -144,18 +144,18 @@ namespace Editor
 
 		float mDuration = 0.0f; // Scale length in seconds
 
-		Ref<Font> mTextFont;       // Captions font
-		Text*   mText = nullptr; // Captions text
+		Ref<Font> mTextFont; // Captions font
+		Ref<Text> mText;     // Captions text
 
-		Sprite* mBeginMark = nullptr; // Begin animation mark sprite. Begin is always at zero
-		Sprite* mEndMark = nullptr;   // End animation mark sprite, at duration
+		Ref<Sprite> mBeginMark; // Begin animation mark sprite. Begin is always at zero
+		Ref<Sprite> mEndMark;   // End animation mark sprite, at duration
 
 		Layout mBeginMarkLayout = Layout(Vec2F(0, 1), Vec2F(0, 1), Vec2F(-6.0f, 3.0f), Vec2F(6.0f, -21.0f));
 		Layout mEndMarkLayout = Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(-4.0f, 3.0f), Vec2F(6.0f, -21.0f));
 
-		HorizontalScrollBar* mScrollBar = nullptr; // Scroll bar. Limited by animation duration
+		Ref<HorizontalScrollBar> mScrollBar; // Scroll bar. Limited by animation duration
 
-		Sprite*          mTimeLine = nullptr; // Red time line
+		Ref<Sprite>      mTimeLine;           // Red time line
 		CursorEventsArea mTimeLineEventsArea; // Top area events listeners, used for moving red line of time
 
 	private:

@@ -98,25 +98,25 @@ namespace Editor
 		// Removes assets in clipboard
 		void DeleteAssets(const Vector<String>& assetsPaths);
 
-		// Creates and returns icon sprite for asset
+		// Creates and returns an icon sprite for the asset
 		static Sprite* GetAssetIconSprite(const Ref<Asset>& asset);
 		 
 		IOBJECT(AssetsWindow);
 
-	protected:
-		float mFoldersTreeShowCoef = 1.0f; // Animating show folders tree coefficient (0...1)
+		protected:
+		float mFoldersTreeShowCoef = 1.0f; // Animation show folders tree coefficient (0...1)
 
-		Button*  mFilterButton;           // Search filter button
-		EditBox* mSearchEditBox;          // Search edit box
-		Label*   mSelectedAssetPathLabel; // Selected asset path label
+		Ref<Button>  mFilterButton;           // Search filter button
+		Ref<EditBox> mSearchEditBox;          // Search edit box
+		Ref<Label>   mSelectedAssetPathLabel; // Selected asset path label
 
-		AssetsFoldersTree*   mFoldersTree;                                    // Folders tree			
+		Ref<AssetsFoldersTree>   mFoldersTree;                                    // Folders tree			
 		Ref<AnimationPlayer> mFoldersTreeShowAnim = mmake<AnimationPlayer>(); // Folders tree visible animation
 		bool                 mFoldersTreeVisible;                             // Is folders tree visible
 
-		AssetsIconsScrollArea* mAssetsGridScroll; // Assets grid scroll
+		Ref<AssetsIconsScrollArea> mAssetsGridScroll; // Assets grid scroll
 
-		Tree* mAssetsTree; // Assets tree
+		Ref<Tree> mAssetsTree; // Assets tree
 
 		CursorEventsArea mSeparatorHandle; // Folders tree and assets tree/grid separator handle
 		float            mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
@@ -193,24 +193,24 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const UID&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const Vector<UID>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectAssets, const Vector<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const Ref<UID>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const Ref<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const Ref<Vector<UID>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectAssets, const Ref<Vector<String>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeselectAssets);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AssetInfo>>&, GetSelectedAssets);
-    FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const UID&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const UID&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Vector<Ref<AssetInfo>>>&, GetSelectedAssets);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const Ref<UID>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const Ref<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const Ref<UID>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const Ref<String>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetOpenedFolderPath);
-    FUNCTION().PUBLIC().SIGNATURE(void, OpenFolder, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, ShowAssetIcon, const UID&);
-    FUNCTION().PUBLIC().SIGNATURE(void, ShowAssetIcon, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, CopyAssets, const Vector<String>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, CutAssets, const Vector<String>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, PasteAssets, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, DeleteAssets, const Vector<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OpenFolder, const Ref<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, ShowAssetIcon, const Ref<UID>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, ShowAssetIcon, const Ref<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, CopyAssets, const Ref<Vector<String>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, CutAssets, const Ref<Vector<String>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, PasteAssets, const Ref<String>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, DeleteAssets, const Ref<Vector<String>>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Sprite*, GetAssetIconSprite, const Ref<Asset>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeSeparator);
@@ -218,12 +218,12 @@ CLASS_METHODS_META(Editor::AssetsWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTree);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeDownPanel);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeUpPanel);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSearchEdited, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSearchEdited, const Ref<WString>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnMenuFilterPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnShowTreePressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnAssetsRebuilt, const Vector<UID>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, ShowAssetIcon, const String&, UID);
-    FUNCTION().PROTECTED().SIGNATURE(void, CopyAssetFolder, const String&, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnAssetsRebuilt, const Ref<Vector<UID>>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, ShowAssetIcon, const Ref<String>&, UID);
+    FUNCTION().PROTECTED().SIGNATURE(void, CopyAssetFolder, const Ref<String>&, const Ref<String>&);
 }
 END_META;
 // --- END META ---

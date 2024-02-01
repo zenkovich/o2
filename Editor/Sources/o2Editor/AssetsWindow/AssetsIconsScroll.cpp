@@ -1023,7 +1023,7 @@ namespace Editor
     void AssetsIconsScrollArea::AddSelectableObject(SelectableDragableObject* object)
     {}
 
-    void AssetsIconsScrollArea::RemoveSelectableObject(SelectableDragableObject* object)
+    void AssetsIconsScrollArea::RemoveSelectableObject(const Ref<SelectableDragableObject>& object)
     {}
 
     void AssetsIconsScrollArea::OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor)

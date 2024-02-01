@@ -506,7 +506,7 @@ namespace o2
     void Tree::AddSelectableObject(const Ref<SelectableDragableObject>& object)
     {}
 
-    void Tree::RemoveSelectableObject(SelectableDragableObject* object)
+    void Tree::RemoveSelectableObject(const Ref<SelectableDragableObject>& object)
     {}
 
     void Tree::OnSelectableObjectCursorReleased(const Ref<SelectableDragableObject>& object, const Input::Cursor& cursor)

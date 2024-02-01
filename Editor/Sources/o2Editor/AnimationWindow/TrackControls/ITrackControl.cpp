@@ -7,10 +7,10 @@
 namespace Editor
 {
 
-	void ITrackControl::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
+	void ITrackControl::Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet)
 	{}
 
-	void ITrackControl::SetTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player, const String& path)
+	void ITrackControl::SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path)
 	{}
 
 	void ITrackControl::UpdateHandles()

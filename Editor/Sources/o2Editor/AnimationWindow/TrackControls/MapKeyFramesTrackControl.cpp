@@ -56,7 +56,7 @@ namespace Editor
 		InitializeNodeHandles(valueNode);
 	}
 
-	void MapKeyFramesTrackControl::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
+	void MapKeyFramesTrackControl::Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet)
 	{
 		mTimeline = timeline;
 		mHandlesSheet = handlesSheet;

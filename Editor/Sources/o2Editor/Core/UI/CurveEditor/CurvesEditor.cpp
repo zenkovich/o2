@@ -1442,14 +1442,14 @@ namespace Editor
 		return selectedMainHandles > 1;
 	}
 
-	void CurvesEditor::OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor)
+	void CurvesEditor::OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor)
 	{
 		SelectableDragHandlesGroup::OnHandleCursorReleased(handle, cursor);
 		UpdateTransformFrame();
 		CheckHandlesVisible();
 	}
 
-	void CurvesEditor::OnHandleBeganDragging(DragHandle* handle)
+	void CurvesEditor::OnHandleBeganDragging(const Ref<DragHandle>& handle)
 	{
 		if (mSupportHandles.Contains((CurveHandle*)handle))
 			return;
@@ -1457,7 +1457,7 @@ namespace Editor
 		SelectableDragHandlesGroup::OnHandleBeganDragging(handle);
 	}
 
-	void CurvesEditor::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
+	void CurvesEditor::OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos)
 	{
 		if (mSupportHandles.Contains((CurveHandle*)handle))
 		{
@@ -1479,7 +1479,7 @@ namespace Editor
 		SelectableDragHandlesGroup::OnHandleMoved(handle, cursorPos);
 	}
 
-	void CurvesEditor::OnHandleCompletedChange(DragHandle* handle)
+	void CurvesEditor::OnHandleCompletedChange(const Ref<DragHandle>& handle)
 	{
 		OnTransformCompleted();
 	}

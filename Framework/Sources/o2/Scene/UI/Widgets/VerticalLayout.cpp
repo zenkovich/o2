@@ -17,7 +17,7 @@ namespace o2
         spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
         borderTop(this), borderBottom(this), fitByChildren(this)
     {
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->GetLayoutData().drivenByParent = true;
 
         RetargetStatesAnimations();
@@ -38,7 +38,7 @@ namespace o2
 
         Widget::operator=(other);
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->GetLayoutData().drivenByParent = true;
 
         RetargetStatesAnimations();
@@ -180,7 +180,7 @@ namespace o2
             return Widget::GetMinWidthWithChildren();
 
         float res = 0;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res = Math::Max(res, child->GetMinWidthWithChildren() + mBorder.left + mBorder.right);
@@ -197,7 +197,7 @@ namespace o2
             return Widget::GetMinHeightWithChildren();
 
         float res = mBorder.top + mBorder.bottom + Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res += child->GetMinHeightWithChildren();
@@ -211,7 +211,7 @@ namespace o2
     float VerticalLayout::GetHeightWeightWithChildren() const
     {
         float res = 0;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res += child->GetHeightWeightWithChildren();
@@ -258,7 +258,7 @@ namespace o2
     void VerticalLayout::UpdateLayoutParametres()
     {
         GetLayoutData().weight.y = 0;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 GetLayoutData().weight.y += child->GetHeightWeightWithChildren();
@@ -282,7 +282,7 @@ namespace o2
                                                  mSpacing);
 
             int i = 0;
-            for (auto child : widgets)
+            for (auto& child : widgets)
             {
                 child->GetLayoutData().offsetMin.y = position;
                 position += heights[i++];
@@ -295,10 +295,10 @@ namespace o2
         }
         else
         {
-            float totalHeight = mChildWidgets.Sum<float>([&](Widget* child) { return child->GetMinHeightWithChildren(); });
+            float totalHeight = mChildWidgets.Sum<float>([&](auto& child) { return child->GetMinHeightWithChildren(); });
             totalHeight += (mChildWidgets.Count() - 1)*mSpacing;
             float position = -totalHeight*0.5f;
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -324,7 +324,7 @@ namespace o2
                                                  mSpacing);
 
             int i = 0;
-            for (auto child : widgets)
+            for (auto& child : widgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -341,7 +341,7 @@ namespace o2
         else
         {
             float position = mBorder.bottom;
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -367,7 +367,7 @@ namespace o2
                                                  mSpacing);
 
             int i = 0;
-            for (auto child : widgets)
+            for (auto& child : widgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -384,7 +384,7 @@ namespace o2
         else
         {
             float position = mBorder.top;
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -400,7 +400,7 @@ namespace o2
         }
     }
 
-    void VerticalLayout::AlignWidgetByWidth(Widget* child, float heightAnchor)
+    void VerticalLayout::AlignWidgetByWidth(const Ref<Widget>& child, float heightAnchor)
     {
         if (mExpandWidth)
         {
@@ -453,7 +453,7 @@ namespace o2
         Vec2F relativePivot = relativePivots[(int)mBaseCorner];
         Vec2F size(GetMinWidthWithChildren(), GetMinHeightWithChildren());
 
-        Vec2F parentSize = mParentWidget ? mParentWidget->GetChildrenWorldRect().Size() : Vec2F();
+        Vec2F parentSize = mParentWidget ? mParentWidget.Lock()->GetChildrenWorldRect().Size() : Vec2F();
         Vec2F szDelta = size - (GetLayoutData().offsetMax - GetLayoutData().offsetMin + (GetLayoutData().anchorMax - GetLayoutData().anchorMin)*parentSize);
 
         if (mExpandWidth)

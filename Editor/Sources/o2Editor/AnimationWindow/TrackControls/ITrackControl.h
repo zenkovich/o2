@@ -18,29 +18,29 @@ namespace Editor
 		struct KeyHandle
 		{
 			UInt64 keyUid = 0;
-			AnimationKeyDragHandle* handle = nullptr;
+			Ref<AnimationKeyDragHandle> handle = nullptr;
 
 			KeyHandle() { }
-			KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle): keyUid(keyUid), handle(handle) { }
+			KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle): keyUid(keyUid), handle(handle) { }
 
 			bool operator==(const KeyHandle& other) const;
 		};
 
 	public:
 		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
-		virtual void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
+		virtual void Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet);
 
 		// Sets Animation track, updates and creates key handles
-		virtual void SetTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player, const String& path);
+		virtual void SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path);
 
 		// Updates handles position on timeline
 		virtual void UpdateHandles();
 
 		// Returns key handles list
-		virtual Vector<KeyHandle*> GetKeyHandles() const;
+		virtual Vector<Ref<KeyHandle>> GetKeyHandles() const;
 
 		// Returns a container of controllers that are part of a tree
-		virtual Widget* GetTreePartControls() const;
+		virtual Ref<Widget> GetTreePartControls() const;
 
 		// Sets curves edit view mode
 		virtual void SetCurveViewEnabled(bool enabled);

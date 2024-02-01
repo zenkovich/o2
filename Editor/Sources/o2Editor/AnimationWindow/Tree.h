@@ -37,7 +37,7 @@ namespace Editor
 		void Draw() override;
 
 		// Sets animation and updates tree structure
-		void SetAnimation(AnimationClip* animation);
+		void SetAnimation(const Ref<AnimationClip>& animation);
 
 		// Called when animation changed, checks count of animation tracks, updates tree structure if needed
 		void OnAnimationChanged();
@@ -46,7 +46,7 @@ namespace Editor
 		void SetTreeWidth(float width);
 
 		// Sets color of track by path
-		void SetAnimationValueColor(String path, const Color4& color);
+		void SetAnimationValueColor(const String& path, const Color4& color);
 
 		// Returns Animation track line number by world position, dependent on scroll
 		float GetLineNumber(float worldPosition) const;
@@ -67,24 +67,24 @@ namespace Editor
 
 			Color4 color;
 
-			IAnimationTrack*          track = nullptr;
-			IAnimationTrack::IPlayer* player = nullptr;
+			Ref<IAnimationTrack>          track;
+			Ref<IAnimationTrack::IPlayer> player;
 
-			ITrackControl* trackControl = nullptr; 
+			Ref<ITrackControl> trackControl; 
 
-			TrackNode*         parent = nullptr;
-			Vector<TrackNode*> children;
+			WeakRef<TrackNode>     parent;
+			Vector<Ref<TrackNode>> children;
 		};
 
 	private:
-		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+		Ref<AnimationWindow> mAnimationWindow; // Animation window
 
 		int mAnimationValuesCount = 0; // Last stored animation tracks count. Used in checking of animation changes for tracking new values
 
-		TrackNode*   mRootValue = nullptr; // Root animation properties tree node
-		ContextMenu* mContextMenu;         // Context menu
+		Ref<TrackNode> mRootValue;     // Root animation properties tree node
+		Ref<ContextMenu> mContextMenu; // Context menu
 
-		Vector<TrackNode*> mPrevSelectedNodes; // Previous selected nodes before new selection
+		Vector<Ref<TrackNode>> mPrevSelectedNodes; // Previous selected nodes before new selection
 
 		float mTreeWidth = 100.0f; // Tree - part width
 
@@ -96,7 +96,7 @@ namespace Editor
 		void RebuildAnimationTree();
 
 		// Adds Animation track to tree. Creates intermediate nodes when required
-		void AddAnimationTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player = nullptr);
+		void AddAnimationTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player = nullptr);
 
 		//Updates tree node width
 		void UpdateTreeWidth();
@@ -154,7 +154,7 @@ namespace Editor
 		AnimationTreeNode& operator=(const AnimationTreeNode& other);
 
 		// Sets object and updates track control
-		void Setup(AnimationTree::TrackNode* node, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
+		void Setup(const Ref<AnimationTree::TrackNode>& node, const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet);
 
 		// Free node, unregister track control
 		void Free();
@@ -175,16 +175,16 @@ namespace Editor
 		float mAddKeyButtonSize = 25.0f;
 		float mPropertySize = 130.0f;
 
-		AnimationTree::TrackNode* mData = nullptr; // Editing Animation track data
+		Ref<AnimationTree::TrackNode> mData; // Editing Animation track data
 
-		AnimationTimeline* mTimeline = nullptr;     // Animation timeline pointer, passes into track controller
-		KeyHandlesSheet*   mHandlesSheet = nullptr; // Handles sheet group, passes into track controller
+		Ref<AnimationTimeline> mTimeline;     // Animation timeline pointer, passes into track controller
+		Ref<KeyHandlesSheet>   mHandlesSheet; // Handles sheet group, passes into track controller
 
-		Text* mNameDrawable = nullptr; // Object name drawable
+		Ref<Text> mNameDrawable; // Object name drawable
 
-		ITrackControl* mTrackControl = nullptr;     // Animation track editor
+		Ref<ITrackControl> mTrackControl;     // Animation track editor
 
-		static Map<const Type*, Vector<ITrackControl*>> mTrackControlsCache; // Shared track controls cache
+		static Map<const Type*, Vector<Ref<ITrackControl>>> mTrackControlsCache; // Shared track controls cache
 
 	protected:
 		// Called on deserialization, initializes controls

@@ -15,7 +15,7 @@ namespace Editor
 	// ---------------------------------------------------------------------
 	// Animation control track for mapped keys from children Animation tracks
 	// ---------------------------------------------------------------------
-	class MapKeyFramesTrackControl: public ITrackControl
+	class MapKeyFramesTrackControl : public ITrackControl
 	{
 	public:
 		// Default constructor
@@ -31,7 +31,7 @@ namespace Editor
 		MapKeyFramesTrackControl& operator=(const MapKeyFramesTrackControl& other);
 
 		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
-		void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet) override;
+		void Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet) override;
 
 		// Draws handles with clipping
 		void Draw() override;
@@ -43,7 +43,7 @@ namespace Editor
 		void SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime) override;
 
 		// Returns key handles list
-		Vector<ITrackControl::KeyHandle*> GetKeyHandles() const override;
+		Vector<Ref<ITrackControl::KeyHandle>> GetKeyHandles() const override;
 
 		// Removes key from track
 		void DeleteKey(UInt64 keyUid) override;
@@ -52,7 +52,7 @@ namespace Editor
 		void SetMappedTracks(const AnimationTree::TrackNode& valueNode);
 
 		// Updates handles positions for specified Animation track
-		void UpdateHandlesForTrack(IAnimationTrack* track);
+		void UpdateHandlesForTrack(const Ref<IAnimationTrack>& track);
 
 		// Called when group of keys began dragged, disables keys combining
 		void BeginKeysDrag() override;
@@ -63,15 +63,15 @@ namespace Editor
 		SERIALIZABLE(MapKeyFramesTrackControl);
 
 	private:
-		struct KeyHandle: public ITrackControl::KeyHandle
+		struct KeyHandle : public ITrackControl::KeyHandle
 		{
-			IAnimationTrack* track = nullptr;
+			WeakRef<IAnimationTrack> track;
 
 			Function<void(KeyHandle& keyHandle)> updateFunc;
 
 		public:
 			KeyHandle();
-			KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle, IAnimationTrack* track,
+			KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle, const Ref<IAnimationTrack>& track,
 					  const Function<void(KeyHandle& keyHandle)>& updateFunc);
 
 			bool operator==(const KeyHandle& other) const;
@@ -79,16 +79,17 @@ namespace Editor
 
 		struct IHandlesGroup
 		{
-			String                    trackPath;
-			MapKeyFramesTrackControl* trackControl;
-			Vector<KeyHandle*>        handles;
+			String                 trackPath;
+			Vector<Ref<KeyHandle>> handles;
+
+			WeakRef<MapKeyFramesTrackControl> trackControl;
 
 		public:
 			virtual ~IHandlesGroup();
 
-			virtual void InitializeHandles(IAnimationTrack* itrack, const String& trackPath) = 0;
+			virtual void InitializeHandles(const Ref<IAnimationTrack>& itrack, const String& trackPath) = 0;
 			virtual void CreateHandles() = 0;
-			virtual void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) = 0;
+			virtual void OnHandleChangedPos(const Ref<KeyHandle>& keyHandle, const Vec2F& pos) = 0;
 			virtual void UpdateHandles() = 0;
 			virtual bool SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime) = 0;
 			virtual void DeleteKey(UInt64 keyUid) = 0;
@@ -96,30 +97,30 @@ namespace Editor
 		};
 
 		template<typename TrackType>
-		struct HandlesGroup: public IHandlesGroup
+		struct HandlesGroup : public IHandlesGroup
 		{
 			typedef AnimationTrackWrapper<TrackType> Wrapper;
 
-			TrackType* track;
+			WeakRef<TrackType> track;
 
 		public:
 			~HandlesGroup();
 
-			void InitializeHandles(IAnimationTrack* itrack, const String& trackPath) override;
+			void InitializeHandles(const Ref<IAnimationTrack>& itrack, const String& trackPath) override;
 			void CreateHandles() override;
-			void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) override;
+			void OnHandleChangedPos(const Ref<KeyHandle>& keyHandle, const Vec2F& pos) override;
 			void UpdateHandles() override;
 			bool SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime) override;
 			void DeleteKey(UInt64 keyUid) override;
 		};
 
 	private:
-		Map<IAnimationTrack*, IHandlesGroup*> mHandlesGroups;          // List of handles, each for keys
-		Vector<IAnimationTrack*>              mTracks;                 // Editing Animation tracks
-		AnimationTimeline*                    mTimeline = nullptr;     // Time line used for calculating handles positions
-		KeyHandlesSheet*                      mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
+		Map<WeakRef<IAnimationTrack>, Ref<IHandlesGroup>> mHandlesGroups; // List of handles, each for keys
+		Vector<WeakRef<IAnimationTrack>>                  mTracks;        // Editing Animation tracks
+		WeakRef<AnimationTimeline>                        mTimeline;      // Time line used for calculating handles positions
+		WeakRef<KeyHandlesSheet>                          mHandlesSheet;  // Handles sheet, used for drawing and managing drag handles
 
-		Vector<AnimationKeyDragHandle*> mHandlesCache; // Cached drag handles, can be reused
+		Vector<Ref<AnimationKeyDragHandle>> mHandlesCache; // Cached drag handles, can be reused
 
 		bool mDisableHandlesUpdate = false;  // It is true when handles are changing and combining or updating is not available
 
@@ -127,9 +128,9 @@ namespace Editor
 		void CacheHandles();
 		void InitializeNodeHandles(const AnimationTree::TrackNode& valueNode);
 
-		AnimationKeyDragHandle* CreateHandle();
+		Ref<AnimationKeyDragHandle> CreateHandle();
 
-		Vector<KeyHandle*> FindHandlesAtPosition(float position) const;
+		Vector<Ref<KeyHandle>> FindHandlesAtPosition(float position) const;
 	};
 
 	template<typename TrackType>
@@ -140,14 +141,14 @@ namespace Editor
 	}
 
 	template<typename TrackType>
-	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::InitializeHandles(IAnimationTrack* itrack,
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::InitializeHandles(const Ref<IAnimationTrack>& itrack,
 																			  const String& trackPath)
 	{
 		this->trackPath = trackPath;
 
-		track = dynamic_cast<TrackType*>(itrack);
-		track->onKeysChanged += THIS_SUBSCRIPTION(HandlesGroup<TrackType>::UpdateHandles,
-												  [&]() { track = nullptr; });
+		track = DynamicCast<TrackType>(itrack);
+		track.Lock()->onKeysChanged += THIS_SUBSCRIPTION(HandlesGroup<TrackType>::UpdateHandles,
+														 [&]() { track = nullptr; });
 
 		trackControl->mTracks.Add(track);
 
@@ -159,8 +160,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		for (auto& key : Wrapper::GetKeys(*track))
-		{
+		for (auto& key : Wrapper::GetKeys(*track)) {
 			AnimationKeyDragHandle* handle = nullptr;
 
 			if (!trackControl->mHandlesCache.IsEmpty())
@@ -179,20 +179,20 @@ namespace Editor
 
 			auto updatePosFunc = [=](KeyHandle& keyHandle) {
 				keyHandle.handle->SetPosition(Vec2F(Wrapper::FindKey(*track, handle->keyUid).position, 0.0f));
-			};
+				};
 
 			KeyHandle* keyHandle = mnew KeyHandle(key.uid, handle, track, updatePosFunc);
 			handles.Add(keyHandle);
 
 			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos(keyHandle, pos); };
 			handle->onPressed = [=]()
-			{
-				if (!o2Input.IsKeyDown(VK_CONTROL))
-					handle->GetSelectionGroup()->DeselectAll();
+				{
+					if (!o2Input.IsKeyDown(VK_CONTROL))
+						handle->GetSelectionGroup()->DeselectAll();
 
-				trackControl->FindHandlesAtPosition(keyHandle->handle->GetPosition().x)
-					.ForEach([](KeyHandle* keyHandle) { keyHandle->handle->SetSelected(true); });
-			};
+					trackControl->FindHandlesAtPosition(keyHandle->handle->GetPosition().x)
+						.ForEach([](KeyHandle* keyHandle) { keyHandle->handle->SetSelected(true); });
+				};
 			handle->onReleased = [&]() { UpdateHandles(); };
 
 			trackControl->AddChild(handle);
@@ -205,11 +205,9 @@ namespace Editor
 		if (trackControl->mDisableHandlesUpdate)
 			return;
 
-		if (Wrapper::GetKeys(*track).Count() != handles.Count())
-		{
+		if (Wrapper::GetKeys(*track).Count() != handles.Count()) {
 			Vector<UInt64> selectedHandles;
-			for (auto keyHandle : handles)
-			{
+			for (auto keyHandle : handles) {
 				if (keyHandle->handle->IsSelected())
 					selectedHandles.Add(keyHandle->keyUid);
 			}
@@ -220,15 +218,14 @@ namespace Editor
 			for (auto keyHandle : handles)
 				keyHandle->handle->SetSelected(selectedHandles.Contains(keyHandle->keyUid));
 		}
-		else
-		{
+		else {
 			for (auto keyHandle : handles)
 				keyHandle->updateFunc(*keyHandle);
 		}
 	}
 
 	template<typename TrackType>
-	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos)
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::OnHandleChangedPos(const Ref<KeyHandle>& keyHandle, const Vec2F& pos)
 	{
 		trackControl->mDisableHandlesUpdate = true;
 
@@ -268,38 +265,38 @@ namespace Editor
 
 CLASS_BASES_META(Editor::MapKeyFramesTrackControl)
 {
-    BASE_CLASS(Editor::ITrackControl);
+	BASE_CLASS(Editor::ITrackControl);
 }
 END_META;
 CLASS_FIELDS_META(Editor::MapKeyFramesTrackControl)
 {
-    FIELD().PRIVATE().NAME(mHandlesGroups);
-    FIELD().PRIVATE().NAME(mTracks);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeline);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
-    FIELD().PRIVATE().NAME(mHandlesCache);
-    FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate);
+	FIELD().PRIVATE().NAME(mHandlesGroups);
+	FIELD().PRIVATE().NAME(mTracks);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeline);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
+	FIELD().PRIVATE().NAME(mHandlesCache);
+	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate);
 }
 END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const MapKeyFramesTrackControl&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
-    FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<ITrackControl::KeyHandle*>, GetKeyHandles);
-    FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetMappedTracks, const AnimationTree::TrackNode&);
-    FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandlesForTrack, IAnimationTrack*);
-    FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysDrag);
-    FUNCTION().PUBLIC().SIGNATURE(void, EndKeysDrag);
-    FUNCTION().PRIVATE().SIGNATURE(void, CacheHandles);
-    FUNCTION().PRIVATE().SIGNATURE(void, InitializeNodeHandles, const AnimationTree::TrackNode&);
-    FUNCTION().PRIVATE().SIGNATURE(AnimationKeyDragHandle*, CreateHandle);
-    FUNCTION().PRIVATE().SIGNATURE(Vector<KeyHandle*>, FindHandlesAtPosition, float);
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const MapKeyFramesTrackControl&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
+	FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<ITrackControl::KeyHandle*>, GetKeyHandles);
+	FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetMappedTracks, const AnimationTree::TrackNode&);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandlesForTrack, IAnimationTrack*);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysDrag);
+	FUNCTION().PUBLIC().SIGNATURE(void, EndKeysDrag);
+	FUNCTION().PRIVATE().SIGNATURE(void, CacheHandles);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeNodeHandles, const AnimationTree::TrackNode&);
+	FUNCTION().PRIVATE().SIGNATURE(AnimationKeyDragHandle*, CreateHandle);
+	FUNCTION().PRIVATE().SIGNATURE(Vector<KeyHandle*>, FindHandlesAtPosition, float);
 }
 END_META;
 // --- END META ---

@@ -11,20 +11,23 @@ namespace Editor
 	class AnimationKeyDragHandle : public WidgetDragHandle
 	{ 
 	public:
-		String           trackPath;
-		IAnimationTrack* track = nullptr;
-		ITrackControl*   trackControl = nullptr;
-		UInt64           keyUid = 0;
-		bool             isMapping = false;
+		String trackPath;
+
+		WeakRef<IAnimationTrack> track;
+		WeakRef<ITrackControl>   trackControl;
+
+		UInt64 keyUid = 0;
+
+		bool isMapping = false;
 
 	public:
 		// Default constructor
 		AnimationKeyDragHandle();
 
 		// Constructor with views
-		AnimationKeyDragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
-						       Sprite* selected = nullptr, Sprite* selectedHovered = nullptr,
-						       Sprite* selectedPressed = nullptr);
+		AnimationKeyDragHandle(const Ref<Sprite>& regular, const Ref<Sprite>& hover = nullptr, const Ref<Sprite>& pressed = nullptr,
+						       const Ref<Sprite>& selected = nullptr, const Ref<Sprite>& selectedHovered = nullptr,
+						       const Ref<Sprite>& selectedPressed = nullptr);
 
 		// Copy-constructor
 		AnimationKeyDragHandle(const AnimationKeyDragHandle& other);

@@ -61,7 +61,7 @@ namespace Editor
 		void UnregAllTrackControls();
 
 		// Adds selectable handle to group
-		void AddHandle(DragHandle* handle) override;
+		void AddHandle(const Ref<DragHandle>& handle) override;
 
 		// Removes selectable handle from group
 		void RemoveHandle(DragHandle* handle) override;
@@ -151,14 +151,14 @@ namespace Editor
 		void OnSelectionChanged() override;
 
 		// Called when selectable draggable handle was pressed, sends to track control that drag has began
-		void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) override;
+		void OnHandleCursorPressed(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
 
 		// Called when selectable draggable handle was released, sends to track control that drag has completed
-		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) override;
+		void OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
 
 		// Called when selectable handle moved, moves all selected handles position
 		// Enables keys batch change
-		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) override;
+		void OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos) override;
 
 		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;

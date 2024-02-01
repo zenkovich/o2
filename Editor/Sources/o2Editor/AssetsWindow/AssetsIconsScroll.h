@@ -300,7 +300,7 @@ namespace Editor
 		void AddSelectableObject(SelectableDragableObject* object) override;
 
 		// Removes selectable object from group
-		void RemoveSelectableObject(SelectableDragableObject* object) override;
+		void RemoveSelectableObject(const Ref<SelectableDragableObject>& object) override;
 
 		// Called when selectable draggable object was released
 		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) override;

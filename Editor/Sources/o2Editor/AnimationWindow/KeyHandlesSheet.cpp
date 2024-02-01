@@ -135,7 +135,7 @@ namespace Editor
 		mHandles.Clear();
 	}
 
-	void KeyHandlesSheet::AddHandle(DragHandle* handle)
+	void KeyHandlesSheet::AddHandle(const Ref<DragHandle>& handle)
 	{
 		if (auto animHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
 		{
@@ -200,7 +200,7 @@ namespace Editor
 		mNeedUpdateSelectionFrame = true;
 	}
 
-	void KeyHandlesSheet::OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor)
+	void KeyHandlesSheet::OnHandleCursorPressed(const Ref<DragHandle>& handle, const Input::Cursor& cursor)
 	{
 		mBeforeChangeKeysData.Clear();
 		SerializeKeys(mBeforeChangeKeysData, GetSelectedKeys(), 0);
@@ -223,7 +223,7 @@ namespace Editor
 		mHandleHasMoved = false;
 	}
 
-	void KeyHandlesSheet::OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor)
+	void KeyHandlesSheet::OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor)
 	{
 		SelectableDragHandlesGroup::OnHandleCursorReleased(handle, cursor);
 
@@ -239,7 +239,7 @@ namespace Editor
 		mAnimationWindow->mActionsList.DoneAction(mnew AnimationKeysChangeAction(selectedKeys, mBeforeChangeKeysData, data, this));
 	}
 
-	void KeyHandlesSheet::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
+	void KeyHandlesSheet::OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos)
 	{
 		for (auto track : mAnimationWindow->mAnimation->GetTracks())
 			track->BeginKeysBatchChange();
