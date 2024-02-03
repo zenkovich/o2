@@ -1,4 +1,5 @@
 #include "o2Editor/stdafx.h"
+#include "o2Editor/Ref.hpp"
 #include "SkinningMeshEditorLayer.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 
@@ -35,13 +36,14 @@ namespace Editor
 
 	const String& SkinningMeshEditorLayer::GetName() const
 	{
-		static String str("mesh texture overlay");
+		static const String str("mesh texture overlay");
 		return str;
 	}
 
 	const String& SkinningMeshEditorLayer::GetIconName() const
 	{
-		return String::empty;
+		static const String empty;
+		return empty;
 	}
 
 	void SkinningMeshEditorLayer::DrawMeshWire()
@@ -59,10 +61,10 @@ namespace Editor
 				auto v2 = o2EditorSceneScreen.LocalToScreenPoint(renderMesh.vertices[renderMesh.indexes[i * 3 + 2]]);
 
 				verticies.Clear();
-				verticies.Add(Vertex(v.x, v.y, 0.0f, wireColor.ABGR(), 0.0f, 0.0f));
-				verticies.Add(Vertex(v1.x, v1.y, 0.0f, wireColor.ABGR(), 0.0f, 0.0f));
-				verticies.Add(Vertex(v2.x, v2.y, 0.0f, wireColor.ABGR(), 0.0f, 0.0f));
-				verticies.Add(Vertex(v.x, v.y, 0.0f, wireColor.ABGR(), 0.0f, 0.0f));
+				verticies.Add(Vertex(v.x, v.y, 0.0f, wireColor.GetABGR(), 0.0f, 0.0f));
+				verticies.Add(Vertex(v1.x, v1.y, 0.0f, wireColor.GetABGR(), 0.0f, 0.0f));
+				verticies.Add(Vertex(v2.x, v2.y, 0.0f, wireColor.GetABGR(), 0.0f, 0.0f));
+				verticies.Add(Vertex(v.x, v.y, 0.0f, wireColor.GetABGR(), 0.0f, 0.0f));
 				o2Render.DrawPolyLine(verticies.Data(), verticies.Count());
 			}
 		}

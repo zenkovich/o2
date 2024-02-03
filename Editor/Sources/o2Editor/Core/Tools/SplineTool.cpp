@@ -42,7 +42,7 @@ namespace Editor
 	}
 
 	void SplineTool::SplineWrapper::AddPoint(int idx, const Vec2F& position,
-											 const Vec2F& prevSupport, const Vec2F& nextSupport)
+		const Vec2F& prevSupport, const Vec2F& nextSupport)
 	{
 		spline->InsertKey(idx, position, prevSupport, nextSupport);
 	}
@@ -93,7 +93,7 @@ namespace Editor
 	Vector<Vec2F> SplineTool::SplineWrapper::GetDrawPoints() const
 	{
 		Vector<Vec2F> res;
-		auto& keys = spline->GetKeys();
+		const auto& keys = spline->GetKeys();
 		for (int i = 1; i < keys.Count(); i++)
 		{
 			for (int j = 0; j < keys[i].GetApproximatedPointsCount() - 1; j++)
@@ -143,7 +143,7 @@ namespace Editor
 
 	const String& SplineTool::SplineSceneLayer::GetName() const
 	{
-		static String res("Animation spline");
+		static const String res("Animation spline");
 		return res;
 	}
 
@@ -152,27 +152,27 @@ namespace Editor
 		return String::empty;
 	}
 
-	void SplineTool::SplineTool::SetSpline(Spline* spline, const Function<Vec2F()>& getOrigin)
+	void SplineTool::SetSpline(Spline* spline, const Ref<Function<Vec2F()>>& getOrigin)
 	{
-		auto wrapper = mnew SplineWrapper();
+		auto wrapper = mmake<SplineWrapper>();
 		wrapper->spline = spline;
 		wrapper->getOrigin = getOrigin;
 		wrapper->tool = this;
 		splineEditor.SetSpline(wrapper);
 	}
 
-	String SplineTool::SplineTool::GetPanelIcon() const
+	String SplineTool::GetPanelIcon() const
 	{
 		return "ui/UI4_path_tool.png";
 	}
 
-	void SplineTool::SplineTool::OnEnabled()
+	void SplineTool::OnEnabled()
 	{
 		o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
 		isEnabled = true;
 	}
 
-	void SplineTool::SplineTool::OnDisabled()
+	void SplineTool::OnDisabled()
 	{
 		o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
 		isEnabled = false;

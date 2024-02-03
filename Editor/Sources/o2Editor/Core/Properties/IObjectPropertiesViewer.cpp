@@ -83,7 +83,7 @@ namespace Editor
 			};
 		}
 
-		return mSpoiler;
+		return mSpoiler.Get();
 	}
 
 	void IObjectPropertiesViewer::SetExpanded(bool expanded)
@@ -113,7 +113,7 @@ namespace Editor
 
 	Spoiler* IObjectPropertiesViewer::CreateSpoiler()
 	{
-		return o2UI.CreateWidget<Spoiler>("expand with caption");
+		return mmake<Spoiler>("expand with caption");
 	}
 
 	bool IObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
@@ -129,8 +129,8 @@ namespace Editor
 		return true;
 	}
 
-	void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before, 
-														 const Vector<DataDocument>& after)
+	void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before,
+		const Vector<DataDocument>& after)
 	{
 		onChangeCompleted(this->path + "/" + path, before, after);
 	}

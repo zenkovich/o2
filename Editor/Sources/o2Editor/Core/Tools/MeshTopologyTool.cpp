@@ -5,286 +5,250 @@
 
 namespace Editor
 {
-	MeshTopologyTool::MeshTopologyTool():
-		mSelectionSprite("ui/UI_Window_place.png")
-	{
-		sceneLayer.tool = this;
+    class MeshTopologyTool : public ITool
+    {
+    public:
+        MeshTopologyTool():
+            mSelectionSprite("ui/UI_Window_place.png")
+        {
+            sceneLayer.tool = mmake<MeshTopologyTool>(Ref<AppState>());
+            
+            mHandleSample = mmake<DragHandle>(Ref<Sprite>(mmake<Sprite>("ui/CurveHandle.png")),
+                                              Ref<Sprite>(mmake<Sprite>("ui/CurveHandleHover.png")),
+                                              Ref<Sprite>(mmake<Sprite>("ui/CurveHandlePressed.png")),
+                                              Ref<Sprite>(mmake<Sprite>("ui/CurveHandleSelected.png")));
 
-		mHandleSample = DragHandle(mnew Sprite("ui/CurveHandle.png"),
-								   mnew Sprite("ui/CurveHandleHover.png"),
-								   mnew Sprite("ui/CurveHandlePressed.png"),
-								   mnew Sprite("ui/CurveHandleSelected.png"));
+            typedef MeshTopologyTool thisclass;
 
-		typedef MeshTopologyTool thisclass;
+            mTransformFrame.SetPivotEnabled(false);
+            mTransformFrame.SetRotationEnabled(false);
+            mTransformFrame.onTransformed = mlambda<void(const Basis&)>([=](const Basis& basis){ OnTransformFrameTransformed(basis); });
+            // mTransformFrame.onPressed = mlambda<void()>([=](){ OnTransformBegin(); });
+            // mTransformFrame.onChangeCompleted = mlambda<void()>([=](){ OnTransformCompleted(); });
+            mTransformFrame.isInputTransparent = true;
+        }
 
-		mTransformFrame.SetPivotEnabled(false);
-		mTransformFrame.SetRotationEnabled(false);
-		mTransformFrame.onTransformed = THIS_FUNC(OnTransformFrameTransformed);
-		// 		mTransformFrame.onPressed = THIS_FUNC(OnTransformBegin);
-		// 		mTransformFrame.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
-		mTransformFrame.isInputTransparent = true;
-	}
+        ~MeshTopologyTool()
+        {
+            ClearHandles();
+        }
 
-	MeshTopologyTool::~MeshTopologyTool()
-	{
-		ClearHandles();
-	}
+        void Setup(const Function<Vector<Vec2F>> getPoints, const Function<void(int, Vec2F)> setPoint,
+                   const Function<Basis> getTransform, const Function<void(Vec2F)> addPoint,
+                   const Function<void(int)> removePoint)
+        {
+            mGetPoints = getPoints;
+            mSetPoint = setPoint;
+            mAddPoint = addPoint;
+            mRemovePoint = removePoint;
+            mGetTransform = getTransform;
 
-	void MeshTopologyTool::Setup(const Function<Vector<Vec2F>()>& getPoints, const Function<void(int, Vec2F)>& setPoint,
-								 const Function<Basis()>& getTransform, const Function<void(Vec2F)>& addPoint,
-								 const Function<void(int)>& removePoint)
-	{
-		mGetPoints = getPoints;
-		mSetPoint = setPoint;
-		mAddPoint = addPoint;
-		mRemovePoint = removePoint;
-		mGetTransform = getTransform;
+            InitializeHandles();
+        }
 
-		InitializeHandles();
-	}
+        void Reset()
+        {
+            mGetPoints.reset();
+            mSetPoint.reset();
+            mAddPoint.reset();
+            mRemovePoint.reset();
+            mGetTransform.reset();
 
-	void MeshTopologyTool::Reset()
-	{
-		mGetPoints.Clear();
-		mSetPoint.Clear();
-		mAddPoint.Clear();
-		mRemovePoint.Clear();
-		mGetTransform.Clear();
+            ClearHandles();
+        }
 
-		ClearHandles();
-	}
+        String GetPanelIcon() const
+        {
+            return "ui/TopologyTool.png";
+        }
 
-	String MeshTopologyTool::GetPanelIcon() const
-	{
-		return "ui/TopologyTool.png";
-	}
+        void OnEnabled()
+        {
+            o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
+            isEnabled = true;
+        }
 
-	void MeshTopologyTool::OnEnabled()
-	{
-		o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
-		isEnabled = true;
-	}
+        void OnDisabled()
+        {
+            o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
+            isEnabled = false;
+        }
 
-	void MeshTopologyTool::OnDisabled()
-	{
-		o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
-		isEnabled = false;
-	}
+        bool IsUnderPoint(const Vec2F& point) const
+        {
+            return true;
+        }
 
-	bool MeshTopologyTool::IsUnderPoint(const Vec2F& point)
-	{
-		return true;
-	}
+        bool IsInputTransparent() const
+        {
+            return true;
+        }
 
-	bool MeshTopologyTool::IsInputTransparent() const
-	{
-		return true;
-	}
+        void InitializeHandles()
+        {
+            ClearHandles();
 
-	void MeshTopologyTool::InitializeHandles()
-	{
-		ClearHandles();
+            for (int i = 0; i < mGetPoints().Count(); i++)
+            {
+                mHandles.Add(mHandleSample.CloneAs<DragHandle>());
+                auto& newHandle = mHandles.Last();
 
-		for (int i = 0; i < mGetPoints().Count(); i++)
-		{
-			mHandles.Add(mHandleSample.CloneAs<DragHandle>());
-			auto& newHandle = mHandles.Last();
+                newHandle->SetPosition(mGetPoints()[i]);
+                newHandle->SetSelectionGroup(this);
+                newHandle->onChangedPos = [=](const Vec2F& pos) { OnHandleMoved(i, pos); };
+                newHandle->localToScreenTransformFunc = [=](const Vec2F& p) { return LocalToWorld(p); };
+                newHandle->screenToLocalTransformFunc = [=](const Vec2F& p) { return WorldToLocal(p); };
+            }
+        }
 
-			newHandle->SetPosition(mGetPoints()[i]);
-			newHandle->SetSelectionGroup(this);
-			newHandle->onChangedPos = [=](const Vec2F& pos) { OnHandleMoved(i, pos); };
-			newHandle->localToScreenTransformFunc = [&](const Vec2F& p) { return LocalToWorld(p); };
-			newHandle->screenToLocalTransformFunc = [&](const Vec2F& p) { return WorldToLocal(p); };
-		}
-	}
+        void ClearHandles()
+        {
+            mHandles.Clear();
+        }
 
-	void MeshTopologyTool::ClearHandles()
-	{
-		for (auto handle : mHandles)
-			delete handle;
+        void OnHandleMoved(int i, const Vec2F& pos)
+        {
+            mSetPoint(i, pos);
+            UpdateTransformFrame();
+        }
 
-		mHandles.Clear();
-	}
+        Vec2F WorldToLocal(const Vec2F& point) const
+        {
+            Basis transform = mGetTransform();
+            return o2EditorSceneScreen.ScreenToLocalPoint(point)*transform.Inverted();
+        }
 
-	void MeshTopologyTool::OnHandleMoved(int i, const Vec2F& pos)
-	{
-		mSetPoint(i, pos);
-		UpdateTransformFrame();
-	}
+        Vec2F LocalToWorld(const Vec2F& point) const
+        {
+            Basis transform = mGetTransform();
+            return o2EditorSceneScreen.LocalToScreenPoint(point*transform);
+        }
 
-	Vec2F MeshTopologyTool::WorldToLocal(const Vec2F& point) const
-	{
-		Basis transform = mGetTransform();
-		return o2EditorSceneScreen.ScreenToLocalPoint(point)*transform.Inverted();
-	}
+        void DrawSelection() const
+        {
+            if (mIsPressed)
+            {
+                mSelectionSprite.rect = RectF(LocalToWorld(mSelectingPressedPoint), o2Input.cursorPos);
+                mSelectionSprite.Draw();
+            }
+        }
 
-	Vec2F MeshTopologyTool::LocalToWorld(const Vec2F& point) const
-	{
-		Basis transform = mGetTransform();
-		return o2EditorSceneScreen.LocalToScreenPoint(point*transform);
-	}
+        void DrawTransformFrame() const
+        {
+            if (!mTransformFrameVisible)
+                return;
 
-	void MeshTopologyTool::DrawSelection()
-	{
-		if (mIsPressed)
-		{
-			mSelectionSprite.rect = RectF(LocalToWorld(mSelectingPressedPoint), o2Input.cursorPos);
-			mSelectionSprite.Draw();
-		}
-	}
+            Vec2F worldOrig = LocalToWorld(mTransformFrameBasis.origin);
+            Vec2F worldXV = LocalToWorld(mTransformFrameBasis.xv + mTransformFrameBasis.origin) - worldOrig;
+            Vec2F worldYV = LocalToWorld(mTransformFrameBasis.yv + mTransformFrameBasis.origin) - worldOrig;
+            mTransformFrame.SetBasis(Basis(worldOrig - mTransformBasisOffet,
+                                           worldXV + Vec2F(mTransformBasisOffet.x*2.0f, 0),
+                                           worldYV + Vec2F(0, mTransformBasisOffet.y*2.0f)));
 
-	void MeshTopologyTool::DrawTransformFrame()
-	{
-		if (!mTransformFrameVisible)
-			return;
+            mTransformFrame.Draw();
+        }
 
-		Vec2F worldOrig = LocalToWorld(mTransformFrameBasis.origin);
-		Vec2F worldXV = LocalToWorld(mTransformFrameBasis.xv + mTransformFrameBasis.origin) - worldOrig;
-		Vec2F worldYV = LocalToWorld(mTransformFrameBasis.yv + mTransformFrameBasis.origin) - worldOrig;
-		mTransformFrame.SetBasis(Basis(worldOrig - mTransformBasisOffet,
-									   worldXV + Vec2F(mTransformBasisOffet.x*2.0f, 0),
-									   worldYV + Vec2F(0, mTransformBasisOffet.y*2.0f)));
+        void UpdateTransformFrame()
+        {
+            mTransformFrameVisible = IsTransformFrameVisible();
 
-		mTransformFrame.Draw();
-	}
+            if (!mTransformFrameVisible || mSelectedHandles.IsEmpty())
+                return;
 
-	void MeshTopologyTool::UpdateTransformFrame()
-	{
-		mTransformFrameVisible = IsTransformFrameVisible();
+            RectF aabb((mSelectedHandles[0])->GetPosition(), (mSelectedHandles[0])->GetPosition());
 
-		if (!mTransformFrameVisible || mSelectedHandles.IsEmpty())
-			return;
+            for (auto handle : mSelectedHandles)
+            {
+                aabb.left = Math::Min(handle->GetPosition().x, aabb.left);
+                aabb.right = Math::Max(handle->GetPosition().x, aabb.right);
+                aabb.top = Math::Max(handle->GetPosition().y, aabb.top);
+                aabb.bottom = Math::Min(handle->GetPosition().y, aabb.bottom);
+            }
 
-		RectF aabb((mSelectedHandles[0])->GetPosition(), (mSelectedHandles[0])->GetPosition());
+            mTransformFrameBasis = Basis(aabb.LeftBottom(), Vec2F::Right()*aabb.Width(), Vec2F::Up()*aabb.Height());
+        }
 
-		for (auto handle : mSelectedHandles)
-		{
-			aabb.left = Math::Min(handle->GetPosition().x, aabb.left);
-			aabb.right = Math::Max(handle->GetPosition().x, aabb.right);
-			aabb.top = Math::Max(handle->GetPosition().y, aabb.top);
-			aabb.bottom = Math::Min(handle->GetPosition().y, aabb.bottom);
-		}
+        bool IsTransformFrameVisible() const
+        {
+            return mSelectedHandles.Count() > 1;
+        }
 
-		mTransformFrameBasis = Basis(aabb.LeftBottom(), Vec2F::Right()*aabb.Width(), Vec2F::Up()*aabb.Height());
-	}
-
-	bool MeshTopologyTool::IsTransformFrameVisible() const
-	{
-		return mSelectedHandles.Count() > 1;
-	}
-
-	void MeshTopologyTool::OnTransformFrameTransformed(const Basis& basis)
-	{
-		Vec2F localBasisOrig = WorldToLocal(basis.origin + mTransformBasisOffet);
-		Vec2F localBasisXV = WorldToLocal(basis.xv - Vec2F(mTransformBasisOffet.x*2.0f, 0) + basis.origin + mTransformBasisOffet) - localBasisOrig;
-		Vec2F localBasisYV = WorldToLocal(basis.yv - Vec2F(0, mTransformBasisOffet.y*2.0f) + basis.origin + mTransformBasisOffet) - localBasisOrig;
-		Basis localBasis(localBasisOrig, localBasisXV, localBasisYV);
-
-		Basis delta = mTransformFrameBasis.Inverted()*localBasis;
-
-		if (delta.origin.Length() > 0.01f || delta.xv != Vec2F(1, 0) || delta.yv != Vec2F(0, 1))
-		{
-			Vector<Vec2F> newPosHandlesPositions, newSupportnHandlesPositions;
-
-			for (int i = 0; i < mSelectedHandles.Count(); i++)
-				newPosHandlesPositions.Add(mSelectedHandles[i]->GetPosition()*delta);
-
-			for (int i = 0; i < mSelectedHandles.Count(); i++)
-			{
-				mSelectedHandles[i]->SetPosition(newPosHandlesPositions[i]);
-				mSelectedHandles[i]->onChangedPos(mSelectedHandles[i]->GetPosition());
-			}
-
-			UpdateTransformFrame();
-		}
-	}
-
-	void MeshTopologyTool::OnCursorPressed(const Input::Cursor& cursor)
-	{
-		mSelectingPressedPoint = WorldToLocal(cursor.position);
-
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			DeselectAll();
-	}
-
-	void MeshTopologyTool::OnCursorReleased(const Input::Cursor& cursor)
-	{
-		for (auto handle : mSelectingHandlesBuf)
-		{
-			SetHandleSelectedState(handle, false);
-			handle->SetSelected(true);
-		}
-
-		mSelectingHandlesBuf.Clear();
-		UpdateTransformFrame();
-	}
-
-	void MeshTopologyTool::OnCursorStillDown(const Input::Cursor& cursor)
-	{
-		for (auto handle : mSelectingHandlesBuf)
-			SetHandleSelectedState(handle, false);
-
-		mSelectingHandlesBuf.Clear();
-
-		RectF selectionLocalRect(mSelectingPressedPoint, WorldToLocal(cursor.position));
-
-		for (auto handle : mHandles)
-		{
-			if (handle->IsEnabled() && selectionLocalRect.IsInside(handle->GetPosition()) &&
-				!mSelectedHandles.Contains(handle))
-			{
-				mSelectingHandlesBuf.Add(handle);
-				SetHandleSelectedState(handle, true);
-			}
-		}
-	}
-
-	void MeshTopologyTool::OnCursorDblClicked(const Input::Cursor& cursor)
-	{
-		auto local = WorldToLocal(cursor.position);
-		mAddPoint(local);
-		InitializeHandles();
-	}
-
-	void MeshTopologyTool::SceneLayer::DrawOverScene()
-	{
-		tool->OnDrawn();
-
-		tool->DrawTransformFrame();
-
-		for (auto handle : tool->mHandles)
-			handle->Draw();
-
-		tool->DrawSelection();
-	}
-
-	void MeshTopologyTool::SceneLayer::Update(float dt)
-	{
-
-	}
-
-	int MeshTopologyTool::SceneLayer::GetOrder() const
-	{
-		return 0;
-	}
-
-	bool MeshTopologyTool::SceneLayer::IsEnabled() const
-	{
-		return tool->isEnabled;
-	}
-
-	const String& MeshTopologyTool::SceneLayer::GetName() const
-	{
-		static String res("Topology");
-		return res;
-	}
-
-	const String& MeshTopologyTool::SceneLayer::GetIconName() const
-	{
-		return String::empty;
-	}
+        void OnTransformFrameTransformed(const Basis& basis)
+        {
+            Vec2F localBasisOrig = WorldToLocal(basis.origin + mTransformBasisOffet);
+            Vec2F localBasisXV = WorldToLocal(basis.xv - Vec2F(mTransformBasisOffet.x*2.0f, 0) + basis.origin + mTransformBasisOffet) - localBasisOrig;
+            Vec2F localBasi
+    };
 }
-// --- META ---
+#include <memory>
+#include "Ref.h"
 
-DECLARE_CLASS(Editor::MeshTopologyTool, Editor__MeshTopologyTool);
-// --- END META ---
+using namespace std;
+
+Replace raw pointers with Ref<>:
+
+    Ref<> localBasisOrig;
+    Ref<> localBasisXV;
+    Ref<> localBasisYV;
+    Ref<> delta.origin;
+    Ref<> delta.xv;
+    Ref<> delta.yv;
+    Ref<Vec2F> newPosHandlesPositions;
+    Ref<Vec2F> newSupportnHandlesPositions;
+    Ref<> handle->GetPosition();
+    Ref<> selectionLocalRect().SetHandleSelectedState(handle, false);
+    Ref<> selectionLocalRect().SetHandleSelectedState(handle, true);
+    Ref<> local = WorldToLocal(cursor.position);
+    Ref<> tool->OnDrawn();
+    Ref<> tool->DrawTransformFrame();
+    Ref<> handle->Draw();
+    Ref<> tool->DrawSelection();
+    Ref<> res("Topology");
+
+Use const Ref<>& for function arguments with pointer types:
+
+    void MeshTopologyTool::TransformFrame::SetBasis(const Ref<>& frameBasis);
+
+    void MeshTopologyTool::InitializeHandles(const Ref<>& parent);
+
+    void MeshTopologyTool::SetHandleSelectedState(const Ref<>& handle, bool selected);
+
+    void MeshTopologyTool::AddPoint(const Ref<>& position);
+
+    void MeshTopologyTool::WorldToLocal(const Ref<>& worldPosition) const;
+
+    void MeshTopologyTool::OnChangedPos(const Ref<>& position);
+
+    void MeshTopologyTool::OnCursorPressed(const Ref<>& cursor);
+
+    void MeshTopologyTool::OnCursorReleased(const Ref<>& cursor);
+
+    void MeshTopologyTool::OnCursorStillDown(const Ref<>& cursor);
+
+    void MeshTopologyTool::OnCursorDblClicked(const Ref<>& cursor);
+
+    void MeshTopologyTool::SceneLayer::Update(float dt);
+
+Change class members with default nullptr value to Ref<>:
+
+    Ref<> localBasisOrig;
+    Ref<> localBasisXV;
+    Ref<> localBasisYV;
+    Ref<> delta.origin;
+    Ref<> delta.xv;
+    Ref<> delta.yv;
+    Ref<Vec2F> newPosHandlesPositions;
+    Ref<Vec2F> newSupportnHandlesPositions;
+    Ref<> handle->GetPosition();
+    Ref<> selectionLocalRect().SetHandleSelectedState(handle, false);
+    Ref<> selectionLocalRect().SetHandleSelectedState(handle, true);
+    Ref<> local = WorldToLocal(cursor.position);
+    Ref<> tool->OnDrawn();
+    Ref<> tool->DrawTransformFrame();
+    Ref<> handle->Draw();
+    Ref<> tool->DrawSelection();
+    Ref<> res("Topology");
+
+Replace dynamic_cast<type*> with DynamicCast<type>:
+
+    DynamicCast<type> local = WorldToLocal(cursor.position);

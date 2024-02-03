@@ -1,60 +1,69 @@
 #include "o2Editor/stdafx.h"
 #include "IEditorTool.h"
-
 #include "o2/Utils/Reflection/Reflection.h"
 #include "o2/Utils/Serialization/DataValue.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
+#include "Ref.h"
+#include "WeakRef.h"
 
 namespace Editor
 {
-	Toggle* IEditTool::GetPanelToggle() const
-	{
-		if (!mPanelToggle)
-			mPanelToggle = CreatePanelToggle();
+    using ToggleRef = Ref<Toggle>;
 
-		return mPanelToggle;
-	}
+    class IEditTool
+    {
+    public:
+        ToggleRef GetPanelToggle() const
+        {
+            if (!mPanelToggle)
+                mPanelToggle = CreatePanelToggle();
 
-	Toggle* IEditTool::CreatePanelToggle() const
-	{
-		Toggle* toggle = mnew Toggle();
-		toggle->layout->minSize = Vec2F(20, 20);
-		toggle->shortcut = GetShortcut();
-		auto rootLayer = toggle->AddLayer("root", nullptr);
-		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
-		selectLayer->AddChildLayer("regular", mnew Sprite(GetPanelIcon()),
-								   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
-		
-		selectLayer->AddChildLayer("pressed", mnew Sprite(GetPanelIcon()),
-								   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+            return mPanelToggle;
+        }
 
-		toggle->AddState("hover", AnimationClip::EaseInOut("layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
-			->offStateAnimationSpeed = 0.25f;
+        ToggleRef CreatePanelToggle() const
+        {
+            ToggleRef toggle = mmake<Toggle>();
+            toggle->layout->minSize = Vec2F(20, 20);
+            toggle->shortcut = GetShortcut();
+            auto rootLayer = toggle->AddLayer("root", nullptr);
+            auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
+            selectLayer->AddChildLayer("regular", mmake<Sprite>(GetPanelIcon()),
+                Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		toggle->AddState("pressed", AnimationClip::EaseInOut("layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
+            selectLayer->AddChildLayer("pressed", mmake<Sprite>(GetPanelIcon()),
+                Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		toggle->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
+            toggle->AddState("hover", AnimationClip::EaseInOut("layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
+                ->offStateAnimationSpeed = 0.25f;
 
-		toggle->AddState("value", AnimationClip::EaseInOut("layer/root/transparency", 0.3f, 1.0f, 0.1f));
+            toggle->AddState("pressed", AnimationClip::EaseInOut("layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
+                ->offStateAnimationSpeed = 0.5f;
 
-		toggle->onToggle = [&](bool v) { if (v) o2EditorSceneScreen.SelectTool(this); };
+            toggle->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
 
-		return toggle;
-	}
+            toggle->AddState("value", AnimationClip::EaseInOut("layer/root/transparency", 0.3f, 1.0f, 0.1f));
 
-	String IEditTool::GetPanelIcon() const
-	{
-		return "ui/UI4_select_tool.png";
-	}
+            toggle->onToggle = [&](bool v) { if (v) o2EditorSceneScreen.SelectTool(this); };
 
-	ShortcutKeys IEditTool::GetShortcut() const
-	{
-		return ShortcutKeys();
-	}
+            return toggle;
+        }
 
+        String GetPanelIcon() const
+        {
+            return "ui/UI4_select_tool.png";
+        }
+
+        ShortcutKeys GetShortcut() const
+        {
+            return ShortcutKeys();
+        }
+
+    private:
+        Ref<Toggle> mPanelToggle;
+    };
 }
-// --- META ---
 
+// --- META ---
 DECLARE_CLASS(Editor::IEditTool, Editor__IEditTool);
 // --- END META ---

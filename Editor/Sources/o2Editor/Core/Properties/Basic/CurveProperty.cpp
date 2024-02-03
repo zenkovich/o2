@@ -8,56 +8,56 @@
 
 namespace Editor
 {
-	CurveProperty::CurveProperty()
-	{}
+    CurveProperty::CurveProperty()
+    {}
 
-	CurveProperty::CurveProperty(const CurveProperty& other) :
-		TPropertyField<Curve>(other)
-	{
-		InitializeControls();
-	}
+    CurveProperty::CurveProperty(const CurveProperty& other) :
+        TPropertyField<Curve>(other)
+    {
+        InitializeControls();
+    }
 
-	CurveProperty& CurveProperty::operator=(const CurveProperty& other)
-	{
-		TPropertyField<Curve>::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    CurveProperty& CurveProperty::operator=(const CurveProperty& other)
+    {
+        TPropertyField<Curve>::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-	void CurveProperty::InitializeControls()
-	{
-		mEditBox = GetChildWidget("container/layout/box");
-		if (mEditBox)
-		{
-			mPreviewImage = mnew CurvePreview();
-			*mPreviewImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
-			mPreviewImage->SetCurve(&mCommonValue);
+    void CurveProperty::InitializeControls()
+    {
+        mEditBox = Ref<IWidget>::make(GetChildWidget("container/layout/box"));
+        if (mEditBox)
+        {
+            mPreviewImage = Ref<CurvePreview>::make();
+            *mPreviewImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
+            mPreviewImage->SetCurve(&mCommonValue);
 
-			mEditBox->layout->minHeight = 10;
-			mEditBox->onDraw += [&]() { mClickArea.OnDrawn(); };
-			mEditBox->AddChild(mPreviewImage);
+            mEditBox->layout->minHeight = 10;
+            mEditBox->onDraw += [&]() { mClickArea.OnDrawn(); };
+            mEditBox->AddChild(mPreviewImage);
 
-			mClickArea.isUnderPoint = [&](const Vec2F& point) { return mEditBox->IsUnderPoint(point); };
-			mClickArea.onCursorReleased = [&](const Input::Cursor& cursor) { if (mEditBox->IsUnderPoint(cursor.position)) OnClicked(); };
-		}
-	}
+            mClickArea.isUnderPoint = [&](const Vec2F& point) { return mEditBox->IsUnderPoint(point); };
+            mClickArea.onCursorReleased = [&](const Input::Cursor& cursor) { if (mEditBox->IsUnderPoint(cursor.position)) OnClicked(); };
+        }
+    }
 
-	void CurveProperty::OnValueChanged()
-	{
-		for (auto ptr : mValuesProxies)
-			SetProxy(ptr.first, mCommonValue);
-	}
+    void CurveProperty::OnValueChanged()
+    {
+        for (const auto& ptr : mValuesProxies)
+            SetProxy(ptr.first, mCommonValue);
+    }
 
-	void CurveProperty::OnClicked()
-	{
-		StoreValues(mBeforeChangeValues);
+    void CurveProperty::OnClicked()
+    {
+        StoreValues(mBeforeChangeValues);
 
-		CurveEditorDlg::Show(THIS_FUNC(OnValueChanged),
-							 MakeFunction<IPropertyField, void>(this, &CurveProperty::CheckValueChangeCompleted));
+        CurveEditorDlg::Show(THIS_FUNC(OnValueChanged),
+            MakeFunction<const IPropertyField&, void>(this, &CurveProperty::CheckValueChangeCompleted));
 
-		CurveEditorDlg::RemoveAllEditingCurves();
-		CurveEditorDlg::AddEditingCurve("property", &mCommonValue, Color4(44, 62, 80));
-	}
+        CurveEditorDlg::RemoveAllEditingCurves();
+        CurveEditorDlg::AddEditingCurve("property", &mCommonValue, Color4(44, 62, 80));
+    }
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Curve>);
 // --- META ---

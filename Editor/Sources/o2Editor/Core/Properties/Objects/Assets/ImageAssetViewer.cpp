@@ -26,32 +26,32 @@ namespace Editor
 		return &TypeOf(ImageAsset);
 	}
 
-	void ImageAssetViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	void ImageAssetViewer::RebuildProperties(const Vector<Pair<IObjectRef<const IObject>, IObjectRef<const IObject>>>& targetObjets)
 	{
 		PushEditorScopeOnStack scope;
 
-		mSlicesEditor = mnew ImageSlicesEditorWidget();
+		mSlicesEditor = mmake<ImageSlicesEditorWidget>();
 		mSpoiler->AddChild(mSlicesEditor);
 
-		mAtlasProperty = dynamic_cast<AssetProperty*>(o2EditorProperties.CreateRegularField(
+		mAtlasProperty = DynamicCast<AssetProperty>(o2EditorProperties.CreateRegularField(
 			&TypeOf(AtlasAssetRef), "Atlas", mOnChildFieldChangeCompleted, onChanged));
 
 		mSpoiler->AddChild(mAtlasProperty);
 	}
 
-	void ImageAssetViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	void ImageAssetViewer::OnRefreshed(const Vector<Pair<IObjectRef<const IObject>, IObjectRef<const IObject>>>& targetObjets)
 	{
 		if (!targetObjets.IsEmpty())
 		{
-			mSlicesEditor->Setup(ImageAssetRef(dynamic_cast<ImageAsset*>(targetObjets.Last().first)->GetUID()),
-								 dynamic_cast<BorderIProperty*>(mPropertiesContext.properties[TypeOf(ImageAsset).GetField("sliceBorder")]));
+			mSlicesEditor->Setup(ImageAssetRef(UID::wrap(dynamic_cast<ImageAsset*>(targetObjets.Last().first)->GetUID())),
+								 DynamicCast<BorderIntProperty>(mPropertiesContext.properties[TypeOf(ImageAsset).GetField("sliceBorder")]));
 		}
 
 		mAtlasProxies.Clear();
 		for (auto& targets : targetObjets)
 		{
-			ImageAsset* image = dynamic_cast<ImageAsset*>(targets.first);
-			auto proxy = mnew FunctionalValueProxy<AtlasAssetRef>(
+			ImageAsset* image = dynamic_cast<ImageAsset*>(targets.first.get());
+			auto proxy = mmake<FunctionalValueProxy<AtlasAssetRef>>(
 				[image](const AtlasAssetRef& value) { image->SetAtlas(value ? value->GetUID() : UID::empty); },
 				[image]() { return AtlasAssetRef(image->GetAtlasUID()); }
 			);

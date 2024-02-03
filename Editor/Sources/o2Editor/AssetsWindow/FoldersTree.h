@@ -8,111 +8,112 @@ using namespace o2;
 
 namespace o2
 {
-	class ContextMenu;
+    class ContextMenu;
 }
 
 namespace Editor
 {
-	class FoldersTree;
+    class FoldersTree;
 
-	// --------------------------
-	// Assets folders tree widget
-	// --------------------------
-	class AssetsFoldersTree: public Widget, public KeyboardEventsListener
-	{
-	public:
-		// Default constructor
-		AssetsFoldersTree();
+    // --------------------------
+    // Assets folders tree widget
+    // --------------------------
+    class AssetsFoldersTree : public Widget, public KeyboardEventsListener
+    {
+    public:
+        // Default constructor
+        AssetsFoldersTree();
 
-		// Copy-constructor
-		AssetsFoldersTree(const AssetsFoldersTree& other);
+        // Copy-constructor
+        AssetsFoldersTree(const AssetsFoldersTree& other);
 
-		// Destructor
-		~AssetsFoldersTree();
+        // Destructor
+        ~AssetsFoldersTree();
 
-		// Copy-operator
-		AssetsFoldersTree& operator=(const AssetsFoldersTree& other);
+        // Copy-operator
+        AssetsFoldersTree& operator=(const AssetsFoldersTree& other);
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AssetsFoldersTree);
+        SERIALIZABLE(AssetsFoldersTree);
 
-	protected:
-		Ref<Tree>        mFoldersTree; // Folders tree
-		Ref<ContextMenu> mContextMenu; // Context menu
-		String           mCurrentPath; // Current viewing path
+    protected:
+        Ref<Tree> mFoldersTree;             // Folders tree
+        Ref<ContextMenu> mContextMenu;      // Context menu
+        String mCurrentPath;                // Current viewing path
 
-		bool mOpengingFolderFromThis = false;
+        bool mOpengingFolderFromThis = false;
 
-	protected:
-		// Selects and expands folder
-		void SelectAndExpandFolder(const String& path);
+    protected:
+        // Selects and expands folder
+        void SelectAndExpandFolder(const String& path);
 
-		// Rebuilds folders tree
-		void UpdateView();
+        // Rebuilds folders tree
+        void UpdateView();
 
-		// Initializes assets context menu
-		void InitializeContext();
+        // Initializes assets context menu
+        void InitializeContext();
 
-		// Returns folder parent (for folders tree)
-		void* GetFoldersTreeNodeParent(void* object);
+        // Returns folder parent (for folders tree)
+        RefBase GetFoldersTreeNodeParent(const RefBase& object);
 
-		// Returns folder childs (for folders tree)
-		Vector<void*> GetFoldersTreeNodeChilds(void* object);
+        // Returns folder childs (for folders tree)
+        Vector<RefBase> GetFoldersTreeNodeChilds(const RefBase& object);
 
-		// Setups tree node by folder (for folders tree)
-		void SetupFoldersTreeNode(const Ref<TreeNode>& node, void* object);
+        // Setups tree node by folder (for folders tree)
+        void SetupFoldersTreeNode(const Ref<TreeNode>& node, const RefBase& object);
 
-		// Called when folder item double clicked (for folders tree)
-		void OnFoldersTreeNodeDblClick(const Ref<TreeNode>& node);
+        // Called when folder item double clicked (for folders tree)
+        void OnFoldersTreeNodeDblClick(const Ref<TreeNode>& node);
 
-		// Called when folder item clicked (for folders tree)
-		void OnFoldersTreeSelect(Vector<void*> nodes);
+        // Called when folder item clicked (for folders tree)
+        void OnFoldersTreeSelect(const Vector<RefBase>& nodes);
 
-		// Called when folders tree clicked by right button
-		void OnFoldersTreeRightClick(const Ref<TreeNode>& node);
+        // Called when folders tree clicked by right button
+        void OnFoldersTreeRightClick(const Ref<TreeNode>& node);
 
-		// Called when context copy pressed
-		void OnContextCopyPressed();
+        // Called when context copy pressed
+        void OnContextCopyPressed();
 
-		// Called when context cut pressed
-		void OnContextCutPressed();
+        // Called when context cut pressed
+        void OnContextCutPressed();
 
-		// Called when context paste pressed
-		void OnContextPastePressed();
+        // Called when context paste pressed
+        void OnContextPastePressed();
 
-		// Called when context delete pressed
-		void OnContextDeletePressed();
+        // Called when context delete pressed
+        void OnContextDeletePressed();
 
-		// Called when context open pressed
-		void OnContextOpenPressed();
+        // Called when context open pressed
+        void OnContextOpenPressed();
 
-		// Called when context show in explorer pressed
-		void OnContextShowInExplorerPressed();
+        // Called when context show in explorer pressed
+        void OnContextShowInExplorerPressed();
 
-		// Called when context create folder pressed
-		void OnContextCreateFolderPressed();
+        // Called when context create folder pressed
+        void OnContextCreateFolderPressed();
 
-		// Called when key was released
-		void OnKeyReleased(const Input::Key& key) override;
+        // Called when key was released
+        void OnKeyReleased(const Input::Key& key) override;
 
-		friend class AssetsWindow;
-	};
+        friend class AssetsWindow;
+    };
 
-	class FoldersTree : public Tree
-	{
-	public:
-		SERIALIZABLE(FoldersTree);
+    class FoldersTree : public Tree
+    {
+    public:
+        SERIALIZABLE(FoldersTree);
 
-	protected:
-		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
-		void UpdateVisibleNodes() override;
+    protected:
+        // Updates visible nodes (calculates range and initializes nodes), enables editor mode
+        void UpdateVisibleNodes() override;
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
-	};
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
+    };
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::AssetsFoldersTree)
@@ -121,28 +122,29 @@ CLASS_BASES_META(Editor::AssetsFoldersTree)
     BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::AssetsFoldersTree)
 {
-    FIELD().PROTECTED().NAME(mFoldersTree);
-    FIELD().PROTECTED().NAME(mContextMenu);
+    FIELD().PROTECTED().NAME(mFoldersTree).REF();
+    FIELD().PROTECTED().NAME(mContextMenu).REF();
     FIELD().PROTECTED().NAME(mCurrentPath);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOpengingFolderFromThis);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::AssetsFoldersTree)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsFoldersTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Editor::AssetsFoldersTree>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, SelectAndExpandFolder, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeContext);
-    FUNCTION().PROTECTED().SIGNATURE(WeakRef<void>, GetFoldersTreeNodeParent, const WeakRef<void>&);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<WeakRef<void>>, GetFoldersTreeNodeChilds, const WeakRef<void>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, const Ref<TreeNode>&, const WeakRef<void>&);
+    FUNCTION().PROTECTED().SIGNATURE(RefBase, GetFoldersTreeNodeParent, const RefBase&);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<RefBase>, GetFoldersTreeNodeChilds, const RefBase&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, const Ref<TreeNode>&, const RefBase&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeNodeDblClick, const Ref<TreeNode>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, const Vector<WeakRef<void>>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, const Vector<RefBase>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeRightClick, const Ref<TreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCutPressed);
@@ -160,15 +162,42 @@ CLASS_BASES_META(Editor::FoldersTree)
     BASE_CLASS(o2::Tree);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::FoldersTree)
 {
 }
 END_META;
+
 CLASS_METHODS_META(Editor::FoldersTree)
 {
-
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
-    FUNCTION().PROTECTED().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
-END_META;
+END_META;#include <memory>
+
+template<typename T>
+using Ref = std::shared_ptr<T>;
+
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+  return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template<typename Derived, typename Base>
+Ref<Derived> DynamicCast(const Ref<Base>& base)
+{
+  return std::dynamic_pointer_cast<Derived>(base);
+}
+
+class Tree
+{
+public:
+  void UpdateVisibleNodes();
+
+protected:
+  static std::string GetCreateMenuCategory();
+};
+
 // --- END META ---

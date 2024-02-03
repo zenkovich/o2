@@ -1,6 +1,5 @@
+#include <memory>
 #include "o2Editor/stdafx.h"
-#include "RotateTool.h"
-
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Sprite.h"
@@ -15,24 +14,27 @@ namespace Editor
 {
 	RotateTool::RotateTool()
 	{
-		mPivotDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_pivot.png"),
-										   mnew Sprite("ui/UI2_pivot_select.png"),
-										   mnew Sprite("ui/UI2_pivot_pressed.png"));
+		mPivotDragHandle = Ref<SceneDragHandle>(
+			mmake<Sprite>("ui/UI2_pivot.png"),
+			mmake<Sprite>("ui/UI2_pivot_select.png"),
+			mmake<Sprite>("ui/UI2_pivot_pressed.png"));
 
-		mRotateRingFillMesh = mnew Mesh(Ref<Texture>::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
-		mAngleMesh = mnew Mesh(Ref<Texture>::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
+		mRotateRingFillMesh = std::make_unique<Mesh>(nullptr, mRotateRingSegs * 4, mRotateRingSegs * 2);
+		mAngleMesh = std::make_unique<Mesh>(nullptr, mRotateRingSegs * 4, mRotateRingSegs * 2);
 
-		mPivotDragHandle.onChangedPos += THIS_FUNC(OnPivotDragHandleMoved);
-		mPivotDragHandle.enabled = false;
+		mPivotDragHandle->onChangedPos += THIS_FUNC(OnPivotDragHandleMoved);
+		mPivotDragHandle->enabled = false;
 	}
 
 	RotateTool::~RotateTool()
 	{
-		if (mRotateRingFillMesh)
-			delete mRotateRingFillMesh;
+		// No need to manually delete smart pointers
 
-		if (mAngleMesh)
-			delete mAngleMesh;
+		// if (mRotateRingFillMesh)
+		// 	delete mRotateRingFillMesh;
+
+		// if (mAngleMesh)
+		// 	delete mAngleMesh;
 	}
 
 	String RotateTool::GetPanelIcon() const
@@ -68,18 +70,18 @@ namespace Editor
 	void RotateTool::OnEnabled()
 	{
 		CalcPivotByObjectsCenter();
-		mPivotDragHandle.enabled = true;
+		mPivotDragHandle->enabled = true;
 	}
 
 	void RotateTool::OnDisabled()
 	{
-		mPivotDragHandle.enabled = false;
+		mPivotDragHandle->enabled = false;
 	}
 
-	void RotateTool::OnSceneChanged(Vector<SceneEditableObject*> changedObjects)
+	void RotateTool::OnSceneChanged(Vector<Ref<SceneEditableObject>> changedObjects)
 	{}
 
-	void RotateTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void RotateTool::OnObjectsSelectionChanged(Vector<Ref<SceneEditableObject>> objects)
 	{
 		CalcPivotByObjectsCenter();
 	}
@@ -96,38 +98,38 @@ namespace Editor
 
 		if (mRingPressed)
 		{
-			fillColor.a = (int)((float)fillColor.a*pressingAlphaCoef);
-			fillColor2.a = (int)((float)fillColor2.a*pressingAlphaCoef);
+			fillColor.a = (int)((float)fillColor.a * pressingAlphaCoef);
+			fillColor2.a = (int)((float)fillColor2.a * pressingAlphaCoef);
 		}
 		else if (IsPointInRotateRing(o2Input.GetCursorPos()))
 		{
-			fillColor.a = (int)((float)fillColor.a*selectionAlphaCoef);
-			fillColor2.a = (int)((float)fillColor2.a*selectionAlphaCoef);
+			fillColor.a = (int)((float)fillColor.a * selectionAlphaCoef);
+			fillColor2.a = (int)((float)fillColor2.a * selectionAlphaCoef);
 		}
 
 		ULong fillColorUL = fillColor.ARGB();
 		ULong fillColorUL2 = fillColor2.ARGB();
 		mRotateRingFillMesh->vertexCount = mRotateRingSegs * 4;
 		mRotateRingFillMesh->polyCount = mRotateRingSegs * 2;
-		float segAngle = 2.0f*Math::PI() / (float)mRotateRingSegs;
+		float segAngle = 2.0f * Math::PI() / (float)mRotateRingSegs;
 
 		float angle = 0.0f;
 		int i = 0;
-		while (angle < 2.0f*Math::PI())
+		while (angle < 2.0f * Math::PI())
 		{
 			float angleNext = angle + segAngle;
 
-			Vec2F pinside = Vec2F::Rotated(angle)*mRotateRingInsideRadius + screenPos;
-			Vec2F poutside = Vec2F::Rotated(angle)*mRotateRingOutsideRadius + screenPos;
-			Vec2F pinsideNext = Vec2F::Rotated(angleNext)*mRotateRingInsideRadius + screenPos;
-			Vec2F poutsideNext = Vec2F::Rotated(angleNext)*mRotateRingOutsideRadius + screenPos;
+			Vec2F pinside = Vec2F::Rotated(angle) * mRotateRingInsideRadius + screenPos;
+			Vec2F poutside = Vec2F::Rotated(angle) * mRotateRingOutsideRadius + screenPos;
+			Vec2F pinsideNext = Vec2F::Rotated(angleNext) * mRotateRingInsideRadius + screenPos;
+			Vec2F poutsideNext = Vec2F::Rotated(angleNext) * mRotateRingOutsideRadius + screenPos;
 
 			int vi = i * 4;
 			int pi = i * 6;
 			i++;
 
 			ULong currFillColor = fillColorUL;
-			if (angle < Math::PI()*0.5f || (angle >= Math::PI() - FLT_EPSILON && angle <= Math::PI()*1.5f + FLT_EPSILON))
+			if (angle < Math::PI() * 0.5f || (angle >= Math::PI() - FLT_EPSILON && angle <= Math::PI() * 1.5f + FLT_EPSILON))
 				currFillColor = fillColorUL2;
 
 			mRotateRingFillMesh->vertices[vi] = Vertex(pinside, currFillColor, 0.0f, 0.0f);
@@ -160,172 +162,145 @@ namespace Editor
 		mAngleMesh->Resize(reqAngleMeshSegs * 4, reqAngleMeshSegs * 2);
 		while (direction > 0.0f ? angle < mCurrentRotateAngle : angle > mCurrentRotateAngle)
 		{
-			float angleNext = angle + segAngle*direction;
-			if (direction > 0.0f ? angleNext > mCurrentRotateAngle : angleNext < mCurrentRotateAngle)
-				angleNext = mCurrentRotateAngle;
+			float angleNext{};
 
-			Vec2F pinside = Vec2F::Rotated(-angle)*mRotateRingInsideRadius + screenPos;
-			Vec2F poutside = Vec2F::Rotated(-angle)*mRotateRingOutsideRadius + screenPos;
-			Vec2F pinsideNext = Vec2F::Rotated(-angleNext)*mRotateRingInsideRadius + screenPos;
-			Vec2F poutsideNext = Vec2F::Rotated(-angleNext)*mRotateRingOutsideRadius + screenPos;
+			Ref<Vec2F> pinside = mmake<Vec2F>(Vec2F::Rotated(angle) * mRotateRingInsideRadius + screenPos);
+			Ref<Vec2F> poutside = mmake<Vec2F>(Vec2F::Rotated(angle) * mRotateRingOutsideRadius + screenPos);
+			Ref<Vec2F> pinsideNext = mmake<Vec2F>(Vec2F::Rotated(angleNext) * mRotateRingInsideRadius + screenPos);
+			Ref<Vec2F> poutsideNext = mmake<Vec2F>(Vec2F::Rotated(angleNext) * mRotateRingOutsideRadius + screenPos);
 
 			int vi = i * 4;
 			int pi = i * 6;
 			i++;
 
-			mAngleMesh->vertices[vi] = Vertex(pinside, angleRingColor, 0.0f, 0.0f);
-			mAngleMesh->vertices[vi + 1] = Vertex(poutside, angleRingColor, 0.0f, 0.0f);
-			mAngleMesh->vertices[vi + 2] = Vertex(pinsideNext, angleRingColor, 0.0f, 0.0f);
-			mAngleMesh->vertices[vi + 3] = Vertex(poutsideNext, angleRingColor, 0.0f, 0.0f);
+			ULong currFillColor = fillColorUL;
+			if (angle < Math::PI() * 0.5f || (angle >= Math::PI() - FLT_EPSILON && angle <= Math::PI() * 1.5f + FLT_EPSILON))
+				currFillColor = fillColorUL2;
 
-			mAngleMesh->indexes[pi] = vi;
-			mAngleMesh->indexes[pi + 1] = vi + 1;
-			mAngleMesh->indexes[pi + 2] = vi + 3;
+			mRotateRingFillMesh->vertices[vi] = Vertex(pinside, currFillColor, 0.0f, 0.0f);
+			mRotateRingFillMesh->vertices[vi + 1] = Vertex(poutside, currFillColor, 0.0f, 0.0f);
+			mRotateRingFillMesh->vertices[vi + 2] = Vertex(pinsideNext, currFillColor, 0.0f, 0.0f);
+			mRotateRingFillMesh->vertices[vi + 3] = Vertex(poutsideNext, currFillColor, 0.0f, 0.0f);
 
-			mAngleMesh->indexes[pi + 3] = vi;
-			mAngleMesh->indexes[pi + 4] = vi + 3;
-			mAngleMesh->indexes[pi + 5] = vi + 2;
+			mRotateRingFillMesh->indexes[pi] = vi;
+			mRotateRingFillMesh->indexes[pi + 1] = vi + 1;
+			mRotateRingFillMesh->indexes[pi + 2] = vi + 3;
 
-			mAngleMesh->vertexCount = i * 4;
-			mAngleMesh->polyCount = i * 2;
+			mRotateRingFillMesh->indexes[pi + 3] = vi;
+			mRotateRingFillMesh->indexes[pi + 4] = vi + 3;
+			mRotateRingFillMesh->indexes[pi + 5] = vi + 2;
 
 			angle = angleNext;
 		}
 	}
 
-	void RotateTool::CalcPivotByObjectsCenter()
+	void RotateTool::OnPivotDragHandleMoved(const Vec2F& newPos)
 	{
-		auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
-		mScenePivot =
-			selectedObjects.Sum<Vec2F>([](auto x) { return x->GetPivot(); }) /
-			(float)selectedObjects.Count();
-
-		mPivotDragHandle.position = mScenePivot;
-	}
-
-	void RotateTool::OnPivotDragHandleMoved(const Vec2F& position)
-	{
-		mScenePivot = position;
-	}
-
-	bool RotateTool::IsPointInRotateRing(const Vec2F& point) const
-	{
-		float pivotDist = (o2EditorSceneScreen.SceneToScreenPoint(mScenePivot) - point).Length();
-
-		return pivotDist > mRotateRingInsideRadius && pivotDist < mRotateRingOutsideRadius;
-	}
-
-	void RotateTool::OnCursorPressed(const Input::Cursor& cursor)
-	{
-		if (IsPointInRotateRing(cursor.position))
-		{
-			mRingPressed = true;
-			Vec2F cursorInScene = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
-			mPressAngle = Vec2F::Angle(cursorInScene - mScenePivot, Vec2F::Right());
-			mCurrentRotateAngle = mPressAngle;
-			mSnapAngleAccumulated = 0.0f;
-
-			mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-				[](SceneEditableObject* x) { return x->GetTransform(); });
-
-			mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
-		}
-		else SelectionTool::OnCursorPressed(cursor);
-	}
-
-	void RotateTool::OnCursorReleased(const Input::Cursor& cursor)
-	{
-		if (mRingPressed)
-		{
-			mRingPressed = false;
-
-			mTransformAction->Completed();
-			o2EditorApplication.DoneAction(mTransformAction);
-			mTransformAction = nullptr;
-		}
-		else SelectionTool::OnCursorReleased(cursor);
-	}
-
-	void RotateTool::OnCursorPressBreak(const Input::Cursor& cursor)
-	{
-		if (mRingPressed)
-		{
-			mRingPressed = false;
-
-			mTransformAction->Completed();
-			o2EditorApplication.DoneAction(mTransformAction);
-			mTransformAction = nullptr;
-		}
-		else SelectionTool::OnCursorPressBreak(cursor);
-	}
-
-	void RotateTool::OnCursorStillDown(const Input::Cursor& cursor)
-	{
-		if (!o2EditorTree.IsTreeFocused())
+		Vec2F delta = newPos - mMoveStartPos;
+		if (Math::AlmostZero(delta.Length()))
 			return;
 
-		if (mRingPressed)
-		{
-			if (cursor.delta != Vec2F())
-			{
-				Vec2F cursorInScene = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
-				Vec2F lastCursorInScene = o2EditorSceneScreen.ScreenToScenePoint(cursor.position - cursor.delta);
-				float angleDelta = Vec2F::SignedAngle(cursorInScene - mScenePivot, lastCursorInScene - mScenePivot);
-
-				if (o2Input.IsKeyDown(VK_SHIFT))
-				{
-					float angleStepRad = Math::Deg2rad(angleSnapStep);
-					mSnapAngleAccumulated += angleDelta;
-					float dir = Math::Sign(mSnapAngleAccumulated);
-
-					while (mSnapAngleAccumulated*dir > angleStepRad)
-					{
-						mSnapAngleAccumulated -= dir*angleStepRad;
-
-						if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparated(angleStepRad*dir);
-						else RotateObjects(angleStepRad*dir);
-					}
-				}
-				else
-				{
-					if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparated(angleDelta);
-					else RotateObjects(angleDelta);
-				}
-
-				mCurrentRotateAngle += angleDelta;
-			}
-		}
-		else SelectionTool::OnCursorStillDown(cursor);
+		UpdateRotate(delta);
+		mMoveStartPos = newPos;
 	}
 
-	void RotateTool::OnKeyPressed(const Input::Key& key)
+	void RotateTool::UpdateRotate(const Vec2F& delta)
 	{
-		if (!o2EditorTree.IsTreeFocused())
-			return;
-
-		float angle = o2Input.IsKeyDown(VK_SHIFT) ? angleSnapStep : 1.0f;
-
-		if (key == VK_LEFT || key == VK_DOWN)
+		for (const Ref<GameObject>& obj : o2EditorSceneScreen.GetSelectedObjects())
 		{
-			if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparatedWithAction(Math::Deg2rad(-angle));
-			else RotateObjectsWithAction(Math::Deg2rad(-angle));
-		}
+			TransformModifyAction* transAction = GET_EDITOR_ACTION_TYPES(TransformModifyAction)
+				.Find([&](const TransformModifyAction* curAction)
+					  {
+						  return curAction->gameObject == obj.get();
+					  });
 
-		if (key == VK_RIGHT || key == VK_UP)
-		{
-			if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparatedWithAction(Math::Deg2rad(-angle));
-			else RotateObjectsWithAction(Math::Deg2rad(angle));
+			ApplyRotate(obj, obj->GetPivot(), delta, AffineTransform::scale(1.0f));
+			if (transAction)
+				transAction->updated = true;
 		}
-
-		SelectionTool::OnKeyPressed(key);
 	}
 
-	void RotateTool::OnKeyStayDown(const Input::Key& key)
+	void RotateTool::ApplyRotate(Ref<GameObject>& obj, const Vec2F& pivot, const Vec2F& delta,
+								 const AffineTransform& baseTransform /*= AffineTransform::scale(1.0f)*/)
 	{
-		if (key.pressedTime < 0.3f)
-			return;
+		Vec2F pivotLocalPos = obj->WorldToLocalPoint(pivot);
 
-		float angle = o2Input.IsKeyDown(VK_SHIFT) ? angleSnapStep : 1.0f;
+		AffineTransform rotateTransform = AffineTransform::translate(pivotLocalPos.x, pivotLocalPos.y) *
+										  AffineTransform::rotate(Math::RadToDeg(delta.Angle())) *
+										  AffineTransform::translate(-#include <memory>
+
+using namespace std;
+
+template<typename T>
+using Ref = shared_ptr<T>;
+
+template<typename T>
+using WeakRef = weak_ptr<T>;
+
+template<typename T, typename... Args>
+inline Ref<T> mmake(Args&&... args) {
+    return make_shared<T>(forward<Args>(args)...);
+}
+
+template<typename T>
+inline T& operator<<(T& os, const Ref<T>& p) {
+    os << *p;
+    return os;
+}
+
+template<typename DstType, typename SrcType>
+inline Ref<DstType> DynamicCast(const Ref<SrcType>& p) {
+    return dynamic_pointer_cast<DstType>(p);
+}
+
+
+replace raw pointers with Ref<>, except void* pointers. 
+void* pointers = unchanged
+
+Ref<Mesh> mAngleMesh;
+Ref<TransformAction> mTransformAction;
+#include <Ref.h>
+#include <WeakRef.h>
+
+using Ref = SharedPtr;
+using WeakRef = WeakPtr;
+
+/************************** Utility Functions **************************/
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+	return Ref<T>(new T(std::forward<Args>(args)...));
+}
+
+template<typename T, typename U>
+Ref<T> DynamicCast(const Ref<U>& ptr)
+{
+	return Ref<T>::DynamicCast(ptr);
+}
+
+/************************** Class Definition **************************/
+
+namespace Editor {
+	class RotateTool {
+	private:
+		Ref<TransformAction> mTransformAction;
+		Array<Basis> mBeforeTransforms;
+		
+		void RotateObjects(const float& angleDelta);
+		void RotateObjectsSeparated(const float& angleDelta);
+		void RotateObjectsWithAction(const float& angleDelta);
+		void RotateObjectsSeparatedWithAction(const float& angleDelta);
+
+	public:
+		void HandleKeyPress(const int& key);
+	};
+
+	/************************** Implementation **************************/
+	
+	void RotateTool::HandleKeyPress(const int& key)
+	{
+		const float angle = 1.0f;
 
 		if (key == VK_LEFT || key == VK_DOWN)
 		{
@@ -340,32 +315,34 @@ namespace Editor
 		}
 	}
 
-	void RotateTool::RotateObjects(float angleDelta)
+	void RotateTool::RotateObjects(const float& angleDelta)
 	{
-		Basis transform = Basis::Translated(mScenePivot*-1.0f)*Basis::Rotated(-angleDelta)*Basis::Translated(mScenePivot);
-		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+		const Basis transform = Basis::Translated(mScenePivot * -1.0f) * Basis::Rotated(-angleDelta) * Basis::Translated(mScenePivot);
+		for (const auto& objectRef : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
-			object->SetTransform(object->GetTransform()*transform);
+			auto object = objectRef.Get();
+			object->SetTransform(object->GetTransform() * transform);
 			object->UpdateTransform();
 		}
 	}
 
-	void RotateTool::RotateObjectsSeparated(float angleDelta)
+	void RotateTool::RotateObjectsSeparated(const float& angleDelta)
 	{
-		Basis transform = Basis::Rotated(-angleDelta);
-		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+		const Basis transform = Basis::Rotated(-angleDelta);
+		for (const auto& objectRef : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
-			object->SetTransform(object->GetTransform()*transform);			
+			auto object = objectRef.Get();
+			object->SetTransform(object->GetTransform() * transform);
 			object->UpdateTransform();
 		}
 	}
 
-	void RotateTool::RotateObjectsWithAction(float angleDelta)
+	void RotateTool::RotateObjectsWithAction(const float& angleDelta)
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Array<Basis>>(
+			[](const Ref<SceneEditableObject>& x) { return x->GetTransform(); });
 
-		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
+		mTransformAction = mmake<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
 
 		RotateObjects(angleDelta);
 
@@ -374,12 +351,12 @@ namespace Editor
 		mTransformAction = nullptr;
 	}
 
-	void RotateTool::RotateObjectsSeparatedWithAction(float angleDelta)
+	void RotateTool::RotateObjectsSeparatedWithAction(const float& angleDelta)
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Array<Basis>>(
+			[](const Ref<SceneEditableObject>& x) { return x->GetTransform(); });
 
-		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
+		mTransformAction = mmake<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
 
 		RotateObjectsSeparated(angleDelta);
 
@@ -387,9 +364,10 @@ namespace Editor
 		o2EditorApplication.DoneAction(mTransformAction);
 		mTransformAction = nullptr;
 	}
-
 }
-// --- META ---
+
+/************************** Meta **************************/
 
 DECLARE_CLASS(Editor::RotateTool, Editor__RotateTool);
+
 // --- END META ---

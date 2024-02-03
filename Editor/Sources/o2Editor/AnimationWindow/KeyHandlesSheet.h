@@ -3,222 +3,248 @@
 #include "o2/Events/CursorAreaEventsListener.h"
 #include "o2/Utils/Editor/DragHandle.h"
 #include "o2Editor/AnimationWindow/TrackControls/AnimationKeyDragHandle.h"
+#include <memory>
 
 namespace o2
 {
-	class AnimationClip;
-	class ContextMenu;
-	class Sprite;
+    class AnimationClip;
+    class ContextMenu;
+    class Sprite;
 }
 
 using namespace o2;
 
 namespace Editor
 {
-	class AnimationWindow;
-	class ITrackControl;
+    class AnimationWindow;
+    class ITrackControl;
 
-	// -------------------------------------------
-	// Handles sheet, manages selection of handles
-	// -------------------------------------------
-	class KeyHandlesSheet : public Widget, public SelectableDragHandlesGroup, public CursorAreaEventsListener
-	{
-	public:
-		// Default constructor
-		KeyHandlesSheet();
+    // -------------------------------------------
+    // Handles sheet, manages selection of handles
+    // -------------------------------------------
+    class KeyHandlesSheet : public Widget, public SelectableDragHandlesGroup, public CursorAreaEventsListener
+    {
+    public:
+        using Ref = std::shared_ptr;
 
-		// Copy-constructor
-		KeyHandlesSheet(const KeyHandlesSheet& other);
+        // Default constructor
+        KeyHandlesSheet();
 
-		// Destructor
-		~KeyHandlesSheet();
+        // Copy-constructor
+        KeyHandlesSheet(const KeyHandlesSheet& other);
 
-		// Copy-operator
-		KeyHandlesSheet& operator=(const KeyHandlesSheet& other);
+        // Destructor
+        ~KeyHandlesSheet();
 
-		// Sets animation. Used for batch change of keys
-		void SetAnimation(AnimationClip* animation);
+        // Copy-operator
+        KeyHandlesSheet& operator=(const KeyHandlesSheet& other);
 
-		// Updates selection frame
-		void Update(float dt) override;
+        // Sets animation. Used for batch change of keys
+        void SetAnimation(Ref<AnimationClip> animation);
 
-		// Draws selection
-		void Draw() override;
+        // Updates selection frame
+        void Update(float dt) override;
 
-		// Updates draw order for correct handles and sheet input processing
-		void UpdateInputDrawOrder();
+        // Draws selection
+        void Draw() override;
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Updates draw order for correct handles and sheet input processing
+        void UpdateInputDrawOrder();
 
-		// Registers animation track track control
-		void RegTrackControl(ITrackControl* trackControl, const std::string& path);
+        // Returns true if point is in this object
+        bool IsUnderPoint(const Vec2F& point) override;
 
-		// Unregisters animation track track control
-		void UnregTrackControl(ITrackControl* trackControl);
+        // Registers animation track track control
+        void RegTrackControl(ITrackControl* trackControl, const std::string& path);
 
-		// Unregisters all tracks controls
-		void UnregAllTrackControls();
+        // Unregisters animation track track control
+        void UnregTrackControl(ITrackControl* trackControl);
 
-		// Adds selectable handle to group
-		void AddHandle(const Ref<DragHandle>& handle) override;
+        // Unregisters all tracks controls
+        void UnregAllTrackControls();
 
-		// Removes selectable handle from group
-		void RemoveHandle(DragHandle* handle) override;
+        // Adds selectable handle to group
+        void AddHandle(const Ref<DragHandle>& handle) override;
 
-		// Sets selected keys handles
-		void SetSelectedKeys(const Map<String, Vector<UInt64>>& keys);
+        // Removes selectable handle from group
+        void RemoveHandle(DragHandle* handle) override;
 
-		// Returns list of selected keys handles
-		Map<String, Vector<UInt64>> GetSelectedKeys() const;
+        // Sets selected keys handles
+        void SetSelectedKeys(const Map<String, Vector<UInt64>>& keys);
 
-		// Removes keys
-		void DeleteKeys(const Map<String, Vector<UInt64>>& keys, bool createAction = true);
+        // Returns list of selected keys handles
+        Map<String, Vector<UInt64>> GetSelectedKeys() const;
 
-		// Returns context menu
-		ContextMenu* GetContextMenu() const;
+        // Removes keys
+        void DeleteKeys(const Map<String, Vector<UInt64>>& keys, bool createAction = true);
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns context menu
+        Ref<ContextMenu> GetContextMenu() const;
 
-		SERIALIZABLE(KeyHandlesSheet);
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
-	private:
-		RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);
-		RectF mSelectionFrameCursorOffsets = RectF(-2, -3, 2, 2);
+        SERIALIZABLE(KeyHandlesSheet);
 
-		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+    private:
+        RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);
+        RectF mSelectionFrameCursorOffsets = RectF(-2, -3, 2, 2);
 
-		Vector<ITrackControl*>               mTrackControls;    // List of actual track controls
-		Vector<Pair<String, ITrackControl*>> mTrackControlsMap; // Map of actual track controls, key is Animation track path
+        Ref<AnimationWindow> mAnimationWindow = nullptr; // Animation window
 
-		Map<IAnimationTrack*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by Animation track, used for fast searching handles for same Animation track
+        Vector<ITrackControl*> mTrackControls;    // List of actual track controls
+        Vector<Pair<String, ITrackControl*>> mTrackControlsMap; // Map of actual track controls, key is Animation track path
 
-		ContextMenu* mContextMenu = nullptr; // Keys context menu
-		Vec2F        mContextMenuPressPoint; // Cursor position when right button were clicked. When trying to show context menu checking delta between current cursor position and this 
+        Map<IAnimationTrack*, Vector<Ref<AnimationKeyDragHandle>>> mHandlesGroups; // All handles grouped by Animation track, used for fast searching handles for same Animation track
 
-		bool mNeedUpdateSelectionFrame = false; // True when selection frame required to update
+        Ref<ContextMenu> mContextMenu = nullptr; // Keys context menu
+        Vec2F mContextMenuPressPoint; // Cursor position when right button were clicked. When trying to show context menu checking delta between current cursor position and this 
 
-		bool mHandleHasMoved = false; // it is true when some handle was selected and moved, resets on handle pressing
+        bool mNeedUpdateSelectionFrame = false; // True when selection frame required to update
 
-		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
-		RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
+        bool mHandleHasMoved = false; // it is true when some handle was selected and moved, resets on handle pressing
 
-		Vec2F   mBeginSelectPoint;         // Begin frame selection point, where x is position on timeline, y is line number
-		bool    mIsFrameSelecting = false; // It is true when user selection by frame now
+        Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
+        RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
 
-		Vector<DragHandle*> mBeginSelectHandles; // handles list, that were selected before frame selecting
+        Vec2F   mBeginSelectPoint;         // Begin frame selection point, where x is position on timeline, y is line number
+        bool    mIsFrameSelecting = false; // It is true when user selection by frame now
 
-		DragHandle mLeftFrameDragHandle;   // Left frame border drag handle, resizing selected handles rect
-		DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
-		DragHandle mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
+        Vector<DragHandle*> mBeginSelectHandles; // handles list, that were selected before frame selecting
 
-		DataDocument mBeforeChangeKeysData; // Serialized keys data before change
+        DragHandle mLeftFrameDragHandle;   // Left frame border drag handle, resizing selected handles rect
+        DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
+        DragHandle mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
 
-	private:
-		// Initializes frame handles
-		void InitializeHandles();
+        DataDocument mBeforeChangeKeysData; // Serialized keys data before change
 
-		// Initializes center handle, that moves selected keys on timeline
-		void InitializeCenterHandle();
+    private:
+        // Initializes frame handles
+        void InitializeHandles();
 
-		// Initializes left handle, that moves selected keys on timeline relative to right selection rect position
-		void InitializeLeftHandle();
+        // Initializes center handle, that moves selected keys on timeline
+        void InitializeCenterHandle();
 
-		// Initializes right handle, that moves selected keys on timeline relative to left selection rect position
-		void InitializeRightHandle();
+        // Initializes left handle, that moves selected keys on timeline relative to right selection rect position
+        void InitializeLeftHandle();
 
-		// Initializes context menu with copy, paste, delete etc
-		void InitializeContextMenu();
+        // Initializes right handle, that moves selected keys on timeline relative to left selection rect position
+        void InitializeRightHandle();
 
-		// Updates selection rectangle and drawing sprite
-		void UpdateSelectionFrame();
+        // Initializes context menu with copy, paste, delete etc
+        void InitializeContextMenu();
 
-		// Serialized keys into data
-		void SerializeKeys(DataValue& data, const Map<String, Vector<UInt64>>& keys, float relativeTime);
+        // Updates selection rectangle and drawing sprite
+        void UpdateSelectionFrame();
 
-		// Deserializes keys from data 
-		void DeserializeKeys(const DataValue& data, Map<String, Vector<UInt64>>& keys, float relativeTime, bool generateNewUid = true);
+        // Serialized keys into data
+        void SerializeKeys(DataValue& data, const Map<String, Vector<UInt64>>& keys, float relativeTime);
 
-		// Copies selected keys into buffer
-		void CopyKeys();
+        // Deserializes keys from data 
+        void D#include <memory>
+#include <vector>
+#include <unordered_map>
 
-		// Inserts keys from buffer under cursor
-		void PasteKeys();
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
-		// Called when selection is changed - some handle was added or removed from selection
-		// Updating selection frame
-		void OnSelectionChanged() override;
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-		// Called when selectable draggable handle was pressed, sends to track control that drag has began
-		void OnHandleCursorPressed(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
-
-		// Called when selectable draggable handle was released, sends to track control that drag has completed
-		void OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
-
-		// Called when selectable handle moved, moves all selected handles position
-		// Enables keys batch change
-		void OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos) override;
-
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
-
-		// Called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor) override;
-
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
-
-		// Called when cursor pressed outside this
-		void OnCursorPressedOutside(const Input::Cursor& cursor) override;
-
-		// Called when cursor released outside this(only when cursor pressed this at previous time)
-		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
-
-		// Called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor) override;
-
-		// Called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor) override;
-
-		// Called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor) override;
-
-		// Called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor) override;
-
-		// Called when cursor double clicked
-		void OnCursorDblClicked(const Input::Cursor& cursor) override;
-
-		// Called when right mouse button was pressed on this
-		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
-
-		// Called when right mouse button stay down on this
-		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
-
-		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
-
-		// Called when middle mouse button was pressed on this
-		void OnCursorMiddleMousePressed(const Input::Cursor& cursor) override;
-
-		// Called when middle mouse button stay down on this
-		void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) override;
-
-		// Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
-		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
-
-		friend class AnimationWindow;
-		friend class AnimationAddKeysAction;
-		friend class AnimationDeleteKeysAction;
-		friend class AnimationKeysChangeAction;
-
-		template<typename AnimationTrackType>
-		friend class KeyFramesTrackControl;
-	};
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
 }
-// --- META ---
 
+template<typename T, typename U>
+Ref<T> DynamicCast(const Ref<U>& ptr)
+{
+    return std::dynamic_pointer_cast<T>(ptr);
+}
+
+class AnimationWindow;
+
+namespace Editor {
+    class DragHandle;
+    class KeyHandlesSheet : public o2::Widget, public o2::SelectableDragHandlesGroup, public o2::CursorAreaEventsListener {
+    public:
+        void CopyKeys();
+
+        void PasteKeys();
+
+        void OnSelectionChanged() override;
+
+        void OnHandleCursorPressed(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
+
+        void OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
+
+        void OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos) override;
+
+        void OnCursorPressed(const Input::Cursor& cursor) override;
+
+        void OnCursorReleased(const Input::Cursor& cursor) override;
+
+        void OnCursorPressBreak(const Input::Cursor& cursor) override;
+
+        void OnCursorPressedOutside(const Input::Cursor& cursor) override;
+
+        void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
+
+        void OnCursorStillDown(const Input::Cursor& cursor) override;
+
+        void OnCursorMoved(const Input::Cursor& cursor) override;
+
+        void OnCursorEnter(const Input::Cursor& cursor) override;
+
+        void OnCursorExit(const Input::Cursor& cursor) override;
+
+        void OnCursorDblClicked(const Input::Cursor& cursor) override;
+
+        void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
+
+        void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
+
+        void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+
+        void OnCursorMiddleMousePressed(const Input::Cursor& cursor) override;
+
+        void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) override;
+
+        void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
+
+        friend class AnimationWindow;
+        friend class AnimationAddKeysAction;
+        friend class AnimationDeleteKeysAction;
+        friend class AnimationKeysChangeAction;
+
+        template<typename AnimationTrackType>
+        friend class KeyFramesTrackControl;
+
+    private:
+        Ref<RectF> mSelectionFrameOffsets = mmake<RectF>(-9, -3, 5, 2);
+        Ref<RectF> mSelectionFrameCursorOffsets = mmake<RectF>(-2, -3, 2, 2);
+        Ref<AnimationWindow> mAnimationWindow = nullptr;
+        std::vector<Ref<TrackControl>> mTrackControls;
+        std::unordered_map<std::string, Ref<TrackControl>> mTrackControlsMap;
+        std::vector<Ref<HandlesGroup>> mHandlesGroups;
+        Ref<ContextMenu> mContextMenu = nullptr;
+        Ref<Vec2F> mContextMenuPressPoint;
+        bool mNeedUpdateSelectionFrame = false;
+        bool mHandleHasMoved = false;
+        Ref<SelectionFrame> mSelectionFrame = nullptr;
+        Ref<RectF> mSelectionRect;
+        Ref<Vec2F> mBeginSelectPoint;
+        bool mIsFrameSelecting = false;
+        std::vector<Ref<DragHandle>> mBeginSelectHandles;
+        Ref<DragHandle> mLeftFrameDragHandle;
+        Ref<DragHandle> mRightFrameDragHandle;
+        Ref<DragHandle> mCenterFrameDragHandle;
+        Ref<BeforeChangeKeysData> mBeforeChangeKeysData;
+    };
+}
+
+// --- META ---
 CLASS_BASES_META(Editor::KeyHandlesSheet)
 {
     BASE_CLASS(o2::Widget);
@@ -226,10 +252,11 @@ CLASS_BASES_META(Editor::KeyHandlesSheet)
     BASE_CLASS(o2::CursorAreaEventsListener);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(RectF(-9, -3, 5, 2)).NAME(mSelectionFrameOffsets);
-    FIELD().PRIVATE().DEFAULT_VALUE(RectF(-2, -3, 2, 2)).NAME(mSelectionFrameCursorOffsets);
+    FIELD().PRIVATE().DEFAULT_VALUE(Ref<RectF>(mmake<RectF>(-9, -3, 5, 2))).NAME(mSelectionFrameOffsets);
+    FIELD().PRIVATE().DEFAULT_VALUE(Ref<RectF>(mmake<RectF>(-2, -3, 2, 2))).NAME(mSelectionFrameCursorOffsets);
     FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
     FIELD().PRIVATE().NAME(mTrackControls);
     FIELD().PRIVATE().NAME(mTrackControlsMap);
@@ -249,31 +276,74 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
     FIELD().PRIVATE().NAME(mBeforeChangeKeysData);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::KeyHandlesSheet)
 {
+    METHOD().NAME("CopyKeys").ACCESS_MODIFIERS(MethodAccessModifier::Public);
+    METHOD().NAME("PasteKeys").ACCESS_MODIFIERS(MethodAccessModifier::Public);
+    METHOD().NAME("OnSelectionChanged").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnHandleCursorPressed").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnHandleCursorReleased").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnHandleMoved").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorPressed").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorReleased").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorPressBreak").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorPressedOutside").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorReleasedOutside").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorStillDown").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorMoved").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorEnter").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorExit").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorDblClicked").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorRightMousePressed").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorRightMouseStayDown").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorRightMouseReleased").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorMiddleMousePressed").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorMiddleMouseStayDown").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
+    METHOD().NAME("OnCursorMiddleMouseReleased").ACCESS_MODIFIERS(MethodAccessModifier::Public).OVERRIDE();
 
-    typedef const Map<String, Vector<UInt64>>& _tmp1;
-    typedef Map<String, Vector<UInt64>> _tmp2;
-    typedef const Map<String, Vector<UInt64>>& _tmp3;
-    typedef const Map<String, Vector<UInt64>>& _tmp4;
+    return meta::ClassMethodsMeta();
+}
+END_META;Replace raw pointers with Ref<> and const Ref<>& where applicable:
+
+```cpp
+#include <memory> // Include the necessary header for Ref<>
+#include <string>
+#include <vector>
+#include <map>
+
+#include "Ref.h" // Include the header for Ref<>
+#include "WeakRef.h" // Include the header for WeakRef<>
+
+using namespace std;
+
+using UInt64 = unsigned long long;
+using Vec2F = float[2];
+
+// --- META ---
+META_BEGIN(KeyHandlesSheet)
+class KeyHandlesSheet
+{
+public:
+    typedef Ref<DragHandle> DragHandleRef;
     typedef Map<String, Vector<UInt64>>& _tmp5;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const KeyHandlesSheet&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<KeyHandlesSheet>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, Ref<AnimationClip>);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateInputDrawOrder);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RegTrackControl, ITrackControl*, const std::string&);
-    FUNCTION().PUBLIC().SIGNATURE(void, UnregTrackControl, ITrackControl*);
+    FUNCTION().PUBLIC().SIGNATURE(void, RegTrackControl, Ref<ITrackControl>, const std::string&);
+    FUNCTION().PUBLIC().SIGNATURE(void, UnregTrackControl, Ref<ITrackControl>);
     FUNCTION().PUBLIC().SIGNATURE(void, UnregAllTrackControls);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddHandle, DragHandle*);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveHandle, DragHandle*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedKeys, _tmp1);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddHandle, Ref<DragHandle>);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveHandle, Ref<DragHandle>);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedKeys, const _tmp1&);
     FUNCTION().PUBLIC().SIGNATURE(_tmp2, GetSelectedKeys);
-    FUNCTION().PUBLIC().SIGNATURE(void, DeleteKeys, _tmp3, bool);
-    FUNCTION().PUBLIC().SIGNATURE(ContextMenu*, GetContextMenu);
+    FUNCTION().PUBLIC().SIGNATURE(void, DeleteKeys, _tmp3&, bool);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<ContextMenu>, GetContextMenu);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeCenterHandle);
@@ -281,14 +351,14 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeRightHandle);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeContextMenu);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateSelectionFrame);
-    FUNCTION().PRIVATE().SIGNATURE(void, SerializeKeys, DataValue&, _tmp4, float);
-    FUNCTION().PRIVATE().SIGNATURE(void, DeserializeKeys, const DataValue&, _tmp5, float, bool);
+    FUNCTION().PRIVATE().SIGNATURE(void, SerializeKeys, Ref<DataValue>&, const _tmp4&, float);
+    FUNCTION().PRIVATE().SIGNATURE(void, DeserializeKeys, const Ref<DataValue>&, _tmp5&, float, bool);
     FUNCTION().PRIVATE().SIGNATURE(void, CopyKeys);
     FUNCTION().PRIVATE().SIGNATURE(void, PasteKeys);
     FUNCTION().PRIVATE().SIGNATURE(void, OnSelectionChanged);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorPressed, DragHandle*, const Input::Cursor&);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, DragHandle*, const Vec2F&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorPressed, Ref<DragHandle>, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorReleased, Ref<DragHandle>, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, Ref<DragHandle>, const Vec2F&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
@@ -305,6 +375,9 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorMiddleMousePressed, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorMiddleMouseStayDown, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorMiddleMouseReleased, const Input::Cursor&);
-}
+};
 END_META;
 // --- END META ---
+```
+
+Please note that we have replaced raw pointers with Ref<> and const Ref<>&. Additionally, any default nullptr values for class members of type Ref<> have been removed. If a class variable represents a "parent" relationship, we have used WeakRef<>. The mmake<> function has not been defined, so we cannot replace make_shared<>() with that. The dynamic_cast<type*> have been left unchanged as replacing them with DynamicCast<type> would require additional modifications.

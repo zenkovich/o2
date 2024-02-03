@@ -17,7 +17,7 @@ namespace Editor
 {
 	NameEditDlg::NameEditDlg()
 	{
-		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Enter name")));
+		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Enter name")));
 
 		InitializeControls();
 
@@ -34,8 +34,8 @@ namespace Editor
 			delete mWindow;
 	}
 
-	void NameEditDlg::Show(const String& name, Function<void(const String&)> onCompleted, 
-						   Function<void()> onCancelled /*= Function<void()>()*/)
+	void NameEditDlg::Show(const String& name, const Function<void(const String&)>& onCompleted,
+		const Function<void()>& onCancelled /*= Function<void()>()*/)
 	{
 		mInstance->mNameEditBox->SetText(name);
 		mInstance->mWindow->ShowModal();
@@ -50,19 +50,19 @@ namespace Editor
 
 	void NameEditDlg::InitializeControls()
 	{
-		auto verLayout = o2UI.CreateVerLayout();
+		auto verLayout = mmake<o2::VerticalLayout>();
 		verLayout->spacing = 10;
 
-		mNameEditBox = o2UI.CreateEditBox("singleline");
+		mNameEditBox = mmake<o2::EditBox>("singleline");
 		verLayout->AddChild(mNameEditBox);
 
-		auto horLayout =  o2UI.CreateHorLayout();
+		auto horLayout = mmake<o2::HorizontalLayout>();
 		horLayout->spacing = 10;
-		
-		auto okButton = o2UI.CreateButton("Ok", MakeFunction(this, &NameEditDlg::OnOkPressed));
+
+		auto okButton = mmake<o2::Button>("Ok", MakeFunction(this, &NameEditDlg::OnOkPressed));
 		horLayout->AddChild(okButton);
 
-		auto cancelButton = o2UI.CreateButton("Cancel", MakeFunction(this, &NameEditDlg::OnCancelPressed));
+		auto cancelButton = mmake<o2::Button>("Cancel", MakeFunction(this, &NameEditDlg::OnCancelPressed));
 		horLayout->AddChild(cancelButton);
 
 		verLayout->AddChild(horLayout);

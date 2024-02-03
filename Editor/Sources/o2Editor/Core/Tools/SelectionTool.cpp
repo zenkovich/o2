@@ -1,6 +1,4 @@
 #include "o2Editor/stdafx.h"
-#include "SelectionTool.h"
-
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Utils/Editor/SceneEditableObject.h"
@@ -8,12 +6,14 @@
 #include "o2Editor/Core/EditorApplication.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
+#include "o2Editor/Utils/Ref.h"
+#include "o2Editor/Utils/WeakRef.h"
 
 namespace Editor
 {
 	SelectionTool::SelectionTool()
 	{
-		mSelectionSprite = mnew Sprite("ui/UI_Window_place.png");
+		mSelectionSprite = mmake<Ref<Sprite>>("ui/UI_Window_place.png");
 	}
 
 	SelectionTool::~SelectionTool()
@@ -34,7 +34,7 @@ namespace Editor
 
 	void SelectionTool::DrawScene()
 	{
-		for (auto object : mCurrentSelectingObjects)
+		for (const Ref<SceneEditableObject>& object : mCurrentSelectingObjects)
 			o2EditorSceneScreen.DrawObjectSelection(object, o2EditorSceneScreen.GetManyObjectsSelectionColor());
 	}
 
@@ -55,7 +55,7 @@ namespace Editor
 		mSelectingObjects = false;
 	}
 
-	void SelectionTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void SelectionTool::OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{}
 
 	void SelectionTool::OnCursorPressed(const Input::Cursor& cursor)
@@ -68,25 +68,25 @@ namespace Editor
 		if (mSelectingObjects)
 		{
 			o2EditorSceneScreen.SelectObjectsWithoutAction(mCurrentSelectingObjects, true);
-			mCurrentSelectingObjects.Clear();
+			mCurrentSelectingObjects.clear();
 			mSelectingObjects = false;
 
-			auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(), mBeforeSelectingObjects);
+			const Ref<SelectAction>& selectionAction = mmake<Ref<SelectAction>>(o2EditorSceneScreen.GetSelectedObjects(), mBeforeSelectingObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 		else
 		{
 			bool selected = false;
-			Vec2F sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
-			auto& drawnObjects = o2Scene.GetDrawnEditableObjects();
+			const Vec2F& sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
+			const Vector<WeakRef<SceneEditableObject>> drawnObjects = o2Scene.GetDrawnEditableObjects();
 
-			int startIdx = drawnObjects.Count() - 1;
-			if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
-				startIdx = drawnObjects.IndexOf(o2EditorSceneScreen.GetSelectedObjects().Last()) - 1;
+			int startIdx = drawnObjects.size() - 1;
+			if (!o2EditorSceneScreen.GetSelectedObjects().empty())
+				startIdx = drawnObjects.IndexOf(o2EditorSceneScreen.GetSelectedObjects().back()) - 1;
 
 			for (int i = startIdx; i >= 0; i--)
 			{
-				auto object = drawnObjects[i];
+				const Ref<SceneEditableObject>& object = drawnObjects[i].Lock();
 				if (!object->IsLockedInHierarchy() && object->GetTransform().IsPointInside(sceneSpaceCursor))
 				{
 					mBeforeSelectingObjects = o2EditorSceneScreen.GetSelectedObjects();
@@ -98,8 +98,7 @@ namespace Editor
 					o2EditorTree.HighlightObjectTreeNode(object);
 					selected = true;
 
-					auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(),
-															 mBeforeSelectingObjects);
+					const Ref<SelectAction>& selectionAction = mmake<Ref<SelectAction>>(o2EditorSceneScreen.GetSelectedObjects(), mBeforeSelectingObjects);
 					o2EditorApplication.DoneAction(selectionAction);
 					break;
 				}
@@ -115,7 +114,7 @@ namespace Editor
 		if (mSelectingObjects)
 		{
 			mSelectingObjects = false;
-			mCurrentSelectingObjects.Clear();
+			mCurrentSelectingObjects.clear();
 		}
 	}
 
@@ -135,24 +134,25 @@ namespace Editor
 		{
 			mSelectionSprite->SetRect(RectF(mPressPoint, cursor.position));
 			RectF selectionRect(o2EditorSceneScreen.ScreenToScenePoint(cursor.position),
-								o2EditorSceneScreen.ScreenToScenePoint(mPressPoint));
+				o2EditorSceneScreen.ScreenToScenePoint(mPressPoint));
 
-			auto currentSelectedObjects = mCurrentSelectingObjects;
-			mCurrentSelectingObjects.Clear();
-			for (auto object : currentSelectedObjects)
+			Vector<Ref<SceneEditableObject>> currentSelectedObjects = mCurrentSelectingObjects;
+			mCurrentSelectingObjects.clear();
+			for (const Ref<SceneEditableObject>& object : currentSelectedObjects)
 			{
 				if (object->GetTransform().AABB().IsIntersects(selectionRect))
-					mCurrentSelectingObjects.Add(object);
+					mCurrentSelectingObjects.push_back(object);
 			}
 
-			auto& drawnObjects = o2Scene.GetDrawnEditableObjects();
-			for (auto object : drawnObjects)
+			const Vector<WeakRef<SceneEditableObject>> drawnObjects = o2Scene.GetDrawnEditableObjects();
+			for (const WeakRef<SceneEditableObject>& obj : drawnObjects)
 			{
-				if (mCurrentSelectingObjects.Contains(object))
+				if (mCurrentSelectingObjects.Contains(obj.Lock()))
 					continue;
 
+				const Ref<SceneEditableObject>& object = obj.Lock();
 				if (!object->IsLockedInHierarchy() && object->GetTransform().AABB().IsIntersects(selectionRect))
-					mCurrentSelectingObjects.Add(object);
+					mCurrentSelectingObjects.push_back(object);
 			}
 
 			mNeedRedraw = true;

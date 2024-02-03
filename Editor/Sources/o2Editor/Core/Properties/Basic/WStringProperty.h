@@ -2,6 +2,7 @@
 
 #include "o2/Utils/Property.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include <memory>
 
 using namespace o2;
 
@@ -15,13 +16,13 @@ namespace Editor
 	// -------------------------------
 	// Editor string property edit box
 	// -------------------------------
-	class WStringProperty: public TPropertyField<WString>
+	class WStringProperty : public TPropertyField<WString>
 	{
 	public:
 		// Default constructor
 		WStringProperty();
 
-		// Copy constructor
+		// Copy constructor		
 		WStringProperty(const WStringProperty& other);
 
 		// Copy operator
@@ -30,7 +31,7 @@ namespace Editor
 		IOBJECT(WStringProperty);
 
 	protected:
-		EditBox* mEditBox = nullptr; // Edit box 
+		Ref<EditBox> mEditBox; // Edit box 
 
 	protected:
 		// Updates value view
@@ -43,6 +44,7 @@ namespace Editor
 		void OnEdited(const WString& data);
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::WStringProperty)
@@ -52,14 +54,14 @@ CLASS_BASES_META(Editor::WStringProperty)
 END_META;
 CLASS_FIELDS_META(Editor::WStringProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<EditBox>()).NAME(mEditBox);
 }
 END_META;
 CLASS_METHODS_META(Editor::WStringProperty)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WStringProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<WStringProperty>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);

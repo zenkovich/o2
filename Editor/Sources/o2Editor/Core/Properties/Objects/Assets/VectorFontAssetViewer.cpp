@@ -6,42 +6,42 @@
 
 namespace Editor
 {
-	const Type* VectorFontAssetViewer::GetViewingObjectType() const
-	{
-		return GetViewingObjectTypeStatic();
-	}
+    const Type* VectorFontAssetViewer::GetViewingObjectType() const
+    {
+        return GetViewingObjectTypeStatic();
+    }
 
-	const Type* VectorFontAssetViewer::GetViewingObjectTypeStatic()
-	{
-		return &TypeOf(VectorFontAsset);
-	}
+    const Type* VectorFontAssetViewer::GetViewingObjectTypeStatic()
+    {
+        return &TypeOf(VectorFontAsset);
+    }
 
-	void VectorFontAssetViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		PushEditorScopeOnStack scope;
+    void VectorFontAssetViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+    {
+        PushEditorScopeOnStack scope;
 
-		mTexturePreview = mnew TexturePreview();
-		*mTexturePreview->layout = WidgetLayout::HorStretch(VerAlign::Middle, 0, 0, 300);
-		mTexturePreview->layout->minHeight = 300;
+        mTexturePreview = mmake<TexturePreview>(); // change to mmake<>()
+        *mTexturePreview->layout = WidgetLayout::HorStretch(VerAlign::Middle, 0, 0, 300);
+        mTexturePreview->layout->minHeight = 300;
 
-		mSpoiler->AddChild(mTexturePreview);
-	}
+        mSpoiler->AddChild(mTexturePreview);
+    }
 
-	void VectorFontAssetViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		if (!targetObjets.IsEmpty())
-		{
-			auto fontAsset = dynamic_cast<VectorFontAsset*>(targetObjets[0].first);
-			auto font = fontAsset->GetFont();
-			if (font)
-			{
-				mTexturePreview->SetTexture(font->GetTexture(), font->GetTextureSrcRect());
-				mTexturePreview->SetEnabled(true);
-			}
-			else
-				mTexturePreview->SetEnabled(false);
-		}
-	}
+    void VectorFontAssetViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+    {
+        if (!targetObjets.IsEmpty())
+        {
+            auto fontAsset = DynamicCast<VectorFontAsset>(targetObjets[0].first); // change dynamic_cast to DynamicCast<>
+            auto font = fontAsset->GetFont();
+            if (font)
+            {
+                mTexturePreview->SetTexture(font->GetTexture(), font->GetTextureSrcRect());
+                mTexturePreview->SetEnabled(true);
+            }
+            else
+                mTexturePreview->SetEnabled(false);
+        }
+    }
 
 }
 // --- META ---

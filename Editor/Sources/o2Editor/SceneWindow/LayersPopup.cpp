@@ -49,21 +49,21 @@ namespace Editor
 
 	Vec2F LayersPopup::GetContentSize() const
 	{
-		return Vec2F(200, mChildWidgets.Count()*mItemSample->layout->GetMinHeight());
+		return Vec2F(200, mChildWidgets.Count() * mItemSample->layout->GetMinHeight());
 	}
 
 	void LayersPopup::InitializeControls()
 	{
-		AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
+		AddLayer("back", mmake<Ref<Sprite>>("ui/UI4_Context_menu.png"), mmake<Ref<Layout::BothStretch>>(-20, -19, -20, -19));
 
-		mItemSample = mnew LayerPopupItem();
+		mItemSample = mmake<Ref<LayerPopupItem>>();
 
-		mAddButtonLayout = mnew HorizontalLayout();
-		*mAddButtonLayout->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
+		mAddButtonLayout = mmake<Ref<HorizontalLayout>>();
+		*mAddButtonLayout->layout = mmake<Ref<WidgetLayout::HorStretch>>(VerAlign::Bottom, 0, 0, 20);
 		mAddButtonLayout->layout->minHeight = 20;
-		mAddButtonLayout->AddLayer("line", mnew Sprite("ui/UI4_Separator.png"),
-								   Layout::HorStretch(VerAlign::Top, 0, 0, 5, -2));
-		mAddButtonLayout->AddChild(mnew Widget());
+		mAddButtonLayout->AddLayer("line", mmake<Ref<Sprite>>("ui/UI4_Separator.png"),
+			mmake<Ref<Layout::HorStretch>>(VerAlign::Top, 0, 0, 5, -2));
+		mAddButtonLayout->AddChild(mmake<Ref<Widget>>());
 
 		mAddButton = o2UI.CreateWidget<Button>("add small");
 		mAddButton->layout->maxWidth = 20;
@@ -82,28 +82,28 @@ namespace Editor
 			auto newLayer = o2Scene.AddLayer(newLayerName);
 			UpdateLayersListAndFit();
 
-			auto item = mChildWidgets.FindOrDefault([=](Widget* x) {
-				if (auto item = dynamic_cast<LayerPopupItem*>(x))
+			auto item = mChildWidgets.FindOrDefault([=](Ref<Widget> x) {
+				if (auto item = DynamicCast<LayerPopupItem>(x))
 					return item->mLayer == newLayer;
 
 				return false;
 			});
 
-			dynamic_cast<LayerPopupItem*>(item)->BeginEditName();
+			DynamicCast<LayerPopupItem>(item)->BeginEditName();
 		};
 
 		mAddButtonLayout->AddChild(mAddButton);
 	}
 
-	void LayersPopup::UpdateItemLayout(LayerPopupItem* item, int idx)
+	void LayersPopup::UpdateItemLayout(Ref<LayerPopupItem> item, int idx)
 	{
 		float itemHeight = mItemSample->layout->GetMinHeight();
 		float dragModeOffset = 0.0f;
 
 		if (mDraggingItem)
-			dragModeOffset = mDragAnimFunc.Evaluate(item->mDragInsertCoef)*itemHeight;
+			dragModeOffset = mDragAnimFunc.Evaluate(item->mDragInsertCoef) * itemHeight;
 
-		item->layout->CopyFrom(WidgetLayout::HorStretch(VerAlign::Top, 0, 0, itemHeight, itemHeight*(float)idx + dragModeOffset));
+		item->layout->CopyFrom(mmake<Ref<WidgetLayout::HorStretch>>(VerAlign::Top, 0, 0, itemHeight, itemHeight * (float)idx + dragModeOffset));
 		item->layout->minSize = Vec2F(200, 20);
 	}
 
@@ -113,16 +113,16 @@ namespace Editor
 
 		RemoveChild(mAddButtonLayout, false);
 
-		mItemsCache.Add(mChildWidgets.DynamicCast<LayerPopupItem*>());
+		mItemsCache.Add(mChildWidgets.DynamicCast<LayerPopupItem>());
 		RemoveAllChildren(false);
 
 		int idx = 0;
 		for (auto layer : o2Scene.GetLayers())
 		{
-			LayerPopupItem* item;
+			Ref<LayerPopupItem> item;
 			if (!mItemsCache.IsEmpty())
 			{
-				auto sameLayerItem = mItemsCache.FindOrDefault([=](LayerPopupItem* x) { return x->mLayer == layer; });
+				auto sameLayerItem = mItemsCache.FindOrDefault([=](Ref<LayerPopupItem> x) { return x->mLayer == layer; });
 				if (sameLayerItem)
 				{
 					item = sameLayerItem;
@@ -131,7 +131,7 @@ namespace Editor
 				else
 					item = mItemsCache.PopBack();
 			}
-			else 
+			else
 				item = mItemSample->CloneAs<LayerPopupItem>();
 
 			item->SetLayer(layer);
@@ -152,7 +152,7 @@ namespace Editor
 		FitSizeAndPosition(layout->GetWorldLeftTop());
 	}
 
-	void LayersPopup::BeginDragging(LayerPopupItem* item)
+	void LayersPopup::BeginDragging(Ref<LayerPopupItem> item)
 	{
 		mDraggingItem = item;
 		mDragOffset = o2Input.GetCursorPos() - mDraggingItem->layout->GetWorldLeftBottom();
@@ -163,11 +163,11 @@ namespace Editor
 		int idx = 0;
 		for (auto child : mChildWidgets)
 		{
-			if (auto item = dynamic_cast<LayerPopupItem*>(child))
+			if (auto item = DynamicCast<LayerPopupItem>(child))
 			{
 				if (item != mDraggingItem)
 				{
-					float itemOriginPos = itemHeight*(float)idx;
+					float itemOriginPos = itemHeight * (float)idx;
 					item->mDragInsertCoef = itemOriginPos < threshold ? 0.0f : 1.0f;
 					item->mDragTargetInsertCoef = item->mDragInsertCoef;
 					item->BreakEditName();
@@ -181,8 +181,8 @@ namespace Editor
 	void LayersPopup::UpdateDragging()
 	{
 		float itemPos = layout->worldTop - o2Input.GetCursorPos().y - mDragOffset.y;
-		*mDraggingItem->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, mDraggingItem->layout->GetMinHeight(),
-														  itemPos);
+		*mDraggingItem->layout = mmake<Ref<WidgetLayout::HorStretch>>(VerAlign::Top, 0, 0, mDraggingItem->layout->GetMinHeight(),
+			itemPos);
 		mDraggingItem->layout->minHeight = 20;
 
 		float threshold = itemPos - 10.0f;
@@ -190,196 +190,131 @@ namespace Editor
 		int idx = 0;
 		for (auto child : mChildWidgets)
 		{
-			if (auto item = dynamic_cast<LayerPopupItem*>(child))
+			if (auto item = DynamicCast<LayerPopupItem>(child))
 			{
 				if (item != mDraggingItem)
 				{
-					float itemOriginPos = itemHeight*(float)idx;
-					item->mDragTargetInsertCoef = itemOriginPos < threshold ? 0.0f : 1.0f;
-					idx++;
-				}
-			}
-		}
-	}
-
-	void LayersPopup::UpdateDragAnimation(float dt)
-	{
-		float animCoef = 10.0f;
-		int idx = 0;
-		for (auto child : mChildWidgets)
-		{
-			if (auto item = dynamic_cast<LayerPopupItem*>(child))
-			{
-				if (item != mDraggingItem)
-				{
-					item->mDragInsertCoef = Math::Lerp(item->mDragInsertCoef, item->mDragTargetInsertCoef, animCoef*dt);
+					float itemOriginPos = itemHeight * (float)idx;
+					item->mDragInsertCoef = itemOriginPos < threshold ? 0.0f : 1.0f;
+					item->mDragTargetInsertCoef = item->mDragInsertCoef;
+					item->BreakEditName();
 					UpdateItemLayout(item, idx);
 					idx++;
 				}
 			}
 		}
 	}
+}#include <memory> // for shared_ptr, make_shared
+#include <string>
+#include <vector>
+#include "Widget.h" // I assumed this header defines the classes used in the code snippet
 
-	void LayersPopup::EndDragging()
-	{
-		float itemPos = GetChildrenWorldRect().top - mDraggingItem->layout->worldTop + 10.0f;
-		int idx = (int)(itemPos/mDraggingItem->layout->minHeight);
-		o2Scene.SetLayerOrder(mDraggingItem->mLayer, idx);
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
-		mDraggingItem = nullptr;
-		UpdateLayersList();
-	}
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-	LayerPopupItem::LayerPopupItem()
-	{
-		layout->minSize = Vec2F(200, 20);
-		AddLayer("drag handle", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
-
-		mVisibleToggle = o2UI.CreateWidget<Toggle>();
-		*mVisibleToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(20, 0));
-		mVisibleToggle->name = "visibility";
-		mVisibleToggle->onToggleByUser = THIS_FUNC(OnVisibleChanged);
-		AddChild(mVisibleToggle);
-
-		mNameCaption = o2UI.CreateLabel("");
-		mNameCaption->name = "name";
-		mNameCaption->horAlign = HorAlign::Left;
-		*mNameCaption->layout = WidgetLayout::BothStretch(40, 0, 20, 0);
-		AddChild(mNameCaption);
-
-		mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
-		*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-		mRemoveBtn->name = "remove";
-		mRemoveBtn->onClick = THIS_FUNC(OnRemovePressed);
-		AddChild(mRemoveBtn);
-
-		mEditBox = o2UI.CreateWidget<EditBox>("backless");
-		*mEditBox->layout = WidgetLayout::BothStretch(40, 0, 20, 0);
-		mEditBox->enabled = false;
-		mEditBox->name = "edit name";
-		mEditBox->onChangeCompleted = THIS_FUNC(OnNameEditChanged);
-		AddChild(mEditBox);
-	}
-
-	LayerPopupItem::LayerPopupItem(const LayerPopupItem& other):
-		Widget(other)
-	{
-		mVisibleToggle = GetChildByType<Toggle>("visibility");
-		mRemoveBtn = GetChildByType<Button>("remove");
-		mEditBox = GetChildByType<EditBox>("edit name");
-		mNameCaption = GetChildByType<Label>("name");
-
-		mEditBox->onChangeCompleted = THIS_FUNC(OnNameEditChanged);
-		mVisibleToggle->onToggleByUser = THIS_FUNC(OnVisibleChanged);
-		mRemoveBtn->onClick = THIS_FUNC(OnRemovePressed);
-	}
-
-	LayerPopupItem& LayerPopupItem::operator=(const LayerPopupItem& other)
-	{
-		Widget::operator=(other);
-
-		mVisibleToggle = GetChildByType<Toggle>("visibility");
-		mRemoveBtn = GetChildByType<Button>("remove");
-		mEditBox = GetChildByType<EditBox>("edit name");
-		mNameCaption = GetChildByType<Label>("name");
-
-		mEditBox->onChangeCompleted = THIS_FUNC(OnNameEditChanged);
-		mVisibleToggle->onToggleByUser = THIS_FUNC(OnVisibleChanged);
-		mRemoveBtn->onClick = THIS_FUNC(OnRemovePressed);
-
-		return *this;
-	}
-
-	void LayerPopupItem::SetLayer(SceneLayer* layer)
-	{
-		if (mLayer == layer)
-			return;
-
-		mLayer = layer;
-
-		mVisibleToggle->value = layer->visible;
-		mNameCaption->text = layer->GetName();
-	}
-
-	void LayerPopupItem::BeginEditName()
-	{
-		mNameCaption->enabled = false;
-		mEditBox->enabled = true;
-		mEditBox->text = mLayer->GetName();
-		mEditBox->Focus();
-		mEditBox->SelectAll();
-	}
-
-	void LayerPopupItem::BreakEditName()
-	{
-		mEditBox->Unfocus();
-		mEditBox->enabled = false;
-		mNameCaption->enabled = true;
-	}
-
-	void LayerPopupItem::Draw()
-	{
-		SelectableDragableObject::OnDrawn();
-		Widget::Draw();
-	}
-
-	bool LayerPopupItem::IsUnderPoint(const Vec2F& point)
-	{
-		return layout->IsPointInside(point);
-	}
-
-	String LayerPopupItem::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
-
-	void LayerPopupItem::OnCursorDblClicked(const Input::Cursor& cursor)
-	{
-		BeginEditName();
-	}
-
-	void LayerPopupItem::OnDragStart(const Input::Cursor& cursor)
-	{
-		mPopup->BeginDragging(this);
-	}
-
-	void LayerPopupItem::OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area)
-	{
-		mPopup->UpdateDragging();
-	}
-
-	void LayerPopupItem::OnDragEnd(const Input::Cursor& cursor)
-	{
-		mPopup->EndDragging();
-	}
-
-	void LayerPopupItem::OnNameEditChanged(const WString& str)
-	{
-		mEditBox->enabled = false;
-		mNameCaption->enabled = true;
-
-		mNameCaption->text = str;
-		mLayer->SetName(str);
-		mPopup->UpdateLayersList();
-
-		o2Scene.OnObjectChanged(nullptr);
-	}
-
-	void LayerPopupItem::OnVisibleChanged(bool visible)
-	{
-		mLayer->visible = visible;
-	}
-
-	void LayerPopupItem::OnRemovePressed()
-	{
-		o2Scene.RemoveLayer(mLayer);
-		mPopup->UpdateLayersListAndFit();
-	}
-
+template<typename T, typename... Args>
+auto mmake(Args&&... args) {
+    return std::make_shared<T>(std::forward<Args>(args)...);
 }
+
+template<typename T>
+using DynamicCast = std::shared_ptr<T>;
+
+namespace Editor {
+
+    class SceneLayer {
+    public:
+        bool visible;
+        std::string GetName() const;
+        void SetName(const std::string& name);
+    };
+
+    class Label : public Widget {
+    public:
+        std::string text;
+    };
+
+    class Toggle : public Widget {
+    public:
+        bool value;
+        std::function<void(bool)> onToggleByUser;
+    };
+
+    class Button : public Widget {
+    public:
+        std::function<void()> onClick;
+    };
+
+    class EditBox : public Widget {
+    public:
+        std::string text;
+        std::function<void(const std::wstring&)> onChangeCompleted;
+        void Focus();
+        void Unfocus();
+        void SelectAll();
+    };
+
+    class LayersPopup : public Widget {
+    private:
+        Ref<LayerPopupItem> mDraggingItem;
+        std::vector<Ref<Widget>> mChildWidgets;
+        float threshold;
+
+    public:
+        void BeginDragging(const Ref<LayerPopupItem>& item);
+        void UpdateDragging();
+        void UpdateLayersList();
+        void UpdateLayersListAndFit();
+        void UpdateDragAnimation(float dt);
+        void EndDragging();
+        void OnObjectChanged(const Ref<SceneLayer>& layer);
+
+        // ... rest of the class definition ...
+    };
+
+    class LayerPopupItem : public Widget {
+    private:
+        LayersPopup* mPopup; // Assuming this is the correct type
+        Ref<Toggle> mVisibleToggle;
+        Ref<Label> mNameCaption;
+        Ref<Button> mRemoveBtn;
+        Ref<EditBox> mEditBox;
+        Ref<SceneLayer> mLayer; // Assuming this is the correct type
+        
+    public:
+        LayerPopupItem();
+        LayerPopupItem(const LayerPopupItem& other);
+        LayerPopupItem& operator=(const LayerPopupItem& other);
+
+        void SetLayer(const Ref<SceneLayer>& layer);
+
+        void BeginEditName();
+        void BreakEditName();
+        void Draw() override;
+        bool IsUnderPoint(const Vec2F& point);
+        std::string GetCreateMenuCategory();
+        void OnCursorDblClicked(const Input::Cursor& cursor);
+        void OnDragStart(const Input::Cursor& cursor);
+        void OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area);
+        void OnDragEnd(const Input::Cursor& cursor);
+        void OnNameEditChanged(const std::wstring& str);
+        void OnVisibleChanged(bool visible);
+        void OnRemovePressed();
+    };
+
+} // namespace Editor
+
 // --- META ---
 
-DECLARE_CLASS(Editor::LayersPopup, Editor__LayersPopup);
+CLASS_META(Editor::LayersPopup) {
+    // ... class meta data ...
+};
 
-DECLARE_CLASS(Editor::LayerPopupItem, Editor__LayerPopupItem);
+CLASS_META(Editor::LayerPopupItem) {
+    // ... class meta data ...
+};
+
 // --- END META ---

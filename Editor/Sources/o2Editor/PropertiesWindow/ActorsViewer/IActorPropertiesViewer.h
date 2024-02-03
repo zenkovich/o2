@@ -9,99 +9,82 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
-	class Component;
-	class Widget;
+    class Actor;
+    class Component;
+    class Widget;
 }
 
 namespace Editor
 {
-	class SpoilerWithHead;
+    class SpoilerWithHead;
 
-	// ----------------------------------------
-	// Editor actor properties viewer interface
-	// ----------------------------------------
-	class IActorPropertiesViewer: public IObject
-	{
-	public:
-		// Default constructor. Initializes data widget
-		IActorPropertiesViewer();
+    class IActorPropertiesViewer : public IObject
+    {
+    public:
+        IActorPropertiesViewer();
 
-		// Virtual destructor
-		virtual ~IActorPropertiesViewer();
+        virtual ~IActorPropertiesViewer();
 
-		// Sets target actors
-		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
+        virtual void SetTargetActors(const Vector<Ref<const Actor>>& actors) {}
 
-		// Returns viewing actor type 
-		virtual const Type* GetActorType() const { return nullptr; }
+        virtual const Type* GetActorType() const { return nullptr; }
 
-		// Returns data widget
-		virtual Widget* GetWidget() const;
+        virtual const Ref<Widget>& GetWidget() const;
 
-		// Expands view
-		void Expand();
+        void Expand();
 
-		// Collapse view
-		void Collapse();
+        void Collapse();
 
-		// Updates all actor values
-		virtual void Refresh();
+        virtual void Refresh();
 
-		// Returns is there no properties
-		virtual bool IsEmpty() const;
+        virtual bool IsEmpty() const;
 
-		// Sets viewer enabled
-		void SetEnabled(bool enabled);
+        void SetEnabled(bool enabled);
 
-		// Returns is viewer enabled
-		bool IsEnabled() const;
+        bool IsEnabled() const;
 
-		IOBJECT(IActorPropertiesViewer);
+        IOBJECT(IActorPropertiesViewer);
 
-	protected:
-		SpoilerWithHead* mSpoiler = nullptr;
+    protected:
+        Ref<SpoilerWithHead> mSpoiler = nullptr;
 
-		bool mEnabled = false; // Is viewer enabled 
+        bool mEnabled = false;
 
-	protected:
-		// Enable viewer event function
-		virtual void OnEnabled() {}
+    protected:
+        virtual void OnEnabled() {}
 
-		// Disable viewer event function
-		virtual void OnDisabled() {}
+        virtual void OnDisabled() {}
 
-		friend class ActorViewer;
-	};
+        friend class ActorViewer;
+    };
 }
-// --- META ---
 
 CLASS_BASES_META(Editor::IActorPropertiesViewer)
 {
     BASE_CLASS(o2::IObject);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::IActorPropertiesViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(Ref<SpoilerWithHead>()).NAME(mSpoiler),
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled)
 }
 END_META;
+
 CLASS_METHODS_META(Editor::IActorPropertiesViewer)
 {
-
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetActorType);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
-    FUNCTION().PUBLIC().SIGNATURE(void, Expand);
-    FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
-    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().CONSTRUCTOR(),
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Ref<const Actor>>&),
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetActorType),
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetWidget),
+    FUNCTION().PUBLIC().SIGNATURE(void, Expand),
+    FUNCTION().PUBLIC().SIGNATURE(void, Collapse),
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh),
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty),
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool),
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled),
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled),
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled)
 }
 END_META;
-// --- END META ---

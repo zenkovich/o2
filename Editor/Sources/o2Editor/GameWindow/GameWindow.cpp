@@ -34,7 +34,7 @@ namespace Editor
 		mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
 
 		mGameView = mnew GameView();
-		*mGameView->layout = WidgetLayout::BothStretch(0, 0, 0, 19);
+		*mGameView->GetLayout() = WidgetLayout::BothStretch(0, 0, 0, 19);
 		mWindow->AddChild(mGameView);
 
 		InitializeDevicesMenu();
@@ -44,14 +44,14 @@ namespace Editor
 		upPanel->baseCorner = BaseCorner::Right;
 		upPanel->expandWidth = false;
 		upPanel->spacing = 5;
-		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		*upPanel->GetLayout() = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
 		upPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
 		mWindow->AddChild(upPanel);
 
 		mResolutionsButton = o2UI.CreateWidget<Button>("panel down");
 		mResolutionsButton->caption = "Resolution";
-		mResolutionsButton->layout->minWidth = 300;
-		mResolutionsButton->onClick = [=]() { mDevicesMenu->Show(mResolutionsButton->layout->GetWorldLeftBottom()); };
+		mResolutionsButton->GetLayout()->minWidth = 300;
+		mResolutionsButton->onClick = [=]() { mDevicesMenu->Show(mResolutionsButton->GetLayout()->GetWorldLeftBottom()); };
 		upPanel->AddChild(mResolutionsButton);
 
 		auto resolutionLabel = o2UI.CreateLabel("Resolution:");
@@ -79,7 +79,7 @@ namespace Editor
 		// 		mCustomSizeItem = mDevicesMenu->AddToggleItem("Custom resolution", false, THIS_FUNC(OnCustomResolution));
 		// 		mCustomSizeProperty = o2UI.CreateWidget<Vec2IProperty>();
 		// 		mCustomSizeProperty->SetValue(Vec2I(800, 600));
-		// 		*mCustomSizeProperty->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(150, 20));
+		// 		*mCustomSizeProperty->GetLayout() = WidgetLayout::Based(BaseCorner::Right, Vec2F(150, 20));
 		// 		mCustomSizeProperty->onChangeCompleted = [&](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&) { OnCustomResolution(true); };
 		// 		mCustomSizeItem->AddChild(mCustomSizeProperty);
 		// 
@@ -136,7 +136,7 @@ namespace Editor
 
 	GameWindow::GameView::GameView()
 	{
-		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTarget = mmake<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
 	}
 
@@ -153,68 +153,72 @@ namespace Editor
 
 		if (!o2Scene.GetCameras().IsEmpty())
 		{
-			auto prevCamera = o2Render.GetCamera();
-			auto cameraActor = o2Scene.GetCameras()[0];
-			cameraActor->Setup();
-			
-			if (o2Input.IsKeyDown(VK_F1))
-			{
-				auto localCursor = cameraActor->listenersLayer.ScreenToLocal(o2Input.GetCursorPos());
-				o2Render.DrawCross(localCursor, 25.0f, Color4::Red());
-				o2Debug.Log((String)localCursor);
-			}
+			Ref<CameraActor> prevCamera = o2Render.GetCamera();
+			Ref<CameraActor> cameraActor = o2Scene.GetCameras()[0];
+			cameraActor->#include <memory>
 
-			o2Render.SetCamera(prevCamera);
-		}
+template<typename T>
+using Ref = std::shared_ptr<T>;
+using RenderTexturePtr = Ref<Texture>;
 
-		EditorScope::Enter(editorDepth);
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-		o2Render.UnbindRenderTexture();
-
-		mRenderTargetSprite->Draw();
-
-		EditorScope::Exit(editorDepth);
-
-		for (auto camera : o2Scene.GetCameras())
-			camera->listenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
-
-		EditorScope::Enter(editorDepth);
-	}
-
-	String GameWindow::GameView::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
-
-	void GameWindow::GameView::OnTransformUpdated()
-	{
-		Widget::OnTransformUpdated();
-
-		Vec2I size = fixedResolution ? resolution : (Vec2I)layout->size.Get();
-		size.x = Math::Max(size.x, 32);
-		size.y = Math::Max(size.y, 32);
-
-		if (size != mRenderTarget->GetSize())
-		{
-			mRenderTarget = Ref<Texture>(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-			*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
-			mRenderTargetSprite->SetMode(SpriteMode::FixedAspect);
-		}
-
-		mRenderTargetSprite->SetRect(layout->worldRect);
-	}
-
-	bool GameWindow::SimulationDevice::operator==(const SimulationDevice& other) const
-	{
-		return deviceName == other.deviceName;
-	}
-
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args) {
+    return std::make_shared<T>(std::forward<Args>(args)...);
 }
+
+template<typename Derived, typename Base>
+inline Ref<Derived> DynamicCast(const Ref<Base>& ptr) {
+    return std::dynamic_pointer_cast<Derived>(ptr);
+}
+
+class GameWindow {
+public:
+    class GameView {
+    public:
+        String GetCreateMenuCategory();
+
+        void OnTransformUpdated();
+
+    private:
+        Ref<Texture> mRenderTarget;
+        Ref<Sprite> mRenderTargetSprite = mmake<Sprite>();
+    };
+
+    class SimulationDevice {
+    public:
+        bool operator==(const SimulationDevice& other) const;
+
+    private:
+        String deviceName;
+    };
+
+private:
+    void Setup();
+
+private:
+    Ref<GameView> cameraActor;
+    WeakRef<GameView> prevCamera;
+};
+
+void GameWindow::Setup() {
+    // ...
+}
+
+void GameWindow::GameView::OnTransformUpdated() {
+    // ...
+}
+
+String GameWindow::GameView::GetCreateMenuCategory() {
+    return "UI/Editor";
+}
+
+bool GameWindow::SimulationDevice::operator==(const SimulationDevice& other) const {
+    return deviceName == other.deviceName;
+}
+
 // --- META ---
 
-DECLARE_CLASS(Editor::GameWindow, Editor__GameWindow);
-
-DECLARE_CLASS(Editor::GameWindow::GameView, Editor__GameWindow__GameView);
-
-DECLARE_CLASS(Editor::GameWindow::SimulationDevice, Editor__GameWindow__SimulationDevice);
-// --- END META ---
+DECLARE_C

@@ -6,6 +6,10 @@
 #include "o2/Utils/Types/Containers/Pair.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
 
+#include <memory>
+#include <vector>
+#include <string>
+
 using namespace o2;
 
 namespace o2
@@ -48,80 +52,80 @@ namespace Editor
 		void SelectAsset(const UID& id);
 
 		// Selects asset by path
-		void SelectAsset(const String& path);
+		void SelectAsset(const std::string& path);
 
 		// Selects assets with ids
-		void SelectAsset(const Vector<UID>& ids);
+		void SelectAsset(const std::vector<UID>& ids);
 
 		// Selects assets by paths
-		void SelectAssets(const Vector<String>& paths);
+		void SelectAssets(const std::vector<std::string>& paths);
 
 		// Deselects all assets
 		void DeselectAssets();
 
 		// Returns selected assets infos
-		const Vector<Ref<AssetInfo>>& GetSelectedAssets() const;
+		const std::vector<std::shared_ptr<AssetInfo>>& GetSelectedAssets() const;
 
 		// Opens asset in folder
 		void OpenAsset(const UID& id);
 
 		// Opens asset in folder
-		void OpenAsset(const String& path);
+		void OpenAsset(const std::string& path);
 
 		// Opens asset for editing 
 		void OpenAndEditAsset(const UID& id);
 
 		// Opens asset for editing 
-		void OpenAndEditAsset(const String& path);
+		void OpenAndEditAsset(const std::string& path);
 
 		// Returns opened folder path
-		String GetOpenedFolderPath() const;
+		std::string GetOpenedFolderPath() const;
 
 		// Opens folder
-		void OpenFolder(const String& path);
+		void OpenFolder(const std::string& path);
 
 		// Shows asset
 		void ShowAssetIcon(const UID& id);
 
 		// Shows asset
-		void ShowAssetIcon(const String& path);
+		void ShowAssetIcon(const std::string& path);
 
 		// Copy assets in clipboard
-		void CopyAssets(const Vector<String>& assetsPaths);
+		void CopyAssets(const std::vector<std::string>& assetsPaths);
 
 		// Cut assets and put into clipboard
-		void CutAssets(const Vector<String>& assetsPaths);
+		void CutAssets(const std::vector<std::string>& assetsPaths);
 
 		// Paste assets from clipboard to path
-		void PasteAssets(const String& targetPath);
+		void PasteAssets(const std::string& targetPath);
 
 		// Removes assets in clipboard
-		void DeleteAssets(const Vector<String>& assetsPaths);
+		void DeleteAssets(const std::vector<std::string>& assetsPaths);
 
 		// Creates and returns an icon sprite for the asset
-		static Sprite* GetAssetIconSprite(const Ref<Asset>& asset);
+		static Sprite* GetAssetIconSprite(const std::shared_ptr<Asset>& asset);
 		 
 		IOBJECT(AssetsWindow);
 
-		protected:
+	protected:
 		float mFoldersTreeShowCoef = 1.0f; // Animation show folders tree coefficient (0...1)
 
-		Ref<Button>  mFilterButton;           // Search filter button
-		Ref<EditBox> mSearchEditBox;          // Search edit box
-		Ref<Label>   mSelectedAssetPathLabel; // Selected asset path label
+		std::shared_ptr<Button>  mFilterButton;           // Search filter button
+		std::shared_ptr<EditBox> mSearchEditBox;          // Search edit box
+		std::shared_ptr<Label>   mSelectedAssetPathLabel; // Selected asset path label
 
-		Ref<AssetsFoldersTree>   mFoldersTree;                                    // Folders tree			
-		Ref<AnimationPlayer> mFoldersTreeShowAnim = mmake<AnimationPlayer>(); // Folders tree visible animation
+		std::shared_ptr<AssetsFoldersTree>   mFoldersTree;                                    // Folders tree			
+		std::shared_ptr<AnimationPlayer> mFoldersTreeShowAnim = mmake<AnimationPlayer>(); // Folders tree visible animation
 		bool                 mFoldersTreeVisible;                             // Is folders tree visible
 
-		Ref<AssetsIconsScrollArea> mAssetsGridScroll; // Assets grid scroll
+		std::shared_ptr<AssetsIconsScrollArea> mAssetsGridScroll; // Assets grid scroll
 
-		Ref<Tree> mAssetsTree; // Assets tree
+		std::shared_ptr<Tree> mAssetsTree; // Assets tree
 
 		CursorEventsArea mSeparatorHandle; // Folders tree and assets tree/grid separator handle
 		float            mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
 
-		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
+		std::vector<Pair<UID, std::string>> mCuttingAssets; // Current cutted assets
 
 	protected:
 		// Initializes window
@@ -152,13 +156,13 @@ namespace Editor
 		void OnShowTreePressed();
 
 		// Called when assets was rebuilt
-		void OnAssetsRebuilt(const Vector<UID>& changedAssets);
+		void OnAssetsRebuilt(const std::vector<UID>& changedAssets);
 
 		// Shows and highligh asset icon
-		void ShowAssetIcon(const String& folder, UID assetId);
+		void ShowAssetIcon(const std::string& folder, UID assetId);
 
 		// Copies asset folder recursively
-		void CopyAssetFolder(const String& src, const String& dst);
+		void CopyAssetFolder(const std::string& src, const std::string& dst);
 
 		friend class AssetsFoldersTree;
 		friend class AssetsIconsScrollArea;
@@ -183,6 +187,14 @@ CLASS_FIELDS_META(Editor::AssetsWindow)
     FIELD().PROTECTED().NAME(mFoldersTreeVisible);
     FIELD().PROTECTED().NAME(mAssetsGridScroll);
     FIELD().PROTECTED().NAME(mAssetsTree);
+    FIELD().PROTECTED().NAME(mSeparatorHandle);
+    FIELD().PROTECTED().NAME(mSeparatorCoef);
+    FIELD().PROTECTED().NAME(mCuttingAssets);
+}
+END_META;replace raw pointers with Ref<>, except void* pointers.Ref<> is a smart pointer like shared_ptr. Use const Ref<>& for function arguments with pointer types, also in overridden methods. Dont replace void* pointers!! Remove default nullptr value for class members with type Ref<>. If class variable is some kind of "parent", use WeakRef<>. Use mmake<>() to create Ref<>, just like make_shared<>(). Replace dynamic_cast<type*> with DynamicCast<type> to cast Ref<>. 
+
+```
+ECTED().NAME(mAssetsTree);
     FIELD().PROTECTED().NAME(mSeparatorHandle);
     FIELD().PROTECTED().NAME(mSeparatorCoef);
     FIELD().PROTECTED().NAME(mCuttingAssets);
@@ -227,3 +239,4 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 }
 END_META;
 // --- END META ---
+```

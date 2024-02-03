@@ -3,6 +3,8 @@
 #include "o2/Events/CursorEventsArea.h"
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2/Utils/Ref.h"
+#include "o2/Utils/WeakRef.h"
 
 using namespace o2;
 
@@ -16,7 +18,7 @@ namespace Editor
 	// --------------------------------
 	// Editor integer property edit box
 	// --------------------------------
-	class IntegerProperty: public TPropertyField<int>, public KeyboardEventsListener
+	class IntegerProperty : public TPropertyField<int>, public KeyboardEventsListener
 	{
 	public:
 		// Default constructor
@@ -31,8 +33,8 @@ namespace Editor
 		IOBJECT(IntegerProperty);
 
 	protected:
-		EditBox*         mEditBox = nullptr;        // Edit box 
-		CursorEventsArea mDragHangle;               // Value changing drag handle
+		Ref<EditBox> mEditBox;        // Edit box
+		CursorEventsArea mDragHangle; // Value changing drag handle
 
 	protected:
 		// Updates value view
@@ -53,11 +55,12 @@ namespace Editor
 		// Called when change value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Called when change value move handle  released, turns off cursor infinite mode, 
+		// Called when change value move handle  released, turns off cursor infinite mode,
 		// checks value was changed then calls value change completed event
 		void OnMoveHandleReleased(const Input::Cursor& cursor);
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::IntegerProperty)
@@ -66,15 +69,16 @@ CLASS_BASES_META(Editor::IntegerProperty)
     BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::IntegerProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mEditBox);
     FIELD().PROTECTED().NAME(mDragHangle);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::IntegerProperty)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const IntegerProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
@@ -86,4 +90,3 @@ CLASS_METHODS_META(Editor::IntegerProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandleReleased, const Input::Cursor&);
 }
 END_META;
-// --- END META ---

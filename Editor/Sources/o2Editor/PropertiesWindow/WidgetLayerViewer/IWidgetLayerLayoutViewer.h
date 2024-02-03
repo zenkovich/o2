@@ -4,6 +4,7 @@
 #include "o2/Utils/Reflection/Reflection.h"
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/SmartPointers/Ref.h"
 
 using namespace o2;
 
@@ -30,10 +31,10 @@ namespace Editor
 		virtual ~IWidgetLayerLayoutViewer();
 
 		// Sets target actors
-		virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
+		virtual void SetTargetLayers(const Vector<Ref<WidgetLayer>>& layers) {}
 
 		// Returns data widget
-		virtual Widget* GetWidget() const;
+		virtual Ref<Widget> GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -53,9 +54,8 @@ namespace Editor
 		IOBJECT(IWidgetLayerLayoutViewer);
 
 	protected:
-		SpoilerWithHead* mSpoiler = nullptr;
-
-		bool mEnabled = false; // Is viewer enabled 
+		Ref<SpoilerWithHead> mSpoiler;
+		bool mEnabled;
 
 	protected:
 		// Enable viewer event function
@@ -65,6 +65,7 @@ namespace Editor
 		virtual void OnDisabled() {}
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::IWidgetLayerLayoutViewer)
@@ -72,18 +73,19 @@ CLASS_BASES_META(Editor::IWidgetLayerLayoutViewer)
     BASE_CLASS(o2::IObject);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::IWidgetLayerLayoutViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+    FIELD().PROTECTED().NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mEnabled);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::IWidgetLayerLayoutViewer)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<Ref<WidgetLayer>>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

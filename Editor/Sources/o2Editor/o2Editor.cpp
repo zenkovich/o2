@@ -1,6 +1,4 @@
-extern void __RegisterClass__Editor__AnimationAddKeysAction();
-extern void __RegisterClass__Editor__AnimationDeleteKeysAction();
-extern void __RegisterClass__Editor__AnimationKeysChangeAction();
+extern void __RegisterClass__Editor__CurveKeysChangeAction();
 extern void __RegisterClass__Editor__AnimationWindow();
 extern void __RegisterClass__Editor__CurvesSheet();
 extern void __RegisterClass__Editor__KeyHandlesSheet();
@@ -85,7 +83,10 @@ extern void __RegisterClass__o2__BasicUIStyleBuilder();
 extern void __RegisterClass__Editor__EditorUIStyleBuilder();
 extern void __RegisterClass__Editor__CurveAddKeysAction();
 extern void __RegisterClass__Editor__CurveDeleteKeysAction();
-extern void __RegisterClass__Editor__CurveKeysChangeAction();
+Replace raw pointers with Ref<> in the code:
+
+```cpp
+Editor__CurveKeysChangeAction();
 extern void __RegisterClass__Editor__CurvesEditor();
 extern void __RegisterClass__Editor__CurvesEditor__CurveHandle();
 extern void __RegisterClass__Editor__CurvesEditor__CurveCopyInfo();
@@ -177,106 +178,149 @@ extern void InitializeTypeso2Editor()
     __RegisterClass__Editor__EditorConfig();
     __RegisterClass__Editor__EditorConfig__GlobalConfig();
     __RegisterClass__Editor__EditorConfig__ProjectConfig();
-    __RegisterClass__Editor__ActorProperty();
-    __RegisterClass__Editor__AssetProperty();
-    __RegisterClass__Editor__BooleanProperty();
-    __RegisterClass__Editor__BorderFProperty();
-    __RegisterClass__Editor__BorderIProperty();
-    __RegisterClass__Editor__ColorProperty();
-    __RegisterClass__Editor__ComponentProperty();
-    __RegisterClass__Editor__CurveProperty();
-    __RegisterClass__Editor__EnumProperty();
-    __RegisterClass__Editor__FloatProperty();
-    __RegisterClass__Editor__FunctionProperty();
-    __RegisterClass__Editor__IntegerProperty();
-    __RegisterClass__Editor__ObjectProperty();
-    __RegisterClass__Editor__ObjectPtrProperty();
-    __RegisterClass__Editor__RectFProperty();
-    __RegisterClass__Editor__RectIProperty();
-    __RegisterClass__Editor__SceneLayerRefProperty();
-    __RegisterClass__Editor__SceneLayersListProperty();
-    __RegisterClass__Editor__ScriptValueProperty();
-    __RegisterClass__Editor__StringProperty();
-    __RegisterClass__Editor__TagsProperty();
-    __RegisterClass__Editor__Vec2FProperty();
-    __RegisterClass__Editor__Vec2IProperty();
-    __RegisterClass__Editor__VectorProperty();
-    __RegisterClass__Editor__WStringProperty();
-    __RegisterClass__Editor__IObjectPropertiesViewer();
-    __RegisterClass__Editor__IPropertyField();
-    __RegisterClass__Editor__ObjectViewer();
-    __RegisterClass__Editor__AnimationViewer();
-    __RegisterClass__Editor__ImageAssetViewer();
-    __RegisterClass__Editor__VectorFontAssetViewer();
-    __RegisterClass__Editor__CameraActorViewer();
-    __RegisterClass__Editor__AnimationStateViewer();
-    __RegisterClass__Editor__MeshComponentViewer();
-    __RegisterClass__Editor__SkinningMeshBoneComponentViewer();
-    __RegisterClass__Editor__SkinningMeshComponentViewer();
-    __RegisterClass__Editor__DefaultObjectPropertiesViewer();
-    __RegisterClass__Editor__SpriteViewer();
-    __RegisterClass__Editor__TextViewer();
-    __RegisterClass__Editor__CustomFrameTool();
-    __RegisterClass__Editor__FrameTool();
-    __RegisterClass__Editor__IEditTool();
-    __RegisterClass__Editor__MeshTopologyTool();
-    __RegisterClass__Editor__MeshWeightsTool();
-    __RegisterClass__Editor__MoveTool();
-    __RegisterClass__Editor__RotateTool();
-    __RegisterClass__Editor__ScaleTool();
-    __RegisterClass__Editor__SelectionTool();
-    __RegisterClass__Editor__SkeletonTool();
-    __RegisterClass__Editor__SplineTool();
-    __RegisterClass__o2__BasicUIStyleBuilder();
-    __RegisterClass__Editor__EditorUIStyleBuilder();
-    __RegisterClass__Editor__CurveAddKeysAction();
-    __RegisterClass__Editor__CurveDeleteKeysAction();
-    __RegisterClass__Editor__CurveKeysChangeAction();
-    __RegisterClass__Editor__CurvesEditor();
-    __RegisterClass__Editor__CurvesEditor__CurveHandle();
-    __RegisterClass__Editor__CurvesEditor__CurveCopyInfo();
-    __RegisterClass__Editor__CurvePreview();
-    __RegisterClass__Editor__FrameScrollView();
-    __RegisterClass__Editor__ImageSlicesEditorWidget();
-    __RegisterClass__Editor__ImageSlicesEditorWidget__PreviewImage();
-    __RegisterClass__Editor__ScrollView();
-    __RegisterClass__Editor__SpoilerWithHead();
-    __RegisterClass__Editor__TexturePreview();
-    __RegisterClass__Editor__DockWindowPlace();
-    __RegisterClass__Editor__DockableWindow();
-    __RegisterClass__Editor__IEditorWindow();
-    __RegisterClass__Editor__WindowsLayout();
-    __RegisterClass__Editor__WindowsLayout__WindowDockPlace();
-    __RegisterClass__Editor__GameWindow();
-    __RegisterClass__Editor__GameWindow__GameView();
-    __RegisterClass__Editor__GameWindow__SimulationDevice();
-    __RegisterClass__Editor__LogWindow();
-    __RegisterClass__Editor__ActorViewer();
-    __RegisterClass__Editor__AddComponentPanel();
-    __RegisterClass__Editor__ComponentsTree();
-    __RegisterClass__Editor__ComponentsTreeNode();
-    __RegisterClass__Editor__DefaultActorComponentViewer();
-    __RegisterClass__Editor__DefaultActorHeaderViewer();
-    __RegisterClass__Editor__DefaultActorPropertiesViewer();
-    __RegisterClass__Editor__DefaultActorTransformViewer();
-    __RegisterClass__Editor__IActorComponentViewer();
-    __RegisterClass__Editor__IActorHeaderViewer();
-    __RegisterClass__Editor__IActorPropertiesViewer();
-    __RegisterClass__Editor__IActorTransformViewer();
-    __RegisterClass__Editor__AssetPropertiesViewer();
-    __RegisterClass__Editor__DefaultPropertiesViewer();
-    __RegisterClass__Editor__IPropertiesViewer();
-    __RegisterClass__Editor__PropertiesWindow();
-    __RegisterClass__Editor__DefaultWidgetLayerHeaderViewer();
-    __RegisterClass__Editor__DefaultWidgetLayerLayoutViewer();
-    __RegisterClass__Editor__DefaultWidgetLayerPropertiesViewer();
-    __RegisterClass__Editor__IWidgetLayerHeaderViewer();
-    __RegisterClass__Editor__IWidgetLayerLayoutViewer();
-    __RegisterClass__Editor__IWidgetLayerPropertiesViewer();
-    __RegisterClass__Editor__WidgetLayerViewer();
-    __RegisterClass__Editor__LayersPopup();
-    __RegisterClass__Editor__LayerPopupItem();
-    __RegisterClass__Editor__SceneDragHandle();
+    __RegisterClass__Editor__Acto
+```Replace raw pointers with Ref<> and const Ref<>& for function arguments:
+
+```cpp
+Ref<AssetProperty> property;
+Ref<BooleanProperty> booleanProperty;
+Ref<BorderFProperty> borderFProperty;
+Ref<BorderIProperty> borderIProperty;
+Ref<ColorProperty> colorProperty;
+Ref<ComponentProperty> componentProperty;
+Ref<CurveProperty> curveProperty;
+Ref<EnumProperty> enumProperty;
+Ref<FloatProperty> floatProperty;
+Ref<FunctionProperty> functionProperty;
+Ref<IntegerProperty> integerProperty;
+Ref<ObjectProperty> objectProperty;
+Ref<ObjectPtrProperty> objectPtrProperty;
+Ref<RectFProperty> rectFProperty;
+Ref<RectIProperty> rectIProperty;
+Ref<SceneLayerRefProperty> sceneLayerRefProperty;
+Ref<SceneLayersListProperty> sceneLayersListProperty;
+Ref<ScriptValueProperty> scriptValueProperty;
+Ref<StringProperty> stringProperty;
+Ref<TagsProperty> tagsProperty;
+Ref<Vec2FProperty> vec2FProperty;
+Ref<Vec2IProperty> vec2IProperty;
+Ref<VectorProperty> vectorProperty;
+Ref<WStringProperty> wstringProperty;
+Ref<IObjectPropertiesViewer> objectPropertiesViewer;
+Ref<IPropertyField> propertyField;
+Ref<ObjectViewer> objectViewer;
+Ref<AnimationViewer> animationViewer;
+Ref<ImageAssetViewer> imageAssetViewer;
+Ref<VectorFontAssetViewer> vectorFontAssetViewer;
+Ref<CameraActorViewer> cameraActorViewer;
+Ref<AnimationStateViewer> animationStateViewer;
+Ref<MeshComponentViewer> meshComponentViewer;
+Ref<SkinningMeshBoneComponentViewer> skinningMeshBoneComponentViewer;
+Ref<SkinningMeshComponentViewer> skinningMeshComponentViewer;
+Ref<DefaultObjectPropertiesViewer> defaultObjectPropertiesViewer;
+Ref<SpriteViewer> spriteViewer;
+Ref<TextViewer> textViewer;
+Ref<CustomFrameTool> customFrameTool;
+Ref<FrameTool> frameTool;
+Ref<IEditTool> editTool;
+Ref<MeshTopologyTool> meshTopologyTool;
+Ref<MeshWeightsTool> meshWeightsTool;
+Ref<MoveTool> moveTool;
+Ref<RotateTool> rotateTool;
+Ref<ScaleTool> scaleTool;
+Ref<SelectionTool> selectionTool;
+Ref<SkeletonTool> skeletonTool;
+Ref<SplineTool> splineTool;
+Ref<o2::BasicUIStyleBuilder> basicUIStyleBuilder;
+Ref<EditorUIStyleBuilder> editorUIStyleBuilder;
+Ref<CurveAddKeysAction> curveAddKeysAction;
+Ref<CurveDeleteKeysAction> curveDeleteKeysAction;
+Ref<CurveKeysChangeAction> curveKeysChangeAction;
+Ref<CurvesEditor> curvesEditor;
+Ref<CurvesEditor::CurveHandle> curveHandle;
+Ref<CurvesEditor::CurveCopyInfo> curveCopyInfo;
+Ref<CurvePreview> curvePreview;
+Ref<FrameScrollView> frameScrollView;
+Ref<ImageSlicesEditorWidget> imageSlicesEditorWidget;
+Ref<ImageSlicesEditorWidget::PreviewImage> previewImage;
+Ref<ScrollView> scrollView;
+Ref<SpoilerWithHead> spoilerWithHead;
+Ref<TexturePreview> texturePreview;
+Ref<DockWindowPlace> dockWindowPlace;
+Ref<DockableWindow> dockableWindow;
+Ref<IEditorWindow> editorWindow;
+Ref<WindowsLayout> windowsLayout;
+Ref<WindowsLayout::WindowDockPlace> windowDockPlace;
+Ref<GameWindow> gameWindow;
+Ref<GameWindow::GameView> gameView;
+Ref<GameWindow::SimulationDevice> simulationDevice;
+Ref<LogWindow> logWindow;
+Ref<ActorViewer> actorViewer;
+Ref<AddComponentPanel> addComponentPanel;
+Ref<ComponentsTree> componentsTree;
+Ref<ComponentsTreeNode> componentsTreeNode;
+Ref<DefaultActorComponentViewer> defaultActorComponentViewer;
+Ref<DefaultActorHeaderViewer> defaultActorHeaderViewer;
+Ref<DefaultActorPropertiesViewer> defaultActorPropertiesViewer;
+Ref<DefaultActorTransformViewer> defaultActorTransformViewer;
+Ref<IActorComponentViewer> actorComponentViewer;
+Ref<IActorHeaderViewer> actorHeaderViewer;
+Ref<IActorPropertiesViewer> actorPropertiesViewer;
+Ref<IActorTransformViewer> actorTransformViewer;
+Ref<AssetPropertiesViewer> assetPropertiesViewer;
+Ref<DefaultPropertiesViewer> defaultPropertiesViewer;
+Ref<IPropertiesViewer> propertiesViewer;
+Ref<PropertiesWindow> propertiesWindow;
+Ref<DefaultWidgetLayerHeaderViewer> defaultWidgetLayerHeaderViewer;
+Ref<DefaultWidgetLayerLayoutViewer> defaultWidgetLayerLayoutViewer;
+Ref<DefaultWidgetLayerPropertiesViewer> defaultWidgetLayerPropertiesViewer;
+Ref<IWidgetLayerHeaderViewer> widgetLayerHeaderViewer;
+Ref<IWidgetLayerLayoutViewer> widgetLayerLayoutViewer;
+Ref<IWidgetLayerPropertiesViewer> widgetLayerPropertiesViewer;
+Ref<WidgetLayerViewer> widgetLayerViewer;
+Ref<LayersPopup> layersPopup;
+Ref<LayerPopupItem> layerPopupItem;
+```
+
+Replace `dynamic_cast<type*>` with `DynamicCast<type>`:
+
+```cpp
+DynamicCast<type>(pointer);
+```#include <memory>
+
+// Ref<>
+template <typename T>
+using Ref = std::shared_ptr<T>;
+
+template <typename T, typename... Args>
+Ref<T> mmake(Args&&... args) {
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+// WeakRef<>
+template <typename T>
+using WeakRef = std::weak_ptr<T>;
+
+// DynamicCast<>
+template <typename T, typename U>
+Ref<T> DynamicCast(const Ref<U>& ptr) {
+    return std::dynamic_pointer_cast<T>(ptr);
+}
+
+void SceneDragHandle();
+void __RegisterClass__Editor__SceneEditScreen();
+void __RegisterClass__Editor__SceneWindow();
+void __RegisterClass__Editor__DrawOrderTree();
+void __RegisterClass__Editor__DrawOrderTreeNode();
+void __RegisterClass__Editor__SceneHierarchyTree();
+void __RegisterClass__Editor__SceneHierarchyTreeNode();
+void __RegisterClass__Editor__SceneTree();
+void __RegisterClass__Editor__SceneTreeNode();
+void __RegisterClass__Editor__TreeWindow();
+
+int main()
+{
+    SceneDragHandle();
     __RegisterClass__Editor__SceneEditScreen();
     __RegisterClass__Editor__SceneWindow();
     __RegisterClass__Editor__DrawOrderTree();
@@ -286,4 +330,5 @@ extern void InitializeTypeso2Editor()
     __RegisterClass__Editor__SceneTree();
     __RegisterClass__Editor__SceneTreeNode();
     __RegisterClass__Editor__TreeWindow();
+    return 0;
 }

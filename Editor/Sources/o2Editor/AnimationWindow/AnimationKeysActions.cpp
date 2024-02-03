@@ -1,5 +1,7 @@
 #include "o2Editor/stdafx.h"
 #include "AnimationKeysActions.h"
+#include "Ref.h"
+#include "WeakRef.h"
 
 namespace Editor
 {

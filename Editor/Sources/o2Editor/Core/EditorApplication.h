@@ -6,6 +6,8 @@
 #include "o2Editor/Core/Actions/ActionsList.h"
 #include "o2Editor/Core/EditorConfig.h"
 #include "o2/Assets/Types/SceneAsset.h"
+#include "o2/Utils/Ref.h"
+#include "o2/Utils/WeakRef.h"
 
 using namespace o2;
 
@@ -47,7 +49,7 @@ namespace Editor
 		const String& GetLoadedSceneName() const;
 
 		// Loads scene from file
-		void LoadScene(const SceneAssetRef& scene);
+		void LoadScene(const Ref<SceneAsset>& scene);
 
 		// Saves current scene
 		void SaveScene();
@@ -68,18 +70,18 @@ namespace Editor
 		bool IsPlaying() const;
 
 	protected:
-		Sprite* mBackground = nullptr; // Background sprite
-		Sprite* mBackSign = nullptr;   // Background o2 signature
+		Ref<Sprite> mBackground; // Background sprite
+		Ref<Sprite> mBackSign;   // Background o2 signature
 
-		UIRoot*         mUIRoot = nullptr;         // Root editor UI
-		WindowsManager* mWindowsManager = nullptr; // Windows manager
-		EditorConfig*   mConfig = nullptr;         // Application configuration
-		ToolsPanel*     mToolsPanel = nullptr;     // Tools panel
-		MenuPanel*      mMenuPanel = nullptr;      // Menu panel
+		Ref<UIRoot>  mUIRoot;         // Root editor UI
+		Ref<WindowsManager> mWindowsManager; // Windows manager
+		Ref<EditorConfig>   mConfig;         // Application configuration
+		Ref<ToolsPanel>     mToolsPanel;     // Tools panel
+		Ref<MenuPanel>      mMenuPanel;      // Menu panel
 
-		Properties* mProperties = nullptr; // Properties manager
+		Ref<Properties> mProperties; // Properties manager
 
-		SceneAssetRef mLoadedScene; // Current loaded scene
+		WeakRef<SceneAsset> mLoadedScene; // Current loaded scene
 
 		DataDocument mSceneDump; // Scene dump, created before playing
 

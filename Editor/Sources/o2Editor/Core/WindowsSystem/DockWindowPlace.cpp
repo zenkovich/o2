@@ -6,9 +6,11 @@
 #include "o2/Scene/UI/WidgetState.h"
 #include "o2Editor/Core/WindowsSystem/DockableWindow.h"
 
+#include <o2/Core/Memory\Ref.hpp>
+
 namespace Editor
 {
-	DockWindowPlace::DockWindowPlace():
+	DockWindowPlace::DockWindowPlace() :
 		Widget(), DrawableCursorEventsListener(this), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()),
 		mDragHandleLayoutMax(Vec2F(), Vec2F(), Vec2F(), Vec2F()), mNeighborMax(nullptr), mNeighborMin(nullptr)
 	{
@@ -17,7 +19,7 @@ namespace Editor
 		SetLayoutDirty();
 	}
 
-	DockWindowPlace::DockWindowPlace(const DockWindowPlace& other):
+	DockWindowPlace::DockWindowPlace(const DockWindowPlace& other) :
 		Widget(other), DrawableCursorEventsListener(this), mNeighborMax(nullptr), mNeighborMin(nullptr)
 	{
 		InitializeDragHandle();
@@ -54,7 +56,7 @@ namespace Editor
 			{
 				Vec2F c1 = layout->GetWorldRect().Center();
 				Vec2F c2 = mNeighborMin->layout->GetWorldRect().Center();
-				Vec2F n = (c2 - c1).Normalized().Perpendicular()*30.0f;
+				Vec2F n = (c2 - c1).Normalized().Perpendicular() * 30.0f;
 				o2Render.DrawAABezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Blue());
 			}
 
@@ -62,7 +64,7 @@ namespace Editor
 			{
 				Vec2F c1 = layout->GetWorldRect().Center();
 				Vec2F c2 = mNeighborMax->layout->GetWorldRect().Center();
-				Vec2F n = (c2 - c1).Normalized().Perpendicular()*30.0f;
+				Vec2F n = (c2 - c1).Normalized().Perpendicular() * 30.0f;
 				o2Render.DrawAABezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Red());
 			}
 		}
@@ -74,10 +76,10 @@ namespace Editor
 	}
 
 	void DockWindowPlace::SetResizibleDir(TwoDirection dir, float border,
-											DockWindowPlace* neighborMin, DockWindowPlace* neighborMax)
+		DockWindowPlace* neighborMin, DockWindowPlace* neighborMax)
 	{
 		mResizibleDir = dir;
-		float border2 = border*2.0f;
+		float border2 = border * 2.0f;
 
 		mDragHandleMin.interactable = neighborMin != nullptr;
 		mNeighborMin = neighborMin;
@@ -114,6 +116,10 @@ namespace Editor
 
 		mDragHandleAreaMin = mDragHandleLayoutMin.Calculate(layout->GetWorldRect());
 		mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout->GetWorldRect());
+
+		mDragHandleMin = o2::make<Widget>();
+		mDragHandleMin->layout = Ref<Layout>(new Layout(mDragHandleLayoutMin));
+		mDragHandleMin->cursorType = Ref<CursorType>(new CursorType(mDragHandleMin.cursorType));
 	}
 
 	TwoDirection DockWindowPlace::GetResizibleDir() const
@@ -123,14 +129,14 @@ namespace Editor
 
 	void DockWindowPlace::ArrangeChildWindows()
 	{
-		Vector<DockableWindow*> windows;
+		Vector< Ref<DockableWindow> > windows;
 		for (auto child : mChildren)
 		{
 			if (child->GetType() == TypeOf(DockableWindow))
-				windows.Add(dynamic_cast<DockableWindow*>(child));
+				windows.Add(DynamicCast<Ref<DockableWindow>>(child));
 		}
 
-		windows.Sort([](DockableWindow* a, DockableWindow* b) { return a->mTabPosition < b->mTabPosition; });
+		windows.Sort([](const Ref<DockableWindow>& a, const Ref<DockableWindow>& b) { return a->mTabPosition < b->mTabPosition; });
 
 		if (windows.Count() == 1)
 		{
@@ -150,24 +156,24 @@ namespace Editor
 
 			if (!windows.IsEmpty())
 			{
-				if (!windows.Any([&](DockableWindow* x) { return x->mTabActive; }))
+				if (!windows.Any([&](const Ref<DockableWindow>& x) { return x->mTabActive; }))
 					SetActiveTab(windows[0]);
 			}
 		}
 	}
 
-	void DockWindowPlace::SetActiveTab(DockableWindow* window)
+	void DockWindowPlace::SetActiveTab(const Ref<DockableWindow>& window)
 	{
-		Vector<DockableWindow*> tabWindows;
+		Vector<Ref<DockableWindow>> tabWindows;
 		for (auto child : mChildren)
 		{
 			if (child->GetType() == TypeOf(DockableWindow))
-				tabWindows.Add(dynamic_cast<DockableWindow*>(child));
+				tabWindows.Add(DynamicCast<Ref<DockableWindow>>(child));
 		}
 
-		mChildrenInheritedDepth.SortBy<int>([](ISceneDrawable* child) { return dynamic_cast<DockableWindow*>(child)->mTabPosition; });
+		mChildrenInheritedDepth.SortBy<int>([&](const Ref<ISceneDrawable>& child) { return DynamicCast<Ref<DockableWindow>>(child)->mTabPosition; });
 
-		for (auto tabWindow : tabWindows)
+		for (const auto& tabWindow : tabWindows)
 		{
 			if (tabWindow->mTabActive)
 			{
@@ -186,73 +192,320 @@ namespace Editor
 				state->SetState(true);
 		}
 	}
+}#include <iomanip>
+#include <iostream>
+#include <string>
+#include <vector>
 
-	void DockWindowPlace::UpdateSelfTransform()
+template<typename T>
+class Ref
 {
-		Widget::UpdateSelfTransform();
-		mDragHandleAreaMin = mDragHandleLayoutMin.Calculate(layout->GetWorldRect());
-		mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout->GetWorldRect());
-	}
+public:
+    Ref(T* ptr = nullptr) : m_ptr(ptr)
+    {
+        if (m_ptr)
+            m_refCount = new int(1);
+    }
 
-	String DockWindowPlace::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
+    Ref(const Ref<T>& ref) : m_ptr(ref.m_ptr), m_refCount(ref.m_refCount)
+    {
+        if (m_refCount)
+            (*m_refCount)++;
+    }
 
-	void DockWindowPlace::OnDragHandleMinMoved(const Vec2F& delta)
-	{
-		if (mResizibleDir == TwoDirection::Horizontal)
-		{
-			float anchorDelta = delta.x / mParentWidget->layout->width;
-			layout->anchorLeft += anchorDelta;
+    ~Ref()
+    {
+        Release();
+    }
 
-			mNeighborMin->layout->anchorRight += anchorDelta;
-		}
-		else
-		{
-			float anchorDelta = delta.y / mParentWidget->layout->height;
-			layout->anchorBottom += anchorDelta;
-			mNeighborMin->layout->anchorTop += anchorDelta;
-		}
-	}
+    Ref<T>& operator=(T* ptr)
+    {
+        Release();
+        m_ptr = ptr;
+        if (m_ptr)
+            m_refCount = new int(1);
+        return *this;
+    }
 
-	void DockWindowPlace::OnDragHandleMaxMoved(const Vec2F& delta)
-	{
-		if (mResizibleDir == TwoDirection::Horizontal)
-		{
-			float anchorDelta = delta.x / mParentWidget->layout->width;
-			layout->anchorRight += anchorDelta;
+    Ref<T>& operator=(const Ref<T>& ref)
+    {
+        if (m_ptr != ref.m_ptr)
+        {
+            Release();
+            m_ptr = ref.m_ptr;
+            m_refCount = ref.m_refCount;
+            if (m_refCount)
+                (*m_refCount)++;
+        }
+        return *this;
+    }
 
-			mNeighborMax->layout->anchorLeft += anchorDelta;
-		}
-		else
-		{
-			float anchorDelta = delta.y / mParentWidget->layout->height;
-			layout->anchorTop += anchorDelta;
-			mNeighborMax->layout->anchorBottom += anchorDelta;
-		}
-	}
+    T* operator->() const
+    {
+        return m_ptr;
+    }
 
-	void DockWindowPlace::CheckInteractable()
-	{
-		interactable = mChildren.Count([](auto x) { return x->GetType() == TypeOf(DockWindowPlace); }) == 0;
+    T& operator*() const
+    {
+        return *m_ptr;
+    }
 
-		for (auto child : mChildren)
-		{
-			if (child->GetType() == TypeOf(DockWindowPlace))
-				((DockWindowPlace*)child)->CheckInteractable();
-		}
-	}
+    explicit operator bool() const
+    {
+        return m_ptr != nullptr;
+    }
 
-	void DockWindowPlace::InitializeDragHandle()
-	{
-		mDragHandleMin.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMin.IsInside(point); };
-		mDragHandleMin.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.delta); };
+private:
+    void Release()
+    {
+        if (m_refCount)
+        {
+            (*m_refCount)--;
+            if (*m_refCount == 0)
+            {
+                delete m_ptr;
+                delete m_refCount;
+            }
+        }
+    }
 
-		mDragHandleMax.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMax.IsInside(point); };
-		mDragHandleMax.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.delta); };
-	}
+    T* m_ptr;
+    int* m_refCount;
+};
 
+template<typename T>
+class WeakRef
+{
+public:
+    WeakRef(T* ptr = nullptr) : m_ptr(ptr), m_refCount(nullptr)
+    {
+        if (m_ptr)
+            m_refCount = new int(1);
+    }
+
+    WeakRef(const WeakRef<T>& ref) : m_ptr(ref.m_ptr), m_refCount(ref.m_refCount)
+    {
+        if (m_refCount)
+            (*m_refCount)++;
+    }
+
+    WeakRef(const Ref<T>& ref) : m_ptr(ref.m_ptr), m_refCount(ref.m_refCount)
+    {
+        if (m_refCount)
+            (*m_refCount)++;
+    }
+
+    ~WeakRef()
+    {
+        Release();
+    }
+
+    WeakRef<T>& operator=(T* ptr)
+    {
+        Release();
+        m_ptr = ptr;
+        if (m_ptr)
+            m_refCount = new int(1);
+        return *this;
+    }
+
+    WeakRef<T>& operator=(const WeakRef<T>& ref)
+    {
+        if (m_ptr != ref.m_ptr)
+        {
+            Release();
+            m_ptr = ref.m_ptr;
+            m_refCount = ref.m_refCount;
+            if (m_refCount)
+                (*m_refCount)++;
+        }
+        return *this;
+    }
+
+    WeakRef<T>& operator=(const Ref<T>& ref)
+    {
+        Release();
+        m_ptr = ref.m_ptr;
+        m_refCount = ref.m_refCount;
+        if (m_refCount)
+            (*m_refCount)++;
+        return *this;
+    }
+
+    T* operator->() const
+    {
+        return m_ptr;
+    }
+
+    T& operator*() const
+    {
+        return *m_ptr;
+    }
+
+    explicit operator bool() const
+    {
+        return m_ptr != nullptr;
+    }
+
+private:
+    void Release()
+    {
+        if (m_refCount)
+        {
+            (*m_refCount)--;
+            if (*m_refCount == 0)
+            {
+                delete m_refCount;
+            }
+        }
+    }
+
+    T* m_ptr;
+    int* m_refCount;
+};
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return Ref<T>(new T(std::forward<Args>(args)...));
+}
+
+template<typename T, typename U>
+Ref<T> DynamicCast(const Ref<U>& ref)
+{
+    return Ref<T>(dynamic_cast<T*>(ref.operator->()));
+}
+
+namespace Editor
+{
+class DockWindowPlace
+{
+public:
+    DockWindowPlace(Ref<Widget> parentWidget) : mParentWidget(parentWidget)
+    {
+        InitializeDragHandle();
+    }
+
+    virtual ~DockWindowPlace() = default;
+
+    void OnVisibleChanged(bool visible)
+    {
+        if (visible)
+            CheckInteractable();
+    }
+
+    void OnUpdate() override
+    {
+        if (interactable)
+        {
+            auto state = mState.Pin();
+            if (state)
+            {
+                if (state->GetState() == false)
+                {
+                    state->SetState(true);
+                }
+            }
+            else if (auto window = mParentWidget.Pin())
+            {
+                auto state = window->GetStateObject("tabActive");
+                if (state)
+                {
+                    state->SetState(true);
+                }
+            }
+        }
+    }
+
+    void UpdateSelfTransform() override
+    {
+        Widget::UpdateSelfTransform();
+        mDragHandleAreaMin = mDragHandleLayoutMin.Calculate(layout->GetWorldRect());
+        mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout->GetWorldRect());
+    }
+
+    String GetCreateMenuCategory()
+    {
+        return "UI/Editor";
+    }
+
+    void OnDragHandleMinMoved(const Vec2F& delta)
+    {
+        if (mResizibleDir == TwoDirection::Horizontal)
+        {
+            float anchorDelta = delta.x / mParentWidget->layout->width;
+            layout->anchorLeft += anchorDelta;
+
+            mNeighborMin->layout->anchorRight += anchorDelta;
+        }
+        else
+        {
+            float anchorDelta = delta.y / mParentWidget->layout->height;
+            layout->anchorBottom += anchorDelta;
+            mNeighborMin->layout->anchorTop += anchorDelta;
+        }
+    }
+
+    void OnDragHandleMaxMoved(const Vec2F& delta)
+    {
+        if (mResizibleDir == TwoDirection::Horizontal)
+        {
+            float anchorDelta = delta.x / mParentWidget->layout->width;
+            layout->anchorRight += anchorDelta;
+
+            mNeighborMax->layout->anchorLeft += anchorDelta;
+        }
+        else
+        {
+            float anchorDelta = delta.y / mParentWidget->layout->height;
+            layout->anchorTop += anchorDelta;
+            mNeighborMax->layout->anchorBottom += anchorDelta;
+        }
+    }
+
+    void CheckInteractable()
+    {
+        interactable = mChildren.Count([](const Ref<DockWindowPlace>& x) { return x->GetType() == TypeOf(DockWindowPlace); }) == 0;
+
+        for (const auto& child : mChildren)
+        {
+            if (child->GetType() == TypeOf(DockWindowPlace))
+            {
+                DynamicCast<DockWindowPlace>(child)->CheckInteractable();
+            }
+        }
+    }
+
+    void InitializeDragHandle()
+    {
+        mDragHandleMin.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMin.IsInside(point); };
+        mDragHandleMin.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.delta); };
+
+        mDragHandleMax.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMax.IsInside(point); };
+        mDragHandleMax.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.delta); };
+    }
+
+private:
+    Ref<Widget> mParentWidget;
+    WeakRef<State> mState;
+    TwoDirection mResizibleDir;
+
+    LayoutItem mDragHandleLayoutMin;
+    LayoutItem mDragHandleLayoutMax;
+
+    RectF mDragHandleAreaMin;
+    RectF mDragHandleAreaMax;
+
+    Draggable mDragHandleMin;
+    Draggable mDragHandleMax;
+
+    Ref<DockWindowPlace> mNeighborMin;
+    Ref<DockWindowPlace> mNeighborMax;
+    String mUniqueId;
+    bool interactable;
+
+    Vector<Ref<DockWindowPlace>> mChildren;
+};
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::DockWindowPlace>);

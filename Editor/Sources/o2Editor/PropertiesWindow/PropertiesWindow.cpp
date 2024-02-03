@@ -1,6 +1,5 @@
 #include "o2Editor/stdafx.h"
 #include "PropertiesWindow.h"
-
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
 #include "o2Editor/Core/Properties/Objects/Assets/ImageAssetViewer.h"
@@ -11,7 +10,6 @@
 #include "o2Editor/PropertiesWindow/DefaultPropertiesViewer.h"
 #include "o2Editor/PropertiesWindow/IPropertiesViewer.h"
 #include "o2Editor/PropertiesWindow/WidgetLayerViewer/WidgetLayerViewer.h"
-
 
 DECLARE_SINGLETON(Editor::PropertiesWindow);
 
@@ -42,7 +40,7 @@ namespace Editor
 	{
 		mWindow->caption = "Properties";
 		mWindow->name = "properties window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_gear_icon.png"));
+		mWindow->SetIcon(mmake<Ref<Sprite>>("ui/UI4_gear_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 2)));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 15));
@@ -52,7 +50,7 @@ namespace Editor
 
 	void PropertiesWindow::InitializeWindowContext()
 	{
-		auto context = mWindow->GetOptionsMenu();
+		Ref<ContextMenu> context = mWindow->GetOptionsMenu();
 		if (!context)
 		{
 			o2Debug.LogError("Failed to initialize properties window context menu: not found menu on window");
@@ -60,7 +58,7 @@ namespace Editor
 		}
 
 		context->AddItem(ContextMenu::Item::Separator());
-		context->AddItem(mnew ContextMenu::Item("Private visible", false, THIS_FUNC(OnPrivateFieldsVisibleChanged)));
+		context->AddItem(mmake<Ref<ContextMenu::Item>>("Private visible", false, THIS_FUNC(OnPrivateFieldsVisibleChanged)));
 	}
 
 	void PropertiesWindow::InitializeViewers()
@@ -69,9 +67,9 @@ namespace Editor
 		viewersTypes.Remove(&TypeOf(DefaultPropertiesViewer));
 
 		for (auto type : viewersTypes)
-			mViewers.Add((IPropertiesViewer*)type->CreateSample());
+			mViewers.Add(mmake<Ref<IPropertiesViewer>>(type->CreateSample()));
 
-		mDefaultViewer = mnew DefaultPropertiesViewer();
+		mDefaultViewer = mmake<Ref<DefaultPropertiesViewer>>();
 	}
 
 	void PropertiesWindow::OnPrivateFieldsVisibleChanged(bool visible)
@@ -82,7 +80,7 @@ namespace Editor
 			mCurrentViewer->SetTargets(mTargets);
 	}
 
-	void PropertiesWindow::OnPropertyChanged(IPropertyField* field)
+	void PropertiesWindow::OnPropertyChanged(Ref<IPropertyField> field)
 	{
 		mTargetsChanged = true;
 	}
@@ -95,12 +93,12 @@ namespace Editor
 			SetTargets({ target });
 	}
 
-	void PropertiesWindow::SetTargets(const Vector<IObject*>& targets, const Function<void()>& targetsChangedDelegate /*= Function<void()>()*/)
+	void PropertiesWindow::SetTargets(const Vector<Ref<IObject>>& targets, const Function<void()>& targetsChangedDelegate /* = Function<void()>()*/)
 	{
 		if (mTargetsChanged)
 			mOnTargetsChangedDelegate();
 
-		IPropertiesViewer* objectViewer = nullptr;
+		Ref<IPropertiesViewer> objectViewer = nullptr;
 		if (!targets.IsEmpty())
 		{
 			auto type = &targets[0]->GetType();
@@ -140,7 +138,7 @@ namespace Editor
 		mTargetsChanged = false;
 	}
 
-	Vector<IObject*> PropertiesWindow::GetTargets() const
+	Vector<Ref<IObject>> PropertiesWindow::GetTargets() const
 	{
 		return mTargets;
 	}

@@ -1,5 +1,7 @@
 #pragma once
 #include "o2/Utils/Types/StringDef.h"
+#include "o2/Utils/Memory/Ref.h"
+#include "o2/Utils/Memory/WeakRef.h"
 
 using namespace o2;
 

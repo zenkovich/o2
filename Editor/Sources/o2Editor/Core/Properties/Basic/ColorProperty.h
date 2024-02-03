@@ -3,49 +3,51 @@
 #include "o2/Events/CursorEventsArea.h"
 #include "o2/Utils/Property.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2/Utils/Ref.h"
+#include "o2/Utils/WeakRef.h"
 
 using namespace o2;
 
 namespace o2
 {
-	class Image;
-	class Widget;
+    class Image;
+    class Widget;
 }
 
 namespace Editor
 {
-	// ------------------------------
-	// Editor color property edit box
-	// ------------------------------
-	class ColorProperty: public TPropertyField<Color4>
-	{
-	public:
-		// Default constructor
-		ColorProperty();
+    // ------------------------------
+    // Editor color property edit box
+    // ------------------------------
+    class ColorProperty: public TPropertyField<Color4>
+    {
+    public:
+        // Default constructor
+        ColorProperty();
 
-		// Copy constructor
-		ColorProperty(const ColorProperty& other);
+        // Copy constructor
+        ColorProperty(const ColorProperty& other);
 
-		// Copy operator
-		ColorProperty& operator=(const ColorProperty& other);
+        // Copy operator
+        ColorProperty& operator=(const ColorProperty& other);
 
-		IOBJECT(ColorProperty);
+        IOBJECT(ColorProperty);
 
-	protected:
-		Widget*          mEditBox = nullptr;     // Edit box 
-		Image*           mColorSprite = nullptr; // Color preview sprite
-		CursorEventsArea mClickArea;             // Box click area
+    protected:
+        Ref<Widget>          mEditBox;     // Edit box 
+        Ref<Image>           mColorSprite; // Color preview sprite
+        CursorEventsArea     mClickArea;   // Box click area
 
-	protected:
-		// Updates value view
-		void UpdateValueView() override;
+    protected:
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Called when box pressed and shows color picking dialog
-		void OnClicked();
-	};
+        // Called when box pressed and shows color picking dialog
+        void OnClicked();
+    };
 }
 // --- META ---
 
@@ -56,8 +58,8 @@ CLASS_BASES_META(Editor::ColorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ColorProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorSprite);
+    FIELD().PROTECTED().NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mColorSprite);
     FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;
@@ -65,7 +67,7 @@ CLASS_METHODS_META(Editor::ColorProperty)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ColorProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<const ColorProperty>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);

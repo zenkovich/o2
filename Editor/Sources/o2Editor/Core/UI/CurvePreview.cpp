@@ -12,14 +12,14 @@ namespace Editor
 {
 	CurvePreview::CurvePreview()
 	{
-		mSprite = mnew Sprite();
+		mSprite = mmake<Ref<Sprite>>();
 		AddLayer("image", mSprite);
 	}
 
 	CurvePreview::CurvePreview(const CurvePreview& other):
 		mBackColor(other.mBackColor), mCurveColor(other.mCurveColor)
 	{
-		mSprite = GetLayerDrawable<Sprite>("image");
+		mSprite = GetLayerDrawable<Ref<Sprite>>("image");
 		RetargetStatesAnimations();
 	}
 
@@ -30,7 +30,7 @@ namespace Editor
 		mBackColor = other.mBackColor;
 		mCurveColor = other.mCurveColor;
 
-		mSprite = GetLayerDrawable<Sprite>("image");
+		mSprite = GetLayerDrawable<Ref<Sprite>>("image");
 		RetargetStatesAnimations();
 
 		mNeedRedraw = true;
@@ -38,7 +38,7 @@ namespace Editor
 		return *this;
 	}
 
-	void CurvePreview::SetCurve(Curve* curve)
+	void CurvePreview::SetCurve(const Ref<Curve>& curve)
 	{
 		if (mCurve)
 			mCurve->onKeysChanged -= THIS_FUNC(OnCurveChanged);
@@ -98,7 +98,7 @@ namespace Editor
 		Ref<Texture> texture = mSprite->GetTexture();
 		if (!texture || texture->GetSize() != (Vec2I)layout->GetSize())
 		{
-			texture = Ref<Texture>(layout->GetSize(), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+			texture = mmake<Ref<Texture>>(layout->GetSize(), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 			mSprite->SetTexture(texture);
 			mSprite->SetTextureSrcRect(RectI(Vec2I(), texture->GetSize()));
 		}

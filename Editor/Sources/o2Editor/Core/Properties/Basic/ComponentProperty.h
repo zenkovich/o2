@@ -4,104 +4,113 @@
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2/Utils/SmartPointers/Ref.h"
+#include "o2/Utils/SmartPointers/WeakRef.h"
 
 namespace o2
 {
-	class Component;
-	class Text;
-	class Widget;
+    template<typename T>
+    using Ref = o2::Ref<T>;
+    
+    template<typename T>
+    using WeakRef = o2::WeakRef<T>;
+    
+    class Component;
+    class Text;
+    class Widget;
 }
 
 namespace Editor
 {
-	class SceneHierarchyTree;
-	class AssetsIconsScrollArea;
+    class SceneHierarchyTree;
+    class AssetsIconsScrollArea;
 
-	// -----------------------------------
-	// Editor actor component property box
-	// -----------------------------------
-	class ComponentProperty: public TPropertyField<Ref<Component>>, public KeyboardEventsListener, public DragDropArea
-	{
-	public:
-		// Default constructor
-		ComponentProperty();
+    // -----------------------------------
+    // Editor actor component property box
+    // -----------------------------------
+    class ComponentProperty : public TPropertyField<Ref<Component>>, public KeyboardEventsListener, public DragDropArea
+    {
+    public:
+        // Default constructor
+        ComponentProperty();
 
-		// Copy constructor
-		ComponentProperty(const ComponentProperty& other);
+        // Copy constructor
+        ComponentProperty(const ComponentProperty& other);
 
-		// Copy operator
-		ComponentProperty& operator=(const ComponentProperty& other);
+        // Copy operator
+        ComponentProperty& operator=(const ComponentProperty& other);
 
-		// Reverts value to prototype value
-		void Revert() override;
+        // Reverts value to prototype value
+        void Revert() override;
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point) override;
+        // Returns true if point is in this object
+        bool IsUnderPoint(const Vec2F& point) override;
 
-		IOBJECT(ComponentProperty);
+        IOBJECT(ComponentProperty);
 
-	protected:
-		const Type* mComponentType = nullptr;  // Component value type
+    protected:
+        const Type* mComponentType = nullptr;  // Component value type
 
-		Widget* mBox = nullptr;            // Edit box 
-		Text*   mNameText = nullptr;       // Component name text
+        Ref<Widget> mBox = nullptr;            // Edit box 
+        Ref<Text> mNameText = nullptr;       // Component name text
 
-	protected:
-		// Called when type specialized during setting value proxy
-		void OnTypeSpecialized(const Type& type) override;
+    protected:
+        // Called when type specialized during setting value proxy
+        void OnTypeSpecialized(const Type& type) override;
 
-		// Checks is value can be reverted
-		bool IsValueRevertable() const override;
+        // Checks is value can be reverted
+        bool IsValueRevertable() const override;
 
-		// Updates value view
-		void UpdateValueView() override;
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor) override;
+        // Called when cursor enters this object
+        void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// Called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor) override;
+        // Called when cursor exits this object
+        void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+        // Called when cursor pressed on this
+        void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// Called when key was pressed
-		void OnKeyPressed(const Input::Key& key) override;
+        // Called when key was pressed
+        void OnKeyPressed(const Input::Key& key) override;
 
-		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+        // Called when some selectable listeners was dropped to this
+        void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
-		// Called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+        // Called when some drag listeners was entered to this area
+        void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
-		// Called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+        // Called when some drag listeners was exited from this area
+        void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Reverts target value to source
-		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
+        // Reverts target value to source
+        void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
 
-		// Called when actors tree nodes was dragged and dropped to this
-		void OnDroppedFromActorsTree(SceneHierarchyTree* actorsTree);
+        // Called when actors tree nodes was dragged and dropped to this
+        void OnDroppedFromActorsTree(SceneHierarchyTree* actorsTree);
 
-		// Called when actors tree nodes was dragged and entered to this
-		void OnDragEnterFromActorsTree(SceneHierarchyTree* actorsTree);
+        // Called when actors tree nodes was dragged and entered to this
+        void OnDragEnterFromActorsTree(SceneHierarchyTree* actorsTree);
 
-		// Called when actors tree nodes was dragged and exited from this
-		void OnDragExitFromActorsTree(SceneHierarchyTree* actorsTree);
+        // Called when actors tree nodes was dragged and exited from this
+        void OnDragExitFromActorsTree(SceneHierarchyTree* actorsTree);
 
-		// Called when assets scroll icons was dragged and dropped to this
-		void OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
+        // Called when assets scroll icons was dragged and dropped to this
+        void OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
 
-		// Called when assets scroll icons was dragged and entered to this
-		void OnDragEnterFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
+        // Called when assets scroll icons was dragged and entered to this
+        void OnDragEnterFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
 
-		// Called when assets scroll icons was dragged and exited from this
-		void OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
-	};
+        // Called when assets scroll icons was dragged and exited from this
+        void OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
+    };
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::ComponentProperty)
@@ -111,16 +120,17 @@ CLASS_BASES_META(Editor::ComponentProperty)
     BASE_CLASS(o2::DragDropArea);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::ComponentProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponentType);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameText);
+    FIELD().PROTECTED().NAME(mComponentType);
+    FIELD().PROTECTED().NAME(mBox);
+    FIELD().PROTECTED().NAME(mNameText);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::ComponentProperty)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, Revert);
@@ -144,5 +154,51 @@ CLASS_METHODS_META(Editor::ComponentProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromAssetsScroll, AssetsIconsScrollArea*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromAssetsScroll, AssetsIconsScrollArea*);
 }
-END_META;
-// --- END META ---
+END_META;#include <memory>
+
+template<class T>
+using Ref = std::shared_ptr<T>;
+
+template<class T>
+using WeakRef = std::weak_ptr<T>;
+
+template<class T>
+using DynamicCast = std::dynamic_pointer_cast<T>;
+
+template<class T, class... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+class SceneHierarchyTree;
+class AssetsIconsScrollArea;
+
+class AbstractValueProxy {};
+
+class IObject {};
+
+class MyClass
+{
+private:
+    Ref<SceneHierarchyTree> m_parent;
+
+public:
+    MyClass(const Ref<SceneHierarchyTree>& parent) : m_parent(parent) {}
+
+    void OnDroppedFromActorsTree(const Ref<SceneHierarchyTree>& tree) {}
+
+    void OnDragEnterFromActorsTree(const Ref<SceneHierarchyTree>& tree) {}
+
+    void OnDragExitFromActorsTree(const Ref<SceneHierarchyTree>& tree) {}
+
+    void OnDroppedFromAssetsScroll(const Ref<AssetsIconsScrollArea>& scrollArea) {}
+
+    void OnDragEnterFromAssetsScroll(const Ref<AssetsIconsScrollArea>& scrollArea) {}
+
+    void OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& scrollArea) {}
+};
+
+int main() {
+    return 0;
+}

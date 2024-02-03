@@ -22,135 +22,261 @@
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 
-
 namespace Editor
 {
-	Widget* ToolsPanel::GetPanelWidget() const
+    Ref<Widget> ToolsPanel::GetPanelWidget() const
+    {
+        return mPanelRoot;
+    }
+
+    Ref<Widget> ToolsPanel::GetPlayPanel() const
+    {
+        return mPlayPanel;
+    }
+
+    Ref<HorizontalLayout> ToolsPanel::GetToolsPanel() const
+    {
+        return mToolsPanel;
+    }
+
+    void ToolsPanel::AddToolToggle(Ref<Toggle> toggle)
+    {
+        if (!toggle->GetStateObject("visible")->GetAnimationClip()->GetTrack<float>("layout/minWidth"))
+        {
+            *toggle->GetStateObject("visible")->GetAnimationClip()->AddTrack<float>("layout/minWidth") =
+                AnimationTrack<float>::EaseInOut(0.0f, 20.0f, 0.2f);
+        }
+
+        mToolsPanel->AddChild(toggle);
+        toggle->SetEnabledForcible(false);
+        toggle->SetEnabled(true);
+        toggle->SetToggleGroup(&mToolsTogglesGroup);
+    }
+
+    void ToolsPanel::RemoveToolToggle(Ref<Toggle> toggle)
+    {
+        toggle->GetStateObject("visible")->onStateFullyFalse = [=]() {
+            o2Tasks.Invoke([=]() { mToolsPanel->RemoveChild(toggle, false); });
+        };
+        toggle->SetEnabled(false);
+    }
+
+    void ToolsPanel::Update(float dt)
+    {
+        mPlayToggle->value = o2EditorApplication.IsPlaying();
+        mPauseToggle->value = o2EditorApplication.isPaused;
+    }
+
+    ToolsPanel::ToolsPanel() :
+        mToolsTogglesGroup(ToggleGroup::Type::OnlySingleTrue)
+    {
+        mPanelRoot = mmake<Widget>();
+        mPanelRoot->name = "tools panel";
+        mPanelRoot->AddLayer("back", mmake<Sprite>("ui/UI4_ToolsPanel_bk.png"), mmake<Layout>(BothStretch(-2, 0, -2, -8)));
+
+        mPanelRoot->layout->anchorMin = Vec2F(0, 1);
+        mPanelRoot->layout->anchorMax = Vec2F(1, 1);
+        mPanelRoot->layout->offsetMin = Vec2F(0, -45);
+        mPanelRoot->layout->offsetMax = Vec2F(0, -20);
+
+        InitializePlayPanel();
+        InitializeLayoutSchemesPanel();
+        InitializeToolsPanel();
+
+        EditorUIRoot.AddWidget(mPanelRoot);
+    }
+
+    ToolsPanel::~ToolsPanel()
+    {
+    }
+
+    void ToolsPanel::InitializePlayPanel()
+    {
+        mPlayPanel = mmake<Widget>();
+        mPlayPanel->name = "play panel";
+        mPlayPanel->AddLayer("back", mmake<Sprite>("ui/UI4_play_panel_bk.png"), mmake<Layout>(BothStretch(-7, -5, -5, -5)));
+        *mPlayPanel->layout = mmake<WidgetLayout>(VerStretch(HorAlign::Left, 3, 2, 200, 10));
+        mPanelRoot->AddChild(mPlayPanel);
+
+        mPlayToggle = o2UI.CreateWidget<Toggle>("play-stop");
+        mPlayToggle->onToggle = [&](bool value) { OnPlayStopToggled(value); };
+        *mPlayToggle->layout = mmake<WidgetLayout>(Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(5, 1)));
+        mPlayPanel->AddChild(mPlayToggle);
+
+        mPauseToggle = o2UI.CreateWidget<Toggle>("pause");
+        mPauseToggle->onToggle = [this](bool value) { OnPauseToggled(value); };
+        *mPauseToggle->layout = mmake<WidgetLayout>(Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(22, 1)));
+        mPauseToggle->shortcut = ShortcutKeys(VK_F11);
+        mPlayPanel->AddChild(mPauseToggle);
+
+        mStepButton = o2UI.CreateWidget<Button>("step");
+        mStepButton->onClick = [this]() { OnStepPressed(); };
+        *mStepButton->layout = mmake<WidgetLayout>(Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(39, 1)));
+        mStepButton->shortcut = ShortcutKeys(VK_F10);
+        mPlayPanel->AddChild(mStepButton);
+
+        mDevicesList = o2UI.CreateDropdown("backless");
+        mDevicesList->name = "devices list";
+        *mDevicesList->layout = mmake<WidgetLayout>(Based(BaseCorner::Right, Vec2F(115, 20), Vec2F(-3, 1)));
+        mPlayPanel->AddChild(mDevicesList);
+
+        mDevicesList->AddItems({ "iPhone", "Editor", "Simulator" });
+        mDevicesList->selectedItemPos = 0;
+
+        auto playPanelPlayStateAnim = mmake<AnimationClip>();
+
+        *playPanelPlayStateAnim->AddTrack<float>("layout/offsetRight") =
+            AnimationTrack<float>::EaseInOut(149.0f, 183.0f, 0.3f);
+
+        auto visiblePauseBtnAnim = playPanelPlayStateAnim->AddTrack<bool>("child/pause/enabled");
+        visiblePauseBtnAnim->AddKey(0.0f, false);
+        visiblePauseBtnAnim->AddKey(0.1f, false);
+        visiblePauseBtnAnim->AddKey(0.11f, true);
+        visiblePauseBtnAnim->AddKey(0.3f, true);
+
+        auto visibleStepBtnAnim = playPanelPlayStateAnim->AddTrack<bool>("child/step/enabled");
+        visibleStepBtnAnim->AddKey(0.0f, false);
+        visibleStepBtnAnim->AddKey(0.25f, false);
+        visibleStepBtnAnim->AddKey(0.26f, true);
+        visibleStepBtnAnim->AddKey(0.3f, true);
+
+        mPlayPanel->AddState("playing", playPanelPlayStateAnim);
+
+        mPlayToggle->onToggle += [=](bool playing) {
+            mPlayPanel->SetState("playing");
+        };
+    }
+}
+#include <memory>
+
+// Ref<> and WeakRef<> templates
+template<typename T>
+class Ref {
+public:
+	Ref(T* ptr) : ptr(ptr) {}
+	T* operator->() { return ptr; }
+	T& operator*() { return *ptr; }
+private:
+	T* ptr;
+};
+
+template<typename T>
+class WeakRef {
+public:
+	WeakRef(T* ptr) : ptr(ptr) {}
+	T* operator->() { return ptr; }
+	T& operator*() { return *ptr; }
+private:
+	T* ptr;
+};
+
+// DynamicCast<> template
+template<typename Derived, typename Base, typename T>
+T DynamicCast(Ref<Base>& base) {
+    return static_cast<T>(base.operator->());
+};
+
+namespace o2Editor {
+
+	using namespace o2Engine;
+
+	ToolsPanel::ToolsPanel() :
+		mLayoutSchemesList(nullptr),
+		mToolsPanel(nullptr),
+		mPlayStopButton(nullptr),
+		mPauseButton(nullptr),
+		mStepButton(nullptr)
 	{
-		return mPanelRoot;
-	}
+		mPanelRoot = mnew VerStretchLayout();
+		mPanelRoot->baseCorner = BaseCorner::TopLeft;
+		mPanelRoot->expand = true;
+		mPanelRoot->expandWidth = false;
+		mPanelRoot->padding = Layout::UniformPadding();
 
-	Widget* ToolsPanel::GetPlayPanel() const
-	{
-		return mPlayPanel;
-	}
+		mPanelRoot->layout->top = 0;
+		mPanelRoot->layout->left = 0;
+		mPanelRoot->layout->width = 200;
+		mPanelRoot->layout->height = 600;
 
-	HorizontalLayout* ToolsPanel::GetToolsPanel() const
-	{
-		return mToolsPanel;
-	}
-
-	void ToolsPanel::AddToolToggle(Toggle* toggle)
-	{
-		if (!toggle->GetStateObject("visible")->GetAnimationClip()->GetTrack<float>("layout/minWidth"))
-		{
-			*toggle->GetStateObject("visible")->GetAnimationClip()->AddTrack<float>("layout/minWidth") =
-				AnimationTrack<float>::EaseInOut(0.0f, 20.0f, 0.2f);
-		}
-
-		mToolsPanel->AddChild(toggle);
-		toggle->SetEnabledForcible(false);
-		toggle->SetEnabled(true);
-		toggle->SetToggleGroup(&mToolsTogglesGroup);
-	}
-
-	void ToolsPanel::RemoveToolToggle(Toggle* toggle)
-	{
-		toggle->GetStateObject("visible")->onStateFullyFalse = [=]() { 
-			o2Tasks.Invoke([=]() { mToolsPanel->RemoveChild(toggle, false); });
-		};
-		toggle->SetEnabled(false);
-	}
-
-	void ToolsPanel::Update(float dt)
-	{
-		mPlayToggle->value = o2EditorApplication.IsPlaying();
-		mPauseToggle->value = o2EditorApplication.isPaused;
-	}
-
-	ToolsPanel::ToolsPanel():
-		mToolsTogglesGroup(ToggleGroup::Type::OnlySingleTrue)
-	{
-		mPanelRoot = mnew Widget();
-		mPanelRoot->name = "tools panel";
-		mPanelRoot->AddLayer("back", mnew Sprite("ui/UI4_ToolsPanel_bk.png"), Layout::BothStretch(-2, 0, -2, -8));
-
-		mPanelRoot->layout->anchorMin = Vec2F(0, 1);
-		mPanelRoot->layout->anchorMax = Vec2F(1, 1);
-		mPanelRoot->layout->offsetMin = Vec2F(0, -45);
-		mPanelRoot->layout->offsetMax = Vec2F(0, -20);
-
-		InitializePlayPanel();
 		InitializeLayoutSchemesPanel();
 		InitializeToolsPanel();
+		InitializePlaybackControls();
 
-		EditorUIRoot.AddWidget(mPanelRoot);
+		o2EditorApplication.OnPlayStopToggled += MakeFunction(this, &ToolsPanel::OnPlayStopToggled);
+		o2EditorApplication.OnStepPressed += MakeFunction(this, &ToolsPanel::OnStepPressed);
+		o2EditorApplication.OnPauseToggled += MakeFunction(this, &ToolsPanel::OnPauseToggled);
 	}
 
-	ToolsPanel::~ToolsPanel()
-	{}
-
-	void ToolsPanel::InitializePlayPanel()
+	void ToolsPanel::AddToolToggle(const Ref<Button>& button)
 	{
-		mPlayPanel = mnew Widget();
-		mPlayPanel->name = "play panel";
-		mPlayPanel->AddLayer("back", mnew Sprite("ui/UI4_play_panel_bk.png"), Layout::BothStretch(-7, -5, -5, -5));
-		*mPlayPanel->layout = WidgetLayout::VerStretch(HorAlign::Left, 3, 2, 200, 10);
-		mPanelRoot->AddChild(mPlayPanel);
+		*mToolsPanel->layout = WidgetLayout::VerAlign(HorAlign::Center, 2, 2 + (int)(mButtons.size() * 3), 200, (int)mButtons.size() * 26);
 
-		mPlayToggle = o2UI.CreateWidget<Toggle>("play-stop");
-		mPlayToggle->onToggle = [&](bool value) { OnPlayStopToggled(value); };
-		*mPlayToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(5, 1));
-		mPlayPanel->AddChild(mPlayToggle);
+		mToolsPanel->AddChild(button);
+		mButtons.push_back(button);
+	}
 
-		mPauseToggle = o2UI.CreateWidget<Toggle>("pause");
-		mPauseToggle->onToggle = [this](bool value) { OnPauseToggled(value); };
-		*mPauseToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(22, 1));
-		mPauseToggle->shortcut = ShortcutKeys(VK_F11);
-		mPlayPanel->AddChild(mPauseToggle);
+	void ToolsPanel::InitializePlaybackControls()
+	{
+		mPlaybackToolsPanel = mnew HorizontalLayout();
+		mPlaybackToolsPanel->name = "playback";
+		*mPlaybackToolsPanel->layout = WidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
+		mPlaybackToolsPanel->expandHeight = false;
+		mPlaybackToolsPanel->expandWidth = false;
+		mPlaybackToolsPanel->baseCorner = BaseCorner::Center;
+		mPanelRoot->AddChild(mPlaybackToolsPanel);
 
-		mStepButton = o2UI.CreateWidget<Button>("step");
-		mStepButton->onClick = [this]() { OnStepPressed(); };
-		*mStepButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(39, 1));
-		mStepButton->shortcut = ShortcutKeys(VK_F10);
-		mPlayPanel->AddChild(mStepButton);
-
-		mDevicesList = o2UI.CreateDropdown("backless");
-		mDevicesList->name = "devices list";
-		*mDevicesList->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(115, 20), Vec2F(-3, 1));
-		mPlayPanel->AddChild(mDevicesList);
-
-		mDevicesList->AddItems({ "iPhone", "Editor", "Simulator" });
-		mDevicesList->selectedItemPos = 0;
-
-		auto playPanelPlayStateAnim = mmake<AnimationClip>();
-
-		*playPanelPlayStateAnim->AddTrack<float>("layout/offsetRight") =
-			AnimationTrack<float>::EaseInOut(149.0f, 183.0f, 0.3f);
-
-		auto visiblePauseBtnAnim = playPanelPlayStateAnim->AddTrack<bool>("child/pause/enabled");
-		visiblePauseBtnAnim->AddKey(0.0f, false);
-		visiblePauseBtnAnim->AddKey(0.1f, false);
-		visiblePauseBtnAnim->AddKey(0.11f, true);
-		visiblePauseBtnAnim->AddKey(0.3f, true);
-
-		auto visibleStepBtnAnim = playPanelPlayStateAnim->AddTrack<bool>("child/step/enabled");
-		visibleStepBtnAnim->AddKey(0.0f, false);
-		visibleStepBtnAnim->AddKey(0.25f, false);
-		visibleStepBtnAnim->AddKey(0.26f, true);
-		visibleStepBtnAnim->AddKey(0.3f, true);
-
-		mPlayPanel->AddState("playing", playPanelPlayStateAnim);
-
-		mPlayToggle->onToggle += [=](bool playing) {
-			mPlayPanel->SetState("playing", playing);
+		mPlayStopButton = mnew ToggleButton();
+		*mPlayStopButton->layout = WidgetLayout::HorStretch(3, 2, 100, 30);
+		mPlayStopButton->fitByChildren = true;
+		mPlayStopButton->spriteIdle = mPanelIdle;
+		mPlayStopButton->spriteHot = mPanelHot;
+		mPlayStopButton->spritePressed = mPanelPressed;
+		mPlayStopButton->spriteFocused = mPanelFocused;
+		mPlayStopButton->layout->contentWidthFrac = 1.0f;
+		mPlayStopButton->layout->contentHeightFrac = 1.0f;
+		mPlayStopButton->onToggled = [](bool playing) {
+			playing ? o2EditorApplication.ResumePlayback() : o2EditorApplication.PausePlayback();
 		};
+		mPlaybackToolsPanel->AddChild(mPlayStopButton);
+
+		mPauseButton = mnew Button();
+		*mPauseButton->layout = WidgetLayout::HorStretch(3, 2, 100, 30);
+		
+		// Convert raw pointers to Ref<>
+		const Ref<Button>& pauseButtonRef = mPauseButton;
+		const Ref<Sprite>& panelSpriteIdleRef = mPanelIdle;
+		const Ref<Sprite>& panelSpriteHotRef = mPanelHot;
+		const Ref<Sprite>& panelSpritePressedRef = mPanelPressed;
+		const Ref<Sprite>& panelSpriteFocusedRef = mPanelFocused;
+		
+		// Use const Ref<>& for function arguments with pointer types
+		mPauseButton->fitByChildren = true;
+		mPauseButton->spriteIdle = panelSpriteIdleRef;
+		mPauseButton->spriteHot = panelSpriteHotRef;
+		mPauseButton->spritePressed = panelSpritePressedRef;
+		mPauseButton->spriteFocused = panelSpriteFocusedRef;
+		mPauseButton->layout->contentWidthFrac = 1.0f;
+		mPauseButton->layout->contentHeightFrac = 1.0f;
+		mPauseButton->onClick = [=]() {
+			o2EditorApplication.PausePlayback();
+		};
+		mPlaybackToolsPanel->AddChild(mPauseButton);
+
+		mStepButton = mnew Button();
+		*mStepButton->layout = WidgetLayout::HorStretch(3, 2, 33, 30);
+		mStepButton->fitByChildren = true;
+		mStepButton->spriteIdle = mStepSprite;
+		mStepButton->spriteHot = mStepSpriteHot;
+		mStepButton->spritePressed = mStepSpritePressed;
+		mStepButton->spriteFocused = mStepSpriteFocused;
+		mStepButton->onClick = MakeFunction(this, &ToolsPanel::OnStepPressed);
+		mPlaybackToolsPanel->AddChild(mStepButton);
 	}
 
 	void ToolsPanel::InitializeLayoutSchemesPanel()
 	{
-		mLayoutSchemesList = o2UI.CreateDropdown("round");
-		*mLayoutSchemesList->layout = WidgetLayout::VerStretch(HorAlign::Right, 3, 2, 150, 10);
+		mLayoutSchemesList = mmake<Dropdown>("round");
+		mLayoutSchemesList->layout = WidgetLayout::VerStretch(HorAlign::Right, 3, 2, 150, 10);
 		mPanelRoot->AddChild(mLayoutSchemesList);
 		UpdateWndLayoutSchemas();
 		mLayoutSchemesList->onSelectedText = MakeFunction(this, &ToolsPanel::OnSchemeSelected);
@@ -158,10 +284,10 @@ namespace Editor
 
 	void ToolsPanel::InitializeToolsPanel()
 	{
-		mToolsPanel = mnew HorizontalLayout();
+		mToolsPanel = mmake<HorizontalLayout>();
 		mToolsPanel->name = "edit tools";
-		mToolsPanel->AddLayer("back", mnew Sprite("ui/UI4_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
-		*mToolsPanel->layout = WidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
+		mToolsPanel->AddLayer("back", mmake<Sprite>("ui/UI4_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
+		mToolsPanel->layout = WidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
 		mToolsPanel->expandHeight = true;
 		mToolsPanel->expandWidth = false;
 		mToolsPanel->fitByChildren = true;

@@ -11,7 +11,7 @@ namespace Editor
 {
 	UIRoot::UIRoot()
 	{
-		mRootWidget = mnew Widget(ActorCreateMode::NotInScene);
+		mRootWidget = mmake<Ref<Widget>>(ActorCreateMode::NotInScene);
 	}
 
 	UIRoot::~UIRoot()
@@ -19,13 +19,13 @@ namespace Editor
 		delete mRootWidget;
 	}
 
-	Widget* UIRoot::AddWidget(Widget* widget)
+	Ref<Widget> UIRoot::AddWidget(const Ref<Widget>& widget)
 	{
 		mRootWidget->AddChild(widget);
 		return widget;
 	}
 
-	void UIRoot::RemoveWidget(Widget* widget)
+	void UIRoot::RemoveWidget(const Ref<Widget>& widget)
 	{
 		mRootWidget->RemoveChild(widget);
 	}
@@ -35,7 +35,7 @@ namespace Editor
 		mRootWidget->RemoveAllChildren();
 	}
 
-	Widget* UIRoot::GetRootWidget()
+	Ref<Widget> UIRoot::GetRootWidget()
 	{
 		return mRootWidget;
 	}
@@ -55,5 +55,4 @@ namespace Editor
 	{
 		*mRootWidget->layout = WidgetLayout::Based(BaseCorner::Center, (Vec2F)o2Application.GetContentSize()/o2Application.GetGraphicsScale());
 	}
-
 }

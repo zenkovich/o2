@@ -3,6 +3,8 @@
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Pair.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/SmartPtr/Ref.h"
+#include "o2/Utils/Types/SmartPtr/WeakRef.h"
 
 using namespace o2;
 
@@ -20,12 +22,12 @@ namespace Editor
 	class PropertiesContext
 	{
 	public:
-		PropertiesContext* parent = nullptr; // Parent context
+		Ref<PropertiesContext> parent; // Parent context
 
-		Vector<Pair<IObject*, IObject*>>       targets;    // Last set targets
-		Map<const FieldInfo*, IPropertyField*> properties; // Property info to property field map
+		Vector<Pair<Ref<IObject>, Ref<IObject>>>       targets;    // Last set targets
+		Map<const FieldInfo*, Ref<IPropertyField>> properties; // Property info to property field map
 
-		Spoiler* privatePropertiesSpoiler = nullptr; // Private properties spoiler
+		WeakRef<Spoiler> privatePropertiesSpoiler; // Private properties spoiler
 
 		bool builtWithPrivateProperties = false; // Is properties was built with hidden properties
 
@@ -34,7 +36,7 @@ namespace Editor
 		void Invalidate();
 
 		// Sets targets objects and updates targets in properties
-		void Set(const Vector<Pair<IObject*, IObject*>>& targets, bool force = false);
+		void Set(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targets, bool force = false);
 
 		// Refreshes properties
 		void Refresh();
@@ -43,7 +45,7 @@ namespace Editor
 		bool IsBuiltWIthPrivateProperties() const;
 
 		// Returns property info to property field map
-		const Map<const FieldInfo*, IPropertyField*>& GetProperties() const;
+		const Map<const FieldInfo*, Ref<IPropertyField>>& GetProperties() const;
 
 		// Searches target with suitable type on contexts stack
 		template<typename _type>
@@ -55,19 +57,18 @@ namespace Editor
 	template<typename _type>
 	_type* PropertiesContext::FindOnStack() const
 	{
-		auto contextIt = parent;
+		auto contextIt = parent.get();
 		while (contextIt)
 		{
 			if (!contextIt->targets.IsEmpty())
 			{
-				if (auto typed = dynamic_cast<_type*>(contextIt->targets[0].first))
+				if (auto typed = DynamicCast<_type>(contextIt->targets[0].first))
 					return typed;
 			}
 
-			contextIt = contextIt->parent;
+			contextIt = contextIt->parent.get();
 		}
 
 		return nullptr;
 	}
-
 }

@@ -11,12 +11,12 @@ namespace Editor
 	{
 		mReady = false;
 
-		mHorScrollbar = mnew HorizontalScrollBar();
+		mHorScrollbar = mmake<HorizontalScrollBar>();
 		*mHorScrollbar->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
 		mHorScrollbar->SetInternalParent(this);
 		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
 
-		mVerScrollbar = mnew VerticalScrollBar();
+		mVerScrollbar = mmake<VerticalScrollBar>();
 		*mVerScrollbar->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 20);
 		mVerScrollbar->SetInternalParent(this);
 		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
@@ -43,18 +43,12 @@ namespace Editor
 
 	FrameScrollView::~FrameScrollView()
 	{
-		if (mHorScrollbar)
-			delete mHorScrollbar;
-
-		if (mVerScrollbar)
-			delete mVerScrollbar;
+		mHorScrollbar.reset();
+		mVerScrollbar.reset();
 	}
 
 	FrameScrollView& FrameScrollView::operator=(const FrameScrollView& other)
 	{
-		delete mHorScrollbar;
-		delete mVerScrollbar;
-
 		ScrollView::operator=(other);
 
 		mHorScrollbar = other.mHorScrollbar->CloneAs<HorizontalScrollBar>();
@@ -103,9 +97,8 @@ namespace Editor
 		mVerScrollbar->UpdateSelfTransform();
 	}
 
-	void FrameScrollView::SetHorScrollbar(HorizontalScrollBar* scrollbar)
+	void FrameScrollView::SetHorScrollbar(const Ref<HorizontalScrollBar>& scrollbar)
 	{
-		delete mHorScrollbar;
 		mHorScrollbar = scrollbar;
 		mHorScrollbar->SetInternalParent(this);
 		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
@@ -113,9 +106,8 @@ namespace Editor
 		SetLayoutDirty();
 	}
 
-	void FrameScrollView::SetVerScrollbar(VerticalScrollBar* scrollbar)
+	void FrameScrollView::SetVerScrollbar(const Ref<VerticalScrollBar>& scrollbar)
 	{
-		delete mVerScrollbar;
 		mVerScrollbar = scrollbar;
 		mVerScrollbar->SetInternalParent(this);
 		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
@@ -146,12 +138,12 @@ namespace Editor
 		RectF camRect = mViewCamera.GetRect();
 		Vec2F camSize = camRect.Size();
 
-		mHorScrollbar->SetValueRange(Math::Min(mAvailableArea.left + camSize.x*0.5f, camRect.Center().x),
-									 Math::Max(mAvailableArea.right - camSize.x*0.5f, camRect.Center().x));
+		mHorScrollbar->SetValueRange(Math::Min(mAvailableArea.left + camSize.x * 0.5f, camRect.Center().x),
+			Math::Max(mAvailableArea.right - camSize.x * 0.5f, camRect.Center().x));
 		mHorScrollbar->SetScrollHandleSize(camRect.Width());
 
-		mVerScrollbar->SetValueRange(Math::Min(mAvailableArea.bottom + camSize.y*0.5f, camRect.Center().y),
-									 Math::Max(mAvailableArea.top - camSize.y*0.5f, camRect.Center().y));
+		mVerScrollbar->SetValueRange(Math::Min(mAvailableArea.bottom + camSize.y * 0.5f, camRect.Center().y),
+			Math::Max(mAvailableArea.top - camSize.y * 0.5f, camRect.Center().y));
 
 		mVerScrollbar->SetScrollHandleSize(camRect.Height());
 	}

@@ -9,8 +9,8 @@ namespace Editor
 {
 	TexturePreview::TexturePreview()
 	{
-		mTextureSprite = mnew Sprite();
-		mBackgroundSprite = mnew Sprite(CommonTextures::checkedBackground);
+		mTextureSprite = mmake<Ref<Sprite>>();
+		mBackgroundSprite = mmake<Ref<Sprite>>(CommonTextures::checkedBackground);
 		mBackgroundSprite->SetMode(SpriteMode::Tiled);
 
 		AddLayer("background", mBackgroundSprite, Layout::BothStretch(0, mLabelHeight, 0, 0));
@@ -24,8 +24,8 @@ namespace Editor
 	TexturePreview::TexturePreview(const TexturePreview& other):
 		Widget(other)
 	{
-		mBackgroundSprite = GetLayerDrawable<Sprite>("background");
-		mTextureSprite = GetLayerDrawable<Sprite>("texture");
+		mBackgroundSprite = GetLayerDrawable<Ref<Sprite>>("background");
+		mTextureSprite = GetLayerDrawable<Ref<Sprite>>("texture");
 
 		mTextureInfoLabel = FindChildByType<Label>();
 	}
@@ -70,8 +70,8 @@ namespace Editor
 	{
 		Widget::operator=(other);
 
-		mBackgroundSprite = GetLayerDrawable<Sprite>("background");
-		mTextureSprite = GetLayerDrawable<Sprite>("texture");
+		mBackgroundSprite = GetLayerDrawable<Ref<Sprite>>("background");
+		mTextureSprite = GetLayerDrawable<Ref<Sprite>>("texture");
 
 		mTextureInfoLabel = FindChildByType<Label>();
 

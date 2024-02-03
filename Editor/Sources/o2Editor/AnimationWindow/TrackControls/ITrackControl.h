@@ -1,9 +1,9 @@
-#pragma once
-
 #include "AnimationKeyDragHandle.h"
 #include "o2/Animation/Tracks/AnimationTrack.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
+
+#include <memory>
 
 using namespace o2;
 
@@ -12,7 +12,7 @@ namespace Editor
 	class AnimationTimeline;
 	class KeyHandlesSheet;
 
-	class ITrackControl: public Widget
+	class ITrackControl : public Widget
 	{
 	public:
 		struct KeyHandle
@@ -21,7 +21,7 @@ namespace Editor
 			Ref<AnimationKeyDragHandle> handle = nullptr;
 
 			KeyHandle() { }
-			KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle): keyUid(keyUid), handle(handle) { }
+			KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle) : keyUid(keyUid), handle(handle) { }
 
 			bool operator==(const KeyHandle& other) const;
 		};
@@ -31,7 +31,7 @@ namespace Editor
 		virtual void Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet);
 
 		// Sets Animation track, updates and creates key handles
-		virtual void SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path);
+		virtual void SetTrack(const Ref<Ref<IAnimationTrack>>& track, const Ref<Ref<IAnimationTrack::IPlayer>>& player, const String& path);
 
 		// Updates handles position on timeline
 		virtual void UpdateHandles();
@@ -75,35 +75,37 @@ namespace Editor
 		SERIALIZABLE(ITrackControl);
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::ITrackControl)
 {
-    BASE_CLASS(o2::Widget);
+	BASE_CLASS(o2::Widget);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::ITrackControl)
 {
 }
 END_META;
+
 CLASS_METHODS_META(Editor::ITrackControl)
 {
-
-    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<KeyHandle*>, GetKeyHandles);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetTreePartControls);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
-    FUNCTION().PUBLIC().SIGNATURE(void, InsertNewKey, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysDrag);
-    FUNCTION().PUBLIC().SIGNATURE(void, EndKeysDrag);
-    FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
-    FUNCTION().PUBLIC().SIGNATURE(UInt64, DeserializeKey, const DataValue&, float, bool);
-    FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationTimeline>&, const Ref<KeyHandlesSheet>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<Ref<IAnimationTrack>>&, const Ref<Ref<IAnimationTrack::IPlayer>>&, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<KeyHandle>>, GetKeyHandles) const;
+	FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetTreePartControls) const;
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertNewKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysDrag);
+	FUNCTION().PUBLIC().SIGNATURE(void, EndKeysDrag);
+	FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
+	FUNCTION().PUBLIC().SIGNATURE(UInt64, DeserializeKey, const DataValue&, float, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
 // --- END META ---

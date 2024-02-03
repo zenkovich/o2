@@ -66,7 +66,7 @@ namespace Editor
 	void ActorProperty::RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source,
 										   IObject* targetOwner)
 	{
-		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
+		if (!source || !targetOwner || DynamicCast<Component>(targetOwner))
 			return;
 
 		Ref<Actor> sourceActor = GetProxy(source);
@@ -74,7 +74,7 @@ namespace Editor
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent();
 
-		Actor* actorOwner = dynamic_cast<Actor*>(targetOwner);
+		Actor* actorOwner = DynamicCast<Actor>(targetOwner);
 
 		if (actorOwner)
 		{
@@ -187,100 +187,123 @@ namespace Editor
 
 	void ActorProperty::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
+		if (auto* actorsTree = DynamicCast<SceneHierarchyTree*>(group))
 			OnDroppedFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
+		else if (auto* assetsScroll = DynamicCast<AssetsIconsScrollArea*>(group))
 			OnDroppedFromAssetsScroll(assetsScroll);
 	}
 
 	void ActorProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
+		if (auto* actorsTree = DynamicCast<SceneHierarchyTree*>(group))
 			OnDragEnterFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
-			OnDragEnterFromAssetsScroll(assetsScroll);
-	}
+		else if (auto* Replace raw pointers with `Ref<>` in the provided code, except for `void*` pointers. Use `const Ref<>&` for function arguments with pointer types and in overridden methods. Remove the default `nullptr` value for class members with type `Ref<>`. If a class variable is some kind of "parent", use `WeakRef<>`. Use `mmake<>` to create `Ref<>` objects, similar to `make_shared<>`. Replace `dynamic_cast<type*>` with `DynamicCast<type>` to cast `Ref<>` objects. 
 
-	void ActorProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
-	{
-		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
-			OnDragExitFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
-			OnDragExitFromAssetsScroll(assetsScroll);
-	}
+Here's the updated code:
 
-	void ActorProperty::OnDroppedFromActorsTree(SceneHierarchyTree* actorsTree)
-	{
-		if (actorsTree->GetSelectedObjects().Count() > 1)
-			return;
+```
+#include <Ref.h>
+#include <WeakRef.h>
 
-		SetValueByUser(dynamic_cast<Actor*>(actorsTree->GetSelectedObjects()[0]));
+void ActorProperty::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
+{
+    if (const auto* actorsTree = DynamicCast<SceneHierarchyTree>(group))
+        OnDragEnterFromActorsTree(actorsTree);
+    else if (const auto* assetsScroll = DynamicCast<AssetsIconsScrollArea>(group))
+        OnDragEnterFromAssetsScroll(assetsScroll);
+}
 
-		o2Application.SetCursor(CursorType::Arrow);
-		mBox->Focus();
-	}
+void ActorProperty::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
+{
+    if (const auto* actorsTree = DynamicCast<SceneHierarchyTree>(group))
+        OnDragExitFromActorsTree(actorsTree);
+    else if (const auto* assetsScroll = DynamicCast<AssetsIconsScrollArea>(group))
+        OnDragExitFromAssetsScroll(assetsScroll);
+}
 
-	void ActorProperty::OnDragEnterFromActorsTree(SceneHierarchyTree* actorsTree)
-	{
-		if (actorsTree->GetSelectedObjects().Count() > 1)
-			return;
+void ActorProperty::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
+{
+    if (const auto* actorsTree = DynamicCast<SceneHierarchyTree>(group))
+        OnDroppedFromActorsTree(actorsTree);
+    else if (const auto* assetsIconsScroll = DynamicCast<AssetsIconsScrollArea>(group))
+        OnDroppedFromAssetsScroll(assetsIconsScroll);
+}
 
-		Actor* actor = dynamic_cast<Actor*>(actorsTree->GetSelectedObjects()[0]);
-		if (!actor || !actor->GetType().IsBasedOn(*mActorType))
-			return;
+void ActorProperty::OnDroppedFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree)
+{
+    if (actorsTree->GetSelectedObjects().Count() > 1)
+        return;
 
-		o2Application.SetCursor(CursorType::Hand);
-		mBox->SetState("focused", true);
-	}
+    SetValueByUser(DynamicCast<Actor>(actorsTree->GetSelectedObjects()[0]));
 
-	void ActorProperty::OnDragExitFromActorsTree(SceneHierarchyTree* actorsTree)
-	{
-		if (actorsTree->GetSelectedObjects().Count() > 1)
-			return;
+    o2Application.SetCursor(CursorType::Arrow);
+    mBox->Focus();
+}
 
-		o2Application.SetCursor(CursorType::Arrow);
-		mBox->SetState("focused", false);
-	}
+void ActorProperty::OnDragEnterFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree)
+{
+    if (actorsTree->GetSelectedObjects().Count() > 1)
+        return;
 
-	void ActorProperty::OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
-	{
-		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
-			return;
+    const auto actor = DynamicCast<Actor>(actorsTree->GetSelectedObjects()[0]);
+    if (!actor || !actor->GetType().IsBasedOn(*mActorType))
+        return;
 
-		auto lastSelectedAsset = assetsIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset->meta->GetAssetType() != &TypeOf(ActorAsset))
-			return;
+    o2Application.SetCursor(CursorType::Hand);
+    mBox->SetState("focused", true);
+}
 
-		SetValueByUser(o2Scene.GetAssetActorByID(lastSelectedAsset->meta->ID()));
+void ActorProperty::OnDragExitFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree)
+{
+    if (actorsTree->GetSelectedObjects().Count() > 1)
+        return;
 
-		o2Application.SetCursor(CursorType::Arrow);
-		mBox->Focus();
-	}
+    o2Application.SetCursor(CursorType::Arrow);
+    mBox->SetState("focused", false);
+}
 
-	void ActorProperty::OnDragEnterFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
-	{
-		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
-			return;
+void ActorProperty::OnDroppedFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll)
+{
+    if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
+        return;
 
-		auto lastSelectedAsset = assetsIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset->meta->GetAssetType() != &TypeOf(ActorAsset))
-			return;
+    const auto lastSelectedAsset = assetsIconsScroll->GetSelectedAssets().Last();
+    if (lastSelectedAsset->meta->GetAssetType() != &TypeOf(ActorAsset))
+        return;
 
-		o2Application.SetCursor(CursorType::Hand);
-		mBox->SetState("focused", true);
-	}
+    SetValueByUser(o2Scene.GetAssetActorByID(lastSelectedAsset->meta->ID()));
 
-	void ActorProperty::OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
-	{
-		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
-			return;
+    o2Application.SetCursor(CursorType::Arrow);
+    mBox->Focus();
+}
 
-		o2Application.SetCursor(CursorType::Arrow);
-		mBox->SetState("focused", false);
-	}
+void ActorProperty::OnDragEnterFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll)
+{
+    if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
+        return;
+
+    const auto lastSelectedAsset = assetsIconsScroll->GetSelectedAssets().Last();
+    if (lastSelectedAsset->meta->GetAssetType() != &TypeOf(ActorAsset))
+        return;
+
+    o2Application.SetCursor(CursorType::Hand);
+    mBox->SetState("focused", true);
+}
+
+void ActorProperty::OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll)
+{
+    if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
+        return;
+
+    o2Application.SetCursor(CursorType::Arrow);
+    mBox->SetState("focused", false);
+}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<Actor>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ActorProperty, Editor__ActorProperty);
 // --- END META ---
+```
+
+Note that the code assumes the existence and correct usage of `Ref.h`, `WeakRef.h`, and `mmake<>`. Please make sure these dependencies are available and properly include them in your project.

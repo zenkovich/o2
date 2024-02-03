@@ -7,133 +7,136 @@
 
 namespace Editor
 {
-	TagsProperty::TagsProperty()
-	{}
+    using namespace o2;
 
-	TagsProperty::TagsProperty(const TagsProperty& other) :
-		TPropertyField<TagGroup>(other)
-	{
-		InitializeControls();
-	}
+    TagsProperty::TagsProperty()
+    {}
 
-	TagsProperty& TagsProperty::operator=(const TagsProperty& other)
-	{
-		TPropertyField<TagGroup>::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    TagsProperty::TagsProperty(const TagsProperty& other) :
+        TPropertyField<TagGroup>(other)
+    {
+        InitializeControls();
+    }
 
-	void TagsProperty::InitializeControls()
-	{
-		mEditBox = FindChildByType<EditBox>();
-		if (mEditBox)
-		{
-			mTagsContext = FindChildByType<ContextMenu>();
-			if (!mTagsContext)
-			{
-				mTagsContext = o2UI.CreateWidget<ContextMenu>();
-				AddChild(mTagsContext);
-			}
+    TagsProperty& TagsProperty::operator=(const TagsProperty& other)
+    {
+        TPropertyField<TagGroup>::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-			mTagsContext->SetMaxItemsVisible(10);
-			mEditBox->AddChild(mTagsContext);
+    void TagsProperty::InitializeControls()
+    {
+        mEditBox = FindChildByType<EditBox>();
+        if (mEditBox)
+        {
+            mTagsContext = FindChildByType<ContextMenu>();
+            if (!mTagsContext)
+            {
+                mTagsContext = UIManager::CreateWidget<ContextMenu>();
+                AddChild(mTagsContext);
+            }
 
-			mEditBox->onFocused = [&]() { UpdateContextData(""); };
-			mEditBox->onChangeCompleted = THIS_FUNC(OnEditBoxChangeCompleted);
-			mEditBox->onChanged = THIS_FUNC(OnEditBoxChanged);
-			mEditBox->text = "--";
-		}
-	}
+            mTagsContext->SetMaxItemsVisible(10);
+            mEditBox->AddChild(mTagsContext);
 
-	void TagsProperty::UpdateValueView()
-	{}
+            mEditBox->onFocused = [&]() { UpdateContextData(""); };
+            mEditBox->onChangeCompleted = THIS_FUNC(OnEditBoxChangeCompleted);
+            mEditBox->onChanged = THIS_FUNC(OnEditBoxChanged);
+            mEditBox->text = "--";
+        }
+    }
 
-	void TagsProperty::UpdateContextData(const WString& filter)
-	{
-		if (mPushingTag)
-			return;
+    void TagsProperty::UpdateValueView()
+    {}
 
-		mTagsContext->RemoveAllItems();
-		mTagsContext->Show(mEditBox->layout->GetWorldLeftBottom());
+    void TagsProperty::UpdateContextData(const WString& filter)
+    {
+        if (mPushingTag)
+            return;
 
-		for (auto tag : o2Scene.GetTags())
-		{
-			if (filter.IsEmpty() || tag->GetName().CountOf(filter) > 0)
-				mTagsContext->AddItem(tag->GetName(), [=]() { PushTag(tag->GetName()); });
-		}
-	}
+        mTagsContext->RemoveAllItems();
+        mTagsContext->Show(mEditBox->layout->GetWorldLeftBottom());
 
-	void TagsProperty::SetCommonValue(const TagGroup& value)
-	{
-		mCommonValue = value;
-		mValuesDifferent = false;
+        for (auto tag : Scene::GetTags())
+        {
+            if (filter.IsEmpty() || tag->GetName().CountOf(filter) > 0)
+                mTagsContext->AddItem(tag->GetName(), [=]() { PushTag(tag->GetName()); });
+        }
+    }
 
-		WString res;
-		for (auto tag : mCommonValue.GetTagsNames())
-			res += tag + " ";
+    void TagsProperty::SetCommonValue(const TagGroup& value)
+    {
+        mCommonValue = value;
+        mValuesDifferent = false;
 
-		mPushingTag = true;
-		mEditBox->text = res;
-		mPushingTag = false;
+        WString res;
+        for (auto tag : mCommonValue.GetTagsNames())
+            res += tag + " ";
 
-		OnValueChanged();
-	}
+        mPushingTag = true;
+        mEditBox->text = res;
+        mPushingTag = false;
 
-	void TagsProperty::OnEditBoxChanged(const WString& text)
-	{
-		if (mPushingTag || !mEditBox->IsFocused())
-			return;
+        OnValueChanged();
+    }
 
-		WString lastTagText;
+    void TagsProperty::OnEditBoxChanged(const WString& text)
+    {
+        if (mPushingTag || !mEditBox->IsFocused())
+            return;
 
-		int spacePos = text.FindLast(" ");
-		if (spacePos < 0)
-			lastTagText = text;
-		else
-			lastTagText = text.SubStr(spacePos + 1);
+        WString lastTagText;
 
-		UpdateContextData(lastTagText);
-	}
+        int spacePos = text.FindLast(" ");
+        if (spacePos < 0)
+            lastTagText = text;
+        else
+            lastTagText = text.SubStr(spacePos + 1);
 
-	void TagsProperty::OnEditBoxChangeCompleted(const WString& text)
-	{
-		SetTags(text);
-	}
+        UpdateContextData(lastTagText);
+    }
 
-	void TagsProperty::SetTags(const WString &text)
-	{
-		auto tagsNames = text.Split(" ");
+    void TagsProperty::OnEditBoxChangeCompleted(const WString& text)
+    {
+        SetTags(text);
+    }
 
-		TagGroup tagsValue;
+    void TagsProperty::SetTags(const WString& text)
+    {
+        auto tagsNames = text.Split(" ");
 
-		for (auto tagName : tagsNames)
-		{
-			if (!tagName.IsEmpty())
-				tagsValue.AddTag(tagName);
-		}
+        TagGroup tagsValue;
 
-		SetValueByUser(tagsValue);
-	}
+        for (auto tagName : tagsNames)
+        {
+            if (!tagName.IsEmpty())
+                tagsValue.AddTag(tagName);
+        }
 
-	void TagsProperty::PushTag(String name)
-	{
-		String editText = (WString)mEditBox->text;
+        SetValueByUser(tagsValue);
+    }
 
-		int spaceIdx = editText.FindLast(" ");
-		if (spaceIdx >= 0)
-			editText = editText.SubStr(0, spaceIdx);
-		else
-			editText = "";
+    void TagsProperty::PushTag(String name)
+    {
+        String editText = (WString)mEditBox->text;
 
-		if (!editText.IsEmpty())
-			editText += " ";
+        int spaceIdx = editText.FindLast(" ");
+        if (spaceIdx >= 0)
+            editText = editText.SubStr(0, spaceIdx);
+        else
+            editText = "";
 
-		editText += name;
+        if (!editText.IsEmpty())
+            editText += " ";
 
-		SetTags(editText);
-	}
+        editText += name;
+
+        SetTags(editText);
+    }
 }
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::TagGroup>);
+
+template class Editor::TPropertyField<o2::TagGroup>;
 // --- META ---
 
 DECLARE_CLASS(Editor::TagsProperty, Editor__TagsProperty);

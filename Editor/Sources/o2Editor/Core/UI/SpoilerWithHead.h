@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Scene/UI/Widgets/Spoiler.h"
+#include <memory>
 
 using namespace o2;
 
@@ -32,7 +33,7 @@ namespace Editor
 		SpoilerWithHead& operator=(const SpoilerWithHead& other);
 
 		// Returns icon
-		Image* GetIcon() const;
+		const Ref<Image>& GetIcon() const;
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -40,17 +41,17 @@ namespace Editor
 		IOBJECT(SpoilerWithHead);
 
 	private:
-		Button* mOptionsBtn = nullptr; // Component option button
-		Button* mSaveBtn = nullptr;    // Save prototype button
-		Image*  mIcon = nullptr;       // Component icon
+		Ref<Button> mOptionsBtn; // Component option button
+		Ref<Button> mSaveBtn;    // Save prototype button
+		Ref<Image>  mIcon;       // Component icon
 
 	private:
 		// Initializes controls: options, save button and icon
 		void InitializeControls();
 	};
 }
-// --- META ---
 
+// --- META ---
 CLASS_BASES_META(Editor::SpoilerWithHead)
 {
     BASE_CLASS(o2::Spoiler);
@@ -60,9 +61,9 @@ CLASS_FIELDS_META(Editor::SpoilerWithHead)
 {
     FIELD().PUBLIC().NAME(onOptionsPressed);
     FIELD().PUBLIC().NAME(onSavePressed);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mOptionsBtn);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSaveBtn);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mIcon);
+    FIELD().PRIVATE().DEFAULT_VALUE(Ref<Button>()).NAME(mOptionsBtn);
+    FIELD().PRIVATE().DEFAULT_VALUE(Ref<Button>()).NAME(mSaveBtn);
+    FIELD().PRIVATE().DEFAULT_VALUE(Ref<Image>()).NAME(mIcon);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpoilerWithHead)
@@ -70,7 +71,7 @@ CLASS_METHODS_META(Editor::SpoilerWithHead)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const SpoilerWithHead&);
-    FUNCTION().PUBLIC().SIGNATURE(Image*, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Image>&, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }

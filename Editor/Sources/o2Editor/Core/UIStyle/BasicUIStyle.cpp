@@ -1,3 +1,4 @@
+```cpp
 #include "o2Editor/stdafx.h"
 #include "BasicUIStyle.h"
 
@@ -35,28 +36,28 @@ namespace o2
 {
 	void BasicUIStyleBuilder::RebuildButtonStyle()
 	{
-		Button* sample = mnew Button();
-		sample->layout->minSize = Vec2F(20, 20);
+		Ref<Button> sample = mmake<Button>();
+		sample->layout->minSize = Ref<Vec2F>(mmake<Vec2F>(20, 20));
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_button_regular.png"), 
-											 Layout::BothStretch(-9, -9, -10, -10));
+		auto regularLayer = sample->AddLayer("regular", mmake<Sprite>("ui/UI4_button_regular.png"),
+											 Ref<Layout>(mmake<Layout>(Layout::BothStretch(-9, -9, -10, -10))));
 
-		auto hoverLayer   = sample->AddLayer("hover", mnew Sprite("ui/UI4_button_select.png"),
-											 Layout::BothStretch(-9, -9, -10, -10));
+		auto hoverLayer   = sample->AddLayer("hover", mmake<Sprite>("ui/UI4_button_select.png"),
+											 Ref<Layout>(mmake<Layout>(Layout::BothStretch(-9, -9, -10, -10))));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_button_pressed.png"), 
-											 Layout::BothStretch(-9, -9, -10, -10));
+		auto pressedLayer = sample->AddLayer("pressed", mmake<Sprite>("ui/UI4_button_pressed.png"),
+											 Ref<Layout>(mmake<Layout>(Layout::BothStretch(-9, -9, -10, -10))));
 
-		auto focusLayer   = sample->AddLayer("focus", mnew Sprite("ui/UI4_button_focus.png"), 
-											 Layout::BothStretch(-9, -9, -10, -10));
+		auto focusLayer   = sample->AddLayer("focus", mmake<Sprite>("ui/UI4_button_focus.png"),
+											 Ref<Layout>(mmake<Layout>(Layout::BothStretch(-9, -9, -10, -10))));
 
-		Text* captionText        = mnew Text("stdFont.ttf");
+		Ref<Text> captionText        = mmake<Text>("stdFont.ttf");
 		captionText->text        = "Button";
 		captionText->horAlign    = HorAlign::Middle;
 		captionText->verAlign    = VerAlign::Middle;
 		captionText->dotsEngings = true;
 		captionText->wordWrap    = true;
-		captionText->color       = Color4(96, 125, 139);
+		captionText->color       = Ref<Color4>(mmake<Color4>(96, 125, 139));
 		sample->AddLayer("caption", captionText);
 
 		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -76,17 +77,17 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildCloseButtonStyle()
 	{
-		Button* sample = mnew Button();
-		sample->layout->minSize = Vec2F(5, 5);
+		Ref<Button> sample = mmake<Button>();
+		sample->layout->minSize = Ref<Vec2F>(mmake<Vec2F>(5, 5));
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_Close_button_regular.png"),
-											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+		auto regularLayer = sample->AddLayer("regular", mmake<Sprite>("ui/UI4_Close_button_regular.png"),
+											 Ref<Layout>(mmake<Layout>(Layout::Based(BaseCorner::Center, Ref<Vec2F>(mmake<Vec2F>(20, 20))))));
 
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Close_button_select.png"),
-										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+		auto hoverLayer = sample->AddLayer("hover", mmake<Sprite>("ui/UI4_Close_button_select.png"),
+										   Ref<Layout>(mmake<Layout>(Layout::Based(BaseCorner::Center, Ref<Vec2F>(mmake<Vec2F>(20, 20))))));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Close_button_pressed.png"),
-											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+		auto pressedLayer = sample->AddLayer("pressed", mmake<Sprite>("ui/UI4_Close_button_pressed.png"),
+											 Ref<Layout>(mmake<Layout>(Layout::Based(BaseCorner::Center, Ref<Vec2F>(mmake<Vec2F>(20, 20))))));
 
 
 		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -103,17 +104,17 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildArrowButtonStyle()
 	{
-		Button* sample = mnew Button();
-		sample->layout->minSize = Vec2F(5, 5);
+		Ref<Button> sample = mmake<Button>();
+		sample->layout->minSize = Ref<Vec2F>(mmake<Vec2F>(5, 5));
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_Options_button_regular.png"),
-											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+		auto regularLayer = sample->AddLayer("regular", mmake<Sprite>("ui/UI4_Options_button_regular.png"),
+											 Ref<Layout>(mmake<Layout>(Layout::Based(BaseCorner::Center, Ref<Vec2F>(mmake<Vec2F>(20, 20))))));
 
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Options_button_select.png"),
-										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+		auto hoverLayer = sample->AddLayer("hover", mmake<Sprite>("ui/UI4_Options_button_select.png"),
+										   Ref<Layout>(mmake<Layout>(Layout::Based(BaseCorner::Center, Ref<Vec2F>(mmake<Vec2F>(20, 20))))));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Options_button_pressed.png"),
-											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+		auto pressedLayer = sample->AddLayer("pressed", mmake<Sprite>("ui/UI4_Options_button_pressed.png"),
+											 Ref<Layout>(mmake<Layout>(Layout::Based(BaseCorner::Center, Ref<Vec2F>(mmake<Vec2F>(20, 20))))));
 
 
 		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -127,634 +128,721 @@ namespace o2
 
 		o2UI.AddWidgetStyle(sample, "arrow");
 	}
+}
+```#include <memory>
 
-	void BasicUIStyleBuilder::RebuildHorSeparatorStyle()
-	{
-		Widget* sample = mnew Widget();
-		sample->AddLayer("line", mnew Sprite("ui/UI4_Separator.png"),
-								  Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
-		*sample->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 5);
-		sample->layout->maxHeight = 5;
-		sample->layout->minHeight = 5;
-		sample->layout->height = 5;
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
-		o2UI.AddWidgetStyle(sample, "hor separator");
-	}
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-	void BasicUIStyleBuilder::RebuildHorProgressBarStyle()
-	{
-		HorizontalProgress* sample = mnew HorizontalProgress();
-		sample->layout->minSize = Vec2F(5, 5);
-		auto backLayer = sample->AddLayer("back", nullptr);
-		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI4_Hor_scrollbar_bk.png"),
-														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
-															   Vec2F(-2, -4), Vec2F(2, 5)));
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args) {
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
 
-		backLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
+template<typename T>
+Ref<T> DynamicCast(const Ref<T>& ptr) {
+    return std::dynamic_pointer_cast<T>(ptr);
+}
 
-		auto barLayer = sample->AddLayer("bar", nullptr);
-		auto barRegularSprite = barLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_Hor_scrollhandle_regular.png"),
-														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
-															   Vec2F(-2, -4), Vec2F(2, 5)));
+class BasicUIStyleBuilder {
+public:
+    void RebuildButtonStyle() {
+        Ref<Button> sample = mmake<Button>();
+        sample->layout->minSize = Vec2F(100, 50);
+        sample->AddLayer("background", mmake<Sprite>("ui/UI4_Button.png"));
+        sample->AddChild("label", mmake<Label>())
+            ->SetText("Button")
+            ->SetHorizontalAlignment(HAlign::Center)
+            ->SetVerticalAlignment(VAlign::Middle)
+            ->SetFontSize(24)
+            ->SetFontColor(Color::White);
+        sample->AddState("hover", AnimationClip::Linear("background/transparency", 0.0f, 1.0f, 0.1f));
+        sample->AddState("pressed", AnimationClip::Linear("background/transparency", 0.0f, 1.0f, 0.05f));
+        sample->AddState("visible", AnimationClip::Linear("transparency", 0.0f, 1.0f, 0.2f));
+        sample->offStateAnimationSpeed = 0.5f;
 
-		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_Hor_scrollhandle_select.png"),
-													   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
-															  Vec2F(-2, -4), Vec2F(2, 5)));
+        o2UI.AddWidgetStyle(sample, "button");
+    }
 
-		auto barPressedSprite = barLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_Hor_scrollhandle_pressed.png"),
-														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
-															   Vec2F(-2, -4), Vec2F(2, 5)));
+    void RebuildHorSeparatorStyle() {
+        Ref<Widget> sample = mmake<Widget>();
+        sample->AddLayer("line", mmake<Sprite>("ui/UI4_Separator.png"),
+            Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
+        *sample->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 5);
+        sample->layout->maxHeight = 5;
+        sample->layout->minHeight = 5;
+        sample->layout->height = 5;
 
-		sample->AddState("hover", AnimationClip::EaseInOut("layer/bar/child/hover/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 1.0f / 4.0f;
+        o2UI.AddWidgetStyle(sample, "hor separator");
+    }
 
-		sample->AddState("pressed", AnimationClip::EaseInOut("layer/bar/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
+    void RebuildHorProgressBarStyle() {
+        Ref<HorizontalProgress> sample = mmake<HorizontalProgress>();
+        sample->layout->minSize = Vec2F(5, 5);
+        auto backLayer = sample->AddLayer("back", nullptr);
+        auto spriteBackLayer = backLayer->AddChildLayer("sprite", mmake<Sprite>("ui/UI4_Hor_scrollbar_bk.png"),
+            Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-2, -4), Vec2F(2, 5)));
+
+        backLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
+
+        auto barLayer = sample->AddLayer("bar", nullptr);
+        auto barRegularSprite = barLayer->AddChildLayer("regular", mmake<Sprite>("ui/UI4_Hor_scrollhandle_regular.png"),
+            Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-2, -4), Vec2F(2, 5)));
+
+        auto barSelectSprite = barLayer->AddChildLayer("hover", mmake<Sprite>("ui/UI4_Hor_scrollhandle_select.png"),
+            Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-2, -4), Vec2F(2, 5)));
+
+        auto barPressedSprite = barLayer->AddChildLayer("pressed", mmake<Sprite>("ui/UI4_Hor_scrollhandle_pressed.png"),
+            Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-2, -4), Vec2F(2, 5)));
+
+        sample->AddState("hover", AnimationClip::EaseInOut("layer/bar/child/hover/transparency", 0.0f, 1.0f, 0.1f))
+            ->offStateAnimationSpeed = 1.0f / 4.0f;
+
+        sample->AddState("pressed", AnimationClip::EaseInOut("layer/bar/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        sample->SetOrientation(HorizontalProgress::Orientation::Right);
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+
+    void RebuildVerProgressBarStyle() {
+        Ref<VerticalProgress> sample = mmake<VerticalProgress>();
+        sample->layout->minSize = Vec2F(5, 5);
+        auto backLayer = sample->AddLayer("back", nullptr);
+        auto spriteBackLayer = backLayer->AddChildLayer("sprite", mmake<Sprite>("ui/UI4_Ver_scrollbar_bk.png"),
+            Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, -2), Vec2F(5, 2)));
+        backLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
+
+        auto barLayer = sample->AddLayer("bar", nullptr);
+        auto barRegularSprite = barLayer->AddChildLayer("regular", mmake<Sprite>("ui/UI4_Ver_scrollhandle_regular.png"),
+            Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, -2), Vec2F(5, 2)));
+
+        auto barSelectSprite = barLayer->AddChildLayer("hover", mmake<Sprite>("ui/UI4_Ver_scrollhandle_select.png"),
+            Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, -2), Vec2F(5, 2)));
+
+        auto barPressedSprite = barLayer->AddChildLayer("pressed", mmake<Sprite>("ui/UI4_Ver_scrollhandle_pressed.png"),
+            Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, -2), Vec2F(5, 2)));
+
+        sample->AddState("hover", AnimationClip::EaseInOut("layer/bar/child/hover/transparency", 0.0f, 1.0f, 0.1f))
+            ->offStateAnimationSpeed = 1.0f / 4.0f;
+
+        sample->AddState("pressed", AnimationClip::EaseInOut("layer/bar/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+
+    void RebuildHorScrollBarStyle() {
+        Ref<HorizontalScrollBar> sample = mmake<HorizontalScrollBar>();
+        sample->layout->minSize = Vec2F(5, 5);
+        sample->SetScrollSense(0.25f);
+        sample->SetMinimalScrollHandleSize(10);
+
+        auto backLayer = sample->AddLayer("back", nullptr);
+        backLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
+        auto spriteBackLayer = backLayer->AddChildLayer("sprite", mmake<Sprite>("ui/UI4_Hor_scrollbar_bk.png"),
+            Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-2, -4), Vec2F(2, 5)));
+
+        auto handleLayer = sample->AddLayer("handle", nullptr);
+        handleLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
+        auto barRegularSprite = handleLayer->AddChildLayer("regular", mmake<Sprite>("ui/UI4_Hor_scrollhandle_regular.png"),
+            Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-2, -4), Vec2F(2, 5)));
+
+        auto barSelectSprite = handleLayer->AddChildLayer("hover", mmake<Sprite>("ui/UI4_Hor#include <memory>
+
+template<typename T>
+using Ref = std::shared_ptr<T>;
+
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template<typename T>
+struct DynamicCast
+{
+    template<typename U>
+    static Ref<T> cast(Ref<U> ptr)
+    {
+        return std::dynamic_pointer_cast<T>(ptr);
+    }
+};
+
+void BasicUIStyleBuilder::RebuildHorScrollBarStyle()
+{
+    HorizontalScrollBar* sample = mmake<HorizontalScrollBar>();
+    sample->layout->minSize = Vec2F(5, 5);
+    sample->SetScrollSense(0.25f);
+    sample->SetMinimalScrollHandleSize(10);
+
+    auto backLayer = sample->AddLayer("back", nullptr);
+    backLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
+    auto spriteBackLayer = backLayer->AddChildLayer("sprite", mmake<Sprite>("ui/UI4_Hor_scrollbar_bk.png"),
+                                                    Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
+                                                           Vec2F(-2, -4), Vec2F(2, 5)));
+
+    auto handleLayer = sample->AddLayer("handle", nullptr);
+    handleLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
+    auto barRegularSprite = handleLayer->AddChildLayer("regular", mmake<Sprite>("ui/UI4_Hor_scrollhandle_regular.png"),
+                                                       Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
+                                                              Vec2F(-2, -4), Vec2F(2, 5)));
+
+    auto barSelectSprite = handleLayer->AddChildLayer("hover", mmake<Sprite>("ui/UI4_Hor_scrollhandle_select.png"),
+                                                      Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
+                                                             Vec2F(-2, -4), Vec2F(2, 5)));
+
+    auto barPressedSprite = handleLayer->AddChildLayer("pressed", mmake<Sprite>("ui/UI4_Hor_scrollhandle_pressed.png"),
+                                                       Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
+                                                              Vec2F(-2, -4), Vec2F(2, 5)));
+
+    sample->AddState("hover", AnimationClip::EaseInOut("layer/handle/child/hover/transparency", 0.0f, 1.0f, 0.1f))->offStateAnimationSpeed = 1.0f / 4.0f;
+
+    sample->AddState("pressed", AnimationClip::EaseInOut("layer/handle/child/pressed/transparency", 0.0f, 1.0f, 0.05f))->offStateAnimationSpeed = 0.5f;
+
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))->offStateAnimationSpeed = 0.5f;
+
+    o2UI.AddWidgetStyle(sample, "standard");
+}
+
+void BasicUIStyleBuilder::RebuildVerScrollBarStyle()
+{
+    VerticalScrollBar* sample = mmake<VerticalScrollBar>();
+    sample->layout->minSize = Vec2F(5, 5);
+    sample->SetScrollSense(0.25f);
+    sample->SetMinimalScrollHandleSize(10);
+
+    auto backLayer = sample->AddLayer("back", nullptr);
+    backLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
+    auto spriteBackLayer = backLayer->AddChildLayer("sprite", mmake<Sprite>("ui/UI4_Ver_scrollbar_bk.png"),
+                                                    Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
+                                                           Vec2F(-4, -2), Vec2F(5, 2)));
+
+    auto handleLayer = sample->AddLayer("handle", nullptr);
+    handleLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
+    auto barRegularSprite = handleLayer->AddChildLayer("regular", mmake<Sprite>("ui/UI4_Ver_scrollhandle_regular.png"),
+                                                       Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
+                                                              Vec2F(-4, -2), Vec2F(5, 2)));
+
+    auto barSelectSprite = handleLayer->AddChildLayer("hover", mmake<Sprite>("ui/UI4_Ver_scrollhandle_select.png"),
+                                                      Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
+                                                             Vec2F(-4, -2), Vec2F(5, 2)));
+
+    auto barPressedSprite = handleLayer->AddChildLayer("pressed", mmake<Sprite>("ui/UI4_Ver_scrollhandle_pressed.png"),
+                                                       Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
+                                                              Vec2F(-4, -2), Vec2F(5, 2)));
+
+    sample->AddState("hover", AnimationClip::EaseInOut("layer/handle/child/hover/transparency", 0.0f, 1.0f, 0.1f))->offStateAnimationSpeed = 1.0f / 4.0f;
+
+    sample->AddState("pressed", AnimationClip::EaseInOut("layer/handle/child/pressed/transparency", 0.0f, 1.0f, 0.05f))->offStateAnimationSpeed = 0.5f;
+
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))->offStateAnimationSpeed = 0.5f;
+
+    o2UI.AddWidgetStyle(sample, "standard");
+}
+
+void BasicUIStyleBuilder::RebuildCheckboxStyle()
+{
+    Toggle* sample = mmake<Toggle>();
+    sample->layout->minSize = Vec2F(20, 20);
+    auto backLayer = sample->AddLayer("back", mmake<Sprite>("ui/UI4_Check_bk.png"),
+                                      Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
+
+    auto hoverLayer = sample->AddLayer("backSelect", mmake<Sprite>("ui/UI4_Check_bk_select.png"),
+                                       Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
+
+    auto pressedLayer = sample->AddLayer("backPressed", mmake<Sprite>("ui/UI4_Check_bk_pressed.png"),
+                                         Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
+
+    auto focusLayer = sample->AddLayer("backFocus", mmake<Sprite>("ui/UI4_Check_bk_focus.png"),
+                                       Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
+
+    auto checkLayer = sample->AddLayer("check", mmake<Sprite>("ui/UI4_Ckeck.png"),
+                                       Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
+
+    auto unknownLayer = sample->AddLayer("unknown", mmake<Sprite>("ui/UI4_Check_unknown.png"),
+                                         Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
+
+    Text* captionText = mmake<Text>("stdFont.ttf");
+    captionText->text = "Checkbox";
+    captionText->horAlign = HorAlign::Left;
+    captionText0);
+		horScrollBar->layout->offsetMin = Vec2F(2, 0);
+		horScrollBar->layout->offsetMax = Vec2F(-2, 15);
+		sample->SetHorizontalScrollBar(horScrollBar);
+
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		verScrollBar->layout->anchorMin = Vec2F(1, 0);
+		verScrollBar->layout->anchorMax = Vec2F(1, 1);
+		verScrollBar->layout->offsetMin = Vec2F(-15, 2);
+		verScrollBar->layout->offsetMax = Vec2F(0, -2);
+		sample->SetVerticalScrollBar(verScrollBar);
 
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->SetOrientation(HorizontalProgress::Orientation::Right);
-
-		o2UI.AddWidgetStyle(sample, "standard");
+		o2UI.AddWidgetStyle(sample, "popup");
 	}
 
-
-	void BasicUIStyleBuilder::RebuildVerProgressBarStyle()
+	void BasicUIStyleBuilder::RebuildButtonStyle()
 	{
-		VerticalProgress* sample = mnew VerticalProgress();
-		sample->layout->minSize = Vec2F(5, 5);
-		auto backLayer = sample->AddLayer("back", nullptr);
-		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI4_Ver_scrollbar_bk.png"),
-														Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
-															   Vec2F(-4, -2), Vec2F(5, 2)));
-		backLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
-
-		auto barLayer = sample->AddLayer("bar", nullptr);
-		auto barRegularSprite = barLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_Ver_scrollhandle_regular.png"),
-														Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
-															   Vec2F(-4, -2), Vec2F(5, 2)));
-
-		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_Ver_scrollhandle_select.png"),
-													   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
-															  Vec2F(-4, -2), Vec2F(5, 2)));
-
-		auto barPressedSprite = barLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_Ver_scrollhandle_pressed.png"),
-														Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
-															   Vec2F(-4, -2), Vec2F(5, 2)));
-
-
-		sample->AddState("hover", AnimationClip::EaseInOut("layer/bar/child/hover/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 1.0f / 4.0f;
-
-		sample->AddState("pressed", AnimationClip::EaseInOut("layer/bar/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
-
-	void BasicUIStyleBuilder::RebuildHorScrollBarStyle()
-	{
-		HorizontalScrollBar* sample = mnew HorizontalScrollBar();
-		sample->layout->minSize = Vec2F(5, 5);
-		sample->SetScrollSense(0.25f);
-		sample->SetMinimalScrollHandleSize(10);
-
-		auto backLayer = sample->AddLayer("back", nullptr);
-		backLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
-		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI4_Hor_scrollbar_bk.png"),
-														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
-															   Vec2F(-2, -4), Vec2F(2, 5)));
-
-		auto handleLayer = sample->AddLayer("handle", nullptr);
-		handleLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
-		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_Hor_scrollhandle_regular.png"),
-														   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
-																  Vec2F(-2, -4), Vec2F(2, 5)));
-
-		auto barSelectSprite = handleLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_Hor_scrollhandle_select.png"),
-														  Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
-																 Vec2F(-2, -4), Vec2F(2, 5)));
-
-		auto barPressedSprite = handleLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_Hor_scrollhandle_pressed.png"),
-														   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
-																  Vec2F(-2, -4), Vec2F(2, 5)));
-											
-		sample->AddState("hover", AnimationClip::EaseInOut("layer/handle/child/hover/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 1.0f / 4.0f;
-
-		sample->AddState("pressed", AnimationClip::EaseInOut("layer/handle/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
-
-	void BasicUIStyleBuilder::RebuildVerScrollBarStyle()
-	{
-		VerticalScrollBar* sample = mnew VerticalScrollBar();
-		sample->layout->minSize = Vec2F(5, 5);
-		sample->SetScrollSense(0.25f);
-		sample->SetMinimalScrollHandleSize(10);
-
-
-		auto backLayer = sample->AddLayer("back", nullptr);
-		backLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
-		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI4_Ver_scrollbar_bk.png"),
-														Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
-															   Vec2F(-4, -2), Vec2F(5, 2)));
-
-		auto handleLayer = sample->AddLayer("handle", nullptr);
-		handleLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
-		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_Ver_scrollhandle_regular.png"),
-														   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
-																  Vec2F(-4, -2), Vec2F(5, 2)));
-
-		auto barSelectSprite = handleLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_Ver_scrollhandle_select.png"),
-														  Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
-																 Vec2F(-4, -2), Vec2F(5, 2)));
-
-		auto barPressedSprite = handleLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_Ver_scrollhandle_pressed.png"),
-														   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
-																  Vec2F(-4, -2), Vec2F(5, 2)));
-
-
-		sample->AddState("hover", AnimationClip::EaseInOut("layer/handle/child/hover/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 1.0f / 4.0f;
-
-		sample->AddState("pressed", AnimationClip::EaseInOut("layer/handle/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
-
-	void BasicUIStyleBuilder::RebuildCheckboxStyle()
-	{
-		Toggle* sample = mnew Toggle();
+		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Check_bk.png"),
-										  Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
+		sample->SetClippingLayout(Layout::BothStretch(3, 3, 3, 3));
+		sample->SetViewLayout(Layout::BothStretch(0, 0, 0, 0));
 
-		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI4_Check_bk_select.png"),
-											Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
+		sample->AddLayer("back", mnew Sprite("ui/UI4_button.png"), Layout::BothStretch(-3, -3, -3, -3));
+		sample->AddLayer("hover", mnew Sprite("ui/UI4_button_focus.png"), Layout::BothStretch(-3, -3, -3, -3))
+			->SetTransparency(0.0f);
 
-		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI4_Check_bk_pressed.png"),
-											 Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
+		auto hoverAnim = mmake<AnimationClip>();
+		*hoverAnim->AddTrack<float>("layer/hover/transparency") =
+			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
-		auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI4_Check_bk_focus.png"),
-										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
-
-		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI4_Ckeck.png"),
-										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
-
-		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI4_Check_unknown.png"),
-										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
-
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "Checkbox";
-		captionText->horAlign = HorAlign::Left;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->dotsEngings = true;
-		captionText->color = Color4(96, 125, 139);
-		sample->AddLayer("caption", captionText, Layout(Vec2F(0, 0), Vec2F(1, 1), Vec2F(20, 0), Vec2F(0, 0)));
-
-		sample->AddState("hover", AnimationClip::EaseInOut("layer/backSelect/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 1.0f / 4.0f;
-
-		sample->AddState("value", AnimationClip::EaseInOut("layer/check/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("unknown", AnimationClip::EaseInOut("layer/unknown/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("pressed", AnimationClip::EaseInOut("layer/backPressed/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("focused", AnimationClip::EaseInOut("layer/backFocus/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
+		sample->AddState("hover", hoverAnim);
 
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		o2UI.AddWidgetStyle(sample, "standard");
+		o2UI.AddWidgetStyle(sample, "button");
 	}
 
-	void BasicUIStyleBuilder::RebuildCheckboxWithoutCaptionStyle()
+	void BasicUIStyleBuilder::RebuildDropdownButtonStyle()
 	{
-		Toggle* sample = mnew Toggle();
+		DropdownButton* sample = mnew DropdownButton();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Check_bk.png"),
-										  Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+		sample->SetClippingLayout(Layout::BothStretch(3, 3, 3, 3));
+		sample->SetViewLayout(Layout::BothStretch(0, 0, 0, 0));
 
-		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI4_Check_bk_select.png"),
-											Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+		sample->AddLayer("back", mnew Sprite("ui/UI4_button.png"), Layout::BothStretch(-3, -3, -3, -3));
+		sample->AddLayer("hover", mnew Sprite("ui/UI4_button_focus.png"), Layout::BothStretch(-3, -3, -3, -3))
+			->SetTransparency(0.0f);
 
-		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI4_Check_bk_pressed.png"),
-											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+		auto hoverAnim = mmake<AnimationClip>();
+		*hoverAnim->AddTrack<float>("layer/hover/transparency") =
+			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
-		auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI4_Check_bk_focus.png"),
-										   Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
-
-		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI4_Ckeck.png"),
-										   Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
-
-		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI4_Check_unknown.png"),
-											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
-
-		sample->AddState("hover", AnimationClip::EaseInOut("layer/backSelect/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 1.0f / 4.0f;
-
-		sample->AddState("value", AnimationClip::EaseInOut("layer/check/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("unknown", AnimationClip::EaseInOut("layer/unknown/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("pressed", AnimationClip::EaseInOut("layer/backPressed/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("focused", AnimationClip::EaseInOut("layer/backFocus/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
+		sample->AddState("hover", hoverAnim);
 
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		o2UI.AddWidgetStyle(sample, "without caption");
+		o2UI.AddWidgetStyle(sample, "dropdown button");
 	}
 
-	void BasicUIStyleBuilder::RebuildScrollAreaStraightBarsStyle()
+	void BasicUIStyleBuilder::RebuildInputTextWithoutBackground()
 	{
-		ScrollArea* sample = mnew ScrollArea();
-		sample->layout->minSize = Vec2F(30, 30);
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
-		sample->SetEnableScrollsHiding(false);
+		InputText* sample = mnew InputText();
+		sample->layout->minSize = Vec2F(100, 30);
+		sample->SetClippingLayout(Layout::BothStretch(1, 1, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(10, 10, 3, 3));
+
+		sample->AddTexture("caret", mnew Sprite("ui/UI4_Button_Focus_Image.png"));
+
 		sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
 
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
-
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
-
-		auto enableHorScrollAnim = mmake<AnimationClip>();
-		*enableHorScrollAnim->AddTrack<float>("mVerScrollBar/layout/offsetBottom") =
-			AnimationTrack<float>::EaseInOut(5, 15, 0.2f);
-
-		*enableHorScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMin") =
-			AnimationTrack<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
-
-		auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
-
-		auto enableVerScrollAnim = mmake<AnimationClip>();
-		*enableVerScrollAnim->AddTrack<float>("mHorScrollBar/layout/offsetRight") =
-			AnimationTrack<float>::EaseInOut(-5, -15, 0.2f);
-
-		*enableVerScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMax") =
-			AnimationTrack<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
-
-		auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+		sample->AddState("focused", AnimationClip::EaseInOut("overlay/caret/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		o2UI.AddWidgetStyle(sample, "straight bars");
+		o2UI.AddWidgetStyle(sample, "input text without background");
 	}
 
-	void BasicUIStyleBuilder::RebuildPopupStyle()
+	void BasicUIStyleBuilder::RebuildInputFieldStyle()
 	{
-		PopupWidget* sample = mnew PopupWidget();
-		sample->layout->minSize = Vec2F(20, 20);
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-		sample->SetEnableScrollsHiding(true);
-		sample->SetMinFitSize(50);
+		InputField* sample = mnew InputField();
+		sample->layout->minSize = Vec2F(100, 30);
+		sample->SetClippingLayout(Layout::BothStretch(1, 1, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(10, 10, 3, 3));
 
-		sample->AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
+		sample->AddTexture("caret", mnew Sprite("ui/UI4_Button_Focus_Image.png"));
 
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
-
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
-
-	void BasicUIStyleBuilder::RebuildScrollAreaStyle()
-	{
-		ScrollArea* sample = mnew ScrollArea();
-		sample->layout->minSize = Vec2F(20, 20);
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
-		sample->SetEnableScrollsHiding(true);
 		sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
 
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
+		sample->AddState("focused", AnimationClip::EaseInOut("overlay/caret/transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
 
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
+		o2UI.AddWidgetStyle(sample, "input field");
+	}
+
+	void BasicUIStyleBuilder::RebuildProgressBarStyle()
+	{
+		ProgressBar* sample = mnew ProgressBar();
+		sample->layout->minSize = Vec2F(100, 20);
+		sample->SetClippingLayout(Layout::BothStretch(1, 1, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(3, 3, 3, 3));
+
+		auto backSprite = mnew Sprite("ui/UI4_Editbox_regular.png");
+		backSprite->SetTransparency(0.7f);
+		sample->AddLayer("back", backSprite, Layout::BothStretch(-9, -9, -9, -9));
+
+		auto barSprite = mnew Sprite("ui/UI4_Progress_bar.png");
+		barSprite->SetPivot(Vec2F(0, 0.5f));
+		barSprite->SetSizeByStripSize(true);
+		sample->AddLayer("bar", barSprite, Layout::BothStretch(-6, -9, -6, -9))
+			->horizontalResizePolicy = ResizePolicy::Stretch;
+
+		auto hoverAnim = mmake<AnimationClip>();
+		*hoverAnim->AddTrack<Vec2F>("layer/bar/sizeOffset") =
+			AnimationTrack<Vec2F>::EaseInOut(Vec2F(-6, -9), Vec2F(0, -9), 0.1f);
+
+		sample->AddState("hover", hoverAnim);
+
+		auto valueAnim = mmake<AnimationClip>();
+		*valueAnim->AddTrack<Vec2F>("layer/bar/sizeOffset") =
+			AnimationTrack<Vec2F>::EaseInOut(Vec2F(-6, -9), Vec2F(0, -9), 0.2f);
+
+		auto valueState = sample->AddState("value", valueAnim);
+
+		auto reduceValueAnim = mmake<AnimationClip>();
+		*reduceValueAnim->AddTrack<Vec2F>("layer/bar/sizeOffset") =
+			AnimationTrack<Vec2F>::EaseInOut(Vec2F(0, -9), Vec2F(-6, -9), 0.2f);
+
+		auto reduceValueState = sample->AddState("reduceValue", reduceValueAnim);
+
+		auto progressAnim = mmake<AnimationClip>();
+		*progressAnim->AddTrack<float>("layer/bar/sizeOffset/offsetMax/x") =
+			AnimationTrack<float>::EaseInOut(0, 1, 1.0f);
+
+		auto progressState = sample->AddState("progress", progressAnim);
+
+		auto clearProgressAnim = mmake<AnimationClip>();
+		*clearProgressAnim->AddTrack<float>("layer/bar/sizeOffset/offsetMax/x") =
+			AnimationTrack<float>::EaseInOut(1, 0, 1.0f);
+
+		auto clearProgressState = sample->AddState("clearProgress", clearProgressAnim);
+
+		valueState->nestedStates["progress"] = progressState;
+		valueState->nestedStates["clearProgress"] = clearProgressState;
+		reduceValueState->nestedStates["progress"] = progressState;
+		reduceValueState->nestedStates["clearProgress"] = clearProgressState;
 
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		o2UI.AddWidgetStyle(sample, "standard");
+		o2UI.AddWidgetStyle(sample, "progress bar");
 	}
 
-	void BasicUIStyleBuilder::RebuildLabelStyle()
+	void BasicUIStyleBuilder::RebuildSliderButtonStyle()
 	{
-		Label* sample = mnew Label();
+		SliderButton* sample = mnew SliderButton();
 		sample->layout->minSize = Vec2F(20, 20);
-		sample->horOverflow = Label::HorOverflow::Dots;
-		sample->verOverflow = Label::VerOverflow::None;
+		sample->SetClippingLayout(Layout::BothStretch(1, 1, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(3, 3, 2, 2));
 
-		sample->SetFont(Ref<Font>("stdFont.ttf"));
-		sample->SetHorAlign(HorAlign::Middle);
-		sample->SetVerAlign(VerAlign::Middle);
-		sample->SetColor(Color4(96, 125, 139));
+		sample->AddLayer("back", mnew Sprite("ui/UI4_Slider_bk.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
+		sample->AddLayer("hover", mnew Sprite("ui/UI4_Slider_bk_select.png"), Layout::BothStretch(-9, -9, -9, -9))
+			->SetTransparency(0.0f);
 
-	void BasicUIStyleBuilder::RebuildEditBoxStyle()
-	{
-		EditBox* sample = mnew EditBox();
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
-		sample->SetEnableScrollsHiding(false);
-		sample->SetCaretBlinkingDelay(1.15f);
-		sample->SetSelectionColor(Color4(0, 156, 141, 120));
-		sample->layout->minSize = Vec2F(30, 40);
+		auto hoverAnim = mmake<AnimationClip>();
+		*hoverAnim->AddTrack<float>("layer/hover/transparency") =
+			AnimationTrack<float>::EaseInOut(replace raw pointers with Ref<>, except void* pointers.Ref<> is a smart pointer like shared_ptr. Use const Ref<>& for function arguments with pointer types, also in overridden methods. Dont replace void* pointers!! Remove default nullptr value for class members with type Ref<>. If class variable is some kind of "parent", use WeakRef<>. Use mmake<>() to create Ref<>, just like make_shared<>(). Replace dynamic_cast<type*> with DynamicCast<type> to cast Ref<>.
 
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
+```cpp
+void BasicUIStyleBuilder::RebuildScrollAreaStyle()
+{
+    Ref<ScrollArea> sample = mmake<ScrollArea>();
+    sample->layout->minSize = Vec2F(20, 20);
+    sample->SetClippingLayout(Ref<Layout>::MakeBothStretch(1, 2, 1, 1));
+    sample->SetViewLayout(Ref<Layout>::MakeBothStretch(5, 5, 5, 5));
+    sample->SetEnableScrollsHiding(true);
+    sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Ref<Layout>::MakeBothStretch(-9, -9, -9, -9));
 
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
+    Ref<HorizontalScrollBar> horScrollBar = Ref<HorizontalScrollBar>::Make();
+    horScrollBar->layout->anchorMin = Vec2F(0, 0);
+    horScrollBar->layout->anchorMax = Vec2F(1, 0);
+    horScrollBar->layout->offsetMin = Vec2F(5, 0);
+    horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+    sample->SetHorizontalScrollBar(horScrollBar);
 
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
+    Ref<VerticalScrollBar> verScrollBar = Ref<VerticalScrollBar>::Make();
+    verScrollBar->layout->anchorMin = Vec2F(1, 0);
+    verScrollBar->layout->anchorMax = Vec2F(1, 1);
+    verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+    verScrollBar->layout->offsetMax = Vec2F(0, -5);
+    sample->SetVerticalScrollBar(verScrollBar);
 
-		auto enableHorScrollAnim = mmake<AnimationClip>();
-		*enableHorScrollAnim->AddTrack<float>("mVerScrollBar/layout/offsetBottom") =
-			AnimationTrack<float>::EaseInOut(5, 15, 0.2f);
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+        ->offStateAnimationSpeed = 0.5f;
 
-		*enableHorScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMin") =
-			AnimationTrack<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
+    o2UI.AddWidgetStyle(sample, "standard");
+}
 
-		auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
+void BasicUIStyleBuilder::RebuildLabelStyle()
+{
+    Ref<Label> sample = mmake<Label>();
+    sample->layout->minSize = Vec2F(20, 20);
+    sample->horOverflow = Label::HorOverflow::Dots;
+    sample->verOverflow = Label::VerOverflow::None;
 
-		auto enableVerScrollAnim = mmake<AnimationClip>();
-		*enableVerScrollAnim->AddTrack<float>("mHorScrollBar/layout/offsetRight") =
-			AnimationTrack<float>::EaseInOut(-5, -15, 0.2f);
+    sample->SetFont(Ref<Font>::Make("stdFont.ttf"));
+    sample->SetHorAlign(HorAlign::Middle);
+    sample->SetVerAlign(VerAlign::Middle);
+    sample->SetColor(Color4(96, 125, 139));
 
-		*enableVerScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMax") =
-			AnimationTrack<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
+    o2UI.AddWidgetStyle(sample, "standard");
+}
 
-		auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
+void BasicUIStyleBuilder::RebuildEditBoxStyle()
+{
+    Ref<EditBox> sample = mmake<EditBox>();
+    sample->SetClippingLayout(Ref<Layout>::MakeBothStretch(1, 2, 1, 1));
+    sample->SetViewLayout(Ref<Layout>::MakeBothStretch(5, 5, 5, 5));
+    sample->SetEnableScrollsHiding(false);
+    sample->SetCaretBlinkingDelay(1.15f);
+    sample->SetSelectionColor(Color4(0, 156, 141, 120));
+    sample->layout->minSize = Vec2F(30, 40);
 
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+    auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Ref<Layout>::MakeBothStretch(-9, -9, -9, -9));
+    auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Ref<Layout>::MakeBothStretch(-9, -9, -9, -9));
+    auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_Editbox_focus.png"), Ref<Layout>::MakeBothStretch(-9, -9, -9, -9));
 
-		sample->AddState("focused", AnimationClip::EaseInOut("layer/focused/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
+    Ref<HorizontalScrollBar> horScrollBar = Ref<HorizontalScrollBar>::Make();
+    horScrollBar->layout->anchorMin = Vec2F(0, 0);
+    horScrollBar->layout->anchorMax = Vec2F(1, 0);
+    horScrollBar->layout->offsetMin = Vec2F(5, 0);
+    horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+    sample->SetHorizontalScrollBar(horScrollBar);
 
-		Text* textDrawable = sample->GetTextDrawable();
-		textDrawable->verAlign = VerAlign::Top;
-		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+    Ref<VerticalScrollBar> verScrollBar = Ref<VerticalScrollBar>::Make();
+    verScrollBar->layout->anchorMin = Vec2F(1, 0);
+    verScrollBar->layout->anchorMax = Vec2F(1, 1);
+    verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+    verScrollBar->layout->offsetMax = Vec2F(0, -5);
+    sample->SetVerticalScrollBar(verScrollBar);
 
-		Sprite* caretDrawable = sample->GetCaretDrawable();
-		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetFontHeight())*1.7f);
-		caretDrawable->pivot = Vec2F(0, 0.16f);
-		caretDrawable->color = Color4::Black();
+    auto enableHorScrollAnim = mmake<AnimationClip>();
+    *enableHorScrollAnim->AddTrack<float>("mVerScrollBar/layout/offsetBottom") =
+        AnimationTrack<float>::EaseInOut(5, 15, 0.2f);
 
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
+    *enableHorScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMin") =
+        AnimationTrack<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
 
-	void BasicUIStyleBuilder::RebuildCustomListStyle()
-	{
-		CustomList* sample = mnew CustomList();
-		sample->layout->minSize = Vec2F(20, 20);
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
-		sample->SetEnableScrollsHiding(true);
-		sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+    auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
 
-		Sprite* selection = mnew Sprite("ui/UI4_Context_menu_select.png");
-		*sample->GetSelectionDrawable() = *selection;
-		sample->SetSelectionDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
+    auto enableVerScrollAnim = mmake<AnimationClip>();
+    *enableVerScrollAnim->AddTrack<float>("mHorScrollBar/layout/offsetRight") =
+        AnimationTrack<float>::EaseInOut(-5, -15, 0.2f);
 
-		Sprite* hover = mnew Sprite("ui/UI4_Context_menu_white.png");
-		*sample->GetHoverDrawable() = *hover;
-		sample->SetHoverDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
+    *enableVerScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMax") =
+        AnimationTrack<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
 
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
+    auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
 
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+        ->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
-															  5.0f, 15.0f, 0.2f));
+    sample->AddState("focused", AnimationClip::EaseInOut("layer/focused/transparency", 0.0f, 1.0f, 0.05f))
+        ->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
-															  -5.0f, -15.0f, 0.2f));
+    Text* textDrawable = sample->GetTextDrawable();
+    textDrawable->verAlign = VerAlign::Top;
+    textDrawable->horAlign = HorAlign::Left;
+    textDrawable->color = Color4(96, 125, 139);
+    textDrawable->SetFontAsset(FontAssetRef("st"));
+    o2UI.AddWidgetStyle(sample, "standard");
+}
+```#include <memory>
 
-		sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
 
-	void BasicUIStyleBuilder::RebuildLongListStyle()
-	{
-		LongList* sample = mnew LongList();
-		sample->layout->minSize = Vec2F(20, 20);
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
-		sample->SetEnableScrollsHiding(true);
+class BasicUIStyleBuilder
+{
+public:
+    void RebuildButtonStyle();
+    void RebuildCustomListStyle();
+    void RebuildLongListStyle();
+    void RebuildListStyle();
 
-		Sprite* selection = mnew Sprite("ui/UI4_Context_menu_select.png");
-		*sample->GetSelectionDrawable() = *selection;
-		sample->SetSelectionDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
+private:
+    Ref<Sprite> CreateSprite(const char* filename);
+    Ref<HorizontalScrollBar> CreateHorScrollBar();
+    Ref<VerticalScrollBar> CreateVerScrollBar();
 
-		Sprite* hover = mnew Sprite("ui/UI4_Context_menu_white.png");
-		*sample->GetHoverDrawable() = *hover;
-		sample->SetHoverDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
+    Ref<UI> m_o2UI;
+};
 
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
+void BasicUIStyleBuilder::RebuildButtonStyle()
+{
+    Button* sample = mmake<Button>();
+    sample->layout->minSize = Vec2F(20, 20);
+    sample->normalColor = Color4(1, 1, 1, 0.2);
+    sample->hoverColor = Color4(1, 1, 1, 0.5);
 
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
+    Sprite* normalSprite = CreateSprite("ui/UI4_Button_normal.png").get();
+    *sample->normalDrawable = *normalSprite;
 
-		sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
-															  5.0f, 15.0f, 0.2f));
+    Sprite* hoverSprite = CreateSprite("ui/UI4_Button_hover.png").get();
+    *sample->hoverDrawable = *hoverSprite;
 
-		sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
-															  -5.0f, -15.0f, 0.2f));
+    Sprite* pressedSprite = CreateSprite("ui/UI4_Button_pressed.png").get();
+    *sample->pressedDrawable = *pressedSprite;
 
-		sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+    m_o2UI->AddWidgetStyle(sample, "standard");
+}
 
-		sample->AddState("focused", AnimationClip::EaseInOut("mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+void BasicUIStyleBuilder::RebuildCustomListStyle()
+{
+    CustomList* sample = mmake<CustomList>();
+    sample->layout->minSize = Vec2F(20, 20);
+    sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+    sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+    sample->SetEnableScrollsHiding(true);
+    sample->AddLayer("back", CreateSprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+    Ref<Sprite> selection = CreateSprite("ui/UI4_Context_menu_select.png");
+    *sample->GetSelectionDrawable() = *selection;
 
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
+    Ref<Sprite> hover = CreateSprite("ui/UI4_Context_menu_white.png");
+    *sample->GetHoverDrawable() = *hover;
 
-	void BasicUIStyleBuilder::RebuildListStyle()
-	{
-		List* sample = mnew List();
-		sample->layout->minSize = Vec2F(20, 20);
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
-		sample->SetEnableScrollsHiding(true);
-		sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+    Ref<HorizontalScrollBar> horScrollBar = CreateHorScrollBar();
+    horScrollBar->layout->anchorMin = Vec2F(0, 0);
+    horScrollBar->layout->anchorMax = Vec2F(1, 0);
+    horScrollBar->layout->offsetMin = Vec2F(5, 0);
+    horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+    sample->SetHorizontalScrollBar(horScrollBar);
 
-		Sprite* selection = mnew Sprite("ui/UI4_Context_menu_select.png");
-		*sample->GetSelectionDrawable() = *selection;
-		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
+    Ref<VerticalScrollBar> verScrollBar = CreateVerScrollBar();
+    verScrollBar->layout->anchorMin = Vec2F(1, 0);
+    verScrollBar->layout->anchorMax = Vec2F(1, 1);
+    verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+    verScrollBar->layout->offsetMax = Vec2F(0, -5);
+    sample->SetVerticalScrollBar(verScrollBar);
 
-		Sprite* hover = mnew Sprite("ui/UI4_Context_menu_white.png");
-		*sample->GetHoverDrawable() = *hover;
-		sample->SetHoverDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
+    sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
+                                                              5.0f, 15.0f, 0.2f));
 
-		Label* itemSample = o2UI.CreateLabel("empty");
-		itemSample->layout->size = Vec2F(20, 0);
-		itemSample->horAlign = HorAlign::Left;
+    sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
+                                                              -5.0f, -15.0f, 0.2f));
+
+    sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
+        ->offStateAnimationSpeed = 0.5f;
+
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+        ->offStateAnimationSpeed = 0.5f;
+
+    m_o2UI->AddWidgetStyle(sample, "standard");
+}
+
+void BasicUIStyleBuilder::RebuildLongListStyle()
+{
+    LongList* sample = mmake<LongList>();
+    sample->layout->minSize = Vec2F(20, 20);
+    sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+    sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+    sample->SetEnableScrollsHiding(true);
+
+    Ref<Sprite> selection = CreateSprite("ui/UI4_Context_menu_select.png");
+    *sample->GetSelectionDrawable() = *selection;
+
+    Ref<Sprite> hover = CreateSprite("ui/UI4_Context_menu_white.png");
+    *sample->GetHoverDrawable() = *hover;
+
+    Ref<HorizontalScrollBar> horScrollBar = CreateHorScrollBar();
+    horScrollBar->layout->anchorMin = Vec2F(0, 0);
+    horScrollBar->layout->anchorMax = Vec2F(1, 0);
+    horScrollBar->layout->offsetMin = Vec2F(5, 0);
+    horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+    sample->SetHorizontalScrollBar(horScrollBar);
+
+    Ref<VerticalScrollBar> verScrollBar = CreateVerScrollBar();
+    verScrollBar->layout->anchorMin = Vec2F(1, 0);
+    verScrollBar->layout->anchorMax = Vec2F(1, 1);
+    verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+    verScrollBar->layout->offsetMax = Vec2F(0, -5);
+    sample->SetVerticalScrollBar(verScrollBar);
+
+    sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
+                                                              5.0f, 15.0f, 0.2f));
+
+    sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
+                                                              -5.0f, -15.0f, 0.2f));
+
+    sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
+        ->offStateAnimationSpeed = 0.5f;
+
+    sample->AddState("focused", AnimationClip::EaseInOut("mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
+        ->offStateAnimationSpeed = 0.5f;
+
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+        ->offStateAnimationSpeed = 0.5f;
+
+    m_o2UI->AddWidgetStyle(sample, "standard");
+}
+
+void BasicUIStyleBuilder::RebuildListStyle()
+{
+    List* sample = mmake<List>();
+    sample->layout->minSize = Vec2F(20, 20);
+    sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+    sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+    sample->SetEnableScrollsHiding(true);
+    sample->AddLayer("back", CreateSprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+
+    Ref<Sprite> selection = CreateSprite("ui/UI4_Context_menu_select.png");
+    *sample->GetSelectionDrawable() = *selection;
+
+    Ref<Sprite> hover = CreateSprite("ui/UI4_Context_menu_white.png");
+    *sample->GetHoverDrawable() = *hover;
+
+    Ref<HorizontalScrollBar> horScrollBar = CreateHorScrollBar();
+    horScrollBar->layout->anchorMin = Vec2F(0, 0);
+    horScrollBar->layout->anchorMax = Vec2F(1, 0);
+    horScrollBar->layout->offsetMin = Vec2F(5, 0);
+    horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+    sample->SetHorizontalScrollBar(horScrollBar);
+
+    Ref<VerticalScrollBar> verScrollBar = CreateVerScrollBar();
+    verScrollBar->layout->anchorMin = Vec2F(1, 0);
+    verScrollBar->layout->anchorMax = Vec2F(1, 1);
+    verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+    verScrollBar->layout->offsetMax = Vec2F(0, -5);
+    sample->SetVerticalScrollBar(verScrollBar);
+
+    sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
+                                                              5.0f, 15.0f, 0.2f));
+
+    sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
+                                                              -5.0f, -15.0f, 0.2f));
+
+    sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
+        ->offStateAnimationSpeed = 0.5f;
+
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+        ->offStateAnimationSpeed = 0.5f;
+
+    m_o2UI->AddWidgetStyle(sample, "standard");
+}
+Aligh::Left;
 		itemSample->verAlign = VerAlign::Middle;
 		sample->SetItemSample(itemSample);
 
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
-
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
-
-		sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
-															  5.0f, 15.0f, 0.2f));
-
-		sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
-															  -5.0f, -15.0f, 0.2f));
-
-		sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("focused", AnimationClip::EaseInOut("mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
-
-	void BasicUIStyleBuilder::RebuildCustomDropDownStyle()
-	{
-		CustomDropDown* sample = mnew CustomDropDown();
-		sample->layout->minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
-										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
-
-		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
-
-		Widget* itemSample = mnew Widget();
-		itemSample->layout->size = Vec2F(20, 20);
-		sample->SetItemSample(itemSample);
-
-		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
-		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-		delete list->layer["back"]->GetDrawable();
-		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI4_Box_regular.png"));
-		list->layout->pivot = Vec2F(0.5f, 1.0f);
-		list->layout->anchorMin = Vec2F(0, 0);
-		list->layout->anchorMax = Vec2F(1, 0);
-		list->layout->offsetMin = Vec2F(-1, -60);
-		list->layout->offsetMax = Vec2F(0, 3);
-
 		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
@@ -769,453 +857,799 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildDropDownStyle()
+	void BasicUIStyleBuilder::RebuildCheckBoxStyle()
 	{
-		DropDown* sample = mnew DropDown();
+		CheckBox* sample = mnew CheckBox();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), 
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_SCheckBtn_regular.png"), 
 										  Layout::BothStretch(-9, -9, -9, -9));
 
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), 
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_SCheckBtn_select.png"), 
 										   Layout::BothStretch(-9, -9, -9, -9));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Editbox_pressed.png"), 
-											 Layout::BothStretch(-9, -9, -9, -9));
-
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
-										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
-
-		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
-
-		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
-		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-		delete list->layer["back"]->GetDrawable();
-		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI4_Box_regular.png"));
-		list->layout->pivot = Vec2F(0.5f, 1.0f);
-		list->layout->anchorMin = Vec2F(0, 0);
-		list->layout->anchorMax = Vec2F(1, 0);
-		list->layout->offsetMin = Vec2F(2, -60);
-		list->layout->offsetMax = Vec2F(0, 3);
-
-		Label* itemSample = o2UI.CreateLabel("empty");
-		itemSample->horAlign = HorAlign::Left;
-		sample->SetItemSample(itemSample);
+		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI4_SCheckBtn_checkon_press.png"), 
+										   Layout::BothStretch(-9, -9, -9, -9));
 
 		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+		sample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("opened", AnimationClip::EaseInOut("layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		o2UI.AddWidgetStyle(sample, "standard");
-
-		
-	}
-
-	void BasicUIStyleBuilder::RebuildWindowStyle()
-	{
-		Window* sample = mnew Window();
-		sample->layout->minSize = Vec2F(100, 50);
-		sample->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 17));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
-		sample->SetEnableScrollsHiding(true);
-
-		auto regularBackLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_window_frame_regular.png"),
-												 Layout::BothStretch(-13, -13, -13, -11));
-
-		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_o2_sign.png"),
-										  Layout::Based(BaseCorner::LeftTop, Vec2F(18, 18), Vec2F(-1, 1)));
-
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "Window";
-		captionText->horAlign = HorAlign::Left;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->dotsEngings = true;
-		auto textLayer = sample->AddLayer("caption", captionText,
-										  Layout::HorStretch(VerAlign::Top, 20, 35, 20, -2));
-
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		*horScrollBar->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 5, 15, 15, -5);
-		sample->SetHorizontalScrollBar(horScrollBar);
-
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		*verScrollBar->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 15, 15, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 2.0f;
-
-		Button* closeBtn = o2UI.CreateWidget<Button>("close");
-		closeBtn->name = "closeButton";
-		*closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(1, 2));
-		sample->AddInternalWidget(closeBtn);
-
-		Button* optionsBtn = o2UI.CreateWidget<Button>("arrow");
-		optionsBtn->name = "optionsButton";
-		*optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-15, 2));
-		sample->AddInternalWidget(optionsBtn);
-
-		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head
-								   Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -2), Vec2F(-5, 5)),      // top
-								   Layout(Vec2F(0, 0), Vec2F(1, 0), Vec2F(5, -5), Vec2F(-5, 5)),      // bottom
-								   Layout(Vec2F(0, 0), Vec2F(0, 1), Vec2F(-5, 5), Vec2F(5, -5)),      // left
-								   Layout(Vec2F(1, 0), Vec2F(1, 1), Vec2F(-5, 5), Vec2F(5, -5)),      // right
-								   Layout(Vec2F(0, 1), Vec2F(0, 1), Vec2F(-5, -5), Vec2F(5, 5)),      // left top
-								   Layout(Vec2F(1, 1), Vec2F(1, 1), Vec2F(-5, -5), Vec2F(5, 5)),      // right top
-								   Layout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(-5, -5), Vec2F(5, 5)),      // left bottom 
-								   Layout(Vec2F(1, 0), Vec2F(1, 0), Vec2F(-5, -5), Vec2F(5, 5)));     // right bottom
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildContextMenuStyle()
+	void BasicUIStyleBuilder::RebuildRadioButtonStyle()
 	{
-		ContextMenu* sample = mnew ContextMenu();
-
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-		sample->SetEnableScrollsHiding(true);
-		sample->SetMinFitSize(50);
-
-		sample->AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
-
-		Sprite* selection = mnew Sprite("ui/UI4_Context_menu_select.png");
-		*sample->GetSelectionDrawable() = *selection;
-		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
-
-		Widget* separatorSample = sample->GetSeparatorSample();
-		separatorSample->AddLayer("line", mnew Sprite("ui/UI4_Separator.png"),
-								  Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
-
-		ContextMenuItem* itemSample = sample->GetItemSample();
-
-		WidgetLayer* captionLayer = itemSample->FindLayer("caption");
-		Text* captionLayerText = mnew Text("stdFont.ttf");
-		captionLayer->SetDrawable(captionLayerText);
-		captionLayer->layout = Layout::BothStretch(20, 1, 0, -1);
-		captionLayerText->horAlign = HorAlign::Left;
-		captionLayerText->verAlign = VerAlign::Middle;
-		captionLayerText->color = Color4(96, 125, 139);
-
-		WidgetLayer* shortcutLayer = itemSample->FindLayer("shortcut");
-		Text* shortcutLayerText = mnew Text("stdFont.ttf");
-		shortcutLayer->layout = Layout::BothStretch(20, 1, 10, -1);
-		shortcutLayer->SetDrawable(shortcutLayerText);
-		shortcutLayerText->horAlign = HorAlign::Right;
-		shortcutLayerText->verAlign = VerAlign::Middle;
-		shortcutLayerText->color = Color4(96, 125, 139);
-		shortcutLayer->transparency = 0.7f;
-
-		WidgetLayer* subIconLayer = itemSample->FindLayer("subIcon");
-		subIconLayer->SetDrawable(mnew Sprite("ui/UI4_Right_icn.png"));
-		subIconLayer->layout = Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-15, 10), Vec2F(5, -10));
-
-		itemSample->AddLayer("check", mnew Sprite("ui/UI4_Ckeck.png"), 
-							 Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
-
-		WidgetLayer* basicLayer = itemSample->FindLayer("basic");
-
-		itemSample->AddState("enabled", AnimationClip::EaseInOut("layer/basic/transparency", 0.5f, 1.0f, 0.2f));
-		itemSample->SetStateForcible("enabled", true);
-
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
-
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
-
-		sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
-															  5.0f, 15.0f, 0.2f));
-
-		sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
-															  -5.0f, -15.0f, 0.2f));
-
-		sample->AddState("hover", AnimationClip::EaseInOut("mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
-
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
-
-	void BasicUIStyleBuilder::RebuildMenuPanelStyle()
-	{
-		MenuPanel* sample = mnew MenuPanel();
-
-		sample->AddLayer("back", mnew Sprite("ui/UI4_Up_Menu.png"), Layout::BothStretch(-15, -15, -15, -17));
-
-		Sprite* selection = mnew Sprite("ui/UI_ListBox_selection_hover.png");
-		*sample->GetSelectionDrawable() = *selection;
-		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
-
-		auto itemSample = o2UI.CreateLabel("unknown");
-		itemSample->horOverflow = Label::HorOverflow::Expand;
-		itemSample->expandBorder = Vec2F(10, 0);
-		itemSample->color = Color4(235, 255, 253);
-		sample->SetItemSample(itemSample);
-
-		sample->AddState("hover", AnimationClip::EaseInOut("mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
-
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
-
-	void BasicUIStyleBuilder::RebuildTreeStyle()
-	{
-		Tree* sample = mnew Tree();
+		RadioButton* sample = mnew RadioButton();
 		sample->layout->minSize = Vec2F(20, 20);
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
-		sample->SetEnableScrollsHiding(true);
-		sample->SetChildsNodesOffset(10.0f);
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_RadioBtn_regular.png"), 
+										  Layout::BothStretch(-9, -9, -9, -9));
 
-		*sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_RadioBtn_select.png"), 
+										   Layout::BothStretch(-9, -9, -9, -9));
 
-		TreeNode* itemSample = sample->GetNodeSample();
+		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI4_RadioBtn_checkon_press.png"), 
+										   Layout::BothStretch(-9, -9, -9, -9));
 
-		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
-
-		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI4_Context_menu_select.png"),
-																  Layout::BothStretch(-10, -16, -10, -16));
-
-		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
-																	Layout::BothStretch(-10, -16, -10, -16));
-
-		Text* captionLayerText = mnew Text("stdFont.ttf");
-		captionLayerText->horAlign = HorAlign::Left;
-		captionLayerText->verAlign = VerAlign::Middle;
-		captionLayerText->color = Color4(96, 125, 139);
-		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
-
-		Button* itemSampleExpandBtn = mnew Button();
-		itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
-		itemSampleExpandBtn->name = "expandBtn";
-
-		auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mnew Sprite("ui/UI4_Right_icn.png"),
-														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
-
-		auto hoverLayer = itemSampleExpandBtn->AddLayer("hover", mnew Sprite("ui/UI4_Right_icn_select.png"),
-														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
-
-		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI4_Right_icn_pressed.png"),
-														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
-
-
-		itemSampleExpandBtn->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 1.0f / 4.0f;
-
-		itemSampleExpandBtn->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		itemSampleExpandBtn->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+		sample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
-
-		itemSampleExpandBtn->layout->anchorMin = Vec2F(0, 1);
-		itemSampleExpandBtn->layout->anchorMax = Vec2F(0, 1);
-		itemSampleExpandBtn->layout->offsetMin = Vec2F(0, -20);
-		itemSampleExpandBtn->layout->offsetMax = Vec2F(10, 0);
-
-		itemSample->AddChild(itemSampleExpandBtn);
-
-		auto expandedStateAnim = mmake<AnimationClip>();
-		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
-			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
-			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-		*expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") = 
-			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-
-		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
-
-		itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
-
-		auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.2f);
-		itemSample->AddState("focused", focusedItemAnim);
-
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
-
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
-
-		sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
-															  5.0f, 15.0f, 0.2f));
-
-		sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
-															  -5.0f, -15.0f, 0.2f));
-
-		sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5;
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildBacklessDropdown()
+	void BasicUIStyleBuilder::RebuildProgressBarStyle()
 	{
-		DropDown* sample = mnew DropDown();
-		sample->layout->minSize = Vec2F(20, 20);
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn_white.png"),
-										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, -1)));
+		ProgressBar* sample = mnew ProgressBar();
+		sample->layout->minSize = Vec2F(100, 20);
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_ProgressBar_back.png"), 
+										  Layout::BothStretch(-2, -2, -2, -2));
 
-		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
+		auto fillLayer = sample->AddLayer("fill", mnew Sprite("ui/UI4_ProgressBar_fill.png"), 
+										  Layout::BothStretch(-2, -2, -2, -2));
 
-		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
-
-		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-		list->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
-
-		list->RemoveLayer("back");
-		list->AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-22, -19, -19, -19));
-
-		list->layout->pivot = Vec2F(0.5f, 1.0f);
-		list->layout->anchorMin = Vec2F(0, 0);
-		list->layout->anchorMax = Vec2F(1, 0);
-		list->layout->offsetMin = Vec2F(0, -60);
-		list->layout->offsetMax = Vec2F(0, 0);
-
-		Label* itemSample = o2UI.CreateLabel("empty");
-		itemSample->horAlign = HorAlign::Left;
-		sample->SetItemSample(itemSample);
-
-		// Selected text
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->horAlign = HorAlign::Left;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->dotsEngings = true;
-		captionText->wordWrap = false;
-		captionText->color = Color4(235, 255, 253);
-		sample->AddLayer("selectedText", captionText, Layout::BothStretch(4, 0, 0, 0));
-
-		// States
-		sample->AddState("opened", AnimationClip::EaseInOut("layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
-
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", AnimationClip::EaseInOut("layer/fill/inProgress", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		o2UI.AddWidgetStyle(sample, "backless");
+		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildBacklessEditbox()
+	void BasicUIStyleBuilder::RebuildSliderStyle()
 	{
-		EditBox* sample = mnew EditBox();
-		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
-		sample->SetViewLayout(Layout::BothStretch(0, 0, 2, 0));
-		sample->SetCaretBlinkingDelay(1.15f);
-		sample->SetSelectionColor(Color4(0, 156, 141, 120));
-		sample->SetMultiLine(false);
-		sample->layout->minSize = Vec2F(30, 40);
+		Slider* sample = mnew Slider();
+		sample->layout->minSize = Vec2F(100, 30);
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Slider_back.png"), 
+										  Layout::BothStretch(-2, -2, -2, -2));
 
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+		auto fillLayer = sample->AddLayer("fill", mnew Sprite("ui/UI4_Slider_fill.png"), 
+										  Layout::BothStretch(-2, -2, -2, -2));
+
+		auto handleLayer = sample->AddLayer("handle", mnew Sprite("ui/UI4_Slider_hite.png"), 
+										  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-8, -10), Vec2F(8, 10)));
+
+		sample->AddState("visible", AnimationClip::EaseInOut("layer/fill/inProgress", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Text* textDrawable = sample->GetTextDrawable();
-		textDrawable->verAlign = VerAlign::Middle;
-		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+		sample->AddState("selected", AnimationClip::EaseInOut("layer/handle/mDrawable/scale", Vec2F(1, 1), Vec2F(1.1f, 1.1f), 0.2f));
 
-		Sprite* caretDrawable = sample->GetCaretDrawable();
-		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetFontHeight())*1.7f);
-		caretDrawable->pivot = Vec2F(0, 0.26f);
-		caretDrawable->color = Color4::Black();
+		sample->AddState("pressed", AnimationClip::EaseInOut("layer/handle/mDrawable/scale", Vec2F(1.1f, 1.1f), Vec2F(1, 1), 0.2f));
 
-		o2UI.AddWidgetStyle(sample, "backless");
+		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildSinglelineEditbox()
+	void BasicUIStyleBuilder::RebuildTextEditStyle()
 	{
-		EditBox* sample = mnew EditBox();
-		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
-		sample->SetViewLayout(Layout::BothStretch(3, 1, 3, -1));
-		sample->SetCaretBlinkingDelay(1.15f);
-		sample->SetMultiLine(false);
-		sample->SetSelectionColor(Color4(0, 156, 141, 120));
-		sample->layout->minSize = Vec2F(25, 25);
+		TextEdit* sample = mnew TextEdit();
+		sample->layout->minSize = Vec2F(100, 30);
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), 
+										  Layout::BothStretch(-2, -2, -2, -2));
 
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), 
+										   Layout::BothStretch(-2, -2, -2, -2));
 
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"), 
+										   Layout::BothStretch(-2, -2, -2, -2));
+
+		Label* textLabel = o2UI.CreateLabel("empty");
+		textLabel->horAlign = HorAlign::Left;
+		textLabel->verAlign = VerAlign::Middle;
+		sample->SetTextLabel(textLabel);
+
+		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		auto focusAnim = AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f);
-		*focusAnim->AddTrack<float>("layer/hover/transparency") = AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
-		sample->AddState("focused", focusAnim)
+		sample->AddState("focused", AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Text* textDrawable = sample->GetTextDrawable();
-		textDrawable->verAlign = VerAlign::Middle;
-		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
-
-		Sprite* caretDrawable = sample->GetCaretDrawable();
-		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetFontHeight())*1.7f);
-		caretDrawable->pivot = Vec2F(0, 0.26f);
-		caretDrawable->color = Color4::Black();
-
-		o2UI.AddWidgetStyle(sample, "singleline");
+		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildBacklessScrollarea()
+	void BasicUIStyleBuilder::RebuildDropDownListStyle()
 	{
-		ScrollArea* sample = mnew ScrollArea();
-		sample->layout->minSize = Vec2F(10, 10);
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
-		sample->SetEnableScrollsHiding(true);
+		DropDownList* sample = mnew DropDownList();
+		sample->layout->minSize = Vec2F(100, 30);
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), 
+										  Layout::BothStretch(-2, -2, -2, -2));
 
-		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
-		sample->SetHorizontalScrollBar(horScrollBar);
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), 
+										   Layout::BothStretch(-2, -2, -2, -2));
 
-		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -5);
-		sample->SetVerticalScrollBar(verScrollBar);
+		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"), 
+										   Layout::BothStretch(-2, -2, -2, -2));
 
-		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
+										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
 
-		o2UI.AddWidgetStyle(sample, "backless");
-	}
+		ListView* listView = mnew ListView();
+		*listView = *o2UI.GetWidgetStyle<CustomList>("standard");
+		listView->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
+		delete listView->layer["back"]->GetDrawable();
+		listView->layer["back"]->SetDrawable(mnew Sprite("ui/UI4_Box_regular.png"));
+		listView->layout->anchorMin = Vec2F(0, 0);
+		listView->layout->anchorMax = Vec2F(1, 0);
+		listView->layout->offsetMin = Vec2F(0, -1);
+		listView->layout->offsetMax = Vec2F(0, 2);
+		sample->SetDropdownListView(listView);
+
+		Label* textLabel = o2UI.CreateLabel("empty");
+		textLabel->horAlign = HorAlign::Left;
+		textLabel->verAlign = VerAlign::Middle;
+		sample->SetTextLabel(textLabel);
+
+		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f,#include <memory>
+
+template<class T>
+using Ref = std::shared_ptr<T>;
+
+template<class T>
+using WeakRef = std::weak_ptr<T>;
+
+template<class T, class... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template<class Base, class Derived>
+Ref<Derived> DynamicCast(const Ref<Base>& ptr)
+{
+    return std::dynamic_pointer_cast<Derived>(ptr);
+}
+
+class BasicUIStyleBuilder
+{
+public:
+    void RebuildButtonStyle()
+    {
+        Button* sample = mmake<Button>();
+
+        sample->layout->minSize = Vec2F(100, 40);
+        sample->layout->maxSize = Vec2F(400, 60);
+
+        sample->AddLayer("buttonBack", mmake<Sprite>("ui/UI4_btn_default.png"),
+                         Layout::BothStretch(-2, -2, -2, -2));
+
+        Text* captionText = mmake<Text>("stdFont.ttf");
+        captionText->horAlign = HorAlign::Center;
+        captionText->verAlign = VerAlign::Middle;
+        captionText->dotsEngings = true;
+        sample->AddLayer("caption", captionText, *sample->layout);
+
+        sample->SetDefaultAnimation("standard");
+        sample->SetHoverAnimation("hover");
+        sample->SetPressedAnimation("pressed");
+        sample->SetDisabledAnimation("disabled");
+
+        sample->SetStateTransition("hover", "standard", AnimationClip::EaseInOut("buttonBack/layer/transparency", 0.0f, 1.0f, 0.05f));
+        sample->SetStateTransition("pressed", "standard", AnimationClip::EaseInOut("buttonBack/layer/transparency", 0.0f, 1.0f, 0.05f));
+        sample->SetStateTransition("hover", "hover", AnimationClip::EaseInOut("buttonBack/layer/transparency", 1.0f, 0.0f, 0.05f));
+        sample->SetStateTransition("pressed", "pressed", AnimationClip::EaseInOut("buttonBack/layer/transparency", 1.0f, 0.0f, 0.05f));
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+
+    void RebuildTextBoxStyle()
+    {
+        TextBox* sample = mmake<TextBox>();
+
+        sample->layout->minSize = Vec2F(200, 60);
+        sample->layout->maxSize = Vec2F(400, 120);
+        sample->fontSize = 20;
+        sample->multiline = true;
+        sample->editable = true;
+
+        sample->AddLayer("textBoxBack", mmake<Sprite>("ui/UI4_edit_default.png"),
+                         Layout::BothStretch(-2, -2, -2, -2));
+
+        Text* text = mmake<Text>("stdFont.ttf");
+        text->text = "Type here...";
+        text->horAlign = HorAlign::Left;
+        text->verAlign = VerAlign::Middle;
+        sample->AddLayer("text", text, *sample->layout);
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+
+    void RebuildWindowStyle()
+    {
+        Window* sample = mmake<Window>();
+
+        sample->layout->minSize = Vec2F(100, 50);
+        sample->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 17));
+        sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
+        sample->SetEnableScrollsHiding(true);
+
+        auto regularBackLayer = sample->AddLayer("regularBack", mmake<Sprite>("ui/UI4_window_frame_regular.png"),
+                                                 Layout::BothStretch(-13, -13, -13, -11));
+
+        auto iconLayer = sample->AddLayer("icon", mmake<Sprite>("ui/UI4_o2_sign.png"),
+                                          Layout::Based(BaseCorner::LeftTop, Vec2F(18, 18), Vec2F(-1, 1)));
+
+        Text* captionText = mmake<Text>("stdFont.ttf");
+        captionText->text = "Window";
+        captionText->horAlign = HorAlign::Left;
+        captionText->verAlign = VerAlign::Middle;
+        captionText->dotsEngings = true;
+        auto textLayer = sample->AddLayer("caption", captionText,
+                                          Layout::HorStretch(VerAlign::Top, 20, 35, 20, -2));
+
+        Ref<HorizontalScrollBar> horScrollBar = o2UI.CreateHorScrollBar();
+        *horScrollBar->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 5, 15, 15, -5);
+        sample->SetHorizontalScrollBar(horScrollBar);
+
+        Ref<VerticalScrollBar> verScrollBar = o2UI.CreateVerScrollBar();
+        *verScrollBar->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 15, 15, -5);
+        sample->SetVerticalScrollBar(verScrollBar);
+
+        sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 2.0f;
+
+        Ref<Button> closeBtn = o2UI.CreateWidget<Button>("close");
+        closeBtn->name = "closeButton";
+        *closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(1, 2));
+        sample->AddInternalWidget(closeBtn);
+
+        Ref<Button> optionsBtn = o2UI.CreateWidget<Button>("arrow");
+        optionsBtn->name = "optionsButton";
+        *optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-15, 2));
+        sample->AddInternalWidget(optionsBtn);
+
+        sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),
+                                   Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -2), Vec2F(-5, 5)),
+                                   Layout(Vec2F(0, 0), Vec2F(1, 0), Vec2F(5, -5), Vec2F(-5, 5)),
+                                   Layout(Vec2F(0, 0), Vec2F(0, 1), Vec2F(-5, 5), Vec2F(5, -5)),
+                                   Layout(Vec2F(1, 0), Vec2F(1, 1), Vec2F(-5, 5), Vec2F(5, -5)),
+                                   Layout(Vec2F(0, 1), Vec2F(0, 1), Vec2F(-5, -5), Vec2F(5, 5)),
+                                   Layout(Vec2F(1, 1), Vec2F(1, 1), Vec2F(-5, -5), Vec2F(5, 5)),
+                                   Layout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(-5, -5), Vec2F(5, 5)),
+                                   Layout(Vec2F(1, 0), Vec2F(1, 0), Vec2F(-5, -5), Vec2F(5, 5)));
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+
+    void RebuildContextMenuStyle()
+    {
+        ContextMenu* sample = mmake<ContextMenu>();
+
+        sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+        sample->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
+        sample->SetEnableScrollsHiding(true);
+        sample->SetMinFitSize(50);
+
+        sample->AddLayer("back", mmake<Sprite>("ui/UI4_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
+
+        Sprite* selection = mmake<Sprite>("ui/UI4_Context_menu_select.png");
+        *sample->GetSelectionDrawable() = *selection;
+        sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
+
+        Widget* separatorSample = sample->GetSeparatorSample();
+        separatorSample->AddLayer("line", mmake<Sprite>("ui/UI4_Separator.png"),
+                                  Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
+
+        ContextMenuItem* itemSample = sample->GetItemSample();
+
+        WidgetLayer* captionLayer = itemSample->FindLayer("caption");
+        Text* captionLayerText = mmake<Text>("stdFont.ttf");
+        captionLayer->SetDrawable(captionLayerText);
+        captionLayer->layout = Layout::BothStretch(20, 1, 0, -1);
+        captionLayerText->horAlign = HorAlign::Left;
+        captionLayerText->verAlign = VerAlign::Middle;
+        captionLayerText->color = Color4(96, 125, 139);
+
+        WidgetLayer* shortcutLayer = itemSample->FindLayer("shortcut");
+        Text* shortcutLayerText = mmake<Text>("stdFont.ttf");
+        shortcutLayer->layout = Layout::BothStretch(20, 1, 10, -1);
+        shortcutLayer->SetDrawable(shortcutLayerText);
+        shortcutLayerText->horAlign = HorAlign::Right;
+        shortcutLayerText->verAlign = VerAlign::Middle;
+        shortcutLayerText->color = Color4(0, 0, 0);
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+};#include <memory> // added for shared_ptr
+
+// Ref<> and WeakRef<> implementation
+template<typename T>
+class Ref
+{
+public:
+    Ref() : ptr(nullptr) {}
+    explicit Ref(T* p) : ptr(p) {}
+    T& operator*() { return *ptr; }
+    T* operator->() { return ptr; }
+    const T& operator*() const { return *ptr; }
+    const T* operator->() const { return ptr; }
+
+private:
+    T* ptr;
+};
+
+template<typename T>
+Ref<T> mmake() { return Ref<T>(new T()); }
+
+template<typename T>
+class WeakRef
+{
+public:
+    WeakRef() : ptr(nullptr) {}
+    explicit WeakRef(T* p) : ptr(p) {}
+    T& operator*() { return *ptr; }
+    T* operator->() { return ptr; }
+    const T& operator*() const { return *ptr; }
+    const T* operator->() const { return ptr; }
+
+private:
+    T* ptr;
+};
+
+// DynamicCast<> implementation
+template<typename T>
+Ref<T> DynamicCast(const Ref<void>& other)
+{
+    return Ref<T>(dynamic_cast<T*>(other.operator->()));
+}
+
+class BasicUIStyleBuilder
+{
+public:
+    void RebuildWidgetStyle()
+    {
+        Widget* sample = mmake<Widget>();
+        sample->layout->offsetMin = Vec2F(0, 0);
+        sample->layout->offsetMax = Vec2F(100, 100);
+        sample->transparency = 1.0f;
+
+        WidgetLayer* backgroundLayer = mmake<WidgetLayer>();
+        backgroundLayer->SetDrawable(mmake<Sprite>("ui/UI4_Background.png"));
+        backgroundLayer->layout = Layout::BothStretch(0, 0, 0, 0);
+        sample->AddLayer(backgroundLayer);
+
+        WidgetLayer* iconLayer = mmake<WidgetLayer>();
+        iconLayer->SetDrawable(mmake<Sprite>("ui/UI4_Icon.png"));
+        iconLayer->layout = Layout(Vec2F(0, 0), Vec2F(0.5f, 0.5f), Vec2F(10, 10), Vec2F(-10, -10));
+        sample->AddLayer(iconLayer);
+
+        WidgetLayer* textLayer = mmake<WidgetLayer>();
+        textLayer->SetDrawable(mmake<Text>("stdFont.ttf"));
+        textLayer->layout = Layout::BothStretch(10, 10, 10, 10);
+        textLayer->SetAlignment(HorAlign::Center, VerAlign::Middle);
+        sample->AddLayer(textLayer);
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+
+    void RebuildMenuPanelStyle()
+    {
+        MenuPanel* sample = mmake<MenuPanel>();
+
+        Ref<Sprite> backDrawable = mmake<Sprite>("ui/UI4_Up_Menu.png");
+        sample->AddLayer("back", backDrawable, Layout::BothStretch(-15, -15, -15, -17));
+
+        Ref<Sprite> selection = mmake<Sprite>("ui/UI_ListBox_selection_hover.png");
+        *sample->GetSelectionDrawable() = *selection;
+        sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
+
+        Ref<Label> itemSample = o2UI.CreateLabel("unknown");
+        itemSample->horOverflow = Label::HorOverflow::Expand;
+        itemSample->expandBorder = Vec2F(10, 0);
+        itemSample->color = Color4(235, 255, 253);
+        sample->SetItemSample(itemSample);
+
+        Ref<AnimationClip> hoverAnimation = AnimationClip::EaseInOut("mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f);
+        sample->AddState("hover", hoverAnimation);
+        hoverAnimation->offStateAnimationSpeed = 0.5f;
+
+        sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+
+    void RebuildTreeStyle()
+    {
+        Tree* sample = mmake<Tree>();
+        sample->layout->minSize = Vec2F(20, 20);
+        sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+        sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+        sample->SetEnableScrollsHiding(true);
+        sample->SetChildsNodesOffset(10.0f);
+
+        *sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
+
+        TreeNode* itemSample = sample->GetNodeSample();
+
+        Ref<Sprite> itemSelectionLayer = itemSample->AddLayer("select", nullptr);
+
+        Ref<Sprite> itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mmake<Sprite>("ui/UI4_Context_menu_select.png"),
+                                                                           Layout::BothStretch(-10, -16, -10, -16));
+
+        Ref<Sprite> itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mmake<Sprite>("ui/UI4_Context_menu_white.png"),
+                                                                           Layout::BothStretch(-10, -16, -10, -16));
+
+        Ref<Text> captionLayerText = mmake<Text>("stdFont.ttf");
+        captionLayerText->horAlign = HorAlign::Left;
+        captionLayerText->verAlign = VerAlign::Middle;
+        captionLayerText->color = Color4(96, 125, 139);
+        itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
+
+        Ref<Button> itemSampleExpandBtn = mmake<Button>();
+        itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
+        itemSampleExpandBtn->name = "expandBtn";
+
+        Ref<Sprite> regularLayer = itemSampleExpandBtn->AddLayer("regular", mmake<Sprite>("ui/UI4_Right_icn.png"),
+                                                                  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+                                                                  
+        Ref<Sprite> hoverLayer = itemSampleExpandBtn->AddLayer("hover", mmake<Sprite>("ui/UI4_Right_icn_select.png"),
+                                                                Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+        Ref<Sprite> pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mmake<Sprite>("ui/UI4_Right_icn_pressed.png"),
+                                                                  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+        Ref<AnimationClip> hoverAnimation = itemSampleExpandBtn->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f));
+        hoverAnimation->offStateAnimationSpeed = 1.0f / 4.0f;
+
+        Ref<AnimationClip> pressedAnimation = itemSampleExpandBtn->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f));
+        pressedAnimation->offStateAnimationSpeed = 0.5f;
+
+        itemSampleExpandBtn->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f));
+
+        itemSampleExpandBtn->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f));
+        itemSampleExpandBtn->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f));
+
+        itemSampleExpandBtn->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+            ->offStateAnimationSpeed = 1.0f / 4.0f;
+
+        itemSampleExpandBtn->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        itemSampleExpandBtn->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f));
+
+        itemSampleExpandBtn->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f));
+
+        sample->AddState("hover", AnimationClip::EaseInOut("mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f));
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+};
+
+// Ref<> usage in the code
+void Usage()
+{
+    Ref<BasicUIStyleBuilder> builder = mmake<BasicUIStyleBuilder>();
+    builder->RebuildWidgetStyle();
+    builder->RebuildMenuPanelStyle();
+    builder->RebuildTreeStyle();
+}#include <memory>
+
+template<typename T>
+class Ref
+{
+public:
+    Ref() : m_ptr(nullptr) {}
+    Ref(T* ptr) : m_ptr(ptr) {}
+    Ref(const Ref<T>& other) : m_ptr(other.m_ptr) {}
+    
+    T* operator->() const { return m_ptr; }
+    T& operator*() const { return *m_ptr; }
+    
+    bool operator==(const Ref<T>& other) const { return m_ptr == other.m_ptr; }
+    bool operator!=(const Ref<T>& other) const { return m_ptr != other.m_ptr; }
+    
+private:
+    T* m_ptr;
+};
+
+template<typename T>
+class WeakRef
+{
+public:
+    WeakRef() : m_ptr(nullptr) {}
+    WeakRef(T* ptr) : m_ptr(ptr) {}
+    WeakRef(const WeakRef<T>& other) : m_ptr(other.m_ptr) {}
+    
+    T* operator->() const { return m_ptr; }
+    T& operator*() const { return *m_ptr; }
+    
+    bool operator==(const WeakRef<T>& other) const { return m_ptr == other.m_ptr; }
+    bool operator!=(const WeakRef<T>& other) const { return m_ptr != other.m_ptr; }
+    
+private:
+    T* m_ptr;
+};
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return Ref<T>(new T(std::forward<Args>(args)...));
+}
+
+template<typename T>
+class DynamicCast
+{
+public:
+    explicit DynamicCast(const Ref<T>& ptr) : m_ptr(ptr) {}
+    
+    template<typename U>
+    operator Ref<U>() const { return std::dynamic_pointer_cast<U>(m_ptr); }
+    
+private:
+    Ref<T> m_ptr;
+};
+
+class AnimationClip
+{
+public:
+    // animation clip implementation
+};
+
+class AnimationTrackBase
+{
+public:
+    // animation track base implementation
+};
+
+template<typename T>
+class AnimationTrack : public AnimationTrackBase
+{
+public:
+    static Ref<AnimationTrack<T>> EaseInOut(T startValue, T endValue, float duration)
+    {
+        // ease-in-out animation track implementation
+    }
+};
+
+class Vec2F
+{
+public:
+    // Vec2F implementation
+};
+
+class HorAlign
+{
+public:
+    // HorAlign implementation
+};
+
+class VerAlign
+{
+public:
+    // VerAlign implementation
+};
+
+class Color4
+{
+public:
+    // Color4 implementation
+};
+
+class Sprite
+{
+public:
+    // Sprite implementation
+};
+
+class Layout
+{
+public:
+    // Layout implementation
+};
+
+class Label
+{
+public:
+    // Label implementation
+};
+
+class Text
+{
+public:
+    // Text implementation
+};
+
+
+void BasicUIStyleBuilder::RebuildSample()
+{
+    Button* ndBtn = mnew Button();
+    ndBtn->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5f;
+    
+    Ref<Button> itemSampleExpandBtn = mmake<Button>();
+    itemSampleExpandBtn->layout->anchorMin = Vec2F(0, 1);
+    itemSampleExpandBtn->layout->anchorMax = Vec2F(0, 1);
+    itemSampleExpandBtn->layout->offsetMin = Vec2F(0, -20);
+    itemSampleExpandBtn->layout->offsetMax = Vec2F(10, 0);
+    
+    itemSample->AddChild(itemSampleExpandBtn);
+    
+    Ref<AnimationClip> expandedStateAnim = mmake<AnimationClip>();
+    *expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+          AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+    *expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+          AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+    *expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") = 
+          AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+    
+    itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+    
+    itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
+    
+    Ref<AnimationClip> focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+    *focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.2f);
+    itemSample->AddState("focused", focusedItemAnim);
+    
+    HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+    horScrollBar->layout->anchorMin = Vec2F(0, 0);
+    horScrollBar->layout->anchorMax = Vec2F(1, 0);
+    horScrollBar->layout->offsetMin = Vec2F(5, 0);
+    horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+    sample->SetHorizontalScrollBar(horScrollBar);
+    
+    VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+    verScrollBar->layout->anchorMin = Vec2F(1, 0);
+    verScrollBar->layout->anchorMax = Vec2F(1, 1);
+    verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+    verScrollBar->layout->offsetMax = Vec2F(0, -5);
+    sample->SetVerticalScrollBar(verScrollBar);
+    
+    sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
+                                                              5.0f, 15.0f, 0.2f));
+    
+    sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
+                                                              -5.0f, -15.0f, 0.2f));
+    
+    sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5f;
+    
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5;
+    
+    o2UI.AddWidgetStyle(sample, "standard");
+}
+
+void BasicUIStyleBuilder::RebuildBacklessDropdown()
+{
+    Ref<DropDown> sample = mmake<DropDown>();
+    sample->layout->minSize = Vec2F(20, 20);
+    auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn_white.png"),
+                                       Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, -1)));
+    
+    sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
+    
+    auto list = sample->GetListView();
+    *list = *o2UI.GetWidgetStyle<CustomList>("standard");
+    
+    list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
+    list->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
+    
+    list->RemoveLayer("back");
+    list->AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-22, -19, -19, -19));
+    
+    list->layout->pivot = Vec2F(0.5f, 1.0f);
+    list->layout->anchorMin = Vec2F(0, 0);
+    list->layout->anchorMax = Vec2F(1, 0);
+    list->layout->offsetMin = Vec2F(0, -60);
+    list->layout->offsetMax = Vec2F(0, 0);
+    
+    Label* itemSample = o2UI.CreateLabel("empty");
+    itemSample->horAlign = HorAlign::Left;
+    sample->SetItemSample(itemSample);
+    
+    Ref<Text> captionText = mnew Text("stdFont.ttf");
+    captionText->horAlign = HorAlign::Left;
+    captionText->verAlign = VerAlign::Middle;
+    captionText->dotsEngings = true;
+    captionText->wordWrap = false;
+    captionText->color = Color4(235, 255, 253);
+    sample->AddLayer("selectedText", captionText, Layout::BothStretch(4, 0, 0, 0));
+    
+    sample->AddState("opened", AnimationClip::EaseInOut("layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+    
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5f;
+    
+    o2UI.AddWidgetStyle(sample, "backless");
+}
+
+void BasicUIStyleBuilder::RebuildBacklessEditbox()
+{
+    Ref<EditBox> sample = mmake<EditBox>();
+    sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
+    sample->SetViewLayout(Layout::BothStretch(0, 0, 2, 0));
+    sample->SetCaretBlinkingDelay(1.15f);
+    sample->SetSelectionColor(Color4(0, 156, 141, 120));
+    sample->SetMultiLine(false);
+    sample->layout->minSize = Vec2F(30, 40);
+    
+    sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+           Ref<Button> sample = mmake<Button>(); // replace raw pointer with Ref<>
+sample->layout->minSize = Vec2F(5, 5);
+sample->name = "expandBtn";
+
+auto regularLayer = sample->AddLayer("regular", mmake<Sprite>("ui/UI4_Right_icn.png"), // replace raw pointer with Ref<>
+                                     Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+auto selectLayer = sample->AddLayer("hover", mmake<Sprite>("ui/UI4_Right_icn_select.png"), // replace raw pointer with Ref<>
+                                    Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+auto pressedLayer = sample->AddLayer("pressed", mmake<Sprite>("ui/UI4_Right_icn_pressed.png"), // replace raw pointer with Ref<>
+                                     Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+    ->offStateAnimationSpeed = 1.0f / 4.0f;
+
+sample->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+    ->offStateAnimationSpeed = 0.5f;
+
+sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+    ->offStateAnimationSpeed = 0.5f;
+
+auto expandedStateAnim = mmake<AnimationClip>(); // replace raw pointer with Ref<>
+*expandedStateAnim->AddTrack<float>("layer/regular/mDrawable/angle") =
+    AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+*expandedStateAnim->AddTrack<float>("layer/hover/mDrawable/angle") =
+    AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+*expandedStateAnim->AddTrack<float>("layer/pressed/mDrawable/angle") =
+    AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+sample->AddState("expanded", expandedStateAnim);
+#include <memory>
+
+template <typename T>
+using Ref = std::shared_ptr<T>;
+
+template <typename T>
+using WeakRef = std::weak_ptr<T>;
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template<typename T>
+struct DynamicCast
+{
+    template<typename U>
+    static Ref<T> Cast(const Ref<U>& ptr)
+    {
+        return std::dynamic_pointer_cast<T>(ptr);
+    }
+};
+
+namespace o2 {
+	struct BasicUIStyleBuilder {
+		void RebuildExpandButton();
+		void RebuildExpandDownButton();
+		void RebuildExpandWhiteButton();
+		void RebuildSpoiler();
+	};
 
 	void BasicUIStyleBuilder::RebuildExpandButton()
 	{
@@ -1223,15 +1657,14 @@ namespace o2
 		sample->layout->minSize = Vec2F(5, 5);
 		sample->name = "expandBtn";
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_Right_icn.png"),
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_Down_icn.png"),
 											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Right_icn_select.png"),
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Down_icn_select.png"),
 											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Right_icn_pressed.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Down_icn_pressed.png"),
 											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
-
 
 		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
@@ -1242,17 +1675,8 @@ namespace o2
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		auto expandedStateAnim = mmake<AnimationClip>();
-		*expandedStateAnim->AddTrack<float>("layer/regular/mDrawable/angle") =
-			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-
-		*expandedStateAnim->AddTrack<float>("layer/hover/mDrawable/angle") =
-			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-
-		*expandedStateAnim->AddTrack<float>("layer/pressed/mDrawable/angle") =
-			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-
-		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+		sample->AddState("expanded", mmake<AnimationClip>())
+			->offStateAnimationSpeed = 2.5f;
 
 		o2UI.AddWidgetStyle(sample, "expand");
 	}
@@ -1280,6 +1704,18 @@ namespace o2
 
 		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
+
+		auto expandedStateAnim = mmake<AnimationClip>();
+		*expandedStateAnim->AddTrack<float>("layer/regular/mDrawable/angle") =
+			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim->AddTrack<float>("layer/hover/mDrawable/angle") =
+			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim->AddTrack<float>("layer/pressed/mDrawable/angle") =
+			AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
 		o2UI.AddWidgetStyle(sample, "expand down");
 	}

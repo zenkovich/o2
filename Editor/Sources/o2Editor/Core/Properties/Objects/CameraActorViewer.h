@@ -2,6 +2,8 @@
 
 #include "o2/Scene/CameraActor.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
+#include "o2Editor/Core/Ref.h"
+#include "o2Editor/Core/WeakRef.h"
 
 using namespace o2;
 
@@ -26,26 +28,27 @@ namespace Editor
 		IOBJECT(CameraActorViewer);
 
 	protected:
-		ColorProperty*           mColorProperty = nullptr;
-		SceneLayersListProperty* mLayersProperty = nullptr;
+		Ref<ColorProperty>           mColorProperty;
+		Ref<SceneLayersListProperty> mLayersProperty;
 
-		EnumProperty*   mTypeProperty = nullptr;
-		VerticalLayout* mHiddenTypeProperties = nullptr;
+		Ref<EnumProperty>   mTypeProperty;
+		Ref<VerticalLayout> mHiddenTypeProperties;
 
-		Spoiler*       mSizePropertySpoiler = nullptr;
-		Vec2FProperty* mSizeProperty = nullptr;
+		Ref<Spoiler>       mSizePropertySpoiler;
+		Ref<Vec2FProperty> mSizeProperty;
 
-		Spoiler*      mUnitsPropertySpoiler = nullptr;
-		EnumProperty* mUnitsProperty = nullptr;
+		Ref<Spoiler>      mUnitsPropertySpoiler;
+		Ref<EnumProperty> mUnitsProperty;
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+		void RebuildProperties(const Ref<const Vector<Pair<Ref<IObject>, Ref<IObject>>>>& targetObjets) override;
 
 		// Called when type enum selected, shows required property spoiler
 		void OnTypeSelected();
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::CameraActorViewer)
@@ -53,22 +56,24 @@ CLASS_BASES_META(Editor::CameraActorViewer)
     BASE_CLASS(Editor::TObjectPropertiesViewer<CameraActor>);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::CameraActorViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTypeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHiddenTypeProperties);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizePropertySpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsPropertySpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsProperty);
+    FIELD().PROTECTED().NAME(mColorProperty);
+    FIELD().PROTECTED().NAME(mLayersProperty);
+    FIELD().PROTECTED().NAME(mTypeProperty);
+    FIELD().PROTECTED().NAME(mHiddenTypeProperties);
+    FIELD().PROTECTED().NAME(mSizePropertySpoiler);
+    FIELD().PROTECTED().NAME(mSizeProperty);
+    FIELD().PROTECTED().NAME(mUnitsPropertySpoiler);
+    FIELD().PROTECTED().NAME(mUnitsProperty);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::CameraActorViewer)
 {
 
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Ref<const Vector<Pair<Ref<IObject>, Ref<IObject>>>>& _tmp1;
 
     FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSelected);

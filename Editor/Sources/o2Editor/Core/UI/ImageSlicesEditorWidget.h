@@ -2,6 +2,7 @@
 
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/Widgets/Image.h"
+#include "o2/Core/SmartPtr.h"
 
 using namespace o2;
 
@@ -30,7 +31,7 @@ namespace Editor
 		ImageSlicesEditorWidget& operator=(const ImageSlicesEditorWidget& other);
 
 		// Sets image and property
-		void Setup(const ImageAssetRef& image, BorderIProperty* borderProperty);
+		void Setup(const Ref<ImageAsset>& image, BorderIProperty* borderProperty);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -51,16 +52,16 @@ namespace Editor
 		};
 
 	private:
-		PreviewImage* mPreviewImage = nullptr;
-		Image*        mPreviewImageBack = nullptr;
+		Ref<PreviewImage> mPreviewImage;
+		Ref<Image>        mPreviewImageBack;
 
-		WidgetDragHandle* mBorderLeftHandle;
-		WidgetDragHandle* mBorderRightHandle;
-		WidgetDragHandle* mBorderTopHandle;
-		WidgetDragHandle* mBorderBottomHandle;
-		BorderF           mBordersSmoothValue;
+		Ref<WidgetDragHandle> mBorderLeftHandle;
+		Ref<WidgetDragHandle> mBorderRightHandle;
+		Ref<WidgetDragHandle> mBorderTopHandle;
+		Ref<WidgetDragHandle> mBorderBottomHandle;
+		BorderF              mBordersSmoothValue;
 
-		BorderIProperty* mBorderProperty = nullptr;
+		WeakRef<BorderIProperty> mBorderProperty;
 
 	protected:
 		// Initializes image preview widgets and border handles
@@ -79,7 +80,7 @@ namespace Editor
 		void UpdateBordersValue();
 
 		// Creates grid sprite
-		Sprite* CreateGridSprite();
+		Ref<Sprite> CreateGridSprite();
 	};
 }
 // --- META ---
@@ -91,14 +92,14 @@ CLASS_BASES_META(Editor::ImageSlicesEditorWidget)
 END_META;
 CLASS_FIELDS_META(Editor::ImageSlicesEditorWidget)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPreviewImage);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPreviewImageBack);
+    FIELD().PRIVATE().NAME(mPreviewImage);
+    FIELD().PRIVATE().NAME(mPreviewImageBack);
     FIELD().PRIVATE().NAME(mBorderLeftHandle);
     FIELD().PRIVATE().NAME(mBorderRightHandle);
     FIELD().PRIVATE().NAME(mBorderTopHandle);
     FIELD().PRIVATE().NAME(mBorderBottomHandle);
     FIELD().PRIVATE().NAME(mBordersSmoothValue);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mBorderProperty);
+    FIELD().PRIVATE().NAME(mBorderProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)
@@ -106,14 +107,14 @@ CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const ImageSlicesEditorWidget&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const ImageAssetRef&, BorderIProperty*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<ImageAsset>&, BorderIProperty*);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeImagePreview);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeSliceHandles);
     FUNCTION().PROTECTED().SIGNATURE(void, FitImage);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateBordersAnchors);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateBordersValue);
-    FUNCTION().PROTECTED().SIGNATURE(Sprite*, CreateGridSprite);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Sprite>, CreateGridSprite);
 }
 END_META;
 

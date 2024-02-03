@@ -2,6 +2,8 @@
 
 #include "o2/Assets/Types/ActorAsset.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/IActorHeaderViewer.h"
+#include "Ref.h"
+#include "WeakRef.h"
 
 namespace o2
 {
@@ -24,7 +26,7 @@ namespace Editor
 	// ---------------------------
 	// Default actor header viewer
 	// ---------------------------
-	class DefaultActorHeaderViewer: public IActorHeaderViewer
+	class DefaultActorHeaderViewer : public IActorHeaderViewer
 	{
 	public:
 		// Default constructor
@@ -34,32 +36,32 @@ namespace Editor
 		~DefaultActorHeaderViewer();
 
 		// Sets target actors
-		void SetTargetActors(const Vector<Actor*>& actors) override;
+		void SetTargetActors(const Vector<Ref<Actor>>& actors) override;
 
 		// Returns data widget
-		Widget* GetWidget() const override;
+		const Ref<Widget>& GetWidget() const override;
 
 		// Updates properties values
 		void Refresh() override;
 
 		IOBJECT(DefaultActorHeaderViewer);
 
-	public: 
-		Vector<Actor*> mActors;
+	public:
+		Vector<Ref<Actor>> mActors;
 
-		Widget* mDataView = nullptr;
+		Ref<Widget> mDataView;
 
-		BooleanProperty*       mEnableProperty = nullptr;
-		StringProperty*        mNameProperty = nullptr;
-		BooleanProperty*       mLockProperty = nullptr;
-		AssetProperty*         mPrototypeProperty = nullptr;
-		TagsProperty*          mTagsProperty = nullptr;
-		SceneLayerRefProperty* mLayerProperty = nullptr;
-		FloatProperty*         mDepthProperty = nullptr;
+		Ref<BooleanProperty> mEnableProperty;
+		Ref<StringProperty> mNameProperty;
+		Ref<BooleanProperty> mLockProperty;
+		Ref<AssetProperty> mPrototypeProperty;
+		Ref<TagsProperty> mTagsProperty;
+		Ref<SceneLayerRefProperty> mLayerProperty;
+		Ref<FloatProperty> mDepthProperty;
 
-		Button* mPrototypeApplyBtn = nullptr;
-		Button* mPrototypeRevertBtn = nullptr;
-		Button* mPrototypeBreakBtn = nullptr;
+		Ref<Button> mPrototypeApplyBtn;
+		Ref<Button> mPrototypeRevertBtn;
+		Ref<Button> mPrototypeBreakBtn;
 
 	protected:
 		// Refreshes layer property
@@ -78,13 +80,14 @@ namespace Editor
 		void OnSelectedInheritedLayer();
 
 		// Returns actor applying roots
-		Vector<Actor*> GetRootApplyActors();
+		Vector<Ref<Actor>> GetRootApplyActors();
 
 		// Called when some property changed, stores action for undo
-		void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue, 
-							   const Vector<DataDocument>& newValue);
+		void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue,
+			const Vector<DataDocument>& newValue);
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::DefaultActorHeaderViewer)
@@ -92,35 +95,36 @@ CLASS_BASES_META(Editor::DefaultActorHeaderViewer)
     BASE_CLASS(Editor::IActorHeaderViewer);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)
 {
     FIELD().PUBLIC().NAME(mActors);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDataView);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mEnableProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mNameProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLockProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mTagsProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLayerProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDepthProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeApplyBtn);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeRevertBtn);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeBreakBtn);
+    FIELD().PUBLIC().NAME(mDataView);
+    FIELD().PUBLIC().NAME(mEnableProperty);
+    FIELD().PUBLIC().NAME(mNameProperty);
+    FIELD().PUBLIC().NAME(mLockProperty);
+    FIELD().PUBLIC().NAME(mPrototypeProperty);
+    FIELD().PUBLIC().NAME(mTagsProperty);
+    FIELD().PUBLIC().NAME(mLayerProperty);
+    FIELD().PUBLIC().NAME(mDepthProperty);
+    FIELD().PUBLIC().NAME(mPrototypeApplyBtn);
+    FIELD().PUBLIC().NAME(mPrototypeRevertBtn);
+    FIELD().PUBLIC().NAME(mPrototypeBreakBtn);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Ref<Actor>>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PROTECTED().SIGNATURE(void, RefreshLayer);
     FUNCTION().PROTECTED().SIGNATURE(void, OnApplyPrototypePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRevertPrototypePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnBreakPrototypePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSelectedInheritedLayer);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<Actor*>, GetRootApplyActors);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<Actor>>, GetRootApplyActors);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

@@ -1,3 +1,6 @@
+Replace raw pointers with Ref<>, except void* pointers. Use const Ref<>& for function arguments with pointer types, also in overridden methods. Don't replace void* pointers. Remove default nullptr value for class members with type Ref<>. If class variable is some kind of "parent", use WeakRef<>. Use mmake<>() to create Ref<>, just like make_shared<>(). Replace dynamic_cast<type*> with DynamicCast<type> to cast Ref<>.
+
+```
 #include "o2Editor/stdafx.h"
 #include "MapKeyFramesTrackControl.h"
 
@@ -40,7 +43,7 @@ namespace Editor
 
 		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
 
-		for (auto child : mChildrenInheritedDepth)
+		for (const auto& child : mChildrenInheritedDepth)
 			child->Draw();
 
 		o2Render.DisableScissorTest();
@@ -79,14 +82,14 @@ namespace Editor
 		{
 			IHandlesGroup* newGroup = nullptr;
 
-			if (auto animatedValue = dynamic_cast<AnimationTrack<float>*>(valueNode.track))
-				newGroup = mnew HandlesGroup<AnimationTrack<float>>();
-			else if (auto animatedValue = dynamic_cast<AnimationTrack<bool>*>(valueNode.track))
-				newGroup = mnew HandlesGroup<AnimationTrack<bool>>();
-			else if (auto animatedValue = dynamic_cast<AnimationTrack<Vec2F>*>(valueNode.track))
-				newGroup = mnew HandlesGroup<AnimationTrack<Vec2F>>();
-			else if (auto animatedValue = dynamic_cast<AnimationTrack<Color4>*>(valueNode.track))
-				newGroup = mnew HandlesGroup<AnimationTrack<Color4>>();
+			if (auto animatedValue = DynamicCast<AnimationTrack<float>>(valueNode.track))
+				newGroup = mmake<HandlesGroup<AnimationTrack<float>>>();
+			else if (auto animatedValue = DynamicCast<AnimationTrack<bool>>(valueNode.track))
+				newGroup = mmake<HandlesGroup<AnimationTrack<bool>>>();
+			else if (auto animatedValue = DynamicCast<AnimationTrack<Vec2F>>(valueNode.track))
+				newGroup = mmake<HandlesGroup<AnimationTrack<Vec2F>>>();
+			else if (auto animatedValue = DynamicCast<AnimationTrack<Color4>>(valueNode.track))
+				newGroup = mmake<HandlesGroup<AnimationTrack<Color4>>>();
 
 			if (newGroup)
 			{
@@ -97,7 +100,7 @@ namespace Editor
 			}
 		}
 
-		for (auto childNode : valueNode.children)
+		for (const auto& childNode : valueNode.children)
 			InitializeNodeHandles(*childNode);
 	}
 
@@ -106,13 +109,13 @@ namespace Editor
 		if (mDisableHandlesUpdate)
 			return;
 
-		for (auto& kv : mHandlesGroups)
+		for (const auto& kv : mHandlesGroups)
 			kv.second->UpdateHandles();
 	}
 
-	void MapKeyFramesTrackControl::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
+	void MapKeyFramesTrackControl::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime) const
 	{
-		for (auto& kv : mHandlesGroups)
+		for (const auto& kv : mHandlesGroups)
 		{
 			if (kv.second->SerializeKey(keyUid, data, relativeTime))
 				break;
@@ -122,7 +125,7 @@ namespace Editor
 	Vector<ITrackControl::KeyHandle*> MapKeyFramesTrackControl::GetKeyHandles() const
 	{
 		Vector<ITrackControl::KeyHandle*> res;
-		for (auto& kv : mHandlesGroups) {
+		for (const auto& kv : mHandlesGroups) {
 			res.Add(kv.second->handles.Cast<ITrackControl::KeyHandle*>());
 		}
 
@@ -131,7 +134,7 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::DeleteKey(UInt64 keyUid)
 	{
-		for (auto& kv : mHandlesGroups)
+		for (const auto& kv : mHandlesGroups)
 			kv.second->DeleteKey(keyUid);
 	}
 
@@ -149,12 +152,12 @@ namespace Editor
 
 	AnimationKeyDragHandle* MapKeyFramesTrackControl::CreateHandle()
 	{
-		AnimationKeyDragHandle* handle = mnew AnimationKeyDragHandle(mnew Sprite("ui/UI4_map_key.png"),
-																	 mnew Sprite("ui/UI4_map_key_hover.png"),
-																	 mnew Sprite("ui/UI4_map_key_pressed.png"),
-																	 mnew Sprite("ui/UI4_selected_map_key.png"),
-																	 mnew Sprite("ui/UI4_selected_map_key_hover.png"),
-																	 mnew Sprite("ui/UI4_selected_map_key_pressed.png"));
+		AnimationKeyDragHandle* handle = mmake<AnimationKeyDragHandle>(mmake<Sprite>("ui/UI4_map_key.png"),
+																	 mmake<Sprite>("ui/UI4_map_key_hover.png"),
+																	 mmake<Sprite>("ui/UI4_map_key_pressed.png"),
+																	 mmake<Sprite>("ui/UI4_selected_map_key.png"),
+																	 mmake<Sprite>("ui/UI4_selected_map_key_hover.png"),
+																	 mmake<Sprite>("ui/UI4_selected_map_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
@@ -165,7 +168,7 @@ namespace Editor
 			if (position < 0.0f)
 				position = 0.0f;
 
-			return Vec2F(position, layout->GetHeight()*0.5f);
+			return Vec2F(position, layout->GetHeight() * 0.5f);
 		};
 
 		handle->localToWidgetOffsetTransformFunc = [&](const Vec2F& pos) {
@@ -185,57 +188,96 @@ namespace Editor
 		return handle;
 	}
 
-	Vector<MapKeyFramesTrackControl::KeyHandle*> MapKeyFramesTrackControl::FindHandlesAtPosition(float position) const
+	Vector<MapKeyFramesTrackControl::KeyHandle*> MapKeyFramesTrackControl::FindHandlesAtPosition(float pos)
 	{
 		Vector<KeyHandle*> res;
-
-		for (auto& kv : mHandlesGroups)
+		for (const auto& kv : mHandlesGroups)
 		{
-			for (auto keyHandle : kv.second->handles)
-			{
-				if (mTimeline->IsSameTime(keyHandle->handle->GetPosition().x, position))
-					res.Add(keyHandle);
-			}
+			Vector<KeyHandle*> handles = kv.second->FindHandlesAtPosition(pos);
+			res.Append(handles);
 		}
 
 		return res;
 	}
+}
+```#include <memory>
+#include <functional>
+#include <vector>
 
-	MapKeyFramesTrackControl::KeyHandle::KeyHandle()
-	{}
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
-	MapKeyFramesTrackControl::KeyHandle::KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle, IAnimationTrack* track,
-												   const Function<void(KeyHandle& keyHandle)>& updateFunc) :
-		ITrackControl::KeyHandle(keyUid, handle), track(track), updateFunc(updateFunc)
-	{}
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-	bool MapKeyFramesTrackControl::KeyHandle::operator==(const KeyHandle& other) const
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+	return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template<typename T, typename U>
+Ref<T> DynamicCast(const Ref<U>& ptr)
+{
+	return std::dynamic_pointer_cast<T>(ptr);
+}
+
+namespace Editor
+{
+	class AnimationKeyDragHandle {};
+	class IAnimationTrack {};
+	class ITrackControl
 	{
-		return handle == other.handle;
-	}
-
-	MapKeyFramesTrackControl::IHandlesGroup::~IHandlesGroup()
-	{
-		for (auto handle : handles)
-			delete handle;
-	}
-
-	void MapKeyFramesTrackControl::IHandlesGroup::CacheHandles()
-	{
-		for (auto keyHandle : handles)
+	public:
+		class KeyHandle
 		{
-			keyHandle->handle->SetParent(nullptr);
-			keyHandle->handle->SetEnabled(false);
-			keyHandle->handle->SetSelected(false);
-			keyHandle->handle->SetSelectionGroup(nullptr);
-			trackControl->mHandlesCache.Add(keyHandle->handle);
-			delete keyHandle;
+		public:
+			KeyHandle();
+			KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle, IAnimationTrack* track,
+					  const std::function<void(KeyHandle& keyHandle)>& updateFunc);
+
+			bool operator==(const KeyHandle& other) const;
+
+			Ref<AnimationKeyDragHandle> handle;
+			Ref<IAnimationTrack> track;
+			std::function<void(KeyHandle& keyHandle)> updateFunc;
+		};
+
+		virtual ~ITrackControl() = default;
+
+		std::vector<Ref<KeyHandle>> FindKeyHandlesAtPosition(float position) const
+		{
+			std::vector<Ref<KeyHandle>> res;
+
+			for (auto& kv : mHandlesGroups)
+			{
+				for (const Ref<KeyHandle>& keyHandle : kv.second->handles)
+				{
+					if (mTimeline->IsSameTime(keyHandle->handle->GetPosition().x, position))
+						res.push_back(keyHandle);
+				}
+			}
+
+			return res;
 		}
 
-		handles.clear();
-	}
+		class IHandlesGroup
+		{
+		public:
+			virtual ~IHandlesGroup();
 
+			virtual void CacheHandles();
+
+			Ref<ITrackControl> trackControl;
+			std::vector<Ref<KeyHandle>> handles;
+		};
+
+		std::map<std::string, Ref<IHandlesGroup>> mHandlesGroups;
+		std::vector<Ref<AnimationKeyDragHandle>> mHandlesCache;
+		Ref<IAnimationTrack> mTimeline;
+	};
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::MapKeyFramesTrackControl, Editor__MapKeyFramesTrackControl);

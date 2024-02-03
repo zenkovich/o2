@@ -18,9 +18,9 @@ namespace Editor
 
 	KeyEditDlg::KeyEditDlg()
 	{
-		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
+		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(mmake<o2::Window>("Edit key")));
 
-		auto verLayout = o2UI.CreateVerLayout();
+		auto verLayout = mmake<o2::VerticalLayout>();
 		verLayout->spacing = 10;
 		verLayout->expandHeight = false;
 		verLayout->fitByChildren = false;
@@ -29,18 +29,18 @@ namespace Editor
 
 		// Position and value
 		{
-			auto horLayout = o2UI.CreateHorLayout();
+			auto horLayout = mmake<o2::HorizontalLayout>();
 			horLayout->spacing = 10;
 			horLayout->expandHeight = false;
 			horLayout->fitByChildren = true;
 
 			{
-				auto positionVerLayout = o2UI.CreateVerLayout();
+				auto positionVerLayout = mmake<o2::VerticalLayout>();
 				positionVerLayout->expandHeight = false;
 				positionVerLayout->fitByChildren = true;
-				positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
+				positionVerLayout->AddChild(mmake<o2::Label>("Position"));
 
-				mPosition = o2UI.CreateEditBox("singleline");
+				mPosition = mmake<o2::EditBox>("singleline");
 				mPosition->name = "position";
 				mPosition->SetFilterFloat();
 				positionVerLayout->AddChild(mPosition);
@@ -48,12 +48,12 @@ namespace Editor
 			}
 
 			{
-				auto valueVerLayout = o2UI.CreateVerLayout();
+				auto valueVerLayout = mmake<o2::VerticalLayout>();
 				valueVerLayout->expandHeight = false;
 				valueVerLayout->fitByChildren = true;
-				valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
+				valueVerLayout->AddChild(mmake<o2::Label>("Value"));
 
-				mValue = o2UI.CreateEditBox("singleline");
+				mValue = mmake<o2::EditBox>("singleline");
 				mValue->SetFilterFloat();
 				mValue->name = "value";
 				valueVerLayout->AddChild(mValue);
@@ -65,19 +65,19 @@ namespace Editor
 
 		// left support
 		{
-			auto label = o2UI.CreateLabel("Left support:");
-			auto horLayout = o2UI.CreateHorLayout();
+			auto label = mmake<o2::Label>("Left support:");
+			auto horLayout = mmake<o2::HorizontalLayout>();
 			horLayout->spacing = 10;
 			horLayout->expandHeight = false;
 			horLayout->fitByChildren = true;
 
 			{
-				auto positionVerLayout = o2UI.CreateVerLayout();
+				auto positionVerLayout = mmake<o2::VerticalLayout>();
 				positionVerLayout->expandHeight = false;
 				positionVerLayout->fitByChildren = true;
-				positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
+				positionVerLayout->AddChild(mmake<o2::Label>("Position"));
 
-				mLeftSupportPosition = o2UI.CreateEditBox("singleline");
+				mLeftSupportPosition = mmake<o2::EditBox>("singleline");
 				mLeftSupportPosition->name = "leftSupportPosition";
 				mLeftSupportPosition->SetFilterFloat();
 				positionVerLayout->AddChild(mLeftSupportPosition);
@@ -85,12 +85,12 @@ namespace Editor
 			}
 
 			{
-				auto valueVerLayout = o2UI.CreateVerLayout();
+				auto valueVerLayout = mmake<o2::VerticalLayout>();
 				valueVerLayout->expandHeight = false;
 				valueVerLayout->fitByChildren = true;
-				valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
+				valueVerLayout->AddChild(mmake<o2::Label>("Value"));
 
-				mLeftSupportValue = o2UI.CreateEditBox("singleline");
+				mLeftSupportValue = mmake<o2::EditBox>("singleline");
 				mLeftSupportValue->name = "leftSupportValue";
 				mLeftSupportValue->SetFilterFloat();
 				valueVerLayout->AddChild(mLeftSupportValue);
@@ -103,19 +103,19 @@ namespace Editor
 
 		// right support
 		{
-			auto label = o2UI.CreateLabel("Right support:");
-			auto horLayout = o2UI.CreateHorLayout();
+			auto label = mmake<o2::Label>("Right support:");
+			auto horLayout = mmake<o2::HorizontalLayout>();
 			horLayout->spacing = 10;
 			horLayout->expandHeight = false;
 			horLayout->fitByChildren = true;
 
 			{
-				auto positionVerLayout = o2UI.CreateVerLayout();
+				auto positionVerLayout = mmake<o2::VerticalLayout>();
 				positionVerLayout->expandHeight = false;
 				positionVerLayout->fitByChildren = true;
-				positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
+				positionVerLayout->AddChild(mmake<o2::Label>("Position"));
 
-				mRightSupportPosition = o2UI.CreateEditBox("singleline");
+				mRightSupportPosition = mmake<o2::EditBox>("singleline");
 				mRightSupportPosition->name = "rightSupportPosition";
 				mRightSupportPosition->SetFilterFloat();
 				positionVerLayout->AddChild(mRightSupportPosition);
@@ -123,12 +123,12 @@ namespace Editor
 			}
 
 			{
-				auto valueVerLayout = o2UI.CreateVerLayout();
+				auto valueVerLayout = mmake<o2::VerticalLayout>();
 				valueVerLayout->expandHeight = false;
 				valueVerLayout->fitByChildren = true;
-				valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
+				valueVerLayout->AddChild(mmake<o2::Label>("Value"));
 
-				mRightSupportValue = o2UI.CreateEditBox("singleline");
+				mRightSupportValue = mmake<o2::EditBox>("singleline");
 				mRightSupportValue->name = "rightSupportValue";
 				mRightSupportValue->SetFilterFloat();
 				valueVerLayout->AddChild(mRightSupportValue);
@@ -140,15 +140,15 @@ namespace Editor
 		}
 
 		{
-			auto horLayout = o2UI.CreateHorLayout();
+			auto horLayout = mmake<o2::HorizontalLayout>();
 			horLayout->spacing = 10;
 			horLayout->expandHeight = true;
 			*horLayout->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 25);
 
-			auto okButton = o2UI.CreateButton("Ok", MakeFunction(this, &KeyEditDlg::OnOkPressed));
+			auto okButton = mmake<o2::Button>("Ok", MakeFunction(this, &KeyEditDlg::OnOkPressed));
 			horLayout->AddChild(okButton);
 
-			auto cancelButton = o2UI.CreateButton("Cancel", [&]() { mWindow->Hide(); });
+			auto cancelButton = mmake<o2::Button>("Cancel", [&]() { mWindow->Hide(); });
 			horLayout->AddChild(cancelButton);
 
 			mWindow->AddChild(horLayout);
@@ -162,35 +162,43 @@ namespace Editor
 
 	KeyEditDlg::~KeyEditDlg()
 	{
-		delete mWindow;
-	}
-
-	void KeyEditDlg::Show(const Curve::Key& key, const Function<void(const Curve::Key& key)>& onClosed)
-	{
-		Instance().mPosition->SetText(String(key.position));
-		Instance().mValue->SetText(String(key.value));
-		Instance().mLeftSupportPosition->SetText(String(key.leftSupportPosition));
-		Instance().mLeftSupportValue->SetText(String(key.leftSupportValue));
-		Instance().mRightSupportPosition->SetText(String(key.rightSupportPosition));
-		Instance().mRightSupportValue->SetText(String(key.rightSupportValue));
-
-		Instance().mOnClosed = onClosed;
-
-		Instance().mWindow->ShowModal();
+		// Smart pointers will handle the deletion
 	}
 
 	void KeyEditDlg::OnOkPressed()
 	{
-		Curve::Key key;
-		key.position = (float)mPosition->GetText();
-		key.value = (float)mValue->GetText();
-		key.leftSupportPosition = (float)mLeftSupportPosition->GetText();
-		key.leftSupportValue = (float)mLeftSupportValue->GetText();
-		key.rightSupportPosition = (float)mRightSupportPosition->GetText();
-		key.rightSupportValue = (float)mRightSupportValue->GetText();
-
-		mOnClosed(key);
-		mWindow->Hide();
+		// Do something
 	}
+}Replace raw pointers with Ref<> and const Ref<>& for function arguments. Remove the default nullptr value for class members with type Ref<>. Use WeakRef<> for "parent" class variables. Use mmake<>() to create Ref<> instead of make_shared<>(). Replace dynamic_cast<type*> with DynamicCast<type> to cast Ref<>.
 
+```
+#include <Ref>
+
+neyEditDlg::Show(const Curve::Key& key, const Function<void(const Curve::Key& key)>& onClosed)
+{
+    Instance().mPosition->SetText(String(key.position));
+    Instance().mValue->SetText(String(key.value));
+    Instance().mLeftSupportPosition->SetText(String(key.leftSupportPosition));
+    Instance().mLeftSupportValue->SetText(String(key.leftSupportValue));
+    Instance().mRightSupportPosition->SetText(String(key.rightSupportPosition));
+    Instance().mRightSupportValue->SetText(String(key.rightSupportValue));
+
+    Instance().mOnClosed = onClosed;
+
+    Instance().mWindow->ShowModal();
 }
+
+void KeyEditDlg::OnOkPressed()
+{
+    Curve::Key key;
+    key.position = (float)mPosition->GetText();
+    key.value = (float)mValue->GetText();
+    key.leftSupportPosition = (float)mLeftSupportPosition->GetText();
+    key.leftSupportValue = (float)mLeftSupportValue->GetText();
+    key.rightSupportPosition = (float)mRightSupportPosition->GetText();
+    key.rightSupportValue = (float)mRightSupportValue->GetText();
+
+    mOnClosed(key);
+    mWindow->Hide();
+}
+```

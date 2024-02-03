@@ -2,6 +2,7 @@
 
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
+#include <memory>
 
 using namespace o2;
 
@@ -35,11 +36,11 @@ namespace Editor
 		void Update(float dt) override;
 
 	protected:
-		LongList* mList = nullptr;
-		Widget*   mLastMessageView = nullptr;
-		Text*     mMessagesCountLabel = nullptr;
-		Text*     mWarningsCountLabel = nullptr;
-		Text*     mErrorsCountLabel = nullptr;
+		Ref<LongList> mList;
+		Ref<Widget>   mLastMessageView;
+		Ref<Text>     mMessagesCountLabel;
+		Ref<Text>     mWarningsCountLabel;
+		Ref<Text>     mErrorsCountLabel;
 
 		Vector<LogMessage> mAllMessages;
 		Vector<LogMessage> mVisibleMessages;
@@ -85,7 +86,7 @@ namespace Editor
 		Vector<void*> GetVisibleMessagesRange(int min, int max);
 
 		// Sets list item by message
-		void SetupListMessage(Widget* item, void* object);
+		void SetupListMessage(Ref<Widget> item, void* object);
 
 		// Outs string to stream
 		void OutStrEx(const WString& str) override;
@@ -140,11 +141,10 @@ CLASS_METHODS_META(Editor::LogWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleMessages);
     FUNCTION().PROTECTED().SIGNATURE(int, GetVisibleMessagesCount);
     FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetVisibleMessagesRange, int, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupListMessage, Widget*, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupListMessage, Ref<Widget>, void*);
     FUNCTION().PROTECTED().SIGNATURE(void, OutStrEx, const WString&);
     FUNCTION().PROTECTED().SIGNATURE(void, OutErrorEx, const WString&);
     FUNCTION().PROTECTED().SIGNATURE(void, OutWarningEx, const WString&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLastMessageView);
 }
 END_META;
-// --- END META ---

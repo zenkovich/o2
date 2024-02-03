@@ -21,14 +21,14 @@ namespace Editor
 		IOBJECT(SceneWindow);
 
 	protected:
-		SceneEditScreen* mEditWidget;
+		Ref<SceneEditScreen> mEditWidget;
 
-		Widget* mUpPanel = nullptr;
+		Ref<Widget> mUpPanel;
 
-		Button*      mLayersButton = nullptr;
-		LayersPopup* mLayersPopup = nullptr;
+		Ref<Button> mLayersButton;
+		Ref<LayersPopup> mLayersPopup;
 
-		PopupWidget* mGizomsView = nullptr;
+		Ref<PopupWidget> mGizomsView;
 
 	public:
 		SceneWindow();
@@ -53,10 +53,10 @@ END_META;
 CLASS_FIELDS_META(Editor::SceneWindow)
 {
     FIELD().PROTECTED().NAME(mEditWidget);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUpPanel);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersPopup);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mGizomsView);
+    FIELD().PROTECTED().NAME(mUpPanel);
+    FIELD().PROTECTED().NAME(mLayersButton);
+    FIELD().PROTECTED().NAME(mLayersPopup);
+    FIELD().PROTECTED().NAME(mGizomsView);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneWindow)
@@ -68,4 +68,3 @@ CLASS_METHODS_META(Editor::SceneWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
 }
 END_META;
-// --- END META ---

@@ -71,7 +71,7 @@ namespace Editor
 	protected:
 		struct TargetObjectData
 		{
-			IAbstractValueProxy* proxy = nullptr;
+			Ref<IAbstractValueProxy> proxy = nullptr;
 			IObject* data = nullptr;
 			bool isCreated = false;
 
@@ -84,7 +84,7 @@ namespace Editor
 	protected:							     								    
 		Vector<Pair<TargetObjectData, TargetObjectData>> mTargetObjects; // Target objects
 
-		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object properties viewer
+		WeakRef<IObjectPropertiesViewer> mObjectViewer; // Object properties viewer
 
 		bool mNoHeader = false;          // Is no header attribute exists
 		bool mExpanded = false;          // True when must be expanded after creating object viewer
@@ -107,6 +107,7 @@ namespace Editor
 		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
 							   const Vector<DataDocument>& after);
+
 	};
 }
 // --- META ---
@@ -119,7 +120,7 @@ END_META;
 CLASS_FIELDS_META(Editor::ObjectProperty)
 {
     FIELD().PROTECTED().NAME(mTargetObjects);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mObjectViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<IObjectPropertiesViewer>(), FieldDefaultType::None).NAME(mObjectViewer);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNoHeader);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
     FIELD().PROTECTED().NAME(mCaption);

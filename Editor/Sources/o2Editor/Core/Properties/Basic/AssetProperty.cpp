@@ -7,6 +7,11 @@
 #include "o2Editor/Core/Properties/ObjectViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
 
+#include "o2/Memory/Ref.h"
+#include "o2/Memory/WeakRef.h"
+
+using namespace o2::Memory;
+
 namespace Editor
 {
 	AssetProperty::AssetProperty()
@@ -101,13 +106,13 @@ namespace Editor
 					Vector<IObject*> targets;
 
 					allAreInstance = false;
-					for (auto proxy : mValuesProxies)
+					for (const auto& proxy : mValuesProxies)
 					{
-						auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
-						if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+						const auto proxyType = DynamicCast<const ObjectType>(proxy.first->GetType());
+						if (const auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 						{
 							void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
-							if (Ref<Asset>* refPtr = dynamic_cast<Ref<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+							if (auto* refPtr = DynamicCast<Ref<Asset>>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
 							{
 								if (refPtr->IsInstance())
 								{
@@ -127,7 +132,7 @@ namespace Editor
 					{
 						if (!mAssetObjectViewer)
 						{
-							mAssetObjectViewer = mnew ObjectViewer();
+							mAssetObjectViewer = mmake<ObjectViewer>();
 							mAssetObjectViewer->SetParentContext(mParentContext);
 							mSpoiler->AddChild(mAssetObjectViewer);
 						}
@@ -183,8 +188,23 @@ namespace Editor
 		if (mCaption)
 			mCaption->SetText(text);
 	}
+}#include <memory>
 
-	WString AssetProperty::GetCaption() const
+template<typename T>
+using Ref = std::shared_ptr<T>;
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
+
+class AssetProperty
+{
+public:
+	AssetProperty() = default;
+	AssetProperty(const AssetProperty&) = default;
+	AssetProperty(AssetProperty&&) = default;
+	AssetProperty& operator=(const AssetProperty&) = default;
+	AssetProperty& operator=(AssetProperty&&) = default;
+
+	WString GetCaption() const
 	{
 		if (mCaption)
 			return mCaption->GetText();
@@ -192,7 +212,7 @@ namespace Editor
 		return WString();
 	}
 
-	Button* AssetProperty::GetRemoveButton()
+	Button* GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
@@ -205,7 +225,7 @@ namespace Editor
 		return mRemoveBtn;
 	}
 
-	void AssetProperty::SetCommonAssetId(const UID& id)
+	void SetCommonAssetId(const UID& id)
 	{
 		mCommonValue = id == 0 ? Ref<Asset>() : Ref<Asset>(id);
 		mValuesDifferent = false;
@@ -215,14 +235,14 @@ namespace Editor
 		OnValueChanged();
 	}
 
-	void AssetProperty::SetAssetIdByUser(const UID& id)
+	void SetAssetIdByUser(const UID& id)
 	{
 		StoreValues(mBeforeChangeValues);
 		SetAssetId(id);
 		CheckValueChangeCompleted();
 	}
 
-	void AssetProperty::OnCreateInstancePressed()
+	void OnCreateInstancePressed()
 	{
 		SetState("instance", true);
 
@@ -241,7 +261,7 @@ namespace Editor
 		mSpoiler->Expand();
 	}
 
-	void AssetProperty::OnRemoveInstancePressed()
+	void OnRemoveInstancePressed()
 	{
 		SetState("instance", false);
 		mSpoiler->Collapse();
@@ -260,7 +280,7 @@ namespace Editor
 		Refresh();
 	}
 
-	void AssetProperty::OnSaveInstancePressed()
+	void OnSaveInstancePressed()
 	{
 		String assetTypeName = GetSmartName(mAssetType->GetName());
 		Vector<String> extesions = mAssetType->InvokeStatic<Vector<String>>("GetFileExtensions");
@@ -268,7 +288,7 @@ namespace Editor
 		String defaultPath = o2Application.GetBinPath() + "\\" + o2Assets.GetAssetsPath().ReplacedAll("/", "\\");
 
 		String path = GetSaveFileNameDialog("Save asset", { { assetTypeName, "*." + extension } },
-											defaultPath);
+			defaultPath);
 		if (path.IsEmpty()) {
 			return;
 		}
@@ -280,35 +300,35 @@ namespace Editor
 		asset->Save(relativePath + "." + extension);
 	}
 
-	void AssetProperty::OnTypeSpecialized(const Type& type)
+	void OnTypeSpecialized(const Type& type)
 	{
 		SetAssetType(type.InvokeStatic<const Type*>("GetAssetTypeStatic"));
 	}
 
-	Ref<Asset> AssetProperty::GetProxy(IAbstractValueProxy* proxy) const
+	Ref<Asset> GetProxy(IAbstractValueProxy* proxy) const
 	{
 		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
 		auto proxySample = proxyType->CreateSample();
 		proxy->GetValuePtr(proxySample);
 		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
 		BaseAssetRef* assetSample = dynamic_cast<BaseAssetRef*>(objectSample);
-		Ref<Asset> res = Ref(assetSample->GetAssetBase());
+		Ref<Asset> res = std::make_shared<Asset>(*assetSample->GetAssetBase());
 		delete assetSample;
 		return res;
 	}
 
-	void AssetProperty::SetProxy(IAbstractValueProxy* proxy, const Ref<Asset>& value)
+	void SetProxy(IAbstractValueProxy* proxy, const Ref<Asset>& value)
 	{
 		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
 		auto proxySample = proxyType->CreateSample();
 		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
 		BaseAssetRef* assetSample = dynamic_cast<BaseAssetRef*>(objectSample);
-		assetSample->SetAssetBase(value.Get());
+		assetSample->SetAssetBase(value.get());
 		proxy->SetValuePtr(proxySample);
 		delete assetSample;
 	}
 
-	void AssetProperty::OnCursorPressed(const Input::Cursor& cursor)
+	void OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.FocusWidget(mBox);
 
@@ -316,34 +336,34 @@ namespace Editor
 			o2EditorAssets.ShowAssetIcon(mCommonValue->GetPath());
 	}
 
-	void AssetProperty::OnCursorExit(const Input::Cursor& cursor)
+	void OnCursorExit(const Input::Cursor& cursor)
 	{
 		mBox->SetState("select", false);
 	}
 
-	void AssetProperty::OnCursorEnter(const Input::Cursor& cursor)
+	void OnCursorEnter(const Input::Cursor& cursor)
 	{
 		mBox->SetState("select", true);
 	}
 
-	void AssetProperty::OnKeyPressed(const Input::Key& key)
+	void OnKeyPressed(const Input::Key& key)
 	{
 		if (mBox && mBox->IsFocused() && (key == VK_DELETE || key == VK_BACK))
 			SetAssetIdByUser(0);
 	}
 
-	bool AssetProperty::IsUnderPoint(const Vec2F& point)
+	bool IsUnderPoint(const Vec2F& point)
 	{
 		return mBox->IsUnderPoint(point) && mBox->transparency > 0.1f;
 	}
 
-	void AssetProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void OnDragExit(ISelectableDragableObjectsGroup* group)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
 	}
 
-	void AssetProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
 		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetIconsScroll)
@@ -360,24 +380,36 @@ namespace Editor
 		mBox->SetState("focused", true);
 	}
 
-	void AssetProperty::OnDropped(ISelectableDragableObjectsGroup* group)
+	void OnDropped(ISelectableDragableObjectsGroup* group)
+
+private:
+	Ref<Label> mCaption;
+	Ref<Button> mRemoveBtn;
+	Ref<Asset> mCommonValue;
+	bool mValuesDifferent;
+	Vector<Ref<Asset>*> mValues;
+	Vector<Value> mCaptionStringValues;
+	Vector<Ref<Asset>> mBeforeChangeValues;
+	Ref<ObjectType> mAssetType;
+	std::unordered_map<IAbstractValueProxy*, IAbstractValueProxy*> mValueProxies;
+	Button* mHeaderContainer;
+	Ref<CollapseWidget> mSpoiler;
+};{	mmake<auto>(group) group;
+	auto assetIconsScroll = DynamicCast<AssetsIconsScrollArea, Ref<Base>>(group);
+	if (!assetIconsScroll)
+		return;
+
+	auto lastSelectedAssetIcon = DynamicCast<const AssetIcon, Ref<Base>>(assetIconsScroll->GetDraggingObject());
+	if (!lastSelectedAssetIcon ||
+		(mAssetType && !lastSelectedAssetIcon->GetAssetInfo()->meta->GetAssetType()->IsBasedOn(*mAssetType)))
 	{
-		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
-		if (!assetIconsScroll)
-			return;
-
-		auto lastSelectedAssetIcon = dynamic_cast<const AssetIcon*>(assetIconsScroll->GetDraggingObject());
-		if (!lastSelectedAssetIcon ||
-			(mAssetType && !lastSelectedAssetIcon->GetAssetInfo()->meta->GetAssetType()->IsBasedOn(*mAssetType)))
-		{
-			return;
-		}
-
-		SetAssetIdByUser(lastSelectedAssetIcon->GetAssetInfo()->meta->ID());
-
-		o2Application.SetCursor(CursorType::Arrow);
-		mBox->Focus();
+		return;
 	}
+
+	SetAssetIdByUser(lastSelectedAssetIcon->GetAssetInfo()->meta->ID());
+
+	o2Application.SetCursor(CursorType::Arrow);
+	mBox->Focus();
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<Ref<Asset>>);

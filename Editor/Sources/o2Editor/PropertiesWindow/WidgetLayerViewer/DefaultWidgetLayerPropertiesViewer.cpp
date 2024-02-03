@@ -1,5 +1,6 @@
-#include "o2Editor/stdafx.h"
-#include "DefaultWidgetLayerPropertiesViewer.h"
+#include "o2/Utils/SmartPointers/Ref.h"
+#include "o2/Utils/SmartPointers/WeakRef.h"
+#include "o2/Utils/SmartPointers/mmake.h"
 
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Button.h"
@@ -12,65 +13,83 @@
 namespace Editor
 {
 
-	DefaultWidgetLayerPropertiesViewer::DefaultWidgetLayerPropertiesViewer()
-	{
-		PushEditorScopeOnStack scope;
-		mFitSizeButton = o2UI.CreateButton("Fit size by drawable", THIS_FUNC(FitLayerByDrawable));
-	}
+    class DefaultWidgetLayerPropertiesViewer
+    {
+    public:
+        DefaultWidgetLayerPropertiesViewer();
+        ~DefaultWidgetLayerPropertiesViewer();
+        void SetTargetLayers(const Vector<Ref<WidgetLayer>>& layers);
+        const Type* GetDrawableType() const;
+        void Refresh();
+        bool IsEmpty() const;
+        void FitLayerByDrawable();
+    private:
+        Ref<IObjectPropertiesViewer> mViewer;
+        Ref<SpoilerWithHead> mSpoiler;
+        Ref<Button> mFitSizeButton;
+        Vector<Ref<WidgetLayer>> mLayers;
+        const Type* mDrawableType;
+    };
 
-	DefaultWidgetLayerPropertiesViewer::~DefaultWidgetLayerPropertiesViewer()
-	{}
+    DefaultWidgetLayerPropertiesViewer::DefaultWidgetLayerPropertiesViewer()
+    {
+        PushEditorScopeOnStack scope;
+        mFitSizeButton = o2UI.CreateButton("Fit size by drawable", THIS_FUNC(FitLayerByDrawable));
+    }
 
-	void DefaultWidgetLayerPropertiesViewer::SetTargetLayers(const Vector<WidgetLayer*>& layers)
-	{
-		mLayers = layers;
-		Refresh();
-	}
+    DefaultWidgetLayerPropertiesViewer::~DefaultWidgetLayerPropertiesViewer()
+    {}
 
-	const Type* DefaultWidgetLayerPropertiesViewer::GetDrawableType() const
-	{
-		return mDrawableType;
-	}
+    void DefaultWidgetLayerPropertiesViewer::SetTargetLayers(const Vector<Ref<WidgetLayer>>& layers)
+    {
+        mLayers = layers;
+        Refresh();
+    }
 
-	void DefaultWidgetLayerPropertiesViewer::Refresh()
-	{
-		if (!mViewer)
-		{
-			mViewer = o2EditorProperties.CreateObjectViewer(&TypeOf(WidgetLayer), "");
-			mViewer->SetHeaderEnabled(false);
-			mSpoiler->AddChild(mViewer->GetSpoiler());
-			mFitSizeButton->SetParent(mSpoiler);
-		}
+    const Type* DefaultWidgetLayerPropertiesViewer::GetDrawableType() const
+    {
+        return mDrawableType;
+    }
 
-		if (mViewer)
-		{
-			mViewer->Refresh(mLayers.Convert<Pair<IObject*, IObject*>>([](WidgetLayer* x) {
-				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), nullptr);
-			}));
-		}
-	}
+    void DefaultWidgetLayerPropertiesViewer::Refresh()
+    {
+        if (!mViewer)
+        {
+            mViewer = o2EditorProperties.CreateObjectViewer(Ref<Type>::MakeShared<WidgetLayer>(), "");
+            mViewer->SetHeaderEnabled(false);
+            mSpoiler->AddChild(mViewer->GetSpoiler());
+            mFitSizeButton->SetParent(mSpoiler);
+        }
 
-	bool DefaultWidgetLayerPropertiesViewer::IsEmpty() const
-	{
-		return mSpoiler->GetChildren().Count() == 0;
-	}
+        if (mViewer)
+        {
+            mViewer->Refresh(mLayers.Convert<Pair<Ref<IObject>, Ref<IObject>>>([](const Ref<WidgetLayer>& x) {
+                return Pair<Ref<IObject>, Ref<IObject>>(Ref<IObject>::DynamicCast(x), nullptr);
+            }));
+        }
+    }
 
-	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
-	{
-		TransformAction* action = new TransformAction(mLayers.Convert<SceneEditableObject*>([](WidgetLayer* layer) { return dynamic_cast<SceneEditableObject*>(layer); }));
+    bool DefaultWidgetLayerPropertiesViewer::IsEmpty() const
+    {
+        return mSpoiler->GetChildren().Count() == 0;
+    }
 
-		for (auto layer : mLayers)
-		{
-			if (Sprite* sprite = dynamic_cast<Sprite*>(layer->GetDrawable()))
-				layer->layout.size = sprite->GetImageAsset()->GetSize();
+    void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
+    {
+        Ref<TransformAction> action = Ref<TransformAction>::MakeShared(mLayers.Convert<Ref<SceneEditableObject>>([](const Ref<WidgetLayer>& layer) { return Ref<SceneEditableObject>::DynamicCast(layer); }));
 
-			if (Text* text = dynamic_cast<Text*>(layer->GetDrawable()))
-				layer->layout.size = text->GetRealSize();
-		}
+        for (const Ref<WidgetLayer>& layer : mLayers)
+        {
+            if (Ref<Sprite> sprite = Ref<Sprite>::DynamicCast(layer->GetDrawable()))
+                layer->layout.size = sprite->GetImageAsset()->GetSize();
 
-		action->Completed();
-		o2EditorApplication.DoneAction(action);
-	}
+            if (Ref<Text> text = Ref<Text>::DynamicCast(layer->GetDrawable()))
+                layer->layout.size = text->GetRealSize();
+        }
+
+        action->Completed();
+        o2EditorApplication.DoneAction(action);
+    }
 
 }
 // --- META ---

@@ -60,7 +60,7 @@ namespace Editor
 			}
 
 			auto zeroWeightColor = Color4::HSL(zeroWeightColorHue, weightMeshSaturation, weightMeshLight, weightMeshAlpha).ABGR();
-			for (UInt i = 0; i < mesh.vertexCount; i++)
+			for (size_t i = 0; i < mesh.vertexCount; i++)
 				debugMesh.vertices[i].Set(mesh.vertices[i], zeroWeightColor, 0, 0);
 
 			for (auto& p : boneComponent->vertexWeights)
@@ -69,7 +69,7 @@ namespace Editor
 				debugMesh.vertices[p.first].color = Color4::HSL(hue, weightMeshSaturation, weightMeshLight, weightMeshAlpha).ABGR();
 			}
 
-			memcpy(debugMesh.indexes, mesh.indexes, sizeof(VertexIndex)*mesh.polyCount*3);
+			memcpy(debugMesh.indexes, mesh.indexes, sizeof(VertexIndex) * mesh.polyCount * 3);
 
 			debugMesh.vertexCount = mesh.vertexCount;
 			debugMesh.polyCount = mesh.polyCount;
@@ -81,14 +81,14 @@ namespace Editor
 		o2Render.DrawAACircle(localCursorPos, tool->mBrushReadius, Color4::White(), 150, 2.0f);
 	}
 
-	void MeshWeightsTool::SceneLayer::DrawMeshWire(auto& mesh)
+	void MeshWeightsTool::SceneLayer::DrawMeshWire(const Ref<Render::SkinnigMesh>& mesh)
 	{
 		Color4 wireColor = Color4::White();
-		for (UInt i = 0; i < mesh.polyCount; i++)
+		for (size_t i = 0; i < mesh->polyCount; i++)
 		{
-			Vec2F p0 = mesh.vertices[mesh.indexes[i*3]];
-			Vec2F p1 = mesh.vertices[mesh.indexes[i*3 + 1]];
-			Vec2F p2 = mesh.vertices[mesh.indexes[i*3 + 2]];
+			Vec2F p0 = mesh->vertices[mesh->indexes[i * 3]];
+			Vec2F p1 = mesh->vertices[mesh->indexes[i * 3 + 1]];
+			Vec2F p2 = mesh->vertices[mesh->indexes[i * 3 + 2]];
 
 			Vertex vertices[] =
 			{
@@ -135,7 +135,7 @@ namespace Editor
 
 				float brushSign = o2Input.IsKeyDown(VK_CONTROL) ? -1.0f : 1.0f;
 
-				w->second = Math::Clamp01(w->second + tool->mBrushStrength*brushSign*dt);
+				w->second = Math::Clamp01(w->second + tool->mBrushStrength * brushSign * dt);
 			}
 		}
 
@@ -163,23 +163,24 @@ namespace Editor
 		return String::empty;
 	}
 
-	String MeshWeightsTool::MeshWeightsTool::GetPanelIcon() const
+	String MeshWeightsTool::GetPanelIcon() const
 	{
 		return "ui/UI4_weight_tool.png";
 	}
 
-	void MeshWeightsTool::MeshWeightsTool::OnEnabled()
+	void MeshWeightsTool::OnEnabled()
 	{
 		o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
 		isEnabled = true;
 	}
 
-	void MeshWeightsTool::MeshWeightsTool::OnDisabled()
+	void MeshWeightsTool::OnDisabled()
 	{
 		o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
 		isEnabled = false;
 	}
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::MeshWeightsTool, Editor__MeshWeightsTool);

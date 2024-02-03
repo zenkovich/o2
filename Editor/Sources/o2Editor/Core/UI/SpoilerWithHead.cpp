@@ -1,53 +1,54 @@
 #include "o2Editor/stdafx.h"
 #include "SpoilerWithHead.h"
-
 #include "o2/Scene/UI/Widgets/Button.h"
 
 namespace Editor
 {
 
-	SpoilerWithHead::SpoilerWithHead() :
-		Spoiler()
-	{}
+    SpoilerWithHead::SpoilerWithHead() :
+        Spoiler()
+    {}
 
-	SpoilerWithHead::SpoilerWithHead(const SpoilerWithHead& other) :
-		Spoiler(other)
-	{
-		InitializeControls();
-		RetargetStatesAnimations();
-	}
+    SpoilerWithHead::SpoilerWithHead(const SpoilerWithHead& other) :
+        Spoiler(other)
+    {
+        InitializeControls();
+        RetargetStatesAnimations();
+    }
 
-	SpoilerWithHead& SpoilerWithHead::operator=(const SpoilerWithHead& other)
-	{
-		Spoiler::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    SpoilerWithHead& SpoilerWithHead::operator=(const SpoilerWithHead& other)
+    {
+        Spoiler::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-	Image* SpoilerWithHead::GetIcon() const
-	{
-		return mIcon;
-	}
+    Ref<Image> SpoilerWithHead::GetIcon() const
+    {
+        return mIcon;
+    }
 
-	String SpoilerWithHead::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
+    String SpoilerWithHead::GetCreateMenuCategory()
+    {
+        return "UI/Editor";
+    }
 
-	void SpoilerWithHead::InitializeControls()
-	{
-		mOptionsBtn = FindInternalWidgetByType<Button>("options");
-		if (mOptionsBtn)
-			mOptionsBtn->onClick = [&]() { onOptionsPressed(); };
+    void SpoilerWithHead::InitializeControls()
+    {
+        mOptionsBtn = FindInternalWidgetByType<Ref<Button>>("options");
+        if (mOptionsBtn)
+            mOptionsBtn->onClick = [&]() { onOptionsPressed(); };
 
-		mSaveBtn = FindInternalWidgetByType<Button>("save");
-		if (mSaveBtn)
-			mSaveBtn->onClick = [&]() { onSavePressed(); };
+        mSaveBtn = FindInternalWidgetByType<Ref<Button>>("save");
+        if (mSaveBtn)
+            mSaveBtn->onClick = [&]() { onSavePressed(); };
 
-		mIcon = FindInternalWidgetByType<Image>("icon");
-	}
+        mIcon = FindInternalWidgetByType<Ref<Image>>("icon");
+    }
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::SpoilerWithHead, Editor__SpoilerWithHead);
+
 // --- END META ---

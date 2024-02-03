@@ -1,8 +1,8 @@
-#pragma once
-
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/Components/SkinningMeshComponent.h"
 #include "o2Editor/SceneWindow/SceneEditorLayer.h"
+#include "o2/Core/Ref.h"
+#include "o2/Core/WeakRef.h"
 
 using namespace o2;
 
@@ -15,8 +15,8 @@ namespace Editor
 	{
 		bool drawMeshWire = true;
 
-		SkinningMeshComponent* mesh = nullptr;
-		Sprite                 textureSprite;
+		Ref<SkinningMeshComponent> mesh;
+		Sprite textureSprite;
 
 	public:
 		void DrawOverScene() override;

@@ -10,75 +10,76 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
-	class Button;
-	class Component;
-	class Widget;
+    class Actor;
+    class Button;
+    class Component;
+    class Widget;
 }
 
 namespace Editor
 {
-	class SpoilerWithHead;
+    class SpoilerWithHead;
 
-	// ---------------------------------------
-	// Editor actor component viewer interface
-	// ---------------------------------------
-	class IActorComponentViewer: public IObject
-	{
-	public:
-		// Default constructor. Initializes data widget
-		IActorComponentViewer();
+    // ---------------------------------------
+    // Editor actor component viewer interface
+    // ---------------------------------------
+    class IActorComponentViewer : public IObject
+    {
+    public:
+        // Default constructor. Initializes data widget
+        IActorComponentViewer();
 
-		// Virtual destructor
-		virtual ~IActorComponentViewer();
+        // Virtual destructor
+        virtual ~IActorComponentViewer();
 
-		// Sets target actors
-		virtual void SetTargetComponents(const Vector<Component*>& components);
+        // Sets target actors
+        virtual void SetTargetComponents(const Vector<Ref<Component>>& components);
 
-		// Returns viewing component type 
-		virtual const Type* GetComponentType() const { return nullptr; }
+        // Returns viewing component type 
+        virtual const Type* GetComponentType() const { return nullptr; }
 
-		// Returns data widget
-		virtual Widget* GetWidget() const;
+        // Returns data widget
+        virtual Ref<Widget> GetWidget() const;
 
-		// Expands view
-		void Expand();
+        // Expands view
+        void Expand();
 
-		// Collapse view
-		void Collapse();
+        // Collapse view
+        void Collapse();
 
-		// Updates all component values
-		virtual void Refresh();
+        // Updates all component values
+        virtual void Refresh();
 
-		// Sets viewer enabled
-		void SetEnabled(bool enabled);
+        // Sets viewer enabled
+        void SetEnabled(bool enabled);
 
-		// Returns is viewer enabled
-		bool IsEnabled() const;
+        // Returns is viewer enabled
+        bool IsEnabled() const;
 
-		IOBJECT(IActorComponentViewer);
+        IOBJECT(IActorComponentViewer);
 
-	protected:
-		Vector<Component*> mTargetComponents; // Target components
+    protected:
+        Vector<Ref<Component>> mTargetComponents; // Target components
 
-		SpoilerWithHead* mSpoiler = nullptr;      // Component's spoiler
-		Button*          mRemoveButton = nullptr; // Remove component button
+        Ref<SpoilerWithHead> mSpoiler;      // Component's spoiler
+        Ref<Button> mRemoveButton; // Remove component button
 
-		bool mEnabled = false; // Is viewer enabled 
+        bool mEnabled = false; // Is viewer enabled 
 
-	protected:
-		// Removes target components
-		void RemoveTargetComponents();
+    protected:
+        // Removes target components
+        void RemoveTargetComponents();
 
-		// Enable viewer event function
-		virtual void OnEnabled() {}
+        // Enable viewer event function
+        virtual void OnEnabled() {}
 
-		// Disable viewer event function
-		virtual void OnDisabled() {}
+        // Disable viewer event function
+        virtual void OnDisabled() {}
 
-		friend class ActorViewer;
-	};
+        friend class ActorViewer;
+    };
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::IActorComponentViewer)
@@ -86,21 +87,22 @@ CLASS_BASES_META(Editor::IActorComponentViewer)
     BASE_CLASS(o2::IObject);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::IActorComponentViewer)
 {
     FIELD().PROTECTED().NAME(mTargetComponents);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRemoveButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+    FIELD().PROTECTED().NAME(mSpoiler).DEFAULT_VALUE(nullptr);
+    FIELD().PROTECTED().NAME(mRemoveButton).DEFAULT_VALUE(nullptr);
+    FIELD().PROTECTED().NAME(mEnabled).DEFAULT_VALUE(false);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::IActorComponentViewer)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Ref<Component>>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

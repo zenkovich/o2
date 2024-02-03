@@ -6,38 +6,38 @@
 
 namespace Editor
 {
-	IPropertiesViewer::~IPropertiesViewer()
-	{
-		delete mContentWidget;
-	}
+    IPropertiesViewer::~IPropertiesViewer()
+    {
+        delete mContentWidget;
+    }
 
-	const Type* IPropertiesViewer::GetViewingObjectType() const
-	{
-		return nullptr;
-	}
+    const Type* IPropertiesViewer::GetViewingObjectType() const
+    {
+        return nullptr;
+    }
 
-	void IPropertiesViewer::Refresh()
-	{}
+    void IPropertiesViewer::Refresh()
+    {}
 
-	void IPropertiesViewer::SetEnabled(bool enabled)
-	{
-		if (mEnabled == enabled)
-			return;
+    void IPropertiesViewer::SetEnabled(const bool& enabled)
+    {
+        if (mEnabled == enabled)
+            return;
 
-		mEnabled = enabled;
+        mEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
-		else
-			OnDisabled();
-	}
+        if (mEnabled)
+            OnEnabled();
+        else
+            OnDisabled();
+    }
 
-	bool IPropertiesViewer::IsEnabled() const
-	{
-		return mEnabled;
-	}
-
+    bool IPropertiesViewer::IsEnabled() const
+    {
+        return mEnabled;
+    }    
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::IPropertiesViewer, Editor__IPropertiesViewer);

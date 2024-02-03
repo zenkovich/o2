@@ -1,5 +1,3 @@
-#pragma once
-
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2Editor/Core/Actions/IAction.h"
@@ -19,7 +17,7 @@ namespace Editor
 	// Storing old and new parent and 
 	// index in parents
 	// ------------------------------
-	class ReparentAction: public IAction
+	class ReparentAction : public IAction
 	{
 	public:
 		struct ObjectInfo
@@ -27,26 +25,26 @@ namespace Editor
 			SceneUID objectId;
 			SceneUID lastParentId;
 			SceneUID lastPrevObjectId;
-			int      objectHierarchyIdx;
-			Basis    transform;
+			int objectHierarchyIdx;
+			Basis transform;
 		};
 
-		Vector<ObjectInfo*> objectsInfos;
-		SceneUID            newParentId;
-		SceneUID            newPrevObjectId;
+		Vector<Ref<ObjectInfo>> objectsInfos;
+		Ref<SceneUID> newParentId;
+		Ref<SceneUID> newPrevObjectId;
 
 	public:
 		// Default constructor
 		ReparentAction();
 
 		// Constructor
-		ReparentAction(const Vector<SceneEditableObject*>& beginObjects);
+		ReparentAction(const Vector<Ref<SceneEditableObject>>& beginObjects);
 
 		// Destructor
 		~ReparentAction();
 
 		// Called when object are reparented, stores all required data to restore old objects' parents
-		void ObjectsReparented(SceneEditableObject* newParent, SceneEditableObject* prevObject);
+		void ObjectsReparented(const Ref<SceneEditableObject>& newParent, const Ref<SceneEditableObject>& prevObject);
 
 		// Returns name of action
 		String GetName() const override;
@@ -60,6 +58,7 @@ namespace Editor
 		SERIALIZABLE(ReparentAction);
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::ReparentAction)
@@ -67,6 +66,7 @@ CLASS_BASES_META(Editor::ReparentAction)
     BASE_CLASS(Editor::IAction);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::ReparentAction)
 {
     FIELD().PUBLIC().NAME(objectsInfos);
@@ -74,15 +74,14 @@ CLASS_FIELDS_META(Editor::ReparentAction)
     FIELD().PUBLIC().NAME(newPrevObjectId);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::ReparentAction)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, ObjectsReparented, SceneEditableObject*, SceneEditableObject*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Vector<SceneEditableObject>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, ObjectsReparented, const Ref<SceneEditableObject>&, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
-// --- END META ---

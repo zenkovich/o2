@@ -19,7 +19,7 @@ namespace Editor
 		public:
 			void DrawScene() override;
 
-			void DrawMeshWire(auto& mesh);
+			void DrawMeshWire(const Ref<Mesh>& mesh);
 
 			void Update(float dt) override;
 
@@ -35,8 +35,8 @@ namespace Editor
 
 		Ref<SkinningMeshBoneComponent> boneComponent; // Reference to selected bone component
 
-		SceneLayer   sceneLayer;        // Scene layer for drawing spline
-		bool         isEnabled = false; // Is tool enabled now       
+		SceneLayer sceneLayer;        // Scene layer for drawing spline
+		bool isEnabled = false;       // Is tool enabled now       
 
 	public:
 		// Default constructor
@@ -57,12 +57,12 @@ namespace Editor
 		IOBJECT(MeshWeightsTool);
 
 	private:
-		Vec2F mCursosPos;            // Current cursor position, used for brush
-		bool  mPressed = false;      // Is brush pressed
-		float mBrushReadius = 50;    // Current brush radius
-		float mBrushStrength = 1.0f; // Strength of brush
+		Vec2F mCursosPos;               // Current cursor position, used for brush
+		bool mPressed = false;          // Is brush pressed
+		float mBrushReadius = 50;       // Current brush radius
+		float mBrushStrength = 1.0f;    // Strength of brush
 
-		Mesh mWeightsDebugMesh; // Mesh for drawing debug colors of weights
+		Mesh mWeightsDebugMesh;         // Mesh for drawing debug colors of weights
 
 	private:
 		// Called when cursor pressed on this
@@ -81,6 +81,7 @@ namespace Editor
 		void OnCursorMoved(const Input::Cursor& cursor) override;
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::MeshWeightsTool)
@@ -114,4 +115,3 @@ CLASS_METHODS_META(Editor::MeshWeightsTool)
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
 }
 END_META;
-// --- END META ---

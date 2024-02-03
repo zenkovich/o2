@@ -1,167 +1,110 @@
-#pragma once
-
-#include "o2/Scene/UI/Widgets/VerticalLayout.h"
-#include "o2/Utils/Basic/IObject.h"
-#include "o2/Utils/ValueProxy.h"
-#include "o2Editor/Core/Properties/PropertiesContext.h"
-
-using namespace o2;
-
-namespace o2
-{
-	class VerticalLayout;
-}
-
-namespace Editor
-{
-	class IPropertyField;
-
-	// ----------------------------------------------------------------------------------
-	// Object properties viewer interface. Used in IObjectProperty and IObjectPtrProperty
-	// Override this class to create new object properties viewer
-	// ----------------------------------------------------------------------------------
-	class IObjectPropertiesViewer : public IObject
-	{
-	public:
-		typedef Function<void(IPropertyField*)> OnChangedFunc;
-		typedef Function<void(const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)> OnChangeCompletedFunc;
-
-	public:
-		OnChangedFunc onChanged;                 // Immediate change value by user event
-		OnChangeCompletedFunc onChangeCompleted; // Change completed by user event
-
-		String path; // Path to viewing object fields
-
-	public:
-		// Default constructor
-		IObjectPropertiesViewer();
-
-		// Refreshing controls and properties by target objects
-		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets);
-
-		// Returns viewing objects base type
-		virtual const Type* GetViewingObjectType() const;
-
-		// Returns viewing objects base type by static function
-		static const Type* GetViewingObjectTypeStatic();
-
-		// Sets parent context
-		void SetParentContext(PropertiesContext* context);
-
-		// Returns view widget
-		Spoiler* GetSpoiler();
-
-		// Sets is header enabled and properties can be collapsed in spoiler
-		virtual void SetHeaderEnabled(bool enabled);
-
-		// Returns is header enabled
-		bool IsHeaderEnabled() const;
-
-		// Expands or collapses spoiler
-		virtual void SetExpanded(bool expanded);
-
-		// Returns is spoiler expanded
-		bool IsExpanded() const;
-
-		// Sets spoiler caption
-		virtual void SetCaption(const WString& caption);
-
-		// Returns caption
-		const WString& GetCaption() const;
-
-		// Returns is viewer empty
-		bool IsEmpty() const;
-
-		// ThCalled when object viewer enabled
-		virtual void OnEnabled() {}
-
-		// ThCalled when object viewer disabled
-		virtual void OnDisabled() {}
-
-		IOBJECT(IObjectPropertiesViewer);
-
-	protected:
-		Spoiler* mSpoiler = nullptr;    // Properties spoiler. Expands forcible when viewer hasn't header
-		bool     mHeaderEnabled = true; // Is header enabled and properties hiding in spoiler
-
-		bool mPropertiesBuilt = false; // True when properties built at first refreshing
-
-		Vector<Pair<IObject*, IObject*>> mTargetObjects; // Target objects
-
-		PropertiesContext mPropertiesContext; // Field properties information
-
-		OnChangeCompletedFunc mOnChildFieldChangeCompleted; // Default field change completed callback, calls
-		                                                    // inChangeCompleted from this with full combined path
-
-	protected:
-		// Creates spoiler for properties
-		virtual Spoiler* CreateSpoiler();
-
-		// Called when header enable changed
-		virtual void OnHeaderEnableChanged(bool enabled) {}
-
-		// Checks if properties need to be rebuilt, rebuilds if necessary; returns true when properties was rebuilt
-		virtual bool CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets);
-
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		virtual void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) {}
-
-		// Called when viewer is refreshed
-		virtual void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) {}
-
-		// ThCalled when the viewer is freed
-		virtual void OnFree() {}
-
-		// Called when some child field were changed
-		void OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before, 
-									const Vector<DataDocument>& after);
-
-		friend class Properties;
-	};
-
-	// --------------------------------------
-	// Specialize object properties interface
-	// --------------------------------------
-	template<typename _object_type>
-	class TObjectPropertiesViewer : public IObjectPropertiesViewer
-	{
-	public:
-		// Returns viewing objects base type
-		const Type* GetViewingObjectType() const override;
-
-		// Returns viewing objects base type by static function
-		static const Type* GetViewingObjectTypeStatic();
-
-		IOBJECT(TObjectPropertiesViewer<_object_type>);
-
-	protected:
-		Vector<Pair<_object_type*, _object_type*>> mTypeTargetObjects; // Target objects casted to viewer type
-
-	protected:
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
-	};
-
-	template<typename _object_type>
-	const Type* TObjectPropertiesViewer<_object_type>::GetViewingObjectType() const
-	{
-		return GetViewingObjectTypeStatic();
-	}
-
-	template<typename _object_type>
-	const Type* TObjectPropertiesViewer<_object_type>::GetViewingObjectTypeStatic()
-	{
-		return &TypeOf(_object_type);
-	}
-
-	template<typename _object_type>
+e>
 	void TObjectPropertiesViewer<_object_type>::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
-		mTypeTargetObjects = targetObjets.Convert<Pair<_object_type*, _object_type*>>([](const auto& x) {
-			return Pair<_object_type*, _object_type*>(dynamic_cast<_object_type*>(x.first), dynamic_cast<_object_type*>(x.second));
-		});
+		// Cast target objects to viewer type
+		mTypeTargetObjects.clear();
+		mTypeTargetObjects.reserve(targetObjets.size());
+		for (const auto& target : targetObjets)
+		{
+			_object_type* from = dynamic_cast<_object_type*>(target.first);
+			_object_type* to = dynamic_cast<_object_type*>(target.second);
+			mTypeTargetObjects.emplace_back(from, to);
+		}
+		
+		IObjectPropertiesViewer::OnRefreshed(targetObjets);
 	}
+} // namespace Editor#include <memory>
+
+template<typename T>
+class Ref
+{
+public:
+    Ref() : m_ptr(nullptr) {}
+    Ref(T* ptr) : m_ptr(ptr) {}
+    template<typename U>
+    Ref(const Ref<U>& other) : m_ptr(other.get()) {}
+
+    T* get() const { return m_ptr; }
+    T& operator*() const { return *m_ptr; }
+    T* operator->() const { return m_ptr; }
+    operator bool() const { return m_ptr != nullptr; }
+
+private:
+    T* m_ptr;
+};
+
+template<typename T, typename U>
+Ref<T> static_pointer_cast(const Ref<U>& ptr)
+{
+    return Ref<T>(static_cast<T*>(ptr.get()));
 }
+
+template<typename T, typename U>
+Ref<T> dynamic_pointer_cast(const Ref<U>& ptr)
+{
+    return Ref<T>(dynamic_cast<T*>(ptr.get()));
+}
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return Ref<T>(new T(std::forward<Args>(args)...));
+}
+
+template<typename T>
+class WeakRef
+{
+public:
+    WeakRef() : m_ptr(nullptr) {}
+    WeakRef(const Ref<T>& ptr) : m_ptr(ptr.get()) {}
+
+    Ref<T> lock() const { return Ref<T>(m_ptr); }
+
+private:
+    T* m_ptr;
+};
+
+template<typename T>
+Ref<T> const& as_const(const Ref<T>& ptr)
+{
+    return ptr;
+}
+
+template<typename T>
+Ref<T>& as_mutable(const Ref<T>& ptr)
+{
+    return const_cast<Ref<T>&>(ptr);
+}
+
+template<typename T>
+class DynamicCast
+{
+public:
+    DynamicCast(const Ref<T>& ptr) : m_ptr(ptr.get()) {}
+
+    template<typename U>
+    operator Ref<U>() const
+    {
+        return dynamic_pointer_cast<U>(m_ptr);
+    }
+
+private:
+    T* m_ptr;
+};
+
+
+template <typename _object_type>
+class TObjectPropertiesViewer : public Editor::IObjectPropertiesViewer
+{
+public:
+    void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+    {
+        mTypeTargetObjects = targetObjets.Convert<Pair<_object_type*, _object_type*>>([](const auto& x) {
+            return Pair<_object_type*, _object_type*>(DynamicCast<_object_type>(x.first), DynamicCast<_object_type>(x.second));
+        });
+    }
+};
+
 // --- META ---
 
 CLASS_BASES_META(Editor::IObjectPropertiesViewer)
@@ -169,12 +112,13 @@ CLASS_BASES_META(Editor::IObjectPropertiesViewer)
     BASE_CLASS(o2::IObject);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
 {
     FIELD().PUBLIC().NAME(onChanged);
     FIELD().PUBLIC().NAME(onChangeCompleted);
     FIELD().PUBLIC().NAME(path);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().DEFAULT_VALUE(Ref<Spoiler>()).NAME(mSpoiler);
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mHeaderEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPropertiesBuilt);
     FIELD().PROTECTED().NAME(mTargetObjects);
@@ -182,20 +126,17 @@ CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
     FIELD().PROTECTED().NAME(mOnChildFieldChangeCompleted);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 {
-
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp3;
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp4;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh, const Ref<_tmp1>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
-    FUNCTION().PUBLIC().SIGNATURE(Spoiler*, GetSpoiler);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, Ref<PropertiesContext>);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Spoiler>, GetSpoiler);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsHeaderEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
@@ -205,11 +146,11 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(Spoiler*, CreateSpoiler);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Spoiler>, CreateSpoiler);
     FUNCTION().PROTECTED().SIGNATURE(void, OnHeaderEnableChanged, bool);
-    FUNCTION().PROTECTED().SIGNATURE(bool, CheckBuildProperties, _tmp2);
-    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp3);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp4);
+    FUNCTION().PROTECTED().SIGNATURE(bool, CheckBuildProperties, const Ref<_tmp1>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, const Ref<_tmp1>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, const Ref<_tmp1>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFree);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFieldChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
@@ -221,21 +162,22 @@ CLASS_BASES_META(Editor::TObjectPropertiesViewer<_object_type>)
     BASE_CLASS(Editor::IObjectPropertiesViewer);
 }
 END_META;
+
 META_TEMPLATES(typename _object_type)
 CLASS_FIELDS_META(Editor::TObjectPropertiesViewer<_object_type>)
 {
     FIELD().PROTECTED().NAME(mTypeTargetObjects);
 }
 END_META;
+
 META_TEMPLATES(typename _object_type)
 CLASS_METHODS_META(Editor::TObjectPropertiesViewer<_object_type>)
 {
-
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp1);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, const Ref<_tmp1>&);
 }
 END_META;
 // --- END META ---

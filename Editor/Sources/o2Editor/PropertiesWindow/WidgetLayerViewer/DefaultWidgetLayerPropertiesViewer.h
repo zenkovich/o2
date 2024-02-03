@@ -3,6 +3,10 @@
 #include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2Editor/Core/Properties/PropertiesContext.h"
 #include "o2Editor/PropertiesWindow/WidgetLayerViewer/IWidgetLayerPropertiesViewer.h"
+#include "smart_ptr/Ref.h"
+#include "smart_ptr/WeakRef.h"
+#include "smart_ptr/make.h"
+#include "utils/DynamicCast.h"
 
 namespace o2
 {
@@ -26,7 +30,7 @@ namespace Editor
 		~DefaultWidgetLayerPropertiesViewer();
 
 		// Sets target actors
-		void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
+		void SetTargetLayers(const Vector<Ref<WidgetLayer>>& layers) override;
 
 		// Returns viewing layer drawable type 
 		const Type* GetDrawableType() const override;
@@ -40,10 +44,10 @@ namespace Editor
 		IOBJECT(DefaultWidgetLayerPropertiesViewer);
 
 	protected:
-		Vector<WidgetLayer*>     mLayers;                  // Target widget layers
-		IObjectPropertiesViewer* mViewer = nullptr;        // Properties viewer
-		Button*                  mFitSizeButton = nullptr; // Fit size of layer by drawable size
-		const Type*              mDrawableType = nullptr;  // Target actor type
+		Vector<Ref<WidgetLayer>>     mLayers;                  // Target widget layers
+		Ref<IObjectPropertiesViewer> mViewer;        // Properties viewer
+		Ref<Button>                  mFitSizeButton; // Fit size of layer by drawable size
+		const Type*              mDrawableType;  // Target actor type
 
 	protected:
 		// Fits layer size by drawable size, Called when mFitSizeButton were pressed
@@ -60,8 +64,8 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
     FIELD().PROTECTED().NAME(mLayers);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitSizeButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(Ref<IObjectPropertiesViewer>()).NAME(mViewer);
+    FIELD().PROTECTED().DEFAULT_VALUE(Ref<Button>()).NAME(mFitSizeButton);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDrawableType);
 }
 END_META;
@@ -69,7 +73,7 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<Ref<WidgetLayer>>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetDrawableType);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);

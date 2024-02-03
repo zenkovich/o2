@@ -1,5 +1,7 @@
 #pragma once
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
+#include "o2/Core/SmartPointers/Ref.h"
+#include "o2/Core/SmartPointers/WeakRef.h"
 
 using namespace o2;
 
@@ -18,13 +20,13 @@ namespace Editor
 		ObjectViewer();
 
 		// Refreshing controls and properties by target objects with prototypes
-		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets);
+		void Refresh(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targetObjets);
 
 		// Refreshing controls and properties by target objects
-		void Refresh(const Vector<IObject*>& targetObjets);
+		void Refresh(const Vector<Ref<IObject>>& targetObjets);
 
 		// Sets parent context
-		void SetParentContext(PropertiesContext* context);
+		void SetParentContext(const Ref<PropertiesContext>& context);
 
 		// Enable viewer event function
 		void OnEnabled() override;
@@ -41,9 +43,9 @@ namespace Editor
 		SERIALIZABLE(ObjectViewer);
 
 	protected:
-		PropertiesContext* mParentContext = nullptr; // Parent properties context
+		Ref<PropertiesContext> mParentContext; // Parent properties context
 
-		IObjectPropertiesViewer* mPropertiesViewer = nullptr; // Object properties viewer
+		Ref<IObjectPropertiesViewer> mPropertiesViewer; // Object properties viewer
 	};
 }
 // --- META ---
@@ -55,23 +57,22 @@ CLASS_BASES_META(Editor::ObjectViewer)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentContext);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer);
+    FIELD().PROTECTED().NAME(mParentContext);
+    FIELD().PROTECTED().NAME(mPropertiesViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectViewer)
 {
 
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+    typedef const Vector<Pair<Ref<IObject>, Ref<IObject>>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
-    FUNCTION().PUBLIC().SIGNATURE(void, Refresh, const Vector<IObject*>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Refresh, const Vector<Ref<IObject>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, const Ref<PropertiesContext>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;
-// --- END META ---

@@ -76,11 +76,11 @@ namespace Editor
 		IOBJECT(ScriptValueProperty);
 
 	protected:
-		Spoiler* mSpoiler = nullptr; // Properties spoiler. Expands forcible when viewer hasn't header
+		Ref<Spoiler> mSpoiler = nullptr; // Properties spoiler. Expands forcible when viewer hasn't header
 
 		Map<String, ScriptValue::ValueType> mPreviousBuiltTypes; // Built types of fields, used to check 
 																 // changed properties structure
-		Map<String, IPropertyField*>        mBuiltProperties;    // Built properties by names
+		Map<String, Ref<IPropertyField>>        mBuiltProperties;    // Built properties by names
 
 		bool mHeaderEnabled = false; // Is no header attribute exists
 		bool mExpanded = false; // True when must be expanded after creating object viewer
@@ -89,14 +89,14 @@ namespace Editor
 
 		bool mIsArray = false; // Is value array
 
-		IntegerProperty* mCountProperty = nullptr; // Vector count property
+		Ref<IntegerProperty> mCountProperty = nullptr; // Vector count property
 
 		bool mCountDifferents = false; // Is targets counts of elements are different
 		int  mCountOfElements = 0;     // Common count of elements
 
-		HorizontalLayout* mHeaderContainer = nullptr; // Count property and other controls container
+		Ref<HorizontalLayout> mHeaderContainer = nullptr; // Count property and other controls container
 
-		Button* mAddButton = nullptr; // Add button, adds new element at end
+		Ref<Button> mAddButton = nullptr; // Add button, adds new element at end
 
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
@@ -132,11 +132,11 @@ namespace Editor
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldProxies(PropertiesList& commonProperties, const String& name, IPropertyField* field);
+		void SetFieldProxies(PropertiesList& commonProperties, const String& name, Ref<IPropertyField> field);
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldPtrProxies(PropertiesList& commonProperties, const String& name, IPropertyField* field);
+		void SetFieldPtrProxies(PropertiesList& commonProperties, const String& name, Ref<IPropertyField> field);
 
 		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
@@ -145,42 +145,151 @@ namespace Editor
 
 	template<typename _type>
 	void ScriptValueProperty::SetFieldProxies(PropertiesList& commonProperties, const String& name, 
-											  IPropertyField* field)
+											  Ref<IPropertyField> field)
 	{
 		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
 		auto proxies = prop->second.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
-				res.first = mnew TypeScriptValueProxy<_type>(x.first->Clone());
+				res.first = mmake<TypeScriptValueProxy<_type>>(x.first->Clone());
 				if (x.second && x.second->Get().IsObject())
-					res.second = mnew TypeScriptValueProxy<_type>(x.second->Clone());
+					res.second = mmake<TypeScriptValueProxy<_type>>(x.second->Clone());
 
 				return res;
 			});
 
-		field->SetValueAndPrototypeProxy(proxies);
+		field->Set.ItemsSource(proxies);
 	}
+}#include <memory>
 
-	template<typename _type>
-	void ScriptValueProperty::SetFieldPtrProxies(PropertiesList& commonProperties, const String& name,
-												 IPropertyField* field)
-	{
-		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
-		auto proxies = prop->second.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
-			{
-				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
-				res.first = mnew PtrScriptValueProxy<_type>(x.first->Clone());
-				if (x.second && x.second->Get().IsObject())
-					res.second = mnew PtrScriptValueProxy<_type>(x.second->Clone());
+template<typename T>
+class Ref
+{
+public:
+    explicit Ref(T* ptr = nullptr)
+        : m_ptr(ptr)
+    {
+    }
 
-				return res;
-			});
+    Ref(const Ref& other)
+        : m_ptr(other.m_ptr)
+    {
+    }
 
-		field->SetValueAndPrototypeProxy(proxies);
-	}
-}
+    template<typename U>
+    Ref(const Ref<U>& other)
+        : m_ptr(other.get())
+    {
+    }
+
+    Ref& operator=(const Ref& other)
+    {
+        m_ptr = other.m_ptr;
+        return *this;
+    }
+
+    T* operator->() const
+    {
+        return m_ptr;
+    }
+
+    T& operator*() const
+    {
+        return *m_ptr;
+    }
+
+    T* get() const
+    {
+        return m_ptr;
+    }
+
+private:
+    T* m_ptr;
+};
+
+template<typename T>
+class WeakRef
+{
+public:
+    explicit WeakRef(T* ptr = nullptr)
+        : m_ptr(ptr)
+    {
+    }
+
+    WeakRef(const WeakRef& other)
+        : m_ptr(other.m_ptr)
+    {
+    }
+
+    template<typename U>
+    WeakRef(const WeakRef<U>& other)
+        : m_ptr(other.get())
+    {
+    }
+
+    WeakRef& operator=(const WeakRef& other)
+    {
+        m_ptr = other.m_ptr;
+        return *this;
+    }
+
+    T* operator->() const
+    {
+        return m_ptr;
+    }
+
+    T& operator*() const
+    {
+        return *m_ptr;
+    }
+
+    T* get() const
+    {
+        return m_ptr;
+    }
+
+private:
+    T* m_ptr;
+};
+
+class ScriptValueProperty
+{
+public:
+    template<typename _type>
+    void SetFieldPtrProxies(PropertiesList& commonProperties, const String& name, IPropertyField* field)
+    {
+        auto prop = commonProperties.Find([&](const auto& x) { return x.first == name; });
+        auto proxies = prop->second.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+            [](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
+            {
+                Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
+                res.first = mmake<PtrScriptValueProxy<_type>>(x.first->Clone());
+                if (x.second && x.second->Get().IsObject())
+                    res.second = mmake<PtrScriptValueProxy<_type>>(x.second->Clone());
+
+                return res;
+            });
+
+        field->SetValueAndPrototypeProxy(proxies);
+    }
+
+private:
+    Ref<void> mSpoiler;
+    Vector<Ref<Type>> mPreviousBuiltTypes;
+    Vector<Ref<IPropertyField>> mBuiltProperties;
+    bool mHeaderEnabled;
+    bool mExpanded;
+    bool mNeedUpdateProxies;
+    bool mIsArray;
+    Ref<IPropertyField> mCountProperty;
+    bool mCountDifferents;
+    int mCountOfElements;
+    Ref<void> mHeaderContainer;
+    Ref<Button> mAddButton;
+    bool mIsRefreshing;
+};
+
 // --- META ---
 
 CLASS_BASES_META(Editor::ScriptValueProperty)
@@ -188,26 +297,27 @@ CLASS_BASES_META(Editor::ScriptValueProperty)
     BASE_CLASS(Editor::IPropertyField);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::ScriptValueProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().NAME(mPreviousBuiltTypes);
     FIELD().PROTECTED().NAME(mBuiltProperties);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mHeaderEnabled);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedUpdateProxies);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsArray);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCountProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mCountDifferents);
-    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mCountOfElements);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsRefreshing);
+    FIELD().PROTECTED().NAME(mHeaderEnabled);
+    FIELD().PROTECTED().NAME(mExpanded);
+    FIELD().PROTECTED().NAME(mNeedUpdateProxies);
+    FIELD().PROTECTED().NAME(mIsArray);
+    FIELD().PROTECTED().NAME(mCountProperty);
+    FIELD().PROTECTED().NAME(mCountDifferents);
+    FIELD().PROTECTED().NAME(mCountOfElements);
+    FIELD().PROTECTED().NAME(mHeaderContainer);
+    FIELD().PROTECTED().NAME(mAddButton);
+    FIELD().PROTECTED().NAME(mIsRefreshing);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::ScriptValueProperty)
 {
-
     typedef const Vector<Pair<ScriptValue, ScriptValue>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();

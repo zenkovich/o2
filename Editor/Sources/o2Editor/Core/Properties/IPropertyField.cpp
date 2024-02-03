@@ -65,7 +65,11 @@ namespace Editor
 	void IPropertyField::SetValueProxy(const Vector<IAbstractValueProxy*>& targets)
 	{
 		auto protoTargets = targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-			[](IAbstractValueProxy* x) { return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(x, nullptr); });
+			[](IAbstractValueProxy* x)
+			{
+				return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(x, nullptr);
+			}
+		);
 
 		SetValueAndPrototypeProxy(protoTargets);
 	}
@@ -80,9 +84,9 @@ namespace Editor
 		if (mCaption)
 			mCaption->text = text;
 
-		if (auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName")))
+		if (auto captionWidget = DynamicCast<Label>(FindChild("propertyName")))
 			captionWidget->text = text;
-		else if (auto captionWidget = dynamic_cast<Label*>(FindInternalWidget("propertyName")))
+		else if (auto captionWidget = DynamicCast<Label>(FindInternalWidget("propertyName")))
 			captionWidget->text = text;
 		else
 		{
@@ -97,9 +101,9 @@ namespace Editor
 		if (mCaption)
 			return mCaption->text;
 
-		if (auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName")))
+		if (auto captionWidget = DynamicCast<Label>(FindChild("propertyName")))
 			return captionWidget->text;
-		else if (auto captionWidget = dynamic_cast<Label*>(FindInternalWidget("propertyName")))
+		else if (auto captionWidget = DynamicCast<Label>(FindInternalWidget("propertyName")))
 			return captionWidget->text;
 		else
 		{
@@ -108,14 +112,14 @@ namespace Editor
 				return captionLayer->text;
 		}
 
-		return "";
+		return WString();
 	}
 
 	Button* IPropertyField::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
-			auto buttonContainer = mnew Widget();
+			auto buttonContainer = MakeRef<Widget>();
 			buttonContainer->name = "remove container";
 			buttonContainer->layout->maxWidth = 20;
 
@@ -222,31 +226,160 @@ namespace Editor
 
 				if (auto layout = FindChild("layout"))
 					layout->AddChild(mRevertBtn);
-				else
-					AddChild(mRevertBtn);
-
-				String path;
-				Actor* itActor = mRevertBtn;
-				while (itActor != this)
-				{
-					path = "child/" + itActor->GetName() + "/" + path;
-					itActor = itActor->GetParent();
-				}
-
-				auto revertStateAnim = AnimationClip::EaseInOut(path + "layout/maxWidth", 0.0f, 20.0f, 0.15f);
-				*revertStateAnim->AddTrack<bool>(path + "enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
-				AddState("revert", revertStateAnim);
 			}
-
-			if (mRevertBtn)
-				mRevertBtn->onClick = THIS_FUNC(Revert);
 		}
+		else
+		{
+			if (mRevertBtn)
+				RemoveChild(mRevertBtn);
+		}
+	}
+}#include <memory>
 
-		if (auto revertState = state["revert"])
-			*revertState = isRevertable;
+template<typename T>
+class Ref
+{
+public:
+	Ref() : m_ptr(nullptr) {}
+	Ref(T* ptr) : m_ptr(ptr) {}
+	Ref(const Ref<T>& other) : m_ptr(other.m_ptr) {}
+	Ref<T>& operator=(const Ref<T>& other) { m_ptr = other.m_ptr; return *this; }
+	
+	bool operator==(const Ref<T>& other) const { return m_ptr == other.m_ptr; }
+	bool operator!=(const Ref<T>& other) const { return !(*this == other); }
+
+	T* operator->() const { return m_ptr; }
+	T& operator*() const { return *m_ptr; }
+
+private:
+	T* m_ptr;
+};
+
+template<typename T>
+bool operator==(const Ref<T>& ptr, std::nullptr_t) { return ptr.operator==(Ref<T>(nullptr)); }
+template<typename T>
+bool operator!=(const Ref<T>& ptr, std::nullptr_t) { return ptr.operator!=(Ref<T>(nullptr)); }
+	
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+	return Ref<T>(new T(std::forward<Args>(args)...));
+}
+
+template<typename T>
+class WeakRef
+{
+public:
+	WeakRef() : m_ptr(nullptr) {}
+	WeakRef(T* ptr) : m_ptr(ptr) {}
+	WeakRef(const WeakRef<T>& other) : m_ptr(other.m_ptr) {}
+	WeakRef<T>& operator=(const WeakRef<T>& other) { m_ptr = other.m_ptr; return *this; }
+	
+	bool operator==(const WeakRef<T>& other) const { return m_ptr == other.m_ptr; }
+	bool operator!=(const WeakRef<T>& other) const { return !(*this == other); }
+
+	T* operator->() const { return m_ptr; }
+	T& operator*() const { return *m_ptr; }
+
+private:
+	T* m_ptr;
+};
+
+template<typename T>
+bool operator==(const WeakRef<T>& ptr, std::nullptr_t) { return ptr.operator==(WeakRef<T>(nullptr)); }
+template<typename T>
+bool operator!=(const WeakRef<T>& ptr, std::nullptr_t) { return ptr.operator!=(WeakRef<T>(nullptr)); }
+
+template<typename Derived, typename Base>
+Ref<Derived> DynamicCast(const Ref<Base>& ptr)
+{
+	return std::dynamic_pointer_cast<Derived>(ptr);
+}
+
+class String
+{
+	// implementation
+};
+
+template<typename T>
+class AnimationClip
+{
+	// implementation
+};
+
+template<typename T>
+class AnimationTrack
+{
+	// implementation
+};
+
+using Actor = Ref<Actor>;
+
+class IPropertyField
+{
+public:
+	IPropertyField() : onChanged(nullptr) {}
+	virtual ~IPropertyField() {}
+
+	virtual void OnValueChanged();
+	virtual void BeginUserChanging();
+	virtual void EndUserChanging();
+
+	void CheckRevertableState();
+	void StoreValues();
+	void CheckValueChangeCompleted();
+	void AddChild(const Ref<Actor>& actor);
+	Ref<Actor> GetParent() const;
+};
+
+class Button : public Actor
+{
+public:
+	Button() : onClick(nullptr) {}
+
+	void Click()
+	{
+		if (onClick)
+			onClick();
 	}
 
-	void IPropertyField::OnValueChanged()
+	std::function<void()> onClick;
+};
+
+class AnimationPropertyField : public IPropertyField
+{
+public:
+	AnimationPropertyField() : mRevertBtn(nullptr) {}
+
+	void SetRevertableState(bool isRevertable)
+	{
+		if (isRevertable)
+		{
+			if (!mRevertBtn)
+			{
+				mRevertBtn = mmake<Button>();
+				AddChild(mRevertBtn);
+			}
+
+			String path;
+			Ref<Actor> itActor = mRevertBtn;
+			while (itActor != this)
+			{
+				path = "child/" + itActor->GetName() + "/" + path;
+				itActor = itActor->GetParent();
+			}
+
+			auto revertStateAnim = mmake<AnimationClip<float>>();
+			revertStateAnim->EaseInOut(path + "layout/maxWidth", 0.0f, 20.0f, 0.15f);
+			*revertStateAnim->AddTrack<bool>(path + "enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
+			AddState("revert", revertStateAnim);
+		}
+
+		if (mRevertBtn)
+			mRevertBtn->onClick = THIS_FUNC(Revert);
+	}
+
+	void OnValueChanged() override
 	{
 		CheckRevertableState();
 		onChanged(this);
@@ -255,17 +388,18 @@ namespace Editor
 			o2EditorSceneScreen.OnSceneChanged();
 	}
 
-	void IPropertyField::BeginUserChanging()
+	void BeginUserChanging() override
 	{
 		StoreValues(mBeforeChangeValues);
 	}
 
-	void IPropertyField::EndUserChanging()
+	void EndUserChanging() override
 	{
 		CheckValueChangeCompleted();
 	}
-}
-// --- META ---
 
-DECLARE_CLASS(Editor::IPropertyField, Editor__IPropertyField);
-// --- END META ---
+private:
+	Ref<Button> mRevertBtn;
+};
+
+DECLARTE_CLASS(ref<IPropertyField>, Editor::IPropertyField);

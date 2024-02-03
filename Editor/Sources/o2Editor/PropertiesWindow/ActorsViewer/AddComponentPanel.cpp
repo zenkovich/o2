@@ -10,331 +10,366 @@
 
 namespace Editor
 {
-	AddComponentPanel::AddComponentPanel(ActorViewer* viewer) :
-		mViewer(viewer)
+    AddComponentPanel::AddComponentPanel(const Ref<ActorViewer>& viewer) :
+    mViewer(viewer)
+    {
+        AddLayer("border", mnew Sprite("ui/UI4_shadow_separator.png"), Layout::HorStretch(VerAlign::Top, -2, -2, 5, -4));
+
+        mFilterBox = o2UI.CreateEditBox("actor head name");
+        mAddButton = o2UI.CreateWidget<Button>("add component");
+        mTree = o2UI.CreateWidget<ComponentsTree>();
+
+        *mFilterBox->layout = WidgetLayout::HorStretch(VerAlign::Top, 10, 40, 20, 10);
+        *mAddButton->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(40, 40), Vec2F());
+        *mTree->layout = WidgetLayout::BothStretch(0, 0, 0, 40);
+
+        AddChildren({ mFilterBox, mAddButton, mTree });
+
+        mFilterBox->onChanged = [&](const WString& filter) { mTree->SetFilter(filter); };
+        mAddButton->onClick = THIS_FUNC(OnAddPressed);
+
+        mTree->onNodeDoubleClicked = THIS_FUNC(OnNodeDblClick);
+        mTree->Refresh();
+    }
+
+    AddComponentPanel::AddComponentPanel()
+    {}
+
+    void AddComponentPanel::Draw()
+    {
+        Widget::Draw();
+        CursorEventsArea::OnDrawn();
+    }
+
+    const Ref<EditBox>& AddComponentPanel::GetFilter() const
+    {
+        return mFilterBox;
+    }
+
+    const Ref<ComponentsTree>& AddComponentPanel::GetTree() const
+    {
+        return mTree;
+    }
+
+    bool AddComponentPanel::IsUnderPoint(const Vec2F& point)
+    {
+        return Widget::IsUnderPoint(point);
+    }
+
+    bool AddComponentPanel::IsInputTransparent() const
+    {
+        return true;
+    }
+
+    String AddComponentPanel::GetCreateMenuCategory()
+    {
+        return "UI/Editor";
+    }
+
+    void AddComponentPanel::OnAddPressed()
+    {
+        if (mTree->GetSelectedObjects().IsEmpty())
+            return;
+
+        ComponentsTree::NodeData* node = (ComponentsTree::NodeData*)(mTree->GetSelectedObjects().Last());
+
+        if (!node->type)
+            return;
+
+        const ObjectType* objType = DynamicCast<const ObjectType>(node->type);
+        CreateComponent(objType);
+
+        onCursorPressedOutside(*o2Input.GetCursor());
+    }
+
+    void AddComponentPanel::CreateComponent(const ObjectType* objType)
+    {
+        for (const auto& actor : mViewer->mTargetActors)
+        {
+            auto comp = DynamicCast<Component>(objType->DynamicCastToIObject(objType->CreateSample()));
+            actor->AddComponent(comp);
+            comp->OnAddedFromEditor();
+        }
+
+        mViewer->SetTargets(Convert<IObject*>(mViewer->mTargetActors, [](const auto& x) { return DynamicCast<IObject>(x); }));
+        mViewer->OnEnabled();
+    }
+
+    void AddComponentPanel::OnNodeDblClick(TreeNode* nodeWidget)
+    {
+        if (!nodeWidget)
+            return;
+
+        auto node = dynamic_cast<ComponentsTreeNode*>(nodeWidget);
+        if (!node->data->type)
+            return;
+
+        const ObjectType* objType = DynamicCast<const ObjectType>(node->data->type);
+        CreateComponent(objType);
+    }
+
+    void AddComponentPanel::OnKeyReleased(const Input::Key& key)
+    {
+        if (key.keyCode != VK_RETURN)
+            return; // haha
+
+        if (mFilterBox->IsFocused() || mTree->IsFocused())
+            OnAddPressed();
+    }
+
+    ComponentsTree::ComponentsTree() :
+    Tree()
+    {}
+
+    ComponentsTree::ComponentsTree(const ComponentsTree& other) :
+    Tree(other)
+    {}
+
+    ComponentsTree& ComponentsTree::operator=(const ComponentsTree& other)
+    {
+        Tree::operator=(other);
+        return *this;
+    }
+
+    void ComponentsTree::Refresh()
+    {
+        mRoot.Clear();
+
+        auto componentsTypes = TypeOf(Component).GetDerivedTypes();
+        componentsTypes.Remove(&TypeOf(DrawableComponent));
+
+        String filterStrLower = mFilterStr.ToLowerCase();
+
+        for (const auto& type : componentsTypes)
+        {
+            if (!type->InvokeStatic<bool>("IsAvailableFromCreateMenu"))
+                continue;
+
+            String name = type->InvokeStatic<String>("GetName");
+            if (name.IsEmpty())
+                name = type->GetName();
+
+            if (!filterStrLower.IsEmpty())
+            {
+                if (name.ToLowerCase().Contains(filterStrLower))
+                    mRoot.AddChild(name, type)->icon = type->InvokeStatic<String>("GetIcon");
+            }
+            else
+            {
+                String category = type->InvokeStatic<String>("GetCategory");
+                NodeData* it = &mRoot;
+                while (!category.IsEmpty())
+                {
+                    int fnd = category.Find('/');
+                    String subStr = category.SubStr(0, fnd);
+                    category = fnd != -1 ? category.SubStr(fnd + 1) : String("");
+
+                    auto nextIt = it->children.FindOrDefault([&](NodeData* x) { return x->name == subStr; });
+                    if (!nextIt)
+                        nextIt = it->AddChild(subStr, nullptr);
+
+                    it = nextIt;
+                }
+
+                it->AddChild(name, type)->icon = type->InvokeStatic<String>("GetIcon");
+            }
+        }
+
+        UpdateNodesStructure();
+        UpdateVisibleNodes();
+    }
+
+    void ComponentsTree::SetFilter(const WString& filter)
+    {
+        mFilterStr = filter;
+        Refresh();
+
+        String lowerFilter = mFilterStr.ToLowerCase();
+        int minDist = INT_MAX;
+        NodeData* filtered = nullptr;
+        Function<void(NodeData*)> recursiveSearch = [&lowerFilter, &recursiveSearch, &minDist, &filtered](NodeData* node)
+        {
+            if (node->type != nullptr)
+            {
+                int dist = node->name.ToLowerCase().Find(lowerFilter);
+                if (dist >= 0 && dist < minDist)
+            }
+#include <Ref.h>
+
+using namespace Editor;
+
+class ComponentsTree
+{
+public:
+	struct NodeData
 	{
-		AddLayer("border", mnew Sprite("ui/UI4_shadow_separator.png"), Layout::HorStretch(VerAlign::Top, -2, -2, 5, -4));
-
-		mFilterBox = o2UI.CreateEditBox("actor head name");
-		mAddButton = o2UI.CreateWidget<Button>("add component");
-		mTree = o2UI.CreateWidget<ComponentsTree>();
-
-		*mFilterBox->layout = WidgetLayout::HorStretch(VerAlign::Top, 10, 40, 20, 10);
-		*mAddButton->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(40, 40), Vec2F());
-		*mTree->layout = WidgetLayout::BothStretch(0, 0, 0, 40);
-
-		AddChildren({ mFilterBox, mAddButton, mTree });
-
-		mFilterBox->onChanged = [&](const WString& filter) { mTree->SetFilter(filter); };
-		mAddButton->onClick = THIS_FUNC(OnAddPressed);
-
-		mTree->onNodeDoubleClicked = THIS_FUNC(OnNodeDblClick);
-		mTree->Refresh();
-	}
-
-	AddComponentPanel::AddComponentPanel()
-	{}
-
-	void AddComponentPanel::Draw()
-	{
-		Widget::Draw();
-		CursorEventsArea::OnDrawn();
-	}
-
-	EditBox* AddComponentPanel::GetFilter() const
-	{
-		return mFilterBox;
-	}
-
-	ComponentsTree* AddComponentPanel::GetTree() const
-	{
-		return mTree;
-	}
-
-	bool AddComponentPanel::IsUnderPoint(const Vec2F& point)
-	{
-		return Widget::IsUnderPoint(point);
-	}
-
-	bool AddComponentPanel::IsInputTransparent() const
-	{
-		return true;
-	}
-
-	String AddComponentPanel::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
-
-	void AddComponentPanel::OnAddPressed()
-	{
-		if (mTree->GetSelectedObjects().IsEmpty())
-			return;
-
-		ComponentsTree::NodeData* node = (ComponentsTree::NodeData*)(mTree->GetSelectedObjects().Last());
-
-		if (!node->type)
-			return;
-
-		const ObjectType* objType = dynamic_cast<const ObjectType*>(node->type);
-		CreateComponent(objType);
-
-		onCursorPressedOutside(*o2Input.GetCursor());
-	}
-
-	void AddComponentPanel::CreateComponent(const ObjectType* objType)
-	{
-		for (auto actor : mViewer->mTargetActors)
-		{
-			auto comp = dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample()));
-			actor->AddComponent(comp);
-			comp->OnAddedFromEditor();
-		}
-
-		mViewer->SetTargets(mViewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
-		mViewer->OnEnabled();
-	}
-
-	void AddComponentPanel::OnNodeDblClick(TreeNode* nodeWidget)
-	{
-		if (!nodeWidget)
-			return;
-
-		auto node = dynamic_cast<ComponentsTreeNode*>(nodeWidget);
-		if (!node->data->type)
-			return;
-
-		const ObjectType* objType = dynamic_cast<const ObjectType*>(node->data->type);
-		CreateComponent(objType);
-	}
-
-	void AddComponentPanel::OnKeyReleased(const Input::Key& key)
-	{
-		if (key.keyCode != VK_RETURN)
-			return; // haha
-
-		if (mFilterBox->IsFocused() || mTree->IsFocused())
-			OnAddPressed();
-	}
-
-	ComponentsTree::ComponentsTree() :
-		Tree()
-	{}
-
-	ComponentsTree::ComponentsTree(const ComponentsTree& other) :
-		Tree(other)
-	{}
-
-	ComponentsTree& ComponentsTree::operator=(const ComponentsTree& other)
-	{
-		Tree::operator=(other);
-		return *this;
-	}
-
-	void ComponentsTree::Refresh()
-	{
-		mRoot.Clear();
-
-		auto componentsTypes = TypeOf(Component).GetDerivedTypes();
-		componentsTypes.Remove(&TypeOf(DrawableComponent));
-
-		String filterStrLower = mFilterStr.ToLowerCase();
-
-		for (auto type : componentsTypes)
-		{
-			if (!type->InvokeStatic<bool>("IsAvailableFromCreateMenu"))
-				continue;
-
-			String name = type->InvokeStatic<String>("GetName");
-			if (name.IsEmpty())
-				name = type->GetName();
-
-			if (!filterStrLower.IsEmpty())
-			{
-				if (name.ToLowerCase().Contains(filterStrLower))
-					mRoot.AddChild(name, type)->icon = type->InvokeStatic<String>("GetIcon");
-			}
-			else
-			{
-				String category = type->InvokeStatic<String>("GetCategory");
-				NodeData* it = &mRoot;
-				while (!category.IsEmpty())
-				{
-					int fnd = category.Find('/');
-					String subStr = category.SubStr(0, fnd);
-					category = fnd != -1 ? category.SubStr(fnd + 1) : String("");
-
-					auto nextIt = it->children.FindOrDefault([&](NodeData* x) { return x->name == subStr; });
-					if (!nextIt)
-						nextIt = it->AddChild(subStr, nullptr);
-
-					it = nextIt;
-				}
-
-				it->AddChild(name, type)->icon = type->InvokeStatic<String>("GetIcon");
-			}
-		}
-
-		UpdateNodesStructure();
-		UpdateVisibleNodes();
-	}
-
-	void ComponentsTree::SetFilter(const WString& filter)
-	{
-		mFilterStr = filter;
-		Refresh();
-
-		String lowerFilter = mFilterStr.ToLowerCase();
-		int minDist = INT_MAX;
-		NodeData* filtered = nullptr;
-		Function<void(NodeData*)> recursiveSearch = [&lowerFilter, &recursiveSearch, &minDist, &filtered](NodeData* node)
-		{
-			if (node->type != nullptr)
-			{
-				int dist = node->name.ToLowerCase().Find(lowerFilter);
-				if (dist >= 0 && dist < minDist)
-				{
-					minDist = dist;
-					filtered = node;
-				}
-			}
-
-			for (auto child : node->children)
-				recursiveSearch(child);
-		};
-
-		recursiveSearch(&mRoot);
-
-		if (filtered)
-			SelectAndHighlightObject(filtered);
-	}
-
-	String ComponentsTree::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
-
-	void ComponentsTree::UpdateVisibleNodes()
-	{
-		PushEditorScopeOnStack scope;
-		Tree::UpdateVisibleNodes();
-	}
-
-	TreeNode* ComponentsTree::CreateTreeNodeWidget()
-	{
-		PushEditorScopeOnStack scope;
-		return Tree::CreateTreeNodeWidget();
-	}
-
-	void* ComponentsTree::GetObjectParent(void* object)
-	{
-		auto node = (NodeData*)object;
-		if (node->parent == &mRoot)
-			return (NodeData*)nullptr;
-
-		return node->parent;
-	}
-
-	Vector<void*> ComponentsTree::GetObjectChilds(void* object)
-	{
-		if (object)
-			return ((NodeData*)object)->children.Cast<void*>();
-
-		return mRoot.children.Cast<void*>();
-	}
-
-	String ComponentsTree::GetObjectDebug(void* object)
-	{
-		if (object)
-			return ((NodeData*)object)->path;
-
-		return "";
-	}
-
-	void ComponentsTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
-	{
-		auto propertyNode = dynamic_cast<ComponentsTreeNode*>(nodeWidget);
-		propertyNode->Setup((NodeData*)object, this);
-	}
-
-	void ComponentsTree::OnDeserialized(const DataValue& node)
-	{
-		Tree::OnDeserialized(node);
-	}
-
-	ComponentsTreeNode::ComponentsTreeNode():
-		TreeNode()
-	{
-		InitializeControls();
-	}
-
-	ComponentsTreeNode::ComponentsTreeNode(const ComponentsTreeNode& other) :
-		TreeNode(other)
-	{
-		InitializeControls();
-	}
-
-	ComponentsTreeNode& ComponentsTreeNode::operator=(const ComponentsTreeNode& other)
-	{
-		TreeNode::operator=(other);
-		InitializeControls();
-		return *this;
-	}
-
-	void ComponentsTreeNode::Setup(ComponentsTree::NodeData* data, ComponentsTree* tree)
-	{
-		mName->text = data->name;
-
-		*mIcon = Sprite(data->icon);
-		mIcon->enabled = data->type != nullptr;
-		mIcon->color = Color4(44, 62, 80);
-
-		this->data = data;
-		mTree = tree;
-	}
-
-	String ComponentsTreeNode::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
-
-	void ComponentsTreeNode::OnDeserialized(const DataValue& node)
-	{
-		TreeNode::OnDeserialized(node);
-		InitializeControls();
-	}
-
-	void ComponentsTreeNode::InitializeControls()
-	{
-		mName = GetLayerDrawable<Text>("name");
-		mIcon = GetLayerDrawable<Sprite>("icon");
-	}
-
-	ComponentsTree::NodeData::~NodeData()
-	{
-		Clear();
-	}
-
-	void ComponentsTree::NodeData::Clear()
-	{
-		for (auto child : children)
-			delete child;
-
-		children.Clear();
-	}
-
-	ComponentsTree::NodeData* ComponentsTree::NodeData::AddChild(const String& name, const Type* type)
-	{
-		NodeData* newChild = mnew NodeData();
-		children.Add(newChild);
-
-		newChild->name = name;
-		newChild->path = path.IsEmpty() ? name : path + "/" + name;
-		newChild->type = type;
-		newChild->parent = this;
-
-		return newChild;
-	}
+		String name;
+		String path;
+		const Type* type;
+		NodeData* parent;
+		Vector<NodeData*> children;
+
+		virtual ~NodeData();
+		void Clear();
+		NodeData* AddChild(const String& name, const Type* type);
+	};
+
+	ComponentsTree();
+	~ComponentsTree();
+
+	void UpdateVisibleNodes();
+	void SelectAndHighlightObject(const Ref<NodeData>& node);
+	void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, const Ref<NodeData>& object);
+
+	String GetCreateMenuCategory();
+	void OnDeserialized(const DataValue& node);
+	Ref<NodeData>& GetObjectParent(const Ref<NodeData>& object);
+	Vector<Ref<NodeData>>& GetObjectChilds(const Ref<NodeData>& object);
+	String GetObjectDebug(const Ref<NodeData>& object);
+
+private:
+	Ref<NodeData> mRoot;
+	Ref<NodeData> recursiveSearch(Ref<NodeData>& node);
+};
+
+class ComponentsTreeNode : public TreeNode
+{
+public:
+	ComponentsTreeNode();
+	ComponentsTreeNode(const ComponentsTreeNode& other);
+	ComponentsTreeNode& operator=(const ComponentsTreeNode& other);
+
+	void Setup(const Ref<ComponentsTree::NodeData>& data, const Ref<ComponentsTree>& tree);
+
+	String GetCreateMenuCategory();
+	void OnDeserialized(const DataValue& node);
+
+private:
+	void InitializeControls();
+
+	Ref<Text> mName;
+	Ref<Sprite> mIcon;
+};
+
+void ComponentsTree::UpdateVisibleNodes()
+{
+	PushEditorScopeOnStack scope;
+	Tree::UpdateVisibleNodes();
+}
+
+String ComponentsTree::GetCreateMenuCategory()
+{
+	return "UI/Editor";
+}
+
+void ComponentsTree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, const Ref<NodeData>& object)
+{
+	auto propertyNode = dynamic_cast<ComponentsTreeNode*>(nodeWidget.Get());
+	propertyNode->Setup(object, this);
+}
+
+void* ComponentsTree::GetObjectParent(void* object)
+{
+	auto node = (NodeData*)object;
+	if (node->parent == mRoot.Get())
+		return nullptr;
+
+	return node->parent;
+}
+
+Vector<void*> ComponentsTree::GetObjectChilds(void* object)
+{
+	if (object)
+		return ((NodeData*)object)->children.Cast<void*>();
+
+	return mRoot->children.Cast<void*>();
+}
+
+String ComponentsTree::GetObjectDebug(void* object)
+{
+	if (object)
+		return ((NodeData*)object)->path;
+
+	return "";
+}
+
+void ComponentsTree::OnDeserialized(const DataValue& node)
+{
+	Tree::OnDeserialized(node);
+}
+
+ComponentsTreeNode::ComponentsTreeNode()
+	: TreeNode()
+{
+	InitializeControls();
+}
+
+ComponentsTreeNode::ComponentsTreeNode(const ComponentsTreeNode& other)
+	: TreeNode(other)
+{
+	InitializeControls();
+}
+
+ComponentsTreeNode& ComponentsTreeNode::operator=(const ComponentsTreeNode& other)
+{
+	TreeNode::operator=(other);
+	InitializeControls();
+	return *this;
+}
+
+void ComponentsTreeNode::Setup(const Ref<ComponentsTree::NodeData>& data, const Ref<ComponentsTree>& tree)
+{
+	mName->text = data->name;
+
+	*mIcon = Sprite(data->icon);
+	mIcon->enabled = data->type != nullptr;
+	mIcon->color = Color4(44, 62, 80);
+
+	this->data = data;
+	mTree = tree;
+}
+
+String ComponentsTreeNode::GetCreateMenuCategory()
+{
+	return "UI/Editor";
+}
+
+void ComponentsTreeNode::OnDeserialized(const DataValue& node)
+{
+	TreeNode::OnDeserialized(node);
+	InitializeControls();
+}
+
+void ComponentsTreeNode::InitializeControls()
+{
+	mName = GetLayerDrawable<Text>("name");
+	mIcon = GetLayerDrawable<Sprite>("icon");
+}
+
+ComponentsTree::NodeData::~NodeData()
+{
+	Clear();
+}
+
+void ComponentsTree::NodeData::Clear()
+{
+	for (auto child : children)
+		delete child;
+
+	children.Clear();
+}
+
+ComponentsTree::NodeData* ComponentsTree::NodeData::AddChild(const String& name, const Type* type)
+{
+	Ref<NodeData> newChild = mmake<NodeData>();
+	children.Add(newChild);
+
+	newChild->name = name;
+	newChild->path = path.IsEmpty() ? name : path + "/" + name;
+	newChild->type = type;
+	newChild->parent = this;
+
+	return newChild.Get();
 }
 // --- META ---
 

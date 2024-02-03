@@ -1,70 +1,69 @@
-#pragma once
-
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2Editor/Core/Utils/Ref.h"
 
 namespace o2
 {
-	class DropDown;
+    class DropDown;
 }
 
 namespace Editor
 {
-	// -----------------------------
-	// Editor enum property dropdown
-	// -----------------------------
-	class EnumProperty: public TPropertyField<int>
-	{
-	public:
-		// Default constructor
-		EnumProperty();
+    // -----------------------------
+    // Editor enum property dropdown
+    // -----------------------------
+    class EnumProperty: public TPropertyField<Ref<int>>
+    {
+    public:
+        // Default constructor
+        EnumProperty();
 
-		// Copy constructor
-		EnumProperty(const EnumProperty& other);
+        // Copy constructor
+        EnumProperty(const EnumProperty& other);
 
-		// Copy operator
-		EnumProperty& operator=(const EnumProperty& other);
+        // Copy operator
+        EnumProperty& operator=(const EnumProperty& other);
 
-		// Returns editing by this field type
-		const Type* GetValueType() const override;
+        // Returns editing by this field type
+        const Type* GetValueType() const override;
 
-		// Specializes field type
-		void SpecializeType(const Type* type);
+        // Specializes field type
+        void SpecializeType(const Type* type);
 
-		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+        // Returns editing by this field type by static function, can't be changed during runtime
+        static const Type* GetValueTypeStatic();
 
-		IOBJECT(EnumProperty);
+        IOBJECT(EnumProperty);
 
-	protected:				       						      
-		const EnumType*         mEnumType = nullptr; // Type of enumeration															      
-		const Map<int, String>* mEntries;            // Enum entries
+    protected:
+        const Ref<const EnumType> mEnumType; // Type of enumeration
+        const Ref<const Map<int, String>> mEntries; // Enum entries
 
-		DropDown* mDropDown = nullptr;       // Layer name dropdown
-		bool      mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
+        Ref<DropDown> mDropDown; // Layer name dropdown
+        bool mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
 
-	protected:
-		// Updates value view
-		void UpdateValueView() override;
+    protected:
+        // Updates value view
+        void UpdateValueView() override;
 
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-		// Selects item
-		void OnSelectedItem(const WString& name);
-	};
+        // Selects item
+        void OnSelectedItem(const WString& name);
+    };
 }
 // --- META ---
 
 CLASS_BASES_META(Editor::EnumProperty)
 {
-    BASE_CLASS(Editor::TPropertyField<int>);
+    BASE_CLASS(Editor::TPropertyField<Ref<int>>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::EnumProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEnumType);
+    FIELD().PROTECTED().DEFAULT_VALUE(M_MAKE<Ref<const EnumType>>()).NAME(mEnumType);
     FIELD().PROTECTED().NAME(mEntries);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
+    FIELD().PROTECTED().DEFAULT_VALUE(M_MAKE<Ref<DropDown>>()).NAME(mDropDown);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
 }
 END_META;

@@ -5,7 +5,6 @@
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Toggle.h"
 
-
 namespace Editor
 {
 	BooleanProperty::BooleanProperty()

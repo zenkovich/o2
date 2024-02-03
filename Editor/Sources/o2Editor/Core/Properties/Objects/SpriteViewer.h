@@ -3,6 +3,7 @@
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/Sprite.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
+#include <Ref.h>
 
 using namespace o2;
 
@@ -25,31 +26,31 @@ namespace Editor
 	// --------------------
 	// Editor sprite viewer
 	// --------------------
-	class SpriteViewer : public TObjectPropertiesViewer<Sprite>
+	class SpriteViewer : public TObjectPropertiesViewer<Ref<Sprite>>
 	{
 	public:
 		IOBJECT(SpriteViewer);
 
 	protected:
-		VerticalLayout* mHiddenProperties = nullptr; // Hidden properties
+		Ref<VerticalLayout> mHiddenProperties = nullptr; // Hidden properties
 
-		AssetProperty* mImageProperty = nullptr;
-		ColorProperty* mColorProperty = nullptr;
-		FloatProperty* mAlphaProperty = nullptr;
-		Vec2FProperty* mSizePivotProperty = nullptr;
-		Vec2FProperty* mPivotProperty = nullptr;
-		EnumProperty*  mModeProperty = nullptr;
+		Ref<AssetProperty> mImageProperty = nullptr;
+		Ref<ColorProperty> mColorProperty = nullptr;
+		Ref<FloatProperty> mAlphaProperty = nullptr;
+		Ref<Vec2FProperty> mSizePivotProperty = nullptr;
+		Ref<Vec2FProperty> mPivotProperty = nullptr;
+		Ref<EnumProperty>  mModeProperty = nullptr;
 
-		Spoiler*       mFillPropertiesSpoiler = nullptr;
-		FloatProperty* mFillProperty = nullptr;
+		Ref<Spoiler>       mFillPropertiesSpoiler = nullptr;
+		Ref<FloatProperty> mFillProperty = nullptr;
 
-		Spoiler*         mSlicedPropertiesSpoiler = nullptr;
-		BorderIProperty* mSliceBorderProperty = nullptr;
+		Ref<Spoiler>         mSlicedPropertiesSpoiler = nullptr;
+		Ref<BorderIProperty> mSliceBorderProperty = nullptr;
 
-		Spoiler*       mTiledPropertiesSpoiler = nullptr;
-		FloatProperty* mTileScaleProperty = nullptr;
+		Ref<Spoiler>       mTiledPropertiesSpoiler = nullptr;
+		Ref<FloatProperty> mTileScaleProperty = nullptr;
 
-		ImageSlicesEditorWidget* mSlicesEditor = nullptr;
+		Ref<ImageSlicesEditorWidget> mSlicesEditor = nullptr;
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -66,7 +67,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SpriteViewer)
 {
-    BASE_CLASS(Editor::TObjectPropertiesViewer<Sprite>);
+    BASE_CLASS(Editor::TObjectPropertiesViewer<Ref<Sprite>>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SpriteViewer)
@@ -93,8 +94,8 @@ CLASS_METHODS_META(Editor::SpriteViewer)
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, const Ref<_tmp1>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, const Ref<_tmp2>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnModeSelected);
 }
 END_META;

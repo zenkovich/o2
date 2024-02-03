@@ -2,56 +2,54 @@
 
 #include "o2Editor/PropertiesWindow/ActorsViewer/IActorTransformViewer.h"
 
-namespace Editor
-{
-	class Vec2FProperty;
-	class FloatProperty;
+namespace Editor {
+    class Vec2FProperty;
+    class FloatProperty;
 
-	// -------------------------------------
-	// Default editor actor transform viewer
-	// -------------------------------------
-	class DefaultActorTransformViewer: public IActorTransformViewer
-	{
-	public:
-		// Default constructor. Initializes data widget
-		DefaultActorTransformViewer();
+    // -------------------------------------
+    // Default editor actor transform viewer
+    // -------------------------------------
+    class DefaultActorTransformViewer : public IActorTransformViewer {
+    public:
+        // Default constructor. Initializes data widget
+        DefaultActorTransformViewer();
 
-		// Virtual destructor
-		~DefaultActorTransformViewer();
+        // Virtual destructor
+        ~DefaultActorTransformViewer();
 
-		// Sets target actors
-		void SetTargetActors(const Vector<Actor*>& actors) override;
+        // Sets target actors
+        void SetTargetActors(const Vector<Ref<Actor>>& actors) override;
 
-		// Updates properties values
-		void Refresh() override;
+        // Updates properties values
+        void Refresh() override;
 
-		IOBJECT(DefaultActorTransformViewer);
+        IOBJECT(DefaultActorTransformViewer);
 
-	protected:
-		Vector<Actor*> mTargetActors;
+    protected:
+        Vector<Ref<Actor>> mTargetActors;
 
-		Vec2FProperty* mPositionProperty = nullptr;
-		Vec2FProperty* mPivotProperty = nullptr;
-		Vec2FProperty* mScaleProperty = nullptr;
-		Vec2FProperty* mSizeProperty = nullptr;
-		FloatProperty* mRotationProperty = nullptr;
-		FloatProperty* mShearProperty = nullptr;
+        Ref<Vec2FProperty> mPositionProperty;
+        Ref<Vec2FProperty> mPivotProperty;
+        Ref<Vec2FProperty> mScaleProperty;
+        Ref<Vec2FProperty> mSizeProperty;
+        Ref<FloatProperty> mRotationProperty;
+        Ref<FloatProperty> mShearProperty;
 
-		bool           mLayoutEnabled = false;
-		Spoiler*       mLayoutSpoiler = nullptr;
-		Vec2FProperty* mAnchorRightTopProperty = nullptr;
-		Vec2FProperty* mAnchorLeftBottomProperty = nullptr;
-		Vec2FProperty* moffsetRightTopProperty = nullptr;
-		Vec2FProperty* mOffsetLeftBottomProperty = nullptr;
-		Vec2FProperty* mMinSizeProperty = nullptr;
-		Vec2FProperty* mMaxSizeProperty = nullptr;
-		Vec2FProperty* mWeightProperty = nullptr;
+        bool mLayoutEnabled = false;
+        Ref<Spoiler> mLayoutSpoiler;
+        Ref<Vec2FProperty> mAnchorRightTopProperty;
+        Ref<Vec2FProperty> mAnchorLeftBottomProperty;
+        Ref<Vec2FProperty> moffsetRightTopProperty;
+        Ref<Vec2FProperty> mOffsetLeftBottomProperty;
+        Ref<Vec2FProperty> mMinSizeProperty;
+        Ref<Vec2FProperty> mMaxSizeProperty;
+        Ref<Vec2FProperty> mWeightProperty;
 
-	protected:
-		// Called when some property changed, stores action for undo
-		void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
-									   const Vector<DataDocument>& newValue);
-	};
+    protected:
+        // Called when some property changed, stores action for undo
+        void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
+                                       const Vector<DataDocument>& newValue);
+    };
 }
 // --- META ---
 
@@ -60,6 +58,7 @@ CLASS_BASES_META(Editor::DefaultActorTransformViewer)
     BASE_CLASS(Editor::IActorTransformViewer);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
 {
     FIELD().PROTECTED().NAME(mTargetActors);
@@ -80,11 +79,11 @@ CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWeightProperty);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::DefaultActorTransformViewer)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Ref<Actor>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }

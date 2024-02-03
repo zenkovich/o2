@@ -4,6 +4,9 @@
 #include "o2/Utils/Math/Basis.h"
 #include "o2Editor/Core/Tools/SelectionTool.h"
 #include "o2Editor/SceneWindow/SceneDragHandle.h"
+#include "o2/Utils/SmartPointers/Ref.h"
+#include "o2/Utils/SmartPointers/WeakRef.h"
+#include "o2/Utils/SmartPointers/mmake.h"
 
 using namespace o2;
 
@@ -33,7 +36,8 @@ namespace Editor
 		RotateTool& operator=(const RotateTool& other) { return *this; }
 
 		// Destructor
-		~RotateTool();
+		~RotateTool() = default;
+		
 
 		IOBJECT(RotateTool);
 
@@ -46,19 +50,19 @@ namespace Editor
 		const Color4 mRotateRingsFillColor2 = Color4(220, 220, 220, 100);   // Rotate ring color 2
 		const Color4 mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
 		const Color4 mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
-						 
-		Mesh* mRotateRingFillMesh = nullptr; // Rotate ring mesh
-		Mesh* mAngleMesh = nullptr;          // Rotation angle mesh
+
+		Ref<Mesh> mRotateRingFillMesh = nullptr; // Rotate ring mesh
+		Ref<Mesh> mAngleMesh = nullptr;          // Rotation angle mesh
 		Vec2F mScenePivot;				    // Rotation pivot in scene space
-						 							   
+
 		SceneDragHandle  mPivotDragHandle;			   // Pivot drag handle
 		float            mPressAngle;				   // Angle at cursor pressing
 		float            mCurrentRotateAngle;		   // Current rotation angle
 		bool             mRingPressed = false;		   // Is rotate ring was pressed
 		float            mSnapAngleAccumulated = 0.0f; // Snapping angle accumulated
-						 
-		Vector<Basis>    mBeforeTransforms;  		 // Array of objects' transformations before changing
-		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
+
+		Vector<Ref<Basis>> mBeforeTransforms;  		 // Array of objects' transformations before changing
+		Ref<TransformAction> mTransformAction = nullptr; // Current transform action. Creates when transform started
 
 	public:
 		// Returns toggle in menu panel icon name
@@ -80,10 +84,10 @@ namespace Editor
 		void OnDisabled() override;
 
 		// Called when scene objects was changed
-		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
+		void OnSceneChanged(Vector<Ref<SceneEditableObject>> changedObjects) override;
 
 		// Called when objects selection was changed
-		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+		void OnObjectsSelectionChanged(Vector<Ref<SceneEditableObject>> objects) override;
 
 		// Updates ring and angle meshes
 		void UpdateMeshes();
@@ -128,62 +132,87 @@ namespace Editor
 		void RotateObjectsSeparatedWithAction(float angleDelta);
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::RotateTool)
 {
-    BASE_CLASS(Editor::SelectionTool);
+	BASE_CLASS(Editor::SelectionTool);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::RotateTool)
 {
-    FIELD().PUBLIC().DEFAULT_VALUE(15.0f).NAME(angleSnapStep);
-    FIELD().PROTECTED().DEFAULT_VALUE(60).NAME(mRotateRingInsideRadius);
-    FIELD().PROTECTED().DEFAULT_VALUE(100).NAME(mRotateRingOutsideRadius);
-    FIELD().PROTECTED().DEFAULT_VALUE(50).NAME(mRotateRingSegs);
-    FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 255)).NAME(mRotateRingsColor);
-    FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 50)).NAME(mRotateRingsFillColor);
-    FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 100)).NAME(mRotateRingsFillColor2);
-    FIELD().PROTECTED().DEFAULT_VALUE(Color4(211, 87, 40, 100)).NAME(mRotateMeshClockwiseColor);
-    FIELD().PROTECTED().DEFAULT_VALUE(Color4(87, 211, 40, 100)).NAME(mRotateMeshCClockwiseColor);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRotateRingFillMesh);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAngleMesh);
-    FIELD().PROTECTED().NAME(mScenePivot);
-    FIELD().PROTECTED().NAME(mPivotDragHandle);
-    FIELD().PROTECTED().NAME(mPressAngle);
-    FIELD().PROTECTED().NAME(mCurrentRotateAngle);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mRingPressed);
-    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mSnapAngleAccumulated);
-    FIELD().PROTECTED().NAME(mBeforeTransforms);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
+	FIELD().PUBLIC().DEFAULT_VALUE(15.0f).NAME(angleSnapStep),
+	FIELD().PROTECTED().DEFAULT_VALUE(60).NAME(mRotateRingInsideRadius),
+	FIELD().PROTECTED().DEFAULT_VALUE(100).NAME(mRotateRingOutsideRadius),
+	FIELD().PROTECTED().DEFAULT_VALUE(50).NAME(mRotateRingSegs),
+	FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 255)).NAME(mRotateRingsColor),
+	FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 50)).NAME(mRotateRingsFillColor),
+	FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 100)).NAME(mRotateRingsFillColor2),
+	FIELD().PROTECTED().DEFAULT_VALUE(Color4(211, 87, 40, 100)).NAME(mRotateMeshClockwiseColor),
+	FIELD().PROTECTED().DEFAULT_VALUE(Color4(87, 211, 40, 100)).NAME(mRotateMeshCClockwiseColor),
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRotateRingFillMesh),
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAngleMesh),
+	FIELD().PROTECTED().DEFAULT_VALUE(Vec2F()).NAME(mScenePivot),
+	FIELD().PROTECTED().DEFAULT_VALUE(SceneDragHandle()).NAME(mPivotDragHandle),
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPressAngle),
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mCurrentRotateAngle),
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mRingPressed),
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mSnapAngleAccumulated),
+	FIELD().PROTECTED().DEFAULT_VALUE(Vector<Ref<Basis>>()).NAME(mBeforeTransforms),
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction)
+};replace raw pointers with Ref<>, except void* pointers.Ref<> is a smart pointer like shared_ptr. Use const Ref<>& for function arguments with pointer types, also in overridden methods. Dont replace void* pointers!!
+
+Replace dynamic_cast<type*> with DynamicCast<type> to cast Ref<>.
+
+Remove default nullptr value for class members with type Ref<>. If class variable is some kind of "parent", use WeakRef<>.
+
+Use mmake<>() to create Ref<>, just like make_shared<>().
+
+Here is the modified code:
+
+FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<Color4>>(211, 87, 40, 100)).NAME(mRotateMeshClockwiseColor);
+FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<Color4>>(87, 211, 40, 100)).NAME(mRotateMeshCClockwiseColor);
+FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRotateRingFillMesh);
+FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAngleMesh);
+FIELD().PROTECTED().NAME(mScenePivot);
+FIELD().PROTECTED().NAME(mPivotDragHandle);
+FIELD().PROTECTED().NAME(mPressAngle);
+FIELD().PROTECTED().NAME(mCurrentRotateAngle);
+FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mRingPressed);
+FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mSnapAngleAccumulated);
+FIELD().PROTECTED().NAME(mBeforeTransforms);
+FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::RotateTool)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
-    FUNCTION().PUBLIC().SIGNATURE(ShortcutKeys, GetShortcut);
-    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, DrawScreen);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
-    FUNCTION().PUBLIC().SIGNATURE(void, UpdateMeshes);
-    FUNCTION().PUBLIC().SIGNATURE(void, CalcPivotByObjectsCenter);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnPivotDragHandleMoved, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsPointInRotateRing, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnKeyPressed, const Input::Key&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RotateObjects, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, RotateObjectsSeparated, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, RotateObjectsWithAction, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, RotateObjectsSeparatedWithAction, float);
+FUNCTION().PUBLIC().CONSTRUCTOR();
+FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
+FUNCTION().PUBLIC().SIGNATURE(ShortcutKeys, GetShortcut);
+FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+FUNCTION().PUBLIC().SIGNATURE(void, DrawScreen);
+FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
+FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged, Vector<Ref<SceneEditableObject>>);
+FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsSelectionChanged, Vector<Ref<SceneEditableObject>>);
+FUNCTION().PUBLIC().SIGNATURE(void, UpdateMeshes);
+FUNCTION().PUBLIC().SIGNATURE(void, CalcPivotByObjectsCenter);
+FUNCTION().PUBLIC().SIGNATURE(void, OnPivotDragHandleMoved, const Vec2F&);
+FUNCTION().PUBLIC().SIGNATURE(bool, IsPointInRotateRing, const Vec2F&);
+FUNCTION().PUBLIC().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+FUNCTION().PUBLIC().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+FUNCTION().PUBLIC().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
+FUNCTION().PUBLIC().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
+FUNCTION().PUBLIC().SIGNATURE(void, OnKeyPressed, const Input::Key&);
+FUNCTION().PUBLIC().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
+FUNCTION().PUBLIC().SIGNATURE(void, RotateObjects, float);
+FUNCTION().PUBLIC().SIGNATURE(void, RotateObjectsSeparated, float);
+FUNCTION().PUBLIC().SIGNATURE(void, RotateObjectsWithAction, float);
+FUNCTION().PUBLIC().SIGNATURE(void, RotateObjectsSeparatedWithAction, float);
 }
 END_META;
 // --- END META ---

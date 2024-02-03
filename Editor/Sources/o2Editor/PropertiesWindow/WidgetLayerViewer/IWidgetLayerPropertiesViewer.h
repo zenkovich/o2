@@ -4,6 +4,7 @@
 #include "o2/Utils/Reflection/Reflection.h"
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/SmartPtr/Ref.h"
 
 using namespace o2;
 
@@ -30,13 +31,13 @@ namespace Editor
 		virtual ~IWidgetLayerPropertiesViewer();
 
 		// Sets target actors
-		virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
+		virtual void SetTargetLayers(const Vector<Ref<WidgetLayer>>& layers) {}
 
 		// Returns viewing layer drawable type 
 		virtual const Type* GetDrawableType() const { return nullptr; }
 
 		// Returns data widget
-		virtual Widget* GetWidget() const;
+		virtual Ref<Widget> GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -59,8 +60,7 @@ namespace Editor
 		IOBJECT(IWidgetLayerPropertiesViewer);
 
 	protected:
-		SpoilerWithHead* mSpoiler = nullptr;
-
+		Ref<SpoilerWithHead> mSpoiler;
 		bool mEnabled = false; // Is viewer enabled 
 
 	protected:
@@ -88,9 +88,9 @@ CLASS_METHODS_META(Editor::IWidgetLayerPropertiesViewer)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<Ref<WidgetLayer>>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetDrawableType);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

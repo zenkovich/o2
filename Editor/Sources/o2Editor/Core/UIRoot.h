@@ -16,43 +16,94 @@ namespace o2
 
 namespace Editor
 {
-	// --------------
-	// Editor UI root
-	// --------------
-	class UIRoot: public Singleton<UIRoot>, ApplicationEventsListener
-	{
-	public:
-		// Adds widget to root
-		Widget* AddWidget(Widget* widget);
+    // --------------
+    // Editor UI root
+    // --------------
+    class UIRoot : public Singleton<UIRoot>, ApplicationEventsListener
+    {
+    public:
+        // Adds widget to root
+        Widget* AddWidget(Widget* widget);
 
-		// Removes widget from root
-		void RemoveWidget(Widget* widget);
+        // Removes widget from root
+        void RemoveWidget(Widget* widget);
 
-		// Removes all widgets from root
-		void RemoveAllWidgets();
+        // Removes all widgets from root
+        void RemoveAllWidgets();
 
-		// Returns root widget
-		Widget* GetRootWidget();
+        // Returns root widget
+        Widget* GetRootWidget();
 
-	private:
-		Widget* mRootWidget = nullptr;
+    private:
+        Ref<Widget> mRootWidget;
 
-	private:
-		// Default constructor, creates root widget
-		UIRoot();
+    private:
+        // Default constructor, creates root widget
+        UIRoot();
 
-		// Destructor
-		~UIRoot();
+        // Destructor
+        ~UIRoot();
 
-		// Draws root widget
-		void Draw();
+        // Draws root widget
+        void Draw();
 
-		// Updates root widget
-		void Update(float dt);
+        // Updates root widget
+        void Update(float dt);
 
-		// Called when application frame was resized, updates root size
-		void OnApplicationSized() override;
+        // Called when application frame was resized, updates root size
+        void OnApplicationSized() override;
 
-		friend class EditorApplication;
-	};
+        friend class EditorApplication;
+    };
+}
+
+// Added Ref<Widget> return type and parameter type for AddWidget() and GetRootWidget() functions
+Widget* UIRoot::AddWidget(Ref<Widget> widget)
+{
+    mRootWidget = widget;
+    return mRootWidget.Get();
+}
+
+void UIRoot::RemoveWidget(Ref<Widget> widget)
+{
+    if (mRootWidget == widget)
+        mRootWidget = nullptr;
+}
+
+void UIRoot::RemoveAllWidgets()
+{
+    mRootWidget = nullptr;
+}
+
+Widget* UIRoot::GetRootWidget() const
+{
+    return mRootWidget.Get();
+}
+
+void UIRoot::OnApplicationSized()
+{
+    if (mRootWidget)
+        mRootWidget->SetSize(GetApplicationSize());
+}
+
+// Replaced raw pointer with Ref<> for the root widget member variable
+UIRoot::UIRoot()
+{
+    mRootWidget = mmake<Widget>();
+}
+
+UIRoot::~UIRoot()
+{
+}
+
+void UIRoot::Draw()
+{
+    if (mRootWidget)
+        mRootWidget->Draw();
+}
+
+void UIRoot::Update(float dt)
+{
+    if (mRootWidget)
+        mRootWidget->Update(dt);
 }

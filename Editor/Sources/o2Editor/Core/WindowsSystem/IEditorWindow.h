@@ -2,65 +2,66 @@
 
 #include "DockableWindow.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/SmartPointers/Ref.h"
 
 using namespace o2;
 
 namespace Editor
 {
-	// -----------------------------
-	// Basic editor window interface
-	// -----------------------------
-	class IEditorWindow: public IObject
-	{
-	public:
-		// Default constructor
-		IEditorWindow();
+    // -----------------------------
+    // Basic editor window interface
+    // -----------------------------
+    class IEditorWindow : public IObject
+    {
+    public:
+        // Default constructor
+        IEditorWindow();
 
-		// Copy-constructor
-		IEditorWindow(const IEditorWindow& other);
+        // Copy-constructor
+        IEditorWindow(const IEditorWindow& other);
 
-		// Virtual destructor
-		virtual ~IEditorWindow();
+        // Virtual destructor
+        virtual ~IEditorWindow();
 
-		// Sets visibility
-		virtual void SetVisible(bool visible);
+        // Sets visibility
+        virtual void SetVisible(bool visible);
 
-		// Updates window logic
-		virtual void Update(float dt);
+        // Updates window logic
+        virtual void Update(float dt);
 
-		// Draws window stuff
-		virtual void Draw();
+        // Draws window stuff
+        virtual void Draw();
 
-		// Returns is window is visible
-		bool IsVisible();
+        // Returns is window is visible
+        bool IsVisible();
 
-		// Shows window
-		void Show();
+        // Shows window
+        void Show();
 
-		// Hides window
-		void Hide();
+        // Hides window
+        void Hide();
 
-		// Returns window
-		DockableWindow* GetWindow() const;
+        // Returns window
+        const Ref<DockableWindow>& GetWindow() const;
 
-		IOBJECT(IEditorWindow);
+        IOBJECT(IEditorWindow);
 
-	protected:
-		DockableWindow* mWindow = nullptr; // Dockable UI window 
+    protected:
+        Ref<DockableWindow> mWindow; // Dockable UI window 
 
-	protected:
-		// Called after that all windows was created
-		virtual void PostInitializeWindow() {}
+    protected:
+        // Called after that all windows was created
+        virtual void PostInitializeWindow() {}
 
-		// Called when editor window has opened
-		virtual void OnOpened() {}
+        // Called when editor window has opened
+        virtual void OnOpened() {}
 
-		// Called when editor window has closed
-		virtual void OnClosed() {}
+        // Called when editor window has closed
+        virtual void OnClosed() {}
 
-		friend class WindowsManager;
-		friend class WindowsLayout;
-	};
+        friend class WindowsManager;
+        friend class WindowsLayout;
+    };
 }
 // --- META ---
 
@@ -71,7 +72,7 @@ CLASS_BASES_META(Editor::IEditorWindow)
 END_META;
 CLASS_FIELDS_META(Editor::IEditorWindow)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWindow);
+    FIELD().PROTECTED().NAME(mWindow);
 }
 END_META;
 CLASS_METHODS_META(Editor::IEditorWindow)
@@ -85,7 +86,7 @@ CLASS_METHODS_META(Editor::IEditorWindow)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsVisible);
     FUNCTION().PUBLIC().SIGNATURE(void, Show);
     FUNCTION().PUBLIC().SIGNATURE(void, Hide);
-    FUNCTION().PUBLIC().SIGNATURE(DockableWindow*, GetWindow);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<DockableWindow>&, GetWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, OnOpened);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);

@@ -14,36 +14,36 @@ namespace Editor
 {
 	ScaleTool::ScaleTool()
 	{
-		mHorDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_right_scale_arrow.png"),
-										 mnew Sprite("ui/UI2_right_scale_arrow_select.png"),
-										 mnew Sprite("ui/UI2_right_scale_arrow_pressed.png"));
+		mHorDragHandle = Ref<SceneDragHandle>(mmake<SceneDragHandle>(mmake<Sprite>("ui/UI2_right_scale_arrow.png"),
+																	 mmake<Sprite>("ui/UI2_right_scale_arrow_select.png"),
+																	 mmake<Sprite>("ui/UI2_right_scale_arrow_pressed.png")));
 
-		mVerDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_up_scale_arrow.png"),
-										 mnew Sprite("ui/UI2_up_scale_arrow_select.png"),
-										 mnew Sprite("ui/UI2_up_scale_arrow_pressed.png"));
+		mVerDragHandle = Ref<SceneDragHandle>(mmake<SceneDragHandle>(mmake<Sprite>("ui/UI2_up_scale_arrow.png"),
+																	 mmake<Sprite>("ui/UI2_up_scale_arrow_select.png"),
+																	 mmake<Sprite>("ui/UI2_up_scale_arrow_pressed.png")));
 
-		mBothDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_scale_both.png"),
-										  mnew Sprite("ui/UI2_scale_both_select.png"),
-										  mnew Sprite("ui/UI2_scale_both_pressed.png"));
+		mBothDragHandle = Ref<SceneDragHandle>(mmake<SceneDragHandle>(mmake<Sprite>("ui/UI2_scale_both.png"),
+																	  mmake<Sprite>("ui/UI2_scale_both_select.png"),
+																	  mmake<Sprite>("ui/UI2_scale_both_pressed.png")));
 
-		mHorDragHandle.enabled = false;
-		mVerDragHandle.enabled = false;
-		mBothDragHandle.enabled = false;
+		mHorDragHandle->enabled = false;
+		mVerDragHandle->enabled = false;
+		mBothDragHandle->enabled = false;
 
-		mHorDragHandle.onChangedPos = THIS_FUNC(OnHorDragHandleMoved);
-		mVerDragHandle.onChangedPos = THIS_FUNC(OnVerDragHandleMoved);
-		mBothDragHandle.onChangedPos = THIS_FUNC(OnBothDragHandleMoved);
+		mHorDragHandle->onChangedPos = THIS_FUNC(OnHorDragHandleMoved);
+		mVerDragHandle->onChangedPos = THIS_FUNC(OnVerDragHandleMoved);
+		mBothDragHandle->onChangedPos = THIS_FUNC(OnBothDragHandleMoved);
 
-		mHorDragHandle.onPressed = THIS_FUNC(HandlePressed);
-		mVerDragHandle.onPressed = THIS_FUNC(HandlePressed);
-		mBothDragHandle.onPressed = THIS_FUNC(HandlePressed);
+		mHorDragHandle->onPressed = THIS_FUNC(HandlePressed);
+		mVerDragHandle->onPressed = THIS_FUNC(HandlePressed);
+		mBothDragHandle->onPressed = THIS_FUNC(HandlePressed);
 
-		mHorDragHandle.onReleased = THIS_FUNC(UpdateHandlesPosition);
-		mVerDragHandle.onReleased = THIS_FUNC(UpdateHandlesPosition);
+		mHorDragHandle->onReleased = THIS_FUNC(UpdateHandlesPosition);
+		mVerDragHandle->onReleased = THIS_FUNC(UpdateHandlesPosition);
 
-		mHorDragHandle.onReleased += THIS_FUNC(HandleReleased);
-		mVerDragHandle.onReleased += THIS_FUNC(HandleReleased);
-		mBothDragHandle.onReleased += THIS_FUNC(HandleReleased);
+		mHorDragHandle->onReleased += THIS_FUNC(HandleReleased);
+		mVerDragHandle->onReleased += THIS_FUNC(HandleReleased);
+		mBothDragHandle->onReleased += THIS_FUNC(HandleReleased);
 	}
 
 	ScaleTool::~ScaleTool()
@@ -66,35 +66,35 @@ namespace Editor
 	{
 		SelectionTool::DrawScreen();
 
-		if (!mHorDragHandle.IsPressed() && !mVerDragHandle.IsPressed() && !mBothDragHandle.IsPressed())
+		if (!mHorDragHandle->IsPressed() && !mVerDragHandle->IsPressed() && !mBothDragHandle->IsPressed())
 			UpdateHandlesPositions();
 
 		Vec2F screenHandlesPos = o2EditorSceneScreen.SceneToScreenPoint(mSceneHandlesPos);
-		Vec2F screenHorHandlePos = o2EditorSceneScreen.SceneToScreenPoint(mHorDragHandle.GetPosition());
-		Vec2F screenVerHandlePos = o2EditorSceneScreen.SceneToScreenPoint(mVerDragHandle.GetPosition());
+		Vec2F screenHorHandlePos = o2EditorSceneScreen.SceneToScreenPoint(mHorDragHandle->GetPosition());
+		Vec2F screenVerHandlePos = o2EditorSceneScreen.SceneToScreenPoint(mVerDragHandle->GetPosition());
 		o2Render.DrawAALine(screenHandlesPos, screenHorHandlePos, Color4::Green());
 		o2Render.DrawAALine(screenHandlesPos, screenVerHandlePos, Color4::Red());
 	}
 
 	void ScaleTool::OnEnabled()
 	{
-		mHorDragHandle.enabled = true;
-		mVerDragHandle.enabled = true;
-		mBothDragHandle.enabled = true;
+		mHorDragHandle->enabled = true;
+		mVerDragHandle->enabled = true;
+		mBothDragHandle->enabled = true;
 		UpdateHandlesPosition();
 	}
 
 	void ScaleTool::OnDisabled()
 	{
-		mHorDragHandle.enabled = false;
-		mVerDragHandle.enabled = false;
-		mBothDragHandle.enabled = false;
+		mHorDragHandle->enabled = false;
+		mVerDragHandle->enabled = false;
+		mBothDragHandle->enabled = false;
 	}
 
-	void ScaleTool::OnSceneChanged(Vector<SceneEditableObject*> changedObjects)
+	void ScaleTool::OnSceneChanged(Vector<Ref<SceneEditableObject>>& changedObjects)
 	{}
 
-	void ScaleTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void ScaleTool::OnObjectsSelectionChanged(Vector<Ref<SceneEditableObject>>& objects)
 	{
 		UpdateHandlesPosition();
 	}
@@ -106,7 +106,7 @@ namespace Editor
 		float scale = (handlePos - mSceneHandlesPos).Length() / (mLastHorHandlePos - mSceneHandlesPos).Length();
 
 		mLastHorHandlePos = handlePos;
-		mHorDragHandle.position = handlePos;
+		mHorDragHandle->position = handlePos;
 
 		ScaleSelectedObjects(Vec2F(scale, 1.0f));
 	}
@@ -118,7 +118,7 @@ namespace Editor
 		float scale = (handlePos - mSceneHandlesPos).Length() / (mLastVerHandlePos - mSceneHandlesPos).Length();
 
 		mLastVerHandlePos = handlePos;
-		mVerDragHandle.position = handlePos;
+		mVerDragHandle->position = handlePos;
 
 		ScaleSelectedObjects(Vec2F(1.0f, scale));
 	}
@@ -131,7 +131,7 @@ namespace Editor
 		float scale = 1.0f + delta*bothScaleSence;
 		mLastBothHandlePos = position;
 
-		mBothDragHandle.position = mSceneHandlesPos;
+		mBothDragHandle->position = mSceneHandlesPos;
 
 		ScaleSelectedObjects(Vec2F(scale, scale));
 	}
@@ -145,100 +145,130 @@ namespace Editor
 
 		if (selectedObjects.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
 		{
-			SceneEditableObject* lastSelectedObject = selectedObjects.Last();
+			SceneEditableObject* lastSelectedObject = selectedObjects.Last().get();
 			UpdateHandlesAngleAndPositions(-lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right()));
 		}
 		else UpdateHandlesAngleAndPositions(0.0f);
 	}
 
-	void ScaleTool::UpdateHandlesAngleAndPositions(float angle)
-	{
-		mHandlesAngle = angle;
+	void ScaleTool::Updat#include <memory>
 
-		mVerDragHandle.angle = mHandlesAngle;
-		mHorDragHandle.angle = mHandlesAngle;
-		mBothDragHandle.angle = mHandlesAngle;
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
-		UpdateHandlesPositions();
-	}
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-	void ScaleTool::UpdateHandlesPositions()
-	{
-		Vec2F handlesAxis = Vec2F::Rotated(mHandlesAngle);
-		Vec2F handlesSceneSize = o2EditorSceneScreen.ScreenToScenePoint(mHandlesSize) -
-			o2EditorSceneScreen.ScreenToScenePoint(Vec2F());
-
-		mVerDragHandle.position = mSceneHandlesPos + handlesAxis.Perpendicular()*handlesSceneSize.y;
-		mHorDragHandle.position = mSceneHandlesPos + handlesAxis*handlesSceneSize.x;
-		mBothDragHandle.position = mSceneHandlesPos;
-
-		mLastVerHandlePos = mVerDragHandle.position;
-		mLastHorHandlePos = mHorDragHandle.position;
-		mLastBothHandlePos = mBothDragHandle.position;
-	}
-
-	void ScaleTool::OnKeyPressed(const Input::Key& key)
-	{
-		if (!o2EditorTree.IsTreeFocused())
-			return;
-
-		if (key == VK_CONTROL)
-			UpdateHandlesAngleAndPositions(0.0f);
-
-		SelectionTool::OnKeyPressed(key);
-	}
-
-	void ScaleTool::OnKeyStayDown(const Input::Key& key)
-	{}
-
-	void ScaleTool::OnKeyReleased(const Input::Key& key)
-	{
-		if (!o2EditorTree.IsTreeFocused())
-			return;
-
-		if (key == VK_CONTROL)
-		{
-			auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
-			if (selectedObjects.Count() > 0)
-			{
-				SceneEditableObject* lastSelectedObject = selectedObjects.Last();
-				UpdateHandlesAngleAndPositions(-lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right()));
-			}
-		}
-	}
-
-	void ScaleTool::ScaleSelectedObjects(const Vec2F& scale)
-	{
-		Basis transform =
-			Basis::Translated(mSceneHandlesPos*-1.0f)*
-			Basis::Rotated(-mHandlesAngle)*
-			Basis::Scaled(scale)*
-			Basis::Rotated(mHandlesAngle)*
-			Basis::Translated(mSceneHandlesPos);
-
-		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
-		{
-			object->SetTransform(object->GetTransform()*transform);
-			object->UpdateTransform();
-		}
-	}
-
-	void ScaleTool::HandlePressed()
-	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
-
-		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
-	}
-
-	void ScaleTool::HandleReleased()
-	{
-		mTransformAction->Completed();
-		o2EditorApplication.DoneAction(mTransformAction);
-		mTransformAction = nullptr;
-	}
-
+template<typename T, typename... Args>
+constexpr Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
 }
+
+template<typename T, typename CastType>
+constexpr inline Ref<CastType> DynamicCast(const Ref<T>& ptr)
+{
+    return std::dynamic_pointer_cast<CastType>(ptr);
+}
+
+class ScaleTool
+{
+public:
+    ScaleTool()
+    {
+        mVerDragHandle = mmake<Handle>();
+        mHorDragHandle = mmake<Handle>();
+        mBothDragHandle = mmake<Handle>();
+    }
+
+    void UpdateHandlesAngleAndPositions(float angle)
+    {
+        mHandlesAngle = angle;
+        mVerDragHandle->angle = mHandlesAngle;
+        mHorDragHandle->angle = mHandlesAngle;
+        mBothDragHandle->angle = mHandlesAngle;
+        UpdateHandlesPositions();
+    }
+
+    void UpdateHandlesPositions()
+    {
+        Vec2F handlesAxis = Vec2F::Rotated(mHandlesAngle);
+        Vec2F handlesSceneSize = o2EditorSceneScreen.ScreenToScenePoint(mHandlesSize) - o2EditorSceneScreen.ScreenToScenePoint(Vec2F());
+
+        mVerDragHandle->position = mSceneHandlesPos + handlesAxis.Perpendicular() * handlesSceneSize.y;
+        mHorDragHandle->position = mSceneHandlesPos + handlesAxis * handlesSceneSize.x;
+        mBothDragHandle->position = mSceneHandlesPos;
+        mLastVerHandlePos = mVerDragHandle->position;
+        mLastHorHandlePos = mHorDragHandle->position;
+        mLastBothHandlePos = mBothDragHandle->position;
+    }
+
+    void OnKeyPressed(const Input::Key& key)
+    {
+        if (!o2EditorTree.IsTreeFocused())
+            return;
+
+        if (key == VK_CONTROL)
+            UpdateHandlesAngleAndPositions(0.0f);
+
+        SelectionTool::OnKeyPressed(key);
+    }
+
+    void OnKeyStayDown(const Input::Key& key) {}
+
+    void OnKeyReleased(const Input::Key& key)
+    {
+        if (!o2EditorTree.IsTreeFocused())
+            return;
+
+        if (key == VK_CONTROL)
+        {
+            auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
+            if (selectedObjects.Count() > 0)
+            {
+                SceneEditableObject* lastSelectedObject = selectedObjects.Last();
+                UpdateHandlesAngleAndPositions(-lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right()));
+            }
+        }
+    }
+
+    void ScaleSelectedObjects(const Vec2F& scale)
+    {
+        Basis transform = Basis::Translated(mSceneHandlesPos * -1.0f) *
+            Basis::Rotated(-mHandlesAngle) *
+            Basis::Scaled(scale) *
+            Basis::Rotated(mHandlesAngle) *
+            Basis::Translated(mSceneHandlesPos);
+
+        for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+        {
+            object->SetTransform(object->GetTransform() * transform);
+            object->UpdateTransform();
+        }
+    }
+
+    void HandlePressed()
+    {
+        mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
+            [](SceneEditableObject* x) {return x->GetTransform(); });
+
+        mTransformAction = mmake<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
+    }
+
+    void HandleReleased()
+    {
+        mTransformAction->Completed();
+        o2EditorApplication.DoneAction(mTransformAction);
+        mTransformAction = nullptr;
+    }
+
+private:
+    Ref<Handle> mVerDragHandle;
+    Ref<Handle> mHorDragHandle;
+    Ref<Handle> mBothDragHandle;
+    WeakRef<TransformAction> mTransformAction;
+};
+
 // --- META ---
 
 DECLARE_CLASS(Editor::ScaleTool, Editor__ScaleTool);

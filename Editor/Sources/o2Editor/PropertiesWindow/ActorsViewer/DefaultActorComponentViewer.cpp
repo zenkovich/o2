@@ -8,12 +8,15 @@
 namespace Editor
 {
 	DefaultActorComponentViewer::DefaultActorComponentViewer()
+		: mComponentType(nullptr), mViewer(nullptr)
 	{}
 
 	DefaultActorComponentViewer::~DefaultActorComponentViewer()
-	{}
+	{
+		mViewer = nullptr;
+	}
 
-	void DefaultActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
+	void DefaultActorComponentViewer::SetTargetComponents(const Vector<Ref<Component>>& components)
 	{
 		IActorComponentViewer::SetTargetComponents(components);
 		Refresh();
@@ -21,7 +24,7 @@ namespace Editor
 
 	const Type* DefaultActorComponentViewer::GetComponentType() const
 	{
-		return mComponentType;
+		return mComponentType.Get();
 	}
 
 	void DefaultActorComponentViewer::Refresh()
@@ -34,7 +37,7 @@ namespace Editor
 			mSpoiler->name = "component " + mComponentType->GetName();
 
 			if (mViewer)
-				o2EditorProperties.FreeObjectViewer(mViewer);
+				o2EditorProperties.FreeObjectViewer(mViewer.Get());
 
 			mViewer = o2EditorProperties.CreateObjectViewer(mComponentType, (String)"component:" + mComponentType->GetName() + "/",
 															THIS_FUNC(OnPropertyChanged));
@@ -55,7 +58,7 @@ namespace Editor
 	void DefaultActorComponentViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
 														const Vector<DataDocument>& after)
 	{
-		for (auto component : mTargetComponents)
+		for (const auto& component : mTargetComponents)
 			component->GetOwnerActor()->OnChanged();
 
 		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);

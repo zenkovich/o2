@@ -22,8 +22,8 @@ namespace Editor
 		InitializeControls();
 	}
 
-	ObjectPtrProperty::ObjectPtrProperty(const ObjectPtrProperty& other):
-		IPropertyField(other)
+	ObjectPtrProperty::ObjectPtrProperty(const ObjectPtrProperty& other)
+		: IPropertyField(other)
 	{
 		InitializeControls();
 	}
@@ -52,17 +52,17 @@ namespace Editor
 
 		borderLeft = 11;
 
-		mCaption = o2UI.CreateLabel("Caption");
+		mCaption = Ref<Label>::make("Caption");
 		mCaption->SetHorAlign(HorAlign::Left);
 		AddChild(mCaption);
 
-		mHeaderContainer = mnew HorizontalLayout();
+		mHeaderContainer = Ref<HorizontalLayout>::make();
 		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 19, 0);
 		mHeaderContainer->baseCorner = BaseCorner::Right;
 		mHeaderContainer->expandHeight = false;
 		mCaption->AddChildWidget(mHeaderContainer);
 
-		mTypeCaption = o2UI.CreateLabel("nullptr");
+		mTypeCaption = Ref<Label>::make("nullptr");
 		*mTypeCaption->layout = WidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
 		mTypeCaption->horOverflow = Label::HorOverflow::Dots;
 		mTypeCaption->horAlign = HorAlign::Left;
@@ -71,14 +71,14 @@ namespace Editor
 		mTypeCaption->transparency = 0.6f;
 		mHeaderContainer->AddInternalWidget(mTypeCaption);
 
-		mCreateDeleteButton = o2UI.CreateButton("Create");
+		mCreateDeleteButton = Ref<Button>::make("Create");
 		mCreateDeleteButton->layout->maxWidth = 75;
 		mCreateDeleteButton->layout->minHeight = 15;
 		mCreateDeleteButton->layout->height = 15;
 		mCreateDeleteButton->onClick = THIS_FUNC(OnCreateOrDeletePressed);
 		mHeaderContainer->AddChild(mCreateDeleteButton);
 
-		mCreateMenu = o2UI.CreateWidget<ContextMenu>();
+		mCreateMenu = Ref<ContextMenu>::make();
 		mCreateDeleteButton->AddChild(mCreateMenu);
 
 		expandHeight = true;
@@ -101,12 +101,12 @@ namespace Editor
 		{
 			auto object = GetProxy(mValuesProxies[0].first);
 			if (object)
-				mCurrentObjectType = dynamic_cast<const ObjectType*>(&object->GetType());
+				mCurrentObjectType = DynamicCast<const ObjectType>(object->GetType());
 			else if (mFieldInfo)
 			{
 				if (auto defaultTypeAttr = mFieldInfo->GetAttribute<DefaultTypeAttribute>())
 				{
-					CreateObject(dynamic_cast<const ObjectType*>(defaultTypeAttr->defaultType));
+					CreateObject(DynamicCast<const ObjectType>(defaultTypeAttr->defaultType));
 					return;
 				}
 			}
@@ -162,9 +162,9 @@ namespace Editor
 		{
 			mObjectViewer->Refresh(mValuesProxies.Convert<Pair<IObject*, IObject*>>(
 				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
-			{
-				return Pair<IObject*, IObject*>(GetProxy(x.first), x.second ? GetProxy(x.second) : nullptr);
-			}));
+				{
+					return Pair<IObject*, IObject*>(GetProxy(x.first), x.second ? GetProxy(x.second) : nullptr);
+				}));
 		}
 
 		SetEnabled((mObjectViewer && !mObjectViewer->IsEmpty()) || !mNoHeader);
@@ -172,253 +172,380 @@ namespace Editor
 
 	const Type* ObjectPtrProperty::GetValueType() const
 	{
-		return GetValueTypeStatic();
+		return mCurrentObjectType;
 	}
 
-	const Type* ObjectPtrProperty::GetValueTypeStatic()
-	{
-		return &TypeOf(IObject*);
-	}
-
-	void ObjectPtrProperty::SetFieldInfo(const FieldInfo* fieldInfo)
-	{
-		IPropertyField::SetFieldInfo(fieldInfo);
-
-		if (fieldInfo)
-		{
-			mExpanded = fieldInfo->HasAttribute<ExpandedByDefaultAttribute>();
-			mNoHeader = fieldInfo->HasAttribute<NoHeaderAttribute>();
-			mDontDeleteEnabled = fieldInfo->HasAttribute<DontDeleteAttribute>();
-		}
-	}
-
-	void ObjectPtrProperty::SetCaption(const WString& text)
-	{
-		mCaption->SetText(text);
-
-		UpdateViewerHeader();
-	}
-
-	WString ObjectPtrProperty::GetCaption() const
-	{
-		return mCaption->GetText();
-	}
-
-	Button* ObjectPtrProperty::GetRemoveButton()
-	{
-		if (!mRemoveBtn)
-		{
-			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
-			mRemoveBtn->layout->maxWidth = 20;
-			mRemoveBtn->layout->minHeight = 20;
-			mHeaderContainer->AddChild(mRemoveBtn, 0);
-		}
-
-		return mRemoveBtn;
-	}
-
-	void ObjectPtrProperty::SetBasicType(const ObjectType* type)
-	{
-		mBasicObjectType = type;
-		mAvailableMultipleTypes = !mBasicObjectType->GetDerivedTypes().IsEmpty();
-	}
-
-	void ObjectPtrProperty::Expand()
-	{
-		SetExpanded(true);
-	}
-
-	void ObjectPtrProperty::Collapse()
-	{
-		SetExpanded(false);
-	}
-
-	void ObjectPtrProperty::SetExpanded(bool expanded)
-	{
-		mExpanded = expanded;
-
-		if (mObjectViewer)
-			mObjectViewer->GetSpoiler()->SetExpanded(expanded);
-	}
-
-	bool ObjectPtrProperty::IsExpanded() const
+	void ObjectPtrProperty::OnCreateOrDeletePressed(Button& button)
 	{
 		if (mObjectViewer)
-			return mObjectViewer->GetSpoiler()->IsExpanded();
-
-		return mExpanded;
-	}
-
-	void ObjectPtrProperty::OnCreateOrDeletePressed()
-	{
-		PushEditorScopeOnStack scope;
-
-		bool hasObject = !mValuesProxies.IsEmpty() && GetProxy(mValuesProxies[0].first) != nullptr;
-		if (hasObject)
 		{
-			for (auto targetObj : mValuesProxies)
+			if (mObjectViewer->IsEmpty())
+				CreateObject(mCurrentObjectType);
+			else
 			{
-				IObject* object = GetProxy(targetObj.first);
-
-				if (object != nullptr)
-				{
-					delete object;
-					SetProxy(targetObj.first, nullptr);
-				}
+				if (!mDontDeleteEnabled)
+					DeleteObject();
 			}
+		}
+	}
 
-			Refresh();
+	void ObjectPtrProperty::CreateObject(const ObjectType* objectType)
+	{
+		if (mParentContext && objectType)
+		{
+			auto object = mParentContext->CreateObject(objectType);
+			if (object)
+			{
+				TargetsVec targets;
+				targets.AddItem(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(GetAbstractValue(), nullptr));
+				o2EditorProperties.ApplyToObjectFields(*object, targets);
+
+				mValuesProxies.Clear();
+				mValuesProxies.AddItem(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(GetAbstractValue(), nullptr));
+
+				Refresh();
+			}
+		}
+	}
+
+	void ObjectPtrProperty::DeleteObject()
+	{
+		if (mParentContext)
+		{
+			TargetsVec targets;
+			targets.AddItem(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(GetAbstractValue(), nullptr));
+			o2EditorProperties.ClearObjectFields(targets);
 
 			if (mObjectViewer)
 			{
-				mObjectViewer->GetSpoiler()->SetLayoutDirty();
-				mObjectViewer->GetSpoiler()->Collapse();
-			}
-		}
-		else
-		{
-			if (!mContextInitialized)
-			{
-				mCreateMenu->RemoveAllItems();
-
-				auto availableTypes = mBasicObjectType->GetDerivedTypes();
-				availableTypes.Insert(mBasicObjectType, 0);
-
-				mImmediateCreateObject = availableTypes.Count() == 1;
-
-				mCreateMenu->AddItems(availableTypes.Convert<ContextMenu::Item*>([&](const Type* type)
-				{
-					return mnew ContextMenu::Item(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
-				}));
-
-				mContextInitialized = true;
+				RemoveChild(mObjectViewer->GetSpoiler(), false);
+				o2EditorProperties.FreeObjectViewer(mObjectViewer);
 			}
 
-			if (mImmediateCreateObject)
-				CreateObject(mBasicObjectType);
-			else
-				mCreateMenu->Show();
+			mObjectViewer = nullptr;
+			mBuiltObjectType = nullptr;
+
+			mValuesProxies.Clear();
+			mValuesProxies.AddItem(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(GetAbstractValue(), nullptr));
+
+			Refresh();
 		}
-	}
-
-	void ObjectPtrProperty::CreateObject(const ObjectType* type)
-	{
-		PushEditorScopeOnStack scope;
-
-		StoreValues(mBeforeChangeValues);
-		for (auto targetObj : mValuesProxies)
-		{
-			if (GetProxy(targetObj.first) == nullptr)
-				SetProxy(targetObj.first, type->DynamicCastToIObject(type->CreateSample()));
-		}
-
-		CheckValueChangeCompleted();
-
-		Refresh();
-
-		if (mObjectViewer)
-			mObjectViewer->GetSpoiler()->SetLayoutDirty();
-	}
-
-	void ObjectPtrProperty::StoreValues(Vector<DataDocument>& data) const
-	{
-		data.Clear();
-		for (auto targetObj : mValuesProxies)
-		{
-			data.Add(DataDocument());
-			data.Last() = GetProxy(targetObj.first);
-		}
-	}
-
-	class DummyObj : public RefCounterable
-	{
-
-	};
-
-	IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy) const
-	{
-		const Type& proxyType = proxy->GetType();
-		if (proxyType.GetUsage() == Type::Usage::Pointer)
-		{
-			const Type& baseType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
-			if (baseType.IsBasedOn(TypeOf(IObject)))
-			{
-				const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
-
-				void* valuePtr;
-				proxy->GetValuePtr(&valuePtr);
-
-				return objectType.DynamicCastToIObject(valuePtr);
-			}
-		}
-		else if (proxyType.GetUsage() == Type::Usage::Reference)
-        {
-            const Type& baseType = *dynamic_cast<const ReferenceType&>(proxyType).GetBaseType();
-            if (baseType.IsBasedOn(TypeOf(IObject)))
-            {
-                const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
-				const ReferenceType& refType = dynamic_cast<const ReferenceType&>(proxyType);
-
-                void* valuePtr = proxyType.CreateSample();
-                proxy->GetValuePtr(valuePtr);
-
-                IObject* res = objectType.DynamicCastToIObject(refType.GetObjectRawPtr(valuePtr));
-
-				proxyType.DestroySample(valuePtr);
-
-				return res;
-            }
-		}
-
-		return nullptr;
-	}
-
-	void ObjectPtrProperty::SetProxy(IAbstractValueProxy* proxy, IObject* object)
-	{
-        const Type& proxyType = proxy->GetType();
-        if (proxyType.GetUsage() == Type::Usage::Pointer)
-        {
-            const Type& baseType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
-            if (baseType.IsBasedOn(TypeOf(IObject)))
-            {
-                const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
-
-                void* valuePtr = objectType.DynamicCastFromIObject(object);
-                proxy->SetValuePtr(&valuePtr);
-            }
-        }
-        else if (proxyType.GetUsage() == Type::Usage::Reference)
-        {
-            const Type& baseType = *dynamic_cast<const ReferenceType&>(proxyType).GetBaseType();
-            if (baseType.IsBasedOn(TypeOf(IObject)))
-            {
-                const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
-                const ReferenceType& refType = dynamic_cast<const ReferenceType&>(proxyType);
-
-                void* valuePtr = objectType.DynamicCastFromIObject(object);
-				
-                proxy->SetValuePtr(refType.CreateSample(valuePtr));
-            }
-        }
 	}
 
 	void ObjectPtrProperty::UpdateViewerHeader()
 	{
 		if (mObjectViewer)
-			mObjectViewer->SetCaption(mCaption->GetText());
-
-		Text* spoilerCaptionLayer = !mObjectViewer ?
-			mCaption->GetLayerDrawableByType<Text>() :
-			mObjectViewer->GetSpoiler()->GetLayerDrawable<Text>("caption");
-
-		if (spoilerCaptionLayer)
 		{
-			Vec2F captionSize = Text::GetTextSize(mCaption->GetText(), spoilerCaptionLayer->GetFont(), spoilerCaptionLayer->GetFontHeight());
-			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
+			mObjectViewer->SetHeaderCaption(mCaption->GetText());
+			mObjectViewer->SetHeaderVisible(!mCaption->GetText().IsEmpty());
 		}
 	}
+}#include <memory>
+
+template<typename T>
+class Ref
+{
+public:
+    Ref(T* ptr) : mPtr(ptr) {}
+    Ref(const Ref& other) : mPtr(other.mPtr) {}
+    Ref& operator=(const Ref& other) { mPtr = other.mPtr; return *this; }
+    T* operator->() { return mPtr; }
+    T& operator*() { return *mPtr; }
+private:
+    T* mPtr;
+};
+
+template<typename T>
+Ref<T> mmake()
+{
+    return Ref<T>(new T());
+}
+
+template<typename T>
+Ref<T> mmake(T* ptr)
+{
+    return Ref<T>(ptr);
+}
+
+class WeakRef {};
+
+Ref<IObject*> ObjectPtrProperty::GetValueTypeStatic()
+{
+    return mmake<IObject*>();
+}
+
+void ObjectPtrProperty::SetFieldInfo(const FieldInfo* fieldInfo)
+{
+    IPropertyField::SetFieldInfo(fieldInfo);
+
+    if (fieldInfo)
+    {
+        mExpanded = fieldInfo->HasAttribute<ExpandedByDefaultAttribute>();
+        mNoHeader = fieldInfo->HasAttribute<NoHeaderAttribute>();
+        mDontDeleteEnabled = fieldInfo->HasAttribute<DontDeleteAttribute>();
+    }
+}
+
+void ObjectPtrProperty::SetCaption(const WString& text)
+{
+    mCaption->SetText(text);
+
+    UpdateViewerHeader();
+}
+
+WString ObjectPtrProperty::GetCaption() const
+{
+    return mCaption->GetText();
+}
+
+Button* ObjectPtrProperty::GetRemoveButton()
+{
+    if (!mRemoveBtn)
+    {
+        mRemoveBtn = mmake<Button>("remove small");
+        mRemoveBtn->layout->maxWidth = 20;
+        mRemoveBtn->layout->minHeight = 20;
+        mHeaderContainer->AddChild(mRemoveBtn, 0);
+    }
+
+    return mRemoveBtn;
+}
+
+void ObjectPtrProperty::SetBasicType(const ObjectType* type)
+{
+    mBasicObjectType = type;
+    mAvailableMultipleTypes = !mBasicObjectType->GetDerivedTypes().IsEmpty();
+}
+
+void ObjectPtrProperty::Expand()
+{
+    SetExpanded(true);
+}
+
+void ObjectPtrProperty::Collapse()
+{
+    SetExpanded(false);
+}
+
+void ObjectPtrProperty::SetExpanded(bool expanded)
+{
+    mExpanded = expanded;
+
+    if (mObjectViewer)
+        mObjectViewer->GetSpoiler()->SetExpanded(expanded);
+}
+
+bool ObjectPtrProperty::IsExpanded() const
+{
+    if (mObjectViewer)
+        return mObjectViewer->GetSpoiler()->IsExpanded();
+
+    return mExpanded;
+}
+
+void ObjectPtrProperty::OnCreateOrDeletePressed()
+{
+    PushEditorScopeOnStack scope;
+
+    bool hasObject = !mValuesProxies.IsEmpty() && GetProxy(mValuesProxies[0].first) != nullptr;
+    if (hasObject)
+    {
+        for (auto targetObj : mValuesProxies)
+        {
+            IObject* object = GetProxy(targetObj.first);
+
+            if (object != nullptr)
+            {
+                delete object;
+                SetProxy(targetObj.first, nullptr);
+            }
+        }
+
+        Refresh();
+
+        if (mObjectViewer)
+        {
+            mObjectViewer->GetSpoiler()->SetLayoutDirty();
+            mObjectViewer->GetSpoiler()->Collapse();
+        }
+    }
+    else
+    {
+        if (!mContextInitialized)
+        {
+            mCreateMenu->RemoveAllItems();
+
+            auto availableTypes = mBasicObjectType->GetDerivedTypes();
+            availableTypes.Insert(mBasicObjectType, 0);
+
+            mImmediateCreateObject = availableTypes.Count() == 1;
+
+            mCreateMenu->AddItems(availableTypes.Convert<ContextMenu::Item*>([&](const Type* type)
+            {
+                return mmake<ContextMenu::Item>(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
+            }));
+
+            mContextInitialized = true;
+        }
+
+        if (mImmediateCreateObject)
+            CreateObject(mBasicObjectType);
+        else
+            mCreateMenu->Show();
+    }
+}
+
+void ObjectPtrProperty::CreateObject(const ObjectType* type)
+{
+    PushEditorScopeOnStack scope;
+
+    StoreValues(mBeforeChangeValues);
+    for (auto targetObj : mValuesProxies)
+    {
+        if (GetProxy(targetObj.first) == nullptr)
+            SetProxy(targetObj.first, type->DynamicCastToIObject(type->CreateSample()));
+    }
+
+    CheckValueChangeCompleted();
+
+    Refresh();
+
+    if (mObjectViewer)
+        mObjectViewer->GetSpoiler()->SetLayoutDirty();
+}
+
+void ObjectPtrProperty::StoreValues(Vector<DataDocument>& data) const
+{
+    data.Clear();
+    for (auto targetObj : mValuesProxies)
+    {
+        data.Add(DataDocument());
+        data.Last() = GetProxy(targetObj.first);
+    }
+}
+
+class DummyObj : public RefCounterable
+{
+
+};
+
+IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy) const
+{
+    const Type& proxyType = proxy->GetType();
+    if (proxyType.GetUsage() == Type::Usage::Pointer)
+    {
+        const Type& baseType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
+        if (baseType.IsBasedOn(TypeOf(IObject)))
+        {
+            const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
+
+            void* valuePtr;
+            proxy->GetValuePtr(&valuePtr);
+
+            return objectType.DynamicCastToIObject(valuePtr);
+        }
+    }
+    else if (proxyType.GetUsage() == Type::Usage::Reference)
+    {
+        const Type& baseType = *dynamic_cast<const ReferenceType&>(proxyType).GetBaseType();
+        if (baseType.IsBasedOn(TypeOf(IObject)))
+        {
+            const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
+            const ReferenceType& refType = dynamic_cast<const ReferenceType&>(proxyType);
+
+            void* valuePtr = proxyType.CreateSample();
+            proxy->GetValuePtr(valuePtr);
+
+            IObject* res = objectType.DynamicCastToIObject(refType.GetObjectRawPtr(valuePtr));
+
+            proxyType.DestroySample(valuePtr);
+
+            return res;
+        }
+    }
+
+    return nullptr;
+}
+
+void ObjectPtrProperty::SetProxy(IAbstractValueProxy* proxy, IObject* object)
+{
+    const Type& proxyType = proxy->GetType();
+    if (proxyType.GetUsage() == Type::Usage::Pointer)
+    {
+        const Type& baseType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
+        if (baseType.IsBasedOn(TypeOf(IObject)))
+        {
+            const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
+
+            void* valuePtr;
+            proxy->GetValuePtr(&valuePtr);
+
+            IObject* currentObject = objectType.DynamicCastToIObject(valuePtr);
+            if (currentObject != nullptr)
+                delete currentObject;
+
+            objectType.DynamicCastToIObject(valuePtr) = object;
+        }
+    }
+    else if (proxyType.GetUsage() == Type::Usage::Reference)
+    {
+        const Type& baseType = *dynamic_cast<const ReferenceType&>(proxyType).GetBaseType();
+        if (baseType.IsBasedOn(TypeOf(IObject)))
+        {
+            const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
+            const ReferenceType& refType = dynamic_cast<const ReferenceType&>(proxyType);
+
+            void* valuePtr = proxyType.CreateSample();
+            proxy->GetValuePtr(valuePtr);
+
+            IObject* currentObject = objectType.DynamicCastToIObject(refType.GetObjectRawPtr(valuePtr));
+            if (currentObject != nullptr)
+                delete currentObject;
+
+            objectType.DynamicCastToIObject(refType.GetObjectRawPtr(valuePtr)) = object;
+
+            proxyType.DestroySample(valuePtr);
+        }
+    }
+}#include <Ref.h>
+
+...
+
+{
+    const ObjectType& objectType = DynamicCast<const ObjectType&>(baseType);
+
+    Ref<void> valuePtr = objectType.DynamicCastFromIObject(object);
+    proxy->SetValuePtr(&valuePtr);
+}
+
+...
+
+const ObjectType& objectType = DynamicCast<const ObjectType&>(baseType);
+const ReferenceType& refType = DynamicCast<const ReferenceType&>(proxyType);
+
+Ref<void> valuePtr = objectType.DynamicCastFromIObject(object);
+proxy->SetValuePtr(refType.CreateSample(valuePtr));
+
+...
+
+void ObjectPtrProperty::UpdateViewerHeader()
+{
+    if (mObjectViewer)
+        mObjectViewer->SetCaption(mCaption->GetText());
+
+    Text* spoilerCaptionLayer = !mObjectViewer ?
+        mCaption->GetLayerDrawableByType<Text>() :
+        mObjectViewer->GetSpoiler()->GetLayerDrawable<Text>("caption");
+
+    if (spoilerCaptionLayer)
+    {
+        Vec2F captionSize = Text::GetTextSize(mCaption->GetText(), spoilerCaptionLayer->GetFont(), spoilerCaptionLayer->GetFontHeight());
+        *mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
+    }
+}
 
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::ObjectPtrProperty, Editor__ObjectPtrProperty);

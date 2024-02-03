@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Ref.h"
 
 using namespace o2;
 
@@ -21,14 +22,14 @@ namespace Editor
 		static void Show(const Curve::Key& key, const Function<void(const Curve::Key& key)>& onClosed);
 
 	private:
-		o2::Window* mWindow;
+		Ref<o2::Window> mWindow;
 
-		EditBox* mPosition;
-		EditBox* mValue;
-		EditBox* mLeftSupportPosition;
-		EditBox* mLeftSupportValue;
-		EditBox* mRightSupportPosition;
-		EditBox* mRightSupportValue;
+		Ref<EditBox> mPosition;
+		Ref<EditBox> mValue;
+		Ref<EditBox> mLeftSupportPosition;
+		Ref<EditBox> mLeftSupportValue;
+		Ref<EditBox> mRightSupportPosition;
+		Ref<EditBox> mRightSupportValue;
 
 		Function<void(const Curve::Key& key)> mOnClosed;
 

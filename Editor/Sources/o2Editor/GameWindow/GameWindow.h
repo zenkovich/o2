@@ -1,7 +1,8 @@
 #pragma once
-
 #include "o2/Events/CursorAreaEventsListenersLayer.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
+#include "o2/SmartPointers/Ref.h"
+#include "o2/SmartPointers/WeakRef.h"
 
 namespace o2
 {
@@ -36,7 +37,7 @@ namespace Editor
 			SERIALIZABLE(GameView);
 
 		protected:
-			Sprite*    mRenderTargetSprite = nullptr; // Render target sprite, using for drawing scene render target
+			Ref<Sprite>    mRenderTargetSprite; // Render target sprite, using for drawing scene render target
 			Ref<Texture> mRenderTarget;                 // Render target texture, using for rendering scene
 
 		protected:
@@ -63,17 +64,17 @@ namespace Editor
 		IOBJECT(GameWindow);
 
 	protected:
-		GameView* mGameView = nullptr;
+		Ref<GameView> mGameView;
 
-		Button* mResolutionsButton = nullptr;
+		Ref<Button> mResolutionsButton;
 
 		Map<String, SimulationDevice> mDevicesList;
 
-		ContextMenu*     mDevicesMenu = nullptr;
-		ContextMenuItem* mCurrentWindowSizeItem = nullptr;
-		ContextMenuItem* mCustomSizeItem = nullptr;
+		Ref<ContextMenu>     mDevicesMenu;
+		Ref<ContextMenuItem> mCurrentWindowSizeItem;
+		Ref<ContextMenuItem> mCustomSizeItem;
 
-		Vec2IProperty* mCustomSizeProperty = nullptr;
+		Ref<Vec2IProperty> mCustomSizeProperty;
 
 	protected:
 		// Initializes window
@@ -83,7 +84,7 @@ namespace Editor
 		void InitializeDevicesMenu();
 
 		// Sets game resolution
-		void SetResolution(const Vec2I& resolution);
+		void SetResolution(const Ref<Vec2I>& resolution);
 
 		// When current window size resolution checked
 		void OnCurrentWindowSize(bool enabled);
@@ -92,10 +93,10 @@ namespace Editor
 		void OnCustomResolution(bool enabled);
 
 		// When device selected
-		void OnDeviceSelected(const String& name, const ContextMenuItem* item);
+		void OnDeviceSelected(const String& name, const Ref<ContextMenuItem>& item);
 
 		// Sets device menu checked item by name
-		void SetDeviceMenuCheckedItem(const ContextMenuItem* item);
+		void SetDeviceMenuCheckedItem(const Ref<ContextMenuItem>& item);
 	};
 }
 // --- META ---
@@ -107,13 +108,13 @@ CLASS_BASES_META(Editor::GameWindow)
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mGameView);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mResolutionsButton);
+    FIELD().PROTECTED().NAME(mGameView);
+    FIELD().PROTECTED().NAME(mResolutionsButton);
     FIELD().PROTECTED().NAME(mDevicesList);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDevicesMenu);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurrentWindowSizeItem);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCustomSizeItem);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCustomSizeProperty);
+    FIELD().PROTECTED().NAME(mDevicesMenu);
+    FIELD().PROTECTED().NAME(mCurrentWindowSizeItem);
+    FIELD().PROTECTED().NAME(mCustomSizeItem);
+    FIELD().PROTECTED().NAME(mCustomSizeProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow)
@@ -123,11 +124,11 @@ CLASS_METHODS_META(Editor::GameWindow)
     FUNCTION().PUBLIC().CONSTRUCTOR(const GameWindow&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeDevicesMenu);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetResolution, const Vec2I&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetResolution, const Ref<Vec2I>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCurrentWindowSize, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCustomResolution, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDeviceSelected, const String&, const ContextMenuItem*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetDeviceMenuCheckedItem, const ContextMenuItem*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeviceSelected, const String&, const Ref<ContextMenuItem>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetDeviceMenuCheckedItem, const Ref<ContextMenuItem>&);
 }
 END_META;
 
@@ -138,9 +139,9 @@ CLASS_BASES_META(Editor::GameWindow::GameView)
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow::GameView)
 {
-    FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(fixedResolution);
+    FIELD().PUBLIC().NAME(fixedResolution);
     FIELD().PUBLIC().NAME(resolution);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRenderTargetSprite);
+    FIELD().PROTECTED().NAME(mRenderTargetSprite);
     FIELD().PROTECTED().NAME(mRenderTarget);
 }
 END_META;
@@ -169,4 +170,3 @@ CLASS_METHODS_META(Editor::GameWindow::SimulationDevice)
 {
 }
 END_META;
-// --- END META ---

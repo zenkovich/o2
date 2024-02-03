@@ -15,115 +15,103 @@
 
 namespace Editor
 {
-	WidgetLayerViewer::WidgetLayerViewer()
-	{
-		PushEditorScopeOnStack scope;
+    WidgetLayerViewer::WidgetLayerViewer()
+    {
+        PushEditorScopeOnStack scope;
 
-		mHeaderViewer = mnew DefaultWidgetLayerHeaderViewer();
-		mLayoutViewer = mnew DefaultWidgetLayerLayoutViewer();
-		mPropertiesViewer = mnew DefaultWidgetLayerPropertiesViewer();
+        mHeaderViewer = mmake<DefaultWidgetLayerHeaderViewer>();
+        mLayoutViewer = mmake<DefaultWidgetLayerLayoutViewer>();
+        mPropertiesViewer = mmake<DefaultWidgetLayerPropertiesViewer>();
 
-		auto scrollArea = o2UI.CreateScrollArea("backless");
-		scrollArea->SetViewLayout(Layout::BothStretch(0, 0, 15, 0));
-		scrollArea->SetClippingLayout(Layout::BothStretch());
-		scrollArea->name = "widget layers scroll area";
-		mContentWidget = scrollArea;
+        auto scrollArea = o2UI.CreateScrollArea("backless");
+        scrollArea->SetViewLayout(Layout::BothStretch(0, 0, 15, 0));
+        scrollArea->SetClippingLayout(Layout::BothStretch());
+        scrollArea->name = "widget layers scroll area";
+        mContentWidget = scrollArea;
 
-		mViewersLayout = o2UI.CreateVerLayout();
-		mViewersLayout->name = "viewers layout";
-		mViewersLayout->spacing = 0.0f;
-		mViewersLayout->border = BorderF();
-		mViewersLayout->expandHeight = false;
-		mViewersLayout->expandWidth = true;
-		mViewersLayout->fitByChildren = true;
-		mViewersLayout->baseCorner = BaseCorner::Top;
-		*mViewersLayout->layout = WidgetLayout::BothStretch();
-		mContentWidget->AddChild(mViewersLayout);
+        mViewersLayout = o2UI.CreateVerLayout();
+        mViewersLayout->name = "viewers layout";
+        mViewersLayout->spacing = 0.0f;
+        mViewersLayout->border = BorderF();
+        mViewersLayout->expandHeight = false;
+        mViewersLayout->expandWidth = true;
+        mViewersLayout->fitByChildren = true;
+        mViewersLayout->baseCorner = BaseCorner::Top;
+        *mViewersLayout->layout = WidgetLayout::BothStretch();
+        mContentWidget->AddChild(mViewersLayout);
 
-		mViewersLayout->AddChild(mHeaderViewer->GetWidget());
-		mViewersLayout->AddChild(mLayoutViewer->GetWidget());
-		mViewersLayout->AddChild(mPropertiesViewer->GetWidget());
+        mViewersLayout->AddChild(mHeaderViewer->GetWidget());
+        mViewersLayout->AddChild(mLayoutViewer->GetWidget());
+        mViewersLayout->AddChild(mPropertiesViewer->GetWidget());
 
-		o2Scene.onObjectsChanged += THIS_FUNC(OnSceneObjectsChanged);
-	}
+        o2Scene.onObjectsChanged += THIS_FUNC(OnSceneObjectsChanged);
+    }
 
-	WidgetLayerViewer::~WidgetLayerViewer()
-	{
-		o2Scene.onObjectsChanged -= THIS_FUNC(OnSceneObjectsChanged);
+    WidgetLayerViewer::~WidgetLayerViewer()
+    {
+        o2Scene.onObjectsChanged -= THIS_FUNC(OnSceneObjectsChanged);
+    }
 
-		if (mPropertiesViewer)
-			delete mPropertiesViewer;
+    const Type* WidgetLayerViewer::GetViewingObjectType() const
+    {
+        return &TypeOf(WidgetLayer);
+    }
 
-		if (mHeaderViewer)
-			delete mHeaderViewer;
+    void WidgetLayerViewer::SetHeaderViewer(const Ref<IWidgetLayerHeaderViewer>& viewer)
+    {
+        mHeaderViewer = viewer;
+    }
 
-		if (mLayoutViewer)
-			delete mLayoutViewer;
-	}
+    void WidgetLayerViewer::SetLayoutViewer(const Ref<IWidgetLayerLayoutViewer>& viewer)
+    {
+        mLayoutViewer = viewer;
+    }
 
-	const Type* WidgetLayerViewer::GetViewingObjectType() const
-	{
-		return &TypeOf(WidgetLayer);
-	}
+    void WidgetLayerViewer::SetActorPropertiesViewer(const Ref<IWidgetLayerPropertiesViewer>& viewer)
+    {
+        mPropertiesViewer = viewer;
+    }
 
-	void WidgetLayerViewer::SetHeaderViewer(IWidgetLayerHeaderViewer* viewer)
-	{
-		delete mHeaderViewer;
-		mHeaderViewer = viewer;
-	}
+    void WidgetLayerViewer::Refresh()
+    {
+        if (mTargetLayers.IsEmpty())
+            return;
 
-	void WidgetLayerViewer::SetLayoutViewer(IWidgetLayerLayoutViewer* viewer)
-	{
-		delete mLayoutViewer;
-		mLayoutViewer = viewer;
-	}
+        mHeaderViewer->Refresh();
+        mLayoutViewer->Refresh();
+        mPropertiesViewer->Refresh();
+    }
 
-	void WidgetLayerViewer::SetActorPropertiesViewer(IWidgetLayerPropertiesViewer* viewer)
-	{
-		delete mPropertiesViewer;
-		mPropertiesViewer = viewer;
-	}
+    void WidgetLayerViewer::OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
+    {
+        Refresh();
+    }
 
-	void WidgetLayerViewer::Refresh()
-	{
-		if (mTargetLayers.IsEmpty())
-			return;
+    void WidgetLayerViewer::SetTargets(const Vector<Ref<IObject>>& targets)
+    {
+        PushEditorScopeOnStack scope;
 
-		mHeaderViewer->Refresh();
-		mLayoutViewer->Refresh();
-		mPropertiesViewer->Refresh();
-	}
+        mTargetLayers = targets.Convert<Ref<WidgetLayer>>([](auto x) { return DynamicCast<WidgetLayer>(x); });
 
-	void WidgetLayerViewer::OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects)
-	{
-		Refresh();
-	}
+        // rebuild
+        mHeaderViewer->SetTargetLayers(mTargetLayers);
+        mLayoutViewer->SetTargetLayers(mTargetLayers);
+        mPropertiesViewer->SetTargetLayers(mTargetLayers);
+    }
 
-	void WidgetLayerViewer::SetTargets(const Vector<IObject*>& targets)
-	{
-		PushEditorScopeOnStack scope;
+    void WidgetLayerViewer::OnEnabled()
+    {}
 
-		mTargetLayers = targets.Convert<WidgetLayer*>([](auto x) { return dynamic_cast<WidgetLayer*>(x); });
+    void WidgetLayerViewer::OnDisabled()
+    {
+        mTargetLayers.Clear();
+    }
 
-		// rebuild
-		mHeaderViewer->SetTargetLayers(mTargetLayers);
-		mLayoutViewer->SetTargetLayers(mTargetLayers);
-		mPropertiesViewer->SetTargetLayers(mTargetLayers);
-	}
+    void WidgetLayerViewer::Update(float dt)
+    {}
 
-	void WidgetLayerViewer::OnEnabled()
-	{}
-
-	void WidgetLayerViewer::OnDisabled()
-	{
-		mTargetLayers.Clear();
-	}
-
-	void WidgetLayerViewer::Update(float dt)
-	{}
-
-	void WidgetLayerViewer::Draw()
-	{}
+    void WidgetLayerViewer::Draw()
+    {}
 }
 // --- META ---
 

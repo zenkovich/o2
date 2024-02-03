@@ -1,5 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "o2Editor/Core/Dialogs/System/OpenSaveDialog.h"
+#include "o2Editor/Memory/Ref.h"
+#include "o2Editor/Memory/WeakRef.h"
+#include "o2Editor/Utils/DynamicCast.h"
 
 #ifdef PLATFORM_LINUX
 

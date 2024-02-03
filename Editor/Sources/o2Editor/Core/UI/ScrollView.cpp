@@ -10,8 +10,8 @@ namespace Editor
 {
 	ScrollView::ScrollView()
 	{
-		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTarget = mmake<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		mBackColor = Color4(225, 232, 232, 255);
 		mGridColor = Color4(190, 190, 190, 255);
@@ -22,8 +22,8 @@ namespace Editor
 	ScrollView::ScrollView(const ScrollView& other):
 		Widget(other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
 	{
-		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTarget = mmake<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
 
@@ -46,8 +46,8 @@ namespace Editor
 
 		mBackColor = other.mBackColor;
 		mGridColor = other.mGridColor;
-		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTarget = mmake<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
 
@@ -127,7 +127,7 @@ namespace Editor
 		size.x = Math::Max(size.x, 32);
 		size.y = Math::Max(size.y, 32);
 
-		mRenderTarget = Ref<Texture>(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTarget = mmake<Texture>(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
 		mRenderTargetSprite->SetRect(layout->worldRect);
 		mNeedRedraw = true;
@@ -205,179 +205,112 @@ namespace Editor
 		Basis identityCamTransform = Transform(rectangle.Size()).basis;
 		Basis cameraTransform = camera.basis;
 
-		Basis sceneToCamTransform = identityCamTransform.Inverted()*cameraTransform;
+		Basis sceneToCamTransform = identityCamTransform.Inverted()*camer#include <Ref.h>
 
-		return Basis::Translated(rectangle.Center()*-1.0f)*sceneToCamTransform;
+namespace Editor {
+	class ScrollView {
+	private:
+		Ref<Camera> mViewCamera;
+		Ref<RenderTexture> mRenderTarget;
+		Basis mScreenToLocalTransform;
+		Basis mLocalToScreenTransform;
+		Color4 mBackColor;
+		Color4 mGridColor;
+
+	public:
+		void SetCamera(const Ref<Camera>& camera);
+		const Ref<Camera>& GetCamera() const;
+
+		void RedrawRenderTarget();
+		void RedrawContent();
+		void DrawGrid();
+
+		Vec2F ScreenToLocalPoint(const Vec2F& point);
+		Vec2F LocalToScreenPoint(const Vec2F& point);
+
+		const Basis& GetLocalToScreenTransform() const;
+		const Basis& GetScreenToLocalTransform() const;
+
+		Vec2F GetCameraScale() const;
 	}
-
-	void ScrollView::UpdateLocalScreenTransforms()
-	{
-		mScreenToLocalTransform = GetCameraScreenToLocalTransform(mViewCamera);
-		mLocalToScreenTransform = mScreenToLocalTransform.Inverted();
-	}
-
-	Vec2F ScrollView::ScreenToLocalPoint(const Vec2F& point)
-	{
-		return point*mScreenToLocalTransform;
-	}
-
-	Vec2F ScrollView::LocalToScreenPoint(const Vec2F& point)
-	{
-		return point*mLocalToScreenTransform;
-	}
-
-	const Basis& ScrollView::GetLocalToScreenTransform() const
-	{
-		return mLocalToScreenTransform;
-	}
-
-	const Basis& ScrollView::GetScreenToLocalTransform() const
-	{
-		return mScreenToLocalTransform;
-	}
-
-	Vec2F ScrollView::GetCameraScale() const
-	{
-		return Vec2F(mScreenToLocalTransform.xv.Length(), mScreenToLocalTransform.yv.Length());
-	}
-
-	void ScrollView::SetCamera(const Camera& camera)
-	{
-		mViewCamera = camera;
-		mViewCameraTargetPos = mViewCamera.position;
-		mViewCameraTargetScale = mViewCamera.scale;
-	}
-
-	const Camera& ScrollView::GetCamera() const
-	{
-		return mViewCamera;
-	}
-
-	void ScrollView::RedrawRenderTarget()
-	{
-		mNeedRedraw = false;
-		UpdateLocalScreenTransforms();
-		Camera prevCamera = o2Render.GetCamera();
-		o2Render.BindRenderTexture(mRenderTarget);
-
-		o2Render.Clear(mBackColor);
-		o2Render.SetCamera(mViewCamera);
-
-		RedrawContent();
-
-		o2Render.SetCamera(prevCamera);
-		o2Render.UnbindRenderTexture();
-	}
-
-	void ScrollView::RedrawContent()
-	{
-		DrawGrid();
-	}
-
-	void ScrollView::DrawGrid()
-
-	{
-		float cameraMaxSize = Math::Max(mViewCamera.GetSize().x*mViewCamera.GetScale().x,
-										mViewCamera.GetSize().y*mViewCamera.GetScale().y);
-
-		float x = cameraMaxSize / 4.0f;
-		float minCellSize = 0.000001f;
-		float maxCellSize = 1000000.0f;
-		float cellSize = minCellSize;
-		while (cellSize < maxCellSize)
-		{
-			float next = cellSize*10.0f;
-			if (x > cellSize && x <= next)
-				break;
-
-			cellSize = next;
-		}
-
-		Vec2F gridOrigin(Math::Round(mViewCamera.GetPosition().x / cellSize)*cellSize,
-						 Math::Round(mViewCamera.GetPosition().y / cellSize)*cellSize);
-
-		int cellsCount = Math::CeilToInt(cameraMaxSize / cellSize);
-		float tenCeilsSize = cellSize*10.0f;
-		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
-
-		for (int i = -cellsCount / 2; i < cellsCount / 2; i++)
-		{
-			float d = (float)i*cellSize;
-			Vec2F dorigin = gridOrigin + Vec2F(d, d);
-
-			float rdx = Math::Abs(dorigin.x / tenCeilsSize - Math::Floor(dorigin.x / tenCeilsSize));
-			float rdy = Math::Abs(dorigin.y / tenCeilsSize - Math::Floor(dorigin.y / tenCeilsSize));
-			bool xTen = rdx < 0.05f || rdx > 0.95f;
-			bool yTen = rdy < 0.05f || rdy > 0.95f;
-
-			if (verGridEnabled)
-			{
-				o2Render.DrawLine(Vec2F(-cameraMaxSize, d) + gridOrigin,
-								  Vec2F(cameraMaxSize, d) + gridOrigin,
-								  yTen ? mGridColor : cellColorSmoothed);
-			}
-
-			if (horGridEnabled)
-			{
-				o2Render.DrawLine(Vec2F(d, -cameraMaxSize) + gridOrigin,
-								  Vec2F(d, cameraMaxSize) + gridOrigin,
-								  xTen ? mGridColor : cellColorSmoothed);
-			}
-		}
-	}
-
-	void ScrollView::OnCameraTransformChanged()
-	{
-	}
-
-	void ScrollView::OnScrolled(float scroll)
-	{
-		ChangeCameraScaleRelativeToCursor(mViewCameraTargetScale*(1.0f - (scroll*mViewCameraScaleSence)));
-	}
-
-	void ScrollView::ChangeCameraScaleRelativeToCursor(const Vec2F& newScale)
-	{
-		Vec2F prevCursor = o2Input.GetCursorPos()*mScreenToLocalTransform;
-		mViewCameraTargetScale = newScale;
-
-		Camera targetValuesCamera = mViewCamera;
-		targetValuesCamera.scale = mViewCameraTargetScale;
-		targetValuesCamera.position = mViewCameraTargetPos;
-
-		Basis screenToLocalTarget = GetCameraScreenToLocalTransform(targetValuesCamera);
-
-		Vec2F newCursor = o2Input.GetCursorPos()*screenToLocalTarget;
-		mViewCameraTargetPos -= newCursor - prevCursor;
-	}
-
-	void ScrollView::OnCursorRightMousePressed(const Input::Cursor& cursor)
-	{
-		o2Application.SetCursorInfiniteMode(true);
-	}
-
-	void ScrollView::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
-	{
-		if (cursor.delta.Length() > 0.5f)
-		{
-			Vec2F delta = cursor.delta*mViewCamera.scale*-1.0f;
-			mViewCameraVelocity = delta / o2Time.GetDeltaTime();
-			mViewCameraTargetPos += delta;
-			mNeedRedraw = true;
-		}
-	}
-
-	void ScrollView::OnCursorRightMouseReleased(const Input::Cursor& cursor)
-	{
-		o2Application.SetCursorInfiniteMode(false);
-	}
-
-	bool ScrollView::IsInputTransparent() const
-	{
-		return true;
-	}
-
 }
-// --- META ---
 
-DECLARE_CLASS(Editor::ScrollView, Editor__ScrollView);
-// --- END META ---
+void Editor::ScrollView::SetCamera(const Ref<Camera>& camera) {
+	mViewCamera = camera;
+	mViewCameraTargetPos = mViewCamera->position;
+	mViewCameraTargetScale = mViewCamera->scale;
+}
+
+const Ref<Camera>& Editor::ScrollView::GetCamera() const {
+	return mViewCamera;
+}
+
+void Editor::ScrollView::RedrawRenderTarget() {
+	mNeedRedraw = false;
+	UpdateLocalScreenTransforms();
+	Ref<Camera> prevCamera = o2Render.GetCamera();
+	o2Render.BindRenderTexture(mRenderTarget);
+
+	o2Render.Clear(mBackColor);
+	o2Render.SetCamera(mViewCamera);
+
+	RedrawContent();
+
+	o2Render.SetCamera(prevCamera);
+	o2Render.UnbindRenderTexture();
+}
+
+void Editor::ScrollView::RedrawContent() {
+	DrawGrid();
+}
+
+void Editor::ScrollView::DrawGrid()
+{
+	float cameraMaxSize = Math::Max(mViewCamera->GetSize().x*mViewCamera->GetScale().x,
+		mViewCamera->GetSize().y*mViewCamera->GetScale().y);
+
+	float x = cameraMaxSize / 4.0f;
+	float minCellSize = 0.000001f;
+	float maxCellSize = 1000000.0f;
+	float cellSize = minCellSize;
+	while (cellSize < maxCellSize)
+	{
+		float next = cellSize * 10.0f;
+		if (x > cellSize && x <= next)
+			break;
+
+		cellSize = next;
+	}
+
+	Vec2F gridOrigin(Math::Round(mViewCamera->GetPosition().x / cellSize)*cellSize,
+		Math::Round(mViewCamera->GetPosition().y / cellSize)*cellSize);
+
+	int cellsCount = Math::CeilToInt(cameraMaxSize / cellSize);
+	float tenCeilsSize = cellSize * 10.0f;
+	Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
+
+	for (int i = -cellsCount / 2; i < cellsCount / 2; i++)
+	{
+		float d = (float)i * cellSize;
+		Vec2F dorigin = gridOrigin + Vec2F(d, d);
+
+		float rdx = Math::Abs(dorigin.x / tenCeilsSize - Math::Floor(dorigin.x / tenCeilsSize));
+		float rdy = Math::Abs(dorigin.y / tenCeilsSize - Math::Floor(dorigin.y / tenCeilsSize));
+		bool xTen = rdx < 0.05f || rdx > 0.95f;
+		bool yTen = rdy < 0.05f || rdy > 0.95f;
+
+		if (verGridEnabled)
+		{
+			o2Render.DrawLine(Vec2F(-cameraMaxSize, d) + gridOrigin,
+				Vec2F(cameraMaxSize, d) + gridOrigin,
+				yTen ? mGridColor : cellColorSmoothed);
+		}
+
+		if (horGridEnabled)
+		{
+			o2Render.DrawLine(Vec2F(d, -cameraMaxSize) + gridOrigin,
+				Vec2F(d, cameraMaxSize) + gridOrigin,
+				xTen ? mGridColor : cellColorSmoothed);
+		}
+	}
+}

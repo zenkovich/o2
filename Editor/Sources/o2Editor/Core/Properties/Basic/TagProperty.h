@@ -2,6 +2,7 @@
 
 #include "o2/Scene/Tags.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include <memory>
 
 namespace o2
 {
@@ -16,7 +17,7 @@ namespace Editor
 	// ------------------------
 	// Editor tags property box
 	// ------------------------
-	class TagsProperty: public TPropertyField<TagGroup>
+	class TagsProperty : public TPropertyField<TagGroup>
 	{
 	public:
 		// Default constructor
@@ -31,9 +32,9 @@ namespace Editor
 		IOBJECT(TagsProperty);
 
 	protected:
-		EditBox*     mEditBox = nullptr;     // Edit box 
-		ContextMenu* mTagsContext = nullptr; // tags context
-		bool         mPushingTag = false;    // Is pushing tag and we don't need to check edit text
+		Ref<EditBox> mEditBox;
+		Ref<ContextMenu> mTagsContext;
+		bool mPushingTag = false;
 
 	protected:
 		// Updates value view
@@ -61,6 +62,7 @@ namespace Editor
 		void PushTag(String name);
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::TagsProperty)
@@ -68,16 +70,17 @@ CLASS_BASES_META(Editor::TagsProperty)
     BASE_CLASS(Editor::TPropertyField<TagGroup>);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::TagsProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTagsContext);
+    FIELD().PROTECTED().NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mTagsContext);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPushingTag);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::TagsProperty)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const TagsProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
@@ -90,4 +93,3 @@ CLASS_METHODS_META(Editor::TagsProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, PushTag, String);
 }
 END_META;
-// --- END META ---

@@ -16,7 +16,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
+		mSpoiler = mmake<Ref<SpoilerWithHead>>();
 
 		mSpoiler->expandHeight = false;
 		mSpoiler->expandWidth = true;
@@ -27,7 +27,7 @@ namespace Editor
 		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
 		mSpoiler->GetIcon()->GetImage()->SetColor(Color4(235, 255, 253));
 
-		mRemoveButton = o2UI.CreateButton("", THIS_FUNC(RemoveTargetComponents), "close");
+		mRemoveButton = mmake<Ref<Button>>("", THIS_FUNC(RemoveTargetComponents), "close");
 		*mRemoveButton->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(1, 0));
 		mSpoiler->AddInternalWidget(mRemoveButton);
 
@@ -36,11 +36,9 @@ namespace Editor
 
 	IActorComponentViewer::~IActorComponentViewer()
 	{
-		if (mSpoiler)
-			delete mSpoiler;
 	}
 
-	void IActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
+	void IActorComponentViewer::SetTargetComponents(const Vector<Ref<Component>>& components)
 	{
 		mTargetComponents = components;
 
@@ -55,7 +53,7 @@ namespace Editor
 		}
 	}
 
-	Widget* IActorComponentViewer::GetWidget() const
+	Ref<Widget> IActorComponentViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}
@@ -97,10 +95,9 @@ namespace Editor
 			delete comp;
 
 		mTargetComponents.Clear();
-
 	}
-
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::IActorComponentViewer, Editor__IActorComponentViewer);

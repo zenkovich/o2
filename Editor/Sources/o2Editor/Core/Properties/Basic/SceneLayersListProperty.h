@@ -1,7 +1,6 @@
-#pragma once
-
 #include "o2/Scene/SceneLayersList.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2/Utils/Ref.h"
 
 namespace o2
 {
@@ -31,10 +30,10 @@ namespace Editor
 		SERIALIZABLE(SceneLayersListProperty);
 
 	protected:
-		Button* mPropertyButton = nullptr; // Property box with layers' names
-		Text*   mPropertyText = nullptr;   // Text layer inside property box
+		Ref<Button> mPropertyButton;       // Property box with layers' names
+		Ref<Text> mPropertyText;           // Text layer inside property box
 
-		ContextMenu* mLayersContext = nullptr; // Layers list toggles context
+		Ref<ContextMenu> mLayersContext;   // Layers list toggles context
 
 	protected:
 		// Updates value view
@@ -47,6 +46,7 @@ namespace Editor
 		void OpenContext();
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::SceneLayersListProperty)
@@ -56,9 +56,9 @@ CLASS_BASES_META(Editor::SceneLayersListProperty)
 END_META;
 CLASS_FIELDS_META(Editor::SceneLayersListProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyText);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersContext);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Button>()).NAME(mPropertyButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Text>()).NAME(mPropertyText);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<ContextMenu>()).NAME(mLayersContext);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneLayersListProperty)

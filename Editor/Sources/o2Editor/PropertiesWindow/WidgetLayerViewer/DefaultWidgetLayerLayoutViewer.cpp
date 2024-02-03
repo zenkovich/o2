@@ -23,7 +23,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		// Position
-		auto positionPropertyContainer = mnew Widget();
+		Ref<Widget> positionPropertyContainer = mnew Widget();
 		positionPropertyContainer->name = "position";
 		positionPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(positionPropertyContainer);
@@ -35,11 +35,11 @@ namespace Editor
 		mPositionProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mPositionProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mPositionProperty->SetValuePath("transform/position");
-		mPositionProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
+		mPositionProperty->onChangeCompleted = Ref<DefaultWidgetLayerLayoutViewer>::Bind(&DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted, this);
 		positionPropertyContainer->AddChild(mPositionProperty);
 
 		// Size
-		auto sizePropertyContainer = mnew Widget();
+		Ref<Widget> sizePropertyContainer = mnew Widget();
 		sizePropertyContainer->name = "size";
 		sizePropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(sizePropertyContainer);
@@ -51,12 +51,12 @@ namespace Editor
 		mSizeProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mSizeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mSizeProperty->SetValuePath("transform/size");
-		mSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
+		mSizeProperty->onChangeCompleted = Ref<DefaultWidgetLayerLayoutViewer>::Bind(&DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted, this);
 		sizePropertyContainer->AddChild(mSizeProperty);
 
 		// Anchors
 		// Right top
-		auto rightTopAnchorPropertyContainer = mnew Widget();
+		Ref<Widget> rightTopAnchorPropertyContainer = mnew Widget();
 		rightTopAnchorPropertyContainer->name = "right top anchor";
 		rightTopAnchorPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(rightTopAnchorPropertyContainer);
@@ -70,12 +70,12 @@ namespace Editor
 		mAnchorRightTopProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "R";
 		mAnchorRightTopProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "T";
 		mAnchorRightTopProperty->SetValuePath("layout/anchorMax");
-		mAnchorRightTopProperty->onChanged = THIS_FUNC(OnPropertyChanged);
-		mAnchorRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
+		mAnchorRightTopProperty->onChanged = Ref<DefaultWidgetLayerLayoutViewer>::Bind(&DefaultWidgetLayerLayoutViewer::OnPropertyChanged, this);
+		mAnchorRightTopProperty->onChangeCompleted = Ref<DefaultWidgetLayerLayoutViewer>::Bind(&DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted, this);
 		rightTopAnchorPropertyContainer->AddChild(mAnchorRightTopProperty);
 
 		// Left bottom
-		auto leftBottomAnchorPropertyContainer = mnew Widget();
+		Ref<Widget> leftBottomAnchorPropertyContainer = mnew Widget();
 		leftBottomAnchorPropertyContainer->name = "left bottom anchor";
 		leftBottomAnchorPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(leftBottomAnchorPropertyContainer);
@@ -85,13 +85,13 @@ namespace Editor
 		mAnchorLeftBottomProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "L";
 		mAnchorLeftBottomProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "B";
 		mAnchorLeftBottomProperty->SetValuePath("layout/anchorMin");
-		mAnchorLeftBottomProperty->onChanged = THIS_FUNC(OnPropertyChanged);
-		mAnchorLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
+		mAnchorLeftBottomProperty->onChanged = Ref<DefaultWidgetLayerLayoutViewer>::Bind(&DefaultWidgetLayerLayoutViewer::OnPropertyChanged, this);
+		mAnchorLeftBottomProperty->onChangeCompleted = Ref<DefaultWidgetLayerLayoutViewer>::Bind(&DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted, this);
 		leftBottomAnchorPropertyContainer->AddChild(mAnchorLeftBottomProperty);
 
 		// Offsets
 		// Right top
-		auto rightTopOffsetPropertyContainer = mnew Widget();
+		Ref<Widget> rightTopOffsetPropertyContainer = mnew Widget();
 		rightTopOffsetPropertyContainer->name = "right top offset";
 		rightTopOffsetPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(rightTopOffsetPropertyContainer);
@@ -102,60 +102,69 @@ namespace Editor
 
 		moffsetRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*moffsetRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		moffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "R";
-		moffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "T";
-		moffsetRightTopProperty->SetValuePath("layout/offsetMax");
-		moffsetRightTopProperty->onChanged = THIS_FUNC(OnPropertyChanged);
-		moffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
-		rightTopOffsetPropertyContainer->AddChild(moffsetRightTopProperty);
+		moffsetRightTopProperty->GetChildByType<Labe#include <memory>
 
-		// Left bottom
-		auto leftBottomOffsetPropertyContainer = mnew Widget();
-		leftBottomOffsetPropertyContainer->name = "left bottom offset";
-		leftBottomOffsetPropertyContainer->layout->minHeight = 20;
-		mSpoiler->AddChild(leftBottomOffsetPropertyContainer);
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
-		mOffsetLeftBottomProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mOffsetLeftBottomProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		mOffsetLeftBottomProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "L";
-		mOffsetLeftBottomProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "B";
-		mOffsetLeftBottomProperty->SetValuePath("layout/offsetMin");
-		mOffsetLeftBottomProperty->onChanged = THIS_FUNC(OnPropertyChanged);
-		mOffsetLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
-		leftBottomOffsetPropertyContainer->AddChild(mOffsetLeftBottomProperty);
-	}
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-	DefaultWidgetLayerLayoutViewer::~DefaultWidgetLayerLayoutViewer()
+template<typename T, typename... Args>
+inline Ref<T> mmake(Args&&... args)
+{
+  return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template<typename Derived, typename Base>
+inline Ref<Derived> DynamicCast(Ref<Base>& ptr)
+{
+  return std::dynamic_pointer_cast<Derived>(ptr);
+}
+
+class DefaultWidgetLayerLayoutViewer
+{
+public:
+	DefaultWidgetLayerLayoutViewer()
 	{
-		delete mSpoiler;
+		mSpoiler = mmake<Widget>();
+		mSpoiler->name = "Widget Layer Layout Viewer";
+		mSpoiler->layout->childLayout = 2;
+		mSpoiler->layout->childSpacing = 2;
+		mSpoiler->isExpanded = true;
 	}
 
-	void DefaultWidgetLayerLayoutViewer::SetTargetLayers(const Vector<WidgetLayer*>& layers)
+	~DefaultWidgetLayerLayoutViewer()
+	{
+		mSpoiler = nullptr;
+	}
+
+	void SetTargetLayers(const Vector<WidgetLayer*>& layers)
 	{
 		mLayers = layers;
 
 		auto prototypes = layers.Convert<WidgetLayer*>([](WidgetLayer* x) { return nullptr; });
 
 		mPositionProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::position)>(
-			layers, prototypes, [](WidgetLayer* x) { return &x->layout.position; });
+			layers, prototypes, [](WidgetLayer* x) -> Ref<decltype(WidgetLayerLayout::position)> { return x->layout.position; });
 
 		mSizeProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::size)>(
-			layers, prototypes, [](WidgetLayer* x) { return &x->layout.size; });
+			layers, prototypes, [](WidgetLayer* x) -> Ref<decltype(WidgetLayerLayout::size)> { return x->layout.size; });
 
 		mAnchorRightTopProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::anchorMax)>(
-			layers, prototypes, [](WidgetLayer* x) { return &x->layout.anchorMax; });
+			layers, prototypes, [](WidgetLayer* x) -> Ref<decltype(WidgetLayerLayout::anchorMax)> { return x->layout.anchorMax; });
 
 		mAnchorLeftBottomProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::anchorMin)>(
-			layers, prototypes, [](WidgetLayer* x) { return &x->layout.anchorMin; });
+			layers, prototypes, [](WidgetLayer* x) -> Ref<decltype(WidgetLayerLayout::anchorMin)> { return x->layout.anchorMin; });
 
 		moffsetRightTopProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::offsetMax)>(
-			layers, prototypes, [](WidgetLayer* x) { return &x->layout.offsetMax; });
+			layers, prototypes, [](WidgetLayer* x) -> Ref<decltype(WidgetLayerLayout::offsetMax)> { return x->layout.offsetMax; });
 
 		mOffsetLeftBottomProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::offsetMin)>(
-			layers, prototypes, [](WidgetLayer* x) { return &x->layout.offsetMin; });
+			layers, prototypes, [](WidgetLayer* x) -> Ref<decltype(WidgetLayerLayout::offsetMin)> { return x->layout.offsetMin; });
 	}
 
-	void DefaultWidgetLayerLayoutViewer::Refresh()
+	void Refresh()
 	{
 		mAnchorRightTopProperty->Refresh();
 		mAnchorLeftBottomProperty->Refresh();
@@ -163,16 +172,16 @@ namespace Editor
 		mOffsetLeftBottomProperty->Refresh();
 	}
 
-	void DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
-														   const Vector<DataDocument>& newValue)
+	void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
+	                              const Vector<DataDocument>& newValue)
 	{
-		PropertyChangeAction* action = mnew PropertyChangeAction(
+		PropertyChangeAction* action = mmake<PropertyChangeAction>(
 			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);
 	}
 
-	void DefaultWidgetLayerLayoutViewer::OnPropertyChanged(IPropertyField* field)
+	void OnPropertyChanged(const Ref<IPropertyField>& field) const
 	{
 		for (auto layer : mLayers) {
 			layer->GetOwnerWidget()->UpdateTransform();
@@ -180,7 +189,17 @@ namespace Editor
 		}
 	}
 
-}
+private:
+	Ref<Widget> mSpoiler;
+	Vector<WidgetLayer*> mLayers;
+
+	Ref<PositionVector3Property> mPositionProperty;
+	Ref<SizeProperty> mSizeProperty;
+	Ref<Vec2FProperty> mAnchorRightTopProperty;
+	Ref<Vec2FProperty> mAnchorLeftBottomProperty;
+	Ref<Vec2FProperty> moffsetRightTopProperty;
+	Ref<Vec2FProperty> mOffsetLeftBottomProperty;
+};
 // --- META ---
 
 DECLARE_CLASS(Editor::DefaultWidgetLayerLayoutViewer, Editor__DefaultWidgetLayerLayoutViewer);

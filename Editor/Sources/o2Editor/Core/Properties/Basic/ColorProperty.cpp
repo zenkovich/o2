@@ -42,14 +42,14 @@ namespace Editor
 			backImage->image = mnew Sprite(backLayerBitmap);
 			backImage->GetImage()->mode = SpriteMode::Tiled;
 			*backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
-			mEditBox->AddChild(backImage);
+			mEditBox->AddChild(Ref<Image>(backImage));
 
 			Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 			colorLayerBitmap.Fill(color1);
 			mColorSprite = mnew Image();
 			mColorSprite->image = mnew Sprite(colorLayerBitmap);
 			*mColorSprite->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
-			mEditBox->AddChild(mColorSprite);
+			mEditBox->AddChild(Ref<Image>(mColorSprite));
 
 			mEditBox->onDraw += [&]() { mClickArea.OnDrawn(); };
 			mClickArea.isUnderPoint = [&](const Vec2F& point) { return mEditBox->IsUnderPoint(point); };
@@ -68,8 +68,8 @@ namespace Editor
 		StoreValues(mBeforeChangeValues);
 
 		ColorPickerDlg::Show(mCommonValue,
-							 MakeFunction<TPropertyField<Color4>, void, const Color4&>(this, &ColorProperty::SetValue),
-							 MakeFunction<IPropertyField, void>(this, &ColorProperty::CheckValueChangeCompleted));
+							 Ref<TPropertyField<Color4>, void, const Color4&>(this, &ColorProperty::SetValue),
+							 Ref<IPropertyField, void>(this, &ColorProperty::CheckValueChangeCompleted));
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Color4>);

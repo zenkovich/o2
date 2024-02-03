@@ -2,6 +2,7 @@
 
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2Editor/Core/Actions/IAction.h"
+#include "o2/Utils/Types/SmartPointers.h"
 
 using namespace o2;
 
@@ -25,7 +26,7 @@ namespace Editor
 		// Default constructor
 		LockAction();
 		// Constructor with list of objects
-		LockAction(const Vector<SceneEditableObject*>& object, bool lock);
+		LockAction(const Vector<Ref<SceneEditableObject>>& object, bool lock);
 
 		// Return name of action
 		String GetName() const override;
@@ -56,7 +57,7 @@ CLASS_METHODS_META(Editor::LockAction)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, bool);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneEditableObject>>&, bool);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

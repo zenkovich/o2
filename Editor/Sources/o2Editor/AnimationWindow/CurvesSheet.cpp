@@ -12,175 +12,212 @@
 namespace Editor
 {
 
-	CurvesSheet::CurvesSheet()
-	{
-		InitializeControls();
-	}
+    CurvesSheet::CurvesSheet()
+    {
+        InitializeControls();
+    }
 
-	CurvesSheet::CurvesSheet(const CurvesSheet& other)
-	{
-		InitializeControls();
-	}
+    CurvesSheet::CurvesSheet(const CurvesSheet& other)
+    {
+        InitializeControls();
+    }
 
-	CurvesSheet::~CurvesSheet()
-	{}
+    CurvesSheet::~CurvesSheet()
+    {}
 
-	CurvesSheet& CurvesSheet::operator=(const CurvesSheet& other)
-	{
-		delete mCurvesEditor;
+    CurvesSheet& CurvesSheet::operator=(const CurvesSheet& other)
+    {
+        mCurvesEditor = nullptr;
 
-		Widget::operator=(other);
-		InitializeControls();
+        Widget::operator=(other);
+        InitializeControls();
 
-		return *this;
-	}
+        return *this;
+    }
 
-	void CurvesSheet::SetAnimation(AnimationClip* animation)
-	{
-		mCurvesEditor->RemoveAllCurves();
+    void CurvesSheet::SetAnimation(const Ref<AnimationClip>& animation)
+    {
+        mCurvesEditor->RemoveAllCurves();
 
-		for (auto track : animation->GetTracks())
-		{
-			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
-				mCurvesEditor->AddCurve(track->path, &floatTrack->curve);
-			else if (auto vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
-				mCurvesEditor->AddCurve(track->path, &vec2Track->timeCurve);
-		}
+        for (const Ref<AnimationTrackBase>& track : animation->GetTracks())
+        {
+            if (const Ref<AnimationTrack<float>>& floatTrack = DynamicCast<AnimationTrack<float>>(track))
+                mCurvesEditor->AddCurve(track->path, &floatTrack->curve);
+            else if (const Ref<AnimationTrack<Vec2F>>& vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
+                mCurvesEditor->AddCurve(track->path, &vec2Track->timeCurve);
+        }
 
-		UpdateCurvesColors();
+        UpdateCurvesColors();
 
-		mCurvesEditor->actionsListDelegate = &mAnimationWindow->mActionsList;
-	}
+        mCurvesEditor->actionsListDelegate = &mAnimationWindow->mActionsList;
+    }
 
-	void CurvesSheet::UpdateCurvesColors()
-	{
-		Color4 curveColor(44, 62, 80);
-		int colorIdx = 0;
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
-		{
-			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
-			{
-				mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
-				mCurvesEditor->SetCurveColor(&floatTrack->curve, curveColor);
-				curveColor = Color4::SomeColor(colorIdx++);
-			}
-			else if (auto vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
-			{
-				mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
-				mCurvesEditor->SetCurveColor(&vec2Track->timeCurve, curveColor);
-				curveColor = Color4::SomeColor(colorIdx++);
-			}
-		}
-	}
+    void CurvesSheet::UpdateCurvesColors()
+    {
+        Color4 curveColor(44, 62, 80);
+        int colorIdx = 0;
+        for (const Ref<AnimationTrackBase>& track : mAnimationWindow->mAnimation->GetTracks())
+        {
+            if (const Ref<AnimationTrack<float>>& floatTrack = DynamicCast<AnimationTrack<float>>(track))
+            {
+                mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
+                mCurvesEditor->SetCurveColor(&floatTrack->curve, curveColor);
+                curveColor = Color4::SomeColor(colorIdx++);
+            }
+            else if (const Ref<AnimationTrack<Vec2F>>& vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
+            {
+                mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
+                mCurvesEditor->SetCurveColor(&vec2Track->timeCurve, curveColor);
+                curveColor = Color4::SomeColor(colorIdx++);
+            }
+        }
+    }
 
-	void CurvesSheet::OnAnimationChanged()
-	{
-		bool changed = false;
+    void CurvesSheet::OnAnimationChanged()
+    {
+        bool changed = false;
 
-		// Check new curves
-		auto currentCurves = mCurvesEditor->GetCurves();
-		Vector<Curve*> animCurves;
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
-		{
-			Curve* curve = nullptr;
-			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
-				curve = &floatTrack->curve;
-			else if (auto vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
-				curve = &vec2Track->timeCurve;
+        // Check new curves
+        auto currentCurves = mCurvesEditor->GetCurves();
+        Vector<Curve*> animCurves;
+        for (const Ref<AnimationTrackBase>& track : mAnimationWindow->mAnimation->GetTracks())
+        {
+            Curve* curve = nullptr;
+            if (const Ref<AnimationTrack<float>>& floatTrack = DynamicCast<AnimationTrack<float>>(track))
+                curve = &floatTrack->curve;
+            else if (const Ref<AnimationTrack<Vec2F>>& vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
+                curve = &vec2Track->timeCurve;
 
-			if (curve)
-			{
-				animCurves.Add(curve);
+            if (curve)
+            {
+                animCurves.Add(curve);
 
-				if (!currentCurves.ContainsValue(curve))
-				{
-					mCurvesEditor->AddCurve(track->path, curve);
-					changed = true;
-				}
-			}
-		}
+                if (!currentCurves.ContainsValue(curve))
+                {
+                    mCurvesEditor->AddCurve(track->path, curve);
+                    changed = true;
+                }
+            }
+        }
 
-		// Check removed curves
-		for (auto curve : mCurvesEditor->GetCurves())
-		{
-			if (!animCurves.Contains(curve.second))
-			{
-				mCurvesEditor->RemoveCurve(curve.second);
-				changed = true;
-			}
-		}
+        // Check removed curves
+        for (auto curve : mCurvesEditor->GetCurves())
+        {
+            if (!animCurves.Contains(curve.second))
+            {
+                mCurvesEditor->RemoveCurve(curve.second);
+                changed = true;
+            }
+        }
 
-		if (changed)
-			UpdateCurvesColors();
-	}
+        if (changed)
+            UpdateCurvesColors();
+    }
 
-	String CurvesSheet::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
+    String CurvesSheet::GetCreateMenuCategory()
+    {
+        return "UI/Editor";
+    }
 
-	void CurvesSheet::InitializeControls()
-	{
-		mCurvesEditor = mnew CurvesEditor();
-		*mCurvesEditor->layout = WidgetLayout::BothStretch();
+    void CurvesSheet::InitializeControls()
+    {
+        mCurvesEditor = mmake<CurvesEditor>();
+        *mCurvesEditor->layout = WidgetLayout::BothStretch();
 
-		auto horScroll = o2UI.CreateHorScrollBar();
-		*horScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 10, 10, 10, 0);
-		mCurvesEditor->SetHorScrollbar(horScroll);
+        auto horScroll = o2UI.CreateHorScrollBar();
+        *horScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 10, 10, 10, 0);
+        mCurvesEditor->SetHorScrollbar(horScroll);
 
-		auto verScroll = o2UI.CreateVerScrollBar();
-		*verScroll->layout = WidgetLayout::VerStretch(HorAlign::Right, 10, 10, 10, 0);
-		mCurvesEditor->SetVerScrollbar(verScroll);
+        auto verScroll = o2UI.CreateVerScrollBar();
+        *verScroll->layout = WidgetLayout::VerStretch(HorAlign::Right, 10, 10, 10, 0);
+        mCurvesEditor->SetVerScrollbar(verScroll);
 
-		mCurvesEditor->SetTextBorder(BorderF(0, 10, 10, 0));
+        mCurvesEditor->SetTextBorder(BorderF(0, 10, 10, 0));
 
-		mCurvesEditor->SetMainHandleImages(ImageAssetRef("ui/CurveHandle.png"),
-										   ImageAssetRef("ui/CurveHandleHover.png"),
-										   ImageAssetRef("ui/CurveHandlePressed.png"),
-										   ImageAssetRef("ui/CurveHandleSelected.png"));
+        mCurvesEditor->SetMainHandleImages(ImageAssetRef("ui/CurveHandle.png"),
+                                           ImageAssetRef("ui/CurveHandleHover.png"),
+                                           ImageAssetRef("ui/CurveHandlePressed.png"),
+                                           ImageAssetRef("ui/CurveHandleSelected.png"));
 
-		mCurvesEditor->SetSupportHandleImages(ImageAssetRef("ui/CurveSupportHandle.png"),
-											  ImageAssetRef("ui/CurveSupportHandleHover.png"),
-											  ImageAssetRef("ui/CurveSupportHandlePressed.png"),
-											  ImageAssetRef("ui/CurveSupportHandleSelected.png"));
+        mCurvesEditor->SetSupportHandleImages(ImageAssetRef("ui/CurveSupportHandle.png"),
+                                              ImageAssetRef("ui/CurveSupportHandleHover.png"),
+                                              ImageAssetRef("ui/CurveSupportHandlePressed.png"),
+                                              ImageAssetRef("ui/CurveSupportHandleSelected.png"));
 
-		mCurvesEditor->SetSelectionSpriteImage(ImageAssetRef("ui/UI_Window_place.png"));
+        mCurvesEditor->SetSelectionSpriteImage(ImageAssetRef("ui/UI_Window_place.png"));
 
-		mCurvesEditor->verGridEnabled = false;
-		mCurvesEditor->onViewChanged += THIS_FUNC(OnEditorViewChanged);
+        mCurvesEditor->verGridEnabled = false;
+        mCurvesEditor->onViewChanged += THIS_FUNC(OnEditorViewChanged);
 
-		mCurvesEditor->GetContextMenu()->AddItem("---");
-		mCurvesEditor->GetContextMenu()->AddToggleItem("Normalize curves", true, [&](bool val) { 
-			mCurvesEditor->SetAdjustCurvesScale(val);
-		});
+        mCurvesEditor->GetContextMenu()->AddItem("---");
+        mCurvesEditor->GetContextMenu()->AddToggleItem("Normalize curves", true, [&](bool val) { 
+            mCurvesEditor->SetAdjustCurvesScale(val);
+        });
 
-		AddChild(mCurvesEditor);
-	}
+        AddChild(mCurvesEditor);
+    }
 
-	void CurvesSheet::SetCameraAsTimelineView()
-	{
-		Camera camera = mCurvesEditor->GetCamera();
-		RectF camRect = camera.GetRect();
-		camRect.left = mAnimationWindow->mTimeline->WorldToLocal(mAnimationWindow->mTimeline->layout->worldLeft);
-		camRect.right = mAnimationWindow->mTimeline->WorldToLocal(mAnimationWindow->mTimeline->layout->worldRight);
+    void CurvesSheet::SetCameraAsTimelineView()
+    {
+        Camera camera = mCurvesEditor->GetCamera();
+        RectF camRect = camera.GetRect();
+        camRect.left = mAnimationWindow->mTimeline->WorldToLocal(mAnimationWindow->mTimeline->layout->worldLeft);
+        camRect.right = mAnimationWindow->mTimeline->WorldToLocal(mAnimationWindow->mTimeline->layout->worldRight);
 
-		camera.SetRect(camRect, false);
+        camera.SetRect(camRect, false);
 
-		mEditorViewLock = true;
-		mCurvesEditor->SetCamera(camera);
-		mEditorViewLock = false;
-	}
+        mEditorViewLock = true;
+        mCurvesEditor->SetCamera(camera);
+        mEditorViewLock = false;
+    }
 
-	void CurvesSheet::OnEditorViewChanged()
-	{
-		if (mEditorViewLock || !IsEnabled())
-			return;
+    void CurvesSheet::OnEditorViewChanged()
+    {
+        if (mEditorViewLock) return;
 
-		mAnimationWindow->mTimeline->SetViewRange(mCurvesEditor->GetCamera().GetRect().left, mCurvesEditor->GetCamera().GetRect().right);
-	}
-
+        mAnimationWindow->mTimeline->layout->worldLeft = mAnimationWindow->mTimeline->LocalToWorld(mCurvesEditor->GetCamera().GetRect().left);
+        mAnimationWindow->mTimeline->layout->worldRight = mAnimationWindow->mTimeline->LocalToWorld(mCurvesEditor->GetCamera().GetRect().right);
+    }
 }
-// --- META ---
+#include <memory>
 
-DECLARE_CLASS(Editor::CurvesSheet, Editor__CurvesSheet);
+template<typename T>
+using Ref = std::shared_ptr<T>;
+
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template<typename Derived, typename Base>
+Ref<Derived> DynamicCast(const Ref<Base>& ptr)
+{
+    return std::dynamic_pointer_cast<Derived>(ptr);
+}
+
+class Editor__CurvesSheet
+{
+public:
+    Editor__CurvesSheet()
+        : mCurvesEditor(mmake<Editor::CurvesEditor>())
+    {
+    }
+
+    void SomeFunction(const Ref<SomeClass>& obj)
+    {
+        if (!obj || !IsEnabled())
+            return;
+
+        mAnimationWindow->mTimeline->SetViewRange(mCurvesEditor->GetCamera().GetRect().left, mCurvesEditor->GetCamera().GetRect().right);
+    }
+
+private:
+    Ref<Editor::CurvesEditor> mCurvesEditor;
+};
+
+DECLARE_CLASS(Editor__CurvesSheet, Editor__CurvesSheet);
 // --- END META ---

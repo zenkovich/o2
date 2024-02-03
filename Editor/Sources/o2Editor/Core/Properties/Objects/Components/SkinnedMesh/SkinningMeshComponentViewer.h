@@ -9,111 +9,115 @@
 #include "o2Editor/Core/Tools/SplineTool.h"
 #include "o2Editor/Core/UI/SplineEditor/SplineEditor.h"
 #include "o2Editor/SceneWindow/SceneEditorLayer.h"
+#include "o2/Core/Ref.h"
+#include "o2/Core/WeakRef.h"
 
 using namespace o2;
 
 namespace o2
 {
-	class Spoiler;
-	class Button;
+    class Spoiler;
+    class Button;
 }
 
 namespace Editor
 {
-	class SceneDragHandle;
-	struct SkeletonTool;
+    class SceneDragHandle;
+    struct SkeletonTool;
 
-	// ------------------------------
-	// Skinning Mesh component viewer
-	// ------------------------------
-	class SkinningMeshComponentViewer: public TObjectPropertiesViewer<SkinningMeshComponent>
-	{
-	public:
-		// Default constructor
-		SkinningMeshComponentViewer();
+    // ------------------------------
+    // Skinning Mesh component viewer
+    // ------------------------------
+    class SkinningMeshComponentViewer : public TObjectPropertiesViewer<Ref<SkinningMeshComponent>>
+    {
+    public:
+        // Default constructor
+        SkinningMeshComponentViewer();
 
-		// Destructor
-		~SkinningMeshComponentViewer();
+        // Destructor
+        ~SkinningMeshComponentViewer();
 
-		// Copy operator
-		SkinningMeshComponentViewer& operator=(const SkinningMeshComponentViewer& other);
+        // Copy operator
+        SkinningMeshComponentViewer& operator=(const SkinningMeshComponentViewer& other);
 
-		IOBJECT(SkinningMeshComponentViewer);
+        IOBJECT(SkinningMeshComponentViewer);
 
-	protected:
-		SplineTool              mSplineTool;             // Spline tool
-		CustomFrameTool         mFrameTool;              // Mapping frame tool
-		MeshTopologyTool        mTopologyTool;           // Mesh topology tool
-		SkeletonTool*           mSkeletonTool = nullptr; // Shared skeleton tool
-		SkinningMeshEditorLayer mFrameTetxureLayer;      // Frame texture drawing layer
+    protected:
+        SplineTool              mSplineTool;                  // Spline tool
+        CustomFrameTool         mFrameTool;                   // Mapping frame tool
+        MeshTopologyTool        mTopologyTool;                // Mesh topology tool
+        Ref<SkeletonTool>       mSkeletonTool;                // Shared skeleton tool
+        SkinningMeshEditorLayer mFrameTetxureLayer;           // Frame texture drawing layer
 
-		Button* mFitAndCenterButton = nullptr; // Fit and centerize button
-		Button* mEditSkeletonButton = nullptr; // Enable/disable skeleton editing button
-		Button* mReskinButton = nullptr;       // Resets mesh skinning and updates bones transforms
+        Ref<Button> mFitAndCenterButton;  // Fit and centerize button
+        Ref<Button> mEditSkeletonButton;  // Enable/disable skeleton editing button
+        Ref<Button> mReskinButton;        // Resets mesh skinning and updates bones transforms
 
-		bool mEditingSkeleton = false; // It editing skeleton enabled
+        bool mEditingSkeleton = false;  // It editing skeleton enabled
 
-	protected:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    protected:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targetObjets) override;
 
-		// Enable viewer event function
-		void OnEnabled() override;
+        // Enable viewer event function
+        void OnEnabled() override;
 
-		// Disable viewer event function
-		void OnDisabled() override;
+        // Disable viewer event function
+        void OnDisabled() override;
 
-		// Called when button pressed
-		void FitAndCenterize();
+        // Called when button pressed
+        void FitAndCenterize();
 
-		// Called when edit skeleton pressed
-		void OnEditSkeletonPressed();
+        // Called when edit skeleton pressed
+        void OnEditSkeletonPressed();
 
-		// Called when reskin pressed
-		void OnReskinPressed();
+        // Called when reskin pressed
+        void OnReskinPressed();
 
-		// Updates the caption on the skeleton edit button depending on whether it is enabled or not
-		void UpdateEditSkeletonButtonCaption();
-	};
+        // Updates the caption on the skeleton edit button depending on whether it is enabled or not
+        void UpdateEditSkeletonButtonCaption();
+    };
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::SkinningMeshComponentViewer)
 {
-    BASE_CLASS(Editor::TObjectPropertiesViewer<SkinningMeshComponent>);
+    BASE_CLASS(Editor::TObjectPropertiesViewer<Ref<SkinningMeshComponent>>);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::SkinningMeshComponentViewer)
 {
-    FIELD().PROTECTED().NAME(mSplineTool);
-    FIELD().PROTECTED().NAME(mFrameTool);
-    FIELD().PROTECTED().NAME(mTopologyTool);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSkeletonTool);
-    FIELD().PROTECTED().NAME(mFrameTetxureLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitAndCenterButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditSkeletonButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mReskinButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEditingSkeleton);
+    FIELD().PROTECTED().NAME(mSplineTool),
+    FIELD().PROTECTED().NAME(mFrameTool),
+    FIELD().PROTECTED().NAME(mTopologyTool),
+    FIELD().PROTECTED().DEFAULT_VALUE(MakeRef<SkeletonTool>()).NAME(mSkeletonTool),
+    FIELD().PROTECTED().NAME(mFrameTetxureLayer),
+    FIELD().PROTECTED().DEFAULT_VALUE(MakeRef<Button>()).NAME(mFitAndCenterButton),
+    FIELD().PROTECTED().DEFAULT_VALUE(MakeRef<Button>()).NAME(mEditSkeletonButton),
+    FIELD().PROTECTED().DEFAULT_VALUE(MakeRef<Button>()).NAME(mReskinButton),
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEditingSkeleton)
 }
 END_META;
+
 CLASS_METHODS_META(Editor::SkinningMeshComponentViewer)
 {
+    typedef const Vector<Pair<Ref<IObject>, Ref<IObject>>>& _tmp1;
+    typedef const Vector<Pair<Ref<IObject>, Ref<IObject>>>& _tmp2;
 
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
-
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, FitAndCenterize);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEditSkeletonPressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnReskinPressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateEditSkeletonButtonCaption);
+    FUNCTION().PUBLIC().CONSTRUCTOR(),
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, const Ref<IObject>&),
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, const _tmp2&),
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled),
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled),
+    FUNCTION().PROTECTED().SIGNATURE(void, FitAndCenterize),
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEditSkeletonPressed),
+    FUNCTION().PROTECTED().SIGNATURE(void, OnReskinPressed),
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateEditSkeletonButtonCaption)
 }
 END_META;
 // --- END META ---

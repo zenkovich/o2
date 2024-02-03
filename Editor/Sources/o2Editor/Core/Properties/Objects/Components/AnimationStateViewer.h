@@ -2,66 +2,66 @@
 
 #include "o2/Animation/AnimationState.h"
 #include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
+#include <Ref.h>
 
 using namespace o2;
 
 namespace o2
 {
-	class Toggle;
-	class Button;
-	class HorizontalProgress;
+    class Toggle;
+    class Button;
+    class HorizontalProgress;
 }
 
 namespace Editor
 {
-	// ------------------------------------
-	// AnimationComponent properties viewer
-	// ------------------------------------
-	class AnimationStateViewer : public DefaultObjectPropertiesViewer
-	{
-	public:
-		// Returns viewing objects type
-		const Type* GetViewingObjectType() const override;
+    // ------------------------------------
+    // AnimationComponent properties viewer
+    // ------------------------------------
+    class AnimationStateViewer : public DefaultObjectPropertiesViewer
+    {
+    public:
+        // Returns viewing objects type
+        const Type* GetViewingObjectType() const override;
 
-		// Returns viewing objects base type by static function
-		static const Type* GetViewingObjectTypeStatic();
+        // Returns viewing objects base type by static function
+        static const Type* GetViewingObjectTypeStatic();
 
-		IOBJECT(AnimationStateViewer);
+        IOBJECT(AnimationStateViewer);
 
-	private:
-		Toggle* mPlayPause = nullptr;
-		Button* mEditBtn = nullptr;
-		Toggle* mLooped = nullptr;
+    private:
+        Ref<Toggle> mPlayPause = mmake<Toggle>();
+        Ref<Button> mEditBtn = mmake<Button>();
+        Ref<Toggle> mLooped = mmake<Toggle>();
+        Ref<HorizontalProgress> mTimeProgress = mmake<HorizontalProgress>();
 
-		HorizontalProgress* mTimeProgress = nullptr;
+        Ref<AnimationPlayer> mSubscribedPlayer = mmake<AnimationPlayer>();
 
-		AnimationPlayer* mSubscribedPlayer = nullptr;
+    private:
+        // Creates spoiler for properties
+        Ref<Spoiler> CreateSpoiler() override;
 
-	private:
-		// Creates spoiler for properties
-		Spoiler* CreateSpoiler() override;
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+        // ThCalled when the viewer is freed
+        void OnFree() override;
 
-		// ThCalled when the viewer is freed
-		void OnFree() override;
+        // Called when play pause toggled
+        void OnPlayPauseToggled(bool play);
 
-		// Called when play pause toggled
-		void OnPlayPauseToggled(bool play);
+        // Called when loop toggled
+        void OnLoopToggled(bool looped);
 
-		// Called when loop toggled
-		void OnLoopToggled(bool looped);
+        // Called when edit button pressed, sets animation editing
+        void OnEditPressed();
 
-		// Called when edit button pressed, sets animation editing
-		void OnEditPressed();
+        // Called when time progress changed by user, sets subscribed player time 
+        void OnTimeProgressChanged(float value);
 
-		// Called when time progress changed by user, sets subscribed player time 
-		void OnTimeProgressChanged(float value);
-
-		// Called when animation updates
-		void OnAnimationUpdated(float time);
-	};
+        // Called when animation updates
+        void OnAnimationUpdated(float time);
+    };
 }
 // --- META ---
 
@@ -72,11 +72,11 @@ CLASS_BASES_META(Editor::AnimationStateViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationStateViewer)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPlayPause);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditBtn);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLooped);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeProgress);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSubscribedPlayer);
+    FIELD().PRIVATE().NAME(mPlayPause);
+    FIELD().PRIVATE().NAME(mEditBtn);
+    FIELD().PRIVATE().NAME(mLooped);
+    FIELD().PRIVATE().NAME(mTimeProgress);
+    FIELD().PRIVATE().NAME(mSubscribedPlayer);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationStateViewer)
@@ -86,8 +86,8 @@ CLASS_METHODS_META(Editor::AnimationStateViewer)
 
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-    FUNCTION().PRIVATE().SIGNATURE(Spoiler*, CreateSpoiler);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp1);
+    FUNCTION().PRIVATE().SIGNATURE(Ref<Spoiler>, CreateSpoiler);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, const Ref<_tmp1>&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnFree);
     FUNCTION().PRIVATE().SIGNATURE(void, OnPlayPauseToggled, bool);
     FUNCTION().PRIVATE().SIGNATURE(void, OnLoopToggled, bool);

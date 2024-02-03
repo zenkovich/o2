@@ -53,7 +53,7 @@ namespace Editor
 		}
 	}
 
-	void AnimationWindow::SetAnimation(AnimationClip* animation, AnimationPlayer* player /*= nullptr*/)
+	void AnimationWindow::SetAnimation(Ref<AnimationClip> animation, Ref<AnimationPlayer> player /*= nullptr*/)
 	{
 		if (mAnimation)
 			mAnimation->onChanged -= THIS_FUNC(OnAnimationChanged);
@@ -63,7 +63,7 @@ namespace Editor
 			mPlayer->onUpdate -= THIS_FUNC(OnAnimationUpdate);
 
 			if (mOwnPlayer)
-				delete mPlayer;
+				delete mPlayer.Get();
 		}
 
 		if (mAnimationEditable)
@@ -91,10 +91,10 @@ namespace Editor
 
 		mPlayPauseToggle->SetValue(false);
 
-		mHandlesSheet->SetAnimation(animation);
-		mTimeline->SetAnimation(animation, player);
-		mTree->SetAnimation(animation);
-		mCurves->SetAnimation(animation);
+		mHandlesSheet->SetAnimation(animation.Get());
+		mTimeline->SetAnimation(animation.Get(), player.Get());
+		mTree->SetAnimation(animation.Get());
+		mCurves->SetAnimation(animation.Get());
 	}
 
 	void AnimationWindow::SetAnimationEditable(IEditableAnimation* editable)
@@ -117,7 +117,7 @@ namespace Editor
 
 		if (!mPlayer && mAnimation)
 		{
-			mPlayer = mnew AnimationPlayer(mTargetActor.Get(), Ref(mAnimation));
+			mPlayer = mmake<AnimationPlayer>(mTargetActor.Get(), mAnimation);
 			SetAnimation(mAnimation, mPlayer);
 			mOwnPlayer = true;
 		}
@@ -194,175 +194,32 @@ namespace Editor
 	void AnimationWindow::InitializeTimeline()
 	{
 		mTimeline = mnew AnimationTimeline();
-		*mTimeline->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0.0f, 0.0f, 0.0f);
-
-		mTimeScroll = o2UI.CreateHorScrollBar();
-		*mTimeScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 10, 10, 10, 0);
-
-		mTimeline->SetScrollBar(mTimeScroll);
-
-		mWindow->AddChild(mTimeline);
-	}
-
-	void AnimationWindow::InitializeCurvesSheet()
-	{
-		mCurves = mnew CurvesSheet();
-		*mCurves->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 0);
-		mCurves->Disable();
-		mWorkArea->AddChild(mCurves);
-	}
-
-	void AnimationWindow::InitializeUpPanel()
-	{
-		mUpPanel = mnew Widget();
-		*mUpPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20);
-		mUpPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_back.png"), Layout::BothStretch(-4, -4, -5, -5));
-		mWindow->AddChild(mUpPanel);
-
-		mControlsPanel = mnew HorizontalLayout();
-		mControlsPanel->name = "controls panel";
-		*mControlsPanel->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(mTreeViewWidth, 20.0f));
-		mControlsPanel->expandWidth = false;
-		mControlsPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
-
-		mPreviewToggle = o2UI.CreateWidget<Toggle>("menu preview");
-		mPreviewToggle->onToggle = THIS_FUNC(OnMenuPreviewToggle);
-		mControlsPanel->AddChild(mPreviewToggle);
-
-		mRecordToggle = o2UI.CreateWidget<Toggle>("menu record");
-		mRecordToggle->onToggle = THIS_FUNC(OnMenuRecordToggle);
-		mControlsPanel->AddChild(mRecordToggle);
-
-		mRewindLeft = o2UI.CreateWidget<Button>("menu rewind left");
-		mControlsPanel->AddChild(mRewindLeft);
-
-		mMoveLeft = o2UI.CreateWidget<Button>("menu move left");
-		mControlsPanel->AddChild(mMoveLeft);
-
-		mPlayPauseToggle = o2UI.CreateWidget<Toggle>("menu play-stop");
-		mPlayPauseToggle->SetValue(false);
-		mPlayPauseToggle->onToggleByUser = THIS_FUNC(OnPlayPauseToggled);
-		mControlsPanel->AddChild(mPlayPauseToggle);
-
-		mMoveRight = o2UI.CreateWidget<Button>("menu move right");
-		mControlsPanel->AddChild(mMoveRight);
-
-		mRewindRight = o2UI.CreateWidget<Button>("menu rewind right");
-		mControlsPanel->AddChild(mRewindRight);
-
-		mLoopToggle = o2UI.CreateWidget<Toggle>("menu loop-nonloop");
-		mLoopToggle->SetValue(true);
-		mLoopToggle->onToggleByUser = THIS_FUNC(OnLoopToggled);
-		mControlsPanel->AddChild(mLoopToggle);
-
-		mCurvesToggle = o2UI.CreateWidget<Toggle>("menu curves");
-		mCurvesToggle->SetValue(false);
-		mCurvesToggle->onToggleByUser = [&](bool value) { SetCurvesMode(value); };
-		mControlsPanel->AddChild(mCurvesToggle);
-
-		mPropertiesButton = o2UI.CreateWidget<Button>("menu properties");
-		mPropertiesButton->onClick = [&]() { PropertiesListDlg::Show(mAnimation, mTargetActor); };
-		mControlsPanel->AddChild(mPropertiesButton);
-
-		mAddKeyButton = o2UI.CreateWidget<Button>("menu add key");
-		mControlsPanel->AddChild(mAddKeyButton);
-
-		mUpPanel->AddChild(mControlsPanel);
-	}
-
-	void AnimationWindow::InitializeSeparatorHandle()
-	{
-		mTreeSeparatorHandle = mnew WidgetDragHandle(mnew Sprite("ui/UI4_Ver_separator.png"));
-		mTreeSeparatorHandle->GetRegularDrawable()->pivot = Vec2F(0.5f, 0.5f);
-		mTreeSeparatorHandle->GetRegularDrawable()->szPivot = Vec2F(4, mTreeSeparatorHandle->GetRegularDrawable()->szPivot.Get().y);
-
-		mTreeSeparatorHandle->onChangedPos = [&](const Vec2F& point) {
-			mTreeViewWidth = Math::Max(point.x, mMinTreeViewWidth);
-			mControlsPanel->layout->right = mTreeViewWidth;
-			mTimeline->layout->left = mTreeViewWidth;
-			mHandlesSheet->layout->left = mTreeViewWidth;
-			mCurves->layout->left = mTreeViewWidth;
-			mTree->SetTreeWidth(mTreeViewWidth);
-		};
-
-		mTreeSeparatorHandle->checkPositionFunc = [&](const Vec2F& point) {
-			return Vec2F(Math::Max(point.x, mMinTreeViewWidth), mWorkArea->layout->GetHeight()*0.5f);
-		};
-
-		mTreeSeparatorHandle->onLayoutUpdated = [&]() {
-			mTreeSeparatorHandle->SetDrawablesSize(Vec2F(5.0f, mWorkArea->layout->GetHeight() + 50.0f));
-			mTreeSeparatorHandle->SetPosition(Vec2F(mTreeViewWidth, mWorkArea->layout->GetHeight()*0.5f));
-		};
-
-		mTreeSeparatorHandle->cursorType = CursorType::SizeWE;
-
-		mWorkArea->AddChild(mTreeSeparatorHandle);
-	}
-
-	void AnimationWindow::OnAnimationChanged()
-	{
-		mTree->OnAnimationChanged();
-		mCurves->OnAnimationChanged();
-
+		*mTimeline->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0.0f, 0.0f,{
 		if (mPlayer)
-			mPlayer->SetTime(mPlayer->GetTime());
-	}
+			mPlayer->SetPreviewing(value);
+	}#include <Ref.hpp> // include Ref.hpp file for Ref class
 
-	void AnimationWindow::OnAnimationUpdate(float time)
-	{
-		if (!mDisableTimeTracking)
-			mTimeline->mTimeCursor = mPlayer->GetLoopTime();
-	}
+...
 
-	void AnimationWindow::OnPlayPauseToggled(bool play)
-	{
-		if (mPlayer)
-		{
-			if (mPlayer->GetLoop() != Loop::Repeat && Math::Equals(mPlayer->GetTime(), mPlayer->GetDuration()))
-				mPlayer->SetTime(0.0f);
+Ref<AnimationEditable> mAnimationEditable; // replace raw pointer with Ref<>
 
-			mPlayer->SetPlaying(play);
-		}
-	}
+...
 
-	void AnimationWindow::OnLoopToggled(bool loop)
-	{
-		if (mAnimation)
-			mAnimation->SetLoop(loop ? Loop::Repeat : Loop::None);
+if (mAnimationEditable)
+{
+    if (value)
+        mAnimationEditable->BeginAnimationEdit();
+    else
+        mAnimationEditable->EndAnimationEdit();
+}
 
-		if (mPlayer)
-			mPlayer->SetLoop(loop ? Loop::Repeat : Loop::None);
-
-		o2Scene.OnObjectChanged(mTargetActor.Get());
-	}
-
-	void AnimationWindow::OnSearchEdited(const WString& search)
-	{
-
-	}
-
-	void AnimationWindow::OnMenuFilterPressed()
-	{
-
-	}
-
-	void AnimationWindow::OnMenuPreviewToggle(bool value)
-	{
-		if (mAnimationEditable)
-		{
-			if (value)
-				mAnimationEditable->BeginAnimationEdit();
-			else
-				mAnimationEditable->EndAnimationEdit();
-		}
-	}
-
-	void AnimationWindow::OnMenuRecordToggle(bool value)
-	{
-
-	}
+void AnimationWindow::OnMenuRecordToggle(const bool value) // use const Ref<>& for function arguments with pointer types
+{
 
 }
+
+...
+
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationWindow, Editor__AnimationWindow);

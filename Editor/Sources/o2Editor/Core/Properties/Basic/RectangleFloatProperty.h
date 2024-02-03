@@ -6,133 +6,133 @@ using namespace o2;
 
 namespace Editor
 {
-	class FloatProperty;
+    class FloatProperty;
 
-	// -------------------------------
-	// Editor float rectangle property
-	// -------------------------------
-	class RectFProperty : public IPropertyField
-	{
-	public:
-		// Default constructor
-		RectFProperty();
+    // -------------------------------
+    // Editor float rectangle property
+    // -------------------------------
+    class RectFProperty : public IPropertyField
+    {
+    public:
+        // Default constructor
+        RectFProperty();
 
-		// Copy constructor
-		RectFProperty(const RectFProperty& other);
+        // Copy constructor
+        RectFProperty(const RectFProperty& other);
 
-		// Copy operator
-		RectFProperty& operator=(const RectFProperty& other);
+        // Copy operator
+        RectFProperty& operator=(const RectFProperty& other);
 
-		// Sets fields
-		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
+        // Sets fields
+        void SetValueAndPrototypeProxy(const Ref<const TargetsVec>& targets) override;
 
-		// Updates and checks value
-		void Refresh() override;
+        // Updates and checks value
+        void Refresh() override;
 
-		// Sets value
-		void SetValue(const RectF& value);
+        // Sets value
+        void SetValue(const Ref<const RectF>& value);
 
-		// Sets value left
-		void SetValueLeft(float value);
+        // Sets value left
+        void SetValueLeft(float value);
 
-		// Sets value right
-		void SetValueRight(float value);
+        // Sets value right
+        void SetValueRight(float value);
 
-		// Sets value top
-		void SetValueTop(float value);
+        // Sets value top
+        void SetValueTop(float value);
 
-		// Sets value bottom
-		void SetValueBottom(float value);
+        // Sets value bottom
+        void SetValueBottom(float value);
 
-		// Sets value as unknown
-		void SetUnknownValue(const RectF& defaultValue = RectF());
+        // Sets value as unknown
+        void SetUnknownValue(const Ref<const RectF>& defaultValue = nullptr);
 
-		// Sets value left as unknown
-		void SetLeftUnknownValue(float defaultValue = 0.0f);
+        // Sets value left as unknown
+        void SetLeftUnknownValue(float defaultValue = 0.0f);
 
-		// Sets value right as unknown
-		void SetRightUnknownValue(float defaultValue = 0.0f);
+        // Sets value right as unknown
+        void SetRightUnknownValue(float defaultValue = 0.0f);
 
-		// Sets value top as unknown
-		void SetTopUnknownValue(float defaultValue = 0.0f);
+        // Sets value top as unknown
+        void SetTopUnknownValue(float defaultValue = 0.0f);
 
-		// Sets value bottom as unknown
-		void SetBottomUnknownValue(float defaultValue = 0.0f);
+        // Sets value bottom as unknown
+        void SetBottomUnknownValue(float defaultValue = 0.0f);
 
-		// Returns value
-		RectF GetCommonValue() const;
+        // Returns value
+        Ref<const RectF> GetCommonValue() const;
 
-		// Returns is values different
-		bool IsValuesDifferent() const;
+        // Returns is values different
+        bool IsValuesDifferent() const;
 
-		// Returns editing by this field type
-		const Type* GetValueType() const override;
+        // Returns editing by this field type
+        const Type* GetValueType() const override;
 
-		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+        // Returns editing by this field type by static function, can't be changed during runtime
+        static const Type* GetValueTypeStatic();
 
-		IOBJECT(RectFProperty);
+        IOBJECT(RectFProperty);
 
-	protected:
-		FloatProperty* mLeftProperty = nullptr;   // Left value property
-		FloatProperty* mRightProperty = nullptr;  // Right value property
-		FloatProperty* mTopProperty = nullptr;    // Top value property
-		FloatProperty* mBottomProperty = nullptr; // Bottom value property
+    protected:
+        Ref<FloatProperty> mLeftProperty;   // Left value property
+        Ref<FloatProperty> mRightProperty;  // Right value property
+        Ref<FloatProperty> mTopProperty;    // Top value property
+        Ref<FloatProperty> mBottomProperty; // Bottom value property
 
-	protected:
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+    protected:
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-	protected:
+    protected:
 
-		class LeftValueProxy : public IValueProxy<float>
-		{
-			IAbstractValueProxy* mProxy = nullptr;
+        class LeftValueProxy : public IValueProxy<float>
+        {
+            IAbstractValueProxy* mProxy = nullptr;
 
-		public:
-			LeftValueProxy();
-			LeftValueProxy(IAbstractValueProxy* proxy);
+        public:
+            LeftValueProxy();
+            LeftValueProxy(IAbstractValueProxy* proxy);
 
-			void SetValue(const float& value) override;
-			float GetValue() const override;
-		};
+            void SetValue(const float& value) override;
+            float GetValue() const override;
+        };
 
-		class RightValueProxy : public IValueProxy<float>
-		{
-			IAbstractValueProxy* mProxy = nullptr;
+        class RightValueProxy : public IValueProxy<float>
+        {
+            IAbstractValueProxy* mProxy = nullptr;
 
-		public:
-			RightValueProxy();
-			RightValueProxy(IAbstractValueProxy* proxy);
+        public:
+            RightValueProxy();
+            RightValueProxy(IAbstractValueProxy* proxy);
 
-			void SetValue(const float& value) override;
-			float GetValue() const override;
-		};
+            void SetValue(const float& value) override;
+            float GetValue() const override;
+        };
 
-		class TopValueProxy : public IValueProxy<float>
-		{
-			IAbstractValueProxy* mProxy = nullptr;
+        class TopValueProxy : public IValueProxy<float>
+        {
+            IAbstractValueProxy* mProxy = nullptr;
 
-		public:
-			TopValueProxy();
-			TopValueProxy(IAbstractValueProxy* proxy);
+        public:
+            TopValueProxy();
+            TopValueProxy(IAbstractValueProxy* proxy);
 
-			void SetValue(const float& value) override;
-			float GetValue() const override;
-		};
+            void SetValue(const float& value) override;
+            float GetValue() const override;
+        };
 
-		class BottomValueProxy : public IValueProxy<float>
-		{
-			IAbstractValueProxy* mProxy = nullptr;
+        class BottomValueProxy : public IValueProxy<float>
+        {
+            IAbstractValueProxy* mProxy = nullptr;
 
-		public:
-			BottomValueProxy();
-			BottomValueProxy(IAbstractValueProxy* proxy);
+        public:
+            BottomValueProxy();
+            BottomValueProxy(IAbstractValueProxy* proxy);
 
-			void SetValue(const float& value) override;
-			float GetValue() const override;
-		};
-	};
+            void SetValue(const float& value) override;
+            float GetValue() const override;
+        };
+    };
 }
 // --- META ---
 
@@ -143,10 +143,10 @@ CLASS_BASES_META(Editor::RectFProperty)
 END_META;
 CLASS_FIELDS_META(Editor::RectFProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTopProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBottomProperty);
+    FIELD().PROTECTED().DEFINITION_VALUE().NAME(mLeftProperty);
+    FIELD().PROTECTED().DEFINITION_VALUE().NAME(mRightProperty);
+    FIELD().PROTECTED().DEFINITION_VALUE().NAME(mTopProperty);
+    FIELD().PROTECTED().DEFINITION_VALUE().NAME(mBottomProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::RectFProperty)
@@ -154,19 +154,19 @@ CLASS_METHODS_META(Editor::RectFProperty)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const RectFProperty&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const Ref<const TargetsVec>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const RectF&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const Ref<const RectF>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueLeft, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueRight, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueTop, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueBottom, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const RectF&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const Ref<const RectF>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLeftUnknownValue, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetRightUnknownValue, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTopUnknownValue, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBottomUnknownValue, float);
-    FUNCTION().PUBLIC().SIGNATURE(RectF, GetCommonValue);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<const RectF>, GetCommonValue);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);

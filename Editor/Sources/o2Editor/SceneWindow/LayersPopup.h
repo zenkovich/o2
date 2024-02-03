@@ -1,6 +1,7 @@
 #pragma once
 #include "o2/Scene/UI/Widgets/PopupWidget.h"
 #include "o2/Utils/Editor/DragHandle.h"
+#include "o2/Core/Ref.h"
 
 using namespace o2;
 
@@ -19,7 +20,7 @@ namespace Editor
 	// -----------------------
 	// Scene layers list popup
 	// -----------------------
-	class LayersPopup: public PopupWidget
+	class LayersPopup : public PopupWidget
 	{
 	public:
 		// Default constructor
@@ -40,17 +41,17 @@ namespace Editor
 		SERIALIZABLE(LayersPopup);
 
 	private:
-		LayerPopupItem* mItemSample = nullptr; // Layer item sample @SERIALIZABLE
+		Ref<LayerPopupItem> mItemSample; // Layer item sample @SERIALIZABLE
 
-		Vector<LayerPopupItem*> mItemsCache; // Cached items widgets
+		Vector<Ref<LayerPopupItem>> mItemsCache; // Cached items widgets
 
-		LayerPopupItem* mDraggingItem = nullptr;            // Current dragging item
-		Vec2F           mDragOffset;                        // Offset from left bottom corner of dragging item to cursor
-		float           mDragAnimTime = 0.4f;               // Node expanding time
-		Curve           mDragAnimFunc = Curve::EaseInOut(); // Expanding easing node curve
+		Ref<LayerPopupItem> mDraggingItem;                     // Current dragging item
+		Vec2F               mDragOffset;                        // Offset from left bottom corner of dragging item to cursor
+		float               mDragAnimTime = 0.4f;               // Node expanding time
+		Curve               mDragAnimFunc = Curve::EaseInOut(); // Expanding easing node curve
 
-		HorizontalLayout* mAddButtonLayout = nullptr; // Add new layer button container layout
-		Button*           mAddButton = nullptr;       // Add new layer button
+		Ref<HorizontalLayout> mAddButtonLayout; // Add new layer button container layout
+		Ref<Button>           mAddButton;       // Add new layer button
 
 	private:
 		// Special drawing for contexts
@@ -63,7 +64,7 @@ namespace Editor
 		void InitializeControls();
 
 		// Updates item layout by index and instert coef
-		void UpdateItemLayout(LayerPopupItem* item, int idx);
+		void UpdateItemLayout(Ref<LayerPopupItem> item, int idx);
 
 		// Updates layers list
 		void UpdateLayersList();
@@ -72,7 +73,7 @@ namespace Editor
 		void UpdateLayersListAndFit();
 
 		// Called when item drag began
-		void BeginDragging(LayerPopupItem* item);
+		void BeginDragging(Ref<LayerPopupItem> item);
 
 		// Called until dragging
 		void UpdateDragging();
@@ -89,7 +90,7 @@ namespace Editor
 	// ----------------------
 	// Layers view popup item
 	// ----------------------
-	class LayerPopupItem: public Widget, public SelectableDragableObject
+	class LayerPopupItem : public Widget, public SelectableDragableObject
 	{
 	public:
 		// Default constructor
@@ -102,7 +103,7 @@ namespace Editor
 		LayerPopupItem& operator=(const LayerPopupItem& other);
 
 		// Sets layer and updates view
-		void SetLayer(SceneLayer* layer);
+		void SetLayer(Ref<SceneLayer> layer);
 
 		// Sets name edit box active
 		void BeginEditName();
@@ -122,16 +123,16 @@ namespace Editor
 		SERIALIZABLE(LayerPopupItem);
 
 	private:
-		SceneLayer* mLayer = nullptr;
+		Ref<SceneLayer> mLayer;
 
-		LayersPopup* mPopup = nullptr;
+		Ref<LayersPopup> mPopup;
 
 		DragHandle mDragHandle;
 
-		Toggle*  mVisibleToggle = nullptr;
-		Label*   mNameCaption = nullptr;
-		Button*  mRemoveBtn = nullptr;
-		EditBox* mEditBox = nullptr;
+		Ref<Toggle>  mVisibleToggle;
+		Ref<Label>   mNameCaption;
+		Ref<Button>  mRemoveBtn;
+		Ref<EditBox> mEditBox;
 
 		float mDragInsertCoef = 0.0f;
 		float mDragTargetInsertCoef = 0.0f;
@@ -190,53 +191,119 @@ CLASS_METHODS_META(Editor::LayersPopup)
     FUNCTION().PRIVATE().SIGNATURE(void, SpecialDraw);
     FUNCTION().PRIVATE().SIGNATURE(Vec2F, GetContentSize);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
-    FUNCTION().PRIVATE().SIGNATURE(void, UpdateItemLayout, LayerPopupItem*, int);
+    FUNCTION().PRIVATE().SIGNATURE(void, UpdateItemLayout, Ref<LayerPopupItem>, int);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateLayersList);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateLayersListAndFit);
-    FUNCTION().PRIVATE().SIGNATURE(void, BeginDragging, LayerPopupItem*);
+    FUNCTION().PRIVATE().SIGNATURE(void, BeginDragging, Ref<LayerPopupItem>);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateDragging);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateDragAnimation, float);
     FUNCTION().PRIVATE().SIGNATURE(void, EndDragging);
-}
-END_META;
-
-CLASS_BASES_META(Editor::LayerPopupItem)
-{
-    BASE_CLASS(o2::Widget);
-    BASE_CLASS(o2::SelectableDragableObject);
-}
-END_META;
-CLASS_FIELDS_META(Editor::LayerPopupItem)
-{
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLayer);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPopup);
-    FIELD().PRIVATE().NAME(mDragHandle);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mVisibleToggle);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mNameCaption);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-    FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mDragInsertCoef);
-    FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mDragTargetInsertCoef);
-}
-END_META;
-CLASS_METHODS_META(Editor::LayerPopupItem)
-{
-
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const LayerPopupItem&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, SceneLayer*);
-    FUNCTION().PUBLIC().SIGNATURE(void, BeginEditName);
-    FUNCTION().PUBLIC().SIGNATURE(void, BreakEditName);
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDragStart, const Input::Cursor&);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnDragged, const Input::Cursor&, DragDropArea*);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDragged, const Input::Cursor&, const Ref<DragDropArea>&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDragEnd, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnNameEditChanged, const WString&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnVisibleChanged, bool);
     FUNCTION().PRIVATE().SIGNATURE(void, OnRemovePressed);
+
+    FUNCTION().PRIVATE().NUMBER_TYPE_VIRTUAL(float, Alpha, GetAlpha, SetAlpha);
+    FUNCTION().PRIVATE().SIGNATURE_VOID_VIRTUAL(void, Draw);
+    FUNCTION().PRIVATE().SIGNATURE_BOOL(IsUnderPoint, const Vec2F&);
 }
-END_META;
-// --- END META ---
+END_META;#include <Ref.h>
+
+Meta(LayerPopupItem,
+     ClassBase(o2::Widget),
+     ClassBase(o2::SelectableDragableObject),
+     MetaNoDefaultPtrRef(mLayer),
+     MetaNoDefaultPtrRef(mPopup),
+     Meta(mDragHandle),
+     MetaNoDefaultPtrRef(mVisibleToggle),
+     MetaNoDefaultPtrRef(mNameCaption),
+     MetaNoDefaultPtrRef(mRemoveBtn),
+     MetaNoDefaultPtrRef(mEditBox),
+     Meta(0.0f, mDragInsertCoef),
+     Meta(0.0f, mDragTargetInsertCoef),
+     MetaConstructor(),
+     MetaConstructor(const LayerPopupItem&),
+     Meta(mLayer, SetLayer, SceneLayer*),
+     Meta(BeginEditName),
+     Meta(BreakEditName),
+     Meta(Draw),
+     Meta(IsUnderPoint, const Vec2F&),
+     Meta(static_cast<String (*)(void)>(GetCreateMenuCategory)),
+     Meta(OnCursorDblClicked, const Input::Cursor&),
+     Meta(OnDragStart, const Input::Cursor&),
+     Meta(OnDragged, const Input::Cursor&, DragDropArea*),
+     Meta(OnDragEnd, const Input::Cursor&),
+     Meta(OnNameEditChanged, const WString&),
+     Meta(OnVisibleChanged, bool),
+     Meta(OnRemovePressed),
+)
+
+CLASS_MEMBER(LayerPopupItem)
+{
+    Ref<SceneLayer> mLayer;
+    Ref<Popup> mPopup;
+    WeakRef<LayerDragHandle> mDragHandle;
+    Ref<VisibleToggle> mVisibleToggle;
+    Ref<NameCaption> mNameCaption;
+    Ref<RemoveButton> mRemoveBtn;
+    Ref<EditBox> mEditBox;
+    float mDragInsertCoef = 0.0f;
+    float mDragTargetInsertCoef = 0.0f;
+};
+
+void LayerPopupItem::InitializeControls()
+{
+    mLayer = mmake<SceneLayer>();
+    mPopup = mmake<Popup>();
+    mVisibleToggle = mmake<VisibleToggle>();
+    mNameCaption = mmake<NameCaption>();
+    mRemoveBtn = mmake<RemoveButton>();
+    mEditBox = mmake<EditBox>();
+}
+
+void LayerPopupItem::UpdateItemLayout(LayerPopupItem* parent, int index)
+{
+    Ref<LayerPopupItem> refParent = parent;
+    Ref<LayerPopupItem, false> refParent2 = parent;
+    // do something
+}
+
+void LayerPopupItem::UpdateLayersList()
+{
+    const Ref<LayerPopupItem>& selfRef = *this;
+    // do something
+}
+
+void LayerPopupItem::UpdateLayersListAndFit()
+{
+    const Ref<LayerPopupItem>& selfRef = *this;
+    // do something
+}
+
+void LayerPopupItem::BeginDragging(LayerPopupItem* item)
+{
+    Ref<LayerPopupItem> refItem = item;
+    // do something
+}
+
+void LayerPopupItem::UpdateDragging()
+{
+    const Ref<LayerPopupItem>& selfRef = *this;
+    // do something
+}
+
+void LayerPopupItem::UpdateDragAnimation(float dt)
+{
+    const Ref<LayerPopupItem>& selfRef = *this;
+    // do something
+}
+
+void LayerPopupItem::EndDragging()
+{
+    const Ref<LayerPopupItem>& selfRef = *this;
+    // do something
+}

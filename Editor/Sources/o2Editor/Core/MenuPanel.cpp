@@ -39,8 +39,8 @@ namespace Editor
 {
 	MenuPanel::MenuPanel()
 	{
-		mMenuPanel = o2UI.CreateWidget<o2::MenuPanel>();
-		*mMenuPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		mMenuPanel = mmake<o2::MenuPanel>();
+		mMenuPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
 		EditorUIRoot.AddWidget(mMenuPanel);
 
 		// FILE
@@ -97,285 +97,361 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/Add property", [&]() {
 			static float xx = 0, yy = 1;
 			ForcePopEditorScopeOnStack scope;
-			auto prop = o2UI.CreateWidget<FloatProperty>("with caption");
+			auto prop = mmake<FloatProperty>("with caption");
 			prop->SetValueAndPrototypeProxy({ { mnew PointerValueProxy(&xx), mnew PointerValueProxy(&yy) } });
-							});
+		});
 
 		mMenuPanel->AddItem("Debug/Randomize IDs", [&]() {
-			Function<void(Actor*)> fixActor = [&fixActor](Actor* actor) {
+			Function<void(Ref<Actor>)> fixActor = [&fixActor](Ref<Actor> actor) {
 				actor->GenerateNewID();
-				actor->GetComponents().ForEach([](auto comp) { comp->GenerateNewID(); });
-				actor->GetChildren().ForEach([&](Actor* x) { fixActor(x); });
+				actor->GetComponents().For ( ( Ref<Component> component ){ component->GenerateNewID(); } );
+				fixActor(actor->GetChild());
+				fixActor(actor->GetNext());
 			};
-
-			for (auto actor : o2Scene.GetRootActors())
-				fixActor(actor);
-		});
-
-		mMenuPanel->AddToggleItem("Debug/View editor UI tree", false, [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
-
-		mMenuPanel->AddItem("Debug/Dump memory", [&]() { o2Memory.DumpInfo(); });
-
-		mMenuPanel->AddItem("Debug/JS collect garbage", [&]() { o2Scripts.CollectGarbage(); });
-
-		mMenuPanel->AddItem("Debug/Rebuild assets", [&]() { o2Assets.RebuildAssets(); });
-		mMenuPanel->AddItem("Debug/Rebuild assets forcible", [&]() { o2Assets.RebuildAssets(true); });
-	}
-
-	MenuPanel::~MenuPanel()
-	{
-	}
-
-	Widget* MenuPanel::AddItem(const o2::MenuPanel::Item& item)
-	{
-		return mMenuPanel->AddItem(item);
-	}
-
-	void MenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
-							const ImageAssetRef& icon /*= ImageAssetRef()*/,
-							const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
-	{
-		mMenuPanel->AddItem(path, clickFunc, icon, shortcut);
-	}
-
-	void MenuPanel::InsertItem(const o2::MenuPanel::Item& item, int position)
-	{
-		mMenuPanel->InsertItem(item, position);
-	}
-
-	void MenuPanel::AddItems(Vector<o2::MenuPanel::Item> items)
-	{
-		mMenuPanel->AddItems(items);
-	}
-
-	void MenuPanel::InsertItems(Vector<o2::MenuPanel::Item> items, int position)
-	{
-		mMenuPanel->InsertItems(items, position);
-	}
-
-	o2::MenuPanel::Item MenuPanel::GetItem(int position)
-	{
-		return mMenuPanel->GetItem(position);
-	}
-
-	Vector<o2::MenuPanel::Item> MenuPanel::GetItems() const
-	{
-		return mMenuPanel->GetItems();
-	}
-
-	void MenuPanel::RemoveItem(int position)
-	{
-		return mMenuPanel->RemoveItem(position);
-	}
-
-	void MenuPanel::RemoveItem(const WString& path)
-	{
-		return mMenuPanel->RemoveItem(path);
-	}
-
-	void MenuPanel::CheckSceneSaving(const Function<void()>& onCompleted)
-	{
-		if (o2EditorApplication.IsSceneChanged())
-		{
-			auto wnd = EditorUIRoot.AddWidget(o2UI.CreateWindow("Save scene?"));
-			*wnd->layout = WidgetLayout::Based(BaseCorner::Center, Vec2F(400, 150));
-
-			auto verLayout = o2UI.CreateVerLayout();
-			wnd->AddChild(verLayout);
-			*verLayout->layout = WidgetLayout::BothStretch();
-			verLayout->baseCorner = BaseCorner::Top;
-
-			auto text = o2UI.CreateLabel("Current scene was modified but wasn't saved.\nDo you want to save it?");
-			text->horOverflow = Label::HorOverflow::Wrap;
-			verLayout->AddChild(text);
-
-			auto horLayout = o2UI.CreateHorLayout();
-			verLayout->AddChild(horLayout);
-
-			*horLayout->layout = WidgetLayout::BothStretch();
-			horLayout->border = BorderF(10, 10, 10, 10);
-			horLayout->spacing = 10;
-			horLayout->AddChild(o2UI.CreateButton("Save", [=]() {
-				o2EditorApplication.SaveScene();
-				onCompleted();
-				wnd->Hide();
-			}));
-
-			horLayout->AddChild(o2UI.CreateButton("Don't save", [=]() {
-				onCompleted();
-				wnd->Hide();
-			}));
-
-			horLayout->AddChild(o2UI.CreateButton("Cancel", [=]() { wnd->Hide(); }));
-
-			return;
-		}
-
-		onCompleted();
-	}
-
-	void MenuPanel::OnNewScenePressed()
-	{
-		o2Tasks.Invoke([&] { CheckSceneSaving([]() { o2EditorApplication.MakeNewScene(); }); });
-	}
-
-	void MenuPanel::OnOpenScenePressed()
-	{
-		o2Tasks.Invoke([&] {
-			auto openDialog = []() {
-				String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" } });
-
-				if (fileName.IsEmpty())
-					return;
-
-				ForcePopEditorScopeOnStack scope;
-				String assetsPath = o2FileSystem.GetPathRelativeToPath(fileName, ::GetAssetsPath());
-				o2EditorApplication.LoadScene(SceneAssetRef(assetsPath));
-			};
-
-			CheckSceneSaving(openDialog);
+			fixActor(GetScene().GetRoot());
 		});
 	}
+}#include <memory>
 
-	void MenuPanel::OnSaveScenePressed()
-	{
-		o2Tasks.Invoke([&] {
-			if (o2EditorApplication.GetLoadedSceneName().IsEmpty())
-				OnSaveSceneAsPressed();
-			else
-				o2EditorApplication.SaveScene();
-		});
-	}
+template <typename T>
+using Ref = std::shared_ptr<T>;
 
-	void MenuPanel::OnSaveSceneAsPressed()
-	{
-		String fileName = GetSaveFileNameDialog("Save scene", { { "o2 Scene", "*.scn" } });
+template <typename T>
+using WeakRef = std::weak_ptr<T>;
 
-		if (fileName.IsEmpty())
-			return;
-
-		if (!fileName.EndsWith(".scn"))
-			fileName += ".scn";
-
-		o2Tasks.Invoke([=] { o2EditorApplication.SaveSceneAs(fileName); });
-	}
-
-	void MenuPanel::OnExitPressed()
-	{
-		o2Application.Shutdown();
-	}
-
-	void MenuPanel::OnUndoPressed()
-	{
-		o2EditorApplication.UndoAction();
-	}
-
-	void MenuPanel::OnRedoPressed()
-	{
-		o2EditorApplication.RedoAction();
-	}
-
-	void MenuPanel::OnShowTreePressed()
-	{
-		auto window = o2EditorWindows.GetWindow<TreeWindow>();
-		if (window)
-			window->Show();
-	}
-
-	void MenuPanel::OnShowScenePressed()
-	{
-		auto window = o2EditorWindows.GetWindow<SceneWindow>();
-		if (window)
-			window->Show();
-	}
-
-	void MenuPanel::OnShowAssetsPressed()
-	{
-		auto window = o2EditorWindows.GetWindow<AssetsWindow>();
-		if (window)
-			window->Show();
-	}
-
-	void MenuPanel::OnShowPropertiesPressed()
-	{
-		auto window = o2EditorWindows.GetWindow<PropertiesWindow>();
-		if (window)
-			window->Show();
-	}
-
-	void MenuPanel::OnShowAnimationPressed()
-	{
-		auto window = o2EditorWindows.GetWindow<AnimationWindow>();
-		if (window)
-			window->Show();
-	}
-
-	void MenuPanel::OnShowLogPressed()
-	{
-		auto window = o2EditorWindows.GetWindow<LogWindow>();
-		if (window)
-			window->Show();
-	}
-
-    void MenuPanel::OnShowGamePressed()
-	{
-		auto window = o2EditorWindows.GetWindow<GameWindow>();
-		if (window)
-			window->Show();
-	}
-
-	void MenuPanel::OnResetLayoutPressed()
-	{
-		o2EditorWindows.SetDefaultWindowsLayout();
-	}
-
-	void MenuPanel::OnRunPressed()
-	{
-
-	}
-
-	void MenuPanel::OnBuildAndRunPressed()
-	{
-
-	}
-
-	void MenuPanel::OnBuildPressed()
-	{
-
-	}
-
-	void MenuPanel::OnAboutPressed()
-	{
-
-	}
-
-	void MenuPanel::OnDocumentationPressed()
-	{
-
-	}
-
-	void MenuPanel::OnSaveDefaultLayoutPressed()
-	{
-		o2EditorConfig.globalConfig.mDefaultLayout = o2EditorWindows.GetWindowsLayout();
-		o2Debug.Log("Default windows layout saved!");
-	}
-
-	void MenuPanel::OnCurveEditorTestPressed()
-	{
-		CurveEditorDlg::Show(Function<void()>());
-
-		int testCurves = 50;
-		int testKeys = 50;
-		for (int i = 0; i < testCurves; i++)
-		{
-			Curve* curve = mnew Curve();
-
-			for (int j = 0; j < testKeys; j++)
-			{
-				curve->AppendKey(Math::Random(0.1f, 2.0f), Math::Random(-1.0f, 1.0f), 1.0f);
-			}
-
-			CurveEditorDlg::AddEditingCurve("test" + (String)i, curve);
-		}
-	}
+template <typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
 }
+
+template <typename T>
+class DynamicCast
+{
+public:
+    template <typename U>
+    static Ref<T> cast(const Ref<U>& ptr)
+    {
+        return std::dynamic_pointer_cast<T>(ptr);
+    }
+};
+
+class MenuPanel
+{
+public:
+    using Item = o2::MenuPanel::Item;
+
+    MenuPanel()
+    {
+        mMenuPanel = mmake<o2::MenuPanel>();
+
+        o2Scene.OnDestroyed([&](o2::Scene* scene) {
+            auto fixActor = [&](o2::Actor* actor) {
+                actor->ForEach([](auto comp) { comp->GenerateNewID(); });
+                actor->GetChildren().ForEach([&](o2::Actor* x) { fixActor(x); });
+            };
+
+            for (const auto& actor : o2Scene.GetRootActors())
+                fixActor(actor);
+        });
+
+        mMenuPanel->AddToggleItem("Debug/View editor UI tree", false, [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
+
+        mMenuPanel->AddItem("Debug/Dump memory", [&]() { o2Memory.DumpInfo(); });
+
+        mMenuPanel->AddItem("Debug/JS collect garbage", [&]() { o2Scripts.CollectGarbage(); });
+
+        mMenuPanel->AddItem("Debug/Rebuild assets", [&]() { o2Assets.RebuildAssets(); });
+        mMenuPanel->AddItem("Debug/Rebuild assets forcible", [&]() { o2Assets.RebuildAssets(true); });
+    }
+
+    ~MenuPanel() {}
+
+    Widget* AddItem(const Item& item)
+    {
+        return mMenuPanel->AddItem(item);
+    }
+
+    void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
+                 const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys())
+    {
+        mMenuPanel->AddItem(path, clickFunc, icon, shortcut);
+    }
+
+    void InsertItem(const Item& item, int position)
+    {
+        mMenuPanel->InsertItem(item, position);
+    }
+
+    void AddItems(Vector<Item> items)
+    {
+        mMenuPanel->AddItems(items);
+    }
+
+    void InsertItems(Vector<Item> items, int position)
+    {
+        mMenuPanel->InsertItems(items, position);
+    }
+
+    Item GetItem(int position)
+    {
+        return mMenuPanel->GetItem(position);
+    }
+
+    Vector<Item> GetItems() const
+    {
+        return mMenuPanel->GetItems();
+    }
+
+    void RemoveItem(int position)
+    {
+        return mMenuPanel->RemoveItem(position);
+    }
+
+    void RemoveItem(const WString& path)
+    {
+        return mMenuPanel->RemoveItem(path);
+    }
+
+    void CheckSceneSaving(const Function<void()>& onCompleted)
+    {
+        if (o2EditorApplication.IsSceneChanged())
+        {
+            auto wnd = EditorUIRoot.AddWidget(o2UI.CreateWindow("Save scene?"));
+            *wnd->layout = WidgetLayout::Based(BaseCorner::Center, Vec2F(400, 150));
+
+            auto verLayout = o2UI.CreateVerLayout();
+            wnd->AddChild(verLayout);
+            *verLayout->layout = WidgetLayout::BothStretch();
+            verLayout->baseCorner = BaseCorner::Top;
+
+            auto text = o2UI.CreateLabel("Current scene was modified but wasn't saved.\nDo you want to save it?");
+            text->horOverflow = Label::HorOverflow::Wrap;
+            verLayout->AddChild(text);
+
+            auto horLayout = o2UI.CreateHorLayout();
+            verLayout->AddChild(horLayout);
+
+            *horLayout->layout = WidgetLayout::BothStretch();
+            horLayout->border = BorderF(10, 10, 10, 10);
+            horLayout->spacing = 10;
+            horLayout->AddChild(o2UI.CreateButton("Save", [=]() {
+                o2EditorApplication.SaveScene();
+                onCompleted();
+                wnd->Hide();
+            }));
+
+            horLayout->AddChild(o2UI.CreateButton("Don't save", [=]() {
+                onCompleted();
+                wnd->Hide();
+            }));
+
+            horLayout->AddChild(o2UI.CreateButton("Cancel", [=]() { wnd->Hide(); }));
+
+            return;
+        }
+
+        onCompleted();
+    }
+
+    void OnNewScenePressed()
+    {
+        o2Tasks.Invoke([&] { CheckSceneSaving([]() { o2EditorApplication.MakeNewScene(); }); });
+    }
+
+    void OnOpenScenePressed()
+    {
+        o2Tasks.Invoke([&] {
+            auto openDialog = []() {
+                String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" } });
+
+                if (fileName.IsEmpty())
+                    return;
+
+                ForcePopEditorScopeOnStack scope;
+                String assetsPath = o2FileSystem.GetPathRelativeToPath(fileName, ::GetAssetsPath());
+                o2EditorApplication.LoadScene(SceneAssetRef(assetsPath));
+            };
+
+            CheckSceneSaving(openDialog);
+        });
+    }
+
+    void OnSaveScenePressed()
+    {
+        o2Tasks.Invoke([&] {
+            if (o2EditorApplication.GetLoadedSceneName().IsEmpty())
+                OnSaveSceneAsPressed();
+            else
+                o2EditorApplication.SaveScene();
+        });
+    }
+
+    void OnSaveSceneAsPressed()
+    {
+        String fileName = GetSaveFileNameDialog("Save scene", { { "o2 Scene", "*.scn" } });
+
+        if (fileName.IsEmpty())
+            return;
+
+        if (!fileName.EndsWith(".scn"))
+            fileName += ".scn";
+
+        o2Tasks.Invoke([=] { o2EditorApplication.SaveSceneAs(fileName); });
+    }
+
+    void OnExitPressed()
+    {
+        o2Application.Shutdown();
+    }
+
+    void OnUndoPressed()
+    {
+        o2EditorApplication.UndoAction();
+    }
+
+    void OnRedoPressed()
+    {
+        o2EditorApplication.RedoAction();
+    }
+
+    void OnShowTreePressed()
+    {
+        auto window = o2EditorWindows.GetWindow<TreeWindow>();
+        if (window)
+            window->Show();
+    }
+
+    void OnShowScenePressed()
+    {
+        auto window = o2EditorWindows.GetWindow<SceneWindow>();
+        if (window)
+            window->Show();
+    }
+
+    void OnShowAssetsPressed()
+    {
+        auto window = o2EditorWindows.GetWindow<AssetsWindow>();
+        if (window)
+            window->Show();
+    }
+
+    void OnShowPropertiesPressed()
+    {
+        auto window = o2EditorWindows.GetWindow<PropertiesWindow>();
+        if (window)
+            window->Show();
+    }
+
+    void OnShowAnimationPressed()
+    {
+        auto window = o2EditorWindows.GetWindow#include <Ref.h>
+
+class AnimationWindow
+{
+public:
+    void Show()
+    {
+        // Show animation window
+    }
+};
+
+class LogWindow
+{
+public:
+    void Show()
+    {
+        // Show log window
+    }
+};
+
+class GameWindow
+{
+public:
+    void Show()
+    {
+        // Show game window
+    }
+};
+
+class MenuPanel
+{
+public:
+    void OnShowAnimationPressed()
+    {
+        auto window = o2EditorWindows.GetWindow<Ref<AnimationWindow>>();
+        if (window)
+            window->Show();
+    }
+
+    void OnShowLogPressed()
+    {
+        auto window = o2EditorWindows.GetWindow<Ref<LogWindow>>();
+        if (window)
+            window->Show();
+    }
+
+    void OnShowGamePressed()
+    {
+        auto window = o2EditorWindows.GetWindow<Ref<GameWindow>>();
+        if (window)
+            window->Show();
+    }
+
+    void OnResetLayoutPressed()
+    {
+        o2EditorWindows.SetDefaultWindowsLayout();
+    }
+
+    void OnRunPressed()
+    {
+
+    }
+
+    void OnBuildAndRunPressed()
+    {
+
+    }
+
+    void OnBuildPressed()
+    {
+
+    }
+
+    void OnAboutPressed()
+    {
+
+    }
+
+    void OnDocumentationPressed()
+    {
+
+    }
+
+    void OnSaveDefaultLayoutPressed()
+    {
+        o2EditorConfig.globalConfig.mDefaultLayout = o2EditorWindows.GetWindowsLayout();
+        o2Debug.Log("Default windows layout saved!");
+    }
+
+    void OnCurveEditorTestPressed()
+    {
+        CurveEditorDlg::Show([=]() {
+            // Callback function
+        });
+
+        int testCurves = 50;
+        int testKeys = 50;
+        for (int i = 0; i < testCurves; i++)
+        {
+            Ref<Curve> curve = mmake<Curve>();
+
+            for (int j = 0; j < testKeys; j++)
+            {
+                curve->AppendKey(Math::Random(0.1f, 2.0f), Math::Random(-1.0f, 1.0f), 1.0f);
+            }
+
+            CurveEditorDlg::AddEditingCurve("test" + std::to_string(i), curve);
+        }
+    }
+};

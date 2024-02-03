@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2Editor/PropertiesWindow/DefaultPropertiesViewer.h"
+#include <memory>
 
 using namespace o2;
 
@@ -29,9 +30,9 @@ namespace Editor
 		IOBJECT(AssetPropertiesViewer);
 
 	protected:
-		Widget* mAssetHeader = nullptr;    // Asset header
-		Label* mAssetNameLabel = nullptr; // Asset name label
-		Button* mSaveButton = nullptr;     // Save asset button
+		Ref<Widget> mAssetHeader;    // Asset header
+		Ref<Label> mAssetNameLabel; // Asset name label
+		Ref<Button> mSaveButton;     // Save asset button
 
 	protected:
 		// Sets target objects
@@ -51,9 +52,9 @@ CLASS_BASES_META(Editor::AssetPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AssetPropertiesViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAssetHeader);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAssetNameLabel);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSaveButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Widget>()).NAME(mAssetHeader);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Label>()).NAME(mAssetNameLabel);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Button>()).NAME(mSaveButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetPropertiesViewer)

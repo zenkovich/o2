@@ -1,6 +1,4 @@
 #include "o2Editor/stdafx.h"
-#include "Create.h"
-
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Scene.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
@@ -11,10 +9,11 @@ namespace Editor
 	CreateAction::CreateAction()
 	{}
 
-	CreateAction::CreateAction(const Vector<SceneEditableObject*>& objects, 
-											 SceneEditableObject* parent, SceneEditableObject* prevObject)
+	CreateAction::CreateAction(const Vector<Ref<SceneEditableObject>>& objects, 
+							   const Ref<SceneEditableObject>& parent, 
+							   const Ref<SceneEditableObject>& prevObject)
 	{
-		objectsIds = objects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
+		objectsIds = objects.Convert<SceneUID>([](const Ref<SceneEditableObject>& x) { return x->GetID(); });
 
 		objectsData.Set(objects);
 
@@ -29,9 +28,9 @@ namespace Editor
 
 	void CreateAction::Redo()
 	{
-		SceneEditableObject* parent = o2Scene.GetEditableObjectByID(insertParentId);
-		SceneEditableObject* prevObject = o2Scene.GetEditableObjectByID(insertPrevObjectId);
-		Vector<SceneEditableObject*> objects;
+		Ref<SceneEditableObject> parent = o2Scene.GetEditableObjectByID(insertParentId);
+		Ref<SceneEditableObject> prevObject = o2Scene.GetEditableObjectByID(insertPrevObjectId);
+		Vector<Ref<SceneEditableObject>> objects;
 
 		if (parent)
 		{
@@ -39,7 +38,7 @@ namespace Editor
 
 			objectsData.Get(objects);
 
-			for (auto object : objects)
+			for (const Ref<SceneEditableObject>& object : objects)
 				parent->AddEditableChild(object, insertIdx++);
 		}
 		else
@@ -48,7 +47,7 @@ namespace Editor
 
 			objectsData.Get(objects);
 
-			for (auto object : objects)
+			for (const Ref<SceneEditableObject>& object : objects)
 				object->SetIndexInSiblings(insertIdx++);
 		}
 
@@ -58,17 +57,17 @@ namespace Editor
 
 	void CreateAction::Undo()
 	{
-		for (auto objectId : objectsIds)
+		for (const SceneUID& objectId : objectsIds)
 		{
-			SceneEditableObject* object = o2Scene.GetEditableObjectByID(objectId);
+			Ref<SceneEditableObject> object = o2Scene.GetEditableObjectByID(objectId);
 			if (object)
 				delete object;
 		}
 
 		o2EditorSceneScreen.ClearSelectionWithoutAction();
 	}
-
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::CreateAction, Editor__CreateAction);

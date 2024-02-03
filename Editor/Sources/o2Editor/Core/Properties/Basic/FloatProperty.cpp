@@ -5,7 +5,6 @@
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/Widgets/EditBox.h"
 
-
 namespace Editor
 {
 	FloatProperty::FloatProperty()
@@ -19,7 +18,7 @@ namespace Editor
 
 	EditBox* FloatProperty::GetEditBox() const
 	{
-		return mEditBox;
+		return mEditBox.get();
 	}
 
 	FloatProperty& FloatProperty::operator=(const FloatProperty& other)

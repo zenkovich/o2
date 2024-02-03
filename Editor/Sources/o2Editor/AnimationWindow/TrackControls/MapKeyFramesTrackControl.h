@@ -7,6 +7,8 @@
 #include "o2Editor/AnimationWindow/TrackControls/AnimationTrackWrapper.h"
 #include "o2Editor/AnimationWindow/Tree.h"
 #include "o2Editor/AnimationWindow/KeyHandlesSheet.h"
+#include <o2/Utils/SmartPointers/Ref.h>
+#include <o2/Utils/SmartPointers/WeakRef.h>
 
 using namespace o2;
 
@@ -72,14 +74,14 @@ namespace Editor
 		public:
 			KeyHandle();
 			KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle, const Ref<IAnimationTrack>& track,
-					  const Function<void(KeyHandle& keyHandle)>& updateFunc);
+			          const Function<void(KeyHandle& keyHandle)>& updateFunc);
 
 			bool operator==(const KeyHandle& other) const;
 		};
 
 		struct IHandlesGroup
 		{
-			String                 trackPath;
+			String trackPath;
 			Vector<Ref<KeyHandle>> handles;
 
 			WeakRef<MapKeyFramesTrackControl> trackControl;
@@ -141,11 +143,176 @@ namespace Editor
 	}
 
 	template<typename TrackType>
-	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::InitializeHandles(const Ref<IAnimationTrack>& itrack,
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::InitializeHandles(const Ref<IAnimationTrack>& itrack, const String& trackPath)
+	{
+		trackPath = trackPath;
+		trackControl = trackControl.Cast<MapKeyFramesTrackControl>();
+		track = itrack.Cast<TrackType>();
+		CreateHandles();
+	}
+
+	template<typename TrackType>
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::CreateHandles()
+	{
+		auto wrapper = Ref<AnimationTrackWrapper<TrackType>>::Create(track);
+		for (const auto& key : wrapper->GetAllKeys())
+		{
+			auto handle = CreateHandle();
+			keyHandles.push_back(
+			    Ref<KeyHandle>::Create(key->GetUid(), handle, itrack, [&](KeyHandle& keyHandle) {
+				    trackControl.Lock()->UpdateHandlesForTrack(track);
+			    }));
+		}
+	}
+
+	template<typename TrackType>
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::OnHandleChangedPos(const Ref<KeyHandle>& keyHandle, const Vec2F& pos)
+	{
+	}
+
+	template<typename TrackType>
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::UpdateHandles()
+	{
+	}
+
+	template<typename TrackType>
+	bool MapKeyFramesTrackControl::HandlesGroup<TrackType>::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
+	{
+	}
+
+	template<typename TrackType>
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::DeleteKey(UInt64 keyUid)
+	{
+	}
+
+	MapKeyFramesTrackControl::MapKeyFramesTrackControl() = default;
+
+	MapKeyFramesTrackControl::MapKeyFramesTrackControl(const MapKeyFramesTrackControl& other) = default;
+
+	MapKeyFramesTrackControl::~MapKeyFramesTrackControl() = default;
+
+	MapKeyFramesTrackControl& MapKeyFramesTrackControl::operator=(const MapKeyFramesTrackControl& other) = default;
+
+	void MapKeyFramesTrackControl::Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet)
+	{
+		mTimeline = timeline;
+		mHandlesSheet = handlesSheet;
+	}
+
+	void MapKeyFramesTrackControl::Draw()
+	{
+	}
+
+	void MapKeyFramesTrackControl::UpdateHandles()
+	{
+	}
+
+	void MapKeyFramesTrackControl::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
+	{
+	}
+
+	Vector<Ref<ITrackControl::KeyHandle>> MapKeyFramesTrackControl::GetKeyHandles() const
+	{
+	}
+
+	void MapKeyFramesTrackControl::DeleteKey(UInt64 keyUid)
+	{
+	}
+
+	void MapKeyFramesTrackControl::SetMappedTracks(const AnimationTree::TrackNode& valueNode)
+	{
+		InitializeNodeHandles(valueNode);
+	}
+
+	void MapKeyFramesTrackControl::UpdateHandlesForTrack(const Ref<IAnimationTrack>& track)
+	{
+	}
+
+	void MapKeyFramesTrackControl::BeginKeysDrag()
+	{
+	}
+
+	void MapKeyFramesTrackControl::EndKeysDrag()
+	{
+	}
+
+	void MapKeyFramesTrackControl::CacheHandles()
+	{
+	}
+
+	void MapKeyFramesTrackControl::InitializeNodeHandles(const AnimationTree::TrackNode& valueNode)
+	{
+	}
+
+	Ref<AnimationKeyDragHandle> MapKeyFramesTrackControl::CreateHandle()
+	{
+	}
+
+	Vector<Ref<KeyHandle>> MapKeyFramesTrackControl::FindHandlesAtPosition(float position) const
+	{
+	}
+
+	MapKeyFramesTrackControl::KeyHandle::KeyHandle() = default;
+
+	MapKeyFramesTrackControl::KeyHandle::KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle, const Ref<IAnimationTrack>& track,
+	                                                const Function<void(KeyHandle& keyHandle)>& updateFunc)
+	{
+	}
+
+	bool MapKeyFramesTrackControl::KeyHandle::operator==(const KeyHandle& other) const
+	{
+	}
+
+	MapKeyFramesTrackControl::IHandlesGroup::~IHandlesGroup() = default;
+
+	void MapKeyFramesTrackControl::IHandlesGroup::CacheHandles()
+	{
+	}
+
+	MapKeyFramesTrackControl::HandlesGroup<TrackType>::~HandlesGroup() = default;
+
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::InitializeHandles(const Ref<IAnimationTrack>& itrack, const String& trackPath)
+	{
+		trackPath = trackPath;
+		trackControl = trackControl.Cast<MapKeyFramesTrackControl>();
+		track = itrack.Cast<TrackType>();
+		CreateHandles();
+	}
+
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::CreateHandles()
+	{
+		auto wrapper = Ref<AnimationTrackWrapper<TrackType>>::Create(track);
+		for (const auto& key : wrapper->GetAllKeys())
+		{
+			auto handle = CreateHandle();
+			keyHandles.push_back(
+			    Ref<KeyHandle>::Create(key->GetUid(), handle, itrack, [&](KeyHandle& keyHandle) {
+				    trackControl.Lock()->UpdateHandlesForTrack(track);
+			    }));
+		}
+	}
+
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::OnHandleChangedPos(const Ref<KeyHandle>& keyHandle, const Vec2F& pos)
+	{
+	}
+
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::UpdateHandles()
+	{
+	}
+
+	bool MapKeyFramesTrackControl::HandlesGroup<TrackType>::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
+	{
+	}
+
+	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::DeleteKey(UInt64 keyUid)
+	{
+	}
+}.replace raw pointers with Ref<>, except void* pointers.Ref<> is a smart pointer like shared_ptr. Use const Ref<>& for function arguments with pointer types, also in overridden methods. Dont replace void* pointers!! Remove default nullptr value for class members with type Ref<>. If class variable is some kind of "parent", use WeakRef<>. Use mmake<>() to create Ref<>, just like make_shared<>(). Replace dynamic_cast<type*> with DynamicCast<type> to cast Ref<>.
+
+/nationTrack>& itrack,
 																			  const String& trackPath)
 	{
 		this->trackPath = trackPath;
-
 		track = DynamicCast<TrackType>(itrack);
 		track.Lock()->onKeysChanged += THIS_SUBSCRIPTION(HandlesGroup<TrackType>::UpdateHandles,
 														 [&]() { track = nullptr; });
@@ -272,10 +439,10 @@ CLASS_FIELDS_META(Editor::MapKeyFramesTrackControl)
 {
 	FIELD().PRIVATE().NAME(mHandlesGroups);
 	FIELD().PRIVATE().NAME(mTracks);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeline);
-	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
+	FIELD().PRIVATE().NAME(mTimeline);
+	FIELD().PRIVATE().NAME(mHandlesSheet);
 	FIELD().PRIVATE().NAME(mHandlesCache);
-	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate);
+	FIELD().PRIVATE().NAME(mDisableHandlesUpdate);
 }
 END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
@@ -283,20 +450,48 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const MapKeyFramesTrackControl&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationTimeline>&, const Ref<KeyHandlesSheet>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
 	FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<ITrackControl::KeyHandle*>, GetKeyHandles);
 	FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMappedTracks, const AnimationTree::TrackNode&);
-	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandlesForTrack, IAnimationTrack*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetMappedTracks, const Ref<AnimationTree::TrackNode>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandlesForTrack, const Ref<IAnimationTrack>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysDrag);
 	FUNCTION().PUBLIC().SIGNATURE(void, EndKeysDrag);
 	FUNCTION().PRIVATE().SIGNATURE(void, CacheHandles);
-	FUNCTION().PRIVATE().SIGNATURE(void, InitializeNodeHandles, const AnimationTree::TrackNode&);
-	FUNCTION().PRIVATE().SIGNATURE(AnimationKeyDragHandle*, CreateHandle);
-	FUNCTION().PRIVATE().SIGNATURE(Vector<KeyHandle*>, FindHandlesAtPosition, float);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeNodeHandles, const Ref<AnimationTree::TrackNode>&);
+	FUNCTION().PRIVATE().SIGNATURE(AnimationKey#include <memory>
+
+template<typename T>
+using Ref = std::shared_ptr<T>;
+
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args) {
+    return std::make_shared<T>(std::forward<Args>(args)...);
 }
-END_META;
-// --- END META ---
+
+template<typename T, typename U>
+Ref<T> DynamicCast(const Ref<U>& ptr) {
+    return std::dynamic_pointer_cast<T>(ptr);
+}
+
+class KeyHandle
+{
+};
+
+class Vector
+{
+public:
+    Vector<KeyHandle*> FindHandlesAtPosition(float) const;
+};
+
+int main()
+{
+    Vector().FindHandlesAtPosition(0.0f);
+    return 0;
+}

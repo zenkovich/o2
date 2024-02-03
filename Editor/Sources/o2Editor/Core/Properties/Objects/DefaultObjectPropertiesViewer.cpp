@@ -1,3 +1,6 @@
+#include "o2/Utils/Ref.h"
+#include "o2/Utils/WeakRef.h"
+
 #include "o2Editor/stdafx.h"
 #include "DefaultObjectPropertiesViewer.h"
 
@@ -7,7 +10,7 @@
 
 namespace Editor
 {
-	bool DefaultObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	bool DefaultObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targetObjets)
 	{
 		IObjectPropertiesViewer::CheckBuildProperties(targetObjets);
 
@@ -39,7 +42,7 @@ namespace Editor
 		return false;
 	}
 
-	void DefaultObjectPropertiesViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	void DefaultObjectPropertiesViewer::OnRefreshed(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targetObjets)
 	{
 		if (!targetObjets.IsEmpty())
 			mRealObjectType = &(targetObjets[0].first)->GetType();

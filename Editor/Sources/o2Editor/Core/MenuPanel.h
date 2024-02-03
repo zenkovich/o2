@@ -2,6 +2,8 @@
 
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Ref.h"
+#include "o2/Utils/WeakRef.h"
 
 using namespace o2;
 
@@ -13,7 +15,7 @@ namespace Editor
 	// -----------------
 	// Editor menu panel
 	// -----------------
-	class MenuPanel: public Singleton<MenuPanel>
+	class MenuPanel : public Singleton<MenuPanel>
 	{
 	public:
 		// Default constructor. Initializes basic menu items
@@ -23,20 +25,20 @@ namespace Editor
 		~MenuPanel();
 
 		// Add item
-		Widget* AddItem(const o2::MenuPanel::Item& item);
+		Ref<Widget> AddItem(const o2::MenuPanel::Item& item);
 
 		// Adds item by path ("node/sub node/target")
 		void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-					 const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
+			const Ref<ImageAsset>& icon = nullptr, const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Inserts item at position
 		void InsertItem(const o2::MenuPanel::Item& item, int position);
 
 		// Adds array of items
-		void AddItems(Vector<o2::MenuPanel::Item> items);
+		void AddItems(const Vector<o2::MenuPanel::Item>& items);
 
 		// Inserts array of items at position
-		void InsertItems(Vector<o2::MenuPanel::Item> items, int position);
+		void InsertItems(const Vector<o2::MenuPanel::Item>& items, int position);
 
 		// Returns item at position
 		o2::MenuPanel::Item GetItem(int position);
@@ -51,7 +53,7 @@ namespace Editor
 		void RemoveItem(const WString& path);
 
 	protected:
-		o2::MenuPanel* mMenuPanel; // Menu panel
+		WeakRef<o2::MenuPanel> mMenuPanel; // Menu panel
 
 	protected:
 		// Checks is scene was changed and shows confirm dialog
@@ -91,10 +93,10 @@ namespace Editor
 		void OnShowPropertiesPressed();
 
 		// On View/Animation pressed in menu
-        void OnShowAnimationPressed();
+		void OnShowAnimationPressed();
 
-        // On View/Log pressed in menu
-        void OnShowLogPressed();
+		// On View/Log pressed in menu
+		void OnShowLogPressed();
 
 		// On View/Game pressed in menu
 		void OnShowGamePressed();

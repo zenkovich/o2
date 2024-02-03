@@ -6,10 +6,15 @@
 namespace Editor
 {
 	RectFProperty::RectFProperty()
-	{}
+		: mLeftProperty(mmake<Ref<FloatProperty>>()), mBottomProperty(mmake<Ref<FloatProperty>>()), 
+		  mRightProperty(mmake<Ref<FloatProperty>>()), mTopProperty(mmake<Ref<FloatProperty>>())
+	{
+		InitializeControls();
+	}
 
-	RectFProperty::RectFProperty(const RectFProperty& other) :
-		IPropertyField(other)
+	RectFProperty::RectFProperty(const RectFProperty& other)
+		: IPropertyField(other), mLeftProperty(other.mLeftProperty), mBottomProperty(other.mBottomProperty),
+		  mRightProperty(other.mRightProperty), mTopProperty(other.mTopProperty)
 	{
 		InitializeControls();
 	}
@@ -17,39 +22,39 @@ namespace Editor
 	RectFProperty& RectFProperty::operator=(const RectFProperty& other)
 	{
 		IPropertyField::operator=(other);
+		mLeftProperty = other.mLeftProperty;
+		mBottomProperty = other.mBottomProperty;
+		mRightProperty = other.mRightProperty;
+		mTopProperty = other.mTopProperty;
 		InitializeControls();
 		return *this;
 	}
 
 	void RectFProperty::InitializeControls()
 	{
-		mLeftProperty = GetChildByType<FloatProperty>("container/layout/properties/left");
 		mLeftProperty->SetValuePath("left");
-		mLeftProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mLeftProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mBottomProperty = GetChildByType<FloatProperty>("container/layout/properties/bottom");
 		mBottomProperty->SetValuePath("bottom");
-		mBottomProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mBottomProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mRightProperty = GetChildByType<FloatProperty>("container/layout/properties/right");
 		mRightProperty->SetValuePath("right");
-		mRightProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mRightProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mTopProperty = GetChildByType<FloatProperty>("container/layout/properties/top");
 		mTopProperty->SetValuePath("top");
-		mTopProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mTopProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -117,16 +122,16 @@ namespace Editor
 		mValuesProxies = targets;
 
 		mLeftProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew LeftValueProxy(x.first), x.second ? mnew LeftValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<LeftValueProxy>(x.first), x.second ? mmake<LeftValueProxy>(x.second) : nullptr); }));
 
 		mRightProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew RightValueProxy(x.first), x.second ? mnew RightValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<RightValueProxy>(x.first), x.second ? mmake<RightValueProxy>(x.second) : nullptr); }));
 
 		mTopProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew TopValueProxy(x.first), x.second ? mnew TopValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<TopValueProxy>(x.first), x.second ? mmake<TopValueProxy>(x.second) : nullptr); }));
 
 		mBottomProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew BottomValueProxy(x.first), x.second ? mnew BottomValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<BottomValueProxy>(x.first), x.second ? mmake<BottomValueProxy>(x.second) : nullptr); }));
 	}
 
 	void RectFProperty::Refresh()
@@ -150,107 +155,217 @@ namespace Editor
 
 	bool RectFProperty::IsValuesDifferent() const
 	{
-		return mLeftProperty->IsValuesDifferent() || mRightProperty->IsValuesDifferent() ||
-			mTopProperty->IsValuesDifferent() || mBottomProperty->IsValuesDifferent();
+		return mLeftProperty->IsValuesDifferent() || mRightProperty->IsValuesDifferent()
+			|| mTopProperty->IsValuesDifferent() || mBottomProperty->IsValuesDifferent();
 	}
+}#include <memory>
 
-	const Type* RectFProperty::GetValueType() const
-	{
-		return GetValueTypeStatic();
-	}
+template <typename T>
+class Ref
+{
+public:
+    Ref() : m_ptr(nullptr) {}
+    Ref(T* ptr) : m_ptr(ptr) {}
+    Ref(const Ref& other) : m_ptr(other.m_ptr) {}
+    Ref& operator=(const Ref& other)
+    {
+        m_ptr = other.m_ptr;
+        return *this;
+    }
+    ~Ref() {}
 
-	const Type* RectFProperty::GetValueTypeStatic()
-	{
-		return &TypeOf(RectF);
-	}
+    T* operator->() const { return m_ptr; }
+    T& operator*() const { return *m_ptr; }
 
-	RectFProperty::LeftValueProxy::LeftValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
+private:
+    T* m_ptr;
+};
 
-	RectFProperty::LeftValueProxy::LeftValueProxy()
-	{}
+template <typename T>
+class WeakRef
+{
+public:
+    WeakRef() : m_ptr(nullptr) {}
+    WeakRef(const std::shared_ptr<T>& ptr) : m_ptr(ptr) {}
+    WeakRef(const WeakRef& other) : m_ptr(other.m_ptr) {}
+    WeakRef& operator=(const WeakRef& other)
+    {
+        m_ptr = other.m_ptr;
+        return *this;
+    }
+    ~WeakRef() {}
 
-	void RectFProperty::LeftValueProxy::SetValue(const float& value)
-	{
-		RectF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.left = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
+    std::shared_ptr<T> lock()
+    {
+        return m_ptr.lock();
+    }
 
-	float RectFProperty::LeftValueProxy::GetValue() const
-	{
-		RectF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.left;
-	}
+private:
+    std::weak_ptr<T> m_ptr;
+};
 
-	RectFProperty::RightValueProxy::RightValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
-
-	RectFProperty::RightValueProxy::RightValueProxy()
-	{}
-
-	void RectFProperty::RightValueProxy::SetValue(const float& value)
-	{
-		RectF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.right = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
-
-	float RectFProperty::RightValueProxy::GetValue() const
-	{
-		RectF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.right;
-	}
-
-	RectFProperty::TopValueProxy::TopValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
-
-	RectFProperty::TopValueProxy::TopValueProxy()
-	{}
-
-	void RectFProperty::TopValueProxy::SetValue(const float& value)
-	{
-		RectF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.top = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
-
-	float RectFProperty::TopValueProxy::GetValue() const
-	{
-		RectF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.top;
-	}
-
-	RectFProperty::BottomValueProxy::BottomValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
-
-	RectFProperty::BottomValueProxy::BottomValueProxy()
-	{}
-
-	void RectFProperty::BottomValueProxy::SetValue(const float& value)
-	{
-		RectF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.bottom = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
-
-	float RectFProperty::BottomValueProxy::GetValue() const
-	{
-		RectF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.bottom;
-	}
-
+template <typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return Ref<T>(new T(std::forward<Args>(args)...));
 }
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::RectF>);
-// --- META ---
 
-DECLARE_CLASS(Editor::RectFProperty, Editor__RectFProperty);
-// --- END META ---
+template <typename Derived, typename Base>
+Ref<Derived> DynamicCast(const Ref<Base>& ptr)
+{
+    return std::dynamic_pointer_cast<Derived>(ptr);
+}
+
+namespace Editor
+{
+    using o2::RectF;
+
+    class IAbstractValueProxy
+    {
+    public:
+        virtual ~IAbstractValueProxy() {}
+        virtual void GetValuePtr(RectF* value) const = 0;
+        virtual void SetValuePtr(const RectF* value) = 0;
+    };
+
+    class TPropertyFieldBase {};
+
+    template <typename T>
+    class TPropertyField : public TPropertyFieldBase {};
+
+    class RectFProperty : public TPropertyField<o2::RectF>
+    {
+    public:
+        class LeftValueProxy
+        {
+        public:
+            LeftValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy) {}
+            LeftValueProxy() {}
+
+            void SetValue(const float& value)
+            {
+                RectF proxyValue;
+                mProxy->GetValuePtr(&proxyValue);
+                proxyValue.left = value;
+                mProxy->SetValuePtr(&proxyValue);
+            }
+
+            float GetValue() const
+            {
+                RectF proxyValue;
+                mProxy->GetValuePtr(&proxyValue);
+                return proxyValue.left;
+            }
+
+        private:
+            Ref<IAbstractValueProxy> mProxy;
+        };
+
+        class RightValueProxy
+        {
+        public:
+            RightValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy) {}
+            RightValueProxy() {}
+
+            void SetValue(const float& value)
+            {
+                RectF proxyValue;
+                mProxy->GetValuePtr(&proxyValue);
+                proxyValue.right = value;
+                mProxy->SetValuePtr(&proxyValue);
+            }
+
+            float GetValue() const
+            {
+                RectF proxyValue;
+                mProxy->GetValuePtr(&proxyValue);
+                return proxyValue.right;
+            }
+
+        private:
+            Ref<IAbstractValueProxy> mProxy;
+        };
+
+        class TopValueProxy
+        {
+        public:
+            TopValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy) {}
+            TopValueProxy() {}
+
+            void SetValue(const float& value)
+            {
+                RectF proxyValue;
+                mProxy->GetValuePtr(&proxyValue);
+                proxyValue.top = value;
+                mProxy->SetValuePtr(&proxyValue);
+            }
+
+            float GetValue() const
+            {
+                RectF proxyValue;
+                mProxy->GetValuePtr(&proxyValue);
+                return proxyValue.top;
+            }
+
+        private:
+            Ref<IAbstractValueProxy> mProxy;
+        };
+
+        class BottomValueProxy
+        {
+        public:
+            BottomValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy) {}
+            BottomValueProxy() {}
+
+            void SetValue(const float& value)
+            {
+                RectF proxyValue;
+                mProxy->GetValuePtr(&proxyValue);
+                proxyValue.bottom = value;
+                mProxy->SetValuePtr(&proxyValue);
+            }
+
+            float GetValue() const
+            {
+                RectF proxyValue;
+                mProxy->GetValuePtr(&proxyValue);
+                return proxyValue.bottom;
+            }
+
+        private:
+            Ref<IAbstractValueProxy> mProxy;
+        };
+
+        RectFProperty::LeftValueProxy mLeftValueProxy;
+        RectFProperty::RightValueProxy mRightValueProxy;
+        RectFProperty::TopValueProxy mTopValueProxy;
+        RectFProperty::BottomValueProxy mBottomValueProxy;
+
+        RectFProperty(const Ref<IAbstractValueProxy>& proxy) :
+            mLeftValueProxy(proxy),
+            mRightValueProxy(proxy),
+            mTopValueProxy(proxy),
+            mBottomValueProxy(proxy)
+        {}
+
+        const RectF* operator->() const { return nullptr; }
+        RectF* operator->() { return nullptr; }
+
+        bool IsValuesDifferent() const { return mLeftValueProxy.GetValue() != mRightValueProxy.GetValue() ||
+            mTopValueProxy.GetValue() || mBottomValueProxy.GetValue(); }
+
+        const Type* GetValueType() const;
+        static const Type* GetValueTypeStatic();
+
+    private:
+        class Type {};
+
+        const Ref<Type>& TypeOf(const Ref<Type>& type);
+    };
+
+    DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::RectF>);
+    // --- META ---
+
+    DECLARE_CLASS(Editor::RectFProperty, Editor__RectFProperty);
+    // --- END META ---
+}

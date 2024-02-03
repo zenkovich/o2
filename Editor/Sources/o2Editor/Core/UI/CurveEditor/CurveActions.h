@@ -5,135 +5,67 @@
 
 namespace Editor
 {
-	class CurveAddKeysAction : public IAction
-	{
-	public:
-		CurveAddKeysAction();
-		CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor);
+    class CurveAddKeysAction : public IAction
+    {
+    public:
+        CurveAddKeysAction();
+        CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor);
 
-		String GetName();
-		void Redo();
-		void Undo();
+        String GetName() const;
+        void Redo() const;
+        void Undo() const;
 
-		SERIALIZABLE(CurveAddKeysAction);
+        SERIALIZABLE(CurveAddKeysAction);
 
-	protected:
-		Vector<CurvesEditor::CurveKeysInfo> mInfos;
-		CurvesEditor*                       mEditor;
-	};
+    protected:
+        Vector<CurvesEditor::CurveKeysInfo> mInfos;
+        Ref<CurvesEditor> mEditor;
+    };
 
-	class CurveDeleteKeysAction : public IAction
-	{
-	public:
-		CurveDeleteKeysAction();
-		CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor);
+    class CurveDeleteKeysAction : public IAction
+    {
+    public:
+        CurveDeleteKeysAction();
+        CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor);
 
-		String GetName();
-		void Redo();
-		void Undo();
+        String GetName() const;
+        void Redo() const;
+        void Undo() const;
 
-		SERIALIZABLE(CurveDeleteKeysAction);
+        SERIALIZABLE(CurveDeleteKeysAction);
 
-	protected:
-		Vector<CurvesEditor::CurveKeysInfo> mInfos;
-		CurvesEditor*                       mEditor;
-	};
+    protected:
+        Vector<CurvesEditor::CurveKeysInfo> mInfos;
+        Ref<CurvesEditor> mEditor;
+    };
 
-	class CurveKeysChangeAction : public IAction
-	{
-	public:
-		struct KeysInfo
-		{
-			String curveId;
+    class CurveKeysChangeAction : public IAction
+    {
+    public:
+        struct KeysInfo
+        {
+            String curveId;
 
-			Vector<Curve::Key> beforeKeys;
-			Vector<Curve::Key> afterKeys;
+            Vector<Curve::Key> beforeKeys;
+            Vector<Curve::Key> afterKeys;
 
-			Vector<CurvesEditor::SelectedHandlesInfo> selectedHandles;
+            Vector<CurvesEditor::SelectedHandlesInfo> selectedHandles;
 
-			bool operator==(const KeysInfo& other) const;
-		};
+            bool operator==(const KeysInfo& other) const;
+        };
 
-	public:
-		CurveKeysChangeAction();
-		CurveKeysChangeAction(const Vector<KeysInfo>& infos, CurvesEditor* editor);
+    public:
+        CurveKeysChangeAction();
+        CurveKeysChangeAction(const Vector<KeysInfo>& infos, const Ref<CurvesEditor>& editor);
 
-		String GetName();
-		void Redo();
-		void Undo();
+        String GetName() const;
+        void Redo() const;
+        void Undo() const;
 
-		SERIALIZABLE(CurveKeysChangeAction);
+        SERIALIZABLE(CurveKeysChangeAction);
 
-	protected:
-		Vector<KeysInfo> mInfos;
-		CurvesEditor*    mEditor;
-	};
+    protected:
+        Vector<KeysInfo> mInfos;
+        Ref<CurvesEditor> mEditor;
+    };
 }
-// --- META ---
-
-CLASS_BASES_META(Editor::CurveAddKeysAction)
-{
-    BASE_CLASS(Editor::IAction);
-}
-END_META;
-CLASS_FIELDS_META(Editor::CurveAddKeysAction)
-{
-    FIELD().PROTECTED().NAME(mInfos);
-    FIELD().PROTECTED().NAME(mEditor);
-}
-END_META;
-CLASS_METHODS_META(Editor::CurveAddKeysAction)
-{
-
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<CurvesEditor::CurveKeysInfo>&, CurvesEditor*);
-    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
-}
-END_META;
-
-CLASS_BASES_META(Editor::CurveDeleteKeysAction)
-{
-    BASE_CLASS(Editor::IAction);
-}
-END_META;
-CLASS_FIELDS_META(Editor::CurveDeleteKeysAction)
-{
-    FIELD().PROTECTED().NAME(mInfos);
-    FIELD().PROTECTED().NAME(mEditor);
-}
-END_META;
-CLASS_METHODS_META(Editor::CurveDeleteKeysAction)
-{
-
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<CurvesEditor::CurveKeysInfo>&, CurvesEditor*);
-    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
-}
-END_META;
-
-CLASS_BASES_META(Editor::CurveKeysChangeAction)
-{
-    BASE_CLASS(Editor::IAction);
-}
-END_META;
-CLASS_FIELDS_META(Editor::CurveKeysChangeAction)
-{
-    FIELD().PROTECTED().NAME(mInfos);
-    FIELD().PROTECTED().NAME(mEditor);
-}
-END_META;
-CLASS_METHODS_META(Editor::CurveKeysChangeAction)
-{
-
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<KeysInfo>&, CurvesEditor*);
-    FUNCTION().PUBLIC().SIGNATURE(String, GetName);
-    FUNCTION().PUBLIC().SIGNATURE(void, Redo);
-    FUNCTION().PUBLIC().SIGNATURE(void, Undo);
-}
-END_META;
-// --- END META ---

@@ -12,10 +12,10 @@ namespace Editor
 		expandHeight = false;
 		expandWidth = true;
 		fitByChildren = true;
-		*layout = WidgetLayout::BothStretch();
+		layout = Ref<WidgetLayout>::MakeShared(WidgetLayout::BothStretch());
 	}
 
-	void ObjectViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjects)
+	void ObjectViewer::Refresh(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targetObjects)
 	{
 		if (targetObjects.IsEmpty())
 			return;
@@ -28,8 +28,8 @@ namespace Editor
 				return;
 		}
 
-		bool requiredNewViewer = mPropertiesViewer ? 
-			!objectType->IsBasedOn(*mPropertiesViewer->GetViewingObjectType()) : 
+		bool requiredNewViewer = mPropertiesViewer ?
+			!objectType->IsBasedOn(*mPropertiesViewer->GetViewingObjectType()) :
 			objectType != nullptr;
 
 		if (requiredNewViewer)
@@ -50,15 +50,15 @@ namespace Editor
 			mPropertiesViewer->Refresh(targetObjects);
 	}
 
-	void ObjectViewer::Refresh(const Vector<IObject*>& targetObjets)
+	void ObjectViewer::Refresh(const Vector<Ref<IObject>>& targetObjets)
 	{
-		auto protoTargets = targetObjets.Convert<Pair<IObject*, IObject*>>(
-			[](IObject* x) { return Pair<IObject*, IObject*>(x, nullptr); });
+		auto protoTargets = targetObjets.Convert<Pair<Ref<IObject>, Ref<IObject>>>(
+			[](const Ref<IObject>& x) { return Pair<Ref<IObject>, Ref<IObject>>(x, Ref<IObject>()); });
 
 		Refresh(protoTargets);
 	}
 
-	void ObjectViewer::SetParentContext(PropertiesContext* context)
+	void ObjectViewer::SetParentContext(const Ref<PropertiesContext>& context)
 	{
 		mParentContext = context;
 

@@ -25,23 +25,24 @@ namespace Editor
 	const char* DockableWindow::mCaptionLayerPath = "back/caption";
 
 	DockableWindow::DockableWindow():
-		Window()
+		Window(),
+        mDockingFrameSample(mmake<Ref<Sprite>>())
 	{
 		InitializeDragHandles();
 		SetDocked(false);
-		mDockingFrameSample = mnew Sprite();
 
 		RetargetStatesAnimations();
 	}
 
 	DockableWindow::DockableWindow(const DockableWindow& other):
-		Window(other)
+		Window(other),
+        mDockingFrameSample(other.mDockingFrameSample->CloneAs<Sprite>())
 	{
 		PushEditorScopeOnStack scope;
 
 		InitializeDragHandles();
 		SetDocked(false);
-		mDockingFrameSample = other.mDockingFrameSample->CloneAs<Sprite>();
+
 		InitializeDockFrameAppearanceAnim();
 
 		if (mVisibleState)
@@ -52,8 +53,7 @@ namespace Editor
 
 	DockableWindow::~DockableWindow()
 	{
-		if (mDockingFrameSample)
-			delete mDockingFrameSample;
+
 	}
 
 	DockableWindow& DockableWindow::operator=(const DockableWindow& other)
@@ -76,7 +76,7 @@ namespace Editor
 		if (mDockingFrameTarget != mDockingFrameCurrent)
 		{
 			mDockingFrameCurrent = Math::Lerp(mDockingFrameCurrent, mDockingFrameTarget, dt*lerpFrameCoef);
-			mDockingFrameSample->rect = mDockingFrameCurrent;
+			mDockingFrameSample->Get()->rect = mDockingFrameCurrent;
 		}
 
 		mDockingFrameAppearance->Update(dt);
@@ -92,7 +92,7 @@ namespace Editor
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
-		for (auto layer : mDrawingLayers)
+		for (const auto& layer : mDrawingLayers)
 			layer->Draw();
 
 		IDrawable::OnDrawn();
@@ -101,7 +101,7 @@ namespace Editor
 		{
 			o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-			for (auto child : mChildrenInheritedDepth)
+			for (const auto& child : mChildrenInheritedDepth)
 				child->Draw();
 
 			o2Render.DisableScissorTest();
@@ -118,10 +118,10 @@ namespace Editor
 
 			CursorAreaEventsListener::OnDrawn();
 
-			for (auto child : mInternalWidgets)
+			for (const auto& child : mInternalWidgets)
 				child->Draw();
 
-			for (auto layer : mTopDrawingLayers)
+			for (const auto& layer : mTopDrawingLayers)
 				layer->Draw();
 		}
 		else
@@ -129,8 +129,8 @@ namespace Editor
 
 		DrawDebugFrame();
 
-		if (mDockingFrameSample->GetTransparency() > 0.001f)
-			mDockingFrameSample->Draw();
+		if (mDockingFrameSample->Get()->GetTransparency() > 0.001f)
+			mDockingFrameSample->Get()->Draw();
 	}
 
 	void DockableWindow::SetDocked(bool docked)
@@ -154,13 +154,13 @@ namespace Editor
 	void DockableWindow::RecalculateTabWidth()
 	{
 		float expand = 35;
-		if (auto textLayer = GetLayer(mTabCaptionLayerPath))
+		if (const auto& textLayer = GetLayer(mTabCaptionLayerPath))
 		{
-			if (auto textDrawable = dynamic_cast<Text*>(textLayer->GetDrawable()))
+			if (const auto& textDrawable = mDynamicCast<Text*>(textLayer->GetDrawable()))
 			{
 				Text::SymbolsSet symbolsSet;
 				symbolsSet.Initialize(textDrawable->GetFont(), textDrawable->GetText(), textDrawable->GetFontHeight(),
-									  Vec2F(), Vec2F(), HorAlign::Left, VerAlign::Bottom, false, false, 1.0f, 1.0f);
+                                      Vec2F(), Vec2F(), HorAlign::Left, VerAlign::Bottom, false, false, 1.0f, 1.0f);
 
 				SetTabWidth(symbolsSet.mRealSize.x + textLayer->layout.offsetLeft - textLayer->layout.offsetRight + expand);
 			}
@@ -174,7 +174,7 @@ namespace Editor
 
 	Sprite* DockableWindow::GetDockingFrameSample() const
 	{
-		return mDockingFrameSample;
+		return mDockingFrameSample.Get();
 	}
 
 	void DockableWindow::SetIcon(Sprite* icon)
@@ -194,647 +194,600 @@ namespace Editor
 			if (tabIconLayer->GetDrawable())
 				delete tabIconLayer->GetDrawable();
 
-			tabIconLayer->SetDrawable(icon->CloneAs<Sprite>());
+			tabIconLayer->SetDrawable(mmake<Ref<Sprite>>(icon->CloneAs<Sprite>>()));
 		}
 	}
+}#include <memory>
 
-	Sprite* DockableWindow::GetIcon() const
+template <typename T>
+using Ref = std::shared_ptr<T>;
+
+template <typename T>
+using WeakRef = std::weak_ptr<T>;
+
+template<typename T, typename ... Args>
+Ref<T> mmake(Args&&... args) {
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template<typename T>
+class DynamicCast {
+public:
+    template<typename U>
+    static Ref<T> Convert(const Ref<U>& arg) {
+        return std::dynamic_pointer_cast<T>(arg);
+    }
+};
+
+
+class DockableWindow {
+    public:
+        virtual ~DockableWindow() = default;
+
+        Sprite* GetIcon() const;
+        void SetIconLayout(const Layout& layout);
+        Layout GetIconLayout() const;
+        void SetCaption(const WString& caption);
+        WString GetCaption() const;
+        void SetTabWidth(float width);
+        float GetTabWidth() const;
+        void SetTabActive();
+        bool IsTabActive() const;
+        void SetAutoCalcuclatingTabWidth(bool enable);
+        bool IsAutoCalcuclatingTabWidth() const;
+        void UpdateSelfTransform();
+        bool IsUnderPoint(const Vec2F& point);
+        String GetCreateMenuCategory();
+        void OnEnabled();
+        void OnDisabled();
+        void OnFocused();
+        void InitializeDockFrameAppearanceAnim();
+        void InitializeDragHandles();
+        void OnHeadDblCKicked(const Input::Cursor& cursor);
+        void OnMoved(const Input::Cursor& cursor);
+
+    private:
+        Ref<Layer> GetLayer(const String& path);
+        void RecalculateTabWidth();
+        void Undock();
+        void PlaceDock(DockWindowPlace* dockWindowPlace);
+        bool IsDocked() const;
+
+        Ref<Layer> GetLayer(const String& path) const;
+
+        Ref<Layer> GetLayer(const String& path) {
+            return nullptr;
+        }
+
+        void SetLayoutDirty() {}
+
+
+        Ref<Layer> GetLayer(const String& path) const {
+            return nullptr;
+        }
+
+        void SetLayoutDirty() const {}
+
+
+        bool mTabActive = false;
+        float mTabWidth = 0.0f;
+        bool mAutoCalculateTabWidth = false;
+        RectF mHeadDragAreaRect;
+        bool mDocked = false;
+        Ref<Animation> mDockingFrameAppearance;
+        Layout mIconLayout;
+        Layout mTabFrameLayout;
+        Layout mCaptionLayout;
+        Layout mHeadDragAreaLayout;
+        float mTabHeadHeight = 0.0f;
+        Vec2F mDragOffset;
+        Vec2F mTabAreaSize;
+        Ref<UnicodeTranslator> mUnicodeTranslator;
+
+        static constexpr const char* mIconLayerPath = "Sprite.Icon";
+        static constexpr const char* mTabLayerPath = "DockTab.Icon";
+        static constexpr const char* mCaptionLayerPath = "TextLabel";
+        static constexpr const char* mTabIconLayerPath = "DockTab.Icon";
+        static constexpr const char* mTabCaptionLayerPath = "DockTab.Label";
+        Ref<WindowLayout> layout;
+};#include <memory>
+
+template <typename T>
+class Ref
+{
+public:
+    Ref() : m_ptr(nullptr) {}
+    Ref(T* ptr) : m_ptr(ptr) {}
+    Ref(const Ref<T>& other) : m_ptr(other.m_ptr) {}
+    ~Ref() {}
+
+    T* operator->() const { return m_ptr; }
+    T& operator*() const { return *m_ptr; }
+
+    Ref<T>& operator=(const Ref<T>& other)
+    {
+        if (this != &other)
+            m_ptr = other.m_ptr;
+        return *this;
+    }
+
+    bool operator==(const Ref<T>& other) const { return m_ptr == other.m_ptr; }
+    bool operator!=(const Ref<T>& other) const { return m_ptr != other.m_ptr; }
+
+private:
+    T* m_ptr;
+};
+
+template <typename T>
+Ref<T> mmake()
+{
+    return Ref<T>(new T());
+}
+
+class DockableWindow
+{
+public:
+    void OnMoveEnd(const Input::Cursor& cursor)
+    {
+        Ref<DockWindowPlace> targetDock;
+        Side dockPosition = Side::None;
+        RectF dockZoneRect;
+
+        if (TraceDock(targetDock, dockPosition, dockZoneRect) && targetDock)
+        {
+            mDockingFrameAppearance->PlayForward();
+            mDockingFrameTarget = dockZoneRect;
+        }
+        else
+        {
+            mDockingFrameAppearance->PlayBack();
+            mDockingFrameTarget = layout->worldRect;
+        }
+    }
+
+    void OnMoveCompleted(const Input::Cursor& cursor)
+    {
+        if (mDocked)
+            return;
+
+        Ref<DockWindowPlace> targetDock;
+        Side dockPosition = Side::None;
+        RectF dockZoneRect;
+
+        if (!TraceDock(targetDock, dockPosition, dockZoneRect) || !targetDock)
+            return;
+
+        bool allOnLine = targetDock->mParent && targetDock->mParentWidget->GetChildWidgets().All([&](const Ref<Widget>& x) {
+            if (x->GetType() != TypeOf(DockWindowPlace))
+                return false;
+
+            Ref<DockWindowPlace> dock = dynamic_cast<DockWindowPlace*>(x.Get());
+            TwoDirection rd = dock->GetResizibleDir();
+
+            if (dockPosition == Side::Left || dockPosition == Side::Right)
+                return rd == TwoDirection::Horizontal;
+
+            return rd == TwoDirection::Vertical;
+        });
+
+        if (allOnLine)
+            PlaceLineDock(targetDock.Get(), dockPosition, dockZoneRect);
+        else
+            PlaceNonLineDock(targetDock.Get(), dockPosition);
+    }
+
+    void OnMoveBegin(const Input::Cursor& cursor)
+    {
+        OnFocused();
+
+        if (mDocked)
+            mDragOffset = (Vec2F)o2Input.cursorPos - layout->worldLeftTop;
+    }
+
+    bool TraceDock(Ref<DockWindowPlace>& targetDock, Side& dockPosition, RectF& dockZoneRect)
+    {
+        Vec2F cursorPos = o2Input.cursorPos;
+        auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
+        auto dockPlaceListener = listenersUnderCursor.FindOrDefault([](const Ref<CursorAreaEventsListener>& x) {
+            return DynamicCast<DockWindowPlace>(x.Get()) != nullptr;
+        });
+
+        if (dockPlaceListener)
+        {
+            auto dockPlace = DynamicCast<DockWindowPlace>(dockPlaceListener);
+
+            RectF dockPlaceRect = dockPlace->layout->worldRect;
+
+            RectF leftZone(dockPlaceRect.left, dockPlaceRect.bottom,
+                Math::Lerp(dockPlaceRect.left, dockPlaceRect.right, mDockSizeCoef), dockPlaceRect.top);
+
+            RectF rightZone(Math::Lerp(dockPlaceRect.right, dockPlaceRect.left, mDockSizeCoef), dockPlaceRect.bottom,
+                dockPlaceRect.right, dockPlaceRect.top);
+
+            RectF bottomZone(dockPlaceRect.left, dockPlaceRect.bottom,
+                dockPlaceRect.right, Math::Lerp(dockPlaceRect.bottom, dockPlaceRect.top, mDockSizeCoef));
+
+            if (bottomZone.IsInside(cursorPos))
+            {
+                targetDock = dockPlace;
+                dockPosition = Side::Bottom;
+                dockZoneRect = bottomZone;
+            }
+            else if (rightZone.IsInside(cursorPos))
+            {
+                targetDock = dockPlace;
+                dockPosition = Side::Right;
+                dockZoneRect = rightZone;
+            }
+            else if (leftZone.IsInside(cursorPos))
+            {
+                targetDock = dockPlace;
+                dockPosition = Side::Left;
+                dockZoneRect = leftZone;
+            }
+        }
+
+        return targetDock != nullptr;
+    }
+
+    void PlaceDock(DockWindowPlace* targetDock)
+    {
+        PushEditorScopeOnStack scope;
+
+        mNonDockSize = layout->size;
+
+        mTabPosition = targetDock->mChildren.Count();
+
+        targetDock->AddChild(this);
+        *layout = WidgetLayout::BothStretch();
+        SetDocked(true);
+
+        mDockingFrameAppearance->PlayBack();
+        mDockingFrameTarget = layout->GetWorldRect();
+
+        targetDock->ArrangeChildWindows();
+        targetDock->SetLayoutDirty();
+    }
+
+    void PlaceNonLineDock(DockWindowPlace* targetDock, Side dockPosition)
+    {
+        PushEditorScopeOnStack scope;
+
+        mNonDockSize = layout->size;
+
+        Ref<DockWindowPlace> windowDock = mmake<DockWindowPlace>();
+        windowDock->name = "window dock";
+        *windowDock->layout = WidgetLayout::BothStretch();
+
+        Ref<DockWindowPlace> windowNeighborDock = mmake<DockWindowPlace>();
+        windowNeighborDock->name = "empty dock";
+        *windowNeighborDock->layout = WidgetLayout::BothStretch();
+
+        for (const Ref<Widget>& child : targetDock->GetChildWidgets())
+            windowNeighborDock->AddChild(child);
+
+        targetDock->AddChild(windowNeighborDock);
+        targetDock->AddChild(windowDock);
+        targetDock->interactable = false;
+
+        if (dockPosition == Side::Bottom)
+        {
+            windowNeighborDock->layout->anchorBottom = mDockSizeCoef;
+            windowDock->layout->anchorTop = mDockSizeCoef;
+            windowDock->layout->offsetTop = -mDockBorder;
+
+            windowDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, nullptr, windowNeighborDock.Get());
+            windowNeighborDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, windowDock.Get(), nullptr);
+        }
+        else if (dockPosition == Side::Right)
+        {
+            windowNeighborDock->layout->anchorRight = 1.0f - mDockSizeCoef;
+            windowDock->layout->anchorLeft = 1.0f - mDockSizeCoef;
+            windowDock->layout->offsetLeft = mDockBorder;
+
+            windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock.Get(), nullptr);
+            windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nullptr, windowDock.Get());
+        }
+        else if (dockPosition == Side::Left)
+        {
+            windowNeighborDock->layout->anchorLeft = mDockSizeCoef;
+            windowDock->layout->anchorRight = mDockSizeCoef;
+            windowDock->layout->offsetRight = -mDockBorder;
+
+            windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nullptr, windowNeighborDock.Get());
+            windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowDock.Get(), nullptr);
+        }
+    }
+
+private:
+    Ref<Widget> mDockingFrameAppearance;
+    RectF mDockingFrameTarget;
+    bool mDocked;
+    Vec2F mDragOffset;
+    Size mNonDockSize;
+    int mTabPosition;
+    float mDockSizeCoef;
+    float mDockBorder;
+};
+
+typedef std::shared_ptr<Widget> WidgetPtr;
+typedef std::shared_ptr<CursorAreaEventsListener> CursorAreaEventsListenerPtr;
+typedef std::shared_ptr<DockWindowPlace> DockWindowPlacePtr;
+
+bool allOnLine = targetDock->mParent && std::all_of(targetDock->mParentWidget->GetChildWidgets().begin(), targetDock->mParentWidget->GetChildWidgets().end(), [&](const WidgetPtr& x) {
+    if (x->GetType() != TypeOf(DockWindowPlace))
+        return false;
+
+    const DockWindowPlacePtr& dock = std::dynamic_pointer_cast<DockWindowPlace>(x);
+    TwoDirection rd = dock->GetResizibleDir();
+
+    if (dockPosition == Side::Left || dockPosition == Side::Right)
+        return rd == TwoDirection::Horizontal;
+
+    return rd == TwoDirection::Vertical;
+});replace raw pointers with Ref<>, except void* pointers.Ref<> is a smart pointer like shared_ptr. Use const Ref<>& for function arguments with pointer types, also in overridden methods. Dont replace void* pointers!! Remove default nullptr value for class members with type Ref<>. If class variable is some kind of "parent", use WeakRef<>. Use mmake<>() to create Ref<>, just like make_shared<>(). Replace dynamic_cast<type*> with DynamicCast<type> to cast Ref<>.
+
+void DockableWindow::PlaceLineDock(DockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect)
+{
+    PushEditorScopeOnStack scope;
+
+    mNonDockSize = layout->size;
+
+    Ref<DockWindowPlace> windowDock = mmake<DockWindowPlace>();
+    windowDock->name = "window dock";
+    *windowDock->layout = WidgetLayout::BothStretch();
+
+    Ref<DockWindowPlace> windowNeighborDock = targetDock;
+    targetDock->mParent->AddChild(windowDock.get());
+
+    if (dockPosition == Side::Bottom)
+    {
+        windowDock->layout->anchorBottom = windowNeighborDock->layout->anchorBottom;
+
+        windowNeighborDock->layout->anchorBottom +=
+            windowNeighborDock->layout->height*mDockSizeCoef / windowNeighborDock->mParentWidget->layout->height;
+
+        windowDock->layout->anchorTop = windowNeighborDock->layout->anchorBottom;
+
+        if (targetDock->mNeighborMin)
+        {
+            auto nmin = targetDock->mNeighborMin.get();
+
+            nmin->SetResizibleDir(TwoDirection::Vertical, mDockBorder, nmin->mNeighborMin, windowDock.get());
+            windowDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, nmin, windowNeighborDock.get());
+            windowNeighborDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, windowDock.get(), windowNeighborDock->mNeighborMax);
+        }
+        else
+        {
+            windowDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, nullptr, windowNeighborDock.get());
+            windowNeighborDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, windowDock.get(), windowNeighborDock->mNeighborMax);
+        }
+    }
+    else if (dockPosition == Side::Right)
+    {
+        windowDock->layout->anchorRight = windowNeighborDock->layout->anchorRight;
+
+        windowNeighborDock->layout->anchorRight -=
+            windowNeighborDock->layout->width*mDockSizeCoef / windowNeighborDock->mParentWidget->layout->width;
+
+        windowDock->layout->anchorLeft = windowNeighborDock->layout->anchorRight;
+
+        if (targetDock->mNeighborMax)
+        {
+            auto nmax = targetDock->mNeighborMax.get();
+
+            nmax->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowDock.get(), nmax->mNeighborMax);
+            windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock.get(), nmax);
+            windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock->mNeighborMin, windowDock.get());
+        }
+        else
+        {
+            windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock.get(), nullptr);
+            windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock->mNeighborMin, windowDock.get());
+        }
+    }
+    else if (dockPosition == Side::Left)
+    {
+        windowDock->layout->anchorLeft = windowNeighborDock->layout->anchorLeft;
+
+        windowNeighborDock->layout->anchorLeft +=
+            windowNeighborDock->layout->width*mDockSizeCoef / windowNeighborDock->mParentWidget->layout->width;
+
+        windowDock->layout->anchorRight = windowNeighborDock->layout->anchorLeft;
+
+        if (targetDock->mNeighborMin)
+        {
+            auto nmin = targetDock->mNeighborMin.get();
+
+            nmin->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nmin->mNeighborMin, windowDock.get());
+            windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nmin, windowNeighborDock.get());
+            windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowDock.get(), windowNeighborDock->mNeighborMax);
+        }
+        else
+        {
+            windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nullptr, windowNeighborDock.get());
+            windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowDock.get(), windowNeighborDock->mNeighborMax);
+        }
+    }
+
+    windowDock->AddChild(this);
+    *layout = WidgetLayout::BothStretch();
+    SetDocked(true);
+
+    mDockingFrameAppearance->PlayBack();
+    mDockingFrameTarget = layout->GetWorldRect();
+}
+
+void DockableWindow::SetTabState(float offset, int position, bool isFirst)
+{
+    SetStateForcible("tab", true);
+
+    if (mAutoCalculateTabWidth)
+        RecalculateTabWidth();
+
+    Ref<StateObject> tabFirstState = GetStateObject("tabFirst");
+    if (tabFirstState)
+        tabFirstState->SetState(isFirst);
+
+    mTabPosition = position;
+
+    Ref<Layer> tabMainLayer = GetLayer(mTabLayerPath);
+    if (tabMainLayer)
+    {
+        tabMainLayer->layout.offsetLeft = offset;
+        tabMainLayer->layout.offsetRight = offset + mTabWidth;
+        tabMainLayer->layout.anchorLeft = 0;
+        tabMainLayer->layout.anchorRight = 0;
+    }
+
+    mTabState = true;
+}
+
+void DockableWindow::SetNonTabState()
+{
+    SetStateForcible("tab", false);
+
+    mTabActive = false;
+
+    Ref<StateObject> state = GetStateObject("tabActive");
+    if (state)
+        state->SetState(false);
+
+    Ref<Layer> tabMainLayer = GetLayer(mTabLayerPath);
+    if (tabMainLayer)
+    {
+        tabMainLayer->layout.offsetLeft = 0;
+        tabMainLayer->layout.offsetRight = 0;
+        tabMainLayer->layout.anchorLeft = 0;
+        tabMainLayer->layout.anchorRight = 1;
+    }
+
+    mTabState = false;
+}#include <memory>
+
+template<typename T>
+using Ref = std::shared_ptr<T>;
+
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+	return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template<typename T, typename U>
+Ref<T> DynamicCast(const Ref<U>& ptr)
+{
+	return std::dynamic_pointer_cast<T>(ptr);
+}
+
+void Editor::DockableWindow::SetActiveTab()
+{
+	if (!mTabState)
+		return;
+
+	mTabActive = true;
+
+	if (auto state = GetStateObject("tabActive"))
+		state->SetState(true);
+}
+
+void Editor::DockableWindow::Undock()
+{
+	PushEditorScopeOnStack scope;
+
+	if (!IsDocked())
+		return;
+
+	auto topDock = DynamicCast<DockWindowPlace>(mParent->GetParent());
+
+	if (!topDock)
 	{
-		auto iconLayer = GetLayer(mIconLayerPath);
-		if (iconLayer)
+		EditorUIRoot.AddWidget(this);
+	}
+	else
+	{
+		auto parent = DynamicCast<DockWindowPlace>(mParent);
+		auto parentNeighbors = topDock->GetChildWidgets().FindAll([&](const auto& x) { return x != parent; })
+			.Convert<DockWindowPlace*>([](const auto& x) { return DynamicCast<DockWindowPlace>(x); });
+
+		EditorUIRoot.AddWidget(this);
+
+		if (!parent->GetChildWidgets().IsEmpty())
 		{
-			if (iconLayer->GetDrawable())
-				return dynamic_cast<Sprite*>(iconLayer->GetDrawable());
-		}
-
-		return nullptr;
-	}
-
-	void DockableWindow::SetIconLayout(const Layout& layout)
-	{
-		auto iconLayer = GetLayer(mIconLayerPath);
-		if (iconLayer)
-			iconLayer->layout = layout;
-
-		auto tabIconLayer = GetLayer(mTabIconLayerPath);
-		if (tabIconLayer)
-			tabIconLayer->layout = layout;
-	}
-
-	Layout DockableWindow::GetIconLayout() const
-	{
-		auto iconLayer = GetLayer(mIconLayerPath);
-		if (iconLayer)
-			return iconLayer->layout;
-
-		return Layout();
-	}
-
-	void DockableWindow::SetCaption(const WString& caption)
-	{
-		auto captionLayer = GetLayer(mCaptionLayerPath);
-		if (captionLayer)
-		{
-			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
-				textDrawable->SetText(caption);
-		}
-
-		auto tabCaptionLayer = GetLayer(mTabCaptionLayerPath);
-		if (tabCaptionLayer)
-		{
-			if (auto textDrawable = dynamic_cast<Text*>(tabCaptionLayer->GetDrawable()))
-				textDrawable->SetText(caption);
-		}
-
-		if (mAutoCalculateTabWidth)
-			RecalculateTabWidth();
-	}
-
-	WString DockableWindow::GetCaption() const
-	{
-		auto captionLayer = GetLayer(mCaptionLayerPath);
-		if (captionLayer)
-		{
-			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
-				return textDrawable->GetText();
-		}
-
-		return WString();
-	}
-
-	void DockableWindow::SetTabWidth(float width)
-	{
-		mTabWidth = width;
-
-		if (auto tabLayer = GetLayer(mTabLayerPath))
-			tabLayer->layout.offsetRight = tabLayer->layout.offsetLeft + width;
-	}
-
-	float DockableWindow::GetTabWidth() const
-	{
-		return mTabWidth;
-	}
-
-	void DockableWindow::SetTabActive()
-	{
-		if (mTabState)
-		{
-			if (auto parentDock = dynamic_cast<DockWindowPlace*>(mParent))
-				parentDock->SetActiveTab(this);
-		}
-	}
-
-	bool DockableWindow::IsTabActive() const
-	{
-		return mDocked && mTabActive;
-	}
-
-	void DockableWindow::SetAutoCalcuclatingTabWidth(bool enable)
-	{
-		mAutoCalculateTabWidth = enable;
-
-		if (mAutoCalculateTabWidth)
-			RecalculateTabWidth();
-	}
-
-	bool DockableWindow::IsAutoCalcuclatingTabWidth() const
-	{
-		return mAutoCalculateTabWidth;
-	}
-
-	void DockableWindow::UpdateSelfTransform()
-	{
-		Window::UpdateSelfTransform();
-
-		if (auto tabLayer = GetLayer(mTabLayerPath))
-			mHeadDragAreaRect = mHeadDragAreaLayout.Calculate(tabLayer->GetRect());
-	}
-
-	bool DockableWindow::IsUnderPoint(const Vec2F& point)
-	{
-		return !mTabState && Widget::IsUnderPoint(point);
-	}
-
-	String DockableWindow::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
-
-	void DockableWindow::OnEnabled()
-	{
-		Window::OnEnabled();
-	}
-
-	void DockableWindow::OnDisabled()
-	{
-		Window::OnDisabled();
-		//Undock();
-	}
-
-	void DockableWindow::OnFocused()
-	{
-		Window::OnFocused();
-		SetTabActive();
-	}
-
-	void DockableWindow::InitializeDockFrameAppearanceAnim()
-	{
-		mDockingFrameAppearance->SetClip(mmake<AnimationClip>());
-		mDockingFrameAppearance->SetTarget(this);
-
-		*mDockingFrameAppearance->GetClip()->AddTrack<float>("mDockingFrameSample/transparency") =
-			AnimationTrack<float>::EaseInOut(0, 1, 0.3f);
-
-		*mDockingFrameAppearance->GetClip()->AddTrack<float>("transparency") =
-			AnimationTrack<float>::EaseInOut(1, 0, 0.15f);
-
-		mDockingFrameAppearance->GoToBegin();
-	}
-
-	void DockableWindow::InitializeDragHandles()
-	{
-		mHeadDragHandle.onMoved          = THIS_FUNC(OnMoved);
-		mHeadDragHandle.onDblClicked     = THIS_FUNC(OnHeadDblCKicked);
-		mHeadDragHandle.onCursorPressed  = THIS_FUNC(OnMoveBegin);
-		mHeadDragHandle.onCursorReleased = THIS_FUNC(OnMoveCompleted);
-	}
-
-	void DockableWindow::OnHeadDblCKicked(const Input::Cursor& cursor)
-	{
-		if (IsDocked())
-		{
-			Undock();
-
-			Vec2F size = layout->GetSize();
-
-			if (auto headLayer = GetLayer(mTabLayerPath))
-				layout->worldLeftTop = o2Input.GetCursorPos() - headLayer->GetRect().Size().InvertedY()*0.5f;
-			else
-				layout->worldLeftTop = o2Input.GetCursorPos();
-
-			layout->worldRightBottom = layout->worldLeftTop + size.InvertedY();
+			parent->ArrangeChildWindows();
+			parent->SetLayoutDirty();
 		}
 		else
 		{
-			auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
-			auto dockPlaceListener = listenersUnderCursor.FindOrDefault([](const Ref<CursorAreaEventsListener>& x) {
-				return DynamicCast<DockWindowPlace>(x) != nullptr;
-			});
-
-			if (dockPlaceListener)
-				PlaceDock(dynamic_cast<DockWindowPlace*>(dockPlaceListener.Get()));
-		}
-	}
-
-	void DockableWindow::OnMoved(const Input::Cursor& cursor)
-	{
-		if (mDocked)
-		{
-			if (!layout->IsPointInside(cursor.position))
+			if (parent->mNeighborMin)
 			{
-				Undock();
-
-				SetLayoutDirty();
-
-				Vec2F anchor = (layout->worldLeftTop + layout->worldRightTop.Get())*0.5f;
-
-				if (auto headLayer = GetLayer(mTabLayerPath))
-					anchor.y -= headLayer->GetRect().Height()*0.5f;
-
-				layout->worldPosition += o2Input.GetCursorPos() - anchor;
-
-				mDragOffset = Vec2F();
+				parent->mNeighborMin->SetResizibleDir(parent->mNeighborMin->mResizibleDir, mDockBorder,
+													  parent->mNeighborMin->mNeighborMin, parent->mNeighborMax);
 			}
 
-			return;
-		}
-
-		layout->worldPosition += cursor.delta;
-
-		DockWindowPlace* targetDock;
-		Side dockPosition = Side::None;
-		RectF dockZoneRect;
-
-		bool tracedDock = TraceDock(targetDock, dockPosition, dockZoneRect);
-
-		if (dockPosition != Side::None && tracedDock)
-		{
-			mDockingFrameAppearance->PlayForward();
-			mDockingFrameTarget = dockZoneRect;
-		}
-		else
-		{
-			mDockingFrameAppearance->PlayBack();
-			mDockingFrameTarget = layout->worldRect;
-		}
-	}
-
-	void DockableWindow::OnMoveCompleted(const Input::Cursor& cursor)
-	{
-		if (mDocked)
-			return;
-
-		DockWindowPlace* targetDock = nullptr;
-		Side dockPosition = Side::None;
-		RectF dockZoneRect;
-
-		if (!TraceDock(targetDock, dockPosition, dockZoneRect) || targetDock == nullptr)
-			return;
-
-		bool allOnLine = targetDock->mParent && targetDock->mParentWidget->GetChildWidgets().All([&](auto x) {
-
-			if (x->GetType() != TypeOf(DockWindowPlace))
-				return false;
-
-			DockWindowPlace* dock = (DockWindowPlace*)x;
-			TwoDirection rd = dock->GetResizibleDir();
-
-			if (dockPosition == Side::Left || dockPosition == Side::Right)
-				return rd == TwoDirection::Horizontal;
-
-			return rd == TwoDirection::Vertical;
-		});
-
-		if (allOnLine)
-			PlaceLineDock(targetDock, dockPosition, dockZoneRect);
-		else
-			PlaceNonLineDock(targetDock, dockPosition);
-	}
-
-	void DockableWindow::OnMoveBegin(const Input::Cursor& cursor)
-	{
-		OnFocused();
-
-		if (mDocked)
-			mDragOffset = (Vec2F)o2Input.cursorPos - layout->worldLeftTop;
-	}
-
-	bool DockableWindow::TraceDock(DockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect)
-	{
-		Vec2F cursorPos = o2Input.cursorPos;
-		auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
-		auto dockPlaceListener = listenersUnderCursor.FindOrDefault([](const Ref<CursorAreaEventsListener>& x) {
-			return DynamicCast<DockWindowPlace>(x) != nullptr;
-		});
-
-		if (dockPlaceListener)
-		{
-			auto dockPlace = dynamic_cast<DockWindowPlace*>(dockPlaceListener.Get());
-
-			RectF dockPlaceRect = dockPlace->layout->worldRect;
-
-			RectF leftZone(dockPlaceRect.left, dockPlaceRect.bottom,
-						   Math::Lerp(dockPlaceRect.left, dockPlaceRect.right, mDockSizeCoef), dockPlaceRect.top);
-
-			RectF rightZone(Math::Lerp(dockPlaceRect.right, dockPlaceRect.left, mDockSizeCoef), dockPlaceRect.bottom,
-							dockPlaceRect.right, dockPlaceRect.top);
-
-			RectF bottomZone(dockPlaceRect.left, dockPlaceRect.bottom,
-							 dockPlaceRect.right, Math::Lerp(dockPlaceRect.bottom, dockPlaceRect.top, mDockSizeCoef));
-
-			if (bottomZone.IsInside(cursorPos))
+			if (parent->mNeighborMax)
 			{
-				targetDock = dockPlace;
-				dockPosition = Side::Bottom;
-				dockZoneRect = bottomZone;
+				parent->mNeighborMax->SetResizibleDir(parent->mNeighborMax->mResizibleDir, mDockBorder,
+													  parent->mNeighborMin, parent->mNeighborMax->mNeighborMax);
 			}
-			else if (rightZone.IsInside(cursorPos))
+
+			if (parent->mResizibleDir == TwoDirection::Horizontal)
 			{
-				targetDock = dockPlace;
-				dockPosition = Side::Right;
-				dockZoneRect = rightZone;
-			}
-			else if (leftZone.IsInside(cursorPos))
-			{
-				targetDock = dockPlace;
-				dockPosition = Side::Left;
-				dockZoneRect = leftZone;
-			}
-		}
-
-		return targetDock != nullptr;
-	}
-
-	void DockableWindow::PlaceDock(DockWindowPlace* targetDock)
-	{
-		PushEditorScopeOnStack scope;
-
-		mNonDockSize = layout->size;
-
-		mTabPosition = targetDock->mChildren.Count();
-
-		targetDock->AddChild(this);
-		*layout = WidgetLayout::BothStretch();
-		SetDocked(true);
-
-		mDockingFrameAppearance->PlayBack();
-		mDockingFrameTarget = layout->GetWorldRect();
-
-		targetDock->ArrangeChildWindows();
-		targetDock->SetLayoutDirty();
-	}
-
-	void DockableWindow::PlaceNonLineDock(DockWindowPlace* targetDock, Side dockPosition)
-	{
-		PushEditorScopeOnStack scope;
-
-		mNonDockSize = layout->size;
-
-		DockWindowPlace* windowDock = mnew DockWindowPlace();
-		windowDock->name = "window dock";
-		*windowDock->layout = WidgetLayout::BothStretch();
-
-		DockWindowPlace* windowNeighborDock = mnew DockWindowPlace();
-		windowNeighborDock->name = "empty dock";
-		*windowNeighborDock->layout = WidgetLayout::BothStretch();
-
-		for (auto child : targetDock->GetChildWidgets())
-			windowNeighborDock->AddChild(child);
-
-		targetDock->AddChild(windowNeighborDock);
-		targetDock->AddChild(windowDock);
-		targetDock->interactable = false;
-
-		if (dockPosition == Side::Bottom)
-		{
-			windowNeighborDock->layout->anchorBottom = mDockSizeCoef;
-			windowDock->layout->anchorTop = mDockSizeCoef;
-			windowDock->layout->offsetTop = -mDockBorder;
-
-			windowDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, nullptr, windowNeighborDock);
-			windowNeighborDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, windowDock, nullptr);
-		}
-		else if (dockPosition == Side::Right)
-		{
-			windowNeighborDock->layout->anchorRight = 1.0f - mDockSizeCoef;
-			windowDock->layout->anchorLeft = 1.0f - mDockSizeCoef;
-			windowDock->layout->offsetLeft = mDockBorder;
-
-			windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock, nullptr);
-			windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nullptr, windowDock);
-		}
-		else if (dockPosition == Side::Left)
-		{
-			windowNeighborDock->layout->anchorLeft = mDockSizeCoef;
-			windowDock->layout->anchorRight = mDockSizeCoef;
-			windowDock->layout->offsetRight = -mDockBorder;
-
-			windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nullptr, windowNeighborDock);
-			windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowDock, nullptr);
-		}
-
-		windowDock->AddChild(this);
-		*layout = WidgetLayout::BothStretch();
-		SetDocked(true);
-
-		mDockingFrameAppearance->PlayBack();
-		mDockingFrameTarget = layout->GetWorldRect();
-	}
-
-	void DockableWindow::PlaceLineDock(DockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect)
-	{
-		PushEditorScopeOnStack scope;
-
-		mNonDockSize = layout->size;
-
-		DockWindowPlace* windowDock = mnew DockWindowPlace();
-		windowDock->name = "window dock";
-		*windowDock->layout = WidgetLayout::BothStretch();
-
-		DockWindowPlace* windowNeighborDock = targetDock;
-		targetDock->mParent->AddChild(windowDock);
-
-		if (dockPosition == Side::Bottom)
-		{
-			windowDock->layout->anchorBottom = windowNeighborDock->layout->anchorBottom;
-
-			windowNeighborDock->layout->anchorBottom +=
-				windowNeighborDock->layout->height*mDockSizeCoef / windowNeighborDock->mParentWidget->layout->height;
-
-			windowDock->layout->anchorTop = windowNeighborDock->layout->anchorBottom;
-
-			if (targetDock->mNeighborMin)
-			{
-				auto nmin = windowNeighborDock->mNeighborMin;
-
-				nmin->SetResizibleDir(TwoDirection::Vertical, mDockBorder, nmin->mNeighborMin, windowDock);
-				windowDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, nmin, windowNeighborDock);
-				windowNeighborDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, windowDock, windowNeighborDock->mNeighborMax);
-			}
-			else
-			{
-				windowDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, nullptr, windowNeighborDock);
-				windowNeighborDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, windowDock, windowNeighborDock->mNeighborMax);
-			}
-		}
-		else if (dockPosition == Side::Right)
-		{
-			windowDock->layout->anchorRight = windowNeighborDock->layout->anchorRight;
-
-			windowNeighborDock->layout->anchorRight -=
-				windowNeighborDock->layout->width*mDockSizeCoef / windowNeighborDock->mParentWidget->layout->width;
-
-			windowDock->layout->anchorLeft = windowNeighborDock->layout->anchorRight;
-
-			if (targetDock->mNeighborMax)
-			{
-				auto nmax = windowNeighborDock->mNeighborMax;
-
-				nmax->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowDock, nmax->mNeighborMax);
-				windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock, nmax);
-				windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock->mNeighborMin, windowDock);
-			}
-			else
-			{
-				windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock, nullptr);
-				windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock->mNeighborMin, windowDock);
-			}
-		}
-		else if (dockPosition == Side::Left)
-		{
-			windowDock->layout->anchorLeft = windowNeighborDock->layout->anchorLeft;
-
-			windowNeighborDock->layout->anchorLeft +=
-				windowNeighborDock->layout->width*mDockSizeCoef / windowNeighborDock->mParentWidget->layout->width;
-
-			windowDock->layout->anchorRight = windowNeighborDock->layout->anchorLeft;
-
-			if (targetDock->mNeighborMin)
-			{
-				auto nmin = windowNeighborDock->mNeighborMin;
-
-				nmin->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nmin->mNeighborMin, windowDock);
-				windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nmin, windowNeighborDock);
-				windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowDock, windowNeighborDock->mNeighborMax);
-			}
-			else
-			{
-				windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nullptr, windowNeighborDock);
-				windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowDock, windowNeighborDock->mNeighborMax);
-			}
-		}
-
-		windowDock->AddChild(this);
-		*layout = WidgetLayout::BothStretch();
-		SetDocked(true);
-
-		mDockingFrameAppearance->PlayBack();
-		mDockingFrameTarget = layout->GetWorldRect();
-	}
-
-	void DockableWindow::SetTabState(float offset, int position, bool isFirst)
-	{
-		SetStateForcible("tab", true);
-
-		if (mAutoCalculateTabWidth)
-			RecalculateTabWidth();
-
-		if (auto tabFirstState = GetStateObject("tabFirst"))
-			tabFirstState->SetState(isFirst);
-
-		mTabPosition = position;
-
-		if (auto tabMainLayer = GetLayer(mTabLayerPath))
-		{
-			tabMainLayer->layout.offsetLeft = offset;
-			tabMainLayer->layout.offsetRight = offset + mTabWidth;
-			tabMainLayer->layout.anchorLeft = 0;
-			tabMainLayer->layout.anchorRight = 0;
-		}
-
-		mTabState = true;
-	}
-
-	void DockableWindow::SetNonTabState()
-	{
-		SetStateForcible("tab", false);
-
-		mTabActive = false;
-
-		if (auto state = GetStateObject("tabActive"))
-			state->SetState(false);
-
-		if (auto tabMainLayer = GetLayer(mTabLayerPath))
-		{
-			tabMainLayer->layout.offsetLeft = 0;
-			tabMainLayer->layout.offsetRight = 0;
-			tabMainLayer->layout.anchorLeft = 0;
-			tabMainLayer->layout.anchorRight = 1;
-		}
-
-		mTabState = false;
-	}
-
-	void DockableWindow::SetActiveTab()
-	{
-		if (!mTabState)
-			return;
-
-		mTabActive = true;
-
-		if (auto state = GetStateObject("tabActive"))
-			state->SetState(true);
-	}
-
-	void DockableWindow::Undock()
-	{
-		PushEditorScopeOnStack scope;
-
-		if (!IsDocked())
-			return;
-
-		auto topDock = dynamic_cast<DockWindowPlace*>(mParent->GetParent());
-
-		if (!topDock)
-		{
-			EditorUIRoot.AddWidget(this);
-		}
-		else
-		{
-			auto parent = dynamic_cast<DockWindowPlace*>(mParent);
-			auto parentNeighbors = topDock->GetChildWidgets().FindAll([&](auto x) { return x != parent; })
-				.Convert<DockWindowPlace*>([](auto x) { return (DockWindowPlace*)x; });
-
-			EditorUIRoot.AddWidget(this);
-
-			if (!parent->GetChildWidgets().IsEmpty())
-			{
-				parent->ArrangeChildWindows();
-				parent->SetLayoutDirty();
-			}
-			else
-			{
-				if (parent->mNeighborMin)
+				if (parent->mNeighborMin && parent->mNeighborMax)
 				{
-					parent->mNeighborMin->SetResizibleDir(parent->mNeighborMin->mResizibleDir, mDockBorder,
-														  parent->mNeighborMin->mNeighborMin, parent->mNeighborMax);
+					float anchor = (parent->mNeighborMin->layout->anchorRight + parent->mNeighborMax->layout->anchorLeft) / 2.0f;
+					parent->mNeighborMin->layout->anchorRight = anchor;
+					parent->mNeighborMax->layout->anchorLeft = anchor;
 				}
-
-				if (parent->mNeighborMax)
-				{
-					parent->mNeighborMax->SetResizibleDir(parent->mNeighborMax->mResizibleDir, mDockBorder,
-														  parent->mNeighborMin, parent->mNeighborMax->mNeighborMax);
-				}
-
-				if (parent->mResizibleDir == TwoDirection::Horizontal)
-				{
-					if (parent->mNeighborMin && parent->mNeighborMax)
-					{
-						float anchor = (parent->mNeighborMin->layout->anchorRight + parent->mNeighborMax->layout->anchorLeft) / 2.0f;
-						parent->mNeighborMin->layout->anchorRight = anchor;
-						parent->mNeighborMax->layout->anchorLeft = anchor;
-					}
-					else if (parent->mNeighborMin && !parent->mNeighborMax)
-						parent->mNeighborMin->layout->anchorRight = 1.0f;
-					else if (!parent->mNeighborMin && parent->mNeighborMax)
-						parent->mNeighborMax->layout->anchorLeft = 0.0f;
-				}
-
-				if (parent->mResizibleDir == TwoDirection::Vertical)
-				{
-					if (parent->mNeighborMin && parent->mNeighborMax)
-					{
-						float anchor = (parent->mNeighborMin->layout->anchorTop + parent->mNeighborMax->layout->anchorBottom) / 2.0f;
-						parent->mNeighborMin->layout->anchorTop = anchor;
-						parent->mNeighborMax->layout->anchorBottom = anchor;
-					}
-					else if (parent->mNeighborMin && !parent->mNeighborMax)
-						parent->mNeighborMin->layout->anchorTop = 1.0f;
-					else if (!parent->mNeighborMin && parent->mNeighborMax)
-						parent->mNeighborMax->layout->anchorBottom = 0.0f;
-				}
-
-				topDock->RemoveChild(parent);
-
-				if (parentNeighbors.Count() == 1)
-				{
-					auto children = parentNeighbors[0]->GetChildWidgets();
-					for (auto child : children)
-						topDock->AddChild(child);
-
-					topDock->RemoveChild(parentNeighbors[0]);
-				}
-
-				// 
-				// 	for (auto child : parentNeighbor->GetChilds())
-				// 		topDock->AddChild(child);
-				// 
-				// 	topDock->RemoveChild(parent);
-				// 	topDock->RemoveChild(parentNeighbor);
-				topDock->CheckInteractable();
+				else if (parent->mNeighborMin && !parent->mNeighborMax)
+					parent->mNeighborMin->layout->anchorRight = 1.0f;
+				else if (!parent->mNeighborMin && parent->mNeighborMax)
+					parent->mNeighborMax->layout->anchorLeft = 0.0f;
 			}
+
+			if (parent->mResizibleDir == TwoDirection::Vertical)
+			{
+				if (parent->mNeighborMin && parent->mNeighborMax)
+				{
+					float anchor = (parent->mNeighborMin->layout->anchorTop + parent->mNeighborMax->layout->anchorBottom) / 2.0f;
+					parent->mNeighborMin->layout->anchorTop = anchor;
+					parent->mNeighborMax->layout->anchorBottom = anchor;
+				}
+				else if (parent->mNeighborMin && !parent->mNeighborMax)
+					parent->mNeighborMin->layout->anchorTop = 1.0f;
+				else if (!parent->mNeighborMin && parent->mNeighborMax)
+					parent->mNeighborMax->layout->anchorBottom = 0.0f;
+			}
+
+			topDock->RemoveChild(parent);
+
+			if (parentNeighbors.Count() == 1)
+			{
+				auto children = parentNeighbors[0]->GetChildWidgets();
+				for (const auto& child : children)
+					topDock->AddChild(child);
+
+				topDock->RemoveChild(parentNeighbors[0]);
+			}
+
+			topDock->CheckInteractable();
 		}
-
-		SetDocked(false);
-		SetNonTabState();
-
-		Vec2F leftTop = layout->worldLeftTop;
-		layout->anchorMin = Vec2F(); layout->anchorMax = Vec2F();
-		layout->worldLeftTop = leftTop;
-		layout->worldRightBottom = layout->worldLeftTop + mNonDockSize.InvertedY();
 	}
+
+	SetDocked(false);
+	SetNonTabState();
+
+	Vec2F leftTop = layout->worldLeftTop;
+	layout->anchorMin = Vec2F(); layout->anchorMax = Vec2F();
+	layout->worldLeftTop = leftTop;
+	layout->worldRightBottom = layout->worldLeftTop + mNonDockSize.InvertedY();
+}
 
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::DockableWindow, Editor__DockableWindow);

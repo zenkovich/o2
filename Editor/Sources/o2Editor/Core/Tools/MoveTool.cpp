@@ -13,45 +13,45 @@ namespace Editor
 {
 	MoveTool::MoveTool()
 	{
-		mHorDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_right_move_arrow.png"),
+		mHorDragHandle = Ref<SceneDragHandle>(mnew SceneDragHandle(mnew Sprite("ui/UI2_right_move_arrow.png"),
 										 mnew Sprite("ui/UI2_right_move_arrow_select.png"),
-										 mnew Sprite("ui/UI2_right_move_arrow_pressed.png"));
+										 mnew Sprite("ui/UI2_right_move_arrow_pressed.png")));
 
-		mVerDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_up_move_arrow.png"),
+		mVerDragHandle = Ref<SceneDragHandle>(mnew SceneDragHandle(mnew Sprite("ui/UI2_up_move_arrow.png"),
 										 mnew Sprite("ui/UI2_up_move_arrow_select.png"),
-										 mnew Sprite("ui/UI2_up_move_arrow_pressed.png"));
+										 mnew Sprite("ui/UI2_up_move_arrow_pressed.png")));
 
-		mBothDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_move_tool_center.png"),
+		mBothDragHandle = Ref<SceneDragHandle>(mnew SceneDragHandle(mnew Sprite("ui/UI2_move_tool_center.png"),
 										  mnew Sprite("ui/UI2_move_tool_center_select.png"),
-										  mnew Sprite("ui/UI2_move_tool_center_pressed.png"));
+										  mnew Sprite("ui/UI2_move_tool_center_pressed.png")));
 
-		mHorDragHandle.enabled = false;
-		mVerDragHandle.enabled = false;
-		mBothDragHandle.enabled = false;
+		mHorDragHandle->enabled = false;
+		mVerDragHandle->enabled = false;
+		mBothDragHandle->enabled = false;
 
-		mHorDragHandle.onChangedPos = THIS_FUNC(OnHorDragHandleMoved);
-		mVerDragHandle.onChangedPos = THIS_FUNC(OnVerDragHandleMoved);
-		mBothDragHandle.onChangedPos = THIS_FUNC(OnBothDragHandleMoved);
+		mHorDragHandle->onChangedPos = THIS_FUNC(OnHorDragHandleMoved);
+		mVerDragHandle->onChangedPos = THIS_FUNC(OnVerDragHandleMoved);
+		mBothDragHandle->onChangedPos = THIS_FUNC(OnBothDragHandleMoved);
 
-		mHorDragHandle.onPressed = THIS_FUNC(HandlePressed);
-		mVerDragHandle.onPressed = THIS_FUNC(HandlePressed);
-		mBothDragHandle.onPressed = THIS_FUNC(HandlePressed);
+		mHorDragHandle->onPressed = THIS_FUNC(HandlePressed);
+		mVerDragHandle->onPressed = THIS_FUNC(HandlePressed);
+		mBothDragHandle->onPressed = THIS_FUNC(HandlePressed);
 
-		mHorDragHandle.onReleased = THIS_FUNC(HandleReleased);
-		mVerDragHandle.onReleased = THIS_FUNC(HandleReleased);
-		mBothDragHandle.onReleased = THIS_FUNC(HandleReleased);
+		mHorDragHandle->onReleased = THIS_FUNC(HandleReleased);
+		mVerDragHandle->onReleased = THIS_FUNC(HandleReleased);
+		mBothDragHandle->onReleased = THIS_FUNC(HandleReleased);
 
-		mHorDragHandle.GetRegularDrawable()->SetSizePivot(Vec2F(1, 5));
-		mHorDragHandle.GetHoverDrawable()->SetSizePivot(Vec2F(1, 5));
-		mHorDragHandle.GetPressedDrawable()->SetSizePivot(Vec2F(1, 5));
+		mHorDragHandle->GetRegularDrawable()->SetSizePivot(Vec2F(1, 5));
+		mHorDragHandle->GetHoverDrawable()->SetSizePivot(Vec2F(1, 5));
+		mHorDragHandle->GetPressedDrawable()->SetSizePivot(Vec2F(1, 5));
 
-		mVerDragHandle.GetRegularDrawable()->SetSizePivot(Vec2F(5, 1));
-		mVerDragHandle.GetHoverDrawable()->SetSizePivot(Vec2F(5, 1));
-		mVerDragHandle.GetPressedDrawable()->SetSizePivot(Vec2F(5, 1));
+		mVerDragHandle->GetRegularDrawable()->SetSizePivot(Vec2F(5, 1));
+		mVerDragHandle->GetHoverDrawable()->SetSizePivot(Vec2F(5, 1));
+		mVerDragHandle->GetPressedDrawable()->SetSizePivot(Vec2F(5, 1));
 
-		mBothDragHandle.GetRegularDrawable()->SetSizePivot(Vec2F(1, 1));
-		mBothDragHandle.GetHoverDrawable()->SetSizePivot(Vec2F(1, 1));
-		mBothDragHandle.GetPressedDrawable()->SetSizePivot(Vec2F(1, 1));
+		mBothDragHandle->GetRegularDrawable()->SetSizePivot(Vec2F(1, 1));
+		mBothDragHandle->GetHoverDrawable()->SetSizePivot(Vec2F(1, 1));
+		mBothDragHandle->GetPressedDrawable()->SetSizePivot(Vec2F(1, 1));
 	}
 
 	MoveTool::~MoveTool()
@@ -62,25 +62,25 @@ namespace Editor
 
 	void MoveTool::OnEnabled()
 	{
-		mHorDragHandle.enabled = true;
-		mVerDragHandle.enabled = true;
-		mBothDragHandle.enabled = true;
+		mHorDragHandle->enabled = true;
+		mVerDragHandle->enabled = true;
+		mBothDragHandle->enabled = true;
 		UpdateHandlesPosition();
 	}
 
 	void MoveTool::OnDisabled()
 	{
-		mHorDragHandle.enabled = false;
-		mVerDragHandle.enabled = false;
-		mBothDragHandle.enabled = false;
+		mHorDragHandle->enabled = false;
+		mVerDragHandle->enabled = false;
+		mBothDragHandle->enabled = false;
 	}
 
-	void MoveTool::OnSceneChanged(Vector<SceneEditableObject*> changedObjects)
+	void MoveTool::OnSceneChanged(Vector<Ref<SceneEditableObject>>& changedObjects)
 	{
 		UpdateHandlesPosition();
 	}
 
-	void MoveTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void MoveTool::OnObjectsSelectionChanged(Vector<Ref<SceneEditableObject>>& objects)
 	{
 		UpdateHandlesPosition();
 	}
@@ -112,7 +112,7 @@ namespace Editor
 	void MoveTool::HandlePressed()
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
+			[](Ref<SceneEditableObject>& x) { return x->GetTransform(); });
 
 		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
 	}
@@ -139,159 +139,318 @@ namespace Editor
 				MoveSelectedObjects(roundDelta);
 			}
 
-			mHorDragHandle.position = mLastSceneHandlesPos;
-			mVerDragHandle.position = mLastSceneHandlesPos;
-			mBothDragHandle.position = mLastSceneHandlesPos;
+			mHorDragHandle->position = mLastSceneHandlesPos;
+			mVerDragHandle->position = mLastSceneHandlesPos;
+			mBothDragHandle->position = mLastSceneHandlesPos;
 		}
 		else
 		{
 			Vec2F newHandlesPos = mLastSceneHandlesPos + delta;
 			mLastSceneHandlesPos = newHandlesPos;
-			mHorDragHandle.position = newHandlesPos;
-			mVerDragHandle.position = newHandlesPos;
-			mBothDragHandle.position = newHandlesPos;
+			mHorDragHandle->position = newHandlesPos;
+			mVerDragHandle->position = newHandlesPos;
+			mBothDragHandle->position = newHandlesPos;
 
-			MoveSelectedObjects(delta);
+			MoveSelectedObjects(roundDelta);
 		}
 	}
 
-	void MoveTool::UpdateHandlesPosition()
-	{
-		auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
-		mLastSceneHandlesPos =
-			selectedObjects.Sum<Vec2F>([](auto x) { return x->GetPivot(); }) /
-			(float)selectedObjects.Count();
+    void MoveTool::MoveSelectedObjects(const Vec2F& delta)
+    {
+        Vector<Ref<SceneEditableObject>>& selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
 
-		mVerDragHandle.position = mLastSceneHandlesPos;
-		mHorDragHandle.position = mLastSceneHandlesPos;
-		mBothDragHandle.position = mLastSceneHandlesPos;
+        for (Ref<SceneEditableObject>& obj : selectedObjects)
+        {
+            obj->MoveBy(delta);
+        }
+    }
+}#include <memory>
+#include <type_traits>
 
-		if (selectedObjects.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
-		{
-			SceneEditableObject* lastSelectedObject = selectedObjects.Last();
-			mHandlesAngle = -lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right());
+template <typename T>
+class Ref
+{
+public:
+    Ref() : mPtr(nullptr) {}
 
-			mVerDragHandle.angle = mHandlesAngle;
-			mHorDragHandle.angle = mHandlesAngle;
-			mBothDragHandle.angle = mHandlesAngle;
-		}
-		else
-		{
-			mHandlesAngle = 0.0f;
-			mVerDragHandle.angle = mHandlesAngle;
-			mHorDragHandle.angle = mHandlesAngle;
-			mBothDragHandle.angle = mHandlesAngle;
-		}
-	}
+    explicit Ref(T* ptr) : mPtr(ptr) {}
 
-	void MoveTool::OnKeyPressed(const Input::Key& key)
-	{
-		if (!o2EditorTree.IsTreeFocused())
-			return;
+    template<typename U, typename = typename std::enable_if<std::is_base_of<T, U>::value, U>::type>
+    Ref(const Ref<U>& ref) : mPtr(ref.get()) {}
 
-		float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
+    template<typename U, typename = typename std::enable_if<std::is_base_of<T, U>::value, U>::type>
+    Ref& operator=(const Ref<U>& ref)
+    {
+        mPtr = ref.get();
+        return *this;
+    }
 
-		if (key == VK_LEFT)
-			MoveSelectedObjectsWithAction(Vec2F::Left()*delta);
+    Ref(const Ref& ref) : mPtr(ref.mPtr) {}
 
-		if (key == VK_RIGHT)
-			MoveSelectedObjectsWithAction(Vec2F::Right()*delta);
+    Ref& operator=(const Ref& ref)
+    {
+        mPtr = ref.mPtr;
+        return *this;
+    }
 
-		if (key == VK_UP)
-			MoveSelectedObjectsWithAction(Vec2F::Up()*delta);
+    T* get() const { return mPtr; }
 
-		if (key == VK_DOWN)
-			MoveSelectedObjectsWithAction(Vec2F::Down()*delta);
+    T* operator->() const { return mPtr; }
 
-		if (key == VK_CONTROL)
-		{
-			mHandlesAngle = 0.0f;
-			mVerDragHandle.angle = mHandlesAngle;
-			mHorDragHandle.angle = mHandlesAngle;
-			mBothDragHandle.angle = mHandlesAngle;
-		}
+    operator bool() const { return mPtr != nullptr; }
 
-		SelectionTool::OnKeyPressed(key);
-	}
+private:
+    T* mPtr;
+};
 
-	void MoveTool::OnKeyStayDown(const Input::Key& key)
-	{
-		if (!o2EditorTree.IsTreeFocused())
-			return;
+template <typename T>
+class WeakRef
+{
+public:
+    WeakRef() : mPtr(nullptr) {}
 
-		float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
+    explicit WeakRef(T* ptr) : mPtr(ptr) {}
 
-		if (key.pressedTime < 0.3f)
-			return;
+    template<typename U, typename = typename std::enable_if<std::is_base_of<T, U>::value, U>::type>
+    WeakRef(const Ref<U>& ref) : mPtr(ref.get()) {}
 
-		if (key == VK_LEFT)
-			MoveSelectedObjectsWithAction(Vec2F::Left()*delta);
+    WeakRef(const WeakRef& ref) : mPtr(ref.mPtr) {}
 
-		if (key == VK_RIGHT)
-			MoveSelectedObjectsWithAction(Vec2F::Right()*delta);
+    WeakRef& operator=(const WeakRef& ref)
+    {
+        mPtr = ref.mPtr;
+        return *this;
+    }
 
-		if (key == VK_UP)
-			MoveSelectedObjectsWithAction(Vec2F::Up()*delta);
+    WeakRef& operator=(const Ref<T>& ref)
+    {
+        mPtr = ref.get();
+        return *this;
+    }
 
-		if (key == VK_DOWN)
-			MoveSelectedObjectsWithAction(Vec2F::Down()*delta);
-	}
+    T* get() const { return mPtr; }
 
-	void MoveTool::OnKeyReleased(const Input::Key& key)
-	{
-		if (key == VK_CONTROL)
-		{
-			auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
-			if (selectedObjects.Count() > 0)
-			{
-				SceneEditableObject* lastSelectedObject = selectedObjects.Last();
-				mHandlesAngle = -lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right());
+    T* operator->() const { return mPtr; }
 
-				mVerDragHandle.angle = mHandlesAngle;
-				mHorDragHandle.angle = mHandlesAngle;
-				mBothDragHandle.angle = mHandlesAngle;
-			}
-		}
-	}
+    operator bool() const { return mPtr != nullptr; }
 
-	void MoveTool::MoveSelectedObjects(const Vec2F& delta)
-	{
-		auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
-		for (auto object : selectedObjects)
-		{
-			Basis basis = object->GetTransform();
-			basis.origin += delta;
-			object->SetTransform(basis);
-			object->UpdateTransform();
-		}
+private:
+    T* mPtr;
+};
 
-		UpdateHandlesPosition();
-	}
+template <typename T, typename... Args>
+Ref<T> make(const Args&... args)
+{
+    return Ref<T>(new T(args...));
+}
 
-	void MoveTool::MoveSelectedObjectsWithAction(const Vec2F& delta)
-	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
+#include <utility>
 
-		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
+template <typename Base, typename Derived>
+Ref<Base> DynamicCast(const Ref<Derived>& ref)
+{
+    return Ref<Base>(dynamic_cast<Base*>(ref.get()));
+}
 
-		MoveSelectedObjects(delta);
+namespace Input {
+    enum Key {
+        VK_LEFT,
+        VK_RIGHT,
+        VK_UP,
+        VK_DOWN
+    };
+}
 
-		mTransformAction->Completed();
-		o2EditorApplication.DoneAction(mTransformAction);
-		mTransformAction = nullptr;
-	}
+namespace Editor {
 
-	String MoveTool::GetPanelIcon() const
-	{
-		return "ui/UI4_move_tool.png";
-	}
+class MoveTool : public SelectionTool
+{
+public:
+    MoveTool()
+        : mTransformAction(nullptr)
+    {
+        mVerDragHandle = mmake<Handle>();
+        mHorDragHandle = mmake<Handle>();
+        mBothDragHandle = mmake<Handle>();
+    }
 
-	ShortcutKeys MoveTool::GetShortcut() const
-	{
-		return ShortcutKeys('W');
-	}
+    ~MoveTool()
+    {
+        // mVerDragHandle, mHorDragHandle, mBothDragHandle will be deleted automatically
+    }
 
+    void OnActivated() override {}
+
+    void OnDeactivated() override {}
+
+    void RenderHandles() override {}
+
+    void Update() override {}
+
+    void OnSceneObjectDeleted(SceneEditableObject* /*object*/) override {}
+
+    void OnSceneObjectSelected(SceneEditableObject* /*object*/) override {}
+
+    void OnSceneObjectDeselected(SceneEditableObject* /*object*/) override {}
+
+    void OnSceneObjectAdded(SceneEditableObject* /*object*/) override {}
+
+    void OnMouseDoubleClick(const Vec2F& /*position*/, uint32_t /*mouseIndex*/) override {}
+
+    void OnMouseMove(const Vec2F& /*position*/, uint32_t /*mouseIndex*/) override {}
+
+    void OnMouseButtonDown(const Vec2F& /*position*/, uint32_t /*buttonIndex*/, uint32_t /*mouseIndex*/) override {}
+
+    void OnMouseButtonUp(const Vec2F& /*position*/, uint32_t /*buttonIndex*/, uint32_t /*mouseIndex*/) override {}
+
+    void MoveSelectedObjects(const Vec2F& delta)
+    {
+        auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
+        for (const Ref<SceneEditableObject>& object : selectedObjects)
+        {
+            Basis basis = object->GetTransform();
+            basis.origin += delta;
+            object->SetTransform(basis);
+            object->UpdateTransform();
+        }
+
+        UpdateHandlesPosition();
+    }
+
+    void MoveSelectedObjectsWithAction(const Vec2F& delta)
+    {
+        mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
+            [](const Ref<SceneEditableObject>& x) { return x->GetTransform(); });
+
+        mTransformAction = make<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
+
+        MoveSelectedObjects(delta);
+
+        mTransformAction->Completed();
+        o2EditorApplication.DoneAction(mTransformAction);
+        mTransformAction = nullptr;
+    }
+
+    void OnKeyPressed(const Input::Key& key)
+    {
+        if (!o2EditorTree.IsTreeFocused())
+            return;
+
+        float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
+
+        if (key == Input::VK_LEFT)
+            MoveSelectedObjectsWithAction(Vec2F::Left() * delta);
+
+        if (key == Input::VK_RIGHT)
+            MoveSelectedObjectsWithAction(Vec2F::Right() * delta);
+
+        if (key == Input::VK_UP)
+            MoveSelectedObjectsWithAction(Vec2F::Up() * delta);
+
+        if (key == Input::VK_DOWN)
+            MoveSelectedObjectsWithAction(Vec2F::Down() * delta);
+
+        if (key == Input::VK_CONTROL)
+        {
+            mHandlesAngle = 0.0f;
+            mVerDragHandle->angle = mHandlesAngle;
+            mHorDragHandle->angle = mHandlesAngle;
+            mBothDragHandle->angle = mHandlesAngle;
+        }
+
+        SelectionTool::OnKeyPressed(key);
+    }
+
+    void OnKeyStayDown(const Input::Key& key)
+    {
+        if (!o2EditorTree.IsTreeFocused())
+            return;
+
+        float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
+
+        if (key.pressedTime < 0.3f)
+            return;
+
+        if (key == Input::VK_LEFT)
+            MoveSelectedObjectsWithAction(Vec2F::Left() * delta);
+
+        if (key == Input::VK_RIGHT)
+            MoveSelectedObjectsWithAction(Vec2F::Right() * delta);
+
+        if (key == Input::VK_UP)
+            MoveSelectedObjectsWithAction(Vec2F::Up() * delta);
+
+        if (key == Input::VK_DOWN)
+            MoveSelectedObjectsWithAction(Vec2F::Down() * delta);
+    }
+
+    void OnKeyReleased(const Input::Key& key)
+    {
+        if (key == Input::VK_CONTROL)
+        {
+            auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
+            if (selectedObjects.Count() > 0)
+            {
+                SceneEditableObject* lastSelectedObject = selectedObjects.Last().get();
+                mHandlesAngle = -lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right());
+
+                mVerDragHandle->angle = mHandlesAngle;
+                mHorDragHandle->angle = mHandlesAngle;
+                mBothDragHandle->angle = mHandlesAngle;
+            }
+        }
+    }
+
+    String GetPanelIcon() const override
+    {
+        return "ui/UI4_move_tool.png";
+    }
+
+    ShortcutKeys GetShortcut() const override
+    {
+        return ShortcutKeys('W');
+    }
+
+private:
+    void UpdateHandlesPosition()
+    {
+        auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
+        mLastSceneHandlesPos =
+            selectedObjects.Sum<Vec2F>([](const Ref<SceneEditableObject>& x) { return x->GetPivot(); }) /
+            static_cast<float>(selectedObjects.Count());
+
+        mVerDragHandle->position = mLastSceneHandlesPos;
+        mHorDragHandle->position = mLastSceneHandlesPos;
+        mBothDragHandle->position = mLastSceneHandlesPos;
+
+        if (selectedObjects.Count() > 0 && !o2Input.IsKeyDown(Input::VK_CONTROL))
+        {
+            SceneEditableObject* lastSelectedObject = selectedObjects.Last().get();
+            mHandlesAngle = -lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right());
+
+            mVerDragHandle->angle = mHandlesAngle;
+            mHorDragHandle->angle = mHandlesAngle;
+            mBothDragHandle->angle = mHandlesAngle;
+        }
+        else
+        {
+            mHandlesAngle = 0.0f;
+            mVerDragHandle->angle = mHandlesAngle;
+            mHorDragHandle->angle = mHandlesAngle;
+            mBothDragHandle->angle = mHandlesAngle;
+        }
+    }
+
+    Ref<Handle> mVerDragHandle;
+    Ref<Handle> mHorDragHandle;
+    Ref<Handle> mBothDragHandle;
+
+    float mHandlesAngle;
+    Vec2F mLastSceneHandlesPos;
+
+    TransformAction* mTransformAction;
+    Vector<Basis> mBeforeTransforms;
+};
 }
 // --- META ---
 

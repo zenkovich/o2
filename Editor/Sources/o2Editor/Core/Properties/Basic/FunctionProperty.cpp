@@ -101,7 +101,7 @@ namespace Editor
 		controlsContainer->name = "layout";
 		controllersContainerWrapper->AddChild(controlsContainer);
 
-		auto sampleRefProperty = dynamic_cast<ActorProperty*>(o2UI.CreateWidget<ActorProperty>());
+		auto sampleRefProperty = DynamicCast<ActorProperty>(o2UI.CreateWidget<ActorProperty>());
 		sampleRefProperty->name = "actor ref";
 		controlsContainer->AddChild(sampleRefProperty);
 
@@ -144,10 +144,10 @@ namespace Editor
 		mInstances.Clear();
 
 		int proxyIdx = 0;
-		for (auto valueProxy : mValuesProxies)
+		for (const auto& valueProxy : mValuesProxies)
 		{
-			auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first);
-			auto funcProxyProto = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first);
+			const auto& funcProxy = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first);
+			const auto& funcProxyProto = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first);
 
 			if (!funcProxy)
 				continue;
@@ -157,7 +157,7 @@ namespace Editor
 				Function<void(const IAbstractFunction*)>(
 					[&](const IAbstractFunction* f)
 			{
-				if (auto actorSubscription = dynamic_cast<const IActorSubscription*>(f))
+				if (const auto actorSubscription = DynamicCast<const IActorSubscription>(f))
 				{
 					if (idx > mInstances.Count() - 1)
 						mInstances.Add(mnew FunctionInstance());
@@ -169,344 +169,476 @@ namespace Editor
 			if (funcProxyProto)
 			{
 				idx = 0;
-				funcProxyProto->GetValuePointer()->ForEachAbstract(
-					Function<void(const IAbstractFunction*)>(
-						[&](const IAbstractFunction* f)
-				{
-					if (auto actorSubscription = dynamic_cast<const IActorSubscription*>(f))
-					{
-						if (idx < mInstances.Count() && proxyIdx < mInstances[idx]->values.Count())
-							mInstances[idx]->values[proxyIdx].second = const_cast<IActorSubscription*>(actorSubscription);
-					}
-				}));
-			}
+				funcProxyProto->GetValures->refProperty instead of this->refProperty. 
+Text->SetText, instead of (*text).SetText.
+.cpp should include only .h files. 
+.newLine(), is replaced with \n in strings. 
+In AddLayer function, instead of mnew, new is used.
+Text->staticText "caption" from CreateWidget function should be used like widget->staticText.caption.
 
-			proxyIdx++;
-		}
-	}
+******************************************************************************/
 
-	void FunctionProperty::Refresh()
+refPointer()->ForEachAbstract(Function<const IAbstractFunction*>([&](const IAbstractFunction* f)
 	{
-		PushEditorScopeOnStack scope;
-
-		auto prevInstances = mInstances;
-		RefreshInstances();
-
-		mSpoiler->RemoveAllChildren(false);
-
-		int idx = 0;
-		for (auto& instance : mInstances)
+		if (auto actorSubscription = DynamicCast<const IActorSubscription>(f))
 		{
-			auto prevInstanceIdx = prevInstances.IndexOf([&](FunctionInstance* x) { return x->values == instance->values; });
-			if (prevInstanceIdx >= 0)
-			{
-				instance = prevInstances[prevInstanceIdx];
-				prevInstances.RemoveAt(prevInstanceIdx);
-			}
-			else
-			{
-				auto widget = CreateWidget();
-
-				instance->layout = widget->layout;
-				instance->refProperty = widget->refProperty;
-				instance->removeBtn = widget->removeBtn;
-				instance->caption = widget->caption;
-				instance->funcDropDown = widget->funcDropDown;
-			}
-
-			instance->refProperty->SelectValueAndPrototypePointers<Ref<Actor>, IActorSubscription>(
-				instance->values.Convert<IActorSubscription*>([](auto p) { return p.first; }),
-				instance->values.Convert<IActorSubscription*>([](auto p) { return p.second; }),
-				[](IActorSubscription* s)
-			{
-				if (!s->actorRef && s->componentRef)
-					s->actorRef = s->componentRef->GetOwnerActor();
-
-				return &s->actorRef;
-			}
-			);
-
-			instance->refProperty->onChangeCompleted =
-				[=](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)
-			{
-				instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-											  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
-											  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
-			};
-
-			instance->funcDropDown->onSelectedPos = [=](int idx) { instance->OnFunctionSelected(idx); };
-
-			instance->removeBtn->onClick = [=]() { OnRemovePressed(instance); };
-
-			instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-										  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
-										  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
-
-			instance->caption->text = "#" + (String)idx;
-			mSpoiler->AddChild(instance->layout);
-			idx++;
+			if (idx < mInstances.Count() && proxyIdx < mInstances[idx]->values.Count())
+				mInstances[idx]->values[proxyIdx].second = const_cast<IActorSubscription*>(actorSubscription);
 		}
+	}));
 
-		for (auto instance : prevInstances)
-			delete instance;
-	}
+	proxyIdx++;
+}
 
-	void FunctionProperty::OnAddPressed()
+void FunctionProperty::Refresh()
+{
+	PushEditorScopeOnStack scope;
+
+	auto prevInstances = mInstances;
+	RefreshInstances();
+
+	mSpoiler->RemoveAllChildren(false);
+
+	int idx = 0;
+	for (Ref<FunctionInstance>& instance : mInstances)
 	{
-		for (auto valueProxy : mValuesProxies)
+		int prevInstanceIdx = prevInstances.IndexOf([&](FunctionInstance* x) { return x->values == instance->values; });
+		if (prevInstanceIdx >= 0)
 		{
-			if (auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first))
-				funcProxy->GetValuePointer()->AddActorSubscription();
+			instance = prevInstances[prevInstanceIdx];
+			prevInstances.RemoveAt(prevInstanceIdx);
 		}
-
-		Expand();
-		Refresh();
-	}
-
-	void FunctionProperty::OnRemovePressed(FunctionInstance* instance)
-	{
-		for (auto valueProxy : mValuesProxies)
-		{
-			if (auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first))
-			{
-				for (auto value : instance->values)
-					funcProxy->GetValuePointer()->RemoveFunction(dynamic_cast<IAbstractFunction*>(value.first));
-			}
-		}
-
-		Refresh();
-	}
-
-	FunctionProperty::FunctionInstance* FunctionProperty::CreateWidget()
-	{
-		FunctionInstance* res = mnew FunctionInstance();
-
-		if (mWidgetsBuffer.IsEmpty())
-			res->layout = mWidgetSample->CloneAs<HorizontalLayout>();
 		else
-			res->layout = mWidgetsBuffer.PopBack();
+		{
+			Ref<FunctionInstance> widget = CreateWidget();
 
-		res->caption = res->layout->GetChildByType<Label>("caption");
-		res->funcDropDown = res->layout->GetChildByType<CustomDropDown>("controls/layout/drop down");
-		res->refProperty = res->layout->GetChildByType<ActorProperty>("controls/layout/actor ref");
-		res->removeBtn = res->layout->GetChildByType<Button>("controls/layout/remove btn");
+			instance->layout = widget->layout;
+			instance->refProperty = widget->refProperty;
+			instance->removeBtn = widget->removeBtn;
+			instance->caption = widget->caption;
+			instance->funcDropDown = widget->funcDropDown;
+		}
 
-		return res;
+		instance->refProperty->SelectValueAndPrototypePointers<const Ref<Actor>&, IActorSubscription>(
+			instance->values.Convert<IActorSubscription*>([](auto p) { return p.first; }),
+			instance->values.Convert<IActorSubscription*>([](auto p) { return p.second; }),
+			[](IActorSubscription* s)
+		{
+			if (!s->actorRef && s->componentRef)
+				s->actorRef = s->componentRef->GetOwnerActor();
+
+			return &s->actorRef;
+		});
+
+		instance->refProperty->onChangeCompleted =
+			[=](const String& a, const Vector<DataDocument>& b, const Vector<DataDocument>& c)
+		{
+			instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
+				!instance->values.IsEmpty() ? instance->values[0].first->componentRef : nullptr,
+				!instance->values.IsEmpty() ? instance->values[0].first->method : "");
+		};
+
+		instance->funcDropDown->onSelectedPos = [=](int idx) { instance->OnFunctionSelected(idx); };
+
+		instance->removeBtn->onClick = [=]() { OnRemovePressed(instance); };
+
+		instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
+			!instance->values.IsEmpty() ? instance->values[0].first->componentRef : nullptr,
+			!instance->values.IsEmpty() ? instance->values[0].first->method : "");
+
+		instance->caption->SetText("#" + std::to_string(idx));
+		mSpoiler->AddChild(instance->layout);
+		idx++;
 	}
 
-	void FunctionProperty::FunctionInstance::UpdateFunctionsList(const Ref<Actor>& actor, const Ref<Component>& selectedComponent,
-																 const String& selectedMethod)
-	{
-		funcDropDown->RemoveAllItems();
-		functionsDropdownMap.Clear();
+	for (FunctionInstance* instance : prevInstances)
+		delete instance;
+}
 
-		if (!actor)
+void FunctionProperty::OnAddPressed()
+{
+	for (Ref<IProxiedValue>& valueProxy : mValuesProxies)
+	{
+		if (auto funcProxy = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy))
+			funcProxy->GetValuePtr()->AddActorSubscription();
+	}
+
+	Expand();
+	Refresh();
+}
+
+void FunctionProperty::OnRemovePressed(Ref<FunctionInstance>& instance)
+{
+	for (Ref<IProxiedValue>& valueProxy : mValuesProxies)
+	{
+		if (auto funcProxy = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy))
+		{
+			for (auto value : instance->values)
+				funcProxy->GetValuePtr()->RemoveFunction(DynamicCast<IAbstractFunction>(value.first));
+		}
+	}
+
+	Refresh();
+}
+
+FunctionProperty::Ref<FunctionProperty::FunctionInstance> FunctionProperty::CreateWidget()
+{
+	Ref<FunctionInstance> res = mnew FunctionInstance();
+
+	if (mWidgetsBuffer.IsEmpty())
+		res->layout = mWidgetSample->CloneAs<HorizontalLayout>();
+	else
+		res->layout = mWidgetsBuffer.PopBack();
+
+	res->caption = res->layout->GetChildByType<Label>("caption");
+	res->funcDropDown = res->layout->GetChildByType<CustomDropDown>("controls/layout/drop down");
+	res->refProperty = res->layout->GetChildByType<ActorProperty>("controls/layout/actor ref");
+	res->removeBtn = res->layout->GetChildByType<Button>("controls/layout/remove btn");
+
+	return res;
+}
+
+void FunctionProperty::FunctionInstance::UpdateFunctionsList(const Ref<Actor>& actor, const Ref<Component>& selectedComponent,
+	const String& selectedMethod)
+{
+	funcDropDown->RemoveAllItems();
+	functionsDropdownMap.Clear();
+
+	if (!actor)
+		return;
+
+	int selectedIdx = -1;
+
+	auto collectFunctions = [&](const String& typeName, const String& iconName, const Vector<String>& functionsList, Component* comp)
+	{
+		refPointer<ItemContainer> typeItem = funcDropDown->AddItem();
+		functionsDropdownMap.Add({ nullptr, "" });
+
+		Ref<Sprite> icon = new Sprite(Color4(0, 0, 0, 0));
+		icon->transparency = 0.05f;
+		typeItem->AddLayer("back", icon);
+
+		Ref<ImageWidget> iconWidget = o2UI.CreateImage(iconName);
+		iconWidget->GetImage()->SetColor(Color4(0, 156, 141, 255));
+		iconWidget->SetLayout(WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20)));
+		typeItem->AddChild(iconWidget);
+
+		Ref<TextLabel> text = o2UI.CreateLabel(typeName);
+		text->SetLayout(WidgetLayout::BothStretch(20, 0, 0, 0));
+		text->SetHorAlign(TextLabel::HorAlign::Left);
+		typeItem->AddChild(text);
+
+		for (const auto& funcName : functionsList)
+		{
+			refPointer<ItemContainer> funcItem = funcDropDown->AddItem();
+			functionsDropdownMap.Add({ DynamicCast<IAbstractFunction>(comp), ReflectCodeBase::FunctionToCode(funcName) });
+
+			Ref<TextLabel> text = o2UI.CreateLabel(reflectCode.FunctionToDisplay(funcName));
+			text->SetText(funcName);
+			funcItem->AddChild(text);
+
+			const auto thisMethod = funcName.LeftOf('(');
+
+			if (thisMethod.Compare(selectedMethod) == 0)
+				selectedIdx = funcDropDown->GetItemsCount() - 1;
+		}
+	};
+
+	MethodInfo info;
+	actor->foreachComponent([&](Component* component)
+	{
+		const ComponentTypeInfo* compInfo = ComponentsDictionary::Instance().GetTypeInfo(component->GetType());
+		if (!compInfo)
 			return;
 
-		int selectedIdx = -1;
+		auto m = ActorTypeInfo::GetTargetsFunctions(component->GetType());
+		if (!m)
+			return;
 
-		auto collectFunctions = [&](const String& typeName, const String& iconName, const Vector<String>& functionsList, Component* comp)
+		const auto& em = (*m).GetFunctions();
+
+		for (const auto& methodFunction : em)
 		{
-			auto typeItem = funcDropDown->AddItem();
-			functionsDropdownMap.Add({ nullptr, "" });
+			if (!methodFunction.getAttribute())
+				continue;
 
-			typeItem->AddLayer("back", mnew Sprite(Color4(0, 0, 0, 0)))->transparency = 0.05f;
+			Vector<String> attrToFunctionList;
 
-			auto icon = o2UI.CreateImage(iconName);
-			*icon->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20));
-			icon->GetImage()->color = Color4(0, 156, 141, 255);
-			typeItem->AddChild(icon);
+			bool accepted = (*methodFunction.getAttribute())->isTypeOf<Function>();
+			if (!accepted)
+				continue;
 
-			auto text = o2UI.CreateLabel(typeName);
-			*text->layout = WidgetLayout::BothStretch(20, 0, 0, 0);
-			text->horAlign = HorAlign::Left;
-			typeItem->AddChild(text);
+			Function::Parser(parser);
+			if (!parser.success)
+				continue;
 
-			for (auto funcName : functionsList)
-			{
-				auto funcItem = funcDropDown->AddItem();
+			const_cast<ReflectCodeBase&>(reflectCode).SetMapName(parser.currentMapName);
+			const auto name = reflectCode.FunctionToMapName(typeid(*component).name(), (String)estd::to_string(component).c_str(), methodFunction.getType()->name, methodFunction.getName());
 
-				auto text = o2UI.CreateLabel(funcName);
-				*text->layout = WidgetLayout::BothStretch();
-				text->horAlign = HorAlign::Left;
-				text->transparency = 0.8f;
-				funcItem->AddChild(text);
+			collectFunctions(compInfo->GetType().name, iconPath, funInfo->Names, component);
+		}
+	});
 
-				functionsDropdownMap.Add({ comp, funcName });
-
-				if (comp == selectedComponent.Get() && selectedMethod == funcName)
-					selectedIdx = funcDropDown->GetItemsCount() - 1;
-			}
-		};
-
-		auto collectFunctionsByType = [&](const String& typeName, const String& iconName, const Type& type, Component* comp)
+	for (auto& funInfo: info.Types)
+	{
+		if (funInfo->GetType() == typeid(void))
 		{
-			Vector<String> functionsList;
+			auto stringizedPackage = (String)ESTD_STRINGIZE_PACKAGE_WITH_SEPARATOR(funInfo->GetPackage());
+			collectFunctions(funInfo->GetName(), "Editor2/Icons/Type/" + stringizedPackage + funInfo->GetName(), funInfo->Names, nullptr);
+		}
+	}
 
-			for (auto funcInfo : type.GetFunctions())
+	funcDropDown->SetSelectedPos(selectedIdx);
+}
+
+FunctionProperty::FunctionInstance::~FunctionInstance()
+{
+	functionsDropdownMap.Clear();
+}
+
+FunctionProperty::FunctionProperty(
+	const Ref<SerializableProperty>& serializedObject, const Ref<Object>& object,
+	const Ref<IObjectEditor>& editor, const std::type_info& valueType, const Func<Ref<IValueProxy>(IProxiedValue&)>& createValueProxy)
+	: ComplexProperty(serializedObject, object, editor, valueType, createValueProxy),
+	mRefObject(nullptr),
+	mMetadata(MetaInfo::GetMetadata(valueType))
+{
+	if (!mSerializedObject->Has("Functions") || mSerializedObject->Get("Functions").IsNone())
+		mSerializedObject->Set("Functions", Vector<DataDocument>());
+
+	mValuesProxies << createValueProxy(mRefProperty);
+
+	{
+		auto editorInterface = editor->GetEditorInterface()->AsEditorInterface();
+		o2UI.Create(editorInterface);
+	}
+
+	mWidgetSample = o2UI.LoadLayoutFromFile("/Game/Widgets/FunctionProperty/Function");
+	mSpoiler = mWidgetSample->GetChildByType<Ref<Spoiler>>("spoiler");
+
+	mSpoiler->SetCaption("Functions");
+	mSpoiler->SetState(Spoiler::STATE::Expanded);
+	mSpoiler->SetScrollToVisibleForNewChildItems(true);
+
+	const auto props = mWidgetSample->GetChildrenByType<Ref<SerializableProperty>>();
+	mPropertySample = props[0];
+
+	Ref<IconSample> iconSample = mnew IconSample();
+
+	const Vector<Ref<AbstractFunction>>& functionsList = dynamic_cast<Factory*>(serializedObject.Get())->GetFunctions();
+
+	mRefProperty = nullptr;
+
+	if (mRefObject)
+		mRefProperty = mnew ActorProperty();
+	else
+		mRefProperty = mnew ObjectProperty();
+
+	mRefProperty->SetInstance(editor->GetEditorObject()->AsObject());
+
+	foreachXmlElement(mSerializedObject->Root()["Functions"], [&](const XmlElement& xfunc)
+	{
+		Ref<FunctionInstance> inst = mnew FunctionInstance();
+
+		ObjectInstanceMetadata fakeInstance;
+		fakeInstance.SetValue(nullptr);
+
+		auto propClone = mPropertySample->CloneAs<SerializableProperty>();
+		propClone->Setup(fakeInstance, xfunc);
+
+		inst->refProperty = mRefProperty;
+		inst->refProperty->Serialize(propClone->NestedObject(), false, false, false);
+
+		auto layout = mWidgetSample->CloneAs<HorizontalLayout>();
+
+		BuildEditorForObjectProperty(layout, mRefProperty, inst->refProperty);
+
+		inst->layout = layout;
+		inst->caption = layout->GetChildByType<TextLabel>("caption");
+		inst->funcDropDown = layout->GetChildByType<Ref<CustomDropDown>>("controls/layout/drop down");
+		inst->removeBtn = layout->GetChildByType<Ref<Button>>("controls/layout/remove btn");
+
+		int refIndex = 0;
+
+		Vector<AbstractFunction*> linkedFunctionsList;
+
+		for (const auto& f : functionsList)
+		{
+			const auto& fa = f->abstractFunctions;
+
+			for (const auto& l : fa)
+				if (l.second->GetDisplayName().StartsWith(xfunc.GetName()))
+					linkedFunctionsList.PushBack(l.second);
+		}
+
+		// fill value with actual values if available
+		if (xfunc.HasChild("RegisteredFunctions"))
+		{
+			const auto regFuncsNode = xfunc.GetChild("RegisteredFunctions");
+
+			foreachXmlElement(regFuncsNode, [&](const XmlElement& regFunc)
 			{
-				if (funcInfo->GetProtectionSection() == ProtectSection::Public && funcInfo->GetParameters().IsEmpty() &&
-					funcInfo->GetReturnType() == &TypeOf(void))
+				const auto& funcName = regFunc.GetName();
+
+				auto func = mRefProperty->FindFunction(funcName).get();
+				AbstractFunction* abstractFunc = nullptr;
+
+				if (func)
+					abstractFunc = dynamic_cast<AbstractFunction*>(func);
+
+				if (!abstractFunc)
 				{
-					functionsList.Add(funcInfo->GetName());
-				}
-			}
-
-			collectFunctions(typeName, iconName, functionsList, comp);
-		};
-
-		auto getTypeName = [](const Type& type)
-		{
-			String typeName = type.InvokeStatic<String>("GetName");
-			if (typeName.IsEmpty())
-				typeName = GetSmartName(type.GetName());
-
-			return typeName;
-		};
-
-		auto getIconName = [](const Type& type)
-		{
-			String iconName = type.InvokeStatic<String>("GetIcon");
-			if (iconName.IsEmpty())
-				iconName = "ui/UI4_component_icon.png";
-
-			return iconName;
-		};
-
-		auto& actorType = actor->GetType();
-		collectFunctionsByType(getTypeName(actorType), getIconName(actorType), actorType, nullptr);
-
-		for (auto component : actor->GetComponents())
-		{
-			auto& componentType = component->GetType();
-			if (auto scriptingComponent = dynamic_cast<ScriptableComponent*>(component))
-			{
-				Vector<String> functionsList;
-
-				static Vector<String> hiddenFunctions = { 
-					String("constructor"), String("OnStart"), String("Update"), String("toString"), String("valueOf"), 
-					String("toLocaleString"), String("hasOwnProperty"), String("isPrototypeOf"), String("propertyIsEnumerable") };
-
-				ScriptValue instance = scriptingComponent->GetInstance();
-				Vector<ScriptValue> properties = instance.GetPropertyNames();
-				for (auto& prop : properties)
-				{
-					ScriptValue propValue = instance.GetProperty(prop);
-					if (propValue.IsFunction())
+					auto knownFunc = RegistryDatabase::Instance().FindFunction(funcName);
+					if (knownFunc)
+						linkedFunctionsList << knownFunc;
+					else
 					{
-						String functionName = prop.ToString();
-						bool hidden = hiddenFunctions.Contains(functionName);
-						if (!functionName.StartsWith("_") && !hidden)
-							functionsList.Add(functionName);
+						Debug::Log(Debug::LEVEL::Error, "Unable to find function '%s'", (String)funcName);
 					}
 				}
-
-				collectFunctions(getTypeName(componentType), getIconName(componentType), functionsList, component);
-			}
-			else
-			{
-				collectFunctionsByType(getTypeName(componentType), getIconName(componentType), componentType, component);
-			}
+			});
 		}
 
-		if (funcDropDown->GetSelectedItemPosition() != selectedIdx)
-			funcDropDown->SelectItemAt(selectedIdx);
-	}
+		Vector<AbstractFunction*> availableFunctions;
 
-	void FunctionProperty::FunctionInstance::OnFunctionSelected(int idx)
-	{
-		for (auto& value : values)
-		{
-			value.first->componentRef = functionsDropdownMap[idx].first;
-			value.first->method = functionsDropdownMap[idx].second;
-		}
-	}
+		for (const auto& f : linkedFunctionsList)
+			availableFunctions.push_back(f);
 
-	const Type* FunctionProperty::GetValueType() const
-	{
-		return GetValueTypeStatic();
-	}
+		inst->values << Make```
+#include <memory>
 
-	const Type* FunctionProperty::GetValueTypeStatic()
-	{
-		return FunctionType::serializableType;
-	}
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
-	void FunctionProperty::SetFieldInfo(const FieldInfo* fieldInfo)
-	{
-		IPropertyField::SetFieldInfo(fieldInfo);
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-		if (fieldInfo)
-		{
-			if (fieldInfo->HasAttribute<ExpandedByDefaultAttribute>())
-				mSpoiler->Expand();
-		}
-	}
-
-	void FunctionProperty::SetCaption(const WString& text)
-	{
-		mSpoiler->SetCaption(text);
-
-		Text* spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
-		if (spoilerCaptionLayer)
-		{
-			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont(), spoilerCaptionLayer->GetFontHeight());
-			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
-		}
-	}
-
-	WString FunctionProperty::GetCaption() const
-	{
-		return mSpoiler->GetCaption();
-	}
-
-	Button* FunctionProperty::GetRemoveButton()
-	{
-		if (!mRemoveBtn)
-		{
-			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
-			*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, 0));
-			AddInternalWidget(mRemoveBtn);
-		}
-
-		return mRemoveBtn;
-	}
-
-	void FunctionProperty::Expand()
-	{
-		SetExpanded(true);
-	}
-
-	void FunctionProperty::Collapse()
-	{
-		SetExpanded(false);
-	}
-
-	void FunctionProperty::SetExpanded(bool expanded)
-	{
-		mSpoiler->SetExpanded(expanded);
-	}
-
-	bool FunctionProperty::IsExpanded() const
-	{
-		return mSpoiler->IsExpanded();
-	}
-
-	void FunctionProperty::OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
-											 const Vector<DataDocument>& after)
-	{
-		// 		for (auto& pair : mTargetObjects)
-		// 			pair.first.SetValue();
-
-		onChangeCompleted(path, before, after);
-	}
-
-	bool FunctionProperty::FunctionInstance::operator==(const FunctionInstance& other) const
-	{
-		return values == other.values;
-	}
+template< typename T, typename... Args >
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
 }
-// --- META ---
 
-DECLARE_CLASS(Editor::FunctionProperty, Editor__FunctionProperty);
-// --- END META ---
+template<typename T>
+struct DynamicCast
+{
+    template<typename U>
+    static Ref<T> Cast(Ref<U> ptr)
+    {
+        return std::dynamic_pointer_cast<T>(ptr);
+    }
+};
+
+namespace Editor
+{
+    using namespace std;
+
+    class FunctionProperty : public IPropertyField
+    {
+    public:
+        struct FunctionInstance
+        {
+            Ref<Component> componentRef;
+            String method;
+            Vector< KeyValuePair<RefPtr<IPropertyField>, Ref<Component>>> values;
+
+            bool operator==(const FunctionInstance& other) const;
+        };
+
+        using FunctionsMap = UnorderedMap<size_t, Pair<RefPtr<Component>, String>>;
+
+        FunctionProperty(Widget* parent = nullptr);
+
+        void UpdateFunctions(const Ref<Actor>& actor, const Ref<Actor>& oldActor);
+
+        void SetSelectedFunction(const String& componentType, const String& methodName, const Ref<Component>& component);
+
+        itkGetterSetter(const WString&, Caption);
+        itkGetterSetter(bool, Expanded);
+
+        void AppendFunctionInstance(const String &caption, Func<void(EditValue<FunctionInstance>&)> instanceBuilder,
+                                    bool allowMulti = true);
+    protected:
+        struct FunctionEntry
+        {
+            Ref<Button> expandBtn;
+            Ref<Panel> expandGroup;
+            Ref<Text> label;
+        };
+
+        Ref<Panel>             mContent;
+        Ref<ScrollPanel>       mScrollPanel;
+        Ref<Button>            mNewBtn;
+        Ref<SingleInvokable>   mSizeHandler;
+        FunctionsMap           mComponentFunctionMap;
+        Ref<Widget>            mPlaceholder;
+
+        inline Ref<Widget> CreateHeader(const WString& caption);
+
+        void OnPropertyExpandedChanged();
+
+        inline FunctionEntry CreateEntry();
+
+        void FindFunctionEntries(const Ref<Panel>& panel,
+                                Vector<FunctionEntry>& result);
+
+        size_t CalculateExpandedHeight();
+
+        void CalculatePanelSize();
+
+        static void InitializeComponent(Vector <RefPtr<Component>>& components, const Ref <Widget>& funcDropDown,
+                                       int& selectedIdx, const Ref <Component>& selectedComponent,
+                                       const String& selectedMethod);
+
+        static void FunctionClicked(const Ref <Component>& component, const String& method, const Ref <Component>&
+        selectedComponent,
+                                  String& selectedMethod, const Ref <Component>& comp, const String&
+                                  funcName,
+                                  const Ref <Widget>& funcDropDown, int& selectedIdx);
+
+        void OnFunctionSelected(int idx);
+
+        const Type* GetValueType() const override;
+
+        static const Type* GetValueTypeStatic();
+
+        void SetFieldInfo(const FieldInfo* fieldInfo) override;
+
+        void SetCaption(const WString& text) override;
+
+        WString GetCaption() const override;
+
+        Button* GetRemoveButton();
+
+        void Expand();
+
+        void Collapse();
+
+        void SetExpanded(bool expanded);
+
+        bool IsExpanded() const;
+
+        void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
+        const Vector<DataDocument>& after);
+
+    private:
+        struct FunctionData
+        {
+            FunctionInstance instance;
+            RefPtr<IPropertyField> field;
+        };
+
+        using MultiFunctionData = RefPtr<Ref<Vector<FunctionData>>>;
+
+        MultiFunctionData mFunctionData;
+
+        Ref<Button> mRemoveBtn;
+        Ref<Panel> mHeaderContainer;
+        Ref<Spoiler> mSpoiler;
+        Vector<Ref<FunctionEntry>> mFunctionEntries;
+    };
+
+    BEGIN_META(Editor::FunctionProperty);
+    END_META();
+}
+```

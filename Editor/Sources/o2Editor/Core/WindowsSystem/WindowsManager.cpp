@@ -22,10 +22,10 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mnew ColorPickerDlg();
-		mnew CurveEditorDlg();
-		mnew NameEditDlg();
-		mnew KeyEditDlg();
+		mmake<ColorPickerDlg>();
+		mmake<CurveEditorDlg>();
+		mmake<NameEditDlg>();
+		mmake<KeyEditDlg>();
 
 		InitializeDock();
 		InitializeWindows();
@@ -47,8 +47,8 @@ namespace Editor
 
 		for (auto type : windowTypes)
 		{
-			IEditorWindow* newWindow = (IEditorWindow*)type->CreateSample();
-			mEditorWindows.Add(newWindow);
+			IEditorWindow* newWindow = mmaket<IEditorWindow>();
+			mEditorWindows.push_back(newWindow);
 		}
 
 		for (auto wnd : mEditorWindows)
@@ -59,7 +59,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mMainDockPlace = mnew DockWindowPlace();
+		mMainDockPlace = mmaket<DockWindowPlace>();
 		mMainDockPlace->name = "main dock";
 		*mMainDockPlace->layout = WidgetLayout::BothStretch(0, 0, 0, 48);
 		mMainDockPlace->SetResizibleDir(TwoDirection::Horizontal, 0, nullptr, nullptr);
@@ -68,7 +68,7 @@ namespace Editor
 
 	void WindowsManager::Update(float dt)
 	{
-		for (auto wnd : mEditorWindows)
+		for (const auto& wnd : mEditorWindows)
 			wnd->Update(dt);
 	}
 
@@ -99,10 +99,10 @@ namespace Editor
 
 #undef DrawText
 
-	void WindowsManager::Draw()
+	void WindowsManager::Draw(const Ref<Render>& render)
 	{
-		for (auto wnd : mEditorWindows)
-			wnd->Draw();
+		for (const auto& wnd : mEditorWindows)
+			wnd->Draw(render);
 
 //		return;
 //		String hierarchy;
@@ -110,9 +110,9 @@ namespace Editor
 //		o2Debug.DrawText((Vec2F)(o2Render.GetResolution().InvertedX())*0.5f, hierarchy);
 	}
 
-	void WindowsManager::AddWindow(IEditorWindow* window)
+	void WindowsManager::AddWindow(const Ref<IEditorWindow>& window)
 	{
-		mEditorWindows.Add(window);
+		mEditorWindows.push_back(window);
 	}
 
 	WindowsLayout WindowsManager::GetWindowsLayout()
@@ -121,7 +121,7 @@ namespace Editor
 
 		res.mainDock.RetrieveLayout(o2EditorWindows.mMainDockPlace);
 
-		for (auto widget : EditorUIRoot.GetRootWidget()->GetChildWidgets())
+		for (const auto& widget : EditorUIRoot.GetRootWidget()->GetChildWidgets())
 		{
 			if (widget->GetType() == TypeOf(DockableWindow))
 				res.windows.Add(widget->name, *widget->layout);
@@ -130,13 +130,13 @@ namespace Editor
 		return res;
 	}
 
-	void WindowsManager::SetWindowsLayout(WindowsLayout layout)
+	void WindowsManager::SetWindowsLayout(const WindowsLayout& layout)
 	{
 		PushEditorScopeOnStack scope;
 
-		for (auto wnd : layout.windows)
+		for (const auto& wnd : layout.windows)
 		{
-			IEditorWindow* editorWindow = o2EditorWindows.mEditorWindows.FindOrDefault([&](IEditorWindow* x) {
+			const auto& editorWindow = o2EditorWindows.mEditorWindows.FindOrDefault([&](const auto& x) {
 				return x->mWindow->GetName() == wnd.first;
 			});
 
@@ -146,7 +146,7 @@ namespace Editor
 				continue;
 			}
 
-			if (DockableWindow* dockWnd = editorWindow->mWindow)
+			if (auto dockWnd = editorWindow->mWindow.lock())
 			{
 				editorWindow->Show();
 				*dockWnd->layout = wnd.second;
@@ -155,10 +155,10 @@ namespace Editor
 
 		layout.RestoreDock(&layout.mainDock, o2EditorWindows.mMainDockPlace);
 
-		for (auto wnd : o2EditorWindows.mEditorWindows)
+		for (const auto& wnd : o2EditorWindows.mEditorWindows)
 		{
-			bool hide = !layout.windows.ContainsKey(wnd->mWindow->GetName()) && 
-				wnd->mWindow->GetParent()->GetType() != TypeOf(DockWindowPlace);
+			bool hide = !layout.windows.ContainsKey(wnd->mWindow.lock()->GetName()) &&
+				wnd->mWindow.lock()->GetParent()->GetType() != TypeOf(DockWindowPlace);
 
 			if (hide)
 				wnd->Hide();

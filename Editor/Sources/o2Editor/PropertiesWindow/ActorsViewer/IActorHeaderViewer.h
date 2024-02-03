@@ -1,59 +1,37 @@
-#pragma once
-
-#include "o2/Utils/Basic/IObject.h"
-#include "o2/Utils/Reflection/Reflection.h"
-#include "o2/Utils/Types/Containers/Vector.h"
+#include <memory>
 
 using namespace o2;
 
-namespace o2
-{
-	class Actor;
-	class Widget;
-}
-
 namespace Editor
 {
-	// ------------------------------------
-	// Editor actor header viewer interface
-	// ------------------------------------
-	class IActorHeaderViewer: public IObject
+	class IActorHeaderViewer : public IObject
 	{
 	public:
-		// Virtual destructor
 		virtual ~IActorHeaderViewer() {}
 
-		// Sets target actors
-		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
+		virtual void SetTargetActors(const Vector<Ref<Actor>>& actors) {}
 
-		// Returns data widget
-		virtual Widget* GetWidget() const { return nullptr; }
+		virtual Ref<Widget> GetWidget() const { return nullptr; }
 
-		// Updates properties values
 		virtual void Refresh() {}
 
-		// Sets viewer enabled
 		void SetEnabled(bool enabled);
 
-		// Returns is viewer enabled
 		bool IsEnabled() const;
 
 		IOBJECT(IActorHeaderViewer);
 
 	protected:
-		bool mEnabled = false; // Is viewer enabled 
+		bool mEnabled = false;
 
 	protected:
-		// Enable viewer event function
 		virtual void OnEnabled() {}
 
-		// Disable viewer event function
 		virtual void OnDisabled() {}
 
 		friend class ActorViewer;
 	};
 }
-// --- META ---
 
 CLASS_BASES_META(Editor::IActorHeaderViewer)
 {
@@ -67,9 +45,8 @@ CLASS_FIELDS_META(Editor::IActorHeaderViewer)
 END_META;
 CLASS_METHODS_META(Editor::IActorHeaderViewer)
 {
-
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Ref<Actor>>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
@@ -77,4 +54,3 @@ CLASS_METHODS_META(Editor::IActorHeaderViewer)
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
-// --- END META ---

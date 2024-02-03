@@ -3,6 +3,7 @@
 #include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2Editor/Core/Properties/PropertiesContext.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/IActorComponentViewer.h"
+#include <memory>
 
 namespace Editor
 {
@@ -11,7 +12,7 @@ namespace Editor
 	// ------------------------------
 	// Default actor component viewer
 	// ------------------------------
-	class DefaultActorComponentViewer: public IActorComponentViewer
+	class DefaultActorComponentViewer : public IActorComponentViewer
 	{
 	public:
 		// Default constructor. Initializes data widget
@@ -32,13 +33,13 @@ namespace Editor
 		IOBJECT(DefaultActorComponentViewer);
 
 	protected:
-		const Type*              mComponentType = nullptr; // Target component type
-		IObjectPropertiesViewer* mViewer = nullptr;        //Component properties viewer
+		const Type* mComponentType = nullptr; // Target component type
+		Ref<IObjectPropertiesViewer> mViewer; //Component properties viewer
 
 	protected:
 		// Called when some property changed, marks Actor as changed and calls default Undo create callback
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
-							   const Vector<DataDocument>& after);
+			const Vector<DataDocument>& after);
 
 		// Enable viewer event function
 		void OnEnabled() override;
@@ -48,7 +49,7 @@ namespace Editor
 	};
 
 	template<typename _component_type>
-	class TActorComponentViewer: public DefaultActorComponentViewer
+	class TActorComponentViewer : public DefaultActorComponentViewer
 	{
 	public:
 		// Sets target actors
@@ -60,14 +61,18 @@ namespace Editor
 		IOBJECT(TActorComponentViewer<_component_type>);
 
 	protected:
-		Vector<_component_type*> mTargetComponents;
+		Vector<Ref<_component_type>> mTargetComponents;
 	};
 
 	template<typename _component_type>
 	void TActorComponentViewer<_component_type>::SetTargetComponents(const Vector<Component*>& components)
 	{
 		DefaultActorComponentViewer::SetTargetComponents(components);
-		mTargetComponents = components.DynamicCast<_component_type*>();
+		mTargetComponents.clear();
+		for (auto component : components)
+		{
+			mTargetComponents.emplace_back(mmake<_component_type>(component));
+		}
 	}
 
 	template<typename _component_type>
@@ -85,13 +90,12 @@ CLASS_BASES_META(Editor::DefaultActorComponentViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorComponentViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponentType);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
+    FIELD().PROTECTED().NAME(mComponentType);
+    FIELD().PROTECTED().NAME(mViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
@@ -117,7 +121,6 @@ END_META;
 META_TEMPLATES(typename _component_type)
 CLASS_METHODS_META(Editor::TActorComponentViewer<_component_type>)
 {
-
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
 }

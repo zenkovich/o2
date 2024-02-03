@@ -14,59 +14,61 @@
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/UI/SpoilerWithHead.h"
 
+using namespace o2;
+
 namespace Editor
 {
-	IActorTransformViewer::IActorTransformViewer()
-	{
-		PushEditorScopeOnStack scope;
+    IActorTransformViewer::IActorTransformViewer()
+    {
+        PushEditorScopeOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
+        mSpoiler = mmake<Ref<SpoilerWithHead>>();
 
-		mSpoiler->borderBottom = 5;
-		mSpoiler->SetCaption("Transform");
-		mSpoiler->GetIcon()->SetImageName("ui/UI4_transform_icon_white.png");
+        mSpoiler->borderBottom = 5;
+        mSpoiler->SetCaption("Transform");
+        mSpoiler->GetIcon()->SetImageName("ui/UI4_transform_icon_white.png");
 
-		mSpoiler->SetExpanded(true);
-	}
+        mSpoiler->SetExpanded(true);
+    }
 
-	IActorTransformViewer::~IActorTransformViewer()
-	{}
+    IActorTransformViewer::~IActorTransformViewer()
+    {}
 
-	Widget* IActorTransformViewer::GetWidget() const
-	{
-		return mSpoiler;
-	}
+    Ref<Widget> IActorTransformViewer::GetWidget() const
+    {
+        return mSpoiler;
+    }
 
-	void IActorTransformViewer::Expand()
-	{
-		mSpoiler->Expand();
-	}
+    void IActorTransformViewer::Expand()
+    {
+        mSpoiler->Expand();
+    }
 
-	void IActorTransformViewer::Collapse()
-	{
-		mSpoiler->Collapse();
-	}
+    void IActorTransformViewer::Collapse()
+    {
+        mSpoiler->Collapse();
+    }
 
-	void IActorTransformViewer::Refresh()
-	{}
+    void IActorTransformViewer::Refresh()
+    {}
 
-	void IActorTransformViewer::SetEnabled(bool enabled)
-	{
-		if (mEnabled == enabled)
-			return;
+    void IActorTransformViewer::SetEnabled(bool enabled)
+    {
+        if (mEnabled == enabled)
+            return;
 
-		mEnabled = enabled;
+        mEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
-		else
-			OnDisabled();
-	}
+        if (mEnabled)
+            OnEnabled();
+        else
+            OnDisabled();
+    }
 
-	bool IActorTransformViewer::IsEnabled() const
-	{
-		return mEnabled;
-	}
+    bool IActorTransformViewer::IsEnabled() const
+    {
+        return mEnabled;
+    }
 
 }
 // --- META ---

@@ -12,7 +12,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
+		mSpoiler = mmake<Ref<SpoilerWithHead>>();
 
 		mSpoiler->expandHeight = false;
 		mSpoiler->expandWidth = true;
@@ -26,12 +26,9 @@ namespace Editor
 	}
 
 	IActorPropertiesViewer::~IActorPropertiesViewer()
-	{
-		if (mSpoiler)
-			delete mSpoiler;
-	}
+	{}
 
-	Widget* IActorPropertiesViewer::GetWidget() const
+	Ref<Widget> IActorPropertiesViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}

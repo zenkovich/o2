@@ -2,54 +2,56 @@
 
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "Ref.h"
+#include "WeakRef.h"
 
 using namespace o2;
 
 namespace o2
 {
-	class Widget;
+    class Widget;
 }
 
 namespace Editor
 {
-	class DockWindowPlace;
+    class DockWindowPlace;
 
-	class WindowsLayout: public ISerializable
-	{
-	public:
-		class WindowDockPlace: public ISerializable
-		{
-		public:
-			RectF                   anchors; // @SERIALIZABLE
-			Vector<String>          windows; // @SERIALIZABLE
-			String                  active;  // @SERIALIZABLE
-			Vector<WindowDockPlace> childs;	 // @SERIALIZABLE
+    class WindowsLayout : public ISerializable
+    {
+    public:
+        class WindowDockPlace : public ISerializable
+        {
+        public:
+            RectF                    anchors;   // @SERIALIZABLE
+            Vector<String>           windows;   // @SERIALIZABLE
+            String                   active;    // @SERIALIZABLE
+            Vector<WindowDockPlace>  childs;    // @SERIALIZABLE
 
-		public:
-			void RetrieveLayout(Widget* widget);
+        public:
+            void RetrieveLayout(const Ref<Widget>& widget); // Changed argument type to const Ref<Widget>&
 
-			bool operator==(const WindowDockPlace& other) const;
+            bool operator==(const WindowDockPlace& other) const;
 
-			SERIALIZABLE(WindowDockPlace);
-		};
+            SERIALIZABLE(WindowDockPlace);
+        };
 
-	public:
-		WindowDockPlace           mainDock; // @SERIALIZABLE
-		Map<String, WidgetLayout> windows;  // @SERIALIZABLE
+    public:
+        Ref<WindowDockPlace>       mainDock;  // Changed type to Ref<WindowDockPlace>
+        Map<String, WidgetLayout>  windows;   // @SERIALIZABLE
 
-		bool operator==(const WindowsLayout& other) const;
+        bool operator==(const WindowsLayout& other) const;
 
-		SERIALIZABLE(WindowsLayout);
+        SERIALIZABLE(WindowsLayout);
 
-	protected:
-		// Restores dock recursively
-		void RestoreDock(WindowDockPlace* dockDef, DockWindowPlace* dockWidget);
+    protected:
+        // Restores dock recursively
+        void RestoreDock(const Ref<WindowDockPlace>& dockDef, DockWindowPlace* dockWidget); // Changed argument type to const Ref<WindowDockPlace>&
 
-		// Removes all children empty dock places
-		void CleanEmptyDocks(DockWindowPlace* dockPlace);
+        // Removes all children empty dock places
+        void CleanEmptyDocks(DockWindowPlace* dockPlace);
 
-		friend class WindowsManager;
-	};
+        friend class WindowsManager;
+    };
 
 }
 // --- META ---
@@ -68,7 +70,7 @@ END_META;
 CLASS_METHODS_META(Editor::WindowsLayout)
 {
 
-    FUNCTION().PROTECTED().SIGNATURE(void, RestoreDock, WindowDockPlace*, DockWindowPlace*);
+    FUNCTION().PROTECTED().SIGNATURE(void, RestoreDock, const Ref<WindowDockPlace>&, DockWindowPlace*); // Changed argument type to const Ref<WindowDockPlace>&
     FUNCTION().PROTECTED().SIGNATURE(void, CleanEmptyDocks, DockWindowPlace*);
 }
 END_META;
@@ -88,8 +90,7 @@ CLASS_FIELDS_META(Editor::WindowsLayout::WindowDockPlace)
 END_META;
 CLASS_METHODS_META(Editor::WindowsLayout::WindowDockPlace)
 {
-
-    FUNCTION().PUBLIC().SIGNATURE(void, RetrieveLayout, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, RetrieveLayout, const Ref<Widget>&); // Changed argument type to const Ref<Widget>&
 }
 END_META;
 // --- END META ---

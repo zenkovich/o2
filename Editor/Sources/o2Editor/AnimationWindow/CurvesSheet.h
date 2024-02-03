@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2Editor/Core/UI/CurveEditor/CurvesEditor.h"
+#include <memory>
 
 using namespace o2;
 
@@ -18,7 +19,7 @@ namespace Editor
 		CurvesSheet& operator=(const CurvesSheet& other);
 
 		// Sets animation and updates tree structure
-		void SetAnimation(AnimationClip* animation);
+		void SetAnimation(const Ref<AnimationClip>& animation);
 
 		// Generates new color for curves and transfers to the tree
 		void UpdateCurvesColors();
@@ -32,9 +33,9 @@ namespace Editor
 		SERIALIZABLE(CurvesSheet);
 
 	private:
-		CurvesEditor* mCurvesEditor; // Curves editor
+		Ref<CurvesEditor> mCurvesEditor; // Curves editor
 
-		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+		WeakRef<AnimationWindow> mAnimationWindow; // Animation window
 
 		bool mEditorViewLock = false; // It is used to prevent handling editor's camera, when timeline view changing 
 
@@ -51,6 +52,7 @@ namespace Editor
 		friend class AnimationWindow;
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::CurvesSheet)
@@ -61,7 +63,7 @@ END_META;
 CLASS_FIELDS_META(Editor::CurvesSheet)
 {
     FIELD().PRIVATE().NAME(mCurvesEditor);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
+    FIELD().PRIVATE().DEFAULT_VALUE(Ref<AnimationWindow>()).NAME(mAnimationWindow);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mEditorViewLock);
 }
 END_META;
@@ -70,7 +72,7 @@ CLASS_METHODS_META(Editor::CurvesSheet)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesSheet&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateCurvesColors);
     FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

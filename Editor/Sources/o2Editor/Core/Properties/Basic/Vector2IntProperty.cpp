@@ -5,167 +5,172 @@
 
 namespace Editor
 {
-	Vec2IProperty::Vec2IProperty()
-	{}
+    using Ref = std::shared_ptr;
 
-	Vec2IProperty::Vec2IProperty(const Vec2IProperty& other):
-		IPropertyField(other)
-	{
-		InitializeControls();
-	}
+    Ref<Vec2IProperty> mXProperty;
+    Ref<Vec2IProperty> mYProperty;
 
-	Editor::Vec2IProperty& Vec2IProperty::operator=(const Vec2IProperty& other)
-	{
-		IPropertyField::operator=(other);
-		InitializeControls();
-		return *this;
-	}
+    Vec2IProperty::Vec2IProperty()
+    {}
 
-	void Vec2IProperty::InitializeControls()
-	{
-		mXProperty = GetChildByType<IntegerProperty>("container/layout/properties/x");
-		mXProperty->SetValuePath("x");
-		mXProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
-		mXProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
-		{
-			onChangeCompleted(mValuesPath + "/" + path, before, after);
-		};
+    Vec2IProperty::Vec2IProperty(const Vec2IProperty& other) :
+        IPropertyField(other)
+    {
+        InitializeControls();
+    }
 
-		mYProperty = GetChildByType<IntegerProperty>("container/layout/properties/y");
-		mYProperty->SetValuePath("y");
-		mYProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
-		mYProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
-		{
-			onChangeCompleted(mValuesPath + "/" + path, before, after);
-		};
-	}
+    Editor::Vec2IProperty& Vec2IProperty::operator=(const Vec2IProperty& other)
+    {
+        IPropertyField::operator=(other);
+        InitializeControls();
+        return *this;
+    }
 
-	void Vec2IProperty::SetValue(const Vec2I& value)
-	{
-		mXProperty->SetValue(value.x);
-		mYProperty->SetValue(value.y);
-	}
+    void Vec2IProperty::InitializeControls()
+    {
+        mXProperty = GetChildByType<IntegerProperty>("container/layout/properties/x");
+        mXProperty->SetValuePath("x");
+        mXProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
+        mXProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
+        {
+            onChangeCompleted(mValuesPath + "/" + path, before, after);
+        };
 
-	void Vec2IProperty::SetValueX(int value)
-	{
-		mXProperty->SetValue(value);
-	}
+        mYProperty = GetChildByType<IntegerProperty>("container/layout/properties/y");
+        mYProperty->SetValuePath("y");
+        mYProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
+        mYProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
+        {
+            onChangeCompleted(mValuesPath + "/" + path, before, after);
+        };
+    }
 
-	void Vec2IProperty::SetValueY(int value)
-	{
-		mYProperty->SetValue(value);
-	}
+    void Vec2IProperty::SetValue(const Vec2I& value)
+    {
+        mXProperty->SetValue(value.x);
+        mYProperty->SetValue(value.y);
+    }
 
-	void Vec2IProperty::SetUnknownValue(const Vec2I& defaultValue /*= Vec2I()*/)
-	{
-		mXProperty->SetUnknownValue(defaultValue.x);
-		mYProperty->SetUnknownValue(defaultValue.y);
-	}
+    void Vec2IProperty::SetValueX(int value)
+    {
+        mXProperty->SetValue(value);
+    }
 
-	void Vec2IProperty::SetXUnknownValue(int defaultValue /*= 0.0f*/)
-	{
-		mXProperty->SetUnknownValue(defaultValue);
-	}
+    void Vec2IProperty::SetValueY(int value)
+    {
+        mYProperty->SetValue(value);
+    }
 
-	void Vec2IProperty::SetYUnknownValue(int defaultValue /*= 0.0f*/)
-	{
-		mYProperty->SetUnknownValue(defaultValue);
-	}
+    void Vec2IProperty::SetUnknownValue(const Vec2I& defaultValue /*= Vec2I()*/)
+    {
+        mXProperty->SetUnknownValue(defaultValue.x);
+        mYProperty->SetUnknownValue(defaultValue.y);
+    }
 
-	void Vec2IProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
-	{
-		mValuesProxies = targets;
+    void Vec2IProperty::SetXUnknownValue(int defaultValue /*= 0.0f*/)
+    {
+        mXProperty->SetUnknownValue(defaultValue);
+    }
 
-		mXProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew XValueProxy(x.first), x.second ? mnew XValueProxy(x.second) : nullptr); }));
+    void Vec2IProperty::SetYUnknownValue(int defaultValue /*= 0.0f*/)
+    {
+        mYProperty->SetUnknownValue(defaultValue);
+    }
 
-		mYProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew YValueProxy(x.first), x.second ? mnew YValueProxy(x.second) : nullptr); }));
-	}
+    void Vec2IProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
+    {
+        mValuesProxies = targets;
 
-	void Vec2IProperty::Refresh()
-	{
-		if (mValuesProxies.IsEmpty())
-			return;
+        mXProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
+            return TargetPair(std::make_shared<XValueProxy>(x.first), x.second ? std::make_shared<XValueProxy>(x.second) : nullptr); }));
 
-		mXProperty->Refresh();
-		mXProperty->Refresh();
+        mYProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
+            return TargetPair(std::make_shared<YValueProxy>(x.first), x.second ? std::make_shared<YValueProxy>(x.second) : nullptr); }));
+    }
 
-		CheckRevertableState();
-	}
+    void Vec2IProperty::Refresh()
+    {
+        if (mValuesProxies.IsEmpty())
+            return;
 
-	void Vec2IProperty::Revert()
-	{
-		if (mValuesProxies.IsEmpty())
-			return;
+        mXProperty->Refresh();
+        mYProperty->Refresh();
 
-		mXProperty->Refresh();
-		mXProperty->Refresh();
+        CheckRevertableState();
+    }
 
-		CheckRevertableState();
-	}
+    void Vec2IProperty::Revert()
+    {
+        if (mValuesProxies.IsEmpty())
+            return;
 
-	Vec2I Vec2IProperty::GetCommonValue() const
-	{
-		return Vec2I(mXProperty->GetCommonValue(), mYProperty->GetCommonValue());
-	}
+        mXProperty->Refresh();
+        mYProperty->Refresh();
 
-	bool Vec2IProperty::IsValuesDifferent() const
-	{
-		return mXProperty->IsValuesDifferent() || mYProperty->IsValuesDifferent();
-	}
+        CheckRevertableState();
+    }
 
-	const Type* Vec2IProperty::GetValueType() const
-	{
-		return GetValueTypeStatic();
-	}
+    Vec2I Vec2IProperty::GetCommonValue() const
+    {
+        return Vec2I(mXProperty->GetCommonValue(), mYProperty->GetCommonValue());
+    }
 
-	const Type* Vec2IProperty::GetValueTypeStatic()
-	{
-		return &TypeOf(Vec2I);
-	}
+    bool Vec2IProperty::IsValuesDifferent() const
+    {
+        return mXProperty->IsValuesDifferent() || mYProperty->IsValuesDifferent();
+    }
 
-	Vec2IProperty::XValueProxy::XValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
+    const Type* Vec2IProperty::GetValueType() const
+    {
+        return GetValueTypeStatic();
+    }
 
-	Vec2IProperty::XValueProxy::XValueProxy()
-	{}
+    const Type* Vec2IProperty::GetValueTypeStatic()
+    {
+        return &TypeOf(Vec2I);
+    }
 
-	void Vec2IProperty::XValueProxy::SetValue(const int& value)
-	{
-		Vec2I proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.x = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
+    Vec2IProperty::XValueProxy::XValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy)
+    {}
 
-	int Vec2IProperty::XValueProxy::GetValue() const
-	{
-		Vec2I proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.x;
-	}
+    Vec2IProperty::XValueProxy::XValueProxy()
+    {}
 
-	Vec2IProperty::YValueProxy::YValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
+    void Vec2IProperty::XValueProxy::SetValue(const int& value)
+    {
+        Vec2I proxyValue;
+        mProxy->GetValuePtr(&proxyValue);
+        proxyValue.x = value;
+        mProxy->SetValuePtr(&proxyValue);
+    }
 
-	Vec2IProperty::YValueProxy::YValueProxy()
-	{}
+    int Vec2IProperty::XValueProxy::GetValue() const
+    {
+        Vec2I proxyValue;
+        mProxy->GetValuePtr(&proxyValue);
+        return proxyValue.x;
+    }
 
-	void Vec2IProperty::YValueProxy::SetValue(const int& value)
-	{
-		Vec2I proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.y = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
+    Vec2IProperty::YValueProxy::YValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy)
+    {}
 
-	int Vec2IProperty::YValueProxy::GetValue() const
-	{
-		Vec2I proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.y;
-	}
+    Vec2IProperty::YValueProxy::YValueProxy()
+    {}
+
+    void Vec2IProperty::YValueProxy::SetValue(const int& value)
+    {
+        Vec2I proxyValue;
+        mProxy->GetValuePtr(&proxyValue);
+        proxyValue.y = value;
+        mProxy->SetValuePtr(&proxyValue);
+    }
+
+    int Vec2IProperty::YValueProxy::GetValue() const
+    {
+        Vec2I proxyValue;
+        mProxy->GetValuePtr(&proxyValue);
+        return proxyValue.y;
+    }
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Vec2I>);
 // --- META ---

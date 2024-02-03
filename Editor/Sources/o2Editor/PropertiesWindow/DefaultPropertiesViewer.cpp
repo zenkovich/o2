@@ -13,16 +13,16 @@ namespace Editor
 		scrollArea->SetViewLayout(Layout::BothStretch());
 		scrollArea->SetClippingLayout(Layout::BothStretch());
 		scrollArea->name = "scroll area";
-		mContentWidget = scrollArea;
+		mContentWidget = Ref<ScrollArea>(scrollArea);
 
-		mViewer = mnew ObjectViewer();
+		mViewer = mmake<ObjectViewer>();
 		*mViewer->layout = WidgetLayout::BothStretch(5, 0, 5, 5);
 		mContentWidget->AddChild(mViewer);
 	}
 
 	DefaultPropertiesViewer::~DefaultPropertiesViewer()
 	{
-		delete mViewer;
+		mViewer.reset();
 	}
 
 	void DefaultPropertiesViewer::Refresh()
@@ -55,4 +55,3 @@ namespace Editor
 // --- META ---
 
 DECLARE_CLASS(Editor::DefaultPropertiesViewer, Editor__DefaultPropertiesViewer);
-// --- END META ---

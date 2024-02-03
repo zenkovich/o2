@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ScrollView.h"
+#include <memory>
 
 namespace o2
 {
@@ -41,10 +42,10 @@ namespace Editor
 		void UpdateSelfTransform() override;
 
 		// Sets horizontal scrollbar
-		void SetHorScrollbar(HorizontalScrollBar* scrollbar);
+		void SetHorScrollbar(const Ref<HorizontalScrollBar>& scrollbar);
 
 		// Sets vertical scrollbar
-		void SetVerScrollbar(VerticalScrollBar* scrollbar);
+		void SetVerScrollbar(const Ref<VerticalScrollBar>& scrollbar);
 
 		// Sets view area
 		void SetViewArea(const RectF& area);
@@ -58,9 +59,9 @@ namespace Editor
 		SERIALIZABLE(FrameScrollView);
 
 	protected:
-		HorizontalScrollBar* mHorScrollbar = nullptr; // Horizontal view scrollbar @SERIALIZABLE
-		VerticalScrollBar*   mVerScrollbar = nullptr; // Vertical view scrollbar @SERIALIZABLE
-		RectF                mAvailableArea;          // Available viewing area @SERIALIZABLE
+		Ref<HorizontalScrollBar> mHorScrollbar; // Horizontal view scrollbar @SERIALIZABLE
+		Ref<VerticalScrollBar>   mVerScrollbar; // Vertical view scrollbar @SERIALIZABLE
+		RectF                    mAvailableArea; // Available viewing area @SERIALIZABLE
 
 	protected:
 		// Updates camera limits
@@ -76,6 +77,8 @@ namespace Editor
 		void OnCameraTransformChanged() override;
 	};
 }
+
+
 // --- META ---
 
 CLASS_BASES_META(Editor::FrameScrollView)
@@ -86,8 +89,8 @@ END_META;
 CLASS_FIELDS_META(Editor::FrameScrollView)
 {
     FIELD().PUBLIC().NAME(onViewChanged);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHorScrollbar);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mVerScrollbar);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<HorizontalScrollBar>()).NAME(mHorScrollbar);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<VerticalScrollBar>()).NAME(mVerScrollbar);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mAvailableArea);
 }
 END_META;
@@ -99,8 +102,8 @@ CLASS_METHODS_META(Editor::FrameScrollView)
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHorScrollbar, HorizontalScrollBar*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetVerScrollbar, VerticalScrollBar*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHorScrollbar, const Ref<HorizontalScrollBar>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetVerScrollbar, const Ref<VerticalScrollBar>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetViewArea, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(RectF, GetViewArea);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

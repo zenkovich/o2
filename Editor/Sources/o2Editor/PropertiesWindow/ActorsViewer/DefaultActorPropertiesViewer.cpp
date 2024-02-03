@@ -14,7 +14,7 @@ namespace Editor
 	DefaultActorPropertiesViewer::~DefaultActorPropertiesViewer()
 	{}
 
-	void DefaultActorPropertiesViewer::SetTargetActors(const Vector<Actor*>& actors)
+	void DefaultActorPropertiesViewer::SetTargetActors(const Vector<Ref<Actor>>& actors)
 	{
 		if (!actors.IsEmpty())
 			mSpoiler->SetCaption(GetSmartName(mActorType->GetName()));
@@ -49,8 +49,8 @@ namespace Editor
 
 		if (mViewer)
 		{
-			mViewer->Refresh(mTargetActors.Convert<Pair<IObject*, IObject*>>([](Actor* x) {
-				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink().Get()));
+			mViewer->Refresh(mTargetActors.Convert<Pair<Ref<IObject>, Ref<IObject>>>([](Ref<Actor> x) {
+				return Pair<Ref<IObject>, Ref<IObject>>(DynamicCast<IObject>(x), DynamicCast<IObject>(x->GetPrototypeLink().Get()));
 			}));
 		}
 	}

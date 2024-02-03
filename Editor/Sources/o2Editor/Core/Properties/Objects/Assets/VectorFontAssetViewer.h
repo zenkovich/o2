@@ -1,43 +1,48 @@
 #pragma once
 
 #include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
+#include <memory>
 
 using namespace o2;
 
 namespace o2
 {
-	class Image;
+    class Image;
+    template<class T> class Ref;
+    template<class T> class WeakRef;
 }
 
 namespace Editor
 {
-	class TexturePreview;
+    class TexturePreview;
 
-	// ------------------------
-	// Vector font asset viewer
-	// ------------------------
-	class VectorFontAssetViewer : public DefaultObjectPropertiesViewer
-	{
-	public:
-		// Returns viewing objects type
-		const Type* GetViewingObjectType() const override;
+    // ------------------------
+    // Vector font asset viewer
+    // ------------------------
+    class VectorFontAssetViewer : public DefaultObjectPropertiesViewer
+    {
+    public:
+        // Returns viewing objects type
+        const Type* GetViewingObjectType() const override;
 
-		// Returns viewing objects base type by static function
-		static const Type* GetViewingObjectTypeStatic();
+        // Returns viewing objects base type by static function
+        static const Type* GetViewingObjectTypeStatic();
 
-		IOBJECT(VectorFontAssetViewer);
+        IOBJECT(VectorFontAssetViewer);
 
-	private:
-		TexturePreview* mTexturePreview = nullptr;
+    private:
+        Ref<TexturePreview> mTexturePreview;
 
-	private:
-		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    private:
+        // Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+        void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
-		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
-	};
+        // Called when viewer is refreshed
+        void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+    };
 }
+
+
 // --- META ---
 
 CLASS_BASES_META(Editor::VectorFontAssetViewer)
@@ -45,21 +50,22 @@ CLASS_BASES_META(Editor::VectorFontAssetViewer)
     BASE_CLASS(Editor::DefaultObjectPropertiesViewer);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::VectorFontAssetViewer)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTexturePreview);
+    FIELD().PRIVATE().NAME(mTexturePreview);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::VectorFontAssetViewer)
 {
-
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-    FUNCTION().PRIVATE().SIGNATURE(void, RebuildProperties, _tmp1);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp2);
+    FUNCTION().PRIVATE().SIGNATURE(void, RebuildProperties, const Ref<_tmp1>&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, const Ref<_tmp2>&);
 }
 END_META;
 // --- END META ---

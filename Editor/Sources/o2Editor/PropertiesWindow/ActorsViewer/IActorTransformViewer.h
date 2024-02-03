@@ -4,6 +4,7 @@
 #include "o2/Utils/Reflection/Reflection.h"
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/SmartPointers/Ref.h"
 
 using namespace o2;
 
@@ -21,7 +22,7 @@ namespace Editor
 	// ---------------------------------------
 	// Editor actor transform viewer interface
 	// ---------------------------------------
-	class IActorTransformViewer: public IObject
+	class IActorTransformViewer : public IObject
 	{
 	public:
 		// Default constructor. Initializes data widget
@@ -31,10 +32,10 @@ namespace Editor
 		virtual ~IActorTransformViewer();
 
 		// Sets target actors
-		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
+		virtual void SetTargetActors(const Ref<const Vector<Ref<const Actor>>>& actors) {}
 
 		// Returns data widget
-		virtual Widget* GetWidget() const;
+		virtual const Ref<const Widget>& GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -54,8 +55,7 @@ namespace Editor
 		IOBJECT(IActorTransformViewer);
 
 	protected:
-		SpoilerWithHead* mSpoiler = nullptr;
-
+		Ref<const SpoilerWithHead> mSpoiler;
 		bool mEnabled = false; // Is viewer enabled 
 
 	protected:
@@ -68,32 +68,31 @@ namespace Editor
 		friend class ActorViewer;
 	};
 }
-// --- META ---
 
 CLASS_BASES_META(Editor::IActorTransformViewer)
 {
-    BASE_CLASS(o2::IObject);
+	BASE_CLASS(o2::IObject);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::IActorTransformViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+	FIELD().PROTECTED().NAME(mSpoiler).DEFAULT_VALUE(Ref<const SpoilerWithHead>());
+	FIELD().PROTECTED().NAME(mEnabled).DEFAULT_VALUE(false);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::IActorTransformViewer)
 {
-
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
-    FUNCTION().PUBLIC().SIGNATURE(void, Expand);
-    FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
-    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Ref<const Vector<Ref<const Actor>>>&);
+	FUNCTION().PUBLIC().SIGNATURE(const Ref<const Widget>&, GetWidget);
+	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
+	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
-// --- END META ---

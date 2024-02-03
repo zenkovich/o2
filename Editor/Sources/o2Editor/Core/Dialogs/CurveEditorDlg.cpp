@@ -14,7 +14,7 @@ namespace Editor
 {
 	CurveEditorDlg::CurveEditorDlg()
 	{
-		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
+		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
 
 		InitializeControls();
 
@@ -39,7 +39,7 @@ namespace Editor
 
 	void CurveEditorDlg::InitializeControls()
 	{
-		mEditorWidget = mnew CurvesEditor();
+		mEditorWidget = MMake<CurvesEditor>();
 		*mEditorWidget->layout = WidgetLayout::BothStretch(0, 5, 5, 0);
 
 		auto horScroll = o2UI.CreateHorScrollBar();
@@ -65,7 +65,7 @@ namespace Editor
 		mWindow->AddChild(mEditorWidget);
 	}
 
-	void CurveEditorDlg::Show(Function<void()> onChanged, Function<void()> onCompleted /*= Function<void()>()*/)
+	void CurveEditorDlg::Show(const Ref<Function<void()>>& onChanged, const Ref<Function<void()>>& onCompleted /*= nullptr*/)
 	{
 		mInstance->mWindow->ShowModal();
 		mInstance->mOnChangedCallback = onChanged;

@@ -12,21 +12,21 @@ namespace Editor
 	AnimationTimeline::AnimationTimeline() :
 		Widget()
 	{
-		mTextFont = Ref<Font>("stdFont.ttf");
+		mTextFont = mmake<Ref<Font>>("stdFont.ttf");
 		mTextFont->CheckCharacters("0123456789.,+-", 10);
 
-		mText = mnew Text(mTextFont);
+		mText = mmake<Ref<Text>>(mTextFont);
 		mText->horAlign = HorAlign::Middle;
 		mText->verAlign = VerAlign::Bottom;
 		mText->height = 8;
 		mText->color = Color4(44, 62, 80);
 
-		AddLayer("back", mnew Sprite("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14))->transparency = 0.5f;
+		AddLayer("back", mmake<Ref<Sprite>>("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14))->transparency = 0.5f;
 
-		mBeginMark = mnew Sprite("ui/UI4_time_line_left.png");
-		mEndMark = mnew Sprite("ui/UI4_time_line_right.png");
+		mBeginMark = mmake<Ref<Sprite>>("ui/UI4_time_line_left.png");
+		mEndMark = mmake<Ref<Sprite>>("ui/UI4_time_line_right.png");
 
-		mTimeLine = mnew Sprite("ui/UI4_time_line.png");
+		mTimeLine = mmake<Ref<Sprite>>("ui/UI4_time_line.png");
 
 		mTimeLineEventsArea.isUnderPoint = [&](const Vec2F& pos) {
 			auto rect = layout->GetWorldRect();
@@ -35,8 +35,8 @@ namespace Editor
 			return rect.IsInside(pos);
 		};
 
-		mTimeLineEventsArea.onMoved = THIS_FUNC(SetAnimationTimeByCursor);
-		mTimeLineEventsArea.onCursorPressed = THIS_FUNC(SetAnimationTimeByCursor);
+		mTimeLineEventsArea.onMoved = THIS_METHOD(SetAnimationTimeByCursor);
+		mTimeLineEventsArea.onCursorPressed = THIS_METHOD(SetAnimationTimeByCursor);
 	}
 
 	AnimationTimeline::AnimationTimeline(const AnimationTimeline& other) :
@@ -95,10 +95,10 @@ namespace Editor
 		double beginPos = (double)(mScaleOffset - mSmoothViewScroll*mOneSecondDefaultSize*mSmoothViewZoom);
 		double endPos = beginPos + mDuration*mOneSecondDefaultSize*mSmoothViewZoom;
 
-		Layout beginLayout = mBeginMarkLayout;
+		auto beginLayout = mBeginMarkLayout;
 		beginLayout.offsetMax.x += (float)beginPos;
 
-		Layout endLayout = mEndMarkLayout;
+		auto endLayout = mEndMarkLayout;
 		endLayout.offsetMin.x += (float)endPos;
 
 		mBeginMark->SetRect(beginLayout.Calculate(GetChildrenWorldRect()));
@@ -180,17 +180,136 @@ namespace Editor
 
 	void AnimationTimeline::OnTransformUpdated()
 	{
-		UpdateScrollBarHandleSize();
-		Widget::OnTransformUpdated();
+		UpdateSuch as:void AnimationTimeline::SetAnimation(Ref<AnimationClip> animation, Ref<AnimationPlayer> player)
+	{
+		if (mAnimation)
+			mAnimation->onDurationChange -= THIS_FUNC(UpdateDuration);
+
+		mAnimation = animation;
+		mPlayer = player;
+
+		if (mAnimation)
+		{
+			mAnimation->onDurationChange += THIS_FUNC(UpdateDuration);
+			mViewZoom = Math::Clamp((layout->worldRight - layout->worldLeft) / mOneSecondDefaultSize / mAnimation->GetDuration(), mMinScale, mMaxScale);
+
+			UpdateDuration(mAnimation->GetDuration());
+		}
 	}
 
-	void AnimationTimeline::SetAnimationTimeByCursor(const Input::Cursor& cursor)
+	void AnimationTimeline::UpdateDuration(float duration)
 	{
-		if (cursor.isPressed && mAnimationWindow->mAnimation)
+		mDuration = duration;
+
+		if (mScrollBar)
 		{
-			mAnimationWindow->mPreviewToggle->value = true;
-			SetTimeCursor(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
+			mScrollBar->minValue = 0.0f;
+			mScrollBar->maxValue = mDuration;
+			UpdateScrollBarHandleSize();
 		}
+	}
+
+	void AnimationTimeline::SetScroll(float scroll)
+	{
+		mSmoothViewScroll = scroll;
+	}
+
+	void AnimationTimeline::SetViewRange(float left, float right, bool force)
+	{
+		mViewZoom = (layout->worldRight - layout->worldLeft) / mOneSecondDefaultSize / (right - left);
+		mViewScroll = left + mScaleOffset / mOneSecondDefaultSize / mViewZoom;
+
+		if (force)
+		{
+			mSmoothViewScroll = mViewScroll;
+			mSmoothViewZoom = mViewZoom;
+		}
+	}
+
+	void AnimationTimeline::SetTimeCursor(float time)
+	{
+		mAnimationWindow->mDisableTimeTracking = true;
+		mTimeCursor = time;
+
+		if (mPlayer)
+		{
+			mPlayer->Stop();
+			mPlayer->SetTime(mTimeCursor);
+		}
+	}
+
+	void AnimationTimeline::OnScrolled(float scroll)
+	{
+		if (!mViewMoveDisabled)
+		{
+			mViewZoom = Math::Clamp(mViewZoom / (1.0f - o2Input.GetMouseWheelDelta() * mScaleSense), mMinScale, mMaxScale);
+			mViewHasZoomed = true;
+		}
+	}
+
+	void AnimationTimeline::UpdateScrolling(float dt)
+	{
+		float prevViewScroll = mSmoothViewScroll;
+
+		if (!mDragViewScroll && Math::Abs(mViewScrollSpeed) > 0.0001f)
+		{
+			mViewScroll += mViewScrollSpeed * dt;
+			mSmoothViewScroll = mViewScroll;
+			mViewScrollSpeed = Math::Lerp(mViewScrollSpeed, 0.0f, dt * mScrollSpeedDecreaseCoef);
+
+			if (mScrollBar)
+				mScrollBar->SetValueForcible(mSmoothViewScroll);
+		}
+
+		if (!mDragViewScroll && !mViewMoveDisabled)
+		{
+			if (mViewScroll < 0.0f)
+				mViewScroll = Math::Lerp(mViewScroll, 0.0f, dt * mScrollBorderBounceCoef);
+
+			if (mViewScroll > mDuration)
+				mViewScroll = Math::Lerp(mSmoothViewScroll, mDuration, dt * mScrollBorderBounceCoef);
+		}
+
+		if (!Math::Equals(mViewScroll, mSmoothViewScroll, 0.0001f))
+		{
+			mSmoothViewScroll = Math::Lerp(mSmoothViewScroll, mViewScroll, dt * mScrollSmoothCoef);
+
+			if (mScrollBar)
+				mScrollBar->SetValueForcible(mSmoothViewScroll);
+		}
+
+		if (!Math::Equals(prevViewScroll, mSmoothViewScroll))
+			onViewChanged();
+	}
+
+	void AnimationTimeline::ChooseScaleParams(int& bigLinePeriod, double& bigLineTimeAmount)
+	{
+		struct Cfg
+		{
+			int chunkSegments;
+			double chunkDuration;
+		};
+
+		Cfg configs[] = { { 10, 0.1 },{ 5, 0.1 },{ 2, 0.1 },{ 5, 0.5 },{ 10, 1.0 },{ 5, 1.0 },{ 2, 1.0 },{ 5, 5.0 },{ 6, 30.0 } };
+
+		Cfg nearestCfg;
+		float nearestCfgScreenChunkSegmentSizeDiff = FLT_MAX;
+		for (auto cfg : configs)
+		{
+			float screenChunkSegmentSize = (float)cfg.chunkDuration / (float)cfg.chunkSegments * mOneSecondDefaultSize * mSmoothViewZoom;
+			float screenChunkSegmentSizeDiff = mPerfectScaleSegmentSize - screenChunkSegmentSize;
+			if (screenChunkSegmentSizeDiff > 0.0f)
+				screenChunkSegmentSizeDiff *= 2.0f;
+
+			if (Math::Abs(screenChunkSegmentSizeDiff) < nearestCfgScreenChunkSegmentSizeDiff)
+			{
+				nearestCfgScreenChunkSegmentSizeDiff = screenChunkSegmentSizeDiff;
+				nearestCfg = cfg;
+			}
+		}
+
+		bigLinePeriod = nearestCfg.chunkSegments;
+		bigLineTimeAmount = nearestCfg.chunkDuration / (double)nearestCfg.chunkSegments;
 	}
 
 	void AnimationTimeline::OnCursorRightMousePressed(const Input::Cursor& cursor)
@@ -213,7 +332,7 @@ namespace Editor
 			mViewScroll -= WorldToLocal(cursor.position.x) - mBeginDragViewScrollOffset;
 
 			if (mViewScroll < 0.0f)
-				mViewScroll = mViewScroll/2.0f;
+				mViewScroll = mViewScroll / 2.0f;
 
 			if (mViewScroll > mDuration)
 				mViewScroll = Math::Lerp(mDuration, mViewScroll, 0.5f);
@@ -229,216 +348,163 @@ namespace Editor
 	{
 		if (mDragViewScroll)
 		{
-			mViewScrollSpeed = -cursor.delta.x/o2Time.GetDeltaTime()/(mOneSecondDefaultSize*mSmoothViewZoom);
+			mViewScrollSpeed = -cursor.delta.x / o2Time.GetDeltaTime() / (mOneSecondDefaultSize * mSmoothViewZoom);
 			mDragViewScroll = false;
 		}
 	}
 
-	void AnimationTimeline::OnScrolled(float scroll)
+	void AnimationTimeline::SetAnimationTimeByCursor(const Input::Cursor& cursor)
 	{
-		if (!mViewMoveDisabled)
+		if (cursor.isPressed && mAnimationWindow->mAnimation)
 		{
-			mViewZoom = Math::Clamp(mViewZoom/(1.0f - o2Input.GetMouseWheelDelta()*mScaleSense), mMinScale, mMaxScale);
-			mViewHasZoomed = true;
+			mAnimationWindow->mPreviewToggle->value = true;
+			SetTimeCursor(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
 		}
 	}
 
-	void AnimationTimeline::ChooseScaleParams(int& bigLinePeriod, double& bigLineTimeAmount)
+	Ref<DynamicCast> AnimationTimeline::DynamicCast(Ref<BaseClass> base)
 	{
-		struct Cfg
-		{
-			int chunkSegments;
-			double chunkDuration;
-		};
-
-		Cfg configs[] = { { 10, 0.1 }, { 5, 0.1 }, { 2, 0.1 }, { 5, 0.5 }, { 10, 1.0 }, { 5, 1.0 }, { 2, 1.0 }, { 5, 5.0 }, { 6, 30.0 } };
-
-		Cfg nearestCfg;
-		float nearestCfgScreenChunkSegmentSizeDiff = FLT_MAX;
-		for (auto cfg : configs)
-		{
-			float screenChunkSegmentSize = (float)cfg.chunkDuration/(float)cfg.chunkSegments*mOneSecondDefaultSize*mSmoothViewZoom;
-			float screenChunkSegmentSizeDiff = mPerfectScaleSegmentSize - screenChunkSegmentSize;
-			if (screenChunkSegmentSizeDiff > 0.0f)
-				screenChunkSegmentSizeDiff *= 2.0f;
-
-			if (Math::Abs(screenChunkSegmentSizeDiff) < nearestCfgScreenChunkSegmentSizeDiff)
-			{
-				nearestCfgScreenChunkSegmentSizeDiff = screenChunkSegmentSizeDiff;
-				nearestCfg = cfg;
-			}
-		}
-
-		bigLinePeriod = nearestCfg.chunkSegments;
-		bigLineTimeAmount = nearestCfg.chunkDuration/(double)nearestCfg.chunkSegments;
+		return Ref<DynamicCast>(base);
 	}
+#include <memory>
 
-	void AnimationTimeline::UpdateScrolling(float dt)
-	{
-		float prevViewScroll = mSmoothViewScroll;
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
-		if (!mDragViewScroll && Math::Abs(mViewScrollSpeed) > 0.0001f)
-		{
-			mViewScroll += mViewScrollSpeed*dt;
-			mSmoothViewScroll = mViewScroll;
-			mViewScrollSpeed = Math::Lerp(mViewScrollSpeed, 0.0f, dt*mScrollSpeedDecreaseCoef);
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
 
-			if (mScrollBar)
-				mScrollBar->SetValueForcible(mSmoothViewScroll);
-		}
+template <typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
 
-		if (!mDragViewScroll && !mViewMoveDisabled)
-		{
-			if (mViewScroll < 0.0f)
-				mViewScroll = Math::Lerp(mViewScroll, 0.0f, dt*mScrollBorderBounceCoef);
+template<typename T>
+struct DynamicCast 
+{
+    template<typename U>
+    static Ref<T> cast(Ref<U>& ref) 
+    {
+        return std::dynamic_pointer_cast<T>(ref);
+    }
+};
 
-			if (mViewScroll > mDuration)
-				mViewScroll = Math::Lerp(mSmoothViewScroll, mDuration, dt*mScrollBorderBounceCoef);
-		}
+class AnimationTimeline : public Widget
+{
+public:
+    void SetTime(float time);
+    void NeedRedraw();
 
-		if (!Math::Equals(mViewScroll, mSmoothViewScroll, 0.0001f))
-		{
-			mSmoothViewScroll = Math::Lerp(mSmoothViewScroll, mViewScroll, dt*mScrollSmoothCoef);
+    void SetScale(float scale);
+    float GetScale() const;
 
-			if (mScrollBar)
-				mScrollBar->SetValueForcible(mSmoothViewScroll);
-		}
+    void SetViewMoveDisabled(bool disabled);
 
-		if (!Math::Equals(prevViewScroll, mSmoothViewScroll))
-			onViewChanged();
-	}
+    // ... rest of the class ...
 
-	void AnimationTimeline::SetAnimation(AnimationClip* animation, AnimationPlayer* player /*= nullptr*/)
-	{
-		if (mAnimation)
-			mAnimation->onDurationChange -= THIS_FUNC(UpdateDuration);
+private:
+    float mTimeCursor = 0.0f;
+    float mSmoothViewScroll = 0.0f;
+    float mViewZoom = 1.0f;
+    bool mViewMoveDisabled = false;
 
-		mAnimation = animation;
-		mPlayer = player;
+    Ref<Text> mText;
+    Ref<HorizontalScrollBar> mScrollBar;
 
-		if (mAnimation)
-		{
-			mAnimation->onDurationChange += THIS_FUNC(UpdateDuration);
-			mViewZoom = Math::Clamp((layout->worldRight - layout->worldLeft)/mOneSecondDefaultSize/mAnimation->GetDuration(), mMinScale, mMaxScale);
+    bool mDragViewScroll = false;
+    bool mHasAutoSize = false;
 
-			UpdateDuration(mAnimation->GetDuration());
-		}		
-	}
+    bool mTimelineChanged = false;
+    bool mViewHasZoomed = false;
+    float mViewScroll = 0.0f;
 
-	void AnimationTimeline::UpdateDuration(float duration)
-	{
-		mDuration = duration;
+    float LocalToWorld(float time) const;
 
-		if (mScrollBar)
-		{
-			mScrollBar->minValue = 0.0f;
-			mScrollBar->maxValue = mDuration;
-			UpdateScrollBarHandleSize();
-		}
-	}
+    // ... rest of the class ...
+};
 
-	void AnimationTimeline::SetScroll(float scroll)
-	{
-		mSmoothViewScroll = scroll;
-	}
+void AnimationTimeline::SetTime(float time)
+{
+    mTimeCursor = time;
+}
 
-	void AnimationTimeline::SetViewRange(float left, float right, bool force /*= true*/)
-	{
-		mViewZoom = (layout->worldRight - layout->worldLeft)/mOneSecondDefaultSize/(right - left);
-		mViewScroll = left + mScaleOffset/mOneSecondDefaultSize/mViewZoom;
+void AnimationTimeline::NeedRedraw()
+{
+    mAnimationWindow->SetRenderChanged(true);
+    o2EditorSceneScreen.NeedRedraw();
+}
 
-		if (force)
-		{
-			mSmoothViewScroll = mViewScroll;
-			mSmoothViewZoom = mViewZoom;
-		}
-	}
+float AnimationTimeline::GetTimeCursor() const
+{
+    return mTimeCursor;
+}
 
-	void AnimationTimeline::SetTimeCursor(float time)
-	{
-		mAnimationWindow->mDisableTimeTracking = true;
-		mTimeCursor = time;
+float AnimationTimeline::GetScroll() const
+{
+    return mSmoothViewScroll;
+}
 
-		if (mPlayer)
-		{
-			mPlayer->Stop();
-			mPlayer->SetTime(time);
+void AnimationTimeline::SetScale(float scale)
+{
+    mViewZoom = scale;
+}
 
-			o2EditorSceneScreen.NeedRedraw();
-		}
+float AnimationTimeline::GetScale() const
+{
+    return mViewZoom;
+}
 
-		mAnimationWindow->mDisableTimeTracking = false;
-	}
+void AnimationTimeline::SetViewMoveDisabled(bool disabled)
+{
+    mViewMoveDisabled = disabled;
+}
 
-	float AnimationTimeline::GetTimeCursor() const
-	{
-		return mTimeCursor;
-	}
+Ref<Text> AnimationTimeline::GetText() const
+{
+    return mText;
+}
 
-	float AnimationTimeline::GetScroll() const
-	{
-		return mSmoothViewScroll;
-	}
+void AnimationTimeline::SetScrollBar(Ref<HorizontalScrollBar> scrollBar)
+{
+    mScrollBar = scrollBar;
+    mScrollBar->onChangeByUser = [&](float value) { mViewScroll = value; };
 
-	void AnimationTimeline::SetScale(float scale)
-	{
-		mViewZoom = scale;
-	}
+    AddChild(scrollBar.get());
+}
 
-	float AnimationTimeline::GetScale() const
-	{
-		return mViewZoom;
-	}
+Ref<HorizontalScrollBar> AnimationTimeline::GetScrollBar() const
+{
+    return mScrollBar;
+}
 
-	void AnimationTimeline::SetViewMoveDisabled(bool disabled)
-	{
-		mViewMoveDisabled = disabled;
-	}
+bool AnimationTimeline::IsSameTime(float timeA, float timeB, float threshold /*= 3.0f*/) const
+{
+    return Math::Abs(LocalToWorld(timeA) - LocalToWorld(timeB)) <= threshold;
+}
 
-	Text* AnimationTimeline::GetText() const
-	{
-		return mText;
-	}
+bool AnimationTimeline::IsUnderPoint(const Vec2F& point)
+{
+    return Widget::IsUnderPoint(point);
+}
 
-	void AnimationTimeline::SetScrollBar(HorizontalScrollBar* scrollBar)
-	{
-		mScrollBar = scrollBar;
-		mScrollBar->onChangeByUser = [&](float value) { mViewScroll = value; };
+bool AnimationTimeline::IsScrollable() const
+{
+    return true;
+}
 
-		AddChild(scrollBar);
-	}
+bool AnimationTimeline::IsInputTransparent() const
+{
+    return !mViewHasZoomed && !mDragViewScroll;
+}
 
-	HorizontalScrollBar* AnimationTimeline::GetScrollBar() const
-	{
-		return mScrollBar;
-	}
-
-	bool AnimationTimeline::IsSameTime(float timeA, float timeB, float threshold /*= 3.0f*/) const
-	{
-		return Math::Abs(LocalToWorld(timeA) - LocalToWorld(timeB)) <= threshold;
-	}
-
-	bool AnimationTimeline::IsUnderPoint(const Vec2F& point)
-	{
-		return Widget::IsUnderPoint(point);
-	}
-
-	bool AnimationTimeline::IsScrollable() const
-	{
-		return true;
-	}
-
-	bool AnimationTimeline::IsInputTransparent() const
-	{
-		return !mViewHasZoomed && !mDragViewScroll;
-	}
-
-	String AnimationTimeline::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
+String AnimationTimeline::GetCreateMenuCategory()
+{
+    return "UI/Editor";
+}
 
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationTimeline, Editor__AnimationTimeline);

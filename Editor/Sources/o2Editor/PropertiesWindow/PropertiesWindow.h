@@ -1,8 +1,8 @@
-#pragma once
-
 #include "o2/Utils/Singleton.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
+#include "o2/Utils/Ref.h"
+#include <functional>
 
 using namespace o2;
 
@@ -38,13 +38,13 @@ namespace Editor
 		void ResetTargets();
 
 		// Sets target object
-		void SetTarget(IObject* target);
+		void SetTarget(const Ref<IObject>& target);
 
 		// Sets target objects
-		void SetTargets(const Vector<IObject*>& targets, const Function<void()>& targetsChangedDelegate = Function<void()>());
+		void SetTargets(const Vector<Ref<IObject>>& targets, const Function<void()>& targetsChangedDelegate = Function<void()>());
 
 		// Returns target object
-		Vector<IObject*> GetTargets() const;
+		Vector<Ref<IObject>> GetTargets() const;
 
 		// Updates window: check next viewer and targets and updates current viewer
 		void Update(float dt) override;
@@ -58,11 +58,11 @@ namespace Editor
 		IOBJECT(PropertiesWindow);
 
 	protected:
-		Vector<IObject*> mTargets; // Target objects
+		Vector<Ref<IObject>> mTargets; // Target objects
 
-		IPropertiesViewer*         mCurrentViewer = nullptr; // Current properties viewer
-		Vector<IPropertiesViewer*> mViewers;                 // All available object types viewers
-		DefaultPropertiesViewer*   mDefaultViewer = nullptr; // Default properties viewer
+		Ref<IPropertiesViewer>         mCurrentViewer; // Current properties viewer
+		Vector<Ref<IPropertiesViewer>> mViewers;                 // All available object types viewers
+		Ref<DefaultPropertiesViewer>   mDefaultViewer; // Default properties viewer
 
 		Function<void()> mOnTargetsChangedDelegate; // Called when targets array changing
 		bool             mTargetsChanged = false;   // True when targets was changed    
@@ -84,7 +84,7 @@ namespace Editor
 		void OnPrivateFieldsVisibleChanged(bool visible);
 
 		// Called when some property field was changed
-		void OnPropertyChanged(IPropertyField* field);
+		void OnPropertyChanged(const Ref<IPropertyField>& field);
 	};
 }
 // --- META ---
@@ -112,9 +112,9 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, ResetTargets);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, IObject*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>&, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<IObject*>, GetTargets);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, const Ref<IObject>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<Ref<IObject>>&, const Function<void()>&);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<IObject>>, GetTargets);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsTargetsChanged);
@@ -122,7 +122,7 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindowContext);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeViewers);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPrivateFieldsVisibleChanged, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, IPropertyField*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const Ref<IPropertyField>&);
 }
 END_META;
 // --- END META ---

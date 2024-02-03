@@ -34,17 +34,17 @@ namespace Editor
 		void Draw() override;
 
 		// Sets resizible side and configures drag handle when draggable is true
-		void SetResizibleDir(TwoDirection dir, float border,
-							 DockWindowPlace* neighborMin, DockWindowPlace* neighborMax);
+		void SetResizibleDir(const TwoDirection& dir, const float& border,
+							 const DockWindowPlace* neighborMin, const DockWindowPlace* neighborMax);
 
 		// Returns resizible side
-		TwoDirection GetResizibleDir() const;
+		const TwoDirection& GetResizibleDir() const;
 
 		// Arranging child windows as tabs
 		void ArrangeChildWindows();
 
 		// Sets target window as active tab
-		void SetActiveTab(DockableWindow* window);
+		void SetActiveTab(const DockableWindow* window);
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -53,19 +53,19 @@ namespace Editor
 		void UpdateSelfTransform() override;
 
 		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+		static const String& GetCreateMenuCategory();
 
 		SERIALIZABLE(DockWindowPlace);
 
 	protected:
 		TwoDirection mResizibleDir; // Resizible dragable side
 
-		DockWindowPlace* mNeighborMin;         // Resizing neighbor, using when dragging this side
+		const DockWindowPlace* mNeighborMin;         // Resizing neighbor, using when dragging this side
 		CursorEventsArea mDragHandleMin;       // Separator drag handle
 		Layout           mDragHandleLayoutMin; // Separator drag handle layout
 		RectF            mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
 
-		DockWindowPlace* mNeighborMax;         // Resizing neighbor, using when dragging this side
+		const DockWindowPlace* mNeighborMax;         // Resizing neighbor, using when dragging this side
 		CursorEventsArea mDragHandleMax;       // Separator drag handle
 		Layout           mDragHandleLayoutMax; // Separator drag handle layout
 		RectF            mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
@@ -114,13 +114,13 @@ CLASS_METHODS_META(Editor::DockWindowPlace)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const DockWindowPlace&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetResizibleDir, TwoDirection, float, DockWindowPlace*, DockWindowPlace*);
-    FUNCTION().PUBLIC().SIGNATURE(TwoDirection, GetResizibleDir);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetResizibleDir, const TwoDirection&, const float&, const DockWindowPlace*, const DockWindowPlace*);
+    FUNCTION().PUBLIC().SIGNATURE(const TwoDirection&, GetResizibleDir);
     FUNCTION().PUBLIC().SIGNATURE(void, ArrangeChildWindows);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetActiveTab, DockableWindow*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActiveTab, const DockableWindow*);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const String&, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMinMoved, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMaxMoved, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckInteractable);

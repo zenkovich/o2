@@ -6,48 +6,48 @@
 
 namespace Editor
 {
-	SelectAction::SelectAction()
-	{}
+    SelectAction::SelectAction()
+    {}
 
-	SelectAction::SelectAction(const Vector<SceneEditableObject*>& selectedObjects, 
-							   const Vector<SceneEditableObject*>& prevSelectedObjects)
-	{
-		selectedObjectsIds = selectedObjects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
-		prevSelectedObjectsIds = prevSelectedObjects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
-	}
+    SelectAction::SelectAction(const Vector<Ref<SceneEditableObject>>& selectedObjects,
+                               const Vector<Ref<SceneEditableObject>>& prevSelectedObjects)
+    {
+        selectedObjectsIds = selectedObjects.Convert<SceneUID>([](const Ref<SceneEditableObject>& x) { return x->GetID(); });
+        prevSelectedObjectsIds = prevSelectedObjects.Convert<SceneUID>([](const Ref<SceneEditableObject>& x) { return x->GetID(); });
+    }
 
-	String SelectAction::GetName() const
-	{
-		return "Actors selection";
-	}
+    String SelectAction::GetName() const
+    {
+        return "Actors selection";
+    }
 
-	void SelectAction::Redo()
-	{
-		auto& selScreen = o2EditorSceneScreen;
+    void SelectAction::Redo()
+    {
+        auto& selScreen = o2EditorSceneScreen;
 
-		selScreen.mSelectedObjects = selectedObjectsIds.Convert<SceneEditableObject*>(
-			[&](SceneUID id) { return o2Scene.GetEditableObjectByID(id); });
+        selScreen.mSelectedObjects = selectedObjectsIds.Convert<Ref<SceneEditableObject>>(
+            [&](const SceneUID& id) { return o2Scene.GetEditableObjectByID(id); });
 
-		selScreen.UpdateTopSelectedObjects();
-		selScreen.OnObjectsSelectedFromThis();
-		selScreen.mNeedRedraw = true;
-	}
+        selScreen.UpdateTopSelectedObjects();
+        selScreen.OnObjectsSelectedFromThis();
+        selScreen.mNeedRedraw = true;
+    }
 
-	void SelectAction::Undo()
-	{
-		auto& selScreen = o2EditorSceneScreen;
+    void SelectAction::Undo()
+    {
+        auto& selScreen = o2EditorSceneScreen;
 
-		selScreen.mSelectedObjects.Clear();
-		
-		prevSelectedObjectsIds.ForEach([&](SceneUID id) { 
-			if (auto obj = o2Scene.GetEditableObjectByID(id))
-				selScreen.mSelectedObjects.Add(obj);
-		});
+        selScreen.mSelectedObjects.Clear();
 
-		selScreen.UpdateTopSelectedObjects();
-		selScreen.OnObjectsSelectedFromThis();
-		selScreen.mNeedRedraw = true;
-	}
+        prevSelectedObjectsIds.ForEach([&](const SceneUID& id) {
+            if (auto obj = o2Scene.GetEditableObjectByID(id))
+                selScreen.mSelectedObjects.Add(obj);
+            });
+
+        selScreen.UpdateTopSelectedObjects();
+        selScreen.OnObjectsSelectedFromThis();
+        selScreen.mNeedRedraw = true;
+    }
 
 }
 // --- META ---

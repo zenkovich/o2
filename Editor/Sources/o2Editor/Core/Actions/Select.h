@@ -2,6 +2,8 @@
 
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2Editor/Core/Actions/IAction.h"
+#include "o2/Utils/SmartPointers/Ref.h"
+#include "o2/Utils/SmartPointers/WeakRef.h"
 
 using namespace o2;
 
@@ -26,7 +28,7 @@ namespace Editor
 		SelectAction();
 
 		// CUnstructor with new and previous selected objects
-		SelectAction(const Vector<SceneEditableObject*>& selectedObjects, const Vector<SceneEditableObject*>& prevSelectedObjects);
+		SelectAction(const Vector<Ref<SceneEditableObject>>& selectedObjects, const Vector<Ref<SceneEditableObject>>& prevSelectedObjects);
 
 		// Returns name of action
 		String GetName() const override;
@@ -40,24 +42,25 @@ namespace Editor
 		SERIALIZABLE(SelectAction);
 	};
 }
-// --- META ---
 
+// --- META ---
 CLASS_BASES_META(Editor::SelectAction)
 {
     BASE_CLASS(Editor::IAction);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::SelectAction)
 {
     FIELD().PUBLIC().NAME(selectedObjectsIds);
     FIELD().PUBLIC().NAME(prevSelectedObjectsIds);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::SelectAction)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneEditableObject>>& , const Vector<Ref<SceneEditableObject>> &);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

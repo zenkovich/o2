@@ -212,67 +212,286 @@ namespace Editor
 		bool usedRawPointer = false;
 		if (auto pointerProxy = dynamic_cast<IPointerValueProxy*>(proxy))
 		{
-			res.data = objectType.DynamicCastToIObject(pointerProxy->GetValueVoidPointer());
+			Ref<IObject> object = objectType.DynamicCastToIObject(pointerProxy->GetValueVoidPointer());
+			res.data = object;
 			res.isCreated = false;
 			usedRawPointer = true;
 		}
-		
+
 #if IS_SCRIPTING_SUPPORTED
 		if (auto scriptProxy = dynamic_cast<ScriptValueProxy*>(proxy))
 		{
 			ScriptValue value = scriptProxy->scriptProperty->Get();
-			if (value.IsObjectContainer())
+			if (value.IsObject())
 			{
-				if (auto valueObjectType = dynamic_cast<const ObjectType*>(value.GetObjectContainerType()))
-				{
-					res.data = valueObjectType->DynamicCastToIObject(value.GetContainingObject());
-					res.isCreated = false;
-					usedRawPointer = true;
-				}
+				res.data = m_make<IObject>(value.ToIObject());
+				res.isCreated = true;
 			}
 		}
 #endif
+
 		if (!usedRawPointer)
 		{
-			void* sample = objectType.CreateSample();
-			proxy->GetValuePtr(sample);
-
-			res.data = objectType.DynamicCastToIObject(sample);
-			res.isCreated = true;
+			res.data = m_make<IObject>(nullptr);
+			res.isCreated = false;
 		}
 
 		return res;
 	}
 
-	void ObjectProperty::OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
-										   const Vector<DataDocument>& after)
+	void ObjectProperty::OnPropertyChanged()
 	{
-		for (auto& pair : mTargetObjects)
-			pair.first.SetValue();
+		if (mPropertyDelegate && mPropertyInfo)
+		{
+			PushEditorScopeOnStack scope;
 
-		onChangeCompleted(path, before, after);
+			for (auto& pair : mTargetObjects)
+			{
+				mPropertyDelegate->Invoke(mPropertyInfo, GetValueFromObject(pair.first.data), GetValueFromObject(pair.second.data));
+			}
+		}
 	}
 
-	void ObjectProperty::TargetObjectData::Refresh()
+	void ObjectProperty::Bind(PropertyChangedCallback callback)
 	{
-		if (!isCreated)
-			return;
+		onChanged = callback;
 
-		const ObjectType& objectType = dynamic_cast<const ObjectType&>(proxy->GetType());
-		proxy->GetValuePtr(objectType.DynamicCastFromIObject(data));
+		if (mObjectViewer)
+			mObjectViewer->Bind([this](const Pair<IObject*, IObject*>& values)
+			{
+				PushEditorScopeOnStack scope;
+
+				Pair<Ref<IObject>, Ref<IObject>> objectsToSet = values.Convert<Pair<Ref<IObject>, Ref<IObject>>>(
+					[](const Pair<IObject*, IObject*>& x)
+					{
+						return Pair<Ref<IObject>, Ref<IObject>>(x.first, x.second);
+					});
+
+				SetValueAndPrototypeProxy({ objectsToSet });
+			});
+
+		IPropertyField::Bind(callback);
 	}
 
-	void ObjectProperty::TargetObjectData::SetValue()
+	void ObjectProperty::DisableObjectViewer()
 	{
-		if (!isCreated)
-			return;
-
-		const ObjectType& objectType = dynamic_cast<const ObjectType&>(proxy->GetType());
-		proxy->SetValuePtr(objectType.DynamicCastFromIObject(data));
+		if (mObjectViewer)
+		{
+			mObjectViewer->SetEnabled(false);
+			mObjectViewer->SetEditEnabled(false);
+		}
 	}
 
+	void ObjectProperty::EnableObjectViewer()
+	{
+		if (mObjectViewer)
+		{
+			mObjectViewer->SetEnabled(true);
+			mObjectViewer->SetEditEnabled(true);
+		}
+	}
+
+	void ObjectProperty::AddProperty(IPropertyField* field)
+	{
+		if (mObjectViewer)
+			mObjectViewer->AddProperty(field);
+	}
+
+	bool ObjectProperty::RemoveProperty(IPropertyField* field)
+	{
+		if (mObjectViewer)
+			return mObjectViewer->RemoveProperty(field);
+
+		return false;
+	}
+
+	void ObjectProperty::RemoveAllProperties()
+	{
+		if (mObjectViewer)
+			mObjectViewer->RemoveAllProperties();
+	}
+
+	const IObjectPropertiesViewer* ObjectProperty::GetObjectViewer() const
+	{
+		return mObjectViewer;
+	}
+
+	void ObjectProperty::SetValuesPath(const WString& path)
+	{
+		mValuesPath = path;
+
+		if (mObjectViewer)
+			mObjectViewer->SetValuesPath(path);
+	}
+
+	const WString& ObjectProperty::GetValuesPath() const
+	{
+		return mValuesPath;
+	}
+
+	void ObjectProperty::HideMobjectViewerHeader()
+	{
+		mNoHeader = true;
+
+		if (mObjectViewer)
+			mObjectViewer->SetHeaderEnabled(false);
+	}
+
+	void ObjectProperty::ShowMobjectViewerHeader()
+	{
+		mNoHeader = false;
+
+		if (mObjectViewer)
+			mObjectViewer->SetHeaderEnabled(true);
+	}
+
+	void ObjectProperty::SetParentContext(Context parent)
+	{
+		mParentContext = parent;
+
+		if (mObjectViewer)
+			mObjectViewer->SetParentContext(parent);
+	}
+
+	Context ObjectProperty::GetParentContext() const
+	{
+		return mParentContext;
+	}
+
+	void ObjectProperty::AddInternalWidget(Widget* widget)
+	{
+		AddChild(widget);
+	}
+
+	void ObjectProperty::RemoveInternalWidget(Widget* widget)
+	{
+		RemoveChild(widget);
+	}
+
+	void ObjectProperty::SetInternalWidgetsVisible(bool visible)
+	{
+		for (auto widget : GetChildren())
+		{
+			if (widget != mRemoveBtn)
+			{
+				widget->SetVisible(visible);
+			}
+		}
+	}
+}#include <Ref.h>
+
+namespace Editor {
+	template<typename T>
+	using Ref = SmartPtr<T>;
+
+	template<typename T>
+	using WeakRef = SmartPtr<T>;
+
+	class ObjectProperty
+	{
+	private:
+		struct TargetObjectData
+		{
+			Ref<IObjectProxy> proxy;
+			Ref<IObject> data;
+			bool isCreated;
+			void Refresh();
+			void SetValue();
+		};
+		
+		Vector< std::pair< Ref<IObjectProperty>, TargetObjectData > > mTargetObjects;
+
+	public:
+		Ref<IObjectValue> ObjectProperty::GetValue(const IObject& obj)
+		{
+			Ref<IObjectValue> res;
+
+			bool usedRawPointer = false;
+
+#ifdef SMART_PTR
+			if (!mTargetObjects.empty())
+			{
+				const ObjectType& objectType = dynamic_cast<const ObjectType&>(obj.GetType());
+
+				for (const auto& pair : mTargetObjects)
+				{
+					const Ref<IObject>& targetObject = pair.second.data;
+					Ref<IObjectProxy> proxy = pair.second.proxy;
+
+					Ref<IValue> value = proxy->GetValuePtr(targetObject);
+					if (!value)
+						continue;
+
+					res = objectType.CreateValue();
+					ObjectValue& objectValue = dynamic_cast<ObjectValue&>(*res);
+
+					Ref<IObject> valueObject = objectType.CreateObject();
+
+					if (const IObject* valueRawObject = dynamic_cast<const IObject*>(value.get()))
+					{
+						*valueObject = *valueRawObject;
+					}
+					else if (auto valueContainer = dynamic_cast<const IObjectContainer*>(value.get()))
+					{
+						*valueObject = *valueContainer->GetObject();
+					}
+					else
+					{
+						valueObject.reset(value->AddRefRawObject());
+					}
+
+					objectValue.SetContainer(valueObject);
+
+					if (!objectValue.GetContainer() || (objectValue.GetContainer() && objectValue.GetContainer()->IsEmpty()))
+					{
+						objectValue.PutPrimitiveValue(value);
+					}
+
+					break;
+				}
+
+				if (!res)
+				{
+					// If no target objects, take first non-empty object as default
+					res = objectType.CreateValue();
+					ObjectValue& objectValue = dynamic_cast<ObjectValue&>(*res);
+
+					Ref<IObject> valueObject = objectType.CreateObject();
+					objectValue.SetContainer(valueObject);
+
+					Ref<IValue> value = objectValue.GetContainer()->GetObject();
+					if (value)
+					{
+						objectValue.PutPrimitiveValue(value);
+					}
+				}
+			}
+#endif
+			if (!usedRawPointer)
+			{
+				void* sample = objectType.CreateSample();
+				proxy->GetValuePtr(sample);
+
+				res.data = objectType.DynamicCastToIObject(sample);
+				res.isCreated = true;
+			}
+
+			return res;
+		}
+
+		void ObjectProperty::OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
+											   const Vector<DataDocument>& after)
+		{
+			for (const auto& pair : mTargetObjects)
+				pair.first.SetValue();
+
+			onChangeCompleted(path, before, after);
+		}
+	};
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::ObjectProperty, Editor__ObjectProperty);
+
 // --- END META ---

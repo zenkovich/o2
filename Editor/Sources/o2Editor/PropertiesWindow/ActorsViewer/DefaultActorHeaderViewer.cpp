@@ -25,261 +25,264 @@
 
 namespace Editor
 {
-	DefaultActorHeaderViewer::DefaultActorHeaderViewer()
+    DefaultActorHeaderViewer::DefaultActorHeaderViewer()
+    {
+        PushEditorScopeOnStack scope;
+
+        mDataView = mmake<Widget>();
+        mDataView->name = "actor head";
+        mDataView->layout->minHeight = 62;
+
+        mEnableProperty = o2UI.CreateWidget<BooleanProperty>();
+        *mEnableProperty->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
+        mEnableProperty->SetValuePath("enabled");
+        mEnableProperty->onChangeCompleted = &DefaultActorHeaderViewer::OnPropertyChanged;
+        mDataView->AddChild(mEnableProperty);
+
+        mNameProperty = o2UI.CreateWidget<StringProperty>();
+        *mNameProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 21, 15, 17, 2);
+        mNameProperty->SetValuePath("name");
+        mNameProperty->onChangeCompleted = &DefaultActorHeaderViewer::OnPropertyChanged;
+        mDataView->AddChild(mNameProperty);
+
+        mLockProperty = o2UI.CreateWidget<BooleanProperty>();
+        *mLockProperty->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, -1));
+        mLockProperty->SetValuePath("locked");
+        mLockProperty->onChangeCompleted = &DefaultActorHeaderViewer::OnPropertyChanged;
+        mDataView->AddChild(mLockProperty);
+
+
+        auto prototypeRoot = mDataView->AddChildWidget(mmake<Widget>());
+        prototypeRoot->name = "prototype";
+        *prototypeRoot->layout = WidgetLayout::BothStretch();
+
+        prototypeRoot->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.1f));
+
+        auto linkImg = o2UI.CreateImage("ui/UI4_prefab_link_big.png");
+        *linkImg->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
+        prototypeRoot->AddChild(linkImg);
+
+        mPrototypeProperty = o2UI.CreateWidget<AssetProperty>();
+        *mPrototypeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 65, 17, 25);
+        prototypeRoot->AddChild(mPrototypeProperty);
+
+        mPrototypeApplyBtn = o2UI.CreateWidget<Button>();
+        *mPrototypeApplyBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-40, -18));
+        mPrototypeApplyBtn->onClick = &DefaultActorHeaderViewer::OnApplyPrototypePressed;
+        prototypeRoot->AddChild(mPrototypeApplyBtn);
+
+        mPrototypeRevertBtn = o2UI.CreateWidget<Button>();
+        *mPrototypeRevertBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-20, -18));
+        mPrototypeRevertBtn->onClick = &DefaultActorHeaderViewer::OnRevertPrototypePressed;
+        prototypeRoot->AddChild(mPrototypeRevertBtn);
+
+        mPrototypeBreakBtn = o2UI.CreateWidget<Button>();
+        *mPrototypeBreakBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(0, -18));
+        mPrototypeBreakBtn->onClick = &DefaultActorHeaderViewer::OnBreakPrototypePressed;
+        prototypeRoot->AddChild(mPrototypeBreakBtn);
+
+        auto tagsImg = o2UI.CreateImage("ui/UI4_tag_big.png");
+        *tagsImg->layout = WidgetLayout::Based(BaseCorner::LeftBottom, Vec2F(20, 20), Vec2F(1, 21));
+        mDataView->AddChild(tagsImg);
+
+        mTagsProperty = o2UI.CreateWidget<TagsProperty>();
+        *mTagsProperty->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 21, 3, 17, 23);
+        mTagsProperty->SetValuePath("tags");
+        mTagsProperty->onChangeCompleted = &DefaultActorHeaderViewer::OnPropertyChanged;
+        mDataView->AddChild(mTagsProperty);
+
+        auto layerImg = o2UI.CreateImage("ui/UI4_layer_big.png");
+        *layerImg->layout = WidgetLayout::Based(BaseCorner::LeftBottom, Vec2F(20, 20), Vec2F(1, 0));
+        mDataView->AddChild(layerImg);
+
+        mLayerProperty = o2UI.CreateWidget<SceneLayerRefProperty>();
+        *mLayerProperty->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 21, 75, 17, 3);
+        mLayerProperty->name = "layer";
+        mLayerProperty->SetValuePath("layer");
+        mLayerProperty->SetUseInheritedValue(true);
+        mLayerProperty->onChangeCompleted = &DefaultActorHeaderViewer::OnPropertyChanged;
+        mLayerProperty->onSelectedInheritedValue = &DefaultActorHeaderViewer::OnSelectedInheritedLayer;
+        mDataView->AddChild(mLayerProperty);
+
+        mDepthProperty = o2UI.CreateWidget<FloatProperty>();
+        *mDepthProperty->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 22, 125, 17, 3);
+        mDepthProperty->name = "depth";
+        mDepthProperty->SetValuePath("depth");
+        mDepthProperty->onChangeCompleted = &DefaultActorHeaderViewer::OnPropertyChanged;
+        mDataView->AddChild(mDepthProperty);
+
+        mEditBtn = o2UI.CreateWidget<Button>();
+        *mEditBtn->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(25, 25), Vec2F(0, 3));
+        mEditBtn->onClick = &DefaultActorHeaderViewer::OnEditPropertiesPressed;
+        mDataView->AddChild(mEditBtn);
+
+        mDeleteBtn = o2UI.CreateWidget<Button>();
+        *mDeleteBtn->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(25, 25), Vec2F(25, 3));
+        mDeleteBtn->onClick = &DefaultActorHeaderViewer::OnDeletePressed;
+        mDataView->AddChild(mDeleteBtn);
+
+        mDrawBadgesBtn = o2UI.CreateWidget<Button>();
+        *mDrawBadgesBtn->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(25, 25), Vec2F(50, 3));
+        mDrawBadgesBtn->onClick = &DefaultActorHeaderViewer::OnDrawBadgesPressed;
+        mDataView->AddChild(mDrawBadgesBtn);
+
+        mVisibleBtn = o2UI.CreateWidget<Button>();
+        *mVisibleBtn->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(25, 25), Vec2F(75, 3));
+        mVisibleBtn->onClick = &DefaultActorHeaderViewer::OnVisiblePressed;
+        mDataView->AddChild(mVisibleBtn);
+    }
+}#include <Ref.h>
+
+// ...
+
+Ref<ActorProperty> mEnableProperty;
+Ref<ActorProperty> mNameProperty;
+Ref<ActorProperty> mLockProperty;
+Ref<ActorProperty> mPrototypeProperty;
+Ref<ActorProperty> mTagsProperty;
+Ref<SceneLayerProperty> mLayerProperty;
+Ref<ActorProperty> mDepthProperty;
+Ref<Widget> mDataView;
+
+// ...
+
+void DefaultActorHeaderViewer::SetTargetActors(const Vector<Ref<Actor>>& actors)
+{
+    mActors = actors;
+
+    auto prototypes = actors.Convert<Ref<Actor>>([](const Ref<Actor>& x) { return x->GetPrototypeLink().Get(); });
+
+    mEnableProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::enabled)>(
+        actors, prototypes, [](const Ref<Actor>& x) { return &x->enabled; });
+
+    mEnableProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::enabled)>(
+        actors, prototypes, [](const Ref<Actor>& x) -> const Ref<const decltype(Actor::enabled)>& { return x->enabled; });
+
+    mNameProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::name)>(
+        actors, prototypes, [](const Ref<Actor>& x) { return &x->name; });
+
+    mLockProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::locked)>(
+        actors, prototypes, [](const Ref<Actor>& x) { return &x->locked; });
+
+    mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
+        actors, [](const Ref<Actor>& x) { return &x->prototype; });
+
+    mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
+
+    mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
+        actors, prototypes, [](const Ref<Actor>& x) { return &x->tags; });
+
+    mLayerProperty->SelectValueAndPrototypeFunctional<Ref<SceneLayer>, Actor>(
+        actors, prototypes, [](const Ref<Actor>& x) { return x->GetLayer(); },
+        [](const Ref<Actor>& x, const Ref<SceneLayer>& l) { x->SetLayer(l->GetName()); });
+
+    mDepthProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::drawDepth)>(
+        actors, prototypes, [](const Ref<Actor>& x) { return &x->drawDepth; });
+
+    RefreshLayer();
+}
+
+// ...
+
+Ref<ActorProperty> mEnableProperty = mmake<ActorProperty>();
+Ref<ActorProperty> mNameProperty = mmake<ActorProperty>();
+Ref<ActorProperty> mLockProperty = mmake<ActorProperty>();
+Ref<ActorProperty> mPrototypeProperty = mmake<ActorProperty>();
+Ref<ActorProperty> mTagsProperty = mmake<ActorProperty>();
+Ref<SceneLayerProperty> mLayerProperty = mmake<SceneLayerProperty>();
+Ref<ActorProperty> mDepthProperty = mmake<ActorProperty>();
+Ref<Widget> mDataView = mmake<Widget>();
+
+// ...
+
+void DefaultActorHeaderViewer::SetTargetActors(const Vector<Ref<Actor>>& actors)
+{
+    mActors = actors;
+
+    auto prototypes = actors.Convert<Ref<Actor>>([](const Ref<Actor>& x) { return x->GetPrototypeLink().Get(); });
+
+    mEnableProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::enabled)>(
+        actors, prototypes, [](const Ref<Actor>& x) { return x->enabled.get(); });
+
+    mNameProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::name)>(
+        actors, prototypes, [](const Ref<Actor>& x) { return x->name.get(); });
+
+    mLockProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::locked)>(
+        actors, prototypes, [](const Ref<Actor>& x) { return x->locked.get(); });
+
+    mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
+        actors, [](const Ref<Actor>& x) { return x->prototype.get(); });
+
+    mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
+
+    mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
+        actors, prototypes, [](const Ref<Actor>& x) { return x->tags.get(); });
+
+    mLayerProperty->SelectValueAndPrototypeFunctional<Ref<SceneLayer>, Actor>(
+        actors, prototypes, [](const Ref<Actor>& x) { return x->GetLayer(); },
+        [](const Ref<Actor>& x, const Ref<SceneLayer>& l) { x->SetLayer(l->GetName()); });
+
+    mDepthProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::drawDepth)>(
+        actors, prototypes, [](const Ref<Actor>& x) { return x->drawDepth.get(); });
+
+    RefreshLayer();
+}
+
+// ...
+
+void DefaultActorHeaderViewer::OnApplyPrototypePressed()
+{
+    Vector<Ref<Actor>> actors = GetRootApplyActors();
+
+    for (const auto& actor : actors)
+        actor->ApplyChangesToPrototype();
+}
+
+void DefaultActorHeaderViewer::OnRevertPrototypePressed()
+{
+    bool areViewActorsAssets = mActors[0]->IsAsset();
+    o2EditorPropertiesWindow.SetTarget(nullptr);
+
+    Vector<Ref<Actor>> revertingActors = GetRootApplyActors();
+
+    for (const auto& actor : revertingActors)
+        actor->RevertToPrototype();
+
+    mActors.Clear();
+    if (areViewActorsAssets)
+    {
+        Vector<UID> viewActors = mActors.Convert<UID>([](const Ref<Actor>& x) { return x->GetAssetID(); });
+        for (const auto& id : viewActors)
+            mActors.Add(Ref<ActorAsset>(id)->GetActor());
+    }
+    else
+    {
+        Vector<UInt64> viewActors = mActors.Convert<UInt64>([](const Ref<Actor>& x) { return x->GetID(); });
+        for (const auto& id : viewActors)
+            mActors.Add(o2Scene.GetActorByID(id));
+    }
+
+    o2EditorPropertiesWindow.SetTargets(mActors.Cast<IObject*>());
+}#include <Ref.h>
+
+class DefaultActorHeaderViewer
+{
+public:
+	DefaultActorHeaderViewer() : mActors(nullptr) {}
+
+	void OnSelectedInheritedLayer()
 	{
-		PushEditorScopeOnStack scope;
-
-		mDataView = mnew Widget();
-		mDataView->name = "actor head";
-		mDataView->layout->minHeight = 62;
-
-		mEnableProperty = o2UI.CreateWidget<BooleanProperty>("actor head enable");
-		*mEnableProperty->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
-		mEnableProperty->SetValuePath("enabled");
-		mEnableProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mEnableProperty);
-
-		mNameProperty = o2UI.CreateWidget<StringProperty>("actor head name");
-		*mNameProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 21, 15, 17, 2);
-		mNameProperty->SetValuePath("name");
-		mNameProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mNameProperty);
-
-		mLockProperty = o2UI.CreateWidget<BooleanProperty>("actor head lock");
-		*mLockProperty->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, -1));
-		mLockProperty->SetValuePath("locked");
-		mLockProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mLockProperty);
-
-
-		auto prototypeRoot = mDataView->AddChildWidget(mnew Widget());
-		prototypeRoot->name = "prototype";
-		*prototypeRoot->layout = WidgetLayout::BothStretch();
-
-		prototypeRoot->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.1f));
-
-		auto linkImg = o2UI.CreateImage("ui/UI4_prefab_link_big.png");
-		*linkImg->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
-		prototypeRoot->AddChild(linkImg);
-
-		mPrototypeProperty = o2UI.CreateWidget<AssetProperty>("actor head asset property");
-		*mPrototypeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 65, 17, 25);
-		prototypeRoot->AddChild(mPrototypeProperty);
-
-		mPrototypeApplyBtn = o2UI.CreateWidget<Button>("accept prototype");
-		*mPrototypeApplyBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-40, -18));
-		mPrototypeApplyBtn->onClick = THIS_FUNC(OnApplyPrototypePressed);
-		prototypeRoot->AddChild(mPrototypeApplyBtn);
-
-		mPrototypeRevertBtn = o2UI.CreateWidget<Button>("revert prototype");
-		*mPrototypeRevertBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-20, -18));
-		mPrototypeRevertBtn->onClick = THIS_FUNC(OnRevertPrototypePressed);
-		prototypeRoot->AddChild(mPrototypeRevertBtn);
-
-		mPrototypeBreakBtn = o2UI.CreateWidget<Button>("break prototype");
-		*mPrototypeBreakBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(0, -18));
-		mPrototypeBreakBtn->onClick = THIS_FUNC(OnBreakPrototypePressed);
-		prototypeRoot->AddChild(mPrototypeBreakBtn);
-
-		auto tagsImg = o2UI.CreateImage("ui/UI4_tag_big.png");
-		*tagsImg->layout = WidgetLayout::Based(BaseCorner::LeftBottom, Vec2F(20, 20), Vec2F(1, 21));
-		mDataView->AddChild(tagsImg);
-
-		mTagsProperty = o2UI.CreateWidget<TagsProperty>("actor head tags");
-		*mTagsProperty->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 21, 3, 17, 23);
-		mTagsProperty->SetValuePath("tags");
-		mTagsProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mTagsProperty);
-
-		auto layerImg = o2UI.CreateImage("ui/UI4_layer_big.png");
-		*layerImg->layout = WidgetLayout::Based(BaseCorner::LeftBottom, Vec2F(20, 20), Vec2F(1, 0));
-		mDataView->AddChild(layerImg);
-
-		mLayerProperty = o2UI.CreateWidget<SceneLayerRefProperty>("actor head layer");
-		*mLayerProperty->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 21, 75, 17, 3);
-		mLayerProperty->name = "layer";
-		mLayerProperty->SetValuePath("layer");
-		mLayerProperty->SetUseInheritedValue(true);
-		mLayerProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mLayerProperty->onSelectedInheritedValue = THIS_FUNC(OnSelectedInheritedLayer);
-		mDataView->AddChild(mLayerProperty);
-
-		mDepthProperty = o2UI.CreateWidget<FloatProperty>("actor head depth");
-		*mDepthProperty->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(70, 17), Vec2F(-3, 3));
-		mDepthProperty->name = "depth";
-		mDepthProperty->SetValuePath("depth");
-		mDepthProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mDepthProperty);
-
-		auto depthInheritStateAnim = AnimationClip::EaseInOut("child/layer/layout/offsetRight", -75.0f, -3.0f, 0.2f);
-		*depthInheritStateAnim->AddTrack<float>("child/depth/layout/offsetLeft") = AnimationTrack<float>::Linear(-70.0f, 0.0f, 0.2f);
-		*depthInheritStateAnim->AddTrack<bool>("child/depth/enabled") = AnimationTrack<bool>::Linear(true, false, 0.2f);
-		mDataView->AddState("depth inherit", depthInheritStateAnim);
-
-		auto protoStateAnim = AnimationClip::EaseInOut("layout/minHeight", 62.0f, 84.0f, 0.1f);
-		*protoStateAnim->AddTrack<bool>("child/prototype/enabled") = AnimationTrack<bool>::Linear(false, true, 0.1f);
-		mDataView->AddState("prototype", protoStateAnim);
-	}
-
-	DefaultActorHeaderViewer::~DefaultActorHeaderViewer()
-	{
-		if (mEnableProperty)
-			delete mEnableProperty;
-
-		if (mNameProperty)
-			delete mNameProperty;
-
-		if (mLockProperty)
-			delete mLockProperty;
-
-		if (mPrototypeProperty)
-			delete mPrototypeProperty;
-
-		if (mTagsProperty)
-			delete mTagsProperty;
-
-		if (mLayerProperty)
-			delete mLayerProperty;
-
-		if (mDepthProperty)
-			delete mDepthProperty;
-
-		if (mDataView)
-			delete mDataView;
-	}
-
-	void DefaultActorHeaderViewer::SetTargetActors(const Vector<Actor*>& actors)
-	{
-		mActors = actors;
-
-		auto prototypes = actors.Convert<Actor*>([](Actor* x) { return x->GetPrototypeLink().Get(); });
-
-		mEnableProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::enabled)>(
-			actors, prototypes, [](Actor* x) { return &x->enabled; });
-
-		mNameProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::name)>(
-			actors, prototypes, [](Actor* x) { return &x->name; });
-
-		mLockProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::locked)>(
-			actors, prototypes, [](Actor* x) { return &x->locked; });
-
-		mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
-			actors, [](Actor* x) { return &x->prototype; });
-
-		mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
-
-		mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
-			actors, prototypes, [](Actor* x) { return &x->tags; });
-
-		mLayerProperty->SelectValueAndPrototypeFunctional<Ref<SceneLayer>, Actor>(
-			actors, prototypes, [](Actor* x) { return x->GetLayer(); },
-			[](Actor* x, const Ref<SceneLayer>& l) { x->SetLayer(l->GetName()); });
-
-		mDepthProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::drawDepth)>(
-			actors, prototypes, [](Actor* x) { return &x->drawDepth; });
-
-		RefreshLayer();
-	}
-
-	Widget* DefaultActorHeaderViewer::GetWidget() const
-	{
-		return mDataView;
-	}
-
-	void DefaultActorHeaderViewer::Refresh()
-	{
-		mEnableProperty->Refresh();
-		mNameProperty->Refresh();
-		mLockProperty->Refresh();
-		mPrototypeProperty->Refresh();
-		mTagsProperty->Refresh();
-		mDepthProperty->Refresh();
-
-		mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
-
-		RefreshLayer();
-	}
-
-	void DefaultActorHeaderViewer::RefreshLayer()
-	{
-		mLayerProperty->Refresh();
-
-		bool commonInheritedValue = mActors[0]->IsDrawingDepthInheritedFromParent();
-		bool differentsInheritedValue = false;
-
-		for (int i = 1; i < mActors.Count(); i++)
-		{
-			bool inheritedValue = mActors[i]->IsDrawingDepthInheritedFromParent();
-			if (inheritedValue != commonInheritedValue)
-				differentsInheritedValue = true;
-		}
-
-		if (differentsInheritedValue)
-			mLayerProperty->SetUnknownValue(mActors[0]->GetLayer());
-		else
-			mLayerProperty->SetSelectedInheritedValue(commonInheritedValue);
-
-		mDataView->state["depth inherit"]->SetState(commonInheritedValue);
-	}
-
-	void DefaultActorHeaderViewer::OnApplyPrototypePressed()
-	{
-		Vector<Actor*> actors = GetRootApplyActors();
-
-		for (auto actor : actors)
-			actor->ApplyChangesToPrototype();
-	}
-
-	void DefaultActorHeaderViewer::OnRevertPrototypePressed()
-	{
-		bool areViewActorsAssets = mActors[0]->IsAsset();
-		o2EditorPropertiesWindow.SetTarget(nullptr);
-
-		Vector<Actor*> revertingActors = GetRootApplyActors();
-
-		for (auto actor : revertingActors)
-			actor->RevertToPrototype();
-
-		mActors.Clear();
-		if (areViewActorsAssets)
-		{
-			Vector<UID> viewActors = mActors.Convert<UID>([](Actor* x) { return x->GetAssetID(); });
-			for (auto id : viewActors)
-				mActors.Add(Ref<ActorAsset>(id)->GetActor());
-		}
-		else
-		{
-			Vector<UInt64> viewActors = mActors.Convert<UInt64>([](Actor* x) { return x->GetID(); });
-			for (auto id : viewActors)
-				mActors.Add(o2Scene.GetActorByID(id));
-		}
-
-		o2EditorPropertiesWindow.SetTargets(mActors.Cast<IObject*>());
-	}
-
-	void DefaultActorHeaderViewer::OnBreakPrototypePressed()
-	{
-		Vector<Actor*> actors = GetRootApplyActors();
-
-		for (auto actor : actors)
-			actor->BreakPrototypeLink();
-
-		*mDataView->state["prototype"] = false;
-	}
-
-	void DefaultActorHeaderViewer::OnSelectedInheritedLayer()
-	{
-		for (auto actor : mActors)
+		for (const Ref<Actor>& actor : mActors)
 			actor->SetDrawingDepthInheritFromParent(true);
 	}
 
-	Vector<Actor*> DefaultActorHeaderViewer::GetRootApplyActors()
+	Vector<Ref<Actor>> GetRootApplyActors()
 	{
-		Vector<Actor*> applyActors;
+		Vector<Ref<Actor>> applyActors;
 
-		for (auto actor : mActors)
+		for (const Ref<Actor>& actor : mActors)
 		{
-			Actor* applyActor = actor;
+			Ref<Actor> applyActor = actor;
 			if (!applyActor->GetPrototype())
 				continue;
 
@@ -293,16 +296,19 @@ namespace Editor
 		return applyActors;
 	}
 
-	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue,
+	void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue,
 													 const Vector<DataDocument>& newValue)
 	{
-		PropertyChangeAction* action = mnew PropertyChangeAction(
+		Ref<PropertyChangeAction> action = mmake<PropertyChangeAction>(
 			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);
 	}
 
-}
+private:
+	WeakRef<Vector<Ref<Actor>>> mActors;
+};
+
 // --- META ---
 
 DECLARE_CLASS(Editor::DefaultActorHeaderViewer, Editor__DefaultActorHeaderViewer);

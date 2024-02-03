@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "o2Editor/stdafx.h"
 #include "EditorApplication.h"
 
@@ -14,7 +16,6 @@
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/WidgetState.h"
-#include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2/Scripts/ScriptEngine.h"
 #include "o2/Utils/Debug/Debug.h"
@@ -56,7 +57,7 @@ namespace Editor
 		return String::empty;
 	}
 
-	void EditorApplication::LoadScene(const SceneAssetRef& scene)
+	void EditorApplication::LoadScene(const Ref<SceneAsset>& scene)
 	{
 		ForcePopEditorScopeOnStack scope;
 
@@ -86,7 +87,7 @@ namespace Editor
 
 		o2Scene.Save(path);
 
-		mLoadedScene = SceneAssetRef::CreateAsset();
+		mLoadedScene = mmake<SceneAsset>();
 		mLoadedScene->SetPath(relativePath);
 		mLoadedScene->Save();
 
@@ -130,22 +131,22 @@ namespace Editor
 
 		o2Application.SetWindowCaption("o2 Editor");
 
-		mUIRoot = mnew UIRoot();
+		mUIRoot = mmake<UIRoot>();
 
-		mBackground = mnew Sprite("ui/UI4_Background.png");
-		mBackSign = mnew Sprite("ui/UI4_o2_sign.png");
+		mBackground = mmake<Sprite>("ui/UI4_Background.png");
+		mBackSign = mmake<Sprite>("ui/UI4_o2_sign.png");
 
 		CommonTextures::Initialize();
 
-		mConfig = mnew EditorConfig();
+		mConfig = mmake<EditorConfig>();
 		mConfig->LoadConfigs();
 
 		LoadUIStyle();
 
-		mProperties = mnew Properties();
-		mWindowsManager = mnew WindowsManager();
-		mMenuPanel = mnew MenuPanel();
-		mToolsPanel = mnew ToolsPanel();
+		mProperties = mmake<Properties>();
+		mWindowsManager = mmake<WindowsManager>();
+		mMenuPanel = mmake<MenuPanel>();
+		mToolsPanel = mmake<ToolsPanel>();
 
 		if (mConfig->projectConfig.mMaximized)
 			o2Application.Maximize();
@@ -159,9 +160,7 @@ namespace Editor
 
 		OnResizing();
 
-		o2EditorApplication.LoadScene(SceneAssetRef(o2EditorConfig.projectConfig.mLastLoadedScene));
-
-		//FreeConsole();
+		o2EditorApplication.LoadScene(mmake<SceneAsset>(o2EditorConfig.projectConfig.mLastLoadedScene));
 
 		auto widget = EditorUIRoot.GetRootWidget()->GetChildWidget("tools panel/play panel");
 		o2EditorAnimationWindow.SetAnimation(widget->GetStateObject("playing")->GetAnimationClip().Get(),
@@ -170,315 +169,225 @@ namespace Editor
 		o2EditorAnimationWindow.SetTarget(widget);
 
 		o2Scripts.CollectGarbage();
-
-		//o2Scripts.GetGlobal().SetProperty("widget", mnew Widget());
-
-		// 		ScriptValue tmp(Vector<int>({ 0, 1, 2, 3, 4 }));
-		// 
-		// 		auto typ = tmp.GetValueType();
-		// 		o2Scripts.GetGlobal().SetProperty("tmp", tmp);
-		// 		o2Scripts.Eval("print(JSON.stringify(tmp));");
-		// 		auto tmp0str = tmp.GetElement(1).ToString();
-		// 		o2Debug.Log(tmp0str);
-
-				// 		ScriptValue tttConstruct;
-				// 		tttConstruct.SetThisFunction(Function<void(ScriptValue, int)>([](ScriptValue xx, int x) { xx.SetProperty("x", x); }));
-				// 		o2Scripts.GetGlobal().SetProperty("ttt", tttConstruct);
-				// 
-				// 		o2Scripts.Eval("let xttt = new ttt(5); print(JSON.stringify(xttt));");
-						// 
-						//float testValue = 0;
-						//o2Scripts.GetGlobal().SetProperty("back", mBackground);
-				// 		o2Scripts.GetGlobal().SetPropertyWrapper<float>(ScriptValue("test"),
-				// 			Function<void(float)>([&](float xx) { testValue = xx; }),
-				// 			Function<float()>([&]() { return testValue; }));
-				// 
-				// 		auto tp = o2Scripts.GetGlobal().GetProperty("test").GetValueType();
-				// 
-				// 		o2Scripts.Eval("print('test is ' + test + ', and its type is ' + typeof test);");
-
-						//auto filename = GetAssetsPath() + String("test.js");
-						//o2Scripts.Run(o2Scripts.Parse(o2FileSystem.ReadFile(filename), filename));
-
-						//o2Debug.LogStr("---Dump global---\n" + o2Scripts.GetGlobal().Dump() + "\n---------------");
-
-				// 		o2Scripts.Eval("let bbn = new Vec2(3, 5); print(Vec2.prototype); print(Dump(Vec2.prototype));");
-				// 
-				// 		ScriptValue tmp;
-				// 		tmp.Accept(jerry_object_get_property_names(o2Scripts.GetGlobal().jvalue, JERRY_PROPERTY_FILTER_ALL));
-				// 		o2Debug.Log(tmp.Dump());
-				// 
-				// 		ScriptValue v(Vec2F(3, 2));
-				// 		o2Scripts.GetGlobal().SetProperty("v", v);
-				// 		o2Scripts.Eval("print(v.Length());");
-				// 
-				// 		o2Scripts.GetGlobal().SetProperty("back", mBackground);
-				// 
-				// 		o2Debug.Log(o2Scripts.Eval("Vec2.prototype").Dump());
-
-				// 		o2Scripts.GetGlobal().SetProperty("widget", ScriptValue(*widget));
-				// 		o2Scripts.Eval("widget.layout.position = Vec2.New(2, 2); print(JSON.stringify(widget.GetChildren(), null, 2));");
-				// 
-				// 		o2Scripts.GetGlobal().SetProperty("array", ScriptValue(Vector<int>({ 0, 1, 2, 3, 4 ,5 })));
-				// 		o2Scripts.Eval("print(JSON.stringify(array, null, 2))");
-				// 
-				// 		Vector<int> arr = o2Scripts.GetGlobal().GetProperty("array");
-				// 		o2Scripts.Eval("print('hello world!');");
-				// 		o2Scripts.Eval("var x = 5 + 5; function myf(a, b) { print(a); print(b); var sum = a + b; print(sum); return sum; }");
-				// 		ScriptValue v2(Vec2F(3, 4));
-				// 		o2Scripts.GetGlobal().SetProperty(ScriptValue("mm"), v2);
-				// 		o2Scripts.Eval("print(JSON.stringify(mm));");
-				// 		o2Scripts.CollectGarbage();
-				// 		ScriptValue p(Function<float(int, float)>([](int a, float b) { o2Debug.Log("prived pidor " + (String)(a + b)); return a + b + 5; }));
-				// 		o2Scripts.CollectGarbage();
-				// 		o2Scripts.GetGlobal().SetProperty(ScriptValue("myfunc"), p);
-				// 		o2Scripts.CollectGarbage();
-				// 		o2Scripts.Eval("print(myfunc(1, 3.2));");
-				// 		o2Scripts.CollectGarbage();
-				// 
-				// 		std::tuple<std::remove_reference<const String&>::type> t = { "as" };
-				// 		auto fff = [](const String& x) { o2Debug.Log(x); };
-				// 		std::apply(fff, t);
-				// 		ScriptValue ff(Function<void(const String&)>([](const String& xx) { o2Debug.Log("called ff" + xx); }));
-				// 		o2Scripts.GetGlobal().SetProperty(ScriptValue("ff"), ff);
-				// 		o2Scripts.Eval("ff('asd');");
-				// 
-				// 		int testPtr = 2;
-				// 		ScriptValue obj;
-				//  		obj.SetPropertyWrapper(ScriptValue("ptrProp"), testPtr);
-				//  		obj.SetPropertyWrapper<int>(ScriptValue("funcProp"), [](int v) { o2Debug.Log((String)v); }, []() { return 15; });
-				// 		obj.SetProperty(ScriptValue("func"), ScriptValue(Function<float()>([]() { 
-				// 			o2Debug.Log("ass"); 
-				// 			return 5.0f;
-				// 		})));
-				// 		o2Scripts.GetGlobal().SetProperty(ScriptValue("obj"), obj);
-				// 		o2Scripts.Eval("print(JSON.stringify(obj));");
-				// 		o2Scripts.Eval("obj.ptrProp = obj.ptrProp + 5");
-				// 		o2Scripts.Eval("obj.ptrProp = obj.func() + 5");
-				// 		o2Scripts.Eval("obj.funcProp = obj.funcProp + 5");
-				// 		o2Scripts.GetGlobal().SetProperty(ScriptValue("obj"), obj);
-				// 		o2Scripts.Eval("print(JSON.stringify(obj));");
-				// 
-				// 		o2Scripts.GetGlobal().SetProperty(ScriptValue("scriptValueFunc"), ScriptValue(Function<ScriptValue()>([&]()
-				// 		{
-				// 			return mBackground->GetScriptValue();
-				// 		})));
-				// 
-				// 		o2Debug.LogStr("---Dump global---\n" + o2Scripts.GetGlobal().Dump() + "\n---------------");
-				// 
-				// 		o2Scripts.Eval("print(JSON.stringify(scriptValueFunc()))");
-				// 
-				// 		o2Scripts.Eval("var testSprite = o2.Sprite.New('ui/UI4_Background.png'); testSprite.image = o2.RefImageAsset.New('ui/UI_Background.png');");
-				// 
-				// 		ScriptValue prot;
-				// 		prot.SetProperty("a", 5);
-				// 		prot.SetProperty("func", Function<void()>([]() { o2Debug.Log("privet"); }));
-				// 
-				// 		Vec2F tv2(3, 5);
-				// 		o2Scripts.GetGlobal().SetProperty("gettt", Function<Vec2F(const Vec2F&)>([&](const Vec2F& in) { tv2 += in; return tv2; }));
-				// 		o2Scripts.Eval("print(JSON.stringify(gettt(Vec2.New(2, 3))));");
-				// 
-				// 		ScriptValue exm = ScriptValue::EmptyObject();
-				// 		exm.SetPrototype(prot);
-				// 		o2Scripts.GetGlobal().SetProperty("exm", exm);
-				// 		o2Scripts.Eval("exm.func();");
-				// 
-				// 		o2Scripts.Run(o2Scripts.Parse(o2FileSystem.ReadFile(GetAssetsPath() + String("test.js"))));
-				// 
-				// 		o2Scripts.Eval("yy.func();");
-				// 
-				// 		o2Scripts.Eval("function testDefault(x = 5) { print(Math.sqrt(x)); }; testDefault(); testDefault(10);");
-				// 		o2Scripts.Eval("let vv = Vec2.New(3, 5); let gg = vv.Add(Vec2.New(1, 1)); print(gg.x + '; ' + gg.y);");
-				// 
-				// 		o2Debug.LogStr("---Dump mBackground---\n" + mBackground->GetScriptValue().Dump() + "\n---------------");
-				// 
-				// 		o2Scripts.GetGlobal().SetProperty(ScriptValue("wrp"), mBackground->GetScriptValue());
-				// 		o2Scripts.Eval("wrp.Draw()");
-				// 		o2Scripts.Eval("wrp.SetFill(wrp.GetFill() - 0.1)");
-				// 		o2Scripts.Eval("wrp.position = wrp.position.Add(Vec2.New(2, 2));");
-				// 		o2Scripts.Eval("print(wrp.GetImageName()); wrp.LoadFromImage('ui/UI_Background.png')");
-				// 		auto pres = o2Scripts.Parse("vaddr str = 'Hello, World!';");
-				// 		if (!pres.IsOk()) {
-				// 			o2Debug.Log(pres.GetError());
-				// 		}
-				// 		else {
-				// 			o2Scripts.Run(pres);
-				// 		}
-				// 
-				// 		auto myfuncRef = o2Scripts.GetGlobal().GetProperty(ScriptValue("myfunc")).GetValue<Function<float(int, float)>>();
-				// 		auto mffr = myfuncRef(2, 3.5f);
-				// 
-				// 		auto myfRef = o2Scripts.GetGlobal().GetProperty(ScriptValue("myf")).GetValue<Function<float(int, float)>>();
-				// 		auto myfr = myfRef(2, 3.5f);
-				// 
-				// 		ScriptValue mb; mb.SetValue(*mBackground); mb.SetProperty(ScriptValue("a"), ScriptValue("b"));
-				// 		ScriptValue xx = mb;
-				// 		auto xxxx = o2Scripts.GetGlobal().GetProperty(ScriptValue("myf")).Invoke<float>(33, 56);
-				// 		o2Scripts.GetGlobal().SetProperty(ScriptValue("myObj"), mb);
-				// 		o2Scripts.Eval("print(JSON.stringify(myObj));");
-				// 		o2Scripts.Eval("myObj.fill = 0.5");
-				// 		o2Scripts.Eval("print(JSON.stringify(myObj));");
-				// 
-				// // 		{
-				// // 			ScriptValue x([]() {
-				// // 				o2Debug.Log("prived pidor");
-				// // 			});
-				// // 			x.Invoke();
-				// // 
-				// // 			ScriptValue y;
-				// // 			y.SetValue([]() {
-				// // 				o2Debug.Log("prived pidor ti");
-				// // 			});
-				// // 			y.Invoke();
-				// // 		}
-				// // 		o2Scripts.CollectGarbage();
-				// // 		auto xx = x.ToString();
-				//  		float res = o2Scripts.GetGlobal().GetProperty(ScriptValue("x")).ToNumber();
-
-
-		o2Debug.LogStr("---Dump global---\n" + o2Scripts.GetGlobal().Dump() + "\n---------------");
 	}
+}#include <memory>
 
-	void EditorApplication::OnClosing()
-	{
-		delete mConfig;
-		delete mWindowsManager;
-		delete mBackground;
-		delete mBackSign;
-		delete mToolsPanel;
-		delete mMenuPanel;
-		delete mUIRoot;
-	}
+template<typename T>
+class Ref
+{
+public:
+	Ref() : m_ptr(nullptr) {}
+	Ref(T* ptr) : m_ptr(ptr) {}
+	Ref(const Ref<T>& other) : m_ptr(other.m_ptr) {}
+	Ref<T>& operator=(const Ref<T>& other) { m_ptr = other.m_ptr; return *this; }
 
-	void EditorApplication::OnResizing()
-	{
-		mBackground->SetSize(o2Render.GetResolution() + Vec2F(20, 20));
-		mBackSign->position = (Vec2F)(o2Render.GetResolution()).InvertedX() * 0.5f + Vec2F(40.0f, -85.0f);
+	operator T*() { return m_ptr; }
+	T* operator->() { return m_ptr; }
+	const T* operator->() const { return m_ptr; }
 
-		mConfig->OnWindowChange();
-		mUIRoot->OnApplicationSized();
-	}
+private:
+	T* m_ptr;
+};
 
-	void EditorApplication::OnMoved()
-	{
-		mConfig->OnWindowChange();
-	}
+template<typename T>
+class WeakRef
+{
+public:
+	WeakRef() : m_ptr(nullptr) {}
+	WeakRef(const Ref<T>& ref) : m_ptr(ref) {}
+	WeakRef(const WeakRef<T>& other) : m_ptr(other.m_ptr) {}
+	WeakRef<T>& operator=(const WeakRef<T>& other) { m_ptr = other.m_ptr; return *this; }
 
-	void EditorApplication::ProcessFrame()
-	{
-		PushEditorScopeOnStack scope;
+	operator Ref<T>() { return m_ptr; }
+	Ref<T> Lock() { return m_ptr; }
 
-		mUpdateStep = mIsPlaying && (!isPaused || step);
-		step = false;
+private:
+	Ref<T> m_ptr;
+};
 
-		Application::ProcessFrame();
+template<typename T, typename ...Args>
+Ref<T> mmake(Args&& ...args)
+{
+	return Ref<T>(new T(std::forward<Args>(args)...));
+}
 
-		mDrawCalls = mRender->GetDrawCallsCount();
-		mDrawnPrimitives = mRender->GetDrawnPrimitives();
-	}
+template<typename Derived, typename Base>
+Ref<Derived> DynamicCast(const Ref<Base>& ref)
+{
+	return Ref<Derived>(dynamic_cast<Derived*>(ref));
+}
 
-	void EditorApplication::CheckPlayingSwitch()
-	{
-		if (!mPlayingChanged)
-			return;
+// Example usage
 
-		ForcePopEditorScopeOnStack scope;
+class Widget {};
 
-		if (mIsPlaying)
-		{
-			o2EditorSceneScreen.ClearSelection();
+class Background {};
 
-			mSceneDump.Clear();
-			o2Scene.Save(mSceneDump);
-			o2Scene.Load(mSceneDump);
-		}
-		else
-		{
-			o2EditorSceneScreen.ClearSelection();
-			o2Scene.Load(mSceneDump);
-		}
+void nerty(const std::string& str, const Ref<Widget>& widget) 
+{
+	// code here...
+	auto ptr = DynamicCast<Background>(widget); // Example usage of DynamicCast
+}
 
-		mPlayingChanged = false;
-	}
+int main()
+{
+	Ref<Widget> widget(new Widget());
+	Ref<Background> bkg(new Background());
 
-	void EditorApplication::InitalizeSystems()
-	{
-		mMainListenersLayer.SetEditorMode(true);
+	nerty("x", widget);
+	// o2Scripts.GetGlobal().SetPropertyWrapper<float>(ScriptValue("test"),
+	// 		Function<void(float)>([&](float xx) { testValue = xx; }),
+	// 		Function<float()>([&]() { return testValue; }));
+	// etc...
 
-		Application::InitalizeSystems();
-	}
+	return 0;
+}{
+    void EditorApplication::OnClosing()
+    {
+        mConfig = nullptr;
+        mWindowsManager = nullptr;
+        mBackground = nullptr;
+        mBackSign = nullptr;
+        mToolsPanel = nullptr;
+        mMenuPanel = nullptr;
+        mUIRoot = nullptr;
+    }
 
-	void EditorApplication::LoadUIStyle()
-	{
-		EditorUIStyleBuilder builder;
-		builder.RebuildEditorUIManager("Editor UI styles", true, true);
-	}
+    void EditorApplication::OnResizing()
+    {
+        mBackground->SetSize(o2Render.GetResolution() + Vec2F(20, 20));
+        mBackSign->position = (Vec2F)(o2Render.GetResolution()).InvertedX() * 0.5f + Vec2F(40.0f, -85.0f);
 
-	void EditorApplication::PreUpdatePhysics()
-	{
-		ForcePopEditorScopeOnStack scope;
+        mConfig->OnWindowChange();
+        mUIRoot->OnApplicationSized();
+    }
 
-		Application::PreUpdatePhysics();
-	}
+    void EditorApplication::OnMoved()
+    {
+        mConfig->OnWindowChange();
+    }
 
-	void EditorApplication::UpdatePhysics(float dt)
-	{
-		ForcePopEditorScopeOnStack scope;
+    void EditorApplication::ProcessFrame()
+    {
+        PushEditorScopeOnStack scope;
 
-		if (mUpdateStep)
-			Application::UpdatePhysics(dt);
-	}
+        mUpdateStep = mIsPlaying && (!isPaused || step);
+        step = false;
 
-	void EditorApplication::PostUpdatePhysics()
-	{
-		ForcePopEditorScopeOnStack scope;
+        Application::ProcessFrame();
 
-		if (mUpdateStep)
-			Application::PostUpdatePhysics();
-	}
+        mDrawCalls = mRender->GetDrawCallsCount();
+        mDrawnPrimitives = mRender->GetDrawnPrimitives();
+    }
 
-	void EditorApplication::UpdateScene(float dt)
-	{
-		ForcePopEditorScopeOnStack scope;
+    void EditorApplication::CheckPlayingSwitch()
+    {
+        if (!mPlayingChanged)
+            return;
 
-		if (mUpdateStep)
-		{
-			mScene->Update(dt);
-			o2EditorSceneScreen.NeedRedraw();
-		}
-		else
-		{
-			mScene->UpdateAddedEntities();
-			mScene->UpdateDestroyingEntities();
-		}
+        ForcePopEditorScopeOnStack scope;
 
-		CheckPlayingSwitch();
-	}
+        if (mIsPlaying)
+        {
+            o2EditorSceneScreen.ClearSelection();
 
-	void EditorApplication::FixedUpdateScene(float dt)
-	{
-		ForcePopEditorScopeOnStack scope;
+            mSceneDump.Clear();
+            o2Scene.Save(mSceneDump);
+            o2Scene.Load(mSceneDump);
+        }
+        else
+        {
+            o2EditorSceneScreen.ClearSelection();
+            o2Scene.Load(mSceneDump);
+        }
 
-		if (mUpdateStep)
-			mScene->FixedUpdate(dt);
-	}
+        mPlayingChanged = false;
+    }
 
-	void EditorApplication::DrawScene()
-	{
-	}
+    void EditorApplication::InitalizeSystems()
+    {
+        mMainListenersLayer.SetEditorMode(true);
 
-	void EditorApplication::DrawUIManager()
-	{
-		PushEditorScopeOnStack scope;
-		Application::DrawUIManager();
-	}
+        Application::InitalizeSystems();
+    }
 
-	void EditorApplication::DrawDebug()
+    void EditorApplication::LoadUIStyle()
+    {
+        EditorUIStyleBuilder builder;
+        builder.RebuildEditorUIManager("Editor UI styles", true, true);
+    }
+
+    void EditorApplication::PreUpdatePhysics()
+    {
+        ForcePopEditorScopeOnStack scope;
+
+        Application::PreUpdatePhysics();
+    }
+
+    void EditorApplication::UpdatePhysics(float dt)
+    {
+        ForcePopEditorScopeOnStack scope;
+
+        if (mUpdateStep)
+            Application::UpdatePhysics(dt);
+    }
+
+    void EditorApplication::PostUpdatePhysics()
+    {
+        ForcePopEditorScopeOnStack scope;
+
+        if (mUpdateStep)
+            Application::PostUpdatePhysics();
+    }
+
+    void EditorApplication::UpdateScene(float dt)
+    {
+        ForcePopEditorScopeOnStack scope;
+
+        if (mUpdateStep)
+        {
+            mScene->Update(dt);
+            o2EditorSceneScreen.NeedRedraw();
+        }
+        else
+        {
+            mScene->UpdateAddedEntities();
+            mScene->UpdateDestroyingEntities();
+        }
+
+        CheckPlayingSwitch();
+    }
+
+    void EditorApplication::FixedUpdateScene(float dt)
+    {
+        ForcePopEditorScopeOnStack scope;
+
+        if (mUpdateStep)
+            mScene->FixedUpdate(dt);
+    }
+
+    void EditorApplication::DrawScene()
+    {
+    }
+
+    void EditorApplication::DrawUIManager()
+    {
+        PushEditorScopeOnStack scope;
+        Application::DrawUIManager();
+    }
+}#include <Ref.h>
+
+class EditorApplication : public Application
+{
+public:
+	EditorApplication() {}
+
+	void DrawDebug()
 	{
 		o2Debug.Draw(true);
 	}
 
-	void EditorApplication::UpdateDebug(float dt)
+	void UpdateDebug(float dt)
 	{
 		if (mUpdateStep)
 			o2Debug.Update(false, dt);
@@ -486,19 +395,19 @@ namespace Editor
 		o2Debug.Update(true, dt);
 	}
 
-	void EditorApplication::UpdateEventSystem()
+	void UpdateEventSystem()
 	{
 		PushEditorScopeOnStack scope;
 		Application::UpdateEventSystem();
 	}
 
-	void EditorApplication::PostUpdateEventSystem()
+	void PostUpdateEventSystem()
 	{
 		PushEditorScopeOnStack scope;
 		Application::PostUpdateEventSystem();
 	}
 
-	void EditorApplication::OnUpdate(float dt)
+	void OnUpdate(float dt)
 	{
 		mWindowsManager->Update(dt);
 		mUIRoot->Update(dt);
@@ -519,7 +428,7 @@ namespace Editor
 
 #undef DrawText
 
-	void EditorApplication::OnDraw()
+	void OnDraw()
 	{
 		PushEditorScopeOnStack scope;
 
@@ -538,13 +447,24 @@ namespace Editor
 		}
 	}
 
-	void EditorApplication::OnActivated()
+	void OnActivated()
 	{
 		//o2Assets.RebuildAssets();
 	}
 
-	void EditorApplication::OnDeactivated()
+	void OnDeactivated()
 	{
 	}
 
-}
+private:
+	Ref<WindowsManager> mWindowsManager;
+	Ref<UIRoot> mUIRoot;
+	Ref<ToolsPanel> mToolsPanel;
+	Ref<Background> mBackground;
+	Ref<BackSign> mBackSign;
+	Ref<Scene> mLoadedScene;
+	bool mUpdateStep;
+	int mDrawCalls;
+	int mDrawnPrimitives;
+	Array<Ref<Action>> mActions;
+};

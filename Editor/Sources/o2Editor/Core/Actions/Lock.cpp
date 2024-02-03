@@ -1,6 +1,5 @@
 #include "o2Editor/stdafx.h"
 #include "Lock.h"
-
 #include "o2/Scene/Actor.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 
@@ -9,10 +8,10 @@ namespace Editor
 	LockAction::LockAction()
 	{}
 
-	LockAction::LockAction(const Vector<SceneEditableObject*>& objects, bool lock):
+	LockAction::LockAction(const Vector<Ref<SceneEditableObject>>& objects, bool lock) :
 		lock(lock)
 	{
-		objectsIds = objects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
+		objectsIds = objects.Convert<SceneUID>([](const Ref<SceneEditableObject>& x) { return x->GetID(); });
 	}
 
 	String LockAction::GetName() const
@@ -22,7 +21,7 @@ namespace Editor
 
 	void LockAction::Redo()
 	{
-		for (auto id : objectsIds)
+		for (const auto& id : objectsIds)
 		{
 			auto object = o2Scene.GetEditableObjectByID(id);
 			if (object)
@@ -32,16 +31,14 @@ namespace Editor
 
 	void LockAction::Undo()
 	{
-		for (auto id : objectsIds)
+		for (const auto& id : objectsIds)
 		{
 			auto object = o2Scene.GetEditableObjectByID(id);
 			if (object)
 				object->SetLocked(!lock);
 		}
 	}
-
 }
 // --- META ---
-
 DECLARE_CLASS(Editor::LockAction, Editor__LockAction);
 // --- END META ---

@@ -1,10 +1,13 @@
 #include "o2Editor/stdafx.h"
 #include "IWidgetLayerPropertiesViewer.h"
-
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Image.h"
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/UI/SpoilerWithHead.h"
+#include "o2/Core/Memory/Ref.h"
+#include "o2/Core/Memory/WeakRef.h"
+#include "o2/Core/Memory/mmake.h"
+#include "o2/Core/Memory/DynamicCast.h"
 
 namespace Editor
 {
@@ -12,7 +15,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
+		mSpoiler = mmake<SpoilerWithHead>();
 
 		mSpoiler->expandHeight = false;
 		mSpoiler->expandWidth = true;
@@ -27,7 +30,7 @@ namespace Editor
 	IWidgetLayerPropertiesViewer::~IWidgetLayerPropertiesViewer()
 	{}
 
-	Widget* IWidgetLayerPropertiesViewer::GetWidget() const
+	Ref<Widget> IWidgetLayerPropertiesViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}

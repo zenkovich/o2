@@ -9,59 +9,59 @@
 
 namespace Editor
 {
-	IEditorWindow::IEditorWindow()
-	{
-		mWindow = o2UI.CreateWidget<DockableWindow>();
-		mWindow->layout->size = Vec2F(200, 200);
-		mWindow->onOpened = THIS_FUNC(OnOpened);
-		mWindow->onClosed = THIS_FUNC(OnClosed);
+    IEditorWindow::IEditorWindow()
+    {
+        mWindow = mmake<Ref<DockableWindow>>();
+        mWindow->layout->size = Vec2F(200, 200);
+        mWindow->onOpened = THIS_FUNC(OnOpened);
+        mWindow->onClosed = THIS_FUNC(OnClosed);
 
-		EditorUIRoot.AddWidget(mWindow);
-	}
+        EditorUIRoot.AddWidget(mWindow);
+    }
 
-	IEditorWindow::IEditorWindow(const IEditorWindow& other):
-		mWindow(other.mWindow->CloneAs<DockableWindow>())
-	{
-		if (mWindow)
-			EditorUIRoot.AddWidget(mWindow);
-	}
+    IEditorWindow::IEditorWindow(const IEditorWindow& other):
+        mWindow(other.mWindow->CloneAs<Ref<DockableWindow>>())
+    {
+        if (mWindow)
+            EditorUIRoot.AddWidget(mWindow);
+    }
 
-	IEditorWindow::~IEditorWindow()
-	{
-		if (mWindow)
-			delete mWindow;
-	}
+    IEditorWindow::~IEditorWindow()
+    {
+        if (mWindow)
+            delete mWindow;
+    }
 
-	void IEditorWindow::Show()
-	{
-		SetVisible(true);
-	}
+    void IEditorWindow::Show()
+    {
+        SetVisible(true);
+    }
 
-	void IEditorWindow::Hide()
-	{
-		SetVisible(false);
-	}
+    void IEditorWindow::Hide()
+    {
+        SetVisible(false);
+    }
 
-	DockableWindow* IEditorWindow::GetWindow() const
-	{
-		return mWindow;
-	}
+    Ref<DockableWindow> IEditorWindow::GetWindow() const
+    {
+        return mWindow;
+    }
 
-	void IEditorWindow::SetVisible(bool visible)
-	{
-		mWindow->SetEnabled(visible);
-	}
+    void IEditorWindow::SetVisible(bool visible)
+    {
+        mWindow->SetEnabled(visible);
+    }
 
-	void IEditorWindow::Update(float dt)
-	{}
+    void IEditorWindow::Update(float dt)
+    {}
 
-	void IEditorWindow::Draw()
-	{}
+    void IEditorWindow::Draw()
+    {}
 
-	bool IEditorWindow::IsVisible()
-	{
-		return mWindow->IsEnabled();
-	}
+    bool IEditorWindow::IsVisible()
+    {
+        return mWindow->IsEnabled();
+    }
 
 }
 // --- META ---

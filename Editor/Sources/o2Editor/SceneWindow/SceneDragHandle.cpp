@@ -15,17 +15,17 @@ namespace Editor
 		if (WindowsManager::IsSingletonInitialzed())
 		{
 			o2EditorSceneScreen.mDragHandles.Add(this);
-			messageFallDownListener = (ScrollView*)SceneEditScreen::InstancePtr();
+			messageFallDownListener = const Ref<ScrollView>(SceneEditScreen::InstancePtr());
 		}
 	}
 
-	SceneDragHandle::SceneDragHandle(IRectDrawable* regular, IRectDrawable* hover /*= nullptr*/, IRectDrawable* pressed /*= nullptr*/):
+	SceneDragHandle::SceneDragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/):
 		DragHandle(regular, hover, pressed)
 	{
 		if (WindowsManager::IsSingletonInitialzed())
 		{
 			o2EditorSceneScreen.mDragHandles.Add(this);
-			messageFallDownListener = (ScrollView*)SceneEditScreen::InstancePtr();
+			messageFallDownListener = const Ref<ScrollView>(SceneEditScreen::InstancePtr());
 		}
 	}
 
@@ -35,7 +35,7 @@ namespace Editor
 		if (WindowsManager::IsSingletonInitialzed())
 		{
 			o2EditorSceneScreen.mDragHandles.Add(this);
-			messageFallDownListener = (ScrollView*)SceneEditScreen::InstancePtr();
+			messageFallDownListener = const Ref<ScrollView>(SceneEditScreen::InstancePtr());
 		}
 	}
 

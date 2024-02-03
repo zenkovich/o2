@@ -22,25 +22,25 @@ namespace Editor
 	{
 		mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 
-		mPlayPause = o2UI.CreateWidget<Toggle>("animation state play-stop");
+		mPlayPause = mmake<Ref<Toggle>>("animation state play-stop");
 		mPlayPause->name = "play-stop";
 		*mPlayPause->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(7, 1));
 		mPlayPause->onToggle = THIS_FUNC(OnPlayPauseToggled);
 		mSpoiler->AddInternalWidget(mPlayPause);
 
-		mEditBtn = o2UI.CreateWidget<Button>("edit animation state");
+		mEditBtn = mmake<Ref<Button>>("edit animation state");
 		mEditBtn->name = "edit";
 		*mEditBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-40, 1));
 		mEditBtn->onClick = THIS_FUNC(OnEditPressed);
 		mSpoiler->AddInternalWidget(mEditBtn);
 
-		mLooped = o2UI.CreateWidget<Toggle>("animation state loop");
+		mLooped = mmake<Ref<Toggle>>("animation state loop");
 		mLooped->name = "loop";
 		*mLooped->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-20, 1));
 		mLooped->onToggle = THIS_FUNC(OnLoopToggled);
 		mSpoiler->AddInternalWidget(mLooped);
 
-		mTimeProgress = o2UI.CreateWidget<HorizontalProgress>("animation state bar");
+		mTimeProgress = mmake<Ref<HorizontalProgress>>("animation state bar");
 		mTimeProgress->name = "bar";
 		*mTimeProgress->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 2, 18);
 		mTimeProgress->onChangeByUser = THIS_FUNC(OnTimeProgressChanged);
@@ -65,7 +65,7 @@ namespace Editor
 
 		if (!targetObjets.IsEmpty())
 		{
-			mSubscribedPlayer = &dynamic_cast<AnimationState*>(targetObjets.Last().first)->player;
+			mSubscribedPlayer = DynamicCast<Player>(targetObjets.Last().first)->player;
 			mSubscribedPlayer->onUpdate += THIS_FUNC(OnAnimationUpdated);
 		}
 	}
@@ -103,10 +103,10 @@ namespace Editor
 	{
 		if (!mTargetObjects.IsEmpty())
 		{
-			auto animationState = dynamic_cast<AnimationState*>(mTargetObjects.Last().first);
+			auto animationState = DynamicCast<AnimationState>(mTargetObjects.Last().first);
 			auto animationRef = animationState->GetAnimation();
 			if (!animationRef) {
-				animationRef.CreateInstance();
+				animationRef = mmake<Ref<Animation>>();
 				animationState->SetAnimation(animationRef);
 
 				GetSpoiler()->Expand();
@@ -117,7 +117,7 @@ namespace Editor
 				o2EditorAnimationWindow.SetAnimation(animationRef->animation.Get());
 
 				if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
-					o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));
+					o2EditorAnimationWindow.SetTarget(DynamicCast<Actor>(o2EditorSceneScreen.GetSelectedObjects().Last()));
 
 				o2EditorAnimationWindow.SetAnimationEditable(mPropertiesContext.FindOnStack<IEditableAnimation>());
 				o2EditorAnimationWindow.GetWindow()->Focus();

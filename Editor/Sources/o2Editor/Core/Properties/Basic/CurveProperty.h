@@ -18,7 +18,7 @@ namespace Editor
 	// ------------------------------
 	// Editor curve property edit box
 	// ------------------------------
-	class CurveProperty: public TPropertyField<Curve>
+	class CurveProperty : public TPropertyField<Curve>
 	{
 	public:
 		// Default constructor
@@ -33,9 +33,9 @@ namespace Editor
 		IOBJECT(CurveProperty);
 
 	protected:
-		Widget*          mEditBox = nullptr;         // Edit box 
-		CurvePreview*    mPreviewImage = nullptr;    // Curve preview image
-		CursorEventsArea mClickArea;                 // Box click area
+		Ref<Widget> mEditBox;
+		Ref<CurvePreview> mPreviewImage;
+		CursorEventsArea mClickArea;
 
 	protected:
 		// Searches controls widgets and layers and initializes them
@@ -48,6 +48,7 @@ namespace Editor
 		void OnClicked();
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::CurveProperty)
@@ -55,16 +56,17 @@ CLASS_BASES_META(Editor::CurveProperty)
     BASE_CLASS(Editor::TPropertyField<Curve>);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::CurveProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPreviewImage);
+    FIELD().PROTECTED().NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mPreviewImage);
     FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::CurveProperty)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const CurveProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
@@ -72,4 +74,5 @@ CLASS_METHODS_META(Editor::CurveProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);
 }
 END_META;
+
 // --- END META ---

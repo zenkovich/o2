@@ -4,6 +4,7 @@
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/SmartPointers/Ref.h"
 
 using namespace o2;
 
@@ -22,7 +23,7 @@ namespace Editor
 	// -------------------
 	// Name editing dialog
 	// -------------------
-	class NameEditDlg: public Singleton<NameEditDlg>, public CursorEventsListener
+	class NameEditDlg : public Singleton<NameEditDlg>, public CursorEventsListener
 	{
 	public:
 		// Default constructor
@@ -32,17 +33,17 @@ namespace Editor
 		~NameEditDlg();
 
 		// Shows name editing window. Delegate onCompleted is called when ok pressed and onCancelled when cancel
-		static void Show(const String& name, 
-						 Function<void(const String&)> onCompleted,
-						 Function<void()> onCancelled = Function<void()>());
+		static void Show(const String& name,
+			const Function<void(const String&)>& onCompleted,
+			const Function<void()>& onCancelled = Function<void()>());
 
 	protected:
 		Function<void(const String&)> mOnCompletedCallback;
-		Function<void()>              mOnCancelledCallback;
+		Function<void()> mOnCancelledCallback;
 
 
-		o2::Window* mWindow = nullptr;
-		EditBox*    mNameEditBox = nullptr;
+		Ref<Window> mWindow;
+		Ref<EditBox> mNameEditBox;
 
 	protected:
 		// Calls when hiding dialog

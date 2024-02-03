@@ -4,74 +4,76 @@
 #include "o2/Scene/Actor.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 
+using namespace o2;
+
 namespace Editor
 {
-	TransformAction::TransformAction()
-	{}
+    TransformAction::TransformAction()
+    {}
 
-	TransformAction::TransformAction(const Vector<SceneEditableObject*>& actors)
-	{
-		objectsIds = actors.Convert<UInt64>([](SceneEditableObject* x) { return x->GetID(); });
-		GetTransforms(objectsIds, beforeTransforms);
-	}
+    TransformAction::TransformAction(const Vector<Ref<SceneEditableObject>>& actors)
+    {
+        objectsIds = actors.Convert<UInt64>([](const Ref<SceneEditableObject>& x) { return x->GetID(); });
+        GetTransforms(objectsIds, beforeTransforms);
+    }
 
-	void TransformAction::Completed()
-	{
-		GetTransforms(objectsIds, doneTransforms);
-	}
+    void TransformAction::Completed()
+    {
+        GetTransforms(objectsIds, doneTransforms);
+    }
 
-	String TransformAction::GetName() const
-	{
-		return "Actors transformation";
-	}
+    String TransformAction::GetName() const
+    {
+        return "Actors transformation";
+    }
 
-	void TransformAction::Redo()
-	{
-		SetTransforms(objectsIds, doneTransforms);
-	}
+    void TransformAction::Redo()
+    {
+        SetTransforms(objectsIds, doneTransforms);
+    }
 
-	void TransformAction::Undo()
-	{
-		SetTransforms(objectsIds, beforeTransforms);
-	}
+    void TransformAction::Undo()
+    {
+        SetTransforms(objectsIds, beforeTransforms);
+    }
 
-	void TransformAction::GetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms)
-	{
-		transforms = objectIds.Convert<Transform>([=](SceneUID id)
-		{
-			SceneEditableObject* object = o2Scene.GetEditableObjectByID(id);
-			if (object)
-			{
-				Transform res;
-				res.transform = object->GetTransform();
-				res.layout = object->GetLayout();
-				return res;
-			}
+    void TransformAction::GetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms)
+    {
+        transforms = objectIds.Convert<Transform>([=](SceneUID id)
+        {
+            Ref<SceneEditableObject> object = o2Scene.GetEditableObjectByID(id);
+            if (object)
+            {
+                Transform res;
+                res.transform = object->GetTransform();
+                res.layout = object->GetLayout();
+                return res;
+            }
 
-			return Transform();
-		});
-	}
+            return Transform();
+        });
+    }
 
-	void TransformAction::SetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms)
-	{
-		for (int i = 0; i < objectsIds.Count(); i++)
-		{
-			SceneEditableObject* object = o2Scene.GetEditableObjectByID(objectsIds[i]);
-			if (object)
-			{
-				object->SetTransform(transforms[i].transform);
-				object->SetLayout(transforms[i].layout);
-			}
-		}
-	}
+    void TransformAction::SetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms)
+    {
+        for (int i = 0; i < objectsIds.Count(); i++)
+        {
+            Ref<SceneEditableObject> object = o2Scene.GetEditableObjectByID(objectsIds[i]);
+            if (object)
+            {
+                object->SetTransform(transforms[i].transform);
+                object->SetLayout(transforms[i].layout);
+            }
+        }
+    }
 
-	bool TransformAction::Transform::operator==(const Transform& other) const
-	{
-		return transform == other.transform && layout == other.layout;
-	}
+    bool TransformAction::Transform::operator==(const Transform& other) const
+    {
+        return transform == other.transform && layout == other.layout;
+    }
 
-}
+} // namespace Editor
+
 // --- META ---
-
 DECLARE_CLASS(Editor::TransformAction, Editor__TransformAction);
 // --- END META ---

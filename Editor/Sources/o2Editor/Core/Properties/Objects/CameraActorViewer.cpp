@@ -14,7 +14,7 @@
 
 namespace Editor
 {
-	void CameraActorViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	void CameraActorViewer::RebuildProperties(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targetObject)
 	{
 		const Type& cameraActorType = TypeOf(CameraActor);
 
@@ -32,7 +32,7 @@ namespace Editor
 		mTypeProperty = o2EditorProperties.BuildFieldType<EnumProperty>(mSpoiler, cameraActorType, "mType", "",
 																		mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
-		mTypeProperty->onChanged += [&](IPropertyField* x) { OnTypeSelected(); };
+		mTypeProperty->onChanged += [&](const Ref<IPropertyField>& x) { OnTypeSelected(); };
 
 		mHiddenTypeProperties = o2UI.CreateWidget<VerticalLayout>();
 		mHiddenTypeProperties->expandWidth = true;
@@ -59,7 +59,7 @@ namespace Editor
 
 	void CameraActorViewer::OnTypeSelected()
 	{
-		CameraActor::Type type = (CameraActor::Type)(mTypeProperty->GetCommonValue());
+		CameraActor::Type type = static_cast<CameraActor::Type>(mTypeProperty->GetCommonValue());
 
 		mSizePropertySpoiler->SetExpanded(type == CameraActor::Type::FittedSize || type == CameraActor::Type::FixedSize);
 		mUnitsPropertySpoiler->SetExpanded(type == CameraActor::Type::PhysicalCorrect);

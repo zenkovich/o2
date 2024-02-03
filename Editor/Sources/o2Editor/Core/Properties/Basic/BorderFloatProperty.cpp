@@ -2,11 +2,21 @@
 #include "BorderFloatProperty.h"
 
 #include "o2Editor/Core/Properties/Basic/FloatProperty.h"
+#include "o2Editor/Core/Utils/SmartPointers/Ref.h"
 
 namespace Editor
 {
-	BorderFProperty::BorderFProperty()
-	{}
+    using Ref = SmartPointers::Ref;
+	using WeakRef = SmartPointers::WeakRef;
+
+    BorderFProperty::BorderFProperty()
+		: mLeftProperty(mmake<FloatProperty>())
+		, mBottomProperty(mmake<FloatProperty>())
+		, mRightProperty(mmake<FloatProperty>())
+		, mTopProperty(mmake<FloatProperty>())
+	{
+		InitializeControls();
+	}
 
 	BorderFProperty::BorderFProperty(const BorderFProperty& other) :
 		IPropertyField(other)
@@ -23,33 +33,29 @@ namespace Editor
 
 	void BorderFProperty::InitializeControls()
 	{
-		mLeftProperty = GetChildByType<FloatProperty>("container/layout/properties/left");
 		mLeftProperty->SetValuePath("left");
-		mLeftProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mLeftProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mBottomProperty = GetChildByType<FloatProperty>("container/layout/properties/bottom");
 		mBottomProperty->SetValuePath("bottom");
-		mBottomProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mBottomProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mRightProperty = GetChildByType<FloatProperty>("container/layout/properties/right");
 		mRightProperty->SetValuePath("right");
-		mRightProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mRightProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mTopProperty = GetChildByType<FloatProperty>("container/layout/properties/top");
 		mTopProperty->SetValuePath("top");
-		mTopProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mTopProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -84,7 +90,7 @@ namespace Editor
 		mBottomProperty->SetValue(value);
 	}
 
-	void BorderFProperty::SetUnknownValue(const BorderF& defaultValue /*= BorderF()*/)
+	void BorderFProperty::SetUnknownValue(const BorderF& defaultValue)
 	{
 		mLeftProperty->SetUnknownValue(defaultValue.left);
 		mRightProperty->SetUnknownValue(defaultValue.right);
@@ -92,22 +98,22 @@ namespace Editor
 		mBottomProperty->SetUnknownValue(defaultValue.bottom);
 	}
 
-	void BorderFProperty::SetLeftUnknownValue(float defaultValue /*= 0.0f*/)
+	void BorderFProperty::SetLeftUnknownValue(float defaultValue)
 	{
 		mLeftProperty->SetUnknownValue(defaultValue);
 	}
 
-	void BorderFProperty::SetRightUnknownValue(float defaultValue /*= 0.0f*/)
+	void BorderFProperty::SetRightUnknownValue(float defaultValue)
 	{
 		mRightProperty->SetUnknownValue(defaultValue);
 	}
 
-	void BorderFProperty::SetTopUnknownValue(float defaultValue /*= 0.0f*/)
+	void BorderFProperty::SetTopUnknownValue(float defaultValue)
 	{
 		mTopProperty->SetUnknownValue(defaultValue);
 	}
 
-	void BorderFProperty::SetBottomUnknownValue(float defaultValue /*= 0.0f*/)
+	void BorderFProperty::SetBottomUnknownValue(float defaultValue)
 	{
 		mBottomProperty->SetUnknownValue(defaultValue);
 	}
@@ -149,108 +155,178 @@ namespace Editor
 	}
 
 	bool BorderFProperty::IsValuesDifferent() const
-	{
-		return mLeftProperty->IsValuesDifferent() || mRightProperty->IsValuesDifferent() ||
-			mTopProperty->IsValuesDifferent() || mBottomProperty->IsValuesDifferent();
-	}
+    {
+        return mLeftProperty->IsValuesDifferent() || mBottomProperty->IsValuesDifferent()
+            || mRightProperty->IsValuesDifferent() || mTopProperty->IsValuesDifferent();
+    }
+}#include <iostream>
+template <typename T>
+class Ref {
+public:
+    Ref(T* ptr) : mPtr(ptr) {}
+    ~Ref() { delete mPtr; }
+    
+    T* operator->() { return mPtr; }
+    const T* operator->() const { return mPtr; }
+    
+    T& operator*() { return *mPtr; }
+    const T& operator*() const { return *mPtr; }
+    
+    T* get() { return mPtr; }
+    const T* get() const { return mPtr; }
+    
+private:
+    T* mPtr;
+};
 
-	const Type* BorderFProperty::GetValueType() const
-	{
-		return GetValueTypeStatic();
-	}
-
-	const Type* BorderFProperty::GetValueTypeStatic()
-	{
-		return &TypeOf(BorderF);
-	}
-
-	BorderFProperty::LeftValueProxy::LeftValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
-
-	BorderFProperty::LeftValueProxy::LeftValueProxy()
-	{}
-
-	void BorderFProperty::LeftValueProxy::SetValue(const float& value)
-	{
-		BorderF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.left = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
-
-	float BorderFProperty::LeftValueProxy::GetValue() const
-	{
-		BorderF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.left;
-	}
-
-	BorderFProperty::RightValueProxy::RightValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
-
-	BorderFProperty::RightValueProxy::RightValueProxy()
-	{}
-
-	void BorderFProperty::RightValueProxy::SetValue(const float& value)
-	{
-		BorderF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.right = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
-
-	float BorderFProperty::RightValueProxy::GetValue() const
-	{
-		BorderF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.right;
-	}
-
-	BorderFProperty::TopValueProxy::TopValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
-
-	BorderFProperty::TopValueProxy::TopValueProxy()
-	{}
-
-	void BorderFProperty::TopValueProxy::SetValue(const float& value)
-	{
-		BorderF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.top = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
-
-	float BorderFProperty::TopValueProxy::GetValue() const
-	{
-		BorderF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.top;
-	}
-
-	BorderFProperty::BottomValueProxy::BottomValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
-	{}
-
-	BorderFProperty::BottomValueProxy::BottomValueProxy()
-	{}
-
-	void BorderFProperty::BottomValueProxy::SetValue(const float& value)
-	{
-		BorderF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		proxyValue.bottom = value;
-		mProxy->SetValuePtr(&proxyValue);
-	}
-
-	float BorderFProperty::BottomValueProxy::GetValue() const
-	{
-		BorderF proxyValue;
-		mProxy->GetValuePtr(&proxyValue);
-		return proxyValue.bottom;
-	}
-
+ template <typename T>
+Ref<T> make_ref() {
+    return Ref<T>(new T());
 }
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::BorderF>);
-// --- META ---
 
+class WeakRef {};
+
+class IAbstractValueProxy {
+public:
+    virtual void GetValuePtr(void* value) const = 0;
+    virtual void SetValuePtr(const void* value) = 0;
+};
+
+template <typename T>
+class TPropertyField {};
+
+template <typename T>
+class DynamicCast {};
+
+using Type = int; // This is just a placeholder, replace with your actual type definition
+
+class BorderF {
+public:
+    float left;
+    float right;
+    float top;
+    float bottom;
+    
+    bool IsValuesDifferent() {
+        return left != 0.0f || right != 0.0f || top != 0.0f || bottom != 0.0f;
+    }
+};
+
+class BorderFProperty {
+public:
+    BorderFProperty(const Ref<TPropertyField<BorderF>>& leftProperty, const Ref<TPropertyField<BorderF>>& rightProperty,
+                    const Ref<TPropertyField<BorderF>>& topProperty, const Ref<TPropertyField<BorderF>>& bottomProperty)
+        : mLeftProperty(leftProperty), mRightProperty(rightProperty), mTopProperty(topProperty), mBottomProperty(bottomProperty) {}
+    
+    bool IsValuesDifferent() const {
+        return mLeftProperty->IsValuesDifferent() || mRightProperty->IsValuesDifferent() ||
+                mTopProperty->IsValuesDifferent() || mBottomProperty->IsValuesDifferent();
+    }
+    
+    const Type* GetValueType() const {
+        return GetValueTypeStatic();
+    }
+    
+    static const Type* GetValueTypeStatic() {
+        return &TypeOf(BorderF);
+    }
+    
+    class LeftValueProxy {
+    public:
+        LeftValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy) {}
+        LeftValueProxy() {}
+        
+        void SetValue(const float& value) {
+            BorderF proxyValue;
+            mProxy->GetValuePtr(&proxyValue);
+            proxyValue.left = value;
+            mProxy->SetValuePtr(&proxyValue);
+        }
+        
+        float GetValue() const {
+            BorderF proxyValue;
+            mProxy->GetValuePtr(&proxyValue);
+            return proxyValue.left;
+        }
+        
+    private:
+        const Ref<IAbstractValueProxy> mProxy;
+    };
+    
+    class RightValueProxy {
+    public:
+        RightValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy) {}
+        RightValueProxy() {}
+        
+        void SetValue(const float& value) {
+            BorderF proxyValue;
+            mProxy->GetValuePtr(&proxyValue);
+            proxyValue.right = value;
+            mProxy->SetValuePtr(&proxyValue);
+        }
+        
+        float GetValue() const {
+            BorderF proxyValue;
+            mProxy->GetValuePtr(&proxyValue);
+            return proxyValue.right;
+        }
+        
+    private:
+        const Ref<IAbstractValueProxy> mProxy;
+    };
+    
+    class TopValueProxy {
+    public:
+        TopValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy) {}
+        TopValueProxy() {}
+        
+        void SetValue(const float& value) {
+            BorderF proxyValue;
+            mProxy->GetValuePtr(&proxyValue);
+            proxyValue.top = value;
+            mProxy->SetValuePtr(&proxyValue);
+        }
+        
+        float GetValue() const {
+            BorderF proxyValue;
+            mProxy->GetValuePtr(&proxyValue);
+            return proxyValue.top;
+        }
+        
+    private:
+        const Ref<IAbstractValueProxy> mProxy;
+    };
+    
+    class BottomValueProxy {
+    public:
+        BottomValueProxy(const Ref<IAbstractValueProxy>& proxy) : mProxy(proxy) {}
+        BottomValueProxy() {}
+        
+        void SetValue(const float& value) {
+            BorderF proxyValue;
+            mProxy->GetValuePtr(&proxyValue);
+            proxyValue.bottom = value;
+            mProxy->SetValuePtr(&proxyValue);
+        }
+        
+        float GetValue() const {
+            BorderF proxyValue;
+            mProxy->GetValuePtr(&proxyValue);
+            return proxyValue.bottom;
+        }
+        
+    private:
+        const Ref<IAbstractValueProxy> mProxy;
+    };
+    
+private:
+    const Ref<TPropertyField<BorderF>> mLeftProperty;
+    const Ref<TPropertyField<BorderF>> mRightProperty;
+    const Ref<TPropertyField<BorderF>> mTopProperty;
+    const Ref<TPropertyField<BorderF>> mBottomProperty;
+};
+
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<BorderF>);
+// --- META ---
 DECLARE_CLASS(Editor::BorderFProperty, Editor__BorderFProperty);
 // --- END META ---

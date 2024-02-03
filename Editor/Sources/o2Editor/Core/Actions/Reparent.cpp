@@ -11,17 +11,17 @@ namespace Editor
 	ReparentAction::ReparentAction()
 	{}
 
-	ReparentAction::ReparentAction(const Vector<SceneEditableObject*>& beginObjects)
+	ReparentAction::ReparentAction(const Vector<Ref<SceneEditableObject>>& beginObjects)
 	{
 		for (auto object : beginObjects)
 		{
-			ObjectInfo* info = mnew ObjectInfo();
+			ObjectInfo* info = mmake<ObjectInfo>();
 
-			SceneEditableObject* parent = object->GetEditableParent();
+			Ref<SceneEditableObject> parent = object->GetEditableParent();
 
-			Vector<SceneEditableObject*> parentChildren = parent ? 
+			Vector<Ref<SceneEditableObject>> parentChildren = parent ? 
 				parent->GetEditableChildren() : 
-				o2Scene.GetRootActors().Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+				o2Scene.GetRootActors().Convert<Ref<SceneEditableObject>>([](Ref<Actor> x) { return DynamicCast<SceneEditableObject>(x); });
 
 			int actorIdx = parentChildren.IndexOf(object);
 
@@ -43,7 +43,7 @@ namespace Editor
 			delete info;
 	}
 
-	void ReparentAction::ObjectsReparented(SceneEditableObject* newParent, SceneEditableObject* prevActor)
+	void ReparentAction::ObjectsReparented(const Ref<SceneEditableObject>& newParent, const Ref<SceneEditableObject>& prevActor)
 	{
 		newParentId = newParent ? newParent->GetID() : 0;
 		newPrevObjectId = prevActor ? prevActor->GetID() : 0;
@@ -56,8 +56,8 @@ namespace Editor
 
 	void ReparentAction::Redo()
 	{
-		SceneEditableObject* parent = o2Scene.GetEditableObjectByID(newParentId);
-		SceneEditableObject* prevObject = o2Scene.GetEditableObjectByID(newPrevObjectId);
+		Ref<SceneEditableObject> parent = o2Scene.GetEditableObjectByID(newParentId);
+		Ref<SceneEditableObject> prevObject = o2Scene.GetEditableObjectByID(newPrevObjectId);
 
 		if (parent)
 		{
@@ -65,7 +65,7 @@ namespace Editor
 
 			for (auto info : objectsInfos)
 			{
-				SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
+				Ref<SceneEditableObject> object = o2Scene.GetEditableObjectByID(info->objectId);
 
 				object->SetEditableParent(nullptr);
 				parent->AddEditableChild(object, insertIdx++);
@@ -76,12 +76,12 @@ namespace Editor
 		{
 			int insertIdx = 0;
 			
-			if (auto prevActor = dynamic_cast<Actor*>(prevObject))
+			if (auto prevActor = DynamicCast<Actor>(prevObject))
 				insertIdx = o2Scene.GetRootActors().IndexOf(prevActor) + 1;
 
 			for (auto info : objectsInfos)
 			{
-				SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
+				Ref<SceneEditableObject> object = o2Scene.GetEditableObjectByID(info->objectId);
 
 				object->SetEditableParent(nullptr);
 				object->SetIndexInSiblings(insertIdx++);
@@ -96,9 +96,9 @@ namespace Editor
 	{
 		for (auto info : objectsInfos)
 		{
-			SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
-			SceneEditableObject* parent = o2Scene.GetEditableObjectByID(info->lastParentId);
-			SceneEditableObject* prevObject = o2Scene.GetEditableObjectByID(info->lastPrevObjectId);
+			Ref<SceneEditableObject> object = o2Scene.GetEditableObjectByID(info->objectId);
+			Ref<SceneEditableObject> parent = o2Scene.GetEditableObjectByID(info->lastParentId);
+			Ref<SceneEditableObject> prevObject = o2Scene.GetEditableObjectByID(info->lastPrevObjectId);
 
 			object->SetEditableParent(nullptr);
 
@@ -119,6 +119,7 @@ namespace Editor
 		o2EditorTree.UpdateTreeView();
 	}
 }
+
 // --- META ---
 
 DECLARE_CLASS(Editor::ReparentAction, Editor__ReparentAction);

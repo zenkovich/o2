@@ -3,6 +3,7 @@
 #include "o2/Utils/Math/Basis.h"
 #include "o2Editor/Core/Tools/SelectionTool.h"
 #include "o2Editor/SceneWindow/SceneDragHandle.h"
+#include "o2/Utils/Ref.h"
 
 namespace o2
 {
@@ -31,16 +32,16 @@ namespace Editor
 		IOBJECT(MoveTool);
 
 	protected:
-		SceneDragHandle  mHorDragHandle;  // Horizontal arrow handle
-		SceneDragHandle  mVerDragHandle;  // Vertical arrow handle
-		SceneDragHandle  mBothDragHandle; // Both arrow handle
-						 
-		Vec2F mLastSceneHandlesPos; // Last scene handles position 
-		Vec2F mSnapPosition;        // Snapping handles position
+		SceneDragHandle mHorDragHandle; // Horizontal arrow handle
+		SceneDragHandle mVerDragHandle; // Vertical arrow handle
+		SceneDragHandle mBothDragHandle; // Both arrow handle
+
+		Vec2F mLastSceneHandlesPos; // Last scene handles position
+		Vec2F mSnapPosition; // Snapping handles position
 		float mHandlesAngle = 0.0f; // Handles angle, in radians
-						 
-		Vector<Basis>    mBeforeTransforms;          // Before transformation transforms
-		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
+
+		Vector<Ref<Basis>> mBeforeTransforms; // Before transformation transforms
+		Ref<TransformAction> mTransformAction; // Current transform action. Creates when transform started
 
 	protected:
 		// Returns toggle in menu panel icon name
@@ -59,10 +60,10 @@ namespace Editor
 		void OnDisabled() override;
 
 		// Called when scene objects was changed
-		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
+		void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) override;
 
 		// Called when objects selection was changed
-		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+		void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
 		// Called when horizontal drag handle was moved
 		void OnHorDragHandleMoved(const Vec2F& position);
@@ -118,7 +119,7 @@ CLASS_FIELDS_META(Editor::MoveTool)
     FIELD().PROTECTED().NAME(mSnapPosition);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mHandlesAngle);
     FIELD().PROTECTED().NAME(mBeforeTransforms);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<TransformAction>()).NAME(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::MoveTool)
@@ -130,8 +131,8 @@ CLASS_METHODS_META(Editor::MoveTool)
     FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, const Vector<Ref<SceneEditableObject>>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnHorDragHandleMoved, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnVerDragHandleMoved, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnBothDragHandleMoved, const Vec2F&);
@@ -146,4 +147,3 @@ CLASS_METHODS_META(Editor::MoveTool)
     FUNCTION().PROTECTED().SIGNATURE(void, MoveSelectedObjectsWithAction, const Vec2F&);
 }
 END_META;
-// --- END META ---

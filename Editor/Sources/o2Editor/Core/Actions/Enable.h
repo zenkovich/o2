@@ -2,43 +2,44 @@
 
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2Editor/Core/Actions/IAction.h"
+#include "o2/Utils/SmartPointers/Ref.h"
 
 using namespace o2;
 
 namespace o2
 {
-	class SceneEditableObject;
+    class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// -------------------------------
-	// Enable or disable scene objects
-	// -------------------------------
-	class EnableAction: public IAction
-	{
-	public:
-		Vector<SceneUID> objectsIds;
-		bool             enable; 
+    // -------------------------------
+    // Enable or disable scene objects
+    // -------------------------------
+    class EnableAction: public IAction
+    {
+    public:
+        Vector<SceneUID> objectsIds;
+        bool             enable; 
 
-	public:
-		// Default constructor
-		EnableAction();
+    public:
+        // Default constructor
+        EnableAction();
 
-		// COnstructor with enabled or disabled objects
-		EnableAction(const Vector<SceneEditableObject*>& objects, bool enable);
+        // Constructor with enabled or disabled objects
+        EnableAction(const Vector<Ref<SceneEditableObject>>& objects, bool enable);
 
-		// Returns name of action
-		String GetName() const override;
+        // Returns name of action
+        String GetName() const override;
 
-		// Enable or disable again
-		void Redo() override;
+        // Enable or disable again
+        void Redo() override;
 
-		// Reverts objects to previous state
-		void Undo() override;
+        // Reverts objects to previous state
+        void Undo() override;
 
-		SERIALIZABLE(EnableAction);
-	};
+        SERIALIZABLE(EnableAction);
+    };
 }
 // --- META ---
 
@@ -55,9 +56,8 @@ CLASS_FIELDS_META(Editor::EnableAction)
 END_META;
 CLASS_METHODS_META(Editor::EnableAction)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, bool);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneEditableObject>>&, bool);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

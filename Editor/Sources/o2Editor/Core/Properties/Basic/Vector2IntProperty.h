@@ -3,135 +3,121 @@
 #include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2/Events/CursorEventsArea.h"
 #include "o2/Events/KeyboardEventsListener.h"
+#include <Ref.h>
 
 using namespace o2;
 
 namespace Editor
 {
-	class IntegerProperty;
+    class IntegerProperty;
 
-	// ----------------------------
-	// Editor int vector property
-	// ----------------------------
-	class Vec2IProperty : public IPropertyField
-	{
-	public:
-		// Default constructor
-		Vec2IProperty();
+    // ----------------------------
+    // Editor int vector property
+    // ----------------------------
+    class Vec2IProperty : public IPropertyField
+    {
+    public:
+        // Default constructor
+        Vec2IProperty();
 
-		// Copy constructor
-		Vec2IProperty(const Vec2IProperty& other);
+        // Copy constructor
+        Vec2IProperty(const Vec2IProperty& other);
 
-		// Copy operator
-		Vec2IProperty& operator=(const Vec2IProperty& other);
+        // Copy operator
+        Vec2IProperty& operator=(const Vec2IProperty& other);
 
-		// Sets fields
-		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
+        // Sets fields
+        void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
-		// Updates and checks value
-		void Refresh() override;
+        // Updates and checks value
+        void Refresh() override;
 
-		// Reverts value to prototype value
-		void Revert() override;
+        // Reverts value to prototype value
+        void Revert() override;
 
-		// Sets value
-		void SetValue(const Vec2I& value);
+        // Sets value
+        void SetValue(const Ref<Vec2I>& value);
 
-		// Sets value X
-		void SetValueX(int value);
+        // Sets value X
+        void SetValueX(int value);
 
-		// Sets value Y
-		void SetValueY(int value);
+        // Sets value Y
+        void SetValueY(int value);
 
-		// Sets value as unknown
-		void SetUnknownValue(const Vec2I& defaultValue = Vec2I());
+        // Sets value as unknown
+        void SetUnknownValue(const Ref<Vec2I>& defaultValue = Ref<Vec2I>());
 
-		// Sets value X as unknown
-		void SetXUnknownValue(int defaultValue = 0.0f);
+        // Sets value X as unknown
+        void SetXUnknownValue(int defaultValue = 0);
 
-		// Sets value Y as unknown
-		void SetYUnknownValue(int defaultValue = 0.0f);
+        // Sets value Y as unknown
+        void SetYUnknownValue(int defaultValue = 0);
 
-		// Returns value
-		Vec2I GetCommonValue() const;
+        // Returns value
+        Ref<Vec2I> GetCommonValue() const;
 
-		// Returns is values different
-		bool IsValuesDifferent() const;
+        // Returns is values different
+        bool IsValuesDifferent() const;
 
-		// Returns editing by this field type
-		const Type* GetValueType() const override;
+        // Returns editing by this field type
+        const Type* GetValueType() const override;
 
-		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+        // Returns editing by this field type by static function, can't be changed during runtime
+        static const Type* GetValueTypeStatic();
 
-		IOBJECT(Vec2IProperty);
+        IOBJECT(Vec2IProperty);
 
-	protected:
-		IntegerProperty* mXProperty = nullptr; // X value property
-		IntegerProperty* mYProperty = nullptr; // Y value property
+    protected:
+        Ref<IntegerProperty> mXProperty;
+        Ref<IntegerProperty> mYProperty;
 
-	protected:
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+    protected:
+        // Searches controls widgets and layers and initializes them
+        void InitializeControls();
 
-	protected:
-		class XValueProxy : public IValueProxy<int>
-		{
-			IAbstractValueProxy* mProxy = nullptr;
+    protected:
+        class XValueProxy : public IValueProxy<int>
+        {
+            IAbstractValueProxy* mProxy = nullptr;
 
-		public:
-			XValueProxy();
-			XValueProxy(IAbstractValueProxy* proxy);
+        public:
+            XValueProxy();
+            XValueProxy(IAbstractValueProxy* proxy);
 
-			void SetValue(const int& value) override;
-			int GetValue() const override;
-		};
+            void SetValue(const int& value) override;
+            int GetValue() const override;
+        };
 
-		class YValueProxy : public IValueProxy<int>
-		{
-			IAbstractValueProxy* mProxy = nullptr;
+        class YValueProxy : public IValueProxy<int>
+        {
+            IAbstractValueProxy* mProxy = nullptr;
 
-		public:
-			YValueProxy();
-			YValueProxy(IAbstractValueProxy* proxy);
+        public:
+            YValueProxy();
+            YValueProxy(IAbstractValueProxy* proxy);
 
-			void SetValue(const int& value) override;
-			int GetValue() const override;
-		};
-	};
+            void SetValue(const int& value) override;
+            int GetValue() const override;
+        };
+    };
 }
-// --- META ---
 
-CLASS_BASES_META(Editor::Vec2IProperty)
-{
-    BASE_CLASS(Editor::IPropertyField);
-}
-END_META;
-CLASS_FIELDS_META(Editor::Vec2IProperty)
-{
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mXProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mYProperty);
-}
-END_META;
-CLASS_METHODS_META(Editor::Vec2IProperty)
-{
-
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2IProperty&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(void, Revert);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const Vec2I&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueX, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueY, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const Vec2I&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetXUnknownValue, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetYUnknownValue, int);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetCommonValue);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
-    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-}
-END_META;
-// --- END META ---
+REFLEX_CLASS_BEGIN(Editor::Vec2IProperty)
+REFLEX_FIELD(mXProperty)
+REFLEX_FIELD(mYProperty)
+REFLEX_METHOD(SetValueAndPrototypeProxy)
+REFLEX_METHOD(Refresh)
+REFLEX_METHOD(Revert)
+REFLEX_METHOD(SetValue)
+REFLEX_METHOD(SetValueX)
+REFLEX_METHOD(SetValueY)
+REFLEX_METHOD(SetUnknownValue)
+REFLEX_METHOD(SetXUnknownValue)
+REFLEX_METHOD(SetYUnknownValue)
+REFLEX_METHOD(GetCommonValue)
+REFLEX_METHOD(IsValuesDifferent)
+REFLEX_METHOD(GetValueType)
+REFLEX_METHOD(GetValueTypeStatic)
+REFLEX_CONSTRUCTOR()
+REFLEX_CONSTRUCTOR(const Editor::Vec2IProperty&)
+REFLEX_CLASS_END(Vec2IProperty)

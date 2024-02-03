@@ -1,6 +1,8 @@
 #pragma once
 
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2Editor/Core/SmartPointers/Ref.h"
+#include "o2Editor/Core/SmartPointers/WeakRef.h"
 
 using namespace o2;
 
@@ -60,24 +62,24 @@ namespace Editor
 		void SetBottomUnknownValue(int defaultValue = 0);
 
 		// Returns value
-		RectI GetCommonValue() const;
+        Ref<RectI> GetCommonValue() const;
 
 		// Returns is values different
 		bool IsValuesDifferent() const;
 
 		// Returns editing by this field type
-		const Type* GetValueType() const override;
+        const Ref<Type> GetValueType() const override;
 
 		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+        static const Ref<Type> GetValueTypeStatic();
 
 		IOBJECT(RectIProperty);
 
 	protected:
-		IntegerProperty* mLeftProperty = nullptr;   // Left value property
-		IntegerProperty* mRightProperty = nullptr;  // Right value property
-		IntegerProperty* mTopProperty = nullptr;    // Top value property
-		IntegerProperty* mBottomProperty = nullptr; // Bottom value property
+		Ref<IntegerProperty> mLeftProperty = nullptr;   // Left value property
+		Ref<IntegerProperty> mRightProperty = nullptr;  // Right value property
+		Ref<IntegerProperty> mTopProperty = nullptr;    // Top value property
+		Ref<IntegerProperty> mBottomProperty = nullptr; // Bottom value property
 
 	protected:
 		// Searches controls widgets and layers and initializes them
@@ -87,11 +89,11 @@ namespace Editor
 
 		class LeftValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy = nullptr;
 
 		public:
 			LeftValueProxy();
-			LeftValueProxy(IAbstractValueProxy* proxy);
+			LeftValueProxy(WeakRef<IAbstractValueProxy> proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -99,11 +101,11 @@ namespace Editor
 
 		class RightValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy = nullptr;
 
 		public:
 			RightValueProxy();
-			RightValueProxy(IAbstractValueProxy* proxy);
+			RightValueProxy(WeakRef<IAbstractValueProxy> proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -111,11 +113,11 @@ namespace Editor
 
 		class TopValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy = nullptr;
 
 		public:
 			TopValueProxy();
-			TopValueProxy(IAbstractValueProxy* proxy);
+			TopValueProxy(WeakRef<IAbstractValueProxy> proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -123,17 +125,18 @@ namespace Editor
 
 		class BottomValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy = nullptr;
 
 		public:
 			BottomValueProxy();
-			BottomValueProxy(IAbstractValueProxy* proxy);
+			BottomValueProxy(WeakRef<IAbstractValueProxy> proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
 		};
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::RectIProperty)
@@ -143,10 +146,10 @@ CLASS_BASES_META(Editor::RectIProperty)
 END_META;
 CLASS_FIELDS_META(Editor::RectIProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTopProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBottomProperty);
+    FIELD().PROTECTED().NAME(mLeftProperty);
+    FIELD().PROTECTED().NAME(mRightProperty);
+    FIELD().PROTECTED().NAME(mTopProperty);
+    FIELD().PROTECTED().NAME(mBottomProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::RectIProperty)
@@ -156,20 +159,20 @@ CLASS_METHODS_META(Editor::RectIProperty)
     FUNCTION().PUBLIC().CONSTRUCTOR(const RectIProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const RectI&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const Ref<RectI>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueLeft, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueRight, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueTop, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueBottom, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const RectI&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const Ref<RectI>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLeftUnknownValue, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetRightUnknownValue, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTopUnknownValue, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBottomUnknownValue, int);
-    FUNCTION().PUBLIC().SIGNATURE(RectI, GetCommonValue);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<RectI>, GetCommonValue);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
-    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Type>, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Ref<Type>, GetValueTypeStatic);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;

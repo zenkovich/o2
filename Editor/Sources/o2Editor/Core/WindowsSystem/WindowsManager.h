@@ -3,6 +3,8 @@
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2Editor/Core/WindowsSystem/WindowsLayout.h"
+#include "o2/Utils/SmartPointers/Ref.h"
+#include "o2/Utils/SmartPointers/WeakRef.h"
 
 using namespace o2;
 
@@ -26,7 +28,7 @@ namespace Editor
 	// ----------------------
 	// Editor windows manager
 	// ----------------------
-	class WindowsManager: public Singleton<WindowsManager>
+	class WindowsManager : public Singleton<WindowsManager>
 	{
 	public:
 		// Adds new window
@@ -52,8 +54,8 @@ namespace Editor
 		void SaveCurrentWindowsLayout(const String& name);
 
 	protected:
-		Vector<IEditorWindow*>     mEditorWindows;           // Editors windows list
-		DockWindowPlace*           mMainDockPlace = nullptr; // Main windows dock place
+		Vector<Ref<IEditorWindow>>     mEditorWindows;           // Editors windows list
+		Ref<DockWindowPlace>           mMainDockPlace; // Main windows dock place
 		Map<String, WindowsLayout> mAvailableLayouts;        // Available layouts
 
 	protected:
@@ -89,10 +91,10 @@ namespace Editor
 	template<typename _type>
 	_type* WindowsManager::GetWindow() const
 	{
-		for (auto wnd : mEditorWindows)
+		for (const auto& wnd : mEditorWindows)
 		{
 			if (wnd->GetType() == TypeOf(_type))
-				return (_type*)wnd;
+				return DynamicCast<_type>(wnd.Get());
 		}
 
 		return nullptr;

@@ -24,7 +24,7 @@ namespace Editor
 		return *this;
 	}
 
-	void ImageSlicesEditorWidget::Setup(const ImageAssetRef& image, BorderIProperty* borderProperty)
+	void ImageSlicesEditorWidget::Setup(const Ref<ImageAsset>& image, const Ref<BorderIProperty>& borderProperty)
 	{
 		mBorderProperty = borderProperty;
 
@@ -43,16 +43,16 @@ namespace Editor
 	{
 		layout->minHeight = 200;
 
-		auto separatorImg = o2UI.CreateImage("ui/UI4_Separator.png");
+		auto separatorImg = Ref<Sprite>::MakeImage("ui/UI4_Separator.png");
 		*separatorImg->layout = WidgetLayout::HorStretch(VerAlign::Bottom, -6, -15, 5, -4);
 		AddChild(separatorImg);
 
-		mPreviewImageBack = mnew Image();
+		mPreviewImageBack = Ref<Sprite>::MakeImage();
 		mPreviewImageBack->SetImage(CreateGridSprite());
 		*mPreviewImageBack->layout = WidgetLayout::BothStretch();
 		AddChild(mPreviewImageBack);
 
-		mPreviewImage = mnew PreviewImage();
+		mPreviewImage = Ref<PreviewImage>::Make();
 		*mPreviewImage->layout = WidgetLayout::BothStretch();
 		AddChild(mPreviewImage);
 
@@ -62,7 +62,7 @@ namespace Editor
 	void ImageSlicesEditorWidget::InitializeSliceHandles()
 	{
 		// Left handle
-		mBorderLeftHandle = mnew WidgetDragHandle(mnew Sprite("ui/ver_slice_line.png"));
+		mBorderLeftHandle = Ref<WidgetDragHandle>::Make(mnew Sprite("ui/ver_slice_line.png"));
 
 		mBorderLeftHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
 			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
@@ -84,7 +84,7 @@ namespace Editor
 		mBorderLeftHandle->cursorType = CursorType::SizeWE;
 
 		// Right handle
-		mBorderRightHandle = mnew WidgetDragHandle(*mBorderLeftHandle);
+		mBorderRightHandle = Ref<WidgetDragHandle>::Make(*mBorderLeftHandle);
 
 		mBorderRightHandle->onChangedPos = [&](const Vec2F& point) {
 			mBordersSmoothValue.right = (float)mPreviewImage->GetImage()->GetOriginalSize().x - point.x;
@@ -95,7 +95,7 @@ namespace Editor
 		mPreviewImage->AddChild(mBorderRightHandle);
 
 		// Top handle
-		mBorderTopHandle = mnew WidgetDragHandle(mnew Sprite("ui/hor_slice_line.png"));
+		mBorderTopHandle = Ref<WidgetDragHandle>::Make(mnew Sprite("ui/hor_slice_line.png"));
 
 		mBorderTopHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
 			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
@@ -117,7 +117,7 @@ namespace Editor
 		mBorderTopHandle->cursorType = CursorType::SizeNS;
 
 		// Bottom handle
-		mBorderBottomHandle = mnew WidgetDragHandle(*mBorderTopHandle);
+		mBorderBottomHandle = Ref<WidgetDragHandle>::Make(*mBorderTopHandle);
 
 		mBorderBottomHandle->onChangedPos = [&](const Vec2F& point) {
 			mBordersSmoothValue.bottom = point.y;
@@ -136,11 +136,11 @@ namespace Editor
 		Vec2F maxSize = layout->size;
 		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 
-		float heightFitScale = maxSize.y/imageSize.y;
-		float widthFitDifference = maxSize.x - imageSize.x*heightFitScale;
+		float heightFitScale = maxSize.y / imageSize.y;
+		float widthFitDifference = maxSize.x - imageSize.x * heightFitScale;
 
-		float widthFitScale = maxSize.x/imageSize.x;
-		float heightFitDifference = maxSize.y - imageSize.y*widthFitScale;
+		float widthFitScale = maxSize.x / imageSize.x;
+		float heightFitDifference = maxSize.y - imageSize.y * widthFitScale;
 
 		bool fitByHeight = true;
 		if (widthFitDifference > 0.0f && heightFitDifference > 0.0f)
@@ -150,82 +150,141 @@ namespace Editor
 		else
 			fitByHeight = false;
 
-		float imageSizeAspect = imageSize.x/imageSize.y;
-		float contentAspect = maxSize.x/maxSize.y;
+		float imageSizeAspect = imageSize.x / imageSize.y;
+		float contentAspect = maxSize.x / maxSize.y;
 
 		if (fitByHeight)
 		{
-			float d = imageSizeAspect*0.5f/contentAspect;
-			*mPreviewImage->layout = WidgetLayout(Vec2F(0.5f - d, 0.0f), Vec2F(0.5f + d, 1.0f), Vec2F(), Vec2F());
+			float d = imageSizeAspect * 0.5f / contentAspect;
+			*mPreviewImage->layout = WidgetLayout(Vec2F(0.5f - d, 0.0f), Vec2F(0.5f + d, 1.0f));
 		}
 		else
 		{
-			float d = 1.0f/imageSizeAspect*0.5f*contentAspect;
-			*mPreviewImage->layout = WidgetLayout(Vec2F(0.0f, 0.5f - d), Vec2F(1.0f, 0.5f + d), Vec2F(), Vec2F());
-		}
-
-		*mPreviewImageBack->layout = *mPreviewImage->layout;
-
-		UpdateBordersAnchors();
-		mBordersSmoothValue = mBorderProperty->GetCommonValue();
-	}
-
-	void ImageSlicesEditorWidget::UpdateBordersAnchors()
-	{
-		BorderI borders = mBorderProperty->GetCommonValue();
-		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
-
-		mPreviewImage->UpdateTransform();
-		mBorderLeftHandle->GetRegularDrawable()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
-		mBorderRightHandle->GetRegularDrawable()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
-		mBorderTopHandle->GetRegularDrawable()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
-		mBorderBottomHandle->GetRegularDrawable()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
-
-		mBorderLeftHandle->SetPosition(Vec2F((float)borders.left, 0));
-		mBorderRightHandle->SetPosition(Vec2F(imageSize.x - (float)borders.right, 0));
-		mBorderTopHandle->SetPosition(Vec2F(0, imageSize.y - (float)borders.top));
-		mBorderBottomHandle->SetPosition(Vec2F(0, (float)borders.bottom));
-	}
-
-	void ImageSlicesEditorWidget::UpdateBordersValue()
-	{
-		mBorderProperty->SetValue(mBordersSmoothValue);
-		UpdateBordersAnchors();
-	}
-
-	Sprite* ImageSlicesEditorWidget::CreateGridSprite()
-	{
-		Color4 color1(1.0f, 1.0f, 1.0f, 1.0f), color2(0.7f, 0.7f, 0.7f, 1.0f);
-		Bitmap backLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
-		backLayerBitmap.Fill(color1);
-		backLayerBitmap.FillRect(0, 10, 10, 0, color2);
-		backLayerBitmap.FillRect(10, 20, 20, 10, color2);
-
-		Sprite* res = mnew Sprite(backLayerBitmap);
-		res->SetMode(SpriteMode::Tiled);
-		return res;
-	}
-
-	void ImageSlicesEditorWidget::PreviewImage::Draw()
-	{
-		mIsClipped = false;
-		if (auto texture = mImage->GetTexture())
-		{
-			auto prevFilter = texture->GetFilter();
-			texture->SetFilter(Texture::Filter::Nearest);
-
-			Image::Draw();
-
-			texture->SetFilter(prevFilter);
+			float d = contentAspect / (imageSizeAspect * 0.5f);
+			*mPreviewImage->layout = WidgetLayout(Vec2F(0.0f, 0.5f - d), Vec2F(1.0f, 0.5f + d));
 		}
 	}
-
-	String ImageSlicesEditorWidget::PreviewImage::GetCreateMenuCategory()
-	{
-		return "UI/Editor";
-	}
-
 }
+#include <memory>
+
+template <typename T>
+using Ref = std::shared_ptr<T>;
+
+template <typename T>
+using WeakRef = std::weak_ptr<T>;
+
+template <typename T, typename... Args>
+constexpr Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+class ImageSlicesEditorWidget
+{
+public:
+    class PreviewImage;
+
+    ImageSlicesEditorWidget()
+    {
+        mPreviewImage = mmake<PreviewImage>();
+        mPreviewImageBack = mmake<PreviewImage>();
+
+        mBorderLeftHandle = mmake<Widget>();
+        mBorderRightHandle = mmake<Widget>();
+        mBorderTopHandle = mmake<Widget>();
+        mBorderBottomHandle = mmake<Widget>();
+
+        mBorderProperty = mmake<Property<BorderI>>();
+    }
+
+    void UpdateLayout(float imageSizeAspect, float contentAspect)
+    {
+        if (imageSizeAspect > contentAspect)
+        {
+            float d = 1.0f / imageSizeAspect * 0.5f * contentAspect;
+            mPreviewImage->layout = mmake<WidgetLayout>(Vec2F(0.0f, 0.5f - d), Vec2F(1.0f, 0.5f + d), Vec2F(), Vec2F());
+        }
+        else
+        {
+            float d = 1.0f / imageSizeAspect * 0.5f * contentAspect;
+            mPreviewImage->layout = mmake<WidgetLayout>(Vec2F(0.5f - d, 0.0f), Vec2F(0.5f + d, 1.0f), Vec2F(), Vec2F());
+        }
+
+        *mPreviewImageBack->layout = *mPreviewImage->layout;
+
+        UpdateBordersAnchors();
+        mBordersSmoothValue = mBorderProperty->GetCommonValue();
+    }
+
+    void UpdateBordersAnchors()
+    {
+        Ref<BorderI> borders = mBorderProperty->GetCommonValue();
+        Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
+
+        mPreviewImage->UpdateTransform();
+        mBorderLeftHandle->GetRegularDrawable()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
+        mBorderRightHandle->GetRegularDrawable()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
+        mBorderTopHandle->GetRegularDrawable()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
+        mBorderBottomHandle->GetRegularDrawable()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
+
+        mBorderLeftHandle->SetPosition(Vec2F(static_cast<float>(borders->left), 0));
+        mBorderRightHandle->SetPosition(Vec2F(imageSize.x - static_cast<float>(borders->right), 0));
+        mBorderTopHandle->SetPosition(Vec2F(0, imageSize.y - static_cast<float>(borders->top)));
+        mBorderBottomHandle->SetPosition(Vec2F(0, static_cast<float>(borders->bottom)));
+    }
+
+    void UpdateBordersValue()
+    {
+        mBorderProperty->SetValue(mBordersSmoothValue);
+        UpdateBordersAnchors();
+    }
+
+    Ref<Sprite> CreateGridSprite()
+    {
+        Color4 color1(1.0f, 1.0f, 1.0f, 1.0f), color2(0.7f, 0.7f, 0.7f, 1.0f);
+        Bitmap backLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
+        backLayerBitmap.Fill(color1);
+        backLayerBitmap.FillRect(0, 10, 10, 0, color2);
+        backLayerBitmap.FillRect(10, 20, 20, 10, color2);
+
+        Ref<Sprite> res = mmake<Sprite>(backLayerBitmap);
+        res->SetMode(SpriteMode::Tiled);
+        return res;
+    }
+
+private:
+    class PreviewImage
+    {
+    public:
+        void Draw()
+        {
+            mIsClipped = false;
+            if (auto texture = mImage->GetTexture())
+            {
+                auto prevFilter = texture->GetFilter();
+                texture->SetFilter(Texture::Filter::Nearest);
+
+                Image::Draw();
+
+                texture->SetFilter(prevFilter);
+            }
+        }
+
+        String GetCreateMenuCategory()
+        {
+            return "UI/Editor";
+        }
+    };
+
+    Ref<PreviewImage> mPreviewImage;
+    Ref<PreviewImage> mPreviewImageBack;
+    Ref<Widget> mBorderLeftHandle;
+    Ref<Widget> mBorderRightHandle;
+    Ref<Widget> mBorderTopHandle;
+    Ref<Widget> mBorderBottomHandle;
+    Ref<Property<BorderI>> mBorderProperty;
+};
+
 // --- META ---
 
 DECLARE_CLASS(Editor::ImageSlicesEditorWidget, Editor__ImageSlicesEditorWidget);

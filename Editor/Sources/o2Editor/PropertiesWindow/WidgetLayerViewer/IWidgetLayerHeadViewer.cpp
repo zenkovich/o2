@@ -1,26 +1,35 @@
 #include "o2Editor/stdafx.h"
 #include "IWidgetLayerHeadViewer.h"
+
 namespace Editor
 {
-	void IWidgetLayerHeaderViewer::SetEnabled(bool enabled)
-	{
-		if (mEnabled == enabled)
-			return;
+    class IWidgetLayerHeaderViewer : public RefCounted<IWidgetLayerHeaderViewer>
+    {
+    public:
+        void SetEnabled(bool enabled)
+        {
+            if (mEnabled == enabled)
+                return;
 
-		mEnabled = enabled;
+            mEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
-		else
-			OnDisabled();
-	}
+            if (mEnabled)
+                OnEnabled();
+            else
+                OnDisabled();
+        }
 
-	bool IWidgetLayerHeaderViewer::IsEnabled() const
-	{
-		return mEnabled;
-	}
+        bool IsEnabled() const
+        {
+            return mEnabled;
+        }
+
+    private:
+        Ref<bool> mEnabled;
+    };
+
+    // --- META ---
+
+    DECLARE_CLASS(Editor::IWidgetLayerHeaderViewer, Editor__IWidgetLayerHeaderViewer);
+    // --- END META ---
 }
-// --- META ---
-
-DECLARE_CLASS(Editor::IWidgetLayerHeaderViewer, Editor__IWidgetLayerHeaderViewer);
-// --- END META ---

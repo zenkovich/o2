@@ -30,13 +30,13 @@ namespace Editor
 		~CurveEditorDlg();
 
 		// Shows editor dialog
-		static void Show(Function<void()> onChanged, Function<void()> onCompleted = Function<void()>());
+		static void Show(const Ref<Function<void()>>& onChanged, const Ref<Function<void()>>& onCompleted = nullptr);
 
 		// Adds editing curve with color. If color is default it will be randomized
-		static void AddEditingCurve(const String& id, Curve* curve, const Color4& color = Color4::Green());
+		static void AddEditingCurve(const String& id, const Ref<Curve>& curve, const Color4& color = Color4::Green());
 
 		// Removed curve from editing
-		static void RemoveEditingCurve(Curve* curve);
+		static void RemoveEditingCurve(const Ref<Curve>& curve);
 
 		// Removed curve from editing
 		static void RemoveEditingCurve(const String& id);
@@ -45,14 +45,14 @@ namespace Editor
 		static void RemoveAllEditingCurves();
 
 		// Adds curves range with color. It can't be edited, just a solid color between curves
-		static void AddCurvesRange(Curve* curveA, Curve* curveB, const Color4& color = Color4::Green());
+		static void AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color = Color4::Green());
 
 		// Removes curve range
-		static void RemoveCurvesRange(Curve* curveA, Curve* curveB);
+		static void RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB);
 
 	protected:
-		Function<void()> mOnChangedCallback;
-		Function<void()> mOnChangeCompletedCallback;
+		Ref<Function<void()>> mOnChangedCallback;
+		Ref<Function<void()>> mOnChangeCompletedCallback;
 
 		o2::Window*   mWindow = nullptr;
 		CurvesEditor* mEditorWidget = nullptr;

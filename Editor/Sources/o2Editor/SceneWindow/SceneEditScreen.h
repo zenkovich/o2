@@ -1,5 +1,3 @@
-#pragma once
-
 #include "o2/Events/DrawableCursorEventsListener.h"
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Render/Camera.h"
@@ -8,6 +6,9 @@
 #include "o2/Utils/Editor/DragAndDrop.h"
 #include "o2/Utils/Singleton.h"
 #include "o2Editor/Core/UI/ScrollView.h"
+#include "o2/Core/Ref.h"
+#include "o2/Core/WeakRef.h"
+#include "o2/Core/MMake.h"
 
 using namespace o2;
 
@@ -36,7 +37,7 @@ namespace Editor
 		public Singleton<SceneEditScreen>, public ScrollView
 	{
 	public:
-		Function<void(const Vector<SceneEditableObject*>&)> onSelectionChanged; // Actors selection change event
+		Function<void(const Vector<Ref<SceneEditableObject>>&)> onSelectionChanged; // Actors selection change event
 
 		// Default constructor
 		SceneEditScreen();
@@ -72,13 +73,13 @@ namespace Editor
 		Vec2F SceneToScreenVector(const Vec2F& point);
 
 		// Draws object selection
-		void DrawObjectSelection(SceneEditableObject* object, const Color4& color);
+		void DrawObjectSelection(const Ref<SceneEditableObject>& object, const Color4& color);
 
 		// Selects objects
-		void SelectObjects(Vector<SceneEditableObject*> objects, bool additive = true);
+		void SelectObjects(const Vector<Ref<SceneEditableObject>>& objects, bool additive = true);
 
 		// Selects object
-		void SelectObject(SceneEditableObject* object, bool additive = true);
+		void SelectObject(const Ref<SceneEditableObject>& object, bool additive = true);
 
 		// Selects all objects
 		void SelectAllObjects();
@@ -87,22 +88,22 @@ namespace Editor
 		void ClearSelection();
 
 		// Returns left top widgets container, can be used for tools additional controls
-		HorizontalLayout* GetLeftTopWidgetsContainer();
+		Ref<HorizontalLayout> GetLeftTopWidgetsContainer();
 
 		// Returns right top widgets container, can be used for tools additional controls
-		HorizontalLayout* GetRightTopWidgetsContainer();
+		Ref<HorizontalLayout> GetRightTopWidgetsContainer();
 
 		// Returns left bottom widgets container, can be used for tools additional controls
-		HorizontalLayout* GetLeftBottomWidgetsContainer();
+		Ref<HorizontalLayout> GetLeftBottomWidgetsContainer();
 
 		// Returns right bottom widgets container, can be used for tools additional controls
-		HorizontalLayout* GetRightBottomWidgetsContainer();
+		Ref<HorizontalLayout> GetRightBottomWidgetsContainer();
 
 		// Adds editable layer
-		void AddEditorLayer(SceneEditorLayer* layer);
+		void AddEditorLayer(const Ref<SceneEditorLayer>& layer);
 
 		// Removes editable layer
-		void RemoveEditorLayer(SceneEditorLayer* layer);
+		void RemoveEditorLayer(const Ref<SceneEditorLayer>& layer);
 
 		// Sets layers with name enabled
 		void SetLayerEnabled(const String& name, bool enabled);
@@ -115,29 +116,29 @@ namespace Editor
 		void SelectTool();
 
 		// Selects tool
-		void SelectTool(const IEditTool* tool);
+		void SelectTool(const Ref<IEditTool>& tool);
 
 		// Returns selected tool
-		IEditTool* GetSelectedTool() const;
+		Ref<IEditTool> GetSelectedTool() const;
 
 		// Adds tool
-		void AddTool(IEditTool* tool);
+		void AddTool(const Ref<IEditTool>& tool);
 
 		// Removes tool
-		void RemoveTool(IEditTool* tool);
+		void RemoveTool(const Ref<IEditTool>& tool);
 
 		// Returns tool by type, or null if it doesn't exists
 		template<typename _type>
-		_type* GetTool();
+		Ref<_type> GetTool();
 
 		// Returns all registered tools
-		const Vector<IEditTool*>& GetTools() const;
+		const Vector<Ref<IEditTool>>& GetTools() const;
 
 		// Returns selected objects array
-		const Vector<SceneEditableObject*>& GetSelectedObjects() const;
+		const Vector<Ref<SceneEditableObject>>& GetSelectedObjects() const;
 
 		// Returns top selected objects in hierarchy
-		const Vector<SceneEditableObject*>& GetTopSelectedObjects() const;
+		const Vector<Ref<SceneEditableObject>>& GetTopSelectedObjects() const;
 
 		// Returns color for single selected object
 		const Color4& GetSingleObjectSelectionColor() const;
@@ -158,130 +159,242 @@ namespace Editor
 		Color4 mMultiSelectedObjectColor = Color4(220, 220, 220, 100); // Selected object color
 		float  mObjectMinimalSelectionSize = 10.0f;                    // Minimal object size on pixels
 
-		Vector<SceneEditableObject*> mSelectedObjects;          // Current selected objects
-		Vector<SceneEditableObject*> mTopSelectedObjects;       // Current selected objects most top in hierarchy
+		Vector<Ref<SceneEditableObject>> mSelectedObjects;          // Current selected objects
+		Vector<Ref<SceneEditableObject>> mTopSelectedObjects;       // Current selected objects most top in hierarchy
 		bool                         mSelectedFromThis = false; // True if selection changed from this, needs to break recursive selection update
 
-		Vector<IEditTool*> mTools;                 // Available tools
-		IEditTool*         mEnabledTool = nullptr; // Current enabled tool
+		Vector<Ref<IEditTool>> mTools;                 // Available tools
+		Ref<IEditTool>         mEnabledTool;
+	};
+}{
+	class SceneEditorLayer;
+	class SceneWindow;
+	class TreeWindow;
+	
+	class SceneEditor : public IEditorTool, public ISelectableDropTarget, public IDragTarget
+	{
+	public:
+		SceneEditor();
+		virtual ~SceneEditor() = default;
 
-		Vector<SceneDragHandle*> mDragHandles; // Dragging handles array
+		// Initializes the scene editor
+		void Initialize() override;
 
-		Vector<SceneEditorLayer*> mEditorLayers;        // List of editable layers
-		Map<String, bool>         mEditorLayersEnabled; // Map of enabled or disabled layers by user
+		// Sets the scene window for the editor
+		void SetSceneWindow(SceneWindow* sceneWindow);
 
-		HorizontalLayout* mLeftTopWidgetsContainer = nullptr;     // Additional controls widgets container at left top
-		HorizontalLayout* mRightTopWidgetsContainer = nullptr;    // Additional controls widgets container at right top
-		HorizontalLayout* mLeftBottomWidgetsContainer = nullptr;  // Additional controls widgets container at left bottom
-		HorizontalLayout* mRightBottomWidgetsContainer = nullptr; // Additional controls widgets container at right bottom
-		
-	protected:
-		// Initializes tools
+		// Sets the tree window for the editor
+		void SetTreeWindow(TreeWindow* treeWindow);
+
+		// Adds an editable layer to the editor
+		void AddEditorLayer(SceneEditorLayer* layer);
+
+		// Removes an editable layer from the editor
+		void RemoveEditorLayer(SceneEditorLayer* layer);
+
+		// Returns the list of editable layers in the editor
+		const Vector<Ref<SceneEditorLayer>>& GetEditorLayers() const;
+
+		// Enables or disables the specified layer
+		void SetEditorLayerEnabled(const String& layerName, bool enabled);
+
+		// Returns whether the specified layer is enabled or disabled
+		bool IsEditorLayerEnabled(const String& layerName) const;
+
+		// Updates the scene editor
+		void Update() override;
+
+		// Called when the editor tool becomes the active tool
+		void OnActivated() override;
+
+		// Called when the editor tool is deactivated
+		void OnDeactivated() override;
+
+		// Called when the editor tool is selected or deselected
+		void OnSelectedChanged(bool selected) override;
+
+		// Handler for mouse press events
+		bool OnMousePress(const Input::MouseData& mouseData) override;
+
+		// Handler for mouse release events
+		bool OnMouseRelease(const Input::MouseData& mouseData) override;
+
+		// Handler for mouse move events
+		bool OnMouseMove(const Input::MouseData& mouseData) override;
+
+		// Handler for mouse wheel events
+		bool OnMouseWheel(float wheelDelta) override;
+
+		// Handler for key press events
+		bool OnKeyPress(const Input::KeyData& keyData) override;
+
+		// Handler for key release events
+		bool OnKeyRelease(const Input::KeyData& keyData) override;
+
+		// Handler for key repeat events
+		bool OnKeyRepeat(const Input::KeyData& keyData) override;
+
+		// Handler for scene changed events
+		void OnSceneChanged(const Ref<Scene>& scene) override;
+
+		// Handler for object selected events
+		void OnObjectSelected(const Ref<SceneObject>& sceneObject) override;
+
+		// Handler for object deselected events
+		void OnObjectDeselected(const Ref<SceneObject>& sceneObject) override;
+
+		// Handler for object hovering events
+		void OnObjectHover(const Ref<SceneObject>& sceneObject) override;
+
+		// Handler for object stop hovering events
+		void OnObjectStopHover(const Ref<SceneObject>& sceneObject) override;
+
+		// Handler for object pressed events
+		void OnObjectPress(const Ref<SceneObject>& sceneObject) override;
+
+		// Handler for object release events
+		void OnObjectRelease(const Ref<SceneObject>& sceneObject) override;
+
+		// Handler for object drag enter events
+		void OnObjectDragEnter(const Ref<SceneObject>& sceneObject) override;
+
+		// Handler for object drag leave events
+		void OnObjectDragLeave(const Ref<SceneObject>& sceneObject) override;
+
+		// Handler for object drag events
+		void OnObjectDrag(const Ref<SceneObject>& sceneObject) override;
+
+		// Handler for object drop events
+		void OnObjectDrop(const Ref<SceneObject>& sceneObject) override;
+
+		// Returns the current active layer
+		const Ref<SceneEditorLayer>& GetActiveLayer() const;
+
+		// Returns the last hovered object
+		const Ref<SceneObject>& GetHoveredObject() const;
+
+		// Returns the last pressed object
+		const Ref<SceneObject>& GetPressedObject() const;
+
+		// Returns the last dragged object
+		const Ref<SceneObject>& GetDraggedObject() const;
+
+		// Returns a list of selected objects
+		const Vector<Ref<SceneObject>>& GetSelectedObjects() const;
+
+		// Returns the list of top selected objects
+		const Vector<Ref<SceneObject>>& GetTopSelectedObjects() const;
+
+		// Returns the number of selected objects
+		uint32_t GetSelectedObjectCount() const;
+
+	private:
+		// Initializes the tools
 		void InitializeTools();
 
-		// Creates and configures widgets container with specified base corner
-		HorizontalLayout* InitializeWidgetsContainer(BaseCorner baseCorner);
+		// Creates and configures the widgets container with the specified base corner
+		Ref<HorizontalLayout> InitializeWidgetsContainer(BaseCorner baseCorner);
 
-		// Returns true if some handle hovered or pressed by cursor
-		bool IsHandleWorking(const Input::Cursor& cursor) const;
+		// Returns true if some handle is being dragged or hovered by cursor
+		bool IsHandleWorking(const Ref<Input::Cursor>& cursor) const;
 
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+		// Called when the cursor is pressed on this
+		void OnCursorPressed(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor) override;
+		// Called when the cursor is released (only when the cursor is pressed on this at the previous time)
+		void OnCursorReleased(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
+		// Called when the cursor press was interrupted (e.g. by scrolling the scroll area or some other event)
+		void OnCursorPressInterrupted(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor) override;
+		// Called when the cursor stays down during the frame
+		void OnCursorStillDown(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor) override;
+		// Called when the cursor is moved on this (or moved outside when this was pressed)
+		void OnCursorMoved(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor) override;
+		// Called when the cursor enters this object
+		void OnCursorEnter(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor) override;
+		// Called when the cursor exits this object
+		void OnCursorExit(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when right mouse button was pressed on this
-		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
+		// Called when the right mouse button is pressed on this
+		void OnCursorRightMousePressed(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when right mouse button stay down on this
-		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
+		// Called when the right mouse button is held down on this
+		void OnCursorRightMouseHeld(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+		// Called when the right mouse button is released (only when the right mouse button was pressed on this at the previous time)
+		void OnCursorRightMouseReleased(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when middle mouse button was pressed on this
-		void OnCursorMiddleMousePressed(const Input::Cursor& cursor) override;
+		// Called when the middle mouse button is pressed on this
+		void OnCursorMiddleMousePressed(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when middle mouse button stay down on this
-		void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) override;
+		// Called when the middle mouse button is held down on this
+		void OnCursorMiddleMouseHeld(const Ref<Input::Cursor>& cursor) override;
 
-		// Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
-		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
+		// Called when the middle mouse button is released (only when the middle mouse button was pressed on this at the previous time)
+		void OnCursorMiddleMouseReleased(const Ref<Input::Cursor>& cursor) override;
 
 		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
-		// Called when key was pressed
-		void OnKeyPressed(const Input::Key& key) override;
+		// Called when a key is pressed
+		void OnKeyPressed(const Ref<Input::Keyboard>& keyboard) override;
 
-		// Called when key was released
-		void OnKeyReleased(const Input::Key& key) override;
+		// Called when a key is released
+		void OnKeyReleased(const Ref<Input::Keyboard>& keyboard) override;
 
-		// Called when key stay down during frame
-		void OnKeyStayDown(const Input::Key& key) override;
+		// Called when a key is held down during the frame
+		void OnKeyHeld(const Ref<Input::Keyboard>& keyboard) override;
 
-		// Called when changed selected objects from this
-		void OnObjectsSelectedFromThis();
+		// Called when the selection of objects from this has changed
+		void OnSelectionChangedFromThis();
 
-		// Redraws scene texture
+		// Redraws the scene texture
 		void RedrawContent() override;
 
-		// Draws objects drawables components
+		// Draws the drawable components of objects
 		void DrawObjects();
 
-		// Draws selection on objects
+		// Draws the selection on objects
 		void DrawSelection();
 
-		// Binds to scene tree selection window
+		// Binds to the scene tree selection window
 		void BindSceneTree();
 
-		// Called when scene tree selection changed
-		void OnTreeSelectionChanged(Vector<SceneEditableObject*> selectedObjects);
+		// Called when the selection in the tree window has changed
+		void OnTreeSelectionChanged(const Vector<Ref<SceneEditableObject>>& selectedObjects);
 
-		// Updates top selected objects
+		// Updates the top selected objects
 		void UpdateTopSelectedObjects();
 
-		// Called when objects was changed
-		void OnSceneChanged(Vector<SceneEditableObject*> objects);
+		// Called when objects have been changed
+		void OnObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects);
 
-		// Clears objects selection
+		// Clears the object selection without triggering any action
 		void ClearSelectionWithoutAction(bool sendSelectedMessage = true);
 
-		// Selects objects
-		void SelectObjectsWithoutAction(Vector<SceneEditableObject*> objects, bool additive = true);
+		// Selects the specified objects without triggering any action
+		void SelectObjectsWithoutAction(const Vector<Ref<SceneEditableObject>>& objects, bool additive = true);
 
-		// Selects object
-		void SelectObjectWithoutAction(SceneEditableObject* object, bool additive = true);
+		// Selects the specified object without triggering any action
+		void SelectObjectWithoutAction(const Ref<SceneEditableObject>& object, bool additive = true);
 
-		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+		// Called when a group of selectable and draggable objects is dropped on this
+		void OnGroupDropped(Ref<ISelectableDraggableObjectsGroup> group) override;
 
-		// Called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+		// Called when a group of draggable objects enters the area of this
+		void OnGroupDragEnter(Ref<ISelectableDraggableObjectsGroup> group) override;
 
-		// Called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
+		// Called when a group of draggable objects is dragged over this
+		void OnGroupDragOver(Ref<ISelectableDraggableObjectsGroup> group) override;
 
-		// Called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+		// Called when a group of draggable objects exits the area of this
+		void OnGroupDragExit(Ref<ISelectableDraggableObjectsGroup> group) override;
 
-		// Returns that this has transparent input
+		// Returns whether the input of this is transparent
 		bool IsInputTransparent() const override;
 
 		friend class DeleteAction;
@@ -292,31 +405,146 @@ namespace Editor
 		friend class TreeWindow;
 		friend class CreateAction;
 	};
-}
 
-#include "o2Editor/Core/Tools/IEditorTool.h"
-
-namespace Editor
-{
-	template<typename _type>
-	void SceneEditScreen::SelectTool()
+	template <typename T>
+	class DynamicCast
 	{
-		SelectTool(mTools.FindOrDefault([&](auto x) { return x->GetType() == TypeOf(_type); }));
-	}
-
-	template<typename _type>
-	_type* SceneEditScreen::GetTool()
-	{
-		for (auto tool : mTools)
+	public:
+		template <typename U>
+		static Ref<T> Cast(const Ref<U>& object)
 		{
-			if (auto typedTool = dynamic_cast<_type*>(tool))
-				return typedTool;
+			return Ref<T>(dynamic_cast<T*>(object.get()), false);
 		}
+	};
 
-		return nullptr;
+	// Helper function to create a Ref object
+	template <typename T, typename... Args>
+	Ref<T> mmake(Args&&... args)
+	{
+		return Ref<T>(new T(std::forward<Args>(args)...));
 	}
-
 }
+
+#include "o2Editor/EditorTools/SceneEditor/SceneEditor.inl"{
+    void, OnCursorLeave, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMouseMove, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyboardKey, KeyboardKey, KeyboardKeyState);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyboardKeyChar, const String&, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMouseScroll, const Vec2F&, float);
+    FUNCTION().PROTECTED().SIGNATURE(Drawable*, InitializeDragHandle, DragHandleType, BaseCorner);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeEditorLayers);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnToolActivated, IEditTool*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnToolDeactivated, IEditTool*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
+    FUNCTION().PROTECTED().DEFAULT_VALUE(Editor::SceneEditorLayer).SIGNATURE(Vector<IEditTool*>, GetInternalTools);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsRectSelectionEnabled);
+    FUNCTION().PROTECTED().DEFAULT_VALUE(Float32Rect()).SIGNATURE(void, SetScreenRectangleSelection);
+    FUNCTION().PROTECTED().DEFAULT_VALUE(Float32Rect()).SIGNATURE(Float32Rect, GetScreenRectangleSelection);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateSelectedObjectsHandlePosition);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawRectSelection);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMoved, const DragHandleEvent& );
+}
+
+// Ref and WeakRef classes
+
+template<typename _type>
+class Ref
+{
+public:
+    Ref() : mPtr(nullptr) {}
+
+    explicit Ref(_type* ptr) : mPtr(ptr) {}
+
+    template<typename _otherType,
+             typename = std::enable_if_t<std::is_convertible_v<_otherType*, _type*>>>
+    Ref(const Ref<_otherType>& other) : mPtr(other.mPtr) {}
+
+    Ref(const Ref& other) : mPtr(other.mPtr) {}
+
+    ~Ref() {}
+    
+    Ref& operator=(const Ref& other)
+    {
+        mPtr = other.mPtr;
+        return *this;
+    }
+    
+    _type* operator->() const
+    {
+        return mPtr;
+    }
+
+    _type* Get() const
+    {
+        return mPtr;
+    }
+
+    explicit operator bool() const
+    {
+        return mPtr != nullptr;
+    }
+
+private:
+    _type* mPtr;
+};
+
+template<typename _type>
+class WeakRef
+{
+public:
+    WeakRef() : mPtr(nullptr) {}
+
+    explicit WeakRef(_type* ptr) : mPtr(ptr) {}
+
+    template<typename _otherType,
+             typename = std::enable_if_t<std::is_convertible_v<_otherType*, _type*>>>
+    WeakRef(const WeakRef<_otherType>& other) : mPtr(other.mPtr) {}
+
+    WeakRef(const WeakRef& other) : mPtr(other.mPtr) {}
+
+    ~WeakRef() {}
+    
+    WeakRef& operator=(const WeakRef& other)
+    {
+        mPtr = other.mPtr;
+        return *this;
+    }
+    
+    _type* operator->() const
+    {
+        return mPtr;
+    }
+
+    _type* Get() const
+    {
+        return mPtr;
+    }
+    
+    explicit operator bool() const
+    {
+        return mPtr != nullptr;
+    }
+
+private:
+    _type* mPtr;
+};
+
+// mmake function
+
+template<typename _type, typename... _args>
+Ref<_type> mmake(_args&&... args)
+{
+    return Ref<_type>(new _type(std::forward<_args>(args)...));
+}
+
+// DynamicCast function
+
+template<typename _targetType, typename _sourceType>
+Ref<_targetType> DynamicCast(Ref<_sourceType> ptr)
+{
+    return Ref<_targetType>(dynamic_cast<_targetType*>(ptr.Get()));
+}
+
 // --- META ---
 
 CLASS_BASES_META(Editor::SceneEditScreen)
@@ -341,10 +569,10 @@ CLASS_FIELDS_META(Editor::SceneEditScreen)
     FIELD().PROTECTED().NAME(mDragHandles);
     FIELD().PROTECTED().NAME(mEditorLayers);
     FIELD().PROTECTED().NAME(mEditorLayersEnabled);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftTopWidgetsContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightTopWidgetsContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftBottomWidgetsContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightBottomWidgetsContainer);
+    FIELD().PROTECTED().DEFAULT_VALUE(WeakRef<IEditableWidgetContainer>()).NAME(mLeftTopWidgetsContainer);
+    FIELD().PROTECTED().DEFAULT_VALUE(WeakRef<IEditableWidgetContainer>()).NAME(mRightTopWidgetsContainer);
+    FIELD().PROTECTED().DEFAULT_VALUE(WeakRef<IEditableWidgetContainer>()).NAME(mLeftBottomWidgetsContainer);
+    FIELD().PROTECTED().DEFAULT_VALUE(WeakRef<IEditableWidgetContainer>()).NAME(mRightBottomWidgetsContainer);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneEditScreen)
@@ -360,32 +588,32 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, SceneToScreenPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToSceneVector, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, SceneToScreenVector, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(void, DrawObjectSelection, SceneEditableObject*, const Color4&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectObjects, Vector<SceneEditableObject*>, bool);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectObject, SceneEditableObject*, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, DrawObjectSelection, Ref<SceneEditableObject>, const Color4&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectObjects, Vector<Ref<SceneEditableObject>>, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectObject, Ref<SceneEditableObject>, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAllObjects);
     FUNCTION().PUBLIC().SIGNATURE(void, ClearSelection);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetLeftTopWidgetsContainer);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetRightTopWidgetsContainer);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetLeftBottomWidgetsContainer);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetRightBottomWidgetsContainer);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddEditorLayer, SceneEditorLayer*);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveEditorLayer, SceneEditorLayer*);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<HorizontalLayout>, GetLeftTopWidgetsContainer);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<HorizontalLayout>, GetRightTopWidgetsContainer);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<HorizontalLayout>, GetLeftBottomWidgetsContainer);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<HorizontalLayout>, GetRightBottomWidgetsContainer);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddEditorLayer, Ref<SceneEditorLayer>);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveEditorLayer, Ref<SceneEditorLayer>);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLayerEnabled, const String&, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsLayerEnabled, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectTool, const IEditTool*);
-    FUNCTION().PUBLIC().SIGNATURE(IEditTool*, GetSelectedTool);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddTool, IEditTool*);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveTool, IEditTool*);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<IEditTool*>&, GetTools);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<SceneEditableObject*>&, GetSelectedObjects);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<SceneEditableObject*>&, GetTopSelectedObjects);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectTool, const Ref<IEditTool>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IEditTool>, GetSelectedTool);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddTool, Ref<IEditTool>);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveTool, Ref<IEditTool>);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<IEditTool>>&, GetTools);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SceneEditableObject>>&, GetSelectedObjects);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SceneEditableObject>>&, GetTopSelectedObjects);
     FUNCTION().PUBLIC().SIGNATURE(const Color4&, GetSingleObjectSelectionColor);
     FUNCTION().PUBLIC().SIGNATURE(const Color4&, GetManyObjectsSelectionColor);
     FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeTools);
-    FUNCTION().PROTECTED().SIGNATURE(HorizontalLayout*, InitializeWidgetsContainer, BaseCorner);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<HorizontalLayout>, InitializeWidgetsContainer, BaseCorner);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsHandleWorking, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
@@ -393,33 +621,137 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMousePressed, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseStayDown, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMiddleMousePressed, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMiddleMouseStayDown, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMiddleMouseReleased, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectedFromThis);
-    FUNCTION().PROTECTED().SIGNATURE(void, RedrawContent);
-    FUNCTION().PROTECTED().SIGNATURE(void, DrawObjects);
-    FUNCTION().PROTECTED().SIGNATURE(void, DrawSelection);
-    FUNCTION().PROTECTED().SIGNATURE(void, BindSceneTree);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnTreeSelectionChanged, Vector<SceneEditableObject*>);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateTopSelectedObjects);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
-    FUNCTION().PROTECTED().SIGNATURE(void, ClearSelectionWithoutAction, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, SelectObjectsWithoutAction, Vector<SceneEditableObject*>, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, SelectObjectWithoutAction, SceneEditableObject*, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(bool, IsInputTransparent);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorLeave, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMouseMove, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyboardKey, KeyboardKey, KeyboardKeyState);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyboardKeyChar, const String&, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMouseScroll, const Vec2F&, float);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Drawable>, InitializeDragHandle, DragHandleType, BaseCorner);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeEditorLayers);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnToolActivated, Ref<IEditTool>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnToolDeactivated, Ref<IEditTool>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
+    FUNCTION().PROTECTED().DEFAULT_VALUE(Vector<Ref<IEditTool>>).SIGNATURE(Vector<Ref<IEditTool>>, GetInternalTools);
+    FUNCTION().PROTECTED().SIGNATURE(bool, IsRectSelectionEnabled);
+    FUNCTION().PROTECTED().DEFAULT_VALUE(Float32Rect()).SIGNATURE(void, SetScreenRectangleSelection);
+    FUNCTION().PROTECTED().DEFAULT_VALUE(Float32Rect()).SIGNATURE(Float32Rect, GetScreenRectangleSelection);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateSelectedObjectsHandlePosition);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawRectSelection);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMoved, const Ref<DragHandleEvent>& );
+}#include <memory>
+#include <vector>
+
+template<typename T>
+class Ref {
+public:
+    Ref() : ptr(nullptr) {}
+
+    explicit Ref(T* p) : ptr(p) {}
+
+    template<typename U>
+    Ref(const Ref<U>& r) : ptr(r.ptr) {}
+
+    T* operator->() const {
+        return ptr;
+    }
+
+    T* get() const {
+        return ptr;
+    }
+
+    operator bool() const {
+        return ptr != nullptr;
+    }
+
+    template<typename U>
+    Ref<U> static mmake() {
+        return Ref<U>(new U());
+    }
+
+private:
+    T* ptr;
+};
+
+template<typename T>
+class WeakRef {
+public:
+    WeakRef() : ptr(nullptr) {}
+
+    explicit WeakRef(T* p) : ptr(p) {}
+
+    template<typename U>
+    WeakRef(const WeakRef<U>& r) : ptr(r.ptr) {}
+
+    T* operator->() const {
+        return ptr;
+    }
+
+    T* get() const {
+        return ptr;
+    }
+
+    operator bool() const {
+        return ptr != nullptr;
+    }
+
+private:
+    T* ptr;
+};
+
+template<typename T>
+Ref<T> DynamicCast(const Ref<T>& ptr) {
+    return Ref<T>(dynamic_cast<T*>(ptr.get()));
 }
-END_META;
+
+class Input::Cursor {};
+
+class Input::Key {};
+
+template<typename T>
+using Vector = std::vector<T>;
+
+class SceneEditableObject {};
+
+class ISelectableDragableObjectsGroup {};
+
+class FUNCTION {
+public:
+    FUNCTION() {}
+
+    FUNCTION& PROTECTED() {
+        return *this;
+    }
+};
+
+// --- BEGIN META ---
+void OnCursorExit(const Ref<const Input::Cursor>&);
+void OnCursorRightMousePressed(const Ref<const Input::Cursor>&);
+void OnCursorRightMouseStayDown(const Ref<const Input::Cursor>&);
+void OnCursorRightMouseReleased(const Ref<const Input::Cursor>&);
+void OnCursorMiddleMousePressed(const Ref<const Input::Cursor>&);
+void OnCursorMiddleMouseStayDown(const Ref<const Input::Cursor>&);
+void OnCursorMiddleMouseReleased(const Ref<const Input::Cursor>&);
+void OnScrolled(float);
+void OnKeyPressed(const Ref<const Input::Key>&);
+void OnKeyReleased(const Ref<const Input::Key>&);
+void OnKeyStayDown(const Ref<const Input::Key>&);
+void OnObjectsSelectedFromThis();
+void RedrawContent();
+void DrawObjects();
+void DrawSelection();
+void BindSceneTree();
+void OnTreeSelectionChanged(const Vector<Ref<SceneEditableObject>>&);
+void UpdateTopSelectedObjects();
+void OnSceneChanged(const Vector<Ref<SceneEditableObject>>&);
+void ClearSelectionWithoutAction(bool);
+void SelectObjectsWithoutAction(const Vector<Ref<SceneEditableObject>>&, bool);
+void SelectObjectWithoutAction(const Ref<SceneEditableObject>&, bool);
+void OnDropped(ISelectableDragableObjectsGroup*);
+void OnDragEnter(ISelectableDragableObjectsGroup*);
+void OnDraggedAbove(ISelectableDragableObjectsGroup*);
+void OnDragExit(ISelectableDragableObjectsGroup*);
+bool IsInputTransparent();
+
+class END_META {};
+
 // --- END META ---

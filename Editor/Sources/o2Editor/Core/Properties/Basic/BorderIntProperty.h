@@ -1,6 +1,8 @@
 #pragma once
 
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2Editor/Core/Helpers/Ref.h"
+#include "o2Editor/Core/Helpers/WeakRef.h"
 
 using namespace o2;
 
@@ -24,7 +26,7 @@ namespace Editor
 		BorderIProperty& operator=(const BorderIProperty& other);
 
 		// Sets fields
-		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
+		void SetValueAndPrototypeProxy(const Ref<const TargetsVec>& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -74,10 +76,10 @@ namespace Editor
 		IOBJECT(BorderIProperty);
 
 	protected:
-		IntegerProperty* mLeftProperty = nullptr;   // Left value property
-		IntegerProperty* mRightProperty = nullptr;  // Right value property
-		IntegerProperty* mTopProperty = nullptr;    // Top value property
-		IntegerProperty* mBottomProperty = nullptr; // Bottom value property
+		Ref<IntegerProperty> mLeftProperty;   // Left value property
+		Ref<IntegerProperty> mRightProperty;  // Right value property
+		Ref<IntegerProperty> mTopProperty;    // Top value property
+		Ref<IntegerProperty> mBottomProperty; // Bottom value property
 
 	protected:
 		// Searches controls widgets and layers and initializes them
@@ -87,11 +89,11 @@ namespace Editor
 
 		class LeftValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy;
 
 		public:
 			LeftValueProxy();
-			LeftValueProxy(IAbstractValueProxy* proxy);
+			LeftValueProxy(const WeakRef<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -99,11 +101,11 @@ namespace Editor
 
 		class RightValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy;
 
 		public:
 			RightValueProxy();
-			RightValueProxy(IAbstractValueProxy* proxy);
+			RightValueProxy(const WeakRef<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -111,11 +113,11 @@ namespace Editor
 
 		class TopValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy;
 
 		public:
 			TopValueProxy();
-			TopValueProxy(IAbstractValueProxy* proxy);
+			TopValueProxy(const WeakRef<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -123,17 +125,18 @@ namespace Editor
 
 		class BottomValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy;
 
 		public:
 			BottomValueProxy();
-			BottomValueProxy(IAbstractValueProxy* proxy);
+			BottomValueProxy(const WeakRef<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
 		};
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::BorderIProperty)
@@ -141,20 +144,21 @@ CLASS_BASES_META(Editor::BorderIProperty)
     BASE_CLASS(Editor::IPropertyField);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::BorderIProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTopProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBottomProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(Ref<Editor::IntegerProperty>()).NAME(mLeftProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(Ref<Editor::IntegerProperty>()).NAME(mRightProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(Ref<Editor::IntegerProperty>()).NAME(mTopProperty);
+    FIELD().PROTECTED().DEFAULT_VALUE(Ref<Editor::IntegerProperty>()).NAME(mBottomProperty);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::BorderIProperty)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const BorderIProperty&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const Ref<const TargetsVec>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const BorderI&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueLeft, int);

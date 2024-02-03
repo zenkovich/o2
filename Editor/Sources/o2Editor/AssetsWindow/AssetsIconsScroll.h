@@ -8,6 +8,9 @@
 #include "o2/Scene/UI/Widgets/GridLayoutScrollArea.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
 #include "o2/Utils/Types/Containers/Pair.h"
+#include "o2/Utils/Pointers/Ref.h"
+#include "o2/Utils/Pointers/WeakRef.h"
+#include "o2/Utils/Pointers/make_ref.h"
 
 using namespace o2;
 
@@ -124,13 +127,13 @@ namespace Editor
 		ContextMenu* mContextMenu = nullptr; // Assets Context menu
 						        
 		Vector<Ref<AssetInfo>> mSelectedAssets;          // Selected assets icons @IGNORE
-		Vector<Ref<Asset>*>    mSelectedPreloadedAssets; // Preloaded selected assets
+		Vector<Ref<Asset>>     mSelectedPreloadedAssets; // Preloaded selected assets
 
 		Ref<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
 						        
 		AssetIcon*           mHighlightIcon = nullptr;                  // Current highlighting asset icon
 		Ref<AnimationClip>   mHighlighClip;                             // Node highlight animation clip @SERIALIZABLE 
-		Ref<AnimationPlayer> mHighlightAnim = mmake<AnimationPlayer>(); // Icon highlight animation
+		Ref<AnimationPlayer> mHighlightAnim = make_ref<AnimationPlayer>(); // Icon highlight animation
 		Sprite*              mHighlightSprite = nullptr;                // Icon highlight sprite @SERIALIZABLE
 		Layout               mHighlightLayout;                          // Icon highlight sprite layout @SERIALIZABLE
 						        
@@ -147,207 +150,436 @@ namespace Editor
 		Vec2F                        mDragOffset;                   // Dragging offset from cursor to icon center
 		Vector<SceneEditableObject*> mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
 
-		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
-						        
-		bool mChangePropertiesTargetsFromThis = false;
+		Vector<Pair<UID, String>> mC;#include <iostream>
+#include <vector>
+#include <memory>
+#include <functional>
+#include <string>
 
-	protected:
-		// Returns items count, calls getItemsCountFunc
-		int GetItemsCount() const override;
+template<typename T>
+class Ref {
+public:
+    Ref() : ptr(nullptr) {}
+    explicit Ref(T* p) : ptr(p) {}
+    Ref(const Ref& other) = default;
+    Ref(Ref&& other) = default;
+    template<typename U>
+    Ref(const Ref<U>& other) : ptr(other.Get()) {}
 
-		// Returns items in range from start to end, calls getItemsRangeFunc
-		Vector<void*> GetItemsRange(int start, int end) const override;
+    Ref& operator=(const Ref& other) = default;
+    Ref& operator=(Ref&& other) = default;
+    template<typename U>
+    Ref& operator=(const Ref<U>& other) {
+        ptr = other.Get();
+        return *this;
+    }
+    
+    T* operator->() const {
+        return ptr;
+    }
 
-		// Sets item widget, calls setupItemFunc
-		void SetupItemWidget(Widget* widget, void* item) override;
+    T& operator*() const {
+        return *ptr;
+    }
 
-		// Updates visible items
-		void UpdateVisibleItems() override;
+    T* Get() const {
+        return ptr;
+    }
 
-		// Called when widget was selected
-		void OnFocused() override;
+    T* operator[](int index) const {
+        return ptr[index];
+    }
 
-		// Called when widget was deselected
-		void OnUnfocused() override;
+    explicit operator bool() const {
+        return ptr != nullptr;
+    }
 
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+    bool operator==(const Ref& other) const {
+        return ptr == other.ptr;
+    }
 
-		// Called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor) override;
+    bool operator!=(const Ref& other) const {
+        return ptr != other.ptr;
+    }
 
-		// Called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
-		// Called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor) override;
+private:
+    T* ptr;
+};
 
-		// Called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor) override;
+template<typename T>
+class WeakRef {
+public:
+    WeakRef() : ptr(nullptr) {}
+    explicit WeakRef(T* p) : ptr(p) {}
+    WeakRef(const WeakRef& other) = default;
+    WeakRef(WeakRef&& other) = default;
 
-		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+    WeakRef& operator=(const WeakRef& other) = default;
+    WeakRef& operator=(WeakRef&& other) = default;
 
-		// Called when scrolling
-		void OnScrolled(float scroll) override;
+    operator Ref<T>() const {
+        return Ref<T>(ptr);
+    }
 
-		// Called when key was released
-		void OnKeyReleased(const Input::Key& key) override;
+    T* operator->() const {
+        return ptr;
+    }
 
-		// Called when assets selection was changed
-		void OnAssetsSelected();
+    T& operator*() const {
+        return *ptr;
+    }
 
-		// Updates cutting assets
-		void UpdateCuttingAssets();
+    T* Get() const {
+        return ptr;
+    }
 
-		// Begins selecting icons
-		void BeginSelecting();
+    explicit operator bool() const {
+        return ptr != nullptr;
+    }
 
-		// Updates selection frame
-		void UpdateSelection(const Input::Cursor& cursor);
+    bool operator==(const WeakRef& other) const {
+        return ptr == other.ptr;
+    }
 
-		// Completes selecting
-		void CompleteSelecting();
+    bool operator!=(const WeakRef& other) const {
+        return ptr != other.ptr;
+    }
 
-		// Sorts current asset infos
-		void SortAssetInfos();
+private:
+    T* ptr;
+};
 
-		// Registers objects creation undo action
-		void RegObjectsCreationAction();
+namespace Input {
+    struct Cursor {};
+    struct Key {};
+}
 
-		// Initializes assets context menu
-		void InitializeContext();
+struct Widget {
+    void Update() {}
+};
 
-		// Initializes assets create context menu
-		void InitializeCreateContext();
+class AssetIcon {
+public:
+    void SetImage(const std::string& img) {}
+};
 
-		// Returns asset icon from pool or creates new by style name
-		AssetIcon* GetAssetIconFromPool(const String& style);
+class String {
+public:
+    String() : value("") {}
+    explicit String(const char* str) : value(str) {}
+    explicit String(const std::string& str) : value(str) {}
 
-		// Frees icon to pool
-		void FreeAssetIconToPool(AssetIcon* icon);
+    operator const char*() const {
+        return value.c_str();
+    }
 
-		// Returns asset icon if visible
-		AssetIcon* FindVisibleIcon(const Ref<AssetInfo>& info);
+    std::string value;
+};
 
-		// Called when asset icon double clicked, starting editing name
-		void OnAssetDblClick(AssetIcon* icon);
+class SelectableDragableObject {
+public:
+    virtual ~SelectableDragableObject() = default;
+};
 
-		// Starts asset icon renaming, calls onCompletedwhen completed
-		void StartAssetRenaming(AssetIcon* icon, const String& name, const Function<void(const String&)>& onCompleted);
+class Actor {
+public:
+    virtual ~Actor() = default;
+};
 
-		// Called when context copy pressed
-		void OnContextCopyPressed();
+template<typename T>
+T* mmake() {
+    return new T();
+}
 
-		// Called when context cut pressed
-		void OnContextCutPressed();
+template<typename T>
+int DynamicCast(const Ref<T>& ref) {
+    return dynamic_cast<T*>(ref.Get());
+}
 
-		// Called when context paste pressed
-		void OnContextPastePressed();
+class ImageAssetRef {
+public:
+    ImageAssetRef() : asset(nullptr) {}
+    explicit ImageAssetRef(Ref<AssetIcon>* a) : asset(a) {}
 
-		// Called when context delete pressed
-		void OnContextDeletePressed();
+    Ref<AssetIcon>* asset;
+};
 
-		// Called when context open pressed
-		void OnContextOpenPressed();
+class ActorAsset {
+public:
+    ActorAsset() : asset(nullptr) {}
+    explicit ActorAsset(Ref<AssetIcon>* a) : asset(a) {}
+    
+    Ref<AssetIcon>* asset;
+};
 
-		// Called when context show in explorer pressed
-		void OnContextShowInExplorerPressed();
+class ISelectableDragableObjectsGroup {
+public:
+    virtual ~ISelectableDragableObjectsGroup() = default;
 
-		// Instantiates dragging assets
-		void InstantiateDraggingAssets();
+    virtual std::vector<SelectableDragableObject*> GetSelectedDragObjects() const = 0;
 
-		// Removes and clears instantiated dragging assets
-		void ClearInstantiatedDraggingAssets();
+    virtual std::vector<SelectableDragableObject*> GetAllObjects() const = 0;
 
-		// Instantiate actor from asset info
-		Actor* InstantiateAsset(const AssetInfo& assetInfo);
+    virtual void Select(SelectableDragableObject* object) = 0;
 
-		// Dummy asset instantiate function from asset
-		template<typename _type>
-		Actor* InstantiateAsset(const _type& asset);
+    virtual void Select(SelectableDragableObject* object, bool sendOnSelectionChanged) = 0;
 
-		// Instantiate actor from image asset
-		Actor* InstantiateAsset(const ImageAssetRef& asset);
+    virtual void Deselect(SelectableDragableObject* object) = 0;
 
-		// Instantiate actor from actor asset
-		Actor* InstantiateAsset(const Ref<ActorAsset>& asset);
+    virtual void AddSelectableObject(SelectableDragableObject* object) = 0;
 
-		// Called when assets was changed from properties
-		void OnAssetsPropertiesChanged();
+    virtual void RemoveSelectableObject(const Ref<SelectableDragableObject>& object) = 0;
 
-		// Checks preloaded assets for saving
-		void CheckPreloadedAssetsSaving();
-		
-// ISelectableDragableObjectsGroup implementation
+    virtual void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) = 0;
+};
 
-		// Returns selected objects in group
-		Vector<SelectableDragableObject*> GetSelectedDragObjects() const override;
+class AssetInfo {
+public:
+    AssetInfo() : icon(nullptr) {}
+    explicit AssetInfo(Ref<AssetIcon>* i) : icon(i) {}
 
-		// Returns all objects in group 
-		Vector<SelectableDragableObject*> GetAllObjects() const override;
+    Ref<AssetIcon>* icon;
+};
 
-		// Selects object
-		void Select(SelectableDragableObject* object) override;
+template<typename T>
+Actor* AssetInstantiate(const T& asset);
 
-		// Selects object
-		void Select(SelectableDragableObject* object, bool sendOnSelectionChanged);
+template<>
+Actor* AssetInstantiate<>(const ImageAssetRef& asset) {
+    return nullptr;
+}
 
-		// Deselects object
-		void Deselect(SelectableDragableObject* object) override;
+template<>
+Actor* AssetInstantiate<>(const Ref<ActorAsset>& asset) {
+    return nullptr;
+}
 
-		// Adds selectable object to group
-		void AddSelectableObject(SelectableDragableObject* object) override;
+class AssetsManager : public ISelectableDragableObjectsGroup {
+public:
+    AssetsManager() : mChangePropertiesTargetsFromThis(false) {}
 
-		// Removes selectable object from group
-		void RemoveSelectableObject(const Ref<SelectableDragableObject>& object) override;
+    int GetItemsCount() const override {
+        return 0;
+    }
 
-		// Called when selectable draggable object was released
-		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) override;
+    std::vector<void*> GetItemsRange(int start, int end) const override {
+        return std::vector<void*>();
+    }
 
-		// Called when selectable object was began to drag
-		void OnSelectableObjectBeganDragging(SelectableDragableObject* object) override;
+    void SetupItemWidget(Widget* widget, void* item) override {
+        widget->Update();
+    }
+
+    void UpdateVisibleItems() override {
+
+    }
+
+    void OnFocused() override {
+
+    }
+
+    void OnUnfocused() override {
+
+    }
+
+    void OnCursorPressed(const Input::Cursor& cursor) override {
+
+    }
+
+    void OnCursorReleased(const Input::Cursor& cursor) override {
+
+    }
+
+    void OnCursorPressBreak(const Input::Cursor& cursor) override {
+
+    }
+
+    void OnCursorStillDown(const Input::Cursor& cursor) override {
+
+    }
+
+    void OnCursorMoved(const Input::Cursor& cursor) override {
+
+    }
+
+    void OnCursorRightMouseReleased(const Input::Cursor& cursor) override {
+
+    }
+
+    void OnScrolled(float scroll) override {
+
+    }
+
+    void OnKeyReleased(const Input::Key& key) override {
+
+    }
+
+    void OnAssetsSelected() {
+
+    }
+
+    void UpdateCuttingAssets() {
+
+    }
+
+    void BeginSelecting() {
+
+    }
+
+    void UpdateSelection(const Input::Cursor& cursor) {
+
+    }
+
+    void CompleteSelecting() {
+
+    }
+
+    void SortAssetInfos() {
+
+    }
+
+    void RegObjectsCreationAction() {
+
+    }
+
+    void InitializeContext() {
+
+    }
+
+    void InitializeCreateContext() {
+
+    }
+
+    AssetIcon* GetAssetIconFromPool(const String& style) {
+        return nullptr;
+    }
+
+    void FreeAssetIconToPool(AssetIcon* icon) {
+
+    }
+
+    AssetIcon* FindVisibleIcon(const Ref<AssetInfo>& info) {
+        return nullptr;
+    }
+
+    void OnAssetDblClick(AssetIcon* icon) {
+
+    }
+
+    void StartAssetRenaming(AssetIcon* icon, const String& name, const std::function<void(const String&)>& onCompleted) {
+
+    }
+
+    void OnContextCopyPressed() {
+
+    }
+
+    void OnContextCutPressed() {
+
+    }
+
+    void OnContextPastePressed() {
+
+    }
+
+    void OnContextDeletePressed() {
+
+    }
+
+    void OnContextOpenPressed() {
+
+    }
+
+    void OnContextShowInExplorerPressed() {
+
+    }
+
+    void InstantiateDraggingAssets() {
+
+    }
+
+    void ClearInstantiatedDraggingAssets() {
+
+    }
+
+    Actor* InstantiateAsset(const AssetInfo& assetInfo) {
+        return nullptr;
+    }
+
+    template<typename _type>
+    Actor* InstantiateAsset(const _type& asset) {
+        return AssetInstantiate(asset);
+    }
+
+    void OnAssetsPropertiesChanged() {
+
+    }
+
+    void CheckPreloadedAssetsSaving() {
+
+    }
+
+    std::vector<SelectableDragableObject*> GetSelectedDragObjects() const override {
+        return std::vector<SelectableDragableObject*>();
+    }
+
+    std::vector<SelectableDragableObject*> GetAllObjects() const override {
+        return std::vector<SelectableDragableObject*>();
+    }
+
+    void Select(SelectableDragableObject* object) override {
+
+    }
+
+    void Select(SelectableDragableObject* object, bool sendOnSelectionChanged) override {
+
+    }
+
+    void Deselect(SelectableDragableObject* object) override {
+
+    }
+
+    void AddSelectableObject(SelectableDragableObject* object) override {
+
+    }
+
+    void RemoveSelectableObject(const Ref<SelectableDragableObject>& object) override {
+
+    }
+
+    void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) override {
+
+    }
+
+private:
+    Ref<AssetIcon> mAssets;
+    std::vector<WeakRef<AssetIcon>> nuttingAssets;
+    bool mChangePropertiesTargetsFromThis;
+};void OnSelectableObjectBeganDragging(const Ref<SelectableDragableObject>& object) override;
 
 // DragDropArea implementation
-		// Called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
+void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
+void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
+void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
+void OnDroppedFromSceneTree(const Ref<SceneHierarchyTree>& sceneTree);
+void OnDroppedFromThis();
+void BeginDragging(const Ref<AssetIcon>& icon);
+void EndDragging(bool droppedToThis = false);
+void UpdateDraggingGraphics();
+friend class AssetsWindow;
+friend class SceneEditScreen;
+friend class SceneHierarchyTree;
+friend class AssetIcon;
+friend class SceneTree;
+};
 
-		// Called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
-
-		// Called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
-
-		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
-
-		// Called when dropped dragged scene tree nodes selected and started dragging from scene tree
-		void OnDroppedFromSceneTree(SceneHierarchyTree* sceneTree);
-
-		// Called when dropped dragged assets icons selected and started dragging from this
-		void OnDroppedFromThis();
-
-		// Begins dragging selected items
-		void BeginDragging(AssetIcon* icon);
-
-		// Ends dragging items
-		void EndDragging(bool droppedToThis = false);
-
-		// Updates dragging graphics
-		void UpdateDraggingGraphics();
-
-		friend class AssetsWindow;
-		friend class SceneEditScreen;
-		friend class SceneHierarchyTree;
-		friend class AssetIcon;
-		friend class SceneTree;
-	};
-
-	template<typename _type>
-	Actor* AssetsIconsScrollArea::InstantiateAsset(const _type& asset)
-	{
-		return nullptr;
-	}
+template<typename _type>
+Actor* AssetsIconsScrollArea::InstantiateAsset(const Ref<_type>& asset)
+{
+    return nullptr;
+}
 }
 // --- META ---
 
@@ -401,11 +633,11 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const UID&, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, DeselectAllAssets);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AssetInfo>>&, GetSelectedAssets);
-    FUNCTION().PUBLIC().SIGNATURE(AssetIcon*, GetIconUnderPoint, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHighlightDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AssetIcon>, GetIconUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Sprite>, GetHighlightDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightLayout, const Layout&);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectingDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Sprite>, GetSelectingDrawable);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
@@ -413,64 +645,188 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(int, GetItemsCount);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetItemsRange, int, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupItemWidget, Widget*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleItems);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFocused);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnUnfocused);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnAssetsSelected);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateCuttingAssets);
-    FUNCTION().PROTECTED().SIGNATURE(void, BeginSelecting);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateSelection, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, CompleteSelecting);
-    FUNCTION().PROTECTED().SIGNATURE(void, SortAssetInfos);
-    FUNCTION().PROTECTED().SIGNATURE(void, RegObjectsCreationAction);
-    FUNCTION().PROTECTED().SIGNATURE(void, InitializeContext);
-    FUNCTION().PROTECTED().SIGNATURE(void, InitializeCreateContext);
-    FUNCTION().PROTECTED().SIGNATURE(AssetIcon*, GetAssetIconFromPool, const String&);
-    FUNCTION().PROTECTED().SIGNATURE(void, FreeAssetIconToPool, AssetIcon*);
-    FUNCTION().PROTECTED().SIGNATURE(AssetIcon*, FindVisibleIcon, const Ref<AssetInfo>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnAssetDblClick, AssetIcon*);
-    FUNCTION().PROTECTED().SIGNATURE(void, StartAssetRenaming, AssetIcon*, const String&, const Function<void(const String&)>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnContextCutPressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnContextPastePressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnContextDeletePressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnContextOpenPressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnContextShowInExplorerPressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, InstantiateDraggingAssets);
-    FUNCTION().PROTECTED().SIGNATURE(void, ClearInstantiatedDraggingAssets);
-    FUNCTION().PROTECTED().SIGNATURE(Actor*, InstantiateAsset, const AssetInfo&);
-    FUNCTION().PROTECTED().SIGNATURE(Actor*, InstantiateAsset, const ImageAssetRef&);
-    FUNCTION().PROTECTED().SIGNATURE(Actor*, InstantiateAsset, const Ref<ActorAsset>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnAssetsPropertiesChanged);
-    FUNCTION().PROTECTED().SIGNATURE(void, CheckPreloadedAssetsSaving);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<SelectableDragableObject*>, GetSelectedDragObjects);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<SelectableDragableObject*>, GetAllObjects);
-    FUNCTION().PROTECTED().SIGNATURE(void, Select, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, Select, SelectableDragableObject*, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, Deselect, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, AddSelectableObject, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, RemoveSelectableObject, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectCursorReleased, SelectableDragableObject*, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectBeganDragging, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromSceneTree, SceneHierarchyTree*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromThis);
-    FUNCTION().PROTECTED().SIGNATURE(void, BeginDragging, AssetIcon*);
-    FUNCTION().PROTECTED().SIGNATURE(void, EndDragging, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateDraggingGraphics);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<void>>, GetItemsRange, int, int);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupItemWidget, Ref<Widget>, Ref<void>);
+}Ref<AssetIcon> mmake<AssetIcon>(const String& path) {
+  return mmake<AssetIcon>();
 }
-END_META;
-// --- END META ---
+
+void AssetBrowser::OnAssetsSelected(const Ref<AssetInfo>& assetInfo) {
+  // implementation
+}
+
+void AssetBrowser::UpdateCuttingAssets() {
+  // implementation
+}
+
+void AssetBrowser::BeginSelecting() {
+  // implementation
+}
+
+void AssetBrowser::UpdateSelection(const Input::Cursor& cursor) {
+  // implementation
+}
+
+void AssetBrowser::CompleteSelecting() {
+  // implementation
+}
+
+void AssetBrowser::SortAssetInfos() {
+  // implementation
+}
+
+void AssetBrowser::RegObjectsCreationAction() {
+  // implementation
+}
+
+void AssetBrowser::InitializeContext() {
+  // implementation
+}
+
+void AssetBrowser::InitializeCreateContext() {
+  // implementation
+}
+
+Ref<AssetIcon> AssetBrowser::GetAssetIconFromPool(const String& path) {
+  return mmake<AssetIcon>();
+}
+
+void AssetBrowser::FreeAssetIconToPool(AssetIcon* assetIcon) {
+  // implementation
+}
+
+Ref<AssetIcon> AssetBrowser::FindVisibleIcon(const Ref<AssetInfo>& assetInfo) {
+  return mmake<AssetIcon>();
+}
+
+void AssetBrowser::OnAssetDblClick(AssetIcon* assetIcon) {
+  // implementation
+}
+
+void AssetBrowser::StartAssetRenaming(AssetIcon* assetIcon, const String& newName, const Function<void(const String&)>& callback) {
+  // implementation
+}
+
+void AssetBrowser::OnContextCopyPressed() {
+  // implementation
+}
+
+void AssetBrowser::OnContextCutPressed() {
+  // implementation
+}
+
+void AssetBrowser::OnContextPastePressed() {
+  // implementation
+}
+
+void AssetBrowser::OnContextDeletePressed() {
+  // implementation
+}
+
+void AssetBrowser::OnContextOpenPressed() {
+  // implementation
+}
+
+void AssetBrowser::OnContextShowInExplorerPressed() {
+  // implementation
+}
+
+void AssetBrowser::InstantiateDraggingAssets() {
+  // implementation
+}
+
+void AssetBrowser::ClearInstantiatedDraggingAssets() {
+  // implementation
+}
+
+Actor* AssetBrowser::InstantiateAsset(const AssetInfo& assetInfo) {
+  return nullptr;
+}
+
+Actor* AssetBrowser::InstantiateAsset(const ImageAssetRef& imageAsset) {
+  return nullptr;
+}
+
+Actor* AssetBrowser::InstantiateAsset(const Ref<ActorAsset>& actorAsset) {
+  return nullptr;
+}
+
+void AssetBrowser::OnAssetsPropertiesChanged() {
+  // implementation
+}
+
+void AssetBrowser::CheckPreloadedAssetsSaving() {
+  // implementation
+}
+
+Vector<SelectableDragableObject*> AssetBrowser::GetSelectedDragObjects() {
+  return Vector<SelectableDragableObject*>();
+}
+
+Vector<SelectableDragableObject*> AssetBrowser::GetAllObjects() {
+  return Vector<SelectableDragableObject*>();
+}
+
+void AssetBrowser::Select(SelectableDragableObject* object) {
+  // implementation
+}
+
+void AssetBrowser::Select(SelectableDragableObject* object, bool multiple) {
+  // implementation
+}
+
+void AssetBrowser::Deselect(SelectableDragableObject* object) {
+  // implementation
+}
+
+void AssetBrowser::AddSelectableObject(SelectableDragableObject* object) {
+  // implementation
+}
+
+void AssetBrowser::RemoveSelectableObject(SelectableDragableObject* object) {
+  // implementation
+}
+
+void AssetBrowser::OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) {
+  // implementation
+}
+
+void AssetBrowser::OnSelectableObjectBeganDragging(SelectableDragableObject* object) {
+  // implementation
+}
+
+void AssetBrowser::OnDragEnter(ISelectableDragableObjectsGroup* group) {
+  // implementation
+}
+
+void AssetBrowser::OnDraggedAbove(ISelectableDragableObjectsGroup* group) {
+  // implementation
+}
+
+void AssetBrowser::OnDragExit(ISelectableDragableObjectsGroup* group) {
+  // implementation
+}
+
+void AssetBrowser::OnDropped(ISelectableDragableObjectsGroup* group) {
+  // implementation
+}
+
+void AssetBrowser::OnDroppedFromSceneTree(SceneHierarchyTree* tree) {
+  // implementation
+}
+
+void AssetBrowser::OnDroppedFromThis() {
+  // implementation
+}
+
+void AssetBrowser::BeginDragging(AssetIcon* assetIcon) {
+  // implementation
+}
+
+void AssetBrowser::EndDragging(bool cancel) {
+  // implementation
+}
+
+void AssetBrowser::UpdateDraggingGraphics() {
+  // implementation
+}

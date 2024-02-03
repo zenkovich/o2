@@ -7,6 +7,7 @@
 #include "o2Editor/Core/Tools/SplineTool.h"
 #include "o2Editor/Core/UI/SplineEditor/SplineEditor.h"
 #include "o2Editor/SceneWindow/SceneEditorLayer.h"
+#include "o2/Utils/Ref.h"
 
 using namespace o2;
 
@@ -30,7 +31,7 @@ namespace Editor
 		~MeshComponentViewer();
 
 		// Copy operator
-		MeshComponentViewer& operator=(const MeshComponentViewer& other);
+		MeshComponentViewer& operator=(const MeshComponentViewer& other) = default;
 
 		IOBJECT(MeshComponentViewer);
 
@@ -38,7 +39,7 @@ namespace Editor
 		struct SceneLayer : public SceneEditorLayer
 		{
 			MeshComponentViewer* viewer = nullptr;
-			Sprite               textureSprite;
+			Sprite textureSprite;
 
 		public:
 			void DrawOverScene() override;
@@ -55,10 +56,10 @@ namespace Editor
 		};
 
 	protected:
-		SplineTool       mSplineTool;        // Spline tool
-		CustomFrameTool  mFrameTool;         // Mapping frame tool
+		SplineTool mSplineTool;        // Spline tool
+		CustomFrameTool mFrameTool;         // Mapping frame tool
 		MeshTopologyTool mTopologyTool;      // Mesh topology tool
-		SceneLayer       mFrameTetxureLayer; // Frame texture drawing layer
+		SceneLayer mFrameTetxureLayer; // Frame texture drawing layer
 
 		IEditTool* mPrevSelectedTool = nullptr; // Previous selected tool, for restore
 
@@ -81,35 +82,3 @@ namespace Editor
 		void FitAndCenterize();
 	};
 }
-// --- META ---
-
-CLASS_BASES_META(Editor::MeshComponentViewer)
-{
-    BASE_CLASS(Editor::TObjectPropertiesViewer<MeshComponent>);
-}
-END_META;
-CLASS_FIELDS_META(Editor::MeshComponentViewer)
-{
-    FIELD().PROTECTED().NAME(mSplineTool);
-    FIELD().PROTECTED().NAME(mFrameTool);
-    FIELD().PROTECTED().NAME(mTopologyTool);
-    FIELD().PROTECTED().NAME(mFrameTetxureLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitAndCenterButton);
-}
-END_META;
-CLASS_METHODS_META(Editor::MeshComponentViewer)
-{
-
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
-
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, FitAndCenterize);
-}
-END_META;
-// --- END META ---

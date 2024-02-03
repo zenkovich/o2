@@ -1,6 +1,9 @@
 #pragma once
 
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "Ref.h"
+#include "WeakRef.h"
+#include "DynamicCast.h"
 
 using namespace o2;
 
@@ -11,7 +14,7 @@ namespace Editor
 	// ----------------------------
 	// Editor float border property
 	// ----------------------------
-	class BorderFProperty: public IPropertyField
+	class BorderFProperty : public IPropertyField
 	{
 	public:
 		// Default constructor
@@ -24,7 +27,7 @@ namespace Editor
 		BorderFProperty& operator=(const BorderFProperty& other);
 
 		// Sets fields
-		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
+		void SetValueAndPrototypeProxy(const Ref<const TargetsVec>& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -66,18 +69,18 @@ namespace Editor
 		bool IsValuesDifferent() const;
 
 		// Returns editing by this field type
-		const Type* GetValueType() const override;
+		const Ref<const Type>& GetValueType() const override;
 
 		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+		static const Ref<const Type>& GetValueTypeStatic();
 
 		IOBJECT(BorderFProperty);
 
 	protected:
-		FloatProperty* mLeftProperty = nullptr;   // Left value property
-		FloatProperty* mRightProperty = nullptr;  // Right value property
-		FloatProperty* mTopProperty = nullptr;    // Top value property
-		FloatProperty* mBottomProperty = nullptr; // Bottom value property
+		Ref<FloatProperty> mLeftProperty = nullptr;   // Left value property
+		Ref<FloatProperty> mRightProperty = nullptr;  // Right value property
+		Ref<FloatProperty> mTopProperty = nullptr;    // Top value property
+		Ref<FloatProperty> mBottomProperty = nullptr; // Bottom value property
 
 	protected:
 		// Searches controls widgets and layers and initializes them
@@ -87,11 +90,11 @@ namespace Editor
 
 		class LeftValueProxy : public IValueProxy<float>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy;
 
 		public:
 			LeftValueProxy();
-			LeftValueProxy(IAbstractValueProxy* proxy);
+			LeftValueProxy(const WeakRef<IAbstractValueProxy>& proxy);
 
 			void SetValue(const float& value) override;
 			float GetValue() const override;
@@ -99,11 +102,11 @@ namespace Editor
 
 		class RightValueProxy : public IValueProxy<float>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy;
 
 		public:
 			RightValueProxy();
-			RightValueProxy(IAbstractValueProxy* proxy);
+			RightValueProxy(const WeakRef<IAbstractValueProxy>& proxy);
 
 			void SetValue(const float& value) override;
 			float GetValue() const override;
@@ -111,11 +114,11 @@ namespace Editor
 
 		class TopValueProxy : public IValueProxy<float>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy;
 
 		public:
 			TopValueProxy();
-			TopValueProxy(IAbstractValueProxy* proxy);
+			TopValueProxy(const WeakRef<IAbstractValueProxy>& proxy);
 
 			void SetValue(const float& value) override;
 			float GetValue() const override;
@@ -123,17 +126,18 @@ namespace Editor
 
 		class BottomValueProxy : public IValueProxy<float>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			WeakRef<IAbstractValueProxy> mProxy;
 
 		public:
 			BottomValueProxy();
-			BottomValueProxy(IAbstractValueProxy* proxy);
+			BottomValueProxy(const WeakRef<IAbstractValueProxy>& proxy);
 
 			void SetValue(const float& value) override;
 			float GetValue() const override;
 		};
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::BorderFProperty)
@@ -141,20 +145,21 @@ CLASS_BASES_META(Editor::BorderFProperty)
     BASE_CLASS(Editor::IPropertyField);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::BorderFProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTopProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBottomProperty);
+    FIELD().PROTECTED().NAME(mLeftProperty);
+    FIELD().PROTECTED().NAME(mRightProperty);
+    FIELD().PROTECTED().NAME(mTopProperty);
+    FIELD().PROTECTED().NAME(mBottomProperty);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::BorderFProperty)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const BorderFProperty&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Editor::BorderFProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const Ref<const TargetsVec>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const BorderF&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueLeft, float);
@@ -168,9 +173,11 @@ CLASS_METHODS_META(Editor::BorderFProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetBottomUnknownValue, float);
     FUNCTION().PUBLIC().SIGNATURE(BorderF, GetCommonValue);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
-    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<const Type>&, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Ref<const Type>&, GetValueTypeStatic);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;
+
 // --- END META ---
+

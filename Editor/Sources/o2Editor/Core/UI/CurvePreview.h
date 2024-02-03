@@ -1,34 +1,33 @@
 #pragma once
 
 #include "o2/Scene/UI/Widget.h"
+#include "O2/Ref.h"
+#include "O2/WeakRef.h"
 
 using namespace o2;
 
-namespace o2
-{
-	class Curve;
-	class Sprite;
+namespace o2 {
+    class Curve;
+    class Sprite;
 }
 
-namespace Editor
-{
+namespace Editor {
 	// -------------------
 	// Curve preview image
 	// -------------------
-	class CurvePreview: public Widget
-	{
+	class CurvePreview : public Widget {
 	public:
 		// Default constructor. Initializes image
-		CurvePreview();
+		CurvePreview() = default;
 
 		// Default copy-constructor
-		CurvePreview(const CurvePreview& other);
+		CurvePreview(const CurvePreview& other) = default;
 
 		// Copy operator
-		CurvePreview& operator=(const CurvePreview& other);
+		CurvePreview& operator=(const CurvePreview& other) = default;
 
 		// Sets viewing curve
-		void SetCurve(Curve* curve);
+		void SetCurve(const Ref<Curve>& curve);
 
 		// Draws widget
 		void Draw() override;
@@ -51,12 +50,11 @@ namespace Editor
 		SERIALIZABLE(CurvePreview);
 
 	protected:
-		Curve*  mCurve = nullptr;
-
-		bool    mNeedRedraw = false;
-		Sprite* mSprite = nullptr;
-		Color4  mBackColor = Color4(225, 232, 232);
-		Color4  mCurveColor = Color4(44, 62, 80);
+		Ref<Curve> mCurve;
+		bool mNeedRedraw = false;
+		WeakRef<Sprite> mSprite;
+		Color4 mBackColor = Color4(225, 232, 232);
+		Color4 mCurveColor = Color4(44, 62, 80);
 
 	protected:
 		// Updates layers layouts, calls after updating widget layout
@@ -69,33 +67,32 @@ namespace Editor
 		void OnCurveChanged();
 	};
 }
+
 // --- META ---
 
-CLASS_BASES_META(Editor::CurvePreview)
-{
+CLASS_BASES_META(Editor::CurvePreview) {
     BASE_CLASS(o2::Widget);
 }
 END_META;
-CLASS_FIELDS_META(Editor::CurvePreview)
-{
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurve);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSprite);
-    FIELD().PROTECTED().DEFAULT_VALUE(Color4(225, 232, 232)).NAME(mBackColor);
-    FIELD().PROTECTED().DEFAULT_VALUE(Color4(44, 62, 80)).NAME(mCurveColor);
+
+CLASS_FIELDS_META(Editor::CurvePreview) {
+    FIELD().PROTECTED().NAME(mCurve);
+    FIELD().PROTECTED().NAME(mNeedRedraw);
+    FIELD().PROTECTED().NAME(mSprite);
+    FIELD().PROTECTED().NAME(mBackColor);
+    FIELD().PROTECTED().NAME(mCurveColor);
 }
 END_META;
-CLASS_METHODS_META(Editor::CurvePreview)
-{
 
+CLASS_METHODS_META(Editor::CurvePreview) {
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const CurvePreview&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetCurve, Curve*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCurve, const Ref<Curve>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBackColor, const Color4&);
-    FUNCTION().PUBLIC().SIGNATURE(Color4, GetBackColor);
+    FUNCTION().PUBLIC().SIGNATURE(Color4, GetBackColor) const;
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveColor, const Color4&);
-    FUNCTION().PUBLIC().SIGNATURE(Color4, GetCurveColor);
+    FUNCTION().PUBLIC().SIGNATURE(Color4, GetCurveColor) const;
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
     FUNCTION().PROTECTED().SIGNATURE(void, Redraw);

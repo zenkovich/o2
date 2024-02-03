@@ -3,6 +3,8 @@
 #include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2Editor/Core/Actions/IAction.h"
+#include "o2/Utils/SmartPtr/Ref.h"
+#include "o2/Utils/SmartPtr/WeakRef.h"
 
 using namespace o2;
 
@@ -13,16 +15,16 @@ namespace o2
 
 namespace Editor
 {
-	class DeleteAction: public IAction
+	class DeleteAction : public IAction
 	{
 	public:
-		class ObjectInfo: public ISerializable
+		class ObjectInfo : public ISerializable
 		{
 		public:
 			DataDocument objectData;   // @SERIALIZABLE
-			SceneUID     parentId;	   // @SERIALIZABLE
-			SceneUID     prevObjectId; // @SERIALIZABLE
-			int          idx;          // @SERIALIZABLE
+			Ref<SceneUID> parentId;	   // @SERIALIZABLE
+			Ref<SceneUID> prevObjectId; // @SERIALIZABLE
+			int idx;          // @SERIALIZABLE
 
 			bool operator==(const ObjectInfo& other) const;
 
@@ -30,14 +32,14 @@ namespace Editor
 		};
 
 	public:
-		Vector<ObjectInfo> objectsInfos;
+		Vector<Ref<ObjectInfo>> objectsInfos;
 
 	public:
 		// Default constructor
 		DeleteAction();
 
 		// Constructor with objects, that will be deleted
-		DeleteAction(const Vector<SceneEditableObject*>& objects);
+		DeleteAction(const Vector<Ref<SceneEditableObject>>& objects);
 
 		// Returns name of action
 		String GetName() const override;
@@ -51,7 +53,6 @@ namespace Editor
 		SERIALIZABLE(DeleteAction);
 	};
 }
-// --- META ---
 
 CLASS_BASES_META(Editor::DeleteAction)
 {
@@ -65,9 +66,8 @@ CLASS_FIELDS_META(Editor::DeleteAction)
 END_META;
 CLASS_METHODS_META(Editor::DeleteAction)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);
@@ -82,8 +82,8 @@ END_META;
 CLASS_FIELDS_META(Editor::DeleteAction::ObjectInfo)
 {
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(objectData);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(parentId);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(prevObjectId);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(parentId).TYPE(Ref<SceneUID>);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(prevObjectId).TYPE(Ref<SceneUID>);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(idx);
 }
 END_META;
@@ -91,4 +91,3 @@ CLASS_METHODS_META(Editor::DeleteAction::ObjectInfo)
 {
 }
 END_META;
-// --- END META ---

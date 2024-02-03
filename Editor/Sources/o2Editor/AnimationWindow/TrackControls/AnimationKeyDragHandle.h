@@ -9,12 +9,12 @@ namespace Editor
 	class ITrackControl;
 
 	class AnimationKeyDragHandle : public WidgetDragHandle
-	{ 
+	{
 	public:
 		String trackPath;
 
-		WeakRef<IAnimationTrack> track;
-		WeakRef<ITrackControl>   trackControl;
+		Ref<IAnimationTrack> track;
+		Ref<ITrackControl>   trackControl;
 
 		UInt64 keyUid = 0;
 
@@ -26,8 +26,8 @@ namespace Editor
 
 		// Constructor with views
 		AnimationKeyDragHandle(const Ref<Sprite>& regular, const Ref<Sprite>& hover = nullptr, const Ref<Sprite>& pressed = nullptr,
-						       const Ref<Sprite>& selected = nullptr, const Ref<Sprite>& selectedHovered = nullptr,
-						       const Ref<Sprite>& selectedPressed = nullptr);
+		                       const Ref<Sprite>& selected = nullptr, const Ref<Sprite>& selectedHovered = nullptr,
+		                       const Ref<Sprite>& selectedPressed = nullptr);
 
 		// Copy-constructor
 		AnimationKeyDragHandle(const AnimationKeyDragHandle& other);
@@ -57,17 +57,17 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationKeyDragHandle)
 {
     FIELD().PUBLIC().NAME(trackPath);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(track);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(trackControl);
-    FIELD().PUBLIC().DEFAULT_VALUE(0).NAME(keyUid);
-    FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isMapping);
+    FIELD().PUBLIC().NAME(track).DEFAULT_VALUE(nullptr);
+    FIELD().PUBLIC().NAME(trackControl).DEFAULT_VALUE(nullptr);
+    FIELD().PUBLIC().NAME(keyUid).DEFAULT_VALUE(0);
+    FIELD().PUBLIC().NAME(isMapping).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationKeyDragHandle)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*, Sprite*, Sprite*, Sprite*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Sprite>&, const Ref<Sprite>&, const Ref<Sprite>&, const Ref<Sprite>&,
+                                     const Ref<Sprite>&, const Ref<Sprite>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationKeyDragHandle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

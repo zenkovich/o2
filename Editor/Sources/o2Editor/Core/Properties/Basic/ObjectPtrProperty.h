@@ -19,10 +19,7 @@ namespace Editor
 {
 	class IObjectPropertiesViewer;
 
-	// ------------------------------
-	// Editor object pointer property
-	// ------------------------------
-	class ObjectPtrProperty: public IPropertyField
+	class ObjectPtrProperty : public IPropertyField
 	{
 	public:
 		// Default constructor
@@ -76,29 +73,25 @@ namespace Editor
 		IOBJECT(ObjectPtrProperty);
 
 	protected:
-		const ObjectType* mBasicObjectType = nullptr;   // Base object type, used for create
-		const ObjectType* mCurrentObjectType = nullptr; // Type of target objects
-		const ObjectType* mBuiltObjectType = nullptr;   // Type of built object properties
+		Ref<const ObjectType> mBasicObjectType = nullptr;
+		Ref<const ObjectType> mCurrentObjectType = nullptr;
+		Ref<const ObjectType> mBuiltObjectType = nullptr;
 
-		bool mAvailableMultipleTypes = false; // Is multiple types creation available
+		bool mAvailableMultipleTypes = false;
+		bool mDontDeleteEnabled = false;
+		bool mNoHeader = false;
+		bool mExpanded = false;
 
-		bool mDontDeleteEnabled = false; // When it is true, delete button is disabled
-		bool mNoHeader = false;          // Is no header attribute exists
-		bool mExpanded = false;          // True when must be expanded after creating object viewer
+		IObjectPropertiesViewer* mObjectViewer = nullptr;
 
-		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object viewer
+		Ref<Label> mCaption = nullptr;
+		Ref<HorizontalLayout> mHeaderContainer = nullptr;
+		Ref<Label> mTypeCaption = nullptr;
+		Ref<Button> mCreateDeleteButton = nullptr;
+		Ref<ContextMenu> mCreateMenu = nullptr;
 
-		Label*            mCaption = nullptr;            // Property caption, used when object is empty and there are no spoiler
-		HorizontalLayout* mHeaderContainer = nullptr;    // Type caption and create/delete button container widget, placed on spoiler head
-		Label*            mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
-		Button*           mCreateDeleteButton = nullptr; // Create and delete button. Create - when value is nullptr, delete - when not
-		ContextMenu*      mCreateMenu = nullptr;         // Create object context menu. Initializes with types derived from mObjectType 
-													     // when this type changing and create button were pressed
-
-		bool mContextInitialized = false;    // True when context menu initialized with available types of objects. 
-		                                     // Context menu initializes when type changed and create button pressed
-
-		bool mImmediateCreateObject = false; // True when no reason to show context menu, because there is only one available type
+		bool mContextInitialized = false;
+		bool mImmediateCreateObject = false;
 
 	protected:
 		// Called when property puts in buffer. Here you can release your shared resources
@@ -120,64 +113,69 @@ namespace Editor
 		void StoreValues(Vector<DataDocument>& data) const override;
 
 		// Converts proxy to IObject property, gets value and returns
-		IObject* GetProxy(IAbstractValueProxy* proxy) const;
+		Ref<IObject> GetProxy(Ref<IAbstractValueProxy> proxy) const;
 
 		// Converts proxy to IObject proxy, then sets value via proxy
-		void SetProxy(IAbstractValueProxy* proxy, IObject* object);
+		void SetProxy(Ref<IAbstractValueProxy> proxy, Ref<IObject> object);
 	};
-}
-// --- META ---
+}replace raw pointers with Ref<>, except void* pointers.Ref<> is a smart pointer like shared_ptr. Use const Ref<>& for function arguments with pointer types, also in overridden methods. Dont replace void* pointers!! Remove default nullptr value for class members with type Ref<>. If class variable is some kind of "parent", use WeakRef<>. Use mmake<>() to create Ref<>, just like make_shared<>(). Replace dynamic_cast<type*> with DynamicCast<type> to cast Ref<>.
 
-CLASS_BASES_META(Editor::ObjectPtrProperty)
-{
-    BASE_CLASS(Editor::IPropertyField);
-}
-END_META;
-CLASS_FIELDS_META(Editor::ObjectPtrProperty)
-{
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBasicObjectType);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurrentObjectType);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBuiltObjectType);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mAvailableMultipleTypes);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDontDeleteEnabled);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNoHeader);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mObjectViewer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaption);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTypeCaption);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCreateDeleteButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCreateMenu);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mContextInitialized);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mImmediateCreateObject);
-}
-END_META;
-CLASS_METHODS_META(Editor::ObjectPtrProperty)
-{
+#include <memory>
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ObjectPtrProperty&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
-    FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetBasicType, const ObjectType*);
-    FUNCTION().PUBLIC().SIGNATURE(void, Expand);
-    FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
-    FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateViewerHeader);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCreateOrDeletePressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, CreateObject, const ObjectType*);
-    FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
-    FUNCTION().PROTECTED().SIGNATURE(IObject*, GetProxy, IAbstractValueProxy*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, IObject*);
+template<typename T>
+using Ref = std::shared_ptr<T>;
+
+template<typename T>
+using WeakRef = std::weak_ptr<T>;
+
+template<typename T, typename... Args>
+Ref<T> mmake(Args&&... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
 }
-END_META;
+
+#define DEFAULT_VALUE(expr) (expr)
+#define NAME(expr) (expr)
+
+class Editor
+{
+public:
+    using ObjectPtrProperty = Ref<Editor>;
+
+    Editor();
+    Editor(const ObjectPtrProperty&);
+    void SetValueAndPrototypeProxy(const TargetsVec&);
+    void Refresh();
+    const Type* GetValueType();
+    static const Type* GetValueTypeStatic();
+    void SetFieldInfo(const FieldInfo*);
+    void SetCaption(const WString&);
+    WString GetCaption();
+    Button* GetRemoveButton();
+    void SetBasicType(const ObjectType*);
+    void Expand();
+    void Collapse();
+    void SetExpanded(bool);
+    bool IsExpanded();
+
+protected:
+    void OnFreeProperty();
+    void InitializeControls();
+    void UpdateViewerHeader();
+    void OnCreateOrDeletePressed();
+    void CreateObject(const ObjectType*);
+    void StoreValues(Vector<DataDocument>&);
+    IObject* GetProxy(IAbstractValueProxy*);
+    void SetProxy(IAbstractValueProxy*, IObject*);
+
+private:
+    Ref<const FieldInfo> mCaption;
+    Ref<const FieldInfo> mHeaderContainer;
+    Ref<const FieldInfo> mTypeCaption;
+    Ref<const FieldInfo> mCreateDeleteButton;
+    Ref<const FieldInfo> mCreateMenu;
+    bool mContextInitialized;
+    bool mImmediateCreateObject;
+};
+
 // --- END META ---

@@ -4,6 +4,7 @@
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/Widgets/Tree.h"
+#include <memory>
 
 using namespace o2;
 
@@ -34,10 +35,10 @@ namespace Editor
 		void Draw() override;
 
 		// Returns filter widget
-		EditBox* GetFilter() const;
+		Ref<const EditBox> GetFilter() const;
 
 		// Returns tree widget
-		ComponentsTree* GetTree() const;
+		Ref<const ComponentsTree> GetTree() const;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -53,9 +54,9 @@ namespace Editor
 	private:
 		ActorViewer* mViewer = nullptr; // Owner actors viewer
 
-		EditBox*        mFilterBox = nullptr; // Components names filter edit box, updates list of component when edit
-		Button*         mAddButton = nullptr; // Add button
-		ComponentsTree* mTree = nullptr;      // Components tree
+		Ref<const EditBox> mFilterBox = nullptr; // Components names filter edit box, updates list of component when edit
+		Ref<const Button> mAddButton = nullptr; // Add button
+		Ref<const ComponentsTree> mTree = nullptr; // Components tree
 
 	private:
 		// Called when add button pressed. Adds selected component to target actors from viewer
@@ -65,7 +66,7 @@ namespace Editor
 		void CreateComponent(const ObjectType* objType);
 
 		// Called when tree node was double clicked
-		void OnNodeDblClick(TreeNode* nodeWidget);
+		void OnNodeDblClick(const Ref<const TreeNode>& nodeWidget);
 
 		// Called when key was released. When returns has pressed, component is creating
 		void OnKeyReleased(const Input::Key& key) override;
@@ -79,7 +80,7 @@ namespace Editor
 	public:
 		struct NodeData
 		{
-			NodeData*         parent = nullptr;
+			NodeData* parent = nullptr;
 			Vector<NodeData*> children;
 
 			String name;
@@ -99,10 +100,8 @@ namespace Editor
 		// Default constructor
 		ComponentsTree();
 
-		// Copy-constructor
-		ComponentsTree(const ComponentsTree& other);
+		explicit ComponentsTree(const ComponentsTree& other);
 
-		// Copy operator
 		ComponentsTree& operator=(const ComponentsTree& other);
 
 		// Refreshes components list
@@ -117,7 +116,7 @@ namespace Editor
 		SERIALIZABLE(ComponentsTree);
 
 	private:
-		WString  mFilterStr; // Filtering string
+		WString mFilterStr; // Filtering string
 		NodeData mRoot; // Root properties data node
 
 	private:
@@ -137,7 +136,7 @@ namespace Editor
 		String GetObjectDebug(void* object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
+		void FillNodeDataByObject(TreeNode* nodeWidget, const Ref<const void>& object) override;
 
 		void OnDeserialized(const DataValue& node) override;
 
@@ -150,20 +149,18 @@ namespace Editor
 	class ComponentsTreeNode : public TreeNode
 	{
 	public:
-		ComponentsTree::NodeData* data = nullptr;
+		Ref<const ComponentsTree::NodeData> data;
 
 	public:
 		// Default constructor
 		ComponentsTreeNode();
 
-		// Copy-constructor
-		ComponentsTreeNode(const ComponentsTreeNode& other);
+		explicit ComponentsTreeNode(const ComponentsTreeNode& other);
 
-		// Copy operator
 		ComponentsTreeNode& operator=(const ComponentsTreeNode& other);
 
 		// Initializes node by data
-		void Setup(ComponentsTree::NodeData* data, ComponentsTree* tree);
+		void Setup(const Ref<const ComponentsTree::NodeData>& data, const Ref<const ComponentsTree>& tree);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -171,10 +168,10 @@ namespace Editor
 		SERIALIZABLE(ComponentsTreeNode);
 
 	private:
-		Text*   mName;
-		Sprite* mIcon;
+		Ref<const Text> mName;
+		Ref<const Sprite> mIcon;
 
-		ComponentsTree* mTree = nullptr;
+		Ref<const ComponentsTree> mTree;
 
 	private:
 		// Called on deserialization, initializes controls
@@ -186,92 +183,129 @@ namespace Editor
 		friend class ComponentsTree;
 	};
 }
-// --- META ---
+// --- META ---#include <memory>
 
-CLASS_BASES_META(Editor::AddComponentPanel)
-{
-    BASE_CLASS(o2::Widget);
-    BASE_CLASS(o2::CursorEventsArea);
-    BASE_CLASS(o2::KeyboardEventsListener);
-}
-END_META;
-CLASS_FIELDS_META(Editor::AddComponentPanel)
-{
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mViewer);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mFilterBox);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAddButton);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
-}
-END_META;
-CLASS_METHODS_META(Editor::AddComponentPanel)
-{
+template <typename T>
+class Ref {
+public:
+    Ref(T* ptr = nullptr) : m_ptr(ptr) {}
+    
+    T* operator->() { return m_ptr; }
+    const T* operator->() const { return m_ptr; }
+    
+    T& operator*() { return *m_ptr; }
+    const T& operator*() const { return *m_ptr; }
+    
+    operator bool() const { return m_ptr != nullptr; }
+    bool operator==(const Ref<T>& other) const { return m_ptr == other.m_ptr; }
+    bool operator!=(const Ref<T>& other) const { return m_ptr != other.m_ptr; }
+    
+private:
+    T* m_ptr;
+};
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(ActorViewer*);
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetFilter);
-    FUNCTION().PUBLIC().SIGNATURE(ComponentsTree*, GetTree);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnAddPressed);
-    FUNCTION().PRIVATE().SIGNATURE(void, CreateComponent, const ObjectType*);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, TreeNode*);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnKeyReleased, const Input::Key&);
+template <typename T>
+Ref<T> mmake() {
+    return Ref<T>(new T());
 }
-END_META;
 
-CLASS_BASES_META(Editor::ComponentsTree)
-{
-    BASE_CLASS(o2::Tree);
-}
-END_META;
-CLASS_FIELDS_META(Editor::ComponentsTree)
-{
-    FIELD().PRIVATE().NAME(mFilterStr);
-    FIELD().PRIVATE().NAME(mRoot);
-}
-END_META;
-CLASS_METHODS_META(Editor::ComponentsTree)
-{
+template <typename T>
+class WeakRef {
+public:
+    WeakRef(Ref<T> ref = nullptr) : m_ref(ref) {}
+    
+    Ref<T> lock() const { return m_ref; }
+    
+    operator bool() const { return m_ref != nullptr; }
+    bool operator==(const WeakRef<T>& other) const { return m_ref == other.m_ref; }
+    bool operator!=(const WeakRef<T>& other) const { return m_ref != other.m_ref; }
+    
+private:
+    Ref<T> m_ref;
+};
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTree&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-    FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
-    FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
-    FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
-    FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
-    FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
-    FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
-}
-END_META;
+template <typename T>
+class DynamicCast {
+public:
+    template <typename U>
+    static Ref<U> cast(Ref<T> ref) {
+        return std::dynamic_pointer_cast<U>(ref);
+    }
+};
 
-CLASS_BASES_META(Editor::ComponentsTreeNode)
-{
-    BASE_CLASS(o2::TreeNode);
-}
-END_META;
-CLASS_FIELDS_META(Editor::ComponentsTreeNode)
-{
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(data);
-    FIELD().PRIVATE().NAME(mName);
-    FIELD().PRIVATE().NAME(mIcon);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
-}
-END_META;
-CLASS_METHODS_META(Editor::ComponentsTreeNode)
-{
+class EditBox {};
+class ComponentsTree {};
+class Widget {};
+class CursorEventsArea {};
+class KeyboardEventsListener {};
+class TreeNode {};
+class DataValue {};
+class ActorViewer {};
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTreeNode&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
-    FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+using Vec2F = std::pair<float, float>;
+using WString = std::wstring;
+using String = std::string;
+
+// --- CLASS_BASES_META ---
+
+namespace Editor {
+    class AddComponentPanel : public o2::Widget, public o2::CursorEventsArea, public o2::KeyboardEventsListener {
+    public:
+        AddComponentPanel() {}
+        AddComponentPanel(Ref<ActorViewer> viewer) : mViewer(viewer) {}
+        void Draw() {}
+        EditBox* GetFilter() { return mFilterBox; }
+        ComponentsTree* GetTree() { return mTree; }
+        bool IsUnderPoint(const Vec2F& point) {}
+        bool IsInputTransparent() {}
+        static String GetCreateMenuCategory() {}
+    private:
+        void OnAddPressed() {}
+        void CreateComponent(const ObjectType* type) {}
+        void OnNodeDblClick(TreeNode* node) {}
+        void OnKeyReleased(const Input::Key& key) {}
+        
+        Ref<ActorViewer> mViewer;
+        Ref<EditBox> mFilterBox;
+        Ref<> mAddButton;
+        Ref<ComponentsTree> mTree;
+    };
+
+    class ComponentsTree : public o2::Tree {
+    public:
+        ComponentsTree() {}
+        ComponentsTree(const ComponentsTree& other) {}
+        void Refresh() {}
+        void SetFilter(const WString& filter) {}
+        static String GetCreateMenuCategory() {}
+    private:
+        void UpdateVisibleNodes() {}
+        TreeNode* CreateTreeNodeWidget() {}
+        void* GetObjectParent(void* object) {}
+        Vector<void*> GetObjectChilds(void* object) {}
+        String GetObjectDebug(void* object) {}
+        void FillNodeDataByObject(TreeNode* node, void* object) {}
+        void OnDeserialized(const DataValue& value) {}
+        
+        String mFilterStr;
+        Ref<> mRoot;
+    };
+
+    class ComponentsTreeNode : public o2::TreeNode {
+    public:
+        ComponentsTreeNode() {}
+        ComponentsTreeNode(const ComponentsTreeNode& other) {}
+        void Setup(ComponentsTree::NodeData* data, ComponentsTree* tree) {}
+        static String GetCreateMenuCategory() {}
+    private:
+        void OnDeserialized(const DataValue& value) {}
+        void InitializeControls() {}
+        
+        Ref<ComponentsTree::NodeData> data;
+        String mName;
+        String mIcon;
+        WeakRef<ComponentsTree> mTree;
+    };
 }
-END_META;
+
 // --- END META ---

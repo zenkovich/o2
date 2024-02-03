@@ -22,17 +22,18 @@ namespace Editor
 	// -------------------------------
 	// Editor property field interface
 	// -------------------------------
-	class IPropertyField: public HorizontalLayout
+	class IPropertyField : public HorizontalLayout
 	{
 	public:
-		typedef Pair<IAbstractValueProxy*, IAbstractValueProxy*> TargetPair;
-		typedef Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> TargetsVec;
+		typedef Ref<IAbstractValueProxy> AbstractValueProxyRef;
+		typedef Pair<AbstractValueProxyRef, AbstractValueProxyRef> TargetPair;
+		typedef Vector<TargetPair> TargetsVec;
 
-		typedef Function<void(IPropertyField*)> OnChangedFunc;
+		typedef Function<void(IPropertyField&)> OnChangedFunc;
 		typedef Function<void(const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)> OnChangeCompletedFunc;
 
 	public:
-		OnChangedFunc         onChanged;         // Immediate change value by user event
+		OnChangedFunc onChanged;         // Immediate change value by user event
 		OnChangeCompletedFunc onChangeCompleted; // Change completed by user event
 
 	public:
@@ -55,7 +56,7 @@ namespace Editor
 		const TargetsVec& GetValueAndPrototypeProxy() const;
 
 		// Sets targets proxies
-		virtual void SetValueProxy(const Vector<IAbstractValueProxy*>& targets);
+		virtual void SetValueProxy(const Vector<AbstractValueProxyRef>& targets);
 
 		// Sets parent context
 		virtual void SetParentContext(PropertiesContext* context);
@@ -153,261 +154,138 @@ namespace Editor
 
 		bool mRevertable = true; // Is property can be reverted
 
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> mValuesProxies;          // Target values proxies
-		bool                                                     mValuesDifferent = true; // Are values different
+		Vector<TargetPair> mValuesProxies;          // Target values pro#include <Ref.h>
 
-		Button* mRevertBtn = nullptr; // Revert to source prototype button
-		Button* mRemoveBtn = nullptr; // Remove from array button
-		Label*  mCaption = nullptr;   // Caption label, null by default   
+class Properties;
 
-		String               mValuesPath;         // Reflection path of target values
-		Vector<DataDocument> mBeforeChangeValues; // Serialized value data before changes started
+class IAbstractValueProxy {};
 
-	protected:
-		// Called when type specialized during setting value proxy
-		virtual void OnTypeSpecialized(const Type& type) {}
+class DataDocument {};
 
-		// Called when property puts in buffer. Here you can release your shared resources
-		virtual void OnFreeProperty();
+template<typename T>
+class Ref {};
 
-		// Stores values to data
-		virtual void StoreValues(Vector<DataDocument>& data) const {}
+template<typename T>
+class WeakRef {};
 
-		// Checks that value was changed and calls onChangeCompleted
-		virtual void CheckValueChangeCompleted();
+template<typename _type>
+class TPropertyField;
 
-		// Checks value for reverting to prototype and sets widget state "revert"
-		virtual void CheckRevertableState();
+class Button {
+public:
+    // constructors
+};
 
-		// Checks is value can be reverted
-		virtual bool IsValueRevertable() const;
+class Label {
+public:
+    // constructors
+};
 
-		// Called when field value changed
-		virtual void OnValueChanged();
+class Type {};
 
-		// Frees values proxies
-		void FreeValuesProxies();
+class IPropertyField {
+public:
+    // constructors
+    void Refresh();
+    void Revert();
+    const Type* GetValueType() const;
+    static const Type* GetValueTypeStatic();
+    void SetValueByUser();
+    virtual void OnTypeSpecialized(const Type& type) {}
+    virtual bool IsValueRevertable() const {}
 
-		// Called when user began to change value and we need to store initial value data
-		void BeginUserChanging();
+protected:
+    template<typename T>
+    T GetProxy(IAbstractValueProxy* proxy) const;
 
-		// Called when user completed changing value and we need to compare current value with previous and call onChangeCompleted
-		void EndUserChanging();
+    template<typename T>
+    void SetProxy(IAbstractValueProxy* proxy, const T& value) const;
 
-		// Sets value via proxy
-		template<typename T>
-		void SetProxy(IAbstractValueProxy* proxy, const T& value) const;
+    template<typename _type>
+    void SetValuePointers(const Vector<_type*>& targets);
 
-		// Returns value from proxy
-		template<typename T>
-		T GetProxy(IAbstractValueProxy* proxy) const;
+    template<typename _property_type>
+    void SetValuePropertyPointers(const Vector<_property_type*>& targets);
 
-		friend class Properties;
-	};
+    template<typename _type, typename _object_type>
+    void SelectValuesPointers(const Vector<_object_type*>& targets, std::function<_type* (_object_type*)> getter);
 
-	template<typename _type>
-	class TPropertyField: public IPropertyField
-	{
-	public:
-		// Default constructor
-		TPropertyField();
+private:
+    void SetValueAndPrototypeProxy(const Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>&);
+};
 
-		// Copy-constructor
-		TPropertyField(const TPropertyField& other);
+class IAbstractValueProxy {};
 
-		// COpy operator
-		TPropertyField& operator=(const TPropertyField& other);
+class DataDocument {};
 
-		// Checks common value and fill fields
-		void Refresh() override;
+template<typename T>
+class Ref {};
 
-		// Reverts value to prototype value
-		void Revert() override;
+template<typename T>
+class WeakRef {};
 
-		// Returns editing by this field type
-		const Type* GetValueType() const override;
+template<typename _type>
+class TPropertyField {
+public:
+    // constructors
+    TPropertyField();
+    TPropertyField(const TPropertyField& other);
+    TPropertyField& operator=(const TPropertyField& other);
+    void Refresh() override;
+    void Revert() override;
+    const Type* GetValueType() const override;
+    static const Type* GetValueTypeStatic();
+    void SetValue(const _type& value);
+    void SetUnknownValue(const _type& defaultValue = _type());
+    _type GetCommonValue() const;
 
-		// Returns editing by this field type by static function, can't be changed during runtime
-		static const Type* GetValueTypeStatic();
+protected:
+    void OnTypeSpecialized(const Type& type) override;
+    bool IsValueRevertable() const override;
+    void StoreValues(Vector<DataDocument>& data) const override;
+    _type GetProxy(IAbstractValueProxy* proxy) const;
+    void SetProxy(IAbstractValueProxy* proxy, const _type& value);
+    virtual void SetCommonValue(const _type& value);
+    void SetValueByUser(const _type& value);
+    virtual void UpdateValueView() {}
+    bool IsAlwaysRefresh() const;
 
-		// Sets value
-		void SetValue(const _type& value);
+private:
+    _type mCommonValue = _type();
+    const Type* mRealType = nullptr;
+};
 
-		// Sets value as unknown
-		void SetUnknownValue(const _type& defaultValue = _type());
+bool                                                     mValuesDifferent = true;
 
-		// Returns value
-		_type GetCommonValue() const;
+Ref<Button> mRevertBtn;
+Ref<Button> mRemoveBtn;
+Ref<Label>  mCaption;
 
-		IOBJECT(TPropertyField<_type>);
+String               mValuesPath;
+Vector<DataDocument> mBeforeChangeValues;
 
-	protected:
-		_type mCommonValue = _type();
+void OnTypeSpecialized(const Type& type) {}
+void OnFreeProperty();
+void StoreValues(Vector<DataDocument>& data) const {}
+void CheckValueChangeCompleted();
+void CheckRevertableState();
+bool IsValueRevertable() const {}
+void OnValueChanged();
+void FreeValuesProxies();
+void BeginUserChanging();
+void EndUserChanging();
 
-		const Type* mRealType = nullptr;
+template<typename T>
+void IPropertyField::SetProxy(IAbstractValueProxy* proxy, const T& value) const {
+    proxy->SetValuePtr(&const_cast<T&>(value));
+}
 
-	protected:
-		// Called when type specialized during setting value proxy
-		void OnTypeSpecialized(const Type& type) override;
-
-		// Checks is value can be reverted
-		bool IsValueRevertable() const override;
-
-		// Stores values to data
-		void StoreValues(Vector<DataDocument>& data) const override;
-
-		// Returns value from proxy
-		virtual _type GetProxy(IAbstractValueProxy* proxy) const;
-
-		// Sets value to proxy
-		virtual void SetProxy(IAbstractValueProxy* proxy, const _type& value);
-
-		// Sets common value
-		virtual void SetCommonValue(const _type& value);
-
-		// Sets value, checks value changed, calls onChangeCompleted
-		void SetValueByUser(const _type& value);
-
-		// Updates value view
-		virtual void UpdateValueView() {}
-
-		// Is required refresh view every time
-		virtual bool IsAlwaysRefresh() const;
-	};
-
-	// -----------------------------
-	// IPropertyField implementation
-	// -----------------------------
-
-	template<typename T>
-	T IPropertyField::GetProxy(IAbstractValueProxy* proxy) const
-	{
-		T res;
-		proxy->GetValuePtr(&res);
-		return res;
-	}
-
-	template<typename T>
-	void IPropertyField::SetProxy(IAbstractValueProxy* proxy, const T& value) const
-	{
-		proxy->SetValuePtr(&const_cast<T&>(value));
-	}
-
-
-	// ----------------------------------
-	// SelectPropertyMixin implementation
-	// ----------------------------------
-
-	template<typename _type>
-	void IPropertyField::SetValuePointers(const Vector<_type*>& targets)
-	{
-		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_type* target)
-		{
-			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(mnew PointerValueProxy<_type>(target), nullptr);
-		}));
-	}
-
-	template<typename _property_type>
-	void IPropertyField::SetValuePropertyPointers(const Vector<_property_type*>& targets)
-	{
-		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_property_type* target)
-		{
-			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(target), nullptr);
-		}));
-	}
-
-	template<typename _type, typename _object_type>
-	void IPropertyField::SelectValuesPointers(const Vector<_object_type*>& targets, std::function<_type* (_object_type*)> getter)
-	{
-		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-			[&](_object_type* target)
-		{
-			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				TypeOf(_type).GetValueProxy(getter(target)), nullptr);
-		}));
-	}
-
-	template<typename _object_type, typename _property_type>
-	void IPropertyField::SelectValuesProperties(const Vector<_object_type*>& targets,
-												std::function<_property_type* (_object_type*)> getter)
-	{
-		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-			[&](_object_type* target)
-		{
-			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(getter(target)), nullptr);
-		}));
-	}
-
-	template<typename _type, typename _object_type>
-	void IPropertyField::SelectValueAndPrototypePointers(const Vector<_object_type*>& targets,
-														 const Vector<_object_type*>& prototypes,
-														 std::function<_type* (_object_type*)> getter)
-	{
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
-		targetPairs.Reserve(targets.Count());
-
-		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
-		{
-			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew PointerValueProxy<_type>(getter(targets[i])),
-				prototypes[i] ? mnew PointerValueProxy<_type>(getter(prototypes[i])) : nullptr
-			));
-		}
-
-		SetValueAndPrototypeProxy(targetPairs);
-	}
-
-	template<typename _object_type, typename _property_type>
-	void IPropertyField::SelectValueAndPrototypeProperties(const Vector<_object_type*>& targets,
-														   const Vector<_object_type*>& prototypes,
-														   std::function<_property_type* (_object_type*)> getter)
-	{
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
-		targetPairs.Reserve(targets.Count());
-
-		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
-		{
-			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(getter(targets[i])),
-				prototypes[i] ? mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(getter(prototypes[i])) : nullptr
-			));
-		}
-
-		SetValueAndPrototypeProxy(targetPairs);
-	}
-
-	template<typename _type, typename _object_type>
-	void IPropertyField::SelectValueAndPrototypeFunctional(const Vector<_object_type*>& targets,
-														   const Vector<_object_type*>& prototypes,
-														   std::function<_type(_object_type*)> getter,
-														   std::function<void(_object_type*, _type)> setter)
-	{
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
-		targetPairs.Reserve(targets.Count());
-
-		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
-		{
-			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew FunctionalValueProxy<_type>(
-				[=](_type v) { setter(targets[i], v); },
-				[=]() { return getter(targets[i]); }),
-				prototypes[i] ? mnew FunctionalValueProxy<_type>(
-				[=](_type v) { setter(prototypes[i], v); },
-				[=]() { return getter(prototypes[i]); }): nullptr));
-		}
-
-		SetValueAndPrototypeProxy(targetPairs);
-	}
-
-
-
-	// -----------------------------
-	// TPropertyField implementation
-	// -----------------------------
-
-	template<typename _type>
+template<typename T>
+T IPropertyField::GetProxy(IAbstractValueProxy* proxy) const {
+    T res;
+    proxy->GetValuePtr(&res);
+    return res;
+}	template<typename _type>
 	TPropertyField<_type>::TPropertyField()
 	{}
 
@@ -417,7 +295,7 @@ namespace Editor
 	{}
 
 	template<typename _type>
-	TPropertyField<_type>& Editor::TPropertyField<_type>::operator=(const TPropertyField& other)
+	TPropertyField<_type>& TPropertyField<_type>::operator=(const TPropertyField& other)
 	{
 		IPropertyField::operator=(other);
 		return *this;
@@ -432,13 +310,13 @@ namespace Editor
 		auto lastCommonValue = mCommonValue;
 		bool lastDifferent = mValuesDifferent;
 
-		_type newCommonValue = GetProxy(mValuesProxies[0].first);
+		_type newCommonValue = *GetProxy(mValuesProxies[0].first);
 
 		bool newDifferent = false;
 
 		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			_type value = GetProxy(mValuesProxies[i].first);
+			_type value = *GetProxy(mValuesProxies[i].first);
 			if (newCommonValue != value)
 			{
 				newDifferent = true;
@@ -483,94 +361,292 @@ namespace Editor
 		mCommonValue = value;
 		mValuesDifferent = false;
 
-		UpdateValueView();
-		OnValueChanged();
+		UpdateVtemplate<typename _type>
+class Ref {
+public:
+	Ref() : m_ptr(nullptr) {}
+	Ref(_type* p) : m_ptr(p) {
+		if (m_ptr)
+			m_ptr->AddRef();
 	}
-
-	template<typename _type>
-	void TPropertyField<_type>::StoreValues(Vector<DataDocument>& data) const
-	{
-		data.Clear();
-		for (auto ptr : mValuesProxies)
-		{
-			data.Add(DataDocument());
-			data.Last() = GetProxy(ptr.first);
+	Ref(const Ref<_type>& r) : m_ptr(r.m_ptr) {
+		if (m_ptr)
+			m_ptr->AddRef();
+	}
+	~Ref() {
+		if (m_ptr)
+			m_ptr->Release();
+	}
+	Ref<_type>& operator=(const Ref<_type>& r) {
+		if (m_ptr) {
+			m_ptr->Release();
+			m_ptr = nullptr;
 		}
+		m_ptr = r.m_ptr;
+		if (m_ptr)
+			m_ptr->AddRef();
+		return *this;
 	}
-
-	template<typename _type>
-	bool TPropertyField<_type>::IsValueRevertable() const
-	{
-		for (auto ptr : mValuesProxies)
-		{
-			if (ptr.second && !Math::Equals(GetProxy(ptr.first), GetProxy(ptr.second)))
-				return true;
+	Ref<_type>& operator=(_type* p) {
+		if (m_ptr) {
+			m_ptr->Release();
+			m_ptr = nullptr;
 		}
-
-		return false;
+		m_ptr = p;
+		if (m_ptr)
+			m_ptr->AddRef();
+		return *this;
 	}
-
-	template<typename _type>
-	_type TPropertyField<_type>::GetCommonValue() const
-	{
-		return mCommonValue;
+	operator bool() const {
+		return (m_ptr != nullptr);
 	}
+	_type* operator->() const {
+		return m_ptr;
+	}
+	_type& operator*() const {
+		return *m_ptr;
+	}
+private:
+	_type* m_ptr;
+};
 
-	template<typename _type>
-	void TPropertyField<_type>::SetUnknownValue(const _type& defaultValue /*= _type()*/)
-	{
-		mCommonValue = defaultValue;
+template<typename _type>
+class WeakRef {
+public:
+	WeakRef() : m_ptr(nullptr) {}
+	WeakRef(const Ref<_type>& r) : m_ptr(r.m_ptr) {}
+	WeakRef(const WeakRef<_type>& r) : m_ptr(r.m_ptr) {}
+	~WeakRef() {}
+
+	Ref<_type> Lock() const {
+		return Ref<_type>(m_ptr);
+	}
+	operator bool() const {
+		return (m_ptr != nullptr);
+	}
+	_type* operator->() const {
+		return m_ptr;
+	}
+	_type& operator*() const {
+		return *m_ptr;
+	}
+private:
+	_type* m_ptr;
+};
+
+template<typename _type>
+Ref<_type> mmake() {
+	return Ref<_type>(new _type());
+}
+
+class IAbstractValueProxy {
+public:
+	virtual ~IAbstractValueProxy() {}
+	virtual void GetValuePtr(void* pValue) const = 0;
+};
+
+template<typename _type>
+class TPropertyField : public o2::HorizontalLayout, public IPropertyField {
+public:
+	TPropertyField() : mRevertable(true) {
+		mRevertBtn = mmake<Button>();
+		mRemoveBtn = mmake<Button>();
+		mCaption = mmake<Label>();
 		mValuesDifferent = true;
 
-		UpdateValueView();
-		OnValueChanged();
+		AddChild(mRevertBtn);
+		AddChild(mRemoveBtn);
+		AddChild(mCaption);
+
+		mRevertBtn->OnClick.Add(Delegate(this, &TPropertyField<_type>::OnRevert));
+		mRemoveBtn->OnClick.Add(Delegate(this, &TPropertyField<_type>::OnRemove));
+
+		OnRefresh();
 	}
 
-	template<typename _type>
-	void TPropertyField<_type>::SetValue(const _type& value)
-	{
-		for (auto ptr : mValuesProxies)
-			SetProxy(ptr.first, value);
-
-		SetCommonValue(value);
+	virtual ~TPropertyField() {
 	}
 
-	template<typename _type>
-	const Type* TPropertyField<_type>::GetValueType() const
-	{
+	void SetValueAndPrototypeProxy(const TargetsVec& targets) {
+		mValuesProxies.clear();
+
+		for (auto& target : targets)
+		{
+			if (target.instance)
+			{
+				auto protoProxy = dynamic_cast<IPrototypeProxy*>(target.instance);
+				if (protoProxy && protoProxy->IsDefault()) // optimize dev prone proxies
+					continue;
+			}
+
+			IAbstractValueProxy* proxy = target.GetPropertyProxy(mValuesPath);
+			if (!proxy)
+				continue;
+
+			auto it = mValuesProxies.find(proxy);
+			if (it != mValuesProxies.end())
+			{
+				it->second = nullptr;
+			}
+			else
+			{
+				mValuesProxies.insert(std::make_pair(proxy, nullptr));
+			}
+		}
+
+		CheckRevertableState();
+		OnRefresh();
+	}
+
+	const TargetsVec GetValueAndPrototypeProxy() const {
+		TargetsVec result;
+		for (auto& proxy : mValuesProxies) {
+			TargetDesc desc;
+			desc.instance = proxy.first->GetInstance();
+			desc.property = proxy.first->GetProperty();
+			result.push_back(desc);
+		}
+		return result;
+	}
+
+	void SetValueProxy(const Vector<Ref<IAbstractValueProxy>>& proxies) {
+		mValuesProxies.clear();
+		for (const auto& proxy : proxies)
+		{
+			auto it = mValuesProxies.find(proxy.Get());
+			if (it != mValuesProxies.end()) {
+				it->second = nullptr;
+			}
+			else {
+				mValuesProxies.insert(std::make_pair(proxy.Get(), nullptr));
+			}
+		}
+
+		CheckRevertableState();
+		OnRefresh();
+	}
+
+	void SetParentContext(Ref<PropertiesContext> parentContext) {
+		mParentContext = parentContext;
+	}
+
+	void Refresh() {
+		OnRefresh();
+	}
+
+	void Revert() {
+		for (auto& proxy : mValuesProxies)
+		{
+			if (proxy.second)
+				SetProxy(proxy.first, GetProxy(proxy.second));
+		}
+
+		mValuesDifferent = true;
+
+		OnRefresh();
+	}
+
+	void SetCaption(const WString& caption) {
+		mCaption->SetText(caption);
+	}
+
+	WString GetCaption() {
+		return mCaption->GetText();
+	}
+
+	Button* GetRemoveButton() {
+		return mRemoveBtn;
+	}
+
+	const Type* GetValueType() const {
 		return GetValueTypeStatic();
 	}
 
-	template<typename _type>
-	const Type* TPropertyField<_type>::GetValueTypeStatic()
-	{
+	static const Type* GetValueTypeStatic() {
 		return &TypeOf(_type);
 	}
 
-	template<typename _type>
-	void TPropertyField<_type>::Revert()
-	{
-		for (auto ptr : mValuesProxies)
-		{
-			if (ptr.second)
-				SetProxy(ptr.first, GetProxy(ptr.second));
-		}
-
-		Refresh();
+	bool IsValuesDifferent() {
+		return mValuesDifferent;
 	}
 
-	template<typename _type>
-	_type TPropertyField<_type>::GetProxy(IAbstractValueProxy* proxy) const
-	{
+	void SetValuePath(const String& valuePath) {
+		mValuesPath = valuePath;
+	}
+
+	String GetValuePath() {
+		return mValuesPath;
+	}
+
+	void SetCaptionLabel(Label* captionLabel) {
+		mCaption = captionLabel;
+	}
+
+	Label* GetCaptionLabel() {
+		return mCaption;
+	}
+
+	void SetRevertable(bool revertable) {
+		mRevertable = revertable;
+	}
+
+	bool IsRevertable() {
+		return mRevertable;
+	}
+
+	void SetFieldInfo(const Ref<FieldInfo>& fieldInfo) {
+		mFieldInfo = fieldInfo;
+	}
+
+	virtual void OnRefresh() = 0;
+
+	virtual void OnRevert() {
+		Revert();
+		mRevertBtn->SetEnabled(false);
+		OnValueChanged();
+	}
+
+	virtual void OnRemove() {
+		OnRemoveField.Raise(this);
+	}
+
+	virtual void OnValueChanged() {
+		OnChanged.Raise(this);
+	}
+
+	static String GetCreateMenuCategory() {
+		return "";
+	}
+
+protected:
+	virtual void OnTypeSpecialized(const Type& newType) {}
+
+	virtual void OnFreeProperty() {}
+
+	void StoreValues(Vector<DataDocument>& data) const {
+		data.Clear();
+		for (auto& proxy : mValuesProxies) {
+			data.Add(DataDocument());
+			data.Last() = GetProxy(proxy.first);
+		}
+	}
+
+	void CheckValueChangeCompleted() {
+		if (!mRevertable || mValuesDifferent) {
+			OnChangeCompleted.Raise(this);
+		}
+	}
+
+	_type GetProxy(IAbstractValueProxy* proxy) const {
 		if constexpr (std::is_polymorphic<_type>::value)
 		{
 			if (mRealType && mRealType->GetUsage() == Type::Usage::Object && TypeOf(_type) != *mRealType)
 			{
-				auto objectType = dynamic_cast<const ObjectType*>(mRealType);
+				auto objectType = DynamicCast<const ObjectType*>(mRealType);
 				void* typeSample = objectType->CreateSample();
 				IObject* typeSampleObject = objectType->DynamicCastToIObject(typeSample);
 				proxy->GetValuePtr(typeSample);
-				_type res = *dynamic_cast<_type*>(typeSampleObject);
+				_type res = *DynamicCast<_type*>(typeSampleObject);
 				delete typeSampleObject;
 				return res;
 			}
@@ -579,71 +655,35 @@ namespace Editor
 		return IPropertyField::GetProxy<_type>(proxy);
 	}
 
-	template<typename _type>
-	void TPropertyField<_type>::SetProxy(IAbstractValueProxy* proxy, const _type& value)
-	{
+	void SetProxy(IAbstractValueProxy* proxy, const _type& value) {
 		IPropertyField::SetProxy<_type>(proxy, value);
 	}
 
-}
-// --- META ---
+	Ref<Button> mRevertBtn;
+	Ref<Button> mRemoveBtn;
+	Ref<Label> mCaption;
+	String mValuesPath;
+	Ref<FieldInfo> mFieldInfo;
+	Ref<PropertiesContext> mParentContext;
+	bool mRevertable;
+	Map<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>> mValuesProxies;
+	bool mValuesDifferent;
+};
 
-CLASS_BASES_META(Editor::IPropertyField)
-{
-    BASE_CLASS(o2::HorizontalLayout);
-}
-END_META;
-CLASS_FIELDS_META(Editor::IPropertyField)
-{
-    FIELD().PUBLIC().NAME(onChanged);
-    FIELD().PUBLIC().NAME(onChangeCompleted);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFieldInfo);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentContext);
-    FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mRevertable);
-    FIELD().PROTECTED().NAME(mValuesProxies);
-    FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mValuesDifferent);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRevertBtn);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaption);
-    FIELD().PROTECTED().NAME(mValuesPath);
-    FIELD().PROTECTED().NAME(mBeforeChangeValues);
-}
-END_META;
-CLASS_METHODS_META(Editor::IPropertyField)
-{
+template<typename _type>
+void TPropertyField<_type>::OnTypeSpecialized(const Type& newType) {
+	IPropertyField::OnTypeSpecialized(newType);
+	if (mValuesDifferent)
+		mRevertBtn->SetEnabled(true);
+}replace raw pointers with Ref<>, except void* pointers.Ref<> is a smart pointer like shared_ptr. Use const Ref<>& for function arguments with pointer types, also in overridden methods. Dont replace void* pointers!! Remove default nullptr value for class members with type Ref<>. If class variable is some kind of "parent", use WeakRef<>. Use mmake<>() to create Ref<>, just like make_shared<>(). Replace dynamic_cast<type*> with DynamicCast<type> to cast Ref<>.
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const IPropertyField&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
-    FUNCTION().PUBLIC().SIGNATURE(const TargetsVec&, GetValueAndPrototypeProxy);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
-    FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(void, Revert);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
-    FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
-    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValuePath, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(const String&, GetValuePath);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetCaptionLabel, Label*);
-    FUNCTION().PUBLIC().SIGNATURE(Label*, GetCaptionLabel);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetRevertable, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsRevertable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
-    FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, CheckValueChangeCompleted);
-    FUNCTION().PROTECTED().SIGNATURE(void, CheckRevertableState);
-    FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
-    FUNCTION().PROTECTED().SIGNATURE(void, FreeValuesProxies);
-    FUNCTION().PROTECTED().SIGNATURE(void, BeginUserChanging);
-    FUNCTION().PROTECTED().SIGNATURE(void, EndUserChanging);
+```cpp
+URE(bool, IsValueRevertable);
+
+FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
+FUNCTION().PROTECTED().SIGNATURE(void, FreeValuesProxies);
+FUNCTION().PROTECTED().SIGNATURE(void, BeginUserChanging);
+FUNCTION().PROTECTED().SIGNATURE(void, EndUserChanging);
 }
 END_META;
 
@@ -656,32 +696,32 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(Editor::TPropertyField<_type>)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(_type()).NAME(mCommonValue);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<_type>>()).NAME(mCommonValue);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRealType);
 }
 END_META;
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(Editor::TPropertyField<_type>)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const TPropertyField&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, Revert);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const _type&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const _type&);
-    FUNCTION().PUBLIC().SIGNATURE(_type, GetCommonValue);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const Ref<_type>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const Ref<_type>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<_type>, GetCommonValue);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
     FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
-    FUNCTION().PROTECTED().SIGNATURE(_type, GetProxy, IAbstractValueProxy*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, const _type&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const _type&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetValueByUser, const _type&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<_type>, GetProxy, IAbstractValueProxy*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, const Ref<_type>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const Ref<_type>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetValueByUser, const Ref<_type>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
 }
 END_META;
 // --- END META ---
+```

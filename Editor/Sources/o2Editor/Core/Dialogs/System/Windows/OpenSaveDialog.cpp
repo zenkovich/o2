@@ -1,5 +1,7 @@
 #include "o2Editor/stdafx.h"
 #include "o2Editor/Core/Dialogs/System/OpenSaveDialog.h"
+#include <Ref.hpp>
+#include <WeakRef.hpp>
 
 #ifdef PLATFORM_WINDOWS
 
@@ -10,12 +12,14 @@ namespace Editor
 		char szFile[MAX_PATH];
 		char oldDir[MAX_PATH];
 
-		int filterStrSize = extensions.Sum<int>([](auto& k, auto& v) { return k.Length() + v.Length() + 2; }) + 1;
+		int filterStrSize = extensions.Sum<int>([](const auto& k, const auto& v) {
+			return k.Length() + v.Length() + 2;
+		}) + 1;
 		char* filterStr = new char[filterStrSize];
 		filterStr[filterStrSize - 1] = '\0';
 
 		int i = 0;
-		for (auto x : extensions)
+		for (const auto& x : extensions)
 		{
 			memcpy(filterStr + i, x.first.Data(), x.first.Length());
 			i += x.first.Length();
@@ -39,13 +43,13 @@ namespace Editor
 		ofn.lpstrFile[0] = '\0';
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = NULL;
+		ofn.lpstrFileTitle = nullptr;
 		ofn.nMaxFileTitle = 0;
 		ofn.lpstrInitialDir = defaultPathReplaced.Data();
 		ofn.Flags = OFN_OVERWRITEPROMPT;
 		ofn.lpstrFilter = filterStr;
 
-		if (GetOpenFileName(&ofn)==TRUE)
+		if (GetOpenFileName(&ofn) == TRUE)
 		{
 			SetCurrentDirectory(oldDir);
 			return ofn.lpstrFile;
@@ -59,12 +63,14 @@ namespace Editor
 		char szFile[MAX_PATH];
 		char oldDir[MAX_PATH];
 
-		int filterStrSize = extensions.Sum<int>([](auto& k, auto& v) { return k.Length() + v.Length() + 2; }) + 1;
+		int filterStrSize = extensions.Sum<int>([](const auto& k, const auto& v) {
+			return k.Length() + v.Length() + 2;
+		}) + 1;
 		char* filterStr = new char[filterStrSize];
 		filterStr[filterStrSize - 1] = '\0';
 
 		int i = 0;
-		for (auto x : extensions)
+		for (const auto& x : extensions)
 		{
 			memcpy(filterStr + i, x.first.Data(), x.first.Length());
 			i += x.first.Length();
@@ -88,7 +94,7 @@ namespace Editor
 		ofn.lpstrFile[0] = '\0';
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = NULL;
+		ofn.lpstrFileTitle = nullptr;
 		ofn.nMaxFileTitle = 0;
 		ofn.lpstrInitialDir = defaultPathReplaced.Data();
 		ofn.Flags = OFN_OVERWRITEPROMPT;

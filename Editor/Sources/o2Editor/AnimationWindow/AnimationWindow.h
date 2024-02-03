@@ -3,6 +3,8 @@
 #include "o2/Utils/Singleton.h"
 #include "o2Editor/Core/Actions/ActionsList.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
+#include "o2/Utils/Ref.h"
+#include "o2/Utils/WeakRef.h"
 
 using namespace o2;
 
@@ -48,13 +50,13 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Sets editing animation
-		void SetAnimation(AnimationClip* animation, AnimationPlayer* player = nullptr);
+		void SetAnimation(Ref<AnimationClip> animation, Ref<AnimationPlayer> player = nullptr);
 
 		// Sets animation editable
-		void SetAnimationEditable(IEditableAnimation* editable);
+		void SetAnimationEditable(Ref<IEditableAnimation> editable);
 
 		// Sets target actor
-		void SetTarget(Ref<Actor> actor);
+		void SetTarget(const Ref<Actor>& actor);
 
 		// Sets curves or handles mode
 		void SetCurvesMode(bool enabled);
@@ -66,12 +68,12 @@ namespace Editor
 		float mTreeViewWidth = 325.0f;    // Width of tree area. Changed by dragable separator
 		float mMinTreeViewWidth = 250.0f; // Minimal tree width
 
-		Ref<Actor>         mTargetActor;         // Target actor on animation
-		AnimationPlayer* mPlayer = nullptr;    // Animation player
+		WeakRef<Actor>         mTargetActor;         // Target actor on animation
+		Ref<AnimationPlayer> mPlayer = nullptr;    // Animation player
 		bool             mOwnPlayer = false;   // Is player owned by this
-		AnimationClip*   mAnimation = nullptr; // Editing animation
+		Ref<AnimationClip>   mAnimation; // Editing animation
 
-		IEditableAnimation* mAnimationEditable = nullptr; // Editable animation holder. Deactivating when editing animation
+		Ref<IEditableAnimation> mAnimationEditable = nullptr; // Editable animation holder. Deactivating when editing animation
 
 		bool mDisableTimeTracking = false; // When true animation time changes has no effect
 
@@ -81,25 +83,25 @@ namespace Editor
 
 		HorizontalLayout* mControlsPanel = nullptr; // Panel with buttons described below
 
-		Toggle* mPreviewToggle = nullptr;    // Preview toggle
-		Toggle* mRecordToggle = nullptr;     // Record toggle
-		Button* mRewindLeft = nullptr;       // Rewind animation to start button
-		Button* mMoveLeft = nullptr;         // Move time one frame left
-		Toggle* mPlayPauseToggle = nullptr;  // Play - pause toggle
-		Button* mMoveRight = nullptr;        // Move time one frame right
-		Button* mRewindRight = nullptr;      // Rewind animation to end
-		Toggle* mLoopToggle = nullptr;       // Animation loop toggle
-		Toggle* mCurvesToggle = nullptr;     // Toggle curves view
-		Button* mAddKeyButton = nullptr;     // Add key on current time button
-		Button* mPropertiesButton = nullptr; // Open properties window
+		Ref<Toggle> mPreviewToggle = nullptr;    // Preview toggle
+		Ref<Toggle> mRecordToggle = nullptr;     // Record toggle
+		Ref<Button> mRewindLeft = nullptr;       // Rewind animation to start button
+		Ref<Button> mMoveLeft = nullptr;         // Move time one frame left
+		Ref<Toggle> mPlayPauseToggle = nullptr;  // Play - pause toggle
+		Ref<Button> mMoveRight = nullptr;        // Move time one frame right
+		Ref<Button> mRewindRight = nullptr;      // Rewind animation to end
+		Ref<Toggle> mLoopToggle = nullptr;       // Animation loop toggle
+		Ref<Toggle> mCurvesToggle = nullptr;     // Toggle curves view
+		Ref<Button> mAddKeyButton = nullptr;     // Add key on current time button
+		Ref<Button> mPropertiesButton = nullptr; // Open properties window
 
-		AnimationTimeline*   mTimeline = nullptr;     // Animation time line
-		HorizontalScrollBar* mTimeScroll = nullptr;   // Time line horizontal scrollbar
-		AnimationTree*       mTree = nullptr;         // animation tracks tree
-		KeyHandlesSheet*     mHandlesSheet = nullptr; // Animation keys handles sheet
-		CurvesSheet*         mCurves = nullptr;       // Animation curves sheet
+		Ref<AnimationTimeline>   mTimeline = nullptr;     // Animation time line
+		Ref<HorizontalScrollBar> mTimeScroll = nullptr;   // Time line horizontal scrollbar
+		Ref<AnimationTree>       mTree = nullptr;         // animation tracks tree
+		Ref<KeyHandlesSheet>     mHandlesSheet = nullptr; // Animation keys handles sheet
+		Ref<CurvesSheet>         mCurves = nullptr;       // Animation curves sheet
 
-		WidgetDragHandle* mTreeSeparatorHandle = nullptr; // Tree separator handle. When it moves, it changes size of all dependent widgets
+		Ref<WidgetDragHandle> mTreeSeparatorHandle = nullptr; // Tree separator handle. When it moves, it changes size of all dependent widgets
 
 		ActionsList mActionsList; // List of actions in animation editor, also injecting into curves editor
 
@@ -158,60 +160,109 @@ namespace Editor
 		friend class KeyHandlesSheet;
 
 		template<typename AnimationTrackType>
-		friend class KeyFramesTrackControl;
+		friend class DynamicCast;
 	};
-}
-// --- META ---
 
+	template<typename Derived, typename Base>
+	class DynamicCast
+	{
+	public:
+		template<typename... Args>
+		static Ref<Derived> Cast(Args&&... args)
+		{
+			return Ref<Derived>(new Derived(std::forward<Args>(args)...));
+		}
+	};
+}#include <memory>
+
+template <typename T>
+class Ref
+{
+public:
+    Ref(T* ptr = nullptr) : m_ptr(ptr) {}
+    ~Ref() { delete m_ptr; }
+    
+    T* operator->() const { return m_ptr; }
+    T& operator*() const { return *m_ptr; }
+
+private:
+    T* m_ptr;
+};
+
+template <typename T>
+Ref<T> mmake()
+{
+    return Ref<T>(new T());
+}
+
+template <typename T>
+class WeakRef
+{
+public:
+    WeakRef(T* ptr = nullptr) : m_ptr(ptr) {}
+
+    T* operator->() const { return m_ptr; }
+    T& operator*() const { return *m_ptr; }
+
+private:
+    T* m_ptr;
+};
+
+class KeyFramesTrackControl
+{
+};
+
+// --- META ---
 CLASS_BASES_META(Editor::AnimationWindow)
 {
     BASE_CLASS(Editor::IEditorWindow);
     BASE_CLASS(o2::Singleton<AnimationWindow>);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::AnimationWindow)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(325.0f).NAME(mTreeViewWidth);
     FIELD().PROTECTED().DEFAULT_VALUE(250.0f).NAME(mMinTreeViewWidth);
     FIELD().PROTECTED().NAME(mTargetActor);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayer);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<AnimationPlayer>>()).NAME(mPlayer);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnPlayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnimation);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<AnimationClip>>()).NAME(mAnimation);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnimationEditable);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDisableTimeTracking);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUpPanel);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWorkArea);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mControlsPanel);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPreviewToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRecordToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRewindLeft);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMoveLeft);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayPauseToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMoveRight);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRewindRight);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLoopToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurvesToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeScroll);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTree);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurves);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTreeSeparatorHandle);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<UpPanel>>()).NAME(mUpPanel);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<WorkArea>>()).NAME(mWorkArea);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<ControlsPanel>>()).NAME(mControlsPanel);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<PreviewToggle>>()).NAME(mPreviewToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<RecordToggle>>()).NAME(mRecordToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<RewindLeft>>()).NAME(mRewindLeft);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<MoveLeft>>()).NAME(mMoveLeft);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<PlayPauseToggle>>()).NAME(mPlayPauseToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<MoveRight>>()).NAME(mMoveRight);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<RewindRight>>()).NAME(mRewindRight);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<LoopToggle>>()).NAME(mLoopToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<CurvesToggle>>()).NAME(mCurvesToggle);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<AddKeyButton>>()).NAME(mAddKeyButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<PropertiesButton>>()).NAME(mPropertiesButton);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<Timeline>>()).NAME(mTimeline);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<TimeScroll>>()).NAME(mTimeScroll);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<Tree>>()).NAME(mTree);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<HandlesSheet>>()).NAME(mHandlesSheet);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<Curves>>()).NAME(mCurves);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<Ref<TreeSeparatorHandle>>()).NAME(mTreeSeparatorHandle);
     FIELD().PROTECTED().NAME(mActionsList);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::AnimationWindow)
 {
-
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*, AnimationPlayer*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationEditable, IEditableAnimation*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Ref<Actor>);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&, const Ref<AnimationPlayer>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationEditable, const IEditableAnimation*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurvesMode, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsCurvesMode);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsCurvesMode) const;
     FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeHandlesSheet);

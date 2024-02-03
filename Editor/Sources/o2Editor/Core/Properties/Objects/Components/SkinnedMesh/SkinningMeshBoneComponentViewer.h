@@ -5,6 +5,9 @@
 #include "o2Editor/Core/Properties/Objects/Components/SkinnedMesh/SkinningMeshEditorLayer.h"
 #include "o2Editor/Core/Tools/MeshWeightsTool.h"
 
+#include "o2/Core/Ref.h"
+#include "o2/Core/WeakRef.h"
+
 using namespace o2;
 
 namespace o2
@@ -21,7 +24,7 @@ namespace Editor
 	// ------------------------------
 	// Skinning Mesh component viewer
 	// ------------------------------
-	class SkinningMeshBoneComponentViewer: public TObjectPropertiesViewer<SkinningMeshBoneComponent>
+	class SkinningMeshBoneComponentViewer: public TObjectPropertiesViewer<Ref<SkinningMeshBoneComponent>>
 	{
 	public:
 		// Default constructor
@@ -41,10 +44,10 @@ namespace Editor
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
-		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+		void RebuildProperties(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targetObjets) override;
 
 		// Called when viewer is refreshed
-		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+		void OnRefreshed(const Vector<Pair<Ref<IObject>, Ref<IObject>>>& targetObjets) override;
 
 		// Enable viewer event function
 		void OnEnabled() override;
@@ -53,30 +56,34 @@ namespace Editor
 		void OnDisabled() override;
 	};
 }
+
 // --- META ---
 
 CLASS_BASES_META(Editor::SkinningMeshBoneComponentViewer)
 {
-    BASE_CLASS(Editor::TObjectPropertiesViewer<SkinningMeshBoneComponent>);
+    BASE_CLASS(Editor::TObjectPropertiesViewer<Ref<SkinningMeshBoneComponent>>);
 }
 END_META;
+
 CLASS_FIELDS_META(Editor::SkinningMeshBoneComponentViewer)
 {
     FIELD().PROTECTED().NAME(mWeightsTool);
     FIELD().PROTECTED().NAME(mFrameTetxureLayer);
 }
 END_META;
+
 CLASS_METHODS_META(Editor::SkinningMeshBoneComponentViewer)
 {
 
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
-    typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
+    typedef const Vector<Pair<Ref<IObject>, Ref<IObject>>>& _tmp1;
+    typedef const Vector<Pair<Ref<IObject>, Ref<IObject>>>& _tmp2;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, const RefVector<Pair<Ref<IObject>, Ref<IObject>>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
+
 // --- END META ---
