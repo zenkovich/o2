@@ -89,9 +89,9 @@ namespace Editor
 	protected:
 		bool mReady = false; // Is widget initialized and ready to use
 				   								           
-		Sprite*    mRenderTargetSprite = nullptr; // Render target sprite, using for caching graphics
-		Ref<Texture> mRenderTarget;                 // Render target texture, using for caching graphics
-		bool       mNeedRedraw = false;           // Is need to redraw render target
+		Ref<Sprite>  mRenderTargetSprite; // Render target sprite, using for caching graphics
+		Ref<Texture> mRenderTarget;       // Render target texture, using for caching graphics
+		bool         mNeedRedraw = false; // Is need to redraw render target
 				   								           
 		Color4 mBackColor; // Color of back @SERIALIZABLE
 		Color4 mGridColor; // Color of grid @SERIALIZABLE

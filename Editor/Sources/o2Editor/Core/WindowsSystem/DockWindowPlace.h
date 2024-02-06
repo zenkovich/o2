@@ -15,7 +15,7 @@ namespace Editor
 	// ------------------------------------
 	// Dockable windows place for attaching
 	// ------------------------------------
-	class DockWindowPlace: public o2::Widget, public DrawableCursorEventsListener
+	class DockWindowPlace: public Widget, public DrawableCursorEventsListener
 	{
 	public:
 		// Default constructor
@@ -35,7 +35,7 @@ namespace Editor
 
 		// Sets resizible side and configures drag handle when draggable is true
 		void SetResizibleDir(TwoDirection dir, float border,
-							 DockWindowPlace* neighborMin, DockWindowPlace* neighborMax);
+							 const Ref<DockWindowPlace>& neighborMin, const Ref<DockWindowPlace>& neighborMax);
 
 		// Returns resizible side
 		TwoDirection GetResizibleDir() const;
@@ -44,7 +44,7 @@ namespace Editor
 		void ArrangeChildWindows();
 
 		// Sets target window as active tab
-		void SetActiveTab(DockableWindow* window);
+		void SetActiveTab(const Ref<DockableWindow>& window);
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -60,15 +60,15 @@ namespace Editor
 	protected:
 		TwoDirection mResizibleDir; // Resizible dragable side
 
-		DockWindowPlace* mNeighborMin;         // Resizing neighbor, using when dragging this side
-		CursorEventsArea mDragHandleMin;       // Separator drag handle
-		Layout           mDragHandleLayoutMin; // Separator drag handle layout
-		RectF            mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
+		WeakRef<DockWindowPlace> mNeighborMin;         // Resizing neighbor, using when dragging this side
+		CursorEventsArea         mDragHandleMin;       // Separator drag handle
+		Layout                   mDragHandleLayoutMin; // Separator drag handle layout
+		RectF                    mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
 
-		DockWindowPlace* mNeighborMax;         // Resizing neighbor, using when dragging this side
-		CursorEventsArea mDragHandleMax;       // Separator drag handle
-		Layout           mDragHandleLayoutMax; // Separator drag handle layout
-		RectF            mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
+		WeakRef<DockWindowPlace> mNeighborMax;         // Resizing neighbor, using when dragging this side
+		CursorEventsArea         mDragHandleMax;       // Separator drag handle
+		Layout                   mDragHandleLayoutMax; // Separator drag handle layout
+		RectF                    mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 
 	protected:
 		// Called when cursor drag handle was moved

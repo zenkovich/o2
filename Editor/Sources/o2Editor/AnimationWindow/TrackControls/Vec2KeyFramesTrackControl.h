@@ -41,13 +41,14 @@ namespace Editor
 		SERIALIZABLE(Vec2KeyFramesTrackControl);
 
 	private:
-		SplineTool mTool;                       // Other handles locking tool
-		IEditTool* mPrevSelectedTool = nullptr; // Previous selected tool, for restore
+		SplineTool mTool; // Other handles locking tool
 
-		Actor* mTrackOwner = nullptr; // Actor which animated in track
+		WeakRef<IEditTool> mPrevSelectedTool; // Previous selected tool, for restore
 
-		static Vec2KeyFramesTrackControl* mLastActive; // Last active track control of this type; When multiple track
-		                                               // controls are activated, only the last one works
+		WeakRef<Actor> mTrackOwner; // Actor which animated in track
+
+		static WeakRef<Vec2KeyFramesTrackControl> mLastActive; // Last active track control of this type; When multiple track
+		                                                       // controls are activated, only the last one works
 
 	private:
 		void InitializeControls();

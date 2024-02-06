@@ -40,39 +40,39 @@ namespace Editor
 		SERIALIZABLE(LayersPopup);
 
 	private:
-		LayerPopupItem* mItemSample = nullptr; // Layer item sample @SERIALIZABLE
+        Ref<LayerPopupItem> mItemSample; // Layer item sample @SERIALIZABLE
 
-		Vector<LayerPopupItem*> mItemsCache; // Cached items widgets
+        Vector<Ref<LayerPopupItem>> mItemsCache; // Cached items widgets
 
-		LayerPopupItem* mDraggingItem = nullptr;            // Current dragging item
-		Vec2F           mDragOffset;                        // Offset from left bottom corner of dragging item to cursor
-		float           mDragAnimTime = 0.4f;               // Node expanding time
-		Curve           mDragAnimFunc = Curve::EaseInOut(); // Expanding easing node curve
+        Ref<LayerPopupItem> mDraggingItem;                      // Current dragging item
+        Vec2F               mDragOffset;                        // Offset from left bottom corner of dragging item to cursor
+        float               mDragAnimTime = 0.4f;               // Node expanding time
+        Curve               mDragAnimFunc = Curve::EaseInOut(); // Expanding easing node curve
 
-		HorizontalLayout* mAddButtonLayout = nullptr; // Add new layer button container layout
-		Button*           mAddButton = nullptr;       // Add new layer button
+        Ref<HorizontalLayout> mAddButtonLayout; // Add new layer button container layout
+        Ref<Button>           mAddButton;       // Add new layer button
 
-	private:
-		// Special drawing for contexts
-		void SpecialDraw() override;
+        private:
+        // Special drawing for contexts
+        void SpecialDraw() override;
 
-		// Returns content size for fitting by children
-		Vec2F GetContentSize() const override;
+        // Returns content size for fitting by children
+        Vec2F GetContentSize() const override;
 
-		// Initializes item sample, add button
-		void InitializeControls();
+        // Initializes item sample, add button
+        void InitializeControls();
 
-		// Updates item layout by index and instert coef
-		void UpdateItemLayout(LayerPopupItem* item, int idx);
+        // Updates item layout by index and instert coef
+        void UpdateItemLayout(const Ref<LayerPopupItem>& item, int idx);
 
-		// Updates layers list
-		void UpdateLayersList();
+        // Updates layers list
+        void UpdateLayersList();
 
-		// Updates layers list and fits size
-		void UpdateLayersListAndFit();
+        // Updates layers list and fits size
+        void UpdateLayersListAndFit();
 
-		// Called when item drag began
-		void BeginDragging(LayerPopupItem* item);
+        // Called when item drag began
+        void BeginDragging(const Ref<LayerPopupItem>& item);
 
 		// Called until dragging
 		void UpdateDragging();
@@ -102,7 +102,7 @@ namespace Editor
 		LayerPopupItem& operator=(const LayerPopupItem& other);
 
 		// Sets layer and updates view
-		void SetLayer(SceneLayer* layer);
+		void SetLayer(const Ref<SceneLayer>& layer);
 
 		// Sets name edit box active
 		void BeginEditName();
@@ -121,20 +121,20 @@ namespace Editor
 
 		SERIALIZABLE(LayerPopupItem);
 
-	private:
-		SceneLayer* mLayer = nullptr;
+	private:		
+        Ref<SceneLayer> mLayer;
 
-		LayersPopup* mPopup = nullptr;
+        Ref<LayersPopup> mPopup;
 
-		DragHandle mDragHandle;
+        DragHandle mDragHandle;
 
-		Toggle*  mVisibleToggle = nullptr;
-		Label*   mNameCaption = nullptr;
-		Button*  mRemoveBtn = nullptr;
-		EditBox* mEditBox = nullptr;
+        Ref<Toggle>  mVisibleToggle;
+        Ref<Label>   mNameCaption;
+        Ref<Button>  mRemoveBtn;
+        Ref<EditBox> mEditBox;
 
-		float mDragInsertCoef = 0.0f;
-		float mDragTargetInsertCoef = 0.0f;
+        float mDragInsertCoef = 0.0f;
+        float mDragTargetInsertCoef = 0.0f;
 
 	private:
 		// Called when cursor double clicked

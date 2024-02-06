@@ -28,7 +28,7 @@ namespace Editor
 		CurvePreview& operator=(const CurvePreview& other);
 
 		// Sets viewing curve
-		void SetCurve(Curve* curve);
+		void SetCurve(const Ref<Curve>& curve);
 
 		// Draws widget
 		void Draw() override;
@@ -51,12 +51,14 @@ namespace Editor
 		SERIALIZABLE(CurvePreview);
 
 	protected:
-		Curve*  mCurve = nullptr;
+		Ref<Curve> mCurve; // Viewing curve
 
-		bool    mNeedRedraw = false;
-		Sprite* mSprite = nullptr;
-		Color4  mBackColor = Color4(225, 232, 232);
-		Color4  mCurveColor = Color4(44, 62, 80);
+		bool mNeedRedraw = false; // Need redraw flag
+
+		Ref<Sprite> mSprite; // Image sprite, used for drawing
+
+		Color4 mBackColor = Color4(225, 232, 232); // Background color
+		Color4 mCurveColor = Color4(44, 62, 80);   // Curve color
 
 	protected:
 		// Updates layers layouts, calls after updating widget layout

@@ -23,9 +23,12 @@ namespace Editor
 	// -------------------------
 	// Application configuration
 	// -------------------------
-	class EditorConfig: public ISerializable, public Singleton<EditorConfig>
+	class EditorConfig : public ISerializable, public Singleton<EditorConfig>
 	{
 	public:
+		// ---------------------------
+		// Global editor configuration
+		// ---------------------------
 		class GlobalConfig : public ISerializable
 		{
 		public:
@@ -36,6 +39,9 @@ namespace Editor
 			SERIALIZABLE(GlobalConfig);
 		};
 
+		// ----------------------------
+		// Project editor configuration
+		// ----------------------------
 		class ProjectConfig : public ISerializable
 		{
 		public:
@@ -65,7 +71,7 @@ namespace Editor
 		String mConfigPath = "../../EditorConfig.json";
 		String mGlobalConfigPath = "../../Config.json";
 
-		bool          mConfigsLoaded = false; // True if configurations were loaded
+		bool mConfigsLoaded = false; // True if configurations were loaded
 
 	protected:
 		// Saves global configs
@@ -95,64 +101,62 @@ namespace Editor
 
 CLASS_BASES_META(Editor::EditorConfig)
 {
-    BASE_CLASS(o2::ISerializable);
-    BASE_CLASS(o2::Singleton<EditorConfig>);
+	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::Singleton<EditorConfig>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig)
 {
-    FIELD().PUBLIC().NAME(projectConfig);
-    FIELD().PUBLIC().NAME(globalConfig);
-    FIELD().PROTECTED().DEFAULT_VALUE("../../EditorConfig.json").NAME(mConfigPath);
-    FIELD().PROTECTED().DEFAULT_VALUE("../../Config.json").NAME(mGlobalConfigPath);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mConfigsLoaded);
+	FIELD().PUBLIC().NAME(projectConfig);
+	FIELD().PUBLIC().NAME(globalConfig);
+	FIELD().PROTECTED().DEFAULT_VALUE("../../EditorConfig.json").NAME(mConfigPath);
+	FIELD().PROTECTED().DEFAULT_VALUE("../../Config.json").NAME(mGlobalConfigPath);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mConfigsLoaded);
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PROTECTED().SIGNATURE(void, SaveGlobalConfigs);
-    FUNCTION().PROTECTED().SIGNATURE(void, SaveProjectConfigs);
-    FUNCTION().PROTECTED().SIGNATURE(void, LoadConfigs);
-    FUNCTION().PROTECTED().SIGNATURE(void, LoadProjectConfig);
-    FUNCTION().PROTECTED().SIGNATURE(void, LoadGlobalConfig);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnWindowChange);
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveGlobalConfigs);
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveProjectConfigs);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadConfigs);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadProjectConfig);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadGlobalConfig);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnWindowChange);
 }
 END_META;
 
 CLASS_BASES_META(Editor::EditorConfig::GlobalConfig)
 {
-    BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig::GlobalConfig)
 {
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDefaultLayout);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mAvailableLayouts);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDefaultLayout);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mAvailableLayouts);
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig::GlobalConfig)
-{
-}
+{}
 END_META;
 
 CLASS_BASES_META(Editor::EditorConfig::ProjectConfig)
 {
-    BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig::ProjectConfig)
 {
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2I(800, 600)).NAME(mWindowSize);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mWindowPosition);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mMaximized);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLayout);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLastLoadedScene);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2I(800, 600)).NAME(mWindowSize);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mWindowPosition);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mMaximized);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLayout);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLastLoadedScene);
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig::ProjectConfig)
-{
-}
+{}
 END_META;
 // --- END META ---

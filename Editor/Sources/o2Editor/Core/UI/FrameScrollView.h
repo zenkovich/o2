@@ -41,10 +41,10 @@ namespace Editor
 		void UpdateSelfTransform() override;
 
 		// Sets horizontal scrollbar
-		void SetHorScrollbar(HorizontalScrollBar* scrollbar);
+		void SetHorScrollbar(const Ref<HorizontalScrollBar>& scrollbar);
 
 		// Sets vertical scrollbar
-		void SetVerScrollbar(VerticalScrollBar* scrollbar);
+		void SetVerScrollbar(const Ref<VerticalScrollBar>& scrollbar);
 
 		// Sets view area
 		void SetViewArea(const RectF& area);
@@ -58,9 +58,10 @@ namespace Editor
 		SERIALIZABLE(FrameScrollView);
 
 	protected:
-		HorizontalScrollBar* mHorScrollbar = nullptr; // Horizontal view scrollbar @SERIALIZABLE
-		VerticalScrollBar*   mVerScrollbar = nullptr; // Vertical view scrollbar @SERIALIZABLE
-		RectF                mAvailableArea;          // Available viewing area @SERIALIZABLE
+		Ref<HorizontalScrollBar> mHorScrollbar; // Horizontal view scrollbar @SERIALIZABLE
+		Ref<VerticalScrollBar>   mVerScrollbar; // Vertical view scrollbar @SERIALIZABLE
+
+		RectF mAvailableArea; // Available viewing area @SERIALIZABLE
 
 	protected:
 		// Updates camera limits

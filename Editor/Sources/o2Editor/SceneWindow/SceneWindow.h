@@ -21,18 +21,24 @@ namespace Editor
 		IOBJECT(SceneWindow);
 
 	protected:
-		SceneEditScreen* mEditWidget;
+		Ref<SceneEditScreen> mEditWidget; // Scene editing widget
 
-		Widget* mUpPanel = nullptr;
+		Ref<Widget> mUpPanel; // Upper panel
 
-		Button*      mLayersButton = nullptr;
-		LayersPopup* mLayersPopup = nullptr;
+		Ref<Button>      mLayersButton; // Layers button
+		Ref<LayersPopup> mLayersPopup;  // Layers popup
 
-		PopupWidget* mGizomsView = nullptr;
+		Ref<PopupWidget> mGizomsView; // Gizoms view
+
 
 	public:
+		// Default constructor
 		SceneWindow();
+
+		// Copy constructor
 		SceneWindow(const SceneWindow& other);
+
+		// Destructor
 		~SceneWindow();
 
 	protected:

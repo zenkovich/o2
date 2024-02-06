@@ -18,12 +18,6 @@
 
 namespace Editor
 {
-	const char* DockableWindow::mTabLayerPath = "tab/main";
-	const char* DockableWindow::mTabIconLayerPath = "tab/main/icon";
-	const char* DockableWindow::mTabCaptionLayerPath = "tab/main/caption";
-	const char* DockableWindow::mIconLayerPath = "back/icon";
-	const char* DockableWindow::mCaptionLayerPath = "back/caption";
-
 	DockableWindow::DockableWindow():
 		Window()
 	{

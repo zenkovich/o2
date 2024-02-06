@@ -23,7 +23,7 @@ namespace Editor
 		~MenuPanel();
 
 		// Add item
-		Widget* AddItem(const o2::MenuPanel::Item& item);
+		Ref<Widget> AddItem(const o2::MenuPanel::Item& item);
 
 		// Adds item by path ("node/sub node/target")
 		void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
@@ -51,7 +51,7 @@ namespace Editor
 		void RemoveItem(const WString& path);
 
 	protected:
-		o2::MenuPanel* mMenuPanel; // Menu panel
+		Ref<o2::MenuPanel> mMenuPanel; // Menu panel
 
 	protected:
 		// Checks is scene was changed and shows confirm dialog

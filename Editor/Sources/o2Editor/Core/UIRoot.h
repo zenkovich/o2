@@ -23,19 +23,19 @@ namespace Editor
 	{
 	public:
 		// Adds widget to root
-		Widget* AddWidget(Widget* widget);
+		Ref<Widget> AddWidget(const Ref<Widget>& widget);
 
 		// Removes widget from root
-		void RemoveWidget(Widget* widget);
+		void RemoveWidget(const Ref<Widget>& widget);
 
 		// Removes all widgets from root
 		void RemoveAllWidgets();
 
 		// Returns root widget
-		Widget* GetRootWidget();
+		const Ref<Widget>& GetRootWidget();
 
 	private:
-		Widget* mRootWidget = nullptr;
+		Ref<Widget> mRootWidget; // Root widget for editor UI
 
 	private:
 		// Default constructor, creates root widget

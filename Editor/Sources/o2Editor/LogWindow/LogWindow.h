@@ -14,20 +14,28 @@ namespace o2
 
 namespace Editor
 {
-	class LogWindow: public IEditorWindow, public LogStream
+	// ----------------
+	// Log window class
+	// ----------------
+	class LogWindow : public IEditorWindow, public LogStream
 	{
 		IOBJECT(LogWindow);
 
 	public:
+		// -----------------------------------------------------------------------------------
+		// LogMessage class represents a log message with its type, message content, and index
+		// -----------------------------------------------------------------------------------		
 		class LogMessage
 		{
 		public:
+			// Enum to represent the type of log message (Regular, Warning, Error)
 			enum class Type { Regular, Warning, Error };
 
-			Type   type;
-			String message;
-			int    idx;
+			Type   type;     // Type of the log message
+			String message;  // Content of the log message
+			int    idx;      // Index of the log message
 
+			// Overloading the equality operator to compare two LogMessage objects
 			bool operator==(const LogMessage& other) const;
 		};
 
@@ -35,22 +43,23 @@ namespace Editor
 		void Update(float dt) override;
 
 	protected:
-		LongList* mList = nullptr;
-		Widget*   mLastMessageView = nullptr;
-		Text*     mMessagesCountLabel = nullptr;
-		Text*     mWarningsCountLabel = nullptr;
-		Text*     mErrorsCountLabel = nullptr;
+		Ref<LongList> mList;            // Reference to the LongList widget
+		Ref<Widget>   mLastMessageView; // Reference to the last message view widget
 
-		Vector<LogMessage> mAllMessages;
-		Vector<LogMessage> mVisibleMessages;
+		Ref<Text> mMessagesCountLabel; // Reference to the label displaying the count of all messages
+		Ref<Text> mWarningsCountLabel; // Reference to the label displaying the count of warning messages
+		Ref<Text> mErrorsCountLabel;   // Reference to the label displaying the count of error messages
 
-		bool mRegularMessagesEnabled;
-		bool mWarningMessagesEnabled;
-		bool mErrorMessagesEnabled;
+		Vector<LogMessage> mAllMessages;    // Vector storing all log messages
+		Vector<LogMessage> mVisibleMessages;// Vector storing visible log messages
 
-		int mRegularMessagesCount;
-		int mWarningMessagesCount;
-		int mErrorMessagesCount;
+		bool mRegularMessagesEnabled = true; // Flag indicating if regular messages are enabled
+		bool mWarningMessagesEnabled = true; // Flag indicating if warning messages are enabled
+		bool mErrorMessagesEnabled = true;   // Flag indicating if error messages are enabled
+
+		int mRegularMessagesCount = 0; // Count of regular messages
+		int mWarningMessagesCount = 0; // Count of warning messages
+		int mErrorMessagesCount = 0;   // Count of error messages
 
 	public:
 		// Default constructor
@@ -85,7 +94,7 @@ namespace Editor
 		Vector<void*> GetVisibleMessagesRange(int min, int max);
 
 		// Sets list item by message
-		void SetupListMessage(Widget* item, void* object);
+		void SetupListMessage(const Ref<Widget>& item, void* object);
 
 		// Outs string to stream
 		void OutStrEx(const WString& str) override;

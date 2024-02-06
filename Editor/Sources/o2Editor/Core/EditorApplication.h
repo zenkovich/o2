@@ -68,16 +68,16 @@ namespace Editor
 		bool IsPlaying() const;
 
 	protected:
-		Sprite* mBackground = nullptr; // Background sprite
-		Sprite* mBackSign = nullptr;   // Background o2 signature
+        Ref<Sprite> mBackground; // Background sprite
+        Ref<Sprite> mBackSign;   // Background o2 signature
 
-		UIRoot*         mUIRoot = nullptr;         // Root editor UI
-		WindowsManager* mWindowsManager = nullptr; // Windows manager
-		EditorConfig*   mConfig = nullptr;         // Application configuration
-		ToolsPanel*     mToolsPanel = nullptr;     // Tools panel
-		MenuPanel*      mMenuPanel = nullptr;      // Menu panel
+        Ref<UIRoot>         mUIRoot;         // Root editor UI
+        Ref<WindowsManager> mWindowsManager; // Windows manager
+        Ref<EditorConfig>   mConfig;         // Application configuration
+        Ref<ToolsPanel>     mToolsPanel;     // Tools panel
+        Ref<MenuPanel>      mMenuPanel;      // Menu panel
 
-		Properties* mProperties = nullptr; // Properties manager
+        Ref<Properties> mProperties; // Properties manager
 
 		SceneAssetRef mLoadedScene; // Current loaded scene
 

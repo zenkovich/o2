@@ -36,13 +36,13 @@ namespace Editor
 		bool IsDocked() const;
 
 		// Return pointer to docking sample sprite
-		Sprite* GetDockingFrameSample() const; 
+		const Ref<Sprite>& GetDockingFrameSample() const; 
 
 		// Sets icon sprite
-		void SetIcon(Sprite* icon) override;
+		void SetIcon(const Ref<Sprite>& icon) override;
 
 		// Returns icon sprite
-		Sprite* GetIcon() const override;
+		Ref<Sprite> GetIcon() const override;
 
 		// Sets icon layer layout
 		void SetIconLayout(const Layout& layout) override;
@@ -75,7 +75,7 @@ namespace Editor
 		bool IsAutoCalcuclatingTabWidth() const;
 
 		// Places this into empty dock
-		void PlaceDock(DockWindowPlace* targetDock);
+		void PlaceDock(const Ref<DockWindowPlace>& targetDock);
 
 		// Undocks this window, using when window moved out from dock
 		void Undock();
@@ -92,19 +92,19 @@ namespace Editor
 		SERIALIZABLE(DockableWindow);
 
 	protected:
-		static const char* mTabLayerPath;
-		static const char* mTabIconLayerPath;
-		static const char* mTabCaptionLayerPath;
-		static const char* mIconLayerPath;
-		static const char* mCaptionLayerPath;
+		const String mTabLayerPath = "tab/main";
+		const String mTabIconLayerPath = "tab/main/icon";
+		const String mTabCaptionLayerPath = "tab/main/caption";
+		const String mIconLayerPath = "back/icon";
+		const String mCaptionLayerPath = "back/caption";
 
 		const float mDockSizeCoef = 0.2f;
 		const float mDockBorder = 1.5f;
 
-		bool    mDocked = false;               // Is window docked
-		Sprite* mDockingFrameSample = nullptr; // Docking frame sample @SERIALIZABLE
-		RectF   mDockingFrameCurrent;          // Docking sample current frame
-		RectF   mDockingFrameTarget;           // Docking sample target  frame
+		bool        mDocked = false;      // Is window docked
+		Ref<Sprite> mDockingFrameSample;  // Docking frame sample @SERIALIZABLE
+		RectF       mDockingFrameCurrent; // Docking sample current frame
+		RectF       mDockingFrameTarget;  // Docking sample target  frame
 
 		Ref<AnimationPlayer> mDockingFrameAppearance = mmake<AnimationPlayer>(); // Docking frame appearance tween
 
@@ -146,13 +146,13 @@ namespace Editor
 		void OnMoveBegin(const Input::Cursor&);
 
 		// Searches dock place under cursor and returns parameters of them
-		bool TraceDock(DockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect);
+		bool TraceDock(Ref<DockWindowPlace>& targetDock, Side& dockPosition, RectF& dockZoneRect);
 
 		// Places this into target dock as non line arranged
-		void PlaceNonLineDock(DockWindowPlace* targetDock, Side dockPosition);
+		void PlaceNonLineDock(const Ref<DockWindowPlace>& targetDock, Side dockPosition);
 
 		// Places this into target dock as line arranged
-		void PlaceLineDock(DockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect);
+		void PlaceLineDock(const Ref<DockWindowPlace>& targetDock, Side dockPosition, RectF dockZoneRect);
 
 		// Sets window as one of tab
 		void SetTabState(float offset, int position, bool isFirst);

@@ -34,11 +34,11 @@ namespace Editor
 		SERIALIZABLE(TexturePreview);
 
 	protected:
-		float mLabelHeight = 20.0f;
+		const float mLabelHeight = 20.0f; // Height of the label with texture info
 
-		Sprite* mBackgroundSprite = nullptr;
-		Sprite* mTextureSprite = nullptr;
-		Label*  mTextureInfoLabel = nullptr;
+		Ref<Sprite> mBackgroundSprite; // Background sprite (chessmate pattern)
+		Ref<Sprite> mTextureSprite;    // Texture sprite
+		Ref<Label>  mTextureInfoLabel; // Texture info label
 
 	protected:
 		// Updates layers layouts, calls after updating widget layout; calculates sprite size

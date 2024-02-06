@@ -34,7 +34,7 @@ namespace Editor
 
 		// Returns window by type
 		template<typename _type>
-		_type* GetWindow() const;
+		Ref<_type> GetWindow() const;
 
 		// Returns current windows layout
 		WindowsLayout GetWindowsLayout();
@@ -52,9 +52,9 @@ namespace Editor
 		void SaveCurrentWindowsLayout(const String& name);
 
 	protected:
-		Vector<IEditorWindow*>     mEditorWindows;           // Editors windows list
-		DockWindowPlace*           mMainDockPlace = nullptr; // Main windows dock place
-		Map<String, WindowsLayout> mAvailableLayouts;        // Available layouts
+		Vector<Ref<IEditorWindow>> mEditorWindows;    // Editors windows list
+		Ref<DockWindowPlace>       mMainDockPlace;    // Main windows dock place
+		Map<String, WindowsLayout> mAvailableLayouts; // Available layouts
 
 	protected:
 		// Default constructor

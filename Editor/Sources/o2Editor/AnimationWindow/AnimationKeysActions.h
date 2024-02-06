@@ -9,7 +9,7 @@ namespace Editor
 	{
 	public:
 		AnimationAddKeysAction();
-		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, KeyHandlesSheet* editor);
+		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
 
 		String GetName() const override;
 		void Redo() override;
@@ -20,14 +20,14 @@ namespace Editor
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
 		DataDocument                mKeysData;
-		KeyHandlesSheet*            mEditor;
+		WeakRef<KeyHandlesSheet>    mEditor;
 	};
 
 	class AnimationDeleteKeysAction : public IAction
 	{
 	public:
 		AnimationDeleteKeysAction();
-		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, KeyHandlesSheet* editor);
+		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
 
 		String GetName() const override;
 		void Redo() override;
@@ -38,7 +38,7 @@ namespace Editor
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
 		DataDocument                mKeysData;
-		KeyHandlesSheet*            mEditor;
+		WeakRef<KeyHandlesSheet>    mEditor;
 	};
 
 	class AnimationKeysChangeAction : public IAction
@@ -47,7 +47,7 @@ namespace Editor
 		AnimationKeysChangeAction();
 		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,
 								  DataDocument& beforeKeysData, DataDocument& afterKeysData,
-								  KeyHandlesSheet* editor);
+								  const Ref<KeyHandlesSheet>& editor);
 
 		String GetName() const override;
 		void Redo() override;
@@ -59,7 +59,7 @@ namespace Editor
 		Map<String, Vector<UInt64>> mKeys;
 		DataDocument                mBeforeKeysData;
 		DataDocument                mAfterKeysData;
-		KeyHandlesSheet*            mEditor;
+		WeakRef<KeyHandlesSheet>    mEditor;
 	};
 }
 // --- META ---

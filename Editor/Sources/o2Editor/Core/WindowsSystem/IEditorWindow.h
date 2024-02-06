@@ -41,12 +41,12 @@ namespace Editor
 		void Hide();
 
 		// Returns window
-		DockableWindow* GetWindow() const;
+		const Ref<DockableWindow>& GetWindow() const;
 
 		IOBJECT(IEditorWindow);
 
 	protected:
-		DockableWindow* mWindow = nullptr; // Dockable UI window 
+		Ref<DockableWindow> mWindow; // Dockable UI window 
 
 	protected:
 		// Called after that all windows was created

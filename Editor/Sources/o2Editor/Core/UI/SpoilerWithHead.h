@@ -40,9 +40,9 @@ namespace Editor
 		IOBJECT(SpoilerWithHead);
 
 	private:
-		Button* mOptionsBtn = nullptr; // Component option button
-		Button* mSaveBtn = nullptr;    // Save prototype button
-		Image*  mIcon = nullptr;       // Component icon
+		Ref<Button> mOptionsBtn; // Component option button
+		Ref<Button> mSaveBtn;    // Save prototype button
+		Ref<Image>  mIcon;       // Component icon
 
 	private:
 		// Initializes controls: options, save button and icon

@@ -9,7 +9,7 @@ namespace Editor
 	// -----------------
 	// Scene drag handle
 	// -----------------
-	class SceneDragHandle: public DragHandle
+	class SceneDragHandle : public DragHandle
 	{
 	public:
 		// Handle drawing type. 
@@ -25,7 +25,7 @@ namespace Editor
 		SceneDragHandle();
 
 		// Constructor with views
-		SceneDragHandle(IRectDrawable* regular, IRectDrawable* hover = nullptr, IRectDrawable* pressed = nullptr);
+		SceneDragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr, const Ref<IRectDrawable>& pressed = nullptr);
 
 		// Copy-constructor
 		SceneDragHandle(const SceneDragHandle& other);
@@ -60,24 +60,24 @@ PRE_ENUM_META(Editor::SceneDragHandle::Mode);
 
 CLASS_BASES_META(Editor::SceneDragHandle)
 {
-    BASE_CLASS(o2::DragHandle);
+	BASE_CLASS(o2::DragHandle);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SceneDragHandle)
 {
-    FIELD().PUBLIC().DEFAULT_VALUE(Mode::ScreenSpace).NAME(mode);
+	FIELD().PUBLIC().DEFAULT_VALUE(Mode::ScreenSpace).NAME(mode);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneDragHandle)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(IRectDrawable*, IRectDrawable*, IRectDrawable*);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneDragHandle&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(IRectDrawable*, IRectDrawable*, IRectDrawable*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneDragHandle&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
 }
 END_META;
 // --- END META ---

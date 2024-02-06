@@ -50,12 +50,12 @@ namespace Editor
 	TreeWindow::~TreeWindow()
 	{}
 
-	SceneHierarchyTree* TreeWindow::GetSceneTree() const
+	const Ref<SceneHierarchyTree>& TreeWindow::GetSceneTree() const
 	{
 		return mSceneTree;
 	}
 
-	DrawOrderTree* TreeWindow::GetDrawOrderTree() const
+	const Ref<DrawOrderTree>& TreeWindow::GetDrawOrderTree() const
 	{
 		return mDrawOrderTree;
 	}
@@ -73,7 +73,7 @@ namespace Editor
 		return mSceneTree->IsFocused() || mDrawOrderTree->IsFocused();
 	}
 
-	void TreeWindow::SetSelectedObjects(const Vector<SceneEditableObject*>& objects)
+	void TreeWindow::SetSelectedObjects(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		if (mSceneTree->IsEnabled())
 			mSceneTree->SetSelectedObjects(objects);
@@ -90,7 +90,7 @@ namespace Editor
 			mDrawOrderTree->UpdateNodesView();
 	}
 
-	void TreeWindow::HighlightObjectTreeNode(SceneEditableObject* targetObject)
+	void TreeWindow::HighlightObjectTreeNode(const Ref<SceneEditableObject>& targetObject)
 	{
 		if (mSceneTree->IsEnabled())
 			mSceneTree->ScrollToAndHighlight(targetObject);

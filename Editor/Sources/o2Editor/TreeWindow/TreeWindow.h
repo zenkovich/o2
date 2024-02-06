@@ -33,10 +33,10 @@ namespace Editor
 
 	public:
 		// Returns actors tree widget
-		SceneHierarchyTree* GetSceneTree() const;
+		const Ref<SceneHierarchyTree>& GetSceneTree() const;
 
 		// Returns draw order tree widget
-		DrawOrderTree* GetDrawOrderTree() const;
+		const Ref<DrawOrderTree>& GetDrawOrderTree() const;
 
 		// Enables focus on current tree
 		void FocusTree();

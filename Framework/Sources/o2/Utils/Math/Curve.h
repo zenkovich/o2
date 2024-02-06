@@ -13,7 +13,7 @@ namespace o2
     // ------------
     // Bezier curve
     // ------------
-    class Curve: public ISerializable
+    class Curve: public ISerializable, public RefCounterable
     {
     public:
         class Key;

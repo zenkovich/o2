@@ -48,13 +48,13 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Sets editing animation
-		void SetAnimation(AnimationClip* animation, AnimationPlayer* player = nullptr);
+		void SetAnimation(const Ref<AnimationClip>& animation, const Ref<AnimationPlayer>& player = nullptr);
 
 		// Sets animation editable
-		void SetAnimationEditable(IEditableAnimation* editable);
+		void SetAnimationEditable(const Ref<IEditableAnimation>& editable);
 
 		// Sets target actor
-		void SetTarget(Ref<Actor> actor);
+		void SetTarget(const Ref<Actor>& actor);
 
 		// Sets curves or handles mode
 		void SetCurvesMode(bool enabled);
@@ -66,12 +66,12 @@ namespace Editor
 		float mTreeViewWidth = 325.0f;    // Width of tree area. Changed by dragable separator
 		float mMinTreeViewWidth = 250.0f; // Minimal tree width
 
-		Ref<Actor>         mTargetActor;         // Target actor on animation
-		AnimationPlayer* mPlayer = nullptr;    // Animation player
-		bool             mOwnPlayer = false;   // Is player owned by this
-		AnimationClip*   mAnimation = nullptr; // Editing animation
+		Ref<Actor>               mTargetActor;       // Target actor on animation
+		WeakRef<AnimationPlayer> mPlayer;            // Animation player
+		bool                     mOwnPlayer = false; // Is player owned by this
+		WeakRef<AnimationClip>   mAnimation;         // Editing animation
 
-		IEditableAnimation* mAnimationEditable = nullptr; // Editable animation holder. Deactivating when editing animation
+		WeakRef<IEditableAnimation> mAnimationEditable; // Editable animation holder. Deactivating when editing animation
 
 		bool mDisableTimeTracking = false; // When true animation time changes has no effect
 
