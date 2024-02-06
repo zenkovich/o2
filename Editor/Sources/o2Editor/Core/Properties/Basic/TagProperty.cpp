@@ -56,7 +56,7 @@ namespace Editor
 		mTagsContext->RemoveAllItems();
 		mTagsContext->Show(mEditBox->layout->GetWorldLeftBottom());
 
-		for (auto tag : o2Scene.GetTags())
+		for (auto& tag : o2Scene.GetTags())
 		{
 			if (filter.IsEmpty() || tag->GetName().CountOf(filter) > 0)
 				mTagsContext->AddItem(tag->GetName(), [=]() { PushTag(tag->GetName()); });
@@ -69,7 +69,7 @@ namespace Editor
 		mValuesDifferent = false;
 
 		WString res;
-		for (auto tag : mCommonValue.GetTagsNames())
+		for (auto& tag : mCommonValue.GetTagsNames())
 			res += tag + " ";
 
 		mPushingTag = true;
@@ -106,7 +106,7 @@ namespace Editor
 
 		TagGroup tagsValue;
 
-		for (auto tagName : tagsNames)
+		for (auto& tagName : tagsNames)
 		{
 			if (!tagName.IsEmpty())
 				tagsValue.AddTag(tagName);

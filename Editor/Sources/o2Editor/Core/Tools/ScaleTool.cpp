@@ -216,7 +216,7 @@ namespace Editor
 			Basis::Rotated(mHandlesAngle)*
 			Basis::Translated(mSceneHandlesPos);
 
-		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+		for (auto& object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
 			object->SetTransform(object->GetTransform()*transform);
 			object->UpdateTransform();

@@ -39,7 +39,7 @@ namespace Editor
 
 			objectsData.Get(objects);
 
-			for (auto object : objects)
+			for (auto& object : objects)
 				parent->AddEditableChild(object, insertIdx++);
 		}
 		else
@@ -48,7 +48,7 @@ namespace Editor
 
 			objectsData.Get(objects);
 
-			for (auto object : objects)
+			for (auto& object : objects)
 				object->SetIndexInSiblings(insertIdx++);
 		}
 
@@ -58,7 +58,7 @@ namespace Editor
 
 	void CreateAction::Undo()
 	{
-		for (auto objectId : objectsIds)
+		for (auto& objectId : objectsIds)
 		{
 			SceneEditableObject* object = o2Scene.GetEditableObjectByID(objectId);
 			if (object)

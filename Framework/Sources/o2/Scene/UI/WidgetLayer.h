@@ -334,11 +334,11 @@ namespace o2
 	template<typename _type>
 	Ref<_type> WidgetLayer::FindChild() const
 	{
-		for (auto child : mChildren)
+		for (auto& child : mChildren)
 			if (child->mDrawable && child->mDrawable->GetType() == TypeOf(_type))
 				return DynamicCast<_type>(child->mDrawable);
 
-		for (auto child : mChildren) {
+		for (auto& child : mChildren) {
 			auto res = child->FindChild<_type>();
 			if (res)
 				return res;

@@ -51,7 +51,7 @@ namespace Editor
 
 	SceneEditScreen::~SceneEditScreen()
 	{
-		for (auto tool : mTools)
+		for (auto& tool : mTools)
 			delete tool;
 	}
 
@@ -70,12 +70,12 @@ namespace Editor
 		if (mEnabledTool)
 			mEnabledTool->DrawScreen();
 
-		for (auto handle : mDragHandles)
+		for (auto& handle : mDragHandles)
 			handle->Draw();
 
 		mEditorLayers.SortBy<int>([](SceneEditorLayer* l) { return l->GetOrder(); });
 
-		for (auto layer : mEditorLayers)
+		for (auto& layer : mEditorLayers)
 		{
 			if (layer->IsEnabled() && IsLayerEnabled(layer->GetName()))
 				layer->DrawOverScene();
@@ -98,13 +98,13 @@ namespace Editor
 		UpdateCamera(dt);
 		o2Scene.CheckChangedObjects();
 
-		for (auto layer : mEditorLayers)
+		for (auto& layer : mEditorLayers)
 		{
 			if (layer->IsEnabled() && IsLayerEnabled(layer->GetName()))
 				layer->Update(dt);
 		}
 
-		for (auto tool : mTools)
+		for (auto& tool : mTools)
 			tool->Update(dt);
 	}
 
@@ -184,7 +184,7 @@ namespace Editor
 
 		mEditorLayers.SortBy<int>([](SceneEditorLayer* l) { return l->GetOrder(); });
 
-		for (auto layer : mEditorLayers)
+		for (auto& layer : mEditorLayers)
 		{
 			if (layer->IsEnabled() && IsLayerEnabled(layer->GetName()))
 				layer->DrawScene();
@@ -215,12 +215,12 @@ namespace Editor
 		{
 			o2Scene.BeginDrawingScene();
 
-			for (auto layer : o2Scene.GetLayers())
+			for (auto& layer : o2Scene.GetLayers())
 			{
 				if (!layer->visible)
 					continue;
 
-				for (auto drw : layer->GetDrawables())
+				for (auto& drw : layer->GetDrawables())
 					drw->Draw();
 			}
 
@@ -238,7 +238,7 @@ namespace Editor
 		}
 		else
 		{
-			for (auto object : mSelectedObjects)
+			for (auto& object : mSelectedObjects)
 				DrawObjectSelection(object, mMultiSelectedObjectColor);
 		}
 	}
@@ -464,7 +464,7 @@ namespace Editor
 	void SceneEditScreen::UpdateTopSelectedObjects()
 	{
 		mTopSelectedObjects.Clear();
-		for (auto object : mSelectedObjects)
+		for (auto& object : mSelectedObjects)
 		{
 			bool processing = true;
 
@@ -532,7 +532,7 @@ namespace Editor
 		OnObjectsSelectedFromThis();
 	}
 
-	void SceneEditScreen::OnDropped(ISelectableDragableObjectsGroup* group)
+	void SceneEditScreen::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetsScroll)
@@ -548,7 +548,7 @@ namespace Editor
 		o2Application.SetCursor(CursorType::Arrow);
 	}
 
-	void SceneEditScreen::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void SceneEditScreen::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetsScroll)
@@ -559,13 +559,13 @@ namespace Editor
 			o2Application.SetCursor(CursorType::Hand);
 	}
 
-	void SceneEditScreen::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
+	void SceneEditScreen::OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetsScroll)
 			return;
 
-		for (auto object : assetsScroll->mInstantiatedSceneDragObjects)
+		for (auto& object : assetsScroll->mInstantiatedSceneDragObjects)
 		{
 			object->UpdateTransform();
 			Basis transform = object->GetTransform();
@@ -574,7 +574,7 @@ namespace Editor
 		}
 	}
 
-	void SceneEditScreen::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void SceneEditScreen::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetsScroll)

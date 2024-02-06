@@ -145,7 +145,7 @@ namespace Editor
 				ProcessTreeNode(field.GetValuePtr(object), field.GetType(), field.GetName(), node);
 		}
 
-		for (auto base : type->GetBaseTypes())
+		for (auto& base : type->GetBaseTypes())
 		{
 			if (base.type->GetUsage() != Type::Usage::Object)
 				continue;
@@ -247,7 +247,7 @@ namespace Editor
 		propertyNode->Setup((NodeData*)object, this);
 	}
 
-	void AnimationPropertiesTree::OnNodeDblClick(TreeNode* nodeWidget)
+	void AnimationPropertiesTree::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
 	{
 		if (!nodeWidget)
 			return;
@@ -368,7 +368,7 @@ namespace Editor
 
 	void AnimationPropertiesTree::NodeData::Clear()
 	{
-		for (auto child : children)
+		for (auto& child : children)
 			delete child;
 
 		children.Clear();

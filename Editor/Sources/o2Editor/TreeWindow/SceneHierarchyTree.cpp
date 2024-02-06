@@ -209,7 +209,7 @@ namespace Editor
 		node->mEnableToggle->SetToggleGroup(mEnableTogglesGroup);
 	}
 
-	void SceneHierarchyTree::OnNodeDblClick(TreeNode* nodeWidget)
+	void SceneHierarchyTree::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
 	{
 		((SceneHierarchyTreeNode*)nodeWidget)->EnableEditName();
 	}
@@ -260,7 +260,7 @@ namespace Editor
 		Tree::OnNodesSelectionChanged(objects);
 	}
 
-	void SceneHierarchyTree::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void SceneHierarchyTree::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (assetsScroll)
@@ -274,7 +274,7 @@ namespace Editor
 				UpdateNodesView(true);
 				SetLayoutDirty();
 
-				for (auto object : assetsScroll->mInstantiatedSceneDragObjects)
+				for (auto& object : assetsScroll->mInstantiatedSceneDragObjects)
 				{
 					int idx = mAllNodes.IndexOf([=](Node* x) { return x->object == object; });
 					CreateVisibleNodeWidget(mAllNodes[idx], idx);
@@ -289,7 +289,7 @@ namespace Editor
 		else Tree::OnDragEnter(group);
 	}
 
-	void SceneHierarchyTree::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void SceneHierarchyTree::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (assetsScroll)
@@ -302,7 +302,7 @@ namespace Editor
 		else Tree::OnDragExit(group);
 	}
 
-	void SceneHierarchyTree::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
+	void SceneHierarchyTree::OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (assetsScroll)
@@ -313,7 +313,7 @@ namespace Editor
 		else Tree::OnDraggedAbove(group);
 	}
 
-	void SceneHierarchyTree::OnDropped(ISelectableDragableObjectsGroup* group)
+	void SceneHierarchyTree::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (assetsScroll)

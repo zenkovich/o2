@@ -161,7 +161,7 @@ namespace Editor
 
 	void SkinningMeshComponentViewer::OnReskinPressed()
 	{
-		for (auto targetPair : mTypeTargetObjects)
+		for (auto& targetPair : mTypeTargetObjects)
 		{
 			targetPair.first->NeedUpdateBones();
 			targetPair.first->OnUpdate(0.0f);

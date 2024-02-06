@@ -270,16 +270,16 @@ namespace Editor
 		void SelectObjectWithoutAction(SceneEditableObject* object, bool additive = true);
 
 		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+		void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
+		void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+		void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Returns that this has transparent input
 		bool IsInputTransparent() const override;
@@ -307,7 +307,7 @@ namespace Editor
 	template<typename _type>
 	_type* SceneEditScreen::GetTool()
 	{
-		for (auto tool : mTools)
+		for (auto& tool : mTools)
 		{
 			if (auto typedTool = dynamic_cast<_type*>(tool))
 				return typedTool;

@@ -212,13 +212,13 @@ namespace Editor
 
 	void AssetsWindow::SelectAsset(const Vector<UID>& ids)
 	{
-		for (auto id : ids)
+		for (auto& id : ids)
 			SelectAsset(id);
 	}
 
 	void AssetsWindow::SelectAssets(const Vector<String>& paths)
 	{
-		for (auto path : paths)
+		for (auto& path : paths)
 			SelectAsset(path);
 	}
 
@@ -343,7 +343,7 @@ namespace Editor
 	void AssetsWindow::PasteAssets(const String& targetPath)
 	{
 		Vector<WString> paths = Clipboard::GetCopyFiles();
-		for (auto path : paths)
+		for (auto& path : paths)
 		{
 			String fileName = o2FileSystem.GetPathWithoutDirectories(path);
 			String extension = o2FileSystem.GetFileExtension(fileName);

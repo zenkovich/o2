@@ -174,7 +174,7 @@ namespace Editor
 
 	void DefaultWidgetLayerLayoutViewer::OnPropertyChanged(IPropertyField* field)
 	{
-		for (auto layer : mLayers) {
+		for (auto& layer : mLayers) {
 			layer->GetOwnerWidget()->UpdateTransform();
 			layer->GetOwnerWidget()->OnChanged();
 		}

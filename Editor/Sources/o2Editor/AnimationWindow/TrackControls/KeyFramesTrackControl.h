@@ -167,7 +167,7 @@ namespace Editor
 
 		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
 
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 			handle->handle->Draw();
 
 		o2Render.DisableScissorTest();
@@ -283,7 +283,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		Vector<UInt64> selectedHandles;
-		for (auto keyHandle : mHandles) {
+		for (auto& keyHandle : mHandles) {
 			if (keyHandle->handle->IsSelected())
 				selectedHandles.Add(keyHandle->keyUid);
 		}
@@ -297,7 +297,7 @@ namespace Editor
 			return x->handle;
 																								 });
 
-		for (auto keyHandle : mHandles)
+		for (auto& keyHandle : mHandles)
 			delete keyHandle;
 
 		mHandles.Clear();
@@ -354,7 +354,7 @@ namespace Editor
 			InitializeHandles();
 		}
 		else {
-			for (auto keyHandle : mHandles)
+			for (auto& keyHandle : mHandles)
 				keyHandle->handle->SetPosition(Vec2F(Wrapper::FindKey(*mTrack, keyHandle->keyUid).position, 0.0f));
 		}
 	}
@@ -365,7 +365,7 @@ namespace Editor
 		time = mTimeline->GetTimeCursor();
 
 		bool hasKeyAtTime = false;
-		for (auto key : Wrapper::GetKeys(*mTrack)) {
+		for (auto& key : Wrapper::GetKeys(*mTrack)) {
 			if (mTimeline->IsSameTime(key.position, time)) {
 				hasKeyAtTime = true;
 				break;

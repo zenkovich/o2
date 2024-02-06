@@ -39,7 +39,7 @@ namespace Editor
 	{
 		mCurvesEditor->RemoveAllCurves();
 
-		for (auto track : animation->GetTracks())
+		for (auto& track : animation->GetTracks())
 		{
 			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
 				mCurvesEditor->AddCurve(track->path, &floatTrack->curve);
@@ -56,7 +56,7 @@ namespace Editor
 	{
 		Color4 curveColor(44, 62, 80);
 		int colorIdx = 0;
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 		{
 			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
 			{
@@ -80,7 +80,7 @@ namespace Editor
 		// Check new curves
 		auto currentCurves = mCurvesEditor->GetCurves();
 		Vector<Curve*> animCurves;
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 		{
 			Curve* curve = nullptr;
 			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
@@ -101,7 +101,7 @@ namespace Editor
 		}
 
 		// Check removed curves
-		for (auto curve : mCurvesEditor->GetCurves())
+		for (auto& curve : mCurvesEditor->GetCurves())
 		{
 			if (!animCurves.Contains(curve.second))
 			{

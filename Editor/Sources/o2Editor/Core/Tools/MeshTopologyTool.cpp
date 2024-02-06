@@ -100,7 +100,7 @@ namespace Editor
 
 	void MeshTopologyTool::ClearHandles()
 	{
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 			delete handle;
 
 		mHandles.Clear();
@@ -157,7 +157,7 @@ namespace Editor
 
 		RectF aabb((mSelectedHandles[0])->GetPosition(), (mSelectedHandles[0])->GetPosition());
 
-		for (auto handle : mSelectedHandles)
+		for (auto& handle : mSelectedHandles)
 		{
 			aabb.left = Math::Min(handle->GetPosition().x, aabb.left);
 			aabb.right = Math::Max(handle->GetPosition().x, aabb.right);
@@ -209,7 +209,7 @@ namespace Editor
 
 	void MeshTopologyTool::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		for (auto handle : mSelectingHandlesBuf)
+		for (auto& handle : mSelectingHandlesBuf)
 		{
 			SetHandleSelectedState(handle, false);
 			handle->SetSelected(true);
@@ -221,14 +221,14 @@ namespace Editor
 
 	void MeshTopologyTool::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		for (auto handle : mSelectingHandlesBuf)
+		for (auto& handle : mSelectingHandlesBuf)
 			SetHandleSelectedState(handle, false);
 
 		mSelectingHandlesBuf.Clear();
 
 		RectF selectionLocalRect(mSelectingPressedPoint, WorldToLocal(cursor.position));
 
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 		{
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(handle->GetPosition()) &&
 				!mSelectedHandles.Contains(handle))
@@ -252,7 +252,7 @@ namespace Editor
 
 		tool->DrawTransformFrame();
 
-		for (auto handle : tool->mHandles)
+		for (auto& handle : tool->mHandles)
 			handle->Draw();
 
 		tool->DrawSelection();

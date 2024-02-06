@@ -29,7 +29,7 @@ namespace Editor
 		if (mCurrentViewer)
 			mCurrentViewer->SetEnabled(false);
 
-		for (auto viewer : mViewers)
+		for (auto& viewer : mViewers)
 			delete viewer;
 	}
 
@@ -68,7 +68,7 @@ namespace Editor
 		auto viewersTypes = TypeOf(IPropertiesViewer).GetDerivedTypes();
 		viewersTypes.Remove(&TypeOf(DefaultPropertiesViewer));
 
-		for (auto type : viewersTypes)
+		for (auto& type : viewersTypes)
 			mViewers.Add((IPropertiesViewer*)type->CreateSample());
 
 		mDefaultViewer = mnew DefaultPropertiesViewer();

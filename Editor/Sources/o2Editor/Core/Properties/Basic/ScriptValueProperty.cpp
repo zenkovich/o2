@@ -89,7 +89,7 @@ namespace Editor
 	{
 		PropertiesList res;
 
-		for (auto kv : values)
+		for (auto& kv : values)
 		{
 			if (kv.first.IsObject())
 			{
@@ -205,7 +205,7 @@ namespace Editor
 		{
 			// Check that last built properties are same
 			bool changedProperties = false;
-			for (auto kv : commonProperties)
+			for (auto& kv : commonProperties)
 			{
 				if (!mPreviousBuiltTypes.ContainsKey(kv.first) ||
 					mPreviousBuiltTypes[kv.first] != kv.second[0].first->Get().GetValueType())
@@ -219,7 +219,7 @@ namespace Editor
 			if (changedProperties)
 			{
 				mPreviousBuiltTypes.Clear();
-				for (auto kv : mBuiltProperties)
+				for (auto& kv : mBuiltProperties)
 				{
 					mSpoiler->RemoveChild(kv.second, false);
 					kv.second->RemoveLayer("drag");
@@ -229,7 +229,7 @@ namespace Editor
 
 				mBuiltProperties.Clear();
 
-				for (auto kv : commonProperties)
+				for (auto& kv : commonProperties)
 				{
 					auto& name = kv.first;
 					auto value = kv.second[0].first->Get();
@@ -265,7 +265,7 @@ namespace Editor
 				mNeedUpdateProxies = true;
 			}
 
-			for (auto kv : mBuiltProperties)
+			for (auto& kv : mBuiltProperties)
 			{
 				if (mNeedUpdateProxies)
 				{
@@ -318,9 +318,9 @@ namespace Editor
 			mSpoiler->SetLayoutDirty();
 		}
 
-		for (auto kv : commonProperties)
+		for (auto& kv : commonProperties)
 		{
-			for (auto x : kv.second)
+			for (auto& x : kv.second)
 			{
 				delete x.first;
 				delete x.second;
@@ -363,7 +363,7 @@ namespace Editor
 		if (mIsRefreshing)
 			return;
 
-		for (auto p : mValuesProxies)
+		for (auto& p : mValuesProxies)
 		{
 			ScriptValue first;
 			p.first->GetValuePtr(&first);
@@ -386,7 +386,7 @@ namespace Editor
 
 	void ScriptValueProperty::Remove(int idx)
 	{
-		for (auto p : mValuesProxies)
+		for (auto& p : mValuesProxies)
 		{
 			ScriptValue first;
 			p.first->GetValuePtr(&first);
@@ -398,7 +398,7 @@ namespace Editor
 
 	void ScriptValueProperty::OnAddPressed()
 	{
-		for (auto p : mValuesProxies)
+		for (auto& p : mValuesProxies)
 		{
 			ScriptValue first;
 			p.first->GetValuePtr(&first);

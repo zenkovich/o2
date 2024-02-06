@@ -75,7 +75,7 @@ namespace Editor
 
 	void SkeletonTool::SceneLayer::Update(float dt)
 	{
-		for (auto instance : tool->mSkeletons)
+		for (auto& instance : tool->mSkeletons)
 			instance->UpdateHandlesPositions();
 	}
 
@@ -217,7 +217,7 @@ namespace Editor
 
 	void SkeletonTool::SkeletonInstance::UpdateHandlesPositions()
 	{
-		for (auto handle : boneHandles)
+		for (auto& handle : boneHandles)
 			handle->UpdatePosition();
 	}
 

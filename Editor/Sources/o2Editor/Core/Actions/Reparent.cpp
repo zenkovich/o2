@@ -13,7 +13,7 @@ namespace Editor
 
 	ReparentAction::ReparentAction(const Vector<SceneEditableObject*>& beginObjects)
 	{
-		for (auto object : beginObjects)
+		for (auto& object : beginObjects)
 		{
 			ObjectInfo* info = mnew ObjectInfo();
 
@@ -39,7 +39,7 @@ namespace Editor
 
 	ReparentAction::~ReparentAction()
 	{
-		for (auto info : objectsInfos)
+		for (auto& info : objectsInfos)
 			delete info;
 	}
 
@@ -63,7 +63,7 @@ namespace Editor
 		{
 			int insertIdx = parent->GetEditableChildren().IndexOf(prevObject) + 1;
 
-			for (auto info : objectsInfos)
+			for (auto& info : objectsInfos)
 			{
 				SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
 
@@ -79,7 +79,7 @@ namespace Editor
 			if (auto prevActor = dynamic_cast<Actor*>(prevObject))
 				insertIdx = o2Scene.GetRootActors().IndexOf(prevActor) + 1;
 
-			for (auto info : objectsInfos)
+			for (auto& info : objectsInfos)
 			{
 				SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
 
@@ -94,7 +94,7 @@ namespace Editor
 
 	void ReparentAction::Undo()
 	{
-		for (auto info : objectsInfos)
+		for (auto& info : objectsInfos)
 		{
 			SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
 			SceneEditableObject* parent = o2Scene.GetEditableObjectByID(info->lastParentId);

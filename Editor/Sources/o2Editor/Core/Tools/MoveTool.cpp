@@ -257,7 +257,7 @@ namespace Editor
 	void MoveTool::MoveSelectedObjects(const Vec2F& delta)
 	{
 		auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
-		for (auto object : selectedObjects)
+		for (auto& object : selectedObjects)
 		{
 			Basis basis = object->GetTransform();
 			basis.origin += delta;

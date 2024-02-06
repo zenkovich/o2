@@ -18,7 +18,7 @@ namespace Editor
 			anchors.Set(widget->layout->GetAnchorLeft(), widget->layout->GetAnchorTop(),
 						widget->layout->GetAnchorRight(), widget->layout->GetAnchorBottom());
 
-			for (auto child : widget->GetChildWidgets())
+			for (auto& child : widget->GetChildWidgets())
 			{
 				if (child->GetType() == TypeOf(DockWindowPlace))
 				{
@@ -51,7 +51,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		Vector<DockWindowPlace*> childDockWidgets;
-		for (auto child : dockDef->childs)
+		for (auto& child : dockDef->childs)
 		{
 			dockWidget->interactable = false;
 
@@ -66,7 +66,7 @@ namespace Editor
 		}
 
 		int idx = 0;
-		for (auto child : dockDef->childs)
+		for (auto& child : dockDef->childs)
 		{
 			DockWindowPlace* newDock = childDockWidgets[idx++];
 
@@ -112,14 +112,14 @@ namespace Editor
 		}
 
 		idx = 0;
-		for (auto child : dockDef->childs)
+		for (auto& child : dockDef->childs)
 		{
 			DockWindowPlace* newDock = childDockWidgets[idx++];
 			RestoreDock(&child, newDock);
 		}
 
 		DockableWindow* activeTabWindow = nullptr;
-		for (auto wnd : dockDef->windows)
+		for (auto& wnd : dockDef->windows)
 		{
 			auto window = o2EditorWindows.mEditorWindows.FindOrDefault([&](IEditorWindow* x) { 
 				return x->mWindow->GetName() == wnd; 
@@ -153,7 +153,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		auto childs = dockPlace->GetChildWidgets();
-		for (auto child : childs)
+		for (auto& child : childs)
 		{
 			if (auto dockChild = dynamic_cast<DockWindowPlace*>(child))
 			{

@@ -84,7 +84,7 @@ namespace Editor
 
 	void AddComponentPanel::CreateComponent(const ObjectType* objType)
 	{
-		for (auto actor : mViewer->mTargetActors)
+		for (auto& actor : mViewer->mTargetActors)
 		{
 			auto comp = dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample()));
 			actor->AddComponent(comp);
@@ -95,7 +95,7 @@ namespace Editor
 		mViewer->OnEnabled();
 	}
 
-	void AddComponentPanel::OnNodeDblClick(TreeNode* nodeWidget)
+	void AddComponentPanel::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
 	{
 		if (!nodeWidget)
 			return;
@@ -140,7 +140,7 @@ namespace Editor
 
 		String filterStrLower = mFilterStr.ToLowerCase();
 
-		for (auto type : componentsTypes)
+		for (auto& type : componentsTypes)
 		{
 			if (!type->InvokeStatic<bool>("IsAvailableFromCreateMenu"))
 				continue;
@@ -199,7 +199,7 @@ namespace Editor
 				}
 			}
 
-			for (auto child : node->children)
+			for (auto& child : node->children)
 				recursiveSearch(child);
 		};
 
@@ -317,7 +317,7 @@ namespace Editor
 
 	void ComponentsTree::NodeData::Clear()
 	{
-		for (auto child : children)
+		for (auto& child : children)
 			delete child;
 
 		children.Clear();

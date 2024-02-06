@@ -75,7 +75,7 @@ namespace Editor
 // 		{
 // 			fields.RemoveAll([&](FieldInfo* x) { return hiddenFields.Contains(x->GetName()); });
 // 
-// 			for (auto fieldName : additionalFields)
+// 			for (auto& fieldName : additionalFields)
 // 			{
 // 				if (auto fieldInfo = fields.FindMatch([&](FieldInfo* x) { return x->GetName() == fieldName; }))
 // 					o2EditorProperties.BuildField(mSpoiler, fieldInfo, mPropertiesContext, "");
@@ -93,7 +93,7 @@ namespace Editor
 	void DefaultActorPropertiesViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
 														 const Vector<DataDocument>& after)
 	{
-		for (auto actors : mTargetActors)
+		for (auto& actors : mTargetActors)
 			actors->OnChanged();
 
 		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);

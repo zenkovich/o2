@@ -4682,7 +4682,7 @@ namespace Editor
 		auto funcs = GetType().GetFunctionsWithBaseClasses();
 
 		Timer timer;
-		for (auto func : funcs)
+		for (auto& func : funcs)
 		{
 			if (func->GetName() == "RebuildBasicUIManager" || func->GetName() == "RebuildEditorUIManager" ||
 				func->GetProtectionSection() != ProtectSection::Public)

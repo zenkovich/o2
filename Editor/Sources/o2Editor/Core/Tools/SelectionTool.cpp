@@ -34,7 +34,7 @@ namespace Editor
 
 	void SelectionTool::DrawScene()
 	{
-		for (auto object : mCurrentSelectingObjects)
+		for (auto& object : mCurrentSelectingObjects)
 			o2EditorSceneScreen.DrawObjectSelection(object, o2EditorSceneScreen.GetManyObjectsSelectionColor());
 	}
 
@@ -139,14 +139,14 @@ namespace Editor
 
 			auto currentSelectedObjects = mCurrentSelectingObjects;
 			mCurrentSelectingObjects.Clear();
-			for (auto object : currentSelectedObjects)
+			for (auto& object : currentSelectedObjects)
 			{
 				if (object->GetTransform().AABB().IsIntersects(selectionRect))
 					mCurrentSelectingObjects.Add(object);
 			}
 
 			auto& drawnObjects = o2Scene.GetDrawnEditableObjects();
-			for (auto object : drawnObjects)
+			for (auto& object : drawnObjects)
 			{
 				if (mCurrentSelectingObjects.Contains(object))
 					continue;

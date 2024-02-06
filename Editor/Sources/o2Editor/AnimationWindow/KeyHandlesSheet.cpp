@@ -90,7 +90,7 @@ namespace Editor
 	{
 		CursorAreaEventsListener::OnDrawn();
 
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 		{
 			if (handle->IsEnabled())
 				handle->CursorAreaEventsListener::OnDrawn();
@@ -205,7 +205,7 @@ namespace Editor
 		mBeforeChangeKeysData.Clear();
 		SerializeKeys(mBeforeChangeKeysData, GetSelectedKeys(), 0);
 
-		for (auto trackControl : mTrackControls)
+		for (auto& trackControl : mTrackControls)
 			trackControl->BeginKeysDrag();
 
 		if (!GetSelectedHandles().Contains(handle) && handle != &mCenterFrameDragHandle && 
@@ -217,7 +217,7 @@ namespace Editor
 			SelectHandle(handle);
 		}
 
-		for (auto handle : GetSelectedHandles())
+		for (auto& handle : GetSelectedHandles())
 			handle->BeginDrag(cursor.position);
 
 		mHandleHasMoved = false;
@@ -227,7 +227,7 @@ namespace Editor
 	{
 		SelectableDragHandlesGroup::OnHandleCursorReleased(handle, cursor);
 
-		for (auto trackControl : mTrackControls)
+		for (auto& trackControl : mTrackControls)
 			trackControl->EndKeysDrag();
 
 		if (mSelectedHandles.Count() == 1 && !mHandleHasMoved)
@@ -241,12 +241,12 @@ namespace Editor
 
 	void KeyHandlesSheet::OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos)
 	{
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 			track->BeginKeysBatchChange();
 
 		for (auto& kv : mHandlesGroups)
 		{
-			for (auto handle : kv.second)
+			for (auto& handle : kv.second)
 			{
 				if (!mSelectedHandles.Contains(handle))
 					continue;
@@ -259,7 +259,7 @@ namespace Editor
 			}
 		}
 
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 			track->CompleteKeysBatchingChange();
 		
 		mHandleHasMoved = true;
@@ -341,15 +341,15 @@ namespace Editor
 
 			float scale = (point.x - mSelectionRect.right) / (mSelectionRect.left - mSelectionRect.right);
 
-			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 				track->BeginKeysBatchChange();
 
-			for (auto handle : GetSelectedHandles()) {
+			for (auto& handle : GetSelectedHandles()) {
 				handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.right)*scale + mSelectionRect.right, handle->GetPosition().y));
 				handle->onChangedPos(handle->GetPosition());
 			}
 
-			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 				track->CompleteKeysBatchingChange();
 
 			mNeedUpdateSelectionFrame = true;
@@ -392,15 +392,15 @@ namespace Editor
 
 			float scale = (point.x - mSelectionRect.left) / (mSelectionRect.right - mSelectionRect.left);
 
-			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 				track->BeginKeysBatchChange();
 
-			for (auto handle : GetSelectedHandles()) {
+			for (auto& handle : GetSelectedHandles()) {
 				handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.left)*scale + mSelectionRect.left, handle->GetPosition().y));
 				handle->onChangedPos(handle->GetPosition());
 			}
 
-			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 				track->CompleteKeysBatchingChange();
 
 			mNeedUpdateSelectionFrame = true;
@@ -446,7 +446,7 @@ namespace Editor
 			mSelectionRect.right = mSelectionRect.left;
 			mSelectionRect.top = mSelectionRect.bottom;
 
-			for (auto handle : mSelectedHandles) {
+			for (auto& handle : mSelectedHandles) {
 				float localPos = handle->GetPosition().x;
 				float lineNumber = mAnimationWindow->mTree->GetLineNumber(handle->GetScreenPosition().y);
 
@@ -478,7 +478,7 @@ namespace Editor
 			trackData.AddMember("Path") = kv.first;
 			DataValue& keysData = trackData.AddMember("Keys");
 
-			for (auto handle : fnd.second->GetKeyHandles())
+			for (auto& handle : fnd.second->GetKeyHandles())
 			{
 				if (kv.second.Contains(handle->keyUid))
 				{
@@ -492,7 +492,7 @@ namespace Editor
 	void KeyHandlesSheet::DeserializeKeys(const DataValue& data, Map<String, Vector<UInt64>>& keys, float relativeTime, 
 										  bool generateNewUid /*= true*/)
 	{
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 			track->BeginKeysBatchChange();
 
 		if (data.GetMembersCount() == 1 && mAnimationWindow->mTree->GetSelectedObjects().Count() == 1)
@@ -525,7 +525,7 @@ namespace Editor
 			}
 		}
 
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 			track->CompleteKeysBatchingChange();
 	}
 
@@ -565,7 +565,7 @@ namespace Editor
 			mAnimationWindow->mActionsList.DoneAction(mnew AnimationDeleteKeysAction(keys, data, this));
 		}
 
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 			track->BeginKeysBatchChange();
 		
 		for (auto& handlesGroup : mHandlesGroups)
@@ -580,7 +580,7 @@ namespace Editor
 			}
 		}
 
-		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 			track->CompleteKeysBatchingChange();
 	}
 
@@ -642,10 +642,10 @@ namespace Editor
 
 				DeselectAll();
 
-				for (auto handle : mBeginSelectHandles)
+				for (auto& handle : mBeginSelectHandles)
 					SelectHandle(handle);
 
-				for (auto handle : mHandles) {
+				for (auto& handle : mHandles) {
 					Vec2F handlePos(handle->GetPosition().x, mAnimationWindow->mTree->GetLineNumber(handle->GetScreenPosition().y));
 					if (handlePos.x > mSelectionRect.left && handlePos.x < mSelectionRect.right && handlePos.y > mSelectionRect.top && handlePos.y < mSelectionRect.bottom + 0.5f) {
 						SelectHandle(handle);

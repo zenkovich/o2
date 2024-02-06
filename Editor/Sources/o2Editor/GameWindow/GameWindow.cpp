@@ -85,7 +85,7 @@ namespace Editor
 		// 
 		// 		mDevicesMenu->AddItem("---");
 		// 
-		// 		for (auto kv : mDevicesList)
+		// 		for (auto& kv : mDevicesList)
 		// 		{
 		// 			String caption = kv.first + " (" + (String)kv.second.resolution.x + " x " + (String)kv.second.resolution.y + ")";
 		// 			auto item = mDevicesMenu->AddToggleItem(caption, false, [](bool) {});
@@ -175,7 +175,7 @@ namespace Editor
 
 		EditorScope::Exit(editorDepth);
 
-		for (auto camera : o2Scene.GetCameras())
+		for (auto& camera : o2Scene.GetCameras())
 			camera->listenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
 
 		EditorScope::Enter(editorDepth);

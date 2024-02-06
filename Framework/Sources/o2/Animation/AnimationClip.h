@@ -143,7 +143,7 @@ namespace o2
 	template<typename _type>
 	Ref<AnimationTrack<_type>> AnimationClip::FindTrack(const String& path)
 	{
-		for (auto track : mTracks) {
+		for (auto& track : mTracks) {
 			if (track->path == path)
 				return dynamic_cast<AnimationTrack<_type>*>(track);
 		}
@@ -215,7 +215,7 @@ namespace o2
 	template<typename _type>
 	Ref<AnimationTrack<_type>> AnimationClip::GetTrack(const String& path)
 	{
-		for (auto track : mTracks) {
+		for (auto& track : mTracks) {
 			if (track->path == path)
 				return DynamicCast<AnimationTrack<_type>>(track);;
 		}

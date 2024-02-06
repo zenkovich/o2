@@ -129,7 +129,7 @@ namespace Editor
 
 	FunctionProperty::~FunctionProperty()
 	{
-		for (auto instance : mInstances)
+		for (auto& instance : mInstances)
 			delete instance;
 	}
 
@@ -144,7 +144,7 @@ namespace Editor
 		mInstances.Clear();
 
 		int proxyIdx = 0;
-		for (auto valueProxy : mValuesProxies)
+		for (auto& valueProxy : mValuesProxies)
 		{
 			auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first);
 			auto funcProxyProto = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first);
@@ -247,13 +247,13 @@ namespace Editor
 			idx++;
 		}
 
-		for (auto instance : prevInstances)
+		for (auto& instance : prevInstances)
 			delete instance;
 	}
 
 	void FunctionProperty::OnAddPressed()
 	{
-		for (auto valueProxy : mValuesProxies)
+		for (auto& valueProxy : mValuesProxies)
 		{
 			if (auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first))
 				funcProxy->GetValuePointer()->AddActorSubscription();
@@ -265,11 +265,11 @@ namespace Editor
 
 	void FunctionProperty::OnRemovePressed(FunctionInstance* instance)
 	{
-		for (auto valueProxy : mValuesProxies)
+		for (auto& valueProxy : mValuesProxies)
 		{
 			if (auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first))
 			{
-				for (auto value : instance->values)
+				for (auto& value : instance->values)
 					funcProxy->GetValuePointer()->RemoveFunction(dynamic_cast<IAbstractFunction*>(value.first));
 			}
 		}
@@ -322,7 +322,7 @@ namespace Editor
 			text->horAlign = HorAlign::Left;
 			typeItem->AddChild(text);
 
-			for (auto funcName : functionsList)
+			for (auto& funcName : functionsList)
 			{
 				auto funcItem = funcDropDown->AddItem();
 
@@ -343,7 +343,7 @@ namespace Editor
 		{
 			Vector<String> functionsList;
 
-			for (auto funcInfo : type.GetFunctions())
+			for (auto& funcInfo : type.GetFunctions())
 			{
 				if (funcInfo->GetProtectionSection() == ProtectSection::Public && funcInfo->GetParameters().IsEmpty() &&
 					funcInfo->GetReturnType() == &TypeOf(void))
@@ -376,7 +376,7 @@ namespace Editor
 		auto& actorType = actor->GetType();
 		collectFunctionsByType(getTypeName(actorType), getIconName(actorType), actorType, nullptr);
 
-		for (auto component : actor->GetComponents())
+		for (auto& component : actor->GetComponents())
 		{
 			auto& componentType = component->GetType();
 			if (auto scriptingComponent = dynamic_cast<ScriptableComponent*>(component))

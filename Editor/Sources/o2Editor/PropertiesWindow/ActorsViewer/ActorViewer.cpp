@@ -36,7 +36,7 @@ namespace Editor
 
 		// Create available component and actors viewers
 		auto componentsViewersTypes = TypeOf(IActorComponentViewer).GetDerivedTypes();
-		for (auto type : componentsViewersTypes)
+		for (auto& type : componentsViewersTypes)
 		{
 			if (type->GetName().Contains("TActorComponentViewer"))
 				continue;
@@ -45,7 +45,7 @@ namespace Editor
 		}
 
 		auto actorPropertiessViewersTypes = TypeOf(IActorPropertiesViewer).GetDerivedTypes();
-		for (auto type : actorPropertiessViewersTypes)
+		for (auto& type : actorPropertiessViewersTypes)
 			mAvailableActorPropertiesViewers.Add((IActorPropertiesViewer*)type->CreateSample());
 
 		// Initialize content widget and viewers layout
@@ -98,11 +98,11 @@ namespace Editor
 
 		for (auto& kv : mComponentViewersPool)
 		{
-			for (auto x : kv.second)
+			for (auto& x : kv.second)
 				delete x;
 		}
 
-		for (auto x : mAvailableComponentsViewers)
+		for (auto& x : mAvailableComponentsViewers)
 			delete x;
 
 		if (mDefaultComponentViewer)
@@ -111,7 +111,7 @@ namespace Editor
 		for (auto& kv : mActorPropertiesViewersPool)
 			delete kv.second;
 
-		for (auto x : mAvailableActorPropertiesViewers)
+		for (auto& x : mAvailableActorPropertiesViewers)
 			delete x;
 
 		if (mDefaultActorPropertiesViewer)
@@ -165,7 +165,7 @@ namespace Editor
 			return;
 		}
 
-		for (auto viewer : mComponentsViewers)
+		for (auto& viewer : mComponentsViewers)
 			viewer->Refresh();
 
 		if (mActorPropertiesViewer)
@@ -250,10 +250,10 @@ namespace Editor
 	{
 		Vector<Pair<const Type*, Vector<Component*>>> res;
 
-		for (auto actor : mTargetActors)
+		for (auto& actor : mTargetActors)
 		{
 			Map<const Type*, int> offsets;
-			for (auto component : actor->GetComponents())
+			for (auto& component : actor->GetComponents())
 			{
 				auto type = &component->GetType();
 				auto offset = offsets[type];
@@ -295,13 +295,13 @@ namespace Editor
 
 		Vector<IActorComponentViewer*> enableComponentViewers;
 
-		for (auto viewer : mComponentsViewers)
+		for (auto& viewer : mComponentsViewers)
 			mComponentViewersPool[viewer->GetComponentType()].Add(viewer);
 
 		mComponentsViewers.Clear();
 
 		mComponentGroupsTypes = GetGroupedComponents();
-		for (auto pair : mComponentGroupsTypes)
+		for (auto& pair : mComponentGroupsTypes)
 		{
 			auto viewerSample = mAvailableComponentsViewers.FindOrDefault([&](IActorComponentViewer* x) {
 				return x->GetComponentType() == pair.first; });
@@ -332,10 +332,10 @@ namespace Editor
 				enableComponentViewers.Add(componentViewer);
 		}
 
-		for (auto viewer : lastComponentViewers)
+		for (auto& viewer : lastComponentViewers)
 			viewer->SetEnabled(false);
 
-		for (auto viewer : enableComponentViewers)
+		for (auto& viewer : enableComponentViewers)
 			viewer->SetEnabled(true);
 	}
 

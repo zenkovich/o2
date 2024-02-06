@@ -491,7 +491,7 @@ namespace Editor
 	void TPropertyField<_type>::StoreValues(Vector<DataDocument>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesProxies)
+		for (auto& ptr : mValuesProxies)
 		{
 			data.Add(DataDocument());
 			data.Last() = GetProxy(ptr.first);
@@ -501,7 +501,7 @@ namespace Editor
 	template<typename _type>
 	bool TPropertyField<_type>::IsValueRevertable() const
 	{
-		for (auto ptr : mValuesProxies)
+		for (auto& ptr : mValuesProxies)
 		{
 			if (ptr.second && !Math::Equals(GetProxy(ptr.first), GetProxy(ptr.second)))
 				return true;
@@ -529,7 +529,7 @@ namespace Editor
 	template<typename _type>
 	void TPropertyField<_type>::SetValue(const _type& value)
 	{
-		for (auto ptr : mValuesProxies)
+		for (auto& ptr : mValuesProxies)
 			SetProxy(ptr.first, value);
 
 		SetCommonValue(value);
@@ -550,7 +550,7 @@ namespace Editor
 	template<typename _type>
 	void TPropertyField<_type>::Revert()
 	{
-		for (auto ptr : mValuesProxies)
+		for (auto& ptr : mValuesProxies)
 		{
 			if (ptr.second)
 				SetProxy(ptr.first, GetProxy(ptr.second));

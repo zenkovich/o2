@@ -256,7 +256,7 @@ namespace Editor
 		bool hasObject = !mValuesProxies.IsEmpty() && GetProxy(mValuesProxies[0].first) != nullptr;
 		if (hasObject)
 		{
-			for (auto targetObj : mValuesProxies)
+			for (auto& targetObj : mValuesProxies)
 			{
 				IObject* object = GetProxy(targetObj.first);
 
@@ -306,7 +306,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		StoreValues(mBeforeChangeValues);
-		for (auto targetObj : mValuesProxies)
+		for (auto& targetObj : mValuesProxies)
 		{
 			if (GetProxy(targetObj.first) == nullptr)
 				SetProxy(targetObj.first, type->DynamicCastToIObject(type->CreateSample()));
@@ -323,7 +323,7 @@ namespace Editor
 	void ObjectPtrProperty::StoreValues(Vector<DataDocument>& data) const
 	{
 		data.Clear();
-		for (auto targetObj : mValuesProxies)
+		for (auto& targetObj : mValuesProxies)
 		{
 			data.Add(DataDocument());
 			data.Last() = GetProxy(targetObj.first);

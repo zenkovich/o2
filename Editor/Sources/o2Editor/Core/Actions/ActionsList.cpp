@@ -8,10 +8,10 @@ namespace Editor
 {
 	ActionsList::~ActionsList()
 	{
-		for (auto action : mActions)
+		for (auto& action : mActions)
 			delete action;
 
-		for (auto action : mForwardActions)
+		for (auto& action : mForwardActions)
 			delete action;
 	}
 
@@ -63,7 +63,7 @@ namespace Editor
 	{
 		mActions.Add(action);
 
-		for (auto action : mForwardActions)
+		for (auto& action : mForwardActions)
 			delete action;
 
 		mForwardActions.Clear();
@@ -80,10 +80,10 @@ namespace Editor
 
 	void ActionsList::ResetUndoActions()
 	{
-		for (auto x : mActions)
+		for (auto& x : mActions)
 			delete x;
 
-		for (auto x : mForwardActions)
+		for (auto& x : mForwardActions)
 			delete x;
 
 		mActions.Clear();

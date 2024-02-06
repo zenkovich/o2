@@ -48,7 +48,7 @@ namespace Editor
 
 		mLayersContext->AddItem("---");
 
-		for (auto layer : o2Scene.GetLayers())
+		for (auto& layer : o2Scene.GetLayers())
 			mLayersContext->AddToggleItem(layer->GetName(), mCommonValue.HasLayer(layer), 
 										  [=](bool b) { 
 			SceneLayersList copy = mCommonValue;

@@ -105,7 +105,7 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesProxies)
+		for (auto& ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
@@ -185,7 +185,7 @@ namespace Editor
 			SetValueByUser(nullptr);
 	}
 
-	void ActorProperty::OnDropped(ISelectableDragableObjectsGroup* group)
+	void ActorProperty::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
 			OnDroppedFromActorsTree(actorsTree);
@@ -193,7 +193,7 @@ namespace Editor
 			OnDroppedFromAssetsScroll(assetsScroll);
 	}
 
-	void ActorProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void ActorProperty::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
 			OnDragEnterFromActorsTree(actorsTree);
@@ -201,7 +201,7 @@ namespace Editor
 			OnDragEnterFromAssetsScroll(assetsScroll);
 	}
 
-	void ActorProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void ActorProperty::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
 			OnDragExitFromActorsTree(actorsTree);

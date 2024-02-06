@@ -87,7 +87,7 @@ namespace Editor
 
 	VectorProperty::~VectorProperty()
 	{
-		for (auto x : mValuePropertiesPool)
+		for (auto& x : mValuePropertiesPool)
 			delete x;
 	}
 
@@ -132,7 +132,7 @@ namespace Editor
 		mCountOfElements = mVectorType->GetObjectVectorSize(mTargetObjects[0].first.data);
 		mCountDifferents = false;
 
-		for (auto target : mTargetObjects)
+		for (auto& target : mTargetObjects)
 		{
 			int targetCount = mVectorType->GetObjectVectorSize(target.first.data);
 			if (targetCount != mCountOfElements)
@@ -150,7 +150,7 @@ namespace Editor
 
 				if (IsExpanded())
 				{
-					for (auto prop : mValueProperties)
+					for (auto& prop : mValueProperties)
 					{
 						mSpoiler->RemoveChild(prop, false);
 						FreeValueProperty(prop);

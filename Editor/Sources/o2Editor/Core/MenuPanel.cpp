@@ -108,7 +108,7 @@ namespace Editor
 				actor->GetChildren().ForEach([&](Actor* x) { fixActor(x); });
 			};
 
-			for (auto actor : o2Scene.GetRootActors())
+			for (auto& actor : o2Scene.GetRootActors())
 				fixActor(actor);
 		});
 

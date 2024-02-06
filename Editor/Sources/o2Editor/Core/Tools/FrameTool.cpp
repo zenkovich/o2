@@ -169,14 +169,14 @@ namespace Editor
 
 		if (o2EditorSceneScreen.GetSelectedObjects().Count() > 0)
 		{
-			for (auto object : o2EditorSceneScreen.GetSelectedObjects())
+			for (auto& object : o2EditorSceneScreen.GetSelectedObjects())
 				o2Render.DrawAABasis(object->GetTransform(), mObjectColor, mObjectColor, mObjectColor);
 
 			o2Render.DrawAABasis(mFrame, mFrameColor, mFrameColor, mFrameColor);
 
 			if (mAnchorsFrameEnabled)
 			{
-				for (auto object : o2EditorSceneScreen.GetSelectedObjects())
+				for (auto& object : o2EditorSceneScreen.GetSelectedObjects())
 				{
 					if (object->GetEditableParent())
 						o2Render.DrawAABasis(object->GetEditableParent()->GetTransform(), mParentColor, mParentColor, mParentColor);
@@ -266,7 +266,7 @@ namespace Editor
 
 	void FrameTool::TransformObjects(const Basis& transform)
 	{
-		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+		for (auto& object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
 			if (object->GetTransform().GetScale() != Vec2F())
 				object->SetTransform(object->GetTransform()*transform);
@@ -299,7 +299,7 @@ namespace Editor
 	{
 		RectF anchorsFrame(transform.origin, transform.origin + Vec2F(transform.xv.Length(), transform.yv.Length()));
 
-		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+		for (auto& object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
 			if (object->IsSupportsLayout())
 			{
@@ -382,7 +382,7 @@ namespace Editor
 			Vec2F sx, sy;
 
 			const Vec2F cp[4] = { Vec2F(0, 0), Vec2F(0, 1), Vec2F(1, 0), Vec2F(1, 1) };
-			for (auto object : selectedObjects)
+			for (auto& object : selectedObjects)
 			{
 				Basis objectTransform = object->GetTransform();
 				for (int i = 0; i < 4; i++)
@@ -1105,7 +1105,7 @@ namespace Editor
 		Vec2F screenpoint = o2EditorSceneScreen.SceneToScreenPoint(point);
 
 		int i = 0;
-		for (auto snapPoint : snapPoints)
+		for (auto& snapPoint : snapPoints)
 		{
 			Vec2F framePoint = o2EditorSceneScreen.LocalToScreenPoint(snapPoint*frame);
 
@@ -1384,7 +1384,7 @@ namespace Editor
 	Vector<Basis> FrameTool::GetObjectsTransforms(const Vector<SceneEditableObject*>& objects) const
 	{
 		Vector<Basis> res;
-		for (auto object : objects)
+		for (auto& object : objects)
 		{
 			if (!object->IsOnScene())
 				continue;
@@ -1441,7 +1441,7 @@ namespace Editor
 
 		for (auto& basis : basises)
 		{
-			for (auto snapLine : snapLines)
+			for (auto& snapLine : snapLines)
 			{
 				Vec2F objectLineBegin = snapLine[0]*basis;
 				Vec2F objectLineEnd = snapLine[1]*basis;

@@ -93,7 +93,7 @@ namespace Editor
 
 	void IActorComponentViewer::RemoveTargetComponents()
 	{
-		for (auto comp : mTargetComponents)
+		for (auto& comp : mTargetComponents)
 			delete comp;
 
 		mTargetComponents.Clear();

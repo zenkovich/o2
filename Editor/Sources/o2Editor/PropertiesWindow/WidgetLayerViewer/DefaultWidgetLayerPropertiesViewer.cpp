@@ -59,7 +59,7 @@ namespace Editor
 	{
 		TransformAction* action = new TransformAction(mLayers.Convert<SceneEditableObject*>([](WidgetLayer* layer) { return dynamic_cast<SceneEditableObject*>(layer); }));
 
-		for (auto layer : mLayers)
+		for (auto& layer : mLayers)
 		{
 			if (Sprite* sprite = dynamic_cast<Sprite*>(layer->GetDrawable()))
 				layer->layout.size = sprite->GetImageAsset()->GetSize();

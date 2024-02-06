@@ -93,7 +93,7 @@ namespace o2
     template<typename _type>
     void ITreeNode<_type>::RemoveAllChilds()
     {
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             OnChildRemoved(child);
 
         mChildren.Clear();

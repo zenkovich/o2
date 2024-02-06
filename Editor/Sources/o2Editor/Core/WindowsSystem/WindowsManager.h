@@ -89,7 +89,7 @@ namespace Editor
 	template<typename _type>
 	_type* WindowsManager::GetWindow() const
 	{
-		for (auto wnd : mEditorWindows)
+		for (auto& wnd : mEditorWindows)
 		{
 			if (wnd->GetType() == TypeOf(_type))
 				return (_type*)wnd;

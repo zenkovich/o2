@@ -310,16 +310,16 @@ namespace Editor
 
 // DragDropArea implementation
 		// Called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+		void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
+		void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+		void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when dropped dragged scene tree nodes selected and started dragging from scene tree
 		void OnDroppedFromSceneTree(SceneHierarchyTree* sceneTree);

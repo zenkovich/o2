@@ -168,7 +168,7 @@ namespace Editor
 		mToolsPanel->baseCorner = BaseCorner::Center;
 		mPanelRoot->AddChild(mToolsPanel);
 
-		for (auto tool : o2EditorSceneScreen.GetTools())
+		for (auto& tool : o2EditorSceneScreen.GetTools())
 			AddToolToggle(tool->GetPanelToggle());
 
 		o2EditorSceneScreen.SelectTool<FrameTool>();

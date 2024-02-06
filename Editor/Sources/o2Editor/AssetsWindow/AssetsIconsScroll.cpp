@@ -70,7 +70,7 @@ namespace Editor
 
         for (auto& kv : mIconsPool)
         {
-            for (auto icon : kv.second)
+            for (auto& icon : kv.second)
                 delete icon;
         }
     }
@@ -105,14 +105,14 @@ namespace Editor
         if (!mResEnabledInHierarchy)
             return;
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         IDrawable::OnDrawn();
 
         o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
 
         if (mSelecting)
@@ -125,7 +125,7 @@ namespace Editor
 
         CursorAreaEventsListener::OnDrawn();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         if (mOwnHorScrollBar)
@@ -200,7 +200,7 @@ namespace Editor
     void AssetsIconsScrollArea::SortAssetInfos()
     {
         Map<Ref<AssetInfo>, Pair<String, int>> sortingCache;
-        for (auto assetInfo : mAssetInfos)
+        for (auto& assetInfo : mAssetInfos)
         {
             sortingCache[assetInfo] = { assetInfo->path.ToLowerCase(), assetInfo->meta->GetAssetType()->InvokeStatic<int>("GetEditorSorting") };
         }
@@ -221,7 +221,7 @@ namespace Editor
 
     void AssetsIconsScrollArea::UpdateCuttingAssets()
     {
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             AssetIcon* icon = (AssetIcon*)child;
             icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.Contains([=](auto x) { return x.first == icon->GetAssetInfo()->meta->ID(); }));
@@ -286,7 +286,7 @@ namespace Editor
 
     void AssetsIconsScrollArea::DeselectAllAssets()
     {
-        for (auto icon : mVisibleAssetIcons)
+        for (auto& icon : mVisibleAssetIcons)
             icon->SetSelected(false);
 
         mSelectedAssets.Clear();
@@ -302,7 +302,7 @@ namespace Editor
     void AssetsIconsScrollArea::OnAssetsSelected()
     {
         auto lastSelectedPreloadedAssets = mSelectedPreloadedAssets;
-        for (auto asset : lastSelectedPreloadedAssets)
+        for (auto& asset : lastSelectedPreloadedAssets)
         {
             if (!mSelectedAssets.Contains([&](const Ref<AssetInfo>& x) {
                 return x->meta->ID() == (*asset)->GetUID(); }))
@@ -312,7 +312,7 @@ namespace Editor
             }
         }
 
-        for (auto icon : mSelectedAssets)
+        for (auto& icon : mSelectedAssets)
         {
             if (mSelectedPreloadedAssets.Contains([&](const Ref<Asset>* x) { return (*x)->GetUID() == icon->meta->ID(); }))
                 continue;
@@ -440,7 +440,7 @@ namespace Editor
 
     void AssetsIconsScrollArea::OnFocused()
     {
-        for (auto icon : mChildWidgets)
+        for (auto& icon : mChildWidgets)
             icon->SetState("focused", true);
 
         Widget::OnFocused();
@@ -448,7 +448,7 @@ namespace Editor
 
     void AssetsIconsScrollArea::OnUnfocused()
     {
-        for (auto icon : mChildWidgets)
+        for (auto& icon : mChildWidgets)
             icon->SetState("focused", false);
 
         Widget::OnUnfocused();
@@ -508,7 +508,7 @@ namespace Editor
         mDragEnded = false;
 
         AssetIcon* dragIcon = nullptr;
-        for (auto sel : mSelectedAssets)
+        for (auto& sel : mSelectedAssets)
         {
             if (auto icon = FindVisibleIcon(sel))
             {
@@ -533,7 +533,7 @@ namespace Editor
 
     void AssetsIconsScrollArea::EndDragging(bool droppedToThis /*= false*/)
     {
-        for (auto sel : mSelectedAssets)
+        for (auto& sel : mSelectedAssets)
         {
             if (auto icon = FindVisibleIcon(sel))
                 icon->Show();
@@ -552,16 +552,16 @@ namespace Editor
         mDragIcon->UpdateChildrenTransforms();
     }
 
-    void AssetsIconsScrollArea::OnDragEnter(ISelectableDragableObjectsGroup* group)
+    void AssetsIconsScrollArea::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
     {}
 
-    void AssetsIconsScrollArea::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
+    void AssetsIconsScrollArea::OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group)
     {}
 
-    void AssetsIconsScrollArea::OnDragExit(ISelectableDragableObjectsGroup* group)
+    void AssetsIconsScrollArea::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
     {}
 
-    void AssetsIconsScrollArea::OnDropped(ISelectableDragableObjectsGroup* group)
+    void AssetsIconsScrollArea::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
     {
         if (dynamic_cast<AssetsIconsScrollArea*>(group))
             OnDroppedFromThis();
@@ -571,7 +571,7 @@ namespace Editor
 
     void AssetsIconsScrollArea::OnDroppedFromThis()
     {
-        for (auto sel : mSelectedAssets)
+        for (auto& sel : mSelectedAssets)
         {
             if (auto icon = FindVisibleIcon(sel))
                 icon->Show();
@@ -598,7 +598,7 @@ namespace Editor
             destPath = iconUnderCursor->GetAssetInfo()->path;
 
         Vector<String> newAssets;
-        for (auto object : sceneTree->GetSelectedObjects())
+        for (auto& object : sceneTree->GetSelectedObjects())
         {
             if (Actor* actor = dynamic_cast<Actor*>(object))
             {
@@ -638,7 +638,7 @@ namespace Editor
     {
         ForcePopEditorScopeOnStack scope;
 
-        for (auto sel : mSelectedAssets)
+        for (auto& sel : mSelectedAssets)
         {
             Actor* actor = InstantiateAsset(*sel);
             if (actor)
@@ -651,7 +651,7 @@ namespace Editor
 
     void AssetsIconsScrollArea::ClearInstantiatedDraggingAssets()
     {
-        for (auto actor : mInstantiatedSceneDragObjects)
+        for (auto& actor : mInstantiatedSceneDragObjects)
             delete actor;
 
         mInstantiatedSceneDragObjects.Clear();
@@ -673,7 +673,7 @@ namespace Editor
 
         mCurrentSelectingInfos.Clear();
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->layout->GetWorldRect().IsIntersects(selectionRect))
             {
@@ -757,7 +757,7 @@ namespace Editor
     {
         auto types = TypeOf(Asset).GetDerivedTypes();
 
-        for (auto type : types)
+        for (auto& type : types)
         {
             if (!type->InvokeStatic<bool>("IsAvailableToCreateFromEditor"))
                 continue;
@@ -833,7 +833,7 @@ namespace Editor
 
     AssetIcon* AssetsIconsScrollArea::GetIconUnderPoint(const Vec2F& point) const
     {
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->layout->IsPointInside(point))
             {
@@ -897,7 +897,7 @@ namespace Editor
     {
         o2EditorPropertiesWindow.ResetTargets();
 
-        for (auto asset : mSelectedPreloadedAssets)
+        for (auto& asset : mSelectedPreloadedAssets)
             delete asset;
 
         mSelectedPreloadedAssets.Clear();
@@ -971,7 +971,7 @@ namespace Editor
 
     void AssetsIconsScrollArea::OnAssetsPropertiesChanged()
     {
-        for (auto asset : mSelectedPreloadedAssets)
+        for (auto& asset : mSelectedPreloadedAssets)
             (*asset)->SetDirty();
 
         CheckPreloadedAssetsSaving();
@@ -982,7 +982,7 @@ namespace Editor
         if (mChangePropertiesTargetsFromThis)
             return;
 
-        for (auto asset : mSelectedPreloadedAssets)
+        for (auto& asset : mSelectedPreloadedAssets)
         {
             (*asset)->Save();
             delete asset;
@@ -1075,7 +1075,7 @@ namespace Editor
 
         if (!o2Input.IsKeyDown(VK_CONTROL) && !mSelectedAssets.Contains(dynamic_cast<AssetIcon*>(object)->GetAssetInfo()))
         {
-            for (auto info : mSelectedAssets)
+            for (auto& info : mSelectedAssets)
             {
                 if (auto icon = FindVisibleIcon(info))
                     icon->SetSelected(false);

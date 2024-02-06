@@ -132,7 +132,7 @@ namespace Editor
 							  key.GetGetApproximatedPointsBounds(), drawCoords, Color4(44, 62, 80));
 		}
 
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 			handle->handle->Draw();
 
 		o2Render.DisableScissorTest();

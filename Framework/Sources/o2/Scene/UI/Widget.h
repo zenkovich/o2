@@ -642,13 +642,13 @@ namespace o2
     template<typename _type>
     Ref<_type> Widget::GetLayerDrawableByType()
     {
-        for (auto layer : mLayers)
+        for (auto& layer : mLayers)
         {
             if (layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(_type))
                 return DynamicCast<_type>(layer->GetDrawable());
         }
 
-        for (auto layer : mLayers)
+        for (auto& layer : mLayers)
         {
             auto res = layer->FindChild<_type>();
             if (res)
@@ -677,7 +677,7 @@ namespace o2
     template<typename _type>
     Ref<_type> Widget::FindInternalWidgetByType(const String& name) const
     {
-        for (auto widget : mInternalWidgets)
+        for (auto& widget : mInternalWidgets)
         {
             if (widget->GetName() == name)
             {
@@ -701,7 +701,7 @@ namespace o2
     template<typename _type>
     Ref<_type> Widget::FindInternalWidgetByType() const
     {
-        for (auto widget : mInternalWidgets)
+        for (auto& widget : mInternalWidgets)
         {
             if (auto res = DynamicCast<_type>(widget))
                 return res;

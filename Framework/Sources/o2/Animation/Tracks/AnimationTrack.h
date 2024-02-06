@@ -383,10 +383,10 @@ namespace o2
     template<typename _type>
     void AnimationTrack<_type>::AddKeys(Vector<Key> keys, float smooth /*= 1.0f*/)
     {
-        for (auto key : keys)
+        for (auto& key : keys)
             AddKey(key, smooth);
 
-        for (auto key : keys)
+        for (auto& key : keys)
             SmoothKey(key.position, smooth);
 
         if (mBatchChange)

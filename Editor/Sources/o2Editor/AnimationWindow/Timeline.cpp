@@ -255,7 +255,7 @@ namespace Editor
 
 		Cfg nearestCfg;
 		float nearestCfgScreenChunkSegmentSizeDiff = FLT_MAX;
-		for (auto cfg : configs)
+		for (auto& cfg : configs)
 		{
 			float screenChunkSegmentSize = (float)cfg.chunkDuration/(float)cfg.chunkSegments*mOneSecondDefaultSize*mSmoothViewZoom;
 			float screenChunkSegmentSizeDiff = mPerfectScaleSegmentSize - screenChunkSegmentSize;

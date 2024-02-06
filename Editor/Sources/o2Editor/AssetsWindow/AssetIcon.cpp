@@ -173,7 +173,7 @@ namespace Editor
 	void AssetIcon::OnDeselected()
 	{}
 
-	void AssetIcon::OnDropped(ISelectableDragableObjectsGroup* group)
+	void AssetIcon::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		if (mOwner)
 			mOwner->OnDropped(group);

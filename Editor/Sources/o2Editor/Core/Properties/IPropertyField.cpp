@@ -46,7 +46,7 @@ namespace Editor
 
 	void IPropertyField::FreeValuesProxies()
 	{
-		for (auto pair : mValuesProxies)
+		for (auto& pair : mValuesProxies)
 		{
 			delete pair.first;
 

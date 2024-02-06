@@ -132,7 +132,7 @@ namespace Editor
 		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
 
 		// Called when tree node was double clicked
-		void OnNodeDblClick(TreeNode* nodeWidget) override;
+		void OnNodeDblClick(const Ref<TreeNode>& nodeWidget) override;
 
 		// Called when list of selected objects was changed
 		void OnNodesSelectionChanged(Vector<void*> objects) override;

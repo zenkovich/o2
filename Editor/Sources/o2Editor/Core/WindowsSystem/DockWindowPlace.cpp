@@ -124,7 +124,7 @@ namespace Editor
 	void DockWindowPlace::ArrangeChildWindows()
 	{
 		Vector<DockableWindow*> windows;
-		for (auto child : mChildren)
+		for (auto& child : mChildren)
 		{
 			if (child->GetType() == TypeOf(DockableWindow))
 				windows.Add(dynamic_cast<DockableWindow*>(child));
@@ -140,7 +140,7 @@ namespace Editor
 		{
 			float offset = 0;
 			int pos = 0;
-			for (auto window : windows)
+			for (auto& window : windows)
 			{
 				window->SetTabState(offset, pos, window == mChildren[0]);
 				offset += window->GetTabWidth();
@@ -159,7 +159,7 @@ namespace Editor
 	void DockWindowPlace::SetActiveTab(DockableWindow* window)
 	{
 		Vector<DockableWindow*> tabWindows;
-		for (auto child : mChildren)
+		for (auto& child : mChildren)
 		{
 			if (child->GetType() == TypeOf(DockableWindow))
 				tabWindows.Add(dynamic_cast<DockableWindow*>(child));
@@ -167,7 +167,7 @@ namespace Editor
 
 		mChildrenInheritedDepth.SortBy<int>([](ISceneDrawable* child) { return dynamic_cast<DockableWindow*>(child)->mTabPosition; });
 
-		for (auto tabWindow : tabWindows)
+		for (auto& tabWindow : tabWindows)
 		{
 			if (tabWindow->mTabActive)
 			{
@@ -237,7 +237,7 @@ namespace Editor
 	{
 		interactable = mChildren.Count([](auto x) { return x->GetType() == TypeOf(DockWindowPlace); }) == 0;
 
-		for (auto child : mChildren)
+		for (auto& child : mChildren)
 		{
 			if (child->GetType() == TypeOf(DockWindowPlace))
 				((DockWindowPlace*)child)->CheckInteractable();

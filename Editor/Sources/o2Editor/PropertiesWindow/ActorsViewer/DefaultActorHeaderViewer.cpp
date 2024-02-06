@@ -226,7 +226,7 @@ namespace Editor
 	{
 		Vector<Actor*> actors = GetRootApplyActors();
 
-		for (auto actor : actors)
+		for (auto& actor : actors)
 			actor->ApplyChangesToPrototype();
 	}
 
@@ -237,20 +237,20 @@ namespace Editor
 
 		Vector<Actor*> revertingActors = GetRootApplyActors();
 
-		for (auto actor : revertingActors)
+		for (auto& actor : revertingActors)
 			actor->RevertToPrototype();
 
 		mActors.Clear();
 		if (areViewActorsAssets)
 		{
 			Vector<UID> viewActors = mActors.Convert<UID>([](Actor* x) { return x->GetAssetID(); });
-			for (auto id : viewActors)
+			for (auto& id : viewActors)
 				mActors.Add(Ref<ActorAsset>(id)->GetActor());
 		}
 		else
 		{
 			Vector<UInt64> viewActors = mActors.Convert<UInt64>([](Actor* x) { return x->GetID(); });
-			for (auto id : viewActors)
+			for (auto& id : viewActors)
 				mActors.Add(o2Scene.GetActorByID(id));
 		}
 
@@ -261,7 +261,7 @@ namespace Editor
 	{
 		Vector<Actor*> actors = GetRootApplyActors();
 
-		for (auto actor : actors)
+		for (auto& actor : actors)
 			actor->BreakPrototypeLink();
 
 		*mDataView->state["prototype"] = false;
@@ -269,7 +269,7 @@ namespace Editor
 
 	void DefaultActorHeaderViewer::OnSelectedInheritedLayer()
 	{
-		for (auto actor : mActors)
+		for (auto& actor : mActors)
 			actor->SetDrawingDepthInheritFromParent(true);
 	}
 
@@ -277,7 +277,7 @@ namespace Editor
 	{
 		Vector<Actor*> applyActors;
 
-		for (auto actor : mActors)
+		for (auto& actor : mActors)
 		{
 			Actor* applyActor = actor;
 			if (!applyActor->GetPrototype())

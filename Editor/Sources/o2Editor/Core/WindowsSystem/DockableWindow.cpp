@@ -92,7 +92,7 @@ namespace Editor
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
-		for (auto layer : mDrawingLayers)
+		for (auto& layer : mDrawingLayers)
 			layer->Draw();
 
 		IDrawable::OnDrawn();
@@ -101,7 +101,7 @@ namespace Editor
 		{
 			o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-			for (auto child : mChildrenInheritedDepth)
+			for (auto& child : mChildrenInheritedDepth)
 				child->Draw();
 
 			o2Render.DisableScissorTest();
@@ -118,10 +118,10 @@ namespace Editor
 
 			CursorAreaEventsListener::OnDrawn();
 
-			for (auto child : mInternalWidgets)
+			for (auto& child : mInternalWidgets)
 				child->Draw();
 
-			for (auto layer : mTopDrawingLayers)
+			for (auto& layer : mTopDrawingLayers)
 				layer->Draw();
 		}
 		else
@@ -548,7 +548,7 @@ namespace Editor
 		windowNeighborDock->name = "empty dock";
 		*windowNeighborDock->layout = WidgetLayout::BothStretch();
 
-		for (auto child : targetDock->GetChildWidgets())
+		for (auto& child : targetDock->GetChildWidgets())
 			windowNeighborDock->AddChild(child);
 
 		targetDock->AddChild(windowNeighborDock);
@@ -809,14 +809,14 @@ namespace Editor
 				if (parentNeighbors.Count() == 1)
 				{
 					auto children = parentNeighbors[0]->GetChildWidgets();
-					for (auto child : children)
+					for (auto& child : children)
 						topDock->AddChild(child);
 
 					topDock->RemoveChild(parentNeighbors[0]);
 				}
 
 				// 
-				// 	for (auto child : parentNeighbor->GetChilds())
+				// 	for (auto& child : parentNeighbor->GetChilds())
 				// 		topDock->AddChild(child);
 				// 
 				// 	topDock->RemoveChild(parent);

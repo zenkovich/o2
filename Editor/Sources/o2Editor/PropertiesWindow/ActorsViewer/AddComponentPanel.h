@@ -65,7 +65,7 @@ namespace Editor
 		void CreateComponent(const ObjectType* objType);
 
 		// Called when tree node was double clicked
-		void OnNodeDblClick(TreeNode* nodeWidget);
+		void OnNodeDblClick(const Ref<TreeNode>& nodeWidget);
 
 		// Called when key was released. When returns has pressed, component is creating
 		void OnKeyReleased(const Input::Key& key) override;

@@ -40,7 +40,7 @@ namespace Editor
 
 		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
 
-		for (auto child : mChildrenInheritedDepth)
+		for (auto& child : mChildrenInheritedDepth)
 			child->Draw();
 
 		o2Render.DisableScissorTest();
@@ -97,7 +97,7 @@ namespace Editor
 			}
 		}
 
-		for (auto childNode : valueNode.children)
+		for (auto& childNode : valueNode.children)
 			InitializeNodeHandles(*childNode);
 	}
 
@@ -191,7 +191,7 @@ namespace Editor
 
 		for (auto& kv : mHandlesGroups)
 		{
-			for (auto keyHandle : kv.second->handles)
+			for (auto& keyHandle : kv.second->handles)
 			{
 				if (mTimeline->IsSameTime(keyHandle->handle->GetPosition().x, position))
 					res.Add(keyHandle);
@@ -216,13 +216,13 @@ namespace Editor
 
 	MapKeyFramesTrackControl::IHandlesGroup::~IHandlesGroup()
 	{
-		for (auto handle : handles)
+		for (auto& handle : handles)
 			delete handle;
 	}
 
 	void MapKeyFramesTrackControl::IHandlesGroup::CacheHandles()
 	{
-		for (auto keyHandle : handles)
+		for (auto& keyHandle : handles)
 		{
 			keyHandle->handle->SetParent(nullptr);
 			keyHandle->handle->SetEnabled(false);

@@ -90,7 +90,7 @@ namespace Editor
 			int fnd = path.Find('/', 0);
 			String pathPart = path.SubStr(0, fnd);
 
-			for (auto child : node->children)
+			for (auto& child : node->children)
 			{
 				if (child->name == pathPart)
 				{
@@ -164,12 +164,12 @@ namespace Editor
 
 		if (mAnimationWindow->mPlayer)
 		{
-			for (auto trackPlayer : mAnimationWindow->mPlayer->GetTrackPlayers())
+			for (auto& trackPlayer : mAnimationWindow->mPlayer->GetTrackPlayers())
 				AddAnimationTrack(trackPlayer->GetTrack().Get(), trackPlayer.Get());
 		}
 		else
 		{
-			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			for (auto& track : mAnimationWindow->mAnimation->GetTracks())
 				AddAnimationTrack(track.Get(), nullptr);
 		}
 
@@ -214,7 +214,7 @@ namespace Editor
 
 	void AnimationTree::UpdateTreeWidth()
 	{
-		for (auto node : mVisibleNodes)
+		for (auto& node : mVisibleNodes)
 		{
 			if (auto trackNode = dynamic_cast<AnimationTreeNode*>(node->widget))
 				trackNode->SetTreeWidth(mTreeWidth);
@@ -223,7 +223,7 @@ namespace Editor
 
 	void AnimationTree::SetCurveViewMode(bool enable)
 	{
-		for (auto node : mVisibleNodes)
+		for (auto& node : mVisibleNodes)
 		{
 			if (auto trackNode = dynamic_cast<AnimationTreeNode*>(node->widget))
 				trackNode->mTrackControl->SetCurveViewEnabled(enable);
@@ -292,20 +292,20 @@ namespace Editor
 
 	void AnimationTree::OnNodesSelectionChanged(Vector<void*> objects)
 	{
-		for (auto node : mPrevSelectedNodes)
+		for (auto& node : mPrevSelectedNodes)
 			node->trackControl->SetActive(false);
 
 		mAnimationWindow->mHandlesSheet->DeselectAll();
 
 		mPrevSelectedNodes.Clear();
-		for (auto obj : objects) 
+		for (auto& obj : objects) 
 		{
 			TrackNode* node = (TrackNode*)obj;
 			mPrevSelectedNodes.Add(node);
 
 			node->trackControl->SetActive(true);
 
-			for (auto handle : node->trackControl->GetKeyHandles())
+			for (auto& handle : node->trackControl->GetKeyHandles())
 				handle->handle->SetSelected(true);
 		}
 	}
@@ -318,7 +318,7 @@ namespace Editor
 
 	void AnimationTree::OnDeletePropertyPressed()
 	{
-		for (auto obj : GetSelectedObjects())
+		for (auto& obj : GetSelectedObjects())
 		{
 			TrackNode* data = (TrackNode*)obj;
 			mAnimationWindow->mAnimation->RemoveTrack(data->path);

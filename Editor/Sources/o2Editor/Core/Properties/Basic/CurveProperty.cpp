@@ -44,7 +44,7 @@ namespace Editor
 
 	void CurveProperty::OnValueChanged()
 	{
-		for (auto ptr : mValuesProxies)
+		for (auto& ptr : mValuesProxies)
 			SetProxy(ptr.first, mCommonValue);
 	}
 

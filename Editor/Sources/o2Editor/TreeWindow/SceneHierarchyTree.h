@@ -4,226 +4,225 @@
 
 namespace o2
 {
-	class Actor;
-	class SceneEditableObject;
-	class Button;
-	class EditBox;
-	class Toggle;
-	class ToggleGroup;
+    class Actor;
+    class SceneEditableObject;
+    class Button;
+    class EditBox;
+    class Toggle;
+    class ToggleGroup;
 }
 
 using namespace o2;
 
 namespace Editor
 {
-	class ActorProperty;
-	class ComponentProperty;
+    class ActorProperty;
+    class ComponentProperty;
 
-	// -----------------
-	// Scene tree widget
-	// -----------------
-	class SceneHierarchyTree: public Tree
-	{
-	public:
-		Function<void(Vector<SceneEditableObject*>)> onObjectsSelectionChanged; // Callback on objects selection changed
+    // -----------------
+    // Scene tree widget
+    // -----------------
+    class SceneHierarchyTree : public Tree
+    {
+    public:
+        Function<void(Vector<const Ref<SceneEditableObject>&>)> onObjectsSelectionChanged; // Callback on objects selection changed
 
-	public:
-		// Default constructor
-		SceneHierarchyTree();
+    public:
+        // Default constructor
+        SceneHierarchyTree();
 
-		// Copy-constructor
-		SceneHierarchyTree(const SceneHierarchyTree& other);
+        // Copy-constructor
+        SceneHierarchyTree(const SceneHierarchyTree& other);
 
-		// Destructor
-		~SceneHierarchyTree();
+        // Destructor
+        ~SceneHierarchyTree();
 
-		// Copy-operator
-		SceneHierarchyTree& operator=(const SceneHierarchyTree& other);
+        // Copy-operator
+        SceneHierarchyTree& operator=(const SceneHierarchyTree& other);
 
-		// Attaches to scene events
-		void AttachToSceneEvents();
+        // Attaches to scene events
+        void AttachToSceneEvents();
 
-		// Deattaches from scene events
-		void DeattachFromSceneEvents();
+        // Deattaches from scene events
+        void DeattachFromSceneEvents();
+        // Returns ui node for object
+        Ref<TreeNode> GetNode(const Ref<SceneEditableObject>& object);
 
-		// Returns ui node for object
-		TreeNode* GetNode(SceneEditableObject* object);
+        // Returns selected objects vector
+        Vector<Ref<SceneEditableObject>> GetSelectedObjects() const;
 
-		// Returns selected objects vector
-		Vector<SceneEditableObject*> GetSelectedObjects() const;
+        // Sets selected objects
+        void SetSelectedObjects(const Vector<Ref<SceneEditableObject>>& objects);
 
-		// Sets selected objects
-		void SetSelectedObjects(const Vector<SceneEditableObject*>& objects);
+        // Selects object
+        void SelectObject(const Ref<SceneEditableObject>& object);
 
-		// Selects object
-		void SelectObject(SceneEditableObject* object);
+        // Selects object
+        void SelectAndHighlightObject(const Ref<SceneEditableObject>& object);
 
-		// Selects object
-		void SelectAndHighlightObject(SceneEditableObject* object);
+        // Scrolls view to object and highlights
+        void ScrollToAndHighlight(const Ref<SceneEditableObject>& object);
 
-		// Scrolls view to object and highlights
-		void ScrollToAndHighlight(SceneEditableObject* object);
+        // Deselects object
+        void DeselectObject(const Ref<SceneEditableObject>& object);
 
-		// Deselects object
-		void DeselectObject(SceneEditableObject* object);
+        // Deselects all objects
+        void DeselectAllObjects();
 
-		// Deselects all objects
-		void DeselectAllObjects();
+        // Scrolls view to object's tree node
+        void ScrollTo(const Ref<SceneEditableObject>& object);
 
-		// Scrolls view to object's tree node
-		void ScrollTo(SceneEditableObject* object);
+        // Sets watching editor UI state
+        void SetEditorWatching(bool watching);
 
-		// Sets watching editor UI state
-		void SetEditorWatching(bool watching);
+        // Returns is watching editor UI state
+        bool IsEditorWatching() const;
 
-		// Returns is watching editor UI state
-		bool IsEditorWatching() const;
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        SERIALIZABLE(SceneHierarchyTree);
 
-		SERIALIZABLE(SceneHierarchyTree);
+    protected:
+        Ref<ToggleGroup> mEnableTogglesGroup;    // Enable objects toggles group
+        Ref<ToggleGroup> mLockTogglesGroup;	     // Lock objects toggles group
+        bool         mAttachedToSceneEvents; // Is tree attached to scene events
 
-	protected:
-		ToggleGroup* mEnableTogglesGroup;    // Enable objects toggles group
-		ToggleGroup* mLockTogglesGroup;	     // Lock objects toggles group
-		bool         mAttachedToSceneEvents; // Is tree attached to scene events
-						    						    
-		ActorProperty*     mDragActorPropertyField;     // Actor property field under cursor when dragging actor
-		ComponentProperty* mDragComponentPropertyField; // Component property field under cursor when dragging actor
+        Ref<ActorProperty>     mDragActorPropertyField;     // Actor property field under cursor when dragging actor
+        Ref<ComponentProperty> mDragComponentPropertyField; // Component property field under cursor when dragging actor
 
-		bool mWatchEditor = false;
+        bool mWatchEditor = false;
 
-	protected:
-		// Initializes widget logic
-		void Initialize();
+    protected:
+        // Initializes widget logic
+        void Initialize();
 
-		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
-		void UpdateVisibleNodes() override;
+        // Updates visible nodes (calculates range and initializes nodes), enables editor mode
+        void UpdateVisibleNodes() override;
 
-		// Gets tree node from pool or creates new, enables editor mode
-		TreeNode* CreateTreeNodeWidget() override;
+        // Gets tree node from pool or creates new, enables editor mode
+        Ref<TreeNode> CreateTreeNodeWidget() override;
 
-		// Returns object's parent
-		void* GetObjectParent(void* object) override;
+        // Returns object's parent
+        void* GetObjectParent(void* object) override;
 
-		// Returns object's children
-		Vector<void*> GetObjectChilds(void* object) override;
+        // Returns object's children
+        Vector<void*> GetObjectChilds(void* object) override;
 
-		// Returns debugging string for object
-		String GetObjectDebug(void* object) override;
+        // Returns debugging string for object
+        String GetObjectDebug(void* object) override;
 
-		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
+        // Sets nodeWidget data by object
+        void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
 
-		// Called when tree node was double clicked
-		void OnNodeDblClick(TreeNode* nodeWidget) override;
+        // Called when tree node was double clicked
+        void OnNodeDblClick(const Ref<TreeNode>& nodeWidget) override;
 
-		// Called when objects was dragged in new parent in position next of prevObject
-		void OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject) override;
+        // Called when objects was dragged in new parent in position next of prevObject
+        void OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject) override;
 
-		// Called when object was created
-		void OnObjectCreated(SceneEditableObject* object);
+        // Called when object was created
+        void OnObjectCreated(const Ref<SceneEditableObject>& object);
 
-		// Called when object was destroyed
-		void OnObjectDestroing(SceneEditableObject* object);
+        // Called when object was destroyed
+        void OnObjectDestroing(const Ref<SceneEditableObject>& object);
 
-		// Called when some objects were changed
-		void OnObjectsChanged(const Vector<SceneEditableObject*>& objects);
+        // Called when some objects were changed
+        void OnObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects);
 
-		// Called when object was changed
-		void OnObjectChanged(SceneEditableObject* object);
+        // Called when object was changed
+        void OnObjectChanged(const Ref<SceneEditableObject>& object);
 
-		// Called when enable objects toggle group pressed
-		void EnableObjectsGroupPressed(bool value);
+        // Called when enable objects toggle group pressed
+        void EnableObjectsGroupPressed(bool value);
 
-		// Called when enable objects toggle group released
-		void EnableObjectsGroupReleased(bool value);
+        // Called when enable objects toggle group released
+        void EnableObjectsGroupReleased(bool value);
 
-		// Called when lock objects toggle group pressed
-		void LockObjectsGroupPressed(bool value);
+        // Called when lock objects toggle group pressed
+        void LockObjectsGroupPressed(bool value);
 
-		// Called when lock objects toggle group released
-		void LockObjectsGroupReleased(bool value);
+        // Called when lock objects toggle group released
+        void LockObjectsGroupReleased(bool value);
 
-		// Called when list of selected objects was changed
-		void OnNodesSelectionChanged(Vector<void*> objects) override;
+        // Called when list of selected objects was changed
+        void OnNodesSelectionChanged(Vector<void*> objects) override;
 
-		// Called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+        // Called when some drag listeners was entered to this area
+        void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+        // Called when some drag listeners was exited from this area
+        void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
+        // Called when some drag listeners was dragged above this area
+        void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+        // Called when some selectable listeners was dropped to this
+        void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-		friend class SceneHierarchyTreeNode;
-	};
+        friend class SceneHierarchyTreeNode;
+    };
 
-	// ---------------
-	// Scene tree node
-	// ---------------
-	class SceneHierarchyTreeNode: public TreeNode
-	{
-	public:
-		// Default constructor
-		SceneHierarchyTreeNode();
+    // ---------------
+    // Scene tree node
+    // ---------------
+    class SceneHierarchyTreeNode : public TreeNode
+    {
+    public:
+        // Default constructor
+        SceneHierarchyTreeNode();
 
-		// Copy-constructor
-		SceneHierarchyTreeNode(const SceneHierarchyTreeNode& other);
+        // Copy-constructor
+        SceneHierarchyTreeNode(const SceneHierarchyTreeNode& other);
 
-		// Copy operator
-		SceneHierarchyTreeNode& operator=(const SceneHierarchyTreeNode& other);
+        // Copy operator
+        SceneHierarchyTreeNode& operator=(const SceneHierarchyTreeNode& other);
 
-		// Sets object and updates content
-		void SetSceneObject(SceneEditableObject* object);
+        // Sets object and updates content
+        void SetSceneObject(const Ref<SceneEditableObject>& object);
 
-		// Enables edit name edit box
-		void EnableEditName();
+        // Enables edit name edit box
+        void EnableEditName();
 
-		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        // Returns create menu category in editor
+        static String GetCreateMenuCategory();
 
-		SERIALIZABLE(SceneHierarchyTreeNode);
+        SERIALIZABLE(SceneHierarchyTreeNode);
 
-	protected:
-		SceneEditableObject* mTargetObject = nullptr; // Target object
-													    
-		Toggle*      mLockToggle = nullptr;              // Lock toggle
-		WidgetState* mLockToggleLockedState = nullptr;   // Lock toggle locked state
-		WidgetState* mLockToggleHalfHideState = nullptr; // Lock toggle half hide state
+    protected:
+        Ref<SceneEditableObject> mTargetObject; // Target object
 
-		Toggle* mEnableToggle = nullptr; // Enable toggle
+        Ref<Toggle>      mLockToggle;              // Lock toggle
+        Ref<WidgetState> mLockToggleLockedState;   // Lock toggle locked state
+        Ref<WidgetState> mLockToggleHalfHideState; // Lock toggle half hide state
 
-		Button*      mLinkBtn = nullptr;              // View link button
-		WidgetState* mLinkBtnHalfHideState = nullptr; // View link button half hide state
+        Ref<Toggle> mEnableToggle; // Enable toggle
 
-		Text*        mNameDrawable = nullptr; // Object name drawable
-		EditBox*     mNameEditBox = nullptr;  // Object's name edit box
-		WidgetState* mEditState = nullptr;    // Object's name edit state
+        Ref<Button>      mLinkBtn;              // View link button
+        Ref<WidgetState> mLinkBtnHalfHideState; // View link button half hide state
 
-	protected:
-		// Called on deserialization, initializes controls
-		void OnDeserialized(const DataValue& node) override;
+        Ref<Text>        mNameDrawable; // Object name drawable
+        Ref<EditBox>     mNameEditBox;  // Object's name edit box
+        Ref<WidgetState> mEditState;    // Object's name edit state
 
-		// initializes controls and widgets
-		void InitializeControls();
+    protected:
+        // Called on deserialization, initializes controls
+        void OnDeserialized(const DataValue& node) override;
 
-		// Called when lock toggle was clicked and changes target object's lock state
-		void OnLockClicked();
+        // initializes controls and widgets
+        void InitializeControls();
 
-		// Called when enable toggle was clicked and changes target object's enable state
-		void OnEnableCkicked();
+        // Called when lock toggle was clicked and changes target object's lock state
+        void OnLockClicked();
 
-		// Called when object name edit box changed
-		void OnObjectNameChanged(const WString& text);
+        // Called when enable toggle was clicked and changes target object's enable state
+        void OnEnableCkicked();
 
-		friend class SceneHierarchyTree;
-	};
+        // Called when object name edit box changed
+        void OnObjectNameChanged(const WString& text);
+
+        friend class SceneHierarchyTree;
+    };
 }
 // --- META ---
 

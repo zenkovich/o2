@@ -90,7 +90,7 @@ namespace Editor
 	{
 		auto layers = o2Scene.GetLayers();
 		auto dropdownLayers = mDropDown->GetAllItemsText();
-		for (auto itemName : dropdownLayers)
+		for (auto& itemName : dropdownLayers)
 		{
 			if (!layers.Contains([&](SceneLayer* x) { return x->GetName() == (String)itemName; }))
 				mDropDown->RemoveItem(itemName);
@@ -99,7 +99,7 @@ namespace Editor
 		if (mUseInheritedValue)
 			mDropDown->AddItem(mInheritFromParentName);
 
-		for (auto layer : layers)
+		for (auto& layer : layers)
 		{
 			if (!dropdownLayers.Contains(layer->GetName()))
 				mDropDown->AddItem(layer->GetName());

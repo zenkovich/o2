@@ -22,7 +22,7 @@ namespace Editor
 
 	void EnableAction::Redo()
 	{
-		for (auto id : objectsIds)
+		for (auto& id : objectsIds)
 		{
 			auto object = o2Scene.GetEditableObjectByID(id);
 			if (object)
@@ -32,7 +32,7 @@ namespace Editor
 
 	void EnableAction::Undo()
 	{
-		for (auto id : objectsIds)
+		for (auto& id : objectsIds)
 		{
 			auto object = o2Scene.GetEditableObjectByID(id);
 			if (object)

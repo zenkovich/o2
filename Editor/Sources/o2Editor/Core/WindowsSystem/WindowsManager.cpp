@@ -37,7 +37,7 @@ namespace Editor
 
 	WindowsManager::~WindowsManager()
 	{
-		for (auto wnd : mEditorWindows)
+		for (auto& wnd : mEditorWindows)
 			delete wnd;
 	}
 
@@ -45,13 +45,13 @@ namespace Editor
 	{
 		auto windowTypes = TypeOf(IEditorWindow).GetDerivedTypes();
 
-		for (auto type : windowTypes)
+		for (auto& type : windowTypes)
 		{
 			IEditorWindow* newWindow = (IEditorWindow*)type->CreateSample();
 			mEditorWindows.Add(newWindow);
 		}
 
-		for (auto wnd : mEditorWindows)
+		for (auto& wnd : mEditorWindows)
 			wnd->PostInitializeWindow();
 	}
 
@@ -68,7 +68,7 @@ namespace Editor
 
 	void WindowsManager::Update(float dt)
 	{
-		for (auto wnd : mEditorWindows)
+		for (auto& wnd : mEditorWindows)
 			wnd->Update(dt);
 	}
 
@@ -93,7 +93,7 @@ namespace Editor
 
 		hierarchy += '\n';
 
-		for (auto child : widget->GetChildWidgets())
+		for (auto& child : widget->GetChildWidgets())
 			ProcHierarchy(hierarchy, child, level + 1);
 	}
 
@@ -101,7 +101,7 @@ namespace Editor
 
 	void WindowsManager::Draw()
 	{
-		for (auto wnd : mEditorWindows)
+		for (auto& wnd : mEditorWindows)
 			wnd->Draw();
 
 //		return;
@@ -121,7 +121,7 @@ namespace Editor
 
 		res.mainDock.RetrieveLayout(o2EditorWindows.mMainDockPlace);
 
-		for (auto widget : EditorUIRoot.GetRootWidget()->GetChildWidgets())
+		for (auto& widget : EditorUIRoot.GetRootWidget()->GetChildWidgets())
 		{
 			if (widget->GetType() == TypeOf(DockableWindow))
 				res.windows.Add(widget->name, *widget->layout);
@@ -134,7 +134,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		for (auto wnd : layout.windows)
+		for (auto& wnd : layout.windows)
 		{
 			IEditorWindow* editorWindow = o2EditorWindows.mEditorWindows.FindOrDefault([&](IEditorWindow* x) {
 				return x->mWindow->GetName() == wnd.first;
@@ -155,7 +155,7 @@ namespace Editor
 
 		layout.RestoreDock(&layout.mainDock, o2EditorWindows.mMainDockPlace);
 
-		for (auto wnd : o2EditorWindows.mEditorWindows)
+		for (auto& wnd : o2EditorWindows.mEditorWindows)
 		{
 			bool hide = !layout.windows.ContainsKey(wnd->mWindow->GetName()) && 
 				wnd->mWindow->GetParent()->GetType() != TypeOf(DockWindowPlace);

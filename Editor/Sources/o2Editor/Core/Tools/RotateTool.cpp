@@ -343,7 +343,7 @@ namespace Editor
 	void RotateTool::RotateObjects(float angleDelta)
 	{
 		Basis transform = Basis::Translated(mScenePivot*-1.0f)*Basis::Rotated(-angleDelta)*Basis::Translated(mScenePivot);
-		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+		for (auto& object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
 			object->SetTransform(object->GetTransform()*transform);
 			object->UpdateTransform();
@@ -353,7 +353,7 @@ namespace Editor
 	void RotateTool::RotateObjectsSeparated(float angleDelta)
 	{
 		Basis transform = Basis::Rotated(-angleDelta);
-		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+		for (auto& object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
 			object->SetTransform(object->GetTransform()*transform);			
 			object->UpdateTransform();

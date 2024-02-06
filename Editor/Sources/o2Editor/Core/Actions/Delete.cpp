@@ -15,7 +15,7 @@ namespace Editor
 
 	DeleteAction::DeleteAction(const Vector<SceneEditableObject*>& objects)
 	{
-		for (auto object : objects)
+		for (auto& object : objects)
 		{
 			ObjectInfo info;
 			info.objectData.Set(object);
@@ -28,7 +28,7 @@ namespace Editor
 				auto parentChilds = parent->GetEditableChildren();
 				info.prevObjectId = 0;
 
-				for (auto child : parentChilds)
+				for (auto& child : parentChilds)
 				{
 					if (child == object)
 						break;
@@ -43,7 +43,7 @@ namespace Editor
 				auto rootObjects = o2Scene.GetRootEditableObjects();
 				info.prevObjectId = 0;
 
-				for (auto child : rootObjects)
+				for (auto& child : rootObjects)
 				{
 					if (child == object)
 						break;
@@ -65,7 +65,7 @@ namespace Editor
 
 	void DeleteAction::Redo()
 	{
-		for (auto info : objectsInfos)
+		for (auto& info : objectsInfos)
 		{
 			auto object = o2Scene.GetEditableObjectByID((SceneUID)info.objectData["Value"]["Id"]);
 			if (object)
@@ -79,7 +79,7 @@ namespace Editor
 	void DeleteAction::Undo()
 	{
 		SceneEditableObject* lastRestored = nullptr;
-		for (auto info : objectsInfos)
+		for (auto& info : objectsInfos)
 		{
 			SceneEditableObject* parent = o2Scene.GetEditableObjectByID(info.parentId);
 			if (parent)

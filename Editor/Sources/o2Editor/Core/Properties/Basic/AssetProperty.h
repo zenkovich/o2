@@ -121,13 +121,13 @@ namespace Editor
 		void OnKeyPressed(const Input::Key& key) override;
 
 		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+		void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+		void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
 	};
 }
 // --- META ---

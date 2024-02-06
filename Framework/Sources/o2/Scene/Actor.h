@@ -669,13 +669,13 @@ namespace o2
     template<typename _type>
     Ref<_type> Actor::FindChildByType(bool searchInChildren /*= true*/)
     {
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             if (child->GetType() == TypeOf(_type))
                 return (_type*)child;
 
         if (searchInChildren)
         {
-            for (auto child : mChildren)
+            for (auto& child : mChildren)
                 if (auto res = child->FindChildByType<_type>())
                     return res;
         }
@@ -700,7 +700,7 @@ namespace o2
     {
         auto res = GetComponents<_type>();
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             res.Add(child->GetComponentsInChildren<_type>());
 
         return res;
@@ -714,7 +714,7 @@ namespace o2
         if (res)
             return res;
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
         {
             res = child->GetComponentInChildren<_type>();
             if (res)
@@ -727,7 +727,7 @@ namespace o2
     template<typename _type>
     Ref<_type> Actor::GetComponent() const
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
         {
             if (comp->GetType().IsBasedOn(TypeOf(_type)))
                 return DynamicCast<_type>(comp);
@@ -740,7 +740,7 @@ namespace o2
     Vector<Ref<_type>> Actor::GetComponents() const
     {
         Vector<Ref<_type>> res;
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
         {
             if (auto typeComp = DynamicCast<_type>(comp))
                 res.Add(typeComp);

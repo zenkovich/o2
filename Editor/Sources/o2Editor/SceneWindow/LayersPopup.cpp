@@ -117,7 +117,7 @@ namespace Editor
 		RemoveAllChildren(false);
 
 		int idx = 0;
-		for (auto layer : o2Scene.GetLayers())
+		for (auto& layer : o2Scene.GetLayers())
 		{
 			LayerPopupItem* item;
 			if (!mItemsCache.IsEmpty())
@@ -161,7 +161,7 @@ namespace Editor
 		float threshold = itemPos - 10.0f;
 		float itemHeight = mItemSample->layout->minHeight;
 		int idx = 0;
-		for (auto child : mChildWidgets)
+		for (auto& child : mChildWidgets)
 		{
 			if (auto item = dynamic_cast<LayerPopupItem*>(child))
 			{
@@ -188,7 +188,7 @@ namespace Editor
 		float threshold = itemPos - 10.0f;
 		float itemHeight = mItemSample->layout->minHeight;
 		int idx = 0;
-		for (auto child : mChildWidgets)
+		for (auto& child : mChildWidgets)
 		{
 			if (auto item = dynamic_cast<LayerPopupItem*>(child))
 			{
@@ -206,7 +206,7 @@ namespace Editor
 	{
 		float animCoef = 10.0f;
 		int idx = 0;
-		for (auto child : mChildWidgets)
+		for (auto& child : mChildWidgets)
 		{
 			if (auto item = dynamic_cast<LayerPopupItem*>(child))
 			{

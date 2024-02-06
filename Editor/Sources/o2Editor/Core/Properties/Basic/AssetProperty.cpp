@@ -101,7 +101,7 @@ namespace Editor
 					Vector<IObject*> targets;
 
 					allAreInstance = false;
-					for (auto proxy : mValuesProxies)
+					for (auto& proxy : mValuesProxies)
 					{
 						auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
 						if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
@@ -161,7 +161,7 @@ namespace Editor
 	{
 		mCommonValue = id == 0 ? Ref<Asset>() : Ref<Asset>(id);
 
-		for (auto ptr : mValuesProxies)
+		for (auto& ptr : mValuesProxies)
 			SetProxy(ptr.first, mCommonValue);
 
 		SetCommonAssetId(id);
@@ -226,7 +226,7 @@ namespace Editor
 	{
 		SetState("instance", true);
 
-		for (auto proxy : mValuesProxies)
+		for (auto& proxy : mValuesProxies)
 		{
 			auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
 			if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
@@ -246,7 +246,7 @@ namespace Editor
 		SetState("instance", false);
 		mSpoiler->Collapse();
 
-		for (auto proxy : mValuesProxies)
+		for (auto& proxy : mValuesProxies)
 		{
 			auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
 			if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
@@ -337,13 +337,13 @@ namespace Editor
 		return mBox->IsUnderPoint(point) && mBox->transparency > 0.1f;
 	}
 
-	void AssetProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void AssetProperty::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
 	}
 
-	void AssetProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void AssetProperty::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetIconsScroll)
@@ -360,7 +360,7 @@ namespace Editor
 		mBox->SetState("focused", true);
 	}
 
-	void AssetProperty::OnDropped(ISelectableDragableObjectsGroup* group)
+	void AssetProperty::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetIconsScroll)

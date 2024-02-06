@@ -70,7 +70,7 @@ namespace Editor
 
 	CurvesEditor::~CurvesEditor()
 	{
-		for (auto curve : mCurves)
+		for (auto& curve : mCurves)
 			delete curve;
 
 		if (mSelectionSprite)
@@ -147,7 +147,7 @@ namespace Editor
 	Map<String, Curve*> CurvesEditor::GetCurves() const
 	{
 		Map<String, Curve*> res;
-		for (auto curveInfo : mCurves)
+		for (auto& curveInfo : mCurves)
 			res.Add(curveInfo->curveId, curveInfo->curve);
 
 		return res;
@@ -183,11 +183,11 @@ namespace Editor
 
 	void CurvesEditor::RemoveCurve(Curve* curve)
 	{
-		for (auto info : mCurves)
+		for (auto& info : mCurves)
 		{
 			if (info->curve == curve)
 			{
-				for (auto handle : info->handles)
+				for (auto& handle : info->handles)
 				{
 					handle->mainHandle.SetSelectionGroup(nullptr);
 
@@ -215,7 +215,7 @@ namespace Editor
 	void CurvesEditor::RemoveAllCurves()
 	{
 		auto curves = mCurves;
-		for (auto info : curves)
+		for (auto& info : curves)
 			RemoveCurve(info->curve);
 	}
 
@@ -231,13 +231,13 @@ namespace Editor
 
 	void CurvesEditor::SetCurveColor(Curve* curve, const Color4& color)
 	{
-		for (auto info : mCurves)
+		for (auto& info : mCurves)
 		{
 			if (info->curve == curve)
 			{
 				info->color = color;
 
-				for (auto handle : info->handles)
+				for (auto& handle : info->handles)
 					handle->mainHandle.SetDrawablesColor(color);
 
 				break;
@@ -306,7 +306,7 @@ namespace Editor
 	{
 		mAdjustCurvesScale = enable;
 
-		for (auto curve : mCurves) {
+		for (auto& curve : mCurves) {
 			curve->AdjustScale();
 		}
 
@@ -346,7 +346,7 @@ namespace Editor
 
 	Curve* CurvesEditor::FindCurve(const String& id)
 	{
-		for (auto curve : mCurves)
+		for (auto& curve : mCurves)
 		{
 			if (curve->curveId == id)
 				return curve->curve;
@@ -437,7 +437,7 @@ namespace Editor
 
 		mAvailableArea = RectF(firstPoint, firstPoint);
 
-		for (auto curve : mCurves)
+		for (auto& curve : mCurves)
 		{
 			for (auto& p : curve->approximatedPoints)
 			{
@@ -670,7 +670,7 @@ namespace Editor
 
 		Basis transform = mViewCamera.GetBasis().Inverted()*Camera().GetBasis();
 
-		for (auto curve : mCurves)
+		for (auto& curve : mCurves)
 		{
 			if (curve->approximatedPoints.IsEmpty())
 				continue;
@@ -699,9 +699,9 @@ namespace Editor
 
 	void CurvesEditor::DrawHandles()
 	{
-		for (auto curve : mCurves)
+		for (auto& curve : mCurves)
 		{
-			for (auto keyHandles : curve->handles)
+			for (auto& keyHandles : curve->handles)
 				keyHandles->Draw(layout->GetWorldRect());
 		}
 	}
@@ -1083,7 +1083,7 @@ namespace Editor
 		Curve::Key newKey;
 		Vec2F localCursorPos = ScreenToLocalPoint(cursor.position);
 
-		for (auto info : mCurves)
+		for (auto& info : mCurves)
 		{
 			auto& keys = info->curve->GetKeys();
 			int keyIdx = 0;
@@ -1285,7 +1285,7 @@ namespace Editor
 
 	void CurvesEditor::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		for (auto handle : mSelectingHandlesBuf)
+		for (auto& handle : mSelectingHandlesBuf)
 		{
 			SetHandleSelectedState(handle, false);
 			handle->SetSelected(true);
@@ -1298,14 +1298,14 @@ namespace Editor
 
 	void CurvesEditor::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		for (auto handle : mSelectingHandlesBuf)
+		for (auto& handle : mSelectingHandlesBuf)
 			SetHandleSelectedState(handle, false);
 
 		mSelectingHandlesBuf.Clear();
 
 		RectF selectionLocalRect(mSelectingPressedPoint, ScreenToLocalPoint(cursor.position));
 
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 		{
 			CurveHandle* curveHandle = (CurveHandle*)handle;
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(curveHandle->GetLocalPosition()) &&
@@ -1316,7 +1316,7 @@ namespace Editor
 			}
 		}
 
-		for (auto handle : mSupportHandlesGroup.GetAllHandles())
+		for (auto& handle : mSupportHandlesGroup.GetAllHandles())
 		{
 			CurveHandle* curveHandle = (CurveHandle*)handle;
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(curveHandle->GetLocalPosition()) &&
@@ -1347,9 +1347,9 @@ namespace Editor
 			bool first = true;
 			bool someSelected = false;
 
-			for (auto curve : mCurves)
+			for (auto& curve : mCurves)
 			{
-				for (auto handles : curve->handles)
+				for (auto& handles : curve->handles)
 				{
 					if (!handles->mainHandle.IsSelected())
 						continue;
@@ -1393,9 +1393,9 @@ namespace Editor
 
 	void CurvesEditor::CheckHandlesVisible()
 	{
-		for (auto info : mCurves)
+		for (auto& info : mCurves)
 		{
-			for (auto handles : info->handles)
+			for (auto& handles : info->handles)
 			{
 				handles->leftSupportHandle.enabled = (handles->mainHandle.IsSelected() ||
 													  handles->leftSupportHandle.IsSelected() ||
@@ -1417,7 +1417,7 @@ namespace Editor
 
 		RectF aabb(((CurveHandle*)mSelectedHandles[0])->GetLocalPosition(), ((CurveHandle*)mSelectedHandles[0])->GetLocalPosition());
 
-		for (auto handle : mSelectedHandles)
+		for (auto& handle : mSelectedHandles)
 		{
 			CurveHandle* curveHandle = (CurveHandle*)handle;
 
@@ -1433,7 +1433,7 @@ namespace Editor
 	bool CurvesEditor::IsTransformFrameVisible() const
 	{
 		int selectedMainHandles = 0;
-		for (auto handle : mSelectedHandles)
+		for (auto& handle : mSelectedHandles)
 		{
 			if (!mSupportHandles.Contains((CurveHandle*)handle))
 				selectedMainHandles++;
@@ -1464,7 +1464,7 @@ namespace Editor
 			if (!handle->IsSelected())
 				return;
 
-			for (auto handle : mSupportHandles)
+			for (auto& handle : mSupportHandles)
 			{
 				if (!handle->IsSelected())
 					continue;
@@ -1491,11 +1491,11 @@ namespace Editor
 
 	void CurvesEditor::SetSelectedKeysSupportsType(Curve::Key::Type type)
 	{
-		for (auto info : mCurves)
+		for (auto& info : mCurves)
 		{
 			auto keys = info->curve->GetKeys();
 
-			for (auto handles : info->handles)
+			for (auto& handles : info->handles)
 			{
 				if (handles->mainHandle.IsSelected())
 				{
@@ -1550,7 +1550,7 @@ namespace Editor
 
 		if (delta.origin.Length() > 0.01f || delta.xv != Vec2F(1, 0) || delta.yv != Vec2F(0, 1))
 		{
-			for (auto handle : mSelectedHandles)
+			for (auto& handle : mSelectedHandles)
 			{
 				CurveHandle* curveHandle = (CurveHandle*)handle;
 				curveHandle->SetPosition(curveHandle->LocalToCurveView(curveHandle->GetLocalPosition()*delta));
@@ -1568,7 +1568,7 @@ namespace Editor
 				bool rightChanged = !Math::Equals(rightOffset, 0.0f) && rightOffset > FLT_EPSILON;
 				bool leftChanged = !Math::Equals(leftOffset, 0.0f) && leftOffset < FLT_EPSILON;
 
-				for (auto handle : mHandles)
+				for (auto& handle : mHandles)
 				{
 					if (mSelectedHandles.Contains(handle))
 						continue;
@@ -1596,12 +1596,12 @@ namespace Editor
 		mBeforeTransformKeys.Clear();
 
 		CurveKeysInfo keysInfo;
-		for (auto curveInfo : mCurves)
+		for (auto& curveInfo : mCurves)
 		{
 			keysInfo.keys.Clear();
 			keysInfo.selectedHandles.Clear();
 
-			for (auto handles : curveInfo->handles)
+			for (auto& handles : curveInfo->handles)
 			{
 				if (handles->IsSomeHandleSelected())
 				{
@@ -1661,7 +1661,7 @@ namespace Editor
 				actionCurveKeysInfo.beforeKeys = keysInfo.keys;
 				actionCurveKeysInfo.selectedHandles = keysInfo.selectedHandles;
 
-				for (auto handles : curveInfo->handles)
+				for (auto& handles : curveInfo->handles)
 				{
 					if (handles->IsSomeHandleSelected())
 						actionCurveKeysInfo.afterKeys.Add(curveInfo->curve->GetKeyAt(handles->curveKeyIdx));
@@ -1699,9 +1699,9 @@ namespace Editor
 		CurveInfo* curveInfo = nullptr;
 		int keyIdx = 0;
 
-		for (auto info : mCurves)
+		for (auto& info : mCurves)
 		{
-			for (auto handles : info->handles)
+			for (auto& handles : info->handles)
 			{
 				if (handles->mainHandle.IsSelected())
 				{
@@ -1804,12 +1804,12 @@ namespace Editor
 
 		Vector<CurveCopyInfo*> copyKeys;
 
-		for (auto curve : mCurves)
+		for (auto& curve : mCurves)
 		{
 			CurveCopyInfo* copyInfo = mnew CurveCopyInfo();
 			copyInfo->curveId = curve->curveId;
 
-			for (auto handles : curve->handles)
+			for (auto& handles : curve->handles)
 			{
 				if (!handles->mainHandle.IsSelected())
 					continue;
@@ -1853,7 +1853,7 @@ namespace Editor
 
 		Vector<CurveKeysInfo> keyInfos;
 
-		for (auto curve : copyKeys)
+		for (auto& curve : copyKeys)
 		{
 			CurveInfo* curveInfo = mCurves.FindOrDefault([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
 
@@ -1906,7 +1906,7 @@ namespace Editor
 
 		Vector<CurveKeysInfo> keyInfos;
 
-		for (auto curveInfo : mCurves)
+		for (auto& curveInfo : mCurves)
 		{
 			curveInfo->BeginCurveManualChange();
 
@@ -1914,7 +1914,7 @@ namespace Editor
 			copyInfo->curveId = curveInfo->curveId;
 
 			Vector<int> removingIdxs;
-			for (auto handles : curveInfo->handles)
+			for (auto& handles : curveInfo->handles)
 			{
 				if (!handles->mainHandle.IsSelected())
 					continue;
@@ -1966,7 +1966,7 @@ namespace Editor
 		Vector<CurveCopyInfo*> copyKeys;
 		copyKeys = data;
 
-		for (auto curve : copyKeys)
+		for (auto& curve : copyKeys)
 		{
 			CurveInfo* curveInfo = mCurves.FindOrDefault([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
 
@@ -2016,7 +2016,7 @@ namespace Editor
 
 	CurvesEditor::CurveInfo::~CurveInfo()
 	{
-		for (auto x : handles)
+		for (auto& x : handles)
 		{
 			x->mainHandle.SetSelectionGroup(nullptr);
 			x->leftSupportHandle.SetSelectionGroup(nullptr);
@@ -2098,7 +2098,7 @@ namespace Editor
 		{
 			Vector<UInt64> selectedMain, selectedLeft, selectedRight;
 
-			for (auto handle : handles)
+			for (auto& handle : handles)
 			{
 				if (handle->leftSupportHandle.IsSelected())
 				{
@@ -2132,7 +2132,7 @@ namespace Editor
 			for (int i = 0; i < curve->GetKeys().Count(); i++)
 				editor->AddCurveKeyHandles(this, i);
 
-			for (auto handle : handles)
+			for (auto& handle : handles)
 			{
 				if (selectedMain.Contains(handle->curveKeyUid))
 					handle->mainHandle.Select();

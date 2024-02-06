@@ -54,7 +54,7 @@ namespace Editor
 		}
 
 		int i = 0;
-		for (auto object : objects)
+		for (auto& object : objects)
 		{
 			if (!object)
 				continue;

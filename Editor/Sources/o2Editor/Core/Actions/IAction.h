@@ -9,7 +9,7 @@ namespace Editor
 	// -----------------------------
 	// Basic editor action interface
 	// -----------------------------
-	class IAction: public ISerializable
+	class IAction: public ISerializable, public RefCounterable
 	{
 	public:
 		// VIrtual destructor

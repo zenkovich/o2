@@ -45,13 +45,13 @@ namespace Editor
 		bool IsTreeFocused() const;
 
 		// Sets selected objects
-		void SetSelectedObjects(const Vector<SceneEditableObject*>& objects);
+		void SetSelectedObjects(const Vector<Ref<SceneEditableObject>>& objects);
 
 		// Updates current tree
 		void UpdateTreeView();
 
 		// Expands all actor's parents nodes in tree and highlights actor
-		void HighlightObjectTreeNode(SceneEditableObject* targetObject);
+		void HighlightObjectTreeNode(const Ref<SceneEditableObject>& targetObject);
 
 		// Sets widgets layers visibility in hierarchy
 		void SetWidgetsLayersVisible(bool visible);
@@ -66,17 +66,16 @@ namespace Editor
 		bool IsWidgetsInternalChildrenVisible() const;
 
 	protected:
-		Toggle* mListTreeToggle = nullptr; // TOggle between list and tree views
-		EditBox* mSearchEditBox = nullptr; // Search actors edit box
+        Ref<Toggle>  mListTreeToggle; // Toggle between list and tree views
+        Ref<EditBox> mSearchEditBox;  // Search actors edit box
 
-		SceneHierarchyTree* mSceneTree = nullptr; // Scene hierarchy tree
+        Ref<SceneHierarchyTree> mSceneTree;     // Scene hierarchy tree
+        Ref<DrawOrderTree>      mDrawOrderTree; // Draw order tree
 
-		DrawOrderTree* mDrawOrderTree = nullptr; // Draw order tree
+        Ref<ContextMenu> mTreeContextMenu; // Context menu
 
-		ContextMenu* mTreeContextMenu = nullptr;// Context menu
-
-		Vector<SceneEditableObject*> mSearchObjects;    // Array of searched objects
-		bool                         mInSearch = false;	// True when searching objects (mSearchEditBox isn't empty)
+        Vector<Ref<SceneEditableObject>> mSearchObjects;    // Array of searched objects
+        bool                             mInSearch = false; // True when searching objects (mSearchEditBox isn't empty)
 
 	public:
 		// Default constructor
@@ -126,16 +125,16 @@ namespace Editor
 		void OnSearchEdited(const WString& searchStr);
 
 		// Searches actors
-		void SearchObjectsRecursive(SceneEditableObject* object, const String& searchStr);
+		void SearchObjectsRecursive(const Ref<SceneEditableObject>& object, const String& searchStr);
 
 		// Called when tree node clicked by right button (For tree widget)
-		void OnTreeRBPressed(TreeNode* node);
+		void OnTreeRBPressed(const Ref<TreeNode>& node);
 
 		template<typename _type>
 		void CreateObject(const String& name);
 
 		// Called when some object needs to be created and registers object insert action
-		void OnCreateObject(SceneEditableObject* newObject);
+		void OnCreateObject(const Ref<SceneEditableObject>& newObject);
 
 		// Called when pressed "Create new" in context menu
 		void OnContextCreateNewPressed();
@@ -180,10 +179,10 @@ namespace Editor
 		void OnViewInternalChildrenToggled(bool view);
 
 		// Called when actor was created
-		void OnActorCreated(SceneEditableObject* object);
+		void OnActorCreated(const Ref<SceneEditableObject>& object);
 
 		// Called when actor was destroyed
-		void OnActorDestroyed(SceneEditableObject* object);
+		void OnActorDestroyed(const Ref<SceneEditableObject>& object);
 
 		friend class SceneEditWidget;
 	};
@@ -193,7 +192,7 @@ namespace Editor
 	{
 		ForcePopEditorScopeOnStack scope;
 
-		SceneEditableObject* object = new _type();
+		auto object = mmake<_type>();
 		object->SetName(name);
 		OnCreateObject(object);
 	}

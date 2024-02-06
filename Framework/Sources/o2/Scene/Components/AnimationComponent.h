@@ -211,7 +211,7 @@ namespace o2
     template<typename _type>
     void AnimationComponent::RegTrack(const Ref<typename AnimationTrack<_type>::Player>& player, const String& path, const Ref<AnimationState>& state)
     {
-        for (auto val : mValues)
+        for (auto& val : mValues)
         {
             if (val->path == path)
             {

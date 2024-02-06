@@ -217,7 +217,7 @@ namespace o2
 	template<typename _type>
 	Ref<_type> UIManager::GetWidgetStyle(const String& style /*= "standard"*/)
 	{
-		for (auto styleWidget : mStyleSamples) {
+		for (auto& styleWidget : mStyleSamples) {
 			if (TypeOf(_type) == styleWidget->GetActor()->GetType()) {
 				if (style == styleWidget->GetActor()->GetName())
 					return DynamicCast<_type>(styleWidget->GetActor());
@@ -230,7 +230,7 @@ namespace o2
 	template<typename _type>
 	void UIManager::RemoveWidgetStyle(const String& style)
 	{
-		for (auto styleWidget : mStyleSamples) {
+		for (auto& styleWidget : mStyleSamples) {
 			if (TypeOf(_type) == styleWidget->GetActor()->GetType()) {
 				if (style == styleWidget->GetActor()->GetName()) {
 					mStyleSamples.Remove(styleWidget);

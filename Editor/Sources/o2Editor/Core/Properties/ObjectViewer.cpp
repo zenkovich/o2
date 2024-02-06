@@ -22,7 +22,7 @@ namespace Editor
 
 		const Type* objectType = !targetObjects.IsEmpty() ? &targetObjects[0].first->GetType() : nullptr;
 
-		for (auto target : targetObjects)
+		for (auto& target : targetObjects)
 		{
 			if (!target.first->GetType().IsBasedOn(*objectType))
 				return;

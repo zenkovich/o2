@@ -233,7 +233,7 @@ namespace Editor
 	{
 		auto subTypes = TypeOf(Actor).GetDerivedTypes();
 
-		for (auto subType : subTypes)
+		for (auto& subType : subTypes)
 		{
 			String category = subType->InvokeStatic<String>("GetCreateMenuCategory");
 			String path;
@@ -265,7 +265,7 @@ namespace Editor
 	{
 		auto styleWidgets = o2UI.GetWidgetStyles();
 
-		for (auto styleWidgetAsset : styleWidgets)
+		for (auto& styleWidgetAsset : styleWidgets)
 		{
 			auto path = styleWidgetAsset->GetActor()->GetType().GetName() + "/" + styleWidgetAsset->GetActor()->GetName();
 			path.ReplaceAll("o2::", "");
@@ -332,7 +332,7 @@ namespace Editor
 		{
 			mSearchObjects.Clear();
 
-			for (auto actor : o2Scene.GetRootActors())
+			for (auto& actor : o2Scene.GetRootActors())
 				SearchObjectsRecursive(actor, (String)searchStr);
 		}
 
@@ -344,7 +344,7 @@ namespace Editor
 		if (object->GetName().CountOf(searchStr) > 0)
 			mSearchObjects.Add(object);
 
-		for (auto child : object->GetEditableChildren())
+		for (auto& child : object->GetEditableChildren())
 			SearchObjectsRecursive(child, searchStr);
 	}
 
@@ -468,10 +468,10 @@ namespace Editor
 		Vector<SceneEditableObject*> objects;
 		data.Get(objects);
 
-		for (auto object : objects)
+		for (auto& object : objects)
 			object->GenerateNewID();
 
-		for (auto object : objects)
+		for (auto& object : objects)
 			object->SetEditableParent(parent);
 
 		mSceneTree->UpdateNodesView();
@@ -492,7 +492,7 @@ namespace Editor
 		auto action = mnew DeleteAction(selectedObjects);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto object : selectedObjects)
+		for (auto& object : selectedObjects)
 		{
 			if (object->IsSupportsDeleting())
 				o2Scene.DestroyEditableObject(object);
@@ -509,7 +509,7 @@ namespace Editor
 
 		Vector<SceneEditableObject*> newObjects;
 
-		for (auto object : selectedObjects)
+		for (auto& object : selectedObjects)
 		{
 			SceneEditableObject* copy = object->CloneAs<SceneEditableObject>();
 			copy->SetEditableParent(object->GetEditableParent());
@@ -524,7 +524,7 @@ namespace Editor
 	{
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
-		for (auto object : selectedObjects)
+		for (auto& object : selectedObjects)
 		{
 			auto node = mSceneTree->GetNode(object);
 
@@ -537,7 +537,7 @@ namespace Editor
 	{
 		auto selectedObject = mSceneTree->GetSelectedObjects();
 
-		for (auto object : selectedObject)
+		for (auto& object : selectedObject)
 		{
 			auto node = mSceneTree->GetNode(object);
 
@@ -554,7 +554,7 @@ namespace Editor
 		auto action = mnew LockAction(selectedObjects, value);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto object : selectedObjects)
+		for (auto& object : selectedObjects)
 		{
 			object->SetLocked(value);
 
@@ -572,7 +572,7 @@ namespace Editor
 		auto action = mnew LockAction(selectedObjects, value);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto object : selectedObjects)
+		for (auto& object : selectedObjects)
 		{
 			object->SetEnabled(value);
 

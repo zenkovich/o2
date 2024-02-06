@@ -207,7 +207,7 @@ namespace Editor
 
 		if (Wrapper::GetKeys(*track).Count() != handles.Count()) {
 			Vector<UInt64> selectedHandles;
-			for (auto keyHandle : handles) {
+			for (auto& keyHandle : handles) {
 				if (keyHandle->handle->IsSelected())
 					selectedHandles.Add(keyHandle->keyUid);
 			}
@@ -215,11 +215,11 @@ namespace Editor
 			CacheHandles();
 			CreateHandles();
 
-			for (auto keyHandle : handles)
+			for (auto& keyHandle : handles)
 				keyHandle->handle->SetSelected(selectedHandles.Contains(keyHandle->keyUid));
 		}
 		else {
-			for (auto keyHandle : handles)
+			for (auto& keyHandle : handles)
 				keyHandle->updateFunc(*keyHandle);
 		}
 	}

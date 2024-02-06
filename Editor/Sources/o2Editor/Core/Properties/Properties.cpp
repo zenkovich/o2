@@ -37,15 +37,15 @@ namespace Editor
 
 	Properties::~Properties()
 	{
-		for (auto kv : mPropertiesPool)
+		for (auto& kv : mPropertiesPool)
 		{
-			for (auto p : kv.second)
+			for (auto& p : kv.second)
 				delete p;
 		}
 
-		for (auto kv : mObjectPropertiesViewersPool)
+		for (auto& kv : mObjectPropertiesViewersPool)
 		{
-			for (auto p : kv.second)
+			for (auto& p : kv.second)
 				delete p;
 		}
 	}
@@ -59,7 +59,7 @@ namespace Editor
 		avaialbleTypes.Remove(&TypeOf(VectorProperty));
 		avaialbleTypes.RemoveAll([](const Type* type) { return type->GetName().Contains("TPropertyField"); });
 
-		for (auto x : avaialbleTypes)
+		for (auto& x : avaialbleTypes)
 		{
 			if (auto valueType = x->InvokeStatic<const Type*>("GetValueTypeStatic"))
 				mAvailablePropertiesFields[valueType] = x;
@@ -72,7 +72,7 @@ namespace Editor
 		availableTypes.Remove(&TypeOf(IObjectPropertiesViewer));
 		availableTypes.Remove(&TypeOf(DefaultObjectPropertiesViewer));
 
-		for (auto x : availableTypes)
+		for (auto& x : availableTypes)
 		{
 			if (auto objectType = x->InvokeStatic<const Type*>("GetViewingObjectTypeStatic"))
 				mAvailableObjectPropertiesViewers[objectType] = x;
@@ -86,7 +86,7 @@ namespace Editor
 		{
 			Vector<const Type*> nextItTypes;
 
-			for (auto t : itTypes)
+			for (auto& t : itTypes)
 			{
 				const Type* viewerType = nullptr;
 				if (mAvailableObjectPropertiesViewers.TryGetValue(t, viewerType))
@@ -123,7 +123,7 @@ namespace Editor
 		if (auto invokeOnChangeAttribute = fieldInfo->GetAttribute<InvokeOnChangeAttribute>())
 		{
 			fieldWidget->onChanged += [&, invokeOnChangeAttribute](IPropertyField*) {
-				for (auto target : context.targets) 
+				for (auto& target : context.targets) 
 				{
 					auto& targetType = target.first->GetType();
 					auto& targetObjType = dynamic_cast<const ObjectType&>(targetType);
@@ -156,7 +156,7 @@ namespace Editor
 	{
 		Timer timer; 
 
-		for (auto fieldInfo : fields)
+		for (auto& fieldInfo : fields)
 			BuildField(layout, fieldInfo, context, path, onChangeCompleted, onChanged);
 
 		//o2Debug.Log(">>> Fields created for " + (String)timer.GetDeltaTime());
@@ -206,7 +206,7 @@ namespace Editor
 
 	void Properties::FreeProperties(PropertiesContext& context)
 	{
-		for (auto prop : context.properties)
+		for (auto& prop : context.properties)
 			FreeProperty(prop.second);
 
 		context.properties.Clear();
@@ -492,7 +492,7 @@ namespace Editor
 
 	const Type* Properties::GetFieldPropertyType(const Type* valueType) const
 	{
-		for (auto kv : mAvailablePropertiesFields)
+		for (auto& kv : mAvailablePropertiesFields)
 		{
 			if (valueType->GetUsage() == Type::Usage::Pointer && kv.first->GetUsage() == Type::Usage::Pointer)
 			{

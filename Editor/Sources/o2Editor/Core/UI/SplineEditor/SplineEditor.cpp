@@ -45,7 +45,7 @@ namespace Editor
 		auto splineHandles = mSplineHandles;
 		mSplineHandles.Clear();
 
-		for (auto handles : splineHandles)
+		for (auto& handles : splineHandles)
 			delete handles;
 
 		mSplineHandles.Clear();
@@ -68,7 +68,7 @@ namespace Editor
 
 	void SplineEditor::DrawHandles()
 	{
-		for (auto handles : mSplineHandles)
+		for (auto& handles : mSplineHandles)
 		{
 			if (handles->IsSupportsVisible())
 			{
@@ -129,13 +129,13 @@ namespace Editor
 
 	void SplineEditor::DrawMainHandles()
 	{
-		for (auto handles : mSplineHandles)
+		for (auto& handles : mSplineHandles)
 			handles->position.Draw();
 	}
 
 	void SplineEditor::DrawSupportHandles()
 	{
-		for (auto handles : mSplineHandles)
+		for (auto& handles : mSplineHandles)
 		{
 			if (handles->IsSupportsVisible())
 			{
@@ -184,7 +184,7 @@ namespace Editor
 
 	void SplineEditor::ClearHandles()
 	{
-		for (auto handles : mSplineHandles)
+		for (auto& handles : mSplineHandles)
 			delete handles;
 
 		mSplineHandles.Clear();
@@ -399,7 +399,7 @@ namespace Editor
 
 	void SplineEditor::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		for (auto handle : mSelectingHandlesBuf)
+		for (auto& handle : mSelectingHandlesBuf)
 		{
 			SetHandleSelectedState(handle, false);
 			handle->SetSelected(true);
@@ -411,14 +411,14 @@ namespace Editor
 
 	void SplineEditor::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		for (auto handle : mSelectingHandlesBuf)
+		for (auto& handle : mSelectingHandlesBuf)
 			SetHandleSelectedState(handle, false);
 
 		mSelectingHandlesBuf.Clear();
 
 		RectF selectionLocalRect(mSelectingPressedPoint, mSplineWrapper->WorldToLocal(cursor.position));
 
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 		{
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(handle->GetPosition()) &&
 				!mSelectedHandles.Contains(handle))
@@ -428,7 +428,7 @@ namespace Editor
 			}
 		}
 
-		for (auto handle : mSupportHandlesGroup.GetAllHandles())
+		for (auto& handle : mSupportHandlesGroup.GetAllHandles())
 		{
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(handle->GetPosition()) &&
 				!mSupportHandlesGroup.GetSelectedHandles().Contains(handle))
@@ -451,7 +451,7 @@ namespace Editor
 		if (key.keyCode == VK_DELETE)
 		{
 			auto selectedHandles = mSelectedHandles;
-			for (auto handle : selectedHandles)
+			for (auto& handle : selectedHandles)
 			{
 				int idx = mHandles.IndexOf(handle);
 				mSplineWrapper->RemovePoint(idx);
@@ -484,7 +484,7 @@ namespace Editor
 
 		RectF aabb((mSelectedHandles[0])->GetPosition(), (mSelectedHandles[0])->GetPosition());
 
-		for (auto handle : mSelectedHandles)
+		for (auto& handle : mSelectedHandles)
 		{
 			aabb.left = Math::Min(handle->GetPosition().x, aabb.left);
 			aabb.right = Math::Max(handle->GetPosition().x, aabb.right);
@@ -492,7 +492,7 @@ namespace Editor
 			aabb.bottom = Math::Min(handle->GetPosition().y, aabb.bottom);
 		}
 
-		for (auto handle : mSupportHandlesGroup.GetSelectedHandles())
+		for (auto& handle : mSupportHandlesGroup.GetSelectedHandles())
 		{
 			aabb.left = Math::Min(handle->GetPosition().x, aabb.left);
 			aabb.right = Math::Max(handle->GetPosition().x, aabb.right);
@@ -507,7 +507,7 @@ namespace Editor
 	{
 		int selectedMainHandles = 0;
 
-		for (auto handles : mSplineHandles)
+		for (auto& handles : mSplineHandles)
 		{
 			if (handles->position.IsSelected())
 				selectedMainHandles++;
