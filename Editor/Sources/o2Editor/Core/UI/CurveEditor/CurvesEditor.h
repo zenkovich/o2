@@ -50,10 +50,10 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Returns list of curves
-		Map<String, Curve*> GetCurves() const;
+		Map<String, Ref<Curve>> GetCurves() const;
 
 		// Adds editing curve with color. If color is default it will be randomized
-		void AddCurve(const String& id, Curve* curve, const Color4& color = Color4(44, 62, 80));
+		void AddCurve(const String& id, const Ref<Curve>& curve, const Color4& color = Color4(44, 62, 80));
 
 		// Removed curve from editing
 		void RemoveCurve(Curve* curve);
@@ -65,16 +65,16 @@ namespace Editor
 		void RemoveAllCurves();
 
 		// Adds curves range with color. It can't be edited, just a solid color between curves
-		void AddCurvesRange(Curve* curveA, Curve* curveB, const Color4& color = Color4::Green());
+		void AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color = Color4::Green());
 
 		// Removes curve range
-		void RemoveCurvesRange(Curve* curveA, Curve* curveB);
+		void RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB);
 
 		// Adds curves range with color. It can't be edited, just a solid color between curves
 		void AddCurvesRange(const String& idA, const String& idB, const Color4& color = Color4::Green());
 
 		// Sets curve color
-		void SetCurveColor(Curve* curve, const Color4& color);
+		void SetCurveColor(const Ref<Curve>& curve, const Color4& color);
 
 		// Removes curve range
 		void RemoveCurvesRange(const String& idA, const String& idB);
@@ -110,6 +110,9 @@ namespace Editor
 	public:
 		struct CurveInfo;
 
+		// --------------------------------------
+		// Drag handle specified to curves editor
+		// --------------------------------------
 		struct CurveHandle : public DragHandle
 		{
 			CurveInfo* curveInfo = nullptr;
@@ -167,7 +170,7 @@ namespace Editor
 			bool IsSomeHandleSelected() const;
 		};
 
-		struct CurveInfo
+		struct CurveInfo: public RefCounterable
 		{
 			CurvesEditor* editor = nullptr;
 
