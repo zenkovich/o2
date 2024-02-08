@@ -4,7 +4,10 @@
 
 namespace Editor
 {
-	class ActionsList
+	// ---------------------------------------------------
+    // Done editor actions list. Can undo and redo actions
+    // ---------------------------------------------------
+	class ActionsList: public RefCounterable
 	{
 	public:
 		// Destructor. Destroys stored actions
@@ -29,7 +32,7 @@ namespace Editor
 		void RedoAction();
 
 		// Called when action was done
-		void DoneAction(IAction* action);
+		void DoneAction(const Ref<IAction>& action);
 
 		// Called when some property changed, stores action for undo
 		void DoneActorPropertyChangeAction(const String& path, 
@@ -39,13 +42,13 @@ namespace Editor
 		void ResetUndoActions();
 
 		// Returns done actions
-		const Vector<IAction*> GetUndoActions() const;
+		const Vector<Ref<IAction>> GetUndoActions() const;
 
 		// Returns redo actions
-		const Vector<IAction*> GetRedoActions() const;
+		const Vector<Ref<IAction>> GetRedoActions() const;
 
 	protected:
-		Vector<IAction*> mActions;        // Done actions
-		Vector<IAction*> mForwardActions; // Forward actions, what you can redo
+		Vector<Ref<IAction>> mActions;        // Done actions
+		Vector<Ref<IAction>> mForwardActions; // Forward actions, what you can redo
 	};
 }

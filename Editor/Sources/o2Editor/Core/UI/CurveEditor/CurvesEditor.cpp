@@ -2044,7 +2044,8 @@ namespace Editor
 				handles[i]->leftSupportHandle.enabled = handles[i]->leftSupportHandle.IsSelected() ||
 					handles[i]->mainHandle.IsSelected();
 			}
-			else handles[i]->leftSupportHandle.enabled = false;
+			else 
+				handles[i]->leftSupportHandle.enabled = false;
 
 			if (i < handles.Count() - 1)
 			{
@@ -2054,7 +2055,8 @@ namespace Editor
 				handles[i]->rightSupportHandle.enabled = handles[i]->rightSupportHandle.IsSelected() ||
 					handles[i]->mainHandle.IsSelected();
 			}
-			else handles[i]->rightSupportHandle.enabled = false;
+			else 
+				handles[i]->rightSupportHandle.enabled = false;
 		}
 	}
 

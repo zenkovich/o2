@@ -15,446 +15,489 @@ using namespace o2;
 
 namespace o2
 {
-	class ContextMenu;
-	class EditBox;
-	class Window;
+    class ContextMenu;
+    class EditBox;
+    class Window;
 }
 
 namespace Editor
 {
-	// ---------------------
-	// Curves editing widget
-	// ---------------------
-	class CurvesEditor: public FrameScrollView, public SelectableDragHandlesGroup
-	{
-	public:
-		ActionsList* actionsListDelegate = nullptr; // Actions fall down list. When it is null, editor uses local actions list
+    // ---------------------
+    // Curves editing widget
+    // ---------------------
+    class CurvesEditor : public FrameScrollView, public SelectableDragHandlesGroup
+    {
+    public:
+        Ref<ActionsList> actionsListDelegate; // Actions fall down list. When it is null, editor uses local actions list
 
-	public:
-		// Default constructor
-		CurvesEditor();
+    public:
+        // Default constructor
+        CurvesEditor();
 
-		// Copy-constructor
-		CurvesEditor(const CurvesEditor& other);
+        // Copy-constructor
+        CurvesEditor(const CurvesEditor& other);
 
-		// Destructor
-		~CurvesEditor();
+        // Destructor
+        ~CurvesEditor();
 
-		// Copy-operator
-		CurvesEditor& operator=(const CurvesEditor& other);
+        // Copy-operator
+        CurvesEditor& operator=(const CurvesEditor& other);
 
-		// Draws widget, updates render target 
-		void Draw() override;
+        // Draws widget, updates render target 
+        void Draw() override;
 
-		// Updates drawables, states and widget
-		void Update(float dt) override;
+        // Updates drawables, states and widget
+        void Update(float dt) override;
 
-		// Returns list of curves
-		Map<String, Ref<Curve>> GetCurves() const;
+        // Returns list of curves
+        Map<String, Ref<Curve>> GetCurves() const;
 
-		// Adds editing curve with color. If color is default it will be randomized
-		void AddCurve(const String& id, const Ref<Curve>& curve, const Color4& color = Color4(44, 62, 80));
+        // Adds editing curve with color. If color is default it will be randomized
+        void AddCurve(const String& id, const Ref<Curve>& curve, const Color4& color = Color4(44, 62, 80));
 
-		// Removed curve from editing
-		void RemoveCurve(Curve* curve);
+        // Removed curve from editing
+        void RemoveCurve(const Ref<Curve>& curve);
 
-		// Removed curve from editing
-		void RemoveCurve(const String& id);
+        // Removed curve from editing
+        void RemoveCurve(const String& id);
 
-		// Removes all editing curves
-		void RemoveAllCurves();
+        // Removes all editing curves
+        void RemoveAllCurves();
 
-		// Adds curves range with color. It can't be edited, just a solid color between curves
-		void AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color = Color4::Green());
+        // Adds curves range with color. It can't be edited, just a solid color between curves
+        void AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color = Color4::Green());
 
-		// Removes curve range
-		void RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB);
+        // Removes curve range
+        void RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB);
 
-		// Adds curves range with color. It can't be edited, just a solid color between curves
-		void AddCurvesRange(const String& idA, const String& idB, const Color4& color = Color4::Green());
+        // Adds curves range with color. It can't be edited, just a solid color between curves
+        void AddCurvesRange(const String& idA, const String& idB, const Color4& color = Color4::Green());
 
-		// Sets curve color
-		void SetCurveColor(const Ref<Curve>& curve, const Color4& color);
+        // Sets curve color
+        void SetCurveColor(const Ref<Curve>& curve, const Color4& color);
 
-		// Removes curve range
-		void RemoveCurvesRange(const String& idA, const String& idB);
+        // Removes curve range
+        void RemoveCurvesRange(const String& idA, const String& idB);
 
-		// Sets selection rectange sprite image
-		void SetSelectionSpriteImage(const ImageAssetRef& image);
+        // Sets selection rectangle sprite image
+        void SetSelectionSpriteImage(const ImageAssetRef& image);
 
-		// Sets captions text font
-		void SetTextFont(const Ref<Font>& font);
+        // Sets captions text font
+        void SetTextFont(const Ref<Font>& font);
 
-		// Sets captions offsets 
-		void SetTextBorder(const BorderF& border);
+        // Sets captions offsets 
+        void SetTextBorder(const BorderF& border);
 
-		// Sets main key handle images
-		void SetMainHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed,
-								 const ImageAssetRef& selected);
+        // Sets main key handle images
+        void SetMainHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed,
+                                 const ImageAssetRef& selected);
 
-		// Sets support key handle images
-		void SetSupportHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed,
-									const ImageAssetRef& selected);
+        // Sets support key handle images
+        void SetSupportHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed,
+                                    const ImageAssetRef& selected);
 
-		// Enables curves scale adjusting. When it is true, all curves adopts their size to be in the same view range
-		void SetAdjustCurvesScale(bool enable);
+        // Enables curves scale adjusting. When it is true, all curves adopts their size to be in the same view range
+        void SetAdjustCurvesScale(bool enable);
 
-		// Updates layout
-		void UpdateSelfTransform() override;
+        // Updates layout
+        void UpdateSelfTransform() override;
 
-		// Returns context menu
-		ContextMenu* GetContextMenu() const;
+        // Returns context menu
+        ContextMenu* GetContextMenu() const;
 
-		SERIALIZABLE(CurvesEditor);
+        SERIALIZABLE(CurvesEditor);
 
-	public:
-		struct CurveInfo;
+    public:
+        struct CurveInfo;
+        FORWARD_REF(CurveInfo);
 
-		// --------------------------------------
-		// Drag handle specified to curves editor
-		// --------------------------------------
-		struct CurveHandle : public DragHandle
-		{
-			CurveInfo* curveInfo = nullptr;
+        // --------------------------------------
+        // Drag handle specified to curves editor
+        // --------------------------------------
+        struct CurveHandle : public DragHandle
+        {
+            Ref<CurveInfo> curveInfo; // Curve info
 
-		public:
-			// Default constructor
-			CurveHandle();
+        public:
+            // Default constructor
+            CurveHandle();
 
-			// Constructor with views
-			CurveHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
-					    Sprite* selected = nullptr, Sprite* selectedHovered = nullptr, Sprite* selectedPressed = nullptr);
+            // Constructor with views
+            CurveHandle(const Ref<Sprite>& regular, const Ref<Sprite>& hover = nullptr, const Ref<Sprite>& pressed = nullptr,
+                        const Ref<Sprite>& selected = nullptr, const Ref<Sprite>& selectedHovered = nullptr, const Ref<Sprite>& selectedPressed = nullptr);
 
-			// Copy-constructor
-			CurveHandle(const DragHandle& other);
+            // Copy-constructor
+            CurveHandle(const DragHandle& other);
 
-			// Destructor
-			~CurveHandle() override;
+            // Destructor
+            ~CurveHandle() override;
 
-			// Copy-operator
-			CurveHandle& operator=(const CurveHandle& other);
+            // Copy-operator
+            CurveHandle& operator=(const CurveHandle& other);
 
-			// Returns handle position with curve view transformations
-			Vec2F GetLocalPosition() const;
+            // Returns handle position with curve view transformations
+            Vec2F GetLocalPosition() const;
 
-			// Converts local to view position (transformed by curve view)
-			Vec2F LocalToCurveView(const Vec2F& point) const;
+            // Converts local to view position (transformed by curve view)
+            Vec2F LocalToCurveView(const Vec2F& point) const;
 
-			// Converts view position (transformed by curve view) to local
-			Vec2F CurveViewToLocal(const Vec2F& point) const;
+            // Converts view position (transformed by curve view) to local
+            Vec2F CurveViewToLocal(const Vec2F& point) const;
 
-			// Converts point from screen to local space
-			Vec2F ScreenToLocal(const Vec2F& point) override;
+            // Converts point from screen to local space
+            Vec2F ScreenToLocal(const Vec2F& point) override;
 
-			// Converts point from local to screen space
-			Vec2F LocalToScreen(const Vec2F& point) override;
-
-			SERIALIZABLE(CurveHandle);
-		};
-
-		struct KeyHandles
-		{
-			CurvesEditor* curveEditor = nullptr;
-			CurveHandle   mainHandle;
-			CurveHandle   leftSupportHandle;
-			CurveHandle   rightSupportHandle;
-				            
-			int    curveKeyIdx;
-			UInt64 curveKeyUid;
-
-		public:
-			KeyHandles() {}
-			KeyHandles(const CurveHandle& mainSample, const CurveHandle& supportSample, CurvesEditor* editor, const Color4& color);
-
-			void Draw(const RectF& camRect);
-			bool IsSomeHandleSelected() const;
-		};
-
-		struct CurveInfo: public RefCounterable
-		{
-			CurvesEditor* editor = nullptr;
-
-			String curveId;
-			Curve* curve = nullptr;
-
-			Vector<KeyHandles*> handles;
-
-			Vector<Vec2F> approximatedPoints;
-
-			Color4 color;
-			Vec2F viewScale;
-			Vec2F viewOffset;
-
-			bool disableChangesHandling = false;
-
-		public:
-			CurveInfo();
-			~CurveInfo();
-
-			void UpdateHandles();
-			void UpdateApproximatedPoints();
-			void AdjustScale();
-			void OnCurveChanged();
-
-			void BeginCurveManualChange();
-			void CompleteCurveManualChange();
-		};
-
-		class CurveCopyInfo: public ISerializable
-		{
-		public:
-			String             curveId; // @SERIALIZABLE
-			Vector<Curve::Key> keys;    // @SERIALIZABLE
-
-			SERIALIZABLE(CurveCopyInfo);
-		};
-
-		struct RangeInfo
-		{
-			CurveInfo* curveA = nullptr;
-			CurveInfo* curveB = nullptr;
-			Color4     color;
-			Mesh*      mesh;
-
-			RangeInfo();
-			~RangeInfo();
-
-			void UpdateMesh();
-		};
-
-		struct SelectedHandlesInfo
-		{
-			int  index;
-			bool mainHandle;
-			bool leftSupportHandle;
-			bool rightSupportHandle;
-
-			bool operator==(const SelectedHandlesInfo& other) const;
-		};
-
-		struct CurveKeysInfo
-		{
-			String                      curveId;
-			Vector<Curve::Key>          keys;
-			Vector<SelectedHandlesInfo> selectedHandles;
+            // Converts point from local to screen space
+            Vec2F LocalToScreen(const Vec2F& point) override;
 
-			bool operator==(const CurveKeysInfo& other) const;
-		};
+            SERIALIZABLE(CurveHandle);
+        };
 
-	protected:
-		ContextMenu* mContextMenu = nullptr; // Context menu for editing keys properties, copying, pasting and other
-							    								    
-		CurveHandle mMainHandleSample;      // Main handle sample, uses to copy sprites @SERIALIZABLE
-		CurveHandle mSupportHandleSample;   // Support handle sample, uses to copy sprites @SERIALIZABLE
-		CurveInfo   mHandleSamplesStubInfo; // Empty curve info, used int handles samples
-							    								    
-		Vector<CurveInfo*> mCurves; // Editing curves infos list 
-		Vector<RangeInfo*> mRanges; // Curves ranges list
-							    								    
-		Vector<CurveHandle*>       mSupportHandles;      // Support points handles list
-		SelectableDragHandlesGroup mSupportHandlesGroup; // Support points handles selection group. They are must be selectable separately from main handles
-		
-		Vector<CurveHandle*> mSelectingHandlesBuf; // Potentially selecting handles while selecting
-							    								    
-		Sprite* mSelectionSprite = nullptr; // Selection sprite @SERIALIZABLE
+        // ------------------------------------------------------
+        // Curve point handles. Contains main and support handles
+        // ------------------------------------------------------
+        struct KeyHandles
+        {
+            WeakRef<CurvesEditor> curveEditor; // Owner curves editor
 
-		bool mAdjustCurvesScale = true; // When it is true, all curves adopts their size to be in the same view range
+            CurveHandle mainHandle;         // Main point handle
+            CurveHandle leftSupportHandle;  // Left support handle
+            CurveHandle rightSupportHandle; // Right support handle
 
-		Ref<Font> mTextFont;             // Captions text font @SERIALIZABLE
-		Text*   mTextLeft = nullptr;   // Captions text drawable at left border
-		Text*   mTextRight = nullptr;  // Captions text drawable at right border
-		Text*   mTextTop = nullptr;    // Captions text drawable at top border
-		Text*   mTextBottom = nullptr; // Captions text drawable at bottom border
-		BorderF mTextBorder;           // Captions offsets from border
-							    								    
-		Vec2F mSelectingPressedPoint; // Point, where cursor was pressed, selection starts here, in local space
-							    								    
-		FrameHandles mTransformFrame;                // Keys transformation frame
-		bool         mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
-		Basis        mTransformFrameBasis;           // Basis of transform frame in screen space
-								 							   	    
-		bool mIsViewScrolling = false; // Is scrolling view at this time
+            int    curveKeyIdx = 0; // Curve key index
+            UInt64 curveKeyUid;     // Curve key unique id
 
-		bool mNeedAdjustView = false; // True when need to adjust view scale. This works in update
-							    
-		Vector<CurveKeysInfo> mBeforeTransformKeys; // Stored selected keys before handles transformed
+        public:
+            // Default constructor
+            KeyHandles() {}
 
-		ActionsList mActionsList; // Local actions list. It uses when actionFallDown is null 
+            // Constructor
+            KeyHandles(const CurveHandle& mainSample, const CurveHandle& supportSample, const Ref<CurvesEditor>& editor, const Color4& color);
 
-	protected:
-		// Called when visible was changed. Sets context menu items priority
-		void OnEnabled() override;
+            // Draws handles
+            void Draw(const RectF& camRect);
 
-		// Called when visible was changed. Sets context menu items priority
-		void OnDisabled() override;
+            // Returns true if some handle is selected
+            bool IsSomeHandleSelected() const;
+        };
 
-		// Called when scrolling
-		void OnScrolled(float scroll) override;
+        // ----------------------------------------------------------
+        // Editing curve info. Contains curve, handles and other data
+        // ----------------------------------------------------------
+        struct CurveInfo : public RefCounterable
+        {
+            WeakRef<CurvesEditor> editor; // Owner curves editor
 
-		// Searches curve by id
-		Curve* FindCurve(const String& id);
+            String     curveId; // Curve id
+            Ref<Curve> curve;   // Editing curve
 
-		// Initializes context menu items
-		void InitializeContextMenu();
+            Vector<Ref<KeyHandles>> handles; // Curve key handles
 
-		// Initializes text drawables by font and sets aligning
-		void InitializeTextDrawables();
+            Vector<Vec2F> approximatedPoints; // Cached approximated curve points
 
-		// Recalculates view area by curves approximated points
-		void RecalculateViewArea();
+            Color4 color; // Curve draw color
 
-		// Redraws content into render target
-		void RedrawContent() override;
+            Vec2F viewScale;  // Adjust curve normalized view scale
+            Vec2F viewOffset; // Adjust curve normalized view offset
 
-		// Draws grid and captions
-		void DrawGrid() override;
+            bool disableChangesHandling = false; // Disable changes handling
 
-		// Draws curves
-		void DrawCurves();
+        public:
+            // Default constructor
+            CurveInfo();
 
-		// Draws handles
-		void DrawHandles();
+            // Destructor
+            ~CurveInfo();
 
-		// Draw selection sprite
-		void DrawSelection();
+            // Updates handles positions and turns on/off support handles
+            void UpdateHandles();
 
-		// Draws transformation frame
-		void DrawTransformFrame();
+            // Updates approximated points
+            void UpdateApproximatedPoints();
 
-		// Adds curve key main and support handles and initializes them
-		void AddCurveKeyHandles(CurveInfo* info, int keyId);
+            // Adjusts curve view scale for normalized view
+            void AdjustScale();
 
-		// Removes curve key handles
-		void RemoveCurveKeyHandles(CurveInfo* info, int keyId);
+            // Called when curve changed, updates handles and approximated points
+            void OnCurveChanged();
 
-		// Called when one of main curve key handles was moved. Updates graphics and handles
-		void OnCurveKeyMainHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
+            // Begins manual curve change
+            void BeginCurveManualChange();
 
-		// Called when one of left support curve key handles was moved. Updates graphics and handles
-		void OnCurveKeyLeftSupportHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
+            // Ends manual curve change
+            void CompleteCurveManualChange();
+        };
 
-		// Called when one of right support curve key handles was moved. Updates graphics and handles
-		void OnCurveKeyRightSupportHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
+        // ----------------------------------------------
+        // Curve copying info. Contains curve id and keys
+        // ----------------------------------------------
+        class CurveCopyInfo : public ISerializable
+        {
+        public:
+            String             curveId; // Curve id @SERIALIZABLE
+            Vector<Curve::Key> keys;    // List of copying keys @SERIALIZABLE
 
-		// Checks left support handle constrains and returns filtered position
-		Vec2F CheckLeftSupportHandlePosition(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
+            SERIALIZABLE(CurveCopyInfo);
+        };
 
-		// Checks right support handle constrains and returns filtered position
-		Vec2F CheckRightSupportHandlePosition(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
+        // -----------------------------------------------
+        // Curve range info. Contains two curves and color
+        // -----------------------------------------------
+        struct RangeInfo
+        {
+            Ref<CurveInfo> curveA; // Curve A
+            Ref<CurveInfo> curveB; // Curve B
 
-		// Smooths key support points and updates handles
-		void SmoothKey(CurveInfo* info, int idx);
+            Color4    color; // Range color
+            Ref<Mesh> mesh;  // Mesh for drawing range
 
-		// Called when cursor double clicked, adds new point in curve
-		void OnCursorDblClicked(const Input::Cursor& cursor) override;
+        public:
+            RangeInfo();
+            ~RangeInfo();
 
-		// Called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor) override;
+            void UpdateMesh();
+        };
 
-		// Called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor) override;
+        // -----------------------------------------------
+        // Selected handles info. Contains index and flags
+        // -----------------------------------------------
+        struct SelectedHandlesInfo
+        {
+            int  index = 0;                  // Selected handle index
+            bool mainHandle = false;         // Main handle selected
+            bool leftSupportHandle = false;  // Left support handle selected
+            bool rightSupportHandle = false; // Right support handle selected
 
-		// Called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor) override;
+            bool operator==(const SelectedHandlesInfo& other) const;
+        };
 
-		// Called when right mouse button stay down on this, overriding from scroll view to call context menu
-		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
+        // -------------------------------------------------------------
+        // Curve keys info. Contains curve id, keys and selected handles
+        // -------------------------------------------------------------
+        struct CurveKeysInfo
+        {
+            String curveId; // Curve id
 
-		// Called when right mouse button was released (only when right mouse button pressed this at previous time), overriding from scroll view to call context menu
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+            Vector<Curve::Key>          keys;            // Curve keys
+            Vector<SelectedHandlesInfo> selectedHandles; // Selected handles
 
-		// Called when selectable draggable handle was released
-		void OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
+            bool operator==(const CurveKeysInfo& other) const;
+        };
 
-		// Called when selectable handle was began to drag
-		void OnHandleBeganDragging(const Ref<DragHandle>& handle) override;
+    protected:
+        Ref<ContextMenu> mContextMenu; // Context menu for editing keys properties, copying, pasting and other
 
-		// Called when selectable handle moved, moves all selected handles position
-		void OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos) override;
+        CurveHandle    mMainHandleSample;      // Main handle sample, uses to copy sprites @SERIALIZABLE
+        CurveHandle    mSupportHandleSample;   // Support handle sample, uses to copy sprites @SERIALIZABLE
+        Ref<CurveInfo> mHandleSamplesStubInfo; // Empty curve info, used int handles samples
 
-		// Called when selectable handle completed changing
-		void OnHandleCompletedChange(const Ref<DragHandle>& handle) override;
+        Vector<Ref<CurveInfo>> mCurves; // Editing curves infos list 
+        Vector<Ref<RangeInfo>> mRanges; // Curves ranges list
 
-		// Called when selection is changed - some handle was added or removed from selection
-		void OnSelectionChanged() override;
+        Vector<Ref<CurveHandle>>   mSupportHandles;      // Support points handles list
+        SelectableDragHandlesGroup mSupportHandlesGroup; // Support points handles selection group. They are must be selectable separately from main handles
 
-		// Checks supports handles visibility
-		void CheckHandlesVisible();
+        Vector<Ref<CurveHandle>> mSelectingHandlesBuf; // Potentially selecting handles while selecting
 
-		// Updates transformation frame by selected handles
-		void UpdateTransformFrame();
+        Ref<Sprite> mSelectionSprite; // Selection sprite @SERIALIZABLE
 
-		// Returns is transform frame visible. it will be visible when 2 or more main handles was selected
-		bool IsTransformFrameVisible() const;
+        bool mAdjustCurvesScale = true; // When it is true, all curves adopts their size to be in the same view range
 
-		// Sets all selected keys supports type
-		void SetSelectedKeysSupportsType(Curve::Key::Type type);
+        Ref<Font> mTextFont;   // Captions text font @SERIALIZABLE
+        Ref<Text> mTextLeft;   // Captions text drawable at left border
+        Ref<Text> mTextRight;  // Captions text drawable at right border
+        Ref<Text> mTextTop;    // Captions text drawable at top border
+        Ref<Text> mTextBottom; // Captions text drawable at bottom border
+        BorderF   mTextBorder; // Captions offsets from border
 
-		// Called when transform frame was transformed
-		void OnTransformFrameTransformed(const Basis& basis);
+        Vec2F mSelectingPressedPoint; // Point, where cursor was pressed, selection starts here, in local space
 
-		// Called when beginning transforming some handles. Stores selected keys before changing
-		void OnTransformBegin();
+        FrameHandles mTransformFrame;                // Keys transformation frame
+        bool         mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
+        Basis        mTransformFrameBasis;           // Basis of transform frame in screen space
 
-		// Called when transform completed. Checks that selected keys changed, creates action for undo/redo
-		void OnTransformCompleted();
+        bool mIsViewScrolling = false; // Is scrolling view at this time
 
-		// Transforms point from local to curve view coords
-		Vec2F LocalToCurveView(const Vec2F& point, const Vec2F& viewScale, const Vec2F& viewOffset) const;
+        bool mNeedAdjustView = false; // True when need to adjust view scale. This works in update
 
-		// Transforms point from curve view to local coords
-		Vec2F CurveViewToLocal(const Vec2F& point, const Vec2F& viewScale, const Vec2F& viewOffset) const;
+        Vector<CurveKeysInfo> mBeforeTransformKeys; // Stored selected keys before handles transformed
 
-		// Stores undo action, clears redo actions
-		void DoneAction(IAction* action);
+        ActionsList mActionsList; // Local actions list. It uses when actionFallDown is null
 
-	
-		// On context menu edit pressed. Shows key edit window
-		void OnEditPressed();
+    protected:
+        // Called when visible was changed. Sets context menu items priority
+        void OnEnabled() override;
 
-		// On context menu auto smooth pressed. Enables auto smoothing for selected keys
-		void OnAutoSmoothChecked(bool checked);
+        // Called when visible was changed. Sets context menu items priority
+        void OnDisabled() override;
 
-		// On context menu flat pressed. Enables flat support handles for selected keys
-		void OnFlatChecked(bool checked);
+        // Called when scrolling
+        void OnScrolled(float scroll) override;
 
-		// On context menu free pressed. Free handles transform for selected keys
-		void OnFreeChecked(bool checked);
+        // Searches curve by id
+        Ref<Curve> FindCurve(const String& id);
 
-		// On context menu linear pressed. Free handles transform for selected keys
-		void OnLinearChecked(bool checked);
+        // Initializes context menu items
+        void InitializeContextMenu();
 
-		// On context menu broken pressed. Breaks connection between left and right supports
-		void OnBrokenChecked(bool checked);
+        // Initializes text drawables by font and sets aligning
+        void InitializeTextDrawables();
 
-		// On context menu discrete pressed. Sets discrete keys transition for selected
-		void OnDiscreteChecked(bool checked);
+        // Recalculates view area by curves approximated points
+        void RecalculateViewArea();
 
-		// On context menu copy pressed. Stores keys into buffer
-		void OnCopyPressed();
+        // Redraws content into render target
+        void RedrawContent() override;
 
-		// On context menu cut pressed. Stores keys into buffer and removes them
-		void OnCutPressed();
+        // Draws grid and captions
+        void DrawGrid() override;
 
-		// On context menu paste pressed. Inserts keys from buffer at cursor position
-		void OnPastePressed();
+        // Draws curves
+        void DrawCurves();
 
-		// On context menu delete pressed. Deletes selected keys
-		void OnDeletePressed();
+        // Draws handles
+        void DrawHandles();
 
-		// On context menu insert pressed. Inserts keys from buffer and moves keys to right
-		void OnInsertPressed();
+        // Draw selection sprite
+        void DrawSelection();
 
-		// On context menu undo pressed. Reverts previous action and puts into actions stack
-		void OnUndoPressed();
+        // Draws transformation frame
+        void DrawTransformFrame();
 
-		// On context menu redo pressed. Restores action from stack
-		void OnRedoPressed();
+        // Adds curve key main and support handles and initializes them
+        void AddCurveKeyHandles(const Ref<CurveInfo>& info, int keyId);
 
-		friend class CurveAddKeysAction;
-		friend class CurveDeleteKeysAction;
-		friend class CurveKeysChangeAction;
-	};
+        // Removes curve key handles
+        void RemoveCurveKeyHandles(const Ref<CurveInfo>& info, int keyId);
+
+        // Called when one of main curve key handles was moved. Updates graphics and handles
+        void OnCurveKeyMainHandleDragged(const Ref<CurveInfo>& info, KeyHandles* handles, const Vec2F& position);
+
+        // Called when one of left support curve key handles was moved. Updates graphics and handles
+        void OnCurveKeyLeftSupportHandleDragged(const Ref<CurveInfo>& info, KeyHandles* handles, const Vec2F& position);
+
+        // Called when one of right support curve key handles was moved. Updates graphics and handles
+        void OnCurveKeyRightSupportHandleDragged(const Ref<CurveInfo>& info, KeyHandles* handles, const Vec2F& position);
+
+        // Checks left support handle constrains and returns filtered position
+        Vec2F CheckLeftSupportHandlePosition(const Ref<CurveInfo>& info, KeyHandles* handles, const Vec2F& position);
+
+        // Checks right support handle constrains and returns filtered position
+        Vec2F CheckRightSupportHandlePosition(const Ref<CurveInfo>& info, KeyHandles* handles, const Vec2F& position);
+
+        // Smooths key support points and updates handles
+        void SmoothKey(const Ref<CurveInfo>& info, int idx);
+
+        // Called when cursor double clicked, adds new point in curve
+        void OnCursorDblClicked(const Input::Cursor& cursor) override;
+
+        // Called when cursor pressed on this
+        void OnCursorPressed(const Input::Cursor& cursor) override;
+
+        // Called when cursor released (only when cursor pressed this at previous time)
+        void OnCursorReleased(const Input::Cursor& cursor) override;
+
+        // Called when cursor stay down during frame
+        void OnCursorStillDown(const Input::Cursor& cursor) override;
+
+        // Called when right mouse button stay down on this, overriding from scroll view to call context menu
+        void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
+
+        // Called when right mouse button was released (only when right mouse button pressed this at previous time), overriding from scroll view to call context menu
+        void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+
+        // Called when selectable draggable handle was released
+        void OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
+
+        // Called when selectable handle was began to drag
+        void OnHandleBeganDragging(const Ref<DragHandle>& handle) override;
+
+        // Called when selectable handle moved, moves all selected handles position
+        void OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos) override;
+
+        // Called when selectable handle completed changing
+        void OnHandleCompletedChange(const Ref<DragHandle>& handle) override;
+
+        // Called when selection is changed - some handle was added or removed from selection
+        void OnSelectionChanged() override;
+
+        // Checks supports handles visibility
+        void CheckHandlesVisible();
+
+        // Updates transformation frame by selected handles
+        void UpdateTransformFrame();
+
+        // Returns is transform frame visible. it will be visible when 2 or more main handles was selected
+        bool IsTransformFrameVisible() const;
+
+        // Sets all selected keys supports type
+        void SetSelectedKeysSupportsType(Curve::Key::Type type);
+
+        // Called when transform frame was transformed
+        void OnTransformFrameTransformed(const Basis& basis);
+
+        // Called when beginning transforming some handles. Stores selected keys before changing
+        void OnTransformBegin();
+
+        // Called when transform completed. Checks that selected keys changed, creates action for undo/redo
+        void OnTransformCompleted();
+
+        // Transforms point from local to curve view coords
+        Vec2F LocalToCurveView(const Vec2F& point, const Vec2F& viewScale, const Vec2F& viewOffset) const;
+
+        // Transforms point from curve view to local coords
+        Vec2F CurveViewToLocal(const Vec2F& point, const Vec2F& viewScale, const Vec2F& viewOffset) const;
+
+        // Stores undo action, clears redo actions
+        void DoneAction(IAction* action);
+
+
+        // On context menu edit pressed. Shows key edit window
+        void OnEditPressed();
+
+        // On context menu auto smooth pressed. Enables auto smoothing for selected keys
+        void OnAutoSmoothChecked(bool checked);
+
+        // On context menu flat pressed. Enables flat support handles for selected keys
+        void OnFlatChecked(bool checked);
+
+        // On context menu free pressed. Free handles transform for selected keys
+        void OnFreeChecked(bool checked);
+
+        // On context menu linear pressed. Free handles transform for selected keys
+        void OnLinearChecked(bool checked);
+
+        // On context menu broken pressed. Breaks connection between left and right supports
+        void OnBrokenChecked(bool checked);
+
+        // On context menu discrete pressed. Sets discrete keys transition for selected
+        void OnDiscreteChecked(bool checked);
+
+        // On context menu copy pressed. Stores keys into buffer
+        void OnCopyPressed();
+
+        // On context menu cut pressed. Stores keys into buffer and removes them
+        void OnCutPressed();
+
+        // On context menu paste pressed. Inserts keys from buffer at cursor position
+        void OnPastePressed();
+
+        // On context menu delete pressed. Deletes selected keys
+        void OnDeletePressed();
+
+        // On context menu insert pressed. Inserts keys from buffer and moves keys to right
+        void OnInsertPressed();
+
+        // On context menu undo pressed. Reverts previous action and puts into actions stack
+        void OnUndoPressed();
+
+        // On context menu redo pressed. Restores action from stack
+        void OnRedoPressed();
+
+        friend class CurveAddKeysAction;
+        friend class CurveDeleteKeysAction;
+        friend class CurveKeysChangeAction;
+    };
 }
 // --- META ---
 
@@ -616,7 +659,6 @@ CLASS_FIELDS_META(Editor::CurvesEditor::CurveCopyInfo)
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesEditor::CurveCopyInfo)
-{
-}
+{}
 END_META;
 // --- END META ---
