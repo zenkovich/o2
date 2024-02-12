@@ -18,7 +18,7 @@ namespace o2
     struct ApplyActorInfo
     {
         Actor*                       actor;
-        Vector<SceneEditableObject*> allChildren;
+        Vector<Ref<SceneEditableObject>> allChildren;
 
         Map<const SceneEditableObject*, SceneEditableObject*> allChildrenByLinks;
 
@@ -27,7 +27,7 @@ namespace o2
 
         bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
 
-        void CollectChildren(SceneEditableObject* object);
+        void CollectChildren(const Ref<SceneEditableObject>& object);
     };
 
     // ------------------------------------------

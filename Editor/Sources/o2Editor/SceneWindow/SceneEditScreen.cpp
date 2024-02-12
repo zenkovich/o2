@@ -243,7 +243,7 @@ namespace Editor
 		}
 	}
 
-	void SceneEditScreen::DrawObjectSelection(SceneEditableObject* object, const Color4& color)
+	void SceneEditScreen::DrawObjectSelection(const Ref<SceneEditableObject>& object, const Color4& color)
 	{
 		o2Render.DrawAABasis(object->GetTransform(), color, color, color);
 		// 
@@ -252,7 +252,7 @@ namespace Editor
 		// 	o2Render.DrawLine(bs.offs, bs.offs + bs.yv*100.0f);
 	}
 
-	void SceneEditScreen::SelectObjects(Vector<SceneEditableObject*> objects, bool additive /*= true*/)
+	void SceneEditScreen::SelectObjects(Vector<Ref<SceneEditableObject>> objects, bool additive /*= true*/)
 	{
 		auto prevSelectedObjects = mSelectedObjects;
 
@@ -397,12 +397,12 @@ namespace Editor
 		return mTools;
 	}
 
-	const Vector<SceneEditableObject*>& SceneEditScreen::GetSelectedObjects() const
+	const Vector<Ref<SceneEditableObject>>& SceneEditScreen::GetSelectedObjects() const
 	{
 		return mSelectedObjects;
 	}
 
-	const Vector<SceneEditableObject*>& SceneEditScreen::GetTopSelectedObjects() const
+	const Vector<Ref<SceneEditableObject>>& SceneEditScreen::GetTopSelectedObjects() const
 	{
 		return mTopSelectedObjects;
 	}
@@ -427,10 +427,10 @@ namespace Editor
 		o2EditorTree.GetSceneTree()->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);
 		o2EditorTree.GetDrawOrderTree()->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);
 
-		o2Scene.onObjectsChanged += Function<void(Vector<SceneEditableObject*>)>(this, &SceneEditScreen::OnSceneChanged);
+		o2Scene.onObjectsChanged += Function<void(Vector<Ref<SceneEditableObject>>)>(this, &SceneEditScreen::OnSceneChanged);
 	}
 
-	void SceneEditScreen::OnTreeSelectionChanged(Vector<SceneEditableObject*> selectedObjects)
+	void SceneEditScreen::OnTreeSelectionChanged(Vector<Ref<SceneEditableObject>> selectedObjects)
 	{
 		if (mSelectedFromThis)
 		{
@@ -485,7 +485,7 @@ namespace Editor
 		}
 	}
 
-	void SceneEditScreen::OnSceneChanged(Vector<SceneEditableObject*> actors)
+	void SceneEditScreen::OnSceneChanged(Vector<Ref<SceneEditableObject>> actors)
 	{
 		mNeedRedraw = true;
 
@@ -508,7 +508,7 @@ namespace Editor
 			OnObjectsSelectedFromThis();
 	}
 
-	void SceneEditScreen::SelectObjectsWithoutAction(Vector<SceneEditableObject*> objects, bool additive /*= true*/)
+	void SceneEditScreen::SelectObjectsWithoutAction(Vector<Ref<SceneEditableObject>> objects, bool additive /*= true*/)
 	{
 		if (!additive)
 			mSelectedObjects.Clear();
@@ -520,7 +520,7 @@ namespace Editor
 		OnObjectsSelectedFromThis();
 	}
 
-	void SceneEditScreen::SelectObjectWithoutAction(SceneEditableObject* object, bool additive /*= true*/)
+	void SceneEditScreen::SelectObjectWithoutAction(const Ref<SceneEditableObject>& object, bool additive /*= true*/)
 	{
 		if (!additive)
 			mSelectedObjects.Clear();

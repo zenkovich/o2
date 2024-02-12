@@ -52,7 +52,7 @@ namespace Editor
 		WString GetCaption() const override;
 
 		// Adds remove button
-		Button* GetRemoveButton() override;
+		Ref<Button> GetRemoveButton() override;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -60,15 +60,15 @@ namespace Editor
 		IOBJECT(AssetProperty);
 
 	protected:
-		Widget*  mBox = nullptr;               // Property edit box
-		Text*    mNameText = nullptr;          // Asset name text
-		Spoiler* mSpoiler = nullptr;           // Spoiler
-		Label*   mCaption = nullptr;           // Property name caption
-		Button*  mCreateInstanceBtn = nullptr; // Create instance button
+		Ref<Widget>  mBox;               // Property edit box
+		Ref<Text>    mNameText;          // Asset name text
+		Ref<Spoiler> mSpoiler;           // Spoiler
+		Ref<Label>   mCaption;           // Property name caption
+		Ref<Button>  mCreateInstanceBtn; // Create instance button
 
-		HorizontalLayout* mHeaderContainer = nullptr; // Asset controls container: create, save and remove
+		Ref<HorizontalLayout> mHeaderContainer; // Asset controls container: create, save and remove
 
-		ObjectViewer* mAssetObjectViewer = nullptr; // Asset instance viewer. Created if required
+		Ref<ObjectViewer> mAssetObjectViewer; // Asset instance viewer. Created if required
 
 		const Type* mAssetType = nullptr; // Type of asset
 
@@ -97,10 +97,10 @@ namespace Editor
 		void OnTypeSpecialized(const Type& type) override;
 
 		// Returns value from proxy
-		Ref<Asset> GetProxy(IAbstractValueProxy* proxy) const override;
+		Ref<Asset> GetProxy(const Ref<IAbstractValueProxy>& proxy) const override;
 
 		// Sets value to proxy
-		void SetProxy(IAbstractValueProxy* proxy, const Ref<Asset>& value) override;
+		void SetProxy(const Ref<IAbstractValueProxy>& proxy, const Ref<Asset>& value) override;
 
 		// Updates value view
 		void UpdateValueView() override;

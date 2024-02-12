@@ -30,7 +30,7 @@ namespace Editor
 		IOBJECT(BooleanProperty);
 
 	protected:
-		Toggle* mToggle = nullptr; // Toggle 
+		Ref<Toggle> mToggle; // Toggle 
 
 	protected:
 		// Updates value view

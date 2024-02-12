@@ -9,8 +9,8 @@ namespace Editor
 	SelectAction::SelectAction()
 	{}
 
-	SelectAction::SelectAction(const Vector<SceneEditableObject*>& selectedObjects, 
-							   const Vector<SceneEditableObject*>& prevSelectedObjects)
+	SelectAction::SelectAction(const Vector<Ref<SceneEditableObject>>& selectedObjects, 
+							   const Vector<Ref<SceneEditableObject>>& prevSelectedObjects)
 	{
 		selectedObjectsIds = selectedObjects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
 		prevSelectedObjectsIds = prevSelectedObjects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });

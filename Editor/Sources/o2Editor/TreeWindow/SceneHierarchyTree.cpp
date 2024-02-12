@@ -33,8 +33,7 @@ namespace Editor
 	SceneHierarchyTree::SceneHierarchyTree() :
 		Tree(), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
-		delete mNodeWidgetSample;
-		mNodeWidgetSample = mnew SceneHierarchyTreeNode();
+		mNodeWidgetSample = mmake<SceneHierarchyTreeNode>();
 		mNodeWidgetSample->layout->minHeight = 20;
 		mNodeWidgetSample->AddLayer("caption", nullptr);
 
@@ -91,39 +90,39 @@ namespace Editor
 		}
 	}
 
-	TreeNode* SceneHierarchyTree::GetNode(SceneEditableObject* object)
+	Ref<TreeNode> SceneHierarchyTree::GetNode(const Ref<SceneEditableObject>& object)
 	{
-		return Tree::GetNode((void*)(void*)object);
+		return Tree::GetNode((void*)object.Get());
 	}
 
-	Vector<SceneEditableObject*> SceneHierarchyTree::GetSelectedObjects() const
+	Vector<Ref<SceneEditableObject>> SceneHierarchyTree::GetSelectedObjects() const
 	{
-		return Tree::GetSelectedObjects().Convert<SceneEditableObject*>([](auto x) { return (SceneEditableObject*)(void*)x; });
+		return Tree::GetSelectedObjects().Convert<Ref<SceneEditableObject>>([](auto x) { return Ref((SceneEditableObject*)x); });
 	}
 
-	void SceneHierarchyTree::SetSelectedObjects(const Vector<SceneEditableObject*>& objects)
+	void SceneHierarchyTree::SetSelectedObjects(const Vector<Ref<SceneEditableObject>>& objects)
 	{
-		Tree::SetSelectedObjects(objects.Convert<void*>([](auto x) { return (void*)(void*)x; }));
+		Tree::SetSelectedObjects(objects.Convert<void*>([](auto& x) { return (void*)x.Get(); }));
 	}
 
-	void SceneHierarchyTree::SelectObject(SceneEditableObject* object)
+	void SceneHierarchyTree::SelectObject(const Ref<SceneEditableObject>& object)
 	{
-		Tree::SelectObject((void*)(void*)object);
+		Tree::SelectObject((void*)object.Get());
 	}
 
-	void SceneHierarchyTree::SelectAndHighlightObject(SceneEditableObject* object)
+	void SceneHierarchyTree::SelectAndHighlightObject(const Ref<SceneEditableObject>& object)
 	{
-		Tree::SelectAndHighlightObject((void*)(void*)object);
+		Tree::SelectAndHighlightObject((void*)object.Get());
 	}
 
-	void SceneHierarchyTree::ScrollToAndHighlight(SceneEditableObject* object)
+	void SceneHierarchyTree::ScrollToAndHighlight(const Ref<SceneEditableObject>& object)
 	{
-		Tree::ScrollToAndHighlight(object);
+		Tree::ScrollToAndHighlight(object.Get());
 	}
 
-	void SceneHierarchyTree::DeselectObject(SceneEditableObject* object)
+	void SceneHierarchyTree::DeselectObject(const Ref<SceneEditableObject>& object)
 	{
-		Tree::DeselectObject((void*)(void*)object);
+		Tree::DeselectObject((void*)object.Get());
 	}
 
 	void SceneHierarchyTree::DeselectAllObjects()
@@ -131,9 +130,9 @@ namespace Editor
 		Tree::DeselectAllObjects();
 	}
 
-	void SceneHierarchyTree::ScrollTo(SceneEditableObject* object)
+	void SceneHierarchyTree::ScrollTo(const Ref<SceneEditableObject>& object)
 	{
-		Tree::ScrollTo((void*)(void*)object);
+		Tree::ScrollTo((void*)object.Get());
 	}
 
 	void SceneHierarchyTree::SetEditorWatching(bool watching)
@@ -154,13 +153,13 @@ namespace Editor
 
 	void SceneHierarchyTree::Initialize()
 	{
-		mEnableTogglesGroup = mnew ToggleGroup(ToggleGroup::Type::VerOneClick);
+		mEnableTogglesGroup = mmake<ToggleGroup>(ToggleGroup::Type::VerOneClick);
 		mEnableTogglesGroup->onReleased = THIS_FUNC(EnableObjectsGroupReleased);
 
-		mLockTogglesGroup = mnew ToggleGroup(ToggleGroup::Type::VerOneClick);
+		mLockTogglesGroup = mmake<ToggleGroup>(ToggleGroup::Type::VerOneClick);
 		mLockTogglesGroup->onReleased = THIS_FUNC(LockObjectsGroupReleased);
 
-		SceneHierarchyTreeNode* objectNodeWidgetSample = (SceneHierarchyTreeNode*)mNodeWidgetSample;
+		auto objectNodeWidgetSample = DynamicCast<SceneHierarchyTreeNode>(mNodeWidgetSample);
 		objectNodeWidgetSample->InitializeControls();
 	}
 
@@ -170,7 +169,7 @@ namespace Editor
 		Tree::UpdateVisibleNodes();
 	}
 
-	TreeNode* SceneHierarchyTree::CreateTreeNodeWidget()
+	Ref<TreeNode> SceneHierarchyTree::CreateTreeNodeWidget()
 	{
 		PushEditorScopeOnStack scope;
 		return Tree::CreateTreeNodeWidget();
@@ -179,7 +178,7 @@ namespace Editor
 	void* SceneHierarchyTree::GetObjectParent(void* object)
 	{
 		SceneEditableObject* sceneObject = (SceneEditableObject*)object;
-		return sceneObject->GetEditableParent();
+		return sceneObject->GetEditableParent().Get();
 	}
 
 	Vector<void*> SceneHierarchyTree::GetObjectChilds(void* object)
@@ -193,7 +192,7 @@ namespace Editor
 		if (mWatchEditor)
 			return EditorUIRoot.GetRootWidget()->GetEditableChildren().Cast<void*>();
 
-		return o2Scene.GetRootActors().Convert<void*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return o2Scene.GetRootActors().Convert<void*>([](const Ref<Actor>& x) { return DynamicCast<SceneEditableObject>(x).Get(); });
 	}
 
 	String SceneHierarchyTree::GetObjectDebug(void* object)
@@ -201,30 +200,32 @@ namespace Editor
 		return object ? ((SceneEditableObject*)object)->GetName() : String("null");
 	}
 
-	void SceneHierarchyTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
+	void SceneHierarchyTree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object)
 	{
-		SceneHierarchyTreeNode* node = (SceneHierarchyTreeNode*)nodeWidget;
-		node->SetSceneObject((SceneEditableObject*)object);
+		auto node = DynamicCast<SceneHierarchyTreeNode>(nodeWidget);
+		node->SetSceneObject(Ref((SceneEditableObject*)object));
 		node->mLockToggle->SetToggleGroup(mLockTogglesGroup);
 		node->mEnableToggle->SetToggleGroup(mEnableTogglesGroup);
 	}
 
 	void SceneHierarchyTree::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
 	{
-		((SceneHierarchyTreeNode*)nodeWidget)->EnableEditName();
+		DynamicCast<SceneHierarchyTreeNode>(nodeWidget)->EnableEditName();
 	}
+
+#undef GetObject
 
 	void SceneHierarchyTree::OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject)
 	{
-		SceneEditableObject* newParentEditableObject = (SceneEditableObject*)newParent;
-		SceneEditableObject* prevEditableObject = (SceneEditableObject*)prevObject;
-		Vector<SceneEditableObject*> editableObjects = objects.Cast<SceneEditableObject*>();
+		auto newParentEditableObject = Ref((SceneEditableObject*)newParent);
+		auto prevEditableObject = Ref((SceneEditableObject*)prevObject);
+		Vector<Ref<SceneEditableObject>> editableObjects = DynamicCastVector<SceneEditableObject>(objects);
 
-		auto action = mnew ReparentAction(editableObjects);
+		auto action = mmake<ReparentAction>(editableObjects);
 
 		o2Scene.ReparentEditableObjects(editableObjects, newParentEditableObject, prevEditableObject);
 
-		action->ObjectsReparented(mParent, prevEditableObject);
+		action->ObjectsReparented(mParent.Lock(), prevEditableObject);
 		o2EditorApplication.DoneAction(action);
 
 		Tree::OnDraggedObjects(objects, newParent, prevObject);
@@ -235,10 +236,10 @@ namespace Editor
 
 	void SceneHierarchyTree::EnableObjectsGroupReleased(bool value)
 	{
-		Vector<SceneEditableObject*> objects = mEnableTogglesGroup->GetToggled().Convert<SceneEditableObject*>(
-			[](Toggle* x) { return (SceneEditableObject*)((TreeNode*)x->GetParent())->GetObject(); });
+		Vector<Ref<SceneEditableObject>> objects = mEnableTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
+			[](const WeakRef<Toggle>& x) { return Ref(static_cast<SceneEditableObject*>(DynamicCast<TreeNode>(x.Lock()->GetParent().Lock())->GetObject())); });
 
-		auto action = mnew EnableAction(objects, value);
+		auto action = mmake<EnableAction>(objects, value);
 		o2EditorApplication.DoneAction(action);
 	}
 
@@ -247,10 +248,10 @@ namespace Editor
 
 	void SceneHierarchyTree::LockObjectsGroupReleased(bool value)
 	{
-		Vector<SceneEditableObject*> objects = mLockTogglesGroup->GetToggled().Convert<SceneEditableObject*>(
-			[](Toggle* x) { return (SceneEditableObject*)((TreeNode*)x->GetParent())->GetObject(); });
+		Vector<Ref<SceneEditableObject>> objects = mLockTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
+			[](const WeakRef<Toggle>& x) { return Ref(static_cast<SceneEditableObject*>(DynamicCast<TreeNode>(x.Lock()->GetParent().Lock())->GetObject())); });
 
-		auto action = mnew LockAction(objects, value);
+		auto action = mmake<LockAction>(objects, value);
 		o2EditorApplication.DoneAction(action);
 	}
 
@@ -326,22 +327,22 @@ namespace Editor
 		else Tree::OnDropped(group);
 	}
 
-	void SceneHierarchyTree::OnObjectCreated(SceneEditableObject* object)
+	void SceneHierarchyTree::OnObjectCreated(const Ref<SceneEditableObject>& object)
 	{
 		Tree::OnObjectCreated(object, object->GetEditableParent());
 	}
 
-	void SceneHierarchyTree::OnObjectDestroing(SceneEditableObject* object)
+	void SceneHierarchyTree::OnObjectDestroing(const Ref<SceneEditableObject>& object)
 	{
 		Tree::OnObjectRemoved(object);
 	}
 
-	void SceneHierarchyTree::OnObjectsChanged(const Vector<SceneEditableObject*>& objects)
+	void SceneHierarchyTree::OnObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		Tree::OnObjectsChanged(objects.Cast<void*>());
 	}
 
-	void SceneHierarchyTree::OnObjectChanged(SceneEditableObject* object)
+	void SceneHierarchyTree::OnObjectChanged(const Ref<SceneEditableObject>& object)
 	{
 		Tree::OnObjectsChanged({ object });
 	}
@@ -396,7 +397,7 @@ namespace Editor
 			mNameEditBox->onChangeCompleted = THIS_FUNC(OnObjectNameChanged);
 	}
 
-	void SceneHierarchyTreeNode::SetSceneObject(SceneEditableObject* object)
+	void SceneHierarchyTreeNode::SetSceneObject(const Ref<SceneEditableObject>& object)
 	{
 		mTargetObject = object;
 

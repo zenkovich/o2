@@ -36,11 +36,11 @@ namespace Editor
 		IOBJECT(EnumProperty);
 
 	protected:				       						      
-		const EnumType*         mEnumType = nullptr; // Type of enumeration															      
-		const Map<int, String>* mEntries;            // Enum entries
+		const EnumType*        mEnumType = nullptr; // Type of enumeration															      
+		const Map<int, String> mEntries;            // Enum entries
 
-		DropDown* mDropDown = nullptr;       // Layer name dropdown
-		bool      mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
+		Ref<DropDown> mDropDown;              // Layer name dropdown
+		bool          mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
 
 	protected:
 		// Updates value view

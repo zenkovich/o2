@@ -31,7 +31,7 @@ namespace Editor
 		IOBJECT(StringProperty);
 
 	protected:
-		EditBox* mEditBox = nullptr; // Edit box 
+		Ref<EditBox> mEditBox; // Edit box 
 
 	protected:
 		// Updates value view

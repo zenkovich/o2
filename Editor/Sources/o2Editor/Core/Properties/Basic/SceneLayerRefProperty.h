@@ -44,8 +44,8 @@ namespace Editor
 		IOBJECT(SceneLayerRefProperty);
 
 	protected:		       
-		DropDown* mDropDown = nullptr;       // Layer name dropdown
-		bool      mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
+		Ref<DropDown> mDropDown;              // Layer name dropdown
+		bool          mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
 
 		bool mUseInheritedValue = false;      // Is used "Inherit from parent" value
 		bool mSelectedInheritedValue = false; // Is selected "Inherit from parent" value

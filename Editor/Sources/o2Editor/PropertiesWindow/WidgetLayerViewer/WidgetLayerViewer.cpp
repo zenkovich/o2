@@ -94,7 +94,7 @@ namespace Editor
 		mPropertiesViewer->Refresh();
 	}
 
-	void WidgetLayerViewer::OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects)
+	void WidgetLayerViewer::OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		Refresh();
 	}

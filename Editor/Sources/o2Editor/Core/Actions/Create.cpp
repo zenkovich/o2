@@ -11,7 +11,7 @@ namespace Editor
 	CreateAction::CreateAction()
 	{}
 
-	CreateAction::CreateAction(const Vector<SceneEditableObject*>& objects, 
+	CreateAction::CreateAction(const Vector<Ref<SceneEditableObject>>& objects, 
 											 SceneEditableObject* parent, SceneEditableObject* prevObject)
 	{
 		objectsIds = objects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
@@ -31,7 +31,7 @@ namespace Editor
 	{
 		SceneEditableObject* parent = o2Scene.GetEditableObjectByID(insertParentId);
 		SceneEditableObject* prevObject = o2Scene.GetEditableObjectByID(insertPrevObjectId);
-		Vector<SceneEditableObject*> objects;
+		Vector<Ref<SceneEditableObject>> objects;
 
 		if (parent)
 		{

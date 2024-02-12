@@ -82,10 +82,10 @@ namespace o2
         return nullptr;
     }
 
-    void SceneEditableObject::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
+    void SceneEditableObject::SetEditableParent(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
     {}
 
-    void SceneEditableObject::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+    void SceneEditableObject::AddEditableChild(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
     {}
 
     void SceneEditableObject::SetIndexInSiblings(int idx)

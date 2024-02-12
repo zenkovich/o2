@@ -250,8 +250,8 @@ CLASS_METHODS_META(Editor::SceneHierarchyTree)
     FUNCTION().PUBLIC().SIGNATURE(void, AttachToSceneEvents);
     FUNCTION().PUBLIC().SIGNATURE(void, DeattachFromSceneEvents);
     FUNCTION().PUBLIC().SIGNATURE(TreeNode*, GetNode, SceneEditableObject*);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetSelectedObjects);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetSelectedObjects);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectObject, SceneEditableObject*);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAndHighlightObject, SceneEditableObject*);
     FUNCTION().PUBLIC().SIGNATURE(void, ScrollToAndHighlight, SceneEditableObject*);
@@ -272,7 +272,7 @@ CLASS_METHODS_META(Editor::SceneHierarchyTree)
     FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedObjects, Vector<void*>, void*, void*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnObjectCreated, SceneEditableObject*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnObjectDestroing, SceneEditableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsChanged, const Vector<SceneEditableObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnObjectChanged, SceneEditableObject*);
     FUNCTION().PROTECTED().SIGNATURE(void, EnableObjectsGroupPressed, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, EnableObjectsGroupReleased, bool);

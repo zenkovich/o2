@@ -168,8 +168,8 @@ CLASS_METHODS_META(Editor::RotateTool)
     FUNCTION().PUBLIC().SIGNATURE(void, DrawScreen);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged, Vector<Ref<SceneEditableObject>>);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsSelectionChanged, Vector<Ref<SceneEditableObject>>);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateMeshes);
     FUNCTION().PUBLIC().SIGNATURE(void, CalcPivotByObjectsCenter);
     FUNCTION().PUBLIC().SIGNATURE(void, OnPivotDragHandleMoved, const Vec2F&);

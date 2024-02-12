@@ -13,7 +13,7 @@ namespace Editor
 	DeleteAction::DeleteAction()
 	{}
 
-	DeleteAction::DeleteAction(const Vector<SceneEditableObject*>& objects)
+	DeleteAction::DeleteAction(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		for (auto& object : objects)
 		{

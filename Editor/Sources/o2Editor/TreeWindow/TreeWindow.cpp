@@ -124,7 +124,7 @@ namespace Editor
 	{
 		mWindow->caption = "Tree";
 		mWindow->name = "tree window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_wnd_icon.png"));
+		mWindow->SetIcon(mmake<Sprite>("ui/UI4_tree_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(0, -2, 0, 18));
 
@@ -172,24 +172,24 @@ namespace Editor
 
 		mTreeContextMenu->AddItem("Create/UI/Empty layer.alayers", [&]() { CreateObject<WidgetLayer>("Layer"); });
 		mTreeContextMenu->AddItem("Create/UI/Sprite layer.alayers", [&]()
-		{
-			ForcePopEditorScopeOnStack scope;
+								  {
+									  ForcePopEditorScopeOnStack scope;
 
-			WidgetLayer* newLayer = mnew WidgetLayer();
-			newLayer->SetDrawable(mnew Sprite());
-			newLayer->name = "Sprite";
-			OnCreateObject(newLayer);
-		});
+									  auto newLayer = mmake<WidgetLayer>();
+									  newLayer->SetDrawable(mmake<Sprite>());
+									  newLayer->name = "Sprite";
+									  OnCreateObject(newLayer);
+								  });
 
 		mTreeContextMenu->AddItem("Create/UI/Text layer.alayers", [&]()
-		{
-			ForcePopEditorScopeOnStack scope;
+								  {
+									  ForcePopEditorScopeOnStack scope;
 
-			WidgetLayer* newLayer = mnew WidgetLayer();
-			newLayer->SetDrawable(mnew Text());
-			newLayer->name = "Text";
-			OnCreateObject(newLayer);
-		});
+									  auto newLayer = mmake<WidgetLayer>();
+									  newLayer->SetDrawable(mmake<Text>());
+									  newLayer->name = "Text";
+									  OnCreateObject(newLayer);
+								  });
 
 		InitializeCreateMenu();
 		InitUIStyleCreateMenu();
@@ -233,14 +233,12 @@ namespace Editor
 	{
 		auto subTypes = TypeOf(Actor).GetDerivedTypes();
 
-		for (auto& subType : subTypes)
-		{
+		for (auto& subType : subTypes) {
 			String category = subType->InvokeStatic<String>("GetCreateMenuCategory");
 			String path;
 			if (category.IsEmpty())
 				path = GetSmartName(subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/"));
-			else
-			{
+			else {
 				String name = subType->GetName().ReplacedAll("o2::", "");
 				int fnd = name.FindLast("::");
 				if (fnd >= 0)
@@ -254,10 +252,10 @@ namespace Editor
 			mTreeContextMenu->AddItem("Create/" + path + "." + group, [=]() {
 				ForcePopEditorScopeOnStack scope;
 				auto objectType = dynamic_cast<const ObjectType*>(subType);
-				Actor* newActor = dynamic_cast<Actor*>(objectType->DynamicCastToIObject(subType->CreateSample()));
+				auto newActor = Ref(dynamic_cast<Actor*>(objectType->DynamicCastToIObject(subType->CreateSample())));
 				newActor->name = path.ReplacedAll("/", " ");
 				OnCreateObject(newActor);
-			});
+									  });
 		}
 	}
 
@@ -265,46 +263,45 @@ namespace Editor
 	{
 		auto styleWidgets = o2UI.GetWidgetStyles();
 
-		for (auto& styleWidgetAsset : styleWidgets)
-		{
+		for (auto& styleWidgetAsset : styleWidgets) {
 			auto path = styleWidgetAsset->GetActor()->GetType().GetName() + "/" + styleWidgetAsset->GetActor()->GetName();
 			path.ReplaceAll("o2::", "");
 			path.ReplaceAll("::", "/");
 
 			mTreeContextMenu->AddItem(String("Create/UI/Style/") + path, [=]()
-			{
-				ForcePopEditorScopeOnStack scope;
-				Widget* newWidget = styleWidgetAsset->GetActor()->CloneAs<Widget>();
-				newWidget->SetEnabledForcible(true);
-				OnCreateObject(newWidget);
-			});
+									  {
+										  ForcePopEditorScopeOnStack scope;
+										  auto newWidget = styleWidgetAsset->GetActor()->CloneAsRef<Widget>();
+										  newWidget->SetEnabledForcible(true);
+										  OnCreateObject(newWidget);
+									  });
 		}
 	}
 
 	void TreeWindow::InitUILayersCreateMenu()
 	{
 		mTreeContextMenu->AddItem("Create/UI layer/Empty", [&]()
-		{
-			WidgetLayer* newLayer = mnew WidgetLayer();
-			newLayer->name = "empty";
-			OnCreateObject(newLayer);
-		});
+								  {
+									  auto newLayer = mmake<WidgetLayer>();
+									  newLayer->name = "empty";
+									  OnCreateObject(newLayer);
+								  });
 
 		mTreeContextMenu->AddItem("Create/UI layer/Sprite", [&]()
-		{
-			WidgetLayer* newLayer = mnew WidgetLayer();
-			newLayer->SetDrawable(mnew Sprite());
-			newLayer->name = "sprite";
-			OnCreateObject(newLayer);
-		});
+								  {
+									  auto newLayer = mmake<WidgetLayer>();
+									  newLayer->SetDrawable(mmake<Sprite>());
+									  newLayer->name = "sprite";
+									  OnCreateObject(newLayer);
+								  });
 
 		mTreeContextMenu->AddItem("Create/UI layer/Text", [&]()
-		{
-			WidgetLayer* newLayer = mnew WidgetLayer();
-			newLayer->SetDrawable(mnew Text());
-			newLayer->name = "text";
-			OnCreateObject(newLayer);
-		});
+								  {
+									  auto newLayer = mmake<WidgetLayer>();
+									  newLayer->SetDrawable(mmake<Text>());
+									  newLayer->name = "text";
+									  OnCreateObject(newLayer);
+								  });
 	}
 
 	void TreeWindow::PostInitializeWindow()
@@ -328,8 +325,7 @@ namespace Editor
 	{
 		mInSearch = searchStr.Length() > 0;
 
-		if (mInSearch)
-		{
+		if (mInSearch) {
 			mSearchObjects.Clear();
 
 			for (auto& actor : o2Scene.GetRootActors())
@@ -339,7 +335,7 @@ namespace Editor
 		mSceneTree->UpdateNodesView();
 	}
 
-	void TreeWindow::SearchObjectsRecursive(SceneEditableObject* object, const String& searchStr)
+	void TreeWindow::SearchObjectsRecursive(const Ref<SceneEditableObject>& object, const String& searchStr)
 	{
 		if (object->GetName().CountOf(searchStr) > 0)
 			mSearchObjects.Add(object);
@@ -348,30 +344,28 @@ namespace Editor
 			SearchObjectsRecursive(child, searchStr);
 	}
 
-	void TreeWindow::OnTreeRBPressed(TreeNode* node)
+	void TreeWindow::OnTreeRBPressed(const Ref<TreeNode>& node)
 	{
 		bool canCreateUILayers = false;
-		if (node)
-		{
+		if (node) {
 			SceneEditableObject* object = (SceneEditableObject*)node->GetObject();
 			canCreateUILayers = dynamic_cast<WidgetLayer*>(object) != nullptr ||
 				dynamic_cast<Widget::LayersEditable*>(object) != nullptr ||
 				dynamic_cast<Widget*>(object) != nullptr;
 		}
 
-// 		mTreeContextMenu->FindItemWidget("Create UI/Empty layer")->SetEnabled(canCreateUILayers);
-// 		mTreeContextMenu->FindItemWidget("Create UI/Sprite layer")->SetEnabled(canCreateUILayers);
-// 		mTreeContextMenu->FindItemWidget("Create UI/Text layer")->SetEnabled(canCreateUILayers);
+		// 		mTreeContextMenu->FindItemWidget("Create UI/Empty layer")->SetEnabled(canCreateUILayers);
+		// 		mTreeContextMenu->FindItemWidget("Create UI/Sprite layer")->SetEnabled(canCreateUILayers);
+		// 		mTreeContextMenu->FindItemWidget("Create UI/Text layer")->SetEnabled(canCreateUILayers);
 
 		mTreeContextMenu->Show();
 	}
 
-	void TreeWindow::OnCreateObject(SceneEditableObject* newObject)
+	void TreeWindow::OnCreateObject(const Ref<SceneEditableObject>& newObject)
 	{
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
-		if (newObject->IsSupportsLayout())
-		{
+		if (newObject->IsSupportsLayout()) {
 			if (!selectedObjects.IsEmpty())
 				newObject->SetLayout(Layout::BothStretch());
 			else
@@ -380,24 +374,22 @@ namespace Editor
 		else
 			newObject->SetTransform(Basis(Vec2F(), Vec2F(100, 0), Vec2F(0, 100)));
 
-		if (selectedObjects.Count() > 0)
-		{
+		if (selectedObjects.Count() > 0) {
 			auto obj = selectedObjects.Last();
 
-			SceneEditableObject* parentObject = obj;
+			auto parentObject = obj;
 			parentObject->AddEditableChild(newObject);
 
 			auto parentChilds = parentObject->GetEditableChildren();
-			auto action = mnew CreateAction({ newObject }, parentObject,
-											parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
+			auto action = mmake<CreateAction>({ newObject }, parentObject,
+											  parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
 
 			o2EditorApplication.DoneAction(action);
 		}
-		else
-		{
+		else {
 			auto sceneObjects = o2Scene.GetRootEditableObjects();
-			auto action = mnew CreateAction({ newObject }, nullptr,
-											sceneObjects.Count() > 1 ? sceneObjects[sceneObjects.Count() - 2] : nullptr);
+			auto action = mmake<CreateAction>({ newObject }, nullptr,
+											  sceneObjects.Count() > 1 ? sceneObjects[sceneObjects.Count() - 2] : nullptr);
 
 			o2EditorApplication.DoneAction(action);
 		}
@@ -412,7 +404,7 @@ namespace Editor
 	{
 		ForcePopEditorScopeOnStack scope;
 
-		Actor* newActor = mnew Actor();
+		auto newActor = mmake<Actor>();
 		newActor->name = "Empty";
 		OnCreateObject(newActor);
 	}
@@ -421,24 +413,19 @@ namespace Editor
 	{
 		ForcePopEditorScopeOnStack scope;
 
-		Actor* newActor = mnew Actor({ mnew ImageComponent() });
+		auto newActor = mmake<Actor>({ mnew ImageComponent() });
 		newActor->name = "Sprite";
 		newActor->transform->size = Vec2F(10, 10);
 		OnCreateObject(newActor);
 	}
 
 	void TreeWindow::OnContextCreateButton()
-	{
-	}
+	{}
 
 	void TreeWindow::OnContextCopyPressed()
 	{
-		Vector<SceneEditableObject*> selectedObjects =
-			mSceneTree->GetSelectedObjects().Convert<SceneEditableObject*>(
-				[](auto x) { return dynamic_cast<SceneEditableObject*>(x); });
-
 		DataDocument data;
-		data.Set(selectedObjects);
+		data.Set(mSceneTree->GetSelectedObjects());
 
 		WString clipboardData = data.SaveAsString();
 
@@ -457,15 +444,15 @@ namespace Editor
 
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
-		SceneEditableObject* parent = selectedObjects.Count() > 0 ? selectedObjects.Last() : nullptr;
+		auto parent = selectedObjects.Count() > 0 ? selectedObjects.Last() : nullptr;
 		auto parentChilds = parent ? parent->GetEditableChildren() : o2Scene.GetRootEditableObjects();
-		SceneEditableObject* prevObject = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
+		auto prevObject = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
 
 		WString clipboardData = Clipboard::GetText();
 		DataDocument data;
 		data.LoadFromData(clipboardData);
 
-		Vector<SceneEditableObject*> objects;
+		Vector<Ref<SceneEditableObject>> objects;
 		data.Get(objects);
 
 		for (auto& object : objects)
@@ -476,7 +463,7 @@ namespace Editor
 
 		mSceneTree->UpdateNodesView();
 
-		auto action = mnew CreateAction(objects, parent, prevObject);
+		auto action = mmake<CreateAction>(objects, parent, prevObject);
 		o2EditorApplication.DoneAction(action);
 
 		mSceneTree->SetSelectedObjects(objects);
@@ -489,11 +476,10 @@ namespace Editor
 		auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
 		o2EditorSceneScreen.ClearSelectionWithoutAction();
 
-		auto action = mnew DeleteAction(selectedObjects);
+		auto action = mmake<DeleteAction>(selectedObjects);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto& object : selectedObjects)
-		{
+		for (auto& object : selectedObjects) {
 			if (object->IsSupportsDeleting())
 				o2Scene.DestroyEditableObject(object);
 		}
@@ -507,11 +493,10 @@ namespace Editor
 
 		auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
 
-		Vector<SceneEditableObject*> newObjects;
+		Vector<Ref<SceneEditableObject>> newObjects;
 
-		for (auto& object : selectedObjects)
-		{
-			SceneEditableObject* copy = object->CloneAs<SceneEditableObject>();
+		for (auto& object : selectedObjects) {
+			auto copy = object->CloneAsRef<SceneEditableObject>();
 			copy->SetEditableParent(object->GetEditableParent());
 			newObjects.Add(copy);
 		}
@@ -524,8 +509,7 @@ namespace Editor
 	{
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
-		for (auto& object : selectedObjects)
-		{
+		for (auto& object : selectedObjects) {
 			auto node = mSceneTree->GetNode(object);
 
 			if (node)
@@ -537,8 +521,7 @@ namespace Editor
 	{
 		auto selectedObject = mSceneTree->GetSelectedObjects();
 
-		for (auto& object : selectedObject)
-		{
+		for (auto& object : selectedObject) {
 			auto node = mSceneTree->GetNode(object);
 
 			if (node)
@@ -551,16 +534,11 @@ namespace Editor
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
 		bool value = selectedObjects.Count() > 0 ? !selectedObjects.Last()->IsLocked() : true;
-		auto action = mnew LockAction(selectedObjects, value);
+		auto action = mmake<LockAction>(selectedObjects, value);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto& object : selectedObjects)
-		{
+		for (auto& object : selectedObjects) {
 			object->SetLocked(value);
-
-			// 			auto node = mActorsTree->GetNode(actor);
-			// 			if (node)
-			// 				node->UpdateView();
 		}
 	}
 
@@ -569,16 +547,11 @@ namespace Editor
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
 		bool value = selectedObjects.Count() > 0 ? !selectedObjects.Last()->IsEnabled() : true;
-		auto action = mnew LockAction(selectedObjects, value);
+		auto action = mmake<LockAction>(selectedObjects, value);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto& object : selectedObjects)
-		{
+		for (auto& object : selectedObjects) {
 			object->SetEnabled(value);
-
-			// 			auto node = mActorsTree->GetNode(actor);
-			// 			if (node)
-			// 				node->UpdateView();
 		}
 	}
 
@@ -592,24 +565,24 @@ namespace Editor
 		SetWidgetsInternalChildrenVisible(view);
 	}
 
-	void TreeWindow::OnActorCreated(SceneEditableObject* actor)
+	void TreeWindow::OnActorCreated(const Ref<SceneEditableObject>& actor)
 	{
 		mSceneTree->UpdateNodesView();
 	}
 
-	void TreeWindow::OnActorDestroyed(SceneEditableObject* actor)
+	void TreeWindow::OnActorDestroyed(const Ref<SceneEditableObject>& actor)
 	{
 		mSceneTree->UpdateNodesView();
 	}
 
 	void TreeWindow::InitializeTopPanel()
 	{
-		Widget* upPanel = mnew Widget();
+		auto upPanel = mmake<Widget>();
 		upPanel->name = "up panel";
 		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-		upPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
+		upPanel->AddLayer("back", mmake<Sprite>("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
-		Button* searchButton = o2UI.CreateWidget<Button>("search");
+		auto searchButton = o2UI.CreateWidget<Button>("search");
 		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
 		searchButton->onClick += THIS_FUNC(OnSearchPressed);
 		upPanel->AddChild(searchButton);

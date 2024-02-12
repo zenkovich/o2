@@ -53,7 +53,7 @@ namespace Editor
 		WString GetCaption() const override;
 
 		// Adds remove button
-		Button* GetRemoveButton() override;
+		Ref<Button> GetRemoveButton() override;
 
 		// Expands property fields
 		void Expand();
@@ -76,11 +76,11 @@ namespace Editor
 		IOBJECT(ScriptValueProperty);
 
 	protected:
-		Spoiler* mSpoiler = nullptr; // Properties spoiler. Expands forcible when viewer hasn't header
+		Ref<Spoiler> mSpoiler; // Properties spoiler. Expands forcible when viewer hasn't header
 
 		Map<String, ScriptValue::ValueType> mPreviousBuiltTypes; // Built types of fields, used to check 
 																 // changed properties structure
-		Map<String, IPropertyField*>        mBuiltProperties;    // Built properties by names
+		Map<String, Ref<IPropertyField>>    mBuiltProperties;    // Built properties by names
 
 		bool mHeaderEnabled = false; // Is no header attribute exists
 		bool mExpanded = false; // True when must be expanded after creating object viewer
@@ -89,19 +89,19 @@ namespace Editor
 
 		bool mIsArray = false; // Is value array
 
-		IntegerProperty* mCountProperty = nullptr; // Vector count property
+		Ref<IntegerProperty> mCountProperty; // Vector count property
 
 		bool mCountDifferents = false; // Is targets counts of elements are different
 		int  mCountOfElements = 0;     // Common count of elements
 
-		HorizontalLayout* mHeaderContainer = nullptr; // Count property and other controls container
+		Ref<HorizontalLayout> mHeaderContainer; // Count property and other controls container
 
-		Button* mAddButton = nullptr; // Add button, adds new element at end
+		Ref<Button> mAddButton; // Add button, adds new element at end
 
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
 	protected:
-		typedef Vector<Pair<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>> PropertiesList;
+		typedef Vector<Pair<String, Vector<Pair<Ref<IScriptValueProperty>, Ref<IScriptValueProperty>>>>> PropertiesList;
 
 		// Called when property puts in buffer. Releases properties
 		void OnFreeProperty() override;
@@ -116,7 +116,7 @@ namespace Editor
 		void AddProperty(const String& name, const Type* type, int idx);
 
 		// Called when count property changing
-		void OnCountChanged(IPropertyField* def);
+		void OnCountChanged(const Ref<IPropertyField>& def);
 
 		// Called when expanding spoiler, refreshing properties
 		void OnExpand();
@@ -132,11 +132,11 @@ namespace Editor
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldProxies(PropertiesList& commonProperties, const String& name, IPropertyField* field);
+		void SetFieldProxies(PropertiesList& commonProperties, const String& name, const Ref<IPropertyField>& field);
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldPtrProxies(PropertiesList& commonProperties, const String& name, IPropertyField* field);
+		void SetFieldPtrProxies(PropertiesList& commonProperties, const String& name, const Ref<IPropertyField>& field);
 
 		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
@@ -145,7 +145,7 @@ namespace Editor
 
 	template<typename _type>
 	void ScriptValueProperty::SetFieldProxies(PropertiesList& commonProperties, const String& name, 
-											  IPropertyField* field)
+											  const Ref<IPropertyField>& field)
 	{
 		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
 		auto proxies = prop->second.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
@@ -164,7 +164,7 @@ namespace Editor
 
 	template<typename _type>
 	void ScriptValueProperty::SetFieldPtrProxies(PropertiesList& commonProperties, const String& name,
-												 IPropertyField* field)
+												 const Ref<IPropertyField>& field)
 	{
 		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
 		auto proxies = prop->second.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(

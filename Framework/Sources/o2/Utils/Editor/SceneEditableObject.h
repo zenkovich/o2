@@ -6,6 +6,8 @@
 #include "o2/Utils/Types/String.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 
+#undef GetObject
+
 namespace o2
 {
 #if IS_EDITOR

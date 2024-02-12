@@ -175,7 +175,7 @@ namespace Editor
 		mHeaderViewer->Refresh();
 	}
 
-	void ActorViewer::OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects)
+	void ActorViewer::OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		Refresh();
 	}

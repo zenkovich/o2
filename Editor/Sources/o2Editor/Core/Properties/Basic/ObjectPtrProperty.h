@@ -56,7 +56,7 @@ namespace Editor
 		WString GetCaption() const override;
 
 		// Adds remove button
-		Button* GetRemoveButton() override;
+		Ref<Button> GetRemoveButton() override;
 
 		// Sets basic object type, used in create
 		void SetBasicType(const ObjectType* type);
@@ -86,14 +86,14 @@ namespace Editor
 		bool mNoHeader = false;          // Is no header attribute exists
 		bool mExpanded = false;          // True when must be expanded after creating object viewer
 
-		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object viewer
+		Ref<IObjectPropertiesViewer> mObjectViewer; // Object viewer
 
-		Label*            mCaption = nullptr;            // Property caption, used when object is empty and there are no spoiler
-		HorizontalLayout* mHeaderContainer = nullptr;    // Type caption and create/delete button container widget, placed on spoiler head
-		Label*            mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
-		Button*           mCreateDeleteButton = nullptr; // Create and delete button. Create - when value is nullptr, delete - when not
-		ContextMenu*      mCreateMenu = nullptr;         // Create object context menu. Initializes with types derived from mObjectType 
-													     // when this type changing and create button were pressed
+		Ref<Label>            mCaption;            // Property caption, used when object is empty and there are no spoiler
+		Ref<HorizontalLayout> mHeaderContainer;    // Type caption and create/delete button container widget, placed on spoiler head
+		Ref<Label>            mTypeCaption;        // Caption that shows type of object or nullptr
+		Ref<Button>           mCreateDeleteButton; // Create and delete button. Create - when value is nullptr, delete - when not
+		Ref<ContextMenu>      mCreateMenu;         // Create object context menu. Initializes with types derived from mObjectType 
+												   // when this type changing and create button were pressed
 
 		bool mContextInitialized = false;    // True when context menu initialized with available types of objects. 
 		                                     // Context menu initializes when type changed and create button pressed
@@ -120,10 +120,10 @@ namespace Editor
 		void StoreValues(Vector<DataDocument>& data) const override;
 
 		// Converts proxy to IObject property, gets value and returns
-		IObject* GetProxy(IAbstractValueProxy* proxy) const;
+		IObject* GetProxy(const Ref<IAbstractValueProxy>& proxy) const;
 
 		// Converts proxy to IObject proxy, then sets value via proxy
-		void SetProxy(IAbstractValueProxy* proxy, IObject* object);
+		void SetProxy(const Ref<IAbstractValueProxy>& proxy, IObject* object);
 	};
 }
 // --- META ---

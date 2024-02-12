@@ -79,7 +79,7 @@ namespace Editor
 
 	protected:
 		// Called when some actors on scene were changed
-		void OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects);
+		void OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects);
 
 		// Sets target objects
 		void SetTargets(const Vector<IObject*>& targets) override;
@@ -140,7 +140,7 @@ CLASS_METHODS_META(Editor::ActorViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, AddComponentViewerType, IActorComponentViewer*);
     FUNCTION().PUBLIC().SIGNATURE(void, AddActorPropertiesViewerType, IActorPropertiesViewer*);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsActorProperties, const Vector<IObject*>&, Vector<Widget*>&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsComponents, const Vector<IObject*>&, Vector<Widget*>&);

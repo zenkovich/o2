@@ -31,9 +31,9 @@ namespace Editor
 		IOBJECT(TagsProperty);
 
 	protected:
-		EditBox*     mEditBox = nullptr;     // Edit box 
-		ContextMenu* mTagsContext = nullptr; // tags context
-		bool         mPushingTag = false;    // Is pushing tag and we don't need to check edit text
+		Ref<EditBox>     mEditBox;            // Edit box 
+		Ref<ContextMenu> mTagsContext;        // tags context
+		bool             mPushingTag = false; // Is pushing tag and we don't need to check edit text
 
 	protected:
 		// Updates value view

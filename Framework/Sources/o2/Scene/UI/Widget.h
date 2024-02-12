@@ -886,7 +886,7 @@ CLASS_METHODS_META(o2::Widget)
 #if  IS_EDITOR
     FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
     FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
     FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsTransforming);
     FUNCTION().PUBLIC().SIGNATURE(Basis, GetTransform);
@@ -925,7 +925,7 @@ CLASS_METHODS_META(o2::Widget::LayersEditable)
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const SceneEditableObject*, GetEditableLink);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
     FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
     FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
@@ -963,7 +963,7 @@ CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const SceneEditableObject*, GetEditableLink);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
     FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
     FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);

@@ -43,8 +43,8 @@ namespace Editor
 	protected:
 		const Type* mActorType = nullptr;  // Actor value type
 
-		Widget* mBox = nullptr;      // Property edit box
-		Text*   mNameText = nullptr; // Asset name text
+		Ref<Widget> mBox;      // Property edit box
+		Ref<Text>   mNameText; // Asset name text
 
 	protected:
 		// Called when type specialized during setting value proxy
@@ -81,25 +81,25 @@ namespace Editor
 		void InitializeControls();
 
 		// Reverts target value to source
-		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
+		void RevertoToPrototype(const Ref<IAbstractValueProxy>& target, const Ref<IAbstractValueProxy>& source, IObject* targetOwner);
 
 		// Called when actors tree nodes was dragged and dropped to this
-		void OnDroppedFromActorsTree(SceneHierarchyTree* actorsTree);
+		void OnDroppedFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree);
 
 		// Called when actors tree nodes was dragged and entered to this
-		void OnDragEnterFromActorsTree(SceneHierarchyTree* actorsTree);
+		void OnDragEnterFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree);
 
 		// Called when actors tree nodes was dragged and exited from this
-		void OnDragExitFromActorsTree(SceneHierarchyTree* actorsTree);
+		void OnDragExitFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree);
 
 		// Called when assets scroll icons was dragged and dropped to this
-		void OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
+		void OnDroppedFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
 
 		// Called when assets scroll icons was dragged and entered to this
-		void OnDragEnterFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
+		void OnDragEnterFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
 
 		// Called when assets scroll icons was dragged and exited from this
-		void OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
+		void OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
 	};
 }
 // --- META ---

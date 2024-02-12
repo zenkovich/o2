@@ -33,9 +33,9 @@ namespace Editor
 		IOBJECT(CurveProperty);
 
 	protected:
-		Widget*          mEditBox = nullptr;         // Edit box 
-		CurvePreview*    mPreviewImage = nullptr;    // Curve preview image
-		CursorEventsArea mClickArea;                 // Box click area
+		Ref<Widget>       mEditBox;      // Edit box 
+		Ref<CurvePreview> mPreviewImage; // Curve preview image
+		CursorEventsArea  mClickArea;    // Box click area
 
 	protected:
 		// Searches controls widgets and layers and initializes them

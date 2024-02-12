@@ -52,7 +52,7 @@ namespace Editor
 		WString GetCaption() const override;
 
 		// Adds remove button
-		Button* GetRemoveButton() override;
+		Ref<Button> GetRemoveButton() override;
 
 		// Expands property fields
 		void Expand();
@@ -71,7 +71,7 @@ namespace Editor
 	protected:
 		struct TargetObjectData
 		{
-			IAbstractValueProxy* proxy = nullptr;
+			Ref<IAbstractValueProxy> proxy;
 			IObject* data = nullptr;
 			bool isCreated = false;
 
@@ -84,7 +84,7 @@ namespace Editor
 	protected:							     								    
 		Vector<Pair<TargetObjectData, TargetObjectData>> mTargetObjects; // Target objects
 
-		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object properties viewer
+		Ref<IObjectPropertiesViewer> mObjectViewer; // Object properties viewer
 
 		bool mNoHeader = false;          // Is no header attribute exists
 		bool mExpanded = false;          // True when must be expanded after creating object viewer
@@ -102,7 +102,7 @@ namespace Editor
 		void CheckViewer();
 
 		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
-		TargetObjectData GetObjectFromProxy(IAbstractValueProxy* proxy);
+		TargetObjectData GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy);
 
 		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 

@@ -17,7 +17,7 @@ namespace o2
         CollectChildren(actor);
     }
 
-    void ApplyActorInfo::CollectChildren(SceneEditableObject* object)
+    void ApplyActorInfo::CollectChildren(const Ref<SceneEditableObject>& object)
     {
         allChildren.Add(object);
 
@@ -62,12 +62,12 @@ namespace o2
         ActorDifferences res;
 
         // Split prototype children
-        Vector<SceneEditableObject*> allProtoChildren;
+        Vector<Ref<SceneEditableObject>> allProtoChildren;
         allProtoChildren.Add(prototype);
         prototype->GetAllEditableChildren(allProtoChildren);
 
         // Split this actor children
-        Vector<SceneEditableObject*> allThisChildren;
+        Vector<Ref<SceneEditableObject>> allThisChildren;
         allThisChildren.Add(changedActor);
         changedActor->GetAllEditableChildren(allThisChildren);
 

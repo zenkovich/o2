@@ -40,7 +40,7 @@ namespace Editor
 		ReparentAction();
 
 		// Constructor
-		ReparentAction(const Vector<SceneEditableObject*>& beginObjects);
+		ReparentAction(const Vector<Ref<SceneEditableObject>>& beginObjects);
 
 		// Destructor
 		~ReparentAction();
@@ -78,7 +78,7 @@ CLASS_METHODS_META(Editor::ReparentAction)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, ObjectsReparented, SceneEditableObject*, SceneEditableObject*);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);

@@ -224,7 +224,7 @@ CLASS_METHODS_META(Editor::TreeWindow)
     FUNCTION().PUBLIC().SIGNATURE(DrawOrderTree*, GetDrawOrderTree);
     FUNCTION().PUBLIC().SIGNATURE(void, FocusTree);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsTreeFocused);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateTreeView);
     FUNCTION().PUBLIC().SIGNATURE(void, HighlightObjectTreeNode, SceneEditableObject*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetWidgetsLayersVisible, bool);

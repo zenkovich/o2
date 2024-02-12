@@ -360,7 +360,7 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToSceneVector, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, SceneToScreenVector, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(void, DrawObjectSelection, SceneEditableObject*, const Color4&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SelectObjects, Vector<SceneEditableObject*>, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, SelectObjects, Vector<Ref<SceneEditableObject>>, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, SelectObject, SceneEditableObject*, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, SelectAllObjects);
 	FUNCTION().PUBLIC().SIGNATURE(void, ClearSelection);
@@ -377,8 +377,8 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	FUNCTION().PUBLIC().SIGNATURE(void, AddTool, IEditTool*);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveTool, IEditTool*);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<IEditTool*>&, GetTools);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<SceneEditableObject*>&, GetSelectedObjects);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<SceneEditableObject*>&, GetTopSelectedObjects);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SceneEditableObject>>&, GetSelectedObjects);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SceneEditableObject>>&, GetTopSelectedObjects);
 	FUNCTION().PUBLIC().SIGNATURE(const Color4&, GetSingleObjectSelectionColor);
 	FUNCTION().PUBLIC().SIGNATURE(const Color4&, GetManyObjectsSelectionColor);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged);
@@ -408,11 +408,11 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	FUNCTION().PROTECTED().SIGNATURE(void, DrawObjects);
 	FUNCTION().PROTECTED().SIGNATURE(void, DrawSelection);
 	FUNCTION().PROTECTED().SIGNATURE(void, BindSceneTree);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTreeSelectionChanged, Vector<SceneEditableObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnTreeSelectionChanged, Vector<Ref<SceneEditableObject>>);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateTopSelectedObjects);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<Ref<SceneEditableObject>>);
 	FUNCTION().PROTECTED().SIGNATURE(void, ClearSelectionWithoutAction, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, SelectObjectsWithoutAction, Vector<SceneEditableObject*>, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, SelectObjectsWithoutAction, Vector<Ref<SceneEditableObject>>, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, SelectObjectWithoutAction, SceneEditableObject*, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);

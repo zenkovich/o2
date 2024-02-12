@@ -74,10 +74,10 @@ namespace Editor
 		IOBJECT(BorderIProperty);
 
 	protected:
-		IntegerProperty* mLeftProperty = nullptr;   // Left value property
-		IntegerProperty* mRightProperty = nullptr;  // Right value property
-		IntegerProperty* mTopProperty = nullptr;    // Top value property
-		IntegerProperty* mBottomProperty = nullptr; // Bottom value property
+		Ref<IntegerProperty> mLeftProperty;   // Left value property
+		Ref<IntegerProperty> mRightProperty;  // Right value property
+		Ref<IntegerProperty> mTopProperty;    // Top value property
+		Ref<IntegerProperty> mBottomProperty; // Bottom value property
 
 	protected:
 		// Searches controls widgets and layers and initializes them
@@ -87,11 +87,11 @@ namespace Editor
 
 		class LeftValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			LeftValueProxy();
-			LeftValueProxy(IAbstractValueProxy* proxy);
+			LeftValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -99,11 +99,11 @@ namespace Editor
 
 		class RightValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			RightValueProxy();
-			RightValueProxy(IAbstractValueProxy* proxy);
+			RightValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -111,11 +111,11 @@ namespace Editor
 
 		class TopValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			TopValueProxy();
-			TopValueProxy(IAbstractValueProxy* proxy);
+			TopValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -123,11 +123,11 @@ namespace Editor
 
 		class BottomValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			BottomValueProxy();
-			BottomValueProxy(IAbstractValueProxy* proxy);
+			BottomValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;

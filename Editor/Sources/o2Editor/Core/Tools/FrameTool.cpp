@@ -1381,7 +1381,7 @@ namespace Editor
 		mAnchorsCenter.enabled = enabled && mAnchorsFrameEnabled;
 	}
 
-	Vector<Basis> FrameTool::GetObjectsTransforms(const Vector<SceneEditableObject*>& objects) const
+	Vector<Basis> FrameTool::GetObjectsTransforms(const Vector<Ref<SceneEditableObject>>& objects) const
 	{
 		Vector<Basis> res;
 		for (auto& object : objects)
@@ -1408,7 +1408,7 @@ namespace Editor
 		return snapBasises;
 	}
 
-	Basis FrameTool::GetObjectParentAnchorSnapBasis(SceneEditableObject* object)
+	Basis FrameTool::GetObjectParentAnchorSnapBasis(const Ref<SceneEditableObject>& object)
 	{
 		auto parent = object->GetEditableParent();
 		Basis parentTransform = parent->GetTransform();

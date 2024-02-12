@@ -11,7 +11,7 @@ namespace Editor
 	ReparentAction::ReparentAction()
 	{}
 
-	ReparentAction::ReparentAction(const Vector<SceneEditableObject*>& beginObjects)
+	ReparentAction::ReparentAction(const Vector<Ref<SceneEditableObject>>& beginObjects)
 	{
 		for (auto& object : beginObjects)
 		{
@@ -19,7 +19,7 @@ namespace Editor
 
 			SceneEditableObject* parent = object->GetEditableParent();
 
-			Vector<SceneEditableObject*> parentChildren = parent ? 
+			Vector<Ref<SceneEditableObject>> parentChildren = parent ? 
 				parent->GetEditableChildren() : 
 				o2Scene.GetRootActors().Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 

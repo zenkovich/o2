@@ -261,7 +261,7 @@ CLASS_METHODS_META(Editor::DrawOrderTree)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const DrawOrderTree&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, ScrollToAndHighlight, SceneEditableObject*);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildOrderTree);
     FUNCTION().PUBLIC().SIGNATURE(void, AttachToSceneEvents);
@@ -280,7 +280,7 @@ CLASS_METHODS_META(Editor::DrawOrderTree)
     FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedObjects, Vector<void*>, void*, void*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnObjectCreated, SceneEditableObject*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnObjectDestroing, SceneEditableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsChanged, const Vector<SceneEditableObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnObjectChanged, SceneEditableObject*);
     FUNCTION().PROTECTED().SIGNATURE(void, EnableObjectsGroupPressed, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, EnableObjectsGroupReleased, bool);

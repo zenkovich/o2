@@ -32,9 +32,9 @@ namespace Editor
 		IOBJECT(ColorProperty);
 
 	protected:
-		Widget*          mEditBox = nullptr;     // Edit box 
-		Image*           mColorSprite = nullptr; // Color preview sprite
-		CursorEventsArea mClickArea;             // Box click area
+		Ref<Widget>      mEditBox;     // Edit box 
+		Ref<Image>       mColorSprite; // Color preview sprite
+		CursorEventsArea mClickArea;   // Box click area
 
 	protected:
 		// Updates value view

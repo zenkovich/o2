@@ -9,7 +9,7 @@ namespace Editor
 	EnableAction::EnableAction()
 	{}
 
-	EnableAction::EnableAction(const Vector<SceneEditableObject*>& objects, bool enable):
+	EnableAction::EnableAction(const Vector<Ref<SceneEditableObject>>& objects, bool enable):
 		enable(enable)
 	{
 		objectsIds = objects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });

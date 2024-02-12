@@ -56,7 +56,7 @@ namespace Editor
 		WString GetCaption() const override;
 
 		// Adds remove button
-		Button* GetRemoveButton() override;
+		Ref<Button> GetRemoveButton() override;
 
 		// Expands property fields
 		void Expand();
@@ -73,16 +73,16 @@ namespace Editor
 		IOBJECT(FunctionProperty);
 
 	protected:
-		struct FunctionInstance
+		struct FunctionInstance: public RefCounterable
 		{
-			HorizontalLayout* layout = nullptr;
-			Label* caption = nullptr;
-			ActorProperty* refProperty = nullptr;
-			CustomDropDown* funcDropDown = nullptr;
-			Button* removeBtn = nullptr;
+			Ref<HorizontalLayout> layout;
+			Ref<Label>            caption;
+			Ref<ActorProperty>    refProperty;
+			Ref<CustomDropDown>   funcDropDown;
+			Ref<Button>           removeBtn;
 
 			Vector<Pair<IActorSubscription*, IActorSubscription*>> values;
-			Vector<Pair<Component*, String>> functionsDropdownMap;
+			Vector<Pair<Ref<Component>, String>> functionsDropdownMap;
 
 		public:
 			// Called when an actor is selected, updates the functions list
@@ -94,14 +94,14 @@ namespace Editor
 			bool operator==(const FunctionInstance& other) const;
 		};
 
-		Spoiler*          mSpoiler = nullptr;         // Properties spoiler
-		HorizontalLayout* mHeaderContainer = nullptr; // Count property and other controls container
-		Button*           mAddButton = nullptr;       // Add button, adds new element at end
+		Ref<Spoiler>          mSpoiler;         // Properties spoiler
+		Ref<HorizontalLayout> mHeaderContainer; // Count property and other controls container
+		Ref<Button>           mAddButton;       // Add button, adds new element at end
 
-		Vector<FunctionInstance*> mInstances; // List of containers with pointers to serializable fields and interfaces
+		Vector<Ref<FunctionInstance>> mInstances; // List of containers with pointers to serializable fields and interfaces
 
-		HorizontalLayout*         mWidgetSample;  // Subscription widget sample
-		Vector<HorizontalLayout*> mWidgetsBuffer; // Buffer of cached widgets
+		Ref<HorizontalLayout>         mWidgetSample;  // Subscription widget sample
+		Vector<Ref<HorizontalLayout>> mWidgetsBuffer; // Buffer of cached widgets
 
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
@@ -116,13 +116,13 @@ namespace Editor
 		void RefreshInstances();
 
 		// Creates new widget for subscription
-		FunctionInstance* CreateWidget();
+		Ref<FunctionInstance> CreateWidget();
 
 		// Called when add button has pressed
 		void OnAddPressed();
 
 		// Called when remove subscription pressed
-		void OnRemovePressed(FunctionInstance* instance);
+		void OnRemovePressed(const Ref<FunctionInstance>& instance);
 
 		// Called when expanding spoiler, refreshing array properties
 		void OnExpand();

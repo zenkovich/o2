@@ -67,8 +67,8 @@ namespace Editor
 		IOBJECT(Vec2FProperty);
 
 	protected:
-		FloatProperty* mXProperty = nullptr; // X value property
-		FloatProperty* mYProperty = nullptr; // Y value property
+		Ref<FloatProperty> mXProperty; // X value property
+		Ref<FloatProperty> mYProperty; // Y value property
 
 	protected:
 		// Searches controls widgets and layers and initializes them
@@ -77,11 +77,11 @@ namespace Editor
 	protected:
 		class XValueProxy : public IValueProxy<float>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			XValueProxy();
-			XValueProxy(IAbstractValueProxy* proxy);
+			XValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const float& value) override;
 			float GetValue() const override;
@@ -89,11 +89,11 @@ namespace Editor
 
 		class YValueProxy : public IValueProxy<float>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			YValueProxy();
-			YValueProxy(IAbstractValueProxy* proxy);
+			YValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const float& value) override;
 			float GetValue() const override;

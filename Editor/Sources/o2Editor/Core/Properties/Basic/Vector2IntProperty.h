@@ -67,8 +67,8 @@ namespace Editor
 		IOBJECT(Vec2IProperty);
 
 	protected:
-		IntegerProperty* mXProperty = nullptr; // X value property
-		IntegerProperty* mYProperty = nullptr; // Y value property
+		Ref<IntegerProperty> mXProperty; // X value property
+		Ref<IntegerProperty> mYProperty; // Y value property
 
 	protected:
 		// Searches controls widgets and layers and initializes them
@@ -77,11 +77,11 @@ namespace Editor
 	protected:
 		class XValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			XValueProxy();
-			XValueProxy(IAbstractValueProxy* proxy);
+			XValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;
@@ -89,11 +89,11 @@ namespace Editor
 
 		class YValueProxy : public IValueProxy<int>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			YValueProxy();
-			YValueProxy(IAbstractValueProxy* proxy);
+			YValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const int& value) override;
 			int GetValue() const override;

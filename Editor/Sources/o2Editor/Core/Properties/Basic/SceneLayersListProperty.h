@@ -31,10 +31,10 @@ namespace Editor
 		SERIALIZABLE(SceneLayersListProperty);
 
 	protected:
-		Button* mPropertyButton = nullptr; // Property box with layers' names
-		Text*   mPropertyText = nullptr;   // Text layer inside property box
+		Ref<Button> mPropertyButton; // Property box with layers' names
+		Ref<Text>   mPropertyText;   // Text layer inside property box
 
-		ContextMenu* mLayersContext = nullptr; // Layers list toggles context
+		Ref<ContextMenu> mLayersContext; // Layers list toggles context
 
 	protected:
 		// Updates value view

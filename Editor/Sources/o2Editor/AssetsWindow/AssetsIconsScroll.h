@@ -145,7 +145,7 @@ namespace Editor
 		bool                         mDragEnded = false;            // Is dragging ended
 		AssetIcon*                   mDragIcon = nullptr;           // Dragging icon
 		Vec2F                        mDragOffset;                   // Dragging offset from cursor to icon center
-		Vector<SceneEditableObject*> mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
+		Vector<Ref<SceneEditableObject>> mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
 
 		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
 						        
