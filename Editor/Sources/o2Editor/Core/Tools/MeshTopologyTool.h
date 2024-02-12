@@ -14,19 +14,30 @@ namespace Editor
 	// --------------------------------------------------------
 	struct MeshTopologyTool: public IEditTool, public SelectableDragHandlesGroup, public CursorAreaEventsListener, public KeyboardEventsListener
 	{
+		// ----------------------
+		// Scene layer for editor
+		// ----------------------
 		struct SceneLayer: public SceneEditorLayer
 		{
-			MeshTopologyTool* tool = nullptr;
+			WeakRef<MeshTopologyTool> tool; // Reference to tool
 
 		public:
+			// Draws editor over scene
 			void DrawOverScene() override;
+
+			// Updates editor
 			void Update(float dt) override;
 
+			// Returns order of layer
 			int GetOrder() const override;
 
+			// Returns true if layer is enabled
 			bool IsEnabled() const override;
 
+			// Returns name of layer
 			const String& GetName() const override;
+
+			// Returns icon name of layer
 			const String& GetIconName() const override;
 		};
 
@@ -78,13 +89,13 @@ namespace Editor
 
 		Function<Basis()> mGetTransform; // Returns local space transformation
 
-		DragHandle          mHandleSample; // Point handle sample
-		Vector<DragHandle*> mHandles;      // List of all handles
+		DragHandle              mHandleSample; // Point handle sample
+		Vector<Ref<DragHandle>> mHandles;      // List of all handles
 
 		Sprite mSelectionSprite;       // Selection sprite
 		Vec2F  mSelectingPressedPoint; // Point, where cursor was pressed, selection starts here, in local space
 
-		Vector<DragHandle*> mSelectingHandlesBuf; // Potentially selecting handles while selecting
+		Vector<Ref<DragHandle>> mSelectingHandlesBuf; // Potentially selecting handles while selecting
 
 		FrameHandles mTransformFrame;                      // Keys transformation frame
 		bool         mTransformFrameVisible = false;       // Is transform frame visible. it visible when 2 or more main handles was selected
@@ -92,12 +103,19 @@ namespace Editor
 		Vec2F        mTransformBasisOffet = Vec2F(10, 10); // Border between side points and frame
 
 	private:
+		// Initializes handles
 		void InitializeHandles();
+
+		// Clears all handles
 		void ClearHandles();
 
+		// Called when handle was moved
 		void OnHandleMoved(int i, const Vec2F& pos);
 
+		// Converts world space point to local space
 		Vec2F WorldToLocal(const Vec2F& point) const;
+
+		// Converts local space point to world space
 		Vec2F LocalToWorld(const Vec2F& point) const;
 
 		// Draw selection sprite

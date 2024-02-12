@@ -27,16 +27,16 @@ namespace Editor
 			bool operator==(const Transform& other) const;
 		};
 
-		Vector<SceneUID>  objectsIds;
-		Vector<Transform> beforeTransforms;
-		Vector<Transform> doneTransforms;
+		Vector<SceneUID>  objectsIds;       // Changed objects ids
+		Vector<Transform> beforeTransforms; // Transforms before changing
+		Vector<Transform> doneTransforms;   // Transforms after changing
 
 	public:
 		// Default constructor
 		TransformAction();
 
 		// Constructor with objects, stores theirs before changing transforms
-		TransformAction(const Vector<SceneEditableObject*>& objects);
+		TransformAction(const Vector<Ref<SceneEditableObject>>& objects);
 
 		// Called when transform completed, stores changed transforms
 		void Completed();

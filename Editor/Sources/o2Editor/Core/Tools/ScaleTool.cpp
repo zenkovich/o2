@@ -91,10 +91,10 @@ namespace Editor
 		mBothDragHandle.enabled = false;
 	}
 
-	void ScaleTool::OnSceneChanged(Vector<SceneEditableObject*> changedObjects)
+	void ScaleTool::OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects)
 	{}
 
-	void ScaleTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void ScaleTool::OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		UpdateHandlesPosition();
 	}

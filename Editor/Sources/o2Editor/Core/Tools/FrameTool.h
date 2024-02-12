@@ -32,12 +32,16 @@ namespace Editor
         IOBJECT(FrameTool);
 
     protected:
+        // -------------------
+        // Snap line draw info
+        // -------------------
         struct SnapLine
         {
             Color4 color;
             Vec2F  begin;
             Vec2F  end;
 
+        public:
             SnapLine() {}
             SnapLine(const Vec2F& begin, const Vec2F& end, const Color4& color):begin(begin), end(end), color(color) {}
 
@@ -86,8 +90,8 @@ namespace Editor
         bool mIsDragging = false;	   // Is frame dragging
         bool mChangedFromThis = false; // Is objects changed from this, needs to break circular updating
 
-        Vector<Basis>    mBeforeTransforms;   		 // Array of objects transformations before changing
-        TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
+        Vector<Basis>        mBeforeTransforms; // Array of objects transformations before changing
+        Ref<TransformAction> mTransformAction;  // Current transform action. Creates when transform started
 
         Vector<SnapLine> mSnapLines; // Immediate drawing lines, used for drawing snapping
 
@@ -111,10 +115,10 @@ namespace Editor
         void OnDisabled() override;
 
         // Called when scene objects was changed
-        void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
+        void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) override;
 
         // Called when objects selection was changed
-        void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+        void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
         // Called when key was pressed
         void OnKeyPressed(const Input::Key& key) override;
@@ -321,13 +325,13 @@ namespace Editor
         void CheckAnchorsCenterEnabled();
 
         // Returns objects' transforms 
-        Vector<Basis> GetObjectsTransforms(const Vector<SceneEditableObject*>& objects) const;
+        Vector<Basis> GetObjectsTransforms(const Vector<Ref<SceneEditableObject>>& objects) const;
 
         // Returns all objects' transforms for snapping and including anchors frame when enabled
         Vector<Basis> GetSnapBasisesForAllObjects() const;
 
         // Returns object's parent snap basis - world rect or children rect
-        Basis GetObjectParentAnchorSnapBasis(SceneEditableObject* object);
+        Basis GetObjectParentAnchorSnapBasis(const Ref<SceneEditableObject>& object);
 
         // Calculates snapping offset for point by parallels lines, offset is on normal
         Vec2F CalculateSnapOffset(const Vec2F& point, const Basis& frame, 

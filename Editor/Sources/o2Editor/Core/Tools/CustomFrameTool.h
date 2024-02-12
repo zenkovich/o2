@@ -11,19 +11,30 @@ namespace Editor
 	// --------------------------------------------------------
 	struct CustomFrameTool: public IEditTool
 	{
+		// ----------------------
+		// Scene layer for editor
+		// ----------------------
 		struct SceneLayer: public SceneEditorLayer
 		{
-			CustomFrameTool* tool = nullptr;
+			WeakRef<CustomFrameTool> tool; // Reference to tool
 
 		public:
+			// Draws editor over scene
 			void DrawOverScene() override;
+
+			// Updates editor
 			void Update(float dt) override;
 
+			// Returns order of layer
 			int GetOrder() const override;
 
+			// Returns true if layer is enabled
 			bool IsEnabled() const override;
 
+			// Returns name of layer
 			const String& GetName() const override;
+
+			// Returns icon name of layer
 			const String& GetIconName() const override;
 		};
 

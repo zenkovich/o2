@@ -31,16 +31,16 @@ namespace Editor
 		IOBJECT(MoveTool);
 
 	protected:
-		SceneDragHandle  mHorDragHandle;  // Horizontal arrow handle
-		SceneDragHandle  mVerDragHandle;  // Vertical arrow handle
-		SceneDragHandle  mBothDragHandle; // Both arrow handle
+		SceneDragHandle mHorDragHandle;  // Horizontal arrow handle
+		SceneDragHandle mVerDragHandle;  // Vertical arrow handle
+		SceneDragHandle mBothDragHandle; // Both arrow handle
 						 
 		Vec2F mLastSceneHandlesPos; // Last scene handles position 
 		Vec2F mSnapPosition;        // Snapping handles position
 		float mHandlesAngle = 0.0f; // Handles angle, in radians
 						 
-		Vector<Basis>    mBeforeTransforms;          // Before transformation transforms
-		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
+		Vector<Basis>       mBeforeTransforms; // Before transformation transforms
+		Ref<TransformAction> mTransformAction; // Current transform action. Creates when transform started
 
 	protected:
 		// Returns toggle in menu panel icon name
@@ -59,10 +59,10 @@ namespace Editor
 		void OnDisabled() override;
 
 		// Called when scene objects was changed
-		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
+		void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) override;
 
 		// Called when objects selection was changed
-		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+		void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
 		// Called when horizontal drag handle was moved
 		void OnHorDragHandleMoved(const Vec2F& position);

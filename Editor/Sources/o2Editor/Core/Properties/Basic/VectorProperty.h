@@ -51,7 +51,7 @@ namespace Editor
 		WString GetCaption() const override;
 
 		// Adds remove button
-		Button* GetRemoveButton() override;
+		Ref<Button> GetRemoveButton() override;
 
 		// Specializes vector type
 		void SpecializeType(const Type* type);
@@ -79,9 +79,10 @@ namespace Editor
 	protected:
 		struct TargetObjectData
 		{
-			IAbstractValueProxy* proxy = nullptr;
+			Ref<IAbstractValueProxy> proxy;
+
 			void* data = nullptr;
-			bool isCreated = false;
+			bool  isCreated = false;
 
 			bool operator==(const TargetObjectData& other) const { return proxy == other.proxy; }
 
@@ -90,23 +91,23 @@ namespace Editor
 		};
 
 	protected:
-		Spoiler* mSpoiler = nullptr; // Properties spoiler
+		Ref<Spoiler> mSpoiler; // Properties spoiler
 
 		const VectorType* mVectorType = nullptr; // Vector type
 
 		Vector<Pair<TargetObjectData, TargetObjectData>>  mTargetObjects; // Target objects
 						 						    
-		Vector<IPropertyField*> mValueProperties;     // Values properties
-		Vector<IPropertyField*> mValuePropertiesPool; // Unused value properties pool
+		Vector<Ref<IPropertyField>> mValueProperties;     // Values properties
+		Vector<Ref<IPropertyField>> mValuePropertiesPool; // Unused value properties pool
 
-		IntegerProperty* mCountProperty = nullptr; // Vector count property
+		Ref<IntegerProperty> mCountProperty; // Vector count property
 
 		bool mCountDifferents = false; // Is targets counts of elements are different
 		int  mCountOfElements = 0;     // Common count of elements
 
-		HorizontalLayout* mHeaderContainer = nullptr; // Count property and other controls container
+		Ref<HorizontalLayout> mHeaderContainer; // Count property and other controls container
 
-		Button* mAddButton = nullptr; // Add button, adds new element at end
+		Ref<Button> mAddButton; // Add button, adds new element at end
 
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
@@ -115,19 +116,19 @@ namespace Editor
 		void InitializeControls();
 
 		// Returns value pointer from proxy when proxy is pointer proxy
-		void* GetProxyValuePointer(IAbstractValueProxy* proxy) const;
+		void* GetProxyValuePointer(const Ref<IAbstractValueProxy>& proxy) const;
 
 		// Returns free element property
-		IPropertyField* GetFreeValueProperty();
+		Ref<IPropertyField> GetFreeValueProperty();
 
 		// Frees element property
-		void FreeValueProperty(IPropertyField* def);
+		void FreeValueProperty(const Ref<IPropertyField>& def);
 
 		// Updates element caption
-		void UpdateElementCaption(IPropertyField* propertyDef) const;
+		void UpdateElementCaption(const Ref<IPropertyField>& propertyDef) const;
 
 		// Called when count property changing
-		void OnCountChanged(IPropertyField* def);
+		void OnCountChanged(const Ref<IPropertyField>& def);
 
 		// Sets new count of elements in vector
 		void Resize(int newCount);
@@ -142,7 +143,7 @@ namespace Editor
 		void OnExpand();
 
 		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
-		TargetObjectData GetObjectFromProxy(IAbstractValueProxy* proxy);
+		TargetObjectData GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy);
 
 		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 

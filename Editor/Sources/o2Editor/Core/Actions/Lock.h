@@ -18,14 +18,15 @@ namespace Editor
 	class LockAction: public IAction
 	{
 	public:
-		Vector<SceneUID> objectsIds;
-		bool             lock;
+		Vector<SceneUID> objectsIds; // Changed objects
+		bool             lock;       // Lock state
 
 	public:
 		// Default constructor
 		LockAction();
+
 		// Constructor with list of objects
-		LockAction(const Vector<SceneEditableObject*>& object, bool lock);
+		LockAction(const Vector<Ref<SceneEditableObject>>& object, bool lock);
 
 		// Return name of action
 		String GetName() const override;

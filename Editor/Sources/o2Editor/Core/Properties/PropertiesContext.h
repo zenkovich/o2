@@ -17,15 +17,18 @@ namespace Editor
 {
 	class IPropertyField;
 
-	class PropertiesContext
+	// --------------------------------------------------------------------------------------------
+    // Editor properties context. Contains targets and properties. Used to update properties values
+    // --------------------------------------------------------------------------------------------
+	class PropertiesContext: public RefCounterable
 	{
 	public:
-		PropertiesContext* parent = nullptr; // Parent context
+		WeakRef<PropertiesContext> parent; // Parent context
 
-		Vector<Pair<IObject*, IObject*>>       targets;    // Last set targets
-		Map<const FieldInfo*, IPropertyField*> properties; // Property info to property field map
+		Vector<Pair<IObject*, IObject*>>           targets;    // Last set targets
+		Map<const FieldInfo*, Ref<IPropertyField>> properties; // Property info to property field map
 
-		Spoiler* privatePropertiesSpoiler = nullptr; // Private properties spoiler
+		Ref<Spoiler> privatePropertiesSpoiler; // Private properties spoiler
 
 		bool builtWithPrivateProperties = false; // Is properties was built with hidden properties
 
@@ -43,7 +46,7 @@ namespace Editor
 		bool IsBuiltWIthPrivateProperties() const;
 
 		// Returns property info to property field map
-		const Map<const FieldInfo*, IPropertyField*>& GetProperties() const;
+		const Map<const FieldInfo*, Ref<IPropertyField>>& GetProperties() const;
 
 		// Searches target with suitable type on contexts stack
 		template<typename _type>

@@ -29,13 +29,13 @@ namespace Editor
 		IOBJECT(AnimationStateViewer);
 
 	private:
-		Toggle* mPlayPause = nullptr;
-		Button* mEditBtn = nullptr;
-		Toggle* mLooped = nullptr;
+		Ref<Toggle> mPlayPause;
+		Ref<Button> mEditBtn;
+		Ref<Toggle> mLooped;
 
-		HorizontalProgress* mTimeProgress = nullptr;
+		Ref<HorizontalProgress> mTimeProgress;
 
-		AnimationPlayer* mSubscribedPlayer = nullptr;
+		WeakRef<AnimationPlayer> mSubscribedPlayer;
 
 	private:
 		// Creates spoiler for properties

@@ -47,9 +47,9 @@ namespace Editor
 		const Color4 mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
 		const Color4 mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
 						 
-		Mesh* mRotateRingFillMesh = nullptr; // Rotate ring mesh
-		Mesh* mAngleMesh = nullptr;          // Rotation angle mesh
-		Vec2F mScenePivot;				    // Rotation pivot in scene space
+		Ref<Mesh> mRotateRingFillMesh; // Rotate ring mesh
+		Ref<Mesh> mAngleMesh;          // Rotation angle mesh
+		Vec2F     mScenePivot;		   // Rotation pivot in scene space
 						 							   
 		SceneDragHandle  mPivotDragHandle;			   // Pivot drag handle
 		float            mPressAngle;				   // Angle at cursor pressing
@@ -57,8 +57,8 @@ namespace Editor
 		bool             mRingPressed = false;		   // Is rotate ring was pressed
 		float            mSnapAngleAccumulated = 0.0f; // Snapping angle accumulated
 						 
-		Vector<Basis>    mBeforeTransforms;  		 // Array of objects' transformations before changing
-		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
+		Vector<Basis>        mBeforeTransforms; // Array of objects' transformations before changing
+		Ref<TransformAction> mTransformAction;  // Current transform action. Creates when transform started
 
 	public:
 		// Returns toggle in menu panel icon name
@@ -80,10 +80,10 @@ namespace Editor
 		void OnDisabled() override;
 
 		// Called when scene objects was changed
-		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
+		void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) override;
 
 		// Called when objects selection was changed
-		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+		void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
 		// Updates ring and angle meshes
 		void UpdateMeshes();

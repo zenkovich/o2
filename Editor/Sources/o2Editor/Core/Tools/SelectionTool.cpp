@@ -55,7 +55,7 @@ namespace Editor
 		mSelectingObjects = false;
 	}
 
-	void SelectionTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void SelectionTool::OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{}
 
 	void SelectionTool::OnCursorPressed(const Input::Cursor& cursor)

@@ -206,7 +206,7 @@ namespace Editor
 		SetHandlesEnable(false);
 	}
 
-	void FrameTool::OnSceneChanged(Vector<SceneEditableObject*> changedObjects)
+	void FrameTool::OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects)
 	{
 		mNeedRedraw = true;
 		if (mChangedFromThis)
@@ -215,7 +215,7 @@ namespace Editor
 			UpdateSelectionFrame();
 	}
 
-	void FrameTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void FrameTool::OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		UpdateSelectionFrame();
 	}

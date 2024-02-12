@@ -18,24 +18,24 @@ namespace Editor
 	// ---------------------
 	// Editor tool interface
 	// ---------------------
-	class IEditTool: public IObject
+	class IEditTool: public IObject, public RefCounterable
 	{
 	public:
 		virtual ~IEditTool() {}
 
-		// Creates if required and retuns toggle button for menu panel
-		virtual Toggle* GetPanelToggle() const;
+		// Creates if required and returns toggle button for menu panel
+		virtual const Ref<Toggle>& GetPanelToggle() const;
 
 		IOBJECT(IEditTool);
 
 	protected:
 		bool mNeedRedraw = false; // True when need redraw scene
 
-		mutable Toggle* mPanelToggle = nullptr; // Toggle button in menu panel
+		mutable Ref<Toggle> mPanelToggle; // Toggle button in menu panel
 
 	protected:
 		// Creates toggle button for menu panel
-		virtual Toggle* CreatePanelToggle() const;
+		virtual Ref<Toggle> CreatePanelToggle() const;
 
 		// Returns toggle in menu panel icon name
 		virtual String GetPanelIcon() const;
@@ -50,7 +50,7 @@ namespace Editor
 		virtual void DrawScreen() {}
 
 		// Called when scene actors was changed
-		virtual void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) {}
+		virtual void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) {}
 
 		// Updates tool
 		virtual void Update(float dt) {}
@@ -62,7 +62,7 @@ namespace Editor
 		virtual void OnDisabled() {}
 
 		// Called when objects selection was changed
-		virtual void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) {}
+		virtual void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) {}
 
 		// Called when cursor pressed on this
 		virtual void OnCursorPressed(const Input::Cursor& cursor) {}

@@ -30,17 +30,17 @@ namespace Editor
 		IOBJECT(TextViewer);
 
 	protected:
-		ColorProperty*   mColorProperty = nullptr;
-		FloatProperty*   mAlphaProperty = nullptr;
-		AssetProperty*   mFontProperty = nullptr;
-		WStringProperty* mTextProperty = nullptr;
-		FloatProperty*   mHeightProperty = nullptr;
-		EnumProperty*    mHorAlignProperty = nullptr;
-		EnumProperty*    mVerAlignProperty = nullptr;
-		BooleanProperty* mWordWrapProperty = nullptr;
-		BooleanProperty* mDotsEndingsProperty = nullptr;
-		FloatProperty*   mSymbolsDistCoefProperty = nullptr;
-		FloatProperty*   mLinesDistCoefProperty = nullptr;
+		Ref<ColorProperty>   mColorProperty;
+		Ref<FloatProperty>   mAlphaProperty;
+		Ref<AssetProperty>   mFontProperty;
+		Ref<WStringProperty> mTextProperty;
+		Ref<FloatProperty>   mHeightProperty;
+		Ref<EnumProperty>    mHorAlignProperty;
+		Ref<EnumProperty>    mVerAlignProperty;
+		Ref<BooleanProperty> mWordWrapProperty;
+		Ref<BooleanProperty> mDotsEndingsProperty;
+		Ref<FloatProperty>   mSymbolsDistCoefProperty;
+		Ref<FloatProperty>   mLinesDistCoefProperty;
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext

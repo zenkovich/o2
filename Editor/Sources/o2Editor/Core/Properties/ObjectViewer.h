@@ -24,7 +24,7 @@ namespace Editor
 		void Refresh(const Vector<IObject*>& targetObjets);
 
 		// Sets parent context
-		void SetParentContext(PropertiesContext* context);
+		void SetParentContext(const Ref<PropertiesContext>& context);
 
 		// Enable viewer event function
 		void OnEnabled() override;
@@ -41,9 +41,9 @@ namespace Editor
 		SERIALIZABLE(ObjectViewer);
 
 	protected:
-		PropertiesContext* mParentContext = nullptr; // Parent properties context
+		Ref<PropertiesContext> mParentContext; // Parent properties context
 
-		IObjectPropertiesViewer* mPropertiesViewer = nullptr; // Object properties viewer
+		Ref<IObjectPropertiesViewer> mPropertiesViewer; // Object properties viewer
 	};
 }
 // --- META ---

@@ -12,24 +12,36 @@ namespace Editor
 	// -------------------------
 	struct MeshWeightsTool: public IEditTool
 	{
+		// ----------------------
+		// Scene layer for editor
+		// ----------------------
 		struct SceneLayer: public SceneEditorLayer
 		{
-			MeshWeightsTool* tool = nullptr;
+			WeakRef<MeshWeightsTool> tool; // Reference to tool
 
 		public:
+			// Draws editor over scene
 			void DrawScene() override;
 
+			// Draws mesh wire
 			void DrawMeshWire(auto& mesh);
 
+			// Updates editor
 			void Update(float dt) override;
 
+			// Updates brush
 			void UpdateBrush(float dt);
 
+			// Returns order of layer
 			int GetOrder() const override;
 
+			// Returns true if layer is enabled
 			bool IsEnabled() const override;
 
+			// Returns name of layer
 			const String& GetName() const override;
+
+			// Returns icon name of layer
 			const String& GetIconName() const override;
 		};
 

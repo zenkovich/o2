@@ -31,25 +31,24 @@ namespace Editor
 		IOBJECT(SpriteViewer);
 
 	protected:
-		VerticalLayout* mHiddenProperties = nullptr; // Hidden properties
+        Ref<VerticalLayout> mHiddenProperties; // Hidden properties container
 
-		AssetProperty* mImageProperty = nullptr;
-		ColorProperty* mColorProperty = nullptr;
-		FloatProperty* mAlphaProperty = nullptr;
-		Vec2FProperty* mSizePivotProperty = nullptr;
-		Vec2FProperty* mPivotProperty = nullptr;
-		EnumProperty*  mModeProperty = nullptr;
+        Ref<AssetProperty> mImageProperty;     // Image asset property
+        Ref<ColorProperty> mColorProperty;     // Color property
+        Ref<FloatProperty> mAlphaProperty;     // Alpha property
+        Ref<Vec2FProperty> mSizePivotProperty; // Size pivot property
+        Ref<Vec2FProperty> mPivotProperty;     // Pivot property
+        Ref<EnumProperty>  mModeProperty;      // Mode property selector. Shows required property spoiler
 
-		Spoiler*       mFillPropertiesSpoiler = nullptr;
-		FloatProperty* mFillProperty = nullptr;
+        Ref<Spoiler>       mFillPropertiesSpoiler; // Fill properties spoiler
+        Ref<FloatProperty> mFillProperty;          // Fill property
 
-		Spoiler*         mSlicedPropertiesSpoiler = nullptr;
-		BorderIProperty* mSliceBorderProperty = nullptr;
+        Ref<Spoiler>                 mSlicedPropertiesSpoiler; // Sliced properties spoiler
+        Ref<BorderIProperty>         mSliceBorderProperty;     // Slice border property
+        Ref<ImageSlicesEditorWidget> mSlicesEditor;            // Image slices editor widget
 
-		Spoiler*       mTiledPropertiesSpoiler = nullptr;
-		FloatProperty* mTileScaleProperty = nullptr;
-
-		ImageSlicesEditorWidget* mSlicesEditor = nullptr;
+        Ref<Spoiler>       mTiledPropertiesSpoiler; // Tiled properties spoiler
+        Ref<FloatProperty> mTileScaleProperty;      // Tile scale property
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext

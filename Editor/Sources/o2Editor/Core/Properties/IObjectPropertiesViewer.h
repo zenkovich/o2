@@ -23,7 +23,7 @@ namespace Editor
 	class IObjectPropertiesViewer : public IObject
 	{
 	public:
-		typedef Function<void(IPropertyField*)> OnChangedFunc;
+		typedef Function<void(const Ref<IPropertyField>&)> OnChangedFunc;
 		typedef Function<void(const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)> OnChangeCompletedFunc;
 
 	public:
@@ -49,7 +49,7 @@ namespace Editor
 		void SetParentContext(PropertiesContext* context);
 
 		// Returns view widget
-		Spoiler* GetSpoiler();
+		const Ref<Spoiler>& GetSpoiler();
 
 		// Sets is header enabled and properties can be collapsed in spoiler
 		virtual void SetHeaderEnabled(bool enabled);
@@ -81,14 +81,14 @@ namespace Editor
 		IOBJECT(IObjectPropertiesViewer);
 
 	protected:
-		Spoiler* mSpoiler = nullptr;    // Properties spoiler. Expands forcible when viewer hasn't header
-		bool     mHeaderEnabled = true; // Is header enabled and properties hiding in spoiler
+		Ref<Spoiler> mSpoiler;              // Properties spoiler. Expands forcible when viewer hasn't header
+		bool         mHeaderEnabled = true; // Is header enabled and properties hiding in spoiler
 
 		bool mPropertiesBuilt = false; // True when properties built at first refreshing
 
 		Vector<Pair<IObject*, IObject*>> mTargetObjects; // Target objects
 
-		PropertiesContext mPropertiesContext; // Field properties information
+		Ref<PropertiesContext> mPropertiesContext; // Field properties information
 
 		OnChangeCompletedFunc mOnChildFieldChangeCompleted; // Default field change completed callback, calls
 		                                                    // inChangeCompleted from this with full combined path

@@ -24,16 +24,16 @@ namespace Editor
 	public:
 		struct ObjectInfo
 		{
-			SceneUID objectId;
-			SceneUID lastParentId;
-			SceneUID lastPrevObjectId;
-			int      objectHierarchyIdx;
-			Basis    transform;
+			SceneUID objectId;           // Object id
+			SceneUID lastParentId;       // Previous parent id
+			SceneUID lastPrevObjectId;   // Previous object id in children
+			int      objectHierarchyIdx; // Object index in hierarchy
+			Basis    transform;          // Object transform
 		};
 
-		Vector<ObjectInfo*> objectsInfos;
-		SceneUID            newParentId;
-		SceneUID            newPrevObjectId;
+		Vector<ObjectInfo> objectsInfos;    // Changed objects info
+		SceneUID           newParentId;     // New parent id
+		SceneUID           newPrevObjectId; // New object id in children
 
 	public:
 		// Default constructor
@@ -46,7 +46,7 @@ namespace Editor
 		~ReparentAction();
 
 		// Called when object are reparented, stores all required data to restore old objects' parents
-		void ObjectsReparented(SceneEditableObject* newParent, SceneEditableObject* prevObject);
+		void ObjectsReparented(const Ref<SceneEditableObject>& newParent, const Ref<SceneEditableObject>& prevObject);
 
 		// Returns name of action
 		String GetName() const override;

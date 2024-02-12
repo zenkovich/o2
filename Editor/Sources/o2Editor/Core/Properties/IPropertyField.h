@@ -25,10 +25,10 @@ namespace Editor
 	class IPropertyField: public HorizontalLayout
 	{
 	public:
-		typedef Pair<IAbstractValueProxy*, IAbstractValueProxy*> TargetPair;
-		typedef Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> TargetsVec;
+		typedef Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>> TargetPair;
+		typedef Vector<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>> TargetsVec;
 
-		typedef Function<void(IPropertyField*)> OnChangedFunc;
+		typedef Function<void(const Ref<IPropertyField>&)> OnChangedFunc;
 		typedef Function<void(const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)> OnChangeCompletedFunc;
 
 	public:
@@ -55,7 +55,7 @@ namespace Editor
 		const TargetsVec& GetValueAndPrototypeProxy() const;
 
 		// Sets targets proxies
-		virtual void SetValueProxy(const Vector<IAbstractValueProxy*>& targets);
+		virtual void SetValueProxy(const Vector<Ref<IAbstractValueProxy>>& targets);
 
 		// Sets parent context
 		virtual void SetParentContext(PropertiesContext* context);
@@ -73,7 +73,7 @@ namespace Editor
 		virtual WString GetCaption() const;
 
 		// Returns remove button, creates if required
-		virtual Button* GetRemoveButton();
+		virtual Ref<Button> GetRemoveButton();
 
 		// Returns editing by this field type
 		virtual const Type* GetValueType() const;
@@ -94,7 +94,7 @@ namespace Editor
 		void SetCaptionLabel(Label* label);
 
 		// Returns caption
-		Label* GetCaptionLabel() const;
+		const Ref<Label>& GetCaptionLabel() const;
 
 		// Sets is property revertable - it's able to check difference between origin value and prototype
 		void SetRevertable(bool revertable);
@@ -147,18 +147,17 @@ namespace Editor
 		IOBJECT(IPropertyField);
 
 	protected:
-		const FieldInfo* mFieldInfo = nullptr; // Specialized field info
+		const FieldInfo*           mFieldInfo = nullptr; // Specialized field info
+		WeakRef<PropertiesContext> mParentContext;       // Parent context
+		bool                       mRevertable = true;   // Is property can be reverted
 
-		PropertiesContext* mParentContext = nullptr; // Parent context
+		Vector<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>> mValuesProxies; // Target values proxies
 
-		bool mRevertable = true; // Is property can be reverted
+		bool mValuesDifferent = true; // Are values different
 
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> mValuesProxies;          // Target values proxies
-		bool                                                     mValuesDifferent = true; // Are values different
-
-		Button* mRevertBtn = nullptr; // Revert to source prototype button
-		Button* mRemoveBtn = nullptr; // Remove from array button
-		Label*  mCaption = nullptr;   // Caption label, null by default   
+		Ref<Button> mRevertBtn; // Revert to source prototype button
+		Ref<Button> mRemoveBtn; // Remove from array button
+		Ref<Label>  mCaption;   // Caption label, null by default   
 
 		String               mValuesPath;         // Reflection path of target values
 		Vector<DataDocument> mBeforeChangeValues; // Serialized value data before changes started
@@ -196,11 +195,11 @@ namespace Editor
 
 		// Sets value via proxy
 		template<typename T>
-		void SetProxy(IAbstractValueProxy* proxy, const T& value) const;
+		void SetProxy(const Ref<IAbstractValueProxy>& proxy, const T& value) const;
 
 		// Returns value from proxy
 		template<typename T>
-		T GetProxy(IAbstractValueProxy* proxy) const;
+		T GetProxy(const Ref<IAbstractValueProxy>& proxy) const;
 
 		friend class Properties;
 	};
@@ -257,10 +256,10 @@ namespace Editor
 		void StoreValues(Vector<DataDocument>& data) const override;
 
 		// Returns value from proxy
-		virtual _type GetProxy(IAbstractValueProxy* proxy) const;
+		virtual _type GetProxy(const Ref<IAbstractValueProxy>& proxy) const;
 
 		// Sets value to proxy
-		virtual void SetProxy(IAbstractValueProxy* proxy, const _type& value);
+		virtual void SetProxy(const Ref<IAbstractValueProxy>& proxy, const _type& value);
 
 		// Sets common value
 		virtual void SetCommonValue(const _type& value);
@@ -280,7 +279,7 @@ namespace Editor
 	// -----------------------------
 
 	template<typename T>
-	T IPropertyField::GetProxy(IAbstractValueProxy* proxy) const
+	T IPropertyField::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
 	{
 		T res;
 		proxy->GetValuePtr(&res);
@@ -288,7 +287,7 @@ namespace Editor
 	}
 
 	template<typename T>
-	void IPropertyField::SetProxy(IAbstractValueProxy* proxy, const T& value) const
+	void IPropertyField::SetProxy(const Ref<IAbstractValueProxy>& proxy, const T& value) const
 	{
 		proxy->SetValuePtr(&const_cast<T&>(value));
 	}
@@ -560,7 +559,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	_type TPropertyField<_type>::GetProxy(IAbstractValueProxy* proxy) const
+	_type TPropertyField<_type>::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
 	{
 		if constexpr (std::is_polymorphic<_type>::value)
 		{
@@ -580,7 +579,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void TPropertyField<_type>::SetProxy(IAbstractValueProxy* proxy, const _type& value)
+	void TPropertyField<_type>::SetProxy(const Ref<IAbstractValueProxy>& proxy, const _type& value)
 	{
 		IPropertyField::SetProxy<_type>(proxy, value);
 	}

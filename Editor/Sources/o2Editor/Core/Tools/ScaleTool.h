@@ -26,9 +26,9 @@ namespace Editor
         IOBJECT(ScaleTool);
 
     protected:
-		SceneDragHandle  mHorDragHandle;  // Horizontal scale drag handle
-		SceneDragHandle  mVerDragHandle;  // Vertical scale drag handle
-		SceneDragHandle  mBothDragHandle; // Bot axis scale drag handle
+		SceneDragHandle mHorDragHandle;  // Horizontal scale drag handle
+		SceneDragHandle mVerDragHandle;  // Vertical scale drag handle
+		SceneDragHandle mBothDragHandle; // Bot axis scale drag handle
 
         float mHandlesAngle = 0.0f;			  // Handles angle in radians
         Vec2F mSceneHandlesPos;				  // Scene space handles position
@@ -38,8 +38,8 @@ namespace Editor
         Vec2F mLastVerHandlePos;  // Last vertical handle position
         Vec2F mLastBothHandlePos; // Last both axis handle position
 
-        Vector<Basis>    mBeforeTransforms;			 // Array of objects' transformations before changing
-        TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
+        Vector<Basis>        mBeforeTransforms; // Array of objects' transformations before changing
+        Ref<TransformAction> mTransformAction;  // Current transform action. Creates when transform started
 
 	protected:
 		// Returns toggle in menu panel icon name
@@ -61,10 +61,10 @@ namespace Editor
         void OnDisabled() override;
 
         // Called when scene objects was changed
-        void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
+        void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) override;
 
         // Called when objects selection was changed
-        void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+        void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
         // Called when horizontal drag handle was moved
         void OnHorDragHandleMoved(const Vec2F& position);
@@ -102,7 +102,6 @@ namespace Editor
         // Called when handle was released, completes transformation action
 		void HandleReleased();
     };
-
 }
 // --- META ---
 

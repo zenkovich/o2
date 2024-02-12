@@ -76,10 +76,10 @@ namespace Editor
 		mPivotDragHandle.enabled = false;
 	}
 
-	void RotateTool::OnSceneChanged(Vector<SceneEditableObject*> changedObjects)
+	void RotateTool::OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects)
 	{}
 
-	void RotateTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void RotateTool::OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		CalcPivotByObjectsCenter();
 	}

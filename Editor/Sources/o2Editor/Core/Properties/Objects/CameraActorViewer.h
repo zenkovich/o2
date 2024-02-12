@@ -26,17 +26,17 @@ namespace Editor
 		IOBJECT(CameraActorViewer);
 
 	protected:
-		ColorProperty*           mColorProperty = nullptr;
-		SceneLayersListProperty* mLayersProperty = nullptr;
+        Ref<ColorProperty>           mColorProperty;  // Background fill color property
+        Ref<SceneLayersListProperty> mLayersProperty; // Layers property
 
-		EnumProperty*   mTypeProperty = nullptr;
-		VerticalLayout* mHiddenTypeProperties = nullptr;
+        Ref<EnumProperty>   mTypeProperty;         // Camera type property
+        Ref<VerticalLayout> mHiddenTypeProperties; // Hidden type properties
 
-		Spoiler*       mSizePropertySpoiler = nullptr;
-		Vec2FProperty* mSizeProperty = nullptr;
+        Ref<Spoiler>       mSizePropertySpoiler; // Size property spoiler
+        Ref<Vec2FProperty> mSizeProperty;        // Size property
 
-		Spoiler*      mUnitsPropertySpoiler = nullptr;
-		EnumProperty* mUnitsProperty = nullptr;
+        Ref<Spoiler>      mUnitsPropertySpoiler; // Units property spoiler
+        Ref<EnumProperty> mUnitsProperty;        // Units property
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext

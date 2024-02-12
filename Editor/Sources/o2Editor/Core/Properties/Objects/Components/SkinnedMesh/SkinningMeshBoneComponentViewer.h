@@ -36,8 +36,8 @@ namespace Editor
 		IOBJECT(SkinningMeshBoneComponentViewer);
 
 	protected:
-		MeshWeightsTool         mWeightsTool;       // Mesh weights tool
-		SkinningMeshEditorLayer mFrameTetxureLayer; // Frame texture drawing layer
+		Ref<MeshWeightsTool>         mWeightsTool;       // Mesh weights tool
+		Ref<SkinningMeshEditorLayer> mFrameTetxureLayer; // Frame texture drawing layer
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext

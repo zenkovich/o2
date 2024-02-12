@@ -18,15 +18,15 @@ namespace Editor
 	class SelectAction: public IAction
 	{
 	public:
-		Vector<SceneUID> selectedObjectsIds;
-		Vector<SceneUID> prevSelectedObjectsIds;
+		Vector<SceneUID> selectedObjectsIds;     // Selected objects ids
+		Vector<SceneUID> prevSelectedObjectsIds; // Selected objects ids before
 
 	public:
 		// Default constructor
 		SelectAction();
 
 		// CUnstructor with new and previous selected objects
-		SelectAction(const Vector<SceneEditableObject*>& selectedObjects, const Vector<SceneEditableObject*>& prevSelectedObjects);
+		SelectAction(const Vector<Ref<SceneEditableObject>>& selectedObjects, const Vector<Ref<SceneEditableObject>>& prevSelectedObjects);
 
 		// Returns name of action
 		String GetName() const override;

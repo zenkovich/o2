@@ -30,7 +30,7 @@ namespace Editor
 		IOBJECT(WStringProperty);
 
 	protected:
-		EditBox* mEditBox = nullptr; // Edit box 
+		Ref<EditBox> mEditBox; // Edit box 
 
 	protected:
 		// Updates value view

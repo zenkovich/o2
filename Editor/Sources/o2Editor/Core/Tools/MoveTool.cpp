@@ -75,12 +75,12 @@ namespace Editor
 		mBothDragHandle.enabled = false;
 	}
 
-	void MoveTool::OnSceneChanged(Vector<SceneEditableObject*> changedObjects)
+	void MoveTool::OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects)
 	{
 		UpdateHandlesPosition();
 	}
 
-	void MoveTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void MoveTool::OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		UpdateHandlesPosition();
 	}

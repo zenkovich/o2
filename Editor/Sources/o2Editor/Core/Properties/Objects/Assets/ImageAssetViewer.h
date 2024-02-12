@@ -31,10 +31,10 @@ namespace Editor
 		IOBJECT(ImageAssetViewer);
 
 	private:
-		ImageSlicesEditorWidget* mSlicesEditor = nullptr; // Slices editor widget
+		Ref<ImageSlicesEditorWidget> mSlicesEditor; // Slices editor widget
 
-		Vector<IAbstractValueProxy*> mAtlasProxies;            // Atlas proxies for property, converts UID to AtlasAssetRef and back
-		AssetProperty*               mAtlasProperty = nullptr; // Atlas property
+		Vector<Ref<IAbstractValueProxy>> mAtlasProxies;  // Atlas proxies for property, converts UID to AtlasAssetRef and back
+		Ref<AssetProperty>               mAtlasProperty; // Atlas property
 
 	private:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext

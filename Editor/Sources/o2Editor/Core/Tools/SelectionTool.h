@@ -27,10 +27,10 @@ namespace Editor
 		IOBJECT(SelectionTool);
 
 	protected:
-		Sprite* mSelectionSprite = nullptr; // Selection frame sprite
+		Ref<Sprite> mSelectionSprite; // Selection frame sprite
 
-		Vector<SceneEditableObject*> mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
-		Vector<SceneEditableObject*> mBeforeSelectingObjects;  // Before selection objects array
+		Vector<Ref<SceneEditableObject>> mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
+		Vector<Ref<SceneEditableObject>> mBeforeSelectingObjects;  // Before selection objects array
 
 		Vec2F mPressPoint;				 // Press point before selecting
 		bool  mSelectingObjects = false; // Is selecting objects now
@@ -58,7 +58,7 @@ namespace Editor
 		void OnDisabled() override;
 
 		// Called when objects selection was changed
-		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+		void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
 		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;

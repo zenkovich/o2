@@ -5,40 +5,65 @@
 
 namespace Editor
 {
+	// ----------------------------
+    // Add to the curve keys action
+    // ----------------------------
 	class CurveAddKeysAction : public IAction
 	{
 	public:
+		// Default constructor
 		CurveAddKeysAction();
-		CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor);
 
-		String GetName();
-		void Redo();
-		void Undo();
+		// Constructor
+		CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor);
+
+		// Get the action name
+		String GetName() const override;
+
+		// Redo the action
+		void Redo() override;
+
+		// Undo the action
+		void Undo() override;
 
 		SERIALIZABLE(CurveAddKeysAction);
 
 	protected:
-		Vector<CurvesEditor::CurveKeysInfo> mInfos;
-		CurvesEditor*                       mEditor;
+		Vector<CurvesEditor::CurveKeysInfo> mInfos;  // Added keys info
+		Ref<CurvesEditor>                   mEditor; // Curves editor
 	};
 
+	// ---------------------------------
+    // Delete from the curve keys action
+    // ---------------------------------
 	class CurveDeleteKeysAction : public IAction
 	{
-	public:
+    public:
+        // Default constructor
 		CurveDeleteKeysAction();
-		CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor);
 
-		String GetName();
-		void Redo();
-		void Undo();
+        // Constructor
+		CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor);
+
+        // Get the action name
+        String GetName() const override;
+
+        // Redo the action
+        void Redo() override;
+
+        // Undo the action
+        void Undo() override;
 
 		SERIALIZABLE(CurveDeleteKeysAction);
 
 	protected:
-		Vector<CurvesEditor::CurveKeysInfo> mInfos;
-		CurvesEditor*                       mEditor;
+        Vector<CurvesEditor::CurveKeysInfo> mInfos;  // Deleted keys info
+        Ref<CurvesEditor>                   mEditor; // Curves editor
 	};
 
+    // ----------------------------
+    // Change the curve keys action
+    // ----------------------------
 	class CurveKeysChangeAction : public IAction
 	{
 	public:
@@ -54,19 +79,27 @@ namespace Editor
 			bool operator==(const KeysInfo& other) const;
 		};
 
-	public:
+    public:
+        // Default constructor
 		CurveKeysChangeAction();
-		CurveKeysChangeAction(const Vector<KeysInfo>& infos, CurvesEditor* editor);
 
-		String GetName();
-		void Redo();
-		void Undo();
+        // Constructor
+		CurveKeysChangeAction(const Vector<KeysInfo>& infos, const Ref<CurvesEditor>& editor);
+
+        // Get the action name
+        String GetName() const override;
+
+        // Redo the action
+        void Redo() override;
+
+        // Undo the action
+        void Undo() override;
 
 		SERIALIZABLE(CurveKeysChangeAction);
 
 	protected:
-		Vector<KeysInfo> mInfos;
-		CurvesEditor*    mEditor;
+        Vector<KeysInfo>  mInfos;  // Changed keys info
+        Ref<CurvesEditor> mEditor; // Curves editor
 	};
 }
 // --- META ---

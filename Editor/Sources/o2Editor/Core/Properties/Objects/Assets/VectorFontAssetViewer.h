@@ -28,7 +28,7 @@ namespace Editor
 		IOBJECT(VectorFontAssetViewer);
 
 	private:
-		TexturePreview* mTexturePreview = nullptr;
+		Ref<TexturePreview> mTexturePreview; // Texture preview widget
 
 	private:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
