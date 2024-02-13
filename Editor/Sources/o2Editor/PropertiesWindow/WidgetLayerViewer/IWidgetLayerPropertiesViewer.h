@@ -36,7 +36,7 @@ namespace Editor
 		virtual const Type* GetDrawableType() const { return nullptr; }
 
 		// Returns data widget
-		virtual Widget* GetWidget() const;
+		virtual Ref<Widget> GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -59,7 +59,7 @@ namespace Editor
 		IOBJECT(IWidgetLayerPropertiesViewer);
 
 	protected:
-		SpoilerWithHead* mSpoiler = nullptr;
+		Ref<SpoilerWithHead> mSpoiler;
 
 		bool mEnabled = false; // Is viewer enabled 
 

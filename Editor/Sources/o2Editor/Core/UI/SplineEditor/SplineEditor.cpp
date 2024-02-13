@@ -5,22 +5,22 @@ namespace Editor
 {
 	SplineEditor::SplineEditor()
 	{
-		mSelectionSprite = mnew Sprite("ui/UI_Window_place.png");
+		mSelectionSprite = mmake<Sprite>("ui/UI_Window_place.png");
 
-		mHandlesSample.position = DragHandle(mnew Sprite("ui/CurveHandle.png"),
-											 mnew Sprite("ui/CurveHandleHover.png"),
-											 mnew Sprite("ui/CurveHandlePressed.png"),
-											 mnew Sprite("ui/CurveHandleSelected.png"));
+		mHandlesSample.position = DragHandle(mmake<Sprite>("ui/CurveHandle.png"),
+											 mmake<Sprite>("ui/CurveHandleHover.png"),
+											 mmake<Sprite>("ui/CurveHandlePressed.png"),
+											 mmake<Sprite>("ui/CurveHandleSelected.png"));
 
-		mHandlesSample.prevSupport = DragHandle(mnew Sprite("ui/CurveSupportHandle.png"),
-												mnew Sprite("ui/CurveSupportHandleHover.png"),
-												mnew Sprite("ui/CurveSupportHandlePressed.png"),
-												mnew Sprite("ui/CurveSupportHandleSelected.png"));
+		mHandlesSample.prevSupport = DragHandle(mmake<Sprite>("ui/CurveSupportHandle.png"),
+												mmake<Sprite>("ui/CurveSupportHandleHover.png"),
+												mmake<Sprite>("ui/CurveSupportHandlePressed.png"),
+												mmake<Sprite>("ui/CurveSupportHandleSelected.png"));
 
-		mHandlesSample.nextSupport = DragHandle(mnew Sprite("ui/CurveSupportHandle.png"),
-												mnew Sprite("ui/CurveSupportHandleHover.png"),
-												mnew Sprite("ui/CurveSupportHandlePressed.png"),
-												mnew Sprite("ui/CurveSupportHandleSelected.png"));
+		mHandlesSample.nextSupport = DragHandle(mmake<Sprite>("ui/CurveSupportHandle.png"),
+												mmake<Sprite>("ui/CurveSupportHandleHover.png"),
+												mmake<Sprite>("ui/CurveSupportHandlePressed.png"),
+												mmake<Sprite>("ui/CurveSupportHandleSelected.png"));
 
 		mSplineColor = Color4(44, 62, 80, 255);
 		mSplineSupportColor = Color4(190, 190, 190, 255);

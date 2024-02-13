@@ -60,9 +60,9 @@ namespace Editor
 	protected:
 		Vector<IObject*> mTargets; // Target objects
 
-		IPropertiesViewer*         mCurrentViewer = nullptr; // Current properties viewer
-		Vector<IPropertiesViewer*> mViewers;                 // All available object types viewers
-		DefaultPropertiesViewer*   mDefaultViewer = nullptr; // Default properties viewer
+		Ref<IPropertiesViewer>         mCurrentViewer; // Current properties viewer
+		Vector<Ref<IPropertiesViewer>> mViewers;       // All available object types viewers
+		Ref<DefaultPropertiesViewer>   mDefaultViewer; // Default properties viewer
 
 		Function<void()> mOnTargetsChangedDelegate; // Called when targets array changing
 		bool             mTargetsChanged = false;   // True when targets was changed    
@@ -84,7 +84,7 @@ namespace Editor
 		void OnPrivateFieldsVisibleChanged(bool visible);
 
 		// Called when some property field was changed
-		void OnPropertyChanged(IPropertyField* field);
+		void OnPropertyChanged(const Ref<IPropertyField>& field);
 	};
 }
 // --- META ---

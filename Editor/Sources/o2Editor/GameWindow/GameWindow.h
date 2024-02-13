@@ -107,10 +107,10 @@ namespace Editor
 		void OnCustomResolution(bool enabled);
 
 		// When device selected
-		void OnDeviceSelected(const String& name, const ContextMenuItem* item);
+		void OnDeviceSelected(const String& name, const Ref<ContextMenuItem>& item);
 
 		// Sets device menu checked item by name
-		void SetDeviceMenuCheckedItem(const ContextMenuItem* item);
+		void SetDeviceMenuCheckedItem(const Ref<ContextMenuItem>& item);
 	};
 }
 // --- META ---

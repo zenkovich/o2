@@ -31,12 +31,12 @@ namespace Editor
 	protected:
 		Vector<WidgetLayer*> mLayers;
 
-		Vec2FProperty* mPositionProperty = nullptr;
-		Vec2FProperty* mSizeProperty = nullptr;
-		Vec2FProperty* mAnchorRightTopProperty = nullptr;
-		Vec2FProperty* mAnchorLeftBottomProperty = nullptr;
-		Vec2FProperty* moffsetRightTopProperty = nullptr;
-		Vec2FProperty* mOffsetLeftBottomProperty = nullptr;
+		Ref<Vec2FProperty> mPositionProperty;
+		Ref<Vec2FProperty> mSizeProperty;
+		Ref<Vec2FProperty> mAnchorRightTopProperty;
+		Ref<Vec2FProperty> mAnchorLeftBottomProperty;
+		Ref<Vec2FProperty> moffsetRightTopProperty;
+		Ref<Vec2FProperty> mOffsetLeftBottomProperty;
 
 	protected:
 		// Called when some property change completed, stores action for undo
@@ -44,7 +44,7 @@ namespace Editor
 									   const Vector<DataDocument>& newValue);
 
 		// Called when some property changed, updates owner widgets
-		void OnPropertyChanged(IPropertyField* field);
+		void OnPropertyChanged(const Ref<IPropertyField>& field);
 	};
 }
 // --- META ---

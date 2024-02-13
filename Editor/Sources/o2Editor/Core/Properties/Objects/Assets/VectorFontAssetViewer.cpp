@@ -20,7 +20,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mTexturePreview = mnew TexturePreview();
+		mTexturePreview = mmake<Text>urePreview();
 		*mTexturePreview->layout = WidgetLayout::HorStretch(VerAlign::Middle, 0, 0, 300);
 		mTexturePreview->layout->minHeight = 300;
 

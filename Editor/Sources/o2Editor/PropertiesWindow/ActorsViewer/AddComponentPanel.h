@@ -28,16 +28,16 @@ namespace Editor
 		AddComponentPanel();
 
 		// Constructor
-		AddComponentPanel(ActorViewer* viewer);
+		AddComponentPanel(const Ref<ActorViewer>& viewer);
 
 		// Draws widget, calls OnDrawn for CursorEventsListener
 		void Draw() override;
 
 		// Returns filter widget
-		EditBox* GetFilter() const;
+		const Ref<EditBox>& GetFilter() const;
 
 		// Returns tree widget
-		ComponentsTree* GetTree() const;
+		const Ref<ComponentsTree>& GetTree() const;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -51,11 +51,11 @@ namespace Editor
 		SERIALIZABLE(AddComponentPanel);
 
 	private:
-		ActorViewer* mViewer = nullptr; // Owner actors viewer
+		WeakRef<ActorViewer> mViewer; // Owner actors viewer
 
-		EditBox*        mFilterBox = nullptr; // Components names filter edit box, updates list of component when edit
-		Button*         mAddButton = nullptr; // Add button
-		ComponentsTree* mTree = nullptr;      // Components tree
+		Ref<EditBox>        mFilterBox; // Components names filter edit box, updates list of component when edit
+		Ref<Button>         mAddButton; // Add button
+		Ref<ComponentsTree> mTree;      // Components tree
 
 	private:
 		// Called when add button pressed. Adds selected component to target actors from viewer
@@ -77,10 +77,10 @@ namespace Editor
 	class ComponentsTree : public Tree
 	{
 	public:
-		struct NodeData
+		struct NodeData: public RefCounterable
 		{
-			NodeData*         parent = nullptr;
-			Vector<NodeData*> children;
+			WeakRef<NodeData>     parent ;
+			Vector<Ref<NodeData>> children;
 
 			String name;
 			String path;
@@ -92,7 +92,7 @@ namespace Editor
 			~NodeData();
 
 			void Clear();
-			NodeData* AddChild(const String& name, const Type* type);
+			Ref<NodeData> AddChild(const String& name, const Type* type);
 		};
 
 	public:
@@ -118,14 +118,14 @@ namespace Editor
 
 	private:
 		WString  mFilterStr; // Filtering string
-		NodeData mRoot; // Root properties data node
+		Ref<NodeData> mRoot; // Root properties data node
 
 	private:
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
 
 		// Gets tree node from pool or creates new, enables editor mode
-		TreeNode* CreateTreeNodeWidget() override;
+		Ref<TreeNode> CreateTreeNodeWidget() override;
 
 		// Returns object's parent
 		void* GetObjectParent(void* object) override;
@@ -137,7 +137,7 @@ namespace Editor
 		String GetObjectDebug(void* object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
+		void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
 
 		void OnDeserialized(const DataValue& node) override;
 
@@ -150,7 +150,7 @@ namespace Editor
 	class ComponentsTreeNode : public TreeNode
 	{
 	public:
-		ComponentsTree::NodeData* data = nullptr;
+		Ref<ComponentsTree::NodeData> data;
 
 	public:
 		// Default constructor
@@ -163,7 +163,7 @@ namespace Editor
 		ComponentsTreeNode& operator=(const ComponentsTreeNode& other);
 
 		// Initializes node by data
-		void Setup(ComponentsTree::NodeData* data, ComponentsTree* tree);
+		void Setup(const Ref<ComponentsTree::NodeData>& data, const Ref<ComponentsTree>& tree);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -171,10 +171,10 @@ namespace Editor
 		SERIALIZABLE(ComponentsTreeNode);
 
 	private:
-		Text*   mName;
-		Sprite* mIcon;
+		Ref<Text>   mName;
+		Ref<Sprite> mIcon;
 
-		ComponentsTree* mTree = nullptr;
+		WeakRef<ComponentsTree> mTree;
 
 	private:
 		// Called on deserialization, initializes controls

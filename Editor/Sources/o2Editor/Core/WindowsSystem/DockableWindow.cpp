@@ -23,7 +23,7 @@ namespace Editor
 	{
 		InitializeDragHandles();
 		SetDocked(false);
-		mDockingFrameSample = mnew Sprite();
+		mDockingFrameSample = mmake<Sprite>();
 
 		RetargetStatesAnimations();
 	}

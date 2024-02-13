@@ -33,7 +33,7 @@ namespace Editor
 		virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
 
 		// Returns data widget
-		virtual Widget* GetWidget() const;
+		virtual Ref<Widget> GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -53,7 +53,7 @@ namespace Editor
 		IOBJECT(IWidgetLayerLayoutViewer);
 
 	protected:
-		SpoilerWithHead* mSpoiler = nullptr;
+		Ref<SpoilerWithHead> mSpoiler;
 
 		bool mEnabled = false; // Is viewer enabled 
 

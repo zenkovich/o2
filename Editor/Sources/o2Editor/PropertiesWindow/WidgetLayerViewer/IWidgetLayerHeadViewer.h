@@ -27,7 +27,7 @@ namespace Editor
 		virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
 
 		// Returns data widget
-		virtual Widget* GetWidget() const { return nullptr; }
+		virtual Ref<Widget> GetWidget() const { return nullptr; }
 
 		// Updates properties values
 		virtual void Refresh() {}

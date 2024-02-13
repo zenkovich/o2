@@ -18,10 +18,7 @@ namespace Editor
 	}
 
 	LayersPopup::~LayersPopup()
-	{
-		delete mItemSample;
-		mItemsCache.ForEach([](auto x) { delete x; });
-	}
+	{}
 
 	void LayersPopup::Show(const Vec2F& position)
 	{
@@ -54,16 +51,16 @@ namespace Editor
 
 	void LayersPopup::InitializeControls()
 	{
-		AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
+		AddLayer("back", mmake<Sprite>("ui/UI4_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
 
-		mItemSample = mnew LayerPopupItem();
+		mItemSample = mmake<LayerPopupItem>();
 
-		mAddButtonLayout = mnew HorizontalLayout();
+		mAddButtonLayout = mmake<HorizontalLayout>();
 		*mAddButtonLayout->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
 		mAddButtonLayout->layout->minHeight = 20;
-		mAddButtonLayout->AddLayer("line", mnew Sprite("ui/UI4_Separator.png"),
+		mAddButtonLayout->AddLayer("line", mmake<Sprite>("ui/UI4_Separator.png"),
 								   Layout::HorStretch(VerAlign::Top, 0, 0, 5, -2));
-		mAddButtonLayout->AddChild(mnew Widget());
+		mAddButtonLayout->AddChild(mmake<Widget>());
 
 		mAddButton = o2UI.CreateWidget<Button>("add small");
 		mAddButton->layout->maxWidth = 20;
@@ -82,20 +79,20 @@ namespace Editor
 			auto newLayer = o2Scene.AddLayer(newLayerName);
 			UpdateLayersListAndFit();
 
-			auto item = mChildWidgets.FindOrDefault([=](Widget* x) {
-				if (auto item = dynamic_cast<LayerPopupItem*>(x))
+			auto item = mChildWidgets.FindOrDefault([=](const Ref<Widget>& x) {
+				if (auto item = DynamicCast<LayerPopupItem>(x))
 					return item->mLayer == newLayer;
 
 				return false;
 			});
 
-			dynamic_cast<LayerPopupItem*>(item)->BeginEditName();
+			DynamicCast<LayerPopupItem>(item)->BeginEditName();
 		};
 
 		mAddButtonLayout->AddChild(mAddButton);
 	}
 
-	void LayersPopup::UpdateItemLayout(LayerPopupItem* item, int idx)
+	void LayersPopup::UpdateItemLayout(const Ref<LayerPopupItem>& item, int idx)
 	{
 		float itemHeight = mItemSample->layout->GetMinHeight();
 		float dragModeOffset = 0.0f;
@@ -113,16 +110,16 @@ namespace Editor
 
 		RemoveChild(mAddButtonLayout, false);
 
-		mItemsCache.Add(mChildWidgets.DynamicCast<LayerPopupItem*>());
-		RemoveAllChildren(false);
+		mItemsCache.Add(DynamicCastVector<LayerPopupItem>(mChildWidgets));
+		RemoveAllChildren();
 
 		int idx = 0;
 		for (auto& layer : o2Scene.GetLayers())
 		{
-			LayerPopupItem* item;
+			Ref<LayerPopupItem> item;
 			if (!mItemsCache.IsEmpty())
 			{
-				auto sameLayerItem = mItemsCache.FindOrDefault([=](LayerPopupItem* x) { return x->mLayer == layer; });
+				auto sameLayerItem = mItemsCache.FindOrDefault([=](const Ref<LayerPopupItem>& x) { return x->mLayer == layer; });
 				if (sameLayerItem)
 				{
 					item = sameLayerItem;
@@ -132,10 +129,10 @@ namespace Editor
 					item = mItemsCache.PopBack();
 			}
 			else 
-				item = mItemSample->CloneAs<LayerPopupItem>();
+				item = mItemSample->CloneAsRef<LayerPopupItem>();
 
 			item->SetLayer(layer);
-			item->mPopup = this;
+			item->mPopup = Ref(this);
 			AddChild(item);
 			UpdateItemLayout(item, idx);
 
@@ -152,7 +149,7 @@ namespace Editor
 		FitSizeAndPosition(layout->GetWorldLeftTop());
 	}
 
-	void LayersPopup::BeginDragging(LayerPopupItem* item)
+	void LayersPopup::BeginDragging(const Ref<LayerPopupItem>& item)
 	{
 		mDraggingItem = item;
 		mDragOffset = o2Input.GetCursorPos() - mDraggingItem->layout->GetWorldLeftBottom();
@@ -163,7 +160,7 @@ namespace Editor
 		int idx = 0;
 		for (auto& child : mChildWidgets)
 		{
-			if (auto item = dynamic_cast<LayerPopupItem*>(child))
+			if (auto item = DynamicCast<LayerPopupItem>(child))
 			{
 				if (item != mDraggingItem)
 				{
@@ -190,7 +187,7 @@ namespace Editor
 		int idx = 0;
 		for (auto& child : mChildWidgets)
 		{
-			if (auto item = dynamic_cast<LayerPopupItem*>(child))
+			if (auto item = DynamicCast<LayerPopupItem>(child))
 			{
 				if (item != mDraggingItem)
 				{
@@ -208,7 +205,7 @@ namespace Editor
 		int idx = 0;
 		for (auto& child : mChildWidgets)
 		{
-			if (auto item = dynamic_cast<LayerPopupItem*>(child))
+			if (auto item = DynamicCast<LayerPopupItem>(child))
 			{
 				if (item != mDraggingItem)
 				{
@@ -233,7 +230,7 @@ namespace Editor
 	LayerPopupItem::LayerPopupItem()
 	{
 		layout->minSize = Vec2F(200, 20);
-		AddLayer("drag handle", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
+		AddLayer("drag handle", mmake<Sprite>("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
 
 		mVisibleToggle = o2UI.CreateWidget<Toggle>();
 		*mVisibleToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(20, 0));
@@ -290,7 +287,7 @@ namespace Editor
 		return *this;
 	}
 
-	void LayerPopupItem::SetLayer(SceneLayer* layer)
+	void LayerPopupItem::SetLayer(const Ref<SceneLayer>& layer)
 	{
 		if (mLayer == layer)
 			return;
@@ -340,7 +337,7 @@ namespace Editor
 
 	void LayerPopupItem::OnDragStart(const Input::Cursor& cursor)
 	{
-		mPopup->BeginDragging(this);
+		mPopup->BeginDragging(Ref(this));
 	}
 
 	void LayerPopupItem::OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area)

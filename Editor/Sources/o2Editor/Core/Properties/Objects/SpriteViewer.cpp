@@ -56,7 +56,7 @@ namespace Editor
 		mFillPropertiesSpoiler = o2UI.CreateWidget<Spoiler>();
 		mHiddenProperties->AddChild(mFillPropertiesSpoiler);
 
-		auto fillSpace = mnew Widget();
+		auto fillSpace = mmake<Widget>();
 		fillSpace->layout->minHeight = 5;
 		mFillPropertiesSpoiler->AddChildWidget(fillSpace);
 
@@ -67,7 +67,7 @@ namespace Editor
 		mSlicedPropertiesSpoiler = o2UI.CreateWidget<Spoiler>();
 		mHiddenProperties->AddChild(mSlicedPropertiesSpoiler);
 
-		auto sliceSpace = mnew Widget();
+		auto sliceSpace = mmake<Widget>();
 		sliceSpace->layout->minHeight = 5;
 		mSlicedPropertiesSpoiler->AddChildWidget(sliceSpace);
 
@@ -85,7 +85,7 @@ namespace Editor
 		mTiledPropertiesSpoiler = o2UI.CreateWidget<Spoiler>();
 		mHiddenProperties->AddChild(mTiledPropertiesSpoiler);
 
-		auto tiledSpace = mnew Widget();
+		auto tiledSpace = mmake<Widget>();
 		tiledSpace->layout->minHeight = 5;
 		mTiledPropertiesSpoiler->AddChildWidget(tiledSpace);
 

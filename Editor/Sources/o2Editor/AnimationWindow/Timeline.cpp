@@ -15,18 +15,18 @@ namespace Editor
 		mTextFont = Ref<Font>("stdFont.ttf");
 		mTextFont->CheckCharacters("0123456789.,+-", 10);
 
-		mText = mnew Text(mTextFont);
+		mText = mmake<Text>(mTextFont);
 		mText->horAlign = HorAlign::Middle;
 		mText->verAlign = VerAlign::Bottom;
 		mText->height = 8;
 		mText->color = Color4(44, 62, 80);
 
-		AddLayer("back", mnew Sprite("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14))->transparency = 0.5f;
+		AddLayer("back", mmake<Sprite>("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14))->transparency = 0.5f;
 
-		mBeginMark = mnew Sprite("ui/UI4_time_line_left.png");
-		mEndMark = mnew Sprite("ui/UI4_time_line_right.png");
+		mBeginMark = mmake<Sprite>("ui/UI4_time_line_left.png");
+		mEndMark = mmake<Sprite>("ui/UI4_time_line_right.png");
 
-		mTimeLine = mnew Sprite("ui/UI4_time_line.png");
+		mTimeLine = mmake<Sprite>("ui/UI4_time_line.png");
 
 		mTimeLineEventsArea.isUnderPoint = [&](const Vec2F& pos) {
 			auto rect = layout->GetWorldRect();

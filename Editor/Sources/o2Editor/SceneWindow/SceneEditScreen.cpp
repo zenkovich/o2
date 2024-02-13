@@ -50,10 +50,7 @@ namespace Editor
 	{}
 
 	SceneEditScreen::~SceneEditScreen()
-	{
-		for (auto& tool : mTools)
-			delete tool;
-	}
+	{}
 
 	void SceneEditScreen::Draw()
 	{
@@ -73,7 +70,7 @@ namespace Editor
 		for (auto& handle : mDragHandles)
 			handle->Draw();
 
-		mEditorLayers.SortBy<int>([](SceneEditorLayer* l) { return l->GetOrder(); });
+		mEditorLayers.SortBy<int>([](auto& l) { return l->GetOrder(); });
 
 		for (auto& layer : mEditorLayers)
 		{
@@ -135,16 +132,16 @@ namespace Editor
 
 	void SceneEditScreen::InitializeTools()
 	{
-		mTools.Add(mnew SelectionTool());
-		mTools.Add(mnew MoveTool());
-		mTools.Add(mnew RotateTool());
-		mTools.Add(mnew ScaleTool());
-		mTools.Add(mnew FrameTool());
+		mTools.Add(mmake<SelectionTool>());
+		mTools.Add(mmake<MoveTool>());
+		mTools.Add(mmake<RotateTool>());
+		mTools.Add(mmake<ScaleTool>());
+		mTools.Add(mmake<FrameTool>());
 	}
 
-	HorizontalLayout* SceneEditScreen::InitializeWidgetsContainer(BaseCorner baseCorner)
+	Ref<HorizontalLayout> SceneEditScreen::InitializeWidgetsContainer(BaseCorner baseCorner)
 	{
-		auto controlsWidget = mnew HorizontalLayout();
+		auto controlsWidget = mmake<HorizontalLayout>();
 		*controlsWidget->layout = WidgetLayout::BothStretch();
 		controlsWidget->baseCorner = baseCorner;
 		controlsWidget->spacing = 5;
@@ -172,7 +169,7 @@ namespace Editor
 			mEnabledTool->OnObjectsSelectionChanged(mSelectedObjects);
 
 		onSelectionChanged(mSelectedObjects);
-		o2EditorPropertiesWindow.SetTargets(mSelectedObjects.Convert<IObject*>([](auto x) { return (IObject*)x; }));
+		o2EditorPropertiesWindow.SetTargets(mSelectedObjects.Convert<IObject*>([](auto x) { return (IObject*)x.Get(); }));
 	}
 
 	void SceneEditScreen::RedrawContent()
@@ -182,7 +179,7 @@ namespace Editor
 		o2Debug.Draw(false);
 		DrawSelection();
 
-		mEditorLayers.SortBy<int>([](SceneEditorLayer* l) { return l->GetOrder(); });
+		mEditorLayers.SortBy<int>([](auto& l) { return l->GetOrder(); });
 
 		for (auto& layer : mEditorLayers)
 		{
@@ -220,8 +217,11 @@ namespace Editor
 				if (!layer->visible)
 					continue;
 
-				for (auto& drw : layer->GetDrawables())
-					drw->Draw();
+				for (auto& drawableWeak : layer->GetDrawables()) 
+				{
+					if (auto drawable = drawableWeak.Lock())
+						drawable->Draw();
+				}
 			}
 
 			o2Scene.EndDrawingScene();
@@ -252,7 +252,7 @@ namespace Editor
 		// 	o2Render.DrawLine(bs.offs, bs.offs + bs.yv*100.0f);
 	}
 
-	void SceneEditScreen::SelectObjects(Vector<Ref<SceneEditableObject>> objects, bool additive /*= true*/)
+	void SceneEditScreen::SelectObjects(const Vector<Ref<SceneEditableObject>>& objects, bool additive /*= true*/)
 	{
 		auto prevSelectedObjects = mSelectedObjects;
 
@@ -260,12 +260,12 @@ namespace Editor
 
 		if (mSelectedObjects != prevSelectedObjects)
 		{
-			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
+			auto selectionAction = mmake<SelectAction>(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
 
-	void SceneEditScreen::SelectObject(SceneEditableObject* actor, bool additive /*= true*/)
+	void SceneEditScreen::SelectObject(const Ref<SceneEditableObject>& actor, bool additive /*= true*/)
 	{
 		auto prevSelectedObjects = mSelectedObjects;
 
@@ -273,7 +273,7 @@ namespace Editor
 
 		if (mSelectedObjects != prevSelectedObjects)
 		{
-			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
+			auto selectionAction = mmake<SelectAction>(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
@@ -283,15 +283,15 @@ namespace Editor
 		auto prevSelectedObjects = mSelectedObjects;
 
 		mSelectedObjects = o2Scene.GetAllActors().
-			FindAll([](auto x) { return !x->IsLockedInHierarchy(); }).
-			Convert<SceneEditableObject*>([](auto x) { return dynamic_cast<SceneEditableObject*>(x); });
+			FindAll([](auto& x) { return !x.Lock()->IsLockedInHierarchy(); }).
+			Convert<Ref<SceneEditableObject>>([](auto& x) { return DynamicCast<SceneEditableObject>(x.Lock()); });
 
 		mNeedRedraw = true;
 		OnObjectsSelectedFromThis();
 
 		if (mSelectedObjects != prevSelectedObjects)
 		{
-			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
+			auto selectionAction = mmake<SelectAction>(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
@@ -304,37 +304,37 @@ namespace Editor
 
 		if (mSelectedObjects != prevSelectedObjects)
 		{
-			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
+			auto selectionAction = mmake<SelectAction>(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
 
-	HorizontalLayout* SceneEditScreen::GetLeftTopWidgetsContainer()
+	const Ref<HorizontalLayout>& SceneEditScreen::GetLeftTopWidgetsContainer()
 	{
 		return mLeftTopWidgetsContainer;
 	}
 
-	HorizontalLayout* SceneEditScreen::GetRightTopWidgetsContainer()
+	const Ref<HorizontalLayout>& SceneEditScreen::GetRightTopWidgetsContainer()
 	{
 		return mRightTopWidgetsContainer;
 	}
 
-	HorizontalLayout* SceneEditScreen::GetLeftBottomWidgetsContainer()
+	const Ref<HorizontalLayout>& SceneEditScreen::GetLeftBottomWidgetsContainer()
 	{
 		return mLeftBottomWidgetsContainer;
 	}
 
-	HorizontalLayout* SceneEditScreen::GetRightBottomWidgetsContainer()
+	const Ref<HorizontalLayout>& SceneEditScreen::GetRightBottomWidgetsContainer()
 	{
 		return mRightBottomWidgetsContainer;
 	}
 
-	void SceneEditScreen::AddEditorLayer(SceneEditorLayer* layer)
+	void SceneEditScreen::AddEditorLayer(const Ref<SceneEditorLayer>& layer)
 	{
 		mEditorLayers.Add(layer);
 	}
 
-	void SceneEditScreen::RemoveEditorLayer(SceneEditorLayer* layer)
+	void SceneEditScreen::RemoveEditorLayer(const Ref<SceneEditorLayer>& layer)
 	{
 		mEditorLayers.Remove(layer);
 	}
@@ -351,7 +351,7 @@ namespace Editor
 		return enabled;
 	}
 
-	void SceneEditScreen::SelectTool(const IEditTool* tool)
+	void SceneEditScreen::SelectTool(const Ref<IEditTool>& tool)
 	{
 		if (tool == mEnabledTool)
 			return;
@@ -359,7 +359,7 @@ namespace Editor
 		if (mEnabledTool)
 			mEnabledTool->OnDisabled();
 
-		mEnabledTool = const_cast<IEditTool*>(tool);
+		mEnabledTool = tool;
 		if (auto toggle = mEnabledTool->GetPanelToggle())
 			toggle->SetValue(true);
 
@@ -367,18 +367,18 @@ namespace Editor
 			mEnabledTool->OnEnabled();
 	}
 
-	IEditTool* SceneEditScreen::GetSelectedTool() const
+	const Ref<IEditTool>& SceneEditScreen::GetSelectedTool() const
 	{
 		return mEnabledTool;
 	}
 
-	void SceneEditScreen::AddTool(IEditTool* tool)
+	void SceneEditScreen::AddTool(const Ref<IEditTool>& tool)
 	{
 		mTools.Add(tool);
 		o2EditorTools.AddToolToggle(tool->GetPanelToggle());
 	}
 
-	void SceneEditScreen::RemoveTool(IEditTool* tool)
+	void SceneEditScreen::RemoveTool(const Ref<IEditTool>& tool)
 	{
 		if (tool == mEnabledTool)
 		{
@@ -392,7 +392,7 @@ namespace Editor
 		o2EditorTools.RemoveToolToggle(tool->GetPanelToggle());
 	}
 
-	const Vector<IEditTool*>& SceneEditScreen::GetTools() const
+	const Vector<Ref<IEditTool>>& SceneEditScreen::GetTools() const
 	{
 		return mTools;
 	}
@@ -448,12 +448,12 @@ namespace Editor
 		if (mEnabledTool)
 			mEnabledTool->OnObjectsSelectionChanged(mSelectedObjects);
 
-		auto selectedIObjects = mSelectedObjects.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); });
+		auto selectedIObjects = mSelectedObjects.Convert<IObject*>([](auto& x) { return dynamic_cast<IObject*>(x.Get()); });
 
 		if (mSelectedObjects != prevSelectedObjects ||
 			selectedIObjects != o2EditorPropertiesWindow.GetTargets())
 		{
-			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
+			auto selectionAction = mmake<SelectAction>(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 
 			onSelectionChanged(mSelectedObjects);
@@ -468,7 +468,7 @@ namespace Editor
 		{
 			bool processing = true;
 
-			SceneEditableObject* parent = object->GetEditableParent();
+			auto parent = object->GetEditableParent();
 			while (parent)
 			{
 				if (mSelectedObjects.Contains([&](auto x) { return parent == x; }))
@@ -534,7 +534,7 @@ namespace Editor
 
 	void SceneEditScreen::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group);
 		if (!assetsScroll)
 			return;
 
@@ -550,7 +550,7 @@ namespace Editor
 
 	void SceneEditScreen::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group);
 		if (!assetsScroll)
 			return;
 
@@ -561,7 +561,7 @@ namespace Editor
 
 	void SceneEditScreen::OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group);
 		if (!assetsScroll)
 			return;
 
@@ -576,7 +576,7 @@ namespace Editor
 
 	void SceneEditScreen::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group);
 		if (!assetsScroll)
 			return;
 

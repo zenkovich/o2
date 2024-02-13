@@ -15,9 +15,9 @@ namespace Editor
 {
 	FrameTool::FrameTool()
 	{
-		mLeftTopRotateHandle.SetRegularDrawable(mnew Sprite("ui/UI3_rotate_regular.png"));
-		mLeftTopRotateHandle.SetHoverDrawable(mnew Sprite("ui/UI3_rotate_hover.png"));
-		mLeftTopRotateHandle.SetPressedDrawable(mnew Sprite("ui/UI3_rotate_pressed.png"));
+		mLeftTopRotateHandle.SetRegularDrawable(mmake<Sprite>("ui/UI3_rotate_regular.png"));
+		mLeftTopRotateHandle.SetHoverDrawable(mmake<Sprite>("ui/UI3_rotate_hover.png"));
+		mLeftTopRotateHandle.SetPressedDrawable(mmake<Sprite>("ui/UI3_rotate_pressed.png"));
 		mLeftTopRotateHandle.GetRegularDrawable()->pivot = Vec2F(0, 0);
 		mLeftTopRotateHandle.GetHoverDrawable()->pivot = Vec2F(0, 0);
 		mLeftTopRotateHandle.GetPressedDrawable()->pivot = Vec2F(0, 0);
@@ -27,32 +27,32 @@ namespace Editor
 		mRightTopRotateHandle = mLeftTopRotateHandle;
 		mRightBottomRotateHandle = mLeftTopRotateHandle;
 
-		mLeftTopHandle.SetRegularDrawable(mnew Sprite("ui/UI2_handle_regular.png"));
-		mLeftTopHandle.SetHoverDrawable(mnew Sprite("ui/UI2_handle_select.png"));
-		mLeftTopHandle.SetPressedDrawable(mnew Sprite("ui/UI2_handle_pressed.png"));
+		mLeftTopHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_regular.png"));
+		mLeftTopHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_select.png"));
+		mLeftTopHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_pressed.png"));
 		mLeftTopHandle.pixelPerfect = false;
 
 		mLeftBottomHandle = mLeftTopHandle;
 		mRightTopHandle = mLeftTopHandle;
 		mRightBottomHandle = mLeftTopHandle;
 
-		mLeftHandle.SetRegularDrawable(mnew Sprite("ui/UI2_handle_side_regular.png"));
-		mLeftHandle.SetHoverDrawable(mnew Sprite("ui/UI2_handle_side_select.png"));
-		mLeftHandle.SetPressedDrawable(mnew Sprite("ui/UI2_handle_side_pressed.png"));
+		mLeftHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_side_regular.png"));
+		mLeftHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_side_select.png"));
+		mLeftHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_side_pressed.png"));
 		mLeftHandle.pixelPerfect = false;
 
 		mTopHandle = mLeftHandle;
 		mBottomHandle = mLeftHandle;
 		mRightHandle = mLeftHandle;
 
-		mPivotHandle.SetRegularDrawable(mnew Sprite("ui/UI2_pivot.png"));
-		mPivotHandle.SetHoverDrawable(mnew Sprite("ui/UI2_pivot_select.png"));
-		mPivotHandle.SetPressedDrawable(mnew Sprite("ui/UI2_pivot_pressed.png"));
+		mPivotHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_pivot.png"));
+		mPivotHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_pivot_select.png"));
+		mPivotHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_pivot_pressed.png"));
 		mPivotHandle.checkSnappingFunc = THIS_FUNC(CheckPivotSnapping);
 
-		mAnchorsLeftTopHandle.SetRegularDrawable(mnew Sprite("ui/UI3_anchor_pressed.png"));
-		mAnchorsLeftTopHandle.SetHoverDrawable(mnew Sprite("ui/UI3_anchor_hover.png"));
-		mAnchorsLeftTopHandle.SetPressedDrawable(mnew Sprite("ui/UI3_anchor_regular.png"));
+		mAnchorsLeftTopHandle.SetRegularDrawable(mmake<Sprite>("ui/UI3_anchor_pressed.png"));
+		mAnchorsLeftTopHandle.SetHoverDrawable(mmake<Sprite>("ui/UI3_anchor_hover.png"));
+		mAnchorsLeftTopHandle.SetPressedDrawable(mmake<Sprite>("ui/UI3_anchor_regular.png"));
 		mAnchorsLeftTopHandle.GetRegularDrawable()->pivot = Vec2F(1, 0);
 		mAnchorsLeftTopHandle.GetHoverDrawable()->pivot = Vec2F(1, 0);
 		mAnchorsLeftTopHandle.GetPressedDrawable()->pivot = Vec2F(1, 0);
@@ -61,11 +61,11 @@ namespace Editor
 		mAnchorsLeftBottomHandle = mAnchorsLeftTopHandle;
 		mAnchorsRightTopHandle = mAnchorsLeftTopHandle;
 
-		auto centerAnchorsRegularSprite = mnew Sprite();
+		auto centerAnchorsRegularSprite = mmake<Sprite>();
 		centerAnchorsRegularSprite->SetSize(Vec2F(0, 0));
 		mAnchorsCenter.SetRegularDrawable(centerAnchorsRegularSprite);
-		mAnchorsCenter.SetHoverDrawable(mnew Sprite("ui/UI3_anchors_hover.png"));
-		mAnchorsCenter.SetPressedDrawable(mnew Sprite("ui/UI3_anchors_pressed.png"));
+		mAnchorsCenter.SetHoverDrawable(mmake<Sprite>("ui/UI3_anchors_hover.png"));
+		mAnchorsCenter.SetPressedDrawable(mmake<Sprite>("ui/UI3_anchors_pressed.png"));
 
 		mLeftTopHandle.onChangedPos = THIS_FUNC(OnLeftTopHandle);
 		mLeftHandle.onChangedPos = THIS_FUNC(OnLeftHandle);

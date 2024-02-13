@@ -55,36 +55,6 @@ namespace Editor
 		}
 	}
 
-// 	void DefaultActorPropertiesViewer::Rebuild()
-// 	{
-// 		PushEditorScopeOnStack scope;
-// 
-// 		static Vector<String> hiddenFields ={
-// 			"prototype", "parent", "name", "layer", "layerName", "enabled", "locked", "tags", "transform",
-// 			"parentWidget", "layout", "drawDepth"
-// 		};
-// 
-// 		static Vector<String> additionalFields ={
-// 			"mStates"
-// 		};
-// 
-// 		o2EditorProperties.FreeProperties(mPropertiesContext);
-// 
-// 		auto fields = mActorType->GetFieldsWithBaseClasses();
-// 		if (!o2EditorProperties.IsPrivateFieldsVisible())
-// 		{
-// 			fields.RemoveAll([&](FieldInfo* x) { return hiddenFields.Contains(x->GetName()); });
-// 
-// 			for (auto& fieldName : additionalFields)
-// 			{
-// 				if (auto fieldInfo = fields.FindMatch([&](FieldInfo* x) { return x->GetName() == fieldName; }))
-// 					o2EditorProperties.BuildField(mSpoiler, fieldInfo, mPropertiesContext, "");
-// 			}
-// 		}
-// 
-// 		o2EditorProperties.BuildObjectProperties(mSpoiler, fields, mPropertiesContext, "");
-// 	}
-
 	bool DefaultActorPropertiesViewer::IsEmpty() const
 	{
 		return mViewer && mViewer->IsEmpty();

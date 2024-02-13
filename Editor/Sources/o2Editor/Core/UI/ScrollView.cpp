@@ -11,7 +11,7 @@ namespace Editor
 	ScrollView::ScrollView()
 	{
 		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		mBackColor = Color4(225, 232, 232, 255);
 		mGridColor = Color4(190, 190, 190, 255);
@@ -23,7 +23,7 @@ namespace Editor
 		Widget(other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
 	{
 		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
 
@@ -47,7 +47,7 @@ namespace Editor
 		mBackColor = other.mBackColor;
 		mGridColor = other.mGridColor;
 		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
 

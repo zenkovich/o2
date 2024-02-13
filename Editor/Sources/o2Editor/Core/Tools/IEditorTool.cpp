@@ -22,10 +22,10 @@ namespace Editor
 		toggle->shortcut = GetShortcut();
 		auto rootLayer = toggle->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
-		selectLayer->AddChildLayer("regular", mnew Sprite(GetPanelIcon()),
+		selectLayer->AddChildLayer("regular", mmake<Sprite>(GetPanelIcon()),
 								   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 		
-		selectLayer->AddChildLayer("pressed", mnew Sprite(GetPanelIcon()),
+		selectLayer->AddChildLayer("pressed", mmake<Sprite>(GetPanelIcon()),
 								   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		toggle->AddState("hover", AnimationClip::EaseInOut("layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))

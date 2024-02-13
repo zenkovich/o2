@@ -132,8 +132,8 @@ namespace Editor
 
 		mUIRoot = mnew UIRoot();
 
-		mBackground = mnew Sprite("ui/UI4_Background.png");
-		mBackSign = mnew Sprite("ui/UI4_o2_sign.png");
+		mBackground = mmake<Sprite>("ui/UI4_Background.png");
+		mBackSign = mmake<Sprite>("ui/UI4_o2_sign.png");
 
 		CommonTextures::Initialize();
 
@@ -171,7 +171,7 @@ namespace Editor
 
 		o2Scripts.CollectGarbage();
 
-		//o2Scripts.GetGlobal().SetProperty("widget", mnew Widget());
+		//o2Scripts.GetGlobal().SetProperty("widget", mmake<Widget>());
 
 		// 		ScriptValue tmp(Vector<int>({ 0, 1, 2, 3, 4 }));
 		// 

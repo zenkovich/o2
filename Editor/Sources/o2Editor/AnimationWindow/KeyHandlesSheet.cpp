@@ -19,7 +19,7 @@ namespace Editor
 	KeyHandlesSheet::KeyHandlesSheet() :
 		Widget()
 	{
-		mSelectionFrame = mnew Sprite("ui/UI4_keys_select.png");
+		mSelectionFrame = mmake<Sprite>("ui/UI4_keys_select.png");
 		mSelectionFrame->enabled = false;
 
 		InitializeHandles();

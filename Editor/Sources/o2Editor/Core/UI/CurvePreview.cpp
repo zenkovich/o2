@@ -12,7 +12,7 @@ namespace Editor
 {
 	CurvePreview::CurvePreview()
 	{
-		mSprite = mnew Sprite();
+		mSprite = mmake<Sprite>();
 		AddLayer("image", mSprite);
 	}
 

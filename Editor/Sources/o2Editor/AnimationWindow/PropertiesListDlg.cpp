@@ -38,16 +38,16 @@ namespace Editor
 		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Animation properties")));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 17));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, -2, 0, 20));
-		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_wnd_icon.png"));
+		mWindow->SetIcon(mmake<Sprite>("ui/UI4_tree_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 
 // 		mWindow->GetInternalWidget("closeButton")->layout->position -= Vec2F(2, -2);
 // 		mWindow->GetInternalWidget("optionsButton")->layout->position -= Vec2F(2, -2);
 
-		Widget* upPanel = mnew Widget();
+		Widget* upPanel = mmake<Widget>();
 		upPanel->name = "up panel";
 		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, -1);
-		upPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
+		upPanel->AddLayer("back", mmake<Sprite>("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		Button* searchButton = o2UI.CreateWidget<Button>("search");
 		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));

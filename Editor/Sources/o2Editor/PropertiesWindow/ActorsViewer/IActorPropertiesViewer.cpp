@@ -26,12 +26,9 @@ namespace Editor
 	}
 
 	IActorPropertiesViewer::~IActorPropertiesViewer()
-	{
-		if (mSpoiler)
-			delete mSpoiler;
-	}
+	{}
 
-	Widget* IActorPropertiesViewer::GetWidget() const
+	Ref<Widget> IActorPropertiesViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}

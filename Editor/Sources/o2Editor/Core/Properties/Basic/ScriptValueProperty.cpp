@@ -50,7 +50,7 @@ namespace Editor
 
 		mSpoiler->borderTop = 5;
 
-		mHeaderContainer = mnew HorizontalLayout();
+		mHeaderContainer = mmake<HorizontalLayout>();
 		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 20, 0);
 		mHeaderContainer->baseCorner = BaseCorner::Right;
 		mHeaderContainer->expandHeight = false;
@@ -337,7 +337,7 @@ namespace Editor
 		if (mIsArray)
 		{
 			prop->GetRemoveButton()->onClick = [=]() { Remove(idx); };
-			prop->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"),
+			prop->AddLayer("drag", mmake<Sprite>("ui/UI4_drag_handle.png"),
 						   Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
 		}
 

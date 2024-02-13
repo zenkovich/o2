@@ -30,7 +30,6 @@ namespace Editor
 
 		Ref<PopupWidget> mGizomsView; // Gizoms view
 
-
 	public:
 		// Default constructor
 		SceneWindow();

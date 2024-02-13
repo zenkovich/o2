@@ -25,7 +25,7 @@ namespace Editor
     class SceneHierarchyTree : public Tree
     {
     public:
-        Function<void(Vector<const Ref<SceneEditableObject>&>)> onObjectsSelectionChanged; // Callback on objects selection changed
+        Function<void(const Vector<Ref<SceneEditableObject>>&)> onObjectsSelectionChanged; // Callback on objects selection changed
 
     public:
         // Default constructor

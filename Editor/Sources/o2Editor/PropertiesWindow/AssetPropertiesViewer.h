@@ -29,9 +29,9 @@ namespace Editor
 		IOBJECT(AssetPropertiesViewer);
 
 	protected:
-		Widget* mAssetHeader = nullptr;    // Asset header
-		Label* mAssetNameLabel = nullptr; // Asset name label
-		Button* mSaveButton = nullptr;     // Save asset button
+		Ref<Widget> mAssetHeader;    // Asset header
+		Ref<Label>  mAssetNameLabel; // Asset name label
+		Ref<Button> mSaveButton;     // Save asset button
 
 	protected:
 		// Sets target objects

@@ -64,14 +64,14 @@ namespace Editor
 
     void ColorPickerDlg::InitializeColorPreview()
     {
-        Widget* colorPreviewContainer = mnew Widget();
+        Widget* colorPreviewContainer = mmake<Widget>();
         *colorPreviewContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 30, 0);
 
         Widget* colorPreview = o2UI.CreateWidget<Widget>("colorProperty");
         *colorPreview->layout = WidgetLayout::BothStretch(5, 5, 5, 5);
 
         Image* backImage = mnew Image();
-        backImage->image = mnew Sprite(CommonTextures::checkedBackground, RectI(0, 0, 20, 20));
+        backImage->image = mmake<Sprite>(CommonTextures::checkedBackground, RectI(0, 0, 20, 20));
         backImage->GetImage()->mode = SpriteMode::Tiled;
         *backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
         colorPreview->AddChild(backImage);
@@ -79,7 +79,7 @@ namespace Editor
         Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
         colorLayerBitmap.Fill(Color4::White());
         mColorSampleImage = mnew Image();
-        mColorSampleImage->image = mnew Sprite(colorLayerBitmap);
+        mColorSampleImage->image = mmake<Sprite>(colorLayerBitmap);
         *mColorSampleImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
         colorPreview->AddChild(mColorSampleImage);
         colorPreviewContainer->AddChild(colorPreview);
@@ -89,19 +89,19 @@ namespace Editor
 
     void ColorPickerDlg::InitializePickArea()
     {
-        Widget* pickAreaContainer = mnew Widget();
+        Widget* pickAreaContainer = mmake<Widget>();
         *pickAreaContainer->layout = WidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 1.0f), Vec2F(0, 0), Vec2F(0, -30));
 
-        Widget* pickArea = mnew Widget();
+        Widget* pickArea = mmake<Widget>();
         *pickArea->layout = WidgetLayout::BothStretch(5, 5, 30, 5);
 
-        pickArea->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
+        pickArea->AddLayer("back", mmake<Sprite>("ui/UI4_Editbox_regular.png"),
                            Layout::BothStretch(-9, -9, -9, -9));
 
         mColorPickAreaBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(80, 80));
         mColorPickAreaBitmap->Clear(Color4::White());
         mColorPickAreaTexture = Ref<Texture>(*mColorPickAreaBitmap);
-        mColorPickAreaColor = pickArea->AddLayer("color", mnew Sprite(mColorPickAreaTexture, RectI(0, 0, 80, 80)),
+        mColorPickAreaColor = pickArea->AddLayer("color", mmake<Sprite>(mColorPickAreaTexture, RectI(0, 0, 80, 80)),
                                                  Layout::BothStretch(1, 1, 1, 1));
 
         mColorPickAreaHandle = o2UI.CreateImage("ui/circle_hole_handle.png");
@@ -116,7 +116,7 @@ namespace Editor
         mHUEBarBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(20, 256));
         InitHUEBarBitmap();
         mHUEBarTexture = Ref<Texture>(*mHUEBarBitmap);
-        mHUEBar->AddLayer("color", mnew Sprite(mHUEBarTexture, RectI(0, 0, 20, 256)), Layout::BothStretch(1, 1, 1, 1),
+        mHUEBar->AddLayer("color", mmake<Sprite>(mHUEBarTexture, RectI(0, 0, 20, 256)), Layout::BothStretch(1, 1, 1, 1),
                           0.5f);
 
         mHUEBar->onChange = MakeFunction(this, &ColorPickerDlg::OnHUEEdited);
@@ -174,7 +174,7 @@ namespace Editor
                                                      EditBox*& edit, Bitmap*& bitmap, Ref<Texture>& texture,
                                                      const Function<void(float)>& changeCallback)
     {
-        auto resLayout = mnew Widget();
+        auto resLayout = mmake<Widget>();
         name = o2UI.CreateLabel("R");
         *name->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(30, 20));
         name->horAlign = HorAlign::Left;
@@ -186,9 +186,9 @@ namespace Editor
 
         bitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2F(256, 256));
         texture = Ref<Texture>(*bitmap);
-        bar->AddLayer("color", mnew Sprite(texture, RectI(0, 0, 256, 256)), Layout::BothStretch(1, 1, 1, 1), 0.5f);
+        bar->AddLayer("color", mmake<Sprite>(texture, RectI(0, 0, 256, 256)), Layout::BothStretch(1, 1, 1, 1), 0.5f);
 
-        Sprite* backSprite = mnew Sprite(mChessBackTexture, RectI(0, 0, 20, 20));
+        Sprite* backSprite = mmake<Sprite>(mChessBackTexture, RectI(0, 0, 20, 20));
         backSprite->mode = SpriteMode::Tiled;
         bar->AddLayer("colorBack", backSprite, Layout::BothStretch(1, 1, 1, 1), 0.4f);
 

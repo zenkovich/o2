@@ -180,7 +180,7 @@ namespace Editor
 		void InitializeTools();
 
 		// Creates and configures widgets container with specified base corner
-		HorizontalLayout* InitializeWidgetsContainer(BaseCorner baseCorner);
+		Ref<HorizontalLayout> InitializeWidgetsContainer(BaseCorner baseCorner);
 
 		// Returns true if some handle hovered or pressed by cursor
 		bool IsHandleWorking(const Input::Cursor& cursor) const;

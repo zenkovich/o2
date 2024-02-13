@@ -255,7 +255,7 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::InitializeControls()
 	{
-		mTreeControls = mnew Widget();
+		mTreeControls = mmake<Widget>();
 
 		auto fieldProto = o2EditorProperties.GetFieldPropertyType(&TypeOf(TrackValueType));
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldProto, "standard"));

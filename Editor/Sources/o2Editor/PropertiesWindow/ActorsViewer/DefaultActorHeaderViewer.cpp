@@ -29,7 +29,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mDataView = mnew Widget();
+		mDataView = mmake<Widget>();
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 62;
 
@@ -52,7 +52,7 @@ namespace Editor
 		mDataView->AddChild(mLockProperty);
 
 
-		auto prototypeRoot = mDataView->AddChildWidget(mnew Widget());
+		auto prototypeRoot = mDataView->AddChildWidget(mmake<Widget>());
 		prototypeRoot->name = "prototype";
 		*prototypeRoot->layout = WidgetLayout::BothStretch();
 
@@ -122,31 +122,7 @@ namespace Editor
 	}
 
 	DefaultActorHeaderViewer::~DefaultActorHeaderViewer()
-	{
-		if (mEnableProperty)
-			delete mEnableProperty;
-
-		if (mNameProperty)
-			delete mNameProperty;
-
-		if (mLockProperty)
-			delete mLockProperty;
-
-		if (mPrototypeProperty)
-			delete mPrototypeProperty;
-
-		if (mTagsProperty)
-			delete mTagsProperty;
-
-		if (mLayerProperty)
-			delete mLayerProperty;
-
-		if (mDepthProperty)
-			delete mDepthProperty;
-
-		if (mDataView)
-			delete mDataView;
-	}
+	{}
 
 	void DefaultActorHeaderViewer::SetTargetActors(const Vector<Actor*>& actors)
 	{
@@ -181,7 +157,7 @@ namespace Editor
 		RefreshLayer();
 	}
 
-	Widget* DefaultActorHeaderViewer::GetWidget() const
+	Ref<Widget> DefaultActorHeaderViewer::GetWidget() const
 	{
 		return mDataView;
 	}
@@ -245,13 +221,13 @@ namespace Editor
 		{
 			Vector<UID> viewActors = mActors.Convert<UID>([](Actor* x) { return x->GetAssetID(); });
 			for (auto& id : viewActors)
-				mActors.Add(Ref<ActorAsset>(id)->GetActor());
+				mActors.Add(Ref<ActorAsset>(id)->GetActor().Get());
 		}
 		else
 		{
 			Vector<UInt64> viewActors = mActors.Convert<UInt64>([](Actor* x) { return x->GetID(); });
 			for (auto& id : viewActors)
-				mActors.Add(o2Scene.GetActorByID(id));
+				mActors.Add(o2Scene.GetActorByID(id).Get());
 		}
 
 		o2EditorPropertiesWindow.SetTargets(mActors.Cast<IObject*>());
@@ -284,7 +260,7 @@ namespace Editor
 				continue;
 
 			while (applyActor && !applyActor->GetPrototypeDirectly().IsValid())
-				applyActor = applyActor->GetParent();
+				applyActor = applyActor->GetParent().Lock().Get();
 
 			if (applyActor)
 				applyActors.Add(applyActor);
@@ -296,9 +272,7 @@ namespace Editor
 	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue,
 													 const Vector<DataDocument>& newValue)
 	{
-		PropertyChangeAction* action = mnew PropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
-
+		auto action = mmake<PropertyChangeAction>(o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 		o2EditorApplication.DoneAction(action);
 	}
 

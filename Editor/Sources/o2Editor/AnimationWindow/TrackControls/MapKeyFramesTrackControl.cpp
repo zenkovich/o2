@@ -149,12 +149,12 @@ namespace Editor
 
 	AnimationKeyDragHandle* MapKeyFramesTrackControl::CreateHandle()
 	{
-		AnimationKeyDragHandle* handle = mnew AnimationKeyDragHandle(mnew Sprite("ui/UI4_map_key.png"),
-																	 mnew Sprite("ui/UI4_map_key_hover.png"),
-																	 mnew Sprite("ui/UI4_map_key_pressed.png"),
-																	 mnew Sprite("ui/UI4_selected_map_key.png"),
-																	 mnew Sprite("ui/UI4_selected_map_key_hover.png"),
-																	 mnew Sprite("ui/UI4_selected_map_key_pressed.png"));
+		AnimationKeyDragHandle* handle = mnew AnimationKeyDragHandle(mmake<Sprite>("ui/UI4_map_key.png"),
+																	 mmake<Sprite>("ui/UI4_map_key_hover.png"),
+																	 mmake<Sprite>("ui/UI4_map_key_pressed.png"),
+																	 mmake<Sprite>("ui/UI4_selected_map_key.png"),
+																	 mmake<Sprite>("ui/UI4_selected_map_key_hover.png"),
+																	 mmake<Sprite>("ui/UI4_selected_map_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;

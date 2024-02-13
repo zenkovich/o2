@@ -34,8 +34,8 @@ namespace Editor
     {
         mDragIcon = mnew AssetIcon();
 
-        mHighlightSprite = mnew Sprite();
-        mSelectionSprite = mnew Sprite();
+        mHighlightSprite = mmake<Sprite>();
+        mSelectionSprite = mmake<Sprite>();
 
         mHighlightAnim->SetTarget(mHighlightSprite);
     }

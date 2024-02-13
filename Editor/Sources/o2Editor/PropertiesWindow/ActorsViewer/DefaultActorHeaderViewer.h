@@ -37,7 +37,7 @@ namespace Editor
 		void SetTargetActors(const Vector<Actor*>& actors) override;
 
 		// Returns data widget
-		Widget* GetWidget() const override;
+		Ref<Widget> GetWidget() const override;
 
 		// Updates properties values
 		void Refresh() override;
@@ -47,19 +47,19 @@ namespace Editor
 	public: 
 		Vector<Actor*> mActors;
 
-		Widget* mDataView = nullptr;
+		Ref<Widget> mDataView;
 
-		BooleanProperty*       mEnableProperty = nullptr;
-		StringProperty*        mNameProperty = nullptr;
-		BooleanProperty*       mLockProperty = nullptr;
-		AssetProperty*         mPrototypeProperty = nullptr;
-		TagsProperty*          mTagsProperty = nullptr;
-		SceneLayerRefProperty* mLayerProperty = nullptr;
-		FloatProperty*         mDepthProperty = nullptr;
+		Ref<BooleanProperty>       mEnableProperty;
+		Ref<StringProperty>        mNameProperty;
+		Ref<BooleanProperty>       mLockProperty;
+		Ref<AssetProperty>         mPrototypeProperty;
+		Ref<TagsProperty>          mTagsProperty;
+		Ref<SceneLayerRefProperty> mLayerProperty;
+		Ref<FloatProperty>         mDepthProperty;
 
-		Button* mPrototypeApplyBtn = nullptr;
-		Button* mPrototypeRevertBtn = nullptr;
-		Button* mPrototypeBreakBtn = nullptr;
+		Ref<Button> mPrototypeApplyBtn;
+		Ref<Button> mPrototypeRevertBtn;
+		Ref<Button> mPrototypeBreakBtn;
 
 	protected:
 		// Refreshes layer property

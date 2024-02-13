@@ -29,7 +29,7 @@ namespace Editor
 	{
 		mReady = false;
 
-		mSelectionSprite = mnew Sprite();
+		mSelectionSprite = mmake<Sprite>();
 		mTextFont = Ref<Font>("stdFont.ttf");
 		mTextFont->CheckCharacters("0123456789.,+-", 10);
 
@@ -291,15 +291,15 @@ namespace Editor
 										   const ImageAssetRef& pressed, const ImageAssetRef& selected)
 	{
 		mMainHandleSample.curveInfo = &mHandleSamplesStubInfo;
-		mMainHandleSample = CurveHandle(mnew Sprite(regular), mnew Sprite(hover),
-										mnew Sprite(pressed), mnew Sprite(selected));
+		mMainHandleSample = CurveHandle(mmake<Sprite>(regular), mmake<Sprite>(hover),
+										mmake<Sprite>(pressed), mmake<Sprite>(selected));
 	}
 
 	void CurvesEditor::SetSupportHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed, const ImageAssetRef& selected)
 	{
 		mSupportHandleSample.curveInfo = &mHandleSamplesStubInfo;
-		mSupportHandleSample = CurveHandle(mnew Sprite(regular), mnew Sprite(hover),
-										   mnew Sprite(pressed), mnew Sprite(selected));
+		mSupportHandleSample = CurveHandle(mmake<Sprite>(regular), mmake<Sprite>(hover),
+										   mmake<Sprite>(pressed), mmake<Sprite>(selected));
 	}
 
 	void CurvesEditor::SetAdjustCurvesScale(bool enable)
@@ -394,20 +394,20 @@ namespace Editor
 
 	void CurvesEditor::InitializeTextDrawables()
 	{
-		mTextLeft = mnew Text(mTextFont);
+		mTextLeft = mmake<Text>(mTextFont);
 		mTextLeft->SetHeight(10);
 		mTextLeft->SetHorAlign(HorAlign::Left);
 		mTextLeft->SetVerAlign(VerAlign::Bottom);
 		mTextLeft->color = Color4(96, 125, 139);
 
-		mTextRight = mnew Text(mTextFont);
+		mTextRight = mmake<Text>(mTextFont);
 		mTextRight->SetHeight(10);
 		mTextRight->SetHorAlign(HorAlign::Right);
 		mTextRight->SetVerAlign(VerAlign::Bottom);
 		mTextRight->color = Color4(96, 125, 139);
 
 
-		mTextTop = mnew Text(mTextFont);
+		mTextTop = mmake<Text>(mTextFont);
 		mTextTop->SetHeight(10);
 		mTextTop->SetHorAlign(HorAlign::Left);
 		mTextTop->SetVerAlign(VerAlign::Bottom);
@@ -415,7 +415,7 @@ namespace Editor
 		mTextTop->color = Color4(96, 125, 139);
 
 
-		mTextBottom = mnew Text(mTextFont);
+		mTextBottom = mmake<Text>(mTextFont);
 		mTextBottom->SetHeight(10);
 		mTextBottom->SetHorAlign(HorAlign::Right);
 		mTextBottom->SetVerAlign(VerAlign::Bottom);

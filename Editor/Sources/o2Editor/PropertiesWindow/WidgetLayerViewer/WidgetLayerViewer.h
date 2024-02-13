@@ -32,13 +32,13 @@ namespace Editor
 		const Type* GetViewingObjectType() const override;
 
 		// Sets header viewer
-		void SetHeaderViewer(IWidgetLayerHeaderViewer* viewer);
+		void SetHeaderViewer(const Ref<IWidgetLayerHeaderViewer>& viewer);
 
 		// Sets transform viewer
-		void SetLayoutViewer(IWidgetLayerLayoutViewer* viewer);
+		void SetLayoutViewer(const Ref<IWidgetLayerLayoutViewer>& viewer);
 
 		// Adds new available actor properties viewer type
-		void SetActorPropertiesViewer(IWidgetLayerPropertiesViewer* viewer);
+		void SetActorPropertiesViewer(const Ref<IWidgetLayerPropertiesViewer>& viewer);
 
 		// Updates properties values
 		void Refresh() override;
@@ -48,11 +48,11 @@ namespace Editor
 	protected:
 		Vector<WidgetLayer*> mTargetLayers; // Current target layers
 
-		IWidgetLayerHeaderViewer*     mHeaderViewer = nullptr;     // Layer header viewer
-		IWidgetLayerLayoutViewer*     mLayoutViewer = nullptr;     // Layer layout viewer
-		IWidgetLayerPropertiesViewer* mPropertiesViewer = nullptr; // Layer properties viewer
+		Ref<IWidgetLayerHeaderViewer>     mHeaderViewer;     // Layer header viewer
+		Ref<IWidgetLayerLayoutViewer>     mLayoutViewer;     // Layer layout viewer
+		Ref<IWidgetLayerPropertiesViewer> mPropertiesViewer; // Layer properties viewer
 
-		VerticalLayout* mViewersLayout = nullptr; // Viewers layout
+		Ref<VerticalLayout> mViewersLayout; // Viewers layout
 
 	protected:
 		// Called when some actors on scene were changed

@@ -53,10 +53,10 @@ namespace Editor
 			mSpoiler->onExpand = THIS_FUNC(OnExpand);
 
 		mSpoiler->borderTop = 5;
-		mSpoiler->AddLayer("func icon", mnew Sprite("ui/function_icon.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(6, 0)));
+		mSpoiler->AddLayer("func icon", mmake<Sprite>("ui/function_icon.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(6, 0)));
 		mSpoiler->GetLayer("caption")->layout.offsetLeft = 24;
 
-		mHeaderContainer = mnew HorizontalLayout();
+		mHeaderContainer = mmake<HorizontalLayout>();
 		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 20, 0);
 		mHeaderContainer->baseCorner = BaseCorner::Right;
 		mHeaderContainer->expandHeight = false;
@@ -88,7 +88,7 @@ namespace Editor
 		sampleCaption->horAlign = HorAlign::Left;
 		mWidgetSample->AddChild(sampleCaption);
 
-		auto controllersContainerWrapper = mnew Widget();
+		auto controllersContainerWrapper = mmake<Widget>();
 		*controllersContainerWrapper->layout = WidgetLayout::BothStretch();
 		controllersContainerWrapper->name = "controls";
 		mWidgetSample->AddChild(controllersContainerWrapper);
@@ -310,7 +310,7 @@ namespace Editor
 			auto typeItem = funcDropDown->AddItem();
 			functionsDropdownMap.Add({ nullptr, "" });
 
-			typeItem->AddLayer("back", mnew Sprite(Color4(0, 0, 0, 0)))->transparency = 0.05f;
+			typeItem->AddLayer("back", mmake<Sprite>(Color4(0, 0, 0, 0)))->transparency = 0.05f;
 
 			auto icon = o2UI.CreateImage(iconName);
 			*icon->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20));

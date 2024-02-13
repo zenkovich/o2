@@ -10,10 +10,10 @@ namespace Editor
 	{
 		sceneLayer.tool = this;
 
-		mHandleSample = DragHandle(mnew Sprite("ui/CurveHandle.png"),
-								   mnew Sprite("ui/CurveHandleHover.png"),
-								   mnew Sprite("ui/CurveHandlePressed.png"),
-								   mnew Sprite("ui/CurveHandleSelected.png"));
+		mHandleSample = DragHandle(mmake<Sprite>("ui/CurveHandle.png"),
+								   mmake<Sprite>("ui/CurveHandleHover.png"),
+								   mmake<Sprite>("ui/CurveHandlePressed.png"),
+								   mmake<Sprite>("ui/CurveHandleSelected.png"));
 
 		typedef MeshTopologyTool thisclass;
 

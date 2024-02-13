@@ -13,17 +13,17 @@ namespace Editor
 {
 	MoveTool::MoveTool()
 	{
-		mHorDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_right_move_arrow.png"),
-										 mnew Sprite("ui/UI2_right_move_arrow_select.png"),
-										 mnew Sprite("ui/UI2_right_move_arrow_pressed.png"));
+		mHorDragHandle = SceneDragHandle(mmake<Sprite>("ui/UI2_right_move_arrow.png"),
+										 mmake<Sprite>("ui/UI2_right_move_arrow_select.png"),
+										 mmake<Sprite>("ui/UI2_right_move_arrow_pressed.png"));
 
-		mVerDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_up_move_arrow.png"),
-										 mnew Sprite("ui/UI2_up_move_arrow_select.png"),
-										 mnew Sprite("ui/UI2_up_move_arrow_pressed.png"));
+		mVerDragHandle = SceneDragHandle(mmake<Sprite>("ui/UI2_up_move_arrow.png"),
+										 mmake<Sprite>("ui/UI2_up_move_arrow_select.png"),
+										 mmake<Sprite>("ui/UI2_up_move_arrow_pressed.png"));
 
-		mBothDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_move_tool_center.png"),
-										  mnew Sprite("ui/UI2_move_tool_center_select.png"),
-										  mnew Sprite("ui/UI2_move_tool_center_pressed.png"));
+		mBothDragHandle = SceneDragHandle(mmake<Sprite>("ui/UI2_move_tool_center.png"),
+										  mmake<Sprite>("ui/UI2_move_tool_center_select.png"),
+										  mmake<Sprite>("ui/UI2_move_tool_center_pressed.png"));
 
 		mHorDragHandle.enabled = false;
 		mVerDragHandle.enabled = false;

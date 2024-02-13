@@ -14,17 +14,17 @@ namespace Editor
 {
 	ScaleTool::ScaleTool()
 	{
-		mHorDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_right_scale_arrow.png"),
-										 mnew Sprite("ui/UI2_right_scale_arrow_select.png"),
-										 mnew Sprite("ui/UI2_right_scale_arrow_pressed.png"));
+		mHorDragHandle = SceneDragHandle(mmake<Sprite>("ui/UI2_right_scale_arrow.png"),
+										 mmake<Sprite>("ui/UI2_right_scale_arrow_select.png"),
+										 mmake<Sprite>("ui/UI2_right_scale_arrow_pressed.png"));
 
-		mVerDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_up_scale_arrow.png"),
-										 mnew Sprite("ui/UI2_up_scale_arrow_select.png"),
-										 mnew Sprite("ui/UI2_up_scale_arrow_pressed.png"));
+		mVerDragHandle = SceneDragHandle(mmake<Sprite>("ui/UI2_up_scale_arrow.png"),
+										 mmake<Sprite>("ui/UI2_up_scale_arrow_select.png"),
+										 mmake<Sprite>("ui/UI2_up_scale_arrow_pressed.png"));
 
-		mBothDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_scale_both.png"),
-										  mnew Sprite("ui/UI2_scale_both_select.png"),
-										  mnew Sprite("ui/UI2_scale_both_pressed.png"));
+		mBothDragHandle = SceneDragHandle(mmake<Sprite>("ui/UI2_scale_both.png"),
+										  mmake<Sprite>("ui/UI2_scale_both_select.png"),
+										  mmake<Sprite>("ui/UI2_scale_both_pressed.png"));
 
 		mHorDragHandle.enabled = false;
 		mVerDragHandle.enabled = false;

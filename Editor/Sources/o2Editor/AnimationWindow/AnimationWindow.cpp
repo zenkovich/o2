@@ -149,14 +149,14 @@ namespace Editor
 
 		mWindow->caption = "Animation";
 		mWindow->name = "animation window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_animation_icon.png"));
+		mWindow->SetIcon(mmake<Sprite>("ui/UI4_animation_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
 
 		InitializeUpPanel();
 
-		mWorkArea = mnew Widget();
+		mWorkArea = mmake<Widget>();
 		*mWorkArea->layout = WidgetLayout::BothStretch(0, 0, 0, 18);
 		mWindow->AddChild(mWorkArea);
 
@@ -214,16 +214,16 @@ namespace Editor
 
 	void AnimationWindow::InitializeUpPanel()
 	{
-		mUpPanel = mnew Widget();
+		mUpPanel = mmake<Widget>();
 		*mUpPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20);
-		mUpPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_back.png"), Layout::BothStretch(-4, -4, -5, -5));
+		mUpPanel->AddLayer("back", mmake<Sprite>("ui/UI4_small_panel_back.png"), Layout::BothStretch(-4, -4, -5, -5));
 		mWindow->AddChild(mUpPanel);
 
-		mControlsPanel = mnew HorizontalLayout();
+		mControlsPanel = mmake<HorizontalLayout>();
 		mControlsPanel->name = "controls panel";
 		*mControlsPanel->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(mTreeViewWidth, 20.0f));
 		mControlsPanel->expandWidth = false;
-		mControlsPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
+		mControlsPanel->AddLayer("back", mmake<Sprite>("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		mPreviewToggle = o2UI.CreateWidget<Toggle>("menu preview");
 		mPreviewToggle->onToggle = THIS_FUNC(OnMenuPreviewToggle);
@@ -272,7 +272,7 @@ namespace Editor
 
 	void AnimationWindow::InitializeSeparatorHandle()
 	{
-		mTreeSeparatorHandle = mnew WidgetDragHandle(mnew Sprite("ui/UI4_Ver_separator.png"));
+		mTreeSeparatorHandle = mmake<Widget>DragHandle(mmake<Sprite>("ui/UI4_Ver_separator.png"));
 		mTreeSeparatorHandle->GetRegularDrawable()->pivot = Vec2F(0.5f, 0.5f);
 		mTreeSeparatorHandle->GetRegularDrawable()->szPivot = Vec2F(4, mTreeSeparatorHandle->GetRegularDrawable()->szPivot.Get().y);
 

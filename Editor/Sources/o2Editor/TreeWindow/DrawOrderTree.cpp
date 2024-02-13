@@ -279,7 +279,7 @@ namespace Editor
 
 		o2Scene.ReparentEditableObjects(editableObjects, newParentEditableObject, prevEditableObject);
 
-		action->ObjectsReparented(mParent, prevEditableObject);
+		action->ObjectsReparented(mParent.Lock(), prevEditableObject);
 		o2EditorApplication.DoneAction(action);
 
 		Tree::OnDraggedObjects(objects, newParent, prevObject);
@@ -290,10 +290,13 @@ namespace Editor
 
 	void DrawOrderTree::EnableObjectsGroupReleased(bool value)
 	{
-		auto objects = mEnableTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
-			[](const Ref<Toggle>& x) { return Ref((SceneEditableObject*)(DynamicCast<TreeNode>(x->GetParent().Lock())->GetObject())); });
+		Vector<Ref<SceneEditableObject>> objects = mEnableTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
+			[](const WeakRef<Toggle>& x) {
+				auto toggleParent = DynamicCast<TreeNode>(x.Lock()->GetParent().Lock());
+				return Ref(static_cast<SceneEditableObject*>(toggleParent->GetObject()));
+			});
 
-		auto action = mnew EnableAction(objects, value);
+		auto action = mmake<EnableAction>(objects, value);
 		o2EditorApplication.DoneAction(action);
 	}
 
@@ -302,18 +305,22 @@ namespace Editor
 
 	void DrawOrderTree::LockObjectsGroupReleased(bool value)
 	{
-        auto objects = mLockTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
-            [](const Ref<Toggle>& x) { return Ref((SceneEditableObject*)(DynamicCast<TreeNode>(x->GetParent().Lock())->GetObject())); });
+		Vector<Ref<SceneEditableObject>> objects = mLockTogglesGroup->GetToggled().Convert<Ref<SceneEditableObject>>(
+			[](const WeakRef<Toggle>& x) {
+				auto toggleParent = DynamicCast<TreeNode>(x.Lock()->GetParent().Lock());
+				return Ref(static_cast<SceneEditableObject*>(toggleParent->GetObject()));
+			});
 
-		auto action = mnew LockAction(objects, value);
+		auto action = mmake<LockAction>(objects, value);
 		o2EditorApplication.DoneAction(action);
 	}
 
 	void DrawOrderTree::OnNodesSelectionChanged(Vector<void*> objects)
 	{
-		Vector<Ref<SceneEditableObject>> editableObjects = objects.Cast<Ref<OrderTreeNode>>()
+		Vector<Ref<SceneEditableObject>> editableObjects = objects
+			.Convert<Ref<OrderTreeNode>>([](auto x) { return Ref((OrderTreeNode*)x); })
 			.FindAll([](auto& x) { return x->object; })
-			.Convert<Ref<SceneEditableObject>>([](auto& x) { return Ref((SceneEditableObject*)x->object); });
+			.Convert<Ref<SceneEditableObject>>([](auto& x) { return x->object; });
 
 		onObjectsSelectionChanged(editableObjects);
 		Tree::OnNodesSelectionChanged(objects);

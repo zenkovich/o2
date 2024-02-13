@@ -39,7 +39,7 @@ namespace Editor
 		virtual const Type* GetComponentType() const { return nullptr; }
 
 		// Returns data widget
-		virtual Widget* GetWidget() const;
+		virtual Ref<Widget> GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -61,8 +61,8 @@ namespace Editor
 	protected:
 		Vector<Component*> mTargetComponents; // Target components
 
-		SpoilerWithHead* mSpoiler = nullptr;      // Component's spoiler
-		Button*          mRemoveButton = nullptr; // Remove component button
+		Ref<SpoilerWithHead> mSpoiler;      // Component's spoiler
+		Ref<Button>          mRemoveButton; // Remove component button
 
 		bool mEnabled = false; // Is viewer enabled 
 

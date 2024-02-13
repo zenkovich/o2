@@ -8,7 +8,7 @@ namespace Editor
 
 	AssetPropertiesViewer::AssetPropertiesViewer()
 	{
-		mAssetHeader = mnew Widget();
+		mAssetHeader = mmake<Widget>();
 		*mAssetHeader->layout = WidgetLayout::HorStretch(VerAlign::Top, 5, 5, 25, 5);
 
 		mAssetNameLabel = o2UI.CreateLabel("asset path");

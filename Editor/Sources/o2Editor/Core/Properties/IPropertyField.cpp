@@ -115,7 +115,7 @@ namespace Editor
 	{
 		if (!mRemoveBtn)
 		{
-			auto buttonContainer = mnew Widget();
+			auto buttonContainer = mmake<Widget>();
 			buttonContainer->name = "remove container";
 			buttonContainer->layout->maxWidth = 20;
 

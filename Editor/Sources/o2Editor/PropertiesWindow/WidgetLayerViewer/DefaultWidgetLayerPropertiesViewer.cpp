@@ -57,14 +57,14 @@ namespace Editor
 
 	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
 	{
-		TransformAction* action = new TransformAction(mLayers.Convert<SceneEditableObject*>([](WidgetLayer* layer) { return dynamic_cast<SceneEditableObject*>(layer); }));
+		auto action = mmake<TransformAction>(mLayers.Convert<Ref<SceneEditableObject>>([](WidgetLayer* layer) { return Ref(dynamic_cast<SceneEditableObject*>(layer)); }));
 
 		for (auto& layer : mLayers)
 		{
-			if (Sprite* sprite = dynamic_cast<Sprite*>(layer->GetDrawable()))
+			if (auto sprite = DynamicCast<Sprite>(layer->GetDrawable()))
 				layer->layout.size = sprite->GetImageAsset()->GetSize();
 
-			if (Text* text = dynamic_cast<Text*>(layer->GetDrawable()))
+			if (auto text = DynamicCast<Text>(layer->GetDrawable()))
 				layer->layout.size = text->GetRealSize();
 		}
 

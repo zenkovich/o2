@@ -62,7 +62,7 @@ namespace Editor
 	void ImageSlicesEditorWidget::InitializeSliceHandles()
 	{
 		// Left handle
-		mBorderLeftHandle = mnew WidgetDragHandle(mnew Sprite("ui/ver_slice_line.png"));
+		mBorderLeftHandle = mmake<Widget>DragHandle(mmake<Sprite>("ui/ver_slice_line.png"));
 
 		mBorderLeftHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
 			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
@@ -84,7 +84,7 @@ namespace Editor
 		mBorderLeftHandle->cursorType = CursorType::SizeWE;
 
 		// Right handle
-		mBorderRightHandle = mnew WidgetDragHandle(*mBorderLeftHandle);
+		mBorderRightHandle = mmake<Widget>DragHandle(*mBorderLeftHandle);
 
 		mBorderRightHandle->onChangedPos = [&](const Vec2F& point) {
 			mBordersSmoothValue.right = (float)mPreviewImage->GetImage()->GetOriginalSize().x - point.x;
@@ -95,7 +95,7 @@ namespace Editor
 		mPreviewImage->AddChild(mBorderRightHandle);
 
 		// Top handle
-		mBorderTopHandle = mnew WidgetDragHandle(mnew Sprite("ui/hor_slice_line.png"));
+		mBorderTopHandle = mmake<Widget>DragHandle(mmake<Sprite>("ui/hor_slice_line.png"));
 
 		mBorderTopHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
 			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
@@ -117,7 +117,7 @@ namespace Editor
 		mBorderTopHandle->cursorType = CursorType::SizeNS;
 
 		// Bottom handle
-		mBorderBottomHandle = mnew WidgetDragHandle(*mBorderTopHandle);
+		mBorderBottomHandle = mmake<Widget>DragHandle(*mBorderTopHandle);
 
 		mBorderBottomHandle->onChangedPos = [&](const Vec2F& point) {
 			mBordersSmoothValue.bottom = point.y;
@@ -201,7 +201,7 @@ namespace Editor
 		backLayerBitmap.FillRect(0, 10, 10, 0, color2);
 		backLayerBitmap.FillRect(10, 20, 20, 10, color2);
 
-		Sprite* res = mnew Sprite(backLayerBitmap);
+		Sprite* res = mmake<Sprite>(backLayerBitmap);
 		res->SetMode(SpriteMode::Tiled);
 		return res;
 	}

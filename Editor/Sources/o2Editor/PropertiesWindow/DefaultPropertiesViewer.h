@@ -25,7 +25,7 @@ namespace Editor
 		IOBJECT(DefaultPropertiesViewer);
 
 	protected:
-		ObjectViewer* mViewer; // Object viewer
+		Ref<ObjectViewer> mViewer; // Object viewer
 
 		Vector<IObject*> mTargets; // Viewing targets
 

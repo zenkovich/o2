@@ -27,7 +27,7 @@ namespace Editor
 		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
 
 		// Returns data widget
-		virtual Widget* GetWidget() const { return nullptr; }
+		virtual Ref<Widget> GetWidget() const { return nullptr; }
 
 		// Updates properties values
 		virtual void Refresh() {}

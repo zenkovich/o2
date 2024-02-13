@@ -40,10 +40,11 @@ namespace Editor
 		IOBJECT(DefaultWidgetLayerPropertiesViewer);
 
 	protected:
-		Vector<WidgetLayer*>     mLayers;                  // Target widget layers
-		IObjectPropertiesViewer* mViewer = nullptr;        // Properties viewer
-		Button*                  mFitSizeButton = nullptr; // Fit size of layer by drawable size
-		const Type*              mDrawableType = nullptr;  // Target actor type
+		Vector<WidgetLayer*> mLayers;                 // Target widget layers
+		const Type*          mDrawableType = nullptr; // Target drawable type
+
+		Ref<IObjectPropertiesViewer> mViewer;        // Properties viewer
+		Ref<Button>                  mFitSizeButton; // Fit size of layer by drawable size
 
 	protected:
 		// Fits layer size by drawable size, Called when mFitSizeButton were pressed

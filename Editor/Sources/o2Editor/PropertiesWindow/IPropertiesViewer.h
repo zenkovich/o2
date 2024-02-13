@@ -40,7 +40,7 @@ namespace Editor
 		IOBJECT(IPropertiesViewer);
 
 	protected:
-		Widget* mContentWidget; // Data content widget (turning on/off on enabling/disabling)
+		Ref<Widget> mContentWidget; // Data content widget (turning on/off on enabling/disabling)
 
 		bool mEnabled = false; // Is viewer enabled
 

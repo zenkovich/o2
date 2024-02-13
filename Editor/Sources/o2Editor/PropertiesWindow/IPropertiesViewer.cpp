@@ -7,9 +7,7 @@
 namespace Editor
 {
 	IPropertiesViewer::~IPropertiesViewer()
-	{
-		delete mContentWidget;
-	}
+	{}
 
 	const Type* IPropertiesViewer::GetViewingObjectType() const
 	{

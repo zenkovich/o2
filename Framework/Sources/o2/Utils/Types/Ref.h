@@ -589,9 +589,9 @@ namespace o2
         NewPlaceHelper(const char* location, int line):location(location), line(line) {}
 
         template<typename _type, typename ... _args>
-        Ref<_type> Create(_args&& ... args)
+        Ref<_type> Create(_args ... args)
         {
-            return MakePlace<_type>(location, line, std::forward<_args>(args)...);
+            return MakePlace<_type>(location, line, args ...);
         }
     };
 

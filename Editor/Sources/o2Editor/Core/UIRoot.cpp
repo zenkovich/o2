@@ -11,7 +11,7 @@ namespace Editor
 {
 	UIRoot::UIRoot()
 	{
-		mRootWidget = mnew Widget(ActorCreateMode::NotInScene);
+		mRootWidget = mmake<Widget>(ActorCreateMode::NotInScene);
 	}
 
 	UIRoot::~UIRoot()

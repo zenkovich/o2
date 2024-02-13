@@ -32,7 +32,7 @@ namespace Editor
 		void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
 
 		// Returns data widget
-		Widget* GetWidget() const override;
+		Ref<Widget> GetWidget() const override;
 
 		// Updates properties values
 		void Refresh() override;
@@ -42,11 +42,11 @@ namespace Editor
 	public:
 		Vector<WidgetLayer*> mLayers;
 
-		Widget* mDataView = nullptr;
+		Ref<Widget> mDataView;
 
-		BooleanProperty* mEnableProperty = nullptr;
-		StringProperty*  mNameProperty = nullptr;
-		BooleanProperty* mLockProperty = nullptr;
+		Ref<BooleanProperty> mEnableProperty;
+		Ref<StringProperty>  mNameProperty;
+		Ref<BooleanProperty> mLockProperty;
 
 	protected:
 		// Called when some property changed, stores action for undo

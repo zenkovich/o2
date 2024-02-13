@@ -9,8 +9,8 @@ namespace Editor
 {
 	TexturePreview::TexturePreview()
 	{
-		mTextureSprite = mnew Sprite();
-		mBackgroundSprite = mnew Sprite(CommonTextures::checkedBackground);
+		mTextureSprite = mmake<Sprite>();
+		mBackgroundSprite = mmake<Sprite>(CommonTextures::checkedBackground);
 		mBackgroundSprite->SetMode(SpriteMode::Tiled);
 
 		AddLayer("background", mBackgroundSprite, Layout::BothStretch(0, mLabelHeight, 0, 0));
