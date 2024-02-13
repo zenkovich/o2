@@ -134,7 +134,7 @@ namespace Editor
             .Convert<void*>([](const Ref<AssetInfo>& x) { return (void*)x.Get(); });
 	}
 
-	void AssetsFoldersTree::SetupFoldersTreeNode(TreeNode* node, void* object)
+	void AssetsFoldersTree::SetupFoldersTreeNode(const Ref<TreeNode>& node, void* object)
 	{
 		AssetInfo* assetTreeNode = (AssetInfo*)(void*)object;
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
@@ -143,17 +143,17 @@ namespace Editor
 
 		auto nameLayer = node->layer["name"];
 		if (nameLayer)
-			((Text*)nameLayer->GetDrawable())->text = pathName;
+			DynamicCast<Text>(nameLayer->GetDrawable())->text = pathName;
 	}
 
-	void AssetsFoldersTree::OnFoldersTreeNodeDblClick(TreeNode* node)
+	void AssetsFoldersTree::OnFoldersTreeNodeDblClick(const Ref<TreeNode>& node)
 	{
-		AssetInfo* assetTreeNode = (AssetInfo*)(void*)node->GetObject();
+		auto assetTreeNode = Ref((AssetInfo*)(void*)node->GetObject());
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
 
 		node->SetState("edit", true);
 
-		auto editBox = (EditBox*)node->GetChild("nameEditBox");
+		auto editBox = node->GetChildByType<EditBox>("nameEditBox");
 		editBox->text = (String)pathName;
 		editBox->SelectAll();
 		editBox->Widget::Focus();
@@ -189,7 +189,7 @@ namespace Editor
 		mOpengingFolderFromThis = false;
 	}
 
-	void AssetsFoldersTree::OnFoldersTreeRightClick(TreeNode* node)
+	void AssetsFoldersTree::OnFoldersTreeRightClick(const Ref<TreeNode>& node)
 	{
 		o2UI.FocusWidget(Ref(this));
 		mContextMenu->Show();

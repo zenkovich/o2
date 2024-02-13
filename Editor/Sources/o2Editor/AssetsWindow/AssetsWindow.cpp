@@ -114,7 +114,7 @@ namespace Editor
 
 	void AssetsWindow::InitializeFoldersTree()
 	{
-		mFoldersTree = mnew AssetsFoldersTree();
+		mFoldersTree = mmake<AssetsFoldersTree>();
 		*mFoldersTree->layout = WidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 5.0f, -18.0f, 0.0f, 18.0f);
 
 		mFoldersTree->AddLayer("separator", mmake<Sprite>("ui/UI4_Ver_separator.png"),
@@ -138,7 +138,7 @@ namespace Editor
 
 	void AssetsWindow::InitializeDownPanel()
 	{
-		Widget* downPanel = mmake<Widget>();
+		auto downPanel = mmake<Widget>();
 		downPanel->AddLayer("back", mmake<Sprite>("ui/UI4_small_panel_down_back.png"),
 							Layout::BothStretch(-4, -5, -4, -5));
 		*downPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
@@ -160,12 +160,12 @@ namespace Editor
 
 	void AssetsWindow::InitializeUpPanel()
 	{
-		Widget* upPanel = mmake<Widget>();
+		auto upPanel = mmake<Widget>();
 		upPanel->name = "up panel";
 		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
 		upPanel->AddLayer("back", mmake<Sprite>("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
-		Button* searchButton = o2UI.CreateWidget<Button>("search");
+		auto searchButton = o2UI.CreateWidget<Button>("search");
 		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(1, 1));
 		upPanel->AddChild(searchButton);
 
@@ -402,7 +402,7 @@ namespace Editor
 		o2Assets.RebuildAssets();
 	}
 
-	Sprite* AssetsWindow::GetAssetIconSprite(const Ref<Asset>& asset)
+	Ref<Sprite> AssetsWindow::GetAssetIconSprite(const Ref<Asset>& asset)
 	{
 		const Type& type = asset->GetType();
 

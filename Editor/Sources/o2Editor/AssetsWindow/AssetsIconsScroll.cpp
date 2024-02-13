@@ -32,12 +32,12 @@ namespace Editor
 {
     AssetsIconsScrollArea::AssetsIconsScrollArea()
     {
-        mDragIcon = mnew AssetIcon();
+        mDragIcon = mmake<AssetIcon>();
 
         mHighlightSprite = mmake<Sprite>();
         mSelectionSprite = mmake<Sprite>();
 
-        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetTarget(mHighlightSprite.Get());
     }
 
     AssetsIconsScrollArea::AssetsIconsScrollArea(const AssetsIconsScrollArea& other) :
@@ -54,7 +54,7 @@ namespace Editor
         if (other.mHighlighClip)
             mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
 
-        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetTarget(mHighlightSprite.Get());
         mHighlightAnim->SetClip(mHighlighClip);
 
         RetargetStatesAnimations();
@@ -63,37 +63,23 @@ namespace Editor
     }
 
     AssetsIconsScrollArea::~AssetsIconsScrollArea()
-    {
-        delete mDragIcon;
-        delete mHighlightSprite;
-        delete mSelectionSprite;
-
-        for (auto& kv : mIconsPool)
-        {
-            for (auto& icon : kv.second)
-                delete icon;
-        }
-    }
+    {}
 
     AssetsIconsScrollArea& AssetsIconsScrollArea::operator=(const AssetsIconsScrollArea& other)
     {
-        delete mDragIcon;
-        delete mHighlightSprite;
-        delete mSelectionSprite;
-
         ScrollArea::operator=(other);
 
-        mDragIcon = other.mDragIcon->CloneAs<AssetIcon>();
+        mDragIcon = other.mDragIcon->CloneAsRef<AssetIcon>();
 
         mContextMenu = FindChildByType<ContextMenu>();
 
         mHighlightLayout = other.mHighlightLayout;
-        mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
+        mHighlightSprite = other.mHighlightSprite->CloneAsRef<Sprite>();
         mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
-        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetTarget(mHighlightSprite.Get());
         mHighlightAnim->SetClip(mHighlighClip);
 
-        mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
+        mSelectionSprite = other.mSelectionSprite->CloneAsRef<Sprite>();
 
         RetargetStatesAnimations();
         SetLayoutDirty();
@@ -223,7 +209,7 @@ namespace Editor
     {
         for (auto& child : mChildWidgets)
         {
-            AssetIcon* icon = (AssetIcon*)child;
+            auto icon = DynamicCast<AssetIcon>(child);
             icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.Contains([=](auto x) { return x.first == icon->GetAssetInfo()->meta->ID(); }));
         }
     }
@@ -238,8 +224,9 @@ namespace Editor
         auto assetInfo = mAssetInfos.FindOrDefault([&](auto& x) { return x->meta->ID() == id; });
         ScrollTo((void*)&assetInfo);
 
-        AssetIcon* icon = (AssetIcon*)(mChildWidgets.FindOrDefault([=](Widget* x) {
-            return ((AssetIcon*)x)->GetAssetInfo() == assetInfo; }));
+        auto icon = DynamicCast<AssetIcon>(mChildWidgets.FindOrDefault([=](const Ref<Widget>& x) {
+            return DynamicCast<AssetIcon>(x)->GetAssetInfo() == assetInfo; 
+        }));
 
         if (!icon)
             return;
@@ -331,7 +318,7 @@ namespace Editor
 
             if (mSelectedPreloadedAssets.All([](Ref<Asset>* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
             {
-                targets = mSelectedPreloadedAssets.Convert<IObject*>([](Ref<Asset>* x) { Ref<ActorAsset> asset(DynamicCast<ActorAsset>(*x)); return asset->GetActor(); });
+                targets = mSelectedPreloadedAssets.Convert<IObject*>([](Ref<Asset>* x) { return DynamicCast<ActorAsset>(*x)->GetActor().Get(); });
             }
             else if (mSelectedPreloadedAssets.All([](Ref<Asset>* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
                 targets.Clear();
@@ -386,13 +373,13 @@ namespace Editor
         return result;
     }
 
-    void AssetsIconsScrollArea::SetupItemWidget(Widget* widget, void* item)
+    void AssetsIconsScrollArea::SetupItemWidget(const Ref<Widget>& widget, void* item)
     {
         auto asset = *(Ref<AssetInfo>*)item;
-        AssetIcon* assetIcon = dynamic_cast<AssetIcon*>(widget);
+        auto assetIcon = DynamicCast<AssetIcon>(widget);
 
         auto iconLayer = assetIcon->layer["icon"];
-        auto iconSprite = dynamic_cast<Sprite*>(iconLayer->GetDrawable());
+        auto iconSprite = DynamicCast<Sprite>(iconLayer->GetDrawable());
 
         if (asset->meta->GetAssetType() == &TypeOf(ImageAsset))
         {
@@ -424,10 +411,10 @@ namespace Editor
 
         assetIcon->SetAssetInfo(asset);
         assetIcon->SetState("halfHide", mCuttingAssets.Contains([&](auto x) { return x.first == asset->meta->ID(); }));
-        assetIcon->SetSelectionGroup(this);
+        assetIcon->SetSelectionGroup(Ref(this));
         assetIcon->SetSelected(mSelectedAssets.Contains(Ref(asset)));
         assetIcon->SetDragOnlySelected(true);
-        assetIcon->mOwner = this;
+        assetIcon->mOwner = Ref(this);
     }
 
     void AssetsIconsScrollArea::UpdateVisibleItems()
@@ -435,7 +422,7 @@ namespace Editor
         PushEditorScopeOnStack scope;
         GridLayoutScrollArea::UpdateVisibleItems();
 
-        mVisibleAssetIcons = mChildWidgets.DynamicCast<AssetIcon*>();
+        mVisibleAssetIcons = mChildWidgets.DynamicCast<AssetIcon>();
     }
 
     void AssetsIconsScrollArea::OnFocused()
@@ -502,12 +489,12 @@ namespace Editor
         }
     }
 
-    void AssetsIconsScrollArea::BeginDragging(AssetIcon* icon)
+    void AssetsIconsScrollArea::BeginDragging(const Ref<AssetIcon>& icon)
     {
         mIsDraggingIcons = true;
         mDragEnded = false;
 
-        AssetIcon* dragIcon = nullptr;
+        Ref<AssetIcon> dragIcon;
         for (auto& sel : mSelectedAssets)
         {
             if (auto icon = FindVisibleIcon(sel))
@@ -563,9 +550,9 @@ namespace Editor
 
     void AssetsIconsScrollArea::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
     {
-        if (dynamic_cast<AssetsIconsScrollArea*>(group))
+        if (DynamicCast<AssetsIconsScrollArea>(group))
             OnDroppedFromThis();
-        else if (auto sceneTree = dynamic_cast<SceneHierarchyTree*>(group))
+        else if (auto sceneTree = DynamicCast<SceneHierarchyTree>(group))
             OnDroppedFromSceneTree(sceneTree);
     }
 
@@ -577,7 +564,7 @@ namespace Editor
                 icon->Show();
         }
 
-        AssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
+        auto iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
         if (iconUnderCursor && iconUnderCursor->GetAssetInfo()->meta->GetAssetType() == &TypeOf(FolderAsset))
         {
             String destPath = iconUnderCursor->GetAssetInfo()->path;
@@ -589,18 +576,18 @@ namespace Editor
         }
     }
 
-    void AssetsIconsScrollArea::OnDroppedFromSceneTree(SceneHierarchyTree* sceneTree)
+    void AssetsIconsScrollArea::OnDroppedFromSceneTree(const Ref<SceneHierarchyTree>& sceneTree)
     {
         String destPath = mCurrentPath;
 
-        AssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
+        auto iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
         if (iconUnderCursor && iconUnderCursor->GetAssetInfo()->meta->GetAssetType() == &TypeOf(FolderAsset))
             destPath = iconUnderCursor->GetAssetInfo()->path;
 
         Vector<String> newAssets;
         for (auto& object : sceneTree->GetSelectedObjects())
         {
-            if (Actor* actor = dynamic_cast<Actor*>(object))
+            if (auto actor = DynamicCast<Actor>(object))
             {
                 Ref<ActorAsset> newAsset = actor->MakePrototype();
                 String path = destPath.IsEmpty() ? newAsset->GetActor()->name + String(".proto") : destPath + "/" +
@@ -629,7 +616,7 @@ namespace Editor
         int idx = parentChilds.IndexOf(firstInstObject);
         auto prevActor = idx > 0 ? parentChilds[idx - 1] : nullptr;
 
-        auto createAction = mnew CreateAction(mInstantiatedSceneDragObjects, parent, prevActor);
+        auto createAction = mmake<CreateAction>(mInstantiatedSceneDragObjects, parent, prevActor);
 
         o2EditorApplication.DoneAction(createAction);
     }
@@ -640,7 +627,7 @@ namespace Editor
 
         for (auto& sel : mSelectedAssets)
         {
-            Actor* actor = InstantiateAsset(*sel);
+            auto actor = InstantiateAsset(*sel);
             if (actor)
             {
                 actor->name = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(sel->path));
@@ -651,9 +638,6 @@ namespace Editor
 
     void AssetsIconsScrollArea::ClearInstantiatedDraggingAssets()
     {
-        for (auto& actor : mInstantiatedSceneDragObjects)
-            delete actor;
-
         mInstantiatedSceneDragObjects.Clear();
     }
 
@@ -677,7 +661,7 @@ namespace Editor
         {
             if (child->layout->GetWorldRect().IsIntersects(selectionRect))
             {
-                AssetIcon* icon = dynamic_cast<AssetIcon*>(child);
+                auto icon = DynamicCast<AssetIcon>(child);
                 icon->SetSelected(true);
                 mCurrentSelectingInfos.Add(icon->GetAssetInfo());
             }
@@ -698,7 +682,7 @@ namespace Editor
 
     void AssetsIconsScrollArea::OnCursorRightMouseReleased(const Input::Cursor& cursor)
     {
-        AssetIcon* iconUnderCursor = GetIconUnderPoint(cursor.position);
+        auto iconUnderCursor = GetIconUnderPoint(cursor.position);
         if (iconUnderCursor)
         {
             if (!mSelectedAssets.Contains(iconUnderCursor->GetAssetInfo()))
@@ -770,10 +754,10 @@ namespace Editor
         }
     }
 
-    AssetIcon* AssetsIconsScrollArea::GetAssetIconFromPool(const String& style)
+    Ref<AssetIcon> AssetsIconsScrollArea::GetAssetIconFromPool(const String& style)
     {
         if (!mIconsPool.ContainsKey(style))
-            mIconsPool.Add(style, Vector<AssetIcon*>());
+            mIconsPool.Add(style, Vector<Ref<AssetIcon>>());
 
         int poolResizeStep = 10;
 
@@ -781,29 +765,27 @@ namespace Editor
         {
             for (int i = 0; i < poolResizeStep; i++)
             {
-                AssetIcon* sample = o2UI.CreateWidget<AssetIcon>(style);
+                auto sample = o2UI.CreateWidget<AssetIcon>(style);
                 mIconsPool[style].Add(sample);
             }
         }
 
-        AssetIcon* sample = mIconsPool[style].PopBack();
+        auto sample = mIconsPool[style].PopBack();
         return sample;
     }
 
-    void AssetsIconsScrollArea::FreeAssetIconToPool(AssetIcon* icon)
+    void AssetsIconsScrollArea::FreeAssetIconToPool(const Ref<AssetIcon>& icon)
     {
         if (mIconsPool.ContainsKey(icon->name))
             mIconsPool[icon->name].Add(icon);
-        else
-            delete icon;
     }
 
-    AssetIcon* AssetsIconsScrollArea::FindVisibleIcon(const Ref<AssetInfo>& info)
+    Ref<AssetIcon> AssetsIconsScrollArea::FindVisibleIcon(const Ref<AssetInfo>& info)
     {
-        return mVisibleAssetIcons.FindOrDefault([=](AssetIcon* x) { return x->GetAssetInfo() == info; });
+        return mVisibleAssetIcons.FindOrDefault([=](auto& x) { return x->GetAssetInfo() == info; });
     }
 
-    void AssetsIconsScrollArea::OnAssetDblClick(AssetIcon* icon)
+    void AssetsIconsScrollArea::OnAssetDblClick(const Ref<AssetIcon>& icon)
     {
         AssetInfo iconAssetInfo = *icon->GetAssetInfo();
         auto assetNameLabel = icon->GetChildWidget("nameLabel");
@@ -831,13 +813,13 @@ namespace Editor
         }
     }
 
-    AssetIcon* AssetsIconsScrollArea::GetIconUnderPoint(const Vec2F& point) const
+    Ref<AssetIcon> AssetsIconsScrollArea::GetIconUnderPoint(const Vec2F& point) const
     {
         for (auto& child : mChildWidgets)
         {
             if (child->layout->IsPointInside(point))
             {
-                AssetIcon* icon = dynamic_cast<AssetIcon*>(child);
+                auto icon = DynamicCast<AssetIcon>(child);
                 return icon;
             }
         }
@@ -845,7 +827,7 @@ namespace Editor
         return nullptr;
     }
 
-    Sprite* AssetsIconsScrollArea::GetHighlightDrawable() const
+    const Ref<Sprite>& AssetsIconsScrollArea::GetHighlightDrawable() const
     {
         return mHighlightSprite;
     }
@@ -854,7 +836,7 @@ namespace Editor
     {
         mHighlighClip = animation;
         mHighlightAnim->SetClip(mHighlighClip);
-        mHighlightAnim->SetTarget(mHighlightSprite);
+        mHighlightAnim->SetTarget(mHighlightSprite.Get());
     }
 
     void AssetsIconsScrollArea::SetHighlightLayout(const Layout& layout)
@@ -862,7 +844,7 @@ namespace Editor
         mHighlightLayout = layout;
     }
 
-    Sprite* AssetsIconsScrollArea::GetSelectingDrawable() const
+    const Ref<Sprite>& AssetsIconsScrollArea::GetSelectingDrawable() const
     {
         return mSelectionSprite;
     }
@@ -932,8 +914,9 @@ namespace Editor
         OnItemsUpdated(true);
         ScrollTo((void*)&mNewAsset->GetInfo());
 
-        AssetIcon* icon = (AssetIcon*)(mChildWidgets.FindOrDefault([=](Widget* x) {
-            return ((AssetIcon*)x)->GetAssetInfo() == &mNewAsset->GetInfo(); }));
+        auto icon = DynamicCast<AssetIcon>(mChildWidgets.FindOrDefault([=](const Ref<Widget>& x) {
+            return DynamicCast<AssetIcon>(x)->GetAssetInfo() == &mNewAsset->GetInfo(); 
+        }));
 
         if (!icon)
             return;
@@ -955,18 +938,18 @@ namespace Editor
                            });
     }
 
-    Actor* AssetsIconsScrollArea::InstantiateAsset(const ImageAssetRef& asset)
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const ImageAssetRef& asset)
     {
-        auto actor = mnew Actor();
-        auto comp = mnew ImageComponent(asset);
+        auto actor = mmake<Actor>();
+        auto comp = mmake<ImageComponent>(asset);
         actor->AddComponent(comp);
         comp->FitActorByImage();
         return actor;
     }
 
-    Actor* AssetsIconsScrollArea::InstantiateAsset(const Ref<ActorAsset>& asset)
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const Ref<ActorAsset>& asset)
     {
-        return asset->GetActor()->CloneAs<Actor>();
+        return asset->GetActor()->CloneAsRef<Actor>();
     }
 
     void AssetsIconsScrollArea::OnAssetsPropertiesChanged()
@@ -991,9 +974,9 @@ namespace Editor
         mSelectedPreloadedAssets.Clear();
     }
 
-    void AssetsIconsScrollArea::Select(SelectableDragableObject* object, bool sendOnSelectionChanged)
+    void AssetsIconsScrollArea::Select(const Ref<SelectableDragableObject>& object, bool sendOnSelectionChanged)
     {
-        AssetIcon* icon = dynamic_cast<AssetIcon*>(object);
+        auto icon = DynamicCast<AssetIcon>(object);
         auto info = icon->GetAssetInfo();
 
         if (!mSelectedAssets.Contains(info))
@@ -1006,9 +989,9 @@ namespace Editor
         }
     }
 
-    void AssetsIconsScrollArea::Deselect(SelectableDragableObject* object)
-    {
-        AssetIcon* icon = dynamic_cast<AssetIcon*>(object);
+    void AssetsIconsScrollArea::Deselect(const Ref<SelectableDragableObject>& object)
+	{
+		auto icon = DynamicCast<AssetIcon>(object);
         auto info = icon->GetAssetInfo();
 
         if (mSelectedAssets.Contains(info))
@@ -1020,13 +1003,13 @@ namespace Editor
         }
     }
 
-    void AssetsIconsScrollArea::AddSelectableObject(SelectableDragableObject* object)
+	void AssetsIconsScrollArea::AddSelectableObject(const Ref<SelectableDragableObject>& object)
     {}
 
-    void AssetsIconsScrollArea::RemoveSelectableObject(const Ref<SelectableDragableObject>& object)
+    void AssetsIconsScrollArea::RemoveSelectableObject(SelectableDragableObject* object)
     {}
 
-    void AssetsIconsScrollArea::OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor)
+    void AssetsIconsScrollArea::OnSelectableObjectCursorReleased(const Ref<SelectableDragableObject>& object, const Input::Cursor& cursor)
     {
         // 		if ((mPressedPoint - cursor.position).Length() > 5.0f)
         // 			return;
@@ -1036,7 +1019,7 @@ namespace Editor
 
         if (o2Input.IsKeyDown(VK_SHIFT) && !mSelectedAssets.IsEmpty())
         {
-            auto selectIcon = dynamic_cast<AssetIcon*>(object);
+            auto selectIcon = DynamicCast<AssetIcon>(object);
             auto selectInfo = selectIcon->GetAssetInfo();
             int iconUnderCursorIdx = mAssetInfos.IndexOf(selectInfo);
             int lastSelectedIdx = mAssetInfos.IndexOf(mSelectedAssets.Last());
@@ -1065,7 +1048,7 @@ namespace Editor
         }
     }
 
-    void AssetsIconsScrollArea::OnSelectableObjectBeganDragging(SelectableDragableObject* object)
+    void AssetsIconsScrollArea::OnSelectableObjectBeganDragging(const Ref<SelectableDragableObject>& object)
     {
         if (mSelecting)
         {
@@ -1073,7 +1056,7 @@ namespace Editor
             mSelecting = false;
         }
 
-        if (!o2Input.IsKeyDown(VK_CONTROL) && !mSelectedAssets.Contains(dynamic_cast<AssetIcon*>(object)->GetAssetInfo()))
+        if (!o2Input.IsKeyDown(VK_CONTROL) && !mSelectedAssets.Contains(DynamicCast<AssetIcon>(object)->GetAssetInfo()))
         {
             for (auto& info : mSelectedAssets)
             {
@@ -1088,7 +1071,7 @@ namespace Editor
             Select(object, false);
     }
 
-    Actor* AssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
     {
         if (assetInfo.meta->GetAssetType() == &TypeOf(ImageAsset))
             return InstantiateAsset(ImageAssetRef(assetInfo.meta->ID()));
@@ -1098,27 +1081,27 @@ namespace Editor
         return nullptr;
     }
 
-    Vector<SelectableDragableObject*> AssetsIconsScrollArea::GetSelectedDragObjects() const
+    Vector<Ref<SelectableDragableObject>> AssetsIconsScrollArea::GetSelectedDragObjects() const
     {
-        return mSelectedAssets.Convert<SelectableDragableObject*>([](const Ref<AssetInfo>& x) { return (SelectableDragableObject*)x.Get(); });
+        return DynamicCastVector<SelectableDragableObject>(mSelectedAssets);
     }
 
-    Vector<SelectableDragableObject*> AssetsIconsScrollArea::GetAllObjects() const
+    Vector<Ref<SelectableDragableObject>> AssetsIconsScrollArea::GetAllObjects() const
     {
-        return mChildWidgets.Cast<SelectableDragableObject*>();
+        return DynamicCastVector<SelectableDragableObject>(mChildWidgets);
     }
 
-    void AssetsIconsScrollArea::Select(SelectableDragableObject* object)
+	void AssetsIconsScrollArea::Select(const Ref<SelectableDragableObject>& object)
     {
         Select(object, true);
     }
 
-    void AssetsIconsScrollArea::StartAssetRenaming(AssetIcon* icon, const String& name,
+    void AssetsIconsScrollArea::StartAssetRenaming(const Ref<AssetIcon>& icon, const String& name,
                                                    const Function<void(const String&)>& onCompleted)
     {
         icon->SetState("edit", true);
 
-        auto editBox = (EditBox*)icon->GetChild("nameEditBox");
+        auto editBox = icon->GetChildByType<EditBox>("nameEditBox");
         editBox->text = name;
 
         editBox->SelectAll();

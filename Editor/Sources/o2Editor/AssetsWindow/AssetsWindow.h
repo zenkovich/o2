@@ -99,7 +99,7 @@ namespace Editor
 		void DeleteAssets(const Vector<String>& assetsPaths);
 
 		// Creates and returns an icon sprite for the asset
-		static Sprite* GetAssetIconSprite(const Ref<Asset>& asset);
+		static Ref<Sprite> GetAssetIconSprite(const Ref<Asset>& asset);
 		 
 		IOBJECT(AssetsWindow);
 
