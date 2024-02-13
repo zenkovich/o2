@@ -34,17 +34,13 @@ namespace Editor
 	}
 
 	KeyHandlesSheet::~KeyHandlesSheet()
-	{
-		delete mSelectionFrame;
-	}
+	{}
 
 	KeyHandlesSheet& KeyHandlesSheet::operator=(const KeyHandlesSheet& other)
 	{
-		delete mSelectionFrame;
-
 		Widget::operator=(other);
 		
-		mSelectionFrame = other.mSelectionFrame->CloneAs<Sprite>();
+		mSelectionFrame = other.mSelectionFrame->CloneAsRef<Sprite>();
 
 		return *this;
 	}
@@ -107,7 +103,7 @@ namespace Editor
 		}
 	}
 
-	void KeyHandlesSheet::SetAnimation(AnimationClip* animation)
+	void KeyHandlesSheet::SetAnimation(const Ref<AnimationClip>& animation)
 	{
 	}
 
@@ -116,13 +112,13 @@ namespace Editor
 		return Widget::IsUnderPoint(point);
 	}
 
-	void KeyHandlesSheet::RegTrackControl(ITrackControl* trackControl, const std::string& path)
+	void KeyHandlesSheet::RegTrackControl(const Ref<ITrackControl>& trackControl, const std::string& path)
 	{
 		mTrackControls.Add(trackControl);
 		mTrackControlsMap.Add({ path, trackControl });
 	}
 
-	void KeyHandlesSheet::UnregTrackControl(ITrackControl* trackControl)
+	void KeyHandlesSheet::UnregTrackControl(const Ref<ITrackControl>& trackControl)
 	{
 		mTrackControls.Remove(trackControl);		
 		mTrackControlsMap.RemoveAll([=](auto& p) { return p.second == trackControl; });
@@ -137,12 +133,14 @@ namespace Editor
 
 	void KeyHandlesSheet::AddHandle(const Ref<DragHandle>& handle)
 	{
-		if (auto animHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
+		if (auto animHandle = DynamicCast<AnimationKeyDragHandle>(handle))
 		{
-			if (!mHandlesGroups.ContainsKey(animHandle->track))
-				mHandlesGroups.Add(animHandle->track, {});
+			auto track = animHandle->track.Lock();
 
-			mHandlesGroups[animHandle->track].Add(animHandle);
+			if (!mHandlesGroups.ContainsKey(track))
+				mHandlesGroups.Add(track, {});
+
+			mHandlesGroups[track].Add(animHandle);
 		}
 
 		SelectableDragHandlesGroup::AddHandle(handle);
@@ -151,7 +149,7 @@ namespace Editor
 	void KeyHandlesSheet::RemoveHandle(DragHandle* handle)
 	{
 		if (auto animHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
-			mHandlesGroups[animHandle->track].Remove(animHandle);
+			mHandlesGroups[Ref(animHandle->track)].RemoveFirst([](auto& x) { return x == animHandle; });
 
 		SelectableDragHandlesGroup::RemoveHandle(handle);
 	}

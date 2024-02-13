@@ -46,26 +46,19 @@ namespace Editor
 	{ }
 
 	AnimationTimeline::~AnimationTimeline()
-	{
-		delete mText;
-		delete mTimeLine;
-	}
+	{}
 
 	AnimationTimeline& AnimationTimeline::operator=(const AnimationTimeline& other)
 	{
-		delete mText;
-		delete mBeginMark;
-		delete mEndMark;
-
 		Widget::operator=(other);
 
 		mTextFont = other.mTextFont;
-		mText = other.mText->CloneAs<Text>();
+		mText = other.mText->CloneAsRef<Text>();
 
-		mBeginMark = other.mBeginMark->CloneAs<Sprite>();
-		mEndMark = other.mEndMark->CloneAs<Sprite>();
+		mBeginMark = other.mBeginMark->CloneAsRef<Sprite>();
+		mEndMark = other.mEndMark->CloneAsRef<Sprite>();
 
-		mTimeLine = other.mTimeLine->CloneAs<Sprite>();
+		mTimeLine = other.mTimeLine->CloneAsRef<Sprite>();
 
 		return *this;
 	}
@@ -308,7 +301,7 @@ namespace Editor
 			onViewChanged();
 	}
 
-	void AnimationTimeline::SetAnimation(AnimationClip* animation, AnimationPlayer* player /*= nullptr*/)
+	void AnimationTimeline::SetAnimation(const Ref<AnimationClip>& animation, const Ref<AnimationPlayer>& player /*= nullptr*/)
 	{
 		if (mAnimation)
 			mAnimation->onDurationChange -= THIS_FUNC(UpdateDuration);
@@ -395,12 +388,12 @@ namespace Editor
 		mViewMoveDisabled = disabled;
 	}
 
-	Text* AnimationTimeline::GetText() const
+	const Ref<Text>& AnimationTimeline::GetText() const
 	{
 		return mText;
 	}
 
-	void AnimationTimeline::SetScrollBar(HorizontalScrollBar* scrollBar)
+	void AnimationTimeline::SetScrollBar(const Ref<HorizontalScrollBar>& scrollBar)
 	{
 		mScrollBar = scrollBar;
 		mScrollBar->onChangeByUser = [&](float value) { mViewScroll = value; };
@@ -408,7 +401,7 @@ namespace Editor
 		AddChild(scrollBar);
 	}
 
-	HorizontalScrollBar* AnimationTimeline::GetScrollBar() const
+	const Ref<HorizontalScrollBar>& AnimationTimeline::GetScrollBar() const
 	{
 		return mScrollBar;
 	}

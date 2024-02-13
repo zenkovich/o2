@@ -89,7 +89,7 @@ namespace Editor
 	{
 		SetState("selected", selected);
 		if (mOwner)
-			SetState("focused", mOwner->IsFocused());
+			SetState("focused", mOwner.Lock()->IsFocused());
 
 		mIsSelected = selected;
 
@@ -102,13 +102,13 @@ namespace Editor
 	void AssetIcon::OnCursorDblClicked(const Input::Cursor& cursor)
 	{
 		if (mOwner)
-			mOwner->OnAssetDblClick(this);
+			mOwner.Lock()->OnAssetDblClick(Ref(this));
 	}
 
 	void AssetIcon::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
 		if (mOwner)
-			mOwner->OnCursorRightMouseReleased(cursor);
+			mOwner.Lock()->OnCursorRightMouseReleased(cursor);
 	}
 
 	void AssetIcon::OnCursorEnter(const Input::Cursor& cursor)
@@ -149,25 +149,25 @@ namespace Editor
 	void AssetIcon::OnDragStart(const Input::Cursor& cursor)
 	{
 		if (mOwner)
-			mOwner->BeginDragging(this);
+			mOwner.Lock()->BeginDragging(Ref(this));
 	}
 
 	void AssetIcon::OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area)
 	{
 		if (mOwner)
-			mOwner->UpdateDraggingGraphics();
+			mOwner.Lock()->UpdateDraggingGraphics();
 	}
 
 	void AssetIcon::OnDragEnd(const Input::Cursor& cursor)
 	{
 		if (mOwner)
-			mOwner->mDragEnded = true;
+			mOwner.Lock()->mDragEnded = true;
 	}
 
 	void AssetIcon::OnSelected()
 	{
 		if (mOwner)
-			mOwner->Focus();
+			mOwner.Lock()->Focus();
 	}
 
 	void AssetIcon::OnDeselected()
@@ -176,7 +176,7 @@ namespace Editor
 	void AssetIcon::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		if (mOwner)
-			mOwner->OnDropped(group);
+			mOwner.Lock()->OnDropped(group);
 	}
 
 }

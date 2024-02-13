@@ -28,13 +28,13 @@ namespace Editor
 		~PropertiesListDlg();
 
 		// Shows animation properties window for actor and animation
-		static void Show(AnimationClip* animation, Ref<Actor> actor);
+		static void Show(const Ref<AnimationClip>& animation, Ref<Actor> actor);
 
 	private:
-		o2::Window* mWindow = nullptr;
-		EditBox*    mFilter = nullptr;
+		Ref<o2::Window> mWindow;
+		Ref<EditBox>    mFilter;
 
-		AnimationPropertiesTree* mPropertiesTree = nullptr;
+		Ref<AnimationPropertiesTree> mPropertiesTree;
 
 	private:
 		// Initializes window and controls
@@ -48,10 +48,10 @@ namespace Editor
 	class AnimationPropertiesTree : public Tree
 	{
 	public:
-		struct NodeData
+		struct NodeData: public RefCounterable
 		{
-			NodeData*         parent = nullptr;
-			Vector<NodeData*> children;
+			WeakRef<NodeData>     parent;
+			Vector<Ref<NodeData>> children;
 
 			String name;
 			String path;
@@ -64,7 +64,7 @@ namespace Editor
 			~NodeData();
 
 			void Clear();
-			NodeData* AddChild(const String& name, const Type* type);
+			Ref<NodeData> AddChild(const String& name, const Type* type);
 		};
 
 	public:
@@ -78,7 +78,7 @@ namespace Editor
 		AnimationPropertiesTree& operator=(const AnimationPropertiesTree& other);
 
 		// Initializes properties
-		void Initialize(AnimationClip* animation, Ref<Actor> actor);
+		void Initialize(const Ref<AnimationClip>& animation, Ref<Actor> actor);
 
 		// Sets filter and refreshes tree
 		void SetFilter(const WString& filter);
@@ -91,33 +91,34 @@ namespace Editor
 	private:
 		WString mFilterStr; // Filtering string
 
-		AnimationClip* mAnimation = nullptr; // Looking animation
-		Ref<Actor>       mActor;               // Looking actor
+		Ref<AnimationClip> mAnimation; // Looking animation
+		Ref<Actor>         mActor;     // Looking actor
 
-		NodeData         mRoot;         // Root properties data node
+		Ref<NodeData> mRoot; // Root properties data node
+
 		Vector<IObject*> mPassedObject; // Tree processing passed objects
 
 	private:
 		// Initializes parameters tree node by object properties
-		void InitializeTreeNode(NodeData* node, IObject* object);
+		void InitializeTreeNode(const Ref<NodeData>& node, IObject* object);
 
 		// Processes object base types and fields
-		void ProcessObject(void* object, const ObjectType* type, NodeData* node);
+		void ProcessObject(void* object, const ObjectType* type, const Ref<NodeData>& node);
 
 		// Processes tree node property. Checks type
-		void ProcessTreeNode(void* object, const Type* type, const String& name, NodeData* node);
+		void ProcessTreeNode(void* object, const Type* type, const String& name, const Ref<NodeData>& node);
 
 		// initializes single property node
-		void InitializePropertyNode(NodeData* node, const String& name, const Type* type);
+		void InitializePropertyNode(const Ref<NodeData>& node, const String& name, const Type* type);
 
 		// Initializes sub tree for object
-		void InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, const String& name, NodeData* node);
+		void InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, const String& name, const Ref<NodeData>& node);
 
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
 
 		// Gets tree node from pool or creates new, enables editor mode
-		TreeNode* CreateTreeNodeWidget() override;
+		Ref<TreeNode> CreateTreeNodeWidget() override;
 
 		// Returns object's parent
 		void* GetObjectParent(void* object) override;
@@ -129,7 +130,7 @@ namespace Editor
 		String GetObjectDebug(void* object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
+		void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
 
 		// Called when tree node was double clicked
 		void OnNodeDblClick(const Ref<TreeNode>& nodeWidget) override;
@@ -156,7 +157,7 @@ namespace Editor
 		AnimationPropertiesTreeNode& operator=(const AnimationPropertiesTreeNode& other);
 
 		// Initializes node by data
-		void Setup(AnimationPropertiesTree::NodeData* data, AnimationPropertiesTree* tree);
+		void Setup(const Ref<AnimationPropertiesTree::NodeData>& data, const Ref<AnimationPropertiesTree>& tree);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -164,14 +165,14 @@ namespace Editor
 		SERIALIZABLE(AnimationPropertiesTreeNode);
 
 	private:
-		Text*   mName;         // Name of property
-		Sprite* mIcon;         // Property icon. Used only for finite properties
-		Button* mAddButton;    // Add button, it is enabled when animation track isn't added to animation, adds this value to animation
-		Button* mRemoveButton; // Remove button, it is enabled when animation track is added to animation, removes this value to animation
+		Ref<Text>   mName;         // Name of property
+		Ref<Sprite> mIcon;         // Property icon. Used only for finite properties
+		Ref<Button> mAddButton;    // Add button, it is enabled when animation track isn't added to animation, adds this value to animation
+		Ref<Button> mRemoveButton; // Remove button, it is enabled when animation track is added to animation, removes this value to animation
 
-		AnimationPropertiesTree::NodeData* mData = nullptr; // Data node pointer
+		WeakRef<AnimationPropertiesTree::NodeData> mData; // Data node pointer
 
-		AnimationPropertiesTree* mTree = nullptr; // Owner tree
+		WeakRef<AnimationPropertiesTree> mTree; // Owner tree
 
 	private:
 		// Called on deserialization, initializes controls

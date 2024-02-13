@@ -37,7 +37,7 @@ namespace Editor
 		KeyHandlesSheet& operator=(const KeyHandlesSheet& other);
 
 		// Sets animation. Used for batch change of keys
-		void SetAnimation(AnimationClip* animation);
+		void SetAnimation(const Ref<AnimationClip>& animation);
 
 		// Updates selection frame
 		void Update(float dt) override;
@@ -52,10 +52,10 @@ namespace Editor
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Registers animation track track control
-		void RegTrackControl(ITrackControl* trackControl, const std::string& path);
+		void RegTrackControl(const Ref<ITrackControl>& trackControl, const std::string& path);
 
 		// Unregisters animation track track control
-		void UnregTrackControl(ITrackControl* trackControl);
+		void UnregTrackControl(const Ref<ITrackControl>& trackControl);
 
 		// Unregisters all tracks controls
 		void UnregAllTrackControls();
@@ -89,25 +89,25 @@ namespace Editor
 
 		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 
-		Vector<ITrackControl*>               mTrackControls;    // List of actual track controls
-		Vector<Pair<String, ITrackControl*>> mTrackControlsMap; // Map of actual track controls, key is Animation track path
+		Vector<Ref<ITrackControl>>               mTrackControls;    // List of actual track controls
+		Vector<Pair<String, Ref<ITrackControl>>> mTrackControlsMap; // Map of actual track controls, key is Animation track path
 
-		Map<IAnimationTrack*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by Animation track, used for fast searching handles for same Animation track
+		Map<Ref<IAnimationTrack>, Vector<Ref<AnimationKeyDragHandle>>> mHandlesGroups; // All handles grouped by Animation track, used for fast searching handles for same Animation track
 
-		ContextMenu* mContextMenu = nullptr; // Keys context menu
-		Vec2F        mContextMenuPressPoint; // Cursor position when right button were clicked. When trying to show context menu checking delta between current cursor position and this 
+		Ref<ContextMenu> mContextMenu; // Keys context menu
+		Vec2F            mContextMenuPressPoint; // Cursor position when right button were clicked. When trying to show context menu checking delta between current cursor position and this 
 
 		bool mNeedUpdateSelectionFrame = false; // True when selection frame required to update
 
 		bool mHandleHasMoved = false; // it is true when some handle was selected and moved, resets on handle pressing
 
-		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
-		RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
+		Ref<Sprite> mSelectionFrame; // Selected handles frame drawing sprite
+		RectF       mSelectionRect;  // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
 
 		Vec2F   mBeginSelectPoint;         // Begin frame selection point, where x is position on timeline, y is line number
 		bool    mIsFrameSelecting = false; // It is true when user selection by frame now
 
-		Vector<DragHandle*> mBeginSelectHandles; // handles list, that were selected before frame selecting
+		Vector<Ref<DragHandle>> mBeginSelectHandles; // handles list, that were selected before frame selecting
 
 		DragHandle mLeftFrameDragHandle;   // Left frame border drag handle, resizing selected handles rect
 		DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
