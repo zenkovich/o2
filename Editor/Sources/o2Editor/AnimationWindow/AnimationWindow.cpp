@@ -45,15 +45,15 @@ namespace Editor
 		if (o2Input.IsKeyDown(VK_F1))
 		{
 			int line = 0;
-			for (int i = 0; i < mActionsList.GetUndoActions().Count(); i++, line++)
-				o2Debug.DrawText(Vec2F(0, line*20.0f), mActionsList.GetUndoActions()[i]->GetName());
+			for (int i = 0; i < mActionsList->GetUndoActions().Count(); i++, line++)
+				o2Debug.DrawText(Vec2F(0, line*20.0f), mActionsList->GetUndoActions()[i]->GetName());
 
-			for (int i = 0; i < mActionsList.GetRedoActions().Count(); i++, line++)
-				o2Debug.DrawText(Vec2F(0, line*20.0f), mActionsList.GetRedoActions()[i]->GetName(), Color4::Red());
+			for (int i = 0; i < mActionsList->GetRedoActions().Count(); i++, line++)
+				o2Debug.DrawText(Vec2F(0, line*20.0f), mActionsList->GetRedoActions()[i]->GetName(), Color4::Red());
 		}
 	}
 
-	void AnimationWindow::SetAnimation(AnimationClip* animation, AnimationPlayer* player /*= nullptr*/)
+	void AnimationWindow::SetAnimation(const Ref<AnimationClip>& animation, const Ref<AnimationPlayer>& player /*= nullptr*/)
 	{
 		if (mAnimation)
 			mAnimation->onChanged -= THIS_FUNC(OnAnimationChanged);
@@ -61,13 +61,10 @@ namespace Editor
 		if (mPlayer)
 		{
 			mPlayer->onUpdate -= THIS_FUNC(OnAnimationUpdate);
-
-			if (mOwnPlayer)
-				delete mPlayer;
 		}
 
 		if (mAnimationEditable)
-			mAnimationEditable->EndAnimationEdit();
+			mAnimationEditable.Lock()->EndAnimationEdit();
 
 		mAnimation = animation;
 		mPlayer = player;
@@ -97,27 +94,27 @@ namespace Editor
 		mCurves->SetAnimation(animation);
 	}
 
-	void AnimationWindow::SetAnimationEditable(IEditableAnimation* editable)
+	void AnimationWindow::SetAnimationEditable(const Ref<IEditableAnimation>& editable)
 	{
 		if (mAnimationEditable)
-			mAnimationEditable->EndAnimationEdit();
+			mAnimationEditable.Lock()->EndAnimationEdit();
 
 		mAnimationEditable = editable;
 
 		if (mAnimationEditable)
 		{
 			mPreviewToggle->value = true;
-			mAnimationEditable->BeginAnimationEdit();
+			mAnimationEditable.Lock()->BeginAnimationEdit();
 		}
 	}
 
-	void AnimationWindow::SetTarget(Ref<Actor> actor)
+	void AnimationWindow::SetTarget(const Ref<Actor>& actor)
 	{
 		mTargetActor = actor;
 
 		if (!mPlayer && mAnimation)
 		{
-			mPlayer = mnew AnimationPlayer(mTargetActor.Get(), Ref(mAnimation));
+			mPlayer = mmake<AnimationPlayer>(mTargetActor.Get(), Ref(mAnimation));
 			SetAnimation(mAnimation, mPlayer);
 			mOwnPlayer = true;
 		}
@@ -166,10 +163,11 @@ namespace Editor
 		InitializeTimeline();
 		InitializeSeparatorHandle();
 
-		mCurves->mAnimationWindow = this;
-		mHandlesSheet->mAnimationWindow = this;
-		mTimeline->mAnimationWindow = this;
-		mTree->mAnimationWindow = this;
+		auto thisRef = Ref(this);
+		mCurves->mAnimationWindow = thisRef;
+		mHandlesSheet->mAnimationWindow = thisRef;
+		mTimeline->mAnimationWindow = thisRef;
+		mTree->mAnimationWindow = thisRef;
 
 		SetCurvesMode(false);
 
@@ -178,7 +176,7 @@ namespace Editor
 
 	void AnimationWindow::InitializeHandlesSheet()
 	{
-		mHandlesSheet = mnew KeyHandlesSheet();
+		mHandlesSheet = mmake<KeyHandlesSheet>();
 		*mHandlesSheet->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 0);
 		mWorkArea->AddChild(mHandlesSheet);
 	}
@@ -193,7 +191,7 @@ namespace Editor
 
 	void AnimationWindow::InitializeTimeline()
 	{
-		mTimeline = mnew AnimationTimeline();
+		mTimeline = mmake<AnimationTimeline>();
 		*mTimeline->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0.0f, 0.0f, 0.0f);
 
 		mTimeScroll = o2UI.CreateHorScrollBar();
@@ -206,7 +204,7 @@ namespace Editor
 
 	void AnimationWindow::InitializeCurvesSheet()
 	{
-		mCurves = mnew CurvesSheet();
+		mCurves = mmake<CurvesSheet>();
 		*mCurves->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 0);
 		mCurves->Disable();
 		mWorkArea->AddChild(mCurves);
@@ -272,7 +270,7 @@ namespace Editor
 
 	void AnimationWindow::InitializeSeparatorHandle()
 	{
-		mTreeSeparatorHandle = mmake<Widget>DragHandle(mmake<Sprite>("ui/UI4_Ver_separator.png"));
+		mTreeSeparatorHandle = mmake<WidgetDragHandle>(mmake<Sprite>("ui/UI4_Ver_separator.png"));
 		mTreeSeparatorHandle->GetRegularDrawable()->pivot = Vec2F(0.5f, 0.5f);
 		mTreeSeparatorHandle->GetRegularDrawable()->szPivot = Vec2F(4, mTreeSeparatorHandle->GetRegularDrawable()->szPivot.Get().y);
 
@@ -333,7 +331,7 @@ namespace Editor
 		if (mPlayer)
 			mPlayer->SetLoop(loop ? Loop::Repeat : Loop::None);
 
-		o2Scene.OnObjectChanged(mTargetActor.Get());
+		o2Scene.OnObjectChanged(mTargetActor);
 	}
 
 	void AnimationWindow::OnSearchEdited(const WString& search)
@@ -351,9 +349,9 @@ namespace Editor
 		if (mAnimationEditable)
 		{
 			if (value)
-				mAnimationEditable->BeginAnimationEdit();
+				mAnimationEditable.Lock()->BeginAnimationEdit();
 			else
-				mAnimationEditable->EndAnimationEdit();
+				mAnimationEditable.Lock()->EndAnimationEdit();
 		}
 	}
 

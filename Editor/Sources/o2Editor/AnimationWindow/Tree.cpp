@@ -179,7 +179,7 @@ namespace Editor
 			int del = track->path.Find('/', lastDel);
 			String subPath = track->path.SubStr(lastDel, del);
 			auto next = (current ? current->children : mRootValue->children)
-				.FindOrDefault([&](const Ref<TrackNode>& x) { return x->name == subPath; });
+				.FindOrDefault([&](auto& x) { return x->name == subPath; });
 
 			if (!next)
 			{
@@ -192,7 +192,8 @@ namespace Editor
 					next->parent = current;
 					current->children.Add(next);
 				}
-				else mRootValue->children.Add(next);
+				else
+					mRootValue->children.Add(next);
 			}
 
 			current = next;
@@ -259,15 +260,15 @@ namespace Editor
 		return treeNode ? treeNode->name : String("Empty");
 	}
 
-	void AnimationTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
+	void AnimationTree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object)
 	{
-		AnimationTreeNode* node = dynamic_cast<AnimationTreeNode*>(nodeWidget);
+		auto node = DynamicCast<AnimationTreeNode>(nodeWidget);
 		node->Setup(Ref((TrackNode*)object), mAnimationWindow->mTimeline, mAnimationWindow->mHandlesSheet);
 	}
 
-	void AnimationTree::FreeNodeData(TreeNode* nodeWidget, void* object)
+	void AnimationTree::FreeNodeData(const Ref<TreeNode>& nodeWidget, void* object)
 	{
-		AnimationTreeNode* node = dynamic_cast<AnimationTreeNode*>(nodeWidget);
+		auto node = DynamicCast<AnimationTreeNode>(nodeWidget);
 		node->Free();
 	}
 
@@ -277,7 +278,7 @@ namespace Editor
 		UpdateTreeWidth();
 	}
 
-	void AnimationTree::OnNodeRBClick(TreeNode* node)
+	void AnimationTree::OnNodeRBClick(const Ref<TreeNode>& node)
 	{
 		o2UI.FocusWidget(Ref(this));
 		mContextMenu->Show();
@@ -317,8 +318,6 @@ namespace Editor
 			mAnimationWindow->mAnimation->RemoveTrack(data->path);
 		}
 	}
-
-    Map<const Type*, o2::Vector<Ref<ITrackControl>>> AnimationTreeNode::mTrackControlsCache;
 
 	AnimationTreeNode::AnimationTreeNode() :
 		TreeNode()
@@ -397,6 +396,8 @@ namespace Editor
 		mNameDrawable = GetLayerDrawable<Text>("name");
 	}
 
+	Map<const Type*, o2::Vector<Ref<ITrackControl>>> AnimationTreeNode::mTrackControlsCache;
+
 	void AnimationTreeNode::InitilizeTrackControl()
 	{
 		PushEditorScopeOnStack scope;
@@ -440,7 +441,7 @@ namespace Editor
 			if (mTrackControlsCache.ContainsKey(trackControlType) && !mTrackControlsCache[trackControlType].IsEmpty())
 				mTrackControl = mTrackControlsCache[trackControlType].PopBack();
 			else
-				mTrackControl = DynamicCast<ITrackControl>(Ref(trackControlType->DynamicCastToIObject(trackControlType->CreateSample())));
+				mTrackControl = Ref(dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample())));
 
 			mTrackControl->Initialize(mTimeline, mHandlesSheet);
 			mTrackControl->SetTrack(mData->track, mData->player, mData->path);
@@ -455,7 +456,7 @@ namespace Editor
 		mTrackControl->SetCurveViewEnabled(animTree->mAnimationWindow->IsCurvesMode());
 		mTrackControl->SetCurveViewColor(mData->color);
 
-		mHandlesSheet->RegTrackControl(mTrackControl.Get(), mData->path);
+		mHandlesSheet->RegTrackControl(mTrackControl, mData->path);
 	}
 
 	void AnimationTreeNode::FreeTrackControl()
@@ -473,7 +474,7 @@ namespace Editor
 			if (auto controls = mTrackControl->GetTreePartControls())
 				RemoveChild(controls, false);
 
-			mHandlesSheet->UnregTrackControl(mTrackControl.Get());
+			mHandlesSheet->UnregTrackControl(mTrackControl);
 		}
 
 		mTrackControl = nullptr;

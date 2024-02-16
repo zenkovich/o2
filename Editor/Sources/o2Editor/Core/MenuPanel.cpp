@@ -98,14 +98,14 @@ namespace Editor
 			static float xx = 0, yy = 1;
 			ForcePopEditorScopeOnStack scope;
 			auto prop = o2UI.CreateWidget<FloatProperty>("with caption");
-			prop->SetValueAndPrototypeProxy({ { mnew PointerValueProxy(&xx), mnew PointerValueProxy(&yy) } });
+			prop->SetValueAndPrototypeProxy({ { mmake<PointerValueProxy>(&xx), mmake<PointerValueProxy>(&yy) } });
 							});
 
 		mMenuPanel->AddItem("Debug/Randomize IDs", [&]() {
-			Function<void(Actor*)> fixActor = [&fixActor](Actor* actor) {
+			Function<void(const Ref<Actor>&)> fixActor = [&fixActor](const Ref<Actor>& actor) {
 				actor->GenerateNewID();
 				actor->GetComponents().ForEach([](auto comp) { comp->GenerateNewID(); });
-				actor->GetChildren().ForEach([&](Actor* x) { fixActor(x); });
+				actor->GetChildren().ForEach([&](const Ref<Actor>& x) { fixActor(x); });
 			};
 
 			for (auto& actor : o2Scene.GetRootActors())
@@ -126,7 +126,7 @@ namespace Editor
 	{
 	}
 
-	Widget* MenuPanel::AddItem(const o2::MenuPanel::Item& item)
+	Ref<Widget> MenuPanel::AddItem(const o2::MenuPanel::Item& item)
 	{
 		return mMenuPanel->AddItem(item);
 	}
@@ -368,7 +368,7 @@ namespace Editor
 		int testKeys = 50;
 		for (int i = 0; i < testCurves; i++)
 		{
-			Curve* curve = mnew Curve();
+			Ref<Curve> curve = mmake<Curve>();
 
 			for (int j = 0; j < testKeys; j++)
 			{

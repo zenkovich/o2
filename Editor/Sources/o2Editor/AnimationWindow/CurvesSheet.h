@@ -18,7 +18,7 @@ namespace Editor
 		CurvesSheet& operator=(const CurvesSheet& other);
 
 		// Sets animation and updates tree structure
-		void SetAnimation(AnimationClip* animation);
+		void SetAnimation(const Ref<AnimationClip>& animation);
 
 		// Generates new color for curves and transfers to the tree
 		void UpdateCurvesColors();
@@ -32,9 +32,9 @@ namespace Editor
 		SERIALIZABLE(CurvesSheet);
 
 	private:
-		CurvesEditor* mCurvesEditor; // Curves editor
+		Ref<CurvesEditor> mCurvesEditor; // Curves editor
 
-		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+		WeakRef<AnimationWindow> mAnimationWindow; // Animation window
 
 		bool mEditorViewLock = false; // It is used to prevent handling editor's camera, when timeline view changing 
 

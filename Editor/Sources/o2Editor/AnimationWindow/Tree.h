@@ -114,16 +114,16 @@ namespace Editor
 		String GetObjectDebug(void* object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
+		void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
 
 		// Free node data
-		void FreeNodeData(TreeNode* nodeWidget, void* object) override;
+		void FreeNodeData(const Ref<TreeNode>& nodeWidget, void* object) override;
 
 		// Updates visible nodes (calculates range and initializes nodes), updates tree width on visible nodes
 		void UpdateVisibleNodes() override;
 
 		// Called when tree node clicked by right button, opening context menu
-		void OnNodeRBClick(TreeNode* node) override;
+		void OnNodeRBClick(const Ref<TreeNode>& node) override;
 
 		// Called when list of selected objects was changed
 		void OnNodesSelectionChanged(Vector<void*> objects) override;

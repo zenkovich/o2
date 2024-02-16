@@ -19,7 +19,7 @@ namespace o2
         PROPERTY(Vector<Key>, keys, SetKeys, GetKeysNonContant); // Keys property
 
     public:
-        Curve curve; // Animation curve @SERIALIZABLE
+        Ref<Curve> curve = mmake<Curve>(); // Animation curve @SERIALIZABLE
 
     public:
         // Default constructor

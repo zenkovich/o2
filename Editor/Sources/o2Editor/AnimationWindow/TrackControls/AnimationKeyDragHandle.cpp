@@ -9,8 +9,12 @@ namespace Editor
 	AnimationKeyDragHandle::AnimationKeyDragHandle()
 	{}
 
-	AnimationKeyDragHandle::AnimationKeyDragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/, Sprite* selected /*= nullptr*/, 
-												   Sprite* selectedHovered /*= nullptr*/, Sprite* selectedPressed /*= nullptr*/):
+	AnimationKeyDragHandle::AnimationKeyDragHandle(const Ref<Sprite>& regular, 
+												   const Ref<Sprite>& hover /*= nullptr*/,
+												   const Ref<Sprite>& pressed /*= nullptr*/, 
+												   const Ref<Sprite>& selected /*= nullptr*/, 
+												   const Ref<Sprite>& selectedHovered /*= nullptr*/, 
+												   const Ref<Sprite>& selectedPressed /*= nullptr*/):
 		WidgetDragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed)
 	{}
 

@@ -56,7 +56,7 @@ namespace o2
         void SetOwner(const Ref<Widget>& owner, bool errors);
 
         // Returns animation player
-        AnimationPlayer& GetAnimationPlayer();
+        const Ref<AnimationPlayer> GetAnimationPlayer();
 
         // Sets animation asset
         void SetAnimationAsset(const AnimationAssetRef& asset);

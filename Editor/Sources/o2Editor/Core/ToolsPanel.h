@@ -57,7 +57,7 @@ namespace Editor
 		Ref<DropDown> mDevicesList;	// Devices list dropdown
 
 		Ref<HorizontalLayout> mToolsPanel;        // Tools panel layout
-		ToggleGroup           mToolsTogglesGroup; // Group for toggles
+		Ref<ToggleGroup>      mToolsTogglesGroup; // Group for toggles
 
 		Ref<DropDown> mLayoutSchemesList; // Layouts schemes list
 

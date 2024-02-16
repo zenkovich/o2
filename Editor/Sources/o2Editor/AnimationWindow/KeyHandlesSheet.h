@@ -76,7 +76,7 @@ namespace Editor
 		void DeleteKeys(const Map<String, Vector<UInt64>>& keys, bool createAction = true);
 
 		// Returns context menu
-		ContextMenu* GetContextMenu() const;
+		const Ref<ContextMenu>& GetContextMenu() const;
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -87,7 +87,7 @@ namespace Editor
 		RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);
 		RectF mSelectionFrameCursorOffsets = RectF(-2, -3, 2, 2);
 
-		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+		WeakRef<AnimationWindow> mAnimationWindow; // Animation window
 
 		Vector<Ref<ITrackControl>>               mTrackControls;    // List of actual track controls
 		Vector<Pair<String, Ref<ITrackControl>>> mTrackControlsMap; // Map of actual track controls, key is Animation track path
@@ -109,9 +109,9 @@ namespace Editor
 
 		Vector<Ref<DragHandle>> mBeginSelectHandles; // handles list, that were selected before frame selecting
 
-		DragHandle mLeftFrameDragHandle;   // Left frame border drag handle, resizing selected handles rect
-		DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
-		DragHandle mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
+		Ref<DragHandle> mLeftFrameDragHandle;   // Left frame border drag handle, resizing selected handles rect
+		Ref<DragHandle> mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
+		Ref<DragHandle> mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
 
 		DataDocument mBeforeChangeKeysData; // Serialized keys data before change
 

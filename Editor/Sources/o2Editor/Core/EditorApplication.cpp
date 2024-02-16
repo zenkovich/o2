@@ -130,22 +130,22 @@ namespace Editor
 
 		o2Application.SetWindowCaption("o2 Editor");
 
-		mUIRoot = mnew UIRoot();
+		mUIRoot = mmake<UIRoot>();
 
 		mBackground = mmake<Sprite>("ui/UI4_Background.png");
 		mBackSign = mmake<Sprite>("ui/UI4_o2_sign.png");
 
 		CommonTextures::Initialize();
 
-		mConfig = mnew EditorConfig();
+		mConfig = mmake<EditorConfig>();
 		mConfig->LoadConfigs();
 
 		LoadUIStyle();
 
-		mProperties = mnew Properties();
-		mWindowsManager = mnew WindowsManager();
-		mMenuPanel = mnew MenuPanel();
-		mToolsPanel = mnew ToolsPanel();
+		mProperties = mmake<Properties>();
+		mWindowsManager = mmake<WindowsManager>();
+		mMenuPanel = mmake<MenuPanel>();
+		mToolsPanel = mmake<ToolsPanel>();
 
 		if (mConfig->projectConfig.mMaximized)
 			o2Application.Maximize();
@@ -164,8 +164,8 @@ namespace Editor
 		//FreeConsole();
 
 		auto widget = EditorUIRoot.GetRootWidget()->GetChildWidget("tools panel/play panel");
-		o2EditorAnimationWindow.SetAnimation(widget->GetStateObject("playing")->GetAnimationClip().Get(),
-											 &widget->GetStateObject("playing")->GetAnimationPlayer());
+		o2EditorAnimationWindow.SetAnimation(widget->GetStateObject("playing")->GetAnimationClip(),
+											 widget->GetStateObject("playing")->GetAnimationPlayer());
 
 		o2EditorAnimationWindow.SetTarget(widget);
 
@@ -341,13 +341,13 @@ namespace Editor
 
 	void EditorApplication::OnClosing()
 	{
-		delete mConfig;
-		delete mWindowsManager;
-		delete mBackground;
-		delete mBackSign;
-		delete mToolsPanel;
-		delete mMenuPanel;
-		delete mUIRoot;
+		mConfig = nullptr;
+		mWindowsManager = nullptr;
+		mBackground = nullptr;
+		mBackSign = nullptr;
+		mToolsPanel = nullptr;
+		mMenuPanel = nullptr;
+		mUIRoot = nullptr;
 	}
 
 	void EditorApplication::OnResizing()

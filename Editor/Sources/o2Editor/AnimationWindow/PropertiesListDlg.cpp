@@ -22,9 +22,9 @@ namespace Editor
 	}
 
 	PropertiesListDlg::~PropertiesListDlg()
-	{	}
+	{}
 
-	void PropertiesListDlg::Show(const Ref<AnimationClip>& animation, Ref<Actor> actor)
+	void PropertiesListDlg::Show(const Ref<AnimationClip>& animation, const Ref<Actor>& actor)
 	{
 		Instance().mPropertiesTree->Initialize(animation, actor);
 		Instance().mFilter->SetText("");
@@ -38,6 +38,9 @@ namespace Editor
 		mWindow->SetViewLayout(Layout::BothStretch(-2, -2, 0, 20));
 		mWindow->SetIcon(mmake<Sprite>("ui/UI4_tree_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
+
+// 		mWindow->GetInternalWidget("closeButton")->layout->position -= Vec2F(2, -2);
+// 		mWindow->GetInternalWidget("optionsButton")->layout->position -= Vec2F(2, -2);
 
 		auto upPanel = mmake<Widget>();
 		upPanel->name = "up panel";
@@ -81,7 +84,7 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationPropertiesTree::Initialize(const Ref<AnimationClip>& animation, Ref<Actor> actor)
+	void AnimationPropertiesTree::Initialize(const Ref<AnimationClip>& animation, const Ref<Actor>& actor)
 	{
 		mFilterStr = "";
 		mRoot = mmake<NodeData>();
@@ -99,7 +102,7 @@ namespace Editor
 	{
 		mFilterStr = filter.ToLowerCase();
 
-        mRoot = mmake<NodeData>();
+		mRoot = mmake<NodeData>();
 		mPassedObject.Clear();
 
 		InitializeTreeNode(mRoot, mActor.Get());
@@ -224,7 +227,7 @@ namespace Editor
 		if (object)
 			return ((NodeData*)object)->children.Cast<void*>();
 
-		return mRoot->children.Cast<void*>();
+		return mRoot->children.Convert<void*>([](auto& x) { return x.Get(); });
 	}
 
 	String AnimationPropertiesTree::GetObjectDebug(void* object)
@@ -247,24 +250,29 @@ namespace Editor
 			return;
 
 		auto propertyNode = DynamicCast<AnimationPropertiesTreeNode>(nodeWidget);
-		auto propertyNodeData = propertyNode->mData.Lock();
-		if (propertyNodeData->used)
-			mAnimation->RemoveTrack(propertyNodeData->path);
+		auto propertyData = propertyNode->mData.Lock();
+		if (propertyData->used)
+			mAnimation->RemoveTrack(propertyData->path);
 		else
-			mAnimation->AddTrack(propertyNodeData->path, *propertyNodeData->type);
+			mAnimation->AddTrack(propertyData->path, *propertyData->type);
 	}
 
 	void AnimationPropertiesTree::OnNodesSelectionChanged(Vector<void*> objects)
-	{}
+	{
 
-	void AnimationPropertiesTree::InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, const String& name, const Ref<NodeData>& node)
+	}
+
+	void AnimationPropertiesTree::InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, 
+														   const String& name, const Ref<NodeData>& node)
 	{
 		auto fieldObject = fieldObjectType->DynamicCastToIObject(object);
 		auto newNode = node->AddChild(name, fieldObjectType);
 		InitializeTreeNode(newNode, fieldObject);
 
 		if (newNode->children.IsEmpty())
+		{
 			node->children.Remove(newNode);
+		}
 	}
 
 	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode():

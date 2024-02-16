@@ -6,7 +6,8 @@ namespace Editor
 	AnimationAddKeysAction::AnimationAddKeysAction()
 	{}
 
-	AnimationAddKeysAction::AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, KeyHandlesSheet* editor):
+	AnimationAddKeysAction::AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, 
+												   const Ref<KeyHandlesSheet>& editor):
 		mKeys(keys), mKeysData(keysData), mEditor(editor)
 	{}
 
@@ -18,19 +19,20 @@ namespace Editor
 	void AnimationAddKeysAction::Redo()
 	{
 		Map<String, Vector<UInt64>> keys;
-		mEditor->DeserializeKeys(mKeysData, keys, 0.0f, false);
-		mEditor->SetSelectedKeys(keys);
+		mEditor.Lock()->DeserializeKeys(mKeysData, keys, 0.0f, false);
+		mEditor.Lock()->SetSelectedKeys(keys);
 	}
 
 	void AnimationAddKeysAction::Undo()
 	{
-		mEditor->DeleteKeys(mKeys, false);
+		mEditor.Lock()->DeleteKeys(mKeys, false);
 	}
 
 	AnimationDeleteKeysAction::AnimationDeleteKeysAction()
 	{}
 
-	AnimationDeleteKeysAction::AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, KeyHandlesSheet* editor) :
+	AnimationDeleteKeysAction::AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, 
+														 const Ref<KeyHandlesSheet>& editor) :
 		mKeys(keys), mKeysData(keysData), mEditor(editor)
 	{}
 
@@ -41,21 +43,21 @@ namespace Editor
 
 	void AnimationDeleteKeysAction::Redo()
 	{
-		mEditor->DeleteKeys(mKeys, false);
+		mEditor.Lock()->DeleteKeys(mKeys, false);
 	}
 
 	void AnimationDeleteKeysAction::Undo()
 	{
 		Map<String, Vector<UInt64>> keys;
-		mEditor->DeserializeKeys(mKeysData, keys, 0.0f, false);
-		mEditor->SetSelectedKeys(keys);
+		mEditor.Lock()->DeserializeKeys(mKeysData, keys, 0.0f, false);
+		mEditor.Lock()->SetSelectedKeys(keys);
 	}
 
 	AnimationKeysChangeAction::AnimationKeysChangeAction()
 	{}
 
 	AnimationKeysChangeAction::AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys, DataDocument& beforeKeysData,
-														 DataDocument& afterKeysData, KeyHandlesSheet* editor):
+														 DataDocument& afterKeysData, const Ref<KeyHandlesSheet>& editor):
 		mKeys(keys), mBeforeKeysData(beforeKeysData), mAfterKeysData(afterKeysData), mEditor(editor)
 	{}
 
@@ -66,20 +68,24 @@ namespace Editor
 
 	void AnimationKeysChangeAction::Redo()
 	{
-		mEditor->DeleteKeys(mKeys, false);
+		auto editor = mEditor.Lock();
+
+		editor->DeleteKeys(mKeys, false);
 
 		Map<String, Vector<UInt64>> keys;
-		mEditor->DeserializeKeys(mAfterKeysData, keys, 0.0f, false);
-		mEditor->SetSelectedKeys(keys);
+		editor->DeserializeKeys(mAfterKeysData, keys, 0.0f, false);
+		editor->SetSelectedKeys(keys);
 	}
 
 	void AnimationKeysChangeAction::Undo()
 	{
-		mEditor->DeleteKeys(mKeys, false);
+		auto editor = mEditor.Lock();
+
+		editor->DeleteKeys(mKeys, false);
 
 		Map<String, Vector<UInt64>> keys;
-		mEditor->DeserializeKeys(mBeforeKeysData, keys, 0.0f, false);
-		mEditor->SetSelectedKeys(keys);
+		editor->DeserializeKeys(mBeforeKeysData, keys, 0.0f, false);
+		editor->SetSelectedKeys(keys);
 	}
 }
 // --- META ---

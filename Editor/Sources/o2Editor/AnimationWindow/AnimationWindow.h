@@ -66,15 +66,14 @@ namespace Editor
 		float mTreeViewWidth = 325.0f;    // Width of tree area. Changed by dragable separator
 		float mMinTreeViewWidth = 250.0f; // Minimal tree width
 
-        Ref<Actor>           mTargetActor;       // Target actor on animation
-        Ref<AnimationPlayer> mPlayer;            // Animation player
-        bool                 mOwnPlayer = false; // Is player owned by this
-        Ref<AnimationClip>   mAnimation;         // Editing animation
+		Ref<Actor>           mTargetActor;       // Target actor on animation
+		Ref<AnimationPlayer> mPlayer;            // Animation player
+		bool                 mOwnPlayer = false; // Is player owned by this
+		Ref<AnimationClip>   mAnimation;         // Editing animation
 
 		WeakRef<IEditableAnimation> mAnimationEditable; // Editable animation holder. Deactivating when editing animation
 
 		bool mDisableTimeTracking = false; // When true animation time changes has no effect
-
 
 		Ref<Widget> mUpPanel;  // Up panel with control buttons
 		Ref<Widget> mWorkArea; // Working area with tree and time line
@@ -101,7 +100,7 @@ namespace Editor
 
 		Ref<WidgetDragHandle> mTreeSeparatorHandle; // Tree separator handle. When it moves, it changes size of all dependent widgets
 
-		ActionsList mActionsList; // List of actions in animation editor, also injecting into curves editor
+		Ref<ActionsList> mActionsList = mmake<ActionsList>(); // List of actions in animation editor, also injecting into curves editor
 
 	protected:
 		// Called when editor window has closed

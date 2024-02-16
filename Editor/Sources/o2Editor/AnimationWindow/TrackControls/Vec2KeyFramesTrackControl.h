@@ -41,7 +41,7 @@ namespace Editor
 		SERIALIZABLE(Vec2KeyFramesTrackControl);
 
 	private:
-		SplineTool mTool; // Other handles locking tool
+		Ref<SplineTool> mTool = mmake<SplineTool>(); // Other handles locking tool
 
 		WeakRef<IEditTool> mPrevSelectedTool; // Previous selected tool, for restore
 

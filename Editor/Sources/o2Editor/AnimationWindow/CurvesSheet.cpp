@@ -27,47 +27,47 @@ namespace Editor
 
 	CurvesSheet& CurvesSheet::operator=(const CurvesSheet& other)
 	{
-		delete mCurvesEditor;
-
 		Widget::operator=(other);
 		InitializeControls();
 
 		return *this;
 	}
 
-	void CurvesSheet::SetAnimation(AnimationClip* animation)
+	void CurvesSheet::SetAnimation(const Ref<AnimationClip>& animation)
 	{
 		mCurvesEditor->RemoveAllCurves();
 
 		for (auto& track : animation->GetTracks())
 		{
 			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
-				mCurvesEditor->AddCurve(track->path, &floatTrack->curve);
+				mCurvesEditor->AddCurve(track->path, floatTrack->curve);
 			else if (auto vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
-				mCurvesEditor->AddCurve(track->path, &vec2Track->timeCurve);
+				mCurvesEditor->AddCurve(track->path, vec2Track->timeCurve);
 		}
 
 		UpdateCurvesColors();
 
-		mCurvesEditor->actionsListDelegate = &mAnimationWindow->mActionsList;
+		mCurvesEditor->actionsListDelegate = mAnimationWindow.Lock()->mActionsList;
 	}
 
 	void CurvesSheet::UpdateCurvesColors()
 	{
+		auto animationWindow = mAnimationWindow.Lock();
+
 		Color4 curveColor(44, 62, 80);
 		int colorIdx = 0;
-		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
+		for (auto& track : animationWindow->mAnimation->GetTracks())
 		{
 			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
 			{
-				mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
-				mCurvesEditor->SetCurveColor(&floatTrack->curve, curveColor);
+				animationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
+				mCurvesEditor->SetCurveColor(floatTrack->curve, curveColor);
 				curveColor = Color4::SomeColor(colorIdx++);
 			}
 			else if (auto vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
 			{
-				mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
-				mCurvesEditor->SetCurveColor(&vec2Track->timeCurve, curveColor);
+				animationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
+				mCurvesEditor->SetCurveColor(vec2Track->timeCurve, curveColor);
 				curveColor = Color4::SomeColor(colorIdx++);
 			}
 		}
@@ -79,14 +79,14 @@ namespace Editor
 
 		// Check new curves
 		auto currentCurves = mCurvesEditor->GetCurves();
-		Vector<Curve*> animCurves;
-		for (auto& track : mAnimationWindow->mAnimation->GetTracks())
+		Vector<Ref<Curve>> animCurves;
+		for (auto& track : mAnimationWindow.Lock()->mAnimation->GetTracks())
 		{
-			Curve* curve = nullptr;
+			Ref<Curve> curve;
 			if (auto floatTrack = DynamicCast<AnimationTrack<float>>(track))
-				curve = &floatTrack->curve;
+				curve = floatTrack->curve;
 			else if (auto vec2Track = DynamicCast<AnimationTrack<Vec2F>>(track))
-				curve = &vec2Track->timeCurve;
+				curve = vec2Track->timeCurve;
 
 			if (curve)
 			{
@@ -121,7 +121,7 @@ namespace Editor
 
 	void CurvesSheet::InitializeControls()
 	{
-		mCurvesEditor = mnew CurvesEditor();
+		mCurvesEditor = mmake<CurvesEditor>();
 		*mCurvesEditor->layout = WidgetLayout::BothStretch();
 
 		auto horScroll = o2UI.CreateHorScrollBar();
@@ -159,10 +159,12 @@ namespace Editor
 
 	void CurvesSheet::SetCameraAsTimelineView()
 	{
+		auto animationWindow = mAnimationWindow.Lock();
+
 		Camera camera = mCurvesEditor->GetCamera();
 		RectF camRect = camera.GetRect();
-		camRect.left = mAnimationWindow->mTimeline->WorldToLocal(mAnimationWindow->mTimeline->layout->worldLeft);
-		camRect.right = mAnimationWindow->mTimeline->WorldToLocal(mAnimationWindow->mTimeline->layout->worldRight);
+		camRect.left = animationWindow->mTimeline->WorldToLocal(animationWindow->mTimeline->layout->worldLeft);
+		camRect.right = animationWindow->mTimeline->WorldToLocal(animationWindow->mTimeline->layout->worldRight);
 
 		camera.SetRect(camRect, false);
 
@@ -176,7 +178,8 @@ namespace Editor
 		if (mEditorViewLock || !IsEnabled())
 			return;
 
-		mAnimationWindow->mTimeline->SetViewRange(mCurvesEditor->GetCamera().GetRect().left, mCurvesEditor->GetCamera().GetRect().right);
+		mAnimationWindow.Lock()->mTimeline->SetViewRange(mCurvesEditor->GetCamera().GetRect().left,
+														 mCurvesEditor->GetCamera().GetRect().right);
 	}
 
 }

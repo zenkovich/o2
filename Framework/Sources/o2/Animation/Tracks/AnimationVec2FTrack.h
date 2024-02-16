@@ -16,8 +16,8 @@ namespace o2
         typedef o2::Vec2F ValueType;
 
     public:
-        Curve  timeCurve; // Time curve. represents speed on spline @SERIALIZABLE
-        Spline spline;    // Movement trajectory spline @SERIALIZABLE
+        Ref<Curve>  timeCurve = mmake<Curve>(); // Time curve. represents speed on spline @SERIALIZABLE
+        Ref<Spline> spline = mmake<Spline>();   // Movement trajectory spline @SERIALIZABLE
 
     public:
         // Default constructor

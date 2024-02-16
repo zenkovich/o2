@@ -8,13 +8,13 @@ namespace o2
 {
     AnimationTrack<float>::AnimationTrack()
     {
-        curve.onKeysChanged.Add(this, &AnimationTrack<float>::OnCurveChanged);
+        curve->onKeysChanged.Add(this, &AnimationTrack<float>::OnCurveChanged);
     }
 
     AnimationTrack<float>::AnimationTrack(const AnimationTrack<float>& other):
         IAnimationTrack(other), curve(other.curve)
     {
-        curve.onKeysChanged.Add(this, &AnimationTrack<float>::OnCurveChanged);
+        curve->onKeysChanged.Add(this, &AnimationTrack<float>::OnCurveChanged);
     }
 
     AnimationTrack<float>& AnimationTrack<float>::operator=(const AnimationTrack<float>& other)
@@ -36,22 +36,22 @@ namespace o2
 
     float AnimationTrack<float>::GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
     {
-        return curve.Evaluate(position, direction, cacheKey, cacheKeyApprox);
+        return curve->Evaluate(position, direction, cacheKey, cacheKeyApprox);
     }
 
     void AnimationTrack<float>::BeginKeysBatchChange()
     {
-        curve.BeginKeysBatchChange();
+        curve->BeginKeysBatchChange();
     }
 
     void AnimationTrack<float>::CompleteKeysBatchingChange()
     {
-        curve.CompleteKeysBatchingChange();
+        curve->CompleteKeysBatchingChange();
     }
 
     float AnimationTrack<float>::GetDuration() const
     {
-        return curve.Length();
+        return curve->Length();
     }
 
     Ref<IAnimationTrack::IPlayer> AnimationTrack<float>::CreatePlayer() const
@@ -61,105 +61,105 @@ namespace o2
 
     void AnimationTrack<float>::AddKeys(Vector<Vec2F> values, float smooth /*= 1.0f*/)
     {
-        curve.AppendKeys(values, smooth);
+        curve->AppendKeys(values, smooth);
     }
 
     int AnimationTrack<float>::AddKey(const Key& key)
     {
-        return curve.InsertKey(key);
+        return curve->InsertKey(key);
     }
 
     int AnimationTrack<float>::AddKey(const Key& key, float position)
     {
         Key newKey = key;
         newKey.position = position;
-        return curve.InsertKey(newKey);
+        return curve->InsertKey(newKey);
     }
 
     int AnimationTrack<float>::AddSmoothKey(const Key& key, float smooth)
     {
-        return curve.InsertKey(key.position, key.value, smooth);
+        return curve->InsertKey(key.position, key.value, smooth);
     }
 
     int AnimationTrack<float>::AddKey(float position, float value, float leftCoef, float leftCoefPosition,
                                       float rightCoef, float rightCoefPosition)
     {
-        return curve.InsertKey(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
+        return curve->InsertKey(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
     }
 
     int AnimationTrack<float>::AddKey(float position, float value, float smooth /*= 1.0f*/)
     {
-        return curve.InsertKey(position, value, smooth);
+        return curve->InsertKey(position, value, smooth);
     }
 
     bool AnimationTrack<float>::RemoveKey(float position)
     {
-        return curve.RemoveKey(position);
+        return curve->RemoveKey(position);
     }
 
     bool AnimationTrack<float>::RemoveKeyAt(int idx)
     {
-        return curve.RemoveKeyAt(idx);
+        return curve->RemoveKeyAt(idx);
     }
 
     void AnimationTrack<float>::RemoveAllKeys()
     {
-        curve.RemoveAllKeys();
+        curve->RemoveAllKeys();
     }
 
     bool AnimationTrack<float>::ContainsKey(float position) const
     {
-        return curve.ContainsKey(position);
+        return curve->ContainsKey(position);
     }
 
     const Vector<AnimationTrack<float>::Key>& AnimationTrack<float>::GetKeys() const
     {
-        return curve.GetKeys();
+        return curve->GetKeys();
     }
 
     AnimationTrack<float>::Key AnimationTrack<float>::GetKey(float position) const
     {
-        return curve.GetKey(position);
+        return curve->GetKey(position);
     }
 
     AnimationTrack<float>::Key AnimationTrack<float>::GetKeyAt(int idx) const
     {
-        return curve.GetKeyAt(idx);
+        return curve->GetKeyAt(idx);
     }
 
     void AnimationTrack<float>::SetKey(int idx, const Key& key)
     {
-        curve.SetKey(key, idx);
+        curve->SetKey(key, idx);
     }
 
     AnimationTrack<float>::Key AnimationTrack<float>::FindKey(UInt64 uid) const
     {
-        return curve.FindKey(uid);
+        return curve->FindKey(uid);
     }
 
     int AnimationTrack<float>::FindKeyIdx(UInt64 uid) const
     {
-        return curve.FindKeyIdx(uid);
+        return curve->FindKeyIdx(uid);
     }
 
     void AnimationTrack<float>::SetKeys(const Vector<Key>& keys)
     {
-        curve.SetKeys(keys);
+        curve->SetKeys(keys);
     }
 
     void AnimationTrack<float>::SmoothKey(float position, float smooth)
     {
-        curve.SmoothKey(position, smooth);
+        curve->SmoothKey(position, smooth);
     }
 
     AnimationTrack<float>::Key AnimationTrack<float>::operator[](float position) const
     {
-        return curve.GetKey(position);
+        return curve->GetKey(position);
     }
 
     Vector<AnimationTrack<float>::Key> AnimationTrack<float>::GetKeysNonContant()
     {
-        return curve.GetKeys();
+        return curve->GetKeys();
     }
 
     void AnimationTrack<float>::OnCurveChanged()
@@ -175,7 +175,7 @@ namespace o2
                                                           float endCoef, float endCoefPosition)
     {
         AnimationTrack<float> res;
-        res.curve = Curve::Parametric(begin, end, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition);
+        res.curve = mmake<Curve>(Curve::Parametric(begin, end, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition));
         return res;
     }
 
@@ -290,7 +290,7 @@ namespace o2
         if (!mTrack)
             return;
 
-        mCurrentValue = mTrack->curve.Evaluate(mInDurationTime, mInDurationTime > mPrevInDurationTime, mPrevKey, mPrevKeyApproximation);
+        mCurrentValue = mTrack->curve->Evaluate(mInDurationTime, mInDurationTime > mPrevInDurationTime, mPrevKey, mPrevKeyApproximation);
         mPrevInDurationTime = mInDurationTime;
 
         if (mTarget)

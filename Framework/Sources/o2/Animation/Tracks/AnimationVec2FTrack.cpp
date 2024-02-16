@@ -11,15 +11,15 @@ namespace o2
 {
     AnimationTrack<Vec2F>::AnimationTrack()
     {
-        timeCurve.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
-        spline.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+        timeCurve->onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+        spline->onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
     }
 
     AnimationTrack<Vec2F>::AnimationTrack(const AnimationTrack<Vec2F>& other) :
         IAnimationTrack(other), timeCurve(other.timeCurve), spline(other.spline)
     {
-        timeCurve.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
-        spline.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+        timeCurve->onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+        spline->onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
     }
 
     AnimationTrack<Vec2F>& AnimationTrack<Vec2F>::operator=(const AnimationTrack<Vec2F>& other)
@@ -42,25 +42,25 @@ namespace o2
     Vec2F AnimationTrack<Vec2F>::GetValue(float position, bool direction, int& cacheTimeKey, int& cacheTimeKeyApprox,
                                           int& cacheSplineKey, int& cacheSplineKeyApprox) const
     {
-        float timePos = timeCurve.Evaluate(position, direction, cacheTimeKey, cacheTimeKeyApprox);
-        return spline.Evaluate(timePos*spline.Length(), direction, cacheSplineKey, cacheTimeKeyApprox);
+        float timePos = timeCurve->Evaluate(position, direction, cacheTimeKey, cacheTimeKeyApprox);
+        return spline->Evaluate(timePos*spline->Length(), direction, cacheSplineKey, cacheTimeKeyApprox);
     }
 
     void AnimationTrack<Vec2F>::BeginKeysBatchChange()
     {
-        timeCurve.BeginKeysBatchChange();
-        spline.BeginKeysBatchChange();
+        timeCurve->BeginKeysBatchChange();
+        spline->BeginKeysBatchChange();
     }
 
     void AnimationTrack<Vec2F>::CompleteKeysBatchingChange()
     {
-        timeCurve.CompleteKeysBatchingChange();
-        spline.CompleteKeysBatchingChange();
+        timeCurve->CompleteKeysBatchingChange();
+        spline->CompleteKeysBatchingChange();
     }
 
     float AnimationTrack<Vec2F>::GetDuration() const
     {
-        return timeCurve.Length();
+        return timeCurve->Length();
     }
 
     Ref<IAnimationTrack::IPlayer> AnimationTrack<Vec2F>::CreatePlayer() const
@@ -78,8 +78,8 @@ namespace o2
                                                           float endCoef, float endCoefPosition)
     {
         AnimationTrack<Vec2F> res;
-        res.spline.SetKeys({ Spline::Key(begin, Vec2F(), Vec2F()), Spline::Key(end, Vec2F(), Vec2F()) });
-        res.timeCurve = Curve::Parametric(0.0f, 1.0f, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition);
+        res.spline->SetKeys({ Spline::Key(begin, Vec2F(), Vec2F()), Spline::Key(end, Vec2F(), Vec2F()) });
+        res.timeCurve = mmake<Curve>(Curve::Parametric(0.0f, 1.0f, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition));
         return res;
     }
 

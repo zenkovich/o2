@@ -62,22 +62,25 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
-		if (!mHandlesSheet->enabled)
+		if (!mHandlesSheet.Lock()->enabled)
 			return;
 
 		OnDrawn();
 
-		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+		auto timeline = mTimeline.Lock();
+		auto track = mTrack.Lock();
 
-		for (int i = 1; i < mTrack->GetKeys().Count(); i++)
+		o2Render.EnableScissorTest(timeline->layout->GetWorldRect());
+
+		for (int i = 1; i < track->GetKeys().Count(); i++)
 		{
-			auto& key = mTrack->GetKeys()[i];
-			auto& prevKey = mTrack->GetKeys()[i - 1];
+			auto& key = track->GetKeys()[i];
+			auto& prevKey = track->GetKeys()[i - 1];
 
-			Basis drawCoords(RectF(mTimeline->LocalToWorld(prevKey.position) - 3,
-							 layout->GetWorldTop() - 5,
-							 mTimeline->LocalToWorld(key.position) - 3,
-							 layout->GetWorldBottom() + 5));
+			Basis drawCoords(RectF(timeline->LocalToWorld(prevKey.position) - 3,
+								   layout->GetWorldTop() - 5,
+								   timeline->LocalToWorld(key.position) - 3,
+								   layout->GetWorldBottom() + 5));
 
 			DrawCurveInCoords(key.GetApproximatedPoints(), key.GetApproximatedPointsCount(),
 							  key.GetGetApproximatedPointsBounds(), drawCoords, Color4(44, 62, 80));
@@ -97,12 +100,15 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
-		if (!mHandlesSheet->enabled)
+		if (!mHandlesSheet.Lock()->enabled)
 			return;
 
 		OnDrawn();
 
-		if (!mTrack->GetKeys().IsEmpty())
+		auto timeline = mTimeline.Lock();
+		auto track = mTrack.Lock();
+
+		if (!track->GetKeys().IsEmpty())
 		{
 			static Ref<Texture> chessBackTexture;
 			static Sprite chessBackSprite;
@@ -118,13 +124,13 @@ namespace Editor
 				chessBackSprite.mode = SpriteMode::Tiled;
 			}
 
-			chessBackSprite.SetRect(RectF(mTimeline->LocalToWorld(mTrack->GetKeys()[0].position), layout->GetWorldTop() - 5,
-									mTimeline->LocalToWorld(mTrack->GetKeys().Last().position), layout->GetWorldBottom() + 4));
+			chessBackSprite.SetRect(RectF(timeline->LocalToWorld(track->GetKeys()[0].position), layout->GetWorldTop() - 5,
+										  timeline->LocalToWorld(track->GetKeys().Last().position), layout->GetWorldBottom() + 4));
 			chessBackSprite.Draw();
 
 			static Mesh mesh;
-			int verticies = mTrack->GetKeys().Count()*2;
-			int polygons = (mTrack->GetKeys().Count() - 1)*2;
+			int verticies = track->GetKeys().Count()*2;
+			int polygons = (track->GetKeys().Count() - 1)*2;
 
 			if (mesh.GetMaxVertexCount() < (UInt)verticies)
 				mesh.Resize(verticies, polygons);
@@ -132,12 +138,12 @@ namespace Editor
 			mesh.vertexCount = verticies;
 			mesh.polyCount = polygons;
 
-			o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+			o2Render.EnableScissorTest(timeline->layout->GetWorldRect());
 
-			for (int i = 0; i < mTrack->GetKeys().Count(); i++)
+			for (int i = 0; i < track->GetKeys().Count(); i++)
 			{
-				auto& key = mTrack->GetKeys()[i];
-				float keyPos = mTimeline->LocalToWorld(key.position);
+				auto& key = track->GetKeys()[i];
+				float keyPos = timeline->LocalToWorld(key.position);
 				int nv = i*2;
 
 				mesh.vertices[nv] = Vertex(keyPos, layout->GetWorldTop() - 5, key.value.ABGR(), 0, 0);
@@ -173,19 +179,22 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
-		if (!mHandlesSheet->enabled)
+		if (!mHandlesSheet.Lock()->enabled)
 			return;
 
 		OnDrawn();
 
-		if (!mTrack->GetKeys().IsEmpty())
+		auto timeline = mTimeline.Lock();
+		auto track = mTrack.Lock();
+
+		if (!track->GetKeys().IsEmpty())
 		{
 
 			float lineOffset = 11;
 
 			static Mesh mesh;
-			int verticies = (mTrack->GetKeys().Count() - 1)*4;
-			int polygons = (mTrack->GetKeys().Count() - 1)*2;
+			int verticies = (track->GetKeys().Count() - 1)*4;
+			int polygons = (track->GetKeys().Count() - 1)*2;
 
 			if (mesh.GetMaxVertexCount() < (UInt)verticies)
 				mesh.Resize(verticies, polygons);
@@ -193,18 +202,18 @@ namespace Editor
 			mesh.vertexCount = verticies;
 			mesh.polyCount = polygons;
 
-			o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+			o2Render.EnableScissorTest(timeline->layout->GetWorldRect());
 
 			Color4 trueColor(44, 62, 80);
 			Color4 falseColor(0, 0, 0, 0);
 
-			for (int i = 1; i < mTrack->GetKeys().Count(); i++)
+			for (int i = 1; i < track->GetKeys().Count(); i++)
 			{
-				auto& key = mTrack->GetKeys()[i];
-				auto& prevKey = mTrack->GetKeys()[i - 1];
+				auto& key = track->GetKeys()[i];
+				auto& prevKey = track->GetKeys()[i - 1];
 
-				float keyPos = mTimeline->LocalToWorld(key.position);
-				float prevKeyPos = mTimeline->LocalToWorld(prevKey.position);
+				float keyPos = timeline->LocalToWorld(key.position);
+				float prevKeyPos = timeline->LocalToWorld(prevKey.position);
 
 				int nv = (i - 1)*4;
 				int np = (i - 1)*2;

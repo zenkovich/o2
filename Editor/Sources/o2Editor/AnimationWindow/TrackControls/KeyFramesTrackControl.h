@@ -288,22 +288,22 @@ namespace Editor
 				selectedHandles.Add(keyHandle->keyUid);
 		}
 
-		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Convert<AnimationKeyDragHandle*>([&](const KeyHandle* x) {
-			x->handle->SetParent(nullptr);
-			x->handle->SetEnabled(false);
-			x->handle->SetSelectionGroup(nullptr);
-			x->handle->SetSelected(false);
-			x->handle->onChangedPos.Clear();
-			return x->handle;
-																								 });
-
-		for (auto& keyHandle : mHandles)
-			delete keyHandle;
+		Vector<Ref<AnimationKeyDragHandle>> handlesCache = mHandles.Convert<Ref<AnimationKeyDragHandle>>(
+			[&](const const Ref<KeyHandle>& x) 
+			{
+				x->handle->SetParent(nullptr);
+				x->handle->SetEnabled(false);
+				x->handle->SetSelectionGroup(nullptr);
+				x->handle->SetSelected(false);
+				x->handle->onChangedPos.Clear();
+				return x->handle;
+			});
 
 		mHandles.Clear();
 
-		for (auto& key : Wrapper::GetKeys(*mTrack)) {
-			AnimationKeyDragHandle* handle = nullptr;
+		for (auto& key : Wrapper::GetKeys(*mTrack)) 
+		{
+			Ref<AnimationKeyDragHandle> handle;
 
 			if (!handlesCache.IsEmpty())
 				handle = handlesCache.PopBack();
@@ -322,10 +322,11 @@ namespace Editor
 
 			AddChild(handle);
 
-			KeyHandle* keyhandle = mnew KeyHandle(key.uid, handle);
+			auto keyhandle = mmake<KeyHandle>(key.uid, handle);
 			mHandles.Add(keyhandle);
 
-			handle->onChangedPos = [=](const Vec2F& pos) {
+			handle->onChangedPos = [=](const Vec2F& pos) 
+			{
 				mDisableHandlesUpdate = true;
 
 				int keyIdx = Wrapper::FindKeyIdx(*mTrack, keyhandle->keyUid);
@@ -336,8 +337,7 @@ namespace Editor
 				Wrapper::AddKey(*mTrack, key);
 
 				mDisableHandlesUpdate = false;
-				};
-
+			};
 		}
 	}
 
@@ -350,10 +350,12 @@ namespace Editor
 		if (mDisableHandlesUpdate)
 			return;
 
-		if (Wrapper::GetKeys(*mTrack).Count() != mHandles.Count()) {
+		if (Wrapper::GetKeys(*mTrack).Count() != mHandles.Count()) 
+		{
 			InitializeHandles();
 		}
-		else {
+		else 
+		{
 			for (auto& keyHandle : mHandles)
 				keyHandle->handle->SetPosition(Vec2F(Wrapper::FindKey(*mTrack, keyHandle->keyUid).position, 0.0f));
 		}
@@ -365,8 +367,10 @@ namespace Editor
 		time = mTimeline->GetTimeCursor();
 
 		bool hasKeyAtTime = false;
-		for (auto& key : Wrapper::GetKeys(*mTrack)) {
-			if (mTimeline->IsSameTime(key.position, time)) {
+		for (auto& key : Wrapper::GetKeys(*mTrack)) 
+		{
+			if (mTimeline->IsSameTime(key.position, time)) 
+			{
 				hasKeyAtTime = true;
 				break;
 			}
@@ -378,37 +382,40 @@ namespace Editor
 	template<typename AnimationTrackType>
 	Ref<AnimationKeyDragHandle> KeyFramesTrackControl<AnimationTrackType>::CreateHandle()
 	{
-		AnimationKeyDragHandle* handle = mmake<AnimationKeyDragHandle>(mmake<Sprite>("ui/UI4_key.png"),
-																	   mmake<Sprite>("ui/UI4_key_hover.png"),
-																	   mmake<Sprite>("ui/UI4_key_pressed.png"),
-																	   mmake<Sprite>("ui/UI4_selected_key.png"),
-																	   mmake<Sprite>("ui/UI4_selected_key_hover.png"),
-																	   mmake<Sprite>("ui/UI4_selected_key_pressed.png"));
+		auto handle = mmake<AnimationKeyDragHandle>(mmake<Sprite>("ui/UI4_key.png"),
+													mmake<Sprite>("ui/UI4_key_hover.png"),
+													mmake<Sprite>("ui/UI4_key_pressed.png"),
+													mmake<Sprite>("ui/UI4_selected_key.png"),
+													mmake<Sprite>("ui/UI4_selected_key_hover.png"),
+													mmake<Sprite>("ui/UI4_selected_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
 		handle->SetDrawablesSizePivot(Vec2F(7, 1));
 
-		handle->checkPositionFunc = [&](const Vec2F& pos) {
-			float position = pos.x;
-			if (position < 0.0f)
-				position = 0.0f;
+		handle->checkPositionFunc = [&](const Vec2F& pos)
+			{
+				float position = pos.x;
+				if (position < 0.0f)
+					position = 0.0f;
 
-			return Vec2F(position, layout->GetHeight() * 0.5f);
+				return Vec2F(position, layout->GetHeight() * 0.5f);
 			};
 
-		handle->localToWidgetOffsetTransformFunc = [&](const Vec2F& pos) {
-			float worldXPos = mTimeline->LocalToWorld(pos.x);
-			float localXPos = worldXPos - layout->GetWorldLeft();
+		handle->localToWidgetOffsetTransformFunc = [&](const Vec2F& pos)
+			{
+				float worldXPos = mTimeline->LocalToWorld(pos.x);
+				float localXPos = worldXPos - layout->GetWorldLeft();
 
-			return Vec2F(localXPos, 0);
+				return Vec2F(localXPos, 0);
 			};
 
-		handle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& pos) {
-			float worldXPos = layout->GetWorldLeft() + pos.x;
-			float localXPos = mTimeline->WorldToLocal(worldXPos);
+		handle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& pos)
+			{
+				float worldXPos = layout->GetWorldLeft() + pos.x;
+				float localXPos = mTimeline->WorldToLocal(worldXPos);
 
-			return Vec2F(localXPos, 0);
+				return Vec2F(localXPos, 0);
 			};
 
 		return handle;
@@ -431,7 +438,7 @@ namespace Editor
 		DataDocument keyData;
 		Map<String, Vector<UInt64>> keys = { { mTrackPath, { Wrapper::GetKey(*mTrack, idx).uid } } };
 		mHandlesSheet->SerializeKeys(keyData, keys, 0);
-		mHandlesSheet->mAnimationWindow->mActionsList.DoneAction(mnew AnimationAddKeysAction(keys, keyData, mHandlesSheet));
+		mHandlesSheet->mAnimationWindow->mActionsList.DoneAction(mmake<AnimationAddKeysAction>(keys, keyData, mHandlesSheet));
 	}
 
 	template<typename AnimationTrackType>
@@ -440,11 +447,14 @@ namespace Editor
 		auto time = mTimeline->GetTimeCursor();
 		int keyIdx = -1;
 		int i = 0;
-		for (auto& key : Wrapper::GetKeys(*mTrack)) {
-			if (mTimeline->IsSameTime(key.position, time)) {
+		for (auto& key : Wrapper::GetKeys(*mTrack))
+		{
+			if (mTimeline->IsSameTime(key.position, time)) 
+			{
 				keyIdx = i;
 				break;
 			}
+
 			i++;
 		}
 
@@ -454,7 +464,8 @@ namespace Editor
 			key.value = mPropertyValue;
 			Wrapper::AddKey(*mTrack, key);
 		}
-		else {
+		else 
+		{
 			typename Wrapper::KeyType key;
 			key.position = time;
 			key.value = mPropertyValue;

@@ -18,8 +18,10 @@ namespace Editor
 		struct KeyHandle
 		{
 			UInt64 keyUid = 0;
+
 			Ref<AnimationKeyDragHandle> handle = nullptr;
 
+		public:
 			KeyHandle() { }
 			KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle): keyUid(keyUid), handle(handle) { }
 

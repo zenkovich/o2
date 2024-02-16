@@ -16,12 +16,12 @@ namespace Editor
 	void ITrackControl::UpdateHandles()
 	{}
 
-	Vector<ITrackControl::KeyHandle*> ITrackControl::GetKeyHandles() const
+	Vector<Ref<ITrackControl::KeyHandle>> ITrackControl::GetKeyHandles() const
 	{
-		return Vector<KeyHandle*>();
+		return {};
 	}
 
-	Widget* ITrackControl::GetTreePartControls() const
+	Ref<Widget> ITrackControl::GetTreePartControls() const
 	{
 		return nullptr;
 	}

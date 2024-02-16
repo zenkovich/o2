@@ -25,22 +25,22 @@
 
 namespace Editor
 {
-	Widget* ToolsPanel::GetPanelWidget() const
+	const Ref<Widget>& ToolsPanel::GetPanelWidget() const
 	{
 		return mPanelRoot;
 	}
 
-	Widget* ToolsPanel::GetPlayPanel() const
+	const Ref<Widget>& ToolsPanel::GetPlayPanel() const
 	{
 		return mPlayPanel;
 	}
 
-	HorizontalLayout* ToolsPanel::GetToolsPanel() const
+	const Ref<HorizontalLayout>& ToolsPanel::GetToolsPanel() const
 	{
 		return mToolsPanel;
 	}
 
-	void ToolsPanel::AddToolToggle(Toggle* toggle)
+	void ToolsPanel::AddToolToggle(const Ref<Toggle>& toggle)
 	{
 		if (!toggle->GetStateObject("visible")->GetAnimationClip()->GetTrack<float>("layout/minWidth"))
 		{
@@ -51,10 +51,10 @@ namespace Editor
 		mToolsPanel->AddChild(toggle);
 		toggle->SetEnabledForcible(false);
 		toggle->SetEnabled(true);
-		toggle->SetToggleGroup(&mToolsTogglesGroup);
+		toggle->SetToggleGroup(mToolsTogglesGroup);
 	}
 
-	void ToolsPanel::RemoveToolToggle(Toggle* toggle)
+	void ToolsPanel::RemoveToolToggle(const Ref<Toggle>& toggle)
 	{
 		toggle->GetStateObject("visible")->onStateFullyFalse = [=]() { 
 			o2Tasks.Invoke([=]() { mToolsPanel->RemoveChild(toggle, false); });
@@ -69,7 +69,7 @@ namespace Editor
 	}
 
 	ToolsPanel::ToolsPanel():
-		mToolsTogglesGroup(ToggleGroup::Type::OnlySingleTrue)
+		mToolsTogglesGroup(mmake<ToggleGroup>(ToggleGroup::Type::OnlySingleTrue))
 	{
 		mPanelRoot = mmake<Widget>();
 		mPanelRoot->name = "tools panel";

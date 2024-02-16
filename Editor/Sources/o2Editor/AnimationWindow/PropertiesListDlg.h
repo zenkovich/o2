@@ -28,7 +28,7 @@ namespace Editor
 		~PropertiesListDlg();
 
 		// Shows animation properties window for actor and animation
-		static void Show(const Ref<AnimationClip>& animation, Ref<Actor> actor);
+		static void Show(const Ref<AnimationClip>& animation, const Ref<Actor>& actor);
 
 	private:
 		Ref<o2::Window> mWindow;
@@ -78,7 +78,7 @@ namespace Editor
 		AnimationPropertiesTree& operator=(const AnimationPropertiesTree& other);
 
 		// Initializes properties
-		void Initialize(const Ref<AnimationClip>& animation, Ref<Actor> actor);
+		void Initialize(const Ref<AnimationClip>& animation, const Ref<Actor>& actor);
 
 		// Sets filter and refreshes tree
 		void SetFilter(const WString& filter);
@@ -94,8 +94,7 @@ namespace Editor
 		Ref<AnimationClip> mAnimation; // Looking animation
 		Ref<Actor>         mActor;     // Looking actor
 
-		Ref<NodeData> mRoot; // Root properties data node
-
+		Ref<NodeData>    mRoot;         // Root properties data node
 		Vector<IObject*> mPassedObject; // Tree processing passed objects
 
 	private:

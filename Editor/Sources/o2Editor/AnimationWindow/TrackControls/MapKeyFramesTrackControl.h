@@ -160,8 +160,9 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		for (auto& key : Wrapper::GetKeys(*track)) {
-			AnimationKeyDragHandle* handle = nullptr;
+		for (auto& key : Wrapper::GetKeys(*track)) 
+		{
+			Ref<AnimationKeyDragHandle> handle;
 
 			if (!trackControl->mHandlesCache.IsEmpty())
 				handle = trackControl->mHandlesCache.PopBack();
@@ -175,13 +176,14 @@ namespace Editor
 			handle->trackControl = trackControl;
 			handle->keyUid = key.uid;
 			handle->isMapping = true;
-			handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(trackControl->mHandlesSheet));
+			handle->SetSelectionGroup(DynamicCast<ISelectableDragHandlesGroup>(trackControl->mHandlesSheet.Lock()));
 
-			auto updatePosFunc = [=](KeyHandle& keyHandle) {
-				keyHandle.handle->SetPosition(Vec2F(Wrapper::FindKey(*track, handle->keyUid).position, 0.0f));
+			auto updatePosFunc = [=](KeyHandle& keyHandle)
+				{
+					keyHandle.handle->SetPosition(Vec2F(Wrapper::FindKey(*track, handle->keyUid).position, 0.0f));
 				};
 
-			KeyHandle* keyHandle = mnew KeyHandle(key.uid, handle, track, updatePosFunc);
+			auto keyHandle = mmake<KeyHandle>(key.uid, handle, track, updatePosFunc);
 			handles.Add(keyHandle);
 
 			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos(keyHandle, pos); };
