@@ -195,8 +195,8 @@ CLASS_FIELDS_META(o2::VerticalScrollBar)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(5.0f).NAME(mScrollhandleMinPxSize);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPressHandleOffset);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mHandlePressed);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandleLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackLayer);
+    FIELD().PROTECTED().NAME(mHandleLayer);
+    FIELD().PROTECTED().NAME(mBackLayer);
 }
 END_META;
 CLASS_METHODS_META(o2::VerticalScrollBar)
@@ -224,7 +224,7 @@ CLASS_METHODS_META(o2::VerticalScrollBar)
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);

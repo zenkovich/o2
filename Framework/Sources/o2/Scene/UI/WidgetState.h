@@ -125,7 +125,7 @@ CLASS_FIELDS_META(o2::WidgetState)
     FIELD().PUBLIC().NAME(onStateBecomesTrue);
     FIELD().PUBLIC().NAME(onStateBecomesFalse);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mState);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
+    FIELD().PROTECTED().NAME(mOwner);
     FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mPlayer);
     FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnAnimationChanged).SERIALIZABLE_ATTRIBUTE().NAME(mAnimation);
 }
@@ -135,8 +135,8 @@ CLASS_METHODS_META(o2::WidgetState)
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetState&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOwner, Widget*, bool);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationPlayer&, GetAnimationPlayer);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOwner, const Ref<Widget>&, bool);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationPlayer>, GetAnimationPlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationAsset, const AnimationAssetRef&);
     FUNCTION().PUBLIC().SIGNATURE(const AnimationAssetRef&, GetAnimationAsset);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationClip, const Ref<AnimationClip>&);

@@ -693,7 +693,7 @@ CLASS_METHODS_META(o2::ActorTransform)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWorldBottom);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransformData*);
     FUNCTION().PROTECTED().SIGNATURE(void, CopyFrom, const ActorTransform&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(RectF, GetParentRectangle);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateWorldRectangleAndTransform);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransform);

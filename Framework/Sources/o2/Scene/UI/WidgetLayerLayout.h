@@ -182,7 +182,7 @@ CLASS_FIELDS_META(o2::WidgetLayerLayout)
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetRight);
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetBottom);
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetTop);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mWidgetLayer);
+    FIELD().PRIVATE().NAME(mWidgetLayer);
     FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(mAnchorMin);
     FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(1, 1)).NAME(mAnchorMax);
     FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(mOffsetMin);
@@ -193,8 +193,8 @@ CLASS_METHODS_META(o2::WidgetLayerLayout)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(WidgetLayer*);
-    FUNCTION().PUBLIC().CONSTRUCTOR(WidgetLayer*, const WidgetLayerLayout&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<WidgetLayer>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<WidgetLayer>&, const WidgetLayerLayout&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, Calculate, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorMin, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetAnchorMin);

@@ -112,7 +112,7 @@ CLASS_FIELDS_META(o2::Spoiler)
     FIELD().PUBLIC().NAME(expanded);
     FIELD().PUBLIC().NAME(onExpand);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mHeadHeight);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mExpandState);
+    FIELD().PROTECTED().NAME(mExpandState);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mExpandCoef);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mTargetHeight);
 }
@@ -131,7 +131,7 @@ CLASS_METHODS_META(o2::Spoiler)
     FUNCTION().PUBLIC().SIGNATURE(const WString&, GetCaption);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHeadHeight, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetHeadHeight);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetExpandButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetExpandButton);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinHeightWithChildren);

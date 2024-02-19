@@ -117,12 +117,12 @@ CLASS_FIELDS_META(o2::GridLayoutScrollArea)
     FIELD().PUBLIC().NAME(getItemsCountFunc);
     FIELD().PUBLIC().NAME(getItemsRangeFunc);
     FIELD().PUBLIC().NAME(setupItemFunc);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemSample);
+    FIELD().PROTECTED().NAME(mItemsPool);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemsSpacing);
     FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mMinVisibleItemIdx);
     FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mMaxVisibleItemIdx);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevItemsInLine);
-    FIELD().PROTECTED().NAME(mItemsPool);
 }
 END_META;
 CLASS_METHODS_META(o2::GridLayoutScrollArea)
@@ -130,8 +130,8 @@ CLASS_METHODS_META(o2::GridLayoutScrollArea)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const GridLayoutScrollArea&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
     FUNCTION().PUBLIC().SIGNATURE(void, SetItemsSpacing, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(const Vec2F&, GetItemsSpacing);
     FUNCTION().PUBLIC().SIGNATURE(void, OnItemsUpdated, bool);
@@ -145,9 +145,9 @@ CLASS_METHODS_META(o2::GridLayoutScrollArea)
     FUNCTION().PROTECTED().SIGNATURE(void, MoveScrollPosition, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(int, GetItemsCount);
     FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetItemsRange, int, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupItemWidget, Widget*, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupItemWidget, const Ref<Widget>&, void*);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleItems);
-    FUNCTION().PROTECTED().SIGNATURE(Widget*, GetItemUnderPoint, const Vec2F&, int*);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, GetItemUnderPoint, const Vec2F&, int*);
     FUNCTION().PROTECTED().SIGNATURE(int, GetItemsInLine);
 }
 END_META;

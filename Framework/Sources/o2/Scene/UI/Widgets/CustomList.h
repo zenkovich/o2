@@ -247,12 +247,12 @@ CLASS_FIELDS_META(o2::CustomList)
     FIELD().PUBLIC().NAME(itemsCount);
     FIELD().PUBLIC().NAME(onSelectedPos);
     FIELD().PUBLIC().NAME(onSelectedItem);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVerLayout);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+    FIELD().PROTECTED().NAME(mVerLayout);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemSample);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mMultiSelection);
     FIELD().PROTECTED().NAME(mSelectedItems);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHoverDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHoverDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mSelectionLayout);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mHoverLayout);
     FIELD().PROTECTED().NAME(mCurrentHoverRect);
@@ -265,27 +265,27 @@ END_META;
 CLASS_METHODS_META(o2::CustomList)
 {
 
-    typedef const Function<bool(Ref<Widget>, Ref<Widget>)>& _tmp1;
+    typedef const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const CustomList&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Ref<Widget>);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetItemSample);
-    FUNCTION().PUBLIC().SIGNATURE(VerticalLayout*, GetItemsLayout);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<VerticalLayout>&, GetItemsLayout);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, Ref<Widget>);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, int, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, Ref<Widget>, int);
-    FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, Ref<Widget>);
+    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, const Ref<Widget>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
     FUNCTION().PUBLIC().SIGNATURE(void, SortItems, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(int, GetItemsCount);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, Ref<Widget>);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectItemAt, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedItems, const Vector<int>&);
     FUNCTION().PUBLIC().SIGNATURE(void, ClearSelection);
@@ -294,8 +294,8 @@ CLASS_METHODS_META(o2::CustomList)
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetSelectedItem);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMultiselectionAvailable, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsMultiselectionAvailable);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectionDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHoverDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetSelectionDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetHoverDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionDrawableLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetSelectionDrawableLayout);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHoverDrawableLayout, const Layout&);
@@ -320,7 +320,7 @@ CLASS_METHODS_META(o2::CustomList)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, GetItemUnderPoint, const Vec2F&, int*);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Vec2F&);
-    FUNCTION().PROTECTED().SIGNATURE(Sprite*, GetSelectionSprite);
+    FUNCTION().PROTECTED().SIGNATURE(const Ref<Sprite>&, GetSelectionSprite);
 }
 END_META;
 // --- END META ---

@@ -744,16 +744,16 @@ CLASS_FIELDS_META(o2::Widget)
     FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onHide);
     FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetLayer).DONT_DELETE_ATTRIBUTE().NAME(mLayers);
     FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).NAME(mStates);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentWidget);
+    FIELD().PROTECTED().NAME(mParentWidget);
     FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().NAME(mChildWidgets);
     FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().NAME(mInternalWidgets);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mTransparency);
     FIELD().PROTECTED().DEFAULT_VALUE(1.0f).NAME(mResTransparency);
     FIELD().PROTECTED().NAME(mDrawingLayers);
-    FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mFocusedState);
+    FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().NAME(mFocusedState);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsFocused);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mIsFocusable);
-    FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mVisibleState);
+    FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().NAME(mVisibleState);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsClipped);
     FIELD().PROTECTED().NAME(mBounds);
     FIELD().PROTECTED().NAME(mBoundsWithChilds);
@@ -773,7 +773,7 @@ CLASS_METHODS_META(o2::Widget)
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<ActorAsset>&, ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Component*>, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Ref<Component>>, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Widget&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildren, float);
@@ -782,18 +782,18 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, ForceDraw, const RectF&, float);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayoutDirty);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, GetParentWidget);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const WeakRef<Widget>&, GetParentWidget);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const RectF&, GetChildrenWorldRect);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, GetChildWidget, const String&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, AddChild, Actor*);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, AddChild, Actor*, int);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, AddChildWidget, Ref<Widget>);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddChildWidget, Ref<Widget>, int);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, AddChild, const Ref<Actor>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, AddChild, const Ref<Actor>&, int);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, AddChildWidget, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddChildWidget, const Ref<Widget>&, int);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<Widget>>&, GetChildWidgets);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetIndexInSiblings, int);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetLayer>, AddLayer, Ref<WidgetLayer>);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<WidgetLayer>, AddLayer, const String&, IRectDrawable*, const Layout&, float);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveLayer, Ref<WidgetLayer>, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetLayer>, AddLayer, const Ref<WidgetLayer>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<WidgetLayer>, AddLayer, const String&, const Ref<IRectDrawable>&, const Layout&, float);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveLayer, WidgetLayer*);
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(RemoveLayerByPath).SIGNATURE(void, RemoveLayer, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllLayers);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetLayer>, GetLayer, const String&);
@@ -802,9 +802,9 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateNew).SIGNATURE(Ref<WidgetState>, AddState, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateWithClip).SIGNATURE(Ref<WidgetState>, AddState, const String&, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateWithClipAsset).SIGNATURE(Ref<WidgetState>, AddState, const String&, const AnimationAssetRef&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetState>, AddState, Ref<WidgetState>, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetState>, AddState, const Ref<WidgetState>&, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(RemoveStateByName).SIGNATURE(bool, RemoveState, const String&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, RemoveState, Ref<WidgetState>);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, RemoveState, const Ref<WidgetState>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllStates);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetState, const String&, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetStateForcible, const String&, bool);
@@ -823,11 +823,11 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsFocusable);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFocusable, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetInternalParent, Ref<Widget>, bool);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddInternalWidget, Ref<Widget>, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetInternalParent, const Ref<Widget>&, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddInternalWidget, const Ref<Widget>&, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, GetInternalWidget, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, FindInternalWidget, const String&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, FindActorById, SceneUID);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, FindActorById, SceneUID);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
@@ -840,9 +840,9 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
@@ -851,8 +851,8 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PROTECTED().SIGNATURE(const WidgetLayoutData&, GetLayoutData);
     FUNCTION().PROTECTED().SIGNATURE(void, SetChildrenWorldRect, const RectF&);
     FUNCTION().PROTECTED().SIGNATURE(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Ref<Widget>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Ref<Widget>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Widget*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFocused);
     FUNCTION().PROTECTED().SIGNATURE(void, OnUnfocused);
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinWidthWithChildren);
@@ -865,17 +865,17 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransparency);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibility, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildFocused, Ref<Widget>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, Ref<WidgetLayer>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAdded, Ref<WidgetState>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildFocused, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAdded, const Ref<WidgetState>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStatesListChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, DrawDebugFrame);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersDrawingSequence);
     FUNCTION().PROTECTED().SIGNATURE(void, RetargetStatesAnimations);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetParentWidget, Ref<Widget>);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<Widget>>, GetChildrenNonConst);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<WidgetLayer>>, GetLayersNonConst);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<WidgetState>>, GetStatesNonConst);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetParentWidget, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<Widget>>&, GetChildrenNonConst);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<WidgetLayer>>&, GetLayersNonConst);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<WidgetState>>&, GetStatesNonConst);
     FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetAllLayers);
     FUNCTION().PROTECTED().SIGNATURE(_tmp2, GetAllChilds);
     FUNCTION().PROTECTED().SIGNATURE(_tmp3, GetAllInternalWidgets);
@@ -884,94 +884,18 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(GetLayout).SIGNATURE(WidgetLayout*, GetLayoutScript);
 #endif
 #if  IS_EDITOR
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
-    FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, const Ref<SceneEditableObject>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableParent);
     FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, const Ref<SceneEditableObject>&, int);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsTransforming);
     FUNCTION().PUBLIC().SIGNATURE(Basis, GetTransform);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTransform, const Basis&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsLayout);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetLayout);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLayout, const Layout&);
-    FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableOwner);
 #endif
 }
 END_META;
-
-#if  IS_EDITOR
-CLASS_BASES_META(o2::Widget::LayersEditable)
-{
-    BASE_CLASS(o2::SceneEditableObject);
-}
-END_META;
-CLASS_FIELDS_META(o2::Widget::LayersEditable)
-{
-#if  IS_EDITOR
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(widget);
-    FIELD().PUBLIC().DEFAULT_VALUE(Math::Random()).NAME(UID);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(prototypeLink);
-#endif
-}
-END_META;
-CLASS_METHODS_META(o2::Widget::LayersEditable)
-{
-
-#if  IS_EDITOR
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(Ref<Widget>);
-    FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
-    FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
-    FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(const SceneEditableObject*, GetEditableLink);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
-    FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDeleting);
-    FUNCTION().PUBLIC().SIGNATURE(Basis, GetTransform);
-#endif
-}
-END_META;
-#endif
-
-#if  IS_EDITOR
-CLASS_BASES_META(o2::Widget::InternalChildrenEditableEditable)
-{
-    BASE_CLASS(o2::SceneEditableObject);
-}
-END_META;
-CLASS_FIELDS_META(o2::Widget::InternalChildrenEditableEditable)
-{
-#if  IS_EDITOR
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(widget);
-    FIELD().PUBLIC().DEFAULT_VALUE(Math::Random()).NAME(UID);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(prototypeLink);
-#endif
-}
-END_META;
-CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
-{
-
-#if  IS_EDITOR
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(Ref<Widget>);
-    FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
-    FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
-    FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(const SceneEditableObject*, GetEditableLink);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
-    FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDeleting);
-    FUNCTION().PUBLIC().SIGNATURE(Basis, GetTransform);
-#endif
-}
-END_META;
-#endif
 // --- END META ---

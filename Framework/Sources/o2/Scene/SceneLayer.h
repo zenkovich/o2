@@ -95,7 +95,7 @@ CLASS_METHODS_META(o2::SceneLayer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<ISceneDrawable>>&, GetDrawables);
-    FUNCTION().PUBLIC().SIGNATURE(RootDrawablesContainer&, GetRootDrawables);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<RootDrawablesContainer>&, GetRootDrawables);
     FUNCTION().PROTECTED().SIGNATURE(void, RegisterDrawable, ISceneDrawable*);
     FUNCTION().PROTECTED().SIGNATURE(void, UnregisterDrawable, ISceneDrawable*);
     FUNCTION().PROTECTED().SIGNATURE(void, SetLastByDepth, const Ref<ISceneDrawable>&);

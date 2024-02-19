@@ -88,7 +88,7 @@ CLASS_FIELDS_META(o2::DropDown)
 {
     FIELD().PUBLIC().NAME(value);
     FIELD().PUBLIC().NAME(onSelectedText);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectedText);
+    FIELD().PROTECTED().NAME(mSelectedText);
 }
 END_META;
 CLASS_METHODS_META(o2::DropDown)
@@ -108,7 +108,7 @@ CLASS_METHODS_META(o2::DropDown)
     FUNCTION().PUBLIC().SIGNATURE(void, SelectItemText, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
 }
 END_META;
 // --- END META ---

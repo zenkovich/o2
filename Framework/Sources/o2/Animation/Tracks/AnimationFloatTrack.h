@@ -228,7 +228,7 @@ END_META;
 CLASS_FIELDS_META(o2::AnimationTrack<float>)
 {
     FIELD().PUBLIC().NAME(keys);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(curve);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Curve>()).NAME(curve);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>)

@@ -136,7 +136,7 @@ namespace o2
         // Copying ref without requiring remap
         void CopyWithoutRemap(const BaseActorRef& other) override
         {
-            mPtr = other.mPtr;
+            Base::mPtr = other.Base::mPtr;
             mRequiredResolveData = nullptr;
         }
 
@@ -181,34 +181,30 @@ namespace o2
 }
 // --- META ---
 
-CLASS_BASES_META(o2::Ref<Actor>)
+CLASS_BASES_META(o2::BaseActorRef)
 {
     BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::Ref<Actor>)
+CLASS_FIELDS_META(o2::BaseActorRef)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActor);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mWasDeleted);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRequiredResolveData);
+    FIELD().PROTECTED().NAME(mRequiredResolveData);
 }
 END_META;
-CLASS_METHODS_META(o2::Ref<Actor>)
+CLASS_METHODS_META(o2::BaseActorRef)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Actor>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const BaseActorRef&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, Get);
     FUNCTION().PUBLIC().SIGNATURE(const Actor*, Get);
+    FUNCTION().PUBLIC().SIGNATURE(void, Set, Actor*);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Destroy);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsValid);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsWasDeleted);
     FUNCTION().PUBLIC().SIGNATURE(const Type&, GetActorType);
+    FUNCTION().PUBLIC().SIGNATURE(void, CopyWithoutRemap, const BaseActorRef&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const Ref<Actor>&, const Ref<Actor>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateSpecActor);
-    FUNCTION().PROTECTED().SIGNATURE(void, CopyWithoutRemap, const Ref<Actor>&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const BaseActorRef&, const BaseActorRef&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }

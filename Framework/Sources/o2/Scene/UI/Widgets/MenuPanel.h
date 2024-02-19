@@ -193,17 +193,17 @@ CLASS_BASES_META(o2::MenuPanel)
 END_META;
 CLASS_FIELDS_META(o2::MenuPanel)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayout);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+    FIELD().PROTECTED().NAME(mLayout);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemSample);
     FIELD().PROTECTED().NAME(mClickFunctions);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionLayout);
     FIELD().PROTECTED().NAME(mCurrentSelectionRect);
     FIELD().PROTECTED().NAME(mTargetSelectionRect);
     FIELD().PROTECTED().NAME(mLastSelectCheckCursor);
     FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mSelectedItem);
     FIELD().PROTECTED().DEFAULT_VALUE(-1.0f).NAME(mSelectSubContextTime);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOpenedContext);
+    FIELD().PROTECTED().NAME(mOpenedContext);
 }
 END_META;
 CLASS_METHODS_META(o2::MenuPanel)
@@ -213,7 +213,7 @@ CLASS_METHODS_META(o2::MenuPanel)
     FUNCTION().PUBLIC().CONSTRUCTOR(const MenuPanel&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem, const Item&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem, const Item&);
     FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertItem, const Item&, int);
@@ -224,19 +224,19 @@ CLASS_METHODS_META(o2::MenuPanel)
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetItemsLayout);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectionDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<HorizontalLayout>&, GetItemsLayout);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetSelectionDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionDrawableLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetSelectionDrawableLayout);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(ContextMenu*, CreateSubContext, WString&);
-    FUNCTION().PROTECTED().SIGNATURE(Widget*, CreateItem, const Item&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<ContextMenu>, CreateSubContext, WString&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, CreateItem, const Item&);
     FUNCTION().PROTECTED().SIGNATURE(Item, GetItemDef, int);
-    FUNCTION().PROTECTED().SIGNATURE(Widget*, GetItemUnderPoint, const Vec2F&, int*);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, GetItemUnderPoint, const Vec2F&, int*);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
@@ -250,6 +250,7 @@ END_META;
 CLASS_BASES_META(o2::MenuPanel::Item)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::MenuPanel::Item)
@@ -263,7 +264,7 @@ CLASS_METHODS_META(o2::MenuPanel::Item)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<ContextMenu::Item*>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<Ref<ContextMenu::Item>>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Function<void()>);
 }
 END_META;

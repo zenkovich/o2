@@ -79,7 +79,7 @@ namespace o2
             if (!protoChild->IsSupportsLinking())
                 continue;
 
-            auto thisLinkedChild = allThisChildren.FindOrDefault([&](SceneEditableObject* x) {
+            auto thisLinkedChild = allThisChildren.FindOrDefault([&](auto& x) {
                 return x->IsEditableLinkedTo(protoChild);
             });
 

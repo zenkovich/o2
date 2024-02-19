@@ -182,8 +182,6 @@ CLASS_FIELDS_META(o2::Window)
     FIELD().PUBLIC().NAME(icon);
     FIELD().PUBLIC().NAME(onOpened);
     FIELD().PUBLIC().NAME(onClosed);
-    FIELD().PROTECTED().DEFAULT_VALUE("icon").NAME(mIconLayerPath);
-    FIELD().PROTECTED().DEFAULT_VALUE("caption").NAME(mCaptionLayerPath);
     FIELD().PROTECTED().NAME(mOptionsMenu);
     FIELD().PROTECTED().NAME(mBackCursorArea);
     FIELD().PROTECTED().NAME(mHeadDragHandle);
@@ -222,13 +220,13 @@ CLASS_METHODS_META(o2::Window)
     FUNCTION().PUBLIC().CONSTRUCTOR(const Window&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, ShowModal);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, Sprite*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, const Ref<Sprite>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Sprite>, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE(void, SetIconLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetIconLayout);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(ContextMenu*, GetOptionsMenu);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<ContextMenu>&, GetOptionsMenu);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDragAreaLayouts, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetModal, bool);
@@ -239,14 +237,14 @@ CLASS_METHODS_META(o2::Window)
     FUNCTION().PROTECTED().SIGNATURE(void, OnFocused);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAdded, WidgetState*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAdded, const Ref<WidgetState>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeContextMenu);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeContextItems);
     FUNCTION().PROTECTED().SIGNATURE(void, RestoreControls);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeHandles);
     FUNCTION().PROTECTED().SIGNATURE(void, SetHandlesInteractable, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, BindHandlesInteractableToVisibility);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildFocused, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildFocused, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
 }
 END_META;

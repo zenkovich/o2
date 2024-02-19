@@ -220,7 +220,7 @@ CLASS_METHODS_META(o2::GridLayout)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFittingByChildren);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Widget*);
     FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromLeftTop);

@@ -161,7 +161,7 @@ CLASS_METHODS_META(o2::MeshComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }

@@ -123,8 +123,8 @@ CLASS_FIELDS_META(o2::Button)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(onClick);
     FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(isPointInside);
     FIELD().PUBLIC().NAME(shortcut);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaptionText);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mIconSprite);
+    FIELD().PROTECTED().NAME(mCaptionText);
+    FIELD().PROTECTED().NAME(mIconSprite);
 }
 END_META;
 CLASS_METHODS_META(o2::Button)
@@ -135,8 +135,8 @@ CLASS_METHODS_META(o2::Button)
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, Sprite*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, const Ref<Sprite>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Sprite>, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
@@ -147,7 +147,7 @@ CLASS_METHODS_META(o2::Button)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnBecomeInteractable);

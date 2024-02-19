@@ -135,7 +135,7 @@ namespace o2
         // Copying ref without requiring remap
         void CopyWithoutRemap(const BaseComponentRef& other) override
         {
-            mPtr = other.mPtr;
+            Base::mPtr = other.Base::mPtr;
             mRequiredResolveData = nullptr;
         }
 
@@ -163,7 +163,7 @@ namespace o2
             typedef _thisType thisclass;
             processor.template StartFields<_thisType>(object, type);
 
-            FIELD().PROTECTED().NAME(mSpecComponent);
+            FIELD().PROTECTED().NAME(Base::mPtr);
         }
 
         template<typename _type_processor>
@@ -172,7 +172,7 @@ namespace o2
             typedef _thisType thisclass;
             processor.template StartMethods<_thisType>(object, type);
 
-            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(T*);
+            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(_component_type*);
             FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
             FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
         }
@@ -187,28 +187,22 @@ CLASS_BASES_META(o2::BaseComponentRef)
 END_META;
 CLASS_FIELDS_META(o2::BaseComponentRef)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponent);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mWasDeleted);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRequiredResolveData);
+    FIELD().PROTECTED().NAME(mRequiredResolveData);
 }
 END_META;
 CLASS_METHODS_META(o2::BaseComponentRef)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(Component*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const BaseComponentRef&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Set, Component*);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, Get);
     FUNCTION().PUBLIC().SIGNATURE(const Component*, Get);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Destroy);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsValid);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsWasDeleted);
     FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
+    FUNCTION().PUBLIC().SIGNATURE(void, CopyWithoutRemap, const BaseComponentRef&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const BaseComponentRef&, const BaseComponentRef&);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateSpecComponent);
-    FUNCTION().PROTECTED().SIGNATURE(void, CopyWithoutRemap, const BaseComponentRef&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }

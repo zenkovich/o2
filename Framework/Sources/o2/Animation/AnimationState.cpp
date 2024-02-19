@@ -10,8 +10,8 @@ namespace o2
     AnimationState::AnimationState(const String& name):
         name(name)
     {
-        player.onTrackPlayerAdded = [&](auto track) { OnTrackPlayerAdded(track); };
-        player.onTrackPlayerRemove = [&](auto track) { OnTrackPlayerRemove(track); };
+        player->onTrackPlayerAdded = [&](auto track) { OnTrackPlayerAdded(track); };
+        player->onTrackPlayerRemove = [&](auto track) { OnTrackPlayerRemove(track); };
     }
 
     void AnimationState::SetWeight(float weight)
@@ -27,7 +27,7 @@ namespace o2
     void AnimationState::SetAnimation(const AnimationAssetRef& animationAsset)
     {
         mAnimation = animationAsset;
-        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
+        player->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
     const AnimationAssetRef& AnimationState::GetAnimation() const
@@ -37,7 +37,7 @@ namespace o2
 
     void AnimationState::OnAnimationChanged()
     {
-        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
+        player->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
     void AnimationState::OnTrackPlayerAdded(const Ref<IAnimationTrack::IPlayer>& trackPlayer)
@@ -54,7 +54,7 @@ namespace o2
 
     void AnimationState::OnDeserialized(const DataValue& node)
     {
-        player.SetClip(mAnimation ? mAnimation->animation : nullptr);
+        player->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
 }

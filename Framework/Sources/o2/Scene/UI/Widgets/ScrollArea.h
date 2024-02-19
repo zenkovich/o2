@@ -224,8 +224,8 @@ CLASS_FIELDS_META(o2::ScrollArea)
     FIELD().PUBLIC().NAME(horScroll);
     FIELD().PUBLIC().NAME(verScroll);
     FIELD().PUBLIC().NAME(onScrolled);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHorScrollBar);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVerScrollBar);
+    FIELD().PROTECTED().NAME(mHorScrollBar);
+    FIELD().PROTECTED().NAME(mVerScrollBar);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnHorScrollBar);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnVerScrollBar);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mLayoutUpdated);
@@ -269,10 +269,10 @@ CLASS_METHODS_META(o2::ScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(float, GetHorizontalScroll);
     FUNCTION().PUBLIC().SIGNATURE(void, SetVerticalScroll, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetVerticalScroll);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHorizontalScrollBar, HorizontalScrollBar*, bool);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalScrollBar*, GetHorizontalScrollbar);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetVerticalScrollBar, VerticalScrollBar*, bool);
-    FUNCTION().PUBLIC().SIGNATURE(VerticalScrollBar*, GetVerticalScrollbar);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHorizontalScrollBar, const Ref<HorizontalScrollBar>&, bool);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<HorizontalScrollBar>&, GetHorizontalScrollbar);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetVerticalScrollBar, const Ref<VerticalScrollBar>&, bool);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<VerticalScrollBar>&, GetVerticalScrollbar);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnableScrollsHiding, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollsHiding);
     FUNCTION().PUBLIC().SIGNATURE(void, SetScrollBarsShowingByCursor, bool);
@@ -287,7 +287,7 @@ CLASS_METHODS_META(o2::ScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Widget*);
     FUNCTION().PROTECTED().SIGNATURE(void, SetChildrenWorldRect, const RectF&);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckClipping, const RectF&);

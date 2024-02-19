@@ -1,5 +1,5 @@
 #pragma once
-#include "o2/Scene/SceneLayer.h"
+#include "o2/Scene/SceneLayerRef.h"
 
 namespace o2
 {

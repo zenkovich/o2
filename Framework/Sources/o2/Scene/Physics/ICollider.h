@@ -150,7 +150,7 @@ CLASS_METHODS_META(o2::ICollider)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableFromCreateMenu);
     FUNCTION().PROTECTED().SIGNATURE(void, AddToRigidBody, RigidBody*);
     FUNCTION().PROTECTED().SIGNATURE(void, RemoveFromRigidBody);
-    FUNCTION().PROTECTED().SIGNATURE(RigidBody*, FindRigidBody);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<RigidBody>, FindRigidBody);
     FUNCTION().PROTECTED().SIGNATURE(void, OnShapeChanged);
     FUNCTION().PROTECTED().SIGNATURE(b2Shape*, GetShape, const Basis&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);

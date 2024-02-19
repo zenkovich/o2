@@ -168,8 +168,8 @@ CLASS_FIELDS_META(o2::VerticalProgress)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mMaxValue);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mScrollSense);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Orientation::Down).NAME(mOrientation);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBarLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackLayer);
+    FIELD().PROTECTED().NAME(mBarLayer);
+    FIELD().PROTECTED().NAME(mBackLayer);
 }
 END_META;
 CLASS_METHODS_META(o2::VerticalProgress)
@@ -193,7 +193,7 @@ CLASS_METHODS_META(o2::VerticalProgress)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);

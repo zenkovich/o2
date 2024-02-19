@@ -79,7 +79,7 @@ CLASS_METHODS_META(o2::SkinningMeshBoneComponent)
     FUNCTION().PUBLIC().CONSTRUCTOR(const SkinningMeshBoneComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
-    FUNCTION().PUBLIC().SIGNATURE(SkinningMeshComponent*, FindSkinningMesh);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SkinningMeshComponent>, FindSkinningMesh);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);

@@ -1,13 +1,12 @@
 #pragma once
 
-#include "o2/Scene/SceneLayer.h"
+#include "o2/Scene/SceneLayerRef.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
 namespace o2
 {
     class Actor;
-    class Ref<Component>;
 
     // ---------------------------
     // Actor's component interface
@@ -294,9 +293,9 @@ CLASS_METHODS_META(o2::Component)
     FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Actor>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, const Ref<Component>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, const Ref<Component>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
 }
 END_META;
 // --- END META ---

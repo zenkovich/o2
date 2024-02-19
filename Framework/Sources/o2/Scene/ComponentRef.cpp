@@ -126,5 +126,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::Ref<Component>, o2__ComponentRef);
+DECLARE_CLASS(o2::BaseComponentRef, o2__BaseComponentRef);
 // --- END META ---

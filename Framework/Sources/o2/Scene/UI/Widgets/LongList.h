@@ -175,9 +175,9 @@ CLASS_FIELDS_META(o2::LongList)
     FIELD().PUBLIC().NAME(getItemsCountFunc);
     FIELD().PUBLIC().NAME(getItemsRangeFunc);
     FIELD().PUBLIC().NAME(setupItemFunc);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHoverDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemSample);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHoverDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mSelectionLayout);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mHoverLayout);
     FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mMinVisibleItemIdx);
@@ -199,12 +199,12 @@ CLASS_METHODS_META(o2::LongList)
     FUNCTION().PUBLIC().CONSTRUCTOR(const LongList&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectItemAt, int);
     FUNCTION().PUBLIC().SIGNATURE(int, GetSelectedItemPosition);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectionDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHoverDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetSelectionDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetHoverDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionDrawableLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetSelectionDrawableLayout);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHoverDrawableLayout, const Layout&);
@@ -225,7 +225,7 @@ CLASS_METHODS_META(o2::LongList)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(Widget*, GetItemUnderPoint, const Vec2F&, int*);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, GetItemUnderPoint, const Vec2F&, int*);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateSelection, int);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);

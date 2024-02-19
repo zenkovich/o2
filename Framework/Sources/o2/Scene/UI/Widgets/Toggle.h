@@ -191,9 +191,9 @@ CLASS_FIELDS_META(o2::Toggle)
     FIELD().PUBLIC().NAME(shortcut);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mValue);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mValueUnknown);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaptionText);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mToggleGroup);
+    FIELD().PROTECTED().NAME(mCaptionText);
+    FIELD().PROTECTED().NAME(mBackLayer);
+    FIELD().PROTECTED().NAME(mToggleGroup);
 }
 END_META;
 CLASS_METHODS_META(o2::Toggle)
@@ -208,12 +208,12 @@ CLASS_METHODS_META(o2::Toggle)
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueUnknown);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsValueUnknown);
     FUNCTION().PUBLIC().SIGNATURE(bool, GetValue);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetToggleGroup, ToggleGroup*);
-    FUNCTION().PUBLIC().SIGNATURE(ToggleGroup*, GetToggleGroup);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetToggleGroup, const Ref<ToggleGroup>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<ToggleGroup>&, GetToggleGroup);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);

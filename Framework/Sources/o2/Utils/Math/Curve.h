@@ -301,6 +301,7 @@ PRE_ENUM_META(o2::Curve::Key::Type);
 CLASS_BASES_META(o2::Curve)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Curve)

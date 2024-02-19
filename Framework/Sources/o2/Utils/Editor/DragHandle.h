@@ -471,12 +471,12 @@ CLASS_FIELDS_META(o2::DragHandle)
     FIELD().PUBLIC().NAME(checkSnappingFunc);
     FIELD().PUBLIC().NAME(onRightButtonPressed);
     FIELD().PUBLIC().NAME(onRightButtonReleased);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mRegularDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHoverDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mPressedDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedHoverDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedPressedDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mRegularDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHoverDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mPressedDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectedDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectedHoverDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectedPressedDrawable);
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabled);
     FIELD().PROTECTED().NAME(mPosition);
     FIELD().PROTECTED().NAME(mScreenPosition);
@@ -491,7 +491,7 @@ CLASS_FIELDS_META(o2::DragHandle)
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsDragging);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsHovered);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsSelected);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectGroup);
+    FIELD().PROTECTED().NAME(mSelectGroup);
     FIELD().PROTECTED().DEFAULT_VALUE(3.0f).NAME(mDragDistanceThreshold);
 }
 END_META;
@@ -499,7 +499,7 @@ CLASS_METHODS_META(o2::DragHandle)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const DragHandle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw, const RectF&);
@@ -517,8 +517,8 @@ CLASS_METHODS_META(o2::DragHandle)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSelected);
     FUNCTION().PUBLIC().SIGNATURE(void, Select);
     FUNCTION().PUBLIC().SIGNATURE(void, Deselect);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionGroup, ISelectableDragHandlesGroup*);
-    FUNCTION().PUBLIC().SIGNATURE(ISelectableDragHandlesGroup*, GetSelectionGroup);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionGroup, const Ref<ISelectableDragHandlesGroup>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<ISelectableDragHandlesGroup>&, GetSelectionGroup);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAngle, float);
@@ -526,18 +526,18 @@ CLASS_METHODS_META(o2::DragHandle)
     FUNCTION().PUBLIC().SIGNATURE(const Vec2F&, GetPressedCursorPos);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetRegularDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetRegularDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHoverDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetHoverDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetPressedDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetPressedDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetSelectedDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedHoveredDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetSelectedHoveredDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedPressedDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetSelectedPressedDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetRegularDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetRegularDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHoverDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetHoverDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPressedDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetPressedDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetSelectedDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedHoveredDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetSelectedHoveredDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedPressedDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetSelectedPressedDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDrawablesSize, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDrawablesColor, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDrawablesSizePivot, const Vec2F&);
@@ -575,7 +575,7 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetDragHandle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);

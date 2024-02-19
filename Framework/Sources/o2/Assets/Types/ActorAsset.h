@@ -86,8 +86,8 @@ CLASS_METHODS_META(o2::ActorAsset)
     FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAsset&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, Instantiate);
-    FUNCTION().PUBLIC().SIGNATURE(Actor*, GetActor);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetActor, Actor*, bool);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Actor>&, GetActor);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActor, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

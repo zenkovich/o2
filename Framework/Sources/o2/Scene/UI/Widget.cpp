@@ -5,7 +5,7 @@
 #include "o2/Render/Render.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/Scene.h"
-#include "o2/Scene/SceneLayer.h"
+#include "o2/Scene/SceneLayerRef.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/WidgetLayout.h"
@@ -1625,12 +1625,4 @@ DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Widget>);
 // --- META ---
 
 DECLARE_CLASS(o2::Widget, o2__Widget);
-
-#if  IS_EDITOR
-DECLARE_CLASS(o2::Widget::LayersEditable, o2__Widget__LayersEditable);
-#endif
-
-#if  IS_EDITOR
-DECLARE_CLASS(o2::Widget::InternalChildrenEditableEditable, o2__Widget__InternalChildrenEditableEditable);
-#endif
 // --- END META ---

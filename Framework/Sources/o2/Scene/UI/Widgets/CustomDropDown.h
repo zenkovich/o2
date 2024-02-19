@@ -181,7 +181,7 @@ CLASS_FIELDS_META(o2::CustomDropDown)
     FIELD().PUBLIC().NAME(onBeforeExpand);
     FIELD().PUBLIC().NAME(onSelectedPos);
     FIELD().PUBLIC().NAME(onSelectedItem);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mItemsList);
+    FIELD().PROTECTED().NAME(mItemsList);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mClipLayout);
     FIELD().PROTECTED().NAME(mAbsoluteClip);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mMaxListItems);
@@ -190,7 +190,7 @@ END_META;
 CLASS_METHODS_META(o2::CustomDropDown)
 {
 
-    typedef const Function<bool(Widget*, Widget*)>& _tmp1;
+    typedef const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const CustomDropDown&);
@@ -198,25 +198,25 @@ CLASS_METHODS_META(o2::CustomDropDown)
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
-    FUNCTION().PUBLIC().SIGNATURE(VerticalLayout*, GetItemsLayout);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<VerticalLayout>&, GetItemsLayout);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, int, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, Widget*, int);
-    FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItem, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, const Ref<Widget>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
     FUNCTION().PUBLIC().SIGNATURE(void, SortItems, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(int, GetItemsCount);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectItemAt, int);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetSelectedItem);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetSelectedItem);
     FUNCTION().PUBLIC().SIGNATURE(int, GetSelectedItemPosition);
-    FUNCTION().PUBLIC().SIGNATURE(CustomList*, GetListView);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<CustomList>&, GetListView);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMaxListSizeInItems, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetClippingLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetClippingLayout);

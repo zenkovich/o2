@@ -22,7 +22,7 @@ namespace o2
         PROPERTY(Color4, color, SetColor, GetColor);                          // Color property
         PROPERTY(Vector<Vec2F>, extraPoints, SetExtraPoints, GetExtraPoints); // extra points property
 
-        Spline spline; // Shell spline @SERIALIZABLE
+        Ref<Spline> spline = mmake<Spline>(); // Shell spline @SERIALIZABLE
 
     public:
         // Default constructor
@@ -154,7 +154,7 @@ CLASS_FIELDS_META(o2::SkinningMeshComponent)
     FIELD().PUBLIC().NAME(mappingFrame);
     FIELD().PUBLIC().NAME(color);
     FIELD().PUBLIC().NAME(extraPoints);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(spline);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Spline>()).NAME(spline);
     FIELD().PROTECTED().NAME(mMesh);
     FIELD().PROTECTED().NAME(mTransform);
     FIELD().PROTECTED().NAME(mBonesMapping);
@@ -169,7 +169,7 @@ END_META;
 CLASS_METHODS_META(o2::SkinningMeshComponent)
 {
 
-    typedef const Vector<Pair<SkinningMeshBoneComponent*, SkinningMesh::Bone*>>& _tmp1;
+    typedef const Vector<Pair<WeakRef<SkinningMeshBoneComponent>, SkinningMesh::Bone*>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const SkinningMeshComponent&);
@@ -197,7 +197,7 @@ CLASS_METHODS_META(o2::SkinningMeshComponent)
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateBones);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
     FUNCTION().PROTECTED().SIGNATURE(void, DrawMeshWire);

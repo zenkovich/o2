@@ -128,7 +128,7 @@ CLASS_METHODS_META(o2::ScriptableComponent)
     FUNCTION().PROTECTED().SIGNATURE(void, LoadScriptAndCreateObject);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);

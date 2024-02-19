@@ -209,14 +209,14 @@ CLASS_METHODS_META(o2::HorizontalLayout)
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinWidthWithChildren);
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinHeightWithChildren);
     FUNCTION().PROTECTED().SIGNATURE(float, GetWidthWeightWithChildren);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Widget*);
     FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromLeftToRight);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromRightToLeft);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromCenter);
     FUNCTION().PROTECTED().SIGNATURE(void, ExpandSizeByChilds);
-    FUNCTION().PROTECTED().SIGNATURE(void, AlignWidgetByHeight, Widget*, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, AlignWidgetByHeight, const Ref<Widget>&, float);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayoutParametres);
 }
 END_META;

@@ -25,7 +25,7 @@ namespace o2
 
         float blend = 1.0f; // State blending coefficient in 0..1 Used for blending
 
-        AnimationPlayer player; // Animation player
+        Ref<AnimationPlayer> player = mmake<AnimationPlayer>(); // Animation player
 
     public:
         // Default constructor
@@ -89,7 +89,7 @@ CLASS_FIELDS_META(o2::AnimationState)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mask);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(autoPlay);
     FIELD().PUBLIC().DEFAULT_VALUE(1.0f).NAME(blend);
-    FIELD().PUBLIC().NAME(player);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(player);
     FIELD().PROTECTED().NAME(mOwner);
     FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnAnimationChanged).SERIALIZABLE_ATTRIBUTE().NAME(mAnimation);
     FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mWeight);

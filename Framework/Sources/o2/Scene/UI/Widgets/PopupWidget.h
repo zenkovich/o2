@@ -116,8 +116,8 @@ CLASS_FIELDS_META(o2::PopupWidget)
 {
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(fitByChildren);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(40.0f).NAME(mFitSizeMin);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentPopup);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mChildPopup);
+    FIELD().PROTECTED().NAME(mParentPopup);
+    FIELD().PROTECTED().NAME(mChildPopup);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mShownAtFrame);
 }
 END_META;
@@ -128,7 +128,7 @@ CLASS_METHODS_META(o2::PopupWidget)
     FUNCTION().PUBLIC().CONSTRUCTOR(const PopupWidget&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, Show, PopupWidget*, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Show, const Ref<PopupWidget>&, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMinFitSize, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);

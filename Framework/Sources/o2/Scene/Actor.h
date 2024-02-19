@@ -223,7 +223,7 @@ namespace o2
 
         // Searches child with specified type
         template<typename _type>
-        Ref<_type> FindChildByType(bool searchInChildren = true);
+        Ref<_type> FindChildByType(bool searchInChildren = true) const;
 
         // Returns children array @SCRIPTABLE
 		const Vector<Ref<Actor>>& GetChildren() const;
@@ -667,7 +667,7 @@ namespace o2
 namespace o2
 {
     template<typename _type>
-    Ref<_type> Actor::FindChildByType(bool searchInChildren /*= true*/)
+    Ref<_type> Actor::FindChildByType(bool searchInChildren /*= true*/) const
     {
         for (auto& child : mChildren)
             if (child->GetType() == TypeOf(_type))
@@ -874,11 +874,13 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, FindChild, const Function<bool(const Ref<Actor>& child)>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Ref<Actor>>&, GetChildren);
     FUNCTION().PUBLIC().SIGNATURE(void, GetAllChildrenActors, Vector<Ref<Actor>>&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, Actor*, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, const Ref<Actor>&, bool);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveChild, Actor*, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllChildren);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, FindActorById, SceneUID);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Component>, AddComponent, const Ref<Component>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveComponent, const Ref<Component>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveComponent, Component*);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllComponents);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Component>, GetComponent, const String&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Component>, GetComponent, const Type*);
@@ -912,7 +914,6 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetAllChilds);
     FUNCTION().PROTECTED().SIGNATURE(_tmp2, GetAllComponents);
     FUNCTION().PROTECTED().SIGNATURE(void, OnBeforeDestroy);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetParentProp, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
@@ -926,9 +927,9 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Actor>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, const Ref<Component>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, const Ref<Component>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
 #if  IS_SCRIPTING_SUPPORTED
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorTransform*, GetTransform);
 #endif
@@ -943,9 +944,9 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE(void, RevertToPrototype);
     FUNCTION().PUBLIC().SIGNATURE(Ref<ActorAsset>, MakePrototype);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToActor, const Ref<Actor>&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, FindLinkedActor, const Ref<Actor>);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, FindLinkedActor, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableOwner);
-    FUNCTION().PUBLIC().SIGNATURE(const Ref<SceneEditableObject>&, GetEditableLink);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableLink);
     FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
     FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableParent);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, const Ref<SceneEditableObject>&, int);
@@ -964,7 +965,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE(void, OnEditableParentChanged, const Ref<SceneEditableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, SeparateActors, Vector<Ref<Actor>>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp3, _tmp4, Vector<ISerializable*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, ProcessReverting, Actor*, const Actor*, const Vector<Ref<Actor>>&, Vector<Actor**>&, Vector<Component**>&, _tmp3, _tmp4, Vector<ISerializable*>&);
     FUNCTION().PROTECTED().SIGNATURE(void, CopyFields, Vector<const FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
     FUNCTION().PROTECTED().SIGNATURE(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
     FUNCTION().PROTECTED().SIGNATURE(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp5, _tmp6);

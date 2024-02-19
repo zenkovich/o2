@@ -3,7 +3,7 @@
 
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Scene.h"
-#include "o2/Scene/SceneLayer.h"
+#include "o2/Scene/SceneLayerRef.h"
 #include <o2/Utils/Debug/StackTrace.h>
 
 namespace o2

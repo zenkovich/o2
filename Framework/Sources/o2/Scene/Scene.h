@@ -461,14 +461,14 @@ END_META;
 CLASS_METHODS_META(o2::Scene)
 {
 
-    typedef const Map<String, Ref<SceneLayer>>& _tmp1;
+    typedef const Map<String, WeakRef<SceneLayer>>& _tmp1;
     typedef Map<Ref<ActorAsset>, Vector<WeakRef<Actor>>>& _tmp2;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(const LogStream&, GetLogStream);
     FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, const String&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<SceneLayer>, GetLayer, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneLayer>, GetDefaultLayer);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<SceneLayer>&, GetDefaultLayer);
     FUNCTION().PUBLIC().SIGNATURE(Ref<SceneLayer>, AddLayer, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, const String&);
@@ -530,9 +530,9 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(void, AddEditableObjectToScene, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveEditableObjectFromScene, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, DestroyEditableObject, const Ref<SceneEditableObject>&);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SceneEditableObject>>&, GetAllEditableObjects);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<SceneEditableObject>>&, GetAllEditableObjects);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SceneEditableObject>>&, GetChangedObjects);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SceneEditableObject>>&, GetDrawnEditableObjects);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<SceneEditableObject>>&, GetDrawnEditableObjects);
     FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableObjectByID, SceneUID);
     FUNCTION().PUBLIC().SIGNATURE(int, GetObjectHierarchyIdx, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, ReparentEditableObjects, const Vector<Ref<SceneEditableObject>>&, const Ref<SceneEditableObject>&, const Ref<SceneEditableObject>&);

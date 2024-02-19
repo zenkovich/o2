@@ -170,7 +170,7 @@ CLASS_FIELDS_META(o2::Label)
     FIELD().PUBLIC().NAME(expandBorder);
     FIELD().PUBLIC().NAME(symbolsDistanceCoef);
     FIELD().PUBLIC().NAME(linesDistanceCoef);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextDrawable);
+    FIELD().PROTECTED().NAME(mTextDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(HorOverflow::None).NAME(mHorOverflow);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(VerOverflow::None).NAME(mVerOverflow);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mExpandBorder);
@@ -182,7 +182,7 @@ CLASS_METHODS_META(o2::Label)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const Label&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetFont, Ref<Font>);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFont, const Ref<Font>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Font>, GetFont);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
     FUNCTION().PUBLIC().SIGNATURE(FontAssetRef, GetFontAsset);
@@ -208,7 +208,7 @@ CLASS_METHODS_META(o2::Label)
     FUNCTION().PUBLIC().SIGNATURE(int, GetHeight);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, CreateDefaultText);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
