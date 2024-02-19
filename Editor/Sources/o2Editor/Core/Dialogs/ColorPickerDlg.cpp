@@ -22,7 +22,7 @@ namespace Editor
 {
     ColorPickerDlg::ColorPickerDlg()
     {
-        mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
+        mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
 
         InitializeControls();
 
@@ -35,13 +35,10 @@ namespace Editor
     }
 
     ColorPickerDlg::~ColorPickerDlg()
-    {
-        if (mWindow)
-            delete mWindow;
-    }
+    {}
 
-    void ColorPickerDlg::Show(const Color4& color, Function<void(const Color4&)> onChanged,
-                              Function<void()> onCompleted/* = Function<void()>()*/)
+    void ColorPickerDlg::Show(const Color4& color, const Function<void(const Color4&)>& onChanged,
+                              const Function<void()>& onCompleted/* = Function<void()>()*/)
     {
         mInstance->mColorValue = color;
         mInstance->mWindow->ShowModal();
@@ -64,13 +61,13 @@ namespace Editor
 
     void ColorPickerDlg::InitializeColorPreview()
     {
-        Widget* colorPreviewContainer = mmake<Widget>();
+        auto colorPreviewContainer = mmake<Widget>();
         *colorPreviewContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 30, 0);
 
-        Widget* colorPreview = o2UI.CreateWidget<Widget>("colorProperty");
+        auto colorPreview = o2UI.CreateWidget<Widget>("colorProperty");
         *colorPreview->layout = WidgetLayout::BothStretch(5, 5, 5, 5);
 
-        Image* backImage = mnew Image();
+        auto backImage = mmake<Image>();
         backImage->image = mmake<Sprite>(CommonTextures::checkedBackground, RectI(0, 0, 20, 20));
         backImage->GetImage()->mode = SpriteMode::Tiled;
         *backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
@@ -78,7 +75,7 @@ namespace Editor
 
         Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
         colorLayerBitmap.Fill(Color4::White());
-        mColorSampleImage = mnew Image();
+        mColorSampleImage = mmake<Image>();
         mColorSampleImage->image = mmake<Sprite>(colorLayerBitmap);
         *mColorSampleImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
         colorPreview->AddChild(mColorSampleImage);
@@ -89,16 +86,16 @@ namespace Editor
 
     void ColorPickerDlg::InitializePickArea()
     {
-        Widget* pickAreaContainer = mmake<Widget>();
+        auto pickAreaContainer = mmake<Widget>();
         *pickAreaContainer->layout = WidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 1.0f), Vec2F(0, 0), Vec2F(0, -30));
 
-        Widget* pickArea = mmake<Widget>();
+        auto pickArea = mmake<Widget>();
         *pickArea->layout = WidgetLayout::BothStretch(5, 5, 30, 5);
 
         pickArea->AddLayer("back", mmake<Sprite>("ui/UI4_Editbox_regular.png"),
                            Layout::BothStretch(-9, -9, -9, -9));
 
-        mColorPickAreaBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(80, 80));
+        mColorPickAreaBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2I(80, 80));
         mColorPickAreaBitmap->Clear(Color4::White());
         mColorPickAreaTexture = Ref<Texture>(*mColorPickAreaBitmap);
         mColorPickAreaColor = pickArea->AddLayer("color", mmake<Sprite>(mColorPickAreaTexture, RectI(0, 0, 80, 80)),
@@ -113,7 +110,7 @@ namespace Editor
         mHUEBar = o2UI.CreateWidget<VerticalProgress>("wide");
         *mHUEBar->layout = WidgetLayout::VerStretch(HorAlign::Right, 5, 5, 20, 5);
 
-        mHUEBarBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(20, 256));
+        mHUEBarBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2I(20, 256));
         InitHUEBarBitmap();
         mHUEBarTexture = Ref<Texture>(*mHUEBarBitmap);
         mHUEBar->AddLayer("color", mmake<Sprite>(mHUEBarTexture, RectI(0, 0, 20, 256)), Layout::BothStretch(1, 1, 1, 1),
@@ -144,7 +141,7 @@ namespace Editor
 
         mWindow->AddChild(mTypeDropdown);
 
-        auto colorParamsArea = mnew VerticalLayout();
+        auto colorParamsArea = mmake<VerticalLayout>();
         *colorParamsArea->layout = WidgetLayout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 0.5f), Vec2F(0, 0), Vec2F(0, -20));
         colorParamsArea->border = BorderF(5, 5, 5, 5);
 
@@ -170,8 +167,8 @@ namespace Editor
         mTypeDropdown->value = "RGB";
     }
 
-    Widget* ColorPickerDlg::InitializeColorParameter(Label*& name, HorizontalProgress*& bar,
-                                                     EditBox*& edit, Bitmap*& bitmap, Ref<Texture>& texture,
+    Ref<Widget> ColorPickerDlg::InitializeColorParameter(Ref<Label>& name, Ref<HorizontalProgress>& bar,
+                                                     Ref<EditBox>& edit, Ref<Bitmap>& bitmap, Ref<Texture>& texture,
                                                      const Function<void(float)>& changeCallback)
     {
         auto resLayout = mmake<Widget>();
@@ -184,11 +181,11 @@ namespace Editor
         *bar->layout = WidgetLayout::HorStretch(VerAlign::Middle, 30, 50, 20);
         bar->onChange = changeCallback;
 
-        bitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2F(256, 256));
+        bitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2F(256, 256));
         texture = Ref<Texture>(*bitmap);
         bar->AddLayer("color", mmake<Sprite>(texture, RectI(0, 0, 256, 256)), Layout::BothStretch(1, 1, 1, 1), 0.5f);
 
-        Sprite* backSprite = mmake<Sprite>(mChessBackTexture, RectI(0, 0, 20, 20));
+        auto backSprite = mmake<Sprite>(mChessBackTexture, RectI(0, 0, 20, 20));
         backSprite->mode = SpriteMode::Tiled;
         bar->AddLayer("colorBack", backSprite, Layout::BothStretch(1, 1, 1, 1), 0.4f);
 

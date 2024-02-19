@@ -66,7 +66,7 @@ CLASS_FIELDS_META(Editor::DefaultActorPropertiesViewer)
 {
     FIELD().PROTECTED().NAME(mTargetActors);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActorType);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
+    FIELD().PROTECTED().NAME(mViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorPropertiesViewer)

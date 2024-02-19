@@ -118,7 +118,7 @@ CLASS_FIELDS_META(Editor::MoveTool)
     FIELD().PROTECTED().NAME(mSnapPosition);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mHandlesAngle);
     FIELD().PROTECTED().NAME(mBeforeTransforms);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
+    FIELD().PROTECTED().NAME(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::MoveTool)
@@ -130,8 +130,8 @@ CLASS_METHODS_META(Editor::MoveTool)
     FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<Ref<SceneEditableObject>>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<Ref<SceneEditableObject>>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, const Vector<Ref<SceneEditableObject>>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnHorDragHandleMoved, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnVerDragHandleMoved, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnBothDragHandleMoved, const Vec2F&);

@@ -44,48 +44,48 @@ namespace Editor
         bool IsPrivateFieldsVisible() const;
 
         // Free properties and put in cache
-        void FreeProperties(PropertiesContext& context);
+        void FreeProperties(const Ref<PropertiesContext>& context);
 
         // Free property field and put in cache
         void FreeProperty(const Ref<IPropertyField>& field);
 
         // Builds layout viewer by type for objects
-        void BuildObjectProperties(const Ref<VerticalLayout>& layout, const Type* type, PropertiesContext& context, const String& path,
+        void BuildObjectProperties(const Ref<VerticalLayout>& layout, const Type* type, const Ref<PropertiesContext>& context, const String& path,
                                    const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
                                    const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
         // Builds layout viewer by fields
-        void BuildObjectProperties(const Ref<VerticalLayout>& layout, Vector<const FieldInfo*> fields, PropertiesContext& context, const String& path,
+        void BuildObjectProperties(const Ref<VerticalLayout>& layout, Vector<const FieldInfo*> fields, const Ref<PropertiesContext>& context, const String& path,
                                    const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
                                    const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
         // Build layout viewer for field
-        Ref<IPropertyField> BuildField(const Ref<VerticalLayout>& layout, const FieldInfo* fieldInfo, PropertiesContext& context, const String& path,
+        Ref<IPropertyField> BuildField(const Ref<VerticalLayout>& layout, const FieldInfo* fieldInfo, const Ref<PropertiesContext>& context, const String& path,
                                        const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
                                        const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
         // Build layout viewer for field
         Ref<IPropertyField> BuildField(const Ref<VerticalLayout>& layout, const Type& objectType, const String& fieldName, const String& path,
-                                       PropertiesContext& context,
+                                       const Ref<PropertiesContext>& context,
                                        const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
                                        const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
         // Build layout viewer for fields
         void BuildFields(const Ref<VerticalLayout>& layout, const Type& objectType, const Vector<String>& fieldsNames, const String& path,
-                         PropertiesContext& context,
+                         const Ref<PropertiesContext>& context,
                          const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
                          const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
         // Build layout viewer for field
         template<typename PropertyFieldType>
-        Ref<PropertyFieldType> BuildFieldType(const Ref<VerticalLayout>& layout, const FieldInfo* fieldInfo, PropertiesContext& context, const String& path,
+        Ref<PropertyFieldType> BuildFieldType(const Ref<VerticalLayout>& layout, const FieldInfo* fieldInfo, const Ref<PropertiesContext>& context, const String& path,
                                               const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
                                               const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
         // Build layout viewer for field
         template<typename PropertyFieldType>
         Ref<PropertyFieldType> BuildFieldType(const Ref<VerticalLayout>& layout, const Type& objectType, const String& fieldName, const String& path,
-                                              PropertiesContext& context,
+                                              const Ref<PropertiesContext>& context,
                                               const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
                                               const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
@@ -170,14 +170,14 @@ namespace Editor
         const Type* GetClosesBasedTypeObjectViewer(const Type* type) const;
 
         // Builds layout viewer by fields without filtering
-        void BuildFields(const Ref<VerticalLayout>& layout, Vector<const FieldInfo*> fields, PropertiesContext& context, const String& path,
+        void BuildFields(const Ref<VerticalLayout>& layout, Vector<const FieldInfo*> fields, const Ref<PropertiesContext>& context, const String& path,
                          const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
                          const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
     };
 
     template<typename PropertyFieldType>
     Ref<PropertyFieldType> Properties::BuildFieldType(const Ref<VerticalLayout>& layout, const FieldInfo* fieldInfo,
-                                                      PropertiesContext& context, const String& path,
+                                                      const Ref<PropertiesContext>& context, const String& path,
                                                       const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
                                                       const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
     {
@@ -186,7 +186,7 @@ namespace Editor
 
     template<typename PropertyFieldType>
     Ref<PropertyFieldType> Properties::BuildFieldType(const Ref<VerticalLayout>& layout, const Type& objectType, const String& fieldName,
-                                                      const String& path, PropertiesContext& context,
+                                                      const String& path, const Ref<PropertiesContext>& context,
                                                       const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
                                                       const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
     {

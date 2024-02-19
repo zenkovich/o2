@@ -98,9 +98,9 @@ END_META;
 CLASS_FIELDS_META(Editor::PropertiesWindow)
 {
     FIELD().PROTECTED().NAME(mTargets);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurrentViewer);
+    FIELD().PROTECTED().NAME(mCurrentViewer);
     FIELD().PROTECTED().NAME(mViewers);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultViewer);
+    FIELD().PROTECTED().NAME(mDefaultViewer);
     FIELD().PROTECTED().NAME(mOnTargetsChangedDelegate);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTargetsChanged);
     FIELD().PROTECTED().DEFAULT_VALUE(0.5f).NAME(mRefreshDelay);
@@ -122,7 +122,7 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindowContext);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeViewers);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPrivateFieldsVisibleChanged, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, IPropertyField*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const Ref<IPropertyField>&);
 }
 END_META;
 // --- END META ---

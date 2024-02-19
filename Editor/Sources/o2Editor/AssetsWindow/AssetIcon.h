@@ -138,10 +138,10 @@ END_META;
 CLASS_FIELDS_META(Editor::AssetIcon)
 {
     FIELD().PUBLIC().NAME(assetName);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameText);
+    FIELD().PROTECTED().NAME(mNameText);
     FIELD().PROTECTED().NAME(mAssetInfo);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectedState);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
+    FIELD().PROTECTED().NAME(mSelectedState);
+    FIELD().PROTECTED().NAME(mOwner);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetIcon)
@@ -168,11 +168,11 @@ CLASS_METHODS_META(Editor::AssetIcon)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleasedOutside, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragStart, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragged, const Input::Cursor&, DragDropArea*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragged, const Input::Cursor&, const Ref<DragDropArea>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnd, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSelected);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeselected);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, const Ref<ISelectableDragableObjectsGroup>&);
 }
 END_META;
 // --- END META ---

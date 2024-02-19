@@ -8,7 +8,7 @@ namespace Editor
 	MeshTopologyTool::MeshTopologyTool():
 		mSelectionSprite("ui/UI_Window_place.png")
 	{
-		sceneLayer.tool = this;
+		sceneLayer.tool = Ref(this);
 
 		mHandleSample = DragHandle(mmake<Sprite>("ui/CurveHandle.png"),
 								   mmake<Sprite>("ui/CurveHandleHover.png"),
@@ -61,13 +61,13 @@ namespace Editor
 
 	void MeshTopologyTool::OnEnabled()
 	{
-		o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.AddEditorLayer(sceneLayer);
 		isEnabled = true;
 	}
 
 	void MeshTopologyTool::OnDisabled()
 	{
-		o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.RemoveEditorLayer(sceneLayer);
 		isEnabled = false;
 	}
 
@@ -87,11 +87,11 @@ namespace Editor
 
 		for (int i = 0; i < mGetPoints().Count(); i++)
 		{
-			mHandles.Add(mHandleSample.CloneAs<DragHandle>());
+			mHandles.Add(mHandleSample.CloneAsRef<DragHandle>());
 			auto& newHandle = mHandles.Last();
 
 			newHandle->SetPosition(mGetPoints()[i]);
-			newHandle->SetSelectionGroup(this);
+			newHandle->SetSelectionGroup(Ref(this));
 			newHandle->onChangedPos = [=](const Vec2F& pos) { OnHandleMoved(i, pos); };
 			newHandle->localToScreenTransformFunc = [&](const Vec2F& p) { return LocalToWorld(p); };
 			newHandle->screenToLocalTransformFunc = [&](const Vec2F& p) { return WorldToLocal(p); };
@@ -100,9 +100,6 @@ namespace Editor
 
 	void MeshTopologyTool::ClearHandles()
 	{
-		for (auto& handle : mHandles)
-			delete handle;
-
 		mHandles.Clear();
 	}
 
@@ -248,14 +245,16 @@ namespace Editor
 
 	void MeshTopologyTool::SceneLayer::DrawOverScene()
 	{
-		tool->OnDrawn();
+		auto toolRef = tool.Lock();
 
-		tool->DrawTransformFrame();
+		toolRef->OnDrawn();
 
-		for (auto& handle : tool->mHandles)
+		toolRef->DrawTransformFrame();
+
+		for (auto& handle : toolRef->mHandles)
 			handle->Draw();
 
-		tool->DrawSelection();
+		toolRef->DrawSelection();
 	}
 
 	void MeshTopologyTool::SceneLayer::Update(float dt)
@@ -270,7 +269,7 @@ namespace Editor
 
 	bool MeshTopologyTool::SceneLayer::IsEnabled() const
 	{
-		return tool->isEnabled;
+		return tool.Lock()->isEnabled;
 	}
 
 	const String& MeshTopologyTool::SceneLayer::GetName() const

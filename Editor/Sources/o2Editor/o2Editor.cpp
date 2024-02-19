@@ -100,7 +100,7 @@ extern void __RegisterClass__Editor__DockWindowPlace();
 extern void __RegisterClass__Editor__DockableWindow();
 extern void __RegisterClass__Editor__IEditorWindow();
 extern void __RegisterClass__Editor__WindowsLayout();
-extern void __RegisterClass__Editor__WindowsLayout__WindowDockPlace();
+extern void __RegisterClass__Editor__WindowsLayout__WindowDockPlaceInfo();
 extern void __RegisterClass__Editor__GameWindow();
 extern void __RegisterClass__Editor__GameWindow__GameView();
 extern void __RegisterClass__Editor__GameWindow__SimulationDevice();
@@ -137,8 +137,6 @@ extern void __RegisterClass__Editor__DrawOrderTree();
 extern void __RegisterClass__Editor__DrawOrderTreeNode();
 extern void __RegisterClass__Editor__SceneHierarchyTree();
 extern void __RegisterClass__Editor__SceneHierarchyTreeNode();
-extern void __RegisterClass__Editor__SceneTree();
-extern void __RegisterClass__Editor__SceneTreeNode();
 extern void __RegisterClass__Editor__TreeWindow();
 
 
@@ -246,7 +244,7 @@ extern void InitializeTypeso2Editor()
     __RegisterClass__Editor__DockableWindow();
     __RegisterClass__Editor__IEditorWindow();
     __RegisterClass__Editor__WindowsLayout();
-    __RegisterClass__Editor__WindowsLayout__WindowDockPlace();
+    __RegisterClass__Editor__WindowsLayout__WindowDockPlaceInfo();
     __RegisterClass__Editor__GameWindow();
     __RegisterClass__Editor__GameWindow__GameView();
     __RegisterClass__Editor__GameWindow__SimulationDevice();
@@ -283,7 +281,5 @@ extern void InitializeTypeso2Editor()
     __RegisterClass__Editor__DrawOrderTreeNode();
     __RegisterClass__Editor__SceneHierarchyTree();
     __RegisterClass__Editor__SceneHierarchyTreeNode();
-    __RegisterClass__Editor__SceneTree();
-    __RegisterClass__Editor__SceneTreeNode();
     __RegisterClass__Editor__TreeWindow();
 }

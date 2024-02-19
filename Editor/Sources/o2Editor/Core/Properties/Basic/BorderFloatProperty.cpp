@@ -25,7 +25,7 @@ namespace Editor
 	{
 		mLeftProperty = GetChildByType<FloatProperty>("container/layout/properties/left");
 		mLeftProperty->SetValuePath("left");
-		mLeftProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mLeftProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -33,7 +33,7 @@ namespace Editor
 
 		mBottomProperty = GetChildByType<FloatProperty>("container/layout/properties/bottom");
 		mBottomProperty->SetValuePath("bottom");
-		mBottomProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mBottomProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -41,7 +41,7 @@ namespace Editor
 
 		mRightProperty = GetChildByType<FloatProperty>("container/layout/properties/right");
 		mRightProperty->SetValuePath("right");
-		mRightProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mRightProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -49,7 +49,7 @@ namespace Editor
 
 		mTopProperty = GetChildByType<FloatProperty>("container/layout/properties/top");
 		mTopProperty->SetValuePath("top");
-		mTopProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mTopProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -117,16 +117,16 @@ namespace Editor
 		mValuesProxies = targets;
 
 		mLeftProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew LeftValueProxy(x.first), x.second ? mnew LeftValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<LeftValueProxy>(x.first), x.second ? mmake<LeftValueProxy>(x.second) : nullptr); }));
 
 		mRightProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew RightValueProxy(x.first), x.second ? mnew RightValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<RightValueProxy>(x.first), x.second ? mmake<RightValueProxy>(x.second) : nullptr); }));
 
 		mTopProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew TopValueProxy(x.first), x.second ? mnew TopValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<TopValueProxy>(x.first), x.second ? mmake<TopValueProxy>(x.second) : nullptr); }));
 
 		mBottomProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew BottomValueProxy(x.first), x.second ? mnew BottomValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<BottomValueProxy>(x.first), x.second ? mmake<BottomValueProxy>(x.second) : nullptr); }));
 	}
 
 	void BorderFProperty::Refresh()
@@ -164,7 +164,7 @@ namespace Editor
 		return &TypeOf(BorderF);
 	}
 
-	BorderFProperty::LeftValueProxy::LeftValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	BorderFProperty::LeftValueProxy::LeftValueProxy(const Ref<IAbstractValueProxy>& proxy) :mProxy(proxy)
 	{}
 
 	BorderFProperty::LeftValueProxy::LeftValueProxy()
@@ -185,7 +185,7 @@ namespace Editor
 		return proxyValue.left;
 	}
 
-	BorderFProperty::RightValueProxy::RightValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	BorderFProperty::RightValueProxy::RightValueProxy(const Ref<IAbstractValueProxy>& proxy) :mProxy(proxy)
 	{}
 
 	BorderFProperty::RightValueProxy::RightValueProxy()
@@ -206,7 +206,7 @@ namespace Editor
 		return proxyValue.right;
 	}
 
-	BorderFProperty::TopValueProxy::TopValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	BorderFProperty::TopValueProxy::TopValueProxy(const Ref<IAbstractValueProxy>& proxy) :mProxy(proxy)
 	{}
 
 	BorderFProperty::TopValueProxy::TopValueProxy()
@@ -227,7 +227,7 @@ namespace Editor
 		return proxyValue.top;
 	}
 
-	BorderFProperty::BottomValueProxy::BottomValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	BorderFProperty::BottomValueProxy::BottomValueProxy(const Ref<IAbstractValueProxy>& proxy) :mProxy(proxy)
 	{}
 
 	BorderFProperty::BottomValueProxy::BottomValueProxy()

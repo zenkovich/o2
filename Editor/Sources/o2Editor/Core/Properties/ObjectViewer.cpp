@@ -58,7 +58,7 @@ namespace Editor
 		Refresh(protoTargets);
 	}
 
-	void ObjectViewer::SetParentContext(PropertiesContext* context)
+	void ObjectViewer::SetParentContext(const Ref<PropertiesContext>& context)
 	{
 		mParentContext = context;
 

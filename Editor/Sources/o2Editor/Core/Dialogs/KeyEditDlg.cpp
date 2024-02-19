@@ -18,7 +18,7 @@ namespace Editor
 
 	KeyEditDlg::KeyEditDlg()
 	{
-		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
+		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
 
 		auto verLayout = o2UI.CreateVerLayout();
 		verLayout->spacing = 10;
@@ -161,9 +161,7 @@ namespace Editor
 	}
 
 	KeyEditDlg::~KeyEditDlg()
-	{
-		delete mWindow;
-	}
+	{}
 
 	void KeyEditDlg::Show(const Curve::Key& key, const Function<void(const Curve::Key& key)>& onClosed)
 	{

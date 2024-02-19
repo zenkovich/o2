@@ -91,11 +91,11 @@ CLASS_FIELDS_META(Editor::SkinningMeshComponentViewer)
     FIELD().PROTECTED().NAME(mSplineTool);
     FIELD().PROTECTED().NAME(mFrameTool);
     FIELD().PROTECTED().NAME(mTopologyTool);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSkeletonTool);
+    FIELD().PROTECTED().NAME(mSkeletonTool);
     FIELD().PROTECTED().NAME(mFrameTetxureLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitAndCenterButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditSkeletonButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mReskinButton);
+    FIELD().PROTECTED().NAME(mFitAndCenterButton);
+    FIELD().PROTECTED().NAME(mEditSkeletonButton);
+    FIELD().PROTECTED().NAME(mReskinButton);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEditingSkeleton);
 }
 END_META;

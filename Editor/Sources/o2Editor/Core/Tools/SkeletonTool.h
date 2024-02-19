@@ -80,8 +80,9 @@ namespace Editor
 		};
 
 	public:
-		SceneLayer sceneLayer;        // Scene layer for drawing spline
-		bool       isEnabled = false; // Is tool enabled now     
+		Ref<SceneLayer> sceneLayer = mmake<SceneLayer>(); // Scene layer for drawing spline
+
+		bool isEnabled = false; // Is tool enabled now     
 
 	public:
 		// Default constructor
@@ -123,7 +124,7 @@ CLASS_BASES_META(Editor::SkeletonTool)
 END_META;
 CLASS_FIELDS_META(Editor::SkeletonTool)
 {
-    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SceneLayer>()).NAME(sceneLayer);
     FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
     FIELD().PRIVATE().NAME(mSkeletons);
 }
@@ -138,7 +139,7 @@ CLASS_METHODS_META(Editor::SkeletonTool)
     FUNCTION().PUBLIC().SIGNATURE(void, AddSkeletonInstance, const Ref<SkinningMeshComponent>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveSkeletonInstance, const Ref<SkinningMeshComponent>&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEditingSkeleton, const Ref<SkinningMeshComponent>&);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<SkeletonInstance*>&, GetEditingSkeletons);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SkeletonInstance>>&, GetEditingSkeletons);
 }
 END_META;
 // --- END META ---

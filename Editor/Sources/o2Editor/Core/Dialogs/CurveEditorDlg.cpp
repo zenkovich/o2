@@ -14,7 +14,7 @@ namespace Editor
 {
 	CurveEditorDlg::CurveEditorDlg()
 	{
-		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
+		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
 
 		InitializeControls();
 
@@ -26,10 +26,7 @@ namespace Editor
 	}
 
 	CurveEditorDlg::~CurveEditorDlg()
-	{
-		if (mWindow)
-			delete mWindow;
-	}
+	{}
 
 	void CurveEditorDlg::OnHide()
 	{
@@ -39,7 +36,7 @@ namespace Editor
 
 	void CurveEditorDlg::InitializeControls()
 	{
-		mEditorWidget = mnew CurvesEditor();
+		mEditorWidget = mmake<CurvesEditor>();
 		*mEditorWidget->layout = WidgetLayout::BothStretch(0, 5, 5, 0);
 
 		auto horScroll = o2UI.CreateHorScrollBar();
@@ -65,7 +62,7 @@ namespace Editor
 		mWindow->AddChild(mEditorWidget);
 	}
 
-	void CurveEditorDlg::Show(Function<void()> onChanged, Function<void()> onCompleted /*= Function<void()>()*/)
+	void CurveEditorDlg::Show(const Function<void()>& onChanged, const Function<void()>& onCompleted /*= Function<void()>()*/)
 	{
 		mInstance->mWindow->ShowModal();
 		mInstance->mOnChangedCallback = onChanged;
@@ -73,12 +70,12 @@ namespace Editor
 		mInstance->mEditorWidget->RemoveAllCurves();
 	}
 
-	void CurveEditorDlg::AddEditingCurve(const String& id, Curve* curve, const Color4& color /*= Color4::Green()*/)
+	void CurveEditorDlg::AddEditingCurve(const String& id, const Ref<Curve>& curve, const Color4& color /*= Color4::Green()*/)
 	{
 		mInstance->mEditorWidget->AddCurve(id, curve, color);
 	}
 
-	void CurveEditorDlg::RemoveEditingCurve(Curve* curve)
+	void CurveEditorDlg::RemoveEditingCurve(const Ref<Curve>& curve)
 	{
 		mInstance->mEditorWidget->RemoveCurve(curve);
 	}
@@ -93,12 +90,12 @@ namespace Editor
 		mInstance->mEditorWidget->RemoveAllCurves();
 	}
 
-	void CurveEditorDlg::AddCurvesRange(Curve* curveA, Curve* curveB, const Color4& color /*= Color4::Green()*/)
+	void CurveEditorDlg::AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color /*= Color4::Green()*/)
 	{
 		mInstance->mEditorWidget->AddCurvesRange(curveA, curveB, color);
 	}
 
-	void CurveEditorDlg::RemoveCurvesRange(Curve* curveA, Curve* curveB)
+	void CurveEditorDlg::RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB)
 	{
 		mInstance->mEditorWidget->RemoveCurvesRange(curveA, curveB);
 	}

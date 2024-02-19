@@ -91,11 +91,11 @@ END_META;
 CLASS_METHODS_META(Editor::ITrackControl)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationTimeline>&, const Ref<KeyHandlesSheet>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&, const Ref<IAnimationTrack::IPlayer>&, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<KeyHandle*>, GetKeyHandles);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetTreePartControls);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<KeyHandle>>, GetKeyHandles);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetTreePartControls);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);

@@ -25,7 +25,7 @@ namespace Editor
 	{
 		mXProperty = GetChildByType<FloatProperty>("container/layout/properties/x");
 		mXProperty->SetValuePath("x");
-		mXProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mXProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mXProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -33,7 +33,7 @@ namespace Editor
 
 		mYProperty = GetChildByType<FloatProperty>("container/layout/properties/y");
 		mYProperty->SetValuePath("x");
-		mYProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mYProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mYProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -77,10 +77,10 @@ namespace Editor
 		mValuesProxies = targets;
 
 		mXProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew XValueProxy(x.first), x.second ? mnew XValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<XValueProxy>(x.first), x.second ? mmake<XValueProxy>(x.second) : nullptr); }));
 
 		mYProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew YValueProxy(x.first), x.second ? mnew YValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<YValueProxy>(x.first), x.second ? mmake<YValueProxy>(x.second) : nullptr); }));
 	}
 
 	void Vec2FProperty::Refresh()
@@ -125,7 +125,8 @@ namespace Editor
 		return &TypeOf(Vec2F);
 	}
 
-	Vec2FProperty::XValueProxy::XValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	Vec2FProperty::XValueProxy::XValueProxy(const Ref<IAbstractValueProxy>& proxy):
+		mProxy(proxy)
 	{}
 
 	Vec2FProperty::XValueProxy::XValueProxy()
@@ -146,7 +147,8 @@ namespace Editor
 		return proxyValue.x;
 	}
 
-	Vec2FProperty::YValueProxy::YValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	Vec2FProperty::YValueProxy::YValueProxy(const Ref<IAbstractValueProxy>& proxy):
+		mProxy(proxy)
 	{}
 
 	Vec2FProperty::YValueProxy::YValueProxy()

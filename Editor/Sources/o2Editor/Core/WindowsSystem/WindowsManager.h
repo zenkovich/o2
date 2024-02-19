@@ -30,7 +30,7 @@ namespace Editor
 	{
 	public:
 		// Adds new window
-		void AddWindow(IEditorWindow* window);
+		void AddWindow(const Ref<IEditorWindow>& window);
 
 		// Returns window by type
 		template<typename _type>
@@ -55,6 +55,11 @@ namespace Editor
 		Vector<Ref<IEditorWindow>> mEditorWindows;    // Editors windows list
 		Ref<DockWindowPlace>       mMainDockPlace;    // Main windows dock place
 		Map<String, WindowsLayout> mAvailableLayouts; // Available layouts
+
+		Ref<ColorPickerDlg> mColorPickerDlg;   // Color picker dialog
+		Ref<CurveEditorDlg> mCurveEditorDlg;   // Curve editor dialog
+		Ref<NameEditDlg>    mNameEditDlg;      // Name edit dialog
+		Ref<KeyEditDlg>     mKeyEditDlg;       // Key edit dialog
 
 	protected:
 		// Default constructor
@@ -87,12 +92,12 @@ namespace Editor
 namespace Editor
 {
 	template<typename _type>
-	_type* WindowsManager::GetWindow() const
+	Ref<_type> WindowsManager::GetWindow() const
 	{
 		for (auto& wnd : mEditorWindows)
 		{
 			if (wnd->GetType() == TypeOf(_type))
-				return (_type*)wnd;
+				return DynamicCast<_type>(wnd);
 		}
 
 		return nullptr;

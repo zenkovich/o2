@@ -45,9 +45,9 @@ namespace Editor
 
 		if (mEnumType)
 		{
-			mEntries = &mEnumType->GetEntries();
+			mEntries = mEnumType->GetEntries();
 
-			for (auto& kv : *mEntries)
+			for (auto& kv : mEntries)
 				mDropDown->AddItem(kv.second);
 		}
 	}
@@ -63,12 +63,12 @@ namespace Editor
 
 		if (mValuesDifferent)
 		{
-			mDropDown->value = (*mEntries).Get(mCommonValue);
+			mDropDown->value = (mEntries).Get(mCommonValue);
 			mDropDown->SetState("undefined", true);
 		}
 		else
 		{
-			mDropDown->value = (*mEntries).Get(mCommonValue);
+			mDropDown->value = (mEntries).Get(mCommonValue);
 			mDropDown->SetState("undefined", false);
 		}
 
@@ -80,7 +80,7 @@ namespace Editor
 		if (mUpdatingValue)
 			return;
 
-		SetValueByUser(mEntries->FindValue(name).first);
+		SetValueByUser(mEntries.FindValue(name).first);
 	}
 }
 // --- META ---

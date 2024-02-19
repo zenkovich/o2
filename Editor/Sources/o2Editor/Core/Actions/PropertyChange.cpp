@@ -15,7 +15,7 @@ namespace Editor
 											   const String& propertyPath,
 											   const Vector<DataDocument>& beforeValues,
 											   const Vector<DataDocument>& afterValues) :
-		objectsIds(objects.Convert<SceneUID>([](const SceneEditableObject* x) { return x->GetID(); })),
+		objectsIds(objects.Convert<SceneUID>([](const auto& x) { return x->GetID(); })),
 		propertyPath(propertyPath), beforeValues(beforeValues), afterValues(afterValues)
 	{}
 
@@ -36,7 +36,7 @@ namespace Editor
 
 	void PropertyChangeAction::SetProperties(Vector<DataDocument>& values)
 	{
-		Vector<Ref<SceneEditableObject>> objects = objectsIds.Convert<SceneEditableObject*>([](SceneUID id) { 
+		Vector<Ref<SceneEditableObject>> objects = objectsIds.Convert<Ref<SceneEditableObject>>([](SceneUID id) { 
 			return o2Scene.GetEditableObjectByID(id); });
 
 		const Type* componentType = nullptr;
@@ -64,11 +64,11 @@ namespace Editor
 
 			if (componentType)
 			{
-				if (Actor* actor = dynamic_cast<Actor*>(object))
+				if (auto actor = DynamicCast<Actor>(object))
 				{
-					Component* component = actor->GetComponent(componentType);
+					auto component = actor->GetComponent(componentType);
 					if (component)
-						ptr = component->GetType().GetFieldPtr(component, finalPropertyPath, fi);
+						ptr = component->GetType().GetFieldPtr(component.Get(), finalPropertyPath, fi);
 				}
 			}
 			else
@@ -76,7 +76,7 @@ namespace Editor
 				auto objectType = dynamic_cast<const ObjectType*>(&object->GetType());
 				if (objectType)
 				{
-					void* realTypeObject = objectType->DynamicCastFromIObject(dynamic_cast<IObject*>(object));
+					void* realTypeObject = objectType->DynamicCastFromIObject(dynamic_cast<IObject*>(object.Get()));
 					ptr = objectType->GetFieldPtr(realTypeObject, finalPropertyPath, fi);
 				}
 			}

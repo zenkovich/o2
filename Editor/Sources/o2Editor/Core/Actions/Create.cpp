@@ -12,9 +12,9 @@ namespace Editor
 	{}
 
 	CreateAction::CreateAction(const Vector<Ref<SceneEditableObject>>& objects, 
-											 SceneEditableObject* parent, SceneEditableObject* prevObject)
+							   const Ref<SceneEditableObject>& parent, const Ref<SceneEditableObject>& prevObject)
 	{
-		objectsIds = objects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
+		objectsIds = objects.Convert<SceneUID>([](auto& x) { return x->GetID(); });
 
 		objectsData.Set(objects);
 
@@ -29,8 +29,8 @@ namespace Editor
 
 	void CreateAction::Redo()
 	{
-		SceneEditableObject* parent = o2Scene.GetEditableObjectByID(insertParentId);
-		SceneEditableObject* prevObject = o2Scene.GetEditableObjectByID(insertPrevObjectId);
+		auto parent = o2Scene.GetEditableObjectByID(insertParentId);
+		auto prevObject = o2Scene.GetEditableObjectByID(insertPrevObjectId);
 		Vector<Ref<SceneEditableObject>> objects;
 
 		if (parent)
@@ -60,9 +60,9 @@ namespace Editor
 	{
 		for (auto& objectId : objectsIds)
 		{
-			SceneEditableObject* object = o2Scene.GetEditableObjectByID(objectId);
-			if (object)
-				delete object;
+			auto object = o2Scene.GetEditableObjectByID(objectId);
+// 			if (object)
+// 				delete object;
 		}
 
 		o2EditorSceneScreen.ClearSelectionWithoutAction();

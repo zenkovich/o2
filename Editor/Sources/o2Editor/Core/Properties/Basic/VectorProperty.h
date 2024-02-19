@@ -159,16 +159,16 @@ CLASS_BASES_META(Editor::VectorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::VectorProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVectorType);
     FIELD().PROTECTED().NAME(mTargetObjects);
     FIELD().PROTECTED().NAME(mValueProperties);
     FIELD().PROTECTED().NAME(mValuePropertiesPool);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCountProperty);
+    FIELD().PROTECTED().NAME(mCountProperty);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mCountDifferents);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mCountOfElements);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+    FIELD().PROTECTED().NAME(mHeaderContainer);
+    FIELD().PROTECTED().NAME(mAddButton);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsRefreshing);
 }
 END_META;
@@ -182,7 +182,7 @@ CLASS_METHODS_META(Editor::VectorProperty)
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetRemoveButton);
     FUNCTION().PUBLIC().SIGNATURE(void, SpecializeType, const Type*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetSpecializedType);
@@ -191,16 +191,16 @@ CLASS_METHODS_META(Editor::VectorProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-    FUNCTION().PROTECTED().SIGNATURE(void*, GetProxyValuePointer, IAbstractValueProxy*);
-    FUNCTION().PROTECTED().SIGNATURE(IPropertyField*, GetFreeValueProperty);
-    FUNCTION().PROTECTED().SIGNATURE(void, FreeValueProperty, IPropertyField*);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateElementCaption, IPropertyField*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, IPropertyField*);
+    FUNCTION().PROTECTED().SIGNATURE(void*, GetProxyValuePointer, const Ref<IAbstractValueProxy>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<IPropertyField>, GetFreeValueProperty);
+    FUNCTION().PROTECTED().SIGNATURE(void, FreeValueProperty, const Ref<IPropertyField>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateElementCaption, const Ref<IPropertyField>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, const Ref<IPropertyField>&);
     FUNCTION().PROTECTED().SIGNATURE(void, Resize, int);
     FUNCTION().PROTECTED().SIGNATURE(void, Remove, int);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnExpand);
-    FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
+    FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

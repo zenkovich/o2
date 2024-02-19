@@ -58,10 +58,10 @@ END_META;
 CLASS_FIELDS_META(Editor::SceneWindow)
 {
     FIELD().PROTECTED().NAME(mEditWidget);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUpPanel);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersPopup);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mGizomsView);
+    FIELD().PROTECTED().NAME(mUpPanel);
+    FIELD().PROTECTED().NAME(mLayersButton);
+    FIELD().PROTECTED().NAME(mLayersPopup);
+    FIELD().PROTECTED().NAME(mGizomsView);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneWindow)

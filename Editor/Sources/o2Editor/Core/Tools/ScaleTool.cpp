@@ -145,7 +145,7 @@ namespace Editor
 
 		if (selectedObjects.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
 		{
-			SceneEditableObject* lastSelectedObject = selectedObjects.Last();
+			auto lastSelectedObject = selectedObjects.Last();
 			UpdateHandlesAngleAndPositions(-lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right()));
 		}
 		else UpdateHandlesAngleAndPositions(0.0f);
@@ -201,7 +201,7 @@ namespace Editor
 			auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
 			if (selectedObjects.Count() > 0)
 			{
-				SceneEditableObject* lastSelectedObject = selectedObjects.Last();
+				auto lastSelectedObject = selectedObjects.Last();
 				UpdateHandlesAngleAndPositions(-lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right()));
 			}
 		}
@@ -226,9 +226,9 @@ namespace Editor
 	void ScaleTool::HandlePressed()
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
+			[](auto& x) { return x->GetTransform(); });
 
-		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
+		mTransformAction = mmake<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
 	}
 
 	void ScaleTool::HandleReleased()

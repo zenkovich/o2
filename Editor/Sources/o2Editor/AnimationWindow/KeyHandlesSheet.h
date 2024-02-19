@@ -230,15 +230,15 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
     FIELD().PRIVATE().DEFAULT_VALUE(RectF(-9, -3, 5, 2)).NAME(mSelectionFrameOffsets);
     FIELD().PRIVATE().DEFAULT_VALUE(RectF(-2, -3, 2, 2)).NAME(mSelectionFrameCursorOffsets);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
+    FIELD().PRIVATE().NAME(mAnimationWindow);
     FIELD().PRIVATE().NAME(mTrackControls);
     FIELD().PRIVATE().NAME(mTrackControlsMap);
     FIELD().PRIVATE().NAME(mHandlesGroups);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mContextMenu);
+    FIELD().PRIVATE().NAME(mContextMenu);
     FIELD().PRIVATE().NAME(mContextMenuPressPoint);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mNeedUpdateSelectionFrame);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mHandleHasMoved);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSelectionFrame);
+    FIELD().PRIVATE().NAME(mSelectionFrame);
     FIELD().PRIVATE().NAME(mSelectionRect);
     FIELD().PRIVATE().NAME(mBeginSelectPoint);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mIsFrameSelecting);
@@ -260,20 +260,20 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const KeyHandlesSheet&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateInputDrawOrder);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RegTrackControl, ITrackControl*, const std::string&);
-    FUNCTION().PUBLIC().SIGNATURE(void, UnregTrackControl, ITrackControl*);
+    FUNCTION().PUBLIC().SIGNATURE(void, RegTrackControl, const Ref<ITrackControl>&, const std::string&);
+    FUNCTION().PUBLIC().SIGNATURE(void, UnregTrackControl, const Ref<ITrackControl>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UnregAllTrackControls);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddHandle, DragHandle*);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddHandle, const Ref<DragHandle>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveHandle, DragHandle*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedKeys, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(_tmp2, GetSelectedKeys);
     FUNCTION().PUBLIC().SIGNATURE(void, DeleteKeys, _tmp3, bool);
-    FUNCTION().PUBLIC().SIGNATURE(ContextMenu*, GetContextMenu);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<ContextMenu>&, GetContextMenu);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeCenterHandle);
@@ -286,9 +286,9 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
     FUNCTION().PRIVATE().SIGNATURE(void, CopyKeys);
     FUNCTION().PRIVATE().SIGNATURE(void, PasteKeys);
     FUNCTION().PRIVATE().SIGNATURE(void, OnSelectionChanged);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorPressed, DragHandle*, const Input::Cursor&);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, DragHandle*, const Vec2F&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorPressed, const Ref<DragHandle>&, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorReleased, const Ref<DragHandle>&, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, const Ref<DragHandle>&, const Vec2F&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);

@@ -82,7 +82,7 @@ CLASS_METHODS_META(Editor::AnimationAddKeysAction)
     typedef const Map<String, Vector<UInt64>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);
@@ -107,7 +107,7 @@ CLASS_METHODS_META(Editor::AnimationDeleteKeysAction)
     typedef const Map<String, Vector<UInt64>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);
@@ -133,7 +133,7 @@ CLASS_METHODS_META(Editor::AnimationKeysChangeAction)
     typedef const Map<String, Vector<UInt64>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, DataDocument&, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, DataDocument&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

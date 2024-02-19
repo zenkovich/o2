@@ -413,7 +413,7 @@ namespace Editor
 	{
 		ForcePopEditorScopeOnStack scope;
 
-		auto newActor = mmake<Actor>({ mnew ImageComponent() });
+		auto newActor = mmake<Actor>({ mmake<Image>Component() });
 		newActor->name = "Sprite";
 		newActor->transform->size = Vec2F(10, 10);
 		OnCreateObject(newActor);

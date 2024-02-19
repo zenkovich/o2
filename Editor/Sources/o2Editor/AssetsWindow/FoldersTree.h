@@ -138,11 +138,11 @@ CLASS_METHODS_META(Editor::AssetsFoldersTree)
     FUNCTION().PROTECTED().SIGNATURE(void, SelectAndExpandFolder, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeContext);
-    FUNCTION().PROTECTED().SIGNATURE(WeakRef<void>, GetFoldersTreeNodeParent, const WeakRef<void>&);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<WeakRef<void>>, GetFoldersTreeNodeChilds, const WeakRef<void>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, const Ref<TreeNode>&, const WeakRef<void>&);
+    FUNCTION().PROTECTED().SIGNATURE(void*, GetFoldersTreeNodeParent, void*);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetFoldersTreeNodeChilds, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, const Ref<TreeNode>&, void*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeNodeDblClick, const Ref<TreeNode>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, const Vector<WeakRef<void>>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, Vector<void*>);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeRightClick, const Ref<TreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCutPressed);

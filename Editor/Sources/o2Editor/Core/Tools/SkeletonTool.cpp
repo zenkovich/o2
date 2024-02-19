@@ -8,7 +8,7 @@ namespace Editor
 {
 	SkeletonTool::SkeletonTool()
 	{
-		sceneLayer.tool = this;
+		sceneLayer.tool = Ref(this);
 	}
 
 	void SkeletonTool::AddSkeletonInstance(const Ref<SkinningMeshComponent>& skinningMeshComponent)
@@ -16,19 +16,19 @@ namespace Editor
 		if (IsEditingSkeleton(skinningMeshComponent))
 			return;
 
-		SkeletonInstance* newInstance = mnew SkeletonInstance();
+		auto newInstance = mmake<SkeletonInstance>();
 
 		newInstance->skinningMeshComponent = skinningMeshComponent;
 
 		for (auto& bones : skinningMeshComponent->GetBones())
 		{
-			BoneHandle* boneHandle = mnew BoneHandle();
-			boneHandle->boneComponent = bones.first;
+			auto boneHandle = mmake<BoneHandle>();
+			boneHandle->boneComponent = bones.first.Lock();
 
 			auto compTransform = skinningMeshComponent->GetOwnerActor()->transform;
 
 			const float handleSize = 5;
-			Vec2F drawableSize(bones.first->length, handleSize);
+			Vec2F drawableSize(bones.first.Lock()->length, handleSize);
 
 			boneHandle->handle->position = compTransform->worldPosition;
 
@@ -48,23 +48,21 @@ namespace Editor
 
 	void SkeletonTool::RemoveSkeletonInstance(const Ref<SkinningMeshComponent>& skinningMeshComponent)
 	{
-		auto instance = mSkeletons.FindOrDefault([&](SkeletonInstance* x) { return x->skinningMeshComponent == skinningMeshComponent; });
+		auto instance = mSkeletons.FindOrDefault([&](auto& x) { return x->skinningMeshComponent == skinningMeshComponent; });
 		if (!instance)
 			return;
 
 		mSkeletons.Remove(instance);
 
-		instance->boneHandles.ForEach([](auto& x) { delete x; });
 		instance->boneHandles.Clear();
-		delete instance;
 	}
 
 	bool SkeletonTool::IsEditingSkeleton(const Ref<SkinningMeshComponent>& skinningMeshComponent) const
 	{
-		return mSkeletons.Contains([&](SkeletonInstance* x) { return x->skinningMeshComponent == skinningMeshComponent; });
+		return mSkeletons.Contains([&](auto& x) { return x->skinningMeshComponent == skinningMeshComponent; });
 	}
 
-	const Vector<SkeletonTool::SkeletonInstance*>& SkeletonTool::GetEditingSkeletons() const
+	const Vector<Ref<SkeletonTool::SkeletonInstance>>& SkeletonTool::GetEditingSkeletons() const
 	{
 		return mSkeletons;
 	}
@@ -75,7 +73,7 @@ namespace Editor
 
 	void SkeletonTool::SceneLayer::Update(float dt)
 	{
-		for (auto& instance : tool->mSkeletons)
+		for (auto& instance : tool.Lock()->mSkeletons)
 			instance->UpdateHandlesPositions();
 	}
 
@@ -86,7 +84,7 @@ namespace Editor
 
 	bool SkeletonTool::SceneLayer::IsEnabled() const
 	{
-		return tool->isEnabled;
+		return tool.Lock()->isEnabled;
 	}
 
 	const String& SkeletonTool::SceneLayer::GetName() const
@@ -107,13 +105,13 @@ namespace Editor
 
 	void SkeletonTool::SkeletonTool::OnEnabled()
 	{
-		o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.AddEditorLayer(sceneLayer);
 		isEnabled = true;
 	}
 
 	void SkeletonTool::SkeletonTool::OnDisabled()
 	{
-		o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.RemoveEditorLayer(sceneLayer);
 		isEnabled = false;
 	}
 
@@ -160,9 +158,9 @@ namespace Editor
 			o2Render.DrawAAPolyLine(vertices.Data(), vertices.Count(), 3.0f);
 		};
 
-		handle = mnew SceneDragHandle(mnew FunctionalRectDrawable(drawHandleRegular),
-									  mnew FunctionalRectDrawable(drawHandleHover),
-									  mnew FunctionalRectDrawable(drawHandlePressed));
+		handle = mmake<SceneDragHandle>(mmake<FunctionalRectDrawable>(drawHandleRegular),
+										mmake<FunctionalRectDrawable>(drawHandleHover),
+										mmake<FunctionalRectDrawable>(drawHandlePressed));
 
 		handle->mode = SceneDragHandle::Mode::SceneSpace;
 
@@ -175,9 +173,7 @@ namespace Editor
 	}
 
 	SkeletonTool::BoneHandle::~BoneHandle()
-	{
-		delete handle;
-	}
+	{}
 
 	void SkeletonTool::BoneHandle::UpdatePosition()
 	{

@@ -68,8 +68,8 @@ namespace Editor
 		for (auto& info : objectsInfos)
 		{
 			auto object = o2Scene.GetEditableObjectByID((SceneUID)info.objectData["Value"]["Id"]);
-			if (object)
-				delete object;
+// 			if (object)
+// 				delete object;
 		}
 
 		o2EditorSceneScreen.ClearSelectionWithoutAction();
@@ -78,16 +78,17 @@ namespace Editor
 
 	void DeleteAction::Undo()
 	{
-		SceneEditableObject* lastRestored = nullptr;
+		Ref<SceneEditableObject> lastRestored;
+
 		for (auto& info : objectsInfos)
 		{
-			SceneEditableObject* parent = o2Scene.GetEditableObjectByID(info.parentId);
+			auto parent = o2Scene.GetEditableObjectByID(info.parentId);
 			if (parent)
 			{
 				SceneUID prevId = info.prevObjectId;
-				int idx = parent->GetEditableChildren().IndexOf([=](SceneEditableObject* x) { return x->GetID() == prevId; }) + 1;
+				int idx = parent->GetEditableChildren().IndexOf([=](auto& x) { return x->GetID() == prevId; }) + 1;
 
-				SceneEditableObject* newObject;
+				Ref<SceneEditableObject> newObject;
 				info.objectData.Get(newObject);
 				parent->AddEditableChild(newObject, idx);
 
@@ -96,9 +97,9 @@ namespace Editor
 			}
 			else
 			{
-				int idx = o2Scene.GetRootActors().IndexOf([&](Actor* x) { return x->GetID() == info.prevObjectId; }) + 1;
+				int idx = o2Scene.GetRootActors().IndexOf([&](auto& x) { return x->GetID() == info.prevObjectId; }) + 1;
 
-				SceneEditableObject* newObject;
+				Ref<SceneEditableObject> newObject;
 				info.objectData.Get(newObject);
 				newObject->SetIndexInSiblings(idx);
 

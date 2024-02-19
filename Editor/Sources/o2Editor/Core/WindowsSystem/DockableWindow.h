@@ -182,10 +182,15 @@ CLASS_BASES_META(Editor::DockableWindow)
 END_META;
 CLASS_FIELDS_META(Editor::DockableWindow)
 {
+    FIELD().PROTECTED().DEFAULT_VALUE("tab/main").NAME(mTabLayerPath);
+    FIELD().PROTECTED().DEFAULT_VALUE("tab/main/icon").NAME(mTabIconLayerPath);
+    FIELD().PROTECTED().DEFAULT_VALUE("tab/main/caption").NAME(mTabCaptionLayerPath);
+    FIELD().PROTECTED().DEFAULT_VALUE("back/icon").NAME(mIconLayerPath);
+    FIELD().PROTECTED().DEFAULT_VALUE("back/caption").NAME(mCaptionLayerPath);
     FIELD().PROTECTED().DEFAULT_VALUE(0.2f).NAME(mDockSizeCoef);
     FIELD().PROTECTED().DEFAULT_VALUE(1.5f).NAME(mDockBorder);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDocked);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mDockingFrameSample);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mDockingFrameSample);
     FIELD().PROTECTED().NAME(mDockingFrameCurrent);
     FIELD().PROTECTED().NAME(mDockingFrameTarget);
     FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mDockingFrameAppearance);
@@ -206,9 +211,9 @@ CLASS_METHODS_META(Editor::DockableWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsDocked);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetDockingFrameSample);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, Sprite*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetDockingFrameSample);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, const Ref<Sprite>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Sprite>, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE(void, SetIconLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetIconLayout);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
@@ -219,7 +224,7 @@ CLASS_METHODS_META(Editor::DockableWindow)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsTabActive);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAutoCalcuclatingTabWidth, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsAutoCalcuclatingTabWidth);
-    FUNCTION().PUBLIC().SIGNATURE(void, PlaceDock, DockWindowPlace*);
+    FUNCTION().PUBLIC().SIGNATURE(void, PlaceDock, const Ref<DockWindowPlace>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Undock);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
@@ -233,9 +238,9 @@ CLASS_METHODS_META(Editor::DockableWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, OnMoved, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnMoveCompleted, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnMoveBegin, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(bool, TraceDock, DockWindowPlace*&, Side&, RectF&);
-    FUNCTION().PROTECTED().SIGNATURE(void, PlaceNonLineDock, DockWindowPlace*, Side);
-    FUNCTION().PROTECTED().SIGNATURE(void, PlaceLineDock, DockWindowPlace*, Side, RectF);
+    FUNCTION().PROTECTED().SIGNATURE(bool, TraceDock, Ref<DockWindowPlace>&, Side&, RectF&);
+    FUNCTION().PROTECTED().SIGNATURE(void, PlaceNonLineDock, const Ref<DockWindowPlace>&, Side);
+    FUNCTION().PROTECTED().SIGNATURE(void, PlaceLineDock, const Ref<DockWindowPlace>&, Side, RectF);
     FUNCTION().PROTECTED().SIGNATURE(void, SetTabState, float, int, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, SetNonTabState);
     FUNCTION().PROTECTED().SIGNATURE(void, SetActiveTab);

@@ -171,7 +171,7 @@ CLASS_FIELDS_META(Editor::ScrollView)
     FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(horGridEnabled);
     FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(verGridEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mReady);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRenderTargetSprite);
+    FIELD().PROTECTED().NAME(mRenderTargetSprite);
     FIELD().PROTECTED().NAME(mRenderTarget);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mBackColor);

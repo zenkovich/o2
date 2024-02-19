@@ -38,7 +38,7 @@ namespace Editor
 		return *this;
 	}
 
-	void CurvePreview::SetCurve(Curve* curve)
+	void CurvePreview::SetCurve(const Ref<Curve>& curve)
 	{
 		if (mCurve)
 			mCurve->onKeysChanged -= THIS_FUNC(OnCurveChanged);

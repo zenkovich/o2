@@ -37,16 +37,8 @@ namespace Editor
 
 	SplineEditor::~SplineEditor()
 	{
-		delete mSelectionSprite;
-
-		if (mSplineWrapper)
-			delete mSplineWrapper;
-
 		auto splineHandles = mSplineHandles;
 		mSplineHandles.Clear();
-
-		for (auto& handles : splineHandles)
-			delete handles;
 
 		mSplineHandles.Clear();
 	}
@@ -152,11 +144,8 @@ namespace Editor
 	{
 	}
 
-	void SplineEditor::SetSpline(ISplineWrapper* wrapper)
+	void SplineEditor::SetSpline(const Ref<ISplineWrapper>& wrapper)
 	{
-		if (mSplineWrapper)
-			delete mSplineWrapper;
-
 		ClearHandles();
 
 		mSplineWrapper = wrapper;
@@ -184,9 +173,6 @@ namespace Editor
 
 	void SplineEditor::ClearHandles()
 	{
-		for (auto& handles : mSplineHandles)
-			delete handles;
-
 		mSplineHandles.Clear();
 	}
 
@@ -203,14 +189,14 @@ namespace Editor
 
 		for (int i = 0; i < mSplineWrapper->GetPointsCount(); i++)
 		{
-			PointHandles* handles = mnew PointHandles();
+			auto handles = mmake<PointHandles>();
 
 			handles->isFirst = i == 0;
 			handles->isLast = i == mSplineWrapper->GetPointsCount() - 1;
 
 			handles->position = mHandlesSample.position;
 			handles->position.SetPosition(mSplineWrapper->GetPointPos(i));
-			handles->position.SetSelectionGroup(this);
+			handles->position.SetSelectionGroup(Ref(this));
 			handles->position.onPressed = [=]() { handles->positionDragged = false; };
 			handles->position.onBeganDragging = [=]() { handles->positionDragged = true; };
 			handles->position.onReleased = [=]() { if (!handles->positionDragged) OnMainHandleReleasedNoDrag(i, handles); };
@@ -220,7 +206,7 @@ namespace Editor
 
 			handles->prevSupport = mHandlesSample.prevSupport;
 			handles->prevSupport.SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
-			handles->prevSupport.SetSelectionGroup(&mSupportHandlesGroup);
+			handles->prevSupport.SetSelectionGroup(mSupportHandlesGroup);
 			handles->prevSupport.onChangedPos = [=](const Vec2F& pos) { OnPrevHandleMoved(i, pos, handles); };
 			handles->prevSupport.onPressed = [=]() { handles->prevSupportDragged = false; CheckDragFromZero(i, handles); };
 			handles->prevSupport.onBeganDragging = [=]() { handles->prevSupportDragged = true; };
@@ -230,7 +216,7 @@ namespace Editor
 
 			handles->nextSupport = mHandlesSample.nextSupport;
 			handles->nextSupport.SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
-			handles->nextSupport.SetSelectionGroup(&mSupportHandlesGroup);
+			handles->nextSupport.SetSelectionGroup(mSupportHandlesGroup);
 			handles->nextSupport.onChangedPos = [=](const Vec2F& pos) { OnNextHandleMoved(i, pos, handles); };
 			handles->nextSupport.onPressed = [=]() { handles->nextSupportDragged = false; CheckDragFromZero(i, handles); };
 			handles->nextSupport.onBeganDragging = [=]() { handles->nextSupportDragged = true; };
@@ -242,7 +228,7 @@ namespace Editor
 		}
 	}
 
-	void SplineEditor::OnPrevHandleMoved(int i, const Vec2F& pos, PointHandles* handles)
+	void SplineEditor::OnPrevHandleMoved(int i, const Vec2F& pos, const Ref<PointHandles>& handles)
 	{
 		Vec2F prev = mSplineWrapper->GetPointPrevSupportPos(i);
 		Vec2F curr = mSplineWrapper->GetPointPos(i);
@@ -263,7 +249,7 @@ namespace Editor
 		onChanged();
 	}
 
-	void SplineEditor::OnNextHandleMoved(int i, const Vec2F& pos, PointHandles* handles)
+	void SplineEditor::OnNextHandleMoved(int i, const Vec2F& pos, const Ref<PointHandles>& handles)
 	{
 		Vec2F prev = mSplineWrapper->GetPointPrevSupportPos(i);
 		Vec2F curr = mSplineWrapper->GetPointPos(i);
@@ -284,7 +270,7 @@ namespace Editor
 		onChanged();
 	}
 
-	void SplineEditor::OnMainHandleMoved(int i, const Vec2F& pos, PointHandles* handles)
+	void SplineEditor::OnMainHandleMoved(int i, const Vec2F& pos, const Ref<PointHandles>& handles)
 	{
 		mSplineWrapper->SetPointPos(i, pos);
 		handles->prevSupport.SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
@@ -295,7 +281,7 @@ namespace Editor
 		onChanged();
 	}
 
-	void SplineEditor::OnPrevHandleReleasedNoDrag(int i, PointHandles* handles)
+	void SplineEditor::OnPrevHandleReleasedNoDrag(int i, const Ref<PointHandles>& handles)
 	{
 		if (o2Input.IsKeyDown(VK_MENU))
 		{
@@ -308,7 +294,7 @@ namespace Editor
 		}
 	}
 
-	void SplineEditor::OnNextHandleReleasedNoDrag(int i, PointHandles* handles)
+	void SplineEditor::OnNextHandleReleasedNoDrag(int i, const Ref<PointHandles>& handles)
 	{
 		if (o2Input.IsKeyDown(VK_MENU))
 		{
@@ -321,7 +307,7 @@ namespace Editor
 		}
 	}
 
-	void SplineEditor::OnMainHandleReleasedNoDrag(int i, PointHandles* handles)
+	void SplineEditor::OnMainHandleReleasedNoDrag(int i, const Ref<PointHandles>& handles)
 	{
 		if (o2Input.IsKeyDown(VK_MENU))
 		{
@@ -393,7 +379,7 @@ namespace Editor
 		if (!o2Input.IsKeyDown(VK_CONTROL))
 		{
 			DeselectAll();
-			mSupportHandlesGroup.DeselectAll();
+			mSupportHandlesGroup->DeselectAll();
 		}
 	}
 
@@ -428,10 +414,10 @@ namespace Editor
 			}
 		}
 
-		for (auto& handle : mSupportHandlesGroup.GetAllHandles())
+		for (auto& handle : mSupportHandlesGroup->GetAllHandles())
 		{
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(handle->GetPosition()) &&
-				!mSupportHandlesGroup.GetSelectedHandles().Contains(handle))
+				!mSupportHandlesGroup->GetSelectedHandles().Contains(handle))
 			{
 				mSelectingHandlesBuf.Add(handle);
 				SetHandleSelectedState(handle, true);
@@ -463,7 +449,7 @@ namespace Editor
 		}
 	}
 
-	void SplineEditor::CheckDragFromZero(int i, PointHandles* handles)
+	void SplineEditor::CheckDragFromZero(int i, const Ref<PointHandles>& handles)
 	{
 		float screenThreshold = 3.0f;
 		float threshold = mSplineWrapper->WorldToLocal(Vec2F(screenThreshold, screenThreshold)).x -
@@ -492,7 +478,7 @@ namespace Editor
 			aabb.bottom = Math::Min(handle->GetPosition().y, aabb.bottom);
 		}
 
-		for (auto& handle : mSupportHandlesGroup.GetSelectedHandles())
+		for (auto& handle : mSupportHandlesGroup->GetSelectedHandles())
 		{
 			aabb.left = Math::Min(handle->GetPosition().x, aabb.left);
 			aabb.right = Math::Max(handle->GetPosition().x, aabb.right);
@@ -532,7 +518,7 @@ namespace Editor
 			for (int i = 0; i < mSelectedHandles.Count(); i++)
 				newPosHandlesPositions.Add(mSelectedHandles[i]->GetPosition()*delta);
 
-			auto& supportHandles = mSupportHandlesGroup.GetSelectedHandles();
+			auto& supportHandles = mSupportHandlesGroup->GetSelectedHandles();
 			for (int i = 0; i < supportHandles.Count(); i++)
 				newSupportnHandlesPositions.Add(supportHandles[i]->GetPosition()*delta);
 

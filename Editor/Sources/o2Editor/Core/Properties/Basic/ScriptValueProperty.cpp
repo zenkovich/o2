@@ -101,10 +101,10 @@ namespace Editor
 						auto nameStr = name.ToString();
 						if (nameStr[0] != '_')
 						{
-							Pair<IScriptValueProperty*, IScriptValueProperty*> elem;
-							elem.first = mnew o2::ScriptValueProperty{ kv.first, name };
+							Pair<Ref<IScriptValueProperty>, Ref<IScriptValueProperty>> elem;
+							elem.first = mmake<o2::ScriptValueProperty>(kv.first, name);
 							if (kv.second.IsObject())
-								elem.second = mnew o2::ScriptValueProperty{ kv.second, name };
+								elem.second = mmake<o2::ScriptValueProperty>(kv.second, name);
 
 							auto fnd = res.Find([&](auto& x) { return x.first == nameStr; });
 							if (fnd)
@@ -122,10 +122,10 @@ namespace Editor
 
 				for (int i = 0; i < kv.first.GetLength(); i++)
 				{
-					Pair<IScriptValueProperty*, IScriptValueProperty*> elem;
-					elem.first = mnew ScriptValueArrayElement{ kv.first, i };
+					Pair<Ref<IScriptValueProperty>, Ref<IScriptValueProperty>> elem;
+					elem.first = mmake<ScriptValueArrayElement>(kv.first, i);
 					if (kv.second.IsObject())
-						elem.second = mnew ScriptValueArrayElement{ kv.second, i };
+						elem.second = mmake<ScriptValueArrayElement>(kv.second, i);
 
 					auto nameStr = (String)i;
 					auto fnd = res.Find([&](auto& x) { return x.first == nameStr; });
@@ -158,7 +158,7 @@ namespace Editor
 		// Get values from proxies
 		Vector<Pair<ScriptValue, ScriptValue>> values =
 			mValuesProxies.Convert<Pair<ScriptValue, ScriptValue>>(
-				[](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+				[](const Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>& x)
 				{
 					Pair<ScriptValue, ScriptValue> res;
 					x.first->GetValuePtr(&res.first);
@@ -294,13 +294,13 @@ namespace Editor
 							SetFieldProxies<Color4>(commonProperties, name, field);
 						else if (value.IsObjectContainer())
 						{
-							auto proxies = prop->second.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-								[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
+							auto proxies = prop->second.Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
+								[](const Pair<Ref<IScriptValueProperty>, Ref<IScriptValueProperty>>& x)
 								{
-									Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
-									res.first = mnew ScriptValueProxy(x.first->Clone());
+									Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>> res;
+									res.first = mmake<ScriptValueProxy>(x.first->Clone());
 									if (x.second && x.second->Get().IsObject())
-										res.second = mnew ScriptValueProxy(x.second->Clone());
+										res.second = mmake<ScriptValueProxy>(x.second->Clone());
 
 									return res;
 								});
@@ -316,15 +316,6 @@ namespace Editor
 			}
 
 			mSpoiler->SetLayoutDirty();
-		}
-
-		for (auto& kv : commonProperties)
-		{
-			for (auto& x : kv.second)
-			{
-				delete x.first;
-				delete x.second;
-			}
 		}
 
 		mNeedUpdateProxies = false;
@@ -345,7 +336,7 @@ namespace Editor
 		mBuiltProperties.Add(name, prop);
 	}
 
-	void ScriptValueProperty::OnCountChanged(IPropertyField* def)
+	void ScriptValueProperty::OnCountChanged(const Ref<IPropertyField>& def)
 	{
 		if (mIsRefreshing)
 			return;
@@ -442,7 +433,7 @@ namespace Editor
 		return mSpoiler->GetCaption();
 	}
 
-	Button* ScriptValueProperty::GetRemoveButton()
+	Ref<Button> ScriptValueProperty::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{

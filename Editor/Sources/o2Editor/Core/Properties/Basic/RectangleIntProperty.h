@@ -143,10 +143,10 @@ CLASS_BASES_META(Editor::RectIProperty)
 END_META;
 CLASS_FIELDS_META(Editor::RectIProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTopProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBottomProperty);
+    FIELD().PROTECTED().NAME(mLeftProperty);
+    FIELD().PROTECTED().NAME(mRightProperty);
+    FIELD().PROTECTED().NAME(mTopProperty);
+    FIELD().PROTECTED().NAME(mBottomProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::RectIProperty)

@@ -32,6 +32,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IAction)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IAction)

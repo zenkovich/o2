@@ -170,14 +170,14 @@ CLASS_BASES_META(Editor::LayersPopup)
 END_META;
 CLASS_FIELDS_META(Editor::LayersPopup)
 {
-    FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+    FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mItemSample);
     FIELD().PRIVATE().NAME(mItemsCache);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mDraggingItem);
+    FIELD().PRIVATE().NAME(mDraggingItem);
     FIELD().PRIVATE().NAME(mDragOffset);
     FIELD().PRIVATE().DEFAULT_VALUE(0.4f).NAME(mDragAnimTime);
     FIELD().PRIVATE().DEFAULT_VALUE(Curve::EaseInOut()).NAME(mDragAnimFunc);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAddButtonLayout);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+    FIELD().PRIVATE().NAME(mAddButtonLayout);
+    FIELD().PRIVATE().NAME(mAddButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::LayersPopup)
@@ -190,10 +190,10 @@ CLASS_METHODS_META(Editor::LayersPopup)
     FUNCTION().PRIVATE().SIGNATURE(void, SpecialDraw);
     FUNCTION().PRIVATE().SIGNATURE(Vec2F, GetContentSize);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
-    FUNCTION().PRIVATE().SIGNATURE(void, UpdateItemLayout, LayerPopupItem*, int);
+    FUNCTION().PRIVATE().SIGNATURE(void, UpdateItemLayout, const Ref<LayerPopupItem>&, int);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateLayersList);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateLayersListAndFit);
-    FUNCTION().PRIVATE().SIGNATURE(void, BeginDragging, LayerPopupItem*);
+    FUNCTION().PRIVATE().SIGNATURE(void, BeginDragging, const Ref<LayerPopupItem>&);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateDragging);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateDragAnimation, float);
     FUNCTION().PRIVATE().SIGNATURE(void, EndDragging);
@@ -208,13 +208,13 @@ CLASS_BASES_META(Editor::LayerPopupItem)
 END_META;
 CLASS_FIELDS_META(Editor::LayerPopupItem)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLayer);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPopup);
+    FIELD().PRIVATE().NAME(mLayer);
+    FIELD().PRIVATE().NAME(mPopup);
     FIELD().PRIVATE().NAME(mDragHandle);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mVisibleToggle);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mNameCaption);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PRIVATE().NAME(mVisibleToggle);
+    FIELD().PRIVATE().NAME(mNameCaption);
+    FIELD().PRIVATE().NAME(mRemoveBtn);
+    FIELD().PRIVATE().NAME(mEditBox);
     FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mDragInsertCoef);
     FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mDragTargetInsertCoef);
 }
@@ -224,7 +224,7 @@ CLASS_METHODS_META(Editor::LayerPopupItem)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const LayerPopupItem&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, SceneLayer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, BeginEditName);
     FUNCTION().PUBLIC().SIGNATURE(void, BreakEditName);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
@@ -232,7 +232,7 @@ CLASS_METHODS_META(Editor::LayerPopupItem)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDragStart, const Input::Cursor&);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnDragged, const Input::Cursor&, DragDropArea*);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDragged, const Input::Cursor&, const Ref<DragDropArea>&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDragEnd, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnNameEditChanged, const WString&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnVisibleChanged, bool);

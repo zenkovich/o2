@@ -87,7 +87,7 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultActorComponentViewer)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponentType);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
+    FIELD().PROTECTED().NAME(mViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorComponentViewer)

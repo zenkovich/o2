@@ -123,7 +123,7 @@ CLASS_FIELDS_META(Editor::ScaleTool)
     FIELD().PROTECTED().NAME(mLastVerHandlePos);
     FIELD().PROTECTED().NAME(mLastBothHandlePos);
     FIELD().PROTECTED().NAME(mBeforeTransforms);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
+    FIELD().PROTECTED().NAME(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::ScaleTool)
@@ -136,8 +136,8 @@ CLASS_METHODS_META(Editor::ScaleTool)
     FUNCTION().PROTECTED().SIGNATURE(void, DrawScreen);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<Ref<SceneEditableObject>>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<Ref<SceneEditableObject>>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, const Vector<Ref<SceneEditableObject>>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnHorDragHandleMoved, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnVerDragHandleMoved, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnBothDragHandleMoved, const Vec2F&);

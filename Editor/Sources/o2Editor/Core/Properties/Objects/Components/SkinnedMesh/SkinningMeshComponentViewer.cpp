@@ -12,10 +12,10 @@ namespace Editor
 
 	SkinningMeshComponentViewer::~SkinningMeshComponentViewer()
 	{
-		o2EditorSceneScreen.RemoveTool(&mSplineTool);
-		o2EditorSceneScreen.RemoveTool(&mFrameTool);
-		o2EditorSceneScreen.RemoveTool(&mTopologyTool);
-		o2EditorSceneScreen.RemoveEditorLayer(&mFrameTetxureLayer);
+		o2EditorSceneScreen.RemoveTool(mSplineTool);
+		o2EditorSceneScreen.RemoveTool(mFrameTool);
+		o2EditorSceneScreen.RemoveTool(mTopologyTool);
+		o2EditorSceneScreen.RemoveEditorLayer(mFrameTetxureLayer);
 	}
 
 	SkinningMeshComponentViewer& SkinningMeshComponentViewer::operator=(const SkinningMeshComponentViewer& other)
@@ -51,23 +51,23 @@ namespace Editor
 			};
 
 			// Spline tool
-			mSplineTool.SetSpline(&mTypeTargetObjects[0].first->spline, getOrigin);
-			mSplineTool.onChanged = [&]() { mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged(); };
+			mSplineTool->SetSpline(mTypeTargetObjects[0].first->spline, getOrigin);
+			mSplineTool->onChanged = [&]() { mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged(); };
 
 			// Frame tool
-			mFrameTool.SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
-			mFrameTool.frameHandles.SetRotationEnabled(false);
-			mFrameTool.getOrigin = getOrigin;
-			mFrameTool.onChanged = [&](const Basis& b) {
+			mFrameTool->SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
+			mFrameTool->frameHandles.SetRotationEnabled(false);
+			mFrameTool->getOrigin = getOrigin;
+			mFrameTool->onChanged = [&](const Basis& b) {
 				mTypeTargetObjects[0].first->SetMappingFrame(b.AABB());
 				mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged();
 			};
 
-			mFrameTetxureLayer.mesh = mTypeTargetObjects[0].first;
+			mFrameTetxureLayer->mesh = Ref(mTypeTargetObjects[0].first);
 
 			// Topology tool
 			auto mesh = mTypeTargetObjects[0].first;
-			mTopologyTool.Setup([=]() { return mesh->GetExtraPoints(); },
+			mTopologyTool->Setup([=]() { return mesh->GetExtraPoints(); },
 				[=](int idx, Vec2F p) { mesh->SetExtraPoint(idx, p); mesh->GetOwnerActor()->OnChanged(); },
 				[=]() { return mesh->GetOwnerActor()->transform->GetWorldNonSizedBasis(); },
 				[=](Vec2F p) { mesh->AddExtraPoint(p); mesh->GetOwnerActor()->OnChanged(); },
@@ -77,32 +77,32 @@ namespace Editor
 
 	void SkinningMeshComponentViewer::OnEnabled()
 	{
-		o2EditorSceneScreen.AddTool(&mSplineTool);
-		o2EditorSceneScreen.AddTool(&mFrameTool);
-		o2EditorSceneScreen.AddTool(&mTopologyTool);
+		o2EditorSceneScreen.AddTool(mSplineTool);
+		o2EditorSceneScreen.AddTool(mFrameTool);
+		o2EditorSceneScreen.AddTool(mTopologyTool);
 
 		o2EditorSceneScreen.SelectTool<SplineTool>();
 
-		o2EditorSceneScreen.AddEditorLayer(&mFrameTetxureLayer);
+		o2EditorSceneScreen.AddEditorLayer(mFrameTetxureLayer);
 
 		mSkeletonTool = o2EditorSceneScreen.GetTool<SkeletonTool>();
 		if (mSkeletonTool && !mTypeTargetObjects.IsEmpty() && mTypeTargetObjects[0].first)
-			mEditingSkeleton = mSkeletonTool->IsEditingSkeleton(mTypeTargetObjects[0].first);
+			mEditingSkeleton = mSkeletonTool->IsEditingSkeleton(Ref(mTypeTargetObjects[0].first));
 
 		UpdateEditSkeletonButtonCaption();
 	}
 
 	void SkinningMeshComponentViewer::OnDisabled()
 	{
-		o2EditorSceneScreen.RemoveTool(&mSplineTool);
-		o2EditorSceneScreen.RemoveTool(&mFrameTool);
-		o2EditorSceneScreen.RemoveTool(&mTopologyTool);
+		o2EditorSceneScreen.RemoveTool(mSplineTool);
+		o2EditorSceneScreen.RemoveTool(mFrameTool);
+		o2EditorSceneScreen.RemoveTool(mTopologyTool);
 
-		o2EditorSceneScreen.RemoveEditorLayer(&mFrameTetxureLayer);
+		o2EditorSceneScreen.RemoveEditorLayer(mFrameTetxureLayer);
 
-		mSplineTool.Reset();
-		mFrameTool.Reset();
-		mTopologyTool.Reset();
+		mSplineTool->Reset();
+		mFrameTool->Reset();
+		mTopologyTool->Reset();
 	}
 
 	void SkinningMeshComponentViewer::FitAndCenterize()
@@ -115,7 +115,7 @@ namespace Editor
 
 			component->SetMappingFrame(RectF(size * -0.5f, size * 0.5f));
 
-			mFrameTool.SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
+			mFrameTool->SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
 		}
 	}
 
@@ -126,14 +126,14 @@ namespace Editor
 
 		mEditingSkeleton = !mEditingSkeleton;
 
-		auto component = mTypeTargetObjects[0].first;
+		auto component = Ref(mTypeTargetObjects[0].first);
 
 		if (mEditingSkeleton)
 		{
 			mSkeletonTool = o2EditorSceneScreen.GetTool<SkeletonTool>();
 			if (!mSkeletonTool)
 			{
-				mSkeletonTool = mnew SkeletonTool();
+				mSkeletonTool = mmake<SkeletonTool>();
 				o2EditorSceneScreen.AddTool(mSkeletonTool);
 			}
 
@@ -150,7 +150,6 @@ namespace Editor
 				if (mSkeletonTool->GetEditingSkeletons().Count() == 0)
 				{
 					o2EditorSceneScreen.RemoveTool(mSkeletonTool);
-					delete mSkeletonTool;
 					mSkeletonTool = nullptr;
 				}
 			}

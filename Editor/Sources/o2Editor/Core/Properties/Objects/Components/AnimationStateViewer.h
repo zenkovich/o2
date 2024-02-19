@@ -39,7 +39,7 @@ namespace Editor
 
 	private:
 		// Creates spoiler for properties
-		Spoiler* CreateSpoiler() override;
+		Ref<Spoiler> CreateSpoiler() override;
 
 		// Called when viewer is refreshed
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
@@ -72,11 +72,11 @@ CLASS_BASES_META(Editor::AnimationStateViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationStateViewer)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPlayPause);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditBtn);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLooped);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeProgress);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSubscribedPlayer);
+    FIELD().PRIVATE().NAME(mPlayPause);
+    FIELD().PRIVATE().NAME(mEditBtn);
+    FIELD().PRIVATE().NAME(mLooped);
+    FIELD().PRIVATE().NAME(mTimeProgress);
+    FIELD().PRIVATE().NAME(mSubscribedPlayer);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationStateViewer)
@@ -86,7 +86,7 @@ CLASS_METHODS_META(Editor::AnimationStateViewer)
 
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-    FUNCTION().PRIVATE().SIGNATURE(Spoiler*, CreateSpoiler);
+    FUNCTION().PRIVATE().SIGNATURE(Ref<Spoiler>, CreateSpoiler);
     FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp1);
     FUNCTION().PRIVATE().SIGNATURE(void, OnFree);
     FUNCTION().PRIVATE().SIGNATURE(void, OnPlayPauseToggled, bool);

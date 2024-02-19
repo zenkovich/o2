@@ -61,9 +61,9 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
     FIELD().PROTECTED().NAME(mLayers);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitSizeButton);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDrawableType);
+    FIELD().PROTECTED().NAME(mViewer);
+    FIELD().PROTECTED().NAME(mFitSizeButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)

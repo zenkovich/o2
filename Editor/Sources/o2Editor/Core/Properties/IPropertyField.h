@@ -58,7 +58,7 @@ namespace Editor
 		virtual void SetValueProxy(const Vector<Ref<IAbstractValueProxy>>& targets);
 
 		// Sets parent context
-		virtual void SetParentContext(PropertiesContext* context);
+		virtual void SetParentContext(const Ref<PropertiesContext>& context);
 
 		// Checks common value and fill fields
 		virtual void Refresh() {}
@@ -91,7 +91,7 @@ namespace Editor
 		const String& GetValuePath() const;
 
 		// Sets caption
-		void SetCaptionLabel(Label* label);
+		void SetCaptionLabel(const Ref<Label>& label);
 
 		// Returns caption
 		const Ref<Label>& GetCaptionLabel() const;
@@ -300,18 +300,18 @@ namespace Editor
 	template<typename _type>
 	void IPropertyField::SetValuePointers(const Vector<_type*>& targets)
 	{
-		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_type* target)
+		SetValueAndPrototypeProxy(targets.template Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>([](_type* target)
 		{
-			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(mnew PointerValueProxy<_type>(target), nullptr);
+			return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(mnew PointerValueProxy<_type>(target), nullptr);
 		}));
 	}
 
 	template<typename _property_type>
 	void IPropertyField::SetValuePropertyPointers(const Vector<_property_type*>& targets)
 	{
-		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_property_type* target)
+		SetValueAndPrototypeProxy(targets.template Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>([](_property_type* target)
 		{
-			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+			return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(
 				mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(target), nullptr);
 		}));
 	}
@@ -319,10 +319,10 @@ namespace Editor
 	template<typename _type, typename _object_type>
 	void IPropertyField::SelectValuesPointers(const Vector<_object_type*>& targets, std::function<_type* (_object_type*)> getter)
 	{
-		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		SetValueAndPrototypeProxy(targets.template Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
 			[&](_object_type* target)
 		{
-			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+			return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(
 				TypeOf(_type).GetValueProxy(getter(target)), nullptr);
 		}));
 	}
@@ -331,10 +331,10 @@ namespace Editor
 	void IPropertyField::SelectValuesProperties(const Vector<_object_type*>& targets,
 												std::function<_property_type* (_object_type*)> getter)
 	{
-		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		SetValueAndPrototypeProxy(targets.template Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
 			[&](_object_type* target)
 		{
-			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+			return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(
 				mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(getter(target)), nullptr);
 		}));
 	}
@@ -344,12 +344,12 @@ namespace Editor
 														 const Vector<_object_type*>& prototypes,
 														 std::function<_type* (_object_type*)> getter)
 	{
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
+		Vector<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>> targetPairs;
 		targetPairs.Reserve(targets.Count());
 
 		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
 		{
-			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+			targetPairs.Add(Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(
 				mnew PointerValueProxy<_type>(getter(targets[i])),
 				prototypes[i] ? mnew PointerValueProxy<_type>(getter(prototypes[i])) : nullptr
 			));
@@ -363,12 +363,12 @@ namespace Editor
 														   const Vector<_object_type*>& prototypes,
 														   std::function<_property_type* (_object_type*)> getter)
 	{
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
+		Vector<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>> targetPairs;
 		targetPairs.Reserve(targets.Count());
 
 		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
 		{
-			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+			targetPairs.Add(Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(
 				mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(getter(targets[i])),
 				prototypes[i] ? mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(getter(prototypes[i])) : nullptr
 			));
@@ -383,12 +383,12 @@ namespace Editor
 														   std::function<_type(_object_type*)> getter,
 														   std::function<void(_object_type*, _type)> setter)
 	{
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
+		Vector<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>> targetPairs;
 		targetPairs.Reserve(targets.Count());
 
 		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
 		{
-			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+			targetPairs.Add(Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(
 				mnew FunctionalValueProxy<_type>(
 				[=](_type v) { setter(targets[i], v); },
 				[=]() { return getter(targets[i]); }),
@@ -597,13 +597,13 @@ CLASS_FIELDS_META(Editor::IPropertyField)
     FIELD().PUBLIC().NAME(onChanged);
     FIELD().PUBLIC().NAME(onChangeCompleted);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFieldInfo);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentContext);
+    FIELD().PROTECTED().NAME(mParentContext);
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mRevertable);
     FIELD().PROTECTED().NAME(mValuesProxies);
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mValuesDifferent);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRevertBtn);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaption);
+    FIELD().PROTECTED().NAME(mRevertBtn);
+    FIELD().PROTECTED().NAME(mRemoveBtn);
+    FIELD().PROTECTED().NAME(mCaption);
     FIELD().PROTECTED().NAME(mValuesPath);
     FIELD().PROTECTED().NAME(mBeforeChangeValues);
 }
@@ -615,20 +615,20 @@ CLASS_METHODS_META(Editor::IPropertyField)
     FUNCTION().PUBLIC().CONSTRUCTOR(const IPropertyField&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(const TargetsVec&, GetValueAndPrototypeProxy);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetValueProxy, const Vector<Ref<IAbstractValueProxy>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, const Ref<PropertiesContext>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, Revert);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetRemoveButton);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValuePath, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetValuePath);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetCaptionLabel, Label*);
-    FUNCTION().PUBLIC().SIGNATURE(Label*, GetCaptionLabel);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCaptionLabel, const Ref<Label>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Label>&, GetCaptionLabel);
     FUNCTION().PUBLIC().SIGNATURE(void, SetRevertable, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsRevertable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
@@ -675,8 +675,8 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
     FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
     FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
-    FUNCTION().PROTECTED().SIGNATURE(_type, GetProxy, IAbstractValueProxy*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, const _type&);
+    FUNCTION().PROTECTED().SIGNATURE(_type, GetProxy, const Ref<IAbstractValueProxy>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, const Ref<IAbstractValueProxy>&, const _type&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const _type&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetValueByUser, const _type&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);

@@ -41,8 +41,10 @@ namespace Editor
 			const String& GetIconName() const override;
 		};
 
-		SceneLayer sceneLayer;        // Scene layer for drawing spline
-		bool       isEnabled = false; // Is tool enabled now
+	public:
+		Ref<SceneLayer> sceneLayer = mmake<SceneLayer>(); // Scene layer for drawing spline
+
+		bool isEnabled = false; // Is tool enabled now
 
 		Function<void()> onChanged; // Called when frame changes     
 
@@ -158,7 +160,7 @@ CLASS_BASES_META(Editor::MeshTopologyTool)
 END_META;
 CLASS_FIELDS_META(Editor::MeshTopologyTool)
 {
-    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SceneLayer>()).NAME(sceneLayer);
     FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
     FIELD().PUBLIC().NAME(onChanged);
     FIELD().PRIVATE().NAME(mGetPoints);

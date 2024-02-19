@@ -79,7 +79,7 @@ END_META;
 CLASS_FIELDS_META(Editor::SceneLayerRefProperty)
 {
     FIELD().PUBLIC().NAME(onSelectedInheritedValue);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
+    FIELD().PROTECTED().NAME(mDropDown);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUseInheritedValue);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelectedInheritedValue);

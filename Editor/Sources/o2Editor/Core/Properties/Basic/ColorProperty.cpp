@@ -38,7 +38,7 @@ namespace Editor
 			backLayerBitmap.FillRect(0, 10, 10, 0, color2);
 			backLayerBitmap.FillRect(10, 20, 20, 10, color2);
 
-			Image* backImage = mnew Image();
+			auto backImage = mmake<Image>();
 			backImage->image = mmake<Sprite>(backLayerBitmap);
 			backImage->GetImage()->mode = SpriteMode::Tiled;
 			*backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
@@ -46,7 +46,7 @@ namespace Editor
 
 			Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 			colorLayerBitmap.Fill(color1);
-			mColorSprite = mnew Image();
+			mColorSprite = mmake<Image>();
 			mColorSprite->image = mmake<Sprite>(colorLayerBitmap);
 			*mColorSprite->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 			mEditBox->AddChild(mColorSprite);

@@ -46,7 +46,7 @@ namespace Editor
 		static const Type* GetViewingObjectTypeStatic();
 
 		// Sets parent context
-		void SetParentContext(PropertiesContext* context);
+		void SetParentContext(const Ref<PropertiesContext>& context);
 
 		// Returns view widget
 		const Ref<Spoiler>& GetSpoiler();
@@ -95,7 +95,7 @@ namespace Editor
 
 	protected:
 		// Creates spoiler for properties
-		virtual Spoiler* CreateSpoiler();
+		virtual Ref<Spoiler> CreateSpoiler();
 
 		// Called when header enable changed
 		virtual void OnHeaderEnableChanged(bool enabled) {}
@@ -174,7 +174,7 @@ CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
     FIELD().PUBLIC().NAME(onChanged);
     FIELD().PUBLIC().NAME(onChangeCompleted);
     FIELD().PUBLIC().NAME(path);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mHeaderEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPropertiesBuilt);
     FIELD().PROTECTED().NAME(mTargetObjects);
@@ -194,8 +194,8 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
-    FUNCTION().PUBLIC().SIGNATURE(Spoiler*, GetSpoiler);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, const Ref<PropertiesContext>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Spoiler>&, GetSpoiler);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsHeaderEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
@@ -205,7 +205,7 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(Spoiler*, CreateSpoiler);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Spoiler>, CreateSpoiler);
     FUNCTION().PROTECTED().SIGNATURE(void, OnHeaderEnableChanged, bool);
     FUNCTION().PROTECTED().SIGNATURE(bool, CheckBuildProperties, _tmp2);
     FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp3);

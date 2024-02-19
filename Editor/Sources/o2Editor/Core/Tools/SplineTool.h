@@ -148,8 +148,8 @@ END_META;
 CLASS_FIELDS_META(Editor::SplineTool)
 {
     FIELD().PUBLIC().NAME(onChanged);
-    FIELD().PUBLIC().NAME(splineEditor);
-    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SplineEditor>()).NAME(splineEditor);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SplineSceneLayer>()).NAME(sceneLayer);
     FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(isEnabled);
 }
 END_META;
@@ -157,7 +157,7 @@ CLASS_METHODS_META(Editor::SplineTool)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSpline, Spline*, const Function<Vec2F()>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSpline, const Ref<Spline>&, const Function<Vec2F()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Reset);
     FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);

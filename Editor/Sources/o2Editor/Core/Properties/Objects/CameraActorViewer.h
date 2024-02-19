@@ -55,14 +55,14 @@ CLASS_BASES_META(Editor::CameraActorViewer)
 END_META;
 CLASS_FIELDS_META(Editor::CameraActorViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTypeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHiddenTypeProperties);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizePropertySpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsPropertySpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsProperty);
+    FIELD().PROTECTED().NAME(mColorProperty);
+    FIELD().PROTECTED().NAME(mLayersProperty);
+    FIELD().PROTECTED().NAME(mTypeProperty);
+    FIELD().PROTECTED().NAME(mHiddenTypeProperties);
+    FIELD().PROTECTED().NAME(mSizePropertySpoiler);
+    FIELD().PROTECTED().NAME(mSizeProperty);
+    FIELD().PROTECTED().NAME(mUnitsPropertySpoiler);
+    FIELD().PROTECTED().NAME(mUnitsProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::CameraActorViewer)

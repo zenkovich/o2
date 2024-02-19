@@ -142,12 +142,12 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDontDeleteEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNoHeader);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mObjectViewer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaption);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTypeCaption);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCreateDeleteButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCreateMenu);
+    FIELD().PROTECTED().NAME(mObjectViewer);
+    FIELD().PROTECTED().NAME(mCaption);
+    FIELD().PROTECTED().NAME(mHeaderContainer);
+    FIELD().PROTECTED().NAME(mTypeCaption);
+    FIELD().PROTECTED().NAME(mCreateDeleteButton);
+    FIELD().PROTECTED().NAME(mCreateMenu);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mContextInitialized);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mImmediateCreateObject);
 }
@@ -164,7 +164,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetRemoveButton);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBasicType, const ObjectType*);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
@@ -176,8 +176,8 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCreateOrDeletePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, CreateObject, const ObjectType*);
     FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
-    FUNCTION().PROTECTED().SIGNATURE(IObject*, GetProxy, IAbstractValueProxy*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, IObject*);
+    FUNCTION().PROTECTED().SIGNATURE(IObject*, GetProxy, const Ref<IAbstractValueProxy>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, const Ref<IAbstractValueProxy>&, IObject*);
 }
 END_META;
 // --- END META ---

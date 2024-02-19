@@ -43,7 +43,7 @@ namespace Editor
 	{
 		mLayersContext->RemoveAllItems();
 
-		mLayersContext->AddToggleItem("All layers", o2Scene.GetLayers().All([&](SceneLayer* x) { return mCommonValue.HasLayer(x); }),
+		mLayersContext->AddToggleItem("All layers", o2Scene.GetLayers().All([&](auto& x) { return mCommonValue.HasLayer(x); }),
 									  [&](bool b) { if (b) SetValueByUser(o2Scene.GetLayers()); else SetValueByUser({}); });
 
 		mLayersContext->AddItem("---");

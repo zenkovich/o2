@@ -68,7 +68,7 @@ CLASS_BASES_META(Editor::IntegerProperty)
 END_META;
 CLASS_FIELDS_META(Editor::IntegerProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mEditBox);
     FIELD().PROTECTED().NAME(mDragHangle);
 }
 END_META;

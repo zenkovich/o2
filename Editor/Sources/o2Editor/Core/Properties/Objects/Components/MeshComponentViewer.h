@@ -106,8 +106,8 @@ CLASS_FIELDS_META(Editor::MeshComponentViewer)
     FIELD().PROTECTED().NAME(mFrameTool);
     FIELD().PROTECTED().NAME(mTopologyTool);
     FIELD().PROTECTED().NAME(mFrameTetxureLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitAndCenterButton);
+    FIELD().PROTECTED().NAME(mPrevSelectedTool);
+    FIELD().PROTECTED().NAME(mFitAndCenterButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::MeshComponentViewer)

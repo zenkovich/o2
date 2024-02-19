@@ -24,7 +24,7 @@ namespace Editor
 		return *this;
 	}
 
-	Image* SpoilerWithHead::GetIcon() const
+	const Ref<Image>& SpoilerWithHead::GetIcon() const
 	{
 		return mIcon;
 	}

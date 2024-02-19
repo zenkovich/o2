@@ -63,7 +63,7 @@ namespace Editor
 		return mBox->IsUnderPoint(point);
 	}
 
-	void ActorProperty::RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source,
+	void ActorProperty::RevertoToPrototype(const Ref<IAbstractValueProxy>& target, const Ref<IAbstractValueProxy>& source,
 										   IObject* targetOwner)
 	{
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
@@ -72,17 +72,17 @@ namespace Editor
 		Ref<Actor> sourceActor = GetProxy(source);
 		Ref<Actor> topSourceActor = sourceActor;
 		while (topSourceActor->GetParent())
-			topSourceActor = topSourceActor->GetParent();
+			topSourceActor = topSourceActor->GetParent().Lock();
 
-		Actor* actorOwner = dynamic_cast<Actor*>(targetOwner);
+		auto actorOwner = Ref(dynamic_cast<Actor*>(targetOwner));
 
 		if (actorOwner)
 		{
-			Actor* topTargetActor = actorOwner;
+			auto topTargetActor = actorOwner;
 			while (topTargetActor->GetPrototypeLink() != topSourceActor && topTargetActor->GetParent())
-				topTargetActor = topTargetActor->GetParent();
+				topTargetActor = topTargetActor->GetParent().Lock();
 
-			Actor* sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceActor.Get());
+			auto sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceActor);
 
 			if (sameToProtoSourceActor)
 			{
@@ -175,7 +175,7 @@ namespace Editor
 			if (mCommonValue->IsAsset())
 				o2EditorAssets.ShowAssetIcon(o2Assets.GetAssetPath(mCommonValue->GetAssetID()));
 			else if (mCommonValue->IsOnScene())
-				o2EditorTree.HighlightObjectTreeNode(mCommonValue.Get());
+				o2EditorTree.HighlightObjectTreeNode(mCommonValue);
 		}
 	}
 
@@ -187,45 +187,45 @@ namespace Editor
 
 	void ActorProperty::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
+		if (auto actorsTree = DynamicCast<SceneHierarchyTree>(group))
 			OnDroppedFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
+		else if (auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group))
 			OnDroppedFromAssetsScroll(assetsScroll);
 	}
 
 	void ActorProperty::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
+		if (auto actorsTree = DynamicCast<SceneHierarchyTree>(group))
 			OnDragEnterFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
+		else if (auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group))
 			OnDragEnterFromAssetsScroll(assetsScroll);
 	}
 
 	void ActorProperty::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
+		if (auto actorsTree = DynamicCast<SceneHierarchyTree>(group))
 			OnDragExitFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
+		else if (auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group))
 			OnDragExitFromAssetsScroll(assetsScroll);
 	}
 
-	void ActorProperty::OnDroppedFromActorsTree(SceneHierarchyTree* actorsTree)
+	void ActorProperty::OnDroppedFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() > 1)
 			return;
 
-		SetValueByUser(dynamic_cast<Actor*>(actorsTree->GetSelectedObjects()[0]));
+		SetValueByUser(DynamicCast<Actor>(actorsTree->GetSelectedObjects()[0]));
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();
 	}
 
-	void ActorProperty::OnDragEnterFromActorsTree(SceneHierarchyTree* actorsTree)
+	void ActorProperty::OnDragEnterFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() > 1)
 			return;
 
-		Actor* actor = dynamic_cast<Actor*>(actorsTree->GetSelectedObjects()[0]);
+		auto actor = DynamicCast<Actor>(actorsTree->GetSelectedObjects()[0]);
 		if (!actor || !actor->GetType().IsBasedOn(*mActorType))
 			return;
 
@@ -233,7 +233,7 @@ namespace Editor
 		mBox->SetState("focused", true);
 	}
 
-	void ActorProperty::OnDragExitFromActorsTree(SceneHierarchyTree* actorsTree)
+	void ActorProperty::OnDragExitFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() > 1)
 			return;
@@ -242,7 +242,7 @@ namespace Editor
 		mBox->SetState("focused", false);
 	}
 
-	void ActorProperty::OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
+	void ActorProperty::OnDroppedFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll)
 	{
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
@@ -257,7 +257,7 @@ namespace Editor
 		mBox->Focus();
 	}
 
-	void ActorProperty::OnDragEnterFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
+	void ActorProperty::OnDragEnterFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll)
 	{
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
@@ -270,7 +270,7 @@ namespace Editor
 		mBox->SetState("focused", true);
 	}
 
-	void ActorProperty::OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
+	void ActorProperty::OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll)
 	{
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;

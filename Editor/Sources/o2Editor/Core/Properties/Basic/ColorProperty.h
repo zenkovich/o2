@@ -56,8 +56,8 @@ CLASS_BASES_META(Editor::ColorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ColorProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorSprite);
+    FIELD().PROTECTED().NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mColorSprite);
     FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;

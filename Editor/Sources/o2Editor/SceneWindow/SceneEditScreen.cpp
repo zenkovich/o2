@@ -7,7 +7,7 @@
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/Scene.h"
-#include "o2/Scene/SceneLayer.h"
+#include "o2/Scene/SceneLayerRef.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Tree.h"
 #include "o2/Utils/Math/Math.h"

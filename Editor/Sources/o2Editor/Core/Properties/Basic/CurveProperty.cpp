@@ -29,9 +29,9 @@ namespace Editor
 		mEditBox = GetChildWidget("container/layout/box");
 		if (mEditBox)
 		{
-			mPreviewImage = mnew CurvePreview();
+			mPreviewImage = mmake<CurvePreview>();
 			*mPreviewImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
-			mPreviewImage->SetCurve(&mCommonValue);
+			//mPreviewImage->SetCurve(&mCommonValue);
 
 			mEditBox->layout->minHeight = 10;
 			mEditBox->onDraw += [&]() { mClickArea.OnDrawn(); };
@@ -56,7 +56,7 @@ namespace Editor
 							 MakeFunction<IPropertyField, void>(this, &CurveProperty::CheckValueChangeCompleted));
 
 		CurveEditorDlg::RemoveAllEditingCurves();
-		CurveEditorDlg::AddEditingCurve("property", &mCommonValue, Color4(44, 62, 80));
+		//CurveEditorDlg::AddEditingCurve("property", &mCommonValue, Color4(44, 62, 80));
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Curve>);

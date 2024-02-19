@@ -119,7 +119,7 @@ END_META;
 CLASS_FIELDS_META(Editor::ObjectProperty)
 {
     FIELD().PROTECTED().NAME(mTargetObjects);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mObjectViewer);
+    FIELD().PROTECTED().NAME(mObjectViewer);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNoHeader);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
     FIELD().PROTECTED().NAME(mCaption);
@@ -137,7 +137,7 @@ CLASS_METHODS_META(Editor::ObjectProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetRemoveButton);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
@@ -145,7 +145,7 @@ CLASS_METHODS_META(Editor::ObjectProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckViewer);
-    FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
+    FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

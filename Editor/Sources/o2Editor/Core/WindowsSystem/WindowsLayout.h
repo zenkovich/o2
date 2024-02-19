@@ -16,30 +16,30 @@ namespace Editor
 
 	// ---------------------------------------
 	// Class that stores layout of all windows
-// ---------------------------------------
+	// ---------------------------------------
 	class WindowsLayout : public ISerializable
 	{
 	public:
-		class WindowDockPlace : public ISerializable
+		class WindowDockPlaceInfo : public ISerializable
 		{
 		public:
-			RectF                   anchors; // Anchors coefficients @SERIALIZABLE
-			Vector<String>          windows; // List of windows inside this place @SERIALIZABLE
-			String                  active;  // Name active window @SERIALIZABLE
-			Vector<WindowDockPlace> childs;	 // Children places @SERIALIZABLE
+			RectF                       anchors; // Anchors coefficients @SERIALIZABLE
+			Vector<String>              windows; // List of windows inside this place @SERIALIZABLE
+			String                      active;  // Name active window @SERIALIZABLE
+			Vector<WindowDockPlaceInfo> childs;	 // Children places @SERIALIZABLE
 
 		public:
 			// Gets layout from widget 
 			void RetrieveLayout(const Ref<Widget>& widget);
 
 			// Compares two dock places
-			bool operator==(const WindowDockPlace& other) const;
+			bool operator==(const WindowDockPlaceInfo& other) const;
 
-			SERIALIZABLE(WindowDockPlace);
+			SERIALIZABLE(WindowDockPlaceInfo);
 		};
 
 	public:
-		WindowDockPlace           mainDock; // Root dock place @SERIALIZABLE
+		WindowDockPlaceInfo       mainDock; // Root dock place @SERIALIZABLE
 		Map<String, WidgetLayout> windows;  // List of non-docked windows @SERIALIZABLE
 
 		// Equal operator
@@ -49,10 +49,10 @@ namespace Editor
 
 	protected:
 		// Restores dock recursively
-		void RestoreDock(WindowDockPlace& dockDef, WindowDockPlace& dockWidget);
+		void RestoreDock(WindowDockPlaceInfo& dockDef, DockWindowPlace& dockWidget);
 
 		// Removes all children empty dock places
-		void CleanEmptyDocks(WindowDockPlace& dockPlace);
+		void CleanEmptyDocks(DockWindowPlace& dockPlace);
 
 		friend class WindowsManager;
 	};
@@ -62,40 +62,40 @@ namespace Editor
 
 CLASS_BASES_META(Editor::WindowsLayout)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::WindowsLayout)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mainDock);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(windows);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mainDock);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(windows);
 }
 END_META;
 CLASS_METHODS_META(Editor::WindowsLayout)
 {
 
-	FUNCTION().PROTECTED().SIGNATURE(void, RestoreDock, WindowDockPlace*, DockWindowPlace*);
-	FUNCTION().PROTECTED().SIGNATURE(void, CleanEmptyDocks, DockWindowPlace*);
+    FUNCTION().PROTECTED().SIGNATURE(void, RestoreDock, WindowDockPlaceInfo&, DockWindowPlace&);
+    FUNCTION().PROTECTED().SIGNATURE(void, CleanEmptyDocks, DockWindowPlace&);
 }
 END_META;
 
-CLASS_BASES_META(Editor::WindowsLayout::WindowDockPlace)
+CLASS_BASES_META(Editor::WindowsLayout::WindowDockPlaceInfo)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(Editor::WindowsLayout::WindowDockPlace)
+CLASS_FIELDS_META(Editor::WindowsLayout::WindowDockPlaceInfo)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(anchors);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(windows);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(active);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(childs);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(anchors);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(windows);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(active);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(childs);
 }
 END_META;
-CLASS_METHODS_META(Editor::WindowsLayout::WindowDockPlace)
+CLASS_METHODS_META(Editor::WindowsLayout::WindowDockPlaceInfo)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(void, RetrieveLayout, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, RetrieveLayout, const Ref<Widget>&);
 }
 END_META;
 // --- END META ---

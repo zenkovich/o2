@@ -285,9 +285,9 @@ namespace Editor
 	void FrameTool::TransformObjectsWithAction(const Basis& transform)
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
+			[](auto& x) { return x->GetTransform(); });
 
-		auto action = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
+		auto action = mmake<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
 
 		TransformObjects(transform);
 
@@ -304,7 +304,7 @@ namespace Editor
 			if (object->IsSupportsLayout())
 			{
 				auto parent = object->GetEditableParent();
-				auto parentWidget = dynamic_cast<Widget*>(parent);
+				auto parentWidget = DynamicCast<Widget>(parent);
 
 				if (parent)
 				{
@@ -354,7 +354,7 @@ namespace Editor
 			if (mAnchorsFrameEnabled)
 			{
 				auto parent = object->GetEditableParent();
-				auto parentWidget = dynamic_cast<Widget*>(parent);
+				auto parentWidget = DynamicCast<Widget>(parent);
 
 				RectF parentWorldRect;
 
@@ -470,7 +470,7 @@ namespace Editor
 				cursorPos = CalculateSnapOffset(cursorPos, preTransformed,
 												{ Vec2F(0, 0), Vec2F(0, 1), Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(1, 0), Vec2F(1, 1) }, preTransformed.xv.Normalized(),
 												{ Vec2F(0, 0), Vec2F(1, 0), Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, 1), Vec2F(1, 1) }, preTransformed.yv.Normalized(),
-												GetObjectsTransforms(o2Scene.GetAllEditableObjects()));
+												GetObjectsTransforms(o2Scene.GetAllEditableObjects().Convert<Ref<SceneEditableObject>>([](auto& x) { return x.Lock(); })));
 			}
 
 			Vec2F delta = cursorPos - mBeginDraggingOffset;
@@ -719,9 +719,9 @@ namespace Editor
 	void FrameTool::HandlePressed()
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
+			[](auto& x) { return x->GetTransform(); });
 
-		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
+		mTransformAction = mmake<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
 
 		mBeginDraggingFrame = mFrame;
 	}
@@ -1400,7 +1400,7 @@ namespace Editor
 
 	Vector<Basis> FrameTool::GetSnapBasisesForAllObjects() const
 	{
-		auto snapBasises = GetObjectsTransforms(o2Scene.GetAllEditableObjects());
+		auto snapBasises = GetObjectsTransforms(o2Scene.GetAllEditableObjects().Convert<Ref<SceneEditableObject>>([](auto& x) { return x.Lock(); }));
 
 		if (mAnchorsFrameEnabled)
 			snapBasises.Add(mAnchorsFrame);
@@ -1412,7 +1412,7 @@ namespace Editor
 	{
 		auto parent = object->GetEditableParent();
 		Basis parentTransform = parent->GetTransform();
-		if (auto parentWidget = dynamic_cast<Widget*>(parent))
+		if (auto parentWidget = DynamicCast<Widget>(parent))
 			parentTransform = parentWidget->GetChildrenWorldRect();
 
 		return parentTransform;

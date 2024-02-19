@@ -131,7 +131,7 @@ namespace Editor
 				mObjectViewer = o2EditorProperties.CreateObjectViewer(mBuiltObjectType, mValuesPath, onChangeCompleted,
 																	  onChanged);
 
-				mObjectViewer->SetParentContext(mParentContext);
+				mObjectViewer->SetParentContext(mParentContext.Lock());
 				mObjectViewer->SetHeaderEnabled(!mNoHeader);
 				mObjectViewer->SetExpanded(mExpanded);
 				AddChild(mObjectViewer->GetSpoiler());
@@ -161,7 +161,7 @@ namespace Editor
 		if (mObjectViewer)
 		{
 			mObjectViewer->Refresh(mValuesProxies.Convert<Pair<IObject*, IObject*>>(
-				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+				[&](const Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>& x)
 			{
 				return Pair<IObject*, IObject*>(GetProxy(x.first), x.second ? GetProxy(x.second) : nullptr);
 			}));
@@ -204,7 +204,7 @@ namespace Editor
 		return mCaption->GetText();
 	}
 
-	Button* ObjectPtrProperty::GetRemoveButton()
+	Ref<Button> ObjectPtrProperty::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
@@ -286,9 +286,9 @@ namespace Editor
 
 				mImmediateCreateObject = availableTypes.Count() == 1;
 
-				mCreateMenu->AddItems(availableTypes.Convert<ContextMenu::Item*>([&](const Type* type)
+				mCreateMenu->AddItems(availableTypes.Convert<Ref<ContextMenu::Item>>([&](const Type* type)
 				{
-					return mnew ContextMenu::Item(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
+					return mmake<ContextMenu::Item>(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
 				}));
 
 				mContextInitialized = true;
@@ -335,7 +335,7 @@ namespace Editor
 
 	};
 
-	IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy) const
+	IObject* ObjectPtrProperty::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
 	{
 		const Type& proxyType = proxy->GetType();
 		if (proxyType.GetUsage() == Type::Usage::Pointer)
@@ -373,7 +373,7 @@ namespace Editor
 		return nullptr;
 	}
 
-	void ObjectPtrProperty::SetProxy(IAbstractValueProxy* proxy, IObject* object)
+	void ObjectPtrProperty::SetProxy(const Ref<IAbstractValueProxy>& proxy, IObject* object)
 	{
         const Type& proxyType = proxy->GetType();
         if (proxyType.GetUsage() == Type::Usage::Pointer)
@@ -407,7 +407,7 @@ namespace Editor
 		if (mObjectViewer)
 			mObjectViewer->SetCaption(mCaption->GetText());
 
-		Text* spoilerCaptionLayer = !mObjectViewer ?
+		auto spoilerCaptionLayer = !mObjectViewer ?
 			mCaption->GetLayerDrawableByType<Text>() :
 			mObjectViewer->GetSpoiler()->GetLayerDrawable<Text>("caption");
 

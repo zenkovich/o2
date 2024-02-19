@@ -123,28 +123,29 @@ namespace Editor
 CLASS_BASES_META(Editor::IEditTool)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IEditTool)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPanelToggle);
+    FIELD().PROTECTED().NAME(mPanelToggle);
 }
 END_META;
 CLASS_METHODS_META(Editor::IEditTool)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(Toggle*, GetPanelToggle);
-    FUNCTION().PROTECTED().SIGNATURE(Toggle*, CreatePanelToggle);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Toggle>&, GetPanelToggle);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Toggle>, CreatePanelToggle);
     FUNCTION().PROTECTED().SIGNATURE(String, GetPanelIcon);
     FUNCTION().PROTECTED().SIGNATURE(ShortcutKeys, GetShortcut);
     FUNCTION().PROTECTED().SIGNATURE(void, DrawScene);
     FUNCTION().PROTECTED().SIGNATURE(void, DrawScreen);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<Ref<SceneEditableObject>>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<Ref<SceneEditableObject>>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);

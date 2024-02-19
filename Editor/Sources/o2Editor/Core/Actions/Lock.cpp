@@ -12,7 +12,7 @@ namespace Editor
 	LockAction::LockAction(const Vector<Ref<SceneEditableObject>>& objects, bool lock):
 		lock(lock)
 	{
-		objectsIds = objects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
+		objectsIds = objects.Convert<SceneUID>([](auto& x) { return x->GetID(); });
 	}
 
 	String LockAction::GetName() const

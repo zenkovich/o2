@@ -17,7 +17,7 @@ namespace Editor
 		InitializeControls();
 	}
 
-	EditBox* FloatProperty::GetEditBox() const
+	const Ref<EditBox>& FloatProperty::GetEditBox() const
 	{
 		return mEditBox;
 	}

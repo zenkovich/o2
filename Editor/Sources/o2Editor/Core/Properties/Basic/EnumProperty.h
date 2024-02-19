@@ -36,8 +36,8 @@ namespace Editor
 		IOBJECT(EnumProperty);
 
 	protected:				       						      
-		const EnumType*        mEnumType = nullptr; // Type of enumeration															      
-		const Map<int, String> mEntries;            // Enum entries
+		const EnumType*  mEnumType = nullptr; // Type of enumeration															      
+		Map<int, String> mEntries;            // Enum entries
 
 		Ref<DropDown> mDropDown;              // Layer name dropdown
 		bool          mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
@@ -64,7 +64,7 @@ CLASS_FIELDS_META(Editor::EnumProperty)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEnumType);
     FIELD().PROTECTED().NAME(mEntries);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
+    FIELD().PROTECTED().NAME(mDropDown);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
 }
 END_META;

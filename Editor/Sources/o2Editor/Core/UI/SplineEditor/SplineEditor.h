@@ -130,9 +130,9 @@ namespace Editor
 	protected:
 		Ref<ISplineWrapper> mSplineWrapper; // Spline getters and setters wrapper
 
-		PointHandles mHandlesSample; // Samples of handles for cloning
+		PointHandles              mHandlesSample; // Samples of handles for cloning
+		Vector<Ref<PointHandles>> mSplineHandles; // Spline handles
 
-		Vector<PointHandles*> mSplineHandles;    // Spline handles
 		Color4 mSplineColor;        // Color of spline line
 		Color4 mSplineSupportColor; // Color of support handles lines
 
@@ -146,7 +146,7 @@ namespace Editor
 		Basis        mTransformFrameBasis;                 // Basis of transform frame in screen space
 		Vec2F        mTransformBasisOffet = Vec2F(10, 10); // Border between side points and frame
 
-		SelectableDragHandlesGroup mSupportHandlesGroup; // Support points handles selection group. They are must be selectable separately from main handles
+		Ref<SelectableDragHandlesGroup> mSupportHandlesGroup = mmake<SelectableDragHandlesGroup>(); // Support points handles selection group. They are must be selectable separately from main handles
 
 	protected:
 		// Removes all handles

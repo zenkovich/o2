@@ -32,7 +32,7 @@ namespace Editor
 		SpoilerWithHead& operator=(const SpoilerWithHead& other);
 
 		// Returns icon
-		Image* GetIcon() const;
+		const Ref<Image>& GetIcon() const;
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -60,9 +60,9 @@ CLASS_FIELDS_META(Editor::SpoilerWithHead)
 {
     FIELD().PUBLIC().NAME(onOptionsPressed);
     FIELD().PUBLIC().NAME(onSavePressed);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mOptionsBtn);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSaveBtn);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mIcon);
+    FIELD().PRIVATE().NAME(mOptionsBtn);
+    FIELD().PRIVATE().NAME(mSaveBtn);
+    FIELD().PRIVATE().NAME(mIcon);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpoilerWithHead)
@@ -70,7 +70,7 @@ CLASS_METHODS_META(Editor::SpoilerWithHead)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const SpoilerWithHead&);
-    FUNCTION().PUBLIC().SIGNATURE(Image*, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Image>&, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }

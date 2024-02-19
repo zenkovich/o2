@@ -31,18 +31,13 @@ namespace Editor
 	}
 
 	ScrollView::~ScrollView()
-	{
-		if (mRenderTargetSprite)
-			delete mRenderTargetSprite;
-	}
+	{}
 
 	ScrollView& ScrollView::operator=(const ScrollView& other)
 	{
 		Widget::operator=(other);
 
 		mReady = false;
-
-		delete mRenderTargetSprite;
 
 		mBackColor = other.mBackColor;
 		mGridColor = other.mGridColor;

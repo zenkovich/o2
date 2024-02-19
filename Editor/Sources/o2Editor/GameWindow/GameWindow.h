@@ -117,70 +117,71 @@ namespace Editor
 
 CLASS_BASES_META(Editor::GameWindow)
 {
-	BASE_CLASS(Editor::IEditorWindow);
+    BASE_CLASS(Editor::IEditorWindow);
 }
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow)
 {
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mGameView);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mResolutionsButton);
-	FIELD().PROTECTED().NAME(mDevicesList);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDevicesMenu);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurrentWindowSizeItem);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCustomSizeItem);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCustomSizeProperty);
+    FIELD().PROTECTED().NAME(mGameView);
+    FIELD().PROTECTED().NAME(mResolutionsButton);
+    FIELD().PROTECTED().NAME(mDevicesList);
+    FIELD().PROTECTED().NAME(mDevicesMenu);
+    FIELD().PROTECTED().NAME(mCurrentWindowSizeItem);
+    FIELD().PROTECTED().NAME(mCustomSizeItem);
+    FIELD().PROTECTED().NAME(mCustomSizeProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(const GameWindow&);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
-	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDevicesMenu);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetResolution, const Vec2I&);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCurrentWindowSize, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnCustomResolution, bool);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnDeviceSelected, const String&, const ContextMenuItem*);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetDeviceMenuCheckedItem, const ContextMenuItem*);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const GameWindow&);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitializeDevicesMenu);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetResolution, const Vec2I&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCurrentWindowSize, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCustomResolution, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeviceSelected, const String&, const Ref<ContextMenuItem>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetDeviceMenuCheckedItem, const Ref<ContextMenuItem>&);
 }
 END_META;
 
 CLASS_BASES_META(Editor::GameWindow::GameView)
 {
-	BASE_CLASS(o2::Widget);
+    BASE_CLASS(o2::Widget);
 }
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow::GameView)
 {
-	FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(fixedResolution);
-	FIELD().PUBLIC().NAME(resolution);
-	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRenderTargetSprite);
-	FIELD().PROTECTED().NAME(mRenderTarget);
+    FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(fixedResolution);
+    FIELD().PUBLIC().NAME(resolution);
+    FIELD().PROTECTED().NAME(mRenderTargetSprite);
+    FIELD().PROTECTED().NAME(mRenderTarget);
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow::GameView)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 }
 END_META;
 
 CLASS_BASES_META(Editor::GameWindow::SimulationDevice)
 {
-	BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow::SimulationDevice)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(deviceName);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(resolution);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(deviceName);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(resolution);
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow::SimulationDevice)
-{}
+{
+}
 END_META;
 // --- END META ---

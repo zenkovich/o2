@@ -4,7 +4,7 @@
 
 namespace Editor
 {
-	CurveAddKeysAction::CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor) :
+	CurveAddKeysAction::CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor) :
 		mInfos(infos), mEditor(editor)
 	{
 		for (auto& info : mInfos)
@@ -16,7 +16,7 @@ namespace Editor
 	CurveAddKeysAction::CurveAddKeysAction()
 	{ }
 
-	String CurveAddKeysAction::GetName()
+	String CurveAddKeysAction::GetName() const
 	{
 		return "add keys";
 	}
@@ -28,7 +28,7 @@ namespace Editor
 
 		for (auto& info : mInfos)
 		{
-			auto curveInfo = mEditor->mCurves.FindOrDefault([&](CurvesEditor::CurveInfo* x) { 
+			auto curveInfo = mEditor->mCurves.FindOrDefault([&](auto& x) { 
 				return x->curveId == info.curveId; });
 
 			if (!curveInfo)
@@ -45,7 +45,7 @@ namespace Editor
 			curveInfo->UpdateHandles();
 
 			for (int idx : indexes)
-				curveInfo->handles[idx]->mainHandle.SetSelected(true);
+				curveInfo->handles[idx]->mainHandle->SetSelected(true);
 
 			mEditor->mNeedRedraw = true;
 
@@ -60,7 +60,7 @@ namespace Editor
 	{
 		for (auto& info : mInfos)
 		{
-			auto curveInfo = mEditor->mCurves.FindOrDefault([&](CurvesEditor::CurveInfo* x) { 
+			auto curveInfo = mEditor->mCurves.FindOrDefault([&](auto& x) { 
 				return x->curveId == info.curveId; });
 
 			if (!curveInfo)
@@ -84,7 +84,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	CurveDeleteKeysAction::CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor) :
+	CurveDeleteKeysAction::CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, const Ref<CurvesEditor>& editor) :
 		mInfos(infos), mEditor(editor)
 	{
 		for (auto& info : mInfos)
@@ -96,7 +96,7 @@ namespace Editor
 	CurveDeleteKeysAction::CurveDeleteKeysAction()
 	{ }
 
-	String CurveDeleteKeysAction::GetName()
+	String CurveDeleteKeysAction::GetName() const
 	{
 		return "remove keys";
 	}
@@ -105,7 +105,7 @@ namespace Editor
 	{
 		for (auto& info : mInfos)
 		{
-			auto curveInfo = mEditor->mCurves.FindOrDefault([&](CurvesEditor::CurveInfo* x) { 
+			auto curveInfo = mEditor->mCurves.FindOrDefault([&](auto& x) { 
 				return x->curveId == info.curveId; });
 
 			if (!curveInfo)
@@ -136,7 +136,7 @@ namespace Editor
 
 		for (auto& info : mInfos)
 		{
-			auto curveInfo = mEditor->mCurves.FindOrDefault([&](CurvesEditor::CurveInfo* x) { 
+			auto curveInfo = mEditor->mCurves.FindOrDefault([&](auto& x) { 
 				return x->curveId == info.curveId; });
 
 			if (!curveInfo)
@@ -153,7 +153,7 @@ namespace Editor
 			curveInfo->UpdateHandles();
 
 			for (int idx : indexes)
-				curveInfo->handles[idx]->mainHandle.SetSelected(true);
+				curveInfo->handles[idx]->mainHandle->SetSelected(true);
 
 			mEditor->mNeedRedraw = true;
 
@@ -164,7 +164,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	CurveKeysChangeAction::CurveKeysChangeAction(const Vector<KeysInfo>& infos, CurvesEditor* editor) :
+	CurveKeysChangeAction::CurveKeysChangeAction(const Vector<KeysInfo>& infos, const Ref<CurvesEditor>& editor) :
 		mInfos(infos), mEditor(editor)
 	{ }
 
@@ -176,7 +176,7 @@ namespace Editor
 		return curveId == other.curveId && beforeKeys == other.beforeKeys && afterKeys == other.afterKeys;
 	}
 
-	String CurveKeysChangeAction::GetName()
+	String CurveKeysChangeAction::GetName() const
 	{
 		return "change keys";
 	}
@@ -188,7 +188,7 @@ namespace Editor
 
 		for (auto& info : mInfos)
 		{
-			auto curveInfo = mEditor->mCurves.FindOrDefault([&](CurvesEditor::CurveInfo* x) { 
+			auto curveInfo = mEditor->mCurves.FindOrDefault([&](auto& x) { 
 				return x->curveId == info.curveId; });
 
 			if (!curveInfo)
@@ -207,13 +207,13 @@ namespace Editor
 				auto handles = curveInfo->handles[selectedHandles.index];
 
 				if (selectedHandles.mainHandle)
-					handles->mainHandle.Select();
+					handles->mainHandle->Select();
 
 				if (selectedHandles.leftSupportHandle)
-					handles->leftSupportHandle.Select();
+					handles->leftSupportHandle->Select();
 
 				if (selectedHandles.rightSupportHandle)
-					handles->rightSupportHandle.Select();
+					handles->rightSupportHandle->Select();
 			}
 
 			curveInfo->UpdateApproximatedPoints();
@@ -234,7 +234,7 @@ namespace Editor
 
 		for (auto& info : mInfos)
 		{
-			auto curveInfo = mEditor->mCurves.FindOrDefault([&](CurvesEditor::CurveInfo* x) { 
+			auto curveInfo = mEditor->mCurves.FindOrDefault([&](auto& x) { 
 				return x->curveId == info.curveId; });
 
 			if (!curveInfo)
@@ -253,13 +253,13 @@ namespace Editor
 				auto handles = curveInfo->handles[selectedHandles.index];
 
 				if (selectedHandles.mainHandle)
-					handles->mainHandle.Select();
+					handles->mainHandle->Select();
 
 				if (selectedHandles.leftSupportHandle)
-					handles->leftSupportHandle.Select();
+					handles->leftSupportHandle->Select();
 
 				if (selectedHandles.rightSupportHandle)
-					handles->rightSupportHandle.Select();
+					handles->rightSupportHandle->Select();
 			}
 
 			curveInfo->UpdateApproximatedPoints();

@@ -57,8 +57,8 @@ CLASS_BASES_META(Editor::CurveProperty)
 END_META;
 CLASS_FIELDS_META(Editor::CurveProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPreviewImage);
+    FIELD().PROTECTED().NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mPreviewImage);
     FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;

@@ -104,7 +104,7 @@ namespace Editor
 					for (auto& proxy : mValuesProxies)
 					{
 						auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
-						if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+						if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 						{
 							void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
 							if (Ref<Asset>* refPtr = dynamic_cast<Ref<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
@@ -127,8 +127,8 @@ namespace Editor
 					{
 						if (!mAssetObjectViewer)
 						{
-							mAssetObjectViewer = mnew ObjectViewer();
-							mAssetObjectViewer->SetParentContext(mParentContext);
+							mAssetObjectViewer = mmake<ObjectViewer>();
+							mAssetObjectViewer->SetParentContext(mParentContext.Lock());
 							mSpoiler->AddChild(mAssetObjectViewer);
 						}
 
@@ -192,7 +192,7 @@ namespace Editor
 		return WString();
 	}
 
-	Button* AssetProperty::GetRemoveButton()
+	Ref<Button> AssetProperty::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
@@ -229,7 +229,7 @@ namespace Editor
 		for (auto& proxy : mValuesProxies)
 		{
 			auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
-			if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+			if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 			{
 				void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
 				if (Ref<Asset>* refPtr = dynamic_cast<Ref<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
@@ -249,7 +249,7 @@ namespace Editor
 		for (auto& proxy : mValuesProxies)
 		{
 			auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
-			if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+			if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 			{
 				void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
 				if (Ref<Asset>* refPtr = dynamic_cast<Ref<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
@@ -285,7 +285,7 @@ namespace Editor
 		SetAssetType(type.InvokeStatic<const Type*>("GetAssetTypeStatic"));
 	}
 
-	Ref<Asset> AssetProperty::GetProxy(IAbstractValueProxy* proxy) const
+	Ref<Asset> AssetProperty::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
 	{
 		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
 		auto proxySample = proxyType->CreateSample();
@@ -297,7 +297,7 @@ namespace Editor
 		return res;
 	}
 
-	void AssetProperty::SetProxy(IAbstractValueProxy* proxy, const Ref<Asset>& value)
+	void AssetProperty::SetProxy(const Ref<IAbstractValueProxy>& proxy, const Ref<Asset>& value)
 	{
 		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
 		auto proxySample = proxyType->CreateSample();
@@ -345,7 +345,7 @@ namespace Editor
 
 	void AssetProperty::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		auto assetIconsScroll = DynamicCast<AssetsIconsScrollArea>(group);
 		if (!assetIconsScroll)
 			return;
 
@@ -362,11 +362,11 @@ namespace Editor
 
 	void AssetProperty::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		auto assetIconsScroll = DynamicCast<AssetsIconsScrollArea>(group);
 		if (!assetIconsScroll)
 			return;
 
-		auto lastSelectedAssetIcon = dynamic_cast<const AssetIcon*>(assetIconsScroll->GetDraggingObject());
+		auto lastSelectedAssetIcon = DynamicCast<AssetIcon>(assetIconsScroll->GetDraggingObject());
 		if (!lastSelectedAssetIcon ||
 			(mAssetType && !lastSelectedAssetIcon->GetAssetInfo()->meta->GetAssetType()->IsBasedOn(*mAssetType)))
 		{

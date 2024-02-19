@@ -71,7 +71,7 @@ CLASS_BASES_META(Editor::IEditorWindow)
 END_META;
 CLASS_FIELDS_META(Editor::IEditorWindow)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWindow);
+    FIELD().PROTECTED().NAME(mWindow);
 }
 END_META;
 CLASS_METHODS_META(Editor::IEditorWindow)
@@ -85,7 +85,7 @@ CLASS_METHODS_META(Editor::IEditorWindow)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsVisible);
     FUNCTION().PUBLIC().SIGNATURE(void, Show);
     FUNCTION().PUBLIC().SIGNATURE(void, Hide);
-    FUNCTION().PUBLIC().SIGNATURE(DockableWindow*, GetWindow);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<DockableWindow>&, GetWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, OnOpened);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);

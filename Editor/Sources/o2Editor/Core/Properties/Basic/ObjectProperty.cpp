@@ -118,7 +118,7 @@ namespace Editor
 																	  onChanged);
 
 				AddChild(mObjectViewer->GetSpoiler());
-				mObjectViewer->SetParentContext(mParentContext);
+				mObjectViewer->SetParentContext(mParentContext.Lock());
 				mObjectViewer->SetHeaderEnabled(!mNoHeader);
 				mObjectViewer->SetExpanded(mExpanded);
 				mObjectViewer->GetSpoiler()->SetCaption(mCaption);
@@ -160,7 +160,7 @@ namespace Editor
 		return mCaption;
 	}
 
-	Button* ObjectProperty::GetRemoveButton()
+	Ref<Button> ObjectProperty::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
@@ -198,7 +198,7 @@ namespace Editor
 		return mExpanded;
 	}
 
-	ObjectProperty::TargetObjectData ObjectProperty::GetObjectFromProxy(IAbstractValueProxy* proxy)
+	ObjectProperty::TargetObjectData ObjectProperty::GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy)
 	{
 		TargetObjectData res;
 
@@ -210,7 +210,7 @@ namespace Editor
 		const ObjectType& objectType = dynamic_cast<const ObjectType&>(proxy->GetType());
 
 		bool usedRawPointer = false;
-		if (auto pointerProxy = dynamic_cast<IPointerValueProxy*>(proxy))
+		if (auto pointerProxy = DynamicCast<IPointerValueProxy>(proxy))
 		{
 			res.data = objectType.DynamicCastToIObject(pointerProxy->GetValueVoidPointer());
 			res.isCreated = false;
@@ -218,7 +218,7 @@ namespace Editor
 		}
 		
 #if IS_SCRIPTING_SUPPORTED
-		if (auto scriptProxy = dynamic_cast<ScriptValueProxy*>(proxy))
+		if (auto scriptProxy = DynamicCast<ScriptValueProxy>(proxy))
 		{
 			ScriptValue value = scriptProxy->scriptProperty->Get();
 			if (value.IsObjectContainer())

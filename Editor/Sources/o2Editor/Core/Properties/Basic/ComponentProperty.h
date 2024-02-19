@@ -114,8 +114,8 @@ END_META;
 CLASS_FIELDS_META(Editor::ComponentProperty)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponentType);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameText);
+    FIELD().PROTECTED().NAME(mBox);
+    FIELD().PROTECTED().NAME(mNameText);
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentProperty)
@@ -132,17 +132,17 @@ CLASS_METHODS_META(Editor::ComponentProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, const Ref<ISelectableDragableObjectsGroup>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-    FUNCTION().PROTECTED().SIGNATURE(void, RevertoToPrototype, IAbstractValueProxy*, IAbstractValueProxy*, IObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromActorsTree, SceneHierarchyTree*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromActorsTree, SceneHierarchyTree*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromActorsTree, SceneHierarchyTree*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromAssetsScroll, AssetsIconsScrollArea*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromAssetsScroll, AssetsIconsScrollArea*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromAssetsScroll, AssetsIconsScrollArea*);
+    FUNCTION().PROTECTED().SIGNATURE(void, RevertoToPrototype, const Ref<IAbstractValueProxy>&, const Ref<IAbstractValueProxy>&, IObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromActorsTree, const Ref<SceneHierarchyTree>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromActorsTree, const Ref<SceneHierarchyTree>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromActorsTree, const Ref<SceneHierarchyTree>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromAssetsScroll, const Ref<AssetsIconsScrollArea>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnterFromAssetsScroll, const Ref<AssetsIconsScrollArea>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExitFromAssetsScroll, const Ref<AssetsIconsScrollArea>&);
 }
 END_META;
 // --- END META ---

@@ -34,7 +34,7 @@ namespace Editor
 		mSpoiler->AddChild(mEditButton);
 		mEditButton->SetIndexInSiblings(mSpoiler->GetChildren().Count() - 1);
 
-		mCurrentAnimation = !targetObjets.IsEmpty() ? dynamic_cast<AnimationClip*>(targetObjets[0].first) : nullptr;
+		mCurrentAnimation = !targetObjets.IsEmpty() ? Ref(dynamic_cast<AnimationClip*>(targetObjets[0].first)) : nullptr;
 	}
 
 	void AnimationViewer::OnEditPressed()
@@ -42,9 +42,9 @@ namespace Editor
 		o2EditorAnimationWindow.SetAnimation(mCurrentAnimation);
 
 		if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
-			o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));
+			o2EditorAnimationWindow.SetTarget(DynamicCast<Actor>(o2EditorSceneScreen.GetSelectedObjects().Last()));
 
-		o2EditorAnimationWindow.SetAnimationEditable(mPropertiesContext.FindOnStack<IEditableAnimation>());
+		o2EditorAnimationWindow.SetAnimationEditable(Ref(mPropertiesContext->FindOnStack<IEditableAnimation>()));
 		o2EditorAnimationWindow.GetWindow()->Focus();
 	}
 

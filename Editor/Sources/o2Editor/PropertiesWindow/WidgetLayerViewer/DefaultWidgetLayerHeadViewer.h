@@ -64,10 +64,10 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerHeaderViewer)
 {
     FIELD().PUBLIC().NAME(mLayers);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDataView);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mEnableProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mNameProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLockProperty);
+    FIELD().PUBLIC().NAME(mDataView);
+    FIELD().PUBLIC().NAME(mEnableProperty);
+    FIELD().PUBLIC().NAME(mNameProperty);
+    FIELD().PUBLIC().NAME(mLockProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerHeaderViewer)
@@ -75,7 +75,7 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerHeaderViewer)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }

@@ -45,7 +45,7 @@ namespace Editor
 
 		mBackColor = Color4(225, 232, 232, 255);
 
-		mHandleSamplesStubInfo.editor = this;
+		mHandleSamplesStubInfo->editor = Ref(this);
 
 		mReady = true;
 	}
@@ -55,11 +55,9 @@ namespace Editor
 	{
 		mReady = false;
 
-		mHandleSamplesStubInfo.editor = this;
+		mHandleSamplesStubInfo->editor = Ref(this);
 
 		mContextMenu = FindChildByType<ContextMenu>();
-		if (mContextMenu)
-			delete mContextMenu;
 
 		InitializeTextDrawables();
 		InitializeContextMenu();
@@ -69,25 +67,7 @@ namespace Editor
 	}
 
 	CurvesEditor::~CurvesEditor()
-	{
-		for (auto& curve : mCurves)
-			delete curve;
-
-		if (mSelectionSprite)
-			delete mSelectionSprite;
-
-		if (mTextLeft)
-			delete mTextLeft;
-
-		if (mTextRight)
-			delete mTextRight;
-
-		if (mTextTop)
-			delete mTextTop;
-
-		if (mTextBottom)
-			delete mTextBottom;
-	}
+	{}
 
 	Editor::CurvesEditor& CurvesEditor::operator=(const CurvesEditor& other)
 	{
@@ -95,13 +75,7 @@ namespace Editor
 
 		mReady = false;
 
-		delete mSelectionSprite;
-		delete mTextLeft;
-		delete mTextRight;
-		delete mTextTop;
-		delete mTextBottom;
-
-		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
+		mSelectionSprite = other.mSelectionSprite->CloneAsRef<Sprite>();
 		mTextFont = other.mTextFont;
 
 		mMainHandleSample = other.mMainHandleSample;
@@ -144,27 +118,27 @@ namespace Editor
 		}
 	}
 
-	Map<String, Curve*> CurvesEditor::GetCurves() const
+	Map<String, Ref<Curve>> CurvesEditor::GetCurves() const
 	{
-		Map<String, Curve*> res;
+		Map<String, Ref<Curve>> res;
 		for (auto& curveInfo : mCurves)
 			res.Add(curveInfo->curveId, curveInfo->curve);
 
 		return res;
 	}
 
-	void CurvesEditor::AddCurve(const String& id, Curve* curve, const Color4& color /*= Color4(44, 62, 80)*/)
+	void CurvesEditor::AddCurve(const String& id, const Ref<Curve>& curve, const Color4& color /*= Color4(44, 62, 80)*/)
 	{
 		UpdateSelfTransform();
 
-		CurveInfo* info = mnew CurveInfo();
-		info->editor = this;
+		auto info = mmake<CurveInfo>();
+		info->editor = Ref(this);
 		info->curveId = id;
 		info->curve = curve;
 
 		info->AdjustScale();
 
-		info->curve->onKeysChanged += MakeSubscription(info, &CurveInfo::OnCurveChanged, [=]() { info->curve = nullptr; });
+		info->curve->onKeysChanged += MakeSubscription(info.Get(), &CurveInfo::OnCurveChanged, [=]() { info->curve = nullptr; });
 
 		if (color == Color4(44, 62, 80) && !mCurves.IsEmpty())
 			info->color = Color4::SomeColor(mCurves.Count());
@@ -181,7 +155,7 @@ namespace Editor
 			mNeedAdjustView = true;
 	}
 
-	void CurvesEditor::RemoveCurve(Curve* curve)
+	void CurvesEditor::RemoveCurve(const Ref<Curve>& curve)
 	{
 		for (auto& info : mCurves)
 		{
@@ -189,16 +163,15 @@ namespace Editor
 			{
 				for (auto& handle : info->handles)
 				{
-					handle->mainHandle.SetSelectionGroup(nullptr);
+					handle->mainHandle->SetSelectionGroup(nullptr);
 
-					handle->leftSupportHandle.SetSelectionGroup(nullptr);
-					mSupportHandles.Remove(&handle->leftSupportHandle);
+					handle->leftSupportHandle->SetSelectionGroup(nullptr);
+					mSupportHandles.Remove(handle->leftSupportHandle);
 
-					handle->rightSupportHandle.SetSelectionGroup(nullptr);
-					mSupportHandles.Remove(&handle->rightSupportHandle);
+					handle->rightSupportHandle->SetSelectionGroup(nullptr);
+					mSupportHandles.Remove(handle->rightSupportHandle);
 				}
 
-				delete info;
 				mCurves.Remove(info);
 				break;
 			}
@@ -207,7 +180,7 @@ namespace Editor
 
 	void CurvesEditor::RemoveCurve(const String& id)
 	{
-		Curve* curve = FindCurve(id);
+		auto curve = FindCurve(id);
 		if (curve)
 			RemoveCurve(curve);
 	}
@@ -219,7 +192,7 @@ namespace Editor
 			RemoveCurve(info->curve);
 	}
 
-	void CurvesEditor::AddCurvesRange(Curve* curveA, Curve* curveB, const Color4& color /*= Color4(-1, -1, -1, -1)*/)
+	void CurvesEditor::AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color /*= Color4(-1, -1, -1, -1)*/)
 	{
 
 	}
@@ -229,7 +202,7 @@ namespace Editor
 
 	}
 
-	void CurvesEditor::SetCurveColor(Curve* curve, const Color4& color)
+	void CurvesEditor::SetCurveColor(const Ref<Curve>& curve, const Color4& color)
 	{
 		for (auto& info : mCurves)
 		{
@@ -238,14 +211,14 @@ namespace Editor
 				info->color = color;
 
 				for (auto& handle : info->handles)
-					handle->mainHandle.SetDrawablesColor(color);
+					handle->mainHandle->SetDrawablesColor(color);
 
 				break;
 			}
 		}
 	}
 
-	void CurvesEditor::RemoveCurvesRange(Curve* curveA, Curve* curveB)
+	void CurvesEditor::RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB)
 	{
 
 	}
@@ -263,7 +236,7 @@ namespace Editor
 		OnCameraTransformChanged();
 	}
 
-	ContextMenu* CurvesEditor::GetContextMenu() const
+	const Ref<ContextMenu>& CurvesEditor::GetContextMenu() const
 	{
 		return mContextMenu;
 	}
@@ -290,14 +263,14 @@ namespace Editor
 	void CurvesEditor::SetMainHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover,
 										   const ImageAssetRef& pressed, const ImageAssetRef& selected)
 	{
-		mMainHandleSample.curveInfo = &mHandleSamplesStubInfo;
+		mMainHandleSample.curveInfo = mHandleSamplesStubInfo;
 		mMainHandleSample = CurveHandle(mmake<Sprite>(regular), mmake<Sprite>(hover),
 										mmake<Sprite>(pressed), mmake<Sprite>(selected));
 	}
 
 	void CurvesEditor::SetSupportHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed, const ImageAssetRef& selected)
 	{
-		mSupportHandleSample.curveInfo = &mHandleSamplesStubInfo;
+		mSupportHandleSample.curveInfo = mHandleSamplesStubInfo;
 		mSupportHandleSample = CurveHandle(mmake<Sprite>(regular), mmake<Sprite>(hover),
 										   mmake<Sprite>(pressed), mmake<Sprite>(selected));
 	}
@@ -344,7 +317,7 @@ namespace Editor
 		ChangeCameraScaleRelativeToCursor(newScale);
 	}
 
-	Curve* CurvesEditor::FindCurve(const String& id)
+	Ref<Curve> CurvesEditor::FindCurve(const String& id)
 	{
 		for (auto& curve : mCurves)
 		{
@@ -360,29 +333,29 @@ namespace Editor
 		mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
 		mContextMenu->AddItems( {
-			mnew ContextMenu::Item("Auto smooth", false, THIS_FUNC(OnAutoSmoothChecked)),
-			mnew ContextMenu::Item("Flat", false, THIS_FUNC(OnFlatChecked)),
-			mnew ContextMenu::Item("Free", false, THIS_FUNC(OnFreeChecked)),
-			mnew ContextMenu::Item("Linear", false, THIS_FUNC(OnLinearChecked)),
-			mnew ContextMenu::Item("Broken", false, THIS_FUNC(OnBrokenChecked)),
-			mnew ContextMenu::Item("Discrete", false, THIS_FUNC(OnDiscreteChecked)),
+			mmake<ContextMenu::Item>("Auto smooth", false, THIS_FUNC(OnAutoSmoothChecked)),
+			mmake<ContextMenu::Item>("Flat", false, THIS_FUNC(OnFlatChecked)),
+			mmake<ContextMenu::Item>("Free", false, THIS_FUNC(OnFreeChecked)),
+			mmake<ContextMenu::Item>("Linear", false, THIS_FUNC(OnLinearChecked)),
+			mmake<ContextMenu::Item>("Broken", false, THIS_FUNC(OnBrokenChecked)),
+			mmake<ContextMenu::Item>("Discrete", false, THIS_FUNC(OnDiscreteChecked)),
 
 			ContextMenu::Item::Separator(),
 
-			mnew ContextMenu::Item("Edit", THIS_FUNC(OnEditPressed)),
+			mmake<ContextMenu::Item>("Edit", THIS_FUNC(OnEditPressed)),
 
 			ContextMenu::Item::Separator(),
 
-			mnew ContextMenu::Item("Copy keys", THIS_FUNC(OnCopyPressed), "", ImageAssetRef(), ShortcutKeys('C', true)),
-			mnew ContextMenu::Item("Cut keys", THIS_FUNC(OnCutPressed), "", ImageAssetRef(), ShortcutKeys('X', true)),
-			mnew ContextMenu::Item("Paste keys", THIS_FUNC(OnPastePressed), "", ImageAssetRef(), ShortcutKeys('V', true)),
-			mnew ContextMenu::Item("Delete keys", THIS_FUNC(OnDeletePressed), "", ImageAssetRef(), ShortcutKeys(VK_DELETE)),
-			mnew ContextMenu::Item("Insert key", THIS_FUNC(OnInsertPressed)),
+			mmake<ContextMenu::Item>("Copy keys", THIS_FUNC(OnCopyPressed), "", ImageAssetRef(), ShortcutKeys('C', true)),
+			mmake<ContextMenu::Item>("Cut keys", THIS_FUNC(OnCutPressed), "", ImageAssetRef(), ShortcutKeys('X', true)),
+			mmake<ContextMenu::Item>("Paste keys", THIS_FUNC(OnPastePressed), "", ImageAssetRef(), ShortcutKeys('V', true)),
+			mmake<ContextMenu::Item>("Delete keys", THIS_FUNC(OnDeletePressed), "", ImageAssetRef(), ShortcutKeys(VK_DELETE)),
+			mmake<ContextMenu::Item>("Insert key", THIS_FUNC(OnInsertPressed)),
 
 			ContextMenu::Item::Separator(),
 
-			mnew ContextMenu::Item("Undo", THIS_FUNC(OnUndoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true)),
-			mnew ContextMenu::Item("Redo", THIS_FUNC(OnRedoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true, true))
+			mmake<ContextMenu::Item>("Undo", THIS_FUNC(OnUndoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true)),
+			mmake<ContextMenu::Item>("Redo", THIS_FUNC(OnRedoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true, true))
 			}
 		);
 
@@ -472,13 +445,13 @@ namespace Editor
 		Vec2F gridScale(1, 1);
 		Vec2F gridOffset(0, 0);
 
-		bool allSameCurve = !mSelectedHandles.IsEmpty() && mSelectedHandles.All([&](DragHandle* x) {
-			return ((CurveHandle*)x)->curveInfo == ((CurveHandle*)mSelectedHandles[0])->curveInfo;
+		bool allSameCurve = !mSelectedHandles.IsEmpty() && mSelectedHandles.All([&](const Ref<DragHandle>& x) {
+			return DynamicCast<CurveHandle>(x)->curveInfo == DynamicCast<CurveHandle>(mSelectedHandles[0])->curveInfo;
 		});
 
 		if (allSameCurve)
 		{
-			CurveHandle* curvehandle = (CurveHandle*)mSelectedHandles[0];
+			auto curvehandle = DynamicCast<CurveHandle>(mSelectedHandles[0]);
 			gridScale = curvehandle->curveInfo->viewScale;
 			gridOffset = curvehandle->curveInfo->viewOffset;
 		}
@@ -740,11 +713,12 @@ namespace Editor
 	}
 
 #undef DrawText
-	void CurvesEditor::AddCurveKeyHandles(CurveInfo* info, int keyId)
+
+	void CurvesEditor::AddCurveKeyHandles(const Ref<CurveInfo>& info, int keyId)
 	{
 		PushEditorScopeOnStack scope;
 
-		KeyHandles* keyHandles = mnew KeyHandles(mMainHandleSample, mSupportHandleSample, this, info->color);
+		auto keyHandles = mmake<KeyHandles>(mMainHandleSample, mSupportHandleSample, this, info->color);
 		keyHandles->curveKeyIdx = keyId;
 		keyHandles->curveKeyUid = info->curve->GetKeyAt(keyId).uid;
 
@@ -753,54 +727,54 @@ namespace Editor
 		Curve::Key nextCurveKey = info->curve->GetKeyAt(Math::Min(keyId + 1, info->curve->GetKeys().Count()));
 
 		// main handle
-		keyHandles->mainHandle.SetPosition(Vec2F(curveKey.position, curveKey.value));
-		keyHandles->mainHandle.curveInfo = info;
-		keyHandles->mainHandle.onChangedPos = [=](const Vec2F& pos) { OnCurveKeyMainHandleDragged(info, keyHandles, pos); };
-		keyHandles->mainHandle.onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
-		keyHandles->mainHandle.onPressed = THIS_FUNC(OnTransformBegin);
-		keyHandles->mainHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
-		keyHandles->mainHandle.messageFallDownListener = this;
+		keyHandles->mainHandle->SetPosition(Vec2F(curveKey.position, curveKey.value));
+		keyHandles->mainHandle->curveInfo = info;
+		keyHandles->mainHandle->onChangedPos = [=](const Vec2F& pos) { OnCurveKeyMainHandleDragged(info, keyHandles, pos); };
+		keyHandles->mainHandle->onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
+		keyHandles->mainHandle->onPressed = THIS_FUNC(OnTransformBegin);
+		keyHandles->mainHandle->onChangeCompleted = THIS_FUNC(OnTransformCompleted);
+		keyHandles->mainHandle->messageFallDownListener = this;
 
-		keyHandles->mainHandle.onDraw = [=]() {
+		keyHandles->mainHandle->onDraw = [=]() {
 			if (o2Input.IsKeyDown(VK_F1))
-				o2Debug.DrawText(keyHandles->mainHandle.GetScreenPosition(), String(keyHandles->curveKeyIdx));
+				o2Debug.DrawText(keyHandles->mainHandle->GetScreenPosition(), String(keyHandles->curveKeyIdx));
 		};
 
 
 		// left support handle
-		keyHandles->leftSupportHandle.curveInfo = info;
-		keyHandles->leftSupportHandle.SetPosition(Vec2F(curveKey.position + curveKey.leftSupportPosition,
+		keyHandles->leftSupportHandle->curveInfo = info;
+		keyHandles->leftSupportHandle->SetPosition(Vec2F(curveKey.position + curveKey.leftSupportPosition,
 												  curveKey.value + curveKey.leftSupportValue));
 
-		keyHandles->leftSupportHandle.onChangedPos =
+		keyHandles->leftSupportHandle->onChangedPos =
 			[=](const Vec2F& pos) { OnCurveKeyLeftSupportHandleDragged(info, keyHandles, pos); };
 
-		keyHandles->leftSupportHandle.checkPositionFunc =
+		keyHandles->leftSupportHandle->checkPositionFunc =
 			[=](const Vec2F& pos) { return CheckLeftSupportHandlePosition(info, keyHandles, pos); };
 
-		keyHandles->leftSupportHandle.enabled = false;
-		keyHandles->leftSupportHandle.onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
-		keyHandles->leftSupportHandle.onPressed = THIS_FUNC(OnTransformBegin);
-		keyHandles->leftSupportHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
-		keyHandles->leftSupportHandle.messageFallDownListener = this;
+		keyHandles->leftSupportHandle->enabled = false;
+		keyHandles->leftSupportHandle->onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
+		keyHandles->leftSupportHandle->onPressed = THIS_FUNC(OnTransformBegin);
+		keyHandles->leftSupportHandle->onChangeCompleted = THIS_FUNC(OnTransformCompleted);
+		keyHandles->leftSupportHandle->messageFallDownListener = this;
 
 
 		// right support handle
-		keyHandles->rightSupportHandle.curveInfo = info;
-		keyHandles->rightSupportHandle.SetPosition(Vec2F(curveKey.position + curveKey.rightSupportPosition,
+		keyHandles->rightSupportHandle->curveInfo = info;
+		keyHandles->rightSupportHandle->SetPosition(Vec2F(curveKey.position + curveKey.rightSupportPosition,
 												   curveKey.value + curveKey.rightSupportValue));
 
-		keyHandles->rightSupportHandle.onChangedPos =
+		keyHandles->rightSupportHandle->onChangedPos =
 			[=](const Vec2F& pos) { OnCurveKeyRightSupportHandleDragged(info, keyHandles, pos); };
 
-		keyHandles->rightSupportHandle.checkPositionFunc =
+		keyHandles->rightSupportHandle->checkPositionFunc =
 			[=](const Vec2F& pos) { return CheckRightSupportHandlePosition(info, keyHandles, pos); };
 
-		keyHandles->rightSupportHandle.enabled = false;
-		keyHandles->rightSupportHandle.onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
-		keyHandles->rightSupportHandle.onPressed = THIS_FUNC(OnTransformBegin);
-		keyHandles->rightSupportHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
-		keyHandles->rightSupportHandle.messageFallDownListener = this;
+		keyHandles->rightSupportHandle->enabled = false;
+		keyHandles->rightSupportHandle->onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
+		keyHandles->rightSupportHandle->onPressed = THIS_FUNC(OnTransformBegin);
+		keyHandles->rightSupportHandle->onChangeCompleted = THIS_FUNC(OnTransformCompleted);
+		keyHandles->rightSupportHandle->messageFallDownListener = this;
 
 		for (int i = keyId; i < info->handles.Count(); i++)
 			info->handles[i]->curveKeyIdx++;
@@ -808,43 +782,42 @@ namespace Editor
 		// Register handles
 		info->handles.Insert(keyHandles, keyId);
 
-		mSupportHandles.Add(&keyHandles->leftSupportHandle);
-		mSupportHandles.Add(&keyHandles->rightSupportHandle);
+		mSupportHandles.Add(keyHandles->leftSupportHandle);
+		mSupportHandles.Add(keyHandles->rightSupportHandle);
 
-		keyHandles->mainHandle.SetSelectionGroup(this);
-		keyHandles->leftSupportHandle.SetSelectionGroup(&mSupportHandlesGroup);
-		keyHandles->rightSupportHandle.SetSelectionGroup(&mSupportHandlesGroup);
+		keyHandles->mainHandle->SetSelectionGroup(Ref(this));
+		keyHandles->leftSupportHandle->SetSelectionGroup(mSupportHandlesGroup);
+		keyHandles->rightSupportHandle->SetSelectionGroup(mSupportHandlesGroup);
 
 		mNeedRedraw = true;
 	}
 
-	void CurvesEditor::RemoveCurveKeyHandles(CurveInfo* info, int keyId)
+	void CurvesEditor::RemoveCurveKeyHandles(const Ref<CurveInfo>& info, int keyId)
 	{
 		for (int i = keyId + 1; i < info->handles.Count(); i++)
 			info->handles[i]->curveKeyIdx--;
 
-		info->handles[keyId]->mainHandle.SetSelectionGroup(nullptr);
-		info->handles[keyId]->leftSupportHandle.SetSelectionGroup(nullptr);
-		info->handles[keyId]->rightSupportHandle.SetSelectionGroup(nullptr);
+		info->handles[keyId]->mainHandle->SetSelectionGroup(nullptr);
+		info->handles[keyId]->leftSupportHandle->SetSelectionGroup(nullptr);
+		info->handles[keyId]->rightSupportHandle->SetSelectionGroup(nullptr);
 
-		mSupportHandles.Remove(&info->handles[keyId]->leftSupportHandle);
-		mSupportHandles.Remove(&info->handles[keyId]->rightSupportHandle);
+		mSupportHandles.Remove(info->handles[keyId]->leftSupportHandle);
+		mSupportHandles.Remove(info->handles[keyId]->rightSupportHandle);
 
-		delete info->handles[keyId];
 		info->handles.RemoveAt(keyId);
 
 		mNeedRedraw = true;
 	}
 
-	void CurvesEditor::OnCurveKeyMainHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
+	void CurvesEditor::OnCurveKeyMainHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position)
 	{
 		info->BeginCurveManualChange();
 
 		Curve::Key key = info->curve->GetKeyAt(handles->curveKeyIdx);
 
-		Vec2F initialDragPoint = handles->mainHandle.GetDraggingBeginPosition();
+		Vec2F initialDragPoint = handles->mainHandle->GetDraggingBeginPosition();
 
-		if (handles->mainHandle.IsPressed())
+		if (handles->mainHandle->IsPressed())
 		{
 			if (o2Input.IsKeyDown(VK_CONTROL) && o2Input.IsKeyDown(VK_SHIFT))
 			{
@@ -913,7 +886,7 @@ namespace Editor
 		info->CompleteCurveManualChange();
 	}
 
-	void CurvesEditor::OnCurveKeyLeftSupportHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
+	void CurvesEditor::OnCurveKeyLeftSupportHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position)
 	{
 		info->BeginCurveManualChange();
 
@@ -922,7 +895,7 @@ namespace Editor
 
 		if (o2Input.IsKeyDown(VK_CONTROL) && o2Input.IsKeyDown(VK_SHIFT))
 		{
-			Vec2F initialDragPoint = handles->leftSupportHandle.GetDraggingBeginPosition();
+			Vec2F initialDragPoint = handles->leftSupportHandle->GetDraggingBeginPosition();
 			float dst = (initialDragPoint - Vec2F(key.position, key.value)).Length();
 			Vec2F v = (position - Vec2F(key.position, key.value)).Normalized()*dst;
 			key.leftSupportPosition = v.x;
@@ -935,7 +908,7 @@ namespace Editor
 		}
 		else if (o2Input.IsKeyDown(VK_SHIFT))
 		{
-			Vec2F initialDragPoint = handles->leftSupportHandle.GetDraggingBeginPosition();
+			Vec2F initialDragPoint = handles->leftSupportHandle->GetDraggingBeginPosition();
 
 			Vec2F v = initialDragPoint - Vec2F(key.position, key.value);
 			float dst = (position - Vec2F(key.position, key.value)).Length();
@@ -976,7 +949,7 @@ namespace Editor
 		info->CompleteCurveManualChange();
 	}
 
-	void CurvesEditor::OnCurveKeyRightSupportHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
+	void CurvesEditor::OnCurveKeyRightSupportHandleDragged(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position)
 	{
 		info->BeginCurveManualChange();
 
@@ -985,7 +958,7 @@ namespace Editor
 
 		if (o2Input.IsKeyDown(VK_CONTROL) && o2Input.IsKeyDown(VK_SHIFT))
 		{
-			Vec2F initialDragPoint = handles->rightSupportHandle.GetDraggingBeginPosition();
+			Vec2F initialDragPoint = handles->rightSupportHandle->GetDraggingBeginPosition();
 			float dst = (initialDragPoint - Vec2F(key.position, key.value)).Length();
 			Vec2F v = (position - Vec2F(key.position, key.value)).Normalized()*dst;
 			key.rightSupportPosition = v.x;
@@ -998,7 +971,7 @@ namespace Editor
 		}
 		else if (o2Input.IsKeyDown(VK_SHIFT))
 		{
-			Vec2F initialDragPoint = handles->rightSupportHandle.GetDraggingBeginPosition();
+			Vec2F initialDragPoint = handles->rightSupportHandle->GetDraggingBeginPosition();
 
 			Vec2F v = initialDragPoint - Vec2F(key.position, key.value);
 			float dst = (position - Vec2F(key.position, key.value)).Length();
@@ -1027,7 +1000,7 @@ namespace Editor
 			key.leftSupportPosition = -key.rightSupportPosition;
 			key.leftSupportValue = -key.rightSupportValue;
 
-			handles->leftSupportHandle.position = Vec2F(key.position + key.leftSupportPosition,
+			handles->leftSupportHandle->position = Vec2F(key.position + key.leftSupportPosition,
 														key.value + key.leftSupportValue);
 		}
 
@@ -1043,7 +1016,7 @@ namespace Editor
 		info->CompleteCurveManualChange();
 	}
 
-	Vec2F CurvesEditor::CheckLeftSupportHandlePosition(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
+	Vec2F CurvesEditor::CheckLeftSupportHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position)
 	{
 		Curve::Key key = info->curve->GetKeyAt(handles->curveKeyIdx);
 		Curve::Key prevKey = info->curve->GetKeyAt(Math::Max(handles->curveKeyIdx - 1, 0));
@@ -1059,7 +1032,7 @@ namespace Editor
 		return Vec2F(key.position, key.value) + relativePos;
 	}
 
-	Vec2F CurvesEditor::CheckRightSupportHandlePosition(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
+	Vec2F CurvesEditor::CheckRightSupportHandlePosition(const Ref<CurveInfo>& info, const Ref<KeyHandles>& handles, const Vec2F& position)
 	{
 		Curve::Key key = info->curve->GetKeyAt(handles->curveKeyIdx);
 		Curve::Key nextKey = info->curve->GetKeyAt(Math::Min(handles->curveKeyIdx + 1, info->curve->GetKeys().Count() - 1));
@@ -1079,7 +1052,7 @@ namespace Editor
 	{
 		const float createPointDistanceThreshold = 7;
 
-		CurveInfo* clickedCurveInfo = nullptr;
+		Ref<CurveInfo> clickedCurveInfo;
 		Curve::Key newKey;
 		Vec2F localCursorPos = ScreenToLocalPoint(cursor.position);
 
@@ -1151,7 +1124,7 @@ namespace Editor
 
 			mNeedRedraw = true;
 
-			SelectHandle(&clickedCurveInfo->handles[idx]->mainHandle);
+			SelectHandle(clickedCurveInfo->handles[idx]->mainHandle);
 			CheckHandlesVisible();
 
 			addedKey = true;
@@ -1175,7 +1148,7 @@ namespace Editor
 
 			mNeedRedraw = true;
 
-			SelectHandle(&clickedCurveInfo->handles[idx]->mainHandle);
+			SelectHandle(clickedCurveInfo->handles[idx]->mainHandle);
 			CheckHandlesVisible();
 
 			addedKey = true;
@@ -1188,12 +1161,12 @@ namespace Editor
 			keyInfos.Last().curveId = clickedCurveInfo->curveId;
 			keyInfos.Last().keys.Add(newKey);
 
-			CurveAddKeysAction* action = mnew CurveAddKeysAction(keyInfos, this);
+			auto action = mmake<CurveAddKeysAction>(keyInfos, this);
 			DoneAction(action);
 		}
 	}
 
-	void CurvesEditor::SmoothKey(CurveInfo* info, int idx)
+	void CurvesEditor::SmoothKey(const Ref<CurveInfo>& info, int idx)
 	{
 		Curve::Key key = info->curve->GetKeyAt(idx);
 		Vec2F thisKeyPoint(key.position, key.value);
@@ -1243,17 +1216,17 @@ namespace Editor
 
 		info->UpdateApproximatedPoints();
 
-		info->handles[idx]->leftSupportHandle.SetPosition(Vec2F(key.position + key.leftSupportPosition,
+		info->handles[idx]->leftSupportHandle->SetPosition(Vec2F(key.position + key.leftSupportPosition,
 														  key.value + key.leftSupportValue));
 
-		info->handles[idx]->rightSupportHandle.SetPosition(Vec2F(key.position + key.rightSupportPosition,
+		info->handles[idx]->rightSupportHandle->SetPosition(Vec2F(key.position + key.rightSupportPosition,
 														   key.value + key.rightSupportValue));
 
 		if (idx > 0)
 		{
 			Curve::Key lastKey = info->curve->GetKeyAt(Math::Max(0, idx - 1));
 
-			info->handles[idx - 1]->rightSupportHandle.SetPosition(
+			info->handles[idx - 1]->rightSupportHandle->SetPosition(
 				Vec2F(lastKey.position + lastKey.rightSupportPosition, lastKey.value + lastKey.rightSupportValue));
 		}
 
@@ -1261,7 +1234,7 @@ namespace Editor
 		{
 			Curve::Key nextKey = info->curve->GetKeyAt(Math::Min(idx + 1, info->curve->GetKeys().Count()));
 
-			info->handles[idx + 1]->leftSupportHandle.SetPosition(
+			info->handles[idx + 1]->leftSupportHandle->SetPosition(
 				Vec2F(nextKey.position + nextKey.leftSupportPosition, nextKey.value + nextKey.leftSupportValue));
 		}
 
@@ -1279,7 +1252,7 @@ namespace Editor
 		if (!o2Input.IsKeyDown(VK_CONTROL))
 		{
 			DeselectAll();
-			mSupportHandlesGroup.DeselectAll();
+			mSupportHandlesGroup->DeselectAll();
 		}
 	}
 
@@ -1307,22 +1280,22 @@ namespace Editor
 
 		for (auto& handle : mHandles)
 		{
-			CurveHandle* curveHandle = (CurveHandle*)handle;
+			auto curveHandle = DynamicCast<CurveHandle>(handle);
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(curveHandle->GetLocalPosition()) &&
 				!mSelectedHandles.Contains(handle))
 			{
-				mSelectingHandlesBuf.Add((CurveHandle*)handle);
+				mSelectingHandlesBuf.Add(curveHandle);
 				SetHandleSelectedState(handle, true);
 			}
 		}
 
-		for (auto& handle : mSupportHandlesGroup.GetAllHandles())
+		for (auto& handle : mSupportHandlesGroup->GetAllHandles())
 		{
-			CurveHandle* curveHandle = (CurveHandle*)handle;
+			auto curveHandle = DynamicCast<CurveHandle>(handle);
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(curveHandle->GetLocalPosition()) &&
-				!mSupportHandlesGroup.GetSelectedHandles().Contains(handle))
+				!mSupportHandlesGroup->GetSelectedHandles().Contains(handle))
 			{
-				mSelectingHandlesBuf.Add((CurveHandle*)handle);
+				mSelectingHandlesBuf.Add(curveHandle);
 				SetHandleSelectedState(handle, true);
 			}
 		}
@@ -1351,7 +1324,7 @@ namespace Editor
 			{
 				for (auto& handles : curve->handles)
 				{
-					if (!handles->mainHandle.IsSelected())
+					if (!handles->mainHandle->IsSelected())
 						continue;
 
 					someSelected = true;
@@ -1397,13 +1370,13 @@ namespace Editor
 		{
 			for (auto& handles : info->handles)
 			{
-				handles->leftSupportHandle.enabled = (handles->mainHandle.IsSelected() ||
-													  handles->leftSupportHandle.IsSelected() ||
-													  handles->rightSupportHandle.IsSelected()) && handles->curveKeyIdx > 0;
+				handles->leftSupportHandle->enabled = (handles->mainHandle->IsSelected() ||
+													  handles->leftSupportHandle->IsSelected() ||
+													  handles->rightSupportHandle->IsSelected()) && handles->curveKeyIdx > 0;
 
-				handles->rightSupportHandle.enabled = (handles->mainHandle.IsSelected() ||
-													   handles->leftSupportHandle.IsSelected() ||
-													   handles->rightSupportHandle.IsSelected()) && handles->curveKeyIdx < info->handles.Count() - 1;
+				handles->rightSupportHandle->enabled = (handles->mainHandle->IsSelected() ||
+													   handles->leftSupportHandle->IsSelected() ||
+													   handles->rightSupportHandle->IsSelected()) && handles->curveKeyIdx < info->handles.Count() - 1;
 			}
 		}
 	}
@@ -1415,11 +1388,12 @@ namespace Editor
 		if (!mTransformFrameVisible)
 			return;
 
-		RectF aabb(((CurveHandle*)mSelectedHandles[0])->GetLocalPosition(), ((CurveHandle*)mSelectedHandles[0])->GetLocalPosition());
+		auto selectedHandle0 = DynamicCast<CurveHandle>(mSelectedHandles[0]);
+		RectF aabb(selectedHandle0->GetLocalPosition(), selectedHandle0->GetLocalPosition());
 
 		for (auto& handle : mSelectedHandles)
 		{
-			CurveHandle* curveHandle = (CurveHandle*)handle;
+			auto curveHandle = DynamicCast<CurveHandle>(handle);
 
 			aabb.left = Math::Min(curveHandle->GetLocalPosition().x, aabb.left);
 			aabb.right = Math::Max(curveHandle->GetLocalPosition().x, aabb.right);
@@ -1435,7 +1409,8 @@ namespace Editor
 		int selectedMainHandles = 0;
 		for (auto& handle : mSelectedHandles)
 		{
-			if (!mSupportHandles.Contains((CurveHandle*)handle))
+			auto curveHandle = DynamicCast<CurveHandle>(handle);
+			if (!mSupportHandles.Contains(curveHandle))
 				selectedMainHandles++;
 		}
 
@@ -1451,7 +1426,7 @@ namespace Editor
 
 	void CurvesEditor::OnHandleBeganDragging(const Ref<DragHandle>& handle)
 	{
-		if (mSupportHandles.Contains((CurveHandle*)handle))
+		if (mSupportHandles.Contains(DynamicCast<CurveHandle>(handle)))
 			return;
 
 		SelectableDragHandlesGroup::OnHandleBeganDragging(handle);
@@ -1459,7 +1434,7 @@ namespace Editor
 
 	void CurvesEditor::OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos)
 	{
-		if (mSupportHandles.Contains((CurveHandle*)handle))
+		if (mSupportHandles.Contains(DynamicCast<CurveHandle>(handle)))
 		{
 			if (!handle->IsSelected())
 				return;
@@ -1497,7 +1472,7 @@ namespace Editor
 
 			for (auto& handles : info->handles)
 			{
-				if (handles->mainHandle.IsSelected())
+				if (handles->mainHandle->IsSelected())
 				{
 					Curve::Key& key = keys[handles->curveKeyIdx];
 					key.supportsType = type;
@@ -1552,7 +1527,7 @@ namespace Editor
 		{
 			for (auto& handle : mSelectedHandles)
 			{
-				CurveHandle* curveHandle = (CurveHandle*)handle;
+				auto curveHandle = DynamicCast<CurveHandle>(handle);
 				curveHandle->SetPosition(curveHandle->LocalToCurveView(curveHandle->GetLocalPosition()*delta));
 				curveHandle->onChangedPos(handle->GetPosition());
 			}
@@ -1609,9 +1584,9 @@ namespace Editor
 
 					keysInfo.selectedHandles.Add(SelectedHandlesInfo());
 					keysInfo.selectedHandles.Last().index = handles->curveKeyIdx;
-					keysInfo.selectedHandles.Last().mainHandle = handles->mainHandle.IsSelected();
-					keysInfo.selectedHandles.Last().leftSupportHandle = handles->leftSupportHandle.IsSelected();
-					keysInfo.selectedHandles.Last().rightSupportHandle = handles->rightSupportHandle.IsSelected();
+					keysInfo.selectedHandles.Last().mainHandle = handles->mainHandle->IsSelected();
+					keysInfo.selectedHandles.Last().leftSupportHandle = handles->leftSupportHandle->IsSelected();
+					keysInfo.selectedHandles.Last().rightSupportHandle = handles->rightSupportHandle->IsSelected();
 				}
 			}
 
@@ -1628,7 +1603,7 @@ namespace Editor
 		bool changed = false;
 		for (auto& keysInfo : mBeforeTransformKeys)
 		{
-			CurveInfo* curveInfo = mCurves.FindOrDefault([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
+			auto curveInfo = mCurves.FindOrDefault([&](auto& x) { return x->curveId == keysInfo.curveId; });
 			if (!curveInfo)
 				continue;
 
@@ -1650,7 +1625,7 @@ namespace Editor
 			Vector<CurveKeysChangeAction::KeysInfo> actionKeysInfos;
 			for (auto& keysInfo : mBeforeTransformKeys)
 			{
-				CurveInfo* curveInfo = mCurves.FindOrDefault([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
+				auto curveInfo = mCurves.FindOrDefault([&](auto& x) { return x->curveId == keysInfo.curveId; });
 				if (!curveInfo)
 					continue;
 
@@ -1668,7 +1643,7 @@ namespace Editor
 				}
 			}
 
-			CurveKeysChangeAction* action = mnew CurveKeysChangeAction(actionKeysInfos, this);
+			auto action = mmake<CurveKeysChangeAction>(actionKeysInfos, this);
 			DoneAction(action);
 		}
 	}
@@ -1683,7 +1658,7 @@ namespace Editor
 		return point/viewScale - viewOffset;
 	}
 
-	void CurvesEditor::DoneAction(IAction* action)
+	void CurvesEditor::DoneAction(const Ref<IAction>& action)
 	{
 		if (actionsListDelegate) {
 			actionsListDelegate->DoneAction(action);
@@ -1696,14 +1671,14 @@ namespace Editor
 	void CurvesEditor::OnEditPressed()
 	{
 		Curve::Key key;
-		CurveInfo* curveInfo = nullptr;
+		Ref<CurveInfo> curveInfo;
 		int keyIdx = 0;
 
 		for (auto& info : mCurves)
 		{
 			for (auto& handles : info->handles)
 			{
-				if (handles->mainHandle.IsSelected())
+				if (handles->mainHandle->IsSelected())
 				{
 					curveInfo = info;
 					keyIdx = handles->curveKeyIdx;
@@ -1811,7 +1786,7 @@ namespace Editor
 
 			for (auto& handles : curve->handles)
 			{
-				if (!handles->mainHandle.IsSelected())
+				if (!handles->mainHandle->IsSelected())
 					continue;
 
 				copyInfo->keys.Add(curve->curve->GetKeyAt(handles->curveKeyIdx));
@@ -1855,7 +1830,7 @@ namespace Editor
 
 		for (auto& curve : copyKeys)
 		{
-			CurveInfo* curveInfo = mCurves.FindOrDefault([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
+			auto curveInfo = mCurves.FindOrDefault([=](auto& x) { return x->curveId == curve->curveId; });
 
 			if (curveInfo == nullptr)
 			{
@@ -1894,7 +1869,7 @@ namespace Editor
 
 		if (!keyInfos.IsEmpty())
 		{
-			CurveAddKeysAction* action = mnew CurveAddKeysAction(keyInfos, this);
+			auto action = mmake<CurveAddKeysAction>(keyInfos, Ref(this));
 			DoneAction(action);
 		}
 	}
@@ -1916,7 +1891,7 @@ namespace Editor
 			Vector<int> removingIdxs;
 			for (auto& handles : curveInfo->handles)
 			{
-				if (!handles->mainHandle.IsSelected())
+				if (!handles->mainHandle->IsSelected())
 					continue;
 
 				removingIdxs.Add(handles->curveKeyIdx);
@@ -1944,12 +1919,12 @@ namespace Editor
 		}
 
 		mSelectedHandles.Clear();
-		mSupportHandlesGroup.DeselectAll();
+		mSupportHandlesGroup->DeselectAll();
 		UpdateTransformFrame();
 
 		if (!keyInfos.IsEmpty())
 		{
-			CurveDeleteKeysAction* action = mnew CurveDeleteKeysAction(keyInfos, this);
+			auto action = mmake<CurveDeleteKeysAction>(keyInfos, Ref(this));
 			DoneAction(action);
 		}
 	}
@@ -1968,7 +1943,7 @@ namespace Editor
 
 		for (auto& curve : copyKeys)
 		{
-			CurveInfo* curveInfo = mCurves.FindOrDefault([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
+			auto curveInfo = mCurves.FindOrDefault([=](auto& x) { return x->curveId == curve->curveId; });
 
 			if (curveInfo == nullptr)
 			{
@@ -2018,11 +1993,9 @@ namespace Editor
 	{
 		for (auto& x : handles)
 		{
-			x->mainHandle.SetSelectionGroup(nullptr);
-			x->leftSupportHandle.SetSelectionGroup(nullptr);
-			x->rightSupportHandle.SetSelectionGroup(nullptr);
-
-			delete x;
+			x->mainHandle->SetSelectionGroup(nullptr);
+			x->leftSupportHandle->SetSelectionGroup(nullptr);
+			x->rightSupportHandle->SetSelectionGroup(nullptr);
 		}
 
 		if (curve)
@@ -2034,29 +2007,29 @@ namespace Editor
 		for (int i = 0; i < handles.Count(); i++)
 		{
 			Curve::Key key = curve->GetKeyAt(i);
-			handles[i]->mainHandle.position = Vec2F(key.position, key.value);
+			handles[i]->mainHandle->position = Vec2F(key.position, key.value);
 
 			if (i > 0)
 			{
-				handles[i]->leftSupportHandle.position = Vec2F(key.position + key.leftSupportPosition,
+				handles[i]->leftSupportHandle->position = Vec2F(key.position + key.leftSupportPosition,
 															   key.value + key.leftSupportValue);
 
-				handles[i]->leftSupportHandle.enabled = handles[i]->leftSupportHandle.IsSelected() ||
-					handles[i]->mainHandle.IsSelected();
+				handles[i]->leftSupportHandle->enabled = handles[i]->leftSupportHandle->IsSelected() ||
+					handles[i]->mainHandle->IsSelected();
 			}
 			else 
-				handles[i]->leftSupportHandle.enabled = false;
+				handles[i]->leftSupportHandle->enabled = false;
 
 			if (i < handles.Count() - 1)
 			{
-				handles[i]->rightSupportHandle.position = Vec2F(key.position + key.rightSupportPosition,
+				handles[i]->rightSupportHandle->position = Vec2F(key.position + key.rightSupportPosition,
 																key.value + key.rightSupportValue);
 
-				handles[i]->rightSupportHandle.enabled = handles[i]->rightSupportHandle.IsSelected() ||
-					handles[i]->mainHandle.IsSelected();
+				handles[i]->rightSupportHandle->enabled = handles[i]->rightSupportHandle->IsSelected() ||
+					handles[i]->mainHandle->IsSelected();
 			}
 			else 
-				handles[i]->rightSupportHandle.enabled = false;
+				handles[i]->rightSupportHandle->enabled = false;
 		}
 	}
 
@@ -2075,7 +2048,7 @@ namespace Editor
 
 	void CurvesEditor::CurveInfo::AdjustScale()
 	{
-		if (editor->mAdjustCurvesScale)
+		if (editor.Lock()->mAdjustCurvesScale)
 		{
 			RectF rect = curve->GetRect();
 			viewScale = Vec2F(1, Math::Min(100.0f, rect.Height() < FLT_EPSILON ? 1.0f : 1.0f/rect.Height()));
@@ -2096,54 +2069,54 @@ namespace Editor
 		if (disableChangesHandling)
 			return;
 
+		auto editor = this->editor.Lock();
+
 		if (handles.Count() != curve->GetKeys().Count())
 		{
 			Vector<UInt64> selectedMain, selectedLeft, selectedRight;
 
 			for (auto& handle : handles)
 			{
-				if (handle->leftSupportHandle.IsSelected())
+				if (handle->leftSupportHandle->IsSelected())
 				{
 					selectedLeft.Add(handle->curveKeyUid);
-					handle->leftSupportHandle.SetSelectionGroup(nullptr);
+					handle->leftSupportHandle->SetSelectionGroup(nullptr);
 				}
 
-				editor->mSupportHandles.Remove(&handle->leftSupportHandle);
+				editor->mSupportHandles.Remove(handle->leftSupportHandle);
 
-				if (handle->rightSupportHandle.IsSelected())
+				if (handle->rightSupportHandle->IsSelected())
 				{
 					selectedRight.Add(handle->curveKeyUid);
-					handle->rightSupportHandle.SetSelectionGroup(nullptr);
+					handle->rightSupportHandle->SetSelectionGroup(nullptr);
 				}
 
-				editor->mSupportHandles.Remove(&handle->rightSupportHandle);
+				editor->mSupportHandles.Remove(handle->rightSupportHandle);
 
-				if (handle->mainHandle.IsSelected())
+				if (handle->mainHandle->IsSelected())
 				{
 					selectedMain.Add(handle->curveKeyUid);
-					handle->mainHandle.SetSelected(false);
+					handle->mainHandle->SetSelected(false);
 				}
 
-				editor->mHandles.Remove(&handle->mainHandle);
-
-				delete handle;
+				editor->mHandles.Remove(handle->mainHandle);
 			}
 
 			handles.clear();
 
 			for (int i = 0; i < curve->GetKeys().Count(); i++)
-				editor->AddCurveKeyHandles(this, i);
+				editor->AddCurveKeyHandles(Ref(this), i);
 
 			for (auto& handle : handles)
 			{
 				if (selectedMain.Contains(handle->curveKeyUid))
-					handle->mainHandle.Select();
+					handle->mainHandle->Select();
 
 				if (selectedLeft.Contains(handle->curveKeyUid))
-					handle->leftSupportHandle.Select();
+					handle->leftSupportHandle->Select();
 
 				if (selectedRight.Contains(handle->curveKeyUid))
-					handle->rightSupportHandle.Select();
+					handle->rightSupportHandle->Select();
 			}
 		}
 
@@ -2177,36 +2150,37 @@ namespace Editor
 	}
 
 	CurvesEditor::KeyHandles::KeyHandles(const CurveHandle& mainSample, const CurveHandle& supportSample,
-										 CurvesEditor* editor, const Color4& color):
-		mainHandle(mainSample), leftSupportHandle(supportSample), rightSupportHandle(supportSample), curveEditor(editor)
+										 const Ref<CurvesEditor>& editor, const Color4& color):
+		mainHandle(mmake<CurveHandle>(mainSample)), leftSupportHandle(mmake<CurveHandle>(supportSample)), 
+		rightSupportHandle(mmake<CurveHandle>(supportSample)), curveEditor(editor)
 	{
-		mainHandle.SetDrawablesColor(color);
+		mainHandle->SetDrawablesColor(color);
 	}
 
 	void CurvesEditor::KeyHandles::Draw(const RectF& camRect)
 	{
-		mainHandle.UpdateScreenPosition();
+		mainHandle->UpdateScreenPosition();
 
-		if (leftSupportHandle.enabled)
+		if (leftSupportHandle->enabled)
 		{
-			leftSupportHandle.UpdateScreenPosition();
-			o2Render.DrawAALine(mainHandle.GetScreenPosition(), leftSupportHandle.GetScreenPosition(), curveEditor->mGridColor);
+			leftSupportHandle->UpdateScreenPosition();
+			o2Render.DrawAALine(mainHandle->GetScreenPosition(), leftSupportHandle->GetScreenPosition(), curveEditor.Lock()->mGridColor);
 		}
 
-		if (rightSupportHandle.enabled)
+		if (rightSupportHandle->enabled)
 		{
-			rightSupportHandle.UpdateScreenPosition();
-			o2Render.DrawAALine(mainHandle.GetScreenPosition(), rightSupportHandle.GetScreenPosition(), curveEditor->mGridColor);
+			rightSupportHandle->UpdateScreenPosition();
+			o2Render.DrawAALine(mainHandle->GetScreenPosition(), rightSupportHandle->GetScreenPosition(), curveEditor.Lock()->mGridColor);
 		}
 
-		mainHandle.Draw(camRect);
-		leftSupportHandle.Draw(camRect);
-		rightSupportHandle.Draw(camRect);
+		mainHandle->Draw(camRect);
+		leftSupportHandle->Draw(camRect);
+		rightSupportHandle->Draw(camRect);
 	}
 
 	bool CurvesEditor::KeyHandles::IsSomeHandleSelected() const
 	{
-		return mainHandle.IsSelected() || leftSupportHandle.IsSelected() || rightSupportHandle.IsSelected();
+		return mainHandle->IsSelected() || leftSupportHandle->IsSelected() || rightSupportHandle->IsSelected();
 	}
 
 	bool CurvesEditor::CurveKeysInfo::operator==(const CurveKeysInfo& other) const
@@ -2223,8 +2197,12 @@ namespace Editor
 	CurvesEditor::CurveHandle::CurveHandle()
 	{ }
 
-	CurvesEditor::CurveHandle::CurveHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/,
-										   Sprite* selected /*= nullptr*/, Sprite* selectedHovered /*= nullptr*/, Sprite* selectedPressed /*= nullptr*/):
+	CurvesEditor::CurveHandle::CurveHandle(const Ref<Sprite>& regular, 
+										   const Ref<Sprite>& hover /*= nullptr*/, 
+										   const Ref<Sprite>& pressed /*= nullptr*/, 
+										   const Ref<Sprite>& selected /*= nullptr*/, 
+										   const Ref<Sprite>& selectedHovered /*= nullptr*/, 
+										   const Ref<Sprite>& selectedPressed /*= nullptr*/):
 		DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed)
 	{ }
 
@@ -2248,22 +2226,22 @@ namespace Editor
 
 	Vec2F CurvesEditor::CurveHandle::LocalToCurveView(const Vec2F& point) const
 	{
-		return curveInfo->editor->LocalToCurveView(point, curveInfo->viewScale, curveInfo->viewOffset);
+		return curveInfo->editor.Lock()->LocalToCurveView(point, curveInfo->viewScale, curveInfo->viewOffset);
 	}
 
 	Vec2F CurvesEditor::CurveHandle::CurveViewToLocal(const Vec2F& point) const
 	{
-		return curveInfo->editor->CurveViewToLocal(point, curveInfo->viewScale, curveInfo->viewOffset);
+		return curveInfo->editor.Lock()->CurveViewToLocal(point, curveInfo->viewScale, curveInfo->viewOffset);
 	}
 
 	Vec2F CurvesEditor::CurveHandle::ScreenToLocal(const Vec2F& point)
 	{
-		return LocalToCurveView(curveInfo->editor->ScreenToLocalPoint(point));
+		return LocalToCurveView(curveInfo->editor.Lock()->ScreenToLocalPoint(point));
 	}
 
 	Vec2F CurvesEditor::CurveHandle::LocalToScreen(const Vec2F& point)
 	{
-		return curveInfo->editor->LocalToScreenPoint(CurveViewToLocal(point));
+		return curveInfo->editor.Lock()->LocalToScreenPoint(CurveViewToLocal(point));
 	}
 
 }

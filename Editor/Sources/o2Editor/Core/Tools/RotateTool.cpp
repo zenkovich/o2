@@ -19,21 +19,15 @@ namespace Editor
 										   mmake<Sprite>("ui/UI2_pivot_select.png"),
 										   mmake<Sprite>("ui/UI2_pivot_pressed.png"));
 
-		mRotateRingFillMesh = mnew Mesh(Ref<Texture>::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
-		mAngleMesh = mnew Mesh(Ref<Texture>::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
+		mRotateRingFillMesh = mmake<Mesh>(Ref<Texture>::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
+		mAngleMesh = mmake<Mesh>(Ref<Texture>::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
 
 		mPivotDragHandle.onChangedPos += THIS_FUNC(OnPivotDragHandleMoved);
 		mPivotDragHandle.enabled = false;
 	}
 
 	RotateTool::~RotateTool()
-	{
-		if (mRotateRingFillMesh)
-			delete mRotateRingFillMesh;
-
-		if (mAngleMesh)
-			delete mAngleMesh;
-	}
+	{}
 
 	String RotateTool::GetPanelIcon() const
 	{
@@ -226,9 +220,9 @@ namespace Editor
 			mSnapAngleAccumulated = 0.0f;
 
 			mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-				[](SceneEditableObject* x) { return x->GetTransform(); });
+				[](auto& x) { return x->GetTransform(); });
 
-			mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
+			mTransformAction = mmake<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
 		}
 		else SelectionTool::OnCursorPressed(cursor);
 	}
@@ -363,9 +357,9 @@ namespace Editor
 	void RotateTool::RotateObjectsWithAction(float angleDelta)
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
+			[](auto& x) { return x->GetTransform(); });
 
-		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
+		mTransformAction = mmake<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
 
 		RotateObjects(angleDelta);
 
@@ -377,9 +371,9 @@ namespace Editor
 	void RotateTool::RotateObjectsSeparatedWithAction(float angleDelta)
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
-			[](SceneEditableObject* x) { return x->GetTransform(); });
+			[](auto& x) { return x->GetTransform(); });
 
-		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
+		mTransformAction = mmake<TransformAction>(o2EditorSceneScreen.GetTopSelectedObjects());
 
 		RotateObjectsSeparated(angleDelta);
 

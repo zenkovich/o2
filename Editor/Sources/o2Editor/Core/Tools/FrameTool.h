@@ -382,7 +382,7 @@ CLASS_FIELDS_META(Editor::FrameTool)
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsDragging);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mChangedFromThis);
     FIELD().PROTECTED().NAME(mBeforeTransforms);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
+    FIELD().PROTECTED().NAME(mTransformAction);
     FIELD().PROTECTED().NAME(mSnapLines);
 }
 END_META;
@@ -396,8 +396,8 @@ CLASS_METHODS_META(Editor::FrameTool)
     FUNCTION().PROTECTED().SIGNATURE(void, DrawSnapLines);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<Ref<SceneEditableObject>>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<Ref<SceneEditableObject>>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, const Vector<Ref<SceneEditableObject>>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
@@ -468,7 +468,7 @@ CLASS_METHODS_META(Editor::FrameTool)
     FUNCTION().PROTECTED().SIGNATURE(void, CheckAnchorsCenterEnabled);
     FUNCTION().PROTECTED().SIGNATURE(Vector<Basis>, GetObjectsTransforms, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(Vector<Basis>, GetSnapBasisesForAllObjects);
-    FUNCTION().PROTECTED().SIGNATURE(Basis, GetObjectParentAnchorSnapBasis, SceneEditableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(Basis, GetObjectParentAnchorSnapBasis, const Ref<SceneEditableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&, Vector<Basis>);
 }
 END_META;

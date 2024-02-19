@@ -146,8 +146,8 @@ CLASS_FIELDS_META(Editor::RotateTool)
     FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 100)).NAME(mRotateRingsFillColor2);
     FIELD().PROTECTED().DEFAULT_VALUE(Color4(211, 87, 40, 100)).NAME(mRotateMeshClockwiseColor);
     FIELD().PROTECTED().DEFAULT_VALUE(Color4(87, 211, 40, 100)).NAME(mRotateMeshCClockwiseColor);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRotateRingFillMesh);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAngleMesh);
+    FIELD().PROTECTED().NAME(mRotateRingFillMesh);
+    FIELD().PROTECTED().NAME(mAngleMesh);
     FIELD().PROTECTED().NAME(mScenePivot);
     FIELD().PROTECTED().NAME(mPivotDragHandle);
     FIELD().PROTECTED().NAME(mPressAngle);
@@ -155,7 +155,7 @@ CLASS_FIELDS_META(Editor::RotateTool)
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mRingPressed);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mSnapAngleAccumulated);
     FIELD().PROTECTED().NAME(mBeforeTransforms);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
+    FIELD().PROTECTED().NAME(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::RotateTool)
@@ -168,8 +168,8 @@ CLASS_METHODS_META(Editor::RotateTool)
     FUNCTION().PUBLIC().SIGNATURE(void, DrawScreen);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged, Vector<Ref<SceneEditableObject>>);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsSelectionChanged, Vector<Ref<SceneEditableObject>>);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged, const Vector<Ref<SceneEditableObject>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsSelectionChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateMeshes);
     FUNCTION().PUBLIC().SIGNATURE(void, CalcPivotByObjectsCenter);
     FUNCTION().PUBLIC().SIGNATURE(void, OnPivotDragHandleMoved, const Vec2F&);

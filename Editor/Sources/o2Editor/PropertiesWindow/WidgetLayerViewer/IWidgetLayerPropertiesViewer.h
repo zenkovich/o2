@@ -80,7 +80,7 @@ CLASS_BASES_META(Editor::IWidgetLayerPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerPropertiesViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
@@ -90,7 +90,7 @@ CLASS_METHODS_META(Editor::IWidgetLayerPropertiesViewer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetDrawableType);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

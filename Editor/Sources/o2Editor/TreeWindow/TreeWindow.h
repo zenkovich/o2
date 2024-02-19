@@ -208,11 +208,11 @@ CLASS_BASES_META(Editor::TreeWindow)
 END_META;
 CLASS_FIELDS_META(Editor::TreeWindow)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mListTreeToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSearchEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSceneTree);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDrawOrderTree);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTreeContextMenu);
+    FIELD().PROTECTED().NAME(mListTreeToggle);
+    FIELD().PROTECTED().NAME(mSearchEditBox);
+    FIELD().PROTECTED().NAME(mSceneTree);
+    FIELD().PROTECTED().NAME(mDrawOrderTree);
+    FIELD().PROTECTED().NAME(mTreeContextMenu);
     FIELD().PROTECTED().NAME(mSearchObjects);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mInSearch);
 }
@@ -220,13 +220,13 @@ END_META;
 CLASS_METHODS_META(Editor::TreeWindow)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(SceneHierarchyTree*, GetSceneTree);
-    FUNCTION().PUBLIC().SIGNATURE(DrawOrderTree*, GetDrawOrderTree);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<SceneHierarchyTree>&, GetSceneTree);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<DrawOrderTree>&, GetDrawOrderTree);
     FUNCTION().PUBLIC().SIGNATURE(void, FocusTree);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsTreeFocused);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateTreeView);
-    FUNCTION().PUBLIC().SIGNATURE(void, HighlightObjectTreeNode, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(void, HighlightObjectTreeNode, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetWidgetsLayersVisible, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsWidgetsLayersVisible);
     FUNCTION().PUBLIC().SIGNATURE(void, SetWidgetsInternalChildrenVisible, bool);
@@ -245,9 +245,9 @@ CLASS_METHODS_META(Editor::TreeWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, OnSearchPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnListTreeToggled, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSearchEdited, const WString&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SearchObjectsRecursive, SceneEditableObject*, const String&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnTreeRBPressed, TreeNode*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCreateObject, SceneEditableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SearchObjectsRecursive, const Ref<SceneEditableObject>&, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnTreeRBPressed, const Ref<TreeNode>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCreateObject, const Ref<SceneEditableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateNewPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateSprite);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateButton);
@@ -262,8 +262,8 @@ CLASS_METHODS_META(Editor::TreeWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextEnablePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnViewLayersToggled, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, OnViewInternalChildrenToggled, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnActorCreated, SceneEditableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnActorDestroyed, SceneEditableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnActorCreated, const Ref<SceneEditableObject>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnActorDestroyed, const Ref<SceneEditableObject>&);
 }
 END_META;
 // --- END META ---

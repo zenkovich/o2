@@ -55,8 +55,8 @@ CLASS_BASES_META(Editor::ObjectViewer)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentContext);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer);
+    FIELD().PROTECTED().NAME(mParentContext);
+    FIELD().PROTECTED().NAME(mPropertiesViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectViewer)
@@ -67,7 +67,7 @@ CLASS_METHODS_META(Editor::ObjectViewer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh, const Vector<IObject*>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, const Ref<PropertiesContext>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);

@@ -29,7 +29,7 @@ namespace Editor
 		FloatProperty& operator=(const FloatProperty& other);
 
 		// Returns edit box
-		EditBox* GetEditBox() const;
+		const Ref<EditBox>& GetEditBox() const;
 
 		IOBJECT(FloatProperty);
 
@@ -71,7 +71,7 @@ CLASS_BASES_META(Editor::FloatProperty)
 END_META;
 CLASS_FIELDS_META(Editor::FloatProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mEditBox);
     FIELD().PROTECTED().NAME(mDragHangle);
 }
 END_META;
@@ -80,7 +80,7 @@ CLASS_METHODS_META(Editor::FloatProperty)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const FloatProperty&);
-    FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetEditBox);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<EditBox>&, GetEditBox);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);

@@ -55,9 +55,9 @@ END_META;
 CLASS_FIELDS_META(Editor::TexturePreview)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(20.0f).NAME(mLabelHeight);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackgroundSprite);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextureSprite);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextureInfoLabel);
+    FIELD().PROTECTED().NAME(mBackgroundSprite);
+    FIELD().PROTECTED().NAME(mTextureSprite);
+    FIELD().PROTECTED().NAME(mTextureInfoLabel);
 }
 END_META;
 CLASS_METHODS_META(Editor::TexturePreview)

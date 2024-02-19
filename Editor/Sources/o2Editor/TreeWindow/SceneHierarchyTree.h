@@ -249,40 +249,40 @@ CLASS_METHODS_META(Editor::SceneHierarchyTree)
     FUNCTION().PUBLIC().CONSTRUCTOR(const SceneHierarchyTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, AttachToSceneEvents);
     FUNCTION().PUBLIC().SIGNATURE(void, DeattachFromSceneEvents);
-    FUNCTION().PUBLIC().SIGNATURE(TreeNode*, GetNode, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<TreeNode>, GetNode, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetSelectedObjects);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<Ref<SceneEditableObject>>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectObject, SceneEditableObject*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectAndHighlightObject, SceneEditableObject*);
-    FUNCTION().PUBLIC().SIGNATURE(void, ScrollToAndHighlight, SceneEditableObject*);
-    FUNCTION().PUBLIC().SIGNATURE(void, DeselectObject, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectObject, const Ref<SceneEditableObject>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectAndHighlightObject, const Ref<SceneEditableObject>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, ScrollToAndHighlight, const Ref<SceneEditableObject>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, DeselectObject, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeselectAllObjects);
-    FUNCTION().PUBLIC().SIGNATURE(void, ScrollTo, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(void, ScrollTo, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEditorWatching, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEditorWatching);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, Initialize);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
-    FUNCTION().PROTECTED().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<TreeNode>, CreateTreeNodeWidget);
     FUNCTION().PROTECTED().SIGNATURE(void*, GetObjectParent, void*);
     FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
     FUNCTION().PROTECTED().SIGNATURE(String, GetObjectDebug, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnNodeDblClick, TreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(void, FillNodeDataByObject, const Ref<TreeNode>&, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnNodeDblClick, const Ref<TreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedObjects, Vector<void*>, void*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectCreated, SceneEditableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectDestroing, SceneEditableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectCreated, const Ref<SceneEditableObject>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectDestroing, const Ref<SceneEditableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsChanged, const Vector<Ref<SceneEditableObject>>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectChanged, SceneEditableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectChanged, const Ref<SceneEditableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(void, EnableObjectsGroupPressed, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, EnableObjectsGroupReleased, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, LockObjectsGroupPressed, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, LockObjectsGroupReleased, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, OnNodesSelectionChanged, Vector<void*>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, const Ref<ISelectableDragableObjectsGroup>&);
 }
 END_META;
 
@@ -293,16 +293,16 @@ CLASS_BASES_META(Editor::SceneHierarchyTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::SceneHierarchyTreeNode)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTargetObject);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLockToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLockToggleLockedState);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLockToggleHalfHideState);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEnableToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLinkBtn);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLinkBtnHalfHideState);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameDrawable);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditState);
+    FIELD().PROTECTED().NAME(mTargetObject);
+    FIELD().PROTECTED().NAME(mLockToggle);
+    FIELD().PROTECTED().NAME(mLockToggleLockedState);
+    FIELD().PROTECTED().NAME(mLockToggleHalfHideState);
+    FIELD().PROTECTED().NAME(mEnableToggle);
+    FIELD().PROTECTED().NAME(mLinkBtn);
+    FIELD().PROTECTED().NAME(mLinkBtnHalfHideState);
+    FIELD().PROTECTED().NAME(mNameDrawable);
+    FIELD().PROTECTED().NAME(mNameEditBox);
+    FIELD().PROTECTED().NAME(mEditState);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneHierarchyTreeNode)
@@ -310,7 +310,7 @@ CLASS_METHODS_META(Editor::SceneHierarchyTreeNode)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const SceneHierarchyTreeNode&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSceneObject, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSceneObject, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, EnableEditName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

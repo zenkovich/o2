@@ -17,10 +17,7 @@ namespace Editor
 	}
 
 	SelectionTool::~SelectionTool()
-	{
-		if (mSelectionSprite)
-			delete mSelectionSprite;
-	}
+	{}
 
 	String SelectionTool::GetPanelIcon() const
 	{
@@ -71,7 +68,7 @@ namespace Editor
 			mCurrentSelectingObjects.Clear();
 			mSelectingObjects = false;
 
-			auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(), mBeforeSelectingObjects);
+			auto selectionAction = mmake<SelectAction>(o2EditorSceneScreen.GetSelectedObjects(), mBeforeSelectingObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 		else
@@ -86,7 +83,7 @@ namespace Editor
 
 			for (int i = startIdx; i >= 0; i--)
 			{
-				auto object = drawnObjects[i];
+				auto object = drawnObjects[i].Lock();
 				if (!object->IsLockedInHierarchy() && object->GetTransform().IsPointInside(sceneSpaceCursor))
 				{
 					mBeforeSelectingObjects = o2EditorSceneScreen.GetSelectedObjects();
@@ -98,8 +95,8 @@ namespace Editor
 					o2EditorTree.HighlightObjectTreeNode(object);
 					selected = true;
 
-					auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(),
-															 mBeforeSelectingObjects);
+					auto selectionAction = mmake<SelectAction>(o2EditorSceneScreen.GetSelectedObjects(),
+															   mBeforeSelectingObjects);
 					o2EditorApplication.DoneAction(selectionAction);
 					break;
 				}
@@ -146,8 +143,10 @@ namespace Editor
 			}
 
 			auto& drawnObjects = o2Scene.GetDrawnEditableObjects();
-			for (auto& object : drawnObjects)
+			for (auto& objectWeak : drawnObjects)
 			{
+				auto object = objectWeak.Lock();
+
 				if (mCurrentSelectingObjects.Contains(object))
 					continue;
 

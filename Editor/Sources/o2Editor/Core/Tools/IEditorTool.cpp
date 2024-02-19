@@ -7,7 +7,7 @@
 
 namespace Editor
 {
-	Toggle* IEditTool::GetPanelToggle() const
+	const Ref<Toggle>& IEditTool::GetPanelToggle() const
 	{
 		if (!mPanelToggle)
 			mPanelToggle = CreatePanelToggle();
@@ -15,9 +15,9 @@ namespace Editor
 		return mPanelToggle;
 	}
 
-	Toggle* IEditTool::CreatePanelToggle() const
+	Ref<Toggle> IEditTool::CreatePanelToggle() const
 	{
-		Toggle* toggle = mnew Toggle();
+		auto toggle = mmake<Toggle>();
 		toggle->layout->minSize = Vec2F(20, 20);
 		toggle->shortcut = GetShortcut();
 		auto rootLayer = toggle->AddLayer("root", nullptr);
@@ -38,7 +38,7 @@ namespace Editor
 
 		toggle->AddState("value", AnimationClip::EaseInOut("layer/root/transparency", 0.3f, 1.0f, 0.1f));
 
-		toggle->onToggle = [&](bool v) { if (v) o2EditorSceneScreen.SelectTool(this); };
+		toggle->onToggle = [&](bool v) { if (v) o2EditorSceneScreen.SelectTool(Ref(const_cast<IEditTool*>(this))); };
 
 		return toggle;
 	}

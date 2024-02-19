@@ -45,9 +45,11 @@ namespace Editor
 			const String& GetIconName() const override;
 		};
 
+	public:
 		Ref<SkinningMeshBoneComponent> boneComponent; // Reference to selected bone component
 
-		SceneLayer   sceneLayer;        // Scene layer for drawing spline
+		Ref<SceneLayer> sceneLayer = mmake<SceneLayer>(); // Scene layer for drawing spline
+
 		bool         isEnabled = false; // Is tool enabled now       
 
 	public:
@@ -103,7 +105,7 @@ END_META;
 CLASS_FIELDS_META(Editor::MeshWeightsTool)
 {
     FIELD().PUBLIC().NAME(boneComponent);
-    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SceneLayer>()).NAME(sceneLayer);
     FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
     FIELD().PRIVATE().NAME(mCursosPos);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mPressed);

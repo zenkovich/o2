@@ -56,9 +56,9 @@ CLASS_BASES_META(Editor::SceneLayersListProperty)
 END_META;
 CLASS_FIELDS_META(Editor::SceneLayersListProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyText);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersContext);
+    FIELD().PROTECTED().NAME(mPropertyButton);
+    FIELD().PROTECTED().NAME(mPropertyText);
+    FIELD().PROTECTED().NAME(mLayersContext);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneLayersListProperty)

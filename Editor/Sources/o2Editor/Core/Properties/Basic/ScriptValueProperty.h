@@ -148,10 +148,10 @@ namespace Editor
 											  const Ref<IPropertyField>& field)
 	{
 		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
-		auto proxies = prop->second.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		auto proxies = prop->second.template Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
-				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
+				Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>> res;
 				res.first = mnew TypeScriptValueProxy<_type>(x.first->Clone());
 				if (x.second && x.second->Get().IsObject())
 					res.second = mnew TypeScriptValueProxy<_type>(x.second->Clone());
@@ -167,10 +167,10 @@ namespace Editor
 												 const Ref<IPropertyField>& field)
 	{
 		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
-		auto proxies = prop->second.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		auto proxies = prop->second.template Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
-				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
+				Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>> res;
 				res.first = mnew PtrScriptValueProxy<_type>(x.first->Clone());
 				if (x.second && x.second->Get().IsObject())
 					res.second = mnew PtrScriptValueProxy<_type>(x.second->Clone());
@@ -190,18 +190,18 @@ CLASS_BASES_META(Editor::ScriptValueProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ScriptValueProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().NAME(mPreviousBuiltTypes);
     FIELD().PROTECTED().NAME(mBuiltProperties);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mHeaderEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedUpdateProxies);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsArray);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCountProperty);
+    FIELD().PROTECTED().NAME(mCountProperty);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mCountDifferents);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mCountOfElements);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+    FIELD().PROTECTED().NAME(mHeaderContainer);
+    FIELD().PROTECTED().NAME(mAddButton);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsRefreshing);
 }
 END_META;
@@ -219,7 +219,7 @@ CLASS_METHODS_META(Editor::ScriptValueProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetRemoveButton);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
@@ -230,7 +230,7 @@ CLASS_METHODS_META(Editor::ScriptValueProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(PropertiesList, GetCommonProperties, _tmp1, bool&);
     FUNCTION().PROTECTED().SIGNATURE(void, AddProperty, const String&, const Type*, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, IPropertyField*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, const Ref<IPropertyField>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnExpand);
     FUNCTION().PROTECTED().SIGNATURE(void, Resize, int);
     FUNCTION().PROTECTED().SIGNATURE(void, Remove, int);

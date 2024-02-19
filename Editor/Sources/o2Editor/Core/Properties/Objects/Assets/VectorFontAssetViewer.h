@@ -47,7 +47,7 @@ CLASS_BASES_META(Editor::VectorFontAssetViewer)
 END_META;
 CLASS_FIELDS_META(Editor::VectorFontAssetViewer)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTexturePreview);
+    FIELD().PRIVATE().NAME(mTexturePreview);
 }
 END_META;
 CLASS_METHODS_META(Editor::VectorFontAssetViewer)

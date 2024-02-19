@@ -248,11 +248,11 @@ CLASS_FIELDS_META(Editor::DrawOrderTree)
     FIELD().PROTECTED().NAME(mRootOrderNodes);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mStartBatchIdx);
     FIELD().PROTECTED().NAME(mObjectToNodeMap);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEnableTogglesGroup);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLockTogglesGroup);
+    FIELD().PROTECTED().NAME(mEnableTogglesGroup);
+    FIELD().PROTECTED().NAME(mLockTogglesGroup);
     FIELD().PROTECTED().NAME(mAttachedToSceneEvents);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDragActorPropertyField);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDragComponentPropertyField);
+    FIELD().PROTECTED().NAME(mDragActorPropertyField);
+    FIELD().PROTECTED().NAME(mDragComponentPropertyField);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mWatchEditor);
 }
 END_META;
@@ -262,35 +262,35 @@ CLASS_METHODS_META(Editor::DrawOrderTree)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const DrawOrderTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<Ref<SceneEditableObject>>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, ScrollToAndHighlight, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(void, ScrollToAndHighlight, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildOrderTree);
     FUNCTION().PUBLIC().SIGNATURE(void, AttachToSceneEvents);
     FUNCTION().PUBLIC().SIGNATURE(void, DeattachFromSceneEvents);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, Initialize);
-    FUNCTION().PROTECTED().SIGNATURE(void, ProcessDrawableTreeNode, OrderTreeNode*, ISceneDrawable*);
-    FUNCTION().PROTECTED().SIGNATURE(void, CheckBatchEnd, OrderTreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(void, ProcessDrawableTreeNode, const Ref<OrderTreeNode>&, const Ref<ISceneDrawable>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, CheckBatchEnd, const Ref<OrderTreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateNodesStructure);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
-    FUNCTION().PROTECTED().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<TreeNode>, CreateTreeNodeWidget);
     FUNCTION().PROTECTED().SIGNATURE(void*, GetObjectParent, void*);
     FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnNodeDblClick, TreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(void, FillNodeDataByObject, const Ref<TreeNode>&, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnNodeDblClick, const Ref<TreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedObjects, Vector<void*>, void*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectCreated, SceneEditableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectDestroing, SceneEditableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectCreated, const Ref<SceneEditableObject>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectDestroing, const Ref<SceneEditableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsChanged, const Vector<Ref<SceneEditableObject>>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectChanged, SceneEditableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectChanged, const Ref<SceneEditableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(void, EnableObjectsGroupPressed, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, EnableObjectsGroupReleased, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, LockObjectsGroupPressed, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, LockObjectsGroupReleased, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, OnNodesSelectionChanged, Vector<void*>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, const Ref<ISelectableDragableObjectsGroup>&);
 }
 END_META;
 
@@ -301,19 +301,19 @@ CLASS_BASES_META(Editor::DrawOrderTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::DrawOrderTreeNode)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLockToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLockToggleLockedState);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLockToggleHalfHideState);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEnableToggle);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLinkBtn);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLinkBtnHalfHideState);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameDrawable);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOrderDrawable);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackSprite);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mIconSprite);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditState);
+    FIELD().PROTECTED().NAME(mTarget);
+    FIELD().PROTECTED().NAME(mLockToggle);
+    FIELD().PROTECTED().NAME(mLockToggleLockedState);
+    FIELD().PROTECTED().NAME(mLockToggleHalfHideState);
+    FIELD().PROTECTED().NAME(mEnableToggle);
+    FIELD().PROTECTED().NAME(mLinkBtn);
+    FIELD().PROTECTED().NAME(mLinkBtnHalfHideState);
+    FIELD().PROTECTED().NAME(mNameDrawable);
+    FIELD().PROTECTED().NAME(mOrderDrawable);
+    FIELD().PROTECTED().NAME(mBackSprite);
+    FIELD().PROTECTED().NAME(mIconSprite);
+    FIELD().PROTECTED().NAME(mNameEditBox);
+    FIELD().PROTECTED().NAME(mEditState);
 }
 END_META;
 CLASS_METHODS_META(Editor::DrawOrderTreeNode)
@@ -321,7 +321,7 @@ CLASS_METHODS_META(Editor::DrawOrderTreeNode)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const DrawOrderTreeNode&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, DrawOrderTree::OrderTreeNode*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<DrawOrderTree::OrderTreeNode>&);
     FUNCTION().PUBLIC().SIGNATURE(void, EnableEditName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

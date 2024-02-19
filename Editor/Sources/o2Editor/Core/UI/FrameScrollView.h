@@ -87,8 +87,8 @@ END_META;
 CLASS_FIELDS_META(Editor::FrameScrollView)
 {
     FIELD().PUBLIC().NAME(onViewChanged);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHorScrollbar);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mVerScrollbar);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHorScrollbar);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mVerScrollbar);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mAvailableArea);
 }
 END_META;
@@ -100,8 +100,8 @@ CLASS_METHODS_META(Editor::FrameScrollView)
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHorScrollbar, HorizontalScrollBar*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetVerScrollbar, VerticalScrollBar*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHorScrollbar, const Ref<HorizontalScrollBar>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetVerScrollbar, const Ref<VerticalScrollBar>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetViewArea, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(RectF, GetViewArea);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

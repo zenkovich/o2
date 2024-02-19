@@ -47,7 +47,7 @@
 #include "o2/Scene/ISceneDrawable.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/Scene.h"
-#include "o2/Scene/SceneLayer.h"
+#include "o2/Scene/SceneLayerRef.h"
 #include "o2/Scene/Tags.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widget.h"

@@ -121,19 +121,19 @@ CLASS_BASES_META(Editor::LogWindow)
 END_META;
 CLASS_FIELDS_META(Editor::LogWindow)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mList);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLastMessageView);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMessagesCountLabel);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWarningsCountLabel);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mErrorsCountLabel);
+    FIELD().PROTECTED().NAME(mList);
+    FIELD().PROTECTED().NAME(mLastMessageView);
+    FIELD().PROTECTED().NAME(mMessagesCountLabel);
+    FIELD().PROTECTED().NAME(mWarningsCountLabel);
+    FIELD().PROTECTED().NAME(mErrorsCountLabel);
     FIELD().PROTECTED().NAME(mAllMessages);
     FIELD().PROTECTED().NAME(mVisibleMessages);
-    FIELD().PROTECTED().NAME(mRegularMessagesEnabled);
-    FIELD().PROTECTED().NAME(mWarningMessagesEnabled);
-    FIELD().PROTECTED().NAME(mErrorMessagesEnabled);
-    FIELD().PROTECTED().NAME(mRegularMessagesCount);
-    FIELD().PROTECTED().NAME(mWarningMessagesCount);
-    FIELD().PROTECTED().NAME(mErrorMessagesCount);
+    FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mRegularMessagesEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mWarningMessagesEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mErrorMessagesEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mRegularMessagesCount);
+    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mWarningMessagesCount);
+    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mErrorMessagesCount);
 }
 END_META;
 CLASS_METHODS_META(Editor::LogWindow)
@@ -149,7 +149,7 @@ CLASS_METHODS_META(Editor::LogWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleMessages);
     FUNCTION().PROTECTED().SIGNATURE(int, GetVisibleMessagesCount);
     FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetVisibleMessagesRange, int, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupListMessage, Widget*, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupListMessage, const Ref<Widget>&, void*);
     FUNCTION().PROTECTED().SIGNATURE(void, OutStrEx, const WString&);
     FUNCTION().PROTECTED().SIGNATURE(void, OutErrorEx, const WString&);
     FUNCTION().PROTECTED().SIGNATURE(void, OutWarningEx, const WString&);

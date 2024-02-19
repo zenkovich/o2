@@ -193,7 +193,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationPropertiesTree)
 {
     FIELD().PRIVATE().NAME(mFilterStr);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimation);
+    FIELD().PRIVATE().NAME(mAnimation);
     FIELD().PRIVATE().NAME(mActor);
     FIELD().PRIVATE().NAME(mRoot);
     FIELD().PRIVATE().NAME(mPassedObject);
@@ -204,21 +204,21 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationPropertiesTree&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationClip*, Ref<Actor>);
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationClip>&, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-    FUNCTION().PRIVATE().SIGNATURE(void, InitializeTreeNode, NodeData*, IObject*);
-    FUNCTION().PRIVATE().SIGNATURE(void, ProcessObject, void*, const ObjectType*, NodeData*);
-    FUNCTION().PRIVATE().SIGNATURE(void, ProcessTreeNode, void*, const Type*, const String&, NodeData*);
-    FUNCTION().PRIVATE().SIGNATURE(void, InitializePropertyNode, NodeData*, const String&, const Type*);
-    FUNCTION().PRIVATE().SIGNATURE(void, InitializeObjectTreeNode, const ObjectType*, void*, const String&, NodeData*);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeTreeNode, const Ref<NodeData>&, IObject*);
+    FUNCTION().PRIVATE().SIGNATURE(void, ProcessObject, void*, const ObjectType*, const Ref<NodeData>&);
+    FUNCTION().PRIVATE().SIGNATURE(void, ProcessTreeNode, void*, const Type*, const String&, const Ref<NodeData>&);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializePropertyNode, const Ref<NodeData>&, const String&, const Type*);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeObjectTreeNode, const ObjectType*, void*, const String&, const Ref<NodeData>&);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
-    FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+    FUNCTION().PRIVATE().SIGNATURE(Ref<TreeNode>, CreateTreeNodeWidget);
     FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
     FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
     FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
-    FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, TreeNode*);
+    FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, const Ref<TreeNode>&, void*);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, const Ref<TreeNode>&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnNodesSelectionChanged, Vector<void*>);
 }
 END_META;
@@ -234,8 +234,8 @@ CLASS_FIELDS_META(Editor::AnimationPropertiesTreeNode)
     FIELD().PRIVATE().NAME(mIcon);
     FIELD().PRIVATE().NAME(mAddButton);
     FIELD().PRIVATE().NAME(mRemoveButton);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mData);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
+    FIELD().PRIVATE().NAME(mData);
+    FIELD().PRIVATE().NAME(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
@@ -243,7 +243,7 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationPropertiesTreeNode&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, AnimationPropertiesTree::NodeData*, AnimationPropertiesTree*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<AnimationPropertiesTree::NodeData>&, const Ref<AnimationPropertiesTree>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);

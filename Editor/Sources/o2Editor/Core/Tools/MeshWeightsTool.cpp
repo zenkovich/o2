@@ -9,7 +9,7 @@ namespace Editor
 {
 	MeshWeightsTool::MeshWeightsTool()
 	{
-		sceneLayer.tool = this;
+		sceneLayer.tool = Ref(this);
 	}
 
 	void MeshWeightsTool::OnCursorPressed(const Input::Cursor& cursor)
@@ -39,11 +39,12 @@ namespace Editor
 
 	void MeshWeightsTool::SceneLayer::DrawScene()
 	{
-		auto boneComponent = tool->boneComponent;
+		auto toolRef = tool.Lock();
+		auto boneComponent = toolRef->boneComponent;
 		if (auto meshComponent = boneComponent->FindSkinningMesh())
 		{
 			auto& mesh = meshComponent->GetMesh();
-			auto& debugMesh = tool->mWeightsDebugMesh;
+			auto& debugMesh = toolRef->mWeightsDebugMesh;
 
 			DrawMeshWire(mesh);
 
@@ -77,8 +78,8 @@ namespace Editor
 			debugMesh.Draw();
 		}
 
-		Vec2F localCursorPos = o2EditorSceneScreen.ScreenToLocalPoint(tool->mCursosPos);
-		o2Render.DrawAACircle(localCursorPos, tool->mBrushReadius, Color4::White(), 150, 2.0f);
+		Vec2F localCursorPos = o2EditorSceneScreen.ScreenToLocalPoint(toolRef->mCursosPos);
+		o2Render.DrawAACircle(localCursorPos, toolRef->mBrushReadius, Color4::White(), 150, 2.0f);
 	}
 
 	void MeshWeightsTool::SceneLayer::DrawMeshWire(auto& mesh)
@@ -104,26 +105,28 @@ namespace Editor
 
 	void MeshWeightsTool::SceneLayer::Update(float dt)
 	{
-		if (tool->mPressed)
+		if (tool.Lock()->mPressed)
 			UpdateBrush(dt);
 	}
 
 	void MeshWeightsTool::SceneLayer::UpdateBrush(float dt)
 	{
-		auto meshComponent = tool->boneComponent->FindSkinningMesh();
+		auto toolRef = tool.Lock();
+
+		auto meshComponent = toolRef->boneComponent->FindSkinningMesh();
 		if (!meshComponent)
 			return;
 
 		auto& vertices = meshComponent->GetMesh().vertices;
-		auto& vertexWeights = tool->boneComponent->vertexWeights;
+		auto& vertexWeights = toolRef->boneComponent->vertexWeights;
 		int vertexCount = meshComponent->GetMesh().vertexCount;
 
-		Vec2F localCursorPos = o2EditorSceneScreen.ScreenToLocalPoint(tool->mCursosPos);
+		Vec2F localCursorPos = o2EditorSceneScreen.ScreenToLocalPoint(toolRef->mCursosPos);
 
 		for (int i = 0; i < vertexCount; i++)
 		{
 			auto& v = vertices[i];
-			bool isInsideBrush = (Vec2F(v) - localCursorPos).Length() < tool->mBrushReadius;
+			bool isInsideBrush = (Vec2F(v) - localCursorPos).Length() < toolRef->mBrushReadius;
 			if (isInsideBrush)
 			{
 				auto w = vertexWeights.Find([=](const Pair<int, float>& x) { return x.first == i; });
@@ -135,7 +138,7 @@ namespace Editor
 
 				float brushSign = o2Input.IsKeyDown(VK_CONTROL) ? -1.0f : 1.0f;
 
-				w->second = Math::Clamp01(w->second + tool->mBrushStrength*brushSign*dt);
+				w->second = Math::Clamp01(w->second + toolRef->mBrushStrength*brushSign*dt);
 			}
 		}
 
@@ -149,7 +152,7 @@ namespace Editor
 
 	bool MeshWeightsTool::SceneLayer::IsEnabled() const
 	{
-		return tool->isEnabled;
+		return tool.Lock()->isEnabled;
 	}
 
 	const String& MeshWeightsTool::SceneLayer::GetName() const
@@ -170,13 +173,13 @@ namespace Editor
 
 	void MeshWeightsTool::MeshWeightsTool::OnEnabled()
 	{
-		o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.AddEditorLayer(sceneLayer);
 		isEnabled = true;
 	}
 
 	void MeshWeightsTool::MeshWeightsTool::OnDisabled()
 	{
-		o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.RemoveEditorLayer(sceneLayer);
 		isEnabled = false;
 	}
 }

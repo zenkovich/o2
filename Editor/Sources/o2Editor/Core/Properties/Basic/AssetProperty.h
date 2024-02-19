@@ -141,13 +141,13 @@ CLASS_BASES_META(Editor::AssetProperty)
 END_META;
 CLASS_FIELDS_META(Editor::AssetProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameText);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaption);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCreateInstanceBtn);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAssetObjectViewer);
+    FIELD().PROTECTED().NAME(mBox);
+    FIELD().PROTECTED().NAME(mNameText);
+    FIELD().PROTECTED().NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mCaption);
+    FIELD().PROTECTED().NAME(mCreateInstanceBtn);
+    FIELD().PROTECTED().NAME(mHeaderContainer);
+    FIELD().PROTECTED().NAME(mAssetObjectViewer);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAssetType);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mAvailableToHaveInstance);
 }
@@ -164,7 +164,7 @@ CLASS_METHODS_META(Editor::AssetProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetRemoveButton);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, SetCommonAssetId, const UID&);
@@ -173,17 +173,17 @@ CLASS_METHODS_META(Editor::AssetProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveInstancePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSaveInstancePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
-    FUNCTION().PROTECTED().SIGNATURE(Ref<Asset>, GetProxy, IAbstractValueProxy*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, const Ref<Asset>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Asset>, GetProxy, const Ref<IAbstractValueProxy>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, const Ref<IAbstractValueProxy>&, const Ref<Asset>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, const Ref<ISelectableDragableObjectsGroup>&);
 }
 END_META;
 // --- END META ---

@@ -109,8 +109,8 @@ CLASS_BASES_META(Editor::Vec2IProperty)
 END_META;
 CLASS_FIELDS_META(Editor::Vec2IProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mXProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mYProperty);
+    FIELD().PROTECTED().NAME(mXProperty);
+    FIELD().PROTECTED().NAME(mYProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::Vec2IProperty)

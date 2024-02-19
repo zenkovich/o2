@@ -10,7 +10,7 @@ namespace Editor
 
 	SkinningMeshBoneComponentViewer::~SkinningMeshBoneComponentViewer()
 	{
-		o2EditorSceneScreen.RemoveTool(&mWeightsTool);
+		o2EditorSceneScreen.RemoveTool(mWeightsTool);
 	}
 
 	SkinningMeshBoneComponentViewer& SkinningMeshBoneComponentViewer::operator=(const SkinningMeshBoneComponentViewer& other)
@@ -33,24 +33,24 @@ namespace Editor
 
 		if (!mTypeTargetObjects.IsEmpty() && prevTargetObjects != mTypeTargetObjects)
 		{
-			mWeightsTool.boneComponent = mTypeTargetObjects[0].first;
+			mWeightsTool->boneComponent = Ref(mTypeTargetObjects[0].first);
 
-			mFrameTetxureLayer.mesh = mTypeTargetObjects[0].first->FindSkinningMesh();
+			mFrameTetxureLayer->mesh = mTypeTargetObjects[0].first->FindSkinningMesh();
 		}
 	}
 
 	void SkinningMeshBoneComponentViewer::OnEnabled()
 	{
-		o2EditorSceneScreen.AddTool(&mWeightsTool);
+		o2EditorSceneScreen.AddTool(mWeightsTool);
 		o2EditorSceneScreen.SelectTool<MeshWeightsTool>();
 
-		o2EditorSceneScreen.AddEditorLayer(&mFrameTetxureLayer);
+		o2EditorSceneScreen.AddEditorLayer(mFrameTetxureLayer);
 	}
 
 	void SkinningMeshBoneComponentViewer::OnDisabled()
 	{
-		o2EditorSceneScreen.RemoveTool(&mWeightsTool);
-		o2EditorSceneScreen.RemoveEditorLayer(&mFrameTetxureLayer);
+		o2EditorSceneScreen.RemoveTool(mWeightsTool);
+		o2EditorSceneScreen.RemoveEditorLayer(mFrameTetxureLayer);
 	}
 }
 

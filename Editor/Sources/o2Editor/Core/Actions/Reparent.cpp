@@ -15,35 +15,32 @@ namespace Editor
 	{
 		for (auto& object : beginObjects)
 		{
-			ObjectInfo* info = mnew ObjectInfo();
+			ObjectInfo info;
 
-			SceneEditableObject* parent = object->GetEditableParent();
+			auto parent = object->GetEditableParent();
 
 			Vector<Ref<SceneEditableObject>> parentChildren = parent ? 
 				parent->GetEditableChildren() : 
-				o2Scene.GetRootActors().Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+				DynamicCastVector<SceneEditableObject>(o2Scene.GetRootActors());
 
 			int actorIdx = parentChildren.IndexOf(object);
 
-			info->objectId = object->GetID();
-			info->objectHierarchyIdx = o2Scene.GetObjectHierarchyIdx(object);
-			info->lastParentId = parent ? parent->GetID() : 0;
-			info->lastPrevObjectId = actorIdx > 0 ? parentChildren[actorIdx - 1]->GetID() : 0;
-			info->transform = object->GetTransform();
+			info.objectId = object->GetID();
+			info.objectHierarchyIdx = o2Scene.GetObjectHierarchyIdx(object);
+			info.lastParentId = parent ? parent->GetID() : 0;
+			info.lastPrevObjectId = actorIdx > 0 ? parentChildren[actorIdx - 1]->GetID() : 0;
+			info.transform = object->GetTransform();
 
 			objectsInfos.Add(info);
 		}
 
-		objectsInfos.Sort([](ObjectInfo* a, ObjectInfo* b) { return a->objectHierarchyIdx < b->objectHierarchyIdx; });
+		objectsInfos.Sort([](auto& a, auto& b) { return a.objectHierarchyIdx < b.objectHierarchyIdx; });
 	}
 
 	ReparentAction::~ReparentAction()
-	{
-		for (auto& info : objectsInfos)
-			delete info;
-	}
+	{}
 
-	void ReparentAction::ObjectsReparented(SceneEditableObject* newParent, SceneEditableObject* prevActor)
+	void ReparentAction::ObjectsReparented(const Ref<SceneEditableObject>& newParent, const Ref<SceneEditableObject>& prevActor)
 	{
 		newParentId = newParent ? newParent->GetID() : 0;
 		newPrevObjectId = prevActor ? prevActor->GetID() : 0;
@@ -56,8 +53,8 @@ namespace Editor
 
 	void ReparentAction::Redo()
 	{
-		SceneEditableObject* parent = o2Scene.GetEditableObjectByID(newParentId);
-		SceneEditableObject* prevObject = o2Scene.GetEditableObjectByID(newPrevObjectId);
+		auto parent = o2Scene.GetEditableObjectByID(newParentId);
+		auto prevObject = o2Scene.GetEditableObjectByID(newPrevObjectId);
 
 		if (parent)
 		{
@@ -65,27 +62,27 @@ namespace Editor
 
 			for (auto& info : objectsInfos)
 			{
-				SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
+				auto object = o2Scene.GetEditableObjectByID(info.objectId);
 
 				object->SetEditableParent(nullptr);
 				parent->AddEditableChild(object, insertIdx++);
-				object->SetTransform(info->transform);
+				object->SetTransform(info.transform);
 			}
 		}
 		else
 		{
 			int insertIdx = 0;
 			
-			if (auto prevActor = dynamic_cast<Actor*>(prevObject))
+			if (auto prevActor = DynamicCast<Actor>(prevObject))
 				insertIdx = o2Scene.GetRootActors().IndexOf(prevActor) + 1;
 
 			for (auto& info : objectsInfos)
 			{
-				SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
+				auto object = o2Scene.GetEditableObjectByID(info.objectId);
 
 				object->SetEditableParent(nullptr);
 				object->SetIndexInSiblings(insertIdx++);
-				object->SetTransform(info->transform);
+				object->SetTransform(info.transform);
 			}
 		}
 
@@ -96,9 +93,9 @@ namespace Editor
 	{
 		for (auto& info : objectsInfos)
 		{
-			SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
-			SceneEditableObject* parent = o2Scene.GetEditableObjectByID(info->lastParentId);
-			SceneEditableObject* prevObject = o2Scene.GetEditableObjectByID(info->lastPrevObjectId);
+			auto object = o2Scene.GetEditableObjectByID(info.objectId);
+			auto parent = o2Scene.GetEditableObjectByID(info.lastParentId);
+			auto prevObject = o2Scene.GetEditableObjectByID(info.lastPrevObjectId);
 
 			object->SetEditableParent(nullptr);
 
@@ -106,13 +103,13 @@ namespace Editor
 			{
 				int idx = parent->GetEditableChildren().IndexOf(prevObject) + 1;
 				parent->AddEditableChild(object, idx);
-				object->SetTransform(info->transform);
+				object->SetTransform(info.transform);
 			}
 			else
 			{
 				int idx = o2Scene.GetRootEditableObjects().IndexOf(prevObject) + 1;
 				object->SetIndexInSiblings(idx);
-				object->SetTransform(info->transform);
+				object->SetTransform(info.transform);
 			}
 		}
 

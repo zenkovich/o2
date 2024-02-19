@@ -52,7 +52,7 @@ namespace Editor
 		if (!mHeaderEnabled || spoiler->IsExpanded())
 		{
 			bool force = CheckBuildProperties(targetObjets);
-			mPropertiesContext.Set(targetObjets, force);
+			mPropertiesContext->Set(targetObjets, force);
 		}
 
 		OnRefreshed(targetObjets);
@@ -68,12 +68,12 @@ namespace Editor
 		return nullptr;
 	}
 
-	void IObjectPropertiesViewer::SetParentContext(PropertiesContext* context)
+	void IObjectPropertiesViewer::SetParentContext(const Ref<PropertiesContext>& context)
 	{
-		mPropertiesContext.parent = context;
+		mPropertiesContext->parent = context;
 	}
 
-	Spoiler* IObjectPropertiesViewer::GetSpoiler()
+	const Ref<Spoiler>& IObjectPropertiesViewer::GetSpoiler()
 	{
 		if (!mSpoiler)
 		{
@@ -111,7 +111,7 @@ namespace Editor
 		return mSpoiler->GetChildren().IsEmpty();
 	}
 
-	Spoiler* IObjectPropertiesViewer::CreateSpoiler()
+	Ref<Spoiler> IObjectPropertiesViewer::CreateSpoiler()
 	{
 		return o2UI.CreateWidget<Spoiler>("expand with caption");
 	}

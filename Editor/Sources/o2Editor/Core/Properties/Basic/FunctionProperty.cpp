@@ -101,7 +101,7 @@ namespace Editor
 		controlsContainer->name = "layout";
 		controllersContainerWrapper->AddChild(controlsContainer);
 
-		auto sampleRefProperty = dynamic_cast<ActorProperty*>(o2UI.CreateWidget<ActorProperty>());
+		auto sampleRefProperty = o2UI.CreateWidget<ActorProperty>();
 		sampleRefProperty->name = "actor ref";
 		controlsContainer->AddChild(sampleRefProperty);
 
@@ -128,10 +128,7 @@ namespace Editor
 	}
 
 	FunctionProperty::~FunctionProperty()
-	{
-		for (auto& instance : mInstances)
-			delete instance;
-	}
+	{}
 
 	void FunctionProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
@@ -146,8 +143,8 @@ namespace Editor
 		int proxyIdx = 0;
 		for (auto& valueProxy : mValuesProxies)
 		{
-			auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first);
-			auto funcProxyProto = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first);
+			auto funcProxy = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first);
+			auto funcProxyProto = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first);
 
 			if (!funcProxy)
 				continue;
@@ -160,7 +157,7 @@ namespace Editor
 				if (auto actorSubscription = dynamic_cast<const IActorSubscription*>(f))
 				{
 					if (idx > mInstances.Count() - 1)
-						mInstances.Add(mnew FunctionInstance());
+						mInstances.Add(mmake<FunctionInstance>());
 
 					mInstances[idx++]->values.Add({ const_cast<IActorSubscription*>(actorSubscription), nullptr });
 				}
@@ -192,12 +189,12 @@ namespace Editor
 		auto prevInstances = mInstances;
 		RefreshInstances();
 
-		mSpoiler->RemoveAllChildren(false);
+		mSpoiler->RemoveAllChildren();
 
 		int idx = 0;
 		for (auto& instance : mInstances)
 		{
-			auto prevInstanceIdx = prevInstances.IndexOf([&](FunctionInstance* x) { return x->values == instance->values; });
+			auto prevInstanceIdx = prevInstances.IndexOf([&](auto& x) { return x->values == instance->values; });
 			if (prevInstanceIdx >= 0)
 			{
 				instance = prevInstances[prevInstanceIdx];
@@ -246,16 +243,13 @@ namespace Editor
 			mSpoiler->AddChild(instance->layout);
 			idx++;
 		}
-
-		for (auto& instance : prevInstances)
-			delete instance;
 	}
 
 	void FunctionProperty::OnAddPressed()
 	{
 		for (auto& valueProxy : mValuesProxies)
 		{
-			if (auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first))
+			if (auto funcProxy = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first))
 				funcProxy->GetValuePointer()->AddActorSubscription();
 		}
 
@@ -263,11 +257,11 @@ namespace Editor
 		Refresh();
 	}
 
-	void FunctionProperty::OnRemovePressed(FunctionInstance* instance)
+	void FunctionProperty::OnRemovePressed(const Ref<FunctionInstance>& instance)
 	{
 		for (auto& valueProxy : mValuesProxies)
 		{
-			if (auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first))
+			if (auto funcProxy = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first))
 			{
 				for (auto& value : instance->values)
 					funcProxy->GetValuePointer()->RemoveFunction(dynamic_cast<IAbstractFunction*>(value.first));
@@ -277,12 +271,12 @@ namespace Editor
 		Refresh();
 	}
 
-	FunctionProperty::FunctionInstance* FunctionProperty::CreateWidget()
+	Ref<FunctionProperty::FunctionInstance> FunctionProperty::CreateWidget()
 	{
-		FunctionInstance* res = mnew FunctionInstance();
+		auto res = mmake<FunctionInstance>();
 
 		if (mWidgetsBuffer.IsEmpty())
-			res->layout = mWidgetSample->CloneAs<HorizontalLayout>();
+			res->layout = mWidgetSample->CloneAsRef<HorizontalLayout>();
 		else
 			res->layout = mWidgetsBuffer.PopBack();
 
@@ -305,7 +299,8 @@ namespace Editor
 
 		int selectedIdx = -1;
 
-		auto collectFunctions = [&](const String& typeName, const String& iconName, const Vector<String>& functionsList, Component* comp)
+		auto collectFunctions = [&](const String& typeName, const String& iconName, const Vector<String>& functionsList, 
+									const Ref<Component>& comp)
 		{
 			auto typeItem = funcDropDown->AddItem();
 			functionsDropdownMap.Add({ nullptr, "" });
@@ -339,7 +334,8 @@ namespace Editor
 			}
 		};
 
-		auto collectFunctionsByType = [&](const String& typeName, const String& iconName, const Type& type, Component* comp)
+		auto collectFunctionsByType = [&](const String& typeName, const String& iconName, const Type& type, 
+										  const Ref<Component>& comp)
 		{
 			Vector<String> functionsList;
 
@@ -379,7 +375,7 @@ namespace Editor
 		for (auto& component : actor->GetComponents())
 		{
 			auto& componentType = component->GetType();
-			if (auto scriptingComponent = dynamic_cast<ScriptableComponent*>(component))
+			if (auto scriptingComponent = DynamicCast<ScriptableComponent>(component))
 			{
 				Vector<String> functionsList;
 
@@ -447,7 +443,7 @@ namespace Editor
 	{
 		mSpoiler->SetCaption(text);
 
-		Text* spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
+		auto spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
 		if (spoilerCaptionLayer)
 		{
 			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont(), spoilerCaptionLayer->GetFontHeight());
@@ -460,7 +456,7 @@ namespace Editor
 		return mSpoiler->GetCaption();
 	}
 
-	Button* FunctionProperty::GetRemoveButton()
+	Ref<Button> FunctionProperty::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{

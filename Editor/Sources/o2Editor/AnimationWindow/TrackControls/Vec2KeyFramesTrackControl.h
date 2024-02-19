@@ -66,9 +66,9 @@ CLASS_BASES_META(Editor::Vec2KeyFramesTrackControl)
 END_META;
 CLASS_FIELDS_META(Editor::Vec2KeyFramesTrackControl)
 {
-    FIELD().PRIVATE().NAME(mTool);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTrackOwner);
+    FIELD().PRIVATE().DEFAULT_VALUE(mmake<SplineTool>()).NAME(mTool);
+    FIELD().PRIVATE().NAME(mPrevSelectedTool);
+    FIELD().PRIVATE().NAME(mTrackOwner);
 }
 END_META;
 CLASS_METHODS_META(Editor::Vec2KeyFramesTrackControl)

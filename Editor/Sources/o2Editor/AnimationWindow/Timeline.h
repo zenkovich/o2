@@ -227,9 +227,9 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
     FIELD().PRIVATE().DEFAULT_VALUE(15.0f).NAME(mScrollSmoothCoef);
     FIELD().PRIVATE().DEFAULT_VALUE(10.0f).NAME(mScrollSpeedDecreaseCoef);
     FIELD().PRIVATE().DEFAULT_VALUE(10.0f).NAME(mScrollBorderBounceCoef);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPlayer);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimation);
+    FIELD().PRIVATE().NAME(mAnimationWindow);
+    FIELD().PRIVATE().NAME(mPlayer);
+    FIELD().PRIVATE().NAME(mAnimation);
     FIELD().PRIVATE().DEFAULT_VALUE(0).NAME(mTimeCursor);
     FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mSmoothViewScroll);
     FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mViewScroll);
@@ -242,13 +242,13 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mViewMoveDisabled);
     FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mDuration);
     FIELD().PRIVATE().NAME(mTextFont);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mText);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mBeginMark);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEndMark);
+    FIELD().PRIVATE().NAME(mText);
+    FIELD().PRIVATE().NAME(mBeginMark);
+    FIELD().PRIVATE().NAME(mEndMark);
     FIELD().PRIVATE().DEFAULT_VALUE(Layout(Vec2F(0, 1), Vec2F(0, 1), Vec2F(-6.0f, 3.0f), Vec2F(6.0f, -21.0f))).NAME(mBeginMarkLayout);
     FIELD().PRIVATE().DEFAULT_VALUE(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(-4.0f, 3.0f), Vec2F(6.0f, -21.0f))).NAME(mEndMarkLayout);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mScrollBar);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeLine);
+    FIELD().PRIVATE().NAME(mScrollBar);
+    FIELD().PRIVATE().NAME(mTimeLine);
     FIELD().PRIVATE().NAME(mTimeLineEventsArea);
 }
 END_META;
@@ -259,7 +259,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
     FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTimeline&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*, AnimationPlayer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&, const Ref<AnimationPlayer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetScroll, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetViewRange, float, float, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTimeCursor, float);
@@ -270,9 +270,9 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
     FUNCTION().PUBLIC().SIGNATURE(void, SetViewMoveDisabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(float, LocalToWorld, float);
     FUNCTION().PUBLIC().SIGNATURE(float, WorldToLocal, float);
-    FUNCTION().PUBLIC().SIGNATURE(Text*, GetText);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetScrollBar, HorizontalScrollBar*);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalScrollBar*, GetScrollBar);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Text>&, GetText);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetScrollBar, const Ref<HorizontalScrollBar>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<HorizontalScrollBar>&, GetScrollBar);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSameTime, float, float, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
