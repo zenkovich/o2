@@ -47,7 +47,7 @@ namespace o2
 
         transform->CopyFrom(*other.transform);
         mAssetId = other.mAssetId;
-        mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);
+        mPrototypeLink = other.mPrototypeLink.Lock();
 
         if (!other.mCopyVisitor)
             other.mCopyVisitor = mmake<SourceToTargetMapCloneVisitor>();
@@ -157,7 +157,7 @@ namespace o2
         mSceneLayer = other.mSceneLayer;
         transform->CopyFrom(*other.transform);
         mAssetId = other.mAssetId;
-        mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);
+        mPrototypeLink = other.mPrototypeLink.Lock();
 
         if (!other.mCopyVisitor)
             other.mCopyVisitor = mmake<SourceToTargetMapCloneVisitor>();
@@ -1175,7 +1175,7 @@ namespace o2
                 {
                     if (auto fnd = protoLink->FindActorById(id))
                     {
-                        mPrototypeLink.CopyWithoutRemap(fnd);
+                        mPrototypeLink = fnd;
                         found = true;
                         break;
                     }
@@ -1329,9 +1329,9 @@ namespace o2
         mPrototype = asset;
 
         if (asset)
-            mPrototypeLink.CopyWithoutRemap(asset->GetActor());
+            mPrototypeLink = asset->GetActor();
         else
-            mPrototypeLink.CopyWithoutRemap(nullptr);
+            mPrototypeLink = nullptr;
 
 #if IS_EDITOR
         Scene::LinkActorToPrototypesHierarchy(Ref(this), mPrototype);
@@ -1440,7 +1440,7 @@ namespace o2
     void Actor::InstantiatePrototypeCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
     {
         SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
-        target->mPrototypeLink.CopyWithoutRemap(const_cast<Actor*>(source));
+        target->mPrototypeLink = Ref(const_cast<Actor*>(source));
     }
 
     void Actor::InstantiatePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)

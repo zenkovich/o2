@@ -37,7 +37,7 @@ namespace o2
         for (auto state : mStates)
         {
             if (state->mAnimation)
-                state->player.Update(dt);
+                state->player->Update(dt);
         }
 
         for (auto val : mValues)
@@ -49,12 +49,12 @@ namespace o2
 
     Ref<AnimationState> AnimationComponent::AddState(const Ref<AnimationState>& state)
     {
-        state->player.SetTarget(mOwner.Lock().Get());
-        state->player.SetPlaying(state->autoPlay);
-        state->player.mAnimationState = state;
+        state->player->SetTarget(mOwner.Lock().Get());
+        state->player->SetPlaying(state->autoPlay);
+        state->player->mAnimationState = state;
         state->mOwner = WeakRef(this);
 
-        for (auto trackPlayer : state->player.mTrackPlayers)
+        for (auto trackPlayer : state->player->mTrackPlayers)
             trackPlayer->RegMixer(state, trackPlayer->GetTrack()->path);
 
         mStates.Add(state);
@@ -80,7 +80,7 @@ namespace o2
 
     void AnimationComponent::RemoveState(const Ref<AnimationState>& state)
     {
-        for (auto trackPlayer : state->player.mTrackPlayers)
+        for (auto trackPlayer : state->player->mTrackPlayers)
             UnregTrack(trackPlayer, trackPlayer->GetTrack()->path);
 
         mStates.Remove(state);
@@ -116,14 +116,14 @@ namespace o2
     Ref<AnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation, const String& name)
     {
         Ref<AnimationState> state = AddState(name, animation, AnimationMask(), 1.0f);
-        state->player.Play();
+        state->player->Play();
         return state;
     }
 
     Ref<AnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation)
     {
         Ref<AnimationState> state = AddState("unknown", animation, AnimationMask(), 1.0f);
-        state->player.Play();
+        state->player->Play();
         return state;
     }
 
@@ -136,7 +136,7 @@ namespace o2
             return nullptr;
         }
 
-        state->player.Play();
+        state->player->Play();
 
         return state;
     }
@@ -172,7 +172,7 @@ namespace o2
         {
             if (state->mAnimation)
             {
-                if (state->player.IsPlaying())
+                if (state->player->IsPlaying())
                     mBlend.blendOffStates.Add(state);
             }
         }
@@ -182,7 +182,7 @@ namespace o2
         mBlend.time = duration;
 
         if (state->mAnimation)
-            state->player.Play();
+            state->player->Play();
 
         return state;
     }
@@ -196,13 +196,13 @@ namespace o2
             return;
         }
 
-        state->player.Stop();
+        state->player->Stop();
     }
 
     void AnimationComponent::StopAll()
     {
         for (auto state : mStates)
-            state->player.Stop();
+            state->player->Stop();
 
         mBlend.time = -1;
     }
@@ -239,7 +239,7 @@ namespace o2
         for (auto state : mStates)
         {
             if (state->autoPlay)
-                state->player.Play();
+                state->player->Play();
         }
     }
 

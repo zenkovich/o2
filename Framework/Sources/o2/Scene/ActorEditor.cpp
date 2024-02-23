@@ -16,7 +16,7 @@ namespace o2
     {
         SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
         target->mPrototypeLink = source->mPrototypeLink;
-        const_cast<Actor*>(source)->mPrototypeLink.CopyWithoutRemap(target);
+        const_cast<Actor*>(source)->mPrototypeLink = Ref(target);
     }
 
     void Actor::MakePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)

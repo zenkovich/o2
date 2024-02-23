@@ -6,7 +6,7 @@ namespace o2
     // ---------------------------------------------------
     // Animation, that can be edited from animation editor
     // ---------------------------------------------------
-    class IEditableAnimation: public RefCounterable
+    class IEditableAnimation: virtual public RefCounterable
     {
     public:
         // Called when animation started to edit. It means that animation must be deactivated

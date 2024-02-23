@@ -10,7 +10,7 @@ namespace o2
     // -----------------------------
     // Basic rect drawable interface
     // -----------------------------
-    class IRectDrawable: public Transform, public virtual IDrawable, public RefCounterable
+    class IRectDrawable: public Transform, public virtual IDrawable, virtual public RefCounterable
     {
     public:
         PROPERTIES(IRectDrawable);

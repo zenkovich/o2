@@ -1,8 +1,9 @@
 #pragma once
 
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
-#include <o2/Utils/Types/Ref.h>
+#include "o2/Utils/Types/WeakRef.h"
 
 namespace o2
 {

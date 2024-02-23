@@ -662,7 +662,7 @@ namespace o2
             }
             else if (mData.typeData.type == DataType::CoupleOfFunctions)
             {
-                for (auto& funcIt = mData.functions.begin(); funcIt != mData.functions.end(); ++funcIt)
+                for (auto funcIt = mData.functions.begin(); funcIt != mData.functions.end(); ++funcIt)
                 {
                     if ((*funcIt)->Equals(&function))
                     {

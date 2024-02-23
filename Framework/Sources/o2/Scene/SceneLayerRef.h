@@ -1,64 +1,41 @@
 #pragma once
 
-#include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Types/Ref.h"
+#include "o2/Scene/SceneLayer.h"
+
+#include "o2/Scene/Scene.h"
 
 namespace o2
 {
     // ---------------------------------------------------------------------
     // Reference to scene layer. Stores by name, creates new layer if needed
     // ---------------------------------------------------------------------
-    template<>
-    class Ref<SceneLayer> : public ISerializable
+    template<typename T>
+    class Ref<T, typename std::enable_if<std::is_same<SceneLayer, T>::value>::type> : public ISerializable, public BaseRef<SceneLayer>
     {
     public:
-        // Default constructor, references to default
-        Ref();
+        using Base = BaseRef<SceneLayer>;
+
+    public:
+		// Base reference implementation
+		BASE_REF_IMPLEMETATION(SceneLayer);
 
         // Constructor from layer name
-        explicit Ref(const String& name);
-
-        // Constructor from layer pointer
-        explicit Ref(SceneLayer* layer);
-
-        // Copy constructor
-        Ref(const Ref& other);
-
-        // Assign operator
-        Ref& operator=(const Ref& other);
-
-        // Returns layer reference
-        SceneLayer* Get();
-
-        // Returns constant layer reference
-        const SceneLayer* Get() const;
-
-        // Returns layer reference
-        SceneLayer& operator*();
-
-        // Returns constant layer reference
-        const SceneLayer& operator*() const;
-
-        // Returns layer reference
-        SceneLayer* operator->();
-
-        // Returns constant layer reference
-        const SceneLayer* operator->() const;
-
-        // Check equals operator
-        bool operator==(const Ref<SceneLayer>& other) const;
-
-        // Check not equals operator
-        bool operator!=(const Ref<SceneLayer>& other) const;
+		explicit Ref(const String& name) :
+			mLayerName(name)
+		{
+			*this = Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(name) : nullptr;
+		}
 
     protected:
         String mLayerName = String("Default"); // Name of layer @SERIALIZABLE
 
-        SceneLayer* mLayer = nullptr; // Layer reference
-
     protected:
         // Gets layer by name
-        void OnDeserialized(const DataValue& node) override;
+		void OnDeserialized(const DataValue& node) override
+		{
+			*this = o2Scene.GetLayer(mLayerName).Get();
+		}
 
     public:
         typedef Ref<SceneLayer> _thisType;
@@ -81,8 +58,8 @@ namespace o2
             typedef _thisType thisclass;
             processor.template StartFields<_thisType>(object, type);
 
-            FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(String("Default")).NAME(mLayerName);
-            FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayer);
+            //FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(String("Default")).NAME(mLayerName);
+            FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(Base::mPtr);
         }
 
         template<typename _type_processor>

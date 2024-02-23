@@ -2,8 +2,8 @@
 
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetInfo.h"
-#include "o2/Utils/FileSystem/FileInfo.h"
 #include "o2/Utils/Basic/ITree.h"
+#include "o2/Utils/FileSystem/FileInfo.h"
 
 namespace o2
 {

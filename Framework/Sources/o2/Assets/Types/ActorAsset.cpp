@@ -52,7 +52,7 @@ namespace o2
         if (!mActor)
             return nullptr;
 
-        return mActor->CloneAs<Actor>();
+        return mActor->CloneAsRef<Actor>();
     }
 
     Vector<String> ActorAsset::GetFileExtensions()
@@ -75,7 +75,7 @@ namespace o2
 
     void ActorAsset::OnDeserialized(const DataValue& node)
     {
-        mActor = node["mActor"];
+        node["mActor"].Get(mActor);
 
         if (mActor)
         {

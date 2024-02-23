@@ -121,7 +121,7 @@ namespace o2
 		BASE_REF_IMPLEMETATION(_component_type);
 
 		// Sets component @SCRIPTABLE
-        void Set(Component* component) override { *this = component; }
+        void Set(Component* component) override { *this = Ref(dynamic_cast<_component_type*>(component)); }
 
         // Returns component pointer @SCRIPTABLE
         _component_type* Get() override { return Base::Get(); }
@@ -135,7 +135,7 @@ namespace o2
         // Copying ref without requiring remap
         void CopyWithoutRemap(const BaseComponentRef& other) override
         {
-            Base::mPtr = other.Base::mPtr;
+            Base::mPtr = dynamic_cast<_component_type*>(const_cast<Component*>(other.Get()));
             mRequiredResolveData = nullptr;
         }
 

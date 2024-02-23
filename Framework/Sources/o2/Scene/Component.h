@@ -11,7 +11,7 @@ namespace o2
     // ---------------------------
     // Actor's component interface
     // ---------------------------
-    class Component: virtual public ISerializable, public RefCounterable
+    class Component: virtual public ISerializable, virtual public RefCounterable
     {
     public:
         PROPERTIES(Component);

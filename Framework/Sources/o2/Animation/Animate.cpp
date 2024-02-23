@@ -54,7 +54,7 @@ namespace o2
 
         auto container = mmake<KeyContainer<Vec2F>>();
         container->animatedValue = mPositionAnimatedValue;
-        container->animatedValue->spline.AppendKey(Vec2F(x, y));
+        container->animatedValue->spline->AppendKey(Vec2F(x, y));
         mKeyContainers.Add(container);
 
         return *this;
@@ -67,7 +67,7 @@ namespace o2
 
         auto container = mmake<KeyContainer<Vec2F>>();
         container->animatedValue = mPositionAnimatedValue;
-        container->animatedValue->spline.AppendKey(point);
+        container->animatedValue->spline->AppendKey(point);
         container->timeKey.position = mTime;
         mKeyContainers.Add(container);
 
@@ -270,11 +270,11 @@ namespace o2
     void KeyContainer<Vec2F>::Apply(float time)
     {
         timeKey.value = 0.0f;
-        animatedValue->timeCurve.InsertKey(timeKey);
+        animatedValue->timeCurve->InsertKey(timeKey);
 
         timeKey.position = time;
         timeKey.value = 1.0f;
-        animatedValue->timeCurve.InsertKey(timeKey);
+        animatedValue->timeCurve->InsertKey(timeKey);
     }
 
     void ScaleKeyContainer::Apply(float time)

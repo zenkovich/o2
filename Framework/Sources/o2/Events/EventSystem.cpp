@@ -148,7 +148,7 @@ namespace o2
                     while (parent)
                     {
                         path = parent->GetName() + "/" + path;
-                        parent = parent->GetParentWidget();
+                        parent = parent->GetParentWidget().Lock();
                     }
 
                     name = path + " : " + widget->GetType().GetName();

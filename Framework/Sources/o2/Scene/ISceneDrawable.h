@@ -3,6 +3,7 @@
 #include "o2/Render/IDrawable.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Scene/SceneLayerRef.h"
 
 #if IS_EDITOR
 #include "o2/Utils/Editor/SceneEditableObject.h"

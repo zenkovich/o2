@@ -2,6 +2,7 @@
 #include "ActorRefResolver.h"
 
 #include "o2/Scene/Actor.h"
+#include "o2/Scene/ActorRef.h"
 #include "o2/Scene/Scene.h"
 
 namespace o2
@@ -84,7 +85,10 @@ namespace o2
         {
             Actor* res = nullptr;
             if (actors.TryGetValue(ref->Get(), res))
-                ref->CopyWithoutRemap(Ref(res));
+            {
+                Ref<Actor> resRef(res);
+                //ref->CopyWithoutRemap(resRef);
+            }
         }
 
         for (auto& ref : mInstance->mRemapComponentRefs)

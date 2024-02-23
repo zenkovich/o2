@@ -7,7 +7,7 @@ namespace o2
     // Basic events listener interface. Can be enabler or disabled, 
     // that setting up in constructor by global setting from events system
     // -------------------------------------------------------------------
-    class IEventsListener: public RefCounterable
+    class IEventsListener: virtual public RefCounterable
     {
     public:
         // Default constructor. Takes global setting from events system and enables or disables this

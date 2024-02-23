@@ -85,8 +85,8 @@ namespace o2
             body->SetTransform(transform->GetWorldPosition()*invScale, transform->GetWorldAngle());
 
             auto colliders = rigidBody->mColliders;
-            for (auto collider : colliders)
-                collider->OnShapeChanged();
+            for (auto& collider : colliders)
+                collider.Lock()->OnShapeChanged();
         }
 
         mPrevPhysicsScale = scale;

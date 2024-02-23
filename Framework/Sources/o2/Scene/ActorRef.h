@@ -128,7 +128,7 @@ namespace o2
 		const _actor_type* Get() const override { return Base::Get(); }
 
 		// Sets actor pointer
-        void Set(Actor* actor) override { *this = Ref(actor); }
+        void Set(Actor* actor) override { *this = Ref(dynamic_cast<_actor_type*>(actor)); }
 
         // Returns actor type
         const Type& GetActorType() const override { return TypeOf(_actor_type); }
@@ -136,7 +136,7 @@ namespace o2
         // Copying ref without requiring remap
         void CopyWithoutRemap(const BaseActorRef& other) override
         {
-            Base::mPtr = other.Base::mPtr;
+            Base::mPtr = dynamic_cast<_actor_type*>(const_cast<Actor*>(other.Get()));
             mRequiredResolveData = nullptr;
         }
 
@@ -164,7 +164,7 @@ namespace o2
             typedef _thisType thisclass;
             processor.template StartFields<_thisType>(object, type);
 
-            FIELD().PROTECTED().NAME(mSpecActor);
+            FIELD().PROTECTED().NAME(mPtr);
         }
 
         template<typename _type_processor>

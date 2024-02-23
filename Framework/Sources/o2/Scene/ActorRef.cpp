@@ -73,7 +73,7 @@ namespace o2
         if (obj.Get() == origin.Get())
             return true;
 
-        if (obj.Get() && obj.Get()->mPrototypeLink.Get() == origin.Get())
+        if (obj.Get() && obj.Get()->mPrototypeLink.Lock().Get() == origin.Get())
             return true;
 
         return false;
@@ -133,8 +133,6 @@ namespace o2
         return mmake<AssetRequireResolveData>(*this);
     }
 }
-
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Actor>);
 // --- META ---
 
 DECLARE_CLASS(o2::BaseActorRef, o2__BaseActorRef);
