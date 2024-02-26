@@ -41,7 +41,7 @@ namespace o2
         else
         {
             if (auto actor = o2Scene.GetActorByID(actorId))
-                ref = actor->GetComponent(id);
+                ref.Set(actor->GetComponent(id).Get());
         }
     }
 
@@ -55,7 +55,7 @@ namespace o2
         else
         {
             if (auto actor = o2Scene.GetAssetActorByID(assetId))
-                ref = actor->GetComponent(id);
+                ref.Set(actor->GetComponent(id).Get());
         }
     }
 

@@ -1,18 +1,10 @@
 #pragma once
 
 #include "o2/Assets/Types/ActorAsset.h"
-#include "o2/Scene/ActorCreationMode.h"
-#include "o2/Scene/ActorRef.h"
 #include "o2/Scene/ActorTransform.h"
-#include "o2/Scene/ComponentRef.h"
 #include "o2/Scene/ISceneDrawable.h"
-#include "o2/Scene/SceneLayerRef.h"
 #include "o2/Scene/Tags.h"
-#include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
-#include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Editor/SceneEditableObject.h"
-#include "o2/Utils/Singleton.h"
-#include "o2/Utils/Types/UID.h"
 
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptValue.h"
