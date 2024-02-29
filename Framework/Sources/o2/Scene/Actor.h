@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Types/ActorAsset.h"
+#include "o2/Scene/ActorRef.h"
 #include "o2/Scene/ActorTransform.h"
 #include "o2/Scene/ISceneDrawable.h"
 #include "o2/Scene/Tags.h"
@@ -663,8 +664,8 @@ namespace o2
     {
         for (auto& child : mChildren)
         {
-            if (child->GetType() == TypeOf(_type))
-                return (_type*)child;
+            if (auto castedChild = DynamicCast<_type>(child))
+                return castedChild;
         }
 
         if (searchInChildren)

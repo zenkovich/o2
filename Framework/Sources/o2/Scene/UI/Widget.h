@@ -690,7 +690,7 @@ namespace o2
 
             if (auto internalWidget = widget->FindInternalWidget(name))
             {
-                if (Ref<_type> res = dynamic_cast<Ref<_type>>(internalWidget))
+                if (auto res = DynamicCast<_type>(internalWidget))
                     return res;
             }
         }

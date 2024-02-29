@@ -77,7 +77,7 @@ namespace o2
             child->GetAllEditableChildren(children);
     }
 
-    SceneEditableObject* SceneEditableObject::GetEditableParent() const
+    Ref<SceneEditableObject> SceneEditableObject::GetEditableParent() const
     {
         return nullptr;
     }

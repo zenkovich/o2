@@ -4,6 +4,12 @@
 
 namespace o2
 {
+	template<>
+    struct DataValue::Converter<nullptr_t>
+    {
+        static constexpr bool isSupported = false;
+    };
+
     template<>
     struct DataValue::Converter<char*>
     {

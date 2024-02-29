@@ -93,7 +93,7 @@ namespace o2
                 {                    
                     printDrawable(drawable.Lock(), 1);
 
-                    if (auto root = DynamicCast<SceneLayer::RootDrawablesContainer>(drawable.Lock()))
+                    if (auto root = DynamicCast<SceneLayerRootDrawablesContainer>(drawable.Lock()))
                     {
                         o2Debug.Log("  ROOT:");
 

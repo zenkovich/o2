@@ -43,8 +43,8 @@ namespace o2
             SERIALIZABLE(TestInside);
         };
 
-        void SetSpritePtr(Sprite* sprite) { mSprite = sprite; }
-        Sprite* GetSpritePtr() const { return mSprite; }
+        void SetSpritePtr(const Ref<Sprite>& sprite) { mSprite = sprite; }
+        const Ref<Sprite>& GetSpritePtr() const { return mSprite; }
 
         void SetSprite(const Sprite& sprite) { *mSprite = sprite; }
         Sprite GetSprite() const { return *mSprite; }
@@ -53,7 +53,7 @@ namespace o2
         const Vector<Vec2I>& GetArray() const { return mVecs; }
 
         PROPERTIES(EditorTestComponent);
-        PROPERTY(Sprite*, spritePropPtr, SetSpritePtr, GetSpritePtr);
+        PROPERTY(Ref<Sprite>, spritePropPtr, SetSpritePtr, GetSpritePtr);
         PROPERTY(Sprite, spriteProp, SetSprite, GetSprite);
         PROPERTY(Vector<Vec2I>, arr, SetArray, GetArray);
 
@@ -66,7 +66,7 @@ namespace o2
         Ref<ActorAsset> mActorAsset;                        // @SERIALIZABLE
         DataAssetRef mDataAsset;                            // @SERIALIZABLE
         AnimationAssetRef mAnimationAsset;                  // @SERIALIZABLE
-        Sprite* mSprite = mmake<Sprite>();                    // @SERIALIZABLE @DONT_DELETE
+        Ref<Sprite> mSprite = mmake<Sprite>();              // @SERIALIZABLE @DONT_DELETE
         Ref<Actor> mActor;                                  // @SERIALIZABLE
         TagGroup mTags;                                     // @SERIALIZABLE
         Ref<SceneLayer> mLayer;                             // @SERIALIZABLE
@@ -180,8 +180,8 @@ END_META;
 CLASS_METHODS_META(o2::EditorTestComponent)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSpritePtr, Sprite*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSpritePtr);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSpritePtr, const Ref<Sprite>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetSpritePtr);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSprite, const Sprite&);
     FUNCTION().PUBLIC().SIGNATURE(Sprite, GetSprite);
     FUNCTION().PUBLIC().SIGNATURE(void, SetArray, const Vector<Vec2I>&);

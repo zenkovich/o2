@@ -6,6 +6,7 @@
 namespace o2
 {
     class Actor;
+    FORWARD_REF(Actor);
 
     // -----------
     // Actor asset
@@ -17,7 +18,7 @@ namespace o2
         ActorAsset();
 
         // Constructor
-        ActorAsset(Actor* actor);
+        ActorAsset(const Ref<Actor>& actor);
 
         // Copy-constructor
         ActorAsset(const ActorAsset& other);
@@ -83,7 +84,7 @@ CLASS_METHODS_META(o2::ActorAsset)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Actor>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAsset&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, Instantiate);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<Actor>&, GetActor);

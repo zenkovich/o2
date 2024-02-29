@@ -8,6 +8,10 @@
 namespace o2
 {
     class Actor;
+
+    class SceneLayerRootDrawablesContainer;
+    FORWARD_REF(SceneLayerRootDrawablesContainer);
+
     class ISceneDrawable;
 
     // --------------------------------------------------------------------------------
@@ -19,13 +23,6 @@ namespace o2
 #if IS_EDITOR
         bool visible = true; // Is layer visible in editor
 #endif
-
-    public:
-        // ------------------------------------------------------------------------------------
-        // Root drawables container. It is used to draw all root drawables with inherited depth
-        // ------------------------------------------------------------------------------------
-        struct RootDrawablesContainer : public ISceneDrawable
-        {};
 
     public:
         // Default constructor
@@ -41,7 +38,7 @@ namespace o2
         const Vector<WeakRef<ISceneDrawable>>& GetDrawables() const;
 
         // Returns root drawable objects of actors in layer
-        const Ref<RootDrawablesContainer>& GetRootDrawables();
+        const Ref<SceneLayerRootDrawablesContainer>& GetRootDrawables();
 
         SERIALIZABLE(SceneLayer);
 
@@ -50,7 +47,7 @@ namespace o2
 
         Vector<WeakRef<ISceneDrawable>> mDrawables; // Drawable objects in layer
 
-        Ref<RootDrawablesContainer> mRootDrawables; // Root drawables with inherited depth. Draws at 0 priority
+        Ref<SceneLayerRootDrawablesContainer> mRootDrawables; // Root drawables with inherited depth. Draws at 0 priority
 
     protected:
         // Registers drawable object
@@ -84,21 +81,16 @@ namespace o2
         BASE_REF_IMPLEMETATION(SceneLayer);
 
         // Constructor from layer name
-        explicit Ref(const String& name) :
-            mLayerName(name)
-        {
-            *this = Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(name) : nullptr;
-        }
+        explicit Ref(const String& name);
+
+        void SetName(const String& name);
 
     protected:
         String mLayerName = String("Default"); // Name of layer @SERIALIZABLE
 
     protected:
         // Gets layer by name
-        void OnDeserialized(const DataValue& node) override
-        {
-            *this = o2Scene.GetLayer(mLayerName).Get();
-        }
+        void OnDeserialized(const DataValue& node) override;
 
     public:
         typedef Ref<SceneLayer> _thisType;
@@ -139,6 +131,38 @@ namespace o2
         }
     };
 }
+
+#include "o2/Scene/ISceneDrawable.h"
+#include "o2/Scene/Scene.h"
+
+namespace o2
+{
+	// ------------------------------------------------------------------------------------
+	// Root drawables container. It is used to draw all root drawables with inherited depth
+	// ------------------------------------------------------------------------------------
+	class SceneLayerRootDrawablesContainer : public ISceneDrawable
+	{};
+
+	template<typename T>
+    Ref<T, typename std::enable_if<std::is_same<SceneLayer, T>::value>::type>::Ref(const String& name) :
+		mLayerName(name)
+	{
+		*this = Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(name) : nullptr;
+	}
+
+	template<typename T>
+	void Ref<T, typename std::enable_if<std::is_same<SceneLayer, T>::value>::type>::SetName(const String& name)
+	{
+		mLayerName = name;
+		*this = o2Scene.GetLayer(name);
+	}
+
+	template<typename T>
+	void Ref<T, typename std::enable_if<std::is_same<SceneLayer, T>::value>::type>::OnDeserialized(const DataValue& node)
+	{
+		*this = o2Scene.GetLayer(mLayerName).Get();
+	}
+}
 // --- META ---
 
 CLASS_BASES_META(o2::SceneLayer)
@@ -164,7 +188,7 @@ CLASS_METHODS_META(o2::SceneLayer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<ISceneDrawable>>&, GetDrawables);
-    FUNCTION().PUBLIC().SIGNATURE(const Ref<RootDrawablesContainer>&, GetRootDrawables);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<SceneLayerRootDrawablesContainer>&, GetRootDrawables);
     FUNCTION().PROTECTED().SIGNATURE(void, RegisterDrawable, ISceneDrawable*);
     FUNCTION().PROTECTED().SIGNATURE(void, UnregisterDrawable, ISceneDrawable*);
     FUNCTION().PROTECTED().SIGNATURE(void, SetLastByDepth, const Ref<ISceneDrawable>&);

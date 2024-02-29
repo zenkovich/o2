@@ -133,10 +133,10 @@ namespace o2
         void Deserialize(const DataValue& data) override
         {
             if (auto actorData = data.FindMember("actor"))
-                actorRef = *actorData;
+                actorData->Get(actorRef);
 
             if (auto componentData = data.FindMember("component"))
-                componentRef = *componentData;
+                componentData->Get(componentRef);
 
             method = data["func"];
         }

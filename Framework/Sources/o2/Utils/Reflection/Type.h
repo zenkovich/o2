@@ -1411,7 +1411,7 @@ namespace o2
     void* TStringPointerAccessorType<_return_type, _accessor_type>::GetValue(void* object, const String& key) const
     {
         _accessor_type* accessor = (_accessor_type*)object;
-        return (void*)(accessor->Get(key));
+        return (void*)(accessor->Get(key).Get());
     }
 
     template<typename _return_type, typename _accessor_type>
@@ -1421,7 +1421,7 @@ namespace o2
         auto all = accessor->GetAll();
         Map<String, void*> res;
         for (auto& kv : all)
-            res.Add(kv.first, (void*)(kv.second));
+            res.Add(kv.first, (void*)(kv.second.Get()));
 
         return res;
     }

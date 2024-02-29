@@ -1352,7 +1352,9 @@ namespace o2
 
     void Actor::SetLayer(const String& name)
     {
-        SetLayer(Ref<SceneLayer>(name));
+        Ref<SceneLayer> tt;
+        //tt.SetName(name);
+        SetLayer(tt);
     }
 
     const Ref<SceneLayer>& Actor::GetLayer() const

@@ -14,7 +14,7 @@ namespace o2
     // ------------
     // Toggle group
     // ------------
-    class ToggleGroup
+    class ToggleGroup: public RefCounterable
     {
     public:
         enum class Type { OnlySingleTrue, VerOneClick, HorOneClick };

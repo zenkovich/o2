@@ -179,7 +179,7 @@ namespace Editor
 			CheckBatchEnd(drawableNode);
 			parent->AddChild(drawableNode);
 		}
-		else if (auto root = DynamicCast<SceneLayer::RootDrawablesContainer>(drawable))
+		else if (auto root = DynamicCast<SceneLayerRootDrawablesContainer>(drawable))
 		{
 			drawableNode->type = OrderTreeNode::Type::Root;
 			drawableNode->name = "Layer roots";

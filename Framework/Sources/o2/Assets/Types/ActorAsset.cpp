@@ -21,7 +21,7 @@ namespace o2
         mActor = other.mActor;
     }
 
-    ActorAsset::ActorAsset(Actor* actor):
+    ActorAsset::ActorAsset(const Ref<Actor>& actor):
         mActor(actor)
     {
         if (!actor->IsAsset())

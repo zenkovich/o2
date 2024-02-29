@@ -56,7 +56,7 @@ namespace o2
 		const WeakRef<Widget>& GetOwnerWidget() const;
 
 		// Returns link to prototype @SCRIPTABLE
-		const WeakRef<WidgetLayer>& GetPrototypeLink() const;
+		const Ref<WidgetLayer>& GetPrototypeLink() const;
 
 		// Sets layer drawable
 		void SetDrawable(const Ref<IRectDrawable>& drawable);
@@ -392,7 +392,7 @@ CLASS_METHODS_META(o2::WidgetLayer)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetLayer&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const WeakRef<Widget>&, GetOwnerWidget);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const WeakRef<WidgetLayer>&, GetPrototypeLink);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Ref<WidgetLayer>&, GetPrototypeLink);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDrawable, const Ref<IRectDrawable>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetDrawable);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);

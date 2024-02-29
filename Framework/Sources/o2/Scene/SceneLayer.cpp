@@ -9,7 +9,7 @@ namespace o2
 {
     SceneLayer::SceneLayer()
     {
-        mRootDrawables = mmake<RootDrawablesContainer>();
+        mRootDrawables = mmake<SceneLayerRootDrawablesContainer>();
         RegisterDrawable(mRootDrawables.Get());
     }
 
@@ -31,7 +31,7 @@ namespace o2
         return mDrawables;
     }
 
-    const Ref<SceneLayer::RootDrawablesContainer>& SceneLayer::GetRootDrawables()
+    const Ref<SceneLayerRootDrawablesContainer>& SceneLayer::GetRootDrawables()
     {
         return mRootDrawables;
     }

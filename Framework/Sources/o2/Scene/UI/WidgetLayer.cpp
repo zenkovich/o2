@@ -81,7 +81,7 @@ namespace o2
 		return mParent.Lock()->GetOwnerWidget();
 	}
 
-	const WeakRef<WidgetLayer>& WidgetLayer::GetPrototypeLink() const
+	const Ref<WidgetLayer>& WidgetLayer::GetPrototypeLink() const
 	{
 		return mPrototypeLink;
 	}

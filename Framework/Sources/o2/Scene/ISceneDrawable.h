@@ -11,6 +11,7 @@
 namespace o2
 {
     class SceneLayer;
+    FORWARD_REF(SceneLayer);
 
     // --------------------------------------------------------------------------------------------------------------
     // Scene drawable object. Has virtual draw function and sorting depth. Depth shows how later object will be drawn

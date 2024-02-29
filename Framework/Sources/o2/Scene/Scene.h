@@ -1,7 +1,6 @@
 #pragma once
 
 #include "o2/Assets/Types/ActorAsset.h"
-#include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
@@ -18,8 +17,10 @@ namespace o2
     class Actor;
     class CameraActor;
     class Component;
-    class SceneLayer;
     class Tag;
+
+	class SceneLayer;
+    FORWARD_REF(SceneLayer);
 
 #if IS_EDITOR
     class SceneEditableObject;
@@ -370,7 +371,7 @@ namespace o2
     };
 }
 
-#include "o2/Scene/Actor.h"
+//#include "o2/Scene/Actor.h"
 
 namespace o2
 {
@@ -378,8 +379,8 @@ namespace o2
     Vector<Ref<_type>> Scene::FindAllActorsComponents()
     {
         Vector<Ref<_type>> res;
-        for (auto& actor : mRootActors)
-            res.Add(actor->GetComponentInChildren<_type>());
+//         for (auto& actor : mRootActors)
+//             res.Add(actor->GetComponentInChildren<_type>());
 
         return res;
     }
@@ -387,14 +388,14 @@ namespace o2
     template<typename _type>
     Ref<_type> Scene::FindActorByType()
     {
-        for (auto& actor : mRootActors)
-        {
-            if (auto res = dynamic_cast<_type*>(actor))
-                return res;
-
-            if (auto res = actor->FindChildByType<_type>())
-                return res;
-        }
+//         for (auto& actor : mRootActors)
+//         {
+//             if (auto res = dynamic_cast<_type*>(actor))
+//                 return res;
+// 
+//             if (auto res = actor->FindChildByType<_type>())
+//                 return res;
+//         }
 
         return nullptr;
     }
@@ -402,12 +403,12 @@ namespace o2
     template<typename _type>
     Ref<_type> Scene::FindActorComponent()
     {
-        for (auto& actor : mRootActors)
-        {
-            _type* res = actor->GetComponentInChildren<_type>();
-            if (res)
-                return res;
-        }
+//         for (auto& actor : mRootActors)
+//         {
+//             _type* res = actor->GetComponentInChildren<_type>();
+//             if (res)
+//                 return res;
+//         }
 
         return nullptr;
     }

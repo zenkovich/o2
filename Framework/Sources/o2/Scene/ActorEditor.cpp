@@ -83,7 +83,7 @@ namespace o2
     Ref<ActorAsset> Actor::MakePrototype()
     {
         mCopyVisitor = mmake<MakePrototypeCloneVisitor>();
-        auto prototype = CloneAs<Actor>();
+        auto prototype = CloneAsRef<Actor>();
 
         Ref<ActorAsset> prototypeAsset = Ref<ActorAsset>::CreateAsset(prototype);
         SetPrototype(prototypeAsset);
@@ -190,7 +190,7 @@ namespace o2
             auto t = mPrototypeLink.Lock().Get();
             while (t)
             {
-                if (t == actor)
+                if (t == actor.Get())
                     return true;
 
                 t = t->mPrototypeLink.Lock().Get();
@@ -311,7 +311,12 @@ namespace o2
 
     Vector<Ref<SceneEditableObject>> Actor::GetEditableChildren() const
     {
-        return DynamicCastVector<SceneEditableObject>(mChildren);
+        Vector<Ref<SceneEditableObject>> res;
+        for (auto& child : mChildren) {
+            res.Add(DynamicCast<SceneEditableObject>(child));
+        }
+
+        return res;
     }
 
     void Actor::SetEditableParent(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
