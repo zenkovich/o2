@@ -2,7 +2,7 @@
 
 #include "o2/Scene/Component.h"
 #include "o2/Scene/ISceneDrawable.h"
-#include "o2/Scene/SceneLayerRef.h"
+#include "o2/Scene/SceneLayer.h"
 
 namespace o2
 {

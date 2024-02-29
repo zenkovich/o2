@@ -662,14 +662,18 @@ namespace o2
     Ref<_type> Actor::FindChildByType(bool searchInChildren /*= true*/) const
     {
         for (auto& child : mChildren)
+        {
             if (child->GetType() == TypeOf(_type))
                 return (_type*)child;
+        }
 
         if (searchInChildren)
         {
             for (auto& child : mChildren)
+            {
                 if (auto res = child->FindChildByType<_type>())
                     return res;
+            }
         }
 
         return nullptr;

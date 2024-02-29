@@ -389,7 +389,7 @@ namespace o2
         if (mImageAsset)
             return mImageAsset->GetAtlasUID();
 
-        return 0;
+        return UID::empty;
     }
 
     void Sprite::NormalizeSize()

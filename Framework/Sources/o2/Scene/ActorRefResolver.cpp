@@ -85,17 +85,14 @@ namespace o2
         {
             Actor* res = nullptr;
             if (actors.TryGetValue(ref->Get(), res))
-            {
-                Ref<Actor> resRef(res);
-                //ref->CopyWithoutRemap(resRef);
-            }
+                ref->Set(res);
         }
 
         for (auto& ref : mInstance->mRemapComponentRefs)
         {
             Component* res = nullptr;
             if (components.TryGetValue(ref->Get(), res))
-                ref->CopyWithoutRemap(Ref(res));
+                ref->Set(res);
         }
 
         mInstance->mRemapActorRefs.Clear();

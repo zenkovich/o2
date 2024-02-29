@@ -5,7 +5,7 @@
 #include "o2/Render/Render.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/Scene.h"
-#include "o2/Scene/SceneLayerRef.h"
+#include "o2/Scene/SceneLayer.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/WidgetLayout.h"

@@ -375,7 +375,7 @@ namespace o2
 	template<typename _to_type, typename _from_type>
 	Ref<_to_type> DynamicCast(const Ref<_from_type>& from)
 	{
-		return Ref<_to_type>(dynamic_cast<_to_type*>(from.Get()));
+		return Ref<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
 	}
 
 	// Dynamic cast from one references vector type to another

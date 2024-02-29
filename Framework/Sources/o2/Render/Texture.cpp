@@ -167,7 +167,7 @@ namespace o2
 
     bool Texture::IsAtlasPage() const
     {
-        return mAtlasAssetId != 0;
+        return mAtlasAssetId != UID::empty;
     }
 
     UID Texture::GetAtlasAssetId() const

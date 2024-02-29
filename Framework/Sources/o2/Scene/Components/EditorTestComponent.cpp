@@ -2,7 +2,7 @@
 #include "EditorTestComponent.h"
 
 #include "o2/Scene/Actor.h"
-#include "o2/Scene/SceneLayerRef.h"
+#include "o2/Scene/SceneLayer.h"
 
 o2::String o2::EditorTestComponent::GetCategory()
 {

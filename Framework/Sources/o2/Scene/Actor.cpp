@@ -6,7 +6,7 @@
 #include "o2/Scene/Components/ScriptableComponent.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/Scene.h"
-#include "o2/Scene/SceneLayerRef.h"
+#include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Debug/Debug.h"
 
 namespace o2

@@ -98,7 +98,7 @@ namespace o2
     {
         auto info = o2Assets.GetAssetInfo(path);
 
-        if (info.meta->mId == 0)
+        if (info.meta->mId == UID::empty)
         {
             GetAssetsLogStream()->Error("Failed to load asset by path (" + path + "): asset isn't exist");
             return;
@@ -111,7 +111,7 @@ namespace o2
     {
         auto& info = o2Assets.GetAssetInfo(id);
 
-        if (info.meta->mId == 0)
+        if (info.meta->mId == UID::empty)
         {
             GetAssetsLogStream()->Error("Failed to load asset by UID (" + (WString)id + "): asset isn't exist");
             return;
@@ -145,11 +145,11 @@ namespace o2
 
     void Asset::Save()
     {
-        if (ID() == 0)
+        if (ID() == UID::empty)
             ID().Randomize();
 
         UID destPathAssetId = o2Assets.GetAssetId(mInfo.path);
-        if (destPathAssetId != 0 && destPathAssetId != mInfo.meta->mId)
+        if (destPathAssetId != UID::empty && destPathAssetId != mInfo.meta->mId)
         {
             GetAssetsLogStream()->Error("Failed to save asset (" + mInfo.path + " - " + (WString)mInfo.meta->mId +
                                         "): another asset exist in this path");

@@ -83,7 +83,7 @@ namespace o2
                 mLastUnfocusedWidgets.Add(lastFocusedWidget);
 
             if (lastFocusedWidget->mFocusedState)
-                lastFocusedWidget->mFocusedState.Lock()->SetState(false);
+                lastFocusedWidget->mFocusedState->SetState(false);
         }
 
         mFocusedWidget = widget;
@@ -102,7 +102,7 @@ namespace o2
                 mFocusedWidget->mParentWidget.Lock()->OnChildFocused(mFocusedWidget);
 
             if (mFocusedWidget->mFocusedState)
-                mFocusedWidget->mFocusedState.Lock()->SetState(true);
+                mFocusedWidget->mFocusedState->SetState(true);
         }
     }
 
@@ -343,7 +343,7 @@ namespace o2
         mTopWidgets.Clear();
 
         if (PopupWidget::mVisiblePopup)
-            PopupWidget::mVisiblePopup->SpecialDraw();
+            PopupWidget::mVisiblePopup.Lock()->SpecialDraw();
 
         if (o2Input.IsKeyPressed(VK_TAB))
             FocusNextWidget();

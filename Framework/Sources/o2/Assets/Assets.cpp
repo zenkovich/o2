@@ -261,7 +261,7 @@ namespace o2
             return false;
         }
 
-        if (GetAssetId(newPath) != 0)
+        if (GetAssetId(newPath) != UID::empty)
         {
             mLog->Error("Can't remove asset '" + info.path + "' to '" + newPath + "' - another asset exist in target path");
             return false;
@@ -316,7 +316,7 @@ namespace o2
         String parentFolder = o2FileSystem.GetParentPath(info.path);
         String newFullName = parentFolder + "/" + newName;
 
-        if (GetAssetId(newFullName) != 0)
+        if (GetAssetId(newFullName) != UID::empty)
         {
             mLog->Error("Can't rename asset by path (" + info.path + ") \nto (" + newName + ")\n - another asset exist in target path");
             return false;
@@ -409,7 +409,7 @@ namespace o2
                         o2Debug.LogError("Duplicate asset path \"" + cache->GetPath() + "\"");
 
                     if (cache->GetUID() == otherCache->GetUID())
-                        o2Debug.LogError("Duplicate asset UID \"" + cache->GetPath() + "\" - " + cache->GetUID());
+                        o2Debug.LogError("Duplicate asset UID \"" + cache->GetPath() + "\" - " + cache->GetUID().ToString());
 
                     if (cache == otherCache)
                         o2Debug.LogError("Duplicate asset cache");

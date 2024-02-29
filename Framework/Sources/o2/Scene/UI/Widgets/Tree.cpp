@@ -506,7 +506,7 @@ namespace o2
     void Tree::AddSelectableObject(const Ref<SelectableDragableObject>& object)
     {}
 
-    void Tree::RemoveSelectableObject(const Ref<SelectableDragableObject>& object)
+    void Tree::RemoveSelectableObject(SelectableDragableObject* object)
     {}
 
     void Tree::OnSelectableObjectCursorReleased(const Ref<SelectableDragableObject>& object, const Input::Cursor& cursor)
@@ -1902,7 +1902,7 @@ namespace o2
 
     int Tree::Node::GetChildCount() const
     {
-        return childs.Count() + childs.Sum<int>([](Node* x) { return x->GetChildCount(); });
+        return childs.Count() + childs.Sum<int>([](auto& x) { return x->GetChildCount(); });
     }
 
     bool Tree::VisibleWidgetDef::operator==(const VisibleWidgetDef& other) const

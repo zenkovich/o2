@@ -56,7 +56,7 @@ namespace o2
         void SetOwner(const Ref<Widget>& owner, bool errors);
 
         // Returns animation player
-        const Ref<AnimationPlayer> GetAnimationPlayer();
+        const Ref<AnimationPlayer>& GetAnimationPlayer();
 
         // Sets animation asset
         void SetAnimationAsset(const AnimationAssetRef& asset);
@@ -137,7 +137,7 @@ CLASS_METHODS_META(o2::WidgetState)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetState&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOwner, const Ref<Widget>&, bool);
-    FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationPlayer>, GetAnimationPlayer);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationPlayer>&, GetAnimationPlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationAsset, const AnimationAssetRef&);
     FUNCTION().PUBLIC().SIGNATURE(const AnimationAssetRef&, GetAnimationAsset);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationClip, const Ref<AnimationClip>&);

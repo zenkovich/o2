@@ -298,7 +298,7 @@ namespace o2
         }
         else
         {
-            float totalWidth = mChildWidgets.Sum<float>([&](Widget* child) { return child->GetMinWidthWithChildren(); });
+            float totalWidth = mChildWidgets.Sum<float>([&](auto& child) { return child->GetMinWidthWithChildren(); });
             totalWidth += (mChildWidgets.Count() - 1)*mSpacing;
             float position = -totalWidth*0.5f;
             for (auto& child : mChildWidgets)
@@ -450,7 +450,7 @@ namespace o2
         Vec2F relativePivot = relativePivots[(int)mBaseCorner];
         Vec2F size(GetMinWidthWithChildren(), GetMinHeightWithChildren());
 
-        Vec2F parentSize = mParent ? mParent->transform->size : Vec2F();
+        Vec2F parentSize = mParent ? mParent.Lock()->transform->size : Vec2F();
         Vec2F szDelta = size - (GetLayoutData().offsetMax - GetLayoutData().offsetMin + (GetLayoutData().anchorMax - GetLayoutData().anchorMin)*parentSize);
 
         if (mExpandWidth)

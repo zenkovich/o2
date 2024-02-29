@@ -17,13 +17,13 @@ namespace o2
     // -----------------------------
     struct ApplyActorInfo
     {
-        Actor*                       actor;
+        Ref<Actor>                       actor;
         Vector<Ref<SceneEditableObject>> allChildren;
 
         Map<const SceneEditableObject*, SceneEditableObject*> allChildrenByLinks;
 
         ApplyActorInfo();
-        ApplyActorInfo(Actor* actor);
+        ApplyActorInfo(const Ref<Actor>& actor);
 
         bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
 
@@ -35,91 +35,91 @@ namespace o2
     // ------------------------------------------
     struct ActorDifferences
     {
-        struct IDifference
+        struct IDifference: public RefCounterable
         {
-            virtual IDifference* Clone() const = 0;
+            virtual Ref<IDifference> Clone() const = 0;
             virtual void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo, 
                                const Vector<ApplyActorInfo>& applyInfos) const = 0;
         };
 
         struct RemovedChild: public IDifference
         {
-            SceneEditableObject* prototypeLink;
+            Ref<SceneEditableObject> prototypeLink;
 
-            IDifference* Clone() const override;
+            Ref<IDifference> Clone() const override;
             void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                        const Vector<ApplyActorInfo>& applyInfos) const override;
         };
 
         struct NewChild: public IDifference
         {
-            SceneEditableObject* parentPrototypeLink;
-            SceneEditableObject* newChild;
+            Ref<SceneEditableObject> parentPrototypeLink;
+            Ref<SceneEditableObject> newChild;
 
-            IDifference* Clone() const override;
+            Ref<IDifference> Clone() const override;
             void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                        const Vector<ApplyActorInfo>& applyInfos) const override;
         };
 
         struct MovedChild: public IDifference
         {
-            SceneEditableObject* prototypeLink;
-            SceneEditableObject* newParentPrototypeLink;
+            Ref<SceneEditableObject> prototypeLink;
+            Ref<SceneEditableObject> newParentPrototypeLink;
 
-            IDifference* Clone() const override;
+            Ref<IDifference> Clone() const override;
             void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                        const Vector<ApplyActorInfo>& applyInfos) const override;
         };
 
         struct RemovedComponent: public IDifference
         {
-            Actor*     ownerPrototypeLink;
-            Component* prototypeLink;
+            Ref<Actor>     ownerPrototypeLink;
+            Ref<Component> prototypeLink;
 
-            IDifference* Clone() const override;
+            Ref<IDifference> Clone() const override;
             void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                        const Vector<ApplyActorInfo>& applyInfos) const override;
         };
 
         struct NewComponent: public IDifference
         {
-            Actor*     ownerPrototypeLink;
-            Component* newComponent;
+            Ref<Actor>     ownerPrototypeLink;
+            Ref<Component> newComponent;
 
-            IDifference* Clone() const override;
+            Ref<IDifference> Clone() const override;
             void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                        const Vector<ApplyActorInfo>& applyInfos) const override;
         };
 
         struct ChangedObjectField: public IDifference
         {
-            SceneEditableObject* prototypeLink;
-            String               path;
+            Ref<SceneEditableObject> prototypeLink;
+            String                   path;
 
-            IDifference* Clone() const override;
+            Ref<IDifference> Clone() const override;
             void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                        const Vector<ApplyActorInfo>& applyInfos) const override;
         };
 
         struct ChangedComponentField: public IDifference
         {
-            SceneEditableObject* ownerPrototypeLink;
-            Component*           prototypeLink;
-            String               path;
+            Ref<SceneEditableObject> ownerPrototypeLink;
+            Ref<Component>           prototypeLink;
+            String                   path;
 
-            IDifference* Clone() const override;
+            Ref<IDifference> Clone() const override;
             void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                        const Vector<ApplyActorInfo>& applyInfos) const override;
         };
 
     public:
-        Vector<IDifference*> removedChildren;
-        Vector<IDifference*> newChildren;
-        Vector<IDifference*> movedChildren;
-        Vector<IDifference*> removedComponents;
-        Vector<IDifference*> newComponents;
-        Vector<IDifference*> changedActorFields;
-        Vector<IDifference*> changedComponentFields;
+        Vector<Ref<IDifference>> removedChildren;
+        Vector<Ref<IDifference>> newChildren;
+        Vector<Ref<IDifference>> movedChildren;
+        Vector<Ref<IDifference>> removedComponents;
+        Vector<Ref<IDifference>> newComponents;
+        Vector<Ref<IDifference>> changedActorFields;
+        Vector<Ref<IDifference>> changedComponentFields;
 
     public:
         ActorDifferences();
@@ -127,7 +127,7 @@ namespace o2
         ~ActorDifferences();
 
         // Returns differences between
-        static ActorDifferences GetDifference(Actor* changedActor, Actor* prototype);
+        static ActorDifferences GetDifference(const Ref<Actor>& changedActor, const Ref<Actor>& prototype);
 
         // Collects object differences
         static void GetObjectDifferences(const Function<void(const String& path)>& createDiffFunc,

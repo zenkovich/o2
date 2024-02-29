@@ -3,7 +3,7 @@
 #include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/ISceneDrawable.h"
-#include "o2/Scene/SceneLayerRef.h"
+#include "o2/Scene/SceneLayer.h"
 #include "o2/Scene/UI/WidgetState.h"
 #include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
 #include "o2/Utils/Editor/Attributes/DefaultTypeAttribute.h"

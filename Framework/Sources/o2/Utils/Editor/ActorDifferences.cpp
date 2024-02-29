@@ -11,7 +11,7 @@ namespace o2
     ApplyActorInfo::ApplyActorInfo()
     {}
 
-    ApplyActorInfo::ApplyActorInfo(Actor* actor):
+    ApplyActorInfo::ApplyActorInfo(const Ref<Actor>& actor):
         actor(actor)
     {
         CollectChildren(actor);
@@ -24,11 +24,11 @@ namespace o2
         auto link = object->GetEditableLink();
         while (link)
         {
-            allChildrenByLinks[link] = object;
+            allChildrenByLinks[link.Get()] = object.Get();
             link = link->GetEditableLink();
         }
 
-        for (auto child : object->GetEditableChildren())
+        for (auto& child : object->GetEditableChildren())
             CollectChildren(child);
     }
 
@@ -37,27 +37,19 @@ namespace o2
 
     ActorDifferences::ActorDifferences(const ActorDifferences& other)
     {
-        removedChildren = other.removedChildren.Convert<IDifference*>([](auto x) { return x->Clone(); });
-        newChildren = other.newChildren.Convert<IDifference*>([](auto x) { return x->Clone(); });
-        movedChildren = other.movedChildren.Convert<IDifference*>([](auto x) { return x->Clone(); });
-        removedComponents = other.removedComponents.Convert<IDifference*>([](auto x) { return x->Clone(); });
-        newComponents = other.newComponents.Convert<IDifference*>([](auto x) { return x->Clone(); });
-        changedActorFields = other.changedActorFields.Convert<IDifference*>([](auto x) { return x->Clone(); });
-        changedComponentFields = other.changedComponentFields.Convert<IDifference*>([](auto x) { return x->Clone(); });
+        removedChildren = other.removedChildren.Convert<Ref<IDifference>>([](auto x) { return x->Clone(); });
+        newChildren = other.newChildren.Convert<Ref<IDifference>>([](auto x) { return x->Clone(); });
+        movedChildren = other.movedChildren.Convert<Ref<IDifference>>([](auto x) { return x->Clone(); });
+        removedComponents = other.removedComponents.Convert<Ref<IDifference>>([](auto x) { return x->Clone(); });
+        newComponents = other.newComponents.Convert<Ref<IDifference>>([](auto x) { return x->Clone(); });
+        changedActorFields = other.changedActorFields.Convert<Ref<IDifference>>([](auto x) { return x->Clone(); });
+        changedComponentFields = other.changedComponentFields.Convert<Ref<IDifference>>([](auto x) { return x->Clone(); });
     }
 
     ActorDifferences::~ActorDifferences()
-    {
-        removedChildren.ForEach([](auto x) { delete x; });
-        newChildren.ForEach([](auto x) { delete x; });
-        movedChildren.ForEach([](auto x) { delete x; });
-        removedComponents.ForEach([](auto x) { delete x; });
-        newComponents.ForEach([](auto x) { delete x; });
-        changedActorFields.ForEach([](auto x) { delete x; });
-        changedComponentFields.ForEach([](auto x) { delete x; });
-    }
+    {}
 
-    ActorDifferences ActorDifferences::GetDifference(Actor* changedActor, Actor* prototype)
+    ActorDifferences ActorDifferences::GetDifference(const Ref<Actor>& changedActor, const Ref<Actor>& prototype)
     {
         ActorDifferences res;
 
@@ -75,7 +67,7 @@ namespace o2
         // Because we should check children before parent removes
         for (int i = allProtoChildren.Count() - 1; i >= 0; i--)
         {
-            SceneEditableObject* protoChild = allProtoChildren[i];
+            auto protoChild = allProtoChildren[i];
             if (!protoChild->IsSupportsLinking())
                 continue;
 
@@ -86,7 +78,7 @@ namespace o2
             // Child was removed
             if (thisLinkedChild == nullptr)
             {
-                auto diff = mnew RemovedChild();
+                auto diff = mmake<RemovedChild>();
                 diff->prototypeLink = protoChild;
                 res.removedChildren.Add(diff);
                 continue;
@@ -96,9 +88,9 @@ namespace o2
             if (thisLinkedChild->GetEditableParent() &&
                 thisLinkedChild->GetEditableParent()->GetEditableLink() != protoChild->GetEditableParent())
             {
-                auto diff = mnew MovedChild();
+                auto diff = mmake<MovedChild>();
                 diff->prototypeLink = protoChild;
-                diff->newParentPrototypeLink = const_cast<SceneEditableObject*>(thisLinkedChild->GetEditableParent()->GetEditableLink());
+                diff->newParentPrototypeLink = thisLinkedChild->GetEditableParent()->GetEditableLink();
                 res.movedChildren.Add(diff);
             }
 
@@ -107,7 +99,7 @@ namespace o2
 
             // Get differences from actor
             auto createActorChangedFieldDiff = [&](const String& fieldPath) {
-                auto diff = mnew ChangedObjectField();
+                auto diff = mmake<ChangedObjectField>();
                 diff->prototypeLink = protoChild;
                 diff->path = fieldPath;
                 res.changedActorFields.Add(diff);
@@ -115,25 +107,25 @@ namespace o2
 
             auto& objectType = dynamic_cast<const ObjectType&>(thisLinkedChild->GetType());
             GetObjectDifferences(createActorChangedFieldDiff, fieldsStack, objectType,
-                                 objectType.DynamicCastFromIObject(thisLinkedChild),
-                                 objectType.DynamicCastFromIObject(protoChild));
+                                 objectType.DynamicCastFromIObject(thisLinkedChild.Get()),
+                                 objectType.DynamicCastFromIObject(protoChild.Get()));
 
             thisLinkedChild->GetDifferences(res);
 
             // Check removed and changed components
-            if (auto actorProtoChild = dynamic_cast<Actor*>(protoChild))
+            if (auto actorProtoChild = DynamicCast<Actor>(protoChild))
             {
-                for (auto protoChildComponent : actorProtoChild->GetComponents())
+                for (auto& protoChildComponent : actorProtoChild->GetComponents())
                 {
-                    if (auto actorThisLinkedChild = dynamic_cast<Actor*>(thisLinkedChild))
+                    if (auto actorThisLinkedChild = DynamicCast<Actor>(thisLinkedChild))
                     {
                         auto thisLinkedChildComponent = actorThisLinkedChild->GetComponents()
-                            .FindOrDefault([&](Component* x) { return x->IsLinkedToComponent(protoChildComponent); });
+                            .FindOrDefault([&](auto& x) { return x->IsLinkedToComponent(protoChildComponent); });
 
                         // Component was removed
                         if (thisLinkedChildComponent == nullptr)
                         {
-                            auto diff = mnew RemovedComponent();
+                            auto diff = mmake<RemovedComponent>();
                             diff->prototypeLink = protoChildComponent;
                             diff->ownerPrototypeLink = actorProtoChild;
                             res.removedComponents.Add(diff);
@@ -142,7 +134,7 @@ namespace o2
 
                         // Check component changes
                         auto createComponentChangedFieldDiff = [&](const String& fieldPath) {
-                            auto diff = mnew ChangedComponentField();
+                            auto diff = mmake<ChangedComponentField>();
                             diff->ownerPrototypeLink = protoChild;
                             diff->prototypeLink = protoChildComponent;
                             diff->path = fieldPath;
@@ -151,20 +143,20 @@ namespace o2
 
                         auto& objectType = dynamic_cast<const ObjectType&>(thisLinkedChildComponent->GetType());
                         GetObjectDifferences(createComponentChangedFieldDiff, fieldsStack, objectType,
-                                             objectType.DynamicCastFromIObject(thisLinkedChildComponent),
-                                             objectType.DynamicCastFromIObject(protoChildComponent));
+                                             objectType.DynamicCastFromIObject(thisLinkedChildComponent.Get()),
+                                             objectType.DynamicCastFromIObject(const_cast<Component*>(protoChildComponent.Get())));
                     }
                 }
 
                 // Check new components
-                if (auto actorThisLinkedChild = dynamic_cast<Actor*>(thisLinkedChild))
+                if (auto actorThisLinkedChild = DynamicCast<Actor>(thisLinkedChild))
                 {
-                    for (auto thisChildComponent : actorThisLinkedChild->GetComponents())
+                    for (auto& thisChildComponent : actorThisLinkedChild->GetComponents())
                     {
                         // Not linked, because it is new
                         if (thisChildComponent->GetPrototypeLink() == nullptr)
                         {
-                            auto diff = mnew NewComponent();
+                            auto diff = mmake<NewComponent>();
                             diff->ownerPrototypeLink = actorProtoChild;
                             diff->newComponent = thisChildComponent;
                             res.newComponents.Add(diff);
@@ -175,14 +167,14 @@ namespace o2
         }
 
         // Check new actors
-        for (auto child : allThisChildren)
+        for (auto& child : allThisChildren)
         {
             // Empty prototype link on child, but not empty on parent means that is new actor
             if (child->IsSupportsLinking() && child->GetEditableLink() == nullptr && child->GetEditableParent() &&
                 child->GetEditableParent()->GetEditableLink())
             {
-                auto diff = mnew NewChild();
-                diff->parentPrototypeLink = const_cast<SceneEditableObject*>(child->GetEditableParent()->GetEditableLink());
+                auto diff = mmake<NewChild>();
+                diff->parentPrototypeLink = child->GetEditableParent()->GetEditableLink();
                 diff->newChild = child;
                 res.newChildren.Add(diff);
             }
@@ -195,14 +187,14 @@ namespace o2
                                                 Vector<const FieldInfo*>& stack,
                                                 const Type& objectType, void* changedObject, void* protoObject)
     {
-        for (auto& baseType : objectType.GetBaseTypes())
+        for (auto&& baseType : objectType.GetBaseTypes())
         {
             void* changedObjectBase = baseType.dynamicCastUpFunc(changedObject);
             void* protoObjectBase = baseType.dynamicCastUpFunc(protoObject);
             GetObjectDifferences(createDiffFunc, stack, *baseType.type, changedObjectBase, protoObjectBase);
         }
 
-        for (auto& fieldInfo : objectType.GetFields())
+        for (auto&& fieldInfo : objectType.GetFields())
         {
             if (!fieldInfo.HasAttribute<SerializableAttribute>() && !fieldInfo.HasAttribute<PrototypeDeltaSearchAttribute>())
                 continue;
@@ -270,39 +262,35 @@ namespace o2
     void ActorDifferences::RemovedChild::Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                                                const Vector<ApplyActorInfo>& applyInfos) const
     {
-        for (auto& applyInfo : applyInfos)
+        for (auto&& applyInfo : applyInfos)
         {
             SceneEditableObject* child = nullptr;
-            if (applyInfo.allChildrenByLinks.TryGetValue(prototypeLink, child))
+            if (applyInfo.allChildrenByLinks.TryGetValue(prototypeLink.Get(), child))
             {
                 if (auto actor = dynamic_cast<Actor*>(child))
-                    o2Scene.DestroyActor(actor);
-                else
-                    delete child;
+                    o2Scene.DestroyActor(Ref(actor));
             }
         }
 
-        if (auto actor = dynamic_cast<Actor*>(prototypeLink))
+        if (auto actor = DynamicCast<Actor>(prototypeLink))
             o2Scene.DestroyActor(actor);
-        else
-            delete prototypeLink;
     }
 
     void ActorDifferences::NewChild::Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                                            const Vector<ApplyActorInfo>& applyInfos) const
     {
         newChild->BeginMakePrototype();
-        auto newInstanceChild = newChild->CloneAs<SceneEditableObject>();
+        auto newInstanceChild = newChild->CloneAsRef<SceneEditableObject>();
         parentPrototypeLink->AddEditableChild(newInstanceChild);
 
-        for (auto& applyInfo : applyInfos)
+        for (auto&& applyInfo : applyInfos)
         {
             SceneEditableObject* child = nullptr;
-            if (applyInfo.allChildrenByLinks.TryGetValue(parentPrototypeLink, child))
+            if (applyInfo.allChildrenByLinks.TryGetValue(parentPrototypeLink.Get(), child))
             {
                 auto prototypeLink = newChild->GetEditableLink();
                 prototypeLink->BeginInstantiatePrototype();
-                auto newInstanceChild = prototypeLink->CloneAs<Actor>();
+                auto newInstanceChild = prototypeLink->CloneAsRef<Actor>();
                 child->AddEditableChild(newInstanceChild);
             }
         }
@@ -313,14 +301,14 @@ namespace o2
     {
         prototypeLink->SetEditableParent(newParentPrototypeLink);
 
-        for (auto& applyInfo : applyInfos)
+        for (auto&& applyInfo : applyInfos)
         {
             SceneEditableObject* child = nullptr;
-            if (applyInfo.allChildrenByLinks.TryGetValue(prototypeLink, child))
+            if (applyInfo.allChildrenByLinks.TryGetValue(prototypeLink.Get(), child))
             {
                 SceneEditableObject* newParent = nullptr;
-                if (applyInfo.allChildrenByLinks.TryGetValue(newParentPrototypeLink, newParent))
-                    child->SetEditableParent(newParent);
+                if (applyInfo.allChildrenByLinks.TryGetValue(newParentPrototypeLink.Get(), newParent))
+                    child->SetEditableParent(Ref(newParent));
             }
         }
     }
@@ -328,14 +316,14 @@ namespace o2
     void ActorDifferences::RemovedComponent::Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                                                    const Vector<ApplyActorInfo>& applyInfos) const
     {
-        for (auto& applyInfo : applyInfos)
+        for (auto&& applyInfo : applyInfos)
         {
             SceneEditableObject* child = nullptr;
-            if (applyInfo.allChildrenByLinks.TryGetValue(ownerPrototypeLink, child))
+            if (applyInfo.allChildrenByLinks.TryGetValue(ownerPrototypeLink.Get(), child))
             {
                 if (auto actor = dynamic_cast<Actor*>(child))
                 {
-                    for (auto comp : actor->GetComponents())
+                    for (auto& comp : actor->GetComponents())
                     {
                         if (comp->IsLinkedToComponent(prototypeLink))
                         {
@@ -353,18 +341,18 @@ namespace o2
     void ActorDifferences::NewComponent::Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
                                                const Vector<ApplyActorInfo>& applyInfos) const
     {
-        auto protoNewComponent = newComponent->CloneAs<Component>();
+        auto protoNewComponent = newComponent->CloneAsRef<Component>();
         newComponent->mPrototypeLink = protoNewComponent;
         ownerPrototypeLink->AddComponent(protoNewComponent);
 
-        for (auto& applyInfo : applyInfos)
+        for (auto&& applyInfo : applyInfos)
         {
             SceneEditableObject* child = nullptr;
-            if (applyInfo.allChildrenByLinks.TryGetValue(ownerPrototypeLink, child))
+            if (applyInfo.allChildrenByLinks.TryGetValue(ownerPrototypeLink.Get(), child))
             {
                 if (auto actor = dynamic_cast<Actor*>(child))
                 {
-                    auto newActorComponent = newComponent->GetPrototypeLink()->CloneAs<Component>();
+                    auto newActorComponent = newComponent->GetPrototypeLink().Lock()->CloneAsRef<Component>();
                     newActorComponent->mPrototypeLink = protoNewComponent;
                     actor->AddComponent(newActorComponent);
                 }
@@ -376,22 +364,22 @@ namespace o2
                                                      const Vector<ApplyActorInfo>& applyInfos) const
     {
         SceneEditableObject* sourceChild = nullptr;
-        if (!sourceInfo.allChildrenByLinks.TryGetValue(prototypeLink, sourceChild))
+        if (!sourceInfo.allChildrenByLinks.TryGetValue(prototypeLink.Get(), sourceChild))
             return;
 
         auto& objectType = dynamic_cast<const ObjectType&>(sourceChild->GetType());
         const FieldInfo* sourceFieldInfo = nullptr;
         const FieldInfo* protoFieldInfo = nullptr;
         auto sourceFieldPtr = objectType.GetFieldPtr(objectType.DynamicCastFromIObject(sourceChild), path, sourceFieldInfo);
-        auto protoFieldPtr = objectType.GetFieldPtr(objectType.DynamicCastFromIObject(prototypeLink), path, protoFieldInfo);
+        auto protoFieldPtr = objectType.GetFieldPtr(objectType.DynamicCastFromIObject(prototypeLink.Get()), path, protoFieldInfo);
 
         if (!sourceFieldPtr || !protoFieldPtr)
             return;
 
-        for (auto& applyInfo : applyInfos)
+        for (auto&& applyInfo : applyInfos)
         {
             SceneEditableObject* child = nullptr;
-            if (!applyInfo.allChildrenByLinks.TryGetValue(prototypeLink, child))
+            if (!applyInfo.allChildrenByLinks.TryGetValue(prototypeLink.Get(), child))
                 continue;
 
             auto& objectType = dynamic_cast<const ObjectType&>(child->GetType());
@@ -411,14 +399,14 @@ namespace o2
                                                         const Vector<ApplyActorInfo>& applyInfos) const
     {
         SceneEditableObject* sourceChild = nullptr;
-        if (!sourceInfo.allChildrenByLinks.TryGetValue(ownerPrototypeLink, sourceChild))
+        if (!sourceInfo.allChildrenByLinks.TryGetValue(ownerPrototypeLink.Get(), sourceChild))
             return;
 
         auto sourceActor = dynamic_cast<Actor*>(sourceChild);
         if (!sourceActor)
             return;
 
-        for (auto sourceComp : sourceActor->GetComponents())
+        for (auto& sourceComp : sourceActor->GetComponents())
         {
             if (!sourceComp->IsLinkedToComponent(prototypeLink))
                 continue;
@@ -426,30 +414,30 @@ namespace o2
             auto& objectType = dynamic_cast<const ObjectType&>(sourceComp->GetType());
             const FieldInfo* sourceFieldInfo = nullptr;
             const FieldInfo* protoFieldInfo = nullptr;
-            auto sourceFieldPtr = objectType.GetFieldPtr(objectType.DynamicCastFromIObject(sourceComp), path, sourceFieldInfo);
-            auto protoFieldPtr = objectType.GetFieldPtr(objectType.DynamicCastFromIObject(prototypeLink), path, protoFieldInfo);
+            auto sourceFieldPtr = objectType.GetFieldPtr(objectType.DynamicCastFromIObject(const_cast<Component*>(sourceComp.Get())), path, sourceFieldInfo);
+            auto protoFieldPtr = objectType.GetFieldPtr(objectType.DynamicCastFromIObject(const_cast<Component*>(prototypeLink.Get())), path, protoFieldInfo);
 
             if (!sourceFieldPtr || !protoFieldInfo)
                 break;
 
-            for (auto& applyInfo : applyInfos)
+            for (auto&& applyInfo : applyInfos)
             {
                 SceneEditableObject* child = nullptr;
-                if (!applyInfo.allChildrenByLinks.TryGetValue(ownerPrototypeLink, child))
+                if (!applyInfo.allChildrenByLinks.TryGetValue(ownerPrototypeLink.Get(), child))
                     continue;
 
                 auto actor = dynamic_cast<Actor*>(child);
                 if (!actor)
                     continue;
 
-                for (auto comp : actor->GetComponents())
+                for (auto& comp : actor->GetComponents())
                 {
                     if (!comp->IsLinkedToComponent(prototypeLink))
                         continue;
 
                     auto& objectType = dynamic_cast<const ObjectType&>(comp->GetType());
                     const FieldInfo* fieldInfo = nullptr;
-                    auto fieldPtr = objectType.GetFieldPtr(objectType.DynamicCastFromIObject(comp), path, fieldInfo);
+                    auto fieldPtr = objectType.GetFieldPtr(objectType.DynamicCastFromIObject(const_cast<Component*>(comp.Get())), path, fieldInfo);
 
                     if (!fieldPtr)
                         break;
@@ -465,39 +453,39 @@ namespace o2
         }
     }
 
-    ActorDifferences::IDifference* ActorDifferences::RemovedChild::Clone() const
+    Ref<ActorDifferences::IDifference> ActorDifferences::RemovedChild::Clone() const
     {
-        return mnew RemovedChild(*this);
+        return mmake<RemovedChild>(*this);
     }
 
-    ActorDifferences::IDifference* ActorDifferences::NewChild::Clone() const
+    Ref<ActorDifferences::IDifference> ActorDifferences::NewChild::Clone() const
     {
-        return mnew NewChild(*this);
+        return mmake<NewChild>(*this);
     }
 
-    ActorDifferences::IDifference* ActorDifferences::RemovedComponent::Clone() const
+    Ref<ActorDifferences::IDifference> ActorDifferences::RemovedComponent::Clone() const
     {
-        return mnew RemovedComponent(*this);
+        return mmake<RemovedComponent>(*this);
     }
 
-    ActorDifferences::IDifference* ActorDifferences::NewComponent::Clone() const
+    Ref<ActorDifferences::IDifference> ActorDifferences::NewComponent::Clone() const
     {
-        return mnew NewComponent(*this);
+        return mmake<NewComponent>(*this);
     }
 
-    ActorDifferences::IDifference* ActorDifferences::ChangedObjectField::Clone() const
+    Ref<ActorDifferences::IDifference> ActorDifferences::ChangedObjectField::Clone() const
     {
-        return mnew ChangedObjectField(*this);
+        return mmake<ChangedObjectField>(*this);
     }
 
-    ActorDifferences::IDifference* ActorDifferences::ChangedComponentField::Clone() const
+    Ref<ActorDifferences::IDifference> ActorDifferences::ChangedComponentField::Clone() const
     {
-        return mnew ChangedComponentField(*this);
+        return mmake<ChangedComponentField>(*this);
     }
 
-    ActorDifferences::IDifference* ActorDifferences::MovedChild::Clone() const
+    Ref<ActorDifferences::IDifference> ActorDifferences::MovedChild::Clone() const
     {
-        return mnew MovedChild(*this);
+        return mmake<MovedChild>(*this);
     }
 #endif
 }

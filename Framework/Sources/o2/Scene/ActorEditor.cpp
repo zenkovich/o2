@@ -114,16 +114,16 @@ namespace o2
             return;
 
         // Get difference between this actor and prototype first
-        auto diffs = ActorDifferences::GetDifference(this, mPrototype->GetActor().Get());
+        auto diffs = ActorDifferences::GetDifference(Ref(this), mPrototype->GetActor());
 
         // Get applying actors infos
-        ApplyActorInfo prototypeApplyInfo(mPrototype->GetActor().Get());
-        ApplyActorInfo thisApplyInfo(this);
+        ApplyActorInfo prototypeApplyInfo(mPrototype->GetActor());
+        ApplyActorInfo thisApplyInfo(Ref(this));
         Vector<ApplyActorInfo> linkedActorsApplyInfos;
 
         auto& linkedActors = o2Scene.mPrototypeLinksCache[mPrototype];
         linkedActorsApplyInfos.Reserve(linkedActors.Count());
-        linkedActors.ForEach([&](auto x) { if (x != this) linkedActorsApplyInfos.Add(ApplyActorInfo(x.Lock().Get())); });
+        linkedActors.ForEach([&](auto x) { if (x != this) linkedActorsApplyInfos.Add(ApplyActorInfo(x.Lock())); });
     
         // Apply differences
         diffs.newChildren.ForEach([&](auto d) { d->Apply(thisApplyInfo, prototypeApplyInfo, linkedActorsApplyInfos); });
@@ -164,8 +164,8 @@ namespace o2
         stack.Add(GetType().GetField("transform"));
 
         auto createActorChangedFieldDiff = [&](const String& fieldPath) {
-            auto diff = mnew ActorDifferences::ChangedObjectField();
-            diff->prototypeLink = const_cast<Actor*>(mPrototypeLink.Lock().Get());
+            auto diff = mmake<ActorDifferences::ChangedObjectField>();
+            diff->prototypeLink = mPrototypeLink.Lock();
             diff->path = fieldPath;
             differences.changedActorFields.Add(diff);
         };

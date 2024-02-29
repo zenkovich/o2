@@ -48,7 +48,7 @@ namespace o2
 	Ref<Texture>::Ref(const String& atlasAssetName, int page)
 	{
 		UID atlasAssetId = o2Assets.GetAssetId(atlasAssetName);
-		if (atlasAssetId == 0) {
+		if (atlasAssetId == UID::empty) {
 			o2Render.mLog->Error("Can't load texture for atlas " + atlasAssetName + " and page " + (String)page + ": atlas isn't exist");
 			mPtr = nullptr;
 			return;
