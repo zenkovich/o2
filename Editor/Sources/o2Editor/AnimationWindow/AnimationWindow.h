@@ -27,6 +27,11 @@ namespace Editor
 	class CurvesSheet;
 	class KeyHandlesSheet;
 
+    FORWARD_REF(AnimationTimeline);
+    FORWARD_REF(AnimationTree);
+    FORWARD_REF(CurvesSheet);
+    FORWARD_REF(KeyHandlesSheet);
+
 	// TODO
 	// - Добавить вывод трека цвета, булевого, вектора
 	// - Добавить assign акторов

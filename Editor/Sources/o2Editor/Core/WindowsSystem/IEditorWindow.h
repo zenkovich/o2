@@ -10,7 +10,7 @@ namespace Editor
 	// -----------------------------
 	// Basic editor window interface
 	// -----------------------------
-	class IEditorWindow: public IObject
+	class IEditorWindow: public IObject, public RefCounterable
 	{
 	public:
 		// Default constructor
@@ -67,6 +67,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IEditorWindow)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IEditorWindow)

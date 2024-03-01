@@ -547,7 +547,7 @@ namespace o2
 		}
 	}
 
-	const Ref<Sprite>& CustomList::GetSelectionSprite()
+	Ref<Sprite> CustomList::GetSelectionSprite()
 	{
 		if (mSelectionSpritesPool.IsEmpty()) {
 			const int poolStep = 5;

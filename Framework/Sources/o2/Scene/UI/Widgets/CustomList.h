@@ -226,7 +226,7 @@ namespace o2
         void UpdateHover(const Vec2F& point);
 
         // Returns selection sprite
-        const Ref<Sprite>& GetSelectionSprite();
+        Ref<Sprite> GetSelectionSprite();
 
         friend class DropDown;
         friend class CustomDropDown;
@@ -320,7 +320,7 @@ CLASS_METHODS_META(o2::CustomList)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, GetItemUnderPoint, const Vec2F&, int*);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Vec2F&);
-    FUNCTION().PROTECTED().SIGNATURE(const Ref<Sprite>&, GetSelectionSprite);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Sprite>, GetSelectionSprite);
 }
 END_META;
 // --- END META ---

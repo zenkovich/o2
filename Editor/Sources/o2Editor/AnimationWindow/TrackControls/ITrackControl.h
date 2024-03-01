@@ -15,7 +15,7 @@ namespace Editor
 	class ITrackControl: public Widget
 	{
 	public:
-		struct KeyHandle
+		struct KeyHandle: public RefCounterable
 		{
 			UInt64 keyUid = 0;
 

@@ -225,7 +225,7 @@ namespace Editor
 	Vector<void*> AnimationPropertiesTree::GetObjectChilds(void* object)
 	{
 		if (object)
-			return ((NodeData*)object)->children.Cast<void*>();
+			return ((NodeData*)object)->children.Convert<void*>([](auto& x) { return x.Get(); });
 
 		return mRoot->children.Convert<void*>([](auto& x) { return x.Get(); });
 	}

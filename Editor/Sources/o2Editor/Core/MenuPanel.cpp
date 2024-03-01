@@ -98,7 +98,7 @@ namespace Editor
 			static float xx = 0, yy = 1;
 			ForcePopEditorScopeOnStack scope;
 			auto prop = o2UI.CreateWidget<FloatProperty>("with caption");
-			prop->SetValueAndPrototypeProxy({ { mmake<PointerValueProxy>(&xx), mmake<PointerValueProxy>(&yy) } });
+			prop->SetValueAndPrototypeProxy({ { mmake<PointerValueProxy<float>>(&xx), mmake<PointerValueProxy<float>>(&yy) } });
 							});
 
 		mMenuPanel->AddItem("Debug/Randomize IDs", [&]() {

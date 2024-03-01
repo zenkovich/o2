@@ -23,9 +23,15 @@ namespace Editor
 	// ------------------
 	// Editor tools panel
 	// ------------------
-	class ToolsPanel : public Singleton<ToolsPanel>
+	class ToolsPanel : public Singleton<ToolsPanel>, public RefCounterable
 	{
-	public:
+    public:
+        // Default constructor. Initializes all panel
+        ToolsPanel();
+
+        // Destructor
+        ~ToolsPanel();
+
 		// Returns panel's widgets
 		const Ref<Widget>& GetPanelWidget() const;
 
@@ -62,12 +68,6 @@ namespace Editor
 		Ref<DropDown> mLayoutSchemesList; // Layouts schemes list
 
 	protected:
-		// Default constructor. Initializes all panel
-		ToolsPanel();
-
-		// Destructor
-		~ToolsPanel();
-
 		// initializes play panel
 		void InitializePlayPanel();
 

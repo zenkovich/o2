@@ -13,7 +13,7 @@ namespace Editor
 	// -----------------
 	// Editor menu panel
 	// -----------------
-	class MenuPanel: public Singleton<MenuPanel>
+	class MenuPanel: public Singleton<MenuPanel>, public RefCounterable
 	{
 	public:
 		// Default constructor. Initializes basic menu items

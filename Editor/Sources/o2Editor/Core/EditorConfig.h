@@ -23,7 +23,7 @@ namespace Editor
 	// -------------------------
 	// Application configuration
 	// -------------------------
-	class EditorConfig : public ISerializable, public Singleton<EditorConfig>
+	class EditorConfig : public ISerializable, public Singleton<EditorConfig>, public RefCounterable
 	{
 	public:
 		// ---------------------------
@@ -103,6 +103,7 @@ CLASS_BASES_META(Editor::EditorConfig)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::Singleton<EditorConfig>);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig)

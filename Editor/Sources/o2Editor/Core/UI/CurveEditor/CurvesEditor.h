@@ -109,7 +109,6 @@ namespace Editor
 
     public:
         struct CurveInfo;
-        FORWARD_REF(CurveInfo);
 
         // --------------------------------------
         // Drag handle specified to curves editor
@@ -564,7 +563,6 @@ CLASS_METHODS_META(Editor::CurvesEditor)
     FUNCTION().PUBLIC().SIGNATURE(void, SetAdjustCurvesScale, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<ContextMenu>&, GetContextMenu);
-    FUNCTION().PUBLIC().SIGNATURE(void, FORWARD_REF, CurveInfo);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);

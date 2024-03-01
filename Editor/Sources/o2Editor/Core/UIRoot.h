@@ -19,9 +19,15 @@ namespace Editor
 	// --------------
 	// Editor UI root
 	// --------------
-	class UIRoot: public Singleton<UIRoot>, ApplicationEventsListener
+	class UIRoot: public Singleton<UIRoot>, public ApplicationEventsListener
 	{
-	public:
+    public:
+        // Default constructor, creates root widget
+        UIRoot();
+
+        // Destructor
+        ~UIRoot();
+
 		// Adds widget to root
 		Ref<Widget> AddWidget(const Ref<Widget>& widget);
 
@@ -38,12 +44,6 @@ namespace Editor
 		Ref<Widget> mRootWidget; // Root widget for editor UI
 
 	private:
-		// Default constructor, creates root widget
-		UIRoot();
-
-		// Destructor
-		~UIRoot();
-
 		// Draws root widget
 		void Draw();
 

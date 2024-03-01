@@ -2,6 +2,7 @@
 
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2Editor/Core/Dialogs/KeyEditDlg.h"
 #include "o2Editor/Core/WindowsSystem/WindowsLayout.h"
 
 using namespace o2;
@@ -26,9 +27,15 @@ namespace Editor
 	// ----------------------
 	// Editor windows manager
 	// ----------------------
-	class WindowsManager: public Singleton<WindowsManager>
+	class WindowsManager: public Singleton<WindowsManager>, public RefCounterable
 	{
-	public:
+    public:
+        // Default constructor
+        WindowsManager();
+
+        // Destructor
+        ~WindowsManager();
+
 		// Adds new window
 		void AddWindow(const Ref<IEditorWindow>& window);
 
@@ -62,12 +69,6 @@ namespace Editor
 		Ref<KeyEditDlg>     mKeyEditDlg;       // Key edit dialog
 
 	protected:
-		// Default constructor
-		WindowsManager();
-
-		// Destructor
-		~WindowsManager();
-
 		// Searches derived from IEditorWindow and creates them
 		void InitializeWindows();
 

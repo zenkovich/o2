@@ -187,8 +187,6 @@ namespace o2
         SERIALIZABLE(Tree);
 
     protected:
-        struct Node;
-
         // --------------------
         // Tree node definition
         // --------------------
@@ -208,6 +206,9 @@ namespace o2
             float insertCoef = 0.0f; // Inserting coefficient (0...1)
 
         public:
+            // Destructor
+            virtual ~Node();
+
             // Returns height of node with children and coefficients
             float GetHeight() const;
 

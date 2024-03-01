@@ -1879,6 +1879,9 @@ namespace o2
         return Widget::IsUnderPoint(point);
     }
 
+    Tree::Node::~Node()
+    {}
+
     float Tree::Node::GetHeight() const
     {
         float res = 20;

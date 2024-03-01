@@ -29,6 +29,11 @@ namespace Editor
 			SceneUID lastPrevObjectId;   // Previous object id in children
 			int      objectHierarchyIdx; // Object index in hierarchy
 			Basis    transform;          // Object transform
+
+			bool operator==(const ObjectInfo& other) const
+            {
+                return objectId == other.objectId;
+            }
 		};
 
 		Vector<ObjectInfo> objectsInfos;    // Changed objects info

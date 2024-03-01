@@ -58,7 +58,7 @@ namespace Editor
 	template<typename _type>
 	_type* PropertiesContext::FindOnStack() const
 	{
-		auto contextIt = parent;
+		auto contextIt = parent.Lock();
 		while (contextIt)
 		{
 			if (!contextIt->targets.IsEmpty())
@@ -67,7 +67,7 @@ namespace Editor
 					return typed;
 			}
 
-			contextIt = contextIt->parent;
+			contextIt = contextIt->parent.Lock();
 		}
 
 		return nullptr;

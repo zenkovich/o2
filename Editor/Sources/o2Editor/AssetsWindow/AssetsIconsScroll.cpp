@@ -422,7 +422,7 @@ namespace Editor
         PushEditorScopeOnStack scope;
         GridLayoutScrollArea::UpdateVisibleItems();
 
-        mVisibleAssetIcons = mChildWidgets.DynamicCast<AssetIcon>();
+        mVisibleAssetIcons = DynamicCastVector<AssetIcon>(mChildWidgets);
     }
 
     void AssetsIconsScrollArea::OnFocused()
