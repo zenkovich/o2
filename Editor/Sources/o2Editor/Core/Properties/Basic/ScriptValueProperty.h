@@ -14,7 +14,7 @@ namespace o2
 
 namespace Editor
 {
-	class IntegerProperty;
+	FORWARD_CLASS_REF(IntegerProperty);
 
 	// --------------------
 	// ScriptValue property
@@ -149,12 +149,12 @@ namespace Editor
 	{
 		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
 		auto proxies = prop->second.template Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
-			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
+			[](auto& x)
 			{
 				Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>> res;
-				res.first = mnew TypeScriptValueProxy<_type>(x.first->Clone());
+				res.first = mmake<TypeScriptValueProxy<_type>>(x.first->Clone());
 				if (x.second && x.second->Get().IsObject())
-					res.second = mnew TypeScriptValueProxy<_type>(x.second->Clone());
+					res.second = mmake<TypeScriptValueProxy<_type>>(x.second->Clone());
 
 				return res;
 			});
@@ -168,12 +168,12 @@ namespace Editor
 	{
 		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
 		auto proxies = prop->second.template Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
-			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
+			[](auto& x)
 			{
 				Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>> res;
-				res.first = mnew PtrScriptValueProxy<_type>(x.first->Clone());
+				res.first = mmake<PtrScriptValueProxy<_type>>(x.first->Clone());
 				if (x.second && x.second->Get().IsObject())
-					res.second = mnew PtrScriptValueProxy<_type>(x.second->Clone());
+					res.second = mmake<PtrScriptValueProxy<_type>>(x.second->Clone());
 
 				return res;
 			});

@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
 	// ----------------------
 	// Editor object property

@@ -155,7 +155,7 @@ namespace Editor
         // ------------------------------------------------------
         // Curve point handles. Contains main and support handles
         // ------------------------------------------------------
-        struct KeyHandles
+        struct KeyHandles: public RefCounterable
         {
             WeakRef<CurvesEditor> curveEditor; // Owner curves editor
 

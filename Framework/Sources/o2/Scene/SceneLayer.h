@@ -9,8 +9,7 @@ namespace o2
 {
     class Actor;
 
-    class SceneLayerRootDrawablesContainer;
-    FORWARD_REF(SceneLayerRootDrawablesContainer);
+    FORWARD_CLASS_REF(SceneLayerRootDrawablesContainer);
 
     class ISceneDrawable;
 

@@ -6,7 +6,7 @@
 
 namespace Editor
 {
-    class TransformAction;
+    FORWARD_CLASS_REF(TransformAction);
 
     // -------------------------
     // Scale objects editor tool

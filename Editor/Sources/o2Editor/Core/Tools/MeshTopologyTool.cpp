@@ -8,7 +8,7 @@ namespace Editor
 	MeshTopologyTool::MeshTopologyTool():
 		mSelectionSprite("ui/UI_Window_place.png")
 	{
-		sceneLayer.tool = Ref(this);
+		sceneLayer->tool = Ref(this);
 
 		mHandleSample = DragHandle(mmake<Sprite>("ui/CurveHandle.png"),
 								   mmake<Sprite>("ui/CurveHandleHover.png"),

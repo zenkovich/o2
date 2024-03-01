@@ -45,7 +45,7 @@ namespace Editor
 			};
 
 			// Spline tool
-			mSplineTool->SetSpline(&mTypeTargetObjects[0].first->spline, getOrigin);
+			mSplineTool->SetSpline(mTypeTargetObjects[0].first->spline, getOrigin);
 			mSplineTool->onChanged = [&]() { mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged(); };
 
 			// Frame tool

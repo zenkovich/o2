@@ -5,8 +5,8 @@ using namespace o2;
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
-	class PropertiesContext;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
+	FORWARD_CLASS_REF(PropertiesContext);
 
 	// -----------------------------------------------------------------
 	// Basic automatic object viewer. Selects suitable properties viewer

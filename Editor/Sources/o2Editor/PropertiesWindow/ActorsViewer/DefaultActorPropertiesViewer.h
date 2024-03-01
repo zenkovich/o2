@@ -6,7 +6,7 @@
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
 	// -------------------------------
 	// Default actor properties viewer

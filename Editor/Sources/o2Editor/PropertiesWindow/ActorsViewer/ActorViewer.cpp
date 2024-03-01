@@ -73,7 +73,7 @@ namespace Editor
 		scrollArea->AddChild(mViewersLayout);
 
 		// Initialize add component panel
-		mAddComponentPanel = mmake<AddComponentPanel>(this);
+		mAddComponentPanel = mmake<AddComponentPanel>(Ref(this));
 		mAddComponentPanel->name = "add component";
 		*mAddComponentPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 40, 0);
 		mContentWidget->AddChild(mAddComponentPanel);

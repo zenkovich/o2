@@ -6,15 +6,15 @@ using namespace o2;
 
 namespace o2
 {
-	class Button;
-	class WidgetDragHandle;
+	FORWARD_CLASS_REF(Button);
+	FORWARD_CLASS_REF(WidgetDragHandle);
 }
 
 namespace Editor
 {
-	class AssetProperty;
-	class BorderIProperty;
-	class ImageSlicesEditorWidget;
+	FORWARD_CLASS_REF(AssetProperty);
+	FORWARD_CLASS_REF(BorderIProperty);
+	FORWARD_CLASS_REF(ImageSlicesEditorWidget);
 
 	// ------------------
 	// Image asset viewer

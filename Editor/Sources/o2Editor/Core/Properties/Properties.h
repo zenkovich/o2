@@ -20,7 +20,7 @@ namespace o2
 
 namespace Editor
 {
-    class IObjectPropertiesViewer;
+    FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
     // ------------------------------------------------------------------------------
     // Editor properties building utility. Can cache, build and reuse property fields

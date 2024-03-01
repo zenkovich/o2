@@ -5,14 +5,9 @@
 
 namespace o2
 {
-    class AnimationClip;
-    FORWARD_REF(AnimationClip);
-
-    class AnimationPlayer;
-    FORWARD_REF(AnimationPlayer);
-
-    class AnimationState;
-    FORWARD_REF(AnimationState);
+    FORWARD_CLASS_REF(AnimationClip);
+    FORWARD_CLASS_REF(AnimationPlayer);
+    FORWARD_CLASS_REF(AnimationState);
 
     // -------------------------
     // Animation track interface

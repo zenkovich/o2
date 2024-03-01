@@ -333,6 +333,11 @@ namespace o2
 	o2::RefCounter* GetRefCounterFwd(CLASS* ptr); \
 	void DestructObjectFwd(CLASS* obj) 
 
+    // Forward declaration of class and reference counter implementation
+#define FORWARD_CLASS_REF(CLASS) \
+    class CLASS;                 \
+	FORWARD_REF(CLASS)
+
     // Implementation of forward declared reference counter 
 #define FORWARD_REF_IMPL(CLASS)                                                   \
 	o2::RefCounter* GetRefCounterFwd(CLASS* ptr) { return GetRefCounterImpl(ptr); } \

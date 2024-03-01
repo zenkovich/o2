@@ -15,7 +15,7 @@ namespace o2
 
 namespace Editor
 {
-	class IPropertyField;
+	FORWARD_CLASS_REF(IPropertyField);
 
 	// --------------------------------------------------------------------------------------------
     // Editor properties context. Contains targets and properties. Used to update properties values

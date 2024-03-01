@@ -14,13 +14,13 @@ namespace o2
 
 namespace Editor
 {
-	class AddComponentPanel;
-	class DefaultActorComponentViewer;
-	class DefaultActorPropertiesViewer;
-	class IActorComponentViewer;
-	class IActorHeaderViewer;
-	class IActorPropertiesViewer;
-	class IActorTransformViewer;
+	FORWARD_CLASS_REF(AddComponentPanel);
+	FORWARD_CLASS_REF(DefaultActorComponentViewer);
+	FORWARD_CLASS_REF(DefaultActorPropertiesViewer);
+	FORWARD_CLASS_REF(IActorComponentViewer);
+	FORWARD_CLASS_REF(IActorHeaderViewer);
+	FORWARD_CLASS_REF(IActorPropertiesViewer);
+	FORWARD_CLASS_REF(IActorTransformViewer);
 
 	// ------------------------
 	// Actors properties viewer

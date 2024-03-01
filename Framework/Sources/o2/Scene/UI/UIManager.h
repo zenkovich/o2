@@ -13,59 +13,24 @@
 
 namespace o2
 {
-    class Button;
-    FORWARD_REF(Button);
-
-    class CustomDropDown;
-    FORWARD_REF(CustomDropDown);
-
-    class CustomList;
-    FORWARD_REF(CustomList);
-
-    class DropDown;
-    FORWARD_REF(DropDown);
-
-    class EditBox;
-    FORWARD_REF(EditBox);
-
-    class HorizontalLayout;
-    FORWARD_REF(HorizontalLayout);
-
-    class HorizontalProgress;
-    FORWARD_REF(HorizontalProgress);
-
-    class HorizontalScrollBar;
-    FORWARD_REF(HorizontalScrollBar);
-
-    class Image;
-    FORWARD_REF(Image);
-
-    class Label;
-    FORWARD_REF(Label);
-
-    class List;
-    FORWARD_REF(List);
-
-    class ScrollArea;
-    FORWARD_REF(ScrollArea);
-
-    class Toggle;
-    FORWARD_REF(Toggle);
-
-    class VerticalLayout;
-    FORWARD_REF(VerticalLayout);
-
-    class VerticalProgress;
-    FORWARD_REF(VerticalProgress);
-
-    class VerticalScrollBar;
-    FORWARD_REF(VerticalScrollBar);
-
-    class Widget;
-    FORWARD_REF(Widget);
-
-    class Window;
-    FORWARD_REF(Window);
+    FORWARD_CLASS_REF(Button);
+    FORWARD_CLASS_REF(CustomDropDown);
+    FORWARD_CLASS_REF(CustomList);
+    FORWARD_CLASS_REF(DropDown);
+    FORWARD_CLASS_REF(EditBox);
+    FORWARD_CLASS_REF(HorizontalLayout);
+    FORWARD_CLASS_REF(HorizontalProgress);
+    FORWARD_CLASS_REF(HorizontalScrollBar);
+    FORWARD_CLASS_REF(Image);
+    FORWARD_CLASS_REF(Label);
+    FORWARD_CLASS_REF(List);
+    FORWARD_CLASS_REF(ScrollArea);
+    FORWARD_CLASS_REF(Toggle);
+    FORWARD_CLASS_REF(VerticalLayout);
+    FORWARD_CLASS_REF(VerticalProgress);
+    FORWARD_CLASS_REF(VerticalScrollBar);
+    FORWARD_CLASS_REF(Widget);
+    FORWARD_CLASS_REF(Window);
 
 #undef CreateWindow
 

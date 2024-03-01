@@ -77,7 +77,7 @@ namespace Editor
             bool operator==(const KeyHandle& other) const;
         };
 
-        struct IHandlesGroup
+        struct IHandlesGroup: public RefCounterable
         {
             String                 trackPath;
             Vector<Ref<KeyHandle>> handles;

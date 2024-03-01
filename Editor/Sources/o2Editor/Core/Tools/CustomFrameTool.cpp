@@ -7,7 +7,7 @@ namespace Editor
 {
 	CustomFrameTool::CustomFrameTool()
 	{
-		sceneLayer.tool = Ref(this);
+		sceneLayer->tool = Ref(this);
 		frameHandles.isInputTransparent = true;
 		frameHandles.onTransformed = [&](const Basis& x) {
 			auto b = x*o2EditorSceneScreen.GetScreenToLocalTransform();

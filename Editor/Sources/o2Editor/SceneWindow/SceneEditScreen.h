@@ -307,8 +307,9 @@ namespace Editor
 	template<typename _type>
 	Ref<_type> SceneEditScreen::GetTool()
 	{
-		for (auto& tool : mTools) {
-			if (auto typedTool = dynamic_cast<_type*>(tool))
+		for (auto& tool : mTools) 
+		{
+			if (auto typedTool = DynamicCast<_type>(tool))
 				return typedTool;
 		}
 

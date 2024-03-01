@@ -10,8 +10,7 @@
 
 namespace o2
 {
-    class AnimationComponent;
-    FORWARD_REF(AnimationComponent);
+    FORWARD_CLASS_REF(AnimationComponent);
 
     // ---------------
     // Animation state

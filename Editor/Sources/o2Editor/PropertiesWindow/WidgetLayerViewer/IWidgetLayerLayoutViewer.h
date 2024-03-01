@@ -20,7 +20,7 @@ namespace Editor
 	// -------------------------------------------
 	// Editor widget layer layout viewer interface
 	// -------------------------------------------
-	class IWidgetLayerLayoutViewer : public IObject
+	class IWidgetLayerLayoutViewer : public IObject, virtual public RefCounterable
 	{
 	public:
 		// Default constructor. Initializes data widget
@@ -70,6 +70,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IWidgetLayerLayoutViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerLayoutViewer)

@@ -241,9 +241,9 @@ namespace Editor
 	Vector<void*> ComponentsTree::GetObjectChilds(void* object)
 	{
 		if (object)
-			return ((NodeData*)object)->children.Cast<void*>();
+			return ((NodeData*)object)->children.Convert<void*>([](auto& x) { return x.Get(); });
 
-		return mRoot->children.Cast<void*>();
+		return mRoot->children.Convert<void*>([](auto& x) { return x.Get(); });
 	}
 
 	String ComponentsTree::GetObjectDebug(void* object)
@@ -331,7 +331,7 @@ namespace Editor
 		newChild->name = name;
 		newChild->path = path.IsEmpty() ? name : path + "/" + name;
 		newChild->type = type;
-		newChild->parent = this;
+		newChild->parent = Ref(this);
 
 		return newChild;
 	}

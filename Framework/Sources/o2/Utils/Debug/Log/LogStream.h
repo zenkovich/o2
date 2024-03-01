@@ -10,7 +10,7 @@ namespace o2
     // ---------------------------------------------------------------------------------
     // Basic log stream. Contains interfaces of outing data, parent and children streams
     // ---------------------------------------------------------------------------------
-    class LogStream: public RefCounterable
+    class LogStream: virtual public RefCounterable
     {
     public:
         // Default constructor

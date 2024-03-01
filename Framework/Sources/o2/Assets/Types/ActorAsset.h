@@ -5,8 +5,7 @@
 
 namespace o2
 {
-    class Actor;
-    FORWARD_REF(Actor);
+    FORWARD_CLASS_REF(Actor);
 
     // -----------
     // Actor asset

@@ -30,8 +30,7 @@
 
 namespace o2
 {
-    class AtlasAsset;
-    FORWARD_REF(AtlasAsset);
+    FORWARD_CLASS_REF(AtlasAsset);
 
     class CursorAreaEventListenersLayer;
     class Font;

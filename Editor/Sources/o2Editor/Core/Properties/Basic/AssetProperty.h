@@ -13,7 +13,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class ObjectViewer;
+	FORWARD_CLASS_REF(ObjectViewer);
 
 	// -------------------------
 	// Editor asset property box

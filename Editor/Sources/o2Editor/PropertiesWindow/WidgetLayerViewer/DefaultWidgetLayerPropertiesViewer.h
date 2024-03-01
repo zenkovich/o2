@@ -6,12 +6,12 @@
 
 namespace o2
 {
-	class Button;
+	FORWARD_CLASS_REF(Button);
 }
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
 	// --------------------------------------
 	// Default widget layer properties viewer

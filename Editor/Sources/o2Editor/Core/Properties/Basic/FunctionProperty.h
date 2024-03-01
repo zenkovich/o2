@@ -13,8 +13,8 @@ namespace o2
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
-	class ActorProperty;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
+	FORWARD_CLASS_REF(ActorProperty);
 
 	// ------------------------
 	// Editor function property

@@ -251,7 +251,7 @@ namespace Editor
 			return { (void*)mRootValue.Get() };
 
 		auto treeNode = (TrackNode*)object;
-		return treeNode->children.Cast<void*>();
+		return treeNode->children.Convert<void*>([](auto& x) { return x.Get(); });
 	}
 
 	String AnimationTree::GetObjectDebug(void* object)

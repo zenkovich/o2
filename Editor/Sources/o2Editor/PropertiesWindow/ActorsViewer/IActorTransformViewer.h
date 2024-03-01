@@ -21,7 +21,7 @@ namespace Editor
 	// ---------------------------------------
 	// Editor actor transform viewer interface
 	// ---------------------------------------
-	class IActorTransformViewer: public IObject
+	class IActorTransformViewer: public IObject, virtual public RefCounterable
 	{
 	public:
 		// Default constructor. Initializes data widget
@@ -73,6 +73,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IActorTransformViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IActorTransformViewer)

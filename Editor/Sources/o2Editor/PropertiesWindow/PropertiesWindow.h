@@ -18,9 +18,9 @@ namespace o2
 
 namespace Editor
 {
-	class DefaultPropertiesViewer;
-	class IPropertiesViewer;
-	class PropertiesContext;
+	FORWARD_CLASS_REF(DefaultPropertiesViewer);
+	FORWARD_CLASS_REF(IPropertiesViewer);
+	FORWARD_CLASS_REF(PropertiesContext);
 
 	// ------------------------
 	// Editor properties window

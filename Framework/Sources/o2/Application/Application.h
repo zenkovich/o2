@@ -27,45 +27,21 @@
 
 namespace o2
 {
-    class Assets;
-    FORWARD_REF(Assets);
-
-    class EventSystem;
-    FORWARD_REF(EventSystem);
-
-    class FileSystem;
-    FORWARD_REF(FileSystem);
-
-    class Input;
-    FORWARD_REF(Input);
-
-    class LogStream;
-    FORWARD_REF(LogStream);
-
-    class PhysicsWorld;
-    FORWARD_REF(PhysicsWorld);
-
-    class ProjectConfig;
-    FORWARD_REF(ProjectConfig);
-
-    class Render;
-    FORWARD_REF(Render);
-
-    class Scene;
-    FORWARD_REF(Scene);
-
-    class TaskManager;
-    FORWARD_REF(TaskManager);
-
-    class Time;
-    FORWARD_REF(Time);
-
-    class UIManager;
-    FORWARD_REF(UIManager);
+    FORWARD_CLASS_REF(Assets);
+    FORWARD_CLASS_REF(EventSystem);
+    FORWARD_CLASS_REF(FileSystem);
+    FORWARD_CLASS_REF(Input);
+    FORWARD_CLASS_REF(LogStream);
+    FORWARD_CLASS_REF(PhysicsWorld);
+    FORWARD_CLASS_REF(ProjectConfig);
+    FORWARD_CLASS_REF(Render);
+    FORWARD_CLASS_REF(Scene);
+    FORWARD_CLASS_REF(TaskManager);
+    FORWARD_CLASS_REF(Time);
+    FORWARD_CLASS_REF(UIManager);
 
 #if IS_SCRIPTING_SUPPORTED
-    class ScriptEngine;
-    FORWARD_REF(ScriptEngine);
+    FORWARD_CLASS_REF(ScriptEngine);
 #endif
 
     // -----------

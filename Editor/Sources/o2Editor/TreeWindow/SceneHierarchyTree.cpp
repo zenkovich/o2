@@ -485,8 +485,8 @@ namespace Editor
 		DataDocument prevData; prevData = prevName;
 		DataDocument newData; newData = mTargetObject->GetName();
 
-		auto action = mmake<PropertyChangeAction>({ mTargetObject }, "name", { prevData }, { newData });
-		o2EditorApplication.DoneAction(action);
+		auto action = new PropertyChangeAction({ mTargetObject }, "name", { prevData }, { newData });
+		o2EditorApplication.DoneAction(Ref(action));
 	}
 
 }

@@ -8,7 +8,7 @@ namespace Editor
 {
 	SkeletonTool::SkeletonTool()
 	{
-		sceneLayer.tool = Ref(this);
+		sceneLayer->tool = Ref(this);
 	}
 
 	void SkeletonTool::AddSkeletonInstance(const Ref<SkinningMeshComponent>& skinningMeshComponent)

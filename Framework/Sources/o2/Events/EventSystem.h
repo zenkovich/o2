@@ -12,23 +12,12 @@
 
 namespace o2
 {
-    class ApplicationEventsListener;
-    FORWARD_REF(ApplicationEventsListener);
-
-    class CursorAreaEventsListener;
-    FORWARD_REF(CursorAreaEventsListener);
-
-    class CursorEventsListener;
-    FORWARD_REF(CursorEventsListener);
-
-    class DragableObject;
-    FORWARD_REF(DragableObject);
-
-    class KeyboardEventsListener;
-    FORWARD_REF(KeyboardEventsListener);
-
-    class ShortcutKeysListenersManager;
-    FORWARD_REF(ShortcutKeysListenersManager);
+    FORWARD_CLASS_REF(ApplicationEventsListener);
+    FORWARD_CLASS_REF(CursorAreaEventsListener);
+    FORWARD_CLASS_REF(CursorEventsListener);
+    FORWARD_CLASS_REF(DragableObject); 
+    FORWARD_CLASS_REF(KeyboardEventsListener);
+    FORWARD_CLASS_REF(ShortcutKeysListenersManager);
 
     // -----------------------
     // Event processing system

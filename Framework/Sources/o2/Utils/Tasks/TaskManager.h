@@ -10,8 +10,7 @@
 
 namespace o2
 {
-    class Task;
-    FORWARD_REF(Task);
+    FORWARD_CLASS_REF(Task);
 
     // -----------------------
     // Tasks manager singleton

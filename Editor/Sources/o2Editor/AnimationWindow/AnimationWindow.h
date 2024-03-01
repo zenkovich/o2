@@ -8,13 +8,13 @@ using namespace o2;
 
 namespace o2
 {
-	class AnimationClip;
-	class Button;
-	class EditBox;
-	class HorizontalLayout;
-	class HorizontalScrollBar;
-	class Toggle;
-	class WidgetDragHandle;
+	FORWARD_CLASS_REF(AnimationClip);
+	FORWARD_CLASS_REF(Button);
+	FORWARD_CLASS_REF(EditBox);
+	FORWARD_CLASS_REF(HorizontalLayout);
+	FORWARD_CLASS_REF(HorizontalScrollBar);
+	FORWARD_CLASS_REF(Toggle);
+	FORWARD_CLASS_REF(WidgetDragHandle);
 }
 
 // Editor animation window accessor macros
@@ -22,15 +22,10 @@ namespace o2
 
 namespace Editor
 {
-	class AnimationTimeline;
-	class AnimationTree;
-	class CurvesSheet;
-	class KeyHandlesSheet;
-
-    FORWARD_REF(AnimationTimeline);
-    FORWARD_REF(AnimationTree);
-    FORWARD_REF(CurvesSheet);
-    FORWARD_REF(KeyHandlesSheet);
+    FORWARD_CLASS_REF(AnimationTimeline);
+    FORWARD_CLASS_REF(AnimationTree);
+    FORWARD_CLASS_REF(CurvesSheet);
+    FORWARD_CLASS_REF(KeyHandlesSheet);
 
 	// TODO
 	// - Добавить вывод трека цвета, булевого, вектора

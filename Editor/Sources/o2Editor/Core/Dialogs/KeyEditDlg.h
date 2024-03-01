@@ -15,7 +15,7 @@ namespace Editor
 	// ---------------------
 	// Curve key edit dialog
 	// ---------------------
-	class KeyEditDlg : public Singleton<KeyEditDlg>
+	class KeyEditDlg : public Singleton<KeyEditDlg>, public RefCounterable
 	{
 	public:
 		// Constructor

@@ -21,7 +21,7 @@ namespace Editor
 	// ----------------------------------------
 	// Editor actor properties viewer interface
 	// ----------------------------------------
-	class IActorPropertiesViewer: public IObject
+	class IActorPropertiesViewer: public IObject, virtual public RefCounterable
 	{
 	public:
 		// Default constructor. Initializes data widget
@@ -79,6 +79,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IActorPropertiesViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IActorPropertiesViewer)

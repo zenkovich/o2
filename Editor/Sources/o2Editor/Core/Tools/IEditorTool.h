@@ -18,7 +18,7 @@ namespace Editor
 	// ---------------------
 	// Editor tool interface
 	// ---------------------
-	class IEditTool: public IObject, public RefCounterable
+	class IEditTool: public IObject, virtual public RefCounterable
 	{
 	public:
 		virtual ~IEditTool() {}

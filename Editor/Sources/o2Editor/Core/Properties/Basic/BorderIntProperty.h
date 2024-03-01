@@ -6,7 +6,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class IntegerProperty;
+	FORWARD_CLASS_REF(IntegerProperty);
 
 	// ------------------------------
 	// Editor integer border property

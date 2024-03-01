@@ -6,8 +6,7 @@
 
 namespace o2
 {
-    class DragableObject;
-    FORWARD_REF(DragableObject);
+    FORWARD_CLASS_REF(DragableObject);
 
     class CursorAreaEventListenersLayer: public CursorAreaEventsListener
     {

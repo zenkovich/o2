@@ -10,15 +10,15 @@ using namespace o2;
 
 namespace o2
 {
-	class Sprite;
-	class Button;
-	class EditBox;
-	class GridLayout;
-	class Label;
-	class ScrollArea;
-	class Tree;
-	class TreeNode;
-	class Widget;
+	FORWARD_CLASS_REF(Sprite);
+	FORWARD_CLASS_REF(Button);
+	FORWARD_CLASS_REF(EditBox);
+	FORWARD_CLASS_REF(GridLayout);
+	FORWARD_CLASS_REF(Label);
+	FORWARD_CLASS_REF(ScrollArea);
+	FORWARD_CLASS_REF(Tree);
+	FORWARD_CLASS_REF(TreeNode);
+	FORWARD_CLASS_REF(Widget);
 }
 
 // Editor assets window accessor macros
@@ -26,8 +26,8 @@ namespace o2
 
 namespace Editor
 {
-	class AssetsIconsScrollArea;
-	class AssetsFoldersTree;
+	FORWARD_CLASS_REF(AssetsIconsScrollArea);
+	FORWARD_CLASS_REF(AssetsFoldersTree);
 
 	// -------------
 	// Assets window

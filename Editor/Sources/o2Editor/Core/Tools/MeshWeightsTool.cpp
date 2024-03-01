@@ -9,7 +9,7 @@ namespace Editor
 {
 	MeshWeightsTool::MeshWeightsTool()
 	{
-		sceneLayer.tool = Ref(this);
+		sceneLayer->tool = Ref(this);
 	}
 
 	void MeshWeightsTool::OnCursorPressed(const Input::Cursor& cursor)

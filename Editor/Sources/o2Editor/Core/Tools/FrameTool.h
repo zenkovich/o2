@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-    class TransformAction;
+    FORWARD_CLASS_REF(TransformAction);
 
     // ----------------------------------
     // Editor frame and pivot moving tool

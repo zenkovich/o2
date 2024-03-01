@@ -10,7 +10,7 @@ namespace Editor
 	// -----------------------------
 	// Basic editor window interface
 	// -----------------------------
-	class IEditorWindow: public IObject, public RefCounterable
+	class IEditorWindow: public IObject, virtual public RefCounterable
 	{
 	public:
 		// Default constructor

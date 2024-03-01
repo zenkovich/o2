@@ -159,7 +159,7 @@ namespace Editor
 
 	void AssetProperty::SetAssetId(const UID& id)
 	{
-		mCommonValue = id == 0 ? Ref<Asset>() : Ref<Asset>(id);
+		mCommonValue = id == UID::empty ? Ref<Asset>() : Ref<Asset>(id);
 
 		for (auto& ptr : mValuesProxies)
 			SetProxy(ptr.first, mCommonValue);
@@ -207,7 +207,7 @@ namespace Editor
 
 	void AssetProperty::SetCommonAssetId(const UID& id)
 	{
-		mCommonValue = id == 0 ? Ref<Asset>() : Ref<Asset>(id);
+		mCommonValue = id == UID::empty ? Ref<Asset>() : Ref<Asset>(id);
 		mValuesDifferent = false;
 
 		UpdateValueView();
@@ -329,7 +329,7 @@ namespace Editor
 	void AssetProperty::OnKeyPressed(const Input::Key& key)
 	{
 		if (mBox && mBox->IsFocused() && (key == VK_DELETE || key == VK_BACK))
-			SetAssetIdByUser(0);
+			SetAssetIdByUser(UID::empty);
 	}
 
 	bool AssetProperty::IsUnderPoint(const Vec2F& point)

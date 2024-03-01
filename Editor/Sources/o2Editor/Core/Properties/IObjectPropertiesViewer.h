@@ -20,7 +20,7 @@ namespace Editor
 	// Object properties viewer interface. Used in IObjectProperty and IObjectPtrProperty
 	// Override this class to create new object properties viewer
 	// ----------------------------------------------------------------------------------
-	class IObjectPropertiesViewer : public IObject
+	class IObjectPropertiesViewer : public IObject, public RefCounterable
 	{
 	public:
 		typedef Function<void(const Ref<IPropertyField>&)> OnChangedFunc;
@@ -167,6 +167,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IObjectPropertiesViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)

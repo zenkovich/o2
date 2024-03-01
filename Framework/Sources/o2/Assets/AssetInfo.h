@@ -5,8 +5,7 @@
 
 namespace o2
 {
-    class AssetsTree;
-    FORWARD_REF(AssetsTree);
+    FORWARD_CLASS_REF(AssetsTree);
 
     // -----------------
     // Asset information

@@ -9,8 +9,7 @@
 
 namespace o2
 {
-    class AnimationState;
-    FORWARD_REF(AnimationState);
+    FORWARD_CLASS_REF(AnimationState);
     
     // ------------------------
     // Template Animation track

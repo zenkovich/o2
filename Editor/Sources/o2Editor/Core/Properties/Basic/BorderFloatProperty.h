@@ -6,7 +6,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class FloatProperty;
+	FORWARD_CLASS_REF(FloatProperty);
 
 	// ----------------------------
 	// Editor float border property

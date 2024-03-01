@@ -20,17 +20,14 @@ namespace Editor
 	}
 
 	IEditorWindow::IEditorWindow(const IEditorWindow& other):
-		mWindow(other.mWindow->CloneAs<DockableWindow>())
+		mWindow(other.mWindow->CloneAsRef<DockableWindow>())
 	{
 		if (mWindow)
 			EditorUIRoot.AddWidget(mWindow);
 	}
 
 	IEditorWindow::~IEditorWindow()
-	{
-		if (mWindow)
-			delete mWindow;
-	}
+	{}
 
 	void IEditorWindow::Show()
 	{
@@ -42,7 +39,7 @@ namespace Editor
 		SetVisible(false);
 	}
 
-	DockableWindow* IEditorWindow::GetWindow() const
+	const Ref<DockableWindow>& IEditorWindow::GetWindow() const
 	{
 		return mWindow;
 	}

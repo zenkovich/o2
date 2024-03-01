@@ -11,7 +11,7 @@ namespace o2
 
 namespace Editor
 {
-	class TransformAction;
+	FORWARD_CLASS_REF(TransformAction); 
 
 	// ------------------------
 	// Move objects editor tool

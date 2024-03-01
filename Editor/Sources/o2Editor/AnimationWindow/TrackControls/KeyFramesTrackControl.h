@@ -93,7 +93,7 @@ namespace Editor
 
 		String mTrackPath; // Path to Animation track in animation
 
-		const Ref<Widget> mTreeControls; // Container of controllers that are part of a tree
+		Ref<Widget> mTreeControls; // Container of controllers that are part of a tree
 
 		Ref<IPropertyField>                    mPropertyField;
 		TrackValueType                         mPropertyValue = TrackValueType();
@@ -258,9 +258,9 @@ namespace Editor
 		mTreeControls = mmake<Widget>();
 
 		auto fieldProto = o2EditorProperties.GetFieldPropertyType(&TypeOf(TrackValueType));
-		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldProto, "standard"));
-		mPropertyValueProxy = mnew PointerValueProxy<TrackValueType>(&mPropertyValue);
-		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(mPropertyValueProxy) });
+		mPropertyField = DynamicCast<IPropertyField>(o2UI.CreateWidget(*fieldProto, "standard"));
+		mPropertyValueProxy = mmake<PointerValueProxy<TrackValueType>>(&mPropertyValue);
+		mPropertyField->SetValueProxy({ DynamicCast<IAbstractValueProxy>(mPropertyValueProxy) });
 		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&) { OnPropertyChanged(); };
 		*mPropertyField->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
@@ -317,7 +317,7 @@ namespace Editor
 			handle->SetPosition(Vec2F(key.position, 0.0f));
 			handle->track = trackRef;
 			handle->trackPath = mTrackPath;
-			handle->trackControl = this;
+			handle->trackControl = Ref(this);
 			handle->keyUid = key.uid;
 			handle->isMapping = false;
 			handle->SetSelectionGroup(DynamicCast<ISelectableDragHandlesGroup>(handlesSheet));
@@ -456,10 +456,12 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::OnPropertyChanged()
 	{
+		auto trackRef = mTrack.Lock();
+
 		auto time = mTimeline.Lock()->GetTimeCursor();
 		int keyIdx = -1;
 		int i = 0;
-		for (auto& key : Wrapper::GetKeys(*mTrack))
+		for (auto& key : Wrapper::GetKeys(*trackRef))
 		{
 			if (mTimeline.Lock()->IsSameTime(key.position, time))
 			{
@@ -469,8 +471,6 @@ namespace Editor
 
 			i++;
 		}
-
-		auto trackRef = mTrack.Lock();
 
 		if (keyIdx >= 0) {
 			auto key = Wrapper::GetKeys(*trackRef)[keyIdx];

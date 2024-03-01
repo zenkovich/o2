@@ -20,7 +20,7 @@ namespace o2
         PROPERTY(Color4, color, SetColor, GetColor);                          // Color property
         PROPERTY(Vector<Vec2F>, extraPoints, SetExtraPoints, GetExtraPoints); // extra points property
 
-        Spline spline; // Shell spline @SERIALIZABLE
+        Ref<Spline> spline = mmake<Spline>(); // Shell spline @SERIALIZABLE
 
     public:
         // Default constructor
@@ -128,7 +128,7 @@ CLASS_FIELDS_META(o2::MeshComponent)
     FIELD().PUBLIC().NAME(mappingFrame);
     FIELD().PUBLIC().NAME(color);
     FIELD().PUBLIC().NAME(extraPoints);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(spline);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Spline>()).NAME(spline);
     FIELD().PROTECTED().NAME(mMesh);
     FIELD().PROTECTED().NAME(mTransform);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset);

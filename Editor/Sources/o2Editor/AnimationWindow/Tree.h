@@ -60,7 +60,7 @@ namespace Editor
 		SERIALIZABLE(AnimationTree);
 
 	public:
-		struct TrackNode
+		struct TrackNode: public RefCounterable
 		{
 			String name;
 			String path;

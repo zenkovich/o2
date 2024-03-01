@@ -120,7 +120,7 @@ namespace Editor
 
 		mSelectedInheritedValue = false;
 
-		SetValueByUser(Ref<SceneLayer>(name));
+		//SetValueByUser(Ref<SceneLayer>(name));
 	}
 
 	bool SceneLayerRefProperty::IsAlwaysRefresh() const

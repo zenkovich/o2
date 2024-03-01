@@ -16,7 +16,7 @@ namespace Editor
 	// ----------------------------------
 	// Object properties viewer interface
 	// ----------------------------------
-	class IPropertiesViewer: public IObject
+	class IPropertiesViewer: public IObject, virtual public RefCounterable
 	{
 	public:
 		// Virtual destructor
@@ -65,6 +65,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IPropertiesViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IPropertiesViewer)

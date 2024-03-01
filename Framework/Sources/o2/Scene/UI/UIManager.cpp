@@ -35,7 +35,26 @@
 
 namespace o2
 {
-    DECLARE_SINGLETON(UIManager);
+	DECLARE_SINGLETON(UIManager);
+
+	FORWARD_REF_IMPL(Button);
+    FORWARD_REF_IMPL(CustomDropDown);
+    FORWARD_REF_IMPL(CustomList);
+    FORWARD_REF_IMPL(DropDown);
+    FORWARD_REF_IMPL(EditBox);
+    FORWARD_REF_IMPL(HorizontalLayout);
+    FORWARD_REF_IMPL(HorizontalProgress);
+    FORWARD_REF_IMPL(HorizontalScrollBar);
+    FORWARD_REF_IMPL(Image);
+    FORWARD_REF_IMPL(Label);
+    FORWARD_REF_IMPL(List);
+    FORWARD_REF_IMPL(ScrollArea);
+    FORWARD_REF_IMPL(Toggle);
+    FORWARD_REF_IMPL(VerticalLayout);
+    FORWARD_REF_IMPL(VerticalProgress);
+    FORWARD_REF_IMPL(VerticalScrollBar);
+    FORWARD_REF_IMPL(Widget);
+    FORWARD_REF_IMPL(Window);
 
     void UIManager::RegisterFocusableWidget(Widget* widget)
     {

@@ -19,8 +19,7 @@ namespace o2
     class Component;
     class Tag;
 
-	class SceneLayer;
-    FORWARD_REF(SceneLayer);
+    FORWARD_CLASS_REF(SceneLayer);
 
 #if IS_EDITOR
     class SceneEditableObject;
