@@ -249,7 +249,9 @@ namespace Editor
 	}
 
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::RectI>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::RectIProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::RectIProperty, Editor__RectIProperty);

@@ -502,6 +502,8 @@ namespace Editor
 		return values == other.values;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::FunctionProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::FunctionProperty, Editor__FunctionProperty);

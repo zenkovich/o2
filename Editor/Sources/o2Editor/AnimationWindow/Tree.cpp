@@ -485,8 +485,9 @@ namespace Editor
 		if (mTrackControl)
 			mTrackControl->UpdateHandles();
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AnimationTreeNode>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationTree, Editor__AnimationTree);

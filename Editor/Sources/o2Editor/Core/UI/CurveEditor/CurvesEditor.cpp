@@ -2206,7 +2206,7 @@ namespace Editor
 		DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed)
 	{ }
 
-	CurvesEditor::CurveHandle::CurveHandle(const DragHandle& other) :
+	CurvesEditor::CurveHandle::CurveHandle(const CurveHandle& other) :
 		DragHandle(other)
 	{ }
 

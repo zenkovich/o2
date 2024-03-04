@@ -287,7 +287,9 @@ namespace Editor
 		mBox->SetState("focused", false);
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<Component>>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ComponentProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ComponentProperty, Editor__ComponentProperty);

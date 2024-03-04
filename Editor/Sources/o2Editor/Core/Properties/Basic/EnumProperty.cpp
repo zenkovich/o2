@@ -83,6 +83,8 @@ namespace Editor
 		SetValueByUser(mEntries.FindValue(name).first);
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::EnumProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::EnumProperty, Editor__EnumProperty);

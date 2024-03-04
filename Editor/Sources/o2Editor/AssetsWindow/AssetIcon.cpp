@@ -178,8 +178,9 @@ namespace Editor
 		if (mOwner)
 			mOwner.Lock()->OnDropped(group);
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AssetIcon>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetIcon, Editor__AssetIcon);

@@ -42,7 +42,9 @@ namespace Editor
 			mToggle->SetValueUnknown();
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<bool>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::BooleanProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::BooleanProperty, Editor__BooleanProperty);

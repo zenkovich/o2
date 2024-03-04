@@ -100,7 +100,9 @@ namespace Editor
 		CheckValueChangeCompleted();
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<int>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::IntegerProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::IntegerProperty, Editor__IntegerProperty);

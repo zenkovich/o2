@@ -47,7 +47,9 @@ namespace Editor
 		SetValueByUser(data);
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::WString>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::WStringProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::WStringProperty, Editor__WStringProperty);

@@ -169,7 +169,9 @@ namespace Editor
 		return proxyValue.y;
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Vec2F>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::Vec2FProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::Vec2FProperty, Editor__Vec2FProperty);

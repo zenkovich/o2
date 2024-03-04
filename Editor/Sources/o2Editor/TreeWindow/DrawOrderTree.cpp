@@ -558,8 +558,9 @@ namespace Editor
 			o2EditorApplication.DoneAction(Ref(action));
 		}
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::DrawOrderTree>);
 // --- META ---
 
 ENUM_META(Editor::DrawOrderTree::OrderTreeNode::Type)

@@ -11,6 +11,7 @@
 #include "o2/Application/VKCodes.h"
 #elif defined PLATFORM_WINDOWS
 #include <windows.h>
+#undef GetObject
 #endif
 
 // Input access macros

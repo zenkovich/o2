@@ -821,8 +821,9 @@ namespace Editor
 		layout->worldLeftTop = leftTop;
 		layout->worldRightBottom = layout->worldLeftTop + mNonDockSize.InvertedY();
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::DockableWindow>);
 // --- META ---
 
 DECLARE_CLASS(Editor::DockableWindow, Editor__DockableWindow);

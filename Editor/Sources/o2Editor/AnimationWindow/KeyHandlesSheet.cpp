@@ -235,8 +235,8 @@ namespace Editor
         DataDocument data;
         auto selectedKeys = GetSelectedKeys();
         SerializeKeys(data, selectedKeys, 0);
-        mAnimationWindow.Lock()->mActionsList->DoneAction(mmake<AnimationKeysChangeAction>(selectedKeys, mBeforeChangeKeysData,
-                                                                                           data, Ref(this)));
+        mAnimationWindow.Lock()->mActionsList->DoneAction(Ref(mnew AnimationKeysChangeAction(selectedKeys, mBeforeChangeKeysData,
+                                                                                             data, Ref(this))));
     }
 
     void KeyHandlesSheet::OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos)

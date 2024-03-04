@@ -133,7 +133,9 @@ namespace Editor
 		SetTags(editText);
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::TagGroup>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TagsProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::TagsProperty, Editor__TagsProperty);

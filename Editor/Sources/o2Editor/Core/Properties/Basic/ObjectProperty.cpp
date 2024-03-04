@@ -270,8 +270,9 @@ namespace Editor
 		const ObjectType& objectType = dynamic_cast<const ObjectType&>(proxy->GetType());
 		proxy->SetValuePtr(objectType.DynamicCastFromIObject(data));
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ObjectProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ObjectProperty, Editor__ObjectProperty);

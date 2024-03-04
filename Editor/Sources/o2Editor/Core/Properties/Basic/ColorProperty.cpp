@@ -73,6 +73,7 @@ namespace Editor
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Color4>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ColorProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ColorProperty, Editor__ColorProperty);

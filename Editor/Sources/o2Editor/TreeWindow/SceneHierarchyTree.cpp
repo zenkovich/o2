@@ -488,8 +488,9 @@ namespace Editor
 		auto action = new PropertyChangeAction({ mTargetObject }, "name", { prevData }, { newData });
 		o2EditorApplication.DoneAction(Ref(action));
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::SceneHierarchyTree>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneHierarchyTree, Editor__SceneHierarchyTree);

@@ -126,7 +126,7 @@ namespace Editor
                         const Ref<Sprite>& selected = nullptr, const Ref<Sprite>& selectedHovered = nullptr, const Ref<Sprite>& selectedPressed = nullptr);
 
             // Copy-constructor
-            CurveHandle(const DragHandle& other);
+			CurveHandle(const CurveHandle& other);
 
             // Destructor
             ~CurveHandle() override;
@@ -637,7 +637,7 @@ CLASS_METHODS_META(Editor::CurvesEditor::CurveHandle)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Sprite>&, const Ref<Sprite>&, const Ref<Sprite>&, const Ref<Sprite>&, const Ref<Sprite>&, const Ref<Sprite>&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const DragHandle&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const CurveHandle&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetLocalPosition);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToCurveView, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, CurveViewToLocal, const Vec2F&);

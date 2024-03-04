@@ -257,6 +257,8 @@ namespace Editor
 		CheckValueChangeCompleted();
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::IPropertyField>);
 // --- META ---
 
 DECLARE_CLASS(Editor::IPropertyField, Editor__IPropertyField);

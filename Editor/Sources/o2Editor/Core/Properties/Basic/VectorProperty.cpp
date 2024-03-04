@@ -525,6 +525,8 @@ namespace Editor
 		proxy->SetValuePtr(data);
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::VectorProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::VectorProperty, Editor__VectorProperty);

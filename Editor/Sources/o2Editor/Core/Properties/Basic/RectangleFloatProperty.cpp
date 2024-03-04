@@ -247,9 +247,10 @@ namespace Editor
 		mProxy->GetValuePtr(&proxyValue);
 		return proxyValue.bottom;
 	}
-
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::RectF>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::RectFProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::RectFProperty, Editor__RectFProperty);

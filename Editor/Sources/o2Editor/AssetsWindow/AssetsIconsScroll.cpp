@@ -1114,6 +1114,8 @@ namespace Editor
         };
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AssetsIconsScrollArea>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetsIconsScrollArea, Editor__AssetsIconsScrollArea);

@@ -417,8 +417,9 @@ namespace Editor
 			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
 		}
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ObjectPtrProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ObjectPtrProperty, Editor__ObjectPtrProperty);
