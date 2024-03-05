@@ -9,8 +9,8 @@ using namespace o2;
 
 namespace Editor
 {
-	class AnimationTimeline;
-	class KeyHandlesSheet;
+	FORWARD_CLASS_REF(AnimationTimeline);
+	FORWARD_CLASS_REF(KeyHandlesSheet);
 
 	class ITrackControl: public Widget
 	{

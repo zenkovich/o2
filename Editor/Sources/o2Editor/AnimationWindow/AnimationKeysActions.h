@@ -9,7 +9,7 @@ namespace Editor
 	{
 	public:
 		AnimationAddKeysAction();
-		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
+		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
 
 		String GetName() const override;
 		void Redo() override;
@@ -27,7 +27,7 @@ namespace Editor
 	{
 	public:
 		AnimationDeleteKeysAction();
-		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
+		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
 
 		String GetName() const override;
 		void Redo() override;
@@ -46,7 +46,7 @@ namespace Editor
 	public:
 		AnimationKeysChangeAction();
 		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,
-								  DataDocument& beforeKeysData, DataDocument& afterKeysData,
+								  const DataDocument& beforeKeysData, const DataDocument& afterKeysData,
 								  const Ref<KeyHandlesSheet>& editor);
 
 		String GetName() const override;
@@ -82,7 +82,7 @@ CLASS_METHODS_META(Editor::AnimationAddKeysAction)
     typedef const Map<String, Vector<UInt64>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, const Ref<KeyHandlesSheet>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, const DataDocument&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);
@@ -107,7 +107,7 @@ CLASS_METHODS_META(Editor::AnimationDeleteKeysAction)
     typedef const Map<String, Vector<UInt64>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, const Ref<KeyHandlesSheet>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, const DataDocument&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);
@@ -133,7 +133,7 @@ CLASS_METHODS_META(Editor::AnimationKeysChangeAction)
     typedef const Map<String, Vector<UInt64>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, DataDocument&, const Ref<KeyHandlesSheet>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, const DataDocument&, const DataDocument&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

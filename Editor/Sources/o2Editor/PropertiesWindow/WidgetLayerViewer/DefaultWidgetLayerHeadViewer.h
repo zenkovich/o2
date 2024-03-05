@@ -13,8 +13,8 @@ namespace Editor
 {
 	using namespace o2;
 
-	class BooleanProperty;
-	class StringProperty;
+	FORWARD_CLASS_REF(BooleanProperty);
+	FORWARD_CLASS_REF(StringProperty);
 
 	// ----------------------------------
 	// Default widget layer header viewer

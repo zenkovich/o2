@@ -4,8 +4,8 @@
 
 namespace Editor
 {
-	class Vec2FProperty;
-	class FloatProperty;
+	FORWARD_CLASS_REF(Vec2FProperty);
+	FORWARD_CLASS_REF(FloatProperty);
 
 	// -------------------------------------
 	// Default editor actor transform viewer

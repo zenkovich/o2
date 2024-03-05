@@ -16,8 +16,8 @@ using namespace o2;
 
 namespace Editor
 {
-    class ActorProperty;
-    class ComponentProperty;
+    FORWARD_CLASS_REF(ActorProperty);
+    FORWARD_CLASS_REF(ComponentProperty);
 
     // -----------------
     // Scene tree widget

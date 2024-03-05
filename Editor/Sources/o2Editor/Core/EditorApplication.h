@@ -19,13 +19,13 @@ namespace o2
 
 namespace Editor
 {
-	class EditorConfig;
-	class IAction;
-	class MenuPanel;
-	class Properties;
-	class ToolsPanel;
-	class UIRoot;
-	class WindowsManager;
+	FORWARD_CLASS_REF(EditorConfig);
+	FORWARD_CLASS_REF(IAction);
+	FORWARD_CLASS_REF(MenuPanel);
+	FORWARD_CLASS_REF(Properties);
+	FORWARD_CLASS_REF(ToolsPanel);
+	FORWARD_CLASS_REF(UIRoot);
+	FORWARD_CLASS_REF(WindowsManager);
 
 	// ------------------
 	// Editor application

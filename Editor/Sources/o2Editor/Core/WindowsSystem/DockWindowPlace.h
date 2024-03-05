@@ -10,7 +10,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class DockableWindow;
+	FORWARD_CLASS_REF(DockableWindow);
 
 	// ------------------------------------
 	// Dockable windows place for attaching

@@ -190,6 +190,8 @@ namespace o2
     }
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Button>);
 // --- META ---
 
 DECLARE_CLASS(o2::Button, o2__Button);

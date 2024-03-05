@@ -242,7 +242,7 @@ namespace Editor
         // -----------------------------------------------
         // Curve range info. Contains two curves and color
         // -----------------------------------------------
-        struct RangeInfo
+        struct RangeInfo: public RefCounterable
         {
             Ref<CurveInfo> curveA; // Curve A
             Ref<CurveInfo> curveB; // Curve B

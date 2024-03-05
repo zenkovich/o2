@@ -16,7 +16,7 @@ namespace o2
 
 namespace Editor
 {
-	class SpoilerWithHead;
+	FORWARD_CLASS_REF(SpoilerWithHead);
 
 	// ----------------------------------------
 	// Editor actor properties viewer interface

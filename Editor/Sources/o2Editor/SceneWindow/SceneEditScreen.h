@@ -24,10 +24,10 @@ namespace o2
 
 namespace Editor
 {
-	class IEditTool;
-	class SceneDragHandle;
-	class SceneEditorLayer;
-	class SceneHierarchyTree;
+	FORWARD_CLASS_REF(IEditTool);
+	FORWARD_CLASS_REF(SceneDragHandle);
+	FORWARD_CLASS_REF(SceneEditorLayer);
+	FORWARD_CLASS_REF(SceneHierarchyTree);
 
 	// --------------------
 	// Scene editing screen

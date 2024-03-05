@@ -21,9 +21,6 @@ namespace o2
         // Destructor
         ~BaseComponentRef();
 
-        // Assign operator
-        BaseComponentRef& operator=(const BaseComponentRef& other);
-
         // Sets component @SCRIPTABLE
         virtual void Set(Component* component);
 

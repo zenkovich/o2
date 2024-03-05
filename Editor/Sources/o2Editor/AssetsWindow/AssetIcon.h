@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-	class AssetsIconsScrollArea;
+	FORWARD_CLASS_REF(AssetsIconsScrollArea);
 
 	// --------------------------
 	// Dragable asset icon widget

@@ -155,8 +155,9 @@ namespace o2
         if (layer->name == "selectedText" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
             mSelectedText = DynamicCast<Text>(layer->GetDrawable());
     }
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::DropDown>);
 // --- META ---
 
 DECLARE_CLASS(o2::DropDown, o2__DropDown);

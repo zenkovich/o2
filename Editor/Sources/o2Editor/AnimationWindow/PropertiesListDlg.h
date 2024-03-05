@@ -16,7 +16,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class AnimationPropertiesTree;
+	FORWARD_CLASS_REF(AnimationPropertiesTree);
 
 	// ---------------------------------------------------------------------------------------
 	// Animation properties list dialog. Shows properties tree with filter for specified actor

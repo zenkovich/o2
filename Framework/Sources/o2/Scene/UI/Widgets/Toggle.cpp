@@ -360,6 +360,8 @@ namespace o2
         }
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Toggle>);
 // --- META ---
 
 ENUM_META(o2::ToggleGroup::Type)

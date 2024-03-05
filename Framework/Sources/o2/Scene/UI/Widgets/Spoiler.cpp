@@ -237,6 +237,8 @@ namespace o2
         return "Dropping";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Spoiler>);
 // --- META ---
 
 DECLARE_CLASS(o2::Spoiler, o2__Spoiler);

@@ -881,6 +881,8 @@ namespace o2
 			mSubMenu = DynamicCast<ContextMenu>(child);
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ContextMenu>);
 // --- META ---
 
 DECLARE_CLASS(o2::ContextMenu, o2__ContextMenu);

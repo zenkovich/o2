@@ -12,8 +12,8 @@ namespace o2
 
 namespace Editor
 {
-	class AnimationWindow;
-	class KeyHandlesSheet;
+	FORWARD_CLASS_REF(AnimationWindow);
+	FORWARD_CLASS_REF(KeyHandlesSheet);
 
 	// ---------------------
 	// animation tracks tree

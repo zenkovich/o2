@@ -13,9 +13,9 @@ namespace o2
 
 namespace Editor
 {
-	class IWidgetLayerHeaderViewer;
-	class IWidgetLayerLayoutViewer;
-	class IWidgetLayerPropertiesViewer;
+	FORWARD_CLASS_REF(IWidgetLayerHeaderViewer);
+	FORWARD_CLASS_REF(IWidgetLayerLayoutViewer);
+	FORWARD_CLASS_REF(IWidgetLayerPropertiesViewer);
 
 	// ------------------------------
 	// Widget layer properties viewer

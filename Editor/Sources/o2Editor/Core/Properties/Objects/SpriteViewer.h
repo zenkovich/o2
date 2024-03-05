@@ -14,13 +14,13 @@ namespace o2
 
 namespace Editor
 {
-	class AssetProperty;
-	class BorderIProperty;
-	class ColorProperty;
-	class EnumProperty;
-	class FloatProperty;
-	class ImageSlicesEditorWidget;
-	class Vec2FProperty;
+	FORWARD_CLASS_REF(AssetProperty);
+	FORWARD_CLASS_REF(BorderIProperty);
+	FORWARD_CLASS_REF(ColorProperty);
+	FORWARD_CLASS_REF(EnumProperty);
+	FORWARD_CLASS_REF(FloatProperty);
+	FORWARD_CLASS_REF(ImageSlicesEditorWidget);
+	FORWARD_CLASS_REF(Vec2FProperty);
 
 	// --------------------
 	// Editor sprite viewer

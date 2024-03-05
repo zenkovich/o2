@@ -1918,6 +1918,8 @@ namespace o2
         return "Tree";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Tree>);
 // --- META ---
 
 ENUM_META(o2::Tree::RearrangeType)

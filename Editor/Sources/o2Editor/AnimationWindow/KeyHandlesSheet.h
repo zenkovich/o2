@@ -15,8 +15,8 @@ using namespace o2;
 
 namespace Editor
 {
-	class AnimationWindow;
-	class ITrackControl;
+	FORWARD_CLASS_REF(AnimationWindow);
+	FORWARD_CLASS_REF(ITrackControl);
 
 	// -------------------------------------------
 	// Handles sheet, manages selection of handles

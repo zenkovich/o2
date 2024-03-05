@@ -718,7 +718,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		auto keyHandles = mmake<KeyHandles>(mMainHandleSample, mSupportHandleSample, this, info->color);
+		auto keyHandles = mmake<KeyHandles>(mMainHandleSample, mSupportHandleSample, Ref(this), info->color);
 		keyHandles->curveKeyIdx = keyId;
 		keyHandles->curveKeyUid = info->curve->GetKeyAt(keyId).uid;
 
@@ -1161,7 +1161,7 @@ namespace Editor
 			keyInfos.Last().curveId = clickedCurveInfo->curveId;
 			keyInfos.Last().keys.Add(newKey);
 
-			auto action = mmake<CurveAddKeysAction>(keyInfos, this);
+			auto action = mmake<CurveAddKeysAction>(keyInfos, Ref(this));
 			DoneAction(action);
 		}
 	}
@@ -1643,7 +1643,7 @@ namespace Editor
 				}
 			}
 
-			auto action = mmake<CurveKeysChangeAction>(actionKeysInfos, this);
+			auto action = mmake<CurveKeysChangeAction>(actionKeysInfos, Ref(this));
 			DoneAction(action);
 		}
 	}

@@ -18,11 +18,11 @@ namespace o2
 
 namespace Editor
 {
-	class ColorPickerDlg;
-	class CurveEditorDlg;
-	class IEditorWindow;
-	class NameEditDlg;
-	class DockWindowPlace;
+	FORWARD_CLASS_REF(ColorPickerDlg);
+	FORWARD_CLASS_REF(CurveEditorDlg);
+	FORWARD_CLASS_REF(IEditorWindow);
+	FORWARD_CLASS_REF(NameEditDlg);
+	FORWARD_CLASS_REF(DockWindowPlace);
 
 	// ----------------------
 	// Editor windows manager

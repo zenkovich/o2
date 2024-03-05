@@ -14,8 +14,8 @@ namespace o2
 
 namespace Editor
 {
-	class SceneHierarchyTree;
-	class AssetsIconsScrollArea;
+	FORWARD_CLASS_REF(SceneHierarchyTree);
+	FORWARD_CLASS_REF(AssetsIconsScrollArea);
 
 	// -----------------------------------
 	// Editor actor component property box

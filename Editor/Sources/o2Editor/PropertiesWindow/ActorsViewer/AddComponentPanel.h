@@ -15,8 +15,8 @@ namespace o2
 
 namespace Editor
 {
-	class ActorViewer;
-	class ComponentsTree;
+	FORWARD_CLASS_REF(ActorViewer);
+	FORWARD_CLASS_REF(ComponentsTree);
 
 	// --------------------------------------------------------------------------------
 	// Add component to actor panel. Shows filter input, add button and components tree

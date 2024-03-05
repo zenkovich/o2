@@ -12,10 +12,10 @@ namespace o2
 
 namespace Editor
 {
-	class EnumProperty;
-	class Vec2FProperty;
-	class SceneLayersListProperty;
-	class ColorProperty;
+	FORWARD_CLASS_REF(EnumProperty);
+	FORWARD_CLASS_REF(Vec2FProperty);
+	FORWARD_CLASS_REF(SceneLayersListProperty);
+	FORWARD_CLASS_REF(ColorProperty);
 
 	// -------------------
 	// Camera actor viewer

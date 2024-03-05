@@ -186,11 +186,11 @@ namespace Editor
 		if (object)
 		{
 			SceneEditableObject* parent = (SceneEditableObject*)object;
-			return parent->GetEditableChildren().Cast<void*>();
+			return parent->GetEditableChildren().Convert<void*>([](auto& x) { return x.Get(); });
 		}
 
 		if (mWatchEditor)
-			return EditorUIRoot.GetRootWidget()->GetEditableChildren().Cast<void*>();
+			return EditorUIRoot.GetRootWidget()->GetEditableChildren().Convert<void*>([](auto& x) { return x.Get(); });
 
 		return o2Scene.GetRootActors().Convert<void*>([](const Ref<Actor>& x) { return DynamicCast<SceneEditableObject>(x).Get(); });
 	}
@@ -219,7 +219,7 @@ namespace Editor
 	{
 		auto newParentEditableObject = Ref((SceneEditableObject*)newParent);
 		auto prevEditableObject = Ref((SceneEditableObject*)prevObject);
-		Vector<Ref<SceneEditableObject>> editableObjects = DynamicCastVector<SceneEditableObject>(objects);
+		auto editableObjects = objects.Convert<Ref<SceneEditableObject>>([](void* x) { return Ref((SceneEditableObject*)x); });
 
 		auto action = mmake<ReparentAction>(editableObjects);
 
@@ -345,7 +345,7 @@ namespace Editor
 
 	void SceneHierarchyTree::OnObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
-		Tree::OnObjectsChanged(objects.Cast<void*>());
+        Tree::OnObjectsChanged(objects.Convert<void*>([](auto& x) { return x.Get(); }));
 	}
 
 	void SceneHierarchyTree::OnObjectChanged(const Ref<SceneEditableObject>& object)

@@ -11,7 +11,7 @@ namespace o2
 
 namespace Editor
 {
-	class Vec2IProperty;
+	FORWARD_CLASS_REF(Vec2IProperty);
 
 	// ---------------------------------------
 	// Game window. Draws scene, handles input

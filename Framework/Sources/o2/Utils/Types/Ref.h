@@ -439,7 +439,7 @@ namespace o2
         template<typename _type, typename ... _args>
         Ref<_type> Create(_args ... args)
         {
-            return MakePlace<_type>(location, line, args ...);
+            return MakePlace<_type>(location, line, std::forward<_args>(args)...);
         }
     };
 

@@ -18,7 +18,7 @@ namespace o2
 
 namespace Editor
 {
-	class DockWindowPlace;
+	FORWARD_CLASS_REF(DockWindowPlace);
 
 	// -------------------------
 	// Application configuration

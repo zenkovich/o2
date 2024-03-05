@@ -1325,6 +1325,8 @@ namespace o2
         mCaretBlinkTime = 0;
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::EditBox>);
 // --- META ---
 
 DECLARE_CLASS(o2::EditBox, o2__EditBox);

@@ -11,7 +11,7 @@ namespace o2
 
 namespace Editor
 {
-	class TexturePreview;
+	FORWARD_CLASS_REF(TexturePreview);
 
 	// ------------------------
 	// Vector font asset viewer

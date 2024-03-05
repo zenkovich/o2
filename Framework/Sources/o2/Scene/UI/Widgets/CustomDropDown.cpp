@@ -320,6 +320,8 @@ namespace o2
     void CustomDropDown::OnSelectionChanged()
     {}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::CustomDropDown>);
 // --- META ---
 
 DECLARE_CLASS(o2::CustomDropDown, o2__CustomDropDown);

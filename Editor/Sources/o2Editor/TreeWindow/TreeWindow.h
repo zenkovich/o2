@@ -21,8 +21,8 @@ using namespace o2;
 
 namespace Editor
 {
-	class SceneHierarchyTree;
-	class DrawOrderTree;
+	FORWARD_CLASS_REF(SceneHierarchyTree);
+	FORWARD_CLASS_REF(DrawOrderTree);
 
 	// -----------------------------------------------------------------
 	// Actors tree window. Shows scene hierarchy tree or draw order tree

@@ -898,4 +898,80 @@ CLASS_METHODS_META(o2::Widget)
 #endif
 }
 END_META;
+
+#if  IS_EDITOR
+CLASS_BASES_META(o2::Widget::LayersEditable)
+{
+    BASE_CLASS(o2::SceneEditableObject);
+}
+END_META;
+CLASS_FIELDS_META(o2::Widget::LayersEditable)
+{
+#if  IS_EDITOR
+    FIELD().PUBLIC().NAME(widget);
+    FIELD().PUBLIC().DEFAULT_VALUE(Math::Random()).NAME(UID);
+    FIELD().PUBLIC().NAME(prototypeLink);
+#endif
+}
+END_META;
+CLASS_METHODS_META(o2::Widget::LayersEditable)
+{
+
+#if  IS_EDITOR
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
+    FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
+    FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableLink);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableParent);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, const Ref<SceneEditableObject>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, const Ref<SceneEditableObject>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDeleting);
+    FUNCTION().PUBLIC().SIGNATURE(Basis, GetTransform);
+#endif
+}
+END_META;
+#endif
+
+#if  IS_EDITOR
+CLASS_BASES_META(o2::Widget::InternalChildrenEditableEditable)
+{
+    BASE_CLASS(o2::SceneEditableObject);
+}
+END_META;
+CLASS_FIELDS_META(o2::Widget::InternalChildrenEditableEditable)
+{
+#if  IS_EDITOR
+    FIELD().PUBLIC().NAME(widget);
+    FIELD().PUBLIC().DEFAULT_VALUE(Math::Random()).NAME(UID);
+    FIELD().PUBLIC().NAME(prototypeLink);
+#endif
+}
+END_META;
+CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
+{
+
+#if  IS_EDITOR
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
+    FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
+    FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableLink);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableParent);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, const Ref<SceneEditableObject>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, const Ref<SceneEditableObject>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDeleting);
+    FUNCTION().PUBLIC().SIGNATURE(Basis, GetTransform);
+#endif
+}
+END_META;
+#endif
 // --- END META ---

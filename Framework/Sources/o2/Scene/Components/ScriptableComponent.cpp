@@ -164,6 +164,7 @@ namespace o2
             mOnDisabledFunc.InvokeRaw(mInstance, {});
     }
 }
+
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ScriptableComponent>);
 // --- META ---
 

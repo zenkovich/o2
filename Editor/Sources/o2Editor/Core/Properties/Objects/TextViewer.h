@@ -14,12 +14,12 @@ namespace o2
 
 namespace Editor
 {
-	class AssetProperty;
-	class FloatProperty;
-	class ColorProperty;
-	class EnumProperty;
-	class WStringProperty;
-	class BooleanProperty;
+	FORWARD_CLASS_REF(AssetProperty);
+	FORWARD_CLASS_REF(FloatProperty);
+	FORWARD_CLASS_REF(ColorProperty);
+	FORWARD_CLASS_REF(EnumProperty);
+	FORWARD_CLASS_REF(WStringProperty);
+	FORWARD_CLASS_REF(BooleanProperty);
 
 	// --------------------
 	// Editor text property

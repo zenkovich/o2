@@ -195,6 +195,8 @@ namespace o2
     }
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ICollider>);
 // --- META ---
 
 DECLARE_CLASS(o2::ICollider, o2__ICollider);

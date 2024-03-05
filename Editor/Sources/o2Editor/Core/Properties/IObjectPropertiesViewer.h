@@ -14,7 +14,7 @@ namespace o2
 
 namespace Editor
 {
-	class IPropertyField;
+	FORWARD_CLASS_REF(IPropertyField);
 
 	// ----------------------------------------------------------------------------------
 	// Object properties viewer interface. Used in IObjectProperty and IObjectPtrProperty

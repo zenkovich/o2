@@ -15,7 +15,7 @@ namespace o2
 
 namespace Editor
 {
-	class CurvesEditor;
+    FORWARD_CLASS_REF(CurvesEditor);
 
 	// --------------------
 	// Curve editing dialog

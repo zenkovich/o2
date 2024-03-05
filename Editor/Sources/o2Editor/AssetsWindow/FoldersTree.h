@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-	class FoldersTree;
+	FORWARD_CLASS_REF(FoldersTree);
 
 	// --------------------------
 	// Assets folders tree widget

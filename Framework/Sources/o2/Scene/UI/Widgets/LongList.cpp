@@ -515,6 +515,8 @@ namespace o2
         return "List";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::LongList>);
 // --- META ---
 
 DECLARE_CLASS(o2::LongList, o2__LongList);

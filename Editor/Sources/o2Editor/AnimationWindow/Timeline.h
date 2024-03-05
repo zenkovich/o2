@@ -14,7 +14,7 @@ namespace o2
 
 namespace Editor
 {
-	class AnimationWindow;
+	FORWARD_CLASS_REF(AnimationWindow);
 
 	// ------------------------------------
 	// Draws time scale in animation window

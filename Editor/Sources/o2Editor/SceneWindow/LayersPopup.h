@@ -14,7 +14,7 @@ namespace o2
 
 namespace Editor
 {
-	class LayerPopupItem;
+    FORWARD_CLASS_REF(LayerPopupItem);
 
 	// -----------------------
 	// Scene layers list popup

@@ -4,9 +4,9 @@
 
 namespace Editor
 {
-    class IPropertyField;
-	class Vec2FProperty;
-	class FloatProperty;
+    FORWARD_CLASS_REF(IPropertyField);
+	FORWARD_CLASS_REF(Vec2FProperty);
+	FORWARD_CLASS_REF(FloatProperty);
 
 	// --------------------------------------------
 	// Default editor widget layer transform viewer

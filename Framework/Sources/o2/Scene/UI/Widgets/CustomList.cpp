@@ -583,6 +583,8 @@ namespace o2
 		return idx == other.idx;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::CustomList>);
 // --- META ---
 
 DECLARE_CLASS(o2::CustomList, o2__CustomList);

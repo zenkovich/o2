@@ -124,6 +124,8 @@ namespace o2
         return "List";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::List>);
 // --- META ---
 
 DECLARE_CLASS(o2::List, o2__List);

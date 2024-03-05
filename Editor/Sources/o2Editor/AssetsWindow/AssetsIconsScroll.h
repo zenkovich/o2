@@ -21,10 +21,10 @@ namespace o2
 
 namespace Editor
 {
-	class ActorProperty;
-	class ComponentProperty;
-	class SceneHierarchyTree;
-	class AssetIcon;
+	FORWARD_CLASS_REF(ActorProperty);
+	FORWARD_CLASS_REF(ComponentProperty);
+	FORWARD_CLASS_REF(SceneHierarchyTree);
+	FORWARD_CLASS_REF(AssetIcon);
 
 	// ------------------------
 	// Assets icons scroll area

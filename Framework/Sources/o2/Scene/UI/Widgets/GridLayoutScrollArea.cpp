@@ -280,6 +280,8 @@ namespace o2
         SetInteractable(false);
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::GridLayoutScrollArea>);
 // --- META ---
 
 DECLARE_CLASS(o2::GridLayoutScrollArea, o2__GridLayoutScrollArea);

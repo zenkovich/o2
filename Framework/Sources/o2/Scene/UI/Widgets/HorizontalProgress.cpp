@@ -287,6 +287,8 @@ namespace o2
         return "Progress";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::HorizontalProgress>);
 // --- META ---
 
 ENUM_META(o2::HorizontalProgress::Orientation)

@@ -7,12 +7,12 @@ using namespace o2;
 
 namespace o2
 {
-	class WidgetDragHandle;
+	FORWARD_CLASS_REF(WidgetDragHandle);
 }
 
 namespace Editor
 {
-	class BorderIProperty;
+	FORWARD_CLASS_REF(BorderIProperty);
 
 	// -----------------------------
 	// Editor of image slices widget

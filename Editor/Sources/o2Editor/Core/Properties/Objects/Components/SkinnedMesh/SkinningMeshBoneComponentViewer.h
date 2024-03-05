@@ -15,8 +15,7 @@ namespace o2
 
 namespace Editor
 {
-	class SceneDragHandle;
-	struct SkeletonTool;
+	FORWARD_CLASS_REF(SceneDragHandle);
 
 	// ------------------------------
 	// Skinning Mesh component viewer

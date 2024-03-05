@@ -6,7 +6,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class DockWindowPlace;
+	FORWARD_CLASS_REF(DockWindowPlace);
 
 	// -----------------------------
 	// Dockable editor window widget

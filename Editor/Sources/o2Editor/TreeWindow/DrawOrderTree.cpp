@@ -273,7 +273,7 @@ namespace Editor
 	{
 		auto newParentEditableObject = Ref((SceneEditableObject*)newParent);
 		auto prevEditableObject = Ref((SceneEditableObject*)prevObject);
-		Vector<Ref<SceneEditableObject>> editableObjects = objects.Cast<Ref<SceneEditableObject>>();
+        auto editableObjects = objects.Convert<Ref<SceneEditableObject>>([](void* x) { return Ref((SceneEditableObject*)x); });
 
 		auto action = mmake<ReparentAction>(editableObjects);
 
@@ -361,7 +361,7 @@ namespace Editor
 	void DrawOrderTree::OnObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		RebuildOrderTree();
-		Tree::OnObjectsChanged(objects.Cast<void*>());
+        Tree::OnObjectsChanged(objects.Convert<void*>([](auto& x) { return x.Get(); }));
 	}
 
 	void DrawOrderTree::OnObjectChanged(const Ref<SceneEditableObject>& object)
@@ -554,8 +554,8 @@ namespace Editor
 			DataDocument prevData; prevData = prevName;
 			DataDocument newData; newData = mTarget->object->GetName();
 
-			auto action = mmake<PropertyChangeAction>({ mTarget->object }, "name", { prevData }, { newData });
-			o2EditorApplication.DoneAction(action);
+			auto action = mnew PropertyChangeAction({ mTarget->object }, "name", { prevData }, { newData });
+			o2EditorApplication.DoneAction(Ref(action));
 		}
 	}
 

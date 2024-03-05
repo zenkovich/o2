@@ -17,7 +17,7 @@ namespace o2
 
 namespace Editor
 {
-	class PropertiesContext;
+	FORWARD_CLASS_REF(PropertiesContext);
 
 	// -------------------------------
 	// Editor property field interface

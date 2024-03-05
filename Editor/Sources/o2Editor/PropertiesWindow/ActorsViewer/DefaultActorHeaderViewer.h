@@ -14,12 +14,12 @@ namespace Editor
 {
 	using namespace o2;
 
-	class TagsProperty;
-	class SceneLayerRefProperty;
-	class BooleanProperty;
-	class StringProperty;
-	class AssetProperty;
-	class FloatProperty;
+	FORWARD_CLASS_REF(TagsProperty);
+	FORWARD_CLASS_REF(SceneLayerRefProperty);
+	FORWARD_CLASS_REF(BooleanProperty);
+	FORWARD_CLASS_REF(StringProperty);
+	FORWARD_CLASS_REF(AssetProperty);
+	FORWARD_CLASS_REF(FloatProperty);
 
 	// ---------------------------
 	// Default actor header viewer

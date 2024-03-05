@@ -12,7 +12,7 @@ namespace o2
 
 namespace Editor
 {
-	class DefaultObjectPropertiesViewer;
+	FORWARD_CLASS_REF(DefaultObjectPropertiesViewer);
 
 	// -------------------------
 	// Default properties viewer

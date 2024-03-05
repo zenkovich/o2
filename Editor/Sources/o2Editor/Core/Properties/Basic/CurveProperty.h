@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-	class CurvePreview;
+	FORWARD_CLASS_REF(CurvePreview);
 
 	// ------------------------------
 	// Editor curve property edit box

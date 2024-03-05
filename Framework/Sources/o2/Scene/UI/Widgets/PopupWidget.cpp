@@ -256,6 +256,8 @@ namespace o2
         return "Window";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::PopupWidget>);
 // --- META ---
 
 DECLARE_CLASS(o2::PopupWidget, o2__PopupWidget);

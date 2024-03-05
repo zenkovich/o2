@@ -6,7 +6,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class AnimationWindow;
+	FORWARD_CLASS_REF(AnimationWindow);
 
 	class CurvesSheet : public Widget
 	{

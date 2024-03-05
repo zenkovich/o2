@@ -9,8 +9,8 @@ namespace o2
 
 namespace Editor
 {
-	class LayersPopup;
-	class SceneEditScreen;
+	FORWARD_CLASS_REF(LayersPopup);
+	FORWARD_CLASS_REF(SceneEditScreen);
 
 	// --------------------
 	// Scene editing window

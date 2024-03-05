@@ -466,6 +466,8 @@ namespace o2
         GetLayoutData().offsetMin -= szDelta*relativePivot;
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::VerticalLayout>);
 // --- META ---
 
 DECLARE_CLASS(o2::VerticalLayout, o2__VerticalLayout);
