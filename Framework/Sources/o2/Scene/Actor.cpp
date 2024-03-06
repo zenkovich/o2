@@ -1324,7 +1324,7 @@ namespace o2
     {
 #if IS_EDITOR
         if (Scene::IsSingletonInitialzed())
-            o2Scene.OnActorPrototypeBroken(Ref(this));
+            o2Scene.OnActorPrototypeBroken(this);
 #endif
 
         mPrototype = asset;
@@ -1335,7 +1335,8 @@ namespace o2
             mPrototypeLink = nullptr;
 
 #if IS_EDITOR
-        Scene::LinkActorToPrototypesHierarchy(Ref(this), mPrototype);
+        if (mPrototype)
+            Scene::LinkActorToPrototypesHierarchy(Ref(this), mPrototype);
 #endif
     }
 

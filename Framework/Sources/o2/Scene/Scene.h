@@ -349,7 +349,7 @@ namespace o2
         void OnActorLinkedToPrototype(Ref<ActorAsset>& assetRef, const Ref<Actor>& actor);
 
         // Called when actor destroying or prototype link broken, updates cache
-        void OnActorPrototypeBroken(const Ref<Actor>& actor);
+        void OnActorPrototypeBroken(Actor* actor);
 
     protected:
         Map<Ref<ActorAsset>, Vector<WeakRef<Actor>>> mPrototypeLinksCache; // Cache of linked to prototypes actors
@@ -547,7 +547,7 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectDrawn, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnActorWithPrototypeCreated, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnActorLinkedToPrototype, Ref<ActorAsset>&, const Ref<Actor>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnActorPrototypeBroken, const Ref<Actor>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnActorPrototypeBroken, Actor*);
 #endif
 }
 END_META;

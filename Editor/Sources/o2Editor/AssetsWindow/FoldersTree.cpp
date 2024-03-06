@@ -259,8 +259,10 @@ namespace Editor
 	{
 		return "UI/Editor";
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::FoldersTree>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AssetsFoldersTree>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetsFoldersTree, Editor__AssetsFoldersTree);

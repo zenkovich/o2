@@ -491,6 +491,7 @@ namespace Editor
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::SceneHierarchyTree>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::SceneHierarchyTreeNode>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneHierarchyTree, Editor__SceneHierarchyTree);

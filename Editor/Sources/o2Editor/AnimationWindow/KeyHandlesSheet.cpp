@@ -741,6 +741,8 @@ namespace Editor
 
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::KeyHandlesSheet>);
 // --- META ---
 
 DECLARE_CLASS(Editor::KeyHandlesSheet, Editor__KeyHandlesSheet);

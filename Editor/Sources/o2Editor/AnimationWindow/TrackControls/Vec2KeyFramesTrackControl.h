@@ -41,7 +41,7 @@ namespace Editor
 		SERIALIZABLE(Vec2KeyFramesTrackControl);
 
 	private:
-		Ref<SplineTool> mTool = mmake<SplineTool>(); // Other handles locking tool
+		Ref<SplineTool> mTool; // Other handles locking tool
 
 		WeakRef<IEditTool> mPrevSelectedTool; // Previous selected tool, for restore
 
@@ -66,7 +66,7 @@ CLASS_BASES_META(Editor::Vec2KeyFramesTrackControl)
 END_META;
 CLASS_FIELDS_META(Editor::Vec2KeyFramesTrackControl)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(mmake<SplineTool>()).NAME(mTool);
+    FIELD().PRIVATE().NAME(mTool);
     FIELD().PRIVATE().NAME(mPrevSelectedTool);
     FIELD().PRIVATE().NAME(mTrackOwner);
 }

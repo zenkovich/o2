@@ -193,12 +193,11 @@ namespace o2
         if (actor->IsOnScene())
             Instance().RemoveActorFromScene(actor, false);
 
-        auto actorRef = Ref(actor);
-        Instance().mAddedActors.Remove(actorRef);
-        Instance().mStartActors.Remove(actorRef);
+        Instance().mAddedActors.RemoveFirst([=](auto& x) { return x == actor; });
+        Instance().mStartActors.RemoveFirst([=](auto& x) { return x == actor; });
 
 #if IS_EDITOR
-        Instance().mChangedObjects.Remove(actorRef);
+        Instance().mChangedObjects.RemoveFirst([=](auto& x) { return x == actor; });
 #endif
     }
 
@@ -936,12 +935,12 @@ namespace o2
         mPrototypeLinksCache[assetRef].Add(actor);
     }
 
-    void Scene::OnActorPrototypeBroken(const Ref<Actor>& actor)
+    void Scene::OnActorPrototypeBroken(Actor* actor)
     {
         // !!! TODO: Optimize this
         for (auto it = mPrototypeLinksCache.Begin(); it != mPrototypeLinksCache.End();)
         {
-            it->second.Remove(actor);
+            it->second.RemoveFirst([=](auto& x) { return x == actor; });
             if (it->second.IsEmpty())
             {
                 mPrototypeLinksCache.Remove(it->first);

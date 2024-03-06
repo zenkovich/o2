@@ -47,6 +47,8 @@ namespace Editor
 		mIcon = FindInternalWidgetByType<Image>("icon");
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::SpoilerWithHead>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SpoilerWithHead, Editor__SpoilerWithHead);

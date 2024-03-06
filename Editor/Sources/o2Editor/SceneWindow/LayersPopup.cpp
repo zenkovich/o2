@@ -372,8 +372,9 @@ namespace Editor
 		o2Scene.RemoveLayer(mLayer);
 		mPopup->UpdateLayersListAndFit();
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::LayersPopup>);
 // --- META ---
 
 DECLARE_CLASS(Editor::LayersPopup, Editor__LayersPopup);

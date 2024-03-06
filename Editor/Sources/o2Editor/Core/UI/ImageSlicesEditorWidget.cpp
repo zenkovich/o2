@@ -224,8 +224,9 @@ namespace Editor
 	{
 		return "UI/Editor";
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ImageSlicesEditorWidget::PreviewImage>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ImageSlicesEditorWidget, Editor__ImageSlicesEditorWidget);

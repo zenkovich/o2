@@ -108,8 +108,8 @@ namespace Editor
 		Function<void()> onChanged; // Called when spline was changed
 
 	public:
-		Ref<SplineEditor>     splineEditor = mmake<SplineEditor>();   // Animation spline editor
-		Ref<SplineSceneLayer> sceneLayer = mmake<SplineSceneLayer>(); // Scene layer for drawing spline
+		Ref<SplineEditor>     splineEditor;   // Animation spline editor
+		Ref<SplineSceneLayer> sceneLayer; // Scene layer for drawing spline
 
 		bool isEnabled = true; // Is tool enabled now
 
@@ -148,8 +148,8 @@ END_META;
 CLASS_FIELDS_META(Editor::SplineTool)
 {
     FIELD().PUBLIC().NAME(onChanged);
-    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SplineEditor>()).NAME(splineEditor);
-    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SplineSceneLayer>()).NAME(sceneLayer);
+    FIELD().PUBLIC().NAME(splineEditor);
+    FIELD().PUBLIC().NAME(sceneLayer);
     FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(isEnabled);
 }
 END_META;

@@ -336,6 +336,8 @@ namespace Editor
 		return newChild;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ComponentsTreeNode>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AddComponentPanel, Editor__AddComponentPanel);

@@ -9,13 +9,13 @@ namespace Editor
 	WeakRef<Vec2KeyFramesTrackControl> Vec2KeyFramesTrackControl::mLastActive;
 
 	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl():
-		Base()
+		Base(), mTool(mmake<SplineTool>())
 	{
 		InitializeControls();
 	}
 
 	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl(const Vec2KeyFramesTrackControl& other):
-		Base(other)
+		Base(other), mTool(mmake<SplineTool>())
 	{
 		InitializeControls();
 	}
@@ -143,6 +143,8 @@ namespace Editor
 		DrawDebugFrame();
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::Vec2KeyFramesTrackControl>);
 // --- META ---
 
 DECLARE_CLASS(Editor::Vec2KeyFramesTrackControl, Editor__Vec2KeyFramesTrackControl);

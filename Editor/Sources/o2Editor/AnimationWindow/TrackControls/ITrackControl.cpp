@@ -65,6 +65,8 @@ namespace Editor
 		return handle == other.handle;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ITrackControl>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ITrackControl, Editor__ITrackControl);

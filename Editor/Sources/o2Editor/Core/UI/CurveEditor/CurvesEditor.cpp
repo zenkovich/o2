@@ -2243,8 +2243,9 @@ namespace Editor
 	{
 		return curveInfo->editor.Lock()->LocalToScreenPoint(CurveViewToLocal(point));
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::CurvesEditor>);
 // --- META ---
 
 DECLARE_CLASS(Editor::CurvesEditor, Editor__CurvesEditor);

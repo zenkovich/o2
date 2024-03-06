@@ -43,8 +43,9 @@ namespace Editor
 		WidgetDragHandle::operator=(other);
 		return *this;
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AnimationKeyDragHandle>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationKeyDragHandle, Editor__AnimationKeyDragHandle);

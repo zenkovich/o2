@@ -208,8 +208,9 @@ namespace Editor
 	{
 		return deviceName == other.deviceName;
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::GameWindow::GameView>);
 // --- META ---
 
 DECLARE_CLASS(Editor::GameWindow, Editor__GameWindow);
