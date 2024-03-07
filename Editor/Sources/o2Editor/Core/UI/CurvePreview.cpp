@@ -137,6 +137,8 @@ namespace Editor
 		mNeedRedraw = true;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::CurvePreview>);
 // --- META ---
 
 DECLARE_CLASS(Editor::CurvePreview, Editor__CurvePreview);

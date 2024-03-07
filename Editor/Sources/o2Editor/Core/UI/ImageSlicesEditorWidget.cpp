@@ -227,6 +227,7 @@ namespace Editor
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ImageSlicesEditorWidget::PreviewImage>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ImageSlicesEditorWidget>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ImageSlicesEditorWidget, Editor__ImageSlicesEditorWidget);

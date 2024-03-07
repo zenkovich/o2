@@ -50,6 +50,7 @@ namespace Editor
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::String>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::StringProperty>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TPropertyField<o2::String>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::StringProperty, Editor__StringProperty);

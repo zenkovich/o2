@@ -905,8 +905,9 @@ namespace o2
             handle->onChangedPos(handle->GetPosition());
         }
     }
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::WidgetDragHandle>);
 // --- META ---
 
 DECLARE_CLASS(o2::DragHandle, o2__DragHandle);

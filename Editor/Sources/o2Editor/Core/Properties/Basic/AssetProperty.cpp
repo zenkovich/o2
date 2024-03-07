@@ -382,6 +382,7 @@ namespace Editor
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<Ref<Asset>>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AssetProperty>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TPropertyField<Ref<Asset>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetProperty, Editor__AssetProperty);

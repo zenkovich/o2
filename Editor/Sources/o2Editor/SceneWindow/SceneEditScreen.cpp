@@ -705,6 +705,8 @@ namespace Editor
 			mEnabledTool->OnCursorMiddleMouseReleased(cursor);
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::SceneEditScreen>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneEditScreen, Editor__SceneEditScreen);

@@ -103,6 +103,7 @@ namespace Editor
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<int>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::IntegerProperty>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TPropertyField<int>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::IntegerProperty, Editor__IntegerProperty);

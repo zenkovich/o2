@@ -78,6 +78,8 @@ namespace Editor
 		return *this;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TexturePreview>);
 // --- META ---
 
 DECLARE_CLASS(Editor::TexturePreview, Editor__TexturePreview);

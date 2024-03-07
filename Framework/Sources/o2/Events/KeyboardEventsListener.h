@@ -12,7 +12,7 @@ namespace o2
     {
     public:
         // Default constructor
-        KeyboardEventsListener();
+        KeyboardEventsListener(RefCounter* refCounter);
 
         // Virtual destructor
         virtual ~KeyboardEventsListener();

@@ -112,6 +112,7 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::ActorAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::ActorAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ActorAsset>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AssetWithDefaultMeta<o2::ActorAsset>>);
 // --- META ---
 
 DECLARE_CLASS(o2::ActorAsset, o2__ActorAsset);

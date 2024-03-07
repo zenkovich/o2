@@ -251,6 +251,7 @@ namespace Editor
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::RectF>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::RectFProperty>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TPropertyField<o2::RectF>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::RectFProperty, Editor__RectFProperty);

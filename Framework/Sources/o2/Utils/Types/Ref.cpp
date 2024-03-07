@@ -15,9 +15,7 @@ namespace o2
 
     RefCounter* RefCounterable::GetRefCounter() const
     {
-        if (!mRefCounter)
-            mRefCounter = new RefCounter(&DefaultRefCounterImplementation::Instance);
-
+        Assert(mRefCounter, "RefCounterable::GetRefCounter: mRefCounter is nullptr");
         return mRefCounter;
     }
 }

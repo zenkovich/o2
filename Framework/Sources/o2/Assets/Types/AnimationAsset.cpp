@@ -30,6 +30,7 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::AnimationAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::AnimationAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AnimationAsset>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AssetWithDefaultMeta<o2::AnimationAsset>>);
 // --- META ---
 
 DECLARE_CLASS(o2::AnimationAsset, o2__AnimationAsset);

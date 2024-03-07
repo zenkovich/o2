@@ -372,6 +372,8 @@ namespace Editor
 	}
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ScrollView>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ScrollView, Editor__ScrollView);

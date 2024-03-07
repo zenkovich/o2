@@ -136,6 +136,7 @@ namespace Editor
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::TagGroup>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TagsProperty>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TPropertyField<o2::TagGroup>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::TagsProperty, Editor__TagsProperty);

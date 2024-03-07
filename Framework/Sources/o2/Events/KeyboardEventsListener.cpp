@@ -5,8 +5,9 @@
 
 namespace o2
 {
-    KeyboardEventsListener::KeyboardEventsListener()
+    KeyboardEventsListener::KeyboardEventsListener(RefCounter* refCounter)
     {
+        mRefCounter = refCounter;
         EventSystem::RegKeyboardListener(this);
     }
 

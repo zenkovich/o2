@@ -96,6 +96,8 @@ namespace o2
     class RefCounterable
     {
     public:
+        virtual ~RefCounterable() {}
+
         // Returns strong references count
         UInt16 GetStrongReferencesCount() const;
 
@@ -339,7 +341,7 @@ namespace o2
 	FORWARD_REF(CLASS)
 
     // Implementation of forward declared reference counter 
-#define FORWARD_REF_IMPL(CLASS)                                                   \
+#define FORWARD_REF_IMPL(CLASS)                                                     \
 	o2::RefCounter* GetRefCounterFwd(CLASS* ptr) { return GetRefCounterImpl(ptr); } \
 	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }
 
@@ -348,23 +350,25 @@ namespace o2
     template<typename _type, typename ... _args>
     Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
     {
+        constexpr bool isConstructibleWithRefCounter = std::is_constructible<_type, RefCounter*, _args...>::value;
+
         std::byte* memory = (std::byte*)_mmalloc(sizeof(RefCounter) + sizeof(_type), location, line);
-        auto object = new (memory + sizeof(RefCounter)) _type(std::forward<_args>(args)...);
+        auto refCounter = new (memory) RefCounter(&LinkedRefCounterImplementation::Instance);
+        refCounter->strongReferences += 1;
 
-		// If object already has reference counter, we need to copy it to new memory block
-        if (object->mRefCounter) 
-        {
-            UInt prevStrongReferences = object->mRefCounter->strongReferences;
-            UInt prevWeakReferences = object->mRefCounter->weakReferences;
+        _type* object;
 
-			(*object->mRefCounter->mImplementation->DestroyCounter)(object->mRefCounter);
-
-			object->mRefCounter = new (memory) RefCounter(&LinkedRefCounterImplementation::Instance);
-            object->mRefCounter->strongReferences = prevStrongReferences;
-            object->mRefCounter->weakReferences = prevWeakReferences;
+        if constexpr (isConstructibleWithRefCounter) 
+		{
+			object = new (memory + sizeof(RefCounter)) _type(refCounter, std::forward<_args>(args)...);
         }
         else
-            object->mRefCounter = new (memory) RefCounter(&LinkedRefCounterImplementation::Instance);
+		{
+			object = new (memory + sizeof(RefCounter)) _type(std::forward<_args>(args)...); 
+            object->mRefCounter = refCounter;
+        }
+
+        refCounter->strongReferences -= 1;
 
         return Ref<_type>(object);
 	}

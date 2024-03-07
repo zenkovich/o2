@@ -41,6 +41,7 @@ namespace o2
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::FolderAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::FolderAsset>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::FolderAsset>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AssetWithDefaultMeta<o2::FolderAsset>>);
 // --- META ---
 
 DECLARE_CLASS(o2::FolderAsset, o2__FolderAsset);

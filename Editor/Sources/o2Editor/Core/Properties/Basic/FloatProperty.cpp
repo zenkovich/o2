@@ -113,6 +113,7 @@ namespace Editor
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<float>);
 DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::FloatProperty>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TPropertyField<float>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::FloatProperty, Editor__FloatProperty);

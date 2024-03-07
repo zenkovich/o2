@@ -549,17 +549,9 @@ namespace o2
             {
                 if (auto valueNode = data.FindMember("Value"))
                 {
-                    value = nullptr;
-
                     auto type = Reflection::GetType(*typeNode);
-                    void* sample = type->CreateSample();
-                    if (type->GetUsage() == Type::Usage::Object)
-                    {
-                        auto objectType = dynamic_cast<const ObjectType*>(type);
-                        value = Ref(dynamic_cast<_ref_type*>(objectType->DynamicCastToIObject(sample)));
-                    }
-                    else
-                        value = Ref(static_cast<_ref_type*>(sample));
+                    auto sample = type->CreateSampleRef();
+                    value = DynamicCast<_ref_type>(sample);
 
                     if (value)
                         valueNode->Get(*value);
