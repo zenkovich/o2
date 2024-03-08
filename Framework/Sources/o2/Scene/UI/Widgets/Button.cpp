@@ -8,8 +8,8 @@
 
 namespace o2
 {
-    Button::Button(RefCounter* refCounter):
-        Widget(), CursorAreaEventsListener(), KeyboardEventsListener(refCounter)
+    Button::Button():
+        Widget(), CursorAreaEventsListener()
     {}
 
     Button::Button(const Button& other) :

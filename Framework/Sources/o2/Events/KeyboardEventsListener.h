@@ -12,10 +12,12 @@ namespace o2
     {
     public:
         // Default constructor
-        KeyboardEventsListener(RefCounter* refCounter);
+        KeyboardEventsListener();
 
         // Virtual destructor
         virtual ~KeyboardEventsListener();
+
+        void RefCounterInitialized();
 
     protected:
         // Called when key was pressed

@@ -30,7 +30,7 @@ namespace o2
 
     public:
         // Default constructor
-        Button(RefCounter* refCounter);
+        Button();
 
         // Copy-constructor
         Button(const Button& other);
@@ -130,7 +130,7 @@ END_META;
 CLASS_METHODS_META(o2::Button)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const Button&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
