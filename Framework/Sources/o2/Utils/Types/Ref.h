@@ -345,6 +345,12 @@ namespace o2
 	o2::RefCounter* GetRefCounterFwd(CLASS* ptr) { return GetRefCounterImpl(ptr); } \
 	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }
 
+	template<class T, class = std::void_t<>>
+	struct HasRefCounterInitialized : std::false_type {};
+
+	template<class T>
+	struct HasRefCounterInitialized<T, std::void_t<decltype(&T::RefCounterInitialized)>> : std::true_type {};
+
     // Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together. 
     // Stores location and line of creation for debug
     template<typename _type, typename ... _args>
@@ -367,6 +373,9 @@ namespace o2
 			object = new (memory + sizeof(RefCounter)) _type(std::forward<_args>(args)...); 
             object->mRefCounter = refCounter;
         }
+
+        if constexpr (HasRefCounterInitialized<_type>::value) 
+            object->RefCounterInitialized();
 
         refCounter->strongReferences -= 1;
 
