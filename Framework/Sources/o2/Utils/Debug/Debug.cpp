@@ -26,16 +26,13 @@ namespace o2
     }
 
     Debug::~Debug()
-    {
-        delete mFont;
-        delete mText;
-    }
+    {}
 
     void Debug::InitializeFont()
     {
-        mFont = mnew VectorFont(o2Assets.GetBuiltAssetsPath() + "debugFont.ttf");
+        mFont = mmake<VectorFont>(o2Assets.GetBuiltAssetsPath() + "debugFont.ttf");
         mFont->AddEffect<FontStrokeEffect>();
-        mText = mnew Text(Ref<Font>(mFont));
+        mText = mmake<Text>(mFont);
     }
 
     void Debug::Update(bool isEditor, float dt)
@@ -290,22 +287,19 @@ namespace o2
         textDrawable(nullptr)
     {}
 
-    Debug::DbgText::DbgText(const Vec2F& position, const String& text, Text* textDrawable, const Color4& color):
-        position(position), text(text), textDrawable(textDrawable), ownTextDrawable(false), IDbgDrawable(color, -1.0f)
+    Debug::DbgText::DbgText(const Vec2F& position, const String& text, const Ref<Text>& textDrawable, const Color4& color):
+        position(position), text(text), textDrawable(textDrawable), IDbgDrawable(color, -1.0f)
     {}
 
-    Debug::DbgText::DbgText(const Vec2F& position, const String& text, VectorFont* font, const Color4& color,
+    Debug::DbgText::DbgText(const Vec2F& position, const String& text, const Ref<VectorFont>& font, const Color4& color,
                             float delay /*= -1.0f*/):
-        position(position), text(text), ownTextDrawable(true), IDbgDrawable(color, delay)
+        position(position), text(text), IDbgDrawable(color, delay)
     {
-        textDrawable = mnew Text(Ref<Font>(font));
+        textDrawable = mmake<Text>(font);
     }
 
     Debug::DbgText::~DbgText()
-    {
-        if (ownTextDrawable)
-            delete textDrawable;
-    }
+    {}
 
     void Debug::DbgText::Draw()
     {

@@ -17,7 +17,7 @@ namespace o2
         // Virtual destructor
         virtual ~KeyboardEventsListener();
 
-        void RefCounterInitialized();
+        void PostRefConstruct();
 
     protected:
         // Called when key was pressed

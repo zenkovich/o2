@@ -146,6 +146,9 @@ namespace o2
         bool mReady; // Is texture ready to use
 
     protected:
+        // It is called after reference initialization at object construction, registers texture in render
+        void PostRefConstruct();
+
         // Loads texture from PNG file 
         void LoadPNG(const String& fileName);
 
@@ -154,6 +157,8 @@ namespace o2
 
 		friend class Render;
 		friend class Ref<Texture>;
+
+        FRIEND_REF_MAKE();
     };
 }
 // --- META ---

@@ -110,6 +110,7 @@ void CppSyntaxParser::InitializeParsers()
     mParsers.push_back(new ExpressionParser("#pragma", &CppSyntaxParser::ParsePragma, false, true));
     mParsers.push_back(new ExpressionParser("#include", &CppSyntaxParser::ParseInclude, false, true));
     mParsers.push_back(new ExpressionParser("#define", &CppSyntaxParser::ParseDefine, true, true));
+    mParsers.push_back(new ExpressionParser("#undef", &CppSyntaxParser::ParseDefine, true, true));
     mParsers.push_back(new ExpressionParser("#ifdef", &CppSyntaxParser::ParseIfdefMacros, true, true));
     mParsers.push_back(new ExpressionParser("#if", &CppSyntaxParser::ParseIfMacros, true, true));
     mParsers.push_back(new ExpressionParser("#endif", &CppSyntaxParser::ParseEndIfMacros, true, true));
@@ -596,6 +597,12 @@ void CppSyntaxParser::ParseDefine(SyntaxSection& section, int& caret,
                                   SyntaxProtectionSection& protectionSection)
 {
     caret += (int)strlen("#define");
+    ReadWord(section.mData, caret, "\n", "");
+}
+
+void CppSyntaxParser::ParseUndef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection)
+{
+    caret += (int)strlen("#undef");
     ReadWord(section.mData, caret, "\n", "");
 }
 

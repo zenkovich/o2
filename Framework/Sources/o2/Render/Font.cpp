@@ -6,13 +6,14 @@
 namespace o2
 {
     Font::Font()
-    {
-        o2Render.OnFontCreated(this);
-    }
+    {}
 
     Font::Font(const Font& font):
         mCharacters(font.mCharacters), mTexture(font.mTexture), 
         mTextureSrcRect(font.mTextureSrcRect), mReady(font.mReady)
+    {}
+    
+    void Font::PostRefConstruct()
     {
         o2Render.OnFontCreated(this);
     }

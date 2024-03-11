@@ -304,9 +304,11 @@ namespace o2
         obj->~_type();
     }
 
+    // Static check if type is complete
     template<typename T, typename = void>
     struct IsCompleteRef : std::false_type {};
 
+    // Static check if type is complete
     template<typename T>
     struct IsCompleteRef<T, std::void_t<decltype(sizeof(T))>> : std::true_type {};
 
@@ -345,11 +347,18 @@ namespace o2
 	o2::RefCounter* GetRefCounterFwd(CLASS* ptr) { return GetRefCounterImpl(ptr); } \
 	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }
 
-	template<class T, class = std::void_t<>>
-	struct HasRefCounterInitialized : std::false_type {};
+    // Declares friend function for creating new object
+#define FRIEND_REF_MAKE()                                                          \
+    template<typename _type, typename ... _args>                                   \
+    friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
 
+    // Static check for presence of PostRefConstruct method
+	template<class T, class = std::void_t<>>
+	struct HasPostRefConstruct : std::false_type {};
+
+    // Static check for presence of PostRefConstruct method
 	template<class T>
-	struct HasRefCounterInitialized<T, std::void_t<decltype(&T::RefCounterInitialized)>> : std::true_type {};
+	struct HasPostRefConstruct<T, std::void_t<decltype(&T::PostRefConstruct)>> : std::true_type {};
 
     // Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together. 
     // Stores location and line of creation for debug
@@ -374,8 +383,8 @@ namespace o2
             object->mRefCounter = refCounter;
         }
 
-        if constexpr (HasRefCounterInitialized<_type>::value) 
-            object->RefCounterInitialized();
+        if constexpr (HasPostRefConstruct<_type>::value) 
+            object->PostRefConstruct();
 
         refCounter->strongReferences -= 1;
 
@@ -450,7 +459,7 @@ namespace o2
         NewPlaceHelper(const char* location, int line):location(location), line(line) {}
 
         template<typename _type, typename ... _args>
-        Ref<_type> Create(_args ... args)
+        Ref<_type> Create(_args&& ... args)
         {
             return MakePlace<_type>(location, line, std::forward<_args>(args)...);
         }

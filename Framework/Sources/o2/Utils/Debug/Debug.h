@@ -200,15 +200,14 @@ namespace o2
         // --------------------------------------------
         struct DbgText: public IDbgDrawable
         {
-            Vec2F  position;
-            String text;
-            Text*  textDrawable;
-            bool   ownTextDrawable;
+            Vec2F     position;
+            String    text;
+            Ref<Text> textDrawable;
 
         public:
             DbgText();
-            DbgText(const Vec2F& position, const String& text, Text* textDrawable, const Color4& color);
-            DbgText(const Vec2F& position, const String& text, VectorFont* font, const Color4& color, float delay = -1.0f);
+            DbgText(const Vec2F& position, const String& text, const Ref<Text>& textDrawable, const Color4& color);
+            DbgText(const Vec2F& position, const String& text, const Ref<VectorFont>& font, const Color4& color, float delay = -1.0f);
             ~DbgText();
             void Draw();
         };
@@ -219,8 +218,8 @@ namespace o2
         Vector<Ref<IDbgDrawable>> mDbgDrawables;       // Debug drawables array
         Vector<Ref<IDbgDrawable>> mEditorDbgDrawables; // Debug drawables array for editor
 
-        VectorFont* mFont; // Font for debug captions
-        Text*       mText; // Text for one frame debug captions
+        Ref<VectorFont> mFont; // Font for debug captions
+        Ref<Text>       mText; // Text for one frame debug captions
 
     private:
         // Default constructor

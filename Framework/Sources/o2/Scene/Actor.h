@@ -384,6 +384,9 @@ namespace o2
 
         // Copy-constructor with transform
         Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode = ActorCreateMode::Default);
+
+        // It is called after reference initialization at object construction
+        void PostRefConstruct();
         
         // Checks that copy visitor finished work, calls it finalization
         void CheckCopyVisitorFinalization() const;
@@ -651,6 +654,8 @@ namespace o2
         friend class Scene;
         friend class Tag;
         friend class Widget;
+
+        FRIEND_REF_MAKE();
     };
 }
 
@@ -898,6 +903,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Ref<ActorAsset>&, ActorCreateMode);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Ref<Component>>, ActorCreateMode);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Actor&, ActorCreateMode);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckCopyVisitorFinalization);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabledInHierarchy, bool);

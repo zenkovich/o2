@@ -84,6 +84,8 @@ protected:
 
     void ParseDefine(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
+    void ParseUndef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
     void ParseIfdefMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
     void ParseIfMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);

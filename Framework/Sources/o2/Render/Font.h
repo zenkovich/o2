@@ -84,11 +84,16 @@ namespace o2
         bool mReady = false; // True when font is ready to use
 
     protected:
+        // It is called after reference initialization at object construction, registers texture in render
+        void PostRefConstruct();
+
         // Adds character and registers in cache map
         void AddCharacter(const Character& character);
 
         friend class Text;
         friend class Ref<Font>;
         friend class Render;
+
+        FRIEND_REF_MAKE();
     };
 }

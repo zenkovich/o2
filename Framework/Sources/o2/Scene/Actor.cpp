@@ -20,16 +20,11 @@ namespace o2
     {
         tags.onTagAdded = [&](const Ref<Tag>& tag) { tag->mActors.Add(WeakRef(this)); };
         tags.onTagRemoved = [&](const Ref<Tag>& tag) { tag->mActors.Remove(WeakRef(this)); };
-
-        transform->SetOwner(Ref(this));
-
-        Scene::OnActorCreated(this);
     }
 
     Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(transform, IsModeOnScene(mode))
     {
-        ActorRefResolver::ActorCreated(this);
     }
 
     Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
@@ -57,13 +52,7 @@ namespace o2
         other.mCopyVisitor->depth++;
 
         if (!mPrototype && other.mPrototype)
-        {
             mPrototype = other.mPrototype;
-
-#if IS_EDITOR
-            Scene::LinkActorToPrototypesHierarchy(Ref(this), mPrototype);
-#endif
-        }
 
         for (auto& child : other.mChildren)
         {
@@ -118,6 +107,19 @@ namespace o2
     Actor::Actor(const Actor& other) :
         Actor(other, ActorCreateMode::Default)
     {}
+
+    void Actor::PostRefConstruct()
+    {
+        transform->SetOwner(Ref(this));
+
+        Scene::OnActorCreated(this);
+        ActorRefResolver::ActorCreated(this);
+
+#if IS_EDITOR
+        if (mPrototype)
+            Scene::LinkActorToPrototypesHierarchy(Ref(this), mPrototype);
+#endif
+    }
 
     Actor::~Actor()
     {

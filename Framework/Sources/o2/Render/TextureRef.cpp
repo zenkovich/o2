@@ -7,69 +7,60 @@
 
 namespace o2
 {
-	Ref<Texture>::Ref(const Vec2I& size,
-					  TextureFormat format /*= TextureFormat::R8G8B8A8*/,
-					  Texture::Usage usage /*= Texture::Usage::Default*/)
-	{
-		mPtr = mnew Texture(size, format, usage);
-		IncrementRef();
-	}
+    Ref<Texture>::Ref(const Vec2I& size,
+                      TextureFormat format /*= TextureFormat::R8G8B8A8*/,
+                      Texture::Usage usage /*= Texture::Usage::Default*/) :
+        Ref(mmake<Texture>(size, format, usage))
+    {}
 
-	Ref<Texture>::Ref(const String& fileName)
-	{
-		mPtr = o2Render.mTextures.FindOrDefault([&](const Ref<Texture>& tex) { return tex->GetFileName() == fileName; }).Get();
+    Ref<Texture>::Ref(const String& fileName)
+    {
+        *this = o2Render.mTextures.FindOrDefault([&](const Ref<Texture>& tex) { return tex->GetFileName() == fileName; });
 
-		if (!mPtr)
-			mPtr = mnew Texture(fileName);
+        if (!mPtr)
+            *this = mmake<Texture>(fileName);
+    }
 
-		IncrementRef();
-	}
+    Ref<Texture>::Ref(const Bitmap& bitmap) :
+        Ref(mmake<Texture>(bitmap))
+    {}
 
-	Ref<Texture>::Ref(const Bitmap& bitmap)
-	{
-		mPtr = mnew Texture(bitmap);
-		IncrementRef();
-	}
+    Ref<Texture>::Ref(UID atlasAssetId, int page)
+    {
+        *this = (o2Render.mTextures.FindOrDefault(
+            [&](const Ref<Texture>& tex)
+            {
+                return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
+            }));
 
-	Ref<Texture>::Ref(UID atlasAssetId, int page)
-	{
-		mPtr = (o2Render.mTextures.FindOrDefault(
-			[&](const Ref<Texture>& tex)
-			{
-				return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
-			}).Get());
+        if (!mPtr)
+            *this = mmake<Texture>(atlasAssetId, page);
+    }
 
-		if (!mPtr)
-			mPtr = mnew Texture(atlasAssetId, page);
+    Ref<Texture>::Ref(const String& atlasAssetName, int page)
+    {
+        UID atlasAssetId = o2Assets.GetAssetId(atlasAssetName);
+        if (atlasAssetId == UID::empty)
+        {
+            o2Render.mLog->Error("Can't load texture for atlas " + atlasAssetName + " and page " + (String)page + ": atlas isn't exist");
+            *this = nullptr;
+            return;
+        }
 
-		IncrementRef();
-	}
+        *this = (o2Render.mTextures.FindOrDefault(
+            [&](const Ref<Texture>& tex)
+            {
+                return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
+            }));
 
-	Ref<Texture>::Ref(const String& atlasAssetName, int page)
-	{
-		UID atlasAssetId = o2Assets.GetAssetId(atlasAssetName);
-		if (atlasAssetId == UID::empty) {
-			o2Render.mLog->Error("Can't load texture for atlas " + atlasAssetName + " and page " + (String)page + ": atlas isn't exist");
-			mPtr = nullptr;
-			return;
-		}
+        if (!mPtr)
+            *this = mmake<Texture>(atlasAssetId, page);
+    }
 
-		mPtr = (o2Render.mTextures.FindOrDefault(
-			[&](const Ref<Texture>& tex)
-			{
-				return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
-			}).Get());
-
-		if (!mPtr)
-			mPtr = mnew Texture(atlasAssetId, page);
-
-		IncrementRef();
-	}
-
-	Ref<Texture> Ref<Texture>::Null()
-	{
-		return Ref<Texture>();
-	}
+    Ref<Texture> Ref<Texture>::Null()
+    {
+        return Ref<Texture>();
+    }
 }
 // --- META ---
 
