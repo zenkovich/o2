@@ -5,54 +5,6 @@
 
 namespace o2
 {
-    // -------------------------------------------------------- 
-    // Reference counters types implementation container
-    // Contains function pointers to destroy object and counter
-    // --------------------------------------------------------
-    struct RefCounterImplementation
-    {
-        void(*DestroyObject)(void*);  // Function pointer to destroy object
-        void(*DestroyCounter)(void*); // Function pointer to destroy counter
-    };
-
-    // -----------------------------------------
-    // Default reference counters implementation
-    // -----------------------------------------
-    struct DefaultRefCounterImplementation
-    {
-        // Default destroy object function
-        static void DestroyObject(void* object)
-        {
-            free(object);
-        }
-
-        // Default destroy counter function
-        static void DestroyCounter(void* counter)
-        {
-            delete counter;
-        }
-
-        static constexpr RefCounterImplementation Instance = { &DestroyObject, &DestroyCounter };
-    };
-
-    // ----------------------------------------------------------------------------
-    // Reference counter implementation for object and counter in same memory block
-    // ----------------------------------------------------------------------------
-    struct LinkedRefCounterImplementation
-    {
-        // Destroy object function, does nothing
-        static void DestroyObject(void* object)
-        {}
-
-        // Destroy counter function, frees memory block of object and counter
-        static void DestroyCounter(void* counter)
-        {
-            free(counter);
-        }
-
-        static constexpr RefCounterImplementation Instance = { &DestroyObject, &DestroyCounter };
-    };
-
     template<typename _type, typename _enable = void>
     class Ref;
 
@@ -67,15 +19,7 @@ namespace o2
         UInt strongReferences = 0; // Strong references count
         UInt weakReferences = 0;   // Weak references count
 
-    public:
-        // Default constructor
-        RefCounter(const RefCounterImplementation* implementation) :
-            mImplementation(implementation)
-        {}
-
     protected:
-        const RefCounterImplementation* mImplementation = &DefaultRefCounterImplementation::Instance; // It's pointer to function pointers to destroy object and counter
-
         template<typename _type>
         friend class BaseRef;
 
@@ -368,7 +312,7 @@ namespace o2
         constexpr bool isConstructibleWithRefCounter = std::is_constructible<_type, RefCounter*, _args...>::value;
 
         std::byte* memory = (std::byte*)_mmalloc(sizeof(RefCounter) + sizeof(_type), location, line);
-        auto refCounter = new (memory) RefCounter(&LinkedRefCounterImplementation::Instance);
+        auto refCounter = new (memory) RefCounter();
         refCounter->strongReferences += 1;
 
         _type* object;
@@ -647,15 +591,13 @@ namespace o2
                 refCounter->weakReferences++;
 
                 DestructObject(mPtr);
-                using _type_no_const = std::remove_const<_type>::type;
-                (*refCounter->mImplementation->DestroyObject)(const_cast<_type_no_const*>(mPtr));
 
                 refCounter->weakReferences--;
 
                 mPtr = nullptr;
 
                 if (refCounter->weakReferences == 0)
-                    (*refCounter->mImplementation->DestroyCounter)(refCounter);
+                    _mfree(refCounter);
             }
         }
     }

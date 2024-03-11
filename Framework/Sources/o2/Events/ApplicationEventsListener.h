@@ -30,5 +30,11 @@ namespace o2
 
         // Called when application frame was resized
         virtual void OnApplicationSized();
+
+	private:
+		// It is called after reference initialization at object construction, registers texture in render
+		void PostRefConstruct();
+
+		FRIEND_REF_MAKE();
     };
 }

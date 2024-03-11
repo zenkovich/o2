@@ -116,7 +116,10 @@ namespace o2
         Asset(const Ref<AssetMeta>& meta);
 
         // Copy-constructor
-        Asset(const Asset& asset);
+		Asset(const Asset& asset);
+
+		// It is called after reference initialization at object construction, registers texture in render
+		void PostRefConstruct();
 
         // Returns meta full path (from binary path)
         String GetMetaFullPath() const;
@@ -146,7 +149,9 @@ namespace o2
         friend class Ref;
 
         friend class Assets;
-        friend class AssetsBuilder;
+		friend class AssetsBuilder;
+
+		FRIEND_REF_MAKE();
     };
 
     // This macro defines asset type
@@ -224,6 +229,7 @@ CLASS_METHODS_META(o2::Asset)
 #endif
     FUNCTION().PROTECTED().CONSTRUCTOR(const Ref<AssetMeta>&);
     FUNCTION().PROTECTED().CONSTRUCTOR(const Asset&);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(String, GetMetaFullPath);
     FUNCTION().PROTECTED().SIGNATURE(UID&, ID);
     FUNCTION().PROTECTED().SIGNATURE(const Ref<LogStream>&, GetAssetsLogStream);

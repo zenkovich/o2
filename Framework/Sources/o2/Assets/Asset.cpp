@@ -14,21 +14,21 @@ namespace o2
         mInfo(other.mInfo)
     {
         mInfo.meta->mId.Randomize();
-
-        if (Assets::IsSingletonInitialzed())
-            o2Assets.AddAssetCache(this);
     }
 
     Asset::Asset(const Ref<AssetMeta>& meta)
     {
         mInfo.meta = meta;
         mInfo.meta->mId.Randomize();
-
-        if (Assets::IsSingletonInitialzed())
-            o2Assets.AddAssetCache(this);
     }
 
-    Asset& Asset::operator=(const Asset& other)
+	void Asset::PostRefConstruct()
+	{
+		if (Assets::IsSingletonInitialzed())
+			o2Assets.AddAssetCache(this);
+	}
+
+	Asset& Asset::operator=(const Asset& other)
     {
         if (Assets::IsSingletonInitialzed())
             o2Assets.RemoveAssetCache(this);

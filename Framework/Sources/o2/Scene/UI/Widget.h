@@ -284,7 +284,10 @@ namespace o2
         RectF mBounds;           // Widget bounds by drawing layers
         RectF mBoundsWithChilds; // Widget with childs bounds
 
-    protected:
+	protected:
+		// It is called after reference initialization at object construction, registers texture in render
+		void PostRefConstruct();
+
         // Regular serializing without prototype
         void SerializeRaw(DataValue& node) const override;
 
@@ -470,7 +473,9 @@ namespace o2
         friend class VerticalScrollBar;
         friend class WidgetLayer;
         friend class WidgetLayout;
-        friend class Window;
+		friend class Window;
+
+		FRIEND_REF_MAKE();
 
 #if IS_EDITOR
     public:
@@ -592,8 +597,8 @@ namespace o2
         static bool isEditorLayersVisible;           // Is widgets layers visible in hierarchy
         static bool isEditorInternalChildrenVisible; // Is widgets internal children visible in hierarchy
 
-        Ref<LayersEditable>                   layersEditable = mmake<LayersEditable>(Ref(this));                             // @EDITOR_IGNORE
-        Ref<InternalChildrenEditableEditable> internalChildrenEditable = mmake<InternalChildrenEditableEditable>(Ref(this)); // @EDITOR_IGNORE
+        Ref<LayersEditable>                   layersEditable;           // @EDITOR_IGNORE
+        Ref<InternalChildrenEditableEditable> internalChildrenEditable; // @EDITOR_IGNORE
 
     public:
         // Sets parent object. nullptr means make this object as root
@@ -829,6 +834,7 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, FindInternalWidget, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, FindActorById, SceneUID);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, SerializeWithProto, DataValue&);

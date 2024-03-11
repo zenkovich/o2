@@ -350,7 +350,7 @@ namespace o2
             {
                 if (mRefCounter->weakReferences == 0)
                 {
-                    (*mRefCounter->mImplementation->DestroyCounter)(mRefCounter);
+                    _mfree(mRefCounter);
                     mRefCounter = nullptr;
                     mPtr = nullptr;
                 }

@@ -15,33 +15,21 @@ namespace o2
 {
     Widget::Widget(ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), mode), layout(dynamic_cast<WidgetLayout*>(transform))
-    {
-        if (IsFocusable())
-            UIManager::RegisterFocusableWidget(this);
-    }
+    {}
 
     Widget::Widget(const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
-    {
-        if (IsFocusable())
-            UIManager::RegisterFocusableWidget(this);
-    }
+    {}
 
     Widget::Widget(Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
-    {
-        if (IsFocusable())
-            UIManager::RegisterFocusableWidget(this);
-    }
+    {}
 
     Widget::Widget(const Widget& other) :
         Actor(mnew WidgetLayout(*other.layout), other), layout(dynamic_cast<WidgetLayout*>(transform)),
         mTransparency(other.mTransparency), transparency(this), resTransparency(this),
         childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
     {
-        if (IsFocusable())
-            UIManager::RegisterFocusableWidget(this);
-
         // Layers
         {
             Ref<WidgetLayer::ICopyVisitor> layerCopyVisitor;
@@ -109,7 +97,18 @@ namespace o2
         RetargetStatesAnimations();
     }
 
-    Widget::~Widget()
+	void Widget::PostRefConstruct()
+	{
+		if (IsFocusable())
+			UIManager::RegisterFocusableWidget(this);
+
+#if IS_EDITOR
+		layersEditable = mmake<LayersEditable>(Ref(this));                             // @EDITOR_IGNORE
+		internalChildrenEditable = mmake<InternalChildrenEditableEditable>(Ref(this)); // @EDITOR_IGNORE
+#endif
+	}
+
+	Widget::~Widget()
     {
         if (mParent)
             mParent.Lock()->OnChildRemoved(this);
@@ -317,7 +316,7 @@ namespace o2
         o2Render.DrawRectFrame(mBoundsWithChilds, Color4::SomeColor(colr++));
     }
 
-    void Widget::SerializeRaw(DataValue& node) const
+	void Widget::SerializeRaw(DataValue& node) const
     {
         Actor::SerializeRaw(node);
 
