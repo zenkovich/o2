@@ -2,11 +2,12 @@
 
 #include "o2/Animation/AnimationMask.h"
 #include "o2/Animation/AnimationPlayer.h"
+#include "o2/Assets/AssetRef.h"
 #include "o2/Assets/Types/AnimationAsset.h"
+#include "o2/Utils/Basic/ICloneable.h"
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Containers/Vector.h"
-#include "o2/Assets/AssetRef.h"
 
 namespace o2
 {
@@ -15,7 +16,7 @@ namespace o2
     // ---------------
     // Animation state
     // ---------------
-    class AnimationState: public ISerializable, public RefCounterable
+    class AnimationState: public ISerializable, public RefCounterable, public ICloneableRef
     {
     public:
         String        name;            // State name @SERIALIZABLE
@@ -46,6 +47,7 @@ namespace o2
         const AnimationAssetRef& GetAnimation() const;
 
         SERIALIZABLE(AnimationState);
+        CLONEABLE_REF(AnimationState);
 
     protected:
         WeakRef<AnimationComponent> mOwner; // Animation state owner component
@@ -80,6 +82,7 @@ CLASS_BASES_META(o2::AnimationState)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationState)

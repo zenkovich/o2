@@ -33,6 +33,7 @@ namespace o2
         static bool IsAvailableToCreateFromEditor() { return true; }
 
         SERIALIZABLE(FolderAsset);
+        CLONEABLE_REF(FolderAsset);
 
     protected:
         // Loads data

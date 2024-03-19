@@ -63,6 +63,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Button);
+        CLONEABLE_REF(Button);
 
     protected:
         WeakRef<Text>   mCaptionText; // Caption layer text

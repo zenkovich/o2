@@ -24,7 +24,7 @@ namespace o2
         // ---------------------
         // Font effect interface
         // ---------------------
-        class Effect: public ISerializable, public RefCounterable
+        class Effect: public ISerializable, public RefCounterable, public ICloneableRef
         {
         public:
             // Processes glyph bitmap
@@ -37,6 +37,7 @@ namespace o2
             virtual bool IsEqual(Effect* other) const { return GetType() == other->GetType(); }
 
             SERIALIZABLE(Effect);
+            CLONEABLE_REF(Effect);
         };
 
     public:
@@ -160,6 +161,7 @@ CLASS_BASES_META(o2::VectorFont::Effect)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::VectorFont::Effect)

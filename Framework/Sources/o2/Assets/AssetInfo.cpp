@@ -16,7 +16,7 @@ namespace o2
 
     AssetInfo::AssetInfo(const AssetInfo& other):
         path(other.path), editTime(other.editTime), tree(other.tree), 
-        meta(other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr),
+        meta(other.meta ? other.meta->CloneAsRef<AssetMeta>() : nullptr),
         mChildren(other.mChildren)
     {}
 

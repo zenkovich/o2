@@ -50,6 +50,7 @@ namespace o2
         static bool IsAvailableToCreateFromEditor() { return true; }
 
         SERIALIZABLE(ActorAsset);
+        CLONEABLE_REF(ActorAsset);
 
     protected:
         Ref<Actor> mActor; // Asset data 

@@ -69,6 +69,7 @@ namespace o2
         static String GetIcon();
 
         SERIALIZABLE(ImageComponent);
+        CLONEABLE_REF(ImageComponent);
 
         using Sprite::onDraw;
 

@@ -16,7 +16,7 @@ namespace o2
 #if IS_EDITOR
 	typedef SceneEditableObject WidgetLayerBase;
 #else
-	struct WidgetLayerBase : public ISerializable, public RefCounterable {};
+	struct WidgetLayerBase : public ISerializable, public RefCounterable, public ICloneableRef {};
 #endif
 
 	// ---------------------
@@ -135,7 +135,8 @@ namespace o2
 		// Returns layout rectangle @SCRIPTABLE
 		const RectF& GetRect() const;
 
-		SERIALIZABLE(WidgetLayer);
+        SERIALIZABLE(WidgetLayer);
+        CLONEABLE_REF(WidgetLayer);
 
 	protected:
 		struct ICopyVisitor : public RefCounterable

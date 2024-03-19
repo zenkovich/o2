@@ -1,6 +1,5 @@
 #pragma once
 
-#include "o2/Assets/AssetRef.h"
 #include "o2/Assets/AssetsTree.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"

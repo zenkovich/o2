@@ -36,6 +36,7 @@ namespace o2
         static bool IsAvailableToCreateFromEditor() { return true; }
 
         SERIALIZABLE(DataAsset);
+        CLONEABLE_REF(DataAsset);
 
     protected:
         // Loads data

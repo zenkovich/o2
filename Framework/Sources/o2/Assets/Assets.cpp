@@ -577,7 +577,7 @@ namespace o2
                     Ref<Asset> cachedAsset;
                     if (mCachedAssetsByUID.TryGetValue(newAssetInfo->meta->ID(), cachedAsset))
                     {
-                        oldAssetInfo = Ref(cachedAsset->mInfo.CloneAs<AssetInfo>());
+                        oldAssetInfo = cachedAsset->mInfo.CloneAsRef<AssetInfo>();
                         oldAssetInfo->RemoveAllChildren();
                         oldAssetInfo->path = newAssetInfo->path;
                     }

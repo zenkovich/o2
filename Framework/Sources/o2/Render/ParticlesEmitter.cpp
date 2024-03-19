@@ -18,7 +18,7 @@ namespace o2
     }
 
     ParticlesEmitter::ParticlesEmitter(const ParticlesEmitter& other):
-        IRectDrawable(other), mImageAsset(other.mImageAsset), mShape(other.mShape->CloneAs<ParticlesEmitterShape>()), 
+        IRectDrawable(other), mImageAsset(other.mImageAsset), mShape(other.mShape->CloneAsRef<ParticlesEmitterShape>()), 
         mParticlesNumLimit(other.mParticlesNumLimit), mPlaying(other.mPlaying), 
         mEmittingCoefficient(other.mEmittingCoefficient), mIsLooped(other.mIsLooped),
         mIsParticlesRelative(other.mIsParticlesRelative), mDuration(other.mDuration),

@@ -54,6 +54,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(PopupWidget);
+        CLONEABLE_REF(PopupWidget);
 
     protected:
         static WeakRef<PopupWidget> mVisiblePopup; // Current visible popup widget

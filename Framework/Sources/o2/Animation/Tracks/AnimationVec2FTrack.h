@@ -68,6 +68,7 @@ namespace o2
         static AnimationTrack<Vec2F> Linear(const Vec2F& begin, const Vec2F& end, float duration = 1.0f);
 
         SERIALIZABLE(AnimationTrack<Vec2F>);
+        CLONEABLE_REF(AnimationTrack<Vec2F>);
 
     public:
         // ----------------------

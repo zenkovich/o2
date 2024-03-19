@@ -12,7 +12,7 @@ namespace o2
     // -----------------------------------------------------------------
     // Triangles mesh. Containing vertices, indexes of polygons, texture
     // -----------------------------------------------------------------
-    class Mesh: public virtual IDrawable, public RefCounterable
+    class Mesh: public virtual IDrawable, public RefCounterable, public ICloneableRef
     {
     public:
         PROPERTIES(Mesh);
@@ -63,6 +63,8 @@ namespace o2
 
         // Returns max polygons count
         UInt GetMaxPolyCount() const;
+
+        CLONEABLE_REF(Mesh);
 
     protected:
         Ref<Texture> mTexture; // Texture

@@ -185,6 +185,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Tree);
+        CLONEABLE_REF(Tree);
 
     protected:
         // --------------------
@@ -542,6 +543,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(TreeNode);
+        CLONEABLE_REF(TreeNode);
 
     protected:
         WeakRef<Tree::Node> mNodeDef;   // Node definition

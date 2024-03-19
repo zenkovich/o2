@@ -82,6 +82,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(LongList);
+        CLONEABLE_REF(LongList);
 
     protected:
         Ref<Widget> mItemSample; // Item sample widget @SERIALIZABLE

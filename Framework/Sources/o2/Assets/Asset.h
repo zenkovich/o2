@@ -2,6 +2,7 @@
 
 #include "o2/Assets/AssetInfo.h"
 #include "o2/Assets/Meta.h"
+#include "o2/Utils/Basic/ICloneable.h"
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
@@ -15,7 +16,7 @@ namespace o2
     // -------------------------------------------------------------------------------------------------
     // Basic asset interface. Contains copy of asset, without caching. For regular use assets references
     // -------------------------------------------------------------------------------------------------
-    class Asset : public ISerializable, public RefCounterable
+    class Asset : public ISerializable, public RefCounterable, public ICloneableRef
     {
     public:
         typedef AssetMeta MetaType;
@@ -103,6 +104,7 @@ namespace o2
 #endif
 
         SERIALIZABLE(Asset);
+        CLONEABLE_REF(Asset);
 
     protected:
         PROPERTY(Ref<AssetMeta>, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE @EXPANDED_BY_DEFAULT
@@ -157,6 +159,7 @@ namespace o2
     // This macro defines asset type
 #define ASSET_TYPE(THIS_TYPE, META_TYPE) \
 SERIALIZABLE(THIS_TYPE);                 \
+CLONEABLE_REF(THIS_TYPE);                \
 typedef META_TYPE MetaType;                                         
 
     // ----------------------------
@@ -187,6 +190,7 @@ CLASS_BASES_META(o2::Asset)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::Asset)

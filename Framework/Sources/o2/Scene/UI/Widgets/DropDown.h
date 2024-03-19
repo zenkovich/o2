@@ -65,6 +65,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(DropDown);
+        CLONEABLE_REF(DropDown);
 
     protected:
         Ref<Text> mSelectedText; // Selected text label, draws separately

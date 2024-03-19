@@ -44,6 +44,7 @@ namespace o2
         static bool IsReferenceCanOwnInstance() { return true; }
 
         SERIALIZABLE(AnimationAsset);
+        CLONEABLE_REF(AnimationAsset);
 
         friend class Assets;
     };

@@ -52,6 +52,7 @@ namespace o2
         static String GetIcon();
 
         SERIALIZABLE(ScriptableComponent);
+        CLONEABLE_REF(ScriptableComponent);
 
     protected:
         JavaScriptAssetRef mScript; // Java script asset link

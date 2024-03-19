@@ -85,7 +85,7 @@ namespace o2
         // -----------------------------------
         // Platform specified meta information
         // -----------------------------------
-        struct PlatformMeta: public ISerializable, public RefCounterable
+        struct PlatformMeta: public ISerializable, public RefCounterable, public ICloneableRef
         {
             Vec2I         maxSize = Vec2I(2048, 2048); // Maximal atlas size @SERIALIZABLE
             TextureFormat format = TextureFormat::R8G8B8A8;  // Atlas format @SERIALIZABLE
@@ -94,6 +94,7 @@ namespace o2
             bool operator==(const PlatformMeta& other) const;
 
             SERIALIZABLE(PlatformMeta);
+            CLONEABLE_REF(PlatformMeta);
         };
 
         // ----------------
@@ -118,6 +119,7 @@ namespace o2
             bool IsEqual(AssetMeta* other) const override;
 
             SERIALIZABLE(Meta);
+            CLONEABLE_REF(Meta);
         };
 
         // ----------
@@ -219,6 +221,7 @@ CLASS_BASES_META(o2::AtlasAsset::PlatformMeta)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::AtlasAsset::PlatformMeta)

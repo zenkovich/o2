@@ -35,6 +35,7 @@ namespace o2
         static int GetEditorSorting() { return 93; }
 
         SERIALIZABLE(FontAsset);
+        CLONEABLE_REF(FontAsset);
 
     protected:
         Ref<Font> mFont;

@@ -98,6 +98,7 @@ namespace o2
         static String GetIcon();
 
         SERIALIZABLE(SkinningMeshComponent);
+        CLONEABLE_REF(SkinningMeshComponent);
 
     protected:
         SkinningMesh mMesh;      // Drawing mesh, built from spline

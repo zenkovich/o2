@@ -189,6 +189,7 @@ namespace o2
         void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 
         SERIALIZABLE(Sprite);
+        CLONEABLE_REF(Sprite);
 
     protected:
         RectI         mTextureSrcRect;             // Texture source rectangle

@@ -88,6 +88,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(VerticalProgress);
+        CLONEABLE_REF(VerticalProgress);
 
     protected:
         float        mValue = 0.0f;                    // Current value @SERIALIZABLE

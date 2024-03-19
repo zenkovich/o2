@@ -1178,7 +1178,7 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const
 {
     static vector<string> ignoringNames = { "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE",
-        "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION", "BASE_REF_IMPLEMETATION", "FRIEND_REF_MAKE" };
+        "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION", "BASE_REF_IMPLEMETATION", "FRIEND_REF_MAKE", "CLONEABLE_REF" };
 
     return !StartsWith(function->GetName(), string("~") + owner->GetName()) &&
         function->GetName().find('~') == string::npos &&

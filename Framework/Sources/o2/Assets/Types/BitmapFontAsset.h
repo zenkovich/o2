@@ -45,6 +45,7 @@ namespace o2
         {
         public:
             SERIALIZABLE(Meta);
+            CLONEABLE_REF(Meta);
         };
 
     protected:

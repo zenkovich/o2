@@ -127,6 +127,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Label);
+        CLONEABLE_REF(Label);
 
     protected:
         Ref<Text>   mTextDrawable;                    // Text layer drawable. Getting from layer "text"

@@ -50,6 +50,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Image);
+        CLONEABLE_REF(Image);
 
     protected:
         WeakRef<Sprite> mImage; // Image layer drawable

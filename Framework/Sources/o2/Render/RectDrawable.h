@@ -10,7 +10,7 @@ namespace o2
     // -----------------------------
     // Basic rect drawable interface
     // -----------------------------
-    class IRectDrawable: public Transform, public virtual IDrawable, virtual public RefCounterable
+    class IRectDrawable: public Transform, public virtual IDrawable, virtual public RefCounterable, virtual public ICloneableRef
     {
     public:
         PROPERTIES(IRectDrawable);
@@ -64,6 +64,7 @@ namespace o2
         bool IsUnderPoint(const Vec2F& point) override;
 
         SERIALIZABLE(IRectDrawable);
+        CLONEABLE_REF(IRectDrawable);
 
     protected:
         Color4 mColor;          // Color @SERIALIZABLE
@@ -111,6 +112,7 @@ CLASS_BASES_META(o2::IRectDrawable)
     BASE_CLASS(o2::Transform);
     BASE_CLASS(o2::IDrawable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::IRectDrawable)

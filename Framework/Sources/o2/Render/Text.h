@@ -146,6 +146,7 @@ namespace o2
                                  float linesDistCoef = 1.0f);
 
         SERIALIZABLE(Text);
+        CLONEABLE_REF(Text);
 
     public:
         // ----------------

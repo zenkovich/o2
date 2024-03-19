@@ -100,6 +100,7 @@ namespace o2
         static AnimationTrack<Color4> Linear(const Color4& begin, const Color4& end, float duration = 1.0f);
 
         SERIALIZABLE(AnimationTrack<Color4>);
+        CLONEABLE_REF(AnimationTrack<Color4>);
 
     public:
         // ----------------------

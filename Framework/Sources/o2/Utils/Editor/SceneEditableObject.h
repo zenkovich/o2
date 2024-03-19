@@ -1,10 +1,11 @@
 #pragma once
+#include "o2/Utils/Basic/ICloneable.h"
+#include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Math/Layout.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/String.h"
-#include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 
 namespace o2
 {
@@ -14,7 +15,7 @@ namespace o2
     // ----------------------------------------------------------
     // Object, that can be shown in editor's tree view and edited
     // ----------------------------------------------------------
-    class SceneEditableObject: virtual public ISerializable, virtual public RefCounterable
+    class SceneEditableObject: virtual public ISerializable, virtual public RefCounterable, virtual public ICloneableRef
     {
     public:
         int changedFrame = 0; // Index of frame, when object has changed @EDITOR_IGNORE
@@ -169,6 +170,7 @@ CLASS_BASES_META(o2::SceneEditableObject)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::SceneEditableObject)

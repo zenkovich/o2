@@ -103,6 +103,7 @@ namespace o2
         static String GetIcon();
 
         SERIALIZABLE(AnimationComponent);
+        CLONEABLE_REF(AnimationComponent);
 
     protected:
         // -------------------------------

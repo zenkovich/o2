@@ -127,6 +127,7 @@ namespace o2
         static AnimationTrack<float> Linear(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
 
         SERIALIZABLE(AnimationTrack<float>);
+        CLONEABLE_REF(AnimationTrack<float>);
 
     public:
         class Player: public IPlayer

@@ -13,8 +13,10 @@
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/UI/Widget.h"
+#include "o2/Utils/Basic/ICloneable.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Debug/Debug.h"
+#include "o2/Utils/Debug/Profiling/SimpleProfiler.h"
 #include "o2/Utils/Function/ActorSubscription.h"
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Math/Basis.h"
@@ -39,7 +41,6 @@
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/String.h"
-#include "o2/Utils/Debug/Profiling/SimpleProfiler.h"
 
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptValue.h"

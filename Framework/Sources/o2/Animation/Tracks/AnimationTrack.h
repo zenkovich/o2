@@ -131,6 +131,7 @@ namespace o2
         static AnimationTrack<_type> Linear(const _type& begin, const _type& end, float duration = 1.0f);
 
         SERIALIZABLE(AnimationTrack<_type>);
+        CLONEABLE_REF(AnimationTrack<_type>);
 
     public:
         // ----------------------

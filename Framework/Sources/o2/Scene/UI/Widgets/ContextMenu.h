@@ -205,6 +205,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(ContextMenu);
+        CLONEABLE_REF(ContextMenu);
 
     protected:
         const float mOpenSubMenuDelay = 0.8f; // Sub menu opening delay when cursor hover it

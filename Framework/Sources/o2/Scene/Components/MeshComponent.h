@@ -84,6 +84,7 @@ namespace o2
         static String GetIcon();
 
         SERIALIZABLE(MeshComponent);
+        CLONEABLE_REF(MeshComponent);
 
     protected:
         Mesh   mMesh;      // Drawing mesh, built from spline

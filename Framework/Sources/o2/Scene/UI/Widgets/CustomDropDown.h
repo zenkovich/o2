@@ -120,6 +120,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(CustomDropDown);
+        CLONEABLE_REF(CustomDropDown);
 
     protected:
         Ref<CustomList> mItemsList; // List view

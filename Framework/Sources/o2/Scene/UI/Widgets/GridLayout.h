@@ -111,6 +111,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(GridLayout);
+        CLONEABLE_REF(GridLayout);
 
     protected:
         BaseCorner   mBaseCorner = BaseCorner::Left;          // Base corner of widgets arranging @SERIALIZABLE

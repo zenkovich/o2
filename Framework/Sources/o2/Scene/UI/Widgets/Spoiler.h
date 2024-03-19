@@ -64,6 +64,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Spoiler);
+        CLONEABLE_REF(Spoiler);
 
     protected:
         float mHeadHeight = 0.0f; // Spoiler head height @SERIALIZABLE

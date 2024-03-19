@@ -51,6 +51,7 @@ namespace o2
 #endif
 
         SERIALIZABLE(CircleCollider);
+        CLONEABLE_REF(CircleCollider);
 
     private:
         float mRadius = 1.0f; // Size of collider @SERIALIZABLE

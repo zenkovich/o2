@@ -20,11 +20,9 @@ namespace o2
     class EditorTestComponent: public Component
     {
     public:
-        Vector<Vec2I> mVecs; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-
         enum class TestEnum { A, B, C, D, E, F, G, H, K, L, M, N };
          
-        class TestInside: public ISerializable, public RefCounterable
+        class TestInside: public ISerializable, public RefCounterable, public ICloneableRef
         {
         public:
             float mFloat = 1.2f;                // @SERIALIZABLE @SCRIPTABLE
@@ -41,22 +39,17 @@ namespace o2
             TestInside() {}
 
             SERIALIZABLE(TestInside);
+            CLONEABLE_REF(TestInside);
         };
 
-        void SetSpritePtr(const Ref<Sprite>& sprite) { mSprite = sprite; }
-        const Ref<Sprite>& GetSpritePtr() const { return mSprite; }
-
-        void SetSprite(const Sprite& sprite) { *mSprite = sprite; }
-        Sprite GetSprite() const { return *mSprite; }
-
-        void SetArray(const Vector<Vec2I>& arr) { mVecs = arr; }
-        const Vector<Vec2I>& GetArray() const { return mVecs; }
-
+    public:
         PROPERTIES(EditorTestComponent);
         PROPERTY(Ref<Sprite>, spritePropPtr, SetSpritePtr, GetSpritePtr);
         PROPERTY(Sprite, spriteProp, SetSprite, GetSprite);
         PROPERTY(Vector<Vec2I>, arr, SetArray, GetArray);
 
+    public:
+        Vector<Vec2I>                                       mVecs; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
         int mInteger;                                       // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
         float mFloat;                                       // @SERIALIZABLE
         String mString;                                     // @SERIALIZABLE
@@ -106,13 +99,24 @@ namespace o2
 		float mFloat8;                      // @SERIALIZABLE
 		float mFloat9;                      // @SERIALIZABLE
 
+    public:
         static String GetCategory();
 
         void Test();
 
         void OnStart() override;
 
+        void SetSpritePtr(const Ref<Sprite>& sprite) { mSprite = sprite; }
+        const Ref<Sprite>& GetSpritePtr() const { return mSprite; }
+
+        void SetSprite(const Sprite& sprite) { *mSprite = sprite; }
+        Sprite GetSprite() const { return *mSprite; }
+
+        void SetArray(const Vector<Vec2I>& arr) { mVecs = arr; }
+        const Vector<Vec2I>& GetArray() const { return mVecs; }
+
         SERIALIZABLE(EditorTestComponent);
+        CLONEABLE_REF(EditorTestComponent);
     };
 }
 // --- META ---
@@ -126,10 +130,10 @@ CLASS_BASES_META(o2::EditorTestComponent)
 END_META;
 CLASS_FIELDS_META(o2::EditorTestComponent)
 {
-    FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().NAME(mVecs);
     FIELD().PUBLIC().NAME(spritePropPtr);
     FIELD().PUBLIC().NAME(spriteProp);
     FIELD().PUBLIC().NAME(arr);
+    FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().NAME(mVecs);
     FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().NAME(mInteger);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mString);
@@ -180,15 +184,15 @@ END_META;
 CLASS_METHODS_META(o2::EditorTestComponent)
 {
 
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
+    FUNCTION().PUBLIC().SIGNATURE(void, Test);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnStart);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSpritePtr, const Ref<Sprite>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetSpritePtr);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSprite, const Sprite&);
     FUNCTION().PUBLIC().SIGNATURE(Sprite, GetSprite);
     FUNCTION().PUBLIC().SIGNATURE(void, SetArray, const Vector<Vec2I>&);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Vec2I>&, GetArray);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
-    FUNCTION().PUBLIC().SIGNATURE(void, Test);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnStart);
 }
 END_META;
 
@@ -196,6 +200,7 @@ CLASS_BASES_META(o2::EditorTestComponent::TestInside)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::EditorTestComponent::TestInside)

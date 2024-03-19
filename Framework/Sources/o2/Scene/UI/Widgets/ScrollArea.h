@@ -121,6 +121,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(ScrollArea);
+        CLONEABLE_REF(ScrollArea);
 
     protected:
         Ref<HorizontalScrollBar> mHorScrollBar; // horizontal scroll bar

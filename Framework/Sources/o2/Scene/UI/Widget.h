@@ -256,6 +256,7 @@ namespace o2
         static String GetCreateMenuCategory();
 
         SERIALIZABLE(Widget);
+        CLONEABLE_REF(Widget);
 
     protected:
         using Actor::mState;

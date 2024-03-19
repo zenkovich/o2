@@ -1,4 +1,5 @@
 #pragma once
+#include "o2/Utils/Basic/ICloneable.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Ref.h"
 
@@ -12,7 +13,7 @@ namespace o2
 	// -----------------------------------------
 	// Animation clip. Contains animation tracks
 	// -----------------------------------------
-	class AnimationClip : public ISerializable, public RefCounterable
+	class AnimationClip : public ISerializable, public RefCounterable, public ICloneableRef
 	{
 	public:
 		PROPERTIES(AnimationClip);
@@ -105,7 +106,8 @@ namespace o2
 		static Ref<AnimationClip> Linear(const String& animatingValuePath,
 										 const _type& begin, const _type& end, float duration = 1.0f);
 
-		SERIALIZABLE(AnimationClip);
+        SERIALIZABLE(AnimationClip);
+        CLONEABLE_REF(AnimationClip);
 
 	protected:
 		Vector<Ref<IAnimationTrack>> mTracks; // Animation track @SERIALIZABLE
@@ -229,6 +231,7 @@ CLASS_BASES_META(o2::AnimationClip)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationClip)

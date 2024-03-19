@@ -86,6 +86,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Window);
+        CLONEABLE_REF(Window);
 
     protected:
         static constexpr auto mIconLayerPath = "icon";

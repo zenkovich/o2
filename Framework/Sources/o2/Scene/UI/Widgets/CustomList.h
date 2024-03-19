@@ -141,6 +141,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(CustomList);
+        CLONEABLE_REF(CustomList);
 
     protected:
         // ------------------

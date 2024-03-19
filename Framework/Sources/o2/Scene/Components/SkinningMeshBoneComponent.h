@@ -10,8 +10,6 @@ namespace o2
 
     class SkinningMeshBoneComponent: public DrawableComponent
     {
-        SERIALIZABLE(SkinningMeshBoneComponent);
-
     public:
         Vector<Pair<int, float>> vertexWeights; // Weights of vertices dependent on this bone. index - weight @SERIALIZABLE
 
@@ -47,6 +45,9 @@ namespace o2
 
         // Returns name of component icon
         static String GetIcon();
+
+        SERIALIZABLE(SkinningMeshBoneComponent);
+        CLONEABLE_REF(SkinningMeshBoneComponent);
 
     protected:
         // Called when actor's transform was changed

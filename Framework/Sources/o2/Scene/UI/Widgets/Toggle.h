@@ -121,6 +121,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Toggle);
+        CLONEABLE_REF(Toggle);
 
     protected:
         bool mValue = false;        // Current value @SERIALIZABLE

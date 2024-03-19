@@ -72,6 +72,7 @@ namespace o2
             bool IsEqual(AssetMeta* other) const override;
 
             SERIALIZABLE(Meta);
+            CLONEABLE_REF(Meta);
 
         protected:
             Vector<Ref<VectorFont::Effect>> mEffects; // Font effects array @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT @INVOKE_ON_CHANGE(UpdateFontEffects)

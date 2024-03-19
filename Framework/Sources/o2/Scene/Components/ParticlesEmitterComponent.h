@@ -8,8 +8,6 @@ namespace o2
 {
     class ParticlesEmitterComponent: public DrawableComponent, public ParticlesEmitter
     {
-        SERIALIZABLE(ParticlesEmitterComponent);
-
     public:
         ParticlesEmitterComponent();
         ParticlesEmitterComponent(const ParticlesEmitterComponent& other);
@@ -35,8 +33,10 @@ namespace o2
         // Returns name of component icon
         static String GetIcon();
 
-    protected:
+        SERIALIZABLE(ParticlesEmitterComponent);
+        CLONEABLE_REF(ParticlesEmitterComponent);
 
+    protected:
         // Called when actor's transform was changed
         void OnTransformUpdated() override;
 

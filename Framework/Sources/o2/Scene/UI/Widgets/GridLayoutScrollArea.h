@@ -55,6 +55,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(GridLayoutScrollArea);
+        CLONEABLE_REF(GridLayoutScrollArea);
 
     protected:
         Ref<Widget>         mItemSample; // Item sample widget @SERIALIZABLE

@@ -154,6 +154,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(EditBox);
+        CLONEABLE_REF(EditBox);
 
     protected:
         Color4  mSelectionColor = Color4(0.1f, 0.2f, 0.6f, 0.3f); // Text selection color @SERIALIZABLE

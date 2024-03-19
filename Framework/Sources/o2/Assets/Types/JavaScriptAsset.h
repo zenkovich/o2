@@ -39,6 +39,7 @@ namespace o2
         static bool IsAvailableToCreateFromEditor() { return true; }
 
         SERIALIZABLE(JavaScriptAsset);
+        CLONEABLE_REF(JavaScriptAsset);
 
     protected:
         // Loads data

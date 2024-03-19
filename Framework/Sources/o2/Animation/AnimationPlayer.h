@@ -1,6 +1,7 @@
 #pragma once
 #include "o2/Animation/IAnimation.h"
 #include "o2/Animation/Tracks/IAnimationTrack.h"
+#include "o2/Utils/Basic/ICloneable.h"
 #include "o2/Utils/Types/Ref.h"
 
 namespace o2
@@ -11,7 +12,7 @@ namespace o2
     // ---------------------
     // Animation clip player
     // ---------------------
-    class AnimationPlayer: public IAnimation, public RefCounterable
+    class AnimationPlayer: public IAnimation, public RefCounterable, public ICloneableRef
     {
     public:
         Function<void(const Ref<IAnimationTrack::IPlayer>&)> onTrackPlayerAdded;  // Called when new track added
@@ -41,6 +42,7 @@ namespace o2
         const Vector<Ref<IAnimationTrack::IPlayer>>& GetTrackPlayers() const;
 
         IOBJECT(AnimationPlayer);
+        CLONEABLE_REF(AnimationPlayer);
 
     protected:
         Ref<AnimationClip> mClip; // Animation clip
@@ -80,6 +82,7 @@ CLASS_BASES_META(o2::AnimationPlayer)
 {
     BASE_CLASS(o2::IAnimation);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationPlayer)

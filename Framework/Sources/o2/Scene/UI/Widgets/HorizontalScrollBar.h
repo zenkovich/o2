@@ -93,6 +93,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(HorizontalScrollBar);
+        CLONEABLE_REF(HorizontalScrollBar);
 
     protected:
         float mValue = 0.0f;       // Current value @SERIALIZABLE

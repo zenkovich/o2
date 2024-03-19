@@ -16,8 +16,6 @@ namespace o2
     // ------------------------------------------------------
     class ParticlesEmitter: public IRectDrawable
     {
-        SERIALIZABLE(ParticlesEmitter);
-
     public:
 		PROPERTIES(ParticlesEmitter);
 
@@ -236,6 +234,9 @@ namespace o2
 
         // Sets emitting color A and B
         void SetEmitParticlesColor(const Color4& colorA, const Color4& colorB);
+
+        SERIALIZABLE(ParticlesEmitter);
+        CLONEABLE_REF(ParticlesEmitter);
 
     protected:
         ImageAssetRef mImageAsset; // Particle sprite image @SERIALIZABLE

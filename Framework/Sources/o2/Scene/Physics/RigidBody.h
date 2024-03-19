@@ -109,6 +109,7 @@ namespace o2
         bool IsFixedRotation() const;
 
         SERIALIZABLE(RigidBody);
+        CLONEABLE_REF(RigidBody);
 
     protected:
         b2Body*    mBody = nullptr; // Box 2d physics body

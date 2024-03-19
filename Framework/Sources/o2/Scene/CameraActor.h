@@ -65,6 +65,7 @@ namespace o2
         Units GetUnits() const;
 
         SERIALIZABLE(CameraActor);
+        CLONEABLE_REF(CameraActor);
 
     protected:
         Type  mType = Type::Default;       // Type of camera @SERIALIZABLE

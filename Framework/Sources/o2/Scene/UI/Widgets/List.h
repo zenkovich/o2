@@ -67,6 +67,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(List);
+        CLONEABLE_REF(List);
 
     protected:
         // Called when selected item index was changed

@@ -307,6 +307,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Actor);
+        CLONEABLE_REF(Actor);
 
     protected:
         struct ICopyVisitor: public RefCounterable
