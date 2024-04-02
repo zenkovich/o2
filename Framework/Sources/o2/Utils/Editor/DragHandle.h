@@ -16,7 +16,7 @@ namespace o2
     // -----------
     // Drag handle
     // -----------
-    class DragHandle: public IDrawable, public CursorAreaEventsListener, virtual public ISerializable
+    class DragHandle: public IDrawable, public CursorAreaEventsListener, virtual public ISerializable, virtual public ICloneableRef
     {
     public:
         PROPERTIES(DragHandle);
@@ -189,6 +189,7 @@ namespace o2
         bool IsScrollable() const override;
 
         SERIALIZABLE(DragHandle);
+        CLONEABLE_REF(DragHandle);
 
     protected:
         Ref<IRectDrawable> mRegularDrawable;  // Regular view IRectDrawable @SERIALIZABLE
@@ -313,6 +314,7 @@ namespace o2
         static String GetCreateMenuCategory();
 
         SERIALIZABLE(WidgetDragHandle);
+        CLONEABLE_REF(WidgetDragHandle);
 
     protected:
         // Hide public functions
@@ -448,6 +450,7 @@ CLASS_BASES_META(o2::DragHandle)
     BASE_CLASS(o2::IDrawable);
     BASE_CLASS(o2::CursorAreaEventsListener);
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::DragHandle)

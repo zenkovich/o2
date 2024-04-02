@@ -21,9 +21,6 @@ namespace o2
 
     Vector<Ref<Asset>> FolderAsset::GetChildrenAssets() const
     {
-        Ref<Asset> xx;
-        xx.SetInstance(nullptr);
-
         Vector<Ref<Asset>> res;
         for (auto asset : mInfo.GetChildren())
             res.Add(Ref<Asset>(asset->meta->ID()));

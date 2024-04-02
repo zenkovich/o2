@@ -5,7 +5,13 @@
 
 namespace o2
 {
+	const Type& BaseAssetRef::GetAssetType() const
+	{
+		return TypeOf(Asset);
+	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Asset>);
 // --- META ---
 
 DECLARE_CLASS(o2::BaseAssetRef, o2__BaseAssetRef);

@@ -292,19 +292,18 @@ namespace Editor
         for (auto& asset : lastSelectedPreloadedAssets)
         {
             if (!mSelectedAssets.Contains([&](const Ref<AssetInfo>& x) {
-                return x->meta->ID() == (*asset)->GetUID(); }))
+                return x->meta->ID() == asset->GetUID(); }))
             {
                 mSelectedPreloadedAssets.Remove(asset);
-                delete asset;
             }
         }
 
         for (auto& icon : mSelectedAssets)
         {
-            if (mSelectedPreloadedAssets.Contains([&](const Ref<Asset>* x) { return (*x)->GetUID() == icon->meta->ID(); }))
+            if (mSelectedPreloadedAssets.Contains([&](const Ref<Asset>& x) { return x->GetUID() == icon->meta->ID(); }))
                 continue;
 
-            Ref<Asset>* iconAsset = o2Assets.GetAssetRef(icon->meta->ID()).CloneAs<Ref<Asset>>();
+            Ref<Asset> iconAsset = o2Assets.GetAssetRef(icon->meta->ID());
             mSelectedPreloadedAssets.Add(iconAsset);
         }
 
@@ -316,14 +315,18 @@ namespace Editor
 
             Vector<IObject*> targets;
 
-            if (mSelectedPreloadedAssets.All([](Ref<Asset>* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
+            if (mSelectedPreloadedAssets.All([](const Ref<Asset>& x) { return x->GetType() == TypeOf(ActorAsset); }))
             {
-                targets = mSelectedPreloadedAssets.Convert<IObject*>([](Ref<Asset>* x) { return DynamicCast<ActorAsset>(*x)->GetActor().Get(); });
+                targets = mSelectedPreloadedAssets.Convert<IObject*>([](const Ref<Asset>& x) { return DynamicCast<ActorAsset>(x)->GetActor().Get(); });
             }
-            else if (mSelectedPreloadedAssets.All([](Ref<Asset>* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
+            else if (mSelectedPreloadedAssets.All([](const Ref<Asset>& x) { return x->GetType() == TypeOf(FolderAsset); }))
+            {
                 targets.Clear();
+            }
             else
-                targets = mSelectedPreloadedAssets.DynamicCast<IObject*>();
+            {
+                targets = mSelectedPreloadedAssets.Convert<IObject*>([](const Ref<Asset>& x) { return x.Get(); });
+            }
 
             if (!targets.IsEmpty())
                 o2EditorPropertiesWindow.SetTargets(targets, THIS_FUNC(OnAssetsPropertiesChanged));
@@ -879,9 +882,6 @@ namespace Editor
     {
         o2EditorPropertiesWindow.ResetTargets();
 
-        for (auto& asset : mSelectedPreloadedAssets)
-            delete asset;
-
         mSelectedPreloadedAssets.Clear();
 
         o2EditorAssets.DeleteAssets(
@@ -955,7 +955,7 @@ namespace Editor
     void AssetsIconsScrollArea::OnAssetsPropertiesChanged()
     {
         for (auto& asset : mSelectedPreloadedAssets)
-            (*asset)->SetDirty();
+            asset->SetDirty();
 
         CheckPreloadedAssetsSaving();
     }
@@ -966,10 +966,7 @@ namespace Editor
             return;
 
         for (auto& asset : mSelectedPreloadedAssets)
-        {
-            (*asset)->Save();
-            delete asset;
-        }
+            asset->Save();
 
         mSelectedPreloadedAssets.Clear();
     }

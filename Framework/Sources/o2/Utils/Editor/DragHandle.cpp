@@ -5,6 +5,7 @@
 #include "o2/Events/EventSystem.h"
 #include "o2/Render/RectDrawable.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Utils/System/Time/Time.h"
 
 namespace o2
 {

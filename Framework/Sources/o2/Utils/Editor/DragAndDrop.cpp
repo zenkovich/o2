@@ -3,6 +3,7 @@
 
 #include "o2/Application/Input.h"
 #include "o2/Events/EventSystem.h"
+#include "o2/Utils/System/Time/Time.h"
 
 namespace o2
 {

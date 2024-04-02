@@ -11,24 +11,26 @@ namespace o2
     // -------------------------------
     // Particles effect base interface
     // -------------------------------
-    class ParticlesEffect: public ISerializable, public RefCounterable
+    class ParticlesEffect: public ISerializable, public RefCounterable, public ICloneableRef
     {
-        SERIALIZABLE(ParticlesEffect);
-
     public:
         virtual void Update(float dt, ParticlesEmitter* emitter);
         Vector<Particle>& GetParticlesDirect(ParticlesEmitter* emitter);
+
+		SERIALIZABLE(ParticlesEffect);
+		CLONEABLE_REF(ParticlesEffect);
     };
 
     class ParticlesGravityEffect : public ParticlesEffect
     {
-        SERIALIZABLE(ParticlesGravityEffect);
-
     public:
         Vec2F gravity; // Vector of gravity @SERIALIZABLE
 
     public:
         void Update(float dt, ParticlesEmitter* emitter) override;
+
+		SERIALIZABLE(ParticlesGravityEffect);
+		CLONEABLE_REF(ParticlesGravityEffect);
     };
 }
 // --- META ---
@@ -37,6 +39,7 @@ CLASS_BASES_META(o2::ParticlesEffect)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::ParticlesEffect)

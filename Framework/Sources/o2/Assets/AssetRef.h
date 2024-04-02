@@ -1,244 +1,334 @@
 #pragma once
 
-#include "o2/Assets/Asset.h"
-#include "o2/Assets/Assets.h"
 #include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
-    // -----------------------------------------------------------------------
-    // Basic asset reference interface. All Ref<AssetType> are derived from it
-    // -----------------------------------------------------------------------
-    class BaseAssetRef: public ISerializable
-    {
+	class Asset;
+
+	// -----------------------------------------------------------------------
+	// Basic asset reference interface. All Ref<AssetType> are derived from it
+	// -----------------------------------------------------------------------
+	class BaseAssetRef : public ISerializable
+	{
 	public:
 		// Returns asset type
-        virtual const Type& GetAssetType() const { return TypeOf(Asset); }
+		virtual const Type& GetAssetType() const;
 
 		// Returns asset raw pointer
-        virtual const Asset* GetAssetBase() const { return nullptr; }
+		virtual const Asset* GetAssetBase() const { return nullptr; }
 
 		// Returns asset raw pointer
-        virtual Asset* GetAssetBase() { return nullptr; }
-
-        // Sets asset
-        virtual void SetAssetBase(Asset* asset) {}
-
-		// Sets asset instance
-        virtual void SetInstance(Asset* asset) {}
-
-		// Creates own asset instance. If asset is empty creates empty instance, copies asset if else
-        virtual void CreateInstance() {}
-
-		// Removes own asset instance
-        virtual void RemoveInstance() {}
-
-		// Saves asset instance
-        virtual void SaveInstance(const String& path) {}
-
-		// Is asset instance owner
-        virtual bool IsInstance() const { return false; }
-
-        SERIALIZABLE(BaseAssetRef);
-    };
-
-    // -----------------------------------------------------------------------------------
-    // Asset reference. Contains asset pointer. Can contain asset instance owned by itself
-    // -----------------------------------------------------------------------------------
-    template<typename _asset_type>
-    class Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type> : public BaseRef<_asset_type>, public BaseAssetRef
-    {
-    public:
-        using Base = BaseRef<_asset_type>;
-
-    public:
-        // Base reference implementation
-        BASE_REF_IMPLEMETATION(_asset_type);
-
-        // Constructor from asset path
-        explicit Ref(const String& path)
-        {
-            *this = o2Assets.GetAssetRefByType<_asset_type>(path);
-        }
-
-        // Constructor from asset id
-        explicit Ref(const UID& id)
-        {
-            *this = o2Assets.GetAssetRefByType<_asset_type>(id);
-        }
-
-        // Returns asset type
-        const Type& GetAssetType() const override { return TypeOf(_asset_type); }
-
-        // Returns asset type
-		static const Type* GetAssetTypeStatic() { return &TypeOf(_asset_type); }
-
-		// Returns asset raw pointer
-		const Asset* GetAssetBase() const override { return BaseRef<_asset_type>::Get(); }
-
-		// Returns asset raw pointer
-        Asset* GetAssetBase() override { return BaseRef<_asset_type>::Get(); }
+		virtual Asset* GetAssetBase() { return nullptr; }
 
 		// Sets asset
-		void SetAssetBase(Asset* asset) override { *this = Ref(dynamic_cast<_asset_type*>(asset)); }
+		virtual void SetAssetBase(Asset* asset) {}
 
-        // Sets asset instance
-        void SetInstance(Asset* asset) override
-        {
-            *this = Ref(dynamic_cast<_asset_type*>(asset));
-            mIsInstance = true;
-        }
+		// Sets asset instance
+		virtual void SetInstance(Asset* asset) {}
 
-        // Creates own asset instance. If asset is empty creates empty instance, copies asset if else
-        void CreateInstance() override
-        {
-            _asset_type* asset;
-            if (Base::mPtr)
-                asset = dynamic_cast<_asset_type*>(Base::mPtr->CloneAs<Asset>());
-            else
-            {
-                auto objectType = dynamic_cast<const ObjectType*>(&GetAssetType());
-                asset = dynamic_cast<_asset_type*>(objectType->DynamicCastToIObject(objectType->CreateSample()));
-            }
+		// Creates own asset instance. If asset is empty creates empty instance, copies asset if else
+		virtual void CreateInstance() {}
 
-            SetInstance(asset);
-        }
+		// Removes own asset instance
+		virtual void RemoveInstance() {}
 
-        // Removes own asset instance
-        void RemoveInstance() override
-        {
-            if (!mIsInstance)
-                return;
+		// Saves asset instance
+		virtual void SaveInstance(const String& path) {}
 
-            mIsInstance = false;
+		// Is asset instance owner
+		virtual bool IsInstance() const { return false; }
 
-            *this = nullptr;
-        }
+		SERIALIZABLE(BaseAssetRef);
+	};
 
-        // Saves asset instance
-        void SaveInstance(const String& path) override
-        {
-            if (!mIsInstance)
-                return;
+	// -----------------------------------------------------------------------------------
+	// Asset reference. Contains asset pointer. Can contain asset instance owned by itself
+	// -----------------------------------------------------------------------------------
+	template<typename _asset_type>
+	class Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type> : public BaseRef<_asset_type>, public BaseAssetRef
+	{
+	public:
+		using Base = BaseRef<_asset_type>;
 
-            Base::mPtr->SetPath(path);
-            Base::mPtr->Save();
+	public:
+		// Base reference implementation
+		BASE_REF_IMPLEMETATION(_asset_type);
 
-            *this = Ref<_asset_type>(path);
-        }
+		// Constructor from asset path
+		explicit Ref(const String& path);
 
-        // Is asset instance owner
-        bool IsInstance() const override { return mIsInstance; }
+		// Constructor from asset id
+		explicit Ref(const UID& id);
 
-        // Creates asset and returns reference
-        template<typename ... _args>
-        static Ref<_asset_type> CreateAsset(_args ... args) { return DynamicCast<_asset_type>(o2Assets.CreateAsset<_asset_type>(args ...)); }
+		// Returns asset type
+		const Type& GetAssetType() const override;
 
-    protected:
-        bool mIsInstance = false; // Is this reference owner of asset
+		// Returns asset type
+		static const Type* GetAssetTypeStatic();
 
-    protected:
-        // Beginning serialization callback - writes path and id
-        void OnSerialize(DataValue& node) const override
-        {
-            if (mIsInstance)
-            {
-                if (Base::mPtr)
-                {
-                    node["instance"] = Base::mPtr;
-                    node["meta"] = Base::mPtr->GetMeta();
-                }
-            }
-            else if (Base::mPtr)
-            {
-                node["id"] = Base::mPtr->GetUID().ToString();
-                node["path"] = Base::mPtr->GetPath();
-            }
-        }
+		// Returns asset raw pointer
+		const Asset* GetAssetBase() const override;
 
-        // Completion deserialization callback -  reads path and id and searches asset
-        void OnDeserialized(const DataValue& node) override
-        {
-            Base::DecrementRef();
+		// Returns asset raw pointer
+		Asset* GetAssetBase() override;
 
-            Base::mPtr = nullptr;
-            mIsInstance = false;
+		// Sets asset
+		void SetAssetBase(Asset* asset) override;
 
-            if (auto instanceNode = node.FindMember("instance"))
-            {
-                mIsInstance = true;
-                Base::mPtr = *instanceNode;
+		// Sets asset instance
+		void SetInstance(Asset* asset) override;
 
-                UID oldUid = Base::mPtr->GetUID();
-                Base::mPtr->mInfo.meta = Ref<AssetMeta>((AssetMeta*)node.GetMember("meta"));
-                o2Assets.UpdateAssetCache(Base::mPtr, "", oldUid);
+		// Creates own asset instance. If asset is empty creates empty instance, copies asset if else
+		void CreateInstance() override;
 
-                Base::IncrementRef();
-            }
-            else if (auto idNode = node.FindMember("id"))
-                *this = o2Assets.GetAssetRefByType<_asset_type>((UID)(*idNode));
-            else if (auto pathNode = node.FindMember("path"))
-                *this = o2Assets.GetAssetRefByType<_asset_type>((String)pathNode);
-        }
+		// Removes own asset instance
+		void RemoveInstance() override;
 
-        // Beginning serialization delta callback
-        void OnSerializeDelta(DataValue& node, const IObject& origin) const override { OnSerialize(node); }
+		// Saves asset instance
+		void SaveInstance(const String& path) override;
 
-        // Completion deserialization delta callback
-        void OnDeserializedDelta(const DataValue& node, const IObject& origin) override { OnDeserialized(node); }
+		// Is asset instance owner
+		bool IsInstance() const override;
 
-        // It is required to process asset reference as single object when searching deltas for prototypes
-        static bool IsDeltaAsSingleObject() { return true; }
+		// Creates asset and returns reference
+		template<typename ... _args>
+		static Ref<_asset_type> CreateAsset(_args ... args);
 
-    public:
-        using _this_type = Ref<_asset_type, typename std::enable_if<std::is_base_of<Asset, _asset_type>::value>::type>;
+	protected:
+		bool mIsInstance = false; // Is this reference owner of asset
 
-        SERIALIZABLE_MAIN(_this_type);
-        IOBJECT_SCRIPTING(); 
+	protected:
+		// Beginning serialization callback - writes path and id
+		void OnSerialize(DataValue& node) const override;
 
-        template<typename _type_processor>
-        static void ProcessBaseTypes(_this_type* object, _type_processor& processor)
-        {
-            typedef _this_type thisclass;
-            processor.template StartBases<_this_type>(object, type);
+		// Completion deserialization callback -  reads path and id and searches asset
+		void OnDeserialized(const DataValue& node) override;
 
-            BASE_CLASS(BaseAssetRef);
-        }
+		// Beginning serialization delta callback
+		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
 
-        template<typename _type_processor>
-        static void ProcessFields(_this_type* object, _type_processor& processor)
-        {
-            typedef _this_type thisclass;
-            processor.template StartFields<_this_type>(object, type);
-        }
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 
-        template<typename _type_processor>
-        static void ProcessMethods(_this_type* object, _type_processor& processor)
-        {
-            typedef _this_type thisclass;
-            processor.template StartMethods<_this_type>(object, type);
+		// It is required to process asset reference as single object when searching deltas for prototypes
+		static bool IsDeltaAsSingleObject();
 
-            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(const String&);
+	public:
+		using _this_type = Ref<_asset_type, typename std::enable_if<std::is_base_of<Asset, _asset_type>::value>::type>;
 
-            FUNCTION().PUBLIC().CONSTRUCTOR();
-            FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<_asset_type>&);
-            FUNCTION().PUBLIC().CONSTRUCTOR(_asset_type*);
-            FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
-            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsValid);
-            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(_asset_type*, Get);
-            FUNCTION().PUBLIC().SIGNATURE(const Type&, GetAssetType);
-            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetInstance, Asset*);
-            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, CreateInstance);
-            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveInstance);
-            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SaveInstance, const String&);
-            FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsInstance);
+		SERIALIZABLE_MAIN(_this_type);
+		IOBJECT_SCRIPTING();
 
-            FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<_asset_type>, CreateAsset);
-            FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetAssetTypeStatic);
-        }
-    };
+		template<typename _type_processor>
+		static void ProcessBaseTypes(_this_type* object, _type_processor& processor)
+		{
+			typedef _this_type thisclass;
+			processor.template StartBases<_this_type>(object, type);
 
-    using AssetRef = Ref<o2::Asset>;
+			BASE_CLASS(BaseAssetRef);
+		}
+
+		template<typename _type_processor>
+		static void ProcessFields(_this_type* object, _type_processor& processor)
+		{
+			typedef _this_type thisclass;
+			processor.template StartFields<_this_type>(object, type);
+		}
+
+		template<typename _type_processor>
+		static void ProcessMethods(_this_type* object, _type_processor& processor)
+		{
+			typedef _this_type thisclass;
+			processor.template StartMethods<_this_type>(object, type);
+
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(const String&);
+
+			FUNCTION().PUBLIC().CONSTRUCTOR();
+			FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<_asset_type>&);
+			FUNCTION().PUBLIC().CONSTRUCTOR(_asset_type*);
+			FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsValid);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(_asset_type*, Get);
+			FUNCTION().PUBLIC().SIGNATURE(const Type&, GetAssetType);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetInstance, Asset*);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, CreateInstance);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveInstance);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SaveInstance, const String&);
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsInstance);
+
+			FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<_asset_type>, CreateAsset);
+			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetAssetTypeStatic);
+		}
+	};
+
+	using AssetRef = Ref<o2::Asset>;
+}
+
+#include "o2/Assets/Assets.h"
+
+namespace o2
+{
+	template<typename _asset_type>
+	Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::Ref(const String& path)
+	{
+		*this = o2Assets.GetAssetRefByType<_asset_type>(path);
+	}
+
+	template<typename _asset_type>
+	Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::Ref(const UID& id)
+	{
+		*this = o2Assets.GetAssetRefByType<_asset_type>(id);
+	}
+
+	template<typename _asset_type>
+	const Type& Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::GetAssetType() const
+	{
+		return TypeOf(_asset_type);
+	}
+
+	template<typename _asset_type>
+	const Type* Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::GetAssetTypeStatic()
+	{
+		return &TypeOf(_asset_type);
+	}
+
+	template<typename _asset_type>
+	const Asset* Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::GetAssetBase() const
+	{
+		return BaseRef<_asset_type>::Get();
+	}
+
+	template<typename _asset_type>
+	Asset* Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::GetAssetBase()
+	{
+		return BaseRef<_asset_type>::Get();
+	}
+
+	template<typename _asset_type>
+	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::SetAssetBase(Asset* asset)
+	{
+		*this = Ref(dynamic_cast<_asset_type*>(asset));
+	}
+
+	template<typename _asset_type>
+	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::SetInstance(Asset* asset)
+	{
+		*this = Ref(dynamic_cast<_asset_type*>(asset));
+		mIsInstance = true;
+	}
+
+	template<typename _asset_type>
+	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::CreateInstance()
+	{
+		_asset_type* asset;
+		if (Base::mPtr)
+			asset = dynamic_cast<_asset_type*>(Base::mPtr->CloneAs<Asset>());
+		else
+		{
+			auto objectType = dynamic_cast<const ObjectType*>(&GetAssetType());
+			asset = dynamic_cast<_asset_type*>(objectType->DynamicCastToIObject(objectType->CreateSample()));
+		}
+
+		SetInstance(asset);
+	}
+
+	template<typename _asset_type>
+	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::RemoveInstance()
+	{
+		if (!mIsInstance)
+			return;
+
+		mIsInstance = false;
+
+		*this = nullptr;
+	}
+
+	template<typename _asset_type>
+	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::SaveInstance(const String& path)
+	{
+		if (!mIsInstance)
+			return;
+
+		Base::mPtr->SetPath(path);
+		Base::mPtr->Save();
+
+		*this = Ref<_asset_type>(path);
+	}
+
+	template<typename _asset_type>
+	bool Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::IsInstance() const
+	{
+		return mIsInstance;
+	}
+
+	template<typename _asset_type>
+	template<typename ... _args>
+	Ref<_asset_type> Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::CreateAsset(_args ... args)
+	{
+		return DynamicCast<_asset_type>(o2Assets.CreateAsset<_asset_type>(args ...));
+	}
+
+	template<typename _asset_type>
+	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::OnSerialize(DataValue& node) const
+	{
+		if (mIsInstance)
+		{
+			if (Base::mPtr)
+			{
+				node["instance"] = Base::mPtr;
+				node["meta"] = Base::mPtr->GetMeta();
+			}
+		}
+		else if (Base::mPtr)
+		{
+			node["id"] = Base::mPtr->GetUID().ToString();
+			node["path"] = Base::mPtr->GetPath();
+		}
+	}
+
+	template<typename _asset_type>
+	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::OnDeserialized(const DataValue& node)
+	{
+		Base::DecrementRef();
+
+		Base::mPtr = nullptr;
+		mIsInstance = false;
+
+		if (auto instanceNode = node.FindMember("instance"))
+		{
+			mIsInstance = true;
+			Base::mPtr = *instanceNode;
+
+			UID oldUid = Base::mPtr->GetUID();
+			Base::mPtr->mInfo.meta = Ref<AssetMeta>((AssetMeta*)node.GetMember("meta"));
+			o2Assets.UpdateAssetCache(Base::mPtr, "", oldUid);
+
+			Base::IncrementRef();
+		}
+		else if (auto idNode = node.FindMember("id"))
+			*this = o2Assets.GetAssetRefByType<_asset_type>((UID)(*idNode));
+		else if (auto pathNode = node.FindMember("path"))
+			*this = o2Assets.GetAssetRefByType<_asset_type>((String)pathNode);
+	}
+
+	template<typename _asset_type>
+	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	{
+		OnSerialize(node);
+	}
+
+	template<typename _asset_type>
+	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		OnDeserialized(node);
+	}
+
+	template<typename _asset_type>
+	bool Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::IsDeltaAsSingleObject()
+	{
+		return true;
+	}
 }
 // --- META ---
 

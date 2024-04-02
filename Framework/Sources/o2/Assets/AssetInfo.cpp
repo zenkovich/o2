@@ -3,6 +3,7 @@
 
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetsTree.h"
+#include "o2/Assets/Assets.h"
 
 namespace o2
 {
@@ -15,8 +16,7 @@ namespace o2
     }
 
     AssetInfo::AssetInfo(const AssetInfo& other):
-        path(other.path), editTime(other.editTime), tree(other.tree), 
-        meta(other.meta ? other.meta->CloneAsRef<AssetMeta>() : nullptr),
+        path(other.path), editTime(other.editTime), tree(other.tree), meta(other.meta),
         mChildren(other.mChildren)
     {}
 
@@ -37,7 +37,7 @@ namespace o2
 
     AssetInfo& AssetInfo::operator=(const AssetInfo& other)
     {
-        meta = other.meta ? Ref(other.meta->CloneAs<AssetMeta>()) : nullptr;
+        meta = other.meta;
         path = other.path;
         editTime = other.editTime;
         tree = other.tree;

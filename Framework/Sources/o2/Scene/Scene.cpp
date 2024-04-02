@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 #include "o2/Application/Input.h"
+#include "o2/Assets/Assets.h"
 #include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Physics/PhysicsWorld.h"
 #include "o2/Render/Render.h"

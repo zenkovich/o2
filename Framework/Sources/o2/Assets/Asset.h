@@ -13,6 +13,17 @@
 
 namespace o2
 {
+    class Asset;
+
+//     template<>
+//     class Ref<Asset>;
+}
+
+#include "o2/Assets/AssetRef.h"
+
+
+namespace o2
+{
     // -------------------------------------------------------------------------------------------------
     // Basic asset interface. Contains copy of asset, without caching. For regular use assets references
     // -------------------------------------------------------------------------------------------------

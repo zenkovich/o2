@@ -124,7 +124,7 @@ namespace Editor
 		Ref<ContextMenu> mContextMenu; // Assets Context menu
 						        
 		Vector<Ref<AssetInfo>> mSelectedAssets;          // Selected assets icons @IGNORE
-		Vector<Ref<Asset>*>    mSelectedPreloadedAssets; // Preloaded selected assets
+		Vector<Ref<Asset>>     mSelectedPreloadedAssets; // Preloaded selected assets
 
 		Ref<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
 						        
