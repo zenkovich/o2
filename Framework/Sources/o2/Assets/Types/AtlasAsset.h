@@ -167,12 +167,17 @@ namespace o2
 
         Vector<Page> mPages; // Pages @SERIALIZABLE
 
-    protected:
+	protected:
+		// It is called after reference initialization at object construction, registers texture in render
+		void PostRefConstruct();
+
         // Completion deserialization callback
         void OnDeserialized(const DataValue& node) override;
 
         friend class Assets;
         friend class ImageAsset;
+
+        FRIEND_REF_MAKE();
     };
 
     typedef Ref<AtlasAsset> AtlasAssetRef;
@@ -213,6 +218,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<Texture>, GetPageTextureRef, const AssetInfo&, UInt);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;

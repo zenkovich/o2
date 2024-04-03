@@ -90,17 +90,13 @@ namespace o2
 
     AtlasAsset::AtlasAsset() :
         Asset(mmake<Meta>())
-    {
-        o2Render.OnAtlasCreated(this);
-    }
+    {}
 
     AtlasAsset::AtlasAsset(const AtlasAsset& other) :
         Asset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
     {
         for (auto& page : mPages)
             page.mOwner = WeakRef(this);
-
-        o2Render.OnAtlasCreated(this);
     }
 
     AtlasAsset::~AtlasAsset()
@@ -108,7 +104,12 @@ namespace o2
         o2Render.OnAtlasDestroyed(this);
     }
 
-    void AtlasAsset::OnDeserialized(const DataValue& node)
+	void AtlasAsset::PostRefConstruct()
+	{
+		o2Render.OnAtlasCreated(this);
+	}
+
+	void AtlasAsset::OnDeserialized(const DataValue& node)
     {
         for (auto& page : mPages)
         {
