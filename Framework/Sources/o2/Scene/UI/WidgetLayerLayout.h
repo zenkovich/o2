@@ -31,14 +31,11 @@ namespace o2
         PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property @SCRIPTABLE
 
     public:
-        // Default unused constructor, required for IObject
+        // Default unused constructor
         WidgetLayerLayout();
 
-        // Default constructor
-        WidgetLayerLayout(const Ref<WidgetLayer>& widgetLayer);
-
         // Copy constructor
-        WidgetLayerLayout(const Ref<WidgetLayer>& widgetLayer, const WidgetLayerLayout& other);
+        WidgetLayerLayout(const WidgetLayerLayout& other);
 
         // Cast to Layout operator
         operator Layout() const;
@@ -60,6 +57,9 @@ namespace o2
 
         // Check not equals operator
         bool operator!=(const Layout& other) const;
+
+        // Sets owner widget layer
+        void SetOwner(const Ref<WidgetLayer>& widgetLayer);
 
         // Returns calculated rectangle by anchors and offsets relative to source @SCRIPTABLE
         RectF Calculate(const RectF& source);
@@ -193,8 +193,8 @@ CLASS_METHODS_META(o2::WidgetLayerLayout)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<WidgetLayer>&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<WidgetLayer>&, const WidgetLayerLayout&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetLayerLayout&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetOwner, const Ref<WidgetLayer>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, Calculate, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorMin, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetAnchorMin);

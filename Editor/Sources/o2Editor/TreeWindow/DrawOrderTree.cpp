@@ -152,7 +152,7 @@ namespace Editor
 				cameraNode->AddChild(layerNode);
 
 				for (auto& drawable : layer->GetDrawables())
-					ProcessDrawableTreeNode(layerNode, drawable.Lock());
+					ProcessDrawableTreeNode(layerNode, drawable);
 			}
 		}
 	}
@@ -455,7 +455,7 @@ namespace Editor
 
 		String icon = icons[mTarget->type];
 		if (mIconSprite->GetImageName() != icon)
-			mIconSprite->SetImageAsset(ImageAssetRef(icon));
+			mIconSprite->SetImageAsset(Ref<ImageAsset>(icon));
 		
 		mBackSprite->color = Color4::SomeColor(mTarget->batchIdx, mBackSprite->GetColor().a);
 		mBackSprite->enabled = mTarget->type != DrawOrderTree::OrderTreeNode::Type::Camera &&
@@ -554,8 +554,9 @@ namespace Editor
 			DataDocument prevData; prevData = prevName;
 			DataDocument newData; newData = mTarget->object->GetName();
 
-			auto action = mnew PropertyChangeAction({ mTarget->object }, "name", { prevData }, { newData });
-			o2EditorApplication.DoneAction(Ref(action));
+			auto action = mmake<PropertyChangeAction>(Vector<Ref<SceneEditableObject>>{ mTarget->object }, "name", 
+													  Vector<DataDocument>{ prevData }, Vector<DataDocument>{ newData });
+			o2EditorApplication.DoneAction(action);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Render/IDrawable.h"
+#include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
@@ -10,8 +11,6 @@
 
 namespace o2
 {
-    FORWARD_CLASS_REF(SceneLayer);
-
     // --------------------------------------------------------------------------------------------------------------
     // Scene drawable object. Has virtual draw function and sorting depth. Depth shows how later object will be drawn
     // Can be used to create your own drawable objects. For that you need to override Draw() function, 
@@ -130,6 +129,12 @@ namespace o2
         void OnDrawn() override;
 #endif
     };
+
+    // ------------------------------------------------------------------------------------
+    // Root drawables container. It is used to draw all root drawables with inherited depth
+    // ------------------------------------------------------------------------------------
+    class SceneLayerRootDrawablesContainer : public ISceneDrawable
+    {};
 }
 // --- META ---
 

@@ -100,12 +100,12 @@ namespace Editor
 		mContextMenu->AddItem("Open", [&]() { OnContextOpenPressed(); });
 		mContextMenu->AddItem("Show in folder", [&]() { OnContextShowInExplorerPressed(); });
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("New folder", [&]() { OnContextCreateFolderPressed(); }, ImageAssetRef(), ShortcutKeys('N', true));
+		mContextMenu->AddItem("New folder", [&]() { OnContextCreateFolderPressed(); }, Ref<ImageAsset>(), ShortcutKeys('N', true));
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true));
-		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true));
-		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true));
-		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+		mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, Ref<ImageAsset>(), ShortcutKeys('C', true));
+		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, Ref<ImageAsset>(), ShortcutKeys('X', true));
+		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, Ref<ImageAsset>(), ShortcutKeys('V', true));
+		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, Ref<ImageAsset>(), ShortcutKeys(VK_DELETE));
 
 		mFoldersTree->onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
 		mFoldersTree->onUnfocused = [&]() { mContextMenu->SetItemsMinPriority(); };

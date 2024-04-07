@@ -8,11 +8,11 @@
 namespace o2
 {
 	WidgetLayer::WidgetLayer() :
-		layout(Ref(this)), interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mUID(Math::Random())
+		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mUID(Math::Random())
 	{}
 
 	WidgetLayer::WidgetLayer(const WidgetLayer& other) :
-		mDepth(other.mDepth), name(other.name), layout(Ref(this), other.layout), mTransparency(other.mTransparency),
+		mDepth(other.mDepth), name(other.name), layout(other.layout), mTransparency(other.mTransparency),
 		interactableLayout(other.interactableLayout), mUID(Math::Random()), depth(this), transparency(this)
 	{
 		if (other.mCopyVisitor)
@@ -148,7 +148,6 @@ namespace o2
 		o2Scene.OnObjectChanged(layer);
 #endif
 
-
 		return layer;
 	}
 
@@ -213,7 +212,12 @@ namespace o2
 		return mChildren;
 	}
 
-	void WidgetLayer::SerializeBasicOverride(DataValue& node) const
+    void WidgetLayer::PostRefConstruct()
+    {
+		layout.SetOwner(Ref(this));
+    }
+
+    void WidgetLayer::SerializeBasicOverride(DataValue& node) const
 	{
 		if (mPrototypeLink)
 			SerializeWithProto(node);

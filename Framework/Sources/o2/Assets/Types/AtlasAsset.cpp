@@ -105,7 +105,8 @@ namespace o2
     }
 
 	void AtlasAsset::PostRefConstruct()
-	{
+    {
+        Asset::PostRefConstruct();
 		o2Render.OnAtlasCreated(this);
 	}
 
@@ -128,7 +129,7 @@ namespace o2
         return *this;
     }
 
-    TextureSource AtlasAsset::GetSpriteSource(const ImageAssetRef& image)
+    TextureSource AtlasAsset::GetSpriteSource(const Ref<ImageAsset>& image)
     {
         for (auto& page : mPages)
         {
@@ -142,7 +143,7 @@ namespace o2
         return {};
     }
 
-    const Vector<ImageAssetRef>& AtlasAsset::GetImages() const
+    const Vector<Ref<ImageAsset>>& AtlasAsset::GetImages() const
     {
         return mImages;
     }
@@ -152,18 +153,18 @@ namespace o2
         return mPages;
     }
 
-    bool AtlasAsset::ContainsImage(const ImageAssetRef& image)
+    bool AtlasAsset::ContainsImage(const Ref<ImageAsset>& image)
     {
         return mImages.Contains(image);
     }
 
-    void AtlasAsset::AddImage(const ImageAssetRef& image)
+    void AtlasAsset::AddImage(const Ref<ImageAsset>& image)
     {
         if (!mImages.Contains(image))
             mImages.Add(image);
     }
 
-    void AtlasAsset::RemoveImage(const ImageAssetRef& image)
+    void AtlasAsset::RemoveImage(const Ref<ImageAsset>& image)
     {
         mImages.Remove(image);
     }

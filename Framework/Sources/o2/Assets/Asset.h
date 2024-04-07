@@ -131,7 +131,7 @@ namespace o2
         // Copy-constructor
 		Asset(const Asset& asset);
 
-		// It is called after reference initialization at object construction, registers texture in render
+		// It is called after reference initialization at object construction, registers asset cache
 		void PostRefConstruct();
 
         // Returns meta full path (from binary path)

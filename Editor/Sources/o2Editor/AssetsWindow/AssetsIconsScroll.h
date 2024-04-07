@@ -268,7 +268,7 @@ namespace Editor
 		Ref<Actor> InstantiateAsset(const _type& asset);
 
 		// Instantiate actor from image asset
-		Ref<Actor> InstantiateAsset(const ImageAssetRef& asset);
+		Ref<Actor> InstantiateAsset(const Ref<ImageAsset>& asset);
 
 		// Instantiate actor from actor asset
 		Ref<Actor> InstantiateAsset(const Ref<ActorAsset>& asset);
@@ -449,7 +449,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PROTECTED().SIGNATURE(void, InstantiateDraggingAssets);
     FUNCTION().PROTECTED().SIGNATURE(void, ClearInstantiatedDraggingAssets);
     FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const AssetInfo&);
-    FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const ImageAssetRef&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const Ref<ImageAsset>&);
     FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const Ref<ActorAsset>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAssetsPropertiesChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckPreloadedAssetsSaving);

@@ -16,21 +16,37 @@ namespace o2
 {
     Widget::Widget(ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), mode), layout(dynamic_cast<WidgetLayout*>(transform))
-    {}
+    {
+#if IS_EDITOR
+        InitEditables();
+#endif
+    }
 
     Widget::Widget(const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
-    {}
+    {
+#if IS_EDITOR
+        InitEditables();
+#endif
+    }
 
     Widget::Widget(Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
-    {}
+    {
+#if IS_EDITOR
+        InitEditables();
+#endif
+    }
 
     Widget::Widget(const Widget& other) :
         Actor(mnew WidgetLayout(*other.layout), other), layout(dynamic_cast<WidgetLayout*>(transform)),
         mTransparency(other.mTransparency), transparency(this), resTransparency(this),
         childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
     {
+#if IS_EDITOR
+        InitEditables();
+#endif
+
         // Layers
         {
             Ref<WidgetLayer::ICopyVisitor> layerCopyVisitor;
@@ -100,12 +116,14 @@ namespace o2
 
 	void Widget::PostRefConstruct()
 	{
+        Actor::PostRefConstruct();
+
 		if (IsFocusable())
 			UIManager::RegisterFocusableWidget(this);
 
 #if IS_EDITOR
-		layersEditable = mmake<LayersEditable>(Ref(this));                             // @EDITOR_IGNORE
-		internalChildrenEditable = mmake<InternalChildrenEditableEditable>(Ref(this)); // @EDITOR_IGNORE
+        layersEditable->widget = Ref(this);
+        internalChildrenEditable->widget = Ref(this);
 #endif
 	}
 
@@ -1491,11 +1509,13 @@ namespace o2
         return Ref(this);
     }
 
-    Widget::LayersEditable::LayersEditable()
-    {}
+    void Widget::InitEditables()
+    {
+        layersEditable = mmake<LayersEditable>();
+        internalChildrenEditable = mmake<InternalChildrenEditableEditable>();
+    }
 
-    Widget::LayersEditable::LayersEditable(const Ref<Widget>& widget) :
-        widget(widget)
+    Widget::LayersEditable::LayersEditable()
     {}
 
     SceneUID Widget::LayersEditable::GetID() const
@@ -1555,10 +1575,6 @@ namespace o2
     }
 
     Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable()
-    {}
-
-    Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(const Ref<Widget>& widget) :
-        widget(widget)
     {}
 
     SceneUID Widget::InternalChildrenEditableEditable::GetID() const

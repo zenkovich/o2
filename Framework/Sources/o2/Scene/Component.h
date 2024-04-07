@@ -1,6 +1,5 @@
 #pragma once
 
-#include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Serialization/Serializable.h"
 

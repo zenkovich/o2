@@ -1,7 +1,6 @@
 #include "o2/stdafx.h"
 #include "FolderAsset.h"
 
-#include "o2/Assets/Assets.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 
 namespace o2

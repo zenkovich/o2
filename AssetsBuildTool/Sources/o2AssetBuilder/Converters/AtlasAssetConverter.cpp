@@ -204,7 +204,7 @@ namespace o2
 
         // Initialize bitmaps and pages
         int pagesCount = packer.GetPagesCount();
-        Vector<Bitmap*> resAtlasBitmaps;
+        Vector<Ref<Bitmap>> resAtlasBitmaps;
         Vector<AtlasAsset::Page> resAtlasPages;
         for (int i = 0; i < pagesCount; i++)
         {
@@ -213,7 +213,7 @@ namespace o2
             atlasPage.mSize = packer.GetMaxSize();
             resAtlasPages.Add(atlasPage);
 
-            Bitmap* newBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, packer.GetMaxSize());
+            auto newBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, packer.GetMaxSize());
             newBitmap->Fill(Color4(255, 255, 255, 0));
 
             resAtlasBitmaps.Add(newBitmap);
@@ -243,8 +243,6 @@ namespace o2
             resAtlasBitmaps[i]->Save(builtPath + ".png", Bitmap::ImageType::Png);
 
             ImageCompressor::CompressImage(builtPath + ".png", builtPath, meta.format, 100);
-
-            delete resAtlasBitmaps[i];
         }
 
         // Save atlas data

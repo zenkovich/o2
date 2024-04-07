@@ -1337,7 +1337,7 @@ namespace o2
             mPrototypeLink = nullptr;
 
 #if IS_EDITOR
-        if (mPrototype)
+        if (mPrototype && HasRefCounter())
             Scene::LinkActorToPrototypesHierarchy(Ref(this), mPrototype);
 #endif
     }
@@ -1355,9 +1355,7 @@ namespace o2
 
     void Actor::SetLayer(const String& name)
     {
-        Ref<SceneLayer> tt;
-        //tt.SetName(name);
-        SetLayer(tt);
+        SetLayer(o2Scene.GetLayer(name));
     }
 
     const Ref<SceneLayer>& Actor::GetLayer() const

@@ -233,30 +233,27 @@ namespace o2
         for (auto msg : inputQueue)
         {
             if (msg->Apply())
-            {
                 mInputQueue.Remove(msg);
-                delete msg;
-            }
         }
     }
 
     void Input::OnKeyPressed(KeyboardKey key)
     {
-        auto msg = mnew InputKeyPressedMsg();
+        auto msg = mmake<InputKeyPressedMsg>();
         msg->key = key;
         mInputQueue.Add(msg);
     }
 
     void Input::OnKeyReleased(KeyboardKey key)
     {
-        auto msg = mnew InputKeyReleasedMsg();
+        auto msg = mmake<InputKeyReleasedMsg>();
         msg->key = key;
         mInputQueue.Add(msg);
     }
 
     void Input::OnCursorPressed(const Vec2F& pos, CursorId id /*= 0*/)
     {
-        auto msg = mnew InputCursorPressedMsg();
+        auto msg = mmake<InputCursorPressedMsg>();
         msg->position = pos;
         msg->id = id;
         mInputQueue.Add(msg);
@@ -264,14 +261,14 @@ namespace o2
 
     void Input::OnCursorReleased(CursorId id /*= 0*/)
     {
-        auto msg = mnew InputCursorReleasedMsg();
+        auto msg = mmake<InputCursorReleasedMsg>();
         msg->id = id;
         mInputQueue.Add(msg);
     }
 
     void Input::OnCursorMoved(const Vec2F& pos, CursorId id /*= 0*/, bool withDelta /*= true*/)
     {
-        auto msg = mnew InputCursorMovedMsg();
+        auto msg = mmake<InputCursorMovedMsg>();
         msg->position = pos;
         msg->id = id;
         mInputQueue.Add(msg);
@@ -439,7 +436,7 @@ namespace o2
 
     void Input::OnMouseWheel(float delta)
     {
-        auto msg = mnew InputMouseWheelMsg();
+        auto msg = mmake<InputMouseWheelMsg>();
         msg->delta = delta;
         mInputQueue.Add(msg);
     }

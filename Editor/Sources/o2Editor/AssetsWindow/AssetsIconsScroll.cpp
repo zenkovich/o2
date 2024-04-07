@@ -173,7 +173,7 @@ namespace Editor
 
         if (mCurrentPath != "")
         {
-            FolderAssetRef ref(mCurrentPath);
+            Ref<FolderAsset> ref(mCurrentPath);
             mAssetInfos = ref->GetInfo().GetChildren();
         }
         else
@@ -386,7 +386,7 @@ namespace Editor
 
         if (asset->meta->GetAssetType() == &TypeOf(ImageAsset))
         {
-            ImageAssetRef previewSpriteAsset(asset->path);
+            Ref<ImageAsset> previewSpriteAsset(asset->path);
             float previewMaxSize = 30;
 
             if (previewSpriteAsset->width > previewSpriteAsset->height)
@@ -728,10 +728,10 @@ namespace Editor
         InitializeCreateContext();
 
         mContextMenu->AddItem("---");
-        mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true));
-        mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true));
-        mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true));
-        mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+        mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, Ref<ImageAsset>(), ShortcutKeys('C', true));
+        mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, Ref<ImageAsset>(), ShortcutKeys('X', true));
+        mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, Ref<ImageAsset>(), ShortcutKeys('V', true));
+        mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, Ref<ImageAsset>(), ShortcutKeys(VK_DELETE));
 
         onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
         onUnfocused = [&]() {
@@ -938,7 +938,7 @@ namespace Editor
                            });
     }
 
-    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const ImageAssetRef& asset)
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const Ref<ImageAsset>& asset)
     {
         auto actor = mmake<Actor>();
         auto comp = mmake<ImageComponent>(asset);
@@ -1071,7 +1071,7 @@ namespace Editor
     Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
     {
         if (assetInfo.meta->GetAssetType() == &TypeOf(ImageAsset))
-            return InstantiateAsset(ImageAssetRef(assetInfo.meta->ID()));
+            return InstantiateAsset(Ref<ImageAsset>(assetInfo.meta->ID()));
         else if (assetInfo.meta->GetAssetType() == &TypeOf(ActorAsset))
             return InstantiateAsset(Ref<ActorAsset>(assetInfo.meta->ID()));
 

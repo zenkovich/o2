@@ -263,7 +263,7 @@ namespace o2
                 o2Render.SetCamera(Camera());
                 o2Render.Clear();
 
-                static auto font = mnew VectorFont(o2Assets.GetBuiltAssetsPath() + "debugFont.ttf");
+                static auto font = mmake<VectorFont>(o2Assets.GetBuiltAssetsPath() + "debugFont.ttf");
                 static auto text = mmake<Text>(Ref<Font>(font));
 
                 text->SetText("No camera");

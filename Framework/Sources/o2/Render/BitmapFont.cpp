@@ -32,7 +32,7 @@ namespace o2
         if (auto common = doc.FindMember("common"))
         {
             String textureName = (*common)["texture"];
-            ImageAssetRef image(textureName);
+            Ref<ImageAsset> image(textureName);
             TextureSource imageSource = image->GetTextureSource();
             mTexture = imageSource.texture;
             mTextureSrcRect = imageSource.sourceRect;

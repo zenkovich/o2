@@ -12,7 +12,7 @@ namespace o2
         mSerializeEnabled = false;
     }
 
-    ImageComponent::ImageComponent(const ImageAssetRef& image) :
+    ImageComponent::ImageComponent(const Ref<ImageAsset>& image) :
         DrawableComponent(), Sprite(image)
     {
         mSerializeEnabled = false;

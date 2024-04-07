@@ -91,9 +91,9 @@ namespace o2
 
                 for (auto& drawable : layer->mDrawables)
                 {                    
-                    printDrawable(drawable.Lock(), 1);
+                    printDrawable(drawable, 1);
 
-                    if (auto root = DynamicCast<SceneLayerRootDrawablesContainer>(drawable.Lock()))
+                    if (auto root = DynamicCast<SceneLayerRootDrawablesContainer>(drawable))
                     {
                         o2Debug.Log("  ROOT:");
 
@@ -112,7 +112,7 @@ namespace o2
             for (auto& layer : drawLayers.GetLayers())
             {
                 for (auto& comp : layer->mDrawables)
-                    comp.Lock()->Draw();
+                    comp->Draw();
             }
         }
 

@@ -315,7 +315,7 @@ namespace o2
         return mEmittingCoefficient;
     }
 
-    void ParticlesEmitter::SetImage(const ImageAssetRef& image)
+    void ParticlesEmitter::SetImage(const Ref<ImageAsset>& image)
     {
         mImageAsset = image;
 
@@ -325,7 +325,7 @@ namespace o2
             mParticlesMesh.SetTexture(Ref<Texture>::Null());
     }
 
-    ImageAssetRef ParticlesEmitter::GetImage() const
+    Ref<ImageAsset> ParticlesEmitter::GetImage() const
     {
         return mImageAsset;
     }

@@ -26,7 +26,7 @@ namespace o2
         return mName;
     }
 
-    const Vector<WeakRef<ISceneDrawable>>& SceneLayer::GetDrawables() const
+    const Vector<Ref<ISceneDrawable>>& SceneLayer::GetDrawables() const
     {
         return mDrawables;
     }
@@ -48,7 +48,7 @@ namespace o2
         {
             int center = (rangeMin + rangeMax) >> 1;
 
-            float centerValue = mDrawables[center].Lock()->mDrawingDepth;
+            float centerValue = mDrawables[center]->mDrawingDepth;
 
             if (targetDepth < centerValue)
                 rangeMax = center;
@@ -65,7 +65,7 @@ namespace o2
         if (!skipLinearSearch)
         {
             for (position = rangeMin; position < rangeMax; position++)
-                if (mDrawables[position].Lock()->mDrawingDepth > targetDepth)
+                if (mDrawables[position]->mDrawingDepth > targetDepth)
                     break;
         }
 
@@ -83,7 +83,7 @@ namespace o2
 
         for (int position = 0; position < mDrawables.Count(); position++)
         {
-            if (mDrawables[position].Lock()->mDrawingDepth > drawable->mDrawingDepth)
+            if (mDrawables[position]->mDrawingDepth > drawable->mDrawingDepth)
             {
                 mDrawables.Insert(drawable, position);
                 return;

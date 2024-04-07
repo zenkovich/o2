@@ -29,20 +29,20 @@ namespace o2
 
     void TaskManager::Run(const Function<void(float)>& update, const Function<bool()> isDone)
     {
-        auto task = mnew FunctionalTask();
+        auto task = mmake<FunctionalTask>();
         task->update = update;
         task->isDone = isDone;
     }
 
     void TaskManager::Run(const Function<void(float)>& update, float time)
     {
-        auto task = mnew FunctionalTimeTask(time);
+        auto task = mmake<FunctionalTimeTask>(time);
         task->update = update;
     }
 
     void TaskManager::Invoke(const Function<void()> func, float delay /*= 0*/)
     {
-        auto task = mnew FunctionalDelayedTask(delay);
+        auto task = mmake<FunctionalDelayedTask>(delay);
         task->doTask = func;
     }
 

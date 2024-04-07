@@ -1,11 +1,11 @@
 #pragma once
-#include "o2/Assets/Meta.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/System/Time/TimeStamp.h"
 
 namespace o2
 {
     FORWARD_CLASS_REF(AssetsTree);
+    FORWARD_CLASS_REF(AssetMeta);
 
     // -----------------
     // Asset information

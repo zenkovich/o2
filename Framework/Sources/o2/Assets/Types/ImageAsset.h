@@ -163,8 +163,6 @@ namespace o2
         friend class AtlasAsset;
         friend class Assets;
     };
-
-    typedef Ref<ImageAsset> ImageAssetRef;
 }
 // --- META ---
 

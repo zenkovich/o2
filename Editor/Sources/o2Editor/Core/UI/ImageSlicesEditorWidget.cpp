@@ -24,7 +24,7 @@ namespace Editor
 		return *this;
 	}
 
-	void ImageSlicesEditorWidget::Setup(const ImageAssetRef& image, const Ref<BorderIProperty>& borderProperty)
+	void ImageSlicesEditorWidget::Setup(const Ref<ImageAsset>& image, const Ref<BorderIProperty>& borderProperty)
 	{
 		mBorderProperty = borderProperty;
 

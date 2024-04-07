@@ -235,8 +235,8 @@ namespace Editor
         DataDocument data;
         auto selectedKeys = GetSelectedKeys();
         SerializeKeys(data, selectedKeys, 0);
-        mAnimationWindow.Lock()->mActionsList->DoneAction(Ref(mnew AnimationKeysChangeAction(selectedKeys, mBeforeChangeKeysData,
-                                                                                             data, Ref(this))));
+        mAnimationWindow.Lock()->mActionsList->DoneAction(mmake<AnimationKeysChangeAction>(selectedKeys, mBeforeChangeKeysData,
+                                                                                           data, Ref(this)));
     }
 
     void KeyHandlesSheet::OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos)
@@ -428,17 +428,17 @@ namespace Editor
     {
         mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
-        mContextMenu->AddItem("Copy", [&]() { CopyKeys(); }, ImageAssetRef(), ShortcutKeys('C', true));
-        mContextMenu->AddItem("Cut", [&]() { CopyKeys(); DeleteKeys(GetSelectedKeys()); }, ImageAssetRef(), ShortcutKeys('X', true));
-        mContextMenu->AddItem("Paste", [&]() { PasteKeys(); }, ImageAssetRef(), ShortcutKeys('V', true));
+        mContextMenu->AddItem("Copy", [&]() { CopyKeys(); }, Ref<ImageAsset>(), ShortcutKeys('C', true));
+        mContextMenu->AddItem("Cut", [&]() { CopyKeys(); DeleteKeys(GetSelectedKeys()); }, Ref<ImageAsset>(), ShortcutKeys('X', true));
+        mContextMenu->AddItem("Paste", [&]() { PasteKeys(); }, Ref<ImageAsset>(), ShortcutKeys('V', true));
         mContextMenu->AddItem("---");
-        mContextMenu->AddItem("Delete", [&]() { DeleteKeys(GetSelectedKeys()); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+        mContextMenu->AddItem("Delete", [&]() { DeleteKeys(GetSelectedKeys()); }, Ref<ImageAsset>(), ShortcutKeys(VK_DELETE));
         mContextMenu->AddItem("---");
-        mContextMenu->AddItem("Select all", [&]() { SelectAll(); }, ImageAssetRef(), ShortcutKeys('A', true));
+        mContextMenu->AddItem("Select all", [&]() { SelectAll(); }, Ref<ImageAsset>(), ShortcutKeys('A', true));
         mContextMenu->AddItem("Deselect all", [&]() { DeselectAll(); });
         mContextMenu->AddItem("---");
-        mContextMenu->AddItem("Undo", [&]() { mAnimationWindow.Lock()->mActionsList->UndoAction(); }, ImageAssetRef(), ShortcutKeys('Z', true));
-        mContextMenu->AddItem("Redo", [&]() { mAnimationWindow.Lock()->mActionsList->RedoAction(); }, ImageAssetRef(), ShortcutKeys('Y', true));
+        mContextMenu->AddItem("Undo", [&]() { mAnimationWindow.Lock()->mActionsList->UndoAction(); }, Ref<ImageAsset>(), ShortcutKeys('Z', true));
+        mContextMenu->AddItem("Redo", [&]() { mAnimationWindow.Lock()->mActionsList->RedoAction(); }, Ref<ImageAsset>(), ShortcutKeys('Y', true));
 
         AddChild(mContextMenu);
 

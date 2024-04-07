@@ -204,7 +204,7 @@ namespace o2
         // -----------------------
         // Input message interface
         // -----------------------
-        struct IInputMsg
+        struct IInputMsg: public RefCounterable
         {
             // Virtual destructor
             virtual ~IInputMsg() {}
@@ -258,7 +258,7 @@ namespace o2
         };
 
     protected:
-        Vector<IInputMsg*> mInputQueue; // Input messages queue
+        Vector<Ref<IInputMsg>> mInputQueue; // Input messages queue
 
         Vector<Key> mPressedKeys;  // Pressed keys at current frame
         Vector<Key> mDownKeys;     // Held down at current frame keys

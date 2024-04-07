@@ -169,7 +169,7 @@ namespace o2
     {
         CheckAppliedKeys();
 
-        KeyContainer<T>* container = mnew KeyContainer<T>();
+        auto container = mmake<KeyContainer<T>>();
         container->animatedValue = GetAnimatedValue(target);
         container->key.value = value;
         mKeyContainers.Add(container);

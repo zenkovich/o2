@@ -172,7 +172,7 @@ namespace o2
 		float mDepth = 0.0f; // Depth of drawable @SERIALIZABLE
 
 		RectF mAbsolutePosition; // Result absolute drawable position
-		RectF mInteractableArea; // Interactable area, depends on interactableLayout
+		RectF mInteractableArea; // Intractable area, depends on interactableLayout
 
 		WeakRef<Widget> mOwnerWidget; // Owner widget pointer 
 
@@ -181,7 +181,10 @@ namespace o2
 
 		bool mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
 
-	protected:
+    protected:
+        // It is called after reference initialization at object construction, sets layout owner
+        void PostRefConstruct();
+
 		// Beginning serialization callback
 		void SerializeBasicOverride(DataValue& node) const;
 
@@ -330,6 +333,8 @@ namespace o2
 
 		friend class Widget;
 		friend class WidgetLayerLayout;
+
+		FRIEND_REF_MAKE();
 	};
 
 	template<typename _type>
@@ -418,6 +423,7 @@ CLASS_METHODS_META(o2::WidgetLayer)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetResTransparency);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const RectF&, GetRect);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(void, SerializeBasicOverride, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, DeserializeBasicOverride, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);

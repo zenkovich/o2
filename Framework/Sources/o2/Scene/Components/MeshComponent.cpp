@@ -78,13 +78,13 @@ namespace o2
         mNeedUpdateMesh = true;
     }
 
-    void MeshComponent::SetImage(const ImageAssetRef& image)
+    void MeshComponent::SetImage(const Ref<ImageAsset>& image)
     {
         mImageAsset = image;
         mNeedUpdateMesh = true;
     }
 
-    const ImageAssetRef& MeshComponent::GetImage() const
+    const Ref<ImageAsset>& MeshComponent::GetImage() const
     {
         return mImageAsset;
     }

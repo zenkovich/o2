@@ -19,6 +19,8 @@ namespace o2
     class LogStream;
     struct AssetInfo;
 
+    FORWARD_CLASS_REF(Asset);
+
     // ----------------
     // Assets utilities
     // ----------------

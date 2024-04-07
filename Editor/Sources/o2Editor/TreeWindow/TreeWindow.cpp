@@ -167,7 +167,7 @@ namespace Editor
 
 		mTreeContextMenu->AddItem("---");
 
-		mTreeContextMenu->AddItem("Create empty actor", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(),
+		mTreeContextMenu->AddItem("Create empty actor", [&]() { OnContextCreateNewPressed(); }, Ref<ImageAsset>(),
 								  ShortcutKeys('N', true, false));
 
 		mTreeContextMenu->AddItem("Create/UI/Empty layer.alayers", [&]() { CreateObject<WidgetLayer>("Layer"); });
@@ -196,11 +196,11 @@ namespace Editor
 
 		mTreeContextMenu->AddItem("---");
 
-		mTreeContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true));
-		mTreeContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true));
-		mTreeContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true));
-		mTreeContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
-		mTreeContextMenu->AddItem("Duplicate", [&]() { OnContextDuplicatePressed(); }, ImageAssetRef(), ShortcutKeys('D', true));
+		mTreeContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, Ref<ImageAsset>(), ShortcutKeys('C', true));
+		mTreeContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, Ref<ImageAsset>(), ShortcutKeys('X', true));
+		mTreeContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, Ref<ImageAsset>(), ShortcutKeys('V', true));
+		mTreeContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, Ref<ImageAsset>(), ShortcutKeys(VK_DELETE));
+		mTreeContextMenu->AddItem("Duplicate", [&]() { OnContextDuplicatePressed(); }, Ref<ImageAsset>(), ShortcutKeys('D', true));
 
 		mTreeContextMenu->AddItem("---");
 
@@ -209,8 +209,8 @@ namespace Editor
 
 		mTreeContextMenu->AddItem("---");
 
-		mTreeContextMenu->AddItem("Enable\\disable", [&]() { OnContextEnablePressed(); }, ImageAssetRef(), ShortcutKeys('L', true));
-		mTreeContextMenu->AddItem("Lock\\unlock", [&]() { OnContextLockPressed(); }, ImageAssetRef(), ShortcutKeys('O', true));
+		mTreeContextMenu->AddItem("Enable\\disable", [&]() { OnContextEnablePressed(); }, Ref<ImageAsset>(), ShortcutKeys('L', true));
+		mTreeContextMenu->AddItem("Lock\\unlock", [&]() { OnContextLockPressed(); }, Ref<ImageAsset>(), ShortcutKeys('O', true));
 
 		mTreeContextMenu->AddItem("---");
 

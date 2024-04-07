@@ -55,7 +55,7 @@ namespace o2
         String mString;                                     // @SERIALIZABLE
         WString mWString;                                   // @SERIALIZABLE
         bool mBool;                                         // @SERIALIZABLE
-        ImageAssetRef mImageAsset;                          // @SERIALIZABLE
+        Ref<ImageAsset> mImageAsset;                          // @SERIALIZABLE
         Ref<ActorAsset> mActorAsset;                        // @SERIALIZABLE
         DataAssetRef mDataAsset;                            // @SERIALIZABLE
         AnimationAssetRef mAnimationAsset;                  // @SERIALIZABLE

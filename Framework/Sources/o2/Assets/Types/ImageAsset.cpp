@@ -60,7 +60,7 @@ namespace o2
 
     void ImageAsset::SetAtlas(const UID& atlas)
     {
-        ImageAssetRef thisRef(GetUID());
+        Ref<ImageAsset> thisRef(GetUID());
 
         if (auto prevAtlas = AtlasAssetRef(GetMeta()->atlasId)) 
             prevAtlas->RemoveImage(thisRef);

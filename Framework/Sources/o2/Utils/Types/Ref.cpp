@@ -18,4 +18,10 @@ namespace o2
         Assert(mRefCounter, "Trying to get the reference counter, but it is null. Use make<> to create Ref<> and PostRefConstruct() to initialize references during object creation.");
         return mRefCounter;
     }
+
+    bool RefCounterable::HasRefCounter() const
+    {
+        return mRefCounter != nullptr;
+    }
+
 }

@@ -30,7 +30,7 @@ namespace Editor
 		ImageSlicesEditorWidget& operator=(const ImageSlicesEditorWidget& other);
 
 		// Sets image and property
-		void Setup(const ImageAssetRef& image, const Ref<BorderIProperty>& borderProperty);
+		void Setup(const Ref<ImageAsset>& image, const Ref<BorderIProperty>& borderProperty);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -110,7 +110,7 @@ CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const ImageSlicesEditorWidget&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const ImageAssetRef&, const Ref<BorderIProperty>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<ImageAsset>&, const Ref<BorderIProperty>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeImagePreview);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeSliceHandles);

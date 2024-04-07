@@ -77,7 +77,7 @@ namespace o2
     // ------------
     // Delayed task
     // ------------
-    class DelayedTask: Task
+    class DelayedTask: public Task
     {
     public:
         DelayedTask(float delay = 0.0f);
@@ -95,7 +95,7 @@ namespace o2
     // -----------------------
     // Functional delayed task
     // -----------------------
-    class FunctionalDelayedTask: DelayedTask
+    class FunctionalDelayedTask: public DelayedTask
     {
     public:
         Function<void()> doTask;

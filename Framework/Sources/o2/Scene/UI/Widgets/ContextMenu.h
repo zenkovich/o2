@@ -36,7 +36,7 @@ namespace o2
         public:
             WString       text;  // Item text @SERIALIZABLE
             WString       group; // Item group id @SERIALIZABLE
-            ImageAssetRef icon;  // Icon image @SERIALIZABLE
+            Ref<ImageAsset> icon;  // Icon image @SERIALIZABLE
 
             Vector<Ref<Item>> subItems; // Children items @SERIALIZABLE
 
@@ -55,15 +55,15 @@ namespace o2
 
             // Constructor from text
             Item(const WString& text, const Vector<Ref<Item>>& subItems, const WString& group = "",
-                 const ImageAssetRef& icon = ImageAssetRef());
+                 const Ref<ImageAsset>& icon = Ref<ImageAsset>());
 
             // Constructor from text and click event
             Item(const WString& text, const Function<void()> onClick, const WString& group = "",
-                 const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
+                 const Ref<ImageAsset>& icon = Ref<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
 
             // Constructor from text and checked event
             Item(const WString& text, bool checked, Function<void(bool)> onChecked = Function<void(bool)>(),
-                 const WString& group = "", const ImageAssetRef& icon = ImageAssetRef(),
+                 const WString& group = "", const Ref<ImageAsset>& icon = Ref<ImageAsset>(),
                  const ShortcutKeys& shortcut = ShortcutKeys());
 
             // Destructor
@@ -127,12 +127,12 @@ namespace o2
 
         // Adds item by path ("node/sub node/target")
         void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-                     const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
+                     const Ref<ImageAsset>& icon = Ref<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Adds item by path ("node/sub node/target")
         void AddToggleItem(const WString& path, bool value,
                            const Function<void(bool)>& clickFunc = Function<void(bool)>(),
-                           const ImageAssetRef& icon = ImageAssetRef(),
+                           const Ref<ImageAsset>& icon = Ref<ImageAsset>(),
                            const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Inserts item at position
@@ -388,8 +388,8 @@ CLASS_METHODS_META(o2::ContextMenu)
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Ref<PopupWidget>&, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const Ref<Item>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const Ref<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const Ref<ImageAsset>&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertItem, const Ref<Item>&, int);
     FUNCTION().PUBLIC().SIGNATURE(void, AddItems, const Vector<Ref<Item>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertItems, const Vector<Ref<Item>>&, int);
@@ -491,9 +491,9 @@ CLASS_METHODS_META(o2::ContextMenu::Item)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<Ref<Item>>&, const WString&, const ImageAssetRef&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Function<void()>, const WString&, const ImageAssetRef&, const ShortcutKeys&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, bool, Function<void(bool)>, const WString&, const ImageAssetRef&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<Ref<Item>>&, const WString&, const Ref<ImageAsset>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Function<void()>, const WString&, const Ref<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, bool, Function<void(bool)>, const WString&, const Ref<ImageAsset>&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetShortcut, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(const ShortcutKeys&, GetShortcut);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMaxPriority);

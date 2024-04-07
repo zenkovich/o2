@@ -96,7 +96,7 @@ namespace o2
         void Copy(const Texture& from, const RectI& rect);
 
         // Gets texture's data to bitmap and returns it
-        Bitmap* GetData();
+        Ref<Bitmap> GetData();
 
         // Reloads texture
         void Reload();

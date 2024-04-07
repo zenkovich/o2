@@ -59,7 +59,7 @@ namespace o2
             mAnimation->animation = animation;
         else
         {
-            mAnimation.SetInstance(mnew AnimationAsset(animation));
+            mAnimation.SetInstance(mmake<AnimationAsset>(animation).Get());
             mPlayer->SetClip(mAnimation->animation);
         }
     }

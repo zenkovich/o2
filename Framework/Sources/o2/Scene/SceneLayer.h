@@ -1,6 +1,5 @@
 #pragma once
 
-#include "o2/Scene/ISceneDrawable.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
@@ -10,8 +9,7 @@ namespace o2
     class Actor;
 
     FORWARD_CLASS_REF(SceneLayerRootDrawablesContainer);
-
-    class ISceneDrawable;
+    FORWARD_CLASS_REF(ISceneDrawable);
 
     // --------------------------------------------------------------------------------
     // Scene layer. It contains Actors and their Drawable parts, managing sorting order
@@ -34,7 +32,7 @@ namespace o2
         const String& GetName() const;
 
         // Returns all drawable objects of actors in layer
-        const Vector<WeakRef<ISceneDrawable>>& GetDrawables() const;
+        const Vector<Ref<ISceneDrawable>>& GetDrawables() const;
 
         // Returns root drawable objects of actors in layer
         const Ref<SceneLayerRootDrawablesContainer>& GetRootDrawables();
@@ -45,7 +43,7 @@ namespace o2
     protected:
         String mName; // Name of layer @SERIALIZABLE
 
-        Vector<WeakRef<ISceneDrawable>> mDrawables; // Drawable objects in layer
+        Vector<Ref<ISceneDrawable>> mDrawables; // Drawable objects in layer
 
         Ref<SceneLayerRootDrawablesContainer> mRootDrawables; // Root drawables with inherited depth. Draws at 0 priority
 
@@ -132,36 +130,29 @@ namespace o2
     };
 }
 
-#include "o2/Scene/ISceneDrawable.h"
 #include "o2/Scene/Scene.h"
 
 namespace o2
 {
-	// ------------------------------------------------------------------------------------
-	// Root drawables container. It is used to draw all root drawables with inherited depth
-	// ------------------------------------------------------------------------------------
-	class SceneLayerRootDrawablesContainer : public ISceneDrawable
-	{};
-
-	template<typename T>
+    template<typename T>
     Ref<T, typename std::enable_if<std::is_same<SceneLayer, T>::value>::type>::Ref(const String& name) :
-		mLayerName(name)
-	{
-		*this = Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(name) : nullptr;
-	}
+        mLayerName(name)
+    {
+        *this = Scene::IsSingletonInitialzed() ? o2Scene.GetLayer(name) : nullptr;
+    }
 
-	template<typename T>
-	void Ref<T, typename std::enable_if<std::is_same<SceneLayer, T>::value>::type>::SetName(const String& name)
-	{
-		mLayerName = name;
-		*this = o2Scene.GetLayer(name);
-	}
+    template<typename T>
+    void Ref<T, typename std::enable_if<std::is_same<SceneLayer, T>::value>::type>::SetName(const String& name)
+    {
+        mLayerName = name;
+        *this = o2Scene.GetLayer(name);
+    }
 
-	template<typename T>
-	void Ref<T, typename std::enable_if<std::is_same<SceneLayer, T>::value>::type>::OnDeserialized(const DataValue& node)
-	{
-		*this = o2Scene.GetLayer(mLayerName).Get();
-	}
+    template<typename T>
+    void Ref<T, typename std::enable_if<std::is_same<SceneLayer, T>::value>::type>::OnDeserialized(const DataValue& node)
+    {
+        *this = o2Scene.GetLayer(mLayerName).Get();
+    }
 }
 // --- META ---
 
@@ -188,7 +179,7 @@ CLASS_METHODS_META(o2::SceneLayer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<ISceneDrawable>>&, GetDrawables);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<ISceneDrawable>>&, GetDrawables);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<SceneLayerRootDrawablesContainer>&, GetRootDrawables);
     FUNCTION().PROTECTED().SIGNATURE(void, RegisterDrawable, ISceneDrawable*);
     FUNCTION().PROTECTED().SIGNATURE(void, UnregisterDrawable, ISceneDrawable*);

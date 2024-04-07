@@ -19,7 +19,7 @@ namespace o2
     public:
 		PROPERTIES(ParticlesEmitter);
 
-		PROPERTY(ImageAssetRef, image, SetImage, GetImage); // Particle image property
+		PROPERTY(Ref<ImageAsset>, image, SetImage, GetImage); // Particle image property
 
 		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape); // Emitting shape property @EDITOR_IGNORE
 
@@ -85,10 +85,10 @@ namespace o2
         float GetEmittingCoef() const;
 
         // Sets particle sprite image
-        void SetImage(const ImageAssetRef& image);
+        void SetImage(const Ref<ImageAsset>& image);
 
         // Returns particle sprite image
-        ImageAssetRef GetImage() const;
+        Ref<ImageAsset> GetImage() const;
 
         // Sets emitting shape
         void SetShape(const Ref<ParticlesEmitterShape>& shape);
@@ -239,7 +239,7 @@ namespace o2
         CLONEABLE_REF(ParticlesEmitter);
 
     protected:
-        ImageAssetRef mImageAsset; // Particle sprite image @SERIALIZABLE
+        Ref<ImageAsset> mImageAsset; // Particle sprite image @SERIALIZABLE
 
         Ref<ParticlesEmitterShape> mShape = nullptr; // Particles emitting shape @SERIALIZABLE @EDITOR_PROPERTY 
 
@@ -384,8 +384,8 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(void, Stop);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEmittingCoef, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetEmittingCoef);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const ImageAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(ImageAssetRef, GetImage);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const Ref<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<ImageAsset>, GetImage);
     FUNCTION().PUBLIC().SIGNATURE(void, SetShape, const Ref<ParticlesEmitterShape>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<ParticlesEmitterShape>&, GetShape);
     FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, const Ref<ParticlesEffect>&);

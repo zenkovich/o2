@@ -158,7 +158,7 @@ namespace o2
     {
         ClearStyle();
 
-        FolderAssetRef folder(stylesPath);
+        Ref<FolderAsset> folder(stylesPath);
         for (auto& subAsset : folder->GetChildrenAssets())
         {
             if (auto actorAsset = DynamicCast<ActorAsset>(subAsset))

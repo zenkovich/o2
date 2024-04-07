@@ -104,7 +104,7 @@ namespace o2
     template<typename _type, typename ... _args>
     void VectorFontAsset::AddEffect(_args ... args)
     {
-        AddEffect(mnew _type(args ...));
+        AddEffect(mmake<_type>(args ...));
     }
 }
 // --- META ---

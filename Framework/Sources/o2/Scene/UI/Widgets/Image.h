@@ -15,7 +15,7 @@ namespace o2
     public:
         PROPERTIES(Image);
         PROPERTY(Ref<Sprite>, image, SetImage, GetImage);                  // Image sprite @SCRIPTABLE
-        PROPERTY(ImageAssetRef, imageAsset, SetImageAsset, GetImageAsset); // Image asset @SCRIPTABLE
+        PROPERTY(Ref<ImageAsset>, imageAsset, SetImageAsset, GetImageAsset); // Image asset @SCRIPTABLE
         PROPERTY(String, imageName, SetImageName, GetImageName);           // Image asset name @SCRIPTABLE
 
     public:
@@ -35,10 +35,10 @@ namespace o2
         Ref<Sprite> GetImage();
 
         // Sets image asset @SCRIPTABLE
-        void SetImageAsset(const ImageAssetRef& asset);
+        void SetImageAsset(const Ref<ImageAsset>& asset);
 
         // Returns image asset @SCRIPTABLE
-        ImageAssetRef GetImageAsset() const;
+        Ref<ImageAsset> GetImageAsset() const;
 
         // Sets image asset name @SCRIPTABLE
         void SetImageName(const String& name);
@@ -80,8 +80,8 @@ CLASS_METHODS_META(o2::Image)
     FUNCTION().PUBLIC().CONSTRUCTOR(const Image&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetImage, const Ref<Sprite>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Sprite>, GetImage);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetImageAsset, const ImageAssetRef&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ImageAssetRef, GetImageAsset);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetImageAsset, const Ref<ImageAsset>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<ImageAsset>, GetImageAsset);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetImageName, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(String, GetImageName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);

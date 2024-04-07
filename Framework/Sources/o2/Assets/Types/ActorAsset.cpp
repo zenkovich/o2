@@ -9,7 +9,7 @@
 namespace o2
 {
     ActorAsset::ActorAsset():
-        mActor(mnew Actor(ActorCreateMode::NotInScene))
+        mActor(mmake<Actor>(ActorCreateMode::NotInScene))
     {
         mActor->mIsAsset = true;
         mActor->mAssetId = ID();

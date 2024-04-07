@@ -217,11 +217,8 @@ namespace Editor
 				if (!layer->visible)
 					continue;
 
-				for (auto& drawableWeak : layer->GetDrawables()) 
-				{
-					if (auto drawable = drawableWeak.Lock())
-						drawable->Draw();
-				}
+				for (auto& drawable : layer->GetDrawables()) 
+					drawable->Draw();
 			}
 
 			o2Scene.EndDrawingScene();

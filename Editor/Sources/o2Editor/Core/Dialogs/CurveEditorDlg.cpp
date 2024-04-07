@@ -47,17 +47,17 @@ namespace Editor
 		*verScroll->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 10, -10);
 		mEditorWidget->SetVerScrollbar(verScroll);
 
-		mEditorWidget->SetMainHandleImages(ImageAssetRef("ui/CurveHandle.png"),
-										   ImageAssetRef("ui/CurveHandleHover.png"),
-										   ImageAssetRef("ui/CurveHandlePressed.png"),
-										   ImageAssetRef("ui/CurveHandleSelected.png"));
+		mEditorWidget->SetMainHandleImages(Ref<ImageAsset>("ui/CurveHandle.png"),
+										   Ref<ImageAsset>("ui/CurveHandleHover.png"),
+										   Ref<ImageAsset>("ui/CurveHandlePressed.png"),
+										   Ref<ImageAsset>("ui/CurveHandleSelected.png"));
 
-		mEditorWidget->SetSupportHandleImages(ImageAssetRef("ui/CurveSupportHandle.png"),
-											  ImageAssetRef("ui/CurveSupportHandleHover.png"),
-											  ImageAssetRef("ui/CurveSupportHandlePressed.png"),
-											  ImageAssetRef("ui/CurveSupportHandleSelected.png"));
+		mEditorWidget->SetSupportHandleImages(Ref<ImageAsset>("ui/CurveSupportHandle.png"),
+											  Ref<ImageAsset>("ui/CurveSupportHandleHover.png"),
+											  Ref<ImageAsset>("ui/CurveSupportHandlePressed.png"),
+											  Ref<ImageAsset>("ui/CurveSupportHandleSelected.png"));
 
-		mEditorWidget->SetSelectionSpriteImage(ImageAssetRef("ui/UI_Window_place.png"));
+		mEditorWidget->SetSelectionSpriteImage(Ref<ImageAsset>("ui/UI_Window_place.png"));
 
 		mWindow->AddChild(mEditorWidget);
 	}

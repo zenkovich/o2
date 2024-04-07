@@ -55,6 +55,9 @@ namespace o2
         // Returns reference counter, creates if not created
         RefCounter* GetRefCounter() const;
 
+        // Returns true if object has reference counter
+        bool HasRefCounter() const;
+
         template<typename _type>
         friend class BaseRef;
 
@@ -297,12 +300,26 @@ namespace o2
     friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
 
     // Static check for presence of PostRefConstruct method
-	template<class T, class = std::void_t<>>
-	struct HasPostRefConstruct : std::false_type {};
+    template<class T, class = std::void_t<>>
+    struct HasPostRefConstruct : std::false_type {};
 
     // Static check for presence of PostRefConstruct method
-	template<class T>
-	struct HasPostRefConstruct<T, std::void_t<decltype(&T::PostRefConstruct)>> : std::true_type {};
+    template<class T>
+    struct HasPostRefConstruct<T, std::void_t<decltype(&T::PostRefConstruct)>> : std::true_type {};
+
+    template<typename T, typename ... _args>
+    struct HasRefConstructArgs
+    {
+    private:
+        template<typename C>
+        static auto test(_args ... args) -> decltype(std::declval<C>().RefConstruct(args ...), std::true_type{});
+
+        template<typename>
+        static auto test(...) -> std::false_type;
+
+    public:
+        static constexpr bool value = decltype(test<T>(0))::value;
+    };
 
     // Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together. 
     // Stores location and line of creation for debug
@@ -327,7 +344,10 @@ namespace o2
             object->mRefCounter = refCounter;
         }
 
-        if constexpr (HasPostRefConstruct<_type>::value) 
+        if constexpr (HasRefConstructArgs<_type, _args...>::value)
+            object->RefConstruct(std::forward<_args>(args)...);
+
+        if constexpr (HasPostRefConstruct<_type>::value)
             object->PostRefConstruct();
 
         refCounter->strongReferences -= 1;

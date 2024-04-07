@@ -241,7 +241,7 @@ namespace Editor
 		return mContextMenu;
 	}
 
-	void CurvesEditor::SetSelectionSpriteImage(const ImageAssetRef& image)
+	void CurvesEditor::SetSelectionSpriteImage(const Ref<ImageAsset>& image)
 	{
 		mSelectionSprite->LoadFromImage(image);
 	}
@@ -260,15 +260,15 @@ namespace Editor
 		mTextBorder = border;
 	}
 
-	void CurvesEditor::SetMainHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover,
-										   const ImageAssetRef& pressed, const ImageAssetRef& selected)
+	void CurvesEditor::SetMainHandleImages(const Ref<ImageAsset>& regular, const Ref<ImageAsset>& hover,
+										   const Ref<ImageAsset>& pressed, const Ref<ImageAsset>& selected)
 	{
 		mMainHandleSample.curveInfo = mHandleSamplesStubInfo;
 		mMainHandleSample = CurveHandle(mmake<Sprite>(regular), mmake<Sprite>(hover),
 										mmake<Sprite>(pressed), mmake<Sprite>(selected));
 	}
 
-	void CurvesEditor::SetSupportHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed, const ImageAssetRef& selected)
+	void CurvesEditor::SetSupportHandleImages(const Ref<ImageAsset>& regular, const Ref<ImageAsset>& hover, const Ref<ImageAsset>& pressed, const Ref<ImageAsset>& selected)
 	{
 		mSupportHandleSample.curveInfo = mHandleSamplesStubInfo;
 		mSupportHandleSample = CurveHandle(mmake<Sprite>(regular), mmake<Sprite>(hover),
@@ -346,16 +346,16 @@ namespace Editor
 
 			ContextMenu::Item::Separator(),
 
-			mmake<ContextMenu::Item>("Copy keys", THIS_FUNC(OnCopyPressed), "", ImageAssetRef(), ShortcutKeys('C', true)),
-			mmake<ContextMenu::Item>("Cut keys", THIS_FUNC(OnCutPressed), "", ImageAssetRef(), ShortcutKeys('X', true)),
-			mmake<ContextMenu::Item>("Paste keys", THIS_FUNC(OnPastePressed), "", ImageAssetRef(), ShortcutKeys('V', true)),
-			mmake<ContextMenu::Item>("Delete keys", THIS_FUNC(OnDeletePressed), "", ImageAssetRef(), ShortcutKeys(VK_DELETE)),
+			mmake<ContextMenu::Item>("Copy keys", THIS_FUNC(OnCopyPressed), "", Ref<ImageAsset>(), ShortcutKeys('C', true)),
+			mmake<ContextMenu::Item>("Cut keys", THIS_FUNC(OnCutPressed), "", Ref<ImageAsset>(), ShortcutKeys('X', true)),
+			mmake<ContextMenu::Item>("Paste keys", THIS_FUNC(OnPastePressed), "", Ref<ImageAsset>(), ShortcutKeys('V', true)),
+			mmake<ContextMenu::Item>("Delete keys", THIS_FUNC(OnDeletePressed), "", Ref<ImageAsset>(), ShortcutKeys(VK_DELETE)),
 			mmake<ContextMenu::Item>("Insert key", THIS_FUNC(OnInsertPressed)),
 
 			ContextMenu::Item::Separator(),
 
-			mmake<ContextMenu::Item>("Undo", THIS_FUNC(OnUndoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true)),
-			mmake<ContextMenu::Item>("Redo", THIS_FUNC(OnRedoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true, true))
+			mmake<ContextMenu::Item>("Undo", THIS_FUNC(OnUndoPressed), "", Ref<ImageAsset>(), ShortcutKeys('Z', true)),
+			mmake<ContextMenu::Item>("Redo", THIS_FUNC(OnRedoPressed), "", Ref<ImageAsset>(), ShortcutKeys('Z', true, true))
 			}
 		);
 
@@ -1777,11 +1777,11 @@ namespace Editor
 		if (!IsFocused())
 			return;
 
-		Vector<CurveCopyInfo*> copyKeys;
+		Vector<Ref<CurveCopyInfo>> copyKeys;
 
 		for (auto& curve : mCurves)
 		{
-			CurveCopyInfo* copyInfo = mnew CurveCopyInfo();
+			auto copyInfo = mmake<CurveCopyInfo>();
 			copyInfo->curveId = curve->curveId;
 
 			for (auto& handles : curve->handles)
@@ -1792,9 +1792,7 @@ namespace Editor
 				copyInfo->keys.Add(curve->curve->GetKeyAt(handles->curveKeyIdx));
 			}
 
-			if (copyInfo->keys.IsEmpty())
-				delete copyInfo;
-			else
+			if (!copyInfo->keys.IsEmpty())
 				copyKeys.Add(copyInfo);
 		}
 
@@ -1885,7 +1883,7 @@ namespace Editor
 		{
 			curveInfo->BeginCurveManualChange();
 
-			CurveCopyInfo* copyInfo = mnew CurveCopyInfo();
+			auto copyInfo = mmake<CurveCopyInfo>();
 			copyInfo->curveId = curveInfo->curveId;
 
 			Vector<int> removingIdxs;

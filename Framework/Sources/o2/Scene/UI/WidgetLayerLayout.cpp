@@ -5,18 +5,12 @@
 
 namespace o2
 {
-
-    WidgetLayerLayout::WidgetLayerLayout(const Ref<WidgetLayer>& widgetLayer) :
-        mWidgetLayer(widgetLayer)
+    WidgetLayerLayout::WidgetLayerLayout()
     {}
 
-    WidgetLayerLayout::WidgetLayerLayout(const Ref<WidgetLayer>& widgetLayer, const WidgetLayerLayout& other) :
-        mWidgetLayer(widgetLayer), mAnchorMin(other.mAnchorMin), mAnchorMax(other.mAnchorMax), mOffsetMin(other.mOffsetMin),
+    WidgetLayerLayout::WidgetLayerLayout(const WidgetLayerLayout& other) :
+        mAnchorMin(other.mAnchorMin), mAnchorMax(other.mAnchorMax), mOffsetMin(other.mOffsetMin),
         mOffsetMax(other.mOffsetMax)
-    {}
-
-    WidgetLayerLayout::WidgetLayerLayout() :
-        mWidgetLayer(nullptr)
     {}
 
     WidgetLayerLayout::operator Layout() const
@@ -66,6 +60,11 @@ namespace o2
         mOffsetMax = other.offsetMax;
 
         return *this;
+    }
+
+    void WidgetLayerLayout::SetOwner(const Ref<WidgetLayer>& widgetLayer)
+    {
+        mWidgetLayer = widgetLayer;
     }
 
     RectF WidgetLayerLayout::Calculate(const RectF& source)

@@ -275,8 +275,8 @@ namespace o2
         Vector<Ref<WidgetLayer>> mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 
         Ref<WidgetState> mFocusedState;        // Focused widget state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
-		bool             mIsFocused = false;   // Is widget focused
-		bool             mIsFocusable = false; // Is widget can be focused @SERIALIZABLE
+        bool             mIsFocused = false;   // Is widget focused
+        bool             mIsFocusable = false; // Is widget can be focused @SERIALIZABLE
 
         Ref<WidgetState> mVisibleState; // Widget visibility state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
 
@@ -285,9 +285,9 @@ namespace o2
         RectF mBounds;           // Widget bounds by drawing layers
         RectF mBoundsWithChilds; // Widget with childs bounds
 
-	protected:
-		// It is called after reference initialization at object construction, registers texture in render
-		void PostRefConstruct();
+    protected:
+        // It is called after reference initialization at object construction, registers texture in render
+        void PostRefConstruct();
 
         // Regular serializing without prototype
         void SerializeRaw(DataValue& node) const override;
@@ -474,9 +474,9 @@ namespace o2
         friend class VerticalScrollBar;
         friend class WidgetLayer;
         friend class WidgetLayout;
-		friend class Window;
+        friend class Window;
 
-		FRIEND_REF_MAKE();
+        FRIEND_REF_MAKE();
 
 #if IS_EDITOR
     public:
@@ -492,9 +492,6 @@ namespace o2
         public:
             // Default constructor
             LayersEditable();
-
-            // Constructor with widget
-            LayersEditable(const Ref<Widget>& widget);
 
             // Returns unique id
             SceneUID GetID() const override;
@@ -549,9 +546,6 @@ namespace o2
         public:
             // Default constructor
             InternalChildrenEditableEditable();
-
-            // Constructor with widget
-            InternalChildrenEditableEditable(const Ref<Widget>& widget);
 
             // Returns unique id
             SceneUID GetID() const override;
@@ -634,6 +628,10 @@ namespace o2
 
         // Returns pointer to owner editable object
         Ref<SceneEditableObject> GetEditableOwner() override;
+
+    protected:
+        // Initializes layers and internal children editables
+        void InitEditables();
 
         friend class LayersEditable;
         friend class InternalChildrenEditableEditable;
@@ -902,6 +900,7 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetLayout);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableOwner);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitEditables);
 #endif
 }
 END_META;
@@ -926,7 +925,6 @@ CLASS_METHODS_META(o2::Widget::LayersEditable)
 
 #if  IS_EDITOR
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
     FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
@@ -964,7 +962,6 @@ CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 
 #if  IS_EDITOR
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
     FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);

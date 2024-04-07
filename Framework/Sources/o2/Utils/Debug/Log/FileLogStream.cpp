@@ -21,6 +21,11 @@ namespace o2
             ofs.close();
     }
 
+    void FileLogStream::RefConstruct(const WString& id, const String& fileName)
+    {
+        this->filename = fileName;
+    }
+
     FileLogStream::~FileLogStream()
     {
     }

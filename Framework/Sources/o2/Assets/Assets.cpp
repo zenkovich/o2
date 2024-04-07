@@ -122,7 +122,7 @@ namespace o2
                 return Ref<Asset>();
 
             auto type = assetInfo.meta->GetAssetType();
-            Asset* asset = (Asset*)type->CreateSample();
+            auto asset = DynamicCast<Asset>(type->CreateSampleRef());
             asset->Load(assetInfo);
 
             cached = FindAssetCache(asset->GetUID());
@@ -144,7 +144,7 @@ namespace o2
                 return Ref<Asset>();
             }
 
-            Asset* asset = (Asset*)assetInfo.meta->GetAssetType()->CreateSample();
+            auto asset = DynamicCast<Asset>(assetInfo.meta->GetAssetType()->CreateSampleRef());
             asset->Load(assetInfo);
 
             cached = FindAssetCache(id);
@@ -228,7 +228,7 @@ namespace o2
         if (info.meta->GetAssetType() == &TypeOf(FolderAsset))
         {
             o2FileSystem.FolderCreate(GetAssetsPath() + dest);
-            FolderAssetRef folderAsset(info.path);
+            Ref<FolderAsset> folderAsset(info.path);
 
             for (auto inInfo : folderAsset->GetChildrenAssets())
                 CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo->GetPath()));
