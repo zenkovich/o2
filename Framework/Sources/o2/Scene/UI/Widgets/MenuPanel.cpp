@@ -38,8 +38,6 @@ namespace o2
         mLayout = FindChildByType<HorizontalLayout>();
 
         RetargetStatesAnimations();
-        UpdateSelfTransform();
-        UpdateChildrenTransforms();
     }
 
     MenuPanel::~MenuPanel()

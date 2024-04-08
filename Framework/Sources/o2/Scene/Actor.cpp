@@ -17,18 +17,56 @@ namespace o2
                  SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/) :
         transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(false),
         mId(id), mAssetId(assetId), mState(State::Initializing), mIsOnScene(onScene)
-    {
-        tags.onTagAdded = [&](const Ref<Tag>& tag) { tag->mActors.Add(WeakRef(this)); };
-        tags.onTagRemoved = [&](const Ref<Tag>& tag) { tag->mActors.Remove(WeakRef(this)); };
-    }
+    {}
 
     Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(transform, IsModeOnScene(mode))
-    {
-    }
+    {}
 
     Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(transform, IsModeOnScene(mode), other.mName, other.mEnabled, Math::Random(), other.mAssetId)
+    {}
+
+    Actor::Actor(ActorTransform* transform, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(transform, *prototype->GetActor(), mode)
+    {}
+
+    Actor::Actor(ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(transform, mode)
+    {}
+
+    Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/) :
+        Actor(mnew ActorTransform(), mode)
+    {}
+
+    Actor::Actor(Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(mnew ActorTransform(), components, mode)
+    {}
+
+    Actor::Actor(const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= CreateMode::Default*/) :
+        Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
+    {}
+
+    Actor::Actor(const Actor& other, ActorCreateMode mode) :
+        Actor(mnew ActorTransform(*other.transform), other, mode)
+    {}
+
+    Actor::Actor(const Actor& other) :
+        Actor(other, ActorCreateMode::Default)
+    {}
+
+    void Actor::RefConstruct(const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/)
+    {
+        RefConstruct(*prototype->GetActor(), mode);
+    }
+
+    void Actor::RefConstruct(Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/)
+    {
+        for (auto& comp : components)
+            AddComponent(comp);
+    }
+
+    void Actor::RefConstruct(const Actor& other, ActorCreateMode mode)
     {
         ActorRefResolver::LockResolving();
 
@@ -77,48 +115,20 @@ namespace o2
         other.CheckCopyVisitorFinalization();
     }
 
-    Actor::Actor(ActorTransform* transform, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-        Actor(transform, *prototype->GetActor(), mode)
-    {}
-
-    Actor::Actor(ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-        Actor(transform, mode)
+    void Actor::RefConstruct(const Actor& other)
     {
-        for (auto& comp : components)
-            AddComponent(comp);
+        RefConstruct(other, ActorCreateMode::Default);
     }
-
-    Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/) :
-        Actor(mnew ActorTransform(), mode)
-    {}
-
-    Actor::Actor(Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-        Actor(mnew ActorTransform(), components, mode)
-    {}
-
-    Actor::Actor(const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= CreateMode::Default*/) :
-        Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
-    {}
-
-    Actor::Actor(const Actor& other, ActorCreateMode mode) :
-        Actor(mnew ActorTransform(*other.transform), other, mode)
-    {}
-
-    Actor::Actor(const Actor& other) :
-        Actor(other, ActorCreateMode::Default)
-    {}
 
     void Actor::PostRefConstruct()
     {
+        tags.onTagAdded = [&](const Ref<Tag>& tag) { tag->mActors.Add(WeakRef(this)); };
+        tags.onTagRemoved = [&](const Ref<Tag>& tag) { tag->mActors.Remove(WeakRef(this)); };
+
         transform->SetOwner(Ref(this));
 
         Scene::OnActorCreated(this);
         ActorRefResolver::ActorCreated(this);
-
-#if IS_EDITOR
-        if (mPrototype)
-            Scene::LinkActorToPrototypesHierarchy(Ref(this), mPrototype);
-#endif
     }
 
     Actor::~Actor()

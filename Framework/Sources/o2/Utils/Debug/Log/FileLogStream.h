@@ -18,8 +18,6 @@ namespace o2
         // Constructor with id and file name
         FileLogStream(const WString& id, const String& fileName);
 
-        void RefConstruct(const WString& id, const String& fileName);
-
         // Destructor
         ~FileLogStream();
 

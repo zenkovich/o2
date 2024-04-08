@@ -386,6 +386,18 @@ namespace o2
         // Copy-constructor with transform
         Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode = ActorCreateMode::Default);
 
+        // Actor ref constructor from prototype
+        void RefConstruct(const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+
+        // Ref constructor with components
+        void RefConstruct(Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
+
+        // Ref copy-constructor
+        void RefConstruct(const Actor& other, ActorCreateMode mode);
+
+        // Ref copy-constructor
+        void RefConstruct(const Actor& other);
+
         // It is called after reference initialization at object construction
         void PostRefConstruct();
         
@@ -904,6 +916,10 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Ref<ActorAsset>&, ActorCreateMode);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Ref<Component>>, ActorCreateMode);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Actor&, ActorCreateMode);
+    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, const Ref<ActorAsset>&, ActorCreateMode);
+    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, Vector<Ref<Component>>, ActorCreateMode);
+    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, const Actor&, ActorCreateMode);
+    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, const Actor&);
     FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckCopyVisitorFinalization);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled, bool);

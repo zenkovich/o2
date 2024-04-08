@@ -22,7 +22,6 @@ namespace o2
         mBackLayer = FindLayer("back");
 
         RetargetStatesAnimations();
-        UpdateSelfTransform();
     }
 
     HorizontalScrollBar::~HorizontalScrollBar()

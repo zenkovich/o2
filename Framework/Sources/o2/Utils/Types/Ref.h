@@ -307,12 +307,13 @@ namespace o2
     template<class T>
     struct HasPostRefConstruct<T, std::void_t<decltype(&T::PostRefConstruct)>> : std::true_type {};
 
-    template<typename T, typename ... _args>
+    // Static check for presence of RefConstruct method with specified arguments
+    template<typename T, typename... Args>
     struct HasRefConstructArgs
     {
     private:
         template<typename C>
-        static auto test(_args ... args) -> decltype(std::declval<C>().RefConstruct(args ...), std::true_type{});
+        static auto test(int) -> decltype(std::declval<C>().template RefConstruct(std::declval<Args>()...), std::true_type{});
 
         template<typename>
         static auto test(...) -> std::false_type;
@@ -344,7 +345,7 @@ namespace o2
             object->mRefCounter = refCounter;
         }
 
-        if constexpr (HasRefConstructArgs<_type, _args...>::value)
+        if constexpr (HasRefConstructArgs<_type, _args ...>::value)
             object->RefConstruct(std::forward<_args>(args)...);
 
         if constexpr (HasPostRefConstruct<_type>::value)

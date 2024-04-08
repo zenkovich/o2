@@ -16,33 +16,53 @@ namespace o2
 {
     Widget::Widget(ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), mode), layout(dynamic_cast<WidgetLayout*>(transform))
-    {
-#if IS_EDITOR
-        InitEditables();
-#endif
-    }
+    {}
 
     Widget::Widget(const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
-    {
-#if IS_EDITOR
-        InitEditables();
-#endif
-    }
+    {}
 
     Widget::Widget(Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
-    {
-#if IS_EDITOR
-        InitEditables();
-#endif
-    }
+    {}
 
     Widget::Widget(const Widget& other) :
         Actor(mnew WidgetLayout(*other.layout), other), layout(dynamic_cast<WidgetLayout*>(transform)),
         mTransparency(other.mTransparency), transparency(this), resTransparency(this),
         childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
+    {}
+
+    void Widget::RefConstruct(ActorCreateMode mode /*= ActorCreateMode::Default*/)
     {
+        Actor::RefConstruct(mode);
+
+#if IS_EDITOR
+        InitEditables();
+#endif
+    }
+
+    void Widget::RefConstruct(const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/)
+    {
+        Actor::RefConstruct(prototype, mode);
+
+#if IS_EDITOR
+        InitEditables();
+#endif
+    }
+
+    void Widget::RefConstruct(Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/)
+    {
+        Actor::RefConstruct(components, mode);
+
+#if IS_EDITOR
+        InitEditables();
+#endif
+    }
+
+    void Widget::RefConstruct(const Widget& other)
+    {
+        Actor::RefConstruct(other);
+
 #if IS_EDITOR
         InitEditables();
 #endif
@@ -114,17 +134,12 @@ namespace o2
         RetargetStatesAnimations();
     }
 
-	void Widget::PostRefConstruct()
+    void Widget::PostRefConstruct()
 	{
         Actor::PostRefConstruct();
 
 		if (IsFocusable())
 			UIManager::RegisterFocusableWidget(this);
-
-#if IS_EDITOR
-        layersEditable->widget = Ref(this);
-        internalChildrenEditable->widget = Ref(this);
-#endif
 	}
 
 	Widget::~Widget()
@@ -1511,11 +1526,15 @@ namespace o2
 
     void Widget::InitEditables()
     {
-        layersEditable = mmake<LayersEditable>();
-        internalChildrenEditable = mmake<InternalChildrenEditableEditable>();
+        layersEditable = mmake<LayersEditable>(Ref(this));
+        internalChildrenEditable = mmake<InternalChildrenEditableEditable>(Ref(this));
     }
 
     Widget::LayersEditable::LayersEditable()
+    {}
+
+    Widget::LayersEditable::LayersEditable(const Ref<Widget>& widget):
+        widget(widget)
     {}
 
     SceneUID Widget::LayersEditable::GetID() const
@@ -1575,6 +1594,10 @@ namespace o2
     }
 
     Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable()
+    {}
+
+    Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(const Ref<Widget>& widget) :
+        widget(widget)
     {}
 
     SceneUID Widget::InternalChildrenEditableEditable::GetID() const
