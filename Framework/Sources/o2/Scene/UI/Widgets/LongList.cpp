@@ -8,8 +8,8 @@
 
 namespace o2
 {
-    LongList::LongList():
-        ScrollArea(), mHoverLayout(Layout::BothStretch()),
+    LongList::LongList(RefCounter* refCounter):
+        ScrollArea(refCounter), mHoverLayout(Layout::BothStretch()),
         mSelectionLayout(Layout::BothStretch())
     {
         mItemSample = mmake<Widget>();
@@ -17,8 +17,8 @@ namespace o2
         mHoverDrawable = mmake<Sprite>();
     }
 
-    LongList::LongList(const LongList& other):
-        ScrollArea(other), mHoverLayout(other.mHoverLayout),
+    LongList::LongList(RefCounter* refCounter, const LongList& other):
+        ScrollArea(refCounter, other), mHoverLayout(other.mHoverLayout),
         mSelectionLayout(other.mSelectionLayout), selectedItemPos(this)
     {
         mItemSample = other.mItemSample->CloneAsRef<Widget>();

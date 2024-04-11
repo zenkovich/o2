@@ -5,14 +5,15 @@
 
 namespace o2
 {
-    HorizontalLayout::HorizontalLayout(): Widget()
+    HorizontalLayout::HorizontalLayout(RefCounter* refCounter):
+        Widget(refCounter)
     {
         SetLayoutDirty();
     }
 
-    HorizontalLayout::HorizontalLayout(const HorizontalLayout& other) :
-        mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
-        mExpandHeight(other.mExpandHeight), Widget(other), mFitByChildren(other.mFitByChildren), baseCorner(this),
+    HorizontalLayout::HorizontalLayout(RefCounter* refCounter, const HorizontalLayout& other) :
+        Widget(refCounter, other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
+        mExpandHeight(other.mExpandHeight), mFitByChildren(other.mFitByChildren), baseCorner(this),
         spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
         borderTop(this), borderBottom(this), fitByChildren(this)
     {

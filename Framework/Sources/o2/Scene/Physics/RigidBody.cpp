@@ -7,11 +7,12 @@
 
 namespace o2
 {
-    RigidBody::RigidBody()
+    RigidBody::RigidBody(RefCounter* refCounter):
+        Actor(refCounter)
     {}
 
-    RigidBody::RigidBody(const RigidBody& other):
-        Actor(other), mBodyType(other.mBodyType), mMass(other.mMass), mInertia(other.mInertia),
+    RigidBody::RigidBody(RefCounter* refCounter, const RigidBody& other):
+        Actor(refCounter, other), mBodyType(other.mBodyType), mMass(other.mMass), mInertia(other.mInertia),
         mLinearDamping(other.mLinearDamping), mAngularDamping(other.mAngularDamping), mGravityScale(other.mGravityScale),
         mIsBullet(other.mIsBullet), mIsFixedRotation(other.mIsFixedRotation)
     {}

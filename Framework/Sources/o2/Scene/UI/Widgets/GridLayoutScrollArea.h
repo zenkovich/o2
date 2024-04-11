@@ -19,10 +19,10 @@ namespace o2
 
     public:
         // Default constructor
-        GridLayoutScrollArea();
+        explicit GridLayoutScrollArea(RefCounter* refCounter);
 
         // Copy-constructor
-        GridLayoutScrollArea(const GridLayoutScrollArea& other);
+        GridLayoutScrollArea(RefCounter* refCounter, const GridLayoutScrollArea& other);
 
         // Destructor
         ~GridLayoutScrollArea();
@@ -129,8 +129,8 @@ END_META;
 CLASS_METHODS_META(o2::GridLayoutScrollArea)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const GridLayoutScrollArea&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const GridLayoutScrollArea&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
     FUNCTION().PUBLIC().SIGNATURE(void, SetItemsSpacing, const Vec2F&);

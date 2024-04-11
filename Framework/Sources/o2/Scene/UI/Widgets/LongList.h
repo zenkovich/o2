@@ -25,10 +25,10 @@ namespace o2
 
     public:
         // Default constructor
-        LongList();
+        explicit LongList(RefCounter* refCounter);
 
         // Copy-constructor
-        LongList(const LongList& other);
+        LongList(RefCounter* refCounter, const LongList& other);
 
         // Destructor
         ~LongList();
@@ -196,8 +196,8 @@ END_META;
 CLASS_METHODS_META(o2::LongList)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const LongList&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const LongList&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);

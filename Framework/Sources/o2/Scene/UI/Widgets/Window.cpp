@@ -14,15 +14,15 @@
 
 namespace o2
 {
-    Window::Window():
-        ScrollArea()
+    Window::Window(RefCounter* refCounter):
+        ScrollArea(refCounter)
     {
         InitializeHandles();
         InitializeContextMenu();
     }
 
-    Window::Window(const Window& other):
-        ScrollArea(other), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
+    Window::Window(RefCounter* refCounter, const Window& other):
+        ScrollArea(refCounter, other), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
         mTopDragAreaLayout(other.mTopDragAreaLayout), mBottomDragAreaLayout(other.mBottomDragAreaLayout),
         mLeftDragAreaLayout(other.mLeftDragAreaLayout), mRightDragAreaLayout(other.mRightDragAreaLayout),
         mLeftTopDragAreaLayout(other.mLeftTopDragAreaLayout), mRightTopDragAreaLayout(other.mRightTopDragAreaLayout),

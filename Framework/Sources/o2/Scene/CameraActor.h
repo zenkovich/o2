@@ -23,10 +23,10 @@ namespace o2
 
     public:
         // Default constructor
-        CameraActor();
+        CameraActor(RefCounter* refCounter);
 
         // Copy constructor
-        CameraActor(const CameraActor& other);
+        CameraActor(RefCounter* refCounter, const CameraActor& other);
 
         // Destructor
         ~CameraActor() override;
@@ -103,8 +103,8 @@ END_META;
 CLASS_METHODS_META(o2::CameraActor)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CameraActor&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CameraActor&);
     FUNCTION().PUBLIC().SIGNATURE(void, Setup);
     FUNCTION().PUBLIC().SIGNATURE(void, SetupAndDraw);
     FUNCTION().PUBLIC().SIGNATURE(Camera, GetRenderCamera);

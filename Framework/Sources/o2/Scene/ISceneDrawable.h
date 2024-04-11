@@ -25,10 +25,10 @@ namespace o2
 
     public:
         // Default constructor
-        ISceneDrawable();
+        ISceneDrawable(RefCounter* refCounter);
 
         // Copy-constructor
-        ISceneDrawable(const ISceneDrawable& other);
+        ISceneDrawable(RefCounter* refCounter, const ISceneDrawable& other);
 
         // Destructor
         ~ISceneDrawable() override;
@@ -134,7 +134,10 @@ namespace o2
     // Root drawables container. It is used to draw all root drawables with inherited depth
     // ------------------------------------------------------------------------------------
     class SceneLayerRootDrawablesContainer : public ISceneDrawable
-    {};
+    {
+    public:
+        SceneLayerRootDrawablesContainer(RefCounter* refCounter): ISceneDrawable(refCounter) {}
+    };
 }
 // --- META ---
 
@@ -165,8 +168,8 @@ END_META;
 CLASS_METHODS_META(o2::ISceneDrawable)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ISceneDrawable&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ISceneDrawable&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepth, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDrawingDepth);

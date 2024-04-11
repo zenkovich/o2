@@ -40,6 +40,13 @@ namespace o2
     class RefCounterable
     {
     public:
+        // Default constructor
+        RefCounterable() {}
+
+        // Constructor with reference counter
+        RefCounterable(RefCounter* refCounter);
+
+        // Virtual destructor, for inheritance
         virtual ~RefCounterable() {}
 
         // Returns strong references count

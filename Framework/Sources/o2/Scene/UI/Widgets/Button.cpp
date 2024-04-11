@@ -8,12 +8,12 @@
 
 namespace o2
 {
-    Button::Button():
-        Widget(), CursorAreaEventsListener()
+    Button::Button(RefCounter* refCounter):
+        Widget(refCounter), CursorAreaEventsListener()
     {}
 
-    Button::Button(const Button& other) :
-        Widget(other), caption(this), icon(this)
+    Button::Button(RefCounter* refCounter, const Button& other) :
+        Widget(refCounter, other), caption(this), icon(this)
     {
         mCaptionText = GetLayerDrawable<Text>("caption");
         mIconSprite = GetLayerDrawable<Sprite>("icon");

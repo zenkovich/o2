@@ -41,10 +41,10 @@ namespace o2
 
     public:
         // Default constructor
-        Tree();
+        explicit Tree(RefCounter* refCounter);
 
         // Copy-constructor
-        Tree(const Tree& other);
+        Tree(RefCounter* refCounter, const Tree& other);
 
         // Destructor
         ~Tree();
@@ -504,10 +504,10 @@ namespace o2
     {
     public:
         // Default constructor
-        TreeNode();
+        explicit TreeNode(RefCounter* refCounter);
 
         // Copy-constructor
-        TreeNode(const TreeNode& other);
+        TreeNode(RefCounter* refCounter, const TreeNode& other);
 
         // Destructor
         ~TreeNode();
@@ -667,8 +667,8 @@ END_META;
 CLASS_METHODS_META(o2::Tree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Tree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Tree&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectCreated, void*, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectRemoved, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsChanged, const Vector<void*>&);
@@ -793,8 +793,8 @@ END_META;
 CLASS_METHODS_META(o2::TreeNode)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const TreeNode&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const TreeNode&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand, bool);

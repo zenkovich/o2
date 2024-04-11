@@ -26,10 +26,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		AnimationTimeline();
+        AnimationTimeline(RefCounter* refCounter);
 
 		// Copy-constructor
-		AnimationTimeline(const AnimationTimeline& other);
+        AnimationTimeline(RefCounter* refCounter, const AnimationTimeline& other);
 
 		// Destructor
 		~AnimationTimeline();
@@ -255,8 +255,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTimeline)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTimeline&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationTimeline&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&, const Ref<AnimationPlayer>&);

@@ -1029,7 +1029,7 @@ namespace o2
     template<typename _type>
     void* TObjectType<_type>::CreateSample() const
     {
-        if constexpr (IsConstructible<_type>::value || std::is_constructible<_type>::value)
+        if constexpr (IsConstructible<_type>::value && std::is_constructible<_type>::value)
             return mnew _type();
         else
         {

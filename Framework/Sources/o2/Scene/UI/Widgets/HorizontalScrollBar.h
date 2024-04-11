@@ -27,10 +27,10 @@ namespace o2
 
     public:
         // Constructor
-        HorizontalScrollBar();
+        explicit HorizontalScrollBar(RefCounter* refCounter);
 
         // Copy-constructor
-        HorizontalScrollBar(const HorizontalScrollBar& other);
+        HorizontalScrollBar(RefCounter* refCounter, const HorizontalScrollBar& other);
 
         // Destructor
         ~HorizontalScrollBar();
@@ -200,8 +200,8 @@ END_META;
 CLASS_METHODS_META(o2::HorizontalScrollBar)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const HorizontalScrollBar&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const HorizontalScrollBar&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueForcible, float);

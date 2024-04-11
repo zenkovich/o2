@@ -24,10 +24,10 @@ namespace o2
 
     public:
         // Default constructor
-        CustomDropDown();
+        explicit CustomDropDown(RefCounter* refCounter);
 
         // Copy-constructor
-        CustomDropDown(const CustomDropDown& other);
+        CustomDropDown(RefCounter* refCounter, const CustomDropDown& other);
 
         // Destructor
         ~CustomDropDown();
@@ -138,7 +138,6 @@ namespace o2
         void OnCursorPressed(const Input::Cursor& cursor) override;
 
         // Called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
-        // Called onClicked if cursor is still above this
         void OnCursorReleased(const Input::Cursor& cursor) override;
 
         // Called when cursor released outside this(only when cursor pressed this at previous time)
@@ -193,8 +192,8 @@ CLASS_METHODS_META(o2::CustomDropDown)
 
     typedef const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& _tmp1;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CustomDropDown&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CustomDropDown&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);

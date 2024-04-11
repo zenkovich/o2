@@ -24,10 +24,10 @@ namespace o2
 
     public:
         // Default constructor
-        Window();
+        explicit Window(RefCounter* refCounter);
 
         // Copy-constructor
-        Window(const Window& other);
+        Window(RefCounter* refCounter, const Window& other);
 
         // Destructor
         ~Window();
@@ -217,8 +217,8 @@ END_META;
 CLASS_METHODS_META(o2::Window)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Window&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Window&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, ShowModal);
     FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, const Ref<Sprite>&);

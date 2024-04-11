@@ -7,12 +7,12 @@
 
 namespace o2
 {
-    VerticalProgress::VerticalProgress():
-        Widget(), DrawableCursorEventsListener(this)
+    VerticalProgress::VerticalProgress(RefCounter* refCounter):
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {}
 
-    VerticalProgress::VerticalProgress(const VerticalProgress& other) :
-        Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+    VerticalProgress::VerticalProgress(RefCounter* refCounter, const VerticalProgress& other) :
+        Widget(refCounter, other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
         mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense), value(this),
         minValue(this), maxValue(this), scrollSense(this)
     {

@@ -27,10 +27,10 @@ namespace o2
 
     public:
         // Default constructor
-        HorizontalLayout();
+        explicit HorizontalLayout(RefCounter* refCounter);
 
         // Copy-constructor
-        HorizontalLayout(const HorizontalLayout& other);
+        HorizontalLayout(RefCounter* refCounter, const HorizontalLayout& other);
 
         // Destructor
         ~HorizontalLayout();
@@ -183,8 +183,8 @@ END_META;
 CLASS_METHODS_META(o2::HorizontalLayout)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const HorizontalLayout&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const HorizontalLayout&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBaseCorner, BaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(BaseCorner, GetBaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSpacing, float);

@@ -19,10 +19,10 @@ namespace o2
 
     public:
         // Default constructor
-        List();
+        explicit List(RefCounter* refCounter);
 
         // Copy-constructor
-        List(const List& other);
+        List(RefCounter* refCounter, const List& other);
 
         // Destructor
         ~List();
@@ -91,8 +91,8 @@ END_META;
 CLASS_METHODS_META(o2::List)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const List&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const List&);
     FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&, int);
     FUNCTION().PUBLIC().SIGNATURE(void, AddItems, const Vector<WString>&);

@@ -18,16 +18,16 @@
 
 namespace o2
 {
-    EditBox::EditBox():
-        ScrollArea()
+    EditBox::EditBox(RefCounter* refCounter):
+        ScrollArea(refCounter)
     {
         mSelectionMesh = mmake<Mesh>();
         mTextDrawable  = mmake<Text>();
         mCaretDrawable = mmake<Sprite>();
     }
 
-    EditBox::EditBox(const EditBox& other):
-        ScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
+    EditBox::EditBox(RefCounter* refCounter, const EditBox& other):
+        ScrollArea(refCounter, other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
         mMaxLinesCount(other.mMaxLinesCount), mText(other.mText), mLastText(other.mText),
         mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
         mCaretBlinkDelay(other.mCaretBlinkDelay), text(this), caret(this),

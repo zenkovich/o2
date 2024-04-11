@@ -9,8 +9,8 @@
 
 namespace Editor
 {
-	AnimationTimeline::AnimationTimeline() :
-		Widget()
+    AnimationTimeline::AnimationTimeline(RefCounter* refCounter) :
+		Widget(refCounter)
 	{
 		mTextFont = Ref<Font>("stdFont.ttf");
 		mTextFont->CheckCharacters("0123456789.,+-", 10);
@@ -39,8 +39,8 @@ namespace Editor
 		mTimeLineEventsArea.onCursorPressed = THIS_FUNC(SetAnimationTimeByCursor);
 	}
 
-	AnimationTimeline::AnimationTimeline(const AnimationTimeline& other) :
-		Widget(other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>()),
+    AnimationTimeline::AnimationTimeline(RefCounter* refCounter, const AnimationTimeline& other) :
+        Widget(refCounter, other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>()),
 		mBeginMark(other.mBeginMark->CloneAs<Sprite>()), mEndMark(other.mEndMark->CloneAs<Sprite>()),
 		mTimeLine(other.mTimeLine->CloneAs<Sprite>())
 	{ }

@@ -90,8 +90,8 @@ namespace o2
 		onChecked(checked);
 	}
 
-	ContextMenu::ContextMenu() :
-		PopupWidget()
+	ContextMenu::ContextMenu(RefCounter* refCounter) :
+		PopupWidget(refCounter)
 	{
 		mItemSample = mmake<ContextMenuItem>();
 		mItemSample->RemoveFromScene();
@@ -119,13 +119,13 @@ namespace o2
 		*mItemsLayout->layout = WidgetLayout::BothStretch();
 	}
 
-	ContextMenu::ContextMenu(const Vector<Ref<Item>>& items) :
-		ContextMenu()
+	ContextMenu::ContextMenu(RefCounter* refCounter, const Vector<Ref<Item>>& items) :
+		ContextMenu(refCounter)
 	{
 		AddItems(items);
 	}
 
-	ContextMenu::ContextMenu(const ContextMenu& other) :
+	ContextMenu::ContextMenu(RefCounter* refCounter, const ContextMenu& other) :
 		PopupWidget(other), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample = other.mItemSample->CloneAsRef<ContextMenuItem>();
@@ -719,14 +719,14 @@ namespace o2
 		return mItems[idx];
 	}
 
-	ContextMenuItem::ContextMenuItem() :
-		Widget(), mSubMenu(nullptr)
+    ContextMenuItem::ContextMenuItem(RefCounter* refCounter) :
+        Widget(refCounter), mSubMenu(nullptr)
 	{
 		RetargetStatesAnimations();
 	}
 
-	ContextMenuItem::ContextMenuItem(const ContextMenuItem& other) :
-		Widget(other), text(this)
+	ContextMenuItem::ContextMenuItem(RefCounter* refCounter, const ContextMenuItem& other) :
+		Widget(refCounter, other), text(this)
 	{
 		mSubMenu = FindChildByType<ContextMenu>();
 		if (mSubMenu)

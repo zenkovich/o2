@@ -663,24 +663,24 @@ namespace o2
         IDrawable::OnDrawn();
     }
 
-    WidgetDragHandle::WidgetDragHandle() :
-        DragHandle(), Widget()
+    WidgetDragHandle::WidgetDragHandle(RefCounter* refCounter) :
+        DragHandle(), Widget(refCounter)
     {
         widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
         localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
     }
 
-    WidgetDragHandle::WidgetDragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/, 
+    WidgetDragHandle::WidgetDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/,
                                        const Ref<IRectDrawable>& selected /*= nullptr*/, const Ref<IRectDrawable>& selectedHovered /*= nullptr*/, 
                                        const Ref<IRectDrawable>& selectedPressed /*= nullptr*/) :
-        DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed), Widget()
+        DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed), Widget(refCounter)
     {
         widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
         localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
     }
 
-    WidgetDragHandle::WidgetDragHandle(const WidgetDragHandle& other) :
-        DragHandle(other), Widget(other)
+    WidgetDragHandle::WidgetDragHandle(RefCounter* refCounter, const WidgetDragHandle& other) :
+        DragHandle(other), Widget(refCounter, other)
     {
         widgetOffsetToLocalTransformFunc = other.widgetOffsetToLocalTransformFunc;
         localToWidgetOffsetTransformFunc = other.localToWidgetOffsetTransformFunc;

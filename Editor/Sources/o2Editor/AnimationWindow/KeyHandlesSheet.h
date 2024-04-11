@@ -25,10 +25,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		KeyHandlesSheet();
+        explicit KeyHandlesSheet(RefCounter* refCounter);
 
 		// Copy-constructor
-		KeyHandlesSheet(const KeyHandlesSheet& other);
+        KeyHandlesSheet(RefCounter* refCounter, const KeyHandlesSheet& other);
 
 		// Destructor
 		~KeyHandlesSheet();
@@ -258,8 +258,8 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
     typedef const Map<String, Vector<UInt64>>& _tmp4;
     typedef Map<String, Vector<UInt64>>& _tmp5;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const KeyHandlesSheet&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const KeyHandlesSheet&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);

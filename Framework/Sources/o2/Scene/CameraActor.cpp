@@ -8,12 +8,12 @@
 
 namespace o2
 {
-    CameraActor::CameraActor():
-        Actor()
+    CameraActor::CameraActor(RefCounter* refCounter) :
+        Actor(refCounter)
     {}
 
-    CameraActor::CameraActor(const CameraActor& other):
-        Actor(other), mType(other.mType), mFixedOrFittedSize(other.mFixedOrFittedSize), mUnits(other.mUnits)
+    CameraActor::CameraActor(RefCounter* refCounter, const CameraActor& other) :
+        Actor(refCounter, other), mType(other.mType), mFixedOrFittedSize(other.mFixedOrFittedSize), mUnits(other.mUnits)
     {}
 
     CameraActor::~CameraActor()

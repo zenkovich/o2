@@ -20,10 +20,10 @@ namespace o2
 
     public:
         // Default constructor @SCRIPTABLE
-        Image();
+        explicit Image(RefCounter* refCounter);
 
         // Copy-constructor
-        Image(const Image& other);
+        Image(RefCounter* refCounter, const Image& other);
 
         // Assign operator
         Image& operator=(const Image& other);
@@ -76,8 +76,8 @@ END_META;
 CLASS_METHODS_META(o2::Image)
 {
 
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Image&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Image&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetImage, const Ref<Sprite>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Sprite>, GetImage);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetImageAsset, const Ref<ImageAsset>&);

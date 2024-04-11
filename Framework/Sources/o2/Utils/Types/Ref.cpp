@@ -3,6 +3,11 @@
 
 namespace o2
 {
+
+    RefCounterable::RefCounterable(RefCounter* refCounter):
+        mRefCounter(refCounter)
+    {}
+
     UInt16 RefCounterable::GetStrongReferencesCount() const
     {
         return GetRefCounter()->strongReferences;

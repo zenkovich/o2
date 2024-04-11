@@ -22,10 +22,10 @@ namespace o2
 
     public:
         // Default constructor
-        Spoiler();
+        explicit Spoiler(RefCounter* refCounter);
 
         // Copy-constructor
-        Spoiler(const Spoiler& other);
+        Spoiler(RefCounter* refCounter, const Spoiler& other);
 
         // Copy-operator
         Spoiler& operator=(const Spoiler& other);
@@ -121,8 +121,8 @@ END_META;
 CLASS_METHODS_META(o2::Spoiler)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Spoiler&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Spoiler&);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);

@@ -8,13 +8,22 @@ namespace Editor
 {
 	FORWARD_CLASS_REF(AnimationWindow);
 
+	// ---------------------------------
+	// Curves sheet. Shows curves editor
+	// ---------------------------------
 	class CurvesSheet : public Widget
 	{
 	public:
-		CurvesSheet();
-		CurvesSheet(const CurvesSheet& other);
+		// Default constructor
+        CurvesSheet(RefCounter* refCounter);
+
+		// Copy-constructor
+        CurvesSheet(RefCounter* refCounter, const CurvesSheet& other);
+
+		// Destructor
 		~CurvesSheet();
 
+		// Copy-operator
 		CurvesSheet& operator=(const CurvesSheet& other);
 
 		// Sets animation and updates tree structure
@@ -68,8 +77,8 @@ END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesSheet&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CurvesSheet&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateCurvesColors);
     FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);

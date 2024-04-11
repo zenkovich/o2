@@ -17,13 +17,14 @@
 
 namespace o2
 {
-    TreeNode::TreeNode()
+    TreeNode::TreeNode(RefCounter* refCounter):
+        Widget(refCounter)
     {
         onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
     }
 
-    TreeNode::TreeNode(const TreeNode& other):
-        Widget(other)
+    TreeNode::TreeNode(RefCounter* refCounter, const TreeNode& other):
+        Widget(refCounter, other)
     {
         onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
 
@@ -171,7 +172,8 @@ namespace o2
     void TreeNode::OnDeselected()
     {}
 
-    Tree::Tree()
+    Tree::Tree(RefCounter* refCounter):
+        ScrollArea(refCounter)
     {
         mNodeWidgetSample = mmake<TreeNode>();
         mNodeWidgetSample->layout->minHeight = 20;
@@ -184,8 +186,8 @@ namespace o2
         mHighlightAnim->SetTarget(mHighlightSprite.Get());
     }
 
-    Tree::Tree(const Tree& other):
-        ScrollArea(other)
+    Tree::Tree(RefCounter* refCounter, const Tree& other):
+        ScrollArea(refCounter, other)
     {
         mRearrangeType = other.mRearrangeType;
         mMultiSelectAvailable = other.mMultiSelectAvailable;

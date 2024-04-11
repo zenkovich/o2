@@ -22,10 +22,10 @@ namespace o2
 
     public:
         // Default constructor
-        ScrollArea();
+        explicit ScrollArea(RefCounter* refCounter);
 
         // Copy-constructor
-        ScrollArea(const ScrollArea& other);
+        ScrollArea(RefCounter* refCounter, const ScrollArea& other);
 
         // Destructor
         ~ScrollArea();
@@ -256,8 +256,8 @@ END_META;
 CLASS_METHODS_META(o2::ScrollArea)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ScrollArea&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ScrollArea&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildren, float);

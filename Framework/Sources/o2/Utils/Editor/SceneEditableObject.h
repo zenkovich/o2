@@ -22,7 +22,7 @@ namespace o2
 
     public:
         // Default constructor. Registers itself in scene editable objects list
-        SceneEditableObject();
+        SceneEditableObject(RefCounter* refCounter);
 
         // Destructor, unregisters from scene editable objects list
         ~SceneEditableObject() override;
@@ -184,7 +184,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 {
 
 #if  IS_EDITOR
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsOnScene);
     FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);

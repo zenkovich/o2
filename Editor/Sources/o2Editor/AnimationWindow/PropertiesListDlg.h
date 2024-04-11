@@ -69,10 +69,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		AnimationPropertiesTree();
+        AnimationPropertiesTree(RefCounter* refCounter);
 
 		// Copy-constructor
-		AnimationPropertiesTree(const AnimationPropertiesTree& other);
+        AnimationPropertiesTree(RefCounter* refCounter, const AnimationPropertiesTree& other);
 
 		// Copy operator
 		AnimationPropertiesTree& operator=(const AnimationPropertiesTree& other);
@@ -147,10 +147,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		AnimationPropertiesTreeNode();
+        AnimationPropertiesTreeNode(RefCounter* refCounter);
 
 		// Copy-constructor
-		AnimationPropertiesTreeNode(const AnimationPropertiesTreeNode& other);
+        AnimationPropertiesTreeNode(RefCounter* refCounter, const AnimationPropertiesTreeNode& other);
 
 		// Copy operator
 		AnimationPropertiesTreeNode& operator=(const AnimationPropertiesTreeNode& other);
@@ -202,8 +202,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationPropertiesTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationPropertiesTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationClip>&, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
@@ -241,8 +241,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationPropertiesTreeNode&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationPropertiesTreeNode&);
     FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<AnimationPropertiesTree::NodeData>&, const Ref<AnimationPropertiesTree>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);

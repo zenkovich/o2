@@ -28,10 +28,10 @@ namespace o2
 
     public:
         // Default constructor
-        EditBox();
+        explicit EditBox(RefCounter* refCounter);
 
         // Copy-constructor
-        EditBox(const EditBox& other);
+        EditBox(RefCounter* refCounter, const EditBox& other);
 
         // Destructor
         ~EditBox();
@@ -331,8 +331,8 @@ END_META;
 CLASS_METHODS_META(o2::EditBox)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const EditBox&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const EditBox&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);

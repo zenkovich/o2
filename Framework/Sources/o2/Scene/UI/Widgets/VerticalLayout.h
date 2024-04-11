@@ -25,13 +25,13 @@ namespace o2
         PROPERTY(bool, expandHeight, SetHeightExpand, IsHeightExpand); // Expand children by height property
 
         PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
-    public:
-        
+
+    public:        
         // Default constructor
-        VerticalLayout();
+        explicit VerticalLayout(RefCounter* refCounter);
 
         // Copy-constructor
-        VerticalLayout(const VerticalLayout& other);
+        VerticalLayout(RefCounter* refCounter, const VerticalLayout& other);
 
         // Destructor
         ~VerticalLayout();
@@ -184,8 +184,8 @@ END_META;
 CLASS_METHODS_META(o2::VerticalLayout)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const VerticalLayout&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const VerticalLayout&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBaseCorner, BaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(BaseCorner, GetBaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSpacing, float);

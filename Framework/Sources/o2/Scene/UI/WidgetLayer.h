@@ -41,10 +41,10 @@ namespace o2
 
 	public:
 		// Default constructor @SCRIPTABLE
-		WidgetLayer();
+        WidgetLayer(RefCounter* refCounter);
 
 		// Copy-constructor
-		WidgetLayer(const WidgetLayer& other);
+		WidgetLayer(RefCounter* refCounter, const WidgetLayer& other);
 
 		// Destructor
 		~WidgetLayer();
@@ -395,8 +395,8 @@ CLASS_METHODS_META(o2::WidgetLayer)
 
     typedef Map<String, Ref<WidgetLayer>> _tmp1;
 
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetLayer&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WidgetLayer&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const WeakRef<Widget>&, GetOwnerWidget);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Ref<WidgetLayer>&, GetPrototypeLink);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDrawable, const Ref<IRectDrawable>&);

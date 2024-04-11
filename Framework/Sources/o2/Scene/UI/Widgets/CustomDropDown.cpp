@@ -10,8 +10,8 @@
 
 namespace o2
 {
-    CustomDropDown::CustomDropDown():
-        Widget(), DrawableCursorEventsListener(this)
+    CustomDropDown::CustomDropDown(RefCounter* refCounter):
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {
         mItemsList = mmake<CustomList>();
         mItemsList->SetInternalParent(Ref(this), false);
@@ -19,8 +19,8 @@ namespace o2
         mItemsList->SetMultiselectionAvailable(false);
     }
 
-    CustomDropDown::CustomDropDown(const CustomDropDown& other):
-        Widget(other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout),
+    CustomDropDown::CustomDropDown(RefCounter* refCounter, const CustomDropDown& other):
+        Widget(refCounter, other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout),
         mMaxListItems(other.mMaxListItems), selectedItem(this), selectedItemPos(this), itemsCount(this)
     {
         mItemsList = FindInternalWidgetByType<CustomList>();

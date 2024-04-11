@@ -30,10 +30,10 @@ namespace o2
 
     public:
         // Default constructor
-        Button();
+        Button(RefCounter* refCounter);
 
         // Copy-constructor
-        Button(const Button& other);
+        Button(RefCounter* refCounter, const Button& other);
 
         // Assign operator
         Button& operator=(const Button& other);
@@ -131,8 +131,8 @@ END_META;
 CLASS_METHODS_META(o2::Button)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Button&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Button&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);

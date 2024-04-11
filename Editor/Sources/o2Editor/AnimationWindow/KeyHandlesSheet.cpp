@@ -16,8 +16,8 @@
 namespace Editor
 {
 
-    KeyHandlesSheet::KeyHandlesSheet() :
-        Widget()
+    KeyHandlesSheet::KeyHandlesSheet(RefCounter* refCounter) :
+        Widget(refCounter)
     {
         mSelectionFrame = mmake<Sprite>("ui/UI4_keys_select.png");
         mSelectionFrame->enabled = false;
@@ -26,8 +26,8 @@ namespace Editor
         InitializeContextMenu();
     }
 
-    KeyHandlesSheet::KeyHandlesSheet(const KeyHandlesSheet& other) :
-        Widget(other), mSelectionFrame(other.mSelectionFrame->CloneAs<Sprite>())
+    KeyHandlesSheet::KeyHandlesSheet(RefCounter* refCounter, const KeyHandlesSheet& other) :
+        Widget(refCounter, other), mSelectionFrame(other.mSelectionFrame->CloneAs<Sprite>())
     {
         InitializeHandles();
         InitializeContextMenu();

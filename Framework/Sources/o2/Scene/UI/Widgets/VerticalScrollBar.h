@@ -27,10 +27,10 @@ namespace o2
 
     public:
         // Constructor
-        VerticalScrollBar();
+        explicit VerticalScrollBar(RefCounter* refCounter);
 
         // Copy-constructor
-        VerticalScrollBar(const VerticalScrollBar& other);
+        VerticalScrollBar(RefCounter* refCounter, const VerticalScrollBar& other);
 
         // Destructor
         ~VerticalScrollBar();
@@ -203,8 +203,8 @@ END_META;
 CLASS_METHODS_META(o2::VerticalScrollBar)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const VerticalScrollBar&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const VerticalScrollBar&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueForcible, float);

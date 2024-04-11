@@ -20,10 +20,10 @@ namespace o2
 
     public:
         // Default constructor
-        DropDown();
+        explicit DropDown(RefCounter* refCounter);
 
         // Copy-constructor
-        DropDown(const DropDown& other);
+        DropDown(RefCounter* refCounter, const DropDown& other);
 
         // Destructor
         ~DropDown();
@@ -95,8 +95,8 @@ END_META;
 CLASS_METHODS_META(o2::DropDown)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const DropDown&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const DropDown&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&, int);

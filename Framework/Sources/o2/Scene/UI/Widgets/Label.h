@@ -37,10 +37,10 @@ namespace o2
 
     public:
         // Default constructor
-        Label();
+        explicit Label(RefCounter* refCounter);
 
         // Copy-constructor
-        Label(const Label& other);
+        Label(RefCounter* refCounter, const Label& other);
 
         // Assign operator
         Label& operator=(const Label& other);
@@ -180,8 +180,8 @@ END_META;
 CLASS_METHODS_META(o2::Label)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Label&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Label&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFont, const Ref<Font>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Font>, GetFont);

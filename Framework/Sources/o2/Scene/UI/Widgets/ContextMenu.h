@@ -99,13 +99,13 @@ namespace o2
 
     public:
         // Default constructor
-        ContextMenu();
+        explicit ContextMenu(RefCounter* refCounter);
 
         // Constructor from items
-        explicit ContextMenu(const Vector<Ref<Item>>& items);
+        ContextMenu(RefCounter* refCounter, const Vector<Ref<Item>>& items);
 
         // Copy-constructor
-        ContextMenu(const ContextMenu& other);
+        ContextMenu(RefCounter* refCounter, const ContextMenu& other);
 
         // Destructor
         ~ContextMenu();
@@ -288,10 +288,10 @@ namespace o2
 
     public:
         // Default constructor
-        ContextMenuItem();
+        explicit ContextMenuItem(RefCounter* refCounter);
 
         // Copy-constructor
-        ContextMenuItem(const ContextMenuItem& other);
+        ContextMenuItem(RefCounter* refCounter, const ContextMenuItem& other);
 
         // Destructor
         ~ContextMenuItem();
@@ -381,9 +381,9 @@ END_META;
 CLASS_METHODS_META(o2::ContextMenu)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<Item>>&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ContextMenu&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Vector<Ref<Item>>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ContextMenu&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Ref<PopupWidget>&, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
@@ -447,8 +447,8 @@ END_META;
 CLASS_METHODS_META(o2::ContextMenuItem)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ContextMenuItem&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ContextMenuItem&);
     FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<ContextMenu::Item>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetText);

@@ -31,10 +31,10 @@ namespace o2
 
     public:
         // Default constructor
-        RigidBody();
+        RigidBody(RefCounter* refCounter);
 
         // Copy-constructor
-        RigidBody(const RigidBody& other);
+        RigidBody(RefCounter* refCounter, const RigidBody& other);
 
         // Copy-operator
         RigidBody& operator=(const RigidBody& other);
@@ -197,8 +197,8 @@ END_META;
 CLASS_METHODS_META(o2::RigidBody)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const RigidBody&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const RigidBody&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBodyType, Type);
     FUNCTION().PUBLIC().SIGNATURE(Type, GetBodyType);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMass, float);

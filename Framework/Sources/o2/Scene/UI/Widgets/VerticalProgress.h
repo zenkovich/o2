@@ -28,10 +28,10 @@ namespace o2
 
     public:
         // Constructor
-        VerticalProgress();
+        explicit VerticalProgress(RefCounter* refCounter);
 
         // Copy-constructor
-        VerticalProgress(const VerticalProgress& other);
+        VerticalProgress(RefCounter* refCounter, const VerticalProgress& other);
 
         // Destructor
         ~VerticalProgress();
@@ -176,8 +176,8 @@ END_META;
 CLASS_METHODS_META(o2::VerticalProgress)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const VerticalProgress&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const VerticalProgress&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, float, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueForcible, float);

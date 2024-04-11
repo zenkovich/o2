@@ -14,8 +14,9 @@
 namespace o2
 {
     class Component;
-    class DrawableComponent;
     class Scene;
+
+    FORWARD_CLASS_REF(DrawableComponent);
 
 #if IS_EDITOR
     typedef SceneEditableObject ActorBase;
@@ -24,7 +25,10 @@ namespace o2
 
 #define OPTIONAL_OVERRIDE override
 #else
-    typedef ISerializable ActorBase;
+    struct ActorBase: public ISerializable
+    {
+        ActorBase(RefCounter* refCounter) {}
+    };
 
 #define OPTIONAL_OVERRIDE
 #endif
@@ -36,7 +40,7 @@ namespace o2
     // When editor pragma is enabled, it is derived from SceneEditableObject and support all editor 
     // features for editing actor
     // ---------------------------------------------------------------------------------------------
-    class Actor: virtual public ActorBase, public ISceneDrawable
+    class Actor: public ActorBase, public ISceneDrawable
     {
     public:
         enum class State { Default, Initializing, Destroying, Destroyed };
@@ -63,19 +67,19 @@ namespace o2
 
     public:
         // Default constructor @SCRIPTABLE
-        Actor(ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(RefCounter* refCounter, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Actor constructor from prototype
-        Actor(const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(RefCounter* refCounter, const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Constructor with components
-        Actor(Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Copy-constructor
-        Actor(const Actor& other, ActorCreateMode mode);
+        Actor(RefCounter* refCounter, const Actor& other, ActorCreateMode mode);
 
         // Copy-constructor
-        Actor(const Actor& other);
+        Actor(RefCounter* refCounter, const Actor& other);
 
         // Destructor
         virtual ~Actor();
@@ -371,35 +375,20 @@ namespace o2
 
     protected:
         // Base actor constructor with transform
-        Actor(ActorTransform* transform, bool onScene = true, const String& name = "unnamed", bool enabled = true, 
+        Actor(RefCounter* refCounter, ActorTransform* transform, bool onScene = true, const String& name = "unnamed", bool enabled = true,
               SceneUID id = Math::Random(), UID assetId = UID(0));
 
         // Default constructor with transform
-        Actor(ActorTransform* transform, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(RefCounter* refCounter, ActorTransform* transform, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Actor constructor from prototype with transform
-        Actor(ActorTransform* transform, const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(RefCounter* refCounter, ActorTransform* transform, const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Constructor with components with transform
-        Actor(ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(RefCounter* refCounter, ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Copy-constructor with transform
-        Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode = ActorCreateMode::Default);
-
-        // Actor ref constructor from prototype
-        void RefConstruct(const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
-
-        // Ref constructor with components
-        void RefConstruct(Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
-
-        // Ref copy-constructor
-        void RefConstruct(const Actor& other, ActorCreateMode mode);
-
-        // Ref copy-constructor
-        void RefConstruct(const Actor& other);
-
-        // It is called after reference initialization at object construction
-        void PostRefConstruct();
+        Actor(RefCounter* refCounter, ActorTransform* transform, const Actor& other, ActorCreateMode mode = ActorCreateMode::Default);
         
         // Checks that copy visitor finished work, calls it finalization
         void CheckCopyVisitorFinalization() const;
@@ -783,7 +772,7 @@ PRE_ENUM_META(o2::Actor::State);
 
 CLASS_BASES_META(o2::Actor)
 {
-    BASE_CLASS(ActorBase);
+    BASE_CLASS(o2::ActorBase);
     BASE_CLASS(o2::ISceneDrawable);
 }
 END_META;
@@ -841,11 +830,11 @@ CLASS_METHODS_META(o2::Actor)
     typedef const Map<const Actor*, Actor*>& _tmp5;
     typedef const Map<const Component*, Component*>& _tmp6;
 
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<ActorAsset>&, ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Ref<Component>>, ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&, ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(RefCounter*, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<ActorAsset>&, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, Vector<Ref<Component>>, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Actor&, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Actor&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Destroy);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Update, float);
@@ -911,16 +900,11 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsModeOnScene, ActorCreateMode);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, bool, const String&, bool, SceneUID, UID);
-    FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, ActorCreateMode);
-    FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Ref<ActorAsset>&, ActorCreateMode);
-    FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Ref<Component>>, ActorCreateMode);
-    FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Actor&, ActorCreateMode);
-    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, const Ref<ActorAsset>&, ActorCreateMode);
-    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, Vector<Ref<Component>>, ActorCreateMode);
-    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, const Actor&, ActorCreateMode);
-    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, const Actor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
+    FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, bool, const String&, bool, SceneUID, UID);
+    FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, ActorCreateMode);
+    FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, const Ref<ActorAsset>&, ActorCreateMode);
+    FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, Vector<Ref<Component>>, ActorCreateMode);
+    FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, const Actor&, ActorCreateMode);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckCopyVisitorFinalization);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabled, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateResEnabledInHierarchy, bool);

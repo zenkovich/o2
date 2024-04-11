@@ -8,14 +8,14 @@
 
 namespace o2
 {
-    GridLayoutScrollArea::GridLayoutScrollArea():
-        ScrollArea()
+    GridLayoutScrollArea::GridLayoutScrollArea(RefCounter* refCounter):
+        ScrollArea(refCounter)
     {
         mItemSample = mmake<Widget>();
     }
 
-    GridLayoutScrollArea::GridLayoutScrollArea(const GridLayoutScrollArea& other):
-        ScrollArea(other), mItemsSpacing(other.mItemsSpacing)
+    GridLayoutScrollArea::GridLayoutScrollArea(RefCounter* refCounter, const GridLayoutScrollArea& other):
+        ScrollArea(refCounter, other), mItemsSpacing(other.mItemsSpacing)
     {
         mItemSample = other.mItemSample->CloneAsRef<Widget>();
         mItemSample->UpdateTransform();

@@ -279,15 +279,15 @@ namespace o2
 
     public:
         // Default constructor
-        WidgetDragHandle();
+        explicit WidgetDragHandle(RefCounter* refCounter);
 
         // Constructor with views
-        WidgetDragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr, const Ref<IRectDrawable>& pressed = nullptr,
+        WidgetDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr, const Ref<IRectDrawable>& pressed = nullptr,
                          const Ref<IRectDrawable>& selected = nullptr, const Ref<IRectDrawable>& selectedHovered = nullptr,
                          const Ref<IRectDrawable>& selectedPressed = nullptr);
 
         // Copy-constructor
-        WidgetDragHandle(const WidgetDragHandle& other);
+        WidgetDragHandle(RefCounter* refCounter, const WidgetDragHandle& other);
 
         // Destructor
         ~WidgetDragHandle();
@@ -577,9 +577,9 @@ END_META;
 CLASS_METHODS_META(o2::WidgetDragHandle)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetDragHandle&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WidgetDragHandle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);

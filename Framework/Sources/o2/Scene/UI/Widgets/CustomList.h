@@ -24,10 +24,10 @@ namespace o2
 
     public:
         // Default constructor
-        CustomList();
+        explicit CustomList(RefCounter* refCounter);
 
         // Copy-constructor
-        CustomList(const CustomList& other);
+        CustomList(RefCounter* refCounter, const CustomList& other);
 
         // Destructor
         ~CustomList();
@@ -268,8 +268,8 @@ CLASS_METHODS_META(o2::CustomList)
 
     typedef const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& _tmp1;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CustomList&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CustomList&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);

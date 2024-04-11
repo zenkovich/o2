@@ -55,16 +55,16 @@ namespace o2
 
     public:
         // Default constructor @SCRIPTABLE
-        explicit Widget(ActorCreateMode mode = ActorCreateMode::Default);
+        explicit Widget(RefCounter* refCounter, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Widget constructor from prototype
-        explicit Widget(const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+        Widget(RefCounter* refCounter, const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Widget constructor with components
-        explicit Widget(Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
+        Widget(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Copy-constructor
-        Widget(const Widget& other);
+        Widget(RefCounter* refCounter, const Widget& other);
 
         // Virtual destructor
         virtual ~Widget();
@@ -286,21 +286,6 @@ namespace o2
         RectF mBoundsWithChilds; // Widget with childs bounds
 
     protected:
-        // Default ref constructor 
-        void RefConstruct(ActorCreateMode mode = ActorCreateMode::Default);
-
-        // Widget ref constructor from prototype
-        void RefConstruct(const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
-
-        // Widget ref constructor with components
-        void RefConstruct(Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
-
-        // Ref copy-constructor
-        void RefConstruct(const Widget& other);
-
-        // It is called after reference initialization at object construction, registers texture in render
-        void PostRefConstruct();
-
         // Regular serializing without prototype
         void SerializeRaw(DataValue& node) const override;
 
@@ -503,10 +488,10 @@ namespace o2
 
         public:
             // Default constructor
-            LayersEditable();
+            LayersEditable(RefCounter* refCounter);
 
             // Default constructor with own widget
-            LayersEditable(const Ref<Widget>& widget);
+            LayersEditable(RefCounter* refCounter, const Ref<Widget>& widget);
 
             // Returns unique id
             SceneUID GetID() const override;
@@ -560,10 +545,10 @@ namespace o2
 
         public:
             // Default constructor
-            InternalChildrenEditableEditable();
+            InternalChildrenEditableEditable(RefCounter* refCounter);
 
             // Default constructor with own widget
-            InternalChildrenEditableEditable(const Ref<Widget>& widget);
+            InternalChildrenEditableEditable(RefCounter* refCounter, const Ref<Widget>& widget);
 
             // Returns unique id
             SceneUID GetID() const override;
@@ -793,10 +778,10 @@ CLASS_METHODS_META(o2::Widget)
     typedef Map<String, Ref<Widget>> _tmp3;
     typedef Map<String, Ref<WidgetState>> _tmp4;
 
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<ActorAsset>&, ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Ref<Component>>, ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Widget&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(RefCounter*, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<ActorAsset>&, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, Vector<Ref<Component>>, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Widget&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildren, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateTransform);
@@ -851,11 +836,6 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, FindInternalWidget, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, FindActorById, SceneUID);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, ActorCreateMode);
-    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, const Ref<ActorAsset>&, ActorCreateMode);
-    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, Vector<Ref<Component>>, ActorCreateMode);
-    FUNCTION().PROTECTED().SIGNATURE(void, RefConstruct, const Widget&);
-    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, SerializeWithProto, DataValue&);
@@ -946,8 +926,8 @@ CLASS_METHODS_META(o2::Widget::LayersEditable)
 {
 
 #if  IS_EDITOR
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Widget>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
     FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
@@ -984,8 +964,8 @@ CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 {
 
 #if  IS_EDITOR
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Widget>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
     FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);

@@ -12,12 +12,14 @@
 namespace Editor
 {
 
-	CurvesSheet::CurvesSheet()
+    CurvesSheet::CurvesSheet(RefCounter* refCounter):
+		Widget(refCounter)
 	{
 		InitializeControls();
 	}
 
-	CurvesSheet::CurvesSheet(const CurvesSheet& other)
+	CurvesSheet::CurvesSheet(RefCounter* refCounter, const CurvesSheet& other):
+		Widget(refCounter, other)
 	{
 		InitializeControls();
 	}

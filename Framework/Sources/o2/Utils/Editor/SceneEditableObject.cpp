@@ -6,7 +6,8 @@
 namespace o2
 {
 #if IS_EDITOR
-    SceneEditableObject::SceneEditableObject()
+    SceneEditableObject::SceneEditableObject(RefCounter* refCounter):
+        RefCounterable(refCounter)
     {}
 
     SceneEditableObject::~SceneEditableObject()

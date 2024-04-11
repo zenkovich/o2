@@ -6,16 +6,16 @@
 
 namespace o2
 {
-    List::List():
-        CustomList()
+    List::List(RefCounter* refCounter):
+        CustomList(refCounter)
     {
         auto itemSample = mmake<Label>();
         itemSample->horOverflow = Label::HorOverflow::Dots;
         SetItemSample(itemSample);
     }
 
-    List::List(const List& other):
-        CustomList(other), value(this), values(this)
+    List::List(RefCounter* refCounter, const List& other):
+        CustomList(refCounter, other), value(this), values(this)
     {
         RetargetStatesAnimations();
     }

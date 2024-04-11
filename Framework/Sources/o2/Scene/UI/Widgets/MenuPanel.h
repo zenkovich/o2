@@ -46,10 +46,10 @@ namespace o2
 
     public:
         // Default constructor
-        MenuPanel();
+        explicit MenuPanel(RefCounter* refCounter);
 
         // Copy-constructor
-        MenuPanel(const MenuPanel& other);
+        MenuPanel(RefCounter* refCounter, const MenuPanel& other);
 
         // Destructor
         ~MenuPanel();
@@ -211,8 +211,8 @@ END_META;
 CLASS_METHODS_META(o2::MenuPanel)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const MenuPanel&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const MenuPanel&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem, const Item&);

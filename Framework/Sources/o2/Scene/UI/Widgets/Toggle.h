@@ -76,10 +76,10 @@ namespace o2
 
     public:
         // Default constructor
-        Toggle();
+        explicit Toggle(RefCounter* refCounter);
 
         // Copy-constructor
-        Toggle(const Toggle& other);
+        Toggle(RefCounter* refCounter, const Toggle& other);
 
         // Assign operator
         Toggle& operator=(const Toggle& other);
@@ -200,8 +200,8 @@ END_META;
 CLASS_METHODS_META(o2::Toggle)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Toggle&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Toggle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);

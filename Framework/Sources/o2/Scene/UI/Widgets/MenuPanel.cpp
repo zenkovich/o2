@@ -11,8 +11,8 @@
 
 namespace o2
 {
-    MenuPanel::MenuPanel():
-        Widget(), DrawableCursorEventsListener(this)
+    MenuPanel::MenuPanel(RefCounter* refCounter):
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {
         mItemSample = mmake<Widget>();
         mItemSample->AddLayer("text", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(200, 0), Vec2F(0, 0)));
@@ -29,8 +29,8 @@ namespace o2
         *mLayout->layout = WidgetLayout::BothStretch();
     }
 
-    MenuPanel::MenuPanel(const MenuPanel& other):
-        Widget(other), DrawableCursorEventsListener(this)
+    MenuPanel::MenuPanel(RefCounter* refCounter, const MenuPanel& other):
+        Widget(refCounter, other), DrawableCursorEventsListener(this)
     {
         mItemSample = other.mItemSample->CloneAsRef<Widget>();
         mSelectionDrawable = other.mSelectionDrawable->CloneAsRef<Sprite>();

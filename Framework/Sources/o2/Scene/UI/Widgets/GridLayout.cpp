@@ -5,13 +5,14 @@
 
 namespace o2
 {
-    GridLayout::GridLayout(): Widget()
+    GridLayout::GridLayout(RefCounter* refCounter):
+        Widget(refCounter)
     {
         SetLayoutDirty();
     }
 
-    GridLayout::GridLayout(const GridLayout& other):
-        Widget(other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder),
+    GridLayout::GridLayout(RefCounter* refCounter, const GridLayout& other):
+        Widget(refCounter, other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder),
         mFitByChildren(other.mFitByChildren), mCellSize(other.mCellSize), mArrangeAxis(other.mArrangeAxis),
         mArrangeAxisMaxCells(other.mArrangeAxisMaxCells), baseCorner(this), cellSize(this), arrangeAxisMaxCells(this),
         arrangeAxis(this), spacing(this), border(this), borderLeft(this), borderRight(this),

@@ -13,8 +13,8 @@
 
 namespace o2
 {
-	CustomList::CustomList() :
-		ScrollArea()
+	CustomList::CustomList(RefCounter* refCounter) :
+		ScrollArea(refCounter)
 	{
 		mItemSample = mmake<Widget>();
 		mItemSample->RemoveFromScene();
@@ -36,8 +36,8 @@ namespace o2
 		AddChild(mVerLayout);
 	}
 
-	CustomList::CustomList(const CustomList& other) :
-		ScrollArea(other), mHoverLayout(other.mHoverLayout),
+	CustomList::CustomList(RefCounter* refCounter, const CustomList& other) :
+		ScrollArea(refCounter, other), mHoverLayout(other.mHoverLayout),
 		mSelectionLayout(other.mSelectionLayout), selectedItem(this), selectedItems(this),
 		selectedItemPos(this), itemsCount(this)
 	{

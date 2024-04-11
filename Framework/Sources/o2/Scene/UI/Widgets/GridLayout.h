@@ -27,10 +27,10 @@ namespace o2
 
     public:
         // Default constructor
-        GridLayout();
+        explicit GridLayout(RefCounter* refCounter);
 
         // Copy-constructor
-        GridLayout(const GridLayout& other);
+        GridLayout(RefCounter* refCounter, const GridLayout& other);
 
         // Destructor
         ~GridLayout();
@@ -195,8 +195,8 @@ END_META;
 CLASS_METHODS_META(o2::GridLayout)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const GridLayout&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const GridLayout&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBaseCorner, BaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(BaseCorner, GetBaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSpacing, float);

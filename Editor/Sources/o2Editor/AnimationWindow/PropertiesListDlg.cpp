@@ -70,12 +70,12 @@ namespace Editor
 		mWindow->GetBackCursorListener().onCursorReleased = [=](const Input::Cursor& c) { mWindow->Hide(); };
 	}
 
-	AnimationPropertiesTree::AnimationPropertiesTree() :
-		Tree()
+    AnimationPropertiesTree::AnimationPropertiesTree(RefCounter* refCounter) :
+		Tree(refCounter)
 	{}
 
-	AnimationPropertiesTree::AnimationPropertiesTree(const AnimationPropertiesTree& other):
-		Tree(other)
+	AnimationPropertiesTree::AnimationPropertiesTree(RefCounter* refCounter, const AnimationPropertiesTree& other):
+        Tree(refCounter, other)
 	{ }
 
 	AnimationPropertiesTree& AnimationPropertiesTree::operator=(const AnimationPropertiesTree& other)
@@ -275,14 +275,14 @@ namespace Editor
 		}
 	}
 
-	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode():
-		TreeNode()
+	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode(RefCounter* refCounter):
+        TreeNode(refCounter)
 	{
 		InitializeControls();
 	}
 
-	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode(const AnimationPropertiesTreeNode& other) :
-		TreeNode(other)
+	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode(RefCounter* refCounter, const AnimationPropertiesTreeNode& other) :
+		TreeNode(refCounter, other)
 	{
 		InitializeControls();
 	}
