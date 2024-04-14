@@ -15,10 +15,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		RectIProperty();
+		RectIProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		RectIProperty(const RectIProperty& other);
+		RectIProperty(RefCounter* refCounter, const RectIProperty& other);
 
 		// Copy operator
 		RectIProperty& operator=(const RectIProperty& other);
@@ -152,8 +152,8 @@ END_META;
 CLASS_METHODS_META(Editor::RectIProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const RectIProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const RectIProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const RectI&);

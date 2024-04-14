@@ -10,8 +10,8 @@
 
 namespace Editor
 {
-	AddComponentPanel::AddComponentPanel(const Ref<ActorViewer>& viewer) :
-		mViewer(viewer)
+	AddComponentPanel::AddComponentPanel(RefCounter* refCounter, const Ref<ActorViewer>& viewer) :
+		Widget(refCounter), mViewer(viewer)
 	{
 		AddLayer("border", mmake<Sprite>("ui/UI4_shadow_separator.png"), Layout::HorStretch(VerAlign::Top, -2, -2, 5, -4));
 
@@ -32,7 +32,8 @@ namespace Editor
 		mTree->Refresh();
 	}
 
-	AddComponentPanel::AddComponentPanel()
+	AddComponentPanel::AddComponentPanel(RefCounter* refCounter):
+		Widget(refCounter)
 	{}
 
 	void AddComponentPanel::Draw()
@@ -113,18 +114,18 @@ namespace Editor
 	void AddComponentPanel::OnKeyReleased(const Input::Key& key)
 	{
 		if (key.keyCode != VK_RETURN)
-			return; // haha
+			return; 
 
 		if (mFilterBox->IsFocused() || mTree->IsFocused())
 			OnAddPressed();
 	}
 
-	ComponentsTree::ComponentsTree() :
-		Tree()
+	ComponentsTree::ComponentsTree(RefCounter* refCounter) :
+		Tree(refCounter)
 	{}
 
-	ComponentsTree::ComponentsTree(const ComponentsTree& other) :
-		Tree(other)
+	ComponentsTree::ComponentsTree(RefCounter* refCounter, const ComponentsTree& other) :
+		Tree(refCounter, other)
 	{}
 
 	ComponentsTree& ComponentsTree::operator=(const ComponentsTree& other)
@@ -265,14 +266,14 @@ namespace Editor
 		Tree::OnDeserialized(node);
 	}
 
-	ComponentsTreeNode::ComponentsTreeNode():
-		TreeNode()
+	ComponentsTreeNode::ComponentsTreeNode(RefCounter* refCounter):
+		TreeNode(refCounter)
 	{
 		InitializeControls();
 	}
 
-	ComponentsTreeNode::ComponentsTreeNode(const ComponentsTreeNode& other) :
-		TreeNode(other)
+	ComponentsTreeNode::ComponentsTreeNode(RefCounter* refCounter, const ComponentsTreeNode& other) :
+		TreeNode(refCounter, other)
 	{
 		InitializeControls();
 	}

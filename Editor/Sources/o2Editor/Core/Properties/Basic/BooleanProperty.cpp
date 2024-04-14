@@ -8,11 +8,12 @@
 
 namespace Editor
 {
-	BooleanProperty::BooleanProperty()
-	{}
+	BooleanProperty::BooleanProperty(RefCounter* refCounter):
+		TPropertyField<bool>(refCounter)
+    {}
 
-	BooleanProperty::BooleanProperty(const BooleanProperty& other) :
-		TPropertyField<bool>(other)
+	BooleanProperty::BooleanProperty(RefCounter* refCounter, const BooleanProperty& other) :
+		TPropertyField<bool>(refCounter, other)
 	{
 		InitializeControls();
 	}

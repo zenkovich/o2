@@ -24,8 +24,8 @@
 
 namespace Editor
 {
-	CurvesEditor::CurvesEditor():
-		FrameScrollView()
+	CurvesEditor::CurvesEditor(RefCounter* refCounter):
+		FrameScrollView(refCounter)
 	{
 		mReady = false;
 
@@ -50,8 +50,8 @@ namespace Editor
 		mReady = true;
 	}
 
-	CurvesEditor::CurvesEditor(const CurvesEditor& other):
-		FrameScrollView(other), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>()), mTextFont(other.mTextFont)
+	CurvesEditor::CurvesEditor(RefCounter* refCounter, const CurvesEditor& other):
+		FrameScrollView(refCounter, other), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>()), mTextFont(other.mTextFont)
 	{
 		mReady = false;
 

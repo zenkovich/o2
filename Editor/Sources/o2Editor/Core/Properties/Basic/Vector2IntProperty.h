@@ -17,10 +17,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		Vec2IProperty();
+		Vec2IProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		Vec2IProperty(const Vec2IProperty& other);
+		Vec2IProperty(RefCounter* refCounter, const Vec2IProperty& other);
 
 		// Copy operator
 		Vec2IProperty& operator=(const Vec2IProperty& other);
@@ -116,8 +116,8 @@ END_META;
 CLASS_METHODS_META(Editor::Vec2IProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2IProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Vec2IProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, Revert);

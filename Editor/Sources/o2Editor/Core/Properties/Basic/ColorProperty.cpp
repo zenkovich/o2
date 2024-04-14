@@ -9,11 +9,12 @@
 
 namespace Editor
 {
-	ColorProperty::ColorProperty()
+	ColorProperty::ColorProperty(RefCounter* refCounter):
+		TPropertyField<Color4>(refCounter)
 	{}
 
-	ColorProperty::ColorProperty(const ColorProperty& other) :
-		TPropertyField<Color4>(other)
+	ColorProperty::ColorProperty(RefCounter* refCounter, const ColorProperty& other):
+		TPropertyField<Color4>(refCounter, other)
 	{
 		InitializeControls();
 	}

@@ -21,10 +21,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		SceneLayerRefProperty();
+		SceneLayerRefProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		SceneLayerRefProperty(const SceneLayerRefProperty& other);
+		SceneLayerRefProperty(RefCounter* refCounter, const SceneLayerRefProperty& other);
 
 		// Copy operator
 		SceneLayerRefProperty& operator=(const SceneLayerRefProperty& other);
@@ -89,8 +89,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneLayerRefProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayerRefProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const SceneLayerRefProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedInheritedValue, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSelectedInheritedValue);
     FUNCTION().PUBLIC().SIGNATURE(void, SetUseInheritedValue, bool);

@@ -7,11 +7,12 @@
 
 namespace Editor
 {
-	TagsProperty::TagsProperty()
+	TagsProperty::TagsProperty(RefCounter* refCounter):
+		TPropertyField<TagGroup>(refCounter)
 	{}
 
-	TagsProperty::TagsProperty(const TagsProperty& other) :
-		TPropertyField<TagGroup>(other)
+	TagsProperty::TagsProperty(RefCounter* refCounter, const TagsProperty& other) :
+		TPropertyField<TagGroup>(refCounter, other)
 	{
 		InitializeControls();
 	}

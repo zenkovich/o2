@@ -8,14 +8,14 @@ namespace Editor
 {
 	WeakRef<Vec2KeyFramesTrackControl> Vec2KeyFramesTrackControl::mLastActive;
 
-	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl():
-		Base(), mTool(mmake<SplineTool>())
+	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl(RefCounter* refCounter):
+		Base(refCounter), mTool(mmake<SplineTool>())
 	{
 		InitializeControls();
 	}
 
-	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl(const Vec2KeyFramesTrackControl& other):
-		Base(other), mTool(mmake<SplineTool>())
+	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl(RefCounter* refCounter, const Vec2KeyFramesTrackControl& other):
+		Base(refCounter, other), mTool(mmake<SplineTool>())
 	{
 		InitializeControls();
 	}

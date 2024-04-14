@@ -23,10 +23,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		SpoilerWithHead();
+		SpoilerWithHead(RefCounter* refCounter);
 
 		// Copy constructor
-		SpoilerWithHead(const SpoilerWithHead& other);
+		SpoilerWithHead(RefCounter* refCounter, const SpoilerWithHead& other);
 
 		// Copy operator
 		SpoilerWithHead& operator=(const SpoilerWithHead& other);
@@ -68,8 +68,8 @@ END_META;
 CLASS_METHODS_META(Editor::SpoilerWithHead)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const SpoilerWithHead&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const SpoilerWithHead&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<Image>&, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);

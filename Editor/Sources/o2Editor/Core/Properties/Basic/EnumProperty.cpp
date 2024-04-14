@@ -5,11 +5,12 @@
 
 namespace Editor
 {
-	EnumProperty::EnumProperty()
-	{}
+	EnumProperty::EnumProperty(RefCounter* refCounter):
+		TPropertyField<int>(refCounter)
+    {}
 
-	EnumProperty::EnumProperty(const EnumProperty& other) :
-		TPropertyField<int>(other)
+	EnumProperty::EnumProperty(RefCounter* refCounter, const EnumProperty& other) :
+		TPropertyField<int>(refCounter, other)
 	{
 		InitializeControls();
 	}

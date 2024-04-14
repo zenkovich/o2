@@ -37,10 +37,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		AssetsIconsScrollArea();
+		AssetsIconsScrollArea(RefCounter* refCounter);
 
 		// Copy-constructor
-		AssetsIconsScrollArea(const AssetsIconsScrollArea& other);
+		AssetsIconsScrollArea(RefCounter* refCounter, const AssetsIconsScrollArea& other);
 
 		// Destructor
 		~AssetsIconsScrollArea();
@@ -389,8 +389,8 @@ END_META;
 CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsIconsScrollArea&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetsIconsScrollArea&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetViewingPath, const String&);

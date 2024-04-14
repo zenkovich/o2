@@ -20,10 +20,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		TagsProperty();
+		TagsProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		TagsProperty(const TagsProperty& other);
+		TagsProperty(RefCounter* refCounter, const TagsProperty& other);
 
 		// Copy operator
 		TagsProperty& operator=(const TagsProperty& other);
@@ -78,8 +78,8 @@ END_META;
 CLASS_METHODS_META(Editor::TagsProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const TagsProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const TagsProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const TagGroup&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);

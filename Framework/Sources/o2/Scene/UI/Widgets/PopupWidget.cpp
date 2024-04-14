@@ -8,13 +8,13 @@
 namespace o2
 {
     PopupWidget::PopupWidget(RefCounter* refCounter):
-        ScrollArea(refCounter)
+        RefCounterable(refCounter), ScrollArea(refCounter)
     {
         SetEnabledForcible(false);
     }
 
     PopupWidget::PopupWidget(RefCounter* refCounter, const PopupWidget& other):
-        ScrollArea(refCounter, other), mFitSizeMin(other.mFitSizeMin)
+        RefCounterable(refCounter), ScrollArea(refCounter, other), mFitSizeMin(other.mFitSizeMin)
     {
         SetEnabledForcible(false);
     }

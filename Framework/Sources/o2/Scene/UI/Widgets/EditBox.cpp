@@ -19,7 +19,7 @@
 namespace o2
 {
     EditBox::EditBox(RefCounter* refCounter):
-        ScrollArea(refCounter)
+        RefCounterable(refCounter), ScrollArea(refCounter)
     {
         mSelectionMesh = mmake<Mesh>();
         mTextDrawable  = mmake<Text>();
@@ -27,7 +27,7 @@ namespace o2
     }
 
     EditBox::EditBox(RefCounter* refCounter, const EditBox& other):
-        ScrollArea(refCounter, other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
+        RefCounterable(refCounter), ScrollArea(refCounter, other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
         mMaxLinesCount(other.mMaxLinesCount), mText(other.mText), mLastText(other.mText),
         mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
         mCaretBlinkDelay(other.mCaretBlinkDelay), text(this), caret(this),

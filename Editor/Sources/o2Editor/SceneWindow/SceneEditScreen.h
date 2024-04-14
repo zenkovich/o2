@@ -39,10 +39,10 @@ namespace Editor
 		Function<void(const Vector<Ref<SceneEditableObject>>&)> onSelectionChanged; // Actors selection change event
 
 		// Default constructor
-		SceneEditScreen();
+		SceneEditScreen(RefCounter* refCounter);
 
 		// Copy-constructor
-		SceneEditScreen(const SceneEditScreen& other);
+		SceneEditScreen(RefCounter* refCounter, const SceneEditScreen& other);
 
 		// Destructor
 		~SceneEditScreen();
@@ -350,8 +350,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneEditScreen)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneEditScreen&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const SceneEditScreen&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, NeedRedraw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);

@@ -34,7 +34,8 @@ DECLARE_SINGLETON(Editor::SceneEditScreen);
 
 namespace Editor
 {
-	SceneEditScreen::SceneEditScreen()
+	SceneEditScreen::SceneEditScreen(RefCounter* refCounter):
+		ScrollView(refCounter)
 	{
 		InitializeTools();
 		SelectTool<MoveTool>();
@@ -45,8 +46,8 @@ namespace Editor
 		mRightBottomWidgetsContainer = InitializeWidgetsContainer(BaseCorner::RightBottom);
 	}
 
-	SceneEditScreen::SceneEditScreen(const SceneEditScreen& other) :
-		SceneEditScreen()
+	SceneEditScreen::SceneEditScreen(RefCounter* refCounter, const SceneEditScreen& other) :
+		SceneEditScreen(refCounter)
 	{}
 
 	SceneEditScreen::~SceneEditScreen()

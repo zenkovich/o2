@@ -7,7 +7,8 @@
 
 namespace Editor
 {
-	TexturePreview::TexturePreview()
+	TexturePreview::TexturePreview(RefCounter* refCounter):
+		Widget(refCounter)
 	{
 		mTextureSprite = mmake<Sprite>();
 		mBackgroundSprite = mmake<Sprite>(CommonTextures::checkedBackground);
@@ -21,8 +22,8 @@ namespace Editor
 		AddChild(mTextureInfoLabel);
 	}
 
-	TexturePreview::TexturePreview(const TexturePreview& other):
-		Widget(other)
+	TexturePreview::TexturePreview(RefCounter* refCounter, const TexturePreview& other):
+		Widget(refCounter, other)
 	{
 		mBackgroundSprite = GetLayerDrawable<Sprite>("background");
 		mTextureSprite = GetLayerDrawable<Sprite>("texture");

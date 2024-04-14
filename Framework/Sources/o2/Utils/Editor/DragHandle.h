@@ -289,6 +289,9 @@ namespace o2
         // Copy-constructor
         WidgetDragHandle(RefCounter* refCounter, const WidgetDragHandle& other);
 
+        // Copy-constructor
+        WidgetDragHandle(const WidgetDragHandle& other):WidgetDragHandle(nullptr, other) {}
+
         // Destructor
         ~WidgetDragHandle();
 
@@ -580,6 +583,7 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WidgetDragHandle&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetDragHandle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);

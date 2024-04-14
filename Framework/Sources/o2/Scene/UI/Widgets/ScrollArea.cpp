@@ -15,11 +15,11 @@
 namespace o2
 {
     ScrollArea::ScrollArea(RefCounter* refCounter) :
-        Widget(refCounter)
+        RefCounterable(refCounter), Widget(refCounter)
     {}
 
     ScrollArea::ScrollArea(RefCounter* refCounter, const ScrollArea& other) :
-        Widget(refCounter, other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
+        RefCounterable(refCounter), Widget(refCounter, other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
         mClipAreaLayout(other.mClipAreaLayout), mScrollPos(other.mScrollPos), mScrollSpeedDamp(other.mScrollSpeedDamp),
         mViewAreaLayout(other.mViewAreaLayout), mEnableScrollsHiding(other.mEnableScrollsHiding), scroll(this),
         horScroll(this), verScroll(this)

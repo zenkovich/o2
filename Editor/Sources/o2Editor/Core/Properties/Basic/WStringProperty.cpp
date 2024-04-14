@@ -5,11 +5,12 @@
 
 namespace Editor
 {
-	WStringProperty::WStringProperty()
+	WStringProperty::WStringProperty(RefCounter* refCounter):
+		TPropertyField<WString>(refCounter)
 	{}
 
-	WStringProperty::WStringProperty(const WStringProperty& other):
-		TPropertyField<WString>(other)
+	WStringProperty::WStringProperty(RefCounter* refCounter, const WStringProperty& other):
+		TPropertyField<WString>(refCounter, other)
 	{
 		InitializeControls();
 	}

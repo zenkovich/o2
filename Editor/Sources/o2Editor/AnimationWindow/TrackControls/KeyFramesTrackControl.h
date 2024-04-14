@@ -29,10 +29,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		KeyFramesTrackControl();
+        KeyFramesTrackControl(RefCounter* refCounter);
 
 		// Copy-constructor
-		KeyFramesTrackControl(const KeyFramesTrackControl& other);
+		KeyFramesTrackControl(RefCounter* refCounter, const KeyFramesTrackControl& other);
 
 		// Destructor
 		~KeyFramesTrackControl();
@@ -126,15 +126,15 @@ namespace Editor
 	};
 
 	template<typename AnimationTrackType>
-	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl() :
-		ITrackControl()
+	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl(RefCounter* refCounter) :
+		ITrackControl(refCounter)
 	{
 		InitializeControls();
 	}
 
 	template<typename AnimationTrackType>
-	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl(const KeyFramesTrackControl& other) :
-		ITrackControl(other)
+	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl(RefCounter* refCounter, const KeyFramesTrackControl& other) :
+		ITrackControl(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -556,8 +556,8 @@ META_TEMPLATES(typename AnimationTrackType)
 CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const KeyFramesTrackControl&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const KeyFramesTrackControl&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&, const Ref<IAnimationTrack::IPlayer>&, const String&);

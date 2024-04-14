@@ -22,10 +22,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		AssetsFoldersTree();
+		AssetsFoldersTree(RefCounter* refCounter);
 
 		// Copy-constructor
-		AssetsFoldersTree(const AssetsFoldersTree& other);
+		AssetsFoldersTree(RefCounter* refCounter, const AssetsFoldersTree& other);
 
 		// Destructor
 		~AssetsFoldersTree();
@@ -103,6 +103,12 @@ namespace Editor
 	class FoldersTree : public Tree
 	{
 	public:
+		// Default constructor
+		FoldersTree(RefCounter* refCounter);
+
+		// Copy-constructor
+		FoldersTree(RefCounter* refCounter, const FoldersTree& other);
+
 		SERIALIZABLE(FoldersTree);
 
 	protected:
@@ -132,8 +138,8 @@ END_META;
 CLASS_METHODS_META(Editor::AssetsFoldersTree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsFoldersTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetsFoldersTree&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, SelectAndExpandFolder, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateView);
@@ -167,6 +173,8 @@ END_META;
 CLASS_METHODS_META(Editor::FoldersTree)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const FoldersTree&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }

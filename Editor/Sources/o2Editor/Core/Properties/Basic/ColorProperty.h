@@ -21,10 +21,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		ColorProperty();
+		ColorProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		ColorProperty(const ColorProperty& other);
+		ColorProperty(RefCounter* refCounter, const ColorProperty& other);
 
 		// Copy operator
 		ColorProperty& operator=(const ColorProperty& other);
@@ -64,8 +64,8 @@ END_META;
 CLASS_METHODS_META(Editor::ColorProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ColorProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ColorProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);

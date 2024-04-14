@@ -24,10 +24,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		ActorProperty();
+		ActorProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		ActorProperty(const ActorProperty& other);
+		ActorProperty(RefCounter* refCounter, const ActorProperty& other);
 
 		// Copy operator
 		ActorProperty& operator=(const ActorProperty& other);
@@ -121,8 +121,8 @@ END_META;
 CLASS_METHODS_META(Editor::ActorProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ActorProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ActorProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, Revert);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);

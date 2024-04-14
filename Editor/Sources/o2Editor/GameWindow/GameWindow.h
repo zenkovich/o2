@@ -30,7 +30,7 @@ namespace Editor
 
 		public:
 			// Default constructor, initializes view
-			GameView();
+			GameView(RefCounter* refCounter);
 
 			// Draws view
 			void Draw() override;
@@ -162,7 +162,7 @@ END_META;
 CLASS_METHODS_META(Editor::GameWindow::GameView)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);

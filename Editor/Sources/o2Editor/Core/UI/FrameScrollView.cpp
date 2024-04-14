@@ -7,7 +7,8 @@
 
 namespace Editor
 {
-	FrameScrollView::FrameScrollView() : ScrollView()
+	FrameScrollView::FrameScrollView(RefCounter* refCounter) :
+		ScrollView(refCounter)
 	{
 		mReady = false;
 
@@ -24,8 +25,8 @@ namespace Editor
 		mReady = true;
 	}
 
-	FrameScrollView::FrameScrollView(const FrameScrollView& other) :
-		ScrollView(other), mHorScrollbar(other.mHorScrollbar->CloneAs<HorizontalScrollBar>()),
+	FrameScrollView::FrameScrollView(RefCounter* refCounter, const FrameScrollView& other) :
+		ScrollView(refCounter, other), mHorScrollbar(other.mHorScrollbar->CloneAs<HorizontalScrollBar>()),
 		mVerScrollbar(other.mVerScrollbar->CloneAs<VerticalScrollBar>())
 	{
 		mReady = false;

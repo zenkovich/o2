@@ -5,11 +5,12 @@
 
 namespace Editor
 {
-	Vec2IProperty::Vec2IProperty()
+	Vec2IProperty::Vec2IProperty(RefCounter* refCounter):
+		IPropertyField(refCounter)
 	{}
 
-	Vec2IProperty::Vec2IProperty(const Vec2IProperty& other):
-		IPropertyField(other)
+	Vec2IProperty::Vec2IProperty(RefCounter* refCounter, const Vec2IProperty& other):
+		IPropertyField(refCounter, other)
 	{
 		InitializeControls();
 	}

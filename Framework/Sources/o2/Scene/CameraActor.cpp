@@ -9,7 +9,7 @@
 namespace o2
 {
     CameraActor::CameraActor(RefCounter* refCounter) :
-        Actor(refCounter)
+        RefCounterable(refCounter), Actor(refCounter)
     {}
 
     CameraActor::CameraActor(RefCounter* refCounter, const CameraActor& other) :

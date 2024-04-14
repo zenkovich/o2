@@ -19,10 +19,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor. Initializes image
-		CurvePreview();
+		CurvePreview(RefCounter* refCounter);
 
 		// Default copy-constructor
-		CurvePreview(const CurvePreview& other);
+		CurvePreview(RefCounter* refCounter, const CurvePreview& other);
 
 		// Copy operator
 		CurvePreview& operator=(const CurvePreview& other);
@@ -90,8 +90,8 @@ END_META;
 CLASS_METHODS_META(Editor::CurvePreview)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CurvePreview&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CurvePreview&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurve, const Ref<Curve>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBackColor, const Color4&);

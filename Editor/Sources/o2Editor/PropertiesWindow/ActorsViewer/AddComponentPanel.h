@@ -25,10 +25,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		AddComponentPanel();
+		AddComponentPanel(RefCounter* refCounter);
 
 		// Constructor
-		AddComponentPanel(const Ref<ActorViewer>& viewer);
+		AddComponentPanel(RefCounter* refCounter, const Ref<ActorViewer>& viewer);
 
 		// Draws widget, calls OnDrawn for CursorEventsListener
 		void Draw() override;
@@ -97,10 +97,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		ComponentsTree();
+		ComponentsTree(RefCounter* refCounter);
 
 		// Copy-constructor
-		ComponentsTree(const ComponentsTree& other);
+		ComponentsTree(RefCounter* refCounter, const ComponentsTree& other);
 
 		// Copy operator
 		ComponentsTree& operator=(const ComponentsTree& other);
@@ -154,10 +154,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		ComponentsTreeNode();
+		ComponentsTreeNode(RefCounter* refCounter);
 
 		// Copy-constructor
-		ComponentsTreeNode(const ComponentsTreeNode& other);
+		ComponentsTreeNode(RefCounter* refCounter, const ComponentsTreeNode& other);
 
 		// Copy operator
 		ComponentsTreeNode& operator=(const ComponentsTreeNode& other);
@@ -206,8 +206,8 @@ END_META;
 CLASS_METHODS_META(Editor::AddComponentPanel)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<ActorViewer>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<ActorViewer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<EditBox>&, GetFilter);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<ComponentsTree>&, GetTree);
@@ -235,8 +235,8 @@ END_META;
 CLASS_METHODS_META(Editor::ComponentsTree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ComponentsTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
@@ -266,8 +266,8 @@ END_META;
 CLASS_METHODS_META(Editor::ComponentsTreeNode)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTreeNode&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ComponentsTreeNode&);
     FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<ComponentsTree::NodeData>&, const Ref<ComponentsTree>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);

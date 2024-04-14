@@ -6,12 +6,12 @@
 namespace Editor
 {
 
-	SpoilerWithHead::SpoilerWithHead() :
-		Spoiler()
+	SpoilerWithHead::SpoilerWithHead(RefCounter* refCounter) :
+		Spoiler(refCounter)
 	{}
 
-	SpoilerWithHead::SpoilerWithHead(const SpoilerWithHead& other) :
-		Spoiler(other)
+	SpoilerWithHead::SpoilerWithHead(RefCounter* refCounter, const SpoilerWithHead& other) :
+		Spoiler(refCounter, other)
 	{
 		InitializeControls();
 		RetargetStatesAnimations();

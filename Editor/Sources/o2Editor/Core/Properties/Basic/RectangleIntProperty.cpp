@@ -5,11 +5,12 @@
 
 namespace Editor
 {
-	RectIProperty::RectIProperty()
+	RectIProperty::RectIProperty(RefCounter* refCounter):
+		IPropertyField(refCounter)
 	{}
 
-	RectIProperty::RectIProperty(const RectIProperty& other) :
-		IPropertyField(other)
+	RectIProperty::RectIProperty(RefCounter* refCounter, const RectIProperty& other) :
+		IPropertyField(refCounter, other)
 	{
 		InitializeControls();
 	}

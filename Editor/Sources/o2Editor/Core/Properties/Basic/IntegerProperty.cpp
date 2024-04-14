@@ -7,11 +7,12 @@
 
 namespace Editor
 {
-	IntegerProperty::IntegerProperty()
+	IntegerProperty::IntegerProperty(RefCounter* refCounter):
+		TPropertyField<int>(refCounter)
 	{}
 
-	IntegerProperty::IntegerProperty(const IntegerProperty& other) :
-		TPropertyField<int>(other)
+	IntegerProperty::IntegerProperty(RefCounter* refCounter, const IntegerProperty& other) :
+		TPropertyField<int>(refCounter, other)
 	{
 		InitializeControls();
 	}

@@ -19,10 +19,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		DockWindowPlace();
+		DockWindowPlace(RefCounter* refCounter);
 
 		// Copy-constructor
-		DockWindowPlace(const DockWindowPlace& other);
+		DockWindowPlace(RefCounter* refCounter, const DockWindowPlace& other);
 
 		// Destructor
 		~DockWindowPlace();
@@ -111,8 +111,8 @@ END_META;
 CLASS_METHODS_META(Editor::DockWindowPlace)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const DockWindowPlace&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const DockWindowPlace&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetResizibleDir, TwoDirection, float, const Ref<DockWindowPlace>&, const Ref<DockWindowPlace>&);
     FUNCTION().PUBLIC().SIGNATURE(TwoDirection, GetResizibleDir);

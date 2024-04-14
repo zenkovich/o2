@@ -12,13 +12,14 @@
 
 namespace Editor
 {
-	IPropertyField::IPropertyField()
+	IPropertyField::IPropertyField(RefCounter* refCounter):
+		HorizontalLayout(refCounter)
 	{
 		mCaption = FindChildByType<Label>("caption");
 	}
 
-	IPropertyField::IPropertyField(const IPropertyField& other) :
-		HorizontalLayout(other)
+	IPropertyField::IPropertyField(RefCounter* refCounter, const IPropertyField& other) :
+		HorizontalLayout(refCounter, other)
 	{}
 
 	IPropertyField::~IPropertyField()

@@ -16,13 +16,13 @@
 
 namespace Editor
 {
-	ComponentProperty::ComponentProperty()
-	{
-		InitializeControls();
+	ComponentProperty::ComponentProperty(RefCounter* refCounter):
+		TPropertyField<Ref<Component>>(refCounter)
+    {
 	}
 
-	ComponentProperty::ComponentProperty(const ComponentProperty& other) :
-		TPropertyField<Ref<Component>>(other)
+	ComponentProperty::ComponentProperty(RefCounter* refCounter, const ComponentProperty& other) :
+		TPropertyField<Ref<Component>>(refCounter, other)
 	{
 		InitializeControls();
 	}

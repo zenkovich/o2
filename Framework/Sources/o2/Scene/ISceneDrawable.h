@@ -136,7 +136,9 @@ namespace o2
     class SceneLayerRootDrawablesContainer : public ISceneDrawable
     {
     public:
-        SceneLayerRootDrawablesContainer(RefCounter* refCounter): ISceneDrawable(refCounter) {}
+        SceneLayerRootDrawablesContainer(RefCounter* refCounter): 
+            RefCounterable(refCounter), ISceneDrawable(refCounter) 
+        {}
     };
 }
 // --- META ---

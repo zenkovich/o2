@@ -20,10 +20,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		StringProperty();
+		StringProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		StringProperty(const StringProperty& other);
+		StringProperty(RefCounter* refCounter, const StringProperty& other);
 
 		// Copy operator
 		StringProperty& operator=(const StringProperty& other);
@@ -59,8 +59,8 @@ END_META;
 CLASS_METHODS_META(Editor::StringProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const StringProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const StringProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);

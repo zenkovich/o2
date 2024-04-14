@@ -21,10 +21,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		ImageSlicesEditorWidget();
+		ImageSlicesEditorWidget(RefCounter* refCounter);
 
 		// Default copy-constructor
-		ImageSlicesEditorWidget(const ImageSlicesEditorWidget& other);
+		ImageSlicesEditorWidget(RefCounter* refCounter, const ImageSlicesEditorWidget& other);
 
 		// Copy operator
 		ImageSlicesEditorWidget& operator=(const ImageSlicesEditorWidget& other);
@@ -44,6 +44,9 @@ namespace Editor
 		class PreviewImage : public Image
 		{
 		public:
+			// Default constructor
+			PreviewImage(RefCounter* refCounter);
+
 			// Sets texture filter to nearest and draws it
 			void Draw() override;
 
@@ -108,8 +111,8 @@ END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ImageSlicesEditorWidget&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ImageSlicesEditorWidget&);
     FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<ImageAsset>&, const Ref<BorderIProperty>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeImagePreview);
@@ -133,6 +136,7 @@ END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget::PreviewImage)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }

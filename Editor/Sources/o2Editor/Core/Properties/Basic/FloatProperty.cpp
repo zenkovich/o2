@@ -8,11 +8,12 @@
 
 namespace Editor
 {
-	FloatProperty::FloatProperty()
+	FloatProperty::FloatProperty(RefCounter* refCounter):
+		TPropertyField<float>(refCounter)
 	{}
 
-	FloatProperty::FloatProperty(const FloatProperty& other) :
-		TPropertyField<float>(other)
+	FloatProperty::FloatProperty(RefCounter* refCounter, const FloatProperty& other) :
+		TPropertyField<float>(refCounter, other)
 	{
 		InitializeControls();
 	}

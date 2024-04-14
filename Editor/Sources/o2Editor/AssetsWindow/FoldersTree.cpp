@@ -18,8 +18,8 @@
 
 namespace Editor
 {
-	AssetsFoldersTree::AssetsFoldersTree() :
-		Widget()
+	AssetsFoldersTree::AssetsFoldersTree(RefCounter* refCounter) :
+		Widget(refCounter)
 	{
 		if (!UIManager::IsSingletonInitialzed())
 			return;
@@ -43,8 +43,8 @@ namespace Editor
 		InitializeContext();
 	}
 
-	AssetsFoldersTree::AssetsFoldersTree(const AssetsFoldersTree& other) :
-		Widget(other)
+	AssetsFoldersTree::AssetsFoldersTree(RefCounter* refCounter, const AssetsFoldersTree& other) :
+		Widget(refCounter, other)
 	{
 		mFoldersTree = FindChildByType<Tree>();
 		RemoveChild(FindChildByType<ContextMenu>());
@@ -249,7 +249,15 @@ namespace Editor
 		}
 	}
 
-	void FoldersTree::UpdateVisibleNodes()
+    FoldersTree::FoldersTree(RefCounter* refCounter):
+		Tree(refCounter)
+    {}
+
+    FoldersTree::FoldersTree(RefCounter* refCounter, const FoldersTree& other):
+		Tree(refCounter, other)
+    {}
+
+    void FoldersTree::UpdateVisibleNodes()
 	{
 		PushEditorScopeOnStack scope;
 		Tree::UpdateNodesStructure();

@@ -14,13 +14,14 @@
 
 namespace Editor
 {
-	ActorProperty::ActorProperty()
+	ActorProperty::ActorProperty(RefCounter* refCounter):
+		TPropertyField<Ref<Actor>>(refCounter)
 	{
 		mCommonValue = nullptr;
 	}
 
-	ActorProperty::ActorProperty(const ActorProperty& other) :
-		TPropertyField<Ref<Actor>>(other)
+	ActorProperty::ActorProperty(RefCounter* refCounter, const ActorProperty& other) :
+		TPropertyField<Ref<Actor>>(refCounter, other)
 	{
 		InitializeControls();
 	}

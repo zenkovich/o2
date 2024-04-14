@@ -10,14 +10,15 @@
 
 namespace Editor
 {
-	CurvePreview::CurvePreview()
+	CurvePreview::CurvePreview(RefCounter* refCounter):
+		Widget(refCounter)
 	{
 		mSprite = mmake<Sprite>();
 		AddLayer("image", mSprite);
 	}
 
-	CurvePreview::CurvePreview(const CurvePreview& other):
-		mBackColor(other.mBackColor), mCurveColor(other.mCurveColor)
+	CurvePreview::CurvePreview(RefCounter* refCounter, const CurvePreview& other):
+		Widget(refCounter, other), mBackColor(other.mBackColor), mCurveColor(other.mCurveColor)
 	{
 		mSprite = GetLayerDrawable<Sprite>("image");
 		RetargetStatesAnimations();

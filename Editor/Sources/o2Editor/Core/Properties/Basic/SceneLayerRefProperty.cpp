@@ -6,13 +6,14 @@
 
 namespace Editor
 {
-	SceneLayerRefProperty::SceneLayerRefProperty()
+	SceneLayerRefProperty::SceneLayerRefProperty(RefCounter* refCounter):
+		TPropertyField<Ref<SceneLayer>>(refCounter)
 	{
 		mCommonValue = Ref<SceneLayer>();
 	}
 
-	SceneLayerRefProperty::SceneLayerRefProperty(const SceneLayerRefProperty& other) :
-		TPropertyField<Ref<SceneLayer>>(other)
+	SceneLayerRefProperty::SceneLayerRefProperty(RefCounter* refCounter, const SceneLayerRefProperty& other) :
+		TPropertyField<Ref<SceneLayer>>(refCounter, other)
 	{
 		InitializeControls();
 	}

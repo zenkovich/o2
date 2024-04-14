@@ -20,10 +20,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		FrameScrollView();
+		FrameScrollView(RefCounter* refCounter);
 
 		// Copy-constructor
-		FrameScrollView(const FrameScrollView& other);
+		FrameScrollView(RefCounter* refCounter, const FrameScrollView& other);
 
 		// Destructor
 		~FrameScrollView();
@@ -95,8 +95,8 @@ END_META;
 CLASS_METHODS_META(Editor::FrameScrollView)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const FrameScrollView&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const FrameScrollView&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);

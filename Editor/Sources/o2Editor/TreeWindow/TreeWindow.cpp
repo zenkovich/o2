@@ -413,10 +413,11 @@ namespace Editor
 	{
 		ForcePopEditorScopeOnStack scope;
 
-		auto newActor = new Actor({ mmake<ImageComponent>() });
+		auto newActor = mmake<Actor>();
+		newActor->AddComponent(mmake<ImageComponent>());
 		newActor->name = "Sprite";
 		newActor->transform->size = Vec2F(10, 10);
-		OnCreateObject(Ref(newActor));
+		OnCreateObject(newActor);
 	}
 
 	void TreeWindow::OnContextCreateButton()

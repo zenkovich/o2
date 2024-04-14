@@ -20,10 +20,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor. Initializes image
-		TexturePreview();
+		TexturePreview(RefCounter* refCounter);
 
 		// Default copy-constructor
-		TexturePreview(const TexturePreview& other);
+		TexturePreview(RefCounter* refCounter, const TexturePreview& other);
 
 		// Copy operator
 		TexturePreview& operator=(const TexturePreview& other);
@@ -63,8 +63,8 @@ END_META;
 CLASS_METHODS_META(Editor::TexturePreview)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const TexturePreview&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const TexturePreview&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTexture, const Ref<Texture>&, const RectI&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
 }

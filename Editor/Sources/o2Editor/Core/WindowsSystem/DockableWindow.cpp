@@ -18,8 +18,8 @@
 
 namespace Editor
 {
-	DockableWindow::DockableWindow():
-		Window()
+	DockableWindow::DockableWindow(RefCounter* refCounter):
+		Window(refCounter)
 	{
 		InitializeDragHandles();
 		SetDocked(false);
@@ -28,8 +28,8 @@ namespace Editor
 		RetargetStatesAnimations();
 	}
 
-	DockableWindow::DockableWindow(const DockableWindow& other):
-		Window(other)
+	DockableWindow::DockableWindow(RefCounter* refCounter, const DockableWindow& other):
+		Window(refCounter, other)
 	{
 		PushEditorScopeOnStack scope;
 

@@ -7,12 +7,12 @@
 
 namespace Editor
 {
-	MapKeyFramesTrackControl::MapKeyFramesTrackControl() :
-		ITrackControl()
+	MapKeyFramesTrackControl::MapKeyFramesTrackControl(RefCounter* refCounter) :
+		ITrackControl(refCounter)
 	{}
 
-	MapKeyFramesTrackControl::MapKeyFramesTrackControl(const MapKeyFramesTrackControl& other) :
-		ITrackControl(other)
+	MapKeyFramesTrackControl::MapKeyFramesTrackControl(RefCounter* refCounter, const MapKeyFramesTrackControl& other) :
+		ITrackControl(refCounter, other)
 	{}
 
 	MapKeyFramesTrackControl::~MapKeyFramesTrackControl()

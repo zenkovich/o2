@@ -19,10 +19,10 @@ namespace Editor
     {
     public:
         // Default constructor
-        MapKeyFramesTrackControl();
+        MapKeyFramesTrackControl(RefCounter* refCounter);
 
         // Copy-constructor
-        MapKeyFramesTrackControl(const MapKeyFramesTrackControl& other);
+        MapKeyFramesTrackControl(RefCounter* refCounter, const MapKeyFramesTrackControl& other);
 
         // Destructor
         ~MapKeyFramesTrackControl();
@@ -295,8 +295,8 @@ END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const MapKeyFramesTrackControl&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const MapKeyFramesTrackControl&);
     FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationTimeline>&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);

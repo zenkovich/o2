@@ -29,6 +29,12 @@ namespace Editor
 		};
 
 	public:
+		// Default constructor
+		ITrackControl(RefCounter* refCounter);
+
+		// Copy-constructor
+		ITrackControl(RefCounter* refCounter, const ITrackControl& other);
+
 		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
 		virtual void Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet);
 
@@ -91,6 +97,8 @@ END_META;
 CLASS_METHODS_META(Editor::ITrackControl)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ITrackControl&);
     FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationTimeline>&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&, const Ref<IAnimationTrack::IPlayer>&, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);

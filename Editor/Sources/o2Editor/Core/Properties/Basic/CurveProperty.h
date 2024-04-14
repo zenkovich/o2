@@ -22,10 +22,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		CurveProperty();
+		CurveProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		CurveProperty(const CurveProperty& other);
+		CurveProperty(RefCounter* refCounter, const CurveProperty& other);
 
 		// Copy operator
 		CurveProperty& operator=(const CurveProperty& other);
@@ -65,8 +65,8 @@ END_META;
 CLASS_METHODS_META(Editor::CurveProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CurveProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CurveProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);

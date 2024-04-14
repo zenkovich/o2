@@ -8,8 +8,8 @@
 
 namespace Editor
 {
-	DockWindowPlace::DockWindowPlace():
-		Widget(), DrawableCursorEventsListener(this), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()),
+	DockWindowPlace::DockWindowPlace(RefCounter* refCounter):
+		Widget(refCounter), DrawableCursorEventsListener(this), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()),
 		mDragHandleLayoutMax(Vec2F(), Vec2F(), Vec2F(), Vec2F()), mNeighborMax(nullptr), mNeighborMin(nullptr)
 	{
 		InitializeDragHandle();
@@ -17,8 +17,8 @@ namespace Editor
 		SetLayoutDirty();
 	}
 
-	DockWindowPlace::DockWindowPlace(const DockWindowPlace& other):
-		Widget(other), DrawableCursorEventsListener(this), mNeighborMax(nullptr), mNeighborMin(nullptr)
+	DockWindowPlace::DockWindowPlace(RefCounter* refCounter, const DockWindowPlace& other):
+		Widget(refCounter, other), DrawableCursorEventsListener(this), mNeighborMax(nullptr), mNeighborMin(nullptr)
 	{
 		InitializeDragHandle();
 		RetargetStatesAnimations();

@@ -23,10 +23,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		ScriptValueProperty();
+		ScriptValueProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		ScriptValueProperty(const ScriptValueProperty& other);
+		ScriptValueProperty(RefCounter* refCounter, const ScriptValueProperty& other);
 
 		// Copy operator
 		ScriptValueProperty& operator=(const ScriptValueProperty& other);
@@ -210,8 +210,8 @@ CLASS_METHODS_META(Editor::ScriptValueProperty)
 
     typedef const Vector<Pair<ScriptValue, ScriptValue>>& _tmp1;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ScriptValueProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ScriptValueProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);

@@ -8,11 +8,12 @@
 
 namespace Editor
 {
-	CurveProperty::CurveProperty()
+	CurveProperty::CurveProperty(RefCounter* refCounter):
+		TPropertyField<Curve>(refCounter)
 	{}
 
-	CurveProperty::CurveProperty(const CurveProperty& other) :
-		TPropertyField<Curve>(other)
+	CurveProperty::CurveProperty(RefCounter* refCounter, const CurveProperty& other) :
+		TPropertyField<Curve>(refCounter, other)
 	{
 		InitializeControls();
 	}

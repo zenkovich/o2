@@ -15,10 +15,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		BorderFProperty();
+		BorderFProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		BorderFProperty(const BorderFProperty& other);
+		BorderFProperty(RefCounter* refCounter, const BorderFProperty& other);
 
 		// Copy operator
 		BorderFProperty& operator=(const BorderFProperty& other);
@@ -152,8 +152,8 @@ END_META;
 CLASS_METHODS_META(Editor::BorderFProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const BorderFProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const BorderFProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const BorderF&);

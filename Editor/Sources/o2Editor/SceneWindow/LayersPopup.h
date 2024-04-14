@@ -23,7 +23,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		LayersPopup();
+		LayersPopup(RefCounter* refCounter);
 
 		// Destructor
 		~LayersPopup();
@@ -93,10 +93,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		LayerPopupItem();
+		LayerPopupItem(RefCounter* refCounter);
 
 		// Copy-constructor
-		LayerPopupItem(const LayerPopupItem& other);
+		LayerPopupItem(RefCounter* refCounter, const LayerPopupItem& other);
 
 		// Copy-operator
 		LayerPopupItem& operator=(const LayerPopupItem& other);
@@ -183,7 +183,7 @@ END_META;
 CLASS_METHODS_META(Editor::LayersPopup)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
@@ -222,8 +222,8 @@ END_META;
 CLASS_METHODS_META(Editor::LayerPopupItem)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const LayerPopupItem&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const LayerPopupItem&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, BeginEditName);
     FUNCTION().PUBLIC().SIGNATURE(void, BreakEditName);

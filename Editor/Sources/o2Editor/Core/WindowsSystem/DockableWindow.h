@@ -15,10 +15,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		DockableWindow();
+		DockableWindow(RefCounter* refCounter);
 
 		// Copy-constructor
-		DockableWindow(const DockableWindow& other);
+		DockableWindow(RefCounter* refCounter, const DockableWindow& other);
 
 		// Destructor
 		~DockableWindow();
@@ -206,8 +206,8 @@ END_META;
 CLASS_METHODS_META(Editor::DockableWindow)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const DockableWindow&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const DockableWindow&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsDocked);

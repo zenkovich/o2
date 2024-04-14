@@ -6,13 +6,14 @@
 
 namespace Editor
 {
-	ImageSlicesEditorWidget::ImageSlicesEditorWidget()
+	ImageSlicesEditorWidget::ImageSlicesEditorWidget(RefCounter* refCounter):
+		Widget(refCounter)
 	{
 		InitializeImagePreview();
 	}
 
-	ImageSlicesEditorWidget::ImageSlicesEditorWidget(const ImageSlicesEditorWidget& other):
-		Widget(other)
+	ImageSlicesEditorWidget::ImageSlicesEditorWidget(RefCounter* refCounter, const ImageSlicesEditorWidget& other):
+		Widget(refCounter, other)
 	{
 		InitializeImagePreview();
 	}
@@ -206,7 +207,11 @@ namespace Editor
 		return res;
 	}
 
-	void ImageSlicesEditorWidget::PreviewImage::Draw()
+    ImageSlicesEditorWidget::PreviewImage::PreviewImage(RefCounter* refCounter):
+		Image(refCounter)
+    {}
+
+    void ImageSlicesEditorWidget::PreviewImage::Draw()
 	{
 		mIsClipped = false;
 		if (auto texture = mImage.Lock()->GetTexture())

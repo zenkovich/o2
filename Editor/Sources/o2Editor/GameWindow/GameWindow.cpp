@@ -134,7 +134,8 @@ namespace Editor
 		}
 	}
 
-	GameWindow::GameView::GameView()
+	GameWindow::GameView::GameView(RefCounter* refCounter):
+		Widget(refCounter)
 	{
 		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));

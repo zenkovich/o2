@@ -26,10 +26,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		ObjectPtrProperty();
+		ObjectPtrProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		ObjectPtrProperty(const ObjectPtrProperty& other);
+		ObjectPtrProperty(RefCounter* refCounter, const ObjectPtrProperty& other);
 
 		// Copy operator
 		ObjectPtrProperty& operator=(const ObjectPtrProperty& other);
@@ -155,8 +155,8 @@ END_META;
 CLASS_METHODS_META(Editor::ObjectPtrProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ObjectPtrProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ObjectPtrProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);

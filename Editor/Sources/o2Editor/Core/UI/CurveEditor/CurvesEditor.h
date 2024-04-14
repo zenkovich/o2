@@ -32,10 +32,10 @@ namespace Editor
 
     public:
         // Default constructor
-        CurvesEditor();
+        CurvesEditor(RefCounter* refCounter);
 
         // Copy-constructor
-        CurvesEditor(const CurvesEditor& other);
+        CurvesEditor(RefCounter* refCounter, const CurvesEditor& other);
 
         // Destructor
         ~CurvesEditor();
@@ -541,8 +541,8 @@ CLASS_METHODS_META(Editor::CurvesEditor)
 
     typedef Map<String, Ref<Curve>> _tmp1;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesEditor&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CurvesEditor&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(_tmp1, GetCurves);

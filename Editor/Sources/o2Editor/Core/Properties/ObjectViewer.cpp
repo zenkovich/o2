@@ -6,7 +6,8 @@
 
 namespace Editor
 {
-	ObjectViewer::ObjectViewer()
+	ObjectViewer::ObjectViewer(RefCounter* refCounter):
+		VerticalLayout(refCounter)
 	{
 		spacing = 5;
 		expandHeight = false;

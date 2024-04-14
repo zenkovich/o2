@@ -12,7 +12,8 @@
 
 namespace Editor
 {
-	LayersPopup::LayersPopup()
+	LayersPopup::LayersPopup(RefCounter* refCounter):
+		PopupWidget(refCounter)
 	{
 		InitializeControls();
 	}
@@ -227,7 +228,8 @@ namespace Editor
 		UpdateLayersList();
 	}
 
-	LayerPopupItem::LayerPopupItem()
+	LayerPopupItem::LayerPopupItem(RefCounter* refCounter):
+		Widget(refCounter)
 	{
 		layout->minSize = Vec2F(200, 20);
 		AddLayer("drag handle", mmake<Sprite>("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
@@ -258,8 +260,8 @@ namespace Editor
 		AddChild(mEditBox);
 	}
 
-	LayerPopupItem::LayerPopupItem(const LayerPopupItem& other):
-		Widget(other)
+	LayerPopupItem::LayerPopupItem(RefCounter* refCounter, const LayerPopupItem& other):
+		Widget(refCounter, other)
 	{
 		mVisibleToggle = GetChildByType<Toggle>("visibility");
 		mRemoveBtn = GetChildByType<Button>("remove");

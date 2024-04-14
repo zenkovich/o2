@@ -14,13 +14,14 @@ using namespace o2;
 
 namespace Editor
 {
-	ScriptValueProperty::ScriptValueProperty()
+	ScriptValueProperty::ScriptValueProperty(RefCounter* refCounter):
+		IPropertyField(refCounter)
 	{
 		InitializeControls();
 	}
 
-	ScriptValueProperty::ScriptValueProperty(const ScriptValueProperty& other) :
-		IPropertyField(other)
+	ScriptValueProperty::ScriptValueProperty(RefCounter* refCounter, const ScriptValueProperty& other) :
+		IPropertyField(refCounter, other)
 	{
 		InitializeControls();
 	}

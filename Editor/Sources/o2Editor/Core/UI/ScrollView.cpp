@@ -8,7 +8,8 @@
 
 namespace Editor
 {
-	ScrollView::ScrollView()
+	ScrollView::ScrollView(RefCounter* refCounter):
+		Widget(refCounter)
 	{
 		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
@@ -19,8 +20,8 @@ namespace Editor
 		mReady = true;
 	}
 
-	ScrollView::ScrollView(const ScrollView& other):
-		Widget(other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
+	ScrollView::ScrollView(RefCounter* refCounter, const ScrollView& other):
+		Widget(refCounter, other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
 	{
 		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));

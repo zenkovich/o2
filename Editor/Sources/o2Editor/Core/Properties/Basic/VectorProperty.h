@@ -24,10 +24,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		VectorProperty();
+		VectorProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		VectorProperty(const VectorProperty& other);
+		VectorProperty(RefCounter* refCounter, const VectorProperty& other);
 
 		// Copy operator
 		VectorProperty& operator=(const VectorProperty& other);
@@ -175,8 +175,8 @@ END_META;
 CLASS_METHODS_META(Editor::VectorProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const VectorProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const VectorProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);

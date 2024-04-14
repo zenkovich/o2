@@ -19,10 +19,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		BooleanProperty();
+		BooleanProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		BooleanProperty(const BooleanProperty& other);
+		BooleanProperty(RefCounter* refCounter, const BooleanProperty& other);
 
 		// Copy operator
 		BooleanProperty& operator=(const BooleanProperty& other);
@@ -55,8 +55,8 @@ END_META;
 CLASS_METHODS_META(Editor::BooleanProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const BooleanProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const BooleanProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }

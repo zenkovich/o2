@@ -20,10 +20,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		IntegerProperty();
+		IntegerProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		IntegerProperty(const IntegerProperty& other);
+		IntegerProperty(RefCounter* refCounter, const IntegerProperty& other);
 
 		// Copy operator
 		IntegerProperty& operator=(const IntegerProperty& other);
@@ -75,8 +75,8 @@ END_META;
 CLASS_METHODS_META(Editor::IntegerProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const IntegerProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const IntegerProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);

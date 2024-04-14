@@ -37,10 +37,10 @@ namespace Editor
 
     public:
         // Default constructor. Searches revert button and sets click action
-        IPropertyField();
+        IPropertyField(RefCounter* refCounter);
 
         // Copy-constructor
-        IPropertyField(const IPropertyField& other);
+        IPropertyField(RefCounter* refCounter, const IPropertyField& other);
 
         // Virtual destructor
         virtual ~IPropertyField();
@@ -209,10 +209,10 @@ namespace Editor
     {
     public:
         // Default constructor
-        TPropertyField();
+        TPropertyField(RefCounter* refCounter);
 
         // Copy-constructor
-        TPropertyField(const TPropertyField& other);
+        TPropertyField(RefCounter* refCounter, const TPropertyField& other);
 
         // COpy operator
         TPropertyField& operator=(const TPropertyField& other);
@@ -405,12 +405,13 @@ namespace Editor
     // -----------------------------
 
     template<typename _type>
-    TPropertyField<_type>::TPropertyField()
+    TPropertyField<_type>::TPropertyField(RefCounter* refCounter):
+        IPropertyField(refCounter)
     {}
 
     template<typename _type>
-    TPropertyField<_type>::TPropertyField(const TPropertyField& other) :
-        IPropertyField(other)
+    TPropertyField<_type>::TPropertyField(RefCounter* refCounter, const TPropertyField& other) :
+        IPropertyField(refCounter, other)
     {}
 
     template<typename _type>
@@ -609,8 +610,8 @@ END_META;
 CLASS_METHODS_META(Editor::IPropertyField)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const IPropertyField&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const IPropertyField&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(const TargetsVec&, GetValueAndPrototypeProxy);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueProxy, const Vector<Ref<IAbstractValueProxy>>&);
@@ -661,8 +662,8 @@ META_TEMPLATES(typename _type)
 CLASS_METHODS_META(Editor::TPropertyField<_type>)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const TPropertyField&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const TPropertyField&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, Revert);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);

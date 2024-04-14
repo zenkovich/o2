@@ -12,13 +12,14 @@
 
 namespace Editor
 {
-	VectorProperty::VectorProperty()
+	VectorProperty::VectorProperty(RefCounter* refCounter):
+		IPropertyField(refCounter)
 	{
 		InitializeControls();
 	}
 
-	VectorProperty::VectorProperty(const VectorProperty& other):
-		IPropertyField(other)
+	VectorProperty::VectorProperty(RefCounter* refCounter, const VectorProperty& other):
+		IPropertyField(refCounter, other)
 	{
 		InitializeControls();
 	}

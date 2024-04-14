@@ -25,10 +25,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		ScrollView();
+		ScrollView(RefCounter* refCounter);
 
 		// Copy-constructor
-		ScrollView(const ScrollView& other);
+		ScrollView(RefCounter* refCounter, const ScrollView& other);
 
 		// Destructor
 		~ScrollView();
@@ -194,8 +194,8 @@ END_META;
 CLASS_METHODS_META(Editor::ScrollView)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ScrollView&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ScrollView&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocalPoint, const Vec2F&);

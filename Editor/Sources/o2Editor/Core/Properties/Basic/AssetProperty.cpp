@@ -9,11 +9,12 @@
 
 namespace Editor
 {
-	AssetProperty::AssetProperty()
+	AssetProperty::AssetProperty(RefCounter* refCounter):
+		TPropertyField<Ref<Asset>>(refCounter)
 	{}
 
-	AssetProperty::AssetProperty(const AssetProperty& other):
-		TPropertyField(other)
+	AssetProperty::AssetProperty(RefCounter* refCounter, const AssetProperty& other):
+		TPropertyField<Ref<Asset>>(refCounter, other)
 	{
 		InitializeControls();
 	}

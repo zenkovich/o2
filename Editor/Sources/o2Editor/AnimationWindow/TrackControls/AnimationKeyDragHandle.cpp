@@ -6,23 +6,29 @@
 namespace Editor
 {
 
-	AnimationKeyDragHandle::AnimationKeyDragHandle()
+	AnimationKeyDragHandle::AnimationKeyDragHandle(RefCounter* refCounter):
+		WidgetDragHandle(refCounter)
 	{}
 
-	AnimationKeyDragHandle::AnimationKeyDragHandle(const Ref<Sprite>& regular, 
+	AnimationKeyDragHandle::AnimationKeyDragHandle(RefCounter* refCounter,
+												   const Ref<Sprite>& regular,
 												   const Ref<Sprite>& hover /*= nullptr*/,
 												   const Ref<Sprite>& pressed /*= nullptr*/, 
 												   const Ref<Sprite>& selected /*= nullptr*/, 
 												   const Ref<Sprite>& selectedHovered /*= nullptr*/, 
 												   const Ref<Sprite>& selectedPressed /*= nullptr*/):
-		WidgetDragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed)
+		WidgetDragHandle(refCounter, regular, hover, pressed, selected, selectedHovered, selectedPressed)
 	{}
 
-	AnimationKeyDragHandle::AnimationKeyDragHandle(const AnimationKeyDragHandle& other):
-		WidgetDragHandle(other)
+	AnimationKeyDragHandle::AnimationKeyDragHandle(RefCounter* refCounter, const AnimationKeyDragHandle& other):
+		WidgetDragHandle(refCounter, other)
 	{}
 
-	AnimationKeyDragHandle::~AnimationKeyDragHandle()
+	AnimationKeyDragHandle::AnimationKeyDragHandle(const AnimationKeyDragHandle& other) :
+		AnimationKeyDragHandle(nullptr, other)
+    {}
+
+    AnimationKeyDragHandle::~AnimationKeyDragHandle()
 	{}
 
 #undef DrawText

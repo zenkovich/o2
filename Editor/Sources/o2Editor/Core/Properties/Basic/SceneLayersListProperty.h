@@ -20,10 +20,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		SceneLayersListProperty();
+		SceneLayersListProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		SceneLayersListProperty(const SceneLayersListProperty& other);
+		SceneLayersListProperty(RefCounter* refCounter, const SceneLayersListProperty& other);
 
 		// Copy operator
 		SceneLayersListProperty& operator=(const SceneLayersListProperty& other);
@@ -64,8 +64,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneLayersListProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayersListProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const SceneLayersListProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OpenContext);

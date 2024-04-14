@@ -22,10 +22,10 @@ namespace Editor
 	{
 	public:		
 		// Default constructor
-		AnimationTree();
+		AnimationTree(RefCounter* refCounter);
 
 		// Copy-constructor
-		AnimationTree(const AnimationTree& other);
+		AnimationTree(RefCounter* refCounter, const AnimationTree& other);
 
 		// Destructor. Clearing tree data
 		~AnimationTree();
@@ -145,10 +145,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		AnimationTreeNode();
+		AnimationTreeNode(RefCounter* refCounter);
 
 		// Copy-constructor
-		AnimationTreeNode(const AnimationTreeNode& other);
+		AnimationTreeNode(RefCounter* refCounter, const AnimationTreeNode& other);
 
 		// Copy operator
 		AnimationTreeNode& operator=(const AnimationTreeNode& other);
@@ -225,8 +225,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
@@ -273,8 +273,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTreeNode)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTreeNode&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationTreeNode&);
     FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<AnimationTree::TrackNode>&, const Ref<AnimationTimeline>&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Free);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTreeWidth, float);

@@ -22,10 +22,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		AssetProperty();
+		AssetProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		AssetProperty(const AssetProperty& other);
+		AssetProperty(RefCounter* refCounter, const AssetProperty& other);
 
 		// Copy operator
         AssetProperty& operator=(const AssetProperty& other);
@@ -155,8 +155,8 @@ END_META;
 CLASS_METHODS_META(Editor::AssetProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetProperty&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAssetId, const UID&);

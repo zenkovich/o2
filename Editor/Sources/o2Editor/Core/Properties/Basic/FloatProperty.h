@@ -20,10 +20,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		FloatProperty();
+		FloatProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		FloatProperty(const FloatProperty& other);
+		FloatProperty(RefCounter* refCounter, const FloatProperty& other);
 
 		// Copy operator
 		FloatProperty& operator=(const FloatProperty& other);
@@ -78,8 +78,8 @@ END_META;
 CLASS_METHODS_META(Editor::FloatProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const FloatProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const FloatProperty&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<EditBox>&, GetEditBox);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);

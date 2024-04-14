@@ -19,10 +19,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		WStringProperty();
+		WStringProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		WStringProperty(const WStringProperty& other);
+		WStringProperty(RefCounter* refCounter, const WStringProperty& other);
 
 		// Copy operator
 		WStringProperty& operator=(const WStringProperty& other);
@@ -58,8 +58,8 @@ END_META;
 CLASS_METHODS_META(Editor::WStringProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WStringProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WStringProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);

@@ -18,10 +18,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		Vec2KeyFramesTrackControl();
+		Vec2KeyFramesTrackControl(RefCounter* refCounter);
 
 		// Copy-constructor
-		Vec2KeyFramesTrackControl(const Vec2KeyFramesTrackControl& other);
+		Vec2KeyFramesTrackControl(RefCounter* refCounter, const Vec2KeyFramesTrackControl& other);
 
 		// Destructor
 		~Vec2KeyFramesTrackControl();
@@ -74,8 +74,8 @@ END_META;
 CLASS_METHODS_META(Editor::Vec2KeyFramesTrackControl)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2KeyFramesTrackControl&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Vec2KeyFramesTrackControl&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);

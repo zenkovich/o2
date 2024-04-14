@@ -5,11 +5,12 @@
 
 namespace Editor
 {
-	BorderIProperty::BorderIProperty()
+	BorderIProperty::BorderIProperty(RefCounter* refCounter):
+		IPropertyField(refCounter)
 	{}
 
-	BorderIProperty::BorderIProperty(const BorderIProperty& other) :
-		IPropertyField(other)
+	BorderIProperty::BorderIProperty(RefCounter* refCounter, const BorderIProperty& other) :
+		IPropertyField(refCounter, other)
 	{
 		InitializeControls();
 	}

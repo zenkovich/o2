@@ -12,11 +12,11 @@
 namespace o2
 {
     Toggle::Toggle(RefCounter* refCounter):
-        Widget(refCounter), DrawableCursorEventsListener(this)
+        RefCounterable(refCounter), Widget(refCounter), DrawableCursorEventsListener(this)
     {}
 
     Toggle::Toggle(RefCounter* refCounter, const Toggle& other) :
-        Widget(refCounter, other), DrawableCursorEventsListener(this), mToggleGroup(nullptr), value(this), caption(this),
+        RefCounterable(refCounter), Widget(refCounter, other), DrawableCursorEventsListener(this), mToggleGroup(nullptr), value(this), caption(this),
         toggleGroup(this)
     {
         mCaptionText = GetLayerDrawable<Text>("caption");

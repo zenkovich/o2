@@ -5,11 +5,12 @@
 
 namespace Editor
 {
-	StringProperty::StringProperty()
+	StringProperty::StringProperty(RefCounter* refCounter):
+		TPropertyField<String>(refCounter)
 	{}
 
-	StringProperty::StringProperty(const StringProperty& other) :
-		TPropertyField<String>(other)
+	StringProperty::StringProperty(RefCounter* refCounter, const StringProperty& other) :
+		TPropertyField<String>(refCounter, other)
 	{
 		InitializeControls();
 	}

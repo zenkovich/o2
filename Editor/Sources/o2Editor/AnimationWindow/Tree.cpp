@@ -13,15 +13,15 @@
 
 namespace Editor
 {
-	AnimationTree::AnimationTree() :
-		Tree()
+	AnimationTree::AnimationTree(RefCounter* refCounter) :
+		Tree(refCounter)
 	{
 		SetRearrangeType(Tree::RearrangeType::Disabled);
 		InitializeContext();
 	}
 
-	AnimationTree::AnimationTree(const AnimationTree& other) :
-		Tree(other)
+	AnimationTree::AnimationTree(RefCounter* refCounter, const AnimationTree& other) :
+		Tree(refCounter, other)
 	{
 		SetRearrangeType(Tree::RearrangeType::Disabled);
 		InitializeContext();
@@ -319,12 +319,12 @@ namespace Editor
 		}
 	}
 
-	AnimationTreeNode::AnimationTreeNode() :
-		TreeNode()
+	AnimationTreeNode::AnimationTreeNode(RefCounter* refCounter) :
+		TreeNode(refCounter)
 	{}
 
-	AnimationTreeNode::AnimationTreeNode(const AnimationTreeNode& other) :
-		TreeNode(other)
+	AnimationTreeNode::AnimationTreeNode(RefCounter* refCounter, const AnimationTreeNode& other) :
+		TreeNode(refCounter, other)
 	{
 		InitializeControls();
 	}

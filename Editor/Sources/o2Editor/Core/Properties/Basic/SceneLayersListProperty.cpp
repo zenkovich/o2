@@ -6,11 +6,12 @@
 
 namespace Editor
 {
-	SceneLayersListProperty::SceneLayersListProperty()
+	SceneLayersListProperty::SceneLayersListProperty(RefCounter* refCounter):
+		TPropertyField<SceneLayersList>(refCounter)
 	{}
 
-	SceneLayersListProperty::SceneLayersListProperty(const SceneLayersListProperty& other):
-		TPropertyField<SceneLayersList>(other)
+	SceneLayersListProperty::SceneLayersListProperty(RefCounter* refCounter, const SceneLayersListProperty& other):
+		TPropertyField<SceneLayersList>(refCounter, other)
 	{
 		InitializeControls();
 	}

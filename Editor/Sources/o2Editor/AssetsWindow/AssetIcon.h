@@ -26,10 +26,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		AssetIcon();
+        AssetIcon(RefCounter* refCounter);
 
 		// Copy-constructor
-		AssetIcon(const AssetIcon& other);
+		AssetIcon(RefCounter* refCounter, const AssetIcon& other);
 
 		// Destructor
 		~AssetIcon();
@@ -147,8 +147,8 @@ END_META;
 CLASS_METHODS_META(Editor::AssetIcon)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetIcon&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetIcon&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAssetInfo, const Ref<AssetInfo>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<AssetInfo>&, GetAssetInfo);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAssetName, const WString&);

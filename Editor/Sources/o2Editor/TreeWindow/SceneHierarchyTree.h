@@ -29,10 +29,10 @@ namespace Editor
 
     public:
         // Default constructor
-        SceneHierarchyTree();
+        SceneHierarchyTree(RefCounter* refCounter);
 
         // Copy-constructor
-        SceneHierarchyTree(const SceneHierarchyTree& other);
+        SceneHierarchyTree(RefCounter* refCounter, const SceneHierarchyTree& other);
 
         // Destructor
         ~SceneHierarchyTree();
@@ -170,10 +170,10 @@ namespace Editor
     {
     public:
         // Default constructor
-        SceneHierarchyTreeNode();
+        SceneHierarchyTreeNode(RefCounter* refCounter);
 
         // Copy-constructor
-        SceneHierarchyTreeNode(const SceneHierarchyTreeNode& other);
+        SceneHierarchyTreeNode(RefCounter* refCounter, const SceneHierarchyTreeNode& other);
 
         // Copy operator
         SceneHierarchyTreeNode& operator=(const SceneHierarchyTreeNode& other);
@@ -245,8 +245,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneHierarchyTree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneHierarchyTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const SceneHierarchyTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, AttachToSceneEvents);
     FUNCTION().PUBLIC().SIGNATURE(void, DeattachFromSceneEvents);
     FUNCTION().PUBLIC().SIGNATURE(Ref<TreeNode>, GetNode, const Ref<SceneEditableObject>&);
@@ -308,8 +308,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneHierarchyTreeNode)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneHierarchyTreeNode&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const SceneHierarchyTreeNode&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSceneObject, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, EnableEditName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

@@ -30,7 +30,8 @@
 
 namespace Editor
 {
-    AssetsIconsScrollArea::AssetsIconsScrollArea()
+    AssetsIconsScrollArea::AssetsIconsScrollArea(RefCounter* refCounter):
+        GridLayoutScrollArea(refCounter)
     {
         mDragIcon = mmake<AssetIcon>();
 
@@ -40,8 +41,8 @@ namespace Editor
         mHighlightAnim->SetTarget(mHighlightSprite.Get());
     }
 
-    AssetsIconsScrollArea::AssetsIconsScrollArea(const AssetsIconsScrollArea& other) :
-        GridLayoutScrollArea(other), mHighlightSprite(other.mHighlightSprite->CloneAs<Sprite>()),
+    AssetsIconsScrollArea::AssetsIconsScrollArea(RefCounter* refCounter, const AssetsIconsScrollArea& other) :
+        GridLayoutScrollArea(refCounter, other), mHighlightSprite(other.mHighlightSprite->CloneAs<Sprite>()),
         mHighlightLayout(other.mHighlightLayout), mHighlightAnim(other.mHighlightAnim),
         mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>())
     {
