@@ -31,7 +31,7 @@
 namespace Editor
 {
     AssetsIconsScrollArea::AssetsIconsScrollArea(RefCounter* refCounter):
-        GridLayoutScrollArea(refCounter)
+        RefCounterable(refCounter), GridLayoutScrollArea(refCounter)
     {
         mDragIcon = mmake<AssetIcon>();
 
@@ -42,7 +42,7 @@ namespace Editor
     }
 
     AssetsIconsScrollArea::AssetsIconsScrollArea(RefCounter* refCounter, const AssetsIconsScrollArea& other) :
-        GridLayoutScrollArea(refCounter, other), mHighlightSprite(other.mHighlightSprite->CloneAs<Sprite>()),
+        RefCounterable(refCounter), GridLayoutScrollArea(refCounter, other), mHighlightSprite(other.mHighlightSprite->CloneAs<Sprite>()),
         mHighlightLayout(other.mHighlightLayout), mHighlightAnim(other.mHighlightAnim),
         mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>())
     {

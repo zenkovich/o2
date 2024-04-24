@@ -33,7 +33,12 @@ add_compile_definitions(${O2_COMPILE_DEFINITIONS})
 
 # warings and errors
 if (MSVC)
-    add_compile_options(/W2)
+    add_compile_options(/W2)   
+
+    if(O2_ASAN)
+        add_compile_options(/fsanitize=address)
+        add_compile_definitions(_DISABLE_STRING_ANNOTATION _DISABLE_VECTOR_ANNOTATION _DISABLE_ITERATOR_ANNOTATION)
+    endif()
 else()
     add_compile_options(-Wall)
 endif()

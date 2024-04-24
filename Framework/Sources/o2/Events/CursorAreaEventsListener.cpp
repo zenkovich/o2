@@ -186,43 +186,154 @@ namespace o2
         EventSystem::UnregCursorListener(this);
     }
 
-    void CursorEventsListener::OnCursorPressed(const Input::Cursor& cursor)
-    {}
+    CursorAreaEventsListenerDelegate::CursorAreaEventsListenerDelegate(RefCounter* refCounter,
+                                                                       CursorAreaEventsListenerInterface& cursorListenerInterface):
+        RefCounterable(refCounter), mCursorListenerInterface(cursorListenerInterface)
+    {
+        mCursorListenerInterface.mCursorEventsDelegate = Ref(this);
+    }
 
-    void CursorEventsListener::OnCursorReleased(const Input::Cursor& cursor)
-    {}
+    bool CursorAreaEventsListenerDelegate::IsUnderPoint(const Vec2F& point)
+    {
+        return mCursorListenerInterface.IsUnderPoint(point);
+    }
 
-    void CursorEventsListener::OnCursorPressBreak(const Input::Cursor& cursor)
-    {}
+    bool CursorAreaEventsListenerDelegate::IsScrollable() const
+    {
+        return mCursorListenerInterface.IsScrollable();
+    }
 
-    void CursorEventsListener::OnCursorStillDown(const Input::Cursor& cursor)
-    {}
+    bool CursorAreaEventsListenerDelegate::IsInputTransparent() const
+    {
+        return mCursorListenerInterface.IsInputTransparent();
+    }
 
-    void CursorEventsListener::OnCursorMoved(const Input::Cursor& cursor)
-    {}
+    void CursorAreaEventsListenerDelegate::OnCursorPressed(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorPressed(cursor);
+    }
 
-    void CursorEventsListener::OnCursorDblClicked(const Input::Cursor& cursor)
-    {}
+    void CursorAreaEventsListenerDelegate::OnCursorReleased(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorReleased(cursor);
+    }
 
-    void CursorEventsListener::OnCursorRightMousePressed(const Input::Cursor& cursor)
-    {}
+    void CursorAreaEventsListenerDelegate::OnCursorPressBreak(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorPressBreak(cursor);
+    }
 
-    void CursorEventsListener::OnCursorRightMouseStillDown(const Input::Cursor& cursor)
-    {}
+    void CursorAreaEventsListenerDelegate::OnCursorPressedOutside(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorPressedOutside(cursor);
+    }
 
-    void CursorEventsListener::OnCursorRightMouseReleased(const Input::Cursor& cursor)
-    {}
+    void CursorAreaEventsListenerDelegate::OnCursorReleasedOutside(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorReleasedOutside(cursor);
+    }
 
-    void CursorEventsListener::OnCursorMiddleMousePressed(const Input::Cursor& cursor)
-    {}
+    void CursorAreaEventsListenerDelegate::OnCursorStillDown(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorStillDown(cursor);
+    }
 
-    void CursorEventsListener::OnCursorMiddleMouseStillDown(const Input::Cursor& cursor)
-    {}
+    void CursorAreaEventsListenerDelegate::OnCursorMoved(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorMoved(cursor);
+    }
 
-    void CursorEventsListener::OnCursorMiddleMouseReleased(const Input::Cursor& cursor)
-    {}
+    void CursorAreaEventsListenerDelegate::OnCursorEnter(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorEnter(cursor);
+    }
 
-    void CursorEventsListener::OnScrolled(float scroll)
-    {}
+    void CursorAreaEventsListenerDelegate::OnCursorExit(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorExit(cursor);
+    }
+
+    void CursorAreaEventsListenerDelegate::OnCursorDblClicked(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorDblClicked(cursor);
+    }
+
+    void CursorAreaEventsListenerDelegate::OnCursorRightMousePressed(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorRightMousePressed(cursor);
+    }
+
+    void CursorAreaEventsListenerDelegate::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorRightMouseStayDown(cursor);
+    }
+
+    void CursorAreaEventsListenerDelegate::OnCursorRightMouseReleased(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorRightMouseReleased(cursor);
+    }
+
+    void CursorAreaEventsListenerDelegate::OnCursorMiddleMousePressed(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorMiddleMousePressed(cursor);
+    }
+
+    void CursorAreaEventsListenerDelegate::OnCursorMiddleMouseStayDown(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorMiddleMouseStayDown(cursor);
+    }
+
+    void CursorAreaEventsListenerDelegate::OnCursorMiddleMouseReleased(const Input::Cursor& cursor)
+    {
+        mCursorListenerInterface.OnCursorMiddleMouseReleased(cursor);
+    }
+
+    void CursorAreaEventsListenerDelegate::OnScrolled(float scroll)
+    {
+        mCursorListenerInterface.OnScrolled(scroll);
+    }
+
+    bool CursorAreaEventsListenerInterface::IsUnderPoint(const Vec2F& point)
+    {
+        return true;
+    }
+
+    bool CursorAreaEventsListenerInterface::IsScrollable() const
+    {
+        return false;
+    }
+
+    void CursorAreaEventsListenerInterface::SetInteractable(bool interactable)
+    {
+        if (mCursorEventsDelegate)
+            mCursorEventsDelegate.Lock()->SetInteractable(interactable);
+    }
+
+    bool CursorAreaEventsListenerInterface::IsInteractable() const
+    {
+        if (mCursorEventsDelegate)
+            return mCursorEventsDelegate.Lock()->IsInteractable();
+
+        return false;
+    }
+
+    bool CursorAreaEventsListenerInterface::IsInputTransparent() const
+    {
+        return false;
+    }
+
+    bool CursorAreaEventsListenerInterface::IsPressed() const
+    {
+        if (mCursorEventsDelegate)
+            return mCursorEventsDelegate.Lock()->IsPressed();
+
+        return false;
+    }
+
+    void CursorAreaEventsListenerInterface::OnDrawn()
+    {
+        if (mCursorEventsDelegate)
+            mCursorEventsDelegate.Lock()->OnDrawn();
+    }
 
 }

@@ -118,7 +118,7 @@ namespace o2
 
 		o2Render.DisableScissorTest();
 
-		CursorAreaEventsListener::OnDrawn();
+		mCursorListenerDelegate->OnDrawn();
 
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
@@ -582,10 +582,604 @@ namespace o2
 	{
 		return idx == other.idx;
 	}
+
+    CustomList2::CustomList2(RefCounter* refCounter) :
+        RefCounterable(refCounter), ScrollArea(refCounter)
+    {
+        mItemSample = mmake<Widget>();
+        mItemSample->RemoveFromScene();
+
+        mSelectionDrawable = mmake<Sprite>();
+        mHoverDrawable = mmake<Sprite>();
+
+        mVerLayout = mmake<VerticalLayout>();
+        mVerLayout->baseCorner = BaseCorner::LeftTop;
+        mVerLayout->name = "layout";
+        mVerLayout->expandHeight = false;
+        mVerLayout->expandWidth = true;
+        mVerLayout->layout->anchorMin = Vec2F(0, 0);
+        mVerLayout->layout->anchorMax = Vec2F(1, 1);
+        mVerLayout->layout->offsetMin = Vec2F();
+        mVerLayout->layout->offsetMax = Vec2F();
+        mVerLayout->fitByChildren = true;
+
+        AddChild(mVerLayout);
+    }
+
+    CustomList2::CustomList2(RefCounter* refCounter, const CustomList2& other) :
+        RefCounterable(refCounter), ScrollArea(refCounter, other), mHoverLayout(other.mHoverLayout),
+        mSelectionLayout(other.mSelectionLayout), selectedItem(this), selectedItems(this),
+        selectedItemPos(this), itemsCount(this)
+    {
+        mVerLayout = FindChildByType<VerticalLayout>();
+
+        mItemSample = other.mItemSample->CloneAsRef<Widget>();
+        mItemSample->RemoveFromScene();
+        mItemSample->UpdateSelfTransform();
+        mItemSample->UpdateChildrenTransforms();
+
+        mSelectionDrawable = other.mSelectionDrawable->CloneAsRef<Sprite>();
+        mHoverDrawable = other.mHoverDrawable->CloneAsRef<Sprite>();
+
+        RetargetStatesAnimations();
+        SetLayoutDirty();
+    }
+
+    CustomList2::~CustomList2()
+    {
+        mSelectionDrawable = nullptr;
+    }
+
+    CustomList2& CustomList2::operator=(const CustomList2& other)
+    {
+        mVerLayout = nullptr;
+
+        mSelectionDrawable = other.mSelectionDrawable->CloneAsRef<Sprite>();
+        mHoverDrawable = other.mHoverDrawable->CloneAsRef<Sprite>();
+
+        mSelectionLayout = other.mSelectionLayout;
+        mHoverLayout = other.mHoverLayout;
+
+        ScrollArea::operator=(other);
+
+        mVerLayout = FindChildByType<VerticalLayout>();
+        mItemSample = other.mItemSample->CloneAsRef<Widget>();
+        mItemSample->RemoveFromScene();
+        mItemSample->SetLayoutDirty();
+
+        RetargetStatesAnimations();
+        SetLayoutDirty();
+
+        return *this;
+    }
+
+    void CustomList2::Update(float dt)
+    {
+        ScrollArea::Update(dt);
+
+        if (!mResEnabledInHierarchy || mIsClipped)
+            return;
+
+        const float rectLerpCoef = 20.0f;
+
+        if (mCurrentHoverRect != mTargetHoverRect)
+        {
+            mCurrentHoverRect = Math::Lerp(mCurrentHoverRect, mTargetHoverRect, dt * rectLerpCoef);
+            mHoverDrawable->SetRect(mCurrentHoverRect);
+        }
+    }
+
+    void CustomList2::Draw()
+    {
+        if (!mResEnabledInHierarchy || mIsClipped)
+            return;
+
+        for (auto layer : mDrawingLayers)
+            layer->Draw();
+
+        IDrawable::OnDrawn();
+
+        o2Render.EnableScissorTest(mAbsoluteClipArea);
+
+        for (auto child : mChildrenInheritedDepth)
+            child->Draw();
+
+        for (auto& sel : mSelectedItems)
+            sel.selection->Draw();
+
+        mHoverDrawable->Draw();
+
+        o2Render.DisableScissorTest();
+
+        mCursorListenerDelegate->OnDrawn();
+
+        for (auto layer : mTopDrawingLayers)
+            layer->Draw();
+
+        if (mOwnHorScrollBar)
+            mHorScrollBar->Draw();
+
+        if (mOwnVerScrollBar)
+            mVerScrollBar->Draw();
+
+        DrawDebugFrame();
+    }
+
+    void CustomList2::SetItemSample(const Ref<Widget>& sample)
+    {
+        RemoveAllItems();
+
+        mItemSample = sample;
+
+        SetLayoutDirty();
+    }
+
+    const Ref<Widget>& CustomList2::GetItemSample() const
+    {
+        return mItemSample;
+    }
+
+    const Ref<VerticalLayout>& CustomList2::GetItemsLayout() const
+    {
+        return mVerLayout;
+    }
+
+    Ref<Widget> CustomList2::AddItem()
+    {
+        return mVerLayout->AddChildWidget(mItemSample->CloneAsRef<Widget>());
+    }
+
+    Ref<Widget> CustomList2::AddItem(int position)
+    {
+        position = Math::Max(0, position);
+
+        for (int i = mVerLayout->GetChildren().Count(); i < position; i++)
+            AddItem();
+
+        return mVerLayout->AddChildWidget(mItemSample->CloneAsRef<Widget>(), position);
+    }
+
+    void CustomList2::RemoveItem(const Ref<Widget>& item)
+    {
+        mVerLayout->RemoveChild(item);
+    }
+
+    void CustomList2::RemoveItem(int position)
+    {
+        if (position < 0 || position >= mVerLayout->GetChildren().Count())
+        {
+            o2Debug.LogWarning("Failed to remove item at %i: out of range (%i)", position, mVerLayout->GetChildren().Count());
+            return;
+        }
+
+        mVerLayout->RemoveChild(mVerLayout->GetChildren().Get(position).Get());
+    }
+
+    void CustomList2::MoveItem(int position, int newPosition)
+    {
+        if (position < 0 || position >= mVerLayout->GetChildren().Count())
+        {
+            o2Debug.LogWarning("Failed to move item from %i to %i: out of range (%i)", position, newPosition,
+                               mVerLayout->GetChildren().Count());
+            return;
+        }
+
+        auto item = mVerLayout->GetChildWidgets().Get(position);
+        mVerLayout->RemoveChild(item.Get());
+        mVerLayout->AddChild(item, newPosition);
+    }
+
+    void CustomList2::MoveItem(const Ref<Widget>& item, int newPosition)
+    {
+        mVerLayout->RemoveChild(item, false);
+        mVerLayout->AddChild(item, newPosition);
+    }
+
+    int CustomList2::GetItemPosition(const Ref<Widget>& item)
+    {
+        int i = 0;
+        for (auto child : mVerLayout->GetChildWidgets())
+        {
+            if (child == item)
+                return i;
+
+            i++;
+        }
+
+        return -1;
+    }
+
+    Ref<Widget> CustomList2::GetItem(int position) const
+    {
+        if (position < 0 || position >= mVerLayout->GetChildWidgets().Count())
+            return nullptr;
+
+        return mVerLayout->GetChildWidgets().Get(position);
+    }
+
+    void CustomList2::RemoveAllItems()
+    {
+        mVerLayout->RemoveAllChildren();
+    }
+
+    void CustomList2::SortItems(const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& sortFunc)
+    {
+        mVerLayout->mChildWidgets.Sort(sortFunc);
+    }
+
+    int CustomList2::GetItemsCount() const
+    {
+        return mVerLayout->GetChildWidgets().Count();
+    }
+
+    void CustomList2::SelectItem(const Ref<Widget>& item)
+    {
+        int itemPos = GetItemPosition(item);
+
+        if (mSelectedItems.Contains([=](auto x) { return x.idx == itemPos; }))
+            return;
+
+        if (!mMultiSelection)
+            ClearSelection();
+
+        Selection selection;
+        selection.idx = itemPos;
+        selection.selection = GetSelectionSprite();
+        mSelectedItems.Add(selection);
+
+        onSelectedPos(itemPos);
+        onSelectedItem(item);
+
+        OnSelectionChanged();
+        SetLayoutDirty();
+    }
+
+    void CustomList2::SelectItemAt(int position)
+    {
+        if (!mMultiSelection)
+            ClearSelection();
+
+        if (position >= mVerLayout->GetChildWidgets().Count())
+        {
+            o2Debug.LogWarning("Can't select item at %i: out of range (%i)", position, GetItemsCount());
+            return;
+        }
+
+        if (mSelectedItems.Contains([=](auto x) { return x.idx == position; }))
+            return;
+
+        if (position >= 0)
+        {
+            Selection selection;
+            selection.idx = position;
+            selection.selection = GetSelectionSprite();
+            mSelectedItems.Add(selection);
+
+            onSelectedPos(position);
+            onSelectedItem(GetItem(position));
+        }
+
+        OnSelectionChanged();
+        SetLayoutDirty();
+    }
+
+    void CustomList2::SetSelectedItems(const Vector<int>& items)
+    {
+        for (auto x : items)
+            SelectItemAt(x);
+    }
+
+    void CustomList2::ClearSelection()
+    {
+        for (auto& sel : mSelectedItems)
+            mSelectionSpritesPool.Add(sel.selection);
+
+        mSelectedItems.Clear();
+    }
+
+    Vector<int> CustomList2::GetSelectedItems() const
+    {
+        return mSelectedItems.Convert<int>([](auto x) { return x.idx; });
+    }
+
+    int CustomList2::GetSelectedItemPos() const
+    {
+        if (mSelectedItems.IsEmpty())
+            return -1;
+
+        return mSelectedItems.Last().idx;
+    }
+
+    Ref<Widget> CustomList2::GetSelectedItem() const
+    {
+        if (mSelectedItems.IsEmpty())
+            return nullptr;
+
+        return GetItem(mSelectedItems.Last().idx);
+    }
+
+    void CustomList2::SetMultiselectionAvailable(bool available)
+    {
+        mMultiSelection = available;
+
+        if (!mMultiSelection)
+        {
+            int count = mSelectedItems.Count();
+            for (int i = 0; i < count - 1; i++)
+            {
+                mSelectionSpritesPool.Add(mSelectedItems.Last().selection);
+                mSelectedItems.PopBack();
+            }
+        }
+    }
+
+    bool CustomList2::IsMultiselectionAvailable() const
+    {
+        return mMultiSelection;
+    }
+
+    const Ref<Sprite>& CustomList2::GetSelectionDrawable() const
+    {
+        return mSelectionDrawable;
+    }
+
+    const Ref<Sprite>& CustomList2::GetHoverDrawable() const
+    {
+        return mHoverDrawable;
+    }
+
+    void CustomList2::SetSelectionDrawableLayout(const Layout& layout)
+    {
+        mSelectionLayout = layout;
+    }
+
+    Layout CustomList2::GetSelectionDrawableLayout() const
+    {
+        return mSelectionLayout;
+    }
+
+    void CustomList2::SetHoverDrawableLayout(const Layout& layout)
+    {
+        mHoverLayout = layout;
+    }
+
+    Layout CustomList2::GetHoverDrawableLayout() const
+    {
+        return mHoverLayout;
+    }
+
+    bool CustomList2::IsScrollable() const
+    {
+        return mEnableHorScroll || mEnableVerScroll;
+    }
+
+    bool CustomList2::IsInputTransparent() const
+    {
+        return false;
+    }
+
+    void CustomList2::MoveScrollPosition(const Vec2F& delta)
+    {
+        ScrollArea::MoveScrollPosition(delta);
+        UpdateHover(o2Input.GetCursorPos());
+        UpdateSelectionSprites();
+    }
+
+    void CustomList2::OnTransformUpdated()
+    {
+        ScrollArea::OnTransformUpdated();
+        UpdateHover(o2Input.GetCursorPos());
+        UpdateSelectionSprites();
+    }
+
+    void CustomList2::UpdateSelfTransform()
+    {
+        ScrollArea::UpdateSelfTransform();
+
+        if (Input::IsSingletonInitialzed())
+            UpdateHover(o2Input.cursorPos);
+
+        mCurrentHoverRect = mTargetHoverRect;
+        mHoverDrawable->SetRect(mCurrentHoverRect);
+    }
+
+    String CustomList2::GetCreateMenuGroup()
+    {
+        return "List";
+    }
+
+    void CustomList2::UpdateSelectionSprites()
+    {
+        for (auto& sel : mSelectedItems)
+        {
+            const Ref<Widget>& item = GetItem(sel.idx);
+            sel.selection->SetRect(mSelectionLayout.Calculate(item->layout->worldRect));
+            sel.selection->SetEnabled(item->mResEnabledInHierarchy && !item->mIsClipped);
+        }
+    }
+
+    void CustomList2::OnCursorPressed(const Input::Cursor& cursor)
+    {
+        auto pressedState = state["pressed"];
+        if (pressedState)
+            *pressedState = true;
+    }
+
+    void CustomList2::OnCursorStillDown(const Input::Cursor& cursor)
+    {
+        const float checkDeltaThreshold = 2.0f;
+        if ((cursor.position - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
+            return;
+
+        mLastSelectCheckCursor = cursor.position;
+    }
+
+    void CustomList2::OnCursorReleased(const Input::Cursor& cursor)
+    {
+        auto pressedState = state["pressed"];
+        if (pressedState)
+            *pressedState = false;
+
+        if (!mMultiSelection || !o2Input.IsKeyDown(VK_CONTROL))
+            ClearSelection();
+
+        int itemIdx = -1;
+        GetItemUnderPoint(cursor.position, &itemIdx);
+        SelectItemAt(itemIdx);
+
+        OnSelectionChanged();
+    }
+
+    void CustomList2::OnCursorPressBreak(const Input::Cursor& cursor)
+    {
+        auto pressedState = state["pressed"];
+        if (pressedState)
+            *pressedState = false;
+    }
+
+    void CustomList2::OnCursorExit(const Input::Cursor& cursor)
+    {
+        auto hoverState = state["hover"];
+        if (hoverState)
+            *hoverState = false;
+        else
+            mHoverDrawable->SetEnabled(false);
+    }
+
+    void CustomList2::OnCursorMoved(const Input::Cursor& cursor)
+    {
+        const float checkDeltaThreshold = 2.0f;
+        if ((cursor.position - mLastHoverCheckCursor).Length() < checkDeltaThreshold)
+            return;
+
+        mLastHoverCheckCursor = cursor.position;
+
+        UpdateHover(cursor.position);
+    }
+
+    Ref<Widget> CustomList2::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+    {
+        if (!mVerLayout)
+            return nullptr;
+
+        int idx = 0;
+        for (auto child : mVerLayout->mChildWidgets)
+        {
+            if (child->layout->IsPointInside(point))
+            {
+                if (idxPtr)
+                    *idxPtr = idx;
+
+                return child;
+            }
+
+            idx++;
+        }
+
+        if (idxPtr)
+            *idxPtr = -1;
+
+        return nullptr;
+    }
+
+    void CustomList2::OnDeserialized(const DataValue& node)
+    {
+        ScrollArea::OnDeserialized(node);
+        RetargetStatesAnimations();
+    }
+
+    void CustomList2::UpdateTransparency()
+    {
+        Widget::UpdateTransparency();
+
+        if (mHorScrollBar)
+            mHorScrollBar->UpdateTransparency();
+
+        if (mVerScrollBar)
+            mVerScrollBar->UpdateTransparency();
+
+        if (mHoverDrawable)
+            mHoverDrawable->transparency = mResTransparency;
+
+        for (auto& sel : mSelectedItems)
+            sel.selection->transparency = mResTransparency;
+    }
+
+    void CustomList2::UpdateHover(const Vec2F& point)
+    {
+        int itemIdx = -1;
+        const Ref<Widget>& itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
+
+        if (itemIdx < 0)
+        {
+            auto hoverState = state["hover"];
+            if (hoverState)
+            {
+                mHoverDrawable->SetEnabled(true);
+                *hoverState = false;
+            }
+            else mHoverDrawable->SetEnabled(false);
+        }
+        else
+        {
+            mTargetHoverRect = mHoverLayout.Calculate(itemUnderCursor->layout->worldRect);
+
+            auto hoverState = state["hover"];
+            if (hoverState)
+            {
+                mHoverDrawable->SetEnabled(true);
+                *hoverState = true;
+            }
+            else mHoverDrawable->SetEnabled(true);
+        }
+    }
+
+    Ref<Sprite> CustomList2::GetSelectionSprite()
+    {
+        if (mSelectionSpritesPool.IsEmpty())
+        {
+            const int poolStep = 5;
+            for (int i = 0; i < poolStep; i++)
+                mSelectionSpritesPool.Add(mSelectionDrawable->CloneAsRef<Sprite>());
+        }
+
+        auto sprite = mSelectionSpritesPool.PopBack();
+        sprite->SetTransparency(1.0f);
+
+        return sprite;
+    }
+
+    void CustomList2::OnSelectionChanged()
+    {}
+
+    void CustomList2::OnEnabled()
+    {
+        Widget::OnEnabled();
+
+        SetInteractable(true);
+    }
+
+    void CustomList2::OnDisabled()
+    {
+        Widget::OnDisabled();
+
+        SetInteractable(false);
+    }
+
+    bool CustomList2::Selection::operator==(const Selection& other) const
+    {
+        return idx == other.idx;
+    }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::Ref<o2::CustomList>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::CustomList2>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::tt>);
 // --- META ---
 
+DECLARE_CLASS(o2::tt, o2__tt);
+
 DECLARE_CLASS(o2::CustomList, o2__CustomList);
+
+DECLARE_CLASS(o2::CustomList2, o2__CustomList2);
 // --- END META ---

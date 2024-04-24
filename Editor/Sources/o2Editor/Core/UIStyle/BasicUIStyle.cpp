@@ -581,6 +581,10 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildCustomListStyle()
 	{
+        //		auto xx = new CustomList(new RefCounter());
+        Ref<ScrollArea> sample_ = mmake<ScrollArea>();
+        Ref<tt> sample2_ = mmake<tt>();
+        Ref<CustomList2> sample2 = mmake<CustomList2>();
 		Ref<CustomList> sample = mmake<CustomList>();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));

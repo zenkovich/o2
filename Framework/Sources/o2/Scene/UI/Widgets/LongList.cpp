@@ -9,7 +9,7 @@
 namespace o2
 {
     LongList::LongList(RefCounter* refCounter):
-        ScrollArea(refCounter), mHoverLayout(Layout::BothStretch()),
+        RefCounterable(refCounter), ScrollArea(refCounter), mHoverLayout(Layout::BothStretch()),
         mSelectionLayout(Layout::BothStretch())
     {
         mItemSample = mmake<Widget>();
@@ -18,7 +18,7 @@ namespace o2
     }
 
     LongList::LongList(RefCounter* refCounter, const LongList& other):
-        ScrollArea(refCounter, other), mHoverLayout(other.mHoverLayout),
+        RefCounterable(refCounter), ScrollArea(refCounter, other), mHoverLayout(other.mHoverLayout),
         mSelectionLayout(other.mSelectionLayout), selectedItemPos(this)
     {
         mItemSample = other.mItemSample->CloneAsRef<Widget>();
@@ -96,7 +96,7 @@ namespace o2
 
         o2Render.DisableScissorTest();
 
-        CursorAreaEventsListener::OnDrawn();
+        CursorAreaEventsListenerInterface::OnDrawn();
 
         for (auto& layer : mTopDrawingLayers)
             layer->Draw();

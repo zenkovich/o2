@@ -14,14 +14,14 @@
 namespace Editor
 {
 	AnimationTree::AnimationTree(RefCounter* refCounter) :
-		Tree(refCounter)
+		RefCounterable(refCounter), Tree(refCounter)
 	{
 		SetRearrangeType(Tree::RearrangeType::Disabled);
 		InitializeContext();
 	}
 
 	AnimationTree::AnimationTree(RefCounter* refCounter, const AnimationTree& other) :
-		Tree(refCounter, other)
+		RefCounterable(refCounter), Tree(refCounter, other)
 	{
 		SetRearrangeType(Tree::RearrangeType::Disabled);
 		InitializeContext();

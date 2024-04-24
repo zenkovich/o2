@@ -99,7 +99,7 @@ namespace o2
 
         o2Render.DisableScissorTest();
 
-        CursorAreaEventsListener::OnDrawn();
+        mCursorListenerDelegate->OnDrawn();
 
         for (auto layer : mTopDrawingLayers)
             layer->Draw();
@@ -381,14 +381,14 @@ namespace o2
     {
         Widget::OnEnabled();
 
-        interactable = true;
+        SetInteractable(true);
     }
 
     void EditBox::OnDisabled()
     {
         Widget::OnDisabled();
 
-        interactable = false;
+        SetInteractable(false);
     }
 
     void EditBox::OnFocused()

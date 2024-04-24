@@ -13,7 +13,7 @@
 namespace Editor
 {
 	LayersPopup::LayersPopup(RefCounter* refCounter):
-		PopupWidget(refCounter)
+		RefCounterable(refCounter), PopupWidget(refCounter)
 	{
 		InitializeControls();
 	}

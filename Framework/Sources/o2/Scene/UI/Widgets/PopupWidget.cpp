@@ -85,14 +85,14 @@ namespace o2
     {
         ScrollArea::OnEnabled();
 
-        interactable = true;
+        SetInteractable(true);
     }
 
     void PopupWidget::OnDisabled()
     {
         ScrollArea::OnDisabled();
 
-        interactable = false;
+        SetInteractable(false);
     }
 
     void PopupWidget::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -227,7 +227,7 @@ namespace o2
             layer->Draw();
 
         IDrawable::OnDrawn();
-        CursorAreaEventsListener::OnDrawn();
+        CursorAreaEventsListenerInterface::OnDrawn();
 
         o2Render.EnableScissorTest(mAbsoluteClipArea);
 

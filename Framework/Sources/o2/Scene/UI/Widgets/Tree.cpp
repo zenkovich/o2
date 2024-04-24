@@ -173,7 +173,7 @@ namespace o2
     {}
 
     Tree::Tree(RefCounter* refCounter):
-        ScrollArea(refCounter)
+        RefCounterable(refCounter), ScrollArea(refCounter)
     {
         mNodeWidgetSample = mmake<TreeNode>();
         mNodeWidgetSample->layout->minHeight = 20;
@@ -187,7 +187,7 @@ namespace o2
     }
 
     Tree::Tree(RefCounter* refCounter, const Tree& other):
-        ScrollArea(refCounter, other)
+        RefCounterable(refCounter), ScrollArea(refCounter, other)
     {
         mRearrangeType = other.mRearrangeType;
         mMultiSelectAvailable = other.mMultiSelectAvailable;

@@ -3,6 +3,11 @@ project(3rdParties)
 # warings and errors
 if (MSVC)
     add_compile_options(/W2)
+    
+    if(O2_ASAN)
+        add_compile_options(/fsanitize=address)
+        add_compile_definitions(_DISABLE_STRING_ANNOTATION _DISABLE_VECTOR_ANNOTATION _DISABLE_ITERATOR_ANNOTATION)
+    endif()
 else()
     add_compile_options(-Wall -Wno-error=format -Wno-error=format-extra-args -Wno-error=conversion
             -Wno-error=incompatible-pointer-types -Wno-error=sign-conversion -Wno-error=pointer-sign)

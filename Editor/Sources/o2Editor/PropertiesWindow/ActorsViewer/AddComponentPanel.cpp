@@ -121,11 +121,11 @@ namespace Editor
 	}
 
 	ComponentsTree::ComponentsTree(RefCounter* refCounter) :
-		Tree(refCounter)
+		RefCounterable(refCounter), Tree(refCounter)
 	{}
 
 	ComponentsTree::ComponentsTree(RefCounter* refCounter, const ComponentsTree& other) :
-		Tree(refCounter, other)
+		RefCounterable(refCounter), Tree(refCounter, other)
 	{}
 
 	ComponentsTree& ComponentsTree::operator=(const ComponentsTree& other)

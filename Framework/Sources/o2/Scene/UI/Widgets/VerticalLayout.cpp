@@ -7,13 +7,13 @@
 namespace o2
 {
     VerticalLayout::VerticalLayout(RefCounter* refCounter):
-        Widget(refCounter)
+        RefCounterable(refCounter), Widget(refCounter)
     {
         SetLayoutDirty();
     }
 
     VerticalLayout::VerticalLayout(RefCounter* refCounter, const VerticalLayout& other):
-        Widget(refCounter, other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
+        RefCounterable(refCounter), Widget(refCounter, other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
         mExpandHeight(other.mExpandHeight), mFitByChildren(other.mFitByChildren), baseCorner(this),
         spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
         borderTop(this), borderBottom(this), fitByChildren(this)
@@ -26,7 +26,9 @@ namespace o2
     }
 
     VerticalLayout::~VerticalLayout()
-    {}
+    {
+        mFitByChildren = false;
+    }
 
     VerticalLayout& VerticalLayout::operator=(const VerticalLayout& other)
     {

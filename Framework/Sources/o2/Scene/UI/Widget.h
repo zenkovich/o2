@@ -448,6 +448,7 @@ namespace o2
         friend class ContextMenu;
         friend class CustomDropDown;
         friend class CustomList;
+        friend class CustomList2;
         friend class DropDown;
         friend class EditBox;
         friend class GridLayout;

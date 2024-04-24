@@ -16,7 +16,9 @@ namespace o2
 {
     ScrollArea::ScrollArea(RefCounter* refCounter) :
         RefCounterable(refCounter), Widget(refCounter)
-    {}
+    {
+        mCursorListenerDelegate = mmake<CursorAreaEventsListenerDelegate>(*this);
+    }
 
     ScrollArea::ScrollArea(RefCounter* refCounter, const ScrollArea& other) :
         RefCounterable(refCounter), Widget(refCounter, other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
@@ -24,6 +26,8 @@ namespace o2
         mViewAreaLayout(other.mViewAreaLayout), mEnableScrollsHiding(other.mEnableScrollsHiding), scroll(this),
         horScroll(this), verScroll(this)
     {
+        mCursorListenerDelegate = mmake<CursorAreaEventsListenerDelegate>(*this);
+
         if (mOwnHorScrollBar)
         {
             mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");
@@ -138,7 +142,7 @@ namespace o2
 
         o2Render.DisableScissorTest();
 
-        CursorAreaEventsListener::OnDrawn();
+        mCursorListenerDelegate->OnDrawn();
 
         for (auto& child : mInternalWidgets)
             child->Draw();

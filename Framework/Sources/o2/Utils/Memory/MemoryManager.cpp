@@ -55,7 +55,7 @@ void operator delete[](void* allocMemory) noexcept
 
 void* _mmalloc(size_t size, const char* location, int line)
 {
-    void* memory = ::operator new(size);
+    void* memory = malloc(size);
 
 #if ENALBE_MEMORY_MANAGE == true
     o2::MemoryManager::Instance().OnMemoryAllocate(memory, size, location, line);

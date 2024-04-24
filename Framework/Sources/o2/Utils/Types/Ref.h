@@ -192,7 +192,7 @@ namespace o2
         Ref(const Ref<_type>& other) : BaseRef<_type>(other) {}
 
         // Move constructor
-        Ref(Ref<_type>&& other) : BaseRef<_type>(other) {}
+        Ref(Ref<_type>&& other) : BaseRef<_type>(std::move(other)) {}
 
         // Copy constructor from other type
         template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
@@ -200,7 +200,7 @@ namespace o2
 
         // Copy constructor from other type
         template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
-        Ref(Ref<_other_type>&& other) : BaseRef<_type>(other) {}
+        Ref(Ref<_other_type>&& other) : BaseRef<_type>(std::move(other)) {}
 
         // Equality operator
         bool operator==(const Ref<_type>& other) const { return BaseRef<_type>::operator==(other); }
@@ -221,7 +221,7 @@ namespace o2
         Ref<_type>& operator=(const Ref<_type>& other) { BaseRef<_type>::operator=(other); return *this; }
 
         // Move operator
-        Ref<_type>& operator=(Ref<_type>&& other) { BaseRef<_type>::operator=(other); return *this; }
+        Ref<_type>& operator=(Ref<_type>&& other) { BaseRef<_type>::operator=(std::move(other)); return *this; }
 
         // Copy operator from other type
         template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
@@ -229,7 +229,7 @@ namespace o2
 
         // Move operator from other type
         template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
-        Ref<_type>& operator=(Ref<_other_type>&& other) { BaseRef<_type>::operator=(other); return *this; }
+        Ref<_type>& operator=(Ref<_other_type>&& other) { BaseRef<_type>::operator=(std::move(other)); return *this; }
 
         // Returns true if reference is valid
         bool IsValid() const { return BaseRef<_type>::IsValid(); }
@@ -334,21 +334,23 @@ namespace o2
     template<typename _type, typename ... _args>
     Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
     {
-        constexpr bool isConstructibleWithRefCounter = std::is_constructible<_type, RefCounter*, _args...>::value;
+        constexpr auto refSize = sizeof(RefCounter);
+        constexpr auto typeSize = sizeof(_type);
 
-        std::byte* memory = (std::byte*)_mmalloc(sizeof(RefCounter) + sizeof(_type), location, line);
+        std::byte* memory = (std::byte*)_mmalloc(refSize + typeSize, location, line);
         auto refCounter = new (memory) RefCounter();
         refCounter->strongReferences += 1;
 
         _type* object;
 
+        constexpr bool isConstructibleWithRefCounter = std::is_constructible<_type, RefCounter*, _args...>::value;
         if constexpr (isConstructibleWithRefCounter) 
 		{
-			object = new (memory + sizeof(RefCounter)) _type(refCounter, std::forward<_args>(args)...);
+			object = new (memory + refSize) _type(refCounter, std::forward<_args>(args)...);
         }
         else
 		{
-			object = new (memory + sizeof(RefCounter)) _type(std::forward<_args>(args)...); 
+			object = new (memory + refSize) _type(std::forward<_args>(args)...);
             object->mRefCounter = refCounter;
         }
 
@@ -404,17 +406,17 @@ namespace o2
 	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
 	Ref(const Ref<_other_type>& other) : BaseRef<CLASS>(other) {}																			\
 	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
-	Ref(Ref<_other_type>&& other) : BaseRef<CLASS>(other) {}																				\
+	Ref(Ref<_other_type>&& other) : BaseRef<CLASS>(std::move(other)) {}																		\
 	bool operator==(const Ref<CLASS>& other) const { return BaseRef<CLASS>::operator==(other); }											\
 	bool operator==(const CLASS* other) const { return BaseRef<CLASS>::operator==(other); }											        \
 	bool operator!=(const Ref<CLASS>& other) const { return BaseRef<CLASS>::operator!=(other); }											\
 	bool operator!=(const CLASS* other) const { return BaseRef<CLASS>::operator!=(other); }											        \
 	Ref<CLASS>& operator=(const Ref<CLASS>& other) { BaseRef<CLASS>::operator=(other); return *this; }										\
-	Ref<CLASS>& operator=(Ref<CLASS>&& other) { BaseRef<CLASS>::operator=(other); return *this; }											\
+	Ref<CLASS>& operator=(Ref<CLASS>&& other) { BaseRef<CLASS>::operator=(std::move(other)); return *this; }								\
 	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
 	Ref<CLASS>& operator=(const Ref<_other_type>& other) { BaseRef<CLASS>::operator=(other); return *this; }								\
 	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
-	Ref<CLASS>& operator=(Ref<_other_type>&& other) { BaseRef<CLASS>::operator=(other); return *this; }										\
+	Ref<CLASS>& operator=(Ref<_other_type>&& other) { BaseRef<CLASS>::operator=(std::move(other)); return *this; }							\
 	bool IsValid() const { return BaseRef<CLASS>::IsValid(); }																				\
 	operator bool() const { return BaseRef<CLASS>::operator bool(); }																		\
 	CLASS& operator*() const { return BaseRef<CLASS>::operator*(); }																		\

@@ -17,7 +17,7 @@ namespace o2
     // GetSceneDrawableSceneLayer(), GetParentDrawable() and GetIndexInParentDrawable(). And call "on" methods: 
     // OnDrawbleParentChanged(), OnEnabled(), OnDisabled(), OnAddToScene(), OnRemoveFromScene()
     // --------------------------------------------------------------------------------------------------------------
-    class ISceneDrawable : virtual public ISerializable, virtual public IDrawable, virtual public RefCounterable, virtual public ICloneableRef
+    class ISceneDrawable : virtual public ISerializable, virtual public RefCounterable, virtual public ICloneableRef, virtual public IDrawable
     {
     public:
         PROPERTIES(ISceneDrawable);
@@ -146,9 +146,9 @@ namespace o2
 CLASS_BASES_META(o2::ISceneDrawable)
 {
     BASE_CLASS(o2::ISerializable);
-    BASE_CLASS(o2::IDrawable);
     BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::ICloneableRef);
+    BASE_CLASS(o2::IDrawable);
 }
 END_META;
 CLASS_FIELDS_META(o2::ISceneDrawable)

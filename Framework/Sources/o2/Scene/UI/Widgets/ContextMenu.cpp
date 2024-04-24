@@ -91,7 +91,7 @@ namespace o2
 	}
 
 	ContextMenu::ContextMenu(RefCounter* refCounter) :
-		PopupWidget(refCounter)
+		RefCounterable(refCounter), PopupWidget(refCounter)
 	{
 		mItemSample = mmake<ContextMenuItem>();
 		mItemSample->RemoveFromScene();
@@ -126,7 +126,7 @@ namespace o2
 	}
 
 	ContextMenu::ContextMenu(RefCounter* refCounter, const ContextMenu& other) :
-		PopupWidget(other), mMaxVisibleItems(other.mMaxVisibleItems)
+		RefCounterable(refCounter), PopupWidget(other), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample = other.mItemSample->CloneAsRef<ContextMenuItem>();
 		mItemSample->RemoveFromScene();
@@ -629,7 +629,7 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
-		CursorAreaEventsListener::OnDrawn();
+		mCursorListenerDelegate->OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
