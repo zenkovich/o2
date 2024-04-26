@@ -7,7 +7,7 @@ namespace o2
     // --------------------------------------------------------------------
     // Drawable cursor events listener. Reacts to something drawable object
     // --------------------------------------------------------------------
-    class DrawableCursorEventsListener: virtual public CursorAreaEventsListener
+    class DrawableCursorEventsListener: public CursorAreaEventsListener
     {
     public:
         PROPERTIES(DrawableCursorEventsListener);

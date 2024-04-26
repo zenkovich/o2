@@ -25,10 +25,7 @@ namespace o2
 
 #define OPTIONAL_OVERRIDE override
 #else
-    struct ActorBase: public ISerializable
-    {
-        ActorBase(RefCounter* refCounter) {}
-    };
+    struct ActorBase {};
 
 #define OPTIONAL_OVERRIDE
 #endif

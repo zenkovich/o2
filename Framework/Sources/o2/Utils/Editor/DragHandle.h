@@ -16,7 +16,7 @@ namespace o2
     // -----------
     // Drag handle
     // -----------
-    class DragHandle: public IDrawable, public CursorAreaEventsListener, virtual public ISerializable, virtual public ICloneableRef
+    class DragHandle: public RefCounterable, public IDrawable, public CursorAreaEventsListener, public ISerializable, public ICloneableRef
     {
     public:
         PROPERTIES(DragHandle);
@@ -450,6 +450,7 @@ namespace o2
 
 CLASS_BASES_META(o2::DragHandle)
 {
+    BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::IDrawable);
     BASE_CLASS(o2::CursorAreaEventsListener);
     BASE_CLASS(o2::ISerializable);

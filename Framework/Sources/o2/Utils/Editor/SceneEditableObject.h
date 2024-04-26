@@ -15,18 +15,12 @@ namespace o2
     // ----------------------------------------------------------
     // Object, that can be shown in editor's tree view and edited
     // ----------------------------------------------------------
-    class SceneEditableObject: virtual public ISerializable, virtual public RefCounterable, virtual public ICloneableRef
+    class SceneEditableObject
     {
     public:
         int changedFrame = 0; // Index of frame, when object has changed @EDITOR_IGNORE
 
     public:
-        // Default constructor. Registers itself in scene editable objects list
-        SceneEditableObject(RefCounter* refCounter);
-
-        // Destructor, unregisters from scene editable objects list
-        ~SceneEditableObject() override;
-
         // Updates object
         virtual void Update(float dt);
 
@@ -153,8 +147,6 @@ namespace o2
         // Called before instantiate from this object
         virtual void BeginInstantiatePrototype() const {}
 
-        SERIALIZABLE(SceneEditableObject);
-
     protected:
         // Collects differences between this and prototype
         virtual void GetDifferences(ActorDifferences& differences) const;
@@ -163,73 +155,3 @@ namespace o2
     };
 #endif
 }
-// --- META ---
-
-#if  IS_EDITOR
-CLASS_BASES_META(o2::SceneEditableObject)
-{
-    BASE_CLASS(o2::ISerializable);
-    BASE_CLASS(o2::RefCounterable);
-    BASE_CLASS(o2::ICloneableRef);
-}
-END_META;
-CLASS_FIELDS_META(o2::SceneEditableObject)
-{
-#if  IS_EDITOR
-    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(changedFrame);
-#endif
-}
-END_META;
-CLASS_METHODS_META(o2::SceneEditableObject)
-{
-
-#if  IS_EDITOR
-    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
-    FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsOnScene);
-    FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
-    FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
-    FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableLink);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEditableLinkedTo, const Ref<SceneEditableObject>&);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsLinking);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
-    FUNCTION().PUBLIC().SIGNATURE(void, GetAllEditableChildren, Vector<Ref<SceneEditableObject>>&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableParent);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, const Ref<SceneEditableObject>&, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, const Ref<SceneEditableObject>&, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
-    FUNCTION().PUBLIC().SIGNATURE(bool, CanBeParentedTo, const Type&);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDisabling);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabledInHierarchy);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsLocking);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsLocked);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsLockedInHierarchy);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetLocked, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsTransforming);
-    FUNCTION().PUBLIC().SIGNATURE(Basis, GetTransform);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTransform, const Basis&);
-    FUNCTION().PUBLIC().SIGNATURE(void, UpdateTransform);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsPivot);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetPivot, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetPivot);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsLayout);
-    FUNCTION().PUBLIC().SIGNATURE(Layout, GetLayout);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetLayout, const Layout&);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDeleting);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnChanged);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnLockChanged);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnNameChanged);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnChildrenChanged);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnEditableParentChanged, const Ref<SceneEditableObject>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, BeginMakePrototype);
-    FUNCTION().PUBLIC().SIGNATURE(void, BeginInstantiatePrototype);
-    FUNCTION().PROTECTED().SIGNATURE(void, GetDifferences, ActorDifferences&);
-#endif
-}
-END_META;
-#endif
-// --- END META ---
