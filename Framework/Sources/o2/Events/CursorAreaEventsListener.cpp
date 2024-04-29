@@ -188,7 +188,7 @@ namespace o2
 
     CursorAreaEventsListenerDelegate::CursorAreaEventsListenerDelegate(RefCounter* refCounter,
                                                                        CursorAreaEventsListenerInterface& cursorListenerInterface):
-        mCursorListenerInterface(cursorListenerInterface)
+        RefCounterable(refCounter), mCursorListenerInterface(cursorListenerInterface)
     {
         mCursorListenerInterface.mCursorEventsDelegate = Ref(this);
     }

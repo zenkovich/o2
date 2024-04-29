@@ -16,13 +16,13 @@ namespace o2
 #if IS_EDITOR
 	typedef SceneEditableObject WidgetLayerBase;
 #else
-	struct WidgetLayerBase {};
+	struct WidgetLayerBase : public ISerializable, public RefCounterable, public ICloneableRef {};
 #endif
 
 	// ---------------------
 	// Widget drawable layer
 	// ---------------------
-	class WidgetLayer : public WidgetLayerBase, public ISerializable, public RefCounterable, public ICloneableRef
+	class WidgetLayer : public WidgetLayerBase
 	{
 	public:
 		PROPERTIES(WidgetLayer);
@@ -358,9 +358,6 @@ namespace o2
 CLASS_BASES_META(o2::WidgetLayer)
 {
     BASE_CLASS(o2::WidgetLayerBase);
-    BASE_CLASS(o2::ISerializable);
-    BASE_CLASS(o2::RefCounterable);
-    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::WidgetLayer)

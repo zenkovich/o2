@@ -6,6 +6,13 @@
 namespace o2
 {
 #if IS_EDITOR
+    SceneEditableObject::SceneEditableObject(RefCounter* refCounter):
+        RefCounterable(refCounter)
+    {}
+
+    SceneEditableObject::~SceneEditableObject()
+    {}
+
     void SceneEditableObject::Update(float dt)
     {}
 

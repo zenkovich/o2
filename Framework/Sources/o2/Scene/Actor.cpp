@@ -17,8 +17,9 @@ namespace o2
 
     Actor::Actor(RefCounter* refCounter, ActorTransform* transform, bool onScene /*= true*/, const String& name /*= "unnamed"*/, 
                  bool enabled /*= true*/, SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/) :
-        ISceneDrawable(refCounter), transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), 
-        mResEnabledInHierarchy(false), mId(id), mAssetId(assetId), mState(State::Initializing), mIsOnScene(onScene)
+        SceneEditableObject(refCounter), ISceneDrawable(refCounter), RefCounterable(refCounter), transform(transform), mName(name), mEnabled(enabled),
+        mResEnabled(enabled), mResEnabledInHierarchy(false), mId(id), mAssetId(assetId), mState(State::Initializing),
+        mIsOnScene(onScene)
     {
         tags.onTagAdded = [&](const Ref<Tag>& tag) { tag->mActors.Add(WeakRef(this)); };
         tags.onTagRemoved = [&](const Ref<Tag>& tag) { tag->mActors.Remove(WeakRef(this)); };
