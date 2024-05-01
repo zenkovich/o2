@@ -475,6 +475,9 @@ namespace o2
 
     void* ObjectType::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
     {
+        if (!object)
+            return nullptr;
+
         IObject* iobject = DynamicCastToIObject(object);
         const Type* realType = &(iobject->GetType());
         if (realType == this)

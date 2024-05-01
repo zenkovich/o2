@@ -527,7 +527,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::VectorProperty>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::VectorProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::VectorProperty, Editor__VectorProperty);

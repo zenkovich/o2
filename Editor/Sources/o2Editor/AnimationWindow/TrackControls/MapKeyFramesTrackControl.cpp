@@ -230,7 +230,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::MapKeyFramesTrackControl>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::MapKeyFramesTrackControl>);
 // --- META ---
 
 DECLARE_CLASS(Editor::MapKeyFramesTrackControl, Editor__MapKeyFramesTrackControl);

@@ -7,13 +7,13 @@
 namespace o2
 {
     Image::Image(RefCounter* refCounter):
-        Widget(refCounter)
+        RefCounterable(refCounter), Widget(refCounter)
     {
         mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
     }
 
     Image::Image(RefCounter* refCounter, const Image& other):
-        Widget(refCounter, other), image(this), imageAsset(this), imageName(this)
+        RefCounterable(refCounter), Widget(refCounter, other), image(this), imageAsset(this), imageName(this)
     {
         mImage = GetLayerDrawable<Sprite>("image");
         if (!mImage)
@@ -84,7 +84,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Image>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::Image>);
 // --- META ---
 
 DECLARE_CLASS(o2::Image, o2__Image);

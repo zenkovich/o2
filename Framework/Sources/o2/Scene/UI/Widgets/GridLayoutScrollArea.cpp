@@ -281,7 +281,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::GridLayoutScrollArea>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::GridLayoutScrollArea>);
 // --- META ---
 
 DECLARE_CLASS(o2::GridLayoutScrollArea, o2__GridLayoutScrollArea);

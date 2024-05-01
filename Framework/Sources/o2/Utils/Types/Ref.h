@@ -240,7 +240,7 @@ namespace o2
         // Gets reference to object
         _type& operator*() const { return BaseRef<_type>::operator*(); }
 
-        // Returns pointer to object
+        // Returns pointer to objec
         _type* operator->() const { return BaseRef<_type>::operator->(); }
     };
 

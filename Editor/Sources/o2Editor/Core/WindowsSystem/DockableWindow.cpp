@@ -823,7 +823,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::DockableWindow>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::DockableWindow>);
 // --- META ---
 
 DECLARE_CLASS(Editor::DockableWindow, Editor__DockableWindow);

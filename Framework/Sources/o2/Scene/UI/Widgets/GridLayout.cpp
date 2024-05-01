@@ -6,13 +6,13 @@
 namespace o2
 {
     GridLayout::GridLayout(RefCounter* refCounter):
-        Widget(refCounter)
+        RefCounterable(refCounter), Widget(refCounter)
     {
         SetLayoutDirty();
     }
 
     GridLayout::GridLayout(RefCounter* refCounter, const GridLayout& other):
-        Widget(refCounter, other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder),
+        RefCounterable(refCounter), Widget(refCounter, other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder),
         mFitByChildren(other.mFitByChildren), mCellSize(other.mCellSize), mArrangeAxis(other.mArrangeAxis),
         mArrangeAxisMaxCells(other.mArrangeAxisMaxCells), baseCorner(this), cellSize(this), arrangeAxisMaxCells(this),
         arrangeAxis(this), spacing(this), border(this), borderLeft(this), borderRight(this),
@@ -904,7 +904,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::GridLayout>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::GridLayout>);
 // --- META ---
 
 DECLARE_CLASS(o2::GridLayout, o2__GridLayout);

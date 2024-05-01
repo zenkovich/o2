@@ -98,7 +98,7 @@ namespace Editor
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ObjectViewer>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::ObjectViewer>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ObjectViewer, Editor__ObjectViewer);

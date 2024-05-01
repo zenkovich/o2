@@ -10,7 +10,7 @@ namespace o2
     // --------------------------------------------------------------
     // Actor reference, automatically invalidates when actor deleting
     // --------------------------------------------------------------
-    class BaseActorRef: public ISerializable
+    class BaseActorRef : public ISerializable
     {
     public:
         // Default constructor, no reference
@@ -58,7 +58,7 @@ namespace o2
         // ------------------------------
         // Reference resolve request data
         // ------------------------------
-        struct IRequiredResolveData: public RefCounterable
+        struct IRequiredResolveData : public RefCounterable
         {
             // Request resolve reference
             virtual void RequireResolve(BaseActorRef& ref) = 0;
@@ -70,7 +70,7 @@ namespace o2
         // -------------------------------------------------
         // Reference resolve request data by actor scene uid
         // -------------------------------------------------
-        struct SceneRequireResolveData: public IRequiredResolveData
+        struct SceneRequireResolveData : public IRequiredResolveData
         {
             SceneUID uid;
 
@@ -84,7 +84,7 @@ namespace o2
         // -------------------------------------------
         // Reference resolve request data by asset uid
         // -------------------------------------------
-        struct AssetRequireResolveData: public IRequiredResolveData
+        struct AssetRequireResolveData : public IRequiredResolveData
         {
             UID uid;
 
@@ -96,7 +96,7 @@ namespace o2
         };
 
         Ref<IRequiredResolveData> mRequiredResolveData; // Reference resolve request data. Used for resolving reference after deserialization.
-                                                        // Not null only when reference is required to resolve. Copies in reference copying.
+        // Not null only when reference is required to resolve. Copies in reference copying.
 
     protected:
         // Beginning serialization callback
@@ -113,38 +113,100 @@ namespace o2
     // Reference on derived from actor classes
     // ---------------------------------------
     template<typename _actor_type>
-    class Ref<_actor_type, typename std::enable_if<IsBaseOf<Actor, _actor_type>::value>::type>: public BaseActorRef, public BaseRef<_actor_type>
-	{
-		using Base = BaseRef<_actor_type>;
+    class ActorRef : public BaseActorRef
+    {
+        static_assert(std::is_base_of<Actor, _actor_type>::value, "ActorRef type must be derived from Actor");
 
-	public:
-		// Base reference implementation
-		BASE_REF_IMPLEMETATION(_actor_type);
-
-        // Returns actor pointer 
-        _actor_type* Get() override { return Base::Get(); }
-
-        // Returns actor pointer
-		const _actor_type* Get() const override { return Base::Get(); }
-
-		// Sets actor pointer
-        void Set(Actor* actor) override { *this = Ref(dynamic_cast<_actor_type*>(actor)); }
-
-        // Returns actor type
-        const Type& GetActorType() const override { return TypeOf(_actor_type); }
-
-        // Copying ref without requiring remap
-        void CopyWithoutRemap(const BaseActorRef& other) override
-        {
-            Base::mPtr = dynamic_cast<_actor_type*>(const_cast<Actor*>(other.Get()));
-            mRequiredResolveData = nullptr;
-        }
-
-        // Returns actor type
-        static const Type* GetActorTypeStatic() { return &TypeOf(_actor_type); }
+        using Base = BaseRef<_actor_type>;
 
     public:
-        typedef Ref<_actor_type, typename std::enable_if<std::is_base_of<Actor, _actor_type>::value>::type> _thisType;
+        // Default constructor, no reference
+        ActorRef();
+
+        // Nullptr constructor
+        ActorRef(nullptr_t);
+
+        // Constructor with actor pointer
+        explicit ActorRef(_actor_type* ptr);
+
+        // Constructor with actor reference
+        explicit ActorRef(const Ref<_actor_type>& ref);
+
+        // Copy constructor
+        ActorRef(const ActorRef<_actor_type>& other);
+
+        // Move constructor
+        ActorRef(ActorRef<_actor_type>&& other);
+
+        // Copy constructor from other actor reference
+        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
+        ActorRef(const ActorRef<_other_type>& other);
+
+        // Move constructor from other actor reference
+        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
+        ActorRef(ActorRef<_other_type>&& other);
+
+        // Equality operator
+        bool operator==(const ActorRef<_actor_type>& other) const;
+
+        // Equality operator
+        bool operator==(const _actor_type* other) const;
+
+        // Inequality operator
+        bool operator!=(const ActorRef<_actor_type>& other) const;
+
+        // Inequality operator
+        bool operator!=(const _actor_type* other) const;
+
+        // Copy operator
+        ActorRef<_actor_type>& operator=(const ActorRef<_actor_type>& other);
+
+        // Move operator
+        ActorRef<_actor_type>& operator=(ActorRef<_actor_type>&& other);
+
+        // Copy operator from other actor reference
+        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
+        ActorRef<_actor_type>& operator=(const ActorRef<_other_type>& other);
+
+        // Move operator from other actor reference
+        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
+        ActorRef<_actor_type>& operator=(Ref<_other_type>&& other);
+
+        // Returns is reference is valid
+        bool IsValid() const;
+
+        // Returns is reference is valid
+        operator bool() const;
+
+        // Returns actor reference
+        _actor_type& operator*() const;
+
+        // Returns actor pointer
+        _actor_type* operator->() const;
+
+        // Returns actor pointer 
+        _actor_type* Get() override;
+
+        // Returns actor pointer
+        const _actor_type* Get() const override;
+
+        // Sets actor pointer
+        void Set(Actor* actor) override;
+
+        // Returns actor type
+        const Type& GetActorType() const override;
+
+        // Copying ref without requiring remap
+        void CopyWithoutRemap(const BaseActorRef& other) override;
+
+        // Returns actor type
+        static const Type* GetActorTypeStatic();
+
+    protected:
+        Ref<_actor_type> mRef; // Reference to actor
+
+    public:
+        typedef ActorRef<_actor_type> _thisType;
 
         SERIALIZABLE_MAIN(_thisType);
         IOBJECT_SCRIPTING();
@@ -155,7 +217,7 @@ namespace o2
             typedef _thisType thisclass;
             processor.template StartBases<_thisType>(object, type);
 
-            BASE_CLASS(o2::Ref<Actor>);
+            BASE_CLASS(o2::BaseActorRef);
         }
 
         template<typename _type_processor>
@@ -164,7 +226,7 @@ namespace o2
             typedef _thisType thisclass;
             processor.template StartFields<_thisType>(object, type);
 
-            FIELD().PROTECTED().NAME(mPtr);
+            FIELD().PROTECTED().NAME(mRef);
         }
 
         template<typename _type_processor>
@@ -178,6 +240,162 @@ namespace o2
             FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
         }
     };
+
+    template<typename _actor_type>
+    ActorRef<_actor_type>::ActorRef()
+    {}
+
+    template<typename _actor_type>
+    ActorRef<_actor_type>::ActorRef(nullptr_t) :
+        mRef(nullptr)
+    {}
+
+    template<typename _actor_type>
+    ActorRef<_actor_type>::ActorRef(_actor_type* ptr) :
+        mRef(ptr)
+    {}
+
+    template<typename _actor_type>
+    ActorRef<_actor_type>::ActorRef(const Ref<_actor_type>& ref) :
+        mRef(ref)
+    {}
+
+    template<typename _actor_type>
+    ActorRef<_actor_type>::ActorRef(const ActorRef<_actor_type>& other) :
+        mRef(other.mRef)
+    {}
+
+    template<typename _actor_type>
+    ActorRef<_actor_type>::ActorRef(ActorRef<_actor_type>&& other) :
+        mRef(other.mRef)
+    {}
+
+    template<typename _actor_type>
+    template<typename _other_type, typename _enable>
+    ActorRef<_actor_type>::ActorRef(const ActorRef<_other_type>& other) :
+        mRef(other.mRef)
+    {}
+
+    template<typename _actor_type>
+    template<typename _other_type, typename>
+    ActorRef<_actor_type>::ActorRef(ActorRef<_other_type>&& other) :
+        mRef(std::move(other.mRef))
+    {}
+
+    template<typename _actor_type>
+    bool ActorRef<_actor_type>::operator==(const ActorRef<_actor_type>& other) const
+    {
+        return mRef == other.mRef;
+    }
+
+    template<typename _actor_type>
+    bool ActorRef<_actor_type>::operator==(const _actor_type* other) const
+    {
+        return mRef == other;
+    }
+
+    template<typename _actor_type>
+    bool ActorRef<_actor_type>::operator!=(const ActorRef<_actor_type>& other) const
+    {
+        return mRef != other.mRef;
+    }
+
+    template<typename _actor_type>
+    bool ActorRef<_actor_type>::operator!=(const _actor_type* other) const
+    {
+        return mRef != other;
+    }
+
+    template<typename _actor_type>
+    ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(const ActorRef<_actor_type>& other)
+    {
+        mRef = other.mRef;
+        return *this;
+    }
+
+    template<typename _actor_type>
+    ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(ActorRef<_actor_type>&& other)
+    {
+        mRef = std::move(other.mRef);
+        return *this;
+    }
+
+    template<typename _actor_type>
+    template<typename _other_type, typename _enable>
+    ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(const ActorRef<_other_type>& other)
+    {
+        mRef = other.mRef;
+        return *this;
+    }
+
+    template<typename _actor_type>
+    template<typename _other_type, typename _enable>
+    ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(Ref<_other_type>&& other)
+    {
+        mRef = std::move(other.mRef);
+        return *this;
+    }
+
+    template<typename _actor_type>
+    bool ActorRef<_actor_type>::IsValid() const
+    {
+        return mRef.IsValid();
+    }
+
+    template<typename _actor_type>
+    ActorRef<_actor_type>::operator bool() const
+    {
+        return IsValid();
+    }
+
+    template<typename _actor_type>
+    _actor_type& ActorRef<_actor_type>::operator*() const
+    {
+        return *mRef;
+    }
+
+    template<typename _actor_type>
+    _actor_type* ActorRef<_actor_type>::operator->() const
+    {
+        return mRef.Get();
+    }
+
+    template<typename _actor_type>
+    _actor_type* ActorRef<_actor_type>::Get()
+    {
+        return mRef.Get();
+    }
+
+    template<typename _actor_type>
+    const _actor_type* ActorRef<_actor_type>::Get() const
+    {
+        return mRef.Get();
+    }
+
+    template<typename _actor_type>
+    void ActorRef<_actor_type>::Set(Actor* actor)
+    {
+        *this = ActorRef(dynamic_cast<_actor_type*>(actor));
+    }
+
+    template<typename _actor_type>
+    const Type& ActorRef<_actor_type>::GetActorType() const
+    {
+        return TypeOf(_actor_type);
+    }
+
+    template<typename _actor_type>
+    void ActorRef<_actor_type>::CopyWithoutRemap(const BaseActorRef& other)
+    {
+        mRef = Ref(dynamic_cast<_actor_type*>(const_cast<Actor*>(other.Get())));
+        mRequiredResolveData = nullptr;
+    }
+
+    template<typename _actor_type>
+    const Type* ActorRef<_actor_type>::GetActorTypeStatic()
+    {
+        return &TypeOf(_actor_type);
+    }
 }
 // --- META ---
 

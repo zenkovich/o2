@@ -1113,7 +1113,7 @@ namespace Editor
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AssetsIconsScrollArea>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::AssetsIconsScrollArea>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetsIconsScrollArea, Editor__AssetsIconsScrollArea);

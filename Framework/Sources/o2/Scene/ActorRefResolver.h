@@ -117,7 +117,6 @@ namespace o2
         int mLockDepth = 0;
 
         friend class Actor;
-        friend class ActorRef;
         friend class Component;
         friend class Scene;
     };

@@ -51,7 +51,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AnimationKeyDragHandle>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::AnimationKeyDragHandle>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationKeyDragHandle, Editor__AnimationKeyDragHandle);

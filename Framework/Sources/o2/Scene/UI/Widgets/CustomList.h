@@ -48,7 +48,7 @@ namespace o2
         const Ref<Widget>& GetItemSample() const;
 
         // Returns layout of items
-        Ref<VerticalLayout> GetItemsLayout() const;
+        const Ref<VerticalLayout>& GetItemsLayout() const;
 
         // Adds new item and returns it
         Ref<Widget> AddItem();
@@ -157,8 +157,8 @@ namespace o2
         };
 
     protected:
-        Ref<Widget> mVerLayout;  // Child vertical layout
-        Ref<Widget> mItemSample; // Item sample widget @SERIALIZABLE
+        Ref<VerticalLayout> mVerLayout;  // Child vertical layout
+        Ref<Widget>         mItemSample; // Item sample widget @SERIALIZABLE
 
         bool              mMultiSelection = true; // Is multi selection available @SERIALIZABLE
         Vector<Selection> mSelectedItems;         // Current selected items
@@ -274,7 +274,7 @@ CLASS_METHODS_META(o2::CustomList)
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<VerticalLayout>, GetItemsLayout);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<VerticalLayout>&, GetItemsLayout);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const Ref<Widget>&);

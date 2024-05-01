@@ -276,7 +276,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::RigidBody>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::RigidBody>);
 // --- META ---
 
 ENUM_META(o2::RigidBody::Type)

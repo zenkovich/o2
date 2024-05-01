@@ -490,8 +490,8 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::SceneHierarchyTree>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::SceneHierarchyTreeNode>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::SceneHierarchyTree>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::SceneHierarchyTreeNode>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneHierarchyTree, Editor__SceneHierarchyTree);

@@ -288,7 +288,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::VerticalProgress>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::VerticalProgress>);
 // --- META ---
 
 ENUM_META(o2::VerticalProgress::Orientation)

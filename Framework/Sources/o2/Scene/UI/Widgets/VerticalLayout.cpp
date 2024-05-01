@@ -470,7 +470,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::VerticalLayout>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::VerticalLayout>);
 // --- META ---
 
 DECLARE_CLASS(o2::VerticalLayout, o2__VerticalLayout);

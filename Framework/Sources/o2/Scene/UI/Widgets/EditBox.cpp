@@ -1326,7 +1326,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::EditBox>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::EditBox>);
 // --- META ---
 
 DECLARE_CLASS(o2::EditBox, o2__EditBox);

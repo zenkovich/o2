@@ -384,7 +384,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Window>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::Window>);
 // --- META ---
 
 DECLARE_CLASS(o2::Window, o2__Window);

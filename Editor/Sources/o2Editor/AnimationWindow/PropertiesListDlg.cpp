@@ -387,7 +387,7 @@ namespace Editor
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AnimationPropertiesTreeNode>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::AnimationPropertiesTreeNode>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationPropertiesTree, Editor__AnimationPropertiesTree);

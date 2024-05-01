@@ -21,28 +21,28 @@ namespace o2
 		return text == other.text && mShortcut == other.mShortcut && icon == other.icon;
 	}
 
-	ContextMenu::Item::Item() :
-		checked(false), checkable(false)
+	ContextMenu::Item::Item(RefCounter* refCounter) :
+		RefCounterable(refCounter), checked(false), checkable(false)
 	{}
 
-	ContextMenu::Item::Item(const WString& text, const Function<void()> onClick,
+	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, const Function<void()> onClick,
 							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
-		text(text), group(group), onClick(onClick), mShortcut(shortcut), icon(icon), checked(false), checkable(false)
+		RefCounterable(refCounter), text(text), group(group), onClick(onClick), mShortcut(shortcut), icon(icon), checked(false), checkable(false)
 	{
 		SetShortcut(shortcut);
 	}
 
-	ContextMenu::Item::Item(const WString& text, const Vector<Ref<Item>>& subItems,
+	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, const Vector<Ref<Item>>& subItems,
 							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/) :
-		text(text), group(group), subItems(subItems), icon(icon), checked(false), checkable(false)
+		RefCounterable(refCounter), text(text), group(group), subItems(subItems), icon(icon), checked(false), checkable(false)
 	{}
 
-	ContextMenu::Item::Item(const WString& text, bool checked,
+	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, bool checked,
 							Function<void(bool)> onChecked /*= Function<void(bool)>()*/,
 							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
-		text(text), group(group), checked(checked), onChecked(onChecked), checkable(true), mShortcut(shortcut), icon(icon)
+		RefCounterable(refCounter), text(text), group(group), checked(checked), onChecked(onChecked), checkable(true), mShortcut(shortcut), icon(icon)
 	{
 		SetShortcut(shortcut);
 	}
@@ -720,13 +720,13 @@ namespace o2
 	}
 
     ContextMenuItem::ContextMenuItem(RefCounter* refCounter) :
-        Widget(refCounter), mSubMenu(nullptr)
+        RefCounterable(refCounter), Widget(refCounter), mSubMenu(nullptr)
 	{
 		RetargetStatesAnimations();
 	}
 
 	ContextMenuItem::ContextMenuItem(RefCounter* refCounter, const ContextMenuItem& other) :
-		Widget(refCounter, other), text(this)
+		RefCounterable(refCounter), Widget(refCounter, other), text(this)
 	{
 		mSubMenu = FindChildByType<ContextMenu>();
 		if (mSubMenu)
@@ -882,7 +882,7 @@ namespace o2
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ContextMenu>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::ContextMenu>);
 // --- META ---
 
 DECLARE_CLASS(o2::ContextMenu, o2__ContextMenu);

@@ -12,7 +12,7 @@
 namespace o2
 {
     MenuPanel::MenuPanel(RefCounter* refCounter):
-        Widget(refCounter), DrawableCursorEventsListener(this)
+        RefCounterable(refCounter), Widget(refCounter), DrawableCursorEventsListener(this)
     {
         mItemSample = mmake<Widget>();
         mItemSample->AddLayer("text", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(200, 0), Vec2F(0, 0)));
@@ -30,7 +30,7 @@ namespace o2
     }
 
     MenuPanel::MenuPanel(RefCounter* refCounter, const MenuPanel& other):
-        Widget(refCounter, other), DrawableCursorEventsListener(this)
+        RefCounterable(refCounter), Widget(refCounter, other), DrawableCursorEventsListener(this)
     {
         mItemSample = other.mItemSample->CloneAsRef<Widget>();
         mSelectionDrawable = other.mSelectionDrawable->CloneAsRef<Sprite>();
@@ -498,7 +498,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::MenuPanel>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::MenuPanel>);
 // --- META ---
 
 DECLARE_CLASS(o2::MenuPanel, o2__MenuPanel);

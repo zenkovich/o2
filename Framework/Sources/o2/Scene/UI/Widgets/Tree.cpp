@@ -18,13 +18,13 @@
 namespace o2
 {
     TreeNode::TreeNode(RefCounter* refCounter):
-        Widget(refCounter)
+        RefCounterable(refCounter), Widget(refCounter)
     {
         onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
     }
 
     TreeNode::TreeNode(RefCounter* refCounter, const TreeNode& other):
-        Widget(refCounter, other)
+        RefCounterable(refCounter), Widget(refCounter, other)
     {
         onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
 
@@ -1921,7 +1921,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Tree>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::Tree>);
 // --- META ---
 
 ENUM_META(o2::Tree::RearrangeType)

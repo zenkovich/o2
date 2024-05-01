@@ -338,8 +338,8 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ComponentsTreeNode>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AddComponentPanel>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::ComponentsTreeNode>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::AddComponentPanel>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AddComponentPanel, Editor__AddComponentPanel);

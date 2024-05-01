@@ -51,18 +51,18 @@ namespace o2
 
         public:
             // Default constructor
-            Item();
+            Item(RefCounter* refCounter);
 
             // Constructor from text
-            Item(const WString& text, const Vector<Ref<Item>>& subItems, const WString& group = "",
+            Item(RefCounter* refCounter, const WString& text, const Vector<Ref<Item>>& subItems, const WString& group = "",
                  const Ref<ImageAsset>& icon = Ref<ImageAsset>());
 
             // Constructor from text and click event
-            Item(const WString& text, const Function<void()> onClick, const WString& group = "",
+            Item(RefCounter* refCounter, const WString& text, const Function<void()> onClick, const WString& group = "",
                  const Ref<ImageAsset>& icon = Ref<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
 
             // Constructor from text and checked event
-            Item(const WString& text, bool checked, Function<void(bool)> onChecked = Function<void(bool)>(),
+            Item(RefCounter* refCounter, const WString& text, bool checked, Function<void(bool)> onChecked = Function<void(bool)>(),
                  const WString& group = "", const Ref<ImageAsset>& icon = Ref<ImageAsset>(),
                  const ShortcutKeys& shortcut = ShortcutKeys());
 
@@ -339,6 +339,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(ContextMenuItem);
+        CLONEABLE_REF(ContextMenuItem);
 
     protected:
         Ref<ContextMenu> mSubMenu; // Context sub menu
@@ -490,10 +491,10 @@ END_META;
 CLASS_METHODS_META(o2::ContextMenu::Item)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<Ref<Item>>&, const WString&, const Ref<ImageAsset>&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Function<void()>, const WString&, const Ref<ImageAsset>&, const ShortcutKeys&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, bool, Function<void(bool)>, const WString&, const Ref<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WString&, const Vector<Ref<Item>>&, const WString&, const Ref<ImageAsset>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WString&, const Function<void()>, const WString&, const Ref<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WString&, bool, Function<void(bool)>, const WString&, const Ref<ImageAsset>&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetShortcut, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(const ShortcutKeys&, GetShortcut);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMaxPriority);

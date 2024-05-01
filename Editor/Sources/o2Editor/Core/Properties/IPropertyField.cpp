@@ -259,7 +259,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::IPropertyField>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::IPropertyField>);
 // --- META ---
 
 DECLARE_CLASS(Editor::IPropertyField, Editor__IPropertyField);

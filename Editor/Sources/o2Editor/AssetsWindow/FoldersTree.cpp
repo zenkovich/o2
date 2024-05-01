@@ -269,8 +269,8 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::FoldersTree>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::AssetsFoldersTree>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::FoldersTree>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::AssetsFoldersTree>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetsFoldersTree, Editor__AssetsFoldersTree);

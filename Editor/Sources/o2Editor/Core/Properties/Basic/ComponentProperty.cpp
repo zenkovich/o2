@@ -289,8 +289,8 @@ namespace Editor
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<Component>>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::ComponentProperty>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::TPropertyField<o2::Ref<Component>>>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::ComponentProperty>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::TPropertyField<o2::Ref<Component>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ComponentProperty, Editor__ComponentProperty);

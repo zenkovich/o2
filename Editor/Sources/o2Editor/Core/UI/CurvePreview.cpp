@@ -139,7 +139,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<Editor::CurvePreview>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::CurvePreview>);
 // --- META ---
 
 DECLARE_CLASS(Editor::CurvePreview, Editor__CurvePreview);

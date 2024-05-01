@@ -516,7 +516,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::LongList>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::LongList>);
 // --- META ---
 
 DECLARE_CLASS(o2::LongList, o2__LongList);
