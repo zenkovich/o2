@@ -354,11 +354,11 @@ namespace Editor
 	}
 
 	SceneHierarchyTreeNode::SceneHierarchyTreeNode(RefCounter* refCounter) :
-		TreeNode(refCounter)
+		RefCounterable(refCounter), TreeNode(refCounter)
 	{}
 
 	SceneHierarchyTreeNode::SceneHierarchyTreeNode(RefCounter* refCounter, const SceneHierarchyTreeNode& other) :
-		TreeNode(refCounter, other)
+		RefCounterable(refCounter), TreeNode(refCounter, other)
 	{
 		InitializeControls();
 	}
