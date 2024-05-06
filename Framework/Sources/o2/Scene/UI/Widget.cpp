@@ -15,7 +15,7 @@
 namespace o2
 {
     Widget::Widget(RefCounter* refCounter, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-        RefCounterable(refCounter), Actor(refCounter, mnew WidgetLayout(), mode), layout(dynamic_cast<WidgetLayout*>(transform))
+        Actor(refCounter, mnew WidgetLayout(), mode), layout(dynamic_cast<WidgetLayout*>(transform))
     {
 #if IS_EDITOR
         InitEditables();
@@ -26,7 +26,7 @@ namespace o2
     }
 
     Widget::Widget(RefCounter* refCounter, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-        RefCounterable(refCounter), Actor(refCounter, mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
+        Actor(refCounter, mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
     {
 #if IS_EDITOR
         InitEditables();
@@ -37,7 +37,7 @@ namespace o2
     }
 
     Widget::Widget(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-        RefCounterable(refCounter), Actor(refCounter, mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
+        Actor(refCounter, mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
     {
 #if IS_EDITOR
         InitEditables();
@@ -48,7 +48,7 @@ namespace o2
     }
 
     Widget::Widget(RefCounter* refCounter, const Widget& other) :
-        RefCounterable(refCounter), Actor(refCounter, mnew WidgetLayout(*other.layout), other), layout(dynamic_cast<WidgetLayout*>(transform)),
+        Actor(refCounter, mnew WidgetLayout(*other.layout), other), layout(dynamic_cast<WidgetLayout*>(transform)),
         mTransparency(other.mTransparency), transparency(this), resTransparency(this),
         childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
     {
@@ -1516,11 +1516,11 @@ namespace o2
     }
 
     Widget::LayersEditable::LayersEditable(RefCounter* refCounter):
-        RefCounterable(refCounter), SceneEditableObject(refCounter)
+        SceneEditableObject(refCounter)
     {}
 
     Widget::LayersEditable::LayersEditable(RefCounter* refCounter, const Ref<Widget>& widget):
-        RefCounterable(refCounter), SceneEditableObject(refCounter), widget(widget)
+        SceneEditableObject(refCounter), widget(widget)
     {}
 
     SceneUID Widget::LayersEditable::GetID() const
@@ -1580,11 +1580,11 @@ namespace o2
     }
 
     Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(RefCounter* refCounter):
-        RefCounterable(refCounter), SceneEditableObject(refCounter)
+        SceneEditableObject(refCounter)
     {}
 
     Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(RefCounter* refCounter, const Ref<Widget>& widget) :
-        RefCounterable(refCounter), SceneEditableObject(refCounter), widget(widget)
+        SceneEditableObject(refCounter), widget(widget)
     {}
 
     SceneUID Widget::InternalChildrenEditableEditable::GetID() const

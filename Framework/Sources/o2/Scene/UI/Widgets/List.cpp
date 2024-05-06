@@ -7,7 +7,7 @@
 namespace o2
 {
     List::List(RefCounter* refCounter):
-        RefCounterable(refCounter), CustomList(refCounter)
+        CustomList(refCounter)
     {
         auto itemSample = mmake<Label>();
         itemSample->horOverflow = Label::HorOverflow::Dots;
@@ -15,7 +15,7 @@ namespace o2
     }
 
     List::List(RefCounter* refCounter, const List& other):
-        RefCounterable(refCounter), CustomList(refCounter, other), value(this), values(this)
+        CustomList(refCounter, other), value(this), values(this)
     {
         RetargetStatesAnimations();
     }

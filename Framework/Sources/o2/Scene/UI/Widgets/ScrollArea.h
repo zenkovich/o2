@@ -9,7 +9,7 @@ namespace o2
     // -----------------------------------------------------
     // Scrolling area with scrollbars and clipping rectangle
     // -----------------------------------------------------
-    class ScrollArea: public Widget, public CursorAreaEventsListenerInterface
+    class ScrollArea: public Widget, public CursorAreaEventsListener
     {
     public:
         PROPERTIES(ScrollArea);
@@ -124,8 +124,6 @@ namespace o2
         CLONEABLE_REF(ScrollArea);
 
     protected:
-        Ref<CursorAreaEventsListenerDelegate> mCursorListenerDelegate; // Delegate to process cursor events
-
         Ref<HorizontalScrollBar> mHorScrollBar; // horizontal scroll bar
         Ref<VerticalScrollBar>   mVerScrollBar; // Vertical scroll bar
 
@@ -210,6 +208,8 @@ namespace o2
         // Called when vertical scroll bar value was changed
         void OnVerScrollChanged(float value);
 
+        REF_COUNTERABLE_IMPL(Widget);
+
         friend class CustomDropDown;
     };
 }
@@ -218,7 +218,7 @@ namespace o2
 CLASS_BASES_META(o2::ScrollArea)
 {
     BASE_CLASS(o2::Widget);
-    BASE_CLASS(o2::CursorAreaEventsListenerInterface);
+    BASE_CLASS(o2::CursorAreaEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(o2::ScrollArea)
@@ -227,7 +227,6 @@ CLASS_FIELDS_META(o2::ScrollArea)
     FIELD().PUBLIC().NAME(horScroll);
     FIELD().PUBLIC().NAME(verScroll);
     FIELD().PUBLIC().NAME(onScrolled);
-    FIELD().PROTECTED().NAME(mCursorListenerDelegate);
     FIELD().PROTECTED().NAME(mHorScrollBar);
     FIELD().PROTECTED().NAME(mVerScrollBar);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnHorScrollBar);

@@ -24,7 +24,7 @@ namespace o2
         // ---------
         // Menu item
         // ---------
-        class Item: public ISerializable, public ShortcutKeysListener
+        class Item: public RefCounterable, public ISerializable, public ShortcutKeysListener
         {
         public:
             static WString separatorText;
@@ -95,6 +95,8 @@ namespace o2
         private:
             // This event calling when shortcut hit and this listener has max priority
             void OnShortcutPressed() override;
+
+            REF_COUNTERABLE_IMPL(RefCounterable);
         };
 
     public:
@@ -469,6 +471,7 @@ END_META;
 
 CLASS_BASES_META(o2::ContextMenu::Item)
 {
+    BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::ShortcutKeysListener);
 }

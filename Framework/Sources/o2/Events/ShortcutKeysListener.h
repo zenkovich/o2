@@ -44,7 +44,7 @@ namespace o2
         friend class ShortcutKeysListenersManager;
     };
 
-    class ShortcutKeysListenersManager: public KeyboardEventsListener, public Singleton<ShortcutKeysListenersManager>
+    class ShortcutKeysListenersManager: public RefCounterable, public KeyboardEventsListener, public Singleton<ShortcutKeysListenersManager>
     {
     protected:
         Map<ShortcutKeys, Vector<Ref<ShortcutKeysListener>>> mListeners;
@@ -64,6 +64,8 @@ namespace o2
 
         // Called when key was pressed, send event to most priority listener
         void OnKeyPressed(const Input::Key& key) override;
+
+        REF_COUNTERABLE_IMPL(RefCounterable);
 
         friend class ShortcutKeysListener;
     };

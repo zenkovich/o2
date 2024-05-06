@@ -25,9 +25,9 @@ namespace o2
 
 #define OPTIONAL_OVERRIDE override
 #else
-    struct ActorBase: public ISerializable
+    struct ActorBase: public ISerializable, public RefCounterable
     {
-        ActorBase(RefCounter* refCounter) {}
+        ActorBase(RefCounter* refCounter):RefCounterable(refCounter) {}
     };
 
 #define OPTIONAL_OVERRIDE
@@ -477,6 +477,8 @@ namespace o2
         // Called when component going to be removed from actor
         virtual void OnComponentRemoving(Component* component);
 
+        REF_COUNTERABLE_IMPL(ActorBase);
+
 #if IS_SCRIPTING_SUPPORTED
     public:
         // Returns transform for scripting @SCRIPTABLE
@@ -656,6 +658,9 @@ namespace o2
         friend class Scene;
         friend class Tag;
         friend class Widget;
+
+        template<typename _type>
+        friend RefCounter* GetRefCounterImpl(_type* ptr);
 
         FRIEND_REF_MAKE();
     };

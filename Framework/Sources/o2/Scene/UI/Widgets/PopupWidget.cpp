@@ -8,13 +8,13 @@
 namespace o2
 {
     PopupWidget::PopupWidget(RefCounter* refCounter):
-        RefCounterable(refCounter), ScrollArea(refCounter)
+        ScrollArea(refCounter)
     {
         SetEnabledForcible(false);
     }
 
     PopupWidget::PopupWidget(RefCounter* refCounter, const PopupWidget& other):
-        RefCounterable(refCounter), ScrollArea(refCounter, other), mFitSizeMin(other.mFitSizeMin)
+        ScrollArea(refCounter, other), mFitSizeMin(other.mFitSizeMin)
     {
         SetEnabledForcible(false);
     }
@@ -227,7 +227,7 @@ namespace o2
             layer->Draw();
 
         IDrawable::OnDrawn();
-        CursorAreaEventsListenerInterface::OnDrawn();
+        CursorAreaEventsListener::OnDrawn();
 
         o2Render.EnableScissorTest(mAbsoluteClipArea);
 

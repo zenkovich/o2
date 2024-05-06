@@ -16,7 +16,7 @@ namespace o2
     // -----------
     // Drag handle
     // -----------
-    class DragHandle: public IDrawable, public CursorAreaEventsListener, virtual public ISerializable, virtual public ICloneableRef
+    class DragHandle: public RefCounterable, public IDrawable, public CursorAreaEventsListener, virtual public ISerializable, virtual public ICloneableRef
     {
     public:
         PROPERTIES(DragHandle);
@@ -189,7 +189,6 @@ namespace o2
         bool IsScrollable() const override;
 
         SERIALIZABLE(DragHandle);
-        CLONEABLE_REF(DragHandle);
 
     protected:
         Ref<IRectDrawable> mRegularDrawable;  // Regular view IRectDrawable @SERIALIZABLE
@@ -262,6 +261,8 @@ namespace o2
         // Called when this was unselected
         virtual void OnDeselected();
 
+        REF_COUNTERABLE_IMPL(RefCounterable);
+
         friend class ISelectableDragHandlesGroup;
         friend class SelectableDragHandlesGroup;
     };
@@ -317,7 +318,8 @@ namespace o2
         static String GetCreateMenuCategory();
 
         SERIALIZABLE(WidgetDragHandle);
-        CLONEABLE_REF(WidgetDragHandle);
+
+        Ref<RefCounterable> CloneRef() const override { return DynamicCast<Widget>(mmake<WidgetDragHandle>(*this)); }
 
     protected:
         // Hide public functions
@@ -335,6 +337,8 @@ namespace o2
 
         // Completion deserialization delta callback; calls widget's function
         void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
+        REF_COUNTERABLE_IMPL(Widget);
     };
 
     // --------------------------------------------
@@ -450,6 +454,7 @@ namespace o2
 
 CLASS_BASES_META(o2::DragHandle)
 {
+    BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::IDrawable);
     BASE_CLASS(o2::CursorAreaEventsListener);
     BASE_CLASS(o2::ISerializable);
@@ -590,6 +595,7 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<RefCounterable>, CloneRef);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

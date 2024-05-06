@@ -287,6 +287,8 @@ namespace o2
 
         // Moves mSelectionEnd position and mSelectionBegin, when selecting
         void MoveCaret(int newPosition, bool selecting);
+        
+        REF_COUNTERABLE_IMPL(ScrollArea);
     };
 }
 // --- META ---

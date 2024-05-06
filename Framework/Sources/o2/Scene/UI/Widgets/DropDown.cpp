@@ -8,7 +8,7 @@
 namespace o2
 {
     DropDown::DropDown(RefCounter* refCounter):
-        RefCounterable(refCounter), CustomDropDown(refCounter)
+        CustomDropDown(refCounter)
     {
         auto itemSample = mmake<Label>();
         itemSample->horOverflow = Label::HorOverflow::Dots;
@@ -16,7 +16,7 @@ namespace o2
     }
 
     DropDown::DropDown(RefCounter* refCounter, const DropDown& other):
-        RefCounterable(refCounter), CustomDropDown(refCounter, other), value(this)
+        CustomDropDown(refCounter, other), value(this)
     {
         RetargetStatesAnimations();
         mSelectedText = GetLayerDrawable<Text>("selectedText");

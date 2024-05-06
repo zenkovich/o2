@@ -163,6 +163,8 @@ namespace o2
 
         // Called when selection was changed
         virtual void OnSelectionChanged();
+
+        REF_COUNTERABLE_IMPL(Widget);
     };
 }
 // --- META ---

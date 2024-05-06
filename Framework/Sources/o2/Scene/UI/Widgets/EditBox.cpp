@@ -19,7 +19,7 @@
 namespace o2
 {
     EditBox::EditBox(RefCounter* refCounter):
-        RefCounterable(refCounter), ScrollArea(refCounter)
+        ScrollArea(refCounter)
     {
         mSelectionMesh = mmake<Mesh>();
         mTextDrawable  = mmake<Text>();
@@ -27,7 +27,7 @@ namespace o2
     }
 
     EditBox::EditBox(RefCounter* refCounter, const EditBox& other):
-        RefCounterable(refCounter), ScrollArea(refCounter, other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
+        ScrollArea(refCounter, other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
         mMaxLinesCount(other.mMaxLinesCount), mText(other.mText), mLastText(other.mText),
         mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
         mCaretBlinkDelay(other.mCaretBlinkDelay), text(this), caret(this),
@@ -99,7 +99,7 @@ namespace o2
 
         o2Render.DisableScissorTest();
 
-        mCursorListenerDelegate->OnDrawn();
+        CursorAreaEventsListener::OnDrawn();
 
         for (auto layer : mTopDrawingLayers)
             layer->Draw();

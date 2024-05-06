@@ -17,7 +17,7 @@ namespace o2
     // GetSceneDrawableSceneLayer(), GetParentDrawable() and GetIndexInParentDrawable(). And call "on" methods: 
     // OnDrawbleParentChanged(), OnEnabled(), OnDisabled(), OnAddToScene(), OnRemoveFromScene()
     // --------------------------------------------------------------------------------------------------------------
-    class ISceneDrawable : virtual public ISerializable, virtual public RefCounterable, virtual public ICloneableRef, virtual public IDrawable
+    class ISceneDrawable : virtual public ISerializable, virtual public IRefCounterable, virtual public ICloneableRef, virtual public IDrawable
     {
     public:
         PROPERTIES(ISceneDrawable);
@@ -133,12 +133,14 @@ namespace o2
     // ------------------------------------------------------------------------------------
     // Root drawables container. It is used to draw all root drawables with inherited depth
     // ------------------------------------------------------------------------------------
-    class SceneLayerRootDrawablesContainer : public ISceneDrawable
+    class SceneLayerRootDrawablesContainer : public ISceneDrawable, public RefCounterable
     {
     public:
         SceneLayerRootDrawablesContainer(RefCounter* refCounter): 
-            RefCounterable(refCounter), ISceneDrawable(refCounter) 
+            ISceneDrawable(refCounter) 
         {}
+
+        REF_COUNTERABLE_IMPL(RefCounterable);
     };
 }
 // --- META ---
@@ -146,7 +148,7 @@ namespace o2
 CLASS_BASES_META(o2::ISceneDrawable)
 {
     BASE_CLASS(o2::ISerializable);
-    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::IRefCounterable);
     BASE_CLASS(o2::ICloneableRef);
     BASE_CLASS(o2::IDrawable);
 }

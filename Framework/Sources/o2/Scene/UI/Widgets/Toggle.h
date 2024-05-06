@@ -165,7 +165,9 @@ namespace o2
         void OnKeyPressed(const Input::Key& key) override;
 
         // Called when key was released
-        void OnKeyReleased(const Input::Key& key) override;
+        void OnKeyReleased(const Input::Key& key) override; 
+        
+        REF_COUNTERABLE_IMPL(Widget);
 
         friend class ToggleGroup;
     };

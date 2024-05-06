@@ -14,7 +14,7 @@
 namespace o2
 {
 	CustomList::CustomList(RefCounter* refCounter) :
-		RefCounterable(refCounter), ScrollArea(refCounter)
+		ScrollArea(refCounter)
 	{
 		mItemSample = mmake<Widget>();
 		mItemSample->RemoveFromScene();
@@ -37,7 +37,7 @@ namespace o2
 	}
 
 	CustomList::CustomList(RefCounter* refCounter, const CustomList& other) :
-		RefCounterable(refCounter), ScrollArea(refCounter, other), mHoverLayout(other.mHoverLayout),
+		ScrollArea(refCounter, other), mHoverLayout(other.mHoverLayout),
 		mSelectionLayout(other.mSelectionLayout), selectedItem(this), selectedItems(this),
 		selectedItemPos(this), itemsCount(this)
 	{
@@ -118,7 +118,7 @@ namespace o2
 
 		o2Render.DisableScissorTest();
 
-		mCursorListenerDelegate->OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();

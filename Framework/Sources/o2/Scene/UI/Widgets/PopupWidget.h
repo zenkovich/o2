@@ -100,6 +100,8 @@ namespace o2
         // Called when key was released
         void OnKeyPressed(const Input::Key& key) override;
 
+        REF_COUNTERABLE_IMPL(RefCounterable);
+
         friend class ContextMenu;
         friend class MenuPanel;
         friend class UIManager;

@@ -18,13 +18,13 @@
 namespace o2
 {
     TreeNode::TreeNode(RefCounter* refCounter):
-        RefCounterable(refCounter), Widget(refCounter)
+        Widget(refCounter)
     {
         onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
     }
 
     TreeNode::TreeNode(RefCounter* refCounter, const TreeNode& other):
-        RefCounterable(refCounter), Widget(refCounter, other)
+        Widget(refCounter, other)
     {
         onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
 
@@ -173,7 +173,7 @@ namespace o2
     {}
 
     Tree::Tree(RefCounter* refCounter):
-        RefCounterable(refCounter), ScrollArea(refCounter)
+        ScrollArea(refCounter)
     {
         mNodeWidgetSample = mmake<TreeNode>();
         mNodeWidgetSample->layout->minHeight = 20;
@@ -187,7 +187,7 @@ namespace o2
     }
 
     Tree::Tree(RefCounter* refCounter, const Tree& other):
-        RefCounterable(refCounter), ScrollArea(refCounter, other)
+        ScrollArea(refCounter, other)
     {
         mRearrangeType = other.mRearrangeType;
         mMultiSelectAvailable = other.mMultiSelectAvailable;
@@ -1486,7 +1486,7 @@ namespace o2
             res->RemoveFromScene();
             res->Show(true);
             res->SetSelectionGroup(Ref(this));
-            res->messageFallDownListener = this;
+            res->messageFallDownListener = static_cast<ScrollArea*>(this);
             res->mOwnerTree = Ref(this);
         }
         else 

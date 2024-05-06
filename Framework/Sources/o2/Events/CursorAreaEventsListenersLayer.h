@@ -8,7 +8,7 @@ namespace o2
 {
     FORWARD_CLASS_REF(DragableObject);
 
-    class CursorAreaEventListenersLayer: public CursorAreaEventsListener
+    class CursorAreaEventListenersLayer: public RefCounterable, public CursorAreaEventsListener
     {
     public:
         Basis  drawnTransform;
@@ -134,6 +134,8 @@ namespace o2
 
         // Processes scrolling event
         void ProcessScrolling();
+
+        REF_COUNTERABLE_IMPL(RefCounterable);
 
         friend class EventSystem;
     };

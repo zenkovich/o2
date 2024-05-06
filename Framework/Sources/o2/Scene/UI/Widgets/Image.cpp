@@ -7,13 +7,13 @@
 namespace o2
 {
     Image::Image(RefCounter* refCounter):
-        RefCounterable(refCounter), Widget(refCounter)
+        Widget(refCounter)
     {
         mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
     }
 
     Image::Image(RefCounter* refCounter, const Image& other):
-        RefCounterable(refCounter), Widget(refCounter, other), image(this), imageAsset(this), imageName(this)
+        Widget(refCounter, other), image(this), imageAsset(this), imageName(this)
     {
         mImage = GetLayerDrawable<Sprite>("image");
         if (!mImage)

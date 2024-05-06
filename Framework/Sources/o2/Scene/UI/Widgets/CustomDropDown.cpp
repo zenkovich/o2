@@ -11,7 +11,7 @@
 namespace o2
 {
     CustomDropDown::CustomDropDown(RefCounter* refCounter):
-        RefCounterable(refCounter), Widget(refCounter), DrawableCursorEventsListener(this)
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {
         mItemsList = mmake<CustomList>();
         mItemsList->SetInternalParent(Ref(this), false);
@@ -20,7 +20,7 @@ namespace o2
     }
 
     CustomDropDown::CustomDropDown(RefCounter* refCounter, const CustomDropDown& other):
-        RefCounterable(refCounter), Widget(refCounter, other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout),
+        Widget(refCounter, other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout),
         mMaxListItems(other.mMaxListItems), selectedItem(this), selectedItemPos(this), itemsCount(this)
     {
         mItemsList = FindInternalWidgetByType<CustomList>();

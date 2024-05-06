@@ -9,11 +9,11 @@
 namespace o2
 {
     VerticalScrollBar::VerticalScrollBar(RefCounter* refCounter):
-        RefCounterable(refCounter), Widget(refCounter), DrawableCursorEventsListener(this)
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {}
 
     VerticalScrollBar::VerticalScrollBar(RefCounter* refCounter, const VerticalScrollBar& other) :
-        RefCounterable(refCounter), Widget(refCounter, other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+        Widget(refCounter, other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
         mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize),
         mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue),
         value(this), minValue(this), maxValue(this), scrollSense(this), scrollSize(this)

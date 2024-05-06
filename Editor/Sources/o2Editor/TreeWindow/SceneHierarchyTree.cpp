@@ -31,7 +31,7 @@
 namespace Editor
 {
 	SceneHierarchyTree::SceneHierarchyTree(RefCounter* refCounter) :
-		RefCounterable(refCounter), Tree(refCounter), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
+		Tree(refCounter), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		mNodeWidgetSample = mmake<SceneHierarchyTreeNode>();
 		mNodeWidgetSample->layout->minHeight = 20;
@@ -41,7 +41,7 @@ namespace Editor
 	}
 
 	SceneHierarchyTree::SceneHierarchyTree(RefCounter* refCounter, const SceneHierarchyTree& other) :
-		RefCounterable(refCounter), Tree(refCounter, other), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
+		Tree(refCounter, other), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		Initialize();
 	}

@@ -106,6 +106,8 @@ namespace o2
 
         // Called when listener stops interacting, enables "inactive" state when exists
         void OnBecomeNotInteractable() override;
+
+        REF_COUNTERABLE_IMPL(Widget);
     };
 }
 // --- META ---

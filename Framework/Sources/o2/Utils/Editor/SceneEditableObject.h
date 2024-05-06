@@ -15,7 +15,7 @@ namespace o2
     // ----------------------------------------------------------
     // Object, that can be shown in editor's tree view and edited
     // ----------------------------------------------------------
-    class SceneEditableObject: virtual public ISerializable, virtual public RefCounterable, virtual public ICloneableRef
+    class SceneEditableObject: public RefCounterable, virtual public ISerializable, virtual public ICloneableRef
     {
     public:
         int changedFrame = 0; // Index of frame, when object has changed @EDITOR_IGNORE
@@ -168,8 +168,8 @@ namespace o2
 #if  IS_EDITOR
 CLASS_BASES_META(o2::SceneEditableObject)
 {
-    BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::ICloneableRef);
 }
 END_META;

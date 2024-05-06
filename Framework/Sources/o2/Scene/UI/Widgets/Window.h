@@ -168,6 +168,8 @@ namespace o2
 
         // Called when cursor pressed on this
         void OnCursorPressed(const Input::Cursor& cursor) override;
+
+        REF_COUNTERABLE_IMPL(Widget);
     };
 }
 // --- META ---

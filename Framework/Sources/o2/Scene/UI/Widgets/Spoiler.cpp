@@ -12,7 +12,7 @@
 namespace o2
 {
     Spoiler::Spoiler(RefCounter* refCounter):
-        RefCounterable(refCounter), VerticalLayout(refCounter)
+        VerticalLayout(refCounter)
     {
         mBaseCorner = BaseCorner::Top;
         mFitByChildren = true;
@@ -26,7 +26,7 @@ namespace o2
     }
 
     Spoiler::Spoiler(RefCounter* refCounter, const Spoiler& other):
-        RefCounterable(refCounter), VerticalLayout(refCounter, other), caption(this), headHeight(this), expanded(this), mHeadHeight(other.mHeadHeight)
+        VerticalLayout(refCounter, other), caption(this), headHeight(this), expanded(this), mHeadHeight(other.mHeadHeight)
     {
         mExpandState = GetStateObject("expand");
         if (!mExpandState)

@@ -22,27 +22,27 @@ namespace o2
 	}
 
 	ContextMenu::Item::Item(RefCounter* refCounter) :
-		RefCounterable(refCounter), checked(false), checkable(false)
+		checked(false), checkable(false)
 	{}
 
 	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, const Function<void()> onClick,
 							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
-		RefCounterable(refCounter), text(text), group(group), onClick(onClick), mShortcut(shortcut), icon(icon), checked(false), checkable(false)
+		text(text), group(group), onClick(onClick), mShortcut(shortcut), icon(icon), checked(false), checkable(false)
 	{
 		SetShortcut(shortcut);
 	}
 
 	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, const Vector<Ref<Item>>& subItems,
 							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/) :
-		RefCounterable(refCounter), text(text), group(group), subItems(subItems), icon(icon), checked(false), checkable(false)
+		text(text), group(group), subItems(subItems), icon(icon), checked(false), checkable(false)
 	{}
 
 	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, bool checked,
 							Function<void(bool)> onChecked /*= Function<void(bool)>()*/,
 							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
-		RefCounterable(refCounter), text(text), group(group), checked(checked), onChecked(onChecked), checkable(true), mShortcut(shortcut), icon(icon)
+		text(text), group(group), checked(checked), onChecked(onChecked), checkable(true), mShortcut(shortcut), icon(icon)
 	{
 		SetShortcut(shortcut);
 	}
@@ -91,7 +91,7 @@ namespace o2
 	}
 
 	ContextMenu::ContextMenu(RefCounter* refCounter) :
-		RefCounterable(refCounter), PopupWidget(refCounter)
+		PopupWidget(refCounter)
 	{
 		mItemSample = mmake<ContextMenuItem>();
 		mItemSample->RemoveFromScene();
@@ -126,7 +126,7 @@ namespace o2
 	}
 
 	ContextMenu::ContextMenu(RefCounter* refCounter, const ContextMenu& other) :
-		RefCounterable(refCounter), PopupWidget(other), mMaxVisibleItems(other.mMaxVisibleItems)
+		PopupWidget(other), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample = other.mItemSample->CloneAsRef<ContextMenuItem>();
 		mItemSample->RemoveFromScene();
@@ -628,8 +628,8 @@ namespace o2
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
-		IDrawable::OnDrawn();
-		mCursorListenerDelegate->OnDrawn();
+        IDrawable::OnDrawn();
+        CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -720,13 +720,13 @@ namespace o2
 	}
 
     ContextMenuItem::ContextMenuItem(RefCounter* refCounter) :
-        RefCounterable(refCounter), Widget(refCounter), mSubMenu(nullptr)
+        Widget(refCounter), mSubMenu(nullptr)
 	{
 		RetargetStatesAnimations();
 	}
 
 	ContextMenuItem::ContextMenuItem(RefCounter* refCounter, const ContextMenuItem& other) :
-		RefCounterable(refCounter), Widget(refCounter, other), text(this)
+		Widget(refCounter, other), text(this)
 	{
 		mSubMenu = FindChildByType<ContextMenu>();
 		if (mSubMenu)

@@ -15,14 +15,14 @@
 namespace o2
 {
     Window::Window(RefCounter* refCounter):
-        RefCounterable(refCounter), ScrollArea(refCounter)
+        ScrollArea(refCounter)
     {
         InitializeHandles();
         InitializeContextMenu();
     }
 
     Window::Window(RefCounter* refCounter, const Window& other):
-        RefCounterable(refCounter), ScrollArea(refCounter, other), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
+        ScrollArea(refCounter, other), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
         mTopDragAreaLayout(other.mTopDragAreaLayout), mBottomDragAreaLayout(other.mBottomDragAreaLayout),
         mLeftDragAreaLayout(other.mLeftDragAreaLayout), mRightDragAreaLayout(other.mRightDragAreaLayout),
         mLeftTopDragAreaLayout(other.mLeftTopDragAreaLayout), mRightTopDragAreaLayout(other.mRightTopDragAreaLayout),
@@ -84,7 +84,7 @@ namespace o2
 
         o2Render.DisableScissorTest();
 
-        CursorAreaEventsListenerInterface::OnDrawn();
+        CursorAreaEventsListener::OnDrawn();
 
         mHeadDragHandle.OnDrawn();
         mTopDragHandle.OnDrawn();

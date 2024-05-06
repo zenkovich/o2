@@ -9,11 +9,11 @@
 namespace o2
 {
     Button::Button(RefCounter* refCounter):
-        RefCounterable(refCounter), Widget(refCounter), CursorAreaEventsListener()
+        Widget(refCounter), CursorAreaEventsListener()
     {}
 
     Button::Button(RefCounter* refCounter, const Button& other) :
-        RefCounterable(refCounter), Widget(refCounter, other), caption(this), icon(this)
+        Widget(refCounter, other), caption(this), icon(this)
     {
         mCaptionText = GetLayerDrawable<Text>("caption");
         mIconSprite = GetLayerDrawable<Sprite>("icon");

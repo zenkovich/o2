@@ -3,7 +3,6 @@
 
 namespace o2
 {
-
     RefCounterable::RefCounterable(RefCounter* refCounter):
         mRefCounter(refCounter)
     {}
@@ -24,9 +23,8 @@ namespace o2
         return mRefCounter;
     }
 
-    bool RefCounterable::HasRefCounter() const
+    void RefCounterable::SetRefCounter(RefCounter* refCounter)
     {
-        return mRefCounter != nullptr;
+        mRefCounter = refCounter;
     }
-
 }

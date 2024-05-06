@@ -9,13 +9,13 @@
 namespace o2
 {
     Label::Label(RefCounter* refCounter):
-        RefCounterable(refCounter), Widget(refCounter)
+        Widget(refCounter)
     {
         CreateDefaultText();
     }
 
     Label::Label(RefCounter* refCounter, const Label& other):
-        RefCounterable(refCounter), Widget(refCounter, other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow),
+        Widget(refCounter, other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow),
         mExpandBorder(other.mExpandBorder), text(this), font(this), height(this), verAlign(this), horAlign(this),
         horOverflow(this), verOverflow(this), expandBorder(this), symbolsDistanceCoef(this), linesDistanceCoef(this),
         color(this)

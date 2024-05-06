@@ -17,7 +17,7 @@ namespace o2
 
     Actor::Actor(RefCounter* refCounter, ActorTransform* transform, bool onScene /*= true*/, const String& name /*= "unnamed"*/, 
                  bool enabled /*= true*/, SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/) :
-        RefCounterable(refCounter), SceneEditableObject(refCounter), ISceneDrawable(refCounter), transform(transform), mName(name), mEnabled(enabled),
+        SceneEditableObject(refCounter), ISceneDrawable(refCounter), transform(transform), mName(name), mEnabled(enabled),
         mResEnabled(enabled), mResEnabledInHierarchy(false), mId(id), mAssetId(assetId), mState(State::Initializing),
         mIsOnScene(onScene)
     {
@@ -1331,7 +1331,7 @@ namespace o2
             mPrototypeLink = nullptr;
 
 #if IS_EDITOR
-        if (mPrototype && HasRefCounter())
+        if (mPrototype)
             Scene::LinkActorToPrototypesHierarchy(Ref(this), mPrototype);
 #endif
     }

@@ -8,12 +8,11 @@
 
 namespace o2
 {
-    ISceneDrawable::ISceneDrawable(RefCounter* refCounter):
-        RefCounterable(refCounter)
+    ISceneDrawable::ISceneDrawable(RefCounter* refCounter)
     {}
 
     ISceneDrawable::ISceneDrawable(RefCounter* refCounter, const ISceneDrawable& other) :
-        RefCounterable(refCounter), mDrawingDepth(other.mDrawingDepth), 
+        mDrawingDepth(other.mDrawingDepth), 
         mInheritDrawingDepthFromParent(other.mInheritDrawingDepthFromParent), drawDepth(this)
     {}
 

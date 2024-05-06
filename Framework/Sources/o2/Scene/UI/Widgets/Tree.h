@@ -489,10 +489,10 @@ namespace o2
         // Called when some selectable listeners was dropped to this
         void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
-// ------------
-
         // Completion deserialization callback
         void OnDeserialized(const DataValue& node) override;
+
+        REF_COUNTERABLE_IMPL(Widget);
 
         friend class TreeNode;
     };
@@ -583,6 +583,8 @@ namespace o2
 
         // Called when this was unselected
         void OnDeselected() override;
+
+        REF_COUNTERABLE_IMPL(Widget);
 
         friend class Tree;
     };

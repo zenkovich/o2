@@ -8,11 +8,11 @@
 namespace o2
 {
     HorizontalProgress::HorizontalProgress(RefCounter* refCounter):
-        RefCounterable(refCounter), Widget(refCounter), DrawableCursorEventsListener(this)
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {}
 
     HorizontalProgress::HorizontalProgress(RefCounter* refCounter, const HorizontalProgress& other) :
-        RefCounterable(refCounter), Widget(refCounter, other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+        Widget(refCounter, other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
         mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense), value(this),
         minValue(this), maxValue(this), scrollSense(this)
     {

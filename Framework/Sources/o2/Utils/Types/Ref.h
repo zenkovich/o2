@@ -56,14 +56,14 @@ namespace o2
         UInt16 GetWeakReferencesCount() const;
 
     protected:
-        mutable RefCounter* mRefCounter = nullptr; // Pointer to reference counter. Creates when first reference created
+        mutable RefCounter* mRefCounter = nullptr; // Pointer to reference counter
 
     protected:
-        // Returns reference counter, creates if not created
+        // Returns reference counter
         RefCounter* GetRefCounter() const;
 
-        // Returns true if object has reference counter
-        bool HasRefCounter() const;
+        // Sets reference counter
+        void SetRefCounter(RefCounter* refCounter);
 
         template<typename _type>
         friend class BaseRef;
@@ -79,7 +79,50 @@ namespace o2
 
         template<typename _type, typename ... _args>
         friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args); 
+
+        template<typename _type, typename ... _other_types> 
+        friend void SetRefCounters(_type* object, RefCounter* refCounter);
     };
+
+    // ---------------------------------------------------------------------------------
+    // Reference counterable interface. Used for multiple reference counters inheritance
+    // ---------------------------------------------------------------------------------
+    class IRefCounterable
+    {
+    protected:
+        // Returns reference counter
+        virtual RefCounter* GetRefCounter() const = 0;
+
+        template<typename _type>
+        friend class BaseRef;
+
+        template<typename _type>
+        friend class BaseWeakRef;
+
+        template<typename _type>
+        friend RefCounter* GetRefCounterImpl(_type* ptr);
+
+        template<typename _type, typename ... _other_types>
+        friend void SetRefCounters(_type* object, RefCounter* refCounter);
+    };
+
+    template<typename _type, typename ... _other_types>
+    void SetRefCounters(_type* object, RefCounter* refCounter)
+    {
+        object->SetRefCounter(refCounter);
+
+        if constexpr (sizeof...(_other_types) > 0)
+            SetRefCounters<_other_types...>(object, refCounter);
+    }
+
+    // Reference counterable implementation to override GetRefCounter method
+#define REF_COUNTERABLE_IMPL(BASE_CLASS, ...)                                                         \
+        RefCounter* GetRefCounter() const override { return BASE_CLASS::GetRefCounter(); }            \
+        void SetRefCounter(RefCounter* refCounter) { SetRefCounters<BASE_CLASS, __VA_ARGS__>(this, refCounter); } \
+        template<typename _type> friend RefCounter* GetRefCounterImpl(_type* ptr); \
+        template<typename _type, typename ... _other_types> friend void SetRefCounters(_type* object, RefCounter* refCounter); \
+        template<typename _type, typename ... _args> friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
+
 
     // -------------------------------
     // Base strong reference to object
@@ -351,7 +394,7 @@ namespace o2
         else
 		{
 			object = new (memory + refSize) _type(std::forward<_args>(args)...);
-            object->mRefCounter = refCounter;
+            object->SetRefCounter(refCounter);
         }
 
         if constexpr (HasRefConstructArgs<_type, _args ...>::value)
