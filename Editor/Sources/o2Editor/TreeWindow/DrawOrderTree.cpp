@@ -370,11 +370,11 @@ namespace Editor
 	}
 
 	DrawOrderTreeNode::DrawOrderTreeNode(RefCounter* refCounter) :
-		TreeNode(refCounter)
+		RefCounterable(refCounter), TreeNode(refCounter)
 	{}
 
 	DrawOrderTreeNode::DrawOrderTreeNode(RefCounter* refCounter, const DrawOrderTreeNode& other) :
-		TreeNode(refCounter, other)
+		RefCounterable(refCounter), TreeNode(refCounter, other)
 	{
 		InitializeControls();
 	}

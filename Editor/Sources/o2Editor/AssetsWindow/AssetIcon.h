@@ -62,6 +62,7 @@ namespace Editor
 		static String GetCreateMenuCategory();
 
 		SERIALIZABLE(AssetIcon);
+		CLONEABLE_REF(AssetIcon);
 
 	protected:
 		Ref<Label>       mNameText;      // Asset name text

@@ -10,14 +10,14 @@
 namespace Editor
 {
 	AssetIcon::AssetIcon(RefCounter* refCounter):
-		Widget(refCounter), mNameText(nullptr)
+		RefCounterable(refCounter), Widget(refCounter), mNameText(nullptr)
 	{
 		onDraw += [&]() { CursorAreaEventsListener::OnDrawn(); };
 		RetargetStatesAnimations();
 	}
 
 	AssetIcon::AssetIcon(RefCounter* refCounter, const AssetIcon& other):
-		Widget(refCounter, other), assetName(this)
+		RefCounterable(refCounter), Widget(refCounter, other), assetName(this)
 	{
 		mNameText = FindChildByType<Label>();
 
