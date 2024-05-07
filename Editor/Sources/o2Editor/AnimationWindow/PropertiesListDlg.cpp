@@ -24,7 +24,7 @@ namespace Editor
 	PropertiesListDlg::~PropertiesListDlg()
 	{}
 
-	void PropertiesListDlg::Show(const Ref<AnimationClip>& animation, const Ref<Actor>& actor)
+	void PropertiesListDlg::Show(const Ref<AnimationClip>& animation, const ActorRef<>& actor)
 	{
 		Instance().mPropertiesTree->Initialize(animation, actor);
 		Instance().mFilter->SetText("");
@@ -71,11 +71,11 @@ namespace Editor
 	}
 
     AnimationPropertiesTree::AnimationPropertiesTree(RefCounter* refCounter) :
-		RefCounterable(refCounter), Tree(refCounter)
+		Tree(refCounter)
 	{}
 
 	AnimationPropertiesTree::AnimationPropertiesTree(RefCounter* refCounter, const AnimationPropertiesTree& other):
-		RefCounterable(refCounter), Tree(refCounter, other)
+		Tree(refCounter, other)
 	{ }
 
 	AnimationPropertiesTree& AnimationPropertiesTree::operator=(const AnimationPropertiesTree& other)
@@ -84,7 +84,7 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationPropertiesTree::Initialize(const Ref<AnimationClip>& animation, const Ref<Actor>& actor)
+	void AnimationPropertiesTree::Initialize(const Ref<AnimationClip>& animation, const ActorRef<>& actor)
 	{
 		mFilterStr = "";
 		mRoot = mmake<NodeData>();

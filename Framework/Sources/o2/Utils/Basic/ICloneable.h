@@ -46,8 +46,22 @@ namespace o2
                 return mnew _type(origin);
             else
                 return nullptr;
-        }
+		}
+
+		static Ref<RefCounterable> CloneRef(const _type& origin)
+		{
+            if constexpr (std::is_copy_constructible<_type>::value)
+            {
+                if constexpr (HasCastToRefCounterable<_type>::value)
+                    return _type::CastToRefCounterable(mmake<_type>(origin));
+                else
+                    return mmake<_type>(origin);
+            }
+			else
+				return nullptr;
+		}
     };
+
 }
 
 // Defines clone method for class
@@ -56,4 +70,4 @@ namespace o2
 
 // Defines clone method for class with reference counting
 #define CLONEABLE_REF(CLASS) \
-    virtual Ref<RefCounterable> CloneRef() const override { return mmake<CLASS>(*this); }
+    virtual Ref<RefCounterable> CloneRef() const override { return o2::SafeClone<CLASS>::CloneRef(*this); }

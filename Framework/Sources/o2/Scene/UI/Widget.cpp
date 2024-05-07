@@ -36,7 +36,7 @@ namespace o2
             UIManager::RegisterFocusableWidget(this);
     }
 
-    Widget::Widget(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+    Widget::Widget(RefCounter* refCounter, Vector<ComponentRef<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(refCounter, mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
     {
 #if IS_EDITOR
@@ -130,7 +130,7 @@ namespace o2
 	Widget::~Widget()
     {
         if (mParent)
-            mParent.Lock()->OnChildRemoved(this);
+            mParent.Lock()->OnChildRemoved(ActorRef(this));
 
         for (auto& layer : mLayers)
             layer->mOwnerWidget = nullptr;
@@ -570,7 +570,7 @@ namespace o2
         return mChildWidgets;
     }
 
-    Ref<Actor> Widget::FindActorById(SceneUID id)
+    ActorRef<> Widget::FindActorById(SceneUID id)
     {
         if (auto res = Actor::FindActorById(id))
             return res;
@@ -1070,12 +1070,12 @@ namespace o2
         return DynamicCast<Widget>(actor);
     }
 
-    Ref<Actor> Widget::AddChild(const Ref<Actor>& actor)
+    ActorRef<> Widget::AddChild(const ActorRef<>& actor)
     {
         return Actor::AddChild(actor);
     }
 
-    Ref<Actor> Widget::AddChild(const Ref<Actor>& actor, int index)
+    ActorRef<> Widget::AddChild(const ActorRef<>& actor, int index)
     {
         Actor::AddChild(actor, index);
         UpdateChildWidgetsList();
@@ -1158,7 +1158,7 @@ namespace o2
             AddState(state);
     }
 
-    void Widget::OnParentChanged(const Ref<Actor>& oldParent)
+    void Widget::OnParentChanged(const ActorRef<>& oldParent)
     {
         layout->SetDirty();
 
@@ -1175,7 +1175,7 @@ namespace o2
         SortInheritedDrawables();
     }
 
-    void Widget::OnChildAdded(const Ref<Actor>& child)
+    void Widget::OnChildAdded(const ActorRef<>& child)
     {
         layout->SetDirty(false);
 
@@ -1190,18 +1190,18 @@ namespace o2
         Actor::OnChildAdded(child);
     }
 
-    void Widget::OnChildAdded(const Ref<Widget>& child)
+    void Widget::OnChildAdded(const ActorRef<Widget>& child)
     {}
 
-    void Widget::OnChildRemoved(Actor* child)
+    void Widget::OnChildRemoved(const ActorRef<>& child)
     {
         layout->SetDirty();
 
-        Widget* widget = dynamic_cast<Widget*>(child);
+        auto widget = DynamicCast<Widget>(child);
         if (widget)
         {
-            mChildWidgets.RemoveFirst([=](auto& x) { return x == widget; });
-            mInternalWidgets.RemoveFirst([=](auto& x) { return x == widget; });
+            mChildWidgets.Remove(widget);
+            mInternalWidgets.Remove(widget);
 
             OnChildRemoved(widget);
         }
@@ -1209,7 +1209,7 @@ namespace o2
         Actor::OnChildRemoved(child);
     }
 
-    void Widget::OnChildRemoved(Widget* child)
+    void Widget::OnChildRemoved(const ActorRef<Widget>& child)
     {}
 
     void Widget::OnRemoveFromScene()

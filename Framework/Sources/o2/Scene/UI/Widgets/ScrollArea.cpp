@@ -425,12 +425,12 @@ namespace o2
         GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
     }
 
-    void ScrollArea::OnChildAdded(const Ref<Widget>& child)
+    void ScrollArea::OnChildAdded(const ActorRef<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }
 
-    void ScrollArea::OnChildRemoved(Widget* child)
+    void ScrollArea::OnChildRemoved(const ActorRef<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
     }

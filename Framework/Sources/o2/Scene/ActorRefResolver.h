@@ -62,57 +62,57 @@ namespace o2
         static void OnComponentIdChanged(Component* component, SceneUID prevId);
 
         // Called when actor reference was destroyed, removes it from unresolved list
-        static void OnActorRefDestroyed(const BaseActorRef* ref);
+        static void OnActorDestroyed(const BaseActorRef* ref);
 
         // Called when component reference was destroyed, removes it from unresolved list
-        static void OnComponentRefDestroyed(const BaseComponentRef* ref);
+        static void OnComponentDestroyed(const BaseComponentRef* ref);
 
     protected:
-        struct UnresolvedActorRef
+        struct UnresolvedActor
         {
             BaseActorRef* target;
             SceneUID      sourceId;
 
         public:
-            UnresolvedActorRef();
-            UnresolvedActorRef(BaseActorRef* target, SceneUID actorId);
-            bool operator==(const UnresolvedActorRef& other) const;
+            UnresolvedActor();
+            UnresolvedActor(BaseActorRef* target, SceneUID actorId);
+            bool operator==(const UnresolvedActor& other) const;
         };
 
-        struct UnresolvedAssetActorRef
+        struct UnresolvedAssetActor
         {
             BaseActorRef* target;
             UID           sourceAssetId;
 
         public:
-            UnresolvedAssetActorRef();
-            UnresolvedAssetActorRef(BaseActorRef* target, const UID& assetId);
+            UnresolvedAssetActor();
+            UnresolvedAssetActor(BaseActorRef* target, const UID& assetId);
 
-            bool operator==(const UnresolvedAssetActorRef& other) const;
+            bool operator==(const UnresolvedAssetActor& other) const;
         };
 
-        struct UnresolvedComponentRef
+        struct UnresolvedComponent
         {
             BaseComponentRef* target;
             SceneUID          sourceId;
 
         public:
-            UnresolvedComponentRef();
-            UnresolvedComponentRef(BaseComponentRef* target, SceneUID id);
+            UnresolvedComponent();
+            UnresolvedComponent(BaseComponentRef* target, SceneUID id);
 
-            bool operator==(const UnresolvedComponentRef& other) const;
+            bool operator==(const UnresolvedComponent& other) const;
         };
 
     protected:
-        Vector<UnresolvedActorRef>      mUnresolvedActorsRefs;
-        Vector<UnresolvedAssetActorRef> mUnresolvedAssetActorsRefs;
-        Map<SceneUID, Actor*>           mNewActors;
+        Vector<UnresolvedActor>      mUnresolvedActorsRefs;
+        Vector<UnresolvedAssetActor> mUnresolvedAssetActorsRefs;
+        Map<SceneUID, Actor*>        mNewActors;
 
-        Vector<UnresolvedComponentRef> mUnresolvedComponentsRefs;
-        Map<SceneUID, Component*>      mNewComponents;
+        Vector<UnresolvedComponent> mUnresolvedComponentsRefs;
+        Map<SceneUID, Component*>   mNewComponents;
 
-        Vector<BaseActorRef*>     mRemapActorRefs;
-        Vector<BaseComponentRef*> mRemapComponentRefs;
+        Vector<BaseActorRef*>     mRemapActors;
+        Vector<BaseComponentRef*> mRemapComponents;
 
         int mLockDepth = 0;
 

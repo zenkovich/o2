@@ -86,13 +86,13 @@ namespace o2
     template<class T>
     struct IsStringAccessorHelper<T, typename std::enable_if<IsAccessor<T>::value && std::is_same<typename T::keyType, String>::value>::type> : std::true_type { };
 
-    template<class T> struct IsStringAccessor : IsStringAccessorHelper<typename std::remove_cv<T>::type> { };
+	template<class T> struct IsStringAccessor : IsStringAccessorHelper<typename std::remove_cv<T>::type> {};
 
-    template<class T, class = void_t<>>
-    struct IsProperty : std::false_type { };
+	template<class T, class = void_t<>>
+	struct IsProperty : std::false_type {};
 
-    template<class T>
-    struct IsProperty<T, void_t<decltype(&T::IsProperty)>> : std::true_type { };
+	template<class T>
+	struct IsProperty<T, void_t<decltype(&T::IsProperty)>> : std::true_type {};
 
     template<class T, class = void_t<>>
     struct SupportsPlus : std::false_type {};
@@ -134,7 +134,13 @@ namespace o2
     struct ExtractPropertyValueType<T, void_t<decltype(std::declval<T>().IsProperty())>>
     {
         typedef typename T::valueType type;
-    };
+	};
+
+	template<class T, class = void_t<>>
+	struct HasCastToRefCounterable : std::false_type {};
+
+	template<class T>
+	struct HasCastToRefCounterable<T, void_t<decltype(&T::CastToRefCounterable)>> : std::true_type {};
 
     template<typename T>
     struct IsFundamental: public std::conditional<

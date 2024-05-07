@@ -112,12 +112,10 @@ namespace o2
     // ---------------------------------------
     // Reference on derived from actor classes
     // ---------------------------------------
-    template<typename _actor_type>
+    template<typename _actor_type = Actor>
     class ActorRef : public BaseActorRef
     {
         static_assert(std::is_base_of<Actor, _actor_type>::value, "ActorRef type must be derived from Actor");
-
-        using Base = BaseRef<_actor_type>;
 
     public:
         // Default constructor, no reference
@@ -130,7 +128,7 @@ namespace o2
         explicit ActorRef(_actor_type* ptr);
 
         // Constructor with actor reference
-        explicit ActorRef(const Ref<_actor_type>& ref);
+        ActorRef(const Ref<_actor_type>& ref);
 
         // Copy constructor
         ActorRef(const ActorRef<_actor_type>& other);
@@ -179,6 +177,13 @@ namespace o2
         operator bool() const;
 
         // Returns actor reference
+		operator Ref<_actor_type>() const;
+        
+		// Returns actor reference with different type
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
+		operator Ref<_other_type>() const;
+
+        // Returns actor reference
         _actor_type& operator*() const;
 
         // Returns actor pointer
@@ -189,6 +194,12 @@ namespace o2
 
         // Returns actor pointer
         const _actor_type* Get() const override;
+
+        // Returns reference
+        Ref<_actor_type>& GetRef();
+
+        // Returns reference
+        const Ref<_actor_type>& GetRef() const;
 
         // Sets actor pointer
         void Set(Actor* actor) override;
@@ -239,7 +250,14 @@ namespace o2
             FUNCTION().PUBLIC().SIGNATURE(const Type&, GetActorType);
             FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
         }
-    };
+	};
+
+	// Dynamic cast from one actor reference type to another
+	template<typename _to_type, typename _from_type>
+	ActorRef<_to_type> DynamicCast(const ActorRef<_from_type>& from)
+	{
+		return ActorRef<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
+	}
 
     template<typename _actor_type>
     ActorRef<_actor_type>::ActorRef()
@@ -346,7 +364,20 @@ namespace o2
     ActorRef<_actor_type>::operator bool() const
     {
         return IsValid();
-    }
+	}
+
+	template<typename _actor_type>
+    ActorRef<_actor_type>::operator Ref<_actor_type>() const
+	{
+		return mRef;
+	}
+
+	template<typename _actor_type>
+	template<typename _other_type, typename _enable>
+	ActorRef<_actor_type>::operator Ref<_other_type>() const
+	{
+        return mRef;
+	}
 
     template<typename _actor_type>
     _actor_type& ActorRef<_actor_type>::operator*() const
@@ -370,7 +401,19 @@ namespace o2
     const _actor_type* ActorRef<_actor_type>::Get() const
     {
         return mRef.Get();
-    }
+	}
+
+	template<typename _actor_type>
+	Ref<_actor_type>& ActorRef<_actor_type>::GetRef()
+	{
+        return mRef;
+	}
+
+	template<typename _actor_type>
+	const Ref<_actor_type>& ActorRef<_actor_type>::GetRef() const
+	{
+        return mRef;
+	}
 
     template<typename _actor_type>
     void ActorRef<_actor_type>::Set(Actor* actor)

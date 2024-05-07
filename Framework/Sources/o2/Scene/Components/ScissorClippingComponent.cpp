@@ -21,7 +21,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ScissorClippingComponent>);
+DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::ScissorClippingComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::ScissorClippingComponent, o2__ScissorClippingComponent);

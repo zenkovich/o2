@@ -11,7 +11,7 @@ namespace o2
     ApplyActorInfo::ApplyActorInfo()
     {}
 
-    ApplyActorInfo::ApplyActorInfo(const Ref<Actor>& actor):
+    ApplyActorInfo::ApplyActorInfo(const ActorRef<>& actor):
         actor(actor)
     {
         CollectChildren(actor);
@@ -49,7 +49,7 @@ namespace o2
     ActorDifferences::~ActorDifferences()
     {}
 
-    ActorDifferences ActorDifferences::GetDifference(const Ref<Actor>& changedActor, const Ref<Actor>& prototype)
+    ActorDifferences ActorDifferences::GetDifference(const ActorRef<>& changedActor, const ActorRef<>& prototype)
     {
         ActorDifferences res;
 

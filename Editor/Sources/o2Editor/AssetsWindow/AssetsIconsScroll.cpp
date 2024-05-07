@@ -939,7 +939,7 @@ namespace Editor
                            });
     }
 
-    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const Ref<ImageAsset>& asset)
+    ActorRef<> AssetsIconsScrollArea::InstantiateAsset(const Ref<ImageAsset>& asset)
     {
         auto actor = mmake<Actor>();
         auto comp = mmake<ImageComponent>(asset);
@@ -948,7 +948,7 @@ namespace Editor
         return actor;
     }
 
-    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const Ref<ActorAsset>& asset)
+    ActorRef<> AssetsIconsScrollArea::InstantiateAsset(const Ref<ActorAsset>& asset)
     {
         return asset->GetActor()->CloneAsRef<Actor>();
     }
@@ -1069,7 +1069,7 @@ namespace Editor
             Select(object, false);
     }
 
-    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
+    ActorRef<> AssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
     {
         if (assetInfo.meta->GetAssetType() == &TypeOf(ImageAsset))
             return InstantiateAsset(Ref<ImageAsset>(assetInfo.meta->ID()));

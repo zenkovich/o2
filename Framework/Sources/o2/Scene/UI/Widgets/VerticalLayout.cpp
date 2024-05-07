@@ -223,12 +223,12 @@ namespace o2
         return res;
     }
 
-    void VerticalLayout::OnChildAdded(const Ref<Widget>& child)
+    void VerticalLayout::OnChildAdded(const ActorRef<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }
 
-    void VerticalLayout::OnChildRemoved(Widget* child)
+    void VerticalLayout::OnChildRemoved(const ActorRef<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
     }

@@ -219,7 +219,11 @@ namespace o2
         mNodeWidgetsBuf.Add(widgets);
     }
 
-    Tree::~Tree()
+	Tree::Tree(const Tree& other):
+        Tree(nullptr, other)
+	{}
+
+	Tree::~Tree()
     {}
 
     Tree& Tree::operator=(const Tree& other)

@@ -15,20 +15,20 @@
 namespace Editor
 {
 	ActorProperty::ActorProperty(RefCounter* refCounter):
-		TPropertyField<Ref<Actor>>(refCounter)
+		TPropertyField<ActorRef<>>(refCounter)
 	{
 		mCommonValue = nullptr;
 	}
 
 	ActorProperty::ActorProperty(RefCounter* refCounter, const ActorProperty& other) :
-		TPropertyField<Ref<Actor>>(refCounter, other)
+		TPropertyField<ActorRef<>>(refCounter, other)
 	{
 		InitializeControls();
 	}
 
 	ActorProperty& ActorProperty::operator=(const ActorProperty& other)
 	{
-		TPropertyField<Ref<Actor>>::operator=(other);
+		TPropertyField<ActorRef<>>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
@@ -70,8 +70,8 @@ namespace Editor
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
 			return;
 
-		Ref<Actor> sourceActor = GetProxy(source);
-		Ref<Actor> topSourceActor = sourceActor;
+		ActorRef<> sourceActor = GetProxy(source);
+		ActorRef<> topSourceActor = sourceActor;
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent().Lock();
 
@@ -98,7 +98,7 @@ namespace Editor
 
 	void ActorProperty::OnTypeSpecialized(const Type& type)
 	{
-		TPropertyField<Ref<Actor>>::OnTypeSpecialized(type);
+		TPropertyField<ActorRef<>>::OnTypeSpecialized(type);
 		mActorType = type.InvokeStatic<const Type*>("GetActorTypeStatic");
 	}
 
@@ -110,8 +110,8 @@ namespace Editor
 		{
 			if (ptr.second)
 			{
-				Ref<Actor> value = GetProxy(ptr.first);
-				Ref<Actor> proto = GetProxy(ptr.second);
+				ActorRef<> value = GetProxy(ptr.first);
+				ActorRef<> proto = GetProxy(ptr.second);
 
 				if (value && value->GetPrototypeLink())
 				{
@@ -281,9 +281,9 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<Actor>>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::ActorRef<>>);
 DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::ActorProperty>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::TPropertyField<o2::Ref<Actor>>>);
+DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::TPropertyField<o2::ActorRef<>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ActorProperty, Editor__ActorProperty);

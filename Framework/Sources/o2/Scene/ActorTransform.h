@@ -22,7 +22,7 @@ namespace o2
     {
     public:
         PROPERTIES(ActorTransform);
-        GETTER(Ref<Actor>, actor, GetOwnerActor); // Owner actor getter 
+        GETTER(ActorRef<>, actor, GetOwnerActor); // Owner actor getter 
 
         PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property
         PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property
@@ -103,7 +103,7 @@ namespace o2
         bool operator==(const ActorTransform& other) const;
 
         // Returns owner actor
-        Ref<Actor> GetOwnerActor() const;
+        ActorRef<> GetOwnerActor() const;
 
         // Sets transform dirty and needed to update @SCRIPTABLE
         virtual void SetDirty(bool fromParent = false);
@@ -442,7 +442,7 @@ namespace o2
         virtual void CopyFrom(const ActorTransform& other);
 
         // Sets owner and updates transform
-        virtual void SetOwner(const Ref<Actor>& actor);
+        virtual void SetOwner(const ActorRef<>& actor);
 
         // Returns parent rectange, or zero when no parent
         virtual RectF GetParentRectangle() const;
@@ -582,7 +582,7 @@ CLASS_METHODS_META(o2::ActorTransform)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, float, const Vec2F&, const Vec2F&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ActorTransform&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetOwnerActor);
+    FUNCTION().PUBLIC().SIGNATURE(ActorRef<>, GetOwnerActor);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDirty, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsDirty);
     FUNCTION().PUBLIC().SIGNATURE(void, Update);
@@ -693,7 +693,7 @@ CLASS_METHODS_META(o2::ActorTransform)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWorldBottom);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransformData*);
     FUNCTION().PROTECTED().SIGNATURE(void, CopyFrom, const ActorTransform&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, const ActorRef<>&);
     FUNCTION().PROTECTED().SIGNATURE(RectF, GetParentRectangle);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateWorldRectangleAndTransform);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransform);

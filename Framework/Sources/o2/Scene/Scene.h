@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Types/ActorAsset.h"
+#include "o2/Scene/ComponentRef.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
@@ -86,10 +87,10 @@ namespace o2
         const Vector<Ref<Tag>>& GetTags() const;
 
         // Returns root actors
-        const Vector<Ref<Actor>>& GetRootActors() const;
+        const Vector<ActorRef<>>& GetRootActors() const;
 
         // Returns root actors
-        Vector<Ref<Actor>>& GetRootActors();
+        Vector<ActorRef<>>& GetRootActors();
 
         // Returns all actors
         const Vector<WeakRef<Actor>>& GetAllActors() const;
@@ -98,13 +99,13 @@ namespace o2
         Vector<WeakRef<Actor>>& GetAllActors();
 
         // Returns actor by id
-        Ref<Actor> GetActorByID(SceneUID id) const;
+        ActorRef<> GetActorByID(SceneUID id) const;
 
         // Returns asset actor by asset id. Tries to find in cache
-        Ref<Actor> GetAssetActorByID(const UID& id);
+        ActorRef<> GetAssetActorByID(const UID& id);
 
         // Returns actor by path (ex "some node/other/target")
-        Ref<Actor> FindActor(const String& path);
+        ActorRef<> FindActor(const String& path);
 
         // Returns actor with type in scene
         template<typename _type>
@@ -158,10 +159,10 @@ namespace o2
         void UpdateDestroyingEntities();
 
         // Adds actor to destroy list, will be removed at next frame
-        void DestroyActor(const Ref<Actor>& actor);
+        void DestroyActor(const ActorRef<>& actor);
 
         // Adds component to destroy list, will be removed at next frame
-        void DestroyComponent(const Ref<Component>& component);
+        void DestroyComponent(const ComponentRef<Component>& component);
 
         // Returns true if scene updating
         bool IsUpdating() const;
@@ -174,20 +175,20 @@ namespace o2
     protected:
 		Ref<LogStream> mLog; // Scene log
 
-		Vector<Ref<Actor>> mRootActors; // Scene root actors     
+		Vector<ActorRef<>> mRootActors; // Scene root actors     
 
         Vector<WeakRef<CameraActor>> mCameras; // List of cameras on scene
    
         Vector<WeakRef<Actor>>        mAllActors; // All scene actors
         Map<SceneUID, WeakRef<Actor>> mActorsMap; // Actors map by unique ID
 
-        Vector<Ref<Actor>> mAddedActors; // List of added on previous frame actors. Will receive OnAddToScene at current frame
+        Vector<ActorRef<>> mAddedActors; // List of added on previous frame actors. Will receive OnAddToScene at current frame
 
-        Vector<Ref<Actor>>     mStartActors;     // List of starting on current frame actors. Will receive OnStart at current frame
-        Vector<Ref<Component>> mStartComponents; // List of starting on current frame components. Will receive OnStart at current frame
+        Vector<ActorRef<>>     mStartActors;     // List of starting on current frame actors. Will receive OnStart at current frame
+        Vector<ComponentRef<Component>> mStartComponents; // List of starting on current frame components. Will receive OnStart at current frame
 
-        Vector<Ref<Actor>>     mDestroyActors;     // List of destroying on current frame actors
-        Vector<Ref<Component>> mDestroyComponents; // List of destroying on current frame components
+        Vector<ActorRef<>>     mDestroyActors;     // List of destroying on current frame actors
+        Vector<ComponentRef<Component>> mDestroyComponents; // List of destroying on current frame components
 
         Map<String, WeakRef<SceneLayer>> mLayersMap; // Layers by names map
         Vector<Ref<SceneLayer>>          mLayers;    // Scene layers
@@ -257,11 +258,13 @@ namespace o2
         friend class Application;
         friend class CameraActor;
         friend class Component;
-        friend class ComponentRef;
         friend class DrawableComponent;
         friend class SceneLayer;
         friend class Widget;
-        friend class WidgetLayer;
+		friend class WidgetLayer;
+
+		template<typename _component_type>
+		friend class ComponentRef;
 
 #if IS_EDITOR          
     public:
@@ -278,7 +281,7 @@ namespace o2
 
     public:
         // Links actor recursively to prototypes and their parent prototypes
-        static void LinkActorToPrototypesHierarchy(Ref<Actor> actor, Ref<ActorAsset> proto);
+        static void LinkActorToPrototypesHierarchy(ActorRef<> actor, Ref<ActorAsset> proto);
 
         // Sets scene playing in editor
         void SetEditorPlaying(bool playing);
@@ -342,10 +345,10 @@ namespace o2
         void OnObjectDrawn(const Ref<SceneEditableObject>& object);
 
         // Called when created actor with prototype, updates cache
-        void OnActorWithPrototypeCreated(const Ref<Actor>& actor);
+        void OnActorWithPrototypeCreated(const ActorRef<>& actor);
 
         // Called when some actor created and linked to prototype, updates linked actors cache
-        void OnActorLinkedToPrototype(Ref<ActorAsset>& assetRef, const Ref<Actor>& actor);
+        void OnActorLinkedToPrototype(Ref<ActorAsset>& assetRef, const ActorRef<>& actor);
 
         // Called when actor destroying or prototype link broken, updates cache
         void OnActorPrototypeBroken(Actor* actor);
@@ -481,13 +484,13 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveTag, const Ref<Tag>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveTag, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<Tag>>&, GetTags);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<Actor>>&, GetRootActors);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<Actor>>&, GetRootActors);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<ActorRef<>>&, GetRootActors);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<ActorRef<>>&, GetRootActors);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<Actor>>&, GetAllActors);
     FUNCTION().PUBLIC().SIGNATURE(Vector<WeakRef<Actor>>&, GetAllActors);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetActorByID, SceneUID);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetAssetActorByID, const UID&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, FindActor, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(ActorRef<>, GetActorByID, SceneUID);
+    FUNCTION().PUBLIC().SIGNATURE(ActorRef<>, GetAssetActorByID, const UID&);
+    FUNCTION().PUBLIC().SIGNATURE(ActorRef<>, FindActor, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<CameraActor>>&, GetCameras);
     FUNCTION().PUBLIC().SIGNATURE(void, Clear, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, ClearCache);
@@ -501,8 +504,8 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateAddedEntities);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateTransforms);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateDestroyingEntities);
-    FUNCTION().PUBLIC().SIGNATURE(void, DestroyActor, const Ref<Actor>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, const Ref<Component>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, DestroyActor, const ActorRef<>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, const ComponentRef<Component>&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUpdating);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEditor);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorCreated, Actor*);
@@ -523,7 +526,7 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCameraAddedOnScene, CameraActor*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCameraRemovedScene, CameraActor*);
 #if  IS_EDITOR          
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(void, LinkActorToPrototypesHierarchy, Ref<Actor>, Ref<ActorAsset>);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(void, LinkActorToPrototypesHierarchy, ActorRef<>, Ref<ActorAsset>);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEditorPlaying, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEditorPlaying);
     FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetRootEditableObjects);
@@ -544,8 +547,8 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectRemoveFromScene, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectChanged, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectDrawn, const Ref<SceneEditableObject>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnActorWithPrototypeCreated, const Ref<Actor>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnActorLinkedToPrototype, Ref<ActorAsset>&, const Ref<Actor>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnActorWithPrototypeCreated, const ActorRef<>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnActorLinkedToPrototype, Ref<ActorAsset>&, const ActorRef<>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnActorPrototypeBroken, Actor*);
 #endif
 }

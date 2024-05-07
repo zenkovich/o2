@@ -21,7 +21,7 @@ namespace o2
         mActor = other.mActor;
     }
 
-    ActorAsset::ActorAsset(const Ref<Actor>& actor):
+    ActorAsset::ActorAsset(const ActorRef<>& actor):
         mActor(actor)
     {
         if (!actor->IsAsset())
@@ -47,7 +47,7 @@ namespace o2
         return *this;
     }
 
-    Ref<Actor> ActorAsset::Instantiate() const
+    ActorRef<> ActorAsset::Instantiate() const
     {
         if (!mActor)
             return nullptr;
@@ -85,12 +85,12 @@ namespace o2
         }
     }
 
-    const Ref<Actor>& ActorAsset::GetActor() const
+    const ActorRef<>& ActorAsset::GetActor() const
     {
         return mActor;
     }
 
-    void ActorAsset::SetActor(const Ref<Actor>& actor)
+    void ActorAsset::SetActor(const ActorRef<>& actor)
     {
         mActor = actor;
 

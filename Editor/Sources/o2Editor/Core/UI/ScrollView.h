@@ -156,6 +156,8 @@ namespace Editor
 
 		// Returns that this scroll area has transparent input
 		bool IsInputTransparent() const override;
+
+		REF_COUNTERABLE_IMPL(Widget);
 	};
 }
 // --- META ---

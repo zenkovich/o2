@@ -743,7 +743,12 @@ namespace o2
         return "UI/Editor";
     }
 
-    void WidgetDragHandle::UpdateLayersLayouts()
+	Ref<o2::RefCounterable> WidgetDragHandle::CastToRefCounterable(const Ref<WidgetDragHandle>& ref)
+	{
+        return DynamicCast<Widget>(ref);
+	}
+
+	void WidgetDragHandle::UpdateLayersLayouts()
     {
         onLayoutUpdated();
         UpdateScreenPosition();

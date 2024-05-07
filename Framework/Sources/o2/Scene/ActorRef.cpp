@@ -24,7 +24,7 @@ namespace o2
     {
         mRequiredResolveData = nullptr;
 
-        ActorRefResolver::OnActorRefDestroyed(this);
+        ActorRefResolver::OnActorDestroyed(this);
     }
 
     BaseActorRef& BaseActorRef::operator=(const BaseActorRef& other)

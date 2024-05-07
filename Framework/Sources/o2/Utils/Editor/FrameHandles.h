@@ -9,7 +9,7 @@ namespace o2
     // -------------------
     // Frame basis handles
     // -------------------
-    class FrameHandles: public CursorAreaEventsListener
+    class FrameHandles: public CursorAreaEventsListener, public RefCounterable
     {
     public:
         Function<void(const Basis&)> onTransformed;     // Basis transformed event
@@ -156,6 +156,8 @@ namespace o2
         void OnTransformed(const Basis& transform);
 
         // Called when handle change completed, calling basis change completed event
-        void OnChangeCompleted();
+		void OnChangeCompleted();
+
+		REF_COUNTERABLE_IMPL(RefCounterable);
     };
 }

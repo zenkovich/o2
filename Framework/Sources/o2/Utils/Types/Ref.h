@@ -80,8 +80,8 @@ namespace o2
         template<typename _type, typename ... _args>
         friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args); 
 
-        template<typename _type, typename ... _other_types> 
-        friend void SetRefCounters(_type* object, RefCounter* refCounter);
+		template<typename _object_type>
+		friend struct RefCountersSetter;
     };
 
     // ---------------------------------------------------------------------------------
@@ -102,25 +102,29 @@ namespace o2
         template<typename _type>
         friend RefCounter* GetRefCounterImpl(_type* ptr);
 
-        template<typename _type, typename ... _other_types>
-        friend void SetRefCounters(_type* object, RefCounter* refCounter);
+		template<typename _object_type>
+        friend struct RefCountersSetter;
     };
 
-    template<typename _type, typename ... _other_types>
-    void SetRefCounters(_type* object, RefCounter* refCounter)
+    template<typename _object_ptr_type>
+    struct RefCountersSetter
     {
-        object->SetRefCounter(refCounter);
+        template<typename _type, typename ... _other_types>
+        static void Set(_object_ptr_type object, RefCounter* refCounter)
+        {
+            static_cast<_type*>(object)->SetRefCounter(refCounter);
 
-        if constexpr (sizeof...(_other_types) > 0)
-            SetRefCounters<_other_types...>(object, refCounter);
-    }
+            if constexpr (sizeof...(_other_types) > 0)
+                Set<_other_types...>(object, refCounter);
+        }
+    };
 
     // Reference counterable implementation to override GetRefCounter method
-#define REF_COUNTERABLE_IMPL(BASE_CLASS, ...)                                                         \
-        RefCounter* GetRefCounter() const override { return BASE_CLASS::GetRefCounter(); }            \
-        void SetRefCounter(RefCounter* refCounter) { SetRefCounters<BASE_CLASS, __VA_ARGS__>(this, refCounter); } \
-        template<typename _type> friend RefCounter* GetRefCounterImpl(_type* ptr); \
-        template<typename _type, typename ... _other_types> friend void SetRefCounters(_type* object, RefCounter* refCounter); \
+#define REF_COUNTERABLE_IMPL(BASE_CLASS, ...)                                                                                             \
+        RefCounter* GetRefCounter() const { return BASE_CLASS::GetRefCounter(); }                                                         \
+        void SetRefCounter(RefCounter* refCounter) { RefCountersSetter<decltype(this)>::Set<BASE_CLASS, __VA_ARGS__>(this, refCounter); } \
+        template<typename _type> friend RefCounter* GetRefCounterImpl(_type* ptr);                                                        \
+        template<typename _object_type> friend struct RefCountersSetter;                                                           \
         template<typename _type, typename ... _args> friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
 
 

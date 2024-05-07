@@ -195,6 +195,8 @@ namespace Editor
 		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
+		REF_COUNTERABLE_IMPL(Widget);
+
 		friend class AnimationWindow;
 
 		template<typename AnimationTrackType>

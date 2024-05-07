@@ -41,10 +41,13 @@ namespace o2
 
     public:
         // Default constructor
-        explicit Tree(RefCounter* refCounter);
+		explicit Tree(RefCounter* refCounter);
 
-        // Copy-constructor
-        Tree(RefCounter* refCounter, const Tree& other);
+		// Copy-constructor
+		Tree(RefCounter* refCounter, const Tree& other);
+
+		// Copy-constructor
+		Tree(const Tree& other);
 
         // Destructor
         ~Tree();
@@ -671,6 +674,7 @@ CLASS_METHODS_META(o2::Tree)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Tree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Tree&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectCreated, void*, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectRemoved, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsChanged, const Vector<void*>&);

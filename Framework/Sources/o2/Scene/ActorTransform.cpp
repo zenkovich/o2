@@ -419,7 +419,7 @@ namespace o2
         return GetRect().bottom;
     }
 
-    Ref<Actor> ActorTransform::GetOwnerActor() const
+    ActorRef<> ActorTransform::GetOwnerActor() const
     {
         return mData->owner.Lock();
     }
@@ -695,7 +695,7 @@ namespace o2
         return dx >= 0.0f && dx <= rs.x && dy >= 0.0f && dy < rs.y;
     }
 
-    void ActorTransform::SetOwner(const Ref<Actor>& actor)
+    void ActorTransform::SetOwner(const ActorRef<>& actor)
     {
         mData->owner = actor;
         SetDirty();

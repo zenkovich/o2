@@ -219,13 +219,13 @@ namespace o2
         return res;
     }
 
-    void HorizontalLayout::OnChildAdded(const Ref<Widget>& child)
+    void HorizontalLayout::OnChildAdded(const ActorRef<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
         Widget::OnChildAdded(child);
     }
 
-    void HorizontalLayout::OnChildRemoved(Widget* child)
+    void HorizontalLayout::OnChildRemoved(const ActorRef<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
         Widget::OnChildRemoved(child);

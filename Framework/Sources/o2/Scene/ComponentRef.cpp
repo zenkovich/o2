@@ -22,7 +22,7 @@ namespace o2
     BaseComponentRef::~BaseComponentRef()
     {
         mRequiredResolveData = nullptr;
-        ActorRefResolver::OnComponentRefDestroyed(this);
+        ActorRefResolver::OnComponentDestroyed(this);
     }
 
     void BaseComponentRef::Set(Component* component)
@@ -40,7 +40,7 @@ namespace o2
 
     void BaseComponentRef::Destroy()
     {
-        o2Scene.DestroyComponent(Ref(Get()));
+        o2Scene.DestroyComponent(ComponentRef(Get()));
     }
 
     const Type& BaseComponentRef::GetComponentType() const

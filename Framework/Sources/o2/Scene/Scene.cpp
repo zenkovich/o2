@@ -75,7 +75,7 @@ namespace o2
     {
         struct helper
         {
-            static void RecursiveCall(const Ref<Actor>& actor, const Function<void(const Ref<Actor>&)>& func)
+            static void RecursiveCall(const ActorRef<>& actor, const Function<void(const ActorRef<>&)>& func)
             {
                 if (actor->mState == Actor::State::Initializing)
                 {
@@ -95,14 +95,14 @@ namespace o2
         for (auto& actor : addedActors)
         {
             if (actor->IsOnScene())
-                helper::RecursiveCall(actor, [&](const Ref<Actor>& actor) { AddActorToScene(actor.Get()); });
+                helper::RecursiveCall(actor, [&](const ActorRef<>& actor) { AddActorToScene(actor.Get()); });
         }
 
         for (auto& actor : addedActors)
-            helper::RecursiveCall(actor, [&](const Ref<Actor>& actor) { actor->UpdateResEnabledInHierarchy(); });
+            helper::RecursiveCall(actor, [&](const ActorRef<>& actor) { actor->UpdateResEnabledInHierarchy(); });
 
         for (auto& actor : addedActors)
-            helper::RecursiveCall(actor, [&](const Ref<Actor>& actor) { actor->OnInitialized(); });
+            helper::RecursiveCall(actor, [&](const ActorRef<>& actor) { actor->OnInitialized(); });
     }
 
     void Scene::UpdateTransforms()
@@ -146,7 +146,7 @@ namespace o2
 #endif
     }
 
-    void Scene::DestroyActor(const Ref<Actor>& actor)
+    void Scene::DestroyActor(const ActorRef<>& actor)
     {
         if (actor->mState != Actor::State::Destroying)
         {
@@ -159,7 +159,7 @@ namespace o2
         }
     }
 
-    void Scene::DestroyComponent(const Ref<Component>& component)
+    void Scene::DestroyComponent(const ComponentRef<Component>& component)
     {
         mDestroyComponents.Add(component);
     }
@@ -350,43 +350,43 @@ namespace o2
 
     void Scene::AddActorToScene(Actor* actor)
     {
-        auto actorRef = Ref(actor);
+        auto ActorRef<> = Ref(actor);
 
         if (!actor->mParent)
-            mRootActors.Add(actorRef);
+            mRootActors.Add(ActorRef<>);
 
-        mAllActors.Add(actorRef);
-        mActorsMap[actor->mId] = actorRef;
+        mAllActors.Add(ActorRef<>);
+        mActorsMap[actor->mId] = ActorRef<>;
 
         actor->OnAddToScene();
 
 #if IS_EDITOR
-        mChangedObjects.Add(actorRef);
-        AddEditableObjectToScene(actorRef);
-        onAddedToScene(actorRef);
+        mChangedObjects.Add(ActorRef<>);
+        AddEditableObjectToScene(ActorRef<>);
+        onAddedToScene(ActorRef<>);
 #endif
     }
 
     void Scene::RemoveActorFromScene(Actor* actor, bool keepEditorObjects /*= false*/)
 	{
-		auto actorRef = Ref(actor);
+		auto ActorRef<> = Ref(actor);
 
         if (!actor->mParent)
-            mRootActors.Remove(actorRef);
+            mRootActors.Remove(ActorRef<>);
 
-        mAllActors.Remove(actorRef);
+        mAllActors.Remove(ActorRef<>);
         mActorsMap.Remove(actor->mId);
 
-        mStartActors.Remove(actorRef);
-        mAddedActors.Remove(actorRef);
+        mStartActors.Remove(ActorRef<>);
+        mAddedActors.Remove(ActorRef<>);
 
         actor->OnRemoveFromScene();
 
 #if IS_EDITOR
         if (!keepEditorObjects)
-            RemoveEditableObjectFromScene(actorRef);
+            RemoveEditableObjectFromScene(ActorRef<>);
 
-        OnObjectRemoveFromScene(actorRef);
+        OnObjectRemoveFromScene(ActorRef<>);
 #endif
     }
 
@@ -531,12 +531,12 @@ namespace o2
         return mTags;
     }
 
-    const Vector<Ref<Actor>>& Scene::GetRootActors() const
+    const Vector<ActorRef<>>& Scene::GetRootActors() const
     {
         return mRootActors;
     }
 
-    Vector<Ref<Actor>>& Scene::GetRootActors()
+    Vector<ActorRef<>>& Scene::GetRootActors()
     {
         return mRootActors;
     }
@@ -551,12 +551,12 @@ namespace o2
         return mAllActors;
     }
 
-    Ref<Actor> Scene::GetActorByID(SceneUID id) const
+    ActorRef<> Scene::GetActorByID(SceneUID id) const
     {
         return mActorsMap.FindKey(id).second.Lock();
     }
 
-    Ref<Actor> Scene::GetAssetActorByID(const UID& id)
+    ActorRef<> Scene::GetAssetActorByID(const UID& id)
     {
         auto cached = mAssetsCache.FindOrDefault([=](const Ref<ActorAsset>& x) { return x->GetUID() == id; });
 
@@ -569,7 +569,7 @@ namespace o2
         return cached->GetActor();
     }
 
-    Ref<Actor> Scene::FindActor(const String& path)
+    ActorRef<> Scene::FindActor(const String& path)
     {
         int delPos = path.Find("/");
         String pathPart = path.SubStr(0, delPos);
@@ -706,7 +706,7 @@ namespace o2
     }
 
 #if IS_EDITOR
-    void Scene::LinkActorToPrototypesHierarchy(Ref<Actor> actor, Ref<ActorAsset> proto)
+    void Scene::LinkActorToPrototypesHierarchy(ActorRef<> actor, Ref<ActorAsset> proto)
     {
         if (!IsSingletonInitialzed())
             return;
@@ -730,7 +730,7 @@ namespace o2
 
     Vector<Ref<SceneEditableObject>> Scene::GetRootEditableObjects()
     {
-        return mRootActors.Convert<Ref<SceneEditableObject>>([](const Ref<Actor>& x) { return DynamicCast<SceneEditableObject>(x); });
+        return mRootActors.Convert<Ref<SceneEditableObject>>([](const ActorRef<>& x) { return DynamicCast<SceneEditableObject>(x); });
     }
 
     void Scene::AddEditableObjectToScene(const Ref<SceneEditableObject>& object)
@@ -768,7 +768,7 @@ namespace o2
             return object->GetEditableParent()->GetEditableChildren().IndexOf(object) + GetObjectHierarchyIdx(object->GetEditableParent());
         }
 
-        return mRootActors.IndexOf([=](const Ref<Actor>& x) { return DynamicCast<SceneEditableObject>(x) == object; });
+        return mRootActors.IndexOf([=](const ActorRef<>& x) { return DynamicCast<SceneEditableObject>(x) == object; });
     }
 
     void Scene::ReparentEditableObjects(const Vector<Ref<SceneEditableObject>>& objects,
@@ -815,7 +815,7 @@ namespace o2
 
             if (prevObject)
             {
-                insertIdx = mRootActors.IndexOf([=](const Ref<Actor>& x) { return DynamicCast<SceneEditableObject>(x) == prevObject; });
+                insertIdx = mRootActors.IndexOf([=](const ActorRef<>& x) { return DynamicCast<SceneEditableObject>(x) == prevObject; });
 
                 if (insertIdx < 0)
                     insertIdx = mRootActors.Count();
@@ -922,13 +922,13 @@ namespace o2
             mDrawnObjects.Add(object);
     }
 
-    void Scene::OnActorWithPrototypeCreated(const Ref<Actor>& actor)
+    void Scene::OnActorWithPrototypeCreated(const ActorRef<>& actor)
     {
         auto proto = actor->GetPrototype();
         OnActorLinkedToPrototype(proto, actor);
     }
 
-    void Scene::OnActorLinkedToPrototype(Ref<ActorAsset>& assetRef, const Ref<Actor>& actor)
+    void Scene::OnActorLinkedToPrototype(Ref<ActorAsset>& assetRef, const ActorRef<>& actor)
     {
         if (!mPrototypeLinksCache.ContainsKey(assetRef))
             mPrototypeLinksCache.Add(assetRef, Vector<WeakRef<Actor>>());

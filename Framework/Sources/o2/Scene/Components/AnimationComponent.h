@@ -196,6 +196,8 @@ namespace o2
         // Called from editor, refreshes states
         void ReattachAnimationStates();
 
+		REF_COUNTERABLE_IMPL(Component);
+
         friend class AnimationClip;
         friend class AnimationState;
         friend class IAnimationTrack;

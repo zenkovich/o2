@@ -1041,10 +1041,15 @@ namespace o2
 	template<typename _type>
 	Ref<RefCounterable> TObjectType<_type>::CreateSampleRef() const
 	{
-		if constexpr (std::is_base_of<RefCounterable, _type>::value)
-			return mmake<_type>();
-		else 
-			return nullptr;
+        if constexpr (std::is_base_of<RefCounterable, _type>::value)
+        {
+            if constexpr (HasCastToRefCounterable<_type>::value)
+                return _type::CastToRefCounterable(mmake<_type>());
+            else
+                return mmake<_type>();
+        }
+        
+        return nullptr;
 	}
 
     template<typename _type>

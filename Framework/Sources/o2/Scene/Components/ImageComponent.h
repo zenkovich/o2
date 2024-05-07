@@ -66,7 +66,10 @@ namespace o2
         static String GetCategory();
 
         // Returns name of component icon
-        static String GetIcon();
+		static String GetIcon();
+
+		// Dynamic cast to RefCounterable via DrawableComponent
+		static Ref<RefCounterable> CastToRefCounterable(const Ref<ImageComponent>& ref);
 
         SERIALIZABLE(ImageComponent);
         CLONEABLE_REF(ImageComponent);
@@ -78,7 +81,7 @@ namespace o2
         void OnTransformUpdated() override;
 
         // Sets owner actor
-        void SetOwnerActor(const Ref<Actor>& actor) override;
+        void SetOwnerActor(const ActorRef<>& actor) override;
 
         // Calling when deserializing
         void OnDeserialized(const DataValue& node) override;
@@ -91,6 +94,8 @@ namespace o2
 
         // Completion deserialization delta callback
         void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;    
+
+		REF_COUNTERABLE_IMPL(DrawableComponent, Sprite);
     };
 }
 // --- META ---
@@ -123,8 +128,9 @@ CLASS_METHODS_META(o2::ImageComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<ImageComponent>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const ActorRef<>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);

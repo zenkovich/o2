@@ -212,15 +212,15 @@ namespace Editor
 				instance->funcDropDown = widget->funcDropDown;
 			}
 
-			instance->refProperty->SelectValueAndPrototypePointers<Ref<Actor>, IActorSubscription>(
+			instance->refProperty->SelectValueAndPrototypePointers<ActorRef<>, IActorSubscription>(
 				instance->values.Convert<IActorSubscription*>([](auto p) { return p.first; }),
 				instance->values.Convert<IActorSubscription*>([](auto p) { return p.second; }),
 				[](IActorSubscription* s)
 			{
-				if (!s->actorRef && s->componentRef)
-					s->actorRef = s->componentRef->GetOwnerActor();
+				if (!s->ActorRef<> && s->ComponentRef<Component>)
+					s->ActorRef<> = s->ComponentRef<Component>->GetOwnerActor();
 
-				return &s->actorRef;
+				return &s->ActorRef<>;
 			}
 			);
 
@@ -228,7 +228,7 @@ namespace Editor
 				[=](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)
 			{
 				instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-											  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
+											  !instance->values.IsEmpty() ? instance->values[0].first->ComponentRef<Component> : ComponentRef<Component>(),
 											  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
 			};
 
@@ -237,7 +237,7 @@ namespace Editor
 			instance->removeBtn->onClick = [=]() { OnRemovePressed(instance); };
 
 			instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-										  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
+										  !instance->values.IsEmpty() ? instance->values[0].first->ComponentRef<Component> : ComponentRef<Component>(),
 										  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
 
 			instance->caption->text = "#" + (String)idx;
@@ -289,7 +289,7 @@ namespace Editor
 		return res;
 	}
 
-	void FunctionProperty::FunctionInstance::UpdateFunctionsList(const Ref<Actor>& actor, const Ref<Component>& selectedComponent,
+	void FunctionProperty::FunctionInstance::UpdateFunctionsList(const ActorRef<>& actor, const ComponentRef<Component>& selectedComponent,
 																 const String& selectedMethod)
 	{
 		funcDropDown->RemoveAllItems();
@@ -301,7 +301,7 @@ namespace Editor
 		int selectedIdx = -1;
 
 		auto collectFunctions = [&](const String& typeName, const String& iconName, const Vector<String>& functionsList, 
-									const Ref<Component>& comp)
+									const ComponentRef<Component>& comp)
 		{
 			auto typeItem = funcDropDown->AddItem();
 			functionsDropdownMap.Add({ nullptr, "" });
@@ -336,7 +336,7 @@ namespace Editor
 		};
 
 		auto collectFunctionsByType = [&](const String& typeName, const String& iconName, const Type& type, 
-										  const Ref<Component>& comp)
+										  const ComponentRef<Component>& comp)
 		{
 			Vector<String> functionsList;
 
@@ -414,7 +414,7 @@ namespace Editor
 	{
 		for (auto& value : values)
 		{
-			value.first->componentRef = functionsDropdownMap[idx].first;
+			value.first->ComponentRef<Component> = functionsDropdownMap[idx].first;
 			value.first->method = functionsDropdownMap[idx].second;
 		}
 	}

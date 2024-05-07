@@ -53,7 +53,12 @@ namespace o2
         return "ui/UI4_emitter_component.png";
     }
 
-    void ParticlesEmitterComponent::OnTransformUpdated()
+	Ref<o2::RefCounterable> ParticlesEmitterComponent::CastToRefCounterable(const Ref<ParticlesEmitterComponent>& ref)
+	{
+        return DynamicCast<DrawableComponent>(ref);
+	}
+
+	void ParticlesEmitterComponent::OnTransformUpdated()
     {
         basis = mOwner.Lock()->transform->GetWorldBasis();
     }
@@ -83,7 +88,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ParticlesEmitterComponent>);
+DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::ParticlesEmitterComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::ParticlesEmitterComponent, o2__ParticlesEmitterComponent);

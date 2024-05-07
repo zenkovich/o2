@@ -593,7 +593,7 @@ namespace o2
         return res;
     }
 
-    void WidgetLayout::SetOwner(const Ref<Actor>& actor)
+    void WidgetLayout::SetOwner(const ActorRef<>& actor)
     {
         ActorTransform::SetOwner(actor);
         mData->owner = (Widget*)actor.Get();

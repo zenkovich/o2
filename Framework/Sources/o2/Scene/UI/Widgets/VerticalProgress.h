@@ -143,6 +143,8 @@ namespace o2
 
         // Called when scrolling
         void OnScrolled(float scroll) override;
+
+        REF_COUNTERABLE_IMPL(Widget);
     };
 }
 // --- META ---

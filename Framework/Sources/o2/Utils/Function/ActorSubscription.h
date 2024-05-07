@@ -15,7 +15,7 @@ namespace o2
     public:
         Ref<Actor>     actorRef;     // Target actor
         Ref<Component> componentRef; // Target component
-        String       method;       // Method name
+        String         method;       // Method name
     };
 
     template <typename UnusedType>
@@ -27,8 +27,7 @@ namespace o2
     public:
         // Constructor
         ActorSubscription()
-        {
-        }
+        {}
 
         // Constructor
         ActorSubscription(const Ref<Actor>& actor, const String& method)

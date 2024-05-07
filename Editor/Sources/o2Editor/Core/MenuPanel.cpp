@@ -102,10 +102,10 @@ namespace Editor
 							});
 
 		mMenuPanel->AddItem("Debug/Randomize IDs", [&]() {
-			Function<void(const Ref<Actor>&)> fixActor = [&fixActor](const Ref<Actor>& actor) {
+			Function<void(const ActorRef<>&)> fixActor = [&fixActor](const ActorRef<>& actor) {
 				actor->GenerateNewID();
 				actor->GetComponents().ForEach([](auto comp) { comp->GenerateNewID(); });
-				actor->GetChildren().ForEach([&](const Ref<Actor>& x) { fixActor(x); });
+				actor->GetChildren().ForEach([&](const ActorRef<>& x) { fixActor(x); });
 			};
 
 			for (auto& actor : o2Scene.GetRootActors())

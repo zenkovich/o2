@@ -181,12 +181,12 @@ namespace o2
         return "Layout";
     }
 
-    void GridLayout::OnChildAdded(const Ref<Widget>& child)
+    void GridLayout::OnChildAdded(const ActorRef<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }
 
-    void GridLayout::OnChildRemoved(Widget* child)
+    void GridLayout::OnChildRemoved(const ActorRef<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
     }

@@ -208,6 +208,8 @@ namespace Editor
 		// Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
 		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
 
+		REF_COUNTERABLE_IMPL(Widget);
+
 		friend class AnimationWindow;
 		friend class AnimationAddKeysAction;
 		friend class AnimationDeleteKeysAction;

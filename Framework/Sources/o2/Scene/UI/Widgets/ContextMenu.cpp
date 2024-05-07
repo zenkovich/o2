@@ -875,7 +875,7 @@ namespace o2
 		return "Context";
 	}
 
-	void ContextMenuItem::OnChildAdded(const Ref<Widget>& child)
+	void ContextMenuItem::OnChildAdded(const ActorRef<Widget>& child)
 	{
 		if (child->GetType() == TypeOf(ContextMenu))
 			mSubMenu = DynamicCast<ContextMenu>(child);

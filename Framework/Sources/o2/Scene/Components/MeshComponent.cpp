@@ -217,7 +217,7 @@ namespace o2
         mMesh.polyCount = triangulation.triangles.size();
     }
 
-    void MeshComponent::SetOwnerActor(const Ref<Actor>& actor)
+    void MeshComponent::SetOwnerActor(const ActorRef<>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }
@@ -236,7 +236,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::MeshComponent>);
+DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::MeshComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::MeshComponent, o2__MeshComponent);

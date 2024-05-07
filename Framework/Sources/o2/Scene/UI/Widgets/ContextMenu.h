@@ -351,7 +351,7 @@ namespace o2
 
     protected:
         // Called when child widget was added
-        void OnChildAdded(const Ref<Widget>& child) override;
+        void OnChildAdded(const ActorRef<Widget>& child) override;
 
         friend class ContextMenu;
     };
@@ -465,7 +465,7 @@ CLASS_METHODS_META(o2::ContextMenuItem)
     FUNCTION().PUBLIC().SIGNATURE(void, Enable);
     FUNCTION().PUBLIC().SIGNATURE(void, Disable);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const ActorRef<Widget>&);
 }
 END_META;
 

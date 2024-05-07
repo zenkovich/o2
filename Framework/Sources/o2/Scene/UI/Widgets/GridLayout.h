@@ -124,10 +124,10 @@ namespace o2
 
     protected:
         // Called when child widget was added
-        void OnChildAdded(const Ref<Widget>& child) override;
+        void OnChildAdded(const ActorRef<Widget>& child) override;
 
         // Called when child widget was removed
-        void OnChildRemoved(Widget* child) override;
+        void OnChildRemoved(const ActorRef<Widget>& child) override;
 
         // Invokes required function for childs arranging
         void RearrangeChilds();
@@ -221,8 +221,8 @@ CLASS_METHODS_META(o2::GridLayout)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFittingByChildren);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const ActorRef<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const ActorRef<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromLeftTop);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromTop);

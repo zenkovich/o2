@@ -24,7 +24,7 @@ namespace o2
         tags.onTagAdded = [&](const Ref<Tag>& tag) { tag->mActors.Add(WeakRef(this)); };
         tags.onTagRemoved = [&](const Ref<Tag>& tag) { tag->mActors.Remove(WeakRef(this)); };
 
-        transform->SetOwner(Ref(this));
+        transform->SetOwner(ActorRef<>(this));
 
         Scene::OnActorCreated(this);
         ActorRefResolver::ActorCreated(this);
@@ -42,7 +42,7 @@ namespace o2
         Actor(refCounter, transform, *prototype->GetActor(), mode)
     {}
 
-    Actor::Actor(RefCounter* refCounter, ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+    Actor::Actor(RefCounter* refCounter, ActorTransform* transform, Vector<ComponentRef<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(refCounter, transform, mode)
     {
         for (auto& comp : components)
@@ -53,7 +53,7 @@ namespace o2
         Actor(refCounter, mnew ActorTransform(), mode)
     {}
 
-    Actor::Actor(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+    Actor::Actor(RefCounter* refCounter, Vector<ComponentRef<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(refCounter, mnew ActorTransform(), components, mode)
     {}
 
@@ -122,7 +122,7 @@ namespace o2
         SetPrototype(nullptr);
 
         if (mParent)
-            mParent.Lock()->RemoveChild(this);
+            mParent.Lock()->RemoveChild(ActorRef(this));
 
         RemoveAllChildren();
         RemoveAllComponents();
@@ -457,7 +457,7 @@ namespace o2
         }
     }
 
-    void Actor::SetParent(const Ref<Actor>& actor, bool worldPositionStays /*= true*/, int idx /*= -1*/)
+    void Actor::SetParent(const ActorRef<>& actor, bool worldPositionStays /*= true*/, int idx /*= -1*/)
     {
         if ((actor && actor->mParent == this) || actor == this || actor == mParent)
             return;
@@ -470,7 +470,7 @@ namespace o2
 
         // Remove from parent list or root actors
         if (mParent)
-            mParent.Lock()->RemoveChild(this, false);
+            mParent.Lock()->RemoveChild(ActorRef(this), false);
         else if (mIsOnScene && Scene::IsSingletonInitialzed())
             o2Scene.mRootActors.Remove(thisRef);
 
@@ -532,7 +532,7 @@ namespace o2
         return mParent;
     }
 
-    Ref<Actor> Actor::AddChild(const Ref<Actor>& actor)
+    ActorRef<> Actor::AddChild(const ActorRef<>& actor)
     {
         Assert(actor, "Actor is null");
 
@@ -540,7 +540,7 @@ namespace o2
         return actor;
     }
 
-    Ref<Actor> Actor::AddChild(const Ref<Actor>& actor, int index)
+    ActorRef<> Actor::AddChild(const ActorRef<>& actor, int index)
     {
         Assert(actor, "Actor is null");
 
@@ -548,13 +548,13 @@ namespace o2
         return actor;
     }
 
-    void Actor::AddChildren(const Vector<Ref<Actor>>& actors)
+    void Actor::AddChildren(const Vector<ActorRef<>>& actors)
     {
         for (auto& actor : actors)
             AddChild(actor);
     }
 
-    Ref<Actor> Actor::GetChild(const String& path) const
+    ActorRef<> Actor::GetChild(const String& path) const
     {
         int delPos = path.Find("/");
         String pathPart = path.SubStr(0, delPos);
@@ -586,7 +586,7 @@ namespace o2
         return nullptr;
     }
 
-    Ref<Actor> Actor::FindChild(const String& name) const
+    ActorRef<> Actor::FindChild(const String& name) const
     {
         for (auto& child : mChildren)
         {
@@ -600,7 +600,7 @@ namespace o2
         return nullptr;
     }
 
-    Ref<Actor> Actor::FindChild(const Function<bool(const Ref<Actor>& child)>& pred) const
+    ActorRef<> Actor::FindChild(const Function<bool(const ActorRef<>& child)>& pred) const
     {
         for (auto& child : mChildren)
         {
@@ -614,12 +614,12 @@ namespace o2
         return nullptr;
     }
 
-    const Vector<Ref<Actor>>& Actor::GetChildren() const
+    const Vector<ActorRef<>>& Actor::GetChildren() const
     {
         return mChildren;
     }
 
-    void Actor::GetAllChildrenActors(Vector<Ref<Actor>>& actors)
+    void Actor::GetAllChildrenActors(Vector<ActorRef<>>& actors)
     {
         actors.Add(mChildren);
 
@@ -627,7 +627,7 @@ namespace o2
             child->GetAllChildrenActors(actors);
     }
 
-    void Actor::RemoveChild(Actor* actor, bool withEvent /*= true*/)
+    void Actor::RemoveChild(const ActorRef<>& actor, bool withEvent /*= true*/)
     {
         auto oldParent = actor->mParent.Lock();
 
@@ -646,25 +646,20 @@ namespace o2
         }
     }
 
-	void Actor::RemoveChild(const Ref<Actor>& actor, bool withEvent /*= true*/)
-	{
-		RemoveChild(actor.Get(), withEvent);
-	}
-
 	void Actor::RemoveAllChildren()
     {
         for (auto& child : mChildren)
         {
             child->mParent = nullptr;
 
-            OnChildRemoved(child.Get());
+            OnChildRemoved(child);
             child->OnParentChanged(Ref(this));
         }
 
         mChildren.Clear();
     }
 
-    Ref<Actor> Actor::FindActorById(SceneUID id)
+    ActorRef<> Actor::FindActorById(SceneUID id)
     {
         if (mId == id)
             return Ref(this);
@@ -678,7 +673,7 @@ namespace o2
         return nullptr;
     }
 
-    Ref<Component> Actor::AddComponent(const Ref<Component>& component)
+    ComponentRef<Component> Actor::AddComponent(const ComponentRef<Component>& component)
     {
         component->SetOwnerActor(Ref(this));
         mComponents.Add(component);
@@ -718,7 +713,7 @@ namespace o2
 #endif
     }
 
-	void Actor::RemoveComponent(const Ref<Component>& component)
+	void Actor::RemoveComponent(const ComponentRef<Component>& component)
 	{
         RemoveComponent(const_cast<Component*>(component.Get()));
 	}
@@ -741,7 +736,7 @@ namespace o2
 #endif
     }
 
-    Ref<Component> Actor::GetComponent(const String& typeName)
+    ComponentRef<Component> Actor::GetComponent(const String& typeName)
     {
         for (auto& comp : mComponents)
         {
@@ -752,7 +747,7 @@ namespace o2
         return nullptr;
     }
 
-    Ref<Component> Actor::GetComponent(const Type* type)
+    ComponentRef<Component> Actor::GetComponent(const Type* type)
     {
         for (auto& comp : mComponents)
         {
@@ -763,7 +758,7 @@ namespace o2
         return nullptr;
     }
 
-    Ref<Component> Actor::GetComponent(SceneUID id)
+    ComponentRef<Component> Actor::GetComponent(SceneUID id)
     {
         for (auto& comp : mComponents)
         {
@@ -775,7 +770,7 @@ namespace o2
     }
 
 #if IS_SCRIPTING_SUPPORTED
-    Ref<Component> Actor::GetComponent(const ScriptValue& typeValue)
+    ComponentRef<Component> Actor::GetComponent(const ScriptValue& typeValue)
     {
         auto proto = typeValue.GetPrototype();
         auto protoYpe = proto.GetValueType();
@@ -813,7 +808,7 @@ namespace o2
     }
 #endif
 
-    const Vector<Ref<Component>>& Actor::GetComponents() const
+    const Vector<ComponentRef<Component>>& Actor::GetComponents() const
     {
         return mComponents;
     }
@@ -894,7 +889,7 @@ namespace o2
             comp->OnTransformUpdated();
     }
 
-    void Actor::OnChildAdded(const Ref<Actor>& child)
+    void Actor::OnChildAdded(const ActorRef<>& child)
     {
         for (auto& comp : mComponents)
             comp->OnChildAdded(child);
@@ -902,7 +897,7 @@ namespace o2
         OnChildrenChanged();
     }
 
-    void Actor::OnChildRemoved(Actor* child)
+    void Actor::OnChildRemoved(const ActorRef<>& child)
     {
         for (auto& comp : mComponents)
             comp->OnChildRemoved(child);
@@ -910,7 +905,7 @@ namespace o2
         OnChildrenChanged();
     }
 
-    void Actor::OnComponentAdded(const Ref<Component>& component)
+    void Actor::OnComponentAdded(const ComponentRef<Component>& component)
     {
         for (auto& comp : mComponents)
             comp->OnComponentAdded(component);
@@ -929,7 +924,7 @@ namespace o2
             comp->OnChildrenChanged();
     }
 
-    void Actor::OnParentChanged(const Ref<Actor>& oldParent) 
+    void Actor::OnParentChanged(const ActorRef<>& oldParent) 
     {
         ISceneDrawable::OnDrawbleParentChanged();
 
@@ -1336,7 +1331,7 @@ namespace o2
 #endif
     }
 
-    Ref<Actor> Actor::GetPrototypeLink() const
+    ActorRef<> Actor::GetPrototypeLink() const
     {
         return mPrototypeLink.Lock();
     }
@@ -1378,18 +1373,18 @@ namespace o2
         return 0;
     }
 
-    Map<String, Ref<Actor>> Actor::GetAllChilds()
+    Map<String, ActorRef<>> Actor::GetAllChilds()
     {
-        Map<String, Ref<Actor>> res;
+        Map<String, ActorRef<>> res;
         for (auto& child : mChildren)
             res.Add(child->GetName(), child);
 
         return res;
     }
 
-    Map<String, Ref<Component>> Actor::GetAllComponents()
+    Map<String, ComponentRef<Component>> Actor::GetAllComponents()
     {
-        Map<String, Ref<Component>> res;
+        Map<String, ComponentRef<Component>> res;
         for (auto& child : mComponents)
             res.Add(child->GetType().GetName(), child);
 

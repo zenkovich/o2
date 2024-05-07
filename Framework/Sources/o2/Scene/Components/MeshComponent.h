@@ -107,7 +107,7 @@ namespace o2
         void UpdateMesh();
 
         // Sets owner actor
-        void SetOwnerActor(const Ref<Actor>& actor) override;
+        void SetOwnerActor(const ActorRef<>& actor) override;
 
         // Calling when deserializing
         void OnDeserialized(const DataValue& node) override;
@@ -162,7 +162,7 @@ CLASS_METHODS_META(o2::MeshComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const ActorRef<>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }

@@ -79,7 +79,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::SkinningMeshBoneComponent>);
+DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::SkinningMeshBoneComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::SkinningMeshBoneComponent, o2__SkinningMeshBoneComponent);

@@ -32,8 +32,8 @@ namespace Editor
 	// --------------------
 	// Scene editing screen
 	// --------------------
-	class SceneEditScreen : public DragDropArea, public KeyboardEventsListener,
-		public Singleton<SceneEditScreen>, public ScrollView
+	class SceneEditScreen : public ScrollView, public DragDropArea, public KeyboardEventsListener,
+		public Singleton<SceneEditScreen>
 	{
 	public:
 		Function<void(const Vector<Ref<SceneEditableObject>>&)> onSelectionChanged; // Actors selection change event
@@ -284,6 +284,8 @@ namespace Editor
 		// Returns that this has transparent input
 		bool IsInputTransparent() const override;
 
+		REF_COUNTERABLE_IMPL(ScrollView, DragDropArea);
+
 		friend class DeleteAction;
 		friend class SelectAction;
 		friend class SelectionTool;
@@ -321,10 +323,10 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SceneEditScreen)
 {
+    BASE_CLASS(Editor::ScrollView);
     BASE_CLASS(o2::DragDropArea);
     BASE_CLASS(o2::KeyboardEventsListener);
     BASE_CLASS(o2::Singleton<SceneEditScreen>);
-    BASE_CLASS(Editor::ScrollView);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SceneEditScreen)

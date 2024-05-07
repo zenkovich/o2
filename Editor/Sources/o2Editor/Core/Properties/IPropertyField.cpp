@@ -219,7 +219,7 @@ namespace Editor
 					AddChild(mRevertBtn);
 
 				String path;
-				Ref<Actor> itActor = mRevertBtn;
+				ActorRef<> itActor = mRevertBtn;
 				while (itActor != Ref(this))
 				{
 					path = "child/" + itActor->GetName() + "/" + path;

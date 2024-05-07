@@ -63,7 +63,7 @@ namespace o2
         };
 
         // -------------------------------------------------
-        // Reference resolve request data by actor scene uid
+        // Reference resolve request data by component scene uid
         // -------------------------------------------------
         struct SceneRequireResolveData : public IRequiredResolveData
         {
@@ -101,46 +101,109 @@ namespace o2
         void OnDeserialized(const DataValue& node) override;
 
         friend class Component;
-        friend class ActorRefResolver;
+        friend class ComponentRefResolver;
     };
 
     // ---------------------------------------
     // Reference on derived from component classes
     // ---------------------------------------
     template<typename _component_type>
-    class Ref<_component_type, typename std::enable_if<IsBaseOf<Component, _component_type>::value>::type>: public BaseComponentRef, public BaseRef<_component_type>
+    class ComponentRef: public BaseComponentRef
     {
 	public:
-		using Base = BaseRef<_component_type>;
+		static_assert(std::is_base_of<Component, _component_type>::value, "ComponentRef type must be derived from Component");
 
 	public:
-		// Base reference implementation
-		BASE_REF_IMPLEMETATION(_component_type);
+		// Default constructor, no reference
+		ComponentRef();
 
-		// Sets component @SCRIPTABLE
-        void Set(Component* component) override { *this = Ref(dynamic_cast<_component_type*>(component)); }
+		// Nullptr constructor
+		ComponentRef(nullptr_t);
 
-        // Returns component pointer @SCRIPTABLE
-        _component_type* Get() override { return Base::Get(); }
+		// Constructor with component pointer
+		explicit ComponentRef(_component_type* ptr);
 
-        // Returns component pointer
-        const _component_type* Get() const { return Base::Get(); }
+		// Constructor with component reference
+		ComponentRef(const Ref<_component_type>& ref);
+
+		// Copy constructor
+		ComponentRef(const ComponentRef<_component_type>& other);
+
+		// Move constructor
+		ComponentRef(ComponentRef<_component_type>&& other);
+
+		// Copy constructor from other component reference
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
+		ComponentRef(const ComponentRef<_other_type>& other);
+
+		// Move constructor from other component reference
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
+		ComponentRef(ComponentRef<_other_type>&& other);
+
+		// Equality operator
+		bool operator==(const ComponentRef<_component_type>& other) const;
+
+		// Equality operator
+		bool operator==(const _component_type* other) const;
+
+		// Inequality operator
+		bool operator!=(const ComponentRef<_component_type>& other) const;
+
+		// Inequality operator
+		bool operator!=(const _component_type* other) const;
+
+		// Copy operator
+		ComponentRef<_component_type>& operator=(const ComponentRef<_component_type>& other);
+
+		// Move operator
+		ComponentRef<_component_type>& operator=(ComponentRef<_component_type>&& other);
+
+		// Copy operator from other component reference
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
+		ComponentRef<_component_type>& operator=(const ComponentRef<_other_type>& other);
+
+		// Move operator from other component reference
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _component_type*>::value>::type>
+		ComponentRef<_component_type>& operator=(Ref<_other_type>&& other);
+
+		// Returns is reference is valid
+		bool IsValid() const;
+
+		// Returns is reference is valid
+		operator bool() const;
+
+		// Returns component reference
+		operator Ref<_component_type>() const;
+
+		// Returns component reference
+		_component_type& operator*() const;
+
+		// Returns component pointer
+		_component_type* operator->() const;
+
+		// Returns component pointer 
+		_component_type* Get() override;
+
+		// Returns component pointer
+		const _component_type* Get() const override;
+
+		// Sets component pointer
+		void Set(Component* component) override;
 
         // Returns component type
-        const Type& GetComponentType() const override { return TypeOf(_component_type); }
+		const Type& GetComponentType() const override;
 
         // Copying ref without requiring remap
-        void CopyWithoutRemap(const BaseComponentRef& other) override
-        {
-            Base::mPtr = dynamic_cast<_component_type*>(const_cast<Component*>(other.Get()));
-            mRequiredResolveData = nullptr;
-        }
+		void CopyWithoutRemap(const BaseComponentRef& other) override;
 
         // Returns component type
-        static const Type* GetComponentTypeStatic() { return &TypeOf(_component_type); }
+		static const Type* GetComponentTypeStatic();
+
+	protected:
+		Ref<_component_type> mRef; // Reference to component
 
     public:
-		typedef Ref<_component_type, typename std::enable_if<std::is_base_of<Component, _component_type>::value>::type> _thisType;
+		typedef ComponentRef<_component_type> _thisType;
 
         SERIALIZABLE_MAIN(_thisType);
         IOBJECT_SCRIPTING();
@@ -160,7 +223,7 @@ namespace o2
             typedef _thisType thisclass;
             processor.template StartFields<_thisType>(object, type);
 
-            FIELD().PROTECTED().NAME(Base::mPtr);
+            FIELD().PROTECTED().NAME(mRef);
         }
 
         template<typename _type_processor>
@@ -173,7 +236,176 @@ namespace o2
             FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
             FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
         }
-    };
+	};
+
+	// Dynamic cast from one component reference type to another
+	template<typename _to_type, typename _from_type>
+	ComponentRef<_to_type> DynamicCast(const ComponentRef<_from_type>& from)
+	{
+		return ComponentRef<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
+	}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>::ComponentRef()
+	{}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>::ComponentRef(nullptr_t) :
+		mRef(nullptr)
+	{}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>::ComponentRef(_component_type* ptr) :
+		mRef(ptr)
+	{}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>::ComponentRef(const Ref<_component_type>& ref) :
+		mRef(ref)
+	{}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>::ComponentRef(const ComponentRef<_component_type>& other) :
+		mRef(other.mRef)
+	{}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>::ComponentRef(ComponentRef<_component_type>&& other) :
+		mRef(other.mRef)
+	{}
+
+	template<typename _component_type>
+	template<typename _other_type, typename _enable>
+	ComponentRef<_component_type>::ComponentRef(const ComponentRef<_other_type>& other) :
+		mRef(other.mRef)
+	{}
+
+	template<typename _component_type>
+	template<typename _other_type, typename>
+	ComponentRef<_component_type>::ComponentRef(ComponentRef<_other_type>&& other) :
+		mRef(std::move(other.mRef))
+	{}
+
+	template<typename _component_type>
+	bool ComponentRef<_component_type>::operator==(const ComponentRef<_component_type>& other) const
+	{
+		return mRef == other.mRef;
+	}
+
+	template<typename _component_type>
+	bool ComponentRef<_component_type>::operator==(const _component_type* other) const
+	{
+		return mRef == other;
+	}
+
+	template<typename _component_type>
+	bool ComponentRef<_component_type>::operator!=(const ComponentRef<_component_type>& other) const
+	{
+		return mRef != other.mRef;
+	}
+
+	template<typename _component_type>
+	bool ComponentRef<_component_type>::operator!=(const _component_type* other) const
+	{
+		return mRef != other;
+	}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>& ComponentRef<_component_type>::operator=(const ComponentRef<_component_type>& other)
+	{
+		mRef = other.mRef;
+		return *this;
+	}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>& ComponentRef<_component_type>::operator=(ComponentRef<_component_type>&& other)
+	{
+		mRef = std::move(other.mRef);
+		return *this;
+	}
+
+	template<typename _component_type>
+	template<typename _other_type, typename _enable>
+	ComponentRef<_component_type>& ComponentRef<_component_type>::operator=(const ComponentRef<_other_type>& other)
+	{
+		mRef = other.mRef;
+		return *this;
+	}
+
+	template<typename _component_type>
+	template<typename _other_type, typename _enable>
+	ComponentRef<_component_type>& ComponentRef<_component_type>::operator=(Ref<_other_type>&& other)
+	{
+		mRef = std::move(other.mRef);
+		return *this;
+	}
+
+	template<typename _component_type>
+	bool ComponentRef<_component_type>::IsValid() const
+	{
+		return mRef.IsValid();
+	}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>::operator bool() const
+	{
+		return IsValid();
+	}
+
+	template<typename _component_type>
+	ComponentRef<_component_type>::operator Ref<_component_type>() const
+	{
+		return mRef;
+	}
+
+	template<typename _component_type>
+	_component_type& ComponentRef<_component_type>::operator*() const
+	{
+		return *mRef;
+	}
+
+	template<typename _component_type>
+	_component_type* ComponentRef<_component_type>::operator->() const
+	{
+		return mRef.Get();
+	}
+
+	template<typename _component_type>
+	_component_type* ComponentRef<_component_type>::Get()
+	{
+		return mRef.Get();
+	}
+
+	template<typename _component_type>
+	const _component_type* ComponentRef<_component_type>::Get() const
+	{
+		return mRef.Get();
+	}
+
+	template<typename _component_type>
+	void ComponentRef<_component_type>::Set(Component* component)
+	{
+		*this = ComponentRef(dynamic_cast<_component_type*>(component));
+	}
+
+	template<typename _component_type>
+	const Type& ComponentRef<_component_type>::GetComponentType() const
+	{
+		return TypeOf(_component_type);
+	}
+
+	template<typename _component_type>
+	void ComponentRef<_component_type>::CopyWithoutRemap(const BaseComponentRef& other)
+	{
+		mRef = Ref(dynamic_cast<_component_type*>(const_cast<Component*>(other.Get())));
+		mRequiredResolveData = nullptr;
+	}
+
+	template<typename _component_type>
+	const Type* ComponentRef<_component_type>::GetComponentTypeStatic()
+	{
+		return &TypeOf(_component_type);
+	}
 }
 // --- META ---
 

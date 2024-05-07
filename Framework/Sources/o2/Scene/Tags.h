@@ -31,19 +31,19 @@ namespace o2
         void SetName(const String& name);
 
         // Adds actor
-        void AddActor(const Ref<Actor>& actor);
+        void AddActor(const ActorRef<>& actor);
 
         // Removes actor
-        void RemoveActor(const Ref<Actor>& actor);
+        void RemoveActor(const ActorRef<>& actor);
 
         // Removes all actors
         void Clear();
 
         // Adds actor
-        Tag& operator+=(const Ref<Actor>& actor);
+        Tag& operator+=(const ActorRef<>& actor);
 
         // Removes actor
-        Tag& operator-=(const Ref<Actor>& actor);
+        Tag& operator-=(const ActorRef<>& actor);
 
         SERIALIZABLE(Tag);
 
@@ -167,8 +167,8 @@ CLASS_METHODS_META(o2::Tag)
     FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddActor, const Ref<Actor>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveActor, const Ref<Actor>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddActor, const ActorRef<>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveActor, const ActorRef<>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Clear);
 }
 END_META;

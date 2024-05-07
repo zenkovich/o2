@@ -103,12 +103,17 @@ namespace o2
         return "ui/UI4_image_component.png";
     }
 
-    void ImageComponent::OnTransformUpdated()
+	Ref<o2::RefCounterable> ImageComponent::CastToRefCounterable(const Ref<ImageComponent>& ref)
+	{
+        return DynamicCast<DrawableComponent>(ref);
+	}
+
+	void ImageComponent::OnTransformUpdated()
     {
         SetBasis(mOwner.Lock()->transform->GetWorldBasis());
     }
 
-    void ImageComponent::SetOwnerActor(const Ref<Actor>& actor)
+    void ImageComponent::SetOwnerActor(const ActorRef<>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }
@@ -139,7 +144,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ImageComponent>);
+DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::ImageComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::ImageComponent, o2__ImageComponent);

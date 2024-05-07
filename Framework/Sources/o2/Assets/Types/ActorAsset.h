@@ -17,7 +17,7 @@ namespace o2
         ActorAsset();
 
         // Constructor
-        ActorAsset(const Ref<Actor>& actor);
+        ActorAsset(const ActorRef<>& actor);
 
         // Copy-constructor
         ActorAsset(const ActorAsset& other);
@@ -29,13 +29,13 @@ namespace o2
         ActorAsset& operator=(const ActorAsset& asset);
 
         // Instantiates actor toscene @SCRIPTABLE
-        Ref<Actor> Instantiate() const;
+        ActorRef<> Instantiate() const;
 
         // Returns actor
-        const Ref<Actor>& GetActor() const;
+        const ActorRef<>& GetActor() const;
 
         // Sets actor
-        void SetActor(const Ref<Actor>& actor);
+        void SetActor(const ActorRef<>& actor);
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
@@ -53,7 +53,7 @@ namespace o2
         CLONEABLE_REF(ActorAsset);
 
     protected:
-        Ref<Actor> mActor; // Asset data 
+        ActorRef<> mActor; // Asset data 
 
     protected:
         // Itis called when UID has changed; updates actor asset id
@@ -84,11 +84,11 @@ CLASS_METHODS_META(o2::ActorAsset)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Actor>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ActorRef<>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAsset&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, Instantiate);
-    FUNCTION().PUBLIC().SIGNATURE(const Ref<Actor>&, GetActor);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetActor, const Ref<Actor>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorRef<>, Instantiate);
+    FUNCTION().PUBLIC().SIGNATURE(const ActorRef<>&, GetActor);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActor, const ActorRef<>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

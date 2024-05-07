@@ -268,7 +268,7 @@ namespace o2
 
     protected:
         // Sets owner and updates transform
-        void SetOwner(const Ref<Actor>& actor) override;
+        void SetOwner(const ActorRef<>& actor) override;
 
         // Returns parent rectange, or zero when no parent
         RectF GetParentRectangle() const override;
@@ -429,7 +429,7 @@ CLASS_METHODS_META(o2::WidgetLayout)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, Based, BaseCorner, const Vec2F&, const Vec2F&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, HorStretch, VerAlign, float, float, float, float);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, VerStretch, HorAlign, float, float, float, float);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, const ActorRef<>&);
     FUNCTION().PROTECTED().SIGNATURE(RectF, GetParentRectangle);
     FUNCTION().PROTECTED().SIGNATURE(void, FloorRectangle);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateOffsetsByCurrentTransform);

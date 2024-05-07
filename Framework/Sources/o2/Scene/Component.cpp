@@ -88,7 +88,7 @@ namespace o2
         return mPrototypeLink;
     }
 
-    bool Component::IsLinkedToComponent(const Ref<Component>& component) const
+    bool Component::IsLinkedToComponent(const ComponentRef<Component>& component) const
     {
         if (mPrototypeLink)
         {
@@ -105,7 +105,7 @@ namespace o2
         return false;
     }
 
-    Ref<Actor> Component::GetOwnerActor() const
+    ActorRef<> Component::GetOwnerActor() const
     {
         return mOwner.Lock();
     }
@@ -187,7 +187,7 @@ namespace o2
         OnRemoveFromScene();
     }
 
-    void Component::SetOwnerActor(const Ref<Actor>& actor)
+    void Component::SetOwnerActor(const ActorRef<>& actor)
     {
         if (mOwner == actor)
             return;
