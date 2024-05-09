@@ -178,7 +178,7 @@ namespace o2
 			return;
 		}
 
-		mVerLayout->RemoveChild(mVerLayout->GetChildren().Get(position).Get());
+		mVerLayout->RemoveChild(mVerLayout->GetChildren().Get(position));
 	}
 
 	void CustomList::MoveItem(int position, int newPosition)
@@ -190,7 +190,7 @@ namespace o2
 		}
 
 		auto item = mVerLayout->GetChildWidgets().Get(position);
-		mVerLayout->RemoveChild(item.Get());
+		mVerLayout->RemoveChild(item);
 		mVerLayout->AddChild(item, newPosition);
 	}
 

@@ -320,7 +320,7 @@ namespace o2
         onClosed();
     }
 
-    void Window::OnChildFocused(const Ref<Widget>& child)
+    void Window::OnChildFocused(const WidgetRef& child)
     {
         OnFocused();
     }

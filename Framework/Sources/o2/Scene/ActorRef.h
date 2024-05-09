@@ -111,6 +111,7 @@ namespace o2
 
     // ---------------------------------------
     // Reference on derived from actor classes
+    // Implicitly converts to Ref<> and back
     // ---------------------------------------
     template<typename _actor_type = Actor>
     class ActorRef : public BaseActorRef
@@ -127,14 +128,11 @@ namespace o2
         // Constructor with actor pointer
         explicit ActorRef(_actor_type* ptr);
 
-        // Constructor with actor reference
-        ActorRef(const Ref<_actor_type>& ref);
+		// Copy constructor from other reference
+		ActorRef(const Ref<_actor_type>& other);
 
-        // Copy constructor
-        ActorRef(const ActorRef<_actor_type>& other);
-
-        // Move constructor
-        ActorRef(ActorRef<_actor_type>&& other);
+		// Move constructor from other reference
+		ActorRef(Ref<_actor_type>&& other);
 
         // Copy constructor from other actor reference
         template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
@@ -156,19 +154,15 @@ namespace o2
         // Inequality operator
         bool operator!=(const _actor_type* other) const;
 
-        // Copy operator
-        ActorRef<_actor_type>& operator=(const ActorRef<_actor_type>& other);
-
-        // Move operator
-        ActorRef<_actor_type>& operator=(ActorRef<_actor_type>&& other);
-
         // Copy operator from other actor reference
         template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
-        ActorRef<_actor_type>& operator=(const ActorRef<_other_type>& other);
+		ActorRef<_actor_type>& operator=(const ActorRef<_other_type>& other);
 
-        // Move operator from other actor reference
-        template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
-        ActorRef<_actor_type>& operator=(Ref<_other_type>&& other);
+		// Move operator from other actor reference
+		ActorRef<_actor_type>& operator=(Ref<_actor_type>&& other);
+
+		// Move operator from nullptr
+		ActorRef<_actor_type>& operator=(nullptr_t);
 
         // Returns is reference is valid
         bool IsValid() const;
@@ -178,10 +172,6 @@ namespace o2
 
         // Returns actor reference
 		operator Ref<_actor_type>() const;
-        
-		// Returns actor reference with different type
-		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _actor_type*>::value>::type>
-		operator Ref<_other_type>() const;
 
         // Returns actor reference
         _actor_type& operator*() const;
@@ -254,9 +244,16 @@ namespace o2
 
 	// Dynamic cast from one actor reference type to another
 	template<typename _to_type, typename _from_type>
-	ActorRef<_to_type> DynamicCast(const ActorRef<_from_type>& from)
+	ActorRef<_to_type> DynamicActorCast(const ActorRef<_from_type>& from)
 	{
 		return ActorRef<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
+	}
+
+	// Dynamic cast from one actor reference type to another
+	template<typename _to_type, typename _from_type>
+	Ref<_to_type> DynamicCast(const ActorRef<_from_type>& from)
+	{
+		return Ref<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
 	}
 
     template<typename _actor_type>
@@ -273,20 +270,15 @@ namespace o2
         mRef(ptr)
     {}
 
-    template<typename _actor_type>
-    ActorRef<_actor_type>::ActorRef(const Ref<_actor_type>& ref) :
-        mRef(ref)
-    {}
+	template<typename _actor_type>
+	ActorRef<_actor_type>::ActorRef(const Ref<_actor_type>&other) :
+		mRef(other)
+	{}
 
-    template<typename _actor_type>
-    ActorRef<_actor_type>::ActorRef(const ActorRef<_actor_type>& other) :
-        mRef(other.mRef)
-    {}
-
-    template<typename _actor_type>
-    ActorRef<_actor_type>::ActorRef(ActorRef<_actor_type>&& other) :
-        mRef(other.mRef)
-    {}
+	template<typename _actor_type>
+	ActorRef<_actor_type>::ActorRef(Ref<_actor_type> && other) :
+		mRef(std::move(other))
+	{}
 
     template<typename _actor_type>
     template<typename _other_type, typename _enable>
@@ -325,34 +317,26 @@ namespace o2
     }
 
     template<typename _actor_type>
-    ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(const ActorRef<_actor_type>& other)
-    {
-        mRef = other.mRef;
-        return *this;
-    }
-
-    template<typename _actor_type>
-    ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(ActorRef<_actor_type>&& other)
-    {
-        mRef = std::move(other.mRef);
-        return *this;
-    }
-
-    template<typename _actor_type>
     template<typename _other_type, typename _enable>
     ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(const ActorRef<_other_type>& other)
     {
         mRef = other.mRef;
         return *this;
-    }
+	}
 
-    template<typename _actor_type>
-    template<typename _other_type, typename _enable>
-    ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(Ref<_other_type>&& other)
-    {
-        mRef = std::move(other.mRef);
-        return *this;
-    }
+	template<typename _actor_type>
+	ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(Ref<_actor_type>&& other)
+	{
+		mRef = std::move(other);
+		return *this;
+	}
+
+	template<typename _actor_type>
+	ActorRef<_actor_type>& ActorRef<_actor_type>::operator=(nullptr_t)
+	{
+		mRef = nullptr;
+		return *this;
+	}
 
     template<typename _actor_type>
     bool ActorRef<_actor_type>::IsValid() const
@@ -370,13 +354,6 @@ namespace o2
     ActorRef<_actor_type>::operator Ref<_actor_type>() const
 	{
 		return mRef;
-	}
-
-	template<typename _actor_type>
-	template<typename _other_type, typename _enable>
-	ActorRef<_actor_type>::operator Ref<_other_type>() const
-	{
-        return mRef;
 	}
 
     template<typename _actor_type>

@@ -203,22 +203,22 @@ namespace o2
 
     protected:
         // Called when actor added to scene, adds to scene deffered
-        static void OnActorCreated(Actor* actor);
+        static void OnActorCreated(const ActorRef<>& actor);
 
         // Called when actor destroyed, removes from scene
-        static void OnActorDestroy(Actor* actor);
+        static void OnActorDestroy(const ActorRef<>& actor);
 
         // Called when new actor was parented to another actor, removes it from added list
-        static void OnNewActorParented(Actor* actor);
+        static void OnNewActorParented(const ActorRef<>& actor);
 
         // Called when actor unique id was changed; updates actors map
-        static void OnActorIdChanged(Actor* actor, SceneUID prevId);
+        static void OnActorIdChanged(const ActorRef<>& actor, SceneUID prevId);
 
         // Called when actor adding to scene; registers in actors list and events list
-        static void OnAddActorToScene(Actor* actor);
+        static void OnAddActorToScene(const ActorRef<>& actor);
 
         // Called when actor removing from scene; unregisters from actors list and events list
-        static void OnRemoveActorFromScene(Actor* actor, bool keepEditorObjects = false);
+        static void OnRemoveActorFromScene(const ActorRef<Actor>& actor, bool keepEditorObjects = false);
 
     protected:
         // Draws cameras
@@ -234,10 +234,10 @@ namespace o2
         void DrawCursorDebugInfo();
 
         // Called when actor adding to scene; registers in actors list and events list
-        void AddActorToScene(Actor* actor);
+        void AddActorToScene(const ActorRef<>& actor);
 
         // Called when actor removing from scene; unregisters from actors list and events list
-        void RemoveActorFromScene(Actor* actor, bool keepEditorObjects = false);
+        void RemoveActorFromScene(const ActorRef<>& actor, bool keepEditorObjects = false);
 
         // Called when component added to actor, registers for calling OnAddOnScene
         void OnComponentAdded(Component* component);
@@ -508,18 +508,18 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, const ComponentRef<Component>&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUpdating);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEditor);
-    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorCreated, Actor*);
-    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorDestroy, Actor*);
-    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnNewActorParented, Actor*);
-    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorIdChanged, Actor*, SceneUID);
-    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnAddActorToScene, Actor*);
-    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnRemoveActorFromScene, Actor*, bool);
+    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorCreated, const ActorRef<>&);
+    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorDestroy, const ActorRef<>&);
+    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnNewActorParented, const ActorRef<>&);
+    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorIdChanged, const ActorRef<>&, SceneUID);
+    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnAddActorToScene, const ActorRef<>&);
+    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnRemoveActorFromScene, const ActorRef<Actor>&, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, DrawCameras);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateActors, float);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateStartingEntities);
     FUNCTION().PROTECTED().SIGNATURE(void, DrawCursorDebugInfo);
-    FUNCTION().PROTECTED().SIGNATURE(void, AddActorToScene, Actor*);
-    FUNCTION().PROTECTED().SIGNATURE(void, RemoveActorFromScene, Actor*, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, AddActorToScene, const ActorRef<>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, RemoveActorFromScene, const ActorRef<>&, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoved, Component*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnLayerRenamed, SceneLayer*, const String&);

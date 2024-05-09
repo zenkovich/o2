@@ -95,7 +95,7 @@ namespace o2
         for (auto& actor : addedActors)
         {
             if (actor->IsOnScene())
-                helper::RecursiveCall(actor, [&](const ActorRef<>& actor) { AddActorToScene(actor.Get()); });
+                helper::RecursiveCall(actor, [&](const ActorRef<>& actor) { AddActorToScene(actor); });
         }
 
         for (auto& actor : addedActors)
@@ -154,7 +154,7 @@ namespace o2
             mDestroyActors.Add(actor);
 
 #if IS_EDITOR
-            mChangedObjects.Remove(actor);
+            mChangedObjects.Remove(actor.GetRef());
 #endif
         }
     }
@@ -178,15 +178,15 @@ namespace o2
         return false;
     }
 
-    void Scene::OnActorCreated(Actor* actor)
+    void Scene::OnActorCreated(const ActorRef<>& actor)
     {
         if (!IsSingletonInitialzed())
             return;
 
-        Instance().mAddedActors.Add(Ref(actor));
+        Instance().mAddedActors.Add(actor);
     }
 
-    void Scene::OnActorDestroy(Actor* actor)
+    void Scene::OnActorDestroy(const ActorRef<Actor>& actor)
     {
         if (!IsSingletonInitialzed())
             return;
@@ -202,22 +202,22 @@ namespace o2
 #endif
     }
 
-    void Scene::OnNewActorParented(Actor* actor)
+    void Scene::OnNewActorParented(const ActorRef<>& actor)
     {
         if (!IsSingletonInitialzed())
             return;
 
-        Instance().mAddedActors.Remove(Ref(actor));
+        Instance().mAddedActors.Remove(actor);
     }
 
-    void Scene::OnAddActorToScene(Actor* actor)
+    void Scene::OnAddActorToScene(const ActorRef<Actor>& actor)
     {
         Assert(IsSingletonInitialzed(), "Cant add actor to scene, because scene not initialized")
 
             Instance().AddActorToScene(actor);
     }
 
-    void Scene::OnRemoveActorFromScene(Actor* actor, bool keepEditorObjects /*= false*/)
+    void Scene::OnRemoveActorFromScene(const ActorRef<Actor>& actor, bool keepEditorObjects /*= false*/)
     {
         if (!IsSingletonInitialzed())
             return;
@@ -225,13 +225,13 @@ namespace o2
         Instance().RemoveActorFromScene(actor, keepEditorObjects);
     }
 
-    void Scene::OnActorIdChanged(Actor* actor, SceneUID prevId)
+    void Scene::OnActorIdChanged(const ActorRef<>& actor, SceneUID prevId)
     {
         if (!IsSingletonInitialzed())
             return
 
             Instance().mActorsMap.Remove(prevId);
-        Instance().mActorsMap[actor->mId] = Ref(actor);
+        Instance().mActorsMap[actor->mId] = actor;
     }
 
     void Scene::UpdateActors(float dt)
@@ -348,45 +348,45 @@ namespace o2
         o2Debug.DrawText(((Vec2F)o2Render.GetResolution().InvertedX()) * 0.5f, debugInfo);
     }
 
-    void Scene::AddActorToScene(Actor* actor)
+    void Scene::AddActorToScene(const ActorRef<>& actor)
     {
-        auto ActorRef<> = Ref(actor);
-
         if (!actor->mParent)
-            mRootActors.Add(ActorRef<>);
+            mRootActors.Add(actor);
 
-        mAllActors.Add(ActorRef<>);
-        mActorsMap[actor->mId] = ActorRef<>;
+        auto& actorRef = actor.GetRef();
+
+        mAllActors.Add(actorRef);
+        mActorsMap[actor->mId] = actor;
 
         actor->OnAddToScene();
 
 #if IS_EDITOR
-        mChangedObjects.Add(ActorRef<>);
-        AddEditableObjectToScene(ActorRef<>);
-        onAddedToScene(ActorRef<>);
+        mChangedObjects.Add(actorRef);
+        AddEditableObjectToScene(actorRef);
+        onAddedToScene(actorRef);
 #endif
     }
 
-    void Scene::RemoveActorFromScene(Actor* actor, bool keepEditorObjects /*= false*/)
+    void Scene::RemoveActorFromScene(const ActorRef<>& actor, bool keepEditorObjects /*= false*/)
 	{
-		auto ActorRef<> = Ref(actor);
-
         if (!actor->mParent)
-            mRootActors.Remove(ActorRef<>);
+            mRootActors.Remove(actor);
 
-        mAllActors.Remove(ActorRef<>);
+		auto& actorRef = actor.GetRef();
+
+        mAllActors.Remove(actorRef);
         mActorsMap.Remove(actor->mId);
 
-        mStartActors.Remove(ActorRef<>);
-        mAddedActors.Remove(ActorRef<>);
+        mStartActors.Remove(actor);
+        mAddedActors.Remove(actor);
 
         actor->OnRemoveFromScene();
 
 #if IS_EDITOR
         if (!keepEditorObjects)
-            RemoveEditableObjectFromScene(ActorRef<>);
+            RemoveEditableObjectFromScene(actorRef);
 
-        OnObjectRemoveFromScene(ActorRef<>);
+        OnObjectRemoveFromScene(actorRef);
 #endif
     }
 
@@ -933,7 +933,7 @@ namespace o2
         if (!mPrototypeLinksCache.ContainsKey(assetRef))
             mPrototypeLinksCache.Add(assetRef, Vector<WeakRef<Actor>>());
 
-        mPrototypeLinksCache[assetRef].Add(actor);
+        mPrototypeLinksCache[assetRef].Add(actor.GetRef());
     }
 
     void Scene::OnActorPrototypeBroken(Actor* actor)

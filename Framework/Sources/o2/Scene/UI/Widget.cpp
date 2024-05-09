@@ -978,7 +978,7 @@ namespace o2
     void Widget::UpdateVisibility(bool updateLayout /*= true*/)
     {}
 
-    void Widget::OnChildFocused(const Ref<Widget>& child)
+    void Widget::OnChildFocused(const WidgetRef& child)
     {
         if (mParentWidget)
             mParentWidget.Lock()->OnChildFocused(child);
@@ -1059,12 +1059,12 @@ namespace o2
         mTopDrawingLayers.Sort([](auto& a, auto& b) { return a->mDepth < b->mDepth; });
     }
 
-    void Widget::SetParentWidget(const Ref<Widget>& widget)
+    void Widget::SetParentWidget(const WidgetRef& widget)
     {
         SetParent(widget);
     }
 
-    Ref<Widget> Widget::GetChildWidget(const String& path) const
+    WidgetRef Widget::GetChildWidget(const String& path) const
     {
         auto actor = GetChild(path);
         return DynamicCast<Widget>(actor);
@@ -1082,12 +1082,12 @@ namespace o2
         return actor;
     }
 
-    Ref<Widget> Widget::AddChildWidget(const Ref<Widget>& widget)
+    WidgetRef Widget::AddChildWidget(const WidgetRef& widget)
     {
         return DynamicCast<Widget>(AddChild(widget));
     }
 
-    Ref<Widget> Widget::AddChildWidget(const Ref<Widget>& widget, int position)
+    WidgetRef Widget::AddChildWidget(const WidgetRef& widget, int position)
     {
         return DynamicCast<Widget>(AddChild(widget, position));
     }
@@ -1116,18 +1116,18 @@ namespace o2
         return res;
     }
 
-    Map<String, Ref<Widget>> Widget::GetAllChilds()
+    Map<String, WidgetRef> Widget::GetAllChilds()
     {
-        Map<String, Ref<Widget>> res;
+        Map<String, WidgetRef> res;
         for (auto& child : mChildWidgets)
             res.Add(child->GetName(), child);
 
         return res;
     }
 
-    Map<String, Ref<Widget>> Widget::GetAllInternalWidgets()
+    Map<String, WidgetRef> Widget::GetAllInternalWidgets()
     {
-        Map<String, Ref<Widget>> res;
+        Map<String, WidgetRef> res;
         for (auto& child : mInternalWidgets)
             res.Add(child->GetName(), child);
 
@@ -1179,7 +1179,7 @@ namespace o2
     {
         layout->SetDirty(false);
 
-        Ref<Widget> widget = DynamicCast<Widget>(child);
+        WidgetRef widget = DynamicCast<Widget>(child);
         if (widget)
         {
             UpdateChildWidgetsList();
@@ -1329,25 +1329,25 @@ namespace o2
             child->UpdateResEnabledInHierarchy(withChildren);
     }
 
-    void Widget::SetInternalParent(const Ref<Widget>& parent, bool worldPositionStays /*= false*/)
+    void Widget::SetInternalParent(const WidgetRef& parent, bool worldPositionStays /*= false*/)
     {
         SetParent(parent, worldPositionStays);
 
         if (parent)
         {
-            auto thisPtr = Ref<Widget>(this);
+            auto thisPtr = WidgetRef(this);
             parent->mChildren.Remove(thisPtr);
             parent->mChildWidgets.Remove(thisPtr);
             parent->mInternalWidgets.Add(thisPtr);
         }
     }
 
-    void Widget::AddInternalWidget(const Ref<Widget>& widget, bool worldPositionStays /*= false*/)
+    void Widget::AddInternalWidget(const WidgetRef& widget, bool worldPositionStays /*= false*/)
     {
         widget->SetInternalParent(Ref(this), worldPositionStays);
     }
 
-    Ref<Widget> Widget::GetInternalWidget(const String& path) const
+    WidgetRef Widget::GetInternalWidget(const String& path) const
     {
         int delPos = path.Find("/");
         String pathPart = path.SubStr(0, delPos);
@@ -1379,14 +1379,14 @@ namespace o2
         return nullptr;
     }
 
-    Ref<Widget> Widget::FindInternalWidget(const String& name) const
+    WidgetRef Widget::FindInternalWidget(const String& name) const
     {
         for (auto& widget : mInternalWidgets)
         {
             if (widget->GetName() == name)
                 return widget;
 
-            if (Ref<Widget> res = widget->FindChildByTypeAndName<Widget>(name))
+            if (WidgetRef res = widget->FindChildByTypeAndName<Widget>(name))
                 return res;
         }
 

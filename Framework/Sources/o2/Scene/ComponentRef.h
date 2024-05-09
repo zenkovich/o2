@@ -175,6 +175,10 @@ namespace o2
 		// Returns component reference
 		operator Ref<_component_type>() const;
 
+		// Returns component reference with different type
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_component_type*, _other_type*>::value>::type>
+		operator Ref<_other_type>() const;
+
 		// Returns component reference
 		_component_type& operator*() const;
 
@@ -186,6 +190,12 @@ namespace o2
 
 		// Returns component pointer
 		const _component_type* Get() const override;
+
+		// Returns reference
+		Ref<_component_type>& GetRef();
+
+		// Returns reference
+		const Ref<_component_type>& GetRef() const;
 
 		// Sets component pointer
 		void Set(Component* component) override;
@@ -240,9 +250,16 @@ namespace o2
 
 	// Dynamic cast from one component reference type to another
 	template<typename _to_type, typename _from_type>
-	ComponentRef<_to_type> DynamicCast(const ComponentRef<_from_type>& from)
+	ComponentRef<_to_type> DynamicComponentCast(const ComponentRef<_from_type>& from)
 	{
 		return ComponentRef<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
+	}
+
+	// Dynamic cast from one component reference type to another
+	template<typename _to_type, typename _from_type>
+	Ref<_to_type> DynamicCast(const ComponentRef<_from_type>& from)
+	{
+		return Ref<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
 	}
 
 	template<typename _component_type>
@@ -359,6 +376,13 @@ namespace o2
 	}
 
 	template<typename _component_type>
+	template<typename _other_type, typename _enable>
+	ComponentRef<_component_type>::operator Ref<_other_type>() const
+	{
+		return mRef;
+	}
+
+	template<typename _component_type>
 	_component_type& ComponentRef<_component_type>::operator*() const
 	{
 		return *mRef;
@@ -380,6 +404,18 @@ namespace o2
 	const _component_type* ComponentRef<_component_type>::Get() const
 	{
 		return mRef.Get();
+	}
+
+	template<typename _component_type>
+	Ref<_component_type>& ComponentRef<_component_type>::GetRef()
+	{
+		return mRef;
+	}
+
+	template<typename _component_type>
+	const Ref<_component_type>& ComponentRef<_component_type>::GetRef() const
+	{
+		return mRef;
 	}
 
 	template<typename _component_type>

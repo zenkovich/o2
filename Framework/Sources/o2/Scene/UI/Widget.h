@@ -19,6 +19,9 @@ namespace o2
     class WidgetLayout;
     class WidgetLayoutData;
 
+    class Widget;
+    using WidgetRef = ActorRef<Widget>;
+
     // ------------------------------------------------------
     // Basic UI Widget. Its a simple and basic element of UI, 
     // everything other UI's are based on this
@@ -38,10 +41,10 @@ namespace o2
         GETTER(Vector<Ref<WidgetLayer>>, layers, GetLayers); // Layers getter
         GETTER(Vector<Ref<WidgetState>>, states, GetStates); // States getter
 
-        ACCESSOR(Ref<Widget>, childWidget, String, GetChildWidget, GetAllChilds);                // Widget child accessor by path like "child/subchild/somechild"
-        ACCESSOR(Ref<Widget>, internalWidget, String, GetInternalWidget, GetAllInternalWidgets); // Widget internals accessor by path like "child/subchild/somechild"
-        ACCESSOR(Ref<WidgetLayer>, layer, String, GetLayer, GetAllLayers);                       // Widget layer accessor by path like "layer/sublayer/target"
-        ACCESSOR(Ref<WidgetState>, state, String, GetStateObject, GetAllStates);                 // Widget state accessor by name
+        ACCESSOR(WidgetRef, childWidget, String, GetChildWidget, GetAllChilds);                // Widget child accessor by path like "child/subchild/somechild"
+        ACCESSOR(WidgetRef, internalWidget, String, GetInternalWidget, GetAllInternalWidgets); // Widget internals accessor by path like "child/subchild/somechild"
+		ACCESSOR(Ref<WidgetLayer>, layer, String, GetLayer, GetAllLayers);                     // Widget layer accessor by path like "layer/sublayer/target"
+		ACCESSOR(Ref<WidgetState>, state, String, GetStateObject, GetAllStates);               // Widget state accessor by name
 
     public:
         WidgetLayout* const layout; // Widget layout @EDITOR_IGNORE
@@ -100,7 +103,7 @@ namespace o2
         const RectF& GetChildrenWorldRect() const;
 
         // Returns child widget by path (like "root/some node/other node/target node") @SCRIPTABLE
-        Ref<Widget> GetChildWidget(const String& path) const;
+        WidgetRef GetChildWidget(const String& path) const;
 
         // Add child actor @SCRIPTABLE
         ActorRef<> AddChild(const ActorRef<>& actor) override;
@@ -109,10 +112,10 @@ namespace o2
         ActorRef<> AddChild(const ActorRef<>& actor, int index) override;
 
         // Adds child widget and returns them @SCRIPTABLE
-        Ref<Widget> AddChildWidget(const Ref<Widget>& widget);
+        WidgetRef AddChildWidget(const WidgetRef& widget);
 
         // Adds child widget at position and returns them
-        Ref<Widget> AddChildWidget(const Ref<Widget>& widget, int position);
+        WidgetRef AddChildWidget(const WidgetRef& widget, int position);
 
         // Returns constant children widgets vector
         const Vector<Ref<Widget>>& GetChildWidgets() const;
@@ -226,20 +229,20 @@ namespace o2
         bool IsUnderPoint(const Vec2F& point) override;
 
         // Sets parent,  doesn't adds to parent's children but adds to internal children @SCRIPTABLE
-        void SetInternalParent(const Ref<Widget>& parent, bool worldPositionStays = false);
+        void SetInternalParent(const WidgetRef& parent, bool worldPositionStays = false);
 
         // Adds widget to internal children @SCRIPTABLE
-        void AddInternalWidget(const Ref<Widget>& widget, bool worldPositionStays = false);
+        void AddInternalWidget(const WidgetRef& widget, bool worldPositionStays = false);
 
         // Returns internal child widget by path (like "root/some node/other node/target node") @SCRIPTABLE
-        Ref<Widget> GetInternalWidget(const String& path) const;
+        WidgetRef GetInternalWidget(const String& path) const;
 
         // Returns internal child widget by path (like "root/some node/other node/target node")
         template<typename _type>
         Ref<_type> GetInternalWidgetByType(const String& path) const;
 
         // Searches widget with name in internal widgets hierarchy @SCRIPTABLE
-        Ref<Widget> FindInternalWidget(const String& name) const;
+        WidgetRef FindInternalWidget(const String& name) const;
 
         // Searches widget with type and name in internal widgets hierarchy
         template<typename _type>
@@ -395,7 +398,7 @@ namespace o2
         virtual void UpdateLayersLayouts();
 
         // Called when child widget was selected
-        virtual void OnChildFocused(const Ref<Widget>& child);
+        virtual void OnChildFocused(const WidgetRef& child);
 
         // Called when layer added and updates drawing sequence
         virtual void OnLayerAdded(const Ref<WidgetLayer>& layer);
@@ -416,7 +419,7 @@ namespace o2
         void RetargetStatesAnimations();
 
         // Sets parent widget, used for property
-        void SetParentWidget(const Ref<Widget>& widget);
+        void SetParentWidget(const WidgetRef& widget);
 
         // Returns children widgets (for property)
         Vector<Ref<Widget>>& GetChildrenNonConst();
@@ -431,10 +434,10 @@ namespace o2
         Map<String, Ref<WidgetLayer>> GetAllLayers();
 
         // Returns dictionary of all children by names
-        Map<String, Ref<Widget>> GetAllChilds();
+        Map<String, WidgetRef> GetAllChilds();
 
         // Returns dictionary of all internal widgets by names
-        Map<String, Ref<Widget>> GetAllInternalWidgets();
+        Map<String, WidgetRef> GetAllInternalWidgets();
 
         // Returns dictionary of all states by names
         Map<String, Ref<WidgetState>> GetAllStates();
@@ -775,8 +778,8 @@ CLASS_METHODS_META(o2::Widget)
 {
 
     typedef Map<String, Ref<WidgetLayer>> _tmp1;
-    typedef Map<String, Ref<Widget>> _tmp2;
-    typedef Map<String, Ref<Widget>> _tmp3;
+    typedef Map<String, WidgetRef> _tmp2;
+    typedef Map<String, WidgetRef> _tmp3;
     typedef Map<String, Ref<WidgetState>> _tmp4;
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(RefCounter*, ActorCreateMode);
@@ -792,11 +795,11 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayoutDirty);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const WeakRef<Widget>&, GetParentWidget);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const RectF&, GetChildrenWorldRect);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, GetChildWidget, const String&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetRef, GetChildWidget, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorRef<>, AddChild, const ActorRef<>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorRef<>, AddChild, const ActorRef<>&, int);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, AddChildWidget, const Ref<Widget>&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddChildWidget, const Ref<Widget>&, int);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetRef, AddChildWidget, const WidgetRef&);
+    FUNCTION().PUBLIC().SIGNATURE(WidgetRef, AddChildWidget, const WidgetRef&, int);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<Widget>>&, GetChildWidgets);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetIndexInSiblings, int);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetLayer>, AddLayer, const Ref<WidgetLayer>&);
@@ -831,10 +834,10 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsFocusable);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFocusable, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetInternalParent, const Ref<Widget>&, bool);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddInternalWidget, const Ref<Widget>&, bool);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, GetInternalWidget, const String&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Widget>, FindInternalWidget, const String&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetInternalParent, const WidgetRef&, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddInternalWidget, const WidgetRef&, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetRef, GetInternalWidget, const String&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetRef, FindInternalWidget, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorRef<>, FindActorById, SceneUID);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);
@@ -873,14 +876,14 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransparency);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibility, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildFocused, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildFocused, const WidgetRef&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStateAdded, const Ref<WidgetState>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStatesListChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, DrawDebugFrame);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersDrawingSequence);
     FUNCTION().PROTECTED().SIGNATURE(void, RetargetStatesAnimations);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetParentWidget, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetParentWidget, const WidgetRef&);
     FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<Widget>>&, GetChildrenNonConst);
     FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<WidgetLayer>>&, GetLayersNonConst);
     FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<WidgetState>>&, GetStatesNonConst);

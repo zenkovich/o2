@@ -24,9 +24,10 @@ namespace o2
         tags.onTagAdded = [&](const Ref<Tag>& tag) { tag->mActors.Add(WeakRef(this)); };
         tags.onTagRemoved = [&](const Ref<Tag>& tag) { tag->mActors.Remove(WeakRef(this)); };
 
-        transform->SetOwner(ActorRef<>(this));
+        auto thisRef = ActorRef<>(this);
+        transform->SetOwner(thisRef);
 
-        Scene::OnActorCreated(this);
+        Scene::OnActorCreated(thisRef);
         ActorRefResolver::ActorCreated(this);
     }
 
@@ -127,7 +128,7 @@ namespace o2
         RemoveAllChildren();
         RemoveAllComponents();
 
-        Scene::OnActorDestroy(this);
+        Scene::OnActorDestroy(ActorRef(this));
 
         delete transform;
     }
@@ -191,7 +192,7 @@ namespace o2
                 newComponent->mPrototypeLink = component->mPrototypeLink;
         }
 
-        Scene::OnActorCreated(this);
+        Scene::OnActorCreated(ActorRef(this));
 
         ActorRefResolver::ActorCreated(this);
         ActorRefResolver::UnlockResolving();
@@ -325,7 +326,7 @@ namespace o2
         auto prevId = mId;
         mId = id;
 
-        Scene::OnActorIdChanged(this, prevId);
+        Scene::OnActorIdChanged(ActorRef(this), prevId);
         ActorRefResolver::OnActorIdChanged(this, prevId);
     }
 
@@ -360,7 +361,7 @@ namespace o2
 
         mIsOnScene = true;;
 
-        Scene::OnAddActorToScene(this);
+        Scene::OnAddActorToScene(ActorRef(this));
 
         for (auto& child : mChildren)
             child->AddToScene();
@@ -373,7 +374,7 @@ namespace o2
 
         mIsOnScene = false;
 
-        Scene::OnRemoveActorFromScene(this, keepEditorObjects);
+        Scene::OnRemoveActorFromScene(ActorRef(this), keepEditorObjects);
 
         for (auto& child : mChildren)
             child->RemoveFromScene();
@@ -520,7 +521,7 @@ namespace o2
         }
         else if (mState == State::Initializing && mParent && mParent.Lock()->mState == State::Initializing)
         {
-            Scene::OnNewActorParented(this);
+            Scene::OnNewActorParented(ActorRef(this));
         }
 
         // Call parent update events
