@@ -17,13 +17,13 @@ namespace o2
     // -----------------------------
     struct ApplyActorInfo
     {
-        ActorRef<>                       actor;
+        Ref<Actor>                       actor;
         Vector<Ref<SceneEditableObject>> allChildren;
 
         Map<const SceneEditableObject*, SceneEditableObject*> allChildrenByLinks;
 
         ApplyActorInfo();
-        ApplyActorInfo(const ActorRef<>& actor);
+        ApplyActorInfo(const Ref<Actor>& actor);
 
         bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
 
@@ -73,8 +73,8 @@ namespace o2
 
         struct RemovedComponent: public IDifference
         {
-            ActorRef<>     ownerPrototypeLink;
-            ComponentRef<Component> prototypeLink;
+            Ref<Actor>     ownerPrototypeLink;
+            Ref<Component> prototypeLink;
 
             Ref<IDifference> Clone() const override;
             void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
@@ -83,8 +83,8 @@ namespace o2
 
         struct NewComponent: public IDifference
         {
-            ActorRef<>     ownerPrototypeLink;
-            ComponentRef<Component> newComponent;
+            Ref<Actor>     ownerPrototypeLink;
+            Ref<Component> newComponent;
 
             Ref<IDifference> Clone() const override;
             void Apply(ApplyActorInfo& sourceInfo, ApplyActorInfo& prototypeInfo,
@@ -104,7 +104,7 @@ namespace o2
         struct ChangedComponentField: public IDifference
         {
             Ref<SceneEditableObject> ownerPrototypeLink;
-            ComponentRef<Component>           prototypeLink;
+            Ref<Component>           prototypeLink;
             String                   path;
 
             Ref<IDifference> Clone() const override;
@@ -127,7 +127,7 @@ namespace o2
         ~ActorDifferences();
 
         // Returns differences between
-        static ActorDifferences GetDifference(const ActorRef<>& changedActor, const ActorRef<>& prototype);
+        static ActorDifferences GetDifference(const Ref<Actor>& changedActor, const Ref<Actor>& prototype);
 
         // Collects object differences
         static void GetObjectDifferences(const Function<void(const String& path)>& createDiffFunc,

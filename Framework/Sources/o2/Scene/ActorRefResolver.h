@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2/Scene/ActorRef.h"
-#include "o2/Scene/ComponentRef.h"
+#include "o2/Scene/ActorLinkRef.h"
+#include "o2/Scene/ComponentLinkRef.h"
 #include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Singleton.h"
 
@@ -14,22 +14,22 @@ namespace o2
     {
     public:
         // Requires to resolve actor reference by actor id
-        static void RequireResolve(BaseActorRef& ref, SceneUID actorId);
+        static void RequireResolve(BaseActorLinkRef& ref, SceneUID actorId);
 
         // Requires to resolve actor reference by asset id
-        static void RequireResolve(BaseActorRef& ref, const UID& assetId);
+        static void RequireResolve(BaseActorLinkRef& ref, const UID& assetId);
 
         // Requires to resolve component reference
-        static void RequireResolve(BaseComponentRef& ref, SceneUID actorId, SceneUID id);
+        static void RequireResolve(BaseComponentLinkRef& ref, SceneUID actorId, SceneUID id);
 
         // Requires to resolve component reference
-        static void RequireResolve(BaseComponentRef& ref, const UID& assetId, SceneUID id);
+        static void RequireResolve(BaseComponentLinkRef& ref, const UID& assetId, SceneUID id);
 
         // Requires to remap actor reference
-        static void RequireRemap(BaseActorRef& ref);
+        static void RequireRemap(BaseActorLinkRef& ref);
 
         // Requires to remap component reference
-        static void RequireRemap(BaseComponentRef& ref);
+        static void RequireRemap(BaseComponentLinkRef& ref);
 
         // Locks references resolving depth
         static void LockResolving(int depth = 1);
@@ -62,43 +62,43 @@ namespace o2
         static void OnComponentIdChanged(Component* component, SceneUID prevId);
 
         // Called when actor reference was destroyed, removes it from unresolved list
-        static void OnActorDestroyed(const BaseActorRef* ref);
+        static void OnActorDestroyed(const BaseActorLinkRef* ref);
 
         // Called when component reference was destroyed, removes it from unresolved list
-        static void OnComponentDestroyed(const BaseComponentRef* ref);
+        static void OnComponentDestroyed(const BaseComponentLinkRef* ref);
 
     protected:
         struct UnresolvedActor
         {
-            BaseActorRef* target;
+            BaseActorLinkRef* target;
             SceneUID      sourceId;
 
         public:
             UnresolvedActor();
-            UnresolvedActor(BaseActorRef* target, SceneUID actorId);
+            UnresolvedActor(BaseActorLinkRef* target, SceneUID actorId);
             bool operator==(const UnresolvedActor& other) const;
         };
 
         struct UnresolvedAssetActor
         {
-            BaseActorRef* target;
+            BaseActorLinkRef* target;
             UID           sourceAssetId;
 
         public:
             UnresolvedAssetActor();
-            UnresolvedAssetActor(BaseActorRef* target, const UID& assetId);
+            UnresolvedAssetActor(BaseActorLinkRef* target, const UID& assetId);
 
             bool operator==(const UnresolvedAssetActor& other) const;
         };
 
         struct UnresolvedComponent
         {
-            BaseComponentRef* target;
+            BaseComponentLinkRef* target;
             SceneUID          sourceId;
 
         public:
             UnresolvedComponent();
-            UnresolvedComponent(BaseComponentRef* target, SceneUID id);
+            UnresolvedComponent(BaseComponentLinkRef* target, SceneUID id);
 
             bool operator==(const UnresolvedComponent& other) const;
         };
@@ -111,8 +111,8 @@ namespace o2
         Vector<UnresolvedComponent> mUnresolvedComponentsRefs;
         Map<SceneUID, Component*>   mNewComponents;
 
-        Vector<BaseActorRef*>     mRemapActors;
-        Vector<BaseComponentRef*> mRemapComponents;
+        Vector<BaseActorLinkRef*>     mRemapActors;
+        Vector<BaseComponentLinkRef*> mRemapComponents;
 
         int mLockDepth = 0;
 

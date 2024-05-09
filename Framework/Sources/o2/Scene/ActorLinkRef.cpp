@@ -1,15 +1,15 @@
 #include "o2/stdafx.h"
-#include "ActorRef.h"
+#include "ActorLinkRef.h"
 
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Scene.h"
 
 namespace o2
 {
-    BaseActorRef::BaseActorRef()
+    BaseActorLinkRef::BaseActorLinkRef()
     {}
 
-    BaseActorRef::BaseActorRef(const BaseActorRef& other)
+    BaseActorLinkRef::BaseActorLinkRef(const BaseActorLinkRef& other)
     {
         if (other.mRequiredResolveData)
         {
@@ -20,14 +20,14 @@ namespace o2
         ActorRefResolver::RequireRemap(*this);
     }
 
-    BaseActorRef::~BaseActorRef()
+    BaseActorLinkRef::~BaseActorLinkRef()
     {
         mRequiredResolveData = nullptr;
 
         ActorRefResolver::OnActorDestroyed(this);
     }
 
-    BaseActorRef& BaseActorRef::operator=(const BaseActorRef& other)
+    BaseActorLinkRef& BaseActorLinkRef::operator=(const BaseActorLinkRef& other)
     {
         CopyWithoutRemap(other);
         ActorRefResolver::RequireRemap(*this);
@@ -35,40 +35,40 @@ namespace o2
         return *this;
     }
 
-    Actor* BaseActorRef::Get()
+    Actor* BaseActorLinkRef::Get()
     {
         return nullptr;
     }
 
-    const Actor* BaseActorRef::Get() const
+    const Actor* BaseActorLinkRef::Get() const
     {
         return nullptr;
     }
 
-	void BaseActorRef::Set(Actor* actor)
+	void BaseActorLinkRef::Set(Actor* actor)
 	{}
 
-	void BaseActorRef::Destroy()
+	void BaseActorLinkRef::Destroy()
     {
         o2Scene.DestroyActor(Ref(Get()));
     }
 
-    bool BaseActorRef::IsValid() const
+    bool BaseActorLinkRef::IsValid() const
     {
         return Get() != nullptr;
     }
 
-    const Type& BaseActorRef::GetActorType() const
+    const Type& BaseActorLinkRef::GetActorType() const
     {
         return TypeOf(Actor);
     }
 
-    const Type* BaseActorRef::GetActorTypeStatic()
+    const Type* BaseActorLinkRef::GetActorTypeStatic()
     {
         return &TypeOf(Actor);
     }
 
-    bool BaseActorRef::EqualsDelta(const BaseActorRef& obj, const BaseActorRef& origin)
+    bool BaseActorLinkRef::EqualsDelta(const BaseActorLinkRef& obj, const BaseActorLinkRef& origin)
     {
         if (obj.Get() == origin.Get())
             return true;
@@ -79,10 +79,10 @@ namespace o2
         return false;
     }
 
-    void BaseActorRef::CopyWithoutRemap(const BaseActorRef& other)
+    void BaseActorLinkRef::CopyWithoutRemap(const BaseActorLinkRef& other)
     {}
 
-    void BaseActorRef::OnSerialize(DataValue& node) const
+    void BaseActorLinkRef::OnSerialize(DataValue& node) const
     {
         if (auto actor = Get())
         {
@@ -93,7 +93,7 @@ namespace o2
         }
     }
 
-    void BaseActorRef::OnDeserialized(const DataValue& node)
+    void BaseActorLinkRef::OnDeserialized(const DataValue& node)
     {
         if (auto assetIdNode = node.FindMember("AssetId"))
         {
@@ -113,27 +113,27 @@ namespace o2
             Set(nullptr);
     }
 
-    void BaseActorRef::SceneRequireResolveData::RequireResolve(BaseActorRef& ref)
+    void BaseActorLinkRef::SceneRequireResolveData::RequireResolve(BaseActorLinkRef& ref)
     {
         ActorRefResolver::RequireResolve(ref, uid);
     }
 
-    Ref<BaseActorRef::IRequiredResolveData> BaseActorRef::SceneRequireResolveData::Clone() const
+    Ref<BaseActorLinkRef::IRequiredResolveData> BaseActorLinkRef::SceneRequireResolveData::Clone() const
     {
         return mmake<SceneRequireResolveData>(*this);
     }
 
-    void BaseActorRef::AssetRequireResolveData::RequireResolve(BaseActorRef& ref)
+    void BaseActorLinkRef::AssetRequireResolveData::RequireResolve(BaseActorLinkRef& ref)
     {
         ActorRefResolver::RequireResolve(ref, uid);
     }
 
-    Ref<BaseActorRef::IRequiredResolveData> BaseActorRef::AssetRequireResolveData::Clone() const
+    Ref<BaseActorLinkRef::IRequiredResolveData> BaseActorLinkRef::AssetRequireResolveData::Clone() const
     {
         return mmake<AssetRequireResolveData>(*this);
     }
 }
 // --- META ---
 
-DECLARE_CLASS(o2::BaseActorRef, o2__BaseActorRef);
+DECLARE_CLASS(o2::BaseActorLinkRef, o2__BaseActorLinkRef);
 // --- END META ---

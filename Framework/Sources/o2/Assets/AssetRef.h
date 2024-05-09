@@ -42,11 +42,13 @@ namespace o2
 		SERIALIZABLE(BaseAssetRef);
 	};
 
+#define ENABLE_ASSET typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type
+
 	// -----------------------------------------------------------------------------------
 	// Asset reference. Contains asset pointer. Can contain asset instance owned by itself
 	// -----------------------------------------------------------------------------------
 	template<typename _asset_type>
-	class Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type> : public BaseRef<_asset_type>, public BaseAssetRef
+	class Ref<_asset_type, ENABLE_ASSET> : public BaseRef<_asset_type>, public BaseAssetRef
 	{
 	public:
 		using Base = BaseRef<_asset_type>;
@@ -170,56 +172,56 @@ namespace o2
 namespace o2
 {
 	template<typename _asset_type>
-	Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::Ref(const String& path)
+	Ref<_asset_type, ENABLE_ASSET>::Ref(const String& path)
 	{
 		*this = o2Assets.GetAssetRefByType<_asset_type>(path);
 	}
 
 	template<typename _asset_type>
-	Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::Ref(const UID& id)
+	Ref<_asset_type, ENABLE_ASSET>::Ref(const UID& id)
 	{
 		*this = o2Assets.GetAssetRefByType<_asset_type>(id);
 	}
 
 	template<typename _asset_type>
-	const Type& Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::GetAssetType() const
+	const Type& Ref<_asset_type, ENABLE_ASSET>::GetAssetType() const
 	{
 		return TypeOf(_asset_type);
 	}
 
 	template<typename _asset_type>
-	const Type* Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::GetAssetTypeStatic()
+	const Type* Ref<_asset_type, ENABLE_ASSET>::GetAssetTypeStatic()
 	{
 		return &TypeOf(_asset_type);
 	}
 
 	template<typename _asset_type>
-	const Asset* Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::GetAssetBase() const
+	const Asset* Ref<_asset_type, ENABLE_ASSET>::GetAssetBase() const
 	{
 		return BaseRef<_asset_type>::Get();
 	}
 
 	template<typename _asset_type>
-	Asset* Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::GetAssetBase()
+	Asset* Ref<_asset_type, ENABLE_ASSET>::GetAssetBase()
 	{
 		return BaseRef<_asset_type>::Get();
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::SetAssetBase(Asset* asset)
+	void Ref<_asset_type, ENABLE_ASSET>::SetAssetBase(Asset* asset)
 	{
 		*this = Ref(dynamic_cast<_asset_type*>(asset));
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::SetInstance(Asset* asset)
+	void Ref<_asset_type, ENABLE_ASSET>::SetInstance(Asset* asset)
 	{
 		*this = Ref(dynamic_cast<_asset_type*>(asset));
 		mIsInstance = true;
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::CreateInstance()
+	void Ref<_asset_type, ENABLE_ASSET>::CreateInstance()
 	{
 		_asset_type* asset;
 		if (Base::mPtr)
@@ -234,7 +236,7 @@ namespace o2
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::RemoveInstance()
+	void Ref<_asset_type, ENABLE_ASSET>::RemoveInstance()
 	{
 		if (!mIsInstance)
 			return;
@@ -245,7 +247,7 @@ namespace o2
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::SaveInstance(const String& path)
+	void Ref<_asset_type, ENABLE_ASSET>::SaveInstance(const String& path)
 	{
 		if (!mIsInstance)
 			return;
@@ -257,20 +259,20 @@ namespace o2
 	}
 
 	template<typename _asset_type>
-	bool Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::IsInstance() const
+	bool Ref<_asset_type, ENABLE_ASSET>::IsInstance() const
 	{
 		return mIsInstance;
 	}
 
 	template<typename _asset_type>
 	template<typename ... _args>
-	Ref<_asset_type> Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::CreateAsset(_args ... args)
+	Ref<_asset_type> Ref<_asset_type, ENABLE_ASSET>::CreateAsset(_args ... args)
 	{
 		return DynamicCast<_asset_type>(o2Assets.CreateAsset<_asset_type>(args ...));
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::OnSerialize(DataValue& node) const
+	void Ref<_asset_type, ENABLE_ASSET>::OnSerialize(DataValue& node) const
 	{
 		if (mIsInstance)
 		{
@@ -288,7 +290,7 @@ namespace o2
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::OnDeserialized(const DataValue& node)
+	void Ref<_asset_type, ENABLE_ASSET>::OnDeserialized(const DataValue& node)
 	{
 		Base::DecrementRef();
 
@@ -313,19 +315,19 @@ namespace o2
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	void Ref<_asset_type, ENABLE_ASSET>::OnSerializeDelta(DataValue& node, const IObject& origin) const
 	{
 		OnSerialize(node);
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	void Ref<_asset_type, ENABLE_ASSET>::OnDeserializedDelta(const DataValue& node, const IObject& origin)
 	{
 		OnDeserialized(node);
 	}
 
 	template<typename _asset_type>
-	bool Ref<_asset_type, typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type>::IsDeltaAsSingleObject()
+	bool Ref<_asset_type, ENABLE_ASSET>::IsDeltaAsSingleObject()
 	{
 		return true;
 	}

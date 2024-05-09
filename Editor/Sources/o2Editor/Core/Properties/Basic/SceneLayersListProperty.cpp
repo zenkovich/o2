@@ -80,8 +80,8 @@ namespace Editor
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::SceneLayersList>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::SceneLayersListProperty>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::TPropertyField<o2::SceneLayersList>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::SceneLayersListProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::SceneLayersList>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneLayersListProperty, Editor__SceneLayersListProperty);

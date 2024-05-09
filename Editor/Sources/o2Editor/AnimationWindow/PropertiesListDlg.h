@@ -28,7 +28,7 @@ namespace Editor
 		~PropertiesListDlg();
 
 		// Shows animation properties window for actor and animation
-		static void Show(const Ref<AnimationClip>& animation, const ActorRef<>& actor);
+		static void Show(const Ref<AnimationClip>& animation, const Ref<Actor>& actor);
 
 	private:
 		Ref<o2::Window> mWindow;
@@ -78,7 +78,7 @@ namespace Editor
 		AnimationPropertiesTree& operator=(const AnimationPropertiesTree& other);
 
 		// Initializes properties
-		void Initialize(const Ref<AnimationClip>& animation, const ActorRef<>& actor);
+		void Initialize(const Ref<AnimationClip>& animation, const Ref<Actor>& actor);
 
 		// Sets filter and refreshes tree
 		void SetFilter(const WString& filter);
@@ -92,7 +92,7 @@ namespace Editor
 		WString mFilterStr; // Filtering string
 
 		Ref<AnimationClip> mAnimation; // Looking animation
-		ActorRef<>         mActor;     // Looking actor
+		Ref<Actor>         mActor;     // Looking actor
 
 		Ref<NodeData>    mRoot;         // Root properties data node
 		Vector<IObject*> mPassedObject; // Tree processing passed objects
@@ -204,7 +204,7 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationPropertiesTree&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationClip>&, const ActorRef<>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationClip>&, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeTreeNode, const Ref<NodeData>&, IObject*);

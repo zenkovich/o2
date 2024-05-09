@@ -52,7 +52,7 @@ namespace o2
         if (!mPrototypeLink)
             return;
 
-        Vector<ActorRef<>> separatedActors;
+        Vector<Ref<Actor>> separatedActors;
         SeparateActors(separatedActors);
 
         for (auto it = separatedActors.Begin(); it != separatedActors.End();)
@@ -95,7 +95,7 @@ namespace o2
         return prototypeAsset;
     }
 
-    void Actor::SeparateActors(Vector<ActorRef<>>& separatedActors)
+    void Actor::SeparateActors(Vector<Ref<Actor>>& separatedActors)
     {
         for (auto& child : mChildren)
         {
@@ -183,7 +183,7 @@ namespace o2
         mCopyVisitor = mmake<InstantiatePrototypeCloneVisitor>();
     }
 
-    bool Actor::IsLinkedToActor(const ActorRef<>& actor) const
+    bool Actor::IsLinkedToActor(const Ref<Actor>& actor) const
     {
         if (mPrototypeLink)
         {
@@ -200,7 +200,7 @@ namespace o2
         return false;
     }
 
-    ActorRef<> Actor::FindLinkedActor(const ActorRef<>& linkActor)
+    Ref<Actor> Actor::FindLinkedActor(const Ref<Actor>& linkActor)
     {
         if (GetPrototypeLink() == linkActor)
             return Ref(this);
@@ -391,7 +391,7 @@ namespace o2
         }
     }
 
-    void Actor::OnParentChanged(const ActorRef<>& oldParent)
+    void Actor::OnParentChanged(const Ref<Actor>& oldParent)
     {
         ISceneDrawable::OnDrawbleParentChanged();
 
@@ -412,7 +412,7 @@ namespace o2
         }
     }
 
-    void Actor::ProcessReverting(Actor* dest, const Actor* source, const Vector<ActorRef<>>& separatedActors,
+    void Actor::ProcessReverting(Actor* dest, const Actor* source, const Vector<Ref<Actor>>& separatedActors,
                                  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
                                  Map<const Actor*, Actor*>& actorsMap,
                                  Map<const Component*, Component*>& componentsMap,
@@ -427,9 +427,9 @@ namespace o2
 
         for (auto& child : source->mChildren)
         {
-            ActorRef<> newChild;
+            Ref<Actor> newChild;
 
-            newChild = separatedActors.FindOrDefault([&](const ActorRef<>& x) { return x->GetPrototypeLink() == child; });
+            newChild = separatedActors.FindOrDefault([&](const Ref<Actor>& x) { return x->GetPrototypeLink() == child; });
 
             if (!newChild)
                 newChild = mmake<Actor>(dest->IsOnScene() ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
@@ -452,7 +452,7 @@ namespace o2
 
         for (auto& component : source->mComponents)
         {
-            auto matchingComponent = dest->mComponents.FindOrDefault([&](const ComponentRef<Component>& x) { return x->GetPrototypeLink() == component; });
+            auto matchingComponent = dest->mComponents.FindOrDefault([&](const Ref<Component>& x) { return x->GetPrototypeLink() == component; });
             if (matchingComponent)
             {
                 Vector<const FieldInfo*> fields;
@@ -554,7 +554,7 @@ namespace o2
         }
     }
 
-    void Actor::GetComponentFields(const ComponentRef<Component>& component, Vector<const FieldInfo*>& fields)
+    void Actor::GetComponentFields(const Ref<Component>& component, Vector<const FieldInfo*>& fields)
     {
         struct helper
         {

@@ -191,7 +191,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::Button>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Button>);
 // --- META ---
 
 DECLARE_CLASS(o2::Button, o2__Button);

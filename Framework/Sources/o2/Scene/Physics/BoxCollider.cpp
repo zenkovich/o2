@@ -120,7 +120,7 @@ namespace o2
 #endif
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::BoxCollider>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::BoxCollider>);
 // --- META ---
 
 DECLARE_CLASS(o2::BoxCollider, o2__BoxCollider);

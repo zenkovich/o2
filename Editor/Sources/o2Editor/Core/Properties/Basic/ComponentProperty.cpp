@@ -17,19 +17,19 @@
 namespace Editor
 {
 	ComponentProperty::ComponentProperty(RefCounter* refCounter):
-		TPropertyField<ComponentRef<Component>>(refCounter)
+		TPropertyField<Ref<Component>>(refCounter)
     {
 	}
 
 	ComponentProperty::ComponentProperty(RefCounter* refCounter, const ComponentProperty& other) :
-		TPropertyField<ComponentRef<Component>>(refCounter, other)
+		TPropertyField<Ref<Component>>(refCounter, other)
 	{
 		InitializeControls();
 	}
 
 	ComponentProperty& ComponentProperty::operator=(const ComponentProperty& other)
 	{
-		TPropertyField<ComponentRef<Component>>::operator=(other);
+		TPropertyField<Ref<Component>>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
@@ -68,7 +68,7 @@ namespace Editor
 
 	void ComponentProperty::OnTypeSpecialized(const Type& type)
 	{
-		TPropertyField<ComponentRef<Component>>::OnTypeSpecialized(type);
+		TPropertyField<Ref<Component>>::OnTypeSpecialized(type);
 		mComponentType = type.InvokeStatic<const Type*>("GetComponentTypeStatic");
 	}
 
@@ -78,8 +78,8 @@ namespace Editor
 		{
 			if (ptr.second)
 			{
-				ComponentRef<Component> value = GetProxy(ptr.first);
-				ComponentRef<Component> proto = GetProxy(ptr.second);
+				Ref<Component> value = GetProxy(ptr.first);
+				Ref<Component> proto = GetProxy(ptr.second);
 
 				if (value && value->GetPrototypeLink())
 				{
@@ -125,7 +125,7 @@ namespace Editor
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
 			return;
 
-		ComponentRef<Component> sourceComponent = GetProxy(source);
+		Ref<Component> sourceComponent = GetProxy(source);
 		auto topSourceActor = sourceComponent->GetOwnerActor();
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent().Lock();
@@ -288,9 +288,9 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::ComponentRef<Component>>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::ComponentProperty>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::TPropertyField<o2::ComponentRef<Component>>>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::LinkRef<Component>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ComponentProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::LinkRef<Component>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ComponentProperty, Editor__ComponentProperty);

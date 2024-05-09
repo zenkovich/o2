@@ -219,7 +219,7 @@ namespace Editor
 					AddChild(mRevertBtn);
 
 				String path;
-				ActorRef<> itActor = mRevertBtn;
+				Ref<Actor> itActor = mRevertBtn;
 				while (itActor != Ref(this))
 				{
 					path = "child/" + itActor->GetName() + "/" + path;
@@ -259,7 +259,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::IPropertyField>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::IPropertyField>);
 // --- META ---
 
 DECLARE_CLASS(Editor::IPropertyField, Editor__IPropertyField);

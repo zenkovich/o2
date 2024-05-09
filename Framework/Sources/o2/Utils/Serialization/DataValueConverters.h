@@ -523,7 +523,7 @@ namespace o2
     };
 
     // ---------------------
-    // Ref<> types converter
+    // Ref<Actor> types converter
     // ---------------------
     template<typename T>
     struct DataValue::Converter<T, typename std::enable_if<IsRef<T>::value && !std::is_const<T>::value &&

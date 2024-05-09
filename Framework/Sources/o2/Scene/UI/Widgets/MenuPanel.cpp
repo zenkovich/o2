@@ -498,7 +498,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::MenuPanel>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::MenuPanel>);
 // --- META ---
 
 DECLARE_CLASS(o2::MenuPanel, o2__MenuPanel);

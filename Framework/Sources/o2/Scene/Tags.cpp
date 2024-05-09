@@ -36,7 +36,7 @@ namespace o2
         mName = name;
     }
 
-    void Tag::AddActor(const ActorRef<>& actor)
+    void Tag::AddActor(const Ref<Actor>& actor)
     {
         if (mActors.Contains(actor.GetRef()))
             return;
@@ -45,7 +45,7 @@ namespace o2
         actor->tags.mTags.Add(Ref(this));
     }
 
-    void Tag::RemoveActor(const ActorRef<>& actor)
+    void Tag::RemoveActor(const Ref<Actor>& actor)
     {
         if (!actor)
             return;
@@ -62,13 +62,13 @@ namespace o2
         mActors.Clear();
     }
 
-    Tag& Tag::operator-=(const ActorRef<>& actor)
+    Tag& Tag::operator-=(const Ref<Actor>& actor)
     {
         RemoveActor(actor);
         return *this;
     }
 
-    Tag& Tag::operator+=(const ActorRef<>& actor)
+    Tag& Tag::operator+=(const Ref<Actor>& actor)
     {
         AddActor(actor);
         return *this;

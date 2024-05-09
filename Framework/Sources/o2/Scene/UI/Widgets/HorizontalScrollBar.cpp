@@ -356,7 +356,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::HorizontalScrollBar>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::HorizontalScrollBar>);
 // --- META ---
 
 DECLARE_CLASS(o2::HorizontalScrollBar, o2__HorizontalScrollBar);

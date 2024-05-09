@@ -875,14 +875,14 @@ namespace o2
 		return "Context";
 	}
 
-	void ContextMenuItem::OnChildAdded(const ActorRef<Widget>& child)
+	void ContextMenuItem::OnChildAdded(const Ref<Widget>& child)
 	{
 		if (child->GetType() == TypeOf(ContextMenu))
 			mSubMenu = DynamicCast<ContextMenu>(child);
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::ContextMenu>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::ContextMenu>);
 // --- META ---
 
 DECLARE_CLASS(o2::ContextMenu, o2__ContextMenu);

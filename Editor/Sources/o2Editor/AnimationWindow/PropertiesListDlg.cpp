@@ -24,7 +24,7 @@ namespace Editor
 	PropertiesListDlg::~PropertiesListDlg()
 	{}
 
-	void PropertiesListDlg::Show(const Ref<AnimationClip>& animation, const ActorRef<>& actor)
+	void PropertiesListDlg::Show(const Ref<AnimationClip>& animation, const Ref<Actor>& actor)
 	{
 		Instance().mPropertiesTree->Initialize(animation, actor);
 		Instance().mFilter->SetText("");
@@ -84,7 +84,7 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationPropertiesTree::Initialize(const Ref<AnimationClip>& animation, const ActorRef<>& actor)
+	void AnimationPropertiesTree::Initialize(const Ref<AnimationClip>& animation, const Ref<Actor>& actor)
 	{
 		mFilterStr = "";
 		mRoot = mmake<NodeData>();
@@ -387,7 +387,7 @@ namespace Editor
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::AnimationPropertiesTreeNode>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AnimationPropertiesTreeNode>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationPropertiesTree, Editor__AnimationPropertiesTree);

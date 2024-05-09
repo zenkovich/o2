@@ -257,7 +257,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::PopupWidget>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::PopupWidget>);
 // --- META ---
 
 DECLARE_CLASS(o2::PopupWidget, o2__PopupWidget);

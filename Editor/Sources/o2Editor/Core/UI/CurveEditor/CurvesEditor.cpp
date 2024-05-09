@@ -2243,7 +2243,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::CurvesEditor>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::CurvesEditor>);
 // --- META ---
 
 DECLARE_CLASS(Editor::CurvesEditor, Editor__CurvesEditor);

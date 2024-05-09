@@ -164,7 +164,7 @@ namespace o2
         void BindHandlesInteractableToVisibility();
 
         // Called when child widget was selected
-        void OnChildFocused(const WidgetRef& child) override;
+        void OnChildFocused(const Ref<Widget>& child) override;
 
         // Called when cursor pressed on this
         void OnCursorPressed(const Input::Cursor& cursor) override;
@@ -247,7 +247,7 @@ CLASS_METHODS_META(o2::Window)
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeHandles);
     FUNCTION().PROTECTED().SIGNATURE(void, SetHandlesInteractable, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, BindHandlesInteractableToVisibility);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildFocused, const WidgetRef&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildFocused, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
 }
 END_META;

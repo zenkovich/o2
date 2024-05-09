@@ -361,7 +361,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::Toggle>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Toggle>);
 // --- META ---
 
 ENUM_META(o2::ToggleGroup::Type)

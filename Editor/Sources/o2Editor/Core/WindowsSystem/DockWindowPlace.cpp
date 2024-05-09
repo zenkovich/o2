@@ -255,7 +255,7 @@ namespace Editor
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::DockWindowPlace>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::DockWindowPlace>);
 // --- META ---
 
 DECLARE_CLASS(Editor::DockWindowPlace, Editor__DockWindowPlace);

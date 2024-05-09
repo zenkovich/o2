@@ -197,7 +197,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::CameraActor>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::CameraActor>);
 // --- META ---
 
 ENUM_META(o2::CameraActor::Type)

@@ -432,7 +432,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::AnimationTimeline>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AnimationTimeline>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationTimeline, Editor__AnimationTimeline);

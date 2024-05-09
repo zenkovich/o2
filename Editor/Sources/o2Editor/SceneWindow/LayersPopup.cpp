@@ -376,7 +376,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::LayersPopup>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::LayersPopup>);
 // --- META ---
 
 DECLARE_CLASS(Editor::LayersPopup, Editor__LayersPopup);

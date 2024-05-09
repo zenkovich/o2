@@ -48,7 +48,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::SpoilerWithHead>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::SpoilerWithHead>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SpoilerWithHead, Editor__SpoilerWithHead);

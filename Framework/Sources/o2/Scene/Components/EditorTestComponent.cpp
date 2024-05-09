@@ -18,7 +18,7 @@ void o2::EditorTestComponent::OnStart()
 {
     mTestInsideRef = mmake<TestInside>();
 }
-DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::EditorTestComponent>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::EditorTestComponent>);
 // --- META ---
 
 ENUM_META(o2::EditorTestComponent::TestEnum)

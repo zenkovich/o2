@@ -1,5 +1,5 @@
 #pragma once
-#include "o2/Scene/ActorRef.h"
+#include "o2/Scene/ActorLinkRef.h"
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Function/ISerializableFunction.h"
 #include "o2/Utils/Serialization/Serializable.h"

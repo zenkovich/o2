@@ -176,7 +176,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::FrameScrollView>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::FrameScrollView>);
 // --- META ---
 
 DECLARE_CLASS(Editor::FrameScrollView, Editor__FrameScrollView);

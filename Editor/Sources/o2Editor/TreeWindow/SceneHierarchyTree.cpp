@@ -192,7 +192,7 @@ namespace Editor
 		if (mWatchEditor)
 			return EditorUIRoot.GetRootWidget()->GetEditableChildren().Convert<void*>([](auto& x) { return x.Get(); });
 
-		return o2Scene.GetRootActors().Convert<void*>([](const ActorRef<>& x) { return DynamicCast<SceneEditableObject>(x).Get(); });
+		return o2Scene.GetRootActors().Convert<void*>([](const Ref<Actor>& x) { return DynamicCast<SceneEditableObject>(x).Get(); });
 	}
 
 	String SceneHierarchyTree::GetObjectDebug(void* object)
@@ -490,8 +490,8 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::SceneHierarchyTree>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::SceneHierarchyTreeNode>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::SceneHierarchyTree>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::SceneHierarchyTreeNode>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneHierarchyTree, Editor__SceneHierarchyTree);

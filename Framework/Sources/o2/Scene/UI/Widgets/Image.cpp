@@ -84,7 +84,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::Image>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Image>);
 // --- META ---
 
 DECLARE_CLASS(o2::Image, o2__Image);

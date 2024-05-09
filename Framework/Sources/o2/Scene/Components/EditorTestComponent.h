@@ -30,7 +30,7 @@ namespace o2
 			WString mWString;                   // @SERIALIZABLE @SCRIPTABLE
 			bool mBool = true;                  // @SERIALIZABLE @SCRIPTABLE
              
-            ComponentRef<Component> mComponent; // @SERIALIZABLE @SCRIPTABLE
+            Ref<Component> mComponent; // @SERIALIZABLE @SCRIPTABLE
             Ref<RigidBody> mRigidBody; // @SERIALIZABLE @SCRIPTABLE
 
             bool operator==(const TestInside& other) const { return false; }
@@ -60,10 +60,10 @@ namespace o2
         DataAssetRef mDataAsset;                            // @SERIALIZABLE
         AnimationAssetRef mAnimationAsset;                  // @SERIALIZABLE
         Ref<Sprite> mSprite = mmake<Sprite>();              // @SERIALIZABLE @DONT_DELETE
-        ActorRef<> mActor;                                  // @SERIALIZABLE
+        Ref<Actor> mActor;                                  // @SERIALIZABLE
         TagGroup mTags;                                     // @SERIALIZABLE
         Ref<SceneLayer> mLayer;                             // @SERIALIZABLE
-        ComponentRef<Component> mComponent;                          // @SERIALIZABLE
+        Ref<Component> mComponent;                          // @SERIALIZABLE
         Ref<RigidBody> mRigidBody;                          // @SERIALIZABLE
         Ref<ImageComponent> mImageComponent;                // @SERIALIZABLE
         Ref<ParticlesEmitterComponent> mParticlesComponent; // @SERIALIZABLE
@@ -84,7 +84,7 @@ namespace o2
         Vector<int> mIntVector;                    // @SERIALIZABLE
         Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
         Vector<TestInside*> mTestInsideptrsVector; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-        Vector<ActorRef<>> mActorVector;           // @SERIALIZABLE
+        Vector<Ref<Actor>> mActorVector;           // @SERIALIZABLE
         Vector<AnimationAssetRef> mAssetsVector;   // @SERIALIZABLE
 
         Vector<Vector<TestInside*>> mVectorOfVector; // @SERIALIZABLE

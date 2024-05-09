@@ -219,13 +219,13 @@ namespace o2
         return res;
     }
 
-    void HorizontalLayout::OnChildAdded(const ActorRef<Widget>& child)
+    void HorizontalLayout::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
         Widget::OnChildAdded(child);
     }
 
-    void HorizontalLayout::OnChildRemoved(const ActorRef<Widget>& child)
+    void HorizontalLayout::OnChildRemoved(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
         Widget::OnChildRemoved(child);
@@ -465,7 +465,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::HorizontalLayout>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::HorizontalLayout>);
 // --- META ---
 
 DECLARE_CLASS(o2::HorizontalLayout, o2__HorizontalLayout);

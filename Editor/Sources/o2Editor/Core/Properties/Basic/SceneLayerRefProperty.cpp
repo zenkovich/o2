@@ -132,8 +132,8 @@ namespace Editor
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<o2::SceneLayer>>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::SceneLayerRefProperty>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::TPropertyField<o2::Ref<o2::SceneLayer>>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::SceneLayerRefProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Ref<o2::SceneLayer>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneLayerRefProperty, Editor__SceneLayerRefProperty);

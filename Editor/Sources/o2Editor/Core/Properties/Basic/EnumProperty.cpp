@@ -85,7 +85,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::EnumProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::EnumProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::EnumProperty, Editor__EnumProperty);

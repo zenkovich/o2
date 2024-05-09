@@ -913,7 +913,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::WidgetDragHandle>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::WidgetDragHandle>);
 // --- META ---
 
 DECLARE_CLASS(o2::DragHandle, o2__DragHandle);

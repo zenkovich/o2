@@ -164,10 +164,10 @@ namespace o2
         void OnDeserialized(const DataValue& node) override;
 
         // Called when child widget was added
-        void OnChildAdded(const ActorRef<Widget>& child) override;
+        void OnChildAdded(const Ref<Widget>& child) override;
 
         // Called when child widget was removed
-        void OnChildRemoved(const ActorRef<Widget>& child) override;
+        void OnChildRemoved(const Ref<Widget>& child) override;
 
         // Sets children world rectangle. Moves children rectangle to scroll position offset
         void SetChildrenWorldRect(const RectF& childrenWorldRect) override;
@@ -290,8 +290,8 @@ CLASS_METHODS_META(o2::ScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const ActorRef<Widget>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const ActorRef<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetChildrenWorldRect, const RectF&);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckClipping, const RectF&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);

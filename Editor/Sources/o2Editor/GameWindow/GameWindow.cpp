@@ -211,7 +211,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::GameWindow::GameView>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::GameWindow::GameView>);
 // --- META ---
 
 DECLARE_CLASS(Editor::GameWindow, Editor__GameWindow);

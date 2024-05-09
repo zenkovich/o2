@@ -354,7 +354,7 @@ namespace o2
     };
 
     // ----------------------
-    // Reference type (Ref<>)
+    // Reference type (Ref<Actor>)
     // ----------------------
     class ReferenceType : public Type
     {

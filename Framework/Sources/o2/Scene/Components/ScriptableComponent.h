@@ -76,7 +76,7 @@ namespace o2
         void OnDeserialized(const DataValue& node) override;
 
         // Sets owner actor
-        void SetOwnerActor(const ActorRef<>& actor) override;
+        void SetOwnerActor(const Ref<Actor>& actor) override;
 
         // Called when actor was included to scene
         void OnAddToScene() override;
@@ -129,7 +129,7 @@ CLASS_METHODS_META(o2::ScriptableComponent)
     FUNCTION().PROTECTED().SIGNATURE(void, LoadScriptAndCreateObject);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const ActorRef<>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);

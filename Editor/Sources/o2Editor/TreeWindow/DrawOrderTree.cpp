@@ -561,8 +561,8 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::DrawOrderTree>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::DrawOrderTreeNode>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::DrawOrderTree>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::DrawOrderTreeNode>);
 // --- META ---
 
 ENUM_META(Editor::DrawOrderTree::OrderTreeNode::Type)

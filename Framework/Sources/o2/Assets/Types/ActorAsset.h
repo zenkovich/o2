@@ -1,7 +1,7 @@
 #pragma once
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetRef.h"
-#include "o2/Scene/ActorRef.h"
+#include "o2/Scene/ActorLinkRef.h"
 
 namespace o2
 {
@@ -17,7 +17,7 @@ namespace o2
         ActorAsset();
 
         // Constructor
-        ActorAsset(const ActorRef<>& actor);
+        ActorAsset(const Ref<Actor>& actor);
 
         // Copy-constructor
         ActorAsset(const ActorAsset& other);
@@ -29,13 +29,13 @@ namespace o2
         ActorAsset& operator=(const ActorAsset& asset);
 
         // Instantiates actor toscene @SCRIPTABLE
-        ActorRef<> Instantiate() const;
+        Ref<Actor> Instantiate() const;
 
         // Returns actor
-        const ActorRef<>& GetActor() const;
+        const Ref<Actor>& GetActor() const;
 
         // Sets actor
-        void SetActor(const ActorRef<>& actor);
+        void SetActor(const Ref<Actor>& actor);
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
@@ -53,7 +53,7 @@ namespace o2
         CLONEABLE_REF(ActorAsset);
 
     protected:
-        ActorRef<> mActor; // Asset data 
+        Ref<Actor> mActor; // Asset data 
 
     protected:
         // Itis called when UID has changed; updates actor asset id
@@ -84,11 +84,11 @@ CLASS_METHODS_META(o2::ActorAsset)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ActorRef<>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Actor>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAsset&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorRef<>, Instantiate);
-    FUNCTION().PUBLIC().SIGNATURE(const ActorRef<>&, GetActor);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetActor, const ActorRef<>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, Instantiate);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Actor>&, GetActor);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActor, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

@@ -54,7 +54,7 @@ namespace Editor
 		void SetAnimationEditable(const Ref<IEditableAnimation>& editable);
 
 		// Sets target actor
-		void SetTarget(const ActorRef<>& actor);
+		void SetTarget(const Ref<Actor>& actor);
 
 		// Sets curves or handles mode
 		void SetCurvesMode(bool enabled);
@@ -66,7 +66,7 @@ namespace Editor
 		float mTreeViewWidth = 325.0f;    // Width of tree area. Changed by dragable separator
 		float mMinTreeViewWidth = 250.0f; // Minimal tree width
 
-		ActorRef<>           mTargetActor;       // Target actor on animation
+		Ref<Actor>           mTargetActor;       // Target actor on animation
 		Ref<AnimationPlayer> mPlayer;            // Animation player
 		bool                 mOwnPlayer = false; // Is player owned by this
 		Ref<AnimationClip>   mAnimation;         // Editing animation
@@ -208,7 +208,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&, const Ref<AnimationPlayer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationEditable, const Ref<IEditableAnimation>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, const ActorRef<>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurvesMode, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsCurvesMode);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);

@@ -36,7 +36,7 @@ namespace o2
             UIManager::RegisterFocusableWidget(this);
     }
 
-    Widget::Widget(RefCounter* refCounter, Vector<ComponentRef<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+    Widget::Widget(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(refCounter, mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
     {
 #if IS_EDITOR
@@ -130,7 +130,7 @@ namespace o2
 	Widget::~Widget()
     {
         if (mParent)
-            mParent.Lock()->OnChildRemoved(ActorRef(this));
+            mParent.Lock()->OnChildRemoved(Ref(this));
 
         for (auto& layer : mLayers)
             layer->mOwnerWidget = nullptr;
@@ -570,7 +570,7 @@ namespace o2
         return mChildWidgets;
     }
 
-    ActorRef<> Widget::FindActorById(SceneUID id)
+    Ref<Actor> Widget::FindActorById(SceneUID id)
     {
         if (auto res = Actor::FindActorById(id))
             return res;
@@ -978,7 +978,7 @@ namespace o2
     void Widget::UpdateVisibility(bool updateLayout /*= true*/)
     {}
 
-    void Widget::OnChildFocused(const WidgetRef& child)
+    void Widget::OnChildFocused(const Ref<Widget>& child)
     {
         if (mParentWidget)
             mParentWidget.Lock()->OnChildFocused(child);
@@ -1059,35 +1059,35 @@ namespace o2
         mTopDrawingLayers.Sort([](auto& a, auto& b) { return a->mDepth < b->mDepth; });
     }
 
-    void Widget::SetParentWidget(const WidgetRef& widget)
+    void Widget::SetParentWidget(const Ref<Widget>& widget)
     {
         SetParent(widget);
     }
 
-    WidgetRef Widget::GetChildWidget(const String& path) const
+    Ref<Widget> Widget::GetChildWidget(const String& path) const
     {
         auto actor = GetChild(path);
         return DynamicCast<Widget>(actor);
     }
 
-    ActorRef<> Widget::AddChild(const ActorRef<>& actor)
+    Ref<Actor> Widget::AddChild(const Ref<Actor>& actor)
     {
         return Actor::AddChild(actor);
     }
 
-    ActorRef<> Widget::AddChild(const ActorRef<>& actor, int index)
+    Ref<Actor> Widget::AddChild(const Ref<Actor>& actor, int index)
     {
         Actor::AddChild(actor, index);
         UpdateChildWidgetsList();
         return actor;
     }
 
-    WidgetRef Widget::AddChildWidget(const WidgetRef& widget)
+    Ref<Widget> Widget::AddChildWidget(const Ref<Widget>& widget)
     {
         return DynamicCast<Widget>(AddChild(widget));
     }
 
-    WidgetRef Widget::AddChildWidget(const WidgetRef& widget, int position)
+    Ref<Widget> Widget::AddChildWidget(const Ref<Widget>& widget, int position)
     {
         return DynamicCast<Widget>(AddChild(widget, position));
     }
@@ -1116,18 +1116,18 @@ namespace o2
         return res;
     }
 
-    Map<String, WidgetRef> Widget::GetAllChilds()
+    Map<String, Ref<Widget>> Widget::GetAllChilds()
     {
-        Map<String, WidgetRef> res;
+        Map<String, Ref<Widget>> res;
         for (auto& child : mChildWidgets)
             res.Add(child->GetName(), child);
 
         return res;
     }
 
-    Map<String, WidgetRef> Widget::GetAllInternalWidgets()
+    Map<String, Ref<Widget>> Widget::GetAllInternalWidgets()
     {
-        Map<String, WidgetRef> res;
+        Map<String, Ref<Widget>> res;
         for (auto& child : mInternalWidgets)
             res.Add(child->GetName(), child);
 
@@ -1158,7 +1158,7 @@ namespace o2
             AddState(state);
     }
 
-    void Widget::OnParentChanged(const ActorRef<>& oldParent)
+    void Widget::OnParentChanged(const Ref<Actor>& oldParent)
     {
         layout->SetDirty();
 
@@ -1175,11 +1175,11 @@ namespace o2
         SortInheritedDrawables();
     }
 
-    void Widget::OnChildAdded(const ActorRef<>& child)
+    void Widget::OnChildAdded(const Ref<Actor>& child)
     {
         layout->SetDirty(false);
 
-        WidgetRef widget = DynamicCast<Widget>(child);
+        Ref<Widget> widget = DynamicCast<Widget>(child);
         if (widget)
         {
             UpdateChildWidgetsList();
@@ -1190,10 +1190,10 @@ namespace o2
         Actor::OnChildAdded(child);
     }
 
-    void Widget::OnChildAdded(const ActorRef<Widget>& child)
+    void Widget::OnChildAdded(const Ref<Widget>& child)
     {}
 
-    void Widget::OnChildRemoved(const ActorRef<>& child)
+    void Widget::OnChildRemoved(const Ref<Actor>& child)
     {
         layout->SetDirty();
 
@@ -1209,7 +1209,7 @@ namespace o2
         Actor::OnChildRemoved(child);
     }
 
-    void Widget::OnChildRemoved(const ActorRef<Widget>& child)
+    void Widget::OnChildRemoved(const Ref<Widget>& child)
     {}
 
     void Widget::OnRemoveFromScene()
@@ -1329,25 +1329,25 @@ namespace o2
             child->UpdateResEnabledInHierarchy(withChildren);
     }
 
-    void Widget::SetInternalParent(const WidgetRef& parent, bool worldPositionStays /*= false*/)
+    void Widget::SetInternalParent(const Ref<Widget>& parent, bool worldPositionStays /*= false*/)
     {
         SetParent(parent, worldPositionStays);
 
         if (parent)
         {
-            auto thisPtr = WidgetRef(this);
+            auto thisPtr = Ref<Widget>(this);
             parent->mChildren.Remove(thisPtr);
             parent->mChildWidgets.Remove(thisPtr);
             parent->mInternalWidgets.Add(thisPtr);
         }
     }
 
-    void Widget::AddInternalWidget(const WidgetRef& widget, bool worldPositionStays /*= false*/)
+    void Widget::AddInternalWidget(const Ref<Widget>& widget, bool worldPositionStays /*= false*/)
     {
         widget->SetInternalParent(Ref(this), worldPositionStays);
     }
 
-    WidgetRef Widget::GetInternalWidget(const String& path) const
+    Ref<Widget> Widget::GetInternalWidget(const String& path) const
     {
         int delPos = path.Find("/");
         String pathPart = path.SubStr(0, delPos);
@@ -1379,14 +1379,14 @@ namespace o2
         return nullptr;
     }
 
-    WidgetRef Widget::FindInternalWidget(const String& name) const
+    Ref<Widget> Widget::FindInternalWidget(const String& name) const
     {
         for (auto& widget : mInternalWidgets)
         {
             if (widget->GetName() == name)
                 return widget;
 
-            if (WidgetRef res = widget->FindChildByTypeAndName<Widget>(name))
+            if (Ref<Widget> res = widget->FindChildByTypeAndName<Widget>(name))
                 return res;
         }
 
@@ -1647,7 +1647,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::Widget>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Widget>);
 // --- META ---
 
 DECLARE_CLASS(o2::Widget, o2__Widget);

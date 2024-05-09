@@ -96,7 +96,7 @@ namespace o2
 #endif
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::CircleCollider>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::CircleCollider>);
 // --- META ---
 
 DECLARE_CLASS(o2::CircleCollider, o2__CircleCollider);

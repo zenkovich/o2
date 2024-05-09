@@ -238,7 +238,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::Spoiler>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Spoiler>);
 // --- META ---
 
 DECLARE_CLASS(o2::Spoiler, o2__Spoiler);

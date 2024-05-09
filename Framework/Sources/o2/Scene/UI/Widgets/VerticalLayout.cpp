@@ -223,12 +223,12 @@ namespace o2
         return res;
     }
 
-    void VerticalLayout::OnChildAdded(const ActorRef<Widget>& child)
+    void VerticalLayout::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }
 
-    void VerticalLayout::OnChildRemoved(const ActorRef<Widget>& child)
+    void VerticalLayout::OnChildRemoved(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
     }
@@ -470,7 +470,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::VerticalLayout>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::VerticalLayout>);
 // --- META ---
 
 DECLARE_CLASS(o2::VerticalLayout, o2__VerticalLayout);

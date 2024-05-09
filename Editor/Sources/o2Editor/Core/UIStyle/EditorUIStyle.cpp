@@ -4706,7 +4706,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::AnimationTree>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AnimationTree>);
 // --- META ---
 
 DECLARE_CLASS(Editor::EditorUIStyleBuilder, Editor__EditorUIStyleBuilder);

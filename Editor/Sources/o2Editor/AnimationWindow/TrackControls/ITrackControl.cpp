@@ -74,7 +74,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::ITrackControl>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ITrackControl>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ITrackControl, Editor__ITrackControl);

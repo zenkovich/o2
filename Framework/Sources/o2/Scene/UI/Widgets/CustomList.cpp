@@ -584,7 +584,7 @@ namespace o2
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::CustomList>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::CustomList>);
 // --- META ---
 
 DECLARE_CLASS(o2::CustomList, o2__CustomList);

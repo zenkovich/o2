@@ -144,7 +144,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::Vec2KeyFramesTrackControl>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::Vec2KeyFramesTrackControl>);
 // --- META ---
 
 DECLARE_CLASS(Editor::Vec2KeyFramesTrackControl, Editor__Vec2KeyFramesTrackControl);

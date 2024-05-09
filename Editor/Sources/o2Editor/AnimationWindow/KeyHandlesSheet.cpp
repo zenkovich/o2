@@ -742,7 +742,7 @@ namespace Editor
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::KeyHandlesSheet>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::KeyHandlesSheet>);
 // --- META ---
 
 DECLARE_CLASS(Editor::KeyHandlesSheet, Editor__KeyHandlesSheet);

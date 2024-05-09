@@ -157,7 +157,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::DropDown>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::DropDown>);
 // --- META ---
 
 DECLARE_CLASS(o2::DropDown, o2__DropDown);

@@ -113,7 +113,7 @@ namespace o2
         SetBasis(mOwner.Lock()->transform->GetWorldBasis());
     }
 
-    void ImageComponent::SetOwnerActor(const ActorRef<>& actor)
+    void ImageComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }
@@ -144,7 +144,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::ImageComponent>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::ImageComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::ImageComponent, o2__ImageComponent);

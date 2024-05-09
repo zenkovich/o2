@@ -127,10 +127,10 @@ namespace o2
         float GetHeightWeightWithChildren() const override;
 
         // Called when child widget was added
-        void OnChildAdded(const ActorRef<Widget>& child) override;
+        void OnChildAdded(const Ref<Widget>& child) override;
 
         // Called when child widget was removed
-        void OnChildRemoved(const ActorRef<Widget>& child) override;
+        void OnChildRemoved(const Ref<Widget>& child) override;
 
         // Invokes required function for childs arranging
         virtual void RearrangeChilds();
@@ -211,8 +211,8 @@ CLASS_METHODS_META(o2::VerticalLayout)
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinWidthWithChildren);
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinHeightWithChildren);
     FUNCTION().PROTECTED().SIGNATURE(float, GetHeightWeightWithChildren);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const ActorRef<Widget>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const ActorRef<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromTopToBottom);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromBottomToTop);

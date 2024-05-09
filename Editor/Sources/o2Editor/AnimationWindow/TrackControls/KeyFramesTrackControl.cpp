@@ -5,10 +5,10 @@ DECLARE_TEMPLATE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<float
 DECLARE_TEMPLATE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<bool>>);
 DECLARE_TEMPLATE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<Color4>>);
 DECLARE_TEMPLATE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<Vec2F>>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::KeyFramesTrackControl<AnimationTrack<float>>>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::KeyFramesTrackControl<AnimationTrack<bool>>>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::KeyFramesTrackControl<AnimationTrack<Color4>>>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::KeyFramesTrackControl<AnimationTrack<Vec2F>>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::KeyFramesTrackControl<AnimationTrack<float>>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::KeyFramesTrackControl<AnimationTrack<bool>>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::KeyFramesTrackControl<AnimationTrack<Color4>>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::KeyFramesTrackControl<AnimationTrack<Vec2F>>>);
 
 namespace Editor
 {

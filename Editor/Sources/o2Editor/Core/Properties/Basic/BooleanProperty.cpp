@@ -45,8 +45,8 @@ namespace Editor
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<bool>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::BooleanProperty>);
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::TPropertyField<bool>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::BooleanProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<bool>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::BooleanProperty, Editor__BooleanProperty);

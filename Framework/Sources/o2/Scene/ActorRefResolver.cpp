@@ -2,14 +2,14 @@
 #include "ActorRefResolver.h"
 
 #include "o2/Scene/Actor.h"
-#include "o2/Scene/ActorRef.h"
+#include "o2/Scene/ActorLinkRef.h"
 #include "o2/Scene/Scene.h"
 
 namespace o2
 {
     CREATE_SINGLETON(ActorRefResolver);
 
-    void ActorRefResolver::RequireResolve(BaseActorRef& ref, SceneUID actorId)
+    void ActorRefResolver::RequireResolve(BaseActorLinkRef& ref, SceneUID actorId)
     {
         if (!mInstance)
             return;
@@ -20,7 +20,7 @@ namespace o2
             ref.Set(o2Scene.GetActorByID(actorId).Get());
     }
 
-    void ActorRefResolver::RequireResolve(BaseActorRef& ref, const UID& assetId)
+    void ActorRefResolver::RequireResolve(BaseActorLinkRef& ref, const UID& assetId)
     {
         if (!mInstance)
             return;
@@ -31,7 +31,7 @@ namespace o2
             ref.Set(o2Scene.GetAssetActorByID(assetId).Get());
     }
 
-    void ActorRefResolver::RequireResolve(BaseComponentRef& ref, SceneUID actorId, SceneUID id)
+    void ActorRefResolver::RequireResolve(BaseComponentLinkRef& ref, SceneUID actorId, SceneUID id)
     {
         if (!mInstance)
             return;
@@ -45,7 +45,7 @@ namespace o2
         }
     }
 
-    void ActorRefResolver::RequireResolve(BaseComponentRef& ref, const UID& assetId, SceneUID id)
+    void ActorRefResolver::RequireResolve(BaseComponentLinkRef& ref, const UID& assetId, SceneUID id)
     {
         if (!mInstance)
             return;
@@ -99,7 +99,7 @@ namespace o2
         mInstance->mRemapComponents.Clear();
     }
 
-    void ActorRefResolver::RequireRemap(BaseActorRef& ref)
+    void ActorRefResolver::RequireRemap(BaseActorLinkRef& ref)
     {
         if (!mInstance)
             return;
@@ -110,7 +110,7 @@ namespace o2
         mInstance->mRemapActors.Add(&ref);
     }
 
-    void ActorRefResolver::RequireRemap(BaseComponentRef& ref)
+    void ActorRefResolver::RequireRemap(BaseComponentLinkRef& ref)
     {
         if (!mInstance)
             return;
@@ -225,18 +225,18 @@ namespace o2
         mInstance->mNewComponents[component->GetID()] = component;
     }
 
-    void ActorRefResolver::OnActorDestroyed(const BaseActorRef* ref)
+    void ActorRefResolver::OnActorDestroyed(const BaseActorLinkRef* ref)
     {
         mInstance->mUnresolvedActorsRefs.RemoveFirst([&](auto& x) { return x.target == ref; });
         mInstance->mUnresolvedAssetActorsRefs.RemoveFirst([&](auto& x) { return x.target == ref; });
 
-        mInstance->mRemapActors.Remove(const_cast<BaseActorRef*>(ref));
+        mInstance->mRemapActors.Remove(const_cast<BaseActorLinkRef*>(ref));
     }
 
-    void ActorRefResolver::OnComponentDestroyed(const BaseComponentRef* ref)
+    void ActorRefResolver::OnComponentDestroyed(const BaseComponentLinkRef* ref)
     {
         mInstance->mUnresolvedComponentsRefs.RemoveFirst([&](auto& x) { return x.target == ref; });
-        mInstance->mRemapComponents.Remove(const_cast<BaseComponentRef*>(ref));
+        mInstance->mRemapComponents.Remove(const_cast<BaseComponentLinkRef*>(ref));
     }
 
     bool ActorRefResolver::UnresolvedActor::operator==(const UnresolvedActor& other) const
@@ -244,7 +244,7 @@ namespace o2
         return target == other.target;
     }
 
-    ActorRefResolver::UnresolvedActor::UnresolvedActor(BaseActorRef* target, SceneUID actorId) :
+    ActorRefResolver::UnresolvedActor::UnresolvedActor(BaseActorLinkRef* target, SceneUID actorId) :
         target(target), sourceId(actorId)
     {}
 
@@ -254,7 +254,7 @@ namespace o2
     ActorRefResolver::UnresolvedComponent::UnresolvedComponent()
     {}
 
-    ActorRefResolver::UnresolvedComponent::UnresolvedComponent(BaseComponentRef* target, SceneUID id):
+    ActorRefResolver::UnresolvedComponent::UnresolvedComponent(BaseComponentLinkRef* target, SceneUID id):
         target(target), sourceId(id)
     {}
 
@@ -266,7 +266,7 @@ namespace o2
     ActorRefResolver::UnresolvedAssetActor::UnresolvedAssetActor()
     {}
 
-    ActorRefResolver::UnresolvedAssetActor::UnresolvedAssetActor(BaseActorRef* target, const UID& assetId):
+    ActorRefResolver::UnresolvedAssetActor::UnresolvedAssetActor(BaseActorLinkRef* target, const UID& assetId):
         target(target), sourceAssetId(assetId)
     {}
 

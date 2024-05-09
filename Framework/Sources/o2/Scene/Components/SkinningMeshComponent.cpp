@@ -66,7 +66,7 @@ namespace o2
     {
         mBonesMapping.Clear();
 
-        Function<void(const ActorRef<>)> searchBones = [&searchBones, this](const ActorRef<>& actor) {
+        Function<void(const Ref<Actor>)> searchBones = [&searchBones, this](const Ref<Actor>& actor) {
             if (auto boneComp = actor->GetComponent<SkinningMeshBoneComponent>())
                 mBonesMapping.Add({ boneComp.GetRef(), nullptr });
 
@@ -317,7 +317,7 @@ namespace o2
         return "ui/UI4_image_component.png";
     }
 
-    void SkinningMeshComponent::SetOwnerActor(const ActorRef<>& actor)
+    void SkinningMeshComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }
@@ -355,7 +355,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ComponentRef<o2::SkinningMeshComponent>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::SkinningMeshComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::SkinningMeshComponent, o2__SkinningMeshComponent);

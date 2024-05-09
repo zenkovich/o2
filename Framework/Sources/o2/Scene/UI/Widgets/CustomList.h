@@ -157,8 +157,8 @@ namespace o2
         };
 
     protected:
-        ActorRef<VerticalLayout> mVerLayout;  // Child vertical layout
-        ActorRef<Widget>         mItemSample; // Item sample widget @SERIALIZABLE
+        Ref<VerticalLayout> mVerLayout;  // Child vertical layout
+        Ref<Widget>         mItemSample; // Item sample widget @SERIALIZABLE
 
         bool              mMultiSelection = true; // Is multi selection available @SERIALIZABLE
         Vector<Selection> mSelectedItems;         // Current selected items

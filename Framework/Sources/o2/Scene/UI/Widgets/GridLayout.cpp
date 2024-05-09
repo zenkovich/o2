@@ -181,12 +181,12 @@ namespace o2
         return "Layout";
     }
 
-    void GridLayout::OnChildAdded(const ActorRef<Widget>& child)
+    void GridLayout::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }
 
-    void GridLayout::OnChildRemoved(const ActorRef<Widget>& child)
+    void GridLayout::OnChildRemoved(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
     }
@@ -904,7 +904,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::GridLayout>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::GridLayout>);
 // --- META ---
 
 DECLARE_CLASS(o2::GridLayout, o2__GridLayout);

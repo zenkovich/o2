@@ -351,7 +351,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<o2::Label>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Label>);
 // --- META ---
 
 ENUM_META(o2::Label::HorOverflow)

@@ -502,7 +502,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::ScriptValueProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ScriptValueProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ScriptValueProperty, Editor__ScriptValueProperty);

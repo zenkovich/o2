@@ -80,7 +80,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::TexturePreview>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TexturePreview>);
 // --- META ---
 
 DECLARE_CLASS(Editor::TexturePreview, Editor__TexturePreview);

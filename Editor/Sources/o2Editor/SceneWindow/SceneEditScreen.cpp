@@ -704,7 +704,7 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::SceneEditScreen>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::SceneEditScreen>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneEditScreen, Editor__SceneEditScreen);

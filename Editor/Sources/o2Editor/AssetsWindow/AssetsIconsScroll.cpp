@@ -939,7 +939,7 @@ namespace Editor
                            });
     }
 
-    ActorRef<> AssetsIconsScrollArea::InstantiateAsset(const Ref<ImageAsset>& asset)
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const Ref<ImageAsset>& asset)
     {
         auto actor = mmake<Actor>();
         auto comp = mmake<ImageComponent>(asset);
@@ -948,7 +948,7 @@ namespace Editor
         return actor;
     }
 
-    ActorRef<> AssetsIconsScrollArea::InstantiateAsset(const Ref<ActorAsset>& asset)
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const Ref<ActorAsset>& asset)
     {
         return asset->GetActor()->CloneAsRef<Actor>();
     }
@@ -1069,7 +1069,7 @@ namespace Editor
             Select(object, false);
     }
 
-    ActorRef<> AssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
     {
         if (assetInfo.meta->GetAssetType() == &TypeOf(ImageAsset))
             return InstantiateAsset(Ref<ImageAsset>(assetInfo.meta->ID()));
@@ -1113,7 +1113,7 @@ namespace Editor
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::ActorRef<Editor::AssetsIconsScrollArea>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AssetsIconsScrollArea>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetsIconsScrollArea, Editor__AssetsIconsScrollArea);

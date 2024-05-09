@@ -1,14 +1,14 @@
 #include "o2/stdafx.h"
-#include "ComponentRef.h"
+#include "ComponentLinkRef.h"
 
 #include "o2/Scene/Scene.h"
 
 namespace o2
 {
-    BaseComponentRef::BaseComponentRef()
+    BaseComponentLinkRef::BaseComponentLinkRef()
     {}
 
-    BaseComponentRef::BaseComponentRef(const BaseComponentRef& other)
+    BaseComponentLinkRef::BaseComponentLinkRef(const BaseComponentLinkRef& other)
     {
         if (other.mRequiredResolveData)
         {
@@ -19,41 +19,41 @@ namespace o2
         ActorRefResolver::RequireRemap(*this);
     }
 
-    BaseComponentRef::~BaseComponentRef()
+    BaseComponentLinkRef::~BaseComponentLinkRef()
     {
         mRequiredResolveData = nullptr;
         ActorRefResolver::OnComponentDestroyed(this);
     }
 
-    void BaseComponentRef::Set(Component* component)
+    void BaseComponentLinkRef::Set(Component* component)
     {}
 
-    Component* BaseComponentRef::Get()
+    Component* BaseComponentLinkRef::Get()
     {
         return nullptr;
     }
 
-    const Component* BaseComponentRef::Get() const
+    const Component* BaseComponentLinkRef::Get() const
     {
         return nullptr;
     }
 
-    void BaseComponentRef::Destroy()
+    void BaseComponentLinkRef::Destroy()
     {
-        o2Scene.DestroyComponent(ComponentRef(Get()));
+        o2Scene.DestroyComponent(Ref(Get()));
     }
 
-    const Type& BaseComponentRef::GetComponentType() const
+    const Type& BaseComponentLinkRef::GetComponentType() const
     {
         return TypeOf(Component);
     }
 
-    const Type* BaseComponentRef::GetComponentTypeStatic()
+    const Type* BaseComponentLinkRef::GetComponentTypeStatic()
     {
         return &TypeOf(Component);
     }
 
-    bool BaseComponentRef::EqualsDelta(const BaseComponentRef& obj, const BaseComponentRef& origin)
+    bool BaseComponentLinkRef::EqualsDelta(const BaseComponentLinkRef& obj, const BaseComponentLinkRef& origin)
     {
         if (obj.Get() == origin.Get())
             return true;
@@ -64,10 +64,10 @@ namespace o2
         return false;
     }
 
-    void BaseComponentRef::CopyWithoutRemap(const BaseComponentRef& other)
+    void BaseComponentLinkRef::CopyWithoutRemap(const BaseComponentLinkRef& other)
     {}
 
-    void BaseComponentRef::OnSerialize(DataValue& node) const
+    void BaseComponentLinkRef::OnSerialize(DataValue& node) const
     {
         if (auto component = Get())
         {
@@ -81,7 +81,7 @@ namespace o2
         }
     }
 
-    void BaseComponentRef::OnDeserialized(const DataValue& node)
+    void BaseComponentLinkRef::OnDeserialized(const DataValue& node)
     {
         if (auto assetIdNode = node.FindMember("AssetId"))
         {
@@ -103,22 +103,22 @@ namespace o2
             Set(nullptr);
     }
 
-    void BaseComponentRef::SceneRequireResolveData::RequireResolve(BaseComponentRef& ref)
+    void BaseComponentLinkRef::SceneRequireResolveData::RequireResolve(BaseComponentLinkRef& ref)
     {
         ActorRefResolver::RequireResolve(ref, uid, componentUID);
     }
 
-    Ref<BaseComponentRef::IRequiredResolveData> BaseComponentRef::SceneRequireResolveData::Clone() const
+    Ref<BaseComponentLinkRef::IRequiredResolveData> BaseComponentLinkRef::SceneRequireResolveData::Clone() const
     {
         return mmake<SceneRequireResolveData>(*this);
     }
 
-    void BaseComponentRef::AssetRequireResolveData::RequireResolve(BaseComponentRef& ref)
+    void BaseComponentLinkRef::AssetRequireResolveData::RequireResolve(BaseComponentLinkRef& ref)
     {
         ActorRefResolver::RequireResolve(ref, uid, componentUID);
     }
 
-    Ref<BaseComponentRef::IRequiredResolveData> BaseComponentRef::AssetRequireResolveData::Clone() const
+    Ref<BaseComponentLinkRef::IRequiredResolveData> BaseComponentLinkRef::AssetRequireResolveData::Clone() const
     {
         return mmake<AssetRequireResolveData>(*this);
     }
@@ -126,5 +126,5 @@ namespace o2
 }
 // --- META ---
 
-DECLARE_CLASS(o2::BaseComponentRef, o2__BaseComponentRef);
+DECLARE_CLASS(o2::BaseComponentLinkRef, o2__BaseComponentLinkRef);
 // --- END META ---
