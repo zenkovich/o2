@@ -313,7 +313,7 @@ namespace o2
     {
         Vector<Ref<SceneEditableObject>> res;
         for (auto& child : mChildren) {
-            res.Add(DynamicCast<SceneEditableObject>(child.GetRef()));
+            res.Add(DynamicCast<SceneEditableObject>(child));
         }
 
         return res;

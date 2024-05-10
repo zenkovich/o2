@@ -154,7 +154,7 @@ namespace o2
             mDestroyActors.Add(actor);
 
 #if IS_EDITOR
-            mChangedObjects.Remove(actor.GetRef());
+            mChangedObjects.Remove(actor);
 #endif
         }
     }
@@ -353,17 +353,15 @@ namespace o2
         if (!actor->mParent)
             mRootActors.Add(actor);
 
-        auto& actorRef = actor.GetRef();
-
-        mAllActors.Add(actorRef);
+        mAllActors.Add(actor);
         mActorsMap[actor->mId] = actor;
 
         actor->OnAddToScene();
 
 #if IS_EDITOR
-        mChangedObjects.Add(actorRef);
-        AddEditableObjectToScene(actorRef);
-        onAddedToScene(actorRef);
+        mChangedObjects.Add(actor);
+        AddEditableObjectToScene(actor);
+        onAddedToScene(actor);
 #endif
     }
 
@@ -372,9 +370,7 @@ namespace o2
         if (!actor->mParent)
             mRootActors.Remove(actor);
 
-		auto& actorRef = actor.GetRef();
-
-        mAllActors.Remove(actorRef);
+        mAllActors.Remove(actor);
         mActorsMap.Remove(actor->mId);
 
         mStartActors.Remove(actor);
@@ -384,9 +380,9 @@ namespace o2
 
 #if IS_EDITOR
         if (!keepEditorObjects)
-            RemoveEditableObjectFromScene(actorRef);
+            RemoveEditableObjectFromScene(actor);
 
-        OnObjectRemoveFromScene(actorRef);
+        OnObjectRemoveFromScene(actor);
 #endif
     }
 
@@ -933,7 +929,7 @@ namespace o2
         if (!mPrototypeLinksCache.ContainsKey(assetRef))
             mPrototypeLinksCache.Add(assetRef, Vector<WeakRef<Actor>>());
 
-        mPrototypeLinksCache[assetRef].Add(actor.GetRef());
+        mPrototypeLinksCache[assetRef].Add(actor);
     }
 
     void Scene::OnActorPrototypeBroken(Actor* actor)

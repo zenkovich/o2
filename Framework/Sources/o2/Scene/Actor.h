@@ -56,8 +56,8 @@ namespace o2
         PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE @ANIMATABLE
         GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is actor enabled in hierarchy getter
 
-        GETTER(Vector<LinkRef<Actor>>, children, GetChildren);             // Children array getter
-        GETTER(Vector<LinkRef<Component>>, components, GetComponents); // Components array getter
+        GETTER(Vector<Ref<Actor>>, children, GetChildren);             // Children array getter
+        GETTER(Vector<Ref<Component>>, components, GetComponents); // Components array getter
 
         ACCESSOR(Ref<Actor>, child, String, GetChild, GetAllChilds);                     // Children accessor
         ACCESSOR(Ref<Component>, component, String, GetComponent, GetAllComponents); // Component accessor by type name
@@ -146,7 +146,7 @@ namespace o2
         Ref<ActorAsset> GetPrototypeDirectly() const;
 
         // Returns prototype link pointer
-        LinkRef<Actor> GetPrototypeLink() const;
+        Ref<Actor> GetPrototypeLink() const;
 
         // Sets scene layer
         void SetLayer(const Ref<SceneLayer>& layer);
@@ -224,7 +224,7 @@ namespace o2
         Ref<_type> FindChildByType(bool searchInChildren = true) const;
 
         // Returns children array @SCRIPTABLE
-		const Vector<LinkRef<Actor>>& GetChildren() const;
+		const Vector<Ref<Actor>>& GetChildren() const;
 
         // Returns all children actors with their children
 		virtual void GetAllChildrenActors(Vector<Ref<Actor>>& actors);
@@ -285,7 +285,7 @@ namespace o2
         Vector<Ref<_type>> GetComponentsInChildren() const;
 
         // Returns all components @SCRIPTABLE
-        const Vector<LinkRef<Component>>& GetComponents() const;
+        const Vector<Ref<Component>>& GetComponents() const;
 
         // Beginning serialization callback
         void SerializeBasicOverride(DataValue& node) const;
@@ -350,9 +350,9 @@ namespace o2
         WeakRef<Actor>  mPrototypeLink; // Prototype link actor. Links to source actor from prototype
 
         WeakRef<Actor>         mParent;   // Parent actor 
-        Vector<LinkRef<Actor>> mChildren; // Children actors 
+        Vector<Ref<Actor>> mChildren; // Children actors 
 
-        Vector<LinkRef<Component>> mComponents; // Components vector 
+        Vector<Ref<Component>> mComponents; // Components vector 
 
         Vector<Ref<DrawableComponent>> mDrawComponents; // Drawable components vector
 
@@ -857,7 +857,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE(void, SetPrototype, Ref<ActorAsset>);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<ActorAsset>, GetPrototype);
     FUNCTION().PUBLIC().SIGNATURE(Ref<ActorAsset>, GetPrototypeDirectly);
-    FUNCTION().PUBLIC().SIGNATURE(LinkRef<Actor>, GetPrototypeLink);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetPrototypeLink);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayer, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Ref<SceneLayer>&, GetLayer);
@@ -879,7 +879,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, GetChild, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, FindChild, const String&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, FindChild, const Function<bool(const Ref<Actor>& child)>&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<LinkRef<Actor>>&, GetChildren);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Ref<Actor>>&, GetChildren);
     FUNCTION().PUBLIC().SIGNATURE(void, GetAllChildrenActors, Vector<Ref<Actor>>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, const Ref<Actor>&, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllChildren);
@@ -894,7 +894,7 @@ CLASS_METHODS_META(o2::Actor)
 #if  IS_SCRIPTING_SUPPORTED
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Component>, GetComponent, const ScriptValue&);
 #endif
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<LinkRef<Component>>&, GetComponents);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Ref<Component>>&, GetComponents);
     FUNCTION().PUBLIC().SIGNATURE(void, SerializeBasicOverride, DataValue&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeserializeBasicOverride, const DataValue&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(void, SetDefaultCreationMode, ActorCreateMode);

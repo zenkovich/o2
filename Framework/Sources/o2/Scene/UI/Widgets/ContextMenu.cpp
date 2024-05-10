@@ -483,7 +483,7 @@ namespace o2
 	void ContextMenu::RemoveItem(int position)
 	{
 		if (position > 0 && position < mItemsLayout->GetChildren().Count())
-			mItemsLayout->RemoveChild(mItemsLayout->GetChildren()[position].Get());
+			mItemsLayout->RemoveChild(mItemsLayout->GetChildren()[position]);
 	}
 
 	void ContextMenu::RemoveItem(const WString& path)
@@ -665,17 +665,17 @@ namespace o2
 
 		for (auto item : mItems) {
 			if (item->widget)
-				mItemsLayout->RemoveChild(item->widget.Lock().Get());
+				mItemsLayout->RemoveChild(item->widget.Lock());
 		}
 
 		auto children = mItemsLayout->GetChildren();
 		for (auto child : children) {
 			if (auto item = DynamicCast<ContextMenuItem>(child)) {
 				cache.Add(item);
-				mItemsLayout->RemoveChild(item.Get());
+				mItemsLayout->RemoveChild(item);
 			}
 			else if (child->name == String("Separator"))
-				mItemsLayout->RemoveChild(child.Get());
+				mItemsLayout->RemoveChild(child);
 		}
 
 		Map<WString, Vector<Ref<Item>>> groups;

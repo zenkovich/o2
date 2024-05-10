@@ -68,7 +68,7 @@ namespace o2
 
         Function<void(const Ref<Actor>)> searchBones = [&searchBones, this](const Ref<Actor>& actor) {
             if (auto boneComp = actor->GetComponent<SkinningMeshBoneComponent>())
-                mBonesMapping.Add({ boneComp.GetRef(), nullptr });
+                mBonesMapping.Add({ boneComp, nullptr });
 
             for (auto child : actor->GetChildren())
                 searchBones(child);

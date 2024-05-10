@@ -904,7 +904,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::GridLayout>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::GridLayout>);
 // --- META ---
 
 DECLARE_CLASS(o2::GridLayout, o2__GridLayout);

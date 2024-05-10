@@ -38,10 +38,10 @@ namespace o2
 
     void Tag::AddActor(const Ref<Actor>& actor)
     {
-        if (mActors.Contains(actor.GetRef()))
+        if (mActors.Contains(actor))
             return;
 
-        mActors.Add(actor.GetRef());
+        mActors.Add(actor);
         actor->tags.mTags.Add(Ref(this));
     }
 
@@ -50,7 +50,7 @@ namespace o2
         if (!actor)
             return;
 
-        mActors.Remove(actor.GetRef());
+        mActors.Remove(actor);
         actor->tags.mTags.Remove(Ref(this));
     }
 
