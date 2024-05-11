@@ -46,7 +46,10 @@ namespace Editor
 		bool IsInputTransparent() const override;
 
 		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        static String GetCreateMenuCategory();
+
+        // Dynamic cast to RefCounterable via DrawableComponent
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<AddComponentPanel>& ref);
 
 		SERIALIZABLE(AddComponentPanel);
 
@@ -69,6 +72,8 @@ namespace Editor
 
 		// Called when key was released. When returns has pressed, component is creating
 		void OnKeyReleased(const Input::Key& key) override;
+
+        REF_COUNTERABLE_IMPL(Widget, CursorEventsArea);
 	};
 	
 	// ---------------------------------------------------------------------
@@ -97,10 +102,13 @@ namespace Editor
 
 	public:
 		// Default constructor
-		ComponentsTree(RefCounter* refCounter);
+        ComponentsTree(RefCounter* refCounter);
 
-		// Copy-constructor
-		ComponentsTree(RefCounter* refCounter, const ComponentsTree& other);
+        // Copy-constructor
+        ComponentsTree(RefCounter* refCounter, const ComponentsTree& other);
+
+        // Copy-constructor
+        ComponentsTree(const ComponentsTree& other);
 
 		// Copy operator
 		ComponentsTree& operator=(const ComponentsTree& other);
@@ -214,6 +222,7 @@ CLASS_METHODS_META(Editor::AddComponentPanel)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<AddComponentPanel>&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnAddPressed);
     FUNCTION().PRIVATE().SIGNATURE(void, CreateComponent, const ObjectType*);
     FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, const Ref<TreeNode>&);
@@ -237,6 +246,7 @@ CLASS_METHODS_META(Editor::ComponentsTree)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ComponentsTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

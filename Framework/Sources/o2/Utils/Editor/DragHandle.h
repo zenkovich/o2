@@ -347,7 +347,7 @@ namespace o2
     // --------------------------------------------
     // Selectable draggable handles group interface
     // --------------------------------------------
-    class ISelectableDragHandlesGroup: virtual public RefCounterable
+    class ISelectableDragHandlesGroup: public RefCounterable
     {
     public:
         // Returns selected handles in group

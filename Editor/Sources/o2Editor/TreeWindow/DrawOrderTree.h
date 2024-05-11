@@ -34,6 +34,9 @@ namespace Editor
         // Copy-constructor
         DrawOrderTree(RefCounter* refCounter, const DrawOrderTree& other);
 
+        // Copy-constructor
+        DrawOrderTree(const DrawOrderTree& other);
+
         // Destructor
         ~DrawOrderTree();
 
@@ -261,6 +264,7 @@ CLASS_METHODS_META(Editor::DrawOrderTree)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const DrawOrderTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const DrawOrderTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedObjects, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, ScrollToAndHighlight, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildOrderTree);

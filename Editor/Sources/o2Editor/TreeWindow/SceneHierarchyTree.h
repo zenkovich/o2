@@ -34,6 +34,9 @@ namespace Editor
         // Copy-constructor
         SceneHierarchyTree(RefCounter* refCounter, const SceneHierarchyTree& other);
 
+        // Copy-constructor
+        SceneHierarchyTree(const SceneHierarchyTree& other);
+
         // Destructor
         ~SceneHierarchyTree();
 
@@ -247,6 +250,7 @@ CLASS_METHODS_META(Editor::SceneHierarchyTree)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const SceneHierarchyTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneHierarchyTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, AttachToSceneEvents);
     FUNCTION().PUBLIC().SIGNATURE(void, DeattachFromSceneEvents);
     FUNCTION().PUBLIC().SIGNATURE(Ref<TreeNode>, GetNode, const Ref<SceneEditableObject>&);

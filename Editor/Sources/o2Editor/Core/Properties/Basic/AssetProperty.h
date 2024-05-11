@@ -128,6 +128,8 @@ namespace Editor
 
 		// Called when some drag listeners was exited from this area
 		void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
+
+        REF_COUNTERABLE_IMPL(TPropertyField<Ref<Asset>>);
 	};
 }
 // --- META ---

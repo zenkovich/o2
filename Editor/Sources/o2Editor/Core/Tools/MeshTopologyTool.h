@@ -48,9 +48,12 @@ namespace Editor
 
 		Function<void()> onChanged; // Called when frame changes     
 
-	public:
-		// Default constructor
-		MeshTopologyTool();
+    public:
+        // Default constructor
+        MeshTopologyTool();
+
+        // Default constructor
+        MeshTopologyTool(const MeshTopologyTool& other);
 
 		// Destructor
 		~MeshTopologyTool();
@@ -79,7 +82,10 @@ namespace Editor
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Returns true when input events can be handled by down listeners
-		bool IsInputTransparent() const override;
+        bool IsInputTransparent() const override;
+
+        // Dynamic cast to RefCounterable via Widget
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<MeshTopologyTool>& ref);
 
 		IOBJECT(MeshTopologyTool);
 
@@ -145,7 +151,9 @@ namespace Editor
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// Called when cursor double clicked; creates new point
-		void OnCursorDblClicked(const Input::Cursor& cursor) override;
+        void OnCursorDblClicked(const Input::Cursor& cursor) override;
+		
+		REF_COUNTERABLE_IMPL(IEditTool, SelectableDragHandlesGroup);
 	};
 }
 // --- META ---
@@ -185,6 +193,7 @@ CLASS_METHODS_META(Editor::MeshTopologyTool)
     typedef const Function<void(int, Vec2F)>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const MeshTopologyTool&);
     FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Function<Vector<Vec2F>()>&, _tmp1, const Function<Basis()>&, const Function<void(Vec2F)>&, const Function<void(int)>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Reset);
     FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
@@ -192,6 +201,7 @@ CLASS_METHODS_META(Editor::MeshTopologyTool)
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<MeshTopologyTool>&);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
     FUNCTION().PRIVATE().SIGNATURE(void, ClearHandles);
     FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, int, const Vec2F&);

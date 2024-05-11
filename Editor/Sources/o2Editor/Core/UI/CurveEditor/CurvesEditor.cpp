@@ -241,7 +241,12 @@ namespace Editor
 		return mContextMenu;
 	}
 
-	void CurvesEditor::SetSelectionSpriteImage(const Ref<ImageAsset>& image)
+    Ref<RefCounterable> CurvesEditor::CastToRefCounterable(const Ref<CurvesEditor>& ref)
+    {
+		return DynamicCast<FrameScrollView>(ref);
+    }
+
+    void CurvesEditor::SetSelectionSpriteImage(const Ref<ImageAsset>& image)
 	{
 		mSelectionSprite->LoadFromImage(image);
 	}

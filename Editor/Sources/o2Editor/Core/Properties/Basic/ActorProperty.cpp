@@ -281,9 +281,9 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::LinkRef<>>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<Actor>>);
 DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ActorProperty>);
-DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::LinkRef<>>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Ref<Actor>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ActorProperty, Editor__ActorProperty);

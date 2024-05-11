@@ -105,6 +105,9 @@ namespace Editor
         // Returns context menu
         const Ref<ContextMenu>& GetContextMenu() const;
 
+        // Dynamic cast to RefCounterable via DrawableComponent
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<CurvesEditor>& ref);
+
         SERIALIZABLE(CurvesEditor);
 
     public:
@@ -293,7 +296,7 @@ namespace Editor
         Vector<Ref<CurveInfo>> mCurves; // Editing curves infos list 
         Vector<Ref<RangeInfo>> mRanges; // Curves ranges list
 
-        Vector<Ref<CurveHandle>>   mSupportHandles;      // Support points handles list
+        Vector<Ref<CurveHandle>>        mSupportHandles;                                            // Support points handles list
         Ref<SelectableDragHandlesGroup> mSupportHandlesGroup = mmake<SelectableDragHandlesGroup>(); // Support points handles selection group. They are must be selectable separately from main handles
 
         Vector<Ref<CurveHandle>> mSelectingHandlesBuf; // Potentially selecting handles while selecting
@@ -491,7 +494,9 @@ namespace Editor
         void OnUndoPressed();
 
         // On context menu redo pressed. Restores action from stack
-        void OnRedoPressed();
+        void OnRedoPressed(); 
+        
+        REF_COUNTERABLE_IMPL(FrameScrollView, SelectableDragHandlesGroup);
 
         friend class CurveAddKeysAction;
         friend class CurveDeleteKeysAction;
@@ -563,6 +568,7 @@ CLASS_METHODS_META(Editor::CurvesEditor)
     FUNCTION().PUBLIC().SIGNATURE(void, SetAdjustCurvesScale, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<ContextMenu>&, GetContextMenu);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<CurvesEditor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);

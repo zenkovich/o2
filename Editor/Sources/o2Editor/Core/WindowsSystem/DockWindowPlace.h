@@ -81,7 +81,9 @@ namespace Editor
 		void CheckInteractable();
 
 		// Initializes drag handle
-		void InitializeDragHandle();
+        void InitializeDragHandle();
+
+        REF_COUNTERABLE_IMPL(Widget);
 
 		friend class DockableWindow;
 		friend class WindowsLayout;

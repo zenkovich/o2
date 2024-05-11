@@ -55,7 +55,9 @@ namespace Editor
 
 		// Called when change value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
-		void OnMoveHandleReleased(const Input::Cursor& cursor);
+        void OnMoveHandleReleased(const Input::Cursor& cursor);
+
+        REF_COUNTERABLE_IMPL(TPropertyField<int>);
 	};
 }
 // --- META ---

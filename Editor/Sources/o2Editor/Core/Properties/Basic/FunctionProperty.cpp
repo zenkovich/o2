@@ -217,10 +217,10 @@ namespace Editor
 				instance->values.Convert<IActorSubscription*>([](auto p) { return p.second; }),
 				[](IActorSubscription* s)
 			{
-				if (!s->Ref<Actor> && s->Ref<Component>)
-					s->Ref<Actor> = s->Ref<Component>->GetOwnerActor();
+				if (!s->actorRef && s->componentRef)
+					s->actorRef = s->componentRef->GetOwnerActor();
 
-				return &s->Ref<Actor>;
+				return &s->actorRef;
 			}
 			);
 
@@ -228,7 +228,7 @@ namespace Editor
 				[=](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)
 			{
 				instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-											  !instance->values.IsEmpty() ? instance->values[0].first->Ref<Component> : Ref<Component>(),
+											  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
 											  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
 			};
 
@@ -237,7 +237,7 @@ namespace Editor
 			instance->removeBtn->onClick = [=]() { OnRemovePressed(instance); };
 
 			instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-										  !instance->values.IsEmpty() ? instance->values[0].first->Ref<Component> : Ref<Component>(),
+										  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
 										  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
 
 			instance->caption->text = "#" + (String)idx;
@@ -414,7 +414,7 @@ namespace Editor
 	{
 		for (auto& value : values)
 		{
-			value.first->Ref<Component> = functionsDropdownMap[idx].first;
+			value.first->componentRef = functionsDropdownMap[idx].first;
 			value.first->method = functionsDropdownMap[idx].second;
 		}
 	}

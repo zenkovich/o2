@@ -99,7 +99,9 @@ namespace Editor
 		void OnDragEnterFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
 
 		// Called when assets scroll icons was dragged and exited from this
-		void OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
+        void OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll); 
+		
+		REF_COUNTERABLE_IMPL(TPropertyField<Ref<Component>>);
 	};
 }
 // --- META ---

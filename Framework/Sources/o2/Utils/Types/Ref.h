@@ -123,9 +123,9 @@ namespace o2
 #define REF_COUNTERABLE_IMPL(BASE_CLASS, ...)                                                                                             \
         RefCounter* GetRefCounter() const { return BASE_CLASS::GetRefCounter(); }                                                         \
         void SetRefCounter(RefCounter* refCounter) { RefCountersSetter<decltype(this)>::Set<BASE_CLASS, __VA_ARGS__>(this, refCounter); } \
-        template<typename _type> friend RefCounter* GetRefCounterImpl(_type* ptr);                                                        \
-        template<typename _object_type> friend struct RefCountersSetter;                                                           \
-        template<typename _type, typename ... _args> friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
+        template<typename _type> friend RefCounter* o2::GetRefCounterImpl(_type* ptr);                                                    \
+        template<typename _object_type> friend struct o2::RefCountersSetter;                                                              \
+        template<typename _type, typename ... _args> friend Ref<_type> o2::MakePlace(const char* location, int line, _args&& ... args)
 
 
     // -------------------------------

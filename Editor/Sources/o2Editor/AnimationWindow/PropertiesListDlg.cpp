@@ -76,9 +76,13 @@ namespace Editor
 
 	AnimationPropertiesTree::AnimationPropertiesTree(RefCounter* refCounter, const AnimationPropertiesTree& other):
 		Tree(refCounter, other)
-	{ }
+	{}
 
-	AnimationPropertiesTree& AnimationPropertiesTree::operator=(const AnimationPropertiesTree& other)
+    AnimationPropertiesTree::AnimationPropertiesTree(const AnimationPropertiesTree& other):
+		AnimationPropertiesTree(nullptr, other)
+    {}
+
+    AnimationPropertiesTree& AnimationPropertiesTree::operator=(const AnimationPropertiesTree& other)
 	{
 		Tree::operator=(other);
 		return *this;

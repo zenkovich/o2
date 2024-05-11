@@ -67,7 +67,12 @@ namespace Editor
 		return "UI/Editor";
 	}
 
-	void AddComponentPanel::OnAddPressed()
+    Ref<RefCounterable> AddComponentPanel::CastToRefCounterable(const Ref<AddComponentPanel>& ref)
+    {
+		return DynamicCast<Widget>(ref);
+    }
+
+    void AddComponentPanel::OnAddPressed()
 	{
 		if (mTree->GetSelectedObjects().IsEmpty())
 			return;
@@ -121,14 +126,18 @@ namespace Editor
 	}
 
 	ComponentsTree::ComponentsTree(RefCounter* refCounter) :
-		RefCounterable(refCounter), Tree(refCounter)
+		Tree(refCounter)
 	{}
 
 	ComponentsTree::ComponentsTree(RefCounter* refCounter, const ComponentsTree& other) :
-		RefCounterable(refCounter), Tree(refCounter, other)
+		Tree(refCounter, other)
 	{}
 
-	ComponentsTree& ComponentsTree::operator=(const ComponentsTree& other)
+    ComponentsTree::ComponentsTree(const ComponentsTree& other):
+		ComponentsTree(nullptr, other)
+    {}
+
+    ComponentsTree& ComponentsTree::operator=(const ComponentsTree& other)
 	{
 		Tree::operator=(other);
 		return *this;

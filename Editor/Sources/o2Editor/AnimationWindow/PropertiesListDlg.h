@@ -74,6 +74,9 @@ namespace Editor
 		// Copy-constructor
         AnimationPropertiesTree(RefCounter* refCounter, const AnimationPropertiesTree& other);
 
+        // Copy-constructor
+        AnimationPropertiesTree(const AnimationPropertiesTree& other);
+
 		// Copy operator
 		AnimationPropertiesTree& operator=(const AnimationPropertiesTree& other);
 
@@ -204,6 +207,7 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationPropertiesTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationPropertiesTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationClip>&, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

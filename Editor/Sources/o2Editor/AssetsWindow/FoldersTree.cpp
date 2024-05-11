@@ -250,11 +250,15 @@ namespace Editor
 	}
 
     FoldersTree::FoldersTree(RefCounter* refCounter):
-		RefCounterable(refCounter), Tree(refCounter)
+		Tree(refCounter)
     {}
 
     FoldersTree::FoldersTree(RefCounter* refCounter, const FoldersTree& other):
-		RefCounterable(refCounter), Tree(refCounter, other)
+		Tree(refCounter, other)
+    {}
+
+    FoldersTree::FoldersTree(const FoldersTree& other):
+		FoldersTree(nullptr, other)
     {}
 
     void FoldersTree::UpdateVisibleNodes()

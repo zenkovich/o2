@@ -25,7 +25,10 @@ namespace Editor
 		mTransformFrame.isInputTransparent = true;
 	}
 
-	MeshTopologyTool::~MeshTopologyTool()
+    MeshTopologyTool::MeshTopologyTool(const MeshTopologyTool& other)
+    {}
+
+    MeshTopologyTool::~MeshTopologyTool()
 	{
 		ClearHandles();
 	}
@@ -81,7 +84,12 @@ namespace Editor
 		return true;
 	}
 
-	void MeshTopologyTool::InitializeHandles()
+    Ref<RefCounterable> MeshTopologyTool::CastToRefCounterable(const Ref<MeshTopologyTool>& ref)
+    {
+		return DynamicCast<IEditTool>(ref);
+    }
+
+    void MeshTopologyTool::InitializeHandles()
 	{
 		ClearHandles();
 

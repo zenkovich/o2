@@ -223,5 +223,7 @@ namespace Editor
 
 		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
+
+        REF_COUNTERABLE_IMPL(SelectableDragHandlesGroup);
 	};
 }

@@ -79,7 +79,10 @@ namespace Editor
 		const Ref<ContextMenu>& GetContextMenu() const;
 
 		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        static String GetCreateMenuCategory();
+
+        // Dynamic cast to RefCounterable via Widget
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<KeyHandlesSheet>& ref);
 
 		SERIALIZABLE(KeyHandlesSheet);
 
@@ -208,7 +211,7 @@ namespace Editor
 		// Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
 		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
 
-		REF_COUNTERABLE_IMPL(Widget);
+		REF_COUNTERABLE_IMPL(Widget, SelectableDragHandlesGroup);
 
 		friend class AnimationWindow;
 		friend class AnimationAddKeysAction;
@@ -277,6 +280,7 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
     FUNCTION().PUBLIC().SIGNATURE(void, DeleteKeys, _tmp3, bool);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<ContextMenu>&, GetContextMenu);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<KeyHandlesSheet>&);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeCenterHandle);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeLeftHandle);

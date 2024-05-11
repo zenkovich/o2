@@ -194,6 +194,11 @@ namespace Editor
         return "UI/Editor";
     }
 
+    Ref<RefCounterable> KeyHandlesSheet::CastToRefCounterable(const Ref<KeyHandlesSheet>& ref)
+    {
+        return DynamicCast<Widget>(ref);
+    }
+
     void KeyHandlesSheet::OnSelectionChanged()
     {
         mNeedUpdateSelectionFrame = true;

@@ -37,10 +37,13 @@ namespace Editor
 
 	public:
 		// Default constructor
-		AssetsIconsScrollArea(RefCounter* refCounter);
+        AssetsIconsScrollArea(RefCounter* refCounter);
 
-		// Copy-constructor
-		AssetsIconsScrollArea(RefCounter* refCounter, const AssetsIconsScrollArea& other);
+        // Copy-constructor
+        AssetsIconsScrollArea(RefCounter* refCounter, const AssetsIconsScrollArea& other);
+
+        // Copy-constructor
+        AssetsIconsScrollArea(const AssetsIconsScrollArea& other);
 
 		// Destructor
 		~AssetsIconsScrollArea();
@@ -334,7 +337,9 @@ namespace Editor
 		void EndDragging(bool droppedToThis = false);
 
 		// Updates dragging graphics
-		void UpdateDraggingGraphics();
+		void UpdateDraggingGraphics(); 
+		
+		REF_COUNTERABLE_IMPL(GridLayoutScrollArea);
 
 		friend class AssetsWindow;
 		friend class SceneEditScreen;
@@ -391,6 +396,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetsIconsScrollArea&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsIconsScrollArea&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetViewingPath, const String&);

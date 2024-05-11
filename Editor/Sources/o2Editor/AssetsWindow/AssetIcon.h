@@ -124,6 +124,8 @@ namespace Editor
 		// Called when some selectable listeners was dropped to this
 		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
+		REF_COUNTERABLE_IMPL(Widget);
+
 		friend class AssetsIconsScrollArea;
 	};
 }

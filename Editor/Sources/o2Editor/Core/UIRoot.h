@@ -19,7 +19,7 @@ namespace Editor
 	// --------------
 	// Editor UI root
 	// --------------
-	class UIRoot: public Singleton<UIRoot>, public ApplicationEventsListener
+	class UIRoot: public Singleton<UIRoot>, public ApplicationEventsListener, public RefCounterable
 	{
     public:
         // Default constructor, creates root widget
@@ -52,6 +52,8 @@ namespace Editor
 
 		// Called when application frame was resized, updates root size
 		void OnApplicationSized() override;
+
+        REF_COUNTERABLE_IMPL(RefCounterable);
 
 		friend class EditorApplication;
 	};

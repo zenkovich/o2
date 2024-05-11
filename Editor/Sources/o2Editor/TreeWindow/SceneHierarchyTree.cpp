@@ -46,7 +46,13 @@ namespace Editor
 		Initialize();
 	}
 
-	SceneHierarchyTree::~SceneHierarchyTree()
+    SceneHierarchyTree::SceneHierarchyTree(const SceneHierarchyTree& other):
+		SceneHierarchyTree(nullptr, other)
+    {
+
+    }
+
+    SceneHierarchyTree::~SceneHierarchyTree()
 	{
 		DeattachFromSceneEvents();
 	}
@@ -354,11 +360,11 @@ namespace Editor
 	}
 
 	SceneHierarchyTreeNode::SceneHierarchyTreeNode(RefCounter* refCounter) :
-		RefCounterable(refCounter), TreeNode(refCounter)
+		TreeNode(refCounter)
 	{}
 
 	SceneHierarchyTreeNode::SceneHierarchyTreeNode(RefCounter* refCounter, const SceneHierarchyTreeNode& other) :
-		RefCounterable(refCounter), TreeNode(refCounter, other)
+		TreeNode(refCounter, other)
 	{
 		InitializeControls();
 	}

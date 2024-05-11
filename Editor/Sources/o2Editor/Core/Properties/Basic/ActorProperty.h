@@ -2,6 +2,7 @@
 
 #include "o2/Events/DrawableCursorEventsListener.h"
 #include "o2/Events/KeyboardEventsListener.h"
+#include "o2/Scene/ActorLinkRef.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
 
@@ -100,6 +101,8 @@ namespace Editor
 
 		// Called when assets scroll icons was dragged and exited from this
 		void OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll);
+
+        REF_COUNTERABLE_IMPL(TPropertyField<Ref<Actor>>);
 	};
 }
 // --- META ---

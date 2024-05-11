@@ -19,7 +19,7 @@
 namespace Editor
 {
 	DockableWindow::DockableWindow(RefCounter* refCounter):
-		RefCounterable(refCounter), Window(refCounter)
+		Window(refCounter)
 	{
 		InitializeDragHandles();
 		SetDocked(false);
@@ -29,7 +29,7 @@ namespace Editor
 	}
 
 	DockableWindow::DockableWindow(RefCounter* refCounter, const DockableWindow& other):
-		RefCounterable(refCounter), Window(refCounter, other)
+		Window(refCounter, other)
 	{
 		PushEditorScopeOnStack scope;
 
@@ -107,7 +107,7 @@ namespace Editor
 			mRightBottomDragHandle.OnDrawn();
 			mHeadDragHandle.OnDrawn();
 
-			CursorAreaEventsListenerInterface::OnDrawn();
+			CursorAreaEventsListener::OnDrawn();
 
 			for (auto& child : mInternalWidgets)
 				child->Draw();

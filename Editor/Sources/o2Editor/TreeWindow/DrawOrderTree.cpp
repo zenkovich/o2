@@ -31,7 +31,7 @@
 namespace Editor
 {
 	DrawOrderTree::DrawOrderTree(RefCounter* refCounter) :
-		RefCounterable(refCounter), Tree(refCounter), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
+		Tree(refCounter), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		mNodeWidgetSample = mmake<DrawOrderTreeNode>();
 		mNodeWidgetSample->layout->minHeight = 20;
@@ -41,12 +41,16 @@ namespace Editor
 	}
 
 	DrawOrderTree::DrawOrderTree(RefCounter* refCounter, const DrawOrderTree& other) :
-		RefCounterable(refCounter), Tree(refCounter, other), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
+		Tree(refCounter, other), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		Initialize();
 	}
 
-	DrawOrderTree::~DrawOrderTree()
+    DrawOrderTree::DrawOrderTree(const DrawOrderTree& other):
+		DrawOrderTree(nullptr, other)
+    {}
+
+    DrawOrderTree::~DrawOrderTree()
 	{
 		DeattachFromSceneEvents();
 	}
@@ -370,11 +374,11 @@ namespace Editor
 	}
 
 	DrawOrderTreeNode::DrawOrderTreeNode(RefCounter* refCounter) :
-		RefCounterable(refCounter), TreeNode(refCounter)
+		TreeNode(refCounter)
 	{}
 
 	DrawOrderTreeNode::DrawOrderTreeNode(RefCounter* refCounter, const DrawOrderTreeNode& other) :
-		RefCounterable(refCounter), TreeNode(refCounter, other)
+		TreeNode(refCounter, other)
 	{
 		InitializeControls();
 	}

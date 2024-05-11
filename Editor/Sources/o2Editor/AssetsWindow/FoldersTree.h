@@ -96,6 +96,8 @@ namespace Editor
 
 		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
+		
+		REF_COUNTERABLE_IMPL(Widget);
 
 		friend class AssetsWindow;
 	};
@@ -104,10 +106,13 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		FoldersTree(RefCounter* refCounter);
+        FoldersTree(RefCounter* refCounter);
 
-		// Copy-constructor
-		FoldersTree(RefCounter* refCounter, const FoldersTree& other);
+        // Copy-constructor
+        FoldersTree(RefCounter* refCounter, const FoldersTree& other);
+
+        // Copy-constructor
+        FoldersTree(const FoldersTree& other);
 
 		SERIALIZABLE(FoldersTree);
 
@@ -175,6 +180,7 @@ CLASS_METHODS_META(Editor::FoldersTree)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const FoldersTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const FoldersTree&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }

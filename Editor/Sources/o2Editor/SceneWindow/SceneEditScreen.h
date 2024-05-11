@@ -284,7 +284,7 @@ namespace Editor
 		// Returns that this has transparent input
 		bool IsInputTransparent() const override;
 
-		REF_COUNTERABLE_IMPL(ScrollView, DragDropArea);
+		REF_COUNTERABLE_IMPL(ScrollView);
 
 		friend class DeleteAction;
 		friend class SelectAction;

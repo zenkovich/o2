@@ -156,7 +156,9 @@ namespace Editor
 		void OnVisibleChanged(bool visible);
 
 		// Called when remove button has pressed
-		void OnRemovePressed();
+        void OnRemovePressed();
+
+        REF_COUNTERABLE_IMPL(Widget);
 
 		friend class LayersPopup;
 	};
