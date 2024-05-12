@@ -38,7 +38,8 @@ namespace Editor
 		// Draws handles with clipping
 		void Draw() override;
 
-		SERIALIZABLE(Vec2KeyFramesTrackControl);
+        SERIALIZABLE(Vec2KeyFramesTrackControl);
+        CLONEABLE_REF(Vec2KeyFramesTrackControl);
 
 	private:
 		Ref<SplineTool> mTool; // Other handles locking tool

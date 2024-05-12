@@ -66,7 +66,8 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-		IOBJECT(ObjectProperty);
+        IOBJECT(ObjectProperty);
+        CLONEABLE_REF(ObjectProperty);
 
 	protected:
 		struct TargetObjectData

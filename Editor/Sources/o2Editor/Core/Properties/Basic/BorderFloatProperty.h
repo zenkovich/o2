@@ -71,7 +71,8 @@ namespace Editor
 		// Returns editing by this field type by static function, can't be changed during runtime
 		static const Type* GetValueTypeStatic();
 
-		IOBJECT(BorderFProperty);
+        IOBJECT(BorderFProperty);
+        CLONEABLE_REF(BorderFProperty);
 
 	protected:
 		Ref<FloatProperty> mLeftProperty;   // Left value property

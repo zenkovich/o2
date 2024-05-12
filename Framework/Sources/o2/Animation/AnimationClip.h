@@ -30,10 +30,10 @@ namespace o2
 
 	public:
 		// Default constructor
-		AnimationClip();
+        AnimationClip(RefCounter* refCounter);
 
 		// Copy-constructor
-		AnimationClip(const AnimationClip& other);
+		AnimationClip(RefCounter* refCounter, const AnimationClip& other);
 
 		// Destructor
 		~AnimationClip();
@@ -250,8 +250,8 @@ END_META;
 CLASS_METHODS_META(o2::AnimationClip)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationClip&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationClip&);
     FUNCTION().PUBLIC().SIGNATURE(void, Clear);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLoop, Loop);

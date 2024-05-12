@@ -89,7 +89,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AnimationPropertiesTree);
+        SERIALIZABLE(AnimationPropertiesTree);
+        CLONEABLE_REF(AnimationPropertiesTree);
 
 	private:
 		WString mFilterStr; // Filtering string
@@ -164,7 +165,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AnimationPropertiesTreeNode);
+        SERIALIZABLE(AnimationPropertiesTreeNode);
+        CLONEABLE_REF(AnimationPropertiesTreeNode);
 
 	private:
 		Ref<Text>   mName;         // Name of property

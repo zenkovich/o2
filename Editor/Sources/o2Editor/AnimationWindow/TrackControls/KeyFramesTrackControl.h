@@ -82,7 +82,8 @@ namespace Editor
 		// Inserts new key at time
 		void InsertNewKey(float time) override;
 
-		SERIALIZABLE(KeyFramesTrackControl<AnimationTrackType>);
+        SERIALIZABLE(KeyFramesTrackControl<AnimationTrackType>);
+        CLONEABLE_REF(KeyFramesTrackControl<AnimationTrackType>);
 
 	protected:
 		typedef AnimationTrackWrapper<AnimationTrackType> Wrapper;

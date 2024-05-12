@@ -15,7 +15,8 @@ DECLARE_SINGLETON(Editor::NameEditDlg);
 
 namespace Editor
 {
-	NameEditDlg::NameEditDlg()
+    NameEditDlg::NameEditDlg(RefCounter* refCounter):
+		CursorEventsListener(refCounter)
 	{
 		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Enter name")));
 

@@ -22,27 +22,27 @@ namespace o2
 	}
 
 	ContextMenu::Item::Item(RefCounter* refCounter) :
-		checked(false), checkable(false)
+		RefCounterable(refCounter), checked(false), checkable(false)
 	{}
 
 	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, const Function<void()> onClick,
 							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
-		text(text), group(group), onClick(onClick), mShortcut(shortcut), icon(icon), checked(false), checkable(false)
+		RefCounterable(refCounter), text(text), group(group), onClick(onClick), mShortcut(shortcut), icon(icon), checked(false), checkable(false)
 	{
 		SetShortcut(shortcut);
 	}
 
 	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, const Vector<Ref<Item>>& subItems,
 							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/) :
-		text(text), group(group), subItems(subItems), icon(icon), checked(false), checkable(false)
+		RefCounterable(refCounter), text(text), group(group), subItems(subItems), icon(icon), checked(false), checkable(false)
 	{}
 
 	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, bool checked,
 							Function<void(bool)> onChecked /*= Function<void(bool)>()*/,
 							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
-		text(text), group(group), checked(checked), onChecked(onChecked), checkable(true), mShortcut(shortcut), icon(icon)
+		RefCounterable(refCounter), text(text), group(group), checked(checked), onChecked(onChecked), checkable(true), mShortcut(shortcut), icon(icon)
 	{
 		SetShortcut(shortcut);
 	}

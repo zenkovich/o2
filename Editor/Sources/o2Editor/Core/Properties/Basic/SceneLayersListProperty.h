@@ -28,7 +28,8 @@ namespace Editor
 		// Copy operator
 		SceneLayersListProperty& operator=(const SceneLayersListProperty& other);
 
-		SERIALIZABLE(SceneLayersListProperty);
+        SERIALIZABLE(SceneLayersListProperty);
+        CLONEABLE_REF(SceneLayersListProperty);
 
 	protected:
 		Ref<Button> mPropertyButton; // Property box with layers' names

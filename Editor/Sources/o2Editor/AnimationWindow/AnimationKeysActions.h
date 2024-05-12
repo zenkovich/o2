@@ -15,7 +15,7 @@ namespace Editor
 		void Redo() override;
 		void Undo() override;
 
-		SERIALIZABLE(AnimationAddKeysAction);
+        SERIALIZABLE(AnimationAddKeysAction);
 
 	protected:
 		Map<String, Vector<UInt64>> mKeys;

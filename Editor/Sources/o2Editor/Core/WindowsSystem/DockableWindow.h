@@ -90,6 +90,7 @@ namespace Editor
 		static String GetCreateMenuCategory();
 
 		SERIALIZABLE(DockableWindow);
+		CLONEABLE_REF(DockableWindow);
 
 	protected:
 		const String mTabLayerPath = "tab/main";

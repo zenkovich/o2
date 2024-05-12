@@ -57,7 +57,8 @@ namespace Editor
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
-		IOBJECT(AssetProperty);
+        IOBJECT(AssetProperty);
+        CLONEABLE_REF(AssetProperty);
 
 	protected:
 		Ref<Widget>  mBox;               // Property edit box

@@ -30,7 +30,8 @@ namespace Editor
 		// Copy operator
 		CurveProperty& operator=(const CurveProperty& other);
 
-		IOBJECT(CurveProperty);
+        IOBJECT(CurveProperty);
+        CLONEABLE_REF(CurveProperty);
 
 	protected:
 		Ref<Widget>       mEditBox;      // Edit box 

@@ -38,7 +38,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(CurvesSheet);
+        SERIALIZABLE(CurvesSheet);
+        CLONEABLE_REF(CurvesSheet);
 
 	private:
 		Ref<CurvesEditor> mCurvesEditor; // Curves editor

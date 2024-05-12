@@ -84,7 +84,8 @@ namespace Editor
         // Dynamic cast to RefCounterable via Widget
         static Ref<RefCounterable> CastToRefCounterable(const Ref<KeyHandlesSheet>& ref);
 
-		SERIALIZABLE(KeyHandlesSheet);
+        SERIALIZABLE(KeyHandlesSheet);
+        CLONEABLE_REF(KeyHandlesSheet);
 
 	private:
 		RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);

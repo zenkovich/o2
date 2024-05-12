@@ -73,7 +73,8 @@ namespace Editor
 		// Returns is spoiler header enabled
 		bool IsHeaderEnabled() const;
 
-		IOBJECT(ScriptValueProperty);
+        IOBJECT(ScriptValueProperty);
+        CLONEABLE_REF(ScriptValueProperty);
 
 	protected:
 		Ref<Spoiler> mSpoiler; // Properties spoiler. Expands forcible when viewer hasn't header

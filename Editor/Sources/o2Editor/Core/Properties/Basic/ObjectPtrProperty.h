@@ -73,7 +73,8 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-		IOBJECT(ObjectPtrProperty);
+        IOBJECT(ObjectPtrProperty);
+        CLONEABLE_REF(ObjectPtrProperty);
 
 	protected:
 		const ObjectType* mBasicObjectType = nullptr;   // Base object type, used for create

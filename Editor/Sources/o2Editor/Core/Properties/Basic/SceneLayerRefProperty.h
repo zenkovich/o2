@@ -41,7 +41,8 @@ namespace Editor
 		// Returns is used "Inherit from parent" value
 		bool IsUseInheritedValue() const;
 
-		IOBJECT(SceneLayerRefProperty);
+        IOBJECT(SceneLayerRefProperty);
+        CLONEABLE_REF(SceneLayerRefProperty);
 
 	protected:		       
 		Ref<DropDown> mDropDown;              // Layer name dropdown

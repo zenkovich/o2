@@ -29,7 +29,8 @@ namespace Editor
 		// Copy operator
 		ColorProperty& operator=(const ColorProperty& other);
 
-		IOBJECT(ColorProperty);
+        IOBJECT(ColorProperty);
+        CLONEABLE_REF(ColorProperty);
 
 	protected:
 		Ref<Widget>      mEditBox;     // Edit box 

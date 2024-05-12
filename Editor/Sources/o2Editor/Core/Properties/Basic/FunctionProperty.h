@@ -70,7 +70,8 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-		IOBJECT(FunctionProperty);
+        IOBJECT(FunctionProperty);
+        CLONEABLE_REF(FunctionProperty);
 
 	protected:
 		struct FunctionInstance: public RefCounterable

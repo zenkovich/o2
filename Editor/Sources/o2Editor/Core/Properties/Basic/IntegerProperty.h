@@ -28,7 +28,8 @@ namespace Editor
 		// Copy operator
 		IntegerProperty& operator=(const IntegerProperty& other);
 
-		IOBJECT(IntegerProperty);
+        IOBJECT(IntegerProperty);
+        CLONEABLE_REF(IntegerProperty);
 
 	protected:
 		Ref<EditBox>     mEditBox;    // Edit box 

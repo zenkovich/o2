@@ -32,6 +32,7 @@ namespace Editor
 		const Ref<EditBox>& GetEditBox() const;
 
 		IOBJECT(FloatProperty);
+		CLONEABLE_REF(FloatProperty);
 
 	protected:
 		Ref<EditBox>     mEditBox;    // Edit box 

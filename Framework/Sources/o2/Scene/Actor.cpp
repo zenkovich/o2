@@ -37,33 +37,6 @@ namespace o2
 
     Actor::Actor(RefCounter* refCounter, ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(refCounter, transform, IsModeOnScene(mode), other.mName, other.mEnabled, Math::Random(), other.mAssetId)
-    {}
-
-    Actor::Actor(RefCounter* refCounter, ActorTransform* transform, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-        Actor(refCounter, transform, *prototype->GetActor(), mode)
-    {}
-
-    Actor::Actor(RefCounter* refCounter, ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-        Actor(refCounter, transform, mode)
-    {
-        for (auto& comp : components)
-            AddComponent(comp);
-    }
-
-    Actor::Actor(RefCounter* refCounter, ActorCreateMode mode /*= CreateMode::Default*/) :
-        Actor(refCounter, mnew ActorTransform(), mode)
-    {}
-
-    Actor::Actor(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-        Actor(refCounter, mnew ActorTransform(), components, mode)
-    {}
-
-    Actor::Actor(RefCounter* refCounter, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= CreateMode::Default*/) :
-        Actor(refCounter, mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
-    {}
-
-    Actor::Actor(RefCounter* refCounter, const Actor& other, ActorCreateMode mode) :
-        Actor(refCounter, mnew ActorTransform(*other.transform), other, mode)
     {
         ActorRefResolver::LockResolving();
 
@@ -111,6 +84,33 @@ namespace o2
 
         other.CheckCopyVisitorFinalization();
     }
+
+    Actor::Actor(RefCounter* refCounter, ActorTransform* transform, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(refCounter, transform, *prototype->GetActor(), mode)
+    {}
+
+    Actor::Actor(RefCounter* refCounter, ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(refCounter, transform, mode)
+    {
+        for (auto& comp : components)
+            AddComponent(comp);
+    }
+
+    Actor::Actor(RefCounter* refCounter, ActorCreateMode mode /*= CreateMode::Default*/) :
+        Actor(refCounter, mnew ActorTransform(), mode)
+    {}
+
+    Actor::Actor(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+        Actor(refCounter, mnew ActorTransform(), components, mode)
+    {}
+
+    Actor::Actor(RefCounter* refCounter, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= CreateMode::Default*/) :
+        Actor(refCounter, mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
+    {}
+
+    Actor::Actor(RefCounter* refCounter, const Actor& other, ActorCreateMode mode) :
+        Actor(refCounter, mnew ActorTransform(*other.transform), other, mode)
+    {}
 
     Actor::Actor(RefCounter* refCounter, const Actor& other) :
         Actor(refCounter, other, ActorCreateMode::Default)

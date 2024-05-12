@@ -28,7 +28,8 @@ namespace Editor
 		// Copy operator
 		StringProperty& operator=(const StringProperty& other);
 
-		IOBJECT(StringProperty);
+        IOBJECT(StringProperty);
+        CLONEABLE_REF(StringProperty);
 
 	protected:
 		Ref<EditBox> mEditBox; // Edit box 

@@ -61,6 +61,7 @@ namespace Editor
         void EndKeysDrag() override;
 
         SERIALIZABLE(MapKeyFramesTrackControl);
+        CLONEABLE_REF(MapKeyFramesTrackControl);
 
     private:
         struct KeyHandle : public ITrackControl::KeyHandle

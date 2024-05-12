@@ -45,6 +45,7 @@ namespace Editor
 
 		mBackColor = Color4(225, 232, 232, 255);
 
+		mHandleSamplesStubInfo = mmake<CurveInfo>();
 		mHandleSamplesStubInfo->editor = Ref(this);
 
 		mReady = true;
@@ -55,6 +56,7 @@ namespace Editor
 	{
 		mReady = false;
 
+        mHandleSamplesStubInfo = mmake<CurveInfo>();
 		mHandleSamplesStubInfo->editor = Ref(this);
 
 		mContextMenu = FindChildByType<ContextMenu>();

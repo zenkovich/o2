@@ -39,7 +39,8 @@ namespace Editor
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
-		IOBJECT(ActorProperty);
+        IOBJECT(ActorProperty);
+        CLONEABLE_REF(ActorProperty);
 
 	protected:
 		const Type* mActorType = nullptr;  // Actor value type

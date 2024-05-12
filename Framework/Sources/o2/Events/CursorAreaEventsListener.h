@@ -135,10 +135,10 @@ namespace o2
     {
     public:
         // Default constructor
-        CursorEventsListener();
+        CursorEventsListener(RefCounter* refCounter);
 
         // Copy-constructor
-        CursorEventsListener(const CursorAreaEventsListener& other);
+        CursorEventsListener(RefCounter* refCounter, const CursorAreaEventsListener& other);
 
         // Virtual destructor
         virtual ~CursorEventsListener();

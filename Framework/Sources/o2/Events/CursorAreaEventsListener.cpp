@@ -169,13 +169,15 @@ namespace o2
         return mIsPressed;
     }
 
-    CursorEventsListener::CursorEventsListener()
+    CursorEventsListener::CursorEventsListener(RefCounter* refCounter):
+        RefCounterable(refCounter)
     {
         if (EventSystem::IsSingletonInitialzed())
             EventSystem::RegCursorListener(this);
     }
 
-    CursorEventsListener::CursorEventsListener(const CursorAreaEventsListener& other)
+    CursorEventsListener::CursorEventsListener(RefCounter* refCounter, const CursorAreaEventsListener& other):
+        RefCounterable(refCounter)
     {
         if (EventSystem::IsSingletonInitialzed())
             EventSystem::RegCursorListener(this);

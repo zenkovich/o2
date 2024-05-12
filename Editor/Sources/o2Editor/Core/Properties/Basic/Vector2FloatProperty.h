@@ -64,7 +64,8 @@ namespace Editor
 		// Returns editing by this field type by static function, can't be changed during runtime
 		static const Type* GetValueTypeStatic();
 
-		IOBJECT(Vec2FProperty);
+        IOBJECT(Vec2FProperty);
+        CLONEABLE_REF(Vec2FProperty);
 
 	protected:
 		Ref<FloatProperty> mXProperty; // X value property

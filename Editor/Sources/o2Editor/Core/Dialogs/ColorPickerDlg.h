@@ -35,7 +35,7 @@ namespace Editor
 
     public:
         // Default constructor
-        ColorPickerDlg();
+        ColorPickerDlg(RefCounter* refCounter);
 
         // Destructor
         ~ColorPickerDlg();

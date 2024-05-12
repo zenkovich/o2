@@ -27,7 +27,8 @@ namespace Editor
 		// Copy operator
 		BooleanProperty& operator=(const BooleanProperty& other);
 
-		IOBJECT(BooleanProperty);
+        IOBJECT(BooleanProperty);
+        CLONEABLE_REF(BooleanProperty);
 
 	protected:
 		Ref<Toggle> mToggle; // Toggle 

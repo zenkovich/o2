@@ -411,7 +411,7 @@ namespace Editor
 	void EditorApplication::LoadUIStyle()
 	{
 		EditorUIStyleBuilder builder;
-		builder.RebuildEditorUIManager("Editor UI styles", true, true);
+		builder.RebuildEditorUIManager("Editor UI styles", true, false);
 	}
 
 	void EditorApplication::PreUpdatePhysics()

@@ -80,7 +80,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ITrackControl);
+        SERIALIZABLE(ITrackControl);
+        CLONEABLE_REF(ITrackControl);
 	};
 }
 // --- META ---

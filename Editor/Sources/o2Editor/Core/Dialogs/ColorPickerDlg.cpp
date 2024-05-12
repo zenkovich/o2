@@ -20,7 +20,8 @@ DECLARE_SINGLETON(Editor::ColorPickerDlg);
 
 namespace Editor
 {
-    ColorPickerDlg::ColorPickerDlg()
+    ColorPickerDlg::ColorPickerDlg(RefCounter* refCounter):
+        CursorEventsListener(refCounter)
     {
         mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
 

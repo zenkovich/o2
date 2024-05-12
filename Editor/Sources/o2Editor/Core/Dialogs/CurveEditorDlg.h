@@ -24,7 +24,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		CurveEditorDlg();
+        CurveEditorDlg(RefCounter* refCounter);
 
 		// Destructor
 		~CurveEditorDlg();

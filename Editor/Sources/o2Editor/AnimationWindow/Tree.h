@@ -61,6 +61,7 @@ namespace Editor
 		static String GetCreateMenuCategory();
 
 		SERIALIZABLE(AnimationTree);
+		CLONEABLE_REF(AnimationTree);
 
 	public:
 		struct TrackNode: public RefCounterable
@@ -171,7 +172,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AnimationTreeNode);
+        SERIALIZABLE(AnimationTreeNode);
+        CLONEABLE_REF(AnimationTreeNode);
 
 	protected:
 		float mPropertyBorder = 2.0f;

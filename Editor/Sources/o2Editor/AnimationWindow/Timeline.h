@@ -100,7 +100,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AnimationTimeline);
+        SERIALIZABLE(AnimationTimeline);
+        CLONEABLE_REF(AnimationTimeline);
 
 	private:
 		const float mTextOffset = 12.0f;              // Text position offset from top border

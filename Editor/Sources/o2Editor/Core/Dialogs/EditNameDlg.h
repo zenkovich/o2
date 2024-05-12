@@ -26,7 +26,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		NameEditDlg();
+		NameEditDlg(RefCounter* refCounter);
 
 		// Destructor
 		~NameEditDlg();
