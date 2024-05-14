@@ -37,7 +37,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		IOBJECT(SpoilerWithHead);
+        SERIALIZABLE(SpoilerWithHead);
+        CLONEABLE_REF(SpoilerWithHead);
 
 	private:
 		Ref<Button> mOptionsBtn; // Component option button

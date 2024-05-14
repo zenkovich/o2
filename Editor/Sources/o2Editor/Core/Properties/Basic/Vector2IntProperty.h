@@ -64,7 +64,7 @@ namespace Editor
 		// Returns editing by this field type by static function, can't be changed during runtime
 		static const Type* GetValueTypeStatic();
 
-        IOBJECT(Vec2IProperty);
+		SERIALIZABLE(Vec2IProperty);
         CLONEABLE_REF(Vec2IProperty);
 
 	protected:

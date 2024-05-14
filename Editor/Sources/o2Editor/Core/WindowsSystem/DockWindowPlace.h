@@ -55,7 +55,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(DockWindowPlace);
+        SERIALIZABLE(DockWindowPlace);
+        CLONEABLE_REF(DockWindowPlace);
 
 	protected:
 		TwoDirection mResizibleDir; // Resizible dragable side

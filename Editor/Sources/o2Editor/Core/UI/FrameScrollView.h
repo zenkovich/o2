@@ -55,7 +55,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(FrameScrollView);
+        SERIALIZABLE(FrameScrollView);
+        CLONEABLE_REF(FrameScrollView);
 
 	protected:
 		Ref<HorizontalScrollBar> mHorScrollbar; // Horizontal view scrollbar @SERIALIZABLE

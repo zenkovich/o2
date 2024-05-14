@@ -144,7 +144,8 @@ namespace Editor
         // Returns create menu category in editor
         static String GetCreateMenuCategory();
 
-        IOBJECT(IPropertyField);
+        SERIALIZABLE(IPropertyField);
+        CLONEABLE_REF(IPropertyField);
 
     protected:
         const FieldInfo* mFieldInfo = nullptr; // Specialized field info

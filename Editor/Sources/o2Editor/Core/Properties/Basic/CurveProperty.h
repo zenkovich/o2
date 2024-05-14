@@ -30,7 +30,7 @@ namespace Editor
 		// Copy operator
 		CurveProperty& operator=(const CurveProperty& other);
 
-        IOBJECT(CurveProperty);
+		SERIALIZABLE(CurveProperty);
         CLONEABLE_REF(CurveProperty);
 
 	protected:

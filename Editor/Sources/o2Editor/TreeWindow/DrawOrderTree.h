@@ -62,6 +62,7 @@ namespace Editor
         static String GetCreateMenuCategory();
 
         SERIALIZABLE(DrawOrderTree);
+        CLONEABLE_REF(DrawOrderTree);
 
     public:
         struct OrderTreeNode : public ITreeNode<OrderTreeNode>, public RefCounterable
@@ -197,6 +198,7 @@ namespace Editor
         static String GetCreateMenuCategory();
 
         SERIALIZABLE(DrawOrderTreeNode);
+        CLONEABLE_REF(DrawOrderTreeNode);
 
     protected:
         Ref<DrawOrderTree::OrderTreeNode> mTarget; // Target object

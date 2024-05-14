@@ -71,7 +71,7 @@ namespace Editor
 		// Returns editing by this field type by static function, can't be changed during runtime
 		static const Type* GetValueTypeStatic();
 
-        IOBJECT(BorderIProperty);
+		SERIALIZABLE(BorderIProperty);
         CLONEABLE_REF(BorderIProperty);
 
 	protected:

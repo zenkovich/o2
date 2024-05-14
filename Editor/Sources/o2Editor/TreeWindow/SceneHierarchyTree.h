@@ -85,6 +85,7 @@ namespace Editor
         static String GetCreateMenuCategory();
 
         SERIALIZABLE(SceneHierarchyTree);
+        CLONEABLE_REF(SceneHierarchyTree);
 
     protected:
         Ref<ToggleGroup> mEnableTogglesGroup;    // Enable objects toggles group
@@ -191,6 +192,7 @@ namespace Editor
         static String GetCreateMenuCategory();
 
         SERIALIZABLE(SceneHierarchyTreeNode);
+        CLONEABLE_REF(SceneHierarchyTreeNode);
 
     protected:
         Ref<SceneEditableObject> mTargetObject; // Target object

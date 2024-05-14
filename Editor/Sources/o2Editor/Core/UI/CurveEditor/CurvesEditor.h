@@ -109,6 +109,7 @@ namespace Editor
         static Ref<RefCounterable> CastToRefCounterable(const Ref<CurvesEditor>& ref);
 
         SERIALIZABLE(CurvesEditor);
+        CLONEABLE_REF(CurvesEditor);
 
     public:
         struct CurveInfo;

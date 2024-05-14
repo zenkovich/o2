@@ -28,7 +28,7 @@ namespace Editor
 		// Copy operator
 		IntegerProperty& operator=(const IntegerProperty& other);
 
-        IOBJECT(IntegerProperty);
+		SERIALIZABLE(IntegerProperty);
         CLONEABLE_REF(IntegerProperty);
 
 	protected:

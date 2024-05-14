@@ -27,7 +27,7 @@ namespace Editor
 		// Copy operator
 		WStringProperty& operator=(const WStringProperty& other);
 
-        IOBJECT(WStringProperty);
+		SERIALIZABLE(WStringProperty);
         CLONEABLE_REF(WStringProperty);
 
 	protected:

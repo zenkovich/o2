@@ -28,7 +28,7 @@ namespace Editor
 		// Copy operator
 		StringProperty& operator=(const StringProperty& other);
 
-        IOBJECT(StringProperty);
+		SERIALIZABLE(StringProperty);
         CLONEABLE_REF(StringProperty);
 
 	protected:

@@ -33,7 +33,7 @@ namespace Editor
 		// Returns editing by this field type by static function, can't be changed during runtime
 		static const Type* GetValueTypeStatic();
 
-        IOBJECT(EnumProperty);
+		SERIALIZABLE(EnumProperty);
         CLONEABLE_REF(EnumProperty);
 
 	protected:				       						      

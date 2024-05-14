@@ -70,7 +70,7 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-        IOBJECT(FunctionProperty);
+		SERIALIZABLE(FunctionProperty);
         CLONEABLE_REF(FunctionProperty);
 
 	protected:

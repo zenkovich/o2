@@ -29,7 +29,7 @@ namespace Editor
 		// Copy operator
 		ColorProperty& operator=(const ColorProperty& other);
 
-        IOBJECT(ColorProperty);
+		SERIALIZABLE(ColorProperty);
         CLONEABLE_REF(ColorProperty);
 
 	protected:

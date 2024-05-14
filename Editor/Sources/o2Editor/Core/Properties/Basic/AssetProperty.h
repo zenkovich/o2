@@ -57,7 +57,7 @@ namespace Editor
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
-        IOBJECT(AssetProperty);
+        SERIALIZABLE(AssetProperty);
         CLONEABLE_REF(AssetProperty);
 
 	protected:

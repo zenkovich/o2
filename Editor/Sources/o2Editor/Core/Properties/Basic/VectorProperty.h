@@ -74,7 +74,7 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-        IOBJECT(VectorProperty);
+		SERIALIZABLE(VectorProperty);
         CLONEABLE_REF(VectorProperty);
 
 	protected:

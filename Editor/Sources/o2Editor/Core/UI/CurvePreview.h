@@ -48,7 +48,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(CurvePreview);
+        SERIALIZABLE(CurvePreview);
+        CLONEABLE_REF(CurvePreview);
 
 	protected:
 		Ref<Curve> mCurve; // Viewing curve

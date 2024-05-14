@@ -73,7 +73,7 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-        IOBJECT(ObjectPtrProperty);
+		SERIALIZABLE(ObjectPtrProperty);
         CLONEABLE_REF(ObjectPtrProperty);
 
 	protected:

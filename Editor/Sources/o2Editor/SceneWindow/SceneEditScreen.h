@@ -151,7 +151,8 @@ namespace Editor
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
-		IOBJECT(SceneEditScreen);
+        SERIALIZABLE(SceneEditScreen);
+        CLONEABLE_REF(SceneEditScreen);
 
 	protected:
 		Color4 mSelectedObjectColor = Color4(220, 220, 220, 255);      // Selected object color

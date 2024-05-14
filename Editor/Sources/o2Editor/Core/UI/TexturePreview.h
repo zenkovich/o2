@@ -31,7 +31,8 @@ namespace Editor
 		// Sets viewing curve
 		void SetTexture(const Ref<Texture>& texture, const RectI& srcRect = RectI());
 
-		SERIALIZABLE(TexturePreview);
+        SERIALIZABLE(TexturePreview);
+        CLONEABLE_REF(TexturePreview);
 
 	protected:
 		const float mLabelHeight = 20.0f; // Height of the label with texture info

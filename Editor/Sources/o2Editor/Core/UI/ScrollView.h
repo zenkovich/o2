@@ -84,7 +84,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ScrollView);
+        SERIALIZABLE(ScrollView);
+        CLONEABLE_REF(ScrollView);
 
 	protected:
 		bool mReady = false; // Is widget initialized and ready to use

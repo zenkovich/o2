@@ -35,7 +35,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ImageSlicesEditorWidget);
+        SERIALIZABLE(ImageSlicesEditorWidget);
+        CLONEABLE_REF(ImageSlicesEditorWidget);
 
 	public:
 		// --------------------
@@ -53,7 +54,8 @@ namespace Editor
 			// Returns create menu category in editor
 			static String GetCreateMenuCategory();
 
-			SERIALIZABLE(PreviewImage);
+            SERIALIZABLE(PreviewImage);
+            CLONEABLE_REF(PreviewImage);
 		};
 
 	private:

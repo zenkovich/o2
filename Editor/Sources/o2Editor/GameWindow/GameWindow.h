@@ -38,7 +38,8 @@ namespace Editor
 			// Returns create menu category in editor
 			static String GetCreateMenuCategory();
 
-			SERIALIZABLE(GameView);
+            SERIALIZABLE(GameView);
+            CLONEABLE_REF(GameView);
 
 		protected:
 			Ref<Sprite>  mRenderTargetSprite; // Render target sprite, using for drawing scene render target

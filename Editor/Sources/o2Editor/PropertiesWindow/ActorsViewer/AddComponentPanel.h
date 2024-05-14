@@ -51,7 +51,8 @@ namespace Editor
         // Dynamic cast to RefCounterable via DrawableComponent
         static Ref<RefCounterable> CastToRefCounterable(const Ref<AddComponentPanel>& ref);
 
-		SERIALIZABLE(AddComponentPanel);
+        SERIALIZABLE(AddComponentPanel);
+        CLONEABLE_REF(AddComponentPanel);
 
 	private:
 		WeakRef<ActorViewer> mViewer; // Owner actors viewer
@@ -122,7 +123,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ComponentsTree);
+        SERIALIZABLE(ComponentsTree);
+        CLONEABLE_REF(ComponentsTree);
 
 	private:
 		WString  mFilterStr; // Filtering string
@@ -176,7 +178,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ComponentsTreeNode);
+        SERIALIZABLE(ComponentsTreeNode);
+        CLONEABLE_REF(ComponentsTreeNode);
 
 	private:
 		Ref<Text>   mName;

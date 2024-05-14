@@ -37,7 +37,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(LayersPopup);
+        SERIALIZABLE(LayersPopup);
+        CLONEABLE_REF(LayersPopup);
 
 	private:
         Ref<LayerPopupItem> mItemSample; // Layer item sample @SERIALIZABLE
@@ -119,7 +120,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(LayerPopupItem);
+        SERIALIZABLE(LayerPopupItem);
+        CLONEABLE_REF(LayerPopupItem);
 
 	private:		
         Ref<SceneLayer> mLayer;

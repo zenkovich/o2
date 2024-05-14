@@ -114,7 +114,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AssetsIconsScrollArea);
+        SERIALIZABLE(AssetsIconsScrollArea);
+        CLONEABLE_REF(AssetsIconsScrollArea);
 
 	protected:
 		const Vec2F mAssetIconSize = Vec2F(50, 60);

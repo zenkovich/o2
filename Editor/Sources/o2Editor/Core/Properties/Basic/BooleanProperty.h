@@ -27,7 +27,7 @@ namespace Editor
 		// Copy operator
 		BooleanProperty& operator=(const BooleanProperty& other);
 
-        IOBJECT(BooleanProperty);
+        SERIALIZABLE(BooleanProperty);
         CLONEABLE_REF(BooleanProperty);
 
 	protected:

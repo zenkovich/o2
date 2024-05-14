@@ -38,7 +38,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ObjectViewer);
+        SERIALIZABLE(ObjectViewer);
+        CLONEABLE_REF(ObjectViewer);
 
 	protected:
 		Ref<PropertiesContext> mParentContext; // Parent properties context

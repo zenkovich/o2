@@ -48,7 +48,8 @@ namespace Editor
 		// Converts point from local to screen space
 		Vec2F LocalToScreen(const Vec2F& point) override;
 
-		SERIALIZABLE(SceneDragHandle);
+        SERIALIZABLE(SceneDragHandle);
+        CLONEABLE_REF(SceneDragHandle);
 
 	protected:
 		friend class SceneEditScreen;

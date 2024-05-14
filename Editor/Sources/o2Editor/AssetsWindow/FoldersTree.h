@@ -36,7 +36,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AssetsFoldersTree);
+        SERIALIZABLE(AssetsFoldersTree);
+        CLONEABLE_REF(AssetsFoldersTree);
 
 	protected:
 		Ref<Tree>        mFoldersTree; // Folders tree
@@ -114,7 +115,8 @@ namespace Editor
         // Copy-constructor
         FoldersTree(const FoldersTree& other);
 
-		SERIALIZABLE(FoldersTree);
+        SERIALIZABLE(FoldersTree);
+        CLONEABLE_REF(FoldersTree);
 
 	protected:
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode

@@ -73,7 +73,7 @@ namespace Editor
 		// Returns is spoiler header enabled
 		bool IsHeaderEnabled() const;
 
-        IOBJECT(ScriptValueProperty);
+		SERIALIZABLE(ScriptValueProperty);
         CLONEABLE_REF(ScriptValueProperty);
 
 	protected:
