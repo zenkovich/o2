@@ -39,7 +39,7 @@ namespace Editor
 
 	public:
 		// Default constructor
-		AnimationWindow();
+		AnimationWindow(RefCounter* refCounter);
 
 		// Destructor
 		~AnimationWindow();
@@ -204,7 +204,7 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationWindow)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&, const Ref<AnimationPlayer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationEditable, const Ref<IEditableAnimation>&);

@@ -20,9 +20,9 @@ namespace o2
 {
     Debug::Debug()
     {
-        auto fileLogStream = mmake<FileLogStream>("", "log.txt");
+        mFileLogStream = mmake<FileLogStream>("", "log.txt");
         mLogStream = mmake<ConsoleLogStream>("");
-        fileLogStream->BindStream(mLogStream);
+        mFileLogStream->BindStream(mLogStream);
     }
 
     Debug::~Debug()

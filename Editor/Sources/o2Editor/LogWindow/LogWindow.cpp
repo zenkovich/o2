@@ -26,8 +26,13 @@ namespace Editor
 			o2Debug.LogError("Error message " + (String)o2Time.GetLocalTime());
 	}
 
-	LogWindow::LogWindow():
-		mRegularMessagesEnabled(true), mWarningMessagesEnabled(true), mErrorMessagesEnabled(true), mRegularMessagesCount(0),
+    Ref<RefCounterable> LogWindow::CastToRefCounterable(const Ref<LogWindow>& ref)
+    {
+		return DynamicCast<IEditorWindow>(ref);
+    }
+
+    LogWindow::LogWindow(RefCounter* refCounter) :
+		IEditorWindow(refCounter), mRegularMessagesEnabled(true), mWarningMessagesEnabled(true), mErrorMessagesEnabled(true), mRegularMessagesCount(0),
 		mWarningMessagesCount(0), mErrorMessagesCount(0)
 	{
 		InitializeWindow();

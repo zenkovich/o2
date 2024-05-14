@@ -18,7 +18,8 @@ DECLARE_SINGLETON(Editor::AnimationWindow);
 
 namespace Editor
 {
-	AnimationWindow::AnimationWindow()
+	AnimationWindow::AnimationWindow(RefCounter* refCounter):
+		IEditorWindow(refCounter)
 	{
 		InitializeWindow();
 	}

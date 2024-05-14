@@ -44,7 +44,7 @@ namespace Editor
 
 		for (auto& type : windowTypes)
 		{
-			auto newWindow = Ref((IEditorWindow*)type->CreateSample());
+			auto newWindow = DynamicCast<IEditorWindow>(type->CreateSampleRef());
 			mEditorWindows.Add(newWindow);
 		}
 

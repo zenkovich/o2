@@ -10,11 +10,14 @@ namespace Editor
 	// -----------------------------
 	// Basic editor window interface
 	// -----------------------------
-	class IEditorWindow: public IObject, virtual public RefCounterable
+	class IEditorWindow: public IObject, public RefCounterable
 	{
-	public:
-		// Default constructor
-		IEditorWindow();
+    public:
+        // Default constructor
+        IEditorWindow();
+
+        // Default constructor
+        IEditorWindow(RefCounter* refCounter);
 
 		// Copy-constructor
 		IEditorWindow(const IEditorWindow& other);
@@ -79,6 +82,7 @@ CLASS_METHODS_META(Editor::IEditorWindow)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const IEditorWindow&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetVisible, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);

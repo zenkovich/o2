@@ -9,15 +9,9 @@
 
 namespace Editor
 {
-	IEditorWindow::IEditorWindow()
-	{
-		mWindow = o2UI.CreateWidget<DockableWindow>();
-		mWindow->layout->size = Vec2F(200, 200);
-		mWindow->onOpened = THIS_FUNC(OnOpened);
-		mWindow->onClosed = THIS_FUNC(OnClosed);
-
-		EditorUIRoot.AddWidget(mWindow);
-	}
+	IEditorWindow::IEditorWindow():
+		IEditorWindow(nullptr)
+	{}
 
 	IEditorWindow::IEditorWindow(const IEditorWindow& other):
 		mWindow(other.mWindow->CloneAsRef<DockableWindow>())
@@ -26,7 +20,18 @@ namespace Editor
 			EditorUIRoot.AddWidget(mWindow);
 	}
 
-	IEditorWindow::~IEditorWindow()
+    IEditorWindow::IEditorWindow(RefCounter* refCounter):
+		RefCounterable(refCounter)
+    {
+        mWindow = o2UI.CreateWidget<DockableWindow>();
+        mWindow->layout->size = Vec2F(200, 200);
+        mWindow->onOpened = THIS_FUNC(OnOpened);
+        mWindow->onClosed = THIS_FUNC(OnClosed);
+
+        EditorUIRoot.AddWidget(mWindow);
+    }
+
+    IEditorWindow::~IEditorWindow()
 	{}
 
 	void IEditorWindow::Show()

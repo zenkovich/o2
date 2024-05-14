@@ -37,10 +37,20 @@ namespace Editor
 
 			// Overloading the equality operator to compare two LogMessage objects
 			bool operator==(const LogMessage& other) const;
-		};
+        };
+
+	public:
+        // Default constructor
+        LogWindow(RefCounter* refCounter);
+
+        // Destructor
+        ~LogWindow();
 
 		// Updates window logic
-		void Update(float dt) override;
+        void Update(float dt) override;
+
+        // Dynamic cast to RefCounterable via IEditorWindow
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<LogWindow>& ref);
 
 	protected:
 		Ref<LongList> mList;            // Reference to the LongList widget
@@ -60,13 +70,6 @@ namespace Editor
 		int mRegularMessagesCount = 0; // Count of regular messages
 		int mWarningMessagesCount = 0; // Count of warning messages
 		int mErrorMessagesCount = 0;   // Count of error messages
-
-	public:
-		// Default constructor
-		LogWindow();
-
-		// Destructor
-		~LogWindow();
 
 	protected:
 		// Initializes window
@@ -107,6 +110,8 @@ namespace Editor
 
 		// Updates last message view
 		void UpdateLastMessageView();
+
+		REF_COUNTERABLE_IMPL(IEditorWindow, LogStream);
 	};
 }
 // --- META ---
@@ -139,8 +144,9 @@ END_META;
 CLASS_METHODS_META(Editor::LogWindow)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<LogWindow>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClearPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRegularMessagesToggled, bool);

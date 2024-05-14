@@ -671,6 +671,7 @@ namespace o2
                 DestructObject(mPtr);
 
                 refCounter->weakReferences--;
+                refCounter->strongReferences = 0;
 
                 mPtr = nullptr;
 

@@ -213,7 +213,8 @@ namespace o2
         };
 
     protected:
-        Ref<LogStream> mLogStream; // Main log stream
+        Ref<LogStream> mFileLogStream; // File log stream
+        Ref<LogStream> mLogStream;     // Main log stream
 
         Vector<Ref<IDbgDrawable>> mDbgDrawables;       // Debug drawables array
         Vector<Ref<IDbgDrawable>> mEditorDbgDrawables; // Debug drawables array for editor

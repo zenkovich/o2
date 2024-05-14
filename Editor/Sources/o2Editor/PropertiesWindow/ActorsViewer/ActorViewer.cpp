@@ -41,12 +41,12 @@ namespace Editor
 			if (type->GetName().Contains("TActorComponentViewer"))
 				continue;
 
-			mAvailableComponentsViewers.Add(Ref((IActorComponentViewer*)type->CreateSample()));
+			mAvailableComponentsViewers.Add(DynamicCast<IActorComponentViewer>(type->CreateSampleRef()));
 		}
 
 		auto actorPropertiessViewersTypes = TypeOf(IActorPropertiesViewer).GetDerivedTypes();
 		for (auto& type : actorPropertiessViewersTypes)
-			mAvailableActorPropertiesViewers.Add(Ref((IActorPropertiesViewer*)type->CreateSample()));
+			mAvailableActorPropertiesViewers.Add(DynamicCast<IActorPropertiesViewer>(type->CreateSampleRef()));
 
 		// Initialize content widget and viewers layout
 		mContentWidget = mmake<Widget>();
