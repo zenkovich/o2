@@ -1355,7 +1355,10 @@ namespace o2
 
     Ref<SceneLayer> Actor::GetSceneDrawableSceneLayer() const
     {
-        return mSceneLayer;
+        if (mSceneLayer)
+            return mSceneLayer;
+
+        return o2Scene.GetDefaultLayer();
     }
 
     Ref<ISceneDrawable> Actor::GetParentDrawable()
