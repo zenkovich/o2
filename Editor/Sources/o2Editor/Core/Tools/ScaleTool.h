@@ -26,9 +26,9 @@ namespace Editor
         IOBJECT(ScaleTool);
 
     protected:
-		SceneDragHandle mHorDragHandle;  // Horizontal scale drag handle
-		SceneDragHandle mVerDragHandle;  // Vertical scale drag handle
-		SceneDragHandle mBothDragHandle; // Bot axis scale drag handle
+		Ref<SceneDragHandle> mHorDragHandle;  // Horizontal scale drag handle
+		Ref<SceneDragHandle> mVerDragHandle;  // Vertical scale drag handle
+		Ref<SceneDragHandle> mBothDragHandle; // Bot axis scale drag handle
 
         float mHandlesAngle = 0.0f;			  // Handles angle in radians
         Vec2F mSceneHandlesPos;				  // Scene space handles position

@@ -6,7 +6,14 @@
 
 namespace Editor
 {
-	IPropertiesViewer::~IPropertiesViewer()
+    IPropertiesViewer::IPropertiesViewer()
+    {}
+
+    IPropertiesViewer::IPropertiesViewer(RefCounter* refCounter):
+		RefCounterable(refCounter)
+    {}
+
+    IPropertiesViewer::~IPropertiesViewer()
 	{}
 
 	const Type* IPropertiesViewer::GetViewingObjectType() const

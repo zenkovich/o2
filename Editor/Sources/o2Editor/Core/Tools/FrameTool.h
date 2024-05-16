@@ -57,25 +57,25 @@ namespace Editor
 
         const float mFrameMinimalSize = 0.001f;   // Minimal size of transforming frame
 
-        SceneDragHandle mLeftTopRotateHandle;	  // Left top rotation handle
-        SceneDragHandle mLeftBottomRotateHandle;  // Left bottom rotation handle
-        SceneDragHandle mRightTopRotateHandle;	  // Right top rotation handle
-        SceneDragHandle mRightBottomRotateHandle; // Right bottom rotation handle
-        SceneDragHandle mLeftTopHandle;			  // Left top corner frame handle
-        SceneDragHandle mLeftHandle;			  // Left corner frame handle
-        SceneDragHandle mLeftBottomHandle;		  // Left bottom corner frame handle
-        SceneDragHandle mTopHandle;				  // Top corner frame handle
-        SceneDragHandle mBottomHandle;			  // Bottom corner frame handle
-        SceneDragHandle mRightTopHandle;		  // Right top corner frame handle
-        SceneDragHandle mRightHandle;			  // Right corner frame handle
-        SceneDragHandle mRightBottomHandle;		  // Right bottom corner frame handle
-        SceneDragHandle mPivotHandle;			  // Frame or object pivot handle
+        Ref<SceneDragHandle> mLeftTopRotateHandle;	  // Left top rotation handle
+        Ref<SceneDragHandle> mLeftBottomRotateHandle;  // Left bottom rotation handle
+        Ref<SceneDragHandle> mRightTopRotateHandle;	  // Right top rotation handle
+        Ref<SceneDragHandle> mRightBottomRotateHandle; // Right bottom rotation handle
+        Ref<SceneDragHandle> mLeftTopHandle;			  // Left top corner frame handle
+        Ref<SceneDragHandle> mLeftHandle;			  // Left corner frame handle
+        Ref<SceneDragHandle> mLeftBottomHandle;		  // Left bottom corner frame handle
+        Ref<SceneDragHandle> mTopHandle;				  // Top corner frame handle
+        Ref<SceneDragHandle> mBottomHandle;			  // Bottom corner frame handle
+        Ref<SceneDragHandle> mRightTopHandle;		  // Right top corner frame handle
+        Ref<SceneDragHandle> mRightHandle;			  // Right corner frame handle
+        Ref<SceneDragHandle> mRightBottomHandle;		  // Right bottom corner frame handle
+        Ref<SceneDragHandle> mPivotHandle;			  // Frame or object pivot handle
                                                           
-        SceneDragHandle mAnchorsLeftTopHandle;	   // Anchors Left top corner frame handle
-        SceneDragHandle mAnchorsLeftBottomHandle;  // Anchors Left bottom corner frame handle
-        SceneDragHandle mAnchorsRightTopHandle;	   // Anchors Right top corner frame handle
-        SceneDragHandle mAnchorsRightBottomHandle; // Anchors Right bottom corner frame handle
-        SceneDragHandle mAnchorsCenter;            // Anchors center, enables when all anchors in one point and drags all of them
+        Ref<SceneDragHandle> mAnchorsLeftTopHandle;	   // Anchors Left top corner frame handle
+        Ref<SceneDragHandle> mAnchorsLeftBottomHandle;  // Anchors Left bottom corner frame handle
+        Ref<SceneDragHandle> mAnchorsRightTopHandle;	   // Anchors Right top corner frame handle
+        Ref<SceneDragHandle> mAnchorsRightBottomHandle; // Anchors Right bottom corner frame handle
+        Ref<SceneDragHandle> mAnchorsCenter;            // Anchors center, enables when all anchors in one point and drags all of them
                                                           
         Basis mFrame; // Frame basis
                                                           

@@ -31,9 +31,9 @@ namespace Editor
 		IOBJECT(MoveTool);
 
 	protected:
-		SceneDragHandle mHorDragHandle;  // Horizontal arrow handle
-		SceneDragHandle mVerDragHandle;  // Vertical arrow handle
-		SceneDragHandle mBothDragHandle; // Both arrow handle
+		Ref<SceneDragHandle> mHorDragHandle;  // Horizontal arrow handle
+		Ref<SceneDragHandle> mVerDragHandle;  // Vertical arrow handle
+		Ref<SceneDragHandle> mBothDragHandle; // Both arrow handle
 						 
 		Vec2F mLastSceneHandlesPos; // Last scene handles position 
 		Vec2F mSnapPosition;        // Snapping handles position

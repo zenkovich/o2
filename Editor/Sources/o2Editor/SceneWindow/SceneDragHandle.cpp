@@ -9,8 +9,8 @@
 
 namespace Editor
 {
-	SceneDragHandle::SceneDragHandle():
-		DragHandle()
+	SceneDragHandle::SceneDragHandle(RefCounter* refCounter):
+		DragHandle(refCounter)
 	{
 		if (WindowsManager::IsSingletonInitialzed())
 		{
@@ -19,9 +19,9 @@ namespace Editor
 		}
 	}
 
-	SceneDragHandle::SceneDragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, 
+	SceneDragHandle::SceneDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/,
 									 const Ref<IRectDrawable>& pressed /*= nullptr*/):
-		DragHandle(regular, hover, pressed)
+		DragHandle(refCounter, regular, hover, pressed)
 	{
 		if (WindowsManager::IsSingletonInitialzed())
 		{
@@ -30,8 +30,8 @@ namespace Editor
 		}
 	}
 
-	SceneDragHandle::SceneDragHandle(const SceneDragHandle& other):
-		DragHandle(other)
+	SceneDragHandle::SceneDragHandle(RefCounter* refCounter, const SceneDragHandle& other):
+		DragHandle(refCounter, other)
 	{
 		if (WindowsManager::IsSingletonInitialzed())
 		{

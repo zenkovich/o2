@@ -22,13 +22,13 @@ namespace Editor
 
 	public:
 		// Default constructor
-		SceneDragHandle();
+        SceneDragHandle(RefCounter* refCounter);
 
 		// Constructor with views
-		SceneDragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr, const Ref<IRectDrawable>& pressed = nullptr);
+		SceneDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr, const Ref<IRectDrawable>& pressed = nullptr);
 
 		// Copy-constructor
-		SceneDragHandle(const SceneDragHandle& other);
+		SceneDragHandle(RefCounter* refCounter, const SceneDragHandle& other);
 
 		// Destructor
 		~SceneDragHandle();
@@ -72,9 +72,9 @@ END_META;
 CLASS_METHODS_META(Editor::SceneDragHandle)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneDragHandle&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const SceneDragHandle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);

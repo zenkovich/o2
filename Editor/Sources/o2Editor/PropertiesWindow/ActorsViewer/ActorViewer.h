@@ -28,7 +28,8 @@ namespace Editor
 	class ActorViewer: public IPropertiesViewer
 	{
 	public:
-		ActorViewer();
+		// Default constructor
+        ActorViewer(RefCounter* refCounter);
 
 		// Virtual destructor
 		~ActorViewer();
@@ -133,7 +134,7 @@ CLASS_METHODS_META(Editor::ActorViewer)
 
     typedef Vector<Pair<const Type*, Vector<Component*>>> _tmp1;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE(void, SetActorHeaderViewer, const Ref<IActorHeaderViewer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetActorTransformViewer, const Ref<IActorTransformViewer>&);

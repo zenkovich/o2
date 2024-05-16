@@ -51,13 +51,24 @@ namespace o2
         // Default constructor
         DragHandle();
 
+        // Default constructor
+        DragHandle(RefCounter* refCounter);
+
         // Constructor with views
-        DragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr, 
-                   const Ref<IRectDrawable>& pressed = nullptr, const Ref<IRectDrawable>& selected = nullptr, 
+        DragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr,
+                   const Ref<IRectDrawable>& pressed = nullptr, const Ref<IRectDrawable>& selected = nullptr,
+                   const Ref<IRectDrawable>& selectedHovered = nullptr, const Ref<IRectDrawable>& selectedPressed = nullptr);
+
+        // Constructor with views
+        DragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr,
+                   const Ref<IRectDrawable>& pressed = nullptr, const Ref<IRectDrawable>& selected = nullptr,
                    const Ref<IRectDrawable>& selectedHovered = nullptr, const Ref<IRectDrawable>& selectedPressed = nullptr);
 
         // Copy-constructor
         DragHandle(const DragHandle& other);
+
+        // Copy-constructor
+        DragHandle(RefCounter* refCounter, const DragHandle& other);
 
         // Destructor
         virtual ~DragHandle();
@@ -513,8 +524,11 @@ CLASS_METHODS_META(o2::DragHandle)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const DragHandle&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const DragHandle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);

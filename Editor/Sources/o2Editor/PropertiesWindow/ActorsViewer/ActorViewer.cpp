@@ -24,7 +24,8 @@
 
 namespace Editor
 {
-	ActorViewer::ActorViewer()
+	ActorViewer::ActorViewer(RefCounter* refCounter):
+		IPropertiesViewer(refCounter)
 	{
 		PushEditorScopeOnStack scope;
 

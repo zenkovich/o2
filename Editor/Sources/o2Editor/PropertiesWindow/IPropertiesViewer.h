@@ -16,9 +16,15 @@ namespace Editor
 	// ----------------------------------
 	// Object properties viewer interface
 	// ----------------------------------
-	class IPropertiesViewer: public IObject, virtual public RefCounterable
+	class IPropertiesViewer: public IObject, public RefCounterable
 	{
 	public:
+		// Default constructor
+		IPropertiesViewer();
+
+		// Default constructor
+		IPropertiesViewer(RefCounter* refCounter);
+
 		// Virtual destructor
 		virtual ~IPropertiesViewer();
 
@@ -77,6 +83,8 @@ END_META;
 CLASS_METHODS_META(Editor::IPropertiesViewer)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

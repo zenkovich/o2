@@ -145,6 +145,9 @@ namespace Editor
 
 	void ComponentsTree::Refresh()
 	{
+		if (!mRoot)
+			return;
+
 		mRoot->Clear();
 
 		auto componentsTypes = TypeOf(Component).GetDerivedTypes();

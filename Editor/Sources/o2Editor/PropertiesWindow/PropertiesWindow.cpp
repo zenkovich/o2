@@ -66,7 +66,7 @@ namespace Editor
 		viewersTypes.Remove(&TypeOf(DefaultPropertiesViewer));
 
 		for (auto& type : viewersTypes)
-			mViewers.Add(Ref((IPropertiesViewer*)type->CreateSample()));
+			mViewers.Add(DynamicCast<IPropertiesViewer>(type->CreateSampleRef()));
 
 		mDefaultViewer = mmake<DefaultPropertiesViewer>();
 	}

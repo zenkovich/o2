@@ -51,11 +51,12 @@ namespace Editor
 		Ref<Mesh> mAngleMesh;          // Rotation angle mesh
 		Vec2F     mScenePivot;		   // Rotation pivot in scene space
 						 							   
-		SceneDragHandle  mPivotDragHandle;			   // Pivot drag handle
-		float            mPressAngle;				   // Angle at cursor pressing
-		float            mCurrentRotateAngle;		   // Current rotation angle
-		bool             mRingPressed = false;		   // Is rotate ring was pressed
-		float            mSnapAngleAccumulated = 0.0f; // Snapping angle accumulated
+		Ref<SceneDragHandle> mPivotDragHandle; // Pivot drag handle
+
+        float mPressAngle;				   // Angle at cursor pressing
+        float mCurrentRotateAngle;		   // Current rotation angle
+        bool  mRingPressed = false;		   // Is rotate ring was pressed
+        float mSnapAngleAccumulated = 0.0f; // Snapping angle accumulated
 						 
 		Vector<Basis>        mBeforeTransforms; // Array of objects' transformations before changing
 		Ref<TransformAction> mTransformAction;  // Current transform action. Creates when transform started

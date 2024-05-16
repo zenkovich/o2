@@ -15,135 +15,141 @@ namespace Editor
 {
 	FrameTool::FrameTool()
 	{
-		mLeftTopRotateHandle.SetRegularDrawable(mmake<Sprite>("ui/UI3_rotate_regular.png"));
-		mLeftTopRotateHandle.SetHoverDrawable(mmake<Sprite>("ui/UI3_rotate_hover.png"));
-		mLeftTopRotateHandle.SetPressedDrawable(mmake<Sprite>("ui/UI3_rotate_pressed.png"));
-		mLeftTopRotateHandle.GetRegularDrawable()->pivot = Vec2F(0, 0);
-		mLeftTopRotateHandle.GetHoverDrawable()->pivot = Vec2F(0, 0);
-		mLeftTopRotateHandle.GetPressedDrawable()->pivot = Vec2F(0, 0);
-		mLeftTopRotateHandle.pixelPerfect = false;
+		mLeftTopRotateHandle = mmake<SceneDragHandle>();
+		mLeftTopRotateHandle->SetRegularDrawable(mmake<Sprite>("ui/UI3_rotate_regular.png"));
+		mLeftTopRotateHandle->SetHoverDrawable(mmake<Sprite>("ui/UI3_rotate_hover.png"));
+		mLeftTopRotateHandle->SetPressedDrawable(mmake<Sprite>("ui/UI3_rotate_pressed.png"));
+		mLeftTopRotateHandle->GetRegularDrawable()->pivot = Vec2F(0, 0);
+		mLeftTopRotateHandle->GetHoverDrawable()->pivot = Vec2F(0, 0);
+		mLeftTopRotateHandle->GetPressedDrawable()->pivot = Vec2F(0, 0);
+		mLeftTopRotateHandle->pixelPerfect = false;
 
-		mLeftBottomRotateHandle = mLeftTopRotateHandle;
-		mRightTopRotateHandle = mLeftTopRotateHandle;
-		mRightBottomRotateHandle = mLeftTopRotateHandle;
+		mLeftBottomRotateHandle = mLeftTopRotateHandle->CloneAsRef<SceneDragHandle>();
+		mRightTopRotateHandle = mLeftTopRotateHandle->CloneAsRef<SceneDragHandle>();
+		mRightBottomRotateHandle = mLeftTopRotateHandle->CloneAsRef<SceneDragHandle>();
 
-		mLeftTopHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_regular.png"));
-		mLeftTopHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_select.png"));
-		mLeftTopHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_pressed.png"));
-		mLeftTopHandle.pixelPerfect = false;
+		mLeftTopHandle = mmake<SceneDragHandle>();
+		mLeftTopHandle->SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_regular.png"));
+		mLeftTopHandle->SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_select.png"));
+		mLeftTopHandle->SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_pressed.png"));
+		mLeftTopHandle->pixelPerfect = false;
 
-		mLeftBottomHandle = mLeftTopHandle;
-		mRightTopHandle = mLeftTopHandle;
-		mRightBottomHandle = mLeftTopHandle;
+		mLeftBottomHandle = mLeftTopHandle->CloneAsRef<SceneDragHandle>();
+		mRightTopHandle = mLeftTopHandle->CloneAsRef<SceneDragHandle>();
+		mRightBottomHandle = mLeftTopHandle->CloneAsRef<SceneDragHandle>();
 
-		mLeftHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_side_regular.png"));
-		mLeftHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_side_select.png"));
-		mLeftHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_side_pressed.png"));
-		mLeftHandle.pixelPerfect = false;
+		mLeftHandle = mmake<SceneDragHandle>();
+		mLeftHandle->SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_side_regular.png"));
+		mLeftHandle->SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_side_select.png"));
+		mLeftHandle->SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_side_pressed.png"));
+		mLeftHandle->pixelPerfect = false;
 
-		mTopHandle = mLeftHandle;
-		mBottomHandle = mLeftHandle;
-		mRightHandle = mLeftHandle;
+		mTopHandle = mLeftHandle->CloneAsRef<SceneDragHandle>();
+		mBottomHandle = mLeftHandle->CloneAsRef<SceneDragHandle>();
+		mRightHandle = mLeftHandle->CloneAsRef<SceneDragHandle>();
 
-		mPivotHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_pivot.png"));
-		mPivotHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_pivot_select.png"));
-		mPivotHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_pivot_pressed.png"));
-		mPivotHandle.checkSnappingFunc = THIS_FUNC(CheckPivotSnapping);
+		mPivotHandle = mmake<SceneDragHandle>();
+		mPivotHandle->SetRegularDrawable(mmake<Sprite>("ui/UI2_pivot.png"));
+		mPivotHandle->SetHoverDrawable(mmake<Sprite>("ui/UI2_pivot_select.png"));
+		mPivotHandle->SetPressedDrawable(mmake<Sprite>("ui/UI2_pivot_pressed.png"));
+		mPivotHandle->checkSnappingFunc = THIS_FUNC(CheckPivotSnapping);
 
-		mAnchorsLeftTopHandle.SetRegularDrawable(mmake<Sprite>("ui/UI3_anchor_pressed.png"));
-		mAnchorsLeftTopHandle.SetHoverDrawable(mmake<Sprite>("ui/UI3_anchor_hover.png"));
-		mAnchorsLeftTopHandle.SetPressedDrawable(mmake<Sprite>("ui/UI3_anchor_regular.png"));
-		mAnchorsLeftTopHandle.GetRegularDrawable()->pivot = Vec2F(1, 0);
-		mAnchorsLeftTopHandle.GetHoverDrawable()->pivot = Vec2F(1, 0);
-		mAnchorsLeftTopHandle.GetPressedDrawable()->pivot = Vec2F(1, 0);
+		mAnchorsLeftTopHandle = mmake<SceneDragHandle>();
+		mAnchorsLeftTopHandle->SetRegularDrawable(mmake<Sprite>("ui/UI3_anchor_pressed.png"));
+		mAnchorsLeftTopHandle->SetHoverDrawable(mmake<Sprite>("ui/UI3_anchor_hover.png"));
+		mAnchorsLeftTopHandle->SetPressedDrawable(mmake<Sprite>("ui/UI3_anchor_regular.png"));
+		mAnchorsLeftTopHandle->GetRegularDrawable()->pivot = Vec2F(1, 0);
+		mAnchorsLeftTopHandle->GetHoverDrawable()->pivot = Vec2F(1, 0);
+		mAnchorsLeftTopHandle->GetPressedDrawable()->pivot = Vec2F(1, 0);
 
-		mAnchorsRightBottomHandle = mAnchorsLeftTopHandle;
-		mAnchorsLeftBottomHandle = mAnchorsLeftTopHandle;
-		mAnchorsRightTopHandle = mAnchorsLeftTopHandle;
+		mAnchorsRightBottomHandle = mAnchorsLeftTopHandle->CloneAsRef<SceneDragHandle>();
+		mAnchorsLeftBottomHandle = mAnchorsLeftTopHandle->CloneAsRef<SceneDragHandle>();
+		mAnchorsRightTopHandle = mAnchorsLeftTopHandle->CloneAsRef<SceneDragHandle>();
 
 		auto centerAnchorsRegularSprite = mmake<Sprite>();
 		centerAnchorsRegularSprite->SetSize(Vec2F(0, 0));
-		mAnchorsCenter.SetRegularDrawable(centerAnchorsRegularSprite);
-		mAnchorsCenter.SetHoverDrawable(mmake<Sprite>("ui/UI3_anchors_hover.png"));
-		mAnchorsCenter.SetPressedDrawable(mmake<Sprite>("ui/UI3_anchors_pressed.png"));
+		mAnchorsCenter = mmake<SceneDragHandle>();
+		mAnchorsCenter->SetRegularDrawable(centerAnchorsRegularSprite);
+		mAnchorsCenter->SetHoverDrawable(mmake<Sprite>("ui/UI3_anchors_hover.png"));
+		mAnchorsCenter->SetPressedDrawable(mmake<Sprite>("ui/UI3_anchors_pressed.png"));
 
-		mLeftTopHandle.onChangedPos = THIS_FUNC(OnLeftTopHandle);
-		mLeftHandle.onChangedPos = THIS_FUNC(OnLeftHandle);
-		mLeftBottomHandle.onChangedPos = THIS_FUNC(OnLeftBottomHandle);
-		mTopHandle.onChangedPos = THIS_FUNC(OnTopHandle);
-		mBottomHandle.onChangedPos = THIS_FUNC(OnBottomHandle);
-		mRightTopHandle.onChangedPos = THIS_FUNC(OnRightTopHandle);
-		mRightHandle.onChangedPos = THIS_FUNC(OnRightHandle);
-		mRightBottomHandle.onChangedPos = THIS_FUNC(OnRightBottomHandle);
-		mPivotHandle.onChangedPos = THIS_FUNC(OnPivotHandle);
-		mLeftTopRotateHandle.onChangedPos = THIS_FUNC(OnLeftTopRotateHandle);
-		mLeftBottomRotateHandle.onChangedPos = THIS_FUNC(OnLeftBottomRotateHandle);
-		mRightTopRotateHandle.onChangedPos = THIS_FUNC(OnRightTopRotateHandle);
-		mRightBottomRotateHandle.onChangedPos = THIS_FUNC(OnRightBottomRotateHandle);
-		mAnchorsLeftTopHandle.onChangedPos = THIS_FUNC(OnAnchorLeftTopHandle);
-		mAnchorsRightBottomHandle.onChangedPos = THIS_FUNC(OnAnchorRightBottomHandle);
-		mAnchorsLeftBottomHandle.onChangedPos = THIS_FUNC(OnAnchorLeftBottomHandle);
-		mAnchorsRightTopHandle.onChangedPos = THIS_FUNC(OnAnchorRightTopHandle);
-		mAnchorsCenter.onChangedPos = THIS_FUNC(OnCenterAnchorHandle);
+		mLeftTopHandle->onChangedPos = THIS_FUNC(OnLeftTopHandle);
+		mLeftHandle->onChangedPos = THIS_FUNC(OnLeftHandle);
+		mLeftBottomHandle->onChangedPos = THIS_FUNC(OnLeftBottomHandle);
+		mTopHandle->onChangedPos = THIS_FUNC(OnTopHandle);
+		mBottomHandle->onChangedPos = THIS_FUNC(OnBottomHandle);
+		mRightTopHandle->onChangedPos = THIS_FUNC(OnRightTopHandle);
+		mRightHandle->onChangedPos = THIS_FUNC(OnRightHandle);
+		mRightBottomHandle->onChangedPos = THIS_FUNC(OnRightBottomHandle);
+		mPivotHandle->onChangedPos = THIS_FUNC(OnPivotHandle);
+		mLeftTopRotateHandle->onChangedPos = THIS_FUNC(OnLeftTopRotateHandle);
+		mLeftBottomRotateHandle->onChangedPos = THIS_FUNC(OnLeftBottomRotateHandle);
+		mRightTopRotateHandle->onChangedPos = THIS_FUNC(OnRightTopRotateHandle);
+		mRightBottomRotateHandle->onChangedPos = THIS_FUNC(OnRightBottomRotateHandle);
+		mAnchorsLeftTopHandle->onChangedPos = THIS_FUNC(OnAnchorLeftTopHandle);
+		mAnchorsRightBottomHandle->onChangedPos = THIS_FUNC(OnAnchorRightBottomHandle);
+		mAnchorsLeftBottomHandle->onChangedPos = THIS_FUNC(OnAnchorLeftBottomHandle);
+		mAnchorsRightTopHandle->onChangedPos = THIS_FUNC(OnAnchorRightTopHandle);
+		mAnchorsCenter->onChangedPos = THIS_FUNC(OnCenterAnchorHandle);
 
-		mLeftTopHandle.onPressed = THIS_FUNC(HandlePressed);
-		mLeftHandle.onPressed = THIS_FUNC(HandlePressed);
-		mLeftBottomHandle.onPressed = THIS_FUNC(HandlePressed);
-		mTopHandle.onPressed = THIS_FUNC(HandlePressed);
-		mBottomHandle.onPressed = THIS_FUNC(HandlePressed);
-		mRightTopHandle.onPressed = THIS_FUNC(HandlePressed);
-		mRightHandle.onPressed = THIS_FUNC(HandlePressed);
-		mRightBottomHandle.onPressed = THIS_FUNC(HandlePressed);
-		mPivotHandle.onPressed = THIS_FUNC(HandlePressed);
-		mLeftTopRotateHandle.onPressed = THIS_FUNC(HandlePressed);
-		mLeftBottomRotateHandle.onPressed = THIS_FUNC(HandlePressed);
-		mRightTopRotateHandle.onPressed = THIS_FUNC(HandlePressed);
-		mRightBottomRotateHandle.onPressed = THIS_FUNC(HandlePressed);
-		mAnchorsLeftTopHandle.onPressed = THIS_FUNC(HandlePressed);
-		mAnchorsRightBottomHandle.onPressed = THIS_FUNC(HandlePressed);
-		mAnchorsLeftBottomHandle.onPressed = THIS_FUNC(HandlePressed);
-		mAnchorsRightTopHandle.onPressed = THIS_FUNC(HandlePressed);
-		mAnchorsCenter.onPressed = THIS_FUNC(HandlePressed);
+		mLeftTopHandle->onPressed = THIS_FUNC(HandlePressed);
+		mLeftHandle->onPressed = THIS_FUNC(HandlePressed);
+		mLeftBottomHandle->onPressed = THIS_FUNC(HandlePressed);
+		mTopHandle->onPressed = THIS_FUNC(HandlePressed);
+		mBottomHandle->onPressed = THIS_FUNC(HandlePressed);
+		mRightTopHandle->onPressed = THIS_FUNC(HandlePressed);
+		mRightHandle->onPressed = THIS_FUNC(HandlePressed);
+		mRightBottomHandle->onPressed = THIS_FUNC(HandlePressed);
+		mPivotHandle->onPressed = THIS_FUNC(HandlePressed);
+		mLeftTopRotateHandle->onPressed = THIS_FUNC(HandlePressed);
+		mLeftBottomRotateHandle->onPressed = THIS_FUNC(HandlePressed);
+		mRightTopRotateHandle->onPressed = THIS_FUNC(HandlePressed);
+		mRightBottomRotateHandle->onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsLeftTopHandle->onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsRightBottomHandle->onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsLeftBottomHandle->onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsRightTopHandle->onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsCenter->onPressed = THIS_FUNC(HandlePressed);
 
-		mLeftTopHandle.onReleased = THIS_FUNC(HandleReleased);
-		mLeftHandle.onReleased = THIS_FUNC(HandleReleased);
-		mLeftBottomHandle.onReleased = THIS_FUNC(HandleReleased);
-		mTopHandle.onReleased = THIS_FUNC(HandleReleased);
-		mBottomHandle.onReleased = THIS_FUNC(HandleReleased);
-		mRightTopHandle.onReleased = THIS_FUNC(HandleReleased);
-		mRightHandle.onReleased = THIS_FUNC(HandleReleased);
-		mRightBottomHandle.onReleased = THIS_FUNC(HandleReleased);
-		mPivotHandle.onReleased = THIS_FUNC(HandleReleased);
-		mLeftTopRotateHandle.onReleased = THIS_FUNC(HandleReleased);
-		mLeftBottomRotateHandle.onReleased = THIS_FUNC(HandleReleased);
-		mRightTopRotateHandle.onReleased = THIS_FUNC(HandleReleased);
-		mRightBottomRotateHandle.onReleased = THIS_FUNC(HandleReleased);
-		mAnchorsLeftTopHandle.onReleased = THIS_FUNC(HandleReleased);
-		mAnchorsRightBottomHandle.onReleased = THIS_FUNC(HandleReleased);
-		mAnchorsLeftBottomHandle.onReleased = THIS_FUNC(HandleReleased);
-		mAnchorsRightTopHandle.onReleased = THIS_FUNC(HandleReleased);
-		mAnchorsCenter.onReleased = THIS_FUNC(HandleReleased);
+		mLeftTopHandle->onReleased = THIS_FUNC(HandleReleased);
+		mLeftHandle->onReleased = THIS_FUNC(HandleReleased);
+		mLeftBottomHandle->onReleased = THIS_FUNC(HandleReleased);
+		mTopHandle->onReleased = THIS_FUNC(HandleReleased);
+		mBottomHandle->onReleased = THIS_FUNC(HandleReleased);
+		mRightTopHandle->onReleased = THIS_FUNC(HandleReleased);
+		mRightHandle->onReleased = THIS_FUNC(HandleReleased);
+		mRightBottomHandle->onReleased = THIS_FUNC(HandleReleased);
+		mPivotHandle->onReleased = THIS_FUNC(HandleReleased);
+		mLeftTopRotateHandle->onReleased = THIS_FUNC(HandleReleased);
+		mLeftBottomRotateHandle->onReleased = THIS_FUNC(HandleReleased);
+		mRightTopRotateHandle->onReleased = THIS_FUNC(HandleReleased);
+		mRightBottomRotateHandle->onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsLeftTopHandle->onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsRightBottomHandle->onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsLeftBottomHandle->onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsRightTopHandle->onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsCenter->onReleased = THIS_FUNC(HandleReleased);
 
-		mTopHandle.checkSnappingFunc = THIS_FUNC(CheckTopSnapping);
-		mLeftHandle.checkSnappingFunc = THIS_FUNC(CheckLeftSnapping);
-		mBottomHandle.checkSnappingFunc = THIS_FUNC(CheckBottomSnapping);
-		mRightHandle.checkSnappingFunc = THIS_FUNC(CheckRightSnapping);
-		mLeftTopHandle.checkSnappingFunc = THIS_FUNC(CheckLeftTopSnapping);
-		mLeftBottomHandle.checkSnappingFunc = THIS_FUNC(CheckLeftBottomSnapping);
-		mRightTopHandle.checkSnappingFunc = THIS_FUNC(CheckRightTopSnapping);
-		mRightBottomHandle.checkSnappingFunc = THIS_FUNC(CheckRightBottomSnapping);
+		mTopHandle->checkSnappingFunc = THIS_FUNC(CheckTopSnapping);
+		mLeftHandle->checkSnappingFunc = THIS_FUNC(CheckLeftSnapping);
+		mBottomHandle->checkSnappingFunc = THIS_FUNC(CheckBottomSnapping);
+		mRightHandle->checkSnappingFunc = THIS_FUNC(CheckRightSnapping);
+		mLeftTopHandle->checkSnappingFunc = THIS_FUNC(CheckLeftTopSnapping);
+		mLeftBottomHandle->checkSnappingFunc = THIS_FUNC(CheckLeftBottomSnapping);
+		mRightTopHandle->checkSnappingFunc = THIS_FUNC(CheckRightTopSnapping);
+		mRightBottomHandle->checkSnappingFunc = THIS_FUNC(CheckRightBottomSnapping);
 
-		mAnchorsRightBottomHandle.checkSnappingFunc = THIS_FUNC(CheckAnchorRightBottomSnapping);
-		mAnchorsLeftBottomHandle.checkSnappingFunc = THIS_FUNC(CheckAnchorLeftBottomSnapping);
-		mAnchorsRightTopHandle.checkSnappingFunc = THIS_FUNC(CheckAnchorRightTopSnapping);
-		mAnchorsLeftTopHandle.checkSnappingFunc = THIS_FUNC(CheckAnchorLeftTopSnapping);
-		mAnchorsCenter.checkSnappingFunc = THIS_FUNC(CheckAnchorCenterSnapping);
+		mAnchorsRightBottomHandle->checkSnappingFunc = THIS_FUNC(CheckAnchorRightBottomSnapping);
+		mAnchorsLeftBottomHandle->checkSnappingFunc = THIS_FUNC(CheckAnchorLeftBottomSnapping);
+		mAnchorsRightTopHandle->checkSnappingFunc = THIS_FUNC(CheckAnchorRightTopSnapping);
+		mAnchorsLeftTopHandle->checkSnappingFunc = THIS_FUNC(CheckAnchorLeftTopSnapping);
+		mAnchorsCenter->checkSnappingFunc = THIS_FUNC(CheckAnchorCenterSnapping);
 
-		mTopHandle.isPointInside = THIS_FUNC(IsPointInTopHandle);
-		mBottomHandle.isPointInside = THIS_FUNC(IsPointInBottomHandle);
-		mLeftHandle.isPointInside = THIS_FUNC(IsPointInLeftHandle);
-		mRightHandle.isPointInside = THIS_FUNC(IsPointInRightHandle);
-		mAnchorsCenter.isPointInside = THIS_FUNC(IsPointInAnchorsCenterHandle);
+		mTopHandle->isPointInside = THIS_FUNC(IsPointInTopHandle);
+		mBottomHandle->isPointInside = THIS_FUNC(IsPointInBottomHandle);
+		mLeftHandle->isPointInside = THIS_FUNC(IsPointInLeftHandle);
+		mRightHandle->isPointInside = THIS_FUNC(IsPointInRightHandle);
+		mAnchorsCenter->isPointInside = THIS_FUNC(IsPointInAnchorsCenterHandle);
 
 		SetHandlesEnable(false);
 	}
@@ -346,7 +352,7 @@ namespace Editor
 			auto object = selectedObjects[0];
 
 			mFrame = object->GetTransform();
-			mPivotHandle.position = object->GetPivot();
+			mPivotHandle->position = object->GetPivot();
 
 			mAnchorsFrameEnabled = object->IsSupportsLayout();
 			mPivotHandleEnabled = object->IsSupportsPivot();
@@ -399,7 +405,7 @@ namespace Editor
 			}
 
 			mFrame.Set(frameOrigin + xAxis*sx.x + yAxis*sy.x, xAxis*(sx.y - sx.x), yAxis*(sy.y - sy.x));
-			mPivotHandle.position = mFrame.origin + mFrame.xv*0.5f + mFrame.yv*0.5f;
+			mPivotHandle->position = mFrame.origin + mFrame.xv*0.5f + mFrame.yv*0.5f;
 		}
 		else
 		{
@@ -587,7 +593,7 @@ namespace Editor
 
 	void FrameTool::OnRotateHandle(const Vec2F& position, Vec2F lastHandleCoords)
 	{
-		Vec2F rotatePivot = mPivotHandle.position;
+		Vec2F rotatePivot = mPivotHandle->position;
 		float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
 		Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
 		Basis transformed = mFrame*transform;
@@ -610,24 +616,24 @@ namespace Editor
 
 	void FrameTool::SetHandlesEnable(bool enable)
 	{
-		mPivotHandle.enabled = enable;
-		mLeftTopRotateHandle.enabled = enable;
-		mLeftBottomRotateHandle.enabled = enable;
-		mRightTopRotateHandle.enabled = enable;
-		mRightBottomRotateHandle.enabled = enable;
-		mLeftTopHandle.enabled = enable;
-		mLeftHandle.enabled = enable;
-		mLeftBottomHandle.enabled = enable;
-		mTopHandle.enabled = enable;
-		mBottomHandle.enabled = enable;
-		mRightTopHandle.enabled = enable;
-		mRightHandle.enabled = enable;
-		mRightBottomHandle.enabled = enable;
+		mPivotHandle->enabled = enable;
+		mLeftTopRotateHandle->enabled = enable;
+		mLeftBottomRotateHandle->enabled = enable;
+		mRightTopRotateHandle->enabled = enable;
+		mRightBottomRotateHandle->enabled = enable;
+		mLeftTopHandle->enabled = enable;
+		mLeftHandle->enabled = enable;
+		mLeftBottomHandle->enabled = enable;
+		mTopHandle->enabled = enable;
+		mBottomHandle->enabled = enable;
+		mRightTopHandle->enabled = enable;
+		mRightHandle->enabled = enable;
+		mRightBottomHandle->enabled = enable;
 
-		mAnchorsLeftBottomHandle.enabled = enable && mAnchorsFrameEnabled;
-		mAnchorsLeftTopHandle.enabled = enable && mAnchorsFrameEnabled;
-		mAnchorsRightTopHandle.enabled = enable && mAnchorsFrameEnabled;
-		mAnchorsRightBottomHandle.enabled = enable && mAnchorsFrameEnabled;
+		mAnchorsLeftBottomHandle->enabled = enable && mAnchorsFrameEnabled;
+		mAnchorsLeftTopHandle->enabled = enable && mAnchorsFrameEnabled;
+		mAnchorsRightTopHandle->enabled = enable && mAnchorsFrameEnabled;
+		mAnchorsRightBottomHandle->enabled = enable && mAnchorsFrameEnabled;
 
 		CheckAnchorsCenterEnabled();
 	}
@@ -660,55 +666,55 @@ namespace Editor
 			return CursorType::SizeNeSw;
 		};
 
-		mLeftTopHandle.position = Vec2F(0.0f, 1.0f)*mFrame;
-		mLeftHandle.position = Vec2F(0.0f, 0.5f)*mFrame;
-		mLeftBottomHandle.position = Vec2F(0.0f, 0.0f)*mFrame;
-		mTopHandle.position = Vec2F(0.5f, 1.0f)*mFrame;
-		mBottomHandle.position = Vec2F(0.5f, 0.0f)*mFrame;
-		mRightTopHandle.position = Vec2F(1.0f, 1.0f)*mFrame;
-		mRightHandle.position = Vec2F(1.0f, 0.5f)*mFrame;
-		mRightBottomHandle.position = Vec2F(1.0f, 0.0f)*mFrame;
+		mLeftTopHandle->position = Vec2F(0.0f, 1.0f)*mFrame;
+		mLeftHandle->position = Vec2F(0.0f, 0.5f)*mFrame;
+		mLeftBottomHandle->position = Vec2F(0.0f, 0.0f)*mFrame;
+		mTopHandle->position = Vec2F(0.5f, 1.0f)*mFrame;
+		mBottomHandle->position = Vec2F(0.5f, 0.0f)*mFrame;
+		mRightTopHandle->position = Vec2F(1.0f, 1.0f)*mFrame;
+		mRightHandle->position = Vec2F(1.0f, 0.5f)*mFrame;
+		mRightBottomHandle->position = Vec2F(1.0f, 0.0f)*mFrame;
 
-		mLeftTopHandle.cursorType = getHandleType(mLeftTopHandle.GetPosition());
-		mLeftHandle.cursorType = getHandleType(mLeftHandle.GetPosition());
-		mLeftBottomHandle.cursorType = getHandleType(mLeftBottomHandle.GetPosition());
-		mTopHandle.cursorType = getHandleType(mTopHandle.GetPosition());
-		mBottomHandle.cursorType = getHandleType(mBottomHandle.GetPosition());
-		mRightTopHandle.cursorType = getHandleType(mRightTopHandle.GetPosition());
-		mRightHandle.cursorType = getHandleType(mRightHandle.GetPosition());
-		mRightBottomHandle.cursorType = getHandleType(mRightBottomHandle.GetPosition());
+		mLeftTopHandle->cursorType = getHandleType(mLeftTopHandle->GetPosition());
+		mLeftHandle->cursorType = getHandleType(mLeftHandle->GetPosition());
+		mLeftBottomHandle->cursorType = getHandleType(mLeftBottomHandle->GetPosition());
+		mTopHandle->cursorType = getHandleType(mTopHandle->GetPosition());
+		mBottomHandle->cursorType = getHandleType(mBottomHandle->GetPosition());
+		mRightTopHandle->cursorType = getHandleType(mRightTopHandle->GetPosition());
+		mRightHandle->cursorType = getHandleType(mRightHandle->GetPosition());
+		mRightBottomHandle->cursorType = getHandleType(mRightBottomHandle->GetPosition());
 
-		mLeftTopRotateHandle.position = Vec2F(0.0f, 1.0f)*mFrame;
-		mLeftBottomRotateHandle.position = Vec2F(0.0f, 0.0f)*mFrame;
-		mRightTopRotateHandle.position = Vec2F(1.0f, 1.0f)*mFrame;
-		mRightBottomRotateHandle.position = Vec2F(1.0f, 0.0f)*mFrame;
+		mLeftTopRotateHandle->position = Vec2F(0.0f, 1.0f)*mFrame;
+		mLeftBottomRotateHandle->position = Vec2F(0.0f, 0.0f)*mFrame;
+		mRightTopRotateHandle->position = Vec2F(1.0f, 1.0f)*mFrame;
+		mRightBottomRotateHandle->position = Vec2F(1.0f, 0.0f)*mFrame;
 
-		mLeftTopHandle.angle = handlesAngle + Math::PI()*0.5f;
-		mLeftHandle.angle = handlesAngle + Math::PI();
-		mLeftBottomHandle.angle = handlesAngle + Math::PI();
-		mTopHandle.angle = handlesAngle + Math::PI()*0.5f;
-		mBottomHandle.angle = handlesAngle - Math::PI()*0.5f;
-		mRightTopHandle.angle = handlesAngle;
-		mRightHandle.angle = handlesAngle;
-		mRightBottomHandle.angle = handlesAngle - Math::PI()*0.5f;
+		mLeftTopHandle->angle = handlesAngle + Math::PI()*0.5f;
+		mLeftHandle->angle = handlesAngle + Math::PI();
+		mLeftBottomHandle->angle = handlesAngle + Math::PI();
+		mTopHandle->angle = handlesAngle + Math::PI()*0.5f;
+		mBottomHandle->angle = handlesAngle - Math::PI()*0.5f;
+		mRightTopHandle->angle = handlesAngle;
+		mRightHandle->angle = handlesAngle;
+		mRightBottomHandle->angle = handlesAngle - Math::PI()*0.5f;
 
-		mLeftTopRotateHandle.angle = handlesAngle + Math::PI()*0.5f;
-		mLeftBottomRotateHandle.angle = handlesAngle + Math::PI();
-		mRightTopRotateHandle.angle = handlesAngle;
-		mRightBottomRotateHandle.angle = handlesAngle + Math::PI()*1.5f;
+		mLeftTopRotateHandle->angle = handlesAngle + Math::PI()*0.5f;
+		mLeftBottomRotateHandle->angle = handlesAngle + Math::PI();
+		mRightTopRotateHandle->angle = handlesAngle;
+		mRightBottomRotateHandle->angle = handlesAngle + Math::PI()*1.5f;
 
 		if (mAnchorsFrameEnabled)
 		{
-			mAnchorsLeftTopHandle.position = Vec2F(0.0f, 1.0f)*mAnchorsFrame;
-			mAnchorsLeftBottomHandle.position = Vec2F(0.0f, 0.0f)*mAnchorsFrame;
-			mAnchorsRightTopHandle.position = Vec2F(1.0f, 1.0f)*mAnchorsFrame;
-			mAnchorsRightBottomHandle.position = Vec2F(1.0f, 0.0f)*mAnchorsFrame;
-			mAnchorsCenter.position = mAnchorsFrame.origin;
+			mAnchorsLeftTopHandle->position = Vec2F(0.0f, 1.0f)*mAnchorsFrame;
+			mAnchorsLeftBottomHandle->position = Vec2F(0.0f, 0.0f)*mAnchorsFrame;
+			mAnchorsRightTopHandle->position = Vec2F(1.0f, 1.0f)*mAnchorsFrame;
+			mAnchorsRightBottomHandle->position = Vec2F(1.0f, 0.0f)*mAnchorsFrame;
+			mAnchorsCenter->position = mAnchorsFrame.origin;
 
-			mAnchorsLeftTopHandle.angle = handlesAngle;
-			mAnchorsLeftBottomHandle.angle = handlesAngle + Math::PI()*0.5f;
-			mAnchorsRightTopHandle.angle = handlesAngle + Math::PI()*1.5f;
-			mAnchorsRightBottomHandle.angle = handlesAngle + Math::PI();
+			mAnchorsLeftTopHandle->angle = handlesAngle;
+			mAnchorsLeftBottomHandle->angle = handlesAngle + Math::PI()*0.5f;
+			mAnchorsRightTopHandle->angle = handlesAngle + Math::PI()*1.5f;
+			mAnchorsRightBottomHandle->angle = handlesAngle + Math::PI();
 
 			CheckAnchorsCenterEnabled();
 		}
@@ -1321,7 +1327,7 @@ namespace Editor
 	bool FrameTool::IsPointInTopHandle(const Vec2F& point)
 	{
 		float camScale = o2EditorSceneScreen.GetCameraScale().x;
-		float spriteSize = mLeftTopHandle.GetRegularDrawable()->GetSize().x*camScale;
+		float spriteSize = mLeftTopHandle->GetRegularDrawable()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin + mFrame.yv + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
 				mFrame.xv - transformNonScaled.xv*spriteSize,
@@ -1333,7 +1339,7 @@ namespace Editor
 	bool FrameTool::IsPointInLeftHandle(const Vec2F& point)
 	{
 		float camScale = o2EditorSceneScreen.GetCameraScale().x;
-		float spriteSize = mLeftTopHandle.GetRegularDrawable()->GetSize().x*camScale;
+		float spriteSize = mLeftTopHandle->GetRegularDrawable()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
 				transformNonScaled.xv*spriteSize,
@@ -1345,7 +1351,7 @@ namespace Editor
 	bool FrameTool::IsPointInRightHandle(const Vec2F& point)
 	{
 		float camScale = o2EditorSceneScreen.GetCameraScale().x;
-		float spriteSize = mLeftTopHandle.GetRegularDrawable()->GetSize().x*camScale;
+		float spriteSize = mLeftTopHandle->GetRegularDrawable()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin + mFrame.xv - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
 				transformNonScaled.xv*spriteSize,
@@ -1357,7 +1363,7 @@ namespace Editor
 	bool FrameTool::IsPointInBottomHandle(const Vec2F& point)
 	{
 		float camScale = o2EditorSceneScreen.GetCameraScale().x;
-		float spriteSize = mLeftTopHandle.GetRegularDrawable()->GetSize().x*camScale;
+		float spriteSize = mLeftTopHandle->GetRegularDrawable()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
 				mFrame.xv - transformNonScaled.xv*spriteSize,
@@ -1377,8 +1383,8 @@ namespace Editor
 	{
 		float lengthThreshold = 0.1f;
 		bool enabled = mAnchorsFrame.xv.Length() < lengthThreshold && mAnchorsFrame.yv.Length() < lengthThreshold;
-		mAnchorsCenter.enabled = false;
-		mAnchorsCenter.enabled = enabled && mAnchorsFrameEnabled;
+		mAnchorsCenter->enabled = false;
+		mAnchorsCenter->enabled = enabled && mAnchorsFrameEnabled;
 	}
 
 	Vector<Basis> FrameTool::GetObjectsTransforms(const Vector<Ref<SceneEditableObject>>& objects) const

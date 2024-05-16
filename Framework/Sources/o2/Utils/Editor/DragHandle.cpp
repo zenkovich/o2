@@ -9,7 +9,8 @@
 
 namespace o2
 {
-    DragHandle::DragHandle()
+    DragHandle::DragHandle(RefCounter* refCounter):
+        RefCounterable(refCounter)
     {
         screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
         localToScreenTransformFunc = [](const Vec2F& point) { return point; };
@@ -17,10 +18,10 @@ namespace o2
         checkSnappingFunc = [](const Vec2F& point) { return point; };
     }
 
-    DragHandle::DragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/,
-                           const Ref<IRectDrawable>& selected /*= nullptr*/, const Ref<IRectDrawable>& selectedHovered /*= nullptr*/, 
+    DragHandle::DragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/,
+                           const Ref<IRectDrawable>& selected /*= nullptr*/, const Ref<IRectDrawable>& selectedHovered /*= nullptr*/,
                            const Ref<IRectDrawable>& selectedPressed /*= nullptr*/) :
-        mRegularDrawable(regular), mHoverDrawable(hover), mPressedDrawable(pressed), mSelectedDrawable(selected),
+        RefCounterable(refCounter), mRegularDrawable(regular), mHoverDrawable(hover), mPressedDrawable(pressed), mSelectedDrawable(selected),
         mSelectedHoverDrawable(selectedHovered), mSelectedPressedDrawable(selectedPressed)
     {
         screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
@@ -29,8 +30,8 @@ namespace o2
         checkSnappingFunc = [](const Vec2F& point) { return point; };
     }
 
-    DragHandle::DragHandle(const DragHandle& other) :
-        angle(this), position(this), enabled(this)
+    DragHandle::DragHandle(RefCounter* refCounter, const DragHandle& other) :
+        RefCounterable(refCounter), angle(this), position(this), enabled(this)
     {
         if (other.mRegularDrawable)
             mRegularDrawable = other.mRegularDrawable->CloneAsRef<IRectDrawable>();
@@ -61,6 +62,20 @@ namespace o2
 
         SetPosition(other.mPosition);
     }
+
+    DragHandle::DragHandle():
+        DragHandle(nullptr)
+    {}
+
+    DragHandle::DragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/,
+                           const Ref<IRectDrawable>& selected /*= nullptr*/, const Ref<IRectDrawable>& selectedHovered /*= nullptr*/,
+                           const Ref<IRectDrawable>& selectedPressed /*= nullptr*/) :
+        DragHandle(nullptr, regular, hover, pressed, selected, selectedHovered, selectedPressed)
+    {}
+
+    DragHandle::DragHandle(const DragHandle& other) :
+        DragHandle(nullptr, other)
+    {}
 
     DragHandle::~DragHandle()
     {
