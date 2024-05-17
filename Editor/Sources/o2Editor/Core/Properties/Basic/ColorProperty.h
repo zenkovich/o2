@@ -33,9 +33,9 @@ namespace Editor
         CLONEABLE_REF(ColorProperty);
 
 	protected:
-		Ref<Widget>      mEditBox;     // Edit box 
-		Ref<Image>       mColorSprite; // Color preview sprite
-		CursorEventsArea mClickArea;   // Box click area
+		Ref<Widget>           mEditBox;     // Edit box 
+		Ref<Image>            mColorSprite; // Color preview sprite
+		Ref<CursorEventsArea> mClickArea;   // Box click area
 
 	protected:
 		// Updates value view

@@ -19,7 +19,7 @@ namespace o2
         bool   fillBackground = true;       // Is background filling with solid color @SERIALIZABLE
         Color4 fillColor = Color4::White(); // Background fill color @SERIALIZABLE
 
-        CursorAreaEventListenersLayer listenersLayer;
+        Ref<CursorAreaEventListenersLayer> listenersLayer = mmake<CursorAreaEventListenersLayer>(); // Listeners layer
 
     public:
         // Default constructor
@@ -94,7 +94,7 @@ CLASS_FIELDS_META(o2::CameraActor)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(drawLayers);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(fillBackground);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Color4::White()).NAME(fillColor);
-    FIELD().PUBLIC().NAME(listenersLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<CursorAreaEventListenersLayer>()).NAME(listenersLayer);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Type::Default).NAME(mType);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mFixedOrFittedSize);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Units::Centimeters).NAME(mUnits);

@@ -39,15 +39,15 @@ namespace Editor
 	{
 		Widget::Draw();
 
-		mDragHandleMin.OnDrawn();
-		mDragHandleMax.OnDrawn();
+		mDragHandleMin->OnDrawn();
+		mDragHandleMax->OnDrawn();
 
 		if (o2Input.IsKeyDown(VK_F1))
 		{
-			if (mDragHandleMin.IsInteractable())
+			if (mDragHandleMin->IsInteractable())
 				o2Render.DrawAARectFrame(mDragHandleAreaMin, Color4::Blue());
 
-			if (mDragHandleMax.IsInteractable())
+			if (mDragHandleMax->IsInteractable())
 				o2Render.DrawAARectFrame(mDragHandleAreaMax, Color4::Red());
 
 			if (mNeighborMin)
@@ -79,18 +79,18 @@ namespace Editor
 		mResizibleDir = dir;
 		float border2 = border*2.0f;
 
-		mDragHandleMin.interactable = neighborMin != nullptr;
+		mDragHandleMin->interactable = neighborMin != nullptr;
 		mNeighborMin = neighborMin;
 
 		mNeighborMax = neighborMax;
-		mDragHandleMax.interactable = neighborMax != nullptr;
+		mDragHandleMax->interactable = neighborMax != nullptr;
 
 		if (dir == TwoDirection::Horizontal)
 		{
 			mDragHandleLayoutMin = Layout(Vec2F(0, 0), Vec2F(0, 1), Vec2F(-border2, 0), Vec2F(0, 0));
 			mDragHandleLayoutMax = Layout(Vec2F(1, 0), Vec2F(1, 1), Vec2F(border2, 0), Vec2F(0, 0));
-			mDragHandleMin.cursorType = CursorType::SizeWE;
-			mDragHandleMax.cursorType = CursorType::SizeWE;
+			mDragHandleMin->cursorType = CursorType::SizeWE;
+			mDragHandleMax->cursorType = CursorType::SizeWE;
 
 			if (neighborMin != nullptr)
 				layout->offsetLeft = border;
@@ -102,8 +102,8 @@ namespace Editor
 		{
 			mDragHandleLayoutMin = Layout(Vec2F(0, 0), Vec2F(1, 0), Vec2F(0, -border2), Vec2F(0, 0));
 			mDragHandleLayoutMax = Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(0, 0), Vec2F(0, border2));
-			mDragHandleMin.cursorType = CursorType::SizeNS;
-			mDragHandleMax.cursorType = CursorType::SizeNS;
+			mDragHandleMin->cursorType = CursorType::SizeNS;
+			mDragHandleMax->cursorType = CursorType::SizeNS;
 
 			if (neighborMin != nullptr)
 				layout->offsetBottom = border;
@@ -246,11 +246,13 @@ namespace Editor
 
 	void DockWindowPlace::InitializeDragHandle()
 	{
-		mDragHandleMin.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMin.IsInside(point); };
-		mDragHandleMin.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.delta); };
+		mDragHandleMin = mmake<CursorEventsArea>();
+		mDragHandleMin->isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMin.IsInside(point); };
+		mDragHandleMin->onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.delta); };
 
-		mDragHandleMax.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMax.IsInside(point); };
-		mDragHandleMax.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.delta); };
+		mDragHandleMax = mmake<CursorEventsArea>();
+		mDragHandleMax->isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMax.IsInside(point); };
+		mDragHandleMax->onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.delta); };
 	}
 
 }

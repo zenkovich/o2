@@ -123,9 +123,10 @@ namespace Editor
 
         mWindow->AddChild(pickAreaContainer);
 
-        mColorPickAreaHandle->onDraw += [&]() { mColorPickHandle.OnDrawn(); };
-        mColorPickHandle.isUnderPoint = [&](const Vec2F& point) { return mColorPickAreaColor->IsUnderPoint(point); };
-        mColorPickHandle.onMoved = MakeFunction(this, &ColorPickerDlg::OnColorPickHandleMoved);
+        mColorPickHandle = mmake<CursorEventsArea>();
+        mColorPickAreaHandle->onDraw += [&]() { mColorPickHandle->OnDrawn(); };
+        mColorPickHandle->isUnderPoint = [&](const Vec2F& point) { return mColorPickAreaColor->IsUnderPoint(point); };
+        mColorPickHandle->onMoved = MakeFunction(this, &ColorPickerDlg::OnColorPickHandleMoved);
     }
 
     void ColorPickerDlg::InitializeColorParams()

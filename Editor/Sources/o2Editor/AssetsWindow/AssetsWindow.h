@@ -118,8 +118,8 @@ namespace Editor
 
 		Ref<Tree> mAssetsTree; // Assets tree
 
-		CursorEventsArea mSeparatorHandle; // Folders tree and assets tree/grid separator handle
-		float            mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
+		Ref<CursorEventsArea> mSeparatorHandle; // Folders tree and assets tree/grid separator handle
+		float                 mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
 
 		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
 

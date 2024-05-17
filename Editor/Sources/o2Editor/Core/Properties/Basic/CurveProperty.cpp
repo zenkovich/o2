@@ -34,12 +34,14 @@ namespace Editor
 			*mPreviewImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 			//mPreviewImage->SetCurve(&mCommonValue);
 
+			mClickArea = mmake<CursorEventsArea>();
+
 			mEditBox->layout->minHeight = 10;
-			mEditBox->onDraw += [&]() { mClickArea.OnDrawn(); };
+			mEditBox->onDraw += [&]() { mClickArea->OnDrawn(); };
 			mEditBox->AddChild(mPreviewImage);
 
-			mClickArea.isUnderPoint = [&](const Vec2F& point) { return mEditBox->IsUnderPoint(point); };
-			mClickArea.onCursorReleased = [&](const Input::Cursor& cursor) { if (mEditBox->IsUnderPoint(cursor.position)) OnClicked(); };
+			mClickArea->isUnderPoint = [&](const Vec2F& point) { return mEditBox->IsUnderPoint(point); };
+			mClickArea->onCursorReleased = [&](const Input::Cursor& cursor) { if (mEditBox->IsUnderPoint(cursor.position)) OnClicked(); };
 		}
 	}
 

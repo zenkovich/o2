@@ -26,17 +26,18 @@ namespace Editor
 		mBeginMark = mmake<Sprite>("ui/UI4_time_line_left.png");
 		mEndMark = mmake<Sprite>("ui/UI4_time_line_right.png");
 
+		mTimeLineEventsArea = mmake<CursorEventsArea>();
 		mTimeLine = mmake<Sprite>("ui/UI4_time_line.png");
 
-		mTimeLineEventsArea.isUnderPoint = [&](const Vec2F& pos) {
+		mTimeLineEventsArea->isUnderPoint = [&](const Vec2F& pos) {
 			auto rect = layout->GetWorldRect();
 			rect.bottom = rect.top - 20.0f;
 
 			return rect.IsInside(pos);
 		};
 
-		mTimeLineEventsArea.onMoved = THIS_FUNC(SetAnimationTimeByCursor);
-		mTimeLineEventsArea.onCursorPressed = THIS_FUNC(SetAnimationTimeByCursor);
+		mTimeLineEventsArea->onMoved = THIS_FUNC(SetAnimationTimeByCursor);
+		mTimeLineEventsArea->onCursorPressed = THIS_FUNC(SetAnimationTimeByCursor);
 	}
 
     AnimationTimeline::AnimationTimeline(RefCounter* refCounter, const AnimationTimeline& other) :
@@ -80,7 +81,7 @@ namespace Editor
 
 		CursorAreaEventsListener::OnDrawn();
 
-		mTimeLineEventsArea.OnDrawn();
+		mTimeLineEventsArea->OnDrawn();
 	}
 
 	void AnimationTimeline::DrawTimeScale()

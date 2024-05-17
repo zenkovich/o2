@@ -90,7 +90,9 @@ namespace o2
         auto addedActors = mAddedActors;
         mAddedActors.Clear();
 
+        auto startedActorsCache = mStartActors;
         mStartActors = addedActors;
+        startedActorsCache.Clear();
 
         for (auto& actor : addedActors)
         {
@@ -194,11 +196,11 @@ namespace o2
         if (actor->IsOnScene())
             Instance().RemoveActorFromScene(actor, false);
 
-        Instance().mAddedActors.RemoveFirst([=](auto& x) { return x == actor; });
-        Instance().mStartActors.RemoveFirst([=](auto& x) { return x == actor; });
+        Instance().mAddedActors.Remove(actor);
+        Instance().mStartActors.Remove(actor);
 
 #if IS_EDITOR
-        Instance().mChangedObjects.RemoveFirst([=](auto& x) { return x == actor; });
+        Instance().mChangedObjects.Remove(actor);
 #endif
     }
 
@@ -279,7 +281,7 @@ namespace o2
                 if (auto cameraRef = camera.Lock()) 
                 {
                     cameraRef->SetupAndDraw();
-                    cameraRef->listenersLayer.OnDrawn(Camera().GetBasis());
+                    cameraRef->listenersLayer->OnDrawn(Camera().GetBasis());
                 }
             }
         }

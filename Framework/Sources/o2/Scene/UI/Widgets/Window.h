@@ -94,43 +94,43 @@ namespace o2
 
         Ref<ContextMenu> mOptionsMenu; // Window options context menu
 
-        CursorEventsArea mBackCursorArea; // Cursor area listener at back of window, for catching events
+        Ref<CursorEventsArea> mBackCursorArea; // Cursor area listener at back of window, for catching events
 
-        CursorEventsArea mHeadDragHandle;     // Head drag handle, for moving window
-        Layout           mHeadDragAreaLayout; // Head drag handle layout @SERIALIZABLE
-        RectF            mHeadDragAreaRect;   // Head drag handle rect
+        Ref<CursorEventsArea> mHeadDragHandle;     // Head drag handle, for moving window
+        Layout                mHeadDragAreaLayout; // Head drag handle layout @SERIALIZABLE
+        RectF                 mHeadDragAreaRect;   // Head drag handle rect
 
-        CursorEventsArea mTopDragHandle;     //    Top drag handle, for resizing window
-        Layout           mTopDragAreaLayout; //    Top drag handle layout @SERIALIZABLE
-        RectF            mTopDragAreaRect;   //    Top drag handle rect
+        Ref<CursorEventsArea> mTopDragHandle;     //    Top drag handle, for resizing window
+        Layout                mTopDragAreaLayout; //    Top drag handle layout @SERIALIZABLE
+        RectF                 mTopDragAreaRect;   //    Top drag handle rect
 
-        CursorEventsArea mBottomDragHandle;     // Bottom drag handle, for resizing window
-        Layout           mBottomDragAreaLayout; // Bottom drag handle layout @SERIALIZABLE
-        RectF            mBottomDragAreaRect;   // Bottom drag handle rect
+        Ref<CursorEventsArea> mBottomDragHandle;     // Bottom drag handle, for resizing window
+        Layout                mBottomDragAreaLayout; // Bottom drag handle layout @SERIALIZABLE
+        RectF                 mBottomDragAreaRect;   // Bottom drag handle rect
 
-        CursorEventsArea mLeftDragHandle;     // Left drag handle, for resizing window
-        Layout           mLeftDragAreaLayout; // Left drag handle layout @SERIALIZABLE
-        RectF            mLeftDragAreaRect;   // Left drag handle rect
+        Ref<CursorEventsArea> mLeftDragHandle;     // Left drag handle, for resizing window
+        Layout                mLeftDragAreaLayout; // Left drag handle layout @SERIALIZABLE
+        RectF                 mLeftDragAreaRect;   // Left drag handle rect
 
-        CursorEventsArea mRightDragHandle;     // Right drag handle, for resizing window
-        Layout           mRightDragAreaLayout; // Right drag handle layout @SERIALIZABLE
-        RectF            mRightDragAreaRect;   // Right drag handle rect
+        Ref<CursorEventsArea> mRightDragHandle;     // Right drag handle, for resizing window
+        Layout                mRightDragAreaLayout; // Right drag handle layout @SERIALIZABLE
+        RectF                 mRightDragAreaRect;   // Right drag handle rect
 
-        CursorEventsArea mLeftTopDragHandle;     // Left Top drag handle, for resizing window
-        Layout           mLeftTopDragAreaLayout; // Left Top drag handle layout @SERIALIZABLE
-        RectF            mLeftTopDragAreaRect;   // Left Top drag handle rect
+        Ref<CursorEventsArea> mLeftTopDragHandle;     // Left Top drag handle, for resizing window
+        Layout                mLeftTopDragAreaLayout; // Left Top drag handle layout @SERIALIZABLE
+        RectF                 mLeftTopDragAreaRect;   // Left Top drag handle rect
                                                      
-        CursorEventsArea mRightTopDragHandle;     // Right Top drag handle, for resizing window
-        Layout           mRightTopDragAreaLayout; // Right Top drag handle layout @SERIALIZABLE
-        RectF            mRightTopDragAreaRect;   // Right Top drag handle rect
+        Ref<CursorEventsArea> mRightTopDragHandle;     // Right Top drag handle, for resizing window
+        Layout                mRightTopDragAreaLayout; // Right Top drag handle layout @SERIALIZABLE
+        RectF                 mRightTopDragAreaRect;   // Right Top drag handle rect
                                                     
-        CursorEventsArea mLeftBottomDragHandle;     // Left Bottom drag handle, for resizing window
-        Layout           mLeftBottomDragAreaLayout; // Left Bottom drag handle layout @SERIALIZABLE
-        RectF            mLeftBottomDragAreaRect;   // Left Bottom drag handle rect
+        Ref<CursorEventsArea> mLeftBottomDragHandle;     // Left Bottom drag handle, for resizing window
+		Layout                mLeftBottomDragAreaLayout; // Left Bottom drag handle layout @SERIALIZABLE
+		RectF                 mLeftBottomDragAreaRect;   // Left Bottom drag handle rect
                                                      
-		CursorEventsArea mRightBottomDragHandle;     // Right Bottom drag handle, for resizing window
-		Layout           mRightBottomDragAreaLayout; // Right Bottom drag handle layout @SERIALIZABLE
-		RectF            mRightBottomDragAreaRect;   // Right Bottom drag handle rect
+        Ref<CursorEventsArea> mRightBottomDragHandle;     // Right Bottom drag handle, for resizing window
+		Layout                mRightBottomDragAreaLayout; // Right Bottom drag handle layout @SERIALIZABLE
+        RectF                 mRightBottomDragAreaRect;   // Right Bottom drag handle rect
 
     protected:
         // Called when widget was selected

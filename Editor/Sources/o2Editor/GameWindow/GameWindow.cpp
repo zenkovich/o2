@@ -160,7 +160,7 @@ namespace Editor
 			
 			if (o2Input.IsKeyDown(VK_F1))
 			{
-				auto localCursor = cameraActor->listenersLayer.ScreenToLocal(o2Input.GetCursorPos());
+				auto localCursor = cameraActor->listenersLayer->ScreenToLocal(o2Input.GetCursorPos());
 				o2Render.DrawCross(localCursor, 25.0f, Color4::Red());
 				o2Debug.Log((String)localCursor);
 			}
@@ -177,7 +177,7 @@ namespace Editor
 		EditorScope::Exit(editorDepth);
 
 		for (auto& camera : o2Scene.GetCameras())
-			camera.Lock()->listenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
+			camera.Lock()->listenersLayer->OnDrawn(mRenderTargetSprite->GetBasis());
 
 		EditorScope::Enter(editorDepth);
 	}

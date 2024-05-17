@@ -159,7 +159,7 @@ namespace Editor
 
 		OnResizing();
 
-		o2EditorApplication.LoadScene(SceneAssetRef(o2EditorConfig.projectConfig.mLastLoadedScene));
+		//o2EditorApplication.LoadScene(SceneAssetRef(o2EditorConfig.projectConfig.mLastLoadedScene));
 
 		//FreeConsole();
 
@@ -403,9 +403,8 @@ namespace Editor
 
 	void EditorApplication::InitalizeSystems()
 	{
-		mMainListenersLayer.SetEditorMode(true);
-
 		Application::InitalizeSystems();
+		mMainListenersLayer->SetEditorMode(true);
 	}
 
 	void EditorApplication::LoadUIStyle()

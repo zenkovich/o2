@@ -229,7 +229,7 @@ namespace o2
 
         float mAccumulatedDT = 0.0f; // Accumulated delta time for fixed FPS update
         
-        CursorAreaEventListenersLayer mMainListenersLayer; // Main listeners layer, required for processing default scaled camera
+        Ref<CursorAreaEventListenersLayer> mMainListenersLayer; // Main listeners layer, required for processing default scaled camera
         
         float mGraphicsScale = 1.0f; // Application graphics scale. Used in mac for retina displays
 

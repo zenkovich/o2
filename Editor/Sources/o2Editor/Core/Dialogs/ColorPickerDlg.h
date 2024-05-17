@@ -56,11 +56,11 @@ namespace Editor
 
         Ref<Texture> mChessBackTexture;
 
-        Ref<Image>           mColorPickAreaHandle;
-        Ref<Bitmap>          mColorPickAreaBitmap;
-        Ref<WidgetLayer>     mColorPickAreaColor;
-        Ref<Texture>         mColorPickAreaTexture;
-        CursorEventsArea     mColorPickHandle;
+		Ref<Image>            mColorPickAreaHandle;
+		Ref<Bitmap>           mColorPickAreaBitmap;
+		Ref<WidgetLayer>      mColorPickAreaColor;
+		Ref<Texture>          mColorPickAreaTexture;
+        Ref<CursorEventsArea> mColorPickHandle;
 
         Ref<VerticalProgress> mHUEBar;
         Ref<Bitmap>           mHUEBarBitmap;

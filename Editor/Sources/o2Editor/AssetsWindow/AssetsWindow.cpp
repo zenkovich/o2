@@ -62,7 +62,8 @@ namespace Editor
 	{
 		auto separatorLayer = mFoldersTree->FindLayer("separator");
 
-		mSeparatorHandle.isUnderPoint = [=](const Vec2F& point) {
+		mSeparatorHandle = mmake<CursorEventsArea>();
+		mSeparatorHandle->isUnderPoint = [=](const Vec2F& point) {
 			RectF rt = separatorLayer->GetDrawable()->GetRect();
 			rt.left -= 2; rt.right += 2;
 			return rt.IsInside(point);
@@ -76,7 +77,7 @@ namespace Editor
 		mFoldersTree->layout->anchorRight = mSeparatorCoef;
 		mAssetsGridScroll->layout->anchorLeft = mSeparatorCoef;
 
-		mSeparatorHandle.onMoved = [&](const Input::Cursor& cursor) {
+		mSeparatorHandle->onMoved = [&](const Input::Cursor& cursor) {
 			float anchorDelta = cursor.delta.x / mWindow->layout->width;
 			mFoldersTree->layout->anchorRight += anchorDelta;
 			mAssetsGridScroll->layout->anchorLeft += anchorDelta;
@@ -85,9 +86,9 @@ namespace Editor
 // 			userData["layout/assetsWindow/separator_coef"].Set(mFoldersTree->layout->GetAnchorRight());
 		};
 
-		mAssetsGridScroll->onDraw += [&]() { mSeparatorHandle.OnDrawn(); };
+		mAssetsGridScroll->onDraw += [&]() { mSeparatorHandle->OnDrawn(); };
 
-		mSeparatorHandle.cursorType = CursorType::SizeWE;
+		mSeparatorHandle->cursorType = CursorType::SizeWE;
 	}
 
 	void AssetsWindow::InitializeFoldersTreeVisibleState()

@@ -122,6 +122,7 @@ namespace o2
         mAssets = mmake<Assets>();
 
         mInput = mmake<Input>();
+        mMainListenersLayer = mmake<CursorAreaEventListenersLayer>();
 
         mTaskManager = mmake<TaskManager>();
 
@@ -227,9 +228,9 @@ namespace o2
 
         PostUpdateEventSystem();
         
-        mMainListenersLayer.OnBeginDraw();
+        mMainListenersLayer->OnBeginDraw();
         SetupGraphicsScaledCamera();
-        mMainListenersLayer.camera = o2Render.GetCamera();
+        mMainListenersLayer->camera = o2Render.GetCamera();
 
         DrawScene();
         OnDraw();
@@ -237,8 +238,8 @@ namespace o2
         DrawUIManager();
         DrawDebug();
 
-        mMainListenersLayer.OnEndDraw();
-        mMainListenersLayer.OnDrawn(Camera::Default().GetBasis());
+        mMainListenersLayer->OnEndDraw();
+        mMainListenersLayer->OnDrawn(Camera::Default().GetBasis());
 
         mRender->End();
 

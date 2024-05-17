@@ -52,9 +52,10 @@ namespace Editor
 			*mColorSprite->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 			mEditBox->AddChild(mColorSprite);
 
-			mEditBox->onDraw += [&]() { mClickArea.OnDrawn(); };
-			mClickArea.isUnderPoint = [&](const Vec2F& point) { return mEditBox->IsUnderPoint(point); };
-			mClickArea.onCursorReleased = [&](const Input::Cursor& cursor) { if (mEditBox->IsUnderPoint(cursor.position)) OnClicked(); };
+			mClickArea = mmake<CursorEventsArea>();
+			mEditBox->onDraw += [&]() { mClickArea->OnDrawn(); };
+			mClickArea->isUnderPoint = [&](const Vec2F& point) { return mEditBox->IsUnderPoint(point); };
+			mClickArea->onCursorReleased = [&](const Input::Cursor& cursor) { if (mEditBox->IsUnderPoint(cursor.position)) OnClicked(); };
 		}
 	}
 

@@ -78,7 +78,7 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
-		mBackCursorArea.OnDrawn();
+		mBackCursorArea->OnDrawn();
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -97,15 +97,15 @@ namespace Editor
 
 			o2Render.DisableScissorTest();
 
-			mTopDragHandle.OnDrawn();
-			mBottomDragHandle.OnDrawn();
-			mLeftDragHandle.OnDrawn();
-			mRightDragHandle.OnDrawn();
-			mLeftTopDragHandle.OnDrawn();
-			mRightTopDragHandle.OnDrawn();
-			mLeftBottomDragHandle.OnDrawn();
-			mRightBottomDragHandle.OnDrawn();
-			mHeadDragHandle.OnDrawn();
+			mTopDragHandle->OnDrawn();
+			mBottomDragHandle->OnDrawn();
+			mLeftDragHandle->OnDrawn();
+			mRightDragHandle->OnDrawn();
+			mLeftTopDragHandle->OnDrawn();
+			mRightTopDragHandle->OnDrawn();
+			mLeftBottomDragHandle->OnDrawn();
+			mRightBottomDragHandle->OnDrawn();
+			mHeadDragHandle->OnDrawn();
 
 			CursorAreaEventsListener::OnDrawn();
 
@@ -116,7 +116,7 @@ namespace Editor
 				layer->Draw();
 		}
 		else
-			mHeadDragHandle.OnDrawn();
+			mHeadDragHandle->OnDrawn();
 
 		DrawDebugFrame();
 
@@ -132,14 +132,14 @@ namespace Editor
 		if (dockedState)
 			*dockedState = docked;
 
-		mTopDragHandle.interactable         = !docked;
-		mBottomDragHandle.interactable      = !docked;
-		mLeftDragHandle.interactable        = !docked;
-		mRightDragHandle.interactable       = !docked;
-		mLeftTopDragHandle.interactable     = !docked;
-		mLeftBottomDragHandle.interactable  = !docked;
-		mRightTopDragHandle.interactable    = !docked;
-		mRightBottomDragHandle.interactable = !docked;
+		mTopDragHandle->interactable         = !docked;
+		mBottomDragHandle->interactable      = !docked;
+		mLeftDragHandle->interactable        = !docked;
+		mRightDragHandle->interactable       = !docked;
+		mLeftTopDragHandle->interactable     = !docked;
+		mLeftBottomDragHandle->interactable  = !docked;
+		mRightTopDragHandle->interactable    = !docked;
+		mRightBottomDragHandle->interactable = !docked;
 	}
 
 	void DockableWindow::RecalculateTabWidth()
@@ -338,10 +338,10 @@ namespace Editor
 
 	void DockableWindow::InitializeDragHandles()
 	{
-		mHeadDragHandle.onMoved          = THIS_FUNC(OnMoved);
-		mHeadDragHandle.onDblClicked     = THIS_FUNC(OnHeadDblCKicked);
-		mHeadDragHandle.onCursorPressed  = THIS_FUNC(OnMoveBegin);
-		mHeadDragHandle.onCursorReleased = THIS_FUNC(OnMoveCompleted);
+		mHeadDragHandle->onMoved          = THIS_FUNC(OnMoved);
+		mHeadDragHandle->onDblClicked     = THIS_FUNC(OnHeadDblCKicked);
+		mHeadDragHandle->onCursorPressed  = THIS_FUNC(OnMoveBegin);
+		mHeadDragHandle->onCursorReleased = THIS_FUNC(OnMoveCompleted);
 	}
 
 	void DockableWindow::OnHeadDblCKicked(const Input::Cursor& cursor)

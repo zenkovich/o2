@@ -34,9 +34,9 @@ namespace Editor
         CLONEABLE_REF(CurveProperty);
 
 	protected:
-		Ref<Widget>       mEditBox;      // Edit box 
-		Ref<CurvePreview> mPreviewImage; // Curve preview image
-		CursorEventsArea  mClickArea;    // Box click area
+		Ref<Widget>           mEditBox;      // Edit box 
+		Ref<CurvePreview>     mPreviewImage; // Curve preview image
+		Ref<CursorEventsArea> mClickArea;    // Box click area
 
 	protected:
 		// Searches controls widgets and layers and initializes them

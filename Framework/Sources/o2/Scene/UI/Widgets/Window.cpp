@@ -70,7 +70,7 @@ namespace o2
             return;
         }
 
-        mBackCursorArea.OnDrawn();
+        mBackCursorArea->OnDrawn();
 
         for (auto& layer : mDrawingLayers)
             layer->Draw();
@@ -86,15 +86,15 @@ namespace o2
 
         CursorAreaEventsListener::OnDrawn();
 
-        mHeadDragHandle.OnDrawn();
-        mTopDragHandle.OnDrawn();
-        mBottomDragHandle.OnDrawn();
-        mLeftDragHandle.OnDrawn();
-        mRightDragHandle.OnDrawn();
-        mLeftTopDragHandle.OnDrawn();
-        mRightTopDragHandle.OnDrawn();
-        mLeftBottomDragHandle.OnDrawn();
-        mRightBottomDragHandle.OnDrawn();
+        mHeadDragHandle->OnDrawn();
+        mTopDragHandle->OnDrawn();
+        mBottomDragHandle->OnDrawn();
+        mLeftDragHandle->OnDrawn();
+        mRightDragHandle->OnDrawn();
+        mLeftTopDragHandle->OnDrawn();
+        mRightTopDragHandle->OnDrawn();
+        mLeftBottomDragHandle->OnDrawn();
+        mRightBottomDragHandle->OnDrawn();
 
         for (auto& child : mInternalWidgets)
             child->Draw();
@@ -191,12 +191,12 @@ namespace o2
 
     void Window::SetModal(bool isModal)
     {
-        mBackCursorArea.interactable = isModal;
+        mBackCursorArea->interactable = isModal;
     }
 
     bool Window::IsModal() const
     {
-        return mBackCursorArea.IsInteractable();
+        return mBackCursorArea->IsInteractable();
     }
 
     void Window::UpdateSelfTransform()
@@ -216,72 +216,82 @@ namespace o2
 
     CursorEventsArea& Window::GetBackCursorListener()
     {
-        return mBackCursorArea;
+        return *mBackCursorArea;
     }
 
     void Window::InitializeHandles()
     {
-        mBackCursorArea.isUnderPoint = [&](const Vec2F& point) { return true; };
-        mBackCursorArea.interactable = false;
+        mBackCursorArea = mmake<CursorEventsArea>();
+        mBackCursorArea->isUnderPoint = [&](const Vec2F& point) { return true; };
+        mBackCursorArea->interactable = false;
 
-        mHeadDragHandle.isUnderPoint = [&](const Vec2F& point) { return mHeadDragAreaRect.IsInside(point); };
-        mHeadDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->position += cursor.delta; };
-        mHeadDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mHeadDragHandle = mmake<CursorEventsArea>();
+        mHeadDragHandle->isUnderPoint = [&](const Vec2F& point) { return mHeadDragAreaRect.IsInside(point); };
+        mHeadDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->position += cursor.delta; };
+        mHeadDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 
-        mTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mTopDragAreaRect.IsInside(point); };
-        mTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->worldTop += cursor.delta.y; };
-        mTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mTopDragHandle.cursorType = CursorType::SizeNS;
+        mTopDragHandle = mmake<CursorEventsArea>();
+        mTopDragHandle->isUnderPoint = [&](const Vec2F& point) { return mTopDragAreaRect.IsInside(point); };
+        mTopDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->worldTop += cursor.delta.y; };
+        mTopDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mTopDragHandle->cursorType = CursorType::SizeNS;
 
-        mBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mBottomDragAreaRect.IsInside(point); };
-        mBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->worldBottom += cursor.delta.y; };
-        mBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mBottomDragHandle.cursorType = CursorType::SizeNS;
+        mBottomDragHandle = mmake<CursorEventsArea>();
+        mBottomDragHandle->isUnderPoint = [&](const Vec2F& point) { return mBottomDragAreaRect.IsInside(point); };
+        mBottomDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->worldBottom += cursor.delta.y; };
+        mBottomDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mBottomDragHandle->cursorType = CursorType::SizeNS;
 
-        mLeftDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftDragAreaRect.IsInside(point); };
-        mLeftDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->left += cursor.delta.x; };
-        mLeftDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mLeftDragHandle.cursorType = CursorType::SizeWE;
+        mLeftDragHandle = mmake<CursorEventsArea>();
+        mLeftDragHandle->isUnderPoint = [&](const Vec2F& point) { return mLeftDragAreaRect.IsInside(point); };
+        mLeftDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->left += cursor.delta.x; };
+        mLeftDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mLeftDragHandle->cursorType = CursorType::SizeWE;
 
-        mRightDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightDragAreaRect.IsInside(point); };
-        mRightDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->right += cursor.delta.x; };
-        mRightDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mRightDragHandle.cursorType = CursorType::SizeWE;
+        mRightDragHandle = mmake<CursorEventsArea>();
+        mRightDragHandle->isUnderPoint = [&](const Vec2F& point) { return mRightDragAreaRect.IsInside(point); };
+        mRightDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->right += cursor.delta.x; };
+        mRightDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mRightDragHandle->cursorType = CursorType::SizeWE;
 
-        mLeftTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftTopDragAreaRect.IsInside(point); };
-        mLeftTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->worldLeftTop += cursor.delta; };
-        mLeftTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mLeftTopDragHandle.cursorType = CursorType::SizeNwSe;
+        mLeftTopDragHandle = mmake<CursorEventsArea>();
+        mLeftTopDragHandle->isUnderPoint = [&](const Vec2F& point) { return mLeftTopDragAreaRect.IsInside(point); };
+        mLeftTopDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->worldLeftTop += cursor.delta; };
+        mLeftTopDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mLeftTopDragHandle->cursorType = CursorType::SizeNwSe;
 
-        mLeftBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftBottomDragAreaRect.IsInside(point); };
-        mLeftBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->leftBottom += cursor.delta; };
-        mLeftBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mLeftBottomDragHandle.cursorType = CursorType::SizeNeSw;
+        mLeftBottomDragHandle = mmake<CursorEventsArea>();
+        mLeftBottomDragHandle->isUnderPoint = [&](const Vec2F& point) { return mLeftBottomDragAreaRect.IsInside(point); };
+        mLeftBottomDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->leftBottom += cursor.delta; };
+        mLeftBottomDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mLeftBottomDragHandle->cursorType = CursorType::SizeNeSw;
 
-        mRightTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightTopDragAreaRect.IsInside(point); };
-        mRightTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->rightTop += cursor.delta; };
-        mRightTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mRightTopDragHandle.cursorType = CursorType::SizeNeSw;
+        mRightTopDragHandle = mmake<CursorEventsArea>();
+        mRightTopDragHandle->isUnderPoint = [&](const Vec2F& point) { return mRightTopDragAreaRect.IsInside(point); };
+        mRightTopDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->rightTop += cursor.delta; };
+        mRightTopDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mRightTopDragHandle->cursorType = CursorType::SizeNeSw;
 
-        mRightBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightBottomDragAreaRect.IsInside(point); };
-        mRightBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->rightBottom += cursor.delta; };
-        mRightBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mRightBottomDragHandle.cursorType = CursorType::SizeNwSe;
+        mRightBottomDragHandle = mmake<CursorEventsArea>();
+        mRightBottomDragHandle->isUnderPoint = [&](const Vec2F& point) { return mRightBottomDragAreaRect.IsInside(point); };
+        mRightBottomDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->rightBottom += cursor.delta; };
+        mRightBottomDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mRightBottomDragHandle->cursorType = CursorType::SizeNwSe;
 
         BindHandlesInteractableToVisibility();
     }
 
     void Window::SetHandlesInteractable(bool interactable)
     {
-        mHeadDragHandle.interactable        = interactable;
-        mTopDragHandle.interactable         = interactable;
-        mBottomDragHandle.interactable      = interactable;
-        mLeftDragHandle.interactable        = interactable;
-        mRightDragHandle.interactable       = interactable;
-        mLeftTopDragHandle.interactable     = interactable;
-        mRightTopDragHandle.interactable    = interactable;
-        mLeftBottomDragHandle.interactable  = interactable;
-        mRightBottomDragHandle.interactable = interactable;
+        mHeadDragHandle->interactable        = interactable;
+        mTopDragHandle->interactable         = interactable;
+        mBottomDragHandle->interactable      = interactable;
+        mLeftDragHandle->interactable        = interactable;
+        mRightDragHandle->interactable       = interactable;
+        mLeftTopDragHandle->interactable     = interactable;
+        mRightTopDragHandle->interactable    = interactable;
+        mLeftBottomDragHandle->interactable  = interactable;
+        mRightBottomDragHandle->interactable = interactable;
     }
 
     void Window::BindHandlesInteractableToVisibility()

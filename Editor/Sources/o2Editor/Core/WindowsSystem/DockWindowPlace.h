@@ -62,12 +62,12 @@ namespace Editor
 		TwoDirection mResizibleDir; // Resizible dragable side
 
 		WeakRef<DockWindowPlace> mNeighborMin;         // Resizing neighbor, using when dragging this side
-		CursorEventsArea         mDragHandleMin;       // Separator drag handle
+		Ref<CursorEventsArea>    mDragHandleMin;       // Separator drag handle
 		Layout                   mDragHandleLayoutMin; // Separator drag handle layout
 		RectF                    mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
 
 		WeakRef<DockWindowPlace> mNeighborMax;         // Resizing neighbor, using when dragging this side
-		CursorEventsArea         mDragHandleMax;       // Separator drag handle
+		Ref<CursorEventsArea>    mDragHandleMax;       // Separator drag handle
 		Layout                   mDragHandleLayoutMax; // Separator drag handle layout
 		RectF                    mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 

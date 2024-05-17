@@ -45,12 +45,12 @@ namespace o2
         if (fillBackground)
             o2Render.Clear(fillColor);
 
-        listenersLayer.OnBeginDraw();
+        listenersLayer->OnBeginDraw();
 
         Camera prevCamera = o2Render.GetCamera();
         Setup();
 
-        listenersLayer.camera = o2Render.GetCamera();
+        listenersLayer->camera = o2Render.GetCamera();
 
         if (o2Input.IsKeyDown('G'))
         {
@@ -118,7 +118,7 @@ namespace o2
 
         o2Render.SetCamera(prevCamera);
 
-        listenersLayer.OnEndDraw();
+        listenersLayer->OnEndDraw();
     }
 
     Camera CameraActor::GetRenderCamera() const

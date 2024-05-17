@@ -156,8 +156,8 @@ namespace Editor
 
 		Ref<HorizontalScrollBar> mScrollBar; // Scroll bar. Limited by animation duration
 
-		Ref<Sprite>      mTimeLine;           // Red time line
-		CursorEventsArea mTimeLineEventsArea; // Top area events listeners, used for moving red line of time
+		Ref<Sprite>           mTimeLine;           // Red time line
+		Ref<CursorEventsArea> mTimeLineEventsArea; // Top area events listeners, used for moving red line of time
 
 	private:
 		// Updates duration and scrollbars
