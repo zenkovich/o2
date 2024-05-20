@@ -139,7 +139,7 @@ namespace o2
         virtual void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const;
 
         // Returns abstract value proxy for object value
-        virtual IAbstractValueProxy* GetValueProxy(void* object) const = 0;
+        virtual Ref<IAbstractValueProxy> GetValueProxy(void* object) const = 0;
 
         // Serializes value from ptr
         virtual void Serialize(void* ptr, DataValue& data) const;
@@ -215,7 +215,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // -------------
@@ -237,7 +237,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
     public:
         static FunctionType* commonType;       // Common function type container
@@ -291,7 +291,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // ----------------
@@ -327,7 +327,7 @@ namespace o2
         void* CreateSample() const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
     protected:
         const Type* mBaseType;
@@ -378,7 +378,7 @@ namespace o2
         virtual void* CreateSample(void* object) const = 0;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
         // Returns raw pointer from reference pointer
         virtual void* GetObjectRawPtr(void* refPtr) const = 0;
@@ -407,7 +407,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
         // Returns raw pointer from reference pointer
         void* GetObjectRawPtr(void* refPtr) const override;
@@ -461,7 +461,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
         // Returns filed pointer by path
         void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
@@ -498,7 +498,7 @@ namespace o2
         virtual void* GetObjectVectorElementPtr(void* object, int idx) const = 0;
 
         // Returns element's value proxy by index
-        virtual IAbstractValueProxy* GetObjectVectorElementProxy(void* object, int idx) const = 0;
+        virtual Ref<IAbstractValueProxy> GetObjectVectorElementProxy(void* object, int idx) const = 0;
 
         // Removes element at idx in vector
         virtual void RemoveObjectVectorElement(void* object, int idx) const = 0;
@@ -541,7 +541,7 @@ namespace o2
         void* GetObjectVectorElementPtr(void* object, int idx) const override;
 
         // Returns element's value proxy by index
-        IAbstractValueProxy* GetObjectVectorElementProxy(void* object, int idx) const override;
+        Ref<IAbstractValueProxy> GetObjectVectorElementProxy(void* object, int idx) const override;
 
         // Removes element at idx in vector
         void RemoveObjectVectorElement(void* object, int idx) const override;
@@ -553,7 +553,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // --------------------------
@@ -609,7 +609,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // -------------------------------------------
@@ -650,7 +650,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
         // Returns value pointer by key
         void* GetValue(void* object, const String& key) const override;
@@ -703,7 +703,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // --------------------------
@@ -1012,9 +1012,9 @@ namespace o2
     }
 
     template<typename _type>
-    IAbstractValueProxy* TType<_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TType<_type>::GetValueProxy(void* object) const
     {
-        return mnew PointerValueProxy<_type>((_type*)object);
+        return mmake<PointerValueProxy<_type>>((_type*)object);
     }
 
     // --------------------------
@@ -1059,10 +1059,10 @@ namespace o2
     }
 
     template<typename _type>
-    IAbstractValueProxy* TObjectType<_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TObjectType<_type>::GetValueProxy(void* object) const
     {
         if constexpr (std::is_copy_constructible<_type>::value)
-            return mnew PointerValueProxy<_type>((_type*)object);
+            return mmake<PointerValueProxy<_type>>((_type*)object);
         else
         {
             Assert(false, "Type isn't copy constructible");
@@ -1122,9 +1122,9 @@ namespace o2
     }
 
     template<typename _type>
-    IAbstractValueProxy* TReferenceType<_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TReferenceType<_type>::GetValueProxy(void* object) const
     {
-        return mnew RefPointerValueProxy<_type>((Ref<_type>*)object);
+        return mmake<RefPointerValueProxy<_type>>((Ref<_type>*)object);
     }
 
     template<typename _type>
@@ -1174,9 +1174,9 @@ namespace o2
     {}
 
     template<typename _value_type, typename _property_type>
-    IAbstractValueProxy* TPropertyType<_value_type, _property_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TPropertyType<_value_type, _property_type>::GetValueProxy(void* object) const
     {
-        return mnew PropertyValueProxy<_value_type, _property_type>((_property_type*)object);
+        return mmake<PropertyValueProxy<_value_type, _property_type>>((_property_type*)object);
     }
 
     template<typename _value_type, typename _property_type>
@@ -1236,7 +1236,7 @@ namespace o2
     }
 
     template<typename _element_type>
-    IAbstractValueProxy* TVectorType<_element_type>::GetObjectVectorElementProxy(void* object, int idx) const
+    Ref<IAbstractValueProxy> TVectorType<_element_type>::GetObjectVectorElementProxy(void* object, int idx) const
     {
         if (idx < 0 || idx >= ((Vector<_element_type>*)object)->Count())
             return nullptr;
@@ -1274,9 +1274,9 @@ namespace o2
     }
 
     template<typename _element_type>
-    IAbstractValueProxy* TVectorType<_element_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TVectorType<_element_type>::GetValueProxy(void* object) const
     {
-        return mnew PointerValueProxy<Vector<_element_type>>((Vector<_element_type>*)object);
+        return mmake<PointerValueProxy<Vector<_element_type>>>((Vector<_element_type>*)object);
     }
 
     template<typename _element_type>
@@ -1393,9 +1393,9 @@ namespace o2
     }
 
     template<typename _key_type, typename _value_type>
-    IAbstractValueProxy* TMapType<_key_type, _value_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TMapType<_key_type, _value_type>::GetValueProxy(void* object) const
     {
-        return mnew PointerValueProxy<Map<_key_type, _value_type>>((Map<_key_type, _value_type>*)object);
+        return mmake<PointerValueProxy<Map<_key_type, _value_type>>>((Map<_key_type, _value_type>*)object);
     }
 
     // ----------------------------------------
@@ -1421,9 +1421,9 @@ namespace o2
     {}
 
     template<typename _return_type, typename _accessor_type>
-    IAbstractValueProxy* TStringPointerAccessorType<_return_type, _accessor_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TStringPointerAccessorType<_return_type, _accessor_type>::GetValueProxy(void* object) const
     {
-        return mnew PointerValueProxy<_accessor_type>((_accessor_type*)object);
+        return mmake<PointerValueProxy<_accessor_type>>((_accessor_type*)object);
     }
 
     template<typename _return_type, typename _accessor_type>
@@ -1486,9 +1486,9 @@ namespace o2
     }
 
     template<typename _type>
-    IAbstractValueProxy* TEnumType<_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TEnumType<_type>::GetValueProxy(void* object) const
     {
-        return mnew PointerValueProxy<_type>((_type*)object);
+        return mmake<PointerValueProxy<_type>>((_type*)object);
     }
 
     FUNDAMENTAL_META(RectF)

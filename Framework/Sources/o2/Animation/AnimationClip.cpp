@@ -104,7 +104,7 @@ namespace o2
             return nullptr;
         }
 
-        auto track = Ref(dynamic_cast<IAnimationTrack*>(animType->DynamicCastToIObject(animType->CreateSample())));
+        auto track = DynamicCast<IAnimationTrack>(animType->CreateSampleRef());
         track->path = path;
         track->onKeysChanged += THIS_FUNC(OnTrackChanged);
 

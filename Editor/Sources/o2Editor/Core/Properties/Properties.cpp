@@ -457,7 +457,7 @@ namespace Editor
 		}
 
 		if (!viewer)
-			viewer = Ref((IObjectPropertiesViewer*)(viewerType->CreateSample()));
+			viewer = DynamicCast<IObjectPropertiesViewer>(viewerType->CreateSampleRef());
 
 		viewer->path = path;
 		viewer->onChanged = onChanged;

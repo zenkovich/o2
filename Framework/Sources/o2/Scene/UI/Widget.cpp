@@ -435,7 +435,7 @@ namespace o2
                     const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
                     if (type)
                     {
-                        auto widget = Ref(dynamic_cast<Widget*>(type->DynamicCastToIObject(type->CreateSample())));
+                        auto widget = DynamicCast<Widget>(type->CreateSampleRef());
                         AddInternalWidget(widget);
                         widget->mCopyVisitor = mCopyVisitor;
                         widget->Deserialize(*dataValue);

@@ -13,7 +13,7 @@ namespace o2
 	// ----------------------------------------------------------------------------
 	// Abstract value proxy. Accepts by void*, value by pointer must match the type
 	// ----------------------------------------------------------------------------
-	class IAbstractValueProxy : virtual public RefCounterable
+	class IAbstractValueProxy : public RefCounterable
 	{
 	public:
 		virtual ~IAbstractValueProxy() {}
@@ -41,7 +41,7 @@ namespace o2
 	// ------------------------------------------------------------
 	// Pointer value proxy interface. Can returns to source pointer
 	// ------------------------------------------------------------
-	class IPointerValueProxy : virtual public RefCounterable
+	class IPointerValueProxy : public IRefCounterable
 	{
 	public:
 		virtual void* GetValueVoidPointer() const = 0;
@@ -65,6 +65,8 @@ namespace o2
 
 		_type* GetValuePointer() const { return mValuePtr; }
 		void* GetValueVoidPointer() const override { return (void*)mValuePtr; }
+
+		REF_COUNTERABLE_IMPL(IValueProxy<_type>);
 	};
 
 	// ----------------------------------------------------
@@ -169,6 +171,8 @@ namespace o2
 
 		void SetValue(const _type& value) override;
 		_type GetValue() const override;
+
+        REF_COUNTERABLE_IMPL(IValueProxy<_type>);
 	};
 
 	// ----------------------------------------

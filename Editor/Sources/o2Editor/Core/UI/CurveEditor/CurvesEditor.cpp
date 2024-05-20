@@ -25,7 +25,7 @@
 namespace Editor
 {
 	CurvesEditor::CurvesEditor(RefCounter* refCounter):
-		FrameScrollView(refCounter)
+		FrameScrollView(refCounter), SelectableDragHandlesGroup(refCounter)
 	{
 		mReady = false;
 
@@ -52,7 +52,7 @@ namespace Editor
 	}
 
 	CurvesEditor::CurvesEditor(RefCounter* refCounter, const CurvesEditor& other):
-		FrameScrollView(refCounter, other), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>()), mTextFont(other.mTextFont)
+		FrameScrollView(refCounter, other), SelectableDragHandlesGroup(refCounter), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>()), mTextFont(other.mTextFont)
 	{
 		mReady = false;
 
@@ -733,9 +733,9 @@ namespace Editor
 		Curve::Key lastCurveKey = info->curve->GetKeyAt(Math::Max(0, keyId - 1));
 		Curve::Key nextCurveKey = info->curve->GetKeyAt(Math::Min(keyId + 1, info->curve->GetKeys().Count()));
 
-		// main handle
-		keyHandles->mainHandle->SetPosition(Vec2F(curveKey.position, curveKey.value));
-		keyHandles->mainHandle->curveInfo = info;
+		// main 
+        keyHandles->mainHandle->curveInfo = info;
+        keyHandles->mainHandle->SetPosition(Vec2F(curveKey.position, curveKey.value));
 		keyHandles->mainHandle->onChangedPos = [=](const Vec2F& pos) { OnCurveKeyMainHandleDragged(info, keyHandles, pos); };
 		keyHandles->mainHandle->onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
 		keyHandles->mainHandle->onPressed = THIS_FUNC(OnTransformBegin);

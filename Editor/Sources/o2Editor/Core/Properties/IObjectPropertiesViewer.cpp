@@ -11,6 +11,8 @@ namespace Editor
 
 	IObjectPropertiesViewer::IObjectPropertiesViewer()
 	{
+		mPropertiesContext = mmake<PropertiesContext>();
+
 		mOnChildFieldChangeCompleted =
 			MakeFunction<IObjectPropertiesViewer, void, const String&,
 			const Vector<DataDocument>&, const Vector<DataDocument>&>(this, &IObjectPropertiesViewer::OnFieldChangeCompleted);

@@ -679,7 +679,7 @@ namespace o2
     }
 
     WidgetDragHandle::WidgetDragHandle(RefCounter* refCounter) :
-        DragHandle(), Widget(refCounter)
+        DragHandle(refCounter), Widget(refCounter)
     {
         widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
         localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
@@ -688,14 +688,14 @@ namespace o2
     WidgetDragHandle::WidgetDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/,
                                        const Ref<IRectDrawable>& selected /*= nullptr*/, const Ref<IRectDrawable>& selectedHovered /*= nullptr*/, 
                                        const Ref<IRectDrawable>& selectedPressed /*= nullptr*/) :
-        DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed), Widget(refCounter)
+        DragHandle(refCounter, regular, hover, pressed, selected, selectedHovered, selectedPressed), Widget(refCounter)
     {
         widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
         localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
     }
 
     WidgetDragHandle::WidgetDragHandle(RefCounter* refCounter, const WidgetDragHandle& other) :
-        DragHandle(other), Widget(refCounter, other)
+        DragHandle(refCounter, other), Widget(refCounter, other)
     {
         widgetOffsetToLocalTransformFunc = other.widgetOffsetToLocalTransformFunc;
         localToWidgetOffsetTransformFunc = other.localToWidgetOffsetTransformFunc;
@@ -784,6 +784,13 @@ namespace o2
         Widget::OnDeserializedDelta(node, origin);
     }
 
+    ISelectableDragHandlesGroup::ISelectableDragHandlesGroup()
+    {}
+
+    ISelectableDragHandlesGroup::ISelectableDragHandlesGroup(RefCounter* refCounter):
+        RefCounterable(refCounter)
+    {}
+
     void ISelectableDragHandlesGroup::DeselectAll()
     {
         auto handles = GetAllHandles();
@@ -802,6 +809,13 @@ namespace o2
     {
         handle->mIsSelected = selected;
     }
+
+    SelectableDragHandlesGroup::SelectableDragHandlesGroup(RefCounter* refCounter):
+        ISelectableDragHandlesGroup(refCounter)
+    {}
+
+    SelectableDragHandlesGroup::SelectableDragHandlesGroup()
+    {}
 
     SelectableDragHandlesGroup::~SelectableDragHandlesGroup()
     {

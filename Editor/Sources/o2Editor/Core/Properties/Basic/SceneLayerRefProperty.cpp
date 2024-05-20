@@ -78,7 +78,7 @@ namespace Editor
 		{
 			if (mSelectedInheritedValue)
 				mDropDown->value = mInheritFromParentName;
-			else
+			else if (mCommonValue)
 				mDropDown->value = mCommonValue->GetName();
 
 			mDropDown->SetState("undefined", false);
@@ -120,6 +120,9 @@ namespace Editor
 		}
 
 		mSelectedInheritedValue = false;
+
+		if (!mCommonValue)
+			mCommonValue = o2Scene.GetDefaultLayer();
 
 		//SetValueByUser(Ref<SceneLayer>(name));
 	}

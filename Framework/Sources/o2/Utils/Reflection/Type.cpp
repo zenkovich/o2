@@ -401,12 +401,12 @@ namespace o2
         return mBaseType->CreateSample();
     }
 
-    IAbstractValueProxy* PointerType::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> PointerType::GetValueProxy(void* object) const
     {
         if (auto objectUnptrType = dynamic_cast<const ObjectType*>(mBaseType))
             return objectUnptrType->GetValueProxy(*(void**)object);
 
-        return mnew PointerValueProxy<void*>((void**)object);
+        return mmake<PointerValueProxy<void*>>((void**)object);
     }
 
     ReferenceType::ReferenceType(const Type* baseType, ITypeSerializer* serializer) :
@@ -434,9 +434,9 @@ namespace o2
         return mBaseType->CreateSample();
     }
 
-    IAbstractValueProxy* ReferenceType::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> ReferenceType::GetValueProxy(void* object) const
     {
-        return mnew PointerValueProxy<void*>((void**)object);
+        return mmake<PointerValueProxy<void*>>((void**)object);
     }
 
     PropertyType::PropertyType(const String& name, int size, ITypeSerializer* serializer) :
@@ -512,13 +512,13 @@ namespace o2
     void FunctionType::DestroySample(void* sample) const
     {}
 
-    IAbstractValueProxy* FunctionType::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> FunctionType::GetValueProxy(void* object) const
     {
         static int offs = (std::ptrdiff_t)((AbstractFunction*)((Function<void()>*)1)) - (std::ptrdiff_t)(Function<void()>*)1;
         auto btpr = reinterpret_cast<std::byte*>(object);
         auto ptr = btpr + offs;
 
-        return mnew PointerValueProxy<AbstractFunction>(reinterpret_cast<AbstractFunction*>(ptr));
+        return mmake<PointerValueProxy<AbstractFunction>>(reinterpret_cast<AbstractFunction*>(ptr));
     }
 }
 

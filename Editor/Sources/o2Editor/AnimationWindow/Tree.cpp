@@ -445,7 +445,7 @@ namespace Editor
 			if (mTrackControlsCache.ContainsKey(trackControlType) && !mTrackControlsCache[trackControlType].IsEmpty())
 				mTrackControl = mTrackControlsCache[trackControlType].PopBack();
 			else
-				mTrackControl = Ref(dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample())));
+				mTrackControl = DynamicCast<ITrackControl>(trackControlType->CreateSampleRef());
 
 			mTrackControl->Initialize(mTimeline, mHandlesSheet);
 			mTrackControl->SetTrack(mData->track, mData->player, mData->path);

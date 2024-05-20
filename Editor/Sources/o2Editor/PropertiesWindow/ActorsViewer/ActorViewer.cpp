@@ -201,7 +201,7 @@ namespace Editor
 		{
 			PushEditorScopeOnStack scope;
 
-			auto newViewer = Ref((IActorPropertiesViewer*)(viewerSample->GetType().CreateSample()));
+			auto newViewer = DynamicCast<IActorPropertiesViewer>(viewerSample->GetType().CreateSampleRef());
 
 			if (usingDefaultViewer)
 				DynamicCast<DefaultActorPropertiesViewer>(newViewer)->SpecializeActorType(type);

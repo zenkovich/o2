@@ -94,7 +94,7 @@ namespace Editor
 
 		for (auto& actor : viewer->mTargetActors)
 		{
-			auto comp = Ref(dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample())));
+			auto comp = DynamicCast<Component>(objType->CreateSampleRef());
 			actor->AddComponent(comp);
 			comp->OnAddedFromEditor();
 		}

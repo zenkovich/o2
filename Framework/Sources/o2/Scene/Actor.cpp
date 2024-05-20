@@ -1072,7 +1072,7 @@ namespace o2
                         const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
                         if (type)
                         {
-                            auto child = Ref(dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample())));
+                            auto child = DynamicCast<Actor>(type->CreateSampleRef());
                             child->Deserialize(*dataValue);
                             o2Scene.mRootActors.Remove(child);
                             AddChild(child);
@@ -1224,7 +1224,7 @@ namespace o2
                     const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
                     if (type)
                     {
-                        auto child = Ref(dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample())));
+                        auto child = DynamicCast<Actor>(type->CreateSampleRef());
                         child->mParent = Ref(this);
                         child->mCopyVisitor = mCopyVisitor;
                         child->Deserialize(*dataValue);

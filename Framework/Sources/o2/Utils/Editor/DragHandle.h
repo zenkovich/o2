@@ -361,6 +361,12 @@ namespace o2
     class ISelectableDragHandlesGroup: public RefCounterable
     {
     public:
+        // Default constructor
+        ISelectableDragHandlesGroup();
+
+        // Default constructor
+        ISelectableDragHandlesGroup(RefCounter *refCounter);
+
         // Returns selected handles in group
         virtual const Vector<Ref<DragHandle>>& GetSelectedHandles() const = 0;
 
@@ -414,6 +420,12 @@ namespace o2
     class SelectableDragHandlesGroup: public ISelectableDragHandlesGroup
     {
     public:
+        // Default constructor
+        SelectableDragHandlesGroup();
+
+        // Default constructor
+        SelectableDragHandlesGroup(RefCounter* refCounter);
+
         // Destructor
         ~SelectableDragHandlesGroup();
 

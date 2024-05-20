@@ -17,7 +17,7 @@ namespace Editor
 {
 
     KeyHandlesSheet::KeyHandlesSheet(RefCounter* refCounter) :
-        Widget(refCounter)
+        Widget(refCounter), SelectableDragHandlesGroup(refCounter)
     {
         mSelectionFrame = mmake<Sprite>("ui/UI4_keys_select.png");
         mSelectionFrame->enabled = false;
@@ -27,7 +27,7 @@ namespace Editor
     }
 
     KeyHandlesSheet::KeyHandlesSheet(RefCounter* refCounter, const KeyHandlesSheet& other) :
-        Widget(refCounter, other), mSelectionFrame(other.mSelectionFrame->CloneAs<Sprite>())
+        Widget(refCounter, other), SelectableDragHandlesGroup(refCounter), mSelectionFrame(other.mSelectionFrame->CloneAs<Sprite>())
     {
         InitializeHandles();
         InitializeContextMenu();

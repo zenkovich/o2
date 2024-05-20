@@ -911,7 +911,7 @@ namespace Editor
 
         auto objectType = dynamic_cast<const ObjectType*>(assetType);
 
-        mNewAsset = Ref(dynamic_cast<Asset*>(objectType->DynamicCastToIObject(objectType->CreateSample())));
+        mNewAsset = DynamicCast<Asset>(objectType->CreateSampleRef());
         mNewAsset->SetPath(mCurrentPath + "/" + newAssetName);
         mAssetInfos.Add(mmake<AssetInfo>(mNewAsset->GetInfo()));
 
