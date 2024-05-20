@@ -136,7 +136,7 @@ namespace o2
         public:
             Vector<Pair<AnimationState*, typename AnimationTrack<_type>::Player*>> tracks; // Animation tracks associated with animation states
             
-            IValueProxy<_type>* target = nullptr; // Target value proxy
+            Ref<IValueProxy<_type>> target; // Target value proxy
 
         public:
             // Destructor
@@ -246,15 +246,12 @@ namespace o2
             return;
         }
 
-        newAgent->target = dynamic_cast<IValueProxy<_type>*>(fieldInfo->GetType()->GetValueProxy(fieldPtr));
+        newAgent->target = DynamicCast<IValueProxy<_type>>(fieldInfo->GetType()->GetValueProxy(fieldPtr));
     }
 
     template<typename _type>
     AnimationComponent::TrackMixer<_type>::~TrackMixer()
-    {
-        if (target)
-            delete target;
-    }
+    {}
 
     template<typename _type>
     bool AnimationComponent::TrackMixer<_type>::IsEmpty() const

@@ -42,13 +42,14 @@ namespace Editor
 			auto handleLayer = mEditBox->FindLayer("arrows");
 			if (handleLayer)
 			{
-				mEditBox->onDraw += [&]() { mDragHangle.OnDrawn(); };
+				mDragHangle = mmake<CursorEventsArea>();
+				mEditBox->onDraw += [&]() { mDragHangle->OnDrawn(); };
 
-				mDragHangle.cursorType = CursorType::SizeNS;
-				mDragHangle.isUnderPoint = [=](const Vec2F& point) { return handleLayer->IsUnderPoint(point); };
-				mDragHangle.onMoved = THIS_FUNC(OnDragHandleMoved);
-				mDragHangle.onCursorPressed = THIS_FUNC(OnMoveHandlePressed);
-				mDragHangle.onCursorReleased = THIS_FUNC(OnMoveHandleReleased);
+				mDragHangle->cursorType = CursorType::SizeNS;
+				mDragHangle->isUnderPoint = [=](const Vec2F& point) { return handleLayer->IsUnderPoint(point); };
+				mDragHangle->onMoved = THIS_FUNC(OnDragHandleMoved);
+				mDragHangle->onCursorPressed = THIS_FUNC(OnMoveHandlePressed);
+				mDragHangle->onCursorReleased = THIS_FUNC(OnMoveHandleReleased);
 			}
 		}
 	}

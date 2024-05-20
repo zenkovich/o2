@@ -103,7 +103,7 @@ namespace o2
             trackPlayer->mOwnerPlayer = WeakRef(this);
 
             if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-                trackPlayer->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(targetPtr));
+                trackPlayer->SetTargetProxy(fieldInfo->GetType()->GetValueProxy(targetPtr));
             else
                 trackPlayer->SetTargetVoid(targetPtr);
 

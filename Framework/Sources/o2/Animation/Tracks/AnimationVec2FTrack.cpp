@@ -111,10 +111,7 @@ namespace o2
     {}
 
     AnimationTrack<Vec2F>::Player::~Player()
-    {
-        if (mTargetProxy)
-            delete mTargetProxy;
-    }
+    {}
 
     AnimationTrack<Vec2F>::Player::operator Vec2F() const
     {
@@ -140,7 +137,7 @@ namespace o2
         mTargetDelegate = changeEvent;
     }
 
-    void AnimationTrack<Vec2F>::Player::SetTargetProxy(IValueProxy<Vec2F>* proxy)
+    void AnimationTrack<Vec2F>::Player::SetTargetProxy(const Ref<IValueProxy<Vec2F>>& proxy)
     {
         mTarget = nullptr;
         mTargetDelegate.Clear();
@@ -163,9 +160,9 @@ namespace o2
         SetTarget((Vec2F*)target, changeEvent);
     }
 
-    void AnimationTrack<Vec2F>::Player::SetTargetProxyVoid(void* target)
+	void AnimationTrack<Vec2F>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
     {
-        SetTargetProxy((IValueProxy<Vec2F>*)target);
+        SetTargetProxy(DynamicCast<IValueProxy<Vec2F>>(targetProxy));
     }
 
     void AnimationTrack<Vec2F>::Player::SetTrack(const Ref<IAnimationTrack>& track)

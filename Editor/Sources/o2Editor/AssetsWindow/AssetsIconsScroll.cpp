@@ -42,9 +42,9 @@ namespace Editor
     }
 
     AssetsIconsScrollArea::AssetsIconsScrollArea(RefCounter* refCounter, const AssetsIconsScrollArea& other) :
-        GridLayoutScrollArea(refCounter, other), mHighlightSprite(other.mHighlightSprite->CloneAs<Sprite>()),
+        GridLayoutScrollArea(refCounter, other), mHighlightSprite(other.mHighlightSprite->CloneAsRef<Sprite>()),
         mHighlightLayout(other.mHighlightLayout), mHighlightAnim(other.mHighlightAnim),
-        mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>())
+        mSelectionSprite(other.mSelectionSprite->CloneAsRef<Sprite>())
     {
         PushEditorScopeOnStack scope;
 

@@ -306,10 +306,7 @@ namespace o2
     {}
 
     AnimationTrack<Color4>::Player::~Player()
-    {
-        if (mTargetProxy)
-            delete mTargetProxy;
-    }
+    {}
 
     AnimationTrack<Color4>::Player::operator Color4() const
     {
@@ -335,7 +332,7 @@ namespace o2
         mTargetDelegate = changeEvent;
     }
 
-    void AnimationTrack<Color4>::Player::SetTargetProxy(IValueProxy<Color4>* proxy)
+    void AnimationTrack<Color4>::Player::SetTargetProxy(const Ref<IValueProxy<Color4>>& proxy)
     {
         mTarget = nullptr;
         mTargetDelegate.Clear();
@@ -358,9 +355,9 @@ namespace o2
         SetTarget((Color4*)target, changeEvent);
     }
 
-    void AnimationTrack<Color4>::Player::SetTargetProxyVoid(void* target)
+    void AnimationTrack<Color4>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
     {
-        SetTargetProxy((IValueProxy<Color4>*)target);
+        SetTargetProxy(DynamicCast<IValueProxy<Color4>>(targetProxy));
     }
 
     void AnimationTrack<Color4>::Player::SetTrack(const Ref<IAnimationTrack>& track)

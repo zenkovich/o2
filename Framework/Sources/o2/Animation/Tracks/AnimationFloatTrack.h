@@ -137,7 +137,6 @@ namespace o2
             GETTER(float, value, GetValue);                              // Current value getter 
             SETTER(float*, target, SetTarget);                           // Bind target setter
             SETTER(Function<void()>, targetDelegate, SetTargetDelegate); // Bind target change event setter
-            SETTER(IValueProxy<float>*, targetProxy, SetTargetProxy);    // Bind proxy setter
 
         public:
             // Default constructor
@@ -159,7 +158,7 @@ namespace o2
             void SetTargetDelegate(const Function<void()>& changeEvent) override;
 
             // Sets target property pointer
-            void SetTargetProxy(IValueProxy<float>* proxy);
+            void SetTargetProxy(const Ref<IValueProxy<float>>& proxy);
 
             // Sets animation track
             void SetTrack(const Ref<AnimationTrack<float>>& track);
@@ -174,7 +173,7 @@ namespace o2
             void SetTargetVoid(void* target, const Function<void()>& changeEvent) override;
 
             // Sets target property by void pointer
-            void SetTargetProxyVoid(void* target) override;
+			void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) override;
 
             // Sets animation track
             void SetTrack(const Ref<IAnimationTrack>& track) override;
@@ -196,9 +195,9 @@ namespace o2
             int   mPrevKey = 0;               // Previous evaluation key index
             int   mPrevKeyApproximation = 0;  // Previous evaluation key approximation index
 
-            float*              mTarget = nullptr;      // Animation target value pointer
-            Function<void()>    mTargetDelegate;        // Animation target value change event
-            IValueProxy<float>* mTargetProxy = nullptr; // Animation target proxy pointer
+            float*                  mTarget = nullptr; // Animation target value pointer
+            Function<void()>        mTargetDelegate;   // Animation target value change event
+            Ref<IValueProxy<float>> mTargetProxy;      // Animation target proxy pointer
 
         protected:
             // Evaluates value
@@ -282,7 +281,6 @@ CLASS_FIELDS_META(o2::AnimationTrack<float>::Player)
     FIELD().PUBLIC().NAME(value);
     FIELD().PUBLIC().NAME(target);
     FIELD().PUBLIC().NAME(targetDelegate);
-    FIELD().PUBLIC().NAME(targetProxy);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
     FIELD().PROTECTED().NAME(mCurrentValue);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime);
@@ -290,7 +288,7 @@ CLASS_FIELDS_META(o2::AnimationTrack<float>::Player)
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevKeyApproximation);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
     FIELD().PROTECTED().NAME(mTargetDelegate);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTargetProxy);
+    FIELD().PROTECTED().NAME(mTargetProxy);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>::Player)
@@ -300,12 +298,12 @@ CLASS_METHODS_META(o2::AnimationTrack<float>::Player)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, float*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, float*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<float>*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IValueProxy<float>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<AnimationTrack<float>>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationTrack<float>>&, GetTrackT);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PUBLIC().SIGNATURE(float, GetValue);

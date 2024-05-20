@@ -81,7 +81,6 @@ namespace o2
             GETTER(o2::Vec2F, value, GetValue);                           // Current value getter
             SETTER(o2::Vec2F*, target, SetTarget);                        // Bind target setter
             SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter  
-            SETTER(IValueProxy<o2::Vec2F>*, targetProxy, SetTargetProxy); // Bind proxy setter
 
         public:
             // Default constructor
@@ -103,7 +102,7 @@ namespace o2
             void SetTargetDelegate(const Function<void()>& changeEvent) override;
 
             // Sets target property pointer
-            void SetTargetProxy(IValueProxy<Vec2F>* setter);
+            void SetTargetProxy(const Ref<IValueProxy<Vec2F>>& setter);
 
             // Sets animation track
             void SetTrack(const Ref<AnimationTrack<Vec2F>>& track);
@@ -118,7 +117,7 @@ namespace o2
             void SetTargetVoid(void* target, const Function<void()>& changeEvent) override;
 
             // Sets target property by void pointer
-            void SetTargetProxyVoid(void* target) override;
+			void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) override;
 
             // Sets animation track
             void SetTrack(const Ref<IAnimationTrack>& track) override;
@@ -142,9 +141,9 @@ namespace o2
             int   mPrevSplineKey = 0;               // Previous evaluation spline key index
             int   mPrevSplineKeyApproximation = 0;  // Previous evaluation spline key approximation index
 
-            Vec2F*              mTarget = nullptr;      // Animation target value pointer
-            Function<void()>    mTargetDelegate;        // Animation target value change event
-            IValueProxy<Vec2F>* mTargetProxy = nullptr; // Animation target proxy pointer
+            Vec2F*                  mTarget = nullptr; // Animation target value pointer
+            Function<void()>        mTargetDelegate;   // Animation target value change event
+            Ref<IValueProxy<Vec2F>> mTargetProxy;      // Animation target proxy pointer
 
         protected:
             // Evaluates value
@@ -202,7 +201,6 @@ CLASS_FIELDS_META(o2::AnimationTrack<o2::Vec2F>::Player)
     FIELD().PUBLIC().NAME(value);
     FIELD().PUBLIC().NAME(target);
     FIELD().PUBLIC().NAME(targetDelegate);
-    FIELD().PUBLIC().NAME(targetProxy);
     FIELD().PROTECTED().NAME(mTrack);
     FIELD().PROTECTED().NAME(mCurrentValue);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime);
@@ -212,7 +210,7 @@ CLASS_FIELDS_META(o2::AnimationTrack<o2::Vec2F>::Player)
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevSplineKeyApproximation);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
     FIELD().PROTECTED().NAME(mTargetDelegate);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTargetProxy);
+    FIELD().PROTECTED().NAME(mTargetProxy);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>::Player)
@@ -222,12 +220,12 @@ CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>::Player)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Vec2F*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Vec2F*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<Vec2F>*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IValueProxy<Vec2F>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<AnimationTrack<Vec2F>>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationTrack<Vec2F>>&, GetTrackT);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetValue);

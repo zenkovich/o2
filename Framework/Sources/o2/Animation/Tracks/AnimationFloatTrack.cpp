@@ -208,10 +208,7 @@ namespace o2
     {}
 
     AnimationTrack<float>::Player::~Player()
-    {
-        if (mTargetProxy)
-            delete mTargetProxy;
-    }
+    {}
 
     AnimationTrack<float>::Player::operator float() const
     {
@@ -237,7 +234,7 @@ namespace o2
         mTargetDelegate = changeEvent;
     }
 
-    void AnimationTrack<float>::Player::SetTargetProxy(IValueProxy<float>* proxy)
+    void AnimationTrack<float>::Player::SetTargetProxy(const Ref<IValueProxy<float>>& proxy)
     {
         mTarget = nullptr;
         mTargetDelegate.Clear();
@@ -265,9 +262,9 @@ namespace o2
         SetTarget((float*)target, changeEvent);
     }
 
-    void AnimationTrack<float>::Player::SetTargetProxyVoid(void* target)
+	void AnimationTrack<float>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
     {
-        SetTargetProxy((IValueProxy<float>*)target);
+        SetTargetProxy(DynamicCast<IValueProxy<float>>(targetProxy));
     }
 
     void AnimationTrack<float>::Player::SetTrack(const Ref<IAnimationTrack>& track)

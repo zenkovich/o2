@@ -350,7 +350,7 @@ namespace o2
         void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // ----------------------
@@ -1101,9 +1101,9 @@ namespace o2
     }
 
     template<typename _type>
-    IAbstractValueProxy* TPointerType<_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TPointerType<_type>::GetValueProxy(void* object) const
     {
-        return mnew PointerValueProxy<_type*>((_type**)object);
+        return mmake<PointerValueProxy<_type*>>((_type**)object);
     }
 
     // -------------------------------

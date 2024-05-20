@@ -35,8 +35,8 @@ namespace Editor
 		CLONEABLE_REF(FloatProperty);
 
 	protected:
-		Ref<EditBox>     mEditBox;    // Edit box 
-		CursorEventsArea mDragHangle; // Value changing drag handle
+		Ref<EditBox>          mEditBox;    // Edit box 
+		Ref<CursorEventsArea> mDragHangle; // Value changing drag handle
 
 	protected:
 		// Updates value view

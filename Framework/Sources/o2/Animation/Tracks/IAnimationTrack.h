@@ -32,7 +32,7 @@ namespace o2
             virtual void SetTargetVoid(void* target, const Function<void()>& changeEvent) {}
 
             // Sets target property by void pointer
-            virtual void SetTargetProxyVoid(void* target) {}
+            virtual void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) {}
 
             // Sets animation track
             virtual void SetTrack(const Ref<IAnimationTrack>& track);
@@ -150,7 +150,7 @@ CLASS_METHODS_META(o2::IAnimationTrack::IPlayer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PUBLIC().SIGNATURE(void, RegMixer, const Ref<AnimationState>&, const String&);
