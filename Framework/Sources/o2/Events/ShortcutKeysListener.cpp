@@ -66,7 +66,7 @@ namespace o2
         if (!mListeners.ContainsKey(shortcut))
             return;
 
-		mListeners[shortcut].RemoveFirst([&](auto x) { return x == listener; });
+		mListeners[shortcut].RemoveFirst([&](auto& x) { return x == listener; });
 
         if (mListeners[shortcut].IsEmpty())
             mListeners.Remove(shortcut);

@@ -20,6 +20,10 @@ namespace o2
     AnimationPlayer::~AnimationPlayer()
     {
         mTrackPlayers.Clear();
+
+        auto tmp = mClip;
+        mClip = nullptr;
+        tmp = nullptr;
     }
 
     void AnimationPlayer::SetTarget(IObject* target, bool errors /*= true*/)

@@ -284,7 +284,7 @@ namespace o2
 
     void EventSystem::RemoveCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer)
     {
-		mInstance->mCursorAreaEventsListenersLayers.RemoveFirst([&](auto x) { return x == layer; });
+		mInstance->mCursorAreaEventsListenersLayers.RemoveFirst([&](auto& x) { return x == layer; });
     }
 
 	void EventSystem::DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener)
@@ -323,7 +323,7 @@ namespace o2
             return;
 
         if (mInstance)
-            mInstance->mCursorListeners.RemoveFirst([&](auto x) { return x == listener; });
+            mInstance->mCursorListeners.RemoveFirst([&](auto& x) { return x == listener; });
     }
 
     void EventSystem::RegDragListener(DragableObject* listener)
@@ -356,7 +356,7 @@ namespace o2
     void EventSystem::UnregKeyboardListener(KeyboardEventsListener* listener)
     {
         if (mInstance)
-            mInstance->mKeyboardListeners.RemoveFirst([&](auto x) { return x == listener; });
+            mInstance->mKeyboardListeners.RemoveFirst([&](auto& x) { return x == listener; });
     }
 
     void EventSystem::RegApplicationListener(ApplicationEventsListener* listener)
@@ -371,6 +371,6 @@ namespace o2
     void EventSystem::UnregApplicationListener(ApplicationEventsListener* listener)
     {
         if (mInstance)
-            mInstance->mApplicationListeners.RemoveFirst([&](auto x) { return x == listener; });
+            mInstance->mApplicationListeners.RemoveFirst([&](auto& x) { return x == listener; });
     }
 }

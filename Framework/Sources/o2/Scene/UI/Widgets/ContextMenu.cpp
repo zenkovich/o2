@@ -126,7 +126,7 @@ namespace o2
 	}
 
 	ContextMenu::ContextMenu(RefCounter* refCounter, const ContextMenu& other) :
-		PopupWidget(other), mMaxVisibleItems(other.mMaxVisibleItems)
+		PopupWidget(refCounter, other), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample = other.mItemSample->CloneAsRef<ContextMenuItem>();
 		mItemSample->RemoveFromScene();
@@ -243,7 +243,7 @@ namespace o2
 							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString targetPath = path;
-		auto itemsList = CreateItemsByPath(targetPath);
+		auto& itemsList = CreateItemsByPath(targetPath);
 		int groupDelPos = targetPath.FindLast(".");
 		itemsList.Add(mmake<Item>(targetPath.SubStr(0, groupDelPos), clickFunc,
 								  groupDelPos < 0 ? "" : targetPath.SubStr(groupDelPos + 1),
@@ -256,7 +256,7 @@ namespace o2
 									const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString targetPath = path;
-		auto itemsList = CreateItemsByPath(targetPath);
+		auto& itemsList = CreateItemsByPath(targetPath);
 		int groupDelPos = targetPath.FindLast(".");
 		itemsList.Add(mmake<Item>(targetPath.SubStr(0, groupDelPos), value, clickFunc,
 								  groupDelPos < 0 ? "" : targetPath.SubStr(groupDelPos + 1),
