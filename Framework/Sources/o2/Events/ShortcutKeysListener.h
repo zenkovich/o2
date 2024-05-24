@@ -51,16 +51,16 @@ namespace o2
 
     protected:
         // Registers listener 
-        void Register(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
+        static void Register(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
 
         // Unregisters listener
-        void UnRegister(const ShortcutKeys& shortcut, ShortcutKeysListener* listener);
+        static void UnRegister(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
 
         // Set listener minimal priority
-        void SetMinPriority(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
+        static void SetMinPriority(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
 
         // Set listener maximal priority
-        void SetMaxPriority(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
+        static void SetMaxPriority(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
 
         // Called when key was pressed, send event to most priority listener
         void OnKeyPressed(const Input::Key& key) override;

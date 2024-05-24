@@ -98,37 +98,37 @@ namespace o2
         static void PopCursorAreaEventsListenersLayer();
 
         // Unregisters layer
-        static void RemoveCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
+        static void RemoveCursorAreaEventsListenersLayer(const Ref<CursorAreaEventListenersLayer>& layer);
 
         // Registering cursor area events listener
         static void DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener);
 
         // Unregistering cursor area events listener
-        static void UnregCursorAreaListener(CursorAreaEventsListener* listener);
+        static void UnregCursorAreaListener(const Ref<CursorAreaEventsListener>& listener);
 
         // Registering cursor events listener
-        static void RegCursorListener(CursorEventsListener* listener);
+        static void RegCursorListener(const Ref<CursorEventsListener>& listener);
 
         // Unregistering cursor events listener
-        static void UnregCursorListener(CursorEventsListener* listener);
+        static void UnregCursorListener(const Ref<CursorEventsListener>& listener);
 
         // Registering drag events listener
-        static void RegDragListener(DragableObject* listener);
+        static void RegDragListener(const Ref<DragableObject>& listener);
 
         // Unregistering drag events listener
-        static void UnregDragListener(DragableObject* listener);
+        static void UnregDragListener(const Ref<DragableObject>& listener);
 
         // Registering keyboard events listener
-        static void RegKeyboardListener(KeyboardEventsListener* listener);
+        static void RegKeyboardListener(const Ref<KeyboardEventsListener>& listener);
 
         // Unregistering keyboard events listener
-        static void UnregKeyboardListener(KeyboardEventsListener* listener);
+        static void UnregKeyboardListener(const Ref<KeyboardEventsListener>& listener);
 
         // Registering application events listener
-        static void RegApplicationListener(ApplicationEventsListener* listener);
+        static void RegApplicationListener(const Ref<ApplicationEventsListener>& listener);
 
         // Unregistering application events listener
-        static void UnregApplicationListener(ApplicationEventsListener* listener);
+        static void UnregApplicationListener(const Ref<ApplicationEventsListener>& listener);
 
         friend class Application;
         friend class ApplicationEventsListener;

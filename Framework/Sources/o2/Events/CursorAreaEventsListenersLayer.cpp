@@ -11,7 +11,7 @@ namespace o2
     CursorAreaEventListenersLayer::~CursorAreaEventListenersLayer()
     {
         if (EventSystem::IsSingletonInitialzed())
-            o2Events.RemoveCursorAreaEventsListenersLayer(this);
+            o2Events.RemoveCursorAreaEventsListenersLayer(Ref(this));
     }
 
     void CursorAreaEventListenersLayer::OnBeginDraw()
@@ -154,25 +154,25 @@ namespace o2
         mPressedListeners.Clear();
     }
 
-    void CursorAreaEventListenersLayer::UnregCursorAreaListener(CursorAreaEventsListener* listener)
+    void CursorAreaEventListenersLayer::UnregCursorAreaListener(const Ref<CursorAreaEventsListener>& listener)
     {
-        cursorEventAreaListeners.RemoveAll([&](auto x) { return x == listener; });
-        mRightButtonPressedListeners.RemoveAll([&](auto x) { return x == listener; });
-        mMiddleButtonPressedListeners.RemoveAll([&](auto x) { return x == listener; });
+        cursorEventAreaListeners.Remove(listener);
+        mRightButtonPressedListeners.Remove(listener);
+        mMiddleButtonPressedListeners.Remove(listener);
 
         for (auto& kv : mPressedListeners)
-            kv.second.RemoveAll([&](auto x) { return x == listener; });
+            kv.second.Remove(listener);
 
         for (auto& kv : mUnderCursorListeners)
-            kv.second.RemoveAll([&](auto x) { return x == listener; });
+            kv.second.Remove(listener);
 
         for (auto& kv : mLastUnderCursorListeners)
-            kv.second.RemoveAll([&](auto x) { return x == listener; });
+            kv.second.Remove(listener);
     }
 
-    void CursorAreaEventListenersLayer::UnregDragListener(DragableObject* listener)
+    void CursorAreaEventListenersLayer::UnregDragListener(const Ref<DragableObject>& listener)
     {
-		mDragListeners.RemoveFirst([&](auto& x) { return x == listener; });
+		mDragListeners.Remove(listener);
     }
 
     Vector<Ref<CursorAreaEventsListener>> CursorAreaEventListenersLayer::GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const

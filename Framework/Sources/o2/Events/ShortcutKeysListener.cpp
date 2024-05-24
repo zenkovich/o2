@@ -7,24 +7,24 @@ namespace o2
 
        ShortcutKeysListener::~ShortcutKeysListener()
     {
-        ShortcutKeysListenersManager::Instance().UnRegister(mShortcut, this);
+        ShortcutKeysListenersManager::UnRegister(mShortcut, Ref(this));
     }
 
     void ShortcutKeysListener::SetMaxPriority()
     {
-        ShortcutKeysListenersManager::Instance().SetMaxPriority(mShortcut, Ref(this));
+        ShortcutKeysListenersManager::SetMaxPriority(mShortcut, Ref(this));
     }
 
     void ShortcutKeysListener::SetMinPriority()
     {
-        ShortcutKeysListenersManager::Instance().SetMinPriority(mShortcut, Ref(this));
+        ShortcutKeysListenersManager::SetMinPriority(mShortcut, Ref(this));
     }
 
     void ShortcutKeysListener::SetShortcut(const ShortcutKeys& shortcut)
     {
-        ShortcutKeysListenersManager::Instance().UnRegister(mShortcut, this);
+        ShortcutKeysListenersManager::UnRegister(mShortcut, Ref(this));
         mShortcut = shortcut;
-        ShortcutKeysListenersManager::Instance().Register(mShortcut, Ref(this));
+        ShortcutKeysListenersManager::Register(mShortcut, Ref(this));
     }
 
     const ShortcutKeys& ShortcutKeysListener::GetShortcut() const
@@ -40,9 +40,9 @@ namespace o2
         mEnabled = enabled;
 
         if (mEnabled)
-            ShortcutKeysListenersManager::Instance().Register(mShortcut, Ref(this));
+            ShortcutKeysListenersManager::Register(mShortcut, Ref(this));
         else
-            ShortcutKeysListenersManager::Instance().UnRegister(mShortcut, this);
+            ShortcutKeysListenersManager::UnRegister(mShortcut, Ref(this));
     }
 
     bool ShortcutKeysListener::IsEnabled() const
@@ -52,42 +52,62 @@ namespace o2
 
     void ShortcutKeysListenersManager::Register(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener)
     {
+        if (!mInstance)
+            return;
+
         if (shortcut.IsEmpty())
             return;
 
-        if (!mListeners.ContainsKey(shortcut))
-            mListeners.Add(shortcut, Vector<Ref<ShortcutKeysListener>>());
+        auto& listeners = mInstance->mListeners;
 
-        mListeners[shortcut].Add(listener);
+        if (!listeners.ContainsKey(shortcut))
+            listeners.Add(shortcut, Vector<Ref<ShortcutKeysListener>>());
+
+        listeners[shortcut].Add(listener);
     }
 
-    void ShortcutKeysListenersManager::UnRegister(const ShortcutKeys& shortcut, ShortcutKeysListener* listener)
+    void ShortcutKeysListenersManager::UnRegister(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener)
     {
-        if (!mListeners.ContainsKey(shortcut))
+        if (!mInstance)
             return;
 
-		mListeners[shortcut].RemoveFirst([&](auto& x) { return x == listener; });
+        auto& listeners = mInstance->mListeners;
 
-        if (mListeners[shortcut].IsEmpty())
-            mListeners.Remove(shortcut);
+        if (!listeners.ContainsKey(shortcut))
+            return;
+
+        listeners[shortcut].RemoveFirst([&](auto& x) { return x == listener; });
+
+        if (listeners[shortcut].IsEmpty())
+            listeners.Remove(shortcut);
     }
 
     void ShortcutKeysListenersManager::SetMinPriority(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener)
     {
-        if (!mListeners.ContainsKey(shortcut))
+        if (!mInstance)
             return;
 
-        mListeners[shortcut].Remove(listener);
-        mListeners[shortcut].Insert(listener, 0);
+        auto& listeners = mInstance->mListeners;
+
+        if (!listeners.ContainsKey(shortcut))
+            return;
+
+        listeners[shortcut].Remove(listener);
+        listeners[shortcut].Insert(listener, 0);
     }
 
     void ShortcutKeysListenersManager::SetMaxPriority(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener)
     {
-        if (!mListeners.ContainsKey(shortcut))
+        if (!mInstance)
             return;
 
-        mListeners[shortcut].Remove(listener);
-        mListeners[shortcut].Add(listener);
+        auto& listeners = mInstance->mListeners;
+
+        if (!listeners.ContainsKey(shortcut))
+            return;
+
+        listeners[shortcut].Remove(listener);
+        listeners[shortcut].Add(listener);
     }
 
     void ShortcutKeysListenersManager::OnKeyPressed(const Input::Key& key)

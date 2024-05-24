@@ -39,7 +39,9 @@ namespace o2
     }
 
     EventSystem::~EventSystem()
-    {}
+    {
+        mInstance = nullptr;
+    }
 
     float EventSystem::GetDoubleClickTime() const
     {
@@ -282,9 +284,9 @@ namespace o2
             mInstance->mCurrentCursorAreaEventsLayer = mInstance->mCursorAreaListenersBasicLayer;
     }
 
-    void EventSystem::RemoveCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer)
+    void EventSystem::RemoveCursorAreaEventsListenersLayer(const Ref<CursorAreaEventListenersLayer>& layer)
     {
-		mInstance->mCursorAreaEventsListenersLayers.RemoveFirst([&](auto& x) { return x == layer; });
+		mInstance->mCursorAreaEventsListenersLayers.Remove(layer);
     }
 
 	void EventSystem::DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener)
@@ -298,9 +300,9 @@ namespace o2
         mInstance->mCurrentCursorAreaEventsLayer->cursorEventAreaListeners.Add(listener);
     }
 
-    void EventSystem::UnregCursorAreaListener(CursorAreaEventsListener* listener)
+    void EventSystem::UnregCursorAreaListener(const Ref<CursorAreaEventsListener>& listener)
     {
-        auto listenerLayer = dynamic_cast<CursorAreaEventListenersLayer*>(listener);
+        auto listenerLayer = DynamicCast<CursorAreaEventListenersLayer>(listener);
         for (auto layer : mInstance->mCursorAreaEventsListenersLayers)
         {
             if (layer != listenerLayer)
@@ -308,25 +310,25 @@ namespace o2
         }
     }
 
-    void EventSystem::RegCursorListener(CursorEventsListener* listener)
+    void EventSystem::RegCursorListener(const Ref<CursorEventsListener>& listener)
     {
         if (!IsSingletonInitialzed())
             return;
 
         if (mInstance)
-            mInstance->mCursorListeners.Add(Ref(listener));
+            mInstance->mCursorListeners.Add(listener);
     }
 
-    void EventSystem::UnregCursorListener(CursorEventsListener* listener)
+    void EventSystem::UnregCursorListener(const Ref<CursorEventsListener>& listener)
     {
         if (!IsSingletonInitialzed())
             return;
 
         if (mInstance)
-            mInstance->mCursorListeners.RemoveFirst([&](auto& x) { return x == listener; });
+            mInstance->mCursorListeners.Remove(listener);
     }
 
-    void EventSystem::RegDragListener(DragableObject* listener)
+    void EventSystem::RegDragListener(const Ref<DragableObject>& listener)
     {
         if (!IsSingletonInitialzed())
             return;
@@ -335,7 +337,7 @@ namespace o2
             mInstance->mCurrentCursorAreaEventsLayer->mDragListeners.Add(Ref(listener));
     }
 
-    void EventSystem::UnregDragListener(DragableObject* listener)
+    void EventSystem::UnregDragListener(const Ref<DragableObject>& listener)
     {
         if (mInstance)
         {
@@ -344,7 +346,7 @@ namespace o2
         }
     }
 
-    void EventSystem::RegKeyboardListener(KeyboardEventsListener* listener)
+    void EventSystem::RegKeyboardListener(const Ref<KeyboardEventsListener>& listener)
     {
         if (!IsSingletonInitialzed())
             return;
@@ -353,24 +355,24 @@ namespace o2
             mInstance->mKeyboardListeners.Add(Ref(listener));
     }
 
-    void EventSystem::UnregKeyboardListener(KeyboardEventsListener* listener)
+    void EventSystem::UnregKeyboardListener(const Ref<KeyboardEventsListener>& listener)
     {
         if (mInstance)
-            mInstance->mKeyboardListeners.RemoveFirst([&](auto& x) { return x == listener; });
+            mInstance->mKeyboardListeners.Remove(listener);
     }
 
-    void EventSystem::RegApplicationListener(ApplicationEventsListener* listener)
+    void EventSystem::RegApplicationListener(const Ref<ApplicationEventsListener>& listener)
     {
         if (!IsSingletonInitialzed())
             return;
 
         if (mInstance)
-            mInstance->mApplicationListeners.Add(Ref(listener));
+            mInstance->mApplicationListeners.Add(listener);
     }
 
-    void EventSystem::UnregApplicationListener(ApplicationEventsListener* listener)
+    void EventSystem::UnregApplicationListener(const Ref<ApplicationEventsListener>& listener)
     {
         if (mInstance)
-            mInstance->mApplicationListeners.RemoveFirst([&](auto& x) { return x == listener; });
+            mInstance->mApplicationListeners.Remove(listener);
     }
 }
