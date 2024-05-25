@@ -64,7 +64,7 @@ namespace o2
     {
         //PROFILE_SAMPLE_FUNC();
 
-        for (auto drw : isEditor ? mEditorDbgDrawables : mDbgDrawables)
+        for (auto& drw : isEditor ? mEditorDbgDrawables : mDbgDrawables)
             drw->Draw();
     }
 

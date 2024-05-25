@@ -84,7 +84,7 @@ namespace o2
     void AssetInfo::OnDeserialized(const DataValue& node)
     {
         auto thisRef = Ref(this);
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->parent = thisRef;
     }
 
@@ -97,7 +97,7 @@ namespace o2
         if (meta)
             tree->allAssetsByUID[meta->ID()] = WeakRef(this);
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->SetTree(tree);
     }
 

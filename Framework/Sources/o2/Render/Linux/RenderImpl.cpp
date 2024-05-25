@@ -112,11 +112,11 @@ namespace o2
         mDashLineTexture = Ref<Texture>::Null();
 
         auto fonts = mFonts;
-        for (auto font : fonts)
+        for (auto& font : fonts)
             delete font;
 
         auto textures = mTextures;
-        for (auto texture : textures)
+        for (auto& texture : textures)
             delete texture;
 
         DeinitializeFreeType();

@@ -158,7 +158,7 @@ namespace o2
     void Render::CheckTexturesUnloading()
     {
 //         Vector<Texture*> unloadTextures;
-//         for (auto texture : mTextures)
+//         for (auto& texture : mTextures)
 //             if (texture->mRefs == 0)
 //                 unloadTextures.Add(texture);
 // 
@@ -168,7 +168,7 @@ namespace o2
     void Render::CheckFontsUnloading()
     {
 //         Vector<Font*> unloadFonts;
-//         for (auto font : mFonts)
+//         for (auto& font : mFonts)
 //         {
 //             if (font->mRefs.IsEmpty())
 //                 unloadFonts.Add(font);
@@ -179,13 +179,13 @@ namespace o2
 
     void Render::OnAssetsRebuilt(const Vector<UID>& changedAssets)
     {
-        for (auto tex : mTextures)
+        for (auto& tex : mTextures)
             tex->Reload();
 
-        for (auto atlas : mAtlases)
+        for (auto& atlas : mAtlases)
             atlas->ReloadPages();
 
-        for (auto spr : mSprites)
+        for (auto& spr : mSprites)
             spr->ReloadImage();
     }
 

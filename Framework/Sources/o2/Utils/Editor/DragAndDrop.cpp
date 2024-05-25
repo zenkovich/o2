@@ -129,7 +129,7 @@ namespace o2
     void DragableObject::OnDrawn()
     {
         CursorAreaEventsListener::OnDrawn();
-        EventSystem::RegDragListener(this);
+        EventSystem::RegDragListener(Ref(this));
     }
 
     Vec2F DragableObject::GetCursorPressedPoint() const

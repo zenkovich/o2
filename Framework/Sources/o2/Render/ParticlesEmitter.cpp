@@ -34,7 +34,7 @@ namespace o2
         emitParticlesSpeedRange(this), emitParticlesMoveDir(this), emitParticlesMoveDirRange(this), emitParticlesColorA(this), emitParticlesColorB(this),
         image(this), shape(this), mParticlesMesh(Ref<Texture>::Null(), mParticlesNumLimit * 4, mParticlesNumLimit * 2)
     {
-        for (auto effect : other.mEffects)
+        for (auto& effect : other.mEffects)
             AddEffect(effect->CloneAsRef<ParticlesEffect>());
 
         mLastTransform = mTransform;
@@ -63,7 +63,7 @@ namespace o2
         mImageAsset = other.mImageAsset;
         mShape = other.mShape->CloneAsRef<ParticlesEmitterShape>();
 
-        for (auto effect : other.mEffects)
+        for (auto& effect : other.mEffects)
             AddEffect(effect->CloneAsRef<ParticlesEffect>());
 
         mParticlesNumLimit = other.mParticlesNumLimit;
@@ -187,7 +187,7 @@ namespace o2
 
     void ParticlesEmitter::UpdateEffects(float dt)
     {
-        for (auto effect : mEffects)
+        for (auto& effect : mEffects)
         {
             if (effect)
                 effect->Update(dt, this);

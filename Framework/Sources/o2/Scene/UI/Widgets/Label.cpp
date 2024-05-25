@@ -76,7 +76,7 @@ namespace o2
             o2Render.EnableScissorTest(cutRect);
         }
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         if (enabledClipping)

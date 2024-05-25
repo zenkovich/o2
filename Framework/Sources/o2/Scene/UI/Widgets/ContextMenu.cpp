@@ -302,14 +302,14 @@ namespace o2
 
 	void ContextMenu::AddItems(const Vector<Ref<Item>>& items)
 	{
-		for (auto& item : items)
+		for (auto item : items)
 			AddItem(item);
 	}
 
 	void ContextMenu::InsertItems(const Vector<Ref<Item>>& items, int position)
 	{
 		int i = 0;
-		for (auto& item : items) {
+		for (auto item : items) {
 			InsertItem(item, position + i);
 			i++;
 		}
@@ -326,7 +326,7 @@ namespace o2
 	int ContextMenu::FindItem(const WString& text) const
 	{
 		int idx = 0;
-		for (auto child : mItemsLayout->GetChildWidgets()) 
+		for (auto& child : mItemsLayout->GetChildWidgets()) 
 		{
 			auto item = DynamicCast<ContextMenuItem>(child);
 			if (item && item->GetText() == text)
@@ -343,7 +343,7 @@ namespace o2
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
 
-		for (auto child : mItemsLayout->mChildren) 
+		for (auto& child : mItemsLayout->mChildren) 
 		{
 			auto item = DynamicCast<ContextMenuItem>(child);
 			if (item && item->GetText() == pathPart) {
@@ -378,7 +378,7 @@ namespace o2
 		if (!mItemsLayout)
 			return nullptr;
 
-		for (auto child : mItemsLayout->mChildWidgets) {
+		for (auto& child : mItemsLayout->mChildWidgets) {
 			if (child->layout->IsPointInside(point) && child->GetType() == TypeOf(ContextMenuItem))
 				return DynamicCast<ContextMenuItem>(child);
 		}
@@ -600,7 +600,7 @@ namespace o2
 		float maxShortcut = 0.0f;
 
 		int i = 0;
-		for (auto child : mItemsLayout->GetChildWidgets()) {
+		for (auto& child : mItemsLayout->GetChildWidgets()) {
 			if (auto childCaption = child->GetLayerDrawable<Text>("basic/caption"))
 				maxCaption = Math::Max(childCaption->GetRealSize().x, maxCaption);
 
@@ -625,7 +625,7 @@ namespace o2
 		if (!mResEnabledInHierarchy)
 			return;
 
-		for (auto layer : mDrawingLayers)
+		for (auto& layer : mDrawingLayers)
 			layer->Draw();
 
         IDrawable::OnDrawn();
@@ -633,14 +633,14 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChildWidgets)
+		for (auto& child : mChildWidgets)
 			child->Draw();
 
 		mSelectionDrawable->Draw();
 
 		o2Render.DisableScissorTest();
 
-		for (auto layer : mTopDrawingLayers)
+		for (auto& layer : mTopDrawingLayers)
 			layer->Draw();
 
 		if (mOwnHorScrollBar)
@@ -669,7 +669,7 @@ namespace o2
 		}
 
 		auto children = mItemsLayout->GetChildren();
-		for (auto child : children) {
+		for (auto& child : children) {
 			if (auto item = DynamicCast<ContextMenuItem>(child)) {
 				cache.Add(item);
 				mItemsLayout->RemoveChild(item);

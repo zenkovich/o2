@@ -101,14 +101,14 @@ namespace o2
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
-		for (auto layer : mDrawingLayers)
+		for (auto& layer : mDrawingLayers)
 			layer->Draw();
 
 		IDrawable::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChildrenInheritedDepth)
+		for (auto& child : mChildrenInheritedDepth)
 			child->Draw();
 
 		for (auto& sel : mSelectedItems)
@@ -120,7 +120,7 @@ namespace o2
 
 		CursorAreaEventsListener::OnDrawn();
 
-		for (auto layer : mTopDrawingLayers)
+		for (auto& layer : mTopDrawingLayers)
 			layer->Draw();
 
 		if (mOwnHorScrollBar)
@@ -203,7 +203,7 @@ namespace o2
 	int CustomList::GetItemPosition(const Ref<Widget>& item)
 	{
 		int i = 0;
-		for (auto child : mVerLayout->GetChildWidgets()) {
+		for (auto& child : mVerLayout->GetChildWidgets()) {
 			if (child == item)
 				return i;
 
@@ -287,7 +287,7 @@ namespace o2
 
 	void CustomList::SetSelectedItems(const Vector<int>& items)
 	{
-		for (auto x : items)
+		for (auto& x : items)
 			SelectItemAt(x);
 	}
 
@@ -482,7 +482,7 @@ namespace o2
 			return nullptr;
 
 		int idx = 0;
-		for (auto child : mVerLayout->mChildWidgets) {
+		for (auto& child : mVerLayout->mChildWidgets) {
 			if (child->layout->IsPointInside(point)) {
 				if (idxPtr)
 					*idxPtr = idx;

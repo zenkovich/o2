@@ -30,7 +30,7 @@ namespace o2
 
     void RectsPacker::Clear()
     {
-        for (auto rt : mRects)
+        for (auto& rt : mRects)
             mRectsPool.Free(rt);
 
         mRects.Clear();
@@ -61,7 +61,7 @@ namespace o2
         mRects.ForEach([](const Ref<Rect>& rt) { rt->page = -1; rt->rect = RectI(); });
         mRects.Sort([](auto a, auto b) { return a->size.y > b->size.y; });
 
-        for (auto rt : mRects)
+        for (auto& rt : mRects)
         {
             if (!InsertRect(*rt))
                 return false;
@@ -74,7 +74,7 @@ namespace o2
     void RectsPacker::CreateNewPage()
     {
         int maxPage = -1;
-        for (auto rt : mRects)
+        for (auto& rt : mRects)
             maxPage = Math::Max(maxPage, rt->page);
 
         mQuadNodes.Add(mmake<QuadNode>(maxPage + 1, RectF(Vec2F(), mMaxSize)));
@@ -82,13 +82,13 @@ namespace o2
 
     bool RectsPacker::InsertRect(Rect& rt)
     {
-        for (auto node : mQuadNodes)
+        for (auto& node : mQuadNodes)
         {
             if (TryInsertRect(rt, node))
                 return true;
         }
 
-        for (auto node : mQuadNodes)
+        for (auto& node : mQuadNodes)
         {
             if (TryInsertRectInChilds(rt, node))
                 return true;
@@ -96,13 +96,13 @@ namespace o2
 
         CreateNewPage();
 
-        for (auto node : mQuadNodes)
+        for (auto& node : mQuadNodes)
         {
             if (TryInsertRect(rt, node))
                 return true;
         }
 
-        for (auto node : mQuadNodes)
+        for (auto& node : mQuadNodes)
         {
             if (TryInsertRectInChilds(rt, node))
                 return true;
@@ -136,13 +136,13 @@ namespace o2
 
     bool RectsPacker::TryInsertRectInChilds(Rect& rt, const Ref<QuadNode>& node)
     {
-        for (auto childNode : node->GetChildren())
+        for (auto& childNode : node->GetChildren())
         {
             if (TryInsertRect(rt, childNode))
                 return true;
         }
 
-        for (auto childNode : node->GetChildren())
+        for (auto& childNode : node->GetChildren())
         {
             if (TryInsertRectInChilds(rt, childNode))
                 return true;

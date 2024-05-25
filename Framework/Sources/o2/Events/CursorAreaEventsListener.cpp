@@ -173,18 +173,18 @@ namespace o2
         RefCounterable(refCounter)
     {
         if (EventSystem::IsSingletonInitialzed())
-            EventSystem::RegCursorListener(this);
+            EventSystem::RegCursorListener(Ref(this));
     }
 
     CursorEventsListener::CursorEventsListener(RefCounter* refCounter, const CursorAreaEventsListener& other):
         RefCounterable(refCounter)
     {
         if (EventSystem::IsSingletonInitialzed())
-            EventSystem::RegCursorListener(this);
+            EventSystem::RegCursorListener(Ref(this));
     }
 
     CursorEventsListener::~CursorEventsListener()
     {
-        EventSystem::UnregCursorListener(this);
+        EventSystem::UnregCursorListener(Ref(this));
     }
 }

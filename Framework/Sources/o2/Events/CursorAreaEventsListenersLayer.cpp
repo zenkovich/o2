@@ -144,7 +144,7 @@ namespace o2
     {
         for (auto& kv : mPressedListeners)
         {
-            for (auto listener : kv.second)
+            for (auto& listener : kv.second)
             {
                 listener->OnCursorPressBreak(*o2Input.GetCursor(kv.first));
                 listener->mIsPressed = false;
@@ -154,32 +154,32 @@ namespace o2
         mPressedListeners.Clear();
     }
 
-    void CursorAreaEventListenersLayer::UnregCursorAreaListener(const Ref<CursorAreaEventsListener>& listener)
+    void CursorAreaEventListenersLayer::UnregCursorAreaListener(CursorAreaEventsListener* listener)
     {
-        cursorEventAreaListeners.Remove(listener);
-        mRightButtonPressedListeners.Remove(listener);
-        mMiddleButtonPressedListeners.Remove(listener);
+        cursorEventAreaListeners.RemoveFirst([&](auto& x) { return x == listener; });
+        mRightButtonPressedListeners.RemoveFirst([&](auto& x) { return x == listener; });
+        mMiddleButtonPressedListeners.RemoveFirst([&](auto& x) { return x == listener; });
 
         for (auto& kv : mPressedListeners)
-            kv.second.Remove(listener);
+            kv.second.RemoveFirst([&](auto& x) { return x == listener; });
 
         for (auto& kv : mUnderCursorListeners)
-            kv.second.Remove(listener);
+            kv.second.RemoveFirst([&](auto& x) { return x == listener; });
 
         for (auto& kv : mLastUnderCursorListeners)
-            kv.second.Remove(listener);
+            kv.second.RemoveFirst([&](auto& x) { return x == listener; });
     }
 
-    void CursorAreaEventListenersLayer::UnregDragListener(const Ref<DragableObject>& listener)
+    void CursorAreaEventListenersLayer::UnregDragListener(DragableObject* listener)
     {
-		mDragListeners.Remove(listener);
+		mDragListeners.RemoveFirst([&](auto& x) { return x == listener; });
     }
 
     Vector<Ref<CursorAreaEventsListener>> CursorAreaEventListenersLayer::GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const
     {
         Vector<Ref<CursorAreaEventsListener>> res;
         Vec2F localCursorPos = ToLocal(cursorPos);
-        for (auto listener : cursorEventAreaListeners)
+        for (auto& listener : cursorEventAreaListeners)
         {
             if (!listener->IsUnderPoint(localCursorPos) || !listener->mScissorRect.IsInside(localCursorPos) || !listener->mInteractable)
                 continue;
@@ -226,7 +226,7 @@ namespace o2
     {
         auto localCursor = ConvertLocalCursor(cursor);
 
-        for (auto listener : cursorEventAreaListeners)
+        for (auto& listener : cursorEventAreaListeners)
         {
             if (!listener->IsUnderPoint(localCursor.position) || !listener->mScissorRect.IsInside(localCursor.position))
                 continue;
@@ -247,10 +247,10 @@ namespace o2
 
     void CursorAreaEventListenersLayer::ProcessCursorEnter()
     {
-        for (auto underCursorListeners : mUnderCursorListeners)
+        for (auto& underCursorListeners : mUnderCursorListeners)
         {
             bool lastListenersHasSameCursor = mLastUnderCursorListeners.ContainsKey(underCursorListeners.first);
-            for (auto listener : underCursorListeners.second)
+            for (auto& listener : underCursorListeners.second)
             {
                 if (!lastListenersHasSameCursor || !mLastUnderCursorListeners[underCursorListeners.first].Contains(listener))
                     listener->OnCursorEnter(ConvertLocalCursor(*o2Input.GetCursor(underCursorListeners.first)));
@@ -260,10 +260,10 @@ namespace o2
 
     void CursorAreaEventListenersLayer::ProcessCursorExit()
     {
-        for (auto lastUnderCursorListeners : mLastUnderCursorListeners)
+        for (auto& lastUnderCursorListeners : mLastUnderCursorListeners)
         {
             bool listenersHasSameCursor = mUnderCursorListeners.ContainsKey(lastUnderCursorListeners.first);
-            for (auto listener : lastUnderCursorListeners.second)
+            for (auto& listener : lastUnderCursorListeners.second)
             {
                 if (!listenersHasSameCursor || !mUnderCursorListeners[lastUnderCursorListeners.first].Contains(listener))
                     listener->OnCursorExit(ConvertLocalCursor(*o2Input.GetCursor(lastUnderCursorListeners.first)));
@@ -275,7 +275,7 @@ namespace o2
     {
         auto localCursor = ConvertLocalCursor(cursor);
 
-        for (auto listener : cursorEventAreaListeners)
+        for (auto& listener : cursorEventAreaListeners)
         {
             if (!listener->IsUnderPoint(localCursor.position))
                 listener->OnCursorPressedOutside(localCursor);
@@ -284,7 +284,7 @@ namespace o2
         if (!mUnderCursorListeners.ContainsKey(localCursor.id))
             return;
 
-        for (auto listener : mUnderCursorListeners[localCursor.id])
+        for (auto& listener : mUnderCursorListeners[localCursor.id])
         {
             float time = o2Time.GetApplicationTime();
             float s = time - listener->mLastPressedTime;
@@ -337,7 +337,7 @@ namespace o2
         {
             if (mUnderCursorListeners.ContainsKey(localCursor.id))
             {
-                for (auto listener : mUnderCursorListeners[localCursor.id])
+                for (auto& listener : mUnderCursorListeners[localCursor.id])
                     listener->OnCursorMoved(localCursor);
             }
         }
@@ -347,7 +347,7 @@ namespace o2
     {
         auto localCursor = ConvertLocalCursor(cursor);
 
-        for (auto listener : cursorEventAreaListeners)
+        for (auto& listener : cursorEventAreaListeners)
         {
             if (!listener->IsUnderPoint(localCursor.position))
                 listener->OnCursorReleasedOutside(localCursor);
@@ -355,7 +355,7 @@ namespace o2
 
         if (mPressedListeners.ContainsKey(localCursor.id))
         {
-            for (auto listener : mPressedListeners[localCursor.id])
+            for (auto& listener : mPressedListeners[localCursor.id])
             {
                 listener->mIsPressed = false;
                 listener->OnCursorReleased(localCursor);
@@ -375,7 +375,7 @@ namespace o2
         mRightButtonPressedListeners.Clear();
 
         auto listeners = mUnderCursorListeners[localCursor.id];
-        for (auto listener : listeners)
+        for (auto& listener : listeners)
         {
             mRightButtonPressedListeners.Add(listener);
 
@@ -417,7 +417,7 @@ namespace o2
     {
         auto localCursor = ConvertLocalCursor(*o2Input.GetCursor(0));
 
-        for (auto listener : mRightButtonPressedListeners)
+        for (auto& listener : mRightButtonPressedListeners)
         {
             listener->OnCursorRightMouseReleased(localCursor);
             listener->mIsRightMousePressed = false;
@@ -434,7 +434,7 @@ namespace o2
         mMiddleButtonPressedListeners.Clear();
 
         auto listeners = mUnderCursorListeners[localCursor.id];
-        for (auto listener : listeners)
+        for (auto& listener : listeners)
         {
             mMiddleButtonPressedListeners.Add(listener);
 
@@ -476,7 +476,7 @@ namespace o2
     {
         auto localCursor = ConvertLocalCursor(*o2Input.GetCursor(0));
 
-        for (auto listener : mMiddleButtonPressedListeners)
+        for (auto& listener : mMiddleButtonPressedListeners)
         {
             listener->OnCursorRightMouseReleased(localCursor);
             listener->mIsMiddleMousePressed = false;
@@ -490,7 +490,7 @@ namespace o2
         {
             for (auto& kv : mUnderCursorListeners)
             {
-                for (auto listener : kv.second)
+                for (auto& listener : kv.second)
                 {
                     if (!listener->IsScrollable())
                         continue;

@@ -15,7 +15,7 @@ namespace o2
     AnimationClip::AnimationClip(RefCounter* refCounter, const AnimationClip& other):
         RefCounterable(refCounter), loop(this), duration(this)
     {
-        for (auto track : other.mTracks)
+        for (auto& track : other.mTracks)
         {
             Ref<IAnimationTrack> newTrack = track->CloneAsRef<IAnimationTrack>();
             mTracks.Add(newTrack);
@@ -36,7 +36,7 @@ namespace o2
     {
         Clear();
 
-        for (auto track : other.mTracks)
+        for (auto& track : other.mTracks)
         {
             Ref<IAnimationTrack> newTrack = track->CloneAsRef<IAnimationTrack>();
             mTracks.Add(newTrack);
@@ -52,7 +52,7 @@ namespace o2
 
     void AnimationClip::Clear()
     {
-        for (auto track : mTracks)
+        for (auto& track : mTracks)
             track->onKeysChanged -= THIS_FUNC(OnTrackChanged);
 
         mTracks.Clear();
@@ -85,7 +85,7 @@ namespace o2
 
     bool AnimationClip::ContainsTrack(const String& path) const
     {
-        for (auto track : mTracks)
+        for (auto& track : mTracks)
         {
             if (track->path == path)
                 return true;
@@ -116,7 +116,7 @@ namespace o2
 
     void AnimationClip::RemoveTrack(const String& path)
     {
-        for (auto track : mTracks)
+        for (auto& track : mTracks)
         {
             if (track->path == path)
             {
@@ -142,7 +142,7 @@ namespace o2
         float lastDuration = mDuration;
         mDuration = 0.0f;
 
-        for (auto track : mTracks)
+        for (auto& track : mTracks)
             mDuration = Math::Max(mDuration, track->GetDuration());
 
         if (!Math::Equals(lastDuration, mDuration))
@@ -151,7 +151,7 @@ namespace o2
 
     void AnimationClip::OnDeserialized(const DataValue& node)
     {
-        for (auto track : mTracks)
+        for (auto& track : mTracks)
             track->onKeysChanged += THIS_FUNC(OnTrackChanged);
 
         OnTrackChanged();

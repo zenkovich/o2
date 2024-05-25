@@ -73,7 +73,7 @@ namespace o2
 
     void DropDown::AddItems(const Vector<WString>& data)
     {
-        for (auto text : data)
+        for (auto& text : data)
             AddItem(text);
     }
 
@@ -87,7 +87,7 @@ namespace o2
     int DropDown::FindItem(const WString& text)
     {
         int i = 0;
-        for (auto child : mItemsList->mVerLayout->mChildWidgets)
+        for (auto& child : mItemsList->mVerLayout->mChildWidgets)
         {
             auto childLabel = DynamicCast<Label>(child);
             if (childLabel && childLabel->GetText() == text)
@@ -111,7 +111,7 @@ namespace o2
     Vector<WString> DropDown::GetAllItemsText() const
     {
         Vector<WString> res;
-        for (auto child : mItemsList->mVerLayout->mChildWidgets)
+        for (auto& child : mItemsList->mVerLayout->mChildWidgets)
         {
             auto childLabel = DynamicCast<Label>(child);
 

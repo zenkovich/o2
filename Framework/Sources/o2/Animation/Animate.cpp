@@ -17,7 +17,7 @@ namespace o2
     {
         mTime += seconds;
 
-        for (auto container : mKeyContainers)
+        for (auto& container : mKeyContainers)
             container->Apply(mTime);
 
         return *this;
@@ -33,7 +33,7 @@ namespace o2
 
     void Animate::ApplyKeys()
     {
-        for (auto container : mKeyContainers)
+        for (auto& container : mKeyContainers)
             container->Apply(mTime);
 
         mKeysApplied = true;
@@ -174,7 +174,7 @@ namespace o2
 
         auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
         void* target = targetObjType.DynamicCastFromIObject(mTarget);
-        for (auto nameVariant : nameVariants)
+        for (auto& nameVariant : nameVariants)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
@@ -194,7 +194,7 @@ namespace o2
 
         auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
         void* target = targetObjType.DynamicCastFromIObject(mTarget);
-        for (auto nameVariant : nameVariants)
+        for (auto& nameVariant : nameVariants)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
@@ -215,7 +215,7 @@ namespace o2
 
         auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
         void* target = targetObjType.DynamicCastFromIObject(mTarget);
-        for (auto nameVariant : nameVariantsX)
+        for (auto& nameVariant : nameVariantsX)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
@@ -225,7 +225,7 @@ namespace o2
             }
         }
 
-        for (auto nameVariant : nameVariantsY)
+        for (auto& nameVariant : nameVariantsY)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
@@ -245,7 +245,7 @@ namespace o2
         
         auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
         void* target = targetObjType.DynamicCastFromIObject(mTarget);
-        for (auto nameVariant : nameVariants)
+        for (auto& nameVariant : nameVariants)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))

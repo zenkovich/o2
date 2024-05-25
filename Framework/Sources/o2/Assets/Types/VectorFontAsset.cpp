@@ -12,7 +12,7 @@ namespace o2
     VectorFontAsset::Meta::Meta(const Meta& other):
         DefaultAssetMeta<VectorFontAsset>(other)
     {
-        for (auto eff : other.mEffects)
+        for (auto& eff : other.mEffects)
             mEffects.Add(eff->CloneAsRef<VectorFont::Effect>());
     }
 
@@ -22,10 +22,10 @@ namespace o2
             return false;
 
         Meta* otherMeta = (Meta*)other;
-        for (auto eff : mEffects)
+        for (auto& eff : mEffects)
         {
             bool found = false;
-            for (auto otherEff : otherMeta->mEffects)
+            for (auto& otherEff : otherMeta->mEffects)
             {
                 if (eff && eff->IsEqual(otherEff.Get()))
                 {
@@ -115,7 +115,7 @@ namespace o2
     void VectorFontAsset::UpdateFontEffects()
     {
         Vector<Ref<VectorFont::Effect>> clonedEffects;;
-        for (auto eff : GetMeta()->mEffects)
+        for (auto& eff : GetMeta()->mEffects)
         {
             if (eff)
                 clonedEffects.Add(eff->CloneAsRef<VectorFont::Effect>());

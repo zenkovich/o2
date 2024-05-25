@@ -56,10 +56,10 @@ namespace o2
         void BreakCursorEvent();
 
         // Unregistering cursor area events listener
-        void UnregCursorAreaListener(const Ref<CursorAreaEventsListener>& listener);
+        void UnregCursorAreaListener(CursorAreaEventsListener* listener);
 
         // Unregistering drag events listener
-        void UnregDragListener(const Ref<DragableObject>& listener);
+        void UnregDragListener(DragableObject* listener);
 
         // Returns all cursor listeners under cursor arranged by depth
         Vector<Ref<CursorAreaEventsListener>> GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const;

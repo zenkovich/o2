@@ -104,7 +104,7 @@ namespace o2
         if (!mEnabled)
             return;
 
-        for (auto mesh : mMeshes)
+        for (auto& mesh : mMeshes)
         {
             mesh->Draw();
 
@@ -285,7 +285,7 @@ namespace o2
 
         if (!mFont)
         {
-            for (auto mesh : mMeshes)
+            for (auto& mesh : mMeshes)
             {
                 mesh->vertexCount = 0;
                 mesh->polyCount = 0;
@@ -305,7 +305,7 @@ namespace o2
 
         PrepareMesh(textLen);
 
-        for (auto mesh : mMeshes)
+        for (auto& mesh : mMeshes)
         {
             mesh->vertexCount = 0;
             mesh->polyCount = 0;
@@ -373,7 +373,7 @@ namespace o2
     void Text::PrepareMesh(int charactersCount)
     {
         int needPolygons = charactersCount*2 + 15; // 15 for dots endings
-        for (auto mesh : mMeshes)
+        for (auto& mesh : mMeshes)
             needPolygons -= mesh->GetMaxPolyCount();
 
         if (needPolygons <= 0)
@@ -415,7 +415,7 @@ namespace o2
     void Text::ColorChanged()
     {
         ULong dcolor = mColor.ABGR();
-        for (auto mesh : mMeshes)
+        for (auto& mesh : mMeshes)
         {
             for (int i = 0; i < (int)mesh->vertexCount; i++)
                 mesh->vertices[i].color = dcolor;

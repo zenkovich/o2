@@ -56,7 +56,7 @@ namespace o2
 
     void Tag::Clear()
     {
-        for (auto actor : mActors)
+        for (auto& actor : mActors)
             actor.Lock()->tags.mTags.Remove(Ref(this));
 
         mActors.Clear();
@@ -90,7 +90,7 @@ namespace o2
 
         mTags = other.mTags;
 
-        for (auto tag : mTags)
+        for (auto& tag : mTags)
             onTagAdded(tag.Lock());
 
         return *this;
@@ -98,7 +98,7 @@ namespace o2
 
     bool TagGroup::operator==(const TagGroup& other) const
     {
-        for (auto tag : mTags) {
+        for (auto& tag : mTags) {
             if (!other.IsHaveTag(tag.Lock()))
                 return false;
         }
@@ -154,7 +154,7 @@ namespace o2
 
     void TagGroup::Clear()
     {
-        for (auto tag : mTags)
+        for (auto& tag : mTags)
             onTagRemoved(tag.Lock());
 
         mTags.Clear();

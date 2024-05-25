@@ -104,7 +104,7 @@ namespace o2
         static void DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener);
 
         // Unregistering cursor area events listener
-        static void UnregCursorAreaListener(const Ref<CursorAreaEventsListener>& listener);
+        static void UnregCursorAreaListener(CursorAreaEventsListener* listener);
 
         // Registering cursor events listener
         static void RegCursorListener(const Ref<CursorEventsListener>& listener);
@@ -116,7 +116,7 @@ namespace o2
         static void RegDragListener(const Ref<DragableObject>& listener);
 
         // Unregistering drag events listener
-        static void UnregDragListener(const Ref<DragableObject>& listener);
+        static void UnregDragListener(DragableObject* listener);
 
         // Registering keyboard events listener
         static void RegKeyboardListener(const Ref<KeyboardEventsListener>& listener);

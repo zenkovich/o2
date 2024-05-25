@@ -225,7 +225,7 @@ namespace o2
         if (!mIsClipped)
             UpdateSelfTransform();
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->MoveAndCheckClipping(delta, clipArea);
 
         if (IsExpanded())

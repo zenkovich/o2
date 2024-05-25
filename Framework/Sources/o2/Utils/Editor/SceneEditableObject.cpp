@@ -74,7 +74,7 @@ namespace o2
 
         children.Add(thisChildren);
 
-        for (auto child : thisChildren)
+        for (auto& child : thisChildren)
             child->GetAllEditableChildren(children);
     }
 

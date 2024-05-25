@@ -201,14 +201,14 @@ namespace o2
 
     void MenuPanel::AddItems(Vector<Item> items)
     {
-        for (auto& item : items)
+        for (auto item : items)
             AddItem(item);
     }
 
     void MenuPanel::InsertItems(Vector<Item> items, int position)
     {
         int i = 0;
-        for (auto& item : items)
+        for (auto item : items)
         {
             InsertItem(item, position + i);
             i++;

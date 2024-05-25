@@ -10,7 +10,7 @@ namespace o2
 
     void TaskManager::StopTask(int id)
     {
-        for (auto task : mTasks)
+        for (auto& task : mTasks)
         {
             if (task->mId == id)
                 return;
@@ -60,7 +60,7 @@ namespace o2
         PROFILE_SAMPLE_FUNC();
 
         Vector<Ref<Task>> doneTasks;
-        for (auto task : mTasks)
+        for (auto& task : mTasks)
         {
             task->Update(dt);
             if (task->IsDone())

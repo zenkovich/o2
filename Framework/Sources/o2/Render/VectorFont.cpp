@@ -211,7 +211,7 @@ namespace o2
         FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
 
         Vec2I border;
-        for (auto effect : mEffects)
+        for (auto& effect : mEffects)
         {
             Vec2I effectExt = effect->GetSizeExtend();
             border.x = Math::Max(border.x, effectExt.x);
@@ -223,7 +223,7 @@ namespace o2
         FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
         int symbolsHeight = Math::CeilToInt((mFreeTypeFace->glyph->bitmap.rows + border.y*2)*1.25f);
 
-        for (auto ch : newCharacters)
+        for (auto& ch : newCharacters)
         {
             CharDef newCharDef;
 
@@ -247,7 +247,7 @@ namespace o2
                 }
             }
 
-            for (auto effect : mEffects)
+            for (auto& effect : mEffects)
                 effect->Process(*newBitmap);
 
             newCharDef.bitmap = newBitmap;
@@ -291,9 +291,9 @@ namespace o2
                     mTexture = Ref<Texture>(lastTexture->GetSize()*2, TextureFormat::R8G8B8A8, Texture::Usage::Default);
                     mTexture->Copy(*lastTexture.Get(), RectI(Vec2I(0, 0), lastTexture->GetSize()));
 
-                    for (auto heightKV : mCharacters)
+                    for (auto& heightKV : mCharacters)
                     {
-                        for (auto charKV : heightKV.second)
+                        for (auto& charKV : heightKV.second)
                         {
                             charKV.second.mTexSrc.left *= 0.5f;
                             charKV.second.mTexSrc.right *= 0.5f;

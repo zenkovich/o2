@@ -91,7 +91,7 @@ namespace Editor
 	{
 		auto layers = o2Scene.GetLayers();
 		auto dropdownLayers = mDropDown->GetAllItemsText();
-		for (auto& itemName : dropdownLayers)
+		for (auto itemName : dropdownLayers)
 		{
 			if (!layers.Contains([&](auto& x) { return x->GetName() == (String)itemName; }))
 				mDropDown->RemoveItem(itemName);

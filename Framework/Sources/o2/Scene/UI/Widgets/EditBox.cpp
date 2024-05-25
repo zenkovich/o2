@@ -81,7 +81,7 @@ namespace o2
         if (!mResEnabledInHierarchy || mIsClipped)
             return;
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         ISceneDrawable::OnDrawn();
@@ -94,14 +94,14 @@ namespace o2
         if (mIsFocused)
             mCaretDrawable->Draw();
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
 
         o2Render.DisableScissorTest();
 
         CursorAreaEventsListener::OnDrawn();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         if (mOwnHorScrollBar)
@@ -632,7 +632,7 @@ namespace o2
 
         mScrollArea = RectF(0.0f, 0.0f, localViewArea.Width(), localViewArea.Height());
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             mScrollArea.left   = Math::Min(mScrollArea.left, child->layout->GetLeft());
             mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout->GetBottom());
@@ -779,7 +779,7 @@ namespace o2
         auto font = mTextDrawable->GetFont();
         float spaceAdvance = font->GetCharacter(' ', mTextDrawable->GetFontHeight()).mAdvance;
 
-        for (auto line : symbolsSet.mLines)
+        for (auto& line : symbolsSet.mLines)
         {
             if (beg > line.mLineBegSymbol + line.mSymbols.Count() || end < line.mLineBegSymbol)
                 continue;
@@ -833,7 +833,7 @@ namespace o2
         }
 
         auto& symbolsSet = mTextDrawable->GetSymbolsSet();
-        for (auto line : symbolsSet.mLines)
+        for (auto& line : symbolsSet.mLines)
         {
             if (position >= line.mLineBegSymbol && position <= line.mLineBegSymbol + line.mSymbols.Count())
             {
@@ -881,7 +881,7 @@ namespace o2
 
         bool checkUp, checkDown, checkLeft, checkRight;
         int lineIdx = 0;
-        for (auto line : symbolsSet.mLines)
+        for (auto& line : symbolsSet.mLines)
         {
             checkUp = lineIdx > 0;
             checkDown = lineIdx < (int)symbolsSet.mLines.Count() - 1;
@@ -894,7 +894,7 @@ namespace o2
 
 
             int idx = 0;
-            for (auto symb : line.mSymbols)
+            for (auto& symb : line.mSymbols)
             {
                 checkLeft = idx > 0;
                 checkRight = idx < (int)line.mSymbols.Count() - 1;

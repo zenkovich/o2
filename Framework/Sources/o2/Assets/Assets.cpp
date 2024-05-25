@@ -50,7 +50,7 @@ namespace o2
 
     const AssetInfo& Assets::GetAssetInfo(const UID& id) const
     {
-        for (auto tree : mAssetsTrees)
+        for (auto& tree : mAssetsTrees)
         {
             if (auto res = tree->Find(id))
                 return *res;
@@ -61,7 +61,7 @@ namespace o2
 
     const AssetInfo& Assets::GetAssetInfo(const String& path) const
     {
-        for (auto tree : mAssetsTrees)
+        for (auto& tree : mAssetsTrees)
         {
             if (auto res = tree->Find(path))
                 return *res;
@@ -77,7 +77,7 @@ namespace o2
         {
             auto derivedAssetTypes = TypeOf(Asset).GetDerivedTypes();
 
-            for (auto type : derivedAssetTypes)
+            for (auto& type : derivedAssetTypes)
             {
                 Vector<String> extensions = type->InvokeStatic<Vector<String>>("GetFileExtensions");
 
@@ -230,7 +230,7 @@ namespace o2
             o2FileSystem.FolderCreate(GetAssetsPath() + dest);
             Ref<FolderAsset> folderAsset(info.path);
 
-            for (auto inInfo : folderAsset->GetChildrenAssets())
+            for (auto& inInfo : folderAsset->GetChildrenAssets())
                 CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo->GetPath()));
         }
         else o2FileSystem.FileCopy(GetAssetsPath() + info.path, GetAssetsPath() + dest);
@@ -418,7 +418,7 @@ namespace o2
         }
 
 //         auto cachedAssets = mCachedAssets;
-//         for (auto cached : cachedAssets)
+//         for (auto& cached : cachedAssets)
 //         {
 //             if (cached->referencesCount <= 0)
 //                 delete cached->asset;
@@ -555,7 +555,7 @@ namespace o2
             oldInfos.Clear();
 
             auto copyNewInfos = newInfos;
-            for (auto newAssetInfo : copyNewInfos)
+            for (auto& newAssetInfo : copyNewInfos)
             {
                 Ref<AssetInfo> oldAssetInfo = mMainAssetsTree->allAssetsByUID[newAssetInfo->meta->ID()].Lock();
 
@@ -606,10 +606,10 @@ namespace o2
         mMainAssetsTree->allAssetsByPath.Clear();
         mMainAssetsTree->allAssetsByUID.Clear();
 
-        for (auto asset : mMainAssetsTree->rootAssets)
+        for (auto& asset : mMainAssetsTree->rootAssets)
             asset->SetTree(mMainAssetsTree);
 
-        for (auto info : oldAllAssets)
+        for (auto& info : oldAllAssets)
         {
             auto infoRef = info.Lock();
 

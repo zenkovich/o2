@@ -884,7 +884,7 @@ namespace o2
         if (mChildWidgets.Count() > 0)
             childrenRect = mChildWidgets[0]->GetLayoutData().rectangle;
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             childrenRect.left   = Math::Min(childrenRect.left, child->GetLayoutData().rectangle.left);
             childrenRect.right  = Math::Max(childrenRect.right, child->GetLayoutData().rectangle.right);

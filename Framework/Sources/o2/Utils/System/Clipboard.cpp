@@ -92,7 +92,7 @@ namespace o2
             df->fWide = TRUE;
             LPWSTR ptr = (LPWSTR)(df + 1);
 
-            for (auto path : paths)
+            for (auto& path : paths)
             {
                 lstrcpyW(ptr, path.Data());
                 ptr += path.Length();

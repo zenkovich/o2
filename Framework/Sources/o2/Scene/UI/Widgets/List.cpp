@@ -45,7 +45,7 @@ namespace o2
 
     void List::AddItems(const Vector<WString>& data)
     {
-        for (auto text : data)
+        for (auto& text : data)
             AddItem(text);
     }
 
@@ -59,7 +59,7 @@ namespace o2
     int List::FindItem(const WString& text)
     {
         int i = 0;
-        for (auto child : mVerLayout->mChildren)
+        for (auto& child : mVerLayout->mChildren)
         {
             if (DynamicCast<Label>(child)->GetText() == text)
                 return i;
@@ -82,7 +82,7 @@ namespace o2
     Vector<WString> List::GetAllItemsText() const
     {
         Vector<WString> res;
-        for (auto child : mVerLayout->mChildren)
+        for (auto& child : mVerLayout->mChildren)
             res.Add(DynamicCast<Label>(child)->GetText());
 
         return res;

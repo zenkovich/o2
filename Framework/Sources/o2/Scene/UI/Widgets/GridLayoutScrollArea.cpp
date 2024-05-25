@@ -234,7 +234,7 @@ namespace o2
     Ref<Widget> GridLayoutScrollArea::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
     {
         int idx = mMinVisibleItemIdx;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->layout->IsPointInside(point))
             {

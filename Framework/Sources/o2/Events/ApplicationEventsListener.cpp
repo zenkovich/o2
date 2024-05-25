@@ -10,12 +10,12 @@ namespace o2
 
 	void ApplicationEventsListener::PostRefConstruct()
 	{
-		EventSystem::RegApplicationListener(this);
+		EventSystem::RegApplicationListener(Ref(this));
 	}
 
     ApplicationEventsListener::~ApplicationEventsListener()
     {
-        EventSystem::UnregApplicationListener(this);
+        EventSystem::UnregApplicationListener(Ref(this));
     }
 
     void ApplicationEventsListener::OnApplicationStarted()

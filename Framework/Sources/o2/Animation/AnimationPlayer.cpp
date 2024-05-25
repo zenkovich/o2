@@ -70,7 +70,7 @@ namespace o2
 
     void AnimationPlayer::BindTracks(bool errors)
     {
-        for (auto player : mTrackPlayers)
+        for (auto& player : mTrackPlayers)
             onTrackPlayerRemove(player);
 
         mTrackPlayers.Clear();
@@ -81,7 +81,7 @@ namespace o2
         const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
         void* castedTarget = type->DynamicCastFromIObject(mTarget);
 
-        for (auto track : mClip->mTracks)
+        for (auto& track : mClip->mTracks)
             BindTrack(type, castedTarget, track, errors);
 
         mLoop = mClip->mLoop;
@@ -138,7 +138,7 @@ namespace o2
 
     void AnimationPlayer::Evaluate()
     {
-        for (auto trackPlayer : mTrackPlayers)
+        for (auto& trackPlayer : mTrackPlayers)
             trackPlayer->ForceSetTime(mInDurationTime, mDuration);
     }
 }

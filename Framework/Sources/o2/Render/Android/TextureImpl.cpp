@@ -10,7 +10,7 @@ namespace o2
     {
         o2Render.OnTextureDestroyed(this);
 
-        for (auto texRef : mRefs)
+        for (auto& texRef : mRefs)
             texRef->mTexture = nullptr;
 
         if (!mReady)

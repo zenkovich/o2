@@ -70,7 +70,7 @@ namespace o2
             if (auto boneComp = actor->GetComponent<SkinningMeshBoneComponent>())
                 mBonesMapping.Add({ boneComp, nullptr });
 
-            for (auto child : actor->GetChildren())
+            for (auto& child : actor->GetChildren())
                 searchBones(child);
         };
 

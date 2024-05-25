@@ -265,7 +265,7 @@ namespace o2
                 itemsWidgets[i - mMinVisibleItemIdx] = mChildWidgets[i - lastMinItemIdx];
         }
 
-        for (auto& item : removingItems)
+        for (auto item : removingItems)
             mItemsPool.Add(item);
 
         mChildren.Clear();

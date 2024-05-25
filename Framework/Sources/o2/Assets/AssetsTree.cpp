@@ -30,7 +30,7 @@ namespace o2
         LoadFolder(folderInfo, nullptr);
 
         auto thisRef = Ref(this);
-        for (auto asset : rootAssets)
+        for (auto& asset : rootAssets)
             asset->SetTree(thisRef);
     }
 
@@ -39,7 +39,7 @@ namespace o2
         LoadFolder(folderInfo, nullptr);
 
         auto thisRef = Ref(this);
-        for (auto asset : rootAssets)
+        for (auto& asset : rootAssets)
             asset->SetTree(thisRef);
     }
 
@@ -50,7 +50,7 @@ namespace o2
         LoadFolder(folderInfo, nullptr);
 
         auto thisRef = Ref(this);
-        for (auto asset : rootAssets)
+        for (auto& asset : rootAssets)
             asset->SetTree(thisRef);
     }
 
@@ -123,7 +123,7 @@ namespace o2
         if (asset->meta->GetAssetType() == &TypeOf(FolderAsset))
         {
             auto& childs = asset->mChildren;
-            for (auto ch : childs)
+            for (auto& ch : childs)
                 RemoveAsset(ch);
         }
     }
@@ -138,7 +138,7 @@ namespace o2
 
     void AssetsTree::LoadFolder(const FolderInfo& folder, Ref<AssetInfo> parentAsset)
     {
-        for (auto fileInfo : folder.files)
+        for (auto& fileInfo : folder.files)
         {
             String extension = o2FileSystem.GetFileExtension(fileInfo.path);
 
@@ -155,7 +155,7 @@ namespace o2
             }
         }
 
-        for (auto subFolder : folder.folders)
+        for (auto& subFolder : folder.folders)
         {
             Ref<AssetInfo> asset;
 
@@ -208,7 +208,7 @@ namespace o2
     void AssetsTree::OnDeserialized(const DataValue& node)
     {
         Ref<AssetsTree> thisRef(this);
-        for (auto asset : rootAssets)
+        for (auto& asset : rootAssets)
             asset->SetTree(thisRef);
     }
 

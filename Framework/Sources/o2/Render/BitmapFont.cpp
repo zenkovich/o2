@@ -50,7 +50,7 @@ namespace o2
         {
             Vec2F invTexSize = Vec2F(1, 1)/mTexture->GetSize();
             Vec2F texOffs = Vec2F(mTextureSrcRect.LeftBottom())*invTexSize;
-            for (auto child : *chars)
+            for (auto& child : *chars)
             {
                 Character newChar;
 
@@ -87,9 +87,9 @@ namespace o2
         }
 
         Vec2F invTexSize(1.0f / mTexture->GetSize().x, 1.0f / mTexture->GetSize().y);
-        for (auto heightKV : mCharacters)
+        for (auto& heightKV : mCharacters)
         {
-            for (auto charKV : heightKV.second)
+            for (auto& charKV : heightKV.second)
             {
                 charKV.second.mSize = charKV.second.mTexSrc.Size().InvertedY();
                 charKV.second.mTexSrc.left *= invTexSize.x;

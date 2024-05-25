@@ -77,7 +77,7 @@ namespace o2
 
     void AnimationTrack<Color4>::AddKeys(const Vector<Key>& keys)
     {
-        for (auto key : keys)
+        for (auto& key : keys)
             AddKey(key);
 
         if (mBatchChange)

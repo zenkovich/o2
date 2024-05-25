@@ -10,7 +10,7 @@ namespace o2
 
     AnimationComponent::AnimationComponent(const AnimationComponent& other)
     {
-        for (auto state : other.mStates)
+        for (auto& state : other.mStates)
             AddState(state->CloneAsRef<AnimationState>());
     }
 
@@ -23,7 +23,7 @@ namespace o2
     {
         RemoveAllStates();
 
-        for (auto state : other.mStates)
+        for (auto& state : other.mStates)
             AddState(state->CloneAsRef<AnimationState>());
 
         return *this;
@@ -34,13 +34,13 @@ namespace o2
         if (mInEditMode)
             return;
 
-        for (auto state : mStates)
+        for (auto& state : mStates)
         {
             if (state->mAnimation)
                 state->player->Update(dt);
         }
 
-        for (auto val : mValues)
+        for (auto& val : mValues)
             val->Update();
 
         if (mBlend.time > 0)
@@ -54,7 +54,7 @@ namespace o2
         state->player->mAnimationState = state;
         state->mOwner = WeakRef(this);
 
-        for (auto trackPlayer : state->player->mTrackPlayers)
+        for (auto& trackPlayer : state->player->mTrackPlayers)
             trackPlayer->RegMixer(state, trackPlayer->GetTrack()->path);
 
         mStates.Add(state);
@@ -80,7 +80,7 @@ namespace o2
 
     void AnimationComponent::RemoveState(const Ref<AnimationState>& state)
     {
-        for (auto trackPlayer : state->player->mTrackPlayers)
+        for (auto& trackPlayer : state->player->mTrackPlayers)
             UnregTrack(trackPlayer, trackPlayer->GetTrack()->path);
 
         mStates.Remove(state);
@@ -99,7 +99,7 @@ namespace o2
 
     Ref<AnimationState> AnimationComponent::GetState(const String& name)
     {
-        for (auto state : mStates)
+        for (auto& state : mStates)
         {
             if (state->name == name)
                 return state;
@@ -168,7 +168,7 @@ namespace o2
     {
         mBlend.blendOffStates.Clear();
 
-        for (auto state : mStates)
+        for (auto& state : mStates)
         {
             if (state->mAnimation)
             {
@@ -201,7 +201,7 @@ namespace o2
 
     void AnimationComponent::StopAll()
     {
-        for (auto state : mStates)
+        for (auto& state : mStates)
             state->player->Stop();
 
         mBlend.time = -1;
@@ -236,7 +236,7 @@ namespace o2
     {
         ReattachAnimationStates();
 
-        for (auto state : mStates)
+        for (auto& state : mStates)
         {
             if (state->autoPlay)
                 state->player->Play();
@@ -245,7 +245,7 @@ namespace o2
 
     void AnimationComponent::UnregTrack(const Ref<IAnimationTrack::IPlayer>& player, const String& path)
     {
-        for (auto val : mValues)
+        for (auto& val : mValues)
         {
             if (val->path == path)
             {
@@ -272,7 +272,7 @@ namespace o2
     void AnimationComponent::ReattachAnimationStates()
     {
         auto statesCopy = mStates;
-        for (auto state : statesCopy)
+        for (auto& state : statesCopy)
         {
             if (state && !state->mOwner)
             {
@@ -287,7 +287,7 @@ namespace o2
         time -= dt;
         float cf = Math::Max(0.0f, time) / duration;
 
-        for (auto state : blendOffStates)
+        for (auto& state : blendOffStates)
             state->blend = cf;
 
         blendOnState->blend = 1.0f - cf;
