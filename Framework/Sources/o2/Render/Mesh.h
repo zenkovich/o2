@@ -16,7 +16,7 @@ namespace o2
     {
     public:
         PROPERTIES(Mesh);
-        PROPERTY(Ref<Texture>, texture, SetTexture, GetTexture);                // Texture property
+        PROPERTY(TextureRef, texture, SetTexture, GetTexture);                // Texture property
         PROPERTY(UInt, maxVertexCount, SetMaxVertexCount, GetMaxVertexCount); // Max vertex count property
         PROPERTY(UInt, maxPolyCount, SetMaxPolyCount, GetMaxPolyCount);       // Max polygons count property
 
@@ -29,7 +29,7 @@ namespace o2
 
     public:
         // Constructor
-        Mesh(Ref<Texture> texture = Ref<Texture>(), UInt vertexCount = 4, UInt polyCount = 2);
+        Mesh(TextureRef texture = TextureRef(), UInt vertexCount = 4, UInt polyCount = 2);
 
         // Copy-constructor
         Mesh(const Mesh& mesh);
@@ -47,10 +47,10 @@ namespace o2
         void Draw();
 
         // Sets texture
-        void SetTexture(const Ref<Texture>& texture);
+        void SetTexture(const TextureRef& texture);
 
         // Returns texture ptr
-        const Ref<Texture>& GetTexture() const;
+        const TextureRef& GetTexture() const;
 
         // Sets max vertex count buffer
         void SetMaxVertexCount(const UInt& count);
@@ -67,7 +67,7 @@ namespace o2
         CLONEABLE_REF(Mesh);
 
     protected:
-        Ref<Texture> mTexture; // Texture
+        TextureRef mTexture; // Texture
 
         UInt mMaxVertexCount; // Max size of vertex buffer
         UInt mMaxPolyCount;   // Max polygons count, mMaxPolyCount*3 - is index buffer max size

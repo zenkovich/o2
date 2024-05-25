@@ -6,61 +6,144 @@
 
 namespace o2
 {
-	template<>
-	class Ref<Texture> : public IObject, public BaseRef<Texture>
-	{
-		IOBJECT(Ref<Texture>);
+    class TextureRef : public IObject
+    {
+    public:
+        // Default constructor, no reference
+        TextureRef();
 
-	public:
-		// Implement base ref interface
-		BASE_REF_IMPLEMETATION(Texture);
+        // Nullptr constructor
+        TextureRef(nullptr_t);
 
-		// Constructor with size and format
-		Ref<Texture>(const Vec2I& size,
-					 TextureFormat format = TextureFormat::R8G8B8A8,
-					 Texture::Usage usage = Texture::Usage::Default);
+        // Copy constructor from other reference
+        TextureRef(const TextureRef& other);
 
-		// Constructor from file @SCRIPTABLE
-		explicit Ref<Texture>(const String& fileName);
+        // Move constructor from other reference
+        TextureRef(TextureRef&& other);
 
-		// Constructor from bitmap
-		explicit Ref<Texture>(const Bitmap& bitmap);
+        // Constructor with texture pointer
+        explicit TextureRef(Texture* ptr);
 
-		// Constructor from atlas page
-		Ref<Texture>(UID atlasAssetId, int page);
+        // Constructor with size and format
+        TextureRef(const Vec2I& size,
+                   TextureFormat format = TextureFormat::R8G8B8A8,
+                   Texture::Usage usage = Texture::Usage::Default);
 
-		// Constructor from atlas page
-		Ref<Texture>(const String& atlasAssetName, int page);
+        // Constructor from file @SCRIPTABLE
+        explicit TextureRef(const String& fileName);
 
-		// Returns empty texture
-		static Ref<Texture> Null();
+        // Constructor from bitmap
+        explicit TextureRef(const Bitmap& bitmap);
 
-	protected:
-		friend class Render;
-		friend class Texture;
-	};
+        // Constructor from atlas page
+        TextureRef(UID atlasAssetId, int page);
+
+        // Constructor from atlas page
+        TextureRef(const String& atlasAssetName, int page);
+
+        // Copy constructor from other reference
+        TextureRef(const Ref<Texture>& other);
+
+        // Move constructor from other reference
+        TextureRef(Ref<Texture>&& other);
+
+        // Equality operator
+        bool operator==(const TextureRef& other) const;
+
+        // Equality operator
+        bool operator==(const Texture* other) const;
+
+        // Inequality operator
+        bool operator!=(const TextureRef& other) const;
+
+        // Inequality operator
+        bool operator!=(const Texture* other) const;
+
+        // Copy operator from other texture reference
+        TextureRef& operator=(const TextureRef& other);
+
+        // Move operator from other texture reference
+        TextureRef& operator=(TextureRef&& other);
+
+        // Move operator from other texture reference
+        TextureRef& operator=(Ref<Texture>&& other);
+
+        // Move operator from nullptr
+        TextureRef& operator=(nullptr_t);
+
+        // Returns is reference is valid
+        bool IsValid() const;
+
+        // Returns is reference is valid
+        operator bool() const;
+
+        // Returns texture reference
+        operator Ref<Texture>() const;
+
+        // Returns texture reference
+        Texture& operator*() const;
+
+        // Returns texture pointer
+        Texture* operator->() const;
+
+        // Returns texture pointer 
+        Texture* Get();
+
+        // Returns texture pointer
+        const Texture* Get() const;
+
+        // Returns reference
+        Ref<Texture>& GetRef();
+
+        // Returns reference
+        const Ref<Texture>& GetRef() const;
+
+        // Returns empty texture
+        static TextureRef Null();
+
+        IOBJECT(TextureRef);
+
+    protected:
+        Ref<Texture> mTexture;
+
+    protected:
+        friend class Render;
+        friend class Texture;
+    };
 }
 // --- META ---
 
-CLASS_BASES_META(o2::Ref<o2::Texture>)
+CLASS_BASES_META(o2::TextureRef)
 {
     BASE_CLASS(o2::IObject);
-    BASE_CLASS(BaseRef<Texture>);
 }
 END_META;
-CLASS_FIELDS_META(o2::Ref<o2::Texture>)
+CLASS_FIELDS_META(o2::TextureRef)
 {
+    FIELD().PROTECTED().NAME(mTexture);
 }
 END_META;
-CLASS_METHODS_META(o2::Ref<o2::Texture>)
+CLASS_METHODS_META(o2::TextureRef)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(nullptr_t);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const TextureRef&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef&&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(Texture*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2I&, TextureFormat, Texture::Usage);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(const String&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Bitmap&);
     FUNCTION().PUBLIC().CONSTRUCTOR(UID, int);
     FUNCTION().PUBLIC().CONSTRUCTOR(const String&, int);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<Texture>, Null);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Texture>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(Ref<Texture>&&);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
+    FUNCTION().PUBLIC().SIGNATURE(Texture*, Get);
+    FUNCTION().PUBLIC().SIGNATURE(const Texture*, Get);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Texture>&, GetRef);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Texture>&, GetRef);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(TextureRef, Null);
 }
 END_META;
 // --- END META ---

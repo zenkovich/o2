@@ -137,7 +137,7 @@ namespace Editor
 	GameWindow::GameView::GameView(RefCounter* refCounter):
 		Widget(refCounter)
 	{
-		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 	}
 
@@ -197,7 +197,7 @@ namespace Editor
 
 		if (size != mRenderTarget->GetSize())
 		{
-			mRenderTarget = Ref<Texture>(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+			mRenderTarget = TextureRef(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 			*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
 			mRenderTargetSprite->SetMode(SpriteMode::FixedAspect);
 		}

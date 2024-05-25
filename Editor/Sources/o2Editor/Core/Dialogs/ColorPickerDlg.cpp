@@ -98,7 +98,7 @@ namespace Editor
 
         mColorPickAreaBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2I(80, 80));
         mColorPickAreaBitmap->Clear(Color4::White());
-        mColorPickAreaTexture = Ref<Texture>(*mColorPickAreaBitmap);
+        mColorPickAreaTexture = TextureRef(*mColorPickAreaBitmap);
         mColorPickAreaColor = pickArea->AddLayer("color", mmake<Sprite>(mColorPickAreaTexture, RectI(0, 0, 80, 80)),
                                                  Layout::BothStretch(1, 1, 1, 1));
 
@@ -113,7 +113,7 @@ namespace Editor
 
         mHUEBarBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2I(20, 256));
         InitHUEBarBitmap();
-        mHUEBarTexture = Ref<Texture>(*mHUEBarBitmap);
+        mHUEBarTexture = TextureRef(*mHUEBarBitmap);
         mHUEBar->AddLayer("color", mmake<Sprite>(mHUEBarTexture, RectI(0, 0, 20, 256)), Layout::BothStretch(1, 1, 1, 1),
                           0.5f);
 
@@ -170,7 +170,7 @@ namespace Editor
     }
 
     Ref<Widget> ColorPickerDlg::InitializeColorParameter(Ref<Label>& name, Ref<HorizontalProgress>& bar,
-                                                     Ref<EditBox>& edit, Ref<Bitmap>& bitmap, Ref<Texture>& texture,
+                                                     Ref<EditBox>& edit, Ref<Bitmap>& bitmap, TextureRef& texture,
                                                      const Function<void(float)>& changeCallback)
     {
         auto resLayout = mmake<Widget>();
@@ -184,7 +184,7 @@ namespace Editor
         bar->onChange = changeCallback;
 
         bitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2F(256, 256));
-        texture = Ref<Texture>(*bitmap);
+        texture = TextureRef(*bitmap);
         bar->AddLayer("color", mmake<Sprite>(texture, RectI(0, 0, 256, 256)), Layout::BothStretch(1, 1, 1, 1), 0.5f);
 
         auto backSprite = mmake<Sprite>(mChessBackTexture, RectI(0, 0, 20, 20));

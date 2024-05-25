@@ -47,14 +47,14 @@ namespace o2
     class ShortcutKeysListenersManager: public RefCounterable, public KeyboardEventsListener, public Singleton<ShortcutKeysListenersManager>
     {
     protected:
-        Map<ShortcutKeys, Vector<Ref<ShortcutKeysListener>>> mListeners;
+        Map<ShortcutKeys, Vector<WeakRef<ShortcutKeysListener>>> mListeners;
 
     protected:
         // Registers listener 
         static void Register(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
 
         // Unregisters listener
-        static void UnRegister(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);
+        static void UnRegister(const ShortcutKeys& shortcut, ShortcutKeysListener* listener);
 
         // Set listener minimal priority
         static void SetMinPriority(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener);

@@ -15,7 +15,7 @@ namespace o2
 
     ApplicationEventsListener::~ApplicationEventsListener()
     {
-        EventSystem::UnregApplicationListener(Ref(this));
+        EventSystem::UnregApplicationListener(this);
     }
 
     void ApplicationEventsListener::OnApplicationStarted()

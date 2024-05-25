@@ -14,6 +14,6 @@ namespace Editor
 		// Initializes common textures
 		static void Initialize();
 
-		static Ref<Texture> checkedBackground;
+		static TextureRef checkedBackground;
 	};
 }

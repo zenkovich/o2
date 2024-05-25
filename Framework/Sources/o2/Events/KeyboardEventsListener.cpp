@@ -11,7 +11,7 @@ namespace o2
 
     KeyboardEventsListener::~KeyboardEventsListener()
     {
-        EventSystem::UnregKeyboardListener(Ref(this));
+        EventSystem::UnregKeyboardListener(this);
     }
 
 	void KeyboardEventsListener::PostRefConstruct()

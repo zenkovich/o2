@@ -11,7 +11,7 @@ namespace Editor
 	ScrollView::ScrollView(RefCounter* refCounter):
 		Widget(refCounter)
 	{
-		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		mBackColor = Color4(225, 232, 232, 255);
@@ -23,7 +23,7 @@ namespace Editor
 	ScrollView::ScrollView(RefCounter* refCounter, const ScrollView& other):
 		Widget(refCounter, other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
 	{
-		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
@@ -42,7 +42,7 @@ namespace Editor
 
 		mBackColor = other.mBackColor;
 		mGridColor = other.mGridColor;
-		mRenderTarget = Ref<Texture>(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
@@ -123,7 +123,7 @@ namespace Editor
 		size.x = Math::Max(size.x, 32);
 		size.y = Math::Max(size.y, 32);
 
-		mRenderTarget = Ref<Texture>(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTarget = TextureRef(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
 		mRenderTargetSprite->SetRect(layout->worldRect);
 		mNeedRedraw = true;

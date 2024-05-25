@@ -9,8 +9,8 @@ namespace Editor
 		backLayerBitmap.Fill(color1);
 		backLayerBitmap.FillRect(0, 10, 10, 00, color2);
 		backLayerBitmap.FillRect(10, 20, 20, 10, color2);
-		checkedBackground = Ref<Texture>(backLayerBitmap);
+		checkedBackground = TextureRef(backLayerBitmap);
 	}
 
-	Ref<Texture> CommonTextures::checkedBackground;
+	TextureRef CommonTextures::checkedBackground;
 }

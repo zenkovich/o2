@@ -54,17 +54,17 @@ namespace Editor
         Ref<o2::Window> mWindow;
         Ref<Image>      mColorSampleImage;
 
-        Ref<Texture> mChessBackTexture;
+        TextureRef mChessBackTexture;
 
 		Ref<Image>            mColorPickAreaHandle;
 		Ref<Bitmap>           mColorPickAreaBitmap;
 		Ref<WidgetLayer>      mColorPickAreaColor;
-		Ref<Texture>          mColorPickAreaTexture;
+		TextureRef          mColorPickAreaTexture;
         Ref<CursorEventsArea> mColorPickHandle;
 
         Ref<VerticalProgress> mHUEBar;
         Ref<Bitmap>           mHUEBarBitmap;
-        Ref<Texture>          mHUEBarTexture;
+        TextureRef          mHUEBarTexture;
 
         Ref<DropDown> mTypeDropdown;
 
@@ -72,25 +72,25 @@ namespace Editor
         Ref<HorizontalProgress> mColor1ParamBar;
         Ref<EditBox>            mColor1ParamEdit;
         Ref<Bitmap>             mColor1ParamBarBitmap;
-        Ref<Texture>            mColor1ParamBarTexture;
+        TextureRef            mColor1ParamBarTexture;
 
         Ref<Label>              mColor2ParamName;
         Ref<HorizontalProgress> mColor2ParamBar;
         Ref<EditBox>            mColor2ParamEdit;
         Ref<Bitmap>             mColor2ParamBarBitmap;
-        Ref<Texture>            mColor2ParamBarTexture;
+        TextureRef            mColor2ParamBarTexture;
 
         Ref<Label>              mColor3ParamName;
         Ref<HorizontalProgress> mColor3ParamBar;
         Ref<EditBox>            mColor3ParamEdit;
         Ref<Bitmap>             mColor3ParamBarBitmap;
-        Ref<Texture>            mColor3ParamBarTexture;
+        TextureRef            mColor3ParamBarTexture;
 
         Ref<Label>              mColorAParamName;
         Ref<HorizontalProgress> mColorAParamBar;
         Ref<EditBox>            mColorAParamEdit;
         Ref<Bitmap>             mColorAParamBarBitmap;
-        Ref<Texture>            mColorAParamBarTexture;
+        TextureRef            mColorAParamBarTexture;
 
 
     protected:
@@ -111,7 +111,7 @@ namespace Editor
 
         // Initializes color parameter controls
         Ref<Widget> InitializeColorParameter(Ref<Label>& name, Ref<HorizontalProgress>& bar, Ref<EditBox>& edit,
-                                             Ref<Bitmap>& bitmap, Ref<Texture>& texture,
+                                             Ref<Bitmap>& bitmap, TextureRef& texture,
                                              const Function<void(float)>& onChanged);
 
         // Initializes HUE bar bitmap

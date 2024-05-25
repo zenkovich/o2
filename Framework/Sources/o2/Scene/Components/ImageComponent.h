@@ -39,7 +39,7 @@ namespace o2
 		explicit ImageComponent(const Sprite& sprite);
 
 		// Constructor from texture and source rectangle
-		ImageComponent(Ref<Texture> texture, const RectI& srcRect);
+		ImageComponent(TextureRef texture, const RectI& srcRect);
 
         // Copy-constructor
         ImageComponent(const ImageComponent& other);
@@ -120,7 +120,7 @@ CLASS_METHODS_META(o2::ImageComponent)
     FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Bitmap&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(Ref<Texture>, const RectI&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ImageComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, FitActorByImage);

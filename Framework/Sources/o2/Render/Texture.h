@@ -156,7 +156,7 @@ namespace o2
         void LoadDDS(const String& fileName);
 
 		friend class Render;
-		friend class Ref<Texture>;
+		friend class TextureRef;
 
         FRIEND_REF_MAKE();
     };

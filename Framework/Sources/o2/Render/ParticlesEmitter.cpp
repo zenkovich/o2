@@ -8,7 +8,7 @@
 namespace o2
 {
     ParticlesEmitter::ParticlesEmitter():
-        IRectDrawable(), mParticlesMesh(Ref<Texture>::Null(), mParticlesNumLimit*4, mParticlesNumLimit*2), mShape(mmake<CircleParticlesEmitterShape>())
+        IRectDrawable(), mParticlesMesh(TextureRef::Null(), mParticlesNumLimit*4, mParticlesNumLimit*2), mShape(mmake<CircleParticlesEmitterShape>())
     {
         mLastTransform = mTransform;
     }
@@ -32,7 +32,7 @@ namespace o2
         duration(this), particlesLifetime(this), emitParticlesPerSecond(this), emitParticlesAngle(this), emitParticlesAngleRange(this),
         emitParticlesSize(this), emitParticlesSizeRange(this), emitParticlesSpeed(this), emitParticlesAngleSpeedRange(this), emitParticlesAngleSpeed(this),
         emitParticlesSpeedRange(this), emitParticlesMoveDir(this), emitParticlesMoveDirRange(this), emitParticlesColorA(this), emitParticlesColorB(this),
-        image(this), shape(this), mParticlesMesh(Ref<Texture>::Null(), mParticlesNumLimit * 4, mParticlesNumLimit * 2)
+        image(this), shape(this), mParticlesMesh(TextureRef::Null(), mParticlesNumLimit * 4, mParticlesNumLimit * 2)
     {
         for (auto& effect : other.mEffects)
             AddEffect(effect->CloneAsRef<ParticlesEffect>());
@@ -320,9 +320,9 @@ namespace o2
         mImageAsset = image;
 
         if (mImageAsset)
-            mParticlesMesh.SetTexture(Ref<Texture>(mImageAsset->GetAtlasUID(), mImageAsset->GetAtlasPage()));
+            mParticlesMesh.SetTexture(TextureRef(mImageAsset->GetAtlasUID(), mImageAsset->GetAtlasPage()));
         else
-            mParticlesMesh.SetTexture(Ref<Texture>::Null());
+            mParticlesMesh.SetTexture(TextureRef::Null());
     }
 
     Ref<ImageAsset> ParticlesEmitter::GetImage() const

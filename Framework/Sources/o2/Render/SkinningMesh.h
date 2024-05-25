@@ -33,7 +33,7 @@ namespace o2
 
     public:
         PROPERTIES(SkinningMesh);
-        PROPERTY(Ref<Texture>, texture, SetTexture, GetTexture);                // Texture property
+        PROPERTY(TextureRef, texture, SetTexture, GetTexture);                // Texture property
         PROPERTY(UInt, maxVertexCount, SetMaxVertexCount, GetMaxVertexCount); // Max vertex count property
         PROPERTY(UInt, maxPolyCount, SetMaxPolyCount, GetMaxPolyCount);       // Max polygons count property
         PROPERTY(UInt, maxBonesCount, SetMaxBonesCount, GetMaxBonesCount);    // Max bones count property
@@ -52,7 +52,7 @@ namespace o2
 
     public:
         // Constructor
-        SkinningMesh(Ref<Texture> texture = Ref<Texture>(), UInt vertexCount = 4, UInt polyCount = 2, UInt bonesCount = 16);
+        SkinningMesh(TextureRef texture = TextureRef(), UInt vertexCount = 4, UInt polyCount = 2, UInt bonesCount = 16);
 
         // Copy-constructor
         SkinningMesh(const SkinningMesh& other);
@@ -73,10 +73,10 @@ namespace o2
         void Draw() override;
 
         // Sets texture
-        void SetTexture(Ref<Texture> texture);
+        void SetTexture(TextureRef texture);
 
         // Returns texture ptr
-        Ref<Texture> GetTexture() const;
+        TextureRef GetTexture() const;
 
         // Sets max vertex count buffer
         void SetMaxVertexCount(const UInt& count);
@@ -99,7 +99,7 @@ namespace o2
         CLONEABLE_REF(SkinningMesh);
 
     protected:
-        Ref<Texture> mTexture; // Texture
+        TextureRef mTexture; // Texture
 
         UInt mMaxBonesCount = 0;  // Max size of bones buffer
         UInt mMaxVertexCount = 0; // Max size of vertex buffer

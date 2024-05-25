@@ -18,7 +18,7 @@ namespace o2
     {
     public:
         PROPERTIES(Sprite);
-        PROPERTY(Ref<Texture>, texture, SetTexture, GetTexture);                       // Texture property @SCRIPTABLE
+        PROPERTY(TextureRef, texture, SetTexture, GetTexture);                       // Texture property @SCRIPTABLE
         PROPERTY(RectI, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);         // Texture source rectangle property @SCRIPTABLE
         PROPERTY(Ref<ImageAsset>, image, SetImageAsset, GetImageAsset);                  // Sets image asset @SCRIPTABLE
         PROPERTY(String, imageName, LoadFromImage, GetImageName);                      // Sets image asset path @SCRIPTABLE
@@ -51,7 +51,7 @@ namespace o2
 		explicit Sprite(const Bitmap& bitmap);
 
 		// Constructor from texture and source rectangle
-		Sprite(Ref<Texture> texture, const RectI& srcRect = RectI());
+		Sprite(TextureRef texture, const RectI& srcRect = RectI());
 
         // Copy-constructor
         Sprite(const Sprite& other);
@@ -87,10 +87,10 @@ namespace o2
         void Draw() override;
 
         // Sets using texture @SCRIPTABLE
-        void SetTexture(const Ref<Texture>& texture);
+        void SetTexture(const TextureRef& texture);
 
         // Returns using texture @SCRIPTABLE
-        const Ref<Texture>& GetTexture() const;
+        const TextureRef& GetTexture() const;
 
         // Sets texture source rectangle
         void SetTextureSrcRect(const RectI& rect);
@@ -292,7 +292,7 @@ CLASS_METHODS_META(o2::Sprite)
     FUNCTION().PUBLIC().CONSTRUCTOR(UID);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Bitmap&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(Ref<Texture>, const RectI&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(LoadFromImageRef).SIGNATURE(void, LoadFromImage, const Ref<ImageAsset>&, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, LoadFromImage, const String&, bool);
@@ -300,8 +300,8 @@ CLASS_METHODS_META(o2::Sprite)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, LoadMonoColor, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(void, LoadFromBitmap, const Bitmap&, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetTexture, const Ref<Texture>&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Ref<Texture>&, GetTexture);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetTexture, const TextureRef&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const TextureRef&, GetTexture);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTextureSrcRect, const RectI&);
     FUNCTION().PUBLIC().SIGNATURE(RectI, GetTextureSrcRect);
     FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetOriginalSize);

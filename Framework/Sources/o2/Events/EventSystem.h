@@ -77,16 +77,16 @@ namespace o2
     protected:
         float mDblClickTime = 0.3f; // Time between clicks for double click reaction
 
-        Vector<Ref<CursorEventsListener>> mCursorListeners; // All cursor non area listeners
+        Vector<WeakRef<CursorEventsListener>> mCursorListeners; // All cursor non area listeners
 
-        Vector<Ref<CursorAreaEventListenersLayer>> mCursorAreaEventsListenersLayers; // Drawn cursor area events listeners layers
+        Vector<WeakRef<CursorAreaEventListenersLayer>> mCursorAreaEventsListenersLayers; // Drawn cursor area events listeners layers
         
         Ref<CursorAreaEventListenersLayer>         mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
         Ref<CursorAreaEventListenersLayer>         mCurrentCursorAreaEventsLayer;  // Current list of area listeners
         Vector<Ref<CursorAreaEventListenersLayer>> mLayersStack;                   // Input layers stack, in order they are pushed
 
-        Vector<Ref<KeyboardEventsListener>>    mKeyboardListeners;    // Keyboard events listeners
-        Vector<Ref<ApplicationEventsListener>> mApplicationListeners; // Application events listeners
+        Vector<WeakRef<KeyboardEventsListener>>    mKeyboardListeners;    // Keyboard events listeners
+        Vector<WeakRef<ApplicationEventsListener>> mApplicationListeners; // Application events listeners
 
         Ref<ShortcutKeysListenersManager> mShortcutEventsManager; // Shortcut events manager
 
@@ -122,13 +122,13 @@ namespace o2
         static void RegKeyboardListener(const Ref<KeyboardEventsListener>& listener);
 
         // Unregistering keyboard events listener
-        static void UnregKeyboardListener(const Ref<KeyboardEventsListener>& listener);
+        static void UnregKeyboardListener(KeyboardEventsListener* listener);
 
         // Registering application events listener
         static void RegApplicationListener(const Ref<ApplicationEventsListener>& listener);
 
         // Unregistering application events listener
-        static void UnregApplicationListener(const Ref<ApplicationEventsListener>& listener);
+        static void UnregApplicationListener(ApplicationEventsListener* listener);
 
         friend class Application;
         friend class ApplicationEventsListener;

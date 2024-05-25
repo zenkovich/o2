@@ -71,7 +71,7 @@ namespace o2
         static String GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx);
 
         // Returns atlas page's texture reference
-        static Ref<Texture> GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx);
+        static TextureRef GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx);
 
         // Returns editor sorting weight
         static int GetEditorSorting() { return 97; }
@@ -135,7 +135,7 @@ namespace o2
             Vec2I Size() const;
 
             // Returns texture reference
-            Ref<Texture> GetTexture() const;
+            TextureRef GetTexture() const;
 
             // Returns texture file name
             String GetTextureFileName() const;
@@ -153,7 +153,7 @@ namespace o2
             Vec2I mSize; // Size of page @SERIALIZABLE
 
             Map<UID, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
-            Ref<Texture>      mTexture;     // Page texture
+            TextureRef      mTexture;     // Page texture
 
             WeakRef<AtlasAsset> mOwner; // Owner atlas
 
@@ -215,7 +215,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
     FUNCTION().PUBLIC().SIGNATURE(Ref<Meta>, GetMeta);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetPageTextureFileName, const AssetInfo&, UInt);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<Texture>, GetPageTextureRef, const AssetInfo&, UInt);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
     FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
@@ -286,7 +286,7 @@ CLASS_METHODS_META(o2::AtlasAsset::Page)
 
     FUNCTION().PUBLIC().SIGNATURE(UInt, ID);
     FUNCTION().PUBLIC().SIGNATURE(Vec2I, Size);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<Texture>, GetTexture);
+    FUNCTION().PUBLIC().SIGNATURE(TextureRef, GetTexture);
     FUNCTION().PUBLIC().SIGNATURE(String, GetTextureFileName);
     FUNCTION().PUBLIC().SIGNATURE(_tmp1, ImagesRects);
 }

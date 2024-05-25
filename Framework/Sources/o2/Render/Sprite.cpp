@@ -56,7 +56,7 @@ namespace o2
         Render::OnSpriteCreated(this);
     }
 
-    Sprite::Sprite(Ref<Texture> texture, const RectI& srcRect /*= RectI()*/):
+    Sprite::Sprite(TextureRef texture, const RectI& srcRect /*= RectI()*/):
         mTextureSrcRect(srcRect), mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(texture, 16, 18)
     {
         if (srcRect == RectI())
@@ -144,13 +144,13 @@ namespace o2
 //         o2Render.DrawBasis(mTransform);
     }
 
-    void Sprite::SetTexture(const Ref<Texture>& texture)
+    void Sprite::SetTexture(const TextureRef& texture)
     {
         mMesh.SetTexture(texture);
         mImageAsset = Ref<ImageAsset>();
     }
 
-    const Ref<Texture>& Sprite::GetTexture() const
+    const TextureRef& Sprite::GetTexture() const
     {
         return mMesh.GetTexture();
     }
@@ -346,7 +346,7 @@ namespace o2
     void Sprite::LoadMonoColor(const Color4& color)
     {
         mImageAsset = Ref<ImageAsset>();
-        mMesh.mTexture = Ref<Texture>();
+        mMesh.mTexture = TextureRef();
         mColor = color;
         mCornersColors[0] = Color4::White();
         mCornersColors[1] = Color4::White();
@@ -359,7 +359,7 @@ namespace o2
     void Sprite::LoadFromBitmap(const Bitmap& bitmap, bool setSizeByImage /*= true*/)
     {
 		mImageAsset = Ref<ImageAsset>();
-		mMesh.mTexture = Ref<Texture>(bitmap);
+		mMesh.mTexture = TextureRef(bitmap);
 		mTextureSrcRect.Set(Vec2F(), mMesh.mTexture->GetSize());
 
 		if (setSizeByImage)

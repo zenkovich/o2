@@ -28,7 +28,7 @@ namespace o2
         bool  mScissorEnabled = false;
         RectI mScissorRect;
         
-        Ref<Texture> mWhiteTexture; // Default white texture
+        TextureRef mWhiteTexture; // Default white texture
         
         friend class RenderDevice;
     };

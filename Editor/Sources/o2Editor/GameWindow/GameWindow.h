@@ -43,7 +43,7 @@ namespace Editor
 
 		protected:
 			Ref<Sprite>  mRenderTargetSprite; // Render target sprite, using for drawing scene render target
-			Ref<Texture> mRenderTarget;       // Render target texture, using for rendering scene
+			TextureRef mRenderTarget;       // Render target texture, using for rendering scene
 
 		protected:
 			// Called when transformation was changed and updated, updates render texture and sprite

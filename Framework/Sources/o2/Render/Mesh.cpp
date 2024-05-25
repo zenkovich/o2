@@ -5,7 +5,7 @@
 
 namespace o2
 {
-    Mesh::Mesh(Ref<Texture> texture /*= TextureRef()*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/):
+    Mesh::Mesh(TextureRef texture /*= TextureRef()*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/):
         vertices(nullptr), indexes(nullptr), mMaxPolyCount(0), mMaxVertexCount(0), vertexCount(0), polyCount(0)
     {
         SetTexture(texture);
@@ -67,12 +67,12 @@ namespace o2
         OnDrawn();
     }
 
-    void Mesh::SetTexture(const Ref<Texture>& texture)
+    void Mesh::SetTexture(const TextureRef& texture)
     {
         mTexture = texture;
     }
 
-    const Ref<Texture>& Mesh::GetTexture() const
+    const TextureRef& Mesh::GetTexture() const
     {
         return mTexture;
     }

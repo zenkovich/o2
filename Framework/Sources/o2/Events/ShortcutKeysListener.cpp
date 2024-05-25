@@ -7,7 +7,7 @@ namespace o2
 
        ShortcutKeysListener::~ShortcutKeysListener()
     {
-        ShortcutKeysListenersManager::UnRegister(mShortcut, Ref(this));
+        ShortcutKeysListenersManager::UnRegister(mShortcut, this);
     }
 
     void ShortcutKeysListener::SetMaxPriority()
@@ -22,7 +22,7 @@ namespace o2
 
     void ShortcutKeysListener::SetShortcut(const ShortcutKeys& shortcut)
     {
-        ShortcutKeysListenersManager::UnRegister(mShortcut, Ref(this));
+        ShortcutKeysListenersManager::UnRegister(mShortcut, this);
         mShortcut = shortcut;
         ShortcutKeysListenersManager::Register(mShortcut, Ref(this));
     }
@@ -42,7 +42,7 @@ namespace o2
         if (mEnabled)
             ShortcutKeysListenersManager::Register(mShortcut, Ref(this));
         else
-            ShortcutKeysListenersManager::UnRegister(mShortcut, Ref(this));
+            ShortcutKeysListenersManager::UnRegister(mShortcut, this);
     }
 
     bool ShortcutKeysListener::IsEnabled() const
@@ -61,12 +61,12 @@ namespace o2
         auto& listeners = mInstance->mListeners;
 
         if (!listeners.ContainsKey(shortcut))
-            listeners.Add(shortcut, Vector<Ref<ShortcutKeysListener>>());
+            listeners.Add(shortcut, {});
 
         listeners[shortcut].Add(listener);
     }
 
-    void ShortcutKeysListenersManager::UnRegister(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener)
+    void ShortcutKeysListenersManager::UnRegister(const ShortcutKeys& shortcut, ShortcutKeysListener* listener)
     {
         if (!mInstance)
             return;
@@ -118,9 +118,10 @@ namespace o2
             {
                 for (int i = kv.second.Count() - 1; i >= 0; i--)
                 {
-                    if (kv.second[i]->IsListeningEvents())
+                    auto listener = kv.second[i].Lock();
+                    if (listener->IsListeningEvents())
                     {
-                        kv.second[i]->OnShortcutPressed();
+                        listener->OnShortcutPressed();
                         break;
                     }
                 }

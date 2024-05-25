@@ -38,7 +38,7 @@ namespace o2
 
     void Render::InitializeLinesTextures()
     {
-        mSolidLineTexture = Ref<Texture>::Null();
+        mSolidLineTexture = TextureRef::Null();
 
         Bitmap bitmap(PixelFormat::R8G8B8A8, Vec2I(32, 32));
         bitmap.Fill(Color4(255, 255, 255, 255));
@@ -97,7 +97,7 @@ namespace o2
 
     void Render::DrawFilledPolygon(const Vertex* verticies, int vertexCount)
     {
-        static Mesh mesh(Ref<Texture>(), 1024, 1024);
+        static Mesh mesh(TextureRef(), 1024, 1024);
 
         int polyCount = vertexCount - 2;
         if (mesh.GetMaxVertexCount() < (UInt)vertexCount || mesh.GetMaxPolyCount() < (UInt)polyCount)
@@ -120,7 +120,7 @@ namespace o2
 
     void Render::DrawFilledPolygon(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/)
     {
-        static Mesh mesh(Ref<Texture>(), 1024, 1024);
+        static Mesh mesh(TextureRef(), 1024, 1024);
 
         int vertexCount = points.Count();
         int polyCount = points.Count() - 2;
@@ -212,7 +212,7 @@ namespace o2
 
     void Render::OnTextureDestroyed(Texture* texture)
     {
-        mTextures.RemoveFirst([=](const Ref<Texture>& x) { return x == texture; });
+        mTextures.RemoveFirst([=](const TextureRef& x) { return x == texture; });
     }
 
     void Render::OnAtlasCreated(AtlasAsset* atlas)
@@ -643,7 +643,7 @@ namespace o2
     {
         static Mesh mesh(mSolidLineTexture, 1024, 1024);
 
-        Ref<Texture> texture = lineType == LineType::Solid ? mSolidLineTexture : mDashLineTexture;
+        TextureRef texture = lineType == LineType::Solid ? mSolidLineTexture : mDashLineTexture;
         Vec2I texSize = lineType == LineType::Solid ? Vec2I(1, 1) : mDashLineTexture->GetSize();
 
         if (scaleToScreenSpace)
@@ -665,7 +665,7 @@ namespace o2
         mesh.Draw();
     }
 
-    Ref<Texture> Render::GetRenderTexture() const
+    TextureRef Render::GetRenderTexture() const
     {
         return mCurrentRenderTarget;
     }
