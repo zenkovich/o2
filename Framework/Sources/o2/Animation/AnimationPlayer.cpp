@@ -22,8 +22,7 @@ namespace o2
         mTrackPlayers.Clear();
 
         auto tmp = mClip;
-        mClip = nullptr;
-        tmp = nullptr;
+        SetClip(nullptr);
     }
 
     void AnimationPlayer::SetTarget(IObject* target, bool errors /*= true*/)
@@ -50,9 +49,9 @@ namespace o2
 
         if (mClip)
         {
-            mClip->onTrackAdded += MakeSubscription(this, &thisclass::OnClipTrackAdded, [&]() { mClip = nullptr; });
-            mClip->onTrackRemove += THIS_SUBSCRIPTION(OnClipTrackRemove, [&]() { mClip = nullptr; });
-            mClip->onDurationChange += THIS_SUBSCRIPTION(OnClipDurationChanged, [&]() { mClip = nullptr; });
+            mClip->onTrackAdded += THIS_FUNC(OnClipTrackAdded);
+            mClip->onTrackRemove += THIS_FUNC(OnClipTrackRemove);
+            mClip->onDurationChange += THIS_FUNC(OnClipDurationChanged);
         }
 
         BindTracks(true);

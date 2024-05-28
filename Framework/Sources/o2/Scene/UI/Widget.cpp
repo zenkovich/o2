@@ -541,7 +541,7 @@ namespace o2
         Actor::OnDisabled();
         ISceneDrawable::OnDisabled();
 
-        layout->SetDirty(false);
+        //layout->SetDirty(false);
         onHide();
     }
 
@@ -1160,7 +1160,8 @@ namespace o2
 
     void Widget::OnParentChanged(const Ref<Actor>& oldParent)
     {
-        layout->SetDirty();
+        if (mState == Actor::State::Default)
+            layout->SetDirty();
 
         mParentWidget = DynamicCast<Widget>(mParent.Lock());
 
