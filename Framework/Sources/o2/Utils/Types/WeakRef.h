@@ -62,6 +62,9 @@ namespace o2
         // Move operator from strong reference
         BaseWeakRef& operator=(BaseRef<_type>&& other);
 
+        // Less operator
+        bool operator<(const BaseWeakRef<_type>& other) const { return mPtr < other.mPtr; }
+
         // Returns true if reference is valid
         bool IsValid() const;
 
@@ -69,7 +72,7 @@ namespace o2
         bool IsExpired() const;
 
         // Boolean cast operator, true means that reference is valid
-        operator bool() const;
+        explicit operator bool() const;
 
         // Returns strong reference to object
         BaseRef<_type> Lock() const;
@@ -140,7 +143,10 @@ namespace o2
         WeakRef& operator=(const Ref<_type>& other) { BaseWeakRef<_type>::operator=(other); return *this; }
 
         // Move operator from strong reference
-        WeakRef& operator=(Ref<_type>&& other) { BaseWeakRef<_type>::operator=((BaseRef<_type>&)other); return *this; }
+		WeakRef& operator=(Ref<_type>&& other) { BaseWeakRef<_type>::operator=((BaseRef<_type>&)other); return *this; }
+
+		// Less operator
+		bool operator<(const WeakRef<_type>& other) const { return BaseWeakRef<_type>::operator<(other); }
 
         // Returns true if reference is valid
         bool IsValid() const { return BaseWeakRef<_type>::IsValid(); }
@@ -149,7 +155,7 @@ namespace o2
         bool IsExpired() const { return BaseWeakRef<_type>::IsExpired(); }
 
         // Boolean cast operator, true means that reference is valid
-        operator bool() const { return BaseWeakRef<_type>::operator bool(); }
+        explicit operator bool() const { return BaseWeakRef<_type>::operator bool(); }
 
         // Returns strong reference to object
         Ref<_type> Lock() const

@@ -703,7 +703,9 @@ namespace o2
 
     void ActorTransform::SetDirty(bool fromParent /*= false*/)
     {
-        mData->dirtyFrame = o2Time.GetCurrentFrame();
+        if (o2::Time::IsSingletonInitialzed())
+            mData->dirtyFrame = o2Time.GetCurrentFrame();
+
         mData->updateFrame = 0;
 
 #if IS_EDITOR

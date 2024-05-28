@@ -460,7 +460,7 @@ namespace o2
 
     void Actor::SetParent(const Ref<Actor>& actor, bool worldPositionStays /*= true*/, int idx /*= -1*/)
     {
-        if ((actor && actor->mParent == this) || actor == this || actor == mParent)
+        if ((actor && actor->mParent == this) || actor == this || mParent == actor)
             return;
 
         auto thisRef = Ref(this);

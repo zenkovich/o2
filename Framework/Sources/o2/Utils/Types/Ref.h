@@ -190,6 +190,9 @@ namespace o2
         template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
         BaseRef<_type>& operator=(BaseRef<_other_type>&& other);
 
+        // Less operator
+        bool operator<(const BaseRef<_type>& other) const { return mPtr < other.mPtr; }
+
         // Returns true if reference is valid
         bool IsValid() const;
 
@@ -197,7 +200,7 @@ namespace o2
         _type* Get() const;
 
         // Boolean cast operator, true means that reference is valid
-        operator bool() const;
+        explicit operator bool() const;
 
         // Getter operator
         _type& operator*() const;
@@ -247,10 +250,10 @@ namespace o2
 
         // Copy constructor from other type
         template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
-        Ref(Ref<_other_type>&& other) : BaseRef<_type>(std::move(other)) {}
+		Ref(Ref<_other_type>&& other) : BaseRef<_type>(std::move(other)) {}
 
-        // Equality operator
-        bool operator==(const Ref<_type>& other) const { return BaseRef<_type>::operator==(other); }
+		// Equality operator
+		bool operator==(const Ref<_type>& other) const { return BaseRef<_type>::operator==(other); }
 
         // Equality operator
         bool operator==(const _type* other) const { return BaseRef<_type>::operator==(other); }
@@ -278,11 +281,14 @@ namespace o2
         template<typename _other_type, typename _enable_m = std::enable_if<std::is_convertible<_other_type*, _type*>::value>::type>
         Ref<_type>& operator=(Ref<_other_type>&& other) { BaseRef<_type>::operator=(std::move(other)); return *this; }
 
+        // Less operator
+        bool operator<(const Ref<_type>& other) const { return BaseRef<_type>::operator<(other); }
+
         // Returns true if reference is valid
         bool IsValid() const { return BaseRef<_type>::IsValid(); }
 
         // Returns true if reference is valid
-        operator bool() const { return BaseRef<_type>::operator bool(); }
+        explicit operator bool() const { return BaseRef<_type>::operator bool(); }
 
         // Gets reference to object
         _type& operator*() const { return BaseRef<_type>::operator*(); }

@@ -142,7 +142,7 @@ namespace Editor
 			int pos = 0;
 			for (auto& window : windows)
 			{
-				window->SetTabState(offset, pos, window == mChildren[0]);
+				window->SetTabState(offset, pos, mChildren[0] == window);
 				offset += window->GetTabWidth();
 
 				pos++;

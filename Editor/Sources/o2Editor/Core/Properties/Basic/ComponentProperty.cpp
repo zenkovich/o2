@@ -143,7 +143,7 @@ namespace Editor
 			if (sameToProtoSourceActor)
 			{
 				auto sameToProtoSourceComponent = sameToProtoSourceActor->GetComponents().FindOrDefault(
-					[&](auto& x) { return sourceComponent == x->GetPrototypeLink(); });
+					[&](auto& x) { return x->GetPrototypeLink() == sourceComponent; });
 
 				if (sameToProtoSourceComponent)
 				{

@@ -323,7 +323,7 @@ namespace Editor
 	{
 		Vector<Ref<SceneEditableObject>> editableObjects = objects
 			.Convert<Ref<OrderTreeNode>>([](auto x) { return Ref((OrderTreeNode*)x); })
-			.FindAll([](auto& x) { return x->object; })
+			.FindAll([](auto& x) { return x->object.IsValid(); })
 			.Convert<Ref<SceneEditableObject>>([](auto& x) { return x->object; });
 
 		onObjectsSelectionChanged(editableObjects);
