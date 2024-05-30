@@ -162,10 +162,10 @@ namespace o2
         void LoadAssetsTree();
 
         // Returns asset cache by path
-        Ref<Asset> FindAssetCache(const String& path);
+        Ref<Asset> FindAssetCache(const String& path) const;
 
         // Returns asset cache by id
-        Ref<Asset> FindAssetCache(const UID& id);
+        Ref<Asset> FindAssetCache(const UID& id) const;
 
         // Clears assets cache
         void ClearAssetsCache();

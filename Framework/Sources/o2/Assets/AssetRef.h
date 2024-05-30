@@ -303,7 +303,7 @@ namespace o2
 			Base::mPtr = *instanceNode;
 
 			UID oldUid = Base::mPtr->GetUID();
-			Base::mPtr->mInfo.meta = Ref<AssetMeta>((AssetMeta*)node.GetMember("meta"));
+			node.GetMember("meta").Get(Base::mPtr->mInfo.meta);
 			o2Assets.UpdateAssetCache(Base::mPtr, "", oldUid);
 
 			Base::IncrementRef();

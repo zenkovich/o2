@@ -310,10 +310,7 @@ namespace o2
     {}
 
     ToggleGroup::~ToggleGroup()
-    {
-        for (auto& toggle : mToggles)
-            toggle.Lock()->mToggleGroup = nullptr;
-    }
+    {}
 
     void ToggleGroup::AddToggle(const Ref<Toggle>& toggle)
     {

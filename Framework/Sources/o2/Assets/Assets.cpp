@@ -39,11 +39,17 @@ namespace o2
 
     const String& Assets::GetAssetPath(const UID& id) const
     {
+        if (auto cached = FindAssetCache(id))
+            return cached->GetPath();
+
         return GetAssetInfo(id).path;
     }
 
     const UID& Assets::GetAssetId(const String& path) const
-    {
+	{
+		if (auto cached = FindAssetCache(path))
+			return cached->GetUID();
+
         auto& info = GetAssetInfo(path);
         return info.meta ? info.meta->ID() : UID::empty;
     }
@@ -425,14 +431,14 @@ namespace o2
 //         }
     }
 
-    Ref<Asset> Assets::FindAssetCache(const String& path)
+    Ref<Asset> Assets::FindAssetCache(const String& path) const
     {
         Ref<Asset> res;
         mCachedAssetsByPath.TryGetValue(path, res);
         return res;
     }
 
-    Ref<Asset> Assets::FindAssetCache(const UID& id)
+    Ref<Asset> Assets::FindAssetCache(const UID& id) const
     {
         Ref<Asset> res;
         mCachedAssetsByUID.TryGetValue(id, res);
