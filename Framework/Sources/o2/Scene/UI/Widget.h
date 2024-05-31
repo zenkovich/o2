@@ -160,7 +160,7 @@ namespace o2
         Ref<WidgetState> AddState(const String& name, const Ref<AnimationClip>& animation);
 
         // Adds new state with name and animation @SCRIPTABLE_NAME(AddStateWithClipAsset)
-        Ref<WidgetState> AddState(const String& name, const AnimationAssetRef& animation);
+        Ref<WidgetState> AddState(const String& name, const AssetRef<AnimationAsset>& animation);
 
         // Adds state @SCRIPTABLE
         Ref<WidgetState> AddState(const Ref<WidgetState>& state, bool showAnimErrors = true);
@@ -809,7 +809,7 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Ref<WidgetLayer>>&, GetLayers);
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateNew).SIGNATURE(Ref<WidgetState>, AddState, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateWithClip).SIGNATURE(Ref<WidgetState>, AddState, const String&, const Ref<AnimationClip>&);
-    FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateWithClipAsset).SIGNATURE(Ref<WidgetState>, AddState, const String&, const AnimationAssetRef&);
+    FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateWithClipAsset).SIGNATURE(Ref<WidgetState>, AddState, const String&, const AssetRef<AnimationAsset>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetState>, AddState, const Ref<WidgetState>&, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(RemoveStateByName).SIGNATURE(bool, RemoveState, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, RemoveState, const Ref<WidgetState>&);

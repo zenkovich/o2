@@ -24,8 +24,8 @@ namespace o2
         PROPERTIES(WidgetState);
         PROPERTY(bool, state, SetState, GetState); // State flag property @SCRIPTABLE
 
-        PROPERTY(AnimationAssetRef, animationAsset, SetAnimationAsset, GetAnimationAsset); // Animation asset property @EDITOR_IGNORE @SCRIPTABLE
-        PROPERTY(Ref<AnimationClip>, animationClip, SetAnimationClip, GetAnimationClip);        // animation clip property @EDITOR_IGNORE @SCRIPTABLE
+        PROPERTY(AssetRef<AnimationAsset>, animationAsset, SetAnimationAsset, GetAnimationAsset); // Animation asset property @EDITOR_IGNORE @SCRIPTABLE
+        PROPERTY(Ref<AnimationClip>, animationClip, SetAnimationClip, GetAnimationClip);          // animation clip property @EDITOR_IGNORE @SCRIPTABLE
 
     public:
         Function<void()> onStateFullyTrue;      // This event calls when state is completely true (at the end of animation)
@@ -59,10 +59,10 @@ namespace o2
         const Ref<AnimationPlayer>& GetAnimationPlayer();
 
         // Sets animation asset
-        void SetAnimationAsset(const AnimationAssetRef& asset);
+        void SetAnimationAsset(const AssetRef<AnimationAsset>& asset);
 
         // Returns animation asset
-        const AnimationAssetRef& GetAnimationAsset() const;
+        const AssetRef<AnimationAsset>& GetAnimationAsset() const;
 
         // Sets animation asset instance clip
         void SetAnimationClip(const Ref<AnimationClip>& animation);
@@ -92,7 +92,7 @@ namespace o2
 
 		Ref<AnimationPlayer> mPlayer = mmake<AnimationPlayer>(); // Animation player
 
-        AnimationAssetRef mAnimation; // Widget animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
+        AssetRef<AnimationAsset> mAnimation; // Widget animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
 
     protected:
         // Called when animation changed from editor
@@ -140,8 +140,8 @@ CLASS_METHODS_META(o2::WidgetState)
     FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetState&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOwner, const Ref<Widget>&, bool);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationPlayer>&, GetAnimationPlayer);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationAsset, const AnimationAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(const AnimationAssetRef&, GetAnimationAsset);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationAsset, const AssetRef<AnimationAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(const AssetRef<AnimationAsset>&, GetAnimationAsset);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationClip, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationClip>&, GetAnimationClip);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetState, bool);

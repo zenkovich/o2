@@ -211,7 +211,7 @@ namespace o2
 }
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::AtlasAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AtlasAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::AtlasAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::AtlasAsset, o2__AtlasAsset);

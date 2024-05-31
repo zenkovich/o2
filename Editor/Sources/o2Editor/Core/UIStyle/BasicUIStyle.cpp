@@ -568,7 +568,7 @@ namespace o2
 		textDrawable->verAlign = VerAlign::Top;
 		textDrawable->horAlign = HorAlign::Left;
 		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+		textDrawable->SetFontAsset(AssetRef<FontAsset>("stdFont.ttf"));
 
 		Ref<Sprite> caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -1139,7 +1139,7 @@ namespace o2
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
 		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+		textDrawable->SetFontAsset(AssetRef<FontAsset>("stdFont.ttf"));
 
 		Ref<Sprite> caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -1176,7 +1176,7 @@ namespace o2
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
 		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+		textDrawable->SetFontAsset(AssetRef<FontAsset>("stdFont.ttf"));
 
 		Ref<Sprite> caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();

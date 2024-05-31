@@ -196,8 +196,8 @@ namespace o2
         Vector<UID> ReloadAssetsTree();
 #endif
 
-        template<typename _type, typename _enable>
-        friend class Ref;
+		template<typename _asset_type>
+		friend class AssetRef;
 
         friend class Asset;
         friend class FolderAsset;

@@ -103,18 +103,18 @@ namespace o2
         return Ref<Font>();
     }
 
-    void Label::SetFontAsset(const FontAssetRef& asset)
+    void Label::SetFontAsset(const AssetRef<FontAsset>& asset)
     {
         if (mTextDrawable)
             mTextDrawable->SetFontAsset(asset);
     }
 
-    FontAssetRef Label::GetFontAsset() const
+    AssetRef<FontAsset> Label::GetFontAsset() const
     {
         if (mTextDrawable)
             return mTextDrawable->GetFontAsset();
 
-        return FontAssetRef();
+        return AssetRef<FontAsset>();
     }
 
     void Label::SetText(const WString& text)
@@ -336,7 +336,7 @@ namespace o2
     void Label::CreateDefaultText()
     {
         mTextDrawable = DynamicCast<Text>(AddLayer("text", mmake<Text>())->GetDrawable());
-        mTextDrawable->SetFontAsset(VectorFontAssetRef("stdFont.ttf"));
+        mTextDrawable->SetFontAsset(AssetRef<VectorFontAsset>("stdFont.ttf"));
     }
 
     void Label::OnDeserialized(const DataValue& node)

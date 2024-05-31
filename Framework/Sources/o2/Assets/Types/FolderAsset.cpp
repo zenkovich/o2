@@ -22,7 +22,7 @@ namespace o2
     {
         Vector<Ref<Asset>> res;
         for (auto& asset : mInfo.GetChildren())
-            res.Add(Ref<Asset>(asset->meta->ID()));
+            res.Add(AssetRef<Asset>(asset->meta->ID()));
 
         return res;
     }
@@ -39,8 +39,8 @@ namespace o2
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::FolderAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::FolderAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::FolderAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AssetWithDefaultMeta<o2::FolderAsset>>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::FolderAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::AssetWithDefaultMeta<o2::FolderAsset>>);
 // --- META ---
 
 DECLARE_CLASS(o2::FolderAsset, o2__FolderAsset);

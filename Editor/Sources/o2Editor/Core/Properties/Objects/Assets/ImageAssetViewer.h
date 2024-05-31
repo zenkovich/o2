@@ -33,7 +33,7 @@ namespace Editor
 	private:
 		Ref<ImageSlicesEditorWidget> mSlicesEditor; // Slices editor widget
 
-		Vector<Ref<IAbstractValueProxy>> mAtlasProxies;  // Atlas proxies for property, converts UID to AtlasAssetRef and back
+		Vector<Ref<IAbstractValueProxy>> mAtlasProxies;  // Atlas proxies for property, converts UID to AssetRef<AtlasAsset> and back
 		Ref<AssetProperty>               mAtlasProperty; // Atlas property
 
 	private:

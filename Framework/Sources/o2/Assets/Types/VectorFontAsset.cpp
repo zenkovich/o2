@@ -126,7 +126,7 @@ namespace o2
 }
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::VectorFontAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::VectorFontAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::VectorFontAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::VectorFontAsset, o2__VectorFontAsset);

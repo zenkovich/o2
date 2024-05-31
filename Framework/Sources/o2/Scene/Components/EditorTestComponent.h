@@ -58,7 +58,7 @@ namespace o2
         Ref<ImageAsset> mImageAsset;                          // @SERIALIZABLE
         Ref<ActorAsset> mActorAsset;                        // @SERIALIZABLE
         DataAssetRef mDataAsset;                            // @SERIALIZABLE
-        AnimationAssetRef mAnimationAsset;                  // @SERIALIZABLE
+        AssetRef<AnimationAsset> mAnimationAsset;                  // @SERIALIZABLE
         Ref<Sprite> mSprite = mmake<Sprite>();              // @SERIALIZABLE @DONT_DELETE
         Ref<Actor> mActor;                                  // @SERIALIZABLE
         TagGroup mTags;                                     // @SERIALIZABLE
@@ -85,7 +85,7 @@ namespace o2
         Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
         Vector<TestInside*> mTestInsideptrsVector; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
         Vector<Ref<Actor>> mActorVector;           // @SERIALIZABLE
-        Vector<AnimationAssetRef> mAssetsVector;   // @SERIALIZABLE
+        Vector<AssetRef<AnimationAsset>> mAssetsVector;   // @SERIALIZABLE
 
         Vector<Vector<TestInside*>> mVectorOfVector; // @SERIALIZABLE
 

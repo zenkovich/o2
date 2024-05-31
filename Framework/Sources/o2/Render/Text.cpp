@@ -43,13 +43,13 @@ namespace o2
             mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
     }
 
-    Text::Text(const BitmapFontAssetRef& fontAsset):
+    Text::Text(const AssetRef<BitmapFontAsset>& fontAsset):
         Text(fontAsset->GetFont())
     {
         mFontAssetId = fontAsset->GetUID();
     }
 
-    Text::Text(const VectorFontAssetRef& fontAsset):
+    Text::Text(const AssetRef<VectorFontAsset>& fontAsset):
         Text(fontAsset->GetFont())
     {
         mFontAssetId = fontAsset->GetUID();
@@ -64,7 +64,7 @@ namespace o2
         mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mDotsEndings(false), mHeight(11),
         mUpdatingMesh(false)
     {
-        SetFontAsset(FontAssetRef(fontAssetId));
+        SetFontAsset(AssetRef<FontAsset>(fontAssetId));
     }
 
     Text::~Text()
@@ -133,7 +133,7 @@ namespace o2
         return mFont;
     }
 
-    void Text::SetFontAsset(const FontAssetRef& asset)
+    void Text::SetFontAsset(const AssetRef<FontAsset>& asset)
     {
         if (mFont)
             mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
@@ -152,13 +152,13 @@ namespace o2
         CheckCharactersAndRebuildMesh();
     }
 
-    FontAssetRef Text::GetFontAsset() const
+    AssetRef<FontAsset> Text::GetFontAsset() const
     {
         auto& fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
         if (fontAssetInfo.meta->GetAssetType() == &TypeOf(BitmapFontAsset))
-            return BitmapFontAssetRef(mFontAssetId);
+            return AssetRef<BitmapFontAsset>(mFontAssetId);
 
-        return VectorFontAssetRef(mFontAssetId);
+        return AssetRef<VectorFontAsset>(mFontAssetId);
     }
 
     void Text::SetHeight(int height)
@@ -441,7 +441,7 @@ namespace o2
 
     void Text::OnDeserialized(const DataValue& node)
     {
-        SetFontAsset(FontAssetRef(mFontAssetId));
+        SetFontAsset(AssetRef<FontAsset>(mFontAssetId));
     }
 
     void Text::TransformMesh(const Basis& bas)

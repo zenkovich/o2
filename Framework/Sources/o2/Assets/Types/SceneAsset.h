@@ -44,8 +44,6 @@ namespace o2
 
         friend class Assets;
     };
-
-    typedef Ref<SceneAsset> SceneAssetRef;
 }
 // --- META ---
 

@@ -41,10 +41,10 @@ namespace o2
         float GetWeight() const;
 
         // Sets animation
-        void SetAnimation(const AnimationAssetRef& animationAsset);
+        void SetAnimation(const AssetRef<AnimationAsset>& animationAsset);
 
         // Returns animation
-        const AnimationAssetRef& GetAnimation() const;
+        const AssetRef<AnimationAsset>& GetAnimation() const;
 
         SERIALIZABLE(AnimationState);
         CLONEABLE_REF(AnimationState);
@@ -52,7 +52,7 @@ namespace o2
     protected:
         WeakRef<AnimationComponent> mOwner; // Animation state owner component
 
-        AnimationAssetRef mAnimation; // Animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
+        AssetRef<AnimationAsset> mAnimation; // Animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
 
         float mWeight = 1.0f; // State weight @SERIALIZABLE @EDITOR_PROPERTY
 
@@ -104,8 +104,8 @@ CLASS_METHODS_META(o2::AnimationState)
     FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetWeight, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetWeight);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const AnimationAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(const AnimationAssetRef&, GetAnimation);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const AssetRef<AnimationAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(const AssetRef<AnimationAsset>&, GetAnimation);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAnimationChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTrackPlayerAdded, const Ref<IAnimationTrack::IPlayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTrackPlayerRemove, const Ref<IAnimationTrack::IPlayer>&);

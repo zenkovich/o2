@@ -48,8 +48,6 @@ namespace o2
 
         friend class Assets;
     };
-
-    typedef Ref<AnimationAsset> AnimationAssetRef;
 }
 // --- META ---
 

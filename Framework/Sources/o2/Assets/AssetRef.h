@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Types/Ref.h"
+#include "o2/Utils/Types/StringDef.h"
 
 namespace o2
 {
@@ -42,26 +43,90 @@ namespace o2
 		SERIALIZABLE(BaseAssetRef);
 	};
 
-#define ENABLE_ASSET typename std::enable_if<IsBaseOf<Asset, _asset_type>::value>::type
-
 	// -----------------------------------------------------------------------------------
 	// Asset reference. Contains asset pointer. Can contain asset instance owned by itself
 	// -----------------------------------------------------------------------------------
 	template<typename _asset_type>
-	class Ref<_asset_type, ENABLE_ASSET> : public BaseRef<_asset_type>, public BaseAssetRef
+	class AssetRef: public BaseAssetRef
 	{
 	public:
-		using Base = BaseRef<_asset_type>;
+		// Default constructor, no reference
+		AssetRef();
 
-	public:
-		// Base reference implementation
-		BASE_REF_IMPLEMETATION(_asset_type);
+		// Nullptr constructor
+		AssetRef(nullptr_t);
 
 		// Constructor from asset path
-		explicit Ref(const String& path);
+		explicit AssetRef(const String& path);
 
 		// Constructor from asset id
-		explicit Ref(const UID& id);
+		explicit AssetRef(const UID& id);
+
+		// Constructor with asset pointer
+		explicit AssetRef(_asset_type* ptr);
+
+		// Copy constructor from other reference
+		AssetRef(const Ref<_asset_type>& other);
+
+		// Move constructor from other reference
+		AssetRef(Ref<_asset_type>&& other);
+
+		// Copy constructor from other asset reference
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _asset_type*>::value>::type>
+		AssetRef(const AssetRef<_other_type>& other);
+
+		// Move constructor from other asset reference
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _asset_type*>::value>::type>
+		AssetRef(AssetRef<_other_type>&& other);
+
+		// Equality operator
+		bool operator==(const AssetRef<_asset_type>& other) const;
+
+		// Equality operator
+		bool operator==(const _asset_type* other) const;
+
+		// Inequality operator
+		bool operator!=(const AssetRef<_asset_type>& other) const;
+
+		// Inequality operator
+		bool operator!=(const _asset_type* other) const;
+
+		// Copy operator from other asset reference
+		template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, _asset_type*>::value>::type>
+		AssetRef<_asset_type>& operator=(const AssetRef<_other_type>& other);
+
+		// Move operator from other asset reference
+		AssetRef<_asset_type>& operator=(Ref<_asset_type>&& other);
+
+		// Move operator from nullptr
+		AssetRef<_asset_type>& operator=(nullptr_t);
+
+		// Returns is reference is valid
+		bool IsValid() const;
+
+		// Returns is reference is valid
+		operator bool() const;
+
+		// Returns asset reference
+		operator Ref<_asset_type>() const;
+
+		// Returns asset reference
+		_asset_type& operator*() const;
+
+		// Returns asset pointer
+		_asset_type* operator->() const;
+
+		// Returns asset pointer 
+		_asset_type* Get();
+
+		// Returns asset pointer
+		const _asset_type* Get() const;
+
+		// Returns reference
+		Ref<_asset_type>& GetRef();
+
+		// Returns reference
+		const Ref<_asset_type>& GetRef() const;
 
 		// Returns asset type
 		const Type& GetAssetType() const override;
@@ -95,10 +160,11 @@ namespace o2
 
 		// Creates asset and returns reference
 		template<typename ... _args>
-		static Ref<_asset_type> CreateAsset(_args ... args);
+		static AssetRef<_asset_type> CreateAsset(_args ... args);
 
 	protected:
-		bool mIsInstance = false; // Is this reference owner of asset
+		bool             mIsInstance = false; // Is this reference owner of asset
+		Ref<_asset_type> mPtr;                // Asset reference
 
 	protected:
 		// Beginning serialization callback - writes path and id
@@ -117,7 +183,7 @@ namespace o2
 		static bool IsDeltaAsSingleObject();
 
 	public:
-		using _this_type = Ref<_asset_type, typename std::enable_if<std::is_base_of<Asset, _asset_type>::value>::type>;
+		using _this_type = AssetRef<_asset_type>;
 
 		SERIALIZABLE_MAIN(_this_type);
 		IOBJECT_SCRIPTING();
@@ -159,73 +225,208 @@ namespace o2
 			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SaveInstance, const String&);
 			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsInstance);
 
-			FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<_asset_type>, CreateAsset);
+			FUNCTION().PUBLIC().SIGNATURE_STATIC(AssetRef<_asset_type>, CreateAsset);
 			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetAssetTypeStatic);
 		}
 	};
-
-	using AssetRef = Ref<o2::Asset>;
 }
 
 #include "o2/Assets/Assets.h"
 
 namespace o2
 {
+
 	template<typename _asset_type>
-	Ref<_asset_type, ENABLE_ASSET>::Ref(const String& path)
+	AssetRef<_asset_type>::AssetRef()
+	{}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>::AssetRef(nullptr_t) :
+		mPtr(nullptr)
+	{}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>::AssetRef(const String& path):
+		mPtr(o2Assets.GetAssetRefByType<_asset_type>(path))
+	{}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>::AssetRef(const UID& id):
+		mPtr(o2Assets.GetAssetRefByType<_asset_type>(id))
+	{}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>::AssetRef(_asset_type* ptr) :
+		mPtr(ptr)
+	{}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>::AssetRef(const Ref<_asset_type>& other) :
+		mPtr(other)
+	{}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>::AssetRef(Ref<_asset_type>&& other) :
+		mPtr(std::move(other))
+	{}
+
+	template<typename _asset_type>
+	template<typename _other_type, typename _enable>
+	AssetRef<_asset_type>::AssetRef(const AssetRef<_other_type>& other) :
+		mPtr(other.mPtr)
+	{}
+
+	template<typename _asset_type>
+	template<typename _other_type, typename>
+	AssetRef<_asset_type>::AssetRef(AssetRef<_other_type>&& other) :
+		mPtr(std::move(other.mPtr))
+	{}
+
+	template<typename _asset_type>
+	bool AssetRef<_asset_type>::operator==(const AssetRef<_asset_type>& other) const
 	{
-		*this = o2Assets.GetAssetRefByType<_asset_type>(path);
+		return mPtr == other.mPtr;
 	}
 
 	template<typename _asset_type>
-	Ref<_asset_type, ENABLE_ASSET>::Ref(const UID& id)
+	bool AssetRef<_asset_type>::operator==(const _asset_type* other) const
 	{
-		*this = o2Assets.GetAssetRefByType<_asset_type>(id);
+		return mPtr == other;
 	}
 
 	template<typename _asset_type>
-	const Type& Ref<_asset_type, ENABLE_ASSET>::GetAssetType() const
+	bool AssetRef<_asset_type>::operator!=(const AssetRef<_asset_type>& other) const
+	{
+		return mPtr != other.mPtr;
+	}
+
+	template<typename _asset_type>
+	bool AssetRef<_asset_type>::operator!=(const _asset_type* other) const
+	{
+		return mPtr != other;
+	}
+
+	template<typename _asset_type>
+	template<typename _other_type, typename _enable>
+	AssetRef<_asset_type>& AssetRef<_asset_type>::operator=(const AssetRef<_other_type>& other)
+	{
+		mPtr = other.mPtr;
+		return *this;
+	}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>& AssetRef<_asset_type>::operator=(Ref<_asset_type>&& other)
+	{
+		mPtr = std::move(other);
+		return *this;
+	}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>& AssetRef<_asset_type>::operator=(nullptr_t)
+	{
+		mPtr = nullptr;
+		return *this;
+	}
+
+	template<typename _asset_type>
+	bool AssetRef<_asset_type>::IsValid() const
+	{
+		return mPtr.IsValid();
+	}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>::operator bool() const
+	{
+		return IsValid();
+	}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type>::operator Ref<_asset_type>() const
+	{
+		return mPtr;
+	}
+
+	template<typename _asset_type>
+	_asset_type& AssetRef<_asset_type>::operator*() const
+	{
+		return *mPtr;
+	}
+
+	template<typename _asset_type>
+	_asset_type* AssetRef<_asset_type>::operator->() const
+	{
+		return mPtr.Get();
+	}
+
+	template<typename _asset_type>
+	_asset_type* AssetRef<_asset_type>::Get()
+	{
+		return mPtr.Get();
+	}
+
+	template<typename _asset_type>
+	const _asset_type* AssetRef<_asset_type>::Get() const
+	{
+		return mPtr.Get();
+	}
+
+	template<typename _asset_type>
+	Ref<_asset_type>& AssetRef<_asset_type>::GetRef()
+	{
+		return mPtr;
+	}
+
+	template<typename _asset_type>
+	const Ref<_asset_type>& AssetRef<_asset_type>::GetRef() const
+	{
+		return mPtr;
+	}
+
+	template<typename _asset_type>
+	const Type& AssetRef<_asset_type>::GetAssetType() const
 	{
 		return TypeOf(_asset_type);
 	}
 
 	template<typename _asset_type>
-	const Type* Ref<_asset_type, ENABLE_ASSET>::GetAssetTypeStatic()
+	const Type* AssetRef<_asset_type>::GetAssetTypeStatic()
 	{
 		return &TypeOf(_asset_type);
 	}
 
 	template<typename _asset_type>
-	const Asset* Ref<_asset_type, ENABLE_ASSET>::GetAssetBase() const
+	const Asset* AssetRef<_asset_type>::GetAssetBase() const
 	{
-		return BaseRef<_asset_type>::Get();
+		return Get();
 	}
 
 	template<typename _asset_type>
-	Asset* Ref<_asset_type, ENABLE_ASSET>::GetAssetBase()
+	Asset* AssetRef<_asset_type>::GetAssetBase()
 	{
-		return BaseRef<_asset_type>::Get();
+		return Get();
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, ENABLE_ASSET>::SetAssetBase(Asset* asset)
+	void AssetRef<_asset_type>::SetAssetBase(Asset* asset)
 	{
-		*this = Ref(dynamic_cast<_asset_type*>(asset));
+		mPtr = Ref(dynamic_cast<_asset_type*>(asset));
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, ENABLE_ASSET>::SetInstance(Asset* asset)
+	void AssetRef<_asset_type>::SetInstance(Asset* asset)
 	{
-		*this = Ref(dynamic_cast<_asset_type*>(asset));
+		mPtr = Ref(dynamic_cast<_asset_type*>(asset));
 		mIsInstance = true;
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, ENABLE_ASSET>::CreateInstance()
+	void AssetRef<_asset_type>::CreateInstance()
 	{
 		_asset_type* asset;
-		if (Base::mPtr)
-			asset = dynamic_cast<_asset_type*>(Base::mPtr->CloneAs<Asset>());
+		if (mPtr)
+		{
+			asset = dynamic_cast<_asset_type*>(mPtr->CloneAs<Asset>());
+		}
 		else
 		{
 			auto objectType = dynamic_cast<const ObjectType*>(&GetAssetType());
@@ -236,98 +437,97 @@ namespace o2
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, ENABLE_ASSET>::RemoveInstance()
+	void AssetRef<_asset_type>::RemoveInstance()
 	{
 		if (!mIsInstance)
 			return;
 
 		mIsInstance = false;
-
-		*this = nullptr;
+		mPtr = nullptr;
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, ENABLE_ASSET>::SaveInstance(const String& path)
+	void AssetRef<_asset_type>::SaveInstance(const String& path)
 	{
 		if (!mIsInstance)
 			return;
 
-		Base::mPtr->SetPath(path);
-		Base::mPtr->Save();
+		mPtr->SetPath(path);
+		mPtr->Save();
 
-		*this = Ref<_asset_type>(path);
+		*this = AssetRef<_asset_type>(path);
 	}
 
 	template<typename _asset_type>
-	bool Ref<_asset_type, ENABLE_ASSET>::IsInstance() const
+	bool AssetRef<_asset_type>::IsInstance() const
 	{
 		return mIsInstance;
 	}
 
 	template<typename _asset_type>
 	template<typename ... _args>
-	Ref<_asset_type> Ref<_asset_type, ENABLE_ASSET>::CreateAsset(_args ... args)
+	AssetRef<_asset_type> AssetRef<_asset_type>::CreateAsset(_args ... args)
 	{
 		return DynamicCast<_asset_type>(o2Assets.CreateAsset<_asset_type>(args ...));
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, ENABLE_ASSET>::OnSerialize(DataValue& node) const
+	void AssetRef<_asset_type>::OnSerialize(DataValue& node) const
 	{
-		if (mIsInstance)
+		if (mPtr)
 		{
-			if (Base::mPtr)
+			if (mIsInstance)
 			{
-				node["instance"] = Base::mPtr;
-				node["meta"] = Base::mPtr->GetMeta();
+				node["instance"] = mPtr;
+				node["meta"] = mPtr->GetMeta();
 			}
-		}
-		else if (Base::mPtr)
-		{
-			node["id"] = Base::mPtr->GetUID().ToString();
-			node["path"] = Base::mPtr->GetPath();
+			else
+			{
+				node["id"] = mPtr->GetUID().ToString();
+				node["path"] = mPtr->GetPath();
+			}
 		}
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, ENABLE_ASSET>::OnDeserialized(const DataValue& node)
+	void AssetRef<_asset_type>::OnDeserialized(const DataValue& node)
 	{
-		Base::DecrementRef();
-
-		Base::mPtr = nullptr;
+		mPtr = nullptr;
 		mIsInstance = false;
 
 		if (auto instanceNode = node.FindMember("instance"))
 		{
 			mIsInstance = true;
-			Base::mPtr = *instanceNode;
+			instanceNode->Get(mPtr);
 
-			UID oldUid = Base::mPtr->GetUID();
-			node.GetMember("meta").Get(Base::mPtr->mInfo.meta);
-			o2Assets.UpdateAssetCache(Base::mPtr, "", oldUid);
-
-			Base::IncrementRef();
+			UID oldUid = mPtr->GetUID();
+			node.GetMember("meta").Get(mPtr->mInfo.meta);
+			o2Assets.UpdateAssetCache(mPtr.Get(), "", oldUid);
 		}
 		else if (auto idNode = node.FindMember("id"))
-			*this = o2Assets.GetAssetRefByType<_asset_type>((UID)(*idNode));
+		{
+			mPtr = o2Assets.GetAssetRefByType<_asset_type>((UID)(*idNode));
+		}
 		else if (auto pathNode = node.FindMember("path"))
-			*this = o2Assets.GetAssetRefByType<_asset_type>((String)pathNode);
+		{
+			mPtr = o2Assets.GetAssetRefByType<_asset_type>((String)pathNode);
+		}
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, ENABLE_ASSET>::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	void AssetRef<_asset_type>::OnSerializeDelta(DataValue& node, const IObject& origin) const
 	{
 		OnSerialize(node);
 	}
 
 	template<typename _asset_type>
-	void Ref<_asset_type, ENABLE_ASSET>::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	void AssetRef<_asset_type>::OnDeserializedDelta(const DataValue& node, const IObject& origin)
 	{
 		OnDeserialized(node);
 	}
 
 	template<typename _asset_type>
-	bool Ref<_asset_type, ENABLE_ASSET>::IsDeltaAsSingleObject()
+	bool AssetRef<_asset_type>::IsDeltaAsSingleObject()
 	{
 		return true;
 	}

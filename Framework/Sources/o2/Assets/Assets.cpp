@@ -234,7 +234,7 @@ namespace o2
         if (info.meta->GetAssetType() == &TypeOf(FolderAsset))
         {
             o2FileSystem.FolderCreate(GetAssetsPath() + dest);
-            Ref<FolderAsset> folderAsset(info.path);
+            AssetRef<FolderAsset> folderAsset(info.path);
 
             for (auto& inInfo : folderAsset->GetChildrenAssets())
                 CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo->GetPath()));

@@ -1355,7 +1355,7 @@ namespace Editor
 		nameEditBox->SetMultiLine(false);
 
 		Ref<Text> textDrawable = nameEditBox->GetTextDrawable();
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+		textDrawable->SetFontAsset(AssetRef<FontAsset>("stdFont.ttf"));
 		textDrawable->height = 8;
 		textDrawable->color = Color4(96, 125, 139);
 
@@ -1623,7 +1623,7 @@ namespace Editor
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
 		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+		textDrawable->SetFontAsset(AssetRef<FontAsset>("stdFont.ttf"));
 
 		Ref<Sprite> caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -1854,7 +1854,7 @@ namespace Editor
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
 		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+		textDrawable->SetFontAsset(AssetRef<FontAsset>("stdFont.ttf"));
 
 		Ref<Sprite> caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -2478,7 +2478,7 @@ namespace Editor
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
 		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+		textDrawable->SetFontAsset(AssetRef<FontAsset>("stdFont.ttf"));
 
 		Ref<Sprite> caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -2517,7 +2517,7 @@ namespace Editor
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
 		textDrawable->color = Color4(96, 125, 139);
-		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
+		textDrawable->SetFontAsset(AssetRef<FontAsset>("stdFont.ttf"));
 
 		Ref<Sprite> caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();

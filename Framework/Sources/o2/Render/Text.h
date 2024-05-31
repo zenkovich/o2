@@ -23,7 +23,7 @@ namespace o2
     public:
         PROPERTIES(Text);
         PROPERTY(Ref<Font>, font, SetFont, GetFont);                     // Font reference property @SCRIPTABLE
-        PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property @SCRIPTABLE
+        PROPERTY(AssetRef<FontAsset>, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property @SCRIPTABLE
         
         PROPERTY(WString, text, SetText, GetText); // Text property, wstring @SCRIPTABLE
         
@@ -52,10 +52,10 @@ namespace o2
         Text(const UID& fontAssetId);
 
         // Constructor
-        Text(const BitmapFontAssetRef& fontAsset);
+        Text(const AssetRef<BitmapFontAsset>& fontAsset);
 
         // Constructor
-        Text(const VectorFontAssetRef& fontAsset);
+        Text(const AssetRef<VectorFontAsset>& fontAsset);
 
         // Copy-constructor
         Text(const Text& text);
@@ -76,10 +76,10 @@ namespace o2
         const Ref<Font>& GetFont() const;
 
         // Sets bitmap font asset  @SCRIPTABLE
-        void SetFontAsset(const FontAssetRef& asset);
+        void SetFontAsset(const AssetRef<FontAsset>& asset);
 
         // Returns asset by font asset id @SCRIPTABLE
-        FontAssetRef GetFontAsset() const;
+        AssetRef<FontAsset> GetFontAsset() const;
 
         // Sets font height
         void SetHeight(int height);
@@ -315,14 +315,14 @@ CLASS_METHODS_META(o2::Text)
     FUNCTION().PUBLIC().CONSTRUCTOR(Ref<Font>);
     FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const BitmapFontAssetRef&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const VectorFontAssetRef&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetRef<BitmapFontAsset>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetRef<VectorFontAsset>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Text&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFont, const Ref<Font>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Ref<Font>&, GetFont);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(FontAssetRef, GetFontAsset);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFontAsset, const AssetRef<FontAsset>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(AssetRef<FontAsset>, GetFontAsset);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHeight, int);
     FUNCTION().PUBLIC().SIGNATURE(int, GetFontHeight);
     FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);

@@ -31,7 +31,7 @@ namespace o2
         return *this;
     }
 }
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::FontAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::FontAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::FontAsset, o2__FontAsset);

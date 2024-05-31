@@ -10,12 +10,12 @@ namespace o2
         String ext = o2FileSystem.GetFileExtension(fileName);
         if (ext == "xml")
         {
-            BitmapFontAssetRef fontAsset(fileName);
+            AssetRef<BitmapFontAsset> fontAsset(fileName);
             *this = fontAsset->GetFont();
         }
         else
         {
-            VectorFontAssetRef fontAsset(fileName);
+            AssetRef<VectorFontAsset> fontAsset(fileName);
             *this = fontAsset->GetFont();
         }
     }

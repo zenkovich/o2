@@ -60,14 +60,14 @@ namespace o2
 
     void ImageAsset::SetAtlas(const UID& atlas)
     {
-        Ref<ImageAsset> thisRef(GetUID());
+        AssetRef<ImageAsset> thisRef(GetUID());
 
-        if (auto prevAtlas = AtlasAssetRef(GetMeta()->atlasId)) 
+        if (auto prevAtlas = AssetRef<AtlasAsset>(GetMeta()->atlasId)) 
             prevAtlas->RemoveImage(thisRef);
 
         GetMeta()->atlasId = atlas;
 
-        if (auto newAtlas = AtlasAssetRef(GetMeta()->atlasId))
+        if (auto newAtlas = AssetRef<AtlasAsset>(GetMeta()->atlasId))
             newAtlas->AddImage(thisRef);
     }
 
@@ -161,7 +161,7 @@ namespace o2
         else
         {
             Asset::LoadData(path);
-            mAtlas = AtlasAssetRef(GetAtlasUID());
+            mAtlas = AssetRef<AtlasAsset>(GetAtlasUID());
         }
     }
 
@@ -241,7 +241,7 @@ namespace o2
 }
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::ImageAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ImageAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::ImageAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::ImageAsset, o2__ImageAsset);

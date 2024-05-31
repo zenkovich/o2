@@ -50,8 +50,6 @@ namespace o2
 
         friend class Assets;
     };
-
-    typedef Ref<JavaScriptAsset> JavaScriptAssetRef;
 }
 // --- META ---
 

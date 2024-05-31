@@ -99,8 +99,6 @@ namespace o2
         friend class Assets;
     };
 
-    typedef Ref<VectorFontAsset> VectorFontAssetRef;
-
     template<typename _type, typename ... _args>
     void VectorFontAsset::AddEffect(_args ... args)
     {

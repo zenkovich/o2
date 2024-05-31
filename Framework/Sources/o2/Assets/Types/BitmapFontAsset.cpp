@@ -41,7 +41,7 @@ namespace o2
     }
 }
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::BitmapFontAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::BitmapFontAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::BitmapFontAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::BitmapFontAsset, o2__BitmapFontAsset);

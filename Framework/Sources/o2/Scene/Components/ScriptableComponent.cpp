@@ -27,13 +27,13 @@ namespace o2
         return *this;
     }
 
-    void ScriptableComponent::SetScript(const JavaScriptAssetRef& script)
+    void ScriptableComponent::SetScript(const AssetRef<JavaScriptAsset>& script)
     {
         mScript = script;
         LoadScriptAndCreateObject();
     }
 
-    const JavaScriptAssetRef& ScriptableComponent::GetScript() const
+    const AssetRef<JavaScriptAsset>& ScriptableComponent::GetScript() const
     {
         return mScript;
     }

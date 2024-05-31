@@ -721,7 +721,7 @@ namespace o2
         return AddState(newState);
     }
 
-    Ref<WidgetState> Widget::AddState(const String& name, const AnimationAssetRef& animation)
+    Ref<WidgetState> Widget::AddState(const String& name, const AssetRef<AnimationAsset>& animation)
     {
         auto newState = mmake<WidgetState>();
         newState->name = name;

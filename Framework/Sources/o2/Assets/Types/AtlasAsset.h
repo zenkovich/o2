@@ -179,8 +179,6 @@ namespace o2
 
         FRIEND_REF_MAKE();
     };
-
-    typedef Ref<AtlasAsset> AtlasAssetRef;
 }
 // --- META ---
 

@@ -230,7 +230,7 @@ namespace Editor
 
 				ForcePopEditorScopeOnStack scope;
 				String assetsPath = o2FileSystem.GetPathRelativeToPath(fileName, ::GetAssetsPath());
-				o2EditorApplication.LoadScene(SceneAssetRef(assetsPath));
+				o2EditorApplication.LoadScene(AssetRef<SceneAsset>(assetsPath));
 			};
 
 			CheckSceneSaving(openDialog);

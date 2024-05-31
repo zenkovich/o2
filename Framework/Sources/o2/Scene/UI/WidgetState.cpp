@@ -42,13 +42,13 @@ namespace o2
         return mPlayer;
 	}
 
-	void WidgetState::SetAnimationAsset(const AnimationAssetRef& asset)
+	void WidgetState::SetAnimationAsset(const AssetRef<AnimationAsset>& asset)
     {
         mAnimation = asset;
         mPlayer->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
-    const AnimationAssetRef& WidgetState::GetAnimationAsset() const
+    const AssetRef<AnimationAsset>& WidgetState::GetAnimationAsset() const
     {
         return mAnimation;
     }

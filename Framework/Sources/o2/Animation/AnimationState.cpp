@@ -24,13 +24,13 @@ namespace o2
         return mWeight;
     }
 
-    void AnimationState::SetAnimation(const AnimationAssetRef& animationAsset)
+    void AnimationState::SetAnimation(const AssetRef<AnimationAsset>& animationAsset)
     {
         mAnimation = animationAsset;
         player->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
-    const AnimationAssetRef& AnimationState::GetAnimation() const
+    const AssetRef<AnimationAsset>& AnimationState::GetAnimation() const
     {
         return mAnimation;
     }

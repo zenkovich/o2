@@ -42,8 +42,6 @@ namespace o2
 
         friend class Assets;
     };
-
-    typedef Ref<FontAsset> FontAssetRef;
 }
 // --- META ---
 

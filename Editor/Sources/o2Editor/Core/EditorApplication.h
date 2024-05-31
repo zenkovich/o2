@@ -47,7 +47,7 @@ namespace Editor
 		const String& GetLoadedSceneName() const;
 
 		// Loads scene from file
-		void LoadScene(const SceneAssetRef& scene);
+		void LoadScene(const AssetRef<SceneAsset>& scene);
 
 		// Saves current scene
 		void SaveScene();
@@ -79,7 +79,7 @@ namespace Editor
 
         Ref<Properties> mProperties; // Properties manager
 
-		SceneAssetRef mLoadedScene; // Current loaded scene
+		AssetRef<SceneAsset> mLoadedScene; // Current loaded scene
 
 		DataDocument mSceneDump; // Scene dump, created before playing
 

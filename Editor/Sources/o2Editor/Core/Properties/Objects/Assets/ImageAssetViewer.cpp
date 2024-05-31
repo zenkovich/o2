@@ -34,7 +34,7 @@ namespace Editor
 		mSpoiler->AddChild(mSlicesEditor);
 
 		mAtlasProperty = DynamicCast<AssetProperty>(o2EditorProperties.CreateRegularField(
-			&TypeOf(AtlasAssetRef), "Atlas", mOnChildFieldChangeCompleted, onChanged));
+			&TypeOf(AssetRef<AtlasAsset>), "Atlas", mOnChildFieldChangeCompleted, onChanged));
 
 		mSpoiler->AddChild(mAtlasProperty);
 	}
@@ -51,9 +51,9 @@ namespace Editor
 		for (auto& targets : targetObjets)
 		{
 			ImageAsset* image = dynamic_cast<ImageAsset*>(targets.first);
-			auto proxy = mmake<FunctionalValueProxy<AtlasAssetRef>>(
-				[image](const AtlasAssetRef& value) { image->SetAtlas(value ? value->GetUID() : UID::empty); },
-				[image]() { return AtlasAssetRef(image->GetAtlasUID()); }
+			auto proxy = mmake<FunctionalValueProxy<AssetRef<AtlasAsset>>>(
+				[image](const AssetRef<AtlasAsset>& value) { image->SetAtlas(value ? value->GetUID() : UID::empty); },
+				[image]() { return AssetRef<AtlasAsset>(image->GetAtlasUID()); }
 			);
 
 			mAtlasProxies.Add(proxy);

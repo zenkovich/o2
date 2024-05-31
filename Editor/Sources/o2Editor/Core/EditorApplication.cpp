@@ -56,7 +56,7 @@ namespace Editor
 		return String::empty;
 	}
 
-	void EditorApplication::LoadScene(const SceneAssetRef& scene)
+	void EditorApplication::LoadScene(const AssetRef<SceneAsset>& scene)
 	{
 		ForcePopEditorScopeOnStack scope;
 
@@ -86,7 +86,7 @@ namespace Editor
 
 		o2Scene.Save(path);
 
-		mLoadedScene = SceneAssetRef::CreateAsset();
+		mLoadedScene = AssetRef<SceneAsset>::CreateAsset();
 		mLoadedScene->SetPath(relativePath);
 		mLoadedScene->Save();
 
@@ -159,7 +159,7 @@ namespace Editor
 
 		OnResizing();
 
-		//o2EditorApplication.LoadScene(SceneAssetRef(o2EditorConfig.projectConfig.mLastLoadedScene));
+		//o2EditorApplication.LoadScene(AssetRef<SceneAsset>(o2EditorConfig.projectConfig.mLastLoadedScene));
 
 		//FreeConsole();
 

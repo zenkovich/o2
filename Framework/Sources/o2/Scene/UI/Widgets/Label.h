@@ -19,7 +19,7 @@ namespace o2
         PROPERTY(WString, text, SetText, GetText);   // Text property, wstring
 
         PROPERTY(Ref<Font>, font, SetFont, GetFont);                     // Font pointer property
-        PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property
+        PROPERTY(AssetRef<FontAsset>, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property
         
         PROPERTY(int, height, SetHeight, GetHeight); // Text height property
         PROPERTY(Color4, color, SetColor, GetColor); // Text color property
@@ -55,10 +55,10 @@ namespace o2
         Ref<Font> GetFont() const;
 
         // Sets bitmap font asset 
-        void SetFontAsset(const FontAssetRef& asset);
+        void SetFontAsset(const AssetRef<FontAsset>& asset);
 
         // Returns asset by font asset id
-        FontAssetRef GetFontAsset() const;
+        AssetRef<FontAsset> GetFontAsset() const;
 
         // Sets text
         void SetText(const WString& text);
@@ -185,8 +185,8 @@ CLASS_METHODS_META(o2::Label)
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFont, const Ref<Font>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Font>, GetFont);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(FontAssetRef, GetFontAsset);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFontAsset, const AssetRef<FontAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(AssetRef<FontAsset>, GetFontAsset);
     FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(const WString&, GetText);
     FUNCTION().PUBLIC().SIGNATURE(void, SetColor, const Color4&);

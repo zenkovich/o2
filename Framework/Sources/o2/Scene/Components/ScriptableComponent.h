@@ -12,7 +12,7 @@ namespace o2
     {
     public:
         PROPERTIES(ScriptableComponent);
-        PROPERTY(JavaScriptAssetRef, script, SetScript, GetScript); // Script asset link property
+        PROPERTY(AssetRef<JavaScriptAsset>, script, SetScript, GetScript); // Script asset link property
 
     public:
         // Default constructor
@@ -31,10 +31,10 @@ namespace o2
         void OnUpdate(float dt) override;
 
         // Sets script
-        void SetScript(const JavaScriptAssetRef& script);
+        void SetScript(const AssetRef<JavaScriptAsset>& script);
 
         // Returns script
-        const JavaScriptAssetRef& GetScript() const;
+        const AssetRef<JavaScriptAsset>& GetScript() const;
 
         // Returns scripting instance
         ScriptValue GetInstance() const;
@@ -55,7 +55,7 @@ namespace o2
         CLONEABLE_REF(ScriptableComponent);
 
     protected:
-        JavaScriptAssetRef mScript; // Java script asset link
+        AssetRef<JavaScriptAsset> mScript; // Java script asset link
 
         ScriptValue mInstance;  // Script value instance @EDITOR_PROPERTY @NO_HEADER
         ScriptValue mClass;     // Script instance class
@@ -119,8 +119,8 @@ CLASS_METHODS_META(o2::ScriptableComponent)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const ScriptableComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetScript, const JavaScriptAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(const JavaScriptAssetRef&, GetScript);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetScript, const AssetRef<JavaScriptAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(const AssetRef<JavaScriptAsset>&, GetScript);
     FUNCTION().PUBLIC().SIGNATURE(ScriptValue, GetInstance);
     FUNCTION().PUBLIC().SIGNATURE(ScriptValue, GetClass);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);

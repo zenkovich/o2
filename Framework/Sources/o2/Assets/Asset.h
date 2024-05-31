@@ -158,8 +158,8 @@ namespace o2
         // It is called when UID has changed
         virtual void OnUIDChanged(const UID& oldUID);
 
-        template<typename _type, typename _enable>
-        friend class Ref;
+        template<typename _asset_type>
+        friend class AssetRef;
 
         friend class Assets;
 		friend class AssetsBuilder;
