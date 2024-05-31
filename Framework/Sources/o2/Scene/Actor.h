@@ -48,7 +48,7 @@ namespace o2
 
     public:
         PROPERTIES(Actor);
-        PROPERTY(Ref<ActorAsset>, prototype, SetPrototype, GetPrototype); // Prototype asset reference property @EDITOR_IGNORE
+        PROPERTY(AssetRef<ActorAsset>, prototype, SetPrototype, GetPrototype); // Prototype asset reference property @EDITOR_IGNORE
 
         GETTER(SceneUID, id, GetID);              // Actor unique id
         PROPERTY(String, name, SetName, GetName); // Actor name property @EDITOR_IGNORE @ANIMATABLE
@@ -71,7 +71,7 @@ namespace o2
         Actor(RefCounter* refCounter, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Actor constructor from prototype
-        Actor(RefCounter* refCounter, const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(RefCounter* refCounter, const AssetRef<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Constructor with components
         Actor(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
@@ -137,13 +137,13 @@ namespace o2
         bool IsAsset() const;
 
         // Sets prototype and links actor to them
-        void SetPrototype(Ref<ActorAsset> asset);
+        void SetPrototype(AssetRef<ActorAsset> asset);
 
         // Returns prototype from this or this parent @SCRIPTABLE
-        Ref<ActorAsset> GetPrototype() const;
+        AssetRef<ActorAsset> GetPrototype() const;
 
         // Returns prototype directly from only this
-        Ref<ActorAsset> GetPrototypeDirectly() const;
+        AssetRef<ActorAsset> GetPrototypeDirectly() const;
 
         // Returns prototype link pointer
         Ref<Actor> GetPrototypeLink() const;
@@ -346,7 +346,7 @@ namespace o2
 
         Ref<SceneLayer> mSceneLayer; // Scene layer @SERIALIZABLE @EDITOR_IGNORE
 
-        Ref<ActorAsset> mPrototype;     // Prototype asset
+        AssetRef<ActorAsset> mPrototype;     // Prototype asset
         WeakRef<Actor>  mPrototypeLink; // Prototype link actor. Links to source actor from prototype
 
         WeakRef<Actor>         mParent;   // Parent actor 
@@ -380,7 +380,7 @@ namespace o2
         Actor(RefCounter* refCounter, ActorTransform* transform, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Actor constructor from prototype with transform
-        Actor(RefCounter* refCounter, ActorTransform* transform, const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+        Actor(RefCounter* refCounter, ActorTransform* transform, const AssetRef<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Constructor with components with transform
         Actor(RefCounter* refCounter, ActorTransform* transform, Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
@@ -529,7 +529,7 @@ namespace o2
         void RevertToPrototype();
 
         // Makes prototype asset from this actor and links this to new asset
-        Ref<ActorAsset> MakePrototype();
+        AssetRef<ActorAsset> MakePrototype();
 
         // Returns is this linked to specified actor with depth links search
         bool IsLinkedToActor(const Ref<Actor>& actor) const;
@@ -638,7 +638,7 @@ namespace o2
         void BeginInstantiatePrototype() const override;
 
         // Not using prototype setter
-        void SetProtytypeDummy(Ref<ActorAsset> asset);
+        void SetProtytypeDummy(AssetRef<ActorAsset> asset);
 
         // Updates locking
         void UpdateLocking();
@@ -834,7 +834,7 @@ CLASS_METHODS_META(o2::Actor)
     typedef const Map<const Component*, Component*>& _tmp6;
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(RefCounter*, ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<ActorAsset>&, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetRef<ActorAsset>&, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, Vector<Ref<Component>>, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Actor&, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Actor&);
@@ -854,9 +854,9 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, GenerateNewID, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(UID, GetAssetID);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsAsset);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetPrototype, Ref<ActorAsset>);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<ActorAsset>, GetPrototype);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<ActorAsset>, GetPrototypeDirectly);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPrototype, AssetRef<ActorAsset>);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(AssetRef<ActorAsset>, GetPrototype);
+    FUNCTION().PUBLIC().SIGNATURE(AssetRef<ActorAsset>, GetPrototypeDirectly);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetPrototypeLink);
     FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const Ref<SceneLayer>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayer, const String&);
@@ -904,7 +904,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, bool, const String&, bool, SceneUID, UID);
     FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, ActorCreateMode);
-    FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, const Ref<ActorAsset>&, ActorCreateMode);
+    FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, const AssetRef<ActorAsset>&, ActorCreateMode);
     FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, Vector<Ref<Component>>, ActorCreateMode);
     FUNCTION().PROTECTED().CONSTRUCTOR(RefCounter*, ActorTransform*, const Actor&, ActorCreateMode);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckCopyVisitorFinalization);
@@ -948,7 +948,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SIGNATURE(void, BreakPrototypeLink);
     FUNCTION().PUBLIC().SIGNATURE(void, ApplyChangesToPrototype);
     FUNCTION().PUBLIC().SIGNATURE(void, RevertToPrototype);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<ActorAsset>, MakePrototype);
+    FUNCTION().PUBLIC().SIGNATURE(AssetRef<ActorAsset>, MakePrototype);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToActor, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, FindLinkedActor, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableOwner);
@@ -979,7 +979,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PROTECTED().SIGNATURE(void, GetDifferences, ActorDifferences&);
     FUNCTION().PROTECTED().SIGNATURE(void, BeginMakePrototype);
     FUNCTION().PROTECTED().SIGNATURE(void, BeginInstantiatePrototype);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetProtytypeDummy, Ref<ActorAsset>);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProtytypeDummy, AssetRef<ActorAsset>);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLocking);
 #endif
 }

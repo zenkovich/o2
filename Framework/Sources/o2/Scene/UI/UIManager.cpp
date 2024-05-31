@@ -158,10 +158,10 @@ namespace o2
     {
         ClearStyle();
 
-        Ref<FolderAsset> folder(stylesPath);
+        AssetRef<FolderAsset> folder(stylesPath);
         for (auto& subAsset : folder->GetChildrenAssets())
         {
-            if (auto actorAsset = DynamicCast<ActorAsset>(subAsset))
+            if (auto actorAsset = DynamicCast<ActorAsset>(subAsset.GetRef()))
                 mStyleSamples.Add(actorAsset);
         }
     }
@@ -387,7 +387,7 @@ namespace o2
         mTopWidgets.Add(widget);
     }
 
-    const Vector<Ref<ActorAsset>>& UIManager::GetWidgetStyles() const
+    const Vector<AssetRef<ActorAsset>>& UIManager::GetWidgetStyles() const
     {
         return mStyleSamples;
     }

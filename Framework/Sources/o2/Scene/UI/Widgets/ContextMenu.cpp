@@ -26,7 +26,7 @@ namespace o2
 	{}
 
 	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, const Function<void()> onClick,
-							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
+							const WString& group /*= ""*/, const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
 		RefCounterable(refCounter), text(text), group(group), onClick(onClick), mShortcut(shortcut), icon(icon), checked(false), checkable(false)
 	{
@@ -34,13 +34,13 @@ namespace o2
 	}
 
 	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, const Vector<Ref<Item>>& subItems,
-							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/) :
+							const WString& group /*= ""*/, const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/) :
 		RefCounterable(refCounter), text(text), group(group), subItems(subItems), icon(icon), checked(false), checkable(false)
 	{}
 
 	ContextMenu::Item::Item(RefCounter* refCounter, const WString& text, bool checked,
 							Function<void(bool)> onChecked /*= Function<void(bool)>()*/,
-							const WString& group /*= ""*/, const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
+							const WString& group /*= ""*/, const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
 		RefCounterable(refCounter), text(text), group(group), checked(checked), onChecked(onChecked), checkable(true), mShortcut(shortcut), icon(icon)
 	{
@@ -239,7 +239,7 @@ namespace o2
 
 	void ContextMenu::AddItem(const WString& path,
 							  const Function<void()>& clickFunc /*= Function<void()>()*/,
-							  const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
+							  const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
 							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString targetPath = path;
@@ -252,7 +252,7 @@ namespace o2
 
 	void ContextMenu::AddToggleItem(const WString& path, bool value,
 									const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
-									const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
+									const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
 									const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString targetPath = path;

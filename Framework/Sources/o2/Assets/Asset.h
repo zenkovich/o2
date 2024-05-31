@@ -16,7 +16,7 @@ namespace o2
     class Asset;
 
 //     template<>
-//     class Ref<Asset>;
+//     class AssetRef<Asset>;
 }
 
 #include "o2/Assets/AssetRef.h"

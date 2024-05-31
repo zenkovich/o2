@@ -80,7 +80,7 @@ namespace Editor
         void RemoveCurvesRange(const String& idA, const String& idB);
 
         // Sets selection rectangle sprite image
-        void SetSelectionSpriteImage(const Ref<ImageAsset>& image);
+        void SetSelectionSpriteImage(const AssetRef<ImageAsset>& image);
 
         // Sets captions text font
         void SetTextFont(const Ref<Font>& font);
@@ -89,12 +89,12 @@ namespace Editor
         void SetTextBorder(const BorderF& border);
 
         // Sets main key handle images
-        void SetMainHandleImages(const Ref<ImageAsset>& regular, const Ref<ImageAsset>& hover, const Ref<ImageAsset>& pressed,
-                                 const Ref<ImageAsset>& selected);
+        void SetMainHandleImages(const AssetRef<ImageAsset>& regular, const AssetRef<ImageAsset>& hover, const AssetRef<ImageAsset>& pressed,
+                                 const AssetRef<ImageAsset>& selected);
 
         // Sets support key handle images
-        void SetSupportHandleImages(const Ref<ImageAsset>& regular, const Ref<ImageAsset>& hover, const Ref<ImageAsset>& pressed,
-                                    const Ref<ImageAsset>& selected);
+        void SetSupportHandleImages(const AssetRef<ImageAsset>& regular, const AssetRef<ImageAsset>& hover, const AssetRef<ImageAsset>& pressed,
+                                    const AssetRef<ImageAsset>& selected);
 
         // Enables curves scale adjusting. When it is true, all curves adopts their size to be in the same view range
         void SetAdjustCurvesScale(bool enable);
@@ -561,11 +561,11 @@ CLASS_METHODS_META(Editor::CurvesEditor)
     FUNCTION().PUBLIC().SIGNATURE(void, AddCurvesRange, const String&, const String&, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveColor, const Ref<Curve>&, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveCurvesRange, const String&, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionSpriteImage, const Ref<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionSpriteImage, const AssetRef<ImageAsset>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTextFont, const Ref<Font>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTextBorder, const BorderF&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetMainHandleImages, const Ref<ImageAsset>&, const Ref<ImageAsset>&, const Ref<ImageAsset>&, const Ref<ImageAsset>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSupportHandleImages, const Ref<ImageAsset>&, const Ref<ImageAsset>&, const Ref<ImageAsset>&, const Ref<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetMainHandleImages, const AssetRef<ImageAsset>&, const AssetRef<ImageAsset>&, const AssetRef<ImageAsset>&, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSupportHandleImages, const AssetRef<ImageAsset>&, const AssetRef<ImageAsset>&, const AssetRef<ImageAsset>&, const AssetRef<ImageAsset>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAdjustCurvesScale, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<ContextMenu>&, GetContextMenu);

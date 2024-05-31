@@ -221,7 +221,7 @@ namespace Editor
 		{
 			Vector<UID> viewActors = mActors.Convert<UID>([](Actor* x) { return x->GetAssetID(); });
 			for (auto& id : viewActors)
-				mActors.Add(Ref<ActorAsset>(id)->GetActor().Get());
+				mActors.Add(AssetRef<ActorAsset>(id)->GetActor().Get());
 		}
 		else
 		{

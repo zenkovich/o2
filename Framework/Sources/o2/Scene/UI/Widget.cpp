@@ -25,7 +25,7 @@ namespace o2
             UIManager::RegisterFocusableWidget(this);
     }
 
-    Widget::Widget(RefCounter* refCounter, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+    Widget::Widget(RefCounter* refCounter, const AssetRef<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(refCounter, mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
     {
 #if IS_EDITOR
@@ -127,7 +127,7 @@ namespace o2
         RetargetStatesAnimations();
     }
 
-	Widget::~Widget()
+    Widget::~Widget()
     {
         if (mParent)
             mParent.Lock()->OnChildRemoved(Ref(this));
@@ -335,7 +335,7 @@ namespace o2
         o2Render.DrawRectFrame(mBoundsWithChilds, Color4::SomeColor(colr++));
     }
 
-	void Widget::SerializeRaw(DataValue& node) const
+    void Widget::SerializeRaw(DataValue& node) const
     {
         Actor::SerializeRaw(node);
 
@@ -592,9 +592,9 @@ namespace o2
     Ref<WidgetLayer> Widget::AddLayer(const Ref<WidgetLayer>& layer)
     {
         if (layer->mParent)
-            layer->mParent.Lock()->RemoveChild(layer.Get());
+            layer->mParent.Lock()->RemoveChild(layer);
         else if (layer->mOwnerWidget)
-            layer->mOwnerWidget.Lock()->RemoveLayer(layer.Get());
+            layer->mOwnerWidget.Lock()->RemoveLayer(layer);
 
         mLayers.Add(layer);
         layer->SetOwnerWidget(Ref(this));
@@ -663,11 +663,11 @@ namespace o2
         return nullptr;
     }
 
-    void Widget::RemoveLayer(WidgetLayer* layer)
+    void Widget::RemoveLayer(const Ref<WidgetLayer>& layer)
     {
         layer->SetOwnerWidget(nullptr);
 
-        mLayers.RemoveFirst([&](auto& x) { return x == layer; });
+        mLayers.Remove(layer);
 
         UpdateLayersDrawingSequence();
 
@@ -685,7 +685,7 @@ namespace o2
 
         if (layer->GetParent())
         {
-            layer->GetParent().Lock()->RemoveChild(layer.Get());
+            layer->GetParent().Lock()->RemoveChild(layer);
             return;
         }
 
@@ -741,16 +741,16 @@ namespace o2
             state->SetStateForcible(mEnabled);
 
             state->onStateBecomesTrue += [&]()
-            {
-                mResEnabled = true;
-                UpdateResEnabledInHierarchy();
-            };
+                {
+                    mResEnabled = true;
+                    UpdateResEnabledInHierarchy();
+                };
 
             state->onStateFullyFalse += [&]()
-            {
-                mResEnabled = false;
-                UpdateResEnabledInHierarchy();
-            };
+                {
+                    mResEnabled = false;
+                    UpdateResEnabledInHierarchy();
+                };
         }
 
         if (state->name == "focused")
@@ -1516,11 +1516,11 @@ namespace o2
         internalChildrenEditable = mmake<InternalChildrenEditableEditable>(Ref(this));
     }
 
-    Widget::LayersEditable::LayersEditable(RefCounter* refCounter):
+    Widget::LayersEditable::LayersEditable(RefCounter* refCounter) :
         SceneEditableObject(refCounter)
     {}
 
-    Widget::LayersEditable::LayersEditable(RefCounter* refCounter, const Ref<Widget>& widget):
+    Widget::LayersEditable::LayersEditable(RefCounter* refCounter, const Ref<Widget>& widget) :
         SceneEditableObject(refCounter), widget(widget)
     {}
 
@@ -1580,7 +1580,7 @@ namespace o2
         return prototypeLink.Lock();
     }
 
-    Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(RefCounter* refCounter):
+    Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(RefCounter* refCounter) :
         SceneEditableObject(refCounter)
     {}
 

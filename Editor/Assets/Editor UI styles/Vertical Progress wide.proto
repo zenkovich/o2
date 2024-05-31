@@ -151,20 +151,23 @@
                                                     "Value": {
                                                         "path": "transparency",
                                                         "curve": {
-                                                            "mKeys": [
-                                                                {
-                                                                    "uid": 6151843874585992003,
-                                                                    "rightSupportPosition": 0.08000000566244126,
-                                                                    "supportsType": "Broken"
-                                                                },
-                                                                {
-                                                                    "uid": 12777300884296634143,
-                                                                    "value": 1.0,
-                                                                    "position": 0.20000000298023225,
-                                                                    "leftSupportPosition": -0.20000000298023225,
-                                                                    "supportsType": "Broken"
-                                                                }
-                                                            ]
+                                                            "Type": "o2::Curve",
+                                                            "Value": {
+                                                                "mKeys": [
+                                                                    {
+                                                                        "uid": 6151843874585992003,
+                                                                        "rightSupportPosition": 0.08000000566244126,
+                                                                        "supportsType": "Broken"
+                                                                    },
+                                                                    {
+                                                                        "uid": 12777300884296634143,
+                                                                        "value": 1.0,
+                                                                        "position": 0.20000000298023225,
+                                                                        "leftSupportPosition": -0.20000000298023225,
+                                                                        "supportsType": "Broken"
+                                                                    }
+                                                                ]
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -177,7 +180,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "01a3359e0ed6006612af69d05b774499"
+                                    "mId": "695762d018022b592ea45fae689f2301"
                                 }
                             }
                         }

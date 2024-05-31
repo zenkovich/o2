@@ -46,7 +46,7 @@ namespace o2
         if (other.mIsAsset)
         {
             other.mCopyVisitor = mmake<InstantiatePrototypeCloneVisitor>();
-            SetPrototype(Ref<ActorAsset>(other.GetAssetID()));
+            SetPrototype(AssetRef<ActorAsset>(other.GetAssetID()));
         }
 
         transform->CopyFrom(*other.transform);
@@ -85,7 +85,7 @@ namespace o2
         other.CheckCopyVisitorFinalization();
     }
 
-    Actor::Actor(RefCounter* refCounter, ActorTransform* transform, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+    Actor::Actor(RefCounter* refCounter, ActorTransform* transform, const AssetRef<ActorAsset>& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
         Actor(refCounter, transform, *prototype->GetActor(), mode)
     {}
 
@@ -104,7 +104,7 @@ namespace o2
         Actor(refCounter, mnew ActorTransform(), components, mode)
     {}
 
-    Actor::Actor(RefCounter* refCounter, const Ref<ActorAsset>& prototype, ActorCreateMode mode /*= CreateMode::Default*/) :
+    Actor::Actor(RefCounter* refCounter, const AssetRef<ActorAsset>& prototype, ActorCreateMode mode /*= CreateMode::Default*/) :
         Actor(refCounter, mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
     {}
 
@@ -144,7 +144,7 @@ namespace o2
             other.mCopyVisitor->OnCopyActor(&other, this);
 
         if (other.mIsAsset)
-            SetPrototype(Ref<ActorAsset>(other.GetAssetID()));
+            SetPrototype(AssetRef<ActorAsset>(other.GetAssetID()));
 
         ISceneDrawable::operator=(other);
 
@@ -1296,7 +1296,7 @@ namespace o2
         }
     }
 
-    Ref<ActorAsset> Actor::GetPrototype() const
+    AssetRef<ActorAsset> Actor::GetPrototype() const
     {
         if (mPrototype)
             return mPrototype;
@@ -1304,15 +1304,15 @@ namespace o2
         if (mPrototypeLink && mParent)
             return mParent.Lock()->GetPrototype();
 
-        return Ref<ActorAsset>();
+        return AssetRef<ActorAsset>();
     }
 
-    Ref<ActorAsset> Actor::GetPrototypeDirectly() const
+    AssetRef<ActorAsset> Actor::GetPrototypeDirectly() const
     {
         return mPrototype;
     }
 
-    void Actor::SetPrototype(Ref<ActorAsset> asset)
+    void Actor::SetPrototype(AssetRef<ActorAsset> asset)
     {
 #if IS_EDITOR
         if (Scene::IsSingletonInitialzed())

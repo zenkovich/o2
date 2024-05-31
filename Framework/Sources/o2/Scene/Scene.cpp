@@ -556,11 +556,11 @@ namespace o2
 
     Ref<Actor> Scene::GetAssetActorByID(const UID& id)
     {
-        auto cached = mAssetsCache.FindOrDefault([=](const Ref<ActorAsset>& x) { return x->GetUID() == id; });
+        auto cached = mAssetsCache.FindOrDefault([=](const AssetRef<ActorAsset>& x) { return x->GetUID() == id; });
 
         if (!cached)
         {
-            cached = Ref<ActorAsset>(id);
+            cached = AssetRef<ActorAsset>(id);
             mAssetsCache.Add(cached);
         }
 
@@ -704,7 +704,7 @@ namespace o2
     }
 
 #if IS_EDITOR
-    void Scene::LinkActorToPrototypesHierarchy(Ref<Actor> actor, Ref<ActorAsset> proto)
+    void Scene::LinkActorToPrototypesHierarchy(Ref<Actor> actor, AssetRef<ActorAsset> proto)
     {
         if (!IsSingletonInitialzed())
             return;
@@ -869,7 +869,7 @@ namespace o2
         return mDrawnObjects;
     }
 
-    Map<Ref<ActorAsset>, Vector<WeakRef<Actor>>>& Scene::GetPrototypesLinksCache()
+    Map<AssetRef<ActorAsset>, Vector<WeakRef<Actor>>>& Scene::GetPrototypesLinksCache()
     {
         return mPrototypeLinksCache;
     }
@@ -926,7 +926,7 @@ namespace o2
         OnActorLinkedToPrototype(proto, actor);
     }
 
-    void Scene::OnActorLinkedToPrototype(Ref<ActorAsset>& assetRef, const Ref<Actor>& actor)
+    void Scene::OnActorLinkedToPrototype(AssetRef<ActorAsset>& assetRef, const Ref<Actor>& actor)
     {
         if (!mPrototypeLinksCache.ContainsKey(assetRef))
             mPrototypeLinksCache.Add(assetRef, Vector<WeakRef<Actor>>());

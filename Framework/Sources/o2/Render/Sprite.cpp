@@ -23,7 +23,7 @@ namespace o2
         Render::OnSpriteCreated(this);
     }
 
-    Sprite::Sprite(const Ref<ImageAsset>& image):
+    Sprite::Sprite(const AssetRef<ImageAsset>& image):
         mMeshBuildFunc(&Sprite::BuildDefaultMesh), mMesh(nullptr, 16, 18)
     {
         for (int i = 0; i < 4; i++)
@@ -147,7 +147,7 @@ namespace o2
     void Sprite::SetTexture(const TextureRef& texture)
     {
         mMesh.SetTexture(texture);
-        mImageAsset = Ref<ImageAsset>();
+        mImageAsset = AssetRef<ImageAsset>();
     }
 
     const TextureRef& Sprite::GetTexture() const
@@ -303,7 +303,7 @@ namespace o2
         return !operator==(other);
     }
 
-    void Sprite::LoadFromImage(const Ref<ImageAsset>& image, bool setSizeByImage /*= true*/)
+    void Sprite::LoadFromImage(const AssetRef<ImageAsset>& image, bool setSizeByImage /*= true*/)
     {
         if (!image)
         {
@@ -327,7 +327,7 @@ namespace o2
 
     void Sprite::LoadFromImage(const String& imagePath, bool setSizeByImage /*= true*/)
     {
-        Ref<ImageAsset> assetRef = DynamicCast<ImageAsset>(o2Assets.GetAssetRef(imagePath));
+        AssetRef<ImageAsset> assetRef = DynamicCast<ImageAsset>(o2Assets.GetAssetRef(imagePath).GetRef());
         if (assetRef)
             LoadFromImage(assetRef, setSizeByImage);
         else 
@@ -336,7 +336,7 @@ namespace o2
 
     void Sprite::LoadFromImage(UID imageId, bool setSizeByImage /*= true*/)
     {
-        Ref<ImageAsset> assetRef = DynamicCast<ImageAsset>(o2Assets.GetAssetRef(imageId));
+        AssetRef<ImageAsset> assetRef = DynamicCast<ImageAsset>(o2Assets.GetAssetRef(imageId).GetRef());
         if (assetRef)
             LoadFromImage(assetRef, setSizeByImage);
         else 
@@ -345,7 +345,7 @@ namespace o2
 
     void Sprite::LoadMonoColor(const Color4& color)
     {
-        mImageAsset = Ref<ImageAsset>();
+        mImageAsset = AssetRef<ImageAsset>();
         mMesh.mTexture = TextureRef();
         mColor = color;
         mCornersColors[0] = Color4::White();
@@ -358,7 +358,7 @@ namespace o2
 
     void Sprite::LoadFromBitmap(const Bitmap& bitmap, bool setSizeByImage /*= true*/)
     {
-		mImageAsset = Ref<ImageAsset>();
+		mImageAsset = AssetRef<ImageAsset>();
 		mMesh.mTexture = TextureRef(bitmap);
 		mTextureSrcRect.Set(Vec2F(), mMesh.mTexture->GetSize());
 
@@ -366,12 +366,12 @@ namespace o2
 			SetSize(mMesh.mTexture->GetSize());
     }
 
-    void Sprite::SetImageAsset(const Ref<ImageAsset>& asset)
+    void Sprite::SetImageAsset(const AssetRef<ImageAsset>& asset)
     {
         LoadFromImage(asset, false);
     }
 
-    Ref<ImageAsset> Sprite::GetImageAsset() const
+    AssetRef<ImageAsset> Sprite::GetImageAsset() const
     {
         return mImageAsset;
     }

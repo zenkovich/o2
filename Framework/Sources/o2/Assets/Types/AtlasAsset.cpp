@@ -129,7 +129,7 @@ namespace o2
         return *this;
     }
 
-    TextureSource AtlasAsset::GetSpriteSource(const Ref<ImageAsset>& image)
+    TextureSource AtlasAsset::GetSpriteSource(const AssetRef<ImageAsset>& image)
     {
         for (auto& page : mPages)
         {
@@ -143,7 +143,7 @@ namespace o2
         return {};
     }
 
-    const Vector<Ref<ImageAsset>>& AtlasAsset::GetImages() const
+    const Vector<AssetRef<ImageAsset>>& AtlasAsset::GetImages() const
     {
         return mImages;
     }
@@ -153,18 +153,18 @@ namespace o2
         return mPages;
     }
 
-    bool AtlasAsset::ContainsImage(const Ref<ImageAsset>& image)
+    bool AtlasAsset::ContainsImage(const AssetRef<ImageAsset>& image)
     {
         return mImages.Contains(image);
     }
 
-    void AtlasAsset::AddImage(const Ref<ImageAsset>& image)
+    void AtlasAsset::AddImage(const AssetRef<ImageAsset>& image)
     {
         if (!mImages.Contains(image))
             mImages.Add(image);
     }
 
-    void AtlasAsset::RemoveImage(const Ref<ImageAsset>& image)
+    void AtlasAsset::RemoveImage(const AssetRef<ImageAsset>& image)
     {
         mImages.Remove(image);
     }

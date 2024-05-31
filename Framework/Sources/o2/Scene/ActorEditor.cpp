@@ -26,7 +26,7 @@ namespace o2
         const_cast<Component*>(source)->mPrototypeLink = Ref(target);
     }
 
-    void Actor::SetProtytypeDummy(Ref<ActorAsset> asset)
+    void Actor::SetProtytypeDummy(AssetRef<ActorAsset> asset)
     {}
 
     void Actor::BreakPrototypeLink()
@@ -34,7 +34,7 @@ namespace o2
         if (!mPrototype && !mPrototypeLink)
             return;
 
-        SetPrototype(Ref<ActorAsset>());
+        SetPrototype(AssetRef<ActorAsset>());
 
         // remove from cache
 
@@ -80,12 +80,12 @@ namespace o2
         OnChanged();
     }
 
-    Ref<ActorAsset> Actor::MakePrototype()
+    AssetRef<ActorAsset> Actor::MakePrototype()
     {
         mCopyVisitor = mmake<MakePrototypeCloneVisitor>();
         auto prototype = CloneAsRef<Actor>();
 
-        Ref<ActorAsset> prototypeAsset = Ref<ActorAsset>::CreateAsset(prototype);
+        AssetRef<ActorAsset> prototypeAsset = AssetRef<ActorAsset>::CreateAsset(prototype);
         SetPrototype(prototypeAsset);
 
         prototype->UpdateResEnabledInHierarchy();
@@ -142,7 +142,7 @@ namespace o2
 
             if (info.actor->IsAsset())
             {
-                Ref<ActorAsset> asset(info.actor->GetAssetID());
+                AssetRef<ActorAsset> asset(info.actor->GetAssetID());
                 if (info.actor != asset->GetActor())
                     asset->SetActor(info.actor);
 
@@ -495,7 +495,7 @@ namespace o2
                 *destValuePtr = sourceValue;
                 componentsPointers.Add(destValuePtr);
             }
-            else if (field->GetType()->IsBasedOn(TypeOf(Ref<Asset>)))
+            else if (field->GetType()->IsBasedOn(TypeOf(AssetRef<Asset>)))
             {
                 field->CopyValue(dest, source);
             }

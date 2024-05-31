@@ -145,7 +145,7 @@ namespace o2
 
         TextureRef mTexture; // Texture reference, if image is not in atlas, it loads texture
 
-        Ref<Asset> mAtlas; // Owner atlas
+        AssetRef<Asset> mAtlas; // Owner atlas
 
         UInt  mAtlasPage; // Owner atlas page index @SERIALIZABLE
         RectI mSourceRect; // Owner atlas rectangle @SERIALIZABLE

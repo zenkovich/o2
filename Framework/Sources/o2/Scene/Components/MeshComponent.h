@@ -15,7 +15,7 @@ namespace o2
     {
     public:
         PROPERTIES(MeshComponent);
-        PROPERTY(Ref<ImageAsset>, image, SetImage, GetImage);                   // Image property
+        PROPERTY(AssetRef<ImageAsset>, image, SetImage, GetImage);                   // Image property
         PROPERTY(RectF, mappingFrame, SetMappingFrame, GetMappingFrame);      // Image mapping frame
         PROPERTY(Color4, color, SetColor, GetColor);                          // Color property
         PROPERTY(Vector<Vec2F>, extraPoints, SetExtraPoints, GetExtraPoints); // extra points property
@@ -57,10 +57,10 @@ namespace o2
         void RemoveExtraPoint(int idx);
 
         // Sets image
-        void SetImage(const Ref<ImageAsset>& image);
+        void SetImage(const AssetRef<ImageAsset>& image);
 
         // Returns image
-        const Ref<ImageAsset>& GetImage() const;
+        const AssetRef<ImageAsset>& GetImage() const;
 
         // Sets image mapping frame
         void SetMappingFrame(const RectF& frame);
@@ -90,7 +90,7 @@ namespace o2
         Mesh   mMesh;      // Drawing mesh, built from spline
         Basis  mTransform; // Transform where mesh was built
 
-        Ref<ImageAsset> mImageAsset;                         // Image asset @SERIALIZABLE
+        AssetRef<ImageAsset> mImageAsset;                         // Image asset @SERIALIZABLE
         RectF         mImageMapping = RectF(0, 0, 10, 10); // Image mapping rectangle @SERIALIZABLE
 
         Vector<Vec2F> mExtraPoints; // Extra topology points @SERIALIZABLE
@@ -151,8 +151,8 @@ CLASS_METHODS_META(o2::MeshComponent)
     FUNCTION().PUBLIC().SIGNATURE(void, SetExtraPoint, int, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, AddExtraPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveExtraPoint, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const Ref<ImageAsset>&);
-    FUNCTION().PUBLIC().SIGNATURE(const Ref<ImageAsset>&, GetImage);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(const AssetRef<ImageAsset>&, GetImage);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMappingFrame, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetMappingFrame);
     FUNCTION().PUBLIC().SIGNATURE(void, SetColor, const Color4&);

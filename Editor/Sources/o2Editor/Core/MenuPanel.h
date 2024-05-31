@@ -27,7 +27,7 @@ namespace Editor
 
 		// Adds item by path ("node/sub node/target")
 		void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-					 const Ref<ImageAsset>& icon = Ref<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
+					 const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Inserts item at position
 		void InsertItem(const o2::MenuPanel::Item& item, int position);

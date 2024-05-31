@@ -43,7 +43,7 @@ namespace Editor
 	{
 		if (!targetObjets.IsEmpty())
 		{
-			mSlicesEditor->Setup(Ref<ImageAsset>(dynamic_cast<ImageAsset*>(targetObjets.Last().first)->GetUID()),
+			mSlicesEditor->Setup(AssetRef<ImageAsset>(dynamic_cast<ImageAsset*>(targetObjets.Last().first)->GetUID()),
 								 DynamicCast<BorderIProperty>(mPropertiesContext->properties[TypeOf(ImageAsset).GetField("sliceBorder")]));
 		}
 

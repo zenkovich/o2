@@ -228,6 +228,9 @@ namespace o2
 			FUNCTION().PUBLIC().SIGNATURE_STATIC(AssetRef<_asset_type>, CreateAsset);
 			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetAssetTypeStatic);
 		}
+
+        template<typename _other_type>
+		friend class AssetRef;
 	};
 }
 
@@ -468,7 +471,7 @@ namespace o2
 	template<typename ... _args>
 	AssetRef<_asset_type> AssetRef<_asset_type>::CreateAsset(_args ... args)
 	{
-		return DynamicCast<_asset_type>(o2Assets.CreateAsset<_asset_type>(args ...));
+		return DynamicCast<_asset_type>(o2Assets.CreateAsset<_asset_type>(args ...).GetRef());
 	}
 
 	template<typename _asset_type>

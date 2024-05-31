@@ -68,22 +68,22 @@ namespace o2
         static const Type* GetAssetTypeByExtension(const String& extension);
 
         // Returns asset reference by path
-        Ref<Asset> GetAssetRef(const String& path);
+        AssetRef<Asset> GetAssetRef(const String& path);
 
         // Returns asset reference by path
         template<typename _asset_type>
-        Ref<_asset_type> GetAssetRefByType(const String& path);
+        AssetRef<_asset_type> GetAssetRefByType(const String& path);
 
         // Returns asset reference by id
-        Ref<Asset> GetAssetRef(const UID& id);
+        AssetRef<Asset> GetAssetRef(const UID& id);
 
         // Returns asset reference by id
         template<typename _asset_type>
-        Ref<_asset_type> GetAssetRefByType(const UID& id);
+        AssetRef<_asset_type> GetAssetRefByType(const UID& id);
 
         // Creates asset type _asset_type
         template<typename _asset_type, typename ... _args>
-        Ref<Asset> CreateAsset(_args ... args);
+        AssetRef<Asset> CreateAsset(_args ... args);
 
         // Returns true if asset exist by path
         bool IsAssetExist(const String& path) const;
@@ -92,7 +92,7 @@ namespace o2
         bool IsAssetExist(const UID& id) const;
 
         // Removes asset
-        bool RemoveAsset(const Ref<Asset>& asset);
+        bool RemoveAsset(const AssetRef<Asset>& asset);
 
         // Removes asset by path
         bool RemoveAsset(const String& path);
@@ -101,7 +101,7 @@ namespace o2
         bool RemoveAsset(const UID& id);
 
         // Copies asset
-        bool CopyAsset(const Ref<Asset>& asset, const String& dest);
+        bool CopyAsset(const AssetRef<Asset>& asset, const String& dest);
 
         // Copies asset by path
         bool CopyAsset(const String& path, const String& dest);
@@ -110,7 +110,7 @@ namespace o2
         bool CopyAsset(const UID& id, const String& dest);
 
         // Moves asset to new path
-        bool MoveAsset(const Ref<Asset>& asset, const String& newPath);
+        bool MoveAsset(const AssetRef<Asset>& asset, const String& newPath);
 
         // Moves asset by path to new path
         bool MoveAsset(const String& path, const String& newPath);
@@ -122,7 +122,7 @@ namespace o2
         bool MoveAssets(const Vector<UID>& assets, const String& destPath);
 
         // Renames asset to new path
-        bool RenameAsset(const Ref<Asset>& asset, const String& newName);
+        bool RenameAsset(const AssetRef<Asset>& asset, const String& newName);
 
         // Renames asset by path to new path
         bool RenameAsset(const String& path, const String& newName);
@@ -153,31 +153,31 @@ namespace o2
 
         Ref<LogStream> mLog; // Log stream
 
-        Vector<Ref<Asset>>      mCachedAssets;       // Current cached assets
-        Map<String, Ref<Asset>> mCachedAssetsByPath; // Current cached assets by path
-        Map<UID, Ref<Asset>>    mCachedAssetsByUID;  // Current cached assets by uid
+        Vector<AssetRef<Asset>>      mCachedAssets;       // Current cached assets
+        Map<String, AssetRef<Asset>> mCachedAssetsByPath; // Current cached assets by path
+        Map<UID, AssetRef<Asset>>    mCachedAssetsByUID;  // Current cached assets by uid
 
     protected:
         // Loads asset infos
         void LoadAssetsTree();
 
         // Returns asset cache by path
-        Ref<Asset> FindAssetCache(const String& path) const;
+        AssetRef<Asset> FindAssetCache(const String& path) const;
 
         // Returns asset cache by id
-        Ref<Asset> FindAssetCache(const UID& id) const;
+        AssetRef<Asset> FindAssetCache(const UID& id) const;
 
         // Clears assets cache
         void ClearAssetsCache();
 
         // Adds asset to cache
-        Ref<Asset> AddAssetCache(Asset* asset);
+        AssetRef<Asset> AddAssetCache(Asset* asset);
 
         // Removes asset from cache by UID and path
         void RemoveAssetCache(Asset* asset);
 
         // Updates asset cached path and id
-        Ref<Asset> UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
+        AssetRef<Asset> UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
 
         // Removes asset by info
         bool RemoveAsset(const AssetInfo& info);
@@ -210,21 +210,21 @@ namespace o2
 namespace o2
 {
     template<typename _asset_type>
-    Ref<_asset_type> Assets::GetAssetRefByType(const String& path)
+    AssetRef<_asset_type> Assets::GetAssetRefByType(const String& path)
     {
-        return DynamicCast<_asset_type>(GetAssetRef(path));
+        return DynamicCast<_asset_type>(GetAssetRef(path).GetRef());
     }
 
     template<typename _asset_type>
-    Ref<_asset_type> Assets::GetAssetRefByType(const UID& id)
+    AssetRef<_asset_type> Assets::GetAssetRefByType(const UID& id)
     {
-        return DynamicCast<_asset_type>(GetAssetRef(id));
+        return DynamicCast<_asset_type>(GetAssetRef(id).GetRef());
     }
 
     template<typename _asset_type, typename ... _args>
-    Ref<Asset> Assets::CreateAsset(_args ... args)
+    AssetRef<Asset> Assets::CreateAsset(_args ... args)
     {
-        auto newAset = mmake<_asset_type>(args ...);
+        auto newAset = AssetRef(mmake<_asset_type>(args ...));
 
         mCachedAssets.Add(newAset);
         mCachedAssetsByUID[newAset->GetUID()] = newAset;

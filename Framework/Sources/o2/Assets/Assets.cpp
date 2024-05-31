@@ -117,7 +117,7 @@ namespace o2
         return GetStdAssetType();
     }
 
-    Ref<Asset> Assets::GetAssetRef(const String& path)
+    AssetRef<Asset> Assets::GetAssetRef(const String& path)
     {
         auto cached = FindAssetCache(path);
 
@@ -125,7 +125,7 @@ namespace o2
         {
             auto& assetInfo = GetAssetInfo(path);
             if (!assetInfo.IsValid())
-                return Ref<Asset>();
+                return AssetRef<Asset>();
 
             auto type = assetInfo.meta->GetAssetType();
             auto asset = DynamicCast<Asset>(type->CreateSampleRef());
@@ -137,7 +137,7 @@ namespace o2
         return cached;
     }
 
-    Ref<Asset> Assets::GetAssetRef(const UID& id)
+    AssetRef<Asset> Assets::GetAssetRef(const UID& id)
     {
         auto cached = FindAssetCache(id);
 
@@ -147,7 +147,7 @@ namespace o2
             if (!assetInfo.IsValid())
             {
                 o2Debug.LogError("Can't load asset by id - " + (String)id);
-                return Ref<Asset>();
+                return AssetRef<Asset>();
             }
 
             auto asset = DynamicCast<Asset>(assetInfo.meta->GetAssetType()->CreateSampleRef());
@@ -169,7 +169,7 @@ namespace o2
         return GetAssetInfo(id).meta->ID() != UID::empty;
     }
 
-    bool Assets::RemoveAsset(const Ref<Asset>& asset)
+    bool Assets::RemoveAsset(const AssetRef<Asset>& asset)
     {
         return RemoveAsset(asset->GetUID());
     }
@@ -202,7 +202,7 @@ namespace o2
         return true;
     }
 
-    bool Assets::CopyAsset(const Ref<Asset>& asset, const String& dest)
+    bool Assets::CopyAsset(const AssetRef<Asset>& asset, const String& dest)
     {
         return CopyAsset(asset->GetUID(), dest);
     }
@@ -244,7 +244,7 @@ namespace o2
         return true;
     }
 
-    bool Assets::MoveAsset(const Ref<Asset>& asset, const String& newPath)
+    bool Assets::MoveAsset(const AssetRef<Asset>& asset, const String& newPath)
     {
         return MoveAsset(asset->GetUID(), newPath);
     }
@@ -296,7 +296,7 @@ namespace o2
         return res;
     }
 
-    bool Assets::RenameAsset(const Ref<Asset>& asset, const String& newName)
+    bool Assets::RenameAsset(const AssetRef<Asset>& asset, const String& newName)
     {
         return RenameAsset(GetAssetInfo(asset->GetUID()), newName);
     }
@@ -431,16 +431,16 @@ namespace o2
 //         }
     }
 
-    Ref<Asset> Assets::FindAssetCache(const String& path) const
+    AssetRef<Asset> Assets::FindAssetCache(const String& path) const
     {
-        Ref<Asset> res;
+        AssetRef<Asset> res;
         mCachedAssetsByPath.TryGetValue(path, res);
         return res;
     }
 
-    Ref<Asset> Assets::FindAssetCache(const UID& id) const
+    AssetRef<Asset> Assets::FindAssetCache(const UID& id) const
     {
-        Ref<Asset> res;
+        AssetRef<Asset> res;
         mCachedAssetsByUID.TryGetValue(id, res);
         return res;
     }
@@ -453,9 +453,9 @@ namespace o2
         mAssetsTrees.Clear();
     }
 
-    Ref<Asset> Assets::AddAssetCache(Asset* asset)
+    AssetRef<Asset> Assets::AddAssetCache(Asset* asset)
     {
-        Ref<Asset> assetRef(asset);
+        AssetRef<Asset> assetRef(asset);
         mCachedAssets.Add(assetRef);
 
         if constexpr (IS_EDITOR)
@@ -483,12 +483,12 @@ namespace o2
         if (fnd2 != mCachedAssetsByPath.end())
             mCachedAssetsByPath.erase(fnd2);
 
-        mCachedAssets.RemoveFirst([=](const Ref<Asset>& x) { return x == asset; });
+        mCachedAssets.RemoveFirst([=](const AssetRef<Asset>& x) { return x == asset; });
     }
 
-    Ref<Asset> Assets::UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID)
+    AssetRef<Asset> Assets::UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID)
     {
-        Ref<Asset> cached;
+        AssetRef<Asset> cached;
 
         auto fnd = mCachedAssetsByUID.find(oldUID);
         if (fnd != mCachedAssetsByUID.end())
@@ -580,7 +580,7 @@ namespace o2
                 }
                 else
                 {
-                    Ref<Asset> cachedAsset;
+                    AssetRef<Asset> cachedAsset;
                     if (mCachedAssetsByUID.TryGetValue(newAssetInfo->meta->ID(), cachedAsset))
                     {
                         oldAssetInfo = cachedAsset->mInfo.CloneAsRef<AssetInfo>();

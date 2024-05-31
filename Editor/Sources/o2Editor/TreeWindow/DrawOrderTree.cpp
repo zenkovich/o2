@@ -459,7 +459,7 @@ namespace Editor
 
 		String icon = icons[mTarget->type];
 		if (mIconSprite->GetImageName() != icon)
-			mIconSprite->SetImageAsset(Ref<ImageAsset>(icon));
+			mIconSprite->SetImageAsset(AssetRef<ImageAsset>(icon));
 		
 		mBackSprite->color = Color4::SomeColor(mTarget->batchIdx, mBackSprite->GetColor().a);
 		mBackSprite->enabled = mTarget->type != DrawOrderTree::OrderTreeNode::Type::Camera &&

@@ -136,17 +136,17 @@ namespace Editor
 
 		mCurvesEditor->SetTextBorder(BorderF(0, 10, 10, 0));
 
-		mCurvesEditor->SetMainHandleImages(Ref<ImageAsset>("ui/CurveHandle.png"),
-										   Ref<ImageAsset>("ui/CurveHandleHover.png"),
-										   Ref<ImageAsset>("ui/CurveHandlePressed.png"),
-										   Ref<ImageAsset>("ui/CurveHandleSelected.png"));
+		mCurvesEditor->SetMainHandleImages(AssetRef<ImageAsset>("ui/CurveHandle.png"),
+										   AssetRef<ImageAsset>("ui/CurveHandleHover.png"),
+										   AssetRef<ImageAsset>("ui/CurveHandlePressed.png"),
+										   AssetRef<ImageAsset>("ui/CurveHandleSelected.png"));
 
-		mCurvesEditor->SetSupportHandleImages(Ref<ImageAsset>("ui/CurveSupportHandle.png"),
-											  Ref<ImageAsset>("ui/CurveSupportHandleHover.png"),
-											  Ref<ImageAsset>("ui/CurveSupportHandlePressed.png"),
-											  Ref<ImageAsset>("ui/CurveSupportHandleSelected.png"));
+		mCurvesEditor->SetSupportHandleImages(AssetRef<ImageAsset>("ui/CurveSupportHandle.png"),
+											  AssetRef<ImageAsset>("ui/CurveSupportHandleHover.png"),
+											  AssetRef<ImageAsset>("ui/CurveSupportHandlePressed.png"),
+											  AssetRef<ImageAsset>("ui/CurveSupportHandleSelected.png"));
 
-		mCurvesEditor->SetSelectionSpriteImage(Ref<ImageAsset>("ui/UI_Window_place.png"));
+		mCurvesEditor->SetSelectionSpriteImage(AssetRef<ImageAsset>("ui/UI_Window_place.png"));
 
 		mCurvesEditor->verGridEnabled = false;
 		mCurvesEditor->onViewChanged += THIS_FUNC(OnEditorViewChanged);

@@ -178,7 +178,7 @@ namespace Editor
 
         if (mCurrentPath != "")
         {
-            Ref<FolderAsset> ref(mCurrentPath);
+            AssetRef<FolderAsset> ref(mCurrentPath);
             mAssetInfos = ref->GetInfo().GetChildren();
         }
         else
@@ -305,10 +305,10 @@ namespace Editor
 
         for (auto& icon : mSelectedAssets)
         {
-            if (mSelectedPreloadedAssets.Contains([&](const Ref<Asset>& x) { return x->GetUID() == icon->meta->ID(); }))
+            if (mSelectedPreloadedAssets.Contains([&](const AssetRef<Asset>& x) { return x->GetUID() == icon->meta->ID(); }))
                 continue;
 
-            Ref<Asset> iconAsset = o2Assets.GetAssetRef(icon->meta->ID());
+            AssetRef<Asset> iconAsset = o2Assets.GetAssetRef(icon->meta->ID());
             mSelectedPreloadedAssets.Add(iconAsset);
         }
 
@@ -320,17 +320,17 @@ namespace Editor
 
             Vector<IObject*> targets;
 
-            if (mSelectedPreloadedAssets.All([](const Ref<Asset>& x) { return x->GetType() == TypeOf(ActorAsset); }))
+            if (mSelectedPreloadedAssets.All([](const AssetRef<Asset>& x) { return x->GetType() == TypeOf(ActorAsset); }))
             {
-                targets = mSelectedPreloadedAssets.Convert<IObject*>([](const Ref<Asset>& x) { return DynamicCast<ActorAsset>(x)->GetActor().Get(); });
+                targets = mSelectedPreloadedAssets.Convert<IObject*>([](const AssetRef<Asset>& x) { return DynamicCast<ActorAsset>(x.GetRef())->GetActor().Get(); });
             }
-            else if (mSelectedPreloadedAssets.All([](const Ref<Asset>& x) { return x->GetType() == TypeOf(FolderAsset); }))
+            else if (mSelectedPreloadedAssets.All([](const AssetRef<Asset>& x) { return x->GetType() == TypeOf(FolderAsset); }))
             {
                 targets.Clear();
             }
             else
             {
-                targets = mSelectedPreloadedAssets.Convert<IObject*>([](const Ref<Asset>& x) { return x.Get(); });
+                targets = mSelectedPreloadedAssets.Convert<IObject*>([](const AssetRef<Asset>& x) { return const_cast<Asset*>(x.Get()); });
             }
 
             if (!targets.IsEmpty())
@@ -391,7 +391,7 @@ namespace Editor
 
         if (asset->meta->GetAssetType() == &TypeOf(ImageAsset))
         {
-            Ref<ImageAsset> previewSpriteAsset(asset->path);
+            AssetRef<ImageAsset> previewSpriteAsset(asset->path);
             float previewMaxSize = 30;
 
             if (previewSpriteAsset->width > previewSpriteAsset->height)
@@ -597,7 +597,7 @@ namespace Editor
         {
             if (auto actor = DynamicCast<Actor>(object))
             {
-                Ref<ActorAsset> newAsset = actor->MakePrototype();
+                AssetRef<ActorAsset> newAsset = actor->MakePrototype();
                 String path = destPath.IsEmpty() ? newAsset->GetActor()->name + String(".proto") : destPath + "/" +
                     newAsset->GetActor()->name + String(".proto");
 
@@ -733,10 +733,10 @@ namespace Editor
         InitializeCreateContext();
 
         mContextMenu->AddItem("---");
-        mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, Ref<ImageAsset>(), ShortcutKeys('C', true));
-        mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, Ref<ImageAsset>(), ShortcutKeys('X', true));
-        mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, Ref<ImageAsset>(), ShortcutKeys('V', true));
-        mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, Ref<ImageAsset>(), ShortcutKeys(VK_DELETE));
+        mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('C', true));
+        mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('X', true));
+        mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('V', true));
+        mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, AssetRef<ImageAsset>(), ShortcutKeys(VK_DELETE));
 
         onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
         onUnfocused = [&]() {
@@ -943,7 +943,7 @@ namespace Editor
                            });
     }
 
-    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const Ref<ImageAsset>& asset)
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const AssetRef<ImageAsset>& asset)
     {
         auto actor = mmake<Actor>();
         auto comp = mmake<ImageComponent>(asset);
@@ -952,7 +952,7 @@ namespace Editor
         return actor;
     }
 
-    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const Ref<ActorAsset>& asset)
+    Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const AssetRef<ActorAsset>& asset)
     {
         return asset->GetActor()->CloneAsRef<Actor>();
     }
@@ -1076,9 +1076,9 @@ namespace Editor
     Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
     {
         if (assetInfo.meta->GetAssetType() == &TypeOf(ImageAsset))
-            return InstantiateAsset(Ref<ImageAsset>(assetInfo.meta->ID()));
+            return InstantiateAsset(AssetRef<ImageAsset>(assetInfo.meta->ID()));
         else if (assetInfo.meta->GetAssetType() == &TypeOf(ActorAsset))
-            return InstantiateAsset(Ref<ActorAsset>(assetInfo.meta->ID()));
+            return InstantiateAsset(AssetRef<ActorAsset>(assetInfo.meta->ID()));
 
         return nullptr;
     }

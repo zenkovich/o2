@@ -284,35 +284,26 @@ namespace Editor
 
         mCenterFrameDragHandle = mmake<DragHandle>();
 
-        mCenterFrameDragHandle->localToScreenTransformFunc = [&](const Vec2F& point) {
-            return Vec2F(animationWindow->mTimeline->LocalToWorld(point.x), animationWindow->mTree->GetLineWorldPosition(point.y));
+        mCenterFrameDragHandle->localToScreenTransformFunc = [=](const Vec2F& point)
+            {
+                return Vec2F(animationWindow->mTimeline->LocalToWorld(point.x), animationWindow->mTree->GetLineWorldPosition(point.y));
             };
 
-        mCenterFrameDragHandle->screenToLocalTransformFunc = [&](const Vec2F& point) {
-            return Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
+        mCenterFrameDragHandle->screenToLocalTransformFunc = [=](const Vec2F& point)
+            {
+                return Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
             };
 
-        mCenterFrameDragHandle->isPointInside = [&](const Vec2F& point) {
-            auto local = Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
-            return local.x > mSelectionRect.left && local.x < mSelectionRect.right && local.y > mSelectionRect.top && local.y < mSelectionRect.bottom;
+        mCenterFrameDragHandle->isPointInside = [=](const Vec2F& point)
+            {
+                auto local = Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
+                return local.x > mSelectionRect.left && local.x < mSelectionRect.right && local.y > mSelectionRect.top && local.y < mSelectionRect.bottom;
             };
 
-        mCenterFrameDragHandle->checkPositionFunc = [&](const Vec2F& point) {
-            return Vec2F(point.x, mSelectionRect.Center().y);
-            };
-
-        mCenterFrameDragHandle->onPressed = [&]() {
-            OnHandleCursorPressed(mCenterFrameDragHandle, *o2Input.GetCursor());
-            };
-
-        mCenterFrameDragHandle->onReleased = [&]() {
-            OnHandleCursorReleased(mCenterFrameDragHandle, *o2Input.GetCursor());
-            };
-
-        mCenterFrameDragHandle->onChangedPos = [&](const Vec2F& point) {
-            OnHandleMoved(mCenterFrameDragHandle, o2Input.GetCursorPos());
-            };
-
+        mCenterFrameDragHandle->checkPositionFunc = [&](const Vec2F& point) { return Vec2F(point.x, mSelectionRect.Center().y); };
+        mCenterFrameDragHandle->onPressed = [&]() { OnHandleCursorPressed(mCenterFrameDragHandle, *o2Input.GetCursor());  };
+        mCenterFrameDragHandle->onReleased = [&]() { OnHandleCursorReleased(mCenterFrameDragHandle, *o2Input.GetCursor()); };
+        mCenterFrameDragHandle->onChangedPos = [&](const Vec2F& point) { OnHandleMoved(mCenterFrameDragHandle, o2Input.GetCursorPos()); };
         mCenterFrameDragHandle->onRightButtonReleased = [&](auto& x) { mContextMenu->Show(); };
         mCenterFrameDragHandle->cursorType = CursorType::SizeWE;
     }
@@ -433,17 +424,17 @@ namespace Editor
     {
         mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
-        mContextMenu->AddItem("Copy", [&]() { CopyKeys(); }, Ref<ImageAsset>(), ShortcutKeys('C', true));
-        mContextMenu->AddItem("Cut", [&]() { CopyKeys(); DeleteKeys(GetSelectedKeys()); }, Ref<ImageAsset>(), ShortcutKeys('X', true));
-        mContextMenu->AddItem("Paste", [&]() { PasteKeys(); }, Ref<ImageAsset>(), ShortcutKeys('V', true));
+        mContextMenu->AddItem("Copy", [&]() { CopyKeys(); }, AssetRef<ImageAsset>(), ShortcutKeys('C', true));
+        mContextMenu->AddItem("Cut", [&]() { CopyKeys(); DeleteKeys(GetSelectedKeys()); }, AssetRef<ImageAsset>(), ShortcutKeys('X', true));
+        mContextMenu->AddItem("Paste", [&]() { PasteKeys(); }, AssetRef<ImageAsset>(), ShortcutKeys('V', true));
         mContextMenu->AddItem("---");
-        mContextMenu->AddItem("Delete", [&]() { DeleteKeys(GetSelectedKeys()); }, Ref<ImageAsset>(), ShortcutKeys(VK_DELETE));
+        mContextMenu->AddItem("Delete", [&]() { DeleteKeys(GetSelectedKeys()); }, AssetRef<ImageAsset>(), ShortcutKeys(VK_DELETE));
         mContextMenu->AddItem("---");
-        mContextMenu->AddItem("Select all", [&]() { SelectAll(); }, Ref<ImageAsset>(), ShortcutKeys('A', true));
+        mContextMenu->AddItem("Select all", [&]() { SelectAll(); }, AssetRef<ImageAsset>(), ShortcutKeys('A', true));
         mContextMenu->AddItem("Deselect all", [&]() { DeselectAll(); });
         mContextMenu->AddItem("---");
-        mContextMenu->AddItem("Undo", [&]() { mAnimationWindow.Lock()->mActionsList->UndoAction(); }, Ref<ImageAsset>(), ShortcutKeys('Z', true));
-        mContextMenu->AddItem("Redo", [&]() { mAnimationWindow.Lock()->mActionsList->RedoAction(); }, Ref<ImageAsset>(), ShortcutKeys('Y', true));
+        mContextMenu->AddItem("Undo", [&]() { mAnimationWindow.Lock()->mActionsList->UndoAction(); }, AssetRef<ImageAsset>(), ShortcutKeys('Z', true));
+        mContextMenu->AddItem("Redo", [&]() { mAnimationWindow.Lock()->mActionsList->RedoAction(); }, AssetRef<ImageAsset>(), ShortcutKeys('Y', true));
 
         AddChild(mContextMenu);
 

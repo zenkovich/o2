@@ -128,9 +128,9 @@ namespace Editor
 		Ref<ContextMenu> mContextMenu; // Assets Context menu
 						        
 		Vector<Ref<AssetInfo>> mSelectedAssets;          // Selected assets icons @IGNORE
-		Vector<Ref<Asset>>     mSelectedPreloadedAssets; // Preloaded selected assets
+		Vector<AssetRef<Asset>>     mSelectedPreloadedAssets; // Preloaded selected assets
 
-		Ref<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
+		AssetRef<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
 						        
 		Ref<AssetIcon>       mHighlightIcon;                            // Current highlighting asset icon
 		Ref<AnimationClip>   mHighlighClip;                             // Node highlight animation clip @SERIALIZABLE 
@@ -272,10 +272,10 @@ namespace Editor
 		Ref<Actor> InstantiateAsset(const _type& asset);
 
 		// Instantiate actor from image asset
-		Ref<Actor> InstantiateAsset(const Ref<ImageAsset>& asset);
+		Ref<Actor> InstantiateAsset(const AssetRef<ImageAsset>& asset);
 
 		// Instantiate actor from actor asset
-		Ref<Actor> InstantiateAsset(const Ref<ActorAsset>& asset);
+		Ref<Actor> InstantiateAsset(const AssetRef<ActorAsset>& asset);
 
 		// Called when assets was changed from properties
 		void OnAssetsPropertiesChanged();
@@ -456,8 +456,8 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PROTECTED().SIGNATURE(void, InstantiateDraggingAssets);
     FUNCTION().PROTECTED().SIGNATURE(void, ClearInstantiatedDraggingAssets);
     FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const AssetInfo&);
-    FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const Ref<ImageAsset>&);
-    FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const Ref<ActorAsset>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const AssetRef<ImageAsset>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const AssetRef<ActorAsset>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAssetsPropertiesChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckPreloadedAssetsSaving);
     FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<SelectableDragableObject>>, GetSelectedDragObjects);

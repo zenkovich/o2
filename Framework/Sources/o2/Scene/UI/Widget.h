@@ -58,7 +58,7 @@ namespace o2
         explicit Widget(RefCounter* refCounter, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Widget constructor from prototype
-        Widget(RefCounter* refCounter, const Ref<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+        Widget(RefCounter* refCounter, const AssetRef<ActorAsset>& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
         // Widget constructor with components
         Widget(RefCounter* refCounter, Vector<Ref<Component>> components, ActorCreateMode mode = ActorCreateMode::Default);
@@ -128,7 +128,7 @@ namespace o2
                                   const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
         // Removes layer @SCRIPTABLE
-        void RemoveLayer(WidgetLayer* layer);
+        void RemoveLayer(const Ref<WidgetLayer>& layer);
 
         // Removes layer @SCRIPTABLE_NAME(RemoveLayerByPath)
         void RemoveLayer(const String& path);
@@ -780,7 +780,7 @@ CLASS_METHODS_META(o2::Widget)
     typedef Map<String, Ref<WidgetState>> _tmp4;
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(RefCounter*, ActorCreateMode);
-    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<ActorAsset>&, ActorCreateMode);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetRef<ActorAsset>&, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, Vector<Ref<Component>>, ActorCreateMode);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Widget&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
@@ -801,7 +801,7 @@ CLASS_METHODS_META(o2::Widget)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetIndexInSiblings, int);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetLayer>, AddLayer, const Ref<WidgetLayer>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<WidgetLayer>, AddLayer, const String&, const Ref<IRectDrawable>&, const Layout&, float);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveLayer, WidgetLayer*);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveLayer, const Ref<WidgetLayer>&);
     FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(RemoveLayerByPath).SIGNATURE(void, RemoveLayer, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllLayers);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetLayer>, GetLayer, const String&);

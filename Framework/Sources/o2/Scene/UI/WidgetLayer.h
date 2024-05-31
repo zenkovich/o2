@@ -86,7 +86,7 @@ namespace o2
 		Ref<WidgetLayer> AddChild(const Ref<WidgetLayer>& node);
 
 		// Remove child layer and releases him if needs @SCRIPTABLE
-		void RemoveChild(WidgetLayer* node);
+		void RemoveChild(const Ref<WidgetLayer>& layer);
 
 		// Removes and releases all children nodes @SCRIPTABLE
 		void RemoveAllChildren();
@@ -408,7 +408,7 @@ CLASS_METHODS_META(o2::WidgetLayer)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetParent, const Ref<WidgetLayer>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const WeakRef<WidgetLayer>&, GetParent);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<WidgetLayer>, AddChild, const Ref<WidgetLayer>&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, WidgetLayer*);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, const Ref<WidgetLayer>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllChildren);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vector<Ref<WidgetLayer>>&, GetChildren);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<WidgetLayer>>&, GetChildren);

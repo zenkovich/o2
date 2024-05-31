@@ -68,13 +68,13 @@ namespace o2
 
         // Adds item by path ("node/sub node/target")
         void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-                     const Ref<ImageAsset>& icon = Ref<ImageAsset>(),
+                     const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(),
                      const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Adds toggle item by path ("node/sub node/target")
         void AddToggleItem(const WString& path, bool value,
                            const Function<void(bool)>& clickFunc = Function<void(bool)>(),
-                           const Ref<ImageAsset>& icon = Ref<ImageAsset>(),
+                           const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(),
                            const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Inserts item at position
@@ -218,8 +218,8 @@ CLASS_METHODS_META(o2::MenuPanel)
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem, const Item&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const Ref<ImageAsset>&, const ShortcutKeys&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const Ref<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertItem, const Item&, int);
     FUNCTION().PUBLIC().SIGNATURE(void, AddItems, Vector<Item>);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertItems, Vector<Item>, int);

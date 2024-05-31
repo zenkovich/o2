@@ -256,13 +256,13 @@ namespace o2
         mNeedUpdateMesh = true;
     }
 
-    void SkinningMeshComponent::SetImage(const Ref<ImageAsset>& image)
+    void SkinningMeshComponent::SetImage(const AssetRef<ImageAsset>& image)
     {
         mImageAsset = image;
         mNeedUpdateMesh = true;
     }
 
-    const Ref<ImageAsset>& SkinningMeshComponent::GetImage() const
+    const AssetRef<ImageAsset>& SkinningMeshComponent::GetImage() const
     {
         return mImageAsset;
     }

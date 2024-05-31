@@ -197,7 +197,7 @@ namespace o2
 
         Vector<Ref<Tag>> mTags; // Scene tags
 
-        Vector<Ref<ActorAsset>> mAssetsCache; // Cached actors assets
+        Vector<AssetRef<ActorAsset>> mAssetsCache; // Cached actors assets
 
         bool mIsUpdatingScene = false; // Sets true when started updating scene, and false when not
 
@@ -278,7 +278,7 @@ namespace o2
 
     public:
         // Links actor recursively to prototypes and their parent prototypes
-        static void LinkActorToPrototypesHierarchy(Ref<Actor> actor, Ref<ActorAsset> proto);
+        static void LinkActorToPrototypesHierarchy(Ref<Actor> actor, AssetRef<ActorAsset> proto);
 
         // Sets scene playing in editor
         void SetEditorPlaying(bool playing);
@@ -321,7 +321,7 @@ namespace o2
         void CheckChangedObjects();
 
         // Returns cache of linked to prototypes actors
-        Map<Ref<ActorAsset>, Vector<WeakRef<Actor>>>& GetPrototypesLinksCache();
+        Map<AssetRef<ActorAsset>, Vector<WeakRef<Actor>>>& GetPrototypesLinksCache();
 
         // Called when scene started to draw. When scene draw started, drawn scene objects will be collected
         void BeginDrawingScene();
@@ -345,13 +345,13 @@ namespace o2
         void OnActorWithPrototypeCreated(const Ref<Actor>& actor);
 
         // Called when some actor created and linked to prototype, updates linked actors cache
-        void OnActorLinkedToPrototype(Ref<ActorAsset>& assetRef, const Ref<Actor>& actor);
+        void OnActorLinkedToPrototype(AssetRef<ActorAsset>& assetRef, const Ref<Actor>& actor);
 
         // Called when actor destroying or prototype link broken, updates cache
         void OnActorPrototypeBroken(Actor* actor);
 
     protected:
-        Map<Ref<ActorAsset>, Vector<WeakRef<Actor>>> mPrototypeLinksCache; // Cache of linked to prototypes actors
+        Map<AssetRef<ActorAsset>, Vector<WeakRef<Actor>>> mPrototypeLinksCache; // Cache of linked to prototypes actors
 
         Vector<Ref<SceneEditableObject>> mChangedObjects;    // Changed actors array
         Vector<Ref<SceneEditableObject>> mDestroyingObjects; // Destroying scene editable objects
@@ -462,7 +462,7 @@ CLASS_METHODS_META(o2::Scene)
 {
 
     typedef const Map<String, WeakRef<SceneLayer>>& _tmp1;
-    typedef Map<Ref<ActorAsset>, Vector<WeakRef<Actor>>>& _tmp2;
+    typedef Map<AssetRef<ActorAsset>, Vector<WeakRef<Actor>>>& _tmp2;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(const LogStream&, GetLogStream);
@@ -523,7 +523,7 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCameraAddedOnScene, CameraActor*);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCameraRemovedScene, CameraActor*);
 #if  IS_EDITOR          
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(void, LinkActorToPrototypesHierarchy, Ref<Actor>, Ref<ActorAsset>);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(void, LinkActorToPrototypesHierarchy, Ref<Actor>, AssetRef<ActorAsset>);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEditorPlaying, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEditorPlaying);
     FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetRootEditableObjects);
@@ -545,7 +545,7 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectChanged, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectDrawn, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnActorWithPrototypeCreated, const Ref<Actor>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnActorLinkedToPrototype, Ref<ActorAsset>&, const Ref<Actor>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnActorLinkedToPrototype, AssetRef<ActorAsset>&, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnActorPrototypeBroken, Actor*);
 #endif
 }

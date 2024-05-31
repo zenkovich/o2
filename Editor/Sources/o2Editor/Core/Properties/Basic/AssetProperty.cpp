@@ -10,11 +10,11 @@
 namespace Editor
 {
 	AssetProperty::AssetProperty(RefCounter* refCounter):
-		TPropertyField<Ref<Asset>>(refCounter)
+		TPropertyField<AssetRef<Asset>>(refCounter)
 	{}
 
 	AssetProperty::AssetProperty(RefCounter* refCounter, const AssetProperty& other):
-		TPropertyField<Ref<Asset>>(refCounter, other)
+		TPropertyField<AssetRef<Asset>>(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -108,7 +108,7 @@ namespace Editor
 						if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 						{
 							void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
-							if (Ref<Asset>* refPtr = dynamic_cast<Ref<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+							if (AssetRef<Asset>* refPtr = dynamic_cast<AssetRef<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
 							{
 								if (refPtr->IsInstance())
 								{
@@ -160,7 +160,7 @@ namespace Editor
 
 	void AssetProperty::SetAssetId(const UID& id)
 	{
-		mCommonValue = id == UID::empty ? Ref<Asset>() : Ref<Asset>(id);
+		mCommonValue = id == UID::empty ? AssetRef<Asset>() : AssetRef<Asset>(id);
 
 		for (auto& ptr : mValuesProxies)
 			SetProxy(ptr.first, mCommonValue);
@@ -208,7 +208,7 @@ namespace Editor
 
 	void AssetProperty::SetCommonAssetId(const UID& id)
 	{
-		mCommonValue = id == UID::empty ? Ref<Asset>() : Ref<Asset>(id);
+		mCommonValue = id == UID::empty ? AssetRef<Asset>() : AssetRef<Asset>(id);
 		mValuesDifferent = false;
 
 		UpdateValueView();
@@ -233,7 +233,7 @@ namespace Editor
 			if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 			{
 				void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
-				if (Ref<Asset>* refPtr = dynamic_cast<Ref<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+				if (AssetRef<Asset>* refPtr = dynamic_cast<AssetRef<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
 					refPtr->CreateInstance();
 			}
 		}
@@ -253,7 +253,7 @@ namespace Editor
 			if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 			{
 				void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
-				if (Ref<Asset>* refPtr = dynamic_cast<Ref<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+				if (AssetRef<Asset>* refPtr = dynamic_cast<AssetRef<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
 					refPtr->RemoveInstance();
 			}
 		}
@@ -286,25 +286,25 @@ namespace Editor
 		SetAssetType(type.InvokeStatic<const Type*>("GetAssetTypeStatic"));
 	}
 
-	Ref<Asset> AssetProperty::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
+	AssetRef<Asset> AssetProperty::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
 	{
 		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
 		auto proxySample = proxyType->CreateSample();
 		proxy->GetValuePtr(proxySample);
 		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
 		BaseAssetRef* assetSample = dynamic_cast<BaseAssetRef*>(objectSample);
-		Ref<Asset> res = Ref(assetSample->GetAssetBase());
+		AssetRef<Asset> res = Ref(assetSample->GetAssetBase());
 		delete assetSample;
 		return res;
 	}
 
-	void AssetProperty::SetProxy(const Ref<IAbstractValueProxy>& proxy, const Ref<Asset>& value)
+	void AssetProperty::SetProxy(const Ref<IAbstractValueProxy>& proxy, const AssetRef<Asset>& value)
 	{
 		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
 		auto proxySample = proxyType->CreateSample();
 		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
 		BaseAssetRef* assetSample = dynamic_cast<BaseAssetRef*>(objectSample);
-		assetSample->SetAssetBase(value.Get());
+		assetSample->SetAssetBase(const_cast<Asset*>(value.Get()));
 		proxy->SetValuePtr(proxySample);
 		delete assetSample;
 	}
@@ -381,9 +381,9 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<Ref<Asset>>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<AssetRef<Asset>>);
 DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AssetProperty>);
-DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<Ref<Asset>>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<AssetRef<Asset>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetProperty, Editor__AssetProperty);

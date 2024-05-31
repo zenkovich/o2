@@ -157,7 +157,7 @@ namespace o2
 
     void MenuPanel::AddItem(const WString& path,
                             const Function<void()>& clickFunc /*= Function<void()>()*/,
-                            const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
+                            const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
                             const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
     {
         WString itemPath = path;
@@ -173,7 +173,7 @@ namespace o2
 
     void MenuPanel::AddToggleItem(const WString& path, bool value,
                                   const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
-                                  const Ref<ImageAsset>& icon /*= Ref<ImageAsset>()*/,
+                                  const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
                                   const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
     {
         WString itemPath = path;

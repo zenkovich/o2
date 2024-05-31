@@ -248,7 +248,7 @@ namespace Editor
 		return DynamicCast<FrameScrollView>(ref);
     }
 
-    void CurvesEditor::SetSelectionSpriteImage(const Ref<ImageAsset>& image)
+    void CurvesEditor::SetSelectionSpriteImage(const AssetRef<ImageAsset>& image)
 	{
 		mSelectionSprite->LoadFromImage(image);
 	}
@@ -267,15 +267,15 @@ namespace Editor
 		mTextBorder = border;
 	}
 
-	void CurvesEditor::SetMainHandleImages(const Ref<ImageAsset>& regular, const Ref<ImageAsset>& hover,
-										   const Ref<ImageAsset>& pressed, const Ref<ImageAsset>& selected)
+	void CurvesEditor::SetMainHandleImages(const AssetRef<ImageAsset>& regular, const AssetRef<ImageAsset>& hover,
+										   const AssetRef<ImageAsset>& pressed, const AssetRef<ImageAsset>& selected)
 	{
 		mMainHandleSample.curveInfo = mHandleSamplesStubInfo;
 		mMainHandleSample = CurveHandle(mmake<Sprite>(regular), mmake<Sprite>(hover),
 										mmake<Sprite>(pressed), mmake<Sprite>(selected));
 	}
 
-	void CurvesEditor::SetSupportHandleImages(const Ref<ImageAsset>& regular, const Ref<ImageAsset>& hover, const Ref<ImageAsset>& pressed, const Ref<ImageAsset>& selected)
+	void CurvesEditor::SetSupportHandleImages(const AssetRef<ImageAsset>& regular, const AssetRef<ImageAsset>& hover, const AssetRef<ImageAsset>& pressed, const AssetRef<ImageAsset>& selected)
 	{
 		mSupportHandleSample.curveInfo = mHandleSamplesStubInfo;
 		mSupportHandleSample = CurveHandle(mmake<Sprite>(regular), mmake<Sprite>(hover),
@@ -353,16 +353,16 @@ namespace Editor
 
 			ContextMenu::Item::Separator(),
 
-			mmake<ContextMenu::Item>("Copy keys", THIS_FUNC(OnCopyPressed), "", Ref<ImageAsset>(), ShortcutKeys('C', true)),
-			mmake<ContextMenu::Item>("Cut keys", THIS_FUNC(OnCutPressed), "", Ref<ImageAsset>(), ShortcutKeys('X', true)),
-			mmake<ContextMenu::Item>("Paste keys", THIS_FUNC(OnPastePressed), "", Ref<ImageAsset>(), ShortcutKeys('V', true)),
-			mmake<ContextMenu::Item>("Delete keys", THIS_FUNC(OnDeletePressed), "", Ref<ImageAsset>(), ShortcutKeys(VK_DELETE)),
+			mmake<ContextMenu::Item>("Copy keys", THIS_FUNC(OnCopyPressed), "", AssetRef<ImageAsset>(), ShortcutKeys('C', true)),
+			mmake<ContextMenu::Item>("Cut keys", THIS_FUNC(OnCutPressed), "", AssetRef<ImageAsset>(), ShortcutKeys('X', true)),
+			mmake<ContextMenu::Item>("Paste keys", THIS_FUNC(OnPastePressed), "", AssetRef<ImageAsset>(), ShortcutKeys('V', true)),
+			mmake<ContextMenu::Item>("Delete keys", THIS_FUNC(OnDeletePressed), "", AssetRef<ImageAsset>(), ShortcutKeys(VK_DELETE)),
 			mmake<ContextMenu::Item>("Insert key", THIS_FUNC(OnInsertPressed)),
 
 			ContextMenu::Item::Separator(),
 
-			mmake<ContextMenu::Item>("Undo", THIS_FUNC(OnUndoPressed), "", Ref<ImageAsset>(), ShortcutKeys('Z', true)),
-			mmake<ContextMenu::Item>("Redo", THIS_FUNC(OnRedoPressed), "", Ref<ImageAsset>(), ShortcutKeys('Z', true, true))
+			mmake<ContextMenu::Item>("Undo", THIS_FUNC(OnUndoPressed), "", AssetRef<ImageAsset>(), ShortcutKeys('Z', true)),
+			mmake<ContextMenu::Item>("Redo", THIS_FUNC(OnRedoPressed), "", AssetRef<ImageAsset>(), ShortcutKeys('Z', true, true))
 			}
 		);
 

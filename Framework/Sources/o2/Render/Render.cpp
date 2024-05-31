@@ -222,7 +222,7 @@ namespace o2
 
     void Render::OnAtlasDestroyed(AtlasAsset* atlas)
     {
-        mAtlases.RemoveFirst([=](const Ref<AtlasAsset>& x) { return x == atlas; });
+        mAtlases.RemoveFirst([=](const AssetRef<AtlasAsset>& x) { return x == atlas; });
     }
 
     void Render::OnFontCreated(Font* font)

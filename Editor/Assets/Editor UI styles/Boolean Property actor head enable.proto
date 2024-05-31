@@ -39,7 +39,7 @@
                                         {
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "6b0f6a187ade5399204b38d571ce0fcc",
+                                                    "id": "4491024637551b5f674a56006ce45cbc",
                                                     "path": "Editor UI styles/Toggle actor head enable.proto"
                                                 },
                                                 "PrototypeLink": 5220158911124853706,
@@ -61,26 +61,110 @@
                                                 "mName": "toggle",
                                                 "Layers": [
                                                     {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mImageAsset": {
+                                                                    "id": "1b4e1f836afb6b7a38b32c5d7e8c31aa",
+                                                                    "path": "ui/UI4_enable_toggle_big.png"
+                                                                }
+                                                            }
+                                                        },
                                                         "mUID": 12282343242211699067,
                                                         "PrototypeLink": 8361011656579638323
                                                     },
                                                     {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "0733208b08c93dd669e00f4c219c633a",
+                                                                    "path": "ui/UI4_enable_toggle_big_select.png"
+                                                                }
+                                                            }
+                                                        },
                                                         "mUID": 17955040743312493004,
                                                         "PrototypeLink": 13602345662484965380
                                                     },
                                                     {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "6be0629a7f532e3b50cd6b8028780add",
+                                                                    "path": "ui/UI4_enable_toggle_big_pressed.png"
+                                                                }
+                                                            }
+                                                        },
                                                         "mUID": 11486784227804782605,
                                                         "PrototypeLink": 9405730236994310120
                                                     },
                                                     {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "698b294551681f373f3a5d233f7c048d",
+                                                                    "path": "ui/UI4_enable_toggle_big_focused.png"
+                                                                }
+                                                            }
+                                                        },
                                                         "mUID": 1172067242946964483,
                                                         "PrototypeLink": 7056141378025239370
                                                     },
                                                     {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "24cb3cd12ba628cd1c366e721f9767e5",
+                                                                    "path": "ui/UI4_enable_dot_big.png"
+                                                                }
+                                                            }
+                                                        },
                                                         "mUID": 6890034738394825544,
                                                         "PrototypeLink": 16703217158514825416
                                                     },
                                                     {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "18867189163f78f1110406954fc902d2",
+                                                                    "path": "ui/UI4_enable_dot_big_unknown.png"
+                                                                }
+                                                            }
+                                                        },
                                                         "mUID": 3066799576538204645,
                                                         "PrototypeLink": 17805862668851531886
                                                     }

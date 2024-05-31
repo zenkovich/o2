@@ -147,7 +147,7 @@ namespace o2
         void DrawWidgetAtTop(const Ref<Widget>& widget);
 
         // Returns all styles widgets
-        const Vector<Ref<ActorAsset>>& GetWidgetStyles() const;
+        const Vector<AssetRef<ActorAsset>>& GetWidgetStyles() const;
 
     protected:
         Ref<LogStream> mLog; // UI Log stream
@@ -159,7 +159,7 @@ namespace o2
 
         Vector<Ref<Widget>> mTopWidgets; // Top widgets, drawing after mScreenWidget 
 
-        Vector<Ref<ActorAsset>> mStyleSamples; // Style widgets
+        Vector<AssetRef<ActorAsset>> mStyleSamples; // Style widgets
 
     protected:
         // Registers focusable widget

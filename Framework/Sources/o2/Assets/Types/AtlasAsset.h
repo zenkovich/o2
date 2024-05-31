@@ -21,7 +21,7 @@ namespace o2
     public:
         PROPERTIES(AtlasAsset);
         GETTER(Ref<Meta>, meta, GetMeta);                 // Meta information getter
-        GETTER(Vector<Ref<ImageAsset>>, images, GetImages); // Images assets getter
+        GETTER(Vector<AssetRef<ImageAsset>>, images, GetImages); // Images assets getter
         GETTER(Vector<Page>, pages, GetPages);            // Pages getter
 
     public:
@@ -38,22 +38,22 @@ namespace o2
         AtlasAsset& operator=(const AtlasAsset& asset);
 
         // Returns atlas sprite source
-        TextureSource GetSpriteSource(const Ref<ImageAsset>& image);
+        TextureSource GetSpriteSource(const AssetRef<ImageAsset>& image);
 
         // Returns containing images assets
-        const Vector<Ref<ImageAsset>>& GetImages() const;
+        const Vector<AssetRef<ImageAsset>>& GetImages() const;
 
         // Returns pages array
         const Vector<Page>& GetPages() const;
 
         // Is contains image
-        bool ContainsImage(const Ref<ImageAsset>& image);
+        bool ContainsImage(const AssetRef<ImageAsset>& image);
 
         // Adds image to atlas
-        void AddImage(const Ref<ImageAsset>& image);
+        void AddImage(const AssetRef<ImageAsset>& image);
 
         // Removes image from atlas
-        void RemoveImage(const Ref<ImageAsset>& image);
+        void RemoveImage(const AssetRef<ImageAsset>& image);
 
         // Removes all images from atlas
         void RemoveAllImages();
@@ -162,8 +162,8 @@ namespace o2
         };
 
     protected:
-        Vector<Ref<ImageAsset>>  mImages;  // Loaded image infos @SERIALIZABLE @EDITOR_PROPERTY
-        Vector<Ref<FolderAsset>> mFolders; // Folders, included in atlas @SERIALIZABLE @EDITOR_PROPERTY
+        Vector<AssetRef<ImageAsset>>  mImages;  // Loaded image infos @SERIALIZABLE @EDITOR_PROPERTY
+        Vector<AssetRef<FolderAsset>> mFolders; // Folders, included in atlas @SERIALIZABLE @EDITOR_PROPERTY
 
         Vector<Page> mPages; // Pages @SERIALIZABLE
 
@@ -202,12 +202,12 @@ CLASS_METHODS_META(o2::AtlasAsset)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AtlasAsset&);
-    FUNCTION().PUBLIC().SIGNATURE(TextureSource, GetSpriteSource, const Ref<ImageAsset>&);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<ImageAsset>>&, GetImages);
+    FUNCTION().PUBLIC().SIGNATURE(TextureSource, GetSpriteSource, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<AssetRef<ImageAsset>>&, GetImages);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Page>&, GetPages);
-    FUNCTION().PUBLIC().SIGNATURE(bool, ContainsImage, const Ref<ImageAsset>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddImage, const Ref<ImageAsset>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveImage, const Ref<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(bool, ContainsImage, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddImage, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveImage, const AssetRef<ImageAsset>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllImages);
     FUNCTION().PUBLIC().SIGNATURE(void, ReloadPages);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Meta>, GetMeta);

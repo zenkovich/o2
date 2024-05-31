@@ -45,7 +45,7 @@ namespace o2
         return mImage.Lock();
     }
 
-    void Image::SetImageAsset(const Ref<ImageAsset>& asset)
+    void Image::SetImageAsset(const AssetRef<ImageAsset>& asset)
     {
         if (!mImage)
             mImage = GetLayerDrawable<Sprite>("image");
@@ -56,17 +56,17 @@ namespace o2
         mImage.Lock()->LoadFromImage(asset);
     }
 
-    Ref<ImageAsset> Image::GetImageAsset() const
+    AssetRef<ImageAsset> Image::GetImageAsset() const
     {
         if (mImage)
             return mImage.Lock()->GetImageAsset();
 
-        return Ref<ImageAsset>();
+        return AssetRef<ImageAsset>();
     }
 
     void Image::SetImageName(const String& name)
     {
-        SetImageAsset(Ref<ImageAsset>(name));
+        SetImageAsset(AssetRef<ImageAsset>(name));
     }
 
     String Image::GetImageName() const

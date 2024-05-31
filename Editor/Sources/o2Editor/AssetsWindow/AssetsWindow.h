@@ -99,7 +99,7 @@ namespace Editor
 		void DeleteAssets(const Vector<String>& assetsPaths);
 
 		// Creates and returns an icon sprite for the asset
-		static Ref<Sprite> GetAssetIconSprite(const Ref<Asset>& asset);
+		static Ref<Sprite> GetAssetIconSprite(const AssetRef<Asset>& asset);
 		 
 		IOBJECT(AssetsWindow);
 
@@ -211,7 +211,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, CutAssets, const Vector<String>&);
     FUNCTION().PUBLIC().SIGNATURE(void, PasteAssets, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeleteAssets, const Vector<String>&);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<Sprite>, GetAssetIconSprite, const Ref<Asset>&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<Sprite>, GetAssetIconSprite, const AssetRef<Asset>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeSeparator);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeVisibleState);
