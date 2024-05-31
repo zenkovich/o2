@@ -280,22 +280,23 @@ namespace Editor
 
     void KeyHandlesSheet::InitializeCenterHandle()
     {
-        auto animationWindow = mAnimationWindow.Lock();
-
         mCenterFrameDragHandle = mmake<DragHandle>();
 
         mCenterFrameDragHandle->localToScreenTransformFunc = [=](const Vec2F& point)
             {
+                auto animationWindow = mAnimationWindow.Lock();
                 return Vec2F(animationWindow->mTimeline->LocalToWorld(point.x), animationWindow->mTree->GetLineWorldPosition(point.y));
             };
 
         mCenterFrameDragHandle->screenToLocalTransformFunc = [=](const Vec2F& point)
             {
+                auto animationWindow = mAnimationWindow.Lock();
                 return Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
             };
 
         mCenterFrameDragHandle->isPointInside = [=](const Vec2F& point)
             {
+                auto animationWindow = mAnimationWindow.Lock();
                 auto local = Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
                 return local.x > mSelectionRect.left && local.x < mSelectionRect.right && local.y > mSelectionRect.top && local.y < mSelectionRect.bottom;
             };
@@ -310,54 +311,51 @@ namespace Editor
 
     void KeyHandlesSheet::InitializeLeftHandle()
     {
-        auto animationWindow = mAnimationWindow.Lock();
-
         mLeftFrameDragHandle = mmake<DragHandle>();
 
-        mLeftFrameDragHandle->localToScreenTransformFunc = [&](const Vec2F& point) {
-            return Vec2F(animationWindow->mTimeline->LocalToWorld(point.x), animationWindow->mTree->GetLineWorldPosition(point.y));
-            };
-
-        mLeftFrameDragHandle->screenToLocalTransformFunc = [&](const Vec2F& point) {
-            return Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
-            };
-
-        mLeftFrameDragHandle->isPointInside = [&](const Vec2F& point) {
-            auto r = mSelectionFrame->GetRect();
-            return RectF(r.left - 5, r.bottom, r.left + 5, r.top).IsInside(point);
-            };
-
-        mLeftFrameDragHandle->checkPositionFunc = [&](const Vec2F& point) {
-            return Vec2F(point.x, mSelectionRect.Center().y);
-            };
-
-        mLeftFrameDragHandle->onPressed = [&]() {
-            OnHandleCursorPressed(mCenterFrameDragHandle, *o2Input.GetCursor());
-            };
-
-        mLeftFrameDragHandle->onReleased = [&]() {
-            OnHandleCursorReleased(mCenterFrameDragHandle, *o2Input.GetCursor());
-            };
-
-        mLeftFrameDragHandle->onChangedPos = [&](const Vec2F& point) {
-            if (Math::Equals(mSelectionRect.Width(), 0.0f))
-                return;
-
-            float scale = (point.x - mSelectionRect.right) / (mSelectionRect.left - mSelectionRect.right);
-
-            for (auto& track : animationWindow->mAnimation->GetTracks())
-                track->BeginKeysBatchChange();
-
-            for (auto& handle : GetSelectedHandles())
+        mLeftFrameDragHandle->localToScreenTransformFunc = [&](const Vec2F& point)
             {
-                handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.right)*scale + mSelectionRect.right, handle->GetPosition().y));
-                handle->onChangedPos(handle->GetPosition());
-            }
+                auto animationWindow = mAnimationWindow.Lock();
+                return Vec2F(animationWindow->mTimeline->LocalToWorld(point.x), animationWindow->mTree->GetLineWorldPosition(point.y));
+            };
 
-            for (auto& track : animationWindow->mAnimation->GetTracks())
-                track->CompleteKeysBatchingChange();
+        mLeftFrameDragHandle->screenToLocalTransformFunc = [&](const Vec2F& point)
+            {
+                auto animationWindow = mAnimationWindow.Lock();
+                return Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
+            };
 
-            mNeedUpdateSelectionFrame = true;
+        mLeftFrameDragHandle->isPointInside = [&](const Vec2F& point)
+            {
+                auto r = mSelectionFrame->GetRect();
+                return RectF(r.left - 5, r.bottom, r.left + 5, r.top).IsInside(point);
+            };
+
+        mLeftFrameDragHandle->checkPositionFunc = [&](const Vec2F& point) { return Vec2F(point.x, mSelectionRect.Center().y); };
+        mLeftFrameDragHandle->onPressed = [&]() { OnHandleCursorPressed(mCenterFrameDragHandle, *o2Input.GetCursor()); };
+        mLeftFrameDragHandle->onReleased = [&]() { OnHandleCursorReleased(mCenterFrameDragHandle, *o2Input.GetCursor()); };
+
+        mLeftFrameDragHandle->onChangedPos = [&](const Vec2F& point)
+            {
+                if (Math::Equals(mSelectionRect.Width(), 0.0f))
+                    return;
+
+                auto animationWindow = mAnimationWindow.Lock();
+                float scale = (point.x - mSelectionRect.right) / (mSelectionRect.left - mSelectionRect.right);
+
+                for (auto& track : animationWindow->mAnimation->GetTracks())
+                    track->BeginKeysBatchChange();
+
+                for (auto& handle : GetSelectedHandles())
+                {
+                    handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.right)*scale + mSelectionRect.right, handle->GetPosition().y));
+                    handle->onChangedPos(handle->GetPosition());
+                }
+
+                for (auto& track : animationWindow->mAnimation->GetTracks())
+                    track->CompleteKeysBatchingChange();
+
+                mNeedUpdateSelectionFrame = true;
             };
 
         mLeftFrameDragHandle->onRightButtonReleased = [&](auto& x) { mContextMenu->Show(); };
@@ -366,54 +364,53 @@ namespace Editor
 
     void KeyHandlesSheet::InitializeRightHandle()
     {
-        auto animationWindow = mAnimationWindow.Lock();
 
         mRightFrameDragHandle = mmake<DragHandle>();
 
-        mRightFrameDragHandle->localToScreenTransformFunc = [&](const Vec2F& point) {
-            return Vec2F(animationWindow->mTimeline->LocalToWorld(point.x), animationWindow->mTree->GetLineWorldPosition(point.y));
-            };
-
-        mRightFrameDragHandle->screenToLocalTransformFunc = [&](const Vec2F& point) {
-            return Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
-            };
-
-        mRightFrameDragHandle->isPointInside = [&](const Vec2F& point) {
-            auto r = mSelectionFrame->GetRect();
-            return RectF(r.right - 5, r.bottom, r.right + 5, r.top).IsInside(point);
-            };
-
-        mRightFrameDragHandle->checkPositionFunc = [&](const Vec2F& point) {
-            return Vec2F(point.x, mSelectionRect.Center().y);
-            };
-
-        mRightFrameDragHandle->onPressed = [&]() {
-            OnHandleCursorPressed(mCenterFrameDragHandle, *o2Input.GetCursor());
-            };
-
-        mRightFrameDragHandle->onReleased = [&]() {
-            OnHandleCursorReleased(mCenterFrameDragHandle, *o2Input.GetCursor());
-            };
-
-        mRightFrameDragHandle->onChangedPos = [&](const Vec2F& point) {
-            if (Math::Equals(mSelectionRect.Width(), 0.0f))
-                return;
-
-            float scale = (point.x - mSelectionRect.left) / (mSelectionRect.right - mSelectionRect.left);
-
-            for (auto& track : animationWindow->mAnimation->GetTracks())
-                track->BeginKeysBatchChange();
-
-            for (auto& handle : GetSelectedHandles())
+        mRightFrameDragHandle->localToScreenTransformFunc = [&](const Vec2F& point)
             {
-                handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.left)*scale + mSelectionRect.left, handle->GetPosition().y));
-                handle->onChangedPos(handle->GetPosition());
-            }
+                auto animationWindow = mAnimationWindow.Lock();
+                return Vec2F(animationWindow->mTimeline->LocalToWorld(point.x), animationWindow->mTree->GetLineWorldPosition(point.y));
+            };
 
-            for (auto& track : animationWindow->mAnimation->GetTracks())
-                track->CompleteKeysBatchingChange();
+        mRightFrameDragHandle->screenToLocalTransformFunc = [&](const Vec2F& point)
+            {
+                auto animationWindow = mAnimationWindow.Lock();
+                return Vec2F(animationWindow->mTimeline->WorldToLocal(point.x), animationWindow->mTree->GetLineNumber(point.y));
+            };
 
-            mNeedUpdateSelectionFrame = true;
+        mRightFrameDragHandle->isPointInside = [&](const Vec2F& point)
+            {
+                auto r = mSelectionFrame->GetRect();
+                return RectF(r.right - 5, r.bottom, r.right + 5, r.top).IsInside(point);
+            };
+
+        mRightFrameDragHandle->checkPositionFunc = [&](const Vec2F& point) { return Vec2F(point.x, mSelectionRect.Center().y); };
+        mRightFrameDragHandle->onPressed = [&]() { OnHandleCursorPressed(mCenterFrameDragHandle, *o2Input.GetCursor()); };
+        mRightFrameDragHandle->onReleased = [&]() { OnHandleCursorReleased(mCenterFrameDragHandle, *o2Input.GetCursor()); };
+
+        mRightFrameDragHandle->onChangedPos = [&](const Vec2F& point)
+            {
+                if (Math::Equals(mSelectionRect.Width(), 0.0f))
+                    return;
+
+                auto animationWindow = mAnimationWindow.Lock();
+
+                float scale = (point.x - mSelectionRect.left) / (mSelectionRect.right - mSelectionRect.left);
+
+                for (auto& track : animationWindow->mAnimation->GetTracks())
+                    track->BeginKeysBatchChange();
+
+                for (auto& handle : GetSelectedHandles())
+                {
+                    handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.left)*scale + mSelectionRect.left, handle->GetPosition().y));
+                    handle->onChangedPos(handle->GetPosition());
+                }
+
+                for (auto& track : animationWindow->mAnimation->GetTracks())
+                    track->CompleteKeysBatchingChange();
+
+                mNeedUpdateSelectionFrame = true;
             };
 
         mRightFrameDragHandle->onRightButtonReleased = [&](auto& x) { mContextMenu->Show(); };

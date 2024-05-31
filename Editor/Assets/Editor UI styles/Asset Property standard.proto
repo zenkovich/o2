@@ -15,7 +15,7 @@
                 {
                     "Data": {
                         "Prototype": {
-                            "id": "50875ac3003c57b2089a262d4d670bc4",
+                            "id": "5e315eec5bf102b2213f32df43646b14",
                             "path": "Editor UI styles/Spoiler expand with caption.proto"
                         },
                         "PrototypeLink": 2311970675964809581,
@@ -36,7 +36,7 @@
                                 "Type": "o2::Button",
                                 "Data": {
                                     "Prototype": {
-                                        "id": "26aa66ae2017751952f657ea31825375",
+                                        "id": "384d02ab33991bd75e3f7624175f6f2b",
                                         "path": "Editor UI styles/Button expand.proto"
                                     },
                                     "PrototypeLink": 14561194698756269949,
@@ -218,7 +218,7 @@
                                         {
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "17d217c868ae064407fe0bdc1c4a53c8",
+                                                    "id": "0d44505a12720ceb6f733d56526f512f",
                                                     "path": "Editor UI styles/Label standard.proto"
                                                 },
                                                 "PrototypeLink": 4272162365707740014,
@@ -300,7 +300,7 @@
                                                                 {
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "4d012f4f3ea46be9693c31cc39f25765",
+                                                                            "id": "6be4226831e4692836d56d0476177640",
                                                                             "path": "Editor UI styles/Button create asset instance.proto"
                                                                         },
                                                                         "PrototypeLink": 11657065622309689359,
@@ -386,7 +386,7 @@
                                                                 {
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "3ee855fc621148e876e720cb645a6ae8",
+                                                                            "id": "0653691c1f0a00bb386550734b26687c",
                                                                             "path": "Editor UI styles/Button remove asset instance.proto"
                                                                         },
                                                                         "PrototypeLink": 12153756836125352111,
@@ -473,7 +473,7 @@
                                                                 {
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "0a823bba38d064217eb23bcc286d259e",
+                                                                            "id": "4d054dd53c7750885d9b68321b797e07",
                                                                             "path": "Editor UI styles/Button save asset instance.proto"
                                                                         },
                                                                         "PrototypeLink": 4794203179030195116,
@@ -770,7 +770,7 @@
                                                                                         "meta": {
                                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                             "Value": {
-                                                                                                "mId": "5ba51df21745315816aa361d149970f9"
+                                                                                                "mId": "07be0fa3075d27f72d365be9218d16f1"
                                                                                             }
                                                                                         }
                                                                                     }
@@ -823,7 +823,7 @@
                                                                                         "meta": {
                                                                                             "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                             "Value": {
-                                                                                                "mId": "3b045ec6049f28256bf0474a5c13193c"
+                                                                                                "mId": "66ce483f0a4e60a2584740bd1480219a"
                                                                                             }
                                                                                         }
                                                                                     }
@@ -839,7 +839,7 @@
                                                                     "Type": "o2::Label",
                                                                     "Value": {
                                                                         "Prototype": {
-                                                                            "id": "17d217c868ae064407fe0bdc1c4a53c8",
+                                                                            "id": "0d44505a12720ceb6f733d56526f512f",
                                                                             "path": "Editor UI styles/Label standard.proto"
                                                                         },
                                                                         "PrototypeLink": 4272162365707740014,
@@ -1198,7 +1198,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "5d6e4ae5273731985b196fb53ef14783"
+                                    "mId": "35861e8c330b5099214f35a1477a7063"
                                 }
                             }
                         }

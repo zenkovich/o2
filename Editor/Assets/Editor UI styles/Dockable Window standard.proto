@@ -197,7 +197,7 @@
                     "Type": "o2::ContextMenu",
                     "Value": {
                         "Prototype": {
-                            "id": "4a647d8a230b45044a400af135a37081",
+                            "id": "620f225d06ac28064f395a0910082a42",
                             "path": "Editor UI styles/Context Menu standard.proto"
                         },
                         "PrototypeLink": 7463183658167841912,
@@ -437,7 +437,7 @@
                                                 "meta": {
                                                     "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                     "Value": {
-                                                        "mId": "5fd83f8c51b72b393ca95c081094713b"
+                                                        "mId": "087601515de2000d6e7073836d942eae"
                                                     }
                                                 }
                                             }
@@ -556,7 +556,7 @@
                                 "Type": "o2::HorizontalScrollBar",
                                 "Data": {
                                     "Prototype": {
-                                        "id": "2b2678ab195d6b546ac223355ad1420b",
+                                        "id": "5fb00149316d62f44cc4622578bb62fe",
                                         "path": "Editor UI styles/Horizontal Scroll Bar standard.proto"
                                     },
                                     "PrototypeLink": 10492944459780109401,
@@ -840,7 +840,7 @@
                                 "Type": "o2::VerticalScrollBar",
                                 "Data": {
                                     "Prototype": {
-                                        "id": "0a5a72ea54cb585e52fd01c60b0c5a14",
+                                        "id": "2dd1051324f86e97264b5aa9372357b8",
                                         "path": "Editor UI styles/Vertical Scroll Bar standard.proto"
                                     },
                                     "PrototypeLink": 1546231510864932275,
@@ -1183,7 +1183,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "2b2678ab195d6b546ac223355ad1420b",
+                            "id": "5fb00149316d62f44cc4622578bb62fe",
                             "path": "Editor UI styles/Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 10492944459780109401,
@@ -1334,7 +1334,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "0a5a72ea54cb585e52fd01c60b0c5a14",
+                            "id": "2dd1051324f86e97264b5aa9372357b8",
                             "path": "Editor UI styles/Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 1546231510864932275,
@@ -1489,7 +1489,7 @@
                     "Type": "o2::Button",
                     "Value": {
                         "Prototype": {
-                            "id": "4c8628b24f0e1bd155cd1daa38ac6aac",
+                            "id": "0dd97c00054e42917b8f7b5d3cd43c4a",
                             "path": "Editor UI styles/Button close.proto"
                         },
                         "PrototypeLink": 17528502887093059144,
@@ -1587,7 +1587,7 @@
                     "Type": "o2::Button",
                     "Value": {
                         "Prototype": {
-                            "id": "6edd6cd314ca7d193952483a519612fd",
+                            "id": "5997272365341a6334965c18698e6a0b",
                             "path": "Editor UI styles/Button arrow.proto"
                         },
                         "PrototypeLink": 5091763966723333905,
@@ -2307,7 +2307,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "164f19092a98550c78de14582518032b"
+                                    "mId": "5f2a7b871c5f69ea3c3171d237b6095c"
                                 }
                             }
                         }
@@ -2384,7 +2384,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4772038b52301a294769374845db63f9"
+                                    "mId": "562e5b0569e224e45117727e439f0e71"
                                 }
                             }
                         }
@@ -2486,7 +2486,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "6d295e325d41427e71be1860217e7e9f"
+                                    "mId": "79c132505f906e555ff64fe86ced4501"
                                 }
                             }
                         }
@@ -2538,7 +2538,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "6bc45f0f47a50d9a6f8814937204409a"
+                                    "mId": "56c76bf052763a104f2379737dab5c88"
                                 }
                             }
                         }
@@ -2592,7 +2592,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7a6a509416aa128b2d863c762f27082d"
+                                    "mId": "40a92042323e385c14bb1e976dc96535"
                                 }
                             }
                         }

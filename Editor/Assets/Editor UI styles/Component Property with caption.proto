@@ -3,7 +3,7 @@
         "Type": "Editor::ComponentProperty",
         "Value": {
             "Prototype": {
-                "id": "5e25581f3d3b21c5538f4187161717e1",
+                "id": "257b3b0d3bb50dcd5e96245656be31d8",
                 "path": "Editor UI styles/Component Property standard.proto"
             },
             "PrototypeLink": 8517559688344064881,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "17d217c868ae064407fe0bdc1c4a53c8",
+                            "id": "0d44505a12720ceb6f733d56526f512f",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 4272162365707740014,

@@ -3,7 +3,7 @@
         "Type": "Editor::WStringProperty",
         "Value": {
             "Prototype": {
-                "id": "6d3b4e623bd011e0700b6411657a1917",
+                "id": "19ef448b658164a7023b3add0a98283d",
                 "path": "Editor UI styles/WString Property standard.proto"
             },
             "PrototypeLink": 7559780077873099079,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "17d217c868ae064407fe0bdc1c4a53c8",
+                            "id": "0d44505a12720ceb6f733d56526f512f",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 4272162365707740014,
@@ -73,7 +73,7 @@
                                             "Type": "o2::EditBox",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "3aa2470a429206115e403c5003bc3428",
+                                                    "id": "085d085b3c55444a567b71aa7807420a",
                                                     "path": "Editor UI styles/Edit Box singleline.proto"
                                                 },
                                                 "PrototypeLink": 773306138782988747,

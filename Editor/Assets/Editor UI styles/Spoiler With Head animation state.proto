@@ -21,7 +21,7 @@
                     "Type": "o2::Button",
                     "Value": {
                         "Prototype": {
-                            "id": "26aa66ae2017751952f657ea31825375",
+                            "id": "384d02ab33991bd75e3f7624175f6f2b",
                             "path": "Editor UI styles/Button expand.proto"
                         },
                         "PrototypeLink": 14561194698756269949,
@@ -121,7 +121,7 @@
                     "Type": "o2::Toggle",
                     "Value": {
                         "Prototype": {
-                            "id": "5f560309094d4de33a2f4d9019873149",
+                            "id": "552c4210427a300e77aa42eb5b8a5faf",
                             "path": "Editor UI styles/Toggle standard.proto"
                         },
                         "PrototypeLink": 1557566515537166444,
@@ -307,7 +307,7 @@
                     "Type": "o2::Button",
                     "Value": {
                         "Prototype": {
-                            "id": "3be176816d367d6d40d204437c612730",
+                            "id": "2e060b754ac248651790082e631112e8",
                             "path": "Editor UI styles/Button remove small.proto"
                         },
                         "PrototypeLink": 6231532431685958712,
@@ -405,7 +405,7 @@
                     "Type": "o2::Toggle",
                     "Value": {
                         "Prototype": {
-                            "id": "5f560309094d4de33a2f4d9019873149",
+                            "id": "552c4210427a300e77aa42eb5b8a5faf",
                             "path": "Editor UI styles/Toggle standard.proto"
                         },
                         "PrototypeLink": 1557566515537166444,
@@ -591,7 +591,7 @@
                     "Type": "o2::HorizontalProgress",
                     "Value": {
                         "Prototype": {
-                            "id": "7c286b174859467c22be53e758ee32e2",
+                            "id": "4e0a5d006a837e6941c257845e875fb5",
                             "path": "Editor UI styles/Horizontal Progress standard.proto"
                         },
                         "PrototypeLink": 10094344899256546876,
@@ -824,7 +824,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "493700477d317d6c48380c64132959a1"
+                                    "mId": "53aa2ebf6cab30f3310457bd12813629"
                                 }
                             }
                         }
