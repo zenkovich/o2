@@ -16,7 +16,7 @@ namespace o2
         Basis  renderBasis;
         Camera camera;
 
-        Vector<Ref<CursorAreaEventsListener>> cursorEventAreaListeners;
+        Vector<WeakRef<CursorAreaEventsListener>> cursorEventAreaListeners;
 
         bool isEditor      = false; // Is this layer drawn in editor scope
         bool isTransparent = false; // Is this layer transparent to input other listeners

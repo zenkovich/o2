@@ -137,13 +137,13 @@ namespace o2
         WeakRef& operator=(const WeakRef<_type>& other) { BaseWeakRef<_type>::operator=(other); return *this; }
 
         // Move operator
-        WeakRef& operator=(WeakRef<_type>&& other) { BaseWeakRef<_type>::operator=(other); return *this; }
+        WeakRef& operator=(WeakRef<_type>&& other) { BaseWeakRef<_type>::operator=(std::move(other)); return *this; }
 
         // Copy operator from strong reference
         WeakRef& operator=(const Ref<_type>& other) { BaseWeakRef<_type>::operator=(other); return *this; }
 
         // Move operator from strong reference
-		WeakRef& operator=(Ref<_type>&& other) { BaseWeakRef<_type>::operator=((BaseRef<_type>&)other); return *this; }
+		WeakRef& operator=(Ref<_type>&& other) { BaseWeakRef<_type>::operator=((BaseRef<_type>&&)other); return *this; }
 
 		// Less operator
 		bool operator<(const WeakRef<_type>& other) const { return BaseWeakRef<_type>::operator<(other); }

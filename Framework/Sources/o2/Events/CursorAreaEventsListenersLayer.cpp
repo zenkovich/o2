@@ -179,9 +179,10 @@ namespace o2
     {
         Vector<Ref<CursorAreaEventsListener>> res;
         Vec2F localCursorPos = ToLocal(cursorPos);
-        for (auto& listener : cursorEventAreaListeners)
+        for (auto& listenerWeak : cursorEventAreaListeners)
         {
-            if (!listener->IsUnderPoint(localCursorPos) || !listener->mScissorRect.IsInside(localCursorPos) || !listener->mInteractable)
+            auto listener = listenerWeak.Lock();
+            if (!listener || !listener->IsUnderPoint(localCursorPos) || !listener->mScissorRect.IsInside(localCursorPos) || !listener->mInteractable)
                 continue;
 
             if (auto layer = DynamicCast<CursorAreaEventListenersLayer>(listener))
@@ -226,9 +227,10 @@ namespace o2
     {
         auto localCursor = ConvertLocalCursor(cursor);
 
-        for (auto& listener : cursorEventAreaListeners)
+        for (auto& listenerWeak : cursorEventAreaListeners)
         {
-            if (!listener->IsUnderPoint(localCursor.position) || !listener->mScissorRect.IsInside(localCursor.position))
+            auto listener = listenerWeak.Lock();
+            if (!listener || !listener->IsUnderPoint(localCursor.position) || !listener->mScissorRect.IsInside(localCursor.position))
                 continue;
 
             auto drag = DynamicCast<DragableObject>(listener);
@@ -275,9 +277,10 @@ namespace o2
     {
         auto localCursor = ConvertLocalCursor(cursor);
 
-        for (auto& listener : cursorEventAreaListeners)
+        for (auto& listenerWeak : cursorEventAreaListeners)
         {
-            if (!listener->IsUnderPoint(localCursor.position))
+            auto listener = listenerWeak.Lock();
+            if (listener && !listener->IsUnderPoint(localCursor.position))
                 listener->OnCursorPressedOutside(localCursor);
         }
 
@@ -347,9 +350,10 @@ namespace o2
     {
         auto localCursor = ConvertLocalCursor(cursor);
 
-        for (auto& listener : cursorEventAreaListeners)
+        for (auto& listenerWeak : cursorEventAreaListeners)
         {
-            if (!listener->IsUnderPoint(localCursor.position))
+            auto listener = listenerWeak.Lock();
+            if (listener && !listener->IsUnderPoint(localCursor.position))
                 listener->OnCursorReleasedOutside(localCursor);
         }
 
