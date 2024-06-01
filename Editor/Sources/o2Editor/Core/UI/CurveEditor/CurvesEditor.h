@@ -2,7 +2,7 @@
 
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/Camera.h"
-#include "o2/Render/FontRef.h"
+#include "o2/Render/Font.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Utils/Editor/DragHandle.h"
 #include "o2/Utils/Editor/FrameHandles.h"

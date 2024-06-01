@@ -30,7 +30,7 @@ namespace Editor
 		mReady = false;
 
 		mSelectionSprite = mmake<Sprite>();
-		mTextFont = Ref<Font>("stdFont.ttf");
+		mTextFont = AssetRef<VectorFontAsset>("stdFont.ttf")->GetFont();
 		mTextFont->CheckCharacters("0123456789.,+-", 10);
 
 		InitializeTextDrawables();

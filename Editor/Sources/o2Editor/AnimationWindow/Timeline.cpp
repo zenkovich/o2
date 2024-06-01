@@ -12,7 +12,7 @@ namespace Editor
     AnimationTimeline::AnimationTimeline(RefCounter* refCounter) :
 		Widget(refCounter)
 	{
-		mTextFont = Ref<Font>("stdFont.ttf");
+		mTextFont = AssetRef<VectorFontAsset>("stdFont.ttf")->GetFont();
 		mTextFont->CheckCharacters("0123456789.,+-", 10);
 
 		mText = mmake<Text>(mTextFont);

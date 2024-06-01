@@ -504,7 +504,7 @@ namespace o2
 		sample->horOverflow = Label::HorOverflow::Dots;
 		sample->verOverflow = Label::VerOverflow::None;
 
-		sample->SetFont(Ref<Font>("stdFont.ttf"));
+		sample->SetFont(AssetRef<VectorFontAsset>("stdFont.ttf")->GetFont());
 		sample->SetHorAlign(HorAlign::Middle);
 		sample->SetVerAlign(VerAlign::Middle);
 		sample->SetColor(Color4(96, 125, 139));

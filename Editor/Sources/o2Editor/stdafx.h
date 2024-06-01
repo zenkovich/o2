@@ -28,7 +28,6 @@
 #include "o2/Render/BitmapFont.h"
 #include "o2/Render/Camera.h"
 #include "o2/Render/Font.h"
-#include "o2/Render/FontRef.h"
 #include "o2/Render/IDrawable.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Particle.h"
