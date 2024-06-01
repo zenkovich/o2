@@ -3,7 +3,7 @@
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/Types/BitmapFontAsset.h"
 #include "o2/Assets/Types/VectorFontAsset.h"
-#include "o2/Render/FontRef.h"
+#include "o2/Render/Font.h"
 #include "o2/Render/RectDrawable.h"
 #include "o2/Utils/Types/String.h"
 
