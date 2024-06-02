@@ -8,13 +8,13 @@ namespace o2
 {
     AnimationTrack<float>::AnimationTrack()
     {
-        curve.onKeysChanged.Add(this, &AnimationTrack<float>::OnCurveChanged);
+        curve->onKeysChanged.Add(this, &AnimationTrack<float>::OnCurveChanged);
     }
 
     AnimationTrack<float>::AnimationTrack(const AnimationTrack<float>& other):
         IAnimationTrack(other), curve(other.curve)
     {
-        curve.onKeysChanged.Add(this, &AnimationTrack<float>::OnCurveChanged);
+        curve->onKeysChanged.Add(this, &AnimationTrack<float>::OnCurveChanged);
     }
 
     AnimationTrack<float>& AnimationTrack<float>::operator=(const AnimationTrack<float>& other)
@@ -36,130 +36,130 @@ namespace o2
 
     float AnimationTrack<float>::GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
     {
-        return curve.Evaluate(position, direction, cacheKey, cacheKeyApprox);
+        return curve->Evaluate(position, direction, cacheKey, cacheKeyApprox);
     }
 
     void AnimationTrack<float>::BeginKeysBatchChange()
     {
-        curve.BeginKeysBatchChange();
+        curve->BeginKeysBatchChange();
     }
 
     void AnimationTrack<float>::CompleteKeysBatchingChange()
     {
-        curve.CompleteKeysBatchingChange();
+        curve->CompleteKeysBatchingChange();
     }
 
     float AnimationTrack<float>::GetDuration() const
     {
-        return curve.Length();
+        return curve->Length();
     }
 
-    IAnimationTrack::IPlayer* AnimationTrack<float>::CreatePlayer() const
+    Ref<IAnimationTrack::IPlayer> AnimationTrack<float>::CreatePlayer() const
     {
-        return mnew Player();
+        return mmake<Player>();
     }
 
     void AnimationTrack<float>::AddKeys(Vector<Vec2F> values, float smooth /*= 1.0f*/)
     {
-        curve.AppendKeys(values, smooth);
+        curve->AppendKeys(values, smooth);
     }
 
     int AnimationTrack<float>::AddKey(const Key& key)
     {
-        return curve.InsertKey(key);
+        return curve->InsertKey(key);
     }
 
     int AnimationTrack<float>::AddKey(const Key& key, float position)
     {
         Key newKey = key;
         newKey.position = position;
-        return curve.InsertKey(newKey);
+        return curve->InsertKey(newKey);
     }
 
     int AnimationTrack<float>::AddSmoothKey(const Key& key, float smooth)
     {
-        return curve.InsertKey(key.position, key.value, smooth);
+        return curve->InsertKey(key.position, key.value, smooth);
     }
 
     int AnimationTrack<float>::AddKey(float position, float value, float leftCoef, float leftCoefPosition,
                                       float rightCoef, float rightCoefPosition)
     {
-        return curve.InsertKey(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
+        return curve->InsertKey(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
     }
 
     int AnimationTrack<float>::AddKey(float position, float value, float smooth /*= 1.0f*/)
     {
-        return curve.InsertKey(position, value, smooth);
+        return curve->InsertKey(position, value, smooth);
     }
 
     bool AnimationTrack<float>::RemoveKey(float position)
     {
-        return curve.RemoveKey(position);
+        return curve->RemoveKey(position);
     }
 
     bool AnimationTrack<float>::RemoveKeyAt(int idx)
     {
-        return curve.RemoveKeyAt(idx);
+        return curve->RemoveKeyAt(idx);
     }
 
     void AnimationTrack<float>::RemoveAllKeys()
     {
-        curve.RemoveAllKeys();
+        curve->RemoveAllKeys();
     }
 
     bool AnimationTrack<float>::ContainsKey(float position) const
     {
-        return curve.ContainsKey(position);
+        return curve->ContainsKey(position);
     }
 
     const Vector<AnimationTrack<float>::Key>& AnimationTrack<float>::GetKeys() const
     {
-        return curve.GetKeys();
+        return curve->GetKeys();
     }
 
     AnimationTrack<float>::Key AnimationTrack<float>::GetKey(float position) const
     {
-        return curve.GetKey(position);
+        return curve->GetKey(position);
     }
 
     AnimationTrack<float>::Key AnimationTrack<float>::GetKeyAt(int idx) const
     {
-        return curve.GetKeyAt(idx);
+        return curve->GetKeyAt(idx);
     }
 
     void AnimationTrack<float>::SetKey(int idx, const Key& key)
     {
-        curve.SetKey(key, idx);
+        curve->SetKey(key, idx);
     }
 
     AnimationTrack<float>::Key AnimationTrack<float>::FindKey(UInt64 uid) const
     {
-        return curve.FindKey(uid);
+        return curve->FindKey(uid);
     }
 
     int AnimationTrack<float>::FindKeyIdx(UInt64 uid) const
     {
-        return curve.FindKeyIdx(uid);
+        return curve->FindKeyIdx(uid);
     }
 
     void AnimationTrack<float>::SetKeys(const Vector<Key>& keys)
     {
-        curve.SetKeys(keys);
+        curve->SetKeys(keys);
     }
 
     void AnimationTrack<float>::SmoothKey(float position, float smooth)
     {
-        curve.SmoothKey(position, smooth);
+        curve->SmoothKey(position, smooth);
     }
 
     AnimationTrack<float>::Key AnimationTrack<float>::operator[](float position) const
     {
-        return curve.GetKey(position);
+        return curve->GetKey(position);
     }
 
     Vector<AnimationTrack<float>::Key> AnimationTrack<float>::GetKeysNonContant()
     {
-        return curve.GetKeys();
+        return curve->GetKeys();
     }
 
     void AnimationTrack<float>::OnCurveChanged()
@@ -175,7 +175,7 @@ namespace o2
                                                           float endCoef, float endCoefPosition)
     {
         AnimationTrack<float> res;
-        res.curve = Curve::Parametric(begin, end, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition);
+        res.curve = mmake<Curve>(Curve::Parametric(begin, end, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition));
         return res;
     }
 
@@ -208,10 +208,7 @@ namespace o2
     {}
 
     AnimationTrack<float>::Player::~Player()
-    {
-        if (mTargetProxy)
-            delete mTargetProxy;
-    }
+    {}
 
     AnimationTrack<float>::Player::operator float() const
     {
@@ -237,20 +234,20 @@ namespace o2
         mTargetDelegate = changeEvent;
     }
 
-    void AnimationTrack<float>::Player::SetTargetProxy(IValueProxy<float>* proxy)
+    void AnimationTrack<float>::Player::SetTargetProxy(const Ref<IValueProxy<float>>& proxy)
     {
         mTarget = nullptr;
         mTargetDelegate.Clear();
         mTargetProxy = proxy;
     }
 
-    void AnimationTrack<float>::Player::SetTrack(AnimationTrack<float>* track)
+    void AnimationTrack<float>::Player::SetTrack(const Ref<AnimationTrack<float>>& track)
     {
         mTrack = track;
         IPlayer::SetTrack(track);
     }
 
-    AnimationTrack<float>* AnimationTrack<float>::Player::GetTrackT() const
+    const Ref<AnimationTrack<float>>& AnimationTrack<float>::Player::GetTrackT() const
     {
         return mTrack;
     }
@@ -265,17 +262,17 @@ namespace o2
         SetTarget((float*)target, changeEvent);
     }
 
-    void AnimationTrack<float>::Player::SetTargetProxyVoid(void* target)
+	void AnimationTrack<float>::Player::SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy)
     {
-        SetTargetProxy((IValueProxy<float>*)target);
+        SetTargetProxy(DynamicCast<IValueProxy<float>>(targetProxy));
     }
 
-    void AnimationTrack<float>::Player::SetTrack(IAnimationTrack* track)
+    void AnimationTrack<float>::Player::SetTrack(const Ref<IAnimationTrack>& track)
     {
-        SetTrack(dynamic_cast<AnimationTrack<float>*>(track));
+        SetTrack(DynamicCast<AnimationTrack<float>>(track));
     }
 
-    IAnimationTrack* AnimationTrack<float>::Player::GetTrack() const
+    Ref<IAnimationTrack> AnimationTrack<float>::Player::GetTrack() const
     {
         return mTrack;
     }
@@ -290,7 +287,7 @@ namespace o2
         if (!mTrack)
             return;
 
-        mCurrentValue = mTrack->curve.Evaluate(mInDurationTime, mInDurationTime > mPrevInDurationTime, mPrevKey, mPrevKeyApproximation);
+        mCurrentValue = mTrack->curve->Evaluate(mInDurationTime, mInDurationTime > mPrevInDurationTime, mPrevKey, mPrevKeyApproximation);
         mPrevInDurationTime = mInDurationTime;
 
         if (mTarget)
@@ -302,9 +299,9 @@ namespace o2
             mTargetProxy->SetValue(mCurrentValue);
     }
 
-    void AnimationTrack<float>::Player::RegMixer(AnimationState* state, const String& path)
+    void AnimationTrack<float>::Player::RegMixer(const Ref<AnimationState>& state, const String& path)
     {
-        state->mOwner->RegTrack<float>(this, path, state);
+        state->mOwner.Lock()->RegTrack<float>(Ref(this), path, state);
     }
 }
 // --- META ---

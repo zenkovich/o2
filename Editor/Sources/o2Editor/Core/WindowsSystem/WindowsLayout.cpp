@@ -11,32 +11,32 @@
 
 namespace Editor
 {
-	void WindowsLayout::WindowDockPlace::RetrieveLayout(Widget* widget)
+	void WindowsLayout::WindowDockPlaceInfo::RetrieveLayout(const Ref<Widget>& widget)
 	{
 		if (widget->GetType() == TypeOf(DockWindowPlace))
 		{
 			anchors.Set(widget->layout->GetAnchorLeft(), widget->layout->GetAnchorTop(),
 						widget->layout->GetAnchorRight(), widget->layout->GetAnchorBottom());
 
-			for (auto child : widget->GetChildWidgets())
+			for (auto& child : widget->GetChildWidgets())
 			{
 				if (child->GetType() == TypeOf(DockWindowPlace))
 				{
-					childs.Add(WindowDockPlace());
+					childs.Add(WindowDockPlaceInfo());
 					childs[childs.Count() - 1].RetrieveLayout(child);
 				}
 				else if (child->GetType() == TypeOf(DockableWindow) && child->IsEnabled())
 				{
 					windows.Add(child->name);
 
-					if (dynamic_cast<DockableWindow*>(child)->IsTabActive())
+					if (DynamicCast<DockableWindow>(child)->IsTabActive())
 						active = child->name;
 				}
 			}
 		}
 	}
 
-	bool WindowsLayout::WindowDockPlace::operator==(const WindowDockPlace& other) const
+	bool WindowsLayout::WindowDockPlaceInfo::operator==(const WindowDockPlaceInfo& other) const
 	{
 		return anchors == other.anchors && childs == other.childs && windows == other.windows;
 	}
@@ -46,18 +46,18 @@ namespace Editor
 		return mainDock == other.mainDock && windows == other.windows;
 	}
 
-	void WindowsLayout::RestoreDock(WindowDockPlace* dockDef, DockWindowPlace* dockWidget)
+	void WindowsLayout::RestoreDock(WindowDockPlaceInfo& dockDef, DockWindowPlace& dockWidget)
 	{
 		PushEditorScopeOnStack scope;
 
-		Vector<DockWindowPlace*> childDockWidgets;
-		for (auto child : dockDef->childs)
+		Vector<Ref<DockWindowPlace>> childDockWidgets;
+		for (auto& child : dockDef.childs)
 		{
-			dockWidget->interactable = false;
+			dockWidget.interactable = false;
 
-			DockWindowPlace* newDock = mnew DockWindowPlace();
+			auto newDock = mmake<DockWindowPlace>();
 			newDock->name = "dock place";
-			dockWidget->AddChild(newDock);
+			dockWidget.AddChild(newDock);
 
 			*newDock->layout = WidgetLayout::BothStretch();
 			newDock->layout->anchorMin = child.anchors.LeftBottom();
@@ -66,81 +66,81 @@ namespace Editor
 		}
 
 		int idx = 0;
-		for (auto child : dockDef->childs)
+		for (auto& child : dockDef.childs)
 		{
-			DockWindowPlace* newDock = childDockWidgets[idx++];
+			auto newDock = childDockWidgets[idx++];
 
 			if ((child.anchors.left < 1.0f && child.anchors.left > 0.0f) ||
 				(child.anchors.right < 1.0f && child.anchors.right > 0.0f))
 			{
-				DockWindowPlace* neighborMin = childDockWidgets.FindOrDefault([&](DockWindowPlace* x) {
+				auto neighborMin = childDockWidgets.FindOrDefault([&](auto& x) {
 					return Math::Equals(x->layout->GetAnchorRight(), newDock->layout->GetAnchorLeft()) && x != newDock;
 				});
 
-				DockWindowPlace* neighborMax = childDockWidgets.FindOrDefault([&](DockWindowPlace* x) {
+				auto neighborMax = childDockWidgets.FindOrDefault([&](auto& x) {
 					return Math::Equals(x->layout->GetAnchorLeft(), newDock->layout->GetAnchorRight()) && x != newDock;
 				});
 
 				newDock->SetResizibleDir(TwoDirection::Horizontal, 1.5f, neighborMin, neighborMax);
 
 				if (neighborMin)
-					neighborMin->SetResizibleDir(TwoDirection::Horizontal, 1.5f, neighborMin->mNeighborMin, newDock);
+					neighborMin->SetResizibleDir(TwoDirection::Horizontal, 1.5f, neighborMin->mNeighborMin.Lock(), newDock);
 
 				if (neighborMax)
-					neighborMax->SetResizibleDir(TwoDirection::Horizontal, 1.5f, newDock, neighborMax->mNeighborMax);
+					neighborMax->SetResizibleDir(TwoDirection::Horizontal, 1.5f, newDock, neighborMax->mNeighborMax.Lock());
 			}
 
 			if ((child.anchors.top < 1.0f && child.anchors.top > 0.0f) ||
 				(child.anchors.bottom < 1.0f && child.anchors.bottom > 0.0f))
 			{
-				DockWindowPlace* neighborMin = childDockWidgets.FindOrDefault([&](DockWindowPlace* x) {
+				auto neighborMin = childDockWidgets.FindOrDefault([&](auto& x) {
 					return Math::Equals(x->layout->GetAnchorTop(), newDock->layout->GetAnchorBottom()) && x != newDock;
 				});
 
-				DockWindowPlace* neighborMax = childDockWidgets.FindOrDefault([&](DockWindowPlace* x) {
+				auto neighborMax = childDockWidgets.FindOrDefault([&](auto& x) {
 					return Math::Equals(x->layout->GetAnchorBottom(), newDock->layout->GetAnchorTop()) && x != newDock;
 				});
 
 				newDock->SetResizibleDir(TwoDirection::Vertical, 1.5f, neighborMin, neighborMax);
 
 				if (neighborMin)
-					neighborMin->SetResizibleDir(TwoDirection::Vertical, 1.5f, neighborMin->mNeighborMin, newDock);
+					neighborMin->SetResizibleDir(TwoDirection::Vertical, 1.5f, neighborMin->mNeighborMin.Lock(), newDock);
 
 				if (neighborMax)
-					neighborMax->SetResizibleDir(TwoDirection::Vertical, 1.5f, newDock, neighborMax->mNeighborMax);
+					neighborMax->SetResizibleDir(TwoDirection::Vertical, 1.5f, newDock, neighborMax->mNeighborMax.Lock());
 			}
 		}
 
 		idx = 0;
-		for (auto child : dockDef->childs)
+		for (auto& child : dockDef.childs)
 		{
-			DockWindowPlace* newDock = childDockWidgets[idx++];
-			RestoreDock(&child, newDock);
+			auto newDock = childDockWidgets[idx++];
+			RestoreDock(child, *newDock);
 		}
 
-		DockableWindow* activeTabWindow = nullptr;
-		for (auto wnd : dockDef->windows)
+		Ref<DockableWindow> activeTabWindow;
+		for (auto& wnd : dockDef.windows)
 		{
-			auto window = o2EditorWindows.mEditorWindows.FindOrDefault([&](IEditorWindow* x) { 
+			auto window = o2EditorWindows.mEditorWindows.FindOrDefault([&](auto& x) {
 				return x->mWindow->GetName() == wnd; 
 			});
 
 			if (window)
 			{
-				DockableWindow* dockWnd = (DockableWindow*)window->mWindow;
+				auto dockWnd = DynamicCast<DockableWindow>(window->mWindow);
 
 				dockWnd->mNonDockSize = dockWnd->layout->size;
-				dockWidget->AddChild(dockWnd);
+				dockWidget.AddChild(dockWnd);
 				*dockWnd->layout = WidgetLayout::BothStretch();
 				dockWnd->SetDocked(true);
 				dockWnd->Show();
 
-				if (dockDef->active == wnd)
+				if (dockDef.active == wnd)
 					activeTabWindow = dockWnd;
 			}
 		}
 
-		dockWidget->ArrangeChildWindows();
+		dockWidget.ArrangeChildWindows();
 
 		if (activeTabWindow)
 			activeTabWindow->SetTabActive();
@@ -148,19 +148,19 @@ namespace Editor
 		CleanEmptyDocks(dockWidget);
 	}
 
-	void WindowsLayout::CleanEmptyDocks(DockWindowPlace* dockPlace)
+	void WindowsLayout::CleanEmptyDocks(DockWindowPlace& dockPlace)
 	{
 		PushEditorScopeOnStack scope;
 
-		auto childs = dockPlace->GetChildWidgets();
-		for (auto child : childs)
+		auto childs = dockPlace.GetChildWidgets();
+		for (auto& child : childs)
 		{
-			if (auto dockChild = dynamic_cast<DockWindowPlace*>(child))
+			if (auto dockChild = DynamicCast<DockWindowPlace>(child))
 			{
-				CleanEmptyDocks(dockChild);
+				CleanEmptyDocks(*dockChild);
 
 				if (dockChild->GetChildWidgets().IsEmpty())
-					dockPlace->RemoveChild(child);
+					dockPlace.RemoveChild(child);
 			}
 		}
 	}
@@ -170,5 +170,5 @@ namespace Editor
 
 DECLARE_CLASS(Editor::WindowsLayout, Editor__WindowsLayout);
 
-DECLARE_CLASS(Editor::WindowsLayout::WindowDockPlace, Editor__WindowsLayout__WindowDockPlace);
+DECLARE_CLASS(Editor::WindowsLayout::WindowDockPlaceInfo, Editor__WindowsLayout__WindowDockPlaceInfo);
 // --- END META ---

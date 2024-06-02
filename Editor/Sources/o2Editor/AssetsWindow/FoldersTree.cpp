@@ -18,8 +18,8 @@
 
 namespace Editor
 {
-	AssetsFoldersTree::AssetsFoldersTree() :
-		Widget()
+	AssetsFoldersTree::AssetsFoldersTree(RefCounter* refCounter) :
+		Widget(refCounter)
 	{
 		if (!UIManager::IsSingletonInitialzed())
 			return;
@@ -43,8 +43,8 @@ namespace Editor
 		InitializeContext();
 	}
 
-	AssetsFoldersTree::AssetsFoldersTree(const AssetsFoldersTree& other) :
-		Widget(other)
+	AssetsFoldersTree::AssetsFoldersTree(RefCounter* refCounter, const AssetsFoldersTree& other) :
+		Widget(refCounter, other)
 	{
 		mFoldersTree = FindChildByType<Tree>();
 		RemoveChild(FindChildByType<ContextMenu>());
@@ -82,7 +82,7 @@ namespace Editor
 	{
 		mOpengingFolderFromThis = true;
 
-		mFoldersTree->SelectAndHighlightObject(o2Assets.GetAssetsTree().Find(path));
+		mFoldersTree->SelectAndHighlightObject(o2Assets.GetAssetsTree().Find(path).Get());
 		mCurrentPath = path;
 
 		mOpengingFolderFromThis = false;
@@ -100,12 +100,12 @@ namespace Editor
 		mContextMenu->AddItem("Open", [&]() { OnContextOpenPressed(); });
 		mContextMenu->AddItem("Show in folder", [&]() { OnContextShowInExplorerPressed(); });
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("New folder", [&]() { OnContextCreateFolderPressed(); }, ImageAssetRef(), ShortcutKeys('N', true));
+		mContextMenu->AddItem("New folder", [&]() { OnContextCreateFolderPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('N', true));
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true));
-		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true));
-		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true));
-		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+		mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('C', true));
+		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('X', true));
+		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('V', true));
+		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, AssetRef<ImageAsset>(), ShortcutKeys(VK_DELETE));
 
 		mFoldersTree->onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
 		mFoldersTree->onUnfocused = [&]() { mContextMenu->SetItemsMinPriority(); };
@@ -119,32 +119,22 @@ namespace Editor
 			return nullptr;
 
 		AssetInfo* assetTreeNode = (AssetInfo*)(void*)object;
-		return (void*)(void*)(assetTreeNode->parent);
+		return (void*)(assetTreeNode->parent.Lock().Get());
 	}
 
 	Vector<void*> AssetsFoldersTree::GetFoldersTreeNodeChilds(void* object)
 	{
 		AssetInfo* assetTreeNode = (AssetInfo*)object;
 
-		if (assetTreeNode)
-		{
-			return assetTreeNode->GetChildren()
-				.FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
-				.Sorted([](AssetInfo* a, AssetInfo* b) { return a->path < b->path; })
-				.Convert<void*>([](AssetInfo* x) { return (void*)x; });
-		}
-		else
-		{
-			const AssetsTree& assetsTree = o2Assets.GetAssetsTree();
+		auto& infos = assetTreeNode ? assetTreeNode->GetChildren() : o2Assets.GetAssetsTree().rootAssets;
 
-			return assetsTree.rootAssets
-				.FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
-				.Sorted([](AssetInfo* a, AssetInfo* b) { return a->path < b->path; })
-				.Convert<void*>([](AssetInfo* x) { return (void*)x; });
-		}
+		return infos
+            .FindAll([](const Ref<AssetInfo>& x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
+            .Sorted([](const Ref<AssetInfo>& a, const Ref<AssetInfo>& b) { return a->path < b->path; })
+            .Convert<void*>([](const Ref<AssetInfo>& x) { return (void*)x.Get(); });
 	}
 
-	void AssetsFoldersTree::SetupFoldersTreeNode(TreeNode* node, void* object)
+	void AssetsFoldersTree::SetupFoldersTreeNode(const Ref<TreeNode>& node, void* object)
 	{
 		AssetInfo* assetTreeNode = (AssetInfo*)(void*)object;
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
@@ -153,17 +143,17 @@ namespace Editor
 
 		auto nameLayer = node->layer["name"];
 		if (nameLayer)
-			((Text*)nameLayer->GetDrawable())->text = pathName;
+			DynamicCast<Text>(nameLayer->GetDrawable())->text = pathName;
 	}
 
-	void AssetsFoldersTree::OnFoldersTreeNodeDblClick(TreeNode* node)
+	void AssetsFoldersTree::OnFoldersTreeNodeDblClick(const Ref<TreeNode>& node)
 	{
-		AssetInfo* assetTreeNode = (AssetInfo*)(void*)node->GetObject();
+		auto assetTreeNode = Ref((AssetInfo*)(void*)node->GetObject());
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
 
 		node->SetState("edit", true);
 
-		auto editBox = (EditBox*)node->GetChild("nameEditBox");
+		auto editBox = node->GetChildByType<EditBox>("nameEditBox");
 		editBox->text = (String)pathName;
 		editBox->SelectAll();
 		editBox->Widget::Focus();
@@ -199,9 +189,9 @@ namespace Editor
 		mOpengingFolderFromThis = false;
 	}
 
-	void AssetsFoldersTree::OnFoldersTreeRightClick(TreeNode* node)
+	void AssetsFoldersTree::OnFoldersTreeRightClick(const Ref<TreeNode>& node)
 	{
-		o2UI.FocusWidget(this);
+		o2UI.FocusWidget(Ref(this));
 		mContextMenu->Show();
 	}
 
@@ -259,7 +249,19 @@ namespace Editor
 		}
 	}
 
-	void FoldersTree::UpdateVisibleNodes()
+    FoldersTree::FoldersTree(RefCounter* refCounter):
+		Tree(refCounter)
+    {}
+
+    FoldersTree::FoldersTree(RefCounter* refCounter, const FoldersTree& other):
+		Tree(refCounter, other)
+    {}
+
+    FoldersTree::FoldersTree(const FoldersTree& other):
+		FoldersTree(nullptr, other)
+    {}
+
+    void FoldersTree::UpdateVisibleNodes()
 	{
 		PushEditorScopeOnStack scope;
 		Tree::UpdateNodesStructure();
@@ -269,8 +271,10 @@ namespace Editor
 	{
 		return "UI/Editor";
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::FoldersTree>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AssetsFoldersTree>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetsFoldersTree, Editor__AssetsFoldersTree);

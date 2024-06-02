@@ -1,23 +1,29 @@
 #pragma once
 
-#include "o2/Utils/Types/Containers/Vector.h"
-#include "o2/Utils/Singleton.h"
 #include "o2/Utils/Function/Function.h"
+#include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 
 // Task manager access macros
 #define o2Tasks o2::TaskManager::Instance()
 
 namespace o2
 {
-    class Task;
-    class AnimationClip;
+    FORWARD_CLASS_REF(Task);
 
     // -----------------------
     // Tasks manager singleton
     // -----------------------
-    class TaskManager: public Singleton<TaskManager>
+    class TaskManager: public Singleton<TaskManager>, public RefCounterable
     {
     public:
+        // Default constructor
+        TaskManager();
+
+        // Destructor. Destroys all tasks
+        ~TaskManager();
+
         // Stops task with specified id
         void StopTask(int id);
 
@@ -25,7 +31,7 @@ namespace o2
         void StopAllTasks();
 
         // Returns task
-        Task* FindTask(int id);
+        Ref<Task> FindTask(int id);
 
         // Runs new functional task
         void Run(const Function<void(float)>& update, const Function<bool()> isDone);
@@ -40,16 +46,11 @@ namespace o2
         void Update(float dt);
 
     protected:
-        Vector<Task*> mTasks;      // All tasks array
-        int           mLastTaskId; // Last given task id
+        Vector<Ref<Task>> mTasks; // All tasks array
+
+        int mLastTaskId = 0; // Last given task id
         
     protected:
-        // Default constructor
-        TaskManager();
-
-        // Destructor. Destroys all tasks
-        ~TaskManager();
-
         friend class Task;
         friend class Application;
     };

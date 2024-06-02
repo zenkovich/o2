@@ -19,7 +19,7 @@ namespace o2
     public:
         PROPERTIES(Button);
         PROPERTY(WString, caption, SetCaption, GetCaption); // Caption property. Searches "caption" layer and sets text
-        PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
+        PROPERTY(Ref<Sprite>, icon, SetIcon, GetIcon);      // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
     public:
         SerializableFunction<void()> onClick;       // Click event @SERIALIZABLE
@@ -30,10 +30,10 @@ namespace o2
 
     public:
         // Default constructor
-        Button();
+        Button(RefCounter* refCounter);
 
         // Copy-constructor
-        Button(const Button& other);
+        Button(RefCounter* refCounter, const Button& other);
 
         // Assign operator
         Button& operator=(const Button& other);
@@ -48,10 +48,10 @@ namespace o2
         WString GetCaption() const;
 
         // Sets icon sprite. Searches sprite layer "icon". Creates a new icon if isn't exist
-        void SetIcon(Sprite* sprite);
+        void SetIcon(const Ref<Sprite>& sprite);
 
         // Returns icon sprite
-        Sprite* GetIcon() const;
+        Ref<Sprite> GetIcon() const;
 
         // Returns is this widget can be selected
         bool IsFocusable() const override;
@@ -63,10 +63,11 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Button);
+        CLONEABLE_REF(Button);
 
     protected:
-        Text*   mCaptionText = nullptr; // Caption layer text
-        Sprite* mIconSprite = nullptr;  // Icon layer sprite
+        WeakRef<Text>   mCaptionText; // Caption layer text
+        WeakRef<Sprite> mIconSprite;  // Icon layer sprite
 
     protected:
         // Called when cursor pressed on this. Sets state "pressed" to true
@@ -92,7 +93,7 @@ namespace o2
         void OnKeyReleased(const Input::Key& key) override;
 
         // Called when layer added and updates drawing sequence
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Called when visible was changed
         void OnEnabled() override;
@@ -105,6 +106,8 @@ namespace o2
 
         // Called when listener stops interacting, enables "inactive" state when exists
         void OnBecomeNotInteractable() override;
+
+        REF_COUNTERABLE_IMPL(Widget);
     };
 }
 // --- META ---
@@ -123,20 +126,20 @@ CLASS_FIELDS_META(o2::Button)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(onClick);
     FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(isPointInside);
     FIELD().PUBLIC().NAME(shortcut);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaptionText);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mIconSprite);
+    FIELD().PROTECTED().NAME(mCaptionText);
+    FIELD().PROTECTED().NAME(mIconSprite);
 }
 END_META;
 CLASS_METHODS_META(o2::Button)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Button&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Button&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, Sprite*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, const Ref<Sprite>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Sprite>, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
@@ -147,7 +150,7 @@ CLASS_METHODS_META(o2::Button)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnBecomeInteractable);

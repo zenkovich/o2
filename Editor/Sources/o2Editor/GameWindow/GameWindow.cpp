@@ -29,23 +29,23 @@ namespace Editor
 	{
 		mWindow->caption = "Game";
 		mWindow->name = "game window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_game_icon.png"));
+		mWindow->SetIcon(mmake<Sprite>("ui/UI4_game_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 2)));
 		mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
 
-		mGameView = mnew GameView();
+		mGameView = mmake<GameView>();
 		*mGameView->layout = WidgetLayout::BothStretch(0, 0, 0, 19);
 		mWindow->AddChild(mGameView);
 
 		InitializeDevicesMenu();
 
-		HorizontalLayout* upPanel = mnew HorizontalLayout();
+		auto upPanel = mmake<HorizontalLayout>();
 		upPanel->name = "up panel";
 		upPanel->baseCorner = BaseCorner::Right;
 		upPanel->expandWidth = false;
 		upPanel->spacing = 5;
 		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-		upPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
+		upPanel->AddLayer("back", mmake<Sprite>("ui/UI4_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
 		mWindow->AddChild(upPanel);
 
 		mResolutionsButton = o2UI.CreateWidget<Button>("panel down");
@@ -85,7 +85,7 @@ namespace Editor
 		// 
 		// 		mDevicesMenu->AddItem("---");
 		// 
-		// 		for (auto kv : mDevicesList)
+		// 		for (auto& kv : mDevicesList)
 		// 		{
 		// 			String caption = kv.first + " (" + (String)kv.second.resolution.x + " x " + (String)kv.second.resolution.y + ")";
 		// 			auto item = mDevicesMenu->AddToggleItem(caption, false, [](bool) {});
@@ -115,18 +115,18 @@ namespace Editor
 		SetResolution(mCustomSizeProperty->GetCommonValue());
 	}
 
-	void GameWindow::OnDeviceSelected(const String& name, const ContextMenuItem* item)
+	void GameWindow::OnDeviceSelected(const String& name, const Ref<ContextMenuItem>& item)
 	{
 		SetDeviceMenuCheckedItem(item);
 		mResolutionsButton->caption = item->text;
 		SetResolution(mDevicesList[name].resolution);
 	}
 
-	void GameWindow::SetDeviceMenuCheckedItem(const ContextMenuItem* item)
+	void GameWindow::SetDeviceMenuCheckedItem(const Ref<ContextMenuItem>& item)
 	{
 		for (auto& child : mDevicesMenu->GetItemsLayout()->GetChildren())
 		{
-			if (auto childItem = dynamic_cast<ContextMenuItem*>(child))
+			if (auto childItem = DynamicCast<ContextMenuItem>(child))
 			{
 				if (childItem->IsCheckable())
 					childItem->SetChecked(childItem == item);
@@ -134,10 +134,11 @@ namespace Editor
 		}
 	}
 
-	GameWindow::GameView::GameView()
+	GameWindow::GameView::GameView(RefCounter* refCounter):
+		Widget(refCounter)
 	{
 		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 	}
 
 	void GameWindow::GameView::Draw()
@@ -154,12 +155,12 @@ namespace Editor
 		if (!o2Scene.GetCameras().IsEmpty())
 		{
 			auto prevCamera = o2Render.GetCamera();
-			auto cameraActor = o2Scene.GetCameras()[0];
+			auto cameraActor = o2Scene.GetCameras()[0].Lock();
 			cameraActor->Setup();
 			
 			if (o2Input.IsKeyDown(VK_F1))
 			{
-				auto localCursor = cameraActor->listenersLayer.ScreenToLocal(o2Input.GetCursorPos());
+				auto localCursor = cameraActor->listenersLayer->ScreenToLocal(o2Input.GetCursorPos());
 				o2Render.DrawCross(localCursor, 25.0f, Color4::Red());
 				o2Debug.Log((String)localCursor);
 			}
@@ -175,8 +176,8 @@ namespace Editor
 
 		EditorScope::Exit(editorDepth);
 
-		for (auto camera : o2Scene.GetCameras())
-			camera->listenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
+		for (auto& camera : o2Scene.GetCameras())
+			camera.Lock()->listenersLayer->OnDrawn(mRenderTargetSprite->GetBasis());
 
 		EditorScope::Enter(editorDepth);
 	}
@@ -208,8 +209,9 @@ namespace Editor
 	{
 		return deviceName == other.deviceName;
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::GameWindow::GameView>);
 // --- META ---
 
 DECLARE_CLASS(Editor::GameWindow, Editor__GameWindow);

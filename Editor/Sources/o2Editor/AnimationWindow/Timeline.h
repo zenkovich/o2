@@ -1,7 +1,7 @@
 #pragma once
 
 #include "o2/Events/CursorEventsArea.h"
-#include "o2/Render/FontRef.h"
+#include "o2/Render/Font.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Utils/Editor/DragHandle.h"
 
@@ -14,7 +14,7 @@ namespace o2
 
 namespace Editor
 {
-	class AnimationWindow;
+	FORWARD_CLASS_REF(AnimationWindow);
 
 	// ------------------------------------
 	// Draws time scale in animation window
@@ -26,10 +26,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		AnimationTimeline();
+        AnimationTimeline(RefCounter* refCounter);
 
 		// Copy-constructor
-		AnimationTimeline(const AnimationTimeline& other);
+        AnimationTimeline(RefCounter* refCounter, const AnimationTimeline& other);
 
 		// Destructor
 		~AnimationTimeline();
@@ -44,7 +44,7 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Sets animation. Subscribes on animation duration change, controls playing time
-		void SetAnimation(AnimationClip* animation, AnimationPlayer* player = nullptr);
+		void SetAnimation(const Ref<AnimationClip>& animation, const Ref<AnimationPlayer>& player = nullptr);
 
 		// Sets current time scroll in seconds
 		void SetScroll(float scroll);
@@ -77,13 +77,13 @@ namespace Editor
 		float WorldToLocal(float pos) const;
 
 		// Returns captions text drawable
-		Text* GetText() const;
+		const Ref<Text>& GetText() const;
 
 		// Sets scrollbar widget, used for view scroll
-		void SetScrollBar(HorizontalScrollBar* scrollBar);
+		void SetScrollBar(const Ref<HorizontalScrollBar>& scrollBar);
 
 		// Returns scrollbar widget, used for view scroll
-		HorizontalScrollBar* GetScrollBar() const;
+		const Ref<HorizontalScrollBar>& GetScrollBar() const;
 
 		// Checks is this timeA and timeB are same on screen. Dependent on zoom, thershold - max pixels distance on screen
 		bool IsSameTime(float timeA, float timeB, float threshold = 3.0f) const;
@@ -100,7 +100,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AnimationTimeline);
+        SERIALIZABLE(AnimationTimeline);
+        CLONEABLE_REF(AnimationTimeline);
 
 	private:
 		const float mTextOffset = 12.0f;              // Text position offset from top border
@@ -123,10 +124,10 @@ namespace Editor
 		const float mScrollBorderBounceCoef = 10.0f;  // Smooth scroll bounds bounce coefficient
 
 	private:
-		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+		Ref<AnimationWindow> mAnimationWindow; // Animation window
 
-		AnimationPlayer* mPlayer = nullptr;    // Animation player
-		AnimationClip*   mAnimation = nullptr; // Animation, used for sibscribing on duration change
+		Ref<AnimationPlayer> mPlayer;    // Animation player
+		Ref<AnimationClip>   mAnimation; // Animation, used for sibscribing on duration change
 
 		float mTimeCursor = 0; // Current time of red cursor
 
@@ -144,19 +145,19 @@ namespace Editor
 
 		float mDuration = 0.0f; // Scale length in seconds
 
-		FontRef mTextFont;       // Captions font
-		Text*   mText = nullptr; // Captions text
+		Ref<Font> mTextFont; // Captions font
+		Ref<Text> mText;     // Captions text
 
-		Sprite* mBeginMark = nullptr; // Begin animation mark sprite. Begin is always at zero
-		Sprite* mEndMark = nullptr;   // End animation mark sprite, at duration
+		Ref<Sprite> mBeginMark; // Begin animation mark sprite. Begin is always at zero
+		Ref<Sprite> mEndMark;   // End animation mark sprite, at duration
 
 		Layout mBeginMarkLayout = Layout(Vec2F(0, 1), Vec2F(0, 1), Vec2F(-6.0f, 3.0f), Vec2F(6.0f, -21.0f));
 		Layout mEndMarkLayout = Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(-4.0f, 3.0f), Vec2F(6.0f, -21.0f));
 
-		HorizontalScrollBar* mScrollBar = nullptr; // Scroll bar. Limited by animation duration
+		Ref<HorizontalScrollBar> mScrollBar; // Scroll bar. Limited by animation duration
 
-		Sprite*          mTimeLine = nullptr; // Red time line
-		CursorEventsArea mTimeLineEventsArea; // Top area events listeners, used for moving red line of time
+		Ref<Sprite>           mTimeLine;           // Red time line
+		Ref<CursorEventsArea> mTimeLineEventsArea; // Top area events listeners, used for moving red line of time
 
 	private:
 		// Updates duration and scrollbars
@@ -195,6 +196,8 @@ namespace Editor
 		// Called when scrolling
 		void OnScrolled(float scroll) override;
 
+		REF_COUNTERABLE_IMPL(Widget);
+
 		friend class AnimationWindow;
 
 		template<typename AnimationTrackType>
@@ -227,9 +230,9 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
     FIELD().PRIVATE().DEFAULT_VALUE(15.0f).NAME(mScrollSmoothCoef);
     FIELD().PRIVATE().DEFAULT_VALUE(10.0f).NAME(mScrollSpeedDecreaseCoef);
     FIELD().PRIVATE().DEFAULT_VALUE(10.0f).NAME(mScrollBorderBounceCoef);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPlayer);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimation);
+    FIELD().PRIVATE().NAME(mAnimationWindow);
+    FIELD().PRIVATE().NAME(mPlayer);
+    FIELD().PRIVATE().NAME(mAnimation);
     FIELD().PRIVATE().DEFAULT_VALUE(0).NAME(mTimeCursor);
     FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mSmoothViewScroll);
     FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mViewScroll);
@@ -242,24 +245,24 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mViewMoveDisabled);
     FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mDuration);
     FIELD().PRIVATE().NAME(mTextFont);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mText);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mBeginMark);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEndMark);
+    FIELD().PRIVATE().NAME(mText);
+    FIELD().PRIVATE().NAME(mBeginMark);
+    FIELD().PRIVATE().NAME(mEndMark);
     FIELD().PRIVATE().DEFAULT_VALUE(Layout(Vec2F(0, 1), Vec2F(0, 1), Vec2F(-6.0f, 3.0f), Vec2F(6.0f, -21.0f))).NAME(mBeginMarkLayout);
     FIELD().PRIVATE().DEFAULT_VALUE(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(-4.0f, 3.0f), Vec2F(6.0f, -21.0f))).NAME(mEndMarkLayout);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mScrollBar);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeLine);
+    FIELD().PRIVATE().NAME(mScrollBar);
+    FIELD().PRIVATE().NAME(mTimeLine);
     FIELD().PRIVATE().NAME(mTimeLineEventsArea);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTimeline)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTimeline&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationTimeline&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*, AnimationPlayer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&, const Ref<AnimationPlayer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetScroll, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetViewRange, float, float, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTimeCursor, float);
@@ -270,9 +273,9 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
     FUNCTION().PUBLIC().SIGNATURE(void, SetViewMoveDisabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(float, LocalToWorld, float);
     FUNCTION().PUBLIC().SIGNATURE(float, WorldToLocal, float);
-    FUNCTION().PUBLIC().SIGNATURE(Text*, GetText);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetScrollBar, HorizontalScrollBar*);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalScrollBar*, GetScrollBar);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Text>&, GetText);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetScrollBar, const Ref<HorizontalScrollBar>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<HorizontalScrollBar>&, GetScrollBar);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSameTime, float, float, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);

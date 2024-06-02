@@ -16,12 +16,12 @@ namespace o2
 
 namespace Editor
 {
-	class SpoilerWithHead;
+	FORWARD_CLASS_REF(SpoilerWithHead);
 
 	// ---------------------------------------
 	// Editor actor transform viewer interface
 	// ---------------------------------------
-	class IActorTransformViewer: public IObject
+	class IActorTransformViewer: public IObject, virtual public RefCounterable
 	{
 	public:
 		// Default constructor. Initializes data widget
@@ -34,7 +34,7 @@ namespace Editor
 		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
 
 		// Returns data widget
-		virtual Widget* GetWidget() const;
+		virtual Ref<Widget> GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -54,7 +54,7 @@ namespace Editor
 		IOBJECT(IActorTransformViewer);
 
 	protected:
-		SpoilerWithHead* mSpoiler = nullptr;
+		Ref<SpoilerWithHead> mSpoiler;
 
 		bool mEnabled = false; // Is viewer enabled 
 
@@ -73,11 +73,12 @@ namespace Editor
 CLASS_BASES_META(Editor::IActorTransformViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IActorTransformViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
@@ -86,7 +87,7 @@ CLASS_METHODS_META(Editor::IActorTransformViewer)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

@@ -28,10 +28,10 @@ namespace o2
 
     public:
         // Default constructor
-        EditBox();
+        explicit EditBox(RefCounter* refCounter);
 
         // Copy-constructor
-        EditBox(const EditBox& other);
+        EditBox(RefCounter* refCounter, const EditBox& other);
 
         // Destructor
         ~EditBox();
@@ -79,10 +79,10 @@ namespace o2
         void SelectAll();
 
         // Returns text drawable
-        Text* GetTextDrawable();
+        const Ref<Text>& GetTextDrawable();
 
         // Returns caret drawable
-        Sprite* GetCaretDrawable();
+        const Ref<Sprite>& GetCaretDrawable();
 
         // Sets selection color
         void SetSelectionColor(const Color4& color);
@@ -154,6 +154,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(EditBox);
+        CLONEABLE_REF(EditBox);
 
     protected:
         Color4  mSelectionColor = Color4(0.1f, 0.2f, 0.6f, 0.3f); // Text selection color @SERIALIZABLE
@@ -162,9 +163,9 @@ namespace o2
         WString mText;             // Current text @SERIALIZABLE
         WString mAvailableSymbols; // Available symbols @SERIALIZABLE
 
-        Text*   mTextDrawable = nullptr;  // Text drawable @SERIALIZABLE
-        Mesh*   mSelectionMesh = nullptr; // Selection mesh
-        Sprite* mCaretDrawable = nullptr; // Caret drawable @SERIALIZABLE
+        Ref<Text>   mTextDrawable;  // Text drawable @SERIALIZABLE
+        Ref<Mesh>   mSelectionMesh; // Selection mesh
+        Ref<Sprite> mCaretDrawable; // Caret drawable @SERIALIZABLE
 
         float mCaretBlinkDelay = 1.0f; // Caret blinking delay @SERIALIZABLE
         float mCaretBlinkTime = 0.0f;  // Caret blinking timer
@@ -286,6 +287,8 @@ namespace o2
 
         // Moves mSelectionEnd position and mSelectionBegin, when selecting
         void MoveCaret(int newPosition, bool selecting);
+        
+        REF_COUNTERABLE_IMPL(ScrollArea);
     };
 }
 // --- META ---
@@ -308,9 +311,9 @@ CLASS_FIELDS_META(o2::EditBox)
     FIELD().PROTECTED().NAME(mLastText);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mText);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mAvailableSymbols);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mTextDrawable);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectionMesh);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mCaretDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mTextDrawable);
+    FIELD().PROTECTED().NAME(mSelectionMesh);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mCaretDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mCaretBlinkDelay);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mCaretBlinkTime);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mSelectionBegin);
@@ -330,8 +333,8 @@ END_META;
 CLASS_METHODS_META(o2::EditBox)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const EditBox&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const EditBox&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);
@@ -345,8 +348,8 @@ CLASS_METHODS_META(o2::EditBox)
     FUNCTION().PUBLIC().SIGNATURE(int, GetSelectionEnd);
     FUNCTION().PUBLIC().SIGNATURE(void, Deselect);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAll);
-    FUNCTION().PUBLIC().SIGNATURE(Text*, GetTextDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetCaretDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Text>&, GetTextDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetCaretDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionColor, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(Color4, GetSelectionColor);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFilterInteger);

@@ -453,6 +453,8 @@ namespace o2
         // Not equals operator
         bool operator!=(const DataDocument& other) const;
 
+        operator std::nullptr_t() const = delete;
+
         // Cast to type operator
         template<typename _type>
         operator _type() const;

@@ -133,38 +133,38 @@ namespace o2
         mReady = true;
     }
 
-    void Texture::Create(Bitmap* bitmap)
+    void Texture::Create(const Bitmap& bitmap)
     {
-        mFileName = bitmap->GetFilename();
-        Create(bitmap->GetSize(), (Byte*)bitmap->GetData(), TextureFormat::R8G8B8A8);
+        mFileName = bitmap.GetFilename();
+        Create(bitmap.GetSize(), (Byte*)bitmap.GetData(), TextureFormat::R8G8B8A8);
     }
 
-    void Texture::SetData(Bitmap* bitmap)
+    void Texture::SetData(const Bitmap& bitmap)
     {
         auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
         glBindTexture(GL_TEXTURE_2D, mHandle);
 
         GLint texFormat = formatMap[format];
 
-        mSize = bitmap->GetSize();
+        mSize = bitmap.GetSize();
 
-        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
-            bitmap->GetData());
+        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap.GetSize().x, bitmap.GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
+            bitmap.GetData());
 
         GL_CHECK_ERROR();
 
         glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
     }
 
-    void Texture::SetSubData(const Vec2I& offset, Bitmap* bitmap)
+    void Texture::SetSubData(const Vec2I& offset, const Bitmap& bitmap)
     {
         auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
         glBindTexture(GL_TEXTURE_2D, mHandle);
 
         GLint texFormat = formatMap[format];
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0, offset.x, offset.y, bitmap->GetSize().x, bitmap->GetSize().y, texFormat, GL_UNSIGNED_BYTE,
-            bitmap->GetData());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, offset.x, offset.y, bitmap.GetSize().x, bitmap.GetSize().y, texFormat, GL_UNSIGNED_BYTE,
+            bitmap.GetData());
 
         GL_CHECK_ERROR();
 

@@ -15,10 +15,10 @@ namespace o2
 
     public:
         // Default constructor
-        PopupWidget();
+        explicit PopupWidget(RefCounter* refCounter);
 
         // Copy-constructor
-        PopupWidget(const PopupWidget& other);
+        PopupWidget(RefCounter* refCounter, const PopupWidget& other);
 
         // Destructor
         ~PopupWidget();
@@ -33,7 +33,7 @@ namespace o2
         void Draw() override;
 
         // Show from parent context
-        virtual void Show(PopupWidget* parent, const Vec2F& position = o2Input.GetCursorPos());
+        virtual void Show(const Ref<PopupWidget>& parent, const Vec2F& position = o2Input.GetCursorPos());
 
         // Shows context
         void Show(const Vec2F& position = o2Input.GetCursorPos());
@@ -54,14 +54,15 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(PopupWidget);
+        CLONEABLE_REF(PopupWidget);
 
     protected:
-        static PopupWidget* mVisiblePopup; // Current visible popup widget
+        static WeakRef<PopupWidget> mVisiblePopup; // Current visible popup widget
 
         float mFitSizeMin = 40.0f;    // Minimal fitting size @SERIALIZABLE
 
-        PopupWidget* mParentPopup = nullptr; // Parent visible popup widget
-        PopupWidget* mChildPopup = nullptr;  // Child visible popup widget
+        WeakRef<PopupWidget> mParentPopup; // Parent visible popup widget
+        WeakRef<PopupWidget> mChildPopup;  // Child visible popup widget
 
         bool mShownAtFrame = false; // Is popup was shown at current frame
 
@@ -99,6 +100,8 @@ namespace o2
         // Called when key was released
         void OnKeyPressed(const Input::Key& key) override;
 
+        REF_COUNTERABLE_IMPL(RefCounterable);
+
         friend class ContextMenu;
         friend class MenuPanel;
         friend class UIManager;
@@ -116,19 +119,19 @@ CLASS_FIELDS_META(o2::PopupWidget)
 {
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(fitByChildren);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(40.0f).NAME(mFitSizeMin);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentPopup);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mChildPopup);
+    FIELD().PROTECTED().NAME(mParentPopup);
+    FIELD().PROTECTED().NAME(mChildPopup);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mShownAtFrame);
 }
 END_META;
 CLASS_METHODS_META(o2::PopupWidget)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const PopupWidget&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const PopupWidget&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, Show, PopupWidget*, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Show, const Ref<PopupWidget>&, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMinFitSize, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);

@@ -17,7 +17,7 @@ namespace Editor
 	// ------------------------------------
 	// Editor actor header viewer interface
 	// ------------------------------------
-	class IActorHeaderViewer: public IObject
+	class IActorHeaderViewer: public IObject, virtual public RefCounterable
 	{
 	public:
 		// Virtual destructor
@@ -27,7 +27,7 @@ namespace Editor
 		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
 
 		// Returns data widget
-		virtual Widget* GetWidget() const { return nullptr; }
+		virtual Ref<Widget> GetWidget() const { return nullptr; }
 
 		// Updates properties values
 		virtual void Refresh() {}
@@ -58,6 +58,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IActorHeaderViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IActorHeaderViewer)
@@ -69,7 +70,7 @@ CLASS_METHODS_META(Editor::IActorHeaderViewer)
 {
 
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);

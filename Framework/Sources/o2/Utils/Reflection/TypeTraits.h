@@ -9,10 +9,23 @@
 #include "o2/Utils/Math/Vertex.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/UID.h"
 
 namespace o2
 {
+    template<class T> struct IsRefHelper : std::false_type {};
+    template<class T> struct IsRefHelper<Ref<T>> : std::true_type {};
+    template<class T> struct IsRef : IsRefHelper<typename std::remove_cv<T>::type> {};
+    template<class T> struct ExtractRefType { typedef T type; };
+    template<class T> struct ExtractRefType<Ref<T>> { typedef T type; };
+
+    template<class T> struct IsBaseRefHelper : std::false_type {};
+    template<class T> struct IsBaseRefHelper<Ref<T>> : std::true_type {};
+    template<class T> struct IsBaseRef : IsBaseRefHelper<typename std::remove_cv<T>::type> {};
+    template<class T> struct ExtractBaseRefType { typedef T type; };
+    template<class T> struct ExtractBaseRefType<Ref<T>> { typedef T type; };
+
     template<class T> struct IsVectorHelper : std::false_type {};
     template<class T> struct IsVectorHelper<Vector<T>> : std::true_type {};
     template<class T> struct IsVector : IsVectorHelper<typename std::remove_cv<T>::type> {};
@@ -43,6 +56,18 @@ namespace o2
     template<typename... Ts> struct make_void { typedef void type; };
     template<typename... Ts> using void_t = typename make_void<Ts...>::type;
 
+    template<typename T, typename = void>
+    struct IsComplete : std::false_type {};
+
+    template<typename T>
+    struct IsComplete<T, std::void_t<decltype(sizeof(T))>> : std::true_type {};
+
+    template<typename Base, typename T>
+    struct IsBaseOf
+    {
+        static constexpr auto value = std::conditional<IsComplete<T>::value, std::is_base_of<Base, T>, std::false_type>::type::value;
+    };
+
     template<class T, class = void_t<>>
     struct IsCloneable: std::false_type { };
 
@@ -61,13 +86,13 @@ namespace o2
     template<class T>
     struct IsStringAccessorHelper<T, typename std::enable_if<IsAccessor<T>::value && std::is_same<typename T::keyType, String>::value>::type> : std::true_type { };
 
-    template<class T> struct IsStringAccessor : IsStringAccessorHelper<typename std::remove_cv<T>::type> { };
+	template<class T> struct IsStringAccessor : IsStringAccessorHelper<typename std::remove_cv<T>::type> {};
 
-    template<class T, class = void_t<>>
-    struct IsProperty : std::false_type { };
+	template<class T, class = void_t<>>
+	struct IsProperty : std::false_type {};
 
-    template<class T>
-    struct IsProperty<T, void_t<decltype(&T::IsProperty)>> : std::true_type { };
+	template<class T>
+	struct IsProperty<T, void_t<decltype(&T::IsProperty)>> : std::true_type {};
 
     template<class T, class = void_t<>>
     struct SupportsPlus : std::false_type {};
@@ -109,7 +134,13 @@ namespace o2
     struct ExtractPropertyValueType<T, void_t<decltype(std::declval<T>().IsProperty())>>
     {
         typedef typename T::valueType type;
-    };
+	};
+
+	template<class T, class = void_t<>>
+	struct HasCastToRefCounterable : std::false_type {};
+
+	template<class T>
+	struct HasCastToRefCounterable<T, void_t<decltype(&T::CastToRefCounterable)>> : std::true_type {};
 
     template<typename T>
     struct IsFundamental: public std::conditional<
@@ -151,29 +182,33 @@ namespace o2
     template<typename _type>
     const Type& GetTypeOf()
     {
-        if constexpr (std::is_pointer<_type>::value)
+        if constexpr (std::is_base_of<IObject, _type>::value)
         {
-            return *GetTypeOf<typename std::remove_pointer<_type>::type>().GetPointerType();
+            return *_type::type;
+        }
+        else if constexpr (IsRef<_type>::value)
+        {
+            return *Reflection::GetReferenceType<typename std::remove_const<typename ExtractRefType<_type>::type>::type>();
+        }
+        else if constexpr (std::is_pointer<_type>::value)
+        {
+            return *Reflection::GetPointerType<typename std::remove_const<typename std::remove_pointer<_type>::type>::type>();
         }
         else if constexpr (IsVector<_type>::value)
         {
-            return *Reflection::InitializeVectorType<typename ExtractVectorElementType<_type>::type>();
+            return *Reflection::GetVectorType<typename ExtractVectorElementType<_type>::type>();
         }
         else if constexpr (IsStringAccessor<_type>::value)
         {
-            return *Reflection::InitializeAccessorType<typename _type::valueType, _type>();
+            return *Reflection::GetAccessorType<typename _type::valueType, _type>();
         }
         else if constexpr (IsMap<_type>::value)
         {
-            return *Reflection::InitializeMapType<typename ExtractMapKeyType<_type>::type, typename ExtractMapValueType<_type>::type>();
+            return *Reflection::GetMapType<typename ExtractMapKeyType<_type>::type, typename ExtractMapValueType<_type>::type>();
         }
         else if constexpr (IsProperty<_type>::value)
         {
-            return *Reflection::InitializePropertyType<typename _type::valueType, _type>();
-        }
-        else if constexpr (std::is_base_of<IObject, _type>::value)
-        {
-            return *_type::type;
+            return *Reflection::GetPropertyType<typename _type::valueType, _type>();
         }
         else if constexpr (IsFundamental<_type>::value && !std::is_const<_type>::value)
         {

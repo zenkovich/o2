@@ -33,6 +33,7 @@ namespace o2
         static int GetEditorSorting() { return 96; }
 
         SERIALIZABLE(SceneAsset);
+        CLONEABLE_REF(SceneAsset);
 
     protected:
         // Loads asset data, using DataValue and serialization
@@ -43,8 +44,6 @@ namespace o2
 
         friend class Assets;
     };
-
-    typedef Ref<SceneAsset> SceneAssetRef;
 }
 // --- META ---
 

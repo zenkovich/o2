@@ -11,8 +11,8 @@
 
 namespace o2
 {
-    Spoiler::Spoiler():
-        VerticalLayout()
+    Spoiler::Spoiler(RefCounter* refCounter):
+        VerticalLayout(refCounter)
     {
         mBaseCorner = BaseCorner::Top;
         mFitByChildren = true;
@@ -20,19 +20,19 @@ namespace o2
         mExpandHeight = false;
 
         CreateExpandAnimation();
-        mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+        mExpandState->GetAnimationPlayer()->onUpdate = THIS_FUNC(UpdateExpanding);
         mExpandState->SetState(false);
         UpdateExpanding(0);
     }
 
-    Spoiler::Spoiler(const Spoiler& other):
-        VerticalLayout(other), caption(this), headHeight(this), expanded(this), mHeadHeight(other.mHeadHeight)
+    Spoiler::Spoiler(RefCounter* refCounter, const Spoiler& other):
+        VerticalLayout(refCounter, other), caption(this), headHeight(this), expanded(this), mHeadHeight(other.mHeadHeight)
     {
         mExpandState = GetStateObject("expand");
         if (!mExpandState)
             CreateExpandAnimation();
 
-        mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+        mExpandState->GetAnimationPlayer()->onUpdate = THIS_FUNC(UpdateExpanding);
         mExpandState->SetState(false);
 
         InitializeControls();
@@ -48,7 +48,7 @@ namespace o2
         if (!mExpandState)
             CreateExpandAnimation();
 
-        mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+        mExpandState->GetAnimationPlayer()->onUpdate = THIS_FUNC(UpdateExpanding);
         mExpandState->SetState(false);
 
         mHeadHeight = other.mHeadHeight;
@@ -95,7 +95,7 @@ namespace o2
         if (!mResEnabledInHierarchy || mIsClipped)
             return;
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         OnDrawn();
@@ -106,17 +106,17 @@ namespace o2
             if (clipping)
                 o2Render.EnableScissorTest(mBounds);
 
-            for (auto child : mChildrenInheritedDepth)
+            for (auto& child : mChildrenInheritedDepth)
                 child->Draw();
 
             if (clipping)
                 o2Render.DisableScissorTest();
         }
 
-        for (auto child : mInternalWidgets)
+        for (auto& child : mInternalWidgets)
             child->Draw();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         DrawDebugFrame();
@@ -174,7 +174,7 @@ namespace o2
             return Widget::GetMinHeightWithChildren();
 
         float res = Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing + mBorder.top + mBorder.bottom;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res += child->GetMinHeightWithChildren();
@@ -211,7 +211,7 @@ namespace o2
         }
     }
 
-    Button* Spoiler::GetExpandButton() const
+    Ref<Button> Spoiler::GetExpandButton() const
     {
         return FindInternalWidgetByType<Button>("expand");
     }
@@ -221,7 +221,7 @@ namespace o2
         if (!mExpandState)
             return true;
 
-        return mExpandState->GetState() && !mExpandState->player.IsPlaying();
+        return mExpandState->GetState() && !mExpandState->GetAnimationPlayer()->IsPlaying();
     }
 
     bool Spoiler::IsFullyCollapsed() const
@@ -229,7 +229,7 @@ namespace o2
         if (!mExpandState)
             return false;
 
-        return !mExpandState->GetState() && !mExpandState->player.IsPlaying();
+        return !mExpandState->GetState() && !mExpandState->GetAnimationPlayer()->IsPlaying();
     }
 
     String Spoiler::GetCreateMenuGroup()
@@ -237,6 +237,8 @@ namespace o2
         return "Dropping";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Spoiler>);
 // --- META ---
 
 DECLARE_CLASS(o2::Spoiler, o2__Spoiler);

@@ -8,12 +8,12 @@
 
 namespace o2
 {
-    CameraActor::CameraActor():
-        Actor()
+    CameraActor::CameraActor(RefCounter* refCounter) :
+        Actor(refCounter)
     {}
 
-    CameraActor::CameraActor(const CameraActor& other):
-        Actor(other), mType(other.mType), mFixedOrFittedSize(other.mFixedOrFittedSize), mUnits(other.mUnits)
+    CameraActor::CameraActor(RefCounter* refCounter, const CameraActor& other) :
+        Actor(refCounter, other), mType(other.mType), mFixedOrFittedSize(other.mFixedOrFittedSize), mUnits(other.mUnits)
     {}
 
     CameraActor::~CameraActor()
@@ -45,32 +45,32 @@ namespace o2
         if (fillBackground)
             o2Render.Clear(fillColor);
 
-        listenersLayer.OnBeginDraw();
+        listenersLayer->OnBeginDraw();
 
         Camera prevCamera = o2Render.GetCamera();
         Setup();
 
-        listenersLayer.camera = o2Render.GetCamera();
+        listenersLayer->camera = o2Render.GetCamera();
 
         if (o2Input.IsKeyDown('G'))
         {
             o2Debug.Log("==========================Draw dump");
 
-            for (auto layer : drawLayers.GetLayers())
+            for (auto& layer : drawLayers.GetLayers())
             {
                 o2Debug.Log("== Layer " + layer->GetName() + " ==");
 
-                Function<void(ISceneDrawable*, int)> printDrawable = [&printDrawable](ISceneDrawable* drawable, int depth)
+                Function<void(const Ref<ISceneDrawable>&, int)> printDrawable = [&printDrawable](const Ref<ISceneDrawable>& drawable, int depth)
                 {
                     String str;
                     for (int i = 0; i < depth; i++)
                         str += "  ";
 
                     str += "(" + drawable->GetType().GetName() + ") ";
-                    Actor* actor = dynamic_cast<Actor*>(drawable);
+                    auto actor = DynamicCast<Actor>(drawable);
                     if (!actor)
                     {
-                        if (auto drawableComponent = dynamic_cast<DrawableComponent*>(drawable))
+                        if (auto drawableComponent = DynamicCast<DrawableComponent>(drawable))
                             actor = drawableComponent->GetOwnerActor();
                     }
 
@@ -78,26 +78,26 @@ namespace o2
                     {
                         str += actor->GetName();
                         if (actor->GetParent())
-                            str += " #" + (String)(actor->GetParent()->GetChildren().IndexOf(actor)) + "/";
+                            str += " #" + (String)(actor->GetParent().Lock()->GetChildren().IndexOf(actor)) + "/";
 
-                        actor = actor->GetParent();
+                        actor = actor->GetParent().Lock();
                     }
 
                     o2Debug.Log(str);
 
-                    for (auto inherited : drawable->GetChildrenInheritedDepth())
+                    for (auto& inherited : drawable->GetChildrenInheritedDepth())
                         printDrawable(inherited, depth + 1);
                 };
 
-                for (auto drawable : layer->mDrawables)
+                for (auto& drawable : layer->mDrawables)
                 {                    
                     printDrawable(drawable, 1);
 
-                    if (auto root = dynamic_cast<SceneLayer::RootDrawablesContainer*>(drawable))
+                    if (auto root = DynamicCast<SceneLayerRootDrawablesContainer>(drawable))
                     {
                         o2Debug.Log("  ROOT:");
 
-                        for (auto child : root->GetChildrenInheritedDepth())
+                        for (auto& child : root->GetChildrenInheritedDepth())
                         {
                             printDrawable(child, 2);
                         }
@@ -109,16 +109,16 @@ namespace o2
         {
             PROFILE_SAMPLE("CameraActor::SetupAndDraw - Draw layers");
 
-            for (auto layer : drawLayers.GetLayers())
+            for (auto& layer : drawLayers.GetLayers())
             {
-                for (auto comp : layer->mDrawables)
+                for (auto& comp : layer->mDrawables)
                     comp->Draw();
             }
         }
 
         o2Render.SetCamera(prevCamera);
 
-        listenersLayer.OnEndDraw();
+        listenersLayer->OnEndDraw();
     }
 
     Camera CameraActor::GetRenderCamera() const
@@ -196,6 +196,8 @@ namespace o2
     }
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::CameraActor>);
 // --- META ---
 
 ENUM_META(o2::CameraActor::Type)

@@ -11,7 +11,7 @@ namespace o2
 
 namespace Editor
 {
-	class TexturePreview;
+	FORWARD_CLASS_REF(TexturePreview);
 
 	// ------------------------
 	// Vector font asset viewer
@@ -28,7 +28,7 @@ namespace Editor
 		IOBJECT(VectorFontAssetViewer);
 
 	private:
-		TexturePreview* mTexturePreview = nullptr;
+		Ref<TexturePreview> mTexturePreview; // Texture preview widget
 
 	private:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -47,7 +47,7 @@ CLASS_BASES_META(Editor::VectorFontAssetViewer)
 END_META;
 CLASS_FIELDS_META(Editor::VectorFontAssetViewer)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTexturePreview);
+    FIELD().PRIVATE().NAME(mTexturePreview);
 }
 END_META;
 CLASS_METHODS_META(Editor::VectorFontAssetViewer)

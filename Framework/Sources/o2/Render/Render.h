@@ -23,13 +23,15 @@
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Math/Vertex.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Ref.h"
 
 // Render access macros
 #define o2Render o2::Render::Instance()
 
 namespace o2
 {
-    class AtlasAsset;
+    FORWARD_CLASS_REF(AtlasAsset);
+
     class CursorAreaEventListenersLayer;
     class Font;
     class Mesh;
@@ -38,7 +40,7 @@ namespace o2
     // ------------------
     // 2D Graphics render
     // ------------------
-    class Render: public RenderBase, public Singleton<Render>
+    class Render: public RenderBase, public Singleton<Render>, public RefCounterable
     {
     public:
         // ---------------------
@@ -300,17 +302,17 @@ namespace o2
     protected:
         PrimitiveType mCurrentPrimitiveType; // Type of drawing primitives for next DIP
 
-        Texture* mLastDrawTexture = nullptr; // Stored texture ptr from last DIP
-        UInt     mLastDrawVertex;            // Last vertex idx for next DIP
-        UInt     mLastDrawIdx;               // Last vertex index for next DIP
-        UInt     mTrianglesCount;            // Triangles count for next DIP
-        UInt     mFrameTrianglesCount;       // Total triangles at current frame
-        UInt     mDIPCount;                  // DrawIndexedPrimitives calls count
+        TextureRef mLastDrawTexture = nullptr; // Stored texture ptr from last DIP
+        UInt         mLastDrawVertex;            // Last vertex idx for next DIP
+        UInt         mLastDrawIdx;               // Last vertex index for next DIP
+        UInt         mTrianglesCount;            // Triangles count for next DIP
+        UInt         mFrameTrianglesCount;       // Total triangles at current frame
+        UInt         mDIPCount;                  // DrawIndexedPrimitives calls count
 
-        LogStream* mLog; // Render log stream
+        Ref<LogStream> mLog; // Render log stream
 
-        Vector<Texture*> mTextures; // Loaded textures
-        Vector<Font*>    mFonts;    // Loaded fonts
+        Vector<TextureRef> mTextures; // Loaded textures
+        Vector<Ref<Font>>    mFonts;    // Loaded fonts
 
         Camera mCamera;            // Camera transformation
         Vec2I  mResolution;        // Primary back buffer size
@@ -340,11 +342,11 @@ namespace o2
 
         Vector<Sprite*> mSprites; // All sprites
 
-        Vector<AtlasAsset*> mAtlases; // All atlases
+        Vector<Ref<AtlasAsset>> mAtlases; // All atlases
 
         VertexIndex* mHardLinesIndexData; // Index data buffer
-        TextureRef   mSolidLineTexture;   // Solid line texture
-        TextureRef   mDashLineTexture;    // Dash line texture
+        TextureRef mSolidLineTexture;   // Solid line texture
+        TextureRef mDashLineTexture;    // Dash line texture
 
         bool mReady; // True, if render system initialized
 
@@ -414,6 +416,12 @@ namespace o2
 
         // Called when atlas destroyed, unregisters it from render
         void OnAtlasDestroyed(AtlasAsset* atlas);
+
+        // Called when font created, registers it in render
+        void OnFontCreated(Font* font);
+
+        // Called when font destroyed, unregisters it from render
+        void OnFontDestroyed(Font* font);
 
         friend class Application;
         friend class AtlasAsset;

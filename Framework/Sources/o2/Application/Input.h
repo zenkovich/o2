@@ -1,15 +1,17 @@
 #pragma once
 
-#include "o2/Utils/Types/CommonTypes.h"
-#include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/CommonTypes.h"
+#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 
 #if defined(PLATFORM_ANDROID) || defined(PLATFORM_MAC) || defined(PLATFORM_IOS) || defined(PLATFORM_LINUX)
 #include "o2/Application/VKCodes.h"
 #elif defined PLATFORM_WINDOWS
 #include <windows.h>
+#undef GetObject
 #endif
 
 // Input access macros
@@ -20,7 +22,7 @@ namespace o2
     // -------------------------------------------------------------------------
     // Input message. Containing pressed, down, released keys, cursors positions
     // -------------------------------------------------------------------------
-    class Input : public Singleton<Input>
+    class Input : public Singleton<Input>, public RefCounterable
     {
     public:
         struct Cursor;
@@ -202,7 +204,7 @@ namespace o2
         // -----------------------
         // Input message interface
         // -----------------------
-        struct IInputMsg
+        struct IInputMsg: public RefCounterable
         {
             // Virtual destructor
             virtual ~IInputMsg() {}
@@ -256,7 +258,7 @@ namespace o2
         };
 
     protected:
-        Vector<IInputMsg*> mInputQueue; // Input messages queue
+        Vector<Ref<IInputMsg>> mInputQueue; // Input messages queue
 
         Vector<Key> mPressedKeys;  // Pressed keys at current frame
         Vector<Key> mDownKeys;     // Held down at current frame keys

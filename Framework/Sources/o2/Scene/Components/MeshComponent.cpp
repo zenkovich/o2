@@ -11,15 +11,15 @@ namespace o2
     MeshComponent::MeshComponent():
         DrawableComponent()
     {
-        spline.onKeysChanged = THIS_FUNC(UpdateMesh);
-        spline.SetClosed(true);
+        spline->onKeysChanged = THIS_FUNC(UpdateMesh);
+        spline->SetClosed(true);
     }
 
     MeshComponent::MeshComponent(const MeshComponent& other):
         DrawableComponent(other), mMesh(other.mMesh), spline(other.spline)
     {
-        spline.onKeysChanged = THIS_FUNC(UpdateMesh);
-        spline.SetClosed(true);
+        spline->onKeysChanged = THIS_FUNC(UpdateMesh);
+        spline->SetClosed(true);
     }
 
     MeshComponent::~MeshComponent()
@@ -78,13 +78,13 @@ namespace o2
         mNeedUpdateMesh = true;
     }
 
-    void MeshComponent::SetImage(const ImageAssetRef& image)
+    void MeshComponent::SetImage(const AssetRef<ImageAsset>& image)
     {
         mImageAsset = image;
         mNeedUpdateMesh = true;
     }
 
-    const ImageAssetRef& MeshComponent::GetImage() const
+    const AssetRef<ImageAsset>& MeshComponent::GetImage() const
     {
         return mImageAsset;
     }
@@ -128,7 +128,7 @@ namespace o2
 
     void MeshComponent::OnTransformUpdated()
     {
-        auto newTransform = mOwner->transform->GetWorldNonSizedBasis();
+        auto newTransform = mOwner.Lock()->transform->GetWorldNonSizedBasis();
         auto delta = newTransform*mTransform.Inverted();
         mTransform = newTransform;
 
@@ -144,7 +144,7 @@ namespace o2
     {
         mNeedUpdateMesh = false;
 
-        if (spline.GetKeys().Count() < 3)
+        if (spline->GetKeys().Count() < 3)
             return;
 
         std::vector<CDT::V2d<float>> verticies;
@@ -157,11 +157,11 @@ namespace o2
                 edges.push_back(CDT::Edge(verticies.size() - 2, verticies.size() - 1));
         };
 
-        int count = spline.GetKeys().Count();
+        int count = spline->GetKeys().Count();
         for (int i = 0; i < count; i++)
         {
-            auto key = spline.GetKey(i);
-            auto prevKey = spline.GetKey((i - 1 + count)%count);
+            auto key = spline->GetKey(i);
+            auto prevKey = spline->GetKey((i - 1 + count)%count);
 
             const float noSupportsThreshold = 0.01f;
             if (!(key.prevSupport.Length() < noSupportsThreshold && prevKey.nextSupport.Length() < noSupportsThreshold))
@@ -217,7 +217,7 @@ namespace o2
         mMesh.polyCount = triangulation.triangles.size();
     }
 
-    void MeshComponent::SetOwnerActor(Actor* actor)
+    void MeshComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }
@@ -236,7 +236,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::MeshComponent>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::MeshComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::MeshComponent, o2__MeshComponent);

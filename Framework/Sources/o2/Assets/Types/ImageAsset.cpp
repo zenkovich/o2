@@ -11,7 +11,7 @@
 namespace o2
 {
     ImageAsset::ImageAsset():
-        Asset(mnew Meta())
+        Asset(mmake<Meta>())
     {}
 
     ImageAsset::ImageAsset(const ImageAsset& other):
@@ -19,7 +19,7 @@ namespace o2
         atlasPage(this), atlasRect(this), size(this), width(this), height(this), meta(this)
     {
         if (other.mBitmap)
-            mBitmap = other.mBitmap->Clone();
+            mBitmap = Ref(other.mBitmap->Clone());
         else
             mBitmap = nullptr;
 
@@ -27,18 +27,9 @@ namespace o2
         mSourceRect = other.mSourceRect;
     }
 
-    ImageAsset::~ImageAsset()
-    {
-        if (mBitmap)
-            delete mBitmap;
-    }
-
     ImageAsset& ImageAsset::operator=(const ImageAsset& asset)
     {
         Asset::operator=(asset);
-
-        if (mBitmap)
-            delete mBitmap;
 
         if (asset.mBitmap)
             SetBitmap(asset.mBitmap);
@@ -49,7 +40,7 @@ namespace o2
         return *this;
     }
 
-    Bitmap* ImageAsset::GetBitmap()
+    const Ref<Bitmap>& ImageAsset::GetBitmap()
     {
         if (!mBitmap)
             LoadBitmap();
@@ -57,11 +48,8 @@ namespace o2
         return mBitmap;
     }
 
-    void ImageAsset::SetBitmap(Bitmap* bitmap)
+    void ImageAsset::SetBitmap(Ref<Bitmap> bitmap)
     {
-        if (mBitmap)
-            delete mBitmap;
-
         mBitmap = bitmap;
     }
 
@@ -72,14 +60,14 @@ namespace o2
 
     void ImageAsset::SetAtlas(const UID& atlas)
     {
-        ImageAssetRef thisRef(GetUID());
+        AssetRef<ImageAsset> thisRef(GetUID());
 
-        if (auto prevAtlas = AtlasAssetRef(GetMeta()->atlasId)) 
+        if (auto prevAtlas = AssetRef<AtlasAsset>(GetMeta()->atlasId)) 
             prevAtlas->RemoveImage(thisRef);
 
         GetMeta()->atlasId = atlas;
 
-        if (auto newAtlas = AtlasAssetRef(GetMeta()->atlasId))
+        if (auto newAtlas = AssetRef<AtlasAsset>(GetMeta()->atlasId))
             newAtlas->AddImage(thisRef);
     }
 
@@ -152,9 +140,9 @@ namespace o2
         return { texture, mSourceRect };
     }
 
-    ImageAsset::Meta* ImageAsset::GetMeta() const
+    Ref<ImageAsset::Meta> ImageAsset::GetMeta() const
     {
-        return (Meta*)mInfo.meta;
+        return DynamicCast<Meta>(mInfo.meta);
     }
 
     Vector<String> ImageAsset::GetFileExtensions()
@@ -173,7 +161,7 @@ namespace o2
         else
         {
             Asset::LoadData(path);
-            mAtlas = AtlasAssetRef(GetAtlasUID());
+            mAtlas = AssetRef<AtlasAsset>(GetAtlasUID());
         }
     }
 
@@ -226,7 +214,7 @@ namespace o2
         if (!(common == otherMeta->common))
             return false;
 
-        auto comparePlatformMeta = [](PlatformMeta* a, PlatformMeta* b)
+        auto comparePlatformMeta = [](const Ref<PlatformMeta>& a, const Ref<PlatformMeta>& b)
         {
             if (a && b)
             {
@@ -253,7 +241,7 @@ namespace o2
 }
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::ImageAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ImageAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::ImageAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::ImageAsset, o2__ImageAsset);

@@ -5,13 +5,14 @@
 
 namespace o2
 {
-    GridLayout::GridLayout(): Widget()
+    GridLayout::GridLayout(RefCounter* refCounter):
+        Widget(refCounter)
     {
         SetLayoutDirty();
     }
 
-    GridLayout::GridLayout(const GridLayout& other):
-        Widget(other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder),
+    GridLayout::GridLayout(RefCounter* refCounter, const GridLayout& other):
+        Widget(refCounter, other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder),
         mFitByChildren(other.mFitByChildren), mCellSize(other.mCellSize), mArrangeAxis(other.mArrangeAxis),
         mArrangeAxisMaxCells(other.mArrangeAxisMaxCells), baseCorner(this), cellSize(this), arrangeAxisMaxCells(this),
         arrangeAxis(this), spacing(this), border(this), borderLeft(this), borderRight(this),
@@ -180,12 +181,12 @@ namespace o2
         return "Layout";
     }
 
-    void GridLayout::OnChildAdded(Widget* child)
+    void GridLayout::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }
 
-    void GridLayout::OnChildRemoved(Widget* child)
+    void GridLayout::OnChildRemoved(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
     }
@@ -218,7 +219,7 @@ namespace o2
             int rowIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (rowIdx == mArrangeAxisMaxCells)
                 {
@@ -245,7 +246,7 @@ namespace o2
             int colIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (colIdx == mArrangeAxisMaxCells)
                 {
@@ -281,7 +282,7 @@ namespace o2
             int rowIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (rowIdx == mArrangeAxisMaxCells)
                 {
@@ -318,7 +319,7 @@ namespace o2
             int colIdx = upColCells > 0 ? mArrangeAxisMaxCells - upColCells : 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (colIdx == mArrangeAxisMaxCells)
                 {
@@ -351,7 +352,7 @@ namespace o2
             int rowIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (rowIdx == mArrangeAxisMaxCells)
                 {
@@ -378,7 +379,7 @@ namespace o2
             int colIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (colIdx == mArrangeAxisMaxCells)
                 {
@@ -421,7 +422,7 @@ namespace o2
             int rowIdx = upRowCells > 0 ? mArrangeAxisMaxCells - upRowCells : 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (rowIdx == mArrangeAxisMaxCells)
                 {
@@ -453,7 +454,7 @@ namespace o2
             int colIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (colIdx == mArrangeAxisMaxCells)
                 {
@@ -506,7 +507,7 @@ namespace o2
 
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (rowIdx == mArrangeAxisMaxCells)
                 {
@@ -551,7 +552,7 @@ namespace o2
 
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (colIdx == mArrangeAxisMaxCells)
                 {
@@ -595,7 +596,7 @@ namespace o2
             int rowIdx = upRowCells > 0 ? mArrangeAxisMaxCells - upRowCells : 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (rowIdx == mArrangeAxisMaxCells)
                 {
@@ -627,7 +628,7 @@ namespace o2
             int colIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (colIdx == mArrangeAxisMaxCells)
                 {
@@ -666,7 +667,7 @@ namespace o2
             int rowIdx = rem != 0 ? mArrangeAxisMaxCells - rem : 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (rowIdx == mArrangeAxisMaxCells)
                 {
@@ -693,7 +694,7 @@ namespace o2
             int colIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (colIdx == mArrangeAxisMaxCells)
                 {
@@ -739,7 +740,7 @@ namespace o2
 
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (rowIdx == mArrangeAxisMaxCells)
                 {
@@ -777,7 +778,7 @@ namespace o2
             int colIdx = upColCells > 0 ? mArrangeAxisMaxCells - upColCells : 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (colIdx == mArrangeAxisMaxCells)
                 {
@@ -815,7 +816,7 @@ namespace o2
             int rowIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (rowIdx == mArrangeAxisMaxCells)
                 {
@@ -842,7 +843,7 @@ namespace o2
             int colIdx = 0;
             for (int i = 0; i < cellsCount; i++)
             {
-                Widget* child = mChildWidgets[i];
+                auto child = mChildWidgets[i];
 
                 if (colIdx == mArrangeAxisMaxCells)
                 {
@@ -883,7 +884,7 @@ namespace o2
         if (mChildWidgets.Count() > 0)
             childrenRect = mChildWidgets[0]->GetLayoutData().rectangle;
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             childrenRect.left   = Math::Min(childrenRect.left, child->GetLayoutData().rectangle.left);
             childrenRect.right  = Math::Max(childrenRect.right, child->GetLayoutData().rectangle.right);
@@ -902,6 +903,8 @@ namespace o2
         }
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::GridLayout>);
 // --- META ---
 
 DECLARE_CLASS(o2::GridLayout, o2__GridLayout);

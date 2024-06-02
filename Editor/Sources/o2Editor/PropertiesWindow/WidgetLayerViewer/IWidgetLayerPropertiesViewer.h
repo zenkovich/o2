@@ -15,12 +15,12 @@ namespace o2
 
 namespace Editor
 {
-	class SpoilerWithHead;
+	FORWARD_CLASS_REF(SpoilerWithHead);
 
 	// -----------------------------------------------
 	// Editor widget layer properties viewer interface
 	// -----------------------------------------------
-	class IWidgetLayerPropertiesViewer : public IObject
+	class IWidgetLayerPropertiesViewer : public IObject, virtual public RefCounterable
 	{
 	public:
 		// Default constructor. Initializes data widget
@@ -36,7 +36,7 @@ namespace Editor
 		virtual const Type* GetDrawableType() const { return nullptr; }
 
 		// Returns data widget
-		virtual Widget* GetWidget() const;
+		virtual Ref<Widget> GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -59,7 +59,7 @@ namespace Editor
 		IOBJECT(IWidgetLayerPropertiesViewer);
 
 	protected:
-		SpoilerWithHead* mSpoiler = nullptr;
+		Ref<SpoilerWithHead> mSpoiler;
 
 		bool mEnabled = false; // Is viewer enabled 
 
@@ -76,11 +76,12 @@ namespace Editor
 CLASS_BASES_META(Editor::IWidgetLayerPropertiesViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerPropertiesViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
@@ -90,7 +91,7 @@ CLASS_METHODS_META(Editor::IWidgetLayerPropertiesViewer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetDrawableType);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

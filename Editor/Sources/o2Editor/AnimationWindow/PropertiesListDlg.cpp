@@ -22,11 +22,9 @@ namespace Editor
 	}
 
 	PropertiesListDlg::~PropertiesListDlg()
-	{
-		delete mWindow;
-	}
+	{}
 
-	void PropertiesListDlg::Show(AnimationClip* animation, ActorRef actor)
+	void PropertiesListDlg::Show(const Ref<AnimationClip>& animation, const Ref<Actor>& actor)
 	{
 		Instance().mPropertiesTree->Initialize(animation, actor);
 		Instance().mFilter->SetText("");
@@ -35,21 +33,21 @@ namespace Editor
 
 	void PropertiesListDlg::InitializeWindow()
 	{
-		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Animation properties")));
+		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Animation properties")));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 17));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, -2, 0, 20));
-		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_wnd_icon.png"));
+		mWindow->SetIcon(mmake<Sprite>("ui/UI4_tree_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 
 // 		mWindow->GetInternalWidget("closeButton")->layout->position -= Vec2F(2, -2);
 // 		mWindow->GetInternalWidget("optionsButton")->layout->position -= Vec2F(2, -2);
 
-		Widget* upPanel = mnew Widget();
+		auto upPanel = mmake<Widget>();
 		upPanel->name = "up panel";
 		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, -1);
-		upPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
+		upPanel->AddLayer("back", mmake<Sprite>("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
-		Button* searchButton = o2UI.CreateWidget<Button>("search");
+		auto searchButton = o2UI.CreateWidget<Button>("search");
 		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
 		upPanel->AddChild(searchButton);
 
@@ -72,30 +70,34 @@ namespace Editor
 		mWindow->GetBackCursorListener().onCursorReleased = [=](const Input::Cursor& c) { mWindow->Hide(); };
 	}
 
-	AnimationPropertiesTree::AnimationPropertiesTree() :
-		Tree()
+    AnimationPropertiesTree::AnimationPropertiesTree(RefCounter* refCounter) :
+		Tree(refCounter)
 	{}
 
-	AnimationPropertiesTree::AnimationPropertiesTree(const AnimationPropertiesTree& other):
-		Tree(other)
-	{ }
+	AnimationPropertiesTree::AnimationPropertiesTree(RefCounter* refCounter, const AnimationPropertiesTree& other):
+		Tree(refCounter, other)
+	{}
 
-	AnimationPropertiesTree& AnimationPropertiesTree::operator=(const AnimationPropertiesTree& other)
+    AnimationPropertiesTree::AnimationPropertiesTree(const AnimationPropertiesTree& other):
+		AnimationPropertiesTree(nullptr, other)
+    {}
+
+    AnimationPropertiesTree& AnimationPropertiesTree::operator=(const AnimationPropertiesTree& other)
 	{
 		Tree::operator=(other);
 		return *this;
 	}
 
-	void AnimationPropertiesTree::Initialize(AnimationClip* animation, ActorRef actor)
+	void AnimationPropertiesTree::Initialize(const Ref<AnimationClip>& animation, const Ref<Actor>& actor)
 	{
 		mFilterStr = "";
-		mRoot.Clear();
+		mRoot = mmake<NodeData>();
 		mPassedObject.Clear();
 
 		mAnimation = animation;
 		mActor = actor;
 
-		InitializeTreeNode(&mRoot, actor.Get());
+		InitializeTreeNode(mRoot, actor.Get());
 		UpdateNodesStructure();
 		UpdateVisibleNodes();
 	}
@@ -104,10 +106,10 @@ namespace Editor
 	{
 		mFilterStr = filter.ToLowerCase();
 
-		mRoot.Clear();
+		mRoot = mmake<NodeData>();
 		mPassedObject.Clear();
 
-		InitializeTreeNode(&mRoot, mActor.Get());
+		InitializeTreeNode(mRoot, mActor.Get());
 		UpdateNodesStructure();
 		UpdateVisibleNodes();
 	}
@@ -117,7 +119,7 @@ namespace Editor
 		return "UI/Editor";
 	}
 
-	void AnimationPropertiesTree::InitializeTreeNode(NodeData* node, IObject* object)
+	void AnimationPropertiesTree::InitializeTreeNode(const Ref<NodeData>& node, IObject* object)
 	{
 		if (!object)
 			return;
@@ -132,7 +134,7 @@ namespace Editor
 		ProcessObject(rawObject, objectType, node);
 	}
 
-	void AnimationPropertiesTree::ProcessObject(void* object, const ObjectType* type, NodeData* node)
+	void AnimationPropertiesTree::ProcessObject(void* object, const ObjectType* type, const Ref<NodeData>& node)
 	{
 		for (auto& field : type->GetFields())
 		{
@@ -145,7 +147,7 @@ namespace Editor
 				ProcessTreeNode(field.GetValuePtr(object), field.GetType(), field.GetName(), node);
 		}
 
-		for (auto base : type->GetBaseTypes())
+		for (auto& base : type->GetBaseTypes())
 		{
 			if (base.type->GetUsage() != Type::Usage::Object)
 				continue;
@@ -154,7 +156,7 @@ namespace Editor
 		}
 	}
 
-	void AnimationPropertiesTree::ProcessTreeNode(void* object, const Type* type, const String& name, NodeData* node)
+	void AnimationPropertiesTree::ProcessTreeNode(void* object, const Type* type, const String& name, const Ref<NodeData>& node)
 	{
 		static Vector<const Type*> availableTypes({ &TypeOf(float), &TypeOf(Color4), &TypeOf(Vec2F), &TypeOf(bool) });
 
@@ -167,7 +169,7 @@ namespace Editor
 		else if (type->GetUsage() == Type::Usage::Pointer)
 		{
 			auto pointerType = dynamic_cast<const PointerType*>(type);
-			auto unpointedType = pointerType->GetUnpointedType();
+			auto unpointedType = pointerType->GetBaseType();
 			if (unpointedType->GetUsage() == Type::Usage::Object)
 			{
 				auto fieldObjectType = dynamic_cast<const ObjectType*>(unpointedType);
@@ -190,7 +192,6 @@ namespace Editor
 
 			if (newNode->children.empty()) {
 				node->children.Remove(newNode);
-				delete newNode;
 			}
 		}
 		else if (availableTypes.Contains(type))
@@ -199,7 +200,7 @@ namespace Editor
 		}
 	}
 
-	void AnimationPropertiesTree::InitializePropertyNode(NodeData* node, const String& name, const Type* type)
+	void AnimationPropertiesTree::InitializePropertyNode(const Ref<NodeData>& node, const String& name, const Type* type)
 	{
 		if (!mFilterStr.IsEmpty() && !name.ToLowerCase().Contains(mFilterStr))
 			return;
@@ -214,7 +215,7 @@ namespace Editor
 		Tree::UpdateVisibleNodes();
 	}
 
-	TreeNode* AnimationPropertiesTree::CreateTreeNodeWidget()
+	Ref<TreeNode> AnimationPropertiesTree::CreateTreeNodeWidget()
 	{
 		PushEditorScopeOnStack scope;
 		return Tree::CreateTreeNodeWidget();
@@ -222,15 +223,15 @@ namespace Editor
 
 	void* AnimationPropertiesTree::GetObjectParent(void* object)
 	{
-		return ((NodeData*)object)->parent;
+		return ((NodeData*)object)->parent.Lock().Get();
 	}
 
 	Vector<void*> AnimationPropertiesTree::GetObjectChilds(void* object)
 	{
 		if (object)
-			return ((NodeData*)object)->children.Cast<void*>();
+			return ((NodeData*)object)->children.Convert<void*>([](auto& x) { return x.Get(); });
 
-		return mRoot.children.Cast<void*>();
+		return mRoot->children.Convert<void*>([](auto& x) { return x.Get(); });
 	}
 
 	String AnimationPropertiesTree::GetObjectDebug(void* object)
@@ -241,22 +242,23 @@ namespace Editor
 		return "";
 	}
 
-	void AnimationPropertiesTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
+	void AnimationPropertiesTree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object)
 	{
-		auto propertyNode = dynamic_cast<AnimationPropertiesTreeNode*>(nodeWidget);
-		propertyNode->Setup((NodeData*)object, this);
+		auto propertyNode = DynamicCast<AnimationPropertiesTreeNode>(nodeWidget);
+		propertyNode->Setup(Ref((NodeData*)object), Ref(this));
 	}
 
-	void AnimationPropertiesTree::OnNodeDblClick(TreeNode* nodeWidget)
+	void AnimationPropertiesTree::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
 	{
 		if (!nodeWidget)
 			return;
 
-		auto propertyNode = dynamic_cast<AnimationPropertiesTreeNode*>(nodeWidget);
-		if (propertyNode->mData->used)
-			mAnimation->RemoveTrack(propertyNode->mData->path);
+		auto propertyNode = DynamicCast<AnimationPropertiesTreeNode>(nodeWidget);
+		auto propertyData = propertyNode->mData.Lock();
+		if (propertyData->used)
+			mAnimation->RemoveTrack(propertyData->path);
 		else
-			mAnimation->AddTrack(propertyNode->mData->path, *propertyNode->mData->type);
+			mAnimation->AddTrack(propertyData->path, *propertyData->type);
 	}
 
 	void AnimationPropertiesTree::OnNodesSelectionChanged(Vector<void*> objects)
@@ -264,7 +266,8 @@ namespace Editor
 
 	}
 
-	void AnimationPropertiesTree::InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, const String& name, NodeData* node)
+	void AnimationPropertiesTree::InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, 
+														   const String& name, const Ref<NodeData>& node)
 	{
 		auto fieldObject = fieldObjectType->DynamicCastToIObject(object);
 		auto newNode = node->AddChild(name, fieldObjectType);
@@ -273,18 +276,17 @@ namespace Editor
 		if (newNode->children.IsEmpty())
 		{
 			node->children.Remove(newNode);
-			delete newNode;
 		}
 	}
 
-	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode():
-		TreeNode()
+	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode(RefCounter* refCounter):
+        TreeNode(refCounter)
 	{
 		InitializeControls();
 	}
 
-	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode(const AnimationPropertiesTreeNode& other) :
-		TreeNode(other)
+	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode(RefCounter* refCounter, const AnimationPropertiesTreeNode& other) :
+		TreeNode(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -296,7 +298,7 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationPropertiesTreeNode::Setup(AnimationPropertiesTree::NodeData* data, AnimationPropertiesTree* tree)
+	void AnimationPropertiesTreeNode::Setup(const Ref<AnimationPropertiesTree::NodeData>& data, const Ref<AnimationPropertiesTree>& tree)
 	{
 		static Map<const Type*, String> icons = 
 		{ 
@@ -339,14 +341,17 @@ namespace Editor
 		mName = GetLayerDrawable<Text>("name");
 		mIcon = GetLayerDrawable<Sprite>("icon");
 
+		auto tree = mTree.Lock();
+		auto data = mData.Lock();
+
 		mAddButton = GetChildByType<Button>("addButton");
 		if (mAddButton)
 		{
 			mAddButton->onClick = [&]()
 			{
-				mTree->mAnimation->AddTrack(mData->path, *mData->type); 
-				mData->used = true; 
-				mTree->OnObjectsChanged({ (void*)mData }); 
+				tree->mAnimation->AddTrack(data->path, *data->type);
+				data->used = true;
+				tree->OnObjectsChanged({ (void*)data.Get() });
 			};
 		}
 
@@ -354,9 +359,9 @@ namespace Editor
 		if (mRemoveButton)
 		{
 			mRemoveButton->onClick = [&]() { 
-				mTree->mAnimation->RemoveTrack(mData->path);
-				mData->used = false;
-				mTree->OnObjectsChanged({ (void*)mData });
+				tree->mAnimation->RemoveTrack(data->path);
+				data->used = false;
+				tree->OnObjectsChanged({ (void*)data.Get() });
 			};
 		}
 	}
@@ -368,26 +373,25 @@ namespace Editor
 
 	void AnimationPropertiesTree::NodeData::Clear()
 	{
-		for (auto child : children)
-			delete child;
-
 		children.Clear();
 	}
 
-	AnimationPropertiesTree::NodeData* AnimationPropertiesTree::NodeData::AddChild(const String& name, const Type* type)
+	Ref<AnimationPropertiesTree::NodeData> AnimationPropertiesTree::NodeData::AddChild(const String& name, const Type* type)
 	{
-		NodeData* newChild = mnew NodeData();
+		auto newChild = mmake<NodeData>();
 		children.Add(newChild);
 
 		newChild->name = name;
 		newChild->path = path.IsEmpty() ? name : path + "/" + name;
 		newChild->type = type;
-		newChild->parent = this;
+		newChild->parent = Ref(this);
 
 		return newChild;
 	}
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AnimationPropertiesTreeNode>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationPropertiesTree, Editor__AnimationPropertiesTree);

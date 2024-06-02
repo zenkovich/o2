@@ -7,19 +7,16 @@
 
 namespace Editor
 {
-	MapKeyFramesTrackControl::MapKeyFramesTrackControl() :
-		ITrackControl()
+	MapKeyFramesTrackControl::MapKeyFramesTrackControl(RefCounter* refCounter) :
+		ITrackControl(refCounter)
 	{}
 
-	MapKeyFramesTrackControl::MapKeyFramesTrackControl(const MapKeyFramesTrackControl& other) :
-		ITrackControl(other)
+	MapKeyFramesTrackControl::MapKeyFramesTrackControl(RefCounter* refCounter, const MapKeyFramesTrackControl& other) :
+		ITrackControl(refCounter, other)
 	{}
 
 	MapKeyFramesTrackControl::~MapKeyFramesTrackControl()
-	{
-		for (auto& kv : mHandlesGroups)
-			delete kv.second;
-	}
+	{}
 
 	MapKeyFramesTrackControl& MapKeyFramesTrackControl::operator=(const MapKeyFramesTrackControl& other)
 	{
@@ -33,14 +30,14 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
-		if (!mHandlesSheet->enabled)
+		if (!mHandlesSheet.Lock()->enabled)
 			return;
 
 		OnDrawn();
 
-		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+		o2Render.EnableScissorTest(mTimeline.Lock()->layout->GetWorldRect());
 
-		for (auto child : mChildrenInheritedDepth)
+		for (auto& child : mChildrenInheritedDepth)
 			child->Draw();
 
 		o2Render.DisableScissorTest();
@@ -56,7 +53,7 @@ namespace Editor
 		InitializeNodeHandles(valueNode);
 	}
 
-	void MapKeyFramesTrackControl::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
+	void MapKeyFramesTrackControl::Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet)
 	{
 		mTimeline = timeline;
 		mHandlesSheet = handlesSheet;
@@ -65,10 +62,7 @@ namespace Editor
 	void MapKeyFramesTrackControl::CacheHandles()
 	{
 		for (auto& kv : mHandlesGroups)
-		{
 			kv.second->CacheHandles();
-			delete kv.second;
-		}
 
 		mHandlesGroups.Clear();
 	}
@@ -77,27 +71,27 @@ namespace Editor
 	{
 		if (valueNode.track)
 		{
-			IHandlesGroup* newGroup = nullptr;
+			Ref<IHandlesGroup> newGroup;
 
-			if (auto animatedValue = dynamic_cast<AnimationTrack<float>*>(valueNode.track))
-				newGroup = mnew HandlesGroup<AnimationTrack<float>>();
-			else if (auto animatedValue = dynamic_cast<AnimationTrack<bool>*>(valueNode.track))
-				newGroup = mnew HandlesGroup<AnimationTrack<bool>>();
-			else if (auto animatedValue = dynamic_cast<AnimationTrack<Vec2F>*>(valueNode.track))
-				newGroup = mnew HandlesGroup<AnimationTrack<Vec2F>>();
-			else if (auto animatedValue = dynamic_cast<AnimationTrack<Color4>*>(valueNode.track))
-				newGroup = mnew HandlesGroup<AnimationTrack<Color4>>();
+			if (auto animatedValue = DynamicCast<AnimationTrack<float>>(valueNode.track))
+				newGroup = mmake<HandlesGroup<AnimationTrack<float>>>();
+			else if (auto animatedValue = DynamicCast<AnimationTrack<bool>>(valueNode.track))
+				newGroup = mmake < HandlesGroup<AnimationTrack<bool>>>();
+			else if (auto animatedValue = DynamicCast<AnimationTrack<Vec2F>>(valueNode.track))
+				newGroup = mmake < HandlesGroup<AnimationTrack<Vec2F>>>();
+			else if (auto animatedValue = DynamicCast<AnimationTrack<Color4>>(valueNode.track))
+				newGroup = mmake < HandlesGroup<AnimationTrack<Color4>>>();
 
 			if (newGroup)
 			{
-				newGroup->trackControl = this;
+				newGroup->trackControl = Ref(this);
 				newGroup->InitializeHandles(valueNode.track, valueNode.path);
 
 				mHandlesGroups.Add(valueNode.track, newGroup);
 			}
 		}
 
-		for (auto childNode : valueNode.children)
+		for (auto& childNode : valueNode.children)
 			InitializeNodeHandles(*childNode);
 	}
 
@@ -119,11 +113,11 @@ namespace Editor
 		}
 	}
 
-	Vector<ITrackControl::KeyHandle*> MapKeyFramesTrackControl::GetKeyHandles() const
+	Vector<Ref<ITrackControl::KeyHandle>> MapKeyFramesTrackControl::GetKeyHandles() const
 	{
-		Vector<ITrackControl::KeyHandle*> res;
+		Vector<Ref<ITrackControl::KeyHandle>> res;
 		for (auto& kv : mHandlesGroups) {
-			res.Add(kv.second->handles.Cast<ITrackControl::KeyHandle*>());
+			res.Add(DynamicCastVector<ITrackControl::KeyHandle>(kv.second->handles));
 		}
 
 		return res;
@@ -135,7 +129,7 @@ namespace Editor
 			kv.second->DeleteKey(keyUid);
 	}
 
-	void MapKeyFramesTrackControl::UpdateHandlesForTrack(IAnimationTrack* animatedValue)
+	void MapKeyFramesTrackControl::UpdateHandlesForTrack(const Ref<IAnimationTrack>& animatedValue)
 	{
 		if (mHandlesGroups.ContainsKey(animatedValue))
 			mHandlesGroups[animatedValue]->UpdateHandles();
@@ -147,14 +141,14 @@ namespace Editor
 	void MapKeyFramesTrackControl::EndKeysDrag()
 	{}
 
-	AnimationKeyDragHandle* MapKeyFramesTrackControl::CreateHandle()
+	Ref<AnimationKeyDragHandle> MapKeyFramesTrackControl::CreateHandle()
 	{
-		AnimationKeyDragHandle* handle = mnew AnimationKeyDragHandle(mnew Sprite("ui/UI4_map_key.png"),
-																	 mnew Sprite("ui/UI4_map_key_hover.png"),
-																	 mnew Sprite("ui/UI4_map_key_pressed.png"),
-																	 mnew Sprite("ui/UI4_selected_map_key.png"),
-																	 mnew Sprite("ui/UI4_selected_map_key_hover.png"),
-																	 mnew Sprite("ui/UI4_selected_map_key_pressed.png"));
+		auto handle = mmake<AnimationKeyDragHandle>(mmake<Sprite>("ui/UI4_map_key.png"),
+													mmake<Sprite>("ui/UI4_map_key_hover.png"),
+													mmake<Sprite>("ui/UI4_map_key_pressed.png"),
+													mmake<Sprite>("ui/UI4_selected_map_key.png"),
+													mmake<Sprite>("ui/UI4_selected_map_key_hover.png"),
+													mmake<Sprite>("ui/UI4_selected_map_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
@@ -169,7 +163,7 @@ namespace Editor
 		};
 
 		handle->localToWidgetOffsetTransformFunc = [&](const Vec2F& pos) {
-			float worldXPos = mTimeline->LocalToWorld(pos.x);
+			float worldXPos = mTimeline.Lock()->LocalToWorld(pos.x);
 			float localXPos = worldXPos - layout->GetWorldLeft();
 
 			return Vec2F(localXPos, 0);
@@ -177,7 +171,7 @@ namespace Editor
 
 		handle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& pos) {
 			float worldXPos = layout->GetWorldLeft() + pos.x;
-			float localXPos = mTimeline->WorldToLocal(worldXPos);
+			float localXPos = mTimeline.Lock()->WorldToLocal(worldXPos);
 
 			return Vec2F(localXPos, 0);
 		};
@@ -185,15 +179,16 @@ namespace Editor
 		return handle;
 	}
 
-	Vector<MapKeyFramesTrackControl::KeyHandle*> MapKeyFramesTrackControl::FindHandlesAtPosition(float position) const
+	Vector<Ref<MapKeyFramesTrackControl::KeyHandle>> MapKeyFramesTrackControl::FindHandlesAtPosition(float position) const
 	{
-		Vector<KeyHandle*> res;
+		Vector<Ref<KeyHandle>> res;
 
+		auto timeline = mTimeline.Lock();
 		for (auto& kv : mHandlesGroups)
 		{
-			for (auto keyHandle : kv.second->handles)
+			for (auto& keyHandle : kv.second->handles)
 			{
-				if (mTimeline->IsSameTime(keyHandle->handle->GetPosition().x, position))
+				if (timeline->IsSameTime(keyHandle->handle->GetPosition().x, position))
 					res.Add(keyHandle);
 			}
 		}
@@ -204,7 +199,8 @@ namespace Editor
 	MapKeyFramesTrackControl::KeyHandle::KeyHandle()
 	{}
 
-	MapKeyFramesTrackControl::KeyHandle::KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle, IAnimationTrack* track,
+	MapKeyFramesTrackControl::KeyHandle::KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle, 
+												   const Ref<IAnimationTrack>& track,
 												   const Function<void(KeyHandle& keyHandle)>& updateFunc) :
 		ITrackControl::KeyHandle(keyUid, handle), track(track), updateFunc(updateFunc)
 	{}
@@ -215,27 +211,26 @@ namespace Editor
 	}
 
 	MapKeyFramesTrackControl::IHandlesGroup::~IHandlesGroup()
-	{
-		for (auto handle : handles)
-			delete handle;
-	}
+	{}
 
 	void MapKeyFramesTrackControl::IHandlesGroup::CacheHandles()
 	{
-		for (auto keyHandle : handles)
+		auto trackControlRef = trackControl.Lock();
+
+		for (auto& keyHandle : handles)
 		{
 			keyHandle->handle->SetParent(nullptr);
 			keyHandle->handle->SetEnabled(false);
 			keyHandle->handle->SetSelected(false);
 			keyHandle->handle->SetSelectionGroup(nullptr);
-			trackControl->mHandlesCache.Add(keyHandle->handle);
-			delete keyHandle;
+			trackControlRef->mHandlesCache.Add(keyHandle->handle);
 		}
 
 		handles.clear();
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::MapKeyFramesTrackControl>);
 // --- META ---
 
 DECLARE_CLASS(Editor::MapKeyFramesTrackControl, Editor__MapKeyFramesTrackControl);

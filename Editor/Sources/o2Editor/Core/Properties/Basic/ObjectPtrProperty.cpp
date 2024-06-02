@@ -17,13 +17,14 @@ using namespace o2;
 
 namespace Editor
 {
-	ObjectPtrProperty::ObjectPtrProperty()
+	ObjectPtrProperty::ObjectPtrProperty(RefCounter* refCounter):
+		IPropertyField(refCounter)
 	{
 		InitializeControls();
 	}
 
-	ObjectPtrProperty::ObjectPtrProperty(const ObjectPtrProperty& other):
-		IPropertyField(other)
+	ObjectPtrProperty::ObjectPtrProperty(RefCounter* refCounter, const ObjectPtrProperty& other):
+		IPropertyField(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -56,7 +57,7 @@ namespace Editor
 		mCaption->SetHorAlign(HorAlign::Left);
 		AddChild(mCaption);
 
-		mHeaderContainer = mnew HorizontalLayout();
+		mHeaderContainer = mmake<HorizontalLayout>();
 		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 19, 0);
 		mHeaderContainer->baseCorner = BaseCorner::Right;
 		mHeaderContainer->expandHeight = false;
@@ -131,7 +132,7 @@ namespace Editor
 				mObjectViewer = o2EditorProperties.CreateObjectViewer(mBuiltObjectType, mValuesPath, onChangeCompleted,
 																	  onChanged);
 
-				mObjectViewer->SetParentContext(mParentContext);
+				mObjectViewer->SetParentContext(mParentContext.Lock());
 				mObjectViewer->SetHeaderEnabled(!mNoHeader);
 				mObjectViewer->SetExpanded(mExpanded);
 				AddChild(mObjectViewer->GetSpoiler());
@@ -161,7 +162,7 @@ namespace Editor
 		if (mObjectViewer)
 		{
 			mObjectViewer->Refresh(mValuesProxies.Convert<Pair<IObject*, IObject*>>(
-				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+				[&](const Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>& x)
 			{
 				return Pair<IObject*, IObject*>(GetProxy(x.first), x.second ? GetProxy(x.second) : nullptr);
 			}));
@@ -204,7 +205,7 @@ namespace Editor
 		return mCaption->GetText();
 	}
 
-	Button* ObjectPtrProperty::GetRemoveButton()
+	Ref<Button> ObjectPtrProperty::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
@@ -256,7 +257,7 @@ namespace Editor
 		bool hasObject = !mValuesProxies.IsEmpty() && GetProxy(mValuesProxies[0].first) != nullptr;
 		if (hasObject)
 		{
-			for (auto targetObj : mValuesProxies)
+			for (auto& targetObj : mValuesProxies)
 			{
 				IObject* object = GetProxy(targetObj.first);
 
@@ -286,9 +287,9 @@ namespace Editor
 
 				mImmediateCreateObject = availableTypes.Count() == 1;
 
-				mCreateMenu->AddItems(availableTypes.Convert<ContextMenu::Item*>([&](const Type* type)
+				mCreateMenu->AddItems(availableTypes.Convert<Ref<ContextMenu::Item>>([&](const Type* type)
 				{
-					return mnew ContextMenu::Item(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
+					return mmake<ContextMenu::Item>(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
 				}));
 
 				mContextInitialized = true;
@@ -306,7 +307,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		StoreValues(mBeforeChangeValues);
-		for (auto targetObj : mValuesProxies)
+		for (auto& targetObj : mValuesProxies)
 		{
 			if (GetProxy(targetObj.first) == nullptr)
 				SetProxy(targetObj.first, type->DynamicCastToIObject(type->CreateSample()));
@@ -323,45 +324,83 @@ namespace Editor
 	void ObjectPtrProperty::StoreValues(Vector<DataDocument>& data) const
 	{
 		data.Clear();
-		for (auto targetObj : mValuesProxies)
+		for (auto& targetObj : mValuesProxies)
 		{
 			data.Add(DataDocument());
 			data.Last() = GetProxy(targetObj.first);
 		}
 	}
 
-	IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy) const
+	class DummyObj : public RefCounterable
+	{
+
+	};
+
+	IObject* ObjectPtrProperty::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
 	{
 		const Type& proxyType = proxy->GetType();
-		if (proxyType.GetUsage() != Type::Usage::Pointer)
-			return nullptr;
+		if (proxyType.GetUsage() == Type::Usage::Pointer)
+		{
+			const Type& baseType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
+			if (baseType.IsBasedOn(TypeOf(IObject)))
+			{
+				const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
 
-		const Type& unptrType = *dynamic_cast<const PointerType&>(proxyType).GetUnpointedType();
-		if (!unptrType.IsBasedOn(TypeOf(IObject)))
-			return nullptr;
+				void* valuePtr;
+				proxy->GetValuePtr(&valuePtr);
 
-		const ObjectType& objectType = dynamic_cast<const ObjectType&>(unptrType);
+				return objectType.DynamicCastToIObject(valuePtr);
+			}
+		}
+		else if (proxyType.GetUsage() == Type::Usage::Reference)
+        {
+            const Type& baseType = *dynamic_cast<const ReferenceType&>(proxyType).GetBaseType();
+            if (baseType.IsBasedOn(TypeOf(IObject)))
+            {
+                const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
+				const ReferenceType& refType = dynamic_cast<const ReferenceType&>(proxyType);
 
-		void* valuePtr;
-		proxy->GetValuePtr(&valuePtr);
+                void* valuePtr = proxyType.CreateSample();
+                proxy->GetValuePtr(valuePtr);
 
-		return objectType.DynamicCastToIObject(valuePtr);
+                IObject* res = objectType.DynamicCastToIObject(refType.GetObjectRawPtr(valuePtr));
+
+				proxyType.DestroySample(valuePtr);
+
+				return res;
+            }
+		}
+
+		return nullptr;
 	}
 
-	void ObjectPtrProperty::SetProxy(IAbstractValueProxy* proxy, IObject* object)
+	void ObjectPtrProperty::SetProxy(const Ref<IAbstractValueProxy>& proxy, IObject* object)
 	{
-		const Type& proxyType = proxy->GetType();
-		if (proxyType.GetUsage() != Type::Usage::Pointer)
-			return;
+        const Type& proxyType = proxy->GetType();
+        if (proxyType.GetUsage() == Type::Usage::Pointer)
+        {
+            const Type& baseType = *dynamic_cast<const PointerType&>(proxyType).GetBaseType();
+            if (baseType.IsBasedOn(TypeOf(IObject)))
+            {
+                const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
 
-		const Type& unptrType = *dynamic_cast<const PointerType&>(proxyType).GetUnpointedType();
-		if (!unptrType.IsBasedOn(TypeOf(IObject)))
-			return;
+                void* valuePtr = objectType.DynamicCastFromIObject(object);
+                proxy->SetValuePtr(&valuePtr);
+            }
+        }
+        else if (proxyType.GetUsage() == Type::Usage::Reference)
+        {
+            const Type& baseType = *dynamic_cast<const ReferenceType&>(proxyType).GetBaseType();
+            if (baseType.IsBasedOn(TypeOf(IObject)))
+            {
+                const ObjectType& objectType = dynamic_cast<const ObjectType&>(baseType);
+                const ReferenceType& refType = dynamic_cast<const ReferenceType&>(proxyType);
 
-		const ObjectType& objectType = dynamic_cast<const ObjectType&>(unptrType);
-
-		void* valuePtr = objectType.DynamicCastFromIObject(object);
-		proxy->SetValuePtr(&valuePtr);
+                void* valuePtr = objectType.DynamicCastFromIObject(object);
+				
+                proxy->SetValuePtr(refType.CreateSample(valuePtr));
+            }
+        }
 	}
 
 	void ObjectPtrProperty::UpdateViewerHeader()
@@ -369,18 +408,19 @@ namespace Editor
 		if (mObjectViewer)
 			mObjectViewer->SetCaption(mCaption->GetText());
 
-		Text* spoilerCaptionLayer = !mObjectViewer ?
+		auto spoilerCaptionLayer = !mObjectViewer ?
 			mCaption->GetLayerDrawableByType<Text>() :
 			mObjectViewer->GetSpoiler()->GetLayerDrawable<Text>("caption");
 
 		if (spoilerCaptionLayer)
 		{
-			Vec2F captionSize = Text::GetTextSize(mCaption->GetText(), spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetFontHeight());
+			Vec2F captionSize = Text::GetTextSize(mCaption->GetText(), spoilerCaptionLayer->GetFont(), spoilerCaptionLayer->GetFontHeight());
 			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
 		}
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ObjectPtrProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ObjectPtrProperty, Editor__ObjectPtrProperty);

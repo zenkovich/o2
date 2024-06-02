@@ -17,7 +17,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mDataView = mnew Widget();
+		mDataView = mmake<Widget>();
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 21;
 
@@ -41,19 +41,7 @@ namespace Editor
 	}
 
 	DefaultWidgetLayerHeaderViewer::~DefaultWidgetLayerHeaderViewer()
-	{
-		if (mEnableProperty)
-			delete mEnableProperty;
-
-		if (mNameProperty)
-			delete mNameProperty;
-
-		if (mLockProperty)
-			delete mLockProperty;
-
-		if (mDataView)
-			delete mDataView;
-	}
+	{}
 
 	void DefaultWidgetLayerHeaderViewer::SetTargetLayers(const Vector<WidgetLayer*>& layers)
 	{
@@ -73,7 +61,7 @@ namespace Editor
 			layers, prototypes, [](WidgetLayer* x) { return &x->locked; });
 	}
 
-	Widget* DefaultWidgetLayerHeaderViewer::GetWidget() const
+	Ref<Widget> DefaultWidgetLayerHeaderViewer::GetWidget() const
 	{
 		return mDataView;
 	}
@@ -88,9 +76,7 @@ namespace Editor
 	void DefaultWidgetLayerHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue,
 														   const Vector<DataDocument>& newValue)
 	{
-		PropertyChangeAction* action = mnew PropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
-
+		auto action = mmake<PropertyChangeAction>(o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 		o2EditorApplication.DoneAction(action);
 	}
 

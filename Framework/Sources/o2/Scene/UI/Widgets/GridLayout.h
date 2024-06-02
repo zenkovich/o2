@@ -27,10 +27,10 @@ namespace o2
 
     public:
         // Default constructor
-        GridLayout();
+        explicit GridLayout(RefCounter* refCounter);
 
         // Copy-constructor
-        GridLayout(const GridLayout& other);
+        GridLayout(RefCounter* refCounter, const GridLayout& other);
 
         // Destructor
         ~GridLayout();
@@ -111,6 +111,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(GridLayout);
+        CLONEABLE_REF(GridLayout);
 
     protected:
         BaseCorner   mBaseCorner = BaseCorner::Left;          // Base corner of widgets arranging @SERIALIZABLE
@@ -123,10 +124,10 @@ namespace o2
 
     protected:
         // Called when child widget was added
-        void OnChildAdded(Widget* child) override;
+        void OnChildAdded(const Ref<Widget>& child) override;
 
         // Called when child widget was removed
-        void OnChildRemoved(Widget* child) override;
+        void OnChildRemoved(const Ref<Widget>& child) override;
 
         // Invokes required function for childs arranging
         void RearrangeChilds();
@@ -194,8 +195,8 @@ END_META;
 CLASS_METHODS_META(o2::GridLayout)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const GridLayout&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const GridLayout&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBaseCorner, BaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(BaseCorner, GetBaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSpacing, float);
@@ -220,8 +221,8 @@ CLASS_METHODS_META(o2::GridLayout)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFittingByChildren);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Widget*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromLeftTop);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromTop);

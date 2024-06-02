@@ -8,12 +8,12 @@
 
 namespace o2
 {
-    VerticalScrollBar::VerticalScrollBar():
-        Widget(), DrawableCursorEventsListener(this)
+    VerticalScrollBar::VerticalScrollBar(RefCounter* refCounter):
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {}
 
-    VerticalScrollBar::VerticalScrollBar(const VerticalScrollBar& other) :
-        Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+    VerticalScrollBar::VerticalScrollBar(RefCounter* refCounter, const VerticalScrollBar& other) :
+        Widget(refCounter, other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
         mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize),
         mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue),
         value(this), minValue(this), maxValue(this), scrollSense(this), scrollSize(this)
@@ -335,7 +335,7 @@ namespace o2
         UpdateProgressLayersLayouts();
     }
 
-    void VerticalScrollBar::OnLayerAdded(WidgetLayer* layer)
+    void VerticalScrollBar::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "back")
             mBackLayer = layer;
@@ -355,6 +355,8 @@ namespace o2
         return "Progress";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::VerticalScrollBar>);
 // --- META ---
 
 DECLARE_CLASS(o2::VerticalScrollBar, o2__VerticalScrollBar);

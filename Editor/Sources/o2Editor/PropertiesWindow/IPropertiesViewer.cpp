@@ -6,10 +6,15 @@
 
 namespace Editor
 {
-	IPropertiesViewer::~IPropertiesViewer()
-	{
-		delete mContentWidget;
-	}
+    IPropertiesViewer::IPropertiesViewer()
+    {}
+
+    IPropertiesViewer::IPropertiesViewer(RefCounter* refCounter):
+		RefCounterable(refCounter)
+    {}
+
+    IPropertiesViewer::~IPropertiesViewer()
+	{}
 
 	const Type* IPropertiesViewer::GetViewingObjectType() const
 	{

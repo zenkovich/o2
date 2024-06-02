@@ -9,15 +9,15 @@
 
 namespace Editor
 {
-	AssetIcon::AssetIcon():
-		Widget(), mNameText(nullptr)
+	AssetIcon::AssetIcon(RefCounter* refCounter):
+		Widget(refCounter), mNameText(nullptr)
 	{
 		onDraw += [&]() { CursorAreaEventsListener::OnDrawn(); };
 		RetargetStatesAnimations();
 	}
 
-	AssetIcon::AssetIcon(const AssetIcon& other):
-		Widget(other), assetName(this)
+	AssetIcon::AssetIcon(RefCounter* refCounter, const AssetIcon& other):
+		Widget(refCounter, other), assetName(this)
 	{
 		mNameText = FindChildByType<Label>();
 
@@ -36,7 +36,7 @@ namespace Editor
 		return *this;
 	}
 
-	void AssetIcon::SetAssetInfo(const AssetInfo* info)
+	void AssetIcon::SetAssetInfo(const Ref<AssetInfo>& info)
 	{
 		mAssetInfo = info;
 
@@ -44,9 +44,9 @@ namespace Editor
 			mNameText->text = o2FileSystem.GetPathWithoutDirectories(info->path);
 	}
 
-	const AssetInfo& AssetIcon::GetAssetInfo() const
+	const Ref<AssetInfo>& AssetIcon::GetAssetInfo() const
 	{
-		return *mAssetInfo;
+		return mAssetInfo;
 	}
 
 	void AssetIcon::SetAssetName(const WString& name)
@@ -89,7 +89,7 @@ namespace Editor
 	{
 		SetState("selected", selected);
 		if (mOwner)
-			SetState("focused", mOwner->IsFocused());
+			SetState("focused", mOwner.Lock()->IsFocused());
 
 		mIsSelected = selected;
 
@@ -102,13 +102,13 @@ namespace Editor
 	void AssetIcon::OnCursorDblClicked(const Input::Cursor& cursor)
 	{
 		if (mOwner)
-			mOwner->OnAssetDblClick(this);
+			mOwner.Lock()->OnAssetDblClick(Ref(this));
 	}
 
 	void AssetIcon::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
 		if (mOwner)
-			mOwner->OnCursorRightMouseReleased(cursor);
+			mOwner.Lock()->OnCursorRightMouseReleased(cursor);
 	}
 
 	void AssetIcon::OnCursorEnter(const Input::Cursor& cursor)
@@ -149,37 +149,38 @@ namespace Editor
 	void AssetIcon::OnDragStart(const Input::Cursor& cursor)
 	{
 		if (mOwner)
-			mOwner->BeginDragging(this);
+			mOwner.Lock()->BeginDragging(Ref(this));
 	}
 
-	void AssetIcon::OnDragged(const Input::Cursor& cursor, DragDropArea* area)
+	void AssetIcon::OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area)
 	{
 		if (mOwner)
-			mOwner->UpdateDraggingGraphics();
+			mOwner.Lock()->UpdateDraggingGraphics();
 	}
 
 	void AssetIcon::OnDragEnd(const Input::Cursor& cursor)
 	{
 		if (mOwner)
-			mOwner->mDragEnded = true;
+			mOwner.Lock()->mDragEnded = true;
 	}
 
 	void AssetIcon::OnSelected()
 	{
 		if (mOwner)
-			mOwner->Focus();
+			mOwner.Lock()->Focus();
 	}
 
 	void AssetIcon::OnDeselected()
 	{}
 
-	void AssetIcon::OnDropped(ISelectableDragableObjectsGroup* group)
+	void AssetIcon::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		if (mOwner)
-			mOwner->OnDropped(group);
+			mOwner.Lock()->OnDropped(group);
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AssetIcon>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetIcon, Editor__AssetIcon);

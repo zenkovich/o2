@@ -7,14 +7,14 @@
 
 namespace o2
 {
-    PopupWidget::PopupWidget():
-        ScrollArea()
+    PopupWidget::PopupWidget(RefCounter* refCounter):
+        ScrollArea(refCounter)
     {
         SetEnabledForcible(false);
     }
 
-    PopupWidget::PopupWidget(const PopupWidget& other):
-        ScrollArea(other), mFitSizeMin(other.mFitSizeMin)
+    PopupWidget::PopupWidget(RefCounter* refCounter, const PopupWidget& other):
+        ScrollArea(refCounter, other), mFitSizeMin(other.mFitSizeMin)
     {
         SetEnabledForcible(false);
     }
@@ -57,14 +57,15 @@ namespace o2
     void PopupWidget::Draw()
     {}
 
-    void PopupWidget::Show(PopupWidget* parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
+    void PopupWidget::Show(const Ref<PopupWidget>& parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
     {
         if (parent)
         {
             mParentPopup = parent;
-            parent->mChildPopup = this;
+            parent->mChildPopup = Ref(this);
         }
-        else mVisiblePopup = this;
+        else 
+            mVisiblePopup = Ref(this);
 
         Widget::Show();
 
@@ -84,14 +85,14 @@ namespace o2
     {
         ScrollArea::OnEnabled();
 
-        interactable = true;
+        SetInteractable(true);
     }
 
     void PopupWidget::OnDisabled()
     {
         ScrollArea::OnDisabled();
 
-        interactable = false;
+        SetInteractable(false);
     }
 
     void PopupWidget::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -121,7 +122,7 @@ namespace o2
         Hide();
 
         if (mParentPopup)
-            mParentPopup->HideWithParent();
+            mParentPopup.Lock()->HideWithParent();
 
         mParentPopup = nullptr;
         mChildPopup = nullptr;
@@ -132,7 +133,7 @@ namespace o2
         Hide();
 
         if (mChildPopup)
-            mChildPopup->HideWithChild();
+            mChildPopup.Lock()->HideWithChild();
 
         mChildPopup = nullptr;
     }
@@ -147,7 +148,7 @@ namespace o2
         return true;
     }
 
-    PopupWidget* PopupWidget::mVisiblePopup = nullptr;
+    WeakRef<PopupWidget> PopupWidget::mVisiblePopup;
 
     bool PopupWidget::IsInputTransparent() const
     {
@@ -160,7 +161,7 @@ namespace o2
 
         Vec2F resolution = o2Render.GetCurrentResolution();
         RectF fullScreenRect(resolution*0.5f, resolution*(-0.5f));
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->CheckClipping(fullScreenRect);
     }
 
@@ -176,7 +177,7 @@ namespace o2
     {
         Vec2F size = layout->GetMinimalSize();
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             size.x = Math::Max(size.x, child->GetMinWidthWithChildren());
             size.y = Math::Max(size.y, child->GetMinHeightWithChildren());
@@ -222,7 +223,7 @@ namespace o2
         if (!mResEnabledInHierarchy)
             return;
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         IDrawable::OnDrawn();
@@ -230,12 +231,12 @@ namespace o2
 
         o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->Draw();
 
         o2Render.DisableScissorTest();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         if (mOwnHorScrollBar)
@@ -247,7 +248,7 @@ namespace o2
         DrawDebugFrame();
 
         if (mChildPopup)
-            mChildPopup->SpecialDraw();
+            mChildPopup.Lock()->SpecialDraw();
     }
 
     String PopupWidget::GetCreateMenuGroup()
@@ -255,6 +256,8 @@ namespace o2
         return "Window";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::PopupWidget>);
 // --- META ---
 
 DECLARE_CLASS(o2::PopupWidget, o2__PopupWidget);

@@ -27,10 +27,10 @@ namespace o2
 
     public:
         // Default constructor
-        HorizontalLayout();
+        explicit HorizontalLayout(RefCounter* refCounter);
 
         // Copy-constructor
-        HorizontalLayout(const HorizontalLayout& other);
+        HorizontalLayout(RefCounter* refCounter, const HorizontalLayout& other);
 
         // Destructor
         ~HorizontalLayout();
@@ -105,6 +105,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(HorizontalLayout);
+        CLONEABLE_REF(HorizontalLayout);
 
     protected:
         BaseCorner mBaseCorner = BaseCorner::Left; // Base corner of widgets arranging @SERIALIZABLE
@@ -125,10 +126,10 @@ namespace o2
         float GetWidthWeightWithChildren() const override;
 
         // Called when child widget was added
-        void OnChildAdded(Widget* child) override;
+        void OnChildAdded(const Ref<Widget>& child) override;
 
         // Called when child widget was removed
-        void OnChildRemoved(Widget* child) override;
+        void OnChildRemoved(const Ref<Widget>& child) override;
 
         // Invokes required function for childs arranging
         void RearrangeChilds();
@@ -146,7 +147,7 @@ namespace o2
         void ExpandSizeByChilds();
 
         // Aligns widget by height with base corner
-        void AlignWidgetByHeight(Widget* child, float widthAnchor);
+        void AlignWidgetByHeight(const Ref<Widget>& child, float widthAnchor);
 
         // Updates layout's weight and minimal size
         void UpdateLayoutParametres();
@@ -182,8 +183,8 @@ END_META;
 CLASS_METHODS_META(o2::HorizontalLayout)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const HorizontalLayout&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const HorizontalLayout&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBaseCorner, BaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(BaseCorner, GetBaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSpacing, float);
@@ -209,14 +210,14 @@ CLASS_METHODS_META(o2::HorizontalLayout)
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinWidthWithChildren);
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinHeightWithChildren);
     FUNCTION().PROTECTED().SIGNATURE(float, GetWidthWeightWithChildren);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Widget*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromLeftToRight);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromRightToLeft);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromCenter);
     FUNCTION().PROTECTED().SIGNATURE(void, ExpandSizeByChilds);
-    FUNCTION().PROTECTED().SIGNATURE(void, AlignWidgetByHeight, Widget*, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, AlignWidgetByHeight, const Ref<Widget>&, float);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayoutParametres);
 }
 END_META;

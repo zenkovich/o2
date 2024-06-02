@@ -26,12 +26,17 @@ namespace Editor
 			o2Debug.LogError("Error message " + (String)o2Time.GetLocalTime());
 	}
 
-	LogWindow::LogWindow():
-		mRegularMessagesEnabled(true), mWarningMessagesEnabled(true), mErrorMessagesEnabled(true), mRegularMessagesCount(0),
+    Ref<RefCounterable> LogWindow::CastToRefCounterable(const Ref<LogWindow>& ref)
+    {
+		return DynamicCast<IEditorWindow>(ref);
+    }
+
+    LogWindow::LogWindow(RefCounter* refCounter) :
+		IEditorWindow(refCounter), mRegularMessagesEnabled(true), mWarningMessagesEnabled(true), mErrorMessagesEnabled(true), mRegularMessagesCount(0),
 		mWarningMessagesCount(0), mErrorMessagesCount(0)
 	{
 		InitializeWindow();
-		BindStream(o2Debug.GetLog());
+		//BindStream(o2Debug.GetLog());
 	}
 
 	LogWindow::~LogWindow()
@@ -41,7 +46,7 @@ namespace Editor
 	{
 		mWindow->caption = "Log";
 		mWindow->name = "log window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_log_wnd_icon.png"));
+		mWindow->SetIcon(mmake<Sprite>("ui/UI4_log_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
@@ -53,15 +58,15 @@ namespace Editor
 		mList->getItemsRangeFunc = THIS_FUNC(GetVisibleMessagesRange);
 		mList->setupItemFunc = THIS_FUNC(SetupListMessage);
 
-		Widget* listItemSample = mnew Widget();
+		auto listItemSample = mmake<Widget>();
 		listItemSample->layout->minHeight = 25;
-		listItemSample->AddLayer("back", mnew Sprite(Color4(0, 0, 0, 255)));
-		listItemSample->AddLayer("warning", mnew Sprite(Color4(226, 198, 83, 255)),
+		listItemSample->AddLayer("back", mmake<Sprite>(Color4(0, 0, 0, 255)));
+		listItemSample->AddLayer("warning", mmake<Sprite>(Color4(226, 198, 83, 255)),
 								 Layout::VerStretch(HorAlign::Left, 0, 0, 10, 0));
-		listItemSample->AddLayer("error", mnew Sprite(Color4(248, 94, 72, 255)),
+		listItemSample->AddLayer("error", mmake<Sprite>(Color4(248, 94, 72, 255)),
 								 Layout::VerStretch(HorAlign::Left, 0, 0, 10, 0));
 
-		Text* captionText = mnew Text("stdFont.ttf");
+		auto captionText = mmake<Text>("stdFont.ttf");
 		captionText->text = "text";
 		captionText->horAlign = HorAlign::Left;
 		captionText->verAlign = VerAlign::Middle;
@@ -73,8 +78,8 @@ namespace Editor
 
 		mWindow->AddChild(mList);
 
-		Widget* downPanel = mnew Widget();
-		downPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_down_back.png"),
+		auto downPanel = mmake<Widget>();
+		downPanel->AddLayer("back", mmake<Sprite>("ui/UI4_small_panel_down_back.png"),
 							Layout::BothStretch(-4, -5, -4, -5));
 		*downPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
 		mWindow->AddChild(downPanel);
@@ -108,7 +113,7 @@ namespace Editor
 		errorsToggle->onToggle = [&](bool value) { OnErrorMessagesToggled(value); };
 		downPanel->AddChild(errorsToggle);
 
-		mLastMessageView = listItemSample->CloneAs<Widget>();
+		mLastMessageView = listItemSample->CloneAsRef<Widget>();
 		*mLastMessageView->layout = WidgetLayout::BothStretch(200, 1, 0, 1);
 		downPanel->AddChild(mLastMessageView);
 		mLastMessageView->Hide(true);
@@ -189,7 +194,7 @@ namespace Editor
 		return res;
 	}
 
-	void LogWindow::SetupListMessage(Widget* item, void* object)
+	void LogWindow::SetupListMessage(const Ref<Widget>& item, void* object)
 	{
 		LogMessage* message = (LogMessage*)(void*)object;
 
@@ -197,7 +202,7 @@ namespace Editor
 		item->layer["error"]->GetDrawable()->enabled = message->type == LogMessage::Type::Error;
 		item->layer["back"]->GetDrawable()->transparency = message->idx % 2 == 1 ? 0.05f : 0.0f;
 
-		Text* text = item->GetLayerDrawable<Text>("caption");
+		auto text = item->GetLayerDrawable<Text>("caption");
 		text->text = message->message.SubStr(0, message->message.Find("\n"));
 	}
 

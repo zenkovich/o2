@@ -1,11 +1,12 @@
 #pragma once
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
     // ---------------------------------------------------
     // Animation, that can be edited from animation editor
     // ---------------------------------------------------
-    class IEditableAnimation
+    class IEditableAnimation: public IRefCounterable
     {
     public:
         // Called when animation started to edit. It means that animation must be deactivated

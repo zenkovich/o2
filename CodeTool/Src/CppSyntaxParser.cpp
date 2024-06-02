@@ -1,13 +1,11 @@
 #include "CppSyntaxParser.h"
 
-#include <algorithm> 
-#include <cctype>
+#include <algorithm>
 #include <fstream>
-#include <functional> 
-#include <iosfwd>
+#include <functional>
 #include <locale>
-#include <iostream>
 #include <sstream>
+#include <cstring>
 
 string& TrimStart(string& str, const string& chars /*= " "*/)
 {
@@ -112,6 +110,7 @@ void CppSyntaxParser::InitializeParsers()
     mParsers.push_back(new ExpressionParser("#pragma", &CppSyntaxParser::ParsePragma, false, true));
     mParsers.push_back(new ExpressionParser("#include", &CppSyntaxParser::ParseInclude, false, true));
     mParsers.push_back(new ExpressionParser("#define", &CppSyntaxParser::ParseDefine, true, true));
+    mParsers.push_back(new ExpressionParser("#undef", &CppSyntaxParser::ParseDefine, true, true));
     mParsers.push_back(new ExpressionParser("#ifdef", &CppSyntaxParser::ParseIfdefMacros, true, true));
     mParsers.push_back(new ExpressionParser("#if", &CppSyntaxParser::ParseIfMacros, true, true));
     mParsers.push_back(new ExpressionParser("#endif", &CppSyntaxParser::ParseEndIfMacros, true, true));
@@ -273,6 +272,9 @@ bool CppSyntaxParser::IsFunction(const string& data)
     if (firstWord == "inline")
         firstWord = ReadWord(data, locCaret, " \n\r(){}[]");
 
+    if (firstWord == "explicit")
+        firstWord = ReadWord(data, locCaret, " \n\r(){}[]");
+
     if (GetNextSymbol(data, locCaret, " \n\r\t") == '(')
     {
         string braces = ReadBraces(data, locCaret);
@@ -289,6 +291,9 @@ bool CppSyntaxParser::IsFunction(const string& data)
     else
     {
         if (firstWord == "const")
+            ReadWord(data, locCaret, " \n\r(){}[]");
+
+        if (firstWord == "operator")
             ReadWord(data, locCaret, " \n\r(){}[]");
 
         string thirdWord = ReadWord(data, locCaret, " \n\r(){}[]<>-");
@@ -595,6 +600,12 @@ void CppSyntaxParser::ParseDefine(SyntaxSection& section, int& caret,
                                   SyntaxProtectionSection& protectionSection)
 {
     caret += (int)strlen("#define");
+    ReadWord(section.mData, caret, "\n", "");
+}
+
+void CppSyntaxParser::ParseUndef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection)
+{
+    caret += (int)strlen("#undef");
     ReadWord(section.mData, caret, "\n", "");
 }
 

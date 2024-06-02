@@ -13,22 +13,31 @@ namespace Editor
 	// -----------------------------------------------------------------
 	struct SkinningMeshEditorLayer : public SceneEditorLayer
 	{
-		bool drawMeshWire = true;
+		bool drawMeshWire = true; // Is draw mesh wire
 
-		SkinningMeshComponent* mesh = nullptr;
-		Sprite                 textureSprite;
+		Ref<SkinningMeshComponent> mesh;          // Reference to mesh component
+		Sprite                     textureSprite; // Texture sprite
 
 	public:
+		// Draws editor over scene
 		void DrawOverScene() override;
+
+		// Updates editor
 		void Update(float dt) override;
 
+		// Returns order of layer
 		int GetOrder() const override;
 
+		// Returns true if layer is enabled
 		bool IsEnabled() const override;
 
+		// Returns name of layer
 		const String& GetName() const override;
+
+		// Returns icon name of layer
 		const String& GetIconName() const override;
 
+		// Draws mesh wire
 		void DrawMeshWire();
 	};
 }

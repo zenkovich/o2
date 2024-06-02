@@ -12,14 +12,8 @@ namespace o2
     VectorFontAsset::Meta::Meta(const Meta& other):
         DefaultAssetMeta<VectorFontAsset>(other)
     {
-        for (auto eff : other.mEffects)
-            mEffects.Add(eff->CloneAs<VectorFont::Effect>());
-    }
-
-    VectorFontAsset::Meta::~Meta()
-    {
-        for (auto eff : mEffects)
-            delete eff;
+        for (auto& eff : other.mEffects)
+            mEffects.Add(eff->CloneAsRef<VectorFont::Effect>());
     }
 
     bool VectorFontAsset::Meta::IsEqual(AssetMeta* other) const
@@ -28,12 +22,12 @@ namespace o2
             return false;
 
         Meta* otherMeta = (Meta*)other;
-        for (auto eff : mEffects)
+        for (auto& eff : mEffects)
         {
             bool found = false;
-            for (auto otherEff : otherMeta->mEffects)
+            for (auto& otherEff : otherMeta->mEffects)
             {
-                if (eff && eff->IsEqual(otherEff))
+                if (eff && eff->IsEqual(otherEff.Get()))
                 {
                     found = true;
                     break;
@@ -50,11 +44,11 @@ namespace o2
     void VectorFontAsset::Meta::UpdateFontEffects()
     {
         if (mAsset)
-            mAsset->UpdateFontEffects();
+            mAsset.Lock()->UpdateFontEffects();
     }
 
     VectorFontAsset::VectorFontAsset():
-        FontAsset(mnew Meta())
+        FontAsset(mmake<Meta>())
     {}
 
     VectorFontAsset::VectorFontAsset(const VectorFontAsset& asset):
@@ -68,31 +62,28 @@ namespace o2
         return *this;
     }
 
-    const Vector<VectorFont::Effect*>& VectorFontAsset::GetEffects() const
+    const Vector<Ref<VectorFont::Effect>>& VectorFontAsset::GetEffects() const
     {
         return GetMeta()->mEffects;
     }
 
-    void VectorFontAsset::AddEffect(VectorFont::Effect* effect)
+    void VectorFontAsset::AddEffect(const Ref<VectorFont::Effect>& effect)
     {
         GetMeta()->mEffects.Add(effect);
-        ((VectorFont*)mFont.mFont)->AddEffect(effect);
+        DynamicCast<VectorFont>(mFont)->AddEffect(effect);
     }
 
-    void VectorFontAsset::RemoveEffect(VectorFont::Effect* effect)
+    void VectorFontAsset::RemoveEffect(const Ref<VectorFont::Effect>& effect)
     {
         GetMeta()->mEffects.Remove(effect);
-        ((VectorFont*)mFont.mFont)->RemoveEffect(effect);
+        DynamicCast<VectorFont>(mFont)->RemoveEffect(effect);
     }
 
     void VectorFontAsset::RemoveAllEffects()
     {
-        for (auto eff : GetMeta()->mEffects)
-            delete eff;
-
         GetMeta()->mEffects.Clear();
 
-        ((VectorFont*)mFont.mFont)->RemoveAllEffects();
+        DynamicCast<VectorFont>(mFont)->RemoveAllEffects();
     }
 
     Vector<String> VectorFontAsset::GetFileExtensions()
@@ -100,9 +91,9 @@ namespace o2
         return { "ttf" };
     }
 
-    VectorFontAsset::Meta* VectorFontAsset::GetMeta() const
+    Ref<VectorFontAsset::Meta> VectorFontAsset::GetMeta() const
     {
-        return (Meta*)mInfo.meta;
+        return DynamicCast<Meta>(mInfo.meta);
     }
 
     void VectorFontAsset::LoadData(const String& path)
@@ -111,11 +102,11 @@ namespace o2
 
         if (!mFont)
         {
-            mFont = mnew VectorFont(path);
+            mFont = mmake<VectorFont>(path);
             UpdateFontEffects();
         }
         
-        GetMeta()->mAsset = this;
+        GetMeta()->mAsset = WeakRef(this);
     }
 
     void VectorFontAsset::SaveData(const String& path) const
@@ -123,19 +114,19 @@ namespace o2
 
     void VectorFontAsset::UpdateFontEffects()
     {
-        Vector<VectorFont::Effect*> clonedEffects;;
-        for (auto eff : GetMeta()->mEffects)
+        Vector<Ref<VectorFont::Effect>> clonedEffects;;
+        for (auto& eff : GetMeta()->mEffects)
         {
             if (eff)
-                clonedEffects.Add(eff->CloneAs<VectorFont::Effect>());
+                clonedEffects.Add(eff->CloneAsRef<VectorFont::Effect>());
         }
 
-        dynamic_cast<VectorFont*>(mFont.mFont)->SetEffects(clonedEffects);
+        DynamicCast<VectorFont>(mFont)->SetEffects(clonedEffects);
     }
 }
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::VectorFontAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::VectorFontAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::VectorFontAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::VectorFontAsset, o2__VectorFontAsset);

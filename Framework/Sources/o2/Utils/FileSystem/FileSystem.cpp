@@ -20,7 +20,7 @@ namespace o2
 
     FileSystem::FileSystem()
     {
-        mLog = mnew LogStream("File System");
+        mLog = mmake<LogStream>("File System");
         o2Debug.GetLog()->BindStream(mLog);
     }
 

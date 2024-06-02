@@ -24,7 +24,7 @@ namespace o2
         mVertexBufferSize = USHRT_MAX;
         mIndexBufferSize = USHRT_MAX;
 
-        mLog = mnew LogStream("Render");
+        mLog = mmake<LogStream>("Render");
         o2Debug.GetLog()->BindStream(mLog);
 
         mResolution = o2Application.GetContentSize();

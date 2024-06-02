@@ -8,12 +8,12 @@
 
 namespace o2
 {
-    HorizontalScrollBar::HorizontalScrollBar():
-        Widget(), DrawableCursorEventsListener(this)
+    HorizontalScrollBar::HorizontalScrollBar(RefCounter* refCounter):
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {}
 
-    HorizontalScrollBar::HorizontalScrollBar(const HorizontalScrollBar& other) :
-        Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+    HorizontalScrollBar::HorizontalScrollBar(RefCounter* refCounter, const HorizontalScrollBar& other) :
+        Widget(refCounter, other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
         mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize),
         mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue), 
         value(this), minValue(this), maxValue(this), scrollSense(this), scrollSize(this)
@@ -22,7 +22,6 @@ namespace o2
         mBackLayer = FindLayer("back");
 
         RetargetStatesAnimations();
-        UpdateSelfTransform();
     }
 
     HorizontalScrollBar::~HorizontalScrollBar()
@@ -341,7 +340,7 @@ namespace o2
         Widget::UpdateLayersLayouts();
     }
 
-    void HorizontalScrollBar::OnLayerAdded(WidgetLayer* layer)
+    void HorizontalScrollBar::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "back")
             mBackLayer = layer;
@@ -356,6 +355,8 @@ namespace o2
         return "Progress";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::HorizontalScrollBar>);
 // --- META ---
 
 DECLARE_CLASS(o2::HorizontalScrollBar, o2__HorizontalScrollBar);

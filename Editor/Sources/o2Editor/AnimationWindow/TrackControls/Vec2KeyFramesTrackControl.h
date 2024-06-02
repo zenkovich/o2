@@ -18,10 +18,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		Vec2KeyFramesTrackControl();
+		Vec2KeyFramesTrackControl(RefCounter* refCounter);
 
 		// Copy-constructor
-		Vec2KeyFramesTrackControl(const Vec2KeyFramesTrackControl& other);
+		Vec2KeyFramesTrackControl(RefCounter* refCounter, const Vec2KeyFramesTrackControl& other);
 
 		// Destructor
 		~Vec2KeyFramesTrackControl();
@@ -38,16 +38,18 @@ namespace Editor
 		// Draws handles with clipping
 		void Draw() override;
 
-		SERIALIZABLE(Vec2KeyFramesTrackControl);
+        SERIALIZABLE(Vec2KeyFramesTrackControl);
+        CLONEABLE_REF(Vec2KeyFramesTrackControl);
 
 	private:
-		SplineTool mTool;                       // Other handles locking tool
-		IEditTool* mPrevSelectedTool = nullptr; // Previous selected tool, for restore
+		Ref<SplineTool> mTool; // Other handles locking tool
 
-		Actor* mTrackOwner = nullptr; // Actor which animated in track
+		WeakRef<IEditTool> mPrevSelectedTool; // Previous selected tool, for restore
 
-		static Vec2KeyFramesTrackControl* mLastActive; // Last active track control of this type; When multiple track
-		                                               // controls are activated, only the last one works
+		WeakRef<Actor> mTrackOwner; // Actor which animated in track
+
+		static WeakRef<Vec2KeyFramesTrackControl> mLastActive; // Last active track control of this type; When multiple track
+		                                                       // controls are activated, only the last one works
 
 	private:
 		void InitializeControls();
@@ -66,15 +68,15 @@ END_META;
 CLASS_FIELDS_META(Editor::Vec2KeyFramesTrackControl)
 {
     FIELD().PRIVATE().NAME(mTool);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTrackOwner);
+    FIELD().PRIVATE().NAME(mPrevSelectedTool);
+    FIELD().PRIVATE().NAME(mTrackOwner);
 }
 END_META;
 CLASS_METHODS_META(Editor::Vec2KeyFramesTrackControl)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2KeyFramesTrackControl&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Vec2KeyFramesTrackControl&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);

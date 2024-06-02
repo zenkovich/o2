@@ -31,14 +31,11 @@ namespace o2
         PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property @SCRIPTABLE
 
     public:
-        // Default unused constructor, required for IObject
+        // Default unused constructor
         WidgetLayerLayout();
 
-        // Default constructor
-        WidgetLayerLayout(WidgetLayer* widgetLayer);
-
         // Copy constructor
-        WidgetLayerLayout(WidgetLayer* widgetLayer, const WidgetLayerLayout& other);
+        WidgetLayerLayout(const WidgetLayerLayout& other);
 
         // Cast to Layout operator
         operator Layout() const;
@@ -60,6 +57,9 @@ namespace o2
 
         // Check not equals operator
         bool operator!=(const Layout& other) const;
+
+        // Sets owner widget layer
+        void SetOwner(const Ref<WidgetLayer>& widgetLayer);
 
         // Returns calculated rectangle by anchors and offsets relative to source @SCRIPTABLE
         RectF Calculate(const RectF& source);
@@ -151,7 +151,7 @@ namespace o2
         SERIALIZABLE(WidgetLayerLayout);
 
     private:
-        WidgetLayer* mWidgetLayer = nullptr; // 
+        WeakRef<WidgetLayer> mWidgetLayer; // Owner widget layer 
 
         Vec2F mAnchorMin = Vec2F(0, 0); // @SERIALIZABLE
         Vec2F mAnchorMax = Vec2F(1, 1); // @SERIALIZABLE
@@ -182,7 +182,7 @@ CLASS_FIELDS_META(o2::WidgetLayerLayout)
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetRight);
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetBottom);
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetTop);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mWidgetLayer);
+    FIELD().PRIVATE().NAME(mWidgetLayer);
     FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(mAnchorMin);
     FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(1, 1)).NAME(mAnchorMax);
     FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(mOffsetMin);
@@ -193,8 +193,8 @@ CLASS_METHODS_META(o2::WidgetLayerLayout)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(WidgetLayer*);
-    FUNCTION().PUBLIC().CONSTRUCTOR(WidgetLayer*, const WidgetLayerLayout&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetLayerLayout&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetOwner, const Ref<WidgetLayer>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, Calculate, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorMin, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetAnchorMin);

@@ -5,11 +5,12 @@
 
 namespace Editor
 {
-	WStringProperty::WStringProperty()
+	WStringProperty::WStringProperty(RefCounter* refCounter):
+		TPropertyField<WString>(refCounter)
 	{}
 
-	WStringProperty::WStringProperty(const WStringProperty& other):
-		TPropertyField<WString>(other)
+	WStringProperty::WStringProperty(RefCounter* refCounter, const WStringProperty& other):
+		TPropertyField<WString>(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -47,7 +48,10 @@ namespace Editor
 		SetValueByUser(data);
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::WString>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::WStringProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::WString>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::WStringProperty, Editor__WStringProperty);

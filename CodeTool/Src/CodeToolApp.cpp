@@ -1,15 +1,12 @@
 #include "CodeToolApp.h"
 
 #include <algorithm>
-#include <cctype>
 #include <fstream>
 #include <functional> 
 #include <iostream>
-#include <locale>
-#include <sstream>
-#include <iostream>
 #include <filesystem>
 #include <cstdarg>
+#include <cstring>
 
 #undef GetClassName
 
@@ -1181,7 +1178,7 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const
 {
     static vector<string> ignoringNames = { "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE",
-        "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION", "BASE_REF_IMPLEMETATION" };
+        "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION", "BASE_REF_IMPLEMETATION", "FRIEND_REF_MAKE", "CLONEABLE_REF", "REF_COUNTERABLE_IMPL" };
 
     return !StartsWith(function->GetName(), string("~") + owner->GetName()) &&
         function->GetName().find('~') == string::npos &&

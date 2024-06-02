@@ -25,14 +25,14 @@ namespace Editor
 	// Creates handles for each keys and updates them
 	// -------------------------------------------------
 	template<typename AnimationTrackType>
-	class KeyFramesTrackControl: public ITrackControl
+	class KeyFramesTrackControl : public ITrackControl
 	{
 	public:
 		// Default constructor
-		KeyFramesTrackControl();
+        KeyFramesTrackControl(RefCounter* refCounter);
 
 		// Copy-constructor
-		KeyFramesTrackControl(const KeyFramesTrackControl& other);
+		KeyFramesTrackControl(RefCounter* refCounter, const KeyFramesTrackControl& other);
 
 		// Destructor
 		~KeyFramesTrackControl();
@@ -47,22 +47,22 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Sets Animation track, updates and creates key handles
-		void SetTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player, const String& path) override;
+		void SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path) override;
 
 		// Returns Animation track
-		AnimationTrackType* GetTrack() const;
+		Ref<AnimationTrackType> GetTrack() const;
 
 		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
-		void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet) override;
+		void Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet) override;
 
 		// Updates handles position on timeline
 		void UpdateHandles() override;
 
 		// Returns key handles list
-		Vector<KeyHandle*> GetKeyHandles() const override;
+		Vector<Ref<KeyHandle>> GetKeyHandles() const override;
 
 		// Returns a container of controllers that are part of a tree
-		Widget* GetTreePartControls() const override;
+		Ref<Widget> GetTreePartControls() const override;
 
 		// Sets curves edit view mode
 		void SetCurveViewEnabled(bool enabled) override;
@@ -82,32 +82,33 @@ namespace Editor
 		// Inserts new key at time
 		void InsertNewKey(float time) override;
 
-		SERIALIZABLE(KeyFramesTrackControl<AnimationTrackType>);
+        SERIALIZABLE(KeyFramesTrackControl<AnimationTrackType>);
+        CLONEABLE_REF(KeyFramesTrackControl<AnimationTrackType>);
 
 	protected:
 		typedef AnimationTrackWrapper<AnimationTrackType> Wrapper;
 		typedef typename Wrapper::TrackPlayerType         TrackPlayerType;
 		typedef typename Wrapper::ValueType               TrackValueType;
 
-		Vector<KeyHandle*> mHandles; // List of handles, each for keys
+		Vector<Ref<KeyHandle>> mHandles; // List of handles, each for keys
 
 		String mTrackPath; // Path to Animation track in animation
 
-		Widget* mTreeControls = nullptr; // Returns a container of controllers that are part of a tree
+		Ref<Widget> mTreeControls; // Container of controllers that are part of a tree
 
-		IPropertyField*                    mPropertyField;
-		TrackValueType                     mPropertyValue = TrackValueType();
-		PointerValueProxy<TrackValueType>* mPropertyValueProxy;
+		Ref<IPropertyField>                    mPropertyField;
+		TrackValueType                         mPropertyValue = TrackValueType();
+		Ref<PointerValueProxy<TrackValueType>> mPropertyValueProxy;
 
-		Button* mAddKeyDotButton = nullptr; // Dot add key button colored with curve color
-		Button* mAddKeyButton = nullptr;    // Add key button, enables when available to add new key
+		Ref<Button> mAddKeyDotButton; // Dot add key button colored with curve color
+		Ref<Button> mAddKeyButton;    // Add key button, enables when available to add new key
 
 		TrackValueType mLastValue = TrackValueType();
 
-		AnimationTrackType* mTrack = nullptr;         // Editing Animation track
-		TrackPlayerType*    mPlayer = nullptr;        // Track player
-		AnimationTimeline*  mTimeline = nullptr;      // Time line used for calculating handles positions
-		KeyHandlesSheet*    mHandlesSheet = nullptr;  // Handles sheet, used for drawing and managing drag handles
+		WeakRef<AnimationTrackType> mTrack;         // Editing Animation track
+		WeakRef<TrackPlayerType>    mPlayer;        // Track player
+		WeakRef<AnimationTimeline>  mTimeline;      // Time line used for calculating handles positions
+		WeakRef<KeyHandlesSheet>    mHandlesSheet;  // Handles sheet, used for drawing and managing drag handles
 
 		bool mDisableHandlesUpdate = false;  // It is true when handles are changing and combining or updating is not available
 
@@ -118,7 +119,7 @@ namespace Editor
 		virtual void OnSetTrack() {}
 		virtual void OnKeysChanged() {}
 
-		AnimationKeyDragHandle* CreateHandle();
+		Ref<AnimationKeyDragHandle> CreateHandle();
 
 		void CheckCanCreateKey(float time);
 
@@ -126,15 +127,15 @@ namespace Editor
 	};
 
 	template<typename AnimationTrackType>
-	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl():
-		ITrackControl()
+	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl(RefCounter* refCounter) :
+		ITrackControl(refCounter)
 	{
 		InitializeControls();
 	}
 
 	template<typename AnimationTrackType>
-	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl(const KeyFramesTrackControl& other):
-		ITrackControl(other)
+	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl(RefCounter* refCounter, const KeyFramesTrackControl& other) :
+		ITrackControl(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -142,14 +143,11 @@ namespace Editor
 	template<typename AnimationTrackType>
 	KeyFramesTrackControl<AnimationTrackType>::~KeyFramesTrackControl()
 	{
-		for (auto handle : mHandles)
-			delete handle;
-
 		if (mTrack)
-			mTrack->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
+			mTrack.Lock()->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
 
 		if (mPlayer)
-			mPlayer->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
+			mPlayer.Lock()->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
 	}
 
 	template<typename AnimationTrackType>
@@ -165,12 +163,12 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
-		if (!mHandlesSheet->enabled)
+        if (!mHandlesSheet.Lock()->enabled)
 			return;
 
-		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+		o2Render.EnableScissorTest(mTimeline.Lock()->layout->GetWorldRect());
 
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 			handle->handle->Draw();
 
 		o2Render.DisableScissorTest();
@@ -184,11 +182,9 @@ namespace Editor
 	{
 		Widget::Update(dt);
 
-		if (mPlayer)
-		{
-			auto playerValue = Wrapper::GetValue(*mPlayer);
-			if (!Math::Equals(mLastValue, playerValue))
-			{
+		if (mPlayer) {
+            auto playerValue = Wrapper::GetValue(*mPlayer.Lock());
+			if (!Math::Equals(mLastValue, playerValue)) {
 				mPropertyValue = playerValue;
 				mLastValue = mPropertyValue;
 				mPropertyField->Refresh();
@@ -197,52 +193,52 @@ namespace Editor
 	}
 
 	template<typename AnimationTrackType>
-	void KeyFramesTrackControl<AnimationTrackType>::SetTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player, const String& path)
+	void KeyFramesTrackControl<AnimationTrackType>::SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path)
 	{
 		mTrackPath = path;
 
 		if (mTrack)
-			mTrack->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
+			mTrack.Lock()->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
 
 		if (mPlayer)
-			mPlayer->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
+			mPlayer.Lock()->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
 
-		mTrack = dynamic_cast<AnimationTrackType*>(track);
-		mPlayer = dynamic_cast<TrackPlayerType*>(player);
+		mTrack = DynamicCast<AnimationTrackType>(track);
+		mPlayer = DynamicCast<TrackPlayerType>(player);
 
 		if (mTrack)
-			mTrack->onKeysChanged += THIS_SUBSCRIPTION(UpdateHandles, [&]() { mTrack = nullptr; });
+			mTrack.Lock()->onKeysChanged += THIS_SUBSCRIPTION(UpdateHandles, [&]() { mTrack = nullptr; });
 
 		if (mPlayer)
-			mPlayer->onUpdate += THIS_SUBSCRIPTION(CheckCanCreateKey, [&]() { mPlayer = nullptr; });
+			mPlayer.Lock()->onUpdate += THIS_SUBSCRIPTION(CheckCanCreateKey, [&]() { mPlayer = nullptr; });
 
 		InitializeHandles();
-		CheckCanCreateKey(mTimeline->GetTimeCursor());
+		CheckCanCreateKey(mTimeline.Lock()->GetTimeCursor());
 
 		OnSetTrack();
 	}
 
 	template<typename AnimationTrackType>
-	AnimationTrackType* KeyFramesTrackControl<AnimationTrackType>::GetTrack() const
+	Ref<AnimationTrackType> KeyFramesTrackControl<AnimationTrackType>::GetTrack() const
 	{
-		return mTrack;
+		return mTrack.Lock();
 	}
 
 	template<typename AnimationTrackType>
-	void KeyFramesTrackControl<AnimationTrackType>::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
+	void KeyFramesTrackControl<AnimationTrackType>::Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet)
 	{
 		mTimeline = timeline;
 		mHandlesSheet = handlesSheet;
 	}
 
 	template<typename AnimationTrackType>
-	Vector<ITrackControl::KeyHandle*> KeyFramesTrackControl<AnimationTrackType>::GetKeyHandles() const
+	Vector<Ref<ITrackControl::KeyHandle>> KeyFramesTrackControl<AnimationTrackType>::GetKeyHandles() const
 	{
 		return mHandles;
 	}
 
 	template<typename AnimationTrackType>
-	Widget* KeyFramesTrackControl<AnimationTrackType>::GetTreePartControls() const
+	Ref<Widget> KeyFramesTrackControl<AnimationTrackType>::GetTreePartControls() const
 	{
 		return mTreeControls;
 	}
@@ -260,23 +256,23 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::InitializeControls()
 	{
-		mTreeControls = mnew Widget();
+		mTreeControls = mmake<Widget>();
 
 		auto fieldProto = o2EditorProperties.GetFieldPropertyType(&TypeOf(TrackValueType));
-		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldProto, "standard"));
-		mPropertyValueProxy = mnew PointerValueProxy<TrackValueType>(&mPropertyValue);
-		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(mPropertyValueProxy) });
+		mPropertyField = DynamicCast<IPropertyField>(o2UI.CreateWidget(*fieldProto, "standard"));
+		mPropertyValueProxy = mmake<PointerValueProxy<TrackValueType>>(&mPropertyValue);
+		mPropertyField->SetValueProxy({ DynamicCast<IAbstractValueProxy>(mPropertyValueProxy) });
 		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&) { OnPropertyChanged(); };
 		*mPropertyField->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		mAddKeyButton = o2UI.CreateWidget<Button>("add key");
 		*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-		mAddKeyButton->onClick = [&]() { InsertNewKey(mTimeline->GetTimeCursor()); };
+		mAddKeyButton->onClick = [&]() { InsertNewKey(mTimeline.Lock()->GetTimeCursor()); };
 
 		mAddKeyDotButton = o2UI.CreateWidget<Button>("add dot key");
 		*mAddKeyDotButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
 		mAddKeyDotButton->GetLayerDrawable<Sprite>("basic/regularBack")->SetColor(Color4::Black());
-		mAddKeyDotButton->onClick = [&]() { InsertNewKey(mTimeline->GetTimeCursor()); };
+		mAddKeyDotButton->onClick = [&]() { InsertNewKey(mTimeline.Lock()->GetTimeCursor()); };
 		mAddKeyDotButton->enabled = false;
 
 		mTreeControls->AddChildren({ mPropertyField, mAddKeyButton, mAddKeyDotButton });
@@ -288,29 +284,30 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		Vector<UInt64> selectedHandles;
-		for (auto keyHandle : mHandles)
-		{
+		for (auto& keyHandle : mHandles) {
 			if (keyHandle->handle->IsSelected())
 				selectedHandles.Add(keyHandle->keyUid);
 		}
 
-		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Convert<AnimationKeyDragHandle*>([&](const KeyHandle* x) {
-			x->handle->SetParent(nullptr);
-			x->handle->SetEnabled(false);
-			x->handle->SetSelectionGroup(nullptr);
-			x->handle->SetSelected(false);
-			x->handle->onChangedPos.Clear();
-			return x->handle;
-		});
-
-		for (auto keyHandle : mHandles)
-			delete keyHandle;
+		Vector<Ref<AnimationKeyDragHandle>> handlesCache = mHandles.Convert<Ref<AnimationKeyDragHandle>>(
+			[&](const Ref<KeyHandle>& x) 
+			{
+				x->handle->SetParent(nullptr);
+				x->handle->SetEnabled(false);
+				x->handle->SetSelectionGroup(nullptr);
+				x->handle->SetSelected(false);
+				x->handle->onChangedPos.Clear();
+				return x->handle;
+			});
 
 		mHandles.Clear();
 
-		for (auto& key : Wrapper::GetKeys(*mTrack))
+		auto trackRef = mTrack.Lock();
+		auto handlesSheet = mHandlesSheet.Lock();
+
+		for (auto& key : Wrapper::GetKeys(*trackRef))
 		{
-			AnimationKeyDragHandle* handle = nullptr;
+			Ref<AnimationKeyDragHandle> handle;
 
 			if (!handlesCache.IsEmpty())
 				handle = handlesCache.PopBack();
@@ -319,32 +316,32 @@ namespace Editor
 
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
-			handle->track = mTrack;
+			handle->track = trackRef;
 			handle->trackPath = mTrackPath;
-			handle->trackControl = this;
+			handle->trackControl = Ref(this);
 			handle->keyUid = key.uid;
 			handle->isMapping = false;
-			handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(mHandlesSheet));
+			handle->SetSelectionGroup(DynamicCast<ISelectableDragHandlesGroup>(handlesSheet));
 			handle->SetSelected(selectedHandles.Contains(key.uid));
 
 			AddChild(handle);
 
-			KeyHandle* keyhandle = mnew KeyHandle(key.uid, handle);
+			auto keyhandle = mmake<KeyHandle>(key.uid, handle);
 			mHandles.Add(keyhandle);
 
-			handle->onChangedPos = [=](const Vec2F& pos) {
+			handle->onChangedPos = [=](const Vec2F& pos) 
+			{
 				mDisableHandlesUpdate = true;
 
-				int keyIdx = Wrapper::FindKeyIdx(*mTrack, keyhandle->keyUid);
-				auto key = Wrapper::GetKeys(*mTrack)[keyIdx];
+				int keyIdx = Wrapper::FindKeyIdx(*trackRef, keyhandle->keyUid);
+				auto key = Wrapper::GetKeys(*trackRef)[keyIdx];
 				key.position = pos.x;
 
-				Wrapper::RemoveKeyAt(*mTrack, keyIdx);
-				Wrapper::AddKey(*mTrack, key);
+				Wrapper::RemoveKeyAt(*trackRef, keyIdx);
+				Wrapper::AddKey(*trackRef, key);
 
 				mDisableHandlesUpdate = false;
 			};
-
 		}
 	}
 
@@ -357,26 +354,31 @@ namespace Editor
 		if (mDisableHandlesUpdate)
 			return;
 
-		if (Wrapper::GetKeys(*mTrack).Count() != mHandles.Count())
+        auto track = mTrack.Lock();
+
+        if (Wrapper::GetKeys(*track).Count() != mHandles.Count())
 		{
 			InitializeHandles();
 		}
-		else
+		else 
 		{
-			for (auto keyHandle : mHandles)
-				keyHandle->handle->SetPosition(Vec2F(Wrapper::FindKey(*mTrack, keyHandle->keyUid).position, 0.0f));
+			for (auto& keyHandle : mHandles)
+				keyHandle->handle->SetPosition(Vec2F(Wrapper::FindKey(*track, keyHandle->keyUid).position, 0.0f));
 		}
 	}
 
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::CheckCanCreateKey(float time)
 	{
-		time = mTimeline->GetTimeCursor();
+        auto timeline = mTimeline.Lock();
+        auto track = mTrack.Lock();
+
+		time = timeline->GetTimeCursor();
 
 		bool hasKeyAtTime = false;
-		for (auto key : Wrapper::GetKeys(*mTrack))
+		for (auto& key : Wrapper::GetKeys(*track))
 		{
-			if (mTimeline->IsSameTime(key.position, time))
+			if (timeline->IsSameTime(key.position, time))
 			{
 				hasKeyAtTime = true;
 				break;
@@ -387,40 +389,43 @@ namespace Editor
 	}
 
 	template<typename AnimationTrackType>
-	AnimationKeyDragHandle* KeyFramesTrackControl<AnimationTrackType>::CreateHandle()
+	Ref<AnimationKeyDragHandle> KeyFramesTrackControl<AnimationTrackType>::CreateHandle()
 	{
-		AnimationKeyDragHandle* handle = mnew AnimationKeyDragHandle(mnew Sprite("ui/UI4_key.png"),
-																	 mnew Sprite("ui/UI4_key_hover.png"),
-																	 mnew Sprite("ui/UI4_key_pressed.png"),
-																	 mnew Sprite("ui/UI4_selected_key.png"),
-																	 mnew Sprite("ui/UI4_selected_key_hover.png"),
-																	 mnew Sprite("ui/UI4_selected_key_pressed.png"));
+		auto handle = mmake<AnimationKeyDragHandle>(mmake<Sprite>("ui/UI4_key.png"),
+													mmake<Sprite>("ui/UI4_key_hover.png"),
+													mmake<Sprite>("ui/UI4_key_pressed.png"),
+													mmake<Sprite>("ui/UI4_selected_key.png"),
+													mmake<Sprite>("ui/UI4_selected_key_hover.png"),
+													mmake<Sprite>("ui/UI4_selected_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
 		handle->SetDrawablesSizePivot(Vec2F(7, 1));
 
-		handle->checkPositionFunc = [&](const Vec2F& pos) {
-			float position = pos.x;
-			if (position < 0.0f)
-				position = 0.0f;
+		handle->checkPositionFunc = [&](const Vec2F& pos)
+			{
+				float position = pos.x;
+				if (position < 0.0f)
+					position = 0.0f;
 
-			return Vec2F(position, layout->GetHeight()*0.5f);
-		};
+				return Vec2F(position, layout->GetHeight() * 0.5f);
+			};
 
-		handle->localToWidgetOffsetTransformFunc = [&](const Vec2F& pos) {
-			float worldXPos = mTimeline->LocalToWorld(pos.x);
-			float localXPos = worldXPos - layout->GetWorldLeft();
+		handle->localToWidgetOffsetTransformFunc = [&](const Vec2F& pos)
+			{
+                float worldXPos = mTimeline.Lock()->LocalToWorld(pos.x);
+				float localXPos = worldXPos - layout->GetWorldLeft();
 
-			return Vec2F(localXPos, 0);
-		};
+				return Vec2F(localXPos, 0);
+			};
 
-		handle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& pos) {
-			float worldXPos = layout->GetWorldLeft() + pos.x;
-			float localXPos = mTimeline->WorldToLocal(worldXPos);
+		handle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& pos)
+			{
+				float worldXPos = layout->GetWorldLeft() + pos.x;
+				float localXPos = mTimeline.Lock()->WorldToLocal(worldXPos);
 
-			return Vec2F(localXPos, 0);
-		};
+				return Vec2F(localXPos, 0);
+			};
 
 		return handle;
 	}
@@ -428,52 +433,58 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::InsertNewKey(float time)
 	{
+        auto handlesSheet = mHandlesSheet.Lock();
+		auto track = mTrack.Lock();
+
 		typename Wrapper::KeyType key;
 		key.position = time;
-		key.value = Wrapper::GetValue(*mTrack, time);
+		key.value = Wrapper::GetValue(*track, time);
 
-		int idx = Wrapper::AddKey(*mTrack, key);
+		int idx = Wrapper::AddKey(*track, key);
 
 		InitializeHandles();
-		mTimeline->SetTimeCursor(time);
+		mTimeline.Lock()->SetTimeCursor(time);
 
-		OnKeysChanged();
+        OnKeysChanged();
+
 
 		DataDocument keyData;
-		Map<String, Vector<UInt64>> keys = { { mTrackPath, { Wrapper::GetKey(*mTrack, idx).uid } } };
-		mHandlesSheet->SerializeKeys(keyData, keys, 0);
-		mHandlesSheet->mAnimationWindow->mActionsList.DoneAction(mnew AnimationAddKeysAction(keys, keyData, mHandlesSheet));
+		Map<String, Vector<UInt64>> keys = { { mTrackPath, { Wrapper::GetKey(*track, idx).uid } } };
+		handlesSheet->SerializeKeys(keyData, keys, 0);
+		handlesSheet->mAnimationWindow.Lock()->mActionsList->DoneAction(mmake<AnimationAddKeysAction>(keys, keyData, handlesSheet));
 	}
 
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::OnPropertyChanged()
 	{
-		auto time = mTimeline->GetTimeCursor();
+		auto trackRef = mTrack.Lock();
+
+		auto time = mTimeline.Lock()->GetTimeCursor();
 		int keyIdx = -1;
 		int i = 0;
-		for (auto& key : Wrapper::GetKeys(*mTrack))
+		for (auto& key : Wrapper::GetKeys(*trackRef))
 		{
-			if (mTimeline->IsSameTime(key.position, time))
+			if (mTimeline.Lock()->IsSameTime(key.position, time))
 			{
 				keyIdx = i;
 				break;
 			}
+
 			i++;
 		}
 
-		if (keyIdx >= 0)
-		{
-			auto key = Wrapper::GetKeys(*mTrack)[keyIdx];
-			Wrapper::RemoveKeyAt(*mTrack, keyIdx);
+		if (keyIdx >= 0) {
+			auto key = Wrapper::GetKeys(*trackRef)[keyIdx];
+			Wrapper::RemoveKeyAt(*trackRef, keyIdx);
 			key.value = mPropertyValue;
-			Wrapper::AddKey(*mTrack, key);
+			Wrapper::AddKey(*trackRef, key);
 		}
-		else
+		else 
 		{
 			typename Wrapper::KeyType key;
 			key.position = time;
 			key.value = mPropertyValue;
-			Wrapper::AddKey(*mTrack, key);
+			Wrapper::AddKey(*trackRef, key);
 			InitializeHandles();
 		}
 
@@ -483,7 +494,7 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
 	{
-		auto key = Wrapper::FindKey(*mTrack, keyUid);
+        auto key = Wrapper::FindKey(*mTrack.Lock(), keyUid);
 		key.position -= relativeTime;
 		data.Set(key);
 	}
@@ -499,17 +510,19 @@ namespace Editor
 		if (generateNewUid)
 			key.uid = Math::Random();
 
-		Wrapper::AddKey(*mTrack, key);
+		Wrapper::AddKey(*mTrack.Lock(), key);
 
 		return key.uid;
 	}
 
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::DeleteKey(UInt64 keyUid)
-	{
-		int idx = Wrapper::FindKeyIdx(*mTrack, keyUid);
+    {
+        auto trackRef = mTrack.Lock();
+
+		int idx = Wrapper::FindKeyIdx(*trackRef, keyUid);
 		if (idx >= 0)
-			Wrapper::RemoveKeyAt(*mTrack, idx);
+			Wrapper::RemoveKeyAt(*trackRef, idx);
 	}
 
 }
@@ -526,17 +539,17 @@ CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
     FIELD().PROTECTED().NAME(mHandles);
     FIELD().PROTECTED().NAME(mTrackPath);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTreeControls);
+    FIELD().PROTECTED().NAME(mTreeControls);
     FIELD().PROTECTED().NAME(mPropertyField);
     FIELD().PROTECTED().DEFAULT_VALUE(TrackValueType()).NAME(mPropertyValue);
     FIELD().PROTECTED().NAME(mPropertyValueProxy);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyDotButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton);
+    FIELD().PROTECTED().NAME(mAddKeyDotButton);
+    FIELD().PROTECTED().NAME(mAddKeyButton);
     FIELD().PROTECTED().DEFAULT_VALUE(TrackValueType()).NAME(mLastValue);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
+    FIELD().PROTECTED().NAME(mTrack);
+    FIELD().PROTECTED().NAME(mPlayer);
+    FIELD().PROTECTED().NAME(mTimeline);
+    FIELD().PROTECTED().NAME(mHandlesSheet);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate);
 }
 END_META;
@@ -544,16 +557,16 @@ META_TEMPLATES(typename AnimationTrackType)
 CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const KeyFramesTrackControl&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const KeyFramesTrackControl&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationTrackType*, GetTrack);
-    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&, const Ref<IAnimationTrack::IPlayer>&, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationTrackType>, GetTrack);
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationTimeline>&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<KeyHandle*>, GetKeyHandles);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetTreePartControls);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<KeyHandle>>, GetKeyHandles);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetTreePartControls);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
@@ -564,7 +577,7 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
     FUNCTION().PRIVATE().SIGNATURE(void, OnSetTrack);
     FUNCTION().PRIVATE().SIGNATURE(void, OnKeysChanged);
-    FUNCTION().PRIVATE().SIGNATURE(AnimationKeyDragHandle*, CreateHandle);
+    FUNCTION().PRIVATE().SIGNATURE(Ref<AnimationKeyDragHandle>, CreateHandle);
     FUNCTION().PRIVATE().SIGNATURE(void, CheckCanCreateKey, float);
     FUNCTION().PRIVATE().SIGNATURE(void, OnPropertyChanged);
 }

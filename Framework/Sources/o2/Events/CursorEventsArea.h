@@ -7,7 +7,7 @@ namespace o2
     // -----------------------------
     // Functional cursor events area 
     // -----------------------------
-    class CursorEventsArea: public CursorAreaEventsListener
+    class CursorEventsArea: public RefCounterable, public CursorAreaEventsListener
     {
     public:
         Function<bool(const Vec2F&)>         isUnderPoint;           // Function for detecting collision (parameter - cursor position)
@@ -15,8 +15,8 @@ namespace o2
         Function<void(const Input::Cursor&)> onCursorPressed;        // Event when cursor was pressed
         Function<void(const Input::Cursor&)> onCursorPressedOutside; // Event when cursor was pressed outside
         Function<void(const Input::Cursor&)> onCursorReleased;       // Event when cursor was released
-        Function<void(const Input::Cursor&)> onCursorEnter;             // Event when cursor was entered to handle
-        Function<void(const Input::Cursor&)> onCursorExit;             // Event when cursor was exited to handle
+        Function<void(const Input::Cursor&)> onCursorEnter;          // Event when cursor was entered to handle
+        Function<void(const Input::Cursor&)> onCursorExit;           // Event when cursor was exited to handle
         Function<void(const Input::Cursor&)> onDblClicked;           // Event when cursor double clicked on this
 
     public:
@@ -58,5 +58,7 @@ namespace o2
 
         // Called when cursor released outside this(only when cursor pressed this at previous time)
         void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
+
+        REF_COUNTERABLE_IMPL(RefCounterable);
     };
 }

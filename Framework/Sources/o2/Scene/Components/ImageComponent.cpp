@@ -12,7 +12,7 @@ namespace o2
         mSerializeEnabled = false;
     }
 
-    ImageComponent::ImageComponent(const ImageAssetRef& image) :
+    ImageComponent::ImageComponent(const AssetRef<ImageAsset>& image) :
         DrawableComponent(), Sprite(image)
     {
         mSerializeEnabled = false;
@@ -42,7 +42,7 @@ namespace o2
         mSerializeEnabled = false;
     }
 
-    ImageComponent::ImageComponent(Bitmap* bitmap) :
+    ImageComponent::ImageComponent(const Bitmap& bitmap) :
         DrawableComponent(), Sprite(bitmap)
     {
         mSerializeEnabled = false;
@@ -80,7 +80,7 @@ namespace o2
     void ImageComponent::FitActorByImage() const
     {
         if (mImageAsset)
-            mOwner->transform->size = mImageAsset->GetSize();
+            mOwner.Lock()->transform->size = mImageAsset->GetSize();
     }
 
     bool ImageComponent::IsUnderPoint(const Vec2F& point)
@@ -103,12 +103,17 @@ namespace o2
         return "ui/UI4_image_component.png";
     }
 
-    void ImageComponent::OnTransformUpdated()
+	Ref<o2::RefCounterable> ImageComponent::CastToRefCounterable(const Ref<ImageComponent>& ref)
+	{
+        return DynamicCast<DrawableComponent>(ref);
+	}
+
+	void ImageComponent::OnTransformUpdated()
     {
-        SetBasis(mOwner->transform->GetWorldBasis());
+        SetBasis(mOwner.Lock()->transform->GetWorldBasis());
     }
 
-    void ImageComponent::SetOwnerActor(Actor* actor)
+    void ImageComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }
@@ -139,7 +144,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ImageComponent>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::ImageComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::ImageComponent, o2__ImageComponent);

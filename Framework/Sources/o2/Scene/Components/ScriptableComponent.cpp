@@ -27,13 +27,13 @@ namespace o2
         return *this;
     }
 
-    void ScriptableComponent::SetScript(const JavaScriptAssetRef& script)
+    void ScriptableComponent::SetScript(const AssetRef<JavaScriptAsset>& script)
     {
         mScript = script;
         LoadScriptAndCreateObject();
     }
 
-    const JavaScriptAssetRef& ScriptableComponent::GetScript() const
+    const AssetRef<JavaScriptAsset>& ScriptableComponent::GetScript() const
     {
         return mScript;
     }
@@ -120,7 +120,7 @@ namespace o2
         }
     }
 
-    void ScriptableComponent::SetOwnerActor(Actor* actor)
+    void ScriptableComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         Component::SetOwnerActor(actor);
 
@@ -164,7 +164,8 @@ namespace o2
             mOnDisabledFunc.InvokeRaw(mInstance, {});
     }
 }
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ScriptableComponent>);
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::ScriptableComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::ScriptableComponent, o2__ScriptableComponent);

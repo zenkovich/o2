@@ -15,31 +15,41 @@ namespace o2
     class MenuPanel: public Widget, public DrawableCursorEventsListener
     {
     public:
-        class Item: public ISerializable
+        // --------------------
+        // Menu panel text item
+        // --------------------
+        class Item: public ISerializable, public RefCounterable, public ICloneableRef
         {
         public:
-            WString text; // @SERIALIZABLE
+            WString text; // Item text @SERIALIZABLE
 
-            Vector<ContextMenu::Item*> subItems; // @SERIALIZABLE
+            Vector<Ref<ContextMenu::Item>> subItems; // Children sub items @SERIALIZABLE
 
-            Function<void()> onClick;
+            Function<void()> onClick; // Click function 
 
         public:
+            // Default constructor
             Item();
-            Item(const WString& text, const Vector<ContextMenu::Item*>& subItems);
+
+            // Constructor with text and sub items
+            Item(const WString& text, const Vector<Ref<ContextMenu::Item>>& subItems);
+
+            // Constructor with text and click function
             Item(const WString& text, const Function<void()> onClick);
 
+            // Copy operator
             bool operator==(const Item& other) const;
 
             SERIALIZABLE(Item);
+            CLONEABLE_REF(Item);
         };
 
     public:
         // Default constructor
-        MenuPanel();
+        explicit MenuPanel(RefCounter* refCounter);
 
         // Copy-constructor
-        MenuPanel(const MenuPanel& other);
+        MenuPanel(RefCounter* refCounter, const MenuPanel& other);
 
         // Destructor
         ~MenuPanel();
@@ -54,18 +64,17 @@ namespace o2
         void Draw() override;
 
         // Add item
-        Widget* AddItem(const Item& item);
+        Ref<Widget> AddItem(const Item& item);
 
         // Adds item by path ("node/sub node/target")
-        void AddItem(const WString& path, const Function<void()>&
-                     clickFunc = Function<void()>(),
-                     const ImageAssetRef& icon = ImageAssetRef(),
+        void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
+                     const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(),
                      const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Adds toggle item by path ("node/sub node/target")
         void AddToggleItem(const WString& path, bool value,
                            const Function<void(bool)>& clickFunc = Function<void(bool)>(),
-                           const ImageAssetRef& icon = ImageAssetRef(),
+                           const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(),
                            const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Inserts item at position
@@ -93,16 +102,16 @@ namespace o2
         void RemoveAllItems();
 
         // Returns items vertical layout
-        HorizontalLayout* GetItemsLayout() const;
+        const Ref<HorizontalLayout>& GetItemsLayout() const;
 
         // Returns item sample
-        Widget* GetItemSample() const;
+        const Ref<Widget>& GetItemSample() const;
 
         // Sets item sample
-        void SetItemSample(Widget* sample);
+        void SetItemSample(const Ref<Widget>& sample);
 
         // Returns selection drawable
-        Sprite* GetSelectionDrawable() const;
+        const Ref<Sprite>& GetSelectionDrawable() const;
 
         // Sets selection drawable layout
         void SetSelectionDrawableLayout(const Layout& layout);
@@ -114,16 +123,17 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(MenuPanel);
+        CLONEABLE_REF(MenuPanel);
 
     protected:
-        HorizontalLayout* mLayout = nullptr; // Items layout
+        Ref<HorizontalLayout> mLayout; // Items layout
 
-        Widget* mItemSample = nullptr; // Item sample @SERIALIZABLE
+        Ref<Widget> mItemSample; // Item sample @SERIALIZABLE
 
         Vector<Function<void()>> mClickFunctions; // Items click functions
 
-        Sprite* mSelectionDrawable = nullptr; // Selection sprite @SERIALIZABLE
-        Layout  mSelectionLayout;             // Selection layout, result selection area depends on selected item @SERIALIZABLE
+        Ref<Sprite> mSelectionDrawable; // Selection sprite @SERIALIZABLE
+        Layout      mSelectionLayout;   // Selection layout, result selection area depends on selected item @SERIALIZABLE
 
         RectF mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
         RectF mTargetSelectionRect;   // Target selection rectangle (over selected item)
@@ -132,7 +142,7 @@ namespace o2
         int   mSelectedItem = -1;            // Index of selected item
         float mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
 
-        ContextMenu* mOpenedContext = nullptr; // Last opened context in menu
+        WeakRef<ContextMenu> mOpenedContext; // Last opened context in menu
 
     protected:
         // Called when visible was changed
@@ -142,16 +152,16 @@ namespace o2
         void OnDisabled() override;
 
         // Creates sub context menus by path
-        ContextMenu* CreateSubContext(WString& path);
+        Ref<ContextMenu> CreateSubContext(WString& path);
 
         // Creates item widget
-        Widget* CreateItem(const Item& item);
+        Ref<Widget> CreateItem(const Item& item);
 
         // Returns item info
         Item GetItemDef(int idx) const;
 
         // Returns item widget under point and stores index in idxPtr, if not null
-        Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+        Ref<Widget> GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
         // Updates hover
         void UpdateHover(const Vec2F& point);
@@ -172,7 +182,9 @@ namespace o2
         void OnCursorMoved(const Input::Cursor& cursor) override;
 
         // Called when cursor exits this object
-        void OnCursorExit(const Input::Cursor& cursor) override;
+		void OnCursorExit(const Input::Cursor& cursor) override;
+
+		REF_COUNTERABLE_IMPL(Widget);
     };
 }
 // --- META ---
@@ -185,29 +197,29 @@ CLASS_BASES_META(o2::MenuPanel)
 END_META;
 CLASS_FIELDS_META(o2::MenuPanel)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayout);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+    FIELD().PROTECTED().NAME(mLayout);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemSample);
     FIELD().PROTECTED().NAME(mClickFunctions);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionLayout);
     FIELD().PROTECTED().NAME(mCurrentSelectionRect);
     FIELD().PROTECTED().NAME(mTargetSelectionRect);
     FIELD().PROTECTED().NAME(mLastSelectCheckCursor);
     FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mSelectedItem);
     FIELD().PROTECTED().DEFAULT_VALUE(-1.0f).NAME(mSelectSubContextTime);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOpenedContext);
+    FIELD().PROTECTED().NAME(mOpenedContext);
 }
 END_META;
 CLASS_METHODS_META(o2::MenuPanel)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const MenuPanel&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const MenuPanel&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem, const Item&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem, const Item&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertItem, const Item&, int);
     FUNCTION().PUBLIC().SIGNATURE(void, AddItems, Vector<Item>);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertItems, Vector<Item>, int);
@@ -216,19 +228,19 @@ CLASS_METHODS_META(o2::MenuPanel)
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetItemsLayout);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectionDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<HorizontalLayout>&, GetItemsLayout);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetSelectionDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionDrawableLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetSelectionDrawableLayout);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(ContextMenu*, CreateSubContext, WString&);
-    FUNCTION().PROTECTED().SIGNATURE(Widget*, CreateItem, const Item&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<ContextMenu>, CreateSubContext, WString&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, CreateItem, const Item&);
     FUNCTION().PROTECTED().SIGNATURE(Item, GetItemDef, int);
-    FUNCTION().PROTECTED().SIGNATURE(Widget*, GetItemUnderPoint, const Vec2F&, int*);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, GetItemUnderPoint, const Vec2F&, int*);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
@@ -242,6 +254,8 @@ END_META;
 CLASS_BASES_META(o2::MenuPanel::Item)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::MenuPanel::Item)
@@ -255,7 +269,7 @@ CLASS_METHODS_META(o2::MenuPanel::Item)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<ContextMenu::Item*>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<Ref<ContextMenu::Item>>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Function<void()>);
 }
 END_META;

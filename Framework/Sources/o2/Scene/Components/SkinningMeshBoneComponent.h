@@ -10,8 +10,6 @@ namespace o2
 
     class SkinningMeshBoneComponent: public DrawableComponent
     {
-        SERIALIZABLE(SkinningMeshBoneComponent);
-
     public:
         Vector<Pair<int, float>> vertexWeights; // Weights of vertices dependent on this bone. index - weight @SERIALIZABLE
 
@@ -37,7 +35,7 @@ namespace o2
         void OnUpdate(float dt) override;
 
         // Searches skinning mesh in parent hierarchy
-        SkinningMeshComponent* FindSkinningMesh() const;
+        Ref<SkinningMeshComponent> FindSkinningMesh() const;
 
         // Returns name of component
         static String GetName();
@@ -47,6 +45,9 @@ namespace o2
 
         // Returns name of component icon
         static String GetIcon();
+
+        SERIALIZABLE(SkinningMeshBoneComponent);
+        CLONEABLE_REF(SkinningMeshBoneComponent);
 
     protected:
         // Called when actor's transform was changed
@@ -79,7 +80,7 @@ CLASS_METHODS_META(o2::SkinningMeshBoneComponent)
     FUNCTION().PUBLIC().CONSTRUCTOR(const SkinningMeshBoneComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
-    FUNCTION().PUBLIC().SIGNATURE(SkinningMeshComponent*, FindSkinningMesh);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SkinningMeshComponent>, FindSkinningMesh);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);

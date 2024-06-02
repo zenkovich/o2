@@ -56,7 +56,7 @@ namespace Editor
 		return String::empty;
 	}
 
-	void EditorApplication::LoadScene(const SceneAssetRef& scene)
+	void EditorApplication::LoadScene(const AssetRef<SceneAsset>& scene)
 	{
 		ForcePopEditorScopeOnStack scope;
 
@@ -86,7 +86,7 @@ namespace Editor
 
 		o2Scene.Save(path);
 
-		mLoadedScene = SceneAssetRef::CreateAsset();
+		mLoadedScene = AssetRef<SceneAsset>::CreateAsset();
 		mLoadedScene->SetPath(relativePath);
 		mLoadedScene->Save();
 
@@ -130,22 +130,22 @@ namespace Editor
 
 		o2Application.SetWindowCaption("o2 Editor");
 
-		mUIRoot = mnew UIRoot();
+		mUIRoot = mmake<UIRoot>();
 
-		mBackground = mnew Sprite("ui/UI4_Background.png");
-		mBackSign = mnew Sprite("ui/UI4_o2_sign.png");
+		mBackground = mmake<Sprite>("ui/UI4_Background.png");
+		mBackSign = mmake<Sprite>("ui/UI4_o2_sign.png");
 
 		CommonTextures::Initialize();
 
-		mConfig = mnew EditorConfig();
+		mConfig = mmake<EditorConfig>();
 		mConfig->LoadConfigs();
 
 		LoadUIStyle();
 
-		mProperties = mnew Properties();
-		mWindowsManager = mnew WindowsManager();
-		mMenuPanel = mnew MenuPanel();
-		mToolsPanel = mnew ToolsPanel();
+		mProperties = mmake<Properties>();
+		mWindowsManager = mmake<WindowsManager>();
+		mMenuPanel = mmake<MenuPanel>();
+		mToolsPanel = mmake<ToolsPanel>();
 
 		if (mConfig->projectConfig.mMaximized)
 			o2Application.Maximize();
@@ -159,19 +159,19 @@ namespace Editor
 
 		OnResizing();
 
-		o2EditorApplication.LoadScene(SceneAssetRef(o2EditorConfig.projectConfig.mLastLoadedScene));
+		//o2EditorApplication.LoadScene(AssetRef<SceneAsset>(o2EditorConfig.projectConfig.mLastLoadedScene));
 
 		//FreeConsole();
 
 		auto widget = EditorUIRoot.GetRootWidget()->GetChildWidget("tools panel/play panel");
-		o2EditorAnimationWindow.SetAnimation(&widget->GetStateObject("playing")->GetAnimationClip(),
-											 &widget->GetStateObject("playing")->player);
+		o2EditorAnimationWindow.SetAnimation(widget->GetStateObject("playing")->GetAnimationClip(),
+											 widget->GetStateObject("playing")->GetAnimationPlayer());
 
 		o2EditorAnimationWindow.SetTarget(widget);
 
 		o2Scripts.CollectGarbage();
 
-		//o2Scripts.GetGlobal().SetProperty("widget", mnew Widget());
+		//o2Scripts.GetGlobal().SetProperty("widget", mmake<Widget>());
 
 		// 		ScriptValue tmp(Vector<int>({ 0, 1, 2, 3, 4 }));
 		// 
@@ -341,13 +341,13 @@ namespace Editor
 
 	void EditorApplication::OnClosing()
 	{
-		delete mConfig;
-		delete mWindowsManager;
-		delete mBackground;
-		delete mBackSign;
-		delete mToolsPanel;
-		delete mMenuPanel;
-		delete mUIRoot;
+		mConfig = nullptr;
+		mWindowsManager = nullptr;
+		mBackground = nullptr;
+		mBackSign = nullptr;
+		mToolsPanel = nullptr;
+		mMenuPanel = nullptr;
+		mUIRoot = nullptr;
 	}
 
 	void EditorApplication::OnResizing()
@@ -403,9 +403,8 @@ namespace Editor
 
 	void EditorApplication::InitalizeSystems()
 	{
-		mMainListenersLayer.SetEditorMode(true);
-
 		Application::InitalizeSystems();
+		mMainListenersLayer->SetEditorMode(true);
 	}
 
 	void EditorApplication::LoadUIStyle()

@@ -128,7 +128,7 @@ namespace o2
         return mFormat;
     }
 
-    const unsigned char* Bitmap::getData() const
+    const unsigned char* Bitmap::GetData() const
     {
         return mData;
     }
@@ -138,15 +138,15 @@ namespace o2
         return mFilename;
     }
 
-    void Bitmap::CopyImage(Bitmap* img, const Vec2I& position /*= Vec2I()*/, const RectI& imgSrc /*= RectI()*/)
+    void Bitmap::CopyImage(const Bitmap& img, const Vec2I& position /*= Vec2I()*/, const RectI& imgSrc /*= RectI()*/)
     {
-        if (mFormat != img->mFormat)
+        if (mFormat != img.mFormat)
             return;
 
         RectI imgSrcRect = imgSrc;
 
         if (imgSrcRect.Width() == 0)
-            imgSrcRect.Set(Vec2I(), img->GetSize());
+            imgSrcRect.Set(Vec2I(), img.GetSize());
 
         int bpp[] ={ 4, 3 };
         int curbpp = bpp[(int)mFormat];
@@ -162,23 +162,23 @@ namespace o2
                 if (y + position.y >= mSize.y)
                     break;
 
-                UInt srcIdx = (img->mSize.y - (y + imgSrcRect.bottom) - 1)*img->mSize.x + x + imgSrcRect.left;
+                UInt srcIdx = (img.mSize.y - (y + imgSrcRect.bottom) - 1)*img.mSize.x + x + imgSrcRect.left;
                 UInt dstIdx = (mSize.y - 1 - (y + position.y))*mSize.x + x + position.x;
 
-                *(int*)&mData[dstIdx*pixelSize] = *(int*)&img->mData[srcIdx*pixelSize];
+                *(int*)&mData[dstIdx*pixelSize] = *(int*)&img.mData[srcIdx*pixelSize];
             }
         }
     }
 
-    void Bitmap::BlendImage(Bitmap* img, const Vec2I& position /*= Vec2I()*/, const RectI& imgSrc /*= RectI()*/)
+    void Bitmap::BlendImage(const Bitmap& img, const Vec2I& position /*= Vec2I()*/, const RectI& imgSrc /*= RectI()*/)
     {
-        if (mFormat != img->mFormat)
+        if (mFormat != img.mFormat)
             return;
 
         RectI imgSrcRect = imgSrc;
 
         if (imgSrcRect.Width() == 0)
-            imgSrcRect.Set(Vec2I(), img->GetSize());
+            imgSrcRect.Set(Vec2I(), img.GetSize());
 
         int bpp[] ={ 4, 3 };
         int curbpp = bpp[(int)mFormat];
@@ -194,12 +194,12 @@ namespace o2
                 if (y + position.y >= mSize.y)
                     break;
 
-                UInt srcIdx = (img->mSize.y - (y + imgSrcRect.bottom) - 1)*img->mSize.x + x + imgSrcRect.left;
+                UInt srcIdx = (img.mSize.y - (y + imgSrcRect.bottom) - 1)*img.mSize.x + x + imgSrcRect.left;
                 UInt dstIdx = (mSize.y - 1 - (y + position.y))*mSize.x + x + position.x;
 
                 Color4 srcColor, src1Color;
                 srcColor.SetABGR(*(Color32Bit*)(mData + dstIdx*pixelSize));
-                src1Color.SetABGR(*(Color32Bit*)(img->mData + srcIdx*pixelSize));
+                src1Color.SetABGR(*(Color32Bit*)(img.mData + srcIdx*pixelSize));
 
                 Color4 resColor = srcColor.BlendByAlpha(src1Color);
                 Color32Bit uresColor = resColor.ABGR();

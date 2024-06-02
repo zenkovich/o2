@@ -3,7 +3,7 @@
         "Type": "Editor::RectFProperty",
         "Value": {
             "Prototype": {
-                "id": "11e21579122f689e22ae171b1faa1363",
+                "id": "19c85f2875ee5a91505f3b9f40be1916",
                 "path": "Editor UI styles/Rect FProperty standard.proto"
             },
             "PrototypeLink": 4504194965696772893,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "75ed100a05054e3f123a486d45cd5736",
+                            "id": "0d44505a12720ceb6f733d56526f512f",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 4272162365707740014,
@@ -35,7 +35,21 @@
                         "Layers": [
                             {
                                 "mDrawable": {
-                                    "mHorAlign": "Left"
+                                    "Type": "o2::Text",
+                                    "Value": {
+                                        "mColor": {
+                                            "r": 96,
+                                            "g": 125,
+                                            "b": 139,
+                                            "a": 255
+                                        },
+                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                        "mHeight": 11,
+                                        "mSymbolsDistCoef": 1.0,
+                                        "mLinesDistanceCoef": 1.0,
+                                        "mVerAlign": "Middle",
+                                        "mDotsEndings": true
+                                    }
                                 },
                                 "mUID": 7363818493982092332,
                                 "PrototypeLink": 12527839538318321895
@@ -65,13 +79,31 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "75ed100a05054e3f123a486d45cd5736",
+                                                                "id": "0d44505a12720ceb6f733d56526f512f",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 16230671054521047945,
                                                             "Id": 10519364120900647801,
                                                             "Layers": [
                                                                 {
+                                                                    "mDrawable": {
+                                                                        "Type": "o2::Text",
+                                                                        "Value": {
+                                                                            "mColor": {
+                                                                                "r": 96,
+                                                                                "g": 125,
+                                                                                "b": 139,
+                                                                                "a": 255
+                                                                            },
+                                                                            "mText": "L",
+                                                                            "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                                            "mHeight": 11,
+                                                                            "mSymbolsDistCoef": 1.0,
+                                                                            "mLinesDistanceCoef": 1.0,
+                                                                            "mVerAlign": "Middle",
+                                                                            "mHorAlign": "Middle"
+                                                                        }
+                                                                    },
                                                                     "mUID": 7394983600530218858,
                                                                     "PrototypeLink": 10946677376135611150
                                                                 }
@@ -82,7 +114,7 @@
                                                         "Type": "Editor::FloatProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "014e01c024b71a9072ff6b6d4c83679a",
+                                                                "id": "76f10c6d75d3742c545835c910f215c2",
                                                                 "path": "Editor UI styles/Float Property standard.proto"
                                                             },
                                                             "PrototypeLink": 10794695855070890750,
@@ -104,137 +136,170 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "26fc5686374562096ef1415a0e8e0717",
+                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 7994248275887245107,
                                                                                                 "Id": 17787395001956865897,
+                                                                                                "mTextDrawable": {
+                                                                                                    "Type": "o2::Text",
+                                                                                                    "Value": {
+                                                                                                        "mPosition": {
+                                                                                                            "x": -2.5,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mSize": {
+                                                                                                            "x": 11.0,
+                                                                                                            "y": 0.0
+                                                                                                        },
+                                                                                                        "mScale": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mPivot": {
+                                                                                                            "x": 0.5,
+                                                                                                            "y": 0.5
+                                                                                                        },
+                                                                                                        "mColor": {
+                                                                                                            "r": 96,
+                                                                                                            "g": 125,
+                                                                                                            "b": 139,
+                                                                                                            "a": 255
+                                                                                                        },
+                                                                                                        "mText": "--",
+                                                                                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                                                                        "mHeight": 11,
+                                                                                                        "mSymbolsDistCoef": 1.0,
+                                                                                                        "mLinesDistanceCoef": 1.0,
+                                                                                                        "mVerAlign": "Middle"
+                                                                                                    }
+                                                                                                },
+                                                                                                "mCaretDrawable": {
+                                                                                                    "Type": "o2::Sprite",
+                                                                                                    "Value": {
+                                                                                                        "mPosition": {
+                                                                                                            "x": -8.0,
+                                                                                                            "y": -4.0
+                                                                                                        },
+                                                                                                        "mSize": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 18.700000762939454
+                                                                                                        },
+                                                                                                        "mScale": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mPivot": {
+                                                                                                            "x": 0.0,
+                                                                                                            "y": 0.25999999046325686
+                                                                                                        },
+                                                                                                        "mColor": {
+                                                                                                            "r": 0,
+                                                                                                            "g": 0,
+                                                                                                            "b": 0,
+                                                                                                            "a": 255
+                                                                                                        },
+                                                                                                        "mTextureSrcRect": {
+                                                                                                            "left": 0,
+                                                                                                            "bottom": 0,
+                                                                                                            "right": 0,
+                                                                                                            "top": 0
+                                                                                                        }
+                                                                                                    }
+                                                                                                },
                                                                                                 "Layers": [
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "41516f7f0265318f5f6d731f16f66682",
+                                                                                                                    "path": "ui/UI4_Editbox_regular.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 9797555106624688985,
                                                                                                         "PrototypeLink": 4460179136211489896
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mColor": {
+                                                                                                                    "r": 255,
+                                                                                                                    "g": 255,
+                                                                                                                    "b": 255,
+                                                                                                                    "a": 0
+                                                                                                                },
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "4fc26f8f22f13b4d2b45412a54061211",
+                                                                                                                    "path": "ui/UI4_Editbox_select.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 26990833116670780,
                                                                                                         "PrototypeLink": 11998856682166775202
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mColor": {
+                                                                                                                    "r": 255,
+                                                                                                                    "g": 255,
+                                                                                                                    "b": 255,
+                                                                                                                    "a": 0
+                                                                                                                },
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "7c09624e7daa45ef4dd24628717942d5",
+                                                                                                                    "path": "ui/UI4_Editbox_focus.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 16303026111428742511,
                                                                                                         "PrototypeLink": 15815759891836448951
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "5219235a0fc2622920a3158b12741171",
+                                                                                                                    "path": "ui/UI4_ch_arrows.png"
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 7459565447706733213,
                                                                                                         "PrototypeLink": 1556360362395738891
                                                                                                     }
                                                                                                 ],
                                                                                                 "States": [
                                                                                                     {
-                                                                                                        "name": "visible",
-                                                                                                        "mAnimation": {
-                                                                                                            "instance": {
-                                                                                                                "Type": "o2::AnimationAsset",
-                                                                                                                "Value": {
-                                                                                                                    "animation": {
-                                                                                                                        "mTracks": [
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 8950902673606985369,
-                                                                                                                                                "rightSupportPosition": 0.08000000566244126,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 16426377007251073767,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.20000000298023225,
-                                                                                                                                                "leftSupportPosition": -0.20000000298023225,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ],
-                                                                                                                        "mDuration": 0.20000000298023225
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            },
-                                                                                                            "meta": {
-                                                                                                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                                                                                "Value": {
-                                                                                                                    "mId": "0c425c8c4aec2c2f4581101d6cca1ae1"
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
+                                                                                                        "name": "visible"
                                                                                                     },
                                                                                                     {
-                                                                                                        "name": "focused",
-                                                                                                        "mAnimation": {
-                                                                                                            "instance": {
-                                                                                                                "Type": "o2::AnimationAsset",
-                                                                                                                "Value": {
-                                                                                                                    "animation": {
-                                                                                                                        "mTracks": [
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "layer/focus/transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 14738215861679510404,
-                                                                                                                                                "rightSupportPosition": 0.020000001415610315,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 13546201940323125245,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.05000000074505806,
-                                                                                                                                                "leftSupportPosition": -0.05000000074505806,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "layer/hover/transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 946906170373819780,
-                                                                                                                                                "rightSupportPosition": 0.020000001415610315,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 1344496529052404798,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.05000000074505806,
-                                                                                                                                                "leftSupportPosition": -0.05000000074505806,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ],
-                                                                                                                        "mDuration": 0.05000000074505806
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            },
-                                                                                                            "meta": {
-                                                                                                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                                                                                "Value": {
-                                                                                                                    "mId": "75794e2a41ff47592e726a2e14d25ba0"
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
+                                                                                                        "name": "focused"
                                                                                                     }
                                                                                                 ]
                                                                                             }
@@ -252,13 +317,31 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "75ed100a05054e3f123a486d45cd5736",
+                                                                "id": "0d44505a12720ceb6f733d56526f512f",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 17398412556118693989,
                                                             "Id": 2823619045507049376,
                                                             "Layers": [
                                                                 {
+                                                                    "mDrawable": {
+                                                                        "Type": "o2::Text",
+                                                                        "Value": {
+                                                                            "mColor": {
+                                                                                "r": 96,
+                                                                                "g": 125,
+                                                                                "b": 139,
+                                                                                "a": 255
+                                                                            },
+                                                                            "mText": "T",
+                                                                            "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                                            "mHeight": 11,
+                                                                            "mSymbolsDistCoef": 1.0,
+                                                                            "mLinesDistanceCoef": 1.0,
+                                                                            "mVerAlign": "Middle",
+                                                                            "mHorAlign": "Middle"
+                                                                        }
+                                                                    },
                                                                     "mUID": 5294487631111845992,
                                                                     "PrototypeLink": 11093848941086887924
                                                                 }
@@ -269,7 +352,7 @@
                                                         "Type": "Editor::FloatProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "014e01c024b71a9072ff6b6d4c83679a",
+                                                                "id": "76f10c6d75d3742c545835c910f215c2",
                                                                 "path": "Editor UI styles/Float Property standard.proto"
                                                             },
                                                             "PrototypeLink": 14565926634866959581,
@@ -291,137 +374,170 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "26fc5686374562096ef1415a0e8e0717",
+                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 5224092821798202903,
                                                                                                 "Id": 6417911708483898294,
+                                                                                                "mTextDrawable": {
+                                                                                                    "Type": "o2::Text",
+                                                                                                    "Value": {
+                                                                                                        "mPosition": {
+                                                                                                            "x": -2.5,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mSize": {
+                                                                                                            "x": 11.0,
+                                                                                                            "y": 0.0
+                                                                                                        },
+                                                                                                        "mScale": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mPivot": {
+                                                                                                            "x": 0.5,
+                                                                                                            "y": 0.5
+                                                                                                        },
+                                                                                                        "mColor": {
+                                                                                                            "r": 96,
+                                                                                                            "g": 125,
+                                                                                                            "b": 139,
+                                                                                                            "a": 255
+                                                                                                        },
+                                                                                                        "mText": "--",
+                                                                                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                                                                        "mHeight": 11,
+                                                                                                        "mSymbolsDistCoef": 1.0,
+                                                                                                        "mLinesDistanceCoef": 1.0,
+                                                                                                        "mVerAlign": "Middle"
+                                                                                                    }
+                                                                                                },
+                                                                                                "mCaretDrawable": {
+                                                                                                    "Type": "o2::Sprite",
+                                                                                                    "Value": {
+                                                                                                        "mPosition": {
+                                                                                                            "x": -8.0,
+                                                                                                            "y": -4.0
+                                                                                                        },
+                                                                                                        "mSize": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 18.700000762939454
+                                                                                                        },
+                                                                                                        "mScale": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mPivot": {
+                                                                                                            "x": 0.0,
+                                                                                                            "y": 0.25999999046325686
+                                                                                                        },
+                                                                                                        "mColor": {
+                                                                                                            "r": 0,
+                                                                                                            "g": 0,
+                                                                                                            "b": 0,
+                                                                                                            "a": 255
+                                                                                                        },
+                                                                                                        "mTextureSrcRect": {
+                                                                                                            "left": 0,
+                                                                                                            "bottom": 0,
+                                                                                                            "right": 0,
+                                                                                                            "top": 0
+                                                                                                        }
+                                                                                                    }
+                                                                                                },
                                                                                                 "Layers": [
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "41516f7f0265318f5f6d731f16f66682",
+                                                                                                                    "path": "ui/UI4_Editbox_regular.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 3800718679955181163,
                                                                                                         "PrototypeLink": 17945956229640235764
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mColor": {
+                                                                                                                    "r": 255,
+                                                                                                                    "g": 255,
+                                                                                                                    "b": 255,
+                                                                                                                    "a": 0
+                                                                                                                },
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "4fc26f8f22f13b4d2b45412a54061211",
+                                                                                                                    "path": "ui/UI4_Editbox_select.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 14171616342036946372,
                                                                                                         "PrototypeLink": 13807201808569237838
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mColor": {
+                                                                                                                    "r": 255,
+                                                                                                                    "g": 255,
+                                                                                                                    "b": 255,
+                                                                                                                    "a": 0
+                                                                                                                },
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "7c09624e7daa45ef4dd24628717942d5",
+                                                                                                                    "path": "ui/UI4_Editbox_focus.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 11354559051745454975,
                                                                                                         "PrototypeLink": 10474820232892127075
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "5219235a0fc2622920a3158b12741171",
+                                                                                                                    "path": "ui/UI4_ch_arrows.png"
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 16951127998173894894,
                                                                                                         "PrototypeLink": 5514915419301616282
                                                                                                     }
                                                                                                 ],
                                                                                                 "States": [
                                                                                                     {
-                                                                                                        "name": "visible",
-                                                                                                        "mAnimation": {
-                                                                                                            "instance": {
-                                                                                                                "Type": "o2::AnimationAsset",
-                                                                                                                "Value": {
-                                                                                                                    "animation": {
-                                                                                                                        "mTracks": [
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 8950902673606985369,
-                                                                                                                                                "rightSupportPosition": 0.08000000566244126,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 16426377007251073767,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.20000000298023225,
-                                                                                                                                                "leftSupportPosition": -0.20000000298023225,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ],
-                                                                                                                        "mDuration": 0.20000000298023225
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            },
-                                                                                                            "meta": {
-                                                                                                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                                                                                "Value": {
-                                                                                                                    "mId": "26a325bc11405d3906a622c328d26e28"
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
+                                                                                                        "name": "visible"
                                                                                                     },
                                                                                                     {
-                                                                                                        "name": "focused",
-                                                                                                        "mAnimation": {
-                                                                                                            "instance": {
-                                                                                                                "Type": "o2::AnimationAsset",
-                                                                                                                "Value": {
-                                                                                                                    "animation": {
-                                                                                                                        "mTracks": [
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "layer/focus/transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 14738215861679510404,
-                                                                                                                                                "rightSupportPosition": 0.020000001415610315,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 13546201940323125245,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.05000000074505806,
-                                                                                                                                                "leftSupportPosition": -0.05000000074505806,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "layer/hover/transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 946906170373819780,
-                                                                                                                                                "rightSupportPosition": 0.020000001415610315,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 1344496529052404798,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.05000000074505806,
-                                                                                                                                                "leftSupportPosition": -0.05000000074505806,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ],
-                                                                                                                        "mDuration": 0.05000000074505806
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            },
-                                                                                                            "meta": {
-                                                                                                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                                                                                "Value": {
-                                                                                                                    "mId": "229618fb5a2d79514382096651574648"
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
+                                                                                                        "name": "focused"
                                                                                                     }
                                                                                                 ]
                                                                                             }
@@ -439,13 +555,31 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "75ed100a05054e3f123a486d45cd5736",
+                                                                "id": "0d44505a12720ceb6f733d56526f512f",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 509665153349388924,
                                                             "Id": 8709129763575302605,
                                                             "Layers": [
                                                                 {
+                                                                    "mDrawable": {
+                                                                        "Type": "o2::Text",
+                                                                        "Value": {
+                                                                            "mColor": {
+                                                                                "r": 96,
+                                                                                "g": 125,
+                                                                                "b": 139,
+                                                                                "a": 255
+                                                                            },
+                                                                            "mText": "R",
+                                                                            "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                                            "mHeight": 11,
+                                                                            "mSymbolsDistCoef": 1.0,
+                                                                            "mLinesDistanceCoef": 1.0,
+                                                                            "mVerAlign": "Middle",
+                                                                            "mHorAlign": "Middle"
+                                                                        }
+                                                                    },
                                                                     "mUID": 9552847682926124876,
                                                                     "PrototypeLink": 9668049314798932196
                                                                 }
@@ -456,7 +590,7 @@
                                                         "Type": "Editor::FloatProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "014e01c024b71a9072ff6b6d4c83679a",
+                                                                "id": "76f10c6d75d3742c545835c910f215c2",
                                                                 "path": "Editor UI styles/Float Property standard.proto"
                                                             },
                                                             "PrototypeLink": 2217289697749910466,
@@ -478,137 +612,170 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "26fc5686374562096ef1415a0e8e0717",
+                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 15335880653927656151,
                                                                                                 "Id": 16443304262444748299,
+                                                                                                "mTextDrawable": {
+                                                                                                    "Type": "o2::Text",
+                                                                                                    "Value": {
+                                                                                                        "mPosition": {
+                                                                                                            "x": -2.5,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mSize": {
+                                                                                                            "x": 11.0,
+                                                                                                            "y": 0.0
+                                                                                                        },
+                                                                                                        "mScale": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mPivot": {
+                                                                                                            "x": 0.5,
+                                                                                                            "y": 0.5
+                                                                                                        },
+                                                                                                        "mColor": {
+                                                                                                            "r": 96,
+                                                                                                            "g": 125,
+                                                                                                            "b": 139,
+                                                                                                            "a": 255
+                                                                                                        },
+                                                                                                        "mText": "--",
+                                                                                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                                                                        "mHeight": 11,
+                                                                                                        "mSymbolsDistCoef": 1.0,
+                                                                                                        "mLinesDistanceCoef": 1.0,
+                                                                                                        "mVerAlign": "Middle"
+                                                                                                    }
+                                                                                                },
+                                                                                                "mCaretDrawable": {
+                                                                                                    "Type": "o2::Sprite",
+                                                                                                    "Value": {
+                                                                                                        "mPosition": {
+                                                                                                            "x": -8.0,
+                                                                                                            "y": -4.0
+                                                                                                        },
+                                                                                                        "mSize": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 18.700000762939454
+                                                                                                        },
+                                                                                                        "mScale": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mPivot": {
+                                                                                                            "x": 0.0,
+                                                                                                            "y": 0.25999999046325686
+                                                                                                        },
+                                                                                                        "mColor": {
+                                                                                                            "r": 0,
+                                                                                                            "g": 0,
+                                                                                                            "b": 0,
+                                                                                                            "a": 255
+                                                                                                        },
+                                                                                                        "mTextureSrcRect": {
+                                                                                                            "left": 0,
+                                                                                                            "bottom": 0,
+                                                                                                            "right": 0,
+                                                                                                            "top": 0
+                                                                                                        }
+                                                                                                    }
+                                                                                                },
                                                                                                 "Layers": [
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "41516f7f0265318f5f6d731f16f66682",
+                                                                                                                    "path": "ui/UI4_Editbox_regular.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 7361983298995489849,
                                                                                                         "PrototypeLink": 17655603323777210217
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mColor": {
+                                                                                                                    "r": 255,
+                                                                                                                    "g": 255,
+                                                                                                                    "b": 255,
+                                                                                                                    "a": 0
+                                                                                                                },
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "4fc26f8f22f13b4d2b45412a54061211",
+                                                                                                                    "path": "ui/UI4_Editbox_select.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 16378550921330738272,
                                                                                                         "PrototypeLink": 6324844665680208569
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mColor": {
+                                                                                                                    "r": 255,
+                                                                                                                    "g": 255,
+                                                                                                                    "b": 255,
+                                                                                                                    "a": 0
+                                                                                                                },
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "7c09624e7daa45ef4dd24628717942d5",
+                                                                                                                    "path": "ui/UI4_Editbox_focus.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 4732106507268926369,
                                                                                                         "PrototypeLink": 11773518363263422076
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "5219235a0fc2622920a3158b12741171",
+                                                                                                                    "path": "ui/UI4_ch_arrows.png"
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 17834341668264072626,
                                                                                                         "PrototypeLink": 6327340369180686183
                                                                                                     }
                                                                                                 ],
                                                                                                 "States": [
                                                                                                     {
-                                                                                                        "name": "visible",
-                                                                                                        "mAnimation": {
-                                                                                                            "instance": {
-                                                                                                                "Type": "o2::AnimationAsset",
-                                                                                                                "Value": {
-                                                                                                                    "animation": {
-                                                                                                                        "mTracks": [
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 8950902673606985369,
-                                                                                                                                                "rightSupportPosition": 0.08000000566244126,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 16426377007251073767,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.20000000298023225,
-                                                                                                                                                "leftSupportPosition": -0.20000000298023225,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ],
-                                                                                                                        "mDuration": 0.20000000298023225
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            },
-                                                                                                            "meta": {
-                                                                                                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                                                                                "Value": {
-                                                                                                                    "mId": "44666ae058821e6046aa1edf052d1313"
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
+                                                                                                        "name": "visible"
                                                                                                     },
                                                                                                     {
-                                                                                                        "name": "focused",
-                                                                                                        "mAnimation": {
-                                                                                                            "instance": {
-                                                                                                                "Type": "o2::AnimationAsset",
-                                                                                                                "Value": {
-                                                                                                                    "animation": {
-                                                                                                                        "mTracks": [
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "layer/focus/transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 14738215861679510404,
-                                                                                                                                                "rightSupportPosition": 0.020000001415610315,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 13546201940323125245,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.05000000074505806,
-                                                                                                                                                "leftSupportPosition": -0.05000000074505806,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "layer/hover/transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 946906170373819780,
-                                                                                                                                                "rightSupportPosition": 0.020000001415610315,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 1344496529052404798,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.05000000074505806,
-                                                                                                                                                "leftSupportPosition": -0.05000000074505806,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ],
-                                                                                                                        "mDuration": 0.05000000074505806
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            },
-                                                                                                            "meta": {
-                                                                                                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                                                                                "Value": {
-                                                                                                                    "mId": "0f697ba5323d56672e04253859624ed9"
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
+                                                                                                        "name": "focused"
                                                                                                     }
                                                                                                 ]
                                                                                             }
@@ -626,13 +793,31 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "75ed100a05054e3f123a486d45cd5736",
+                                                                "id": "0d44505a12720ceb6f733d56526f512f",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 1698367914269593395,
                                                             "Id": 740754545849629380,
                                                             "Layers": [
                                                                 {
+                                                                    "mDrawable": {
+                                                                        "Type": "o2::Text",
+                                                                        "Value": {
+                                                                            "mColor": {
+                                                                                "r": 96,
+                                                                                "g": 125,
+                                                                                "b": 139,
+                                                                                "a": 255
+                                                                            },
+                                                                            "mText": "B",
+                                                                            "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                                            "mHeight": 11,
+                                                                            "mSymbolsDistCoef": 1.0,
+                                                                            "mLinesDistanceCoef": 1.0,
+                                                                            "mVerAlign": "Middle",
+                                                                            "mHorAlign": "Middle"
+                                                                        }
+                                                                    },
                                                                     "mUID": 11685182881829407907,
                                                                     "PrototypeLink": 5133120526861766279
                                                                 }
@@ -643,7 +828,7 @@
                                                         "Type": "Editor::FloatProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "014e01c024b71a9072ff6b6d4c83679a",
+                                                                "id": "76f10c6d75d3742c545835c910f215c2",
                                                                 "path": "Editor UI styles/Float Property standard.proto"
                                                             },
                                                             "PrototypeLink": 6267413411498449878,
@@ -665,137 +850,170 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "26fc5686374562096ef1415a0e8e0717",
+                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 7365108144724673954,
                                                                                                 "Id": 16349867905688219121,
+                                                                                                "mTextDrawable": {
+                                                                                                    "Type": "o2::Text",
+                                                                                                    "Value": {
+                                                                                                        "mPosition": {
+                                                                                                            "x": -2.5,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mSize": {
+                                                                                                            "x": 11.0,
+                                                                                                            "y": 0.0
+                                                                                                        },
+                                                                                                        "mScale": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mPivot": {
+                                                                                                            "x": 0.5,
+                                                                                                            "y": 0.5
+                                                                                                        },
+                                                                                                        "mColor": {
+                                                                                                            "r": 96,
+                                                                                                            "g": 125,
+                                                                                                            "b": 139,
+                                                                                                            "a": 255
+                                                                                                        },
+                                                                                                        "mText": "--",
+                                                                                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                                                                        "mHeight": 11,
+                                                                                                        "mSymbolsDistCoef": 1.0,
+                                                                                                        "mLinesDistanceCoef": 1.0,
+                                                                                                        "mVerAlign": "Middle"
+                                                                                                    }
+                                                                                                },
+                                                                                                "mCaretDrawable": {
+                                                                                                    "Type": "o2::Sprite",
+                                                                                                    "Value": {
+                                                                                                        "mPosition": {
+                                                                                                            "x": -8.0,
+                                                                                                            "y": -4.0
+                                                                                                        },
+                                                                                                        "mSize": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 18.700000762939454
+                                                                                                        },
+                                                                                                        "mScale": {
+                                                                                                            "x": 1.0,
+                                                                                                            "y": 1.0
+                                                                                                        },
+                                                                                                        "mPivot": {
+                                                                                                            "x": 0.0,
+                                                                                                            "y": 0.25999999046325686
+                                                                                                        },
+                                                                                                        "mColor": {
+                                                                                                            "r": 0,
+                                                                                                            "g": 0,
+                                                                                                            "b": 0,
+                                                                                                            "a": 255
+                                                                                                        },
+                                                                                                        "mTextureSrcRect": {
+                                                                                                            "left": 0,
+                                                                                                            "bottom": 0,
+                                                                                                            "right": 0,
+                                                                                                            "top": 0
+                                                                                                        }
+                                                                                                    }
+                                                                                                },
                                                                                                 "Layers": [
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "41516f7f0265318f5f6d731f16f66682",
+                                                                                                                    "path": "ui/UI4_Editbox_regular.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 14958848263184188272,
                                                                                                         "PrototypeLink": 12291554240797274168
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mColor": {
+                                                                                                                    "r": 255,
+                                                                                                                    "g": 255,
+                                                                                                                    "b": 255,
+                                                                                                                    "a": 0
+                                                                                                                },
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "4fc26f8f22f13b4d2b45412a54061211",
+                                                                                                                    "path": "ui/UI4_Editbox_select.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 8790016485057466311,
                                                                                                         "PrototypeLink": 8173126672720926923
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mColor": {
+                                                                                                                    "r": 255,
+                                                                                                                    "g": 255,
+                                                                                                                    "b": 255,
+                                                                                                                    "a": 0
+                                                                                                                },
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "7c09624e7daa45ef4dd24628717942d5",
+                                                                                                                    "path": "ui/UI4_Editbox_focus.png"
+                                                                                                                },
+                                                                                                                "mMode": "Sliced",
+                                                                                                                "mSlices": {
+                                                                                                                    "left": 13,
+                                                                                                                    "bottom": 14,
+                                                                                                                    "right": 14,
+                                                                                                                    "top": 14
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 2145126408340403009,
                                                                                                         "PrototypeLink": 7992886897934738743
                                                                                                     },
                                                                                                     {
+                                                                                                        "mDrawable": {
+                                                                                                            "Type": "o2::Sprite",
+                                                                                                            "Value": {
+                                                                                                                "mImageAsset": {
+                                                                                                                    "id": "5219235a0fc2622920a3158b12741171",
+                                                                                                                    "path": "ui/UI4_ch_arrows.png"
+                                                                                                                }
+                                                                                                            }
+                                                                                                        },
                                                                                                         "mUID": 16154194099992178516,
                                                                                                         "PrototypeLink": 3232597127262550060
                                                                                                     }
                                                                                                 ],
                                                                                                 "States": [
                                                                                                     {
-                                                                                                        "name": "visible",
-                                                                                                        "mAnimation": {
-                                                                                                            "instance": {
-                                                                                                                "Type": "o2::AnimationAsset",
-                                                                                                                "Value": {
-                                                                                                                    "animation": {
-                                                                                                                        "mTracks": [
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 8950902673606985369,
-                                                                                                                                                "rightSupportPosition": 0.08000000566244126,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 16426377007251073767,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.20000000298023225,
-                                                                                                                                                "leftSupportPosition": -0.20000000298023225,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ],
-                                                                                                                        "mDuration": 0.20000000298023225
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            },
-                                                                                                            "meta": {
-                                                                                                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                                                                                "Value": {
-                                                                                                                    "mId": "7f3358c2479a42a923b42fb951434f2a"
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
+                                                                                                        "name": "visible"
                                                                                                     },
                                                                                                     {
-                                                                                                        "name": "focused",
-                                                                                                        "mAnimation": {
-                                                                                                            "instance": {
-                                                                                                                "Type": "o2::AnimationAsset",
-                                                                                                                "Value": {
-                                                                                                                    "animation": {
-                                                                                                                        "mTracks": [
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "layer/focus/transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 14738215861679510404,
-                                                                                                                                                "rightSupportPosition": 0.020000001415610315,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 13546201940323125245,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.05000000074505806,
-                                                                                                                                                "leftSupportPosition": -0.05000000074505806,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            {
-                                                                                                                                "Type": "o2::AnimationTrack<float>",
-                                                                                                                                "Value": {
-                                                                                                                                    "path": "layer/hover/transparency",
-                                                                                                                                    "curve": {
-                                                                                                                                        "mKeys": [
-                                                                                                                                            {
-                                                                                                                                                "uid": 946906170373819780,
-                                                                                                                                                "rightSupportPosition": 0.020000001415610315,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            },
-                                                                                                                                            {
-                                                                                                                                                "uid": 1344496529052404798,
-                                                                                                                                                "value": 1.0,
-                                                                                                                                                "position": 0.05000000074505806,
-                                                                                                                                                "leftSupportPosition": -0.05000000074505806,
-                                                                                                                                                "supportsType": "Broken"
-                                                                                                                                            }
-                                                                                                                                        ]
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        ],
-                                                                                                                        "mDuration": 0.05000000074505806
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            },
-                                                                                                            "meta": {
-                                                                                                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
-                                                                                                                "Value": {
-                                                                                                                    "mId": "57994cf003172ba52e2032ec2e5d54d9"
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
+                                                                                                        "name": "focused"
                                                                                                     }
                                                                                                 ]
                                                                                             }

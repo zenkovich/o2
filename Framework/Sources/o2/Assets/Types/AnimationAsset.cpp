@@ -9,14 +9,14 @@ namespace o2
         AssetWithDefaultMeta<AnimationAsset>(other), animation(other.animation)
     {}
 
-    AnimationAsset::AnimationAsset(const AnimationClip& clip):
+    AnimationAsset::AnimationAsset(const Ref<AnimationClip>& clip):
         AssetWithDefaultMeta<AnimationAsset>(), animation(clip)
     {}
 
     AnimationAsset& AnimationAsset::operator=(const AnimationAsset& other)
     {
         Asset::operator=(other);
-        animation = other.animation;
+        animation = other.animation->CloneAsRef<AnimationClip>();
 
         return *this;
     }
@@ -29,7 +29,8 @@ namespace o2
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::AnimationAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::AnimationAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AnimationAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::AnimationAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::AssetWithDefaultMeta<o2::AnimationAsset>>);
 // --- META ---
 
 DECLARE_CLASS(o2::AnimationAsset, o2__AnimationAsset);

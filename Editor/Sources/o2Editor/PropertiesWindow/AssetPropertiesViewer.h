@@ -12,7 +12,7 @@ namespace o2
 
 namespace Editor
 {
-	class DefaultObjectPropertiesViewer;
+	FORWARD_CLASS_REF(DefaultObjectPropertiesViewer);
 
 	// -------------------------
 	// Default properties viewer
@@ -29,9 +29,9 @@ namespace Editor
 		IOBJECT(AssetPropertiesViewer);
 
 	protected:
-		Widget* mAssetHeader = nullptr;    // Asset header
-		Label* mAssetNameLabel = nullptr; // Asset name label
-		Button* mSaveButton = nullptr;     // Save asset button
+		Ref<Widget> mAssetHeader;    // Asset header
+		Ref<Label>  mAssetNameLabel; // Asset name label
+		Ref<Button> mSaveButton;     // Save asset button
 
 	protected:
 		// Sets target objects
@@ -51,9 +51,9 @@ CLASS_BASES_META(Editor::AssetPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AssetPropertiesViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAssetHeader);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAssetNameLabel);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSaveButton);
+    FIELD().PROTECTED().NAME(mAssetHeader);
+    FIELD().PROTECTED().NAME(mAssetNameLabel);
+    FIELD().PROTECTED().NAME(mSaveButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetPropertiesViewer)

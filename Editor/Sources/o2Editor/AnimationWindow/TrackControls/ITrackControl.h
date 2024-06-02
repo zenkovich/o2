@@ -9,38 +9,46 @@ using namespace o2;
 
 namespace Editor
 {
-	class AnimationTimeline;
-	class KeyHandlesSheet;
+	FORWARD_CLASS_REF(AnimationTimeline);
+	FORWARD_CLASS_REF(KeyHandlesSheet);
 
 	class ITrackControl: public Widget
 	{
 	public:
-		struct KeyHandle
+		struct KeyHandle: public RefCounterable
 		{
 			UInt64 keyUid = 0;
-			AnimationKeyDragHandle* handle = nullptr;
 
+			Ref<AnimationKeyDragHandle> handle = nullptr;
+
+		public:
 			KeyHandle() { }
-			KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle): keyUid(keyUid), handle(handle) { }
+			KeyHandle(UInt64 keyUid, const Ref<AnimationKeyDragHandle>& handle): keyUid(keyUid), handle(handle) { }
 
 			bool operator==(const KeyHandle& other) const;
 		};
 
 	public:
+		// Default constructor
+		ITrackControl(RefCounter* refCounter);
+
+		// Copy-constructor
+		ITrackControl(RefCounter* refCounter, const ITrackControl& other);
+
 		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
-		virtual void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
+		virtual void Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet);
 
 		// Sets Animation track, updates and creates key handles
-		virtual void SetTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player, const String& path);
+		virtual void SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path);
 
 		// Updates handles position on timeline
 		virtual void UpdateHandles();
 
 		// Returns key handles list
-		virtual Vector<KeyHandle*> GetKeyHandles() const;
+		virtual Vector<Ref<KeyHandle>> GetKeyHandles() const;
 
 		// Returns a container of controllers that are part of a tree
-		virtual Widget* GetTreePartControls() const;
+		virtual Ref<Widget> GetTreePartControls() const;
 
 		// Sets curves edit view mode
 		virtual void SetCurveViewEnabled(bool enabled);
@@ -72,7 +80,8 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ITrackControl);
+        SERIALIZABLE(ITrackControl);
+        CLONEABLE_REF(ITrackControl);
 	};
 }
 // --- META ---
@@ -89,11 +98,13 @@ END_META;
 CLASS_METHODS_META(Editor::ITrackControl)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ITrackControl&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationTimeline>&, const Ref<KeyHandlesSheet>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&, const Ref<IAnimationTrack::IPlayer>&, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<KeyHandle*>, GetKeyHandles);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetTreePartControls);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<KeyHandle>>, GetKeyHandles);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetTreePartControls);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);

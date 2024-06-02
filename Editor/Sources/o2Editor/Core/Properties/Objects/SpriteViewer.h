@@ -14,13 +14,13 @@ namespace o2
 
 namespace Editor
 {
-	class AssetProperty;
-	class BorderIProperty;
-	class ColorProperty;
-	class EnumProperty;
-	class FloatProperty;
-	class ImageSlicesEditorWidget;
-	class Vec2FProperty;
+	FORWARD_CLASS_REF(AssetProperty);
+	FORWARD_CLASS_REF(BorderIProperty);
+	FORWARD_CLASS_REF(ColorProperty);
+	FORWARD_CLASS_REF(EnumProperty);
+	FORWARD_CLASS_REF(FloatProperty);
+	FORWARD_CLASS_REF(ImageSlicesEditorWidget);
+	FORWARD_CLASS_REF(Vec2FProperty);
 
 	// --------------------
 	// Editor sprite viewer
@@ -31,25 +31,24 @@ namespace Editor
 		IOBJECT(SpriteViewer);
 
 	protected:
-		VerticalLayout* mHiddenProperties = nullptr; // Hidden properties
+        Ref<VerticalLayout> mHiddenProperties; // Hidden properties container
 
-		AssetProperty* mImageProperty = nullptr;
-		ColorProperty* mColorProperty = nullptr;
-		FloatProperty* mAlphaProperty = nullptr;
-		Vec2FProperty* mSizePivotProperty = nullptr;
-		Vec2FProperty* mPivotProperty = nullptr;
-		EnumProperty*  mModeProperty = nullptr;
+        Ref<AssetProperty> mImageProperty;     // Image asset property
+        Ref<ColorProperty> mColorProperty;     // Color property
+        Ref<FloatProperty> mAlphaProperty;     // Alpha property
+        Ref<Vec2FProperty> mSizePivotProperty; // Size pivot property
+        Ref<Vec2FProperty> mPivotProperty;     // Pivot property
+        Ref<EnumProperty>  mModeProperty;      // Mode property selector. Shows required property spoiler
 
-		Spoiler*       mFillPropertiesSpoiler = nullptr;
-		FloatProperty* mFillProperty = nullptr;
+        Ref<Spoiler>       mFillPropertiesSpoiler; // Fill properties spoiler
+        Ref<FloatProperty> mFillProperty;          // Fill property
 
-		Spoiler*         mSlicedPropertiesSpoiler = nullptr;
-		BorderIProperty* mSliceBorderProperty = nullptr;
+        Ref<Spoiler>                 mSlicedPropertiesSpoiler; // Sliced properties spoiler
+        Ref<BorderIProperty>         mSliceBorderProperty;     // Slice border property
+        Ref<ImageSlicesEditorWidget> mSlicesEditor;            // Image slices editor widget
 
-		Spoiler*       mTiledPropertiesSpoiler = nullptr;
-		FloatProperty* mTileScaleProperty = nullptr;
-
-		ImageSlicesEditorWidget* mSlicesEditor = nullptr;
+        Ref<Spoiler>       mTiledPropertiesSpoiler; // Tiled properties spoiler
+        Ref<FloatProperty> mTileScaleProperty;      // Tile scale property
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -71,20 +70,20 @@ CLASS_BASES_META(Editor::SpriteViewer)
 END_META;
 CLASS_FIELDS_META(Editor::SpriteViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHiddenProperties);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mImageProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizePivotProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPivotProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mModeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFillPropertiesSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFillProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSlicedPropertiesSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSliceBorderProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTiledPropertiesSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTileScaleProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSlicesEditor);
+    FIELD().PROTECTED().NAME(mHiddenProperties);
+    FIELD().PROTECTED().NAME(mImageProperty);
+    FIELD().PROTECTED().NAME(mColorProperty);
+    FIELD().PROTECTED().NAME(mAlphaProperty);
+    FIELD().PROTECTED().NAME(mSizePivotProperty);
+    FIELD().PROTECTED().NAME(mPivotProperty);
+    FIELD().PROTECTED().NAME(mModeProperty);
+    FIELD().PROTECTED().NAME(mFillPropertiesSpoiler);
+    FIELD().PROTECTED().NAME(mFillProperty);
+    FIELD().PROTECTED().NAME(mSlicedPropertiesSpoiler);
+    FIELD().PROTECTED().NAME(mSliceBorderProperty);
+    FIELD().PROTECTED().NAME(mSlicesEditor);
+    FIELD().PROTECTED().NAME(mTiledPropertiesSpoiler);
+    FIELD().PROTECTED().NAME(mTileScaleProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpriteViewer)

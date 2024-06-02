@@ -17,12 +17,12 @@ namespace o2
     {
     public:
         PROPERTIES(SkinningMeshComponent);
-        PROPERTY(ImageAssetRef, image, SetImage, GetImage);                   // Image property
+        PROPERTY(AssetRef<ImageAsset>, image, SetImage, GetImage);                   // Image property
         PROPERTY(RectF, mappingFrame, SetMappingFrame, GetMappingFrame);      // Image mapping frame
         PROPERTY(Color4, color, SetColor, GetColor);                          // Color property
         PROPERTY(Vector<Vec2F>, extraPoints, SetExtraPoints, GetExtraPoints); // extra points property
 
-        Spline spline; // Shell spline @SERIALIZABLE
+        Ref<Spline> spline = mmake<Spline>(); // Shell spline @SERIALIZABLE
 
     public:
         // Default constructor
@@ -65,10 +65,10 @@ namespace o2
         void RemoveExtraPoint(int idx);
 
         // Sets image
-        void SetImage(const ImageAssetRef& image);
+        void SetImage(const AssetRef<ImageAsset>& image);
 
         // Returns image
-        const ImageAssetRef& GetImage() const;
+        const AssetRef<ImageAsset>& GetImage() const;
 
         // Sets image mapping frame
         void SetMappingFrame(const RectF& frame);
@@ -86,7 +86,7 @@ namespace o2
         void NeedUpdateBones(bool force = false);
 
         // Returns list of bones
-        const Vector<Pair<SkinningMeshBoneComponent*, SkinningMesh::Bone*>>& GetBones() const;
+        const Vector<Pair<WeakRef<SkinningMeshBoneComponent>, SkinningMesh::Bone*>>& GetBones() const;
 
         // Returns name of component
         static String GetName();
@@ -98,14 +98,15 @@ namespace o2
         static String GetIcon();
 
         SERIALIZABLE(SkinningMeshComponent);
+        CLONEABLE_REF(SkinningMeshComponent);
 
     protected:
         SkinningMesh mMesh;      // Drawing mesh, built from spline
         Basis        mTransform; // Transform where mesh was built
 
-        Vector<Pair<SkinningMeshBoneComponent*, SkinningMesh::Bone*>> mBonesMapping; // Map of bones to components. Updates in UpdateBones, used in updating mesh
+        Vector<Pair<WeakRef<SkinningMeshBoneComponent>, SkinningMesh::Bone*>> mBonesMapping; // Map of bones to components. Updates in UpdateBones, used in updating mesh
 
-        ImageAssetRef mImageAsset;                         // Image asset @SERIALIZABLE
+        AssetRef<ImageAsset> mImageAsset;                         // Image asset @SERIALIZABLE
         RectF         mImageMapping = RectF(0, 0, 10, 10); // Image mapping rectangle @SERIALIZABLE
 
         Vector<Vec2F> mExtraPoints; // Extra topology points @SERIALIZABLE
@@ -129,7 +130,7 @@ namespace o2
         void UpdateBones();
 
         // Sets owner actor
-        void SetOwnerActor(Actor* actor) override;
+        void SetOwnerActor(const Ref<Actor>& actor) override;
 
         // Calling when deserializing
         void OnDeserialized(const DataValue& node) override;
@@ -154,7 +155,7 @@ CLASS_FIELDS_META(o2::SkinningMeshComponent)
     FIELD().PUBLIC().NAME(mappingFrame);
     FIELD().PUBLIC().NAME(color);
     FIELD().PUBLIC().NAME(extraPoints);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(spline);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Spline>()).NAME(spline);
     FIELD().PROTECTED().NAME(mMesh);
     FIELD().PROTECTED().NAME(mTransform);
     FIELD().PROTECTED().NAME(mBonesMapping);
@@ -169,7 +170,7 @@ END_META;
 CLASS_METHODS_META(o2::SkinningMeshComponent)
 {
 
-    typedef const Vector<Pair<SkinningMeshBoneComponent*, SkinningMesh::Bone*>>& _tmp1;
+    typedef const Vector<Pair<WeakRef<SkinningMeshBoneComponent>, SkinningMesh::Bone*>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const SkinningMeshComponent&);
@@ -182,8 +183,8 @@ CLASS_METHODS_META(o2::SkinningMeshComponent)
     FUNCTION().PUBLIC().SIGNATURE(void, SetExtraPoint, int, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, AddExtraPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveExtraPoint, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const ImageAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(const ImageAssetRef&, GetImage);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(const AssetRef<ImageAsset>&, GetImage);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMappingFrame, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetMappingFrame);
     FUNCTION().PUBLIC().SIGNATURE(void, SetColor, const Color4&);
@@ -197,7 +198,7 @@ CLASS_METHODS_META(o2::SkinningMeshComponent)
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateBones);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
     FUNCTION().PROTECTED().SIGNATURE(void, DrawMeshWire);

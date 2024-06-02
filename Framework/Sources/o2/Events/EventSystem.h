@@ -5,30 +5,37 @@
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 
 // Events system accessor macros
 #define o2Events o2::EventSystem::Instance()
 
 namespace o2
 {
-    class ApplicationEventsListener;
-    class CursorAreaEventsListener;
-    class CursorEventsListener;
-    class DragableObject;
-    class KeyboardEventsListener;
-    class ShortcutKeysListenersManager;
+    FORWARD_CLASS_REF(ApplicationEventsListener);
+    FORWARD_CLASS_REF(CursorAreaEventsListener);
+    FORWARD_CLASS_REF(CursorEventsListener);
+    FORWARD_CLASS_REF(DragableObject); 
+    FORWARD_CLASS_REF(KeyboardEventsListener);
+    FORWARD_CLASS_REF(ShortcutKeysListenersManager);
 
     // -----------------------
     // Event processing system
     // -----------------------
-    class EventSystem: public Singleton<EventSystem>
+    class EventSystem: public Singleton<EventSystem>, public RefCounterable
     {
     public:
         static bool eventsListenersEnabledByDefault; // Then it is true, new events listeners will be enabled on initialization
 
     public:
+        // Default constructor
+        EventSystem();
+
+        // Destructor
+        ~EventSystem();
+
         // Returns all cursor listeners under cursor arranged by depth
-        Vector<CursorAreaEventsListener*> GetAllCursorListenersUnderCursor(CursorId cursorId) const;
+        Vector<Ref<CursorAreaEventsListener>> GetAllCursorListenersUnderCursor(CursorId cursorId) const;
 
         // Breaks cursor event. All pressed listeners will be unpressed with specific event OnPressBreak
         void BreakCursorEvent();
@@ -40,12 +47,6 @@ namespace o2
         void PostUpdate();
 
     protected:
-        // Default constructor
-        EventSystem();
-
-        // Destructor
-        ~EventSystem();
-
         // Returns time between clicks for double click reaction
         float GetDoubleClickTime() const;
 
@@ -76,55 +77,55 @@ namespace o2
     protected:
         float mDblClickTime = 0.3f; // Time between clicks for double click reaction
 
-        Vector<CursorEventsListener*> mCursorListeners; // All cursor non area listeners
+        Vector<WeakRef<CursorEventsListener>> mCursorListeners; // All cursor non area listeners
 
-        Vector<CursorAreaEventListenersLayer*> mCursorAreaEventsListenersLayers; // Drawn cursor area events listeners layers
+        Vector<WeakRef<CursorAreaEventListenersLayer>> mCursorAreaEventsListenersLayers; // Drawn cursor area events listeners layers
         
-        CursorAreaEventListenersLayer          mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
-        CursorAreaEventListenersLayer*         mCurrentCursorAreaEventsLayer;  // Current list of area listeners
-        Vector<CursorAreaEventListenersLayer*> mLayersStack;                   // Input layers stack, in order they are pushed
+        Ref<CursorAreaEventListenersLayer>         mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
+        Ref<CursorAreaEventListenersLayer>         mCurrentCursorAreaEventsLayer;  // Current list of area listeners
+        Vector<Ref<CursorAreaEventListenersLayer>> mLayersStack;                   // Input layers stack, in order they are pushed
 
-        Vector<KeyboardEventsListener*>    mKeyboardListeners;    // Keyboard events listeners
-        Vector<ApplicationEventsListener*> mApplicationListeners; // Application events listeners
+        Vector<WeakRef<KeyboardEventsListener>>    mKeyboardListeners;    // Keyboard events listeners
+        Vector<WeakRef<ApplicationEventsListener>> mApplicationListeners; // Application events listeners
 
-        ShortcutKeysListenersManager* mShortcutEventsManager; // Shortcut events manager
+        Ref<ShortcutKeysListenersManager> mShortcutEventsManager; // Shortcut events manager
 
     protected:
         // Push current cursor area events listeners layer in layers stack
-        static void PushCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
+        static void PushCursorAreaEventsListenersLayer(const Ref<CursorAreaEventListenersLayer>& layer);
 
         // Pops current cursor area events listeners layer
         static void PopCursorAreaEventsListenersLayer();
 
         // Unregisters layer
-        static void RemoveCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
+        static void RemoveCursorAreaEventsListenersLayer(const Ref<CursorAreaEventListenersLayer>& layer);
 
         // Registering cursor area events listener
-        static void DrawnCursorAreaListener(CursorAreaEventsListener* listener);
+        static void DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener);
 
         // Unregistering cursor area events listener
         static void UnregCursorAreaListener(CursorAreaEventsListener* listener);
 
         // Registering cursor events listener
-        static void RegCursorListener(CursorEventsListener* listener);
+        static void RegCursorListener(const Ref<CursorEventsListener>& listener);
 
         // Unregistering cursor events listener
-        static void UnregCursorListener(CursorEventsListener* listener);
+        static void UnregCursorListener(const Ref<CursorEventsListener>& listener);
 
         // Registering drag events listener
-        static void RegDragListener(DragableObject* listener);
+        static void RegDragListener(const Ref<DragableObject>& listener);
 
         // Unregistering drag events listener
         static void UnregDragListener(DragableObject* listener);
 
         // Registering keyboard events listener
-        static void RegKeyboardListener(KeyboardEventsListener* listener);
+        static void RegKeyboardListener(const Ref<KeyboardEventsListener>& listener);
 
         // Unregistering keyboard events listener
         static void UnregKeyboardListener(KeyboardEventsListener* listener);
 
         // Registering application events listener
-        static void RegApplicationListener(ApplicationEventsListener* listener);
+        static void RegApplicationListener(const Ref<ApplicationEventsListener>& listener);
 
         // Unregistering application events listener
         static void UnregApplicationListener(ApplicationEventsListener* listener);

@@ -7,10 +7,10 @@ namespace o2
     SceneLayersList::SceneLayersList()
     {}
 
-    SceneLayersList::SceneLayersList(const Vector<SceneLayer*>& layers)
+    SceneLayersList::SceneLayersList(const Vector<Ref<SceneLayer>>& layers)
     {
         mAllLayers = o2Scene.GetLayers() == layers;
-        mLayers = layers.Convert<String>([](SceneLayer* x) { return x->GetName(); });
+        mLayers = layers.Convert<String>([](const Ref<SceneLayer>& x) { return x->GetName(); });
     }
 
     SceneLayersList::SceneLayersList(const Vector<String>& layers):
@@ -44,7 +44,7 @@ namespace o2
         return *this;
     }
 
-    bool SceneLayersList::HasLayer(SceneLayer* layer) const
+    bool SceneLayersList::HasLayer(const Ref<SceneLayer>& layer) const
     {
         return mAllLayers || mLayers.Contains(layer->GetName());
     }
@@ -54,7 +54,7 @@ namespace o2
         return mAllLayers || mLayers.Contains(layerName);
     }
 
-    void SceneLayersList::AddLayer(SceneLayer* layer)
+    void SceneLayersList::AddLayer(const Ref<SceneLayer>& layer)
     {
         mLayers.Add(layer->GetName());
         mAllLayers = false;
@@ -66,7 +66,7 @@ namespace o2
         mAllLayers = false;
     }
 
-    void SceneLayersList::RemoveLayer(SceneLayer* layer)
+    void SceneLayersList::RemoveLayer(const Ref<SceneLayer>& layer)
     {
         mLayers.Remove(layer->GetName());
         mAllLayers = false;
@@ -78,9 +78,9 @@ namespace o2
         mAllLayers = false;
     }
 
-    void SceneLayersList::SetLayers(const Vector<SceneLayer*>& layers)
+    void SceneLayersList::SetLayers(const Vector<Ref<SceneLayer>>& layers)
     {
-        mLayers = layers.Convert<String>([](SceneLayer* x) { return x->GetName(); });
+        mLayers = layers.Convert<String>([](const Ref<SceneLayer>& x) { return x->GetName(); });
         mAllLayers = false;
     }
 
@@ -95,12 +95,12 @@ namespace o2
         mAllLayers = true;
     }
 
-    Vector<SceneLayer*> SceneLayersList::GetLayers() const
+    Vector<Ref<SceneLayer>> SceneLayersList::GetLayers() const
     {
         if (mAllLayers)
             return o2Scene.GetLayers();
 
-        return mLayers.Convert<SceneLayer*>([](const String& x) { return o2Scene.GetLayer(x); });
+        return mLayers.Convert<Ref<SceneLayer>>([](const String& x) { return o2Scene.GetLayer(x); });
     }
 
     const Vector<String>& SceneLayersList::GetLayersNames() const

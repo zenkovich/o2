@@ -131,57 +131,57 @@ namespace o2
     // -----------------------
     // Cursors events listener
     // -----------------------
-    class CursorEventsListener
+    class CursorEventsListener: public RefCounterable
     {
     public:
         // Default constructor
-        CursorEventsListener();
+        CursorEventsListener(RefCounter* refCounter);
 
         // Copy-constructor
-        CursorEventsListener(const CursorAreaEventsListener& other);
+        CursorEventsListener(RefCounter* refCounter, const CursorAreaEventsListener& other);
 
         // Virtual destructor
         virtual ~CursorEventsListener();
 
     protected:
         // Called when cursor pressed on this
-        virtual void OnCursorPressed(const Input::Cursor& cursor);
+        virtual void OnCursorPressed(const Input::Cursor& cursor) {}
 
         // Called when cursor released (only when cursor pressed this at previous time)
-        virtual void OnCursorReleased(const Input::Cursor& cursor);
+        virtual void OnCursorReleased(const Input::Cursor& cursor) {}
 
         // Called when cursor pressing was broken (when scrolled scroll area or some other)
-        virtual void OnCursorPressBreak(const Input::Cursor& cursor);
+        virtual void OnCursorPressBreak(const Input::Cursor& cursor) {}
 
         // Called when cursor stay down during frame
-        virtual void OnCursorStillDown(const Input::Cursor& cursor);
+        virtual void OnCursorStillDown(const Input::Cursor& cursor) {}
 
         // Called when cursor moved on this (or moved outside when this was pressed)
-        virtual void OnCursorMoved(const Input::Cursor& cursor);
+        virtual void OnCursorMoved(const Input::Cursor& cursor) {}
 
         // Called when cursor double clicked
-        virtual void OnCursorDblClicked(const Input::Cursor& cursor);
+        virtual void OnCursorDblClicked(const Input::Cursor& cursor) {}
 
         // Called when right mouse button was pressed on this
-        virtual void OnCursorRightMousePressed(const Input::Cursor& cursor);
+        virtual void OnCursorRightMousePressed(const Input::Cursor& cursor) {}
 
         // Called when right mouse button stay down on this
-        virtual void OnCursorRightMouseStillDown(const Input::Cursor& cursor);
+        virtual void OnCursorRightMouseStillDown(const Input::Cursor& cursor) {}
 
         // Called when right mouse button was released (only when right mouse button pressed this at previous time)
-        virtual void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+        virtual void OnCursorRightMouseReleased(const Input::Cursor& cursor) {}
 
         // Called when middle mouse button was pressed on this
-        virtual void OnCursorMiddleMousePressed(const Input::Cursor& cursor);
+        virtual void OnCursorMiddleMousePressed(const Input::Cursor& cursor) {}
 
         // Called when middle mouse button stay down on this
-        virtual void OnCursorMiddleMouseStillDown(const Input::Cursor& cursor);
+        virtual void OnCursorMiddleMouseStillDown(const Input::Cursor& cursor) {}
 
         // Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
-        virtual void OnCursorMiddleMouseReleased(const Input::Cursor& cursor);
+        virtual void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) {}
 
         // Called when scrolling
-        virtual void OnScrolled(float scroll);
+        virtual void OnScrolled(float scroll) {}
 
         friend class EventSystem;
     };

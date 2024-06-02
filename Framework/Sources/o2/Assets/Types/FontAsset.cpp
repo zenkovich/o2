@@ -15,11 +15,11 @@ namespace o2
         Asset(other), mFont(other.mFont), font(this)
     {}
 
-    FontAsset::FontAsset(AssetMeta* meta):
+    FontAsset::FontAsset(const Ref<AssetMeta>& meta):
         Asset(meta)
     {}
 
-    FontRef FontAsset::GetFont() const
+    Ref<Font> FontAsset::GetFont() const
     {
         return mFont;
     }
@@ -31,7 +31,7 @@ namespace o2
         return *this;
     }
 }
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::FontAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::FontAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::FontAsset, o2__FontAsset);

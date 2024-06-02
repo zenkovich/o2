@@ -8,16 +8,17 @@
 
 namespace Editor
 {
-	FloatProperty::FloatProperty()
+	FloatProperty::FloatProperty(RefCounter* refCounter):
+		TPropertyField<float>(refCounter)
 	{}
 
-	FloatProperty::FloatProperty(const FloatProperty& other) :
-		TPropertyField<float>(other)
+	FloatProperty::FloatProperty(RefCounter* refCounter, const FloatProperty& other) :
+		TPropertyField<float>(refCounter, other)
 	{
 		InitializeControls();
 	}
 
-	EditBox* FloatProperty::GetEditBox() const
+	const Ref<EditBox>& FloatProperty::GetEditBox() const
 	{
 		return mEditBox;
 	}
@@ -41,13 +42,14 @@ namespace Editor
 			auto handleLayer = mEditBox->FindLayer("arrows");
 			if (handleLayer)
 			{
-				mEditBox->onDraw += [&]() { mDragHangle.OnDrawn(); };
+				mDragHangle = mmake<CursorEventsArea>();
+				mEditBox->onDraw += [&]() { mDragHangle->OnDrawn(); };
 
-				mDragHangle.cursorType = CursorType::SizeNS;
-				mDragHangle.isUnderPoint = [=](const Vec2F& point) { return handleLayer->IsUnderPoint(point); };
-				mDragHangle.onMoved = THIS_FUNC(OnDragHandleMoved);
-				mDragHangle.onCursorPressed = THIS_FUNC(OnMoveHandlePressed);
-				mDragHangle.onCursorReleased = THIS_FUNC(OnMoveHandleReleased);
+				mDragHangle->cursorType = CursorType::SizeNS;
+				mDragHangle->isUnderPoint = [=](const Vec2F& point) { return handleLayer->IsUnderPoint(point); };
+				mDragHangle->onMoved = THIS_FUNC(OnDragHandleMoved);
+				mDragHangle->onCursorPressed = THIS_FUNC(OnMoveHandlePressed);
+				mDragHangle->onCursorReleased = THIS_FUNC(OnMoveHandleReleased);
 			}
 		}
 	}
@@ -110,7 +112,10 @@ namespace Editor
 		CheckValueChangeCompleted();
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<float>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::FloatProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<float>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::FloatProperty, Editor__FloatProperty);

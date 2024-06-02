@@ -59,7 +59,7 @@ namespace o2
             return;
 
         mScissorRect = o2Render.GetResScissorRect();
-        o2Events.DrawnCursorAreaListener(this);
+        o2Events.DrawnCursorAreaListener(Ref(this));
     }
 
     void CursorAreaEventsListener::OnCursorPressed(const Input::Cursor& cursor)
@@ -169,60 +169,22 @@ namespace o2
         return mIsPressed;
     }
 
-    CursorEventsListener::CursorEventsListener()
+    CursorEventsListener::CursorEventsListener(RefCounter* refCounter):
+        RefCounterable(refCounter)
     {
         if (EventSystem::IsSingletonInitialzed())
-            EventSystem::RegCursorListener(this);
+            EventSystem::RegCursorListener(Ref(this));
     }
 
-    CursorEventsListener::CursorEventsListener(const CursorAreaEventsListener& other)
+    CursorEventsListener::CursorEventsListener(RefCounter* refCounter, const CursorAreaEventsListener& other):
+        RefCounterable(refCounter)
     {
         if (EventSystem::IsSingletonInitialzed())
-            EventSystem::RegCursorListener(this);
+            EventSystem::RegCursorListener(Ref(this));
     }
 
     CursorEventsListener::~CursorEventsListener()
     {
-        EventSystem::UnregCursorListener(this);
+        EventSystem::UnregCursorListener(Ref(this));
     }
-
-    void CursorEventsListener::OnCursorPressed(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorReleased(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorPressBreak(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorStillDown(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorMoved(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorDblClicked(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorRightMousePressed(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorRightMouseStillDown(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorRightMouseReleased(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorMiddleMousePressed(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorMiddleMouseStillDown(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnCursorMiddleMouseReleased(const Input::Cursor& cursor)
-    {}
-
-    void CursorEventsListener::OnScrolled(float scroll)
-    {}
-
 }

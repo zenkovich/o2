@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-	class CurvePreview;
+	FORWARD_CLASS_REF(CurvePreview);
 
 	// ------------------------------
 	// Editor curve property edit box
@@ -22,20 +22,21 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		CurveProperty();
+		CurveProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		CurveProperty(const CurveProperty& other);
+		CurveProperty(RefCounter* refCounter, const CurveProperty& other);
 
 		// Copy operator
 		CurveProperty& operator=(const CurveProperty& other);
 
-		IOBJECT(CurveProperty);
+		SERIALIZABLE(CurveProperty);
+        CLONEABLE_REF(CurveProperty);
 
 	protected:
-		Widget*          mEditBox = nullptr;         // Edit box 
-		CurvePreview*    mPreviewImage = nullptr;    // Curve preview image
-		CursorEventsArea mClickArea;                 // Box click area
+		Ref<Widget>           mEditBox;      // Edit box 
+		Ref<CurvePreview>     mPreviewImage; // Curve preview image
+		Ref<CursorEventsArea> mClickArea;    // Box click area
 
 	protected:
 		// Searches controls widgets and layers and initializes them
@@ -57,16 +58,16 @@ CLASS_BASES_META(Editor::CurveProperty)
 END_META;
 CLASS_FIELDS_META(Editor::CurveProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPreviewImage);
+    FIELD().PROTECTED().NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mPreviewImage);
     FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CurveProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CurveProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);

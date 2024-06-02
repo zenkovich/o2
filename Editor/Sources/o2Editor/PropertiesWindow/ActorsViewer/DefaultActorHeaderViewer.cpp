@@ -29,7 +29,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mDataView = mnew Widget();
+		mDataView = mmake<Widget>();
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 62;
 
@@ -52,7 +52,7 @@ namespace Editor
 		mDataView->AddChild(mLockProperty);
 
 
-		auto prototypeRoot = mDataView->AddChildWidget(mnew Widget());
+		auto prototypeRoot = mDataView->AddChildWidget(mmake<Widget>());
 		prototypeRoot->name = "prototype";
 		*prototypeRoot->layout = WidgetLayout::BothStretch();
 
@@ -111,42 +111,18 @@ namespace Editor
 		mDepthProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mDepthProperty);
 
-		AnimationClip depthInheritStateAnim = AnimationClip::EaseInOut("child/layer/layout/offsetRight", -75.0f, -3.0f, 0.2f);
-		*depthInheritStateAnim.AddTrack<float>("child/depth/layout/offsetLeft") = AnimationTrack<float>::Linear(-70.0f, 0.0f, 0.2f);
-		*depthInheritStateAnim.AddTrack<bool>("child/depth/enabled") = AnimationTrack<bool>::Linear(true, false, 0.2f);
+		auto depthInheritStateAnim = AnimationClip::EaseInOut("child/layer/layout/offsetRight", -75.0f, -3.0f, 0.2f);
+		*depthInheritStateAnim->AddTrack<float>("child/depth/layout/offsetLeft") = AnimationTrack<float>::Linear(-70.0f, 0.0f, 0.2f);
+		*depthInheritStateAnim->AddTrack<bool>("child/depth/enabled") = AnimationTrack<bool>::Linear(true, false, 0.2f);
 		mDataView->AddState("depth inherit", depthInheritStateAnim);
 
-		AnimationClip protoStateAnim = AnimationClip::EaseInOut("layout/minHeight", 62.0f, 84.0f, 0.1f);
-		*protoStateAnim.AddTrack<bool>("child/prototype/enabled") = AnimationTrack<bool>::Linear(false, true, 0.1f);
+		auto protoStateAnim = AnimationClip::EaseInOut("layout/minHeight", 62.0f, 84.0f, 0.1f);
+		*protoStateAnim->AddTrack<bool>("child/prototype/enabled") = AnimationTrack<bool>::Linear(false, true, 0.1f);
 		mDataView->AddState("prototype", protoStateAnim);
 	}
 
 	DefaultActorHeaderViewer::~DefaultActorHeaderViewer()
-	{
-		if (mEnableProperty)
-			delete mEnableProperty;
-
-		if (mNameProperty)
-			delete mNameProperty;
-
-		if (mLockProperty)
-			delete mLockProperty;
-
-		if (mPrototypeProperty)
-			delete mPrototypeProperty;
-
-		if (mTagsProperty)
-			delete mTagsProperty;
-
-		if (mLayerProperty)
-			delete mLayerProperty;
-
-		if (mDepthProperty)
-			delete mDepthProperty;
-
-		if (mDataView)
-			delete mDataView;
-	}
+	{}
 
 	void DefaultActorHeaderViewer::SetTargetActors(const Vector<Actor*>& actors)
 	{
@@ -181,7 +157,7 @@ namespace Editor
 		RefreshLayer();
 	}
 
-	Widget* DefaultActorHeaderViewer::GetWidget() const
+	Ref<Widget> DefaultActorHeaderViewer::GetWidget() const
 	{
 		return mDataView;
 	}
@@ -226,7 +202,7 @@ namespace Editor
 	{
 		Vector<Actor*> actors = GetRootApplyActors();
 
-		for (auto actor : actors)
+		for (auto& actor : actors)
 			actor->ApplyChangesToPrototype();
 	}
 
@@ -237,21 +213,21 @@ namespace Editor
 
 		Vector<Actor*> revertingActors = GetRootApplyActors();
 
-		for (auto actor : revertingActors)
+		for (auto& actor : revertingActors)
 			actor->RevertToPrototype();
 
 		mActors.Clear();
 		if (areViewActorsAssets)
 		{
 			Vector<UID> viewActors = mActors.Convert<UID>([](Actor* x) { return x->GetAssetID(); });
-			for (auto id : viewActors)
-				mActors.Add(ActorAssetRef(id)->GetActor());
+			for (auto& id : viewActors)
+				mActors.Add(AssetRef<ActorAsset>(id)->GetActor().Get());
 		}
 		else
 		{
 			Vector<UInt64> viewActors = mActors.Convert<UInt64>([](Actor* x) { return x->GetID(); });
-			for (auto id : viewActors)
-				mActors.Add(o2Scene.GetActorByID(id));
+			for (auto& id : viewActors)
+				mActors.Add(o2Scene.GetActorByID(id).Get());
 		}
 
 		o2EditorPropertiesWindow.SetTargets(mActors.Cast<IObject*>());
@@ -261,7 +237,7 @@ namespace Editor
 	{
 		Vector<Actor*> actors = GetRootApplyActors();
 
-		for (auto actor : actors)
+		for (auto& actor : actors)
 			actor->BreakPrototypeLink();
 
 		*mDataView->state["prototype"] = false;
@@ -269,7 +245,7 @@ namespace Editor
 
 	void DefaultActorHeaderViewer::OnSelectedInheritedLayer()
 	{
-		for (auto actor : mActors)
+		for (auto& actor : mActors)
 			actor->SetDrawingDepthInheritFromParent(true);
 	}
 
@@ -277,14 +253,14 @@ namespace Editor
 	{
 		Vector<Actor*> applyActors;
 
-		for (auto actor : mActors)
+		for (auto& actor : mActors)
 		{
 			Actor* applyActor = actor;
 			if (!applyActor->GetPrototype())
 				continue;
 
 			while (applyActor && !applyActor->GetPrototypeDirectly().IsValid())
-				applyActor = applyActor->GetParent();
+				applyActor = applyActor->GetParent().Lock().Get();
 
 			if (applyActor)
 				applyActors.Add(applyActor);
@@ -296,9 +272,7 @@ namespace Editor
 	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue,
 													 const Vector<DataDocument>& newValue)
 	{
-		PropertyChangeAction* action = mnew PropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
-
+		auto action = mmake<PropertyChangeAction>(o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 		o2EditorApplication.DoneAction(action);
 	}
 

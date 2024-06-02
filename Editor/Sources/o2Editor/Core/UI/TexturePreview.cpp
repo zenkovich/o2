@@ -7,10 +7,11 @@
 
 namespace Editor
 {
-	TexturePreview::TexturePreview()
+	TexturePreview::TexturePreview(RefCounter* refCounter):
+		Widget(refCounter)
 	{
-		mTextureSprite = mnew Sprite();
-		mBackgroundSprite = mnew Sprite(CommonTextures::checkedBackground);
+		mTextureSprite = mmake<Sprite>();
+		mBackgroundSprite = mmake<Sprite>(CommonTextures::checkedBackground);
 		mBackgroundSprite->SetMode(SpriteMode::Tiled);
 
 		AddLayer("background", mBackgroundSprite, Layout::BothStretch(0, mLabelHeight, 0, 0));
@@ -21,8 +22,8 @@ namespace Editor
 		AddChild(mTextureInfoLabel);
 	}
 
-	TexturePreview::TexturePreview(const TexturePreview& other):
-		Widget(other)
+	TexturePreview::TexturePreview(RefCounter* refCounter, const TexturePreview& other):
+		Widget(refCounter, other)
 	{
 		mBackgroundSprite = GetLayerDrawable<Sprite>("background");
 		mTextureSprite = GetLayerDrawable<Sprite>("texture");
@@ -78,6 +79,8 @@ namespace Editor
 		return *this;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TexturePreview>);
 // --- META ---
 
 DECLARE_CLASS(Editor::TexturePreview, Editor__TexturePreview);

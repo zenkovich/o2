@@ -12,30 +12,44 @@ namespace Editor
 	// -------------------------
 	struct MeshWeightsTool: public IEditTool
 	{
+		// ----------------------
+		// Scene layer for editor
+		// ----------------------
 		struct SceneLayer: public SceneEditorLayer
 		{
-			MeshWeightsTool* tool = nullptr;
+			WeakRef<MeshWeightsTool> tool; // Reference to tool
 
 		public:
+			// Draws editor over scene
 			void DrawScene() override;
 
+			// Draws mesh wire
 			void DrawMeshWire(auto& mesh);
 
+			// Updates editor
 			void Update(float dt) override;
 
+			// Updates brush
 			void UpdateBrush(float dt);
 
+			// Returns order of layer
 			int GetOrder() const override;
 
+			// Returns true if layer is enabled
 			bool IsEnabled() const override;
 
+			// Returns name of layer
 			const String& GetName() const override;
+
+			// Returns icon name of layer
 			const String& GetIconName() const override;
 		};
 
+	public:
 		Ref<SkinningMeshBoneComponent> boneComponent; // Reference to selected bone component
 
-		SceneLayer   sceneLayer;        // Scene layer for drawing spline
+		Ref<SceneLayer> sceneLayer = mmake<SceneLayer>(); // Scene layer for drawing spline
+
 		bool         isEnabled = false; // Is tool enabled now       
 
 	public:
@@ -91,7 +105,7 @@ END_META;
 CLASS_FIELDS_META(Editor::MeshWeightsTool)
 {
     FIELD().PUBLIC().NAME(boneComponent);
-    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SceneLayer>()).NAME(sceneLayer);
     FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
     FIELD().PRIVATE().NAME(mCursosPos);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mPressed);

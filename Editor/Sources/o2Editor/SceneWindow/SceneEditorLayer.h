@@ -1,11 +1,12 @@
 #pragma once
 #include "o2/Utils/Types/StringDef.h"
+#include "o2/Utils/Types/Ref.h"
 
 using namespace o2;
 
 namespace Editor
 {
-	class SceneEditorLayer
+	class SceneEditorLayer: virtual public RefCounterable
 	{
 	public:
 		virtual void DrawScene() {}

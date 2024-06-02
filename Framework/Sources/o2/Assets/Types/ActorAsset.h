@@ -1,11 +1,11 @@
 #pragma once
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetRef.h"
-#include "o2/Scene/ActorRef.h"
+#include "o2/Scene/ActorLinkRef.h"
 
 namespace o2
 {
-    class Actor;
+    FORWARD_CLASS_REF(Actor);
 
     // -----------
     // Actor asset
@@ -17,7 +17,7 @@ namespace o2
         ActorAsset();
 
         // Constructor
-        ActorAsset(Actor* actor);
+        ActorAsset(const Ref<Actor>& actor);
 
         // Copy-constructor
         ActorAsset(const ActorAsset& other);
@@ -29,16 +29,13 @@ namespace o2
         ActorAsset& operator=(const ActorAsset& asset);
 
         // Instantiates actor toscene @SCRIPTABLE
-        ActorRef Instantiate() const;
-
-        // Returns meta information
-        Meta* GetMeta() const;
+        Ref<Actor> Instantiate() const;
 
         // Returns actor
-        Actor* GetActor() const;
+        const Ref<Actor>& GetActor() const;
 
         // Sets actor
-        void SetActor(Actor* actor, bool own = true);
+        void SetActor(const Ref<Actor>& actor);
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
@@ -53,10 +50,10 @@ namespace o2
         static bool IsAvailableToCreateFromEditor() { return true; }
 
         SERIALIZABLE(ActorAsset);
+        CLONEABLE_REF(ActorAsset);
 
     protected:
-        Actor* mActor = nullptr;  // Asset data 
-        bool   mOwnActor = false; // Is asset owns this actor
+        Ref<Actor> mActor; // Asset data 
 
     protected:
         // Itis called when UID has changed; updates actor asset id
@@ -70,8 +67,6 @@ namespace o2
 
         friend class Assets;
     };
-
-    typedef Ref<ActorAsset> ActorAssetRef;
 }
 // --- META ---
 
@@ -82,20 +77,18 @@ CLASS_BASES_META(o2::ActorAsset)
 END_META;
 CLASS_FIELDS_META(o2::ActorAsset)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActor);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnActor);
+    FIELD().PROTECTED().NAME(mActor);
 }
 END_META;
 CLASS_METHODS_META(o2::ActorAsset)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Actor>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAsset&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorRef, Instantiate);
-    FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
-    FUNCTION().PUBLIC().SIGNATURE(Actor*, GetActor);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetActor, Actor*, bool);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, Instantiate);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Actor>&, GetActor);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActor, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

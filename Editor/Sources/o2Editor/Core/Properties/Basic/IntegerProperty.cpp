@@ -7,11 +7,12 @@
 
 namespace Editor
 {
-	IntegerProperty::IntegerProperty()
+	IntegerProperty::IntegerProperty(RefCounter* refCounter):
+		TPropertyField<int>(refCounter)
 	{}
 
-	IntegerProperty::IntegerProperty(const IntegerProperty& other) :
-		TPropertyField<int>(other)
+	IntegerProperty::IntegerProperty(RefCounter* refCounter, const IntegerProperty& other) :
+		TPropertyField<int>(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -35,13 +36,14 @@ namespace Editor
 			auto handleLayer = mEditBox->FindLayer("arrows");
 			if (handleLayer)
 			{
-				mEditBox->onDraw += [&]() { mDragHangle.OnDrawn(); };
+				mEditBox->onDraw += [&]() { mDragHangle->OnDrawn(); };
 
-				mDragHangle.cursorType = CursorType::SizeNS;
-				mDragHangle.isUnderPoint = [=](const Vec2F& point) { return handleLayer->IsUnderPoint(point); };
-				mDragHangle.onMoved = THIS_FUNC(OnDragHandleMoved);
-				mDragHangle.onCursorPressed = THIS_FUNC(OnMoveHandlePressed);
-				mDragHangle.onCursorReleased = THIS_FUNC(OnMoveHandleReleased);
+				mDragHangle = mmake<CursorEventsArea>();
+				mDragHangle->cursorType = CursorType::SizeNS;
+				mDragHangle->isUnderPoint = [=](const Vec2F& point) { return handleLayer->IsUnderPoint(point); };
+				mDragHangle->onMoved = THIS_FUNC(OnDragHandleMoved);
+				mDragHangle->onCursorPressed = THIS_FUNC(OnMoveHandlePressed);
+				mDragHangle->onCursorReleased = THIS_FUNC(OnMoveHandleReleased);
 			}
 		}
 	}
@@ -100,7 +102,10 @@ namespace Editor
 		CheckValueChangeCompleted();
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<int>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::IntegerProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<int>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::IntegerProperty, Editor__IntegerProperty);

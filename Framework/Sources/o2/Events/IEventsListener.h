@@ -1,4 +1,5 @@
 #pragma once
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -6,7 +7,7 @@ namespace o2
     // Basic events listener interface. Can be enabler or disabled, 
     // that setting up in constructor by global setting from events system
     // -------------------------------------------------------------------
-    class IEventsListener
+    class IEventsListener: virtual public IRefCounterable
     {
     public:
         // Default constructor. Takes global setting from events system and enables or disables this

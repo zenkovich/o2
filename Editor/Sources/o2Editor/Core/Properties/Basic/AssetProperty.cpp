@@ -9,16 +9,27 @@
 
 namespace Editor
 {
-	AssetProperty::AssetProperty()
+	AssetProperty::AssetProperty(RefCounter* refCounter):
+		TPropertyField<AssetRef<Asset>>(refCounter)
 	{}
 
-	AssetProperty::AssetProperty(const AssetProperty& other):
-		TPropertyField(other)
+	AssetProperty::AssetProperty(RefCounter* refCounter, const AssetProperty& other):
+		TPropertyField<AssetRef<Asset>>(refCounter, other)
 	{
 		InitializeControls();
 	}
 
-	AssetProperty& AssetProperty::operator=(const AssetProperty& other)
+    const Type* AssetProperty::GetValueType() const
+    {
+		return GetValueTypeStatic();
+    }
+
+    const Type* AssetProperty::GetValueTypeStatic()
+    {
+        return &TypeOf(BaseAssetRef);
+    }
+
+    AssetProperty& AssetProperty::operator=(const AssetProperty& other)
 	{
 		TPropertyField::operator =(other);
 		InitializeControls();
@@ -91,13 +102,13 @@ namespace Editor
 					Vector<IObject*> targets;
 
 					allAreInstance = false;
-					for (auto proxy : mValuesProxies)
+					for (auto& proxy : mValuesProxies)
 					{
 						auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
-						if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+						if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 						{
 							void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
-							if (AssetRef* refPtr = dynamic_cast<AssetRef*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+							if (AssetRef<Asset>* refPtr = dynamic_cast<AssetRef<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
 							{
 								if (refPtr->IsInstance())
 								{
@@ -117,8 +128,8 @@ namespace Editor
 					{
 						if (!mAssetObjectViewer)
 						{
-							mAssetObjectViewer = mnew ObjectViewer();
-							mAssetObjectViewer->SetParentContext(mParentContext);
+							mAssetObjectViewer = mmake<ObjectViewer>();
+							mAssetObjectViewer->SetParentContext(mParentContext.Lock());
 							mSpoiler->AddChild(mAssetObjectViewer);
 						}
 
@@ -149,9 +160,9 @@ namespace Editor
 
 	void AssetProperty::SetAssetId(const UID& id)
 	{
-		mCommonValue = id == 0 ? AssetRef() : AssetRef(id);
+		mCommonValue = id == UID::empty ? AssetRef<Asset>() : AssetRef<Asset>(id);
 
-		for (auto ptr : mValuesProxies)
+		for (auto& ptr : mValuesProxies)
 			SetProxy(ptr.first, mCommonValue);
 
 		SetCommonAssetId(id);
@@ -182,7 +193,7 @@ namespace Editor
 		return WString();
 	}
 
-	Button* AssetProperty::GetRemoveButton()
+	Ref<Button> AssetProperty::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
@@ -197,7 +208,7 @@ namespace Editor
 
 	void AssetProperty::SetCommonAssetId(const UID& id)
 	{
-		mCommonValue = id == 0 ? AssetRef() : AssetRef(id);
+		mCommonValue = id == UID::empty ? AssetRef<Asset>() : AssetRef<Asset>(id);
 		mValuesDifferent = false;
 
 		UpdateValueView();
@@ -216,13 +227,13 @@ namespace Editor
 	{
 		SetState("instance", true);
 
-		for (auto proxy : mValuesProxies)
+		for (auto& proxy : mValuesProxies)
 		{
 			auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
-			if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+			if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 			{
 				void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
-				if (AssetRef* refPtr = dynamic_cast<AssetRef*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+				if (AssetRef<Asset>* refPtr = dynamic_cast<AssetRef<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
 					refPtr->CreateInstance();
 			}
 		}
@@ -236,13 +247,13 @@ namespace Editor
 		SetState("instance", false);
 		mSpoiler->Collapse();
 
-		for (auto proxy : mValuesProxies)
+		for (auto& proxy : mValuesProxies)
 		{
 			auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
-			if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+			if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 			{
 				void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
-				if (AssetRef* refPtr = dynamic_cast<AssetRef*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+				if (AssetRef<Asset>* refPtr = dynamic_cast<AssetRef<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
 					refPtr->RemoveInstance();
 			}
 		}
@@ -275,25 +286,25 @@ namespace Editor
 		SetAssetType(type.InvokeStatic<const Type*>("GetAssetTypeStatic"));
 	}
 
-	AssetRef AssetProperty::GetProxy(IAbstractValueProxy* proxy) const
+	AssetRef<Asset> AssetProperty::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
 	{
 		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
 		auto proxySample = proxyType->CreateSample();
 		proxy->GetValuePtr(proxySample);
 		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
-		AssetRef* assetSample = dynamic_cast<AssetRef*>(objectSample);
-		AssetRef res = *assetSample;
+		BaseAssetRef* assetSample = dynamic_cast<BaseAssetRef*>(objectSample);
+		AssetRef<Asset> res = Ref(assetSample->GetAssetBase());
 		delete assetSample;
 		return res;
 	}
 
-	void AssetProperty::SetProxy(IAbstractValueProxy* proxy, const AssetRef& value)
+	void AssetProperty::SetProxy(const Ref<IAbstractValueProxy>& proxy, const AssetRef<Asset>& value)
 	{
 		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
 		auto proxySample = proxyType->CreateSample();
 		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
-		AssetRef* assetSample = dynamic_cast<AssetRef*>(objectSample);
-		*assetSample = value;
+		BaseAssetRef* assetSample = dynamic_cast<BaseAssetRef*>(objectSample);
+		assetSample->SetAssetBase(const_cast<Asset*>(value.Get()));
 		proxy->SetValuePtr(proxySample);
 		delete assetSample;
 	}
@@ -319,7 +330,7 @@ namespace Editor
 	void AssetProperty::OnKeyPressed(const Input::Key& key)
 	{
 		if (mBox && mBox->IsFocused() && (key == VK_DELETE || key == VK_BACK))
-			SetAssetIdByUser(0);
+			SetAssetIdByUser(UID::empty);
 	}
 
 	bool AssetProperty::IsUnderPoint(const Vec2F& point)
@@ -327,15 +338,15 @@ namespace Editor
 		return mBox->IsUnderPoint(point) && mBox->transparency > 0.1f;
 	}
 
-	void AssetProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void AssetProperty::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
 	}
 
-	void AssetProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void AssetProperty::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		auto assetIconsScroll = DynamicCast<AssetsIconsScrollArea>(group);
 		if (!assetIconsScroll)
 			return;
 
@@ -350,27 +361,29 @@ namespace Editor
 		mBox->SetState("focused", true);
 	}
 
-	void AssetProperty::OnDropped(ISelectableDragableObjectsGroup* group)
+	void AssetProperty::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		auto assetIconsScroll = DynamicCast<AssetsIconsScrollArea>(group);
 		if (!assetIconsScroll)
 			return;
 
-		auto lastSelectedAssetIcon = dynamic_cast<const AssetIcon*>(assetIconsScroll->GetDraggingObject());
+		auto lastSelectedAssetIcon = DynamicCast<AssetIcon>(assetIconsScroll->GetDraggingObject());
 		if (!lastSelectedAssetIcon ||
-			(mAssetType && !lastSelectedAssetIcon->GetAssetInfo().meta->GetAssetType()->IsBasedOn(*mAssetType)))
+			(mAssetType && !lastSelectedAssetIcon->GetAssetInfo()->meta->GetAssetType()->IsBasedOn(*mAssetType)))
 		{
 			return;
 		}
 
-		SetAssetIdByUser(lastSelectedAssetIcon->GetAssetInfo().meta->ID());
+		SetAssetIdByUser(lastSelectedAssetIcon->GetAssetInfo()->meta->ID());
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<AssetRef>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<AssetRef<Asset>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AssetProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<AssetRef<Asset>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AssetProperty, Editor__AssetProperty);

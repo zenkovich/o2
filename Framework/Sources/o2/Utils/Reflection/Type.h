@@ -45,7 +45,7 @@ namespace o2
     public:
         enum class Usage
         {
-            Regular, Object, Vector, Map, StringAccessor, Enumeration, Pointer, Property, Function
+            Regular, Object, Vector, Map, StringAccessor, Enumeration, Pointer, Reference, Property, Function
         };
 
         struct BaseType
@@ -81,9 +81,6 @@ namespace o2
 
         // Is this type based on other
         bool IsBasedOn(const Type& other) const;
-
-        // Returns pointer of type (type -> type*)
-        virtual const Type* GetPointerType() const = 0;
 
         // Returns type usage
         virtual Usage GetUsage() const;
@@ -132,11 +129,17 @@ namespace o2
         // Creates sample copy and returns him
         virtual void* CreateSample() const = 0;
 
+        // Creates sample copy and returns him if type is reference
+        virtual Ref<RefCounterable> CreateSampleRef() const;
+
+        // Destroys sample
+        virtual void DestroySample(void* sample) const = 0;
+
         // Returns filed pointer by path
         virtual void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const;
 
         // Returns abstract value proxy for object value
-        virtual IAbstractValueProxy* GetValueProxy(void* object) const = 0;
+        virtual Ref<IAbstractValueProxy> GetValueProxy(void* object) const = 0;
 
         // Serializes value from ptr
         virtual void Serialize(void* ptr, DataValue& data) const;
@@ -177,6 +180,7 @@ namespace o2
         Vector<StaticFunctionInfo*> mStaticFunctions; // Functions informations
 
         mutable Type* mPtrType = nullptr; // Pointer type from this
+        mutable Type* mRefType = nullptr; // Reference type from this
 
         ITypeSerializer* mSerializer = nullptr; // Value serializer
 
@@ -202,13 +206,16 @@ namespace o2
         TType(const String& name, int size);
 
         // Creates sample copy and returns him
-        void* CreateSample() const override;
+		void* CreateSample() const override;
+
+		// Creates sample copy and returns him if type is reference
+		Ref<RefCounterable> CreateSampleRef() const override;
+
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // -------------
@@ -223,14 +230,14 @@ namespace o2
         // Returns type usage
         Usage GetUsage() const override;
 
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
-
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
+        // Destroys sample
+        void DestroySample(void* sample) const override;
+
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
     public:
         static FunctionType* commonType;       // Common function type container
@@ -275,13 +282,16 @@ namespace o2
         TObjectType(const String& name, int size, void* (*castFromFunc)(void*), void* (*castToFunc)(void*));
 
         // Creates sample copy and returns him
-        void* CreateSample() const override;
+		void* CreateSample() const override;
+
+		// Creates sample copy and returns him if type is reference
+		Ref<RefCounterable> CreateSampleRef() const override;
+
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
-
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // ----------------
@@ -298,17 +308,17 @@ namespace o2
     // ------------
     // Pointer type
     // ------------
-    class PointerType: public Type
+    class PointerType : public Type
     {
     public:
         // Constructor
-        PointerType(const Type* unptrType, ITypeSerializer* serializer);
+        PointerType(const Type* baseType, ITypeSerializer* serializer);
 
         // Returns type usage
         Usage GetUsage() const override;
 
-        // Returns unpointed type
-        const Type* GetUnpointedType() const;
+        // Returns base type
+        const Type* GetBaseType() const;
 
         // Returns filed pointer by path
         void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
@@ -317,30 +327,96 @@ namespace o2
         void* CreateSample() const override;
 
         // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
     protected:
-        const Type* mUnptrType;
+        const Type* mBaseType;
     };
 
     // ------------------------
     // Specialized pointer type
     // ------------------------
     template<typename _type>
-    class TPointerType: public PointerType
+    class TPointerType : public PointerType
     {
     public:
         // Default constructor
-        TPointerType(const Type* unptrType);
+        TPointerType(const Type* baseType);
 
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
-        // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
+        // Returns abstract value proxy for object value
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
+    };
+
+    // ----------------------
+    // Reference type (Ref<Actor>)
+    // ----------------------
+    class ReferenceType : public Type
+    {
+    public:
+        // Constructor
+        ReferenceType(const Type* baseType, ITypeSerializer* serializer);
+
+        // Returns type usage
+        Usage GetUsage() const override;
+
+        // Returns base type
+        const Type* GetBaseType() const;
+
+        // Returns filed pointer by path
+        void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
+
+        // Creates sample copy and returns him
+        void* CreateSample() const override;
+
+        // Creates sample reference with object
+        virtual void* CreateSample(void* object) const = 0;
+
+        // Returns abstract value proxy for object value
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
+
+        // Returns raw pointer from reference pointer
+        virtual void* GetObjectRawPtr(void* refPtr) const = 0;
+
+        // Sets raw pointer to reference
+        virtual void SetObjectRawPtr(void* object, void* refPtr) = 0;
+
+    protected:
+        const Type* mBaseType;
+    };
+
+    // --------------------------
+    // Specialized reference type
+    // --------------------------
+    template<typename _type>
+    class TReferenceType : public ReferenceType
+    {
+    public:
+        // Default constructor
+        TReferenceType(const Type* baseType);
+
+        // Creates sample copy and returns him
+        void* CreateSample() const override;
+
+        // Destroys sample
+        void DestroySample(void* sample) const override;
+
+        // Returns abstract value proxy for object value
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
+
+        // Returns raw pointer from reference pointer
+        void* GetObjectRawPtr(void* refPtr) const override;
+
+        // Sets raw pointer to reference
+        void SetObjectRawPtr(void* object, void* refPtr) override;
+
+        // Creates sample reference with object
+        void* CreateSample(void* object) const override;
     };
 
     // -------------
@@ -381,11 +457,11 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
-        // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
+        // Returns abstract value proxy for object value
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
         // Returns filed pointer by path
         void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
@@ -422,7 +498,7 @@ namespace o2
         virtual void* GetObjectVectorElementPtr(void* object, int idx) const = 0;
 
         // Returns element's value proxy by index
-        virtual IAbstractValueProxy* GetObjectVectorElementProxy(void* object, int idx) const = 0;
+        virtual Ref<IAbstractValueProxy> GetObjectVectorElementProxy(void* object, int idx) const = 0;
 
         // Removes element at idx in vector
         virtual void RemoveObjectVectorElement(void* object, int idx) const = 0;
@@ -465,7 +541,7 @@ namespace o2
         void* GetObjectVectorElementPtr(void* object, int idx) const override;
 
         // Returns element's value proxy by index
-        IAbstractValueProxy* GetObjectVectorElementProxy(void* object, int idx) const override;
+        Ref<IAbstractValueProxy> GetObjectVectorElementProxy(void* object, int idx) const override;
 
         // Removes element at idx in vector
         void RemoveObjectVectorElement(void* object, int idx) const override;
@@ -473,11 +549,11 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
-        // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
+        // Returns abstract value proxy for object value
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // --------------------------
@@ -529,11 +605,11 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
-        // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
+        // Returns abstract value proxy for object value
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // -------------------------------------------
@@ -570,11 +646,11 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
-        // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
+        // Returns abstract value proxy for object value
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
 
         // Returns value pointer by key
         void* GetValue(void* object, const String& key) const override;
@@ -623,11 +699,11 @@ namespace o2
         // Creates sample copy and returns him
         void* CreateSample() const override;
 
-        // Returns abstract value proxy for object value
-        IAbstractValueProxy* GetValueProxy(void* object) const override;
+        // Destroys sample
+        void DestroySample(void* sample) const override;
 
-        // Returns pointer of type (type -> type*)
-        const Type* GetPointerType() const override;
+        // Returns abstract value proxy for object value
+        Ref<IAbstractValueProxy> GetValueProxy(void* object) const override;
     };
 
     // --------------------------
@@ -918,20 +994,27 @@ namespace o2
     void* TType<_type>::CreateSample() const
     {
         return mnew _type();
-    }
+	}
+
+	template<typename _type>
+	Ref<RefCounterable> TType<_type>::CreateSampleRef() const
+	{
+        if constexpr (std::is_base_of<RefCounterable, _type>::value)
+			return mmake<_type>();
+		else
+			return nullptr;
+	}
+
     template<typename _type>
-    IAbstractValueProxy* TType<_type>::GetValueProxy(void* object) const
+    void TType<_type>::DestroySample(void* sample) const
     {
-        return mnew PointerValueProxy<_type>((_type*)object);
+        delete (_type*)sample;
     }
 
     template<typename _type>
-    const Type* TType<_type>::GetPointerType() const
+    Ref<IAbstractValueProxy> TType<_type>::GetValueProxy(void* object) const
     {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_type>(this);
-
-        return mPtrType;
+        return mmake<PointerValueProxy<_type>>((_type*)object);
     }
 
     // --------------------------
@@ -946,34 +1029,45 @@ namespace o2
     template<typename _type>
     void* TObjectType<_type>::CreateSample() const
     {
-        if constexpr (IsConstructible<_type>::value || std::is_constructible<_type>::value)
+        if constexpr (IsConstructible<_type>::value && std::is_constructible<_type>::value)
             return mnew _type();
         else
         {
             Assert(false, "Type isn't constructible");
             return nullptr;
         }
+	}
+
+	template<typename _type>
+	Ref<RefCounterable> TObjectType<_type>::CreateSampleRef() const
+	{
+        if constexpr (std::is_base_of<RefCounterable, _type>::value)
+        {
+            if constexpr (HasCastToRefCounterable<_type>::value)
+                return _type::CastToRefCounterable(mmake<_type>());
+            else
+                return mmake<_type>();
+        }
+        
+        return nullptr;
+	}
+
+    template<typename _type>
+    void TObjectType<_type>::DestroySample(void* sample) const
+    {
+        delete (_type*)sample;
     }
 
     template<typename _type>
-    IAbstractValueProxy* TObjectType<_type>::GetValueProxy(void* object) const
+    Ref<IAbstractValueProxy> TObjectType<_type>::GetValueProxy(void* object) const
     {
         if constexpr (std::is_copy_constructible<_type>::value)
-            return mnew PointerValueProxy<_type>((_type*)object);
+            return mmake<PointerValueProxy<_type>>((_type*)object);
         else
         {
             Assert(false, "Type isn't copy constructible");
             return nullptr;
         }
-    }
-
-    template<typename _type>
-    const Type* TObjectType<_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_type>(this);
-
-        return mPtrType;
     }
 
     // ------------------------------
@@ -990,8 +1084,8 @@ namespace o2
     // -----------------------------
 
     template<typename _type>
-    TPointerType<_type>::TPointerType(const Type* unptrType):
-        PointerType(unptrType, mnew TypeSerializer<_type*>())
+    TPointerType<_type>::TPointerType(const Type * baseType) :
+        PointerType(baseType, mnew TypeSerializer<_type*>())
     {}
 
     template<typename _type>
@@ -1001,18 +1095,60 @@ namespace o2
     }
 
     template<typename _type>
-    IAbstractValueProxy* TPointerType<_type>::GetValueProxy(void* object) const
+    void TPointerType<_type>::DestroySample(void* sample) const
     {
-        return mnew PointerValueProxy<_type*>((_type**)object);
+        delete (_type**)sample;
     }
 
     template<typename _type>
-    const Type* TPointerType<_type>::GetPointerType() const
+    Ref<IAbstractValueProxy> TPointerType<_type>::GetValueProxy(void* object) const
     {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_type>(this);
+        return mmake<PointerValueProxy<_type*>>((_type**)object);
+    }
 
-        return mPtrType;
+    // -------------------------------
+    // TReferenceType<> implementation
+    // -------------------------------
+
+    template<typename _type>
+    TReferenceType<_type>::TReferenceType(const Type* baseType) :
+        ReferenceType(baseType, mnew TypeSerializer<Ref<_type>>())
+    {}
+
+    template<typename _type>
+    void* TReferenceType<_type>::CreateSample() const
+    {
+        return mnew Ref<_type>();
+    }
+
+    template<typename _type>
+    Ref<IAbstractValueProxy> TReferenceType<_type>::GetValueProxy(void* object) const
+    {
+        return mmake<RefPointerValueProxy<_type>>((Ref<_type>*)object);
+    }
+
+    template<typename _type>
+    void TReferenceType<_type>::DestroySample(void* sample) const
+    {
+        delete (Ref<_type>*)sample;
+    }
+
+    template<typename _type>
+    void* TReferenceType<_type>::GetObjectRawPtr(void* refPtr) const
+    {
+        return ((Ref<_type>*)refPtr)->Get();
+    }
+
+    template<typename _type>
+    void TReferenceType<_type>::SetObjectRawPtr(void* object, void* refPtr)
+    {
+        *((Ref<_type>*)refPtr) = Ref<_type>((_type*)object);
+    }
+
+    template<typename _type>
+    void* TReferenceType<_type>::CreateSample(void* object) const
+    {
+        return mnew Ref<_type>((_type*)object);
     }
 
     // ------------------------------
@@ -1032,19 +1168,15 @@ namespace o2
     {
         return nullptr;
     }
-    template<typename _value_type, typename _property_type>
-    IAbstractValueProxy* TPropertyType<_value_type, _property_type>::GetValueProxy(void* object) const
-    {
-        return mnew PropertyValueProxy<_value_type, _property_type>((_property_type*)object);
-    }
 
     template<typename _value_type, typename _property_type>
-    const Type* TPropertyType<_value_type, _property_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_property_type>(this);
+    void TPropertyType<_value_type, _property_type>::DestroySample(void* sample) const
+    {}
 
-        return mPtrType;
+    template<typename _value_type, typename _property_type>
+    Ref<IAbstractValueProxy> TPropertyType<_value_type, _property_type>::GetValueProxy(void* object) const
+    {
+        return mmake<PropertyValueProxy<_value_type, _property_type>>((_property_type*)object);
     }
 
     template<typename _value_type, typename _property_type>
@@ -1104,7 +1236,7 @@ namespace o2
     }
 
     template<typename _element_type>
-    IAbstractValueProxy* TVectorType<_element_type>::GetObjectVectorElementProxy(void* object, int idx) const
+    Ref<IAbstractValueProxy> TVectorType<_element_type>::GetObjectVectorElementProxy(void* object, int idx) const
     {
         if (idx < 0 || idx >= ((Vector<_element_type>*)object)->Count())
             return nullptr;
@@ -1136,9 +1268,15 @@ namespace o2
     }
 
     template<typename _element_type>
-    IAbstractValueProxy* TVectorType<_element_type>::GetValueProxy(void* object) const
+    void TVectorType<_element_type>::DestroySample(void* sample) const
     {
-        return mnew PointerValueProxy<Vector<_element_type>>((Vector<_element_type>*)object);
+        delete (Vector<_element_type>*)sample;
+    }
+
+    template<typename _element_type>
+    Ref<IAbstractValueProxy> TVectorType<_element_type>::GetValueProxy(void* object) const
+    {
+        return mmake<PointerValueProxy<Vector<_element_type>>>((Vector<_element_type>*)object);
     }
 
     template<typename _element_type>
@@ -1157,15 +1295,6 @@ namespace o2
         mCountFieldInfo = mnew FieldInfo(this, "count", 0, &GetTypeOf<int>(), ProtectSection::Public,
                                          mnew DefaultValue<int>(0),
                                          mnew VectorCountFieldSerializer<_element_type>());
-    }
-
-    template<typename _element_type>
-    const Type* TVectorType<_element_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<Vector<_element_type>>(this);
-
-        return mPtrType;
     }
 
     template<typename _element_type>
@@ -1258,18 +1387,15 @@ namespace o2
     }
 
     template<typename _key_type, typename _value_type>
-    IAbstractValueProxy* TMapType<_key_type, _value_type>::GetValueProxy(void* object) const
+    void TMapType<_key_type, _value_type>::DestroySample(void* sample) const
     {
-        return mnew PointerValueProxy<Map<_key_type, _value_type>>((Map<_key_type, _value_type>*)object);
+        delete (Map<_key_type, _value_type>*)sample;
     }
 
     template<typename _key_type, typename _value_type>
-    const Type* TMapType<_key_type, _value_type>::GetPointerType() const
+    Ref<IAbstractValueProxy> TMapType<_key_type, _value_type>::GetValueProxy(void* object) const
     {
-        if (!mPtrType)
-            Reflection::InitializePointerType<Map<_key_type, _value_type>>(this);
-
-        return mPtrType;
+        return mmake<PointerValueProxy<Map<_key_type, _value_type>>>((Map<_key_type, _value_type>*)object);
     }
 
     // ----------------------------------------
@@ -1291,9 +1417,13 @@ namespace o2
     }
 
     template<typename _return_type, typename _accessor_type>
-    IAbstractValueProxy* TStringPointerAccessorType<_return_type, _accessor_type>::GetValueProxy(void* object) const
+    void TStringPointerAccessorType<_return_type, _accessor_type>::DestroySample(void* sample) const
+    {}
+
+    template<typename _return_type, typename _accessor_type>
+    Ref<IAbstractValueProxy> TStringPointerAccessorType<_return_type, _accessor_type>::GetValueProxy(void* object) const
     {
-        return mnew PointerValueProxy<_accessor_type>((_accessor_type*)object);
+        return mmake<PointerValueProxy<_accessor_type>>((_accessor_type*)object);
     }
 
     template<typename _return_type, typename _accessor_type>
@@ -1310,19 +1440,10 @@ namespace o2
     }
 
     template<typename _return_type, typename _accessor_type>
-    const Type* TStringPointerAccessorType<_return_type, _accessor_type>::GetPointerType() const
-    {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_accessor_type>(this);
-
-        return mPtrType;
-    }
-
-    template<typename _return_type, typename _accessor_type>
     void* TStringPointerAccessorType<_return_type, _accessor_type>::GetValue(void* object, const String& key) const
     {
         _accessor_type* accessor = (_accessor_type*)object;
-        return (void*)(accessor->Get(key));
+        return (void*)(accessor->Get(key).Get());
     }
 
     template<typename _return_type, typename _accessor_type>
@@ -1332,7 +1453,7 @@ namespace o2
         auto all = accessor->GetAll();
         Map<String, void*> res;
         for (auto& kv : all)
-            res.Add(kv.first, (void*)(kv.second));
+            res.Add(kv.first, (void*)(kv.second.Get()));
 
         return res;
     }
@@ -1359,18 +1480,15 @@ namespace o2
     }
 
     template<typename _type>
-    IAbstractValueProxy* TEnumType<_type>::GetValueProxy(void* object) const
+    void TEnumType<_type>::DestroySample(void* sample) const
     {
-        return mnew PointerValueProxy<_type>((_type*)object);
+        delete (_type*)sample;
     }
 
     template<typename _type>
-    const Type* TEnumType<_type>::GetPointerType() const
+    Ref<IAbstractValueProxy> TEnumType<_type>::GetValueProxy(void* object) const
     {
-        if (!mPtrType)
-            Reflection::InitializePointerType<_type>(this);
-
-        return mPtrType;
+        return mmake<PointerValueProxy<_type>>((_type*)object);
     }
 
     FUNDAMENTAL_META(RectF)

@@ -6,18 +6,18 @@
 
 namespace o2
 {
-    Image::Image():
-        Widget()
+    Image::Image(RefCounter* refCounter):
+        Widget(refCounter)
     {
-        mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
+        mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
     }
 
-    Image::Image(const Image& other):
-        Widget(other), image(this), imageAsset(this), imageName(this)
+    Image::Image(RefCounter* refCounter, const Image& other):
+        Widget(refCounter, other), image(this), imageAsset(this), imageName(this)
     {
         mImage = GetLayerDrawable<Sprite>("image");
         if (!mImage)
-            mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
+            mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
     }
 
     Image& Image::operator=(const Image& other)
@@ -26,16 +26,13 @@ namespace o2
 
         mImage = GetLayerDrawable<Sprite>("image");
         if (!mImage)
-            mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
+            mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
 
         return *this;
     }
 
-    void Image::SetImage(Sprite* sprite)
+    void Image::SetImage(const Ref<Sprite>& sprite)
     {
-        if (mImage)
-            delete mImage;
-
         if (auto layer = FindLayer("image"))
         {
             layer->SetDrawable(sprite);
@@ -43,33 +40,33 @@ namespace o2
         }
     }
 
-    Sprite* Image::GetImage()
+    Ref<Sprite> Image::GetImage()
     {
-        return mImage;
+        return mImage.Lock();
     }
 
-    void Image::SetImageAsset(const ImageAssetRef& asset)
+    void Image::SetImageAsset(const AssetRef<ImageAsset>& asset)
     {
         if (!mImage)
             mImage = GetLayerDrawable<Sprite>("image");
 
         if (!mImage)
-            mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
+            mImage = DynamicCast<Sprite>(AddLayer("image", mmake<Sprite>())->GetDrawable());
 
-        mImage->LoadFromImage(asset);
+        mImage.Lock()->LoadFromImage(asset);
     }
 
-    ImageAssetRef Image::GetImageAsset() const
+    AssetRef<ImageAsset> Image::GetImageAsset() const
     {
         if (mImage)
-            return mImage->GetImageAsset();
+            return mImage.Lock()->GetImageAsset();
 
-        return ImageAssetRef();
+        return AssetRef<ImageAsset>();
     }
 
     void Image::SetImageName(const String& name)
     {
-        SetImageAsset(ImageAssetRef(name));
+        SetImageAsset(AssetRef<ImageAsset>(name));
     }
 
     String Image::GetImageName() const
@@ -87,7 +84,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Image>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Image>);
 // --- META ---
 
 DECLARE_CLASS(o2::Image, o2__Image);

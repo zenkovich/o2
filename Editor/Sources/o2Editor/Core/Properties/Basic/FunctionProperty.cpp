@@ -16,13 +16,14 @@ using namespace o2;
 
 namespace Editor
 {
-	FunctionProperty::FunctionProperty()
+	FunctionProperty::FunctionProperty(RefCounter* refCounter):
+		IPropertyField(refCounter)
 	{
 		InitializeControls();
 	}
 
-	FunctionProperty::FunctionProperty(const FunctionProperty& other):
-		IPropertyField(other)
+	FunctionProperty::FunctionProperty(RefCounter* refCounter, const FunctionProperty& other):
+		IPropertyField(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -53,10 +54,10 @@ namespace Editor
 			mSpoiler->onExpand = THIS_FUNC(OnExpand);
 
 		mSpoiler->borderTop = 5;
-		mSpoiler->AddLayer("func icon", mnew Sprite("ui/function_icon.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(6, 0)));
+		mSpoiler->AddLayer("func icon", mmake<Sprite>("ui/function_icon.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(6, 0)));
 		mSpoiler->GetLayer("caption")->layout.offsetLeft = 24;
 
-		mHeaderContainer = mnew HorizontalLayout();
+		mHeaderContainer = mmake<HorizontalLayout>();
 		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 20, 0);
 		mHeaderContainer->baseCorner = BaseCorner::Right;
 		mHeaderContainer->expandHeight = false;
@@ -88,7 +89,7 @@ namespace Editor
 		sampleCaption->horAlign = HorAlign::Left;
 		mWidgetSample->AddChild(sampleCaption);
 
-		auto controllersContainerWrapper = mnew Widget();
+		auto controllersContainerWrapper = mmake<Widget>();
 		*controllersContainerWrapper->layout = WidgetLayout::BothStretch();
 		controllersContainerWrapper->name = "controls";
 		mWidgetSample->AddChild(controllersContainerWrapper);
@@ -101,7 +102,7 @@ namespace Editor
 		controlsContainer->name = "layout";
 		controllersContainerWrapper->AddChild(controlsContainer);
 
-		auto sampleRefProperty = dynamic_cast<ActorProperty*>(o2UI.CreateWidget<ActorProperty>());
+		auto sampleRefProperty = o2UI.CreateWidget<ActorProperty>();
 		sampleRefProperty->name = "actor ref";
 		controlsContainer->AddChild(sampleRefProperty);
 
@@ -128,10 +129,7 @@ namespace Editor
 	}
 
 	FunctionProperty::~FunctionProperty()
-	{
-		for (auto instance : mInstances)
-			delete instance;
-	}
+	{}
 
 	void FunctionProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
@@ -144,10 +142,10 @@ namespace Editor
 		mInstances.Clear();
 
 		int proxyIdx = 0;
-		for (auto valueProxy : mValuesProxies)
+		for (auto& valueProxy : mValuesProxies)
 		{
-			auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first);
-			auto funcProxyProto = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first);
+			auto funcProxy = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first);
+			auto funcProxyProto = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first);
 
 			if (!funcProxy)
 				continue;
@@ -160,7 +158,7 @@ namespace Editor
 				if (auto actorSubscription = dynamic_cast<const IActorSubscription*>(f))
 				{
 					if (idx > mInstances.Count() - 1)
-						mInstances.Add(mnew FunctionInstance());
+						mInstances.Add(mmake<FunctionInstance>());
 
 					mInstances[idx++]->values.Add({ const_cast<IActorSubscription*>(actorSubscription), nullptr });
 				}
@@ -192,12 +190,12 @@ namespace Editor
 		auto prevInstances = mInstances;
 		RefreshInstances();
 
-		mSpoiler->RemoveAllChildren(false);
+		mSpoiler->RemoveAllChildren();
 
 		int idx = 0;
 		for (auto& instance : mInstances)
 		{
-			auto prevInstanceIdx = prevInstances.IndexOf([&](FunctionInstance* x) { return x->values == instance->values; });
+			auto prevInstanceIdx = prevInstances.IndexOf([&](auto& x) { return x->values == instance->values; });
 			if (prevInstanceIdx >= 0)
 			{
 				instance = prevInstances[prevInstanceIdx];
@@ -214,7 +212,7 @@ namespace Editor
 				instance->funcDropDown = widget->funcDropDown;
 			}
 
-			instance->refProperty->SelectValueAndPrototypePointers<ActorRef, IActorSubscription>(
+			instance->refProperty->SelectValueAndPrototypePointers<Ref<Actor>, IActorSubscription>(
 				instance->values.Convert<IActorSubscription*>([](auto p) { return p.first; }),
 				instance->values.Convert<IActorSubscription*>([](auto p) { return p.second; }),
 				[](IActorSubscription* s)
@@ -230,7 +228,7 @@ namespace Editor
 				[=](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)
 			{
 				instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-											  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : ComponentRef(),
+											  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
 											  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
 			};
 
@@ -239,23 +237,20 @@ namespace Editor
 			instance->removeBtn->onClick = [=]() { OnRemovePressed(instance); };
 
 			instance->UpdateFunctionsList(instance->refProperty->GetCommonValue(),
-										  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : ComponentRef(),
+										  !instance->values.IsEmpty() ? instance->values[0].first->componentRef : Ref<Component>(),
 										  !instance->values.IsEmpty() ? instance->values[0].first->method : String());
 
 			instance->caption->text = "#" + (String)idx;
 			mSpoiler->AddChild(instance->layout);
 			idx++;
 		}
-
-		for (auto instance : prevInstances)
-			delete instance;
 	}
 
 	void FunctionProperty::OnAddPressed()
 	{
-		for (auto valueProxy : mValuesProxies)
+		for (auto& valueProxy : mValuesProxies)
 		{
-			if (auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first))
+			if (auto funcProxy = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first))
 				funcProxy->GetValuePointer()->AddActorSubscription();
 		}
 
@@ -263,13 +258,13 @@ namespace Editor
 		Refresh();
 	}
 
-	void FunctionProperty::OnRemovePressed(FunctionInstance* instance)
+	void FunctionProperty::OnRemovePressed(const Ref<FunctionInstance>& instance)
 	{
-		for (auto valueProxy : mValuesProxies)
+		for (auto& valueProxy : mValuesProxies)
 		{
-			if (auto funcProxy = dynamic_cast<PointerValueProxy<AbstractFunction>*>(valueProxy.first))
+			if (auto funcProxy = DynamicCast<PointerValueProxy<AbstractFunction>>(valueProxy.first))
 			{
-				for (auto value : instance->values)
+				for (auto& value : instance->values)
 					funcProxy->GetValuePointer()->RemoveFunction(dynamic_cast<IAbstractFunction*>(value.first));
 			}
 		}
@@ -277,12 +272,12 @@ namespace Editor
 		Refresh();
 	}
 
-	FunctionProperty::FunctionInstance* FunctionProperty::CreateWidget()
+	Ref<FunctionProperty::FunctionInstance> FunctionProperty::CreateWidget()
 	{
-		FunctionInstance* res = mnew FunctionInstance();
+		auto res = mmake<FunctionInstance>();
 
 		if (mWidgetsBuffer.IsEmpty())
-			res->layout = mWidgetSample->CloneAs<HorizontalLayout>();
+			res->layout = mWidgetSample->CloneAsRef<HorizontalLayout>();
 		else
 			res->layout = mWidgetsBuffer.PopBack();
 
@@ -294,7 +289,7 @@ namespace Editor
 		return res;
 	}
 
-	void FunctionProperty::FunctionInstance::UpdateFunctionsList(const ActorRef& actor, const ComponentRef& selectedComponent,
+	void FunctionProperty::FunctionInstance::UpdateFunctionsList(const Ref<Actor>& actor, const Ref<Component>& selectedComponent,
 																 const String& selectedMethod)
 	{
 		funcDropDown->RemoveAllItems();
@@ -305,12 +300,13 @@ namespace Editor
 
 		int selectedIdx = -1;
 
-		auto collectFunctions = [&](const String& typeName, const String& iconName, const Vector<String>& functionsList, Component* comp)
+		auto collectFunctions = [&](const String& typeName, const String& iconName, const Vector<String>& functionsList, 
+									const Ref<Component>& comp)
 		{
 			auto typeItem = funcDropDown->AddItem();
 			functionsDropdownMap.Add({ nullptr, "" });
 
-			typeItem->AddLayer("back", mnew Sprite(Color4(0, 0, 0, 0)))->transparency = 0.05f;
+			typeItem->AddLayer("back", mmake<Sprite>(Color4(0, 0, 0, 0)))->transparency = 0.05f;
 
 			auto icon = o2UI.CreateImage(iconName);
 			*icon->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20));
@@ -322,7 +318,7 @@ namespace Editor
 			text->horAlign = HorAlign::Left;
 			typeItem->AddChild(text);
 
-			for (auto funcName : functionsList)
+			for (auto& funcName : functionsList)
 			{
 				auto funcItem = funcDropDown->AddItem();
 
@@ -339,11 +335,12 @@ namespace Editor
 			}
 		};
 
-		auto collectFunctionsByType = [&](const String& typeName, const String& iconName, const Type& type, Component* comp)
+		auto collectFunctionsByType = [&](const String& typeName, const String& iconName, const Type& type, 
+										  const Ref<Component>& comp)
 		{
 			Vector<String> functionsList;
 
-			for (auto funcInfo : type.GetFunctions())
+			for (auto& funcInfo : type.GetFunctions())
 			{
 				if (funcInfo->GetProtectionSection() == ProtectSection::Public && funcInfo->GetParameters().IsEmpty() &&
 					funcInfo->GetReturnType() == &TypeOf(void))
@@ -376,10 +373,10 @@ namespace Editor
 		auto& actorType = actor->GetType();
 		collectFunctionsByType(getTypeName(actorType), getIconName(actorType), actorType, nullptr);
 
-		for (auto component : actor->GetComponents())
+		for (auto& component : actor->GetComponents())
 		{
 			auto& componentType = component->GetType();
-			if (auto scriptingComponent = dynamic_cast<ScriptableComponent*>(component))
+			if (auto scriptingComponent = DynamicCast<ScriptableComponent>(component))
 			{
 				Vector<String> functionsList;
 
@@ -447,10 +444,10 @@ namespace Editor
 	{
 		mSpoiler->SetCaption(text);
 
-		Text* spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
+		auto spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
 		if (spoilerCaptionLayer)
 		{
-			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetFontHeight());
+			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont(), spoilerCaptionLayer->GetFontHeight());
 			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
 		}
 	}
@@ -460,7 +457,7 @@ namespace Editor
 		return mSpoiler->GetCaption();
 	}
 
-	Button* FunctionProperty::GetRemoveButton()
+	Ref<Button> FunctionProperty::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
@@ -506,6 +503,8 @@ namespace Editor
 		return values == other.values;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::FunctionProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::FunctionProperty, Editor__FunctionProperty);

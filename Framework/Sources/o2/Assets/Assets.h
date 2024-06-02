@@ -1,16 +1,13 @@
 #pragma once
 
-#include "o2/Assets/Asset.h"
-#include "o2/Assets/AssetInfo.h"
 #include "o2/Assets/AssetsTree.h"
-#include "o2/Utils/FileSystem/FileInfo.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 
 // Assets system access macros
-#define  o2Assets o2::Assets::Instance()
+#define o2Assets o2::Assets::Instance()
 
 namespace Editor
 {
@@ -20,12 +17,14 @@ namespace Editor
 namespace o2
 {
     class LogStream;
-    class AssetRef;
+    struct AssetInfo;
+
+    FORWARD_CLASS_REF(Asset);
 
     // ----------------
     // Assets utilities
     // ----------------
-    class Assets : public Singleton<Assets>
+    class Assets : public Singleton<Assets>, public RefCounterable
     {
     public:
         PROPERTIES(Assets);
@@ -69,14 +68,22 @@ namespace o2
         static const Type* GetAssetTypeByExtension(const String& extension);
 
         // Returns asset reference by path
-        AssetRef GetAssetRef(const String& path);
+        AssetRef<Asset> GetAssetRef(const String& path);
+
+        // Returns asset reference by path
+        template<typename _asset_type>
+        AssetRef<_asset_type> GetAssetRefByType(const String& path);
 
         // Returns asset reference by id
-        AssetRef GetAssetRef(const UID& id);
+        AssetRef<Asset> GetAssetRef(const UID& id);
+
+        // Returns asset reference by id
+        template<typename _asset_type>
+        AssetRef<_asset_type> GetAssetRefByType(const UID& id);
 
         // Creates asset type _asset_type
         template<typename _asset_type, typename ... _args>
-        AssetRef CreateAsset(_args ... args);
+        AssetRef<Asset> CreateAsset(_args ... args);
 
         // Returns true if asset exist by path
         bool IsAssetExist(const String& path) const;
@@ -85,7 +92,7 @@ namespace o2
         bool IsAssetExist(const UID& id) const;
 
         // Removes asset
-        bool RemoveAsset(const AssetRef& asset);
+        bool RemoveAsset(const AssetRef<Asset>& asset);
 
         // Removes asset by path
         bool RemoveAsset(const String& path);
@@ -94,7 +101,7 @@ namespace o2
         bool RemoveAsset(const UID& id);
 
         // Copies asset
-        bool CopyAsset(const AssetRef& asset, const String& dest);
+        bool CopyAsset(const AssetRef<Asset>& asset, const String& dest);
 
         // Copies asset by path
         bool CopyAsset(const String& path, const String& dest);
@@ -103,7 +110,7 @@ namespace o2
         bool CopyAsset(const UID& id, const String& dest);
 
         // Moves asset to new path
-        bool MoveAsset(const AssetRef& asset, const String& newPath);
+        bool MoveAsset(const AssetRef<Asset>& asset, const String& newPath);
 
         // Moves asset by path to new path
         bool MoveAsset(const String& path, const String& newPath);
@@ -115,7 +122,7 @@ namespace o2
         bool MoveAssets(const Vector<UID>& assets, const String& destPath);
 
         // Renames asset to new path
-        bool RenameAsset(const AssetRef& asset, const String& newName);
+        bool RenameAsset(const AssetRef<Asset>& asset, const String& newName);
 
         // Renames asset by path to new path
         bool RenameAsset(const String& path, const String& newName);
@@ -124,7 +131,7 @@ namespace o2
         bool RenameAsset(const UID& id, const String& newName);
 
         // Returns all assets trees
-        const Vector<AssetsTree*>& GetAssetsTrees() const;
+        const Vector<Ref<AssetsTree>>& GetAssetsTrees() const;
 
         // Returns main tree
         const AssetsTree& GetAssetsTree() const;
@@ -141,44 +148,36 @@ namespace o2
 #endif
 
     protected:
-        struct AssetCache
-        {
-            Asset* asset = nullptr;
-            int    referencesCount = 0;
+        Ref<AssetsTree>         mMainAssetsTree; // Main assets tree
+        Vector<Ref<AssetsTree>> mAssetsTrees;    // Assets trees
 
-            ~AssetCache();
-        };
+        Ref<LogStream> mLog; // Log stream
 
-    protected:
-        AssetsTree*         mMainAssetsTree; // Main assets tree
-        Vector<AssetsTree*> mAssetsTrees;    // Assets trees
-        LogStream*          mLog;            // Log stream
-
-        Vector<AssetCache*>      mCachedAssets;       // Current cached assets
-        Map<String, AssetCache*> mCachedAssetsByPath; // Current cached assets by path
-        Map<UID, AssetCache*>    mCachedAssetsByUID;  // Current cached assets by uid
+        Vector<AssetRef<Asset>>      mCachedAssets;       // Current cached assets
+        Map<String, AssetRef<Asset>> mCachedAssetsByPath; // Current cached assets by path
+        Map<UID, AssetRef<Asset>>    mCachedAssetsByUID;  // Current cached assets by uid
 
     protected:
         // Loads asset infos
         void LoadAssetsTree();
 
         // Returns asset cache by path
-        AssetCache* FindAssetCache(const String& path);
+        AssetRef<Asset> FindAssetCache(const String& path) const;
 
         // Returns asset cache by id
-        AssetCache* FindAssetCache(const UID& id);
+        AssetRef<Asset> FindAssetCache(const UID& id) const;
 
         // Clears assets cache
         void ClearAssetsCache();
 
         // Adds asset to cache
-        AssetCache* AddAssetCache(Asset* asset);
+        AssetRef<Asset> AddAssetCache(Asset* asset);
 
         // Removes asset from cache by UID and path
         void RemoveAssetCache(Asset* asset);
 
         // Updates asset cached path and id
-        AssetCache* UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
+        AssetRef<Asset> UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
 
         // Removes asset by info
         bool RemoveAsset(const AssetInfo& info);
@@ -197,8 +196,10 @@ namespace o2
         Vector<UID> ReloadAssetsTree();
 #endif
 
+		template<typename _asset_type>
+		friend class AssetRef;
+
         friend class Asset;
-        friend class AssetRef;
         friend class FolderAsset;
         friend class Editor::EditorApplication;
     };
@@ -208,19 +209,27 @@ namespace o2
 
 namespace o2
 {
-    template<typename _asset_type, typename ... _args>
-    AssetRef Assets::CreateAsset(_args ... args)
+    template<typename _asset_type>
+    AssetRef<_asset_type> Assets::GetAssetRefByType(const String& path)
     {
-        _asset_type* newAset = mnew _asset_type(args ...);
+        return DynamicCast<_asset_type>(GetAssetRef(path).GetRef());
+    }
 
-        auto cached = mnew AssetCache();
-        cached->asset = newAset;
-        cached->referencesCount = 0;
+    template<typename _asset_type>
+    AssetRef<_asset_type> Assets::GetAssetRefByType(const UID& id)
+    {
+        return DynamicCast<_asset_type>(GetAssetRef(id).GetRef());
+    }
 
-        mCachedAssets.Add(cached);
-        mCachedAssetsByUID[cached->asset->GetUID()] = cached;
+    template<typename _asset_type, typename ... _args>
+    AssetRef<Asset> Assets::CreateAsset(_args ... args)
+    {
+        auto newAset = AssetRef(mmake<_asset_type>(args ...));
 
-        return AssetRef(newAset, &cached->referencesCount);
+        mCachedAssets.Add(newAset);
+        mCachedAssetsByUID[newAset->GetUID()] = newAset;
+
+        return newAset;
     }
 
 }

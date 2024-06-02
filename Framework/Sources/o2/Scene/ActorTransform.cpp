@@ -3,6 +3,7 @@
 
 #include "o2/Application/Input.h"
 #include "o2/Scene/Actor.h"
+#include "o2/Utils/System/Time/Time.h"
 
 namespace o2
 {
@@ -418,9 +419,9 @@ namespace o2
         return GetRect().bottom;
     }
 
-    Actor* ActorTransform::GetOwnerActor() const
+    Ref<Actor> ActorTransform::GetOwnerActor() const
     {
-        return mData->owner;
+        return mData->owner.Lock();
     }
 
     bool ActorTransform::IsDirty() const
@@ -694,7 +695,7 @@ namespace o2
         return dx >= 0.0f && dx <= rs.x && dy >= 0.0f && dy < rs.y;
     }
 
-    void ActorTransform::SetOwner(Actor* actor)
+    void ActorTransform::SetOwner(const Ref<Actor>& actor)
     {
         mData->owner = actor;
         SetDirty();
@@ -702,12 +703,14 @@ namespace o2
 
     void ActorTransform::SetDirty(bool fromParent /*= false*/)
     {
-        mData->dirtyFrame = o2Time.GetCurrentFrame();
+        if (o2::Time::IsSingletonInitialzed())
+            mData->dirtyFrame = o2Time.GetCurrentFrame();
+
         mData->updateFrame = 0;
 
 #if IS_EDITOR
         if (mData->owner && !fromParent)
-            mData->owner->OnChanged();
+            mData->owner.Lock()->OnChanged();
 #endif
     }
 
@@ -718,7 +721,7 @@ namespace o2
         UpdateWorldRectangleAndTransform();
 
         mData->updateFrame = mData->dirtyFrame;
-        mData->owner->OnTransformUpdated();
+        mData->owner.Lock()->OnTransformUpdated();
     }
 
     void ActorTransform::UpdateRectangle()
@@ -740,9 +743,10 @@ namespace o2
 
     void ActorTransform::UpdateWorldRectangleAndTransform()
     {
-        if (mData->owner && mData->owner->mParent)
+        auto ownerActor = mData->owner.Lock();
+        if (mData->owner && ownerActor->mParent)
         {
-            auto parentData = mData->owner->mParent->transform->mData;
+            auto parentData = ownerActor->mParent.Lock()->transform->mData;
             mData->parentRectangle = parentData->worldRectangle;
             mData->parentRectangePosition = mData->parentRectangle.LeftBottom() + parentData->size*parentData->pivot;
             mData->worldRectangle.left   = mData->parentRectangePosition.x + mData->rectangle.left;
@@ -750,7 +754,7 @@ namespace o2
             mData->worldRectangle.bottom = mData->parentRectangePosition.y + mData->rectangle.bottom;
             mData->worldRectangle.top    = mData->parentRectangePosition.y + mData->rectangle.top;
 
-            mData->parentTransform = mData->owner->mParent->transform->mData->worldNonSizedTransform;
+            mData->parentTransform = ownerActor->mParent.Lock()->transform->mData->worldNonSizedTransform;
             mData->worldNonSizedTransform = mData->nonSizedTransform*mData->parentTransform;
             mData->worldTransform = mData->transform*mData->parentTransform;
         }
@@ -778,8 +782,8 @@ namespace o2
 
         mData->parentInvTransformActualFrame = o2Time.GetCurrentFrame();
 
-        if (mData->owner && mData->owner->mParent)
-            mData->parentInvertedTransform = mData->owner->mParent->transform->mData->worldNonSizedTransform.Inverted();
+        if (mData->owner && mData->owner.Lock()->mParent)
+            mData->parentInvertedTransform = mData->owner.Lock()->mParent.Lock()->transform->mData->worldNonSizedTransform.Inverted();
         else
             mData->parentInvertedTransform = Basis::Identity();
     }
@@ -808,18 +812,18 @@ namespace o2
 
     Vec2F ActorTransform::GetParentPosition() const
     {
-        if (!mData->owner || !mData->owner->mParent)
+        if (!mData->owner || !mData->owner.Lock()->mParent)
             return Vec2F();
 
-        return mData->owner->mParent->transform->mData->worldRectangle.LeftBottom();
+        return mData->owner.Lock()->mParent.Lock()->transform->mData->worldRectangle.LeftBottom();
     }
 
     RectF ActorTransform::GetParentRectangle() const
     {
-        if (!mData->owner || !mData->owner->mParent)
+        if (!mData->owner || !mData->owner.Lock()->mParent)
             return RectF();
 
-        return mData->owner->mParent->transform->GetWorldRect();
+        return mData->owner.Lock()->mParent.Lock()->transform->GetWorldRect();
     }
 
     bool ActorTransformData::IsSerializeEnabled() const

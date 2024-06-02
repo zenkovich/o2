@@ -20,18 +20,19 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		StringProperty();
+		StringProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		StringProperty(const StringProperty& other);
+		StringProperty(RefCounter* refCounter, const StringProperty& other);
 
 		// Copy operator
 		StringProperty& operator=(const StringProperty& other);
 
-		IOBJECT(StringProperty);
+		SERIALIZABLE(StringProperty);
+        CLONEABLE_REF(StringProperty);
 
 	protected:
-		EditBox* mEditBox = nullptr; // Edit box 
+		Ref<EditBox> mEditBox; // Edit box 
 
 	protected:
 		// Updates value view
@@ -53,14 +54,14 @@ CLASS_BASES_META(Editor::StringProperty)
 END_META;
 CLASS_FIELDS_META(Editor::StringProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mEditBox);
 }
 END_META;
 CLASS_METHODS_META(Editor::StringProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const StringProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const StringProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);

@@ -1,6 +1,9 @@
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 #include "jerryscript/jerry-core/include/jerryscript-core.h"
 
+#include "o2/Utils/Types/Ref.h"
+#include "o2/Utils/Debug/Log/LogStream.h"
+
 namespace o2
 {
     class LogStream;
@@ -21,7 +24,7 @@ namespace o2
     class ScriptEngineBase
     {
     protected:
-        LogStream* mLog = nullptr; // Scripting log stream
+        Ref<LogStream> mLog; // Scripting log stream
 
     protected:
         static void ErrorCallback(const jerry_value_t error_object, void* user_p);

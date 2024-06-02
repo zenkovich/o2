@@ -27,7 +27,7 @@ namespace Editor
 	IWidgetLayerPropertiesViewer::~IWidgetLayerPropertiesViewer()
 	{}
 
-	Widget* IWidgetLayerPropertiesViewer::GetWidget() const
+	Ref<Widget> IWidgetLayerPropertiesViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}

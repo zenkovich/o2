@@ -44,25 +44,25 @@ namespace Editor
 		EditorUIRoot.AddWidget(mMenuPanel);
 
 		// FILE
-		mMenuPanel->AddItem("File/New scene", [&]() { OnNewScenePressed(); }, ImageAssetRef(), ShortcutKeys('N', true, true));
-		mMenuPanel->AddItem("File/Open scene", [&]() { OnOpenScenePressed(); }, ImageAssetRef(), ShortcutKeys('O', true));
-		mMenuPanel->AddItem("File/Save scene", [&]() { OnSaveScenePressed(); }, ImageAssetRef(), ShortcutKeys('S', true));
-		mMenuPanel->AddItem("File/Save scene as ...", [&]() { OnSaveSceneAsPressed(); }, ImageAssetRef(), ShortcutKeys('S', true, false, true));
+		mMenuPanel->AddItem("File/New scene", [&]() { OnNewScenePressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('N', true, true));
+		mMenuPanel->AddItem("File/Open scene", [&]() { OnOpenScenePressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('O', true));
+		mMenuPanel->AddItem("File/Save scene", [&]() { OnSaveScenePressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('S', true));
+		mMenuPanel->AddItem("File/Save scene as ...", [&]() { OnSaveSceneAsPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('S', true, false, true));
 
 		mMenuPanel->AddItem("File/---");
 
 		mMenuPanel->AddItem("File/Exit", [&]() { OnExitPressed(); });
 
 		// EDIT
-		mMenuPanel->AddItem("Edit/Undo", [&]() { OnUndoPressed(); }, ImageAssetRef(), ShortcutKeys('Z', true));
-		mMenuPanel->AddItem("Edit/Redo", [&]() { OnRedoPressed(); }, ImageAssetRef(), ShortcutKeys('Z', true, true));
+		mMenuPanel->AddItem("Edit/Undo", [&]() { OnUndoPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('Z', true));
+		mMenuPanel->AddItem("Edit/Redo", [&]() { OnRedoPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('Z', true, true));
 
 		mMenuPanel->AddItem("Edit/---");
 
-		mMenuPanel->AddItem("Edit/Copy", [&]() {}, ImageAssetRef(), ShortcutKeys('C', true));
-		mMenuPanel->AddItem("Edit/Cut", [&]() {}, ImageAssetRef(), ShortcutKeys('X', true));
-		mMenuPanel->AddItem("Edit/Paste", [&]() {}, ImageAssetRef(), ShortcutKeys('V', true));
-		mMenuPanel->AddItem("Edit/Delete", [&]() {}, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+		mMenuPanel->AddItem("Edit/Copy", [&]() {}, AssetRef<ImageAsset>(), ShortcutKeys('C', true));
+		mMenuPanel->AddItem("Edit/Cut", [&]() {}, AssetRef<ImageAsset>(), ShortcutKeys('X', true));
+		mMenuPanel->AddItem("Edit/Paste", [&]() {}, AssetRef<ImageAsset>(), ShortcutKeys('V', true));
+		mMenuPanel->AddItem("Edit/Delete", [&]() {}, AssetRef<ImageAsset>(), ShortcutKeys(VK_DELETE));
 
 		mMenuPanel->AddItem("Edit/---");
 
@@ -82,10 +82,10 @@ namespace Editor
 		mMenuPanel->AddItem("View/Reset layout", [&]() { OnResetLayoutPressed(); });
 
 		// BUILD
-		mMenuPanel->AddItem("Run/Connect scripts debugger", [&]() { o2Scripts.ConnectDebugger(); }, ImageAssetRef(), ShortcutKeys(VK_F5));
+		mMenuPanel->AddItem("Run/Connect scripts debugger", [&]() { o2Scripts.ConnectDebugger(); }, AssetRef<ImageAsset>(), ShortcutKeys(VK_F5));
 		mMenuPanel->AddItem("Run/---");
-		mMenuPanel->AddItem("Run/Build & Run", [&]() { OnBuildAndRunPressed(); }, ImageAssetRef(), ShortcutKeys('R', true));
-		mMenuPanel->AddItem("Run/Build", [&]() { OnBuildPressed(); }, ImageAssetRef(), ShortcutKeys('R', true, true));
+		mMenuPanel->AddItem("Run/Build & Run", [&]() { OnBuildAndRunPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('R', true));
+		mMenuPanel->AddItem("Run/Build", [&]() { OnBuildPressed(); }, AssetRef<ImageAsset>(), ShortcutKeys('R', true, true));
 
 		// HELP
 		mMenuPanel->AddItem("Help/About", [&]() { OnAboutPressed(); });
@@ -98,17 +98,17 @@ namespace Editor
 			static float xx = 0, yy = 1;
 			ForcePopEditorScopeOnStack scope;
 			auto prop = o2UI.CreateWidget<FloatProperty>("with caption");
-			prop->SetValueAndPrototypeProxy({ { mnew PointerValueProxy(&xx), mnew PointerValueProxy(&yy) } });
+			prop->SetValueAndPrototypeProxy({ { mmake<PointerValueProxy<float>>(&xx), mmake<PointerValueProxy<float>>(&yy) } });
 							});
 
 		mMenuPanel->AddItem("Debug/Randomize IDs", [&]() {
-			Function<void(Actor*)> fixActor = [&fixActor](Actor* actor) {
+			Function<void(const Ref<Actor>&)> fixActor = [&fixActor](const Ref<Actor>& actor) {
 				actor->GenerateNewID();
 				actor->GetComponents().ForEach([](auto comp) { comp->GenerateNewID(); });
-				actor->GetChildren().ForEach([&](Actor* x) { fixActor(x); });
+				actor->GetChildren().ForEach([&](const Ref<Actor>& x) { fixActor(x); });
 			};
 
-			for (auto actor : o2Scene.GetRootActors())
+			for (auto& actor : o2Scene.GetRootActors())
 				fixActor(actor);
 		});
 
@@ -126,13 +126,13 @@ namespace Editor
 	{
 	}
 
-	Widget* MenuPanel::AddItem(const o2::MenuPanel::Item& item)
+	Ref<Widget> MenuPanel::AddItem(const o2::MenuPanel::Item& item)
 	{
 		return mMenuPanel->AddItem(item);
 	}
 
 	void MenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
-							const ImageAssetRef& icon /*= ImageAssetRef()*/,
+							const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		mMenuPanel->AddItem(path, clickFunc, icon, shortcut);
@@ -230,7 +230,7 @@ namespace Editor
 
 				ForcePopEditorScopeOnStack scope;
 				String assetsPath = o2FileSystem.GetPathRelativeToPath(fileName, ::GetAssetsPath());
-				o2EditorApplication.LoadScene(SceneAssetRef(assetsPath));
+				o2EditorApplication.LoadScene(AssetRef<SceneAsset>(assetsPath));
 			};
 
 			CheckSceneSaving(openDialog);
@@ -368,7 +368,7 @@ namespace Editor
 		int testKeys = 50;
 		for (int i = 0; i < testCurves; i++)
 		{
-			Curve* curve = mnew Curve();
+			Ref<Curve> curve = mmake<Curve>();
 
 			for (int j = 0; j < testKeys; j++)
 			{

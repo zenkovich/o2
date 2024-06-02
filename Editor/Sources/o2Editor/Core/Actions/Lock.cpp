@@ -9,10 +9,10 @@ namespace Editor
 	LockAction::LockAction()
 	{}
 
-	LockAction::LockAction(const Vector<SceneEditableObject*>& objects, bool lock):
+	LockAction::LockAction(const Vector<Ref<SceneEditableObject>>& objects, bool lock):
 		lock(lock)
 	{
-		objectsIds = objects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
+		objectsIds = objects.Convert<SceneUID>([](auto& x) { return x->GetID(); });
 	}
 
 	String LockAction::GetName() const
@@ -22,7 +22,7 @@ namespace Editor
 
 	void LockAction::Redo()
 	{
-		for (auto id : objectsIds)
+		for (auto& id : objectsIds)
 		{
 			auto object = o2Scene.GetEditableObjectByID(id);
 			if (object)
@@ -32,7 +32,7 @@ namespace Editor
 
 	void LockAction::Undo()
 	{
-		for (auto id : objectsIds)
+		for (auto& id : objectsIds)
 		{
 			auto object = o2Scene.GetEditableObjectByID(id);
 			if (object)

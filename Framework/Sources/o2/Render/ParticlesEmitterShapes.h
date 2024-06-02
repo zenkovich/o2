@@ -1,13 +1,14 @@
 #pragma once
 
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
     // --------------------------------------
     // Particles emitter shape base interface
     // --------------------------------------
-    class ParticlesEmitterShape: public ISerializable
+    class ParticlesEmitterShape: public ISerializable, public RefCounterable, public ICloneableRef
     {
         SERIALIZABLE(ParticlesEmitterShape);
 
@@ -22,6 +23,7 @@ namespace o2
     class CircleParticlesEmitterShape: public ParticlesEmitterShape
     {
         SERIALIZABLE(CircleParticlesEmitterShape);
+        CLONEABLE_REF(CircleParticlesEmitterShape);
 
     public:
         float radius = 0;
@@ -35,6 +37,7 @@ namespace o2
     class SquareParticlesEmitterShape: public ParticlesEmitterShape
     {
         SERIALIZABLE(SquareParticlesEmitterShape);
+        CLONEABLE_REF(SquareParticlesEmitterShape);
 
     public:
         Vec2F size;
@@ -47,6 +50,8 @@ namespace o2
 CLASS_BASES_META(o2::ParticlesEmitterShape)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::ParticlesEmitterShape)

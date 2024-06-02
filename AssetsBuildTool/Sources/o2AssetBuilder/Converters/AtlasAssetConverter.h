@@ -61,9 +61,10 @@ namespace o2
         // ------------------------
         struct ImagePackDef
         {
-            Bitmap* bitmap = nullptr;    // Image bitmap pointer
-            RectsPacker::Rect* packRect = nullptr;  // Image pack rectangle pointer
-            AssetInfo* assetInfo = nullptr; // Asset information
+            Ref<Bitmap>            bitmap;    // Image bitmap pointer
+            Ref<RectsPacker::Rect> packRect;  // Image pack rectangle pointer
+
+            WeakRef<AssetInfo> assetInfo; // Asset information
 
             // Check equal operator
             bool operator==(const ImagePackDef& other) const;
@@ -74,13 +75,13 @@ namespace o2
         Vector<UID> CheckRebuildingAtlases();
 
         // Checks atlas for rebuilding
-        bool CheckAtlasRebuilding(AssetInfo* atlasInfo);
+        bool CheckAtlasRebuilding(const Ref<AssetInfo>& atlasInfo);
 
         // Returns true if atlas needs to rebuild
         bool ImagesListChanged(Vector<Image>& currentImages, Vector<Image>& lastImages);
 
         // Rebuilds atlas
-        void RebuildAtlas(AssetInfo* atlasInfo, Vector<Image>& images);
+        void RebuildAtlas(const Ref<AssetInfo>& atlasInfo, Vector<Image>& images);
 
         // Saves image asset data
         void SaveImageAsset(ImagePackDef& imgDef);
@@ -107,9 +108,9 @@ CLASS_METHODS_META(o2::AtlasAssetConverter)
     FUNCTION().PUBLIC().SIGNATURE(Vector<UID>, AssetsPostProcess);
     FUNCTION().PUBLIC().SIGNATURE(void, Reset);
     FUNCTION().PROTECTED().SIGNATURE(Vector<UID>, CheckRebuildingAtlases);
-    FUNCTION().PROTECTED().SIGNATURE(bool, CheckAtlasRebuilding, AssetInfo*);
+    FUNCTION().PROTECTED().SIGNATURE(bool, CheckAtlasRebuilding, const Ref<AssetInfo>&);
     FUNCTION().PROTECTED().SIGNATURE(bool, ImagesListChanged, Vector<Image>&, Vector<Image>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, RebuildAtlas, AssetInfo*, Vector<Image>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, RebuildAtlas, const Ref<AssetInfo>&, Vector<Image>&);
     FUNCTION().PROTECTED().SIGNATURE(void, SaveImageAsset, ImagePackDef&);
 }
 END_META;

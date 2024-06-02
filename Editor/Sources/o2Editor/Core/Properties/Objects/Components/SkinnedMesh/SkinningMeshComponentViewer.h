@@ -20,8 +20,10 @@ namespace o2
 
 namespace Editor
 {
-	class SceneDragHandle;
+	FORWARD_CLASS_REF(SceneDragHandle);
+
 	struct SkeletonTool;
+	FORWARD_REF(SkeletonTool);
 
 	// ------------------------------
 	// Skinning Mesh component viewer
@@ -41,15 +43,15 @@ namespace Editor
 		IOBJECT(SkinningMeshComponentViewer);
 
 	protected:
-		SplineTool              mSplineTool;             // Spline tool
-		CustomFrameTool         mFrameTool;              // Mapping frame tool
-		MeshTopologyTool        mTopologyTool;           // Mesh topology tool
-		SkeletonTool*           mSkeletonTool = nullptr; // Shared skeleton tool
-		SkinningMeshEditorLayer mFrameTetxureLayer;      // Frame texture drawing layer
+		Ref<SplineTool>              mSplineTool;        // Spline tool
+		Ref<CustomFrameTool>         mFrameTool;         // Mapping frame tool
+		Ref<MeshTopologyTool>        mTopologyTool;      // Mesh topology tool
+		Ref<SkeletonTool>            mSkeletonTool;      // Shared skeleton tool
+		Ref<SkinningMeshEditorLayer> mFrameTetxureLayer; // Frame texture drawing layer
 
-		Button* mFitAndCenterButton = nullptr; // Fit and centerize button
-		Button* mEditSkeletonButton = nullptr; // Enable/disable skeleton editing button
-		Button* mReskinButton = nullptr;       // Resets mesh skinning and updates bones transforms
+		Ref<Button> mFitAndCenterButton; // Fit and centerize button
+		Ref<Button> mEditSkeletonButton; // Enable/disable skeleton editing button
+		Ref<Button> mReskinButton;       // Resets mesh skinning and updates bones transforms
 
 		bool mEditingSkeleton = false; // It editing skeleton enabled
 
@@ -91,11 +93,11 @@ CLASS_FIELDS_META(Editor::SkinningMeshComponentViewer)
     FIELD().PROTECTED().NAME(mSplineTool);
     FIELD().PROTECTED().NAME(mFrameTool);
     FIELD().PROTECTED().NAME(mTopologyTool);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSkeletonTool);
+    FIELD().PROTECTED().NAME(mSkeletonTool);
     FIELD().PROTECTED().NAME(mFrameTetxureLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitAndCenterButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditSkeletonButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mReskinButton);
+    FIELD().PROTECTED().NAME(mFitAndCenterButton);
+    FIELD().PROTECTED().NAME(mEditSkeletonButton);
+    FIELD().PROTECTED().NAME(mReskinButton);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEditingSkeleton);
 }
 END_META;

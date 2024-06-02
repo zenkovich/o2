@@ -2,59 +2,60 @@
 #include "ActorRefResolver.h"
 
 #include "o2/Scene/Actor.h"
+#include "o2/Scene/ActorLinkRef.h"
 #include "o2/Scene/Scene.h"
 
 namespace o2
 {
     CREATE_SINGLETON(ActorRefResolver);
 
-    void ActorRefResolver::RequireResolve(ActorRef& ref, SceneUID actorId)
+    void ActorRefResolver::RequireResolve(BaseActorLinkRef& ref, SceneUID actorId)
     {
         if (!mInstance)
             return;
 
         if (IsLocked())
-            mInstance->mUnresolvedActorsRefs.Add(UnresolvedActorRef(&ref, actorId));
+            mInstance->mUnresolvedActorsRefs.Add(UnresolvedActor(&ref, actorId));
         else
-            ref = o2Scene.GetActorByID(actorId);
+            ref.Set(o2Scene.GetActorByID(actorId).Get());
     }
 
-    void ActorRefResolver::RequireResolve(ActorRef& ref, const UID& assetId)
+    void ActorRefResolver::RequireResolve(BaseActorLinkRef& ref, const UID& assetId)
     {
         if (!mInstance)
             return;
 
         if (IsLocked())
-            mInstance->mUnresolvedAssetActorsRefs.Add(UnresolvedAssetActorRef(&ref, assetId));
+            mInstance->mUnresolvedAssetActorsRefs.Add(UnresolvedAssetActor(&ref, assetId));
         else
-            ref = o2Scene.GetAssetActorByID(assetId);
+            ref.Set(o2Scene.GetAssetActorByID(assetId).Get());
     }
 
-    void ActorRefResolver::RequireResolve(ComponentRef& ref, SceneUID actorId, SceneUID id)
+    void ActorRefResolver::RequireResolve(BaseComponentLinkRef& ref, SceneUID actorId, SceneUID id)
     {
         if (!mInstance)
             return;
 
         if (IsLocked())
-            mInstance->mUnresolvedComponentsRefs.Add(UnresolvedComponentRef(&ref, id));
+            mInstance->mUnresolvedComponentsRefs.Add(UnresolvedComponent(&ref, id));
         else
         {
             if (auto actor = o2Scene.GetActorByID(actorId))
-                ref = actor->GetComponent(id);
+                ref.Set(actor->GetComponent(id).Get());
         }
     }
 
-    void ActorRefResolver::RequireResolve(ComponentRef& ref, const UID& assetId, SceneUID id)
+    void ActorRefResolver::RequireResolve(BaseComponentLinkRef& ref, const UID& assetId, SceneUID id)
     {
         if (!mInstance)
             return;
 
         if (IsLocked())
-            mInstance->mUnresolvedComponentsRefs.Add(UnresolvedComponentRef(&ref, id));
+            mInstance->mUnresolvedComponentsRefs.Add(UnresolvedComponent(&ref, id));
         else
         {
             if (auto actor = o2Scene.GetAssetActorByID(assetId))
-                ref = actor->GetComponent(id);
+                ref.Set(actor->GetComponent(id).Get());
         }
     }
 
@@ -80,25 +81,25 @@ namespace o2
         if (!mInstance)
             return;
 
-        for (auto ref : mInstance->mRemapActorRefs)
+        for (auto& ref : mInstance->mRemapActors)
         {
             Actor* res = nullptr;
-            if (actors.TryGetValue(ref->mActor, res))
-                ref->CopyWithoutRemap(res);
+            if (actors.TryGetValue(ref->Get(), res))
+                ref->Set(res);
         }
 
-        for (auto ref : mInstance->mRemapComponentRefs)
+        for (auto& ref : mInstance->mRemapComponents)
         {
             Component* res = nullptr;
-            if (components.TryGetValue(ref->mComponent, res))
-                ref->CopyWithoutRemap(res);
+            if (components.TryGetValue(ref->Get(), res))
+                ref->Set(res);
         }
 
-        mInstance->mRemapActorRefs.Clear();
-        mInstance->mRemapComponentRefs.Clear();
+        mInstance->mRemapActors.Clear();
+        mInstance->mRemapComponents.Clear();
     }
 
-    void ActorRefResolver::RequireRemap(ActorRef& ref)
+    void ActorRefResolver::RequireRemap(BaseActorLinkRef& ref)
     {
         if (!mInstance)
             return;
@@ -106,10 +107,10 @@ namespace o2
         if (!IsLocked())
             return;
 
-        mInstance->mRemapActorRefs.Add(&ref);
+        mInstance->mRemapActors.Add(&ref);
     }
 
-    void ActorRefResolver::RequireRemap(ComponentRef& ref)
+    void ActorRefResolver::RequireRemap(BaseComponentLinkRef& ref)
     {
         if (!mInstance)
             return;
@@ -117,7 +118,7 @@ namespace o2
         if (!IsLocked())
             return;
 
-        mInstance->mRemapComponentRefs.Add(&ref);
+        mInstance->mRemapComponents.Add(&ref);
     }
 
     void ActorRefResolver::LockResolving(int depth /*= 1*/)
@@ -153,23 +154,23 @@ namespace o2
         if (mInstance->mLockDepth > 0)
             return;
 
-        for (auto def : mInstance->mUnresolvedActorsRefs)
+        for (auto& def : mInstance->mUnresolvedActorsRefs)
         {
             Actor* res = nullptr;
             if (mInstance->mNewActors.TryGetValue(def.sourceId, res))
-                *def.target = res;
+                def.target->Set(res);
             else
-                *def.target = o2Scene.GetActorByID(def.sourceId);
+                def.target->Set(o2Scene.GetActorByID(def.sourceId).Get());
         }
 
-        for (auto def : mInstance->mUnresolvedAssetActorsRefs)
-            *def.target = o2Scene.GetAssetActorByID(def.sourceAssetId);
+        for (auto& def : mInstance->mUnresolvedAssetActorsRefs)
+            def.target->Set(o2Scene.GetAssetActorByID(def.sourceAssetId).Get());
 
-        for (auto def : mInstance->mUnresolvedComponentsRefs)
+        for (auto& def : mInstance->mUnresolvedComponentsRefs)
         {
             Component* res = nullptr;
             if (mInstance->mNewComponents.TryGetValue(def.sourceId, res))
-                *def.target = res;
+                def.target->Set(res);
         }
 
         mInstance->mNewActors.Clear();
@@ -224,52 +225,52 @@ namespace o2
         mInstance->mNewComponents[component->GetID()] = component;
     }
 
-    void ActorRefResolver::OnActorRefDestroyed(const ActorRef* ref)
+    void ActorRefResolver::OnActorDestroyed(const BaseActorLinkRef* ref)
     {
         mInstance->mUnresolvedActorsRefs.RemoveFirst([&](auto& x) { return x.target == ref; });
         mInstance->mUnresolvedAssetActorsRefs.RemoveFirst([&](auto& x) { return x.target == ref; });
 
-        mInstance->mRemapActorRefs.Remove(const_cast<ActorRef*>(ref));
+        mInstance->mRemapActors.Remove(const_cast<BaseActorLinkRef*>(ref));
     }
 
-    void ActorRefResolver::OnComponentRefDestroyed(const ComponentRef* ref)
+    void ActorRefResolver::OnComponentDestroyed(const BaseComponentLinkRef* ref)
     {
         mInstance->mUnresolvedComponentsRefs.RemoveFirst([&](auto& x) { return x.target == ref; });
-        mInstance->mRemapComponentRefs.Remove(const_cast<ComponentRef*>(ref));
+        mInstance->mRemapComponents.Remove(const_cast<BaseComponentLinkRef*>(ref));
     }
 
-    bool ActorRefResolver::UnresolvedActorRef::operator==(const UnresolvedActorRef& other) const
+    bool ActorRefResolver::UnresolvedActor::operator==(const UnresolvedActor& other) const
     {
         return target == other.target;
     }
 
-    ActorRefResolver::UnresolvedActorRef::UnresolvedActorRef(ActorRef* target, SceneUID actorId) :
+    ActorRefResolver::UnresolvedActor::UnresolvedActor(BaseActorLinkRef* target, SceneUID actorId) :
         target(target), sourceId(actorId)
     {}
 
-    ActorRefResolver::UnresolvedActorRef::UnresolvedActorRef()
+    ActorRefResolver::UnresolvedActor::UnresolvedActor()
     {}
 
-    ActorRefResolver::UnresolvedComponentRef::UnresolvedComponentRef()
+    ActorRefResolver::UnresolvedComponent::UnresolvedComponent()
     {}
 
-    ActorRefResolver::UnresolvedComponentRef::UnresolvedComponentRef(ComponentRef* target, SceneUID id):
+    ActorRefResolver::UnresolvedComponent::UnresolvedComponent(BaseComponentLinkRef* target, SceneUID id):
         target(target), sourceId(id)
     {}
 
-    bool ActorRefResolver::UnresolvedComponentRef::operator==(const UnresolvedComponentRef& other) const
+    bool ActorRefResolver::UnresolvedComponent::operator==(const UnresolvedComponent& other) const
     {
         return target == other.target;
     }
 
-    ActorRefResolver::UnresolvedAssetActorRef::UnresolvedAssetActorRef()
+    ActorRefResolver::UnresolvedAssetActor::UnresolvedAssetActor()
     {}
 
-    ActorRefResolver::UnresolvedAssetActorRef::UnresolvedAssetActorRef(ActorRef* target, const UID& assetId):
+    ActorRefResolver::UnresolvedAssetActor::UnresolvedAssetActor(BaseActorLinkRef* target, const UID& assetId):
         target(target), sourceAssetId(assetId)
     {}
 
-    bool ActorRefResolver::UnresolvedAssetActorRef::operator==(const UnresolvedAssetActorRef& other) const
+    bool ActorRefResolver::UnresolvedAssetActor::operator==(const UnresolvedAssetActor& other) const
     {
         return target == other.target;
     }

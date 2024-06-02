@@ -13,7 +13,7 @@ namespace o2
     // ------------------------------------------------------------------------------------------
     // Triangles SkinnableMesh. Containing bones, skinning vertices, indexes of polygons, texture
     // ------------------------------------------------------------------------------------------
-    class SkinningMesh : public virtual IDrawable
+    class SkinningMesh : public virtual IDrawable, public virtual RefCounterable, public ICloneableRef
     {
     public:
         struct Bone
@@ -95,6 +95,8 @@ namespace o2
 
         // Returns max bones count
         UInt GetMaxBonesCount() const;
+
+        CLONEABLE_REF(SkinningMesh);
 
     protected:
         TextureRef mTexture; // Texture

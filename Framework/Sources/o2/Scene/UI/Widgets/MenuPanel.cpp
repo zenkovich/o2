@@ -11,15 +11,15 @@
 
 namespace o2
 {
-    MenuPanel::MenuPanel():
-        Widget(), DrawableCursorEventsListener(this)
+    MenuPanel::MenuPanel(RefCounter* refCounter):
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {
-        mItemSample = mnew Widget();
+        mItemSample = mmake<Widget>();
         mItemSample->AddLayer("text", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(200, 0), Vec2F(0, 0)));
 
-        mSelectionDrawable = mnew Sprite();
+        mSelectionDrawable = mmake<Sprite>();
 
-        mLayout = mnew HorizontalLayout();
+        mLayout = mmake<HorizontalLayout>();
         AddChild(mLayout);
 
         mLayout->expandHeight = true;
@@ -29,34 +29,26 @@ namespace o2
         *mLayout->layout = WidgetLayout::BothStretch();
     }
 
-    MenuPanel::MenuPanel(const MenuPanel& other):
-        Widget(other), DrawableCursorEventsListener(this)
+    MenuPanel::MenuPanel(RefCounter* refCounter, const MenuPanel& other):
+        Widget(refCounter, other), DrawableCursorEventsListener(this)
     {
-        mItemSample = other.mItemSample->CloneAs<Widget>();
-        mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+        mItemSample = other.mItemSample->CloneAsRef<Widget>();
+        mSelectionDrawable = other.mSelectionDrawable->CloneAsRef<Sprite>();
         mSelectionLayout = other.mSelectionLayout;
         mLayout = FindChildByType<HorizontalLayout>();
 
         RetargetStatesAnimations();
-        UpdateSelfTransform();
-        UpdateChildrenTransforms();
     }
 
     MenuPanel::~MenuPanel()
-    {
-        delete mItemSample;
-        delete mSelectionDrawable;
-    }
+    {}
 
     MenuPanel& MenuPanel::operator=(const MenuPanel& other)
     {
         Widget::operator=(other);
 
-        delete mItemSample;
-        delete mSelectionDrawable;
-
-        mItemSample = other.mItemSample->CloneAs<Widget>();
-        mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+        mItemSample = other.mItemSample->CloneAsRef<Widget>();
+        mSelectionDrawable = other.mSelectionDrawable->CloneAsRef<Sprite>();
         mSelectionLayout = other.mSelectionLayout;
         mLayout = FindChildByType<HorizontalLayout>();
 
@@ -88,7 +80,7 @@ namespace o2
             {
                 if (mOpenedContext)
                 {
-                    mOpenedContext->HideWithChild();
+                    mOpenedContext.Lock()->HideWithChild();
 
                     if (mSelectedItem >= 0)
                     {
@@ -108,32 +100,32 @@ namespace o2
         if (!mResEnabledInHierarchy)
             return;
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         IDrawable::OnDrawn();
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
 
         mSelectionDrawable->Draw();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         DrawDebugFrame();
     }
 
-    Widget* MenuPanel::AddItem(const Item& item)
+    Ref<Widget> MenuPanel::AddItem(const Item& item)
     {
-        Widget* newItem = CreateItem(item);
+        auto newItem = CreateItem(item);
         mLayout->AddChild(newItem);
         mClickFunctions.Add(item.onClick);
 
         return newItem;
     }
 
-    ContextMenu* MenuPanel::CreateSubContext(WString& path)
+    Ref<ContextMenu> MenuPanel::CreateSubContext(WString& path)
     {
         int slashPos = path.Find("/");
         if (slashPos < 0)
@@ -141,7 +133,7 @@ namespace o2
 
         WString subMenu = path.SubStr(0, slashPos);
 
-        Widget* subChild = mLayout->mChildWidgets.FindOrDefault([&](auto x) {
+        auto subChild = mLayout->mChildWidgets.FindOrDefault([&](auto& x) {
             if (auto text = x->template GetLayerDrawable<Text>("text"))
                 return text->text == subMenu;
 
@@ -151,7 +143,7 @@ namespace o2
         if (!subChild)
             subChild = AddItem(Item(subMenu, Function<void()>()));
 
-        ContextMenu* subContext = subChild->FindChildByType<ContextMenu>();
+        auto subContext = subChild->FindChildByType<ContextMenu>();
         if (!subContext)
         {
             subContext = o2UI.CreateWidget<ContextMenu>();
@@ -165,11 +157,11 @@ namespace o2
 
     void MenuPanel::AddItem(const WString& path,
                             const Function<void()>& clickFunc /*= Function<void()>()*/,
-                            const ImageAssetRef& icon /*= ImageAssetRef()*/,
+                            const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
                             const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
     {
         WString itemPath = path;
-        ContextMenu* subContext = CreateSubContext(itemPath);
+        auto subContext = CreateSubContext(itemPath);
         if (!subContext)
         {
             AddItem(Item(path, clickFunc));
@@ -181,11 +173,11 @@ namespace o2
 
     void MenuPanel::AddToggleItem(const WString& path, bool value,
                                   const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
-                                  const ImageAssetRef& icon /*= ImageAssetRef()*/,
+                                  const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
                                   const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
     {
         WString itemPath = path;
-        ContextMenu* subContext = CreateSubContext(itemPath);
+        auto subContext = CreateSubContext(itemPath);
         if (!subContext)
             return;
 
@@ -194,7 +186,7 @@ namespace o2
 
     void MenuPanel::InsertItem(const Item& item, int position)
     {
-        Widget* newItem = CreateItem(item);
+        auto newItem = CreateItem(item);
         mLayout->AddChild(newItem, position);
 
         if (item.subItems.Count() > 0)
@@ -251,7 +243,7 @@ namespace o2
         int slashPos = path.Find("/");
         if (slashPos < 0)
         {
-            Widget* removingItem = mLayout->mChildWidgets.FindOrDefault([&](auto x) {
+            auto removingItem = mLayout->mChildWidgets.FindOrDefault([&](auto& x) {
                 if (auto text = x->template GetLayerDrawable<Text>("text"))
                     return text->text == path;
 
@@ -271,7 +263,7 @@ namespace o2
 
         WString subMenu = path.SubStr(0, slashPos);
 
-        Widget* subChild = mLayout->mChildWidgets.FindOrDefault([&](auto x) {
+        auto subChild = mLayout->mChildWidgets.FindOrDefault([&](auto& x) {
             if (auto text = x->template GetLayerDrawable<Text>("text"))
                 return text->text == subMenu;
 
@@ -284,7 +276,7 @@ namespace o2
             return;
         }
 
-        ContextMenu* subContext = subChild->FindChildByType<ContextMenu>();
+        auto subContext = subChild->FindChildByType<ContextMenu>();
         if (!subContext)
         {
             o2Debug.LogError("Failed to remove menu item " + path);
@@ -299,23 +291,22 @@ namespace o2
         mLayout->RemoveAllChildren();
     }
 
-    HorizontalLayout* MenuPanel::GetItemsLayout() const
+    const Ref<HorizontalLayout>& MenuPanel::GetItemsLayout() const
     {
         return mLayout;
     }
 
-    Widget* MenuPanel::GetItemSample() const
+    const Ref<Widget>& MenuPanel::GetItemSample() const
     {
         return mItemSample;
     }
 
-    void MenuPanel::SetItemSample(Widget* sample)
+    void MenuPanel::SetItemSample(const Ref<Widget>& sample)
     {
-        delete mItemSample;
         mItemSample = sample;
     }
 
-    Sprite* MenuPanel::GetSelectionDrawable() const
+    const Ref<Sprite>& MenuPanel::GetSelectionDrawable() const
     {
         return mSelectionDrawable;
     }
@@ -330,9 +321,9 @@ namespace o2
         return mSelectionLayout;
     }
 
-    Widget* MenuPanel::CreateItem(const Item& item)
+    Ref<Widget> MenuPanel::CreateItem(const Item& item)
     {
-        Widget* newItem = mItemSample->CloneAs<Widget>();
+        auto newItem = mItemSample->CloneAsRef<Widget>();
         newItem->name = (WString)"Menu Item:" + item.text;
 
         if (auto textLayer = newItem->GetLayerDrawable<Text>("text"))
@@ -340,7 +331,7 @@ namespace o2
 
         if (item.subItems.Count() > 0)
         {
-            ContextMenu* subMenu = o2UI.CreateWidget<ContextMenu>();
+            auto subMenu = o2UI.CreateWidget<ContextMenu>();
             subMenu->AddItems(item.subItems);
             newItem->AddChild(subMenu);
         }
@@ -376,13 +367,13 @@ namespace o2
         interactable = false;
     }
 
-    Widget* MenuPanel::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+    Ref<Widget> MenuPanel::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
     {
         if (!mLayout)
             return nullptr;
 
         int idx = 0;
-        for (auto child : mLayout->mChildWidgets)
+        for (auto& child : mLayout->mChildWidgets)
         {
             if (child->layout->IsPointInside(point))
             {
@@ -404,7 +395,7 @@ namespace o2
     void MenuPanel::UpdateHover(const Vec2F& point)
     {
         int itemIdx = -1;
-        Widget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
+        auto itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
 
         if (itemIdx < 0)
         {
@@ -449,14 +440,14 @@ namespace o2
     void MenuPanel::OnCursorReleased(const Input::Cursor& cursor)
     {
         int itemIdx = -1;
-        Widget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
+        auto itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
 
         if (itemIdx >= 0)
         {
             mClickFunctions[itemIdx]();
 
             if (mOpenedContext)
-                mOpenedContext->HideWithChild();
+                mOpenedContext.Lock()->HideWithChild();
 
             if (auto context = itemUnderCursor->FindChildByType<ContextMenu>())
             {
@@ -488,7 +479,7 @@ namespace o2
     MenuPanel::Item::Item()
     {}
 
-    MenuPanel::Item::Item(const WString& text, const Vector<ContextMenu::Item*>& subItems):
+    MenuPanel::Item::Item(const WString& text, const Vector<Ref<ContextMenu::Item>>& subItems):
         text(text), subItems(subItems)
     {}
 
@@ -506,6 +497,8 @@ namespace o2
         return "Dropping";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::MenuPanel>);
 // --- META ---
 
 DECLARE_CLASS(o2::MenuPanel, o2__MenuPanel);

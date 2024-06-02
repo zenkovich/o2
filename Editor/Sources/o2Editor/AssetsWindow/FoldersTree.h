@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-	class FoldersTree;
+	FORWARD_CLASS_REF(FoldersTree);
 
 	// --------------------------
 	// Assets folders tree widget
@@ -22,10 +22,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		AssetsFoldersTree();
+		AssetsFoldersTree(RefCounter* refCounter);
 
 		// Copy-constructor
-		AssetsFoldersTree(const AssetsFoldersTree& other);
+		AssetsFoldersTree(RefCounter* refCounter, const AssetsFoldersTree& other);
 
 		// Destructor
 		~AssetsFoldersTree();
@@ -36,12 +36,13 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AssetsFoldersTree);
+        SERIALIZABLE(AssetsFoldersTree);
+        CLONEABLE_REF(AssetsFoldersTree);
 
 	protected:
-		Tree*        mFoldersTree; // Folders tree
-		ContextMenu* mContextMenu; // Context menu
-		String       mCurrentPath; // Current viewing path
+		Ref<Tree>        mFoldersTree; // Folders tree
+		Ref<ContextMenu> mContextMenu; // Context menu
+		String           mCurrentPath; // Current viewing path
 
 		bool mOpengingFolderFromThis = false;
 
@@ -62,16 +63,16 @@ namespace Editor
 		Vector<void*> GetFoldersTreeNodeChilds(void* object);
 
 		// Setups tree node by folder (for folders tree)
-		void SetupFoldersTreeNode(TreeNode* node, void* object);
+		void SetupFoldersTreeNode(const Ref<TreeNode>& node, void* object);
 
 		// Called when folder item double clicked (for folders tree)
-		void OnFoldersTreeNodeDblClick(TreeNode* node);
+		void OnFoldersTreeNodeDblClick(const Ref<TreeNode>& node);
 
 		// Called when folder item clicked (for folders tree)
 		void OnFoldersTreeSelect(Vector<void*> nodes);
 
 		// Called when folders tree clicked by right button
-		void OnFoldersTreeRightClick(TreeNode* node);
+		void OnFoldersTreeRightClick(const Ref<TreeNode>& node);
 
 		// Called when context copy pressed
 		void OnContextCopyPressed();
@@ -96,6 +97,8 @@ namespace Editor
 
 		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
+		
+		REF_COUNTERABLE_IMPL(Widget);
 
 		friend class AssetsWindow;
 	};
@@ -103,7 +106,17 @@ namespace Editor
 	class FoldersTree : public Tree
 	{
 	public:
-		SERIALIZABLE(FoldersTree);
+		// Default constructor
+        FoldersTree(RefCounter* refCounter);
+
+        // Copy-constructor
+        FoldersTree(RefCounter* refCounter, const FoldersTree& other);
+
+        // Copy-constructor
+        FoldersTree(const FoldersTree& other);
+
+        SERIALIZABLE(FoldersTree);
+        CLONEABLE_REF(FoldersTree);
 
 	protected:
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
@@ -132,18 +145,18 @@ END_META;
 CLASS_METHODS_META(Editor::AssetsFoldersTree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsFoldersTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetsFoldersTree&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, SelectAndExpandFolder, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeContext);
     FUNCTION().PROTECTED().SIGNATURE(void*, GetFoldersTreeNodeParent, void*);
     FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetFoldersTreeNodeChilds, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, TreeNode*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeNodeDblClick, TreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, const Ref<TreeNode>&, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeNodeDblClick, const Ref<TreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, Vector<void*>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeRightClick, TreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeRightClick, const Ref<TreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCutPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextPastePressed);
@@ -167,6 +180,9 @@ END_META;
 CLASS_METHODS_META(Editor::FoldersTree)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const FoldersTree&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const FoldersTree&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }

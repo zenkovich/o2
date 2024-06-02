@@ -142,9 +142,9 @@ namespace Editor
 	template<typename _property_type>
 	void EditorUIStyleBuilder::BuildPropertyWithCaption(const String& propertyStyle, const String& propertyWithCaptionStyle)
 	{
-		_property_type* property = o2UI.CreateWidget<_property_type>(propertyStyle);
+		Ref<_property_type> property = o2UI.CreateWidget<_property_type>(propertyStyle);
 
-		Label* label = o2UI.CreateWidget<Label>();
+		auto label = o2UI.CreateWidget<Label>();
 		label->name = "propertyName";
 		label->horAlign = HorAlign::Left;
 		label->layout->widthWeight = 0.6f;

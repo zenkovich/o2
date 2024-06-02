@@ -27,10 +27,10 @@ namespace o2
 
     public:
         // Constructor
-        VerticalScrollBar();
+        explicit VerticalScrollBar(RefCounter* refCounter);
 
         // Copy-constructor
-        VerticalScrollBar(const VerticalScrollBar& other);
+        VerticalScrollBar(RefCounter* refCounter, const VerticalScrollBar& other);
 
         // Destructor
         ~VerticalScrollBar();
@@ -96,6 +96,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(VerticalScrollBar);
+        CLONEABLE_REF(VerticalScrollBar);
 
     protected:
         float mValue = 0.0f;       // Current value @SERIALIZABLE
@@ -111,15 +112,15 @@ namespace o2
         float mPressHandleOffset = 0.0f; // Value offset when handle was pressed
         bool  mHandlePressed = false;    // True, when handle was pressed
 
-        WidgetLayer* mHandleLayer = nullptr; // Handle layer
-        WidgetLayer* mBackLayer = nullptr;   // Background layer
+       Ref<WidgetLayer> mHandleLayer; // Handle layer
+       Ref<WidgetLayer> mBackLayer;   // Background layer
 
     protected:
         // Updates layers layouts, calls after updating widget layout
         void UpdateLayersLayouts() override;
 
         // Called when new layer was added. Here searching bar, back and handle layers
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Called when deserialized
         void OnDeserialized(const DataValue& node) override;
@@ -160,6 +161,8 @@ namespace o2
         // Called when scrolling
         void OnScrolled(float scroll) override;
 
+        REF_COUNTERABLE_IMPL(Widget);
+
         friend class ContextMenu;
         friend class CustomList;
         friend class EditBox;
@@ -195,15 +198,15 @@ CLASS_FIELDS_META(o2::VerticalScrollBar)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(5.0f).NAME(mScrollhandleMinPxSize);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPressHandleOffset);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mHandlePressed);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandleLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackLayer);
+    FIELD().PROTECTED().NAME(mHandleLayer);
+    FIELD().PROTECTED().NAME(mBackLayer);
 }
 END_META;
 CLASS_METHODS_META(o2::VerticalScrollBar)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const VerticalScrollBar&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const VerticalScrollBar&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueForcible, float);
@@ -224,7 +227,7 @@ CLASS_METHODS_META(o2::VerticalScrollBar)
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);

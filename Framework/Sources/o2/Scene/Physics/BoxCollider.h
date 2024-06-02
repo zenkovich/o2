@@ -51,6 +51,7 @@ namespace o2
 #endif
 
         SERIALIZABLE(BoxCollider);
+        CLONEABLE_REF(BoxCollider);
 
     private:
         Vec2F mSize = Vec2F(1, 1); // Size of collider @SERIALIZABLE

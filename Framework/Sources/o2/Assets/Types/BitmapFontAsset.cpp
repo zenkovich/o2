@@ -9,7 +9,7 @@
 namespace o2
 {
     BitmapFontAsset::BitmapFontAsset():
-        FontAsset(mnew Meta())
+        FontAsset(mmake<Meta>())
     {}
 
     BitmapFontAsset::BitmapFontAsset(const BitmapFontAsset& asset):
@@ -27,9 +27,9 @@ namespace o2
         return { "fnt" };
     }
 
-    BitmapFontAsset::Meta* BitmapFontAsset::GetMeta() const
+    Ref<BitmapFontAsset::Meta> BitmapFontAsset::GetMeta() const
     {
-        return (Meta*)mInfo.meta;
+        return DynamicCast<Meta>(mInfo.meta);
     }
 
     void BitmapFontAsset::LoadData(const String& path)
@@ -37,11 +37,11 @@ namespace o2
         mFont = o2Render.mFonts.FindOrDefault([&](auto fnt) { return fnt->GetFileName() == path; });
 
         if (!mFont)
-            mFont = mnew BitmapFont(path);
+            mFont = mmake<BitmapFont>(path);
     }
 }
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::BitmapFontAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::BitmapFontAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::BitmapFontAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::BitmapFontAsset, o2__BitmapFontAsset);

@@ -18,15 +18,15 @@ namespace Editor
 	class EnableAction: public IAction
 	{
 	public:
-		Vector<SceneUID> objectsIds;
-		bool             enable; 
+		Vector<SceneUID> objectsIds; // Changed objects
+		bool             enable;     // Enabled or disabled
 
 	public:
 		// Default constructor
 		EnableAction();
 
 		// COnstructor with enabled or disabled objects
-		EnableAction(const Vector<SceneEditableObject*>& objects, bool enable);
+		EnableAction(const Vector<Ref<SceneEditableObject>>& objects, bool enable);
 
 		// Returns name of action
 		String GetName() const override;
@@ -57,7 +57,7 @@ CLASS_METHODS_META(Editor::EnableAction)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, bool);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneEditableObject>>&, bool);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

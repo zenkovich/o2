@@ -18,12 +18,12 @@ namespace o2
 
 namespace Editor
 {
-	class SpoilerWithHead;
+	FORWARD_CLASS_REF(SpoilerWithHead);
 
 	// ---------------------------------------
 	// Editor actor component viewer interface
 	// ---------------------------------------
-	class IActorComponentViewer: public IObject
+	class IActorComponentViewer: public IObject, virtual public RefCounterable
 	{
 	public:
 		// Default constructor. Initializes data widget
@@ -39,7 +39,7 @@ namespace Editor
 		virtual const Type* GetComponentType() const { return nullptr; }
 
 		// Returns data widget
-		virtual Widget* GetWidget() const;
+		virtual Ref<Widget> GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -61,8 +61,8 @@ namespace Editor
 	protected:
 		Vector<Component*> mTargetComponents; // Target components
 
-		SpoilerWithHead* mSpoiler = nullptr;      // Component's spoiler
-		Button*          mRemoveButton = nullptr; // Remove component button
+		Ref<SpoilerWithHead> mSpoiler;      // Component's spoiler
+		Ref<Button>          mRemoveButton; // Remove component button
 
 		bool mEnabled = false; // Is viewer enabled 
 
@@ -84,13 +84,14 @@ namespace Editor
 CLASS_BASES_META(Editor::IActorComponentViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IActorComponentViewer)
 {
     FIELD().PROTECTED().NAME(mTargetComponents);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRemoveButton);
+    FIELD().PROTECTED().NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mRemoveButton);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
@@ -100,7 +101,7 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

@@ -23,23 +23,29 @@ namespace Editor
 	// ------------------
 	// Editor tools panel
 	// ------------------
-	class ToolsPanel: public Singleton<ToolsPanel>
+	class ToolsPanel : public Singleton<ToolsPanel>, public RefCounterable
 	{
-	public:
+    public:
+        // Default constructor. Initializes all panel
+        ToolsPanel();
+
+        // Destructor
+        ~ToolsPanel();
+
 		// Returns panel's widgets
-		Widget* GetPanelWidget() const;
+		const Ref<Widget>& GetPanelWidget() const;
 
 		// Returns play panel's widget
-		Widget* GetPlayPanel() const;
+		const Ref<Widget>& GetPlayPanel() const;
 
 		// Returns tools' panel widget 
-		HorizontalLayout* GetToolsPanel() const;
+		const Ref<HorizontalLayout>& GetToolsPanel() const;
 
 		// Adds tool to panel
-		void AddToolToggle(Toggle* toggle);
+		void AddToolToggle(const Ref<Toggle>& toggle);
 
 		// Removes tool from panel
-		void RemoveToolToggle(Toggle* toggle);
+		void RemoveToolToggle(const Ref<Toggle>& toggle);
 
 		// Updates panel
 		void Update(float dt);
@@ -48,26 +54,20 @@ namespace Editor
 		const String mDefaultSchemeName = "Default";
 		const String mSaveAsSchemeName = "Save as ...";
 
-		Widget* mPanelRoot = nullptr;     // Root panel widget
+		Ref<Widget> mPanelRoot; // Root panel widget
 
-		Widget*   mPlayPanel = nullptr;	    // Play panel widget
-		Toggle*   mPlayToggle = nullptr;	// Play toggle
-		Toggle*   mPauseToggle = nullptr;	// Pause toggle
-		Button*   mStepButton = nullptr;	// Step button
-		DropDown* mDevicesList = nullptr;	// Devices list dropdown
+		Ref<Widget>   mPlayPanel;	// Play panel widget
+		Ref<Toggle>   mPlayToggle;	// Play toggle
+		Ref<Toggle>   mPauseToggle;	// Pause toggle
+		Ref<Button>   mStepButton;	// Step button
+		Ref<DropDown> mDevicesList;	// Devices list dropdown
 
-		HorizontalLayout* mToolsPanel = nullptr; // Tools panel layout
-		ToggleGroup       mToolsTogglesGroup;    // Group for toggles
+		Ref<HorizontalLayout> mToolsPanel;        // Tools panel layout
+		Ref<ToggleGroup>      mToolsTogglesGroup; // Group for toggles
 
-		DropDown* mLayoutSchemesList; // Layouts schemes list
+		Ref<DropDown> mLayoutSchemesList; // Layouts schemes list
 
 	protected:
-		// Default constructor. Initializes all panel
-		ToolsPanel();
-
-		// Destructor
-		~ToolsPanel();
-
 		// initializes play panel
 		void InitializePlayPanel();
 

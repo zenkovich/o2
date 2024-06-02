@@ -23,7 +23,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		// Position
-		auto positionPropertyContainer = mnew Widget();
+		auto positionPropertyContainer = mmake<Widget>();
 		positionPropertyContainer->name = "position";
 		positionPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(positionPropertyContainer);
@@ -39,7 +39,7 @@ namespace Editor
 		positionPropertyContainer->AddChild(mPositionProperty);
 
 		// Size
-		auto sizePropertyContainer = mnew Widget();
+		auto sizePropertyContainer = mmake<Widget>();
 		sizePropertyContainer->name = "size";
 		sizePropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(sizePropertyContainer);
@@ -56,7 +56,7 @@ namespace Editor
 
 		// Anchors
 		// Right top
-		auto rightTopAnchorPropertyContainer = mnew Widget();
+		auto rightTopAnchorPropertyContainer = mmake<Widget>();
 		rightTopAnchorPropertyContainer->name = "right top anchor";
 		rightTopAnchorPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(rightTopAnchorPropertyContainer);
@@ -75,7 +75,7 @@ namespace Editor
 		rightTopAnchorPropertyContainer->AddChild(mAnchorRightTopProperty);
 
 		// Left bottom
-		auto leftBottomAnchorPropertyContainer = mnew Widget();
+		auto leftBottomAnchorPropertyContainer = mmake<Widget>();
 		leftBottomAnchorPropertyContainer->name = "left bottom anchor";
 		leftBottomAnchorPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(leftBottomAnchorPropertyContainer);
@@ -91,7 +91,7 @@ namespace Editor
 
 		// Offsets
 		// Right top
-		auto rightTopOffsetPropertyContainer = mnew Widget();
+		auto rightTopOffsetPropertyContainer = mmake<Widget>();
 		rightTopOffsetPropertyContainer->name = "right top offset";
 		rightTopOffsetPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(rightTopOffsetPropertyContainer);
@@ -110,7 +110,7 @@ namespace Editor
 		rightTopOffsetPropertyContainer->AddChild(moffsetRightTopProperty);
 
 		// Left bottom
-		auto leftBottomOffsetPropertyContainer = mnew Widget();
+		auto leftBottomOffsetPropertyContainer = mmake<Widget>();
 		leftBottomOffsetPropertyContainer->name = "left bottom offset";
 		leftBottomOffsetPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(leftBottomOffsetPropertyContainer);
@@ -126,9 +126,7 @@ namespace Editor
 	}
 
 	DefaultWidgetLayerLayoutViewer::~DefaultWidgetLayerLayoutViewer()
-	{
-		delete mSpoiler;
-	}
+	{}
 
 	void DefaultWidgetLayerLayoutViewer::SetTargetLayers(const Vector<WidgetLayer*>& layers)
 	{
@@ -166,17 +164,16 @@ namespace Editor
 	void DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
 														   const Vector<DataDocument>& newValue)
 	{
-		PropertyChangeAction* action = mnew PropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
+		auto action = mmake<PropertyChangeAction>(o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);
 	}
 
-	void DefaultWidgetLayerLayoutViewer::OnPropertyChanged(IPropertyField* field)
+	void DefaultWidgetLayerLayoutViewer::OnPropertyChanged(const Ref<IPropertyField>& field)
 	{
-		for (auto layer : mLayers) {
-			layer->GetOwnerWidget()->UpdateTransform();
-			layer->GetOwnerWidget()->OnChanged();
+		for (auto& layer : mLayers) {
+			layer->GetOwnerWidget().Lock()->UpdateTransform();
+			layer->GetOwnerWidget().Lock()->OnChanged();
 		}
 	}
 

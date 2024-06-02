@@ -486,7 +486,7 @@ namespace o2
                 return;
             }
 
-            for (auto func : other.mData.functions)
+            for (auto& func : other.mData.functions)
                 Add(*func);
         }
 
@@ -586,7 +586,7 @@ namespace o2
         {
             if (mData.typeData.type == DataType::CoupleOfFunctions)
             {
-                for (auto func : mData.functions)
+                for (auto& func : mData.functions)
                     delete func;
 
                 mData.functions.clear();
@@ -715,7 +715,7 @@ namespace o2
                 Add(func.OneFunctionRef());
             else if (func.mData.typeData.type == DataType::CoupleOfFunctions)
             {
-                for (auto x : func.mData.functions)
+                for (auto& x : func.mData.functions)
                     Add(*x);
             }
         }
@@ -727,7 +727,7 @@ namespace o2
                 Remove(func.OneFunctionRef());
             else if (func.mData.typeData.type == DataType::CoupleOfFunctions)
             {
-                for (auto x : func.mData.functions)
+                for (auto& x : func.mData.functions)
                     Remove(*x);
             }
         }
@@ -753,7 +753,7 @@ namespace o2
                 return OneFunctionRef().Equals(&func);
             else if (mData.typeData.type == DataType::CoupleOfFunctions)
             {
-                for (auto x : mData.functions)
+                for (auto& x : mData.functions)
                 {
                     if (x->Equals(&func))
                         return true;
@@ -856,10 +856,10 @@ namespace o2
                 return mData.functions[0]->Equals(&other.OneFunctionRef());
             }
 
-            for (auto func : mData.functions)
+            for (auto& func : mData.functions)
             {
                 bool found = false;
-                for (auto otherFunc : other.mData.functions)
+                for (auto& otherFunc : other.mData.functions)
                 {
                     if (func->Equals(otherFunc))
                     {

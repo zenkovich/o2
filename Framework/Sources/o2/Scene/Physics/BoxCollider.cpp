@@ -30,7 +30,7 @@ namespace o2
 
         if (fit)
         {
-            mSize = mOwner->transform->GetSize();
+            mSize = mOwner.Lock()->transform->GetSize();
             OnShapeChanged();
         }
     }
@@ -105,7 +105,7 @@ namespace o2
     void BoxCollider::FitSize()
     {
         Vec2F prevSize = mSize;
-        mSize = mOwner->transform->GetSize();
+        mSize = mOwner.Lock()->transform->GetSize();
 
         if (prevSize != mSize)
             OnShapeChanged();
@@ -114,11 +114,13 @@ namespace o2
 #if IS_EDITOR
     void BoxCollider::OnAddedFromEditor()
     {
-        mSize = mOwner->transform->GetSize();
+        mSize = mOwner.Lock()->transform->GetSize();
         OnShapeChanged();
     }
 #endif
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::BoxCollider>);
 // --- META ---
 
 DECLARE_CLASS(o2::BoxCollider, o2__BoxCollider);

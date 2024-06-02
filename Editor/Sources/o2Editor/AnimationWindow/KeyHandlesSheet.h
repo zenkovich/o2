@@ -15,8 +15,8 @@ using namespace o2;
 
 namespace Editor
 {
-	class AnimationWindow;
-	class ITrackControl;
+	FORWARD_CLASS_REF(AnimationWindow);
+	FORWARD_CLASS_REF(ITrackControl);
 
 	// -------------------------------------------
 	// Handles sheet, manages selection of handles
@@ -25,10 +25,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		KeyHandlesSheet();
+        explicit KeyHandlesSheet(RefCounter* refCounter);
 
 		// Copy-constructor
-		KeyHandlesSheet(const KeyHandlesSheet& other);
+        KeyHandlesSheet(RefCounter* refCounter, const KeyHandlesSheet& other);
 
 		// Destructor
 		~KeyHandlesSheet();
@@ -37,7 +37,7 @@ namespace Editor
 		KeyHandlesSheet& operator=(const KeyHandlesSheet& other);
 
 		// Sets animation. Used for batch change of keys
-		void SetAnimation(AnimationClip* animation);
+		void SetAnimation(const Ref<AnimationClip>& animation);
 
 		// Updates selection frame
 		void Update(float dt) override;
@@ -52,16 +52,16 @@ namespace Editor
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Registers animation track track control
-		void RegTrackControl(ITrackControl* trackControl, const std::string& path);
+		void RegTrackControl(const Ref<ITrackControl>& trackControl, const std::string& path);
 
 		// Unregisters animation track track control
-		void UnregTrackControl(ITrackControl* trackControl);
+		void UnregTrackControl(const Ref<ITrackControl>& trackControl);
 
 		// Unregisters all tracks controls
 		void UnregAllTrackControls();
 
 		// Adds selectable handle to group
-		void AddHandle(DragHandle* handle) override;
+		void AddHandle(const Ref<DragHandle>& handle) override;
 
 		// Removes selectable handle from group
 		void RemoveHandle(DragHandle* handle) override;
@@ -76,42 +76,46 @@ namespace Editor
 		void DeleteKeys(const Map<String, Vector<UInt64>>& keys, bool createAction = true);
 
 		// Returns context menu
-		ContextMenu* GetContextMenu() const;
+		const Ref<ContextMenu>& GetContextMenu() const;
 
 		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        static String GetCreateMenuCategory();
 
-		SERIALIZABLE(KeyHandlesSheet);
+        // Dynamic cast to RefCounterable via Widget
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<KeyHandlesSheet>& ref);
+
+        SERIALIZABLE(KeyHandlesSheet);
+        CLONEABLE_REF(KeyHandlesSheet);
 
 	private:
 		RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);
 		RectF mSelectionFrameCursorOffsets = RectF(-2, -3, 2, 2);
 
-		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+		WeakRef<AnimationWindow> mAnimationWindow; // Animation window
 
-		Vector<ITrackControl*>               mTrackControls;    // List of actual track controls
-		Vector<Pair<String, ITrackControl*>> mTrackControlsMap; // Map of actual track controls, key is Animation track path
+		Vector<Ref<ITrackControl>>               mTrackControls;    // List of actual track controls
+		Vector<Pair<String, Ref<ITrackControl>>> mTrackControlsMap; // Map of actual track controls, key is Animation track path
 
-		Map<IAnimationTrack*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by Animation track, used for fast searching handles for same Animation track
+		Map<Ref<IAnimationTrack>, Vector<Ref<AnimationKeyDragHandle>>> mHandlesGroups; // All handles grouped by Animation track, used for fast searching handles for same Animation track
 
-		ContextMenu* mContextMenu = nullptr; // Keys context menu
-		Vec2F        mContextMenuPressPoint; // Cursor position when right button were clicked. When trying to show context menu checking delta between current cursor position and this 
+		Ref<ContextMenu> mContextMenu; // Keys context menu
+		Vec2F            mContextMenuPressPoint; // Cursor position when right button were clicked. When trying to show context menu checking delta between current cursor position and this 
 
 		bool mNeedUpdateSelectionFrame = false; // True when selection frame required to update
 
 		bool mHandleHasMoved = false; // it is true when some handle was selected and moved, resets on handle pressing
 
-		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
-		RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
+		Ref<Sprite> mSelectionFrame; // Selected handles frame drawing sprite
+		RectF       mSelectionRect;  // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
 
 		Vec2F   mBeginSelectPoint;         // Begin frame selection point, where x is position on timeline, y is line number
 		bool    mIsFrameSelecting = false; // It is true when user selection by frame now
 
-		Vector<DragHandle*> mBeginSelectHandles; // handles list, that were selected before frame selecting
+		Vector<Ref<DragHandle>> mBeginSelectHandles; // handles list, that were selected before frame selecting
 
-		DragHandle mLeftFrameDragHandle;   // Left frame border drag handle, resizing selected handles rect
-		DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
-		DragHandle mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
+		Ref<DragHandle> mLeftFrameDragHandle;   // Left frame border drag handle, resizing selected handles rect
+		Ref<DragHandle> mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
+		Ref<DragHandle> mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
 
 		DataDocument mBeforeChangeKeysData; // Serialized keys data before change
 
@@ -151,14 +155,14 @@ namespace Editor
 		void OnSelectionChanged() override;
 
 		// Called when selectable draggable handle was pressed, sends to track control that drag has began
-		void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) override;
+		void OnHandleCursorPressed(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
 
 		// Called when selectable draggable handle was released, sends to track control that drag has completed
-		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) override;
+		void OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
 
 		// Called when selectable handle moved, moves all selected handles position
 		// Enables keys batch change
-		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) override;
+		void OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos) override;
 
 		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
@@ -208,6 +212,8 @@ namespace Editor
 		// Called when middle mouse button was released (only when middle mouse button pressed this at previous time)
 		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
 
+		REF_COUNTERABLE_IMPL(Widget, SelectableDragHandlesGroup);
+
 		friend class AnimationWindow;
 		friend class AnimationAddKeysAction;
 		friend class AnimationDeleteKeysAction;
@@ -230,15 +236,15 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
     FIELD().PRIVATE().DEFAULT_VALUE(RectF(-9, -3, 5, 2)).NAME(mSelectionFrameOffsets);
     FIELD().PRIVATE().DEFAULT_VALUE(RectF(-2, -3, 2, 2)).NAME(mSelectionFrameCursorOffsets);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
+    FIELD().PRIVATE().NAME(mAnimationWindow);
     FIELD().PRIVATE().NAME(mTrackControls);
     FIELD().PRIVATE().NAME(mTrackControlsMap);
     FIELD().PRIVATE().NAME(mHandlesGroups);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mContextMenu);
+    FIELD().PRIVATE().NAME(mContextMenu);
     FIELD().PRIVATE().NAME(mContextMenuPressPoint);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mNeedUpdateSelectionFrame);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mHandleHasMoved);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSelectionFrame);
+    FIELD().PRIVATE().NAME(mSelectionFrame);
     FIELD().PRIVATE().NAME(mSelectionRect);
     FIELD().PRIVATE().NAME(mBeginSelectPoint);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mIsFrameSelecting);
@@ -258,23 +264,24 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
     typedef const Map<String, Vector<UInt64>>& _tmp4;
     typedef Map<String, Vector<UInt64>>& _tmp5;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const KeyHandlesSheet&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const KeyHandlesSheet&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateInputDrawOrder);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RegTrackControl, ITrackControl*, const std::string&);
-    FUNCTION().PUBLIC().SIGNATURE(void, UnregTrackControl, ITrackControl*);
+    FUNCTION().PUBLIC().SIGNATURE(void, RegTrackControl, const Ref<ITrackControl>&, const std::string&);
+    FUNCTION().PUBLIC().SIGNATURE(void, UnregTrackControl, const Ref<ITrackControl>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UnregAllTrackControls);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddHandle, DragHandle*);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddHandle, const Ref<DragHandle>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveHandle, DragHandle*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedKeys, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(_tmp2, GetSelectedKeys);
     FUNCTION().PUBLIC().SIGNATURE(void, DeleteKeys, _tmp3, bool);
-    FUNCTION().PUBLIC().SIGNATURE(ContextMenu*, GetContextMenu);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<ContextMenu>&, GetContextMenu);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<KeyHandlesSheet>&);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeCenterHandle);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeLeftHandle);
@@ -286,9 +293,9 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
     FUNCTION().PRIVATE().SIGNATURE(void, CopyKeys);
     FUNCTION().PRIVATE().SIGNATURE(void, PasteKeys);
     FUNCTION().PRIVATE().SIGNATURE(void, OnSelectionChanged);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorPressed, DragHandle*, const Input::Cursor&);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, DragHandle*, const Vec2F&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorPressed, const Ref<DragHandle>&, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleCursorReleased, const Ref<DragHandle>&, const Input::Cursor&);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, const Ref<DragHandle>&, const Vec2F&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);

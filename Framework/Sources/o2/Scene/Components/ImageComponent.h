@@ -21,25 +21,25 @@ namespace o2
         ImageComponent();
 
         // Constructor from image asset
-        ImageComponent(const ImageAssetRef& image);
+        explicit ImageComponent(const AssetRef<ImageAsset>& image);
 
         // Constructor from image asset by path
-        ImageComponent(const String& imagePath);
+        explicit ImageComponent(const String& imagePath);
 
         // Constructor from image asset by id
-        ImageComponent(const UID& imageId);
-
-        // Constructor from texture and source rectangle
-        ImageComponent(TextureRef texture, const RectI& srcRect);
+        explicit ImageComponent(const UID& imageId);
 
         // Constructor from color
-        ImageComponent(const Color4& color);
+        explicit ImageComponent(const Color4& color);
 
         // Constructor from bitmap
-        ImageComponent(Bitmap* bitmap);
+        explicit ImageComponent(const Bitmap& bitmap);
 
         // Constructor from sprite
-        ImageComponent(const Sprite& sprite);
+		explicit ImageComponent(const Sprite& sprite);
+
+		// Constructor from texture and source rectangle
+		ImageComponent(TextureRef texture, const RectI& srcRect);
 
         // Copy-constructor
         ImageComponent(const ImageComponent& other);
@@ -66,9 +66,13 @@ namespace o2
         static String GetCategory();
 
         // Returns name of component icon
-        static String GetIcon();
+		static String GetIcon();
+
+		// Dynamic cast to RefCounterable via DrawableComponent
+		static Ref<RefCounterable> CastToRefCounterable(const Ref<ImageComponent>& ref);
 
         SERIALIZABLE(ImageComponent);
+        CLONEABLE_REF(ImageComponent);
 
         using Sprite::onDraw;
 
@@ -77,7 +81,7 @@ namespace o2
         void OnTransformUpdated() override;
 
         // Sets owner actor
-        void SetOwnerActor(Actor* actor) override;
+        void SetOwnerActor(const Ref<Actor>& actor) override;
 
         // Calling when deserializing
         void OnDeserialized(const DataValue& node) override;
@@ -90,6 +94,8 @@ namespace o2
 
         // Completion deserialization delta callback
         void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;    
+
+		REF_COUNTERABLE_IMPL(DrawableComponent, Sprite);
     };
 }
 // --- META ---
@@ -108,13 +114,13 @@ CLASS_METHODS_META(o2::ImageComponent)
 {
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ImageAssetRef&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetRef<ImageAsset>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(Bitmap*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Bitmap&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ImageComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, FitActorByImage);
@@ -122,8 +128,9 @@ CLASS_METHODS_META(o2::ImageComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<ImageComponent>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);

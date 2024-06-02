@@ -1,14 +1,16 @@
 #pragma once
 
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
+#include "o2/Utils/Types/WeakRef.h"
 
 namespace o2
 {
     // ---------------------------------------------------------------------------------
     // Basic log stream. Contains interfaces of outing data, parent and children streams
     // ---------------------------------------------------------------------------------
-    class LogStream
+    class LogStream: public RefCounterable
     {
     public:
         // Default constructor
@@ -24,19 +26,19 @@ namespace o2
         const WString& GetId() const;
 
         // Binds child stream
-        void BindStream(LogStream* stream);
+        void BindStream(const Ref<LogStream>& stream);
 
         // Unbinds child stream
-        void UnbindStream(LogStream* stream);
+        void UnbindStream(const Ref<LogStream>& stream);
 
         // Unbinds and destroy child stream
-        void UnbindAndReleaseStream(LogStream* stream);
+        void UnbindAndReleaseStream(const Ref<LogStream>& stream);
 
         // Unbinds and destroy all child streams
         void UnbindAllStreams();
 
         // Returns parent stream. Null if no parent
-        LogStream* GetParentStream() const;
+        const WeakRef<LogStream>& GetParentStream() const;
 
         // Outs with low level log
         void Out(WString format, ...);
@@ -57,9 +59,10 @@ namespace o2
         void WarningStr(const WString& str);
 
     protected:
-        LogStream*         mParentStream; // Parent stream. NULL if no parent
-        WString            mId;           // Name of log stream
-        Vector<LogStream*> mChildStreams; // Child streams
+        WString mId; // Name of log stream
+
+        WeakRef<LogStream>     mParentStream; // Parent stream
+        Vector<Ref<LogStream>> mChildStreams; // Child streams
 
     protected:
         // Outs string to stream

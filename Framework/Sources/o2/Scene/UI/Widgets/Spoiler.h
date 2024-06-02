@@ -22,10 +22,10 @@ namespace o2
 
     public:
         // Default constructor
-        Spoiler();
+        explicit Spoiler(RefCounter* refCounter);
 
         // Copy-constructor
-        Spoiler(const Spoiler& other);
+        Spoiler(RefCounter* refCounter, const Spoiler& other);
 
         // Copy-operator
         Spoiler& operator=(const Spoiler& other);
@@ -58,19 +58,20 @@ namespace o2
         float GetHeadHeight() const;
 
         // Searches expand button by name and type
-        Button* GetExpandButton() const;
+        Ref<Button> GetExpandButton() const;
 
         // Returns create menu group in editor
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Spoiler);
+        CLONEABLE_REF(Spoiler);
 
     protected:
         float mHeadHeight = 0.0f; // Spoiler head height @SERIALIZABLE
 
-        WidgetState* mExpandState = nullptr; // Expanding state
-        float        mExpandCoef = 0.0f;     // Expanding animation coefficient 0...1 
-        float        mTargetHeight = 0.0f;   // target expanding height
+        Ref<WidgetState> mExpandState;         // Expanding state
+        float             mExpandCoef = 0.0f;   // Expanding animation coefficient 0...1 
+        float             mTargetHeight = 0.0f; // target expanding height
 
     protected:
         // Invokes required function for childs arranging
@@ -112,7 +113,7 @@ CLASS_FIELDS_META(o2::Spoiler)
     FIELD().PUBLIC().NAME(expanded);
     FIELD().PUBLIC().NAME(onExpand);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mHeadHeight);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mExpandState);
+    FIELD().PROTECTED().NAME(mExpandState);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mExpandCoef);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mTargetHeight);
 }
@@ -120,8 +121,8 @@ END_META;
 CLASS_METHODS_META(o2::Spoiler)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Spoiler&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Spoiler&);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
@@ -131,7 +132,7 @@ CLASS_METHODS_META(o2::Spoiler)
     FUNCTION().PUBLIC().SIGNATURE(const WString&, GetCaption);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHeadHeight, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetHeadHeight);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetExpandButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetExpandButton);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinHeightWithChildren);

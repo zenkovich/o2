@@ -13,16 +13,19 @@ namespace o2
 
 namespace Editor
 {
+	// ---------------------
+	// Delete objects action
+	// ---------------------
 	class DeleteAction: public IAction
 	{
 	public:
 		class ObjectInfo: public ISerializable
 		{
 		public:
-			DataDocument objectData;   // @SERIALIZABLE
-			SceneUID     parentId;	   // @SERIALIZABLE
-			SceneUID     prevObjectId; // @SERIALIZABLE
-			int          idx;          // @SERIALIZABLE
+			DataDocument objectData;   // Serialized object @SERIALIZABLE
+			SceneUID     parentId;	   // Previous object parent @SERIALIZABLE
+			SceneUID     prevObjectId; // Previous object sibling @SERIALIZABLE
+			int          idx;          // Index in children @SERIALIZABLE
 
 			bool operator==(const ObjectInfo& other) const;
 
@@ -30,14 +33,14 @@ namespace Editor
 		};
 
 	public:
-		Vector<ObjectInfo> objectsInfos;
+		Vector<ObjectInfo> objectsInfos; // Deleted objects infos
 
 	public:
 		// Default constructor
 		DeleteAction();
 
 		// Constructor with objects, that will be deleted
-		DeleteAction(const Vector<SceneEditableObject*>& objects);
+		DeleteAction(const Vector<Ref<SceneEditableObject>>& objects);
 
 		// Returns name of action
 		String GetName() const override;
@@ -67,7 +70,7 @@ CLASS_METHODS_META(Editor::DeleteAction)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

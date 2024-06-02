@@ -16,17 +16,17 @@ namespace o2
     {
         SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
         target->mPrototypeLink = source->mPrototypeLink;
-        const_cast<Actor*>(source)->mPrototypeLink.CopyWithoutRemap(target);
+        const_cast<Actor*>(source)->mPrototypeLink = Ref(target);
     }
 
     void Actor::MakePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)
     {
         SourceToTargetMapCloneVisitor::OnCopyComponent(source, target);
         target->mPrototypeLink = source->mPrototypeLink;
-        const_cast<Component*>(source)->mPrototypeLink = target;
+        const_cast<Component*>(source)->mPrototypeLink = Ref(target);
     }
 
-    void Actor::SetProtytypeDummy(ActorAssetRef asset)
+    void Actor::SetProtytypeDummy(AssetRef<ActorAsset> asset)
     {}
 
     void Actor::BreakPrototypeLink()
@@ -34,14 +34,14 @@ namespace o2
         if (!mPrototype && !mPrototypeLink)
             return;
 
-        SetPrototype(ActorAssetRef());
+        SetPrototype(AssetRef<ActorAsset>());
 
         // remove from cache
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->BreakPrototypeLink();
 
-        for (auto component : mComponents)
+        for (auto& component : mComponents)
             component->mPrototypeLink = nullptr;
 
         OnChanged();
@@ -52,7 +52,7 @@ namespace o2
         if (!mPrototypeLink)
             return;
 
-        Vector<Actor*> separatedActors;
+        Vector<Ref<Actor>> separatedActors;
         SeparateActors(separatedActors);
 
         for (auto it = separatedActors.Begin(); it != separatedActors.End();)
@@ -60,10 +60,7 @@ namespace o2
             if ((*it)->mPrototypeLink)
                 ++it;
             else
-            {
-                delete *it;
                 it = separatedActors.Remove(it);
-            }
         }
 
         Vector<Actor**> actorPointersFields;
@@ -72,13 +69,10 @@ namespace o2
         Map<const Component*, Component*> componentsMap;
         Vector<ISerializable*> serializableObjects;
 
-        ProcessReverting(this, mPrototypeLink.Get(), separatedActors, actorPointersFields, componentPointersFields, actorsMap,
+        ProcessReverting(this, mPrototypeLink.Lock().Get(), separatedActors, actorPointersFields, componentPointersFields, actorsMap,
                          componentsMap, serializableObjects);
 
         FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
-
-        //         for (auto serializable : serializableObjects)
-        //             serializable->OnDeserialized();
 
         UpdateResEnabledInHierarchy();
         transform->SetDirty();
@@ -86,12 +80,12 @@ namespace o2
         OnChanged();
     }
 
-    ActorAssetRef Actor::MakePrototype()
+    AssetRef<ActorAsset> Actor::MakePrototype()
     {
-        mCopyVisitor = mnew MakePrototypeCloneVisitor();
-        auto prototype = CloneAs<Actor>();
+        mCopyVisitor = mmake<MakePrototypeCloneVisitor>();
+        auto prototype = CloneAsRef<Actor>();
 
-        ActorAssetRef prototypeAsset = ActorAssetRef::CreateAsset(prototype);
+        AssetRef<ActorAsset> prototypeAsset = AssetRef<ActorAsset>::CreateAsset(prototype);
         SetPrototype(prototypeAsset);
 
         prototype->UpdateResEnabledInHierarchy();
@@ -101,9 +95,9 @@ namespace o2
         return prototypeAsset;
     }
 
-    void Actor::SeparateActors(Vector<Actor*>& separatedActors)
+    void Actor::SeparateActors(Vector<Ref<Actor>>& separatedActors)
     {
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
         {
             child->mParent = nullptr;
             separatedActors.Add(child);
@@ -120,16 +114,16 @@ namespace o2
             return;
 
         // Get difference between this actor and prototype first
-        auto diffs = ActorDifferences::GetDifference(this, mPrototype->GetActor());
+        auto diffs = ActorDifferences::GetDifference(Ref(this), mPrototype->GetActor());
 
         // Get applying actors infos
         ApplyActorInfo prototypeApplyInfo(mPrototype->GetActor());
-        ApplyActorInfo thisApplyInfo(this);
+        ApplyActorInfo thisApplyInfo(Ref(this));
         Vector<ApplyActorInfo> linkedActorsApplyInfos;
 
         auto& linkedActors = o2Scene.mPrototypeLinksCache[mPrototype];
         linkedActorsApplyInfos.Reserve(linkedActors.Count());
-        linkedActors.ForEach([&](auto x) { if (x != this) linkedActorsApplyInfos.Add(ApplyActorInfo(x)); });
+        linkedActors.ForEach([&](auto x) { if (x != this) linkedActorsApplyInfos.Add(ApplyActorInfo(x.Lock())); });
     
         // Apply differences
         diffs.newChildren.ForEach([&](auto d) { d->Apply(thisApplyInfo, prototypeApplyInfo, linkedActorsApplyInfos); });
@@ -141,16 +135,16 @@ namespace o2
         diffs.removedChildren.ForEach([&](auto d) { d->Apply(thisApplyInfo, prototypeApplyInfo, linkedActorsApplyInfos); });
 
         // Invoke changed callback for actors and save assets
-        for (auto info : linkedActorsApplyInfos)
+        for (auto& info : linkedActorsApplyInfos)
         {
             info.actor->OnChanged();
             info.actor->UpdateTransform();
 
             if (info.actor->IsAsset())
             {
-                ActorAssetRef asset(info.actor->GetAssetID());
+                AssetRef<ActorAsset> asset(info.actor->GetAssetID());
                 if (info.actor != asset->GetActor())
-                    asset->SetActor(info.actor, false);
+                    asset->SetActor(info.actor);
 
                 asset->Save();
             }
@@ -170,48 +164,48 @@ namespace o2
         stack.Add(GetType().GetField("transform"));
 
         auto createActorChangedFieldDiff = [&](const String& fieldPath) {
-            auto diff = mnew ActorDifferences::ChangedObjectField();
-            diff->prototypeLink = const_cast<Actor*>(mPrototypeLink.Get());
+            auto diff = mmake<ActorDifferences::ChangedObjectField>();
+            diff->prototypeLink = mPrototypeLink.Lock();
             diff->path = fieldPath;
             differences.changedActorFields.Add(diff);
         };
 
-        ActorDifferences::GetObjectDifferences(createActorChangedFieldDiff, stack, transform->GetType(), transform, mPrototypeLink->transform);
+        ActorDifferences::GetObjectDifferences(createActorChangedFieldDiff, stack, transform->GetType(), transform, mPrototypeLink.Lock()->transform);
     }
 
     void Actor::BeginMakePrototype() const
     {
-        mCopyVisitor = mnew MakePrototypeCloneVisitor();
+        mCopyVisitor = mmake<MakePrototypeCloneVisitor>();
     }
 
     void Actor::BeginInstantiatePrototype() const
     {
-        mCopyVisitor = mnew InstantiatePrototypeCloneVisitor();
+        mCopyVisitor = mmake<InstantiatePrototypeCloneVisitor>();
     }
 
-    bool Actor::IsLinkedToActor(Actor* actor) const
+    bool Actor::IsLinkedToActor(const Ref<Actor>& actor) const
     {
         if (mPrototypeLink)
         {
-            auto t = mPrototypeLink.Get();
+            auto t = mPrototypeLink.Lock().Get();
             while (t)
             {
-                if (t == actor)
+                if (t == actor.Get())
                     return true;
 
-                t = t->mPrototypeLink.Get();
+                t = t->mPrototypeLink.Lock().Get();
             }
         }
 
         return false;
     }
 
-    Actor* Actor::FindLinkedActor(Actor* linkActor)
+    Ref<Actor> Actor::FindLinkedActor(const Ref<Actor>& linkActor)
     {
         if (GetPrototypeLink() == linkActor)
-            return this;
+            return Ref(this);
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
         {
             if (auto res = child->FindLinkedActor(linkActor))
                 return res;
@@ -258,14 +252,14 @@ namespace o2
         bool lastResLocked = mResLocked;
 
         if (mParent)
-            mResLocked = mLocked || mParent->mResLocked;
+            mResLocked = mLocked || mParent.Lock()->mResLocked;
         else
             mResLocked = mLocked;
 
         if (lastResLocked != mResLocked)
             OnLockChanged();
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->UpdateLocking();
     }
 
@@ -299,9 +293,9 @@ namespace o2
         return transform->GetWorldPivot();
     }
 
-    void Actor::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+    void Actor::AddEditableChild(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
     {
-        if (Actor* actor = dynamic_cast<Actor*>(object))
+        if (auto actor = DynamicCast<Actor>(object))
         {
             if (idx >= 0)
                 AddChild(actor, idx);
@@ -315,29 +309,34 @@ namespace o2
         return true;
     }
 
-    Vector<SceneEditableObject*> Actor::GetEditableChildren() const
+    Vector<Ref<SceneEditableObject>> Actor::GetEditableChildren() const
     {
-        return mChildren.DynamicCast<SceneEditableObject*>();
+        Vector<Ref<SceneEditableObject>> res;
+        for (auto& child : mChildren) {
+            res.Add(DynamicCast<SceneEditableObject>(child));
+        }
+
+        return res;
     }
 
-    void Actor::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
+    void Actor::SetEditableParent(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
     {
-        SetParent(dynamic_cast<Actor*>(object), false, idx);
+        SetParent(DynamicCast<Actor>(object), false, idx);
     }
 
-    SceneEditableObject* Actor::GetEditableOwner()
+    Ref<SceneEditableObject> Actor::GetEditableOwner()
     {
-        return this;
+        return Ref(this);
     }
 
-    const SceneEditableObject* Actor::GetEditableLink() const
+    Ref<SceneEditableObject> Actor::GetEditableLink() const
     {
-        return mPrototypeLink.Get();
+        return Ref(const_cast<Actor*>(mPrototypeLink.Lock().Get()));
     }
 
-    SceneEditableObject* Actor::GetEditableParent() const
+    Ref<SceneEditableObject> Actor::GetEditableParent() const
     {
-        return mParent;
+        return mParent.Lock();
     }
 
     void Actor::OnChanged()
@@ -345,7 +344,7 @@ namespace o2
         onChanged();
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
-            o2Scene.OnObjectChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
     }
 
     void Actor::OnLockChanged()
@@ -355,8 +354,8 @@ namespace o2
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
         {
-            o2Scene.OnObjectChanged(this);
-            o2Scene.onLockChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
+            o2Scene.onLockChanged(Ref(this));
         }
     }
 
@@ -367,19 +366,19 @@ namespace o2
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
         {
-            o2Scene.OnObjectChanged(this);
-            o2Scene.onNameChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
+            o2Scene.onNameChanged(Ref(this));
         }
     }
 
-    void Actor::OnEditableParentChanged(SceneEditableObject* oldParent)
+    void Actor::OnEditableParentChanged(const Ref<SceneEditableObject>& oldParent)
     {
-        OnParentChanged(dynamic_cast<Actor*>(oldParent));
+        OnParentChanged(DynamicCast<Actor>(oldParent));
     }
 
     void Actor::OnChildrenChanged()
     {
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnChildrenChanged();
 
         onChildHierarchyChanged();
@@ -387,16 +386,16 @@ namespace o2
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
         {
-            o2Scene.OnObjectChanged(this);
-            o2Scene.onChildrenHierarchyChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
+            o2Scene.onChildrenHierarchyChanged(Ref(this));
         }
     }
 
-    void Actor::OnParentChanged(Actor* oldParent)
+    void Actor::OnParentChanged(const Ref<Actor>& oldParent)
     {
         ISceneDrawable::OnDrawbleParentChanged();
 
-        for (auto comp : mComponents)
+        for (auto& comp : mComponents)
             comp->OnParentChanged(oldParent);
 
         onParentChanged(oldParent);
@@ -404,16 +403,16 @@ namespace o2
 
         if (Scene::IsSingletonInitialzed() && IsOnScene())
         {
-            o2Scene.OnObjectChanged(this);
+            o2Scene.OnObjectChanged(Ref(this));
             o2Scene.OnObjectChanged(oldParent);
-            o2Scene.OnObjectChanged(mParent);
+            o2Scene.OnObjectChanged(mParent.Lock());
 
             o2Scene.onChildrenHierarchyChanged(oldParent);
-            o2Scene.onChildrenHierarchyChanged(mParent);
+            o2Scene.onChildrenHierarchyChanged(mParent.Lock());
         }
     }
 
-    void Actor::ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
+    void Actor::ProcessReverting(Actor* dest, const Actor* source, const Vector<Ref<Actor>>& separatedActors,
                                  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
                                  Map<const Actor*, Actor*>& actorsMap,
                                  Map<const Component*, Component*>& componentsMap,
@@ -426,18 +425,18 @@ namespace o2
 
         actorsMap.Add(source, dest);
 
-        for (auto child : source->mChildren)
+        for (auto& child : source->mChildren)
         {
-            Actor* newChild = nullptr;
+            Ref<Actor> newChild;
 
-            newChild = separatedActors.FindOrDefault([&](Actor* x) { return x->GetPrototypeLink() == child; });
+            newChild = separatedActors.FindOrDefault([&](const Ref<Actor>& x) { return x->GetPrototypeLink() == child; });
 
             if (!newChild)
-                newChild = mnew Actor(dest->IsOnScene() ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
+                newChild = mmake<Actor>(dest->IsOnScene() ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
 
             dest->AddChild(newChild);
 
-            ProcessReverting(newChild, child, separatedActors, actorsPointers, componentsPointers, actorsMap,
+            ProcessReverting(newChild.Get(), child.Get(), separatedActors, actorsPointers, componentsPointers, actorsMap,
                              componentsMap, serializableObjects);
         }
 
@@ -446,37 +445,36 @@ namespace o2
             if (!(*it)->mPrototypeLink)
             {
                 (*it)->mOwner = nullptr;
-                delete *it;
                 it = dest->mComponents.Remove(it);
             }
             else ++it;
         }
 
-        for (auto component : source->mComponents)
+        for (auto& component : source->mComponents)
         {
-            Component* matchingComponent = dest->mComponents.FindOrDefault([&](Component* x) { return x->GetPrototypeLink() == component; });
+            auto matchingComponent = dest->mComponents.FindOrDefault([&](const Ref<Component>& x) { return x->GetPrototypeLink() == component; });
             if (matchingComponent)
             {
                 Vector<const FieldInfo*> fields;
                 GetComponentFields(matchingComponent, fields);
 
-                CopyFields(fields, component, matchingComponent, actorsPointers, componentsPointers,
+                CopyFields(fields, const_cast<Component*>(component.Get()), matchingComponent.Get(), actorsPointers, componentsPointers,
                            serializableObjects);
 
                 continue;
             }
 
-            Component* newComponent = dest->AddComponent(CloneAs<Component>());
-            componentsMap.Add(component, newComponent);
+            auto newComponent = dest->AddComponent(CloneAsRef<Component>());
+            componentsMap.Add(component.Get(), newComponent.Get());
 
-            CollectFixingFields(newComponent, componentsPointers, actorsPointers);
+            CollectFixingFields(newComponent.Get(), componentsPointers, actorsPointers);
         }
     }
 
     void Actor::CopyFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* dest, Vector<Actor**>& actorsPointers,
                            Vector<Component**>& componentsPointers, Vector<ISerializable*>& serializableObjects)
     {
-        for (auto field : fields)
+        for (auto& field : fields)
         {
             if (!field->HasAttribute<SerializableAttribute>())
                 continue;
@@ -497,7 +495,7 @@ namespace o2
                 *destValuePtr = sourceValue;
                 componentsPointers.Add(destValuePtr);
             }
-            else if (field->GetType()->IsBasedOn(TypeOf(AssetRef)))
+            else if (field->GetType()->IsBasedOn(TypeOf(AssetRef<Asset>)))
             {
                 field->CopyValue(dest, source);
             }
@@ -519,15 +517,15 @@ namespace o2
                                     Vector<Actor**>& actorsPointers)
     {
         Vector<const FieldInfo*> fields;
-        GetComponentFields(newComponent, fields);
+        GetComponentFields(Ref(newComponent), fields);
 
-        for (auto field : fields)
+        for (auto& field : fields)
         {
             if (field->GetType()->GetUsage() == Type::Usage::Pointer)
             {
                 const PointerType* fieldType = (const PointerType*)field->GetType();
 
-                if (fieldType->GetUnpointedType()->IsBasedOn(TypeOf(Component)))
+                if (fieldType->GetBaseType()->IsBasedOn(TypeOf(Component)))
                     componentsPointers.Add((Component**)(field->GetValuePtrStrong(newComponent)));
 
                 if (*fieldType == TypeOf(Actor*))
@@ -541,14 +539,14 @@ namespace o2
                                            const Map<const Actor*, Actor*>& actorsMap,
                                            const Map<const Component*, Component*>& componentsMap)
     {
-        for (auto actorPtr : actorsPointers)
+        for (auto& actorPtr : actorsPointers)
         {
             Actor* newActorPtr;
             if (actorsMap.TryGetValue(*actorPtr, newActorPtr))
                 *actorPtr = newActorPtr;
         }
 
-        for (auto componentPtr : componentsPointers)
+        for (auto& componentPtr : componentsPointers)
         {
             Component* newComponentPtr;
             if (componentsMap.TryGetValue(*componentPtr, newComponentPtr))
@@ -556,7 +554,7 @@ namespace o2
         }
     }
 
-    void Actor::GetComponentFields(Component* component, Vector<const FieldInfo*>& fields)
+    void Actor::GetComponentFields(const Ref<Component>& component, Vector<const FieldInfo*>& fields)
     {
         struct helper
         {
@@ -564,7 +562,7 @@ namespace o2
             {
                 fields.Add(type->GetFields().Convert<const FieldInfo*>([](const auto& x) { return &x; }));
 
-                for (auto baseType : type->GetBaseTypes())
+                for (auto& baseType : type->GetBaseTypes())
                 {
                     if (*baseType.type != TypeOf(Component))
                         GetFields(baseType.type, fields);
@@ -578,13 +576,17 @@ namespace o2
     void Actor::CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds,
                                        bool withTransform)
     {
-        if (changed->mParent && changed->mParent->mPrototypeLink)
+        if (changed->mParent && changed->mParent.Lock()->mPrototypeLink)
         {
-            if (!changed->mParent->IsLinkedToActor(source->mParent) && dest->mParent &&
-                dest->mParent->IsLinkedToActor(source->mParent))
+            auto changedParent = changed->mParent.Lock();
+            auto destParent = dest->mParent.Lock();
+            auto sourceParent = source->mParent.Lock();
+
+            if (!changedParent->IsLinkedToActor(sourceParent) && dest->mParent &&
+                destParent->IsLinkedToActor(sourceParent))
             {
-                Actor* newParent = allDestChilds.FindOrDefault([&](Actor* x) { return x->IsLinkedToActor(changed->mParent->mPrototypeLink.Get()); });
-                dest->SetParent(newParent);
+                Actor* newParent = allDestChilds.FindOrDefault([&](Actor* x) { return x->IsLinkedToActor(Ref(changedParent->mPrototypeLink.Lock().Get())); });
+                dest->SetParent(Ref(newParent));
             }
         }
 

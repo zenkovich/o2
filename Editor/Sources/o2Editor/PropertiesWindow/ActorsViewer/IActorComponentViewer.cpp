@@ -35,10 +35,7 @@ namespace Editor
 	}
 
 	IActorComponentViewer::~IActorComponentViewer()
-	{
-		if (mSpoiler)
-			delete mSpoiler;
-	}
+	{}
 
 	void IActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
 	{
@@ -55,7 +52,7 @@ namespace Editor
 		}
 	}
 
-	Widget* IActorComponentViewer::GetWidget() const
+	Ref<Widget> IActorComponentViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}
@@ -93,7 +90,7 @@ namespace Editor
 
 	void IActorComponentViewer::RemoveTargetComponents()
 	{
-		for (auto comp : mTargetComponents)
+		for (auto& comp : mTargetComponents)
 			delete comp;
 
 		mTargetComponents.Clear();

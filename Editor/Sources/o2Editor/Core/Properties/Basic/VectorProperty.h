@@ -15,7 +15,7 @@ namespace o2
 
 namespace Editor
 {
-	class IntegerProperty;
+	FORWARD_CLASS_REF(IntegerProperty);
 
 	// ----------------------
 	// Editor vector property
@@ -24,10 +24,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		VectorProperty();
+		VectorProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		VectorProperty(const VectorProperty& other);
+		VectorProperty(RefCounter* refCounter, const VectorProperty& other);
 
 		// Copy operator
 		VectorProperty& operator=(const VectorProperty& other);
@@ -51,7 +51,7 @@ namespace Editor
 		WString GetCaption() const override;
 
 		// Adds remove button
-		Button* GetRemoveButton() override;
+		Ref<Button> GetRemoveButton() override;
 
 		// Specializes vector type
 		void SpecializeType(const Type* type);
@@ -74,14 +74,16 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-		IOBJECT(VectorProperty);
+		SERIALIZABLE(VectorProperty);
+        CLONEABLE_REF(VectorProperty);
 
 	protected:
 		struct TargetObjectData
 		{
-			IAbstractValueProxy* proxy = nullptr;
+			Ref<IAbstractValueProxy> proxy;
+
 			void* data = nullptr;
-			bool isCreated = false;
+			bool  isCreated = false;
 
 			bool operator==(const TargetObjectData& other) const { return proxy == other.proxy; }
 
@@ -90,23 +92,23 @@ namespace Editor
 		};
 
 	protected:
-		Spoiler* mSpoiler = nullptr; // Properties spoiler
+		Ref<Spoiler> mSpoiler; // Properties spoiler
 
 		const VectorType* mVectorType = nullptr; // Vector type
 
 		Vector<Pair<TargetObjectData, TargetObjectData>>  mTargetObjects; // Target objects
 						 						    
-		Vector<IPropertyField*> mValueProperties;     // Values properties
-		Vector<IPropertyField*> mValuePropertiesPool; // Unused value properties pool
+		Vector<Ref<IPropertyField>> mValueProperties;     // Values properties
+		Vector<Ref<IPropertyField>> mValuePropertiesPool; // Unused value properties pool
 
-		IntegerProperty* mCountProperty = nullptr; // Vector count property
+		Ref<IntegerProperty> mCountProperty; // Vector count property
 
 		bool mCountDifferents = false; // Is targets counts of elements are different
 		int  mCountOfElements = 0;     // Common count of elements
 
-		HorizontalLayout* mHeaderContainer = nullptr; // Count property and other controls container
+		Ref<HorizontalLayout> mHeaderContainer; // Count property and other controls container
 
-		Button* mAddButton = nullptr; // Add button, adds new element at end
+		Ref<Button> mAddButton; // Add button, adds new element at end
 
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
@@ -115,19 +117,19 @@ namespace Editor
 		void InitializeControls();
 
 		// Returns value pointer from proxy when proxy is pointer proxy
-		void* GetProxyValuePointer(IAbstractValueProxy* proxy) const;
+		void* GetProxyValuePointer(const Ref<IAbstractValueProxy>& proxy) const;
 
 		// Returns free element property
-		IPropertyField* GetFreeValueProperty();
+		Ref<IPropertyField> GetFreeValueProperty();
 
 		// Frees element property
-		void FreeValueProperty(IPropertyField* def);
+		void FreeValueProperty(const Ref<IPropertyField>& def);
 
 		// Updates element caption
-		void UpdateElementCaption(IPropertyField* propertyDef) const;
+		void UpdateElementCaption(const Ref<IPropertyField>& propertyDef) const;
 
 		// Called when count property changing
-		void OnCountChanged(IPropertyField* def);
+		void OnCountChanged(const Ref<IPropertyField>& def);
 
 		// Sets new count of elements in vector
 		void Resize(int newCount);
@@ -142,7 +144,7 @@ namespace Editor
 		void OnExpand();
 
 		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
-		TargetObjectData GetObjectFromProxy(IAbstractValueProxy* proxy);
+		TargetObjectData GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy);
 
 		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
@@ -158,30 +160,30 @@ CLASS_BASES_META(Editor::VectorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::VectorProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVectorType);
     FIELD().PROTECTED().NAME(mTargetObjects);
     FIELD().PROTECTED().NAME(mValueProperties);
     FIELD().PROTECTED().NAME(mValuePropertiesPool);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCountProperty);
+    FIELD().PROTECTED().NAME(mCountProperty);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mCountDifferents);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mCountOfElements);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+    FIELD().PROTECTED().NAME(mHeaderContainer);
+    FIELD().PROTECTED().NAME(mAddButton);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsRefreshing);
 }
 END_META;
 CLASS_METHODS_META(Editor::VectorProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const VectorProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const VectorProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetRemoveButton);
     FUNCTION().PUBLIC().SIGNATURE(void, SpecializeType, const Type*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetSpecializedType);
@@ -190,16 +192,16 @@ CLASS_METHODS_META(Editor::VectorProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-    FUNCTION().PROTECTED().SIGNATURE(void*, GetProxyValuePointer, IAbstractValueProxy*);
-    FUNCTION().PROTECTED().SIGNATURE(IPropertyField*, GetFreeValueProperty);
-    FUNCTION().PROTECTED().SIGNATURE(void, FreeValueProperty, IPropertyField*);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateElementCaption, IPropertyField*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, IPropertyField*);
+    FUNCTION().PROTECTED().SIGNATURE(void*, GetProxyValuePointer, const Ref<IAbstractValueProxy>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<IPropertyField>, GetFreeValueProperty);
+    FUNCTION().PROTECTED().SIGNATURE(void, FreeValueProperty, const Ref<IPropertyField>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateElementCaption, const Ref<IPropertyField>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, const Ref<IPropertyField>&);
     FUNCTION().PROTECTED().SIGNATURE(void, Resize, int);
     FUNCTION().PROTECTED().SIGNATURE(void, Remove, int);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnExpand);
-    FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
+    FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

@@ -5,14 +5,15 @@
 
 namespace Editor
 {
-	SplineTool::SplineTool()
+	SplineTool::SplineTool():
+		splineEditor(mmake<SplineEditor>()), sceneLayer(mmake<SplineSceneLayer>())
 	{
-		sceneLayer.tool = this;
+		sceneLayer->tool = Ref(this);
 	}
 
 	void SplineTool::Reset()
 	{
-		splineEditor.Reset();
+		splineEditor->Reset();
 		onChanged.Clear();
 	}
 
@@ -118,17 +119,17 @@ namespace Editor
 
 	void SplineTool::SplineWrapper::OnChanged()
 	{
-		tool->onChanged();
+		tool.Lock()->onChanged();
 	}
 
 	void SplineTool::SplineSceneLayer::DrawOverScene()
 	{
-		tool->splineEditor.Draw();
+		tool.Lock()->splineEditor->Draw();
 	}
 
 	void SplineTool::SplineSceneLayer::Update(float dt)
 	{
-		tool->splineEditor.Update(dt);
+		tool.Lock()->splineEditor->Update(dt);
 	}
 
 	int SplineTool::SplineSceneLayer::GetOrder() const
@@ -138,7 +139,7 @@ namespace Editor
 
 	bool SplineTool::SplineSceneLayer::IsEnabled() const
 	{
-		return tool->isEnabled;
+		return tool.Lock()->isEnabled;
 	}
 
 	const String& SplineTool::SplineSceneLayer::GetName() const
@@ -152,13 +153,13 @@ namespace Editor
 		return String::empty;
 	}
 
-	void SplineTool::SplineTool::SetSpline(Spline* spline, const Function<Vec2F()>& getOrigin)
+	void SplineTool::SplineTool::SetSpline(const Ref<Spline>& spline, const Function<Vec2F()>& getOrigin)
 	{
-		auto wrapper = mnew SplineWrapper();
+		auto wrapper = mmake<SplineWrapper>();
 		wrapper->spline = spline;
 		wrapper->getOrigin = getOrigin;
-		wrapper->tool = this;
-		splineEditor.SetSpline(wrapper);
+		wrapper->tool = Ref(this);
+		splineEditor->SetSpline(wrapper);
 	}
 
 	String SplineTool::SplineTool::GetPanelIcon() const
@@ -168,13 +169,13 @@ namespace Editor
 
 	void SplineTool::SplineTool::OnEnabled()
 	{
-		o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.AddEditorLayer(sceneLayer);
 		isEnabled = true;
 	}
 
 	void SplineTool::SplineTool::OnDisabled()
 	{
-		o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.RemoveEditorLayer(sceneLayer);
 		isEnabled = false;
 	}
 }

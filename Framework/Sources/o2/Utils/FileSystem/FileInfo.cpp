@@ -18,13 +18,13 @@ namespace o2
 
     bool FolderInfo::IsFileExist(const String& filePath)
     {
-        for (auto file:files)
+        for (auto& file:files)
         {
             if (file.path == filePath)
                 return true;
         }
 
-        for (auto path:folders)
+        for (auto& path:folders)
         {
             if (path.IsFileExist(filePath))
                 return true;

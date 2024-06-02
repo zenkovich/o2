@@ -25,13 +25,13 @@ namespace o2
         PROPERTY(bool, expandHeight, SetHeightExpand, IsHeightExpand); // Expand children by height property
 
         PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
-    public:
-        
+
+    public:        
         // Default constructor
-        VerticalLayout();
+        explicit VerticalLayout(RefCounter* refCounter);
 
         // Copy-constructor
-        VerticalLayout(const VerticalLayout& other);
+        VerticalLayout(RefCounter* refCounter, const VerticalLayout& other);
 
         // Destructor
         ~VerticalLayout();
@@ -106,6 +106,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(VerticalLayout);
+        CLONEABLE_REF(VerticalLayout);
 
     protected:
         BaseCorner mBaseCorner = BaseCorner::Top;  // Base corner of widgets arranging @SERIALIZABLE
@@ -126,10 +127,10 @@ namespace o2
         float GetHeightWeightWithChildren() const override;
 
         // Called when child widget was added
-        void OnChildAdded(Widget* child) override;
+        void OnChildAdded(const Ref<Widget>& child) override;
 
         // Called when child widget was removed
-        void OnChildRemoved(Widget* child) override;
+        void OnChildRemoved(const Ref<Widget>& child) override;
 
         // Invokes required function for childs arranging
         virtual void RearrangeChilds();
@@ -147,7 +148,7 @@ namespace o2
         virtual void ExpandSizeByChilds();
 
         // Aligns widget by height with base corner
-        void AlignWidgetByWidth(Widget* child, float heightAnchor);
+        void AlignWidgetByWidth(const Ref<Widget>& child, float heightAnchor);
 
         // Updates layout's weight and minimal size
         virtual void UpdateLayoutParametres();
@@ -183,8 +184,8 @@ END_META;
 CLASS_METHODS_META(o2::VerticalLayout)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const VerticalLayout&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const VerticalLayout&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBaseCorner, BaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(BaseCorner, GetBaseCorner);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSpacing, float);
@@ -210,14 +211,14 @@ CLASS_METHODS_META(o2::VerticalLayout)
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinWidthWithChildren);
     FUNCTION().PROTECTED().SIGNATURE(float, GetMinHeightWithChildren);
     FUNCTION().PROTECTED().SIGNATURE(float, GetHeightWeightWithChildren);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Widget*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromTopToBottom);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromBottomToTop);
     FUNCTION().PROTECTED().SIGNATURE(void, ArrangeFromCenter);
     FUNCTION().PROTECTED().SIGNATURE(void, ExpandSizeByChilds);
-    FUNCTION().PROTECTED().SIGNATURE(void, AlignWidgetByWidth, Widget*, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, AlignWidgetByWidth, const Ref<Widget>&, float);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayoutParametres);
 }
 END_META;

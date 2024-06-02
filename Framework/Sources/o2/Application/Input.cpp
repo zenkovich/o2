@@ -20,7 +20,7 @@ namespace o2
 
     bool Input::IsKeyPressed(KeyboardKey key) const
     {
-        for (auto ikey : mPressedKeys)
+        for (auto& ikey : mPressedKeys)
         {
             if (ikey.keyCode == key)
                 return true;
@@ -31,7 +31,7 @@ namespace o2
 
     bool Input::IsKeyDown(KeyboardKey key) const
     {
-        for (auto ikey : mDownKeys)
+        for (auto& ikey : mDownKeys)
         {
             if (ikey.keyCode == key)
                 return true;
@@ -42,7 +42,7 @@ namespace o2
 
     bool Input::IsKeyReleased(KeyboardKey key) const
     {
-        for (auto ikey : mReleasedKeys)
+        for (auto& ikey : mReleasedKeys)
         {
             if (ikey.keyCode == key)
                 return true;
@@ -61,7 +61,7 @@ namespace o2
 
     float Input::GetKeyPressingTime(KeyboardKey key) const
     {
-        for (auto ikey : mDownKeys)
+        for (auto& ikey : mDownKeys)
         {
             if (ikey.keyCode == key)
                 return ikey.pressedTime;
@@ -72,7 +72,7 @@ namespace o2
 
     Vec2F Input::GetCursorPos(CursorId id /*= 0*/) const
     {
-        for (auto cursor : mCursors)
+        for (auto& cursor : mCursors)
         {
             if (cursor.id == id)
                 return cursor.position;
@@ -86,7 +86,7 @@ namespace o2
 
     bool Input::IsCursorPressed(CursorId id /*= 0*/) const
     {
-        for (auto cursor : mCursors)
+        for (auto& cursor : mCursors)
         {
             if (cursor.id == id && cursor.pressedTime < FLT_EPSILON && cursor.isPressed)
                 return true;
@@ -97,7 +97,7 @@ namespace o2
 
     bool Input::IsCursorDown(CursorId id /*= 0*/) const
     {
-        for (auto cursor : mCursors)
+        for (auto& cursor : mCursors)
         {
             if (cursor.id == id && cursor.isPressed)
                 return true;
@@ -108,7 +108,7 @@ namespace o2
 
     bool Input::IsCursorReleased(CursorId id /*= 0*/) const
     {
-        for (auto cursor : mReleasedCursors)
+        for (auto& cursor : mReleasedCursors)
         {
             if (cursor.id == id)
                 return true;
@@ -119,7 +119,7 @@ namespace o2
 
     float Input::GetCursorPressingTime(CursorId id /*= 0*/) const
     {
-        for (auto cursor : mCursors)
+        for (auto& cursor : mCursors)
         {
             if (cursor.id == id)
                 return cursor.pressedTime;
@@ -130,7 +130,7 @@ namespace o2
 
     Vec2F Input::GetCursorDelta(CursorId id /*= 0*/) const
     {
-        for (auto cursor : mCursors)
+        for (auto& cursor : mCursors)
         {
             if (cursor.id == id)
             {
@@ -230,33 +230,30 @@ namespace o2
         PROFILE_SAMPLE_FUNC();
 
         auto inputQueue = mInputQueue;
-        for (auto msg : inputQueue)
+        for (auto& msg : inputQueue)
         {
             if (msg->Apply())
-            {
                 mInputQueue.Remove(msg);
-                delete msg;
-            }
         }
     }
 
     void Input::OnKeyPressed(KeyboardKey key)
     {
-        auto msg = mnew InputKeyPressedMsg();
+        auto msg = mmake<InputKeyPressedMsg>();
         msg->key = key;
         mInputQueue.Add(msg);
     }
 
     void Input::OnKeyReleased(KeyboardKey key)
     {
-        auto msg = mnew InputKeyReleasedMsg();
+        auto msg = mmake<InputKeyReleasedMsg>();
         msg->key = key;
         mInputQueue.Add(msg);
     }
 
     void Input::OnCursorPressed(const Vec2F& pos, CursorId id /*= 0*/)
     {
-        auto msg = mnew InputCursorPressedMsg();
+        auto msg = mmake<InputCursorPressedMsg>();
         msg->position = pos;
         msg->id = id;
         mInputQueue.Add(msg);
@@ -264,14 +261,14 @@ namespace o2
 
     void Input::OnCursorReleased(CursorId id /*= 0*/)
     {
-        auto msg = mnew InputCursorReleasedMsg();
+        auto msg = mmake<InputCursorReleasedMsg>();
         msg->id = id;
         mInputQueue.Add(msg);
     }
 
     void Input::OnCursorMoved(const Vec2F& pos, CursorId id /*= 0*/, bool withDelta /*= true*/)
     {
-        auto msg = mnew InputCursorMovedMsg();
+        auto msg = mmake<InputCursorMovedMsg>();
         msg->position = pos;
         msg->id = id;
         mInputQueue.Add(msg);
@@ -336,13 +333,13 @@ namespace o2
 
     bool Input::OnKeyReleasedMsgApply(KeyboardKey key)
     {
-        for (auto ikey : mPressedKeys)
+        for (auto& ikey : mPressedKeys)
         {
             if (ikey.keyCode == key)
                 return false;
         }
         
-        for (auto ikey : mDownKeys)
+        for (auto& ikey : mDownKeys)
         {
             if (ikey.keyCode == key)
             {
@@ -439,7 +436,7 @@ namespace o2
 
     void Input::OnMouseWheel(float delta)
     {
-        auto msg = mnew InputMouseWheelMsg();
+        auto msg = mmake<InputMouseWheelMsg>();
         msg->delta = delta;
         mInputQueue.Add(msg);
     }

@@ -10,14 +10,15 @@
 
 namespace Editor
 {
-	CurvePreview::CurvePreview()
+	CurvePreview::CurvePreview(RefCounter* refCounter):
+		Widget(refCounter)
 	{
-		mSprite = mnew Sprite();
+		mSprite = mmake<Sprite>();
 		AddLayer("image", mSprite);
 	}
 
-	CurvePreview::CurvePreview(const CurvePreview& other):
-		mBackColor(other.mBackColor), mCurveColor(other.mCurveColor)
+	CurvePreview::CurvePreview(RefCounter* refCounter, const CurvePreview& other):
+		Widget(refCounter, other), mBackColor(other.mBackColor), mCurveColor(other.mCurveColor)
 	{
 		mSprite = GetLayerDrawable<Sprite>("image");
 		RetargetStatesAnimations();
@@ -38,7 +39,7 @@ namespace Editor
 		return *this;
 	}
 
-	void CurvePreview::SetCurve(Curve* curve)
+	void CurvePreview::SetCurve(const Ref<Curve>& curve)
 	{
 		if (mCurve)
 			mCurve->onKeysChanged -= THIS_FUNC(OnCurveChanged);
@@ -137,6 +138,8 @@ namespace Editor
 		mNeedRedraw = true;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::CurvePreview>);
 // --- META ---
 
 DECLARE_CLASS(Editor::CurvePreview, Editor__CurvePreview);

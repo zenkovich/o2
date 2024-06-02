@@ -6,7 +6,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class ObjectViewer;
+	FORWARD_CLASS_REF(ObjectViewer);
 
 	// -------------------------
 	// Default properties viewer
@@ -25,7 +25,7 @@ namespace Editor
 		IOBJECT(DefaultPropertiesViewer);
 
 	protected:
-		ObjectViewer* mViewer; // Object viewer
+		Ref<ObjectViewer> mViewer; // Object viewer
 
 		Vector<IObject*> mTargets; // Viewing targets
 

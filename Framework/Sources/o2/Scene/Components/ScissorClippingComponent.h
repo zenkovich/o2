@@ -23,6 +23,7 @@ namespace o2
         void Draw() override;
 
         SERIALIZABLE(ScissorClippingComponent);
+        CLONEABLE_REF(ScissorClippingComponent);
     };
 }
 // --- META ---

@@ -6,8 +6,6 @@
 
 namespace o2
 {
-    class Font;
-
     // -----------------
     // Vector font asset
     // -----------------
@@ -18,7 +16,7 @@ namespace o2
 
     public:
         PROPERTIES(VectorFontAsset);
-        GETTER(Meta*, meta, GetMeta); // Meta information getter
+        GETTER(Ref<Meta>, meta, GetMeta); // Meta information getter
 
     public:
         // Default constructor
@@ -31,20 +29,20 @@ namespace o2
         VectorFontAsset& operator=(const VectorFontAsset& asset);
 
         // Returns meta information
-        Meta* GetMeta() const;
+        Ref<Meta> GetMeta() const;
 
         // Returns font effects array 
-        const Vector<VectorFont::Effect*>& GetEffects() const;
+        const Vector<Ref<VectorFont::Effect>>& GetEffects() const;
 
         // Adds effect to font
-        void AddEffect(VectorFont::Effect* effect);
+        void AddEffect(const Ref<VectorFont::Effect>& effect);
 
         // Adds effect to font
         template<typename _type, typename ... _args>
         void AddEffect(_args ... args);
 
         // Removes effect from font
-        void RemoveEffect(VectorFont::Effect* effect);
+        void RemoveEffect(const Ref<VectorFont::Effect>& effect);
 
         // Removes all effects
         void RemoveAllEffects();
@@ -70,18 +68,16 @@ namespace o2
             // Copy-constructor
             Meta(const Meta& other);
 
-            // Destructor
-            ~Meta();
-
             // Returns true if other meta is equal to this
             bool IsEqual(AssetMeta* other) const override;
 
             SERIALIZABLE(Meta);
+            CLONEABLE_REF(Meta);
 
         protected:
-            Vector<VectorFont::Effect*> mEffects; // Font effects array @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT @INVOKE_ON_CHANGE(UpdateFontEffects)
+            Vector<Ref<VectorFont::Effect>> mEffects; // Font effects array @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT @INVOKE_ON_CHANGE(UpdateFontEffects)
             
-            VectorFontAsset* mAsset = nullptr; // Asset pointer
+            WeakRef<VectorFontAsset> mAsset = nullptr; // Asset pointer
 
         protected:
             // Calls UpdateFontEffects from asset
@@ -103,12 +99,10 @@ namespace o2
         friend class Assets;
     };
 
-    typedef Ref<VectorFontAsset> VectorFontAssetRef;
-
     template<typename _type, typename ... _args>
     void VectorFontAsset::AddEffect(_args ... args)
     {
-        AddEffect(mnew _type(args ...));
+        AddEffect(mmake<_type>(args ...));
     }
 }
 // --- META ---
@@ -128,10 +122,10 @@ CLASS_METHODS_META(o2::VectorFontAsset)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const VectorFontAsset&);
-    FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<VectorFont::Effect*>&, GetEffects);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, VectorFont::Effect*);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveEffect, VectorFont::Effect*);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Meta>, GetMeta);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<VectorFont::Effect>>&, GetEffects);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, const Ref<VectorFont::Effect>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveEffect, const Ref<VectorFont::Effect>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllEffects);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

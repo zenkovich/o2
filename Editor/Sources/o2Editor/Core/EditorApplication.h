@@ -19,13 +19,13 @@ namespace o2
 
 namespace Editor
 {
-	class EditorConfig;
-	class IAction;
-	class MenuPanel;
-	class Properties;
-	class ToolsPanel;
-	class UIRoot;
-	class WindowsManager;
+	FORWARD_CLASS_REF(EditorConfig);
+	FORWARD_CLASS_REF(IAction);
+	FORWARD_CLASS_REF(MenuPanel);
+	FORWARD_CLASS_REF(Properties);
+	FORWARD_CLASS_REF(ToolsPanel);
+	FORWARD_CLASS_REF(UIRoot);
+	FORWARD_CLASS_REF(WindowsManager);
 
 	// ------------------
 	// Editor application
@@ -47,7 +47,7 @@ namespace Editor
 		const String& GetLoadedSceneName() const;
 
 		// Loads scene from file
-		void LoadScene(const SceneAssetRef& scene);
+		void LoadScene(const AssetRef<SceneAsset>& scene);
 
 		// Saves current scene
 		void SaveScene();
@@ -68,18 +68,18 @@ namespace Editor
 		bool IsPlaying() const;
 
 	protected:
-		Sprite* mBackground = nullptr; // Background sprite
-		Sprite* mBackSign = nullptr;   // Background o2 signature
+        Ref<Sprite> mBackground; // Background sprite
+        Ref<Sprite> mBackSign;   // Background o2 signature
 
-		UIRoot*         mUIRoot = nullptr;         // Root editor UI
-		WindowsManager* mWindowsManager = nullptr; // Windows manager
-		EditorConfig*   mConfig = nullptr;         // Application configuration
-		ToolsPanel*     mToolsPanel = nullptr;     // Tools panel
-		MenuPanel*      mMenuPanel = nullptr;      // Menu panel
+        Ref<UIRoot>         mUIRoot;         // Root editor UI
+        Ref<WindowsManager> mWindowsManager; // Windows manager
+        Ref<EditorConfig>   mConfig;         // Application configuration
+        Ref<ToolsPanel>     mToolsPanel;     // Tools panel
+        Ref<MenuPanel>      mMenuPanel;      // Menu panel
 
-		Properties* mProperties = nullptr; // Properties manager
+        Ref<Properties> mProperties; // Properties manager
 
-		SceneAssetRef mLoadedScene; // Current loaded scene
+		AssetRef<SceneAsset> mLoadedScene; // Current loaded scene
 
 		DataDocument mSceneDump; // Scene dump, created before playing
 

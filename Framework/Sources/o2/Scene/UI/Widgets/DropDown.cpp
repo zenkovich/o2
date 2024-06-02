@@ -7,16 +7,16 @@
 
 namespace o2
 {
-    DropDown::DropDown():
-        CustomDropDown()
+    DropDown::DropDown(RefCounter* refCounter):
+        CustomDropDown(refCounter)
     {
-        Label* itemSample = mnew Label();
+        auto itemSample = mmake<Label>();
         itemSample->horOverflow = Label::HorOverflow::Dots;
         SetItemSample(itemSample);
     }
 
-    DropDown::DropDown(const DropDown& other):
-        CustomDropDown(other), value(this)
+    DropDown::DropDown(RefCounter* refCounter, const DropDown& other):
+        CustomDropDown(refCounter, other), value(this)
     {
         RetargetStatesAnimations();
         mSelectedText = GetLayerDrawable<Text>("selectedText");
@@ -45,7 +45,7 @@ namespace o2
 
         if (!mSelectedText)
         {
-            Label* selectedItem = (Label*)(mItemsList->GetItem(mItemsList->GetSelectedItemPos()));
+            auto selectedItem = DynamicCast<Label>((mItemsList->GetItem(mItemsList->GetSelectedItemPos())));
             if (selectedItem)
             {
                 o2Render.EnableScissorTest(mAbsoluteClip);
@@ -59,21 +59,21 @@ namespace o2
 
     int DropDown::AddItem(const WString& text)
     {
-        auto item = (Label*)CustomDropDown::AddItem();
+        auto item = DynamicCast<Label>(CustomDropDown::AddItem());
         item->text = text;
         return GetItemsCount() - 1;
     }
 
     int DropDown::AddItem(const WString& text, int position)
     {
-        auto item = (Label*)CustomDropDown::AddItem(position);
+        auto item = DynamicCast<Label>(CustomDropDown::AddItem(position));
         item->text = text;
         return position;
     }
 
     void DropDown::AddItems(const Vector<WString>& data)
     {
-        for (auto text : data)
+        for (auto& text : data)
             AddItem(text);
     }
 
@@ -87,9 +87,9 @@ namespace o2
     int DropDown::FindItem(const WString& text)
     {
         int i = 0;
-        for (auto child : mItemsList->mVerLayout->mChildWidgets)
+        for (auto& child : mItemsList->mVerLayout->mChildWidgets)
         {
-            Label* childLabel = dynamic_cast<Label*>(child);
+            auto childLabel = DynamicCast<Label>(child);
             if (childLabel && childLabel->GetText() == text)
                 return i;
 
@@ -101,7 +101,7 @@ namespace o2
 
     WString DropDown::GetItemText(int position)
     {
-        auto item = (Label*)GetItem(position);
+        auto item = DynamicCast<Label>(GetItem(position));
         if (item)
             return item->GetText();
 
@@ -111,9 +111,9 @@ namespace o2
     Vector<WString> DropDown::GetAllItemsText() const
     {
         Vector<WString> res;
-        for (auto child : mItemsList->mVerLayout->mChildWidgets)
+        for (auto& child : mItemsList->mVerLayout->mChildWidgets)
         {
-            Label* childLabel = dynamic_cast<Label*>(child);
+            auto childLabel = DynamicCast<Label>(child);
 
             if (childLabel)
                 res.Add(childLabel->GetText());
@@ -124,7 +124,7 @@ namespace o2
 
     WString DropDown::GetSelectedItemText()
     {
-        auto selectedItem = (Label*)GetSelectedItem();
+        auto selectedItem = DynamicCast<Label>(GetSelectedItem());
         if (selectedItem)
             return selectedItem->GetText();
 
@@ -150,13 +150,14 @@ namespace o2
             mSelectedText->SetText(GetSelectedItemText());
     }
 
-    void DropDown::OnLayerAdded(WidgetLayer* layer)
+    void DropDown::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "selectedText" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
-            mSelectedText = (Text*)layer->GetDrawable();
+            mSelectedText = DynamicCast<Text>(layer->GetDrawable());
     }
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::DropDown>);
 // --- META ---
 
 DECLARE_CLASS(o2::DropDown, o2__DropDown);

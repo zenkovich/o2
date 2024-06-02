@@ -46,9 +46,6 @@ namespace o2
     {
         if (mFreeTypeFace)
             FT_Done_Face(mFreeTypeFace);
-
-        for (auto effect : mEffects)
-            delete effect;
     }
 
     const char* GetFreeTypeErrorMessage(FT_Error err)
@@ -162,7 +159,7 @@ namespace o2
             UpdateCharacters(needToRenderChars, height);
     }
 
-    VectorFont::Effect* VectorFont::AddEffect(Effect* effect)
+    Ref<VectorFont::Effect> VectorFont::AddEffect(const Ref<Effect>& effect)
     {
         mEffects.Add(effect);
         Reset();
@@ -170,32 +167,25 @@ namespace o2
         return effect;
     }
 
-    void VectorFont::RemoveEffect(Effect* effect)
+    void VectorFont::RemoveEffect(const Ref<Effect>& effect)
     {
         mEffects.Remove(effect);
-        delete effect;
         Reset();
     }
 
     void VectorFont::RemoveAllEffects()
     {
-        for (auto effect : mEffects)
-            delete effect;
-
         mEffects.Clear();
         Reset();
     }
 
-    void VectorFont::SetEffects(const Vector<Effect*>& effects)
+    void VectorFont::SetEffects(const Vector<Ref<Effect>>& effects)
     {
-        for (auto effect : mEffects)
-            delete effect;
-
         mEffects = effects;
         Reset();
     }
 
-    const Vector<VectorFont::Effect*>& VectorFont::GetEffects() const
+    const Vector<Ref<VectorFont::Effect>>& VectorFont::GetEffects() const
     {
         return mEffects;
     }
@@ -221,7 +211,7 @@ namespace o2
         FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
 
         Vec2I border;
-        for (auto effect : mEffects)
+        for (auto& effect : mEffects)
         {
             Vec2I effectExt = effect->GetSizeExtend();
             border.x = Math::Max(border.x, effectExt.x);
@@ -233,7 +223,7 @@ namespace o2
         FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
         int symbolsHeight = Math::CeilToInt((mFreeTypeFace->glyph->bitmap.rows + border.y*2)*1.25f);
 
-        for (auto ch : newCharacters)
+        for (auto& ch : newCharacters)
         {
             CharDef newCharDef;
 
@@ -242,7 +232,7 @@ namespace o2
 
             Vec2I glyphSize(glyph->bitmap.width, glyph->bitmap.rows);
 
-            Bitmap* newBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, glyphSize + border*2);
+            Ref<Bitmap> newBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, glyphSize + border*2);
             newBitmap->Fill(Color4(255, 255, 255, 0));
             UInt8* newBitmapData = newBitmap->GetData();
             Vec2I newBitmapSize = newBitmap->GetSize();
@@ -257,8 +247,8 @@ namespace o2
                 }
             }
 
-            for (auto effect : mEffects)
-                effect->Process(newBitmap);
+            for (auto& effect : mEffects)
+                effect->Process(*newBitmap);
 
             newCharDef.bitmap = newBitmap;
             newCharDef.character.mId = ch;
@@ -270,24 +260,24 @@ namespace o2
 
             PackCharacter(newCharDef, symbolsHeight);
 
-            delete newBitmap;
+            newCharDef.bitmap = nullptr;
         }
     }
 
     void VectorFont::PackCharacter(CharDef& character, int height)
     {
-        PackLine* packLine = nullptr;
+        Ref<PackLine> packLine;
 
         while (!packLine)
         {
-            packLine = mPackLines.FindOrDefault([&](PackLine* x) {
+            packLine = mPackLines.FindOrDefault([&](const Ref<PackLine>& x) {
                 return x->height >= height && x->length + character.bitmap->GetSize().x < mTexture->GetSize().x; });
 
             if (!packLine)
             {
                 if (mLastPackLinePos + height <= mTexture->GetSize().y)
                 {
-                    packLine = mnew PackLine();
+                    packLine = mmake<PackLine>();
                     packLine->position = mLastPackLinePos;
                     packLine->height = height;
 
@@ -301,9 +291,9 @@ namespace o2
                     mTexture = TextureRef(lastTexture->GetSize()*2, TextureFormat::R8G8B8A8, Texture::Usage::Default);
                     mTexture->Copy(*lastTexture.Get(), RectI(Vec2I(0, 0), lastTexture->GetSize()));
 
-                    for (auto heightKV : mCharacters)
+                    for (auto& heightKV : mCharacters)
                     {
-                        for (auto charKV : heightKV.second)
+                        for (auto& charKV : heightKV.second)
                         {
                             charKV.second.mTexSrc.left *= 0.5f;
                             charKV.second.mTexSrc.right *= 0.5f;
@@ -331,7 +321,7 @@ namespace o2
         character.character.mTexSrc.top = 1.0f - character.rect.top*invTexSize.y;
         character.character.mTexSrc.bottom = 1.0f - character.rect.bottom*invTexSize.y;
 
-        mTexture->SetSubData(character.rect.LeftBottom(), character.bitmap);
+        mTexture->SetSubData(character.rect.LeftBottom(), *character.bitmap);
 
         AddCharacter(character.character);
     }

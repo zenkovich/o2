@@ -18,7 +18,7 @@ namespace Editor
 		return &TypeOf(AnimationState);
 	}
 
-	Spoiler* AnimationStateViewer::CreateSpoiler()
+	Ref<Spoiler> AnimationStateViewer::CreateSpoiler()
 	{
 		mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 
@@ -59,33 +59,33 @@ namespace Editor
 	void AnimationStateViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		if (mSubscribedPlayer)
-			mSubscribedPlayer->onUpdate -= THIS_FUNC(OnAnimationUpdated);
+			mSubscribedPlayer.Lock()->onUpdate -= THIS_FUNC(OnAnimationUpdated);
 
 		mSubscribedPlayer = nullptr;
 
 		if (!targetObjets.IsEmpty())
 		{
-			mSubscribedPlayer = &dynamic_cast<AnimationState*>(targetObjets.Last().first)->player;
-			mSubscribedPlayer->onUpdate += THIS_FUNC(OnAnimationUpdated);
+			mSubscribedPlayer = dynamic_cast<AnimationState*>(targetObjets.Last().first)->player;
+			mSubscribedPlayer.Lock()->onUpdate += THIS_FUNC(OnAnimationUpdated);
 		}
 	}
 
 	void AnimationStateViewer::OnFree()
 	{
 		if (mSubscribedPlayer)
-			mSubscribedPlayer->onUpdate -= THIS_FUNC(OnAnimationUpdated);
+			mSubscribedPlayer.Lock()->onUpdate -= THIS_FUNC(OnAnimationUpdated);
 
 		mSubscribedPlayer = nullptr;
 	}
 
 	void AnimationStateViewer::OnPlayPauseToggled(bool play)
 	{
-		if (mSubscribedPlayer)
+		if (auto subscribedPlayer = mSubscribedPlayer.Lock())
 		{
-			if (play && mSubscribedPlayer->GetRelTime() >= 1.0f - FLT_EPSILON)
-				mSubscribedPlayer->SetRelTime(0.0f);
+			if (play && subscribedPlayer->GetRelTime() >= 1.0f - FLT_EPSILON)
+				subscribedPlayer->SetRelTime(0.0f);
 
-			mSubscribedPlayer->SetPlaying(play);
+			subscribedPlayer->SetPlaying(play);
 		}
 
 		o2Scene.OnObjectChanged(o2EditorSceneScreen.GetSelectedObjects().First());
@@ -94,7 +94,7 @@ namespace Editor
 	void AnimationStateViewer::OnLoopToggled(bool looped)
 	{
 		if (mSubscribedPlayer)
-			mSubscribedPlayer->SetLoop(looped ? Loop::Repeat : Loop::None);
+			mSubscribedPlayer.Lock()->SetLoop(looped ? Loop::Repeat : Loop::None);
 
 		o2Scene.OnObjectChanged(o2EditorSceneScreen.GetSelectedObjects().First());
 	}
@@ -114,12 +114,12 @@ namespace Editor
 
 			if (animationRef)
 			{
-				o2EditorAnimationWindow.SetAnimation(&animationRef->animation);
+				o2EditorAnimationWindow.SetAnimation(animationRef->animation);
 
 				if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
-					o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));
+					o2EditorAnimationWindow.SetTarget(DynamicCast<Actor>(o2EditorSceneScreen.GetSelectedObjects().Last()));
 
-				o2EditorAnimationWindow.SetAnimationEditable(mPropertiesContext.FindOnStack<IEditableAnimation>());
+				o2EditorAnimationWindow.SetAnimationEditable(Ref(mPropertiesContext->FindOnStack<IEditableAnimation>()));
 				o2EditorAnimationWindow.GetWindow()->Focus();
 			}
 		}
@@ -128,14 +128,15 @@ namespace Editor
 	void AnimationStateViewer::OnTimeProgressChanged(float value)
 	{
 		if (mSubscribedPlayer)
-			mSubscribedPlayer->SetRelTime(value);
+			mSubscribedPlayer.Lock()->SetRelTime(value);
 	}
 
 	void AnimationStateViewer::OnAnimationUpdated(float time)
 	{
-		if (mSubscribedPlayer) {
-			mTimeProgress->value = mSubscribedPlayer->GetLoopTime()/mSubscribedPlayer->GetDuration();
-			mPlayPause->value = mSubscribedPlayer->IsPlaying();
+		if (auto subscribedPlayer = mSubscribedPlayer.Lock()) 
+		{
+			mTimeProgress->value = subscribedPlayer->GetLoopTime()/ subscribedPlayer->GetDuration();
+			mPlayPause->value = subscribedPlayer->IsPlaying();
 		}
 	}
 

@@ -8,16 +8,16 @@
 
 namespace o2
 {
-    GridLayoutScrollArea::GridLayoutScrollArea():
-        ScrollArea()
+    GridLayoutScrollArea::GridLayoutScrollArea(RefCounter* refCounter):
+        ScrollArea(refCounter)
     {
-        mItemSample = mnew Widget();
+        mItemSample = mmake<Widget>();
     }
 
-    GridLayoutScrollArea::GridLayoutScrollArea(const GridLayoutScrollArea& other):
-        ScrollArea(other), mItemsSpacing(other.mItemsSpacing)
+    GridLayoutScrollArea::GridLayoutScrollArea(RefCounter* refCounter, const GridLayoutScrollArea& other):
+        ScrollArea(refCounter, other), mItemsSpacing(other.mItemsSpacing)
     {
-        mItemSample = other.mItemSample->CloneAs<Widget>();
+        mItemSample = other.mItemSample->CloneAsRef<Widget>();
         mItemSample->UpdateTransform();
 
         RetargetStatesAnimations();
@@ -25,18 +25,14 @@ namespace o2
     }
 
     GridLayoutScrollArea::~GridLayoutScrollArea()
-    {
-        delete mItemSample;
-    }
+    {}
 
     GridLayoutScrollArea& GridLayoutScrollArea::operator=(const GridLayoutScrollArea& other)
     {
-        delete mItemSample;
-
         ScrollArea::operator=(other);
         mItemsSpacing = other.mItemsSpacing;
 
-        mItemSample = other.mItemSample->CloneAs<Widget>();
+        mItemSample = other.mItemSample->CloneAsRef<Widget>();
         mItemSample->UpdateSelfTransform();
         mItemSample->UpdateChildrenTransforms();
 
@@ -46,15 +42,14 @@ namespace o2
         return *this;
     }
 
-    void GridLayoutScrollArea::SetItemSample(Widget* sample)
+    void GridLayoutScrollArea::SetItemSample(const Ref<Widget>& sample)
     {
-        delete mItemSample;
         mItemSample = sample;
 
         SetLayoutDirty();
     }
 
-    Widget* GridLayoutScrollArea::GetItemSample() const
+    const Ref<Widget>& GridLayoutScrollArea::GetItemSample() const
     {
         return mItemSample;
     }
@@ -74,7 +69,7 @@ namespace o2
     {
         if (itemsRearranged)
         {
-            Vector<Widget*> removingItems;
+            Vector<Ref<Widget>> removingItems;
             for (int i = mMinVisibleItemIdx; i <= mMaxVisibleItemIdx; i++)
             {
                 if (i < 0)
@@ -146,7 +141,7 @@ namespace o2
         return getItemsRangeFunc(start, end);
     }
 
-    void GridLayoutScrollArea::SetupItemWidget(Widget* widget, void* item)
+    void GridLayoutScrollArea::SetupItemWidget(const Ref<Widget>& widget, void* item)
     {
         setupItemFunc(widget, item);
     }
@@ -174,10 +169,10 @@ namespace o2
         mMaxVisibleItemIdx = Math::Min(mMaxVisibleItemIdx, itemsCount - 1);
 
         auto itemsInRange = GetItemsRange(mMinVisibleItemIdx, mMaxVisibleItemIdx + 1);
-        Vector<Widget*> itemsWidgets;
+        Vector<Ref<Widget>> itemsWidgets;
         itemsWidgets.Resize(mMaxVisibleItemIdx - mMinVisibleItemIdx + 1);
 
-        Vector<Widget*> removingItems;
+        Vector<Ref<Widget>> removingItems;
         for (int i = lastMinItemIdx; i <= lastMaxItemIdx; i++)
         {
             if (i < 0)
@@ -196,6 +191,8 @@ namespace o2
         mChildWidgets.Clear();
         mChildrenInheritedDepth.Clear();
 
+        auto thisRef = Ref(this);
+
         for (int i = mMinVisibleItemIdx; i <= mMaxVisibleItemIdx; i++)
         {
             if (i < 0)
@@ -205,9 +202,9 @@ namespace o2
                 continue;
 
             if (mItemsPool.IsEmpty())
-                mItemsPool.Add(mItemSample->CloneAs<Widget>());
+                mItemsPool.Add(mItemSample->CloneAsRef<Widget>());
 
-            Widget* newItem = mItemsPool.PopBack();
+            auto newItem = mItemsPool.PopBack();
 
             SetupItemWidget(newItem, itemsInRange[i - mMinVisibleItemIdx]);
 
@@ -217,8 +214,8 @@ namespace o2
 
             newItem->layout->minSize = Vec2F(itemWidth, itemHeight);
 
-            newItem->mParent = this;
-            newItem->mParentWidget = this;
+            newItem->mParent = thisRef;
+            newItem->mParentWidget = thisRef;
 
             itemsWidgets[i - mMinVisibleItemIdx] = newItem;
 
@@ -227,17 +224,17 @@ namespace o2
             newItem->mIsClipped = false;
         }
 
-        mChildren.Add(itemsWidgets.Cast<Actor*>());
+        mChildren.Add(DynamicCastVector<Actor>(itemsWidgets));
         mChildWidgets.Add(itemsWidgets);
-        mChildrenInheritedDepth.Add(itemsWidgets.DynamicCast<ISceneDrawable*>());
+        mChildrenInheritedDepth.Add(DynamicCastVector< ISceneDrawable>(itemsWidgets));
 
         mPrevItemsInLine = itemsInLine;
     }
 
-    Widget* GridLayoutScrollArea::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+    Ref<Widget> GridLayoutScrollArea::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
     {
         int idx = mMinVisibleItemIdx;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->layout->IsPointInside(point))
             {
@@ -283,6 +280,8 @@ namespace o2
         SetInteractable(false);
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::GridLayoutScrollArea>);
 // --- META ---
 
 DECLARE_CLASS(o2::GridLayoutScrollArea, o2__GridLayoutScrollArea);

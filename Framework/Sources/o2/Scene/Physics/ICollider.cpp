@@ -106,7 +106,7 @@ namespace o2
 
     void ICollider::AddToRigidBody(RigidBody* body)
     {
-        auto thisTransform = mOwner->transform;
+        auto thisTransform = mOwner.Lock()->transform;
         auto bodyTransform = body->transform;
         Basis thisBasis = thisTransform->GetWorldNonSizedBasis(); 
         Basis bodyBasis = bodyTransform->GetWorldNonSizedBasis(); 
@@ -145,15 +145,15 @@ namespace o2
         mFixture = nullptr;
     }
 
-    RigidBody* ICollider::FindRigidBody() const
+    Ref<RigidBody> ICollider::FindRigidBody() const
     {
-        auto itActor = mOwner;
+        auto itActor = mOwner.Lock();
         while (itActor)
         {
-            if (auto body = dynamic_cast<RigidBody*>(itActor))
+            if (auto body = DynamicCast<RigidBody>(itActor))
                 return body;
 
-            itActor = itActor->GetParent();
+            itActor = itActor->GetParent().Lock();
         }
 
         return nullptr;
@@ -195,6 +195,8 @@ namespace o2
     }
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::ICollider>);
 // --- META ---
 
 DECLARE_CLASS(o2::ICollider, o2__ICollider);

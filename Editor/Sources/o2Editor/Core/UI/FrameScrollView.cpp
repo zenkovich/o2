@@ -7,33 +7,34 @@
 
 namespace Editor
 {
-	FrameScrollView::FrameScrollView() : ScrollView()
+	FrameScrollView::FrameScrollView(RefCounter* refCounter) :
+		ScrollView(refCounter)
 	{
 		mReady = false;
 
-		mHorScrollbar = mnew HorizontalScrollBar();
+		mHorScrollbar = mmake<HorizontalScrollBar>();
 		*mHorScrollbar->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
-		mHorScrollbar->SetInternalParent(this);
+		mHorScrollbar->SetInternalParent(Ref(this));
 		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
 
-		mVerScrollbar = mnew VerticalScrollBar();
+		mVerScrollbar = mmake<VerticalScrollBar>();
 		*mVerScrollbar->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 20);
-		mVerScrollbar->SetInternalParent(this);
+		mVerScrollbar->SetInternalParent(Ref(this));
 		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
 
 		mReady = true;
 	}
 
-	FrameScrollView::FrameScrollView(const FrameScrollView& other) :
-		ScrollView(other), mHorScrollbar(other.mHorScrollbar->CloneAs<HorizontalScrollBar>()),
+	FrameScrollView::FrameScrollView(RefCounter* refCounter, const FrameScrollView& other) :
+		ScrollView(refCounter, other), mHorScrollbar(other.mHorScrollbar->CloneAs<HorizontalScrollBar>()),
 		mVerScrollbar(other.mVerScrollbar->CloneAs<VerticalScrollBar>())
 	{
 		mReady = false;
 
-		mHorScrollbar->SetInternalParent(this);
+		mHorScrollbar->SetInternalParent(Ref(this));
 		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
 
-		mVerScrollbar->SetInternalParent(this);
+		mVerScrollbar->SetInternalParent(Ref(this));
 		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
 
 		RetargetStatesAnimations();
@@ -42,27 +43,18 @@ namespace Editor
 	}
 
 	FrameScrollView::~FrameScrollView()
-	{
-		if (mHorScrollbar)
-			delete mHorScrollbar;
-
-		if (mVerScrollbar)
-			delete mVerScrollbar;
-	}
+	{}
 
 	FrameScrollView& FrameScrollView::operator=(const FrameScrollView& other)
 	{
-		delete mHorScrollbar;
-		delete mVerScrollbar;
-
 		ScrollView::operator=(other);
 
-		mHorScrollbar = other.mHorScrollbar->CloneAs<HorizontalScrollBar>();
-		mHorScrollbar->SetInternalParent(this);
+		mHorScrollbar = other.mHorScrollbar->CloneAsRef<HorizontalScrollBar>();
+		mHorScrollbar->SetInternalParent(Ref(this));
 		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
 
-		mVerScrollbar = other.mVerScrollbar->CloneAs<VerticalScrollBar>();
-		mVerScrollbar->SetInternalParent(this);
+		mVerScrollbar = other.mVerScrollbar->CloneAsRef<VerticalScrollBar>();
+		mVerScrollbar->SetInternalParent(Ref(this));
 		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
 
 		return *this;
@@ -103,21 +95,19 @@ namespace Editor
 		mVerScrollbar->UpdateSelfTransform();
 	}
 
-	void FrameScrollView::SetHorScrollbar(HorizontalScrollBar* scrollbar)
+	void FrameScrollView::SetHorScrollbar(const Ref<HorizontalScrollBar>& scrollbar)
 	{
-		delete mHorScrollbar;
 		mHorScrollbar = scrollbar;
-		mHorScrollbar->SetInternalParent(this);
+		mHorScrollbar->SetInternalParent(Ref(this));
 		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
 
 		SetLayoutDirty();
 	}
 
-	void FrameScrollView::SetVerScrollbar(VerticalScrollBar* scrollbar)
+	void FrameScrollView::SetVerScrollbar(const Ref<VerticalScrollBar>& scrollbar)
 	{
-		delete mVerScrollbar;
 		mVerScrollbar = scrollbar;
-		mVerScrollbar->SetInternalParent(this);
+		mVerScrollbar->SetInternalParent(Ref(this));
 		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
 
 		SetLayoutDirty();
@@ -185,6 +175,8 @@ namespace Editor
 		onViewChanged();
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::FrameScrollView>);
 // --- META ---
 
 DECLARE_CLASS(Editor::FrameScrollView, Editor__FrameScrollView);

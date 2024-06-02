@@ -5,18 +5,19 @@
 
 namespace o2
 {
-    HorizontalLayout::HorizontalLayout(): Widget()
+    HorizontalLayout::HorizontalLayout(RefCounter* refCounter):
+        Widget(refCounter)
     {
         SetLayoutDirty();
     }
 
-    HorizontalLayout::HorizontalLayout(const HorizontalLayout& other) :
-        mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
-        mExpandHeight(other.mExpandHeight), Widget(other), mFitByChildren(other.mFitByChildren), baseCorner(this),
+    HorizontalLayout::HorizontalLayout(RefCounter* refCounter, const HorizontalLayout& other) :
+        Widget(refCounter, other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
+        mExpandHeight(other.mExpandHeight), mFitByChildren(other.mFitByChildren), baseCorner(this),
         spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
         borderTop(this), borderBottom(this), fitByChildren(this)
     {
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->GetLayoutData().drivenByParent = true;
 
         RetargetStatesAnimations();
@@ -36,7 +37,7 @@ namespace o2
         mExpandWidth = other.mExpandWidth;
         mExpandHeight = other.mExpandHeight;
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->GetLayoutData().drivenByParent = true;
 
         RetargetStatesAnimations();
@@ -178,7 +179,7 @@ namespace o2
             return Widget::GetMinWidthWithChildren();
 
         float res = mBorder.left + mBorder.right + Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res += child->GetMinWidthWithChildren();
@@ -195,7 +196,7 @@ namespace o2
             return Widget::GetMinHeightWithChildren();
 
         float res = 0;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res = Math::Max(res, child->GetMinHeightWithChildren() + mBorder.top + mBorder.bottom);
@@ -209,7 +210,7 @@ namespace o2
     float HorizontalLayout::GetWidthWeightWithChildren() const
     {
         float res = 0;
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 res += child->GetWidthWeightWithChildren();
@@ -218,13 +219,13 @@ namespace o2
         return res;
     }
 
-    void HorizontalLayout::OnChildAdded(Widget* child)
+    void HorizontalLayout::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
         Widget::OnChildAdded(child);
     }
 
-    void HorizontalLayout::OnChildRemoved(Widget* child)
+    void HorizontalLayout::OnChildRemoved(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
         Widget::OnChildRemoved(child);
@@ -261,7 +262,7 @@ namespace o2
     {
         GetLayoutData().weight.x = 0;
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (child->mResEnabledInHierarchy)
                 GetLayoutData().weight.x += child->GetWidthWeightWithChildren();
@@ -285,7 +286,7 @@ namespace o2
                 mSpacing);
 
             int i = 0;
-            for (auto child : widgets)
+            for (auto& child : widgets)
             {
                 child->GetLayoutData().offsetMin.x = position;
                 position += widths[i++];
@@ -298,10 +299,10 @@ namespace o2
         }
         else
         {
-            float totalWidth = mChildWidgets.Sum<float>([&](Widget* child) { return child->GetMinWidthWithChildren(); });
+            float totalWidth = mChildWidgets.Sum<float>([&](auto& child) { return child->GetMinWidthWithChildren(); });
             totalWidth += (mChildWidgets.Count() - 1)*mSpacing;
             float position = -totalWidth*0.5f;
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -327,7 +328,7 @@ namespace o2
                 mSpacing);
 
             int i = 0;
-            for (auto child : widgets)
+            for (auto& child : widgets)
             {
                 child->GetLayoutData().offsetMin.x = position;
                 position += widths[i++];
@@ -341,7 +342,7 @@ namespace o2
         else
         {
             float position = mBorder.left;
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -367,7 +368,7 @@ namespace o2
                 mSpacing);
 
             int i = 0;
-            for (auto child : widgets)
+            for (auto& child : widgets)
             {
                 child->GetLayoutData().offsetMax.x = -position;
                 position += widths[i++];
@@ -381,7 +382,7 @@ namespace o2
         else
         {
             float position = mBorder.right;
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
             {
                 if (!child->mResEnabledInHierarchy)
                     continue;
@@ -397,7 +398,7 @@ namespace o2
         }
     }
 
-    void HorizontalLayout::AlignWidgetByHeight(Widget* child, float widthAnchor)
+    void HorizontalLayout::AlignWidgetByHeight(const Ref<Widget>& child, float widthAnchor)
     {
         if (mExpandHeight)
         {
@@ -450,7 +451,7 @@ namespace o2
         Vec2F relativePivot = relativePivots[(int)mBaseCorner];
         Vec2F size(GetMinWidthWithChildren(), GetMinHeightWithChildren());
 
-        Vec2F parentSize = mParent ? mParent->transform->size : Vec2F();
+        Vec2F parentSize = mParent ? mParent.Lock()->transform->size : Vec2F();
         Vec2F szDelta = size - (GetLayoutData().offsetMax - GetLayoutData().offsetMin + (GetLayoutData().anchorMax - GetLayoutData().anchorMin)*parentSize);
 
         if (mExpandWidth)
@@ -463,6 +464,8 @@ namespace o2
         GetLayoutData().offsetMin -= szDelta*relativePivot;
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::HorizontalLayout>);
 // --- META ---
 
 DECLARE_CLASS(o2::HorizontalLayout, o2__HorizontalLayout);

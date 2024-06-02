@@ -45,7 +45,7 @@ namespace Editor
 		if (mViewer)
 		{
 			mViewer->Refresh(mTargetComponents.Convert<Pair<IObject*, IObject*>>([](Component* x) {
-				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink()));
+				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink().Lock().Get()));
 			}));
 
 			mSpoiler->AddChild(mViewer->GetSpoiler());
@@ -55,7 +55,7 @@ namespace Editor
 	void DefaultActorComponentViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
 														const Vector<DataDocument>& after)
 	{
-		for (auto component : mTargetComponents)
+		for (auto& component : mTargetComponents)
 			component->GetOwnerActor()->OnChanged();
 
 		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);

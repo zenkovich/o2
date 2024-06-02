@@ -12,15 +12,15 @@ namespace o2
     SkinningMeshComponent::SkinningMeshComponent():
         DrawableComponent()
     {
-        spline.onKeysChanged = THIS_FUNC(UpdateMesh);
-        spline.SetClosed(true);
+        spline->onKeysChanged = THIS_FUNC(UpdateMesh);
+        spline->SetClosed(true);
     }
 
     SkinningMeshComponent::SkinningMeshComponent(const SkinningMeshComponent& other):
         DrawableComponent(other), mMesh(other.mMesh), spline(other.spline)
     {
-        spline.onKeysChanged = THIS_FUNC(UpdateMesh);
-        spline.SetClosed(true);
+        spline->onKeysChanged = THIS_FUNC(UpdateMesh);
+        spline->SetClosed(true);
     }
 
     SkinningMeshComponent::~SkinningMeshComponent()
@@ -59,22 +59,22 @@ namespace o2
     void SkinningMeshComponent::UpdateBonesTransforms()
     {
         for (auto& bone : mBonesMapping)
-            bone.second->releaseTransform = bone.second->baseTransform.Inverted()*bone.first->GetOwnerActor()->transform->GetWorldNonSizedBasis();
+            bone.second->releaseTransform = bone.second->baseTransform.Inverted()*bone.first.Lock()->GetOwnerActor()->transform->GetWorldNonSizedBasis();
     }
 
     void SkinningMeshComponent::UpdateBones()
     {
         mBonesMapping.Clear();
 
-        Function<void(Actor*)> searchBones = [&searchBones, this](Actor* actor) {
+        Function<void(const Ref<Actor>)> searchBones = [&searchBones, this](const Ref<Actor>& actor) {
             if (auto boneComp = actor->GetComponent<SkinningMeshBoneComponent>())
                 mBonesMapping.Add({ boneComp, nullptr });
 
-            for (auto child : actor->GetChildren())
+            for (auto& child : actor->GetChildren())
                 searchBones(child);
         };
 
-        searchBones(mOwner);
+        searchBones(mOwner.Lock());
 
         mMesh.SetMaxBonesCount(mBonesMapping.Count() + 1);
         mMesh.bonesCount = mBonesMapping.Count() + 1;
@@ -89,9 +89,9 @@ namespace o2
         {
             mBonesMapping[i].second = &mMesh.bones[i + 1];
             mBonesMapping[i].second->baseTransform = 
-                mBonesMapping[i].first->GetOwnerActor()->transform->GetWorldNonSizedBasis();
+                mBonesMapping[i].first.Lock()->GetOwnerActor()->transform->GetWorldNonSizedBasis();
 
-            for (auto& weightPair : mBonesMapping[i].first->vertexWeights)
+            for (auto& weightPair : mBonesMapping[i].first.Lock()->vertexWeights)
             {
                 auto& vertex = mMesh.vertices[weightPair.first];
 
@@ -133,7 +133,7 @@ namespace o2
 
     void SkinningMeshComponent::OnTransformUpdated()
     {
-        auto newTransform = mOwner->transform->GetWorldNonSizedBasis();
+        auto newTransform = mOwner.Lock()->transform->GetWorldNonSizedBasis();
         auto delta = newTransform*mTransform.Inverted();
         mTransform = newTransform;
 
@@ -149,7 +149,7 @@ namespace o2
     {
         mNeedUpdateMesh = false;
 
-        if (spline.GetKeys().Count() < 3)
+        if (spline->GetKeys().Count() < 3)
             return;
 
         std::vector<CDT::V2d<float>> verticies;
@@ -162,11 +162,11 @@ namespace o2
                 edges.push_back(CDT::Edge(verticies.size() - 2, verticies.size() - 1));
         };
 
-        int count = spline.GetKeys().Count();
+        int count = spline->GetKeys().Count();
         for (int i = 0; i < count; i++)
         {
-            auto key = spline.GetKey(i);
-            auto prevKey = spline.GetKey((i - 1 + count)%count);
+            auto key = spline->GetKey(i);
+            auto prevKey = spline->GetKey((i - 1 + count)%count);
 
             const float noSupportsThreshold = 0.01f;
             if (!(key.prevSupport.Length() < noSupportsThreshold && prevKey.nextSupport.Length() < noSupportsThreshold))
@@ -256,13 +256,13 @@ namespace o2
         mNeedUpdateMesh = true;
     }
 
-    void SkinningMeshComponent::SetImage(const ImageAssetRef& image)
+    void SkinningMeshComponent::SetImage(const AssetRef<ImageAsset>& image)
     {
         mImageAsset = image;
         mNeedUpdateMesh = true;
     }
 
-    const ImageAssetRef& SkinningMeshComponent::GetImage() const
+    const AssetRef<ImageAsset>& SkinningMeshComponent::GetImage() const
     {
         return mImageAsset;
     }
@@ -297,7 +297,7 @@ namespace o2
             UpdateBones();
     }
 
-    const Vector<Pair<SkinningMeshBoneComponent*, SkinningMesh::Bone*>>& SkinningMeshComponent::GetBones() const
+    const Vector<Pair<WeakRef<SkinningMeshBoneComponent>, SkinningMesh::Bone*>>& SkinningMeshComponent::GetBones() const
     {
         return mBonesMapping;
     }
@@ -317,7 +317,7 @@ namespace o2
         return "ui/UI4_image_component.png";
     }
 
-    void SkinningMeshComponent::SetOwnerActor(Actor* actor)
+    void SkinningMeshComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
         DrawableComponent::SetOwnerActor(actor);
     }
@@ -355,7 +355,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::SkinningMeshComponent>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::SkinningMeshComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::SkinningMeshComponent, o2__SkinningMeshComponent);

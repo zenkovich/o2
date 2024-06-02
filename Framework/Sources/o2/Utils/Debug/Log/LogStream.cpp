@@ -5,18 +5,17 @@
 
 namespace o2
 {
-    LogStream::LogStream():
-        mParentStream(nullptr)
+    LogStream::LogStream()
     {}
 
     LogStream::LogStream(const WString& id) :
-        mParentStream(nullptr), mId(id)
+        mId(id)
     {}
 
     LogStream::~LogStream()
     {
         if (mParentStream)
-            mParentStream->UnbindStream(this);
+            mParentStream.Lock()->UnbindStream(Ref(this));
 
         UnbindAllStreams();
     }
@@ -26,29 +25,24 @@ namespace o2
         return mId;
     }
 
-    void LogStream::BindStream(LogStream* stream)
+    void LogStream::BindStream(const Ref<LogStream>& stream)
     {
-        stream->mParentStream = this;
+        stream->mParentStream = WeakRef(this);
         mChildStreams.Add(stream);
     }
 
-    void LogStream::UnbindStream(LogStream* stream)
+    void LogStream::UnbindStream(const Ref<LogStream>& stream)
     {
         mChildStreams.Remove(stream);
     }
 
-    void LogStream::UnbindAndReleaseStream(LogStream* stream)
+    void LogStream::UnbindAndReleaseStream(const Ref<LogStream>& stream)
     {
         mChildStreams.Remove(stream);
-        delete stream;
     }
 
     void LogStream::UnbindAllStreams()
     {
-        auto streams = mChildStreams;
-        for (auto stream : streams)
-            delete stream;
-
         mChildStreams.Clear();
     }
 
@@ -82,7 +76,7 @@ namespace o2
         va_end(vlist);
     }
 
-    LogStream* LogStream::GetParentStream() const
+    const WeakRef<LogStream>& LogStream::GetParentStream() const
     {
         return mParentStream;
     }
@@ -94,9 +88,9 @@ namespace o2
         if (mParentStream)
         {
             if (mId.IsEmpty())
-                mParentStream->OutStr(str);
+                mParentStream.Lock()->OutStr(str);
             else
-                mParentStream->OutStr((mId + ":" + str));
+                mParentStream.Lock()->OutStr((mId + ":" + str));
         }
     }
 
@@ -107,9 +101,9 @@ namespace o2
         if (mParentStream)
         {
             if (mId == "")
-                mParentStream->ErrorStr(str);
+                mParentStream.Lock()->ErrorStr(str);
             else
-                mParentStream->ErrorStr((mId + ":" + str));
+                mParentStream.Lock()->ErrorStr((mId + ":" + str));
         }
     }
 
@@ -120,9 +114,9 @@ namespace o2
         if (mParentStream)
         {
             if (mId == "")
-                mParentStream->WarningStr(str);
+                mParentStream.Lock()->WarningStr(str);
             else
-                mParentStream->WarningStr((mId + ":" + str));
+                mParentStream.Lock()->WarningStr((mId + ":" + str));
         }
     }
 
@@ -130,8 +124,8 @@ namespace o2
     {
         OutStrEx("ERROR:" + str);
 
-    if (IsStoppingOnLogErrors())
-        Assert(false, (const char*)((String)str));
+        if (IsStoppingOnLogErrors())
+            Assert(false, (const char*)((String)str));
     }
 
     void LogStream::OutWarningEx(const WString& str)

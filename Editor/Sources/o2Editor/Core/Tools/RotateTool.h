@@ -15,7 +15,7 @@ namespace o2
 
 namespace Editor
 {
-	class TransformAction;
+	FORWARD_CLASS_REF(TransformAction);
 
 	// -------------------
 	// Rotate objects tool
@@ -47,18 +47,19 @@ namespace Editor
 		const Color4 mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
 		const Color4 mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
 						 
-		Mesh* mRotateRingFillMesh = nullptr; // Rotate ring mesh
-		Mesh* mAngleMesh = nullptr;          // Rotation angle mesh
-		Vec2F mScenePivot;				    // Rotation pivot in scene space
+		Ref<Mesh> mRotateRingFillMesh; // Rotate ring mesh
+		Ref<Mesh> mAngleMesh;          // Rotation angle mesh
+		Vec2F     mScenePivot;		   // Rotation pivot in scene space
 						 							   
-		SceneDragHandle  mPivotDragHandle;			   // Pivot drag handle
-		float            mPressAngle;				   // Angle at cursor pressing
-		float            mCurrentRotateAngle;		   // Current rotation angle
-		bool             mRingPressed = false;		   // Is rotate ring was pressed
-		float            mSnapAngleAccumulated = 0.0f; // Snapping angle accumulated
+		Ref<SceneDragHandle> mPivotDragHandle; // Pivot drag handle
+
+        float mPressAngle;				   // Angle at cursor pressing
+        float mCurrentRotateAngle;		   // Current rotation angle
+        bool  mRingPressed = false;		   // Is rotate ring was pressed
+        float mSnapAngleAccumulated = 0.0f; // Snapping angle accumulated
 						 
-		Vector<Basis>    mBeforeTransforms;  		 // Array of objects' transformations before changing
-		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
+		Vector<Basis>        mBeforeTransforms; // Array of objects' transformations before changing
+		Ref<TransformAction> mTransformAction;  // Current transform action. Creates when transform started
 
 	public:
 		// Returns toggle in menu panel icon name
@@ -80,10 +81,10 @@ namespace Editor
 		void OnDisabled() override;
 
 		// Called when scene objects was changed
-		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
+		void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) override;
 
 		// Called when objects selection was changed
-		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+		void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
 		// Updates ring and angle meshes
 		void UpdateMeshes();
@@ -146,8 +147,8 @@ CLASS_FIELDS_META(Editor::RotateTool)
     FIELD().PROTECTED().DEFAULT_VALUE(Color4(220, 220, 220, 100)).NAME(mRotateRingsFillColor2);
     FIELD().PROTECTED().DEFAULT_VALUE(Color4(211, 87, 40, 100)).NAME(mRotateMeshClockwiseColor);
     FIELD().PROTECTED().DEFAULT_VALUE(Color4(87, 211, 40, 100)).NAME(mRotateMeshCClockwiseColor);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRotateRingFillMesh);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAngleMesh);
+    FIELD().PROTECTED().NAME(mRotateRingFillMesh);
+    FIELD().PROTECTED().NAME(mAngleMesh);
     FIELD().PROTECTED().NAME(mScenePivot);
     FIELD().PROTECTED().NAME(mPivotDragHandle);
     FIELD().PROTECTED().NAME(mPressAngle);
@@ -155,7 +156,7 @@ CLASS_FIELDS_META(Editor::RotateTool)
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mRingPressed);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mSnapAngleAccumulated);
     FIELD().PROTECTED().NAME(mBeforeTransforms);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
+    FIELD().PROTECTED().NAME(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::RotateTool)
@@ -168,8 +169,8 @@ CLASS_METHODS_META(Editor::RotateTool)
     FUNCTION().PUBLIC().SIGNATURE(void, DrawScreen);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged, const Vector<Ref<SceneEditableObject>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsSelectionChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateMeshes);
     FUNCTION().PUBLIC().SIGNATURE(void, CalcPivotByObjectsCenter);
     FUNCTION().PUBLIC().SIGNATURE(void, OnPivotDragHandleMoved, const Vec2F&);

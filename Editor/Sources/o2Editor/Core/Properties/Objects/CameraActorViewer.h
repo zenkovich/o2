@@ -12,10 +12,10 @@ namespace o2
 
 namespace Editor
 {
-	class EnumProperty;
-	class Vec2FProperty;
-	class SceneLayersListProperty;
-	class ColorProperty;
+	FORWARD_CLASS_REF(EnumProperty);
+	FORWARD_CLASS_REF(Vec2FProperty);
+	FORWARD_CLASS_REF(SceneLayersListProperty);
+	FORWARD_CLASS_REF(ColorProperty);
 
 	// -------------------
 	// Camera actor viewer
@@ -26,17 +26,17 @@ namespace Editor
 		IOBJECT(CameraActorViewer);
 
 	protected:
-		ColorProperty*           mColorProperty = nullptr;
-		SceneLayersListProperty* mLayersProperty = nullptr;
+        Ref<ColorProperty>           mColorProperty;  // Background fill color property
+        Ref<SceneLayersListProperty> mLayersProperty; // Layers property
 
-		EnumProperty*   mTypeProperty = nullptr;
-		VerticalLayout* mHiddenTypeProperties = nullptr;
+        Ref<EnumProperty>   mTypeProperty;         // Camera type property
+        Ref<VerticalLayout> mHiddenTypeProperties; // Hidden type properties
 
-		Spoiler*       mSizePropertySpoiler = nullptr;
-		Vec2FProperty* mSizeProperty = nullptr;
+        Ref<Spoiler>       mSizePropertySpoiler; // Size property spoiler
+        Ref<Vec2FProperty> mSizeProperty;        // Size property
 
-		Spoiler*      mUnitsPropertySpoiler = nullptr;
-		EnumProperty* mUnitsProperty = nullptr;
+        Ref<Spoiler>      mUnitsPropertySpoiler; // Units property spoiler
+        Ref<EnumProperty> mUnitsProperty;        // Units property
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -55,14 +55,14 @@ CLASS_BASES_META(Editor::CameraActorViewer)
 END_META;
 CLASS_FIELDS_META(Editor::CameraActorViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTypeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHiddenTypeProperties);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizePropertySpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsPropertySpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUnitsProperty);
+    FIELD().PROTECTED().NAME(mColorProperty);
+    FIELD().PROTECTED().NAME(mLayersProperty);
+    FIELD().PROTECTED().NAME(mTypeProperty);
+    FIELD().PROTECTED().NAME(mHiddenTypeProperties);
+    FIELD().PROTECTED().NAME(mSizePropertySpoiler);
+    FIELD().PROTECTED().NAME(mSizeProperty);
+    FIELD().PROTECTED().NAME(mUnitsPropertySpoiler);
+    FIELD().PROTECTED().NAME(mUnitsProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::CameraActorViewer)

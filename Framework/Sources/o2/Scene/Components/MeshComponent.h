@@ -15,12 +15,12 @@ namespace o2
     {
     public:
         PROPERTIES(MeshComponent);
-        PROPERTY(ImageAssetRef, image, SetImage, GetImage);                   // Image property
+        PROPERTY(AssetRef<ImageAsset>, image, SetImage, GetImage);                   // Image property
         PROPERTY(RectF, mappingFrame, SetMappingFrame, GetMappingFrame);      // Image mapping frame
         PROPERTY(Color4, color, SetColor, GetColor);                          // Color property
         PROPERTY(Vector<Vec2F>, extraPoints, SetExtraPoints, GetExtraPoints); // extra points property
 
-        Spline spline; // Shell spline @SERIALIZABLE
+        Ref<Spline> spline = mmake<Spline>(); // Shell spline @SERIALIZABLE
 
     public:
         // Default constructor
@@ -57,10 +57,10 @@ namespace o2
         void RemoveExtraPoint(int idx);
 
         // Sets image
-        void SetImage(const ImageAssetRef& image);
+        void SetImage(const AssetRef<ImageAsset>& image);
 
         // Returns image
-        const ImageAssetRef& GetImage() const;
+        const AssetRef<ImageAsset>& GetImage() const;
 
         // Sets image mapping frame
         void SetMappingFrame(const RectF& frame);
@@ -84,12 +84,13 @@ namespace o2
         static String GetIcon();
 
         SERIALIZABLE(MeshComponent);
+        CLONEABLE_REF(MeshComponent);
 
     protected:
         Mesh   mMesh;      // Drawing mesh, built from spline
         Basis  mTransform; // Transform where mesh was built
 
-        ImageAssetRef mImageAsset;                         // Image asset @SERIALIZABLE
+        AssetRef<ImageAsset> mImageAsset;                         // Image asset @SERIALIZABLE
         RectF         mImageMapping = RectF(0, 0, 10, 10); // Image mapping rectangle @SERIALIZABLE
 
         Vector<Vec2F> mExtraPoints; // Extra topology points @SERIALIZABLE
@@ -106,7 +107,7 @@ namespace o2
         void UpdateMesh();
 
         // Sets owner actor
-        void SetOwnerActor(Actor* actor) override;
+        void SetOwnerActor(const Ref<Actor>& actor) override;
 
         // Calling when deserializing
         void OnDeserialized(const DataValue& node) override;
@@ -128,7 +129,7 @@ CLASS_FIELDS_META(o2::MeshComponent)
     FIELD().PUBLIC().NAME(mappingFrame);
     FIELD().PUBLIC().NAME(color);
     FIELD().PUBLIC().NAME(extraPoints);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(spline);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Spline>()).NAME(spline);
     FIELD().PROTECTED().NAME(mMesh);
     FIELD().PROTECTED().NAME(mTransform);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset);
@@ -150,8 +151,8 @@ CLASS_METHODS_META(o2::MeshComponent)
     FUNCTION().PUBLIC().SIGNATURE(void, SetExtraPoint, int, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, AddExtraPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveExtraPoint, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const ImageAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(const ImageAssetRef&, GetImage);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(const AssetRef<ImageAsset>&, GetImage);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMappingFrame, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetMappingFrame);
     FUNCTION().PUBLIC().SIGNATURE(void, SetColor, const Color4&);
@@ -161,7 +162,7 @@ CLASS_METHODS_META(o2::MeshComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }

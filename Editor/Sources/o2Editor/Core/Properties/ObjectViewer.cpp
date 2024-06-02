@@ -6,7 +6,8 @@
 
 namespace Editor
 {
-	ObjectViewer::ObjectViewer()
+	ObjectViewer::ObjectViewer(RefCounter* refCounter):
+		VerticalLayout(refCounter)
 	{
 		spacing = 5;
 		expandHeight = false;
@@ -22,7 +23,7 @@ namespace Editor
 
 		const Type* objectType = !targetObjects.IsEmpty() ? &targetObjects[0].first->GetType() : nullptr;
 
-		for (auto target : targetObjects)
+		for (auto& target : targetObjects)
 		{
 			if (!target.first->GetType().IsBasedOn(*objectType))
 				return;
@@ -58,7 +59,7 @@ namespace Editor
 		Refresh(protoTargets);
 	}
 
-	void ObjectViewer::SetParentContext(PropertiesContext* context)
+	void ObjectViewer::SetParentContext(const Ref<PropertiesContext>& context)
 	{
 		mParentContext = context;
 
@@ -96,6 +97,8 @@ namespace Editor
 	}
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ObjectViewer>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ObjectViewer, Editor__ObjectViewer);

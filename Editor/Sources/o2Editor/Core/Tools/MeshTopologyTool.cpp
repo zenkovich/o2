@@ -8,12 +8,12 @@ namespace Editor
 	MeshTopologyTool::MeshTopologyTool():
 		mSelectionSprite("ui/UI_Window_place.png")
 	{
-		sceneLayer.tool = this;
+		sceneLayer->tool = Ref(this);
 
-		mHandleSample = DragHandle(mnew Sprite("ui/CurveHandle.png"),
-								   mnew Sprite("ui/CurveHandleHover.png"),
-								   mnew Sprite("ui/CurveHandlePressed.png"),
-								   mnew Sprite("ui/CurveHandleSelected.png"));
+		mHandleSample = DragHandle(mmake<Sprite>("ui/CurveHandle.png"),
+								   mmake<Sprite>("ui/CurveHandleHover.png"),
+								   mmake<Sprite>("ui/CurveHandlePressed.png"),
+								   mmake<Sprite>("ui/CurveHandleSelected.png"));
 
 		typedef MeshTopologyTool thisclass;
 
@@ -25,7 +25,10 @@ namespace Editor
 		mTransformFrame.isInputTransparent = true;
 	}
 
-	MeshTopologyTool::~MeshTopologyTool()
+    MeshTopologyTool::MeshTopologyTool(const MeshTopologyTool& other)
+    {}
+
+    MeshTopologyTool::~MeshTopologyTool()
 	{
 		ClearHandles();
 	}
@@ -61,13 +64,13 @@ namespace Editor
 
 	void MeshTopologyTool::OnEnabled()
 	{
-		o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.AddEditorLayer(sceneLayer);
 		isEnabled = true;
 	}
 
 	void MeshTopologyTool::OnDisabled()
 	{
-		o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.RemoveEditorLayer(sceneLayer);
 		isEnabled = false;
 	}
 
@@ -81,17 +84,22 @@ namespace Editor
 		return true;
 	}
 
-	void MeshTopologyTool::InitializeHandles()
+    Ref<RefCounterable> MeshTopologyTool::CastToRefCounterable(const Ref<MeshTopologyTool>& ref)
+    {
+		return DynamicCast<IEditTool>(ref);
+    }
+
+    void MeshTopologyTool::InitializeHandles()
 	{
 		ClearHandles();
 
 		for (int i = 0; i < mGetPoints().Count(); i++)
 		{
-			mHandles.Add(mHandleSample.CloneAs<DragHandle>());
+			mHandles.Add(mHandleSample.CloneAsRef<DragHandle>());
 			auto& newHandle = mHandles.Last();
 
 			newHandle->SetPosition(mGetPoints()[i]);
-			newHandle->SetSelectionGroup(this);
+			newHandle->SetSelectionGroup(Ref(this));
 			newHandle->onChangedPos = [=](const Vec2F& pos) { OnHandleMoved(i, pos); };
 			newHandle->localToScreenTransformFunc = [&](const Vec2F& p) { return LocalToWorld(p); };
 			newHandle->screenToLocalTransformFunc = [&](const Vec2F& p) { return WorldToLocal(p); };
@@ -100,9 +108,6 @@ namespace Editor
 
 	void MeshTopologyTool::ClearHandles()
 	{
-		for (auto handle : mHandles)
-			delete handle;
-
 		mHandles.Clear();
 	}
 
@@ -157,7 +162,7 @@ namespace Editor
 
 		RectF aabb((mSelectedHandles[0])->GetPosition(), (mSelectedHandles[0])->GetPosition());
 
-		for (auto handle : mSelectedHandles)
+		for (auto& handle : mSelectedHandles)
 		{
 			aabb.left = Math::Min(handle->GetPosition().x, aabb.left);
 			aabb.right = Math::Max(handle->GetPosition().x, aabb.right);
@@ -209,7 +214,7 @@ namespace Editor
 
 	void MeshTopologyTool::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		for (auto handle : mSelectingHandlesBuf)
+		for (auto& handle : mSelectingHandlesBuf)
 		{
 			SetHandleSelectedState(handle, false);
 			handle->SetSelected(true);
@@ -221,14 +226,14 @@ namespace Editor
 
 	void MeshTopologyTool::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		for (auto handle : mSelectingHandlesBuf)
+		for (auto& handle : mSelectingHandlesBuf)
 			SetHandleSelectedState(handle, false);
 
 		mSelectingHandlesBuf.Clear();
 
 		RectF selectionLocalRect(mSelectingPressedPoint, WorldToLocal(cursor.position));
 
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 		{
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(handle->GetPosition()) &&
 				!mSelectedHandles.Contains(handle))
@@ -248,14 +253,16 @@ namespace Editor
 
 	void MeshTopologyTool::SceneLayer::DrawOverScene()
 	{
-		tool->OnDrawn();
+		auto toolRef = tool.Lock();
 
-		tool->DrawTransformFrame();
+		toolRef->OnDrawn();
 
-		for (auto handle : tool->mHandles)
+		toolRef->DrawTransformFrame();
+
+		for (auto& handle : toolRef->mHandles)
 			handle->Draw();
 
-		tool->DrawSelection();
+		toolRef->DrawSelection();
 	}
 
 	void MeshTopologyTool::SceneLayer::Update(float dt)
@@ -270,7 +277,7 @@ namespace Editor
 
 	bool MeshTopologyTool::SceneLayer::IsEnabled() const
 	{
-		return tool->isEnabled;
+		return tool.Lock()->isEnabled;
 	}
 
 	const String& MeshTopologyTool::SceneLayer::GetName() const

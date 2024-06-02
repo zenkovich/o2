@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-	class AssetsIconsScrollArea;
+	FORWARD_CLASS_REF(AssetsIconsScrollArea);
 
 	// --------------------------
 	// Dragable asset icon widget
@@ -26,10 +26,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		AssetIcon();
+        AssetIcon(RefCounter* refCounter);
 
 		// Copy-constructor
-		AssetIcon(const AssetIcon& other);
+		AssetIcon(RefCounter* refCounter, const AssetIcon& other);
 
 		// Destructor
 		~AssetIcon();
@@ -38,10 +38,10 @@ namespace Editor
 		AssetIcon& operator=(const AssetIcon& other);
 
 		// Sets asset info
-		void SetAssetInfo(const AssetInfo* info);
+		void SetAssetInfo(const Ref<AssetInfo>& info);
 
 		// Returns asset info
-		const AssetInfo& GetAssetInfo() const;
+		const Ref<AssetInfo>& GetAssetInfo() const;
 
 		// Sets name label text
 		void SetAssetName(const WString& name);
@@ -62,12 +62,14 @@ namespace Editor
 		static String GetCreateMenuCategory();
 
 		SERIALIZABLE(AssetIcon);
+		CLONEABLE_REF(AssetIcon);
 
 	protected:
-		Label*                 mNameText = nullptr;      // Asset name text
-		const AssetInfo*       mAssetInfo;               // Asset information
-		WidgetState*           mSelectedState = nullptr; // Node selected state
-		AssetsIconsScrollArea* mOwner = nullptr;         // Owner assets scroll area
+		Ref<Label>       mNameText;      // Asset name text
+		Ref<AssetInfo>   mAssetInfo;     // Asset information
+		Ref<WidgetState> mSelectedState; // Node selected state
+
+		WeakRef<AssetsIconsScrollArea> mOwner; // Owner assets scroll area
 
 	protected:
 		using SelectableDragableObject::OnDrawn;
@@ -108,7 +110,7 @@ namespace Editor
 		void OnDragStart(const Input::Cursor& cursor) override;
 
 		// Called when dragged
-		void OnDragged(const Input::Cursor& cursor, DragDropArea* area) override;
+		void OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area) override;
 
 		// Called when dragging completed
 		void OnDragEnd(const Input::Cursor& cursor) override;
@@ -120,7 +122,9 @@ namespace Editor
 		void OnDeselected() override;
 
 		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
+
+		REF_COUNTERABLE_IMPL(Widget);
 
 		friend class AssetsIconsScrollArea;
 	};
@@ -137,19 +141,19 @@ END_META;
 CLASS_FIELDS_META(Editor::AssetIcon)
 {
     FIELD().PUBLIC().NAME(assetName);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameText);
+    FIELD().PROTECTED().NAME(mNameText);
     FIELD().PROTECTED().NAME(mAssetInfo);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectedState);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
+    FIELD().PROTECTED().NAME(mSelectedState);
+    FIELD().PROTECTED().NAME(mOwner);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetIcon)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AssetIcon&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAssetInfo, const AssetInfo*);
-    FUNCTION().PUBLIC().SIGNATURE(const AssetInfo&, GetAssetInfo);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetIcon&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAssetInfo, const Ref<AssetInfo>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AssetInfo>&, GetAssetInfo);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAssetName, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetAssetName);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
@@ -167,11 +171,11 @@ CLASS_METHODS_META(Editor::AssetIcon)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleasedOutside, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragStart, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragged, const Input::Cursor&, DragDropArea*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragged, const Input::Cursor&, const Ref<DragDropArea>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnd, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSelected);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeselected);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, const Ref<ISelectableDragableObjectsGroup>&);
 }
 END_META;
 // --- END META ---

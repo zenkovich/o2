@@ -19,18 +19,19 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		BooleanProperty();
+		BooleanProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		BooleanProperty(const BooleanProperty& other);
+		BooleanProperty(RefCounter* refCounter, const BooleanProperty& other);
 
 		// Copy operator
 		BooleanProperty& operator=(const BooleanProperty& other);
 
-		IOBJECT(BooleanProperty);
+        SERIALIZABLE(BooleanProperty);
+        CLONEABLE_REF(BooleanProperty);
 
 	protected:
-		Toggle* mToggle = nullptr; // Toggle 
+		Ref<Toggle> mToggle; // Toggle 
 
 	protected:
 		// Updates value view
@@ -49,14 +50,14 @@ CLASS_BASES_META(Editor::BooleanProperty)
 END_META;
 CLASS_FIELDS_META(Editor::BooleanProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mToggle);
+    FIELD().PROTECTED().NAME(mToggle);
 }
 END_META;
 CLASS_METHODS_META(Editor::BooleanProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const BooleanProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const BooleanProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }

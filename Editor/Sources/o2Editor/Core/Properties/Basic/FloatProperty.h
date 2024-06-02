@@ -20,22 +20,23 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		FloatProperty();
+		FloatProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		FloatProperty(const FloatProperty& other);
+		FloatProperty(RefCounter* refCounter, const FloatProperty& other);
 
 		// Copy operator
 		FloatProperty& operator=(const FloatProperty& other);
 
 		// Returns edit box
-		EditBox* GetEditBox() const;
+		const Ref<EditBox>& GetEditBox() const;
 
-		IOBJECT(FloatProperty);
+		SERIALIZABLE(FloatProperty);
+		CLONEABLE_REF(FloatProperty);
 
 	protected:
-		EditBox*         mEditBox = nullptr; // Edit box 
-		CursorEventsArea mDragHangle;        // Value changing drag handle
+		Ref<EditBox>          mEditBox;    // Edit box 
+		Ref<CursorEventsArea> mDragHangle; // Value changing drag handle
 
 	protected:
 		// Updates value view
@@ -58,7 +59,9 @@ namespace Editor
 
 		// Called when change value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
-		void OnMoveHandleReleased(const Input::Cursor& cursor);
+        void OnMoveHandleReleased(const Input::Cursor& cursor);
+
+        REF_COUNTERABLE_IMPL(TPropertyField<float>);
 	};
 }
 // --- META ---
@@ -71,16 +74,16 @@ CLASS_BASES_META(Editor::FloatProperty)
 END_META;
 CLASS_FIELDS_META(Editor::FloatProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mEditBox);
     FIELD().PROTECTED().NAME(mDragHangle);
 }
 END_META;
 CLASS_METHODS_META(Editor::FloatProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const FloatProperty&);
-    FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetEditBox);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const FloatProperty&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<EditBox>&, GetEditBox);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);

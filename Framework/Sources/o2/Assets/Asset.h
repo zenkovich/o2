@@ -2,19 +2,32 @@
 
 #include "o2/Assets/AssetInfo.h"
 #include "o2/Assets/Meta.h"
+#include "o2/Utils/Basic/ICloneable.h"
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
 #include "o2/Utils/Editor/Attributes/NoHeaderAttribute.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
+
+namespace o2
+{
+    class Asset;
+
+//     template<>
+//     class AssetRef<Asset>;
+}
+
+#include "o2/Assets/AssetRef.h"
+
 
 namespace o2
 {
     // -------------------------------------------------------------------------------------------------
     // Basic asset interface. Contains copy of asset, without caching. For regular use assets references
     // -------------------------------------------------------------------------------------------------
-    class Asset : public ISerializable
+    class Asset : public ISerializable, public RefCounterable, public ICloneableRef
     {
     public:
         typedef AssetMeta MetaType;
@@ -24,9 +37,12 @@ namespace o2
         PROPERTY(String, path, SetPath, GetPath); // Asset path property @EDITOR_IGNORE
         GETTER(String, fullPath, GetFullPath);    // Full asset path getter (from binary path)
         GETTER(UID, id, GetUID);                  // Asset id getter
-        GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter
+        GETTER(Ref<AssetMeta>, meta, GetMeta);        // Asset meta information pointer getter
 
     public:
+        // Hidden default constructor
+        Asset();
+
         // Virtual destructor
         virtual ~Asset();
 
@@ -49,18 +65,10 @@ namespace o2
         const UID& GetUID() const;
 
         // Returns meta information pointer
-        AssetMeta* GetMeta() const;
+        const Ref<AssetMeta>& GetMeta() const;
 
         // Returns asset info
         const AssetInfo& GetInfo() const;
-
-#if IS_EDITOR
-        // Does the asset for the editor or not
-        void SetEditorAsset(bool isEditor);
-
-        // Returns is asset for editor or not
-        bool IsEditorAsset() const;
-#endif
 
         // Loads asset from path
         void Load(const String& path);
@@ -98,25 +106,33 @@ namespace o2
         // Is asset reference available to contain instance inside
         static bool IsReferenceCanOwnInstance() { return false; }
 
+#if IS_EDITOR
+        // Does the asset for the editor or not
+        void SetEditorAsset(bool isEditor);
+
+        // Returns is asset for editor or not
+        bool IsEditorAsset() const;
+#endif
+
         SERIALIZABLE(Asset);
+        CLONEABLE_REF(Asset);
 
     protected:
-        PROPERTY(AssetMeta*, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE @EXPANDED_BY_DEFAULT
+        PROPERTY(Ref<AssetMeta>, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE @EXPANDED_BY_DEFAULT
 
         AssetInfo mInfo; // Asset info 
 
         bool mDirty = false; // Is asset was changed
 
-    private:
-        // Hidden default constructor
-        Asset();
-
     protected:
         // Constructor with meta, use it as default constructor
-        Asset(AssetMeta* meta);
+        Asset(const Ref<AssetMeta>& meta);
 
         // Copy-constructor
-        Asset(const Asset& asset);
+		Asset(const Asset& asset);
+
+		// It is called after reference initialization at object construction, registers asset cache
+		void PostRefConstruct();
 
         // Returns meta full path (from binary path)
         String GetMetaFullPath() const;
@@ -125,10 +141,10 @@ namespace o2
         UID& ID();
 
         // Returns assets log stream pointer
-        LogStream* GetAssetsLogStream() const;
+        const Ref<LogStream>& GetAssetsLogStream() const;
 
         // Meta setter, used for property
-        void SetMeta(AssetMeta* meta);
+        void SetMeta(const Ref<AssetMeta>& meta);
 
         // Loads asset from path
         void Load(const AssetInfo& info);
@@ -142,14 +158,19 @@ namespace o2
         // It is called when UID has changed
         virtual void OnUIDChanged(const UID& oldUID);
 
+        template<typename _asset_type>
         friend class AssetRef;
+
         friend class Assets;
-        friend class AssetsBuilder;
+		friend class AssetsBuilder;
+
+		FRIEND_REF_MAKE();
     };
 
     // This macro defines asset type
 #define ASSET_TYPE(THIS_TYPE, META_TYPE) \
 SERIALIZABLE(THIS_TYPE);                 \
+CLONEABLE_REF(THIS_TYPE);                \
 typedef META_TYPE MetaType;                                         
 
     // ----------------------------
@@ -164,12 +185,12 @@ typedef META_TYPE MetaType;
 
     public:
         PROPERTIES(AssetWithDefaultMeta<T>);
-        GETTER(Meta*, meta, GetMeta);  // Meta information getter
+        GETTER(Ref<Meta>, meta, GetMeta);  // Meta information getter
 
     public:
-        AssetWithDefaultMeta(): Asset(mnew Meta()) {}
+        AssetWithDefaultMeta(): Asset(mmake<Meta>()) {}
         AssetWithDefaultMeta(const AssetWithDefaultMeta<T>& other) : Asset(other), meta(this) {}
-        Meta* GetMeta() const { return dynamic_cast<Meta*>(mInfo.meta); }
+        Ref<Meta> GetMeta() const { return DynamicCast<Meta>(mInfo.meta); }
 
         SERIALIZABLE(AssetWithDefaultMeta<T>);
     };
@@ -179,6 +200,8 @@ typedef META_TYPE MetaType;
 CLASS_BASES_META(o2::Asset)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::Asset)
@@ -195,17 +218,14 @@ END_META;
 CLASS_METHODS_META(o2::Asset)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const String&, GetPath);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetPath, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(String, GetFullPath);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(String, GetBuiltFullPath);
     FUNCTION().PUBLIC().SIGNATURE(const UID&, GetUID);
-    FUNCTION().PUBLIC().SIGNATURE(AssetMeta*, GetMeta);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AssetMeta>&, GetMeta);
     FUNCTION().PUBLIC().SIGNATURE(const AssetInfo&, GetInfo);
-#if  IS_EDITOR
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEditorAsset, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEditorAsset);
-#endif
     FUNCTION().PUBLIC().SIGNATURE(void, Load, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, Load, const UID&);
     FUNCTION().PUBLIC().SIGNATURE(void, Reload);
@@ -218,13 +238,17 @@ CLASS_METHODS_META(o2::Asset)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsReferenceCanOwnInstance);
-    FUNCTION().PRIVATE().CONSTRUCTOR();
-    FUNCTION().PROTECTED().CONSTRUCTOR(AssetMeta*);
+#if  IS_EDITOR
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEditorAsset, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEditorAsset);
+#endif
+    FUNCTION().PROTECTED().CONSTRUCTOR(const Ref<AssetMeta>&);
     FUNCTION().PROTECTED().CONSTRUCTOR(const Asset&);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(String, GetMetaFullPath);
     FUNCTION().PROTECTED().SIGNATURE(UID&, ID);
-    FUNCTION().PROTECTED().SIGNATURE(LogStream*, GetAssetsLogStream);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetMeta, AssetMeta*);
+    FUNCTION().PROTECTED().SIGNATURE(const Ref<LogStream>&, GetAssetsLogStream);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetMeta, const Ref<AssetMeta>&);
     FUNCTION().PROTECTED().SIGNATURE(void, Load, const AssetInfo&);
     FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
@@ -250,7 +274,7 @@ CLASS_METHODS_META(o2::AssetWithDefaultMeta<T>)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AssetWithDefaultMeta<T>&);
-    FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Meta>, GetMeta);
 }
 END_META;
 // --- END META ---

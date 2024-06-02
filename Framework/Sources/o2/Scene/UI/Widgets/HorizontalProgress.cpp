@@ -7,12 +7,12 @@
 
 namespace o2
 {
-    HorizontalProgress::HorizontalProgress():
-        Widget(), DrawableCursorEventsListener(this)
+    HorizontalProgress::HorizontalProgress(RefCounter* refCounter):
+        Widget(refCounter), DrawableCursorEventsListener(this)
     {}
 
-    HorizontalProgress::HorizontalProgress(const HorizontalProgress& other) :
-        Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+    HorizontalProgress::HorizontalProgress(RefCounter* refCounter, const HorizontalProgress& other) :
+        Widget(refCounter, other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
         mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense), value(this),
         minValue(this), maxValue(this), scrollSense(this)
     {
@@ -272,7 +272,7 @@ namespace o2
         Widget::UpdateLayersLayouts();
     }
 
-    void HorizontalProgress::OnLayerAdded(WidgetLayer* layer)
+    void HorizontalProgress::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "back")
             mBackLayer = layer;
@@ -287,6 +287,8 @@ namespace o2
         return "Progress";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::HorizontalProgress>);
 // --- META ---
 
 ENUM_META(o2::HorizontalProgress::Orientation)

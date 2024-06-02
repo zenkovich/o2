@@ -107,7 +107,8 @@ namespace o2
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::BinaryAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::BinaryAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::BinaryAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::BinaryAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::AssetWithDefaultMeta<o2::BinaryAsset>>);
 // --- META ---
 
 DECLARE_CLASS(o2::BinaryAsset, o2__BinaryAsset);

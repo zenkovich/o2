@@ -14,14 +14,15 @@ namespace o2
     public:
         Function<int()>                   getItemsCountFunc; // Items count getting function
         Function<Vector<void*>(int, int)> getItemsRangeFunc; // Items getting in range function
-        Function<void(Widget*, void*)>    setupItemFunc;     // Setup item widget function
+
+        Function<void(const Ref<Widget>&, void*)> setupItemFunc; // Setup item widget function
 
     public:
         // Default constructor
-        GridLayoutScrollArea();
+        explicit GridLayoutScrollArea(RefCounter* refCounter);
 
         // Copy-constructor
-        GridLayoutScrollArea(const GridLayoutScrollArea& other);
+        GridLayoutScrollArea(RefCounter* refCounter, const GridLayoutScrollArea& other);
 
         // Destructor
         ~GridLayoutScrollArea();
@@ -30,10 +31,10 @@ namespace o2
         GridLayoutScrollArea& operator=(const GridLayoutScrollArea& other);
 
         // Sets item sample widget. WARNING: Removing all old items!
-        void SetItemSample(Widget* sample);
+        void SetItemSample(const Ref<Widget>& sample);
 
         // Returns item sample widget
-        Widget* GetItemSample() const;
+        const Ref<Widget>& GetItemSample() const;
 
         // Sets spacing between cell widgets
         void SetItemsSpacing(const Vec2F& spacing);
@@ -54,17 +55,18 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(GridLayoutScrollArea);
+        CLONEABLE_REF(GridLayoutScrollArea);
 
     protected:
-        Widget* mItemSample = nullptr; // Item sample widget @SERIALIZABLE
-        Vec2F   mItemsSpacing;         // Spacing between cell widgets @SERIALIZABLE
+        Ref<Widget>         mItemSample; // Item sample widget @SERIALIZABLE
+        Vector<Ref<Widget>> mItemsPool;  // Items pool
+
+        Vec2F mItemsSpacing; // Spacing between cell widgets @SERIALIZABLE
         
         int mMinVisibleItemIdx = -1; // Visible item with minimal index
         int mMaxVisibleItemIdx = -1; // Visible item with maximal index
 
-        int mPrevItemsInLine = 0; // Previous visible items on line count
-                                                 
-        Vector<Widget*> mItemsPool; // Items pool
+        int mPrevItemsInLine = 0; // Previous visible items on line count                                                 
 
     protected:
         // Called when object was deserialized and trying to reattach states animations target
@@ -89,13 +91,13 @@ namespace o2
         virtual Vector<void*> GetItemsRange(int start, int end) const;
 
         // Sets item widget, calls setupItemFunc
-        virtual void SetupItemWidget(Widget* widget, void* item);
+        virtual void SetupItemWidget(const Ref<Widget>& widget, void* item);
 
         // Updates visible items
         virtual void UpdateVisibleItems();
 
         // Returns item widget under point and stores index in idxPtr, if not null
-        Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+        Ref<Widget> GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
         // Returns count of items in one line
         int GetItemsInLine() const;
@@ -116,21 +118,21 @@ CLASS_FIELDS_META(o2::GridLayoutScrollArea)
     FIELD().PUBLIC().NAME(getItemsCountFunc);
     FIELD().PUBLIC().NAME(getItemsRangeFunc);
     FIELD().PUBLIC().NAME(setupItemFunc);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemSample);
+    FIELD().PROTECTED().NAME(mItemsPool);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemsSpacing);
     FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mMinVisibleItemIdx);
     FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mMaxVisibleItemIdx);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevItemsInLine);
-    FIELD().PROTECTED().NAME(mItemsPool);
 }
 END_META;
 CLASS_METHODS_META(o2::GridLayoutScrollArea)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const GridLayoutScrollArea&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const GridLayoutScrollArea&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
     FUNCTION().PUBLIC().SIGNATURE(void, SetItemsSpacing, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(const Vec2F&, GetItemsSpacing);
     FUNCTION().PUBLIC().SIGNATURE(void, OnItemsUpdated, bool);
@@ -144,9 +146,9 @@ CLASS_METHODS_META(o2::GridLayoutScrollArea)
     FUNCTION().PROTECTED().SIGNATURE(void, MoveScrollPosition, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(int, GetItemsCount);
     FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetItemsRange, int, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupItemWidget, Widget*, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupItemWidget, const Ref<Widget>&, void*);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleItems);
-    FUNCTION().PROTECTED().SIGNATURE(Widget*, GetItemUnderPoint, const Vec2F&, int*);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, GetItemUnderPoint, const Vec2F&, int*);
     FUNCTION().PROTECTED().SIGNATURE(int, GetItemsInLine);
 }
 END_META;

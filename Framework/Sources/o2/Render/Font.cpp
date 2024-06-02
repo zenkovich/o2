@@ -5,22 +5,22 @@
 
 namespace o2
 {
-    Font::Font():
-        mReady(false)
-    {
-        o2Render.mFonts.Add(this);
-    }
+    Font::Font()
+    {}
 
     Font::Font(const Font& font):
         mCharacters(font.mCharacters), mTexture(font.mTexture), 
         mTextureSrcRect(font.mTextureSrcRect), mReady(font.mReady)
+    {}
+    
+    void Font::PostRefConstruct()
     {
-        o2Render.mFonts.Add(this);
+        o2Render.OnFontCreated(this);
     }
 
     Font::~Font()
     {
-        o2Render.mFonts.Remove(this);
+        o2Render.OnFontDestroyed(this);
     }
 
     float Font::GetHeightPx(int height) const

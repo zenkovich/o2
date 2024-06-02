@@ -5,11 +5,12 @@
 
 namespace Editor
 {
-	EnumProperty::EnumProperty()
-	{}
+	EnumProperty::EnumProperty(RefCounter* refCounter):
+		TPropertyField<int>(refCounter)
+    {}
 
-	EnumProperty::EnumProperty(const EnumProperty& other) :
-		TPropertyField<int>(other)
+	EnumProperty::EnumProperty(RefCounter* refCounter, const EnumProperty& other) :
+		TPropertyField<int>(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -45,9 +46,9 @@ namespace Editor
 
 		if (mEnumType)
 		{
-			mEntries = &mEnumType->GetEntries();
+			mEntries = mEnumType->GetEntries();
 
-			for (auto& kv : *mEntries)
+			for (auto& kv : mEntries)
 				mDropDown->AddItem(kv.second);
 		}
 	}
@@ -63,12 +64,12 @@ namespace Editor
 
 		if (mValuesDifferent)
 		{
-			mDropDown->value = (*mEntries).Get(mCommonValue);
+			mDropDown->value = (mEntries).Get(mCommonValue);
 			mDropDown->SetState("undefined", true);
 		}
 		else
 		{
-			mDropDown->value = (*mEntries).Get(mCommonValue);
+			mDropDown->value = (mEntries).Get(mCommonValue);
 			mDropDown->SetState("undefined", false);
 		}
 
@@ -80,9 +81,11 @@ namespace Editor
 		if (mUpdatingValue)
 			return;
 
-		SetValueByUser(mEntries->FindValue(name).first);
+		SetValueByUser(mEntries.FindValue(name).first);
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::EnumProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::EnumProperty, Editor__EnumProperty);

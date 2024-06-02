@@ -26,7 +26,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		NameEditDlg();
+		NameEditDlg(RefCounter* refCounter);
 
 		// Destructor
 		~NameEditDlg();
@@ -37,12 +37,11 @@ namespace Editor
 						 Function<void()> onCancelled = Function<void()>());
 
 	protected:
-		Function<void(const String&)> mOnCompletedCallback;
-		Function<void()>              mOnCancelledCallback;
+		Function<void(const String&)> mOnCompletedCallback; // On completed callback
+		Function<void()>              mOnCancelledCallback; // On cancelled callback
 
-
-		o2::Window* mWindow = nullptr;
-		EditBox*    mNameEditBox = nullptr;
+		Ref<o2::Window> mWindow;      // Dialog window
+		Ref<EditBox>    mNameEditBox; // Name edit box
 
 	protected:
 		// Calls when hiding dialog

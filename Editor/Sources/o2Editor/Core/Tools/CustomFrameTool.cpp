@@ -7,7 +7,7 @@ namespace Editor
 {
 	CustomFrameTool::CustomFrameTool()
 	{
-		sceneLayer.tool = this;
+		sceneLayer->tool = Ref(this);
 		frameHandles.isInputTransparent = true;
 		frameHandles.onTransformed = [&](const Basis& x) {
 			auto b = x*o2EditorSceneScreen.GetScreenToLocalTransform();
@@ -19,11 +19,13 @@ namespace Editor
 
 	void CustomFrameTool::SceneLayer::DrawOverScene()
 	{
-		Basis b = tool->mBasis;
-		b.origin += tool->getOrigin();
+		auto toolRef = tool.Lock();
 
-		tool->frameHandles.SetBasis(b*o2EditorSceneScreen.GetLocalToScreenTransform());
-		tool->frameHandles.Draw();
+		Basis b = toolRef->mBasis;
+		b.origin += toolRef->getOrigin();
+
+		toolRef->frameHandles.SetBasis(b*o2EditorSceneScreen.GetLocalToScreenTransform());
+		toolRef->frameHandles.Draw();
 	}
 
 	void CustomFrameTool::SceneLayer::Update(float dt)
@@ -36,7 +38,7 @@ namespace Editor
 
 	bool CustomFrameTool::SceneLayer::IsEnabled() const
 	{
-		return tool->isEnabled;
+		return tool.Lock()->isEnabled;
 	}
 
 	const String& CustomFrameTool::SceneLayer::GetName() const
@@ -73,13 +75,13 @@ namespace Editor
 
 	void CustomFrameTool::CustomFrameTool::OnEnabled()
 	{
-		o2EditorSceneScreen.AddEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.AddEditorLayer(sceneLayer);
 		isEnabled = true;
 	}
 
 	void CustomFrameTool::CustomFrameTool::OnDisabled()
 	{
-		o2EditorSceneScreen.RemoveEditorLayer(&sceneLayer);
+		o2EditorSceneScreen.RemoveEditorLayer(sceneLayer);
 		isEnabled = false;
 	}
 }

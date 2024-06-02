@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-    class TransformAction;
+    FORWARD_CLASS_REF(TransformAction);
 
     // ----------------------------------
     // Editor frame and pivot moving tool
@@ -32,12 +32,16 @@ namespace Editor
         IOBJECT(FrameTool);
 
     protected:
+        // -------------------
+        // Snap line draw info
+        // -------------------
         struct SnapLine
         {
             Color4 color;
             Vec2F  begin;
             Vec2F  end;
 
+        public:
             SnapLine() {}
             SnapLine(const Vec2F& begin, const Vec2F& end, const Color4& color):begin(begin), end(end), color(color) {}
 
@@ -53,25 +57,25 @@ namespace Editor
 
         const float mFrameMinimalSize = 0.001f;   // Minimal size of transforming frame
 
-        SceneDragHandle mLeftTopRotateHandle;	  // Left top rotation handle
-        SceneDragHandle mLeftBottomRotateHandle;  // Left bottom rotation handle
-        SceneDragHandle mRightTopRotateHandle;	  // Right top rotation handle
-        SceneDragHandle mRightBottomRotateHandle; // Right bottom rotation handle
-        SceneDragHandle mLeftTopHandle;			  // Left top corner frame handle
-        SceneDragHandle mLeftHandle;			  // Left corner frame handle
-        SceneDragHandle mLeftBottomHandle;		  // Left bottom corner frame handle
-        SceneDragHandle mTopHandle;				  // Top corner frame handle
-        SceneDragHandle mBottomHandle;			  // Bottom corner frame handle
-        SceneDragHandle mRightTopHandle;		  // Right top corner frame handle
-        SceneDragHandle mRightHandle;			  // Right corner frame handle
-        SceneDragHandle mRightBottomHandle;		  // Right bottom corner frame handle
-        SceneDragHandle mPivotHandle;			  // Frame or object pivot handle
+        Ref<SceneDragHandle> mLeftTopRotateHandle;	  // Left top rotation handle
+        Ref<SceneDragHandle> mLeftBottomRotateHandle;  // Left bottom rotation handle
+        Ref<SceneDragHandle> mRightTopRotateHandle;	  // Right top rotation handle
+        Ref<SceneDragHandle> mRightBottomRotateHandle; // Right bottom rotation handle
+        Ref<SceneDragHandle> mLeftTopHandle;			  // Left top corner frame handle
+        Ref<SceneDragHandle> mLeftHandle;			  // Left corner frame handle
+        Ref<SceneDragHandle> mLeftBottomHandle;		  // Left bottom corner frame handle
+        Ref<SceneDragHandle> mTopHandle;				  // Top corner frame handle
+        Ref<SceneDragHandle> mBottomHandle;			  // Bottom corner frame handle
+        Ref<SceneDragHandle> mRightTopHandle;		  // Right top corner frame handle
+        Ref<SceneDragHandle> mRightHandle;			  // Right corner frame handle
+        Ref<SceneDragHandle> mRightBottomHandle;		  // Right bottom corner frame handle
+        Ref<SceneDragHandle> mPivotHandle;			  // Frame or object pivot handle
                                                           
-        SceneDragHandle mAnchorsLeftTopHandle;	   // Anchors Left top corner frame handle
-        SceneDragHandle mAnchorsLeftBottomHandle;  // Anchors Left bottom corner frame handle
-        SceneDragHandle mAnchorsRightTopHandle;	   // Anchors Right top corner frame handle
-        SceneDragHandle mAnchorsRightBottomHandle; // Anchors Right bottom corner frame handle
-        SceneDragHandle mAnchorsCenter;            // Anchors center, enables when all anchors in one point and drags all of them
+        Ref<SceneDragHandle> mAnchorsLeftTopHandle;	   // Anchors Left top corner frame handle
+        Ref<SceneDragHandle> mAnchorsLeftBottomHandle;  // Anchors Left bottom corner frame handle
+        Ref<SceneDragHandle> mAnchorsRightTopHandle;	   // Anchors Right top corner frame handle
+        Ref<SceneDragHandle> mAnchorsRightBottomHandle; // Anchors Right bottom corner frame handle
+        Ref<SceneDragHandle> mAnchorsCenter;            // Anchors center, enables when all anchors in one point and drags all of them
                                                           
         Basis mFrame; // Frame basis
                                                           
@@ -86,8 +90,8 @@ namespace Editor
         bool mIsDragging = false;	   // Is frame dragging
         bool mChangedFromThis = false; // Is objects changed from this, needs to break circular updating
 
-        Vector<Basis>    mBeforeTransforms;   		 // Array of objects transformations before changing
-        TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
+        Vector<Basis>        mBeforeTransforms; // Array of objects transformations before changing
+        Ref<TransformAction> mTransformAction;  // Current transform action. Creates when transform started
 
         Vector<SnapLine> mSnapLines; // Immediate drawing lines, used for drawing snapping
 
@@ -111,10 +115,10 @@ namespace Editor
         void OnDisabled() override;
 
         // Called when scene objects was changed
-        void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
+        void OnSceneChanged(const Vector<Ref<SceneEditableObject>>& changedObjects) override;
 
         // Called when objects selection was changed
-        void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+        void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
         // Called when key was pressed
         void OnKeyPressed(const Input::Key& key) override;
@@ -321,13 +325,13 @@ namespace Editor
         void CheckAnchorsCenterEnabled();
 
         // Returns objects' transforms 
-        Vector<Basis> GetObjectsTransforms(const Vector<SceneEditableObject*>& objects) const;
+        Vector<Basis> GetObjectsTransforms(const Vector<Ref<SceneEditableObject>>& objects) const;
 
         // Returns all objects' transforms for snapping and including anchors frame when enabled
         Vector<Basis> GetSnapBasisesForAllObjects() const;
 
         // Returns object's parent snap basis - world rect or children rect
-        Basis GetObjectParentAnchorSnapBasis(SceneEditableObject* object);
+        Basis GetObjectParentAnchorSnapBasis(const Ref<SceneEditableObject>& object);
 
         // Calculates snapping offset for point by parallels lines, offset is on normal
         Vec2F CalculateSnapOffset(const Vec2F& point, const Basis& frame, 
@@ -378,7 +382,7 @@ CLASS_FIELDS_META(Editor::FrameTool)
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsDragging);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mChangedFromThis);
     FIELD().PROTECTED().NAME(mBeforeTransforms);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
+    FIELD().PROTECTED().NAME(mTransformAction);
     FIELD().PROTECTED().NAME(mSnapLines);
 }
 END_META;
@@ -392,8 +396,8 @@ CLASS_METHODS_META(Editor::FrameTool)
     FUNCTION().PROTECTED().SIGNATURE(void, DrawSnapLines);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, const Vector<Ref<SceneEditableObject>>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
@@ -462,9 +466,9 @@ CLASS_METHODS_META(Editor::FrameTool)
     FUNCTION().PROTECTED().SIGNATURE(bool, IsPointInBottomHandle, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsPointInAnchorsCenterHandle, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckAnchorsCenterEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<Basis>, GetObjectsTransforms, const Vector<SceneEditableObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Basis>, GetObjectsTransforms, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(Vector<Basis>, GetSnapBasisesForAllObjects);
-    FUNCTION().PROTECTED().SIGNATURE(Basis, GetObjectParentAnchorSnapBasis, SceneEditableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(Basis, GetObjectParentAnchorSnapBasis, const Ref<SceneEditableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&, Vector<Basis>);
 }
 END_META;

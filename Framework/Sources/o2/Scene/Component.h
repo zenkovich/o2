@@ -1,22 +1,20 @@
 #pragma once
 
-#include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
 namespace o2
 {
     class Actor;
-    class ComponentRef;
 
     // ---------------------------
     // Actor's component interface
     // ---------------------------
-    class Component: virtual public ISerializable
+    class Component: public RefCounterable, virtual public ISerializable, virtual public ICloneableRef
     {
     public:
         PROPERTIES(Component);
-        GETTER(Actor*, actor, GetOwnerActor);                   // Owner actor getter
+        GETTER(Ref<Actor>, actor, GetOwnerActor);               // Owner actor getter
         PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Enabling property @EDITOR_IGNORE
         GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is enabled in hierarchy property
 
@@ -55,29 +53,29 @@ namespace o2
         bool IsEnabledInHierarchy() const;
 
         // Returns prototype link
-        Component* GetPrototypeLink() const;
+        const WeakRef<Component>& GetPrototypeLink() const;
 
         // Returns is this linked to specified component with depth links search
-        bool IsLinkedToComponent(Component* component) const;
+        bool IsLinkedToComponent(const Ref<Component>& component) const;
 
         // Returns owner actor
-        Actor* GetOwnerActor() const;
+        Ref<Actor> GetOwnerActor() const;
 
         // Returns component with type
         template<typename _type>
-        _type* GetComponent() const;
+        Ref<_type> GetComponent() const;
 
         // Returns component with type in children
         template<typename _type>
-        _type* GetComponentInChildren() const;
+        Ref<_type> GetComponentInChildren() const;
 
         // Returns components with type
         template<typename _type>
-        Vector<_type*> GetComponents() const;
+        Vector<Ref<_type>> GetComponents() const;
 
         // Returns components with type in children
         template<typename _type>
-        Vector<_type*> GetComponentsInChildren() const;
+        Vector<Ref<_type>> GetComponentsInChildren() const;
 
         // Returns name of component
         static String GetName();
@@ -97,15 +95,17 @@ namespace o2
 #endif
 
         SERIALIZABLE(Component);
+        CLONEABLE_REF(Component);
 
-    protected:
-        Component* mPrototypeLink = nullptr;    // Prototype actor component pointer. Null if no actor prototype
-        SceneUID   mId;                         // Component id @EDITOR_IGNORE
-        Actor*     mOwner = nullptr;            // Owner actor
-        bool       mEnabled = true;             // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
-        bool       mEnabledInHierarchy = false; // Is component enabled in hierarchy
+	protected:
+		WeakRef<Actor> mOwner; // Owner actor
 
-        Vector<ComponentRef*> mReferences; // References to this component
+		SceneUID mId; // Component id @EDITOR_IGNORE
+
+        WeakRef<Component> mPrototypeLink; // Prototype actor component pointer. Null if no actor prototype
+
+        bool mEnabled = true;             // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
+        bool mEnabledInHierarchy = false; // Is component enabled in hierarchy
 
     protected:
         // Beginning serialization callback
@@ -130,7 +130,7 @@ namespace o2
         virtual void UpdateEnabledInHierarchy();
 
         // Sets owner actor
-        virtual void SetOwnerActor(Actor* actor);
+        virtual void SetOwnerActor(const Ref<Actor>& actor);
 
         // Called when actor was included to scene
         virtual void OnAddToScene() {}
@@ -163,56 +163,51 @@ namespace o2
         virtual void OnTransformUpdated() {}
 
         // Called when parent changed
-        virtual void OnParentChanged(Actor* oldParent) {}
+        virtual void OnParentChanged(const Ref<Actor>& oldParent) {}
 
         // Called when children list changed
         virtual void OnChildrenChanged() {}
 
         // Called when child actor was added
-        virtual void OnChildAdded(Actor* child) {}
+        virtual void OnChildAdded(const Ref<Actor>& child) {}
 
         // Called when child actor was removed
-        virtual void OnChildRemoved(Actor* child) {}
+        virtual void OnChildRemoved(const Ref<Actor>& child) {}
 
         // Called when new component has added to actor
-        virtual void OnComponentAdded(Component* component) {}
+        virtual void OnComponentAdded(const Ref<Component>& component) {}
 
         // Called when component going to be removed from actor
         virtual void OnComponentRemoving(Component* component) {}
 
         friend class Actor;
-        friend struct ActorDifferences;
         friend class ActorRefResolver;
-        friend class ComponentRef;
+        friend class BaseComponentLinkRef;
         friend class Scene;
         friend class Widget;
+        friend struct ActorDifferences;
     };
-}
 
-#include "o2/Scene/Actor.h"
-
-namespace o2
-{
     template<typename _type>
-    Vector<_type*> Component::GetComponentsInChildren() const
+    Vector<Ref<_type>> Component::GetComponentsInChildren() const
     {
         if (mOwner)
             return mOwner->GetComponentsInChildren<_type>();
 
-        return Vector<_type*>();
+        return {};
     }
 
     template<typename _type>
-    Vector<_type*> Component::GetComponents() const
+    Vector<Ref<_type>> Component::GetComponents() const
     {
         if (mOwner)
             return mOwner->GetComponents();
 
-        return Vector<_type*>();
+        return {};
     }
 
     template<typename _type>
-    _type* Component::GetComponentInChildren() const
+    Ref<_type> Component::GetComponentInChildren() const
     {
         if (mOwner)
             return mOwner->GetComponentInChildren<_type>();
@@ -221,7 +216,7 @@ namespace o2
     }
 
     template<typename _type>
-    _type* Component::GetComponent() const
+    Ref<_type> Component::GetComponent() const
     {
         if (mOwner)
             return mOwner->GetComponent<_type>();
@@ -234,7 +229,9 @@ namespace o2
 
 CLASS_BASES_META(o2::Component)
 {
+    BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::Component)
@@ -242,12 +239,11 @@ CLASS_FIELDS_META(o2::Component)
     FIELD().PUBLIC().NAME(actor);
     FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(enabled);
     FIELD().PUBLIC().NAME(enabledInHierarchy);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink);
+    FIELD().PROTECTED().NAME(mOwner);
     FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().NAME(mId);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
+    FIELD().PROTECTED().NAME(mPrototypeLink);
     FIELD().PROTECTED().EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabledInHierarchy);
-    FIELD().PROTECTED().NAME(mReferences);
 }
 END_META;
 CLASS_METHODS_META(o2::Component)
@@ -262,9 +258,9 @@ CLASS_METHODS_META(o2::Component)
     FUNCTION().PUBLIC().SIGNATURE(void, Disable);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabledInHierarchy);
-    FUNCTION().PUBLIC().SIGNATURE(Component*, GetPrototypeLink);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToComponent, Component*);
-    FUNCTION().PUBLIC().SIGNATURE(Actor*, GetOwnerActor);
+    FUNCTION().PUBLIC().SIGNATURE(const WeakRef<Component>&, GetPrototypeLink);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsLinkedToComponent, const Ref<Component>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetOwnerActor);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
@@ -279,7 +275,7 @@ CLASS_METHODS_META(o2::Component)
     FUNCTION().PROTECTED().SIGNATURE(void, AddToScene);
     FUNCTION().PROTECTED().SIGNATURE(void, RemoveFromScene);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateEnabledInHierarchy);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
@@ -290,11 +286,11 @@ CLASS_METHODS_META(o2::Component)
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnParentChanged, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildrenChanged);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Actor*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Actor*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, const Ref<Component>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
 }
 END_META;

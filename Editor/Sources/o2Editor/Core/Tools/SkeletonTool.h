@@ -19,26 +19,34 @@ namespace Editor
 		// ---------------------------------------------------------------------
 		struct SceneLayer: public SceneEditorLayer
 		{
-			SkeletonTool* tool = nullptr;
+			WeakRef<SkeletonTool> tool; // Skeleton tool
 
 		public:
+			// Draws editor over scene
 			void DrawOverScene() override;
+
+			// Updates editor
 			void Update(float dt) override;
 
+			// Returns order of layer
 			int GetOrder() const override;
 
+			// Returns true if layer is enabled
 			bool IsEnabled() const override;
 
+			// Returns name of layer
 			const String& GetName() const override;
+
+			// Returns icon name of layer
 			const String& GetIconName() const override;
 		};
 
 		// ---------------------------------------------------------
 		// Bone handle container. Keeps handle and reference to bone
 		// ---------------------------------------------------------
-		struct BoneHandle
+		struct BoneHandle: public RefCounterable
 		{
-			SceneDragHandle* handle = nullptr;            // Bone handle in scene
+			Ref<SceneDragHandle>           handle;        // Bone handle in scene
 			Ref<SkinningMeshBoneComponent> boneComponent; // Bone component
 
 			Basis pressedTransform; // Stored bone transform when pressed
@@ -61,10 +69,10 @@ namespace Editor
 		// ---------------------------------------------------------------------------------
 		// Skeleton edit instance. Contains handles and reference to skinning mesh component
 		// ---------------------------------------------------------------------------------
-		struct SkeletonInstance
+		struct SkeletonInstance: public RefCounterable
 		{
 			Ref<SkinningMeshComponent> skinningMeshComponent; // Reference to component
-			Vector<BoneHandle*>        boneHandles;           // List of bones handles
+			Vector<Ref<BoneHandle>>    boneHandles;           // List of bones handles
 
 		public:
 			// Updates handles positions by bones transforms
@@ -72,8 +80,9 @@ namespace Editor
 		};
 
 	public:
-		SceneLayer   sceneLayer;        // Scene layer for drawing spline
-		bool         isEnabled = false; // Is tool enabled now     
+		Ref<SceneLayer> sceneLayer = mmake<SceneLayer>(); // Scene layer for drawing spline
+
+		bool isEnabled = false; // Is tool enabled now     
 
 	public:
 		// Default constructor
@@ -98,12 +107,12 @@ namespace Editor
 		bool IsEditingSkeleton(const Ref<SkinningMeshComponent>& skinningMeshComponent) const;
 
 		// Returns list of editing skeletons
-		const Vector<SkeletonInstance*>& GetEditingSkeletons() const;
+		const Vector<Ref<SkeletonInstance>>& GetEditingSkeletons() const;
 
 		IOBJECT(SkeletonTool);
 
 	private:
-		Vector<SkeletonInstance*> mSkeletons; // List of editing skeletons
+		Vector<Ref<SkeletonInstance>> mSkeletons; // List of editing skeletons
 	};
 }
 // --- META ---
@@ -115,7 +124,7 @@ CLASS_BASES_META(Editor::SkeletonTool)
 END_META;
 CLASS_FIELDS_META(Editor::SkeletonTool)
 {
-    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SceneLayer>()).NAME(sceneLayer);
     FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
     FIELD().PRIVATE().NAME(mSkeletons);
 }
@@ -130,7 +139,7 @@ CLASS_METHODS_META(Editor::SkeletonTool)
     FUNCTION().PUBLIC().SIGNATURE(void, AddSkeletonInstance, const Ref<SkinningMeshComponent>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveSkeletonInstance, const Ref<SkinningMeshComponent>&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEditingSkeleton, const Ref<SkinningMeshComponent>&);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<SkeletonInstance*>&, GetEditingSkeletons);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SkeletonInstance>>&, GetEditingSkeletons);
 }
 END_META;
 // --- END META ---

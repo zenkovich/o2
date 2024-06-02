@@ -16,14 +16,16 @@ namespace o2
 
     Assets::Assets()
     {
-        mLog = mnew LogStream("Assets");
+        mLog = mmake<LogStream>("Assets");
         o2Debug.GetLog()->BindStream(mLog);
 
         LoadAssetsTree();
     }
 
     Assets::~Assets()
-    {}
+    {
+        mInstance = nullptr;
+    }
 
     String Assets::GetAssetsPath() const
     {
@@ -37,18 +39,24 @@ namespace o2
 
     const String& Assets::GetAssetPath(const UID& id) const
     {
+        if (auto cached = FindAssetCache(id))
+            return cached->GetPath();
+
         return GetAssetInfo(id).path;
     }
 
     const UID& Assets::GetAssetId(const String& path) const
-    {
+	{
+		if (auto cached = FindAssetCache(path))
+			return cached->GetUID();
+
         auto& info = GetAssetInfo(path);
         return info.meta ? info.meta->ID() : UID::empty;
     }
 
     const AssetInfo& Assets::GetAssetInfo(const UID& id) const
     {
-        for (auto tree : mAssetsTrees)
+        for (auto& tree : mAssetsTrees)
         {
             if (auto res = tree->Find(id))
                 return *res;
@@ -59,7 +67,7 @@ namespace o2
 
     const AssetInfo& Assets::GetAssetInfo(const String& path) const
     {
-        for (auto tree : mAssetsTrees)
+        for (auto& tree : mAssetsTrees)
         {
             if (auto res = tree->Find(path))
                 return *res;
@@ -75,7 +83,7 @@ namespace o2
         {
             auto derivedAssetTypes = TypeOf(Asset).GetDerivedTypes();
 
-            for (auto type : derivedAssetTypes)
+            for (auto& type : derivedAssetTypes)
             {
                 Vector<String> extensions = type->InvokeStatic<Vector<String>>("GetFileExtensions");
 
@@ -109,7 +117,7 @@ namespace o2
         return GetStdAssetType();
     }
 
-    AssetRef Assets::GetAssetRef(const String& path)
+    AssetRef<Asset> Assets::GetAssetRef(const String& path)
     {
         auto cached = FindAssetCache(path);
 
@@ -117,19 +125,19 @@ namespace o2
         {
             auto& assetInfo = GetAssetInfo(path);
             if (!assetInfo.IsValid())
-                return AssetRef();
+                return AssetRef<Asset>();
 
             auto type = assetInfo.meta->GetAssetType();
-            Asset* asset = (Asset*)type->CreateSample();
+            auto asset = DynamicCast<Asset>(type->CreateSampleRef());
             asset->Load(assetInfo);
 
             cached = FindAssetCache(asset->GetUID());
         }
 
-        return AssetRef(cached->asset, &cached->referencesCount);
+        return cached;
     }
 
-    AssetRef Assets::GetAssetRef(const UID& id)
+    AssetRef<Asset> Assets::GetAssetRef(const UID& id)
     {
         auto cached = FindAssetCache(id);
 
@@ -139,16 +147,16 @@ namespace o2
             if (!assetInfo.IsValid())
             {
                 o2Debug.LogError("Can't load asset by id - " + (String)id);
-                return AssetRef();
+                return AssetRef<Asset>();
             }
 
-            Asset* asset = (Asset*)assetInfo.meta->GetAssetType()->CreateSample();
+            auto asset = DynamicCast<Asset>(assetInfo.meta->GetAssetType()->CreateSampleRef());
             asset->Load(assetInfo);
 
             cached = FindAssetCache(id);
         }
 
-        return AssetRef(cached->asset, &cached->referencesCount);
+        return cached;
     }
 
     bool Assets::IsAssetExist(const String& path) const
@@ -161,7 +169,7 @@ namespace o2
         return GetAssetInfo(id).meta->ID() != UID::empty;
     }
 
-    bool Assets::RemoveAsset(const AssetRef& asset)
+    bool Assets::RemoveAsset(const AssetRef<Asset>& asset)
     {
         return RemoveAsset(asset->GetUID());
     }
@@ -194,7 +202,7 @@ namespace o2
         return true;
     }
 
-    bool Assets::CopyAsset(const AssetRef& asset, const String& dest)
+    bool Assets::CopyAsset(const AssetRef<Asset>& asset, const String& dest)
     {
         return CopyAsset(asset->GetUID(), dest);
     }
@@ -226,9 +234,9 @@ namespace o2
         if (info.meta->GetAssetType() == &TypeOf(FolderAsset))
         {
             o2FileSystem.FolderCreate(GetAssetsPath() + dest);
-            FolderAssetRef folderAsset(info.path);
+            AssetRef<FolderAsset> folderAsset(info.path);
 
-            for (auto inInfo : folderAsset->GetChildrenAssets())
+            for (auto& inInfo : folderAsset->GetChildrenAssets())
                 CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo->GetPath()));
         }
         else o2FileSystem.FileCopy(GetAssetsPath() + info.path, GetAssetsPath() + dest);
@@ -236,7 +244,7 @@ namespace o2
         return true;
     }
 
-    bool Assets::MoveAsset(const AssetRef& asset, const String& newPath)
+    bool Assets::MoveAsset(const AssetRef<Asset>& asset, const String& newPath)
     {
         return MoveAsset(asset->GetUID(), newPath);
     }
@@ -259,7 +267,7 @@ namespace o2
             return false;
         }
 
-        if (GetAssetId(newPath) != 0)
+        if (GetAssetId(newPath) != UID::empty)
         {
             mLog->Error("Can't remove asset '" + info.path + "' to '" + newPath + "' - another asset exist in target path");
             return false;
@@ -288,7 +296,7 @@ namespace o2
         return res;
     }
 
-    bool Assets::RenameAsset(const AssetRef& asset, const String& newName)
+    bool Assets::RenameAsset(const AssetRef<Asset>& asset, const String& newName)
     {
         return RenameAsset(GetAssetInfo(asset->GetUID()), newName);
     }
@@ -314,7 +322,7 @@ namespace o2
         String parentFolder = o2FileSystem.GetParentPath(info.path);
         String newFullName = parentFolder + "/" + newName;
 
-        if (GetAssetId(newFullName) != 0)
+        if (GetAssetId(newFullName) != UID::empty)
         {
             mLog->Error("Can't rename asset by path (" + info.path + ") \nto (" + newName + ")\n - another asset exist in target path");
             return false;
@@ -326,7 +334,7 @@ namespace o2
         return true;
     }
 
-    const Vector<AssetsTree*>& Assets::GetAssetsTrees() const
+    const Vector<Ref<AssetsTree>>& Assets::GetAssetsTrees() const
     {
         return mAssetsTrees;
     }
@@ -377,10 +385,10 @@ namespace o2
     {
         mAssetsTrees.Clear();
 
-        auto editorAssetsTree = mnew AssetsTree();
+        auto editorAssetsTree = mmake<AssetsTree>();
         editorAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(::GetEditorBuiltAssetsTreePath()));
 
-        mMainAssetsTree = mnew AssetsTree();
+        mMainAssetsTree = mmake<AssetsTree>();
         mMainAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
         mMainAssetsTree->assetsPath = ::GetAssetsPath();
         mMainAssetsTree->builtAssetsPath = ::GetBuiltAssetsPath();
@@ -392,6 +400,7 @@ namespace o2
     void Assets::CheckAssetsUnload()
     {
         return;
+
         const bool checkDuplications = false;
         if (checkDuplications)
         {
@@ -402,62 +411,52 @@ namespace o2
                 {
                     auto otherCache = mCachedAssets[j];
 
-                    if (!cache->asset->GetPath().IsEmpty() && cache->asset->GetPath() == otherCache->asset->GetPath())
-                        o2Debug.LogError("Duplicate asset path \"" + cache->asset->GetPath() + "\"");
+                    if (!cache->GetPath().IsEmpty() && cache->GetPath() == otherCache->GetPath())
+                        o2Debug.LogError("Duplicate asset path \"" + cache->GetPath() + "\"");
 
-                    if (cache->asset->GetUID() == otherCache->asset->GetUID())
-                        o2Debug.LogError("Duplicate asset UID \"" + cache->asset->GetPath() + "\" - " + cache->asset->GetUID());
+                    if (cache->GetUID() == otherCache->GetUID())
+                        o2Debug.LogError("Duplicate asset UID \"" + cache->GetPath() + "\" - " + cache->GetUID().ToString());
 
-                    if (cache->asset == otherCache->asset)
+                    if (cache == otherCache)
                         o2Debug.LogError("Duplicate asset cache");
                 }
             }
         }
 
-        auto cachedAssets = mCachedAssets;
-        for (auto cached : cachedAssets)
-        {
-            if (cached->referencesCount <= 0)
-                delete cached->asset;
-        }
+//         auto cachedAssets = mCachedAssets;
+//         for (auto& cached : cachedAssets)
+//         {
+//             if (cached->referencesCount <= 0)
+//                 delete cached->asset;
+//         }
     }
 
-    Assets::AssetCache* Assets::FindAssetCache(const String& path)
+    AssetRef<Asset> Assets::FindAssetCache(const String& path) const
     {
-        Assets::AssetCache* res = nullptr;
+        AssetRef<Asset> res;
         mCachedAssetsByPath.TryGetValue(path, res);
         return res;
     }
 
-    Assets::AssetCache* Assets::FindAssetCache(const UID& id)
+    AssetRef<Asset> Assets::FindAssetCache(const UID& id) const
     {
-        Assets::AssetCache* res = nullptr;
+        AssetRef<Asset> res;
         mCachedAssetsByUID.TryGetValue(id, res);
         return res;
     }
 
     void Assets::ClearAssetsCache()
     {
-        auto cached = mCachedAssets;
         mCachedAssets.Clear();
         mCachedAssetsByPath.Clear();
         mCachedAssetsByUID.Clear();
         mAssetsTrees.Clear();
-
-        for (auto cache : cached)
-        {
-            if (cache->referencesCount == 0)
-                delete cache->asset;
-        }
     }
 
-    Assets::AssetCache* Assets::AddAssetCache(Asset* asset)
+    AssetRef<Asset> Assets::AddAssetCache(Asset* asset)
     {
-        auto cached = mnew AssetCache();
-        cached->asset = asset;
-        cached->referencesCount = 0;
-
-        mCachedAssets.Add(cached);
+        AssetRef<Asset> assetRef(asset);
+        mCachedAssets.Add(assetRef);
 
         if constexpr (IS_EDITOR)
         {
@@ -468,51 +467,28 @@ namespace o2
                 mLog->Error("Duplicated asset cache path: \"" + asset->GetPath() + "\"");
         }
 
-        mCachedAssetsByPath[asset->GetPath()] = cached;
-        mCachedAssetsByUID[asset->GetUID()] = cached;
+        mCachedAssetsByPath[asset->GetPath()] = assetRef;
+        mCachedAssetsByUID[asset->GetUID()] = assetRef;
 
-        return cached;
+        return assetRef;
     }
 
     void Assets::RemoveAssetCache(Asset* asset)
     {
-        AssetCache* cached = nullptr;
         auto fnd = mCachedAssetsByUID.find(asset->GetUID());
         if (fnd != mCachedAssetsByUID.end())
-        {
-            cached = fnd->second;
             mCachedAssetsByUID.erase(fnd);
-        }
 
         auto fnd2 = mCachedAssetsByPath.find(asset->GetPath());
         if (fnd2 != mCachedAssetsByPath.end())
-        {
             mCachedAssetsByPath.erase(fnd2);
-        }
 
-        if (cached) 
-        {
-            mCachedAssets.Remove(cached);
-            delete cached;
-        }
-        else
-        {
-            for (auto cache : mCachedAssets)
-            {
-                if (cache->asset == asset)
-                {
-                    mCachedAssets.Remove(cache);
-                    break;
-                }
-            }
-
-            o2Debug.Log("Asset cache not found!");
-        }
+        mCachedAssets.RemoveFirst([=](const AssetRef<Asset>& x) { return x == asset; });
     }
 
-    Assets::AssetCache* Assets::UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID)
+    AssetRef<Asset> Assets::UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID)
     {
-        AssetCache* cached = nullptr;
+        AssetRef<Asset> cached;
 
         auto fnd = mCachedAssetsByUID.find(oldUID);
         if (fnd != mCachedAssetsByUID.end())
@@ -541,11 +517,6 @@ namespace o2
         }
 
         return cached;
-    }
-
-    Assets::AssetCache::~AssetCache()
-    {
-        Assert(referencesCount == 0, "Some references not removed for asset");
     }
 
 #if IS_EDITOR
@@ -582,25 +553,25 @@ namespace o2
 
         Vector<UID> changedAssetsUIDs;
 
-        Function<void(AssetInfo* oldParent, Vector<AssetInfo*>& oldInfos, AssetInfo* newParent, Vector<AssetInfo*>& newInfos)> processFolder =
+        Function<void(Ref<AssetInfo> oldParent, Vector<Ref<AssetInfo>>& oldInfos, Ref<AssetInfo> newParent, Vector<Ref<AssetInfo>>& newInfos)> processFolder =
             [&processFolder, this, &changedAssetsUIDs]
-        (AssetInfo* oldParent, Vector<AssetInfo*>& oldInfos, AssetInfo* newParent, Vector<AssetInfo*>& newInfos)
+        (Ref<AssetInfo> oldParent, Vector<Ref<AssetInfo>>& oldInfos, Ref<AssetInfo> newParent, Vector<Ref<AssetInfo>>& newInfos)
         {
             auto oldInfosCopy = oldInfos;
             oldInfos.Clear();
 
             auto copyNewInfos = newInfos;
-            for (auto newAssetInfo : copyNewInfos)
+            for (auto& newAssetInfo : copyNewInfos)
             {
-                AssetInfo* oldAssetInfo = mMainAssetsTree->allAssetsByUID[newAssetInfo->meta->ID()];
+                Ref<AssetInfo> oldAssetInfo = mMainAssetsTree->allAssetsByUID[newAssetInfo->meta->ID()].Lock();
 
                 if (oldAssetInfo)
                 {
                     oldInfos.Add(oldAssetInfo);
                     if (oldParent)
-                        oldAssetInfo->parent = oldParent;
+                        oldAssetInfo->parent = Ref(oldParent);
 
-                    if (newAssetInfo->editTime != oldAssetInfo->editTime || !newAssetInfo->meta->IsEqual(oldAssetInfo->meta))
+                    if (newAssetInfo->editTime != oldAssetInfo->editTime || !newAssetInfo->meta->IsEqual(oldAssetInfo->meta.Get()))
                         changedAssetsUIDs.Add(newAssetInfo->meta->ID());
 
                     oldAssetInfo->path = newAssetInfo->path;
@@ -609,14 +580,12 @@ namespace o2
                 }
                 else
                 {
-                    AssetCache* cachedAsset = nullptr;
+                    AssetRef<Asset> cachedAsset;
                     if (mCachedAssetsByUID.TryGetValue(newAssetInfo->meta->ID(), cachedAsset))
                     {
-                        oldAssetInfo = cachedAsset->asset->mInfo.CloneAs<AssetInfo>();
+                        oldAssetInfo = cachedAsset->mInfo.CloneAsRef<AssetInfo>();
                         oldAssetInfo->RemoveAllChildren();
                         oldAssetInfo->path = newAssetInfo->path;
-
-                        cachedAsset->asset->mInfo.mOwnChildren = false;
                     }
                     else
                     {
@@ -628,7 +597,7 @@ namespace o2
 
                     oldInfos.Add(oldAssetInfo);
                     if (oldParent)
-                        oldAssetInfo->parent = oldParent;
+                        oldAssetInfo->parent = Ref(oldParent);
                 }
 
                 if (newAssetInfo->meta->GetAssetType() == &TypeOf(FolderAsset))
@@ -643,19 +612,19 @@ namespace o2
         mMainAssetsTree->allAssetsByPath.Clear();
         mMainAssetsTree->allAssetsByUID.Clear();
 
-        for (auto asset : mMainAssetsTree->rootAssets)
+        for (auto& asset : mMainAssetsTree->rootAssets)
             asset->SetTree(mMainAssetsTree);
 
-        for (auto info : oldAllAssets)
+        for (auto& info : oldAllAssets)
         {
-            if (!mMainAssetsTree->allAssetsByUID.ContainsKey(info->meta->ID()))
+            auto infoRef = info.Lock();
+
+            if (!mMainAssetsTree->allAssetsByUID.ContainsKey(infoRef->meta->ID()))
             {
-                changedAssetsUIDs.Add(info->meta->ID());
+                changedAssetsUIDs.Add(infoRef->meta->ID());
 
-                info->mChildren.Clear();
-                info->parent = nullptr;
-
-                delete info;
+                infoRef->mChildren.Clear();
+                infoRef->parent = nullptr;
             }
         }
 

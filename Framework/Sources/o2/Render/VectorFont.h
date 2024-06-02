@@ -8,6 +8,7 @@
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Tools/RectPacker.h"
 #include "o2/Utils/Types/Containers/Map.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -23,11 +24,11 @@ namespace o2
         // ---------------------
         // Font effect interface
         // ---------------------
-        class Effect: public ISerializable
+        class Effect: public ISerializable, public RefCounterable, public ICloneableRef
         {
         public:
             // Processes glyph bitmap
-            virtual void Process(Bitmap* bitmap) {};
+            virtual void Process(Bitmap& bitmap) {};
 
             // Returns needs extending size for glyph bitmap
             virtual Vec2I GetSizeExtend() const { return Vec2I(); };
@@ -36,6 +37,7 @@ namespace o2
             virtual bool IsEqual(Effect* other) const { return GetType() == other->GetType(); }
 
             SERIALIZABLE(Effect);
+            CLONEABLE_REF(Effect);
         };
 
     public:
@@ -67,23 +69,23 @@ namespace o2
         void CheckCharacters(const WString& needChararacters, int height);
 
         // Adds effect
-        Effect* AddEffect(Effect* effect);
+        Ref<Effect> AddEffect(const Ref<Effect>& effect);
 
         // Adds effect
         template<typename _eff_type, typename ... _args>
-        _eff_type* AddEffect(_args ... args);
+        Ref<_eff_type> AddEffect(_args ... args);
 
         // Removes effect
-        void RemoveEffect(Effect* effect);
+        void RemoveEffect(const Ref<Effect>& effect);
 
         // Removes all effects
         void RemoveAllEffects();
 
         // Sets effects list
-        void SetEffects(const Vector<Effect*>& effects);
+        void SetEffects(const Vector<Ref<Effect>>& effects);
 
         // Returns effects list
-        const Vector<Effect*>& GetEffects() const;
+        const Vector<Ref<Effect>>& GetEffects() const;
 
         // Removes all cached characters
         void Reset();
@@ -96,10 +98,11 @@ namespace o2
         // ------------------------------
         struct CharDef
         {
-            PackLine* packLine;
-            RectI     rect;
-            Character character;
-            Bitmap*   bitmap;
+            WeakRef<PackLine> packLine;
+
+            RectI       rect;
+            Character   character;
+            Ref<Bitmap> bitmap;
 
             bool operator==(const CharDef& other) const { return false; }
         };
@@ -107,7 +110,7 @@ namespace o2
         // -----------------------
         // Characters packing line
         // -----------------------
-        struct PackLine
+        struct PackLine: public RefCounterable
         {
             int position = 0;
             int height = 0;
@@ -125,10 +128,10 @@ namespace o2
         String  mFileName;     // Source file name
         FT_Face mFreeTypeFace; // Free Type font face
 
-        Vector<Effect*> mEffects; // Font effects
+        Vector<Ref<Effect>> mEffects; // Font effects
 
-        Vector<PackLine*> mPackLines;           // Packed symbols lines
-        int               mLastPackLinePos = 0; // Last packed line bottom pos
+        Vector<Ref<PackLine>> mPackLines;           // Packed symbols lines
+        int                   mLastPackLinePos = 0; // Last packed line bottom pos
 
         mutable Map<int, float> mHeights; // Cached line heights
 
@@ -147,9 +150,9 @@ namespace o2
     };
 
     template<typename _eff_type, typename ... _args>
-    _eff_type* VectorFont::AddEffect(_args ... args)
+    Ref<_eff_type> VectorFont::AddEffect(_args ... args)
     {
-        return (_eff_type*)AddEffect(mnew _eff_type(args ...));
+        return DynamicCast<_eff_type>(AddEffect(mmake<_eff_type>(args ...)));
     }
 }
 // --- META ---
@@ -157,6 +160,8 @@ namespace o2
 CLASS_BASES_META(o2::VectorFont::Effect)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::VectorFont::Effect)
@@ -166,7 +171,7 @@ END_META;
 CLASS_METHODS_META(o2::VectorFont::Effect)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+    FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, Effect*);
 }

@@ -4,9 +4,9 @@
 
 namespace Editor
 {
-    class IPropertyField;
-	class Vec2FProperty;
-	class FloatProperty;
+    FORWARD_CLASS_REF(IPropertyField);
+	FORWARD_CLASS_REF(Vec2FProperty);
+	FORWARD_CLASS_REF(FloatProperty);
 
 	// --------------------------------------------
 	// Default editor widget layer transform viewer
@@ -31,12 +31,12 @@ namespace Editor
 	protected:
 		Vector<WidgetLayer*> mLayers;
 
-		Vec2FProperty* mPositionProperty = nullptr;
-		Vec2FProperty* mSizeProperty = nullptr;
-		Vec2FProperty* mAnchorRightTopProperty = nullptr;
-		Vec2FProperty* mAnchorLeftBottomProperty = nullptr;
-		Vec2FProperty* moffsetRightTopProperty = nullptr;
-		Vec2FProperty* mOffsetLeftBottomProperty = nullptr;
+		Ref<Vec2FProperty> mPositionProperty;
+		Ref<Vec2FProperty> mSizeProperty;
+		Ref<Vec2FProperty> mAnchorRightTopProperty;
+		Ref<Vec2FProperty> mAnchorLeftBottomProperty;
+		Ref<Vec2FProperty> moffsetRightTopProperty;
+		Ref<Vec2FProperty> mOffsetLeftBottomProperty;
 
 	protected:
 		// Called when some property change completed, stores action for undo
@@ -44,7 +44,7 @@ namespace Editor
 									   const Vector<DataDocument>& newValue);
 
 		// Called when some property changed, updates owner widgets
-		void OnPropertyChanged(IPropertyField* field);
+		void OnPropertyChanged(const Ref<IPropertyField>& field);
 	};
 }
 // --- META ---
@@ -57,12 +57,12 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
     FIELD().PROTECTED().NAME(mLayers);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPositionProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty);
+    FIELD().PROTECTED().NAME(mPositionProperty);
+    FIELD().PROTECTED().NAME(mSizeProperty);
+    FIELD().PROTECTED().NAME(mAnchorRightTopProperty);
+    FIELD().PROTECTED().NAME(mAnchorLeftBottomProperty);
+    FIELD().PROTECTED().NAME(moffsetRightTopProperty);
+    FIELD().PROTECTED().NAME(mOffsetLeftBottomProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)
@@ -72,7 +72,7 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, IPropertyField*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const Ref<IPropertyField>&);
 }
 END_META;
 // --- END META ---

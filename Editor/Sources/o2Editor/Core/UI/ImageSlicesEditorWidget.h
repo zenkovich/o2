@@ -7,60 +7,69 @@ using namespace o2;
 
 namespace o2
 {
-	class WidgetDragHandle;
+	FORWARD_CLASS_REF(WidgetDragHandle);
 }
 
 namespace Editor
 {
-	class BorderIProperty;
+	FORWARD_CLASS_REF(BorderIProperty);
 
 	// -----------------------------
 	// Editor of image slices widget
 	// -----------------------------
-	class ImageSlicesEditorWidget: public Widget
+	class ImageSlicesEditorWidget : public Widget
 	{
 	public:
 		// Default constructor
-		ImageSlicesEditorWidget();
+		ImageSlicesEditorWidget(RefCounter* refCounter);
 
 		// Default copy-constructor
-		ImageSlicesEditorWidget(const ImageSlicesEditorWidget& other);
+		ImageSlicesEditorWidget(RefCounter* refCounter, const ImageSlicesEditorWidget& other);
 
 		// Copy operator
 		ImageSlicesEditorWidget& operator=(const ImageSlicesEditorWidget& other);
 
 		// Sets image and property
-		void Setup(const ImageAssetRef& image, BorderIProperty* borderProperty);
+		void Setup(const AssetRef<ImageAsset>& image, const Ref<BorderIProperty>& borderProperty);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ImageSlicesEditorWidget);
+        SERIALIZABLE(ImageSlicesEditorWidget);
+        CLONEABLE_REF(ImageSlicesEditorWidget);
 
 	public:
-		class PreviewImage: public Image
+		// --------------------
+		// Image preview widget
+		// --------------------
+		class PreviewImage : public Image
 		{
 		public:
+			// Default constructor
+			PreviewImage(RefCounter* refCounter);
+
 			// Sets texture filter to nearest and draws it
 			void Draw() override;
 
 			// Returns create menu category in editor
 			static String GetCreateMenuCategory();
 
-			SERIALIZABLE(PreviewImage);
+            SERIALIZABLE(PreviewImage);
+            CLONEABLE_REF(PreviewImage);
 		};
 
 	private:
-		PreviewImage* mPreviewImage = nullptr;
-		Image*        mPreviewImageBack = nullptr;
+        Ref<PreviewImage> mPreviewImage;     // Image preview widget
+        Ref<Image>        mPreviewImageBack; // Image preview background with chessmate pattern
 
-		WidgetDragHandle* mBorderLeftHandle;
-		WidgetDragHandle* mBorderRightHandle;
-		WidgetDragHandle* mBorderTopHandle;
-		WidgetDragHandle* mBorderBottomHandle;
-		BorderF           mBordersSmoothValue;
+        Ref<WidgetDragHandle> mBorderLeftHandle;   // Left border handle
+        Ref<WidgetDragHandle> mBorderRightHandle;  // Right border handle
+        Ref<WidgetDragHandle> mBorderTopHandle;    // Top border handle
+        Ref<WidgetDragHandle> mBorderBottomHandle; // Bottom border handle
 
-		BorderIProperty* mBorderProperty = nullptr;
+        BorderF mBordersSmoothValue; // Smoothed borders values
+
+        Ref<BorderIProperty> mBorderProperty; // Image borders property
 
 	protected:
 		// Initializes image preview widgets and border handles
@@ -79,7 +88,7 @@ namespace Editor
 		void UpdateBordersValue();
 
 		// Creates grid sprite
-		Sprite* CreateGridSprite();
+		Ref<Sprite> CreateGridSprite();
 	};
 }
 // --- META ---
@@ -91,29 +100,29 @@ CLASS_BASES_META(Editor::ImageSlicesEditorWidget)
 END_META;
 CLASS_FIELDS_META(Editor::ImageSlicesEditorWidget)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPreviewImage);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPreviewImageBack);
+    FIELD().PRIVATE().NAME(mPreviewImage);
+    FIELD().PRIVATE().NAME(mPreviewImageBack);
     FIELD().PRIVATE().NAME(mBorderLeftHandle);
     FIELD().PRIVATE().NAME(mBorderRightHandle);
     FIELD().PRIVATE().NAME(mBorderTopHandle);
     FIELD().PRIVATE().NAME(mBorderBottomHandle);
     FIELD().PRIVATE().NAME(mBordersSmoothValue);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mBorderProperty);
+    FIELD().PRIVATE().NAME(mBorderProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ImageSlicesEditorWidget&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const ImageAssetRef&, BorderIProperty*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ImageSlicesEditorWidget&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const AssetRef<ImageAsset>&, const Ref<BorderIProperty>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeImagePreview);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeSliceHandles);
     FUNCTION().PROTECTED().SIGNATURE(void, FitImage);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateBordersAnchors);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateBordersValue);
-    FUNCTION().PROTECTED().SIGNATURE(Sprite*, CreateGridSprite);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Sprite>, CreateGridSprite);
 }
 END_META;
 
@@ -129,6 +138,7 @@ END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget::PreviewImage)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }

@@ -6,9 +6,12 @@
 namespace o2
 {
     ApplicationEventsListener::ApplicationEventsListener()
-    {
-        EventSystem::RegApplicationListener(this);
-    }
+    {}
+
+	void ApplicationEventsListener::PostRefConstruct()
+	{
+		EventSystem::RegApplicationListener(Ref(this));
+	}
 
     ApplicationEventsListener::~ApplicationEventsListener()
     {

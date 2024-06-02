@@ -10,9 +10,9 @@ namespace o2
         radius(radius), color(color), alphaThreshold(alphaThreshold)
     {}
 
-    void FontStrokeEffect::Process(Bitmap* bitmap)
+    void FontStrokeEffect::Process(Bitmap& bitmap)
     {
-        bitmap->Outline(radius, color, alphaThreshold);
+        bitmap.Outline(radius, color, alphaThreshold);
     }
 
     Vec2I FontStrokeEffect::GetSizeExtend() const
@@ -36,9 +36,9 @@ namespace o2
         color1(color1), color2(color2), angle(angle), length(length), origin(origin)
     {}
 
-    void FontGradientEffect::Process(Bitmap* bitmap)
+    void FontGradientEffect::Process(Bitmap& bitmap)
     {
-        bitmap->GradientByAlpha(color1, color2, angle, length, origin);
+        bitmap.GradientByAlpha(color1, color2, angle, length, origin);
     }
 
     Vec2I FontGradientEffect::GetSizeExtend() const
@@ -60,9 +60,9 @@ namespace o2
         color(color)
     {}
 
-    void FontColorEffect::Process(Bitmap* bitmap)
+    void FontColorEffect::Process(Bitmap& bitmap)
     {
-        bitmap->Colorise(color);
+        bitmap.Colorise(color);
     }
 
     Vec2I FontColorEffect::GetSizeExtend() const
@@ -84,12 +84,12 @@ namespace o2
         blurRadius(blurRadius), offset(offset), color(color)
     {}
 
-    void FontShadowEffect::Process(Bitmap* bitmap)
+    void FontShadowEffect::Process(Bitmap& bitmap)
     {
-        Bitmap shadow(*bitmap);
+        Bitmap shadow(bitmap);
         shadow.Colorise(color);
         shadow.Blur(blurRadius);
-        bitmap->BlendImage(&shadow, offset);
+        bitmap.BlendImage(shadow, offset);
     }
 
     Vec2I FontShadowEffect::GetSizeExtend() const

@@ -12,7 +12,7 @@ namespace o2
     {
     public:
         PROPERTIES(ScriptableComponent);
-        PROPERTY(JavaScriptAssetRef, script, SetScript, GetScript); // Script asset link property
+        PROPERTY(AssetRef<JavaScriptAsset>, script, SetScript, GetScript); // Script asset link property
 
     public:
         // Default constructor
@@ -31,10 +31,10 @@ namespace o2
         void OnUpdate(float dt) override;
 
         // Sets script
-        void SetScript(const JavaScriptAssetRef& script);
+        void SetScript(const AssetRef<JavaScriptAsset>& script);
 
         // Returns script
-        const JavaScriptAssetRef& GetScript() const;
+        const AssetRef<JavaScriptAsset>& GetScript() const;
 
         // Returns scripting instance
         ScriptValue GetInstance() const;
@@ -52,9 +52,10 @@ namespace o2
         static String GetIcon();
 
         SERIALIZABLE(ScriptableComponent);
+        CLONEABLE_REF(ScriptableComponent);
 
     protected:
-        JavaScriptAssetRef mScript; // Java script asset link
+        AssetRef<JavaScriptAsset> mScript; // Java script asset link
 
         ScriptValue mInstance;  // Script value instance @EDITOR_PROPERTY @NO_HEADER
         ScriptValue mClass;     // Script instance class
@@ -75,7 +76,7 @@ namespace o2
         void OnDeserialized(const DataValue& node) override;
 
         // Sets owner actor
-        void SetOwnerActor(Actor* actor) override;
+        void SetOwnerActor(const Ref<Actor>& actor) override;
 
         // Called when actor was included to scene
         void OnAddToScene() override;
@@ -118,8 +119,8 @@ CLASS_METHODS_META(o2::ScriptableComponent)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const ScriptableComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetScript, const JavaScriptAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(const JavaScriptAssetRef&, GetScript);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetScript, const AssetRef<JavaScriptAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(const AssetRef<JavaScriptAsset>&, GetScript);
     FUNCTION().PUBLIC().SIGNATURE(ScriptValue, GetInstance);
     FUNCTION().PUBLIC().SIGNATURE(ScriptValue, GetClass);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
@@ -128,7 +129,7 @@ CLASS_METHODS_META(o2::ScriptableComponent)
     FUNCTION().PROTECTED().SIGNATURE(void, LoadScriptAndCreateObject);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);

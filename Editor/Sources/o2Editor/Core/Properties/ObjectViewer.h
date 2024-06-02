@@ -5,8 +5,8 @@ using namespace o2;
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
-	class PropertiesContext;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
+	FORWARD_CLASS_REF(PropertiesContext);
 
 	// -----------------------------------------------------------------
 	// Basic automatic object viewer. Selects suitable properties viewer
@@ -15,7 +15,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor, creates view widget as vertical layout
-		ObjectViewer();
+        ObjectViewer(RefCounter* refCounter);
 
 		// Refreshing controls and properties by target objects with prototypes
 		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets);
@@ -24,7 +24,7 @@ namespace Editor
 		void Refresh(const Vector<IObject*>& targetObjets);
 
 		// Sets parent context
-		void SetParentContext(PropertiesContext* context);
+		void SetParentContext(const Ref<PropertiesContext>& context);
 
 		// Enable viewer event function
 		void OnEnabled() override;
@@ -38,12 +38,13 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ObjectViewer);
+        SERIALIZABLE(ObjectViewer);
+        CLONEABLE_REF(ObjectViewer);
 
 	protected:
-		PropertiesContext* mParentContext = nullptr; // Parent properties context
+		Ref<PropertiesContext> mParentContext; // Parent properties context
 
-		IObjectPropertiesViewer* mPropertiesViewer = nullptr; // Object properties viewer
+		Ref<IObjectPropertiesViewer> mPropertiesViewer; // Object properties viewer
 	};
 }
 // --- META ---
@@ -55,8 +56,8 @@ CLASS_BASES_META(Editor::ObjectViewer)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentContext);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer);
+    FIELD().PROTECTED().NAME(mParentContext);
+    FIELD().PROTECTED().NAME(mPropertiesViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectViewer)
@@ -64,10 +65,10 @@ CLASS_METHODS_META(Editor::ObjectViewer)
 
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh, const Vector<IObject*>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, const Ref<PropertiesContext>&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);

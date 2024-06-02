@@ -9,32 +9,33 @@
 
 namespace Editor
 {
-	SceneDragHandle::SceneDragHandle():
-		DragHandle()
+	SceneDragHandle::SceneDragHandle(RefCounter* refCounter):
+		DragHandle(refCounter)
 	{
 		if (WindowsManager::IsSingletonInitialzed())
 		{
-			o2EditorSceneScreen.mDragHandles.Add(this);
+			o2EditorSceneScreen.mDragHandles.Add(Ref(this));
 			messageFallDownListener = (ScrollView*)SceneEditScreen::InstancePtr();
 		}
 	}
 
-	SceneDragHandle::SceneDragHandle(IRectDrawable* regular, IRectDrawable* hover /*= nullptr*/, IRectDrawable* pressed /*= nullptr*/):
-		DragHandle(regular, hover, pressed)
+	SceneDragHandle::SceneDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/,
+									 const Ref<IRectDrawable>& pressed /*= nullptr*/):
+		DragHandle(refCounter, regular, hover, pressed)
 	{
 		if (WindowsManager::IsSingletonInitialzed())
 		{
-			o2EditorSceneScreen.mDragHandles.Add(this);
+			o2EditorSceneScreen.mDragHandles.Add(Ref(this));
 			messageFallDownListener = (ScrollView*)SceneEditScreen::InstancePtr();
 		}
 	}
 
-	SceneDragHandle::SceneDragHandle(const SceneDragHandle& other):
-		DragHandle(other)
+	SceneDragHandle::SceneDragHandle(RefCounter* refCounter, const SceneDragHandle& other):
+		DragHandle(refCounter, other)
 	{
 		if (WindowsManager::IsSingletonInitialzed())
 		{
-			o2EditorSceneScreen.mDragHandles.Add(this);
+			o2EditorSceneScreen.mDragHandles.Add(Ref(this));
 			messageFallDownListener = (ScrollView*)SceneEditScreen::InstancePtr();
 		}
 	}
@@ -42,7 +43,7 @@ namespace Editor
 	SceneDragHandle::~SceneDragHandle()
 	{
 		if (WindowsManager::IsSingletonInitialzed())
-			o2EditorSceneScreen.mDragHandles.Remove(this);
+			o2EditorSceneScreen.mDragHandles.RemoveFirst([&](auto& x) { return x == this; });
 	}
 
 	SceneDragHandle& SceneDragHandle::operator=(const SceneDragHandle& other)
@@ -89,9 +90,9 @@ namespace Editor
 		DragHandle::SetEnabled(enable);
 
 		if (mEnabled)
-			o2EditorSceneScreen.mDragHandles.Add(this);
+			o2EditorSceneScreen.mDragHandles.Add(Ref(this));
 		else
-			o2EditorSceneScreen.mDragHandles.Remove(this);
+			o2EditorSceneScreen.mDragHandles.Remove(Ref(this));
 	}
 }
 // --- META ---

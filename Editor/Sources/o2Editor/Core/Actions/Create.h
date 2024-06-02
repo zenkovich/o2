@@ -18,17 +18,17 @@ namespace Editor
 	class CreateAction: public IAction
 	{
 	public:
-		DataDocument     objectsData;
-		Vector<SceneUID> objectsIds;
-		SceneUID         insertParentId;
-		SceneUID         insertPrevObjectId;
+		DataDocument     objectsData;        // Serialized created objects
+		Vector<SceneUID> objectsIds;         // Created objects ids
+		SceneUID         insertParentId;     // Parent id
+		SceneUID         insertPrevObjectId; // Previous object id
 
 	public:
 		// Default constructor
 		CreateAction();
 
 		// Constructor wit created actors and their places in their parents
-		CreateAction(const Vector<SceneEditableObject*>& objects, SceneEditableObject* parent, SceneEditableObject* prevObject);
+        CreateAction(const Vector<Ref<SceneEditableObject>>& objects, const Ref<SceneEditableObject>& parent, const Ref<SceneEditableObject>& prevObject);
 
 		// Returns name of action
 		String GetName() const override;
@@ -62,7 +62,7 @@ CLASS_METHODS_META(Editor::CreateAction)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, SceneEditableObject*, SceneEditableObject*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneEditableObject>>&, const Ref<SceneEditableObject>&, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

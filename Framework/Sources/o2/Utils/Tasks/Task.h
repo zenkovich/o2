@@ -7,7 +7,7 @@ namespace o2
     // --------------------
     // Basic task interface
     // --------------------
-    class Task
+    class Task: public RefCounterable
     {
     public:
         // Default constructor. Registering himself in tasks manager and gets id
@@ -77,7 +77,7 @@ namespace o2
     // ------------
     // Delayed task
     // ------------
-    class DelayedTask: Task
+    class DelayedTask: public Task
     {
     public:
         DelayedTask(float delay = 0.0f);
@@ -95,7 +95,7 @@ namespace o2
     // -----------------------
     // Functional delayed task
     // -----------------------
-    class FunctionalDelayedTask: DelayedTask
+    class FunctionalDelayedTask: public DelayedTask
     {
     public:
         Function<void()> doTask;

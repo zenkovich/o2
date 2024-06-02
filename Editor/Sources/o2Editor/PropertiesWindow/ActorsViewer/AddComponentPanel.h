@@ -15,8 +15,8 @@ namespace o2
 
 namespace Editor
 {
-	class ActorViewer;
-	class ComponentsTree;
+	FORWARD_CLASS_REF(ActorViewer);
+	FORWARD_CLASS_REF(ComponentsTree);
 
 	// --------------------------------------------------------------------------------
 	// Add component to actor panel. Shows filter input, add button and components tree
@@ -25,19 +25,19 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		AddComponentPanel();
+		AddComponentPanel(RefCounter* refCounter);
 
 		// Constructor
-		AddComponentPanel(ActorViewer* viewer);
+		AddComponentPanel(RefCounter* refCounter, const Ref<ActorViewer>& viewer);
 
 		// Draws widget, calls OnDrawn for CursorEventsListener
 		void Draw() override;
 
 		// Returns filter widget
-		EditBox* GetFilter() const;
+		const Ref<EditBox>& GetFilter() const;
 
 		// Returns tree widget
-		ComponentsTree* GetTree() const;
+		const Ref<ComponentsTree>& GetTree() const;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -46,16 +46,20 @@ namespace Editor
 		bool IsInputTransparent() const override;
 
 		// Returns create menu category in editor
-		static String GetCreateMenuCategory();
+        static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AddComponentPanel);
+        // Dynamic cast to RefCounterable via DrawableComponent
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<AddComponentPanel>& ref);
+
+        SERIALIZABLE(AddComponentPanel);
+        CLONEABLE_REF(AddComponentPanel);
 
 	private:
-		ActorViewer* mViewer = nullptr; // Owner actors viewer
+		WeakRef<ActorViewer> mViewer; // Owner actors viewer
 
-		EditBox*        mFilterBox = nullptr; // Components names filter edit box, updates list of component when edit
-		Button*         mAddButton = nullptr; // Add button
-		ComponentsTree* mTree = nullptr;      // Components tree
+		Ref<EditBox>        mFilterBox; // Components names filter edit box, updates list of component when edit
+		Ref<Button>         mAddButton; // Add button
+		Ref<ComponentsTree> mTree;      // Components tree
 
 	private:
 		// Called when add button pressed. Adds selected component to target actors from viewer
@@ -65,10 +69,12 @@ namespace Editor
 		void CreateComponent(const ObjectType* objType);
 
 		// Called when tree node was double clicked
-		void OnNodeDblClick(TreeNode* nodeWidget);
+		void OnNodeDblClick(const Ref<TreeNode>& nodeWidget);
 
 		// Called when key was released. When returns has pressed, component is creating
 		void OnKeyReleased(const Input::Key& key) override;
+
+        REF_COUNTERABLE_IMPL(Widget, CursorEventsArea);
 	};
 	
 	// ---------------------------------------------------------------------
@@ -77,10 +83,10 @@ namespace Editor
 	class ComponentsTree : public Tree
 	{
 	public:
-		struct NodeData
+		struct NodeData: public RefCounterable
 		{
-			NodeData*         parent = nullptr;
-			Vector<NodeData*> children;
+			WeakRef<NodeData>     parent ;
+			Vector<Ref<NodeData>> children;
 
 			String name;
 			String path;
@@ -92,15 +98,18 @@ namespace Editor
 			~NodeData();
 
 			void Clear();
-			NodeData* AddChild(const String& name, const Type* type);
+			Ref<NodeData> AddChild(const String& name, const Type* type);
 		};
 
 	public:
 		// Default constructor
-		ComponentsTree();
+        ComponentsTree(RefCounter* refCounter);
 
-		// Copy-constructor
-		ComponentsTree(const ComponentsTree& other);
+        // Copy-constructor
+        ComponentsTree(RefCounter* refCounter, const ComponentsTree& other);
+
+        // Copy-constructor
+        ComponentsTree(const ComponentsTree& other);
 
 		// Copy operator
 		ComponentsTree& operator=(const ComponentsTree& other);
@@ -114,18 +123,19 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ComponentsTree);
+        SERIALIZABLE(ComponentsTree);
+        CLONEABLE_REF(ComponentsTree);
 
 	private:
 		WString  mFilterStr; // Filtering string
-		NodeData mRoot; // Root properties data node
+		Ref<NodeData> mRoot; // Root properties data node
 
 	private:
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
 
 		// Gets tree node from pool or creates new, enables editor mode
-		TreeNode* CreateTreeNodeWidget() override;
+		Ref<TreeNode> CreateTreeNodeWidget() override;
 
 		// Returns object's parent
 		void* GetObjectParent(void* object) override;
@@ -137,7 +147,7 @@ namespace Editor
 		String GetObjectDebug(void* object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
+		void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
 
 		void OnDeserialized(const DataValue& node) override;
 
@@ -150,31 +160,32 @@ namespace Editor
 	class ComponentsTreeNode : public TreeNode
 	{
 	public:
-		ComponentsTree::NodeData* data = nullptr;
+		Ref<ComponentsTree::NodeData> data;
 
 	public:
 		// Default constructor
-		ComponentsTreeNode();
+		ComponentsTreeNode(RefCounter* refCounter);
 
 		// Copy-constructor
-		ComponentsTreeNode(const ComponentsTreeNode& other);
+		ComponentsTreeNode(RefCounter* refCounter, const ComponentsTreeNode& other);
 
 		// Copy operator
 		ComponentsTreeNode& operator=(const ComponentsTreeNode& other);
 
 		// Initializes node by data
-		void Setup(ComponentsTree::NodeData* data, ComponentsTree* tree);
+		void Setup(const Ref<ComponentsTree::NodeData>& data, const Ref<ComponentsTree>& tree);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ComponentsTreeNode);
+        SERIALIZABLE(ComponentsTreeNode);
+        CLONEABLE_REF(ComponentsTreeNode);
 
 	private:
-		Text*   mName;
-		Sprite* mIcon;
+		Ref<Text>   mName;
+		Ref<Sprite> mIcon;
 
-		ComponentsTree* mTree = nullptr;
+		WeakRef<ComponentsTree> mTree;
 
 	private:
 		// Called on deserialization, initializes controls
@@ -197,26 +208,27 @@ CLASS_BASES_META(Editor::AddComponentPanel)
 END_META;
 CLASS_FIELDS_META(Editor::AddComponentPanel)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mViewer);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mFilterBox);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAddButton);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
+    FIELD().PRIVATE().NAME(mViewer);
+    FIELD().PRIVATE().NAME(mFilterBox);
+    FIELD().PRIVATE().NAME(mAddButton);
+    FIELD().PRIVATE().NAME(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::AddComponentPanel)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(ActorViewer*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<ActorViewer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetFilter);
-    FUNCTION().PUBLIC().SIGNATURE(ComponentsTree*, GetTree);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<EditBox>&, GetFilter);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<ComponentsTree>&, GetTree);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<AddComponentPanel>&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnAddPressed);
     FUNCTION().PRIVATE().SIGNATURE(void, CreateComponent, const ObjectType*);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, TreeNode*);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, const Ref<TreeNode>&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
@@ -235,17 +247,18 @@ END_META;
 CLASS_METHODS_META(Editor::ComponentsTree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ComponentsTree&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTree&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
-    FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+    FUNCTION().PRIVATE().SIGNATURE(Ref<TreeNode>, CreateTreeNodeWidget);
     FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
     FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
     FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
-    FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
+    FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, const Ref<TreeNode>&, void*);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
@@ -257,18 +270,18 @@ CLASS_BASES_META(Editor::ComponentsTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::ComponentsTreeNode)
 {
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(data);
+    FIELD().PUBLIC().NAME(data);
     FIELD().PRIVATE().NAME(mName);
     FIELD().PRIVATE().NAME(mIcon);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
+    FIELD().PRIVATE().NAME(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentsTreeNode)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTreeNode&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ComponentsTreeNode&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<ComponentsTree::NodeData>&, const Ref<ComponentsTree>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);

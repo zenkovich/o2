@@ -17,7 +17,7 @@ namespace o2
         // -----------------
         // Packing rectangle
         // -----------------
-        struct Rect
+        struct Rect: public RefCounterable
         {
             int   page; // Page index
             RectF rect; // Rectangle on page
@@ -36,10 +36,10 @@ namespace o2
         ~RectsPacker();
 
         // Adds rectangle with size
-        Rect* AddRect(const Vec2F&  size);
+        Ref<Rect> AddRect(const Vec2F&  size);
 
         // Removes rectangle
-        void RemoveRect(Rect* remRect);
+        void RemoveRect(const Ref<Rect>& remRect);
 
         // Removes all rectangles and quads
         void Clear();
@@ -60,7 +60,7 @@ namespace o2
         // ---------
         // Quad node
         // ---------
-        struct QuadNode: public ITreeNode<QuadNode>
+        struct QuadNode: public ITreeNode<QuadNode>, public RefCounterable
         {
             RectF rect; // Quad rectangle on page
             int   page; // Page index
@@ -71,26 +71,28 @@ namespace o2
             QuadNode(int page = 0, const RectF& rect = RectF());
 
             //Calls when child quad was added
-            void OnChildAdded(QuadNode* child);
+            void OnChildAdded(const Ref<QuadNode>& child) override;
 
             // Check equals operator
             bool operator==(const QuadNode& other);
-        };
+		};
 
-        Pool<Rect>        mRectsPool; // Rectangles pool
-        Vector<Rect*>     mRects;     // Rectangles
-        Vector<QuadNode*> mQuadNodes; // Quad nodes 
-        Vec2F             mMaxSize;   // Max page size
+		Vec2F mMaxSize; // Max page size
+
+		Pool<Rect>   mRectsPool; // Rectangles pool
+		Vector<Ref<Rect>> mRects;     // Rectangles
+
+		Vector<Ref<QuadNode>> mQuadNodes; // Quad nodes 
 
     protected:
         // Tries to insert rectangle
         bool InsertRect(Rect& rt);
 
         // Tries to insert rectangle in specified node
-        bool TryInsertRect(Rect& rt, QuadNode* node);
+        bool TryInsertRect(Rect& rt, const Ref<QuadNode>& node);
 
         // Tries to insert rectangle in specified node
-        bool TryInsertRectInChilds(Rect& rt, QuadNode* node);
+        bool TryInsertRectInChilds(Rect& rt, const Ref<QuadNode>& node);
 
         // Creates new page
         void CreateNewPage();

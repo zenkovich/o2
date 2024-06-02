@@ -1,7 +1,6 @@
 #include "o2/stdafx.h"
 #include "FolderAsset.h"
 
-#include "o2/Assets/Assets.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 
 namespace o2
@@ -19,11 +18,11 @@ namespace o2
         return *this;
     }
 
-    Vector<AssetRef> FolderAsset::GetChildrenAssets() const
+    Vector<AssetRef<Asset>> FolderAsset::GetChildrenAssets() const
     {
-        Vector<AssetRef> res;
-        for (auto asset : mInfo.GetChildren())
-            res.Add(AssetRef(asset->meta->ID()));
+        Vector<AssetRef<Asset>> res;
+        for (auto& asset : mInfo.GetChildren())
+            res.Add(AssetRef<Asset>(asset->meta->ID()));
 
         return res;
     }
@@ -40,7 +39,8 @@ namespace o2
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::FolderAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::FolderAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::FolderAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::FolderAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::AssetWithDefaultMeta<o2::FolderAsset>>);
 // --- META ---
 
 DECLARE_CLASS(o2::FolderAsset, o2__FolderAsset);

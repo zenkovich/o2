@@ -13,9 +13,9 @@ namespace o2
 
 namespace Editor
 {
-	class IWidgetLayerHeaderViewer;
-	class IWidgetLayerLayoutViewer;
-	class IWidgetLayerPropertiesViewer;
+	FORWARD_CLASS_REF(IWidgetLayerHeaderViewer);
+	FORWARD_CLASS_REF(IWidgetLayerLayoutViewer);
+	FORWARD_CLASS_REF(IWidgetLayerPropertiesViewer);
 
 	// ------------------------------
 	// Widget layer properties viewer
@@ -32,13 +32,13 @@ namespace Editor
 		const Type* GetViewingObjectType() const override;
 
 		// Sets header viewer
-		void SetHeaderViewer(IWidgetLayerHeaderViewer* viewer);
+		void SetHeaderViewer(const Ref<IWidgetLayerHeaderViewer>& viewer);
 
 		// Sets transform viewer
-		void SetLayoutViewer(IWidgetLayerLayoutViewer* viewer);
+		void SetLayoutViewer(const Ref<IWidgetLayerLayoutViewer>& viewer);
 
 		// Adds new available actor properties viewer type
-		void SetActorPropertiesViewer(IWidgetLayerPropertiesViewer* viewer);
+		void SetActorPropertiesViewer(const Ref<IWidgetLayerPropertiesViewer>& viewer);
 
 		// Updates properties values
 		void Refresh() override;
@@ -48,15 +48,15 @@ namespace Editor
 	protected:
 		Vector<WidgetLayer*> mTargetLayers; // Current target layers
 
-		IWidgetLayerHeaderViewer*     mHeaderViewer = nullptr;     // Layer header viewer
-		IWidgetLayerLayoutViewer*     mLayoutViewer = nullptr;     // Layer layout viewer
-		IWidgetLayerPropertiesViewer* mPropertiesViewer = nullptr; // Layer properties viewer
+		Ref<IWidgetLayerHeaderViewer>     mHeaderViewer;     // Layer header viewer
+		Ref<IWidgetLayerLayoutViewer>     mLayoutViewer;     // Layer layout viewer
+		Ref<IWidgetLayerPropertiesViewer> mPropertiesViewer; // Layer properties viewer
 
-		VerticalLayout* mViewersLayout = nullptr; // Viewers layout
+		Ref<VerticalLayout> mViewersLayout; // Viewers layout
 
 	protected:
 		// Called when some actors on scene were changed
-		void OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects);
+		void OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects);
 
 		// Sets target objects
 		void SetTargets(const Vector<IObject*>& targets) override;
@@ -85,10 +85,10 @@ END_META;
 CLASS_FIELDS_META(Editor::WidgetLayerViewer)
 {
     FIELD().PROTECTED().NAME(mTargetLayers);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayoutViewer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewersLayout);
+    FIELD().PROTECTED().NAME(mHeaderViewer);
+    FIELD().PROTECTED().NAME(mLayoutViewer);
+    FIELD().PROTECTED().NAME(mPropertiesViewer);
+    FIELD().PROTECTED().NAME(mViewersLayout);
 }
 END_META;
 CLASS_METHODS_META(Editor::WidgetLayerViewer)
@@ -96,11 +96,11 @@ CLASS_METHODS_META(Editor::WidgetLayerViewer)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderViewer, IWidgetLayerHeaderViewer*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetLayoutViewer, IWidgetLayerLayoutViewer*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetActorPropertiesViewer, IWidgetLayerPropertiesViewer*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderViewer, const Ref<IWidgetLayerHeaderViewer>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetLayoutViewer, const Ref<IWidgetLayerLayoutViewer>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActorPropertiesViewer, const Ref<IWidgetLayerPropertiesViewer>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);

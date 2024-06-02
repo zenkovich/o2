@@ -9,7 +9,7 @@ namespace o2
     // -----------------------------------------------------
     // Scrolling area with scrollbars and clipping rectangle
     // -----------------------------------------------------
-    class ScrollArea: public Widget, virtual public CursorAreaEventsListener
+    class ScrollArea: public Widget, public CursorAreaEventsListener
     {
     public:
         PROPERTIES(ScrollArea);
@@ -22,10 +22,10 @@ namespace o2
 
     public:
         // Default constructor
-        ScrollArea();
+        explicit ScrollArea(RefCounter* refCounter);
 
         // Copy-constructor
-        ScrollArea(const ScrollArea& other);
+        ScrollArea(RefCounter* refCounter, const ScrollArea& other);
 
         // Destructor
         ~ScrollArea();
@@ -70,16 +70,16 @@ namespace o2
         float GetVerticalScroll() const;
 
         // Sets horizontal scroll bar
-        void SetHorizontalScrollBar(HorizontalScrollBar* scrollbar, bool owner = true);
+        void SetHorizontalScrollBar(const Ref<HorizontalScrollBar>& scrollbar, bool owner = true);
 
         // Returns horizontal scroll bar
-        HorizontalScrollBar* GetHorizontalScrollbar() const;
+        const Ref<HorizontalScrollBar>& GetHorizontalScrollbar() const;
 
         // Sets Vertical scroll bar
-        void SetVerticalScrollBar(VerticalScrollBar* scrollbar, bool owner = true);
+        void SetVerticalScrollBar(const Ref<VerticalScrollBar>& scrollbar, bool owner = true);
 
         // Returns Vertical scroll bar
-        VerticalScrollBar* GetVerticalScrollbar() const;
+        const Ref<VerticalScrollBar>& GetVerticalScrollbar() const;
 
         // Sets scroll bars hiding
         void SetEnableScrollsHiding(bool hideScrolls);
@@ -121,10 +121,11 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(ScrollArea);
+        CLONEABLE_REF(ScrollArea);
 
     protected:
-        HorizontalScrollBar*   mHorScrollBar = nullptr; // horizontal scroll bar
-        VerticalScrollBar*     mVerScrollBar = nullptr; // Vertical scroll bar
+        Ref<HorizontalScrollBar> mHorScrollBar; // horizontal scroll bar
+        Ref<VerticalScrollBar>   mVerScrollBar; // Vertical scroll bar
 
         bool mOwnHorScrollBar = false; // True, if this widget is owner of mHorScrollBar
         bool mOwnVerScrollBar = false; // True, if this widget is owner of mVerScrollBar
@@ -163,10 +164,10 @@ namespace o2
         void OnDeserialized(const DataValue& node) override;
 
         // Called when child widget was added
-        void OnChildAdded(Widget* child) override;
+        void OnChildAdded(const Ref<Widget>& child) override;
 
         // Called when child widget was removed
-        void OnChildRemoved(Widget* child) override;
+        void OnChildRemoved(const Ref<Widget>& child) override;
 
         // Sets children world rectangle. Moves children rectangle to scroll position offset
         void SetChildrenWorldRect(const RectF& childrenWorldRect) override;
@@ -207,6 +208,8 @@ namespace o2
         // Called when vertical scroll bar value was changed
         void OnVerScrollChanged(float value);
 
+        REF_COUNTERABLE_IMPL(Widget);
+
         friend class CustomDropDown;
     };
 }
@@ -224,8 +227,8 @@ CLASS_FIELDS_META(o2::ScrollArea)
     FIELD().PUBLIC().NAME(horScroll);
     FIELD().PUBLIC().NAME(verScroll);
     FIELD().PUBLIC().NAME(onScrolled);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHorScrollBar);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVerScrollBar);
+    FIELD().PROTECTED().NAME(mHorScrollBar);
+    FIELD().PROTECTED().NAME(mVerScrollBar);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnHorScrollBar);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnVerScrollBar);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mLayoutUpdated);
@@ -255,8 +258,8 @@ END_META;
 CLASS_METHODS_META(o2::ScrollArea)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ScrollArea&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ScrollArea&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildren, float);
@@ -269,10 +272,10 @@ CLASS_METHODS_META(o2::ScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(float, GetHorizontalScroll);
     FUNCTION().PUBLIC().SIGNATURE(void, SetVerticalScroll, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetVerticalScroll);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHorizontalScrollBar, HorizontalScrollBar*, bool);
-    FUNCTION().PUBLIC().SIGNATURE(HorizontalScrollBar*, GetHorizontalScrollbar);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetVerticalScrollBar, VerticalScrollBar*, bool);
-    FUNCTION().PUBLIC().SIGNATURE(VerticalScrollBar*, GetVerticalScrollbar);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHorizontalScrollBar, const Ref<HorizontalScrollBar>&, bool);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<HorizontalScrollBar>&, GetHorizontalScrollbar);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetVerticalScrollBar, const Ref<VerticalScrollBar>&, bool);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<VerticalScrollBar>&, GetVerticalScrollbar);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnableScrollsHiding, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollsHiding);
     FUNCTION().PUBLIC().SIGNATURE(void, SetScrollBarsShowingByCursor, bool);
@@ -287,8 +290,8 @@ CLASS_METHODS_META(o2::ScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Widget*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetChildrenWorldRect, const RectF&);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckClipping, const RectF&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);

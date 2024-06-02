@@ -9,11 +9,12 @@
 
 namespace Editor
 {
-	ColorProperty::ColorProperty()
+	ColorProperty::ColorProperty(RefCounter* refCounter):
+		TPropertyField<Color4>(refCounter)
 	{}
 
-	ColorProperty::ColorProperty(const ColorProperty& other) :
-		TPropertyField<Color4>(other)
+	ColorProperty::ColorProperty(RefCounter* refCounter, const ColorProperty& other):
+		TPropertyField<Color4>(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -38,22 +39,23 @@ namespace Editor
 			backLayerBitmap.FillRect(0, 10, 10, 0, color2);
 			backLayerBitmap.FillRect(10, 20, 20, 10, color2);
 
-			Image* backImage = mnew Image();
-			backImage->image = mnew Sprite(&backLayerBitmap);
+			auto backImage = mmake<Image>();
+			backImage->image = mmake<Sprite>(backLayerBitmap);
 			backImage->GetImage()->mode = SpriteMode::Tiled;
 			*backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 			mEditBox->AddChild(backImage);
 
 			Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 			colorLayerBitmap.Fill(color1);
-			mColorSprite = mnew Image();
-			mColorSprite->image = mnew Sprite(&colorLayerBitmap);
+			mColorSprite = mmake<Image>();
+			mColorSprite->image = mmake<Sprite>(colorLayerBitmap);
 			*mColorSprite->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 			mEditBox->AddChild(mColorSprite);
 
-			mEditBox->onDraw += [&]() { mClickArea.OnDrawn(); };
-			mClickArea.isUnderPoint = [&](const Vec2F& point) { return mEditBox->IsUnderPoint(point); };
-			mClickArea.onCursorReleased = [&](const Input::Cursor& cursor) { if (mEditBox->IsUnderPoint(cursor.position)) OnClicked(); };
+			mClickArea = mmake<CursorEventsArea>();
+			mEditBox->onDraw += [&]() { mClickArea->OnDrawn(); };
+			mClickArea->isUnderPoint = [&](const Vec2F& point) { return mEditBox->IsUnderPoint(point); };
+			mClickArea->onCursorReleased = [&](const Input::Cursor& cursor) { if (mEditBox->IsUnderPoint(cursor.position)) OnClicked(); };
 		}
 	}
 
@@ -73,6 +75,8 @@ namespace Editor
 	}
 }
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Color4>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ColorProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Color4>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ColorProperty, Editor__ColorProperty);

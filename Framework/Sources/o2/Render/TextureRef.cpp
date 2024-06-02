@@ -7,128 +7,87 @@
 
 namespace o2
 {
-    TextureRef::TextureRef():
-        mTexture(nullptr)
-    {
-    }
+    TextureRef::TextureRef() :
+        mTexture()
+    {}
 
-    TextureRef::TextureRef(const Vec2I& size, 
+    TextureRef::TextureRef(nullptr_t) :
+        mTexture(nullptr)
+    {}
+
+    TextureRef::TextureRef(Texture* ptr) :
+        mTexture(ptr)
+    {}
+
+    TextureRef::TextureRef(const TextureRef& other) :
+        mTexture(other.mTexture)
+    {}
+
+    TextureRef::TextureRef(const Ref<Texture>& other):
+        mTexture(other)
+    {}
+
+    TextureRef::TextureRef(Ref<Texture>&& other):
+        mTexture(std::move(other))
+    {}
+
+    TextureRef::TextureRef(TextureRef&& other) :
+        mTexture(std::move(other.mTexture))
+    {}
+
+    TextureRef::TextureRef(const Vec2I& size,
                            TextureFormat format /*= TextureFormat::R8G8B8A8*/,
-                           Texture::Usage usage /*= Texture::Usage::Default*/)
-    {
-        mTexture = mnew Texture(size, format, usage);
-        mTexture->mRefs++;
-    }
+                           Texture::Usage usage /*= Texture::Usage::Default*/) :
+        TextureRef(mmake<Texture>(size, format, usage))
+    {}
 
     TextureRef::TextureRef(const String& fileName)
     {
-        mTexture = o2Render.mTextures.FindOrDefault([&](Texture* tex) { return tex->GetFileName() == fileName; });
+        *this = o2Render.mTextures.FindOrDefault([&](const TextureRef& tex) { return tex->GetFileName() == fileName; });
 
         if (!mTexture)
-            mTexture = mnew Texture(fileName);
-
-        mTexture->mRefs++;
+            *this = mmake<Texture>(fileName);
     }
 
-    TextureRef::TextureRef(Bitmap* bitmap)
-    {
-        mTexture = mnew Texture(bitmap);
-        mTexture->mRefs++;
-    }
-
-    TextureRef::TextureRef(const TextureRef& other):
-        mTexture(other.mTexture)
-    {
-        if (mTexture)
-            mTexture->mRefs++;
-    }
-
-    TextureRef::TextureRef(Texture* texture):
-        mTexture(texture)
-    {
-        if (mTexture)
-            mTexture->mRefs++;
-    }
+    TextureRef::TextureRef(const Bitmap& bitmap) :
+        TextureRef(mmake<Texture>(bitmap))
+    {}
 
     TextureRef::TextureRef(UID atlasAssetId, int page)
     {
-        mTexture = o2Render.mTextures.FindOrDefault([&](Texture* tex) {
-            return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
-        });
+        *this = (o2Render.mTextures.FindOrDefault(
+            [&](const TextureRef& tex)
+            {
+                return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
+            }));
 
         if (!mTexture)
-            mTexture = mnew Texture(atlasAssetId, page);
-
-        mTexture->mRefs++;
+            *this = mmake<Texture>(atlasAssetId, page);
     }
 
     TextureRef::TextureRef(const String& atlasAssetName, int page)
     {
         UID atlasAssetId = o2Assets.GetAssetId(atlasAssetName);
-        if (atlasAssetId == 0)
+        if (atlasAssetId == UID::empty)
         {
             o2Render.mLog->Error("Can't load texture for atlas " + atlasAssetName + " and page " + (String)page + ": atlas isn't exist");
-            mTexture = nullptr;
+            *this = nullptr;
             return;
         }
 
-        mTexture = o2Render.mTextures.FindOrDefault([&](Texture* tex) {
-            return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
-        });
+        *this = (o2Render.mTextures.FindOrDefault(
+            [&](const TextureRef& tex)
+            {
+                return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
+            }));
 
         if (!mTexture)
-            mTexture = mnew Texture(atlasAssetId, page);
-
-        mTexture->mRefs++;
+            *this = mmake<Texture>(atlasAssetId, page);
     }
 
-    TextureRef::~TextureRef()
+    bool TextureRef::operator!=(const Texture* other) const
     {
-        if (mTexture)
-            mTexture->mRefs--;
-    }
-
-    TextureRef& TextureRef::operator=(const TextureRef& other)
-    {
-        if (mTexture)
-            mTexture->mRefs--;
-
-        mTexture = other.mTexture;
-
-        if (mTexture)
-            mTexture->mRefs++;
-
-        return *this;
-    }
-
-    Texture* TextureRef::operator->()
-    {
-        return mTexture;
-    }
-
-    const Texture* TextureRef::operator->() const
-    {
-        return mTexture;
-    }
-
-    Texture* TextureRef::Get() const
-    {
-        return mTexture;
-    }
-
-    bool TextureRef::IsValid() const
-    {
-        return mTexture != nullptr;
-    }
-
-    TextureRef::operator bool() const
-    {
-        return mTexture != nullptr;
-    }
-
-    TextureRef TextureRef::Null()
-    {
-        return TextureRef();
+        return mTexture == other;
     }
 
     bool TextureRef::operator!=(const TextureRef& other) const
@@ -136,16 +95,89 @@ namespace o2
         return mTexture != other.mTexture;
     }
 
+    bool TextureRef::operator==(const Texture* other) const
+    {
+        return mTexture == other;
+    }
+
     bool TextureRef::operator==(const TextureRef& other) const
     {
         return mTexture == other.mTexture;
     }
 
-    TextureRef NoTexture()
+    TextureRef& TextureRef::operator=(Ref<Texture>&& other)
+    {
+        mTexture = other;
+        return *this;
+    }
+
+    TextureRef& TextureRef::operator=(nullptr_t)
+    {
+        mTexture = nullptr;
+        return *this;
+    }
+
+    TextureRef& TextureRef::operator=(const TextureRef& other)
+    {
+        mTexture = other.mTexture;
+        return *this;
+    }
+
+    TextureRef& TextureRef::operator=(TextureRef&& other)
+    {
+        mTexture = std::move(other.mTexture);
+        return *this;
+    }
+
+    bool TextureRef::IsValid() const
+    {
+        return mTexture.IsValid();
+    }
+
+    TextureRef::operator bool() const
+    {
+        return mTexture.operator bool();
+    }
+
+    TextureRef::operator Ref<Texture>() const
+    {
+        return mTexture;
+    }
+
+    Texture& TextureRef::operator*() const
+    {
+        return mTexture.operator*();
+    }
+
+    Texture* TextureRef::operator->() const
+    {
+        return mTexture.operator->();
+    }
+
+    Texture* TextureRef::Get()
+    {
+        return mTexture.Get();
+    }
+
+    const Texture* TextureRef::Get() const
+    {
+        return mTexture.Get();
+    }
+
+    Ref<Texture>& TextureRef::GetRef()
+    {
+        return mTexture;
+    }
+
+    const Ref<Texture>& TextureRef::GetRef() const
+    {
+        return mTexture;
+    }
+
+    TextureRef TextureRef::Null()
     {
         return TextureRef();
     }
-
 }
 // --- META ---
 

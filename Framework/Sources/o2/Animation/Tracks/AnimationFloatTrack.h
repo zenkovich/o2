@@ -19,7 +19,7 @@ namespace o2
         PROPERTY(Vector<Key>, keys, SetKeys, GetKeysNonContant); // Keys property
 
     public:
-        Curve curve; // Animation curve @SERIALIZABLE
+        Ref<Curve> curve = mmake<Curve>(); // Animation curve @SERIALIZABLE
 
     public:
         // Default constructor
@@ -37,7 +37,7 @@ namespace o2
         // Returns value at time
         float GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
 
-        // Called when beginning keys batch change. After this call all keys modifications will not be update pproximation
+        // Called when beginning keys batch change. After this call all keys modifications will not be update approximation
         // Used for optimizing many keys change
         void BeginKeysBatchChange() override;
 
@@ -48,7 +48,7 @@ namespace o2
         float GetDuration() const override;
 
         // Creates track-type specific player
-        IPlayer* CreatePlayer() const override;
+        Ref<IPlayer> CreatePlayer() const override;
 
         // Adds key with smoothing
         void AddKeys(Vector<Vec2F> values, float smooth = 1.0f);
@@ -127,6 +127,7 @@ namespace o2
         static AnimationTrack<float> Linear(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
 
         SERIALIZABLE(AnimationTrack<float>);
+        CLONEABLE_REF(AnimationTrack<float>);
 
     public:
         class Player: public IPlayer
@@ -136,7 +137,6 @@ namespace o2
             GETTER(float, value, GetValue);                              // Current value getter 
             SETTER(float*, target, SetTarget);                           // Bind target setter
             SETTER(Function<void()>, targetDelegate, SetTargetDelegate); // Bind target change event setter
-            SETTER(IValueProxy<float>*, targetProxy, SetTargetProxy);    // Bind proxy setter
 
         public:
             // Default constructor
@@ -158,13 +158,13 @@ namespace o2
             void SetTargetDelegate(const Function<void()>& changeEvent) override;
 
             // Sets target property pointer
-            void SetTargetProxy(IValueProxy<float>* proxy);
+            void SetTargetProxy(const Ref<IValueProxy<float>>& proxy);
 
             // Sets animation track
-            void SetTrack(AnimationTrack<float>* track);
+            void SetTrack(const Ref<AnimationTrack<float>>& track);
 
             // Returns animation track
-            AnimationTrack<float>* GetTrackT() const;
+            const Ref<AnimationTrack<float>>& GetTrackT() const;
 
             // Sets target by void pointer
             void SetTargetVoid(void* target) override;
@@ -173,13 +173,13 @@ namespace o2
             void SetTargetVoid(void* target, const Function<void()>& changeEvent) override;
 
             // Sets target property by void pointer
-            void SetTargetProxyVoid(void* target) override;
+			void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) override;
 
             // Sets animation track
-            void SetTrack(IAnimationTrack* track) override;
+            void SetTrack(const Ref<IAnimationTrack>& track) override;
 
             // Returns animation track
-            IAnimationTrack* GetTrack() const override;
+            Ref<IAnimationTrack> GetTrack() const override;
 
             // Returns current value
             float GetValue() const;
@@ -187,7 +187,7 @@ namespace o2
             IOBJECT(Player);
 
         protected:
-            AnimationTrack<float>* mTrack = nullptr; // Animation track
+            Ref<AnimationTrack<float>> mTrack = nullptr; // Animation track
 
             float mCurrentValue; // Current animation track
 
@@ -195,16 +195,16 @@ namespace o2
             int   mPrevKey = 0;               // Previous evaluation key index
             int   mPrevKeyApproximation = 0;  // Previous evaluation key approximation index
 
-            float*              mTarget = nullptr;      // Animation target value pointer
-            Function<void()>    mTargetDelegate;        // Animation target value change event
-            IValueProxy<float>* mTargetProxy = nullptr; // Animation target proxy pointer
+            float*                  mTarget = nullptr; // Animation target value pointer
+            Function<void()>        mTargetDelegate;   // Animation target value change event
+            Ref<IValueProxy<float>> mTargetProxy;      // Animation target proxy pointer
 
         protected:
             // Evaluates value
             void Evaluate() override;
 
             // Registering this in value mixer
-            void RegMixer(AnimationState* state, const String& path) override;
+            void RegMixer(const Ref<AnimationState>& state, const String& path) override;
         };
 
     protected:
@@ -228,7 +228,7 @@ END_META;
 CLASS_FIELDS_META(o2::AnimationTrack<float>)
 {
     FIELD().PUBLIC().NAME(keys);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(curve);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Curve>()).NAME(curve);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>)
@@ -241,7 +241,7 @@ CLASS_METHODS_META(o2::AnimationTrack<float>)
     FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
     FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
-    FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IPlayer>, CreatePlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, AddKeys, Vector<Vec2F>, float);
     FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&);
     FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&, float);
@@ -281,7 +281,6 @@ CLASS_FIELDS_META(o2::AnimationTrack<float>::Player)
     FIELD().PUBLIC().NAME(value);
     FIELD().PUBLIC().NAME(target);
     FIELD().PUBLIC().NAME(targetDelegate);
-    FIELD().PUBLIC().NAME(targetProxy);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
     FIELD().PROTECTED().NAME(mCurrentValue);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime);
@@ -289,7 +288,7 @@ CLASS_FIELDS_META(o2::AnimationTrack<float>::Player)
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevKeyApproximation);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
     FIELD().PROTECTED().NAME(mTargetDelegate);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTargetProxy);
+    FIELD().PROTECTED().NAME(mTargetProxy);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>::Player)
@@ -299,17 +298,17 @@ CLASS_METHODS_META(o2::AnimationTrack<float>::Player)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, float*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, float*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<float>*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, AnimationTrack<float>*);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationTrack<float>*, GetTrackT);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IValueProxy<float>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<AnimationTrack<float>>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationTrack<float>>&, GetTrackT);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
-    FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IAbstractValueProxy>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PUBLIC().SIGNATURE(float, GetValue);
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
-    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, AnimationState*, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, const Ref<AnimationState>&, const String&);
 }
 END_META;
 // --- END META ---

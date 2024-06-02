@@ -20,10 +20,10 @@ namespace o2
 
     public:
         // Default constructor
-        DropDown();
+        explicit DropDown(RefCounter* refCounter);
 
         // Copy-constructor
-        DropDown(const DropDown& other);
+        DropDown(RefCounter* refCounter, const DropDown& other);
 
         // Destructor
         ~DropDown();
@@ -65,16 +65,17 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(DropDown);
+        CLONEABLE_REF(DropDown);
 
     protected:
-        Text* mSelectedText = nullptr; // Selected text label, draws separately
+        Ref<Text> mSelectedText; // Selected text label, draws separately
 
     protected:
         // Called when selected item index was changed
         void OnSelectionChanged() override;
 
         // Called when layer added and updates drawing sequence, searches selected text drawable
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
     };
 }
 // --- META ---
@@ -88,14 +89,14 @@ CLASS_FIELDS_META(o2::DropDown)
 {
     FIELD().PUBLIC().NAME(value);
     FIELD().PUBLIC().NAME(onSelectedText);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectedText);
+    FIELD().PROTECTED().NAME(mSelectedText);
 }
 END_META;
 CLASS_METHODS_META(o2::DropDown)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const DropDown&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const DropDown&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&, int);
@@ -108,7 +109,7 @@ CLASS_METHODS_META(o2::DropDown)
     FUNCTION().PUBLIC().SIGNATURE(void, SelectItemText, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
 }
 END_META;
 // --- END META ---

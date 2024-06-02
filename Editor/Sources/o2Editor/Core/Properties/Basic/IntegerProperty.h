@@ -20,19 +20,20 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		IntegerProperty();
+		IntegerProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		IntegerProperty(const IntegerProperty& other);
+		IntegerProperty(RefCounter* refCounter, const IntegerProperty& other);
 
 		// Copy operator
 		IntegerProperty& operator=(const IntegerProperty& other);
 
-		IOBJECT(IntegerProperty);
+		SERIALIZABLE(IntegerProperty);
+        CLONEABLE_REF(IntegerProperty);
 
 	protected:
-		EditBox*         mEditBox = nullptr;        // Edit box 
-		CursorEventsArea mDragHangle;               // Value changing drag handle
+		Ref<EditBox>          mEditBox;    // Edit box 
+		Ref<CursorEventsArea> mDragHangle; // Value changing drag handle
 
 	protected:
 		// Updates value view
@@ -55,7 +56,9 @@ namespace Editor
 
 		// Called when change value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
-		void OnMoveHandleReleased(const Input::Cursor& cursor);
+        void OnMoveHandleReleased(const Input::Cursor& cursor);
+
+        REF_COUNTERABLE_IMPL(TPropertyField<int>);
 	};
 }
 // --- META ---
@@ -68,15 +71,15 @@ CLASS_BASES_META(Editor::IntegerProperty)
 END_META;
 CLASS_FIELDS_META(Editor::IntegerProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mEditBox);
     FIELD().PROTECTED().NAME(mDragHangle);
 }
 END_META;
 CLASS_METHODS_META(Editor::IntegerProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const IntegerProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const IntegerProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);

@@ -16,7 +16,7 @@ namespace o2
     // -----------
     // Drag handle
     // -----------
-    class DragHandle: public IDrawable, public CursorAreaEventsListener, virtual public ISerializable
+    class DragHandle: public RefCounterable, public IDrawable, public CursorAreaEventsListener, virtual public ISerializable, virtual public ICloneableRef
     {
     public:
         PROPERTIES(DragHandle);
@@ -51,12 +51,24 @@ namespace o2
         // Default constructor
         DragHandle();
 
+        // Default constructor
+        DragHandle(RefCounter* refCounter);
+
         // Constructor with views
-        DragHandle(IRectDrawable* regular, IRectDrawable* hover = nullptr, IRectDrawable* pressed = nullptr,
-                   IRectDrawable* selected = nullptr, IRectDrawable* selectedHovered = nullptr, IRectDrawable* selectedPressed = nullptr);
+        DragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr,
+                   const Ref<IRectDrawable>& pressed = nullptr, const Ref<IRectDrawable>& selected = nullptr,
+                   const Ref<IRectDrawable>& selectedHovered = nullptr, const Ref<IRectDrawable>& selectedPressed = nullptr);
+
+        // Constructor with views
+        DragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr,
+                   const Ref<IRectDrawable>& pressed = nullptr, const Ref<IRectDrawable>& selected = nullptr,
+                   const Ref<IRectDrawable>& selectedHovered = nullptr, const Ref<IRectDrawable>& selectedPressed = nullptr);
 
         // Copy-constructor
         DragHandle(const DragHandle& other);
+
+        // Copy-constructor
+        DragHandle(RefCounter* refCounter, const DragHandle& other);
 
         // Destructor
         virtual ~DragHandle();
@@ -113,10 +125,10 @@ namespace o2
         void Deselect();
 
         // Sets selection group
-        void SetSelectionGroup(ISelectableDragHandlesGroup* group);
+        void SetSelectionGroup(const Ref<ISelectableDragHandlesGroup>& group);
 
         // Returns selection group
-        ISelectableDragHandlesGroup* GetSelectionGroup() const;
+        const Ref<ISelectableDragHandlesGroup>& GetSelectionGroup() const;
 
         // Set handle enabled. Disabled handle don't drawn and interact
         virtual void SetEnabled(bool enabled);
@@ -140,40 +152,40 @@ namespace o2
         virtual Vec2F LocalToScreen(const Vec2F& point);
 
         // Sets regular drawable
-        void SetRegularDrawable(IRectDrawable* IRectDrawable);
+        void SetRegularDrawable(const Ref<IRectDrawable>& IRectDrawable);
 
         // Returns regular drawable
-        IRectDrawable* GetRegularDrawable() const;
+        const Ref<IRectDrawable>& GetRegularDrawable() const;
 
         // Sets hovered drawable
-        void SetHoverDrawable(IRectDrawable* IRectDrawable);
+        void SetHoverDrawable(const Ref<IRectDrawable>& IRectDrawable);
 
         // Returns hovered drawable
-        IRectDrawable* GetHoverDrawable() const;
+        const Ref<IRectDrawable>& GetHoverDrawable() const;
 
         // Sets pressed drawable
-        void SetPressedDrawable(IRectDrawable* IRectDrawable);
+        void SetPressedDrawable(const Ref<IRectDrawable>& IRectDrawable);
 
         // Returns pressed drawable
-        IRectDrawable* GetPressedDrawable() const;
+        const Ref<IRectDrawable>& GetPressedDrawable() const;
 
         // Sets selected drawable
-        void SetSelectedDrawable(IRectDrawable* IRectDrawable);
+        void SetSelectedDrawable(const Ref<IRectDrawable>& IRectDrawable);
 
         // Returns selected drawable
-        IRectDrawable* GetSelectedDrawable() const;
+        const Ref<IRectDrawable>& GetSelectedDrawable() const;
 
         // Sets selected hovered drawable
-        void SetSelectedHoveredDrawable(IRectDrawable* IRectDrawable);
+        void SetSelectedHoveredDrawable(const Ref<IRectDrawable>& IRectDrawable);
 
         // Returns selected hovered drawable
-        IRectDrawable* GetSelectedHoveredDrawable() const;
+        const Ref<IRectDrawable>& GetSelectedHoveredDrawable() const;
 
         // Sets selected pressed drawable
-        void SetSelectedPressedDrawable(IRectDrawable* IRectDrawable);
+        void SetSelectedPressedDrawable(const Ref<IRectDrawable>& IRectDrawable);
 
         // Returns selected pressed drawable
-        IRectDrawable* GetSelectedPressedDrawable() const;
+        const Ref<IRectDrawable>& GetSelectedPressedDrawable() const;
 
         // Sets size to all available drawable
         void SetDrawablesSize(const Vec2F& size);
@@ -190,13 +202,13 @@ namespace o2
         SERIALIZABLE(DragHandle);
 
     protected:
-        IRectDrawable* mRegularDrawable = nullptr;  // Regular view IRectDrawable @SERIALIZABLE
-        IRectDrawable* mHoverDrawable = nullptr;    // Hovered view IRectDrawable @SERIALIZABLE
-        IRectDrawable* mPressedDrawable = nullptr;  // Pressed view IRectDrawable @SERIALIZABLE
+        Ref<IRectDrawable> mRegularDrawable;  // Regular view IRectDrawable @SERIALIZABLE
+        Ref<IRectDrawable> mHoverDrawable;    // Hovered view IRectDrawable @SERIALIZABLE
+        Ref<IRectDrawable> mPressedDrawable;  // Pressed view IRectDrawable @SERIALIZABLE
 
-        IRectDrawable* mSelectedDrawable = nullptr;        // Selected view IRectDrawable @SERIALIZABLE
-        IRectDrawable* mSelectedHoverDrawable = nullptr;   // Selected hovered view IRectDrawable @SERIALIZABLE
-        IRectDrawable* mSelectedPressedDrawable = nullptr; // Selected pressed view IRectDrawable @SERIALIZABLE
+        Ref<IRectDrawable> mSelectedDrawable;        // Selected view IRectDrawable @SERIALIZABLE
+        Ref<IRectDrawable> mSelectedHoverDrawable;   // Selected hovered view IRectDrawable @SERIALIZABLE
+        Ref<IRectDrawable> mSelectedPressedDrawable; // Selected pressed view IRectDrawable @SERIALIZABLE
 
         bool   mEnabled = true; // Is handle enabled. Disabled handle don't drawn and interact
 
@@ -215,8 +227,8 @@ namespace o2
         bool   mIsDragging = false; // Is handle in dragging mode
         bool   mIsHovered = false;  // Is handle under cursor, used for hover IRectDrawable appearing
 
-        bool                         mIsSelected = false;    // Is this selected
-        ISelectableDragHandlesGroup* mSelectGroup = nullptr; // Selection group
+        bool                             mIsSelected = false; // Is this selected
+        Ref<ISelectableDragHandlesGroup> mSelectGroup;        // Selection group
 
         float  mDragDistanceThreshold = 3.0f; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
 
@@ -260,6 +272,8 @@ namespace o2
         // Called when this was unselected
         virtual void OnDeselected();
 
+        REF_COUNTERABLE_IMPL(RefCounterable);
+
         friend class ISelectableDragHandlesGroup;
         friend class SelectableDragHandlesGroup;
     };
@@ -277,15 +291,18 @@ namespace o2
 
     public:
         // Default constructor
-        WidgetDragHandle();
+        explicit WidgetDragHandle(RefCounter* refCounter);
 
         // Constructor with views
-        WidgetDragHandle(IRectDrawable* regular, IRectDrawable* hover = nullptr, IRectDrawable* pressed = nullptr,
-                         IRectDrawable* selected = nullptr, IRectDrawable* selectedHovered = nullptr,
-                         IRectDrawable* selectedPressed = nullptr);
+        WidgetDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover = nullptr, const Ref<IRectDrawable>& pressed = nullptr,
+                         const Ref<IRectDrawable>& selected = nullptr, const Ref<IRectDrawable>& selectedHovered = nullptr,
+                         const Ref<IRectDrawable>& selectedPressed = nullptr);
 
         // Copy-constructor
-        WidgetDragHandle(const WidgetDragHandle& other);
+        WidgetDragHandle(RefCounter* refCounter, const WidgetDragHandle& other);
+
+        // Copy-constructor
+        WidgetDragHandle(const WidgetDragHandle& other):WidgetDragHandle(nullptr, other) {}
 
         // Destructor
         ~WidgetDragHandle();
@@ -311,7 +328,12 @@ namespace o2
         // Returns create menu category in editor
         static String GetCreateMenuCategory();
 
+        // Dynamic cast to RefCounterable via Widget
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<WidgetDragHandle>& ref);
+
         SERIALIZABLE(WidgetDragHandle);
+
+        Ref<RefCounterable> CloneRef() const override { return DynamicCast<Widget>(mmake<WidgetDragHandle>(*this)); }
 
     protected:
         // Hide public functions
@@ -329,28 +351,36 @@ namespace o2
 
         // Completion deserialization delta callback; calls widget's function
         void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
+        REF_COUNTERABLE_IMPL(Widget);
     };
 
     // --------------------------------------------
     // Selectable draggable handles group interface
     // --------------------------------------------
-    class ISelectableDragHandlesGroup
+    class ISelectableDragHandlesGroup: public RefCounterable
     {
     public:
+        // Default constructor
+        ISelectableDragHandlesGroup();
+
+        // Default constructor
+        ISelectableDragHandlesGroup(RefCounter *refCounter);
+
         // Returns selected handles in group
-        virtual const Vector<DragHandle*>& GetSelectedHandles() const = 0;
+        virtual const Vector<Ref<DragHandle>>& GetSelectedHandles() const = 0;
 
         // Returns all handles in group 
-        virtual Vector<DragHandle*> GetAllHandles() const = 0;
+        virtual Vector<Ref<DragHandle>> GetAllHandles() const = 0;
 
         // Selects handle
-        virtual void SelectHandle(DragHandle* handle) = 0;
+        virtual void SelectHandle(const Ref<DragHandle>& handle) = 0;
 
         // Deselects handle
-        virtual void DeselectHandle(DragHandle* handle) = 0;
+        virtual void DeselectHandle(const Ref<DragHandle>& handle) = 0;
 
         // Adds selectable handle to group
-        virtual void AddHandle(DragHandle* handle) = 0;
+        virtual void AddHandle(const Ref<DragHandle>& handle) = 0;
 
         // Removes selectable handle from group
         virtual void RemoveHandle(DragHandle* handle) = 0;
@@ -363,22 +393,22 @@ namespace o2
 
     protected:
         // Called when selectable draggable handle was pressed
-        virtual void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) { }
+        virtual void OnHandleCursorPressed(const Ref<DragHandle>& handle, const Input::Cursor& cursor) { }
 
         // Called when selectable draggable handle was released
-        virtual void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) { }
+        virtual void OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor) { }
 
         // Called when selectable handle was began to drag
-        virtual void OnHandleBeganDragging(DragHandle* handle) { }
+        virtual void OnHandleBeganDragging(const Ref<DragHandle>& handle) { }
 
         // Called when selectable handle moved, moves all selected handles position
-        virtual void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) { }
+        virtual void OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos) { }
 
         // Called when selectable handle completed changing
-        virtual void OnHandleCompletedChange(DragHandle* handle) { }
+        virtual void OnHandleCompletedChange(const Ref<DragHandle>& handle) { }
 
         // Sets handle selected state without adding to selected handles array
-        void SetHandleSelectedState(DragHandle* handle, bool selected);
+        void SetHandleSelectedState(const Ref<DragHandle>& handle, bool selected);
 
         friend class DragHandle;
     };
@@ -390,23 +420,29 @@ namespace o2
     class SelectableDragHandlesGroup: public ISelectableDragHandlesGroup
     {
     public:
+        // Default constructor
+        SelectableDragHandlesGroup();
+
+        // Default constructor
+        SelectableDragHandlesGroup(RefCounter* refCounter);
+
         // Destructor
         ~SelectableDragHandlesGroup();
 
         // Returns selected handles in group
-        const Vector<DragHandle*>& GetSelectedHandles() const override;
+        const Vector<Ref<DragHandle>>& GetSelectedHandles() const override;
 
         // Returns all handles in group 
-        Vector<DragHandle*> GetAllHandles() const override;
+        Vector<Ref<DragHandle>> GetAllHandles() const override;
 
         // Selects handle
-        void SelectHandle(DragHandle* handle) override;
+        void SelectHandle(const Ref<DragHandle>& handle) override;
 
         // Deselects handle
-        void DeselectHandle(DragHandle* handle) override;
+        void DeselectHandle(const Ref<DragHandle>& handle) override;
 
         // Adds selectable handle to group
-        void AddHandle(DragHandle* handle) override;
+        void AddHandle(const Ref<DragHandle>& handle) override;
 
         // Removes selectable handle from group
         void RemoveHandle(DragHandle* handle) override;
@@ -418,24 +454,24 @@ namespace o2
         void SelectAll() override;
 
     protected:
-        Vector<DragHandle*> mSelectedHandles;
-        Vector<DragHandle*> mHandles;
+        Vector<Ref<DragHandle>> mSelectedHandles;
+        Vector<Ref<DragHandle>> mHandles;
 
     protected:
         // Called when selection is changed - some handle was added or removed from selection
         virtual void OnSelectionChanged();
 
         // Called when selectable draggable handle was pressed
-        void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) override;
+        void OnHandleCursorPressed(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
 
         // Called when selectable draggable handle was released
-        void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) override;
+        void OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor) override;
 
         // Called when selectable handle was began to drag
-        void OnHandleBeganDragging(DragHandle* handle) override;
+        void OnHandleBeganDragging(const Ref<DragHandle>& handle) override;
 
         // Called when selectable handle moved, moves all selected handles position
-        void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) override;
+        void OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos) override;
 
         friend class DragHandle;
     };
@@ -444,9 +480,11 @@ namespace o2
 
 CLASS_BASES_META(o2::DragHandle)
 {
+    BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::IDrawable);
     BASE_CLASS(o2::CursorAreaEventsListener);
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::DragHandle)
@@ -470,12 +508,12 @@ CLASS_FIELDS_META(o2::DragHandle)
     FIELD().PUBLIC().NAME(checkSnappingFunc);
     FIELD().PUBLIC().NAME(onRightButtonPressed);
     FIELD().PUBLIC().NAME(onRightButtonReleased);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mRegularDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHoverDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mPressedDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedHoverDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedPressedDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mRegularDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHoverDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mPressedDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectedDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectedHoverDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectedPressedDrawable);
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabled);
     FIELD().PROTECTED().NAME(mPosition);
     FIELD().PROTECTED().NAME(mScreenPosition);
@@ -490,7 +528,7 @@ CLASS_FIELDS_META(o2::DragHandle)
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsDragging);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsHovered);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsSelected);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectGroup);
+    FIELD().PROTECTED().NAME(mSelectGroup);
     FIELD().PROTECTED().DEFAULT_VALUE(3.0f).NAME(mDragDistanceThreshold);
 }
 END_META;
@@ -498,8 +536,11 @@ CLASS_METHODS_META(o2::DragHandle)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const DragHandle&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const DragHandle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw, const RectF&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
@@ -516,8 +557,8 @@ CLASS_METHODS_META(o2::DragHandle)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSelected);
     FUNCTION().PUBLIC().SIGNATURE(void, Select);
     FUNCTION().PUBLIC().SIGNATURE(void, Deselect);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionGroup, ISelectableDragHandlesGroup*);
-    FUNCTION().PUBLIC().SIGNATURE(ISelectableDragHandlesGroup*, GetSelectionGroup);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionGroup, const Ref<ISelectableDragHandlesGroup>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<ISelectableDragHandlesGroup>&, GetSelectionGroup);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAngle, float);
@@ -525,18 +566,18 @@ CLASS_METHODS_META(o2::DragHandle)
     FUNCTION().PUBLIC().SIGNATURE(const Vec2F&, GetPressedCursorPos);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetRegularDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetRegularDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHoverDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetHoverDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetPressedDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetPressedDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetSelectedDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedHoveredDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetSelectedHoveredDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedPressedDrawable, IRectDrawable*);
-    FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetSelectedPressedDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetRegularDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetRegularDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHoverDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetHoverDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPressedDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetPressedDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetSelectedDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedHoveredDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetSelectedHoveredDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedPressedDrawable, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<IRectDrawable>&, GetSelectedPressedDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDrawablesSize, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDrawablesColor, const Color4&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDrawablesSizePivot, const Vec2F&);
@@ -573,8 +614,9 @@ END_META;
 CLASS_METHODS_META(o2::WidgetDragHandle)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*, IRectDrawable*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&, const Ref<IRectDrawable>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WidgetDragHandle&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetDragHandle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
@@ -582,6 +624,8 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<WidgetDragHandle>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<RefCounterable>, CloneRef);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

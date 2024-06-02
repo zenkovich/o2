@@ -9,7 +9,8 @@ namespace o2
 {
     SceneLayer::SceneLayer()
     {
-        RegisterDrawable(&mRootDrawables);
+        mRootDrawables = mmake<SceneLayerRootDrawablesContainer>();
+        RegisterDrawable(mRootDrawables.Get());
     }
 
     void SceneLayer::SetName(const String& name)
@@ -25,12 +26,12 @@ namespace o2
         return mName;
     }
 
-    const Vector<ISceneDrawable*>& SceneLayer::GetDrawables() const
+    const Vector<Ref<ISceneDrawable>>& SceneLayer::GetDrawables() const
     {
         return mDrawables;
     }
 
-    SceneLayer::RootDrawablesContainer& SceneLayer::GetRootDrawables()
+    const Ref<SceneLayerRootDrawablesContainer>& SceneLayer::GetRootDrawables()
     {
         return mRootDrawables;
     }
@@ -68,15 +69,15 @@ namespace o2
                     break;
         }
 
-        mDrawables.Insert(drawable, position);
+        mDrawables.Insert(Ref(drawable), position);
     }
 
     void SceneLayer::UnregisterDrawable(ISceneDrawable* drawable)
     {
-        mDrawables.Remove(drawable);
+        mDrawables.Remove(Ref(drawable));
     }
 
-    void SceneLayer::SetLastByDepth(ISceneDrawable* drawable)
+    void SceneLayer::SetLastByDepth(const Ref<ISceneDrawable>& drawable)
     {
         mDrawables.Remove(drawable);
 

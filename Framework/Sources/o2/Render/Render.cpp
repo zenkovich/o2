@@ -18,6 +18,8 @@ namespace o2
 {
     DECLARE_SINGLETON(Render);
 
+    FORWARD_REF_IMPL(AtlasAsset);
+
     void Render::OnFrameResized()
     {
         mResolution = o2Application.GetContentSize();
@@ -41,7 +43,7 @@ namespace o2
         Bitmap bitmap(PixelFormat::R8G8B8A8, Vec2I(32, 32));
         bitmap.Fill(Color4(255, 255, 255, 255));
         bitmap.FillRect(0, 32, 16, 0, Color4(255, 255, 255, 0));
-        mDashLineTexture = new Texture(&bitmap);
+        mDashLineTexture = mmake<Texture>(bitmap);
     }
 
     void Render::InitializeFreeType()
@@ -155,35 +157,35 @@ namespace o2
 
     void Render::CheckTexturesUnloading()
     {
-        Vector<Texture*> unloadTextures;
-        for (auto texture : mTextures)
-            if (texture->mRefs == 0)
-                unloadTextures.Add(texture);
-
-        unloadTextures.ForEach([](auto texture) { delete texture; });
+//         Vector<Texture*> unloadTextures;
+//         for (auto& texture : mTextures)
+//             if (texture->mRefs == 0)
+//                 unloadTextures.Add(texture);
+// 
+//         unloadTextures.ForEach([](auto texture) { delete texture; });
     }
 
     void Render::CheckFontsUnloading()
     {
-        Vector<Font*> unloadFonts;
-        for (auto font : mFonts)
-        {
-            if (font->mRefs.IsEmpty())
-                unloadFonts.Add(font);
-        }
-
-        unloadFonts.ForEach([](auto fnt) { delete fnt; });
+//         Vector<Font*> unloadFonts;
+//         for (auto& font : mFonts)
+//         {
+//             if (font->mRefs.IsEmpty())
+//                 unloadFonts.Add(font);
+//         }
+// 
+//         unloadFonts.ForEach([](auto fnt) { delete fnt; });
     }
 
     void Render::OnAssetsRebuilt(const Vector<UID>& changedAssets)
     {
-        for (auto tex : mTextures)
+        for (auto& tex : mTextures)
             tex->Reload();
 
-        for (auto atlas : mAtlases)
+        for (auto& atlas : mAtlases)
             atlas->ReloadPages();
 
-        for (auto spr : mSprites)
+        for (auto& spr : mSprites)
             spr->ReloadImage();
     }
 
@@ -205,22 +207,32 @@ namespace o2
 
     void Render::OnTextureCreated(Texture* texture)
     {
-        mTextures.Add(texture);
+        mTextures.Add(Ref(texture));
     }
 
     void Render::OnTextureDestroyed(Texture* texture)
     {
-        mTextures.Remove(texture);
+        mTextures.RemoveFirst([=](const TextureRef& x) { return x == texture; });
     }
 
     void Render::OnAtlasCreated(AtlasAsset* atlas)
     {
-        mAtlases.Add(atlas);
+        mAtlases.Add(Ref(atlas));
     }
 
     void Render::OnAtlasDestroyed(AtlasAsset* atlas)
     {
-        mAtlases.Remove(atlas);
+        mAtlases.RemoveFirst([=](const AssetRef<AtlasAsset>& x) { return x == atlas; });
+    }
+
+    void Render::OnFontCreated(Font* font)
+    {
+        mFonts.Add(Ref(font));
+    }
+
+    void Render::OnFontDestroyed(Font* font)
+    {
+        mFonts.RemoveFirst([=](const Ref<Font>& x) { return x == font; });
     }
 
     void Render::DrawAALine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/,

@@ -9,10 +9,10 @@ namespace Editor
 	EnableAction::EnableAction()
 	{}
 
-	EnableAction::EnableAction(const Vector<SceneEditableObject*>& objects, bool enable):
+	EnableAction::EnableAction(const Vector<Ref<SceneEditableObject>>& objects, bool enable):
 		enable(enable)
 	{
-		objectsIds = objects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
+		objectsIds = objects.Convert<SceneUID>([](auto& x) { return x->GetID(); });
 	}
 
 	String EnableAction::GetName() const
@@ -22,7 +22,7 @@ namespace Editor
 
 	void EnableAction::Redo()
 	{
-		for (auto id : objectsIds)
+		for (auto& id : objectsIds)
 		{
 			auto object = o2Scene.GetEditableObjectByID(id);
 			if (object)
@@ -32,7 +32,7 @@ namespace Editor
 
 	void EnableAction::Undo()
 	{
-		for (auto id : objectsIds)
+		for (auto& id : objectsIds)
 		{
 			auto object = o2Scene.GetEditableObjectByID(id);
 			if (object)

@@ -14,21 +14,21 @@ namespace o2
         mInfo(other.mInfo)
     {
         mInfo.meta->mId.Randomize();
-
-        if (Assets::IsSingletonInitialzed())
-            o2Assets.AddAssetCache(this);
     }
 
-    Asset::Asset(AssetMeta* meta)
+    Asset::Asset(const Ref<AssetMeta>& meta)
     {
         mInfo.meta = meta;
         mInfo.meta->mId.Randomize();
-
-        if (Assets::IsSingletonInitialzed())
-            o2Assets.AddAssetCache(this);
     }
 
-    Asset& Asset::operator=(const Asset& other)
+	void Asset::PostRefConstruct()
+	{
+		if (Assets::IsSingletonInitialzed())
+			o2Assets.AddAssetCache(this);
+	}
+
+	Asset& Asset::operator=(const Asset& other)
     {
         if (Assets::IsSingletonInitialzed())
             o2Assets.RemoveAssetCache(this);
@@ -70,7 +70,7 @@ namespace o2
         return mInfo.meta->mId;
     }
 
-    AssetMeta* Asset::GetMeta() const
+    const Ref<AssetMeta>& Asset::GetMeta() const
     {
         return mInfo.meta;
     }
@@ -84,7 +84,7 @@ namespace o2
     void Asset::SetEditorAsset(bool isEditor)
     {
         mInfo.tree = !isEditor ?
-            &o2Assets.GetAssetsTree() :
+            Ref(const_cast<AssetsTree*>(&o2Assets.GetAssetsTree())) :
             o2Assets.GetAssetsTrees().FindOrDefault([](auto x) { return x != &o2Assets.GetAssetsTree(); });
     }
 
@@ -98,7 +98,7 @@ namespace o2
     {
         auto info = o2Assets.GetAssetInfo(path);
 
-        if (info.meta->mId == 0)
+        if (info.meta->mId == UID::empty)
         {
             GetAssetsLogStream()->Error("Failed to load asset by path (" + path + "): asset isn't exist");
             return;
@@ -111,7 +111,7 @@ namespace o2
     {
         auto& info = o2Assets.GetAssetInfo(id);
 
-        if (info.meta->mId == 0)
+        if (info.meta->mId == UID::empty)
         {
             GetAssetsLogStream()->Error("Failed to load asset by UID (" + (WString)id + "): asset isn't exist");
             return;
@@ -145,11 +145,11 @@ namespace o2
 
     void Asset::Save()
     {
-        if (ID() == 0)
+        if (ID() == UID::empty)
             ID().Randomize();
 
         UID destPathAssetId = o2Assets.GetAssetId(mInfo.path);
-        if (destPathAssetId != 0 && destPathAssetId != mInfo.meta->mId)
+        if (destPathAssetId != UID::empty && destPathAssetId != mInfo.meta->mId)
         {
             GetAssetsLogStream()->Error("Failed to save asset (" + mInfo.path + " - " + (WString)mInfo.meta->mId +
                                         "): another asset exist in this path");
@@ -180,12 +180,12 @@ namespace o2
 
     String Asset::GetFullPath() const
     {
-        return (mInfo.tree ? mInfo.tree->assetsPath : String()) + mInfo.path;
+        return (mInfo.tree ? mInfo.tree.Lock()->assetsPath : String()) + mInfo.path;
     }
 
     String Asset::GetBuiltFullPath() const
     {
-        return (mInfo.tree ? mInfo.tree->builtAssetsPath : String()) + mInfo.path;
+        return (mInfo.tree ? mInfo.tree.Lock()->builtAssetsPath : String()) + mInfo.path;
     }
 
     String Asset::GetMetaFullPath() const
@@ -193,12 +193,12 @@ namespace o2
         return GetFullPath() + ".meta";
     }
 
-    LogStream* Asset::GetAssetsLogStream() const
+    const Ref<LogStream>& Asset::GetAssetsLogStream() const
     {
         return o2Assets.mLog;
     }
 
-    void Asset::SetMeta(AssetMeta* meta)
+    void Asset::SetMeta(const Ref<AssetMeta>& meta)
     {}
 
     void Asset::LoadData(const String& path)

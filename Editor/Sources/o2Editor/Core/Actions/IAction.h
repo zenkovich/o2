@@ -9,7 +9,7 @@ namespace Editor
 	// -----------------------------
 	// Basic editor action interface
 	// -----------------------------
-	class IAction: public ISerializable
+	class IAction: public ISerializable, public RefCounterable
 	{
 	public:
 		// VIrtual destructor
@@ -32,6 +32,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IAction)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IAction)

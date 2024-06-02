@@ -6,7 +6,8 @@
 namespace o2
 {
 #if IS_EDITOR
-    SceneEditableObject::SceneEditableObject()
+    SceneEditableObject::SceneEditableObject(RefCounter* refCounter):
+        RefCounterable(refCounter)
     {}
 
     SceneEditableObject::~SceneEditableObject()
@@ -36,12 +37,12 @@ namespace o2
     void SceneEditableObject::SetName(const String& name)
     {}
 
-    const SceneEditableObject* SceneEditableObject::GetEditableLink() const
+    Ref<SceneEditableObject> SceneEditableObject::GetEditableLink() const
     {
         return nullptr;
     }
 
-    bool SceneEditableObject::IsEditableLinkedTo(SceneEditableObject* link) const
+    bool SceneEditableObject::IsEditableLinkedTo(const Ref<SceneEditableObject>& link) const
     {
         if (auto thisLink = GetEditableLink())
         {
@@ -62,30 +63,30 @@ namespace o2
         return true;
     }
 
-    Vector<SceneEditableObject*> SceneEditableObject::GetEditableChildren() const
+    Vector<Ref<SceneEditableObject>> SceneEditableObject::GetEditableChildren() const
     {
-        return Vector<SceneEditableObject*>();
+        return Vector<Ref<SceneEditableObject>>();
     }
 
-    void SceneEditableObject::GetAllEditableChildren(Vector<SceneEditableObject*>& children)
+    void SceneEditableObject::GetAllEditableChildren(Vector<Ref<SceneEditableObject>>& children)
     {
         auto thisChildren = GetEditableChildren();
 
         children.Add(thisChildren);
 
-        for (auto child : thisChildren)
+        for (auto& child : thisChildren)
             child->GetAllEditableChildren(children);
     }
 
-    SceneEditableObject* SceneEditableObject::GetEditableParent() const
+    Ref<SceneEditableObject> SceneEditableObject::GetEditableParent() const
     {
         return nullptr;
     }
 
-    void SceneEditableObject::SetEditableParent(SceneEditableObject* object, int idx /*= -1*/)
+    void SceneEditableObject::SetEditableParent(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
     {}
 
-    void SceneEditableObject::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+    void SceneEditableObject::AddEditableChild(const Ref<SceneEditableObject>& object, int idx /*= -1*/)
     {}
 
     void SceneEditableObject::SetIndexInSiblings(int idx)
@@ -192,7 +193,7 @@ namespace o2
     void SceneEditableObject::OnChildrenChanged()
     {}
 
-    void SceneEditableObject::OnEditableParentChanged(SceneEditableObject* oldParent)
+    void SceneEditableObject::OnEditableParentChanged(const Ref<SceneEditableObject>& oldParent)
     {}
 
     void SceneEditableObject::GetDifferences(ActorDifferences& differences) const

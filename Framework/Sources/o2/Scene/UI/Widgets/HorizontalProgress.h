@@ -28,10 +28,10 @@ namespace o2
 
     public:
         // Constructor
-        HorizontalProgress();
+        explicit HorizontalProgress(RefCounter* refCounter);
 
         // Copy-constructor
-        HorizontalProgress(const HorizontalProgress& other);
+        HorizontalProgress(RefCounter* refCounter, const HorizontalProgress& other);
 
         // Destructor
         ~HorizontalProgress();
@@ -88,6 +88,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(HorizontalProgress);
+        CLONEABLE_REF(HorizontalProgress);
 
     protected:
         float        mValue = 0.0f;                     // Current value @SERIALIZABLE
@@ -96,12 +97,13 @@ namespace o2
         float        mMaxValue = 1.0f;                  // Maximal value @SERIALIZABLE
         float        mScrollSense = 1.0f;               // Scroll sense coefficient @SERIALIZABLE
         Orientation  mOrientation = Orientation::Right; // Bar orientation @SERIALIZABLE
-        WidgetLayer* mBarLayer = nullptr;               // Bar layer
-        WidgetLayer* mBackLayer = nullptr;              // background layer
+
+		Ref<WidgetLayer> mBarLayer;  // Bar layer
+		Ref<WidgetLayer> mBackLayer; // background layer
 
     protected:
         // Called when new layer was added. Here searching bar, back and handle layers
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Called when deserialized
         void OnDeserialized(const DataValue& node) override;
@@ -141,6 +143,8 @@ namespace o2
 
         // Called when scrolling
         void OnScrolled(float scroll) override;
+
+        REF_COUNTERABLE_IMPL(Widget);
     };
 }
 // --- META ---
@@ -167,15 +171,15 @@ CLASS_FIELDS_META(o2::HorizontalProgress)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mMaxValue);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mScrollSense);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Orientation::Right).NAME(mOrientation);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBarLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackLayer);
+    FIELD().PROTECTED().NAME(mBarLayer);
+    FIELD().PROTECTED().NAME(mBackLayer);
 }
 END_META;
 CLASS_METHODS_META(o2::HorizontalProgress)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const HorizontalProgress&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const HorizontalProgress&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, float, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueForcible, float);
@@ -192,7 +196,7 @@ CLASS_METHODS_META(o2::HorizontalProgress)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);

@@ -21,20 +21,21 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		ColorProperty();
+		ColorProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		ColorProperty(const ColorProperty& other);
+		ColorProperty(RefCounter* refCounter, const ColorProperty& other);
 
 		// Copy operator
 		ColorProperty& operator=(const ColorProperty& other);
 
-		IOBJECT(ColorProperty);
+		SERIALIZABLE(ColorProperty);
+        CLONEABLE_REF(ColorProperty);
 
 	protected:
-		Widget*          mEditBox = nullptr;     // Edit box 
-		Image*           mColorSprite = nullptr; // Color preview sprite
-		CursorEventsArea mClickArea;             // Box click area
+		Ref<Widget>           mEditBox;     // Edit box 
+		Ref<Image>            mColorSprite; // Color preview sprite
+		Ref<CursorEventsArea> mClickArea;   // Box click area
 
 	protected:
 		// Updates value view
@@ -56,16 +57,16 @@ CLASS_BASES_META(Editor::ColorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ColorProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorSprite);
+    FIELD().PROTECTED().NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mColorSprite);
     FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;
 CLASS_METHODS_META(Editor::ColorProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ColorProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ColorProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);

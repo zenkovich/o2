@@ -1,10 +1,11 @@
 #pragma once
+#include "o2/Utils/Basic/ICloneable.h"
+#include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Math/Layout.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/String.h"
-#include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 
 namespace o2
 {
@@ -14,14 +15,14 @@ namespace o2
     // ----------------------------------------------------------
     // Object, that can be shown in editor's tree view and edited
     // ----------------------------------------------------------
-    class SceneEditableObject: virtual public ISerializable
+    class SceneEditableObject: public RefCounterable, virtual public ISerializable, virtual public ICloneableRef
     {
     public:
         int changedFrame = 0; // Index of frame, when object has changed @EDITOR_IGNORE
 
     public:
         // Default constructor. Registers itself in scene editable objects list
-        SceneEditableObject();
+        SceneEditableObject(RefCounter* refCounter);
 
         // Destructor, unregisters from scene editable objects list
         ~SceneEditableObject() override;
@@ -45,28 +46,28 @@ namespace o2
         virtual void SetName(const String& name);
 
         // Returns object's link to prototype
-        virtual const SceneEditableObject* GetEditableLink() const;
+        virtual Ref<SceneEditableObject> GetEditableLink() const;
 
         // Returns is object linked to another object
-        virtual bool IsEditableLinkedTo(SceneEditableObject* link) const;
+        virtual bool IsEditableLinkedTo(const Ref<SceneEditableObject>& link) const;
 
         // Is supports linking to prototype
         virtual bool IsSupportsLinking() const;
 
         // Returns list of object's children
-        virtual Vector<SceneEditableObject*> GetEditableChildren() const;
+        virtual Vector<Ref<SceneEditableObject>> GetEditableChildren() const;
 
         // Collects all children in hierarchy
-        void GetAllEditableChildren(Vector<SceneEditableObject*>& children);
+        void GetAllEditableChildren(Vector<Ref<SceneEditableObject>>& children);
 
         // Returns object's parent object. Return nullptr when it is a root scene object
-        virtual SceneEditableObject* GetEditableParent() const;
+        virtual Ref<SceneEditableObject> GetEditableParent() const;
 
         // Sets parent object. nullptr means make this object as root. idx == -1 means last
-        virtual void SetEditableParent(SceneEditableObject* object, int idx = -1);
+        virtual void SetEditableParent(const Ref<SceneEditableObject>& object, int idx = -1);
 
         // Adds child. idx is place in parent children. idx == -1 means last
-        virtual void AddEditableChild(SceneEditableObject* object, int idx = -1);
+        virtual void AddEditableChild(const Ref<SceneEditableObject>& object, int idx = -1);
 
         // Sets index in siblings - children of parent
         virtual void SetIndexInSiblings(int idx);
@@ -144,7 +145,7 @@ namespace o2
         virtual void OnChildrenChanged();
 
         // Called when parent changed
-        virtual void OnEditableParentChanged(SceneEditableObject* oldParent);
+        virtual void OnEditableParentChanged(const Ref<SceneEditableObject>& oldParent);
 
         // Called before making prototype from this object
         virtual void BeginMakePrototype() const {}
@@ -162,19 +163,14 @@ namespace o2
     };
 #endif
 }
-
-
-#if  IS_EDITOR
-#endif
-
-#if  IS_EDITOR
-#endif
 // --- META ---
 
 #if  IS_EDITOR
 CLASS_BASES_META(o2::SceneEditableObject)
 {
+    BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::SceneEditableObject)
@@ -188,21 +184,21 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 {
 
 #if  IS_EDITOR
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsOnScene);
     FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
     FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(const SceneEditableObject*, GetEditableLink);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEditableLinkedTo, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableLink);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEditableLinkedTo, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsLinking);
-    FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);
-    FUNCTION().PUBLIC().SIGNATURE(void, GetAllEditableChildren, Vector<SceneEditableObject*>&);
-    FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, SceneEditableObject*, int);
+    FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetEditableChildren);
+    FUNCTION().PUBLIC().SIGNATURE(void, GetAllEditableChildren, Vector<Ref<SceneEditableObject>>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<SceneEditableObject>, GetEditableParent);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, const Ref<SceneEditableObject>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddEditableChild, const Ref<SceneEditableObject>&, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
     FUNCTION().PUBLIC().SIGNATURE(bool, CanBeParentedTo, const Type&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSupportsDisabling);
@@ -228,7 +224,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
     FUNCTION().PUBLIC().SIGNATURE(void, OnLockChanged);
     FUNCTION().PUBLIC().SIGNATURE(void, OnNameChanged);
     FUNCTION().PUBLIC().SIGNATURE(void, OnChildrenChanged);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnEditableParentChanged, SceneEditableObject*);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnEditableParentChanged, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, BeginMakePrototype);
     FUNCTION().PUBLIC().SIGNATURE(void, BeginInstantiatePrototype);
     FUNCTION().PROTECTED().SIGNATURE(void, GetDifferences, ActorDifferences&);

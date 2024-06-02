@@ -12,13 +12,14 @@
 
 namespace Editor
 {
-	VectorProperty::VectorProperty()
+	VectorProperty::VectorProperty(RefCounter* refCounter):
+		IPropertyField(refCounter)
 	{
 		InitializeControls();
 	}
 
-	VectorProperty::VectorProperty(const VectorProperty& other):
-		IPropertyField(other)
+	VectorProperty::VectorProperty(RefCounter* refCounter, const VectorProperty& other):
+		IPropertyField(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -46,7 +47,7 @@ namespace Editor
 
 		mSpoiler->borderTop = 5;
 
-		mHeaderContainer = mnew HorizontalLayout();
+		mHeaderContainer = mmake<HorizontalLayout>();
 		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 20, 0);
 		mHeaderContainer->baseCorner = BaseCorner::Right;
 		mHeaderContainer->expandHeight = false;
@@ -86,10 +87,7 @@ namespace Editor
 	}
 
 	VectorProperty::~VectorProperty()
-	{
-		for (auto x : mValuePropertiesPool)
-			delete x;
-	}
+	{}
 
 	void VectorProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
@@ -132,7 +130,7 @@ namespace Editor
 		mCountOfElements = mVectorType->GetObjectVectorSize(mTargetObjects[0].first.data);
 		mCountDifferents = false;
 
-		for (auto target : mTargetObjects)
+		for (auto& target : mTargetObjects)
 		{
 			int targetCount = mVectorType->GetObjectVectorSize(target.first.data);
 			if (targetCount != mCountOfElements)
@@ -150,7 +148,7 @@ namespace Editor
 
 				if (IsExpanded())
 				{
-					for (auto prop : mValueProperties)
+					for (auto& prop : mValueProperties)
 					{
 						mSpoiler->RemoveChild(prop, false);
 						FreeValueProperty(prop);
@@ -160,7 +158,7 @@ namespace Editor
 
 					mAddButton->Hide(true);
 
-					onChanged(this);
+					onChanged(Ref(this));
 					o2EditorSceneScreen.OnSceneChanged();
 				}
 			}
@@ -174,15 +172,15 @@ namespace Editor
 				int i = 0;
 				for (; i < mCountOfElements; i++)
 				{
-					auto itemTargetValues = mTargetObjects.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+					auto itemTargetValues = mTargetObjects.Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
 						[&](const Pair<TargetObjectData, TargetObjectData>& x)
 					{
-						return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+						return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(
 							mVectorType->GetObjectVectorElementProxy(x.first.data, i),
 							x.second.data ? mVectorType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
 					});
 
-					IPropertyField* propertyDef;
+					Ref<IPropertyField> propertyDef;
 					if (i < mValueProperties.Count())
 						propertyDef = mValueProperties[i];
 					else
@@ -217,7 +215,7 @@ namespace Editor
 
 				mSpoiler->SetLayoutDirty();
 
-				onChanged(this);
+				onChanged(Ref(this));
 				o2EditorSceneScreen.OnSceneChanged();
 			}
 		}
@@ -227,15 +225,15 @@ namespace Editor
 			{
 				for (int i = 0; i < mCountOfElements; i++)
 				{
-					auto itemTargetValues = mTargetObjects.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+					auto itemTargetValues = mTargetObjects.Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
 						[&](const Pair<TargetObjectData, TargetObjectData>& x)
 					{
-						return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+						return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(
 							mVectorType->GetObjectVectorElementProxy(x.first.data, i),
 							x.second.data ? mVectorType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
 					});
 
-					IPropertyField* propertyDef = mValueProperties[i];
+					auto propertyDef = mValueProperties[i];
 					propertyDef->SetValueAndPrototypeProxy(itemTargetValues);
 					UpdateElementCaption(propertyDef);
 				}
@@ -285,10 +283,10 @@ namespace Editor
 	{
 		mSpoiler->SetCaption(text);
 
-		Text* spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
+		auto spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
 		if (spoilerCaptionLayer)
 		{
-			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetFontHeight());
+			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont(), spoilerCaptionLayer->GetFontHeight());
 			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
 		}
 	}
@@ -298,7 +296,7 @@ namespace Editor
 		return mSpoiler->GetCaption();
 	}
 
-	Button* VectorProperty::GetRemoveButton()
+	Ref<Button> VectorProperty::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
@@ -331,25 +329,25 @@ namespace Editor
 		return mSpoiler->IsExpanded();
 	}
 
-	void* VectorProperty::GetProxyValuePointer(IAbstractValueProxy* proxy) const
+	void* VectorProperty::GetProxyValuePointer(const Ref<IAbstractValueProxy>& proxy) const
 	{
-		IPointerValueProxy* variableProxy = dynamic_cast<IPointerValueProxy*>(proxy);
+		auto variableProxy = DynamicCast<IPointerValueProxy>(proxy);
 		if (variableProxy)
 			return variableProxy->GetValueVoidPointer();
 
 		return nullptr;
 	}
 
-	VectorProperty::IPropertyField* VectorProperty::GetFreeValueProperty()
+	Ref<VectorProperty::IPropertyField> VectorProperty::GetFreeValueProperty()
 	{
 		if (!mValuePropertiesPool.IsEmpty())
 			return mValuePropertiesPool.PopBack();
 
-		IPropertyField* res = o2EditorProperties.CreateFieldProperty(mVectorType->GetElementType(), "Element", 
-																	 onChangeCompleted, onChanged);
-		res->SetParentContext(mParentContext);
+		auto res = o2EditorProperties.CreateFieldProperty(mVectorType->GetElementType(), "Element", 
+														  onChangeCompleted, onChanged);
+		res->SetParentContext(mParentContext.Lock());
 
-		res->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
+		res->AddLayer("drag", mmake<Sprite>("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
 
 		if (res)
 			res->SetFieldInfo(mFieldInfo);
@@ -357,12 +355,12 @@ namespace Editor
 		return res;
 	}
 
-	void VectorProperty::FreeValueProperty(IPropertyField* def)
+	void VectorProperty::FreeValueProperty(const Ref<IPropertyField>& def)
 	{
 		mValuePropertiesPool.Add(def);
 	}
 
-	void VectorProperty::OnCountChanged(IPropertyField* def)
+	void VectorProperty::OnCountChanged(const Ref<IPropertyField>& def)
 	{
 		if (mIsRefreshing)
 			return;
@@ -381,7 +379,7 @@ namespace Editor
 		Refresh();
 	}
 
-	VectorProperty::TargetObjectData VectorProperty::GetObjectFromProxy(IAbstractValueProxy* proxy)
+	VectorProperty::TargetObjectData VectorProperty::GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy)
 	{
 		TargetObjectData res;
 
@@ -390,11 +388,13 @@ namespace Editor
 
 		res.proxy = proxy;
 
-		if (auto pointerProxy = dynamic_cast<IPointerValueProxy*>(proxy)) {
+		if (auto pointerProxy = DynamicCast<IPointerValueProxy>(proxy)) 
+		{
 			res.data = pointerProxy->GetValueVoidPointer();
 			res.isCreated = false;
 		}
-		else {
+		else
+		{
 			void* sample = proxy->GetType().CreateSample();
 			proxy->GetValuePtr(sample);
 
@@ -445,7 +445,7 @@ namespace Editor
 		if (prevValues != newValues)
 			onChangeCompleted(mValuesPath + "/count", prevValues, newValues);
 
-		onChanged(this);
+		onChanged(Ref(this));
 		o2EditorSceneScreen.OnSceneChanged();
 	}
 
@@ -469,18 +469,18 @@ namespace Editor
 		if (prevValues != newValues)
 			onChangeCompleted(mValuesPath, prevValues, newValues);
 
-		onChanged(this);
+		onChanged(Ref(this));
 		o2EditorSceneScreen.OnSceneChanged();
 	}
 
-	void VectorProperty::UpdateElementCaption(IPropertyField* propertyDef) const
+	void VectorProperty::UpdateElementCaption(const Ref<IPropertyField>& propertyDef) const
 	{
 		auto& proxies = propertyDef->GetValueAndPrototypeProxy();
 		if (!proxies.IsEmpty())
 		{
 			const Type* itemType = &proxies[0].first->GetType();
 			if (auto ptrType = dynamic_cast<const PointerType*>(itemType))
-				itemType = ptrType->GetUnpointedType();
+				itemType = ptrType->GetBaseType();
 
 			if (auto objectType = dynamic_cast<const ObjectType*>(itemType))
 			{
@@ -526,6 +526,8 @@ namespace Editor
 		proxy->SetValuePtr(data);
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::VectorProperty>);
 // --- META ---
 
 DECLARE_CLASS(Editor::VectorProperty, Editor__VectorProperty);

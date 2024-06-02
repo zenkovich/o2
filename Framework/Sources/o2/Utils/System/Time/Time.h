@@ -4,6 +4,7 @@
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/System/Time/TimeStamp.h"
 #include "o2/Utils/Types/CommonTypes.h"
+#include "o2/Utils/Types/Ref.h"
 
 // Time stuff access macros
 #define o2Time o2::Time::Instance()
@@ -13,9 +14,12 @@ namespace o2
     // -------------
     // Timing system
     // -------------
-    class Time: public Singleton<Time>
+    class Time: public Singleton<Time>, public RefCounterable
     {
     public:
+        // Default constructor
+        Time();
+
         // Destructor
         ~Time();
 
@@ -59,9 +63,5 @@ namespace o2
         float mFPSSum;              // Summary of fps
         float mFramesSum;           // Frames summary
         float mLastFPSCheckingTime; // Last average fps checking time
-
-    protected:
-        // Default constructor
-        Time();
     };
 }

@@ -14,15 +14,15 @@
 
 namespace o2
 {
-    Window::Window():
-        ScrollArea()
+    Window::Window(RefCounter* refCounter):
+        ScrollArea(refCounter)
     {
         InitializeHandles();
         InitializeContextMenu();
     }
 
-    Window::Window(const Window& other):
-        ScrollArea(other), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
+    Window::Window(RefCounter* refCounter, const Window& other):
+        ScrollArea(refCounter, other), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
         mTopDragAreaLayout(other.mTopDragAreaLayout), mBottomDragAreaLayout(other.mBottomDragAreaLayout),
         mLeftDragAreaLayout(other.mLeftDragAreaLayout), mRightDragAreaLayout(other.mRightDragAreaLayout),
         mLeftTopDragAreaLayout(other.mLeftTopDragAreaLayout), mRightTopDragAreaLayout(other.mRightTopDragAreaLayout),
@@ -64,42 +64,42 @@ namespace o2
     {
         if (!mResEnabledInHierarchy || mIsClipped) 
         {
-            for (auto child : mChildrenInheritedDepth)
+            for (auto& child : mChildrenInheritedDepth)
                 child->Draw();
 
             return;
         }
 
-        mBackCursorArea.OnDrawn();
+        mBackCursorArea->OnDrawn();
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         IDrawable::OnDrawn();
 
         o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
 
         o2Render.DisableScissorTest();
 
         CursorAreaEventsListener::OnDrawn();
 
-        mHeadDragHandle.OnDrawn();
-        mTopDragHandle.OnDrawn();
-        mBottomDragHandle.OnDrawn();
-        mLeftDragHandle.OnDrawn();
-        mRightDragHandle.OnDrawn();
-        mLeftTopDragHandle.OnDrawn();
-        mRightTopDragHandle.OnDrawn();
-        mLeftBottomDragHandle.OnDrawn();
-        mRightBottomDragHandle.OnDrawn();
+        mHeadDragHandle->OnDrawn();
+        mTopDragHandle->OnDrawn();
+        mBottomDragHandle->OnDrawn();
+        mLeftDragHandle->OnDrawn();
+        mRightDragHandle->OnDrawn();
+        mLeftTopDragHandle->OnDrawn();
+        mRightTopDragHandle->OnDrawn();
+        mLeftBottomDragHandle->OnDrawn();
+        mRightBottomDragHandle->OnDrawn();
 
-        for (auto child : mInternalWidgets)
+        for (auto& child : mInternalWidgets)
             child->Draw();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         DrawDebugFrame();
@@ -111,23 +111,17 @@ namespace o2
         SetModal(true);
     }
 
-    void Window::SetIcon(Sprite* icon)
+    void Window::SetIcon(const Ref<Sprite>& icon)
     {
-        auto iconLayer = GetLayer(mIconLayerPath);
-        if (iconLayer)
-        {
-            if (iconLayer->GetDrawable())
-                delete iconLayer->GetDrawable();
-
+        if (auto iconLayer = GetLayer(mIconLayerPath))
             iconLayer->SetDrawable(icon);
-        }
     }
 
-    Sprite* Window::GetIcon() const
+    Ref<Sprite> Window::GetIcon() const
     {
         auto iconLayer = GetLayer(mIconLayerPath);
         if (iconLayer)
-            return dynamic_cast<Sprite*>(iconLayer->GetDrawable());
+            return DynamicCast<Sprite>(iconLayer->GetDrawable());
 
         return nullptr;
     }
@@ -153,7 +147,7 @@ namespace o2
         auto captionLayer = GetLayer(mCaptionLayerPath);
         if (captionLayer)
         {
-            if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
+            if (auto textDrawable = DynamicCast<Text>(captionLayer->GetDrawable()))
                 textDrawable->SetText(caption);
         }
     }
@@ -163,14 +157,14 @@ namespace o2
         auto captionLayer = GetLayer(mCaptionLayerPath);
         if (captionLayer)
         {
-            if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
+            if (auto textDrawable = DynamicCast<Text>(captionLayer->GetDrawable()))
                 return textDrawable->GetText();
         }
 
         return WString();
     }
 
-    ContextMenu* Window::GetOptionsMenu() const
+    const Ref<ContextMenu>& Window::GetOptionsMenu() const
     {
         return mOptionsMenu;
     }
@@ -197,12 +191,12 @@ namespace o2
 
     void Window::SetModal(bool isModal)
     {
-        mBackCursorArea.interactable = isModal;
+        mBackCursorArea->interactable = isModal;
     }
 
     bool Window::IsModal() const
     {
-        return mBackCursorArea.IsInteractable();
+        return mBackCursorArea->IsInteractable();
     }
 
     void Window::UpdateSelfTransform()
@@ -222,72 +216,82 @@ namespace o2
 
     CursorEventsArea& Window::GetBackCursorListener()
     {
-        return mBackCursorArea;
+        return *mBackCursorArea;
     }
 
     void Window::InitializeHandles()
     {
-        mBackCursorArea.isUnderPoint = [&](const Vec2F& point) { return true; };
-        mBackCursorArea.interactable = false;
+        mBackCursorArea = mmake<CursorEventsArea>();
+        mBackCursorArea->isUnderPoint = [&](const Vec2F& point) { return true; };
+        mBackCursorArea->interactable = false;
 
-        mHeadDragHandle.isUnderPoint = [&](const Vec2F& point) { return mHeadDragAreaRect.IsInside(point); };
-        mHeadDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->position += cursor.delta; };
-        mHeadDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mHeadDragHandle = mmake<CursorEventsArea>();
+        mHeadDragHandle->isUnderPoint = [&](const Vec2F& point) { return mHeadDragAreaRect.IsInside(point); };
+        mHeadDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->position += cursor.delta; };
+        mHeadDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 
-        mTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mTopDragAreaRect.IsInside(point); };
-        mTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->worldTop += cursor.delta.y; };
-        mTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mTopDragHandle.cursorType = CursorType::SizeNS;
+        mTopDragHandle = mmake<CursorEventsArea>();
+        mTopDragHandle->isUnderPoint = [&](const Vec2F& point) { return mTopDragAreaRect.IsInside(point); };
+        mTopDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->worldTop += cursor.delta.y; };
+        mTopDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mTopDragHandle->cursorType = CursorType::SizeNS;
 
-        mBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mBottomDragAreaRect.IsInside(point); };
-        mBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->worldBottom += cursor.delta.y; };
-        mBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mBottomDragHandle.cursorType = CursorType::SizeNS;
+        mBottomDragHandle = mmake<CursorEventsArea>();
+        mBottomDragHandle->isUnderPoint = [&](const Vec2F& point) { return mBottomDragAreaRect.IsInside(point); };
+        mBottomDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->worldBottom += cursor.delta.y; };
+        mBottomDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mBottomDragHandle->cursorType = CursorType::SizeNS;
 
-        mLeftDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftDragAreaRect.IsInside(point); };
-        mLeftDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->left += cursor.delta.x; };
-        mLeftDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mLeftDragHandle.cursorType = CursorType::SizeWE;
+        mLeftDragHandle = mmake<CursorEventsArea>();
+        mLeftDragHandle->isUnderPoint = [&](const Vec2F& point) { return mLeftDragAreaRect.IsInside(point); };
+        mLeftDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->left += cursor.delta.x; };
+        mLeftDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mLeftDragHandle->cursorType = CursorType::SizeWE;
 
-        mRightDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightDragAreaRect.IsInside(point); };
-        mRightDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->right += cursor.delta.x; };
-        mRightDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mRightDragHandle.cursorType = CursorType::SizeWE;
+        mRightDragHandle = mmake<CursorEventsArea>();
+        mRightDragHandle->isUnderPoint = [&](const Vec2F& point) { return mRightDragAreaRect.IsInside(point); };
+        mRightDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->right += cursor.delta.x; };
+        mRightDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mRightDragHandle->cursorType = CursorType::SizeWE;
 
-        mLeftTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftTopDragAreaRect.IsInside(point); };
-        mLeftTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->worldLeftTop += cursor.delta; };
-        mLeftTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mLeftTopDragHandle.cursorType = CursorType::SizeNwSe;
+        mLeftTopDragHandle = mmake<CursorEventsArea>();
+        mLeftTopDragHandle->isUnderPoint = [&](const Vec2F& point) { return mLeftTopDragAreaRect.IsInside(point); };
+        mLeftTopDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->worldLeftTop += cursor.delta; };
+        mLeftTopDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mLeftTopDragHandle->cursorType = CursorType::SizeNwSe;
 
-        mLeftBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftBottomDragAreaRect.IsInside(point); };
-        mLeftBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->leftBottom += cursor.delta; };
-        mLeftBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mLeftBottomDragHandle.cursorType = CursorType::SizeNeSw;
+        mLeftBottomDragHandle = mmake<CursorEventsArea>();
+        mLeftBottomDragHandle->isUnderPoint = [&](const Vec2F& point) { return mLeftBottomDragAreaRect.IsInside(point); };
+        mLeftBottomDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->leftBottom += cursor.delta; };
+        mLeftBottomDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mLeftBottomDragHandle->cursorType = CursorType::SizeNeSw;
 
-        mRightTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightTopDragAreaRect.IsInside(point); };
-        mRightTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->rightTop += cursor.delta; };
-        mRightTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mRightTopDragHandle.cursorType = CursorType::SizeNeSw;
+        mRightTopDragHandle = mmake<CursorEventsArea>();
+        mRightTopDragHandle->isUnderPoint = [&](const Vec2F& point) { return mRightTopDragAreaRect.IsInside(point); };
+        mRightTopDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->rightTop += cursor.delta; };
+        mRightTopDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mRightTopDragHandle->cursorType = CursorType::SizeNeSw;
 
-        mRightBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightBottomDragAreaRect.IsInside(point); };
-        mRightBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout->rightBottom += cursor.delta; };
-        mRightBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
-        mRightBottomDragHandle.cursorType = CursorType::SizeNwSe;
+        mRightBottomDragHandle = mmake<CursorEventsArea>();
+        mRightBottomDragHandle->isUnderPoint = [&](const Vec2F& point) { return mRightBottomDragAreaRect.IsInside(point); };
+        mRightBottomDragHandle->onMoved = [&](const Input::Cursor& cursor) { layout->rightBottom += cursor.delta; };
+        mRightBottomDragHandle->onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
+        mRightBottomDragHandle->cursorType = CursorType::SizeNwSe;
 
         BindHandlesInteractableToVisibility();
     }
 
     void Window::SetHandlesInteractable(bool interactable)
     {
-        mHeadDragHandle.interactable        = interactable;
-        mTopDragHandle.interactable         = interactable;
-        mBottomDragHandle.interactable      = interactable;
-        mLeftDragHandle.interactable        = interactable;
-        mRightDragHandle.interactable       = interactable;
-        mLeftTopDragHandle.interactable     = interactable;
-        mRightTopDragHandle.interactable    = interactable;
-        mLeftBottomDragHandle.interactable  = interactable;
-        mRightBottomDragHandle.interactable = interactable;
+        mHeadDragHandle->interactable        = interactable;
+        mTopDragHandle->interactable         = interactable;
+        mBottomDragHandle->interactable      = interactable;
+        mLeftDragHandle->interactable        = interactable;
+        mRightDragHandle->interactable       = interactable;
+        mLeftTopDragHandle->interactable     = interactable;
+        mRightTopDragHandle->interactable    = interactable;
+        mLeftBottomDragHandle->interactable  = interactable;
+        mRightBottomDragHandle->interactable = interactable;
     }
 
     void Window::BindHandlesInteractableToVisibility()
@@ -302,7 +306,7 @@ namespace o2
     void Window::OnFocused()
     {
         if (mParent)
-            SetIndexInSiblings(mParent->GetChildren().Count() - 1);
+            SetIndexInSiblings(mParent.Lock()->GetChildren().Count() - 1);
 
         SetLastOnCurrentDepth();
 
@@ -313,7 +317,7 @@ namespace o2
     {
         ScrollArea::OnEnabled();
 
-        interactable = true;
+        SetInteractable(true);
         Focus();
         onOpened();
     }
@@ -322,21 +326,21 @@ namespace o2
     {
         ScrollArea::OnDisabled();
 
-        interactable = false;
+        SetInteractable(false);
         onClosed();
     }
 
-    void Window::OnChildFocused(Widget* child)
+    void Window::OnChildFocused(const Ref<Widget>& child)
     {
         OnFocused();
     }
 
     void Window::OnCursorPressed(const Input::Cursor& cursor)
     {
-        o2UI.FocusWidget(this);
+        o2UI.FocusWidget(Ref(this));
     }
 
-    void Window::OnStateAdded(WidgetState* state)
+    void Window::OnStateAdded(const Ref<WidgetState>& state)
     {
         BindHandlesInteractableToVisibility();
     }
@@ -352,8 +356,8 @@ namespace o2
         InitializeContextItems();
         AddInternalWidget(mOptionsMenu);
 
-        Button* optionsBtn = dynamic_cast<Button*>(mInternalWidgets.FindOrDefault(
-            [](Widget* x) { return x->GetName() == "optionsButton" && x->GetType() == TypeOf(Button); }));
+        auto optionsBtn = DynamicCast<Button>(mInternalWidgets.FindOrDefault(
+            [](auto& x) { return x->GetName() == "optionsButton" && x->GetType() == TypeOf(Button); }));
 
         if (optionsBtn)
             optionsBtn->onClick += [=]() { mOptionsMenu->Show(optionsBtn->transform->worldCenter); };
@@ -365,19 +369,18 @@ namespace o2
     }
 
     void Window::RestoreControls()
-    {
-        Button* closeBtn = dynamic_cast<Button*>(mInternalWidgets.FindOrDefault(
-            [](Widget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(Button); }));
+	{
+		auto closeBtn = DynamicCast<Button>(mInternalWidgets.FindOrDefault(
+            [](auto& x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(Button); }));
 
         if (closeBtn)
             closeBtn->onClick += [&]() { Hide(); };
 
-        for (auto element : mInternalWidgets)
+        for (auto& element : mInternalWidgets)
         {
             if (element->GetName() == "options context" && element->GetType() == TypeOf(ContextMenu))
             {
                 element->SetInternalParent(nullptr);
-                delete element;
                 break;
             }
         }
@@ -390,6 +393,8 @@ namespace o2
         return "Window";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Window>);
 // --- META ---
 
 DECLARE_CLASS(o2::Window, o2__Window);

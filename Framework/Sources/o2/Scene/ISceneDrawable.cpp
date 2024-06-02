@@ -9,20 +9,19 @@
 namespace o2
 {
     ISceneDrawable::ISceneDrawable()
-    {
-    }
+    {}
 
     ISceneDrawable::ISceneDrawable(const ISceneDrawable& other) :
-        mDrawingDepth(other.mDrawingDepth), mInheritDrawingDepthFromParent(other.mInheritDrawingDepthFromParent), drawDepth(this)
-    {
-    }
+        mDrawingDepth(other.mDrawingDepth), 
+        mInheritDrawingDepthFromParent(other.mInheritDrawingDepthFromParent), drawDepth(this)
+    {}
 
     ISceneDrawable::~ISceneDrawable()
     {
         if (mRegistered)
             Unregister();
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
         {
             child->mParentRegistry = nullptr;
             child->mRegistered = false;
@@ -45,7 +44,7 @@ namespace o2
 
         OnDrawn();
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
     }
 
@@ -86,7 +85,7 @@ namespace o2
 
     void ISceneDrawable::SortInheritedDrawables()
     {
-        mChildrenInheritedDepth.SortBy<int>([](ISceneDrawable* x) { return x->GetIndexInParentDrawable(); });
+        mChildrenInheritedDepth.SortBy<int>([](const Ref<ISceneDrawable>& x) { return x->GetIndexInParentDrawable(); });
     }
 
     void ISceneDrawable::OnEnabled()
@@ -138,15 +137,13 @@ namespace o2
             {
                 mParentRegistry = GetParentDrawable();
                 if (!mParentRegistry && mIsOnScene)
-                    mParentRegistry = &GetSceneDrawableSceneLayer()->GetRootDrawables();
+                    mParentRegistry = GetSceneDrawableSceneLayer()->GetRootDrawables();
 
                 if (mParentRegistry)
                 {
-//                     if (mParentRegistry->mChildrenInheritedDepth.Contains(this))
-//                         o2Debug.Log("asd");
-
-                    mParentRegistry->mChildrenInheritedDepth.Add(this);
-                    mParentRegistry->SortInheritedDrawables();
+                    auto parentRegistry = mParentRegistry.Lock();
+                    parentRegistry->mChildrenInheritedDepth.Add(Ref(this));
+                    parentRegistry->SortInheritedDrawables();
 
                     mRegistered = true;
                 }
@@ -157,7 +154,7 @@ namespace o2
             if (mDrawableEnabled && mIsOnScene)
             {
                 mLayerRegistry = GetSceneDrawableSceneLayer();
-                mLayerRegistry->RegisterDrawable(this);
+                mLayerRegistry.Lock()->RegisterDrawable(this);
 
                 mRegistered = true;
             }
@@ -168,9 +165,9 @@ namespace o2
     void ISceneDrawable::Unregister()
     {
         if (mParentRegistry)
-            mParentRegistry->mChildrenInheritedDepth.Remove(this);
+            mParentRegistry.Lock()->mChildrenInheritedDepth.Remove(Ref(this));
         else
-            mLayerRegistry->UnregisterDrawable(this);
+            mLayerRegistry.Lock()->UnregisterDrawable(this);
 
         mParentRegistry = nullptr;
         mLayerRegistry = nullptr;
@@ -184,21 +181,22 @@ namespace o2
             return;
 
         if (mParentRegistry)
-        {
-            mParentRegistry->mChildrenInheritedDepth.Remove(this);
-            mParentRegistry->mChildrenInheritedDepth.Add(this);
+		{
+			auto parentRegistry = mParentRegistry.Lock();
+            parentRegistry->mChildrenInheritedDepth.Remove(Ref(this));
+            parentRegistry->mChildrenInheritedDepth.Add(Ref(this));
         }
         else
-            mLayerRegistry->SetLastByDepth(this);
+            mLayerRegistry.Lock()->SetLastByDepth(Ref(this));
     }
 
-    const Vector<ISceneDrawable*>& ISceneDrawable::GetChildrenInheritedDepth() const
+    const Vector<Ref<ISceneDrawable>>& ISceneDrawable::GetChildrenInheritedDepth() const
     {
         return mChildrenInheritedDepth;
     }
 
 #if IS_EDITOR
-    SceneEditableObject* ISceneDrawable::GetEditableOwner()
+    Ref<SceneEditableObject> ISceneDrawable::GetEditableOwner()
     {
         return nullptr;
     }

@@ -9,31 +9,19 @@
 namespace o2
 {
     ActorAsset::ActorAsset():
-        mActor(mnew Actor(ActorCreateMode::NotInScene))
+        mActor(mmake<Actor>(ActorCreateMode::NotInScene))
     {
         mActor->mIsAsset = true;
         mActor->mAssetId = ID();
-        mOwnActor = true;
     }
 
     ActorAsset::ActorAsset(const ActorAsset& other):
         AssetWithDefaultMeta<ActorAsset>(other)
     {
-        if (other.mOwnActor)
-        {
-            mActor = other.mActor->CloneAs<Actor>();
-            mActor->mIsAsset = true;
-            mActor->mAssetId = ID();
-            mOwnActor = true;
-        }
-        else
-        {
-            mActor = other.mActor;
-            mOwnActor = false;
-        }
+        mActor = other.mActor;
     }
 
-    ActorAsset::ActorAsset(Actor* actor):
+    ActorAsset::ActorAsset(const Ref<Actor>& actor):
         mActor(actor)
     {
         if (!actor->IsAsset())
@@ -44,50 +32,27 @@ namespace o2
         }
         else
             ID() = mActor->mAssetId;
-
-        mOwnActor = false;
     }
 
     ActorAsset::~ActorAsset()
     {
-        if (mOwnActor)
-            delete mActor;
     }
 
     ActorAsset& ActorAsset::operator=(const ActorAsset& other)
     {
         Asset::operator=(other);
 
-        if (mOwnActor)
-            delete mActor;
-        
-        if (other.mOwnActor)
-        {
-            mActor = other.mActor->CloneAs<Actor>();
-            mActor->mIsAsset = true;
-            mActor->mAssetId = ID();
-            mOwnActor = true;
-        }
-        else
-        {
-            mActor = other.mActor;
-            mOwnActor = false;
-        }
+        mActor = other.mActor;
 
         return *this;
     }
 
-    ActorRef ActorAsset::Instantiate() const
+    Ref<Actor> ActorAsset::Instantiate() const
     {
         if (!mActor)
             return nullptr;
 
-        return mActor->CloneAs<Actor>();
-    }
-
-    ActorAsset::Meta* ActorAsset::GetMeta() const
-    {
-        return (Meta*)mInfo.meta;
+        return mActor->CloneAsRef<Actor>();
     }
 
     Vector<String> ActorAsset::GetFileExtensions()
@@ -110,29 +75,24 @@ namespace o2
 
     void ActorAsset::OnDeserialized(const DataValue& node)
     {
-        mActor = node["mActor"];
+        node["mActor"].Get(mActor);
 
         if (mActor)
         {
             mActor->RemoveFromScene();
             mActor->mIsAsset = true;
             mActor->mAssetId = GetUID();
-            mOwnActor = true;
         }
     }
 
-    Actor* ActorAsset::GetActor() const
+    const Ref<Actor>& ActorAsset::GetActor() const
     {
         return mActor;
     }
 
-    void ActorAsset::SetActor(Actor* actor, bool own /*= true*/)
+    void ActorAsset::SetActor(const Ref<Actor>& actor)
     {
-        if (mActor && mOwnActor)
-            delete mActor;
-
         mActor = actor;
-        mOwnActor = own;
 
         if (mActor)
         {
@@ -151,7 +111,8 @@ namespace o2
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::ActorAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::ActorAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ActorAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::ActorAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::AssetWithDefaultMeta<o2::ActorAsset>>);
 // --- META ---
 
 DECLARE_CLASS(o2::ActorAsset, o2__ActorAsset);

@@ -12,9 +12,10 @@ DECLARE_SINGLETON(Editor::CurveEditorDlg);
 
 namespace Editor
 {
-	CurveEditorDlg::CurveEditorDlg()
+	CurveEditorDlg::CurveEditorDlg(RefCounter* refCounter):
+		CursorEventsListener(refCounter)
 	{
-		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
+		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
 
 		InitializeControls();
 
@@ -26,10 +27,7 @@ namespace Editor
 	}
 
 	CurveEditorDlg::~CurveEditorDlg()
-	{
-		if (mWindow)
-			delete mWindow;
-	}
+	{}
 
 	void CurveEditorDlg::OnHide()
 	{
@@ -39,7 +37,7 @@ namespace Editor
 
 	void CurveEditorDlg::InitializeControls()
 	{
-		mEditorWidget = mnew CurvesEditor();
+		mEditorWidget = mmake<CurvesEditor>();
 		*mEditorWidget->layout = WidgetLayout::BothStretch(0, 5, 5, 0);
 
 		auto horScroll = o2UI.CreateHorScrollBar();
@@ -50,22 +48,22 @@ namespace Editor
 		*verScroll->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 10, -10);
 		mEditorWidget->SetVerScrollbar(verScroll);
 
-		mEditorWidget->SetMainHandleImages(ImageAssetRef("ui/CurveHandle.png"),
-										   ImageAssetRef("ui/CurveHandleHover.png"),
-										   ImageAssetRef("ui/CurveHandlePressed.png"),
-										   ImageAssetRef("ui/CurveHandleSelected.png"));
+		mEditorWidget->SetMainHandleImages(AssetRef<ImageAsset>("ui/CurveHandle.png"),
+										   AssetRef<ImageAsset>("ui/CurveHandleHover.png"),
+										   AssetRef<ImageAsset>("ui/CurveHandlePressed.png"),
+										   AssetRef<ImageAsset>("ui/CurveHandleSelected.png"));
 
-		mEditorWidget->SetSupportHandleImages(ImageAssetRef("ui/CurveSupportHandle.png"),
-											  ImageAssetRef("ui/CurveSupportHandleHover.png"),
-											  ImageAssetRef("ui/CurveSupportHandlePressed.png"),
-											  ImageAssetRef("ui/CurveSupportHandleSelected.png"));
+		mEditorWidget->SetSupportHandleImages(AssetRef<ImageAsset>("ui/CurveSupportHandle.png"),
+											  AssetRef<ImageAsset>("ui/CurveSupportHandleHover.png"),
+											  AssetRef<ImageAsset>("ui/CurveSupportHandlePressed.png"),
+											  AssetRef<ImageAsset>("ui/CurveSupportHandleSelected.png"));
 
-		mEditorWidget->SetSelectionSpriteImage(ImageAssetRef("ui/UI_Window_place.png"));
+		mEditorWidget->SetSelectionSpriteImage(AssetRef<ImageAsset>("ui/UI_Window_place.png"));
 
 		mWindow->AddChild(mEditorWidget);
 	}
 
-	void CurveEditorDlg::Show(Function<void()> onChanged, Function<void()> onCompleted /*= Function<void()>()*/)
+	void CurveEditorDlg::Show(const Function<void()>& onChanged, const Function<void()>& onCompleted /*= Function<void()>()*/)
 	{
 		mInstance->mWindow->ShowModal();
 		mInstance->mOnChangedCallback = onChanged;
@@ -73,12 +71,12 @@ namespace Editor
 		mInstance->mEditorWidget->RemoveAllCurves();
 	}
 
-	void CurveEditorDlg::AddEditingCurve(const String& id, Curve* curve, const Color4& color /*= Color4::Green()*/)
+	void CurveEditorDlg::AddEditingCurve(const String& id, const Ref<Curve>& curve, const Color4& color /*= Color4::Green()*/)
 	{
 		mInstance->mEditorWidget->AddCurve(id, curve, color);
 	}
 
-	void CurveEditorDlg::RemoveEditingCurve(Curve* curve)
+	void CurveEditorDlg::RemoveEditingCurve(const Ref<Curve>& curve)
 	{
 		mInstance->mEditorWidget->RemoveCurve(curve);
 	}
@@ -93,12 +91,12 @@ namespace Editor
 		mInstance->mEditorWidget->RemoveAllCurves();
 	}
 
-	void CurveEditorDlg::AddCurvesRange(Curve* curveA, Curve* curveB, const Color4& color /*= Color4::Green()*/)
+	void CurveEditorDlg::AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color /*= Color4::Green()*/)
 	{
 		mInstance->mEditorWidget->AddCurvesRange(curveA, curveB, color);
 	}
 
-	void CurveEditorDlg::RemoveCurvesRange(Curve* curveA, Curve* curveB)
+	void CurveEditorDlg::RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB)
 	{
 		mInstance->mEditorWidget->RemoveCurvesRange(curveA, curveB);
 	}

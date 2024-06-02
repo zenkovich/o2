@@ -6,15 +6,15 @@ using namespace o2;
 
 namespace o2
 {
-	class Button;
-	class WidgetDragHandle;
+	FORWARD_CLASS_REF(Button);
+	FORWARD_CLASS_REF(WidgetDragHandle);
 }
 
 namespace Editor
 {
-	class AssetProperty;
-	class BorderIProperty;
-	class ImageSlicesEditorWidget;
+	FORWARD_CLASS_REF(AssetProperty);
+	FORWARD_CLASS_REF(BorderIProperty);
+	FORWARD_CLASS_REF(ImageSlicesEditorWidget);
 
 	// ------------------
 	// Image asset viewer
@@ -31,10 +31,10 @@ namespace Editor
 		IOBJECT(ImageAssetViewer);
 
 	private:
-		ImageSlicesEditorWidget* mSlicesEditor = nullptr; // Slices editor widget
+		Ref<ImageSlicesEditorWidget> mSlicesEditor; // Slices editor widget
 
-		Vector<IAbstractValueProxy*> mAtlasProxies;            // Atlas proxies for property, converts UID to AtlasAssetRef and back
-		AssetProperty*               mAtlasProperty = nullptr; // Atlas property
+		Vector<Ref<IAbstractValueProxy>> mAtlasProxies;  // Atlas proxies for property, converts UID to AssetRef<AtlasAsset> and back
+		Ref<AssetProperty>               mAtlasProperty; // Atlas property
 
 	private:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -53,9 +53,9 @@ CLASS_BASES_META(Editor::ImageAssetViewer)
 END_META;
 CLASS_FIELDS_META(Editor::ImageAssetViewer)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSlicesEditor);
+    FIELD().PRIVATE().NAME(mSlicesEditor);
     FIELD().PRIVATE().NAME(mAtlasProxies);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAtlasProperty);
+    FIELD().PRIVATE().NAME(mAtlasProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageAssetViewer)

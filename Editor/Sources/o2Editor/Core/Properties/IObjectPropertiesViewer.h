@@ -14,16 +14,16 @@ namespace o2
 
 namespace Editor
 {
-	class IPropertyField;
+	FORWARD_CLASS_REF(IPropertyField);
 
 	// ----------------------------------------------------------------------------------
 	// Object properties viewer interface. Used in IObjectProperty and IObjectPtrProperty
 	// Override this class to create new object properties viewer
 	// ----------------------------------------------------------------------------------
-	class IObjectPropertiesViewer : public IObject
+	class IObjectPropertiesViewer : public IObject, public RefCounterable
 	{
 	public:
-		typedef Function<void(IPropertyField*)> OnChangedFunc;
+		typedef Function<void(const Ref<IPropertyField>&)> OnChangedFunc;
 		typedef Function<void(const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)> OnChangeCompletedFunc;
 
 	public:
@@ -46,10 +46,10 @@ namespace Editor
 		static const Type* GetViewingObjectTypeStatic();
 
 		// Sets parent context
-		void SetParentContext(PropertiesContext* context);
+		void SetParentContext(const Ref<PropertiesContext>& context);
 
 		// Returns view widget
-		Spoiler* GetSpoiler();
+		const Ref<Spoiler>& GetSpoiler();
 
 		// Sets is header enabled and properties can be collapsed in spoiler
 		virtual void SetHeaderEnabled(bool enabled);
@@ -81,21 +81,21 @@ namespace Editor
 		IOBJECT(IObjectPropertiesViewer);
 
 	protected:
-		Spoiler* mSpoiler = nullptr;    // Properties spoiler. Expands forcible when viewer hasn't header
-		bool     mHeaderEnabled = true; // Is header enabled and properties hiding in spoiler
+		Ref<Spoiler> mSpoiler;              // Properties spoiler. Expands forcible when viewer hasn't header
+		bool         mHeaderEnabled = true; // Is header enabled and properties hiding in spoiler
 
 		bool mPropertiesBuilt = false; // True when properties built at first refreshing
 
 		Vector<Pair<IObject*, IObject*>> mTargetObjects; // Target objects
 
-		PropertiesContext mPropertiesContext; // Field properties information
+		Ref<PropertiesContext> mPropertiesContext; // Field properties information
 
 		OnChangeCompletedFunc mOnChildFieldChangeCompleted; // Default field change completed callback, calls
 		                                                    // inChangeCompleted from this with full combined path
 
 	protected:
 		// Creates spoiler for properties
-		virtual Spoiler* CreateSpoiler();
+		virtual Ref<Spoiler> CreateSpoiler();
 
 		// Called when header enable changed
 		virtual void OnHeaderEnableChanged(bool enabled) {}
@@ -167,6 +167,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IObjectPropertiesViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
@@ -174,7 +175,7 @@ CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
     FIELD().PUBLIC().NAME(onChanged);
     FIELD().PUBLIC().NAME(onChangeCompleted);
     FIELD().PUBLIC().NAME(path);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mHeaderEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPropertiesBuilt);
     FIELD().PROTECTED().NAME(mTargetObjects);
@@ -194,8 +195,8 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
-    FUNCTION().PUBLIC().SIGNATURE(Spoiler*, GetSpoiler);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, const Ref<PropertiesContext>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Spoiler>&, GetSpoiler);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsHeaderEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
@@ -205,7 +206,7 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(Spoiler*, CreateSpoiler);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Spoiler>, CreateSpoiler);
     FUNCTION().PROTECTED().SIGNATURE(void, OnHeaderEnableChanged, bool);
     FUNCTION().PROTECTED().SIGNATURE(bool, CheckBuildProperties, _tmp2);
     FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp3);

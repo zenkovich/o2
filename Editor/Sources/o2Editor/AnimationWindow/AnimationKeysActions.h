@@ -9,25 +9,25 @@ namespace Editor
 	{
 	public:
 		AnimationAddKeysAction();
-		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, KeyHandlesSheet* editor);
+		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
 
 		String GetName() const override;
 		void Redo() override;
 		void Undo() override;
 
-		SERIALIZABLE(AnimationAddKeysAction);
+        SERIALIZABLE(AnimationAddKeysAction);
 
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
 		DataDocument                mKeysData;
-		KeyHandlesSheet*            mEditor;
+		WeakRef<KeyHandlesSheet>    mEditor;
 	};
 
 	class AnimationDeleteKeysAction : public IAction
 	{
 	public:
 		AnimationDeleteKeysAction();
-		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, KeyHandlesSheet* editor);
+		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataDocument& keysData, const Ref<KeyHandlesSheet>& editor);
 
 		String GetName() const override;
 		void Redo() override;
@@ -38,7 +38,7 @@ namespace Editor
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
 		DataDocument                mKeysData;
-		KeyHandlesSheet*            mEditor;
+		WeakRef<KeyHandlesSheet>    mEditor;
 	};
 
 	class AnimationKeysChangeAction : public IAction
@@ -46,8 +46,8 @@ namespace Editor
 	public:
 		AnimationKeysChangeAction();
 		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,
-								  DataDocument& beforeKeysData, DataDocument& afterKeysData,
-								  KeyHandlesSheet* editor);
+								  const DataDocument& beforeKeysData, const DataDocument& afterKeysData,
+								  const Ref<KeyHandlesSheet>& editor);
 
 		String GetName() const override;
 		void Redo() override;
@@ -59,7 +59,7 @@ namespace Editor
 		Map<String, Vector<UInt64>> mKeys;
 		DataDocument                mBeforeKeysData;
 		DataDocument                mAfterKeysData;
-		KeyHandlesSheet*            mEditor;
+		WeakRef<KeyHandlesSheet>    mEditor;
 	};
 }
 // --- META ---
@@ -82,7 +82,7 @@ CLASS_METHODS_META(Editor::AnimationAddKeysAction)
     typedef const Map<String, Vector<UInt64>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, const DataDocument&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);
@@ -107,7 +107,7 @@ CLASS_METHODS_META(Editor::AnimationDeleteKeysAction)
     typedef const Map<String, Vector<UInt64>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, const DataDocument&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);
@@ -133,7 +133,7 @@ CLASS_METHODS_META(Editor::AnimationKeysChangeAction)
     typedef const Map<String, Vector<UInt64>>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, DataDocument&, DataDocument&, KeyHandlesSheet*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(_tmp1, const DataDocument&, const DataDocument&, const Ref<KeyHandlesSheet>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

@@ -14,11 +14,12 @@
 
 namespace o2
 {
-    ScrollArea::ScrollArea() : Widget()
+    ScrollArea::ScrollArea(RefCounter* refCounter) :
+        Widget(refCounter)
     {}
 
-    ScrollArea::ScrollArea(const ScrollArea& other) :
-        Widget(other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
+    ScrollArea::ScrollArea(RefCounter* refCounter, const ScrollArea& other) :
+        Widget(refCounter, other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
         mClipAreaLayout(other.mClipAreaLayout), mScrollPos(other.mScrollPos), mScrollSpeedDamp(other.mScrollSpeedDamp),
         mViewAreaLayout(other.mViewAreaLayout), mEnableScrollsHiding(other.mEnableScrollsHiding), scroll(this),
         horScroll(this), verScroll(this)
@@ -118,31 +119,31 @@ namespace o2
         {
             if (mIsClipped)
             {
-                for (auto child : mChildrenInheritedDepth)
+                for (auto& child : mChildrenInheritedDepth)
                     child->Draw();
             }
 
             return;
         }
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         IDrawable::OnDrawn();
 
         o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
 
         o2Render.DisableScissorTest();
 
         CursorAreaEventsListener::OnDrawn();
 
-        for (auto child : mInternalWidgets)
+        for (auto& child : mInternalWidgets)
             child->Draw();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         DrawDebugFrame();
@@ -295,7 +296,7 @@ namespace o2
         return mScrollPos.y;
     }
 
-    void ScrollArea::SetHorizontalScrollBar(HorizontalScrollBar* scrollbar, bool owner /*= true*/)
+    void ScrollArea::SetHorizontalScrollBar(const Ref<HorizontalScrollBar>& scrollbar, bool owner /*= true*/)
     {
         if (mHorScrollBar)
         {
@@ -309,7 +310,7 @@ namespace o2
         if (mHorScrollBar)
         {
             mHorScrollBar->name = "horScrollBar";
-            mHorScrollBar->SetInternalParent(this, false);
+            mHorScrollBar->SetInternalParent(Ref(this), false);
             mHorScrollBar->GetLayoutData().drivenByParent = true;
             mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
         }
@@ -318,12 +319,12 @@ namespace o2
         SetLayoutDirty();
     }
 
-    HorizontalScrollBar* ScrollArea::GetHorizontalScrollbar() const
+    const Ref<HorizontalScrollBar>& ScrollArea::GetHorizontalScrollbar() const
     {
         return mHorScrollBar;
     }
 
-    void ScrollArea::SetVerticalScrollBar(VerticalScrollBar* scrollbar, bool owner /*= true*/)
+    void ScrollArea::SetVerticalScrollBar(const Ref<VerticalScrollBar>& scrollbar, bool owner /*= true*/)
     {
         if (mVerScrollBar)
         {
@@ -337,7 +338,7 @@ namespace o2
         if (mVerScrollBar)
         {
             mVerScrollBar->name = "verScrollBar";
-            mVerScrollBar->SetInternalParent(this, false);
+            mVerScrollBar->SetInternalParent(Ref(this), false);
             mVerScrollBar->GetLayoutData().drivenByParent = true;
             mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
         }
@@ -346,7 +347,7 @@ namespace o2
         SetLayoutDirty();
     }
 
-    VerticalScrollBar* ScrollArea::GetVerticalScrollbar() const
+    const Ref<VerticalScrollBar>& ScrollArea::GetVerticalScrollbar() const
     {
         return mVerScrollBar;
     }
@@ -424,12 +425,12 @@ namespace o2
         GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
     }
 
-    void ScrollArea::OnChildAdded(Widget* child)
+    void ScrollArea::OnChildAdded(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = true;
     }
 
-    void ScrollArea::OnChildRemoved(Widget* child)
+    void ScrollArea::OnChildRemoved(const Ref<Widget>& child)
     {
         child->GetLayoutData().drivenByParent = false;
     }
@@ -504,7 +505,7 @@ namespace o2
         SetChildrenWorldRect(GetLayoutData().worldRectangle);
 
         Vec2F widgetsMove(-delta.x, delta.y);
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->MoveAndCheckClipping(widgetsMove, mAbsoluteClipArea);
 
         UpdateScrollParams();
@@ -512,7 +513,7 @@ namespace o2
 
     void ScrollArea::CheckChildrenClipping()
     {
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->CheckClipping(mAbsoluteClipArea);
     }
 
@@ -522,7 +523,7 @@ namespace o2
 
         RectF newClipArea = clipArea.GetIntersection(mAbsoluteClipArea);
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->CheckClipping(newClipArea);
     }
 
@@ -547,7 +548,7 @@ namespace o2
         Vec2F offset;
         InitializeScrollAreaRectCalculation(offset);
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             if (!child->mResEnabledInHierarchy || child->GetType() == TypeOf(ContextMenu))
                 continue;
@@ -693,17 +694,13 @@ namespace o2
         if (mHorScrollBar)
         {
             mEnableHorScroll = mHorScrollBar->IsEnabled();
-
-            if (mOwnHorScrollBar) delete mHorScrollBar;
-            else                  mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
+            mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
         }
 
         if (mVerScrollBar)
         {
             mEnableVerScroll = mVerScrollBar->IsEnabled();
-
-            if (mOwnVerScrollBar) delete mVerScrollBar;
-            else                  mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
+            mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
         }
 
         mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");
@@ -716,7 +713,7 @@ namespace o2
         if (mOwnVerScrollBar)
             mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
             child->GetLayoutData().drivenByParent = true;
 
         RetargetStatesAnimations();
@@ -746,6 +743,8 @@ namespace o2
         return "Basic";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::ScrollArea>);
 // --- META ---
 
 DECLARE_CLASS(o2::ScrollArea, o2__ScrollArea);

@@ -8,13 +8,14 @@
 
 namespace o2
 {
-    Label::Label()
+    Label::Label(RefCounter* refCounter):
+        Widget(refCounter)
     {
         CreateDefaultText();
     }
 
-    Label::Label(const Label& other):
-        Widget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow), 
+    Label::Label(RefCounter* refCounter, const Label& other):
+        Widget(refCounter, other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow),
         mExpandBorder(other.mExpandBorder), text(this), font(this), height(this), verAlign(this), horAlign(this),
         horOverflow(this), verOverflow(this), expandBorder(this), symbolsDistanceCoef(this), linesDistanceCoef(this),
         color(this)
@@ -75,7 +76,7 @@ namespace o2
             o2Render.EnableScissorTest(cutRect);
         }
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         if (enabledClipping)
@@ -86,7 +87,7 @@ namespace o2
         DrawDebugFrame();
     }
 
-    void Label::SetFont(FontRef font)
+    void Label::SetFont(const Ref<Font>& font)
     {
         if (mTextDrawable)
             mTextDrawable->SetFont(font);
@@ -94,26 +95,26 @@ namespace o2
         SetLayoutDirty();
     }
 
-    FontRef Label::GetFont() const
+    Ref<Font> Label::GetFont() const
     {
         if (mTextDrawable)
             return mTextDrawable->GetFont();
 
-        return FontRef();
+        return Ref<Font>();
     }
 
-    void Label::SetFontAsset(const FontAssetRef& asset)
+    void Label::SetFontAsset(const AssetRef<FontAsset>& asset)
     {
         if (mTextDrawable)
             mTextDrawable->SetFontAsset(asset);
     }
 
-    FontAssetRef Label::GetFontAsset() const
+    AssetRef<FontAsset> Label::GetFontAsset() const
     {
         if (mTextDrawable)
             return mTextDrawable->GetFontAsset();
 
-        return FontAssetRef();
+        return AssetRef<FontAsset>();
     }
 
     void Label::SetText(const WString& text)
@@ -326,16 +327,16 @@ namespace o2
         layout->Update();
     }
 
-    void Label::OnLayerAdded(WidgetLayer* layer)
+    void Label::OnLayerAdded(const Ref<WidgetLayer>& layer)
     {
         if (layer->name == "text" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
-            mTextDrawable = dynamic_cast<Text*>(layer->GetDrawable());
+            mTextDrawable = DynamicCast<Text>(layer->GetDrawable());
     }
 
     void Label::CreateDefaultText()
     {
-        mTextDrawable = dynamic_cast<Text*>(AddLayer("text", mnew Text())->GetDrawable());
-        mTextDrawable->SetFontAsset(VectorFontAssetRef("stdFont.ttf"));
+        mTextDrawable = DynamicCast<Text>(AddLayer("text", mmake<Text>())->GetDrawable());
+        mTextDrawable->SetFontAsset(AssetRef<VectorFontAsset>("stdFont.ttf"));
     }
 
     void Label::OnDeserialized(const DataValue& node)
@@ -350,7 +351,7 @@ namespace o2
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Label>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Label>);
 // --- META ---
 
 ENUM_META(o2::Label::HorOverflow)

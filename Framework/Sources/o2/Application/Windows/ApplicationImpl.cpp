@@ -314,13 +314,11 @@ namespace o2
             {
             case WM_LBUTTONDOWN:
             case WM_TOUCH:
-            case WM_POINTERDOWN:
             SetCapture(app->mHWnd);
             app->mInput->OnCursorPressed(cursorPos);
             break;
 
             case WM_LBUTTONUP:
-            case WM_POINTERUP:
             app->mInput->OnCursorReleased();
             ReleaseCapture();
             break;

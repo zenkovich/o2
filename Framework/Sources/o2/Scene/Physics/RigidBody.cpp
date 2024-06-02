@@ -7,11 +7,12 @@
 
 namespace o2
 {
-    RigidBody::RigidBody()
+    RigidBody::RigidBody(RefCounter* refCounter):
+        Actor(refCounter)
     {}
 
-    RigidBody::RigidBody(const RigidBody& other):
-        Actor(other), mBodyType(other.mBodyType), mMass(other.mMass), mInertia(other.mInertia),
+    RigidBody::RigidBody(RefCounter* refCounter, const RigidBody& other):
+        Actor(refCounter, other), mBodyType(other.mBodyType), mMass(other.mMass), mInertia(other.mInertia),
         mLinearDamping(other.mLinearDamping), mAngularDamping(other.mAngularDamping), mGravityScale(other.mGravityScale),
         mIsBullet(other.mIsBullet), mIsFixedRotation(other.mIsFixedRotation)
     {}
@@ -256,13 +257,13 @@ namespace o2
 
     void RigidBody::AddCollider(ICollider* collider)
     {
-        if (mColliders.Contains(collider))
+        if (mColliders.Contains(Ref(collider)))
             return;
 
         if (mBody)
             collider->AddToRigidBody(this);
 
-        mColliders.Add(collider);
+        mColliders.Add(Ref(collider));
     }
 
     void RigidBody::RemoveCollider(ICollider* collider)
@@ -270,12 +271,12 @@ namespace o2
         if (mBody)
             collider->RemoveFromRigidBody();
 
-        mColliders.Remove(collider);
+        mColliders.RemoveFirst([&](auto& x) { return x == collider; });
     }
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::RigidBody>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::RigidBody>);
 // --- META ---
 
 ENUM_META(o2::RigidBody::Type)

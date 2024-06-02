@@ -20,20 +20,21 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		TagsProperty();
+		TagsProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		TagsProperty(const TagsProperty& other);
+		TagsProperty(RefCounter* refCounter, const TagsProperty& other);
 
 		// Copy operator
 		TagsProperty& operator=(const TagsProperty& other);
 
-		IOBJECT(TagsProperty);
+		SERIALIZABLE(TagsProperty);
+        CLONEABLE_REF(TagsProperty);
 
 	protected:
-		EditBox*     mEditBox = nullptr;     // Edit box 
-		ContextMenu* mTagsContext = nullptr; // tags context
-		bool         mPushingTag = false;    // Is pushing tag and we don't need to check edit text
+		Ref<EditBox>     mEditBox;            // Edit box 
+		Ref<ContextMenu> mTagsContext;        // tags context
+		bool             mPushingTag = false; // Is pushing tag and we don't need to check edit text
 
 	protected:
 		// Updates value view
@@ -70,16 +71,16 @@ CLASS_BASES_META(Editor::TagsProperty)
 END_META;
 CLASS_FIELDS_META(Editor::TagsProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTagsContext);
+    FIELD().PROTECTED().NAME(mEditBox);
+    FIELD().PROTECTED().NAME(mTagsContext);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPushingTag);
 }
 END_META;
 CLASS_METHODS_META(Editor::TagsProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const TagsProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const TagsProperty&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const TagGroup&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);

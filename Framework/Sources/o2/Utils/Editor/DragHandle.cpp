@@ -5,10 +5,12 @@
 #include "o2/Events/EventSystem.h"
 #include "o2/Render/RectDrawable.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Utils/System/Time/Time.h"
 
 namespace o2
 {
-    DragHandle::DragHandle()
+    DragHandle::DragHandle(RefCounter* refCounter):
+        RefCounterable(refCounter)
     {
         screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
         localToScreenTransformFunc = [](const Vec2F& point) { return point; };
@@ -16,10 +18,10 @@ namespace o2
         checkSnappingFunc = [](const Vec2F& point) { return point; };
     }
 
-    DragHandle::DragHandle(IRectDrawable* regular, IRectDrawable* hover /*= nullptr*/, IRectDrawable* pressed /*= nullptr*/,
-                           IRectDrawable* selected /*= nullptr*/, IRectDrawable* selectedHovered /*= nullptr*/, 
-                           IRectDrawable* selectedPressed /*= nullptr*/) :
-        mRegularDrawable(regular), mHoverDrawable(hover), mPressedDrawable(pressed), mSelectedDrawable(selected),
+    DragHandle::DragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/,
+                           const Ref<IRectDrawable>& selected /*= nullptr*/, const Ref<IRectDrawable>& selectedHovered /*= nullptr*/,
+                           const Ref<IRectDrawable>& selectedPressed /*= nullptr*/) :
+        RefCounterable(refCounter), mRegularDrawable(regular), mHoverDrawable(hover), mPressedDrawable(pressed), mSelectedDrawable(selected),
         mSelectedHoverDrawable(selectedHovered), mSelectedPressedDrawable(selectedPressed)
     {
         screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
@@ -28,26 +30,26 @@ namespace o2
         checkSnappingFunc = [](const Vec2F& point) { return point; };
     }
 
-    DragHandle::DragHandle(const DragHandle& other) :
-        angle(this), position(this), enabled(this)
+    DragHandle::DragHandle(RefCounter* refCounter, const DragHandle& other) :
+        RefCounterable(refCounter), angle(this), position(this), enabled(this)
     {
         if (other.mRegularDrawable)
-            mRegularDrawable = other.mRegularDrawable->CloneAs<IRectDrawable>();
+            mRegularDrawable = other.mRegularDrawable->CloneAsRef<IRectDrawable>();
 
         if (other.mHoverDrawable)
-            mHoverDrawable = other.mHoverDrawable->CloneAs<IRectDrawable>();
+            mHoverDrawable = other.mHoverDrawable->CloneAsRef<IRectDrawable>();
 
         if (other.mPressedDrawable)
-            mPressedDrawable = other.mPressedDrawable->CloneAs<IRectDrawable>();
+            mPressedDrawable = other.mPressedDrawable->CloneAsRef<IRectDrawable>();
 
         if (other.mSelectedDrawable)
-            mSelectedDrawable = other.mSelectedDrawable->CloneAs<IRectDrawable>();
+            mSelectedDrawable = other.mSelectedDrawable->CloneAsRef<IRectDrawable>();
 
         if (other.mSelectedHoverDrawable)
-            mSelectedHoverDrawable = other.mSelectedHoverDrawable->CloneAs<IRectDrawable>();
+            mSelectedHoverDrawable = other.mSelectedHoverDrawable->CloneAsRef<IRectDrawable>();
 
         if (other.mSelectedPressedDrawable)
-            mSelectedPressedDrawable = other.mSelectedPressedDrawable->CloneAs<IRectDrawable>();
+            mSelectedPressedDrawable = other.mSelectedPressedDrawable->CloneAsRef<IRectDrawable>();
 
         onChangedPos = other.onChangedPos;
         screenToLocalTransformFunc = other.screenToLocalTransformFunc;
@@ -61,77 +63,55 @@ namespace o2
         SetPosition(other.mPosition);
     }
 
+    DragHandle::DragHandle():
+        DragHandle(nullptr)
+    {}
+
+    DragHandle::DragHandle(const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/,
+                           const Ref<IRectDrawable>& selected /*= nullptr*/, const Ref<IRectDrawable>& selectedHovered /*= nullptr*/,
+                           const Ref<IRectDrawable>& selectedPressed /*= nullptr*/) :
+        DragHandle(nullptr, regular, hover, pressed, selected, selectedHovered, selectedPressed)
+    {}
+
+    DragHandle::DragHandle(const DragHandle& other) :
+        DragHandle(nullptr, other)
+    {}
+
     DragHandle::~DragHandle()
     {
-        if (mRegularDrawable)
-            delete mRegularDrawable;
-
-        if (mHoverDrawable)
-            delete mHoverDrawable;
-
-        if (mPressedDrawable)
-            delete mPressedDrawable;
-
-        if (mSelectedDrawable)
-            delete mSelectedDrawable;
-
-        if (mSelectedHoverDrawable)
-            delete mSelectedHoverDrawable;
-
-        if (mSelectedPressedDrawable)
-            delete mSelectedPressedDrawable;
-
         if (mSelectGroup)
             mSelectGroup->RemoveHandle(this);
     }
 
     DragHandle& DragHandle::operator=(const DragHandle& other)
     {
-        if (mRegularDrawable)
-            delete mRegularDrawable;
-
-        if (mHoverDrawable)
-            delete mHoverDrawable;
-
-        if (mPressedDrawable)
-            delete mPressedDrawable;
-
-        if (mSelectedDrawable)
-            delete mSelectedDrawable;
-
-        if (mSelectedHoverDrawable)
-            delete mSelectedHoverDrawable;
-
-        if (mSelectedPressedDrawable)
-            delete mSelectedPressedDrawable;
-
         if (other.mRegularDrawable)
-            mRegularDrawable = other.mRegularDrawable->CloneAs<IRectDrawable>();
+            mRegularDrawable = other.mRegularDrawable->CloneAsRef<IRectDrawable>();
         else
             mRegularDrawable = nullptr;
 
         if (other.mHoverDrawable)
-            mHoverDrawable = other.mHoverDrawable->CloneAs<IRectDrawable>();
+            mHoverDrawable = other.mHoverDrawable->CloneAsRef<IRectDrawable>();
         else
             mHoverDrawable = nullptr;
 
         if (other.mPressedDrawable)
-            mPressedDrawable = other.mPressedDrawable->CloneAs<IRectDrawable>();
+            mPressedDrawable = other.mPressedDrawable->CloneAsRef<IRectDrawable>();
         else
             mPressedDrawable = nullptr;
 
         if (other.mSelectedDrawable)
-            mSelectedDrawable = other.mSelectedDrawable->CloneAs<IRectDrawable>();
+            mSelectedDrawable = other.mSelectedDrawable->CloneAsRef<IRectDrawable>();
         else
             mSelectedDrawable = nullptr;
 
         if (other.mSelectedHoverDrawable)
-            mSelectedHoverDrawable = other.mSelectedHoverDrawable->CloneAs<IRectDrawable>();
+            mSelectedHoverDrawable = other.mSelectedHoverDrawable->CloneAsRef<IRectDrawable>();
         else
             mSelectedHoverDrawable = nullptr;
 
         if (other.mSelectedPressedDrawable)
-            mSelectedPressedDrawable = other.mSelectedPressedDrawable->CloneAs<IRectDrawable>();
+            mSelectedPressedDrawable = other.mSelectedPressedDrawable->CloneAsRef<IRectDrawable>();
         else
             mSelectedPressedDrawable = nullptr;
 
@@ -162,9 +142,9 @@ namespace o2
         if (mSelectGroup)
         {
             if (selected)
-                mSelectGroup->SelectHandle(this);
+                mSelectGroup->SelectHandle(Ref(this));
             else
-                mSelectGroup->DeselectHandle(this);
+                mSelectGroup->DeselectHandle(Ref(this));
         }
         else
         {
@@ -250,7 +230,7 @@ namespace o2
         mPressedCursorId = cursor.id;
 
         if (mSelectGroup)
-            mSelectGroup->OnHandleCursorPressed(this, cursor);
+            mSelectGroup->OnHandleCursorPressed(Ref(this), cursor);
 
         mPressedCursorPos = cursor.position;
     }
@@ -264,7 +244,7 @@ namespace o2
             if (mDragBeginPosition != mPosition)
             {
                 if (mSelectGroup)
-                    mSelectGroup->OnHandleCompletedChange(this);
+                    mSelectGroup->OnHandleCompletedChange(Ref(this));
                 else
                     onChangeCompleted();
             }
@@ -272,7 +252,7 @@ namespace o2
         else
         {
             if (mSelectGroup)
-                mSelectGroup->OnHandleCursorReleased(this, cursor);
+                mSelectGroup->OnHandleCursorReleased(Ref(this), cursor);
             else
                 SetSelected(!IsSelected());
         }
@@ -315,7 +295,7 @@ namespace o2
                 mDragBeginPosition = mPosition;
 
                 if (mSelectGroup)
-                    mSelectGroup->OnHandleBeganDragging(this);
+                    mSelectGroup->OnHandleBeganDragging(Ref(this));
                 else
                     Select();
             }
@@ -329,7 +309,7 @@ namespace o2
             onChangedPos(mPosition);
 
             if (mSelectGroup)
-                mSelectGroup->OnHandleMoved(this, cursor.position);
+                mSelectGroup->OnHandleMoved(Ref(this), cursor.position);
         }
     }
 
@@ -484,80 +464,62 @@ namespace o2
         return mPressedCursorPos;
     }
 
-    void DragHandle::SetRegularDrawable(IRectDrawable* IRectDrawable)
+    void DragHandle::SetRegularDrawable(const Ref<IRectDrawable>& IRectDrawable)
     {
-        if (mRegularDrawable)
-            delete mRegularDrawable;
-
         mRegularDrawable = IRectDrawable;
     }
 
-    IRectDrawable* DragHandle::GetRegularDrawable() const
+    const Ref<IRectDrawable>& DragHandle::GetRegularDrawable() const
     {
         return mRegularDrawable;
     }
 
-    void DragHandle::SetHoverDrawable(IRectDrawable* IRectDrawable)
+    void DragHandle::SetHoverDrawable(const Ref<IRectDrawable>& IRectDrawable)
     {
-        if (mHoverDrawable)
-            delete mHoverDrawable;
-
         mHoverDrawable = IRectDrawable;
     }
 
-    IRectDrawable* DragHandle::GetHoverDrawable() const
+    const Ref<IRectDrawable>& DragHandle::GetHoverDrawable() const
     {
         return mHoverDrawable;
     }
 
-    void DragHandle::SetPressedDrawable(IRectDrawable* IRectDrawable)
+    void DragHandle::SetPressedDrawable(const Ref<IRectDrawable>& IRectDrawable)
     {
-        if (mPressedDrawable)
-            delete mPressedDrawable;
-
         mPressedDrawable = IRectDrawable;
     }
 
-    IRectDrawable* DragHandle::GetPressedDrawable() const
+    const Ref<IRectDrawable>& DragHandle::GetPressedDrawable() const
     {
         return mPressedDrawable;
     }
 
-    void DragHandle::SetSelectedDrawable(IRectDrawable* IRectDrawable)
+    void DragHandle::SetSelectedDrawable(const Ref<IRectDrawable>& IRectDrawable)
     {
-        if (mSelectedDrawable)
-            delete mSelectedDrawable;
-
         mSelectedDrawable = IRectDrawable;
     }
 
-    IRectDrawable* DragHandle::GetSelectedDrawable() const
+    const Ref<IRectDrawable>& DragHandle::GetSelectedDrawable() const
     {
         return mSelectedDrawable;
     }
 
-    void DragHandle::SetSelectedHoveredDrawable(IRectDrawable* IRectDrawable)
+    void DragHandle::SetSelectedHoveredDrawable(const Ref<IRectDrawable>& IRectDrawable)
     {
-        if (mSelectedHoverDrawable)
-            delete mSelectedHoverDrawable;
-
         mSelectedHoverDrawable = IRectDrawable;
     }
 
-    IRectDrawable* DragHandle::GetSelectedHoveredDrawable() const
+    const Ref<IRectDrawable>& DragHandle::GetSelectedHoveredDrawable() const
     {
         return mSelectedHoverDrawable;
     }
 
-    void DragHandle::SetSelectedPressedDrawable(IRectDrawable* IRectDrawable)
+    void DragHandle::SetSelectedPressedDrawable(const Ref<IRectDrawable>& IRectDrawable)
     {
-        if (mSelectedPressedDrawable)
-            delete mSelectedPressedDrawable;
-
         mSelectedPressedDrawable = IRectDrawable;
     }
 
-    IRectDrawable* DragHandle::GetSelectedPressedDrawable() const
+    const Ref<IRectDrawable>& DragHandle::GetSelectedPressedDrawable() const
     {
         return mSelectedPressedDrawable;
     }
@@ -621,7 +583,7 @@ namespace o2
         return true;
     }
 
-    void DragHandle::SetSelectionGroup(ISelectableDragHandlesGroup* group)
+    void DragHandle::SetSelectionGroup(const Ref<ISelectableDragHandlesGroup>& group)
     {
         if (mSelectGroup)
             mSelectGroup->RemoveHandle(this);
@@ -629,10 +591,10 @@ namespace o2
         mSelectGroup = group;
 
         if (mSelectGroup)
-            mSelectGroup->AddHandle(this);
+			mSelectGroup->AddHandle(Ref(this));
     }
 
-    ISelectableDragHandlesGroup* DragHandle::GetSelectionGroup() const
+    const Ref<ISelectableDragHandlesGroup>& DragHandle::GetSelectionGroup() const
     {
         return mSelectGroup;
     }
@@ -716,24 +678,24 @@ namespace o2
         IDrawable::OnDrawn();
     }
 
-    WidgetDragHandle::WidgetDragHandle() :
-        DragHandle(), Widget()
+    WidgetDragHandle::WidgetDragHandle(RefCounter* refCounter) :
+        DragHandle(refCounter), Widget(refCounter)
     {
         widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
         localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
     }
 
-    WidgetDragHandle::WidgetDragHandle(IRectDrawable* regular, IRectDrawable* hover /*= nullptr*/, IRectDrawable* pressed /*= nullptr*/, 
-                                       IRectDrawable* selected /*= nullptr*/, IRectDrawable* selectedHovered /*= nullptr*/, 
-                                       IRectDrawable* selectedPressed /*= nullptr*/) :
-        DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed), Widget()
+    WidgetDragHandle::WidgetDragHandle(RefCounter* refCounter, const Ref<IRectDrawable>& regular, const Ref<IRectDrawable>& hover /*= nullptr*/, const Ref<IRectDrawable>& pressed /*= nullptr*/,
+                                       const Ref<IRectDrawable>& selected /*= nullptr*/, const Ref<IRectDrawable>& selectedHovered /*= nullptr*/, 
+                                       const Ref<IRectDrawable>& selectedPressed /*= nullptr*/) :
+        DragHandle(refCounter, regular, hover, pressed, selected, selectedHovered, selectedPressed), Widget(refCounter)
     {
         widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
         localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
     }
 
-    WidgetDragHandle::WidgetDragHandle(const WidgetDragHandle& other) :
-        DragHandle(other), Widget(other)
+    WidgetDragHandle::WidgetDragHandle(RefCounter* refCounter, const WidgetDragHandle& other) :
+        DragHandle(refCounter, other), Widget(refCounter, other)
     {
         widgetOffsetToLocalTransformFunc = other.widgetOffsetToLocalTransformFunc;
         localToWidgetOffsetTransformFunc = other.localToWidgetOffsetTransformFunc;
@@ -778,7 +740,7 @@ namespace o2
     Vec2F WidgetDragHandle::ScreenToLocal(const Vec2F& point)
     {
         if (mParentWidget)
-            return widgetOffsetToLocalTransformFunc(point - mParentWidget->layout->GetWorldLeftBottom());
+            return widgetOffsetToLocalTransformFunc(point - mParentWidget.Lock()->layout->GetWorldLeftBottom());
 
         return DragHandle::ScreenToLocal(point);
     }
@@ -786,7 +748,7 @@ namespace o2
     Vec2F WidgetDragHandle::LocalToScreen(const Vec2F& point)
     {
         if (mParentWidget)
-            return localToWidgetOffsetTransformFunc(point) + mParentWidget->layout->GetWorldLeftBottom();
+            return localToWidgetOffsetTransformFunc(point) + mParentWidget.Lock()->layout->GetWorldLeftBottom();
 
         return DragHandle::ScreenToLocal(point);
     }
@@ -796,7 +758,12 @@ namespace o2
         return "UI/Editor";
     }
 
-    void WidgetDragHandle::UpdateLayersLayouts()
+	Ref<o2::RefCounterable> WidgetDragHandle::CastToRefCounterable(const Ref<WidgetDragHandle>& ref)
+	{
+        return DynamicCast<Widget>(ref);
+	}
+
+	void WidgetDragHandle::UpdateLayersLayouts()
     {
         onLayoutUpdated();
         UpdateScreenPosition();
@@ -817,42 +784,56 @@ namespace o2
         Widget::OnDeserializedDelta(node, origin);
     }
 
+    ISelectableDragHandlesGroup::ISelectableDragHandlesGroup()
+    {}
+
+    ISelectableDragHandlesGroup::ISelectableDragHandlesGroup(RefCounter* refCounter):
+        RefCounterable(refCounter)
+    {}
+
     void ISelectableDragHandlesGroup::DeselectAll()
     {
         auto handles = GetAllHandles();
-        for (auto handle : handles)
+        for (auto& handle : handles)
             DeselectHandle(handle);
     }
 
     void ISelectableDragHandlesGroup::SelectAll()
     {
         auto handles = GetAllHandles();
-        for (auto handle : handles)
+        for (auto& handle : handles)
             SelectHandle(handle);
     }
 
-    void ISelectableDragHandlesGroup::SetHandleSelectedState(DragHandle* handle, bool selected)
+    void ISelectableDragHandlesGroup::SetHandleSelectedState(const Ref<DragHandle>& handle, bool selected)
     {
         handle->mIsSelected = selected;
     }
 
+    SelectableDragHandlesGroup::SelectableDragHandlesGroup(RefCounter* refCounter):
+        ISelectableDragHandlesGroup(refCounter)
+    {}
+
+    SelectableDragHandlesGroup::SelectableDragHandlesGroup()
+    {}
+
     SelectableDragHandlesGroup::~SelectableDragHandlesGroup()
     {
-        for (auto handle : mHandles)
+        for (auto& handle : mHandles)
             handle->mSelectGroup = nullptr;
     }
 
-    const Vector<DragHandle*>& SelectableDragHandlesGroup::GetSelectedHandles() const
+    const Vector<Ref<DragHandle>>& SelectableDragHandlesGroup::GetSelectedHandles() const
     {
         return mSelectedHandles;
     }
 
-    Vector<DragHandle*> SelectableDragHandlesGroup::GetAllHandles() const
+    Vector<Ref<DragHandle>> SelectableDragHandlesGroup::GetAllHandles() const
     {
         return mHandles;
     }
 
-    void SelectableDragHandlesGroup::SelectHandle(DragHandle* handle)
+    void SelectableDragHandlesGroup::SelectHandle(const Ref<DragHandle>& handle)
     {
         if (mSelectedHandles.Contains(handle))
             return;
@@ -864,7 +845,7 @@ namespace o2
         OnSelectionChanged();
     }
 
-    void SelectableDragHandlesGroup::DeselectHandle(DragHandle* handle)
+    void SelectableDragHandlesGroup::DeselectHandle(const Ref<DragHandle>& handle)
     {
         if (!mSelectedHandles.Contains(handle))
             return;
@@ -876,7 +857,7 @@ namespace o2
         OnSelectionChanged();
     }
 
-    void SelectableDragHandlesGroup::AddHandle(DragHandle* handle)
+    void SelectableDragHandlesGroup::AddHandle(const Ref<DragHandle>& handle)
     {
         if (mHandles.Contains(handle))
             return;
@@ -886,19 +867,19 @@ namespace o2
 
     void SelectableDragHandlesGroup::RemoveHandle(DragHandle* handle)
     {
-        mHandles.Remove(handle);
+        mHandles.RemoveFirst([&](auto& x) { return x == handle; });
 
-        int idx = mSelectedHandles.IndexOf(handle);
+        int idx = mSelectedHandles.IndexOf([&](auto& x) { return x == handle; });
         if (idx >= 0)
         {
-            mSelectedHandles.Remove(handle);
+            mSelectedHandles.RemoveAt(idx);
             OnSelectionChanged();
         }
     }
 
     void SelectableDragHandlesGroup::DeselectAll()
     {
-        for (auto handle : mSelectedHandles)
+        for (auto& handle : mSelectedHandles)
         {
             handle->mIsSelected = false;
             handle->OnDeselected();
@@ -910,7 +891,7 @@ namespace o2
 
     void SelectableDragHandlesGroup::SelectAll()
     {
-        for (auto handle : mHandles) {
+        for (auto& handle : mHandles) {
             handle->mIsSelected = true;
             handle->OnSelected();
         }
@@ -922,7 +903,7 @@ namespace o2
     void SelectableDragHandlesGroup::OnSelectionChanged()
     {}
 
-    void SelectableDragHandlesGroup::OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor)
+    void SelectableDragHandlesGroup::OnHandleCursorPressed(const Ref<DragHandle>& handle, const Input::Cursor& cursor)
     {
         if (!GetSelectedHandles().Contains(handle))
         {
@@ -932,14 +913,14 @@ namespace o2
             SelectHandle(handle);
         }
 
-        for (auto handle : GetSelectedHandles())
+        for (auto& handle : GetSelectedHandles())
             handle->BeginDrag(cursor.position);
     }
 
-    void SelectableDragHandlesGroup::OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor)
+    void SelectableDragHandlesGroup::OnHandleCursorReleased(const Ref<DragHandle>& handle, const Input::Cursor& cursor)
     {}
 
-    void SelectableDragHandlesGroup::OnHandleBeganDragging(DragHandle* handle)
+    void SelectableDragHandlesGroup::OnHandleBeganDragging(const Ref<DragHandle>& handle)
     {
         if (handle->IsSelected())
             return;
@@ -950,17 +931,18 @@ namespace o2
         SelectHandle(handle);
     }
 
-    void SelectableDragHandlesGroup::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
+    void SelectableDragHandlesGroup::OnHandleMoved(const Ref<DragHandle>& handle, const Vec2F& cursorPos)
     {
-        for (auto handle : GetSelectedHandles())
+        for (auto& handle : GetSelectedHandles())
         {
             handle->mDragPosition = handle->ScreenToLocal(cursorPos) + handle->mDragOffset;
             handle->SetPosition(handle->mDragPosition);
             handle->onChangedPos(handle->GetPosition());
         }
     }
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::WidgetDragHandle>);
 // --- META ---
 
 DECLARE_CLASS(o2::DragHandle, o2__DragHandle);

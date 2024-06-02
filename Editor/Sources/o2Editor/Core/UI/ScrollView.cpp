@@ -8,10 +8,11 @@
 
 namespace Editor
 {
-	ScrollView::ScrollView()
+	ScrollView::ScrollView(RefCounter* refCounter):
+		Widget(refCounter)
 	{
 		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		mBackColor = Color4(225, 232, 232, 255);
 		mGridColor = Color4(190, 190, 190, 255);
@@ -19,11 +20,11 @@ namespace Editor
 		mReady = true;
 	}
 
-	ScrollView::ScrollView(const ScrollView& other):
-		Widget(other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
+	ScrollView::ScrollView(RefCounter* refCounter, const ScrollView& other):
+		Widget(refCounter, other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
 	{
 		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
 
@@ -31,10 +32,7 @@ namespace Editor
 	}
 
 	ScrollView::~ScrollView()
-	{
-		if (mRenderTargetSprite)
-			delete mRenderTargetSprite;
-	}
+	{}
 
 	ScrollView& ScrollView::operator=(const ScrollView& other)
 	{
@@ -42,12 +40,10 @@ namespace Editor
 
 		mReady = false;
 
-		delete mRenderTargetSprite;
-
 		mBackColor = other.mBackColor;
 		mGridColor = other.mGridColor;
 		mRenderTarget = TextureRef(Vec2I(256, 256), TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+		mRenderTargetSprite = mmake<Sprite>(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
 
@@ -377,6 +373,8 @@ namespace Editor
 	}
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ScrollView>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ScrollView, Editor__ScrollView);

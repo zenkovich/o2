@@ -1,9 +1,9 @@
 #pragma once
 
-#include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Math/Vector2.h"
-
 #include "o2/Utils/Property.h"
+#include "o2/Utils/Types/CommonTypes.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
 
 namespace o2
@@ -11,7 +11,7 @@ namespace o2
     // ------------------------------------------------------
     // Image. Containing formatted pixel data, size, filename
     // ------------------------------------------------------
-    class Bitmap
+    class Bitmap: public RefCounterable
     {
     public:
         enum class ImageType { Auto = 0, Png };
@@ -60,7 +60,7 @@ namespace o2
         UInt8* GetData();
 
         // Returns const data
-        const UInt8* getData() const;
+        const UInt8* GetData() const;
 
         // Returns size of image
         Vec2I GetSize() const;
@@ -72,10 +72,10 @@ namespace o2
         const String& GetFilename() const;
 
         // Copy image to position
-        void CopyImage(Bitmap* img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
+        void CopyImage(const Bitmap& img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
 
         // Blends images by alpha
-        void BlendImage(Bitmap* img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
+        void BlendImage(const Bitmap& img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
 
         // Sets images pixels colors
         void Colorise(const Color4& color);

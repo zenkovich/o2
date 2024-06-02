@@ -4,6 +4,7 @@
 
 #include "o2/Scripts/ScriptValue.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
 
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
@@ -38,7 +39,7 @@ namespace o2
     // Scripting engine. Depends on scripting backend. 
     // Can parse, run and evaluate scripts. Can return global namespace
     // ----------------------------------------------------------------
-    class ScriptEngine: public Singleton<ScriptEngine>, public ScriptEngineBase
+    class ScriptEngine: public Singleton<ScriptEngine>, public ScriptEngineBase, public RefCounterable
     {
     public:
         // Default constructor, initializes scripting engine

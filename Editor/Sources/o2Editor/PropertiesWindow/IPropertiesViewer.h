@@ -16,9 +16,15 @@ namespace Editor
 	// ----------------------------------
 	// Object properties viewer interface
 	// ----------------------------------
-	class IPropertiesViewer: public IObject
+	class IPropertiesViewer: public IObject, public RefCounterable
 	{
 	public:
+		// Default constructor
+		IPropertiesViewer();
+
+		// Default constructor
+		IPropertiesViewer(RefCounter* refCounter);
+
 		// Virtual destructor
 		virtual ~IPropertiesViewer();
 
@@ -40,7 +46,7 @@ namespace Editor
 		IOBJECT(IPropertiesViewer);
 
 	protected:
-		Widget* mContentWidget; // Data content widget (turning on/off on enabling/disabling)
+		Ref<Widget> mContentWidget; // Data content widget (turning on/off on enabling/disabling)
 
 		bool mEnabled = false; // Is viewer enabled
 
@@ -65,6 +71,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IPropertiesViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IPropertiesViewer)
@@ -76,6 +83,8 @@ END_META;
 CLASS_METHODS_META(Editor::IPropertiesViewer)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

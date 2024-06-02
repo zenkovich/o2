@@ -3,11 +3,16 @@
 
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2/Utils/Editor/EditorScope.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
 
 namespace Editor
 {
+	FORWARD_REF_IMPL(IPropertyField);
+
 	IObjectPropertiesViewer::IObjectPropertiesViewer()
 	{
+		mPropertiesContext = mmake<PropertiesContext>();
+
 		mOnChildFieldChangeCompleted =
 			MakeFunction<IObjectPropertiesViewer, void, const String&,
 			const Vector<DataDocument>&, const Vector<DataDocument>&>(this, &IObjectPropertiesViewer::OnFieldChangeCompleted);
@@ -52,7 +57,7 @@ namespace Editor
 		if (!mHeaderEnabled || spoiler->IsExpanded())
 		{
 			bool force = CheckBuildProperties(targetObjets);
-			mPropertiesContext.Set(targetObjets, force);
+			mPropertiesContext->Set(targetObjets, force);
 		}
 
 		OnRefreshed(targetObjets);
@@ -68,12 +73,12 @@ namespace Editor
 		return nullptr;
 	}
 
-	void IObjectPropertiesViewer::SetParentContext(PropertiesContext* context)
+	void IObjectPropertiesViewer::SetParentContext(const Ref<PropertiesContext>& context)
 	{
-		mPropertiesContext.parent = context;
+		mPropertiesContext->parent = context;
 	}
 
-	Spoiler* IObjectPropertiesViewer::GetSpoiler()
+	const Ref<Spoiler>& IObjectPropertiesViewer::GetSpoiler()
 	{
 		if (!mSpoiler)
 		{
@@ -111,7 +116,7 @@ namespace Editor
 		return mSpoiler->GetChildren().IsEmpty();
 	}
 
-	Spoiler* IObjectPropertiesViewer::CreateSpoiler()
+	Ref<Spoiler> IObjectPropertiesViewer::CreateSpoiler()
 	{
 		return o2UI.CreateWidget<Spoiler>("expand with caption");
 	}

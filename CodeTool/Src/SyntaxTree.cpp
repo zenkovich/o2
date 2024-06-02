@@ -90,29 +90,29 @@ SyntaxSection::SyntaxSection()
 
 SyntaxSection::~SyntaxSection()
 {
-    for (auto x : mFunctions)
-        delete x;
-
-    for (auto x : mVariables)
-        delete x;
-
-    for (auto x : mEnums)
-        delete x;
-
-    for (auto x : mSections)
-        delete x;
-
-    for (auto x : mComments)
-        delete x;
-
-    for (auto x : mTypedefs)
-        delete x;
-
-    for (auto x : mUsingNamespaces)
-        delete x;
-
-    for (auto x : mDefines)
-        delete x;
+//     for (auto x : mFunctions)
+//         delete x;
+// 
+//     for (auto x : mVariables)
+//         delete x;
+// 
+//     for (auto x : mEnums)
+//         delete x;
+// 
+//     for (auto x : mSections)
+//         delete x;
+// 
+//     for (auto x : mComments)
+//         delete x;
+// 
+//     for (auto x : mTypedefs)
+//         delete x;
+// 
+//     for (auto x : mUsingNamespaces)
+//         delete x;
+// 
+//     for (auto x : mDefines)
+//         delete x;
 }
 
 SyntaxSection* SyntaxSection::GetParentSection() const

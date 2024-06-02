@@ -12,25 +12,32 @@ namespace o2
 
 namespace Editor
 {
-	class KeyEditDlg : public Singleton<KeyEditDlg>
+	// ---------------------
+	// Curve key edit dialog
+	// ---------------------
+	class KeyEditDlg : public Singleton<KeyEditDlg>, public RefCounterable
 	{
 	public:
+		// Constructor
 		KeyEditDlg();
+
+		// Destructor
 		~KeyEditDlg();
 
+		// Show the dialog
 		static void Show(const Curve::Key& key, const Function<void(const Curve::Key& key)>& onClosed);
 
 	private:
-		o2::Window* mWindow;
+		Ref<o2::Window> mWindow; // Dialog window
 
-		EditBox* mPosition;
-		EditBox* mValue;
-		EditBox* mLeftSupportPosition;
-		EditBox* mLeftSupportValue;
-		EditBox* mRightSupportPosition;
-		EditBox* mRightSupportValue;
+		Ref<EditBox> mPosition;             // Key position
+		Ref<EditBox> mValue;                // Key value
+		Ref<EditBox> mLeftSupportPosition;  // Left support position
+		Ref<EditBox> mLeftSupportValue;     // Left support value
+		Ref<EditBox> mRightSupportPosition; // Right support position
+        Ref<EditBox> mRightSupportValue;    // Right support value
 
-		Function<void(const Curve::Key& key)> mOnClosed;
+		Function<void(const Curve::Key& key)> mOnClosed; // On closed callback
 
 	private:
 		// Called when Ok button pressed, calls onClosed function with new key parameters

@@ -39,7 +39,7 @@ namespace o2
         void LogErrorStr(const WString& out);
 
         // Returns pointer to main log
-        LogStream* GetLog();
+        const Ref<LogStream>& GetLog();
 
         // Draws debug line from begin to end with color and disappearing delay
         void DrawLine(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay);
@@ -114,11 +114,12 @@ namespace o2
         // ------------------------------------------------------
         // Debug drawable interface: color and disappearing delay
         // ------------------------------------------------------
-        struct IDbgDrawable
+        struct IDbgDrawable: public RefCounterable
         {
             Color4 color;
             float  delay;
 
+        public:
             IDbgDrawable();
             IDbgDrawable(const Color4& color, float delay);
             virtual ~IDbgDrawable();
@@ -134,6 +135,7 @@ namespace o2
             Vec2F begin;
             Vec2F end;
 
+        public:
             DbgLine();
             DbgLine(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay = -1.0f);
             void Draw();
@@ -147,6 +149,7 @@ namespace o2
             Vec2F begin;
             Vec2F end;
 
+        public:
             DbgArrow();
             DbgArrow(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay = -1.0f);
             void Draw();
@@ -160,6 +163,7 @@ namespace o2
             Vec2F origin;
             float radius;
 
+        public:
             DbgCircle();
             DbgCircle(const Vec2F& origin, float radius, const Color4& color, float delay = -1.0f);
             void Draw();
@@ -172,6 +176,7 @@ namespace o2
         {
             RectF rect;
 
+        public:
             DbgRect();
             DbgRect(const RectF& rect, const Color4& color, float delay = -1.0f);
             void Draw();
@@ -184,6 +189,7 @@ namespace o2
         {
             Vector<Vec2F> points;
 
+        public:
             DbgPolyLine();
             DbgPolyLine(const Vector<Vec2F>& points, const Color4& color, float delay = -1.0f);
             void Draw();
@@ -194,26 +200,27 @@ namespace o2
         // --------------------------------------------
         struct DbgText: public IDbgDrawable
         {
-            Vec2F  position;
-            String text;
-            Text*  textDrawable;
-            bool   ownTextDrawable;
+            Vec2F     position;
+            String    text;
+            Ref<Text> textDrawable;
 
+        public:
             DbgText();
-            DbgText(const Vec2F& position, const String& text, Text* textDrawable, const Color4& color);
-            DbgText(const Vec2F& position, const String& text, VectorFont* font, const Color4& color, float delay = -1.0f);
+            DbgText(const Vec2F& position, const String& text, const Ref<Text>& textDrawable, const Color4& color);
+            DbgText(const Vec2F& position, const String& text, const Ref<VectorFont>& font, const Color4& color, float delay = -1.0f);
             ~DbgText();
             void Draw();
         };
 
     protected:
-        LogStream* mLogStream; // Main log stream
+        Ref<LogStream> mFileLogStream; // File log stream
+        Ref<LogStream> mLogStream;     // Main log stream
 
-        Vector<IDbgDrawable*> mDbgDrawables;       // Debug drawables array
-        Vector<IDbgDrawable*> mEditorDbgDrawables; // Debug drawables array for editor
+        Vector<Ref<IDbgDrawable>> mDbgDrawables;       // Debug drawables array
+        Vector<Ref<IDbgDrawable>> mEditorDbgDrawables; // Debug drawables array for editor
 
-        VectorFont* mFont; // Font for debug captions
-        Text*       mText; // Text for one frame debug captions
+        Ref<VectorFont> mFont; // Font for debug captions
+        Ref<Text>       mText; // Text for one frame debug captions
 
     private:
         // Default constructor
@@ -229,10 +236,10 @@ namespace o2
         void InitializeFont();
 
         // Updates drawables list
-        void UpdateDrawables(Vector<IDbgDrawable*>& drawables, float dt);
+        void UpdateDrawables(Vector<Ref<IDbgDrawable>>& drawables, float dt);
 
         // Returns regular or editor drawables by current context
-        Vector<IDbgDrawable*>& GetCurrentScopeDrawables();
+        Vector<Ref<IDbgDrawable>>& GetCurrentScopeDrawables();
 
         friend class Singleton<Debug>;
         friend class BaseApplication;

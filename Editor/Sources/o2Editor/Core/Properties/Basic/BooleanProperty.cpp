@@ -8,11 +8,12 @@
 
 namespace Editor
 {
-	BooleanProperty::BooleanProperty()
-	{}
+	BooleanProperty::BooleanProperty(RefCounter* refCounter):
+		TPropertyField<bool>(refCounter)
+    {}
 
-	BooleanProperty::BooleanProperty(const BooleanProperty& other) :
-		TPropertyField<bool>(other)
+	BooleanProperty::BooleanProperty(RefCounter* refCounter, const BooleanProperty& other) :
+		TPropertyField<bool>(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -42,7 +43,10 @@ namespace Editor
 			mToggle->SetValueUnknown();
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<bool>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::BooleanProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<bool>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::BooleanProperty, Editor__BooleanProperty);

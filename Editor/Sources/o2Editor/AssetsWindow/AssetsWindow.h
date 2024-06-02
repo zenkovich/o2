@@ -10,15 +10,15 @@ using namespace o2;
 
 namespace o2
 {
-	class Sprite;
-	class Button;
-	class EditBox;
-	class GridLayout;
-	class Label;
-	class ScrollArea;
-	class Tree;
-	class TreeNode;
-	class Widget;
+	FORWARD_CLASS_REF(Sprite);
+	FORWARD_CLASS_REF(Button);
+	FORWARD_CLASS_REF(EditBox);
+	FORWARD_CLASS_REF(GridLayout);
+	FORWARD_CLASS_REF(Label);
+	FORWARD_CLASS_REF(ScrollArea);
+	FORWARD_CLASS_REF(Tree);
+	FORWARD_CLASS_REF(TreeNode);
+	FORWARD_CLASS_REF(Widget);
 }
 
 // Editor assets window accessor macros
@@ -26,8 +26,8 @@ namespace o2
 
 namespace Editor
 {
-	class AssetsIconsScrollArea;
-	class AssetsFoldersTree;
+	FORWARD_CLASS_REF(AssetsIconsScrollArea);
+	FORWARD_CLASS_REF(AssetsFoldersTree);
 
 	// -------------
 	// Assets window
@@ -60,7 +60,7 @@ namespace Editor
 		void DeselectAssets();
 
 		// Returns selected assets infos
-		const Vector<const AssetInfo*>& GetSelectedAssets() const;
+		const Vector<Ref<AssetInfo>>& GetSelectedAssets() const;
 
 		// Opens asset in folder
 		void OpenAsset(const UID& id);
@@ -98,28 +98,28 @@ namespace Editor
 		// Removes assets in clipboard
 		void DeleteAssets(const Vector<String>& assetsPaths);
 
-		// Creates and returns icon sprite for asset
-		static Sprite* GetAssetIconSprite(const AssetRef& asset);
+		// Creates and returns an icon sprite for the asset
+		static Ref<Sprite> GetAssetIconSprite(const AssetRef<Asset>& asset);
 		 
 		IOBJECT(AssetsWindow);
 
-	protected:
-		float mFoldersTreeShowCoef = 1.0f; // Animating show folders tree coefficient (0...1)
+		protected:
+		float mFoldersTreeShowCoef = 1.0f; // Animation show folders tree coefficient (0...1)
 
-		Button*  mFilterButton;           // Search filter button
-		EditBox* mSearchEditBox;          // Search edit box
-		Label*   mSelectedAssetPathLabel; // Selected asset path label
+		Ref<Button>  mFilterButton;           // Search filter button
+		Ref<EditBox> mSearchEditBox;          // Search edit box
+		Ref<Label>   mSelectedAssetPathLabel; // Selected asset path label
 
-		AssetsFoldersTree* mFoldersTree;         // Folders tree			
-		AnimationPlayer    mFoldersTreeShowAnim; // Folders tree visible animation
-		bool               mFoldersTreeVisible;  // Is folders tree visible
+		Ref<AssetsFoldersTree>   mFoldersTree;                                    // Folders tree			
+		Ref<AnimationPlayer> mFoldersTreeShowAnim = mmake<AnimationPlayer>(); // Folders tree visible animation
+		bool                 mFoldersTreeVisible;                             // Is folders tree visible
 
-		AssetsIconsScrollArea* mAssetsGridScroll; // Assets grid scroll
+		Ref<AssetsIconsScrollArea> mAssetsGridScroll; // Assets grid scroll
 
-		Tree* mAssetsTree; // Assets tree
+		Ref<Tree> mAssetsTree; // Assets tree
 
-		CursorEventsArea mSeparatorHandle; // Folders tree and assets tree/grid separator handle
-		float            mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
+		Ref<CursorEventsArea> mSeparatorHandle; // Folders tree and assets tree/grid separator handle
+		float                 mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
 
 		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
 
@@ -179,7 +179,7 @@ CLASS_FIELDS_META(Editor::AssetsWindow)
     FIELD().PROTECTED().NAME(mSearchEditBox);
     FIELD().PROTECTED().NAME(mSelectedAssetPathLabel);
     FIELD().PROTECTED().NAME(mFoldersTree);
-    FIELD().PROTECTED().NAME(mFoldersTreeShowAnim);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mFoldersTreeShowAnim);
     FIELD().PROTECTED().NAME(mFoldersTreeVisible);
     FIELD().PROTECTED().NAME(mAssetsGridScroll);
     FIELD().PROTECTED().NAME(mAssetsTree);
@@ -198,7 +198,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const Vector<UID>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAssets, const Vector<String>&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeselectAssets);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<const AssetInfo*>&, GetSelectedAssets);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AssetInfo>>&, GetSelectedAssets);
     FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const UID&);
     FUNCTION().PUBLIC().SIGNATURE(void, OpenAsset, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, OpenAndEditAsset, const UID&);
@@ -211,7 +211,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, CutAssets, const Vector<String>&);
     FUNCTION().PUBLIC().SIGNATURE(void, PasteAssets, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeleteAssets, const Vector<String>&);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(Sprite*, GetAssetIconSprite, const AssetRef&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<Sprite>, GetAssetIconSprite, const AssetRef<Asset>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeSeparator);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeVisibleState);

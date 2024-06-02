@@ -31,10 +31,10 @@ namespace o2
 
     public:
         // Default constructor
-        RigidBody();
+        RigidBody(RefCounter* refCounter);
 
         // Copy-constructor
-        RigidBody(const RigidBody& other);
+        RigidBody(RefCounter* refCounter, const RigidBody& other);
 
         // Copy-operator
         RigidBody& operator=(const RigidBody& other);
@@ -109,6 +109,7 @@ namespace o2
         bool IsFixedRotation() const;
 
         SERIALIZABLE(RigidBody);
+        CLONEABLE_REF(RigidBody);
 
     protected:
         b2Body*    mBody = nullptr; // Box 2d physics body
@@ -124,7 +125,7 @@ namespace o2
         bool  mIsBullet = false;        // Is using continuous collision detection @SERIALIZABLE
         bool  mIsFixedRotation = false; // Is fixed rotation @SERIALIZABLE
 
-        Vector<ICollider*> mColliders; // Attached colliders list
+        Vector<WeakRef<ICollider>> mColliders; // Attached colliders list
 
     protected:
         // Called when enabled, turns on rigid body
@@ -196,8 +197,8 @@ END_META;
 CLASS_METHODS_META(o2::RigidBody)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const RigidBody&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const RigidBody&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBodyType, Type);
     FUNCTION().PUBLIC().SIGNATURE(Type, GetBodyType);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMass, float);

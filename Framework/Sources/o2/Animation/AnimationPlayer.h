@@ -1,23 +1,26 @@
 #pragma once
 #include "o2/Animation/IAnimation.h"
 #include "o2/Animation/Tracks/IAnimationTrack.h"
+#include "o2/Utils/Basic/ICloneable.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
-    class AnimationClip;
+    FORWARD_CLASS_REF(AnimationClip);
+    FORWARD_CLASS_REF(AnimationState);
 
     // ---------------------
     // Animation clip player
     // ---------------------
-    class AnimationPlayer: public IAnimation
+    class AnimationPlayer: public IAnimation, public RefCounterable, public ICloneableRef
     {
     public:
-        Function<void(IAnimationTrack::IPlayer*)> onTrackPlayerAdded;  // Called when new track added
-        Function<void(IAnimationTrack::IPlayer*)> onTrackPlayerRemove; // Called when new track removing
+        Function<void(const Ref<IAnimationTrack::IPlayer>&)> onTrackPlayerAdded;  // Called when new track added
+        Function<void(const Ref<IAnimationTrack::IPlayer>&)> onTrackPlayerRemove; // Called when new track removing
 
     public:
         // Default constructor
-        AnimationPlayer(IObject* target = nullptr, AnimationClip* clip = nullptr);
+        AnimationPlayer(IObject* target = nullptr, const Ref<AnimationClip>& clip = nullptr);
 
         // Destructor
         ~AnimationPlayer();
@@ -30,23 +33,25 @@ namespace o2
         IObject* GetTarget() const;
 
         // Sets animation clip
-        void SetClip(AnimationClip* clip, bool owner = false);
+        void SetClip(const Ref<AnimationClip>& clip);
 
         // Returns animation clip
-        AnimationClip* GetClip() const;
+        const Ref<AnimationClip>& GetClip() const;
 
         // Returns track players list
-        const Vector<IAnimationTrack::IPlayer*>& GetTrackPlayers() const;
+        const Vector<Ref<IAnimationTrack::IPlayer>>& GetTrackPlayers() const;
 
         IOBJECT(AnimationPlayer);
+        CLONEABLE_REF(AnimationPlayer);
 
     protected:
-        AnimationClip*  mClip = nullptr;           // Animation clip
-        bool            mClipOwner = false;        // Is animation clip owned by this player
-        IObject*        mTarget = nullptr;         // Target object
-        AnimationState* mAnimationState = nullptr; // Animation state owner
+        Ref<AnimationClip> mClip; // Animation clip
 
-        Vector<IAnimationTrack::IPlayer*> mTrackPlayers; // Animation clip track players
+        IObject* mTarget = nullptr; // Target object
+
+        Ref<AnimationState> mAnimationState = nullptr; // Animation state owner
+
+        Vector<Ref<IAnimationTrack::IPlayer>> mTrackPlayers; // Animation clip track players
 
     protected:
         // Evaluates all Animation tracks by time
@@ -56,13 +61,13 @@ namespace o2
         void BindTracks(bool errors);
 
         // Binds animation track
-        void BindTrack(const ObjectType* type, void* castedTarget, IAnimationTrack* track, bool errors);
+        void BindTrack(const ObjectType* type, void* castedTarget, const Ref<IAnimationTrack>& track, bool errors);
 
         // Called when added new track in clip
-        void OnClipTrackAdded(IAnimationTrack* track);
+        void OnClipTrackAdded(const Ref<IAnimationTrack>& track);
 
         // Called when removing track from clip
-        void OnClipTrackRemove(IAnimationTrack* track);
+        void OnClipTrackRemove(const Ref<IAnimationTrack>& track);
 
         // Called when clip duration changed
         void OnClipDurationChanged(float duration);
@@ -76,14 +81,15 @@ namespace o2
 CLASS_BASES_META(o2::AnimationPlayer)
 {
     BASE_CLASS(o2::IAnimation);
+    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationPlayer)
 {
     FIELD().PUBLIC().NAME(onTrackPlayerAdded);
     FIELD().PUBLIC().NAME(onTrackPlayerRemove);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mClip);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mClipOwner);
+    FIELD().PROTECTED().NAME(mClip);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnimationState);
     FIELD().PROTECTED().NAME(mTrackPlayers);
@@ -92,17 +98,17 @@ END_META;
 CLASS_METHODS_META(o2::AnimationPlayer)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR(IObject*, AnimationClip*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(IObject*, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, IObject*, bool);
     FUNCTION().PUBLIC().SIGNATURE(IObject*, GetTarget);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetClip, AnimationClip*, bool);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationClip*, GetClip);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<IAnimationTrack::IPlayer*>&, GetTrackPlayers);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetClip, const Ref<AnimationClip>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationClip>&, GetClip);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<IAnimationTrack::IPlayer>>&, GetTrackPlayers);
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
     FUNCTION().PROTECTED().SIGNATURE(void, BindTracks, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, BindTrack, const ObjectType*, void*, IAnimationTrack*, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnClipTrackAdded, IAnimationTrack*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnClipTrackRemove, IAnimationTrack*);
+    FUNCTION().PROTECTED().SIGNATURE(void, BindTrack, const ObjectType*, void*, const Ref<IAnimationTrack>&, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnClipTrackAdded, const Ref<IAnimationTrack>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnClipTrackRemove, const Ref<IAnimationTrack>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClipDurationChanged, float);
 }
 END_META;

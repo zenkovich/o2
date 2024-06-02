@@ -8,7 +8,7 @@ namespace Editor
 
 	AssetPropertiesViewer::AssetPropertiesViewer()
 	{
-		mAssetHeader = mnew Widget();
+		mAssetHeader = mmake<Widget>();
 		*mAssetHeader->layout = WidgetLayout::HorStretch(VerAlign::Top, 5, 5, 25, 5);
 
 		mAssetNameLabel = o2UI.CreateLabel("asset path");
@@ -31,18 +31,18 @@ namespace Editor
 
 	const Type* AssetPropertiesViewer::GetViewingObjectType() const
 	{
-		return &TypeOf(AssetRef);
+		return &TypeOf(AssetRef<Asset>);
 	}
 
 	void AssetPropertiesViewer::SetTargets(const Vector<IObject*>& targets)
 	{
 		DefaultPropertiesViewer::SetTargets(targets.Convert<IObject*>([](IObject* x) {
-			return dynamic_cast<AssetRef*>(x)->Get();
+			return dynamic_cast<AssetRef<Asset>*>(x)->Get();
 		}));
 
 		if (targets.Count() == 1)
 		{
-			if (AssetRef* assetRef = dynamic_cast<AssetRef*>(targets[0]))
+			if (AssetRef<Asset>* assetRef = dynamic_cast<AssetRef<Asset>*>(targets[0]))
 				mAssetNameLabel->text = assetRef->Get()->GetPath();
 		}
 		else

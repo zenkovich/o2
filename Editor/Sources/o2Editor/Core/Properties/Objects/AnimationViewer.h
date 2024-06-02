@@ -1,5 +1,4 @@
 #pragma once
-
 #include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
 
 using namespace o2;
@@ -26,8 +25,8 @@ namespace Editor
 		IOBJECT(AnimationViewer);
 
 	private:
-		Button*        mEditButton = nullptr;
-		AnimationClip* mCurrentAnimation = nullptr;
+		Ref<Button>        mEditButton;       // Edit button, opens animation editor window
+		Ref<AnimationClip> mCurrentAnimation; // Current animation
 
 	private:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -49,8 +48,8 @@ CLASS_BASES_META(Editor::AnimationViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationViewer)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditButton);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mCurrentAnimation);
+    FIELD().PRIVATE().NAME(mEditButton);
+    FIELD().PRIVATE().NAME(mCurrentAnimation);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationViewer)

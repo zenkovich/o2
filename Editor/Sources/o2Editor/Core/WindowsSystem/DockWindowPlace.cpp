@@ -8,8 +8,8 @@
 
 namespace Editor
 {
-	DockWindowPlace::DockWindowPlace():
-		Widget(), DrawableCursorEventsListener(this), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()),
+	DockWindowPlace::DockWindowPlace(RefCounter* refCounter):
+		Widget(refCounter), DrawableCursorEventsListener(this), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()),
 		mDragHandleLayoutMax(Vec2F(), Vec2F(), Vec2F(), Vec2F()), mNeighborMax(nullptr), mNeighborMin(nullptr)
 	{
 		InitializeDragHandle();
@@ -17,8 +17,8 @@ namespace Editor
 		SetLayoutDirty();
 	}
 
-	DockWindowPlace::DockWindowPlace(const DockWindowPlace& other):
-		Widget(other), DrawableCursorEventsListener(this), mNeighborMax(nullptr), mNeighborMin(nullptr)
+	DockWindowPlace::DockWindowPlace(RefCounter* refCounter, const DockWindowPlace& other):
+		Widget(refCounter, other), DrawableCursorEventsListener(this), mNeighborMax(nullptr), mNeighborMin(nullptr)
 	{
 		InitializeDragHandle();
 		RetargetStatesAnimations();
@@ -39,21 +39,21 @@ namespace Editor
 	{
 		Widget::Draw();
 
-		mDragHandleMin.OnDrawn();
-		mDragHandleMax.OnDrawn();
+		mDragHandleMin->OnDrawn();
+		mDragHandleMax->OnDrawn();
 
 		if (o2Input.IsKeyDown(VK_F1))
 		{
-			if (mDragHandleMin.IsInteractable())
+			if (mDragHandleMin->IsInteractable())
 				o2Render.DrawAARectFrame(mDragHandleAreaMin, Color4::Blue());
 
-			if (mDragHandleMax.IsInteractable())
+			if (mDragHandleMax->IsInteractable())
 				o2Render.DrawAARectFrame(mDragHandleAreaMax, Color4::Red());
 
 			if (mNeighborMin)
 			{
 				Vec2F c1 = layout->GetWorldRect().Center();
-				Vec2F c2 = mNeighborMin->layout->GetWorldRect().Center();
+				Vec2F c2 = mNeighborMin.Lock()->layout->GetWorldRect().Center();
 				Vec2F n = (c2 - c1).Normalized().Perpendicular()*30.0f;
 				o2Render.DrawAABezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Blue());
 			}
@@ -61,7 +61,7 @@ namespace Editor
 			if (mNeighborMax)
 			{
 				Vec2F c1 = layout->GetWorldRect().Center();
-				Vec2F c2 = mNeighborMax->layout->GetWorldRect().Center();
+				Vec2F c2 = mNeighborMax.Lock()->layout->GetWorldRect().Center();
 				Vec2F n = (c2 - c1).Normalized().Perpendicular()*30.0f;
 				o2Render.DrawAABezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Red());
 			}
@@ -74,23 +74,23 @@ namespace Editor
 	}
 
 	void DockWindowPlace::SetResizibleDir(TwoDirection dir, float border,
-											DockWindowPlace* neighborMin, DockWindowPlace* neighborMax)
+										  const Ref<DockWindowPlace>& neighborMin, const Ref<DockWindowPlace>& neighborMax)
 	{
 		mResizibleDir = dir;
 		float border2 = border*2.0f;
 
-		mDragHandleMin.interactable = neighborMin != nullptr;
+		mDragHandleMin->interactable = neighborMin != nullptr;
 		mNeighborMin = neighborMin;
 
 		mNeighborMax = neighborMax;
-		mDragHandleMax.interactable = neighborMax != nullptr;
+		mDragHandleMax->interactable = neighborMax != nullptr;
 
 		if (dir == TwoDirection::Horizontal)
 		{
 			mDragHandleLayoutMin = Layout(Vec2F(0, 0), Vec2F(0, 1), Vec2F(-border2, 0), Vec2F(0, 0));
 			mDragHandleLayoutMax = Layout(Vec2F(1, 0), Vec2F(1, 1), Vec2F(border2, 0), Vec2F(0, 0));
-			mDragHandleMin.cursorType = CursorType::SizeWE;
-			mDragHandleMax.cursorType = CursorType::SizeWE;
+			mDragHandleMin->cursorType = CursorType::SizeWE;
+			mDragHandleMax->cursorType = CursorType::SizeWE;
 
 			if (neighborMin != nullptr)
 				layout->offsetLeft = border;
@@ -102,8 +102,8 @@ namespace Editor
 		{
 			mDragHandleLayoutMin = Layout(Vec2F(0, 0), Vec2F(1, 0), Vec2F(0, -border2), Vec2F(0, 0));
 			mDragHandleLayoutMax = Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(0, 0), Vec2F(0, border2));
-			mDragHandleMin.cursorType = CursorType::SizeNS;
-			mDragHandleMax.cursorType = CursorType::SizeNS;
+			mDragHandleMin->cursorType = CursorType::SizeNS;
+			mDragHandleMax->cursorType = CursorType::SizeNS;
 
 			if (neighborMin != nullptr)
 				layout->offsetBottom = border;
@@ -123,14 +123,14 @@ namespace Editor
 
 	void DockWindowPlace::ArrangeChildWindows()
 	{
-		Vector<DockableWindow*> windows;
-		for (auto child : mChildren)
+		Vector<Ref<DockableWindow>> windows;
+		for (auto& child : mChildren)
 		{
 			if (child->GetType() == TypeOf(DockableWindow))
-				windows.Add(dynamic_cast<DockableWindow*>(child));
+				windows.Add(DynamicCast<DockableWindow>(child));
 		}
 
-		windows.Sort([](DockableWindow* a, DockableWindow* b) { return a->mTabPosition < b->mTabPosition; });
+		windows.Sort([](auto& a, auto& b) { return a->mTabPosition < b->mTabPosition; });
 
 		if (windows.Count() == 1)
 		{
@@ -140,9 +140,9 @@ namespace Editor
 		{
 			float offset = 0;
 			int pos = 0;
-			for (auto window : windows)
+			for (auto& window : windows)
 			{
-				window->SetTabState(offset, pos, window == mChildren[0]);
+				window->SetTabState(offset, pos, mChildren[0] == window);
 				offset += window->GetTabWidth();
 
 				pos++;
@@ -150,24 +150,24 @@ namespace Editor
 
 			if (!windows.IsEmpty())
 			{
-				if (!windows.Any([&](DockableWindow* x) { return x->mTabActive; }))
+				if (!windows.Any([&](auto& x) { return x->mTabActive; }))
 					SetActiveTab(windows[0]);
 			}
 		}
 	}
 
-	void DockWindowPlace::SetActiveTab(DockableWindow* window)
+	void DockWindowPlace::SetActiveTab(const Ref<DockableWindow>& window)
 	{
-		Vector<DockableWindow*> tabWindows;
-		for (auto child : mChildren)
+		Vector<Ref<DockableWindow>> tabWindows;
+		for (auto& child : mChildren)
 		{
 			if (child->GetType() == TypeOf(DockableWindow))
-				tabWindows.Add(dynamic_cast<DockableWindow*>(child));
+				tabWindows.Add(DynamicCast<DockableWindow>(child));
 		}
 
-		mChildrenInheritedDepth.SortBy<int>([](ISceneDrawable* child) { return dynamic_cast<DockableWindow*>(child)->mTabPosition; });
+		mChildrenInheritedDepth.SortBy<int>([](auto& child) { return DynamicCast<DockableWindow>(child)->mTabPosition; });
 
-		for (auto tabWindow : tabWindows)
+		for (auto& tabWindow : tabWindows)
 		{
 			if (tabWindow->mTabActive)
 			{
@@ -203,16 +203,16 @@ namespace Editor
 	{
 		if (mResizibleDir == TwoDirection::Horizontal)
 		{
-			float anchorDelta = delta.x / mParentWidget->layout->width;
+			float anchorDelta = delta.x / mParentWidget.Lock()->layout->width;
 			layout->anchorLeft += anchorDelta;
 
-			mNeighborMin->layout->anchorRight += anchorDelta;
+			mNeighborMin.Lock()->layout->anchorRight += anchorDelta;
 		}
 		else
 		{
-			float anchorDelta = delta.y / mParentWidget->layout->height;
+			float anchorDelta = delta.y / mParentWidget.Lock()->layout->height;
 			layout->anchorBottom += anchorDelta;
-			mNeighborMin->layout->anchorTop += anchorDelta;
+			mNeighborMin.Lock()->layout->anchorTop += anchorDelta;
 		}
 	}
 
@@ -220,16 +220,16 @@ namespace Editor
 	{
 		if (mResizibleDir == TwoDirection::Horizontal)
 		{
-			float anchorDelta = delta.x / mParentWidget->layout->width;
+			float anchorDelta = delta.x / mParentWidget.Lock()->layout->width;
 			layout->anchorRight += anchorDelta;
 
-			mNeighborMax->layout->anchorLeft += anchorDelta;
+			mNeighborMax.Lock()->layout->anchorLeft += anchorDelta;
 		}
 		else
 		{
-			float anchorDelta = delta.y / mParentWidget->layout->height;
+			float anchorDelta = delta.y / mParentWidget.Lock()->layout->height;
 			layout->anchorTop += anchorDelta;
-			mNeighborMax->layout->anchorBottom += anchorDelta;
+			mNeighborMax.Lock()->layout->anchorBottom += anchorDelta;
 		}
 	}
 
@@ -237,23 +237,27 @@ namespace Editor
 	{
 		interactable = mChildren.Count([](auto x) { return x->GetType() == TypeOf(DockWindowPlace); }) == 0;
 
-		for (auto child : mChildren)
+		for (auto& child : mChildren)
 		{
 			if (child->GetType() == TypeOf(DockWindowPlace))
-				((DockWindowPlace*)child)->CheckInteractable();
+				DynamicCast<DockWindowPlace>(child)->CheckInteractable();
 		}
 	}
 
 	void DockWindowPlace::InitializeDragHandle()
 	{
-		mDragHandleMin.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMin.IsInside(point); };
-		mDragHandleMin.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.delta); };
+		mDragHandleMin = mmake<CursorEventsArea>();
+		mDragHandleMin->isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMin.IsInside(point); };
+		mDragHandleMin->onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.delta); };
 
-		mDragHandleMax.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMax.IsInside(point); };
-		mDragHandleMax.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.delta); };
+		mDragHandleMax = mmake<CursorEventsArea>();
+		mDragHandleMax->isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMax.IsInside(point); };
+		mDragHandleMax->onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.delta); };
 	}
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::DockWindowPlace>);
 // --- META ---
 
 DECLARE_CLASS(Editor::DockWindowPlace, Editor__DockWindowPlace);

@@ -3,10 +3,11 @@
 
 #include "o2/Application/Input.h"
 #include "o2/Events/EventSystem.h"
+#include "o2/Utils/System/Time/Time.h"
 
 namespace o2
 {
-    DragableObject::DragableObject():CursorAreaEventsListener()
+    DragableObject::DragableObject() :CursorAreaEventsListener()
     {}
 
     DragableObject::~DragableObject()
@@ -14,19 +15,16 @@ namespace o2
         EventSystem::UnregDragListener(this);
     }
 
-    DragDropArea* DragableObject::GetDropAreaUnderCursor(CursorId cursorId) const
+    Ref<DragDropArea> DragableObject::GetDropAreaUnderCursor(CursorId cursorId) const
     {
-        if (o2Input.IsKeyDown('J'))
-            o2Debug.Log("asd");
-
         auto underCursorListeners = o2Events.GetAllCursorListenersUnderCursor(cursorId);
-        DragDropArea* dragDropArea = nullptr;
+        Ref<DragDropArea> dragDropArea = nullptr;
 
-        for (auto listener : underCursorListeners)
+        for (auto& listener : underCursorListeners)
         {
             if (listener != this)
             {
-                if (auto listenerDragDropArea = dynamic_cast<DragDropArea*>(listener))
+                if (auto listenerDragDropArea = DynamicCast<DragDropArea>(listener))
                 {
                     dragDropArea = listenerDragDropArea;
                     break;
@@ -81,16 +79,16 @@ namespace o2
             if (mDragDropArea != dragArea)
             {
                 if (mDragDropArea)
-                    mDragDropArea->OnDragExit(this);
+                    mDragDropArea->OnDragExit(Ref(this));
 
                 mDragDropArea = dragArea;
 
                 if (mDragDropArea)
-                    mDragDropArea->OnDragEnter(this);
+                    mDragDropArea->OnDragEnter(Ref(this));
             }
 
             if (dragArea)
-                dragArea->OnDraggedAbove(this);
+                dragArea->OnDraggedAbove(Ref(this));
         }
     }
 
@@ -103,7 +101,7 @@ namespace o2
             if (auto dragArea = GetDropAreaUnderCursor(cursor.id))
             {
                 OnDropped(dragArea);
-                dragArea->OnDropped(this);
+                dragArea->OnDropped(Ref(this));
             }
         }
 
@@ -114,13 +112,13 @@ namespace o2
     void DragableObject::OnDragStart(const Input::Cursor& cursor)
     {}
 
-    void DragableObject::OnDragged(const Input::Cursor& cursor, DragDropArea* area)
+    void DragableObject::OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area)
     {}
 
     void DragableObject::OnDragEnd(const Input::Cursor& cursor)
     {}
 
-    void DragableObject::OnDropped(DragDropArea* area)
+    void DragableObject::OnDropped(const Ref<DragDropArea>& area)
     {}
 
     bool DragableObject::IsDragging() const
@@ -131,7 +129,7 @@ namespace o2
     void DragableObject::OnDrawn()
     {
         CursorAreaEventsListener::OnDrawn();
-        EventSystem::RegDragListener(this);
+        EventSystem::RegDragListener(Ref(this));
     }
 
     Vec2F DragableObject::GetCursorPressedPoint() const
@@ -139,48 +137,48 @@ namespace o2
         return mPressedCursorPos;
     }
 
-    void DragDropArea::OnDropped(DragableObject* draggable)
+    void DragDropArea::OnDropped(const Ref<DragableObject>& draggable)
     {}
 
-    void DragDropArea::OnDropped(ISelectableDragableObjectsGroup* group)
+    void DragDropArea::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
     {}
 
-    void DragDropArea::OnDragEnter(DragableObject* draggable)
+    void DragDropArea::OnDragEnter(const Ref<DragableObject>& draggable)
     {}
 
-    void DragDropArea::OnDragEnter(ISelectableDragableObjectsGroup* group)
+    void DragDropArea::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
     {}
 
-    void DragDropArea::OnDraggedAbove(DragableObject* draggable)
+    void DragDropArea::OnDraggedAbove(const Ref<DragableObject>& draggable)
     {}
 
-    void DragDropArea::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
+    void DragDropArea::OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group)
     {}
 
-    void DragDropArea::OnDragExit(DragableObject* draggable)
+    void DragDropArea::OnDragExit(const Ref<DragableObject>& draggable)
     {}
 
-    void DragDropArea::OnDragExit(ISelectableDragableObjectsGroup* group)
+    void DragDropArea::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
     {}
 
     SelectableDragableObjectsGroup::~SelectableDragableObjectsGroup()
     {
         auto objects = mObjects;
-        for (auto object : objects)
-            RemoveSelectableObject(object);
+        for (auto& object : objects)
+            RemoveSelectableObject(object.Get());
     }
 
-    Vector<SelectableDragableObject*> SelectableDragableObjectsGroup::GetSelectedDragObjects() const
+    Vector<Ref<SelectableDragableObject>> SelectableDragableObjectsGroup::GetSelectedDragObjects() const
     {
         return mSelectedObjects;
     }
 
-    Vector<SelectableDragableObject*> SelectableDragableObjectsGroup::GetAllObjects() const
+    Vector<Ref<SelectableDragableObject>> SelectableDragableObjectsGroup::GetAllObjects() const
     {
         return mObjects;
     }
 
-    void SelectableDragableObjectsGroup::Select(SelectableDragableObject* object)
+    void SelectableDragableObjectsGroup::Select(const Ref<SelectableDragableObject>& object)
     {
         if (object->IsSelected())
             return;
@@ -190,7 +188,7 @@ namespace o2
         object->OnSelected();
     }
 
-    void SelectableDragableObjectsGroup::Deselect(SelectableDragableObject* object)
+    void SelectableDragableObjectsGroup::Deselect(const Ref<SelectableDragableObject>& object)
     {
         if (!object->IsSelected())
             return;
@@ -200,7 +198,7 @@ namespace o2
         object->OnDeselected();
     }
 
-    void SelectableDragableObjectsGroup::AddSelectableObject(SelectableDragableObject* object)
+    void SelectableDragableObjectsGroup::AddSelectableObject(const Ref<SelectableDragableObject>& object)
     {
         if (mObjects.Contains(object))
             return;
@@ -210,13 +208,13 @@ namespace o2
         if (object->IsSelected())
             mSelectedObjects.Add(object);
 
-        object->mSelectGroup = this;
+        object->mSelectGroup = Ref(this);
     }
 
     void SelectableDragableObjectsGroup::RemoveSelectableObject(SelectableDragableObject* object)
     {
-        mSelectedObjects.Remove(object);
-        mObjects.Remove(object);
+        mSelectedObjects.RemoveFirst([&](auto& x) { return x == object; });
+        mObjects.RemoveFirst([&](auto& x) { return x == object; });
 
         object->mSelectGroup = nullptr;
     }
@@ -226,7 +224,7 @@ namespace o2
         return true;
     }
 
-    void SelectableDragableObjectsGroup::OnSelectableObjectCursorPressed(SelectableDragableObject* object,
+    void SelectableDragableObjectsGroup::OnSelectableObjectCursorPressed(const Ref<SelectableDragableObject>& object,
                                                                          const Input::Cursor& cursor)
     {
         if (!o2Input.IsKeyDown(VK_CONTROL))
@@ -252,9 +250,9 @@ namespace o2
         if (mSelectGroup)
         {
             if (selected)
-                mSelectGroup->Select(this);
+                mSelectGroup->Select(Ref(this));
             else
-                mSelectGroup->Deselect(this);
+                mSelectGroup->Deselect(Ref(this));
         }
         else
         {
@@ -277,7 +275,7 @@ namespace o2
         SetSelected(false);
     }
 
-    void SelectableDragableObject::SetSelectionGroup(ISelectableDragableObjectsGroup* group)
+    void SelectableDragableObject::SetSelectionGroup(const Ref<ISelectableDragableObjectsGroup>& group)
     {
         if (mSelectGroup)
             mSelectGroup->RemoveSelectableObject(this);
@@ -285,10 +283,10 @@ namespace o2
         mSelectGroup = group;
 
         if (mSelectGroup)
-            mSelectGroup->AddSelectableObject(this);
+            mSelectGroup->AddSelectableObject(Ref(this));
     }
 
-    ISelectableDragableObjectsGroup* SelectableDragableObject::GetSelectionGroup() const
+    const Ref<ISelectableDragableObjectsGroup>& SelectableDragableObject::GetSelectionGroup() const
     {
         return mSelectGroup;
     }
@@ -313,7 +311,7 @@ namespace o2
         DragableObject::OnCursorPressed(cursor);
 
         if (mSelectGroup)
-            mSelectGroup->OnSelectableObjectCursorPressed(this, cursor);
+            mSelectGroup->OnSelectableObjectCursorPressed(Ref(this), cursor);
 
         if (mDragOnlySelected && !mIsSelected)
             mIsDragAvailable = false;
@@ -331,7 +329,7 @@ namespace o2
             return;
         }
 
-        DragDropArea* dragDropArea = GetDropAreaUnderCursor(cursor.id);
+        Ref<DragDropArea> dragDropArea = GetDropAreaUnderCursor(cursor.id);
 
         if (!mIsDragAvailable)
         {
@@ -348,10 +346,10 @@ namespace o2
 
                 if (mSelectGroup)
                 {
-                    mSelectGroup->OnSelectableObjectBeganDragging(this);
-                    mSelectGroup->mDraggingObject = this;
+                    mSelectGroup->OnSelectableObjectBeganDragging(Ref(this));
+                    mSelectGroup->mDraggingObject = Ref(this);
                 }
-                else 
+                else
                     Select();
 
                 OnDragStart(cursor);
@@ -369,7 +367,7 @@ namespace o2
                     if (mSelectGroup)
                         mDragDropArea->OnDragExit(mSelectGroup);
                     else
-                        mDragDropArea->OnDragExit(this);
+                        mDragDropArea->OnDragExit(Ref(this));
                 }
 
                 mDragDropArea = dragDropArea;
@@ -379,7 +377,7 @@ namespace o2
                     if (mSelectGroup)
                         mDragDropArea->OnDragEnter(mSelectGroup);
                     else
-                        mDragDropArea->OnDragEnter(this);
+                        mDragDropArea->OnDragEnter(Ref(this));
                 }
             }
 
@@ -388,7 +386,7 @@ namespace o2
                 if (mSelectGroup)
                     dragDropArea->OnDraggedAbove(mSelectGroup);
                 else
-                    dragDropArea->OnDraggedAbove(this);
+                    dragDropArea->OnDraggedAbove(Ref(this));
             }
         }
 
@@ -401,7 +399,7 @@ namespace o2
         {
             OnDragEnd(cursor);
 
-            if (DragDropArea* dragDropArea = GetDropAreaUnderCursor(cursor.id))
+            if (Ref<DragDropArea> dragDropArea = GetDropAreaUnderCursor(cursor.id))
             {
                 OnDropped(dragDropArea);
                 if (mSelectGroup)
@@ -410,7 +408,7 @@ namespace o2
                     mSelectGroup->mDraggingObject = nullptr;
                 }
                 else
-                    dragDropArea->OnDropped(this);
+                    dragDropArea->OnDropped(Ref(this));
             }
 
             mDragDropArea = nullptr;
@@ -419,7 +417,7 @@ namespace o2
         else
         {
             if (mSelectGroup)
-                mSelectGroup->OnSelectableObjectCursorReleased(this, cursor);
+                mSelectGroup->OnSelectableObjectCursorReleased(Ref(this), cursor);
             else
                 SetSelected(!IsSelected());
         }
@@ -445,18 +443,18 @@ namespace o2
     void ISelectableDragableObjectsGroup::DeselectAll()
     {
         auto objects = GetAllObjects();
-        for (auto object : objects)
+        for (auto& object : objects)
             Deselect(object);
     }
 
     void ISelectableDragableObjectsGroup::SelectAll()
     {
         auto objects = GetAllObjects();
-        for (auto object : objects)
+        for (auto& object : objects)
             Select(object);
     }
 
-    const SelectableDragableObject* ISelectableDragableObjectsGroup::GetDraggingObject() const
+    const Ref<SelectableDragableObject> ISelectableDragableObjectsGroup::GetDraggingObject() const
     {
         return mDraggingObject;
     }

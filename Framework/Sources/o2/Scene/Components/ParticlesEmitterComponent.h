@@ -8,8 +8,6 @@ namespace o2
 {
     class ParticlesEmitterComponent: public DrawableComponent, public ParticlesEmitter
     {
-        SERIALIZABLE(ParticlesEmitterComponent);
-
     public:
         ParticlesEmitterComponent();
         ParticlesEmitterComponent(const ParticlesEmitterComponent& other);
@@ -33,10 +31,15 @@ namespace o2
         static String GetCategory();
 
         // Returns name of component icon
-        static String GetIcon();
+		static String GetIcon();
+
+		// Dynamic cast to RefCounterable via DrawableComponent
+		static Ref<RefCounterable> CastToRefCounterable(const Ref<ParticlesEmitterComponent>& ref);
+
+        SERIALIZABLE(ParticlesEmitterComponent);
+        CLONEABLE_REF(ParticlesEmitterComponent);
 
     protected:
-
         // Called when actor's transform was changed
         void OnTransformUpdated() override;
 
@@ -51,6 +54,8 @@ namespace o2
 
         // Completion deserialization delta callback
         void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
+        REF_COUNTERABLE_IMPL(DrawableComponent, ParticlesEmitter);
     };
 }
 // --- META ---
@@ -76,6 +81,7 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<ParticlesEmitterComponent>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

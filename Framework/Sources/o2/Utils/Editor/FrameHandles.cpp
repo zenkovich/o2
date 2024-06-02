@@ -11,9 +11,9 @@ namespace o2
         Vec2F rotateHandleSize = Vec2F(mHandlesRotateSize, mHandlesRotateSize);
         Vec2F frameHandleSize = Vec2F(mFrameHandlesSize, mFrameHandlesSize);
 
-        mLeftTopRotateHandle.SetRegularDrawable(mnew Sprite(Color4(0, 0, 0, 20)));
-        mLeftTopRotateHandle.SetHoverDrawable(mnew Sprite(Color4(0, 0, 0, 10)));
-        mLeftTopRotateHandle.SetPressedDrawable(mnew Sprite(Color4(0, 0, 0, 50)));
+        mLeftTopRotateHandle.SetRegularDrawable(mmake<Sprite>(Color4(0, 0, 0, 20)));
+        mLeftTopRotateHandle.SetHoverDrawable(mmake<Sprite>(Color4(0, 0, 0, 10)));
+        mLeftTopRotateHandle.SetPressedDrawable(mmake<Sprite>(Color4(0, 0, 0, 50)));
         mLeftTopRotateHandle.GetRegularDrawable()->size = rotateHandleSize;
         mLeftTopRotateHandle.GetHoverDrawable()->size = rotateHandleSize;
         mLeftTopRotateHandle.GetPressedDrawable()->size = rotateHandleSize;
@@ -25,25 +25,25 @@ namespace o2
         mRightTopRotateHandle = mLeftTopRotateHandle;
         mRightBottomRotateHandle = mLeftTopRotateHandle;
 
-        mLeftTopHandle.SetRegularDrawable(mnew Sprite("ui/UI2_handle_regular.png"));
-        mLeftTopHandle.SetHoverDrawable(mnew Sprite("ui/UI2_handle_select.png"));
-        mLeftTopHandle.SetPressedDrawable(mnew Sprite("ui/UI2_handle_pressed.png"));
+        mLeftTopHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_regular.png"));
+        mLeftTopHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_select.png"));
+        mLeftTopHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_pressed.png"));
 
         mLeftBottomHandle = mLeftTopHandle;
         mRightTopHandle = mLeftTopHandle;
         mRightBottomHandle = mLeftTopHandle;
 
-        mLeftHandle.SetRegularDrawable(mnew Sprite("ui/UI2_handle_side_regular.png"));
-        mLeftHandle.SetHoverDrawable(mnew Sprite("ui/UI2_handle_side_select.png"));
-        mLeftHandle.SetPressedDrawable(mnew Sprite("ui/UI2_handle_side_pressed.png"));
+        mLeftHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_side_regular.png"));
+        mLeftHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_side_select.png"));
+        mLeftHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_side_pressed.png"));
 
         mTopHandle = mLeftHandle;
         mBottomHandle = mLeftHandle;
         mRightHandle = mLeftHandle;
 
-        mPivotHandle.SetRegularDrawable(mnew Sprite("ui/UI2_pivot.png"));
-        mPivotHandle.SetHoverDrawable(mnew Sprite("ui/UI2_pivot_select.png"));
-        mPivotHandle.SetPressedDrawable(mnew Sprite("ui/UI2_pivot_pressed.png"));
+        mPivotHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_pivot.png"));
+        mPivotHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_pivot_select.png"));
+        mPivotHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_pivot_pressed.png"));
 
         mLeftTopHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnLeftTopHandle);
         mLeftHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnLeftHandle);

@@ -10,10 +10,10 @@
 
 namespace Editor
 {
-	AddComponentPanel::AddComponentPanel(ActorViewer* viewer) :
-		mViewer(viewer)
+	AddComponentPanel::AddComponentPanel(RefCounter* refCounter, const Ref<ActorViewer>& viewer) :
+		Widget(refCounter), mViewer(viewer)
 	{
-		AddLayer("border", mnew Sprite("ui/UI4_shadow_separator.png"), Layout::HorStretch(VerAlign::Top, -2, -2, 5, -4));
+		AddLayer("border", mmake<Sprite>("ui/UI4_shadow_separator.png"), Layout::HorStretch(VerAlign::Top, -2, -2, 5, -4));
 
 		mFilterBox = o2UI.CreateEditBox("actor head name");
 		mAddButton = o2UI.CreateWidget<Button>("add component");
@@ -32,7 +32,8 @@ namespace Editor
 		mTree->Refresh();
 	}
 
-	AddComponentPanel::AddComponentPanel()
+	AddComponentPanel::AddComponentPanel(RefCounter* refCounter):
+		Widget(refCounter)
 	{}
 
 	void AddComponentPanel::Draw()
@@ -41,12 +42,12 @@ namespace Editor
 		CursorEventsArea::OnDrawn();
 	}
 
-	EditBox* AddComponentPanel::GetFilter() const
+	const Ref<EditBox>& AddComponentPanel::GetFilter() const
 	{
 		return mFilterBox;
 	}
 
-	ComponentsTree* AddComponentPanel::GetTree() const
+	const Ref<ComponentsTree>& AddComponentPanel::GetTree() const
 	{
 		return mTree;
 	}
@@ -66,7 +67,12 @@ namespace Editor
 		return "UI/Editor";
 	}
 
-	void AddComponentPanel::OnAddPressed()
+    Ref<RefCounterable> AddComponentPanel::CastToRefCounterable(const Ref<AddComponentPanel>& ref)
+    {
+		return DynamicCast<Widget>(ref);
+    }
+
+    void AddComponentPanel::OnAddPressed()
 	{
 		if (mTree->GetSelectedObjects().IsEmpty())
 			return;
@@ -84,23 +90,25 @@ namespace Editor
 
 	void AddComponentPanel::CreateComponent(const ObjectType* objType)
 	{
-		for (auto actor : mViewer->mTargetActors)
+		auto viewer = mViewer.Lock();
+
+		for (auto& actor : viewer->mTargetActors)
 		{
-			auto comp = dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample()));
+			auto comp = DynamicCast<Component>(objType->CreateSampleRef());
 			actor->AddComponent(comp);
 			comp->OnAddedFromEditor();
 		}
 
-		mViewer->SetTargets(mViewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
-		mViewer->OnEnabled();
+		viewer->SetTargets(viewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
+		viewer->OnEnabled();
 	}
 
-	void AddComponentPanel::OnNodeDblClick(TreeNode* nodeWidget)
+	void AddComponentPanel::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
 	{
 		if (!nodeWidget)
 			return;
 
-		auto node = dynamic_cast<ComponentsTreeNode*>(nodeWidget);
+		auto node = DynamicCast<ComponentsTreeNode>(nodeWidget);
 		if (!node->data->type)
 			return;
 
@@ -111,21 +119,25 @@ namespace Editor
 	void AddComponentPanel::OnKeyReleased(const Input::Key& key)
 	{
 		if (key.keyCode != VK_RETURN)
-			return; // haha
+			return; 
 
 		if (mFilterBox->IsFocused() || mTree->IsFocused())
 			OnAddPressed();
 	}
 
-	ComponentsTree::ComponentsTree() :
-		Tree()
+	ComponentsTree::ComponentsTree(RefCounter* refCounter) :
+		Tree(refCounter)
 	{}
 
-	ComponentsTree::ComponentsTree(const ComponentsTree& other) :
-		Tree(other)
+	ComponentsTree::ComponentsTree(RefCounter* refCounter, const ComponentsTree& other) :
+		Tree(refCounter, other)
 	{}
 
-	ComponentsTree& ComponentsTree::operator=(const ComponentsTree& other)
+    ComponentsTree::ComponentsTree(const ComponentsTree& other):
+		ComponentsTree(nullptr, other)
+    {}
+
+    ComponentsTree& ComponentsTree::operator=(const ComponentsTree& other)
 	{
 		Tree::operator=(other);
 		return *this;
@@ -133,14 +145,17 @@ namespace Editor
 
 	void ComponentsTree::Refresh()
 	{
-		mRoot.Clear();
+		if (!mRoot)
+			return;
+
+		mRoot->Clear();
 
 		auto componentsTypes = TypeOf(Component).GetDerivedTypes();
 		componentsTypes.Remove(&TypeOf(DrawableComponent));
 
 		String filterStrLower = mFilterStr.ToLowerCase();
 
-		for (auto type : componentsTypes)
+		for (auto& type : componentsTypes)
 		{
 			if (!type->InvokeStatic<bool>("IsAvailableFromCreateMenu"))
 				continue;
@@ -152,19 +167,19 @@ namespace Editor
 			if (!filterStrLower.IsEmpty())
 			{
 				if (name.ToLowerCase().Contains(filterStrLower))
-					mRoot.AddChild(name, type)->icon = type->InvokeStatic<String>("GetIcon");
+					mRoot->AddChild(name, type)->icon = type->InvokeStatic<String>("GetIcon");
 			}
 			else
 			{
 				String category = type->InvokeStatic<String>("GetCategory");
-				NodeData* it = &mRoot;
+				auto it = mRoot;
 				while (!category.IsEmpty())
 				{
 					int fnd = category.Find('/');
 					String subStr = category.SubStr(0, fnd);
 					category = fnd != -1 ? category.SubStr(fnd + 1) : String("");
 
-					auto nextIt = it->children.FindOrDefault([&](NodeData* x) { return x->name == subStr; });
+					auto nextIt = it->children.FindOrDefault([&](auto& x) { return x->name == subStr; });
 					if (!nextIt)
 						nextIt = it->AddChild(subStr, nullptr);
 
@@ -186,8 +201,9 @@ namespace Editor
 
 		String lowerFilter = mFilterStr.ToLowerCase();
 		int minDist = INT_MAX;
-		NodeData* filtered = nullptr;
-		Function<void(NodeData*)> recursiveSearch = [&lowerFilter, &recursiveSearch, &minDist, &filtered](NodeData* node)
+		Ref<NodeData> filtered;
+		Function<void(const Ref<NodeData>&)> recursiveSearch = 
+			[&lowerFilter, &recursiveSearch, &minDist, &filtered](const Ref<NodeData>& node)
 		{
 			if (node->type != nullptr)
 			{
@@ -199,14 +215,14 @@ namespace Editor
 				}
 			}
 
-			for (auto child : node->children)
+			for (auto& child : node->children)
 				recursiveSearch(child);
 		};
 
-		recursiveSearch(&mRoot);
+		recursiveSearch(mRoot);
 
 		if (filtered)
-			SelectAndHighlightObject(filtered);
+			SelectAndHighlightObject(filtered.Get());
 	}
 
 	String ComponentsTree::GetCreateMenuCategory()
@@ -220,7 +236,7 @@ namespace Editor
 		Tree::UpdateVisibleNodes();
 	}
 
-	TreeNode* ComponentsTree::CreateTreeNodeWidget()
+	Ref<TreeNode> ComponentsTree::CreateTreeNodeWidget()
 	{
 		PushEditorScopeOnStack scope;
 		return Tree::CreateTreeNodeWidget();
@@ -229,18 +245,18 @@ namespace Editor
 	void* ComponentsTree::GetObjectParent(void* object)
 	{
 		auto node = (NodeData*)object;
-		if (node->parent == &mRoot)
+		if (node->parent == mRoot.Get())
 			return (NodeData*)nullptr;
 
-		return node->parent;
+		return node->parent.Lock().Get();
 	}
 
 	Vector<void*> ComponentsTree::GetObjectChilds(void* object)
 	{
 		if (object)
-			return ((NodeData*)object)->children.Cast<void*>();
+			return ((NodeData*)object)->children.Convert<void*>([](auto& x) { return x.Get(); });
 
-		return mRoot.children.Cast<void*>();
+		return mRoot->children.Convert<void*>([](auto& x) { return x.Get(); });
 	}
 
 	String ComponentsTree::GetObjectDebug(void* object)
@@ -251,10 +267,10 @@ namespace Editor
 		return "";
 	}
 
-	void ComponentsTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
+	void ComponentsTree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object)
 	{
-		auto propertyNode = dynamic_cast<ComponentsTreeNode*>(nodeWidget);
-		propertyNode->Setup((NodeData*)object, this);
+		auto propertyNode = DynamicCast<ComponentsTreeNode>(nodeWidget);
+		propertyNode->Setup(Ref((NodeData*)object), Ref(this));
 	}
 
 	void ComponentsTree::OnDeserialized(const DataValue& node)
@@ -262,14 +278,14 @@ namespace Editor
 		Tree::OnDeserialized(node);
 	}
 
-	ComponentsTreeNode::ComponentsTreeNode():
-		TreeNode()
+	ComponentsTreeNode::ComponentsTreeNode(RefCounter* refCounter):
+		TreeNode(refCounter)
 	{
 		InitializeControls();
 	}
 
-	ComponentsTreeNode::ComponentsTreeNode(const ComponentsTreeNode& other) :
-		TreeNode(other)
+	ComponentsTreeNode::ComponentsTreeNode(RefCounter* refCounter, const ComponentsTreeNode& other) :
+		TreeNode(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -281,7 +297,7 @@ namespace Editor
 		return *this;
 	}
 
-	void ComponentsTreeNode::Setup(ComponentsTree::NodeData* data, ComponentsTree* tree)
+	void ComponentsTreeNode::Setup(const Ref<ComponentsTree::NodeData>& data, const Ref<ComponentsTree>& tree)
 	{
 		mName->text = data->name;
 
@@ -317,25 +333,25 @@ namespace Editor
 
 	void ComponentsTree::NodeData::Clear()
 	{
-		for (auto child : children)
-			delete child;
-
 		children.Clear();
 	}
 
-	ComponentsTree::NodeData* ComponentsTree::NodeData::AddChild(const String& name, const Type* type)
+	Ref<ComponentsTree::NodeData> ComponentsTree::NodeData::AddChild(const String& name, const Type* type)
 	{
-		NodeData* newChild = mnew NodeData();
+		auto newChild = mmake<NodeData>();
 		children.Add(newChild);
 
 		newChild->name = name;
 		newChild->path = path.IsEmpty() ? name : path + "/" + name;
 		newChild->type = type;
-		newChild->parent = this;
+		newChild->parent = Ref(this);
 
 		return newChild;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ComponentsTreeNode>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AddComponentPanel>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AddComponentPanel, Editor__AddComponentPanel);

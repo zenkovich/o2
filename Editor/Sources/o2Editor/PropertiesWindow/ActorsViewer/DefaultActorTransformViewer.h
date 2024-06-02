@@ -4,8 +4,8 @@
 
 namespace Editor
 {
-	class Vec2FProperty;
-	class FloatProperty;
+	FORWARD_CLASS_REF(Vec2FProperty);
+	FORWARD_CLASS_REF(FloatProperty);
 
 	// -------------------------------------
 	// Default editor actor transform viewer
@@ -30,22 +30,22 @@ namespace Editor
 	protected:
 		Vector<Actor*> mTargetActors;
 
-		Vec2FProperty* mPositionProperty = nullptr;
-		Vec2FProperty* mPivotProperty = nullptr;
-		Vec2FProperty* mScaleProperty = nullptr;
-		Vec2FProperty* mSizeProperty = nullptr;
-		FloatProperty* mRotationProperty = nullptr;
-		FloatProperty* mShearProperty = nullptr;
+		Ref<Vec2FProperty> mPositionProperty;
+		Ref<Vec2FProperty> mPivotProperty;
+		Ref<Vec2FProperty> mScaleProperty;
+		Ref<Vec2FProperty> mSizeProperty;
+		Ref<FloatProperty> mRotationProperty;
+		Ref<FloatProperty> mShearProperty;
 
-		bool           mLayoutEnabled = false;
-		Spoiler*       mLayoutSpoiler = nullptr;
-		Vec2FProperty* mAnchorRightTopProperty = nullptr;
-		Vec2FProperty* mAnchorLeftBottomProperty = nullptr;
-		Vec2FProperty* moffsetRightTopProperty = nullptr;
-		Vec2FProperty* mOffsetLeftBottomProperty = nullptr;
-		Vec2FProperty* mMinSizeProperty = nullptr;
-		Vec2FProperty* mMaxSizeProperty = nullptr;
-		Vec2FProperty* mWeightProperty = nullptr;
+		bool               mLayoutEnabled = false;
+		Ref<Spoiler>       mLayoutSpoiler;
+		Ref<Vec2FProperty> mAnchorRightTopProperty;
+		Ref<Vec2FProperty> mAnchorLeftBottomProperty;
+		Ref<Vec2FProperty> moffsetRightTopProperty;
+		Ref<Vec2FProperty> mOffsetLeftBottomProperty;
+		Ref<Vec2FProperty> mMinSizeProperty;
+		Ref<Vec2FProperty> mMaxSizeProperty;
+		Ref<Vec2FProperty> mWeightProperty;
 
 	protected:
 		// Called when some property changed, stores action for undo
@@ -63,21 +63,21 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
 {
     FIELD().PROTECTED().NAME(mTargetActors);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPositionProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPivotProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mScaleProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRotationProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mShearProperty);
+    FIELD().PROTECTED().NAME(mPositionProperty);
+    FIELD().PROTECTED().NAME(mPivotProperty);
+    FIELD().PROTECTED().NAME(mScaleProperty);
+    FIELD().PROTECTED().NAME(mSizeProperty);
+    FIELD().PROTECTED().NAME(mRotationProperty);
+    FIELD().PROTECTED().NAME(mShearProperty);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mLayoutEnabled);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayoutSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMinSizeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMaxSizeProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWeightProperty);
+    FIELD().PROTECTED().NAME(mLayoutSpoiler);
+    FIELD().PROTECTED().NAME(mAnchorRightTopProperty);
+    FIELD().PROTECTED().NAME(mAnchorLeftBottomProperty);
+    FIELD().PROTECTED().NAME(moffsetRightTopProperty);
+    FIELD().PROTECTED().NAME(mOffsetLeftBottomProperty);
+    FIELD().PROTECTED().NAME(mMinSizeProperty);
+    FIELD().PROTECTED().NAME(mMaxSizeProperty);
+    FIELD().PROTECTED().NAME(mWeightProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorTransformViewer)

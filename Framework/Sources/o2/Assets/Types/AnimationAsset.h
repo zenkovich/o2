@@ -13,7 +13,7 @@ namespace o2
     class AnimationAsset: public AssetWithDefaultMeta<AnimationAsset>
     {
     public:
-        AnimationClip animation; // Asset data @SERIALIZABLE @EXPANDED_BY_DEFAULT
+        Ref<AnimationClip> animation; // Asset data @SERIALIZABLE @EXPANDED_BY_DEFAULT
 
     public:
         // Default constructor
@@ -23,7 +23,7 @@ namespace o2
         AnimationAsset(const AnimationAsset& asset);
 
         // Constructor with animation clip
-        AnimationAsset(const AnimationClip& clip);
+        explicit AnimationAsset(const Ref<AnimationClip>& clip);
 
         // Check equals operator
         AnimationAsset& operator=(const AnimationAsset& asset);
@@ -44,11 +44,10 @@ namespace o2
         static bool IsReferenceCanOwnInstance() { return true; }
 
         SERIALIZABLE(AnimationAsset);
+        CLONEABLE_REF(AnimationAsset);
 
         friend class Assets;
     };
-
-    typedef Ref<AnimationAsset> AnimationAssetRef;
 }
 // --- META ---
 
@@ -67,7 +66,7 @@ CLASS_METHODS_META(o2::AnimationAsset)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationAsset&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationClip&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

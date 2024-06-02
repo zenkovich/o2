@@ -44,7 +44,7 @@ namespace Editor
 
 		mWindow->caption = "Assets";
 		mWindow->name = "assets window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_folder_icon.png"));
+		mWindow->SetIcon(mmake<Sprite>("ui/UI4_folder_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
@@ -62,7 +62,8 @@ namespace Editor
 	{
 		auto separatorLayer = mFoldersTree->FindLayer("separator");
 
-		mSeparatorHandle.isUnderPoint = [=](const Vec2F& point) {
+		mSeparatorHandle = mmake<CursorEventsArea>();
+		mSeparatorHandle->isUnderPoint = [=](const Vec2F& point) {
 			RectF rt = separatorLayer->GetDrawable()->GetRect();
 			rt.left -= 2; rt.right += 2;
 			return rt.IsInside(point);
@@ -76,7 +77,7 @@ namespace Editor
 		mFoldersTree->layout->anchorRight = mSeparatorCoef;
 		mAssetsGridScroll->layout->anchorLeft = mSeparatorCoef;
 
-		mSeparatorHandle.onMoved = [&](const Input::Cursor& cursor) {
+		mSeparatorHandle->onMoved = [&](const Input::Cursor& cursor) {
 			float anchorDelta = cursor.delta.x / mWindow->layout->width;
 			mFoldersTree->layout->anchorRight += anchorDelta;
 			mAssetsGridScroll->layout->anchorLeft += anchorDelta;
@@ -85,9 +86,9 @@ namespace Editor
 // 			userData["layout/assetsWindow/separator_coef"].Set(mFoldersTree->layout->GetAnchorRight());
 		};
 
-		mAssetsGridScroll->onDraw += [&]() { mSeparatorHandle.OnDrawn(); };
+		mAssetsGridScroll->onDraw += [&]() { mSeparatorHandle->OnDrawn(); };
 
-		mSeparatorHandle.cursorType = CursorType::SizeWE;
+		mSeparatorHandle->cursorType = CursorType::SizeWE;
 	}
 
 	void AssetsWindow::InitializeFoldersTreeVisibleState()
@@ -95,11 +96,11 @@ namespace Editor
 		mFoldersTreeShowCoef = 1.0f;
 		mFoldersTreeVisible = true;
 
-		mFoldersTreeShowAnim.SetTarget(this);
-		mFoldersTreeShowAnim.SetClip(mnew AnimationClip(AnimationClip::EaseInOut("mFoldersTreeShowCoef", 0.0f, 1.0f, 0.4f)), true);
-		mFoldersTreeShowAnim.GoToEnd();
+		mFoldersTreeShowAnim->SetTarget(this);
+		mFoldersTreeShowAnim->SetClip(AnimationClip::EaseInOut("mFoldersTreeShowCoef", 0.0f, 1.0f, 0.4f));
+		mFoldersTreeShowAnim->GoToEnd();
 
-		mFoldersTreeShowAnim.onUpdate = [&](float dt) {
+		mFoldersTreeShowAnim->onUpdate = [&](float dt) {
 			mFoldersTree->layout->anchorRight = mSeparatorCoef*mFoldersTreeShowCoef;
 			mAssetsGridScroll->layout->anchorLeft = mSeparatorCoef*mFoldersTreeShowCoef;
 
@@ -114,10 +115,10 @@ namespace Editor
 
 	void AssetsWindow::InitializeFoldersTree()
 	{
-		mFoldersTree = mnew AssetsFoldersTree();
+		mFoldersTree = mmake<AssetsFoldersTree>();
 		*mFoldersTree->layout = WidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 5.0f, -18.0f, 0.0f, 18.0f);
 
-		mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI4_Ver_separator.png"),
+		mFoldersTree->AddLayer("separator", mmake<Sprite>("ui/UI4_Ver_separator.png"),
 							   Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
 		
 		mFoldersTree->UpdateView();
@@ -138,8 +139,8 @@ namespace Editor
 
 	void AssetsWindow::InitializeDownPanel()
 	{
-		Widget* downPanel = mnew Widget();
-		downPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_down_back.png"),
+		auto downPanel = mmake<Widget>();
+		downPanel->AddLayer("back", mmake<Sprite>("ui/UI4_small_panel_down_back.png"),
 							Layout::BothStretch(-4, -5, -4, -5));
 		*downPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
 
@@ -160,12 +161,12 @@ namespace Editor
 
 	void AssetsWindow::InitializeUpPanel()
 	{
-		Widget* upPanel = mnew Widget();
+		auto upPanel = mmake<Widget>();
 		upPanel->name = "up panel";
 		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-		upPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
+		upPanel->AddLayer("back", mmake<Sprite>("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
-		Button* searchButton = o2UI.CreateWidget<Button>("search");
+		auto searchButton = o2UI.CreateWidget<Button>("search");
 		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(1, 1));
 		upPanel->AddChild(searchButton);
 
@@ -185,7 +186,7 @@ namespace Editor
 	void AssetsWindow::Update(float dt)
 	{
 		IEditorWindow::Update(dt);
-		mFoldersTreeShowAnim.Update(dt);
+		mFoldersTreeShowAnim->Update(dt);
 	}
 
 	void AssetsWindow::SelectAsset(const UID& id)
@@ -212,13 +213,13 @@ namespace Editor
 
 	void AssetsWindow::SelectAsset(const Vector<UID>& ids)
 	{
-		for (auto id : ids)
+		for (auto& id : ids)
 			SelectAsset(id);
 	}
 
 	void AssetsWindow::SelectAssets(const Vector<String>& paths)
 	{
-		for (auto path : paths)
+		for (auto& path : paths)
 			SelectAsset(path);
 	}
 
@@ -253,7 +254,7 @@ namespace Editor
 		mAssetsGridScroll->DeselectAllAssets();
 	}
 
-	const Vector<const AssetInfo*>& AssetsWindow::GetSelectedAssets() const
+	const Vector<Ref<AssetInfo>>& AssetsWindow::GetSelectedAssets() const
 	{
 		return mAssetsGridScroll->GetSelectedAssets();
 	}
@@ -343,7 +344,7 @@ namespace Editor
 	void AssetsWindow::PasteAssets(const String& targetPath)
 	{
 		Vector<WString> paths = Clipboard::GetCopyFiles();
-		for (auto path : paths)
+		for (auto& path : paths)
 		{
 			String fileName = o2FileSystem.GetPathWithoutDirectories(path);
 			String extension = o2FileSystem.GetFileExtension(fileName);
@@ -402,22 +403,22 @@ namespace Editor
 		o2Assets.RebuildAssets();
 	}
 
-	Sprite* AssetsWindow::GetAssetIconSprite(const AssetRef& asset)
+	Ref<Sprite> AssetsWindow::GetAssetIconSprite(const AssetRef<Asset>& asset)
 	{
 		const Type& type = asset->GetType();
 
 		if (type == TypeOf(ImageAsset))
-			return mnew Sprite(asset->GetPath());
+			return mmake<Sprite>(asset->GetPath());
 		else if (type == TypeOf(ActorAsset))
-			return mnew Sprite("ui/UI4_actor_icon.png");
+			return mmake<Sprite>("ui/UI4_actor_icon.png");
 		else if (type == TypeOf(FolderAsset))
-			return mnew Sprite("ui/UI4_big_folder_icon.png");
+			return mmake<Sprite>("ui/UI4_big_folder_icon.png");
 		else if (type == TypeOf(DataAsset))
-			return mnew Sprite("ui/UI4_big_text_file_icon.png");
+			return mmake<Sprite>("ui/UI4_big_text_file_icon.png");
 		else if (type == TypeOf(AnimationAsset))
-			return mnew Sprite("ui/UI4_anim_file_icon.png"); 
+			return mmake<Sprite>("ui/UI4_anim_file_icon.png"); 
 
-		return mnew Sprite("ui/UI4_big_file_icon.png"); 
+		return mmake<Sprite>("ui/UI4_big_file_icon.png"); 
 	}
 
 	void AssetsWindow::OnSearchEdited(const WString& search)
@@ -431,9 +432,9 @@ namespace Editor
 		mFoldersTreeVisible = !mFoldersTreeVisible;
 
 		if (mFoldersTreeVisible)
-			mFoldersTreeShowAnim.PlayForward();
+			mFoldersTreeShowAnim->PlayForward();
 		else
-			mFoldersTreeShowAnim.PlayBack();
+			mFoldersTreeShowAnim->PlayBack();
 	}
 
 	void AssetsWindow::OnAssetsRebuilt(const Vector<UID>& changedAssets)

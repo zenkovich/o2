@@ -10,10 +10,10 @@ namespace Editor
 
 	MeshComponentViewer::~MeshComponentViewer()
 	{
-		o2EditorSceneScreen.RemoveTool(&mSplineTool);
-		o2EditorSceneScreen.RemoveTool(&mFrameTool);
-		o2EditorSceneScreen.RemoveTool(&mTopologyTool);
-		o2EditorSceneScreen.RemoveEditorLayer(&mFrameTetxureLayer);
+		o2EditorSceneScreen.RemoveTool(mSplineTool);
+		o2EditorSceneScreen.RemoveTool(mFrameTool);
+		o2EditorSceneScreen.RemoveTool(mTopologyTool);
+		o2EditorSceneScreen.RemoveEditorLayer(mFrameTetxureLayer);
 	}
 
 	MeshComponentViewer& MeshComponentViewer::operator=(const MeshComponentViewer& other)
@@ -45,53 +45,53 @@ namespace Editor
 			};
 
 			// Spline tool
-			mSplineTool.SetSpline(&mTypeTargetObjects[0].first->spline, getOrigin);
-			mSplineTool.onChanged = [&]() { mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged(); };
+			mSplineTool->SetSpline(mTypeTargetObjects[0].first->spline, getOrigin);
+			mSplineTool->onChanged = [&]() { mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged(); };
 
 			// Frame tool
-			mFrameTool.SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
-			mFrameTool.frameHandles.SetRotationEnabled(false);
-			mFrameTool.getOrigin = getOrigin;
-			mFrameTool.onChanged = [&](const Basis& b) {
+			mFrameTool->SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
+			mFrameTool->frameHandles.SetRotationEnabled(false);
+			mFrameTool->getOrigin = getOrigin;
+			mFrameTool->onChanged = [&](const Basis& b) {
 				mTypeTargetObjects[0].first->SetMappingFrame(b.AABB());
 				mTypeTargetObjects[0].first->GetOwnerActor()->OnChanged();
 			};
 
-			mFrameTetxureLayer.viewer = this;
+			mFrameTetxureLayer->viewer = Ref(this);
 
 			// Topology tool
 			auto mesh = mTypeTargetObjects[0].first;
-			mTopologyTool.Setup([=]() { return mesh->GetExtraPoints(); },
-								[=](int idx, Vec2F p) { mesh->SetExtraPoint(idx, p); mesh->GetOwnerActor()->OnChanged(); },
-								[=]() { return mesh->GetOwnerActor()->transform->GetWorldNonSizedBasis(); },
-								[=](Vec2F p) { mesh->AddExtraPoint(p); mesh->GetOwnerActor()->OnChanged(); },
-								[=](int idx) { mesh->RemoveExtraPoint(idx); mesh->GetOwnerActor()->OnChanged(); });
+			mTopologyTool->Setup([=]() { return mesh->GetExtraPoints(); },
+								 [=](int idx, Vec2F p) { mesh->SetExtraPoint(idx, p); mesh->GetOwnerActor()->OnChanged(); },
+								 [=]() { return mesh->GetOwnerActor()->transform->GetWorldNonSizedBasis(); },
+								 [=](Vec2F p) { mesh->AddExtraPoint(p); mesh->GetOwnerActor()->OnChanged(); },
+								 [=](int idx) { mesh->RemoveExtraPoint(idx); mesh->GetOwnerActor()->OnChanged(); });
 		}
 	}
 
 	void MeshComponentViewer::OnEnabled()
 	{
-		o2EditorSceneScreen.AddTool(&mSplineTool);
-		o2EditorSceneScreen.AddTool(&mFrameTool);
-		o2EditorSceneScreen.AddTool(&mTopologyTool);
+		o2EditorSceneScreen.AddTool(mSplineTool);
+		o2EditorSceneScreen.AddTool(mFrameTool);
+		o2EditorSceneScreen.AddTool(mTopologyTool);
 
 		mPrevSelectedTool = o2EditorSceneScreen.GetSelectedTool();
 		o2EditorSceneScreen.SelectTool<SplineTool>();
 
-		o2EditorSceneScreen.AddEditorLayer(&mFrameTetxureLayer);
+		o2EditorSceneScreen.AddEditorLayer(mFrameTetxureLayer);
 	}
 
 	void MeshComponentViewer::OnDisabled()
 	{
 		auto selectedTool = o2EditorSceneScreen.GetSelectedTool();
-		if (selectedTool == &mSplineTool || selectedTool == &mFrameTool || selectedTool == &mTopologyTool)
-			o2EditorSceneScreen.SelectTool(mPrevSelectedTool);
+		if (selectedTool == mSplineTool || selectedTool == mFrameTool || selectedTool == mTopologyTool)
+			o2EditorSceneScreen.SelectTool(mPrevSelectedTool.Lock());
 
-		o2EditorSceneScreen.RemoveTool(&mSplineTool);
-		o2EditorSceneScreen.RemoveTool(&mFrameTool);
-		o2EditorSceneScreen.RemoveTool(&mTopologyTool);
+		o2EditorSceneScreen.RemoveTool(mSplineTool);
+		o2EditorSceneScreen.RemoveTool(mFrameTool);
+		o2EditorSceneScreen.RemoveTool(mTopologyTool);
 
-		o2EditorSceneScreen.RemoveEditorLayer(&mFrameTetxureLayer);
+		o2EditorSceneScreen.RemoveEditorLayer(mFrameTetxureLayer);
 	}
 
 	void MeshComponentViewer::FitAndCenterize()
@@ -104,17 +104,18 @@ namespace Editor
 
 			component->SetMappingFrame(RectF(size*-0.5f, size*0.5f));
 
-			mFrameTool.SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
+			mFrameTool->SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
 		}
 	}
 
 	void MeshComponentViewer::SceneLayer::DrawOverScene()
 	{
-		if (!viewer->mTypeTargetObjects.IsEmpty())
+		auto viewerRef = viewer.Lock();
+		if (!viewerRef->mTypeTargetObjects.IsEmpty())
 		{
-			if (viewer->mFrameTool.isEnabled || viewer->mSplineTool.isEnabled)
+			if (viewerRef->mFrameTool->isEnabled || viewerRef->mSplineTool->isEnabled)
 			{
-				auto obj = viewer->mTypeTargetObjects[0].first;
+				auto obj = viewerRef->mTypeTargetObjects[0].first;
 
 				textureSprite.SetImageAsset(obj->GetImage());
 				textureSprite.SetBasis(Basis(obj->GetMappingFrame())
@@ -124,7 +125,7 @@ namespace Editor
 				textureSprite.Draw();
 			}
 
-			if (viewer->mTopologyTool.isEnabled || viewer->mSplineTool.isEnabled)
+			if (viewerRef->mTopologyTool->isEnabled || viewerRef->mSplineTool->isEnabled)
 				DrawMeshWire();
 		}
 	}
@@ -139,7 +140,8 @@ namespace Editor
 
 	bool MeshComponentViewer::SceneLayer::IsEnabled() const
 	{
-		return viewer->mFrameTool.isEnabled || viewer->mSplineTool.isEnabled || viewer->mTopologyTool.isEnabled;
+		auto viewerRef = viewer.Lock();
+		return viewerRef->mFrameTool->isEnabled || viewerRef->mSplineTool->isEnabled || viewerRef->mTopologyTool->isEnabled;
 	}
 
 	const String& MeshComponentViewer::SceneLayer::GetName() const
@@ -155,9 +157,10 @@ namespace Editor
 
 	void MeshComponentViewer::SceneLayer::DrawMeshWire()
 	{
-		if (!viewer->mTypeTargetObjects.IsEmpty())
+		auto viewerRef = viewer.Lock();
+		if (!viewerRef->mTypeTargetObjects.IsEmpty())
 		{
-			auto& mesh = viewer->mTypeTargetObjects[0].first->GetMesh();
+			auto& mesh = viewerRef->mTypeTargetObjects[0].first->GetMesh();
 
 			Color4 wireColor(0, 0, 0, 100);
 			Vector<Vertex> verticies;

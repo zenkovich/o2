@@ -18,17 +18,17 @@ namespace Editor
 	class PropertyChangeAction: public IAction
 	{
 	public:
-		Vector<SceneUID>     objectsIds;
-		String               propertyPath;
-		Vector<DataDocument> beforeValues;
-		Vector<DataDocument> afterValues;
+		Vector<SceneUID>     objectsIds;   // Changed objects
+		String               propertyPath; // Path to property
+		Vector<DataDocument> beforeValues; // Serialized values before change
+		Vector<DataDocument> afterValues;  // Serialized values after change
 
 	public:
 		// Default constructor
 		PropertyChangeAction();
 
 		// Constructor with all data
-		PropertyChangeAction(const Vector<SceneEditableObject*>& objects,
+        PropertyChangeAction(const Vector<Ref<SceneEditableObject>>& objects,
 							 const String& propertyPath,
 							 const Vector<DataDocument>& beforeValues,
 							 const Vector<DataDocument>& afterValues);
@@ -68,7 +68,7 @@ CLASS_METHODS_META(Editor::PropertyChangeAction)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Ref<SceneEditableObject>>&, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
     FUNCTION().PUBLIC().SIGNATURE(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE(void, Redo);
     FUNCTION().PUBLIC().SIGNATURE(void, Undo);

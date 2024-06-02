@@ -12,22 +12,22 @@ namespace o2
     {
     public:
         PROPERTIES(CustomDropDown);
-        PROPERTY(Widget*, selectedItem, SelectItem, GetSelectedItem);       // Selected item widget property
+        PROPERTY(Ref<Widget>, selectedItem, SelectItem, GetSelectedItem);      // Selected item widget property
         PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property
         GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
 
     public:
         Function<void()> onBeforeExpand; // Called before opening 
 
-        Function<void(int)>     onSelectedPos;   // Select item position event
-        Function<void(Widget*)> onSelectedItem;  // Select item event
+        Function<void(int)>                onSelectedPos;   // Select item position event
+        Function<void(const Ref<Widget>&)> onSelectedItem;  // Select item event
 
     public:
         // Default constructor
-        CustomDropDown();
+        explicit CustomDropDown(RefCounter* refCounter);
 
         // Copy-constructor
-        CustomDropDown(const CustomDropDown& other);
+        CustomDropDown(RefCounter* refCounter, const CustomDropDown& other);
 
         // Destructor
         ~CustomDropDown();
@@ -48,22 +48,22 @@ namespace o2
         bool IsExpanded() const;
 
         // Sets item sample widget. WARNING: Removing all old items!
-        void SetItemSample(Widget* sample);
+        void SetItemSample(const Ref<Widget>& sample);
 
         // Returns item sample widget
-        Widget* GetItemSample() const;
+        const Ref<Widget>& GetItemSample() const;
 
         // Returns layout of items
-        VerticalLayout* GetItemsLayout() const;
+        const Ref<VerticalLayout>& GetItemsLayout() const;
 
         // Adds new item and returns it
-        Widget* AddItem();
+        Ref<Widget> AddItem();
 
         // Adds new item at position and returns it
-        Widget* AddItem(int position);
+        Ref<Widget> AddItem(int position);
 
         // Removes item
-        void RemoveItem(Widget* item);
+        void RemoveItem(const Ref<Widget>& item);
 
         // Removes item in position
         void RemoveItem(int position);
@@ -72,37 +72,37 @@ namespace o2
         void MoveItem(int position, int newPosition);
 
         // Moves item to new position
-        void MoveItem(Widget* item, int newPosition);
+        void MoveItem(const Ref<Widget>& item, int newPosition);
 
         // Returns item position
-        int GetItemPosition(Widget* item);
+        int GetItemPosition(const Ref<Widget>& item);
 
         // Returns item by position
-        Widget* GetItem(int position) const;
+        Ref<Widget> GetItem(int position) const;
 
         // Removes all items
         void RemoveAllItems();
 
         // Sorts items
-        void SortItems(const Function<bool(Widget*, Widget*)>& sortFunc);
+        void SortItems(const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& sortFunc);
 
         // Returns items count
         int GetItemsCount() const;
 
         // Selects item
-        void SelectItem(Widget* item);
+        void SelectItem(const Ref<Widget>& item);
 
         // Selects item at position
         void SelectItemAt(int position);
 
         // Returns selected item
-        Widget* GetSelectedItem() const;
+        Ref<Widget> GetSelectedItem() const;
 
         // Returns selected item position
         int GetSelectedItemPosition() const;
 
         // Returns list view 
-        CustomList* GetListView() const;
+        const Ref<CustomList>& GetListView() const;
 
         // Sets list view size by items size
         void SetMaxListSizeInItems(int itemsCount);
@@ -120,12 +120,15 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(CustomDropDown);
+        CLONEABLE_REF(CustomDropDown);
 
     protected:
-        CustomList* mItemsList = nullptr;                // List view
-        Layout      mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
-        RectF       mAbsoluteClip;                       // Absolute clipping rectangle
-        int         mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
+        Ref<CustomList> mItemsList; // List view
+
+        Layout mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
+        RectF  mAbsoluteClip;                       // Absolute clipping rectangle
+
+        int mMaxListItems = 10; // Maximum visible items in list @SERIALIZABLE
 
     protected:
         // Moves widget's to delta and checks for clipping
@@ -135,7 +138,6 @@ namespace o2
         void OnCursorPressed(const Input::Cursor& cursor) override;
 
         // Called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
-        // Called onClicked if cursor is still above this
         void OnCursorReleased(const Input::Cursor& cursor) override;
 
         // Called when cursor released outside this(only when cursor pressed this at previous time)
@@ -161,6 +163,8 @@ namespace o2
 
         // Called when selection was changed
         virtual void OnSelectionChanged();
+
+        REF_COUNTERABLE_IMPL(Widget);
     };
 }
 // --- META ---
@@ -179,7 +183,7 @@ CLASS_FIELDS_META(o2::CustomDropDown)
     FIELD().PUBLIC().NAME(onBeforeExpand);
     FIELD().PUBLIC().NAME(onSelectedPos);
     FIELD().PUBLIC().NAME(onSelectedItem);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mItemsList);
+    FIELD().PROTECTED().NAME(mItemsList);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mClipLayout);
     FIELD().PROTECTED().NAME(mAbsoluteClip);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mMaxListItems);
@@ -188,33 +192,33 @@ END_META;
 CLASS_METHODS_META(o2::CustomDropDown)
 {
 
-    typedef const Function<bool(Widget*, Widget*)>& _tmp1;
+    typedef const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& _tmp1;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CustomDropDown&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CustomDropDown&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
-    FUNCTION().PUBLIC().SIGNATURE(VerticalLayout*, GetItemsLayout);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<VerticalLayout>&, GetItemsLayout);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, int, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, Widget*, int);
-    FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItem, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, const Ref<Widget>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
     FUNCTION().PUBLIC().SIGNATURE(void, SortItems, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(int, GetItemsCount);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectItemAt, int);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetSelectedItem);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetSelectedItem);
     FUNCTION().PUBLIC().SIGNATURE(int, GetSelectedItemPosition);
-    FUNCTION().PUBLIC().SIGNATURE(CustomList*, GetListView);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<CustomList>&, GetListView);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMaxListSizeInItems, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetClippingLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetClippingLayout);

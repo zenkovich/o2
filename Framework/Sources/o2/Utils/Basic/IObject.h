@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Memory/MemoryManager.h"
+#include "o2/Utils/Types/Ref.h"
 
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptValueDef.h"
@@ -30,13 +31,6 @@ namespace o2
                 delete mScriptValueCache;
 #endif
         }
-
-        // Cloning interface
-        virtual IObject* Clone() const { return nullptr; };
-
-        // Cloning as type
-        template<typename _cast_type>
-        _cast_type* CloneAs() const { return dynamic_cast<_cast_type*>(Clone()); }
 
         // Returns type
         virtual const Type& GetType() const { return *type; }
@@ -70,18 +64,6 @@ namespace o2
 
         friend class ReflectionInitializationTypeProcessor;
         friend class Reflection;
-    };
-
-    template<typename _type>
-    struct SafeClone
-    {
-        static _type* Clone(const _type& origin)
-        {
-            if constexpr (std::is_copy_constructible<_type>::value)
-                return mnew _type(origin);
-            else
-                return nullptr;
-        }
     };
 }
 
@@ -126,9 +108,7 @@ private:                                                                        
                                                                                                                 \
 public:                                                                                                         \
     typedef CLASS thisclass;                                                                                    \
-    o2::IObject* Clone() const override {return o2::SafeClone<CLASS>::Clone(*this); }                           \
     const o2::Type& GetType() const override { return *type; };                                                 \
-    IOBJECT_SCRIPTING();                                                                                        \
                                                                                                                 \
     template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \
     {                                                                                                           \
@@ -140,6 +120,7 @@ public:                                                                         
 
 #define IOBJECT(CLASS)                                                                                          \
     IOBJECT_MAIN(CLASS)                                                                                         \
+    IOBJECT_SCRIPTING();                                                                                        \
                                                                                                                 \
     template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
     template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \

@@ -25,7 +25,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		// Position
-		auto positionPropertyContainer = mnew Widget();
+		auto positionPropertyContainer = mmake<Widget>();
 		positionPropertyContainer->name = "position";
 		positionPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(positionPropertyContainer);
@@ -41,7 +41,7 @@ namespace Editor
 		positionPropertyContainer->AddChild(mPositionProperty);
 
 		// Pivot
-		auto pivotPropertyContainer = mnew Widget();
+		auto pivotPropertyContainer = mmake<Widget>();
 		pivotPropertyContainer->name = "pivot";
 		pivotPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(pivotPropertyContainer);
@@ -57,7 +57,7 @@ namespace Editor
 		pivotPropertyContainer->AddChild(mPivotProperty);
 
 		// Size
-		auto sizePropertyContainer = mnew Widget();
+		auto sizePropertyContainer = mmake<Widget>();
 		sizePropertyContainer->name = "size";
 		sizePropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(sizePropertyContainer);
@@ -73,7 +73,7 @@ namespace Editor
 		sizePropertyContainer->AddChild(mSizeProperty);
 
 		// Scale
-		auto scalePropertyContainer = mnew Widget();
+		auto scalePropertyContainer = mmake<Widget>();
 		scalePropertyContainer->name = "scale";
 		scalePropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(scalePropertyContainer);
@@ -89,7 +89,7 @@ namespace Editor
 		scalePropertyContainer->AddChild(mScaleProperty);
 
 		// Rotation
-		auto rotationAndShearPropertyContainer = mnew Widget();
+		auto rotationAndShearPropertyContainer = mmake<Widget>();
 		rotationAndShearPropertyContainer->name = "rotation and depth";
 		rotationAndShearPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(rotationAndShearPropertyContainer);
@@ -127,7 +127,7 @@ namespace Editor
 
 		// Anchors
 		// Right top
-		auto rightTopAnchorPropertyContainer = mnew Widget();
+		auto rightTopAnchorPropertyContainer = mmake<Widget>();
 		rightTopAnchorPropertyContainer->name = "right top anchor";
 		rightTopAnchorPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(rightTopAnchorPropertyContainer);
@@ -145,7 +145,7 @@ namespace Editor
 		rightTopAnchorPropertyContainer->AddChild(mAnchorRightTopProperty);
 
 		// Left bottom
-		auto leftBottomAnchorPropertyContainer = mnew Widget();
+		auto leftBottomAnchorPropertyContainer = mmake<Widget>();
 		leftBottomAnchorPropertyContainer->name = "left bottom anchor";
 		leftBottomAnchorPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(leftBottomAnchorPropertyContainer);
@@ -160,7 +160,7 @@ namespace Editor
 
 		// Offsets
 		// Right top
-		auto rightTopOffsetPropertyContainer = mnew Widget();
+		auto rightTopOffsetPropertyContainer = mmake<Widget>();
 		rightTopOffsetPropertyContainer->name = "right top offset";
 		rightTopOffsetPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(rightTopOffsetPropertyContainer);
@@ -178,7 +178,7 @@ namespace Editor
 		rightTopOffsetPropertyContainer->AddChild(moffsetRightTopProperty);
 
 		// Left bottom
-		auto leftBottomOffsetPropertyContainer = mnew Widget();
+		auto leftBottomOffsetPropertyContainer = mmake<Widget>();
 		leftBottomOffsetPropertyContainer->name = "left bottom offset";
 		leftBottomOffsetPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(leftBottomOffsetPropertyContainer);
@@ -192,7 +192,7 @@ namespace Editor
 		leftBottomOffsetPropertyContainer->AddChild(mOffsetLeftBottomProperty);
 
 		// Min size
-		auto minSizePropertyContainer = mnew Widget();
+		auto minSizePropertyContainer = mmake<Widget>();
 		minSizePropertyContainer->name = "right top anchor";
 		minSizePropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(minSizePropertyContainer);
@@ -208,7 +208,7 @@ namespace Editor
 		minSizePropertyContainer->AddChild(mMinSizeProperty);
 
 		// Max size
-		auto maxSizePropertyContainer = mnew Widget();
+		auto maxSizePropertyContainer = mmake<Widget>();
 		maxSizePropertyContainer->name = "right top anchor";
 		maxSizePropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(maxSizePropertyContainer);
@@ -224,7 +224,7 @@ namespace Editor
 		maxSizePropertyContainer->AddChild(mMaxSizeProperty);
 
 		// Weight
-		auto weightPropertyContainer = mnew Widget();
+		auto weightPropertyContainer = mmake<Widget>();
 		weightPropertyContainer->name = "right top anchor";
 		weightPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(weightPropertyContainer);
@@ -241,9 +241,7 @@ namespace Editor
 	}
 
 	DefaultActorTransformViewer::~DefaultActorTransformViewer()
-	{
-		delete mSpoiler;
-	}
+	{}
 
 	void DefaultActorTransformViewer::SetTargetActors(const Vector<Actor*>& actors)
 	{
@@ -330,9 +328,7 @@ namespace Editor
 																const Vector<DataDocument>& prevValue,
 																const Vector<DataDocument>& newValue)
 	{
-		PropertyChangeAction* action = mnew PropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
-
+		auto action = mmake<PropertyChangeAction>(o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 		o2EditorApplication.DoneAction(action);
 	}
 }

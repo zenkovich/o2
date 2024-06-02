@@ -13,7 +13,7 @@ namespace Editor
 	// -----------------
 	// Editor menu panel
 	// -----------------
-	class MenuPanel: public Singleton<MenuPanel>
+	class MenuPanel: public Singleton<MenuPanel>, public RefCounterable
 	{
 	public:
 		// Default constructor. Initializes basic menu items
@@ -23,11 +23,11 @@ namespace Editor
 		~MenuPanel();
 
 		// Add item
-		Widget* AddItem(const o2::MenuPanel::Item& item);
+		Ref<Widget> AddItem(const o2::MenuPanel::Item& item);
 
 		// Adds item by path ("node/sub node/target")
 		void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-					 const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
+					 const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Inserts item at position
 		void InsertItem(const o2::MenuPanel::Item& item, int position);
@@ -51,7 +51,7 @@ namespace Editor
 		void RemoveItem(const WString& path);
 
 	protected:
-		o2::MenuPanel* mMenuPanel; // Menu panel
+		Ref<o2::MenuPanel> mMenuPanel; // Menu panel
 
 	protected:
 		// Checks is scene was changed and shows confirm dialog

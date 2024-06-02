@@ -15,9 +15,10 @@ DECLARE_SINGLETON(Editor::NameEditDlg);
 
 namespace Editor
 {
-	NameEditDlg::NameEditDlg()
+    NameEditDlg::NameEditDlg(RefCounter* refCounter):
+		CursorEventsListener(refCounter)
 	{
-		mWindow = dynamic_cast<o2::Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Enter name")));
+		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Enter name")));
 
 		InitializeControls();
 
@@ -29,10 +30,7 @@ namespace Editor
 	}
 
 	NameEditDlg::~NameEditDlg()
-	{
-		if (mWindow)
-			delete mWindow;
-	}
+	{}
 
 	void NameEditDlg::Show(const String& name, Function<void(const String&)> onCompleted, 
 						   Function<void()> onCancelled /*= Function<void()>()*/)

@@ -19,9 +19,9 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mHeaderViewer = mnew DefaultWidgetLayerHeaderViewer();
-		mLayoutViewer = mnew DefaultWidgetLayerLayoutViewer();
-		mPropertiesViewer = mnew DefaultWidgetLayerPropertiesViewer();
+		mHeaderViewer = mmake<DefaultWidgetLayerHeaderViewer>();
+		mLayoutViewer = mmake<DefaultWidgetLayerLayoutViewer>();
+		mPropertiesViewer = mmake<DefaultWidgetLayerPropertiesViewer>();
 
 		auto scrollArea = o2UI.CreateScrollArea("backless");
 		scrollArea->SetViewLayout(Layout::BothStretch(0, 0, 15, 0));
@@ -50,15 +50,6 @@ namespace Editor
 	WidgetLayerViewer::~WidgetLayerViewer()
 	{
 		o2Scene.onObjectsChanged -= THIS_FUNC(OnSceneObjectsChanged);
-
-		if (mPropertiesViewer)
-			delete mPropertiesViewer;
-
-		if (mHeaderViewer)
-			delete mHeaderViewer;
-
-		if (mLayoutViewer)
-			delete mLayoutViewer;
 	}
 
 	const Type* WidgetLayerViewer::GetViewingObjectType() const
@@ -66,21 +57,18 @@ namespace Editor
 		return &TypeOf(WidgetLayer);
 	}
 
-	void WidgetLayerViewer::SetHeaderViewer(IWidgetLayerHeaderViewer* viewer)
+	void WidgetLayerViewer::SetHeaderViewer(const Ref<IWidgetLayerHeaderViewer>& viewer)
 	{
-		delete mHeaderViewer;
 		mHeaderViewer = viewer;
 	}
 
-	void WidgetLayerViewer::SetLayoutViewer(IWidgetLayerLayoutViewer* viewer)
+	void WidgetLayerViewer::SetLayoutViewer(const Ref<IWidgetLayerLayoutViewer>& viewer)
 	{
-		delete mLayoutViewer;
 		mLayoutViewer = viewer;
 	}
 
-	void WidgetLayerViewer::SetActorPropertiesViewer(IWidgetLayerPropertiesViewer* viewer)
+	void WidgetLayerViewer::SetActorPropertiesViewer(const Ref<IWidgetLayerPropertiesViewer>& viewer)
 	{
-		delete mPropertiesViewer;
 		mPropertiesViewer = viewer;
 	}
 
@@ -94,7 +82,7 @@ namespace Editor
 		mPropertiesViewer->Refresh();
 	}
 
-	void WidgetLayerViewer::OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects)
+	void WidgetLayerViewer::OnSceneObjectsChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{
 		Refresh();
 	}

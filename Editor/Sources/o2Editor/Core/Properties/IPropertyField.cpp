@@ -12,13 +12,14 @@
 
 namespace Editor
 {
-	IPropertyField::IPropertyField()
+	IPropertyField::IPropertyField(RefCounter* refCounter):
+		HorizontalLayout(refCounter)
 	{
 		mCaption = FindChildByType<Label>("caption");
 	}
 
-	IPropertyField::IPropertyField(const IPropertyField& other) :
-		HorizontalLayout(other)
+	IPropertyField::IPropertyField(RefCounter* refCounter, const IPropertyField& other) :
+		HorizontalLayout(refCounter, other)
 	{}
 
 	IPropertyField::~IPropertyField()
@@ -46,14 +47,6 @@ namespace Editor
 
 	void IPropertyField::FreeValuesProxies()
 	{
-		for (auto pair : mValuesProxies)
-		{
-			delete pair.first;
-
-			if (pair.second)
-				delete pair.second;
-		}
-
 		mValuesProxies.Clear();
 	}
 
@@ -62,15 +55,15 @@ namespace Editor
 		return mValuesProxies;
 	}
 
-	void IPropertyField::SetValueProxy(const Vector<IAbstractValueProxy*>& targets)
+	void IPropertyField::SetValueProxy(const Vector<Ref<IAbstractValueProxy>>& targets)
 	{
-		auto protoTargets = targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-			[](IAbstractValueProxy* x) { return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(x, nullptr); });
+		auto protoTargets = targets.Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
+			[](const Ref<IAbstractValueProxy>& x) { return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(x, nullptr); });
 
 		SetValueAndPrototypeProxy(protoTargets);
 	}
 
-	void IPropertyField::SetParentContext(PropertiesContext* context)
+	void IPropertyField::SetParentContext(const Ref<PropertiesContext>& context)
 	{
 		mParentContext = context;
 	}
@@ -80,9 +73,9 @@ namespace Editor
 		if (mCaption)
 			mCaption->text = text;
 
-		if (auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName")))
+		if (auto captionWidget = FindChildByType<Label>("propertyName"))
 			captionWidget->text = text;
-		else if (auto captionWidget = dynamic_cast<Label*>(FindInternalWidget("propertyName")))
+		else if (auto captionWidget = FindInternalWidgetByType<Label>("propertyName"))
 			captionWidget->text = text;
 		else
 		{
@@ -97,9 +90,9 @@ namespace Editor
 		if (mCaption)
 			return mCaption->text;
 
-		if (auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName")))
+		if (auto captionWidget = FindChildByType<Label>("propertyName"))
 			return captionWidget->text;
-		else if (auto captionWidget = dynamic_cast<Label*>(FindInternalWidget("propertyName")))
+		else if (auto captionWidget = FindInternalWidgetByType<Label>("propertyName"))
 			return captionWidget->text;
 		else
 		{
@@ -111,11 +104,11 @@ namespace Editor
 		return "";
 	}
 
-	Button* IPropertyField::GetRemoveButton()
+	Ref<Button> IPropertyField::GetRemoveButton()
 	{
 		if (!mRemoveBtn)
 		{
-			auto buttonContainer = mnew Widget();
+			auto buttonContainer = mmake<Widget>();
 			buttonContainer->name = "remove container";
 			buttonContainer->layout->maxWidth = 20;
 
@@ -158,12 +151,12 @@ namespace Editor
 		return mValuesPath;
 	}
 
-	void IPropertyField::SetCaptionLabel(Label* label)
+	void IPropertyField::SetCaptionLabel(const Ref<Label>& label)
 	{
 		mCaption = label;
 	}
 
-	Label* IPropertyField::GetCaptionLabel() const
+	const Ref<Label>& IPropertyField::GetCaptionLabel() const
 	{
 		return mCaption;
 	}
@@ -226,15 +219,15 @@ namespace Editor
 					AddChild(mRevertBtn);
 
 				String path;
-				Actor* itActor = mRevertBtn;
-				while (itActor != this)
+				Ref<Actor> itActor = mRevertBtn;
+				while (itActor != Ref(this))
 				{
 					path = "child/" + itActor->GetName() + "/" + path;
-					itActor = itActor->GetParent();
+					itActor = itActor->GetParent().Lock();
 				}
 
-				AnimationClip revertStateAnim = AnimationClip::EaseInOut(path + "layout/maxWidth", 0.0f, 20.0f, 0.15f);
-				*revertStateAnim.AddTrack<bool>(path + "enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
+				auto revertStateAnim = AnimationClip::EaseInOut(path + "layout/maxWidth", 0.0f, 20.0f, 0.15f);
+				*revertStateAnim->AddTrack<bool>(path + "enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
 				AddState("revert", revertStateAnim);
 			}
 
@@ -249,7 +242,7 @@ namespace Editor
 	void IPropertyField::OnValueChanged()
 	{
 		CheckRevertableState();
-		onChanged(this);
+		onChanged(Ref(this));
 
 		if (SceneEditScreen::IsSingletonInitialzed())
 			o2EditorSceneScreen.OnSceneChanged();
@@ -265,6 +258,8 @@ namespace Editor
 		CheckValueChangeCompleted();
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::IPropertyField>);
 // --- META ---
 
 DECLARE_CLASS(Editor::IPropertyField, Editor__IPropertyField);

@@ -18,8 +18,8 @@ namespace o2
         PROPERTIES(Label);
         PROPERTY(WString, text, SetText, GetText);   // Text property, wstring
 
-        PROPERTY(FontRef, font, SetFont, GetFont);                     // Font pointer property
-        PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property
+        PROPERTY(Ref<Font>, font, SetFont, GetFont);                     // Font pointer property
+        PROPERTY(AssetRef<FontAsset>, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property
         
         PROPERTY(int, height, SetHeight, GetHeight); // Text height property
         PROPERTY(Color4, color, SetColor, GetColor); // Text color property
@@ -37,10 +37,10 @@ namespace o2
 
     public:
         // Default constructor
-        Label();
+        explicit Label(RefCounter* refCounter);
 
         // Copy-constructor
-        Label(const Label& other);
+        Label(RefCounter* refCounter, const Label& other);
 
         // Assign operator
         Label& operator=(const Label& other);
@@ -49,16 +49,16 @@ namespace o2
         void Draw() override;
 
         // Sets using font
-        void SetFont(FontRef font);
+        void SetFont(const Ref<Font>& font);
 
         // Returns using font
-        FontRef GetFont() const;
+        Ref<Font> GetFont() const;
 
         // Sets bitmap font asset 
-        void SetFontAsset(const FontAssetRef& asset);
+        void SetFontAsset(const AssetRef<FontAsset>& asset);
 
         // Returns asset by font asset id
-        FontAssetRef GetFontAsset() const;
+        AssetRef<FontAsset> GetFontAsset() const;
 
         // Sets text
         void SetText(const WString& text);
@@ -127,16 +127,17 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Label);
+        CLONEABLE_REF(Label);
 
     protected:
-        Text*       mTextDrawable = nullptr;             // Text layer drawable. Getting from layer "text"
-        HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
-        VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
-        Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
+        Ref<Text>   mTextDrawable;                    // Text layer drawable. Getting from layer "text"
+		HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
+		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
+		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
 
     protected:
         // Called when layer added and updates drawing sequence
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Creates default text layer
         void CreateDefaultText();
@@ -170,7 +171,7 @@ CLASS_FIELDS_META(o2::Label)
     FIELD().PUBLIC().NAME(expandBorder);
     FIELD().PUBLIC().NAME(symbolsDistanceCoef);
     FIELD().PUBLIC().NAME(linesDistanceCoef);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextDrawable);
+    FIELD().PROTECTED().NAME(mTextDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(HorOverflow::None).NAME(mHorOverflow);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(VerOverflow::None).NAME(mVerOverflow);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mExpandBorder);
@@ -179,13 +180,13 @@ END_META;
 CLASS_METHODS_META(o2::Label)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Label&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Label&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetFont, FontRef);
-    FUNCTION().PUBLIC().SIGNATURE(FontRef, GetFont);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(FontAssetRef, GetFontAsset);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFont, const Ref<Font>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Font>, GetFont);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFontAsset, const AssetRef<FontAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(AssetRef<FontAsset>, GetFontAsset);
     FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(const WString&, GetText);
     FUNCTION().PUBLIC().SIGNATURE(void, SetColor, const Color4&);
@@ -208,7 +209,7 @@ CLASS_METHODS_META(o2::Label)
     FUNCTION().PUBLIC().SIGNATURE(int, GetHeight);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, CreateDefaultText);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }

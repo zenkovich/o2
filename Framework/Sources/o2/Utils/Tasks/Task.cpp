@@ -8,18 +8,18 @@ namespace o2
     Task::Task()
     {
         mId = o2Tasks.mLastTaskId++;
-        o2Tasks.mTasks.Add(this);
+        o2Tasks.mTasks.Add(Ref(this));
     }
 
     Task::Task(const Task& other)
     {
         mId = o2Tasks.mLastTaskId++;
-        o2Tasks.mTasks.Add(this);
+        o2Tasks.mTasks.Add(Ref(this));
     }
 
     Task::~Task()
     {
-        o2Tasks.mTasks.Remove(this);
+        //o2Tasks.mTasks.Remove(Ref(this));
     }
 
     void Task::Update(float dt)

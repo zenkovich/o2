@@ -15,8 +15,7 @@ namespace o2
 
 namespace Editor
 {
-	class SceneDragHandle;
-	struct SkeletonTool;
+	FORWARD_CLASS_REF(SceneDragHandle);
 
 	// ------------------------------
 	// Skinning Mesh component viewer
@@ -36,8 +35,8 @@ namespace Editor
 		IOBJECT(SkinningMeshBoneComponentViewer);
 
 	protected:
-		MeshWeightsTool         mWeightsTool;       // Mesh weights tool
-		SkinningMeshEditorLayer mFrameTetxureLayer; // Frame texture drawing layer
+		Ref<MeshWeightsTool>         mWeightsTool;       // Mesh weights tool
+		Ref<SkinningMeshEditorLayer> mFrameTetxureLayer; // Frame texture drawing layer
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext

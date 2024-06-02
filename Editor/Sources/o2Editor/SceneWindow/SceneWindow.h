@@ -9,8 +9,8 @@ namespace o2
 
 namespace Editor
 {
-	class LayersPopup;
-	class SceneEditScreen;
+	FORWARD_CLASS_REF(LayersPopup);
+	FORWARD_CLASS_REF(SceneEditScreen);
 
 	// --------------------
 	// Scene editing window
@@ -21,18 +21,23 @@ namespace Editor
 		IOBJECT(SceneWindow);
 
 	protected:
-		SceneEditScreen* mEditWidget;
+		Ref<SceneEditScreen> mEditWidget; // Scene editing widget
 
-		Widget* mUpPanel = nullptr;
+		Ref<Widget> mUpPanel; // Upper panel
 
-		Button*      mLayersButton = nullptr;
-		LayersPopup* mLayersPopup = nullptr;
+		Ref<Button>      mLayersButton; // Layers button
+		Ref<LayersPopup> mLayersPopup;  // Layers popup
 
-		PopupWidget* mGizomsView = nullptr;
+		Ref<PopupWidget> mGizomsView; // Gizoms view
 
 	public:
+		// Default constructor
 		SceneWindow();
+
+		// Copy constructor
 		SceneWindow(const SceneWindow& other);
+
+		// Destructor
 		~SceneWindow();
 
 	protected:
@@ -53,10 +58,10 @@ END_META;
 CLASS_FIELDS_META(Editor::SceneWindow)
 {
     FIELD().PROTECTED().NAME(mEditWidget);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUpPanel);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersPopup);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mGizomsView);
+    FIELD().PROTECTED().NAME(mUpPanel);
+    FIELD().PROTECTED().NAME(mLayersButton);
+    FIELD().PROTECTED().NAME(mLayersPopup);
+    FIELD().PROTECTED().NAME(mGizomsView);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneWindow)

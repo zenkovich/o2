@@ -11,21 +11,19 @@ namespace Editor
 {
 	UIRoot::UIRoot()
 	{
-		mRootWidget = mnew Widget(ActorCreateMode::NotInScene);
+		mRootWidget = mmake<Widget>(ActorCreateMode::NotInScene);
 	}
 
 	UIRoot::~UIRoot()
-	{
-		delete mRootWidget;
-	}
+	{}
 
-	Widget* UIRoot::AddWidget(Widget* widget)
+	Ref<Widget> UIRoot::AddWidget(const Ref<Widget>& widget)
 	{
 		mRootWidget->AddChild(widget);
 		return widget;
 	}
 
-	void UIRoot::RemoveWidget(Widget* widget)
+	void UIRoot::RemoveWidget(const Ref<Widget>& widget)
 	{
 		mRootWidget->RemoveChild(widget);
 	}
@@ -35,7 +33,7 @@ namespace Editor
 		mRootWidget->RemoveAllChildren();
 	}
 
-	Widget* UIRoot::GetRootWidget()
+	const Ref<Widget>& UIRoot::GetRootWidget()
 	{
 		return mRootWidget;
 	}

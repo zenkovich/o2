@@ -42,7 +42,8 @@ namespace o2
 
 DECLARE_TEMPLATE_CLASS(o2::AssetWithDefaultMeta<o2::SceneAsset>);
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::SceneAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::SceneAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::SceneAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::AssetWithDefaultMeta<o2::SceneAsset>>);
 // --- META ---
 
 DECLARE_CLASS(o2::SceneAsset, o2__SceneAsset);

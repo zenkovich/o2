@@ -11,115 +11,151 @@ using namespace o2;
 
 namespace o2
 {
-	class Bitmap;
-	class DropDown;
-	class EditBox;
-	class HorizontalProgress;
-	class Image;
-	class Label;
-	class VerticalProgress;
-	class Widget;
-	class WidgetLayer;
-	class Window;
+    class Bitmap;
+    class DropDown;
+    class EditBox;
+    class HorizontalProgress;
+    class Image;
+    class Label;
+    class VerticalProgress;
+    class Widget;
+    class WidgetLayer;
+    class Window;
 }
 
 namespace Editor
 {
-	// --------------------
-	// Color picking dialog
-	// --------------------
-	class ColorPickerDlg : public Singleton<ColorPickerDlg>, public CursorEventsListener
-	{
-	public:
-		enum  class ColorType { RGB, HSL };
+    // --------------------
+    // Color picking dialog
+    // --------------------
+    class ColorPickerDlg : public Singleton<ColorPickerDlg>, public CursorEventsListener
+    {
+    public:
+        enum class ColorType { RGB, HSL };
 
-	public:
-		ColorPickerDlg();
-		~ColorPickerDlg();
+    public:
+        // Default constructor
+        ColorPickerDlg(RefCounter* refCounter);
 
-		static void Show(const Color4& color, Function<void(const Color4&)> onChanged,
-						 Function<void()> onCompleted = Function<void()>());
+        // Destructor
+        ~ColorPickerDlg();
 
-	protected:
-		Function<void(const Color4&)> mOnChangedCallback;
-		Function<void()>              mOnCompletedCallback;
+        // Shows color picking window. Delegate onChanged is called when color changed and onCompleted when ok pressed
+        static void Show(const Color4& color, const Function<void(const Color4&)>& onChanged,
+                         const Function<void()>& onCompleted = {});
 
-		Color4    mColorValue;
-		ColorType mColorType = ColorType::RGB;
+    protected:
+        Function<void(const Color4&)> mOnChangedCallback;   // On changed callback
+        Function<void()>              mOnCompletedCallback; // On completed callback
 
-		o2::Window* mWindow = nullptr;
-		Image*      mColorSampleImage = nullptr;
+        Color4    mColorValue;                 // Current color value
+        ColorType mColorType = ColorType::RGB; // Current color controls type
 
-		TextureRef mChessBackTexture;
+        Ref<o2::Window> mWindow;
+        Ref<Image>      mColorSampleImage;
 
-		Image*           mColorPickAreaHandle = nullptr;
-		Bitmap*          mColorPickAreaBitmap = nullptr;
-		WidgetLayer*     mColorPickAreaColor = nullptr;
-		TextureRef       mColorPickAreaTexture;
-		CursorEventsArea mColorPickHandle;
+        TextureRef mChessBackTexture;
 
-		VerticalProgress* mHUEBar = nullptr;
-		Bitmap*           mHUEBarBitmap = nullptr;
-		TextureRef        mHUEBarTexture;
+		Ref<Image>            mColorPickAreaHandle;
+		Ref<Bitmap>           mColorPickAreaBitmap;
+		Ref<WidgetLayer>      mColorPickAreaColor;
+		TextureRef          mColorPickAreaTexture;
+        Ref<CursorEventsArea> mColorPickHandle;
 
-		DropDown* mTypeDropdown = nullptr;
+        Ref<VerticalProgress> mHUEBar;
+        Ref<Bitmap>           mHUEBarBitmap;
+        TextureRef          mHUEBarTexture;
 
-		Label*              mColor1ParamName = nullptr;
-		HorizontalProgress* mColor1ParamBar = nullptr;
-		EditBox*            mColor1ParamEdit = nullptr;
-		Bitmap*             mColor1ParamBarBitmap = nullptr;
-		TextureRef          mColor1ParamBarTexture;
+        Ref<DropDown> mTypeDropdown;
 
-		Label*              mColor2ParamName = nullptr;
-		HorizontalProgress* mColor2ParamBar;
-		EditBox*            mColor2ParamEdit = nullptr;
-		Bitmap*             mColor2ParamBarBitmap = nullptr;
-		TextureRef          mColor2ParamBarTexture;
+        Ref<Label>              mColor1ParamName;
+        Ref<HorizontalProgress> mColor1ParamBar;
+        Ref<EditBox>            mColor1ParamEdit;
+        Ref<Bitmap>             mColor1ParamBarBitmap;
+        TextureRef            mColor1ParamBarTexture;
 
-		Label*              mColor3ParamName = nullptr;
-		HorizontalProgress* mColor3ParamBar;
-		EditBox*            mColor3ParamEdit = nullptr;
-		Bitmap*             mColor3ParamBarBitmap = nullptr;
-		TextureRef          mColor3ParamBarTexture;
+        Ref<Label>              mColor2ParamName;
+        Ref<HorizontalProgress> mColor2ParamBar;
+        Ref<EditBox>            mColor2ParamEdit;
+        Ref<Bitmap>             mColor2ParamBarBitmap;
+        TextureRef            mColor2ParamBarTexture;
 
-		Label*              mColorAParamName = nullptr;
-		HorizontalProgress* mColorAParamBar;
-		EditBox*            mColorAParamEdit = nullptr;
-		Bitmap*             mColorAParamBarBitmap = nullptr;
-		TextureRef          mColorAParamBarTexture;
+        Ref<Label>              mColor3ParamName;
+        Ref<HorizontalProgress> mColor3ParamBar;
+        Ref<EditBox>            mColor3ParamEdit;
+        Ref<Bitmap>             mColor3ParamBarBitmap;
+        TextureRef            mColor3ParamBarTexture;
+
+        Ref<Label>              mColorAParamName;
+        Ref<HorizontalProgress> mColorAParamBar;
+        Ref<EditBox>            mColorAParamEdit;
+        Ref<Bitmap>             mColorAParamBarBitmap;
+        TextureRef            mColorAParamBarTexture;
 
 
-	protected:
-		void OnHide();
-		void InitializeControls();
-		void InitializeColorPreview();
-		void InitializePickArea();
-		void InitializeColorParams();
+    protected:
+        // Called when color picking dialog wehe hidden
+        void OnHide();
 
-		Widget* InitializeColorParameter(Label*& name, HorizontalProgress*& bar, EditBox*& edit,
-										 Bitmap*& bitmap, TextureRef& texture,
-										 const Function<void(float)>& onChanged);
+        // Initializes all controls
+        void InitializeControls();
 
-		void InitHUEBarBitmap();
+        // Initializes color preview
+        void InitializeColorPreview();
 
-		void OnColorPickHandleMoved(const Input::Cursor& cursor);
-		void OnColorTypeSelected(const WString& name);
+        // Initializes color pick area
+        void InitializePickArea();
 
-		void OnColor1ParameterEdited(float value);
-		void OnColor2ParameterEdited(float value);
-		void OnColor3ParameterEdited(float value);
-		void OnColorAParameterEdited(float value);
-		void OnHUEEdited(float value);
+        // Initializes HUE/RGB bars
+        void InitializeColorParams();
 
-		void UpdateHandlesBitmaps();
-		void UpdateHandlesValues();
+        // Initializes color parameter controls
+        Ref<Widget> InitializeColorParameter(Ref<Label>& name, Ref<HorizontalProgress>& bar, Ref<EditBox>& edit,
+                                             Ref<Bitmap>& bitmap, TextureRef& texture,
+                                             const Function<void(float)>& onChanged);
 
-		void UpdateRGBABitmaps();
-		void UpdateHSLABitmaps();
-		void UpdateColorPickBitmap();
+        // Initializes HUE bar bitmap
+        void InitHUEBarBitmap();
 
-		void OnCursorPressedOutside();
-	};
+        // Called when color pick handle moved, updates actual color value
+        void OnColorPickHandleMoved(const Input::Cursor& cursor);
+
+        // Called when controls type changed, updates controls
+        void OnColorTypeSelected(const WString& name);
+
+        // Called when color parameter 1 (R/H) changed, updates actual color value
+        void OnColor1ParameterEdited(float value);
+
+        // Called when color parameter 2 (G/S) changed, updates actual color value
+        void OnColor2ParameterEdited(float value);
+
+        // Called when color parameter 3 (B/L) changed, updates actual color value
+        void OnColor3ParameterEdited(float value);
+
+        // Called when alpha changed, updates actual color value
+        void OnColorAParameterEdited(float value);
+
+        // Called when HUE changed, updates actual color value
+        void OnHUEEdited(float value);
+
+        // Called when color changed, updates color bars
+        void UpdateHandlesBitmaps();
+
+        // Updates color handles values by actual color value
+        void UpdateHandlesValues();
+
+        // Updates RGBA bitmaps
+        void UpdateRGBABitmaps();
+
+        // Updates HSLA bitmaps
+        void UpdateHSLABitmaps();
+
+        // Updates color pick bitmap
+        void UpdateColorPickBitmap();
+
+        // Called when cursor pressed outside of color picking dialog, closes it
+        void OnCursorPressedOutside();
+    };
 }
 // --- META ---
 

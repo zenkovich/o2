@@ -8,15 +8,16 @@
 
 namespace o2
 {
-    AnimationClip::AnimationClip() 
+    AnimationClip::AnimationClip(RefCounter* refCounter):
+        RefCounterable(refCounter)
     {}
 
-    AnimationClip::AnimationClip(const AnimationClip& other):
-        loop(this), duration(this)
+    AnimationClip::AnimationClip(RefCounter* refCounter, const AnimationClip& other):
+        RefCounterable(refCounter), loop(this), duration(this)
     {
-        for (auto track : other.mTracks)
+        for (auto& track : other.mTracks)
         {
-            IAnimationTrack* newTrack = track->CloneAs<IAnimationTrack>();
+            Ref<IAnimationTrack> newTrack = track->CloneAsRef<IAnimationTrack>();
             mTracks.Add(newTrack);
             OnTrackAdded(newTrack);
         }
@@ -35,9 +36,9 @@ namespace o2
     {
         Clear();
 
-        for (auto track : other.mTracks)
+        for (auto& track : other.mTracks)
         {
-            IAnimationTrack* newTrack = track->CloneAs<IAnimationTrack>();
+            Ref<IAnimationTrack> newTrack = track->CloneAsRef<IAnimationTrack>();
             mTracks.Add(newTrack);
             OnTrackAdded(newTrack);
         }
@@ -51,11 +52,8 @@ namespace o2
 
     void AnimationClip::Clear()
     {
-        for (auto track : mTracks)
-        {
+        for (auto& track : mTracks)
             track->onKeysChanged -= THIS_FUNC(OnTrackChanged);
-            delete track;
-        }
 
         mTracks.Clear();
     }
@@ -75,19 +73,19 @@ namespace o2
         return mLoop;
     }
 
-    Vector<IAnimationTrack*>& AnimationClip::GetTracks()
+    Vector<Ref<IAnimationTrack>>& AnimationClip::GetTracks()
     {
         return mTracks;
     }
 
-    const Vector<IAnimationTrack*>& AnimationClip::GetTracks() const
+    const Vector<Ref<IAnimationTrack>>& AnimationClip::GetTracks() const
     {
         return mTracks;
     }
 
     bool AnimationClip::ContainsTrack(const String& path) const
     {
-        for (auto track : mTracks)
+        for (auto& track : mTracks)
         {
             if (track->path == path)
                 return true;
@@ -96,7 +94,7 @@ namespace o2
         return false;
     }
 
-    IAnimationTrack* AnimationClip::AddTrack(const String& path, const Type& type)
+    Ref<IAnimationTrack> AnimationClip::AddTrack(const String& path, const Type& type)
     {
         auto animTypeName = "o2::AnimationTrack<" + type.GetName() + ">";
         auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
@@ -106,7 +104,7 @@ namespace o2
             return nullptr;
         }
 
-        auto track = dynamic_cast<IAnimationTrack*>(animType->DynamicCastToIObject(animType->CreateSample()));
+        auto track = DynamicCast<IAnimationTrack>(animType->CreateSampleRef());
         track->path = path;
         track->onKeysChanged += THIS_FUNC(OnTrackChanged);
 
@@ -118,13 +116,12 @@ namespace o2
 
     void AnimationClip::RemoveTrack(const String& path)
     {
-        for (auto track : mTracks)
+        for (auto& track : mTracks)
         {
             if (track->path == path)
             {
                 onTrackRemove(track);
 
-                delete track;
                 mTracks.Remove(track);
 
                 onChanged();
@@ -145,7 +142,7 @@ namespace o2
         float lastDuration = mDuration;
         mDuration = 0.0f;
 
-        for (auto track : mTracks)
+        for (auto& track : mTracks)
             mDuration = Math::Max(mDuration, track->GetDuration());
 
         if (!Math::Equals(lastDuration, mDuration))
@@ -154,16 +151,16 @@ namespace o2
 
     void AnimationClip::OnDeserialized(const DataValue& node)
     {
-        for (auto track : mTracks)
+        for (auto& track : mTracks)
             track->onKeysChanged += THIS_FUNC(OnTrackChanged);
 
         OnTrackChanged();
     }
 
-    void AnimationClip::OnTrackAdded(IAnimationTrack* track)
+    void AnimationClip::OnTrackAdded(const Ref<IAnimationTrack>& track)
     {
         track->onKeysChanged += THIS_FUNC(OnTrackChanged);
-        track->mOwnerClip = this;
+        track->mOwnerClip = WeakRef(this);
 
         onTrackAdded(track);
         onChanged();

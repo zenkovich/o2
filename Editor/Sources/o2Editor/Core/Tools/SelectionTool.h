@@ -27,10 +27,10 @@ namespace Editor
 		IOBJECT(SelectionTool);
 
 	protected:
-		Sprite* mSelectionSprite = nullptr; // Selection frame sprite
+		Ref<Sprite> mSelectionSprite; // Selection frame sprite
 
-		Vector<SceneEditableObject*> mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
-		Vector<SceneEditableObject*> mBeforeSelectingObjects;  // Before selection objects array
+		Vector<Ref<SceneEditableObject>> mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
+		Vector<Ref<SceneEditableObject>> mBeforeSelectingObjects;  // Before selection objects array
 
 		Vec2F mPressPoint;				 // Press point before selecting
 		bool  mSelectingObjects = false; // Is selecting objects now
@@ -58,7 +58,7 @@ namespace Editor
 		void OnDisabled() override;
 
 		// Called when objects selection was changed
-		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
+		void OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects) override;
 
 		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
@@ -89,7 +89,7 @@ CLASS_BASES_META(Editor::SelectionTool)
 END_META;
 CLASS_FIELDS_META(Editor::SelectionTool)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite);
+    FIELD().PROTECTED().NAME(mSelectionSprite);
     FIELD().PROTECTED().NAME(mCurrentSelectingObjects);
     FIELD().PROTECTED().NAME(mBeforeSelectingObjects);
     FIELD().PROTECTED().NAME(mPressPoint);
@@ -107,7 +107,7 @@ CLASS_METHODS_META(Editor::SelectionTool)
     FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, const Vector<Ref<SceneEditableObject>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);

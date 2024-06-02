@@ -1,30 +1,25 @@
 #pragma once
 
-#include "o2/Scene/ISceneDrawable.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Ref.h"
 #include "o2/Utils/Types/String.h"
 
 namespace o2
 {
     class Actor;
-    class ISceneDrawable;
+
+    FORWARD_CLASS_REF(SceneLayerRootDrawablesContainer);
+    FORWARD_CLASS_REF(ISceneDrawable);
 
     // --------------------------------------------------------------------------------
     // Scene layer. It contains Actors and their Drawable parts, managing sorting order
     // --------------------------------------------------------------------------------
-    class SceneLayer: public ISerializable
+    class SceneLayer: public ISerializable, public RefCounterable, public ICloneableRef
     {
     public:
 #if IS_EDITOR
         bool visible = true; // Is layer visible in editor
 #endif
-
-    public:
-        // ------------------------------------------------------------------------------------
-        // Root drawables container. It is used to draw all root drawables with inherited depth
-        // ------------------------------------------------------------------------------------
-        struct RootDrawablesContainer : public ISceneDrawable
-        {};
 
     public:
         // Default constructor
@@ -37,19 +32,20 @@ namespace o2
         const String& GetName() const;
 
         // Returns all drawable objects of actors in layer
-        const Vector<ISceneDrawable*>& GetDrawables() const;
+        const Vector<Ref<ISceneDrawable>>& GetDrawables() const;
 
         // Returns root drawable objects of actors in layer
-        RootDrawablesContainer& GetRootDrawables();
+        const Ref<SceneLayerRootDrawablesContainer>& GetRootDrawables();
 
         SERIALIZABLE(SceneLayer);
+        CLONEABLE_REF(SceneLayer);
 
     protected:
         String mName; // Name of layer @SERIALIZABLE
 
-        Vector<ISceneDrawable*> mDrawables; // Drawable objects in layer=
+        Vector<Ref<ISceneDrawable>> mDrawables; // Drawable objects in layer
 
-        RootDrawablesContainer mRootDrawables; // Root drawables with inherited depth. Draws at 0 priority
+        Ref<SceneLayerRootDrawablesContainer> mRootDrawables; // Root drawables with inherited depth. Draws at 0 priority
 
     protected:
         // Registers drawable object
@@ -59,7 +55,7 @@ namespace o2
         void UnregisterDrawable(ISceneDrawable* drawable);
 
         // Sets drawable order as last of all objects with same depth
-        void SetLastByDepth(ISceneDrawable* drawable);
+        void SetLastByDepth(const Ref<ISceneDrawable>& drawable);
 
         friend class Actor;
         friend class CameraActor;
@@ -74,6 +70,8 @@ namespace o2
 CLASS_BASES_META(o2::SceneLayer)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::SceneLayer)
@@ -92,11 +90,11 @@ CLASS_METHODS_META(o2::SceneLayer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<ISceneDrawable*>&, GetDrawables);
-    FUNCTION().PUBLIC().SIGNATURE(RootDrawablesContainer&, GetRootDrawables);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<ISceneDrawable>>&, GetDrawables);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<SceneLayerRootDrawablesContainer>&, GetRootDrawables);
     FUNCTION().PROTECTED().SIGNATURE(void, RegisterDrawable, ISceneDrawable*);
     FUNCTION().PROTECTED().SIGNATURE(void, UnregisterDrawable, ISceneDrawable*);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetLastByDepth, ISceneDrawable*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetLastByDepth, const Ref<ISceneDrawable>&);
 }
 END_META;
 // --- END META ---

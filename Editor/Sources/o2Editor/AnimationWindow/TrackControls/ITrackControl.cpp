@@ -7,21 +7,29 @@
 namespace Editor
 {
 
-	void ITrackControl::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
+    ITrackControl::ITrackControl(RefCounter* refCounter):
+		Widget(refCounter)
 	{}
 
-	void ITrackControl::SetTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player, const String& path)
+    ITrackControl::ITrackControl(RefCounter* refCounter, const ITrackControl& other):
+		Widget(refCounter, other)
+    {}
+
+    void ITrackControl::Initialize(const Ref<AnimationTimeline>& timeline, const Ref<KeyHandlesSheet>& handlesSheet)
+	{}
+
+	void ITrackControl::SetTrack(const Ref<IAnimationTrack>& track, const Ref<IAnimationTrack::IPlayer>& player, const String& path)
 	{}
 
 	void ITrackControl::UpdateHandles()
 	{}
 
-	Vector<ITrackControl::KeyHandle*> ITrackControl::GetKeyHandles() const
+	Vector<Ref<ITrackControl::KeyHandle>> ITrackControl::GetKeyHandles() const
 	{
-		return Vector<KeyHandle*>();
+		return {};
 	}
 
-	Widget* ITrackControl::GetTreePartControls() const
+	Ref<Widget> ITrackControl::GetTreePartControls() const
 	{
 		return nullptr;
 	}
@@ -65,6 +73,8 @@ namespace Editor
 		return handle == other.handle;
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ITrackControl>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ITrackControl, Editor__ITrackControl);

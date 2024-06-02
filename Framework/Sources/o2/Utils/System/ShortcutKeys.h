@@ -10,7 +10,7 @@ namespace o2
     {
     public:
         bool        control; // @SERIALIZABLE
-        bool        shift;     // @SERIALIZABLE
+        bool        shift;   // @SERIALIZABLE
         bool        alt;     // @SERIALIZABLE
         KeyboardKey key;     // @SERIALIZABLE
 

@@ -54,7 +54,7 @@ namespace o2
         sortedSamples.Clear();
 
         float invMS = 1000.0f / (float)mAccumulatedSamplesCount;
-        for (auto kv : mAccumulatedSamples)
+        for (auto& kv : mAccumulatedSamples)
             sortedSamples.Add({ kv.first, { kv.second.first * invMS, kv.second.second } });
 
         sortedSamples.Sort([](auto& a, auto& b) { return a.second > b.second; });

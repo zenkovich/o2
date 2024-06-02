@@ -10,8 +10,8 @@ namespace o2
     template<typename _type>
     class Pool
     {
-        Vector<_type*> mObjects;   // Cached objects
-        int            mChunkSize; // Cache resize size
+        Vector<Ref<_type>> mObjects;   // Cached objects
+        int                mChunkSize; // Cache resize size
 
     public:
         // Constructor
@@ -27,10 +27,10 @@ namespace o2
         int  GetChunkSize() const;
 
         // Takes object from cached and returns him
-        _type* Take();
+        Ref<_type> Take();
 
         // Frees object and puts into cached
-        void Free(_type* obj);
+        void Free(const Ref<_type>& obj);
 
         // Creates cached object
         void CreateObjects(int count);
@@ -47,9 +47,6 @@ namespace o2
     template<typename _type>
     Pool<_type>::~Pool()
     {
-        for (int i = 0; i < mObjects.Count(); i++)
-            delete mObjects[i];
-
         mObjects.Clear();
     }
 
@@ -66,7 +63,7 @@ namespace o2
     }
 
     template<typename _type>
-    _type* Pool<_type>::Take()
+    Ref<_type> Pool<_type>::Take()
     {
         if (mObjects.Count() == 0)
             CreateObjects(mChunkSize);
@@ -75,7 +72,7 @@ namespace o2
     }
 
     template<typename _type>
-    void Pool<_type>::Free(_type* obj)
+    void Pool<_type>::Free(const Ref<_type>& obj)
     {
         mObjects.Add(obj);
     }
@@ -84,6 +81,6 @@ namespace o2
     void Pool<_type>::CreateObjects(int count)
     {
         for (int i = 0; i < count; i++)
-            mObjects.Add(mnew _type());
+            mObjects.Add(mmake<_type>());
     }
 }

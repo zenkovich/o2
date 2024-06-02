@@ -21,10 +21,10 @@ namespace o2
 
 namespace Editor
 {
-	class ActorProperty;
-	class ComponentProperty;
-	class SceneHierarchyTree;
-	class AssetIcon;
+	FORWARD_CLASS_REF(ActorProperty);
+	FORWARD_CLASS_REF(ComponentProperty);
+	FORWARD_CLASS_REF(SceneHierarchyTree);
+	FORWARD_CLASS_REF(AssetIcon);
 
 	// ------------------------
 	// Assets icons scroll area
@@ -37,10 +37,13 @@ namespace Editor
 
 	public:
 		// Default constructor
-		AssetsIconsScrollArea();
+        AssetsIconsScrollArea(RefCounter* refCounter);
 
-		// Copy-constructor
-		AssetsIconsScrollArea(const AssetsIconsScrollArea& other);
+        // Copy-constructor
+        AssetsIconsScrollArea(RefCounter* refCounter, const AssetsIconsScrollArea& other);
+
+        // Copy-constructor
+        AssetsIconsScrollArea(const AssetsIconsScrollArea& other);
 
 		// Destructor
 		~AssetsIconsScrollArea();
@@ -76,22 +79,22 @@ namespace Editor
 		void DeselectAllAssets();
 
 		// Returns selected assets infos
-		const Vector<const AssetInfo*>& GetSelectedAssets() const;
+		const Vector<Ref<AssetInfo>>& GetSelectedAssets() const;
 
 		// Return asset icon under point
-		AssetIcon* GetIconUnderPoint(const Vec2F& point) const;
+		Ref<AssetIcon> GetIconUnderPoint(const Vec2F& point) const;
 
 		// Returns node highlight drawable
-		Sprite* GetHighlightDrawable() const;
+		const Ref<Sprite>& GetHighlightDrawable() const;
 
 		// Sets highlight animation
-		void SetHighlightAnimation(const AnimationClip& animation);
+		void SetHighlightAnimation(const Ref<AnimationClip>& animation);
 
 		// Sets highlight layout
 		void SetHighlightLayout(const Layout& layout);
 
 		// Returns selecting rectangle drawable
-		Sprite* GetSelectingDrawable() const;
+		const Ref<Sprite>& GetSelectingDrawable() const;
 
 		// Returns is this widget can be selected
 		bool IsFocusable() const override;
@@ -111,41 +114,42 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AssetsIconsScrollArea);
+        SERIALIZABLE(AssetsIconsScrollArea);
+        CLONEABLE_REF(AssetsIconsScrollArea);
 
 	protected:
 		const Vec2F mAssetIconSize = Vec2F(50, 60);
 						        
 		String mCurrentPath = "_"; // Current viewing path
 
-		Vector<const AssetInfo*> mAssetInfos;        // Asset infos in path @IGNORE
-		Vector<AssetIcon*>       mVisibleAssetIcons; // Visible asset icons
+        Vector<Ref<AssetInfo>> mAssetInfos;        // Asset infos in path @IGNORE
+        Vector<Ref<AssetIcon>> mVisibleAssetIcons; // Visible asset icons
 
-		ContextMenu* mContextMenu = nullptr; // Assets Context menu
+		Ref<ContextMenu> mContextMenu; // Assets Context menu
 						        
-		Vector<const AssetInfo*> mSelectedAssets;          // Selected assets icons @IGNORE
-		Vector<AssetRef*>        mSelectedPreloadedAssets; // Preloaded selected assets
+		Vector<Ref<AssetInfo>> mSelectedAssets;          // Selected assets icons @IGNORE
+		Vector<AssetRef<Asset>>     mSelectedPreloadedAssets; // Preloaded selected assets
 
-		AssetRef mNewAsset; // Temporary new asset. Used when creating new asset
+		AssetRef<Asset> mNewAsset; // Temporary new asset. Used when creating new asset
 						        
-		AssetIcon*      mHighlightIcon = nullptr;   // Current highlighting asset icon
-		AnimationClip   mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
-		AnimationPlayer mHighlightAnim;             // Icon highlight animation
-		Sprite*         mHighlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
-		Layout          mHighlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
+		Ref<AssetIcon>       mHighlightIcon;                            // Current highlighting asset icon
+		Ref<AnimationClip>   mHighlighClip;                             // Node highlight animation clip @SERIALIZABLE 
+		Ref<AnimationPlayer> mHighlightAnim = mmake<AnimationPlayer>(); // Icon highlight animation
+		Ref<Sprite>          mHighlightSprite;                          // Icon highlight sprite @SERIALIZABLE
+		Layout               mHighlightLayout;                          // Icon highlight sprite layout @SERIALIZABLE
 						        
-		Map<String, Vector<AssetIcon*>> mIconsPool; // Assets icons pool
+		Map<String, Vector<Ref<AssetIcon>>> mIconsPool; // Assets icons pool
 						        
-		Sprite*                  mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
-		bool                     mSelecting = false;          // Is selecting icons 
-		Vec2F                    mPressedPoint;               // Pressed point
-		Vector<const AssetInfo*> mCurrentSelectingInfos;      // Selecting icons at current selection @IGNORE
+		Ref<Sprite>            mSelectionSprite;       // Icons selection rectangle sprite @SERIALIZABLE
+		bool                   mSelecting = false;     // Is selecting icons 
+		Vec2F                  mPressedPoint;          // Pressed point
+		Vector<Ref<AssetInfo>> mCurrentSelectingInfos; // Selecting icons at current selection @IGNORE
 						        
-		bool                         mIsDraggingIcons = false;      // Is dragging icons
-		bool                         mDragEnded = false;            // Is dragging ended
-		AssetIcon*                   mDragIcon = nullptr;           // Dragging icon
-		Vec2F                        mDragOffset;                   // Dragging offset from cursor to icon center
-		Vector<SceneEditableObject*> mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
+		bool                             mIsDraggingIcons = false;      // Is dragging icons
+		bool                             mDragEnded = false;            // Is dragging ended
+		Ref<AssetIcon>                   mDragIcon;                     // Dragging icon
+		Vec2F                            mDragOffset;                   // Dragging offset from cursor to icon center
+		Vector<Ref<SceneEditableObject>> mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
 
 		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
 						        
@@ -159,7 +163,7 @@ namespace Editor
 		Vector<void*> GetItemsRange(int start, int end) const override;
 
 		// Sets item widget, calls setupItemFunc
-		void SetupItemWidget(Widget* widget, void* item) override;
+		void SetupItemWidget(const Ref<Widget>& widget, void* item) override;
 
 		// Updates visible items
 		void UpdateVisibleItems() override;
@@ -222,19 +226,19 @@ namespace Editor
 		void InitializeCreateContext();
 
 		// Returns asset icon from pool or creates new by style name
-		AssetIcon* GetAssetIconFromPool(const String& style);
+		Ref<AssetIcon> GetAssetIconFromPool(const String& style);
 
 		// Frees icon to pool
-		void FreeAssetIconToPool(AssetIcon* icon);
+		void FreeAssetIconToPool(const Ref<AssetIcon>& icon);
 
 		// Returns asset icon if visible
-		AssetIcon* FindVisibleIcon(const AssetInfo* info);
+		Ref<AssetIcon> FindVisibleIcon(const Ref<AssetInfo>& info);
 
 		// Called when asset icon double clicked, starting editing name
-		void OnAssetDblClick(AssetIcon* icon);
+		void OnAssetDblClick(const Ref<AssetIcon>& icon);
 
 		// Starts asset icon renaming, calls onCompletedwhen completed
-		void StartAssetRenaming(AssetIcon* icon, const String& name, const Function<void(const String&)>& onCompleted);
+		void StartAssetRenaming(const Ref<AssetIcon>& icon, const String& name, const Function<void(const String&)>& onCompleted);
 
 		// Called when context copy pressed
 		void OnContextCopyPressed();
@@ -261,17 +265,17 @@ namespace Editor
 		void ClearInstantiatedDraggingAssets();
 
 		// Instantiate actor from asset info
-		Actor* InstantiateAsset(const AssetInfo& assetInfo);
+		Ref<Actor> InstantiateAsset(const AssetInfo& assetInfo);
 
 		// Dummy asset instantiate function from asset
 		template<typename _type>
-		Actor* InstantiateAsset(const _type& asset);
+		Ref<Actor> InstantiateAsset(const _type& asset);
 
 		// Instantiate actor from image asset
-		Actor* InstantiateAsset(const ImageAssetRef& asset);
+		Ref<Actor> InstantiateAsset(const AssetRef<ImageAsset>& asset);
 
 		// Instantiate actor from actor asset
-		Actor* InstantiateAsset(const ActorAssetRef& asset);
+		Ref<Actor> InstantiateAsset(const AssetRef<ActorAsset>& asset);
 
 		// Called when assets was changed from properties
 		void OnAssetsPropertiesChanged();
@@ -282,59 +286,61 @@ namespace Editor
 // ISelectableDragableObjectsGroup implementation
 
 		// Returns selected objects in group
-		Vector<SelectableDragableObject*> GetSelectedDragObjects() const override;
+		Vector<Ref<SelectableDragableObject>> GetSelectedDragObjects() const override;
 
 		// Returns all objects in group 
-		Vector<SelectableDragableObject*> GetAllObjects() const override;
+		Vector<Ref<SelectableDragableObject>> GetAllObjects() const override;
 
 		// Selects object
-		void Select(SelectableDragableObject* object) override;
+		void Select(const Ref<SelectableDragableObject>& object) override;
 
 		// Selects object
-		void Select(SelectableDragableObject* object, bool sendOnSelectionChanged);
+		void Select(const Ref<SelectableDragableObject>& object, bool sendOnSelectionChanged);
 
 		// Deselects object
-		void Deselect(SelectableDragableObject* object) override;
+		void Deselect(const Ref<SelectableDragableObject>& object) override;
 
 		// Adds selectable object to group
-		void AddSelectableObject(SelectableDragableObject* object) override;
+		void AddSelectableObject(const Ref<SelectableDragableObject>& object) override;
 
 		// Removes selectable object from group
 		void RemoveSelectableObject(SelectableDragableObject* object) override;
 
 		// Called when selectable draggable object was released
-		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) override;
+		void OnSelectableObjectCursorReleased(const Ref<SelectableDragableObject>& object, const Input::Cursor& cursor) override;
 
 		// Called when selectable object was began to drag
-		void OnSelectableObjectBeganDragging(SelectableDragableObject* object) override;
+		void OnSelectableObjectBeganDragging(const Ref<SelectableDragableObject>& object) override;
 
 // DragDropArea implementation
 		// Called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+		void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
+		void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+		void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+		void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
 		// Called when dropped dragged scene tree nodes selected and started dragging from scene tree
-		void OnDroppedFromSceneTree(SceneHierarchyTree* sceneTree);
+		void OnDroppedFromSceneTree(const Ref<SceneHierarchyTree>& sceneTree);
 
 		// Called when dropped dragged assets icons selected and started dragging from this
 		void OnDroppedFromThis();
 
 		// Begins dragging selected items
-		void BeginDragging(AssetIcon* icon);
+		void BeginDragging(const Ref<AssetIcon>& icon);
 
 		// Ends dragging items
 		void EndDragging(bool droppedToThis = false);
 
 		// Updates dragging graphics
-		void UpdateDraggingGraphics();
+		void UpdateDraggingGraphics(); 
+		
+		REF_COUNTERABLE_IMPL(GridLayoutScrollArea);
 
 		friend class AssetsWindow;
 		friend class SceneEditScreen;
@@ -344,7 +350,7 @@ namespace Editor
 	};
 
 	template<typename _type>
-	Actor* AssetsIconsScrollArea::InstantiateAsset(const _type& asset)
+	Ref<Actor> AssetsIconsScrollArea::InstantiateAsset(const _type& asset)
 	{
 		return nullptr;
 	}
@@ -365,21 +371,21 @@ CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
     FIELD().PROTECTED().DEFAULT_VALUE(Vec2F(50, 60)).NAME(mAssetIconSize);
     FIELD().PROTECTED().DEFAULT_VALUE("_").NAME(mCurrentPath);
     FIELD().PROTECTED().NAME(mVisibleAssetIcons);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mContextMenu);
+    FIELD().PROTECTED().NAME(mContextMenu);
     FIELD().PROTECTED().NAME(mSelectedPreloadedAssets);
     FIELD().PROTECTED().NAME(mNewAsset);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHighlightIcon);
+    FIELD().PROTECTED().NAME(mHighlightIcon);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlighClip);
-    FIELD().PROTECTED().NAME(mHighlightAnim);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHighlightSprite);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mHighlightAnim);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightSprite);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightLayout);
     FIELD().PROTECTED().NAME(mIconsPool);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionSprite);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelecting);
     FIELD().PROTECTED().NAME(mPressedPoint);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsDraggingIcons);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDragEnded);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDragIcon);
+    FIELD().PROTECTED().NAME(mDragIcon);
     FIELD().PROTECTED().NAME(mDragOffset);
     FIELD().PROTECTED().NAME(mInstantiatedSceneDragObjects);
     FIELD().PROTECTED().NAME(mCuttingAssets);
@@ -389,7 +395,8 @@ END_META;
 CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AssetsIconsScrollArea&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsIconsScrollArea&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
@@ -400,12 +407,12 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(void, HighlightAsset, const UID&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const UID&, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, DeselectAllAssets);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<const AssetInfo*>&, GetSelectedAssets);
-    FUNCTION().PUBLIC().SIGNATURE(AssetIcon*, GetIconUnderPoint, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHighlightDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const AnimationClip&);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AssetInfo>>&, GetSelectedAssets);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<AssetIcon>, GetIconUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetHighlightDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightLayout, const Layout&);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectingDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetSelectingDrawable);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
@@ -414,7 +421,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(int, GetItemsCount);
     FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetItemsRange, int, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetupItemWidget, Widget*, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupItemWidget, const Ref<Widget>&, void*);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleItems);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFocused);
     FUNCTION().PROTECTED().SIGNATURE(void, OnUnfocused);
@@ -435,11 +442,11 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PROTECTED().SIGNATURE(void, RegObjectsCreationAction);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeContext);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeCreateContext);
-    FUNCTION().PROTECTED().SIGNATURE(AssetIcon*, GetAssetIconFromPool, const String&);
-    FUNCTION().PROTECTED().SIGNATURE(void, FreeAssetIconToPool, AssetIcon*);
-    FUNCTION().PROTECTED().SIGNATURE(AssetIcon*, FindVisibleIcon, const AssetInfo*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnAssetDblClick, AssetIcon*);
-    FUNCTION().PROTECTED().SIGNATURE(void, StartAssetRenaming, AssetIcon*, const String&, const Function<void(const String&)>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<AssetIcon>, GetAssetIconFromPool, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, FreeAssetIconToPool, const Ref<AssetIcon>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<AssetIcon>, FindVisibleIcon, const Ref<AssetInfo>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnAssetDblClick, const Ref<AssetIcon>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, StartAssetRenaming, const Ref<AssetIcon>&, const String&, const Function<void(const String&)>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextCutPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextPastePressed);
@@ -448,27 +455,27 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
     FUNCTION().PROTECTED().SIGNATURE(void, OnContextShowInExplorerPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, InstantiateDraggingAssets);
     FUNCTION().PROTECTED().SIGNATURE(void, ClearInstantiatedDraggingAssets);
-    FUNCTION().PROTECTED().SIGNATURE(Actor*, InstantiateAsset, const AssetInfo&);
-    FUNCTION().PROTECTED().SIGNATURE(Actor*, InstantiateAsset, const ImageAssetRef&);
-    FUNCTION().PROTECTED().SIGNATURE(Actor*, InstantiateAsset, const ActorAssetRef&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const AssetInfo&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const AssetRef<ImageAsset>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Actor>, InstantiateAsset, const AssetRef<ActorAsset>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAssetsPropertiesChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckPreloadedAssetsSaving);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<SelectableDragableObject*>, GetSelectedDragObjects);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<SelectableDragableObject*>, GetAllObjects);
-    FUNCTION().PROTECTED().SIGNATURE(void, Select, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, Select, SelectableDragableObject*, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, Deselect, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, AddSelectableObject, SelectableDragableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<SelectableDragableObject>>, GetSelectedDragObjects);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<SelectableDragableObject>>, GetAllObjects);
+    FUNCTION().PROTECTED().SIGNATURE(void, Select, const Ref<SelectableDragableObject>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, Select, const Ref<SelectableDragableObject>&, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, Deselect, const Ref<SelectableDragableObject>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, AddSelectableObject, const Ref<SelectableDragableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(void, RemoveSelectableObject, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectCursorReleased, SelectableDragableObject*, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectBeganDragging, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromSceneTree, SceneHierarchyTree*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectCursorReleased, const Ref<SelectableDragableObject>&, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectBeganDragging, const Ref<SelectableDragableObject>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromSceneTree, const Ref<SceneHierarchyTree>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDroppedFromThis);
-    FUNCTION().PROTECTED().SIGNATURE(void, BeginDragging, AssetIcon*);
+    FUNCTION().PROTECTED().SIGNATURE(void, BeginDragging, const Ref<AssetIcon>&);
     FUNCTION().PROTECTED().SIGNATURE(void, EndDragging, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateDraggingGraphics);
 }

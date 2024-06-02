@@ -14,12 +14,12 @@ namespace o2
 
 namespace Editor
 {
-	class AssetProperty;
-	class FloatProperty;
-	class ColorProperty;
-	class EnumProperty;
-	class WStringProperty;
-	class BooleanProperty;
+	FORWARD_CLASS_REF(AssetProperty);
+	FORWARD_CLASS_REF(FloatProperty);
+	FORWARD_CLASS_REF(ColorProperty);
+	FORWARD_CLASS_REF(EnumProperty);
+	FORWARD_CLASS_REF(WStringProperty);
+	FORWARD_CLASS_REF(BooleanProperty);
 
 	// --------------------
 	// Editor text property
@@ -30,17 +30,17 @@ namespace Editor
 		IOBJECT(TextViewer);
 
 	protected:
-		ColorProperty*   mColorProperty = nullptr;
-		FloatProperty*   mAlphaProperty = nullptr;
-		AssetProperty*   mFontProperty = nullptr;
-		WStringProperty* mTextProperty = nullptr;
-		FloatProperty*   mHeightProperty = nullptr;
-		EnumProperty*    mHorAlignProperty = nullptr;
-		EnumProperty*    mVerAlignProperty = nullptr;
-		BooleanProperty* mWordWrapProperty = nullptr;
-		BooleanProperty* mDotsEndingsProperty = nullptr;
-		FloatProperty*   mSymbolsDistCoefProperty = nullptr;
-		FloatProperty*   mLinesDistCoefProperty = nullptr;
+		Ref<ColorProperty>   mColorProperty;
+		Ref<FloatProperty>   mAlphaProperty;
+		Ref<AssetProperty>   mFontProperty;
+		Ref<WStringProperty> mTextProperty;
+		Ref<FloatProperty>   mHeightProperty;
+		Ref<EnumProperty>    mHorAlignProperty;
+		Ref<EnumProperty>    mVerAlignProperty;
+		Ref<BooleanProperty> mWordWrapProperty;
+		Ref<BooleanProperty> mDotsEndingsProperty;
+		Ref<FloatProperty>   mSymbolsDistCoefProperty;
+		Ref<FloatProperty>   mLinesDistCoefProperty;
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -56,17 +56,17 @@ CLASS_BASES_META(Editor::TextViewer)
 END_META;
 CLASS_FIELDS_META(Editor::TextViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFontProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeightProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHorAlignProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVerAlignProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWordWrapProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDotsEndingsProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSymbolsDistCoefProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLinesDistCoefProperty);
+    FIELD().PROTECTED().NAME(mColorProperty);
+    FIELD().PROTECTED().NAME(mAlphaProperty);
+    FIELD().PROTECTED().NAME(mFontProperty);
+    FIELD().PROTECTED().NAME(mTextProperty);
+    FIELD().PROTECTED().NAME(mHeightProperty);
+    FIELD().PROTECTED().NAME(mHorAlignProperty);
+    FIELD().PROTECTED().NAME(mVerAlignProperty);
+    FIELD().PROTECTED().NAME(mWordWrapProperty);
+    FIELD().PROTECTED().NAME(mDotsEndingsProperty);
+    FIELD().PROTECTED().NAME(mSymbolsDistCoefProperty);
+    FIELD().PROTECTED().NAME(mLinesDistCoefProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::TextViewer)

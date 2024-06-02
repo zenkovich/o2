@@ -6,23 +6,23 @@
 
 namespace Editor
 {
-	Vec2KeyFramesTrackControl* Vec2KeyFramesTrackControl::mLastActive = nullptr;
+	WeakRef<Vec2KeyFramesTrackControl> Vec2KeyFramesTrackControl::mLastActive;
 
-	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl():
-		Base()
+	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl(RefCounter* refCounter):
+		Base(refCounter), mTool(mmake<SplineTool>())
 	{
 		InitializeControls();
 	}
 
-	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl(const Vec2KeyFramesTrackControl& other):
-		Base(other)
+	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl(RefCounter* refCounter, const Vec2KeyFramesTrackControl& other):
+		Base(refCounter, other), mTool(mmake<SplineTool>())
 	{
 		InitializeControls();
 	}
 
 	Vec2KeyFramesTrackControl::~Vec2KeyFramesTrackControl()
 	{
-		o2EditorSceneScreen.RemoveTool(&mTool);
+		o2EditorSceneScreen.RemoveTool(mTool);
 	}
 
 	void Vec2KeyFramesTrackControl::SetActive(bool active)
@@ -30,20 +30,20 @@ namespace Editor
 		if (active)
 		{
 			if (mLastActive)
-				mLastActive->SetActive(false);
+				mLastActive.Lock()->SetActive(false);
 
-			o2EditorSceneScreen.AddTool(&mTool);
+			o2EditorSceneScreen.AddTool(mTool);
 			mPrevSelectedTool = o2EditorSceneScreen.GetSelectedTool();
 			o2EditorSceneScreen.SelectTool<SplineTool>();
 
-			mLastActive = this;
+			mLastActive = Ref(this);
 		}
 		else
 		{
-			if (o2EditorSceneScreen.GetSelectedTool() == &mTool)
-				o2EditorSceneScreen.SelectTool(mPrevSelectedTool);
+			if (o2EditorSceneScreen.GetSelectedTool() == mTool)
+				o2EditorSceneScreen.SelectTool(mPrevSelectedTool.Lock());
 
-			o2EditorSceneScreen.RemoveTool(&mTool);
+			o2EditorSceneScreen.RemoveTool(mTool);
 
 			if (mLastActive == this)
 				mLastActive = nullptr;
@@ -66,8 +66,8 @@ namespace Editor
 		if (!mPlayer)
 			return;
 
-		auto path = mTrack->path;
-		Actor* root = dynamic_cast<Actor*>(mPlayer->GetOwnerPlayer()->GetTarget());
+		auto path = mTrack.Lock()->path;
+		auto root = Ref(dynamic_cast<Actor*>(mPlayer.Lock()->GetOwnerPlayer().Lock()->GetTarget()));
 		while (root && path.StartsWith("child"))
 		{
 			int nextSlash = path.Find("/");
@@ -87,9 +87,9 @@ namespace Editor
 	{
 		TryFindOwnerTrack();
 
-		mTool.SetSpline(&mTrack->spline, [&]() { 
-			if (mTrackOwner && mTrackOwner->GetParent())
-				return mTrackOwner->GetParent()->transform->worldPosition.Get(); 
+		mTool->SetSpline(mTrack.Lock()->spline, [&]() { 
+			if (mTrackOwner && mTrackOwner.Lock()->GetParent())
+				return mTrackOwner.Lock()->GetParent().Lock()->transform->worldPosition.Get(); 
 
 			return Vec2F();
 		});
@@ -97,7 +97,7 @@ namespace Editor
 
 	void Vec2KeyFramesTrackControl::OnKeysChanged()
 	{
-		mTool.splineEditor.OnSplineChanged();
+		mTool->splineEditor->OnSplineChanged();
 	}
 
 	void Vec2KeyFramesTrackControl::SetCurveViewEnabled(bool enabled)
@@ -111,28 +111,31 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
-		if (!mHandlesSheet->enabled)
+		if (!mHandlesSheet.Lock()->enabled)
 			return;
 
 		OnDrawn();
 
-		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+		auto timeline = mTimeline.Lock();
+		auto track = mTrack.Lock();
 
-		for (int i = 1; i < mTrack->timeCurve.GetKeys().Count(); i++)
+		o2Render.EnableScissorTest(timeline->layout->GetWorldRect());
+
+		for (int i = 1; i < track->timeCurve->GetKeys().Count(); i++)
 		{
-			auto& key = mTrack->timeCurve.GetKeys()[i];
-			auto& prevKey = mTrack->timeCurve.GetKeys()[i - 1];
+			auto& key = track->timeCurve->GetKeys()[i];
+			auto& prevKey = track->timeCurve->GetKeys()[i - 1];
 
-			Basis drawCoords(RectF(mTimeline->LocalToWorld(prevKey.position) - 3,
-							 layout->GetWorldTop() - 5,
-							 mTimeline->LocalToWorld(key.position) - 3,
-							 layout->GetWorldBottom() + 5));
+			Basis drawCoords(RectF(timeline->LocalToWorld(prevKey.position) - 3,
+								   layout->GetWorldTop() - 5,
+								   timeline->LocalToWorld(key.position) - 3,
+								   layout->GetWorldBottom() + 5));
 
 			DrawCurveInCoords(key.GetApproximatedPoints(), key.GetApproximatedPointsCount(),
 							  key.GetGetApproximatedPointsBounds(), drawCoords, Color4(44, 62, 80));
 		}
 
-		for (auto handle : mHandles)
+		for (auto& handle : mHandles)
 			handle->handle->Draw();
 
 		o2Render.DisableScissorTest();
@@ -140,6 +143,8 @@ namespace Editor
 		DrawDebugFrame();
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::Vec2KeyFramesTrackControl>);
 // --- META ---
 
 DECLARE_CLASS(Editor::Vec2KeyFramesTrackControl, Editor__Vec2KeyFramesTrackControl);

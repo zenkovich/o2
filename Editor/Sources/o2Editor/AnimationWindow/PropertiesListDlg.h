@@ -16,7 +16,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class AnimationPropertiesTree;
+	FORWARD_CLASS_REF(AnimationPropertiesTree);
 
 	// ---------------------------------------------------------------------------------------
 	// Animation properties list dialog. Shows properties tree with filter for specified actor
@@ -28,13 +28,13 @@ namespace Editor
 		~PropertiesListDlg();
 
 		// Shows animation properties window for actor and animation
-		static void Show(AnimationClip* animation, ActorRef actor);
+		static void Show(const Ref<AnimationClip>& animation, const Ref<Actor>& actor);
 
 	private:
-		o2::Window* mWindow = nullptr;
-		EditBox*    mFilter = nullptr;
+		Ref<o2::Window> mWindow;
+		Ref<EditBox>    mFilter;
 
-		AnimationPropertiesTree* mPropertiesTree = nullptr;
+		Ref<AnimationPropertiesTree> mPropertiesTree;
 
 	private:
 		// Initializes window and controls
@@ -48,10 +48,10 @@ namespace Editor
 	class AnimationPropertiesTree : public Tree
 	{
 	public:
-		struct NodeData
+		struct NodeData: public RefCounterable
 		{
-			NodeData*         parent = nullptr;
-			Vector<NodeData*> children;
+			WeakRef<NodeData>     parent;
+			Vector<Ref<NodeData>> children;
 
 			String name;
 			String path;
@@ -64,21 +64,24 @@ namespace Editor
 			~NodeData();
 
 			void Clear();
-			NodeData* AddChild(const String& name, const Type* type);
+			Ref<NodeData> AddChild(const String& name, const Type* type);
 		};
 
 	public:
 		// Default constructor
-		AnimationPropertiesTree();
+        AnimationPropertiesTree(RefCounter* refCounter);
 
 		// Copy-constructor
-		AnimationPropertiesTree(const AnimationPropertiesTree& other);
+        AnimationPropertiesTree(RefCounter* refCounter, const AnimationPropertiesTree& other);
+
+        // Copy-constructor
+        AnimationPropertiesTree(const AnimationPropertiesTree& other);
 
 		// Copy operator
 		AnimationPropertiesTree& operator=(const AnimationPropertiesTree& other);
 
 		// Initializes properties
-		void Initialize(AnimationClip* animation, ActorRef actor);
+		void Initialize(const Ref<AnimationClip>& animation, const Ref<Actor>& actor);
 
 		// Sets filter and refreshes tree
 		void SetFilter(const WString& filter);
@@ -86,38 +89,39 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AnimationPropertiesTree);
+        SERIALIZABLE(AnimationPropertiesTree);
+        CLONEABLE_REF(AnimationPropertiesTree);
 
 	private:
 		WString mFilterStr; // Filtering string
 
-		AnimationClip* mAnimation = nullptr; // Looking animation
-		ActorRef       mActor;               // Looking actor
+		Ref<AnimationClip> mAnimation; // Looking animation
+		Ref<Actor>         mActor;     // Looking actor
 
-		NodeData         mRoot;         // Root properties data node
+		Ref<NodeData>    mRoot;         // Root properties data node
 		Vector<IObject*> mPassedObject; // Tree processing passed objects
 
 	private:
 		// Initializes parameters tree node by object properties
-		void InitializeTreeNode(NodeData* node, IObject* object);
+		void InitializeTreeNode(const Ref<NodeData>& node, IObject* object);
 
 		// Processes object base types and fields
-		void ProcessObject(void* object, const ObjectType* type, NodeData* node);
+		void ProcessObject(void* object, const ObjectType* type, const Ref<NodeData>& node);
 
 		// Processes tree node property. Checks type
-		void ProcessTreeNode(void* object, const Type* type, const String& name, NodeData* node);
+		void ProcessTreeNode(void* object, const Type* type, const String& name, const Ref<NodeData>& node);
 
 		// initializes single property node
-		void InitializePropertyNode(NodeData* node, const String& name, const Type* type);
+		void InitializePropertyNode(const Ref<NodeData>& node, const String& name, const Type* type);
 
 		// Initializes sub tree for object
-		void InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, const String& name, NodeData* node);
+		void InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, const String& name, const Ref<NodeData>& node);
 
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
 
 		// Gets tree node from pool or creates new, enables editor mode
-		TreeNode* CreateTreeNodeWidget() override;
+		Ref<TreeNode> CreateTreeNodeWidget() override;
 
 		// Returns object's parent
 		void* GetObjectParent(void* object) override;
@@ -129,10 +133,10 @@ namespace Editor
 		String GetObjectDebug(void* object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
+		void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object) override;
 
 		// Called when tree node was double clicked
-		void OnNodeDblClick(TreeNode* nodeWidget) override;
+		void OnNodeDblClick(const Ref<TreeNode>& nodeWidget) override;
 
 		// Called when list of selected objects was changed
 		void OnNodesSelectionChanged(Vector<void*> objects) override;
@@ -147,31 +151,32 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		AnimationPropertiesTreeNode();
+        AnimationPropertiesTreeNode(RefCounter* refCounter);
 
 		// Copy-constructor
-		AnimationPropertiesTreeNode(const AnimationPropertiesTreeNode& other);
+        AnimationPropertiesTreeNode(RefCounter* refCounter, const AnimationPropertiesTreeNode& other);
 
 		// Copy operator
 		AnimationPropertiesTreeNode& operator=(const AnimationPropertiesTreeNode& other);
 
 		// Initializes node by data
-		void Setup(AnimationPropertiesTree::NodeData* data, AnimationPropertiesTree* tree);
+		void Setup(const Ref<AnimationPropertiesTree::NodeData>& data, const Ref<AnimationPropertiesTree>& tree);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(AnimationPropertiesTreeNode);
+        SERIALIZABLE(AnimationPropertiesTreeNode);
+        CLONEABLE_REF(AnimationPropertiesTreeNode);
 
 	private:
-		Text*   mName;         // Name of property
-		Sprite* mIcon;         // Property icon. Used only for finite properties
-		Button* mAddButton;    // Add button, it is enabled when animation track isn't added to animation, adds this value to animation
-		Button* mRemoveButton; // Remove button, it is enabled when animation track is added to animation, removes this value to animation
+		Ref<Text>   mName;         // Name of property
+		Ref<Sprite> mIcon;         // Property icon. Used only for finite properties
+		Ref<Button> mAddButton;    // Add button, it is enabled when animation track isn't added to animation, adds this value to animation
+		Ref<Button> mRemoveButton; // Remove button, it is enabled when animation track is added to animation, removes this value to animation
 
-		AnimationPropertiesTree::NodeData* mData = nullptr; // Data node pointer
+		WeakRef<AnimationPropertiesTree::NodeData> mData; // Data node pointer
 
-		AnimationPropertiesTree* mTree = nullptr; // Owner tree
+		WeakRef<AnimationPropertiesTree> mTree; // Owner tree
 
 	private:
 		// Called on deserialization, initializes controls
@@ -193,7 +198,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationPropertiesTree)
 {
     FIELD().PRIVATE().NAME(mFilterStr);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimation);
+    FIELD().PRIVATE().NAME(mAnimation);
     FIELD().PRIVATE().NAME(mActor);
     FIELD().PRIVATE().NAME(mRoot);
     FIELD().PRIVATE().NAME(mPassedObject);
@@ -202,23 +207,24 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationPropertiesTree&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationPropertiesTree&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationClip*, ActorRef);
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, const Ref<AnimationClip>&, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
-    FUNCTION().PRIVATE().SIGNATURE(void, InitializeTreeNode, NodeData*, IObject*);
-    FUNCTION().PRIVATE().SIGNATURE(void, ProcessObject, void*, const ObjectType*, NodeData*);
-    FUNCTION().PRIVATE().SIGNATURE(void, ProcessTreeNode, void*, const Type*, const String&, NodeData*);
-    FUNCTION().PRIVATE().SIGNATURE(void, InitializePropertyNode, NodeData*, const String&, const Type*);
-    FUNCTION().PRIVATE().SIGNATURE(void, InitializeObjectTreeNode, const ObjectType*, void*, const String&, NodeData*);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeTreeNode, const Ref<NodeData>&, IObject*);
+    FUNCTION().PRIVATE().SIGNATURE(void, ProcessObject, void*, const ObjectType*, const Ref<NodeData>&);
+    FUNCTION().PRIVATE().SIGNATURE(void, ProcessTreeNode, void*, const Type*, const String&, const Ref<NodeData>&);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializePropertyNode, const Ref<NodeData>&, const String&, const Type*);
+    FUNCTION().PRIVATE().SIGNATURE(void, InitializeObjectTreeNode, const ObjectType*, void*, const String&, const Ref<NodeData>&);
     FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
-    FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+    FUNCTION().PRIVATE().SIGNATURE(Ref<TreeNode>, CreateTreeNodeWidget);
     FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
     FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
     FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
-    FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
-    FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, TreeNode*);
+    FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, const Ref<TreeNode>&, void*);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, const Ref<TreeNode>&);
     FUNCTION().PRIVATE().SIGNATURE(void, OnNodesSelectionChanged, Vector<void*>);
 }
 END_META;
@@ -234,16 +240,16 @@ CLASS_FIELDS_META(Editor::AnimationPropertiesTreeNode)
     FIELD().PRIVATE().NAME(mIcon);
     FIELD().PRIVATE().NAME(mAddButton);
     FIELD().PRIVATE().NAME(mRemoveButton);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mData);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
+    FIELD().PRIVATE().NAME(mData);
+    FIELD().PRIVATE().NAME(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationPropertiesTreeNode&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, AnimationPropertiesTree::NodeData*, AnimationPropertiesTree*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const AnimationPropertiesTreeNode&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<AnimationPropertiesTree::NodeData>&, const Ref<AnimationPropertiesTree>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);

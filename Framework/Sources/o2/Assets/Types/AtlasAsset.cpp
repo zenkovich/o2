@@ -33,7 +33,7 @@ namespace o2
         if (!(common == otherMeta->common))
             return false;
 
-        auto comparePlatformMeta = [](PlatformMeta* a, PlatformMeta* b)
+        auto comparePlatformMeta = [](const Ref<PlatformMeta>& a, const Ref<PlatformMeta>& b)
         {
             if (a && b)
             {
@@ -75,7 +75,7 @@ namespace o2
 
     String AtlasAsset::Page::GetTextureFileName() const
     {
-        return AtlasAsset::GetPageTextureFileName(mOwner->mInfo, mId);
+        return AtlasAsset::GetPageTextureFileName(mOwner.Lock()->mInfo, mId);
     }
 
     const Map<UID, RectI>& AtlasAsset::Page::ImagesRects() const
@@ -89,18 +89,14 @@ namespace o2
     }
 
     AtlasAsset::AtlasAsset() :
-        Asset(mnew Meta())
-    {
-        o2Render.OnAtlasCreated(this);
-    }
+        Asset(mmake<Meta>())
+    {}
 
     AtlasAsset::AtlasAsset(const AtlasAsset& other) :
         Asset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
     {
         for (auto& page : mPages)
-            page.mOwner = this;
-
-        o2Render.OnAtlasCreated(this);
+            page.mOwner = WeakRef(this);
     }
 
     AtlasAsset::~AtlasAsset()
@@ -108,11 +104,17 @@ namespace o2
         o2Render.OnAtlasDestroyed(this);
     }
 
-    void AtlasAsset::OnDeserialized(const DataValue& node)
+	void AtlasAsset::PostRefConstruct()
+    {
+        Asset::PostRefConstruct();
+		o2Render.OnAtlasCreated(this);
+	}
+
+	void AtlasAsset::OnDeserialized(const DataValue& node)
     {
         for (auto& page : mPages)
         {
-            page.mOwner = this;
+            page.mOwner = WeakRef(this);
             page.mTexture = GetPageTextureRef(mInfo, page.mId);
         }
     }
@@ -127,7 +129,7 @@ namespace o2
         return *this;
     }
 
-    TextureSource AtlasAsset::GetSpriteSource(const ImageAssetRef& image)
+    TextureSource AtlasAsset::GetSpriteSource(const AssetRef<ImageAsset>& image)
     {
         for (auto& page : mPages)
         {
@@ -141,7 +143,7 @@ namespace o2
         return {};
     }
 
-    const Vector<ImageAssetRef>& AtlasAsset::GetImages() const
+    const Vector<AssetRef<ImageAsset>>& AtlasAsset::GetImages() const
     {
         return mImages;
     }
@@ -151,18 +153,18 @@ namespace o2
         return mPages;
     }
 
-    bool AtlasAsset::ContainsImage(const ImageAssetRef& image)
+    bool AtlasAsset::ContainsImage(const AssetRef<ImageAsset>& image)
     {
         return mImages.Contains(image);
     }
 
-    void AtlasAsset::AddImage(const ImageAssetRef& image)
+    void AtlasAsset::AddImage(const AssetRef<ImageAsset>& image)
     {
         if (!mImages.Contains(image))
             mImages.Add(image);
     }
 
-    void AtlasAsset::RemoveImage(const ImageAssetRef& image)
+    void AtlasAsset::RemoveImage(const AssetRef<ImageAsset>& image)
     {
         mImages.Remove(image);
     }
@@ -180,9 +182,9 @@ namespace o2
             img->Reload();
     }
 
-    AtlasAsset::Meta* AtlasAsset::GetMeta() const
+    Ref<AtlasAsset::Meta> AtlasAsset::GetMeta() const
     {
-        return (Meta*)mInfo.meta;
+        return DynamicCast<Meta>(mInfo.meta);
     }
 
     Vector<String> AtlasAsset::GetFileExtensions()
@@ -192,9 +194,9 @@ namespace o2
 
     String AtlasAsset::GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx)
     {
-        auto meta = dynamic_cast<AtlasAsset::Meta*>(atlasInfo.meta);
+        auto meta = DynamicCast<AtlasAsset::Meta>(atlasInfo.meta);
         String extension = Texture::formatFileExtensions.Get(meta->GetResultPlatformMeta(::GetEnginePlatform()).format);
-        return (atlasInfo.tree ? atlasInfo.tree->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + "." + extension;
+        return (atlasInfo.tree ? atlasInfo.tree.Lock()->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + "." + extension;
     }
 
     TextureRef AtlasAsset::GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx)
@@ -209,7 +211,7 @@ namespace o2
 }
 
 DECLARE_TEMPLATE_CLASS(o2::DefaultAssetMeta<o2::AtlasAsset>);
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::AtlasAsset>);
+DECLARE_TEMPLATE_CLASS(o2::AssetRef<o2::AtlasAsset>);
 // --- META ---
 
 DECLARE_CLASS(o2::AtlasAsset, o2__AtlasAsset);

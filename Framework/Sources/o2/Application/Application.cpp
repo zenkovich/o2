@@ -1,8 +1,6 @@
 #include "o2/stdafx.h"
 #include "o2/Application/Application.h"
 
-#include <chrono>
-#include <thread>
 #include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Config/ProjectConfig.h"
@@ -15,20 +13,39 @@
 #include "o2/Utils/Debug/Log/ConsoleLogStream.h"
 #include "o2/Utils/Debug/Log/FileLogStream.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include "o2/Utils/Debug/Profiling/SimpleProfiler.h"
 #include "o2/Utils/Debug/StackTrace.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 #include "o2/Utils/System/Time/Time.h"
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
-#include "o2/Utils/Debug/Profiling/SimpleProfiler.h"
+
+#include <chrono>
+#include <thread>
 
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptEngine.h"
 #endif
-#include "o2/Utils/Editor/EditorScope.h"
 
 namespace o2
 {
+    FORWARD_REF_IMPL(Assets);
+    FORWARD_REF_IMPL(EventSystem);
+    FORWARD_REF_IMPL(FileSystem);
+    FORWARD_REF_IMPL(Input);
+    FORWARD_REF_IMPL(PhysicsWorld);
+    FORWARD_REF_IMPL(ProjectConfig);
+    FORWARD_REF_IMPL(Render);
+    FORWARD_REF_IMPL(Scene);
+    FORWARD_REF_IMPL(TaskManager);
+    FORWARD_REF_IMPL(Time);
+    FORWARD_REF_IMPL(UIManager);
+
+#if IS_SCRIPTING_SUPPORTED
+    FORWARD_REF_IMPL(ScriptEngine);
+#endif
+
     DECLARE_SINGLETON(Application);
 
     Application::Application()
@@ -44,7 +61,7 @@ namespace o2
         InitalizeSystems();
         InitializePlatform();
 
-        mRender = mnew Render();
+        mRender = mmake<Render>();
 
         o2Debug.InitializeFont();
         o2UI.TryLoadStyle();
@@ -95,32 +112,32 @@ namespace o2
     {
         srand((UInt)time(NULL));
 
-        mTime = mnew Time();
+        mTime = Make<Time>();
 
-        mLog = mnew LogStream("Application");
+        mLog = mmake<LogStream>("Application");
         o2Debug.GetLog()->BindStream(mLog);
 
-        mProjectConfig = mnew ProjectConfig();
+        mProjectConfig = mmake<ProjectConfig>();
 
-        mAssets = mnew Assets();
+        mAssets = mmake<Assets>();
 
-        mInput = mnew Input();
+        mInput = mmake<Input>();
+        mMainListenersLayer = mmake<CursorAreaEventListenersLayer>();
 
-        mTaskManager = mnew TaskManager();
+        mTaskManager = mmake<TaskManager>();
 
-        mTimer = mnew Timer();
-        mTimer->Reset();
+        mTimer.Reset();
 
-        mEventSystem = mnew EventSystem();
+        mEventSystem = mmake<EventSystem>();
 
-        mUIManager = mnew UIManager();
+        mUIManager = mmake<UIManager>();
 
-        mScene = mnew Scene();
+        mScene = mmake<Scene>();
 
-        mPhysics = mnew PhysicsWorld();
+        mPhysics = mmake<PhysicsWorld>();
 
 #if IS_SCRIPTING_SUPPORTED
-        mScriptingEngine = mnew ScriptEngine();
+        mScriptingEngine = mmake<ScriptEngine>();
 #endif
 
         mLog->Out("Initialized");
@@ -128,21 +145,18 @@ namespace o2
 
     void Application::DeinitializeSystems()
     {
-        delete mUIManager;
-        delete mScene;
-        delete mPhysics;
-        delete mRender;
-        delete mInput;
-        delete mTime;
-        delete mTimer;
-        delete mProjectConfig;
-        delete mAssets;
-        delete mEventSystem;
-        delete mTaskManager;
-
-#if IS_SCRIPTING_SUPPORTED
-        delete mScriptingEngine;
-#endif
+        mScene = nullptr;
+        mInput = nullptr;
+        mProjectConfig = nullptr;
+        mPhysics = nullptr;
+        mTaskManager = nullptr;
+        mUIManager = nullptr;
+        mEventSystem = nullptr;
+        mRender = nullptr;
+        mFileSystem = nullptr;
+        mAssets = nullptr;
+        mTime = nullptr;
+        mLog = nullptr;
     }
     
     void Application::SetupGraphicsScaledCamera()
@@ -171,7 +185,7 @@ namespace o2
 
             float maxFPSDeltaTime = 1.0f/(float)maxFPS;
 
-            realDt = mTimer->GetDeltaTime();
+            realDt = mTimer.GetDeltaTime();
 
             if (realDt < maxFPSDeltaTime)
             {
@@ -214,9 +228,9 @@ namespace o2
 
         PostUpdateEventSystem();
         
-        mMainListenersLayer.OnBeginDraw();
+        mMainListenersLayer->OnBeginDraw();
         SetupGraphicsScaledCamera();
-        mMainListenersLayer.camera = o2Render.GetCamera();
+        mMainListenersLayer->camera = o2Render.GetCamera();
 
         DrawScene();
         OnDraw();
@@ -224,8 +238,8 @@ namespace o2
         DrawUIManager();
         DrawDebug();
 
-        mMainListenersLayer.OnEndDraw();
-        mMainListenersLayer.OnDrawn(Camera::Default().GetBasis());
+        mMainListenersLayer->OnEndDraw();
+        mMainListenersLayer->OnDrawn(Camera::Default().GetBasis());
 
         mRender->End();
 
@@ -316,24 +330,9 @@ namespace o2
         return IS_EDITOR;
     }
 
-    LogStream* Application::GetLog() const
+    const Ref<LogStream>& Application::GetLog() const
     {
         return mInstance->mLog;
-    }
-
-    Input* Application::GetInput() const
-    {
-        return mInstance->mInput;
-    }
-
-    ProjectConfig* Application::GetProjectConfig() const
-    {
-        return mInstance->mProjectConfig;
-    }
-
-    Time* Application::GetTime() const
-    {
-        return mInstance->mTime;
     }
     
     float Application::GetGraphicsScale() const

@@ -21,10 +21,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		SceneLayerRefProperty();
+		SceneLayerRefProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		SceneLayerRefProperty(const SceneLayerRefProperty& other);
+		SceneLayerRefProperty(RefCounter* refCounter, const SceneLayerRefProperty& other);
 
 		// Copy operator
 		SceneLayerRefProperty& operator=(const SceneLayerRefProperty& other);
@@ -41,11 +41,12 @@ namespace Editor
 		// Returns is used "Inherit from parent" value
 		bool IsUseInheritedValue() const;
 
-		IOBJECT(SceneLayerRefProperty);
+		SERIALIZABLE(SceneLayerRefProperty);
+        CLONEABLE_REF(SceneLayerRefProperty);
 
 	protected:		       
-		DropDown* mDropDown = nullptr;       // Layer name dropdown
-		bool      mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
+		Ref<DropDown> mDropDown;              // Layer name dropdown
+		bool          mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
 
 		bool mUseInheritedValue = false;      // Is used "Inherit from parent" value
 		bool mSelectedInheritedValue = false; // Is selected "Inherit from parent" value
@@ -79,7 +80,7 @@ END_META;
 CLASS_FIELDS_META(Editor::SceneLayerRefProperty)
 {
     FIELD().PUBLIC().NAME(onSelectedInheritedValue);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
+    FIELD().PROTECTED().NAME(mDropDown);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUseInheritedValue);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelectedInheritedValue);
@@ -89,8 +90,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneLayerRefProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayerRefProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const SceneLayerRefProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedInheritedValue, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSelectedInheritedValue);
     FUNCTION().PUBLIC().SIGNATURE(void, SetUseInheritedValue, bool);

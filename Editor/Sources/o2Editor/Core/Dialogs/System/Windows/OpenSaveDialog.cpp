@@ -15,7 +15,7 @@ namespace Editor
 		filterStr[filterStrSize - 1] = '\0';
 
 		int i = 0;
-		for (auto x : extensions)
+		for (auto& x : extensions)
 		{
 			memcpy(filterStr + i, x.first.Data(), x.first.Length());
 			i += x.first.Length();
@@ -64,7 +64,7 @@ namespace Editor
 		filterStr[filterStrSize - 1] = '\0';
 
 		int i = 0;
-		for (auto x : extensions)
+		for (auto& x : extensions)
 		{
 			memcpy(filterStr + i, x.first.Data(), x.first.Length());
 			i += x.first.Length();

@@ -261,7 +261,7 @@ namespace o2
     // -----------------------------------
     // Basic script value property wrapper
     // -----------------------------------
-    struct IScriptValueProperty
+    struct IScriptValueProperty: public RefCounterable
     {
         virtual ~IScriptValueProperty() {}
         virtual ScriptValue Get() const = 0;

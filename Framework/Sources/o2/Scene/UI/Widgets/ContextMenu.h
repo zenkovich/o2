@@ -24,7 +24,7 @@ namespace o2
         // ---------
         // Menu item
         // ---------
-        class Item: public ISerializable, ShortcutKeysListener
+        class Item: public RefCounterable, public ISerializable, public ShortcutKeysListener
         {
         public:
             static WString separatorText;
@@ -33,64 +33,81 @@ namespace o2
             PROPERTIES(Item);
             PROPERTY(ShortcutKeys, shortcut, SetShortcut, GetShortcut);
 
-            WString       text;        // @SERIALIZABLE
-            WString       group;    // @SERIALIZABLE
-            ImageAssetRef icon;        // @SERIALIZABLE
+        public:
+            WString       text;  // Item text @SERIALIZABLE
+            WString       group; // Item group id @SERIALIZABLE
+            AssetRef<ImageAsset> icon;  // Icon image @SERIALIZABLE
 
-            Vector<Item*> subItems;  // @SERIALIZABLE
+            Vector<Ref<Item>> subItems; // Children items @SERIALIZABLE
 
-            bool checked;   // @SERIALIZABLE
-            bool checkable; // @SERIALIZABLE
+            bool checkable = false; // Is item checkable @SERIALIZABLE
+            bool checked = false;   // Is item checked @SERIALIZABLE
 
+        public:
             Function<void()>     onClick;   // On click event    
             Function<void(bool)> onChecked; // On checked event    
 
-            ContextMenuItem* widget = nullptr;
+            WeakRef<ContextMenuItem> widget; // Widget of this item
 
         public:
-            Item();
+            // Default constructor
+            Item(RefCounter* refCounter);
 
-            Item(const WString& text, const Vector<Item*>& subItems, const WString& group = "",
-                 const ImageAssetRef& icon = ImageAssetRef());
+            // Constructor from text
+            Item(RefCounter* refCounter, const WString& text, const Vector<Ref<Item>>& subItems, const WString& group = "",
+                 const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>());
 
-            Item(const WString& text, const Function<void()> onClick, const WString& group = "",
-                 const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
+            // Constructor from text and click event
+            Item(RefCounter* refCounter, const WString& text, const Function<void()> onClick, const WString& group = "",
+                 const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
 
-            Item(const WString& text, bool checked, Function<void(bool)> onChecked = Function<void(bool)>(),
-                 const WString& group = "", const ImageAssetRef& icon = ImageAssetRef(),
+            // Constructor from text and checked event
+            Item(RefCounter* refCounter, const WString& text, bool checked, Function<void(bool)> onChecked = Function<void(bool)>(),
+                 const WString& group = "", const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(),
                  const ShortcutKeys& shortcut = ShortcutKeys());
 
+            // Destructor
             ~Item();
 
+            // Copy-operator
             bool operator==(const Item& other) const;
 
+            // Sets shortcut
             void SetShortcut(const ShortcutKeys& shortcut);
+
+            // Returns shortcut
             const ShortcutKeys& GetShortcut() const;
 
+            // Sets maximum priority
             void SetMaxPriority();
+
+            // Sets minimum priority
             void SetMinPriority();
 
-            static Item* Separator();
+            // Returns new separator item
+            static Ref<Item> Separator();
 
             SERIALIZABLE(Item);
 
         private:
-            ShortcutKeys mShortcut; // @SERIALIZABLE
+            ShortcutKeys mShortcut; // Keys shortcut @SERIALIZABLE
 
         private:
             // This event calling when shortcut hit and this listener has max priority
             void OnShortcutPressed() override;
+
+            REF_COUNTERABLE_IMPL(RefCounterable);
         };
 
     public:
         // Default constructor
-        ContextMenu();
+        explicit ContextMenu(RefCounter* refCounter);
 
         // Constructor from items
-        ContextMenu(const Vector<Item*>& items);
+        ContextMenu(RefCounter* refCounter, const Vector<Ref<Item>>& items);
 
         // Copy-constructor
-        ContextMenu(const ContextMenu& other);
+        ContextMenu(RefCounter* refCounter, const ContextMenu& other);
 
         // Destructor
         ~ContextMenu();
@@ -102,47 +119,47 @@ namespace o2
         void Update(float dt) override;
 
         // Show from parent context
-        void Show(PopupWidget* parent, const Vec2F& position = o2Input.GetCursorPos()) override;
+        void Show(const Ref<PopupWidget>& parent, const Vec2F& position = o2Input.GetCursorPos()) override;
 
         // Shows context
         void Show(const Vec2F& position = o2Input.GetCursorPos());
 
         // Add item
-        void AddItem(Item* item);
+        void AddItem(const Ref<Item>& item);
 
         // Adds item by path ("node/sub node/target")
         void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-                     const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
+                     const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Adds item by path ("node/sub node/target")
         void AddToggleItem(const WString& path, bool value,
                            const Function<void(bool)>& clickFunc = Function<void(bool)>(),
-                           const ImageAssetRef& icon = ImageAssetRef(),
+                           const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(),
                            const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Inserts item at position
-        void InsertItem(Item* item, int position);
+        void InsertItem(const Ref<Item>& item, int position);
 
         // Adds array of items
-        void AddItems(const Vector<Item*>& items);
+        void AddItems(const Vector<Ref<Item>>& items);
 
         // Inserts array of items at position
-        void InsertItems(const Vector<Item*>& items, int position);
+        void InsertItems(const Vector<Ref<Item>>& items, int position);
 
         // Returns item's widget at position
-        ContextMenuItem* GetItemWidget(int position);
+        Ref<ContextMenuItem> GetItemWidget(int position);
 
         // Returns index of item by path
         int FindItem(const WString& text) const;
 
         // Returns item's widget by path
-        ContextMenuItem* FindItemWidget(const WString& path) const;
+        Ref<ContextMenuItem> FindItemWidget(const WString& path) const;
 
         // Sets item at position
-        void SetItem(int position, Item* item);
+        void SetItem(int position, const Ref<Item>& item);
 
         // Returns array of all items
-        const Vector<Item*>& GetItems() const;
+        const Vector<Ref<Item>>& GetItems() const;
 
         // Removes item at position
         void RemoveItem(int position);
@@ -160,16 +177,16 @@ namespace o2
         bool IsItemChecked(int position) const;
 
         // Returns items vertical layout
-        VerticalLayout* GetItemsLayout() const;
+        const Ref<VerticalLayout>& GetItemsLayout() const;
 
         // Returns item sample
-        ContextMenuItem* GetItemSample() const;
+        const Ref<ContextMenuItem>& GetItemSample() const;
 
         // Returns items separator sample
-        Widget* GetSeparatorSample() const;
+        const Ref<Widget>& GetSeparatorSample() const;
 
         // Returns selection drawable
-        Sprite* GetSelectionDrawable() const;
+        const Ref<Sprite>& GetSelectionDrawable() const;
 
         // Sets selection drawable layout
         void SetSelectionDrawableLayout(const Layout& layout);
@@ -190,28 +207,29 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(ContextMenu);
+        CLONEABLE_REF(ContextMenu);
 
     protected:
         const float mOpenSubMenuDelay = 0.8f; // Sub menu opening delay when cursor hover it
 
         int mMaxVisibleItems = 100; // Maximum visible items @SERIALIZABLE
 
-        Vector<Item*>   mItems;                 // Items list
-        VerticalLayout* mItemsLayout = nullptr; // Items layout; builds when opening context
-        bool            mItemsBuilt = false;    // Is items layout is actual and built
+        Vector<Ref<Item>>   mItems;              // Items list
+        Ref<VerticalLayout> mItemsLayout;        // Items layout; builds when opening context
+        bool                mItemsBuilt = false; // Is items layout is actual and built
 
-        ContextMenuItem* mItemSample = nullptr;      // Item sample @SERIALIZABLE
-        Widget*          mSeparatorSample = nullptr; // Items separator sample @SERIALIZABLE
+        Ref<ContextMenuItem> mItemSample;      // Item sample @SERIALIZABLE
+        Ref<Widget>          mSeparatorSample; // Items separator sample @SERIALIZABLE
 
-        Sprite* mSelectionDrawable = nullptr; // Selection sprite @SERIALIZABLE
-        Layout  mSelectionLayout;             // Selection layout, result selection area depends on selected item @SERIALIZABLE
+        Ref<Sprite> mSelectionDrawable; // Selection sprite @SERIALIZABLE
+        Layout      mSelectionLayout;   // Selection layout, result selection area depends on selected item @SERIALIZABLE
 
         RectF mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
         RectF mTargetSelectionRect;   // Target selection rectangle (over selected item)
         Vec2F mLastSelectCheckCursor; // Last cursor position on selection check
 
-        ContextMenuItem* mSelectedItem = nullptr;       // Index of selected item
-        float            mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
+        Ref<ContextMenuItem> mSelectedItem;                 // Index of selected item
+        float                mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
 
     protected:
         // Fits size by items
@@ -230,13 +248,13 @@ namespace o2
         void RebuildItems();
 
         // Creates context items by path ("node/sub node/target")
-        Vector<Item*>* CreateItemsByPath(WString& path);
+        Vector<Ref<Item>>& CreateItemsByPath(WString& path);
 
         // Returns item info
-        Item* GetItem(int idx) const;
+        Ref<Item> GetItem(int idx) const;
 
         // Returns item widget under point and stores index in idxPtr, if not null
-        ContextMenuItem* GetItemUnderPoint(const Vec2F& point);
+        Ref<ContextMenuItem> GetItemUnderPoint(const Vec2F& point);
 
         // Updates hover
         void UpdateHover(const Vec2F& point);
@@ -272,10 +290,10 @@ namespace o2
 
     public:
         // Default constructor
-        ContextMenuItem();
+        explicit ContextMenuItem(RefCounter* refCounter);
 
         // Copy-constructor
-        ContextMenuItem(const ContextMenuItem& other);
+        ContextMenuItem(RefCounter* refCounter, const ContextMenuItem& other);
 
         // Destructor
         ~ContextMenuItem();
@@ -284,7 +302,7 @@ namespace o2
         ContextMenuItem& operator=(const ContextMenuItem& other);
 
         // Sets item
-        void Setup(ContextMenu::Item* item);
+        void Setup(const Ref<ContextMenu::Item>& item);
 
         // Sets text
         void SetText(const WString& text);
@@ -293,7 +311,7 @@ namespace o2
         WString GetText() const;
 
         // Returns sub context menu
-        ContextMenu* GetSubMenu() const;
+        const Ref<ContextMenu>& GetSubMenu() const;
 
         // Sets checked icon
         void SetChecked(bool checked);
@@ -323,16 +341,17 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(ContextMenuItem);
+        CLONEABLE_REF(ContextMenuItem);
 
     protected:
-        ContextMenu* mSubMenu; // Context sub menu
+        Ref<ContextMenu> mSubMenu; // Context sub menu
 
         bool mChecked = false;   // Is menu item checked
         bool mCheckable = false; // Is menu item can be checked
 
     protected:
         // Called when child widget was added
-        void OnChildAdded(Widget* child) override;
+        void OnChildAdded(const Ref<Widget>& child) override;
 
         friend class ContextMenu;
     };
@@ -349,48 +368,48 @@ CLASS_FIELDS_META(o2::ContextMenu)
     FIELD().PROTECTED().DEFAULT_VALUE(0.8f).NAME(mOpenSubMenuDelay);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(100).NAME(mMaxVisibleItems);
     FIELD().PROTECTED().NAME(mItems);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mItemsLayout);
+    FIELD().PROTECTED().NAME(mItemsLayout);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mItemsBuilt);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSeparatorSample);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemSample);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSeparatorSample);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionLayout);
     FIELD().PROTECTED().NAME(mCurrentSelectionRect);
     FIELD().PROTECTED().NAME(mTargetSelectionRect);
     FIELD().PROTECTED().NAME(mLastSelectCheckCursor);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectedItem);
+    FIELD().PROTECTED().NAME(mSelectedItem);
     FIELD().PROTECTED().DEFAULT_VALUE(-1.0f).NAME(mSelectSubContextTime);
 }
 END_META;
 CLASS_METHODS_META(o2::ContextMenu)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Item*>&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ContextMenu&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Vector<Ref<Item>>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ContextMenu&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, Show, PopupWidget*, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Show, const Ref<PopupWidget>&, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, Item*);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
-    FUNCTION().PUBLIC().SIGNATURE(void, InsertItem, Item*, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddItems, const Vector<Item*>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, InsertItems, const Vector<Item*>&, int);
-    FUNCTION().PUBLIC().SIGNATURE(ContextMenuItem*, GetItemWidget, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const Ref<Item>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(void, InsertItem, const Ref<Item>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddItems, const Vector<Ref<Item>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, InsertItems, const Vector<Ref<Item>>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<ContextMenuItem>, GetItemWidget, int);
     FUNCTION().PUBLIC().SIGNATURE(int, FindItem, const WString&);
-    FUNCTION().PUBLIC().SIGNATURE(ContextMenuItem*, FindItemWidget, const WString&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItem, int, Item*);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<Item*>&, GetItems);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<ContextMenuItem>, FindItemWidget, const WString&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItem, int, const Ref<Item>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<Item>>&, GetItems);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
     FUNCTION().PUBLIC().SIGNATURE(void, SetItemChecked, int, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsItemChecked, int);
-    FUNCTION().PUBLIC().SIGNATURE(VerticalLayout*, GetItemsLayout);
-    FUNCTION().PUBLIC().SIGNATURE(ContextMenuItem*, GetItemSample);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetSeparatorSample);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectionDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<VerticalLayout>&, GetItemsLayout);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<ContextMenuItem>&, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetSeparatorSample);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetSelectionDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionDrawableLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetSelectionDrawableLayout);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMaxItemsVisible, int);
@@ -402,9 +421,9 @@ CLASS_METHODS_META(o2::ContextMenu)
     FUNCTION().PROTECTED().SIGNATURE(void, HideWithChild);
     FUNCTION().PROTECTED().SIGNATURE(void, SpecialDraw);
     FUNCTION().PROTECTED().SIGNATURE(void, RebuildItems);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<Item*>*, CreateItemsByPath, WString&);
-    FUNCTION().PROTECTED().SIGNATURE(Item*, GetItem, int);
-    FUNCTION().PROTECTED().SIGNATURE(ContextMenuItem*, GetItemUnderPoint, const Vec2F&);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<Item>>&, CreateItemsByPath, WString&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Item>, GetItem, int);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<ContextMenuItem>, GetItemUnderPoint, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
@@ -431,12 +450,12 @@ END_META;
 CLASS_METHODS_META(o2::ContextMenuItem)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ContextMenuItem&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, ContextMenu::Item*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ContextMenuItem&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Ref<ContextMenu::Item>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetText);
-    FUNCTION().PUBLIC().SIGNATURE(ContextMenu*, GetSubMenu);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<ContextMenu>&, GetSubMenu);
     FUNCTION().PUBLIC().SIGNATURE(void, SetChecked, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsChecked);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCheckable, bool);
@@ -446,12 +465,13 @@ CLASS_METHODS_META(o2::ContextMenuItem)
     FUNCTION().PUBLIC().SIGNATURE(void, Enable);
     FUNCTION().PUBLIC().SIGNATURE(void, Disable);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Widget*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
 }
 END_META;
 
 CLASS_BASES_META(o2::ContextMenu::Item)
 {
+    BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::ShortcutKeysListener);
 }
@@ -463,26 +483,26 @@ CLASS_FIELDS_META(o2::ContextMenu::Item)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(group);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(icon);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(subItems);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(checked);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(checkable);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(checkable);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(checked);
     FIELD().PUBLIC().NAME(onClick);
     FIELD().PUBLIC().NAME(onChecked);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(widget);
+    FIELD().PUBLIC().NAME(widget);
     FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mShortcut);
 }
 END_META;
 CLASS_METHODS_META(o2::ContextMenu::Item)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<Item*>&, const WString&, const ImageAssetRef&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Function<void()>, const WString&, const ImageAssetRef&, const ShortcutKeys&);
-    FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, bool, Function<void(bool)>, const WString&, const ImageAssetRef&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WString&, const Vector<Ref<Item>>&, const WString&, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WString&, const Function<void()>, const WString&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WString&, bool, Function<void(bool)>, const WString&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetShortcut, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(const ShortcutKeys&, GetShortcut);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMaxPriority);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMinPriority);
-    FUNCTION().PUBLIC().SIGNATURE_STATIC(Item*, Separator);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<Item>, Separator);
     FUNCTION().PRIVATE().SIGNATURE(void, OnShortcutPressed);
 }
 END_META;

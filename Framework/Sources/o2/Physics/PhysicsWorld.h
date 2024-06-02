@@ -1,8 +1,9 @@
 #pragma once
 
-#include "o2/Utils/Singleton.h"
-#include "Box2D/Dynamics/b2World.h"
 #include "Box2D/Common/b2Draw.h"
+#include "Box2D/Dynamics/b2World.h"
+#include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Ref.h"
 
 // Render physics macros
 #define o2Physics o2::PhysicsWorld::Instance()
@@ -12,7 +13,7 @@ namespace o2
     // -------------------
     // Box2D Physics world
     // -------------------
-    class PhysicsWorld : public Singleton<PhysicsWorld>
+    class PhysicsWorld : public Singleton<PhysicsWorld>, public RefCounterable
     {
     public:
         // Default constructor

@@ -22,7 +22,7 @@ namespace o2
     {
     public:
         PROPERTIES(ActorTransform);
-        GETTER(Actor*, actor, GetOwnerActor); // Owner actor getter 
+        GETTER(Ref<Actor>, actor, GetOwnerActor); // Owner actor getter 
 
         PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property
         PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property
@@ -103,7 +103,7 @@ namespace o2
         bool operator==(const ActorTransform& other) const;
 
         // Returns owner actor
-        Actor* GetOwnerActor() const;
+        Ref<Actor> GetOwnerActor() const;
 
         // Sets transform dirty and needed to update @SCRIPTABLE
         virtual void SetDirty(bool fromParent = false);
@@ -442,7 +442,7 @@ namespace o2
         virtual void CopyFrom(const ActorTransform& other);
 
         // Sets owner and updates transform
-        virtual void SetOwner(Actor* actor);
+        virtual void SetOwner(const Ref<Actor>& actor);
 
         // Returns parent rectange, or zero when no parent
         virtual RectF GetParentRectangle() const;
@@ -506,7 +506,7 @@ namespace o2
         Basis parentTransform;               // Parent world transform
         int   parentInvTransformActualFrame; // last mParentInvertedTransform actual frame index
 
-        Actor* owner = nullptr; // Owner actor 
+        WeakRef<Actor> owner; // Owner actor 
 
         SERIALIZABLE(ActorTransformData);
 
@@ -582,7 +582,7 @@ CLASS_METHODS_META(o2::ActorTransform)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, float, const Vec2F&, const Vec2F&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ActorTransform&);
-    FUNCTION().PUBLIC().SIGNATURE(Actor*, GetOwnerActor);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Actor>, GetOwnerActor);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDirty, bool);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsDirty);
     FUNCTION().PUBLIC().SIGNATURE(void, Update);
@@ -693,7 +693,7 @@ CLASS_METHODS_META(o2::ActorTransform)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWorldBottom);
     FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransformData*);
     FUNCTION().PROTECTED().SIGNATURE(void, CopyFrom, const ActorTransform&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, Actor*);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(RectF, GetParentRectangle);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateWorldRectangleAndTransform);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateTransform);
@@ -733,7 +733,7 @@ CLASS_FIELDS_META(o2::ActorTransformData)
     FIELD().PUBLIC().NAME(parentInvertedTransform);
     FIELD().PUBLIC().NAME(parentTransform);
     FIELD().PUBLIC().NAME(parentInvTransformActualFrame);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(owner);
+    FIELD().PUBLIC().NAME(owner);
 }
 END_META;
 CLASS_METHODS_META(o2::ActorTransformData)

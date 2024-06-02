@@ -7,11 +7,12 @@
 
 namespace Editor
 {
-	TagsProperty::TagsProperty()
+	TagsProperty::TagsProperty(RefCounter* refCounter):
+		TPropertyField<TagGroup>(refCounter)
 	{}
 
-	TagsProperty::TagsProperty(const TagsProperty& other) :
-		TPropertyField<TagGroup>(other)
+	TagsProperty::TagsProperty(RefCounter* refCounter, const TagsProperty& other) :
+		TPropertyField<TagGroup>(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -56,7 +57,7 @@ namespace Editor
 		mTagsContext->RemoveAllItems();
 		mTagsContext->Show(mEditBox->layout->GetWorldLeftBottom());
 
-		for (auto tag : o2Scene.GetTags())
+		for (auto& tag : o2Scene.GetTags())
 		{
 			if (filter.IsEmpty() || tag->GetName().CountOf(filter) > 0)
 				mTagsContext->AddItem(tag->GetName(), [=]() { PushTag(tag->GetName()); });
@@ -69,7 +70,7 @@ namespace Editor
 		mValuesDifferent = false;
 
 		WString res;
-		for (auto tag : mCommonValue.GetTagsNames())
+		for (auto& tag : mCommonValue.GetTagsNames())
 			res += tag + " ";
 
 		mPushingTag = true;
@@ -106,7 +107,7 @@ namespace Editor
 
 		TagGroup tagsValue;
 
-		for (auto tagName : tagsNames)
+		for (auto& tagName : tagsNames)
 		{
 			if (!tagName.IsEmpty())
 				tagsValue.AddTag(tagName);
@@ -133,7 +134,10 @@ namespace Editor
 		SetTags(editText);
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::TagGroup>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TagsProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::TagGroup>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::TagsProperty, Editor__TagsProperty);

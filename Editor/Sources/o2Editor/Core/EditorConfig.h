@@ -18,14 +18,17 @@ namespace o2
 
 namespace Editor
 {
-	class DockWindowPlace;
+	FORWARD_CLASS_REF(DockWindowPlace);
 
 	// -------------------------
 	// Application configuration
 	// -------------------------
-	class EditorConfig: public ISerializable, public Singleton<EditorConfig>
+	class EditorConfig : public ISerializable, public Singleton<EditorConfig>, public RefCounterable
 	{
 	public:
+		// ---------------------------
+		// Global editor configuration
+		// ---------------------------
 		class GlobalConfig : public ISerializable
 		{
 		public:
@@ -36,6 +39,9 @@ namespace Editor
 			SERIALIZABLE(GlobalConfig);
 		};
 
+		// ----------------------------
+		// Project editor configuration
+		// ----------------------------
 		class ProjectConfig : public ISerializable
 		{
 		public:
@@ -65,7 +71,7 @@ namespace Editor
 		String mConfigPath = "../../EditorConfig.json";
 		String mGlobalConfigPath = "../../Config.json";
 
-		bool          mConfigsLoaded = false; // True if configurations were loaded
+		bool mConfigsLoaded = false; // True if configurations were loaded
 
 	protected:
 		// Saves global configs
@@ -97,6 +103,7 @@ CLASS_BASES_META(Editor::EditorConfig)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::Singleton<EditorConfig>);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig)

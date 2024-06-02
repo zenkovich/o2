@@ -6,7 +6,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class DockWindowPlace;
+	FORWARD_CLASS_REF(DockWindowPlace);
 
 	// -----------------------------
 	// Dockable editor window widget
@@ -15,10 +15,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		DockableWindow();
+		DockableWindow(RefCounter* refCounter);
 
 		// Copy-constructor
-		DockableWindow(const DockableWindow& other);
+		DockableWindow(RefCounter* refCounter, const DockableWindow& other);
 
 		// Destructor
 		~DockableWindow();
@@ -36,13 +36,13 @@ namespace Editor
 		bool IsDocked() const;
 
 		// Return pointer to docking sample sprite
-		Sprite* GetDockingFrameSample() const; 
+		const Ref<Sprite>& GetDockingFrameSample() const; 
 
 		// Sets icon sprite
-		void SetIcon(Sprite* icon) override;
+		void SetIcon(const Ref<Sprite>& icon) override;
 
 		// Returns icon sprite
-		Sprite* GetIcon() const override;
+		Ref<Sprite> GetIcon() const override;
 
 		// Sets icon layer layout
 		void SetIconLayout(const Layout& layout) override;
@@ -75,7 +75,7 @@ namespace Editor
 		bool IsAutoCalcuclatingTabWidth() const;
 
 		// Places this into empty dock
-		void PlaceDock(DockWindowPlace* targetDock);
+		void PlaceDock(const Ref<DockWindowPlace>& targetDock);
 
 		// Undocks this window, using when window moved out from dock
 		void Undock();
@@ -90,24 +90,27 @@ namespace Editor
 		static String GetCreateMenuCategory();
 
 		SERIALIZABLE(DockableWindow);
+		CLONEABLE_REF(DockableWindow);
 
 	protected:
-		static const char* mTabLayerPath;
-		static const char* mTabIconLayerPath;
-		static const char* mTabCaptionLayerPath;
-		static const char* mIconLayerPath;
-		static const char* mCaptionLayerPath;
+		const String mTabLayerPath = "tab/main";
+		const String mTabIconLayerPath = "tab/main/icon";
+		const String mTabCaptionLayerPath = "tab/main/caption";
+		const String mIconLayerPath = "back/icon";
+		const String mCaptionLayerPath = "back/caption";
 
 		const float mDockSizeCoef = 0.2f;
 		const float mDockBorder = 1.5f;
 
-		bool            mDocked = false;               // Is window docked
-		Sprite*         mDockingFrameSample = nullptr; // Docking frame sample @SERIALIZABLE
-		AnimationPlayer mDockingFrameAppearance;       // Docking frame appearance tween
-		RectF           mDockingFrameCurrent;          // Docking sample current frame
-		RectF           mDockingFrameTarget;           // Docking sample target  frame
-		Vec2F           mNonDockSize;                  // Size of widget before docking
-		Vec2F           mDragOffset;                   // Offset from cursor to dragging anchor point
+		bool        mDocked = false;      // Is window docked
+		Ref<Sprite> mDockingFrameSample;  // Docking frame sample @SERIALIZABLE
+		RectF       mDockingFrameCurrent; // Docking sample current frame
+		RectF       mDockingFrameTarget;  // Docking sample target  frame
+
+		Ref<AnimationPlayer> mDockingFrameAppearance = mmake<AnimationPlayer>(); // Docking frame appearance tween
+
+		Vec2F mNonDockSize; // Size of widget before docking
+		Vec2F mDragOffset;  // Offset from cursor to dragging anchor point
 
 		bool  mTabState = false;             // Is window as tab
 		int   mTabPosition = 0;              // Tab index
@@ -144,13 +147,13 @@ namespace Editor
 		void OnMoveBegin(const Input::Cursor&);
 
 		// Searches dock place under cursor and returns parameters of them
-		bool TraceDock(DockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect);
+		bool TraceDock(Ref<DockWindowPlace>& targetDock, Side& dockPosition, RectF& dockZoneRect);
 
 		// Places this into target dock as non line arranged
-		void PlaceNonLineDock(DockWindowPlace* targetDock, Side dockPosition);
+		void PlaceNonLineDock(const Ref<DockWindowPlace>& targetDock, Side dockPosition);
 
 		// Places this into target dock as line arranged
-		void PlaceLineDock(DockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect);
+		void PlaceLineDock(const Ref<DockWindowPlace>& targetDock, Side dockPosition, RectF dockZoneRect);
 
 		// Sets window as one of tab
 		void SetTabState(float offset, int position, bool isFirst);
@@ -180,13 +183,18 @@ CLASS_BASES_META(Editor::DockableWindow)
 END_META;
 CLASS_FIELDS_META(Editor::DockableWindow)
 {
+    FIELD().PROTECTED().DEFAULT_VALUE("tab/main").NAME(mTabLayerPath);
+    FIELD().PROTECTED().DEFAULT_VALUE("tab/main/icon").NAME(mTabIconLayerPath);
+    FIELD().PROTECTED().DEFAULT_VALUE("tab/main/caption").NAME(mTabCaptionLayerPath);
+    FIELD().PROTECTED().DEFAULT_VALUE("back/icon").NAME(mIconLayerPath);
+    FIELD().PROTECTED().DEFAULT_VALUE("back/caption").NAME(mCaptionLayerPath);
     FIELD().PROTECTED().DEFAULT_VALUE(0.2f).NAME(mDockSizeCoef);
     FIELD().PROTECTED().DEFAULT_VALUE(1.5f).NAME(mDockBorder);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDocked);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mDockingFrameSample);
-    FIELD().PROTECTED().NAME(mDockingFrameAppearance);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mDockingFrameSample);
     FIELD().PROTECTED().NAME(mDockingFrameCurrent);
     FIELD().PROTECTED().NAME(mDockingFrameTarget);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mDockingFrameAppearance);
     FIELD().PROTECTED().NAME(mNonDockSize);
     FIELD().PROTECTED().NAME(mDragOffset);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTabState);
@@ -199,14 +207,14 @@ END_META;
 CLASS_METHODS_META(Editor::DockableWindow)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const DockableWindow&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const DockableWindow&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsDocked);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetDockingFrameSample);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, Sprite*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetIcon);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetDockingFrameSample);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, const Ref<Sprite>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Sprite>, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE(void, SetIconLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetIconLayout);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
@@ -217,7 +225,7 @@ CLASS_METHODS_META(Editor::DockableWindow)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsTabActive);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAutoCalcuclatingTabWidth, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsAutoCalcuclatingTabWidth);
-    FUNCTION().PUBLIC().SIGNATURE(void, PlaceDock, DockWindowPlace*);
+    FUNCTION().PUBLIC().SIGNATURE(void, PlaceDock, const Ref<DockWindowPlace>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Undock);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
@@ -231,9 +239,9 @@ CLASS_METHODS_META(Editor::DockableWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, OnMoved, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnMoveCompleted, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnMoveBegin, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(bool, TraceDock, DockWindowPlace*&, Side&, RectF&);
-    FUNCTION().PROTECTED().SIGNATURE(void, PlaceNonLineDock, DockWindowPlace*, Side);
-    FUNCTION().PROTECTED().SIGNATURE(void, PlaceLineDock, DockWindowPlace*, Side, RectF);
+    FUNCTION().PROTECTED().SIGNATURE(bool, TraceDock, Ref<DockWindowPlace>&, Side&, RectF&);
+    FUNCTION().PROTECTED().SIGNATURE(void, PlaceNonLineDock, const Ref<DockWindowPlace>&, Side);
+    FUNCTION().PROTECTED().SIGNATURE(void, PlaceLineDock, const Ref<DockWindowPlace>&, Side, RectF);
     FUNCTION().PROTECTED().SIGNATURE(void, SetTabState, float, int, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, SetNonTabState);
     FUNCTION().PROTECTED().SIGNATURE(void, SetActiveTab);

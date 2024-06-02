@@ -67,12 +67,12 @@ namespace o2
         OnDrawn();
     }
 
-    void Mesh::SetTexture(TextureRef texture)
+    void Mesh::SetTexture(const TextureRef& texture)
     {
         mTexture = texture;
     }
 
-    TextureRef Mesh::GetTexture() const
+    const TextureRef& Mesh::GetTexture() const
     {
         return mTexture;
     }

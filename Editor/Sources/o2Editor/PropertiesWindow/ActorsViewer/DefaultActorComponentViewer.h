@@ -6,7 +6,7 @@
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
 	// ------------------------------
 	// Default actor component viewer
@@ -32,8 +32,9 @@ namespace Editor
 		IOBJECT(DefaultActorComponentViewer);
 
 	protected:
-		const Type*              mComponentType = nullptr; // Target component type
-		IObjectPropertiesViewer* mViewer = nullptr;        //Component properties viewer
+		const Type* mComponentType = nullptr; // Target component type
+
+		Ref<IObjectPropertiesViewer> mViewer; //Component properties viewer
 
 	protected:
 		// Called when some property changed, marks Actor as changed and calls default Undo create callback
@@ -86,7 +87,7 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultActorComponentViewer)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponentType);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
+    FIELD().PROTECTED().NAME(mViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorComponentViewer)

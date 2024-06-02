@@ -13,7 +13,7 @@ namespace o2
     void ScissorClippingComponent::Draw()
     {
         if (enableClipping)
-            o2Render.EnableScissorTest(mOwner->transform->GetWorldAxisAlignedRect());
+            o2Render.EnableScissorTest(mOwner.Lock()->transform->GetWorldAxisAlignedRect());
 
         if (enableClipping)
             o2Render.DisableScissorTest();
@@ -21,7 +21,7 @@ namespace o2
 
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::ScissorClippingComponent>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::ScissorClippingComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::ScissorClippingComponent, o2__ScissorClippingComponent);

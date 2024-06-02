@@ -6,12 +6,12 @@
 
 namespace o2
 {
-	class Button;
+	FORWARD_CLASS_REF(Button);
 }
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
 	// --------------------------------------
 	// Default widget layer properties viewer
@@ -40,10 +40,11 @@ namespace Editor
 		IOBJECT(DefaultWidgetLayerPropertiesViewer);
 
 	protected:
-		Vector<WidgetLayer*>     mLayers;                  // Target widget layers
-		IObjectPropertiesViewer* mViewer = nullptr;        // Properties viewer
-		Button*                  mFitSizeButton = nullptr; // Fit size of layer by drawable size
-		const Type*              mDrawableType = nullptr;  // Target actor type
+		Vector<WidgetLayer*> mLayers;                 // Target widget layers
+		const Type*          mDrawableType = nullptr; // Target drawable type
+
+		Ref<IObjectPropertiesViewer> mViewer;        // Properties viewer
+		Ref<Button>                  mFitSizeButton; // Fit size of layer by drawable size
 
 	protected:
 		// Fits layer size by drawable size, Called when mFitSizeButton were pressed
@@ -60,9 +61,9 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
     FIELD().PROTECTED().NAME(mLayers);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitSizeButton);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDrawableType);
+    FIELD().PROTECTED().NAME(mViewer);
+    FIELD().PROTECTED().NAME(mFitSizeButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)

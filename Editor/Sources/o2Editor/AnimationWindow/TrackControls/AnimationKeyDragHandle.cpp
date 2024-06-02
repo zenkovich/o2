@@ -6,19 +6,29 @@
 namespace Editor
 {
 
-	AnimationKeyDragHandle::AnimationKeyDragHandle()
+	AnimationKeyDragHandle::AnimationKeyDragHandle(RefCounter* refCounter):
+		WidgetDragHandle(refCounter)
 	{}
 
-	AnimationKeyDragHandle::AnimationKeyDragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/, Sprite* selected /*= nullptr*/, 
-												   Sprite* selectedHovered /*= nullptr*/, Sprite* selectedPressed /*= nullptr*/):
-		WidgetDragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed)
+	AnimationKeyDragHandle::AnimationKeyDragHandle(RefCounter* refCounter,
+												   const Ref<Sprite>& regular,
+												   const Ref<Sprite>& hover /*= nullptr*/,
+												   const Ref<Sprite>& pressed /*= nullptr*/, 
+												   const Ref<Sprite>& selected /*= nullptr*/, 
+												   const Ref<Sprite>& selectedHovered /*= nullptr*/, 
+												   const Ref<Sprite>& selectedPressed /*= nullptr*/):
+		WidgetDragHandle(refCounter, regular, hover, pressed, selected, selectedHovered, selectedPressed)
 	{}
 
-	AnimationKeyDragHandle::AnimationKeyDragHandle(const AnimationKeyDragHandle& other):
-		WidgetDragHandle(other)
+	AnimationKeyDragHandle::AnimationKeyDragHandle(RefCounter* refCounter, const AnimationKeyDragHandle& other):
+		WidgetDragHandle(refCounter, other)
 	{}
 
-	AnimationKeyDragHandle::~AnimationKeyDragHandle()
+	AnimationKeyDragHandle::AnimationKeyDragHandle(const AnimationKeyDragHandle& other) :
+		AnimationKeyDragHandle(nullptr, other)
+    {}
+
+    AnimationKeyDragHandle::~AnimationKeyDragHandle()
 	{}
 
 #undef DrawText
@@ -39,8 +49,9 @@ namespace Editor
 		WidgetDragHandle::operator=(other);
 		return *this;
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AnimationKeyDragHandle>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationKeyDragHandle, Editor__AnimationKeyDragHandle);

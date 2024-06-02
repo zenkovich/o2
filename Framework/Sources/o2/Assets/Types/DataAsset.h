@@ -36,6 +36,7 @@ namespace o2
         static bool IsAvailableToCreateFromEditor() { return true; }
 
         SERIALIZABLE(DataAsset);
+        CLONEABLE_REF(DataAsset);
 
     protected:
         // Loads data
@@ -46,8 +47,6 @@ namespace o2
 
         friend class Assets;
     };
-
-    typedef Ref<DataAsset> DataAssetRef;
 }
 // --- META ---
 

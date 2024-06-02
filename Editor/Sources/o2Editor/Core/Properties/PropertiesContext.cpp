@@ -29,7 +29,7 @@ namespace Editor
 
 		for (auto& kv : properties)
 		{
-			auto fieldPointers = targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+			auto fieldPointers = targets.Convert<Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>>(
 				[&](const Pair<IObject*, IObject*>& x)
 			{
 				auto fieldInfo = kv.first;
@@ -37,19 +37,19 @@ namespace Editor
 				const ObjectType* objType = dynamic_cast<const ObjectType*>(&type);
 
 				if (objType == nullptr)
-					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(nullptr, nullptr);
+					return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(nullptr, nullptr);
 
 				void* firstObjectPtr = objType->DynamicCastFromIObject(x.first);
 				void* secondObjectPtr = nullptr;
 				if (x.second)
 					secondObjectPtr = objType->DynamicCastFromIObject(x.second);
 
-				IAbstractValueProxy* firstValuePtr = fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(firstObjectPtr));
-				IAbstractValueProxy* secondValuePtr = nullptr;
+				Ref<IAbstractValueProxy> firstValuePtr = Ref(fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(firstObjectPtr)));
+				Ref<IAbstractValueProxy> secondValuePtr = nullptr;
 				if (x.second)
-					secondValuePtr = fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(secondObjectPtr));
+					secondValuePtr = Ref(fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(secondObjectPtr)));
 
-				return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(firstValuePtr, secondValuePtr);
+				return Pair<Ref<IAbstractValueProxy>, Ref<IAbstractValueProxy>>(firstValuePtr, secondValuePtr);
 			});
 
 			kv.second->SetValueAndPrototypeProxy(fieldPointers);
@@ -67,7 +67,7 @@ namespace Editor
 		return builtWithPrivateProperties;
 	}
 
-	const Map<const FieldInfo*, IPropertyField*>& PropertiesContext::GetProperties() const
+	const Map<const FieldInfo*, Ref<IPropertyField>>& PropertiesContext::GetProperties() const
 	{
 		return properties;
 	}

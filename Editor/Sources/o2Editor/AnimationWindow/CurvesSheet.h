@@ -6,19 +6,28 @@ using namespace o2;
 
 namespace Editor
 {
-	class AnimationWindow;
+	FORWARD_CLASS_REF(AnimationWindow);
 
+	// ---------------------------------
+	// Curves sheet. Shows curves editor
+	// ---------------------------------
 	class CurvesSheet : public Widget
 	{
 	public:
-		CurvesSheet();
-		CurvesSheet(const CurvesSheet& other);
+		// Default constructor
+        CurvesSheet(RefCounter* refCounter);
+
+		// Copy-constructor
+        CurvesSheet(RefCounter* refCounter, const CurvesSheet& other);
+
+		// Destructor
 		~CurvesSheet();
 
+		// Copy-operator
 		CurvesSheet& operator=(const CurvesSheet& other);
 
 		// Sets animation and updates tree structure
-		void SetAnimation(AnimationClip* animation);
+		void SetAnimation(const Ref<AnimationClip>& animation);
 
 		// Generates new color for curves and transfers to the tree
 		void UpdateCurvesColors();
@@ -29,12 +38,13 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(CurvesSheet);
+        SERIALIZABLE(CurvesSheet);
+        CLONEABLE_REF(CurvesSheet);
 
 	private:
-		CurvesEditor* mCurvesEditor; // Curves editor
+		Ref<CurvesEditor> mCurvesEditor; // Curves editor
 
-		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+		WeakRef<AnimationWindow> mAnimationWindow; // Animation window
 
 		bool mEditorViewLock = false; // It is used to prevent handling editor's camera, when timeline view changing 
 
@@ -61,16 +71,16 @@ END_META;
 CLASS_FIELDS_META(Editor::CurvesSheet)
 {
     FIELD().PRIVATE().NAME(mCurvesEditor);
-    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
+    FIELD().PRIVATE().NAME(mAnimationWindow);
     FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mEditorViewLock);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesSheet&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CurvesSheet&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateCurvesColors);
     FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

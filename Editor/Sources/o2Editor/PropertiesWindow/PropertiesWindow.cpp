@@ -28,9 +28,6 @@ namespace Editor
 	{
 		if (mCurrentViewer)
 			mCurrentViewer->SetEnabled(false);
-
-		for (auto viewer : mViewers)
-			delete viewer;
 	}
 
 	void PropertiesWindow::ResetTargets()
@@ -42,7 +39,7 @@ namespace Editor
 	{
 		mWindow->caption = "Properties";
 		mWindow->name = "properties window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_gear_icon.png"));
+		mWindow->SetIcon(mmake<Sprite>("ui/UI4_gear_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 2)));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 15));
@@ -60,7 +57,7 @@ namespace Editor
 		}
 
 		context->AddItem(ContextMenu::Item::Separator());
-		context->AddItem(mnew ContextMenu::Item("Private visible", false, THIS_FUNC(OnPrivateFieldsVisibleChanged)));
+		context->AddItem(mmake<ContextMenu::Item>("Private visible", false, THIS_FUNC(OnPrivateFieldsVisibleChanged)));
 	}
 
 	void PropertiesWindow::InitializeViewers()
@@ -68,10 +65,10 @@ namespace Editor
 		auto viewersTypes = TypeOf(IPropertiesViewer).GetDerivedTypes();
 		viewersTypes.Remove(&TypeOf(DefaultPropertiesViewer));
 
-		for (auto type : viewersTypes)
-			mViewers.Add((IPropertiesViewer*)type->CreateSample());
+		for (auto& type : viewersTypes)
+			mViewers.Add(DynamicCast<IPropertiesViewer>(type->CreateSampleRef()));
 
-		mDefaultViewer = mnew DefaultPropertiesViewer();
+		mDefaultViewer = mmake<DefaultPropertiesViewer>();
 	}
 
 	void PropertiesWindow::OnPrivateFieldsVisibleChanged(bool visible)
@@ -82,7 +79,7 @@ namespace Editor
 			mCurrentViewer->SetTargets(mTargets);
 	}
 
-	void PropertiesWindow::OnPropertyChanged(IPropertyField* field)
+	void PropertiesWindow::OnPropertyChanged(const Ref<IPropertyField>& field)
 	{
 		mTargetsChanged = true;
 	}
@@ -100,11 +97,11 @@ namespace Editor
 		if (mTargetsChanged)
 			mOnTargetsChangedDelegate();
 
-		IPropertiesViewer* objectViewer = nullptr;
+		Ref<IPropertiesViewer> objectViewer;
 		if (!targets.IsEmpty())
 		{
 			auto type = &targets[0]->GetType();
-			objectViewer = mViewers.FindOrDefault([&](auto x) { return type->IsBasedOn(*x->GetViewingObjectType()); });
+			objectViewer = mViewers.FindOrDefault([&](auto& x) { return type->IsBasedOn(*x->GetViewingObjectType()); });
 		}
 
 		if (!objectViewer)

@@ -12,7 +12,7 @@ namespace o2
     // -------------
     // Bezier spline
     // -------------
-    class Spline: public ISerializable
+    class Spline: public ISerializable, public RefCounterable
     {
     public:
         class Key;
@@ -251,6 +251,7 @@ PRE_ENUM_META(o2::Spline::Key::Type);
 CLASS_BASES_META(o2::Spline)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Spline)

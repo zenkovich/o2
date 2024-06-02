@@ -9,11 +9,11 @@ namespace Editor
 	SelectAction::SelectAction()
 	{}
 
-	SelectAction::SelectAction(const Vector<SceneEditableObject*>& selectedObjects, 
-							   const Vector<SceneEditableObject*>& prevSelectedObjects)
+	SelectAction::SelectAction(const Vector<Ref<SceneEditableObject>>& selectedObjects, 
+							   const Vector<Ref<SceneEditableObject>>& prevSelectedObjects)
 	{
-		selectedObjectsIds = selectedObjects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
-		prevSelectedObjectsIds = prevSelectedObjects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
+		selectedObjectsIds = selectedObjects.Convert<SceneUID>([](auto& x) { return x->GetID(); });
+		prevSelectedObjectsIds = prevSelectedObjects.Convert<SceneUID>([](auto& x) { return x->GetID(); });
 	}
 
 	String SelectAction::GetName() const
@@ -25,7 +25,7 @@ namespace Editor
 	{
 		auto& selScreen = o2EditorSceneScreen;
 
-		selScreen.mSelectedObjects = selectedObjectsIds.Convert<SceneEditableObject*>(
+		selScreen.mSelectedObjects = selectedObjectsIds.Convert<Ref<SceneEditableObject>>(
 			[&](SceneUID id) { return o2Scene.GetEditableObjectByID(id); });
 
 		selScreen.UpdateTopSelectedObjects();

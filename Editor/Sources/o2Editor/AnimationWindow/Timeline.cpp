@@ -9,63 +9,57 @@
 
 namespace Editor
 {
-	AnimationTimeline::AnimationTimeline() :
-		Widget()
+    AnimationTimeline::AnimationTimeline(RefCounter* refCounter) :
+		Widget(refCounter)
 	{
-		mTextFont = FontRef("stdFont.ttf");
+		mTextFont = AssetRef<VectorFontAsset>("stdFont.ttf")->GetFont();
 		mTextFont->CheckCharacters("0123456789.,+-", 10);
 
-		mText = mnew Text(mTextFont);
+		mText = mmake<Text>(mTextFont);
 		mText->horAlign = HorAlign::Middle;
 		mText->verAlign = VerAlign::Bottom;
 		mText->height = 8;
 		mText->color = Color4(44, 62, 80);
 
-		AddLayer("back", mnew Sprite("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14))->transparency = 0.5f;
+		AddLayer("back", mmake<Sprite>("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14))->transparency = 0.5f;
 
-		mBeginMark = mnew Sprite("ui/UI4_time_line_left.png");
-		mEndMark = mnew Sprite("ui/UI4_time_line_right.png");
+		mBeginMark = mmake<Sprite>("ui/UI4_time_line_left.png");
+		mEndMark = mmake<Sprite>("ui/UI4_time_line_right.png");
 
-		mTimeLine = mnew Sprite("ui/UI4_time_line.png");
+		mTimeLineEventsArea = mmake<CursorEventsArea>();
+		mTimeLine = mmake<Sprite>("ui/UI4_time_line.png");
 
-		mTimeLineEventsArea.isUnderPoint = [&](const Vec2F& pos) {
+		mTimeLineEventsArea->isUnderPoint = [&](const Vec2F& pos) {
 			auto rect = layout->GetWorldRect();
 			rect.bottom = rect.top - 20.0f;
 
 			return rect.IsInside(pos);
 		};
 
-		mTimeLineEventsArea.onMoved = THIS_FUNC(SetAnimationTimeByCursor);
-		mTimeLineEventsArea.onCursorPressed = THIS_FUNC(SetAnimationTimeByCursor);
+		mTimeLineEventsArea->onMoved = THIS_FUNC(SetAnimationTimeByCursor);
+		mTimeLineEventsArea->onCursorPressed = THIS_FUNC(SetAnimationTimeByCursor);
 	}
 
-	AnimationTimeline::AnimationTimeline(const AnimationTimeline& other) :
-		Widget(other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>()),
+    AnimationTimeline::AnimationTimeline(RefCounter* refCounter, const AnimationTimeline& other) :
+        Widget(refCounter, other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>()),
 		mBeginMark(other.mBeginMark->CloneAs<Sprite>()), mEndMark(other.mEndMark->CloneAs<Sprite>()),
 		mTimeLine(other.mTimeLine->CloneAs<Sprite>())
 	{ }
 
 	AnimationTimeline::~AnimationTimeline()
-	{
-		delete mText;
-		delete mTimeLine;
-	}
+	{}
 
 	AnimationTimeline& AnimationTimeline::operator=(const AnimationTimeline& other)
 	{
-		delete mText;
-		delete mBeginMark;
-		delete mEndMark;
-
 		Widget::operator=(other);
 
 		mTextFont = other.mTextFont;
-		mText = other.mText->CloneAs<Text>();
+		mText = other.mText->CloneAsRef<Text>();
 
-		mBeginMark = other.mBeginMark->CloneAs<Sprite>();
-		mEndMark = other.mEndMark->CloneAs<Sprite>();
+		mBeginMark = other.mBeginMark->CloneAsRef<Sprite>();
+		mEndMark = other.mEndMark->CloneAsRef<Sprite>();
 
-		mTimeLine = other.mTimeLine->CloneAs<Sprite>();
+		mTimeLine = other.mTimeLine->CloneAsRef<Sprite>();
 
 		return *this;
 	}
@@ -87,7 +81,7 @@ namespace Editor
 
 		CursorAreaEventsListener::OnDrawn();
 
-		mTimeLineEventsArea.OnDrawn();
+		mTimeLineEventsArea->OnDrawn();
 	}
 
 	void AnimationTimeline::DrawTimeScale()
@@ -255,7 +249,7 @@ namespace Editor
 
 		Cfg nearestCfg;
 		float nearestCfgScreenChunkSegmentSizeDiff = FLT_MAX;
-		for (auto cfg : configs)
+		for (auto& cfg : configs)
 		{
 			float screenChunkSegmentSize = (float)cfg.chunkDuration/(float)cfg.chunkSegments*mOneSecondDefaultSize*mSmoothViewZoom;
 			float screenChunkSegmentSizeDiff = mPerfectScaleSegmentSize - screenChunkSegmentSize;
@@ -308,7 +302,7 @@ namespace Editor
 			onViewChanged();
 	}
 
-	void AnimationTimeline::SetAnimation(AnimationClip* animation, AnimationPlayer* player /*= nullptr*/)
+	void AnimationTimeline::SetAnimation(const Ref<AnimationClip>& animation, const Ref<AnimationPlayer>& player /*= nullptr*/)
 	{
 		if (mAnimation)
 			mAnimation->onDurationChange -= THIS_FUNC(UpdateDuration);
@@ -395,12 +389,12 @@ namespace Editor
 		mViewMoveDisabled = disabled;
 	}
 
-	Text* AnimationTimeline::GetText() const
+	const Ref<Text>& AnimationTimeline::GetText() const
 	{
 		return mText;
 	}
 
-	void AnimationTimeline::SetScrollBar(HorizontalScrollBar* scrollBar)
+	void AnimationTimeline::SetScrollBar(const Ref<HorizontalScrollBar>& scrollBar)
 	{
 		mScrollBar = scrollBar;
 		mScrollBar->onChangeByUser = [&](float value) { mViewScroll = value; };
@@ -408,7 +402,7 @@ namespace Editor
 		AddChild(scrollBar);
 	}
 
-	HorizontalScrollBar* AnimationTimeline::GetScrollBar() const
+	const Ref<HorizontalScrollBar>& AnimationTimeline::GetScrollBar() const
 	{
 		return mScrollBar;
 	}
@@ -437,8 +431,9 @@ namespace Editor
 	{
 		return "UI/Editor";
 	}
-
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::AnimationTimeline>);
 // --- META ---
 
 DECLARE_CLASS(Editor::AnimationTimeline, Editor__AnimationTimeline);

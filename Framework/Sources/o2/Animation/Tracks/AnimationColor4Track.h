@@ -46,7 +46,7 @@ namespace o2
         float GetDuration() const override;
 
         // Creates track-type specific player
-        IPlayer* CreatePlayer() const override;
+        Ref<IPlayer> CreatePlayer() const override;
 
         // Adds keys
         void AddKeys(const Vector<Key>& keys);
@@ -100,6 +100,7 @@ namespace o2
         static AnimationTrack<Color4> Linear(const Color4& begin, const Color4& end, float duration = 1.0f);
 
         SERIALIZABLE(AnimationTrack<Color4>);
+        CLONEABLE_REF(AnimationTrack<Color4>);
 
     public:
         // ----------------------
@@ -112,7 +113,6 @@ namespace o2
             GETTER(o2::Color4, value, GetValue);                           // Current value getter
             SETTER(o2::Color4*, target, SetTarget);                        // Bind target setter
             SETTER(Function<void()>, targetDelegate, SetTargetDelegate);   // Bind target change event setter  
-            SETTER(IValueProxy<o2::Color4>*, targetProxy, SetTargetProxy); // Bind proxy setter
 
         public:
             // Default constructor
@@ -134,13 +134,13 @@ namespace o2
             void SetTargetDelegate(const Function<void()>& changeEvent) override;
 
             // Sets target property pointer
-            void SetTargetProxy(IValueProxy<Color4>* setter);
+            void SetTargetProxy(const Ref<IValueProxy<Color4>>& setter);
 
             // Sets animation track
-            void SetTrack(AnimationTrack<Color4>* track);
+            void SetTrack(const Ref<AnimationTrack<Color4>>& track);
 
             // Returns animation track
-            AnimationTrack<Color4>* GetTrackT() const;
+            const Ref<AnimationTrack<Color4>>& GetTrackT() const;
 
             // Sets target by void pointer
             void SetTargetVoid(void* target) override;
@@ -149,13 +149,13 @@ namespace o2
             void SetTargetVoid(void* target, const Function<void()>& changeEvent) override;
 
             // Sets target property by void pointer
-            void SetTargetProxyVoid(void* target) override;
+            void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) override;
 
             // Sets animation track
-            void SetTrack(IAnimationTrack* track) override;
+            void SetTrack(const Ref<IAnimationTrack>& track) override;
 
             // Returns animation track
-            IAnimationTrack* GetTrack() const override;
+            Ref<IAnimationTrack> GetTrack() const override;
 
             // Returns current value
             Color4 GetValue() const;
@@ -163,7 +163,7 @@ namespace o2
             IOBJECT(Player);
 
         protected:
-            AnimationTrack<Color4>* mTrack = nullptr; // Animation track
+            Ref<AnimationTrack<Color4>> mTrack; // Animation track
 
             Color4 mCurrentValue; // Current animation track
 
@@ -171,16 +171,16 @@ namespace o2
             int   mPrevKey = 0;               // Previous evaluation key index
             int   mPrevKeyApproximation = 0;  // Previous evaluation key approximation index
 
-            Color4*              mTarget = nullptr;      // Animation target value pointer
-            Function<void()>    mTargetDelegate;         // Animation target value change event
-            IValueProxy<Color4>* mTargetProxy = nullptr; // Animation target proxy pointer
+            Color4*                  mTarget = nullptr; // Animation target value pointer
+            Function<void()>         mTargetDelegate;   // Animation target value change event
+            Ref<IValueProxy<Color4>> mTargetProxy;      // Animation target proxy pointer
 
         protected:
             // Evaluates value
             void Evaluate() override;
 
             // Registering this in animatable value agent
-            void RegMixer(AnimationState* state, const String& path) override;
+            void RegMixer(const Ref<AnimationState>& state, const String& path) override;
         };
 
     public:
@@ -258,7 +258,7 @@ CLASS_METHODS_META(o2::AnimationTrack<o2::Color4>)
     FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
     FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
-    FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IPlayer>, CreatePlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, AddKeys, const Vector<Key>&);
     FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&);
     FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&, float);
@@ -289,15 +289,14 @@ CLASS_FIELDS_META(o2::AnimationTrack<o2::Color4>::Player)
     FIELD().PUBLIC().NAME(value);
     FIELD().PUBLIC().NAME(target);
     FIELD().PUBLIC().NAME(targetDelegate);
-    FIELD().PUBLIC().NAME(targetProxy);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
+    FIELD().PROTECTED().NAME(mTrack);
     FIELD().PROTECTED().NAME(mCurrentValue);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevKey);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevKeyApproximation);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
     FIELD().PROTECTED().NAME(mTargetDelegate);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTargetProxy);
+    FIELD().PROTECTED().NAME(mTargetProxy);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Color4>::Player)
@@ -307,17 +306,17 @@ CLASS_METHODS_META(o2::AnimationTrack<o2::Color4>::Player)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Color4*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Color4*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<Color4>*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, AnimationTrack<Color4>*);
-    FUNCTION().PUBLIC().SIGNATURE(AnimationTrack<Color4>*, GetTrackT);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IValueProxy<Color4>>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<AnimationTrack<Color4>>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<AnimationTrack<Color4>>&, GetTrackT);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
-    FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IAbstractValueProxy>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PUBLIC().SIGNATURE(Color4, GetValue);
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
-    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, AnimationState*, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, const Ref<AnimationState>&, const String&);
 }
 END_META;
 

@@ -5,11 +5,12 @@
 
 namespace Editor
 {
-	RectFProperty::RectFProperty()
+	RectFProperty::RectFProperty(RefCounter* refCounter):
+		IPropertyField(refCounter)
 	{}
 
-	RectFProperty::RectFProperty(const RectFProperty& other) :
-		IPropertyField(other)
+	RectFProperty::RectFProperty(RefCounter* refCounter, const RectFProperty& other) :
+		IPropertyField(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -25,7 +26,7 @@ namespace Editor
 	{
 		mLeftProperty = GetChildByType<FloatProperty>("container/layout/properties/left");
 		mLeftProperty->SetValuePath("left");
-		mLeftProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mLeftProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -33,7 +34,7 @@ namespace Editor
 
 		mBottomProperty = GetChildByType<FloatProperty>("container/layout/properties/bottom");
 		mBottomProperty->SetValuePath("bottom");
-		mBottomProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mBottomProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -41,7 +42,7 @@ namespace Editor
 
 		mRightProperty = GetChildByType<FloatProperty>("container/layout/properties/right");
 		mRightProperty->SetValuePath("right");
-		mRightProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mRightProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -49,7 +50,7 @@ namespace Editor
 
 		mTopProperty = GetChildByType<FloatProperty>("container/layout/properties/top");
 		mTopProperty->SetValuePath("top");
-		mTopProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
+		mTopProperty->onChanged = [&](const Ref<IPropertyField>& field) { onChanged(field); };
 		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -117,16 +118,16 @@ namespace Editor
 		mValuesProxies = targets;
 
 		mLeftProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew LeftValueProxy(x.first), x.second ? mnew LeftValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<LeftValueProxy>(x.first), x.second ? mmake<LeftValueProxy>(x.second) : nullptr); }));
 
 		mRightProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew RightValueProxy(x.first), x.second ? mnew RightValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<RightValueProxy>(x.first), x.second ? mmake<RightValueProxy>(x.second) : nullptr); }));
 
 		mTopProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew TopValueProxy(x.first), x.second ? mnew TopValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<TopValueProxy>(x.first), x.second ? mmake<TopValueProxy>(x.second) : nullptr); }));
 
 		mBottomProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
-			return TargetPair(mnew BottomValueProxy(x.first), x.second ? mnew BottomValueProxy(x.second) : nullptr); }));
+			return TargetPair(mmake<BottomValueProxy>(x.first), x.second ? mmake<BottomValueProxy>(x.second) : nullptr); }));
 	}
 
 	void RectFProperty::Refresh()
@@ -164,7 +165,7 @@ namespace Editor
 		return &TypeOf(RectF);
 	}
 
-	RectFProperty::LeftValueProxy::LeftValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	RectFProperty::LeftValueProxy::LeftValueProxy(const Ref<IAbstractValueProxy>& proxy) :mProxy(proxy)
 	{}
 
 	RectFProperty::LeftValueProxy::LeftValueProxy()
@@ -185,7 +186,7 @@ namespace Editor
 		return proxyValue.left;
 	}
 
-	RectFProperty::RightValueProxy::RightValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	RectFProperty::RightValueProxy::RightValueProxy(const Ref<IAbstractValueProxy>& proxy) :mProxy(proxy)
 	{}
 
 	RectFProperty::RightValueProxy::RightValueProxy()
@@ -206,7 +207,7 @@ namespace Editor
 		return proxyValue.right;
 	}
 
-	RectFProperty::TopValueProxy::TopValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	RectFProperty::TopValueProxy::TopValueProxy(const Ref<IAbstractValueProxy>& proxy) :mProxy(proxy)
 	{}
 
 	RectFProperty::TopValueProxy::TopValueProxy()
@@ -227,7 +228,7 @@ namespace Editor
 		return proxyValue.top;
 	}
 
-	RectFProperty::BottomValueProxy::BottomValueProxy(IAbstractValueProxy* proxy) :mProxy(proxy)
+	RectFProperty::BottomValueProxy::BottomValueProxy(const Ref<IAbstractValueProxy>& proxy) :mProxy(proxy)
 	{}
 
 	RectFProperty::BottomValueProxy::BottomValueProxy()
@@ -247,9 +248,11 @@ namespace Editor
 		mProxy->GetValuePtr(&proxyValue);
 		return proxyValue.bottom;
 	}
-
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::RectF>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::RectFProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::RectF>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::RectFProperty, Editor__RectFProperty);

@@ -25,10 +25,10 @@ namespace Editor
 
 	public:
 		// Default constructor
-		ScrollView();
+		ScrollView(RefCounter* refCounter);
 
 		// Copy-constructor
-		ScrollView(const ScrollView& other);
+		ScrollView(RefCounter* refCounter, const ScrollView& other);
 
 		// Destructor
 		~ScrollView();
@@ -84,14 +84,15 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(ScrollView);
+        SERIALIZABLE(ScrollView);
+        CLONEABLE_REF(ScrollView);
 
 	protected:
 		bool mReady = false; // Is widget initialized and ready to use
 				   								           
-		Sprite*    mRenderTargetSprite = nullptr; // Render target sprite, using for caching graphics
-		TextureRef mRenderTarget;                 // Render target texture, using for caching graphics
-		bool       mNeedRedraw = false;           // Is need to redraw render target
+		Ref<Sprite>  mRenderTargetSprite; // Render target sprite, using for caching graphics
+		TextureRef mRenderTarget;       // Render target texture, using for caching graphics
+		bool         mNeedRedraw = false; // Is need to redraw render target
 				   								           
 		Color4 mBackColor; // Color of back @SERIALIZABLE
 		Color4 mGridColor; // Color of grid @SERIALIZABLE
@@ -156,6 +157,8 @@ namespace Editor
 
 		// Returns that this scroll area has transparent input
 		bool IsInputTransparent() const override;
+
+		REF_COUNTERABLE_IMPL(Widget);
 	};
 }
 // --- META ---
@@ -171,7 +174,7 @@ CLASS_FIELDS_META(Editor::ScrollView)
     FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(horGridEnabled);
     FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(verGridEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mReady);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRenderTargetSprite);
+    FIELD().PROTECTED().NAME(mRenderTargetSprite);
     FIELD().PROTECTED().NAME(mRenderTarget);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mBackColor);
@@ -194,8 +197,8 @@ END_META;
 CLASS_METHODS_META(Editor::ScrollView)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ScrollView&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ScrollView&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocalPoint, const Vec2F&);

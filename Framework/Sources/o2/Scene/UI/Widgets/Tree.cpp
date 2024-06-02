@@ -17,19 +17,20 @@
 
 namespace o2
 {
-    TreeNode::TreeNode()
+    TreeNode::TreeNode(RefCounter* refCounter):
+        Widget(refCounter)
     {
         onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
     }
 
-    TreeNode::TreeNode(const TreeNode& other):
-        Widget(other)
+    TreeNode::TreeNode(RefCounter* refCounter, const TreeNode& other):
+        Widget(refCounter, other)
     {
         onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
 
-        mExpandBtn = (Button*)GetChild("expandBtn");
+        mExpandBtn = DynamicCast<Button>(GetChild("expandBtn"));
         if (mExpandBtn)
-            mExpandBtn->onClick = [&]() { if (IsExpanded()) Collapse(); else Expand(); o2UI.FocusWidget(mOwnerTree); };
+            mExpandBtn->onClick = [&]() { if (IsExpanded()) Collapse(); else Expand(); o2UI.FocusWidget(mOwnerTree.Lock()); };
 
         SetSelectionGroup(other.GetSelectionGroup());
 
@@ -46,9 +47,9 @@ namespace o2
 
         onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
 
-        mExpandBtn = (Button*)GetChild("expandBtn");
+        mExpandBtn = DynamicCast<Button>(GetChild("expandBtn"));
         if (mExpandBtn)
-            mExpandBtn->onClick = [&]() { if (IsExpanded()) Collapse(); else Expand(); o2UI.FocusWidget(mOwnerTree); };
+            mExpandBtn->onClick = [&]() { if (IsExpanded()) Collapse(); else Expand(); o2UI.FocusWidget(mOwnerTree.Lock()); };
 
         SetSelectionGroup(other.GetSelectionGroup());
 
@@ -63,16 +64,18 @@ namespace o2
         if (expanded == IsExpanded())
             return;
 
-        if (expanded) mOwnerTree->ExpandNode(mNodeDef);
-        else          mOwnerTree->CollapseNode(mNodeDef);
+        if (expanded) 
+            mOwnerTree.Lock()->ExpandNode(mNodeDef.Lock());
+        else          
+            mOwnerTree.Lock()->CollapseNode(mNodeDef.Lock());
 
         SetState("expanded", expanded);
-        mNodeDef->isExpanded = expanded;
+        mNodeDef.Lock()->isExpanded = expanded;
     }
 
     bool TreeNode::IsExpanded() const
     {
-        return mNodeDef->isExpanded;
+        return mNodeDef.Lock()->isExpanded;
     }
 
     void TreeNode::Expand(bool forcible /*= false*/)
@@ -87,7 +90,7 @@ namespace o2
 
     void* TreeNode::GetObject() const
     {
-        return mNodeDef->object;
+        return mNodeDef.Lock()->object;
     }
 
     bool TreeNode::IsUnderPoint(const Vec2F& point)
@@ -115,7 +118,7 @@ namespace o2
         return "Tree";
     }
 
-    void TreeNode::OnStateAdded(WidgetState* state)
+    void TreeNode::OnStateAdded(const Ref<WidgetState>& state)
     {
         Widget::OnStateAdded(state);
 
@@ -125,79 +128,82 @@ namespace o2
 
     void TreeNode::UpdateTreeLayout(float dt)
     {
-        mOwnerTree->mIsNeedUdateLayout = true;
+        mOwnerTree.Lock()->mIsNeedUdateLayout = true;
     }
 
     void TreeNode::OnCursorDblClicked(const Input::Cursor& cursor)
     {
         if (mOwnerTree)
-            mOwnerTree->OnNodeDblClick(this);
+            mOwnerTree.Lock()->OnNodeDblClick(Ref(this));
     }
 
     void TreeNode::OnCursorEnter(const Input::Cursor& cursor)
     {
         if (mOwnerTree)
-            mOwnerTree->UpdateHover(this);
+            mOwnerTree.Lock()->UpdateHover(Ref(this));
     }
 
     void TreeNode::OnCursorExit(const Input::Cursor& cursor)
     {
         if (mOwnerTree)
-            mOwnerTree->UpdateHover(nullptr);
+            mOwnerTree.Lock()->UpdateHover(nullptr);
     }
 
     void TreeNode::OnDragStart(const Input::Cursor& cursor)
     {
-        mOwnerTree->BeginDragging(this);
+        mOwnerTree.Lock()->BeginDragging(Ref(this));
     }
 
-    void TreeNode::OnDragged(const Input::Cursor& cursor, DragDropArea* area)
+    void TreeNode::OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area)
     {
-        mOwnerTree->UpdateDraggingGraphics();
+        mOwnerTree.Lock()->UpdateDraggingGraphics();
     }
 
     void TreeNode::OnDragEnd(const Input::Cursor& cursor)
     {
-        mOwnerTree->mDragEnded = true;
+        mOwnerTree.Lock()->mDragEnded = true;
     }
 
     void TreeNode::OnSelected()
     {
-        mOwnerTree->Focus();
+        mOwnerTree.Lock()->Focus();
     }
 
     void TreeNode::OnDeselected()
     {}
 
-    Tree::Tree()
+    Tree::Tree(RefCounter* refCounter):
+        ScrollArea(refCounter)
     {
-        mNodeWidgetSample = mnew TreeNode();
+        mNodeWidgetSample = mmake<TreeNode>();
         mNodeWidgetSample->layout->minHeight = 20;
         mNodeWidgetSample->AddLayer("caption", nullptr);
 
-        mFakeDragNode = mnew TreeNode();
-        mHoverDrawable = mnew Sprite();
-        mHighlightSprite = mnew Sprite();
+        mFakeDragNode = mmake<TreeNode>();
+        mHoverDrawable = mmake<Sprite>();
+        mHighlightSprite = mmake<Sprite>();
 
-        mHighlightAnim.SetTarget(mHighlightSprite);
+        mHighlightAnim->SetTarget(mHighlightSprite.Get());
     }
 
-    Tree::Tree(const Tree& other):
-        ScrollArea(other)
+    Tree::Tree(RefCounter* refCounter, const Tree& other):
+        ScrollArea(refCounter, other)
     {
         mRearrangeType = other.mRearrangeType;
         mMultiSelectAvailable = other.mMultiSelectAvailable;
-        mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<TreeNode>();
-        mFakeDragNode = other.mNodeWidgetSample->CloneAs<TreeNode>();
-        mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
-        mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
+        mNodeWidgetSample = other.mNodeWidgetSample->CloneAsRef<TreeNode>();
+        mFakeDragNode = other.mNodeWidgetSample->CloneAsRef<TreeNode>();
+        mHoverDrawable = other.mHoverDrawable->CloneAsRef<Sprite>();
+        mHighlightSprite = other.mHighlightSprite->CloneAsRef<Sprite>();
 
         if (other.mZebraBackLine)
-            mZebraBackLine = other.mZebraBackLine->CloneAs<Sprite>();
+            mZebraBackLine = other.mZebraBackLine->CloneAsRef<Sprite>();
 
-        mHighlighClip = other.mHighlighClip;
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+        if (other.mHighlighClip)
+            mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
+
+        mHighlightAnim->SetTarget(mHighlightSprite.Get());
+        mHighlightAnim->SetClip(mHighlighClip);
 
         mHoverLayout = other.mHoverLayout;
         mHighlightLayout = other.mHighlightLayout;
@@ -206,46 +212,34 @@ namespace o2
         SetLayoutDirty();
 
         const int widgetsBufferInitialSize = 20;
-        Vector<TreeNode*> widgets;
+        Vector<Ref<TreeNode>> widgets;
         for (int i = 0; i < widgetsBufferInitialSize; i++)
             widgets.Add(CreateTreeNodeWidget());
 
         mNodeWidgetsBuf.Add(widgets);
     }
 
-    Tree::~Tree()
-    {
-        delete mNodeWidgetSample;
-        delete mFakeDragNode;
-        delete mHoverDrawable;
-        delete mHighlightSprite;
+	Tree::Tree(const Tree& other):
+        Tree(nullptr, other)
+	{}
 
-        if (mZebraBackLine)
-            delete mZebraBackLine;
-
-        for (auto node : mAllNodes)
-            delete node;
-    }
+	Tree::~Tree()
+    {}
 
     Tree& Tree::operator=(const Tree& other)
     {
         ScrollArea::operator=(other);
 
-        delete mNodeWidgetSample;
-        delete mHoverDrawable;
-        delete mFakeDragNode;
-        delete mHighlightSprite;
-
         mRearrangeType = other.mRearrangeType;
         mMultiSelectAvailable = other.mMultiSelectAvailable;
-        mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<TreeNode>();
-        mFakeDragNode = other.mNodeWidgetSample->CloneAs<TreeNode>();
-        mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
-        mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
+        mNodeWidgetSample = other.mNodeWidgetSample->CloneAsRef<TreeNode>();
+        mFakeDragNode = other.mNodeWidgetSample->CloneAsRef<TreeNode>();
+        mHoverDrawable = other.mHoverDrawable->CloneAsRef<Sprite>();
+        mHighlightSprite = other.mHighlightSprite->CloneAsRef<Sprite>();
 
-        mHighlighClip = other.mHighlighClip;
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+        mHighlighClip = other.mHighlighClip->CloneAsRef<AnimationClip>();
+        mHighlightAnim->SetTarget(mHighlightSprite.Get());
+        mHighlightAnim->SetClip(mHighlighClip);
 
         mHoverLayout = other.mHoverLayout;
         mHighlightLayout = other.mHighlightLayout;
@@ -264,7 +258,7 @@ namespace o2
         if (mIsDraggingNodes)
             o2UI.DrawWidgetAtTop(mFakeDragNode);
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         IDrawable::OnDrawn();
@@ -276,7 +270,7 @@ namespace o2
 
         if (mExpandingNodeState == ExpandState::None)
         {
-            for (auto node : mVisibleNodes)
+            for (auto& node : mVisibleNodes)
                 node->widget->Draw();
         }
         else
@@ -290,7 +284,7 @@ namespace o2
 
             for (int i = clipTopIdx; i <= clipBottomIdx; i++)
             {
-                Node* node = mAllNodes[i];
+                auto node = mAllNodes[i];
                 if (node->widget)
                     node->widget->Draw();
             }
@@ -299,7 +293,7 @@ namespace o2
 
             for (int i = mMinVisibleNodeIdx; i <= mMaxVisibleNodeIdx; i++)
             {
-                Node* node = mAllNodes[i];
+                auto node = mAllNodes[i];
                 if (node->widget && (i < clipTopIdx || i > clipBottomIdx))
                     node->widget->Draw();
             }
@@ -312,7 +306,7 @@ namespace o2
 
         CursorAreaEventsListener::OnDrawn();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         if (mOwnHorScrollBar)
@@ -366,20 +360,20 @@ namespace o2
 
     void Tree::UpdateHighlighting(float dt)
     {
-        if (mHighlightAnim.IsPlaying())
+        if (mHighlightAnim->IsPlaying())
         {
             if (mHighlightObject && !mHighlighNode)
-                mHighlighNode = mAllNodes.FindOrDefault([=](Node* x) { return x->object == mHighlightObject; });
+                mHighlighNode = mAllNodes.FindOrDefault([=](auto& x) { return x->object == mHighlightObject; });
 
-            if (mHighlighNode && mHighlighNode->widget)
+            if (mHighlighNode && mHighlighNode.Lock()->widget)
             {
                 mHighlightSprite->SetScale(Vec2F(1.0f, 1.0f));
-                mHighlightSprite->SetRect(mHighlightLayout.Calculate(mHighlighNode->widget->layout->worldRect));
+                mHighlightSprite->SetRect(mHighlightLayout.Calculate(mHighlighNode.Lock()->widget->layout->worldRect));
             }
 
-            mHighlightAnim.Update(dt);
+            mHighlightAnim->Update(dt);
 
-            if (!mHighlightAnim.IsPlaying())
+            if (!mHighlightAnim->IsPlaying())
             {
                 mHighlighNode = nullptr;
                 mHighlightObject = nullptr;
@@ -417,22 +411,22 @@ namespace o2
         return getDebugForObject(object);
     }
 
-    void Tree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
+    void Tree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object)
     {
         fillNodeDataByObjectDelegate(nodeWidget, object);
     }
 
-    void Tree::FreeNodeData(TreeNode* nodeWidget, void* object)
+    void Tree::FreeNodeData(const Ref<TreeNode>& nodeWidget, void* object)
     {
         freeNodeDataDelegate(nodeWidget, object);
     }
 
-    void Tree::OnNodeDblClick(TreeNode* nodeWidget)
+    void Tree::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
     {
         onNodeDoubleClicked(nodeWidget);
     }
 
-    void Tree::OnNodeRBClick(TreeNode* nodeWidget)
+    void Tree::OnNodeRBClick(const Ref<TreeNode>& nodeWidget)
     {
         onNodeRightButtonClicked(nodeWidget);
     }
@@ -447,20 +441,20 @@ namespace o2
         onDraggedObjects(objects, newParent, prevObject);
     }
 
-    Vector<SelectableDragableObject*> Tree::GetSelectedDragObjects() const
+    Vector<Ref<SelectableDragableObject>> Tree::GetSelectedDragObjects() const
     {
-        return Vector<SelectableDragableObject*>();
+        return {};
     }
 
-    Vector<SelectableDragableObject*> Tree::GetAllObjects() const
+    Vector<Ref<SelectableDragableObject>> Tree::GetAllObjects() const
     {
-        return Vector<SelectableDragableObject*>();
+        return {};
     }
 
-    void Tree::Select(SelectableDragableObject* object, bool sendOnSelectionChanged)
+    void Tree::Select(const Ref<SelectableDragableObject>& object, bool sendOnSelectionChanged)
     {
         bool someSelected = false;
-        TreeNode* uiNode = (TreeNode*)object;
+        auto uiNode = DynamicCast<TreeNode>(object);
 
         if (o2Input.IsKeyDown(VK_SHIFT) && mSelectedNodes.Count() > 0)
         {
@@ -468,7 +462,7 @@ namespace o2
         }
         else if (!o2Input.IsKeyDown(VK_CONTROL))
         {
-            for (auto sel : mSelectedNodes)
+            for (auto& sel : mSelectedNodes)
                 sel->SetSelected(false);
 
             mSelectedNodes.Clear();
@@ -477,13 +471,13 @@ namespace o2
             someSelected = true;
         }
 
-        if (!mSelectedNodes.Contains([=](Node* x) { return x->widget == uiNode; }))
+        if (!mSelectedNodes.Contains([=](auto& x) { return x->widget == uiNode; }))
         {
             someSelected = true;
 
             uiNode->mIsSelected = true;
 
-            Node* node = mAllNodes.FindOrDefault([=](Node* x) { return x->widget == uiNode; });
+            auto node = mAllNodes.FindOrDefault([=](auto& x) { return x->widget == uiNode; });
             node->SetSelected(true);
             mSelectedNodes.Add(node);
             mSelectedObjects.Add(node->object);
@@ -493,14 +487,14 @@ namespace o2
             OnSelectionChanged();
     }
 
-    void Tree::Select(SelectableDragableObject* object)
+    void Tree::Select(const Ref<SelectableDragableObject>& object)
     {
         Select(object, true);
     }
 
-    void Tree::Deselect(SelectableDragableObject* object)
+    void Tree::Deselect(const Ref<SelectableDragableObject>& object)
     {
-        TreeNode* uiNode = (TreeNode*)object;
+        auto uiNode = DynamicCast<TreeNode>(object);
         uiNode->mIsSelected = false;
 
         int idx = mSelectedNodes.IndexOf([&](auto x) { return x->widget == uiNode; });
@@ -515,17 +509,17 @@ namespace o2
         OnSelectionChanged();
     }
 
-    void Tree::AddSelectableObject(SelectableDragableObject* object)
+    void Tree::AddSelectableObject(const Ref<SelectableDragableObject>& object)
     {}
 
     void Tree::RemoveSelectableObject(SelectableDragableObject* object)
     {}
 
-    void Tree::OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor)
+    void Tree::OnSelectableObjectCursorReleased(const Ref<SelectableDragableObject>& object, const Input::Cursor& cursor)
     {
         if (!o2Input.IsKeyDown(VK_SHIFT) && !o2Input.IsKeyDown(VK_CONTROL))
         {
-            for (auto sel : mSelectedNodes)
+            for (auto& sel : mSelectedNodes)
                 sel->SetSelected(false);
 
             mSelectedNodes.Clear();
@@ -536,7 +530,7 @@ namespace o2
             object->SetSelected(!object->IsSelected());
     }
 
-    void Tree::OnSelectableObjectBeganDragging(SelectableDragableObject* object)
+    void Tree::OnSelectableObjectBeganDragging(const Ref<SelectableDragableObject>& object)
     {
         mBeforeDragSelectedItems = mSelectedObjects;
 
@@ -558,7 +552,7 @@ namespace o2
 
         int idx = 0;
         float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
-        for (auto node : mAllNodes)
+        for (auto& node : mAllNodes)
         {
             if (mSelectedNodes.Contains(node))
             {
@@ -604,7 +598,7 @@ namespace o2
                 mExpandNodeCandidate->Expand();
 
                 if (mIsDraggingNodes)
-                    mExpandNodeCandidate->mNodeDef->inserting = false;
+                    mExpandNodeCandidate->mNodeDef.Lock()->inserting = false;
 
                 mExpandNodeCandidate = nullptr;
             }
@@ -628,9 +622,9 @@ namespace o2
             mIsNeedUpdateView = true;
     }
 
-    TreeNode* Tree::GetNode(void* object)
+    Ref<TreeNode> Tree::GetNode(void* object)
     {
-        Node* fnd = mAllNodes.FindOrDefault([=](Node* x) { return x->object == object; });
+        auto fnd = mAllNodes.FindOrDefault([=](auto& x) { return x->object == object; });
         if (fnd)
             return fnd->widget;
 
@@ -647,9 +641,9 @@ namespace o2
             isAllExpanded = true;
 
             auto nodes = mAllNodes;
-            for (auto child : nodes)
+            for (auto& child : nodes)
             {
-                TreeNode* childNode = child->widget;
+                auto childNode = child->widget;
                 if (childNode && !childNode->IsExpanded())
                 {
                     childNode->Expand();
@@ -661,9 +655,9 @@ namespace o2
 
     void Tree::CollapseAll()
     {
-        for (auto child : mAllNodes)
+        for (auto& child : mAllNodes)
         {
-            TreeNode* childNode = (TreeNode*)child;
+            auto childNode = DynamicCast<TreeNode>(child);
             childNode->Collapse();
         }
     }
@@ -675,15 +669,15 @@ namespace o2
 
     void Tree::SetSelectedObjects(const Vector<void*>& objects)
     {
-        for (auto sel : mSelectedNodes)
+        for (auto& sel : mSelectedNodes)
             sel->SetSelected(false);
 
         mSelectedNodes.Clear();
         mSelectedObjects.Clear();
 
-        for (auto obj : objects)
+        for (auto& obj : objects)
         {
-            auto node = mAllNodes.FindOrDefault([=](Node* x) { return x->object == obj; });
+            auto node = mAllNodes.FindOrDefault([=](auto& x) { return x->object == obj; });
 
             if (!node)
                 continue;
@@ -709,7 +703,7 @@ namespace o2
             return;
         }
 
-        auto node = mAllNodes.FindOrDefault([=](Node* x) { return x->object == object; });
+        auto node = mAllNodes.FindOrDefault([=](auto& x) { return x->object == object; });
         if (!node)
             return;
 
@@ -746,7 +740,7 @@ namespace o2
 
     void Tree::DeselectAllObjects()
     {
-        for (auto sel : mSelectedNodes)
+        for (auto& sel : mSelectedNodes)
             sel->SetSelected(false);
 
         mSelectedNodes.Clear();
@@ -764,7 +758,7 @@ namespace o2
 
         ExpandParentObjects(object);
 
-        int idx = mAllNodes.IndexOf([=](Node* x) { return x->object == object; });
+        int idx = mAllNodes.IndexOf([=](auto& x) { return x->object == object; });
 
         if (idx >= 0)
             SetScroll(Vec2F(mScrollPos.x, (float)idx*mNodeWidgetSample->layout->minHeight - layout->height*0.5f));
@@ -780,7 +774,7 @@ namespace o2
 
         ExpandParentObjects(object);
 
-        int idx = mAllNodes.IndexOf([=](Node* x) { return x->object == object; });
+        int idx = mAllNodes.IndexOf([=](auto& x) { return x->object == object; });
 
         if (idx >= 0)
         {
@@ -790,7 +784,7 @@ namespace o2
 
             mHighlighNode = mAllNodes[idx];
             mHighlightObject = object;
-            mHighlightAnim.RewindAndPlay();
+            mHighlightAnim->RewindAndPlay();
         }
     }
 
@@ -806,7 +800,7 @@ namespace o2
 
         for (int i = parentsStack.Count() - 1; i >= 0; i--)
         {
-            auto node = mAllNodes.FindOrDefault([&](Node* x) { return x->object == parentsStack[i]; });
+            auto node = mAllNodes.FindOrDefault([=](auto& x) { return x->object == parentsStack[i]; });
 
             if (!node)
             {
@@ -842,9 +836,9 @@ namespace o2
         if (mIsNeedUpdateView)
             return;
 
-        for (auto object : objects)
+        for (auto& object : objects)
         {
-            auto nodeIdx = mVisibleNodes.IndexOf([=](Node* x) { return x->object == object; });
+            auto nodeIdx = mVisibleNodes.IndexOf([=](auto& x) { return x->object == object; });
             if (nodeIdx < 0)
                 continue;
 
@@ -864,14 +858,14 @@ namespace o2
         {
             UpdateNodeExpanding(mExpandNodeTime);
 
-            for (auto child : mChildWidgets)
+            for (auto& child : mChildWidgets)
                 child->SetLayoutDirty();
         }
 
         Vector<void*> rootObjects = GetObjectChilds(nullptr);
 
         mVisibleWidgetsCache.Clear();
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
         {
             if (!node->widget)
                 continue;
@@ -895,12 +889,12 @@ namespace o2
         mMaxVisibleNodeIdx = -1;
 
         int position = 0;
-        for (auto object : rootObjects)
+        for (auto& object : rootObjects)
         {
             if (mIsDraggingNodes && mSelectedObjects.Contains(object))
                 continue;
 
-            Node* node = CreateNode(object, nullptr);
+            auto node = CreateNode(object, nullptr);
             mAllNodes.Insert(node, position++);
             position += InsertNodes(node, position);
         }
@@ -908,19 +902,19 @@ namespace o2
         SetLayoutDirty();
     }
 
-    int Tree::InsertNodes(Node* parentNode, int position, Vector<Node*>* newNodes /*= nullptr*/)
+    int Tree::InsertNodes(const Ref<Node>& parentNode, int position, Vector<Ref<Node>>* newNodes /*= nullptr*/)
     {
         int initialPosition = position;
 
         if (mExpandedObjects.Contains(parentNode->object))
         {
             auto childObjects = GetObjectChilds(parentNode->object);
-            for (auto child : childObjects)
+            for (auto& child : childObjects)
             {
                 if (mIsDraggingNodes && mSelectedObjects.Contains(child))
                     continue;
 
-                Node* node = CreateNode(child, parentNode);
+                auto node = CreateNode(child, parentNode);
 
                 mAllNodes.Insert(node, position++);
 
@@ -934,7 +928,7 @@ namespace o2
         return position - initialPosition;
     }
 
-    void Tree::RemoveNodes(Node* parentNode)
+    void Tree::RemoveNodes(const Ref<Node>& parentNode)
     {
         int begin = mAllNodes.IndexOf(parentNode) + 1;
         int end = begin - 1 + parentNode->GetChildCount();
@@ -942,9 +936,9 @@ namespace o2
         mAllNodes.RemoveRange(begin, end);
     }
 
-    Tree::Node* Tree::CreateNode(void* object, Node* parent)
+    Ref<Tree::Node> Tree::CreateNode(void* object, const Ref<Node>& parent)
     {
-        Node* node = mNodesBuf.IsEmpty() ? mnew Node() : mNodesBuf.PopBack();
+        auto node = mNodesBuf.IsEmpty() ? mmake<Node>() : mNodesBuf.PopBack();
         node->childs.Clear();
 
         node->parent = parent;
@@ -967,7 +961,7 @@ namespace o2
 
     void Tree::OnFocused()
     {
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
         {
             if (node->widget)
                 node->widget->SetState("focused", true);
@@ -978,7 +972,7 @@ namespace o2
 
     void Tree::OnUnfocused()
     {
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
         {
             if (node->widget)
                 node->widget->SetState("focused", false);
@@ -1039,7 +1033,7 @@ namespace o2
                 if (i >= mAllNodes.Count())
                     break;
 
-                Node* node = mAllNodes[i];
+                auto node = mAllNodes[i];
 
                 if (node->widget)
                 {
@@ -1061,7 +1055,7 @@ namespace o2
         float nodeHeight = mNodeWidgetSample->layout->minHeight;
         for (int i = mMinVisibleNodeIdx; i <= mMaxVisibleNodeIdx && i < mAllNodes.Count(); i++)
         {
-            Node* node = mAllNodes[i];
+            auto node = mAllNodes[i];
 
             if (i < lastMinVisible || i > lastMaxVisible)
                 CreateVisibleNodeWidget(node, i);
@@ -1076,7 +1070,7 @@ namespace o2
 
         mVisibleNodes = mAllNodes.Take(mMinVisibleNodeIdx, mMaxVisibleNodeIdx + 1);
 
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
         {
             if (node->widget)
             {
@@ -1088,20 +1082,20 @@ namespace o2
 
         mNodeWidgetsBuf.Add(mVisibleWidgetsCache
                             .FindAll([](const VisibleWidgetDef& x) { return x.widget != nullptr; })
-                            .Convert<TreeNode*>([&](const VisibleWidgetDef& x) { FreeNodeData(x.widget, x.object); return x.widget; }));
+                            .Convert<Ref<TreeNode>>([&](const VisibleWidgetDef& x) { FreeNodeData(x.widget, x.object); return x.widget; }));
 
         mVisibleWidgetsCache.Clear();
 
         if (mIsDraggingNodes)
-            OnDraggedAbove(this);
+            OnDraggedAbove(Ref(this));
     }
 
-    void Tree::CreateVisibleNodeWidget(Node* node, int i)
+    void Tree::CreateVisibleNodeWidget(const Ref<Node>& node, int i)
     {
         int cacheIdx = mVisibleWidgetsCache.IndexOf([=](const VisibleWidgetDef& x) {
             return x.object == node->object && x.position == i; });
 
-        TreeNode* widget;
+        Ref<TreeNode> widget;
 
         if (cacheIdx < 0)
             widget = CreateTreeNodeWidget();
@@ -1116,8 +1110,8 @@ namespace o2
         widget->mIsSelected = node->isSelected;
         widget->mNodeDef = node;
         node->widget = widget;
-        widget->mParent = this;
-        widget->mParentWidget = this;
+        widget->mParent = Ref(this);
+        widget->mParentWidget = Ref(this);
         widget->mResEnabledInHierarchy = true;
         widget->mResEnabled = true;
 
@@ -1126,7 +1120,7 @@ namespace o2
         mChildrenInheritedDepth.Add(widget);
     }
 
-    void Tree::UpdateNodeView(Node* node, TreeNode* widget, int idx)
+    void Tree::UpdateNodeView(const Ref<Node>& node, const Ref<TreeNode>& widget, int idx)
     {
         node->widget = widget;
 
@@ -1152,7 +1146,7 @@ namespace o2
             UpdateNodeWidgetLayout(node, idx);
     }
 
-    void Tree::UpdateNodeWidgetLayout(Node* node, int idx)
+    void Tree::UpdateNodeWidgetLayout(const Ref<Node>& node, int idx)
     {
         float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
         float dragModeOffset = 0.0f;
@@ -1191,7 +1185,7 @@ namespace o2
         return res;
     }
 
-    void Tree::ExpandNode(Node* node)
+    void Tree::ExpandNode(const Ref<Node>& node)
     {
         int position = mAllNodes.IndexOf(node) + 1;
 
@@ -1202,11 +1196,13 @@ namespace o2
 
         node->isExpanded = true;
 
+        auto thisRef = Ref(this);
+
         if (mExpandingNodeState != ExpandState::None && mExpandingNodeIdx == position - 1)
             mExpandingNodeState = ExpandState::Expanding;
         else
         {
-            Vector<Node*> newNodes;
+            Vector<Ref<Node>> newNodes;
             InsertNodes(node, position, &newNodes);
 
             float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
@@ -1221,13 +1217,13 @@ namespace o2
             }
             else if (idx <= mMaxVisibleNodeIdx)
             {
-                for (auto node : newNodes)
+                for (auto& node : newNodes)
                 {
                     float position = (float)idx*nodeHeight;
                     if (position > bottomViewBorder)
                         break;
 
-                    TreeNode* nodeWidget = CreateTreeNodeWidget();
+                    const Ref<TreeNode>& nodeWidget = CreateTreeNodeWidget();
 
                     node->widget = nodeWidget;
                     nodeWidget->mNodeDef = node;
@@ -1235,8 +1231,8 @@ namespace o2
 
                     UpdateNodeView(node, nodeWidget, idx);
 
-                    nodeWidget->mParent = this;
-                    nodeWidget->mParentWidget = this;
+                    nodeWidget->mParent = thisRef;
+                    nodeWidget->mParentWidget = thisRef;
 
                     mVisibleNodes.Add(node);
                     mChildren.Add(nodeWidget);
@@ -1254,7 +1250,7 @@ namespace o2
         mIsNeedUdateLayout = true;
     }
 
-    void Tree::CollapseNode(Node* node)
+    void Tree::CollapseNode(const Ref<Node>& node)
     {
         int idx = mAllNodes.IndexOf(node);
 
@@ -1275,7 +1271,7 @@ namespace o2
         mIsNeedUdateLayout = true;
     }
 
-    void Tree::StartExpandingAnimation(ExpandState direction, Node* node, int childrenCount)
+    void Tree::StartExpandingAnimation(ExpandState direction, const Ref<Node>& node, int childrenCount)
     {
         int idx = mAllNodes.IndexOf(node);
 
@@ -1320,7 +1316,7 @@ namespace o2
 
                 for (int i = mExpandingNodeIdx + 1; i <= mExpandingNodeIdx + mExpandingNodeChildsCount && i < mAllNodes.Count(); i++)
                 {
-                    Node* node = mAllNodes[i];
+                    auto node = mAllNodes[i];
                     if (node->widget)
                     {
                         FreeNodeData(node->widget, node->object);
@@ -1354,7 +1350,7 @@ namespace o2
         float offs = mExpandingNodeBottomPosition - lastExpandBottom;
         for (int i = Math::Max(mExpandingNodeIdx + mExpandingNodeChildsCount + 1, mMinVisibleNodeIdx); i <= mMaxVisibleNodeIdx && i < mAllNodes.Count(); i++)
         {
-            Node* node = mAllNodes[i];
+            auto node = mAllNodes[i];
 
             if (node->widget)
             {
@@ -1391,7 +1387,7 @@ namespace o2
         Focus();
     }
 
-    void Tree::UpdateHover(TreeNode* itemUnderCursor)
+    void Tree::UpdateHover(const Ref<TreeNode>& itemUnderCursor)
     {
         bool hoverVisible = false;
         if (itemUnderCursor)
@@ -1440,7 +1436,7 @@ namespace o2
         auto node = GetTreeNodeUnderPoint(cursor.position);
         if (mSelectedNodes.Count() < 2)
         {
-            for (auto sel : mSelectedNodes)
+            for (auto& sel : mSelectedNodes)
                 sel->SetSelected(false);
 
             mSelectedNodes.Clear();
@@ -1473,9 +1469,9 @@ namespace o2
         ScrollArea::OnScrolled(scroll);
     }
 
-    TreeNode* Tree::GetTreeNodeUnderPoint(const Vec2F& point)
+    Ref<TreeNode> Tree::GetTreeNodeUnderPoint(const Vec2F& point)
     {
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
         {
             if (node->widget && node->widget->layout->IsPointInside(point))
                 return node->widget;
@@ -1484,20 +1480,21 @@ namespace o2
         return nullptr;
     }
 
-    TreeNode* Tree::CreateTreeNodeWidget()
+    Ref<TreeNode> Tree::CreateTreeNodeWidget()
     {
-        TreeNode* res;
+        Ref<TreeNode> res;
 
         if (mNodeWidgetsBuf.IsEmpty())
         {
-            res = mNodeWidgetSample->CloneAs<TreeNode>();
+            res = mNodeWidgetSample->CloneAsRef<TreeNode>();
             res->RemoveFromScene();
             res->Show(true);
-            res->SetSelectionGroup(this);
-            res->messageFallDownListener = this;
-            res->mOwnerTree = this;
+            res->SetSelectionGroup(Ref(this));
+            res->messageFallDownListener = static_cast<ScrollArea*>(this);
+            res->mOwnerTree = Ref(this);
         }
-        else res = mNodeWidgetsBuf.PopBack();
+        else 
+            res = mNodeWidgetsBuf.PopBack();
 
         res->SetInteractable(!mIsDraggingNodes);
         res->mIsSelected = false;
@@ -1510,7 +1507,7 @@ namespace o2
         return res;
     }
 
-    void Tree::BeginDragging(TreeNode* node)
+    void Tree::BeginDragging(const Ref<TreeNode>& node)
     {
         if (mRearrangeType == RearrangeType::Disabled)
             return;
@@ -1529,7 +1526,7 @@ namespace o2
                 nameLayer->text = String::Format("%i items", mSelectedNodes.Count());
         }
 
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
             node->widget->SetInteractable(false);
 
         mIsDraggingNodes = true;
@@ -1543,7 +1540,7 @@ namespace o2
         mFakeDragNode->Hide(true);
 
         int idx = 0;
-        for (auto node : mAllNodes)
+        for (auto& node : mAllNodes)
         {
             node->inserting = false;
             node->insertCoef = 0.0f;
@@ -1583,7 +1580,7 @@ namespace o2
     {
         bool first = true;
         float ycursor = o2Input.GetCursor(0)->position.y;
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
         {
             if (!node->widget)
                 return;
@@ -1599,7 +1596,7 @@ namespace o2
 
     void Tree::UpdateDraggingInsertionAnim(float dt)
     {
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
         {
             bool changed = false;
             if (node->inserting && node->insertCoef < 1.0f)
@@ -1630,20 +1627,20 @@ namespace o2
         }
     }
 
-    void Tree::OnDragEnter(ISelectableDragableObjectsGroup* group)
+    void Tree::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
     {
         mInsertNodeCandidate = nullptr;
         OnDraggedAbove(group);
     }
 
-    void Tree::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
+    void Tree::OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group)
     {
         const Input::Cursor& cursor = *o2Input.GetCursor(0);
 
-        TreeNode* currentInsertCandidate = nullptr;
+        Ref<TreeNode> currentInsertCandidate;
         float nodeDst = FLT_MAX;
         bool first = true;
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
         {
             //             if (node->widget->mDragSizeCoef < 0.95f)
             //                 continue;
@@ -1678,15 +1675,15 @@ namespace o2
             mTargetHoverRect += Vec2F::Up()*mInsertNodeCandidate->layout->height;
     }
 
-    void Tree::OnDragExit(ISelectableDragableObjectsGroup* group)
+    void Tree::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
     {
-        for (auto node : mVisibleNodes)
+        for (auto& node : mVisibleNodes)
             node->inserting = false;
     }
 
-    void Tree::OnDropped(ISelectableDragableObjectsGroup* group)
+    void Tree::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
     {
-        if (dynamic_cast<Tree*>(group) == nullptr)
+        if (DynamicCast<Tree>(group) == nullptr)
             return;
 
         auto underCursorItem = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
@@ -1697,15 +1694,15 @@ namespace o2
         Vector<void*> objects;
         void* targetParent = nullptr;
         void* targetPrevObject = nullptr;
-        Node* insertNodeCandidate = mInsertNodeCandidate ? mInsertNodeCandidate->mNodeDef : nullptr;
+        auto insertNodeCandidate = mInsertNodeCandidate ? mInsertNodeCandidate->mNodeDef.Lock() : nullptr;
 
         if (underCursorItem)
-            targetParent = underCursorItem->mNodeDef->object;
+            targetParent = underCursorItem->mNodeDef.Lock()->object;
         else
         {
             if (insertNodeCandidate)
             {
-                targetParent = insertNodeCandidate->parent ? insertNodeCandidate->parent->object : nullptr;
+                targetParent = insertNodeCandidate->parent ? insertNodeCandidate->parent.Lock()->object : nullptr;
                 auto parentChilds = GetObjectChilds(targetParent);
 
                 int idx = parentChilds.IndexOf(insertNodeCandidate->object);
@@ -1737,7 +1734,7 @@ namespace o2
             }
         }
 
-        for (auto sel : mSelectedObjects)
+        for (auto& sel : mSelectedObjects)
         {
             bool processing = true;
 
@@ -1765,9 +1762,9 @@ namespace o2
 
     void Tree::OnDeserialized(const DataValue& node)
     {
-        ScrollArea::OnDeserialized(node);
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+		ScrollArea::OnDeserialized(node);
+        mHighlightAnim->SetTarget(mHighlightSprite.Get());
+        mHighlightAnim->SetClip(mHighlighClip);
     }
 
     void Tree::OnSelectionChanged()
@@ -1775,32 +1772,31 @@ namespace o2
         OnNodesSelectionChanged(mSelectedObjects);
     }
 
-    TreeNode* Tree::GetNodeSample() const
+    const Ref<TreeNode>& Tree::GetNodeSample() const
     {
         return mNodeWidgetSample;
     }
 
-    void Tree::SetNodeSample(TreeNode* sample)
+    void Tree::SetNodeSample(const Ref<TreeNode>& sample)
     {
-        delete mNodeWidgetSample;
         mNodeWidgetSample = sample;
     }
 
-    Sprite* Tree::GetHoverDrawable() const
+    const Ref<Sprite>& Tree::GetHoverDrawable() const
     {
         return mHoverDrawable;
     }
 
-    Sprite* Tree::GetHighlightDrawable() const
+    const Ref<Sprite>& Tree::GetHighlightDrawable() const
     {
         return mHighlightSprite;
     }
 
-    void Tree::SetHighlightAnimation(const AnimationClip& animation)
+    void Tree::SetHighlightAnimation(const Ref<AnimationClip>& animation)
     {
         mHighlighClip = animation;
-        mHighlightAnim.SetTarget(mHighlightSprite);
-        mHighlightAnim.SetClip(&mHighlighClip);
+        mHighlightAnim->SetTarget(mHighlightSprite.Get());
+        mHighlightAnim->SetClip(mHighlighClip);
     }
 
     void Tree::SetHighlightLayout(const Layout& layout)
@@ -1808,12 +1804,12 @@ namespace o2
         mHighlightLayout = layout;
     }
 
-    void Tree::SetZebraBackLine(Sprite* sprite)
+    void Tree::SetZebraBackLine(const Ref<Sprite>& sprite)
     {
         mZebraBackLine = sprite;
     }
 
-    Sprite* Tree::GetZebraBackLine() const
+    const Ref<Sprite>& Tree::GetZebraBackLine() const
     {
         return mZebraBackLine;
     }
@@ -1889,6 +1885,9 @@ namespace o2
         return Widget::IsUnderPoint(point);
     }
 
+    Tree::Node::~Node()
+    {}
+
     float Tree::Node::GetHeight() const
     {
         float res = 20;
@@ -1912,7 +1911,7 @@ namespace o2
 
     int Tree::Node::GetChildCount() const
     {
-        return childs.Count() + childs.Sum<int>([](Node* x) { return x->GetChildCount(); });
+        return childs.Count() + childs.Sum<int>([](auto& x) { return x->GetChildCount(); });
     }
 
     bool Tree::VisibleWidgetDef::operator==(const VisibleWidgetDef& other) const
@@ -1925,6 +1924,8 @@ namespace o2
         return "Tree";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Tree>);
 // --- META ---
 
 ENUM_META(o2::Tree::RearrangeType)

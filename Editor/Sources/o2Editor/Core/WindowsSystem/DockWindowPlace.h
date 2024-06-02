@@ -10,19 +10,19 @@ using namespace o2;
 
 namespace Editor
 {
-	class DockableWindow;
+	FORWARD_CLASS_REF(DockableWindow);
 
 	// ------------------------------------
 	// Dockable windows place for attaching
 	// ------------------------------------
-	class DockWindowPlace: public o2::Widget, public DrawableCursorEventsListener
+	class DockWindowPlace: public Widget, public DrawableCursorEventsListener
 	{
 	public:
 		// Default constructor
-		DockWindowPlace();
+		DockWindowPlace(RefCounter* refCounter);
 
 		// Copy-constructor
-		DockWindowPlace(const DockWindowPlace& other);
+		DockWindowPlace(RefCounter* refCounter, const DockWindowPlace& other);
 
 		// Destructor
 		~DockWindowPlace();
@@ -35,7 +35,7 @@ namespace Editor
 
 		// Sets resizible side and configures drag handle when draggable is true
 		void SetResizibleDir(TwoDirection dir, float border,
-							 DockWindowPlace* neighborMin, DockWindowPlace* neighborMax);
+							 const Ref<DockWindowPlace>& neighborMin, const Ref<DockWindowPlace>& neighborMax);
 
 		// Returns resizible side
 		TwoDirection GetResizibleDir() const;
@@ -44,7 +44,7 @@ namespace Editor
 		void ArrangeChildWindows();
 
 		// Sets target window as active tab
-		void SetActiveTab(DockableWindow* window);
+		void SetActiveTab(const Ref<DockableWindow>& window);
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -55,20 +55,21 @@ namespace Editor
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
-		SERIALIZABLE(DockWindowPlace);
+        SERIALIZABLE(DockWindowPlace);
+        CLONEABLE_REF(DockWindowPlace);
 
 	protected:
 		TwoDirection mResizibleDir; // Resizible dragable side
 
-		DockWindowPlace* mNeighborMin;         // Resizing neighbor, using when dragging this side
-		CursorEventsArea mDragHandleMin;       // Separator drag handle
-		Layout           mDragHandleLayoutMin; // Separator drag handle layout
-		RectF            mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
+		WeakRef<DockWindowPlace> mNeighborMin;         // Resizing neighbor, using when dragging this side
+		Ref<CursorEventsArea>    mDragHandleMin;       // Separator drag handle
+		Layout                   mDragHandleLayoutMin; // Separator drag handle layout
+		RectF                    mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
 
-		DockWindowPlace* mNeighborMax;         // Resizing neighbor, using when dragging this side
-		CursorEventsArea mDragHandleMax;       // Separator drag handle
-		Layout           mDragHandleLayoutMax; // Separator drag handle layout
-		RectF            mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
+		WeakRef<DockWindowPlace> mNeighborMax;         // Resizing neighbor, using when dragging this side
+		Ref<CursorEventsArea>    mDragHandleMax;       // Separator drag handle
+		Layout                   mDragHandleLayoutMax; // Separator drag handle layout
+		RectF                    mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 
 	protected:
 		// Called when cursor drag handle was moved
@@ -81,7 +82,9 @@ namespace Editor
 		void CheckInteractable();
 
 		// Initializes drag handle
-		void InitializeDragHandle();
+        void InitializeDragHandle();
+
+        REF_COUNTERABLE_IMPL(Widget);
 
 		friend class DockableWindow;
 		friend class WindowsLayout;
@@ -111,13 +114,13 @@ END_META;
 CLASS_METHODS_META(Editor::DockWindowPlace)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const DockWindowPlace&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const DockWindowPlace&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetResizibleDir, TwoDirection, float, DockWindowPlace*, DockWindowPlace*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetResizibleDir, TwoDirection, float, const Ref<DockWindowPlace>&, const Ref<DockWindowPlace>&);
     FUNCTION().PUBLIC().SIGNATURE(TwoDirection, GetResizibleDir);
     FUNCTION().PUBLIC().SIGNATURE(void, ArrangeChildWindows);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetActiveTab, DockableWindow*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetActiveTab, const Ref<DockableWindow>&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

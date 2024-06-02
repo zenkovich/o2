@@ -16,20 +16,20 @@
 
 namespace Editor
 {
-	ComponentProperty::ComponentProperty()
-	{
-		InitializeControls();
+	ComponentProperty::ComponentProperty(RefCounter* refCounter):
+		TPropertyField<Ref<Component>>(refCounter)
+    {
 	}
 
-	ComponentProperty::ComponentProperty(const ComponentProperty& other) :
-		TPropertyField<ComponentRef>(other)
+	ComponentProperty::ComponentProperty(RefCounter* refCounter, const ComponentProperty& other) :
+		TPropertyField<Ref<Component>>(refCounter, other)
 	{
 		InitializeControls();
 	}
 
 	ComponentProperty& ComponentProperty::operator=(const ComponentProperty& other)
 	{
-		TPropertyField<ComponentRef>::operator=(other);
+		TPropertyField<Ref<Component>>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
@@ -68,18 +68,18 @@ namespace Editor
 
 	void ComponentProperty::OnTypeSpecialized(const Type& type)
 	{
-		TPropertyField<ComponentRef>::OnTypeSpecialized(type);
+		TPropertyField<Ref<Component>>::OnTypeSpecialized(type);
 		mComponentType = type.InvokeStatic<const Type*>("GetComponentTypeStatic");
 	}
 
 	bool ComponentProperty::IsValueRevertable() const
 	{
-		for (auto ptr : mValuesProxies)
+		for (auto& ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				ComponentRef value = GetProxy(ptr.first);
-				ComponentRef proto = GetProxy(ptr.second);
+				Ref<Component> value = GetProxy(ptr.first);
+				Ref<Component> proto = GetProxy(ptr.second);
 
 				if (value && value->GetPrototypeLink())
 				{
@@ -119,30 +119,31 @@ namespace Editor
 		}
 	}
 
-	void ComponentProperty::RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner)
+	void ComponentProperty::RevertoToPrototype(const Ref<IAbstractValueProxy>& target, const Ref<IAbstractValueProxy>& source, 
+											   IObject* targetOwner)
 	{
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
 			return;
 
-		ComponentRef sourceComponent = GetProxy(source);
-		Actor* topSourceActor = sourceComponent->GetOwnerActor();
+		Ref<Component> sourceComponent = GetProxy(source);
+		auto topSourceActor = sourceComponent->GetOwnerActor();
 		while (topSourceActor->GetParent())
-			topSourceActor = topSourceActor->GetParent();
+			topSourceActor = topSourceActor->GetParent().Lock();
 
-		Actor* actorOwner = dynamic_cast<Actor*>(targetOwner);
+		auto actorOwner = Ref(dynamic_cast<Actor*>(targetOwner));
 
 		if (actorOwner)
 		{
-			Actor* topTargetActor = actorOwner;
+			auto topTargetActor = actorOwner;
 			while (topTargetActor->GetPrototypeLink() != topSourceActor && topTargetActor->GetParent())
-				topTargetActor = topTargetActor->GetParent();
+				topTargetActor = topTargetActor->GetParent().Lock();
 
-			Actor* sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceComponent->GetOwnerActor());
+			auto sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceComponent->GetOwnerActor());
 
 			if (sameToProtoSourceActor)
 			{
-				Component* sameToProtoSourceComponent = sameToProtoSourceActor->GetComponents().FindOrDefault(
-					[&](Component* x) { return sourceComponent == x->GetPrototypeLink(); });
+				auto sameToProtoSourceComponent = sameToProtoSourceActor->GetComponents().FindOrDefault(
+					[&](auto& x) { return x->GetPrototypeLink() == sourceComponent; });
 
 				if (sameToProtoSourceComponent)
 				{
@@ -190,36 +191,36 @@ namespace Editor
 			SetValueByUser(nullptr);
 	}
 
-	void ComponentProperty::OnDropped(ISelectableDragableObjectsGroup* group)
+	void ComponentProperty::OnDropped(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
+		if (auto actorsTree = DynamicCast<SceneHierarchyTree>(group))
 			OnDroppedFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
+		else if (auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group))
 			OnDroppedFromAssetsScroll(assetsScroll);
 	}
 
-	void ComponentProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void ComponentProperty::OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
+		if (auto actorsTree = DynamicCast<SceneHierarchyTree>(group))
 			OnDragEnterFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
+		else if (auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group))
 			OnDragEnterFromAssetsScroll(assetsScroll);
 	}
 
-	void ComponentProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void ComponentProperty::OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group)
 	{
-		if (auto* actorsTree = dynamic_cast<SceneHierarchyTree*>(group))
+		if (auto actorsTree = DynamicCast<SceneHierarchyTree>(group))
 			OnDragExitFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
+		else if (auto assetsScroll = DynamicCast<AssetsIconsScrollArea>(group))
 			OnDragExitFromAssetsScroll(assetsScroll);
 	}
 
-	void ComponentProperty::OnDroppedFromActorsTree(SceneHierarchyTree* actorsTree)
+	void ComponentProperty::OnDroppedFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() > 1)
 			return;
 
-		if (Actor* actor = dynamic_cast<Actor*>(actorsTree->GetSelectedObjects()[0]))
+		if (auto actor = DynamicCast<Actor>(actorsTree->GetSelectedObjects()[0]))
 			SetValueByUser(actor->GetComponent(mComponentType));
 		else
 			return;
@@ -228,12 +229,12 @@ namespace Editor
 		mBox->Focus();
 	}
 
-	void ComponentProperty::OnDragEnterFromActorsTree(SceneHierarchyTree* actorsTree)
+	void ComponentProperty::OnDragEnterFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() != 1)
 			return;
 
-		Actor* actor = dynamic_cast<Actor*>(actorsTree->GetSelectedObjects()[0]);
+		auto actor = DynamicCast<Actor>(actorsTree->GetSelectedObjects()[0]);
 		if (!actor)
 			return;
 
@@ -244,13 +245,13 @@ namespace Editor
 		mBox->SetState("focused", true);
 	}
 
-	void ComponentProperty::OnDragExitFromActorsTree(SceneHierarchyTree* actorsTree)
+	void ComponentProperty::OnDragExitFromActorsTree(const Ref<SceneHierarchyTree>& actorsTree)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
 	}
 
-	void ComponentProperty::OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
+	void ComponentProperty::OnDroppedFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll)
 	{
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
@@ -262,7 +263,7 @@ namespace Editor
 		mBox->Focus();
 	}
 
-	void ComponentProperty::OnDragEnterFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
+	void ComponentProperty::OnDragEnterFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll)
 	{
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
@@ -280,13 +281,16 @@ namespace Editor
 		}
 	}
 
-	void ComponentProperty::OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
+	void ComponentProperty::OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
 	}
 }
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::ComponentRef>);
+
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<Component>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ComponentProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Ref<Component>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ComponentProperty, Editor__ComponentProperty);

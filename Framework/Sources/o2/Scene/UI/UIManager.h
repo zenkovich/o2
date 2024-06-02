@@ -6,39 +6,46 @@
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Ref.h"
 
 // User interfaces manager access macros
 #define o2UI UIManager::Instance()
 
 namespace o2
 {
-    class Button;
-    class CustomDropDown;
-    class CustomList;
-    class DropDown;
-    class EditBox;
-    class HorizontalLayout;
-    class HorizontalProgress;
-    class HorizontalScrollBar;
-    class Image;
-    class Label;
-    class List;
-    class ScrollArea;
-    class Toggle;
-    class VerticalLayout;
-    class VerticalProgress;
-    class VerticalScrollBar;
-    class Widget;
-    class Window;
+    FORWARD_CLASS_REF(Button);
+    FORWARD_CLASS_REF(CustomDropDown);
+    FORWARD_CLASS_REF(CustomList);
+    FORWARD_CLASS_REF(DropDown);
+    FORWARD_CLASS_REF(EditBox);
+    FORWARD_CLASS_REF(HorizontalLayout);
+    FORWARD_CLASS_REF(HorizontalProgress);
+    FORWARD_CLASS_REF(HorizontalScrollBar);
+    FORWARD_CLASS_REF(Image);
+    FORWARD_CLASS_REF(Label);
+    FORWARD_CLASS_REF(List);
+    FORWARD_CLASS_REF(ScrollArea);
+    FORWARD_CLASS_REF(Toggle);
+    FORWARD_CLASS_REF(VerticalLayout);
+    FORWARD_CLASS_REF(VerticalProgress);
+    FORWARD_CLASS_REF(VerticalScrollBar);
+    FORWARD_CLASS_REF(Widget);
+    FORWARD_CLASS_REF(Window);
 
 #undef CreateWindow
 
     // ------------------------------------------------
     // UI manager, contains all root widgets and styles
     // ------------------------------------------------
-    class UIManager : public Singleton<UIManager>
+    class UIManager : public Singleton<UIManager>, public RefCounterable
     {
     public:
+        // Default constructor
+        UIManager();
+
+        // Destructor
+        ~UIManager();
+
         // Loads widgets style
         void LoadStyle(const String& stylesPath);
 
@@ -49,17 +56,17 @@ namespace o2
         void ClearStyle();
 
         // Adds widget style
-        void AddWidgetStyle(Widget* widget, const String& style);
+        void AddWidgetStyle(const Ref<Widget>& widget, const String& style);
 
         // Creates widget by style
-        Widget* CreateWidget(const Type& type, const String& style = "standard");
+        Ref<Widget> CreateWidget(const Type& type, const String& style = "standard");
 
         // Returns widget style by name
-        Widget* GetWidgetStyle(const Type& type, const String& style);
+        Ref<Widget> GetWidgetStyle(const Type& type, const String& style);
 
         // Returns widget style by name
         template<typename _type>
-        _type* GetWidgetStyle(const String& style);
+        Ref<_type> GetWidgetStyle(const String& style);
 
         // Removes widget style
         template<typename _type>
@@ -67,65 +74,65 @@ namespace o2
 
         // Creates widget by style
         template<typename _type>
-        _type* CreateWidget(const String& style = "standard");
+        Ref<_type> CreateWidget(const String& style = "standard");
 
         // Creates button by style
-        Button* CreateButton(const WString& caption, const Function<void()>& onClick = Function<void()>(),
-                             const String& style = "standard");
+        Ref<Button> CreateButton(const WString& caption, const Function<void()>& onClick = Function<void()>(),
+                                 const String& style = "standard");
 
         // Creates button by style
-        Window* CreateWindow(const WString& caption, const String& style = "standard");
+        Ref<Window> CreateWindow(const WString& caption, const String& style = "standard");
 
         // Creates label by style
-        Label* CreateLabel(const WString& text, const String& style = "standard");
+        Ref<Label> CreateLabel(const WString& text, const String& style = "standard");
 
         // Creates horizontal layout
-        HorizontalLayout* CreateHorLayout();
+        Ref<HorizontalLayout> CreateHorLayout();
 
         // Creates vertical layout
-        VerticalLayout* CreateVerLayout();
+        Ref<VerticalLayout> CreateVerLayout();
 
         // Creates horizontal progress bar by style
-        HorizontalProgress* CreateHorProgress(const String& style = "standard");
+        Ref<HorizontalProgress> CreateHorProgress(const String& style = "standard");
 
         // CreatesCreates vertical progress bar by style
-        VerticalProgress* CreateVerProgress(const String& style = "standard");
+        Ref<VerticalProgress> CreateVerProgress(const String& style = "standard");
 
         // Creates horizontal scroll bar by style
-        HorizontalScrollBar* CreateHorScrollBar(const String& style = "standard");
+        Ref<HorizontalScrollBar> CreateHorScrollBar(const String& style = "standard");
 
         // Creates vertical scroll bar by style
-        VerticalScrollBar* CreateVerScrollBar(const String& style = "standard");
+        Ref<VerticalScrollBar> CreateVerScrollBar(const String& style = "standard");
 
         // Creates scroll area
-        ScrollArea* CreateScrollArea(const String& style = "standard");
+        Ref<ScrollArea> CreateScrollArea(const String& style = "standard");
 
         // Creates edit box
-        EditBox* CreateEditBox(const String& style = "standard");
+        Ref<EditBox> CreateEditBox(const String& style = "standard");
 
         // Creates list view
-        CustomList* CreateCustomList(const String& style = "standard");
+        Ref<CustomList> CreateCustomList(const String& style = "standard");
 
         // Creates text list
-        List* CreateList(const String& style = "standard");
+        Ref<List> CreateList(const String& style = "standard");
 
         // Creates custom dropdown
-        CustomDropDown* CreateCustomDropdown(const String& style = "standard");
+        Ref<CustomDropDown> CreateCustomDropdown(const String& style = "standard");
 
         // Creates text dropdown
-        DropDown* CreateDropdown(const String& style = "standard");
+        Ref<DropDown> CreateDropdown(const String& style = "standard");
 
         // Creates toggle
-        Toggle* CreateToggle(const WString& caption, const String& style = "standard");
+        Ref<Toggle> CreateToggle(const WString& caption, const String& style = "standard");
 
         // Creates image
-        Image* CreateImage(const String& name);
+        Ref<Image> CreateImage(const String& name);
 
         // Sets widget as focused
-        void FocusWidget(Widget* widget);
+        void FocusWidget(const Ref<Widget>& widget);
 
         // Returns current focused widget
-        Widget* GetFocusedWidget() const;
+        Ref<Widget> GetFocusedWidget() const;
 
         // Sets next widget focused
         void FocusNextWidget();
@@ -137,22 +144,22 @@ namespace o2
         void Update();
 
         // Registering widget for drawing at top of all regular widgets
-        void DrawWidgetAtTop(Widget* widget);
+        void DrawWidgetAtTop(const Ref<Widget>& widget);
 
         // Returns all styles widgets
-        const Vector<ActorAssetRef>& GetWidgetStyles() const;
+        const Vector<AssetRef<ActorAsset>>& GetWidgetStyles() const;
 
     protected:
-        LogStream* mLog = nullptr; // UI Log stream
+        Ref<LogStream> mLog; // UI Log stream
 
         Ref<Widget>         mFocusedWidget;        // Current selected widget
         Vector<Ref<Widget>> mLastUnfocusedWidgets; // Widget that was unfocused on last frame
         Vector<Ref<Widget>> mLastFocusedWidgets;   // Widget that was focused on last frame
         Vector<Ref<Widget>> mFocusableWidgets;     // List of selectable widgets
 
-        Vector<Widget*> mTopWidgets; // Top widgets, drawing after mScreenWidget 
+        Vector<Ref<Widget>> mTopWidgets; // Top widgets, drawing after mScreenWidget 
 
-        Vector<ActorAssetRef> mStyleSamples; // Style widgets
+        Vector<AssetRef<ActorAsset>> mStyleSamples; // Style widgets
 
     protected:
         // Registers focusable widget
@@ -162,12 +169,6 @@ namespace o2
         static void UnregisterFocusableWidget(Widget* widget);
 
     protected:
-        // Default constructor
-        UIManager();
-
-        // Destructor
-        ~UIManager();
-
         // Tries to load style "ui_style.json"
         void TryLoadStyle();
 
@@ -179,14 +180,14 @@ namespace o2
     };
 
     template<typename _type>
-    _type* UIManager::GetWidgetStyle(const String& style /*= "standard"*/)
+    Ref<_type> UIManager::GetWidgetStyle(const String& style /*= "standard"*/)
     {
-        for (auto styleWidget : mStyleSamples)
+        for (auto& styleWidget : mStyleSamples)
         {
             if (TypeOf(_type) == styleWidget->GetActor()->GetType())
             {
                 if (style == styleWidget->GetActor()->GetName())
-                    return dynamic_cast<_type*>(styleWidget->GetActor());
+                    return DynamicCast<_type>(styleWidget->GetActor());
             }
         }
 
@@ -196,7 +197,7 @@ namespace o2
     template<typename _type>
     void UIManager::RemoveWidgetStyle(const String& style)
     {
-        for (auto styleWidget : mStyleSamples)
+        for (auto& styleWidget : mStyleSamples)
         {
             if (TypeOf(_type) == styleWidget->GetActor()->GetType())
             {
@@ -210,21 +211,21 @@ namespace o2
     }
 
     template<typename _type>
-    _type* UIManager::CreateWidget(const String& style /*= "standard"*/)
+    Ref<_type> UIManager::CreateWidget(const String& style /*= "standard"*/)
     {
-        _type* sample = GetWidgetStyle<_type>(style);
+        auto sample = GetWidgetStyle<_type>(style);
         if (!sample)
             sample = GetWidgetStyle<_type>("standard");
 
-        _type* res = nullptr;
+        Ref<_type> res;
 
         if (sample)
-            res = sample->template CloneAs<_type>();
+            res = sample->template CloneAsRef<_type>();
         else
-            res = mnew _type();
+            res = mmake<_type>();
 
-//         if (TypeOf(_type) != TypeOf(ContextMenu))
-//             res->SetEnabledForcible(true);
+        //         if (TypeOf(_type) != TypeOf(ContextMenu))
+        //             res->SetEnabledForcible(true);
 
         return res;
     }

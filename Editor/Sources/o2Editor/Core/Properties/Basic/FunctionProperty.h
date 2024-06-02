@@ -13,8 +13,8 @@ namespace o2
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
-	class ActorProperty;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
+	FORWARD_CLASS_REF(ActorProperty);
 
 	// ------------------------
 	// Editor function property
@@ -23,10 +23,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		FunctionProperty();
+		FunctionProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		FunctionProperty(const FunctionProperty& other);
+		FunctionProperty(RefCounter* refCounter, const FunctionProperty& other);
 
 		// Copy operator
 		FunctionProperty& operator=(const FunctionProperty& other);
@@ -56,7 +56,7 @@ namespace Editor
 		WString GetCaption() const override;
 
 		// Adds remove button
-		Button* GetRemoveButton() override;
+		Ref<Button> GetRemoveButton() override;
 
 		// Expands property fields
 		void Expand();
@@ -70,23 +70,24 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-		IOBJECT(FunctionProperty);
+		SERIALIZABLE(FunctionProperty);
+        CLONEABLE_REF(FunctionProperty);
 
 	protected:
-		struct FunctionInstance
+		struct FunctionInstance: public RefCounterable
 		{
-			HorizontalLayout* layout = nullptr;
-			Label* caption = nullptr;
-			ActorProperty* refProperty = nullptr;
-			CustomDropDown* funcDropDown = nullptr;
-			Button* removeBtn = nullptr;
+			Ref<HorizontalLayout> layout;
+			Ref<Label>            caption;
+			Ref<ActorProperty>    refProperty;
+			Ref<CustomDropDown>   funcDropDown;
+			Ref<Button>           removeBtn;
 
 			Vector<Pair<IActorSubscription*, IActorSubscription*>> values;
-			Vector<Pair<Component*, String>> functionsDropdownMap;
+			Vector<Pair<Ref<Component>, String>> functionsDropdownMap;
 
 		public:
 			// Called when an actor is selected, updates the functions list
-			void UpdateFunctionsList(const ActorRef& actor, const ComponentRef& selectedComponent, const String& selectedMethod);
+			void UpdateFunctionsList(const Ref<Actor>& actor, const Ref<Component>& selectedComponent, const String& selectedMethod);
 
 			// Called when a function is selected, remembers the link to the component and the name from the list of functionsDropdownMap
 			void OnFunctionSelected(int idx);
@@ -94,14 +95,14 @@ namespace Editor
 			bool operator==(const FunctionInstance& other) const;
 		};
 
-		Spoiler*          mSpoiler = nullptr;         // Properties spoiler
-		HorizontalLayout* mHeaderContainer = nullptr; // Count property and other controls container
-		Button*           mAddButton = nullptr;       // Add button, adds new element at end
+		Ref<Spoiler>          mSpoiler;         // Properties spoiler
+		Ref<HorizontalLayout> mHeaderContainer; // Count property and other controls container
+		Ref<Button>           mAddButton;       // Add button, adds new element at end
 
-		Vector<FunctionInstance*> mInstances; // List of containers with pointers to serializable fields and interfaces
+		Vector<Ref<FunctionInstance>> mInstances; // List of containers with pointers to serializable fields and interfaces
 
-		HorizontalLayout*         mWidgetSample;  // Subscription widget sample
-		Vector<HorizontalLayout*> mWidgetsBuffer; // Buffer of cached widgets
+		Ref<HorizontalLayout>         mWidgetSample;  // Subscription widget sample
+		Vector<Ref<HorizontalLayout>> mWidgetsBuffer; // Buffer of cached widgets
 
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
@@ -116,13 +117,13 @@ namespace Editor
 		void RefreshInstances();
 
 		// Creates new widget for subscription
-		FunctionInstance* CreateWidget();
+		Ref<FunctionInstance> CreateWidget();
 
 		// Called when add button has pressed
 		void OnAddPressed();
 
 		// Called when remove subscription pressed
-		void OnRemovePressed(FunctionInstance* instance);
+		void OnRemovePressed(const Ref<FunctionInstance>& instance);
 
 		// Called when expanding spoiler, refreshing array properties
 		void OnExpand();
@@ -141,9 +142,9 @@ CLASS_BASES_META(Editor::FunctionProperty)
 END_META;
 CLASS_FIELDS_META(Editor::FunctionProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+    FIELD().PROTECTED().NAME(mSpoiler);
+    FIELD().PROTECTED().NAME(mHeaderContainer);
+    FIELD().PROTECTED().NAME(mAddButton);
     FIELD().PROTECTED().NAME(mInstances);
     FIELD().PROTECTED().NAME(mWidgetSample);
     FIELD().PROTECTED().NAME(mWidgetsBuffer);
@@ -153,8 +154,8 @@ END_META;
 CLASS_METHODS_META(Editor::FunctionProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const FunctionProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const FunctionProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
@@ -162,7 +163,7 @@ CLASS_METHODS_META(Editor::FunctionProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetRemoveButton);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
@@ -170,9 +171,9 @@ CLASS_METHODS_META(Editor::FunctionProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, RefreshInstances);
-    FUNCTION().PROTECTED().SIGNATURE(FunctionInstance*, CreateWidget);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<FunctionInstance>, CreateWidget);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddPressed);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnRemovePressed, FunctionInstance*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnRemovePressed, const Ref<FunctionInstance>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnExpand);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }

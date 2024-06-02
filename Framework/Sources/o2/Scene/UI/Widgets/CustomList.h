@@ -14,20 +14,20 @@ namespace o2
     public:
         PROPERTIES(CustomList);
         PROPERTY(Vector<int>, selectedItems, SetSelectedItems, GetSelectedItems); // Selected item widget property
-        PROPERTY(Widget*, selectedItem, SelectItem, GetSelectedItem);           // Selected item widget
+        PROPERTY(Ref<Widget>, selectedItem, SelectItem, GetSelectedItem);         // Selected item widget
         PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPos);         // Selected item position property
         GETTER(int, itemsCount, GetItemsCount);                                   // All items count getter
 
     public:
-        Function<void(int)>     onSelectedPos;   // Select item position event
-        Function<void(Widget*)> onSelectedItem;  // Select item event
+        Function<void(int)>                onSelectedPos;   // Select item position event
+        Function<void(const Ref<Widget>&)> onSelectedItem;  // Select item event
 
     public:
         // Default constructor
-        CustomList();
+        explicit CustomList(RefCounter* refCounter);
 
         // Copy-constructor
-        CustomList(const CustomList& other);
+        CustomList(RefCounter* refCounter, const CustomList& other);
 
         // Destructor
         ~CustomList();
@@ -42,22 +42,22 @@ namespace o2
         void Draw() override;
 
         // Sets item sample widget. WARNING: Removing all old items!
-        void SetItemSample(Widget* sample);
+        void SetItemSample(const Ref<Widget>& sample);
 
         // Returns item sample widget
-        Widget* GetItemSample() const;
+        const Ref<Widget>& GetItemSample() const;
 
         // Returns layout of items
-        VerticalLayout* GetItemsLayout() const;
+        const Ref<VerticalLayout>& GetItemsLayout() const;
 
         // Adds new item and returns it
-        Widget* AddItem();
+        Ref<Widget> AddItem();
 
         // Adds new item at position and returns it
-        Widget* AddItem(int position);
+        Ref<Widget> AddItem(int position);
 
         // Removes item
-        void RemoveItem(Widget* item);
+        void RemoveItem(const Ref<Widget>& item);
 
         // Removes item in position
         void RemoveItem(int position);
@@ -66,25 +66,25 @@ namespace o2
         void MoveItem(int position, int newPosition);
 
         // Moves item to new position
-        void MoveItem(Widget* item, int newPosition);
+        void MoveItem(const Ref<Widget>& item, int newPosition);
 
         // Returns item position
-        int GetItemPosition(Widget* item);
+        int GetItemPosition(const Ref<Widget>& item);
 
         // Returns item by position
-        Widget* GetItem(int position) const;
+        Ref<Widget> GetItem(int position) const;
 
         // Removes all items
         void RemoveAllItems();
 
         // Sorts items
-        void SortItems(const Function<bool(Widget*, Widget*)>& sortFunc);
+        void SortItems(const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& sortFunc);
 
         // Returns items count
         int GetItemsCount() const;
 
         // Selects item
-        void SelectItem(Widget* item);
+        void SelectItem(const Ref<Widget>& item);
 
         // Selects item at position
         void SelectItemAt(int position);
@@ -102,7 +102,7 @@ namespace o2
         int GetSelectedItemPos() const;
 
         // Returns selected item widget
-        Widget* GetSelectedItem() const;
+        Ref<Widget> GetSelectedItem() const;
 
         // Sets multi selection
         void SetMultiselectionAvailable(bool available);
@@ -111,10 +111,10 @@ namespace o2
         bool IsMultiselectionAvailable() const;
 
         // Returns selection drawable
-        Sprite* GetSelectionDrawable() const;
+        const Ref<Sprite>& GetSelectionDrawable() const;
 
         // Returns hover drawable
-        Sprite* GetHoverDrawable() const;
+        const Ref<Sprite>& GetHoverDrawable() const;
 
         // Sets selection drawable layout (result rectangle will be calculated by item widget absolute rectangle)
         void SetSelectionDrawableLayout(const Layout& layout);
@@ -141,6 +141,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(CustomList);
+        CLONEABLE_REF(CustomList);
 
     protected:
         // ------------------
@@ -148,22 +149,22 @@ namespace o2
         // ------------------
         struct Selection
         {
-            int     idx;       // Item index
-            Sprite* selection; // Selection sprite
+            int         idx;       // Item index
+            Ref<Sprite> selection; // Selection sprite
 
             // Check equals operator
             bool operator==(const Selection& other) const;
         };
 
     protected:
-        VerticalLayout* mVerLayout = nullptr;  // Child vertical layout
-        Widget*         mItemSample = nullptr; // Item sample widget @SERIALIZABLE
+        Ref<VerticalLayout> mVerLayout;  // Child vertical layout
+        Ref<Widget>         mItemSample; // Item sample widget @SERIALIZABLE
 
         bool              mMultiSelection = true; // Is multi selection available @SERIALIZABLE
         Vector<Selection> mSelectedItems;         // Current selected items
 
-        Sprite* mSelectionDrawable = nullptr; // Selection sprite @SERIALIZABLE
-        Sprite* mHoverDrawable = nullptr;     // Item hover drawable @SERIALIZABLE
+        Ref<Sprite> mSelectionDrawable; // Selection sprite @SERIALIZABLE
+        Ref<Sprite> mHoverDrawable;     // Item hover drawable @SERIALIZABLE
 
         Layout mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
         Layout mHoverLayout = Layout::BothStretch();     // Hover layout, result selection area depends on selected item @SERIALIZABLE
@@ -174,7 +175,7 @@ namespace o2
         Vec2F mLastHoverCheckCursor;  // Last cursor position on hover check
         Vec2F mLastSelectCheckCursor; // Last cursor position on selection check
 
-        Vector<Sprite*> mSelectionSpritesPool; // Selection sprites pool
+        Vector<Ref<Sprite>> mSelectionSpritesPool; // Selection sprites pool
 
     protected:
         // Called when object was deserialized and trying to reattach states animations target
@@ -220,13 +221,13 @@ namespace o2
         void OnCursorExit(const Input::Cursor& cursor) override;
 
         // Returns item widget under point and stores index in idxPtr, if not null
-        Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+        Ref<Widget> GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
         // Updates hover
         void UpdateHover(const Vec2F& point);
 
         // Returns selection sprite
-        Sprite* GetSelectionSprite();
+        Ref<Sprite> GetSelectionSprite();
 
         friend class DropDown;
         friend class CustomDropDown;
@@ -247,12 +248,12 @@ CLASS_FIELDS_META(o2::CustomList)
     FIELD().PUBLIC().NAME(itemsCount);
     FIELD().PUBLIC().NAME(onSelectedPos);
     FIELD().PUBLIC().NAME(onSelectedItem);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVerLayout);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+    FIELD().PROTECTED().NAME(mVerLayout);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemSample);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mMultiSelection);
     FIELD().PROTECTED().NAME(mSelectedItems);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHoverDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionDrawable);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHoverDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mSelectionLayout);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Layout::BothStretch()).NAME(mHoverLayout);
     FIELD().PROTECTED().NAME(mCurrentHoverRect);
@@ -265,37 +266,37 @@ END_META;
 CLASS_METHODS_META(o2::CustomList)
 {
 
-    typedef const Function<bool(Widget*, Widget*)>& _tmp1;
+    typedef const Function<bool(const Ref<Widget>&, const Ref<Widget>&)>& _tmp1;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const CustomList&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const CustomList&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
-    FUNCTION().PUBLIC().SIGNATURE(VerticalLayout*, GetItemsLayout);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Widget>&, GetItemSample);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<VerticalLayout>&, GetItemsLayout);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, AddItem, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, int, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, Widget*, int);
-    FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, Widget*);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItem, int);
+    FUNCTION().PUBLIC().SIGNATURE(void, MoveItem, const Ref<Widget>&, int);
+    FUNCTION().PUBLIC().SIGNATURE(int, GetItemPosition, const Ref<Widget>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetItem, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
     FUNCTION().PUBLIC().SIGNATURE(void, SortItems, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(int, GetItemsCount);
-    FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, Widget*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SelectItem, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectItemAt, int);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedItems, const Vector<int>&);
     FUNCTION().PUBLIC().SIGNATURE(void, ClearSelection);
     FUNCTION().PUBLIC().SIGNATURE(Vector<int>, GetSelectedItems);
     FUNCTION().PUBLIC().SIGNATURE(int, GetSelectedItemPos);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetSelectedItem);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetSelectedItem);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMultiselectionAvailable, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsMultiselectionAvailable);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectionDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHoverDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetSelectionDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetHoverDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionDrawableLayout, const Layout&);
     FUNCTION().PUBLIC().SIGNATURE(Layout, GetSelectionDrawableLayout);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHoverDrawableLayout, const Layout&);
@@ -318,9 +319,9 @@ CLASS_METHODS_META(o2::CustomList)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(Widget*, GetItemUnderPoint, const Vec2F&, int*);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Widget>, GetItemUnderPoint, const Vec2F&, int*);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Vec2F&);
-    FUNCTION().PROTECTED().SIGNATURE(Sprite*, GetSelectionSprite);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Sprite>, GetSelectionSprite);
 }
 END_META;
 // --- END META ---

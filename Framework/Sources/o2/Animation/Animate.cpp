@@ -8,13 +8,7 @@ namespace o2
         mTarget(&object)
     {}
 
-    Animate::~Animate()
-    {
-        for (auto container : mKeyContainers)
-            delete container;
-    }
-
-    Animate::operator AnimationClip() const
+    Animate::operator Ref<AnimationClip>() const
     {
         return mAnimation;
     }
@@ -23,7 +17,7 @@ namespace o2
     {
         mTime += seconds;
 
-        for (auto container : mKeyContainers)
+        for (auto& container : mKeyContainers)
             container->Apply(mTime);
 
         return *this;
@@ -39,7 +33,7 @@ namespace o2
 
     void Animate::ApplyKeys()
     {
-        for (auto container : mKeyContainers)
+        for (auto& container : mKeyContainers)
             container->Apply(mTime);
 
         mKeysApplied = true;
@@ -58,9 +52,9 @@ namespace o2
         CheckPositionAnimatedvalue();
         CheckAppliedKeys();
 
-        KeyContainer<Vec2F>* container = mnew KeyContainer<Vec2F>();
+        auto container = mmake<KeyContainer<Vec2F>>();
         container->animatedValue = mPositionAnimatedValue;
-        container->animatedValue->spline.AppendKey(Vec2F(x, y));
+        container->animatedValue->spline->AppendKey(Vec2F(x, y));
         mKeyContainers.Add(container);
 
         return *this;
@@ -71,9 +65,9 @@ namespace o2
         CheckPositionAnimatedvalue();
         CheckAppliedKeys();
 
-        KeyContainer<Vec2F>* container = mnew KeyContainer<Vec2F>();
+        auto container = mmake<KeyContainer<Vec2F>>();
         container->animatedValue = mPositionAnimatedValue;
-        container->animatedValue->spline.AppendKey(point);
+        container->animatedValue->spline->AppendKey(point);
         container->timeKey.position = mTime;
         mKeyContainers.Add(container);
 
@@ -90,7 +84,7 @@ namespace o2
         CheckColorAnimatedValue();
         CheckAppliedKeys();
 
-        KeyContainer<Color4>* container = mnew KeyContainer<Color4>();
+        auto container = mmake<KeyContainer<Color4>>();
         container->animatedValue = mColorAnimatedValue;
         container->key.value = Color4(1.0f, 1.0f, 1.0f, alpha);
         mKeyContainers.Add(container);
@@ -113,7 +107,7 @@ namespace o2
         CheckColorAnimatedValue();
         CheckAppliedKeys();
 
-        KeyContainer<Color4>* container = mnew KeyContainer<Color4>();
+        auto container = mmake<KeyContainer<Color4>>();
         container->animatedValue = mColorAnimatedValue;
         container->key.value = color;
         mKeyContainers.Add(container);
@@ -136,7 +130,7 @@ namespace o2
         CheckScaleAnimatedValue();
         CheckAppliedKeys();
 
-        ScaleKeyContainer* container = mnew ScaleKeyContainer();
+        auto container = mmake<ScaleKeyContainer>();
         container->animatedValueX = mScaleXAnimatedValue;
         container->animatedValueY = mScaleYAnimatedValue;
         container->keyX.value = scale.x;
@@ -151,7 +145,7 @@ namespace o2
         CheckRotateAnimatedValue();
         CheckAppliedKeys();
 
-        KeyContainer<float>* container = mnew KeyContainer<float>();
+        auto container = mmake<KeyContainer<float>>();
         container->animatedValue = mRotationAnimatedValue;
         container->key.value = angle;
         mKeyContainers.Add(container);
@@ -161,13 +155,13 @@ namespace o2
 
     Animate& Animate::Looped()
     {
-        mAnimation.SetLoop(Loop::Repeat);
+        mAnimation->SetLoop(Loop::Repeat);
         return *this;
     }
 
     Animate& Animate::PingPong()
     {
-        mAnimation.SetLoop(Loop::PingPong);
+        mAnimation->SetLoop(Loop::PingPong);
         return *this;
     }
 
@@ -180,12 +174,12 @@ namespace o2
 
         auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
         void* target = targetObjType.DynamicCastFromIObject(mTarget);
-        for (auto nameVariant : nameVariants)
+        for (auto& nameVariant : nameVariants)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mColorAnimatedValue = mAnimation.AddTrack<Color4>(nameVariant);
+                mColorAnimatedValue = mAnimation->AddTrack<Color4>(nameVariant);
                 return;
             }
         }
@@ -200,12 +194,12 @@ namespace o2
 
         auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
         void* target = targetObjType.DynamicCastFromIObject(mTarget);
-        for (auto nameVariant : nameVariants)
+        for (auto& nameVariant : nameVariants)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mPositionAnimatedValue = mAnimation.AddTrack<Vec2F>(nameVariant);
+                mPositionAnimatedValue = mAnimation->AddTrack<Vec2F>(nameVariant);
                 return;
             }
         }
@@ -221,22 +215,22 @@ namespace o2
 
         auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
         void* target = targetObjType.DynamicCastFromIObject(mTarget);
-        for (auto nameVariant : nameVariantsX)
+        for (auto& nameVariant : nameVariantsX)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mScaleXAnimatedValue = mAnimation.AddTrack<float>(nameVariant);
+                mScaleXAnimatedValue = mAnimation->AddTrack<float>(nameVariant);
                 break;
             }
         }
 
-        for (auto nameVariant : nameVariantsY)
+        for (auto& nameVariant : nameVariantsY)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mScaleYAnimatedValue = mAnimation.AddTrack<float>(nameVariant);
+                mScaleYAnimatedValue = mAnimation->AddTrack<float>(nameVariant);
                 break;
             }
         }
@@ -251,12 +245,12 @@ namespace o2
         
         auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
         void* target = targetObjType.DynamicCastFromIObject(mTarget);
-        for (auto nameVariant : nameVariants)
+        for (auto& nameVariant : nameVariants)
         {
             const FieldInfo* fi;
             if (targetObjType.GetFieldPtr(target, nameVariant, fi))
             {
-                mRotationAnimatedValue = mAnimation.AddTrack<float>(nameVariant);
+                mRotationAnimatedValue = mAnimation->AddTrack<float>(nameVariant);
                 return;
             }
         }
@@ -267,9 +261,6 @@ namespace o2
         if (!mKeysApplied)
             return;
 
-        for (auto container : mKeyContainers)
-            delete container;
-
         mKeyContainers.Clear();
         mFunction.Clear();
 
@@ -279,11 +270,11 @@ namespace o2
     void KeyContainer<Vec2F>::Apply(float time)
     {
         timeKey.value = 0.0f;
-        animatedValue->timeCurve.InsertKey(timeKey);
+        animatedValue->timeCurve->InsertKey(timeKey);
 
         timeKey.position = time;
         timeKey.value = 1.0f;
-        animatedValue->timeCurve.InsertKey(timeKey);
+        animatedValue->timeCurve->InsertKey(timeKey);
     }
 
     void ScaleKeyContainer::Apply(float time)

@@ -6,16 +6,16 @@
 
 namespace o2
 {
-    List::List():
-        CustomList()
+    List::List(RefCounter* refCounter):
+        CustomList(refCounter)
     {
-        Label* itemSample = mnew Label();
+        auto itemSample = mmake<Label>();
         itemSample->horOverflow = Label::HorOverflow::Dots;
         SetItemSample(itemSample);
     }
 
-    List::List(const List& other):
-        CustomList(other), value(this), values(this)
+    List::List(RefCounter* refCounter, const List& other):
+        CustomList(refCounter, other), value(this), values(this)
     {
         RetargetStatesAnimations();
     }
@@ -31,21 +31,21 @@ namespace o2
 
     int List::AddItem(const WString& text)
     {
-        auto item = (Label*)CustomList::AddItem();
+        auto item = DynamicCast<Label>(CustomList::AddItem());
         item->text = text;
         return GetItemsCount() - 1;
     }
 
     int List::AddItem(const WString& text, int position)
     {
-        auto item = (Label*)CustomList::AddItem(position);
+        auto item = DynamicCast<Label>(CustomList::AddItem(position));
         item->text = text;
         return position;
     }
 
     void List::AddItems(const Vector<WString>& data)
     {
-        for (auto text : data)
+        for (auto& text : data)
             AddItem(text);
     }
 
@@ -59,9 +59,9 @@ namespace o2
     int List::FindItem(const WString& text)
     {
         int i = 0;
-        for (auto child : mVerLayout->mChildren)
+        for (auto& child : mVerLayout->mChildren)
         {
-            if (((Label*)child)->GetText() == text)
+            if (DynamicCast<Label>(child)->GetText() == text)
                 return i;
 
             i++;
@@ -72,7 +72,7 @@ namespace o2
 
     WString List::GetItemText(int position) const
     {
-        auto item = (Label*)GetItem(position);
+        auto item = DynamicCast<Label>(GetItem(position));
         if (item)
             return item->GetText();
 
@@ -82,15 +82,15 @@ namespace o2
     Vector<WString> List::GetAllItemsText() const
     {
         Vector<WString> res;
-        for (auto child : mVerLayout->mChildren)
-            res.Add(((Label*)child)->GetText());
+        for (auto& child : mVerLayout->mChildren)
+            res.Add(DynamicCast<Label>(child)->GetText());
 
         return res;
     }
 
     WString List::GetSelectedItemText()
     {
-        auto selectedItem = dynamic_cast<Label*>(GetSelectedItem());
+        auto selectedItem = DynamicCast<Label>(GetSelectedItem());
         if (selectedItem)
             return selectedItem->GetText();
 
@@ -124,6 +124,8 @@ namespace o2
         return "List";
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::List>);
 // --- META ---
 
 DECLARE_CLASS(o2::List, o2__List);

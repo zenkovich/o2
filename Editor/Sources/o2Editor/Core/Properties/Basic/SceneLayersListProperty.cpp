@@ -6,11 +6,12 @@
 
 namespace Editor
 {
-	SceneLayersListProperty::SceneLayersListProperty()
+	SceneLayersListProperty::SceneLayersListProperty(RefCounter* refCounter):
+		TPropertyField<SceneLayersList>(refCounter)
 	{}
 
-	SceneLayersListProperty::SceneLayersListProperty(const SceneLayersListProperty& other):
-		TPropertyField<SceneLayersList>(other)
+	SceneLayersListProperty::SceneLayersListProperty(RefCounter* refCounter, const SceneLayersListProperty& other):
+		TPropertyField<SceneLayersList>(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -43,12 +44,12 @@ namespace Editor
 	{
 		mLayersContext->RemoveAllItems();
 
-		mLayersContext->AddToggleItem("All layers", o2Scene.GetLayers().All([&](SceneLayer* x) { return mCommonValue.HasLayer(x); }),
+		mLayersContext->AddToggleItem("All layers", o2Scene.GetLayers().All([&](auto& x) { return mCommonValue.HasLayer(x); }),
 									  [&](bool b) { if (b) SetValueByUser(o2Scene.GetLayers()); else SetValueByUser({}); });
 
 		mLayersContext->AddItem("---");
 
-		for (auto layer : o2Scene.GetLayers())
+		for (auto& layer : o2Scene.GetLayers())
 			mLayersContext->AddToggleItem(layer->GetName(), mCommonValue.HasLayer(layer), 
 										  [=](bool b) { 
 			SceneLayersList copy = mCommonValue;
@@ -77,7 +78,10 @@ namespace Editor
 		mPropertyText->text = layers;
 	}
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::SceneLayersList>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::SceneLayersListProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::SceneLayersList>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneLayersListProperty, Editor__SceneLayersListProperty);

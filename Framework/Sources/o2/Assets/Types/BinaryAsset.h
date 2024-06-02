@@ -44,6 +44,7 @@ namespace o2
         static int GetEditorSorting() { return 96; }
 
         SERIALIZABLE(BinaryAsset);
+        CLONEABLE_REF(BinaryAsset);
 
     protected:
         char* mData = nullptr; // Asset data
@@ -58,8 +59,6 @@ namespace o2
 
         friend class Assets;
     };
-
-    typedef Ref<BinaryAsset> BinaryAssetRef;
 }
 // --- META ---
 

@@ -1,11 +1,12 @@
 #pragma once
 
+#include "o2/Events/CursorAreaEventsListenersLayer.h"
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Types/String.h"
-#include "o2/Events/CursorAreaEventsListenersLayer.h"
 
 #if defined PLATFORM_WINDOWS
 #include "o2/Application/Windows/ApplicationBase.h"
@@ -26,22 +27,21 @@
 
 namespace o2
 {
-    class Assets;
-    class EventSystem;
-    class FileSystem;
-    class Input;
-    class LogStream;
-    class PhysicsWorld;
-    class ProjectConfig;
-    class Render;
-    class Scene;
-    class TaskManager;
-    class Time;
-    class Timer;
-    class UIManager;
+    FORWARD_CLASS_REF(Assets);
+    FORWARD_CLASS_REF(EventSystem);
+    FORWARD_CLASS_REF(FileSystem);
+    FORWARD_CLASS_REF(Input);
+    FORWARD_CLASS_REF(LogStream);
+    FORWARD_CLASS_REF(PhysicsWorld);
+    FORWARD_CLASS_REF(ProjectConfig);
+    FORWARD_CLASS_REF(Render);
+    FORWARD_CLASS_REF(Scene);
+    FORWARD_CLASS_REF(TaskManager);
+    FORWARD_CLASS_REF(Time);
+    FORWARD_CLASS_REF(UIManager);
 
 #if IS_SCRIPTING_SUPPORTED
-    class ScriptEngine;
+    FORWARD_CLASS_REF(ScriptEngine);
 #endif
 
     // -----------
@@ -67,7 +67,7 @@ namespace o2
         Function<void()> onMoving;      // On moving app window callbacks. Ignoring on mobiles/tables
 
     public:
-        int maxFPS = 600;   // Maximum frames per second
+        int maxFPS = 600;  // Maximum frames per second
         int fixedFPS = 60; // Fixed frames per second
 
     public:
@@ -81,16 +81,7 @@ namespace o2
         void InitializePlatform();
 
         // Returns pointer to log object
-        virtual LogStream* GetLog() const;
-
-        // Returns pointer to input message object
-        virtual Input* GetInput() const;
-
-        // Returns pointer to project config
-        virtual ProjectConfig* GetProjectConfig() const;
-
-        // Returns pointer to time utilities object
-        virtual Time* GetTime() const;
+        virtual const Ref<LogStream>& GetLog() const;
 
         // Shutting down application
         virtual void Shutdown();
@@ -214,30 +205,31 @@ namespace o2
     protected:
         bool mReady = false; // Is all systems is ready
 
-        Assets*        mAssets = nullptr;        // Assets
-        EventSystem*   mEventSystem = nullptr;   // Events processing system
-        FileSystem*    mFileSystem = nullptr;    // File system
-        Input*         mInput = nullptr;         // While application user input message
-        LogStream*     mLog = nullptr;           // Log stream with id "app", using only for application messages
-        PhysicsWorld*  mPhysics = nullptr;       // Physics
-        ProjectConfig* mProjectConfig = nullptr; // Project config
-        Render*        mRender = nullptr;        // Graphics render
-        Scene*         mScene = nullptr;         // Scene
-        TaskManager*   mTaskManager = nullptr;   // Tasks manager
-        Time*          mTime = nullptr;          // Time utilities
-        Timer*         mTimer = nullptr;         // Timer for detecting delta time for update
-        UIManager*     mUIManager = nullptr;     // UI manager
+        Ref<Assets>        mAssets;        // Assets
+        Ref<EventSystem>   mEventSystem;   // Events processing system
+        Ref<FileSystem>    mFileSystem;    // File system
+        Ref<Input>         mInput;         // While application user input message
+        Ref<LogStream>     mLog;           // Log stream with id "app", using only for application messages
+        Ref<PhysicsWorld>  mPhysics;       // Physics
+        Ref<ProjectConfig> mProjectConfig; // Project config
+        Ref<Render>        mRender;        // Graphics render
+        Ref<Scene>         mScene;         // Scene
+        Ref<TaskManager>   mTaskManager;   // Tasks manager
+        Ref<Time>          mTime;          // Time utilities
+        Ref<UIManager>     mUIManager;     // UI manager>
 
 #if IS_SCRIPTING_SUPPORTED
-        ScriptEngine*  mScriptingEngine = nullptr; // Scripting engine
+        Ref<ScriptEngine>  mScriptingEngine; // Scripting engine
 #endif
+
+        Timer mTimer; // Timer for detecting delta time for update
 
         bool  mCursorInfiniteModeEnabled = false; // Is cursor infinite mode enabled
         Vec2F mCursorCorrectionDelta;             // Cursor corrections delta - result of infinite cursors offset
 
         float mAccumulatedDT = 0.0f; // Accumulated delta time for fixed FPS update
         
-        CursorAreaEventListenersLayer mMainListenersLayer; // Main listeners layer, required for processing default scaled camera
+        Ref<CursorAreaEventListenersLayer> mMainListenersLayer; // Main listeners layer, required for processing default scaled camera
         
         float mGraphicsScale = 1.0f; // Application graphics scale. Used in mac for retina displays
 

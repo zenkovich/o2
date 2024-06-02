@@ -20,8 +20,8 @@ namespace o2
 
     public:
         PROPERTIES(AtlasAsset);
-        GETTER(Meta*, meta, GetMeta);                     // Meta information getter
-        GETTER(Vector<ImageAssetRef>, images, GetImages); // Images assets getter
+        GETTER(Ref<Meta>, meta, GetMeta);                 // Meta information getter
+        GETTER(Vector<AssetRef<ImageAsset>>, images, GetImages); // Images assets getter
         GETTER(Vector<Page>, pages, GetPages);            // Pages getter
 
     public:
@@ -38,22 +38,22 @@ namespace o2
         AtlasAsset& operator=(const AtlasAsset& asset);
 
         // Returns atlas sprite source
-        TextureSource GetSpriteSource(const ImageAssetRef& image);
+        TextureSource GetSpriteSource(const AssetRef<ImageAsset>& image);
 
         // Returns containing images assets
-        const Vector<ImageAssetRef>& GetImages() const;
+        const Vector<AssetRef<ImageAsset>>& GetImages() const;
 
         // Returns pages array
         const Vector<Page>& GetPages() const;
 
         // Is contains image
-        bool ContainsImage(const ImageAssetRef& image);
+        bool ContainsImage(const AssetRef<ImageAsset>& image);
 
         // Adds image to atlas
-        void AddImage(const ImageAssetRef& image);
+        void AddImage(const AssetRef<ImageAsset>& image);
 
         // Removes image from atlas
-        void RemoveImage(const ImageAssetRef& image);
+        void RemoveImage(const AssetRef<ImageAsset>& image);
 
         // Removes all images from atlas
         void RemoveAllImages();
@@ -62,7 +62,7 @@ namespace o2
         void ReloadPages();
 
         // Returns meta information
-        Meta* GetMeta() const;
+        Ref<Meta> GetMeta() const;
 
         // Returns extensions string
         static Vector<String> GetFileExtensions();
@@ -85,7 +85,7 @@ namespace o2
         // -----------------------------------
         // Platform specified meta information
         // -----------------------------------
-        struct PlatformMeta: public ISerializable
+        struct PlatformMeta: public ISerializable, public RefCounterable, public ICloneableRef
         {
             Vec2I         maxSize = Vec2I(2048, 2048); // Maximal atlas size @SERIALIZABLE
             TextureFormat format = TextureFormat::R8G8B8A8;  // Atlas format @SERIALIZABLE
@@ -94,6 +94,7 @@ namespace o2
             bool operator==(const PlatformMeta& other) const;
 
             SERIALIZABLE(PlatformMeta);
+            CLONEABLE_REF(PlatformMeta);
         };
 
         // ----------------
@@ -104,11 +105,11 @@ namespace o2
         public:
             PlatformMeta common; // Common meta @SERIALIZABLE
 
-            PlatformMeta* ios = nullptr;     // IOS specified meta @SERIALIZABLE
-            PlatformMeta* android = nullptr; // Android specified meta @SERIALIZABLE
-            PlatformMeta* macOS = nullptr;   // MacOS specified meta @SERIALIZABLE
-            PlatformMeta* windows = nullptr; // Windows specified meta @SERIALIZABLE
-            PlatformMeta* linuxOS = nullptr; // Linux specified meta @SERIALIZABLE
+            Ref<PlatformMeta> ios = nullptr;     // IOS specified meta @SERIALIZABLE
+            Ref<PlatformMeta> android = nullptr; // Android specified meta @SERIALIZABLE
+            Ref<PlatformMeta> macOS = nullptr;   // MacOS specified meta @SERIALIZABLE
+            Ref<PlatformMeta> windows = nullptr; // Windows specified meta @SERIALIZABLE
+            Ref<PlatformMeta> linuxOS = nullptr; // Linux specified meta @SERIALIZABLE
 
         public:
             // Returns platform meta for specified platform
@@ -118,6 +119,7 @@ namespace o2
             bool IsEqual(AssetMeta* other) const override;
 
             SERIALIZABLE(Meta);
+            CLONEABLE_REF(Meta);
         };
 
         // ----------
@@ -153,27 +155,30 @@ namespace o2
             Map<UID, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
             TextureRef      mTexture;     // Page texture
 
-            AtlasAsset* mOwner; // Owner atlas
+            WeakRef<AtlasAsset> mOwner; // Owner atlas
 
             friend class AtlasAssetConverter;
             friend class AtlasAsset;
         };
 
     protected:
-        Vector<ImageAssetRef>  mImages;  // Loaded image infos @SERIALIZABLE @EDITOR_PROPERTY
-        Vector<FolderAssetRef> mFolders; // Folders, included in atlas @SERIALIZABLE @EDITOR_PROPERTY
+        Vector<AssetRef<ImageAsset>>  mImages;  // Loaded image infos @SERIALIZABLE @EDITOR_PROPERTY
+        Vector<AssetRef<FolderAsset>> mFolders; // Folders, included in atlas @SERIALIZABLE @EDITOR_PROPERTY
 
         Vector<Page> mPages; // Pages @SERIALIZABLE
 
-    protected:
+	protected:
+		// It is called after reference initialization at object construction, registers atlas in render
+		void PostRefConstruct();
+
         // Completion deserialization callback
         void OnDeserialized(const DataValue& node) override;
 
         friend class Assets;
         friend class ImageAsset;
-    };
 
-    typedef Ref<AtlasAsset> AtlasAssetRef;
+        FRIEND_REF_MAKE();
+    };
 }
 // --- META ---
 
@@ -197,20 +202,21 @@ CLASS_METHODS_META(o2::AtlasAsset)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AtlasAsset&);
-    FUNCTION().PUBLIC().SIGNATURE(TextureSource, GetSpriteSource, const ImageAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<ImageAssetRef>&, GetImages);
+    FUNCTION().PUBLIC().SIGNATURE(TextureSource, GetSpriteSource, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<AssetRef<ImageAsset>>&, GetImages);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Page>&, GetPages);
-    FUNCTION().PUBLIC().SIGNATURE(bool, ContainsImage, const ImageAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddImage, const ImageAssetRef&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveImage, const ImageAssetRef&);
+    FUNCTION().PUBLIC().SIGNATURE(bool, ContainsImage, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, AddImage, const AssetRef<ImageAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveImage, const AssetRef<ImageAsset>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllImages);
     FUNCTION().PUBLIC().SIGNATURE(void, ReloadPages);
-    FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Meta>, GetMeta);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Vector<String>, GetFileExtensions);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetPageTextureFileName, const AssetInfo&, UInt);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
@@ -218,6 +224,8 @@ END_META;
 CLASS_BASES_META(o2::AtlasAsset::PlatformMeta)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ICloneableRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::AtlasAsset::PlatformMeta)

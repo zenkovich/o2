@@ -17,8 +17,8 @@ namespace o2
     public:
         UID();
         UID(const UID& other);
-        UID(int value);
-        UID(const WString& stringData);
+        explicit UID(int value);
+        explicit UID(const WString& stringData);
 
         UID& operator=(const UID& other);
 
@@ -32,10 +32,10 @@ namespace o2
         WString ToString() const;
         void FromString(const WString& stringData);
 
-        operator WString() const;
+        explicit operator WString() const;
         UID& operator=(const WString& data);
 
-        operator String() const;
+        explicit operator String() const;
         UID& operator=(const String& data);
 
     public:

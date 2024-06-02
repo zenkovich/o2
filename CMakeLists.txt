@@ -31,6 +31,18 @@ endif()
 set(O2_COMPILE_DEFINITIONS_EXPORT ${O2_COMPILE_DEFINITIONS} PARENT_SCOPE)
 add_compile_definitions(${O2_COMPILE_DEFINITIONS})
 
+# warings and errors
+if (MSVC)
+    add_compile_options(/W2)   
+
+    if(O2_ASAN)
+        add_compile_options(/fsanitize=address)
+        add_compile_definitions(_DISABLE_STRING_ANNOTATION _DISABLE_VECTOR_ANNOTATION _DISABLE_ITERATOR_ANNOTATION)
+    endif()
+else()
+    add_compile_options(-Wall)
+endif()
+
 # dependencies
 add_subdirectory(Framework/3rdPartyLibs)
 
@@ -146,10 +158,10 @@ if (O2_EDITOR)
                                    -project o2Editor 
                                    -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" 
                                    -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml"
-                           COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool 
-                                   -project o2Editor 
-                                   -sources \"${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor\" 
-                                   -parent_projects \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml\"")
+                           COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool "
+                                   "-project o2Editor "
+                                   "-sources \"${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor\" "
+                                   "-parent_projects \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml\"")
     endif()
 
     # dependency

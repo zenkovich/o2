@@ -17,7 +17,7 @@ namespace Editor
 	// -------------------------------------------
 	// Editor widget layer header viewer interface
 	// -------------------------------------------
-	class IWidgetLayerHeaderViewer : public IObject
+	class IWidgetLayerHeaderViewer : public IObject, virtual public RefCounterable
 	{
 	public:
 		// Virtual destructor
@@ -27,7 +27,7 @@ namespace Editor
 		virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
 
 		// Returns data widget
-		virtual Widget* GetWidget() const { return nullptr; }
+		virtual Ref<Widget> GetWidget() const { return nullptr; }
 
 		// Updates properties values
 		virtual void Refresh() {}
@@ -56,6 +56,7 @@ namespace Editor
 CLASS_BASES_META(Editor::IWidgetLayerHeaderViewer)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerHeaderViewer)
@@ -67,7 +68,7 @@ CLASS_METHODS_META(Editor::IWidgetLayerHeaderViewer)
 {
 
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);

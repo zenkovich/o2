@@ -2,17 +2,17 @@
 
 #include "o2/Render/IDrawable.h"
 #include "o2/Render/TextureRef.h"
-#include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Math/Vertex.h"
-
 #include "o2/Utils/Property.h"
+#include "o2/Utils/Types/CommonTypes.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
     // -----------------------------------------------------------------
     // Triangles mesh. Containing vertices, indexes of polygons, texture
     // -----------------------------------------------------------------
-    class Mesh: public virtual IDrawable
+    class Mesh: public virtual IDrawable, public RefCounterable, public ICloneableRef
     {
     public:
         PROPERTIES(Mesh);
@@ -47,10 +47,10 @@ namespace o2
         void Draw();
 
         // Sets texture
-        void SetTexture(TextureRef texture);
+        void SetTexture(const TextureRef& texture);
 
         // Returns texture ptr
-        TextureRef GetTexture() const;
+        const TextureRef& GetTexture() const;
 
         // Sets max vertex count buffer
         void SetMaxVertexCount(const UInt& count);
@@ -63,6 +63,8 @@ namespace o2
 
         // Returns max polygons count
         UInt GetMaxPolyCount() const;
+
+        CLONEABLE_REF(Mesh);
 
     protected:
         TextureRef mTexture; // Texture

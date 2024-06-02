@@ -32,7 +32,7 @@ namespace Editor
 	IActorTransformViewer::~IActorTransformViewer()
 	{}
 
-	Widget* IActorTransformViewer::GetWidget() const
+	Ref<Widget> IActorTransformViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}

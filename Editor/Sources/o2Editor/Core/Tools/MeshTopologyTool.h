@@ -14,30 +14,46 @@ namespace Editor
 	// --------------------------------------------------------
 	struct MeshTopologyTool: public IEditTool, public SelectableDragHandlesGroup, public CursorAreaEventsListener, public KeyboardEventsListener
 	{
+		// ----------------------
+		// Scene layer for editor
+		// ----------------------
 		struct SceneLayer: public SceneEditorLayer
 		{
-			MeshTopologyTool* tool = nullptr;
+			WeakRef<MeshTopologyTool> tool; // Reference to tool
 
 		public:
+			// Draws editor over scene
 			void DrawOverScene() override;
+
+			// Updates editor
 			void Update(float dt) override;
 
+			// Returns order of layer
 			int GetOrder() const override;
 
+			// Returns true if layer is enabled
 			bool IsEnabled() const override;
 
+			// Returns name of layer
 			const String& GetName() const override;
+
+			// Returns icon name of layer
 			const String& GetIconName() const override;
 		};
 
-		SceneLayer sceneLayer;        // Scene layer for drawing spline
-		bool       isEnabled = false; // Is tool enabled now
+	public:
+		Ref<SceneLayer> sceneLayer = mmake<SceneLayer>(); // Scene layer for drawing spline
+
+		bool isEnabled = false; // Is tool enabled now
 
 		Function<void()> onChanged; // Called when frame changes     
 
-	public:
-		// Default constructor
-		MeshTopologyTool();
+    public:
+        // Default constructor
+        MeshTopologyTool();
+
+        // Default constructor
+        MeshTopologyTool(const MeshTopologyTool& other);
 
 		// Destructor
 		~MeshTopologyTool();
@@ -66,7 +82,10 @@ namespace Editor
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Returns true when input events can be handled by down listeners
-		bool IsInputTransparent() const override;
+        bool IsInputTransparent() const override;
+
+        // Dynamic cast to RefCounterable via Widget
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<MeshTopologyTool>& ref);
 
 		IOBJECT(MeshTopologyTool);
 
@@ -78,13 +97,13 @@ namespace Editor
 
 		Function<Basis()> mGetTransform; // Returns local space transformation
 
-		DragHandle          mHandleSample; // Point handle sample
-		Vector<DragHandle*> mHandles;      // List of all handles
+		DragHandle              mHandleSample; // Point handle sample
+		Vector<Ref<DragHandle>> mHandles;      // List of all handles
 
 		Sprite mSelectionSprite;       // Selection sprite
 		Vec2F  mSelectingPressedPoint; // Point, where cursor was pressed, selection starts here, in local space
 
-		Vector<DragHandle*> mSelectingHandlesBuf; // Potentially selecting handles while selecting
+		Vector<Ref<DragHandle>> mSelectingHandlesBuf; // Potentially selecting handles while selecting
 
 		FrameHandles mTransformFrame;                      // Keys transformation frame
 		bool         mTransformFrameVisible = false;       // Is transform frame visible. it visible when 2 or more main handles was selected
@@ -92,12 +111,19 @@ namespace Editor
 		Vec2F        mTransformBasisOffet = Vec2F(10, 10); // Border between side points and frame
 
 	private:
+		// Initializes handles
 		void InitializeHandles();
+
+		// Clears all handles
 		void ClearHandles();
 
+		// Called when handle was moved
 		void OnHandleMoved(int i, const Vec2F& pos);
 
+		// Converts world space point to local space
 		Vec2F WorldToLocal(const Vec2F& point) const;
+
+		// Converts local space point to world space
 		Vec2F LocalToWorld(const Vec2F& point) const;
 
 		// Draw selection sprite
@@ -125,7 +151,9 @@ namespace Editor
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// Called when cursor double clicked; creates new point
-		void OnCursorDblClicked(const Input::Cursor& cursor) override;
+        void OnCursorDblClicked(const Input::Cursor& cursor) override;
+		
+		REF_COUNTERABLE_IMPL(IEditTool, SelectableDragHandlesGroup);
 	};
 }
 // --- META ---
@@ -140,7 +168,7 @@ CLASS_BASES_META(Editor::MeshTopologyTool)
 END_META;
 CLASS_FIELDS_META(Editor::MeshTopologyTool)
 {
-    FIELD().PUBLIC().NAME(sceneLayer);
+    FIELD().PUBLIC().DEFAULT_VALUE(mmake<SceneLayer>()).NAME(sceneLayer);
     FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isEnabled);
     FIELD().PUBLIC().NAME(onChanged);
     FIELD().PRIVATE().NAME(mGetPoints);
@@ -165,6 +193,7 @@ CLASS_METHODS_META(Editor::MeshTopologyTool)
     typedef const Function<void(int, Vec2F)>& _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const MeshTopologyTool&);
     FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Function<Vector<Vec2F>()>&, _tmp1, const Function<Basis()>&, const Function<void(Vec2F)>&, const Function<void(int)>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Reset);
     FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
@@ -172,6 +201,7 @@ CLASS_METHODS_META(Editor::MeshTopologyTool)
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<MeshTopologyTool>&);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
     FUNCTION().PRIVATE().SIGNATURE(void, ClearHandles);
     FUNCTION().PRIVATE().SIGNATURE(void, OnHandleMoved, int, const Vec2F&);

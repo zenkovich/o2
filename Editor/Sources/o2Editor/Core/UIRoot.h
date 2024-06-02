@@ -19,31 +19,31 @@ namespace Editor
 	// --------------
 	// Editor UI root
 	// --------------
-	class UIRoot: public Singleton<UIRoot>, ApplicationEventsListener
+	class UIRoot: public Singleton<UIRoot>, public ApplicationEventsListener, public RefCounterable
 	{
-	public:
+    public:
+        // Default constructor, creates root widget
+        UIRoot();
+
+        // Destructor
+        ~UIRoot();
+
 		// Adds widget to root
-		Widget* AddWidget(Widget* widget);
+		Ref<Widget> AddWidget(const Ref<Widget>& widget);
 
 		// Removes widget from root
-		void RemoveWidget(Widget* widget);
+		void RemoveWidget(const Ref<Widget>& widget);
 
 		// Removes all widgets from root
 		void RemoveAllWidgets();
 
 		// Returns root widget
-		Widget* GetRootWidget();
+		const Ref<Widget>& GetRootWidget();
 
 	private:
-		Widget* mRootWidget = nullptr;
+		Ref<Widget> mRootWidget; // Root widget for editor UI
 
 	private:
-		// Default constructor, creates root widget
-		UIRoot();
-
-		// Destructor
-		~UIRoot();
-
 		// Draws root widget
 		void Draw();
 
@@ -52,6 +52,8 @@ namespace Editor
 
 		// Called when application frame was resized, updates root size
 		void OnApplicationSized() override;
+
+        REF_COUNTERABLE_IMPL(RefCounterable);
 
 		friend class EditorApplication;
 	};

@@ -24,15 +24,16 @@ namespace o2
         enum class ExpandState { None, Expanding, Collaping };
 
     public:
-        Function<void*(void*)>           getObjectParentDelegate;      // Getting objects' parent delegate
-        Function<Vector<void*>(void*)>   getObjectChildrenDelegate;    // Getting objects' childs count delegate 
-        Function<void(TreeNode*, void*)> fillNodeDataByObjectDelegate; // Setup tree node item delegate
-        Function<void(TreeNode*, void*)> freeNodeDataDelegate;         // Free tree node data delegate
+        Function<void*(void*)>         getObjectParentDelegate;      // Getting objects' parent delegate
+        Function<Vector<void*>(void*)> getObjectChildrenDelegate;    // Getting objects' childs count delegate
+
+        Function<void(const Ref<TreeNode>&, void*)> fillNodeDataByObjectDelegate; // Setup tree node item delegate
+        Function<void(const Ref<TreeNode>&, void*)> freeNodeDataDelegate;         // Free tree node data delegate
 
         Function<String(void*)> getDebugForObject; // Getting debug string for object delegate
 
-        Function<void(TreeNode*)> onNodeDoubleClicked;      // Node double clicked event
-        Function<void(TreeNode*)> onNodeRightButtonClicked; // Node right button click event
+        Function<void(const Ref<TreeNode>&)> onNodeDoubleClicked;      // Node double clicked event
+        Function<void(const Ref<TreeNode>&)> onNodeRightButtonClicked; // Node right button click event
 
         Function<void(Vector<void*>)> onObjectsSelectionChanged; // Objects selected event
 
@@ -40,10 +41,13 @@ namespace o2
 
     public:
         // Default constructor
-        Tree();
+		explicit Tree(RefCounter* refCounter);
 
-        // Copy-constructor
-        Tree(const Tree& other);
+		// Copy-constructor
+		Tree(RefCounter* refCounter, const Tree& other);
+
+		// Copy-constructor
+		Tree(const Tree& other);
 
         // Destructor
         ~Tree();
@@ -76,7 +80,7 @@ namespace o2
         void UpdateNodesView(bool immediately = true);
 
         // Returns ui node for object
-        TreeNode* GetNode(void* object);
+        Ref<TreeNode> GetNode(void* object);
 
         // Expands all nodes
         void ExpandAll();
@@ -112,7 +116,7 @@ namespace o2
         void ExpandParentObjects(void* object);
 
         // Returns item widget under point
-        TreeNode* GetTreeNodeUnderPoint(const Vec2F& point);
+        Ref<TreeNode> GetTreeNodeUnderPoint(const Vec2F& point);
 
         // Sets rearrange type
         void SetRearrangeType(RearrangeType type);
@@ -127,31 +131,31 @@ namespace o2
         bool IsMultiSelectionAvailable() const;
 
         // Returns item sample
-        TreeNode* GetNodeSample() const;
+        const Ref<TreeNode>& GetNodeSample() const;
 
         // Sets item sample
-        void SetNodeSample(TreeNode* sample);
+        void SetNodeSample(const Ref<TreeNode>& sample);
 
         // Returns hover drawable
-        Sprite* GetHoverDrawable() const;
+        const Ref<Sprite>& GetHoverDrawable() const;
 
         // Sets hover layout
         void SetHoverLayout(const Layout& layout);
 
         // Returns node highlight drawable
-        Sprite* GetHighlightDrawable() const;
+        const Ref<Sprite>& GetHighlightDrawable() const;
 
         // Sets highlight animation
-        void SetHighlightAnimation(const AnimationClip& animation);
+        void SetHighlightAnimation(const Ref<AnimationClip>& animation);
 
         // Sets highlight layout
         void SetHighlightLayout(const Layout& layout);
 
         // Sets zebra back line sprite drawable. When it is null no zebra back isn't drawing
-        void SetZebraBackLine(Sprite* sprite);
+        void SetZebraBackLine(const Ref<Sprite>& sprite);
 
         // Return zebra back line sprite
-        Sprite* GetZebraBackLine() const;
+        const Ref<Sprite>& GetZebraBackLine() const;
 
         // Sets node pressing and expanding time
         void SetNodeExpandTimer(float time);
@@ -184,29 +188,31 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(Tree);
+        CLONEABLE_REF(Tree);
 
     protected:
-        struct Node;
-
         // --------------------
         // Tree node definition
         // --------------------
-        struct Node
+        struct Node: public RefCounterable
         {
-            String     id;
-            void*      object;             // Pointer to object
-            TreeNode*  widget = nullptr;   // Node widget
-            int        level = 0;          // Hierarchy depth level
-            bool       isSelected = false; // Is node selected
-            bool       isExpanded = false; // Is node expanded
+            String         id;
+            void*          object;             // Pointer to object
+            Ref<TreeNode>  widget;             // Node widget
+            int            level = 0;          // Hierarchy depth level
+            bool           isSelected = false; // Is node selected
+            bool           isExpanded = false; // Is node expanded
 
-            Node*         parent = nullptr; // Parent node definition
-            Vector<Node*> childs;           // Children nodes definitions
+            WeakRef<Node>     parent; // Parent node definition
+            Vector<Ref<Node>> childs; // Children nodes definitions
 
             bool  inserting = false; // Node insertion flag
             float insertCoef = 0.0f; // Inserting coefficient (0...1)
 
         public:
+            // Destructor
+            virtual ~Node();
+
             // Returns height of node with children and coefficients
             float GetHeight() const;
 
@@ -223,9 +229,9 @@ namespace o2
         // -----------------------------------
         struct VisibleWidgetDef
         {
-            void*     object;
-            TreeNode* widget;
-            int       position;
+            void*         object;
+            Ref<TreeNode> widget;
+            int           position;
 
         public:
 
@@ -236,39 +242,40 @@ namespace o2
         RearrangeType mRearrangeType = RearrangeType::Enabled; // Current available rearrange type @SERIALIZABLE
         bool          mMultiSelectAvailable = true;            // Is multi selection available @SERIALIZABLE
 
-        TreeNode* mNodeWidgetSample = nullptr; // Item sample @SERIALIZABLE
-        float     mChildrenOffset = 10.0f;     // Children nodes offset from parent @SERIALIZABLE
+        Ref<TreeNode> mNodeWidgetSample; // Item sample @SERIALIZABLE
+
+        float mChildrenOffset = 10.0f; // Children nodes offset from parent @SERIALIZABLE
 
         bool mIsNeedUpdateView = false;         // Is tree needs to be rebuild
         bool mIsNeedUdateLayout = false;        // Is layout needs to rebuild
         bool mIsNeedUpdateVisibleNodes = false; // In need to update visible nodes
 
-        Vector<Node*> mAllNodes; // All expanded nodes definitions
+        Vector<Ref<Node>> mAllNodes; // All expanded nodes definitions
 
-        Vector<void*> mSelectedObjects; // Selected objects
-        Vector<Node*> mSelectedNodes;   // Selected nodes definitions
+        Vector<void*>     mSelectedObjects; // Selected objects
+        Vector<Ref<Node>> mSelectedNodes;   // Selected nodes definitions
 
-        Vector<TreeNode*> mNodeWidgetsBuf; // Nodes widgets buffer
-        Vector<Node*>     mNodesBuf;       // Nodes buffer
+        Vector<Ref<TreeNode>> mNodeWidgetsBuf; // Nodes widgets buffer
+        Vector<Ref<Node>>     mNodesBuf;       // Nodes buffer
 
-        Vector<Node*> mVisibleNodes;           // Visible nodes
-        int           mMinVisibleNodeIdx = 0;  // Minimal visible node index
-        int           mMaxVisibleNodeIdx = -1; // Maximum visible node index
+        Vector<Ref<Node>> mVisibleNodes;           // Visible nodes
+        int               mMinVisibleNodeIdx = 0;  // Minimal visible node index
+        int               mMaxVisibleNodeIdx = -1; // Maximum visible node index
 
         Vec2F mLastClickPos; // Last click position in scroll space (depends on scroll position)
 
-        TreeNode* mHoveredItem = nullptr;   // Current hovered tree node item
-        Sprite*   mHoverDrawable = nullptr; // Selection sprite @SERIALIZABLE
-        Layout    mHoverLayout;             // Selection layout, result selection area depends on selected item @SERIALIZABLE                                                                     
-        RectF     mCurrentHoverRect;        // Current selection rectangle (for smoothing)
-        RectF     mTargetHoverRect;         // Target selection rectangle (over selected item)    
+        WeakRef<TreeNode> mHoveredItem;      // Current hovered tree node item
+        Ref<Sprite>       mHoverDrawable;    // Selection sprite @SERIALIZABLE
+        Layout            mHoverLayout;      // Selection layout, result selection area depends on selected item @SERIALIZABLE                                                                     
+        RectF             mCurrentHoverRect; // Current selection rectangle (for smoothing)
+        RectF             mTargetHoverRect;  // Target selection rectangle (over selected item)    
 
-        bool          mIsDraggingNodes = false;       // Is nodes moving by cursor
-        TreeNode*     mFakeDragNode = nullptr;        // Dragging node
-        Vec2F         mDragOffset;                    // Offset from cursor to dragging node's center
-        TreeNode*     mInsertNodeCandidate = nullptr; // Insertion node candidate when dragging nodes
-        Vector<void*> mBeforeDragSelectedItems;       // Before drag begin selection
-        bool          mDragEnded = false;             // Is dragging ended and it needs to call EndDragging
+        bool          mIsDraggingNodes = false; // Is nodes moving by cursor
+        Ref<TreeNode> mFakeDragNode;            // Dragging node
+        Vec2F         mDragOffset;              // Offset from cursor to dragging node's center
+        Ref<TreeNode> mInsertNodeCandidate;     // Insertion node candidate when dragging nodes
+        Vector<void*> mBeforeDragSelectedItems; // Before drag begin selection
+        bool          mDragEnded = false;       // Is dragging ended and it needs to call EndDragging
 
         Vector<void*> mExpandedObjects; // Expanded objects
 
@@ -283,21 +290,21 @@ namespace o2
         float       mExpandNodeTime = 0.4f;                  // Node expanding time
         Curve       mExpandingNodeFunc = Curve::EaseInOut(); // Expanding easing node curve
 
-        TreeNode* mExpandNodeCandidate = nullptr; // Expand node candidate when dragging
-        float     mExpandInsertTime = -1.0f;      // Remaining time to expanding item under cursor when dragging nodes
-        float     mPressedTime = 10.0f;           // Time from last item pressing
+        Ref<TreeNode> mExpandNodeCandidate;      // Expand node candidate when dragging
+        float         mExpandInsertTime = -1.0f; // Remaining time to expanding item under cursor when dragging nodes
+        float         mPressedTime = 10.0f;      // Time from last item pressing
 
         float mNodeExpandTime = 2.0f;   // Node expand time when dragging actors @SERIALIZABLE
         float mNodeDragIntoZone = 0.3f; // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
 
-        AnimationClip   mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
-        AnimationPlayer mHighlightAnim;             // Node highlight animation
-        Sprite*         mHighlightSprite = nullptr; // Node highlight sprite @SERIALIZABLE
-        Layout          mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
-        Node*           mHighlighNode = nullptr;    // Hightlighing node
-        void*           mHighlightObject;           // Highlight object
+        Ref<AnimationClip>   mHighlighClip;                             // Node highlight animation clip @SERIALIZABLE 
+        Ref<AnimationPlayer> mHighlightAnim = mmake<AnimationPlayer>(); // Node highlight animation
+        Ref<Sprite>          mHighlightSprite;                          // Node highlight sprite @SERIALIZABLE
+        Layout               mHighlightLayout;                          // Node highlight sprite layout @SERIALIZABLE
+        WeakRef<Node>        mHighlighNode = nullptr;                   // Hightlighing node
+        void*                mHighlightObject;                          // Highlight object
         
-        Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
+        Ref<Sprite> mZebraBackLine; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
 
         Vector<VisibleWidgetDef> mVisibleWidgetsCache; // Visible widgets cache
 
@@ -321,16 +328,16 @@ namespace o2
         virtual String GetObjectDebug(void* object);
 
         // Sets nodeWidget data by object
-        virtual void FillNodeDataByObject(TreeNode* nodeWidget, void* object);
+        virtual void FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object);
 
         // Free node data
-        virtual void FreeNodeData(TreeNode* nodeWidget, void* object);
+        virtual void FreeNodeData(const Ref<TreeNode>& nodeWidget, void* object);
 
         // Called when tree node was double clicked
-        virtual void OnNodeDblClick(TreeNode* nodeWidget);
+        virtual void OnNodeDblClick(const Ref<TreeNode>& nodeWidget);
 
         // Called when tree node was clicked by right button
-        virtual void OnNodeRBClick(TreeNode* nodeWidget);
+        virtual void OnNodeRBClick(const Ref<TreeNode>& nodeWidget);
 
         // Called when list of selected objects was changed
         virtual void OnNodesSelectionChanged(Vector<void*> objects);
@@ -341,31 +348,31 @@ namespace o2
 // ISelectableDragableObjectsGroup implementation
 
         // Returns selected objects in group
-        Vector<SelectableDragableObject*> GetSelectedDragObjects() const override;
+        Vector<Ref<SelectableDragableObject>> GetSelectedDragObjects() const override;
 
         // Returns all objects in group 
-        Vector<SelectableDragableObject*> GetAllObjects() const override;
+        Vector<Ref<SelectableDragableObject>> GetAllObjects() const override;
 
         // Selects object
-        void Select(SelectableDragableObject* object) override;
+        void Select(const Ref<SelectableDragableObject>& object) override;
 
         // Selects object
-        void Select(SelectableDragableObject* object, bool sendOnSelectionChanged);
+        void Select(const Ref<SelectableDragableObject>& object, bool sendOnSelectionChanged);
 
         // Deselects object
-        void Deselect(SelectableDragableObject* object) override;
+        void Deselect(const Ref<SelectableDragableObject>& object) override;
 
         // Adds selectable object to group
-        void AddSelectableObject(SelectableDragableObject* object) override;
+        void AddSelectableObject(const Ref<SelectableDragableObject>& object) override;
 
         // Removes selectable object from group
         void RemoveSelectableObject(SelectableDragableObject* object) override;
 
         // Called when selectable draggable object was released
-        void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) override;
+        void OnSelectableObjectCursorReleased(const Ref<SelectableDragableObject>& object, const Input::Cursor& cursor) override;
 
         // Called when selectable object was began to drag
-        void OnSelectableObjectBeganDragging(SelectableDragableObject* object) override;
+        void OnSelectableObjectBeganDragging(const Ref<SelectableDragableObject>& object) override;
 
 // -------------
 
@@ -385,25 +392,25 @@ namespace o2
         virtual void UpdateNodesStructure();
 
         // Inserts node to hierarchy
-        int InsertNodes(Node* parentNode, int position, Vector<Node*>* newNodes = nullptr);
+        int InsertNodes(const Ref<Node>& parentNode, int position, Vector<Ref<Node>>* newNodes = nullptr);
 
         // Removes node from hierarchy
-        void RemoveNodes(Node* parentNode);
+        void RemoveNodes(const Ref<Node>& parentNode);
 
         // Creates node from object with parent
-        Node* CreateNode(void* object, Node* parent);
+        Ref<Node> CreateNode(void* object, const Ref<Node>& parent);
 
         // Updates visible nodes (calculates range and initializes nodes)
         virtual void UpdateVisibleNodes();
 
         // Creates UITreeNode for visible node at position i
-        void CreateVisibleNodeWidget(Node* node, int i);
+        void CreateVisibleNodeWidget(const Ref<Node>& node, int i);
 
         // Updates node view
-        void UpdateNodeView(Node* node, TreeNode* widget, int idx);
+        void UpdateNodeView(const Ref<Node>& node, const Ref<TreeNode>& widget, int idx);
 
         // Updates node widget layout
-        void UpdateNodeWidgetLayout(Node* node, int idx);
+        void UpdateNodeWidgetLayout(const Ref<Node>& node, int idx);
 
         // Returns node index from mAllNodes by position in local coordinates
         int GetNodeIndex(float position) const;
@@ -412,13 +419,13 @@ namespace o2
         float GetNodePosition(int idx) const;
 
         // Expands node: creates his children and sets expanded state
-        void ExpandNode(Node* node);
+        void ExpandNode(const Ref<Node>& node);
 
         // Collapses node: removes children from hierarchy and widgets if they're visible
-        void CollapseNode(Node* node);
+        void CollapseNode(const Ref<Node>& node);
 
         // Starts expanding or collapse animation of node
-        void StartExpandingAnimation(ExpandState direction, Node* node, int childrenCount);
+        void StartExpandingAnimation(ExpandState direction, const Ref<Node>& node, int childrenCount);
 
         // Updates node expanding
         void UpdateNodeExpanding(float dt);
@@ -451,15 +458,15 @@ namespace o2
         void OnScrolled(float scroll) override;
 
         // Updates hover target rect and visibility
-        void UpdateHover(TreeNode* itemUnderCursor);
+        void UpdateHover(const Ref<TreeNode>& itemUnderCursor);
 
         // Gets tree node from pool or creates new
-        virtual TreeNode* CreateTreeNodeWidget();
+        virtual Ref<TreeNode> CreateTreeNodeWidget();
 
 // DragDropArea implementation
 
         // Begins dragging selected items
-        void BeginDragging(TreeNode* node);
+        void BeginDragging(const Ref<TreeNode>& node);
 
         // Ends dragging items
         void EndDragging(bool droppedToThis = false);
@@ -474,21 +481,21 @@ namespace o2
         void UpdateDraggingInsertionAnim(float dt);
 
         // Called when some drag listeners was entered to this area
-        void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+        void OnDragEnter(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
         // Called when some drag listeners was dragged above this area
-        void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
+        void OnDraggedAbove(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
         // Called when some drag listeners was exited from this area
-        void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+        void OnDragExit(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
         // Called when some selectable listeners was dropped to this
-        void OnDropped(ISelectableDragableObjectsGroup* group) override;
-
-// ------------
+        void OnDropped(const Ref<ISelectableDragableObjectsGroup>& group) override;
 
         // Completion deserialization callback
         void OnDeserialized(const DataValue& node) override;
+
+        REF_COUNTERABLE_IMPL(Widget);
 
         friend class TreeNode;
     };
@@ -500,10 +507,10 @@ namespace o2
     {
     public:
         // Default constructor
-        TreeNode();
+        explicit TreeNode(RefCounter* refCounter);
 
         // Copy-constructor
-        TreeNode(const TreeNode& other);
+        TreeNode(RefCounter* refCounter, const TreeNode& other);
 
         // Destructor
         ~TreeNode();
@@ -539,17 +546,19 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(TreeNode);
+        CLONEABLE_REF(TreeNode);
 
     protected:
-        Tree::Node* mNodeDef = nullptr;   // Node definition
-        Tree*       mOwnerTree = nullptr; // Owner tree
-        Button*     mExpandBtn = nullptr; // Node expanding button
+        WeakRef<Tree::Node> mNodeDef;   // Node definition
 
-        WidgetState* mSelectedState = nullptr; // Selected state cached
+        WeakRef<Tree> mOwnerTree; // Owner tree
+        Ref<Button>   mExpandBtn; // Node expanding button
+
+        Ref<WidgetState> mSelectedState; // Selected state cached
 
     protected:
         // Called when widget state was added, caches selected state
-        void OnStateAdded(WidgetState* state) override;
+        void OnStateAdded(const Ref<WidgetState>& state) override;
 
         // Updates expanding
         void UpdateTreeLayout(float dt);
@@ -567,7 +576,7 @@ namespace o2
         void OnDragStart(const Input::Cursor& cursor) override;
 
         // Called when dragged
-        void OnDragged(const Input::Cursor& cursor, DragDropArea* area) override;
+        void OnDragged(const Input::Cursor& cursor, const Ref<DragDropArea>& area) override;
 
         // Called when dragging completed
         void OnDragEnd(const Input::Cursor& cursor) override;
@@ -577,6 +586,8 @@ namespace o2
 
         // Called when this was unselected
         void OnDeselected() override;
+
+        REF_COUNTERABLE_IMPL(Widget);
 
         friend class Tree;
     };
@@ -607,7 +618,7 @@ CLASS_FIELDS_META(o2::Tree)
     FIELD().PUBLIC().NAME(onDraggedObjects);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(RearrangeType::Enabled).NAME(mRearrangeType);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mMultiSelectAvailable);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mNodeWidgetSample);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mNodeWidgetSample);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10.0f).NAME(mChildrenOffset);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsNeedUpdateView);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsNeedUdateLayout);
@@ -621,15 +632,15 @@ CLASS_FIELDS_META(o2::Tree)
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mMinVisibleNodeIdx);
     FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mMaxVisibleNodeIdx);
     FIELD().PROTECTED().NAME(mLastClickPos);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHoveredItem);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHoverDrawable);
+    FIELD().PROTECTED().NAME(mHoveredItem);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHoverDrawable);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHoverLayout);
     FIELD().PROTECTED().NAME(mCurrentHoverRect);
     FIELD().PROTECTED().NAME(mTargetHoverRect);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsDraggingNodes);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFakeDragNode);
+    FIELD().PROTECTED().NAME(mFakeDragNode);
     FIELD().PROTECTED().NAME(mDragOffset);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mInsertNodeCandidate);
+    FIELD().PROTECTED().NAME(mInsertNodeCandidate);
     FIELD().PROTECTED().NAME(mBeforeDragSelectedItems);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDragEnded);
     FIELD().PROTECTED().NAME(mExpandedObjects);
@@ -643,25 +654,26 @@ CLASS_FIELDS_META(o2::Tree)
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mExpandingNodeTargetHeight);
     FIELD().PROTECTED().DEFAULT_VALUE(0.4f).NAME(mExpandNodeTime);
     FIELD().PROTECTED().DEFAULT_VALUE(Curve::EaseInOut()).NAME(mExpandingNodeFunc);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mExpandNodeCandidate);
+    FIELD().PROTECTED().NAME(mExpandNodeCandidate);
     FIELD().PROTECTED().DEFAULT_VALUE(-1.0f).NAME(mExpandInsertTime);
     FIELD().PROTECTED().DEFAULT_VALUE(10.0f).NAME(mPressedTime);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(2.0f).NAME(mNodeExpandTime);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.3f).NAME(mNodeDragIntoZone);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlighClip);
-    FIELD().PROTECTED().NAME(mHighlightAnim);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHighlightSprite);
+    FIELD().PROTECTED().DEFAULT_VALUE(mmake<AnimationPlayer>()).NAME(mHighlightAnim);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightSprite);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightLayout);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHighlighNode);
     FIELD().PROTECTED().NAME(mHighlightObject);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mZebraBackLine);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mZebraBackLine);
     FIELD().PROTECTED().NAME(mVisibleWidgetsCache);
 }
 END_META;
 CLASS_METHODS_META(o2::Tree)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Tree&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Tree&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectCreated, void*, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, OnObjectRemoved, void*);
@@ -671,7 +683,7 @@ CLASS_METHODS_META(o2::Tree)
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildren, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildrenTransforms);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateNodesView, bool);
-    FUNCTION().PUBLIC().SIGNATURE(TreeNode*, GetNode, void*);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<TreeNode>, GetNode, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, ExpandAll);
     FUNCTION().PUBLIC().SIGNATURE(void, CollapseAll);
     FUNCTION().PUBLIC().SIGNATURE(Vector<void*>, GetSelectedObjects);
@@ -683,20 +695,20 @@ CLASS_METHODS_META(o2::Tree)
     FUNCTION().PUBLIC().SIGNATURE(void, ScrollTo, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, ScrollToAndHighlight, void*);
     FUNCTION().PUBLIC().SIGNATURE(void, ExpandParentObjects, void*);
-    FUNCTION().PUBLIC().SIGNATURE(TreeNode*, GetTreeNodeUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<TreeNode>, GetTreeNodeUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetRearrangeType, RearrangeType);
     FUNCTION().PUBLIC().SIGNATURE(RearrangeType, GetRearrangeType);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMultipleSelectionAvailable, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsMultiSelectionAvailable);
-    FUNCTION().PUBLIC().SIGNATURE(TreeNode*, GetNodeSample);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetNodeSample, TreeNode*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHoverDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<TreeNode>&, GetNodeSample);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetNodeSample, const Ref<TreeNode>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetHoverDrawable);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHoverLayout, const Layout&);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetHighlightDrawable);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const AnimationClip&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetHighlightDrawable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightAnimation, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHighlightLayout, const Layout&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetZebraBackLine, Sprite*);
-    FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetZebraBackLine);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetZebraBackLine, const Ref<Sprite>&);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<Sprite>&, GetZebraBackLine);
     FUNCTION().PUBLIC().SIGNATURE(void, SetNodeExpandTimer, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetNodeExpandTimer);
     FUNCTION().PUBLIC().SIGNATURE(void, SetChildsNodesOffset, float);
@@ -713,38 +725,38 @@ CLASS_METHODS_META(o2::Tree)
     FUNCTION().PROTECTED().SIGNATURE(void*, GetObjectParent, void*);
     FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
     FUNCTION().PROTECTED().SIGNATURE(String, GetObjectDebug, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, FreeNodeData, TreeNode*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnNodeDblClick, TreeNode*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnNodeRBClick, TreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(void, FillNodeDataByObject, const Ref<TreeNode>&, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, FreeNodeData, const Ref<TreeNode>&, void*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnNodeDblClick, const Ref<TreeNode>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnNodeRBClick, const Ref<TreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnNodesSelectionChanged, Vector<void*>);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedObjects, Vector<void*>, void*, void*);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<SelectableDragableObject*>, GetSelectedDragObjects);
-    FUNCTION().PROTECTED().SIGNATURE(Vector<SelectableDragableObject*>, GetAllObjects);
-    FUNCTION().PROTECTED().SIGNATURE(void, Select, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, Select, SelectableDragableObject*, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, Deselect, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, AddSelectableObject, SelectableDragableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<SelectableDragableObject>>, GetSelectedDragObjects);
+    FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<SelectableDragableObject>>, GetAllObjects);
+    FUNCTION().PROTECTED().SIGNATURE(void, Select, const Ref<SelectableDragableObject>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, Select, const Ref<SelectableDragableObject>&, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, Deselect, const Ref<SelectableDragableObject>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, AddSelectableObject, const Ref<SelectableDragableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(void, RemoveSelectableObject, SelectableDragableObject*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectCursorReleased, SelectableDragableObject*, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectBeganDragging, SelectableDragableObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectCursorReleased, const Ref<SelectableDragableObject>&, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSelectableObjectBeganDragging, const Ref<SelectableDragableObject>&);
     FUNCTION().PROTECTED().SIGNATURE(bool, CheckMultipleSelection, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateHighlighting, float);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdatePressedNodeExpand, float);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateNodesStructure);
-    FUNCTION().PROTECTED().SIGNATURE(int, InsertNodes, Node*, int, Vector<Node*>*);
-    FUNCTION().PROTECTED().SIGNATURE(void, RemoveNodes, Node*);
-    FUNCTION().PROTECTED().SIGNATURE(Node*, CreateNode, void*, Node*);
+    FUNCTION().PROTECTED().SIGNATURE(int, InsertNodes, const Ref<Node>&, int, Vector<Ref<Node>>*);
+    FUNCTION().PROTECTED().SIGNATURE(void, RemoveNodes, const Ref<Node>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<Node>, CreateNode, void*, const Ref<Node>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
-    FUNCTION().PROTECTED().SIGNATURE(void, CreateVisibleNodeWidget, Node*, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateNodeView, Node*, TreeNode*, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateNodeWidgetLayout, Node*, int);
+    FUNCTION().PROTECTED().SIGNATURE(void, CreateVisibleNodeWidget, const Ref<Node>&, int);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateNodeView, const Ref<Node>&, const Ref<TreeNode>&, int);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateNodeWidgetLayout, const Ref<Node>&, int);
     FUNCTION().PROTECTED().SIGNATURE(int, GetNodeIndex, float);
     FUNCTION().PROTECTED().SIGNATURE(float, GetNodePosition, int);
-    FUNCTION().PROTECTED().SIGNATURE(void, ExpandNode, Node*);
-    FUNCTION().PROTECTED().SIGNATURE(void, CollapseNode, Node*);
-    FUNCTION().PROTECTED().SIGNATURE(void, StartExpandingAnimation, ExpandState, Node*, int);
+    FUNCTION().PROTECTED().SIGNATURE(void, ExpandNode, const Ref<Node>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, CollapseNode, const Ref<Node>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, StartExpandingAnimation, ExpandState, const Ref<Node>&, int);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateNodeExpanding, float);
     FUNCTION().PROTECTED().SIGNATURE(void, CalculateScrollArea);
     FUNCTION().PROTECTED().SIGNATURE(void, MoveScrollPosition, const Vec2F&);
@@ -755,17 +767,17 @@ CLASS_METHODS_META(o2::Tree)
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnScrolled, float);
-    FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, TreeNode*);
-    FUNCTION().PROTECTED().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
-    FUNCTION().PROTECTED().SIGNATURE(void, BeginDragging, TreeNode*);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Ref<TreeNode>&);
+    FUNCTION().PROTECTED().SIGNATURE(Ref<TreeNode>, CreateTreeNodeWidget);
+    FUNCTION().PROTECTED().SIGNATURE(void, BeginDragging, const Ref<TreeNode>&);
     FUNCTION().PROTECTED().SIGNATURE(void, EndDragging, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateDraggingGraphics);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateDraggingInsertion);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateDraggingInsertionAnim, float);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, ISelectableDragableObjectsGroup*);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnter, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraggedAbove, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragExit, const Ref<ISelectableDragableObjectsGroup>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, const Ref<ISelectableDragableObjectsGroup>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
@@ -778,17 +790,17 @@ CLASS_BASES_META(o2::TreeNode)
 END_META;
 CLASS_FIELDS_META(o2::TreeNode)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNodeDef);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwnerTree);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mExpandBtn);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectedState);
+    FIELD().PROTECTED().NAME(mNodeDef);
+    FIELD().PROTECTED().NAME(mOwnerTree);
+    FIELD().PROTECTED().NAME(mExpandBtn);
+    FIELD().PROTECTED().NAME(mSelectedState);
 }
 END_META;
 CLASS_METHODS_META(o2::TreeNode)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const TreeNode&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const TreeNode&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand, bool);
@@ -798,13 +810,13 @@ CLASS_METHODS_META(o2::TreeNode)
     FUNCTION().PUBLIC().SIGNATURE(void, SetSelectedState, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFocusedState, bool);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAdded, WidgetState*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnStateAdded, const Ref<WidgetState>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateTreeLayout, float);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragStart, const Input::Cursor&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDragged, const Input::Cursor&, DragDropArea*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDragged, const Input::Cursor&, const Ref<DragDropArea>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnd, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSelected);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeselected);

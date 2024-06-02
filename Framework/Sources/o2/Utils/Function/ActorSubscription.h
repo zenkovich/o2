@@ -1,5 +1,5 @@
 #pragma once
-#include "o2/Scene/ActorRef.h"
+#include "o2/Scene/ActorLinkRef.h"
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Function/ISerializableFunction.h"
 #include "o2/Utils/Serialization/Serializable.h"
@@ -13,9 +13,9 @@ namespace o2
     class IActorSubscription : public ISerializableFunction
     {
     public:
-        ActorRef     actorRef;     // Target actor
-        ComponentRef componentRef; // Target component
-        String       method;       // Method name
+        Ref<Actor>     actorRef;     // Target actor
+        Ref<Component> componentRef; // Target component
+        String         method;       // Method name
     };
 
     template <typename UnusedType>
@@ -27,11 +27,10 @@ namespace o2
     public:
         // Constructor
         ActorSubscription()
-        {
-        }
+        {}
 
         // Constructor
-        ActorSubscription(const ActorRef& actor, const String& method)
+        ActorSubscription(const Ref<Actor>& actor, const String& method)
         {
             this->actorRef = actor;
             this->method = method;
@@ -133,10 +132,10 @@ namespace o2
         void Deserialize(const DataValue& data) override
         {
             if (auto actorData = data.FindMember("actor"))
-                actorRef = *actorData;
+                actorData->Get(actorRef);
 
             if (auto componentData = data.FindMember("component"))
-                componentRef = *componentData;
+                componentData->Get(componentRef);
 
             method = data["func"];
         }

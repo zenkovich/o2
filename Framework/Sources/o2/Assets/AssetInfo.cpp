@@ -3,56 +3,45 @@
 
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetsTree.h"
+#include "o2/Assets/Assets.h"
 
 namespace o2
 {
+    FORWARD_REF_IMPL(AssetsTree);
+
     AssetInfo::AssetInfo()
     {
         if (Assets::IsSingletonInitialzed())
-            tree = &o2Assets.GetAssetsTree();
+            tree = Ref(const_cast<AssetsTree*>(&o2Assets.GetAssetsTree()));
     }
 
     AssetInfo::AssetInfo(const AssetInfo& other):
-        path(other.path), editTime(other.editTime), tree(other.tree), 
-        meta(other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr),
-        mOwnChildren(false), mChildren(other.mChildren)
+        path(other.path), editTime(other.editTime), tree(other.tree), meta(other.meta),
+        mChildren(other.mChildren)
     {}
 
-    AssetInfo::AssetInfo(AssetMeta* meta):
+    AssetInfo::AssetInfo(const Ref<AssetMeta>& meta):
         meta(meta)
     {
         if (Assets::IsSingletonInitialzed())
-            tree = &o2Assets.GetAssetsTree();
+            tree = Ref(const_cast<AssetsTree*>(&o2Assets.GetAssetsTree()));
     }
 
     AssetInfo::~AssetInfo()
     {
-        if (meta)
-            delete meta;
-
         if (parent)
-            parent->RemoveChild(this, false);
+            parent.Lock()->RemoveChild(Ref(this));
 
         RemoveAllChildren();
     }
 
     AssetInfo& AssetInfo::operator=(const AssetInfo& other)
     {
-        if (mOwnChildren)
-        {
-            for (auto child : mChildren)
-            {
-                child->parent = nullptr;
-                delete child;
-            }
-        }
-
-        meta = other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr;
+        meta = other.meta;
         path = other.path;
         editTime = other.editTime;
         tree = other.tree;
         mChildren = other.mChildren;
-        mOwnChildren = false;
 
         return *this;
     }
@@ -62,87 +51,58 @@ namespace o2
         return IsValid();
     }
 
-    AssetInfo* AssetInfo::AddChild(AssetInfo* node)
+    Ref<AssetInfo> AssetInfo::AddChild(const Ref<AssetInfo>& node)
     {
         if (node->parent)
-            node->parent->RemoveChild(node, false);
+            node->parent.Lock()->RemoveChild(node);
 
-        node->parent = this;
+        node->parent = WeakRef(this);
 
         mChildren.Add(node);
 
         return node;
     }
 
-    void AssetInfo::RemoveChild(AssetInfo* node, bool release /*= true*/)
+    void AssetInfo::RemoveChild(const Ref<AssetInfo>& node)
     {
         node->parent = nullptr;
 
         mChildren.Remove(node);
-
-        if (release && node)
-            delete node;
     }
 
     void AssetInfo::RemoveAllChildren()
     {
-        if (mOwnChildren)
-        {
-            for (auto child : mChildren)
-            {
-                child->parent = nullptr;
-                delete child;
-            }
-        }
-
         mChildren.Clear();
-        mOwnChildren = true;
     }
 
-    void AssetInfo::SetParent(AssetInfo* parent)
+    void AssetInfo::SetParent(const Ref<AssetInfo>& parent)
     {
         if (parent)
-            parent->AddChild(this);
-        else
-        {
-            if (parent)
-                parent->RemoveChild(this, false);
-
-            parent = nullptr;
-        }
+            parent->AddChild(Ref(this));
     }
 
     void AssetInfo::OnDeserialized(const DataValue& node)
     {
-        for (auto child : mChildren)
-            child->parent = this;
+        auto thisRef = Ref(this);
+        for (auto& child : mChildren)
+            child->parent = thisRef;
     }
 
-    void AssetInfo::SetTree(AssetsTree* tree)
+    void AssetInfo::SetTree(const Ref<AssetsTree>& tree)
     {
         this->tree = tree;
-        tree->allAssets.Add(this);
-        tree->allAssetsByPath[path] = this;
+        tree->allAssets.Add(WeakRef(this));
+        tree->allAssetsByPath[path] = WeakRef(this);
 
         if (meta)
-            tree->allAssetsByUID[meta->ID()] = this;
+            tree->allAssetsByUID[meta->ID()] = WeakRef(this);
 
-        for (auto child : mChildren)
+        for (auto& child : mChildren)
             child->SetTree(tree);
     }
 
-    const Vector<AssetInfo*>& AssetInfo::GetChildren() const
+    const Vector<Ref<AssetInfo>>& AssetInfo::GetChildren() const
     {
-        if (mOwnChildren)
-            return mChildren;
-
-        if (tree)
-        {
-            AssetInfo* sameInTree = nullptr;
-            if (tree->allAssetsByUID.TryGetValue(meta->ID(), sameInTree))
-                return sameInTree->GetChildren();
-        }
-
         return mChildren;
     }
 
@@ -151,7 +111,7 @@ namespace o2
         return meta && meta->ID() != UID::empty;
     }
 
-    AssetInfo AssetInfo::empty = AssetInfo(mnew AssetMeta());
+    AssetInfo AssetInfo::empty = AssetInfo(mmake<AssetMeta>());
 
     bool AssetInfo::operator==(const AssetInfo& other) const
     {

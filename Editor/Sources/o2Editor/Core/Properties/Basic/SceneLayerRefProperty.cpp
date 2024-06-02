@@ -6,13 +6,14 @@
 
 namespace Editor
 {
-	SceneLayerRefProperty::SceneLayerRefProperty()
+	SceneLayerRefProperty::SceneLayerRefProperty(RefCounter* refCounter):
+		TPropertyField<Ref<SceneLayer>>(refCounter)
 	{
 		mCommonValue = Ref<SceneLayer>();
 	}
 
-	SceneLayerRefProperty::SceneLayerRefProperty(const SceneLayerRefProperty& other) :
-		TPropertyField<Ref<SceneLayer>>(other)
+	SceneLayerRefProperty::SceneLayerRefProperty(RefCounter* refCounter, const SceneLayerRefProperty& other) :
+		TPropertyField<Ref<SceneLayer>>(refCounter, other)
 	{
 		InitializeControls();
 	}
@@ -77,7 +78,7 @@ namespace Editor
 		{
 			if (mSelectedInheritedValue)
 				mDropDown->value = mInheritFromParentName;
-			else
+			else if (mCommonValue)
 				mDropDown->value = mCommonValue->GetName();
 
 			mDropDown->SetState("undefined", false);
@@ -92,14 +93,14 @@ namespace Editor
 		auto dropdownLayers = mDropDown->GetAllItemsText();
 		for (auto itemName : dropdownLayers)
 		{
-			if (!layers.Contains([&](SceneLayer* x) { return x->GetName() == (String)itemName; }))
+			if (!layers.Contains([&](auto& x) { return x->GetName() == (String)itemName; }))
 				mDropDown->RemoveItem(itemName);
 		}
 
 		if (mUseInheritedValue)
 			mDropDown->AddItem(mInheritFromParentName);
 
-		for (auto layer : layers)
+		for (auto& layer : layers)
 		{
 			if (!dropdownLayers.Contains(layer->GetName()))
 				mDropDown->AddItem(layer->GetName());
@@ -120,7 +121,10 @@ namespace Editor
 
 		mSelectedInheritedValue = false;
 
-		SetValueByUser(Ref<SceneLayer>(name));
+		if (!mCommonValue)
+			mCommonValue = o2Scene.GetDefaultLayer();
+
+		//SetValueByUser(Ref<SceneLayer>(name));
 	}
 
 	bool SceneLayerRefProperty::IsAlwaysRefresh() const
@@ -129,7 +133,10 @@ namespace Editor
 	}
 
 }
+
 DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<o2::SceneLayer>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::SceneLayerRefProperty>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Ref<o2::SceneLayer>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SceneLayerRefProperty, Editor__SceneLayerRefProperty);

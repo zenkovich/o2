@@ -25,36 +25,36 @@
 
 namespace Editor
 {
-	Widget* ToolsPanel::GetPanelWidget() const
+	const Ref<Widget>& ToolsPanel::GetPanelWidget() const
 	{
 		return mPanelRoot;
 	}
 
-	Widget* ToolsPanel::GetPlayPanel() const
+	const Ref<Widget>& ToolsPanel::GetPlayPanel() const
 	{
 		return mPlayPanel;
 	}
 
-	HorizontalLayout* ToolsPanel::GetToolsPanel() const
+	const Ref<HorizontalLayout>& ToolsPanel::GetToolsPanel() const
 	{
 		return mToolsPanel;
 	}
 
-	void ToolsPanel::AddToolToggle(Toggle* toggle)
+	void ToolsPanel::AddToolToggle(const Ref<Toggle>& toggle)
 	{
-		if (!toggle->GetStateObject("visible")->GetAnimationClip().GetTrack<float>("layout/minWidth"))
+		if (!toggle->GetStateObject("visible")->GetAnimationClip()->GetTrack<float>("layout/minWidth"))
 		{
-			*toggle->GetStateObject("visible")->GetAnimationClip().AddTrack<float>("layout/minWidth") =
+			*toggle->GetStateObject("visible")->GetAnimationClip()->AddTrack<float>("layout/minWidth") =
 				AnimationTrack<float>::EaseInOut(0.0f, 20.0f, 0.2f);
 		}
 
 		mToolsPanel->AddChild(toggle);
 		toggle->SetEnabledForcible(false);
 		toggle->SetEnabled(true);
-		toggle->SetToggleGroup(&mToolsTogglesGroup);
+		toggle->SetToggleGroup(mToolsTogglesGroup);
 	}
 
-	void ToolsPanel::RemoveToolToggle(Toggle* toggle)
+	void ToolsPanel::RemoveToolToggle(const Ref<Toggle>& toggle)
 	{
 		toggle->GetStateObject("visible")->onStateFullyFalse = [=]() { 
 			o2Tasks.Invoke([=]() { mToolsPanel->RemoveChild(toggle, false); });
@@ -69,11 +69,11 @@ namespace Editor
 	}
 
 	ToolsPanel::ToolsPanel():
-		mToolsTogglesGroup(ToggleGroup::Type::OnlySingleTrue)
+		mToolsTogglesGroup(mmake<ToggleGroup>(ToggleGroup::Type::OnlySingleTrue))
 	{
-		mPanelRoot = mnew Widget();
+		mPanelRoot = mmake<Widget>();
 		mPanelRoot->name = "tools panel";
-		mPanelRoot->AddLayer("back", mnew Sprite("ui/UI4_ToolsPanel_bk.png"), Layout::BothStretch(-2, 0, -2, -8));
+		mPanelRoot->AddLayer("back", mmake<Sprite>("ui/UI4_ToolsPanel_bk.png"), Layout::BothStretch(-2, 0, -2, -8));
 
 		mPanelRoot->layout->anchorMin = Vec2F(0, 1);
 		mPanelRoot->layout->anchorMax = Vec2F(1, 1);
@@ -92,9 +92,9 @@ namespace Editor
 
 	void ToolsPanel::InitializePlayPanel()
 	{
-		mPlayPanel = mnew Widget();
+		mPlayPanel = mmake<Widget>();
 		mPlayPanel->name = "play panel";
-		mPlayPanel->AddLayer("back", mnew Sprite("ui/UI4_play_panel_bk.png"), Layout::BothStretch(-7, -5, -5, -5));
+		mPlayPanel->AddLayer("back", mmake<Sprite>("ui/UI4_play_panel_bk.png"), Layout::BothStretch(-7, -5, -5, -5));
 		*mPlayPanel->layout = WidgetLayout::VerStretch(HorAlign::Left, 3, 2, 200, 10);
 		mPanelRoot->AddChild(mPlayPanel);
 
@@ -123,18 +123,18 @@ namespace Editor
 		mDevicesList->AddItems({ "iPhone", "Editor", "Simulator" });
 		mDevicesList->selectedItemPos = 0;
 
-		AnimationClip playPanelPlayStateAnim;
+		auto playPanelPlayStateAnim = mmake<AnimationClip>();
 
-		*playPanelPlayStateAnim.AddTrack<float>("layout/offsetRight") =
+		*playPanelPlayStateAnim->AddTrack<float>("layout/offsetRight") =
 			AnimationTrack<float>::EaseInOut(149.0f, 183.0f, 0.3f);
 
-		auto visiblePauseBtnAnim = playPanelPlayStateAnim.AddTrack<bool>("child/pause/enabled");
+		auto visiblePauseBtnAnim = playPanelPlayStateAnim->AddTrack<bool>("child/pause/enabled");
 		visiblePauseBtnAnim->AddKey(0.0f, false);
 		visiblePauseBtnAnim->AddKey(0.1f, false);
 		visiblePauseBtnAnim->AddKey(0.11f, true);
 		visiblePauseBtnAnim->AddKey(0.3f, true);
 
-		auto visibleStepBtnAnim = playPanelPlayStateAnim.AddTrack<bool>("child/step/enabled");
+		auto visibleStepBtnAnim = playPanelPlayStateAnim->AddTrack<bool>("child/step/enabled");
 		visibleStepBtnAnim->AddKey(0.0f, false);
 		visibleStepBtnAnim->AddKey(0.25f, false);
 		visibleStepBtnAnim->AddKey(0.26f, true);
@@ -158,9 +158,9 @@ namespace Editor
 
 	void ToolsPanel::InitializeToolsPanel()
 	{
-		mToolsPanel = mnew HorizontalLayout();
+		mToolsPanel = mmake<HorizontalLayout>();
 		mToolsPanel->name = "edit tools";
-		mToolsPanel->AddLayer("back", mnew Sprite("ui/UI4_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
+		mToolsPanel->AddLayer("back", mmake<Sprite>("ui/UI4_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
 		*mToolsPanel->layout = WidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
 		mToolsPanel->expandHeight = true;
 		mToolsPanel->expandWidth = false;
@@ -168,7 +168,7 @@ namespace Editor
 		mToolsPanel->baseCorner = BaseCorner::Center;
 		mPanelRoot->AddChild(mToolsPanel);
 
-		for (auto tool : o2EditorSceneScreen.GetTools())
+		for (auto& tool : o2EditorSceneScreen.GetTools())
 			AddToolToggle(tool->GetPanelToggle());
 
 		o2EditorSceneScreen.SelectTool<FrameTool>();

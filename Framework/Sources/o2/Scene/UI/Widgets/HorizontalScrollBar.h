@@ -27,10 +27,10 @@ namespace o2
 
     public:
         // Constructor
-        HorizontalScrollBar();
+        explicit HorizontalScrollBar(RefCounter* refCounter);
 
         // Copy-constructor
-        HorizontalScrollBar(const HorizontalScrollBar& other);
+        HorizontalScrollBar(RefCounter* refCounter, const HorizontalScrollBar& other);
 
         // Destructor
         ~HorizontalScrollBar();
@@ -93,6 +93,7 @@ namespace o2
         static String GetCreateMenuGroup();
 
         SERIALIZABLE(HorizontalScrollBar);
+        CLONEABLE_REF(HorizontalScrollBar);
 
     protected:
         float mValue = 0.0f;       // Current value @SERIALIZABLE
@@ -105,11 +106,11 @@ namespace o2
         float mScrollHandleSize = 0.2f;      // Scroll handle size (in value range) @SERIALIZABLE
         float mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels @SERIALIZABLE
 
-        float        mPressHandleOffset = 0.0f; // Value offset when handle was pressed
-        bool         mHandlePressed = false;    // True, when handle was pressed
-        WidgetLayer* mHandleLayer = nullptr;    // Handle layer
+		float            mPressHandleOffset = 0.0f; // Value offset when handle was pressed
+		bool             mHandlePressed = false;    // True, when handle was pressed
+        Ref<WidgetLayer> mHandleLayer;              // Handle layer
 
-        WidgetLayer* mBackLayer = nullptr; // Background layer
+        Ref<WidgetLayer> mBackLayer; // Background layer
 
     protected:
         // Called when deserialized
@@ -125,7 +126,7 @@ namespace o2
         void UpdateLayersLayouts() override;
 
         // Called when new layer was added. Here searching bar, back and handle layers
-        void OnLayerAdded(WidgetLayer* layer) override;
+        void OnLayerAdded(const Ref<WidgetLayer>& layer) override;
 
         // Updates bar, back and handle layers layout by value
         void UpdateProgressLayersLayouts();
@@ -156,6 +157,8 @@ namespace o2
 
         // Called when scrolling
         void OnScrolled(float scroll) override;
+
+        REF_COUNTERABLE_IMPL(RefCounterable);
 
         friend class ContextMenu;
         friend class CustomList;
@@ -192,15 +195,15 @@ CLASS_FIELDS_META(o2::HorizontalScrollBar)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(5.0f).NAME(mScrollhandleMinPxSize);
     FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPressHandleOffset);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mHandlePressed);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandleLayer);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackLayer);
+    FIELD().PROTECTED().NAME(mHandleLayer);
+    FIELD().PROTECTED().NAME(mBackLayer);
 }
 END_META;
 CLASS_METHODS_META(o2::HorizontalScrollBar)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const HorizontalScrollBar&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const HorizontalScrollBar&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValue, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueForcible, float);
@@ -223,7 +226,7 @@ CLASS_METHODS_META(o2::HorizontalScrollBar)
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, const Ref<WidgetLayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateProgressLayersLayouts);
     FUNCTION().PROTECTED().SIGNATURE(float, GetValueFromCursor, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetValueFromUser, float);

@@ -20,10 +20,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor. Initializes image
-		TexturePreview();
+		TexturePreview(RefCounter* refCounter);
 
 		// Default copy-constructor
-		TexturePreview(const TexturePreview& other);
+		TexturePreview(RefCounter* refCounter, const TexturePreview& other);
 
 		// Copy operator
 		TexturePreview& operator=(const TexturePreview& other);
@@ -31,14 +31,15 @@ namespace Editor
 		// Sets viewing curve
 		void SetTexture(const TextureRef& texture, const RectI& srcRect = RectI());
 
-		SERIALIZABLE(TexturePreview);
+        SERIALIZABLE(TexturePreview);
+        CLONEABLE_REF(TexturePreview);
 
 	protected:
-		float mLabelHeight = 20.0f;
+		const float mLabelHeight = 20.0f; // Height of the label with texture info
 
-		Sprite* mBackgroundSprite = nullptr;
-		Sprite* mTextureSprite = nullptr;
-		Label*  mTextureInfoLabel = nullptr;
+		Ref<Sprite> mBackgroundSprite; // Background sprite (chessmate pattern)
+		Ref<Sprite> mTextureSprite;    // Texture sprite
+		Ref<Label>  mTextureInfoLabel; // Texture info label
 
 	protected:
 		// Updates layers layouts, calls after updating widget layout; calculates sprite size
@@ -55,16 +56,16 @@ END_META;
 CLASS_FIELDS_META(Editor::TexturePreview)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(20.0f).NAME(mLabelHeight);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackgroundSprite);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextureSprite);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextureInfoLabel);
+    FIELD().PROTECTED().NAME(mBackgroundSprite);
+    FIELD().PROTECTED().NAME(mTextureSprite);
+    FIELD().PROTECTED().NAME(mTextureInfoLabel);
 }
 END_META;
 CLASS_METHODS_META(Editor::TexturePreview)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const TexturePreview&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const TexturePreview&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTexture, const TextureRef&, const RectI&);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
 }

@@ -37,16 +37,16 @@ namespace o2
         Platform GetPlatform() const;
 
     protected:
-        LogStream* mLog; // Asset builder log stream
+        Ref<LogStream> mLog; // Asset builder log stream
 
         Platform mPlatform; // Current platform
 
-        String     mSourceAssetsPath; // Source assets path
-        AssetsTree mSourceAssetsTree; // Source assets tree
+        String          mSourceAssetsPath; // Source assets path
+        Ref<AssetsTree> mSourceAssetsTree; // Source assets tree
 
-        String     mBuiltAssetsPath;     // Built assets path
-        String     mBuiltAssetsTreePath; // Built assets tree data path
-        AssetsTree mBuiltAssetsTree;     // Built assets tree
+        String          mBuiltAssetsPath;     // Built assets path
+        String          mBuiltAssetsTreePath; // Built assets tree data path
+        Ref<AssetsTree> mBuiltAssetsTree;     // Built assets tree
 
         Vector<UID> mModifiedAssets; // Modified assets infos
 
@@ -80,9 +80,6 @@ namespace o2
 
         // Returns assets converter by asset type
         IAssetConverter* GetAssetConverter(const Type* assetType);
-
-        // Resets builder
-        void Reset();
 
         friend class AtlasAssetConverter;
     };

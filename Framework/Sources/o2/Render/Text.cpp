@@ -14,7 +14,7 @@ namespace o2
         mDotsEndings(false), mHeight(11)
     {}
 
-    Text::Text(FontRef font):
+    Text::Text(Ref<Font> font):
         mFont(font), mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
         mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mUpdatingMesh(false),
         mFontAssetId(0), mDotsEndings(false), mHeight(11)
@@ -43,13 +43,13 @@ namespace o2
             mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
     }
 
-    Text::Text(const BitmapFontAssetRef& fontAsset):
+    Text::Text(const AssetRef<BitmapFontAsset>& fontAsset):
         Text(fontAsset->GetFont())
     {
         mFontAssetId = fontAsset->GetUID();
     }
 
-    Text::Text(const VectorFontAssetRef& fontAsset):
+    Text::Text(const AssetRef<VectorFontAsset>& fontAsset):
         Text(fontAsset->GetFont())
     {
         mFontAssetId = fontAsset->GetUID();
@@ -64,14 +64,11 @@ namespace o2
         mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mDotsEndings(false), mHeight(11),
         mUpdatingMesh(false)
     {
-        SetFontAsset(FontAssetRef(fontAssetId));
+        SetFontAsset(AssetRef<FontAsset>(fontAssetId));
     }
 
     Text::~Text()
     {
-        for (auto mesh : mMeshes)
-            delete mesh;
-
         if (mFont)
             mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
     }
@@ -107,18 +104,18 @@ namespace o2
         if (!mEnabled)
             return;
 
-        for (auto mesh : mMeshes)
+        for (auto& mesh : mMeshes)
         {
             mesh->Draw();
 
             if (o2Input.IsKeyDown(VK_F3))
-                o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 150));
+                o2Render.DrawMeshWire(mesh.Get(), Color4(0, 255, 0, 150));
         }
 
         OnDrawn();
     }
 
-    void Text::SetFont(FontRef font)
+    void Text::SetFont(const Ref<Font>& font)
     {
         if (mFont)
             mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
@@ -131,12 +128,12 @@ namespace o2
         UpdateMesh();
     }
 
-    FontRef Text::GetFont() const
+    const Ref<Font>& Text::GetFont() const
     {
         return mFont;
     }
 
-    void Text::SetFontAsset(const FontAssetRef& asset)
+    void Text::SetFontAsset(const AssetRef<FontAsset>& asset)
     {
         if (mFont)
             mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
@@ -147,7 +144,7 @@ namespace o2
             mFontAssetId = asset->GetUID();
         }
         else
-            mFont = FontRef();
+            mFont = Ref<Font>();
 
         if (mFont)
             mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
@@ -155,13 +152,13 @@ namespace o2
         CheckCharactersAndRebuildMesh();
     }
 
-    FontAssetRef Text::GetFontAsset() const
+    AssetRef<FontAsset> Text::GetFontAsset() const
     {
         auto& fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
         if (fontAssetInfo.meta->GetAssetType() == &TypeOf(BitmapFontAsset))
-            return BitmapFontAssetRef(mFontAssetId);
+            return AssetRef<BitmapFontAsset>(mFontAssetId);
 
-        return VectorFontAssetRef(mFontAssetId);
+        return AssetRef<VectorFontAsset>(mFontAssetId);
     }
 
     void Text::SetHeight(int height)
@@ -267,7 +264,7 @@ namespace o2
         return RectF(mTransform.origin, mTransform.origin + mSymbolsSet.mRealSize);
     }
 
-    Vec2F Text::GetTextSize(const WString& text, Font* font, int height /*= 11*/, const Vec2F& areaSize /*= Vec2F()*/,
+    Vec2F Text::GetTextSize(const WString& text, const Ref<Font>& font, int height /*= 11*/, const Vec2F& areaSize /*= Vec2F()*/,
                             HorAlign horAlign /*= HorAlign::Left*/, VerAlign verAlign /*= VerAlign::Top*/,
                             bool wordWrap /*= true*/, bool dotsEngings /*= false*/, float charsDistCoef /*= 1.0f*/,
                             float linesDistCoef /*= 1.0f*/)
@@ -275,6 +272,7 @@ namespace o2
         SymbolsSet textSet;
         textSet.Initialize(font, text, height, Vec2F(), areaSize, horAlign, verAlign, wordWrap, dotsEngings, charsDistCoef,
                            linesDistCoef);
+
         return textSet.mRealSize;
     }
 
@@ -287,7 +285,7 @@ namespace o2
 
         if (!mFont)
         {
-            for (auto mesh : mMeshes)
+            for (auto& mesh : mMeshes)
             {
                 mesh->vertexCount = 0;
                 mesh->polyCount = 0;
@@ -307,14 +305,14 @@ namespace o2
 
         PrepareMesh(textLen);
 
-        for (auto mesh : mMeshes)
+        for (auto& mesh : mMeshes)
         {
             mesh->vertexCount = 0;
             mesh->polyCount = 0;
         }
 
         int currentMeshIdx = 0;
-        Mesh* currentMesh = mMeshes[0];
+        Ref<Mesh> currentMesh = mMeshes[0];
 
         mSymbolsSet.Initialize(mFont, mText, mHeight, mTransform.origin, mSize, mHorAlign, mVerAlign, mWordWrap, mDotsEndings,
                                mSymbolsDistCoef, mLinesDistanceCoef);
@@ -375,7 +373,7 @@ namespace o2
     void Text::PrepareMesh(int charactersCount)
     {
         int needPolygons = charactersCount*2 + 15; // 15 for dots endings
-        for (auto mesh : mMeshes)
+        for (auto& mesh : mMeshes)
             needPolygons -= mesh->GetMaxPolyCount();
 
         if (needPolygons <= 0)
@@ -393,7 +391,7 @@ namespace o2
         {
             int polyCount = Math::Min<int>(needPolygons, mMeshMaxPolyCount);
             needPolygons -= polyCount;
-            mMeshes.Add(mnew Mesh(mFont->mTexture, polyCount * 2, polyCount));
+            mMeshes.Add(mmake<Mesh>(mFont->mTexture, polyCount * 2, polyCount));
         }
     }
 
@@ -417,7 +415,7 @@ namespace o2
     void Text::ColorChanged()
     {
         ULong dcolor = mColor.ABGR();
-        for (auto mesh : mMeshes)
+        for (auto& mesh : mMeshes)
         {
             for (int i = 0; i < (int)mesh->vertexCount; i++)
                 mesh->vertices[i].color = dcolor;
@@ -443,7 +441,7 @@ namespace o2
 
     void Text::OnDeserialized(const DataValue& node)
     {
-        SetFontAsset(FontAssetRef(mFontAssetId));
+        SetFontAsset(AssetRef<FontAsset>(mFontAssetId));
     }
 
     void Text::TransformMesh(const Basis& bas)
@@ -463,7 +461,7 @@ namespace o2
         mSymbolsSet.Move(bas.origin);
     }
 
-    void Text::SymbolsSet::Initialize(FontRef font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,
+    void Text::SymbolsSet::Initialize(const Ref<Font>& font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,
                                       HorAlign horAlign, VerAlign verAlign, bool wordWrap, bool dotsEngings,
                                       float charsDistCoef, float linesDistCoef)
     {

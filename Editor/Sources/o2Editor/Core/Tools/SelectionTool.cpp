@@ -13,14 +13,11 @@ namespace Editor
 {
 	SelectionTool::SelectionTool()
 	{
-		mSelectionSprite = mnew Sprite("ui/UI_Window_place.png");
+		mSelectionSprite = mmake<Sprite>("ui/UI_Window_place.png");
 	}
 
 	SelectionTool::~SelectionTool()
-	{
-		if (mSelectionSprite)
-			delete mSelectionSprite;
-	}
+	{}
 
 	String SelectionTool::GetPanelIcon() const
 	{
@@ -34,7 +31,7 @@ namespace Editor
 
 	void SelectionTool::DrawScene()
 	{
-		for (auto object : mCurrentSelectingObjects)
+		for (auto& object : mCurrentSelectingObjects)
 			o2EditorSceneScreen.DrawObjectSelection(object, o2EditorSceneScreen.GetManyObjectsSelectionColor());
 	}
 
@@ -55,7 +52,7 @@ namespace Editor
 		mSelectingObjects = false;
 	}
 
-	void SelectionTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
+	void SelectionTool::OnObjectsSelectionChanged(const Vector<Ref<SceneEditableObject>>& objects)
 	{}
 
 	void SelectionTool::OnCursorPressed(const Input::Cursor& cursor)
@@ -71,7 +68,7 @@ namespace Editor
 			mCurrentSelectingObjects.Clear();
 			mSelectingObjects = false;
 
-			auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(), mBeforeSelectingObjects);
+			auto selectionAction = mmake<SelectAction>(o2EditorSceneScreen.GetSelectedObjects(), mBeforeSelectingObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 		else
@@ -86,7 +83,7 @@ namespace Editor
 
 			for (int i = startIdx; i >= 0; i--)
 			{
-				auto object = drawnObjects[i];
+				auto object = drawnObjects[i].Lock();
 				if (!object->IsLockedInHierarchy() && object->GetTransform().IsPointInside(sceneSpaceCursor))
 				{
 					mBeforeSelectingObjects = o2EditorSceneScreen.GetSelectedObjects();
@@ -98,8 +95,8 @@ namespace Editor
 					o2EditorTree.HighlightObjectTreeNode(object);
 					selected = true;
 
-					auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(),
-															 mBeforeSelectingObjects);
+					auto selectionAction = mmake<SelectAction>(o2EditorSceneScreen.GetSelectedObjects(),
+															   mBeforeSelectingObjects);
 					o2EditorApplication.DoneAction(selectionAction);
 					break;
 				}
@@ -139,15 +136,17 @@ namespace Editor
 
 			auto currentSelectedObjects = mCurrentSelectingObjects;
 			mCurrentSelectingObjects.Clear();
-			for (auto object : currentSelectedObjects)
+			for (auto& object : currentSelectedObjects)
 			{
 				if (object->GetTransform().AABB().IsIntersects(selectionRect))
 					mCurrentSelectingObjects.Add(object);
 			}
 
 			auto& drawnObjects = o2Scene.GetDrawnEditableObjects();
-			for (auto object : drawnObjects)
+			for (auto& objectWeak : drawnObjects)
 			{
+				auto object = objectWeak.Lock();
+
 				if (mCurrentSelectingObjects.Contains(object))
 					continue;
 

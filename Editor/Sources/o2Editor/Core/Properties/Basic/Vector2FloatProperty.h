@@ -8,7 +8,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class FloatProperty;
+	FORWARD_CLASS_REF(FloatProperty);
 
 	// ----------------------------
 	// Editor float vector property
@@ -17,10 +17,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		Vec2FProperty();
+		Vec2FProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		Vec2FProperty(const Vec2FProperty& other);
+		Vec2FProperty(RefCounter* refCounter, const Vec2FProperty& other);
 
 		// Copy operator
 		Vec2FProperty& operator=(const Vec2FProperty& other);
@@ -64,11 +64,12 @@ namespace Editor
 		// Returns editing by this field type by static function, can't be changed during runtime
 		static const Type* GetValueTypeStatic();
 
-		IOBJECT(Vec2FProperty);
+		SERIALIZABLE(Vec2FProperty);
+        CLONEABLE_REF(Vec2FProperty);
 
 	protected:
-		FloatProperty* mXProperty = nullptr; // X value property
-		FloatProperty* mYProperty = nullptr; // Y value property
+		Ref<FloatProperty> mXProperty; // X value property
+		Ref<FloatProperty> mYProperty; // Y value property
 
 	protected:
 		// Searches controls widgets and layers and initializes them
@@ -77,11 +78,11 @@ namespace Editor
 	protected:
 		class XValueProxy : public IValueProxy<float>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			XValueProxy();
-			XValueProxy(IAbstractValueProxy* proxy);
+			XValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const float& value) override;
 			float GetValue() const override;
@@ -89,11 +90,11 @@ namespace Editor
 
 		class YValueProxy : public IValueProxy<float>
 		{
-			IAbstractValueProxy* mProxy = nullptr;
+			Ref<IAbstractValueProxy> mProxy;
 
 		public:
 			YValueProxy();
-			YValueProxy(IAbstractValueProxy* proxy);
+			YValueProxy(const Ref<IAbstractValueProxy>& proxy);
 
 			void SetValue(const float& value) override;
 			float GetValue() const override;
@@ -109,15 +110,15 @@ CLASS_BASES_META(Editor::Vec2FProperty)
 END_META;
 CLASS_FIELDS_META(Editor::Vec2FProperty)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mXProperty);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mYProperty);
+    FIELD().PROTECTED().NAME(mXProperty);
+    FIELD().PROTECTED().NAME(mYProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::Vec2FProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2FProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Vec2FProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(void, Revert);

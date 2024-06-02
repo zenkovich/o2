@@ -64,22 +64,22 @@ namespace o2
             skinningMesh->NeedUpdateBones(true);
     }
 
-    SkinningMeshComponent* SkinningMeshBoneComponent::FindSkinningMesh() const
+    Ref<SkinningMeshComponent> SkinningMeshBoneComponent::FindSkinningMesh() const
     {
-        auto itActor = mOwner;
+        auto itActor = mOwner.Lock();
         while (itActor)
         {
             if (auto mesh = itActor->GetComponent<SkinningMeshComponent>())
                 return mesh;
 
-            itActor = itActor->GetParent();
+            itActor = itActor->GetParent().Lock();
         }
 
         return nullptr;
     }
 }
 
-DECLARE_TEMPLATE_CLASS(o2::Ref<o2::SkinningMeshBoneComponent>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::SkinningMeshBoneComponent>);
 // --- META ---
 
 DECLARE_CLASS(o2::SkinningMeshBoneComponent, o2__SkinningMeshBoneComponent);

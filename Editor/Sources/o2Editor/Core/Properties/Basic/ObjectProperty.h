@@ -13,7 +13,7 @@ namespace o2
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
+	FORWARD_CLASS_REF(IObjectPropertiesViewer);
 
 	// ----------------------
 	// Editor object property
@@ -22,10 +22,10 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		ObjectProperty();
+		ObjectProperty(RefCounter* refCounter);
 
 		// Copy constructor
-		ObjectProperty(const ObjectProperty& other);
+		ObjectProperty(RefCounter* refCounter, const ObjectProperty& other);
 
 		// Copy operator
 		ObjectProperty& operator=(const ObjectProperty& other);
@@ -52,7 +52,7 @@ namespace Editor
 		WString GetCaption() const override;
 
 		// Adds remove button
-		Button* GetRemoveButton() override;
+		Ref<Button> GetRemoveButton() override;
 
 		// Expands property fields
 		void Expand();
@@ -66,12 +66,13 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-		IOBJECT(ObjectProperty);
+		SERIALIZABLE(ObjectProperty);
+        CLONEABLE_REF(ObjectProperty);
 
 	protected:
 		struct TargetObjectData
 		{
-			IAbstractValueProxy* proxy = nullptr;
+			Ref<IAbstractValueProxy> proxy;
 			IObject* data = nullptr;
 			bool isCreated = false;
 
@@ -84,7 +85,7 @@ namespace Editor
 	protected:							     								    
 		Vector<Pair<TargetObjectData, TargetObjectData>> mTargetObjects; // Target objects
 
-		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object properties viewer
+		Ref<IObjectPropertiesViewer> mObjectViewer; // Object properties viewer
 
 		bool mNoHeader = false;          // Is no header attribute exists
 		bool mExpanded = false;          // True when must be expanded after creating object viewer
@@ -102,7 +103,7 @@ namespace Editor
 		void CheckViewer();
 
 		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
-		TargetObjectData GetObjectFromProxy(IAbstractValueProxy* proxy);
+		TargetObjectData GetObjectFromProxy(const Ref<IAbstractValueProxy>& proxy);
 
 		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
@@ -119,7 +120,7 @@ END_META;
 CLASS_FIELDS_META(Editor::ObjectProperty)
 {
     FIELD().PROTECTED().NAME(mTargetObjects);
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mObjectViewer);
+    FIELD().PROTECTED().NAME(mObjectViewer);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNoHeader);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
     FIELD().PROTECTED().NAME(mCaption);
@@ -128,8 +129,8 @@ END_META;
 CLASS_METHODS_META(Editor::ObjectProperty)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const ObjectProperty&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ObjectProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
@@ -137,7 +138,7 @@ CLASS_METHODS_META(Editor::ObjectProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
-    FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Button>, GetRemoveButton);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
@@ -145,7 +146,7 @@ CLASS_METHODS_META(Editor::ObjectProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckViewer);
-    FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
+    FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

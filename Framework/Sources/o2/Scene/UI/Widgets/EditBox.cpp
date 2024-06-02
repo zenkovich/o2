@@ -18,24 +18,24 @@
 
 namespace o2
 {
-    EditBox::EditBox():
-        ScrollArea()
+    EditBox::EditBox(RefCounter* refCounter):
+        ScrollArea(refCounter)
     {
-        mSelectionMesh = mnew Mesh();
-        mTextDrawable  = mnew Text();
-        mCaretDrawable = mnew Sprite();
+        mSelectionMesh = mmake<Mesh>();
+        mTextDrawable  = mmake<Text>();
+        mCaretDrawable = mmake<Sprite>();
     }
 
-    EditBox::EditBox(const EditBox& other):
-        ScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
+    EditBox::EditBox(RefCounter* refCounter, const EditBox& other):
+        ScrollArea(refCounter, other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
         mMaxLinesCount(other.mMaxLinesCount), mText(other.mText), mLastText(other.mText),
         mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
         mCaretBlinkDelay(other.mCaretBlinkDelay), text(this), caret(this),
         selectionBegin(this), selectionEnd(this)
     {
-        mSelectionMesh = mnew Mesh();
-        mTextDrawable  = other.mTextDrawable->CloneAs<Text>();
-        mCaretDrawable = other.mCaretDrawable->CloneAs<Sprite>();
+        mSelectionMesh = mmake<Mesh>();
+        mTextDrawable  = other.mTextDrawable->CloneAsRef<Text>();
+        mCaretDrawable = other.mCaretDrawable->CloneAsRef<Sprite>();
 
         mTextDrawable->SetText(mText);
 
@@ -44,17 +44,10 @@ namespace o2
     }
 
     EditBox::~EditBox()
-    {
-        delete mSelectionMesh;
-        delete mTextDrawable;
-        delete mCaretDrawable;
-    }
+    {}
 
     EditBox& EditBox::operator=(const EditBox& other)
     {
-        delete mTextDrawable;
-        delete mCaretDrawable;
-
         ScrollArea::operator=(other);
 
         mText = other.mText;
@@ -70,8 +63,8 @@ namespace o2
         mMaxLinesCount = other.mMaxLinesCount;
         mSelectionColor = other.mSelectionColor;
         mCaretBlinkDelay = other.mCaretBlinkDelay;
-        mTextDrawable = other.mTextDrawable->CloneAs<Text>();
-        mCaretDrawable = other.mCaretDrawable->CloneAs<Sprite>();
+        mTextDrawable = other.mTextDrawable->CloneAsRef<Text>();
+        mCaretDrawable = other.mCaretDrawable->CloneAsRef<Sprite>();
 
         mTextDrawable->SetText(mText);
 
@@ -88,7 +81,7 @@ namespace o2
         if (!mResEnabledInHierarchy || mIsClipped)
             return;
 
-        for (auto layer : mDrawingLayers)
+        for (auto& layer : mDrawingLayers)
             layer->Draw();
 
         ISceneDrawable::OnDrawn();
@@ -101,14 +94,14 @@ namespace o2
         if (mIsFocused)
             mCaretDrawable->Draw();
 
-        for (auto child : mChildrenInheritedDepth)
+        for (auto& child : mChildrenInheritedDepth)
             child->Draw();
 
         o2Render.DisableScissorTest();
 
         CursorAreaEventsListener::OnDrawn();
 
-        for (auto layer : mTopDrawingLayers)
+        for (auto& layer : mTopDrawingLayers)
             layer->Draw();
 
         if (mOwnHorScrollBar)
@@ -205,12 +198,12 @@ namespace o2
         CheckScrollingToCaret();
     }
 
-    Text* EditBox::GetTextDrawable()
+    const Ref<Text>& EditBox::GetTextDrawable()
     {
         return mTextDrawable;
     }
 
-    Sprite* EditBox::GetCaretDrawable()
+    const Ref<Sprite>& EditBox::GetCaretDrawable()
     {
         return mCaretDrawable;
     }
@@ -388,14 +381,14 @@ namespace o2
     {
         Widget::OnEnabled();
 
-        interactable = true;
+        SetInteractable(true);
     }
 
     void EditBox::OnDisabled()
     {
         Widget::OnDisabled();
 
-        interactable = false;
+        SetInteractable(false);
     }
 
     void EditBox::OnFocused()
@@ -422,7 +415,7 @@ namespace o2
 
     void EditBox::OnCursorPressed(const Input::Cursor& cursor)
     {
-        o2UI.FocusWidget(this);
+        o2UI.FocusWidget(Ref(this));
 
         auto pressedState = state["pressed"];
         if (pressedState)
@@ -639,7 +632,7 @@ namespace o2
 
         mScrollArea = RectF(0.0f, 0.0f, localViewArea.Width(), localViewArea.Height());
 
-        for (auto child : mChildWidgets)
+        for (auto& child : mChildWidgets)
         {
             mScrollArea.left   = Math::Min(mScrollArea.left, child->layout->GetLeft());
             mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout->GetBottom());
@@ -786,7 +779,7 @@ namespace o2
         auto font = mTextDrawable->GetFont();
         float spaceAdvance = font->GetCharacter(' ', mTextDrawable->GetFontHeight()).mAdvance;
 
-        for (auto line : symbolsSet.mLines)
+        for (auto& line : symbolsSet.mLines)
         {
             if (beg > line.mLineBegSymbol + line.mSymbols.Count() || end < line.mLineBegSymbol)
                 continue;
@@ -840,7 +833,7 @@ namespace o2
         }
 
         auto& symbolsSet = mTextDrawable->GetSymbolsSet();
-        for (auto line : symbolsSet.mLines)
+        for (auto& line : symbolsSet.mLines)
         {
             if (position >= line.mLineBegSymbol && position <= line.mLineBegSymbol + line.mSymbols.Count())
             {
@@ -888,7 +881,7 @@ namespace o2
 
         bool checkUp, checkDown, checkLeft, checkRight;
         int lineIdx = 0;
-        for (auto line : symbolsSet.mLines)
+        for (auto& line : symbolsSet.mLines)
         {
             checkUp = lineIdx > 0;
             checkDown = lineIdx < (int)symbolsSet.mLines.Count() - 1;
@@ -901,7 +894,7 @@ namespace o2
 
 
             int idx = 0;
-            for (auto symb : line.mSymbols)
+            for (auto& symb : line.mSymbols)
             {
                 checkLeft = idx > 0;
                 checkRight = idx < (int)line.mSymbols.Count() - 1;
@@ -1332,6 +1325,8 @@ namespace o2
         mCaretBlinkTime = 0;
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::EditBox>);
 // --- META ---
 
 DECLARE_CLASS(o2::EditBox, o2__EditBox);

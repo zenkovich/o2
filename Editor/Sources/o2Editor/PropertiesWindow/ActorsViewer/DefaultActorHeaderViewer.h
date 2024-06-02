@@ -14,12 +14,12 @@ namespace Editor
 {
 	using namespace o2;
 
-	class TagsProperty;
-	class SceneLayerRefProperty;
-	class BooleanProperty;
-	class StringProperty;
-	class AssetProperty;
-	class FloatProperty;
+	FORWARD_CLASS_REF(TagsProperty);
+	FORWARD_CLASS_REF(SceneLayerRefProperty);
+	FORWARD_CLASS_REF(BooleanProperty);
+	FORWARD_CLASS_REF(StringProperty);
+	FORWARD_CLASS_REF(AssetProperty);
+	FORWARD_CLASS_REF(FloatProperty);
 
 	// ---------------------------
 	// Default actor header viewer
@@ -37,7 +37,7 @@ namespace Editor
 		void SetTargetActors(const Vector<Actor*>& actors) override;
 
 		// Returns data widget
-		Widget* GetWidget() const override;
+		Ref<Widget> GetWidget() const override;
 
 		// Updates properties values
 		void Refresh() override;
@@ -47,19 +47,19 @@ namespace Editor
 	public: 
 		Vector<Actor*> mActors;
 
-		Widget* mDataView = nullptr;
+		Ref<Widget> mDataView;
 
-		BooleanProperty*       mEnableProperty = nullptr;
-		StringProperty*        mNameProperty = nullptr;
-		BooleanProperty*       mLockProperty = nullptr;
-		AssetProperty*         mPrototypeProperty = nullptr;
-		TagsProperty*          mTagsProperty = nullptr;
-		SceneLayerRefProperty* mLayerProperty = nullptr;
-		FloatProperty*         mDepthProperty = nullptr;
+		Ref<BooleanProperty>       mEnableProperty;
+		Ref<StringProperty>        mNameProperty;
+		Ref<BooleanProperty>       mLockProperty;
+		Ref<AssetProperty>         mPrototypeProperty;
+		Ref<TagsProperty>          mTagsProperty;
+		Ref<SceneLayerRefProperty> mLayerProperty;
+		Ref<FloatProperty>         mDepthProperty;
 
-		Button* mPrototypeApplyBtn = nullptr;
-		Button* mPrototypeRevertBtn = nullptr;
-		Button* mPrototypeBreakBtn = nullptr;
+		Ref<Button> mPrototypeApplyBtn;
+		Ref<Button> mPrototypeRevertBtn;
+		Ref<Button> mPrototypeBreakBtn;
 
 	protected:
 		// Refreshes layer property
@@ -95,17 +95,17 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)
 {
     FIELD().PUBLIC().NAME(mActors);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDataView);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mEnableProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mNameProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLockProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mTagsProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLayerProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDepthProperty);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeApplyBtn);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeRevertBtn);
-    FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeBreakBtn);
+    FIELD().PUBLIC().NAME(mDataView);
+    FIELD().PUBLIC().NAME(mEnableProperty);
+    FIELD().PUBLIC().NAME(mNameProperty);
+    FIELD().PUBLIC().NAME(mLockProperty);
+    FIELD().PUBLIC().NAME(mPrototypeProperty);
+    FIELD().PUBLIC().NAME(mTagsProperty);
+    FIELD().PUBLIC().NAME(mLayerProperty);
+    FIELD().PUBLIC().NAME(mDepthProperty);
+    FIELD().PUBLIC().NAME(mPrototypeApplyBtn);
+    FIELD().PUBLIC().NAME(mPrototypeRevertBtn);
+    FIELD().PUBLIC().NAME(mPrototypeBreakBtn);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
@@ -113,7 +113,7 @@ CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
-    FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PROTECTED().SIGNATURE(void, RefreshLayer);
     FUNCTION().PROTECTED().SIGNATURE(void, OnApplyPrototypePressed);

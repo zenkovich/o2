@@ -9,9 +9,9 @@ namespace Editor
 	TransformAction::TransformAction()
 	{}
 
-	TransformAction::TransformAction(const Vector<SceneEditableObject*>& actors)
+	TransformAction::TransformAction(const Vector<Ref<SceneEditableObject>>& actors)
 	{
-		objectsIds = actors.Convert<UInt64>([](SceneEditableObject* x) { return x->GetID(); });
+		objectsIds = actors.Convert<UInt64>([](auto& x) { return x->GetID(); });
 		GetTransforms(objectsIds, beforeTransforms);
 	}
 
@@ -39,7 +39,7 @@ namespace Editor
 	{
 		transforms = objectIds.Convert<Transform>([=](SceneUID id)
 		{
-			SceneEditableObject* object = o2Scene.GetEditableObjectByID(id);
+			auto object = o2Scene.GetEditableObjectByID(id);
 			if (object)
 			{
 				Transform res;
@@ -56,7 +56,7 @@ namespace Editor
 	{
 		for (int i = 0; i < objectsIds.Count(); i++)
 		{
-			SceneEditableObject* object = o2Scene.GetEditableObjectByID(objectsIds[i]);
+			auto object = o2Scene.GetEditableObjectByID(objectsIds[i]);
 			if (object)
 			{
 				object->SetTransform(transforms[i].transform);

@@ -6,12 +6,12 @@
 namespace Editor
 {
 
-	SpoilerWithHead::SpoilerWithHead() :
-		Spoiler()
+	SpoilerWithHead::SpoilerWithHead(RefCounter* refCounter) :
+		Spoiler(refCounter)
 	{}
 
-	SpoilerWithHead::SpoilerWithHead(const SpoilerWithHead& other) :
-		Spoiler(other)
+	SpoilerWithHead::SpoilerWithHead(RefCounter* refCounter, const SpoilerWithHead& other) :
+		Spoiler(refCounter, other)
 	{
 		InitializeControls();
 		RetargetStatesAnimations();
@@ -24,7 +24,7 @@ namespace Editor
 		return *this;
 	}
 
-	Image* SpoilerWithHead::GetIcon() const
+	const Ref<Image>& SpoilerWithHead::GetIcon() const
 	{
 		return mIcon;
 	}
@@ -47,6 +47,8 @@ namespace Editor
 		mIcon = FindInternalWidgetByType<Image>("icon");
 	}
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::SpoilerWithHead>);
 // --- META ---
 
 DECLARE_CLASS(Editor::SpoilerWithHead, Editor__SpoilerWithHead);

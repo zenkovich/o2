@@ -10,11 +10,14 @@ namespace Editor
 	// -----------------------------
 	// Basic editor window interface
 	// -----------------------------
-	class IEditorWindow: public IObject
+	class IEditorWindow: public IObject, public RefCounterable
 	{
-	public:
-		// Default constructor
-		IEditorWindow();
+    public:
+        // Default constructor
+        IEditorWindow();
+
+        // Default constructor
+        IEditorWindow(RefCounter* refCounter);
 
 		// Copy-constructor
 		IEditorWindow(const IEditorWindow& other);
@@ -41,12 +44,12 @@ namespace Editor
 		void Hide();
 
 		// Returns window
-		DockableWindow* GetWindow() const;
+		const Ref<DockableWindow>& GetWindow() const;
 
 		IOBJECT(IEditorWindow);
 
 	protected:
-		DockableWindow* mWindow = nullptr; // Dockable UI window 
+		Ref<DockableWindow> mWindow; // Dockable UI window 
 
 	protected:
 		// Called after that all windows was created
@@ -67,17 +70,19 @@ namespace Editor
 CLASS_BASES_META(Editor::IEditorWindow)
 {
     BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IEditorWindow)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWindow);
+    FIELD().PROTECTED().NAME(mWindow);
 }
 END_META;
 CLASS_METHODS_META(Editor::IEditorWindow)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const IEditorWindow&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetVisible, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
@@ -85,7 +90,7 @@ CLASS_METHODS_META(Editor::IEditorWindow)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsVisible);
     FUNCTION().PUBLIC().SIGNATURE(void, Show);
     FUNCTION().PUBLIC().SIGNATURE(void, Hide);
-    FUNCTION().PUBLIC().SIGNATURE(DockableWindow*, GetWindow);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<DockableWindow>&, GetWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, OnOpened);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);
