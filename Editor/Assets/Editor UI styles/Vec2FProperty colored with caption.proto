@@ -3,7 +3,7 @@
         "Type": "Editor::Vec2FProperty",
         "Value": {
             "Prototype": {
-                "id": "52761c12511636c42415535975c509c3",
+                "id": "4ef0391861ef5a2936a05f3d64e05b03",
                 "path": "Editor UI styles/Vec2FProperty colored.proto"
             },
             "PrototypeLink": 1549273597060455454,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "0d44505a12720ceb6f733d56526f512f",
+                            "id": "7d5f55e1507d5e0059862ed85c5712ad",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 4272162365707740014,
@@ -79,7 +79,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 2689640329615679043,
@@ -114,7 +114,7 @@
                                                         "Type": "Editor::FloatProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0da74ce075b7196040fc65174b1449b1",
+                                                                "id": "653c558675f0318d54d619b31462049e",
                                                                 "path": "Editor UI styles/Float Property red.proto"
                                                             },
                                                             "PrototypeLink": 10439207866421168302,
@@ -136,7 +136,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "47602f5d18ca329c3c98698c6b2945ef",
+                                                                                                    "id": "0ba303442efb59717910566d1bf052ae",
                                                                                                     "path": "Editor UI styles/Edit Box red singleline.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 12648695139211323951,
@@ -317,7 +317,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 16845241035141315159,
@@ -352,7 +352,7 @@
                                                         "Type": "Editor::FloatProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "7bdf62033d9f07504d6325bf37fd72da",
+                                                                "id": "0ce43b30390902221e7a0f5d153a7143",
                                                                 "path": "Editor UI styles/Float Property green.proto"
                                                             },
                                                             "PrototypeLink": 15082701048682773546,
@@ -374,7 +374,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "2f292cd15ac56d5b3bd373743ef24bdf",
+                                                                                                    "id": "3b3c5abb10c42b293bc242b85dd73e68",
                                                                                                     "path": "Editor UI styles/Edit Box green singleline.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 17014502069573644775,

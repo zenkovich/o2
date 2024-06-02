@@ -57,7 +57,9 @@ namespace Editor
 	}
 
 	void EditorApplication::LoadScene(const AssetRef<SceneAsset>& scene)
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		ForcePopEditorScopeOnStack scope;
 
 		if (scene)
@@ -125,7 +127,9 @@ namespace Editor
 	}
 
 	void EditorApplication::OnStarted()
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		PushEditorScopeOnStack enterScope;
 
 		o2Application.SetWindowCaption("o2 Editor");
@@ -402,26 +406,34 @@ namespace Editor
 	}
 
 	void EditorApplication::InitalizeSystems()
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		Application::InitalizeSystems();
 		mMainListenersLayer->SetEditorMode(true);
 	}
 
 	void EditorApplication::LoadUIStyle()
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		EditorUIStyleBuilder builder;
 		builder.RebuildEditorUIManager("Editor UI styles", true, true);
 	}
 
 	void EditorApplication::PreUpdatePhysics()
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		ForcePopEditorScopeOnStack scope;
 
 		Application::PreUpdatePhysics();
 	}
 
 	void EditorApplication::UpdatePhysics(float dt)
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		ForcePopEditorScopeOnStack scope;
 
 		if (mUpdateStep)
@@ -429,7 +441,9 @@ namespace Editor
 	}
 
 	void EditorApplication::PostUpdatePhysics()
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		ForcePopEditorScopeOnStack scope;
 
 		if (mUpdateStep)
@@ -437,7 +451,9 @@ namespace Editor
 	}
 
 	void EditorApplication::UpdateScene(float dt)
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		ForcePopEditorScopeOnStack scope;
 
 		if (mUpdateStep)
@@ -455,7 +471,9 @@ namespace Editor
 	}
 
 	void EditorApplication::FixedUpdateScene(float dt)
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		ForcePopEditorScopeOnStack scope;
 
 		if (mUpdateStep)
@@ -473,12 +491,16 @@ namespace Editor
 	}
 
 	void EditorApplication::DrawDebug()
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		o2Debug.Draw(true);
 	}
 
 	void EditorApplication::UpdateDebug(float dt)
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		if (mUpdateStep)
 			o2Debug.Update(false, dt);
 
@@ -498,7 +520,9 @@ namespace Editor
 	}
 
 	void EditorApplication::OnUpdate(float dt)
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		mWindowsManager->Update(dt);
 		mUIRoot->Update(dt);
 		mToolsPanel->Update(dt);
@@ -514,12 +538,19 @@ namespace Editor
 
 		if (o2Input.IsKeyPressed('K'))
 			o2Memory.DumpInfo();
+
+		TracyPlot("FPS", o2Time.GetFPS());
+		TracyPlot("Draw Calls", (float)mDrawCalls);
+		TracyPlot("Drawn Primitives", (float)mDrawnPrimitives);
+		TracyPlot("JS Memory", o2Scripts.GetUsedMemory() / 1024.0f);
 	}
 
 #undef DrawText
 
 	void EditorApplication::OnDraw()
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		PushEditorScopeOnStack scope;
 
 		o2Render.Clear();

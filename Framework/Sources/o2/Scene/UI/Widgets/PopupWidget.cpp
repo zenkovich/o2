@@ -36,6 +36,8 @@ namespace o2
 
     void PopupWidget::Update(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (!mResEnabledInHierarchy)
             return;
 
@@ -220,6 +222,8 @@ namespace o2
 
     void PopupWidget::SpecialDraw()
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (!mResEnabledInHierarchy)
             return;
 

@@ -231,6 +231,8 @@ namespace o2
 
     void Actor::Draw()
     {
+        PROFILE_SAMPLE_FUNC();
+
         for (auto& component : mDrawComponents)
             component->Draw();
 
@@ -239,6 +241,8 @@ namespace o2
 
     void Actor::Update(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (transform->IsDirty())
         {
             for (auto& child : mChildren)
@@ -255,6 +259,8 @@ namespace o2
 
     void Actor::FixedUpdate(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         OnFixedUpdate(dt);
 
         for (auto& comp : mComponents)
@@ -263,6 +269,8 @@ namespace o2
 
     void Actor::UpdateChildren(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         for (auto& child : mChildren)
             child->Update(dt);
 
@@ -272,6 +280,8 @@ namespace o2
 
     void Actor::FixedUpdateChildren(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         for (auto& child : mChildren)
             child->FixedUpdate(dt);
 

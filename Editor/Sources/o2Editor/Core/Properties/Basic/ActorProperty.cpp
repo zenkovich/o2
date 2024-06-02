@@ -99,7 +99,9 @@ namespace Editor
 	void ActorProperty::OnTypeSpecialized(const Type& type)
 	{
 		TPropertyField<Ref<Actor>>::OnTypeSpecialized(type);
-		mActorType = type.InvokeStatic<const Type*>("GetActorTypeStatic");
+
+		if (auto refType = dynamic_cast<const ReferenceType*>(&type))
+			mActorType = refType->GetBaseType();
 	}
 
 	bool ActorProperty::IsValueRevertable() const

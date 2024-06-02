@@ -171,7 +171,6 @@ namespace Editor
 
 		SetTargetsActorProperties(targets, viewersWidgets);
 		SetTargetsComponents(targets, viewersWidgets);
-
 		mViewersLayout->AddChildren(DynamicCastVector<Actor>(viewersWidgets));
 	}
 
@@ -287,7 +286,7 @@ namespace Editor
 				if (!mComponentViewersPool.ContainsKey(type))
 					mComponentViewersPool.Add(type, {});
 
-				auto newViewer = Ref((IActorComponentViewer*)(viewerSample->GetType().CreateSample()));
+				auto newViewer = DynamicCast<IActorComponentViewer>(viewerSample->GetType().CreateSampleRef());
 
 				mComponentViewersPool[type].Add(newViewer);
 			}

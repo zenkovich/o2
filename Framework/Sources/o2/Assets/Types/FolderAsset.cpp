@@ -20,9 +20,17 @@ namespace o2
 
     Vector<AssetRef<Asset>> FolderAsset::GetChildrenAssets() const
     {
+        PROFILE_SAMPLE_FUNC();
+
         Vector<AssetRef<Asset>> res;
+
         for (auto& asset : mInfo.GetChildren())
+        {
+            PROFILE_SAMPLE("Load sub asset");
+            PROFILE_INFO(asset->path);
+
             res.Add(AssetRef<Asset>(asset->meta->ID()));
+        }
 
         return res;
     }

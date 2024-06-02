@@ -388,18 +388,18 @@ namespace Editor
             parentObject->AddEditableChild(newObject);
 
             auto parentChilds = parentObject->GetEditableChildren();
-            auto action = new CreateAction({ newObject }, parentObject,
-                                           parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : Ref<SceneEditableObject>());
+            auto action = mmake<CreateAction>(Vector<Ref<SceneEditableObject>>{ newObject }, parentObject,
+                                              parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : Ref<SceneEditableObject>());
 
             o2EditorApplication.DoneAction(Ref(action));
         }
         else
         {
             auto sceneObjects = o2Scene.GetRootEditableObjects();
-            auto action = new CreateAction({ newObject }, nullptr,
-                                           sceneObjects.Count() > 1 ? sceneObjects[sceneObjects.Count() - 2] : nullptr);
+            auto action = mmake<CreateAction>(Vector<Ref<SceneEditableObject>>{ newObject }, nullptr,
+                                              sceneObjects.Count() > 1 ? sceneObjects[sceneObjects.Count() - 2] : nullptr);
 
-            o2EditorApplication.DoneAction(Ref(action));
+            o2EditorApplication.DoneAction(action);
         }
 
         newObject->UpdateTransform();

@@ -78,6 +78,8 @@ namespace o2
 
     void EditBox::Draw()
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (!mResEnabledInHierarchy || mIsClipped)
             return;
 
@@ -115,6 +117,8 @@ namespace o2
 
     void EditBox::Update(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         ScrollArea::Update(dt);
 
         if (!mResEnabledInHierarchy || mIsClipped)

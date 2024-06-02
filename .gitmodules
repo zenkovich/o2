@@ -1,0 +1,3 @@
+[submodule "Framework/3rdPartyLibs/tracy"]
+	path = Framework/3rdPartyLibs/tracy
+	url = https://github.com/wolfpld/tracy

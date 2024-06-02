@@ -59,7 +59,7 @@
                                                     {
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 4272162365707740014,
@@ -106,7 +106,7 @@
                                                     {
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "76f10c6d75d3742c545835c910f215c2",
+                                                                "id": "1c2268b359413a10138e6bb042b530e6",
                                                                 "path": "Editor UI styles/Float Property standard.proto"
                                                             },
                                                             "PrototypeLink": 4213832603312123428,
@@ -147,7 +147,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
+                                                                                                    "id": "046c25fd1bb333ba3c5a410d76fa3ed3",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 14448706337552783923,
@@ -330,7 +330,7 @@
                                                     {
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 4272162365707740014,
@@ -385,7 +385,7 @@
                                                     {
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "76f10c6d75d3742c545835c910f215c2",
+                                                                "id": "1c2268b359413a10138e6bb042b530e6",
                                                                 "path": "Editor UI styles/Float Property standard.proto"
                                                             },
                                                             "PrototypeLink": 4213832603312123428,
@@ -430,7 +430,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
+                                                                                                    "id": "046c25fd1bb333ba3c5a410d76fa3ed3",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 14448706337552783923,
@@ -613,7 +613,7 @@
                                                     {
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 4272162365707740014,
@@ -668,7 +668,7 @@
                                                     {
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "76f10c6d75d3742c545835c910f215c2",
+                                                                "id": "1c2268b359413a10138e6bb042b530e6",
                                                                 "path": "Editor UI styles/Float Property standard.proto"
                                                             },
                                                             "PrototypeLink": 4213832603312123428,
@@ -713,7 +713,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
+                                                                                                    "id": "046c25fd1bb333ba3c5a410d76fa3ed3",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 14448706337552783923,
@@ -896,7 +896,7 @@
                                                     {
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 4272162365707740014,
@@ -951,7 +951,7 @@
                                                     {
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "76f10c6d75d3742c545835c910f215c2",
+                                                                "id": "1c2268b359413a10138e6bb042b530e6",
                                                                 "path": "Editor UI styles/Float Property standard.proto"
                                                             },
                                                             "PrototypeLink": 4213832603312123428,
@@ -996,7 +996,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
+                                                                                                    "id": "046c25fd1bb333ba3c5a410d76fa3ed3",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 14448706337552783923,

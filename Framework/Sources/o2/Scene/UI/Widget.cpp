@@ -206,6 +206,9 @@ namespace o2
 
     void Widget::Update(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+        PROFILE_INFO(mName);
+
         if (mResEnabledInHierarchy)
         {
             if (GetLayoutData().updateFrame == 0)
@@ -235,6 +238,9 @@ namespace o2
 
     void Widget::UpdateChildren(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+        PROFILE_INFO(mName);
+
         for (auto& child : mChildren)
             child->Update(dt);
 
@@ -289,7 +295,7 @@ namespace o2
 
     void Widget::Draw()
     {
-        //PROFILE_SAMPLE_FUNC();
+        PROFILE_SAMPLE_FUNC();
 
         if (!mResEnabledInHierarchy || mIsClipped)
         {

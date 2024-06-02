@@ -3,7 +3,7 @@
         "Type": "Editor::CurveProperty",
         "Value": {
             "Prototype": {
-                "id": "3a0c115653cb3c5b405b3754596d36d4",
+                "id": "5e9d659e56e86de76c8206372dfd036c",
                 "path": "Editor UI styles/Curve Property standard.proto"
             },
             "PrototypeLink": 3354357458973033390,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "0d44505a12720ceb6f733d56526f512f",
+                            "id": "7d5f55e1507d5e0059862ed85c5712ad",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 4272162365707740014,

@@ -21,6 +21,8 @@
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
 
+#include "tracy/Tracy.hpp"
+
 #include <chrono>
 #include <thread>
 
@@ -58,6 +60,8 @@ namespace o2
 
     void Application::BasicInitialize()
     {
+        PROFILE_SAMPLE_FUNC();
+
         InitalizeSystems();
         InitializePlatform();
 
@@ -110,6 +114,8 @@ namespace o2
 
     void Application::InitalizeSystems()
     {
+        PROFILE_SAMPLE_FUNC();
+
         srand((UInt)time(NULL));
 
         mTime = Make<Time>();
@@ -247,6 +253,8 @@ namespace o2
         mUIManager->Update();
 
         mAssets->CheckAssetsUnload();
+
+        FrameMark;
     }
 
     void Application::DrawScene()

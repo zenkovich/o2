@@ -94,6 +94,8 @@ namespace o2
 
         GL_CHECK_ERROR();
 
+        wglSwapIntervalEXT(0);
+
         // Check compatibles
         CheckCompatibles();
 

@@ -54,6 +54,8 @@ namespace o2
 
     void Toggle::Update(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         Widget::Update(dt);
 
         if (!mResEnabledInHierarchy || mIsClipped)

@@ -65,5 +65,6 @@ extern PFNGLUNIFORM1IPROC                 glUniform1i;
 extern PFNGLCOMPRESSEDTEXIMAGE2DPROC      glCompressedTexImage2D;
 extern PFNGLBLENDFUNCSEPARATEPROC         glBlendFuncSeparate;
 extern PFNGLBUFFERSUBDATAPROC             glBufferSubData;
+extern PFNWGLSWAPINTERVALEXTPROC          wglSwapIntervalEXT;
 
 #endif // PLATFORM_WINDOWS

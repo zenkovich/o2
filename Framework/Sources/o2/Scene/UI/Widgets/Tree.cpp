@@ -252,6 +252,8 @@ namespace o2
 
     void Tree::Draw()
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (!mResEnabledInHierarchy || mIsClipped)
             return;
 
@@ -320,6 +322,8 @@ namespace o2
 
     void Tree::Update(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         UpdateHighlighting(dt);
         UpdateNodeExpanding(dt);
 

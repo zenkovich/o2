@@ -62,6 +62,13 @@ add_subdirectory(libpng)
 add_subdirectory(zlib)
 add_subdirectory(FreeType)
 add_subdirectory(pugixml)
+add_subdirectory(tracy)
+
+option(TRACY_ENABLE "" ON)
+option(TRACY_ON_DEMAND "" ON)
+option(TRACY_CALLSTACK "" ON)
+
+add_compile_definitions(TRACY_ENABLE)
 
 if(MSVC)
     target_compile_options(Box2D PRIVATE "/MP")
@@ -83,3 +90,4 @@ set_target_properties(libpng PROPERTIES FOLDER o2/3rdPartyLibs)
 set_target_properties(zlib PROPERTIES FOLDER o2/3rdPartyLibs)
 set_target_properties(FreeType PROPERTIES FOLDER o2/3rdPartyLibs)
 set_target_properties(pugixml PROPERTIES FOLDER o2/3rdPartyLibs)
+set_target_properties(TracyClient PROPERTIES FOLDER o2/3rdPartyLibs)

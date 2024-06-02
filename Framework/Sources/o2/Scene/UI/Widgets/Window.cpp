@@ -62,6 +62,8 @@ namespace o2
 
     void Window::Draw()
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (!mResEnabledInHierarchy || mIsClipped) 
         {
             for (auto& child : mChildrenInheritedDepth)

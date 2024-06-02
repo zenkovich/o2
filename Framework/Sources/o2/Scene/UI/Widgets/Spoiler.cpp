@@ -92,6 +92,8 @@ namespace o2
 #undef DrawText
     void Spoiler::Draw()
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (!mResEnabledInHierarchy || mIsClipped)
             return;
 

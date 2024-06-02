@@ -36,6 +36,8 @@ namespace o2
 
     void DropDown::Draw()
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (!mResEnabledInHierarchy)
             return;
 

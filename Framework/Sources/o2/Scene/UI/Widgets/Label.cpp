@@ -48,7 +48,7 @@ namespace o2
 
     void Label::Draw()
     {
-        //PROFILE_SAMPLE_FUNC();
+        PROFILE_SAMPLE_FUNC();
 
         if (!mResEnabledInHierarchy || mIsClipped)
             return;

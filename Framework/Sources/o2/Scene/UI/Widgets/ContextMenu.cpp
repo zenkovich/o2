@@ -168,7 +168,9 @@ namespace o2
 	}
 
 	void ContextMenu::Update(float dt)
-	{
+    {
+        PROFILE_SAMPLE_FUNC();
+
 		if (!mResEnabledInHierarchy)
 			return;
 

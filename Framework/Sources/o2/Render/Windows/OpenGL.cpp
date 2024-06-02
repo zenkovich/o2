@@ -50,6 +50,7 @@ void GetGLExtensions(o2::LogStream* log /*= nullptr*/)
     glCompressedTexImage2D = (PFNGLCOMPRESSEDTEXIMAGE2DPROC)GetSafeWGLProcAddress("glCompressedTexImage2D", log);
     glBlendFuncSeparate = (PFNGLBLENDFUNCSEPARATEPROC)GetSafeWGLProcAddress("glBlendFuncSeparate", log);
     glBufferSubData = (PFNGLBUFFERSUBDATAPROC)GetSafeWGLProcAddress("glBufferSubData", log);
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)GetSafeWGLProcAddress("wglSwapIntervalEXT", log);
 }
 
 bool IsGLExtensionSupported(const char *extension)
@@ -148,5 +149,6 @@ extern PFNGLUNIFORM1IPROC                 glUniform1i = NULL;
 extern PFNGLCOMPRESSEDTEXIMAGE2DPROC      glCompressedTexImage2D = NULL;
 extern PFNGLBLENDFUNCSEPARATEPROC         glBlendFuncSeparate = NULL;
 extern PFNGLBUFFERSUBDATAPROC             glBufferSubData = NULL;
+extern PFNWGLSWAPINTERVALEXTPROC          wglSwapIntervalEXT = NULL;
 
 #endif // PLATFORM_WINDOWS

@@ -68,8 +68,10 @@ namespace Editor
 
 	void ComponentProperty::OnTypeSpecialized(const Type& type)
 	{
-		TPropertyField<Ref<Component>>::OnTypeSpecialized(type);
-		mComponentType = type.InvokeStatic<const Type*>("GetComponentTypeStatic");
+        TPropertyField<Ref<Component>>::OnTypeSpecialized(type);
+
+        if (auto refType = dynamic_cast<const ReferenceType*>(&type))
+			mComponentType = refType->GetBaseType();
 	}
 
 	bool ComponentProperty::IsValueRevertable() const

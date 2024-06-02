@@ -60,6 +60,8 @@ namespace o2
 
     void MenuPanel::Update(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         Widget::Update(dt);
 
         if (!mResEnabledInHierarchy || mIsClipped)
@@ -97,6 +99,8 @@ namespace o2
 
     void MenuPanel::Draw()
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (!mResEnabledInHierarchy)
             return;
 

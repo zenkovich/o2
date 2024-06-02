@@ -145,10 +145,7 @@ namespace Editor
 
 	void ComponentsTree::Refresh()
 	{
-		if (!mRoot)
-			return;
-
-		mRoot->Clear();
+		mRoot = mmake<NodeData>();
 
 		auto componentsTypes = TypeOf(Component).GetDerivedTypes();
 		componentsTypes.Remove(&TypeOf(DrawableComponent));

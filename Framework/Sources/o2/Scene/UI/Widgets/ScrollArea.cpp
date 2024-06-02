@@ -115,6 +115,8 @@ namespace o2
 
     void ScrollArea::Draw()
     {
+        PROFILE_SAMPLE_FUNC();
+
         if (!mResEnabledInHierarchy || mIsClipped)
         {
             if (mIsClipped)
@@ -151,6 +153,8 @@ namespace o2
 
     void ScrollArea::Update(float dt)
     {
+        PROFILE_SAMPLE_FUNC();
+
         mHasScrolled = false;
 
         mLayoutUpdated = layout->IsDirty();

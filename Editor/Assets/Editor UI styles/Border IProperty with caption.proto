@@ -3,7 +3,7 @@
         "Type": "Editor::BorderIProperty",
         "Value": {
             "Prototype": {
-                "id": "401c4e0d227e5d1033f85c4219e7743e",
+                "id": "2bc81b535afc730d612e32e85ddd44b0",
                 "path": "Editor UI styles/Border IProperty standard.proto"
             },
             "PrototypeLink": 11729974733429293242,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "0d44505a12720ceb6f733d56526f512f",
+                            "id": "7d5f55e1507d5e0059862ed85c5712ad",
                             "path": "Editor UI styles/Label standard.proto"
                         },
                         "PrototypeLink": 4272162365707740014,
@@ -79,7 +79,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 5121021427361586794,
@@ -114,7 +114,7 @@
                                                         "Type": "Editor::IntegerProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "02d47699338a35cf028d5d4333a149c1",
+                                                                "id": "7f473b782b1e72ca50ae1a74520579be",
                                                                 "path": "Editor UI styles/Integer Property standard.proto"
                                                             },
                                                             "PrototypeLink": 17970660927318162801,
@@ -136,7 +136,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
+                                                                                                    "id": "046c25fd1bb333ba3c5a410d76fa3ed3",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 5485218460185088947,
@@ -317,7 +317,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 12150264340293726,
@@ -352,7 +352,7 @@
                                                         "Type": "Editor::IntegerProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "02d47699338a35cf028d5d4333a149c1",
+                                                                "id": "7f473b782b1e72ca50ae1a74520579be",
                                                                 "path": "Editor UI styles/Integer Property standard.proto"
                                                             },
                                                             "PrototypeLink": 779438139672594159,
@@ -374,7 +374,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
+                                                                                                    "id": "046c25fd1bb333ba3c5a410d76fa3ed3",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 15379584576969383198,
@@ -555,7 +555,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 12818148319386793647,
@@ -590,7 +590,7 @@
                                                         "Type": "Editor::IntegerProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "02d47699338a35cf028d5d4333a149c1",
+                                                                "id": "7f473b782b1e72ca50ae1a74520579be",
                                                                 "path": "Editor UI styles/Integer Property standard.proto"
                                                             },
                                                             "PrototypeLink": 14783990608581835316,
@@ -612,7 +612,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
+                                                                                                    "id": "046c25fd1bb333ba3c5a410d76fa3ed3",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 9428248384425200437,
@@ -793,7 +793,7 @@
                                                         "Type": "o2::Label",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "0d44505a12720ceb6f733d56526f512f",
+                                                                "id": "7d5f55e1507d5e0059862ed85c5712ad",
                                                                 "path": "Editor UI styles/Label standard.proto"
                                                             },
                                                             "PrototypeLink": 10044656900436826277,
@@ -828,7 +828,7 @@
                                                         "Type": "Editor::IntegerProperty",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "02d47699338a35cf028d5d4333a149c1",
+                                                                "id": "7f473b782b1e72ca50ae1a74520579be",
                                                                 "path": "Editor UI styles/Integer Property standard.proto"
                                                             },
                                                             "PrototypeLink": 7062676344710798972,
@@ -850,7 +850,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "0a371736399512787aeb198d32a10f74",
+                                                                                                    "id": "046c25fd1bb333ba3c5a410d76fa3ed3",
                                                                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 6124122227076054699,
