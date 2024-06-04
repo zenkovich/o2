@@ -163,7 +163,7 @@ namespace Editor
 
 		OnResizing();
 
-		//o2EditorApplication.LoadScene(AssetRef<SceneAsset>(o2EditorConfig.projectConfig.mLastLoadedScene));
+		o2EditorApplication.LoadScene(AssetRef<SceneAsset>(o2EditorConfig.projectConfig.mLastLoadedScene));
 
 		//FreeConsole();
 

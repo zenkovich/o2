@@ -49,6 +49,9 @@ namespace o2
         // Returns a copy of type sample
         static void* CreateTypeSample(const String& typeName);
 
+        // Returns a copy of type sample reference
+        static Ref<RefCounterable> CreateTypeSampleRef(const String& typeName);
+
         // Returns type by name
         static const Type* GetType(const String& name);
 

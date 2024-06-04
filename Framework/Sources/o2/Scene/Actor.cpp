@@ -1054,7 +1054,7 @@ namespace o2
                 for (auto& componentNode : *componentsNode)
                 {
                     String componentType = componentNode.GetMember("Type");
-                    auto component = Ref((Component*)o2Reflection.CreateTypeSample(componentType));
+                    auto component = DynamicCast<Component>(o2Reflection.CreateTypeSampleRef(componentType));
                     if (component)
                     {
                         component->Deserialize(componentNode.GetMember("Data"));
@@ -1252,7 +1252,7 @@ namespace o2
             for (auto& componentNode : *componentsNode)
             {
                 String type = componentNode["Type"];
-                auto newComponent = Ref((Component*)o2Reflection.CreateTypeSample(type));
+                auto newComponent = DynamicCast<Component>(o2Reflection.CreateTypeSampleRef(type));
                 if (!newComponent)
                 {
                     o2Debug.LogError("Can't create component with type:" + type);

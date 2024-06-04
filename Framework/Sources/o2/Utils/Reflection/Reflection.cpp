@@ -103,6 +103,14 @@ namespace o2
         return nullptr;
     }
 
+    Ref<RefCounterable> Reflection::CreateTypeSampleRef(const String& typeName)
+    {
+        if (auto type = GetType(typeName))
+            return type->CreateSampleRef();
+
+        return nullptr;
+    }
+
     const Type* Reflection::GetType(const String& name)
     {
         auto fnd = mInstance->mTypes.find(name);
