@@ -248,9 +248,6 @@ namespace o2
 		// Removes component @SCRIPTABLE
 		void RemoveComponent(const Ref<Component>& component);
 
-        // Removes component
-        void RemoveComponent(Component* component);
-
         // Removes all components @SCRIPTABLE
         void RemoveAllComponents();
 
@@ -473,7 +470,7 @@ namespace o2
         virtual void OnComponentAdded(const Ref<Component>& component);
 
         // Called when component going to be removed from actor
-        virtual void OnComponentRemoving(Component* component);
+        virtual void OnComponentRemoving(const Ref<Component>& component);
 
         REF_COUNTERABLE_IMPL(ActorBase);
 
@@ -886,7 +883,6 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Actor>, FindActorById, SceneUID);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Component>, AddComponent, const Ref<Component>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveComponent, const Ref<Component>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveComponent, Component*);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllComponents);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<Component>, GetComponent, const String&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Component>, GetComponent, const Type*);
@@ -935,7 +931,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, const Ref<Component>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, const Ref<Component>&);
 #if  IS_SCRIPTING_SUPPORTED
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorTransform*, GetTransform);
 #endif

@@ -178,7 +178,7 @@ namespace o2
         virtual void OnComponentAdded(const Ref<Component>& component) {}
 
         // Called when component going to be removed from actor
-        virtual void OnComponentRemoving(Component* component) {}
+        virtual void OnComponentRemoving(const Ref<Component>& component) {}
 
         friend class Actor;
         friend class ActorRefResolver;
@@ -291,7 +291,7 @@ CLASS_METHODS_META(o2::Component)
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, const Ref<Component>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, const Ref<Component>&);
 }
 END_META;
 // --- END META ---

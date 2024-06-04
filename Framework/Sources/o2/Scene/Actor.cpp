@@ -706,28 +706,23 @@ namespace o2
         return component;
     }
 
-    void Actor::RemoveComponent(Component* component)
+    void Actor::RemoveComponent(const Ref<Component>& component)
     {
         if (mIsOnScene)
             component->RemoveFromScene();
 
-        if (auto drawableComponent = dynamic_cast<DrawableComponent*>(component))
-            mDrawComponents.RemoveFirst([&](auto& x) { return x == drawableComponent; });
+        if (auto drawableComponent = DynamicCast<DrawableComponent>(component))
+            mDrawComponents.Remove(drawableComponent);
 
         OnComponentRemoving(component);
 
-        mComponents.RemoveFirst([&](auto& x) { return x == component; });
+        mComponents.Remove(component);
         component->mOwner = nullptr;
 
 #if IS_EDITOR
         OnChanged();
 #endif
     }
-
-	void Actor::RemoveComponent(const Ref<Component>& component)
-	{
-        RemoveComponent(const_cast<Component*>(component.Get()));
-	}
 
 	void Actor::RemoveAllComponents()
     {
@@ -739,7 +734,7 @@ namespace o2
             if (mIsOnScene)
                 component->RemoveFromScene();
 
-            OnComponentRemoving(component.Get());
+            OnComponentRemoving(component);
         }
 
 #if IS_EDITOR
@@ -922,7 +917,7 @@ namespace o2
             comp->OnComponentAdded(component);
     }
 
-    void Actor::OnComponentRemoving(Component* component)
+    void Actor::OnComponentRemoving(const Ref<Component>& component)
     {
         for (auto& comp : mComponents)
             comp->OnComponentRemoving(component);

@@ -21,10 +21,7 @@ namespace o2
     }
 
     Component::~Component()
-    {
-        if (mOwner)
-            mOwner.Lock()->RemoveComponent(this);
-    }
+    {}
 
     Component& Component::operator=(const Component& other)
     {
@@ -193,7 +190,7 @@ namespace o2
             return;
 
         if (mOwner)
-            mOwner.Lock()->RemoveComponent(this);
+            mOwner.Lock()->RemoveComponent(Ref(this));
 
         mOwner = actor;
 

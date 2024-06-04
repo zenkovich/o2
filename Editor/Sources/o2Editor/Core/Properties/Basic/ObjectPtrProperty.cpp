@@ -310,7 +310,7 @@ namespace Editor
 		for (auto& targetObj : mValuesProxies)
 		{
 			if (GetProxy(targetObj.first) == nullptr)
-				SetProxy(targetObj.first, type->DynamicCastToIObject(type->CreateSample()));
+				SetProxy(targetObj.first, dynamic_cast<IObject*>(type->CreateSampleRef().Get()));
 		}
 
 		CheckValueChangeCompleted();
