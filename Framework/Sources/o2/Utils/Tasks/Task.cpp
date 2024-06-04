@@ -5,22 +5,22 @@
 
 namespace o2
 {
-    Task::Task()
+    Task::Task(RefCounter* refCounter):
+        RefCounterable(refCounter)
     {
         mId = o2Tasks.mLastTaskId++;
         o2Tasks.mTasks.Add(Ref(this));
     }
 
-    Task::Task(const Task& other)
+    Task::Task(RefCounter* refCounter, const Task& other):
+		RefCounterable(refCounter)
     {
         mId = o2Tasks.mLastTaskId++;
         o2Tasks.mTasks.Add(Ref(this));
     }
 
     Task::~Task()
-    {
-        //o2Tasks.mTasks.Remove(Ref(this));
-    }
+    {}
 
     void Task::Update(float dt)
     {}
@@ -35,7 +35,11 @@ namespace o2
         return mId;
     }
 
-    void FunctionalTask::Update(float dt)
+	FunctionalTask::FunctionalTask(RefCounter* refCounter):
+		Task(refCounter)
+	{}
+
+	void FunctionalTask::Update(float dt)
     {
         update(dt);
     }
@@ -45,8 +49,8 @@ namespace o2
         return isDone();
     }
 
-    TimeTask::TimeTask(float time /*= 1.0f*/):
-        Task(), mRemainingTime(time)
+    TimeTask::TimeTask(RefCounter* refCounter, float time /*= 1.0f*/):
+        Task(refCounter), mRemainingTime(time)
     {}
 
     void TimeTask::Update(float dt)
@@ -59,8 +63,8 @@ namespace o2
         return mRemainingTime < 0;
     }
 
-    FunctionalTimeTask::FunctionalTimeTask(float time /*= 1.0f*/):
-        TimeTask(time)
+    FunctionalTimeTask::FunctionalTimeTask(RefCounter* refCounter, float time /*= 1.0f*/):
+        TimeTask(refCounter, time)
     {}
 
     void FunctionalTimeTask::Update(float dt)
@@ -68,8 +72,8 @@ namespace o2
         update(dt);
     }
 
-    DelayedTask::DelayedTask(float delay /*= 0.0f*/):
-        Task(), mRemainingToCallTime(delay)
+    DelayedTask::DelayedTask(RefCounter* refCounter, float delay /*= 0.0f*/):
+        Task(refCounter), mRemainingToCallTime(delay)
     {}
 
     void DelayedTask::Update(float dt)
@@ -87,8 +91,8 @@ namespace o2
     void DelayedTask::DoTask()
     {}
 
-    FunctionalDelayedTask::FunctionalDelayedTask(float delay /*= 0.0f*/):
-        DelayedTask(delay)
+    FunctionalDelayedTask::FunctionalDelayedTask(RefCounter* refCounter, float delay /*= 0.0f*/):
+        DelayedTask(refCounter, delay)
     {}
 
     void FunctionalDelayedTask::DoTask()

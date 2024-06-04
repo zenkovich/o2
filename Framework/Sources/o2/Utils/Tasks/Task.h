@@ -11,10 +11,10 @@ namespace o2
     {
     public:
         // Default constructor. Registering himself in tasks manager and gets id
-        Task();
+        Task(RefCounter* refCounter);
 
         // Copy-constructor. Registering himself in tasks manager and gets id
-        Task(const Task& other);
+        Task(RefCounter* refCounter, const Task& other);
 
         // Destructor. Removes from tasks manager
         virtual ~Task();
@@ -43,6 +43,9 @@ namespace o2
         Function<void(float)> update;
         Function<bool()> isDone;
 
+    public:
+        FunctionalTask(RefCounter* refCounter);
+
         void Update(float dt);
         bool IsDone() const;
     };
@@ -53,7 +56,7 @@ namespace o2
     class TimeTask: public Task
     {
     public:
-        TimeTask(float time = 1.0f);
+        TimeTask(RefCounter* refCounter, float time = 1.0f);
 
         void Update(float dt);
         bool IsDone() const;
@@ -70,7 +73,9 @@ namespace o2
     public:
         Function<void(float)> update;
 
-        FunctionalTimeTask(float time = 1.0f);
+    public:
+        FunctionalTimeTask(RefCounter* refCounter, float time = 1.0f);
+
         void Update(float dt);
     };
 
@@ -80,7 +85,7 @@ namespace o2
     class DelayedTask: public Task
     {
     public:
-        DelayedTask(float delay = 0.0f);
+        DelayedTask(RefCounter* refCounter, float delay = 0.0f);
 
         void Update(float dt);
         bool IsDone() const;
@@ -100,7 +105,8 @@ namespace o2
     public:
         Function<void()> doTask;
 
-        FunctionalDelayedTask(float delay = 0.0f);
+    public:
+        FunctionalDelayedTask(RefCounter* refCounter, float delay = 0.0f);
 
     protected:
         void DoTask();

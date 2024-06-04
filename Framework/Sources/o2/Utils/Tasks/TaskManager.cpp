@@ -60,9 +60,11 @@ namespace o2
         PROFILE_SAMPLE_FUNC();
 
         Vector<Ref<Task>> doneTasks;
-        for (auto& task : mTasks)
+        Vector<Ref<Task>> tasks = mTasks;
+        for (auto& task : tasks)
         {
             task->Update(dt);
+
             if (task->IsDone())
                 doneTasks.Add(task);
         }
