@@ -3,7 +3,7 @@ project(o2)
 set(CMAKE_CXX_STANDARD 20)
 
 # Common definitions
-set(O2_COMPILE_DEFINITIONS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
+set(O2_COMPILE_DEFINITIONS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS TRACY_ENABLE)
 
 if (WIN32)
     list(APPEND O2_COMPILE_DEFINITIONS PLATFORM_WINDOWS)
@@ -77,6 +77,7 @@ set(o2Framework_INCLUDES
     "Framework/3rdPartyLibs/FreeType/include"
     "Framework/3rdPartyLibs/jerryscript/jerry-core/include"
     "Framework/3rdPartyLibs/jerryscript"
+    "Framework/3rdPartyLibs/tracy/public"
     "Framework/"
 )
 
@@ -93,7 +94,8 @@ target_link_libraries(o2Framework PUBLIC
         zlib
         FreeType
         pugixml
-)        
+        Tracy::TracyClient
+)
 
 if (UNIX)
     target_link_libraries(o2Framework PUBLIC ${X11_LIBRARIES})
