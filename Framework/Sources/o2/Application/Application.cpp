@@ -21,8 +21,6 @@
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
 
-#include "tracy/Tracy.hpp"
-
 #include <chrono>
 #include <thread>
 
@@ -254,7 +252,7 @@ namespace o2
 
         mAssets->CheckAssetsUnload();
 
-        FrameMark;
+        PROFILE_FRAME();
     }
 
     void Application::DrawScene()

@@ -2,8 +2,14 @@ project(o2)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# Options
+option(O2_SELFPROFILE "Enable profiling o2 benchmark." OFF)
+option(O2_EDITOR "Enables o2 editor." ON)
+option(O2_ASAN "Enables ASAN (address sanitizer)." OFF)
+option(O2_TRACY "Enables Tracy profiling" ON)
+
 # Common definitions
-set(O2_COMPILE_DEFINITIONS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS TRACY_ENABLE)
+set(O2_COMPILE_DEFINITIONS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
 
 if (WIN32)
     list(APPEND O2_COMPILE_DEFINITIONS PLATFORM_WINDOWS)
@@ -26,6 +32,10 @@ endif()
 
 if (O2_EDITOR)
     list(APPEND O2_COMPILE_DEFINITIONS O2_EDITOR_ENABLED)
+endif()
+
+if (O2_TRACY)
+    list(APPEND O2_COMPILE_DEFINITIONS TRACY_ENABLE)
 endif()
 
 set(O2_COMPILE_DEFINITIONS_EXPORT ${O2_COMPILE_DEFINITIONS} PARENT_SCOPE)
@@ -77,7 +87,6 @@ set(o2Framework_INCLUDES
     "Framework/3rdPartyLibs/FreeType/include"
     "Framework/3rdPartyLibs/jerryscript/jerry-core/include"
     "Framework/3rdPartyLibs/jerryscript"
-    "Framework/3rdPartyLibs/tracy/public"
     "Framework/"
 )
 
@@ -93,9 +102,13 @@ target_link_libraries(o2Framework PUBLIC
         libpng
         zlib
         FreeType
-        pugixml
-        Tracy::TracyClient
+        pugixml        
 )
+
+if (O2_TRACY)
+    list(APPEND o2Framework_INCLUDES "Framework/3rdPartyLibs/tracy/public")
+    target_link_libraries(o2Framework PUBLIC Tracy::TracyClient)
+endif()
 
 if (UNIX)
     target_link_libraries(o2Framework PUBLIC ${X11_LIBRARIES})

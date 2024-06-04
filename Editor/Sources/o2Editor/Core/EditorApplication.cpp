@@ -539,10 +539,12 @@ namespace Editor
 		if (o2Input.IsKeyPressed('K'))
 			o2Memory.DumpInfo();
 
+#if defined(TRACY_ENABLE)
 		TracyPlot("FPS", o2Time.GetFPS());
 		TracyPlot("Draw Calls", (float)mDrawCalls);
 		TracyPlot("Drawn Primitives", (float)mDrawnPrimitives);
 		TracyPlot("JS Memory", o2Scripts.GetUsedMemory() / 1024.0f);
+#endif
 	}
 
 #undef DrawText
@@ -576,5 +578,4 @@ namespace Editor
 	void EditorApplication::OnDeactivated()
 	{
 	}
-
 }

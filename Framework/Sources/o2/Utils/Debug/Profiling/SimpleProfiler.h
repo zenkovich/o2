@@ -4,7 +4,9 @@
 #include "o2/Utils/Types/Containers/Pair.h"
 #include "o2/Utils/System/Time/Timer.h"
 
+#ifdef TRACY_ENABLE
 #include "tracy/Tracy.hpp"
+#endif
 
 namespace o2
 {    
@@ -78,14 +80,31 @@ namespace o2
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
-#if defined(O2_PROFILE_STATS)
-#define PROFILE_SAMPLE_FUNC() ZoneScoped; o2::SimpleProfiler::ScopeSampler __scope_sampler(__PRETTY_FUNCTION__)
-#define PROFILE_SAMPLE(id) ZoneScopedN(id); o2::SimpleProfiler::ScopeSampler __scope_sampler(id)
-#define PROFILE_INFO(info) ZoneText(info, info.Length());
+#if defined(TRACY_ENABLE)
+#define TRACY_PROFILE_SAMPLE_FUNC() ZoneScoped
+#define TRACY_PROFILE_SAMPLE(id) ZoneScopedN(id)
+#define TRACY_PROFILE_INFO(info) ZoneText(info, info.Length())
+#define TRACY_PROFILE_FRAME() FrameMark
 #else
-#define PROFILE_SAMPLE_FUNC() ZoneScoped
-#define PROFILE_SAMPLE(id) ZoneScopedN(id)
-#define PROFILE_INFO(info) ZoneText(info, info.Length())
-#endif
+#define TRACY_PROFILE_SAMPLE_FUNC() 
+#define TRACY_PROFILE_SAMPLE(id) 
+#define TRACY_PROFILE_INFO(info)
+#define TRACY_PROFILE_FRAME()
+#endif 
+
+#if defined(O2_PROFILE_STATS)
+#define SIMPLE_PROFILE_SAMPLE_FUNC() o2::SimpleProfiler::ScopeSampler __scope_sampler(__PRETTY_FUNCTION__)
+#define SIMPLE_PROFILE_SAMPLE(id) o2::SimpleProfiler::ScopeSampler __scope_sampler(id)
+#define SIMPLE_PROFILE_INFO(info) 
+#else
+#define SIMPLE_PROFILE_SAMPLE_FUNC() 
+#define SIMPLE_PROFILE_SAMPLE(id) 
+#define SIMPLE_PROFILE_INFO(info)
+#endif 
+
+#define PROFILE_SAMPLE_FUNC() TRACY_PROFILE_SAMPLE_FUNC(); SIMPLE_PROFILE_SAMPLE_FUNC()
+#define PROFILE_SAMPLE(id) TRACY_PROFILE_SAMPLE(id); SIMPLE_PROFILE_SAMPLE(id)
+#define PROFILE_INFO(info) TRACY_PROFILE_INFO(info); SIMPLE_PROFILE_INFO(info)
+#define PROFILE_FRAME() TRACY_PROFILE_FRAME()
 
 }
