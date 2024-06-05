@@ -20,7 +20,7 @@ namespace o2
 
     public:
         // Default constructor
-        AnimationPlayer(IObject* target = nullptr, const Ref<AnimationClip>& clip = nullptr);
+        AnimationPlayer(RefCounter* refCounter, IObject* target = nullptr, const Ref<AnimationClip>& clip = nullptr);
 
         // Destructor
         ~AnimationPlayer();
@@ -98,7 +98,7 @@ END_META;
 CLASS_METHODS_META(o2::AnimationPlayer)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR(IObject*, const Ref<AnimationClip>&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, IObject*, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, IObject*, bool);
     FUNCTION().PUBLIC().SIGNATURE(IObject*, GetTarget);
     FUNCTION().PUBLIC().SIGNATURE(void, SetClip, const Ref<AnimationClip>&);

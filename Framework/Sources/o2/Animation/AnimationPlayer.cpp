@@ -10,8 +10,8 @@ namespace o2
     FORWARD_REF_IMPL(AnimationClip);
     FORWARD_REF_IMPL(AnimationState);
 
-    AnimationPlayer::AnimationPlayer(IObject* target /*= nullptr*/, const Ref<AnimationClip>& clip /*= nullptr*/):
-        mTarget(target), mClip(clip)
+    AnimationPlayer::AnimationPlayer(RefCounter* refCounter, IObject* target /*= nullptr*/, const Ref<AnimationClip>& clip /*= nullptr*/):
+        RefCounterable(refCounter), mTarget(target), mClip(clip)
     {
         SetTarget(target);
         SetClip(clip);
