@@ -48,7 +48,7 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Sets editing animation
-		void SetAnimation(const Ref<AnimationClip>& animation, const Ref<AnimationPlayer>& player = nullptr);
+		void SetAnimation(const Ref<AnimationClip>& animation, Ref<AnimationPlayer> player = nullptr);
 
 		// Sets animation editable
 		void SetAnimationEditable(const Ref<IEditableAnimation>& editable);
@@ -206,7 +206,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&, const Ref<AnimationPlayer>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const Ref<AnimationClip>&, Ref<AnimationPlayer>);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationEditable, const Ref<IEditableAnimation>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurvesMode, bool);

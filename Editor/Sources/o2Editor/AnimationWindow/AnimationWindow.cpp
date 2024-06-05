@@ -54,7 +54,7 @@ namespace Editor
 		}
 	}
 
-	void AnimationWindow::SetAnimation(const Ref<AnimationClip>& animation, const Ref<AnimationPlayer>& player /*= nullptr*/)
+	void AnimationWindow::SetAnimation(const Ref<AnimationClip>& animation, Ref<AnimationPlayer> player /*= nullptr*/)
 	{
 		if (mAnimation)
 			mAnimation->onChanged -= THIS_FUNC(OnAnimationChanged);
