@@ -65,6 +65,9 @@ namespace o2
 		// Constructor with asset pointer
 		explicit AssetRef(_asset_type* ptr);
 
+		// Copy constructor from other base reference
+		AssetRef(const BaseAssetRef& other);
+
 		// Copy constructor from other reference
 		AssetRef(const Ref<_asset_type>& other);
 
@@ -264,6 +267,13 @@ namespace o2
 	{}
 
 	template<typename _asset_type>
+	AssetRef<_asset_type>::AssetRef(const BaseAssetRef& other)
+	{
+		mPtr = Ref(dynamic_cast<_asset_type*>(const_cast<Asset*>(other.GetAssetBase())));
+		mIsInstance = other.IsInstance();
+	}
+
+	template<typename _asset_type>
 	AssetRef<_asset_type>::AssetRef(const Ref<_asset_type>& other) :
 		mPtr(other)
 	{}
@@ -276,13 +286,13 @@ namespace o2
 	template<typename _asset_type>
 	template<typename _other_type, typename _enable>
 	AssetRef<_asset_type>::AssetRef(const AssetRef<_other_type>& other) :
-		mPtr(other.mPtr)
+		mPtr(other.mPtr), mIsInstance(other.mIsInstance)
 	{}
 
 	template<typename _asset_type>
 	template<typename _other_type, typename>
 	AssetRef<_asset_type>::AssetRef(AssetRef<_other_type>&& other) :
-		mPtr(std::move(other.mPtr))
+		mPtr(std::move(other.mPtr)), mIsInstance(other.mIsInstance)
 	{}
 
 	template<typename _asset_type>
@@ -314,6 +324,7 @@ namespace o2
 	AssetRef<_asset_type>& AssetRef<_asset_type>::operator=(const AssetRef<_other_type>& other)
 	{
 		mPtr = other.mPtr;
+		mIsInstance = other.mIsInstance;
 		return *this;
 	}
 
@@ -321,6 +332,7 @@ namespace o2
 	AssetRef<_asset_type>& AssetRef<_asset_type>::operator=(Ref<_asset_type>&& other)
 	{
 		mPtr = std::move(other);
+		mIsInstance = false;
 		return *this;
 	}
 
@@ -413,6 +425,7 @@ namespace o2
 	void AssetRef<_asset_type>::SetAssetBase(Asset* asset)
 	{
 		mPtr = Ref(dynamic_cast<_asset_type*>(asset));
+		mIsInstance = false;
 	}
 
 	template<typename _asset_type>

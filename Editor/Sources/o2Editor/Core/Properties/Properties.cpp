@@ -177,8 +177,11 @@ namespace Editor
 		if (type->IsBasedOn(TypeOf(IObject)))
 			return true;
 
-		if (type->GetUsage() == Type::Usage::Pointer && ((PointerType*)type)->GetBaseType()->IsBasedOn((TypeOf(IObject))))
+		if ((type->GetUsage() == Type::Usage::Pointer || type->GetUsage() == Type::Usage::Reference) &&
+			((PointerType*)type)->GetBaseType()->IsBasedOn((TypeOf(IObject))))
+		{
 			return true;
+		}
 
 		if (type->GetUsage() == Type::Usage::Enumeration)
 			return true;

@@ -28,7 +28,7 @@ namespace o2
         PROPERTY(Ref<AnimationClip>, animationClip, SetAnimationClip, GetAnimationClip);          // animation clip property @EDITOR_IGNORE @SCRIPTABLE
 
     public:
-        Function<void()> onStateFullyTrue;      // This event calls when state is completely true (at the end of animation)
+        Function<void()> onStateFullyTrue;    // This event calls when state is completely true (at the end of animation)
         Function<void()> onStateFullyFalse;   // This event calls when state is completely false (at the end of animation)
         Function<void()> onStateBecomesTrue;  // This event calls when state becomes to true
         Function<void()> onStateBecomesFalse; // This event calls when state becomes to true

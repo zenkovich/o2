@@ -108,11 +108,11 @@ namespace Editor
 						if (auto ptrProxy = DynamicCast<IPointerValueProxy>(proxy.first))
 						{
 							void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
-							if (AssetRef<Asset>* refPtr = dynamic_cast<AssetRef<Asset>*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+							if (auto refPtr = dynamic_cast<BaseAssetRef*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
 							{
 								if (refPtr->IsInstance())
 								{
-									targets.Add(refPtr->Get());
+									targets.Add(refPtr->GetAssetBase());
 									allAreInstance = true;
 								}
 								else
@@ -293,7 +293,7 @@ namespace Editor
 		proxy->GetValuePtr(proxySample);
 		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
 		BaseAssetRef* assetSample = dynamic_cast<BaseAssetRef*>(objectSample);
-		AssetRef<Asset> res = Ref(assetSample->GetAssetBase());
+		AssetRef<Asset> res = AssetRef<Asset>(*assetSample);
 		delete assetSample;
 		return res;
 	}

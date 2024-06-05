@@ -203,7 +203,7 @@ namespace o2
         if (sample)
             res = sample->CloneAsRef<Widget>();
         else
-            res = Ref((Widget*)type.CreateSample());
+            res = DynamicCast<Widget>(type.CreateSampleRef());
 
         if (type != TypeOf(ContextMenu))
             res->SetEnabledForcible(true);
