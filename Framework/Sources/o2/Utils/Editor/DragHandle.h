@@ -200,6 +200,7 @@ namespace o2
         bool IsScrollable() const override;
 
         SERIALIZABLE(DragHandle);
+        CLONEABLE_REF(DragHandle);
 
     protected:
         Ref<IRectDrawable> mRegularDrawable;  // Regular view IRectDrawable @SERIALIZABLE

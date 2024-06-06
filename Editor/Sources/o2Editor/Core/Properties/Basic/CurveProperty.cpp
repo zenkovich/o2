@@ -9,18 +9,18 @@
 namespace Editor
 {
 	CurveProperty::CurveProperty(RefCounter* refCounter):
-		TPropertyField<Curve>(refCounter)
+		TPropertyField<Ref<Curve>>(refCounter)
 	{}
 
 	CurveProperty::CurveProperty(RefCounter* refCounter, const CurveProperty& other) :
-		TPropertyField<Curve>(refCounter, other)
+		TPropertyField<Ref<Curve>>(refCounter, other)
 	{
 		InitializeControls();
 	}
 
 	CurveProperty& CurveProperty::operator=(const CurveProperty& other)
 	{
-		TPropertyField<Curve>::operator=(other);
+		TPropertyField<Ref<Curve>>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
@@ -32,7 +32,7 @@ namespace Editor
 		{
 			mPreviewImage = mmake<CurvePreview>();
 			*mPreviewImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
-			//mPreviewImage->SetCurve(&mCommonValue);
+			mPreviewImage->SetCurve(mCommonValue);
 
 			mClickArea = mmake<CursorEventsArea>();
 
@@ -48,7 +48,10 @@ namespace Editor
 	void CurveProperty::OnValueChanged()
 	{
 		for (auto& ptr : mValuesProxies)
-			SetProxy(ptr.first, mCommonValue);
+            SetProxy(ptr.first, mCommonValue);
+
+		if (mCommonValue)
+			mPreviewImage->SetCurve(mCommonValue);
 	}
 
 	void CurveProperty::OnClicked()
@@ -59,13 +62,13 @@ namespace Editor
 							 MakeFunction<IPropertyField, void>(this, &CurveProperty::CheckValueChangeCompleted));
 
 		CurveEditorDlg::RemoveAllEditingCurves();
-		//CurveEditorDlg::AddEditingCurve("property", &mCommonValue, Color4(44, 62, 80));
+		CurveEditorDlg::AddEditingCurve("property", mCommonValue, Color4(44, 62, 80));
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Curve>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<o2::Curve>>);
 DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::CurveProperty>);
-DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Curve>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Ref<o2::Curve>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::CurveProperty, Editor__CurveProperty);

@@ -41,6 +41,9 @@ namespace Editor
 
 	void CurvePreview::SetCurve(const Ref<Curve>& curve)
 	{
+		if (mCurve == curve)
+			return;
+
 		if (mCurve)
 			mCurve->onKeysChanged -= THIS_FUNC(OnCurveChanged);
 
@@ -108,11 +111,11 @@ namespace Editor
 		o2Render.Clear(mBackColor);
 
 		Camera camera; camera.SetRect(mCurve->GetRect());
-		camera.SetScale(camera.GetScale().InvertedY());
+		camera.SetScale(camera.GetScale());
 
 		Camera defaultCamera = o2Render.GetCamera();
-		defaultCamera.leftBottom += Vec2F(0.0f, 1.0f);
-		defaultCamera.rightTop   -= Vec2F(0.0f, 1.0f);
+		defaultCamera.leftBottom += Vec2F(10.0f, 11.0f);
+		defaultCamera.rightTop   -= Vec2F(10.0f, 11.0f);
 
 		Basis transform = camera.GetBasis().Inverted()*defaultCamera.GetBasis();
 

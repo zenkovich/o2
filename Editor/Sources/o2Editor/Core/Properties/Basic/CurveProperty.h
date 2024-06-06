@@ -18,7 +18,7 @@ namespace Editor
 	// ------------------------------
 	// Editor curve property edit box
 	// ------------------------------
-	class CurveProperty: public TPropertyField<Curve>
+	class CurveProperty: public TPropertyField<Ref<Curve>>
 	{
 	public:
 		// Default constructor
@@ -53,7 +53,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::CurveProperty)
 {
-    BASE_CLASS(Editor::TPropertyField<Curve>);
+    BASE_CLASS(Editor::TPropertyField<Ref<Curve>>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurveProperty)

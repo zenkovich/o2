@@ -11,100 +11,104 @@ namespace o2
         Vec2F rotateHandleSize = Vec2F(mHandlesRotateSize, mHandlesRotateSize);
         Vec2F frameHandleSize = Vec2F(mFrameHandlesSize, mFrameHandlesSize);
 
-        mLeftTopRotateHandle.SetRegularDrawable(mmake<Sprite>(Color4(0, 0, 0, 20)));
-        mLeftTopRotateHandle.SetHoverDrawable(mmake<Sprite>(Color4(0, 0, 0, 10)));
-        mLeftTopRotateHandle.SetPressedDrawable(mmake<Sprite>(Color4(0, 0, 0, 50)));
-        mLeftTopRotateHandle.GetRegularDrawable()->size = rotateHandleSize;
-        mLeftTopRotateHandle.GetHoverDrawable()->size = rotateHandleSize;
-        mLeftTopRotateHandle.GetPressedDrawable()->size = rotateHandleSize;
-        mLeftTopRotateHandle.GetRegularDrawable()->szPivot = frameHandleSize*0.5f;
-        mLeftTopRotateHandle.GetHoverDrawable()->szPivot = frameHandleSize*0.5f;
-        mLeftTopRotateHandle.GetPressedDrawable()->szPivot = frameHandleSize*0.5f;
+        mLeftTopRotateHandle = mmake<DragHandle>();
+        mLeftTopRotateHandle->SetRegularDrawable(mmake<Sprite>(Color4(0, 0, 0, 20)));
+        mLeftTopRotateHandle->SetHoverDrawable(mmake<Sprite>(Color4(0, 0, 0, 10)));
+        mLeftTopRotateHandle->SetPressedDrawable(mmake<Sprite>(Color4(0, 0, 0, 50)));
+        mLeftTopRotateHandle->GetRegularDrawable()->size = rotateHandleSize;
+        mLeftTopRotateHandle->GetHoverDrawable()->size = rotateHandleSize;
+        mLeftTopRotateHandle->GetPressedDrawable()->size = rotateHandleSize;
+        mLeftTopRotateHandle->GetRegularDrawable()->szPivot = frameHandleSize*0.5f;
+        mLeftTopRotateHandle->GetHoverDrawable()->szPivot = frameHandleSize*0.5f;
+        mLeftTopRotateHandle->GetPressedDrawable()->szPivot = frameHandleSize*0.5f;
 
-        mLeftBottomRotateHandle = mLeftTopRotateHandle;
-        mRightTopRotateHandle = mLeftTopRotateHandle;
-        mRightBottomRotateHandle = mLeftTopRotateHandle;
+        mLeftBottomRotateHandle = mLeftTopRotateHandle->CloneAsRef<DragHandle>();
+        mRightTopRotateHandle = mLeftTopRotateHandle->CloneAsRef<DragHandle>();
+        mRightBottomRotateHandle = mLeftTopRotateHandle->CloneAsRef<DragHandle>();
 
-        mLeftTopHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_regular.png"));
-        mLeftTopHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_select.png"));
-        mLeftTopHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_pressed.png"));
+        mLeftTopHandle = mmake<DragHandle>();
+        mLeftTopHandle->SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_regular.png"));
+        mLeftTopHandle->SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_select.png"));
+        mLeftTopHandle->SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_pressed.png"));
 
-        mLeftBottomHandle = mLeftTopHandle;
-        mRightTopHandle = mLeftTopHandle;
-        mRightBottomHandle = mLeftTopHandle;
+        mLeftBottomHandle = mLeftTopHandle->CloneAsRef<DragHandle>();
+        mRightTopHandle = mLeftTopHandle->CloneAsRef<DragHandle>();
+        mRightBottomHandle = mLeftTopHandle->CloneAsRef<DragHandle>();
 
-        mLeftHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_side_regular.png"));
-        mLeftHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_side_select.png"));
-        mLeftHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_side_pressed.png"));
+        mLeftHandle = mmake<DragHandle>();
+        mLeftHandle->SetRegularDrawable(mmake<Sprite>("ui/UI2_handle_side_regular.png"));
+        mLeftHandle->SetHoverDrawable(mmake<Sprite>("ui/UI2_handle_side_select.png"));
+        mLeftHandle->SetPressedDrawable(mmake<Sprite>("ui/UI2_handle_side_pressed.png"));
 
-        mTopHandle = mLeftHandle;
-        mBottomHandle = mLeftHandle;
-        mRightHandle = mLeftHandle;
+        mTopHandle = mLeftHandle->CloneAsRef<DragHandle>();
+        mBottomHandle = mLeftHandle->CloneAsRef<DragHandle>();
+        mRightHandle = mLeftHandle->CloneAsRef<DragHandle>();
 
-        mPivotHandle.SetRegularDrawable(mmake<Sprite>("ui/UI2_pivot.png"));
-        mPivotHandle.SetHoverDrawable(mmake<Sprite>("ui/UI2_pivot_select.png"));
-        mPivotHandle.SetPressedDrawable(mmake<Sprite>("ui/UI2_pivot_pressed.png"));
+        mPivotHandle = mmake<DragHandle>();
+        mPivotHandle->SetRegularDrawable(mmake<Sprite>("ui/UI2_pivot.png"));
+        mPivotHandle->SetHoverDrawable(mmake<Sprite>("ui/UI2_pivot_select.png"));
+        mPivotHandle->SetPressedDrawable(mmake<Sprite>("ui/UI2_pivot_pressed.png"));
 
-        mLeftTopHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnLeftTopHandle);
-        mLeftHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnLeftHandle);
-        mLeftBottomHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnLeftBottomHandle);
-        mTopHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnTopHandle);
-        mBottomHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnBottomHandle);
-        mRightTopHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnRightTopHandle);
-        mRightHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnRightHandle);
-        mRightBottomHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnRightBottomHandle);
-        mLeftTopRotateHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnLeftTopRotateHandle);
-        mLeftBottomRotateHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnLeftBottomRotateHandle);
-        mRightTopRotateHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnRightTopRotateHandle);
-        mRightBottomRotateHandle.onChangedPos = MakeFunction(this, &FrameHandles::OnRightBottomRotateHandle);
+        mLeftTopHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnLeftTopHandle);
+        mLeftHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnLeftHandle);
+        mLeftBottomHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnLeftBottomHandle);
+        mTopHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnTopHandle);
+        mBottomHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnBottomHandle);
+        mRightTopHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnRightTopHandle);
+        mRightHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnRightHandle);
+        mRightBottomHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnRightBottomHandle);
+        mLeftTopRotateHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnLeftTopRotateHandle);
+        mLeftBottomRotateHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnLeftBottomRotateHandle);
+        mRightTopRotateHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnRightTopRotateHandle);
+        mRightBottomRotateHandle->onChangedPos = MakeFunction(this, &FrameHandles::OnRightBottomRotateHandle);
 
-        mLeftTopHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mLeftHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mLeftBottomHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mTopHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mBottomHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mRightTopHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mRightHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mRightBottomHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mPivotHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mLeftTopRotateHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mLeftBottomRotateHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mRightTopRotateHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
-        mRightBottomRotateHandle.onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mLeftTopHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mLeftHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mLeftBottomHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mTopHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mBottomHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mRightTopHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mRightHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mRightBottomHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mPivotHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mLeftTopRotateHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mLeftBottomRotateHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mRightTopRotateHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
+        mRightBottomRotateHandle->onPressed = MakeFunction(this, &FrameHandles::OnHandlePressed);
 
-        mLeftTopHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mLeftHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mLeftBottomHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mTopHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mBottomHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mRightTopHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mRightHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mRightBottomHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mPivotHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mLeftTopRotateHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mLeftBottomRotateHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mRightTopRotateHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
-        mRightBottomRotateHandle.onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mLeftTopHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mLeftHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mLeftBottomHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mTopHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mBottomHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mRightTopHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mRightHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mRightBottomHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mPivotHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mLeftTopRotateHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mLeftBottomRotateHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mRightTopRotateHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
+        mRightBottomRotateHandle->onReleased = MakeFunction(this, &FrameHandles::OnHandleReleased);
 
-        mLeftTopHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mLeftHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mLeftBottomHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mTopHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mBottomHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mRightTopHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mRightHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mRightBottomHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mPivotHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mLeftTopRotateHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mLeftBottomRotateHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mRightTopRotateHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
-        mRightBottomRotateHandle.onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mLeftTopHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mLeftHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mLeftBottomHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mTopHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mBottomHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mRightTopHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mRightHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mRightBottomHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mPivotHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mLeftTopRotateHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mLeftBottomRotateHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mRightTopRotateHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
+        mRightBottomRotateHandle->onChangeCompleted = MakeFunction(this, &FrameHandles::OnChangeCompleted);
     }
 
     void FrameHandles::SetBasis(const Basis& basis)
     {
         mFrame = basis;
-        mPivotHandle.position = mFrame*Vec2F(0.5f, 0.5f);
+        mPivotHandle->position = mFrame*Vec2F(0.5f, 0.5f);
         UpdateHandlesTransform();
     }
 
@@ -115,12 +119,12 @@ namespace o2
 
     void FrameHandles::SetPivot(const Vec2F& position)
     {
-        mPivotHandle.position = position;
+        mPivotHandle->position = position;
     }
 
     Vec2F FrameHandles::GetPivot() const
     {
-        return mPivotHandle.GetPosition();
+        return mPivotHandle->GetPosition();
     }
 
     void FrameHandles::Draw()
@@ -130,23 +134,23 @@ namespace o2
 
         if (mIsRotationAvailable)
         {
-            mLeftTopRotateHandle.Draw();
-            mLeftBottomRotateHandle.Draw();
-            mRightTopRotateHandle.Draw();
-            mRightBottomRotateHandle.Draw();
+            mLeftTopRotateHandle->Draw();
+            mLeftBottomRotateHandle->Draw();
+            mRightTopRotateHandle->Draw();
+            mRightBottomRotateHandle->Draw();
         }
 
-        mLeftTopHandle.Draw();
-        mLeftHandle.Draw();
-        mLeftBottomHandle.Draw();
-        mTopHandle.Draw();
-        mBottomHandle.Draw();
-        mRightTopHandle.Draw();
-        mRightHandle.Draw();
-        mRightBottomHandle.Draw();
+        mLeftTopHandle->Draw();
+        mLeftHandle->Draw();
+        mLeftBottomHandle->Draw();
+        mTopHandle->Draw();
+        mBottomHandle->Draw();
+        mRightTopHandle->Draw();
+        mRightHandle->Draw();
+        mRightBottomHandle->Draw();
 
         if (mIsPivotAvailable)
-            mPivotHandle.Draw();
+            mPivotHandle->Draw();
     }
 
     bool FrameHandles::IsUnderPoint(const Vec2F& point)
@@ -463,7 +467,7 @@ namespace o2
 
     void FrameHandles::OnRotateHandle(const Vec2F& position, Vec2F lastHandleCoords)
     {
-        Vec2F rotatePivot = mPivotHandle.position;
+        Vec2F rotatePivot = mPivotHandle->position;
         float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
         Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
         Basis transformed = mFrame*transform;
@@ -497,21 +501,21 @@ namespace o2
 
     void FrameHandles::SetHandlesEnable(bool enable)
     {
-        mLeftTopRotateHandle.enabled = enable;
-        mLeftBottomRotateHandle.enabled = enable;
-        mRightTopRotateHandle.enabled = enable;
-        mRightBottomRotateHandle.enabled = enable;
+        mLeftTopRotateHandle->enabled = enable;
+        mLeftBottomRotateHandle->enabled = enable;
+        mRightTopRotateHandle->enabled = enable;
+        mRightBottomRotateHandle->enabled = enable;
 
-        mLeftTopHandle.enabled = enable;
-        mLeftHandle.enabled = enable;
-        mLeftBottomHandle.enabled = enable;
-        mTopHandle.enabled = enable;
-        mBottomHandle.enabled = enable;
-        mRightTopHandle.enabled = enable;
-        mRightHandle.enabled = enable;
-        mRightBottomHandle.enabled = enable;
+        mLeftTopHandle->enabled = enable;
+        mLeftHandle->enabled = enable;
+        mLeftBottomHandle->enabled = enable;
+        mTopHandle->enabled = enable;
+        mBottomHandle->enabled = enable;
+        mRightTopHandle->enabled = enable;
+        mRightHandle->enabled = enable;
+        mRightBottomHandle->enabled = enable;
 
-        mPivotHandle.enabled = enable;
+        mPivotHandle->enabled = enable;
     }
 
     void FrameHandles::UpdateHandlesTransform()
@@ -542,48 +546,48 @@ namespace o2
             return CursorType::SizeNeSw;
         };
 
-        mLeftTopHandle.position = Vec2F(0.0f, 1.0f)*mFrame;
-        mLeftHandle.position = Vec2F(0.0f, 0.5f)*mFrame;
-        mLeftBottomHandle.position = Vec2F(0.0f, 0.0f)*mFrame;
-        mTopHandle.position = Vec2F(0.5f, 1.0f)*mFrame;
-        mBottomHandle.position = Vec2F(0.5f, 0.0f)*mFrame;
-        mRightTopHandle.position = Vec2F(1.0f, 1.0f)*mFrame;
-        mRightHandle.position = Vec2F(1.0f, 0.5f)*mFrame;
-        mRightBottomHandle.position = Vec2F(1.0f, 0.0f)*mFrame;
+        mLeftTopHandle->position = Vec2F(0.0f, 1.0f)*mFrame;
+        mLeftHandle->position = Vec2F(0.0f, 0.5f)*mFrame;
+        mLeftBottomHandle->position = Vec2F(0.0f, 0.0f)*mFrame;
+        mTopHandle->position = Vec2F(0.5f, 1.0f)*mFrame;
+        mBottomHandle->position = Vec2F(0.5f, 0.0f)*mFrame;
+        mRightTopHandle->position = Vec2F(1.0f, 1.0f)*mFrame;
+        mRightHandle->position = Vec2F(1.0f, 0.5f)*mFrame;
+        mRightBottomHandle->position = Vec2F(1.0f, 0.0f)*mFrame;
 
-        mLeftTopHandle.cursorType = getHandleType(mLeftTopHandle.GetPosition());
-        mLeftHandle.cursorType = getHandleType(mLeftHandle.GetPosition());
-        mLeftBottomHandle.cursorType = getHandleType(mLeftBottomHandle.GetPosition());
-        mTopHandle.cursorType = getHandleType(mTopHandle.GetPosition());
-        mBottomHandle.cursorType = getHandleType(mBottomHandle.GetPosition());
-        mRightTopHandle.cursorType = getHandleType(mRightTopHandle.GetPosition());
-        mRightHandle.cursorType = getHandleType(mRightHandle.GetPosition());
-        mRightBottomHandle.cursorType = getHandleType(mRightBottomHandle.GetPosition());
+        mLeftTopHandle->cursorType = getHandleType(mLeftTopHandle->GetPosition());
+        mLeftHandle->cursorType = getHandleType(mLeftHandle->GetPosition());
+        mLeftBottomHandle->cursorType = getHandleType(mLeftBottomHandle->GetPosition());
+        mTopHandle->cursorType = getHandleType(mTopHandle->GetPosition());
+        mBottomHandle->cursorType = getHandleType(mBottomHandle->GetPosition());
+        mRightTopHandle->cursorType = getHandleType(mRightTopHandle->GetPosition());
+        mRightHandle->cursorType = getHandleType(mRightHandle->GetPosition());
+        mRightBottomHandle->cursorType = getHandleType(mRightBottomHandle->GetPosition());
 
-        mLeftTopRotateHandle.position = Vec2F(0.0f, 1.0f)*mFrame;
-        mLeftBottomRotateHandle.position = Vec2F(0.0f, 0.0f)*mFrame;
-        mRightTopRotateHandle.position = Vec2F(1.0f, 1.0f)*mFrame;
-        mRightBottomRotateHandle.position = Vec2F(1.0f, 0.0f)*mFrame;
+        mLeftTopRotateHandle->position = Vec2F(0.0f, 1.0f)*mFrame;
+        mLeftBottomRotateHandle->position = Vec2F(0.0f, 0.0f)*mFrame;
+        mRightTopRotateHandle->position = Vec2F(1.0f, 1.0f)*mFrame;
+        mRightBottomRotateHandle->position = Vec2F(1.0f, 0.0f)*mFrame;
 
-        mLeftTopHandle.angle = handlesAngle + Math::PI()*0.5f;
-        mLeftHandle.angle = handlesAngle + Math::PI();
-        mLeftBottomHandle.angle = handlesAngle + Math::PI();
-        mTopHandle.angle = handlesAngle + Math::PI()*0.5f;
-        mBottomHandle.angle = handlesAngle - Math::PI()*0.5f;
-        mRightTopHandle.angle = handlesAngle;
-        mRightHandle.angle = handlesAngle;
-        mRightBottomHandle.angle = handlesAngle - Math::PI()*0.5f;
+        mLeftTopHandle->angle = handlesAngle + Math::PI()*0.5f;
+        mLeftHandle->angle = handlesAngle + Math::PI();
+        mLeftBottomHandle->angle = handlesAngle + Math::PI();
+        mTopHandle->angle = handlesAngle + Math::PI()*0.5f;
+        mBottomHandle->angle = handlesAngle - Math::PI()*0.5f;
+        mRightTopHandle->angle = handlesAngle;
+        mRightHandle->angle = handlesAngle;
+        mRightBottomHandle->angle = handlesAngle - Math::PI()*0.5f;
 
-        mLeftTopRotateHandle.angle = handlesAngle + Math::PI()*0.5f;
-        mLeftBottomRotateHandle.angle = handlesAngle + Math::PI();
-        mRightTopRotateHandle.angle = handlesAngle;
-        mRightBottomRotateHandle.angle = handlesAngle + Math::PI()*1.5f;
+        mLeftTopRotateHandle->angle = handlesAngle + Math::PI()*0.5f;
+        mLeftBottomRotateHandle->angle = handlesAngle + Math::PI();
+        mRightTopRotateHandle->angle = handlesAngle;
+        mRightBottomRotateHandle->angle = handlesAngle + Math::PI()*1.5f;
     }
 
     void FrameHandles::OnTransformed(const Basis& transform)
     {
         mFrame = mFrame*transform;
-        mPivotHandle.position = mPivotHandle.position*transform;
+        mPivotHandle->position = mPivotHandle->position*transform;
         mChangedFromThis = true;
         UpdateHandlesTransform();
 

@@ -36,12 +36,13 @@ namespace Editor
 		InitializeTextDrawables();
 		InitializeContextMenu();
 
-		mTransformFrame.SetPivotEnabled(false);
-		mTransformFrame.SetRotationEnabled(false);
-		mTransformFrame.onTransformed = THIS_FUNC(OnTransformFrameTransformed);
-		mTransformFrame.onPressed = THIS_FUNC(OnTransformBegin);
-		mTransformFrame.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
-		mTransformFrame.messageFallDownListener = this;
+		mTransformFrame = mmake<FrameHandles>();
+		mTransformFrame->SetPivotEnabled(false);
+		mTransformFrame->SetRotationEnabled(false);
+		mTransformFrame->onTransformed = THIS_FUNC(OnTransformFrameTransformed);
+		mTransformFrame->onPressed = THIS_FUNC(OnTransformBegin);
+		mTransformFrame->onChangeCompleted = THIS_FUNC(OnTransformCompleted);
+		mTransformFrame->messageFallDownListener = this;
 
 		mBackColor = Color4(225, 232, 232, 255);
 
@@ -702,20 +703,20 @@ namespace Editor
 
 		Vec2F borders(10, 10);
 
-		mTransformFrame.SetBasis(Basis(LocalToScreenPoint(mTransformFrameBasis.origin) - borders,
+		mTransformFrame->SetBasis(Basis(LocalToScreenPoint(mTransformFrameBasis.origin) - borders,
 								 mTransformFrameBasis.xv/mViewCamera.GetScale() + Vec2F(borders.x*2.0f, 0),
 								 mTransformFrameBasis.yv/mViewCamera.GetScale() + Vec2F(0, borders.y*2.0f)));
 
-		mTransformFrame.Draw();
+		mTransformFrame->Draw();
 
 		if (o2Input.IsKeyDown(VK_CONTROL))
 		{
-			Vec2F left = mTransformFrame.GetCurrentBasis().origin;
-			Vec2F right = mTransformFrame.GetCurrentBasis().origin + mTransformFrame.GetCurrentBasis().xv;
+			Vec2F left = mTransformFrame->GetCurrentBasis().origin;
+			Vec2F right = mTransformFrame->GetCurrentBasis().origin + mTransformFrame->GetCurrentBasis().xv;
 			RectF rect = layout->worldRect;
 
-			o2Render.DrawAALine(Vec2F(right.x, rect.bottom), Vec2F(right.x, rect.top), mTransformFrame.GetFrameColor());
-			o2Render.DrawAALine(Vec2F(left.x, rect.bottom), Vec2F(left.x, rect.top), mTransformFrame.GetFrameColor());
+			o2Render.DrawAALine(Vec2F(right.x, rect.bottom), Vec2F(right.x, rect.top), mTransformFrame->GetFrameColor());
+			o2Render.DrawAALine(Vec2F(left.x, rect.bottom), Vec2F(left.x, rect.top), mTransformFrame->GetFrameColor());
 		}
 	}
 

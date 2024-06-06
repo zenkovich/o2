@@ -315,9 +315,9 @@ namespace Editor
 
         Vec2F mSelectingPressedPoint; // Point, where cursor was pressed, selection starts here, in local space
 
-        FrameHandles mTransformFrame;                // Keys transformation frame
-        bool         mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
-        Basis        mTransformFrameBasis;           // Basis of transform frame in screen space
+        Ref<FrameHandles> mTransformFrame;                // Keys transformation frame
+        bool              mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
+        Basis             mTransformFrameBasis;           // Basis of transform frame in screen space
 
         bool mIsViewScrolling = false; // Is scrolling view at this time
 

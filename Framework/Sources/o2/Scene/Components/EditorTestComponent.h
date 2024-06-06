@@ -75,10 +75,9 @@ namespace o2
         RectI mRectI;                                       // @SERIALIZABLE
         BorderF mBorderF;                                   // @SERIALIZABLE
         BorderI mBorderI;                                   // @SERIALIZABLE
-		Curve mCurve = Curve::EaseInOut();                  // @SERIALIZABLE
+		Ref<Curve> mCurve = mmake<Curve>(Curve::EaseInOut()); // @SERIALIZABLE
 		TestInside mTestInside;                             // @SERIALIZABLE
 		TestEnum mTestEnum;                                 // @SERIALIZABLE
-		TestInside* mTestInsidePtr = nullptr;               // @SERIALIZABLE
         Ref<TestInside> mTestInsideRef;                     // @SERIALIZABLE
 
         Vector<int> mIntVector;                    // @SERIALIZABLE
@@ -159,10 +158,9 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mRectI);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mBorderF);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mBorderI);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Curve::EaseInOut()).NAME(mCurve);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Curve>(Curve::EaseInOut())).NAME(mCurve);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestInside);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestEnum);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mTestInsidePtr);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestInsideRef);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mIntVector);
     FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().NAME(mTestInsideVector);

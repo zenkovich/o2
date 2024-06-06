@@ -263,7 +263,6 @@ namespace Editor
 
 				if (object != nullptr)
 				{
-					delete object;
 					SetProxy(targetObj.first, nullptr);
 				}
 			}
