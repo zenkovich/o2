@@ -17,19 +17,19 @@
 namespace Editor
 {
 	ComponentProperty::ComponentProperty(RefCounter* refCounter):
-		TPropertyField<Ref<Component>>(refCounter)
+		TPropertyField<LinkRef<Component>>(refCounter)
     {
 	}
 
 	ComponentProperty::ComponentProperty(RefCounter* refCounter, const ComponentProperty& other) :
-		TPropertyField<Ref<Component>>(refCounter, other)
+		TPropertyField<LinkRef<Component>>(refCounter, other)
 	{
 		InitializeControls();
 	}
 
 	ComponentProperty& ComponentProperty::operator=(const ComponentProperty& other)
 	{
-		TPropertyField<Ref<Component>>::operator=(other);
+		TPropertyField<LinkRef<Component>>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
@@ -61,6 +61,16 @@ namespace Editor
 		Refresh();
 	}
 
+	const Type* ComponentProperty::GetValueType() const
+	{
+		return GetValueTypeStatic();
+	}
+
+	const Type* ComponentProperty::GetValueTypeStatic()
+	{
+		return &TypeOf(BaseComponentLinkRef);
+	}
+
 	bool ComponentProperty::IsUnderPoint(const Vec2F& point)
 	{
 		return mBox->IsUnderPoint(point);
@@ -68,10 +78,32 @@ namespace Editor
 
 	void ComponentProperty::OnTypeSpecialized(const Type& type)
 	{
-        TPropertyField<Ref<Component>>::OnTypeSpecialized(type);
+        TPropertyField<LinkRef<Component>>::OnTypeSpecialized(type);
 
-        if (auto refType = dynamic_cast<const ReferenceType*>(&type))
-			mComponentType = refType->GetBaseType();
+		mComponentType = type.InvokeStatic<const Type*>("GetComponentTypeStatic");
+	}
+
+	LinkRef<Component> ComponentProperty::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
+	{
+		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
+		auto proxySample = proxyType->CreateSample();
+		proxy->GetValuePtr(proxySample);
+		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
+		BaseComponentLinkRef* baseComponentLinkSample = dynamic_cast<BaseComponentLinkRef*>(objectSample);
+		LinkRef<Component> res = LinkRef<Component>(const_cast<Component*>(baseComponentLinkSample->Get()));
+		delete baseComponentLinkSample;
+		return res;
+	}
+
+	void ComponentProperty::SetProxy(const Ref<IAbstractValueProxy>& proxy, const LinkRef<Component>& value)
+	{
+		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
+		auto proxySample = proxyType->CreateSample();
+		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
+		BaseComponentLinkRef* baseComponentLinkSample = dynamic_cast<BaseComponentLinkRef*>(objectSample);
+		baseComponentLinkSample->Set(const_cast<Component*>(value.Get()));
+		proxy->SetValuePtr(proxySample);
+		delete baseComponentLinkSample;
 	}
 
 	bool ComponentProperty::IsValueRevertable() const
@@ -290,9 +322,9 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<Component>>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::LinkRef<Component>>);
 DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ComponentProperty>);
-DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Ref<Component>>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::LinkRef<Component>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ComponentProperty, Editor__ComponentProperty);

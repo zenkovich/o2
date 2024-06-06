@@ -124,6 +124,8 @@ namespace o2
     }
 
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Component>);
 // --- META ---
 
 DECLARE_CLASS(o2::BaseComponentLinkRef, o2__BaseComponentLinkRef);

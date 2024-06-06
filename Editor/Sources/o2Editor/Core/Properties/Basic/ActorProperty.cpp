@@ -15,20 +15,20 @@
 namespace Editor
 {
 	ActorProperty::ActorProperty(RefCounter* refCounter):
-		TPropertyField<Ref<Actor>>(refCounter)
+		TPropertyField<LinkRef<Actor>>(refCounter)
 	{
 		mCommonValue = nullptr;
 	}
 
 	ActorProperty::ActorProperty(RefCounter* refCounter, const ActorProperty& other) :
-		TPropertyField<Ref<Actor>>(refCounter, other)
+		TPropertyField<LinkRef<Actor>>(refCounter, other)
 	{
 		InitializeControls();
 	}
 
 	ActorProperty& ActorProperty::operator=(const ActorProperty& other)
 	{
-		TPropertyField<Ref<Actor>>::operator=(other);
+		TPropertyField<LinkRef<Actor>>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
@@ -57,6 +57,16 @@ namespace Editor
 			RevertoToPrototype(mValuesProxies[i].first, mValuesProxies[i].second, propertyObjects[i]);
 
 		Refresh();
+	}
+
+	const Type* ActorProperty::GetValueType() const
+	{
+		return GetValueTypeStatic();
+	}
+
+	const Type* ActorProperty::GetValueTypeStatic()
+	{
+		return &TypeOf(BaseActorLinkRef);
 	}
 
 	bool ActorProperty::IsUnderPoint(const Vec2F& point)
@@ -98,10 +108,32 @@ namespace Editor
 
 	void ActorProperty::OnTypeSpecialized(const Type& type)
 	{
-		TPropertyField<Ref<Actor>>::OnTypeSpecialized(type);
+		TPropertyField<LinkRef<Actor>>::OnTypeSpecialized(type);
 
-		if (auto refType = dynamic_cast<const ReferenceType*>(&type))
-			mActorType = refType->GetBaseType();
+		mActorType = type.InvokeStatic<const Type*>("GetActorTypeStatic");
+	}
+
+	LinkRef<Actor> ActorProperty::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
+	{
+		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
+		auto proxySample = proxyType->CreateSample();
+		proxy->GetValuePtr(proxySample);
+		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
+		BaseActorLinkRef* baseActorLinkSample = dynamic_cast<BaseActorLinkRef*>(objectSample);
+		LinkRef<Actor> res = LinkRef<Actor>(const_cast<Actor*>(baseActorLinkSample->Get()));
+		delete baseActorLinkSample;
+		return res;
+	}
+
+	void ActorProperty::SetProxy(const Ref<IAbstractValueProxy>& proxy, const LinkRef<Actor>& value)
+	{
+		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
+		auto proxySample = proxyType->CreateSample();
+		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
+		BaseActorLinkRef* baseActorLinkSample = dynamic_cast<BaseActorLinkRef*>(objectSample);
+		baseActorLinkSample->Set(const_cast<Actor*>(value.Get()));
+		proxy->SetValuePtr(proxySample);
+		delete baseActorLinkSample;
 	}
 
 	bool ActorProperty::IsValueRevertable() const
@@ -178,7 +210,7 @@ namespace Editor
 			if (mCommonValue->IsAsset())
 				o2EditorAssets.ShowAssetIcon(o2Assets.GetAssetPath(mCommonValue->GetAssetID()));
 			else if (mCommonValue->IsOnScene())
-				o2EditorTree.HighlightObjectTreeNode(mCommonValue);
+				o2EditorTree.HighlightObjectTreeNode(mCommonValue.GetRef());
 		}
 	}
 
@@ -283,9 +315,9 @@ namespace Editor
 	}
 }
 
-DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Ref<Actor>>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::LinkRef<Actor>>);
 DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ActorProperty>);
-DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Ref<Actor>>>);
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::LinkRef<Actor>>>);
 // --- META ---
 
 DECLARE_CLASS(Editor::ActorProperty, Editor__ActorProperty);

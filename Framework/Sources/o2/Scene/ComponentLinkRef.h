@@ -257,6 +257,11 @@ namespace o2
 	{}
 
 	template<typename _component_type>
+	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(Ref<_component_type> && other):
+		mRef(std::move(other))
+	{}
+
+	template<typename _component_type>
 	template<typename _other_type, typename _enable>
 	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(const LinkRef<_other_type>& other) :
 		mRef(other.mRef)
@@ -297,6 +302,20 @@ namespace o2
 	LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(const LinkRef<_other_type>& other)
 	{
 		mRef = other.mRef;
+		return *this;
+	}
+
+	template<typename _component_type>
+	LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(Ref<_component_type>&& other)
+	{
+		mRef = std::move(other);
+		return *this;
+	}
+
+	template<typename _component_type>
+	LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(nullptr_t)
+	{
+		mRef = nullptr;
 		return *this;
 	}
 

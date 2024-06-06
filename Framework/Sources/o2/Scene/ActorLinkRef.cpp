@@ -133,6 +133,8 @@ namespace o2
         return mmake<AssetRequireResolveData>(*this);
     }
 }
+
+DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::Actor>);
 // --- META ---
 
 DECLARE_CLASS(o2::BaseActorLinkRef, o2__BaseActorLinkRef);

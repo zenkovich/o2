@@ -20,7 +20,7 @@ namespace Editor
 	// -----------------------------------
 	// Editor actor component property box
 	// -----------------------------------
-	class ComponentProperty: public TPropertyField<Ref<Component>>, public KeyboardEventsListener, public DragDropArea
+	class ComponentProperty: public TPropertyField<LinkRef<Component>>, public KeyboardEventsListener, public DragDropArea
 	{
 	public:
 		// Default constructor
@@ -34,6 +34,12 @@ namespace Editor
 
 		// Reverts value to prototype value
 		void Revert() override;
+
+		// Returns editing by this field type
+		const Type* GetValueType() const override;
+
+		// Returns editing by this field type by static function, can't be changed during runtime
+		static const Type* GetValueTypeStatic();
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -50,6 +56,12 @@ namespace Editor
 	protected:
 		// Called when type specialized during setting value proxy
 		void OnTypeSpecialized(const Type& type) override;
+
+		// Returns value from proxy
+		LinkRef<Component> GetProxy(const Ref<IAbstractValueProxy>& proxy) const override;
+
+		// Sets value to proxy
+		void SetProxy(const Ref<IAbstractValueProxy>& proxy, const LinkRef<Component>& value) override;
 
 		// Checks is value can be reverted
 		bool IsValueRevertable() const override;
@@ -102,14 +114,14 @@ namespace Editor
 		// Called when assets scroll icons was dragged and exited from this
         void OnDragExitFromAssetsScroll(const Ref<AssetsIconsScrollArea>& assetsIconsScroll); 
 		
-		REF_COUNTERABLE_IMPL(TPropertyField<Ref<Component>>);
+		REF_COUNTERABLE_IMPL(TPropertyField<LinkRef<Component>>);
 	};
 }
 // --- META ---
 
 CLASS_BASES_META(Editor::ComponentProperty)
 {
-    BASE_CLASS(Editor::TPropertyField<Ref<Component>>);
+    BASE_CLASS(Editor::TPropertyField<LinkRef<Component>>);
     BASE_CLASS(o2::KeyboardEventsListener);
     BASE_CLASS(o2::DragDropArea);
 }
@@ -127,8 +139,12 @@ CLASS_METHODS_META(Editor::ComponentProperty)
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const ComponentProperty&);
     FUNCTION().PUBLIC().SIGNATURE(void, Revert);
+    FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
+    FUNCTION().PROTECTED().SIGNATURE(LinkRef<Component>, GetProxy, const Ref<IAbstractValueProxy>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, const Ref<IAbstractValueProxy>&, const LinkRef<Component>&);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);

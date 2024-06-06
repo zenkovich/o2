@@ -42,7 +42,13 @@ namespace o2
             CLONEABLE_REF(TestInside);
         };
 
-    public:
+	public:
+		AssetRef<ImageAsset> mImageAsset;                          // @SERIALIZABLE
+		LinkRef<Component> mComponent;                          // @SERIALIZABLE
+		LinkRef<RigidBody> mRigidBody;                          // @SERIALIZABLE
+		LinkRef<ImageComponent> mImageComponent;                // @SERIALIZABLE
+		LinkRef<ParticlesEmitterComponent> mParticlesComponent; // @SERIALIZABLE
+
         PROPERTIES(EditorTestComponent);
         PROPERTY(Ref<Sprite>, spritePropPtr, SetSpritePtr, GetSpritePtr);
         PROPERTY(Sprite, spriteProp, SetSprite, GetSprite);
@@ -55,7 +61,6 @@ namespace o2
         String mString;                                     // @SERIALIZABLE
         WString mWString;                                   // @SERIALIZABLE
         bool mBool;                                         // @SERIALIZABLE
-        AssetRef<ImageAsset> mImageAsset;                          // @SERIALIZABLE
         AssetRef<ActorAsset> mActorAsset;                        // @SERIALIZABLE
         AssetRef<DataAsset> mDataAsset;                            // @SERIALIZABLE
         AssetRef<AnimationAsset> mAnimationAsset;                  // @SERIALIZABLE
@@ -63,10 +68,6 @@ namespace o2
         Ref<Actor> mActor;                                  // @SERIALIZABLE
         TagGroup mTags;                                     // @SERIALIZABLE
         Ref<SceneLayer> mLayer;                             // @SERIALIZABLE
-        Ref<Component> mComponent;                          // @SERIALIZABLE
-        Ref<RigidBody> mRigidBody;                          // @SERIALIZABLE
-        Ref<ImageComponent> mImageComponent;                // @SERIALIZABLE
-        Ref<ParticlesEmitterComponent> mParticlesComponent; // @SERIALIZABLE
         Color4 mColor;                                      // @SERIALIZABLE
         Vec2F mVec2F;                                       // @SERIALIZABLE
         Vec2I mVec2I;                                       // @SERIALIZABLE
@@ -129,6 +130,11 @@ CLASS_BASES_META(o2::EditorTestComponent)
 END_META;
 CLASS_FIELDS_META(o2::EditorTestComponent)
 {
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mComponent);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mRigidBody);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mImageComponent);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mParticlesComponent);
     FIELD().PUBLIC().NAME(spritePropPtr);
     FIELD().PUBLIC().NAME(spriteProp);
     FIELD().PUBLIC().NAME(arr);
@@ -138,7 +144,6 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mString);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mWString);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mBool);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mActorAsset);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDataAsset);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mAnimationAsset);
@@ -146,10 +151,6 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mActor);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTags);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLayer);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mComponent);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mRigidBody);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mImageComponent);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mParticlesComponent);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mColor);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mVec2F);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mVec2I);
