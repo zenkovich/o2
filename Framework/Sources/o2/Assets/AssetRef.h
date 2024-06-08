@@ -54,7 +54,7 @@ namespace o2
 		AssetRef();
 
 		// Nullptr constructor
-		AssetRef(nullptr_t);
+		AssetRef(std::nullptr_t);
 
 		// Constructor from asset path
 		explicit AssetRef(const String& path);
@@ -102,7 +102,7 @@ namespace o2
 		AssetRef<_asset_type>& operator=(Ref<_asset_type>&& other);
 
 		// Move operator from nullptr
-		AssetRef<_asset_type>& operator=(nullptr_t);
+		AssetRef<_asset_type>& operator=(std::nullptr_t);
 
 		// Returns is reference is valid
 		bool IsValid() const;
@@ -247,7 +247,7 @@ namespace o2
 	{}
 
 	template<typename _asset_type>
-	AssetRef<_asset_type>::AssetRef(nullptr_t) :
+	AssetRef<_asset_type>::AssetRef(std::nullptr_t) :
 		mPtr(nullptr)
 	{}
 
@@ -337,7 +337,7 @@ namespace o2
 	}
 
 	template<typename _asset_type>
-	AssetRef<_asset_type>& AssetRef<_asset_type>::operator=(nullptr_t)
+	AssetRef<_asset_type>& AssetRef<_asset_type>::operator=(std::nullptr_t)
 	{
 		mPtr = nullptr;
 		return *this;
@@ -441,7 +441,7 @@ namespace o2
 		_asset_type* asset;
 		if (mPtr)
 		{
-			asset = dynamic_cast<_asset_type*>(mPtr->CloneAs<Asset>());
+			asset = dynamic_cast<_asset_type*>(mPtr->template CloneAs<Asset>());
 		}
 		else
 		{

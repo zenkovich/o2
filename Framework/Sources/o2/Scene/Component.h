@@ -3,8 +3,7 @@
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
-namespace o2
-{
+namespace o2 {
     class Actor;
 
     // ---------------------------
@@ -97,10 +96,10 @@ namespace o2
         SERIALIZABLE(Component);
         CLONEABLE_REF(Component);
 
-	protected:
-		WeakRef<Actor> mOwner; // Owner actor
+    protected:
+        WeakRef<Actor> mOwner; // Owner actor
 
-		SceneUID mId; // Component id @EDITOR_IGNORE
+        SceneUID mId; // Component id @EDITOR_IGNORE
 
         WeakRef<Component> mPrototypeLink; // Prototype actor component pointer. Null if no actor prototype
 
@@ -192,7 +191,7 @@ namespace o2
     Vector<Ref<_type>> Component::GetComponentsInChildren() const
     {
         if (mOwner)
-            return mOwner->GetComponentsInChildren<_type>();
+            return mOwner.Lock()->template GetComponentsInChildren<_type>();
 
         return {};
     }
@@ -201,7 +200,7 @@ namespace o2
     Vector<Ref<_type>> Component::GetComponents() const
     {
         if (mOwner)
-            return mOwner->GetComponents();
+            return mOwner.Lock()->GetComponents();
 
         return {};
     }
@@ -210,7 +209,7 @@ namespace o2
     Ref<_type> Component::GetComponentInChildren() const
     {
         if (mOwner)
-            return mOwner->GetComponentInChildren<_type>();
+            return mOwner.Lock()->template GetComponentInChildren<_type>();
 
         return nullptr;
     }
@@ -219,7 +218,7 @@ namespace o2
     Ref<_type> Component::GetComponent() const
     {
         if (mOwner)
-            return mOwner->GetComponent<_type>();
+            return mOwner.Lock()->template GetComponent<_type>();
 
         return nullptr;
     }

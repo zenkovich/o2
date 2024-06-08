@@ -344,9 +344,9 @@ namespace o2
         Ref<SceneLayer> mSceneLayer; // Scene layer @SERIALIZABLE @EDITOR_IGNORE
 
         AssetRef<ActorAsset> mPrototype;     // Prototype asset
-        WeakRef<Actor>  mPrototypeLink; // Prototype link actor. Links to source actor from prototype
+        WeakRef<Actor>       mPrototypeLink; // Prototype link actor. Links to source actor from prototype
 
-        WeakRef<Actor>         mParent;   // Parent actor 
+        WeakRef<Actor>     mParent;   // Parent actor
         Vector<Ref<Actor>> mChildren; // Children actors 
 
         Vector<Ref<Component>> mComponents; // Components vector 

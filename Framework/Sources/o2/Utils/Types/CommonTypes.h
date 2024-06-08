@@ -1,7 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Reflection/Enum.h"
-#include <cstddef>
+#include <cstdint>
 
 namespace o2
 {

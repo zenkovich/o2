@@ -13,13 +13,13 @@ namespace o2
         TextureRef();
 
         // Nullptr constructor
-        TextureRef(nullptr_t);
+        TextureRef(std::nullptr_t);
 
         // Copy constructor from other reference
         TextureRef(const TextureRef& other);
 
         // Move constructor from other reference
-        TextureRef(TextureRef&& other);
+        TextureRef(TextureRef&& other) noexcept;
 
         // Constructor with texture pointer
         explicit TextureRef(Texture* ptr);
@@ -69,7 +69,7 @@ namespace o2
         TextureRef& operator=(Ref<Texture>&& other);
 
         // Move operator from nullptr
-        TextureRef& operator=(nullptr_t);
+        TextureRef& operator=(std::nullptr_t);
 
         // Returns is reference is valid
         bool IsValid() const;
@@ -127,7 +127,7 @@ CLASS_METHODS_META(o2::TextureRef)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(nullptr_t);
+    FUNCTION().PUBLIC().CONSTRUCTOR(std::nullptr_t);
     FUNCTION().PUBLIC().CONSTRUCTOR(const TextureRef&);
     FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef&&);
     FUNCTION().PUBLIC().CONSTRUCTOR(Texture*);

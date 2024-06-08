@@ -39,7 +39,6 @@ if (O2_TRACY)
 endif()
 
 set(O2_COMPILE_DEFINITIONS_EXPORT ${O2_COMPILE_DEFINITIONS} PARENT_SCOPE)
-add_compile_definitions(${O2_COMPILE_DEFINITIONS})
 
 # warings and errors
 if (MSVC)
@@ -50,7 +49,11 @@ if (MSVC)
         add_compile_definitions(_DISABLE_STRING_ANNOTATION _DISABLE_VECTOR_ANNOTATION _DISABLE_ITERATOR_ANNOTATION)
     endif()
 else()
-    add_compile_options(-Wall)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-error=format -Wno-error=format-extra-args -Wno-error=conversion \
+            -Wno-error=incompatible-pointer-types -Wno-error=sign-conversion -Wno-error=pointer-sign \
+            -Wno-error=deprecated -Wno-reorder -Wno-unused-variable")
 endif()
 
 # dependencies
@@ -93,6 +96,7 @@ set(o2Framework_INCLUDES
 target_sources(o2Framework PRIVATE ${o2Framework_SOURCES})
 target_include_directories(o2Framework PUBLIC ${o2Framework_INCLUDES})
 target_precompile_headers(o2Framework PUBLIC "Framework/Sources/o2/stdafx.h")
+target_compile_definitions(o2Framework PUBLIC ${O2_COMPILE_DEFINITIONS})
 
 target_link_libraries(o2Framework PUBLIC
         Box2D
@@ -162,6 +166,7 @@ if (O2_EDITOR)
     )
 
     target_precompile_headers(o2Editor PUBLIC "Editor/Sources/o2Editor/stdafx.h")
+    target_compile_definitions(o2Editor PUBLIC ${O2_COMPILE_DEFINITIONS})
 
     if(MSVC)
         target_compile_options(o2Editor PRIVATE "/MP" "/Zc:__cplusplus")

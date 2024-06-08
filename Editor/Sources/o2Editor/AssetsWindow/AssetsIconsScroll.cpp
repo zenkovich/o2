@@ -114,7 +114,7 @@ namespace Editor
 
         o2Render.DisableScissorTest();
 
-        CursorAreaEventsListener::OnDrawn();
+        GridLayoutScrollArea::OnDrawn();
 
         for (auto& layer : mTopDrawingLayers)
             layer->Draw();

@@ -11,7 +11,7 @@ namespace o2
         mTexture()
     {}
 
-    TextureRef::TextureRef(nullptr_t) :
+    TextureRef::TextureRef(std::nullptr_t) :
         mTexture(nullptr)
     {}
 
@@ -31,7 +31,7 @@ namespace o2
         mTexture(std::move(other))
     {}
 
-    TextureRef::TextureRef(TextureRef&& other) :
+    TextureRef::TextureRef(TextureRef&& other) noexcept :
         mTexture(std::move(other.mTexture))
     {}
 
@@ -111,7 +111,7 @@ namespace o2
         return *this;
     }
 
-    TextureRef& TextureRef::operator=(nullptr_t)
+    TextureRef& TextureRef::operator=(std::nullptr_t)
     {
         mTexture = nullptr;
         return *this;

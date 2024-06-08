@@ -199,7 +199,7 @@ namespace o2
     template<typename _type>
     FieldInfo& FieldInfo::SetDefaultValue(const _type& value)
     {
-        if constexpr (std::is_copy_constructible<_type>::value && SupportsEqualOperator<_type>::value)
+        if constexpr (std::is_copy_constructible_v<_type> && SupportsEqualOperator<_type>::value)
             mDefaultValue = mnew DefaultValue<_type>(value);
 
         return *this;

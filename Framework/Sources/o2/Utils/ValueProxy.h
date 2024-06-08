@@ -66,7 +66,7 @@ namespace o2
 		_type* GetValuePointer() const { return mValuePtr; }
 		void* GetValueVoidPointer() const override { return (void*)mValuePtr; }
 
-		REF_COUNTERABLE_IMPL(IValueProxy<_type>);
+		REF_COUNTERABLE_IMPL_TEMPLATE(PointerValueProxy<_type>, IValueProxy<_type>);
 	};
 
 	// ----------------------------------------------------
@@ -172,7 +172,7 @@ namespace o2
 		void SetValue(const _type& value) override;
 		_type GetValue() const override;
 
-        REF_COUNTERABLE_IMPL(IValueProxy<_type>);
+		REF_COUNTERABLE_IMPL_TEMPLATE(TypeScriptValueProxy<_type>, IValueProxy<_type>);
 	};
 
 	// ----------------------------------------

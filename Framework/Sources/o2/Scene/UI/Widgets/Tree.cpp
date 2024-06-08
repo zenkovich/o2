@@ -306,7 +306,7 @@ namespace o2
 
         o2Render.DisableScissorTest();
 
-        CursorAreaEventsListener::OnDrawn();
+        ScrollArea::OnDrawn();
 
         for (auto& layer : mTopDrawingLayers)
             layer->Draw();

@@ -119,14 +119,19 @@ namespace o2
         }
     };
 
-    // Reference counterable implementation to override GetRefCounter method
-#define REF_COUNTERABLE_IMPL(BASE_CLASS, ...)                                                                                             \
-        RefCounter* GetRefCounter() const { return BASE_CLASS::GetRefCounter(); }                                                         \
-        void SetRefCounter(RefCounter* refCounter) { RefCountersSetter<decltype(this)>::Set<BASE_CLASS, __VA_ARGS__>(this, refCounter); } \
-        template<typename _type> friend RefCounter* o2::GetRefCounterImpl(_type* ptr);                                                    \
-        template<typename _object_type> friend struct o2::RefCountersSetter;                                                              \
-        template<typename _type, typename ... _args> friend Ref<_type> o2::MakePlace(const char* location, int line, _args&& ... args)
 
+    // Reference counterable implementation to override GetRefCounter method
+#define REF_COUNTERABLE_IMPL_TEMPLATE(THIS_CLASS, BASE_CLASS, ...)                                                                                \
+        RefCounter* GetRefCounter() const { return BASE_CLASS::GetRefCounter(); }                                                                 \
+        void SetRefCounter(RefCounter* refCounter) { RefCountersSetter<THIS_CLASS*>::template Set<BASE_CLASS, ##__VA_ARGS__>(this, refCounter); } \
+        template<typename __type> friend RefCounter* o2::GetRefCounterImpl(__type* ptr);                                                          \
+        template<typename _object_type> friend struct o2::RefCountersSetter;                                                                      \
+        template<typename __type, typename ... _args> friend Ref<__type> o2::MakePlace(const char* location, int line, _args&& ... args)
+
+
+    // Reference counterable implementation to override GetRefCounter method
+#define REF_COUNTERABLE_IMPL(BASE_CLASS, ...) \
+        REF_COUNTERABLE_IMPL_TEMPLATE(typename std::remove_pointer<decltype(this)>::type, BASE_CLASS, ##__VA_ARGS__)
 
     // ----------------
     // Strong reference
@@ -361,7 +366,7 @@ namespace o2
 	template<typename _to_type, typename _from_type>
 	Vector<Ref<_to_type>> DynamicCastVector(const _from_type& from)
 	{
-		return from.Convert<Ref<_to_type>>([](auto& ref) { return DynamicCast<_to_type>(ref); });
+		return from.template Convert<Ref<_to_type>>([](auto& ref) { return DynamicCast<_to_type>(ref); });
 	}
 
     // Static cast from one reference type to another
@@ -372,33 +377,7 @@ namespace o2
     }
 
     // Special macro for making new object and returning reference to it with storing location and line of creation for debug
-#define mmake NewPlaceHelper(__FILE__, __LINE__).Create
-
-    // Reference class implementation of BaseRef
-#define BASE_REF_IMPLEMETATION(CLASS) 																										\
-	Ref() : BaseRef<CLASS>() {}																												\
-	Ref(nullptr_t) : BaseRef<CLASS>(nullptr) {}																								\
-	explicit Ref(CLASS* ptr) : BaseRef<CLASS>(ptr) {}																						\
-	Ref(const Ref<CLASS>& other) : BaseRef<CLASS>(other) {}																					\
-	Ref(Ref<CLASS>&& other) : BaseRef<CLASS>(other) {}																						\
-	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
-	Ref(const Ref<_other_type>& other) : BaseRef<CLASS>(other) {}																			\
-	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
-	Ref(Ref<_other_type>&& other) : BaseRef<CLASS>(std::move(other)) {}																		\
-	bool operator==(const Ref<CLASS>& other) const { return BaseRef<CLASS>::operator==(other); }											\
-	bool operator==(const CLASS* other) const { return BaseRef<CLASS>::operator==(other); }											        \
-	bool operator!=(const Ref<CLASS>& other) const { return BaseRef<CLASS>::operator!=(other); }											\
-	bool operator!=(const CLASS* other) const { return BaseRef<CLASS>::operator!=(other); }											        \
-	Ref<CLASS>& operator=(const Ref<CLASS>& other) { BaseRef<CLASS>::operator=(other); return *this; }										\
-	Ref<CLASS>& operator=(Ref<CLASS>&& other) { BaseRef<CLASS>::operator=(std::move(other)); return *this; }								\
-	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
-	Ref<CLASS>& operator=(const Ref<_other_type>& other) { BaseRef<CLASS>::operator=(other); return *this; }								\
-	template<typename _other_type, typename _enable = std::enable_if<std::is_convertible<_other_type*, CLASS*>::value>::type>				\
-	Ref<CLASS>& operator=(Ref<_other_type>&& other) { BaseRef<CLASS>::operator=(std::move(other)); return *this; }							\
-	bool IsValid() const { return BaseRef<CLASS>::IsValid(); }																				\
-	operator bool() const { return BaseRef<CLASS>::operator bool(); }																		\
-	CLASS& operator*() const { return BaseRef<CLASS>::operator*(); }																		\
-	CLASS* operator->() const { return BaseRef<CLASS>::operator->(); }															
+#define mmake NewPlaceHelper(__FILE__, __LINE__).Create														
 
     // ------------------------------
     // Helper struct for mmake macros

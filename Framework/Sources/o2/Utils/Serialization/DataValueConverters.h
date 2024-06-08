@@ -5,7 +5,7 @@
 namespace o2
 {
 	template<>
-    struct DataValue::Converter<nullptr_t>
+    struct DataValue::Converter<std::nullptr_t>
     {
         static constexpr bool isSupported = false;
     };
@@ -689,7 +689,7 @@ namespace o2
     // Enums converter
     // ---------------
     template<typename T>
-    struct DataValue::Converter<T, typename std::enable_if<std::is_enum<T>::value>::type>
+    struct DataValue::Converter<T, std::enable_if_t<std::is_enum_v<T>>>
     {
         static constexpr bool isSupported = true;
 
@@ -707,7 +707,7 @@ namespace o2
     };
 
     template<typename T>
-    struct DataValue::Converter<T, typename std::enable_if<IsProperty<T>::value>::type>
+    struct DataValue::Converter<T, std::enable_if_t<IsProperty<T>::value>>
     {
         static constexpr bool isSupported = DataValue::IsSupports<typename T::valueType>::value;
         using TValueType = typename T::valueType;
@@ -739,8 +739,8 @@ namespace o2
     }
 
     template<typename T>
-    struct DataValue::DeltaConverter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value&&
-        std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
+    struct DataValue::DeltaConverter<T, std::enable_if_t<std::is_pointer_v<T> && !std::is_const_v<T> &&
+                                                         std::is_base_of_v<o2::IObject, std::remove_pointer_t<T>>>>
     {
         static constexpr bool isSupported = true;
 

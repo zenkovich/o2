@@ -124,7 +124,7 @@ namespace o2
         LinkRef();
 
         // Nullptr constructor
-        LinkRef(nullptr_t);
+        LinkRef(std::nullptr_t);
 
         // Constructor with actor pointer
         explicit LinkRef(_actor_type* ptr);
@@ -163,7 +163,7 @@ namespace o2
 		LinkRef<_actor_type>& operator=(Ref<_actor_type>&& other);
 
 		// Move operator from nullptr
-		LinkRef<_actor_type>& operator=(nullptr_t);
+		LinkRef<_actor_type>& operator=(std::nullptr_t);
 
         // Returns is reference is valid
         bool IsValid() const;
@@ -248,7 +248,7 @@ namespace o2
     {}
 
     template<typename _actor_type>
-    LinkRef<_actor_type, ENABLE_ACTOR>::LinkRef(nullptr_t) :
+    LinkRef<_actor_type, ENABLE_ACTOR>::LinkRef(std::nullptr_t) :
         mRef(nullptr)
     {}
 
@@ -319,7 +319,7 @@ namespace o2
 	}
 
 	template<typename _actor_type>
-	LinkRef<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::operator=(nullptr_t)
+	LinkRef<_actor_type>& LinkRef<_actor_type, ENABLE_ACTOR>::operator=(std::nullptr_t)
 	{
 		mRef = nullptr;
 		return *this;

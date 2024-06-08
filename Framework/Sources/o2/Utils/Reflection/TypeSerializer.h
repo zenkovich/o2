@@ -43,7 +43,7 @@ namespace o2
     template<typename _type>
     bool TypeSerializer<_type>::IsDefault(void* object) const
     {
-        if constexpr (std::is_default_constructible<_type>::value && SupportsEqualOperator<_type>::value)
+        if constexpr (std::is_default_constructible_v<_type> && SupportsEqualOperator<_type>::value)
             return Math::Equals(*(_type*)object, _type());
 
         return false;

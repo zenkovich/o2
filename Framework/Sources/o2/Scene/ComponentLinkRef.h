@@ -118,7 +118,7 @@ namespace o2
 		LinkRef();
 
 		// Nullptr constructor
-		LinkRef(nullptr_t);
+		LinkRef(std::nullptr_t);
 
 		// Constructor with component pointer
 		explicit LinkRef(_component_type* ptr);
@@ -157,7 +157,7 @@ namespace o2
 		LinkRef<_component_type>& operator=(Ref<_component_type>&& other);
 
 		// Move operator from nullptr
-		LinkRef<_component_type>& operator=(nullptr_t);
+		LinkRef<_component_type>& operator=(std::nullptr_t);
 
 		// Returns is reference is valid
 		bool IsValid() const;
@@ -242,7 +242,7 @@ namespace o2
 	{}
 
 	template<typename _component_type>
-	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(nullptr_t) :
+	LinkRef<_component_type, ENABLE_COMPONENT>::LinkRef(std::nullptr_t) :
 		mRef(nullptr)
 	{}
 
@@ -313,7 +313,7 @@ namespace o2
 	}
 
 	template<typename _component_type>
-	LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(nullptr_t)
+	LinkRef<_component_type>& LinkRef<_component_type, ENABLE_COMPONENT>::operator=(std::nullptr_t)
 	{
 		mRef = nullptr;
 		return *this;

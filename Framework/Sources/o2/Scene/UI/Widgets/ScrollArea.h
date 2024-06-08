@@ -160,6 +160,9 @@ namespace o2
         float mLastVerScrollChangeTime = -1.0f; // Last time when horizontal scroll bar was changed
 
     protected:
+        // Called when listener was drawn
+        void OnDrawn() override;
+
         // Completion deserialization callback
         void OnDeserialized(const DataValue& node) override;
 
@@ -289,6 +292,7 @@ CLASS_METHODS_META(o2::ScrollArea)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDrawn);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, const Ref<Widget>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChildRemoved, const Ref<Widget>&);

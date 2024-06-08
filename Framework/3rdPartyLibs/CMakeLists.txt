@@ -10,7 +10,8 @@ if (MSVC)
     endif()
 else()
     add_compile_options(-Wall -Wno-error=format -Wno-error=format-extra-args -Wno-error=conversion
-                        -Wno-error=incompatible-pointer-types -Wno-error=sign-conversion -Wno-error=pointer-sign)
+                        -Wno-error=incompatible-pointer-types -Wno-error=sign-conversion -Wno-error=pointer-sign
+                        -Wno-error=dangling-pointer -Wno-error=class-memaccess -Wno-error=misleading-indentation)
 endif()
 
 # jerry script

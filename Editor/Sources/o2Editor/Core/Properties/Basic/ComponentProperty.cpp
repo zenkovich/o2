@@ -117,7 +117,7 @@ namespace Editor
 
 				if (value && value->GetPrototypeLink())
 				{
-					if (proto != value->GetPrototypeLink())
+					if (value->GetPrototypeLink() != proto)
 						return true;
 				}
 				else
