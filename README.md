@@ -1,3 +1,5 @@
+![MSVS build status](https://github.com/zenkovich/PetStory/actions/workflows/cmake-multi-platform.yml/badge.svg)
+
 # o2
 
 o2 - it's an open-source technology for easy making 2D games and applications for mobile and PC platforms using C++ and JavaScript with visual editor. The main features are performance, usability and effective development.
