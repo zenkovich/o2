@@ -22,7 +22,7 @@ namespace o2
         mReady(false), mStencilDrawing(false), mStencilTest(false), mClippingEverything(false)
     {
         // Create log stream
-        mLog = mnew LogStream("Render");
+        mLog = mmake<LogStream>("Render");
         o2Debug.GetLog()->BindStream(mLog);
 
         // Initialize OpenGL
@@ -37,7 +37,7 @@ namespace o2
         }
 
         // Get OpenGL extensions
-        GetGLExtensions(mLog);
+        GetGLExtensions(mLog.Get());
 
         GL_CHECK_ERROR();
 
@@ -84,9 +84,9 @@ namespace o2
         mDPI.x = 90;
         mDPI.y = 90;
 
-        Bitmap b(PixelFormat::R8G8B8A8, Vec2I(16, 16));
-        b.Fill(Color4::White());
-        mWhiteTexture = TextureRef(&b);
+        Bitmap whiteBitmap(PixelFormat::R8G8B8A8, Vec2I(16, 16));
+        whiteBitmap.Fill(Color4::White());
+        mWhiteTexture = TextureRef(whiteBitmap);
 
         InitializeFreeType();
         InitializeLinesIndexBuffer();
@@ -110,14 +110,6 @@ namespace o2
 
         mSolidLineTexture = TextureRef::Null();
         mDashLineTexture = TextureRef::Null();
-
-        auto fonts = mFonts;
-        for (auto& font : fonts)
-            delete font;
-
-        auto textures = mTextures;
-        for (auto& texture : textures)
-            delete texture;
 
         DeinitializeFreeType();
 
@@ -357,7 +349,7 @@ namespace o2
         else
             indexesCount = elementsCount * 3;
 
-        if (mLastDrawTexture != texture.mTexture ||
+        if (mLastDrawTexture != texture ||
             mLastDrawVertex + verticesCount >= mVertexBufferSize ||
             mLastDrawIdx + indexesCount >= mIndexBufferSize ||
             mCurrentPrimitiveType != primitiveType)

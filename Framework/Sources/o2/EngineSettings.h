@@ -85,7 +85,7 @@ const char* GetEditorBuiltAssetsPath();
 const char* GetEditorBuiltAssetsTreePath();
 
 // Built in assets path. Relative from executable
-const char* GetBuiltitAssetsPath();
+const char* GetBuiltinAssetsPath();
 
 
 // ----------------------

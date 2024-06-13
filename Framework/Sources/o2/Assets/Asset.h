@@ -46,6 +46,9 @@ namespace o2
         // Virtual destructor
         virtual ~Asset();
 
+        // It is called after reference initialization at object construction, registers asset cache
+        void PostRefConstruct();
+
         // Assign operator
         Asset& operator=(const Asset& asset);
 
@@ -130,9 +133,6 @@ namespace o2
 
         // Copy-constructor
 		Asset(const Asset& asset);
-
-		// It is called after reference initialization at object construction, registers asset cache
-		void PostRefConstruct();
 
         // Returns meta full path (from binary path)
         String GetMetaFullPath() const;

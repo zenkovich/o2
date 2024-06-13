@@ -29,10 +29,6 @@ namespace o2
 
     AssetInfo::~AssetInfo()
     {
-        if (parent)
-            parent.Lock()->RemoveChild(Ref(this));
-
-        RemoveAllChildren();
     }
 
     AssetInfo& AssetInfo::operator=(const AssetInfo& other)

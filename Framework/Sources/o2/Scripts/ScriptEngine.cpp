@@ -40,7 +40,7 @@ namespace o2
 
     void ScriptEngine::RunBuiltinScript(const String& filename)
     {
-        Eval(o2FileSystem.ReadFile(GetBuiltitAssetsPath() + filename), filename);
+        Eval(o2FileSystem.ReadFile(GetBuiltinAssetsPath() + filename), filename);
     }
 
     Vector<ScriptEngine::RegisterConstructorFunc>& ScriptEngine::GetRegisterConstructorFuncs()

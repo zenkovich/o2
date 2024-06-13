@@ -182,9 +182,9 @@ namespace o2
         glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
     }
 
-    Bitmap* Texture::GetData()
+    Ref<Bitmap> Texture::GetData()
     {
-        Bitmap* bitmap = mnew Bitmap(PixelFormat::R8G8B8A8, mSize);
+        auto bitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, mSize);
 
         auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
         glBindTexture(GL_TEXTURE_2D, mHandle);
