@@ -74,11 +74,7 @@ namespace o2
         template<typename _type>
         friend RefCounter* GetRefCounterImpl(_type* ptr);
 
-        template<typename _type, typename ... _args>
-        friend Ref<_type> Make(_args&& ... args);
-
-        template<typename _type, typename ... _args>
-        friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args); 
+        friend struct RefMaker;
 
 		template<typename _object_type>
 		friend struct RefCountersSetter;
@@ -126,7 +122,7 @@ namespace o2
         void SetRefCounter(RefCounter* refCounter) { RefCountersSetter<THIS_CLASS*>::template Set<BASE_CLASS, ##__VA_ARGS__>(this, refCounter); } \
         template<typename __type> friend RefCounter* o2::GetRefCounterImpl(__type* ptr);                                                          \
         template<typename _object_type> friend struct o2::RefCountersSetter;                                                                      \
-        template<typename __type, typename ... _args> friend Ref<__type> o2::MakePlace(const char* location, int line, _args&& ... args)
+        friend struct o2::RefMaker
 
 
     // Reference counterable implementation to override GetRefCounter method
@@ -285,46 +281,8 @@ namespace o2
 	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }
 
     // Declares friend function for creating new object
-#define FRIEND_REF_MAKE()                                                          \
-    template<typename _type, typename ... _args>                                   \
-    friend Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
-
-    // Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together. 
-    // Stores location and line of creation for debug
-    template<typename _type, typename ... _args>
-    Ref<_type> MakePlace(const char* location, int line, _args&& ... args)
-    {
-        constexpr auto refSize = sizeof(RefCounter);
-        constexpr auto typeSize = sizeof(_type);
-
-        std::byte* memory = (std::byte*)_mmalloc(refSize + typeSize, location, line);
-        auto refCounter = new (memory) RefCounter();
-        refCounter->strongReferences += 1;
-
-        _type* object;
-
-        constexpr bool isConstructibleWithRefCounter = std::is_constructible<_type, RefCounter*, _args...>::value;
-        if constexpr (isConstructibleWithRefCounter) 
-		{
-			object = new (memory + refSize) _type(refCounter, std::forward<_args>(args)...);
-        }
-        else
-		{
-			object = new (memory + refSize) _type(std::forward<_args>(args)...);
-            object->SetRefCounter(refCounter);
-        }
-
-        refCounter->strongReferences -= 1;
-
-        return Ref<_type>(object);
-	}
-
-	// Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together
-	template<typename _type, typename ... _args>
-	Ref<_type> Make(_args&& ... args)
-	{
-        return MakePlace<_type>(nullptr, 0, std::forward<_args>(args)...);
-	}
+#define FRIEND_REF_MAKE()  \
+    friend struct RefMaker
 
 	// Dynamic cast from one reference type to another
 	template<typename _to_type, typename _from_type>
@@ -347,23 +305,95 @@ namespace o2
         return Ref<_to_type>(static_cast<_to_type*>(from.Get()));
     }
 
+#if ENABLE_MEMORY_MANAGE
     // Special macro for making new object and returning reference to it with storing location and line of creation for debug
-#define mmake NewPlaceHelper(__FILE__, __LINE__).Create														
+#define mmake RefMaker(__FILE__, __LINE__).Make
+#else
+    // Special macro for making new object and returning reference to it with storing location and line of creation for debug
+#define mmake RefMaker().Make
+#endif
 
     // ------------------------------
     // Helper struct for mmake macros
     // ------------------------------
-    struct NewPlaceHelper
+    struct RefMaker
     {
+        // Static check for presence of PostRefConstruct method
+        template<class T, class = std::void_t<>>
+        struct HasPostRefConstruct : std::false_type {};
+
+        // Static check for presence of PostRefConstruct method
+        template<class T>
+        struct HasPostRefConstruct<T, std::void_t<decltype(&T::PostRefConstruct)>> : std::true_type {};
+
+        // Static check for presence of RefConstruct method with specified arguments
+        template<typename T, typename... Args>
+        struct HasRefConstructArgs
+        {
+        private:
+            template<typename C>
+            static auto test(int) -> decltype(std::declval<C>().template RefConstruct(std::declval<Args>()...), std::true_type{});
+
+            template<typename>
+            static auto test(...) -> std::false_type;
+
+        public:
+            static constexpr bool value = decltype(test<T>(0))::value;
+        };
+
+    public:
+        RefMaker() = default;
+
+#if ENABLE_MEMORY_MANAGE
         const char* location;
         int line;
 
-        NewPlaceHelper(const char* location, int line):location(location), line(line) {}
+        RefMaker(const char* location, int line):location(location), line(line) {}
 
-        template<typename _type, typename ... _args>
-        Ref<_type> Create(_args&& ... args)
+        void* allocate(std::size_t size) const
         {
-            return MakePlace<_type>(location, line, std::forward<_args>(args)...);
+            return _mmalloc(size, location, line);
+        }
+#else
+        void* allocate(std::size_t size) const
+        {
+            return malloc(size);
+        }
+#endif
+        // Makes new object and returns reference to it. Creates memory block with reference counter and object to keep them together.
+        // Stores location and line of creation for debug
+        template<typename _type, typename ... _args>
+        Ref<_type> Make(_args&& ... args)
+        {
+            constexpr auto refSize = sizeof(RefCounter);
+            constexpr auto typeSize = sizeof(_type);
+
+            auto memory = (std::byte*)allocate(refSize + typeSize);
+            auto refCounter = new (memory) RefCounter();
+            refCounter->strongReferences += 1;
+
+            _type* object;
+
+            constexpr bool isConstructibleWithRefCounter = std::is_constructible<_type, RefCounter*, _args...>::value;
+            if constexpr (isConstructibleWithRefCounter)
+            {
+                object = new (memory + refSize) _type(refCounter, std::forward<_args>(args)...);
+            }
+            else
+            {
+                object = new (memory + refSize) _type(std::forward<_args>(args)...);
+                object->SetRefCounter(refCounter);
+            }
+
+            if constexpr (HasRefConstructArgs<_type, _args ...>::value)
+                object->RefConstruct(std::forward<_args>(args)...);
+
+            if constexpr (HasPostRefConstruct<_type>::value)
+                object->PostRefConstruct();
+
+            refCounter->strongReferences -= 1;
+
+            return Ref<_type>(object);
         }
     };
 
