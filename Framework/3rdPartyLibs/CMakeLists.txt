@@ -25,7 +25,12 @@ set(JERRY_MATH              OFF CACHE BOOL "" FORCE)
 set(UNITTESTS               OFF CACHE BOOL "" FORCE)
 set(DOCTESTS                OFF CACHE BOOL "" FORCE)
 
-set(BUILD_SHARED_LIBS         ON CACHE BOOL "" FORCE)
+if (WIN32)
+    set(BUILD_SHARED_LIBS         OFF CACHE BOOL "" FORCE)
+elseif (UNIX)
+    set(BUILD_SHARED_LIBS         ON CACHE BOOL "" FORCE)
+endif()
+
 set(ENABLE_AMALGAM            OFF CACHE BOOL "" FORCE)
 set(ENABLE_LTO                ON  CACHE BOOL "" FORCE)
 set(ENABLE_STRIP              ON  CACHE BOOL "" FORCE)
