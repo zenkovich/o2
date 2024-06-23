@@ -494,6 +494,8 @@ namespace o2
 		{
 			if (mIsInstance)
 			{
+				mPtr->ID().Randomize(); // Randomize ID to avoid conflicts after loading same asset multiple times
+
 				node["instance"] = mPtr;
 				node["meta"] = mPtr->GetMeta();
 			}

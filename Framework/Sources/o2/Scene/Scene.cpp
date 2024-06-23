@@ -139,7 +139,9 @@ namespace o2
         mDestroyComponents.Clear();
 
         for (auto& actor : destroyActors)
+        {
             actor->OnBeforeDestroy();
+        }
 
         destroyActors.Clear();
 

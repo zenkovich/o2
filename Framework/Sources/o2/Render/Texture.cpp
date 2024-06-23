@@ -55,6 +55,89 @@ namespace o2
         o2Render.OnTextureCreated(this);
     }
 
+    Texture::~Texture()
+    {
+        if (!mReady)
+            return;
+
+        PlatformDestroy();
+    }
+
+    void Texture::Create(const Vec2I& size, TextureFormat format /*= TextureFormat::R8G8B8A8*/,
+                         Usage usage /*= Usage::Default*/)
+    {
+        if (mReady)
+        {
+            PlatformDestroy();
+            mReady = false;
+        }
+
+        mFormat = format;
+        mUsage = usage;
+        mSize = size;
+
+        mReady = PlatformCreate();
+    }
+
+    void Texture::Create(const Vec2I& size, Byte* data, TextureFormat format /*= TextureFormat::R8G8B8A8*/)
+    {
+        if (mReady)
+        {
+            if (mUsage == Usage::RenderTarget)
+                glDeleteFramebuffersEXT(1, &mFrameBuffer);
+
+            glDeleteTextures(1, &mHandle);
+        }
+
+        mFormat = format;
+        mUsage = Usage::Default;
+        mSize = size;
+        mReady = PlatformCreate();
+
+        if (mReady)
+            PlatformUploadData(size, data, format);
+    }
+
+    void Texture::Create(const Bitmap& bitmap)
+    {
+        mFileName = bitmap.GetFilename();
+        Create(bitmap.GetSize(), (Byte*)bitmap.GetData(), TextureFormat::R8G8B8A8);
+    }
+
+    void Texture::SetData(const Bitmap& bitmap)
+    {
+        if (mSize != bitmap.GetSize())
+        {
+            o2Render.mLog->Error("Cant set data to texture with different size");
+            return;
+        }
+
+        PlatformUploadData(mSize, (Byte*)bitmap.GetData(), TextureFormat::R8G8B8A8);
+    }
+
+    void Texture::SetSubData(const Vec2I& offset, const Bitmap& bitmap)
+    {
+        PlatformUploadRegionData(offset, bitmap.GetSize(), (Byte*)bitmap.GetData(), TextureFormat::R8G8B8A8);
+    }
+
+    Ref<Bitmap> Texture::GetData()
+    {
+        auto bitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, mSize);
+        PlatformGetData((Byte*)bitmap->GetData());
+        return bitmap;
+    }
+
+    void Texture::SetFilter(Filter filter)
+    {
+        mFilter = filter;
+        PlatformSetFilter();
+    }
+
+    Texture::Filter Texture::GetFilter() const
+    {
+        return mFilter;
+    }
+
     void Texture::Create(const String& fileName)
     {
         String extension = o2FileSystem.GetFileExtension(fileName);
