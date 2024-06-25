@@ -98,7 +98,7 @@ namespace o2
         static void PopCursorAreaEventsListenersLayer();
 
         // Unregisters layer
-        static void RemoveCursorAreaEventsListenersLayer(const Ref<CursorAreaEventListenersLayer>& layer);
+        static void RemoveCursorAreaEventsListenersLayer(const WeakRef<CursorAreaEventListenersLayer>& layer);
 
         // Registering cursor area events listener
         static void DrawnCursorAreaListener(const Ref<CursorAreaEventsListener>& listener);
@@ -110,7 +110,7 @@ namespace o2
         static void RegCursorListener(const Ref<CursorEventsListener>& listener);
 
         // Unregistering cursor events listener
-        static void UnregCursorListener(const Ref<CursorEventsListener>& listener);
+        static void UnregCursorListener(const WeakRef<CursorEventsListener>& listener);
 
         // Registering drag events listener
         static void RegDragListener(const Ref<DragableObject>& listener);

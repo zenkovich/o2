@@ -576,12 +576,10 @@ namespace o2
             if (refCounter->strongReferences == 0)
             {
                 refCounter->weakReferences++;
-                refCounter->strongReferences = 1;
 
                 DestructObject(mPtr);
 
                 refCounter->weakReferences--;
-                refCounter->strongReferences = 0;
 
                 mPtr = nullptr;
 

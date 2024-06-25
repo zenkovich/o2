@@ -122,13 +122,10 @@ namespace o2
 
         SetPrototype(nullptr);
 
-        if (mParent)
-            mParent.Lock()->RemoveChild(Ref(this));
-
         RemoveAllChildren();
         RemoveAllComponents();
 
-        Scene::OnActorDestroy(Ref(this));
+        Scene::OnActorDestroy(WeakRef(this));
 
         delete transform;
     }

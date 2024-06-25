@@ -185,6 +185,6 @@ namespace o2
 
     CursorEventsListener::~CursorEventsListener()
     {
-        EventSystem::UnregCursorListener(Ref(this));
+        EventSystem::UnregCursorListener(WeakRef(this));
     }
 }

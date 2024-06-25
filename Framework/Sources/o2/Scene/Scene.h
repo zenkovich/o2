@@ -206,7 +206,7 @@ namespace o2
         static void OnActorCreated(const Ref<Actor>& actor);
 
         // Called when actor destroyed, removes from scene
-        static void OnActorDestroy(const Ref<Actor>& actor);
+        static void OnActorDestroy(const WeakRef<Actor>& actor);
 
         // Called when new actor was parented to another actor, removes it from added list
         static void OnNewActorParented(const Ref<Actor>& actor);
@@ -506,7 +506,7 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUpdating);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEditor);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorCreated, const Ref<Actor>&);
-    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorDestroy, const Ref<Actor>&);
+    FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorDestroy, const WeakRef<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnNewActorParented, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnActorIdChanged, const Ref<Actor>&, SceneUID);
     FUNCTION().PROTECTED().SIGNATURE_STATIC(void, OnAddActorToScene, const Ref<Actor>&);
