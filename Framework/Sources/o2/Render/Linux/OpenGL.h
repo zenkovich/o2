@@ -2,6 +2,8 @@
 
 #if defined(PLATFORM_LINUX) && !defined(O2_RENDER_GLES2)
 
+#define Font XFont
+
 #include <GL/gl.h>
 #include <GL/glx.h>
 
@@ -9,6 +11,7 @@
 #undef Bool
 #undef None
 #undef CurrentTime
+#undef Font
 
 namespace o2
 {

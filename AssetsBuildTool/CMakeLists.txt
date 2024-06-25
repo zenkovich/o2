@@ -11,7 +11,7 @@ target_include_directories(o2AssetsBuilder PUBLIC "Sources")
 target_sources(o2AssetsBuilder PRIVATE ${o2AssetsBuilder_SOURCES})
 
 target_link_libraries(o2AssetsBuilder 
-    PRIVATE
+    PUBLIC
     o2Framework
 )
 

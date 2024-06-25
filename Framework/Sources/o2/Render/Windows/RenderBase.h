@@ -37,17 +37,12 @@ namespace o2
         UInt         mVertexBufferSize;          // Maximum size of vertex buffer
         UInt         mIndexBufferSize;           // Maximum size of index buffer
 
-        TextureRef mWhiteTexture; // Default white texture
-
     protected:
         // Builds vertex and fragment shaders
         GLuint LoadShader(GLenum shaderType, const char* source);
 
         // Builds vertex and fragment shaders
         GLuint BuildShaderProgram(const char* vertexSource, const char* fragmentSource);
-
-        // Initializes standard shader
-        void InitializeStdShader();
 
         // BInds next buffers from pool
         void BindNextPoolBuffers();

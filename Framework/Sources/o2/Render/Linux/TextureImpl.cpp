@@ -7,51 +7,28 @@
 namespace o2
 {
     Map<TextureFormat, GLint> formatMap =
-        {
-            { TextureFormat::R8G8B8A8, GL_RGBA },
-            { TextureFormat::DXT5, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT }
+    {
+        { TextureFormat::R8G8B8A8, GL_RGBA },
+        { TextureFormat::DXT5, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT }
     };
 
-    Texture::~Texture()
+    bool Texture::PlatformCreate()
     {
-        o2Render.OnTextureDestroyed(this);
-
-        if (!mReady)
-            return;
-
-        if (mUsage == Usage::RenderTarget)
-            glDeleteFramebuffersEXT(1, &mFrameBuffer);
-
-        glDeleteTextures(1, &mHandle);
-    }
-
-    void Texture::Create(const Vec2I& size, TextureFormat format /*= TextureFormat::R8G8B8A8*/,
-        Usage usage /*= Usage::Default*/)
-    {
-        if (mReady)
-        {
-            if (mUsage == Usage::RenderTarget)
-                glDeleteFramebuffersEXT(1, &mFrameBuffer);
-
-            glDeleteTextures(1, &mHandle);
-        }
-
-        mFormat = format;
-        mUsage = usage;
-        mSize = size;
-
-        auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
+        auto prevTextureHandle = o2Render.mCurrentDrawTexture ? o2Render.mCurrentDrawTexture->mHandle : 0;
 
         glGenTextures(1, &mHandle);
         glBindTexture(GL_TEXTURE_2D, mHandle);
+        GL_CHECK_ERROR();
 
         GLint texFormat = formatMap[format];
-        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, (GLsizei)size.x, (GLsizei)size.y, 0, texFormat, GL_UNSIGNED_BYTE, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, (GLsizei)mSize.x, (GLsizei)mSize.y, 0, texFormat, GL_UNSIGNED_BYTE, NULL);
+        GL_CHECK_ERROR();
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        GL_CHECK_ERROR();
 
         if (mUsage == Usage::RenderTarget)
         {
@@ -68,41 +45,34 @@ namespace o2
                 GLenum glError = glGetError();
 
                 o2Render.mLog->Error("Failed to create GL frame buffer object! GL Error %i %cs", glError,
-                    GetGLErrorDesc(glError));
+                                     GetGLErrorDesc(glError));
 
-                mReady = false;
                 glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 
-                return;
+                return false;
             }
 
-            mReady = true;
-
             glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+            GL_CHECK_ERROR();
         }
 
         glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 
-        mReady = true;
+        return true;
     }
 
-    void Texture::Create(const Vec2I& size, Byte* data, TextureFormat format /*= TextureFormat::R8G8B8A8*/)
+    void Texture::PlatformDestroy()
     {
-        if (mReady)
-        {
-            if (mUsage == Usage::RenderTarget)
-                glDeleteFramebuffersEXT(1, &mFrameBuffer);
+        if (mUsage == Usage::RenderTarget)
+            glDeleteFramebuffersEXT(1, &mFrameBuffer);
 
-            glDeleteTextures(1, &mHandle);
-        }
+        glDeleteTextures(1, &mHandle);
+    }
 
-        mFormat = format;
-        mUsage = Usage::Default;
-        mSize = size;
+    void Texture::PlatformUploadData(const Vec2I& size, Byte* data, TextureFormat format)
+    {
+        auto prevTextureHandle = o2Render.mCurrentDrawTexture ? o2Render.mCurrentDrawTexture->mHandle : 0;
 
-        auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
-
-        glGenTextures(1, &mHandle);
         glBindTexture(GL_TEXTURE_2D, mHandle);
 
         GLint texFormat = formatMap[format];
@@ -111,10 +81,9 @@ namespace o2
         {
             int blockSize = 16;
             int offset = 0;
-
             int dataSize = ((size.x + 3) / 4) * ((size.y + 3) / 4) * blockSize;
 
-            glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, size.x, size.y, 0, dataSize, data );
+            glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, size.x, size.y, 0, dataSize, data);
         }
         else
         {
@@ -123,48 +92,18 @@ namespace o2
 
         GL_CHECK_ERROR();
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
         glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
-
-        mReady = true;
     }
 
-    void Texture::Create(const Bitmap& bitmap)
+    void Texture::PlatformUploadRegionData(const Vec2I& offset, const Vec2I& size, Byte* data, TextureFormat format)
     {
-        mFileName = bitmap.GetFilename();
-        Create(bitmap.GetSize(), (Byte*)bitmap.GetData(), TextureFormat::R8G8B8A8);
-    }
-
-    void Texture::SetData(const Bitmap& bitmap)
-    {
-        auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
+        auto prevTextureHandle = o2Render.mCurrentDrawTexture ? o2Render.mCurrentDrawTexture->mHandle : 0;
         glBindTexture(GL_TEXTURE_2D, mHandle);
 
         GLint texFormat = formatMap[format];
 
-        mSize = bitmap.GetSize();
-
-        glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap.GetSize().x, bitmap.GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
-            bitmap.GetData());
-
-        GL_CHECK_ERROR();
-
-        glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
-    }
-
-    void Texture::SetSubData(const Vec2I& offset, const Bitmap& bitmap)
-    {
-        auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
-        glBindTexture(GL_TEXTURE_2D, mHandle);
-
-        GLint texFormat = formatMap[format];
-
-        glTexSubImage2D(GL_TEXTURE_2D, 0, offset.x, offset.y, bitmap.GetSize().x, bitmap.GetSize().y, texFormat, GL_UNSIGNED_BYTE,
-            bitmap.GetData());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, offset.x, offset.y, size.x, size.y, texFormat, GL_UNSIGNED_BYTE,
+                        data);
 
         GL_CHECK_ERROR();
 
@@ -173,7 +112,7 @@ namespace o2
 
     void Texture::Copy(const Texture& from, const RectI& rect)
     {
-        auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
+        auto prevTextureHandle = o2Render.mCurrentDrawTexture ? o2Render.mCurrentDrawTexture->mHandle : 0;
         glBindTexture(GL_TEXTURE_2D, from.mHandle);
 
         GLint texFormat = formatMap[format];
@@ -182,27 +121,21 @@ namespace o2
         glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
     }
 
-    Bitmap* Texture::GetData()
+    void Texture::PlatformGetData(Byte* data)
     {
-        Bitmap* bitmap = mnew Bitmap(PixelFormat::R8G8B8A8, mSize);
-
-        auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
+        auto prevTextureHandle = o2Render.mCurrentDrawTexture ? o2Render.mCurrentDrawTexture->mHandle : 0;
         glBindTexture(GL_TEXTURE_2D, mHandle);
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap->GetData());
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
-
-        return bitmap;
     }
 
-    void Texture::SetFilter(Filter filter)
+    void Texture::PlatformSetFilter()
     {
-        mFilter = filter;
-
         GLint type = GL_LINEAR;
         if (mFilter == Filter::Nearest)
             type = GL_NEAREST;
 
-        auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
+        auto prevTextureHandle = o2Render.mCurrentDrawTexture ? o2Render.mCurrentDrawTexture->mHandle : 0;
         o2Render.DrawPrimitives();
 
         glBindTexture(GL_TEXTURE_2D, mHandle);
@@ -212,11 +145,6 @@ namespace o2
         glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 
         GL_CHECK_ERROR();
-    }
-
-    Texture::Filter Texture::GetFilter() const
-    {
-        return mFilter;
     }
 }
 

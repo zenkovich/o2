@@ -7,7 +7,6 @@
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Types/CommonTypes.h"
 
-
 namespace o2
 {
     class Texture;
@@ -28,15 +27,13 @@ namespace o2
         GLuint mVertexBuffersPool[mBuffersPoolsSize]; // Batch vertices buffer
         GLuint mIndexBuffersPool[mBuffersPoolsSize];  // Batch polygons indexes buffer
         int    mCurrentBufferIdx = 0;                 // Current buffer index
-        int    mVertexBufferOffset = 0;                  // Current vertex index in vertex buffer
+        int    mVertexBufferIdx = 0;                  // Current vertex index in vertex buffer
         int    mIndexBufferIdx = 0;                   // Current index count in index buffer
 
         UInt8*       mVertexData = nullptr;      // Vertex data buffer
         VertexIndex* mVertexIndexData = nullptr; // Index data buffer
         UInt         mVertexBufferSize;          // Maximum size of vertex buffer
         UInt         mIndexBufferSize;           // Maximum size of index buffer
-
-        TextureRef mWhiteTexture; // Default white texture
 
     protected:
         // Builds vertex and fragment shaders
@@ -46,7 +43,7 @@ namespace o2
         GLuint BuildShaderProgram(const char* vertexSource, const char* fragmentSource);
 
         // Initializes standard shader
-        void InitializeStdShader();
+        void InitializeSandardShader();
 
         // BInds next buffers from pool
         void BindNextPoolBuffers();

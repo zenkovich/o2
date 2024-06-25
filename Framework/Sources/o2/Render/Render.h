@@ -48,10 +48,11 @@ namespace o2
         // ---------------------
         struct ScissorInfo
         {
-            float mBeginDepth;   // Drawing depth on enabling clipping
-            float mEndDepth;     // Drawing depth on disabling clipping
-            RectI mScissorRect;  // Scissor clipping rectangle
+            float beginDepth = 0.0f; // Drawing depth on enabling clipping
+            float endDepth = 0.0f;   // Drawing depth on disabling clipping
+            RectI scissorRect;       // Scissor clipping rectangle
 
+        public:
             ScissorInfo();
             ScissorInfo(const RectI& rect, float beginDepth);
 
@@ -63,10 +64,11 @@ namespace o2
         // --------------------------------
         struct ScissorStackEntry
         {
-            RectI mScrissorRect;       // Clipping scissor rectangle
-            RectI mSummaryScissorRect; // Real clipping rectangle: summary of top clipping rectangles
-            bool  mRenderTarget;       // Is render target turned on this step
+            RectI scissorRect;          // Clipping scissor rectangle
+            RectI summaryScissorRect;   // Real clipping rectangle: summary of top clipping rectangles
+            bool  renderTarget = false; // Is render target turned on this step
 
+        public:
             ScissorStackEntry();
             ScissorStackEntry(const RectI& rect, const RectI& summaryRect, bool renderTarget = false);
 
@@ -75,12 +77,11 @@ namespace o2
 
     public:
         PROPERTIES(Render);
-        PROPERTY(Camera, camera, SetCamera, GetCamera);                          // Current camera property
-        PROPERTY(RectI, scissorRect, EnableScissorTest, GetScissorRect);         // Scissor rect property
+        PROPERTY(Camera, camera, SetCamera, GetCamera);                           // Current camera property
+        PROPERTY(RectI, scissorRect, EnableScissorTest, GetScissorRect);          // Scissor rect property
         PROPERTY(TextureRef, renderTexture, BindRenderTexture, GetRenderTexture); // Render target texture property
-        GETTER(Vec2I, resolution, GetResolution);                                // Screen resolution getter
-        GETTER(bool, renderTextureAvailable, IsRenderTextureAvailable);          // Render textures available getter
-        GETTER(Vec2I, maxTextureSize, GetMaxTextureSize);                        // Maximal texture size getter
+        GETTER(Vec2I, resolution, GetResolution);                                 // Screen resolution getter
+        GETTER(Vec2I, maxTextureSize, GetMaxTextureSize);                         // Maximal texture size getter
 
     public:
         Function<void()> preRender;  // Pre rendering event. Call after beginning drawing. Clearing every frame
@@ -268,6 +269,10 @@ namespace o2
         void DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
                         VertexIndex* indexes, UInt elementsCount, const TextureRef& texture);
 
+        // Platform specific upload vertex and index buffers
+        void PlatformUploadBuffers(Vertex* vertices, UInt verticesCount,
+                                   VertexIndex* indexes, UInt indexesCount);
+
         // Draws mesh wire
         void DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
 
@@ -287,9 +292,6 @@ namespace o2
         // Returns current render target. Returns NULL if no render target
         TextureRef GetRenderTexture() const;
 
-        // Returns true, if render target is can be used with current device
-        bool IsRenderTextureAvailable() const;
-
         // Returns maximum texture size
         Vec2I GetMaxTextureSize() const;
 
@@ -300,83 +302,114 @@ namespace o2
         const Vector<ScissorInfo>& GetScissorInfos() const;
 
     protected:
-        PrimitiveType mCurrentPrimitiveType; // Type of drawing primitives for next DIP
+        PrimitiveType mCurrentPrimitiveType = PrimitiveType::Polygon; // Type of drawing primitives for next DIP
 
-        TextureRef mLastDrawTexture = nullptr; // Stored texture ptr from last DIP
-        UInt         mLastDrawVertex;            // Last vertex idx for next DIP
-        UInt         mLastDrawIdx;               // Last vertex index for next DIP
-        UInt         mTrianglesCount;            // Triangles count for next DIP
-        UInt         mFrameTrianglesCount;       // Total triangles at current frame
-        UInt         mDIPCount;                  // DrawIndexedPrimitives calls count
+        TextureRef mCurrentDrawTexture = nullptr; // Stored texture ptr from last DIP
+        UInt       mLastDrawVertex;               // Last vertex idx for next DIP
+        UInt       mLastDrawIdx;                  // Last vertex index for next DIP
+        UInt       mTrianglesCount;               // Triangles count for next DIP
+        UInt       mFrameTrianglesCount;          // Total triangles at current frame
+        UInt       mDrawCallsCount;               // DrawIndexedPrimitives calls count
 
         Ref<LogStream> mLog; // Render log stream
 
-        Vector<TextureRef> mTextures; // Loaded textures
-        Vector<Ref<Font>>    mFonts;    // Loaded fonts
+        TextureRef mWhiteTexture; // Default white texture
 
-        Camera mCamera;            // Camera transformation
+        Vector<TextureRef> mTextures; // Loaded textures
+        Vector<Ref<Font>>  mFonts;    // Loaded fonts
+
+        Camera mCamera;     // Camera transformation
+        Camera mPrevCamera; // Previous camera transformation
+
         Vec2I  mResolution;        // Primary back buffer size
         Vec2I  mCurrentResolution; // Current back buffer size
+        Vec2I  mPrevResolution;    // Previous back buffer size
+
         Vec2F  mViewScale;         // Current view scale, depends on camera
         Vec2F  mInvViewScale;      // Inverted mViewScale
         Vec2I  mDPI;               // Current device screen DPI
 
-        Vec2I mPrevResolution;
-        Camera mPrevCamera;
+        bool mStencilDrawing = false; // True, if drawing in stencil buffer
+        bool mStencilTest = false;    // True, if drawing with stencil test
 
-        bool  mRenderTargetsAvailable; // True, if render targets is available
-        Vec2I mMaxTextureSize;         // Max texture size
-
-        bool mStencilDrawing; // True, if drawing in stencil buffer
-        bool mStencilTest;    // True, if drawing with stencil test
-
-        Vector<ScissorInfo>       mScissorInfos;       // Scissor clipping depth infos vector
-        Vector<ScissorStackEntry> mStackScissors;      // Stack of scissors clippings
-        bool                      mClippingEverything; // Is everything clipped
+        Vector<ScissorInfo>       mScissorInfos;               // Scissor clipping depth infos vector
+        Vector<ScissorStackEntry> mStackScissors;              // Stack of scissors clippings
+        bool                      mClippingEverything = false; // Is everything clipped
 
         TextureRef mCurrentRenderTarget; // Current render target. NULL if rendering in back buffer
 
-        float mDrawingDepth; // Current drawing depth, increments after each drawing drawables
+        float mDrawingDepth = 0.0f; // Current drawing depth, increments after each drawing drawables
 
         FT_Library mFreeTypeLib; // FreeType library, for rendering fonts
 
-        Vector<Sprite*> mSprites; // All sprites
-
+        Vector<Sprite*>         mSprites; // All sprites
         Vector<Ref<AtlasAsset>> mAtlases; // All atlases
 
-        VertexIndex* mHardLinesIndexData; // Index data buffer
-        TextureRef mSolidLineTexture;   // Solid line texture
-        TextureRef mDashLineTexture;    // Dash line texture
+        VertexIndex* mHardLinesIndexData = nullptr; // Index data buffer
+        TextureRef   mSolidLineTexture;             // Solid line texture
+        TextureRef   mDashLineTexture;              // Dash line texture
 
-        bool mReady; // True, if render system initialized
+        Vec2I mMaxTextureSize; // Max texture size
+
+        bool mReady = false; // True, if render is ready to draw
 
     protected:
         // Don't copy
-        Render(const Render& other);
+        Render(const Render& other) = delete;
 
         // Don't copy
         Render& operator=(const Render& other);
 
+        // Initializes platform specific part of render
+        void InitializePlatform();
+
+        // Initialized white texture
+        void InitializeWhiteTexture();
+
         // Initializes index buffer for drawing lines - pairs of lines beginnings and ends
         void InitializeLinesIndexBuffer();
 
-        // Initializeslines textures
+        // Initializes lines textures
         void InitializeLinesTextures();
 
         // Initializes free type library
         void InitializeFreeType();
 
+        // Initializes standard shader
+        void InitializeSandardShader();
+
+        // Deinitializes platform specific part of render
+        void DeinitializePlatform();
+
         // Deinitializes free type library
         void DeinitializeFreeType();
+
+        // Returns platform specific max texture size
+        Vec2I GetPlatformMaxTextureSize();
+
+        // Returns platform specific DPI
+        Vec2I GetPlatformDPI();
 
         // Called when target frame or window was resized
         void OnFrameResized();
 
+        // Platform specific begin of rendering
+        void PlatformBegin();
+
+        // Platform specific end of rendering
+        void PlatformEnd();
+
         // Send buffers to draw
         void DrawPrimitives();
 
+        // Platform specific draw primitives (draw call)
+        void PlatformDrawPrimitives();
+
         // Checks vertex buffer for texture coordinate flip by texture format
         void CheckVertexBufferTexCoordFlipByTextureFormat();
+
+        // Platform specific reset renderer state
+        void PlatformResetState();
 
         // Sets orthographic view matrix by view size
         void SetupViewMatrix(const Vec2I& viewSize);
@@ -384,11 +417,35 @@ namespace o2
         // Updates render transformations for camera
         void UpdateCameraTransforms();
 
+        // Platform specific setup camera transforms
+        void PlatformSetupCameraTransforms(float* matrix);
+
+        // Platform specific begin of stencil drawing
+        void PlatformBeginStencilDrawing();
+
+        // Platform specific end of stencil drawing
+        void PlatformEndStencilDrawing();
+
+        // Platform specific setup stencil test
+        void PlatformEnableStencilTest();
+
+        // Platform specific disable stencil test
+        void PlatformDisableStencilTest();
+
+        // Platform specific enable scissor test
+        void PlatformEnableScissorTest();
+
+        // Platform specific disable scissor test
+        void PlatformDisableScissorTest();
+
+        // Platform specific set scissor rect
+        void PlatformSetScissorRect(const RectI& rect);
+
+        // Platform specific bind render target
+        void PlatformBindRenderTarget(const TextureRef& renderTarget);
+
         // Calculates screen space scissor clipping rectangle from camera space rectangle
         RectI CalculateScreenSpaceScissorRect(const RectF& cameraSpaceScissorRect) const;
-
-        // Checks render compatibles
-        void CheckCompatibles();
 
         // Check textures for unloading
         void CheckTexturesUnloading();

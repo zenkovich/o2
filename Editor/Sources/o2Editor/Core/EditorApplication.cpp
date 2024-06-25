@@ -162,6 +162,8 @@ namespace Editor
 		}
 
 		OnResizing();
+        mScene->UpdateAddedEntities();
+        mScene->UpdateDestroyingEntities();
 
 		o2EditorApplication.LoadScene(AssetRef<SceneAsset>(o2EditorConfig.projectConfig.mLastLoadedScene));
 

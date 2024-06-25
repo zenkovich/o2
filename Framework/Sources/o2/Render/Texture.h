@@ -149,6 +149,24 @@ namespace o2
         // It is called after reference initialization at object construction, registers texture in render
         void PostRefConstruct();
 
+        // Platform specific texture creating
+        bool PlatformCreate();
+
+        // Platform specific texture destroying
+        void PlatformDestroy();
+
+        // Platform specific texture uploading
+        void PlatformUploadData(const Vec2I& size, Byte* data, TextureFormat format);
+
+        // Platform specific texture uploading
+        void PlatformUploadRegionData(const Vec2I& offset, const Vec2I& size, Byte* data, TextureFormat format);
+
+        // Platform specific retrieving texture data
+        void PlatformGetData(Byte* data);
+
+        // Platform specific set filter
+        void PlatformSetFilter();
+
         // Loads texture from PNG file 
         void LoadPNG(const String& fileName);
 

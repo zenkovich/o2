@@ -1,11 +1,13 @@
 #pragma once
 #include "o2/Utils/Types/CommonTypes.h"
 
+#define DEBUG
+
 // Enables memory managing
 #if defined DEBUG
-#define ENALBE_MEMORY_MANAGE true
+#define ENABLE_MEMORY_MANAGE true
 #else
-#define ENALBE_MEMORY_MANAGE false
+#define ENABLE_MEMORY_MANAGE false
 #endif
 
 // Enables render debugging
@@ -85,7 +87,7 @@ const char* GetEditorBuiltAssetsPath();
 const char* GetEditorBuiltAssetsTreePath();
 
 // Built in assets path. Relative from executable
-const char* GetBuiltitAssetsPath();
+const char* GetBuiltinAssetsPath();
 
 
 // ----------------------

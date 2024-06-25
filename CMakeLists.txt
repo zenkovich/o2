@@ -100,13 +100,13 @@ target_compile_definitions(o2Framework PUBLIC ${O2_COMPILE_DEFINITIONS})
 
 target_link_libraries(o2Framework PUBLIC
         Box2D
-        jerry-core
-        jerry-ext
-        jerry-port-default
         libpng
         zlib
         FreeType
-        pugixml        
+        pugixml
+        jerry-core
+        jerry-ext
+        jerry-port-default
 )
 
 if (O2_TRACY)
@@ -115,6 +115,7 @@ if (O2_TRACY)
 endif()
 
 if (UNIX)
+    find_package(X11 REQUIRED)
     target_link_libraries(o2Framework PUBLIC ${X11_LIBRARIES})
 
     if (O2_RENDER_API STREQUAL "gles2")
@@ -167,6 +168,7 @@ if (O2_EDITOR)
 
     target_precompile_headers(o2Editor PUBLIC "Editor/Sources/o2Editor/stdafx.h")
     target_compile_definitions(o2Editor PUBLIC ${O2_COMPILE_DEFINITIONS})
+    target_link_libraries(o2Editor PUBLIC o2Framework)
 
     if(MSVC)
         target_compile_options(o2Editor PRIVATE "/MP" "/Zc:__cplusplus")

@@ -9,9 +9,15 @@ if (MSVC)
         add_compile_definitions(_DISABLE_STRING_ANNOTATION _DISABLE_VECTOR_ANNOTATION _DISABLE_ITERATOR_ANNOTATION)
     endif()
 else()
+    include(CheckGCCVersion.cmake)
+
     add_compile_options(-Wall -Wno-error=format -Wno-error=format-extra-args -Wno-error=conversion
                         -Wno-error=incompatible-pointer-types -Wno-error=sign-conversion -Wno-error=pointer-sign
-                        -Wno-error=dangling-pointer -Wno-error=class-memaccess -Wno-error=misleading-indentation)
+                        -Wno-error=class-memaccess -Wno-error=misleading-indentation)
+
+    if(GCC_MAJOR_INT GREATER_EQUAL 12 AND GCC_MINOR_INT GREATER_EQUAL 1)
+        add_compile_options(-Wno-error=dangling-pointer)
+    endif()
 endif()
 
 # jerry script
@@ -25,7 +31,12 @@ set(JERRY_MATH              OFF CACHE BOOL "" FORCE)
 set(UNITTESTS               OFF CACHE BOOL "" FORCE)
 set(DOCTESTS                OFF CACHE BOOL "" FORCE)
 
-set(BUILD_SHARED_LIBS         OFF CACHE BOOL "" FORCE)
+if (WIN32)
+    set(BUILD_SHARED_LIBS         OFF CACHE BOOL "" FORCE)
+elseif (UNIX)
+    set(BUILD_SHARED_LIBS         ON CACHE BOOL "" FORCE)
+endif()
+
 set(ENABLE_AMALGAM            OFF CACHE BOOL "" FORCE)
 set(ENABLE_LTO                ON  CACHE BOOL "" FORCE)
 set(ENABLE_STRIP              ON  CACHE BOOL "" FORCE)

@@ -52,7 +52,7 @@ namespace o2
 
         //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-        InitializeStdShader();
+        InitializeSandardShader();
 
         GL_CHECK_ERROR();
 
@@ -164,7 +164,7 @@ namespace o2
         return program;
     }
 
-    void RenderBase::InitializeStdShader()
+    void RenderBase::InitializeSandardShader()
     {
         const char* fragShader = " precision mediump float;             \n \
                                                                         \n \
@@ -240,12 +240,12 @@ namespace o2
         if (!mReady)
             return;
 
-        mLastDrawTexture = NULL;
+        mCurrentDrawTexture = NULL;
         mLastDrawVertex = 0;
         mLastDrawIdx = 0;
         mTrianglesCount = 0;
         mFrameTrianglesCount = 0;
-        mDIPCount = 0;
+        mDrawCallsCount = 0;
         mCurrentPrimitiveType = PrimitiveType::Polygon;
 
         mDrawingDepth = 0.0f;
@@ -281,7 +281,7 @@ namespace o2
         mFrameTrianglesCount += mTrianglesCount;
         mLastDrawVertex = mTrianglesCount = mLastDrawIdx = 0;
 
-        mDIPCount++;
+        mDrawCallsCount++;
     }
 
     void Render::SetupViewMatrix(const Vec2I& viewSize)
@@ -459,10 +459,10 @@ namespace o2
         RectI summaryScissorRect = rect;
         if (!mStackScissors.IsEmpty())
         {
-            RectI lastSummaryClipRect = mStackScissors.Last().mSummaryScissorRect;
+            RectI lastSummaryClipRect = mStackScissors.Last().summaryScissorRect;
             mClippingEverything = !summaryScissorRect.IsIntersects(lastSummaryClipRect);
             summaryScissorRect = summaryScissorRect.GetIntersection(lastSummaryClipRect);
-            mScissorInfos.Last().mEndDepth = mDrawingDepth;
+            mScissorInfos.Last().endDepth = mDrawingDepth;
         }
         else
         {
@@ -494,10 +494,10 @@ namespace o2
             glDisable(GL_SCISSOR_TEST);
             GL_CHECK_ERROR();
 
-            while (!mStackScissors.IsEmpty() && !mStackScissors.Last().mRenderTarget)
+            while (!mStackScissors.IsEmpty() && !mStackScissors.Last().renderTarget)
                 mStackScissors.PopBack();
 
-            mScissorInfos.Last().mEndDepth = mDrawingDepth;
+            mScissorInfos.Last().endDepth = mDrawingDepth;
         }
         else
         {
@@ -507,19 +507,19 @@ namespace o2
                 GL_CHECK_ERROR();
                 mStackScissors.PopBack();
 
-                mScissorInfos.Last().mEndDepth = mDrawingDepth;
+                mScissorInfos.Last().endDepth = mDrawingDepth;
                 mClippingEverything = false;
             }
             else
             {
                 mStackScissors.PopBack();
-                RectI lastClipRect = mStackScissors.Last().mSummaryScissorRect;
+                RectI lastClipRect = mStackScissors.Last().summaryScissorRect;
                 glScissor((int)(lastClipRect.left + mCurrentResolution.x*0.5f),
                     (int)(lastClipRect.bottom + mCurrentResolution.y*0.5f),
                           (int)lastClipRect.Width(),
                           (int)lastClipRect.Height());
 
-                mScissorInfos.Last().mEndDepth = mDrawingDepth;
+                mScissorInfos.Last().endDepth = mDrawingDepth;
                 mScissorInfos.Add(ScissorInfo(lastClipRect, mDrawingDepth));
 
                 mClippingEverything = lastClipRect == RectI();
@@ -544,20 +544,20 @@ namespace o2
         else
             indexesCount = elementsCount*3;
 
-        if (mLastDrawTexture != texture.mTexture ||
+        if (mCurrentDrawTexture != texture.mTexture ||
             mLastDrawVertex + verticesCount >= mVertexBufferSize ||
             mLastDrawIdx + indexesCount >= mIndexBufferSize ||
             mCurrentPrimitiveType != primitiveType)
         {
             DrawPrimitives();
 
-            mLastDrawTexture = texture.mTexture;
+            mCurrentDrawTexture = texture.mTexture;
             mCurrentPrimitiveType = primitiveType;
 
-            if (mLastDrawTexture)
+            if (mCurrentDrawTexture)
             {
                 glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, mLastDrawTexture->mHandle);
+                glBindTexture(GL_TEXTURE_2D, mCurrentDrawTexture->mHandle);
                 glUniform1i(mStdShaderTextureSample, 0);
 
                 GL_CHECK_ERROR();
@@ -610,7 +610,7 @@ namespace o2
 
         if (!mStackScissors.IsEmpty())
         {
-            mScissorInfos.Last().mEndDepth = mDrawingDepth;
+            mScissorInfos.Last().endDepth = mDrawingDepth;
             glDisable(GL_SCISSOR_TEST);
             GL_CHECK_ERROR();
         }
@@ -646,7 +646,7 @@ namespace o2
             glEnable(GL_SCISSOR_TEST);
             GL_CHECK_ERROR();
 
-            auto clipRect = mStackScissors.Last().mSummaryScissorRect;
+            auto clipRect = mStackScissors.Last().summaryScissorRect;
 
             glScissor((int)(clipRect.left + mCurrentResolution.x*0.5f),
                 (int)(clipRect.bottom + mCurrentResolution.y*0.5f),

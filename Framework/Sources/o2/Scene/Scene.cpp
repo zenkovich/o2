@@ -139,7 +139,9 @@ namespace o2
         mDestroyComponents.Clear();
 
         for (auto& actor : destroyActors)
+        {
             actor->OnBeforeDestroy();
+        }
 
         destroyActors.Clear();
 
@@ -185,7 +187,7 @@ namespace o2
         if (!IsSingletonInitialzed())
             return;
 
-        Instance().mAddedActors.Add(actor);
+        mInstance->mAddedActors.Add(actor);
     }
 
     void Scene::OnActorDestroy(const WeakRef<Actor>& actor)
@@ -202,14 +204,14 @@ namespace o2
         if (!IsSingletonInitialzed())
             return;
 
-        Instance().mAddedActors.Remove(actor);
+        mInstance->mAddedActors.Remove(actor);
     }
 
     void Scene::OnAddActorToScene(const Ref<Actor>& actor)
     {
         Assert(IsSingletonInitialzed(), "Cant add actor to scene, because scene not initialized")
 
-            Instance().AddActorToScene(actor);
+            mInstance->AddActorToScene(actor);
     }
 
     void Scene::OnRemoveActorFromScene(const Ref<Actor>& actor, bool keepEditorObjects /*= false*/)
@@ -217,7 +219,7 @@ namespace o2
         if (!IsSingletonInitialzed())
             return;
 
-        Instance().RemoveActorFromScene(actor, keepEditorObjects);
+        mInstance->RemoveActorFromScene(actor, keepEditorObjects);
     }
 
     void Scene::OnActorIdChanged(const Ref<Actor>& actor, SceneUID prevId)
@@ -225,8 +227,8 @@ namespace o2
         if (!IsSingletonInitialzed())
             return
 
-            Instance().mActorsMap.Remove(prevId);
-        Instance().mActorsMap[actor->mId] = actor;
+            mInstance->mActorsMap.Remove(prevId);
+        mInstance->mActorsMap[actor->mId] = actor;
     }
 
     void Scene::UpdateActors(float dt)
@@ -617,7 +619,7 @@ namespace o2
 
     void Scene::Load(const DataDocument& doc, bool append /*= false*/)
     {
-        ActorRefResolver::Instance().LockResolving();
+        ActorRefResolver::mInstance->LockResolving();
 
         if (!append)
             Clear(false);
@@ -662,8 +664,8 @@ namespace o2
             mRootActors.Clear();
         }
 
-        ActorRefResolver::Instance().UnlockResolving();
-        ActorRefResolver::Instance().ResolveRefs();
+        ActorRefResolver::mInstance->UnlockResolving();
+        ActorRefResolver::mInstance->ResolveRefs();
 
         UpdateAddedEntities();
         UpdateTransforms();

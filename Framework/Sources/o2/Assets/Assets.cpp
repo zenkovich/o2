@@ -525,7 +525,11 @@ namespace o2
 #if PLATFORM_WINDOWS
         String assetsBuilderPath = "AssetsBuilder.exe";
         String platform = "Windows";
+#elif PLATFORM_LINUX
+        String assetsBuilderPath = "AssetsBuilder";
+        String platform = "Linux";
 #endif
+
         //-platform ${O2_PLATFORM} -source "${CMAKE_CURRENT_SOURCE_DIR}/Assets/" -target "${CMAKE_CURRENT_SOURCE_DIR}/BuiltAssets/${O2_PLATFORM}/Data/" -target-tree "${CMAKE_CURRENT_SOURCE_DIR}/BuiltAssets/${O2_PLATFORM}/Data.json" -compressor-config "${CMAKE_CURRENT_SOURCE_DIR}/o2/CompressToolsConfig.json"
         String command = assetsBuilderPath +
             " -platform " + platform +

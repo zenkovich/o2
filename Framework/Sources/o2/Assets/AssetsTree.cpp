@@ -130,8 +130,8 @@ namespace o2
 
     void AssetsTree::Clear()
     {
-        allAssets.Clear();
         rootAssets.Clear();
+        allAssets.Clear();
         allAssetsByPath.Clear();
         allAssetsByUID.Clear();
     }

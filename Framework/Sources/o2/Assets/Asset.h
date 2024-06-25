@@ -46,6 +46,9 @@ namespace o2
         // Virtual destructor
         virtual ~Asset();
 
+        // It is called after reference initialization at object construction, registers asset cache
+        void PostRefConstruct();
+
         // Assign operator
         Asset& operator=(const Asset& asset);
 
@@ -130,9 +133,6 @@ namespace o2
 
         // Copy-constructor
 		Asset(const Asset& asset);
-
-		// It is called after reference initialization at object construction, registers asset cache
-		void PostRefConstruct();
 
         // Returns meta full path (from binary path)
         String GetMetaFullPath() const;
@@ -219,6 +219,7 @@ CLASS_METHODS_META(o2::Asset)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const String&, GetPath);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetPath, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(String, GetFullPath);
@@ -244,7 +245,6 @@ CLASS_METHODS_META(o2::Asset)
 #endif
     FUNCTION().PROTECTED().CONSTRUCTOR(const Ref<AssetMeta>&);
     FUNCTION().PROTECTED().CONSTRUCTOR(const Asset&);
-    FUNCTION().PROTECTED().SIGNATURE(void, PostRefConstruct);
     FUNCTION().PROTECTED().SIGNATURE(String, GetMetaFullPath);
     FUNCTION().PROTECTED().SIGNATURE(UID&, ID);
     FUNCTION().PROTECTED().SIGNATURE(const Ref<LogStream>&, GetAssetsLogStream);
