@@ -491,7 +491,10 @@ namespace Editor
         for (auto& object : selectedObjects)
         {
             if (object->IsSupportsDeleting())
-                o2Scene.DestroyEditableObject(object);
+            {
+                if (auto actor = DynamicCast<Actor>(object))
+                    o2Scene.DestroyActor(actor);
+            }
         }
 
         mSceneTree->UpdateNodesView();

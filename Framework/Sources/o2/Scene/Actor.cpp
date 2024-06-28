@@ -118,8 +118,6 @@ namespace o2
 
     Actor::~Actor()
     {
-        mState = State::Destroyed;
-
         SetPrototype(nullptr);
 
         RemoveAllChildren();
@@ -221,7 +219,7 @@ namespace o2
         if (Scene::IsSingletonInitialzed())
             o2Scene.DestroyActor(Ref(this));
         else
-            o2Debug.LogError("Cant destroy actor in scene, because it's not exists. Delete actor manually");
+            o2Debug.LogError("Cant destroy actor in scene, because scene is not exists. Delete actor manually");
     }
 
     void Actor::Draw()
@@ -1400,13 +1398,9 @@ namespace o2
         if (mResEnabledInHierarchy)
             OnDisabled();
 
-        if (mIsOnScene)
-        {
-            OnRemoveFromScene();
-            mIsOnScene = false;
-        }
-
         OnDestroy();
+
+        mState = State::Destroyed;
     }
 
     String Actor::GetCreateMenuCategory()

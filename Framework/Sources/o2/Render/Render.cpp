@@ -507,6 +507,7 @@ namespace o2
         SetupViewMatrix(mResolution);
 
         mCurrentRenderTarget = TextureRef();
+        SetCamera(Camera());
 
         DisableScissorTest(true);
         mStackScissors.PopBack();

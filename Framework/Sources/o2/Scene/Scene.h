@@ -295,9 +295,6 @@ namespace o2
         // Removes object from scene
         void RemoveEditableObjectFromScene(const Ref<SceneEditableObject>& object);
 
-        // Removes object at end of frame
-        void DestroyEditableObject(const Ref<SceneEditableObject>& object);
-
         // Returns all editable objects
 		const Vector<WeakRef<SceneEditableObject>>& GetAllEditableObjects();
 
@@ -354,7 +351,6 @@ namespace o2
         Map<AssetRef<ActorAsset>, Vector<WeakRef<Actor>>> mPrototypeLinksCache; // Cache of linked to prototypes actors
 
         Vector<Ref<SceneEditableObject>> mChangedObjects;    // Changed actors array
-        Vector<Ref<SceneEditableObject>> mDestroyingObjects; // Destroying scene editable objects
 
         Vector<WeakRef<SceneEditableObject>>                mEditableObjects;      // All scene editable objects
         mutable Map<SceneUID, WeakRef<SceneEditableObject>> mEditableObjectsByUID; // All scene editable objects by UID
@@ -449,7 +445,6 @@ CLASS_FIELDS_META(o2::Scene)
     FIELD().PUBLIC().NAME(onLayersListChanged);
     FIELD().PROTECTED().NAME(mPrototypeLinksCache);
     FIELD().PROTECTED().NAME(mChangedObjects);
-    FIELD().PROTECTED().NAME(mDestroyingObjects);
     FIELD().PROTECTED().NAME(mEditableObjects);
     FIELD().PROTECTED().NAME(mEditableObjectsByUID);
     FIELD().PROTECTED().NAME(mDrawnObjects);
@@ -529,7 +524,6 @@ CLASS_METHODS_META(o2::Scene)
     FUNCTION().PUBLIC().SIGNATURE(Vector<Ref<SceneEditableObject>>, GetRootEditableObjects);
     FUNCTION().PUBLIC().SIGNATURE(void, AddEditableObjectToScene, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveEditableObjectFromScene, const Ref<SceneEditableObject>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, DestroyEditableObject, const Ref<SceneEditableObject>&);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<SceneEditableObject>>&, GetAllEditableObjects);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<SceneEditableObject>>&, GetChangedObjects);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<WeakRef<SceneEditableObject>>&, GetDrawnEditableObjects);

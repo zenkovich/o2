@@ -134,20 +134,27 @@ namespace o2
     void Scene::UpdateDestroyingEntities()
     {
         auto destroyActors = mDestroyActors;
+        auto destroyComponents = mDestroyComponents;
 
         mDestroyActors.Clear();
         mDestroyComponents.Clear();
 
+        for (auto& component : destroyComponents)
+        {
+            if (auto owner = component->GetOwnerActor())
+                owner->RemoveComponent(component);
+        }
+
         for (auto& actor : destroyActors)
         {
+            if (auto parent = actor->GetParent().Lock())
+                parent->RemoveChild(actor);
+
+            actor->RemoveFromScene();
             actor->OnBeforeDestroy();
         }
 
         destroyActors.Clear();
-
-#if IS_EDITOR
-        mDestroyingObjects.Clear();
-#endif
     }
 
     void Scene::DestroyActor(const Ref<Actor>& actor)
@@ -218,7 +225,7 @@ namespace o2
     {
         Assert(IsSingletonInitialzed(), "Cant add actor to scene, because scene not initialized")
 
-            mInstance->AddActorToScene(actor);
+        mInstance->AddActorToScene(actor);
     }
 
     void Scene::OnRemoveActorFromScene(const Ref<Actor>& actor, bool keepEditorObjects /*= false*/)
@@ -267,11 +274,9 @@ namespace o2
                 o2Render.SetCamera(Camera());
                 o2Render.Clear();
 
-                static auto font = mmake<VectorFont>(o2Assets.GetBuiltAssetsPath() + "debugFont.ttf");
-                static auto text = mmake<Text>(Ref<Font>(font));
-
-                text->SetText("No camera");
-                text->Draw();
+                Text text(o2Assets.GetBuiltAssetsPath() + "debugFont.ttf");
+                text.SetText("No camera");
+                text.Draw();
             }
         }
         else
@@ -590,13 +595,8 @@ namespace o2
 
     void Scene::Clear(bool keepDefaultLayer /*= true*/)
     {
-        auto allActors = mRootActors;
-        for (auto& actor : allActors)
-            actor->OnBeforeDestroy();
-
-        mRootActors.Clear();
-        allActors.Clear();
-        mLayers.Clear();
+        mDestroyActors = mRootActors;
+        UpdateDestroyingEntities();
 
         mAddedActors.Clear();
         mStartActors.Clear();
@@ -744,11 +744,6 @@ namespace o2
         mChangedObjects.RemoveAll([&](auto x) { return x == object; });
         mEditableObjects.RemoveAll([&](auto x) { return x == object; });
         mEditableObjectsByUID.Remove(object->GetID());
-    }
-
-    void Scene::DestroyEditableObject(const Ref<SceneEditableObject>& object)
-    {
-        mDestroyingObjects.Add(object);
     }
 
     const Vector<WeakRef<SceneEditableObject>>& Scene::GetAllEditableObjects()
