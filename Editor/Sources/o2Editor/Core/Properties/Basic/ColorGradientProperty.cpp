@@ -5,6 +5,7 @@
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2Editor/Core/Dialogs/CurveEditorDlg.h"
 #include "o2Editor/Core/UI/CurvePreview.h"
+#include "o2Editor/Core/Dialogs/ColorPickerDlg.h"
 
 namespace Editor
 {
@@ -42,8 +43,23 @@ namespace Editor
 			mBox->AddLayer("back", backSprite, Layout::BothStretch(1, 1, 1, 1));
 
 			mPreview = mmake<GradientPreviewDrawable>();
-			mBox->AddLayer("preview", mPreview, Layout::BothStretch(1, 3, 1, 3));
+			mBox->AddLayer("preview", mPreview, Layout::BothStretch(1, 1, 1, 1));
+
+			mBoxArea = mmake<CursorEventsArea>();
+			mPreview->onDraw = [=]() { mBoxArea->OnDrawn(); };
+			mBoxArea->isUnderPoint = [=](const Vec2F& point) { return mBox->IsUnderPoint(point); };
+			mBoxArea->onDblClicked = [=](const Input::Cursor& cursor) { AddNewKey(cursor); };
+			mBoxArea->onRightMouseReleased = [=](const Input::Cursor& cursor) { OpenBoxContextMenu(cursor); };
  		}
+
+		mBoxContextMenu = o2UI.CreateWidget<ContextMenu>();
+		mBoxContextMenu->AddItem("Add key", [=]() { AddNewKey(mBoxPressedCursor); }, nullptr, ShortcutKeys("Double click"));
+		mBox->AddChild(mBoxContextMenu);
+
+		mHandleContextMenu = o2UI.CreateWidget<ContextMenu>();
+		mHandleContextMenu->AddItem("Change color", [=]() { OpenKeyColorPick(mSelectedHandleUID); }, nullptr, ShortcutKeys("Double click"));
+		mHandleContextMenu->AddItem("Delete key", [=]() { DeleteKey(mSelectedHandleUID); }, nullptr, ShortcutKeys(VK_DELETE));
+		mBox->AddChild(mHandleContextMenu);
 	}
 
 	void ColorGradientProperty::OnValueChanged()
@@ -58,34 +74,36 @@ namespace Editor
 		InitializeHandles();
 	}
 
-	Ref<WidgetDragHandle> ColorGradientProperty::CreateHandle()
+	Ref<WidgetDragHandle> ColorGradientProperty::CreateHandle(HandleType type)
 	{
-		auto handle = mmake<WidgetDragHandle>(mmake<Sprite>("ui/UI4_key.png"),
-			mmake<Sprite>("ui/UI4_key_hover.png"),
-			mmake<Sprite>("ui/UI4_key_pressed.png"),
-			mmake<Sprite>("ui/UI4_selected_key.png"),
-			mmake<Sprite>("ui/UI4_selected_key_hover.png"),
-			mmake<Sprite>("ui/UI4_selected_key_pressed.png"));
+		auto handle = mmake<WidgetDragHandle>(mmake<Sprite>("ui/UI4_map_key.png"),
+			mmake<Sprite>("ui/UI4_map_key_hover.png"),
+			mmake<Sprite>("ui/UI4_map_key_pressed.png"),
+			mmake<Sprite>("ui/UI4_selected_map_key.png"),
+			mmake<Sprite>("ui/UI4_selected_map_key_hover.png"),
+			mmake<Sprite>("ui/UI4_selected_map_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
-		handle->SetDrawablesSizePivot(Vec2F(7, 1));
+		handle->SetDrawablesSizePivot(Vec2F(4, 1));
 
-		handle->checkPositionFunc = [&](const Vec2F& pos)
+		handle->checkPositionFunc = [=](const Vec2F& pos)
 			{
-				float position = pos.x;
-				if (position < 0.0f)
-					position = 0.0f;
+				if (type == HandleType::Left)
+					return Vec2F(0, mBox->layout->GetHeight() * 0.5f);
 
-				return Vec2F(position, layout->GetHeight() * 0.5f);
+				if (type == HandleType::Right)
+					return Vec2F(1, mBox->layout->GetHeight() * 0.5f);
+
+				return Vec2F(Math::Clamp01(pos.x), layout->GetHeight() * 0.5f);
 			};
 
-		handle->localToWidgetOffsetTransformFunc = [&](const Vec2F& pos)
+		handle->localToWidgetOffsetTransformFunc = [=](const Vec2F& pos)
 			{
-				return Vec2F(pos.x * mBox->layout->width, 0);
+				return Vec2F(pos.x * mBox->layout->width, -2);
 			};
 
-		handle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& pos)
+		handle->widgetOffsetToLocalTransformFunc = [=](const Vec2F& pos)
 			{
 				return Vec2F(pos.x / mBox->layout->width, 0);
 			};
@@ -96,8 +114,8 @@ namespace Editor
 	void ColorGradientProperty::InitializeHandles()
 	{
 		// Clear old handles
-		for (auto& handle : mHandles)
-			mBox->RemoveChild(handle);
+		for (auto& pair : mHandles)
+			mBox->RemoveChild(pair.second);
 
 		mHandles.Clear();
 
@@ -105,18 +123,122 @@ namespace Editor
 			return;
 
 		// Create new handles
-		for (auto& key : mCommonValue->GetKeys())
+		float length = mCommonValue->Length();
+		int keysCount = mCommonValue->GetKeys().Count();
+
+		for (int i = 0; i < keysCount; i++)
 		{
-			auto handle = CreateHandle();
-			handle->SetPosition(Vec2F(key.position, 0));
+			auto& key = mCommonValue->GetKeys()[i];
+			auto handleType = i == 0 ? HandleType::Left : (i == keysCount - 1 ? HandleType::Right : HandleType::Middle);
+			auto handle = CreateHandle(handleType);
+			handle->SetPosition(Vec2F(key.position / length, 0));
+
+			auto uid = key.uid;
+			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos(pos, uid); };
+			handle->onDblClicked = [=]() { OpenKeyColorPick(uid); };
+			handle->onRightButtonReleased = [=](const Input::Cursor& cursor) { OpenKeyContextMenu(uid, cursor); };
+			handle->onPressed = [=]() { mHandleContextMenu->SetItemsMaxPriority(); mSelectedHandleUID = uid; };
+
 			mBox->AddChild(handle);
-			mHandles.Add(handle);
+			mHandles.Add({ uid, handle });
 		}
+	}
+
+	UInt64 ColorGradientProperty::FindSelectedHandle()
+	{
+		for (auto& pair : mHandles)
+		{
+			if (pair.second->IsSelected())
+				return pair.first;
+		}
+
+		return 0;
+	}
+
+	void ColorGradientProperty::OnHandleChangedPos(const Vec2F& pos, UInt64 id)
+	{
+		if (!mCommonValue)
+			return;
+
+		int keyIdx = mCommonValue->FindKeyIdx(id);
+		if (keyIdx == -1)
+			return;
+
+		auto key = mCommonValue->GetKeys()[keyIdx];
+		key.position = pos.x * mCommonValue->Length();
+
+		mCommonValue->SetKey(key, keyIdx);
+	}
+
+	void ColorGradientProperty::OpenKeyColorPick(UInt64 id)
+	{
+		if (!mCommonValue)
+			return;
+
+		int keyIdx = mCommonValue->FindKeyIdx(id);
+		if (keyIdx == -1)
+			return;
+
+		auto key = mCommonValue->GetKeys()[keyIdx];
+
+		ColorPickerDlg::Show(key.color, [=](const Color4& color) {
+			auto key = mCommonValue->GetKeys()[keyIdx];
+			key.color = color;
+			mCommonValue->SetKey(key, keyIdx);
+		});
+	}
+
+	void ColorGradientProperty::AddNewKey(const Input::Cursor& cursor)
+	{
+		if (!mCommonValue)
+			return;
+
+		float position = (cursor.position.x - mBox->layout->worldLeft) / mBox->layout->width * mCommonValue->Length();
+		auto color = mCommonValue->Evaluate(position);
+
+		mCommonValue->InsertKey(position, color);
+		InitializeHandles();
+	}
+
+	void ColorGradientProperty::OpenBoxContextMenu(const Input::Cursor& cursor)
+	{
+		mBoxPressedCursor = cursor;
+		mBoxContextMenu->Show(cursor.position);
+	}
+
+	void ColorGradientProperty::OpenKeyContextMenu(UInt64 id, const Input::Cursor& cursor)
+	{
+		mHandleContextMenu->Show(cursor.position);
+		mSelectedHandleUID = id;
+	}
+
+	void ColorGradientProperty::DeleteKey(UInt64 keyUid)
+	{
+		if (!mCommonValue)
+			return;
+
+		auto keyIdx = mCommonValue->FindKeyIdx(keyUid);
+		if (keyIdx == -1)
+			return;
+
+		// Do not allow to delete first and last keys
+		if (keyIdx == 0 || keyIdx == mCommonValue->GetKeys().Count() - 1)
+			return;
+
+		mCommonValue->RemoveKeyAt(keyIdx);
+		InitializeHandles();
 	}
 
 	void ColorGradientProperty::GradientPreviewDrawable::SetGradient(const Ref<ColorGradient>& gradient)
 	{
+		if (mGradient)
+			mGradient->onKeysChanged -= THIS_FUNC(UpdateMesh);
+
 		mGradient = gradient;
+
+		if (mGradient)
+			mGradient->onKeysChanged += THIS_FUNC(UpdateMesh);
+
 		UpdateMesh();
 	}
 
@@ -175,8 +297,8 @@ namespace Editor
 			float xPos = key.position / gradientLength;
 
 			int vertexIndex = i * 4;
-			auto prevColor32 = prevColor.ARGB();
-			auto color32 = key.color.ARGB();
+			auto prevColor32 = prevColor.ABGR();
+			auto color32 = key.color.ABGR();
 
 			mMesh.vertices[vertexIndex + 0].Set(mTransform * Vec2F(prevXPos, 0), prevColor32, 0.0f, 0.0f);
 			mMesh.vertices[vertexIndex + 1].Set(mTransform * Vec2F(xPos, 0), color32, 0.0f, 0.0f);
@@ -204,5 +326,15 @@ DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::ColorGradientProperty>);
 DECLARE_TEMPLATE_CLASS(o2::LinkRef<Editor::TPropertyField<o2::Ref<o2::ColorGradient>>>);
 // --- META ---
 
+ENUM_META(Editor::ColorGradientProperty::HandleType)
+{
+    ENUM_ENTRY(Left);
+    ENUM_ENTRY(Middle);
+    ENUM_ENTRY(Right);
+}
+END_ENUM_META;
+
 DECLARE_CLASS(Editor::ColorGradientProperty, Editor__ColorGradientProperty);
+
+DECLARE_CLASS(Editor::ColorGradientProperty::GradientPreviewDrawable, Editor__ColorGradientProperty__GradientPreviewDrawable);
 // --- END META ---

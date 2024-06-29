@@ -34,8 +34,8 @@ namespace o2
             PROPERTY(ShortcutKeys, shortcut, SetShortcut, GetShortcut);
 
         public:
-            WString       text;  // Item text @SERIALIZABLE
-            WString       group; // Item group id @SERIALIZABLE
+            WString              text;  // Item text @SERIALIZABLE
+            WString              group; // Item group id @SERIALIZABLE
             AssetRef<ImageAsset> icon;  // Icon image @SERIALIZABLE
 
             Vector<Ref<Item>> subItems; // Children items @SERIALIZABLE

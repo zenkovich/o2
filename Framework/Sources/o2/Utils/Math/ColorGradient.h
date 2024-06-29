@@ -189,6 +189,10 @@ namespace o2
 
     protected:
         Vector<Key> mKeys; // ColorGradient keys @SERIALIZABLE
+
+    protected:
+        // Sort keys by position
+        void SortKeys(); 
     };
 }
 // --- META ---
@@ -249,6 +253,7 @@ CLASS_METHODS_META(o2::ColorGradient)
     FUNCTION().PUBLIC().SIGNATURE(void, SetKey, const Key&, int);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, Length);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEmpty);
+    FUNCTION().PROTECTED().SIGNATURE(void, SortKeys);
 }
 END_META;
 

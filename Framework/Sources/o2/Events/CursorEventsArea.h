@@ -11,6 +11,7 @@ namespace o2
     {
     public:
         Function<bool(const Vec2F&)>         isUnderPoint;           // Function for detecting collision (parameter - cursor position)
+
         Function<void(const Input::Cursor&)> onMoved;                // Event when cursor was moved (parameter - cursor)
         Function<void(const Input::Cursor&)> onCursorPressed;        // Event when cursor was pressed
         Function<void(const Input::Cursor&)> onCursorPressedOutside; // Event when cursor was pressed outside
@@ -18,6 +19,9 @@ namespace o2
         Function<void(const Input::Cursor&)> onCursorEnter;          // Event when cursor was entered to handle
         Function<void(const Input::Cursor&)> onCursorExit;           // Event when cursor was exited to handle
         Function<void(const Input::Cursor&)> onDblClicked;           // Event when cursor double clicked on this
+
+        Function<void(const Input::Cursor&)> onRightMousePressed;    // Event when right mouse button pressed
+        Function<void(const Input::Cursor&)> onRightMouseReleased;   // Event when right mouse button released
 
     public:
         CursorType cursorType; // Cursor type when hovering and dragging
@@ -57,7 +61,13 @@ namespace o2
         void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
         // Called when cursor released outside this(only when cursor pressed this at previous time)
-        void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
+		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
+
+		// Called when right mouse button was pressed on this
+		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
+
+		// Called when right mouse button was released (only when right mouse button pressed this at previous time)
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
         REF_COUNTERABLE_IMPL(RefCounterable);
     };
