@@ -9,9 +9,15 @@ o2::String o2::EditorTestComponent::GetCategory()
     return "Debug";
 }
 
+o2::EditorTestComponent::EditorTestComponent()
+{
+    mGradient = mmake<ColorGradient>(Vector<Pair<float, Color4>>{ { 0.0f, Color4::Red() }, { 1.0f, Color4::Green() }, { 3.0f, Color4(0.0f, 1.0f, 1.0f, 0.5f) } });
+}
+
 void o2::EditorTestComponent::Test()
 {
     //o2Debug.Log("test");
+
 }
 
 void o2::EditorTestComponent::OnStart()

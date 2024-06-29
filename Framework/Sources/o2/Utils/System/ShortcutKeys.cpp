@@ -17,7 +17,11 @@ namespace o2
         key(key), control(control), shift(shift), alt(alt)
     {}
 
-    bool ShortcutKeys::IsPressed() const
+	ShortcutKeys::ShortcutKeys(const String& customString):
+        custromString(customString)
+	{}
+
+	bool ShortcutKeys::IsPressed() const
     {
         return o2Input.IsKeyPressed(key) &&
             (shift ? o2Input.IsKeyDown(VK_SHIFT) : !o2Input.IsKeyDown(VK_SHIFT)) &&
@@ -35,6 +39,9 @@ namespace o2
 
     String ShortcutKeys::AsString() const
     {
+        if (!custromString.IsEmpty())
+            return custromString;
+
         String res;
 
 #if defined PLATFORM_WINDOWS

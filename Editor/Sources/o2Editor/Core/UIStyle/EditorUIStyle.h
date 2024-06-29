@@ -72,6 +72,7 @@ namespace Editor
 		void RebuildColorPropety();
 		void RebuildComponentProperty();
 		void RebuildCurveProperty();
+		void RebuildColorGradientProperty();
 		void RebuildEnumProperty();
 		void RebuildLayerProperty();
 		void RebuildRectFProperty();
@@ -228,6 +229,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildColorPropety);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildComponentProperty);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildCurveProperty);
+    FUNCTION().PUBLIC().SIGNATURE(void, RebuildColorGradientProperty);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildEnumProperty);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildLayerProperty);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildRectFProperty);

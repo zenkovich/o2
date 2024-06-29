@@ -36,6 +36,8 @@ extern void __RegisterClass__Editor__AssetProperty();
 extern void __RegisterClass__Editor__BooleanProperty();
 extern void __RegisterClass__Editor__BorderFProperty();
 extern void __RegisterClass__Editor__BorderIProperty();
+extern void __RegisterClass__Editor__ColorGradientProperty();
+extern void __RegisterClass__Editor__ColorGradientProperty__GradientPreviewDrawable();
 extern void __RegisterClass__Editor__ColorProperty();
 extern void __RegisterClass__Editor__ComponentProperty();
 extern void __RegisterClass__Editor__CurveProperty();
@@ -180,6 +182,8 @@ extern void InitializeTypeso2Editor()
     __RegisterClass__Editor__BooleanProperty();
     __RegisterClass__Editor__BorderFProperty();
     __RegisterClass__Editor__BorderIProperty();
+    __RegisterClass__Editor__ColorGradientProperty();
+    __RegisterClass__Editor__ColorGradientProperty__GradientPreviewDrawable();
     __RegisterClass__Editor__ColorProperty();
     __RegisterClass__Editor__ComponentProperty();
     __RegisterClass__Editor__CurveProperty();

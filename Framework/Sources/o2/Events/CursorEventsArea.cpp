@@ -70,4 +70,14 @@ namespace o2
         onCursorPressedOutside(cursor);
     }
 
+	void CursorEventsArea::OnCursorRightMousePressed(const Input::Cursor& cursor)
+	{
+        onRightMousePressed(cursor);
+	}
+
+	void CursorEventsArea::OnCursorRightMouseReleased(const Input::Cursor& cursor)
+	{
+        onRightMouseReleased(cursor);
+	}
+
 }

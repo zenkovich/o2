@@ -235,7 +235,12 @@ namespace o2
         mPressedCursorPos = cursor.position;
     }
 
-    void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
+	void DragHandle::OnCursorDblClicked(const Input::Cursor& cursor)
+	{
+        onDblClicked();
+	}
+
+	void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
     {
         if (mIsDragging)
         {

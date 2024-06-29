@@ -11,7 +11,7 @@ namespace o2
     CursorAreaEventListenersLayer::~CursorAreaEventListenersLayer()
     {
         if (EventSystem::IsSingletonInitialzed())
-            o2Events.RemoveCursorAreaEventsListenersLayer(Ref(this));
+            o2Events.RemoveCursorAreaEventsListenersLayer(WeakRef(this));
     }
 
     void CursorAreaEventListenersLayer::OnBeginDraw()
@@ -157,17 +157,6 @@ namespace o2
     void CursorAreaEventListenersLayer::UnregCursorAreaListener(CursorAreaEventsListener* listener)
     {
         cursorEventAreaListeners.RemoveFirst([&](auto& x) { return x == listener; });
-        mRightButtonPressedListeners.RemoveFirst([&](auto& x) { return x == listener; });
-        mMiddleButtonPressedListeners.RemoveFirst([&](auto& x) { return x == listener; });
-
-        for (auto& kv : mPressedListeners)
-            kv.second.RemoveFirst([&](auto& x) { return x == listener; });
-
-        for (auto& kv : mUnderCursorListeners)
-            kv.second.RemoveFirst([&](auto& x) { return x == listener; });
-
-        for (auto& kv : mLastUnderCursorListeners)
-            kv.second.RemoveFirst([&](auto& x) { return x == listener; });
     }
 
     void CursorAreaEventListenersLayer::UnregDragListener(DragableObject* listener)

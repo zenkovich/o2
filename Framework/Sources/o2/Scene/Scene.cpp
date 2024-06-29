@@ -197,20 +197,13 @@ namespace o2
         mInstance->mAddedActors.Add(actor);
     }
 
-    void Scene::OnActorDestroy(const Ref<Actor>& actor)
+    void Scene::OnActorDestroy(const WeakRef<Actor>& actor)
     {
         if (!IsSingletonInitialzed())
             return;
 
-        if (actor->IsOnScene())
-            mInstance->RemoveActorFromScene(actor, false);
-
-        mInstance->mAddedActors.Remove(actor);
-        mInstance->mStartActors.Remove(actor);
-
-#if IS_EDITOR
-        mInstance->mChangedObjects.Remove(actor);
-#endif
+//         if (actor->IsOnScene())
+//             Instance().RemoveActorFromScene(actor, false);
     }
 
     void Scene::OnNewActorParented(const Ref<Actor>& actor)

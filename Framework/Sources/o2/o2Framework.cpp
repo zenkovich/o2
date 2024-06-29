@@ -123,6 +123,8 @@ extern void __RegisterClass__o2__Window();
 extern void __RegisterClass__o2__DragHandle();
 extern void __RegisterClass__o2__WidgetDragHandle();
 extern void __RegisterClass__o2__SceneEditableObject();
+extern void __RegisterClass__o2__ColorGradient();
+extern void __RegisterClass__o2__ColorGradient__Key();
 extern void __RegisterClass__o2__Curve();
 extern void __RegisterClass__o2__Curve__Key();
 extern void __RegisterClass__o2__Layout();
@@ -261,6 +263,8 @@ extern void InitializeTypeso2Framework()
     __RegisterClass__o2__DragHandle();
     __RegisterClass__o2__WidgetDragHandle();
     __RegisterClass__o2__SceneEditableObject();
+    __RegisterClass__o2__ColorGradient();
+    __RegisterClass__o2__ColorGradient__Key();
     __RegisterClass__o2__Curve();
     __RegisterClass__o2__Curve__Key();
     __RegisterClass__o2__Layout();

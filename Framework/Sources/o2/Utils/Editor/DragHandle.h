@@ -33,6 +33,7 @@ namespace o2
     public:
         Function<void(const Vec2F&)> onChangedPos;      // On position changed event
         Function<void()>             onPressed;         // Pressed cursor on handle event
+        Function<void()>             onDblClicked;      // Double clicked cursor on handle event
         Function<void()>             onReleased;        // Released cursor event
         Function<void()>             onBeganDragging;   // Drag begin event
         Function<void()>             onChangeCompleted; // Change completed event
@@ -238,7 +239,10 @@ namespace o2
         void DrawInternal();
 
         // Called when cursor pressed on this
-        void OnCursorPressed(const Input::Cursor& cursor) override;
+		void OnCursorPressed(const Input::Cursor& cursor) override;
+
+		// Called when cursor double clicked
+		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
         // Called when cursor released (only when cursor pressed this at previous time)
         void OnCursorReleased(const Input::Cursor& cursor) override;
@@ -499,6 +503,7 @@ CLASS_FIELDS_META(o2::DragHandle)
     FIELD().PUBLIC().DEFAULT_VALUE(VK_CONTROL).NAME(snappingKey);
     FIELD().PUBLIC().NAME(onChangedPos);
     FIELD().PUBLIC().NAME(onPressed);
+    FIELD().PUBLIC().NAME(onDblClicked);
     FIELD().PUBLIC().NAME(onReleased);
     FIELD().PUBLIC().NAME(onBeganDragging);
     FIELD().PUBLIC().NAME(onChangeCompleted);
@@ -585,6 +590,7 @@ CLASS_METHODS_META(o2::DragHandle)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
     FUNCTION().PROTECTED().SIGNATURE(void, DrawInternal);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleasedOutside, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);

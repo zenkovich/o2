@@ -14,6 +14,7 @@
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 #include "o2/Utils/Math/Curve.h"
+#include "o2/Utils/Math/ColorGradient.h"
 
 namespace o2
 {
@@ -43,7 +44,7 @@ namespace o2
         };
 
 	public:
-		AssetRef<ImageAsset> mImageAsset;                          // @SERIALIZABLE
+		AssetRef<ImageAsset> mImageAsset;                       // @SERIALIZABLE
 		LinkRef<Component> mComponent;                          // @SERIALIZABLE
 		LinkRef<RigidBody> mRigidBody;                          // @SERIALIZABLE
 		LinkRef<ImageComponent> mImageComponent;                // @SERIALIZABLE
@@ -53,39 +54,40 @@ namespace o2
         PROPERTY(Ref<Sprite>, spritePropPtr, SetSpritePtr, GetSpritePtr);
         PROPERTY(Sprite, spriteProp, SetSprite, GetSprite);
         PROPERTY(Vector<Vec2I>, arr, SetArray, GetArray);
+                                                               
+    public:                                                    
+        Vector<Vec2I> mVecs;                                   // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+        int mInteger;                                          // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+        float mFloat;                                          // @SERIALIZABLE
+        String mString;                                        // @SERIALIZABLE
+        WString mWString;                                      // @SERIALIZABLE
+        bool mBool;                                            // @SERIALIZABLE
+        AssetRef<ActorAsset> mActorAsset;                      // @SERIALIZABLE
+        AssetRef<DataAsset> mDataAsset;                        // @SERIALIZABLE
+        AssetRef<AnimationAsset> mAnimationAsset;              // @SERIALIZABLE
+        Ref<Sprite> mSprite = mmake<Sprite>();                 // @SERIALIZABLE @DONT_DELETE
+        Ref<Actor> mActor;                                     // @SERIALIZABLE
+        TagGroup mTags;                                        // @SERIALIZABLE
+        Ref<SceneLayer> mLayer;                                // @SERIALIZABLE
+        Color4 mColor;                                         // @SERIALIZABLE
+        Vec2F mVec2F;                                          // @SERIALIZABLE
+        Vec2I mVec2I;                                          // @SERIALIZABLE
+        Vertex mVertex;                                        // @SERIALIZABLE
+        RectF mRectF;                                          // @SERIALIZABLE
+        RectI mRectI;                                          // @SERIALIZABLE
+        BorderF mBorderF;                                      // @SERIALIZABLE
+        BorderI mBorderI;                                      // @SERIALIZABLE
+		Ref<Curve> mCurve = mmake<Curve>(Curve::EaseInOut());  // @SERIALIZABLE
+        Ref<ColorGradient> mGradient;                          // @SERIALIZABLE
+		TestInside mTestInside;                                // @SERIALIZABLE
+		TestEnum mTestEnum;                                    // @SERIALIZABLE
+        Ref<TestInside> mTestInsideRef;                        // @SERIALIZABLE
 
-    public:
-        Vector<Vec2I>                                       mVecs; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-        int mInteger;                                       // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-        float mFloat;                                       // @SERIALIZABLE
-        String mString;                                     // @SERIALIZABLE
-        WString mWString;                                   // @SERIALIZABLE
-        bool mBool;                                         // @SERIALIZABLE
-        AssetRef<ActorAsset> mActorAsset;                        // @SERIALIZABLE
-        AssetRef<DataAsset> mDataAsset;                            // @SERIALIZABLE
-        AssetRef<AnimationAsset> mAnimationAsset;                  // @SERIALIZABLE
-        Ref<Sprite> mSprite = mmake<Sprite>();              // @SERIALIZABLE @DONT_DELETE
-        Ref<Actor> mActor;                                  // @SERIALIZABLE
-        TagGroup mTags;                                     // @SERIALIZABLE
-        Ref<SceneLayer> mLayer;                             // @SERIALIZABLE
-        Color4 mColor;                                      // @SERIALIZABLE
-        Vec2F mVec2F;                                       // @SERIALIZABLE
-        Vec2I mVec2I;                                       // @SERIALIZABLE
-        Vertex mVertex;                                     // @SERIALIZABLE
-        RectF mRectF;                                       // @SERIALIZABLE
-        RectI mRectI;                                       // @SERIALIZABLE
-        BorderF mBorderF;                                   // @SERIALIZABLE
-        BorderI mBorderI;                                   // @SERIALIZABLE
-		Ref<Curve> mCurve = mmake<Curve>(Curve::EaseInOut()); // @SERIALIZABLE
-		TestInside mTestInside;                             // @SERIALIZABLE
-		TestEnum mTestEnum;                                 // @SERIALIZABLE
-        Ref<TestInside> mTestInsideRef;                     // @SERIALIZABLE
-
-        Vector<int> mIntVector;                    // @SERIALIZABLE
-        Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-        Vector<TestInside*> mTestInsideptrsVector; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-        Vector<Ref<Actor>> mActorVector;           // @SERIALIZABLE
-        Vector<AssetRef<AnimationAsset>> mAssetsVector;   // @SERIALIZABLE
+        Vector<int> mIntVector;                         // @SERIALIZABLE
+        Vector<TestInside> mTestInsideVector;           // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+        Vector<TestInside*> mTestInsideptrsVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+        Vector<Ref<Actor>> mActorVector;                // @SERIALIZABLE
+        Vector<AssetRef<AnimationAsset>> mAssetsVector; // @SERIALIZABLE
 
         Vector<Vector<TestInside*>> mVectorOfVector; // @SERIALIZABLE
 
@@ -101,6 +103,8 @@ namespace o2
 
     public:
         static String GetCategory();
+
+        EditorTestComponent();
 
         void Test();
 
@@ -160,6 +164,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mBorderF);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mBorderI);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Curve>(Curve::EaseInOut())).NAME(mCurve);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mGradient);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestInside);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestEnum);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestInsideRef);
@@ -184,6 +189,7 @@ CLASS_METHODS_META(o2::EditorTestComponent)
 {
 
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
+    FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, Test);
     FUNCTION().PUBLIC().SIGNATURE(void, OnStart);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSpritePtr, const Ref<Sprite>&);

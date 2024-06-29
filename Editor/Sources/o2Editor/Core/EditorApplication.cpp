@@ -420,7 +420,7 @@ namespace Editor
         PROFILE_SAMPLE_FUNC();
 
 		EditorUIStyleBuilder builder;
-		builder.RebuildEditorUIManager("Editor UI styles", true, true);
+		builder.RebuildEditorUIManager("Editor UI styles", true, false);
 	}
 
 	void EditorApplication::PreUpdatePhysics()

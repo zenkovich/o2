@@ -1013,6 +1013,7 @@ namespace o2
             return;
 
         mBounds = GetLayoutData().worldRectangle;
+        mBoundsWithChilds = mBounds;
 
         for (auto& layer : mDrawingLayers)
             mBounds.Expand(layer->GetRect());

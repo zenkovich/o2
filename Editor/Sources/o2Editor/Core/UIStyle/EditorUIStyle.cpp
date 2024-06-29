@@ -46,15 +46,16 @@
 #include "o2Editor/Core/Properties/Basic/BooleanProperty.h"
 #include "o2Editor/Core/Properties/Basic/BorderFloatProperty.h"
 #include "o2Editor/Core/Properties/Basic/BorderIntProperty.h"
+#include "o2Editor/Core/Properties/Basic/ColorGradientProperty.h"
 #include "o2Editor/Core/Properties/Basic/ColorProperty.h"
 #include "o2Editor/Core/Properties/Basic/ComponentProperty.h"
 #include "o2Editor/Core/Properties/Basic/CurveProperty.h"
 #include "o2Editor/Core/Properties/Basic/EnumProperty.h"
 #include "o2Editor/Core/Properties/Basic/FloatProperty.h"
 #include "o2Editor/Core/Properties/Basic/IntegerProperty.h"
-#include "o2Editor/Core/Properties/Basic/SceneLayerRefProperty.h"
 #include "o2Editor/Core/Properties/Basic/RectangleFloatProperty.h"
 #include "o2Editor/Core/Properties/Basic/RectangleIntProperty.h"
+#include "o2Editor/Core/Properties/Basic/SceneLayerRefProperty.h"
 #include "o2Editor/Core/Properties/Basic/SceneLayersListProperty.h"
 #include "o2Editor/Core/Properties/Basic/StringProperty.h"
 #include "o2Editor/Core/Properties/Basic/TagProperty.h"
@@ -4222,6 +4223,49 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
+	void EditorUIStyleBuilder::RebuildColorGradientProperty()
+	{
+		auto sample = mmake<ColorGradientProperty>();
+		sample->layout->minHeight = 20;
+		sample->expandHeight = true;
+		sample->expandWidth = true;
+		sample->fitByChildren = false;
+
+		auto layoutContainer = mmake<Widget>();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mmake<HorizontalLayout>();
+		layout->name = "layout";
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
+
+		auto box = mmake<Widget>();
+		box->name = "box";
+		box->SetFocusable(true);
+		*box->layout = WidgetLayout::BothStretch();
+
+		auto backLayer = box->AddLayer("back", mmake<Sprite>("ui/UI4_Editbox_regular.png"),
+			Layout::BothStretch(-9, -9, -9, -9));
+
+		auto selectLayer = box->AddLayer("hover", mmake<Sprite>("ui/UI4_Editbox_select.png"),
+			Layout::BothStretch(-9, -9, -9, -9));
+
+		auto focusLayer = box->AddLayer("focus", mmake<Sprite>("ui/UI4_Editbox_focus.png"),
+			Layout::BothStretch(-9, -9, -9, -9));
+
+		box->AddState("focused", AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		box->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		layout->AddChild(box);
+
+		o2UI.AddWidgetStyle(sample, "standard");
+	}
+
 	void EditorUIStyleBuilder::RebuildEnumProperty()
 	{
 		auto sample = mmake<EnumProperty>();
@@ -4641,6 +4685,7 @@ namespace Editor
 		BuildPropertyWithCaption<ColorProperty>("standard", "with caption");
 		BuildPropertyWithCaption<ComponentProperty>("standard", "with caption");
 		BuildPropertyWithCaption<CurveProperty>("standard", "with caption");
+		BuildPropertyWithCaption<ColorGradientProperty>("standard", "with caption");
 		BuildPropertyWithCaption<EnumProperty>("standard", "with caption");
 		BuildPropertyWithCaption<FloatProperty>("standard", "with caption");
 		BuildPropertyWithCaption<IntegerProperty>("standard", "with caption");

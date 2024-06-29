@@ -123,6 +123,8 @@ namespace o2
         RemoveAllChildren();
         RemoveAllComponents();
 
+        Scene::OnActorDestroy(WeakRef(this));
+
         delete transform;
     }
 
