@@ -35,6 +35,9 @@ namespace Editor
 			// Draws view
 			void Draw() override;
 
+			// Updates render target size
+			void UpdateRenderTargetSize();
+
 			// Returns create menu category in editor
 			static String GetCreateMenuCategory();
 
@@ -85,9 +88,9 @@ namespace Editor
 
 		Map<String, SimulationDevice> mDevicesList; // List of devices
 
-		Ref<ContextMenu>     mDevicesMenu;           // Devices menu
-		Ref<ContextMenuItem> mCurrentWindowSizeItem; // Current window size item
-		Ref<ContextMenuItem> mCustomSizeItem;        // Custom size item
+		Ref<ContextMenu>       mDevicesMenu;           // Devices menu
+		Ref<ContextMenu::Item> mCurrentWindowSizeItem; // Current window size item
+		Ref<ContextMenu::Item> mCustomSizeItem;        // Custom size item
 
 		Ref<Vec2IProperty> mCustomSizeProperty; // Custom view resolution size property
 
@@ -108,10 +111,10 @@ namespace Editor
 		void OnCustomResolution(bool enabled);
 
 		// When device selected
-		void OnDeviceSelected(const String& name, const Ref<ContextMenuItem>& item);
+		void OnDeviceSelected(const String& name, const Ref<ContextMenu::Item>& item);
 
 		// Sets device menu checked item by name
-		void SetDeviceMenuCheckedItem(const Ref<ContextMenuItem>& item);
+		void SetDeviceMenuCheckedItem(const Ref<ContextMenu::Item>& item);
 	};
 }
 // --- META ---
@@ -142,8 +145,8 @@ CLASS_METHODS_META(Editor::GameWindow)
     FUNCTION().PROTECTED().SIGNATURE(void, SetResolution, const Vec2I&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCurrentWindowSize, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, OnCustomResolution, bool);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDeviceSelected, const String&, const Ref<ContextMenuItem>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, SetDeviceMenuCheckedItem, const Ref<ContextMenuItem>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeviceSelected, const String&, const Ref<ContextMenu::Item>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetDeviceMenuCheckedItem, const Ref<ContextMenu::Item>&);
 }
 END_META;
 
@@ -165,6 +168,7 @@ CLASS_METHODS_META(Editor::GameWindow::GameView)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PUBLIC().SIGNATURE(void, UpdateRenderTargetSize);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 }

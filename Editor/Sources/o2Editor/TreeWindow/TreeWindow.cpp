@@ -391,7 +391,7 @@ namespace Editor
             auto action = mmake<CreateAction>(Vector<Ref<SceneEditableObject>>{ newObject }, parentObject,
                                               parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : Ref<SceneEditableObject>());
 
-            o2EditorApplication.DoneAction(Ref(action));
+            o2EditorApplication.DoneAction(action);
         }
         else
         {

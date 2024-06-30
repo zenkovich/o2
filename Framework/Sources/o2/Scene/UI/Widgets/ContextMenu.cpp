@@ -239,7 +239,7 @@ namespace o2
 		}
 	}
 
-	void ContextMenu::AddItem(const WString& path,
+	Ref<ContextMenu::Item>  ContextMenu::AddItem(const WString& path,
 							  const Function<void()>& clickFunc /*= Function<void()>()*/,
 							  const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
 							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
@@ -247,12 +247,17 @@ namespace o2
 		WString targetPath = path;
 		auto& itemsList = CreateItemsByPath(targetPath);
 		int groupDelPos = targetPath.FindLast(".");
-		itemsList.Add(mmake<Item>(targetPath.SubStr(0, groupDelPos), clickFunc,
-								  groupDelPos < 0 ? "" : targetPath.SubStr(groupDelPos + 1),
-								  icon, shortcut));
+
+		auto item = mmake<Item>(targetPath.SubStr(0, groupDelPos), clickFunc,
+								groupDelPos < 0 ? "" : targetPath.SubStr(groupDelPos + 1),
+								icon, shortcut);
+
+		itemsList.Add(item);
+
+		return item;
 	}
 
-	void ContextMenu::AddToggleItem(const WString& path, bool value,
+	Ref<ContextMenu::Item>  ContextMenu::AddToggleItem(const WString& path, bool value,
 									const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
 									const AssetRef<ImageAsset>& icon /*= AssetRef<ImageAsset>()*/,
 									const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
@@ -260,9 +265,13 @@ namespace o2
 		WString targetPath = path;
 		auto& itemsList = CreateItemsByPath(targetPath);
 		int groupDelPos = targetPath.FindLast(".");
-		itemsList.Add(mmake<Item>(targetPath.SubStr(0, groupDelPos), value, clickFunc,
-								  groupDelPos < 0 ? "" : targetPath.SubStr(groupDelPos + 1),
-								  icon, shortcut));
+
+		auto item = mmake<Item>(targetPath.SubStr(0, groupDelPos), value, clickFunc,
+								groupDelPos < 0 ? "" : targetPath.SubStr(groupDelPos + 1),
+								icon, shortcut);
+		itemsList.Add(item);
+
+		return item;
 	}
 
 	Vector<Ref<ContextMenu::Item>>& ContextMenu::CreateItemsByPath(WString& path)

@@ -22,8 +22,7 @@ namespace Editor
 	}
 
 	GameWindow::~GameWindow()
-	{
-	}
+	{}
 
 	void GameWindow::InitializeWindow()
 	{
@@ -74,23 +73,23 @@ namespace Editor
 
 		mDevicesMenu = o2UI.CreateWidget<ContextMenu>();
 
-		// 		mCurrentWindowSizeItem = mDevicesMenu->AddToggleItem("Current window size", true, THIS_FUNC(OnCurrentWindowSize));
-		// 
-		// 		mCustomSizeItem = mDevicesMenu->AddToggleItem("Custom resolution", false, THIS_FUNC(OnCustomResolution));
-		// 		mCustomSizeProperty = o2UI.CreateWidget<Vec2IProperty>();
-		// 		mCustomSizeProperty->SetValue(Vec2I(800, 600));
-		// 		*mCustomSizeProperty->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(150, 20));
-		// 		mCustomSizeProperty->onChangeCompleted = [&](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&) { OnCustomResolution(true); };
-		// 		mCustomSizeItem->AddChild(mCustomSizeProperty);
-		// 
-		// 		mDevicesMenu->AddItem("---");
-		// 
-		// 		for (auto& kv : mDevicesList)
-		// 		{
-		// 			String caption = kv.first + " (" + (String)kv.second.resolution.x + " x " + (String)kv.second.resolution.y + ")";
-		// 			auto item = mDevicesMenu->AddToggleItem(caption, false, [](bool) {});
-		// 			item->onChecked = [=](bool checked) { OnDeviceSelected(kv.first, item); };
-		// 		}
+        mCurrentWindowSizeItem = mDevicesMenu->AddToggleItem("Current window size", true, THIS_FUNC(OnCurrentWindowSize));
+
+//         mCustomSizeItem = mDevicesMenu->AddToggleItem("Custom resolution", false, THIS_FUNC(OnCustomResolution));
+//         mCustomSizeProperty = o2UI.CreateWidget<Vec2IProperty>();
+//         mCustomSizeProperty->SetValue(Vec2I(800, 600));
+//         *mCustomSizeProperty->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(150, 20));
+//         mCustomSizeProperty->onChangeCompleted = [&](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&) { OnCustomResolution(true); };
+//         mCustomSizeItem->AddChild(mCustomSizeProperty);
+
+        mDevicesMenu->AddItem("---");
+
+        for (auto& kv : mDevicesList)
+        {
+            String caption = kv.first + " (" + (String)kv.second.resolution.x + " x " + (String)kv.second.resolution.y + ")";
+            auto item = mDevicesMenu->AddToggleItem(caption, false, [](bool) {});
+            item->onChecked = [=](bool checked) { OnDeviceSelected(kv.first, item); };
+        }
 
 		mWindow->AddChild(mDevicesMenu);
 	}
@@ -99,13 +98,15 @@ namespace Editor
 	{
 		mGameView->fixedResolution = true;
 		mGameView->resolution = resolution;
+		mGameView->UpdateRenderTargetSize();
 	}
 
 	void GameWindow::OnCurrentWindowSize(bool enabled)
 	{
 		SetDeviceMenuCheckedItem(mCurrentWindowSizeItem);
 		mResolutionsButton->caption = "Current window size";
-		mGameView->fixedResolution = false;
+        mGameView->fixedResolution = false;
+        mGameView->UpdateRenderTargetSize();
 	}
 
 	void GameWindow::OnCustomResolution(bool enabled)
@@ -115,21 +116,21 @@ namespace Editor
 		SetResolution(mCustomSizeProperty->GetCommonValue());
 	}
 
-	void GameWindow::OnDeviceSelected(const String& name, const Ref<ContextMenuItem>& item)
+	void GameWindow::OnDeviceSelected(const String& name, const Ref<ContextMenu::Item>& item)
 	{
 		SetDeviceMenuCheckedItem(item);
 		mResolutionsButton->caption = item->text;
 		SetResolution(mDevicesList[name].resolution);
 	}
 
-	void GameWindow::SetDeviceMenuCheckedItem(const Ref<ContextMenuItem>& item)
+	void GameWindow::SetDeviceMenuCheckedItem(const Ref<ContextMenu::Item>& item)
 	{
 		for (auto& child : mDevicesMenu->GetItemsLayout()->GetChildren())
 		{
 			if (auto childItem = DynamicCast<ContextMenuItem>(child))
 			{
 				if (childItem->IsCheckable())
-					childItem->SetChecked(childItem == item);
+					childItem->SetChecked(childItem == item->widget.Lock());
 			}
 		}
 	}
@@ -182,7 +183,23 @@ namespace Editor
 		EditorScope::Enter(editorDepth);
 	}
 
-	String GameWindow::GameView::GetCreateMenuCategory()
+    void GameWindow::GameView::UpdateRenderTargetSize()
+    {
+        Vec2I size = fixedResolution ? resolution : (Vec2I)layout->size.Get();
+        size.x = Math::Max(size.x, 32);
+        size.y = Math::Max(size.y, 32);
+
+        if (size != mRenderTarget->GetSize())
+        {
+            mRenderTarget = TextureRef(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+            *mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
+            mRenderTargetSprite->SetMode(SpriteMode::FixedAspect);
+        }
+
+        mRenderTargetSprite->SetRect(layout->worldRect);
+    }
+
+    String GameWindow::GameView::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
 	}
@@ -190,19 +207,7 @@ namespace Editor
 	void GameWindow::GameView::OnTransformUpdated()
 	{
 		Widget::OnTransformUpdated();
-
-		Vec2I size = fixedResolution ? resolution : (Vec2I)layout->size.Get();
-		size.x = Math::Max(size.x, 32);
-		size.y = Math::Max(size.y, 32);
-
-		if (size != mRenderTarget->GetSize())
-		{
-			mRenderTarget = TextureRef(size, TextureFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-			*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
-			mRenderTargetSprite->SetMode(SpriteMode::FixedAspect);
-		}
-
-		mRenderTargetSprite->SetRect(layout->worldRect);
+		UpdateRenderTargetSize();
 	}
 
 	bool GameWindow::SimulationDevice::operator==(const SimulationDevice& other) const

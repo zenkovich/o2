@@ -491,8 +491,9 @@ namespace Editor
 		DataDocument prevData; prevData = prevName;
 		DataDocument newData; newData = mTargetObject->GetName();
 
-		auto action = new PropertyChangeAction({ mTargetObject }, "name", { prevData }, { newData });
-		o2EditorApplication.DoneAction(Ref(action));
+		auto action = mmake<PropertyChangeAction>(Vector<Ref<SceneEditableObject>>{ mTargetObject }, "name",
+												  Vector<DataDocument>{ prevData }, Vector<DataDocument>{ newData });
+		o2EditorApplication.DoneAction(action);
 	}
 }
 

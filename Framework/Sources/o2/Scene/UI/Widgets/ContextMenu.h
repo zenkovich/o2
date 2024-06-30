@@ -18,13 +18,13 @@ namespace o2
     // -----------------------
     // Context menu ui element
     // -----------------------
-    class ContextMenu: public PopupWidget
+    class ContextMenu : public PopupWidget
     {
     public:
         // ---------
         // Menu item
         // ---------
-        class Item: public RefCounterable, public ISerializable, public ShortcutKeysListener
+        class Item : public RefCounterable, public ISerializable, public ShortcutKeysListener
         {
         public:
             static WString separatorText;
@@ -128,14 +128,14 @@ namespace o2
         void AddItem(const Ref<Item>& item);
 
         // Adds item by path ("node/sub node/target")
-        void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-                     const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
+        Ref<Item> AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
+                          const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(), const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Adds item by path ("node/sub node/target")
-        void AddToggleItem(const WString& path, bool value,
-                           const Function<void(bool)>& clickFunc = Function<void(bool)>(),
-                           const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(),
-                           const ShortcutKeys& shortcut = ShortcutKeys());
+        Ref<Item> AddToggleItem(const WString& path, bool value,
+                                const Function<void(bool)>& clickFunc = Function<void(bool)>(),
+                                const AssetRef<ImageAsset>& icon = AssetRef<ImageAsset>(),
+                                const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Inserts item at position
         void InsertItem(const Ref<Item>& item, int position);
@@ -278,7 +278,7 @@ namespace o2
     // -----------------
     // Context menu item
     // -----------------
-    class ContextMenuItem: public Widget
+    class ContextMenuItem : public Widget
     {
     public:
         PROPERTIES(ContextMenuItem);
@@ -391,8 +391,8 @@ CLASS_METHODS_META(o2::ContextMenu)
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Ref<PopupWidget>&, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const Ref<Item>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
-    FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Item>, AddItem, const WString&, const Function<void()>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Item>, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertItem, const Ref<Item>&, int);
     FUNCTION().PUBLIC().SIGNATURE(void, AddItems, const Vector<Ref<Item>>&);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertItems, const Vector<Ref<Item>>&, int);
