@@ -275,23 +275,24 @@ namespace Editor
 		mComponentGroupsTypes = GetGroupedComponents();
 		for (auto& pair : mComponentGroupsTypes)
 		{
+			auto componentType = pair.first;
 			auto viewerSample = mAvailableComponentsViewers.FindOrDefault([&](auto& x) {
-				return x->GetComponentType() == pair.first; });
+				return x->GetComponentType() == componentType; });
 
 			if (!viewerSample)
 				viewerSample = mDefaultComponentViewer;
 
-			if (!mComponentViewersPool.ContainsKey(type) || mComponentViewersPool[type].IsEmpty())
+			if (!mComponentViewersPool.ContainsKey(componentType) || mComponentViewersPool[componentType].IsEmpty())
 			{
-				if (!mComponentViewersPool.ContainsKey(type))
-					mComponentViewersPool.Add(type, {});
+				if (!mComponentViewersPool.ContainsKey(componentType))
+					mComponentViewersPool.Add(componentType, {});
 
 				auto newViewer = DynamicCast<IActorComponentViewer>(viewerSample->GetType().CreateSampleRef());
 
-				mComponentViewersPool[type].Add(newViewer);
+				mComponentViewersPool[componentType].Add(newViewer);
 			}
 
-			auto componentViewer = mComponentViewersPool[type].PopBack();
+			auto componentViewer = mComponentViewersPool[componentType].PopBack();
 
 			viewersWidgets.Add(componentViewer->GetWidget());
 			mComponentsViewers.Add(componentViewer);

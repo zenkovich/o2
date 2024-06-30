@@ -63,7 +63,7 @@ namespace o2
         if (!listeners.ContainsKey(shortcut))
             listeners.Add(shortcut, {});
 
-        listeners[shortcut].Add(listener);
+        listeners[shortcut].Insert(listener, 0);
     }
 
     void ShortcutKeysListenersManager::UnRegister(const ShortcutKeys& shortcut, ShortcutKeysListener* listener)
