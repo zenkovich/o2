@@ -57,11 +57,11 @@ namespace o2
                                                                
     public:                                                    
         Vector<Vec2I> mVecs;                                   // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-        int mInteger;                                          // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-        float mFloat;                                          // @SERIALIZABLE
+        int mInteger = 0;                                          // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+        float mFloat = 0.0f;                                          // @SERIALIZABLE
         String mString;                                        // @SERIALIZABLE
         WString mWString;                                      // @SERIALIZABLE
-        bool mBool;                                            // @SERIALIZABLE
+        bool mBool = false;                                            // @SERIALIZABLE
         AssetRef<ActorAsset> mActorAsset;                      // @SERIALIZABLE
         AssetRef<DataAsset> mDataAsset;                        // @SERIALIZABLE
         AssetRef<AnimationAsset> mAnimationAsset;              // @SERIALIZABLE
@@ -80,7 +80,7 @@ namespace o2
 		Ref<Curve> mCurve = mmake<Curve>(Curve::EaseInOut());  // @SERIALIZABLE
         Ref<ColorGradient> mGradient;                          // @SERIALIZABLE
 		TestInside mTestInside;                                // @SERIALIZABLE
-		TestEnum mTestEnum;                                    // @SERIALIZABLE
+		TestEnum mTestEnum = TestEnum::A;                                    // @SERIALIZABLE
         Ref<TestInside> mTestInsideRef;                        // @SERIALIZABLE
 
         Vector<int> mIntVector;                         // @SERIALIZABLE
@@ -92,14 +92,14 @@ namespace o2
         Vector<Vector<TestInside*>> mVectorOfVector; // @SERIALIZABLE
 
         Map<String, String> mDictionary;    // @SERIALIZABLE
-		float mFloat2;                      // @SERIALIZABLE
-		float mFloat3;                      // @SERIALIZABLE
-		float mFloat4;                      // @SERIALIZABLE
-		float mFloat5;                      // @SERIALIZABLE
-		float mFloat6;                      // @SERIALIZABLE
-		float mFloat7;                      // @SERIALIZABLE
-		float mFloat8;                      // @SERIALIZABLE
-		float mFloat9;                      // @SERIALIZABLE
+		float mFloat2 = 0.0f;                      // @SERIALIZABLE
+		float mFloat3 = 0.0f;                      // @SERIALIZABLE
+		float mFloat4 = 0.0f;                      // @SERIALIZABLE
+		float mFloat5 = 0.0f;                      // @SERIALIZABLE
+		float mFloat6 = 0.0f;                      // @SERIALIZABLE
+		float mFloat7 = 0.0f;                      // @SERIALIZABLE
+		float mFloat8 = 0.0f;                      // @SERIALIZABLE
+		float mFloat9 = 0.0f;                      // @SERIALIZABLE
 
     public:
         static String GetCategory();
@@ -143,11 +143,11 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().NAME(spriteProp);
     FIELD().PUBLIC().NAME(arr);
     FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().NAME(mVecs);
-    FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().NAME(mInteger);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat);
+    FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mInteger);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mString);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mWString);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mBool);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mBool);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mActorAsset);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDataAsset);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mAnimationAsset);
@@ -166,7 +166,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Curve>(Curve::EaseInOut())).NAME(mCurve);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mGradient);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestInside);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestEnum);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(TestEnum::A).NAME(mTestEnum);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTestInsideRef);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mIntVector);
     FIELD().PUBLIC().INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE().NAME(mTestInsideVector);
@@ -175,14 +175,14 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mAssetsVector);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mVectorOfVector);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDictionary);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat2);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat3);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat4);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat5);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat6);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat7);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat8);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat9);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat2);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat3);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat4);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat5);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat6);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat7);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat8);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat9);
 }
 END_META;
 CLASS_METHODS_META(o2::EditorTestComponent)

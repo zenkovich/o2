@@ -89,6 +89,7 @@ namespace o2
                         if (auto contextMenu = mLayout->mChildWidgets[mSelectedItem]->FindChildByType<ContextMenu>())
                         {
                             contextMenu->Show(mLayout->mChildWidgets[mSelectedItem]->layout->worldLeftBottom);
+                            contextMenu->onHide = [=]() { mOpenedContext = nullptr; };
                             mOpenedContext = contextMenu;
                         }
                     }
@@ -457,6 +458,7 @@ namespace o2
             {
                 context->Show(itemUnderCursor->layout->worldLeftBottom);
                 mOpenedContext = context;
+                mSelectSubContextTime = -1.0f;
             }
         }
     }
