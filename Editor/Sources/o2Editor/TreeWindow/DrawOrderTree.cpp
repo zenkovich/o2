@@ -479,7 +479,7 @@ namespace Editor
 
 			if (auto actor = DynamicCast<Actor>(sceneObject))
 			{
-				mLinkBtn->SetEnabled(actor->GetPrototype());
+				mLinkBtn->SetEnabled(actor->GetPrototype().IsValid());
 				mLinkBtnHalfHideState->SetState(!actor->GetPrototypeDirectly().IsValid());
 
 				if (actor->GetPrototype())

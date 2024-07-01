@@ -71,11 +71,14 @@ namespace o2
         // Move operator from nullptr
         TextureRef& operator=(std::nullptr_t);
 
+        // Less operator
+        bool operator<(const TextureRef& other) const;
+
         // Returns is reference is valid
         bool IsValid() const;
 
         // Returns is reference is valid
-        operator bool() const;
+        explicit operator bool() const;
 
         // Returns texture reference
         operator Ref<Texture>() const;

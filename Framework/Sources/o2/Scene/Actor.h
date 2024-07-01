@@ -89,7 +89,7 @@ namespace o2
         Actor& operator=(const Actor& other);
 
         // Marks actor to destroy, will be destroyed on next frame @SCRIPTABLE
-        void Destroy();
+        void Destroy() OPTIONAL_OVERRIDE;
 
         // Draws actor ant its components
         void Draw() override;

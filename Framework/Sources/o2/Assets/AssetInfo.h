@@ -45,7 +45,7 @@ namespace o2
         bool operator==(const AssetInfo& other) const;
 
         // Returns is asset info valid - checks id for empty
-        operator bool() const;
+        explicit operator bool() const;
 
         // Adds new child node and returns him
         Ref<AssetInfo> AddChild(const Ref<AssetInfo>& node);

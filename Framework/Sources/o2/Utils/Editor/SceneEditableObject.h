@@ -33,6 +33,9 @@ namespace o2
         // Returns true when object is on scene
         virtual bool IsOnScene() const;
 
+        // Destroys object
+        virtual void Destroy();
+
         // Returns unique id
         virtual SceneUID GetID() const;
 
@@ -187,6 +190,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsOnScene);
+    FUNCTION().PUBLIC().SIGNATURE(void, Destroy);
     FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
     FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);

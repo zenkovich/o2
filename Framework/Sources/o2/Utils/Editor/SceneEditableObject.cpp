@@ -21,6 +21,9 @@ namespace o2
         return true;
     }
 
+    void SceneEditableObject::Destroy()
+    {}
+
     SceneUID SceneEditableObject::GetID() const
     {
         return 0;

@@ -646,6 +646,9 @@ namespace Editor
 
     void AssetsIconsScrollArea::ClearInstantiatedDraggingAssets()
     {
+        for (auto& object : mInstantiatedSceneDragObjects)
+            object->Destroy();
+
         mInstantiatedSceneDragObjects.Clear();
     }
 

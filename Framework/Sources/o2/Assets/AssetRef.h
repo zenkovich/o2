@@ -102,13 +102,16 @@ namespace o2
 		AssetRef<_asset_type>& operator=(Ref<_asset_type>&& other);
 
 		// Move operator from nullptr
-		AssetRef<_asset_type>& operator=(std::nullptr_t);
+        AssetRef<_asset_type>& operator=(std::nullptr_t);
+
+        // Less operator
+        bool operator<(const AssetRef<_asset_type>& other) const;
 
 		// Returns is reference is valid
 		bool IsValid() const;
 
 		// Returns is reference is valid
-		operator bool() const;
+		explicit operator bool() const;
 
 		// Returns asset reference
 		operator Ref<_asset_type>() const;
@@ -343,7 +346,13 @@ namespace o2
 		return *this;
 	}
 
-	template<typename _asset_type>
+    template<typename _asset_type>
+    bool AssetRef<_asset_type>::operator<(const AssetRef<_asset_type>& other) const
+    {
+        return mPtr < other.mPtr;
+    }
+
+    template<typename _asset_type>
 	bool AssetRef<_asset_type>::IsValid() const
 	{
 		return mPtr.IsValid();

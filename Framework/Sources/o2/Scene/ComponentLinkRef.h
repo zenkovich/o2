@@ -157,13 +157,16 @@ namespace o2
 		LinkRef<_component_type>& operator=(Ref<_component_type>&& other);
 
 		// Move operator from nullptr
-		LinkRef<_component_type>& operator=(std::nullptr_t);
+        LinkRef<_component_type>& operator=(std::nullptr_t);
+
+        // Less operator
+        bool operator<(const LinkRef<_component_type>& other) const;
 
 		// Returns is reference is valid
 		bool IsValid() const;
 
 		// Returns is reference is valid
-		operator bool() const;
+		explicit operator bool() const;
 
 		// Returns component reference
 		operator Ref<_component_type>() const;
@@ -319,7 +322,13 @@ namespace o2
 		return *this;
 	}
 
-	template<typename _component_type>
+    template<typename _component_type>
+    bool LinkRef<_component_type, ENABLE_COMPONENT>::operator<(const LinkRef<_component_type>& other) const
+    {
+        return mRef < other.mRef;
+    }
+
+    template<typename _component_type>
 	bool LinkRef<_component_type, ENABLE_COMPONENT>::IsValid() const
 	{
 		return mRef.IsValid();

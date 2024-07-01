@@ -129,6 +129,11 @@ namespace o2
         return *this;
     }
 
+    bool TextureRef::operator<(const TextureRef& other) const
+    {
+        return mTexture < other.mTexture;
+    }
+
     bool TextureRef::IsValid() const
     {
         return mTexture.IsValid();
