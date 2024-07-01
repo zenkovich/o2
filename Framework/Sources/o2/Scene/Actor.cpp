@@ -1007,8 +1007,8 @@ namespace o2
             for (auto& child : mChildren)
             {
                 auto& childNode = childsNode.AddElement();
-                child->Serialize(childNode.AddMember("Data"));
                 childNode.AddMember("Type") = child->GetType().GetName();
+                child->Serialize(childNode.AddMember("Data"));
             }
         }
 

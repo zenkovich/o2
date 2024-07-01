@@ -37,7 +37,7 @@ namespace Editor
 	IActorComponentViewer::~IActorComponentViewer()
 	{}
 
-	void IActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
+	void IActorComponentViewer::SetTargetComponents(const Vector<Ref<Component>>& components)
 	{
 		mTargetComponents = components;
 
@@ -91,7 +91,7 @@ namespace Editor
 	void IActorComponentViewer::RemoveTargetComponents()
 	{
 		for (auto& comp : mTargetComponents)
-			delete comp;
+			comp->GetOwnerActor()->RemoveComponent(comp);
 
 		mTargetComponents.Clear();
 

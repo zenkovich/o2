@@ -68,11 +68,11 @@ namespace Editor
 		Vector<Ref<IActorPropertiesViewer>> mAvailableActorPropertiesViewers; // Available actor properties viewers										 							      
 		TypeActorViewersMap                 mActorPropertiesViewersPool;      // Actor properties viewers pool
 
-		Vector<Pair<const Type*, Vector<Component*>>> mComponentGroupsTypes;       // List of components group types for targets
-		Vector<Ref<IActorComponentViewer>>            mComponentsViewers;          // Components viewers
-		Ref<DefaultActorComponentViewer>              mDefaultComponentViewer;     // Default component viewer sample
-		Vector<Ref<IActorComponentViewer>>            mAvailableComponentsViewers; // Available components' viewers										 							      
-		TypeCompViewersMap                            mComponentViewersPool;       // Components viewers pool
+		Vector<Pair<const Type*, Vector<Ref<Component>>>> mComponentGroupsTypes;       // List of components group types for targets
+		Vector<Ref<IActorComponentViewer>>                mComponentsViewers;          // Components viewers
+		Ref<DefaultActorComponentViewer>                  mDefaultComponentViewer;     // Default component viewer sample
+		Vector<Ref<IActorComponentViewer>>                mAvailableComponentsViewers; // Available components' viewers										 							      
+		TypeCompViewersMap                                mComponentViewersPool;       // Components viewers pool
 
 		Ref<AddComponentPanel> mAddComponentPanel; // Add component panel. Shown by clicking on filter field
 									    
@@ -92,7 +92,7 @@ namespace Editor
 		void SetTargetsComponents(const Vector<IObject*>& targets, Vector<Ref<Widget>>& viewersWidgets);
 
 		// Returns list of grouped by types components
-		Vector<Pair<const Type*, Vector<Component*>>> GetGroupedComponents() const;
+		Vector<Pair<const Type*, Vector<Ref<Component>>>> GetGroupedComponents() const;
 
 		// Enable viewer event function
 		void OnEnabled() override;
@@ -132,7 +132,7 @@ END_META;
 CLASS_METHODS_META(Editor::ActorViewer)
 {
 
-    typedef Vector<Pair<const Type*, Vector<Component*>>> _tmp1;
+    typedef Vector<Pair<const Type*, Vector<Ref<Component>>>> _tmp1;
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);

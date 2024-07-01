@@ -13,7 +13,7 @@ namespace Editor
 	DefaultActorComponentViewer::~DefaultActorComponentViewer()
 	{}
 
-	void DefaultActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
+    void DefaultActorComponentViewer::SetTargetComponents(const Vector<Ref<Component>>& components)
 	{
 		IActorComponentViewer::SetTargetComponents(components);
 		Refresh();
@@ -44,8 +44,8 @@ namespace Editor
 
 		if (mViewer)
 		{
-			mViewer->Refresh(mTargetComponents.Convert<Pair<IObject*, IObject*>>([](Component* x) {
-				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink().Lock().Get()));
+			mViewer->Refresh(mTargetComponents.Convert<Pair<IObject*, IObject*>>([](const Ref<Component>& x) {
+				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x.Get()), dynamic_cast<IObject*>(x->GetPrototypeLink().Lock().Get()));
 			}));
 
 			mSpoiler->AddChild(mViewer->GetSpoiler());

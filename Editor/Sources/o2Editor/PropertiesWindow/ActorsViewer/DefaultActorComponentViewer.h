@@ -21,7 +21,7 @@ namespace Editor
 		~DefaultActorComponentViewer();
 
 		// Sets target actors
-		void SetTargetComponents(const Vector<Component*>& components) override;
+		void SetTargetComponents(const Vector<Ref<Component>>& components) override;
 
 		// Returns viewing component type 
 		const Type* GetComponentType() const override;
@@ -53,7 +53,7 @@ namespace Editor
 	{
 	public:
 		// Sets target actors
-		void SetTargetComponents(const Vector<Component*>& components) override;
+		void SetTargetComponents(const Vector<Ref<Component>>& components) override;
 
 		// Returns viewing component type 
 		const Type* GetComponentType() const override;
@@ -61,14 +61,14 @@ namespace Editor
 		IOBJECT(TActorComponentViewer<_component_type>);
 
 	protected:
-		Vector<_component_type*> mTargetComponents;
+		Vector<Ref<_component_type>> mTargetComponents;
 	};
 
 	template<typename _component_type>
-	void TActorComponentViewer<_component_type>::SetTargetComponents(const Vector<Component*>& components)
+	void TActorComponentViewer<_component_type>::SetTargetComponents(const Vector<Ref<Component>>& components)
 	{
 		DefaultActorComponentViewer::SetTargetComponents(components);
-		mTargetComponents = components.DynamicCast<_component_type*>();
+		mTargetComponents = DynamicCastVector<_component_type>(components);
 	}
 
 	template<typename _component_type>
@@ -94,7 +94,7 @@ CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Ref<Component>>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
@@ -119,7 +119,7 @@ META_TEMPLATES(typename _component_type)
 CLASS_METHODS_META(Editor::TActorComponentViewer<_component_type>)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Ref<Component>>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
 }
 END_META;

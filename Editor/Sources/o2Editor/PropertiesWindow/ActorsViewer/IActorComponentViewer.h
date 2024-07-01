@@ -33,7 +33,7 @@ namespace Editor
 		virtual ~IActorComponentViewer();
 
 		// Sets target actors
-		virtual void SetTargetComponents(const Vector<Component*>& components);
+		virtual void SetTargetComponents(const Vector<Ref<Component>>& components);
 
 		// Returns viewing component type 
 		virtual const Type* GetComponentType() const { return nullptr; }
@@ -59,7 +59,7 @@ namespace Editor
 		IOBJECT(IActorComponentViewer);
 
 	protected:
-		Vector<Component*> mTargetComponents; // Target components
+		Vector<Ref<Component>> mTargetComponents; // Target components
 
 		Ref<SpoilerWithHead> mSpoiler;      // Component's spoiler
 		Ref<Button>          mRemoveButton; // Remove component button
@@ -99,7 +99,7 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Ref<Component>>&);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);

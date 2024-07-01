@@ -218,9 +218,9 @@ namespace Editor
 		mActorPropertiesViewer = propertiesViewer;
 	}
 
-	Vector<Pair<const Type*, Vector<Component*>>> ActorViewer::GetGroupedComponents() const
+	Vector<Pair<const Type*, Vector<Ref<Component>>>> ActorViewer::GetGroupedComponents() const
 	{
-		Vector<Pair<const Type*, Vector<Component*>>> res;
+		Vector<Pair<const Type*, Vector<Ref<Component>>>> res;
 
 		for (auto& actor : mTargetActors)
 		{
@@ -231,7 +231,7 @@ namespace Editor
 				auto offset = offsets[type];
 				offsets[type]++;
 
-				Vector<Component*>* list = nullptr;
+				Vector<Ref<Component>>* list = nullptr;
 				for (int i = 0; i < res.Count(); i++)
 				{
 					if (res[i].first == type)
@@ -252,7 +252,7 @@ namespace Editor
 					list = &res.Last().second;
 				}
 
-				list->Add(const_cast<Component*>(component.Get()));
+				list->Add(component);
 			}
 		}
 
