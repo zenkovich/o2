@@ -38,6 +38,12 @@ if (O2_TRACY)
     list(APPEND O2_COMPILE_DEFINITIONS TRACY_ENABLE)
 endif()
 
+if (UNIX)
+    set(O2_ASSETS_PLATFORM "Linux" PARENT_SCOPE)
+elseif (WIN32)
+    set(O2_ASSETS_PLATFORM "Windows" PARENT_SCOPE)
+endif()
+
 set(O2_COMPILE_DEFINITIONS_EXPORT ${O2_COMPILE_DEFINITIONS} PARENT_SCOPE)
 
 # warings and errors
@@ -52,8 +58,9 @@ else()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-error=format -Wno-error=format-extra-args -Wno-error=conversion \
-            -Wno-error=incompatible-pointer-types -Wno-error=sign-conversion -Wno-error=pointer-sign \
-            -Wno-error=deprecated -Wno-reorder -Wno-unused-variable")
+                         -Wno-error=incompatible-pointer-types -Wno-error=sign-conversion -Wno-error=pointer-sign \
+                         -Wno-error=deprecated -Wno-reorder -Wno-unused-variable"
+    )
 endif()
 
 # dependencies
@@ -63,18 +70,10 @@ add_subdirectory(Framework/3rdPartyLibs)
 add_subdirectory(CodeTool)
 
 # o2 copy builtin framework assets
-if (UNIX)
-    set(O2_ASSETS_PLATFORM "Linux")
-elseif (WIN32)
-    set(O2_ASSETS_PLATFORM "Windows")
-endif()
-
-add_custom_target(
-    o2CopyBuiltinAssets
-    COMMAND
-        ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Assets"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../BuiltAssets/${O2_ASSETS_PLATFORM}/FrameworkData"
-    COMMENT "Copy o2 builtin assets"
+add_custom_target(o2CopyBuiltinAssets
+                  COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Assets" 
+                                                             "${CMAKE_CURRENT_SOURCE_DIR}/../BuiltAssets/${O2_ASSETS_PLATFORM}/FrameworkData"
+                  COMMENT "Copy o2 builtin assets"
 )
 
 # o2 Framework library
@@ -98,14 +97,15 @@ target_include_directories(o2Framework PUBLIC ${o2Framework_INCLUDES})
 target_precompile_headers(o2Framework PUBLIC "Framework/Sources/o2/stdafx.h")
 target_compile_definitions(o2Framework PUBLIC ${O2_COMPILE_DEFINITIONS})
 
-target_link_libraries(o2Framework PUBLIC
-        Box2D
-        libpng
-        zlib
-        FreeType
-        pugixml
-        jerry-core
-        jerry-ext
+target_link_libraries(o2Framework 
+    PUBLIC 
+        Box2D 
+        libpng 
+        zlib 
+        FreeType 
+        pugixml 
+        jerry-core 
+        jerry-ext 
         jerry-port-default
 )
 
@@ -135,11 +135,7 @@ if(WIN32)
     add_subdirectory(Framework/3rdPartyLibs/StackWalker)
     add_dependencies(o2Framework StackWalker)
     target_link_libraries(o2Framework PRIVATE StackWalker)
-    set_target_properties(StackWalker PROPERTIES FOLDER o2/3rdPartyLibs)  
-
-    add_custom_command(TARGET o2Framework PRE_BUILD
-                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -project o2Framework -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2"
-                      COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -project o2Framework -sources \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2\"")
+    set_target_properties(StackWalker PROPERTIES FOLDER o2/3rdPartyLibs) 
 endif()
 
 if (UNIX)
@@ -149,8 +145,22 @@ elseif(MSVC)
     target_sources(o2Framework PRIVATE "Framework/Platforms/Windows/Framework.natvis")
 endif()
 
-add_dependencies(o2Framework o2CopyBuiltinAssets)
+# Codegen
+add_custom_target(o2FrameworkCodegen
+                  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool 
+                        -project o2Framework 
+                        -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2"
+                  COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool "
+                         "-project o2Framework "
+                         "-sources \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2\""
+)
+add_dependencies(o2FrameworkCodegen o2CodeTool)
+
+# dependencies
+add_dependencies(o2Framework Box2D jerry-core jerry-ext jerry-port-default libpng zlib FreeType)
 add_dependencies(o2Framework o2CodeTool)
+add_dependencies(o2Framework o2CopyBuiltinAssets)
+add_dependencies(o2Framework o2FrameworkCodegen)
 
 # o2 Editor Library
 if (O2_EDITOR)
@@ -174,30 +184,23 @@ if (O2_EDITOR)
         target_compile_options(o2Editor PRIVATE "/MP" "/Zc:__cplusplus")
     endif()
 
-    if(WIN32)
-        add_custom_command(TARGET o2Editor PRE_BUILD
-                           COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool 
-                                   -project o2Editor 
-                                   -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" 
-                                   -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml"
-                           COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool "
-                                   "-project o2Editor "
-                                   "-sources \"${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor\" "
-                                   "-parent_projects \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml\"")
-    endif()
-
-    # dependency
-    add_dependencies(o2Framework 
-        Box2D
-        jerry-core
-        jerry-ext
-        jerry-port-default
-        libpng
-        zlib
-        FreeType)
+    # Codegen
+    add_custom_target(o2EditorCodegen
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool 
+                              -project o2Editor 
+                              -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" 
+                              -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml"
+                      COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool "
+                              "-project o2Editor "
+                              "-sources \"${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor\" "
+                              "-parent_projects \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml\""
+    )
+    add_dependencies(o2EditorCodegen o2CodeTool)
 
     add_dependencies(o2Editor o2Framework)
+    add_dependencies(o2Editor o2EditorCodegen)
     set_target_properties(o2Editor PROPERTIES FOLDER o2)
+    set_target_properties(o2EditorCodegen PROPERTIES FOLDER o2/Codegen)
 endif()
 
 # assets build tool
@@ -207,5 +210,6 @@ add_subdirectory(AssetsBuildTool)
 set_target_properties(o2Framework PROPERTIES FOLDER o2)
 set_target_properties(o2AssetsBuilder PROPERTIES FOLDER o2)
 set_target_properties(o2CopyBuiltinAssets PROPERTIES FOLDER o2)
-set_target_properties(o2CodeTool PROPERTIES FOLDER o2)
+set_target_properties(o2FrameworkCodegen PROPERTIES FOLDER o2/Codegen)
+set_target_properties(o2CodeTool PROPERTIES FOLDER o2/Codegen)
 
