@@ -39,9 +39,9 @@ if (O2_TRACY)
 endif()
 
 if (UNIX)
-    set(O2_ASSETS_PLATFORM "Linux" PARENT_SCOPE)
+    set(O2_PLATFORM "Linux" PARENT_SCOPE)
 elseif (WIN32)
-    set(O2_ASSETS_PLATFORM "Windows" PARENT_SCOPE)
+    set(O2_PLATFORM "Windows" PARENT_SCOPE)
 endif()
 
 set(O2_COMPILE_DEFINITIONS_EXPORT ${O2_COMPILE_DEFINITIONS} PARENT_SCOPE)
@@ -72,7 +72,7 @@ add_subdirectory(CodeTool)
 # o2 copy builtin framework assets
 add_custom_target(o2CopyBuiltinAssets
                   COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Assets" 
-                                                             "${CMAKE_CURRENT_SOURCE_DIR}/../BuiltAssets/${O2_ASSETS_PLATFORM}/FrameworkData"
+                                                             "${CMAKE_CURRENT_SOURCE_DIR}/../BuiltAssets/${O2_PLATFORM}/FrameworkData"
                   COMMENT "Copy o2 builtin assets"
 )
 
