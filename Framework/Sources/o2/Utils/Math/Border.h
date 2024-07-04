@@ -30,8 +30,8 @@ namespace o2
         inline Vec2<T> RightBottom() const;
     };
 
-    typedef Border<float> BorderF;
-    typedef Border<int>   BorderI;
+    using BorderF = Border<float>;
+    using BorderI = Border<int>;
 
     template<typename T>
     Border<T>::Border():left(0), bottom(0), right(0), top(0) {}

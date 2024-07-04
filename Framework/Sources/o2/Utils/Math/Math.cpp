@@ -9,6 +9,16 @@ namespace o2
     namespace Math
     {
 
+        float Floor(float value)
+        {
+            return floorf(value);
+        }
+
+        float Ceil(float value)
+        {
+            return ceilf(value);
+        }
+
         Vec2F Round(const Vec2F& value)
         {
             return Vec2F(Round(value.x), Round(value.y));
@@ -17,6 +27,42 @@ namespace o2
         RectF Round(const RectF& value)
         {
             return RectF(Round(value.left), Round(value.top), Round(value.right), Round(value.bottom));
+        }
+
+        float Round(float value)
+        {
+            return roundf(value);
+        }
+
+        float Pow(float value, float s)
+        {
+            return powf(value, s);
+        }
+
+        int FloorToInt(float value)
+        {
+            return (int)floorf(value);
+        }
+
+        int CeilToInt(float value)
+        {
+            return (int)ceilf(value);
+        }
+
+        float Clamp01(float value)
+        {
+            return Clamp(value, 0.0f, 1.0f);
+        }
+
+        int RoundToInt(float value)
+        {
+            return (int)roundf(value);
+        }
+
+        float Mod(float val, float x)
+        {
+
+            return fmodf(val, x);
         }
 
         RectF Lerp(const RectF& a, const RectF& b, float coef)
@@ -30,9 +76,60 @@ namespace o2
             return coef < 0.99f ? a : b;
         }
 
-        bool Lerp(int a, int b, float coef)
+        int Lerp(int a, int b, float coef)
         {
             return (int)((float)(b - a)*coef) + a;
+        }
+
+        bool Equals(float a, float b, float range /*= FLT_EPSILON*/)
+        {
+            float x = a - b;
+            return x*x < range*range;
+        }
+
+        float Sqrt(float value)
+        {
+            return sqrtf(value);
+        }
+
+        float PI()
+        {
+            return 3.1415926535897932384626433832795f;
+        }
+
+        float Deg2rad(const float& value)
+        {
+            return value*(PI() / 180.0f);
+        }
+
+        float Rad2deg(const float& value)
+        {
+            return value*(180.0f / PI());
+        }
+
+        float Sin(float rad)
+        {
+            return sinf(rad);
+        }
+
+        float Cos(float rad)
+        {
+            return cosf(rad);
+        }
+
+        float ASin(float value)
+        {
+            return asinf(value);
+        }
+
+        float ACos(float value)
+        {
+            return acosf(value);
+        }
+
+        float Atan2F(float x, float y)
+        {
+            return atan2f(x, y);
         }
 
         void OrthoProjMatrix(float* mat, float left, float right, float bottom, float top, float nearz, float farz)
@@ -73,5 +170,13 @@ namespace o2
 
             return ellipseTangent;
         }
+
+        UInt64 Random()
+        {
+            static std::default_random_engine generator;
+            static std::uniform_int_distribution<unsigned long long> distribution;
+            return distribution(generator);
+        }
+
     }
 } 

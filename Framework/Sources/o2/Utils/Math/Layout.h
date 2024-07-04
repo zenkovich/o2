@@ -10,11 +10,12 @@ namespace o2
     class Layout: public ISerializable
     {
     public:
-        Vec2F anchorMin = Vec2F(0, 0); // @SERIALIZABLE
-        Vec2F anchorMax = Vec2F(1, 1); // @SERIALIZABLE
-        Vec2F offsetMin = Vec2F(0, 0); // @SERIALIZABLE
-        Vec2F offsetMax = Vec2F(0, 0); // @SERIALIZABLE
+        Vec2F anchorMin = Vec2F(0, 0); // Left bottom relative anchor point @SERIALIZABLE
+        Vec2F anchorMax = Vec2F(1, 1); // Right top relative anchor point @SERIALIZABLE
+        Vec2F offsetMin = Vec2F(0, 0); // Left bottom offset from relative anchor point @SERIALIZABLE
+        Vec2F offsetMax = Vec2F(0, 0); // Right top offset from relative anchor point @SERIALIZABLE
 
+    public:
         Layout();
         Layout(const Vec2F& anchorMin, const Vec2F& anchorMax, const Vec2F& offsetMin, const Vec2F& offsetMax);
 

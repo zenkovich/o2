@@ -11,11 +11,9 @@ namespace o2
     class Color4
     {
     public:
-        int r;
-        int g;
-        int b;
-        int a;
+        int r, g, b, a;
 
+    public:
         Color4();
         Color4(int r, int g, int b, int a = 255);
         Color4(float r, float g, float b, float a = 1.0f);
