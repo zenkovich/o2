@@ -9,33 +9,17 @@
 
 void* operator new(size_t size, const char* location, int line)
 {
-    void* memory = ::operator new(size);
-
-#if ENABLE_MEMORY_MANAGE
-o2::MemoryManager::Instance().OnMemoryAllocate(memory, size, location, line);
-#endif
-
-    return memory;
+    return _mmalloc(size, location, line);
 }
 
 void* operator new[](size_t size, const char* location, int line)
 {
-    void* memory = ::operator new(size);
-
-#if ENABLE_MEMORY_MANAGE
-    o2::MemoryManager::Instance().OnMemoryAllocate(memory, size, location, line);
-#endif
-
-    return memory;
+    return _mmalloc(size, location, line);
 }
 
 void operator delete(void* allocMemory) noexcept
 {
-#if ENABLE_MEMORY_MANAGE
-    o2::MemoryManager::Instance().OnMemoryRelease(allocMemory);
-#endif
-
-    free(allocMemory);
+    _mfree(allocMemory);
 }
 
 void operator delete(void* allocMemory, const char* location, int line)
@@ -110,7 +94,7 @@ namespace o2
 
     void MemoryManager::OnMemoryRelease(void* memory)
     {
-        std::map<void*, AllocInfo>::iterator fnd = mAllocs.find(memory);
+        auto fnd = mAllocs.find(memory);
         if (fnd != mAllocs.end())
         {
             mTotalBytes -= (*fnd).second.size;
@@ -178,5 +162,4 @@ namespace o2
 
         printf("========END==========\n");
     }
-
 }

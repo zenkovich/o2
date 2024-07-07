@@ -107,6 +107,8 @@ extern void __RegisterClass__Editor__GameWindow();
 extern void __RegisterClass__Editor__GameWindow__GameView();
 extern void __RegisterClass__Editor__GameWindow__SimulationDevice();
 extern void __RegisterClass__Editor__LogWindow();
+extern void __RegisterClass__Editor__MemoryAnalyzeTree();
+extern void __RegisterClass__Editor__MemoryAnalyzeTreeNode();
 extern void __RegisterClass__Editor__ActorViewer();
 extern void __RegisterClass__Editor__AddComponentPanel();
 extern void __RegisterClass__Editor__ComponentsTree();
@@ -253,6 +255,8 @@ extern void InitializeTypeso2Editor()
     __RegisterClass__Editor__GameWindow__GameView();
     __RegisterClass__Editor__GameWindow__SimulationDevice();
     __RegisterClass__Editor__LogWindow();
+    __RegisterClass__Editor__MemoryAnalyzeTree();
+    __RegisterClass__Editor__MemoryAnalyzeTreeNode();
     __RegisterClass__Editor__ActorViewer();
     __RegisterClass__Editor__AddComponentPanel();
     __RegisterClass__Editor__ComponentsTree();

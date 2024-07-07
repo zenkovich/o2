@@ -68,6 +68,7 @@
 #include "o2Editor/PropertiesWindow/ActorsViewer/AddComponentPanel.h"
 #include "o2Editor/TreeWindow/DrawOrderTree.h"
 #include "o2Editor/TreeWindow/SceneHierarchyTree.h"
+#include "o2Editor/MemoryAnalyzerWindow/MemoryAnalyzerWindow.h"
 
 using namespace o2;
 
@@ -3445,7 +3446,137 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "animation state");
 	}
 
-	void EditorUIStyleBuilder::RebuildAnimationStateViewerPlayToggle()
+    void EditorUIStyleBuilder::RebuildMemoryAnalyzerTree()
+    {
+        // basics
+        auto sample = mmake<MemoryAnalyzeTree>();
+        sample->layout->minSize = Vec2F(20, 20);
+        sample->SetClippingLayout(Layout::BothStretch(1, 2, 0, 1));
+        sample->SetViewLayout(Layout::BothStretch(0, 0, 1, 0));
+        sample->SetEnableScrollsHiding(true);
+        sample->SetChildsNodesOffset(10);
+
+        // hover
+        *sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
+        sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
+
+        // zebra back
+        sample->SetZebraBackLine(mmake<Sprite>(Color4(0, 0, 0, 13)));
+
+        // highlight
+        *sample->GetHighlightDrawable() = Sprite("ui/UI4_selection_frame.png");
+        sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
+        sample->SetHighlightLayout(Layout::BothStretch());
+        sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
+                                      Hide().Scale(1.5f).Then().
+                                      Wait(0.3f).Then().
+                                      Show().Scale(1.0f).For(0.2f).Then().
+                                      Wait(1.0f).Then().
+                                      Hide().For(0.2f));
+
+        // node sample
+        auto itemSample = mmake<MemoryAnalyzeTreeNode>();
+        sample->SetNodeSample(DynamicCast<TreeNode>(itemSample));
+        itemSample->layout->minHeight = 20;
+
+        auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
+
+        auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mmake<Sprite>("ui/UI4_Context_menu_select.png"),
+                                                                  Layout::BothStretch(-10, -16, -10, -16));
+
+        auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mmake<Sprite>("ui/UI4_Context_menu_white.png"),
+                                                                    Layout::BothStretch(-10, -16, -10, -16));
+
+        itemSample->AddLayer("icon", mmake<Sprite>("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(15, -1)));
+
+        Ref<Text> captionLayerText = mmake<Text>("stdFont.ttf");
+        captionLayerText->color = Color4(96, 125, 139);
+        captionLayerText->horAlign = HorAlign::Left;
+        captionLayerText->verAlign = VerAlign::Middle;
+        itemSample->AddLayer("name", captionLayerText);
+
+        auto nameLayer = itemSample->layer["name"];
+        nameLayer->layout = Layout::BothStretch(33, 0, 5, 0);
+        DynamicCast<Text>(nameLayer->GetDrawable())->dotsEngings = true;
+
+        // node sample button
+        Ref<Button> itemSampleExpandBtn = mmake<Button>();
+        *itemSampleExpandBtn->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(15, 15), Vec2F(2, -1));
+        itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
+        itemSampleExpandBtn->name = "expandBtn";
+
+        auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mmake<Sprite>("ui/UI4_Right_icn.png"),
+                                                          Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+        auto selectLayer = itemSampleExpandBtn->AddLayer("hover", mmake<Sprite>("ui/UI4_Right_icn_select.png"),
+                                                         Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+        auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mmake<Sprite>("ui/UI4_Right_icn_pressed.png"),
+                                                          Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+
+        itemSampleExpandBtn->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+            ->offStateAnimationSpeed = 1.0f / 4.0f;
+
+        itemSampleExpandBtn->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        itemSampleExpandBtn->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        itemSample->AddChild(itemSampleExpandBtn);
+
+        auto expandedStateAnim = mmake<AnimationClip>();
+        *expandedStateAnim->AddTrack<float>("child/expandBtn/layer/regular/mDrawable/angle") =
+            AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+        *expandedStateAnim->AddTrack<float>("child/expandBtn/layer/hover/mDrawable/angle") =
+            AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+        *expandedStateAnim->AddTrack<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
+            AnimationTrack<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+        itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+        itemSample->AddState("selected", AnimationClip::EaseInOut("layer/select/transparency", 0.0f, 1.0f, 0.2f));
+
+        auto focusedItemAnim = AnimationClip::EaseInOut("layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+        *focusedItemAnim->AddTrack<float>("layer/select/child/unfocused/transparency") = AnimationTrack<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+        itemSample->AddState("focused", focusedItemAnim);
+
+        // scrollbars
+        Ref<HorizontalScrollBar> horScrollBar = o2UI.CreateHorScrollBar();
+        horScrollBar->layout->anchorMin = Vec2F(0, 0);
+        horScrollBar->layout->anchorMax = Vec2F(1, 0);
+        horScrollBar->layout->offsetMin = Vec2F(5, 0);
+        horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+        sample->SetHorizontalScrollBar(horScrollBar);
+
+        Ref<VerticalScrollBar> verScrollBar = o2UI.CreateVerScrollBar();
+        verScrollBar->layout->anchorMin = Vec2F(1, 0);
+        verScrollBar->layout->anchorMax = Vec2F(1, 1);
+        verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+        verScrollBar->layout->offsetMax = Vec2F(0, -5);
+        sample->SetVerticalScrollBar(verScrollBar);
+
+        sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
+                                                                  5.0f, 15.0f, 0.2f));
+
+        sample->AddState("enableVerBar", AnimationClip::EaseInOut("mHorScrollBar/layout/offsetRight",
+                                                                  -5.0f, -15.0f, 0.2f));
+
+        sample->AddState("hover", AnimationClip::EaseInOut("mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        sample->SetStateForcible("hover", false);
+
+        sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5;
+
+        o2UI.AddWidgetStyle(sample, "standard");
+    }
+
+    void EditorUIStyleBuilder::RebuildAnimationStateViewerPlayToggle()
 	{
 		Ref<Toggle> sample = mmake<Toggle>();
 		auto playRootIconLayer = sample->AddLayer("playRootIcon", nullptr);

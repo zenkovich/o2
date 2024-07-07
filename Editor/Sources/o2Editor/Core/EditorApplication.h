@@ -67,6 +67,8 @@ namespace Editor
 		// Is scene playing
 		bool IsPlaying() const;
 
+		REF_COUNTERABLE_IMPL(Application, ActionsList);
+
 	protected:
         Ref<Sprite> mBackground; // Background sprite
         Ref<Sprite> mBackSign;   // Background o2 signature

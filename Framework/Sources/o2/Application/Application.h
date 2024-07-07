@@ -47,7 +47,7 @@ namespace o2
     // -----------
     // Application
     // -----------
-    class Application: public Singleton<Application>, public ApplicationBase
+    class Application: public Singleton<Application>, public ApplicationBase, public RefCounterable
     {
     public:
         PROPERTIES(Application);

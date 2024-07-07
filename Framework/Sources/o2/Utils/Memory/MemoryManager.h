@@ -78,6 +78,8 @@ namespace o2
             int         sourceLine; // Allocation source code line
             size_t      size;       // Allocated size in bytes
             void*       memory;     // Pointer to allocated memory
+
+            int markIndex = 0;
         };
 
         static MemoryManager* mInstance; // Instance pointer
@@ -97,5 +99,6 @@ namespace o2
         friend void  ::operator delete(void* allocMemory) noexcept;
         friend void* ::_mmalloc(size_t size, const char* location, int line);
         friend void  ::_mfree(void* allocMemory);
+        friend class MemoryAnalyzer;
     };
 }

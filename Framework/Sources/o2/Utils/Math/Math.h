@@ -109,7 +109,12 @@ namespace o2
         template<typename T>
         T Clamp(const T& value, const T& minv, const T& maxv)
         {
-            return std::clamp(value, minv, maxv);
+            if (value < minv)
+                return minv;
+            else if (value > maxv)
+                return maxv;
+
+            return value;
         }
 
         template<typename T>

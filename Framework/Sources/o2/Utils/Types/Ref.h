@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "Containers/Vector.h"
+#include "o2/Utils/Memory/MemoryAnalyzer.h"
 
 namespace o2
 {
@@ -76,8 +77,8 @@ namespace o2
 
         friend struct RefMaker;
 
-		template<typename _object_type>
-		friend struct RefCountersSetter;
+        template<typename _object_type>
+        friend struct RefCountersSetter;
     };
 
     // ---------------------------------------------------------------------------------
@@ -98,7 +99,7 @@ namespace o2
         template<typename _type>
         friend RefCounter* GetRefCounterImpl(_type* ptr);
 
-		template<typename _object_type>
+        template<typename _object_type>
         friend struct RefCountersSetter;
     };
 
@@ -211,6 +212,22 @@ namespace o2
 
     protected:
         _type* mPtr = nullptr; // Pointer to object
+
+#if ENABLE_REFS_MANAGE
+        size_t      mManagedIndex = 0;     // Managed index in refs manager
+        RefCounter* mRefCounter = nullptr; // Pointer to reference counter
+
+        // Called when reference created and registered in refs manager
+        void OnCreated();
+
+        // Called when reference destroyed and unregistered from refs manager
+        void OnDestroyed();
+
+        friend class MemoryAnalyzer;
+#else
+        void OnCreated() {}
+        void OnDestroyed() {}
+#endif 
 
     protected:
         void IncrementRef(); // Increments reference counter
@@ -398,24 +415,45 @@ namespace o2
     };
 
     // BaseRef implementation
+#if ENABLE_REFS_MANAGE
     template<typename _type>
-    Ref<_type>::Ref() = default;
+    void Ref<_type>::OnCreated()
+    {
+        MemoryAnalyzer::OnRefCreated(this);
+    }
+
+    template<typename _type>
+    void Ref<_type>::OnDestroyed()
+    {
+        MemoryAnalyzer::OnRefDestroyed(this);
+    }
+#endif
+
+    template<typename _type>
+    Ref<_type>::Ref()
+    {
+        OnCreated();
+    }
 
     template<typename _type>
     Ref<_type>::Ref(_type* ptr) :
         mPtr(ptr)
     {
+        OnCreated();
         IncrementRef();
     }
 
     template<typename _type>
     Ref<_type>::Ref(std::nullptr_t)
-    {}
+    {
+        OnCreated();
+    }
 
     template<typename _type>
     Ref<_type>::Ref(const Ref<_type>& other) :
         mPtr(other.mPtr)
     {
+        OnCreated();
         IncrementRef();
     }
 
@@ -423,7 +461,12 @@ namespace o2
     Ref<_type>::Ref(Ref<_type>&& other) :
         mPtr(other.mPtr)
     {
+        OnCreated();
         other.mPtr = nullptr;
+
+#if ENABLE_REFS_MANAGE
+        mRefCounter = other.mRefCounter;
+#endif
     }
 
     template<typename _type>
@@ -431,6 +474,7 @@ namespace o2
     Ref<_type>::Ref(const Ref<_other_type>& other) :
         mPtr(other.mPtr)
     {
+        OnCreated();
         IncrementRef();
     }
 
@@ -439,12 +483,18 @@ namespace o2
     Ref<_type>::Ref(Ref<_other_type>&& other) :
         mPtr(other.mPtr)
     {
+        OnCreated();
         other.mPtr = nullptr;
+
+#if ENABLE_REFS_MANAGE
+        mRefCounter = other.mRefCounter;
+#endif
     }
 
     template<typename _type>
     Ref<_type>::~Ref()
     {
+        OnDestroyed();
         DecrementRef();
     }
 
@@ -515,6 +565,10 @@ namespace o2
         mPtr = other.mPtr;
         other.mPtr = nullptr;
 
+#if ENABLE_REFS_MANAGE
+        mRefCounter = other.mRefCounter;
+#endif
+
         return *this;
     }
 
@@ -525,6 +579,10 @@ namespace o2
 
         mPtr = other.mPtr;
         other.mPtr = nullptr;
+
+#if ENABLE_REFS_MANAGE
+        mRefCounter = other.mRefCounter;
+#endif
 
         return *this;
     }
@@ -563,7 +621,14 @@ namespace o2
     void Ref<_type>::IncrementRef()
     {
         if (mPtr)
-            GetRefCounter(mPtr)->strongReferences++;
+        {
+            auto refCounter = GetRefCounter(mPtr);
+            refCounter->strongReferences++;
+
+#if ENABLE_REFS_MANAGE
+            mRefCounter = refCounter;
+#endif
+        }
     }
 
     template<typename _type>

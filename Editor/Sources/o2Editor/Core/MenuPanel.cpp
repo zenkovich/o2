@@ -13,6 +13,7 @@
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 #include "o2/Utils/Math/Curve.h"
+#include "o2/Utils/Memory/MemoryAnalyzer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
@@ -28,6 +29,7 @@
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/GameWindow/GameWindow.h"
 #include "o2Editor/LogWindow/LogWindow.h"
+#include "o2Editor/MemoryAnalyzerWindow/MemoryAnalyzerWindow.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneWindow.h"
 #include "o2Editor/TreeWindow/SceneHierarchyTree.h"
@@ -110,6 +112,13 @@ namespace Editor
 
 			for (auto& actor : o2Scene.GetRootActors())
 				fixActor(actor);
+		});
+		
+
+		mMenuPanel->AddItem("Debug/Memory debug", [&]() {
+			auto appRef = DynamicCast<RefCounterable>(Ref(Application::InstancePtr()));
+			auto data = MemoryAnalyzer::BuildMemoryTree({ &appRef });
+			MemoryAnalyzerWindow::Show(data);
 		});
 
 		mMenuPanel->AddToggleItem("Debug/View editor UI tree", false, [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });

@@ -6,8 +6,10 @@
 // Enables memory managing
 #if defined DEBUG
 #define ENABLE_MEMORY_MANAGE true
+#define ENABLE_REFS_MANAGE true
 #else
 #define ENABLE_MEMORY_MANAGE false
+#define ENABLE_REFS_MANAGE false
 #endif
 
 // Enables render debugging

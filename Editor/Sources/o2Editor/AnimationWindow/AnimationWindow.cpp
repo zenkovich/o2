@@ -172,7 +172,7 @@ namespace Editor
 
 		SetCurvesMode(false);
 
-		 PropertiesListDlg::InitializeSingleton();
+		PropertiesListDlg::InitializeSingleton();
 	}
 
 	void AnimationWindow::InitializeHandlesSheet()
