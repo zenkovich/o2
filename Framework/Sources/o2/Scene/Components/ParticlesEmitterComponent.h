@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Render/ParticlesEmitter.h"
+#include "o2/Render/Particles/ParticlesEmitter.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 
@@ -37,7 +37,8 @@ namespace o2
 		static Ref<RefCounterable> CastToRefCounterable(const Ref<ParticlesEmitterComponent>& ref);
 
         SERIALIZABLE(ParticlesEmitterComponent);
-        CLONEABLE_REF(ParticlesEmitterComponent);
+		CLONEABLE_REF(ParticlesEmitterComponent);
+		REF_COUNTERABLE_IMPL(DrawableComponent, ParticlesEmitter);
 
     protected:
         // Called when actor's transform was changed
@@ -54,8 +55,6 @@ namespace o2
 
         // Completion deserialization delta callback
         void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
-
-        REF_COUNTERABLE_IMPL(DrawableComponent, ParticlesEmitter);
     };
 }
 // --- META ---

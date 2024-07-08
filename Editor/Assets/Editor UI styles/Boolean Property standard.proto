@@ -3,7 +3,7 @@
         "Type": "Editor::BooleanProperty",
         "Value": {
             "mName": "standard",
-            "Id": 14478011807750577634,
+            "Id": 12896737795227307765,
             "Transform": {
                 "minSize": {
                     "x": 0.0,
@@ -12,9 +12,10 @@
             },
             "Children": [
                 {
+                    "Type": "o2::Widget",
                     "Data": {
                         "mName": "container",
-                        "Id": 5921833149603177244,
+                        "Id": 8231225149419777517,
                         "Transform": {
                             "anchorMax": {
                                 "x": 1.0,
@@ -27,9 +28,10 @@
                         },
                         "Children": [
                             {
+                                "Type": "o2::HorizontalLayout",
                                 "Data": {
                                     "mName": "layout",
-                                    "Id": 10527240517549911003,
+                                    "Id": 12458475556582700808,
                                     "Transform": {
                                         "anchorMax": {
                                             "x": 1.0,
@@ -42,13 +44,14 @@
                                     },
                                     "Children": [
                                         {
+                                            "Type": "o2::Toggle",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "37182fe92a1a5fe624ef3e9b21084edc",
+                                                    "id": "5cf03c5c7c410e1e64ae3d83223f448d",
                                                     "path": "Editor UI styles/Toggle without caption.proto"
                                                 },
                                                 "PrototypeLink": 3392499943774661634,
-                                                "Id": 12896737795227307765,
+                                                "Id": 13783350871892119123,
                                                 "Transform": {
                                                     "maxSize": {
                                                         "x": 20.0,
@@ -67,7 +70,7 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 8231225149419777517,
+                                                        "mUID": 2431846596801868035,
                                                         "PrototypeLink": 915962471591573851
                                                     },
                                                     {
@@ -86,7 +89,7 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 8589955334397553691,
+                                                        "mUID": 2278188320900846633,
                                                         "PrototypeLink": 16652173066469936625
                                                     },
                                                     {
@@ -105,7 +108,7 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 5147364418751616203,
+                                                        "mUID": 3521536045960099759,
                                                         "PrototypeLink": 17428247585315230625
                                                     },
                                                     {
@@ -124,7 +127,7 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 12458475556582700808,
+                                                        "mUID": 2688282712569220378,
                                                         "PrototypeLink": 9054844328747397315
                                                     },
                                                     {
@@ -143,7 +146,7 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 16669668243380321064,
+                                                        "mUID": 10792149763403840948,
                                                         "PrototypeLink": 9025118204233990844
                                                     },
                                                     {
@@ -162,7 +165,7 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 16759344671028375703,
+                                                        "mUID": 1353284384822013450,
                                                         "PrototypeLink": 6229823476518225172
                                                     }
                                                 ],
@@ -186,22 +189,19 @@
                                                         "name": "visible"
                                                     }
                                                 ]
-                                            },
-                                            "Type": "o2::Toggle"
+                                            }
                                         }
                                     ],
                                     "InternalWidgets": [],
                                     "Layers": [],
                                     "States": []
-                                },
-                                "Type": "o2::HorizontalLayout"
+                                }
                             }
                         ],
                         "InternalWidgets": [],
                         "Layers": [],
                         "States": []
-                    },
-                    "Type": "o2::Widget"
+                    }
                 }
             ],
             "InternalWidgets": [],

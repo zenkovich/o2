@@ -32,9 +32,10 @@
                     },
                     "Children": [
                         {
+                            "Type": "o2::Toggle",
                             "Data": {
                                 "Prototype": {
-                                    "id": "1d5c22bb1fa11cea7d03644d12c3571e",
+                                    "id": "277c436a5a062b57166c7fe62629209e",
                                     "path": "Editor UI styles/Toggle actor node enable.proto"
                                 },
                                 "PrototypeLink": 13485507530897776395,
@@ -109,13 +110,13 @@
                                         "name": "halfHide"
                                     }
                                 ]
-                            },
-                            "Type": "o2::Toggle"
+                            }
                         },
                         {
+                            "Type": "o2::Toggle",
                             "Data": {
                                 "Prototype": {
-                                    "id": "0c554c5563d52f2c1e0f5d3c52eb3af0",
+                                    "id": "68666ea85dd974aa613b490843296192",
                                     "path": "Editor UI styles/Toggle actor node lock.proto"
                                 },
                                 "PrototypeLink": 17947913420964204178,
@@ -190,13 +191,13 @@
                                         "name": "halfHide"
                                     }
                                 ]
-                            },
-                            "Type": "o2::Toggle"
+                            }
                         },
                         {
+                            "Type": "o2::Button",
                             "Data": {
                                 "Prototype": {
-                                    "id": "2edd3eb121014d432fec65ec7bd43c13",
+                                    "id": "70cf7267172474804f4d66be6f8655bd",
                                     "path": "Editor UI styles/Button actor node link.proto"
                                 },
                                 "PrototypeLink": 2250881230686634693,
@@ -273,13 +274,13 @@
                                         "name": "pressed"
                                     }
                                 ]
-                            },
-                            "Type": "o2::Button"
+                            }
                         },
                         {
+                            "Type": "o2::EditBox",
                             "Data": {
                                 "Prototype": {
-                                    "id": "184844985186082128715d7854f44587",
+                                    "id": "6e9122242df83ece31917f8b41695b72",
                                     "path": "Editor UI styles/Edit Box backless.proto"
                                 },
                                 "PrototypeLink": 12774960284875247092,
@@ -376,10 +377,10 @@
                                         "mState": false
                                     }
                                 ]
-                            },
-                            "Type": "o2::EditBox"
+                            }
                         },
                         {
+                            "Type": "o2::Button",
                             "Data": {
                                 "mName": "expandBtn",
                                 "Id": 17175977974363394967,
@@ -574,7 +575,7 @@
                                                 "meta": {
                                                     "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                     "Value": {
-                                                        "mId": "347a6fa770712eef2f4336347d2b6983"
+                                                        "mId": "086148de33206e656f8e134f677c0c9e"
                                                     }
                                                 }
                                             }
@@ -627,7 +628,7 @@
                                                 "meta": {
                                                     "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                     "Value": {
-                                                        "mId": "57c022e954672e7357510757479e6770"
+                                                        "mId": "664b5d7e177d364c6b2d0efe1b4512b8"
                                                     }
                                                 }
                                             }
@@ -681,15 +682,14 @@
                                                 "meta": {
                                                     "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                     "Value": {
-                                                        "mId": "515503630c4d612c574163eb70a33f1d"
+                                                        "mId": "4f411b741e6a07de55fd244e30e45710"
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                 ]
-                            },
-                            "Type": "o2::Button"
+                            }
                         }
                     ],
                     "InternalWidgets": [],
@@ -1018,7 +1018,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "17d245565238073416337ca370510d80"
+                                            "mId": "19b73b98467851d65fd3143f3d6a768d"
                                         }
                                     }
                                 }
@@ -1121,7 +1121,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "62ef54ad487d5c7f4b38696426953e98"
+                                            "mId": "7208438064fc2dc6374b7ebb0052705d"
                                         }
                                     }
                                 }
@@ -1173,7 +1173,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "66c4423335f67c3f51214f4747b43e9f"
+                                            "mId": "630a603340d37a750ed8428b5d1505bf"
                                         }
                                     }
                                 }
@@ -1250,7 +1250,7 @@
                                     "meta": {
                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                         "Value": {
-                                            "mId": "061377b968d93f39472b27b114a26728"
+                                            "mId": "3b455e2d44cf30470fd3233c6fd35ea7"
                                         }
                                     }
                                 }
@@ -1468,7 +1468,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "61e9496f05f24fc81018330f2c60124f",
+                            "id": "087d23e805423760713e7aaa6d1f6d50",
                             "path": "Editor UI styles/Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 10492944459780109401,
@@ -1619,7 +1619,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "26f83f081652018e0f4c176231d74aad",
+                            "id": "3ff25ead503d2db13abd03f16e9174d3",
                             "path": "Editor UI styles/Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 1546231510864932275,
@@ -1820,7 +1820,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7f9b09d156ec73a91a496fd172e943da"
+                                    "mId": "3a83642b570273e238d4729b53ed234b"
                                 }
                             }
                         }
@@ -1873,7 +1873,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7e222e66621733c224b170693f732892"
+                                    "mId": "21cc432b68bc662a6db560b434044c21"
                                 }
                             }
                         }
@@ -1926,7 +1926,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7ef0453572ea322a1c5e6e51311065df"
+                                    "mId": "436a466a068d7446078f4bd659fa71dc"
                                 }
                             }
                         }
@@ -1979,7 +1979,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4851304f2314567c118e2af34af44d86"
+                                    "mId": "12e503646848279864ba108b3eef1d72"
                                 }
                             }
                         }

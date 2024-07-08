@@ -31,12 +31,26 @@ namespace Editor
 		// Returns edit box
 		const Ref<EditBox>& GetEditBox() const;
 
+		// Specializes field info, checks range attribute
+		void SetFieldInfo(const FieldInfo* fieldInfo) override;
+
+		// Enables range mode and sets min and max
+		void SetRange(float minRange, float maxRange);
+
+		// Disables range mode
+		void DisableRange();
+
 		SERIALIZABLE(FloatProperty);
 		CLONEABLE_REF(FloatProperty);
 
 	protected:
-		Ref<EditBox>          mEditBox;    // Edit box 
+		Ref<EditBox>          mEditBox;    // Edit box for regular values
 		Ref<CursorEventsArea> mDragHangle; // Value changing drag handle
+
+		Ref<HorizontalProgress> mProgress;          // Progress bar for range values
+		bool                    mUsesRange = false; // Is value used with range
+		float                   mMinRange = 0.0f;   // Min range value
+		float                   mMaxRange = 1.0f;   // Max range value
 
 	protected:
 		// Updates value view
@@ -50,6 +64,9 @@ namespace Editor
 
 		// Edit box change event
 		void OnEdited(const WString& data);
+
+		// On value changed by progress
+		void OnEditedValue(float value);
 
 		// Called when drag handle was moved and changes the property value
 		void OnDragHandleMoved(const Input::Cursor& cursor);
@@ -76,6 +93,10 @@ CLASS_FIELDS_META(Editor::FloatProperty)
 {
     FIELD().PROTECTED().NAME(mEditBox);
     FIELD().PROTECTED().NAME(mDragHangle);
+    FIELD().PROTECTED().NAME(mProgress);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUsesRange);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mMinRange);
+    FIELD().PROTECTED().DEFAULT_VALUE(1.0f).NAME(mMaxRange);
 }
 END_META;
 CLASS_METHODS_META(Editor::FloatProperty)
@@ -84,10 +105,14 @@ CLASS_METHODS_META(Editor::FloatProperty)
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const FloatProperty&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<EditBox>&, GetEditBox);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetRange, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, DisableRange);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
     FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEditedValue, float);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMoved, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandlePressed, const Input::Cursor&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandleReleased, const Input::Cursor&);

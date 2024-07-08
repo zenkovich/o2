@@ -36,7 +36,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "61e9496f05f24fc81018330f2c60124f",
+                            "id": "087d23e805423760713e7aaa6d1f6d50",
                             "path": "Editor UI styles/Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 10492944459780109401,
@@ -187,7 +187,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "26f83f081652018e0f4c176231d74aad",
+                            "id": "3ff25ead503d2db13abd03f16e9174d3",
                             "path": "Editor UI styles/Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 1546231510864932275,
@@ -471,7 +471,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "444735365132241c74ea49227e0b4338"
+                                    "mId": "04644d89231418cd0be0166943116b49"
                                 }
                             }
                         }
@@ -573,7 +573,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "55764c501c3a4d941580763e251d723f"
+                                    "mId": "7fbb6abd511602f6659d43f147b51c13"
                                 }
                             }
                         }
@@ -627,7 +627,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "2f7c071f4df650ab22d66480329c1a6a"
+                                    "mId": "208c1e77738b017d13813f715ed95636"
                                 }
                             }
                         }

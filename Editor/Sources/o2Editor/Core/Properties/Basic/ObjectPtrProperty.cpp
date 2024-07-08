@@ -10,6 +10,7 @@
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "o2/Utils/Editor/Attributes/NoHeaderAttribute.h"
 #include "o2/Utils/Editor/EditorScope.h"
+#include "o2/Utils/StringUtils.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
 
@@ -277,28 +278,50 @@ namespace Editor
 		}
 		else
 		{
-			if (!mContextInitialized)
-			{
-				mCreateMenu->RemoveAllItems();
-
-				auto availableTypes = mBasicObjectType->GetDerivedTypes();
-				availableTypes.Insert(mBasicObjectType, 0);
-
-				mImmediateCreateObject = availableTypes.Count() == 1;
-
-				mCreateMenu->AddItems(availableTypes.Convert<Ref<ContextMenu::Item>>([&](const Type* type)
-				{
-					return mmake<ContextMenu::Item>(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
-				}));
-
-				mContextInitialized = true;
-			}
+			CheckCreateContextMenu();
 
 			if (mImmediateCreateObject)
 				CreateObject(mBasicObjectType);
 			else
 				mCreateMenu->Show();
 		}
+	}
+
+	void ObjectPtrProperty::CheckCreateContextMenu()
+	{
+		if (mContextInitialized)
+			return;
+
+		mCreateMenu->RemoveAllItems();
+
+		auto availableTypes = mBasicObjectType->GetDerivedTypes();
+		availableTypes.Insert(mBasicObjectType, 0);
+
+		mImmediateCreateObject = availableTypes.Count() == 1;
+
+		const int maxUngroupedTypes = 10;
+		if (availableTypes.Count() < maxUngroupedTypes)
+		{
+			for (auto& type : availableTypes)
+			{
+				mCreateMenu->AddItem(GetSmartName(type->GetName()), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
+			}
+		}
+		else
+		{
+			for (auto& type : availableTypes)
+			{
+				String group = type->InvokeStatic<String>("GetCreateMenuGroup");
+				if (!group.IsEmpty())
+					group += String("/") + GetSmartName(type->GetName());
+				else
+					group = GetSmartName(type->GetName().ReplacedAll("::", "/"));
+
+				mCreateMenu->AddItem(group, [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
+			}
+		}
+
+		mContextInitialized = true;
 	}
 
 	void ObjectPtrProperty::CreateObject(const ObjectType* type)
@@ -329,11 +352,6 @@ namespace Editor
 			data.Last() = GetProxy(targetObj.first);
 		}
 	}
-
-	class DummyObj : public RefCounterable
-	{
-
-	};
 
 	IObject* ObjectPtrProperty::GetProxy(const Ref<IAbstractValueProxy>& proxy) const
 	{

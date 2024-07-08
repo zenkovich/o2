@@ -1,10 +1,11 @@
 #pragma once
 
 #include "o2/Assets/Types/ImageAsset.h"
-#include "o2/Render/Particle.h"
-#include "o2/Render/ParticlesEffects.h"
-#include "o2/Render/ParticlesEmitterShapes.h"
+#include "o2/Render/Particles/Particle.h"
+#include "o2/Render/Particles/ParticlesEffects.h"
+#include "o2/Render/Particles/ParticlesEmitterShapes.h"
 #include "o2/Render/RectDrawable.h"
+#include "o2/Utils/Editor/Attributes/RangeAttribute.h"
 #include "o2/Utils/Math/Curve.h"
 
 namespace o2
@@ -24,16 +25,16 @@ namespace o2
 		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape); // Emitting shape property @EDITOR_IGNORE
 
         PROPERTY(bool, playing, SetPlaying, IsPlaying);                                 // Is particles playing property
-        PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef);         // Particles emitting coefficient property (0...1)
+        PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef);         // Particles emitting coefficient property (0...1) @RANGE(0, 1)
         PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter
         PROPERTY(bool, looped, SetLoop, IsLooped);                                      // Is emitter looped property
         PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles);                  // Number of maximum particles in emitter property
-        PROPERTY(float, duration, SetDuration, GetDuration);                            // Working duration in seconds property
+        PROPERTY(float, duration, SetDuration, GetDuration);                            // Working duration in seconds property @RANGE(0, 10)
 
-        PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);                   // Particles lifetime in seconds property
-        PROPERTY(float, emitParticlesPerSecond, SetEmitParticlesPerSecond, GetEmitParticlesPerSecond);    // Amount of particles emitting in one second property
-        PROPERTY(float, emitParticlesAngle, SetEmitParticlesAngle, GetEmitParticlesAngle);                // Emitting particle angle property in degrees
-        PROPERTY(float, emitParticlesAngleRange, SetEmitParticlesAngleRange, GetEmitParticlesAngleRange); // Emitting particle angle range property in degrees
+        PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);                   // Particles lifetime in seconds property @RANGE(0, 10)
+        PROPERTY(float, emitParticlesPerSecond, SetEmitParticlesPerSecond, GetEmitParticlesPerSecond);    // Amount of particles emitting in one second property 
+        PROPERTY(float, emitParticlesAngle, SetEmitParticlesAngle, GetEmitParticlesAngle);                // Emitting particle angle property in degrees @RANGE(0, 360)
+        PROPERTY(float, emitParticlesAngleRange, SetEmitParticlesAngleRange, GetEmitParticlesAngleRange); // Emitting particle angle range property in degrees @RANGE(0, 360)
         PROPERTY(Vec2F, emitParticlesSize, SetEmitParticlesSize, GetEmitParticlesSize);                   // Emitting particle size property
         PROPERTY(Vec2F, emitParticlesSizeRange, SetEmitParticlesSizeRange, GetEmitParticlesSizeRange);    // Emitting particle size range property
         PROPERTY(float, emitParticlesSpeed, SetEmitParticlesSpeed, GetEmitParticlesSpeed);                // Emitting particle angle speed property in degrees/sec
@@ -252,7 +253,7 @@ namespace o2
         bool  mIsParticlesRelative = true; // Is particles relative to emitter or global @SERIALIZABLE
         bool  mIsLooped = false;           // Is emitter looped @SERIALIZABLE
                                                                   
-        float mDuration = 1;                            // Duration of working time @SERIALIZABLE
+        float mDuration = 1; // Duration of working time @SERIALIZABLE
                                                                   
         float mParticlesLifetime = 0.5f;    // Particles lifetime in seconds @SERIALIZABLE
         float mEmitParticlesPerSecond = 10; // Number of particles emitting in one second @SERIALIZABLE
@@ -277,7 +278,7 @@ namespace o2
 
         float            mCurrentTime = 0;         // Current working time in seconds
         float            mEmitTimeBuffer = 0;      // Emitting next particle time buffer
-        Mesh             mParticlesMesh; // Particles mesh
+        Mesh             mParticlesMesh;           // Particles mesh
         Vector<Particle> mParticles;               // Working particles
         Vector<int>      mDeadParticles;           // Dead particles indexes
         int              mNumAliveParticles = 0;   // Count of current alive particles
@@ -320,15 +321,15 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PUBLIC().NAME(image);
     FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(shape);
     FIELD().PUBLIC().NAME(playing);
-    FIELD().PUBLIC().NAME(emittingCoefficient);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 1).NAME(emittingCoefficient);
     FIELD().PUBLIC().NAME(particlesRelative);
     FIELD().PUBLIC().NAME(looped);
     FIELD().PUBLIC().NAME(maxParticles);
-    FIELD().PUBLIC().NAME(duration);
-    FIELD().PUBLIC().NAME(particlesLifetime);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 10).NAME(duration);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 10).NAME(particlesLifetime);
     FIELD().PUBLIC().NAME(emitParticlesPerSecond);
-    FIELD().PUBLIC().NAME(emitParticlesAngle);
-    FIELD().PUBLIC().NAME(emitParticlesAngleRange);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(emitParticlesAngle);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(emitParticlesAngleRange);
     FIELD().PUBLIC().NAME(emitParticlesSize);
     FIELD().PUBLIC().NAME(emitParticlesSizeRange);
     FIELD().PUBLIC().NAME(emitParticlesSpeed);

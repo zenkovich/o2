@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "ParticlesEffects.h"
 
-#include "o2/Render/ParticlesEmitter.h"
+#include "o2/Render/Particles/ParticlesEmitter.h"
 
 namespace o2
 {

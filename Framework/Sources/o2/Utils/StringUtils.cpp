@@ -3,27 +3,18 @@
 
 namespace o2
 {
-    String GetSmartName(const String& fieldName)
+    String GetSmartName(const String& name)
     {
         String begn;
 
-        if (fieldName[0] == 'm' && fieldName[1] >= 'A' && fieldName[1] <= 'Z')
-            begn = fieldName.SubStr(1);
-        else if (fieldName[0] == 'm' && fieldName[1] == '_')
-            begn = fieldName.SubStr(2);
-        else if (fieldName[0] == '_')
-            begn = fieldName.SubStr(1);
+        if (name[0] == 'm' && name[1] >= 'A' && name[1] <= 'Z')
+            begn = name.SubStr(1);
+        else if (name[0] == 'm' && name[1] == '_')
+            begn = name.SubStr(2);
+        else if (name[0] == '_')
+            begn = name.SubStr(1);
         else
-            begn = fieldName;
-
-        if (begn.StartsWith("o2::"))
-            begn.Erase(0, 4);
-
-        if (begn.StartsWith("Editor::"))
-            begn.Erase(0, 8);
-
-        if (begn.StartsWith("UI"))
-            begn = begn;
+            begn = name;
 
         String res;
         int len = begn.Length();

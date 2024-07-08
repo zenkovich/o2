@@ -4,6 +4,7 @@
 #include "o2/Application/Application.h"
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/Widgets/EditBox.h"
+#include "o2/Utils/Editor/Attributes/RangeAttribute.h"
 
 
 namespace Editor
@@ -21,6 +22,36 @@ namespace Editor
 	const Ref<EditBox>& FloatProperty::GetEditBox() const
 	{
 		return mEditBox;
+	}
+
+	void FloatProperty::SetFieldInfo(const FieldInfo* fieldInfo)
+	{
+		TPropertyField<float>::SetFieldInfo(fieldInfo);
+
+		if (auto rangeAttribute = fieldInfo->GetAttribute<RangeAttribute>())
+			SetRange(rangeAttribute->minRange, rangeAttribute->maxRange);
+		else
+			DisableRange();
+	}
+
+	void FloatProperty::SetRange(float minRange, float maxRange)
+	{
+		mUsesRange = true;
+		mMinRange = minRange;
+		mMaxRange = maxRange;
+
+		mProgress->enabled = true;
+		mProgress->SetMinValue(mMinRange);
+		mProgress->SetMaxValue(mMaxRange);
+
+		mEditBox->layout->maxWidth = 65;
+	}
+
+	void FloatProperty::DisableRange()
+	{
+		mUsesRange = false;
+		mProgress->enabled = false;
+		mEditBox->layout->maxWidth = 10000;
 	}
 
 	FloatProperty& FloatProperty::operator=(const FloatProperty& other)
@@ -52,6 +83,13 @@ namespace Editor
 				mDragHangle->onCursorReleased = THIS_FUNC(OnMoveHandleReleased);
 			}
 		}
+
+		mProgress = FindChildByType<HorizontalProgress>();
+		if (mProgress)
+		{
+			mProgress->onChangeByUser = THIS_FUNC(OnEditedValue);
+			mProgress->enabled = false;
+		}
 	}
 
 	void FloatProperty::UpdateValueView()
@@ -63,6 +101,9 @@ namespace Editor
 			mEditBox->text = "--";
 		else
 			mEditBox->text = (WString)mCommonValue;
+
+		if (mUsesRange)
+			mProgress->value = mCommonValue;
 	}
 
 	void FloatProperty::OnEdited(const WString& data)
@@ -70,7 +111,22 @@ namespace Editor
 		if (mValuesDifferent && data == "--")
 			return;
 
-		SetValueByUser((const float)data);
+		float value = (float)data;
+
+		if (mUsesRange)
+			mProgress->value = value;
+
+		SetValueByUser(value);
+	}
+
+	void FloatProperty::OnEditedValue(float value)
+	{
+		if (mValuesDifferent)
+			mEditBox->text = "--";
+		else
+			mEditBox->text = (WString)mCommonValue;
+
+		SetValueByUser(value);
 	}
 
 	void FloatProperty::OnDragHandleMoved(const Input::Cursor& cursor)

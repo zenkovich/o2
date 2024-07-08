@@ -148,7 +148,7 @@ namespace Editor
         CLONEABLE_REF(IPropertyField);
 
     protected:
-        const FieldInfo* mFieldInfo = nullptr; // Specialized field info
+        const FieldInfo*           mFieldInfo = nullptr; // Specialized field info
         WeakRef<PropertiesContext> mParentContext;       // Parent context
         bool                       mRevertable = true;   // Is property can be reverted
 

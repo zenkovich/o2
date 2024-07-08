@@ -3,7 +3,7 @@
         "Type": "Editor::TagsProperty",
         "Value": {
             "mName": "standard",
-            "Id": 12898813349693947729,
+            "Id": 15914414197310645647,
             "Transform": {
                 "minSize": {
                     "x": 0.0,
@@ -12,9 +12,10 @@
             },
             "Children": [
                 {
+                    "Type": "o2::Widget",
                     "Data": {
                         "mName": "container",
-                        "Id": 16191886452671807828,
+                        "Id": 15008108544165200269,
                         "Transform": {
                             "anchorMax": {
                                 "x": 1.0,
@@ -27,9 +28,10 @@
                         },
                         "Children": [
                             {
+                                "Type": "o2::HorizontalLayout",
                                 "Data": {
                                     "mName": "layout",
-                                    "Id": 8624166847448509298,
+                                    "Id": 7004670321153633112,
                                     "Transform": {
                                         "anchorMax": {
                                             "x": 1.0,
@@ -42,13 +44,14 @@
                                     },
                                     "Children": [
                                         {
+                                            "Type": "o2::EditBox",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "52b2368a51cb4a2159b13bdb1d880e8f",
+                                                    "id": "29a707864b8968550dd758e62d821219",
                                                     "path": "Editor UI styles/Edit Box singleline.proto"
                                                 },
                                                 "PrototypeLink": 6227323235845158254,
-                                                "Id": 13175446942707674784,
+                                                "Id": 6988053292240565154,
                                                 "mName": "edit box",
                                                 "mTextDrawable": {
                                                     "Type": "o2::Text",
@@ -134,7 +137,7 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 12035040243224732804,
+                                                        "mUID": 10540710671524133356,
                                                         "PrototypeLink": 1933463122110454130
                                                     },
                                                     {
@@ -160,7 +163,7 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 9796121939732530084,
+                                                        "mUID": 18109699390758951834,
                                                         "PrototypeLink": 2359124186370584830
                                                     },
                                                     {
@@ -186,7 +189,7 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 13191396432532752769,
+                                                        "mUID": 15673866862323985444,
                                                         "PrototypeLink": 10137225725825241658
                                                     }
                                                 ],
@@ -198,22 +201,19 @@
                                                         "name": "focused"
                                                     }
                                                 ]
-                                            },
-                                            "Type": "o2::EditBox"
+                                            }
                                         }
                                     ],
                                     "InternalWidgets": [],
                                     "Layers": [],
                                     "States": []
-                                },
-                                "Type": "o2::HorizontalLayout"
+                                }
                             }
                         ],
                         "InternalWidgets": [],
                         "Layers": [],
                         "States": []
-                    },
-                    "Type": "o2::Widget"
+                    }
                 }
             ],
             "InternalWidgets": [],

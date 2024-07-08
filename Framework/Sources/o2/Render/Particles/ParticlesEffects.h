@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Render/Particle.h"
+#include "o2/Render/Particles/Particle.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Ref.h"
 

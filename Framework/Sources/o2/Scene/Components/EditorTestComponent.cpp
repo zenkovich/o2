@@ -47,4 +47,6 @@ END_ENUM_META;
 DECLARE_CLASS(o2::EditorTestComponent, o2__EditorTestComponent);
 
 DECLARE_CLASS(o2::EditorTestComponent::TestInside, o2__EditorTestComponent__TestInside);
+
+DECLARE_CLASS(o2::EditorTestComponent::TestDerivedInside, o2__EditorTestComponent__TestDerivedInside);
 // --- END META ---

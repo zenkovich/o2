@@ -27,7 +27,7 @@
                 "Type": "o2::Label",
                 "Value": {
                     "Prototype": {
-                        "id": "7d5f55e1507d5e0059862ed85c5712ad",
+                        "id": "2cbd2b33354204c143134ec638151dd1",
                         "path": "Editor UI styles/Label standard.proto"
                     },
                     "PrototypeLink": 4272162365707740014,
@@ -156,6 +156,7 @@
             },
             "Children": [
                 {
+                    "Type": "o2::VerticalLayout",
                     "Data": {
                         "mName": "layout",
                         "mBaseCorner": "LeftTop",
@@ -175,8 +176,7 @@
                         "InternalWidgets": [],
                         "Layers": [],
                         "States": []
-                    },
-                    "Type": "o2::VerticalLayout"
+                    }
                 }
             ],
             "InternalWidgets": [
@@ -184,7 +184,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "61e9496f05f24fc81018330f2c60124f",
+                            "id": "087d23e805423760713e7aaa6d1f6d50",
                             "path": "Editor UI styles/Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 10492944459780109401,
@@ -335,7 +335,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "26f83f081652018e0f4c176231d74aad",
+                            "id": "3ff25ead503d2db13abd03f16e9174d3",
                             "path": "Editor UI styles/Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 1546231510864932275,
@@ -570,7 +570,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "06ce4fff4fe66fde40e653142ebd2dcb"
+                                    "mId": "0f761fea7fec4b7864464fd47be276a2"
                                 }
                             }
                         }
@@ -623,7 +623,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "273b54fa63da60fc2f8d45ca402b15ff"
+                                    "mId": "2690610a0f5b6bbf4ee96dbc5d266ea3"
                                 }
                             }
                         }
@@ -676,7 +676,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "483e0f146c3a407d5e636c813eed7908"
+                                    "mId": "022961af7e657557461f5a2460bb18b9"
                                 }
                             }
                         }
@@ -729,7 +729,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "0a1b37b76c6f481355202b7d216e2242"
+                                    "mId": "7d8b6a172a9c3a667c01005871830299"
                                 }
                             }
                         }
@@ -783,7 +783,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4f9b62205e8779e5673d131527fe09bf"
+                                    "mId": "553e4cbe5ccf695167ea09e4699d6a38"
                                 }
                             }
                         }

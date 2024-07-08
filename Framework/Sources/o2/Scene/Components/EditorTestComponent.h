@@ -1,6 +1,6 @@
 #pragma once
-
 #include "ImageComponent.h"
+
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Assets/Types/AnimationAsset.h"
@@ -13,8 +13,9 @@
 #include "o2/Scene/Tags.h"
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
-#include "o2/Utils/Math/Curve.h"
+#include "o2/Utils/Editor/Attributes/RangeAttribute.h"
 #include "o2/Utils/Math/ColorGradient.h"
+#include "o2/Utils/Math/Curve.h"
 
 namespace o2
 {
@@ -41,7 +42,25 @@ namespace o2
 
             SERIALIZABLE(TestInside);
             CLONEABLE_REF(TestInside);
-        };
+		};
+
+		class TestDerivedInside : public TestInside
+		{
+		public:
+			float mFloatDerived = 1.2f;                // @SERIALIZABLE @SCRIPTABLE
+			String mStringDerived = String("bla bla"); // @SERIALIZABLE @SCRIPTABLE
+			WString mWStringDerived;                   // @SERIALIZABLE @SCRIPTABLE
+			bool mBoolDerived = true;                  // @SERIALIZABLE @SCRIPTABLE
+
+			Ref<Component> mComponentDerived; // @SERIALIZABLE @SCRIPTABLE
+			Ref<RigidBody> mRigidBodyDerived; // @SERIALIZABLE @SCRIPTABLE
+
+			// @SCRIPTABLE
+            TestDerivedInside() {}
+
+			SERIALIZABLE(TestDerivedInside);
+			CLONEABLE_REF(TestDerivedInside);
+		};
 
 	public:
 		AssetRef<ImageAsset> mImageAsset;                       // @SERIALIZABLE
@@ -65,7 +84,8 @@ namespace o2
         AssetRef<ActorAsset> mActorAsset;                      // @SERIALIZABLE
         AssetRef<DataAsset> mDataAsset;                        // @SERIALIZABLE
         AssetRef<AnimationAsset> mAnimationAsset;              // @SERIALIZABLE
-        Ref<Sprite> mSprite = mmake<Sprite>();                 // @SERIALIZABLE @DONT_DELETE
+		Ref<Sprite> mSprite = mmake<Sprite>();                 // @SERIALIZABLE @DONT_DELETE
+		Ref<IRectDrawable> mDrawable;                 // @SERIALIZABLE
         Ref<Actor> mActor;                                     // @SERIALIZABLE
         TagGroup mTags;                                        // @SERIALIZABLE
         Ref<SceneLayer> mLayer;                                // @SERIALIZABLE
@@ -92,7 +112,7 @@ namespace o2
         Vector<Vector<TestInside*>> mVectorOfVector; // @SERIALIZABLE
 
         Map<String, String> mDictionary;    // @SERIALIZABLE
-		float mFloat2 = 0.0f;                      // @SERIALIZABLE
+		float mFloat2 = 0.0f;                      // @SERIALIZABLE @RANGE(0, 10)
 		float mFloat3 = 0.0f;                      // @SERIALIZABLE
 		float mFloat4 = 0.0f;                      // @SERIALIZABLE
 		float mFloat5 = 0.0f;                      // @SERIALIZABLE
@@ -152,6 +172,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDataAsset);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mAnimationAsset);
     FIELD().PUBLIC().DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Sprite>()).NAME(mSprite);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDrawable);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mActor);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTags);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLayer);
@@ -175,7 +196,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mAssetsVector);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mVectorOfVector);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDictionary);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat2);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 10).SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat2);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat3);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat4);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mFloat5);
@@ -219,6 +240,28 @@ CLASS_FIELDS_META(o2::EditorTestComponent::TestInside)
 }
 END_META;
 CLASS_METHODS_META(o2::EditorTestComponent::TestInside)
+{
+
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
+}
+END_META;
+
+CLASS_BASES_META(o2::EditorTestComponent::TestDerivedInside)
+{
+    BASE_CLASS(o2::EditorTestComponent::TestInside);
+}
+END_META;
+CLASS_FIELDS_META(o2::EditorTestComponent::TestDerivedInside)
+{
+    FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.2f).NAME(mFloatDerived);
+    FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(String("bla bla")).NAME(mStringDerived);
+    FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mWStringDerived);
+    FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mBoolDerived);
+    FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mComponentDerived);
+    FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mRigidBodyDerived);
+}
+END_META;
+CLASS_METHODS_META(o2::EditorTestComponent::TestDerivedInside)
 {
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();

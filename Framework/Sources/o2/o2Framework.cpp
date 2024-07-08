@@ -65,6 +65,7 @@ extern void __RegisterClass__o2__BaseComponentLinkRef();
 extern void __RegisterClass__o2__AnimationComponent();
 extern void __RegisterClass__o2__EditorTestComponent();
 extern void __RegisterClass__o2__EditorTestComponent__TestInside();
+extern void __RegisterClass__o2__EditorTestComponent__TestDerivedInside();
 extern void __RegisterClass__o2__ImageComponent();
 extern void __RegisterClass__o2__MeshComponent();
 extern void __RegisterClass__o2__ParticlesEmitterComponent();
@@ -205,6 +206,7 @@ extern void InitializeTypeso2Framework()
     __RegisterClass__o2__AnimationComponent();
     __RegisterClass__o2__EditorTestComponent();
     __RegisterClass__o2__EditorTestComponent__TestInside();
+    __RegisterClass__o2__EditorTestComponent__TestDerivedInside();
     __RegisterClass__o2__ImageComponent();
     __RegisterClass__o2__MeshComponent();
     __RegisterClass__o2__ParticlesEmitterComponent();

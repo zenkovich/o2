@@ -125,6 +125,9 @@ namespace Editor
 
 		// Converts proxy to IObject proxy, then sets value via proxy
 		void SetProxy(const Ref<IAbstractValueProxy>& proxy, IObject* object);
+
+		// Updates available types in create context menu
+		void CheckCreateContextMenu();
 	};
 }
 // --- META ---
@@ -179,6 +182,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
     FUNCTION().PROTECTED().SIGNATURE(IObject*, GetProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, const Ref<IAbstractValueProxy>&, IObject*);
+    FUNCTION().PROTECTED().SIGNATURE(void, CheckCreateContextMenu);
 }
 END_META;
 // --- END META ---

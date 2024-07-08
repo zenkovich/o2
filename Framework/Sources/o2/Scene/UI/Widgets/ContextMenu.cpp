@@ -215,11 +215,13 @@ namespace o2
 		PopupWidget::Show(parent, position);
 
 		auto hoverState = state["hover"];
-		if (hoverState) {
+		if (hoverState) 
+		{
 			mSelectionDrawable->SetEnabled(true);
 			*hoverState = false;
 		}
-		else mSelectionDrawable->SetEnabled(false);
+		else 
+			mSelectionDrawable->SetEnabled(false);
 	}
 
 	void ContextMenu::Show(const Vec2F& position /*= o2Input.GetCursorPos()*/)
@@ -628,7 +630,15 @@ namespace o2
 		size.x = mFitSizeMin + maxCaption + maxShortcut;
 		size.y += mViewAreaLayout.offsetMin.y - mViewAreaLayout.offsetMax.y;
 
-		FitPosition(position, size);
+		// Check if menu is out of screen to the right. Then put to the right of parent context
+		auto correctedPosition = position;
+		if (position.x + size.x > o2Render.GetResolution().x/2)
+		{
+			if (mParentPopup)
+				correctedPosition.x = mParentPopup.Lock()->layout->worldLeft - size.x;
+		}
+
+		FitPosition(correctedPosition, size);
 	}
 
 	void ContextMenu::SpecialDraw()

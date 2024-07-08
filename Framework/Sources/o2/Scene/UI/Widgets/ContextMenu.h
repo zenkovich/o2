@@ -210,7 +210,7 @@ namespace o2
         CLONEABLE_REF(ContextMenu);
 
     protected:
-        const float mOpenSubMenuDelay = 0.8f; // Sub menu opening delay when cursor hover it
+        const float mOpenSubMenuDelay = 0.4f; // Sub menu opening delay when cursor hover it
 
         int mMaxVisibleItems = 100; // Maximum visible items @SERIALIZABLE
 
@@ -365,7 +365,7 @@ CLASS_BASES_META(o2::ContextMenu)
 END_META;
 CLASS_FIELDS_META(o2::ContextMenu)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(0.8f).NAME(mOpenSubMenuDelay);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.4f).NAME(mOpenSubMenuDelay);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(100).NAME(mMaxVisibleItems);
     FIELD().PROTECTED().NAME(mItems);
     FIELD().PROTECTED().NAME(mItemsLayout);

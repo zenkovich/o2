@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Render/ParticlesEmitter.h"
+#include "o2/Render/Particles/ParticlesEmitter.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 

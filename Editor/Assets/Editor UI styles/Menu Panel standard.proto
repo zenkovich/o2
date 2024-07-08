@@ -7,7 +7,7 @@
                 "Type": "o2::Label",
                 "Value": {
                     "Prototype": {
-                        "id": "7d5f55e1507d5e0059862ed85c5712ad",
+                        "id": "2cbd2b33354204c143134ec638151dd1",
                         "path": "Editor UI styles/Label standard.proto"
                     },
                     "PrototypeLink": 4272162365707740014,
@@ -85,6 +85,7 @@
             "Transform": {},
             "Children": [
                 {
+                    "Type": "o2::HorizontalLayout",
                     "Data": {
                         "mName": "unnamed",
                         "mBaseCorner": "LeftTop",
@@ -104,8 +105,7 @@
                         "InternalWidgets": [],
                         "Layers": [],
                         "States": []
-                    },
-                    "Type": "o2::HorizontalLayout"
+                    }
                 }
             ],
             "InternalWidgets": [],
@@ -192,7 +192,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "41be1cad2288419a1828152c4a306ceb"
+                                    "mId": "42f6207e1da101466f99296121827cb6"
                                 }
                             }
                         }
@@ -245,7 +245,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "07b601a37b1261a5388d360c67877b30"
+                                    "mId": "1f9e5b6f350c37e368154e57756d622a"
                                 }
                             }
                         }

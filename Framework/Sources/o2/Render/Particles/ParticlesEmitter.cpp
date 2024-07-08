@@ -2,8 +2,8 @@
 #include "ParticlesEmitter.h"
 
 #include "o2/Render/Mesh.h"
-#include "o2/Render/ParticlesEffects.h"
-#include "o2/Render/ParticlesEmitterShapes.h"
+#include "o2/Render/Particles/ParticlesEffects.h"
+#include "o2/Render/Particles/ParticlesEmitterShapes.h"
 
 namespace o2
 {
