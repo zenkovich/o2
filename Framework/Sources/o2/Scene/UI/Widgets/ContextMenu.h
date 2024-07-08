@@ -12,8 +12,9 @@ namespace o2
     class Sprite;
     class Button;
     class ContextMenu;
-    class VerticalLayout;
     class ContextMenuItem;
+
+    FORWARD_CLASS_REF(VerticalLayout);
 
     // -----------------------
     // Context menu ui element

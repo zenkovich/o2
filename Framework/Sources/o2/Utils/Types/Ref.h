@@ -116,7 +116,6 @@ namespace o2
         }
     };
 
-
     // Reference counterable implementation to override GetRefCounter method
 #define REF_COUNTERABLE_IMPL_TEMPLATE(THIS_CLASS, BASE_CLASS, ...)                                                                                \
         RefCounter* GetRefCounter() const { return BASE_CLASS::GetRefCounter(); }                                                                 \
@@ -130,11 +129,35 @@ namespace o2
 #define REF_COUNTERABLE_IMPL(BASE_CLASS, ...) \
         REF_COUNTERABLE_IMPL_TEMPLATE(typename std::remove_pointer<decltype(this)>::type, BASE_CLASS, ##__VA_ARGS__)
 
+#if ENABLE_REFS_MANAGE
+    class IObject;
+
+    struct BaseRef
+    {
+        size_t mManagedIndex = 0;     // Managed index in refs manager
+
+        BaseRef() { MemoryAnalyzer::OnRefCreated(this); }
+        virtual ~BaseRef() { MemoryAnalyzer::OnRefDestroyed(this); }
+
+        virtual RefCounter* GetRefCounterPtr() const = 0;
+        virtual IObject* GetObjectPtr() = 0;
+    };
+
+#define OPTIONAL_BASE_REF : public BaseRef
+#define OPTIONAL_REFS_MANAGE_FORWARD(CLASS) o2::IObject* GetIObjectPtrFwd(CLASS* obj)
+#define OPTIONAL_REFS_MANAGE_FORWARD_IMPL(CLASS) o2::IObject* GetIObjectPtrFwd(CLASS* obj) { return dynamic_cast<IObject*>(obj); }
+
+#else
+#define OPTIONAL_BASE_REF
+#define OPTIONAL_REFS_MANAGE_FORWARD(CLASS)
+#define OPTIONAL_REFS_MANAGE_FORWARD_IMPL(CLASS)
+#endif
+
     // ----------------
     // Strong reference
     // ----------------
     template<typename _type>
-    class Ref
+    class Ref OPTIONAL_BASE_REF
     {
     public:
         // Default constructor
@@ -214,19 +237,11 @@ namespace o2
         _type* mPtr = nullptr; // Pointer to object
 
 #if ENABLE_REFS_MANAGE
-        size_t      mManagedIndex = 0;     // Managed index in refs manager
-        RefCounter* mRefCounter = nullptr; // Pointer to reference counter
+        RefCounter* GetRefCounterPtr() const override;
 
-        // Called when reference created and registered in refs manager
-        void OnCreated();
-
-        // Called when reference destroyed and unregistered from refs manager
-        void OnDestroyed();
+        IObject* GetObjectPtr() override;
 
         friend class MemoryAnalyzer;
-#else
-        void OnCreated() {}
-        void OnDestroyed() {}
 #endif 
 
     protected:
@@ -285,7 +300,8 @@ namespace o2
     // Forward declaration of class and reference counter implementation
 #define FORWARD_REF(CLASS)                        \
 	o2::RefCounter* GetRefCounterFwd(CLASS* ptr); \
-	void DestructObjectFwd(CLASS* obj) 
+	void DestructObjectFwd(CLASS* obj);           \
+    OPTIONAL_REFS_MANAGE_FORWARD(CLASS)
 
     // Forward declaration of class and reference counter implementation
 #define FORWARD_CLASS_REF(CLASS) \
@@ -295,25 +311,26 @@ namespace o2
     // Implementation of forward declared reference counter 
 #define FORWARD_REF_IMPL(CLASS)                                                     \
 	o2::RefCounter* GetRefCounterFwd(CLASS* ptr) { return GetRefCounterImpl(ptr); } \
-	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }
+	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }                 \
+    OPTIONAL_REFS_MANAGE_FORWARD_IMPL(CLASS)
 
     // Declares friend function for creating new object
 #define FRIEND_REF_MAKE()  \
     friend struct RefMaker
 
-	// Dynamic cast from one reference type to another
-	template<typename _to_type, typename _from_type>
-	Ref<_to_type> DynamicCast(const Ref<_from_type>& from)
-	{
-		return Ref<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
-	}
+    // Dynamic cast from one reference type to another
+    template<typename _to_type, typename _from_type>
+    Ref<_to_type> DynamicCast(const Ref<_from_type>& from)
+    {
+        return Ref<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
+    }
 
-	// Dynamic cast from one references vector type to another
-	template<typename _to_type, typename _from_type>
-	Vector<Ref<_to_type>> DynamicCastVector(const _from_type& from)
-	{
-		return from.template Convert<Ref<_to_type>>([](auto& ref) { return DynamicCast<_to_type>(ref); });
-	}
+    // Dynamic cast from one references vector type to another
+    template<typename _to_type, typename _from_type>
+    Vector<Ref<_to_type>> DynamicCastVector(const _from_type& from)
+    {
+        return from.template Convert<Ref<_to_type>>([](auto& ref) { return DynamicCast<_to_type>(ref); });
+    }
 
     // Static cast from one reference type to another
     template<typename _to_type, typename _from_type>
@@ -365,7 +382,7 @@ namespace o2
         const char* location;
         int line;
 
-        RefMaker(const char* location, int line):location(location), line(line) {}
+        RefMaker(const char* location, int line) :location(location), line(line) {}
 
         void* allocate(std::size_t size) const
         {
@@ -415,45 +432,26 @@ namespace o2
     };
 
     // BaseRef implementation
-#if ENABLE_REFS_MANAGE
-    template<typename _type>
-    void Ref<_type>::OnCreated()
-    {
-        MemoryAnalyzer::OnRefCreated(this);
-    }
-
-    template<typename _type>
-    void Ref<_type>::OnDestroyed()
-    {
-        MemoryAnalyzer::OnRefDestroyed(this);
-    }
-#endif
 
     template<typename _type>
     Ref<_type>::Ref()
-    {
-        OnCreated();
-    }
+    {}
 
     template<typename _type>
     Ref<_type>::Ref(_type* ptr) :
         mPtr(ptr)
     {
-        OnCreated();
         IncrementRef();
     }
 
     template<typename _type>
     Ref<_type>::Ref(std::nullptr_t)
-    {
-        OnCreated();
-    }
+    {}
 
     template<typename _type>
     Ref<_type>::Ref(const Ref<_type>& other) :
         mPtr(other.mPtr)
     {
-        OnCreated();
         IncrementRef();
     }
 
@@ -461,12 +459,7 @@ namespace o2
     Ref<_type>::Ref(Ref<_type>&& other) :
         mPtr(other.mPtr)
     {
-        OnCreated();
         other.mPtr = nullptr;
-
-#if ENABLE_REFS_MANAGE
-        mRefCounter = other.mRefCounter;
-#endif
     }
 
     template<typename _type>
@@ -474,7 +467,6 @@ namespace o2
     Ref<_type>::Ref(const Ref<_other_type>& other) :
         mPtr(other.mPtr)
     {
-        OnCreated();
         IncrementRef();
     }
 
@@ -483,18 +475,12 @@ namespace o2
     Ref<_type>::Ref(Ref<_other_type>&& other) :
         mPtr(other.mPtr)
     {
-        OnCreated();
         other.mPtr = nullptr;
-
-#if ENABLE_REFS_MANAGE
-        mRefCounter = other.mRefCounter;
-#endif
     }
 
     template<typename _type>
     Ref<_type>::~Ref()
     {
-        OnDestroyed();
         DecrementRef();
     }
 
@@ -565,10 +551,6 @@ namespace o2
         mPtr = other.mPtr;
         other.mPtr = nullptr;
 
-#if ENABLE_REFS_MANAGE
-        mRefCounter = other.mRefCounter;
-#endif
-
         return *this;
     }
 
@@ -579,10 +561,6 @@ namespace o2
 
         mPtr = other.mPtr;
         other.mPtr = nullptr;
-
-#if ENABLE_REFS_MANAGE
-        mRefCounter = other.mRefCounter;
-#endif
 
         return *this;
     }
@@ -624,10 +602,6 @@ namespace o2
         {
             auto refCounter = GetRefCounter(mPtr);
             refCounter->strongReferences++;
-
-#if ENABLE_REFS_MANAGE
-            mRefCounter = refCounter;
-#endif
         }
     }
 
@@ -654,4 +628,41 @@ namespace o2
             }
         }
     }
+}
+
+#include "o2/Utils/Basic/IObject.h"
+
+namespace o2
+{
+#if ENABLE_REFS_MANAGE
+    template<typename _type>
+    RefCounter* Ref<_type>::GetRefCounterPtr() const
+    {
+        if (mPtr)
+            return GetRefCounter(mPtr);
+
+        return nullptr;
+    }
+
+    template<typename _type>
+    IObject* GetIObjectPtrImpl(_type* ptr)
+    {
+        return dynamic_cast<IObject*>(ptr);
+    }
+
+    template<typename _type>
+    IObject* GetIObjectPtr(_type* ptr)
+    {
+        if constexpr (IsCompleteRef<_type>::value)
+            return GetIObjectPtrImpl(ptr);
+        else
+            return GetIObjectPtrFwd(ptr);
+    }
+
+    template<typename _type>
+    IObject* Ref<_type>::GetObjectPtr()
+    {
+        return GetIObjectPtr(mPtr);
+    }
+#endif
 }

@@ -26,7 +26,6 @@ namespace o2
     FORWARD_CLASS_REF(List);
     FORWARD_CLASS_REF(ScrollArea);
     FORWARD_CLASS_REF(Toggle);
-    FORWARD_CLASS_REF(VerticalLayout);
     FORWARD_CLASS_REF(VerticalProgress);
     FORWARD_CLASS_REF(VerticalScrollBar);
     FORWARD_CLASS_REF(Widget);

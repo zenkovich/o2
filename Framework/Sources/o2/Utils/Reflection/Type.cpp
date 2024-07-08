@@ -410,7 +410,7 @@ namespace o2
     }
 
     ReferenceType::ReferenceType(const Type* baseType, ITypeSerializer* serializer) :
-        Type("Ref<" + baseType->GetName() + ">", sizeof(Ref<Type::Dummy>), serializer),
+        Type("Ref<" + baseType->GetName() + ">", sizeof(Ref<RefCounterable>), serializer),
         mBaseType(baseType)
     {}
 
@@ -426,7 +426,7 @@ namespace o2
 
     void* ReferenceType::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
     {
-        return mBaseType->GetFieldPtr(*(void**)object, path, fieldInfo);
+        return mBaseType->GetFieldPtr(reinterpret_cast<Ref<RefCounterable>*>(object)->Get(), path, fieldInfo);
     }
 
     void* ReferenceType::CreateSample() const

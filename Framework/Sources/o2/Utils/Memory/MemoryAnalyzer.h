@@ -2,6 +2,9 @@
 
 namespace o2
 {
+    struct BaseRef;
+    class IObject;
+
     class MemoryAnalyzer
     {
     public:
@@ -13,9 +16,10 @@ namespace o2
                 MemoryNode* node;    // Node pointer
             };
 
-            void* memory;       // Pointer to allocated memory
-            size_t size;        // Allocated size in bytes
-            size_t summarySize; // Summary size of all children
+            void*    memory;      // Pointer to allocated memory
+            IObject* object;      // Pointer to object, if can be casted
+            size_t   size;        // Allocated size in bytes
+            size_t   summarySize; // Summary size of all children
 
             MemoryNode* parent = nullptr;
             std::vector<ChildNode> children; // Children nodes
@@ -26,17 +30,17 @@ namespace o2
         };
 
     public:
-        static void OnRefCreated(void* ref);
-        static void OnRefDestroyed(void* ref);
+        static void OnRefCreated(BaseRef* ref);
+        static void OnRefDestroyed(BaseRef* ref);
 
         // Builds memory tree from roots
-        static MemoryNode* BuildMemoryTree(std::vector<void*> roots);
+        static MemoryNode* BuildMemoryTree(std::vector<BaseRef*> roots);
 
     private:
         static int mCurrentBuildMemoryTreeIdx;
 
     private:
-        static std::vector<void*>& GetReferences();
+        static std::vector<BaseRef*>& GetReferences();
         static std::vector<size_t>& GetFreeReferences();
         static void AllocateReferencesList();
     };

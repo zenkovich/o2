@@ -8,9 +8,9 @@ namespace o2
 {
     int MemoryAnalyzer::mCurrentBuildMemoryTreeIdx = 0;
 
-    std::vector<void*>& MemoryAnalyzer::GetReferences()
+    std::vector<BaseRef*>& MemoryAnalyzer::GetReferences()
     {
-        static std::vector<void*> data;
+        static std::vector<BaseRef*> data;
         return data;
     }
 
@@ -43,7 +43,7 @@ namespace o2
         }
     }
 
-    void MemoryAnalyzer::OnRefCreated(void* ref)
+    void MemoryAnalyzer::OnRefCreated(BaseRef* ref)
     {
         auto& freeRefs = GetFreeReferences();
         if (freeRefs.empty())
@@ -72,14 +72,14 @@ namespace o2
             freeRefs.push_back(newSize - i - 1);
     }
 
-    void MemoryAnalyzer::OnRefDestroyed(void* ref)
+    void MemoryAnalyzer::OnRefDestroyed(BaseRef* ref)
     {
         auto idx = reinterpret_cast<Ref<RefCounterable>*>(ref)->mManagedIndex;
         GetReferences()[idx] = nullptr;
         GetFreeReferences().push_back(idx);
     }
 
-    MemoryAnalyzer::MemoryNode* MemoryAnalyzer::BuildMemoryTree(std::vector<void*> roots)
+    MemoryAnalyzer::MemoryNode* MemoryAnalyzer::BuildMemoryTree(std::vector<BaseRef*> roots)
     {
         // Increment build index for marking tree
         mCurrentBuildMemoryTreeIdx++;
@@ -118,7 +118,7 @@ namespace o2
 
                 for (auto& ref : it.second)
                 {
-                    std::byte* memory = reinterpret_cast<std::byte*>(ref->mRefCounter);
+                    std::byte* memory = reinterpret_cast<std::byte*>(ref->GetRefCounterPtr());
                     if (!memory)
                         continue;
 
@@ -138,6 +138,7 @@ namespace o2
 
                     MemoryNode* childNode = new MemoryNode();
                     childNode->memory = memory;
+                    childNode->object = ref->GetObjectPtr();
                     childNode->size = memoryInfo.size;
                     childNode->parent = node;
                     node->children.push_back({ true, childNode });

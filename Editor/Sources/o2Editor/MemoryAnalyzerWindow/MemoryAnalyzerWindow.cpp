@@ -177,7 +177,19 @@ namespace Editor
 
 	void MemoryAnalyzeTreeNode::Setup(MemoryAnalyzer::MemoryNode* data, const Ref<MemoryAnalyzeTree>& tree)
 	{
-		mName->text = (String)data->memory + ": " + (String)data->summarySize + " bytes";
+		String address = String::Format("%p", data->memory);
+		if (data->object)
+            address += " (" + data->object->GetType().GetName() + ")";
+
+		String size;
+		if (data->summarySize > 1024 * 1024)
+            size = String::Format("%.2f Mb", data->summarySize / (1024.0 * 1024.0));
+        else if (data->summarySize > 1024)
+            size = String::Format("%.2f Kb", data->summarySize / 1024.0);
+        else
+            size = String::Format("%d bytes", data->summarySize);
+
+		mName->text = address + ": " + size;
 
 		mData = data;
 		mTree = tree;
