@@ -107,7 +107,7 @@ namespace Editor
 		MemoryAnalyzeTreeNode& operator=(const MemoryAnalyzeTreeNode& other);
 
 		// Initializes node by data
-		void Setup(MemoryAnalyzer::MemoryNode* data, const Ref<MemoryAnalyzeTree>& tree);
+		void Setup(MemoryAnalyzer::MemoryNode* data, bool owner, const Ref<MemoryAnalyzeTree>& tree);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -115,8 +115,10 @@ namespace Editor
         SERIALIZABLE(MemoryAnalyzeTreeNode);
         CLONEABLE_REF(MemoryAnalyzeTreeNode);
 
-	private:
-		Ref<Text> mName; 
+    private:
+        Ref<Text> mName;
+        Ref<Text> mAddress;
+        Ref<Text> mSize;
 
 		MemoryAnalyzer::MemoryNode* mData; // Data node pointer
 
@@ -172,6 +174,8 @@ END_META;
 CLASS_FIELDS_META(Editor::MemoryAnalyzeTreeNode)
 {
     FIELD().PRIVATE().NAME(mName);
+    FIELD().PRIVATE().NAME(mAddress);
+    FIELD().PRIVATE().NAME(mSize);
     FIELD().PRIVATE().NAME(mData);
     FIELD().PRIVATE().NAME(mTree);
 }
@@ -181,7 +185,7 @@ CLASS_METHODS_META(Editor::MemoryAnalyzeTreeNode)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const MemoryAnalyzeTreeNode&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, MemoryAnalyzer::MemoryNode*, const Ref<MemoryAnalyzeTree>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, MemoryAnalyzer::MemoryNode*, bool, const Ref<MemoryAnalyzeTree>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);

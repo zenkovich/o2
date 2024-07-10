@@ -134,18 +134,24 @@ namespace o2
 
     struct BaseRef
     {
-        size_t mManagedIndex = 0;     // Managed index in refs manager
+        size_t mManagedIndex = 0; // Managed index in refs manager
 
         BaseRef() { MemoryAnalyzer::OnRefCreated(this); }
         virtual ~BaseRef() { MemoryAnalyzer::OnRefDestroyed(this); }
 
         virtual RefCounter* GetRefCounterPtr() const = 0;
         virtual IObject* GetObjectPtr() = 0;
+        virtual const std::type_info& GetTypeInfo() const = 0;
     };
 
 #define OPTIONAL_BASE_REF : public BaseRef
-#define OPTIONAL_REFS_MANAGE_FORWARD(CLASS) o2::IObject* GetIObjectPtrFwd(CLASS* obj)
-#define OPTIONAL_REFS_MANAGE_FORWARD_IMPL(CLASS) o2::IObject* GetIObjectPtrFwd(CLASS* obj) { return dynamic_cast<IObject*>(obj); }
+#define OPTIONAL_REFS_MANAGE_FORWARD(CLASS)          \
+    o2::IObject* GetIObjectPtrFwd(CLASS* obj);       \
+    const std::type_info& GetTypeInfoFwd(CLASS* obj)
+     
+#define OPTIONAL_REFS_MANAGE_FORWARD_IMPL(CLASS)                                      \
+    o2::IObject* GetIObjectPtrFwd(CLASS* obj) { return dynamic_cast<IObject*>(obj); } \
+    const std::type_info& GetTypeInfoFwd(CLASS* obj) { return typeid(*obj); }
 
 #else
 #define OPTIONAL_BASE_REF
@@ -238,8 +244,8 @@ namespace o2
 
 #if ENABLE_REFS_MANAGE
         RefCounter* GetRefCounterPtr() const override;
-
         IObject* GetObjectPtr() override;
+        const std::type_info& GetTypeInfo() const override;
 
         friend class MemoryAnalyzer;
 #endif 
@@ -663,6 +669,27 @@ namespace o2
     IObject* Ref<_type>::GetObjectPtr()
     {
         return GetIObjectPtr(mPtr);
+    }
+
+    template<typename _type>
+    const std::type_info& GetTypeInfoImpl(_type* ptr)
+    {
+        return typeid(*ptr);
+    }
+
+    template<typename _type>
+    const std::type_info& GetTypeInfo(_type* ptr)
+    {
+        if constexpr (IsCompleteRef<_type>::value)
+            return GetTypeInfoImpl(ptr);
+        else
+            return GetTypeInfoFwd(ptr);
+    }
+
+    template<typename _type>
+    const std::type_info& Ref<_type>::GetTypeInfo() const 
+    { 
+        return o2::GetTypeInfo(mPtr);
     }
 #endif
 }

@@ -141,7 +141,7 @@ endif()
 if (UNIX)
     target_compile_options(o2Framework PRIVATE -Wno-pedantic)
 elseif(MSVC)
-    target_compile_options(o2Framework PUBLIC "/MP" "/Zc:__cplusplus")
+    target_compile_options(o2Framework PUBLIC "/MP" "/Zc:__cplusplus" "/bigobj")
     target_sources(o2Framework PRIVATE "Framework/Platforms/Windows/Framework.natvis")
 endif()
 
@@ -177,7 +177,7 @@ if (O2_EDITOR)
     target_link_libraries(o2Editor PUBLIC o2Framework)
 
     if(MSVC)
-        target_compile_options(o2Editor PRIVATE "/MP" "/Zc:__cplusplus")
+        target_compile_options(o2Editor PRIVATE "/MP" "/Zc:__cplusplus" "/bigobj")
     endif()
 
     # Codegen

@@ -6,14 +6,38 @@
 #include "o2/Utils/Math/Math.h"
 #include <vector>
 #include <algorithm>
+#include "o2/Utils/Memory/MemoryAnalyzer.h"
 
 namespace o2
 {
+#if ENABLE_REFS_MANAGE
+    struct BaseVector
+    {
+        size_t mManagedIndex = 0; // Managed index in refs manager
+        int    mMarkIndex = 0;    // Mark index for memory analyzer
+        void* memoryNode = nullptr;
+
+        BaseVector() { MemoryAnalyzer::OnVectorCreated(this); }
+        virtual ~BaseVector() { MemoryAnalyzer::OnVectorDestroyed(this); }
+
+        virtual void* GetDataPtr() = 0;
+        virtual size_t GetDataSize() = 0;
+        virtual const std::type_info& GetTypeInfo() = 0;
+        virtual int GetElementsCount() = 0;
+
+        friend class MemoryAnalyzer;
+    };
+
+#define OPTIONAL_BASE_VECTOR , BaseVector
+#else
+#define OPTIONAL_BASE_VECTOR
+#endif
+
     // --------------------
     // Dynamic linear array
     // --------------------
     template<typename _type>
-    class Vector : public std::vector<_type>
+    class Vector : public std::vector<_type> OPTIONAL_BASE_VECTOR
     {
     public:
         typedef typename std::vector<_type>::iterator Iterator;
@@ -276,6 +300,13 @@ namespace o2
 
         // Returns constant end iterator
         ConstIterator End() const;
+
+#if ENABLE_REFS_MANAGE
+        void* GetDataPtr() override { return Data(); }
+        size_t GetDataSize() override { return Count() * sizeof(_type); }
+        const std::type_info& GetTypeInfo() override { return typeid(Vector<_type>); }
+        int GetElementsCount() { return Count(); }
+#endif
     };
 
     template<typename _type>

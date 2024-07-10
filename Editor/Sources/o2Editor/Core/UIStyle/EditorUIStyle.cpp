@@ -3487,17 +3487,31 @@ namespace Editor
         auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mmake<Sprite>("ui/UI4_Context_menu_white.png"),
                                                                     Layout::BothStretch(-10, -16, -10, -16));
 
-        itemSample->AddLayer("icon", mmake<Sprite>("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(15, -1)));
+        //itemSample->AddLayer("icon", mmake<Sprite>("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(15, -1)));
 
-        Ref<Text> captionLayerText = mmake<Text>("stdFont.ttf");
-        captionLayerText->color = Color4(96, 125, 139);
-        captionLayerText->horAlign = HorAlign::Left;
-        captionLayerText->verAlign = VerAlign::Middle;
-        itemSample->AddLayer("name", captionLayerText);
+		// Name
+        Ref<Text> nameCaptionLayerText = mmake<Text>("stdFont.ttf");
+		nameCaptionLayerText->color = Color4(96, 125, 139);
+		nameCaptionLayerText->horAlign = HorAlign::Left;
+		nameCaptionLayerText->verAlign = VerAlign::Middle;
+		nameCaptionLayerText->dotsEngings = true;
+        itemSample->AddLayer("name", nameCaptionLayerText, Layout::BothStretch(20, 0, 235, 0));
 
-        auto nameLayer = itemSample->layer["name"];
-        nameLayer->layout = Layout::BothStretch(33, 0, 5, 0);
-        DynamicCast<Text>(nameLayer->GetDrawable())->dotsEngings = true;
+        // Address
+        Ref<Text> addressCaptionLayerText = mmake<Text>("stdFont.ttf");
+        addressCaptionLayerText->color = Color4(96, 125, 139);
+        addressCaptionLayerText->horAlign = HorAlign::Left;
+        addressCaptionLayerText->verAlign = VerAlign::Middle;
+        addressCaptionLayerText->dotsEngings = true;
+        itemSample->AddLayer("address", addressCaptionLayerText, Layout::VerStretch(HorAlign::Right, 0, 0, 150, 85));
+
+        // Size
+        Ref<Text> sizeCaptionLayerText = mmake<Text>("stdFont.ttf");
+		sizeCaptionLayerText->color = Color4(96, 125, 139);
+		sizeCaptionLayerText->horAlign = HorAlign::Right;
+		sizeCaptionLayerText->verAlign = VerAlign::Middle;
+		sizeCaptionLayerText->dotsEngings = true;
+        itemSample->AddLayer("size", sizeCaptionLayerText, Layout::VerStretch(HorAlign::Right, 0, 0, 80, 5));
 
         // node sample button
         Ref<Button> itemSampleExpandBtn = mmake<Button>();

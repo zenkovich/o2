@@ -140,7 +140,7 @@ namespace Editor
 	void MemoryAnalyzeTree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object)
 	{
 		auto propertyNode = DynamicCast<MemoryAnalyzeTreeNode>(nodeWidget);
-		propertyNode->Setup((MemoryAnalyzer::MemoryNode*)object, Ref(this));
+		propertyNode->Setup((MemoryAnalyzer::MemoryNode*)object, false, Ref(this));
 	}
 
 	void MemoryAnalyzeTree::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
@@ -175,11 +175,9 @@ namespace Editor
 		return *this;
 	}
 
-	void MemoryAnalyzeTreeNode::Setup(MemoryAnalyzer::MemoryNode* data, const Ref<MemoryAnalyzeTree>& tree)
+	void MemoryAnalyzeTreeNode::Setup(MemoryAnalyzer::MemoryNode* data, bool owner, const Ref<MemoryAnalyzeTree>& tree)
 	{
 		String address = String::Format("%p", data->memory);
-		if (data->object)
-            address += " (" + data->object->GetType().GetName() + ")";
 
 		String size;
 		if (data->summarySize > 1024 * 1024)
@@ -187,9 +185,13 @@ namespace Editor
         else if (data->summarySize > 1024)
             size = String::Format("%.2f Kb", data->summarySize / 1024.0);
         else
-            size = String::Format("%d bytes", data->summarySize);
+            size = String::Format("%d b", data->summarySize);
 
-		mName->text = address + ": " + size;
+		mName->text = (String)data->name;
+		//mName->transparency = owner ? 1.0f : 0.5f;
+
+		mAddress->text = address;
+		mSize->text = size;
 
 		mData = data;
 		mTree = tree;
@@ -207,8 +209,10 @@ namespace Editor
 	}
 
 	void MemoryAnalyzeTreeNode::InitializeControls()
-	{
-		mName = GetLayerDrawable<Text>("name");
+    {
+        mName = GetLayerDrawable<Text>("name");
+        mAddress = GetLayerDrawable<Text>("address");
+		mSize = GetLayerDrawable<Text>("size");
 
 		auto tree = mTree.Lock();
 	}

@@ -80,6 +80,7 @@ namespace o2
             void*       memory;     // Pointer to allocated memory
 
             int markIndex = 0;
+            void* memoryNode = nullptr;
         };
 
         static MemoryManager* mInstance; // Instance pointer
