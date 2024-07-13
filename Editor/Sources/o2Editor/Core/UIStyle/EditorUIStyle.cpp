@@ -3489,13 +3489,15 @@ namespace Editor
 
         //itemSample->AddLayer("icon", mmake<Sprite>("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(15, -1)));
 
+		auto layersRoot = itemSample->AddLayer("root", nullptr, Layout::BothStretch(0, 0, 20, 0));
+
 		// Name
         Ref<Text> nameCaptionLayerText = mmake<Text>("stdFont.ttf");
 		nameCaptionLayerText->color = Color4(96, 125, 139);
 		nameCaptionLayerText->horAlign = HorAlign::Left;
 		nameCaptionLayerText->verAlign = VerAlign::Middle;
 		nameCaptionLayerText->dotsEngings = true;
-        itemSample->AddLayer("name", nameCaptionLayerText, Layout::BothStretch(20, 0, 235, 0));
+		layersRoot->AddChildLayer("name", nameCaptionLayerText, Layout::BothStretch(20, 0, 235, 0));
 
         // Address
         Ref<Text> addressCaptionLayerText = mmake<Text>("stdFont.ttf");
@@ -3503,7 +3505,7 @@ namespace Editor
         addressCaptionLayerText->horAlign = HorAlign::Left;
         addressCaptionLayerText->verAlign = VerAlign::Middle;
         addressCaptionLayerText->dotsEngings = true;
-        itemSample->AddLayer("address", addressCaptionLayerText, Layout::VerStretch(HorAlign::Right, 0, 0, 150, 85));
+		layersRoot->AddChildLayer("address", addressCaptionLayerText, Layout::VerStretch(HorAlign::Right, 0, 0, 150, 85));
 
         // Size
         Ref<Text> sizeCaptionLayerText = mmake<Text>("stdFont.ttf");
@@ -3511,7 +3513,7 @@ namespace Editor
 		sizeCaptionLayerText->horAlign = HorAlign::Right;
 		sizeCaptionLayerText->verAlign = VerAlign::Middle;
 		sizeCaptionLayerText->dotsEngings = true;
-        itemSample->AddLayer("size", sizeCaptionLayerText, Layout::VerStretch(HorAlign::Right, 0, 0, 80, 5));
+		layersRoot->AddChildLayer("size", sizeCaptionLayerText, Layout::VerStretch(HorAlign::Right, 0, 0, 80, 5));
 
         // node sample button
         Ref<Button> itemSampleExpandBtn = mmake<Button>();

@@ -8,259 +8,215 @@ namespace o2
 {
     int MemoryAnalyzer::mCurrentBuildMemoryTreeIdx = 0;
 
-    std::vector<BaseRef*>& MemoryAnalyzer::GetReferences()
+    MemoryAnalyzeObject::MemoryAnalyzeObject()
     {
-        static std::vector<BaseRef*> data;
-        return data;
+        MemoryAnalyzer::OnObjectCreated(this);
     }
 
-    std::vector<size_t>& MemoryAnalyzer::GetFreeReferences()
+    MemoryAnalyzeObject::~MemoryAnalyzeObject()
     {
-        static std::vector<size_t> data;
-        return data;
+        MemoryAnalyzer::OnObjectDestroyed(this);
     }
 
-    std::vector<BaseVector*>& MemoryAnalyzer::GetVectors()
+    void MemoryAnalyzer::MemoryNode::SummarizeSize()
     {
-        static std::vector<BaseVector*> data;
-        return data;
-    }
+        if (summarySize != 0)
+            return;
 
-    std::vector<size_t>& MemoryAnalyzer::GetFreeVectors()
-    {
-        static std::vector<size_t> data;
-        return data;
+        summarySize = size;
+
+        for (auto& child : children)
+        {
+            child->SummarizeSize();
+            
+            if (child->mainParent == this)
+                summarySize += child->summarySize;
+        }
     }
 
     MemoryAnalyzer::MemoryNode::~MemoryNode()
     {
         for (auto& child : children)
         {
-            if (child.isOwner)
-                delete child.node;
+            if (child->mainParent == this)
+                delete child;
         }
     }
 
-    void MemoryAnalyzer::MemoryNode::SummarizeSize()
+    std::vector<MemoryAnalyzeObject*>& MemoryAnalyzer::GetAnalyzeObjects()
     {
-        summarySize = size;
+        static std::vector<MemoryAnalyzeObject*> data;
+        return data;
+    }
 
-        for (auto& child : children)
+    std::vector<size_t>& MemoryAnalyzer::GetFreeAnalyzeObjects()
+    {
+        static std::vector<size_t> data;
+        return data;
+    }
+
+    void MemoryAnalyzer::AllocateAnalyzeObjects()
+    {
+        auto& objects = GetAnalyzeObjects();
+        auto& freeIndexes = GetFreeAnalyzeObjects();
+
+        auto size = objects.size();
+        auto newSize = std::max((size_t)1024, size + size/2);
+
+        objects.resize(newSize, nullptr);
+        for (size_t i = 0; i < newSize - size; i++)
+            freeIndexes.push_back(newSize - i - 1);
+    }
+
+    void MemoryAnalyzer::OnObjectCreated(MemoryAnalyzeObject* obj)
+    {
+        auto& freeIndexes = GetFreeAnalyzeObjects();
+        if (freeIndexes.empty())
+            AllocateAnalyzeObjects();
+
+        auto& objects = GetAnalyzeObjects();
+
+        auto nextFreeIdx = freeIndexes.back();
+
+        objects[nextFreeIdx] = obj;
+        freeIndexes.pop_back();
+
+        reinterpret_cast<MemoryAnalyzeObject*>(obj)->manageIndex = nextFreeIdx;
+    }
+
+    void MemoryAnalyzer::OnObjectDestroyed(MemoryAnalyzeObject* obj)
+    {
+        auto idx = reinterpret_cast<MemoryAnalyzeObject*>(obj)->manageIndex;
+        GetAnalyzeObjects()[idx] = nullptr;
+        GetFreeAnalyzeObjects().push_back(idx);
+    }
+    
+    void ReplaceAllStr(std::string& str, const std::string& oldStr, const std::string& newStr)
+    {
+        while (true)
         {
-            if (!child.isOwner)
-                return;
+            auto pos = str.find(oldStr);
+            if (pos == std::string::npos)
+                break;
 
-            child.node->SummarizeSize();
-            summarySize += child.node->summarySize;
+            str.replace(pos, oldStr.size(), newStr);
         }
     }
 
-    void MemoryAnalyzer::OnRefCreated(BaseRef* ref)
+    void FixClassName(std::string& className)
     {
-        auto& freeRefs = GetFreeReferences();
-        if (freeRefs.empty())
-            AllocateReferencesList();
-
-        auto& refs = GetReferences();
-
-        auto nextFreeIdx = freeRefs.back();
-
-        refs[nextFreeIdx] = ref;
-        freeRefs.pop_back();
-
-        reinterpret_cast<BaseRef*>(ref)->mManagedIndex = nextFreeIdx;
+        ReplaceAllStr(className, "class ", "");
+        ReplaceAllStr(className, "> >", ">>");
     }
 
-    void MemoryAnalyzer::AllocateReferencesList()
-    {
-        auto& refs = GetReferences();
-        auto& freeRefs = GetFreeReferences();
-
-        auto size = refs.size();
-        auto newSize = std::max((size_t)1024, size + size/2);
-
-        refs.resize(newSize, nullptr);
-        for (size_t i = 0; i < newSize - size; i++)
-            freeRefs.push_back(newSize - i - 1);
-    }
-
-    void MemoryAnalyzer::OnRefDestroyed(BaseRef* ref)
-    {
-        auto idx = reinterpret_cast<BaseRef*>(ref)->mManagedIndex;
-        GetReferences()[idx] = nullptr;
-        GetFreeReferences().push_back(idx);
-    }
-
-    void MemoryAnalyzer::OnVectorCreated(BaseVector* vector)
-    {
-        auto& freeVectors = GetFreeVectors();
-        if (freeVectors.empty())
-            AllocateVectorsList();
-
-        auto& vectors = GetVectors();
-
-        auto nextFreeIdx = freeVectors.back();
-
-        vectors[nextFreeIdx] = vector;
-        freeVectors.pop_back();
-
-        reinterpret_cast<BaseVector*>(vector)->mManagedIndex = nextFreeIdx;
-    }
-
-    void MemoryAnalyzer::OnVectorDestroyed(BaseVector* vector)
-    {
-        auto idx = reinterpret_cast<BaseVector*>(vector)->mManagedIndex;
-        GetVectors()[idx] = nullptr;
-        GetFreeVectors().push_back(idx);
-    }
-
-    void MemoryAnalyzer::AllocateVectorsList()
-    {
-        auto& vectors = GetVectors();
-        auto& freeVectors = GetFreeVectors();
-
-        auto size = vectors.size();
-        auto newSize = std::max((size_t)1024, size + size/2);
-
-        vectors.resize(newSize, nullptr);
-        for (size_t i = 0; i < newSize - size; i++)
-            freeVectors.push_back(newSize - i - 1);
-    }
-
-    MemoryAnalyzer::MemoryNode* MemoryAnalyzer::BuildMemoryTree(std::vector<BaseRef*> roots)
+    MemoryAnalyzer::MemoryNode* MemoryAnalyzer::BuildMemoryTree(std::vector<MemoryAnalyzeObject*> roots)
     {
         // Increment build index for marking tree
         mCurrentBuildMemoryTreeIdx++;
 
-        auto& allRefs = GetReferences();
-        auto& allVectors = GetVectors();
+        auto& objects = GetAnalyzeObjects();
 
-        // Get all reference pointers and sort
-        std::vector<BaseRef*> refs;
-        refs.reserve(allRefs.size());
-        for (auto ref : allRefs)
+        // Get all object pointers and sort
+        std::vector<MemoryAnalyzeObject*> sortedObjects;
+        sortedObjects.reserve(objects.size());
+        for (auto object : objects)
         {
-            if (ref)
-                refs.push_back(reinterpret_cast<BaseRef*>(ref));
+            if (object)
+                sortedObjects.push_back(object);
         }
 
-        std::sort(refs.begin(), refs.end(), [](BaseRef* a, BaseRef* b) { return a < b; });
-
-        // Get all vector pointers and sort
-        std::vector<BaseVector*> vectors;
-        vectors.reserve(allVectors.size());
-        for (auto vector : allVectors)
-        {
-            if (vector)
-                vectors.push_back(reinterpret_cast<BaseVector*>(vector));
-        }
-
-        std::sort(vectors.begin(), vectors.end(), [](BaseVector* a, BaseVector* b) { return a < b; });
+        std::sort(sortedObjects.begin(), sortedObjects.end(), [](MemoryAnalyzeObject* a, MemoryAnalyzeObject* b) { return a < b; });
 
         // Create root node
         MemoryNode* root = new MemoryNode();
 
         // Begin marking and collecting algorithm
-        std::vector<BaseRef*> rootRefs;
-        for (auto& root : roots)
-            rootRefs.push_back(reinterpret_cast<BaseRef*>(root));
+        std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>> currentNodes = { { root, roots } };
+        std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>> nextNodes;
 
-        std::vector<std::pair<MemoryNode*, std::vector<BaseRef*>>> currentNodes = { { root, rootRefs } };
-        std::vector<std::pair<MemoryNode*, std::vector<BaseRef*>>> nextNodes;
+        std::map<std::byte*, MemoryNode*> memoryNodes;
 
         auto& memoryInfos = MemoryManager::Instance().mAllocs;
 
+        // Repeat until there are no more nodes to process
         while (!currentNodes.empty())
         {
+            // Iterate over current nodes
             for (auto& it : currentNodes)
             {
                 auto& node = it.first;
 
-                for (auto& ref : it.second)
+                // Iterate children objects of this node
+                for (auto& object : it.second)
                 {
-                    std::byte* memory = reinterpret_cast<std::byte*>(ref->GetRefCounterPtr());
-                    if (!memory)
+                    // Get object's memory begin address
+                    std::byte* objectMemoryBegin = object->GetMemory();
+                    if (!objectMemoryBegin)
                         continue;
 
-                    auto memoryInfoIt = memoryInfos.find(memory);
-                    if (memoryInfoIt == memoryInfos.end())
+                    // Try to find existing node for this memory address. Stop looking deeper if found
+                    auto nodesMapFndIt = memoryNodes.find(objectMemoryBegin);
+                    if (nodesMapFndIt != memoryNodes.end())
                     {
-                        o2Debug.LogError("Failed to find memory info for memory address: %p", memory);
-                        continue;
-                    }
+                        node->children.push_back(nodesMapFndIt->second);
+                        nodesMapFndIt->second->parents.push_back(node);
 
-                    auto& memoryInfo = memoryInfoIt->second;
-
-                    if (memoryInfo.markIndex == mCurrentBuildMemoryTreeIdx)
-                    {
-                        node->children.push_back({ false, reinterpret_cast<MemoryNode*>(memoryInfo.memoryNode) });
                         continue;
                     }
 
-                    memoryInfo.markIndex = mCurrentBuildMemoryTreeIdx;
-
-                    MemoryNode* childNode = new MemoryNode();
-                    childNode->name = (String)ref->GetTypeInfo().name();
-                    childNode->memory = memory;
-                    childNode->object = ref->GetObjectPtr();
-                    childNode->size = memoryInfo.size;
-                    childNode->parent = node;
-                    node->children.push_back({ true, childNode });
-                    memoryInfo.memoryNode = childNode;
-
-                    std::byte* memoryEnd = memory + memoryInfo.size;
-
-                    std::vector<BaseRef*> childRefs;
-
-                    auto refIt = std::lower_bound(refs.begin(), refs.end(), reinterpret_cast<BaseRef*>(memory));
-                    while (refIt != refs.end() && reinterpret_cast<std::byte*>(*refIt) < memoryEnd)
+                    // Get object's memory size
+                    size_t objectSize = object->GetMemorySize();
+                    if (objectSize == 0)
                     {
-                        childRefs.push_back(*refIt);
-                        refIt++;
-                    }
-
-                    auto vectorIt = std::lower_bound(vectors.begin(), vectors.end(), reinterpret_cast<BaseVector*>(memory));
-                    while (vectorIt != vectors.end() && reinterpret_cast<std::byte*>(*vectorIt) < memoryEnd)
-                    {
-                        if ((*vectorIt)->mMarkIndex == mCurrentBuildMemoryTreeIdx)
+                        // If it's zero, try to find it in memory info
+                        auto memoryInfosFndIt = memoryInfos.find(objectMemoryBegin);
+                        if (memoryInfosFndIt == memoryInfos.end())
                         {
-                            node->children.push_back({ false, reinterpret_cast<MemoryNode*>((*vectorIt)->memoryNode) });
-
-                            vectorIt++;
+                            o2Debug.LogError("Failed to find memory info for memory address: %p", objectMemoryBegin);
                             continue;
                         }
 
-                        (*vectorIt)->mMarkIndex = mCurrentBuildMemoryTreeIdx;
+                        auto& memoryInfo = memoryInfosFndIt->second;
+                        objectSize = memoryInfo.size;
+                        memoryInfo.markIndex = mCurrentBuildMemoryTreeIdx;
+                    }
 
-                        std::byte* vectorBeginMemory = reinterpret_cast<std::byte*>((*vectorIt)->GetDataPtr());
-                        std::byte* vectorEndMemory = vectorBeginMemory + (*vectorIt)->GetDataSize();
+                    // Create new node for this object
+                    MemoryNode* childNode = new MemoryNode();
 
-                        std::vector<BaseRef*> childVecRefs;
+                    childNode->name = std::string(object->GetTypeInfo().name());
+                    FixClassName(childNode->name);
 
-                        MemoryNode* vectorNode = new MemoryNode();
-                        vectorNode->name = (String)(*vectorIt)->GetTypeInfo().name() + " [" + (String)(*vectorIt)->GetElementsCount() + "]";
-                        vectorNode->memory = reinterpret_cast<std::byte*>(*vectorIt);
-                        vectorNode->size = (*vectorIt)->GetDataSize();
-                        vectorNode->parent = childNode;
-                        childNode->children.push_back({ true, vectorNode });
-                        (*vectorIt)->memoryNode = vectorNode;
+                    childNode->memory = objectMemoryBegin;
+                    childNode->object = object;
+                    childNode->iobject = object->GetIObject();
+                    childNode->size = objectSize;
+                    childNode->mainParent = node;
 
-                        auto vecRefIt = std::lower_bound(refs.begin(), refs.end(), reinterpret_cast<BaseRef*>(vectorBeginMemory));
-                        while (vecRefIt != refs.end() && reinterpret_cast<std::byte*>(*vecRefIt) < vectorEndMemory)
-                        {
-                            childVecRefs.push_back(*vecRefIt);
-                            vecRefIt++;
-                        }
+                    node->children.push_back(childNode);
+                    childNode->parents.push_back(node);
 
-                        nextNodes.push_back({ vectorNode, childVecRefs });
+                    // Store this node for future reference
+                    memoryNodes[objectMemoryBegin] = childNode;
 
-                        vectorIt++;
+                    // Get object's memory end address
+                    std::byte* objectMemoryEnd = objectMemoryBegin + objectSize;
+
+                    // Find all child objects
+                    std::vector<MemoryAnalyzeObject*> childRefs;
+
+                    auto refIt = std::lower_bound(sortedObjects.begin(), sortedObjects.end(), reinterpret_cast<MemoryAnalyzeObject*>(objectMemoryBegin));
+                    while (refIt != sortedObjects.end() && reinterpret_cast<std::byte*>(*refIt) < objectMemoryEnd)
+                    {
+                        childRefs.push_back(*refIt);
+                        refIt++;
                     }
 
                     nextNodes.push_back({ childNode, childRefs });
                 }
             }
 
+            // Update current nodes and clear next nodes
             currentNodes = nextNodes;
             nextNodes.clear();
         }

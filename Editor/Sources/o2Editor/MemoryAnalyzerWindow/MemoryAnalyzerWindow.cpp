@@ -112,7 +112,7 @@ namespace Editor
 
 	void* MemoryAnalyzeTree::GetObjectParent(void* object)
 	{
-		return ((MemoryAnalyzer::MemoryNode*)object)->parent;
+		return ((MemoryAnalyzer::MemoryNode*)object)->mainParent;
 	}
 
 	Vector<void*> MemoryAnalyzeTree::GetObjectChilds(void* object)
@@ -121,12 +121,12 @@ namespace Editor
 		if (object)
 		{
 			for (auto& child : ((MemoryAnalyzer::MemoryNode*)object)->children)
-                result.push_back(child.node);
+                result.push_back(child);
 		}
         else
         {
             for (auto& child : mRoot->children)
-                result.push_back(child.node);
+                result.push_back(child);
         }
 
 		return result;
@@ -140,7 +140,7 @@ namespace Editor
 	void MemoryAnalyzeTree::FillNodeDataByObject(const Ref<TreeNode>& nodeWidget, void* object)
 	{
 		auto propertyNode = DynamicCast<MemoryAnalyzeTreeNode>(nodeWidget);
-		propertyNode->Setup((MemoryAnalyzer::MemoryNode*)object, false, Ref(this));
+		propertyNode->Setup((MemoryAnalyzer::MemoryNode*)object, Ref(this));
 	}
 
 	void MemoryAnalyzeTree::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)
@@ -175,17 +175,20 @@ namespace Editor
 		return *this;
 	}
 
-	void MemoryAnalyzeTreeNode::Setup(MemoryAnalyzer::MemoryNode* data, bool owner, const Ref<MemoryAnalyzeTree>& tree)
+	void MemoryAnalyzeTreeNode::Setup(MemoryAnalyzer::MemoryNode* data, const Ref<MemoryAnalyzeTree>& tree)
 	{
 		String address = String::Format("%p", data->memory);
 
 		String size;
-		if (data->summarySize > 1024 * 1024)
-            size = String::Format("%.2f Mb", data->summarySize / (1024.0 * 1024.0));
-        else if (data->summarySize > 1024)
-            size = String::Format("%.2f Kb", data->summarySize / 1024.0);
+		auto summarySize = data->summarySize;
+		if (summarySize > 1024 * 1024)
+            size = String::Format("%.2f Mb", summarySize / (1024.0 * 1024.0));
+        else if (summarySize > 1024)
+            size = String::Format("%.2f Kb", summarySize / 1024.0);
         else
-            size = String::Format("%d b", data->summarySize);
+            size = String::Format("%d b", summarySize);
+
+		bool isOwner = data->mainParent == nullptr;
 
 		mName->text = (String)data->name;
 		//mName->transparency = owner ? 1.0f : 0.5f;
@@ -210,9 +213,9 @@ namespace Editor
 
 	void MemoryAnalyzeTreeNode::InitializeControls()
     {
-        mName = GetLayerDrawable<Text>("name");
-        mAddress = GetLayerDrawable<Text>("address");
-		mSize = GetLayerDrawable<Text>("size");
+        mName = GetLayerDrawable<Text>("root/name");
+        mAddress = GetLayerDrawable<Text>("root/address");
+		mSize = GetLayerDrawable<Text>("root/size");
 
 		auto tree = mTree.Lock();
 	}

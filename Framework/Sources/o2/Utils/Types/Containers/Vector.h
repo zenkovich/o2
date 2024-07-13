@@ -2,33 +2,16 @@
 
 #include "o2/Utils/Debug/Assert.h"
 #include "o2/Utils/Function/Function.h"
-#include "o2/Utils/Memory/MemoryManager.h"
 #include "o2/Utils/Math/Math.h"
-#include <vector>
-#include <algorithm>
 #include "o2/Utils/Memory/MemoryAnalyzer.h"
+#include "o2/Utils/Memory/MemoryManager.h"
+#include <algorithm>
+#include <vector>
 
 namespace o2
 {
 #if ENABLE_REFS_MANAGE
-    struct BaseVector
-    {
-        size_t mManagedIndex = 0; // Managed index in refs manager
-        int    mMarkIndex = 0;    // Mark index for memory analyzer
-        void* memoryNode = nullptr;
-
-        BaseVector() { MemoryAnalyzer::OnVectorCreated(this); }
-        virtual ~BaseVector() { MemoryAnalyzer::OnVectorDestroyed(this); }
-
-        virtual void* GetDataPtr() = 0;
-        virtual size_t GetDataSize() = 0;
-        virtual const std::type_info& GetTypeInfo() = 0;
-        virtual int GetElementsCount() = 0;
-
-        friend class MemoryAnalyzer;
-    };
-
-#define OPTIONAL_BASE_VECTOR , BaseVector
+#define OPTIONAL_BASE_VECTOR , MemoryAnalyzeObject
 #else
 #define OPTIONAL_BASE_VECTOR
 #endif
@@ -302,10 +285,10 @@ namespace o2
         ConstIterator End() const;
 
 #if ENABLE_REFS_MANAGE
-        void* GetDataPtr() override { return Data(); }
-        size_t GetDataSize() override { return Count() * sizeof(_type); }
-        const std::type_info& GetTypeInfo() override { return typeid(Vector<_type>); }
-        int GetElementsCount() { return Count(); }
+        std::byte* GetMemory() const override { return const_cast<std::byte*>(reinterpret_cast<const std::byte*>(std::vector<_type>::data())); }
+        size_t GetMemorySize() const { return Count() * sizeof(_type) + sizeof(*this); }
+        //void IterateChildren(const std::function<void(const String&, MemoryAnalyzeObject*)>& callback) {}
+        const std::type_info& GetTypeInfo() const override { return typeid(Vector<_type>); }
 #endif
     };
 

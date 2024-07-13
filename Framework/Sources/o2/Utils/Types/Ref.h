@@ -132,19 +132,7 @@ namespace o2
 #if ENABLE_REFS_MANAGE
     class IObject;
 
-    struct BaseRef
-    {
-        size_t mManagedIndex = 0; // Managed index in refs manager
-
-        BaseRef() { MemoryAnalyzer::OnRefCreated(this); }
-        virtual ~BaseRef() { MemoryAnalyzer::OnRefDestroyed(this); }
-
-        virtual RefCounter* GetRefCounterPtr() const = 0;
-        virtual IObject* GetObjectPtr() = 0;
-        virtual const std::type_info& GetTypeInfo() const = 0;
-    };
-
-#define OPTIONAL_BASE_REF : public BaseRef
+#define OPTIONAL_BASE_REF : public MemoryAnalyzeObject
 #define OPTIONAL_REFS_MANAGE_FORWARD(CLASS)          \
     o2::IObject* GetIObjectPtrFwd(CLASS* obj);       \
     const std::type_info& GetTypeInfoFwd(CLASS* obj)
@@ -243,8 +231,8 @@ namespace o2
         _type* mPtr = nullptr; // Pointer to object
 
 #if ENABLE_REFS_MANAGE
-        RefCounter* GetRefCounterPtr() const override;
-        IObject* GetObjectPtr() override;
+        std::byte* GetMemory() const override;
+        IObject* GetIObject() const override;
         const std::type_info& GetTypeInfo() const override;
 
         friend class MemoryAnalyzer;
@@ -642,10 +630,10 @@ namespace o2
 {
 #if ENABLE_REFS_MANAGE
     template<typename _type>
-    RefCounter* Ref<_type>::GetRefCounterPtr() const
+    std::byte* Ref<_type>::GetMemory() const
     {
         if (mPtr)
-            return GetRefCounter(mPtr);
+            return reinterpret_cast<std::byte*>(GetRefCounter(mPtr));
 
         return nullptr;
     }
@@ -666,7 +654,7 @@ namespace o2
     }
 
     template<typename _type>
-    IObject* Ref<_type>::GetObjectPtr()
+    IObject* Ref<_type>::GetIObject() const
     {
         return GetIObjectPtr(mPtr);
     }
@@ -691,5 +679,6 @@ namespace o2
     { 
         return o2::GetTypeInfo(mPtr);
     }
+
 #endif
 }

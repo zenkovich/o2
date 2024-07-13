@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 
 namespace o2
 {
@@ -6,53 +7,66 @@ namespace o2
     struct BaseVector;
     class IObject;
 
+    struct MemoryAnalyzeObject
+    {
+        int markIndex = 0;   // Mark index for memory tree building
+        int manageIndex = 0; // Manage index in objects array
+
+    public:
+        MemoryAnalyzeObject();
+        virtual ~MemoryAnalyzeObject();
+
+        virtual std::byte* GetMemory() const = 0;
+        virtual size_t GetMemorySize() const { return 0; }
+
+        virtual IObject* GetIObject() const { return nullptr; }
+
+        virtual std::vector<std::pair<void*, size_t>> GetAllocations() const { return {}; }
+
+        virtual void IterateChildren(const std::function<void(const std::string&, MemoryAnalyzeObject*)>& callback) {}
+
+        virtual const std::type_info& GetTypeInfo() const { return typeid(this); }
+    };
+
     class MemoryAnalyzer
     {
     public:
         struct MemoryNode
         {
-            struct ChildNode
-            {
-                bool        isOwner; // Is owner of child
-                MemoryNode* node;    // Node pointer
-            };
+            std::string name; // Name of object
 
-            std::string name;          // Name of object
+            void* memory = nullptr; // Pointer to allocated memory
 
-            void*    memory;      // Pointer to allocated memory
-            IObject* object;      // Pointer to object, if can be casted
-            size_t   size;        // Allocated size in bytes
-            size_t   summarySize; // Summary size of all children
+            MemoryAnalyzeObject* object = nullptr; // Memory analyzeable object
+            IObject*             iobject = nullptr; // Pointer to IObject, if can be casted
 
-            MemoryNode* parent = nullptr;
-            std::vector<ChildNode> children; // Children nodes
+            size_t size = 0;        // Allocated size in bytes
+            size_t summarySize = 0; // Summary size of all children
 
+            MemoryNode*              mainParent = nullptr; // Main parent node, the owner of this node
+            std::vector<MemoryNode*> parents;              // Parent nodes
+            std::vector<MemoryNode*> children;             // Children nodes
+
+        public:
             ~MemoryNode();
 
             void SummarizeSize();
         };
 
     public:
-        static void OnRefCreated(BaseRef* ref);
-        static void OnRefDestroyed(BaseRef* ref);
-
-        static void OnVectorCreated(BaseVector* vector);
-        static void OnVectorDestroyed(BaseVector* vector);
+        static void OnObjectCreated(MemoryAnalyzeObject* obj);
+        static void OnObjectDestroyed(MemoryAnalyzeObject* obj);
 
         // Builds memory tree from roots
-        static MemoryNode* BuildMemoryTree(std::vector<BaseRef*> roots);
+        static MemoryNode* BuildMemoryTree(std::vector<MemoryAnalyzeObject*> roots);
 
     private:
         static int mCurrentBuildMemoryTreeIdx;
 
     private:
-        static std::vector<BaseRef*>& GetReferences();
-        static std::vector<size_t>& GetFreeReferences();
+        static std::vector<MemoryAnalyzeObject*>& GetAnalyzeObjects();
+        static std::vector<size_t>& GetFreeAnalyzeObjects();
 
-        static std::vector<BaseVector*>& GetVectors();
-        static std::vector<size_t>& GetFreeVectors();
-
-        static void AllocateReferencesList();
-        static void AllocateVectorsList();
+        static void AllocateAnalyzeObjects();
     };
 }

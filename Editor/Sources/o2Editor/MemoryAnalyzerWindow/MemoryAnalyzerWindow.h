@@ -107,7 +107,7 @@ namespace Editor
 		MemoryAnalyzeTreeNode& operator=(const MemoryAnalyzeTreeNode& other);
 
 		// Initializes node by data
-		void Setup(MemoryAnalyzer::MemoryNode* data, bool owner, const Ref<MemoryAnalyzeTree>& tree);
+		void Setup(MemoryAnalyzer::MemoryNode* data, const Ref<MemoryAnalyzeTree>& tree);
 
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
@@ -185,7 +185,7 @@ CLASS_METHODS_META(Editor::MemoryAnalyzeTreeNode)
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const MemoryAnalyzeTreeNode&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Setup, MemoryAnalyzer::MemoryNode*, bool, const Ref<MemoryAnalyzeTree>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Setup, MemoryAnalyzer::MemoryNode*, const Ref<MemoryAnalyzeTree>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);

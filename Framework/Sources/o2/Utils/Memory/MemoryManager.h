@@ -79,8 +79,7 @@ namespace o2
             size_t      size;       // Allocated size in bytes
             void*       memory;     // Pointer to allocated memory
 
-            int markIndex = 0;
-            void* memoryNode = nullptr;
+            int markIndex = 0; // Mark index for memory analyzer
         };
 
         static MemoryManager* mInstance; // Instance pointer
