@@ -190,7 +190,10 @@ namespace Editor
 
 		bool isOwner = data->mainParent == nullptr;
 
-		mName->text = (String)data->name;
+        String name = data->name;
+        name.ReplaceAll("class ", "");
+        name.ReplaceAll("> >", ">>");
+		mName->text = name;
 		//mName->transparency = owner ? 1.0f : 0.5f;
 
 		mAddress->text = address;

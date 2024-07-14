@@ -16,14 +16,13 @@ namespace o2
         MemoryAnalyzeObject();
         virtual ~MemoryAnalyzeObject();
 
-        virtual std::byte* GetMemory() const = 0;
+        virtual std::byte* GetMemory() const { return nullptr; }
         virtual size_t GetMemorySize() const { return 0; }
 
         virtual IObject* GetIObject() const { return nullptr; }
 
-        virtual std::vector<std::pair<void*, size_t>> GetAllocations() const { return {}; }
-
-        virtual void IterateChildren(const std::function<void(const std::string&, MemoryAnalyzeObject*)>& callback) {}
+        virtual void IterateChildren(const std::function<void(MemoryAnalyzeObject*)>& callback) {}
+        virtual void IterateAllocations(const std::function<void(std::byte*, size_t)>& callback) {}
 
         virtual const std::type_info& GetTypeInfo() const { return typeid(this); }
     };
@@ -38,12 +37,12 @@ namespace o2
             void* memory = nullptr; // Pointer to allocated memory
 
             MemoryAnalyzeObject* object = nullptr; // Memory analyzeable object
-            IObject*             iobject = nullptr; // Pointer to IObject, if can be casted
+            IObject* iobject = nullptr; // Pointer to IObject, if can be casted
 
             size_t size = 0;        // Allocated size in bytes
             size_t summarySize = 0; // Summary size of all children
 
-            MemoryNode*              mainParent = nullptr; // Main parent node, the owner of this node
+            MemoryNode* mainParent = nullptr; // Main parent node, the owner of this node
             std::vector<MemoryNode*> parents;              // Parent nodes
             std::vector<MemoryNode*> children;             // Children nodes
 
@@ -58,7 +57,7 @@ namespace o2
         static void OnObjectDestroyed(MemoryAnalyzeObject* obj);
 
         // Builds memory tree from roots
-        static MemoryNode* BuildMemoryTree(std::vector<MemoryAnalyzeObject*> roots);
+        static MemoryNode* BuildMemoryTree(const std::vector<MemoryAnalyzeObject*>& roots);
 
     private:
         static int mCurrentBuildMemoryTreeIdx;
@@ -68,5 +67,17 @@ namespace o2
         static std::vector<size_t>& GetFreeAnalyzeObjects();
 
         static void AllocateAnalyzeObjects();
+
+        static void BuildSubTree(MemoryNode* root, const std::vector<MemoryAnalyzeObject*>& roots,
+                                 std::map<std::byte*, MemoryNode*>& memoryNodes,
+                                 std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>>& currentNodes,
+                                 std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>>& nextNodes,
+                                 std::vector<MemoryAnalyzeObject*>& childRefs,
+                                 const std::vector<MemoryAnalyzeObject*>& sortedObjects);
+
+        static void SearchChildrenObjects(const std::vector<MemoryAnalyzeObject*>& sortedObjects,
+                                          std::byte* objectMemoryBegin, std::byte* objectMemoryEnd,
+                                          MemoryAnalyzeObject*& object,
+                                          std::vector<MemoryAnalyzeObject*>& childRefs);
     };
 }

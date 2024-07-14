@@ -28,7 +28,7 @@ namespace o2
         for (auto& child : children)
         {
             child->SummarizeSize();
-            
+
             if (child->mainParent == this)
                 summarySize += child->summarySize;
         }
@@ -90,26 +90,8 @@ namespace o2
         GetAnalyzeObjects()[idx] = nullptr;
         GetFreeAnalyzeObjects().push_back(idx);
     }
-    
-    void ReplaceAllStr(std::string& str, const std::string& oldStr, const std::string& newStr)
-    {
-        while (true)
-        {
-            auto pos = str.find(oldStr);
-            if (pos == std::string::npos)
-                break;
 
-            str.replace(pos, oldStr.size(), newStr);
-        }
-    }
-
-    void FixClassName(std::string& className)
-    {
-        ReplaceAllStr(className, "class ", "");
-        ReplaceAllStr(className, "> >", ">>");
-    }
-
-    MemoryAnalyzer::MemoryNode* MemoryAnalyzer::BuildMemoryTree(std::vector<MemoryAnalyzeObject*> roots)
+    MemoryAnalyzer::MemoryNode* MemoryAnalyzer::BuildMemoryTree(const std::vector<MemoryAnalyzeObject*>& roots)
     {
         // Increment build index for marking tree
         mCurrentBuildMemoryTreeIdx++;
@@ -127,14 +109,52 @@ namespace o2
 
         std::sort(sortedObjects.begin(), sortedObjects.end(), [](MemoryAnalyzeObject* a, MemoryAnalyzeObject* b) { return a < b; });
 
-        // Create root node
-        MemoryNode* root = new MemoryNode();
-
-        // Begin marking and collecting algorithm
-        std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>> currentNodes = { { root, roots } };
-        std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>> nextNodes;
-
         std::map<std::byte*, MemoryNode*> memoryNodes;
+        std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>> currentNodes;
+        std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>> nextNodes;
+        std::vector<MemoryAnalyzeObject*> childRefs;
+
+        // Create root node
+        MemoryNode* allMemoryNode = new MemoryNode();
+        allMemoryNode->name = "All memory";
+
+        // Build tree from roots
+        BuildSubTree(allMemoryNode, roots, memoryNodes, currentNodes, nextNodes, childRefs, sortedObjects);
+
+        // Collect "hanging" nodes
+        auto hangingNode = new MemoryNode();
+        hangingNode->name = "hanging";
+        hangingNode->mainParent = allMemoryNode;
+        hangingNode->parents.push_back(allMemoryNode);
+        allMemoryNode->children.push_back(hangingNode);
+
+        for (int i = 0; i < sortedObjects.size(); i++)
+        {
+            auto& object = sortedObjects[i];
+            if (object->markIndex == mCurrentBuildMemoryTreeIdx)
+                continue;
+
+            o2Debug.Log("Processing hanging object: %p (%i/%i)", object, i, sortedObjects.size());
+
+            BuildSubTree(hangingNode, { object }, memoryNodes, currentNodes, nextNodes, childRefs, sortedObjects);
+        }
+
+        allMemoryNode->SummarizeSize();
+
+        return allMemoryNode;
+    }
+
+    void MemoryAnalyzer::BuildSubTree(MemoryNode* root, const std::vector<MemoryAnalyzeObject*>& roots,
+                                      std::map<std::byte*, MemoryNode*>& memoryNodes,
+                                      std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>>& currentNodes,
+                                      std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>>& nextNodes,
+                                      std::vector<MemoryAnalyzeObject*>& childRefs,
+                                      const std::vector<MemoryAnalyzeObject*>& sortedObjects)
+    {
+        // Begin marking and collecting algorithm
+        currentNodes = { { root, roots } };
+        nextNodes.clear();
+        childRefs.clear();
 
         auto& memoryInfos = MemoryManager::Instance().mAllocs;
 
@@ -149,6 +169,8 @@ namespace o2
                 // Iterate children objects of this node
                 for (auto& object : it.second)
                 {
+                    object->markIndex = mCurrentBuildMemoryTreeIdx;
+
                     // Get object's memory begin address
                     std::byte* objectMemoryBegin = object->GetMemory();
                     if (!objectMemoryBegin)
@@ -172,6 +194,7 @@ namespace o2
                         auto memoryInfosFndIt = memoryInfos.find(objectMemoryBegin);
                         if (memoryInfosFndIt == memoryInfos.end())
                         {
+
                             o2Debug.LogError("Failed to find memory info for memory address: %p", objectMemoryBegin);
                             continue;
                         }
@@ -185,7 +208,7 @@ namespace o2
                     MemoryNode* childNode = new MemoryNode();
 
                     childNode->name = std::string(object->GetTypeInfo().name());
-                    FixClassName(childNode->name);
+                    //FixClassName(childNode->name);
 
                     childNode->memory = objectMemoryBegin;
                     childNode->object = object;
@@ -203,14 +226,22 @@ namespace o2
                     std::byte* objectMemoryEnd = objectMemoryBegin + objectSize;
 
                     // Find all child objects
-                    std::vector<MemoryAnalyzeObject*> childRefs;
+                    childRefs.clear();
 
-                    auto refIt = std::lower_bound(sortedObjects.begin(), sortedObjects.end(), reinterpret_cast<MemoryAnalyzeObject*>(objectMemoryBegin));
-                    while (refIt != sortedObjects.end() && reinterpret_cast<std::byte*>(*refIt) < objectMemoryEnd)
-                    {
-                        childRefs.push_back(*refIt);
-                        refIt++;
-                    }
+                    // By memory
+                    SearchChildrenObjects(sortedObjects, objectMemoryBegin, objectMemoryEnd, object, childRefs);
+
+                    // By children
+                    object->IterateChildren([&](MemoryAnalyzeObject* child)
+                                            {
+                                                childRefs.push_back(child);
+                                            });
+
+                    // By allocations
+                    object->IterateAllocations([&](std::byte* data, size_t size)
+                                               {
+                                                   SearchChildrenObjects(sortedObjects, data, data + size, object, childRefs);
+                                               });
 
                     nextNodes.push_back({ childNode, childRefs });
                 }
@@ -220,10 +251,21 @@ namespace o2
             currentNodes = nextNodes;
             nextNodes.clear();
         }
+    }
 
-        root->SummarizeSize();
+    void MemoryAnalyzer::SearchChildrenObjects(const std::vector<MemoryAnalyzeObject*>& sortedObjects,
+                                               std::byte* objectMemoryBegin, std::byte* objectMemoryEnd,
+                                               MemoryAnalyzeObject*& object,
+                                               std::vector<MemoryAnalyzeObject*>& childRefs)
+    {
+        auto refIt = std::lower_bound(sortedObjects.begin(), sortedObjects.end(), reinterpret_cast<MemoryAnalyzeObject*>(objectMemoryBegin));
+        while (refIt != sortedObjects.end() && reinterpret_cast<std::byte*>(*refIt) < objectMemoryEnd)
+        {
+            if (*refIt != object)
+                childRefs.push_back(*refIt);
 
-        return root;
+            refIt++;
+        }
     }
 
 }

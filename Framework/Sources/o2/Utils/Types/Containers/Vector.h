@@ -11,7 +11,7 @@
 namespace o2
 {
 #if ENABLE_REFS_MANAGE
-#define OPTIONAL_BASE_VECTOR , MemoryAnalyzeObject
+#define OPTIONAL_BASE_VECTOR , public MemoryAnalyzeObject
 #else
 #define OPTIONAL_BASE_VECTOR
 #endif
