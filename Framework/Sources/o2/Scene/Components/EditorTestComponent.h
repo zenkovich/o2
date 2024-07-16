@@ -63,6 +63,7 @@ namespace o2
 		};
 
 	public:
+		Ref<IRectDrawable> mDrawable;                 // @SERIALIZABLE
 		AssetRef<ImageAsset> mImageAsset;                       // @SERIALIZABLE
 		LinkRef<Component> mComponent;                          // @SERIALIZABLE
 		LinkRef<RigidBody> mRigidBody;                          // @SERIALIZABLE
@@ -85,7 +86,6 @@ namespace o2
         AssetRef<DataAsset> mDataAsset;                        // @SERIALIZABLE
         AssetRef<AnimationAsset> mAnimationAsset;              // @SERIALIZABLE
 		Ref<Sprite> mSprite = mmake<Sprite>();                 // @SERIALIZABLE @DONT_DELETE
-		Ref<IRectDrawable> mDrawable;                 // @SERIALIZABLE
         Ref<Actor> mActor;                                     // @SERIALIZABLE
         TagGroup mTags;                                        // @SERIALIZABLE
         Ref<SceneLayer> mLayer;                                // @SERIALIZABLE
@@ -154,6 +154,7 @@ CLASS_BASES_META(o2::EditorTestComponent)
 END_META;
 CLASS_FIELDS_META(o2::EditorTestComponent)
 {
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDrawable);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mComponent);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mRigidBody);
@@ -172,7 +173,6 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDataAsset);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mAnimationAsset);
     FIELD().PUBLIC().DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<Sprite>()).NAME(mSprite);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDrawable);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mActor);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mTags);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLayer);

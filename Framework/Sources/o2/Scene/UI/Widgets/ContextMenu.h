@@ -2,10 +2,11 @@
 
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Events/ShortcutKeysListener.h"
+#include "o2/Render/Sprite.h"
+#include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/PopupWidget.h"
 #include "o2/Scene/UI/Widgets/ScrollArea.h"
 #include "o2/Utils/System/ShortcutKeys.h"
-#include "o2/Render/Sprite.h"
 
 namespace o2
 {
@@ -49,9 +50,12 @@ namespace o2
 
             WeakRef<ContextMenuItem> widget; // Widget of this item
 
-        public:
-            // Default constructor
-            Item(RefCounter* refCounter);
+		public:
+			// Default constructor
+			Item(RefCounter* refCounter);
+
+			// Copy constructor
+			Item(RefCounter* refCounter, const Item& other);
 
             // Constructor from text
             Item(RefCounter* refCounter, const WString& text, const Vector<Ref<Item>>& subItems, const WString& group = "",
@@ -83,6 +87,9 @@ namespace o2
 
             // Sets minimum priority
             void SetMinPriority();
+
+            // Recursive search sub items by text
+            void RecursiveSearchSubItems(const WString& text, Vector<Ref<Item>>& result);
 
             // Returns new separator item
             static Ref<Item> Separator();
@@ -123,6 +130,12 @@ namespace o2
 
         // Shows context
         void Show(const Vec2F& position = o2Input.GetCursorPos());
+
+        // Enables or disables search panel
+        void SetSearchEnabled(bool enabled);
+
+        // Returns is search enabled
+        bool IsSearchEnabled() const;
 
         // Add item
         void AddItem(const Ref<Item>& item);
@@ -214,6 +227,11 @@ namespace o2
 
         int mMaxVisibleItems = 100; // Maximum visible items @SERIALIZABLE
 
+        bool         mSearchEnabled = false; // Is search enabled
+		Ref<Widget>  mSearchPanel;           // Widget with search edit box and icon
+		Ref<EditBox> mSearchEditBox;         // Search input text box
+        String       mSearchText;            // Search text used to filter items
+
         Vector<Ref<Item>>   mItems;              // Items list
         Ref<VerticalLayout> mItemsLayout;        // Items layout; builds when opening context
         bool                mItemsBuilt = false; // Is items layout is actual and built
@@ -246,6 +264,9 @@ namespace o2
 
         // Build items layout
         void RebuildItems();
+
+        // Called when search edit box has changed, updates items list
+        void OnSearchChanged(const WString& text);
 
         // Creates context items by path ("node/sub node/target")
         Vector<Ref<Item>>& CreateItemsByPath(WString& path);
@@ -367,6 +388,10 @@ CLASS_FIELDS_META(o2::ContextMenu)
 {
     FIELD().PROTECTED().DEFAULT_VALUE(0.4f).NAME(mOpenSubMenuDelay);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(100).NAME(mMaxVisibleItems);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSearchEnabled);
+    FIELD().PROTECTED().NAME(mSearchPanel);
+    FIELD().PROTECTED().NAME(mSearchEditBox);
+    FIELD().PROTECTED().NAME(mSearchText);
     FIELD().PROTECTED().NAME(mItems);
     FIELD().PROTECTED().NAME(mItemsLayout);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mItemsBuilt);
@@ -390,6 +415,8 @@ CLASS_METHODS_META(o2::ContextMenu)
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Ref<PopupWidget>&, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSearchEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsSearchEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const Ref<Item>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Item>, AddItem, const WString&, const Function<void()>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Item>, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
@@ -421,6 +448,7 @@ CLASS_METHODS_META(o2::ContextMenu)
     FUNCTION().PROTECTED().SIGNATURE(void, HideWithChild);
     FUNCTION().PROTECTED().SIGNATURE(void, SpecialDraw);
     FUNCTION().PROTECTED().SIGNATURE(void, RebuildItems);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSearchChanged, const WString&);
     FUNCTION().PROTECTED().SIGNATURE(Vector<Ref<Item>>&, CreateItemsByPath, WString&);
     FUNCTION().PROTECTED().SIGNATURE(Ref<Item>, GetItem, int);
     FUNCTION().PROTECTED().SIGNATURE(Ref<ContextMenuItem>, GetItemUnderPoint, const Vec2F&);
@@ -495,6 +523,7 @@ CLASS_METHODS_META(o2::ContextMenu::Item)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const Item&);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WString&, const Vector<Ref<Item>>&, const WString&, const AssetRef<ImageAsset>&);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WString&, const Function<void()>, const WString&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const WString&, bool, Function<void(bool)>, const WString&, const AssetRef<ImageAsset>&, const ShortcutKeys&);
@@ -502,6 +531,7 @@ CLASS_METHODS_META(o2::ContextMenu::Item)
     FUNCTION().PUBLIC().SIGNATURE(const ShortcutKeys&, GetShortcut);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMaxPriority);
     FUNCTION().PUBLIC().SIGNATURE(void, SetMinPriority);
+    FUNCTION().PUBLIC().SIGNATURE(void, RecursiveSearchSubItems, const WString&, Vector<Ref<Item>>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<Item>, Separator);
     FUNCTION().PRIVATE().SIGNATURE(void, OnShortcutPressed);
 }

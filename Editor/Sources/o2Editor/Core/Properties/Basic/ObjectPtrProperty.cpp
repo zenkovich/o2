@@ -321,6 +321,8 @@ namespace Editor
 			}
 		}
 
+		mCreateMenu->SetSearchEnabled(true);
+
 		mContextInitialized = true;
 	}
 

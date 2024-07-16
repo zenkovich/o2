@@ -28,7 +28,6 @@ namespace o2
 		void RebuildListStyle();
 		void RebuildCustomDropDownStyle();
 		void RebuildDropDownStyle();
-		void RebuildContextMenuStyle();
 		void RebuildWindowStyle();
 		void RebuildTreeStyle();
 		void RebuildMenuPanelStyle();
@@ -36,6 +35,7 @@ namespace o2
 		void RebuildBacklessEditbox();
 		void RebuildSinglelineEditbox();
 		void RebuildBacklessScrollarea();
+		void RebuildContextMenuStyle();
 		void RebuildExpandButton();
 		void RebuildExpandDownButton();
 		void RebuildExpandWhiteButton();
@@ -78,7 +78,6 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildListStyle);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildCustomDropDownStyle);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildDropDownStyle);
-    FUNCTION().PUBLIC().SIGNATURE(void, RebuildContextMenuStyle);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildWindowStyle);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildTreeStyle);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildMenuPanelStyle);
@@ -86,6 +85,7 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildBacklessEditbox);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildSinglelineEditbox);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildBacklessScrollarea);
+    FUNCTION().PUBLIC().SIGNATURE(void, RebuildContextMenuStyle);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildExpandButton);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildExpandDownButton);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildExpandWhiteButton);

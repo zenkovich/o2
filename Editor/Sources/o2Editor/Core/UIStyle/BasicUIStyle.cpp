@@ -887,10 +887,12 @@ namespace o2
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
+		// Separator sample
 		Ref<Widget> separatorSample = sample->GetSeparatorSample();
 		separatorSample->AddLayer("line", mmake<Sprite>("ui/UI4_Separator.png"),
 								  Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
 
+		// Item sample
 		Ref<ContextMenuItem> itemSample = sample->GetItemSample();
 
 		Ref<WidgetLayer> captionLayer = itemSample->FindLayer("caption");
@@ -922,6 +924,27 @@ namespace o2
 		itemSample->AddState("enabled", AnimationClip::EaseInOut("layer/basic/transparency", 0.5f, 1.0f, 0.2f));
 		itemSample->SetStateForcible("enabled", true);
 
+		// Search panel
+		Ref<Widget> searchPanel = mmake<Widget>();
+		searchPanel->name = "search panel";
+		searchPanel->layout->minHeight = 25;
+		searchPanel->layout->minWidth = 200;
+		searchPanel->enabled = false;
+
+		searchPanel->AddLayer("search icon", mmake<Sprite>("ui/UI4_search_regular.png"),
+			                  Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F()));
+
+		searchPanel->AddLayer("line", mmake<Sprite>("ui/UI4_Separator.png"),
+			                  Layout::HorStretch(VerAlign::Bottom, 0, 0, 5, 0));
+
+		Ref<EditBox> searchEditBox = o2UI.CreateEditBox("singleline");
+		*searchEditBox->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20);
+		searchPanel->AddChild(searchEditBox);
+
+		auto itemsLayout = sample->FindChildByType<VerticalLayout>();
+		itemsLayout->AddChild(searchPanel);
+
+		// Scrollbars
 		Ref<HorizontalScrollBar> horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
@@ -936,6 +959,7 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
+		// States
 		sample->AddState("enableHorBar", AnimationClip::EaseInOut("mVerScrollBar/layout/offsetBottom",
 															  5.0f, 15.0f, 0.2f));
 

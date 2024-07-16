@@ -40,7 +40,7 @@ namespace Editor
 		mMinRange = minRange;
 		mMaxRange = maxRange;
 
-		mProgress->enabled = true;
+		mProgress->enabledForcibly = true;
 		mProgress->SetMinValue(mMinRange);
 		mProgress->SetMaxValue(mMaxRange);
 
@@ -50,7 +50,7 @@ namespace Editor
 	void FloatProperty::DisableRange()
 	{
 		mUsesRange = false;
-		mProgress->enabled = false;
+		mProgress->enabledForcibly = false;
 		mEditBox->layout->maxWidth = 10000;
 	}
 
@@ -88,7 +88,7 @@ namespace Editor
 		if (mProgress)
 		{
 			mProgress->onChangeByUser = THIS_FUNC(OnEditedValue);
-			mProgress->enabled = false;
+			mProgress->enabledForcibly = false;
 		}
 	}
 

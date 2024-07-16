@@ -47,6 +47,13 @@ namespace o2
 		SetShortcut(shortcut);
 	}
 
+	ContextMenu::Item::Item(RefCounter* refCounter, const Item& other):
+		RefCounterable(refCounter), text(other.text), group(other.group), icon(other.icon), checked(other.checked), 
+		checkable(other.checkable), onClick(other.onClick), onChecked(other.onChecked), mShortcut(other.mShortcut)
+	{
+		SetShortcut(mShortcut);
+	}
+
 	ContextMenu::Item::~Item()
 	{}
 
@@ -75,6 +82,20 @@ namespace o2
 
 		for (auto item : subItems)
 			item->SetMinPriority();
+	}
+
+	void ContextMenu::Item::RecursiveSearchSubItems(const WString& text, Vector<Ref<Item>>& result)
+	{
+		if (subItems.IsEmpty())
+		{
+			if (this->text.ToLowerCase().Contains(text))
+				result.Add(mmake<Item>(*this));
+		}
+		else
+		{
+			for (auto item : subItems)
+				item->RecursiveSearchSubItems(text, result);
+		}
 	}
 
 	Ref<ContextMenu::Item> ContextMenu::Item::Separator()
@@ -137,6 +158,14 @@ namespace o2
 		mSelectionDrawable = other.mSelectionDrawable->CloneAsRef<Sprite>();
 		mSelectionLayout = other.mSelectionLayout;
 		mItemsLayout = FindChildByType<VerticalLayout>();
+
+		mSearchPanel = mItemsLayout->GetChildByType<Widget>("search panel");
+		if (mSearchPanel)
+		{
+			mSearchEditBox = mSearchPanel->FindChildByType<EditBox>();
+			if (mSearchEditBox)
+				mSearchEditBox->onChanged = THIS_FUNC(OnSearchChanged);
+		}
 
 		RetargetStatesAnimations();
 	}
@@ -209,6 +238,12 @@ namespace o2
 
 	void ContextMenu::Show(const Ref<PopupWidget>& parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
 	{
+		if (mSearchEnabled)
+		{
+			mSearchEditBox->text = "";
+			mSearchEditBox->Focus();
+		}
+
 		if (!mItemsBuilt)
 			RebuildItems();
 
@@ -226,7 +261,20 @@ namespace o2
 
 	void ContextMenu::Show(const Vec2F& position /*= o2Input.GetCursorPos()*/)
 	{
-		PopupWidget::Show(position);
+		Show(nullptr, position);
+	}
+
+	void ContextMenu::SetSearchEnabled(bool enabled)
+	{
+		mSearchEnabled = enabled;
+
+		if (mSearchPanel)
+			mSearchPanel->enabled = enabled;
+	}
+
+	bool ContextMenu::IsSearchEnabled() const
+	{
+		return mSearchEnabled;
 	}
 
 	void ContextMenu::AddItem(const Ref<Item>& item)
@@ -403,7 +451,8 @@ namespace o2
 	{
 		auto itemUnderCursor = GetItemUnderPoint(point);
 
-		if (!itemUnderCursor) {
+		if (!itemUnderCursor)
+		{
 			auto hoverState = state["hover"];
 			if (hoverState) {
 				mSelectionDrawable->SetEnabled(true);
@@ -414,18 +463,21 @@ namespace o2
 
 			mSelectedItem = itemUnderCursor;
 		}
-		else {
+		else 
+		{
 			mTargetSelectionRect = mSelectionLayout.Calculate(itemUnderCursor->GetLayoutData().worldRectangle);
 
 			auto hoverState = state["hover"];
-			if (hoverState) {
+			if (hoverState)
+			{
 				mSelectionDrawable->SetEnabled(true);
 				*hoverState = true;
 			}
 			else
 				mSelectionDrawable->SetEnabled(true);
 
-			if (itemUnderCursor != mSelectedItem) {
+			if (itemUnderCursor != mSelectedItem) 
+			{
 				mSelectedItem = itemUnderCursor;
 
 				if (mSelectedItem && mSelectedItem->GetSubMenu())
@@ -450,10 +502,12 @@ namespace o2
 		if (!itemUnderCursor->IsEnabled())
 			return;
 
-		if (itemUnderCursor) {
+		if (itemUnderCursor)
+		{
 			itemUnderCursor->onClick();
 
-			if (itemUnderCursor->IsCheckable()) {
+			if (itemUnderCursor->IsCheckable())
+			{
 				itemUnderCursor->SetChecked(!itemUnderCursor->IsChecked());
 				itemUnderCursor->onChecked(itemUnderCursor->IsChecked());
 			}
@@ -530,6 +584,8 @@ namespace o2
 	void ContextMenu::RemoveAllItems()
 	{
 		mItemsLayout->RemoveAllChildren();
+		mItemsLayout->AddChild(mSearchPanel);
+
 		mSelectedItem = nullptr;
 
 		mItems.Clear();
@@ -612,8 +668,14 @@ namespace o2
 		float maxCaption = 0.0f;
 		float maxShortcut = 0.0f;
 
+		mSearchPanel->enabled = mSearchEnabled;
+
 		int i = 0;
-		for (auto& child : mItemsLayout->GetChildWidgets()) {
+		for (auto& child : mItemsLayout->GetChildWidgets()) 
+		{
+			if (!child->IsEnabled())
+				continue;
+
 			if (auto childCaption = child->GetLayerDrawable<Text>("basic/caption"))
 				maxCaption = Math::Max(childCaption->GetRealSize().x, maxCaption);
 
@@ -628,6 +690,11 @@ namespace o2
 		}
 
 		size.x = mFitSizeMin + maxCaption + maxShortcut;
+
+		if (mSearchEnabled)
+			size.x = Math::Max(size.x, mSearchPanel->layout->GetMinWidth());
+
+		size.x += mViewAreaLayout.offsetMin.x - mViewAreaLayout.offsetMax.x;
 		size.y += mViewAreaLayout.offsetMin.y - mViewAreaLayout.offsetMax.y;
 
 		// Check if menu is out of screen to the right. Then put to the right of parent context
@@ -684,13 +751,17 @@ namespace o2
 
 		Vector<Ref<ContextMenuItem>> cache;
 
-		for (auto item : mItems) {
+		// Cache all items
+		for (auto item : mItems)
+		{
 			if (item->widget)
 				mItemsLayout->RemoveChild(item->widget.Lock());
 		}
 
+		// Cache extra items
 		auto children = mItemsLayout->GetChildren();
-		for (auto& child : children) {
+		for (auto& child : children) 
+		{
 			if (auto item = DynamicCast<ContextMenuItem>(child)) {
 				cache.Add(item);
 				mItemsLayout->RemoveChild(item);
@@ -699,12 +770,35 @@ namespace o2
 				mItemsLayout->RemoveChild(child);
 		}
 
+		// Update visible items with search text
+		Vector<Ref<Item>> viewItems;
+		if (mSearchText.IsEmpty()) 
+		{
+			viewItems = mItems;
+		}
+		else
+		{
+			for (auto item : mItems) 
+			{
+				if (item->subItems.IsEmpty())
+				{
+					if (item->text.ToLowerCase().Contains(mSearchText))
+						viewItems.Add(mmake<Item>(*item));
+				}
+				else
+					item->RecursiveSearchSubItems(mSearchText, viewItems);
+			}
+		}
+
+		// Group items by group
 		Map<WString, Vector<Ref<Item>>> groups;
-		for (auto item : mItems)
+		for (auto item : viewItems)
 			groups[item->group].Add(item);
 
+		// Add items to layout
 		bool isFirst = true;
-		for (auto& kv : groups) {
+		for (auto& kv : groups) 
+		{
 			if (!isFirst) {
 				auto newItem = mSeparatorSample->CloneAsRef<Widget>();
 				newItem->name = "Separator";
@@ -714,7 +808,8 @@ namespace o2
 			if (isFirst)
 				isFirst = false;
 
-			for (auto item : kv.second) {
+			for (auto item : kv.second) 
+			{
 				if (item->widget)
 					mItemsLayout->AddChild(item->widget.Lock());
 				else {
@@ -733,6 +828,12 @@ namespace o2
 		}
 
 		mItemsBuilt = true;
+	}
+
+	void ContextMenu::OnSearchChanged(const WString& text)
+	{
+		mSearchText = text.ToLowerCase();
+		RebuildItems();
 	}
 
 	Ref<ContextMenu::Item> ContextMenu::GetItem(int idx) const
@@ -806,11 +907,11 @@ namespace o2
 		onChecked = item->onChecked;
 
 		RemoveAllChildren();
+
 		if (item->subItems.Count() > 0) {
 			auto subMenu = o2UI.CreateWidget<ContextMenu>();
 			subMenu->RemoveAllItems();
 			subMenu->AddItems(item->subItems);
-			item->subItems.Clear();
 
 			AddChild(subMenu);
 		}

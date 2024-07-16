@@ -174,7 +174,7 @@ namespace o2
             asset->SetEditorAsset(true);
 #endif
 
-            auto path = stylesPath + "/" + GetSmartName(asset->GetActor()->GetType().GetName()) + " " +
+            auto path = stylesPath + "/" + GetSmartName(asset->GetActor()->GetType().GetName()).ReplacedAll(":", "") + " " +
                 asset->GetActor()->GetName() + ".proto";
 
             asset->Save(path);
