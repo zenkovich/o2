@@ -6,6 +6,7 @@ namespace o2
     struct BaseRef;
     struct BaseVector;
     class IObject;
+    class Type;
 
     struct MemoryAnalyzeObject
     {
@@ -33,6 +34,7 @@ namespace o2
         struct MemoryNode
         {
             std::string name; // Name of object
+            std::string type; // Type of object
 
             void* memory = nullptr; // Pointer to allocated memory
 
@@ -74,6 +76,9 @@ namespace o2
                                  std::vector<std::pair<MemoryNode*, std::vector<MemoryAnalyzeObject*>>>& nextNodes,
                                  std::vector<MemoryAnalyzeObject*>& childRefs,
                                  const std::vector<MemoryAnalyzeObject*>& sortedObjects);
+
+        static std::string TryFindFieldName(const Type* nodeIObjectType, void* nodeObject,
+                                            MemoryAnalyzeObject*& object);
 
         static void SearchChildrenObjects(const std::vector<MemoryAnalyzeObject*>& sortedObjects,
                                           std::byte* objectMemoryBegin, std::byte* objectMemoryEnd,

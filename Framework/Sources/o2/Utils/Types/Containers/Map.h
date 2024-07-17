@@ -171,8 +171,8 @@ namespace o2
             {
                 for (auto& pair : *this)
                 {
-//                     if constexpr (std::is_base_of_v<MemoryAnalyzeObject, _key_type>)
-//                         callback("key", &pair.first);
+                     if constexpr (std::is_base_of_v<MemoryAnalyzeObject, _key_type>)
+                         callback(const_cast<_key_type*>(&pair.first));
 
                     if constexpr (std::is_base_of_v<MemoryAnalyzeObject, _value_type>)
                         callback(&pair.second);

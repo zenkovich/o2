@@ -28,6 +28,7 @@ extern void __RegisterClass__Editor__PropertyChangeAction();
 extern void __RegisterClass__Editor__ReparentAction();
 extern void __RegisterClass__Editor__SelectAction();
 extern void __RegisterClass__Editor__TransformAction();
+extern void __RegisterClass__Editor__EditorApplication();
 extern void __RegisterClass__Editor__EditorConfig();
 extern void __RegisterClass__Editor__EditorConfig__GlobalConfig();
 extern void __RegisterClass__Editor__EditorConfig__ProjectConfig();
@@ -176,6 +177,7 @@ extern void InitializeTypeso2Editor()
     __RegisterClass__Editor__ReparentAction();
     __RegisterClass__Editor__SelectAction();
     __RegisterClass__Editor__TransformAction();
+    __RegisterClass__Editor__EditorApplication();
     __RegisterClass__Editor__EditorConfig();
     __RegisterClass__Editor__EditorConfig__GlobalConfig();
     __RegisterClass__Editor__EditorConfig__ProjectConfig();

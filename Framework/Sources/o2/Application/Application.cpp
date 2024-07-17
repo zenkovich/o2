@@ -350,3 +350,7 @@ namespace o2
     template<> Debug* Singleton<Debug>::mInstance = mnew Debug();
     template<> FileSystem* Singleton<FileSystem>::mInstance = mnew FileSystem();
 }
+// --- META ---
+
+DECLARE_CLASS(o2::Application, o2__Application);
+// --- END META ---

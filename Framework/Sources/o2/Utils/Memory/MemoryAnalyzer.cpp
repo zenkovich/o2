@@ -121,12 +121,12 @@ namespace o2
         // Build tree from roots
         BuildSubTree(allMemoryNode, roots, memoryNodes, currentNodes, nextNodes, childRefs, sortedObjects);
 
-        // Collect "hanging" nodes
-        auto hangingNode = new MemoryNode();
-        hangingNode->name = "hanging";
-        hangingNode->mainParent = allMemoryNode;
-        hangingNode->parents.push_back(allMemoryNode);
-        allMemoryNode->children.push_back(hangingNode);
+        // Collect possible leaks nodes
+        auto possibleLeaksNode = new MemoryNode();
+        possibleLeaksNode->name = "Possible leaks";
+        possibleLeaksNode->mainParent = allMemoryNode;
+        possibleLeaksNode->parents.push_back(allMemoryNode);
+        allMemoryNode->children.push_back(possibleLeaksNode);
 
         for (int i = 0; i < sortedObjects.size(); i++)
         {
@@ -134,9 +134,9 @@ namespace o2
             if (object->markIndex == mCurrentBuildMemoryTreeIdx)
                 continue;
 
-            o2Debug.Log("Processing hanging object: %p (%i/%i)", object, i, sortedObjects.size());
+            o2Debug.Log("Processing object: %p (%i/%i)", object, i, sortedObjects.size());
 
-            BuildSubTree(hangingNode, { object }, memoryNodes, currentNodes, nextNodes, childRefs, sortedObjects);
+            BuildSubTree(possibleLeaksNode, { object }, memoryNodes, currentNodes, nextNodes, childRefs, sortedObjects);
         }
 
         allMemoryNode->SummarizeSize();
@@ -165,6 +165,16 @@ namespace o2
             for (auto& it : currentNodes)
             {
                 auto& node = it.first;
+
+                auto nodeIObject = it.first->iobject;
+                void* nodeObject = nullptr;
+                const ObjectType* nodeIObjectType = nullptr;
+
+                if (nodeIObject)
+                {
+                    nodeIObjectType = dynamic_cast<const ObjectType*>(&nodeIObject->GetType());
+                    nodeObject = nodeIObjectType->DynamicCastFromIObject(nodeIObject);
+                }
 
                 // Iterate children objects of this node
                 for (auto& object : it.second)
@@ -207,8 +217,7 @@ namespace o2
                     // Create new node for this object
                     MemoryNode* childNode = new MemoryNode();
 
-                    childNode->name = std::string(object->GetTypeInfo().name());
-                    //FixClassName(childNode->name);
+                    childNode->type = std::string(object->GetTypeInfo().name());
 
                     childNode->memory = objectMemoryBegin;
                     childNode->object = object;
@@ -218,6 +227,10 @@ namespace o2
 
                     node->children.push_back(childNode);
                     childNode->parents.push_back(node);
+
+                    // Try to determine node's name
+                    if (nodeIObjectType)
+                        childNode->name = TryFindFieldName(nodeIObjectType, nodeObject, object);
 
                     // Store this node for future reference
                     memoryNodes[objectMemoryBegin] = childNode;
@@ -268,4 +281,25 @@ namespace o2
         }
     }
 
+    std::string MemoryAnalyzer::TryFindFieldName(const Type* nodeIObjectType, void* nodeObject,
+                                                 MemoryAnalyzeObject*& object)
+    {
+        for (auto& fieldInfo : nodeIObjectType->GetFields())
+        {
+            if (fieldInfo.GetValuePtr(nodeObject) == object)
+            {
+                return (std::string)fieldInfo.GetName();
+            }
+        }
+
+        for (auto& baseClass : nodeIObjectType->GetBaseTypes())
+        {
+            auto baseObject = baseClass.dynamicCastUpFunc(nodeObject);
+            auto name = TryFindFieldName(baseClass.type, baseObject, object);
+            if (!name.empty())
+                return name;
+        }
+
+        return "";
+    }
 }
