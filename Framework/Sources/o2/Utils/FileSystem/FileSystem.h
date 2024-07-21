@@ -21,11 +21,11 @@ namespace o2
     // ---------------------------------------------------
     // File system. Using for working with files and paths
     // ---------------------------------------------------
-    class FileSystem: public Singleton<FileSystem>, public RefCounterable
+    class FileSystem: public Singleton<FileSystem>
     {
     public:
         // Default constructor
-        FileSystem();
+        FileSystem(RefCounter* refCounter);
 
         // Destructor
         ~FileSystem();

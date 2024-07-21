@@ -19,11 +19,11 @@ namespace Editor
 	// --------------
 	// Editor UI root
 	// --------------
-	class UIRoot: public Singleton<UIRoot>, public ApplicationEventsListener, public RefCounterable
+	class UIRoot: public Singleton<UIRoot>, public ApplicationEventsListener
 	{
     public:
         // Default constructor, creates root widget
-        UIRoot();
+        UIRoot(RefCounter* refCounter);
 
         // Destructor
         ~UIRoot();

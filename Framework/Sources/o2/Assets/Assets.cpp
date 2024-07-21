@@ -14,7 +14,8 @@ namespace o2
 {
     DECLARE_SINGLETON(Assets);
 
-    Assets::Assets()
+    Assets::Assets(RefCounter* refCounter):
+        Singleton<Assets>(refCounter)
     {
         mLog = mmake<LogStream>("Assets");
         o2Debug.GetLog()->BindStream(mLog);

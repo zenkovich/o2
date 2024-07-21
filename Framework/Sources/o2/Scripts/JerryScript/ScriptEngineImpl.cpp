@@ -52,7 +52,8 @@ namespace o2
         return tmp.GetError();
     }
 
-    ScriptEngine::ScriptEngine()
+    ScriptEngine::ScriptEngine(RefCounter* refCounter):
+        Singleton<ScriptEngine>(refCounter)
     {
         mLog = mmake<LogStream>("Scripting");
         o2Debug.GetLog()->BindStream(mLog);

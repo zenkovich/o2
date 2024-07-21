@@ -50,6 +50,10 @@ namespace o2
         return mEnabled;
     }
 
+    ShortcutKeysListenersManager::ShortcutKeysListenersManager(RefCounter* refCounter):
+        Singleton<ShortcutKeysListenersManager>(refCounter)
+    {}
+
     void ShortcutKeysListenersManager::Register(const ShortcutKeys& shortcut, const Ref<ShortcutKeysListener>& listener)
     {
         if (!mInstance)

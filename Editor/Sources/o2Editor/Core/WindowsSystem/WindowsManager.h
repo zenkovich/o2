@@ -27,11 +27,11 @@ namespace Editor
 	// ----------------------
 	// Editor windows manager
 	// ----------------------
-	class WindowsManager: public Singleton<WindowsManager>, public RefCounterable
+	class WindowsManager: public Singleton<WindowsManager>
 	{
     public:
         // Default constructor
-        WindowsManager();
+        WindowsManager(RefCounter* refCounter);
 
         // Destructor
         ~WindowsManager();

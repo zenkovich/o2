@@ -17,10 +17,13 @@ namespace Editor
         IEditorWindow();
 
         // Default constructor
-        IEditorWindow(RefCounter* refCounter);
+        explicit IEditorWindow(RefCounter* refCounter);
 
-		// Copy-constructor
-		IEditorWindow(const IEditorWindow& other);
+        // Copy-constructor
+        IEditorWindow(const IEditorWindow& other);
+
+        // Copy-constructor
+        IEditorWindow(RefCounter* refCounter, const IEditorWindow& other);
 
 		// Virtual destructor
 		virtual ~IEditorWindow();
@@ -84,6 +87,7 @@ CLASS_METHODS_META(Editor::IEditorWindow)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const IEditorWindow&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const IEditorWindow&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetVisible, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);

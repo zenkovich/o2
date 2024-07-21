@@ -38,7 +38,7 @@ namespace Editor
 
 	public:
 		// Default constructor. Initializes all editor components
-		EditorApplication();
+        EditorApplication(RefCounter* refCounter);
 
 		// Destructor
 		~EditorApplication();
@@ -199,7 +199,7 @@ END_META;
 CLASS_METHODS_META(Editor::EditorApplication)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(const String&, GetLoadedSceneName);
     FUNCTION().PUBLIC().SIGNATURE(void, LoadScene, const AssetRef<SceneAsset>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SaveScene);

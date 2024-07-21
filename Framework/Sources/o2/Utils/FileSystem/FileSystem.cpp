@@ -18,7 +18,8 @@ namespace fs = std::filesystem;
 namespace o2
 {
 
-    FileSystem::FileSystem()
+    FileSystem::FileSystem(RefCounter* refCounter):
+        Singleton<FileSystem>(refCounter)
     {
         mLog = mmake<LogStream>("File System");
         o2Debug.GetLog()->BindStream(mLog);

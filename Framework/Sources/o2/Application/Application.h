@@ -47,7 +47,7 @@ namespace o2
     // -----------
     // Application
     // -----------
-    class Application: public Singleton<Application>, public IObject, public ApplicationBase, public RefCounterable
+    class Application: public Singleton<Application>, public IObject, public ApplicationBase
     {
     public:
         PROPERTIES(Application);
@@ -72,7 +72,7 @@ namespace o2
 
     public:
         // Default constructor
-        Application();
+        Application(RefCounter* refCounter);
 
         // Destructor 
         virtual ~Application();
@@ -327,7 +327,6 @@ CLASS_BASES_META(o2::Application)
     BASE_CLASS(o2::Singleton<Application>);
     BASE_CLASS(o2::IObject);
     BASE_CLASS(o2::ApplicationBase);
-    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Application)
@@ -373,7 +372,7 @@ END_META;
 CLASS_METHODS_META(o2::Application)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, InitializePlatform);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<LogStream>&, GetLog);
     FUNCTION().PUBLIC().SIGNATURE(void, Shutdown);

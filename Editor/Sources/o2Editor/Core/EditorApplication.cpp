@@ -40,13 +40,12 @@
 
 namespace Editor
 {
-	EditorApplication::EditorApplication()
-	{
-	}
+	EditorApplication::EditorApplication(RefCounter* refCounter):
+		Application(refCounter)
+	{}
 
 	EditorApplication::~EditorApplication()
-	{
-	}
+	{}
 
 	const String& EditorApplication::GetLoadedSceneName() const
 	{

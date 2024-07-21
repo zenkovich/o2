@@ -39,7 +39,8 @@ DECLARE_SINGLETON(Editor::MenuPanel);
 
 namespace Editor
 {
-	MenuPanel::MenuPanel()
+	MenuPanel::MenuPanel(RefCounter* refCounter):
+		Singleton<MenuPanel>(refCounter)
 	{
 		mMenuPanel = o2UI.CreateWidget<o2::MenuPanel>();
 		*mMenuPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
@@ -115,9 +116,15 @@ namespace Editor
 		});
 		
 
-		mMenuPanel->AddItem("Debug/Memory debug", [&]() {
-			auto appRef = DynamicCast<RefCounterable>(Ref(Application::InstancePtr()));
-			auto data = MemoryAnalyzer::BuildMemoryTree({ &appRef });
+        mMenuPanel->AddItem("Debug/Memory debug", [&]() {
+            auto appRef = DynamicCast<RefCounterable>(Ref(Application::InstancePtr()));
+
+			std::vector<MemoryAnalyzeObject*> objects = { &appRef };
+
+            for (auto& singleton : GetSingletonsList())
+                objects.push_back(&singleton);
+
+			auto data = MemoryAnalyzer::BuildMemoryTree(objects);
 			MemoryAnalyzerWindow::Show(data);
 		});
 

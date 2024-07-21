@@ -9,7 +9,8 @@ DECLARE_SINGLETON(Editor::UIRoot);
 
 namespace Editor
 {
-	UIRoot::UIRoot()
+	UIRoot::UIRoot(RefCounter* refCounter):
+		Singleton<UIRoot>(refCounter)
 	{
 		mRootWidget = mmake<Widget>(ActorCreateMode::NotInScene);
 	}

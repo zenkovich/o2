@@ -12,6 +12,7 @@ namespace o2
     {
         int markIndex = 0;   // Mark index for memory tree building
         int manageIndex = 0; // Manage index in objects array
+        int createIndex = 0; // Index of object creation, for debugging
 
     public:
         MemoryAnalyzeObject();
@@ -26,6 +27,8 @@ namespace o2
         virtual void IterateAllocations(const std::function<void(std::byte*, size_t)>& callback) {}
 
         virtual const std::type_info& GetTypeInfo() const { return typeid(this); }
+
+        static int GetNextCreateIndex();
     };
 
     class MemoryAnalyzer
@@ -43,6 +46,7 @@ namespace o2
 
             size_t size = 0;        // Allocated size in bytes
             size_t summarySize = 0; // Summary size of all children
+            size_t leakedSize = 0;  // Summary leaked size
 
             MemoryNode* mainParent = nullptr; // Main parent node, the owner of this node
             std::vector<MemoryNode*> parents;              // Parent nodes
@@ -52,7 +56,11 @@ namespace o2
             ~MemoryNode();
 
             void SummarizeSize();
+            void SummarizeLeakedSize();
         };
+
+    public:
+        static bool enabledObjectsTracking; // Enable objects tracking
 
     public:
         static void OnObjectCreated(MemoryAnalyzeObject* obj);

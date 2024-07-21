@@ -25,11 +25,11 @@ namespace Editor
 	// ------------------------
 	// Editor properties window
 	// ------------------------
-	class PropertiesWindow: public IEditorWindow, public Singleton<PropertiesWindow>
+	class PropertiesWindow: public Singleton<PropertiesWindow>, public IEditorWindow
 	{
 	public:
 		// Default constructor
-		PropertiesWindow();
+        PropertiesWindow(RefCounter* refCounter);
 
 		// Destructor
 		~PropertiesWindow();
@@ -53,9 +53,13 @@ namespace Editor
 		void Draw() override;
 
 		// Returns is targets changed
-		bool IsTargetsChanged() const;
+        bool IsTargetsChanged() const;
 
-		IOBJECT(PropertiesWindow);
+        // Dynamic cast to RefCounterable via Singleton<PropertiesWindow>
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<PropertiesWindow>& ref);
+
+        IOBJECT(PropertiesWindow); 
+		REF_COUNTERABLE_IMPL(IEditorWindow, Singleton<PropertiesWindow>);
 
 	protected:
 		Vector<IObject*> mTargets; // Target objects
@@ -91,8 +95,8 @@ namespace Editor
 
 CLASS_BASES_META(Editor::PropertiesWindow)
 {
-    BASE_CLASS(Editor::IEditorWindow);
     BASE_CLASS(o2::Singleton<PropertiesWindow>);
+    BASE_CLASS(Editor::IEditorWindow);
 }
 END_META;
 CLASS_FIELDS_META(Editor::PropertiesWindow)
@@ -110,7 +114,7 @@ END_META;
 CLASS_METHODS_META(Editor::PropertiesWindow)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, ResetTargets);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, IObject*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>&, const Function<void()>&);
@@ -118,6 +122,7 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsTargetsChanged);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<PropertiesWindow>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindowContext);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeViewers);

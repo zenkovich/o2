@@ -1,6 +1,5 @@
 #pragma once
 
-#include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/String.h"
 
 #undef CopyFile

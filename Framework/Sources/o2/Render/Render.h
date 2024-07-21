@@ -40,7 +40,7 @@ namespace o2
     // ------------------
     // 2D Graphics render
     // ------------------
-    class Render: public RenderBase, public Singleton<Render>, public RefCounterable
+    class Render: public RenderBase, public Singleton<Render>
     {
     public:
         // ---------------------
@@ -89,7 +89,7 @@ namespace o2
 
     public:
         // Default constructor
-        Render();
+        Render(RefCounter* refCounter);
 
         // Destructor
         ~Render();

@@ -29,11 +29,11 @@ namespace o2
     // -------------------------------------------------------
     // Actors scene. Contains and manages actors, tags, layers
     // -------------------------------------------------------
-    class Scene : public Singleton<Scene>, public IObject, public RefCounterable
+    class Scene : public Singleton<Scene>, public IObject
     {
     public:
         // Default constructor
-        Scene();
+        Scene(RefCounter* refCounter);
 
         // Destructor
         ~Scene();
@@ -413,7 +413,6 @@ CLASS_BASES_META(o2::Scene)
 {
     BASE_CLASS(o2::Singleton<Scene>);
     BASE_CLASS(o2::IObject);
-    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Scene)
@@ -459,7 +458,7 @@ CLASS_METHODS_META(o2::Scene)
     typedef const Map<String, WeakRef<SceneLayer>>& _tmp1;
     typedef Map<AssetRef<ActorAsset>, Vector<WeakRef<Actor>>>& _tmp2;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(const LogStream&, GetLogStream);
     FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, const String&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<SceneLayer>, GetLayer, const String&);

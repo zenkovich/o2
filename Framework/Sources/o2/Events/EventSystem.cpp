@@ -27,7 +27,8 @@ namespace o2
 	FORWARD_REF_IMPL(KeyboardEventsListener);
 	FORWARD_REF_IMPL(ShortcutKeysListenersManager);
 
-    EventSystem::EventSystem()
+    EventSystem::EventSystem(RefCounter* refCounter):
+        Singleton<EventSystem>(refCounter)
     {
         PushEditorScopeOnStack scope;
 

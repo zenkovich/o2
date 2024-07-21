@@ -19,7 +19,8 @@
 
 namespace Editor
 {
-	WindowsManager::WindowsManager()
+	WindowsManager::WindowsManager(RefCounter* refCounter):
+		Singleton<WindowsManager>(refCounter)
 	{
 		PushEditorScopeOnStack scope;
 

@@ -36,11 +36,11 @@ namespace o2
     // ------------------------------------------------
     // UI manager, contains all root widgets and styles
     // ------------------------------------------------
-    class UIManager : public Singleton<UIManager>, public RefCounterable
+    class UIManager : public Singleton<UIManager>
     {
     public:
         // Default constructor
-        UIManager();
+        UIManager(RefCounter* refCounter);
 
         // Destructor
         ~UIManager();

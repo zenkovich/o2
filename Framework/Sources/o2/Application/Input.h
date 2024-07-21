@@ -22,7 +22,7 @@ namespace o2
     // -------------------------------------------------------------------------
     // Input message. Containing pressed, down, released keys, cursors positions
     // -------------------------------------------------------------------------
-    class Input : public Singleton<Input>, public RefCounterable
+    class Input : public Singleton<Input>
     {
     public:
         struct Cursor;
@@ -44,7 +44,7 @@ namespace o2
 
     public:
         // Default constructor
-        Input();
+        Input(RefCounter* refCounter);
 
         // Returns true if key was pressed at current frame
         bool IsKeyPressed(KeyboardKey key) const;

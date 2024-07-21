@@ -32,8 +32,7 @@ namespace Editor
 	// --------------------
 	// Scene editing screen
 	// --------------------
-	class SceneEditScreen : public ScrollView, public DragDropArea, public KeyboardEventsListener,
-		public Singleton<SceneEditScreen>
+	class SceneEditScreen : public Singleton<SceneEditScreen>, public ScrollView, public DragDropArea, public KeyboardEventsListener
 	{
 	public:
 		Function<void(const Vector<Ref<SceneEditableObject>>&)> onSelectionChanged; // Actors selection change event
@@ -149,7 +148,10 @@ namespace Editor
 		void OnSceneChanged();
 
 		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point) override;
+        bool IsUnderPoint(const Vec2F& point) override;
+
+        // Dynamic cast to RefCounterable via Singleton<SceneEditScreen>
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<SceneEditScreen>& ref);
 
         SERIALIZABLE(SceneEditScreen);
         CLONEABLE_REF(SceneEditScreen);
@@ -324,10 +326,10 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SceneEditScreen)
 {
+    BASE_CLASS(o2::Singleton<SceneEditScreen>);
     BASE_CLASS(Editor::ScrollView);
     BASE_CLASS(o2::DragDropArea);
     BASE_CLASS(o2::KeyboardEventsListener);
-    BASE_CLASS(o2::Singleton<SceneEditScreen>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SceneEditScreen)
@@ -387,6 +389,7 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
     FUNCTION().PUBLIC().SIGNATURE(const Color4&, GetManyObjectsSelectionColor);
     FUNCTION().PUBLIC().SIGNATURE(void, OnSceneChanged);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<SceneEditScreen>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeTools);
     FUNCTION().PROTECTED().SIGNATURE(Ref<HorizontalLayout>, InitializeWidgetsContainer, BaseCorner);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsHandleWorking, const Input::Cursor&);

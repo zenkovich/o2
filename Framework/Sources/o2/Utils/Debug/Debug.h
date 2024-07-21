@@ -20,6 +20,12 @@ namespace o2
     class Debug: public Singleton<Debug>
     {
     public:
+        // Default constructor
+        Debug(RefCounter* refCounter);
+
+        // Destructor
+        ~Debug();
+
         // Out message into main log with formatting
         void Log(WString format, ...);
 
@@ -223,12 +229,6 @@ namespace o2
         Ref<Text>       mText; // Text for one frame debug captions
 
     private:
-        // Default constructor
-        Debug();
-
-        // Destructor
-        ~Debug();
-
         // Protect copying
         Debug operator=(const Debug& other);
 

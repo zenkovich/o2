@@ -21,7 +21,7 @@ namespace Editor
 	class MemoryAnalyzerWindow : public Singleton<MemoryAnalyzerWindow>
 	{
 	public:
-		MemoryAnalyzerWindow();
+        MemoryAnalyzerWindow(RefCounter* refCounter);
 		~MemoryAnalyzerWindow();
 
 		static void Show(MemoryAnalyzer::MemoryNode* data);

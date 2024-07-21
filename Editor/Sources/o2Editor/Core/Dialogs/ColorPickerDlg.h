@@ -44,6 +44,8 @@ namespace Editor
         static void Show(const Color4& color, const Function<void(const Color4&)>& onChanged,
                          const Function<void()>& onCompleted = {});
 
+        REF_COUNTERABLE_IMPL(Singleton<ColorPickerDlg>, CursorEventsListener);
+
     protected:
         Function<void(const Color4&)> mOnChangedCallback;   // On changed callback
         Function<void()>              mOnCompletedCallback; // On completed callback
@@ -59,12 +61,12 @@ namespace Editor
 		Ref<Image>            mColorPickAreaHandle;
 		Ref<Bitmap>           mColorPickAreaBitmap;
 		Ref<WidgetLayer>      mColorPickAreaColor;
-		TextureRef          mColorPickAreaTexture;
+		TextureRef            mColorPickAreaTexture;
         Ref<CursorEventsArea> mColorPickHandle;
 
         Ref<VerticalProgress> mHUEBar;
         Ref<Bitmap>           mHUEBarBitmap;
-        TextureRef          mHUEBarTexture;
+        TextureRef            mHUEBarTexture;
 
         Ref<DropDown> mTypeDropdown;
 
@@ -72,25 +74,25 @@ namespace Editor
         Ref<HorizontalProgress> mColor1ParamBar;
         Ref<EditBox>            mColor1ParamEdit;
         Ref<Bitmap>             mColor1ParamBarBitmap;
-        TextureRef            mColor1ParamBarTexture;
+        TextureRef              mColor1ParamBarTexture;
 
         Ref<Label>              mColor2ParamName;
         Ref<HorizontalProgress> mColor2ParamBar;
         Ref<EditBox>            mColor2ParamEdit;
         Ref<Bitmap>             mColor2ParamBarBitmap;
-        TextureRef            mColor2ParamBarTexture;
+        TextureRef              mColor2ParamBarTexture;
 
         Ref<Label>              mColor3ParamName;
         Ref<HorizontalProgress> mColor3ParamBar;
         Ref<EditBox>            mColor3ParamEdit;
         Ref<Bitmap>             mColor3ParamBarBitmap;
-        TextureRef            mColor3ParamBarTexture;
+        TextureRef              mColor3ParamBarTexture;
 
         Ref<Label>              mColorAParamName;
         Ref<HorizontalProgress> mColorAParamBar;
         Ref<EditBox>            mColorAParamEdit;
         Ref<Bitmap>             mColorAParamBarBitmap;
-        TextureRef            mColorAParamBarTexture;
+        TextureRef              mColorAParamBarTexture;
 
 
     protected:

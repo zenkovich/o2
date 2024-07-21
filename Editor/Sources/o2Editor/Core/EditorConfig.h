@@ -23,7 +23,7 @@ namespace Editor
 	// -------------------------
 	// Application configuration
 	// -------------------------
-	class EditorConfig : public ISerializable, public Singleton<EditorConfig>, public RefCounterable
+	class EditorConfig : public Singleton<EditorConfig>, public ISerializable
 	{
 	public:
 		// ---------------------------
@@ -60,7 +60,7 @@ namespace Editor
 
 	public:
 		// Default constructor. Loads data and applies to application 
-		EditorConfig();
+		EditorConfig(RefCounter* refCounter);
 
 		// Destructor. Saves application configuration
 		~EditorConfig();
@@ -101,9 +101,8 @@ namespace Editor
 
 CLASS_BASES_META(Editor::EditorConfig)
 {
-    BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::Singleton<EditorConfig>);
-    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig)
@@ -118,7 +117,7 @@ END_META;
 CLASS_METHODS_META(Editor::EditorConfig)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PROTECTED().SIGNATURE(void, SaveGlobalConfigs);
     FUNCTION().PROTECTED().SIGNATURE(void, SaveProjectConfigs);
     FUNCTION().PROTECTED().SIGNATURE(void, LoadConfigs);

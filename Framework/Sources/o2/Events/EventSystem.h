@@ -22,14 +22,14 @@ namespace o2
     // -----------------------
     // Event processing system
     // -----------------------
-    class EventSystem: public Singleton<EventSystem>, public RefCounterable
+    class EventSystem: public Singleton<EventSystem>
     {
     public:
         static bool eventsListenersEnabledByDefault; // Then it is true, new events listeners will be enabled on initialization
 
     public:
         // Default constructor
-        EventSystem();
+        EventSystem(RefCounter* refCounter);
 
         // Destructor
         ~EventSystem();

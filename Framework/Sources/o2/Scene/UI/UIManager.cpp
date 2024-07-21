@@ -71,7 +71,8 @@ namespace o2
         Instance().mFocusableWidgets.RemoveFirst([&](auto& x) { return x == widget; });
     }
 
-    UIManager::UIManager()
+    UIManager::UIManager(RefCounter* refCounter):
+        Singleton<UIManager>(refCounter)
     {
         mLog = mmake<LogStream>("UI");
         o2Debug.GetLog()->BindStream(mLog);

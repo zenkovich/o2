@@ -33,10 +33,8 @@ namespace Editor
 	// - Добавить "запись" изменения полей
 	// - Сделать редактор кривых для Vec2F
 
-	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
+	class AnimationWindow : public Singleton<AnimationWindow>, public IEditorWindow
 	{
-		IOBJECT(AnimationWindow);
-
 	public:
 		// Default constructor
 		AnimationWindow(RefCounter* refCounter);
@@ -60,7 +58,13 @@ namespace Editor
 		void SetCurvesMode(bool enabled);
 
 		// Returns is curves mode enabled
-		bool IsCurvesMode() const;
+        bool IsCurvesMode() const;
+
+        // Dynamic cast to RefCounterable via Singleton<AnimationWindow>
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<AnimationWindow>& ref);
+
+        IOBJECT(AnimationWindow);
+        REF_COUNTERABLE_IMPL(IEditorWindow, Singleton<AnimationWindow>);
 
 	protected:
 		float mTreeViewWidth = 325.0f;    // Width of tree area. Changed by dragable separator
@@ -164,8 +168,8 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AnimationWindow)
 {
-    BASE_CLASS(Editor::IEditorWindow);
     BASE_CLASS(o2::Singleton<AnimationWindow>);
+    BASE_CLASS(Editor::IEditorWindow);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationWindow)
@@ -211,6 +215,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, const Ref<Actor>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetCurvesMode, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsCurvesMode);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<AnimationWindow>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeHandlesSheet);

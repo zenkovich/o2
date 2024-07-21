@@ -20,7 +20,8 @@ namespace o2
 
     FORWARD_REF_IMPL(AtlasAsset);
 
-    Render::Render()
+    Render::Render(RefCounter* refCounter):
+        Singleton<Render>(refCounter)
     {
         mLog = mmake<LogStream>("Render");
         o2Debug.GetLog()->BindStream(mLog);

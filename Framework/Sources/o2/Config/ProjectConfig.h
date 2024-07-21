@@ -17,7 +17,7 @@ namespace o2
     // ---------------------
     // Project configuration
     // ---------------------
-    class ProjectConfig: public ISerializable, public Singleton<ProjectConfig>, public RefCounterable
+    class ProjectConfig: public ISerializable, public Singleton<ProjectConfig>
     {
     public:
         PROPERTIES(ProjectConfig);
@@ -29,7 +29,7 @@ namespace o2
 
     public:
         // Default constructor
-        ProjectConfig();
+        ProjectConfig(RefCounter* refCounter);
 
         // Destructor
         ~ProjectConfig();
@@ -68,7 +68,6 @@ CLASS_BASES_META(o2::ProjectConfig)
 {
     BASE_CLASS(o2::ISerializable);
     BASE_CLASS(o2::Singleton<ProjectConfig>);
-    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::ProjectConfig)
@@ -83,7 +82,7 @@ END_META;
 CLASS_METHODS_META(o2::ProjectConfig)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(String, GetProjectName);
     FUNCTION().PUBLIC().SIGNATURE(void, SetProjectName, const String&);
     FUNCTION().PUBLIC().SIGNATURE(Platform, GetPlatform);

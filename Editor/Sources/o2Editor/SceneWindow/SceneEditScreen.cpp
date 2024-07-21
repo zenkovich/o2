@@ -35,7 +35,7 @@ DECLARE_SINGLETON(Editor::SceneEditScreen);
 namespace Editor
 {
 	SceneEditScreen::SceneEditScreen(RefCounter* refCounter):
-		ScrollView(refCounter)
+		Singleton<SceneEditScreen>(refCounter), ScrollView(refCounter)
 	{
 		InitializeTools();
 		SelectTool<MoveTool>();
@@ -420,7 +420,12 @@ namespace Editor
 		return Widget::IsUnderPoint(point);
 	}
 
-	void SceneEditScreen::BindSceneTree()
+    Ref<RefCounterable> SceneEditScreen::CastToRefCounterable(const Ref<SceneEditScreen>& ref)
+    {
+		return DynamicCast<Singleton<SceneEditScreen>>(ref);
+    }
+
+    void SceneEditScreen::BindSceneTree()
 	{
 		o2EditorTree.GetSceneTree()->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);
 		o2EditorTree.GetDrawOrderTree()->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);

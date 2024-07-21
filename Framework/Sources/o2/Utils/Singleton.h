@@ -1,6 +1,7 @@
 #pragma once
 
-#include <stdarg.h>
+#include "Types/Containers/Vector.h"
+#include "Types/Ref.h"
 #include "o2/Utils/Debug/Assert.h"
 #include "o2/Utils/Memory/MemoryManager.h"
 
@@ -11,11 +12,11 @@ namespace o2
     // Template class singleton interface
     // ----------------------------------
     template <typename _class_type> 
-    class Singleton
+    class Singleton: public RefCounterable
     {
     public:
         // Default constructor
-        Singleton();
+        Singleton(RefCounter* refCounter);
 
         // Destructor
         virtual ~Singleton();
@@ -39,23 +40,35 @@ namespace o2
         static _class_type* mInstance;
     };
 
+    // Returns list of all singletons
+    Vector<Ref<RefCounterable>>& GetSingletonsList();
+
     // Declaring singleton macros
 #define DECLARE_SINGLETON(CLASS) template<> CLASS* Singleton<CLASS>::mInstance = nullptr
 
     // Declaring and initializing singleton macros
-#define CREATE_SINGLETON(CLASS)  template<> CLASS* Singleton<CLASS>::mInstance = mnew CLASS()
+#define CREATE_SINGLETON(CLASS)  template<> CLASS* Singleton<CLASS>::mInstance = nullptr; SingletonInitializer<CLASS> gSingleton##CLASS
 
     template <typename _class_type>
-    Singleton<_class_type>::Singleton()
+    struct SingletonInitializer
+    {
+        SingletonInitializer()
+        {
+            Singleton<_class_type>::InitializeSingleton();
+        }
+    };
+
+    template <typename _class_type>
+    Singleton<_class_type>::Singleton(RefCounter* refCounter):
+        RefCounterable(refCounter)
     {
         mInstance = (_class_type*)this;
+        GetSingletonsList().Add(DynamicCast<RefCounterable>(Ref(this)));
     }
 
     template <typename _class_type>
     Singleton<_class_type>::~Singleton()
-    {
-        mInstance = nullptr; 
-    }
+    {}
 
     template <typename _class_type>
     _class_type& Singleton<_class_type>::Instance() 
@@ -74,7 +87,7 @@ namespace o2
     void Singleton<_class_type>::InitializeSingleton()
     { 
         if (!mInstance) 
-            mnew _class_type; 
+            mInstance = mmake<_class_type>().Get(); 
     }
 
     template <typename _class_type>

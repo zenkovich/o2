@@ -14,11 +14,11 @@ namespace o2
     // -------------
     // Timing system
     // -------------
-    class Time: public Singleton<Time>, public RefCounterable
+    class Time: public Singleton<Time>
     {
     public:
         // Default constructor
-        Time();
+        Time(RefCounter* refCounter);
 
         // Destructor
         ~Time();

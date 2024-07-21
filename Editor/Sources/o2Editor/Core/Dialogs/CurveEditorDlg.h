@@ -48,7 +48,9 @@ namespace Editor
 		static void AddCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB, const Color4& color = Color4::Green());
 
 		// Removes curve range
-		static void RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB);
+        static void RemoveCurvesRange(const Ref<Curve>& curveA, const Ref<Curve>& curveB);
+
+        REF_COUNTERABLE_IMPL(Singleton<CurveEditorDlg>, CursorEventsListener);
 
 	protected:
 		Function<void()> mOnChangedCallback;         // On changed callback

@@ -15,11 +15,11 @@ namespace Editor
 	// ---------------------
 	// Curve key edit dialog
 	// ---------------------
-	class KeyEditDlg : public Singleton<KeyEditDlg>, public RefCounterable
+	class KeyEditDlg : public Singleton<KeyEditDlg>
 	{
 	public:
 		// Constructor
-		KeyEditDlg();
+		KeyEditDlg(RefCounter* refCounter);
 
 		// Destructor
 		~KeyEditDlg();

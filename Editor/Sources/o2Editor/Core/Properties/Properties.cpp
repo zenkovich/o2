@@ -25,7 +25,8 @@ namespace Editor
 {
 	Editor::IPropertyField::OnChangeCompletedFunc Properties::mOnPropertyCompletedChangingUndoCreateDelegate;
 
-	Properties::Properties()
+	Properties::Properties(RefCounter* refCounter):
+		Singleton<Properties>(refCounter)
 	{
 		InitializeAvailablePropertiesFields();
 		InitializeAvailableObjectPropertiesViewers();

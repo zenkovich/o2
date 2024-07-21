@@ -16,7 +16,8 @@ DECLARE_SINGLETON(Editor::MemoryAnalyzerWindow);
 
 namespace Editor
 {	
-	MemoryAnalyzerWindow::MemoryAnalyzerWindow()
+    MemoryAnalyzerWindow::MemoryAnalyzerWindow(RefCounter* refCounter):
+		Singleton<MemoryAnalyzerWindow>(refCounter)
 	{
 		InitializeWindow();
 	}
@@ -61,7 +62,7 @@ namespace Editor
 		mWindow->AddChild(mMemoryTree);
 
 		mWindow->Hide(true);
-		mWindow->layout->size = Vec2F(400, 600);
+		mWindow->layout->size = Vec2F(1500, 900);
 
 		mWindow->GetBackCursorListener().onCursorReleased = [=](const Input::Cursor& c) { mWindow->Hide(); };
 	}
@@ -180,7 +181,7 @@ namespace Editor
 		String address = String::Format("%p", data->memory);
 
 		String size;
-		auto summarySize = data->summarySize;
+		auto summarySize = data->leakedSize != 0 ? data->leakedSize : data->summarySize;
 		if (summarySize > 1024 * 1024)
             size = String::Format("%.2f Mb", summarySize / (1024.0 * 1024.0));
         else if (summarySize > 1024)
@@ -193,6 +194,8 @@ namespace Editor
         String type = data->type;
 		type.ReplaceAll("class ", "");
 		type.ReplaceAll("> >", ">>");
+
+		type += " (" + (String)data->parents.size() + ")";
 		
 		auto& name = data->name;
 
@@ -203,7 +206,13 @@ namespace Editor
 		else
 			mName->text = type + " " + (String)name;
 
-		//mName->transparency = owner ? 1.0f : 0.5f;
+		if (data->object)
+			mName->text = mName->text.Get() + String("(") + (String)data->object->createIndex + String(")");
+
+		if (data->leakedSize > 0)
+			mName->color = Color4(235, 125, 139);
+		else
+			mName->color = Color4(96, 125, 139);
 
 		mAddress->text = address;
 		mSize->text = size;

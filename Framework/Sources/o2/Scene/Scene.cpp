@@ -24,11 +24,10 @@ namespace o2
 {
     DECLARE_SINGLETON(Scene);
 
-    Scene::Scene()
+    Scene::Scene(RefCounter* refCounter):
+        Singleton<Scene>(refCounter)
     {
         mDefaultLayer = AddLayer("Default");
-        auto camera = mmake<CameraActor>();
-        camera->name = "Camera";
 
         mLog = mmake<LogStream>("Scene");
         o2Debug.GetLog()->BindStream(mLog);

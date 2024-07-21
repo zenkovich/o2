@@ -39,11 +39,11 @@ namespace o2
     // Scripting engine. Depends on scripting backend. 
     // Can parse, run and evaluate scripts. Can return global namespace
     // ----------------------------------------------------------------
-    class ScriptEngine: public Singleton<ScriptEngine>, public ScriptEngineBase, public RefCounterable
+    class ScriptEngine: public Singleton<ScriptEngine>, public ScriptEngineBase
     {
     public:
         // Default constructor, initializes scripting engine
-        ScriptEngine();
+        ScriptEngine(RefCounter* refCounter);
 
         // Default destructor, cleans up
         ~ScriptEngine();

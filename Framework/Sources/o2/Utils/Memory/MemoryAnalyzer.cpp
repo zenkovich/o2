@@ -7,15 +7,25 @@
 namespace o2
 {
     int MemoryAnalyzer::mCurrentBuildMemoryTreeIdx = 0;
+    bool MemoryAnalyzer::enabledObjectsTracking = true;
 
     MemoryAnalyzeObject::MemoryAnalyzeObject()
     {
         MemoryAnalyzer::OnObjectCreated(this);
+        createIndex = GetNextCreateIndex();
     }
 
     MemoryAnalyzeObject::~MemoryAnalyzeObject()
     {
         MemoryAnalyzer::OnObjectDestroyed(this);
+    }
+
+    int MemoryAnalyzeObject::GetNextCreateIndex()
+    {
+        static int idx = 0;
+        idx++;
+
+        return idx;
     }
 
     void MemoryAnalyzer::MemoryNode::SummarizeSize()
@@ -31,6 +41,22 @@ namespace o2
 
             if (child->mainParent == this)
                 summarySize += child->summarySize;
+        }
+    }
+
+    void MemoryAnalyzer::MemoryNode::SummarizeLeakedSize()
+    {
+        if (leakedSize != 0 || summarySize != 0)
+            return;
+
+        leakedSize = size;
+
+        for (auto& child : children)
+        {
+            child->SummarizeLeakedSize();
+
+            if (child->mainParent == this)
+                leakedSize += child->leakedSize;
         }
     }
 
@@ -70,6 +96,9 @@ namespace o2
 
     void MemoryAnalyzer::OnObjectCreated(MemoryAnalyzeObject* obj)
     {
+        if (!enabledObjectsTracking)
+            return;
+
         auto& freeIndexes = GetFreeAnalyzeObjects();
         if (freeIndexes.empty())
             AllocateAnalyzeObjects();
@@ -86,6 +115,9 @@ namespace o2
 
     void MemoryAnalyzer::OnObjectDestroyed(MemoryAnalyzeObject* obj)
     {
+        if (!enabledObjectsTracking)
+            return;
+
         auto idx = reinterpret_cast<MemoryAnalyzeObject*>(obj)->manageIndex;
         GetAnalyzeObjects()[idx] = nullptr;
         GetFreeAnalyzeObjects().push_back(idx);
@@ -121,6 +153,24 @@ namespace o2
         // Build tree from roots
         BuildSubTree(allMemoryNode, roots, memoryNodes, currentNodes, nextNodes, childRefs, sortedObjects);
 
+        // Remove duplicated nodes
+        for (auto it = allMemoryNode->children.begin(); it != allMemoryNode->children.end();)
+        {
+            auto node = *it;
+
+            if (node->parents.size() > 1)
+            {
+                node->mainParent = node->parents[1];
+                node->parents.erase(node->parents.begin());
+
+                it = allMemoryNode->children.erase(it);
+            }
+            else
+                it++;
+        }
+
+        allMemoryNode->SummarizeSize();
+
         // Collect possible leaks nodes
         auto possibleLeaksNode = new MemoryNode();
         possibleLeaksNode->name = "Possible leaks";
@@ -139,7 +189,30 @@ namespace o2
             BuildSubTree(possibleLeaksNode, { object }, memoryNodes, currentNodes, nextNodes, childRefs, sortedObjects);
         }
 
-        allMemoryNode->SummarizeSize();
+        possibleLeaksNode->SummarizeLeakedSize();
+
+        // Remove ampty and duplicated leak nodes
+        for (auto it = possibleLeaksNode->children.begin(); it != possibleLeaksNode->children.end();)
+        {
+            auto node = *it;
+
+            if (node->leakedSize == 0 || node->children.empty())
+            {
+                if (node->mainParent == possibleLeaksNode)
+                    delete *it;
+
+                it = possibleLeaksNode->children.erase(it);
+            }
+            else if (node->parents.size() > 1)
+            {
+                node->mainParent = node->parents[1];
+                node->parents.erase(node->parents.begin());
+
+                it = possibleLeaksNode->children.erase(it);
+            }
+            else
+                it++;
+        }
 
         return allMemoryNode;
     }

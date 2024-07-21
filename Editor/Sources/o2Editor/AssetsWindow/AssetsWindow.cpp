@@ -29,7 +29,8 @@ DECLARE_SINGLETON(Editor::AssetsWindow);
 
 namespace Editor
 {
-	AssetsWindow::AssetsWindow()
+	AssetsWindow::AssetsWindow(RefCounter* refCounter):
+		Singleton<AssetsWindow>(refCounter), IEditorWindow(refCounter)
 	{
 		if (Application::IsReady())
 			InitializeWindow();
@@ -421,7 +422,12 @@ namespace Editor
 		return mmake<Sprite>("ui/UI4_big_file_icon.png"); 
 	}
 
-	void AssetsWindow::OnSearchEdited(const WString& search)
+    Ref<RefCounterable> AssetsWindow::CastToRefCounterable(const Ref<AssetsWindow>& ref)
+    {
+		return DynamicCast<Singleton<AssetsWindow>>(ref);
+    }
+
+    void AssetsWindow::OnSearchEdited(const WString& search)
 	{}
 
 	void AssetsWindow::OnMenuFilterPressed()
