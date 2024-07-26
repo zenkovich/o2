@@ -17,8 +17,6 @@ namespace o2
         static LRESULT WndProc(HWND wnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     };
 
-    o2StackWalker* o2StackWalker::mInstance = new o2StackWalker();
-
     void Application::Initialize()
     {
         BasicInitialize();

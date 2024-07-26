@@ -134,11 +134,6 @@ endif()
 if(WIN32)
     target_link_libraries(o2Framework PRIVATE Shlwapi.lib)
     target_link_libraries(o2Framework PRIVATE opengl32.lib)  
-
-    add_subdirectory(Framework/3rdPartyLibs/StackWalker)
-    add_dependencies(o2Framework StackWalker)
-    target_link_libraries(o2Framework PRIVATE StackWalker)
-    set_target_properties(StackWalker PROPERTIES FOLDER o2/3rdPartyLibs) 
 endif()
 
 if (UNIX)
