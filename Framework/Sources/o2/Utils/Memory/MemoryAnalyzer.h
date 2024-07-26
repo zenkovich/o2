@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include "o2/Utils/Debug/StackTrace.h"
 
 namespace o2
 {
@@ -13,6 +14,8 @@ namespace o2
         int markIndex = 0;   // Mark index for memory tree building
         int manageIndex = 0; // Manage index in objects array
         int createIndex = 0; // Index of object creation, for debugging
+
+        StackTrace trace; // Stack trace of object creation
 
     public:
         MemoryAnalyzeObject();
