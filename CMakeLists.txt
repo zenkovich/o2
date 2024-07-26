@@ -107,6 +107,9 @@ target_link_libraries(o2Framework
         jerry-core 
         jerry-ext 
         jerry-port-default
+        boost_stacktrace_basic
+        boost_stacktrace_noop
+        boost_stacktrace_windbg
 )
 
 if (O2_TRACY)
