@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+		<Type Name="o2::UID">
+				<DisplayString>{((((int)data[0] &amp; 0xFF)) + (((int)data[1] &amp; 0xFF) &lt;&lt; 8) + (((int)data[2] &amp; 0xFF) &lt;&lt; 16) + (((int)data[3] &amp; 0xFF) &lt;&lt; 24)),X} - {((((int)data[4] &amp; 0xFF)) + (((int)data[5] &amp; 0xFF) &lt;&lt; 8) + (((int)data[6] &amp; 0xFF) &lt;&lt; 16) + (((int)data[7] &amp; 0xFF) &lt;&lt; 24)),X} - {((((int)data[8] &amp; 0xFF)) + (((int)data[9] &amp; 0xFF) &lt;&lt; 8) + (((int)data[10] &amp; 0xFF) &lt;&lt; 16) + (((int)data[11] &amp; 0xFF) &lt;&lt; 24)),X} - {((((int)data[12] &amp; 0xFF)) + (((int)data[13] &amp; 0xFF) &lt;&lt; 8) + (((int)data[14] &amp; 0xFF) &lt;&lt; 16) + (((int)data[15] &amp; 0xFF) &lt;&lt; 24)),X}</DisplayString>
+		</Type>
+
+		<Type Name="o2::Vec2&lt;*&gt;">
+				<DisplayString>{{ { x } { y } }}</DisplayString>
+		</Type>
+
+		<Type Name="o2::Rect&lt;*&gt;">
+				<DisplayString>{{ (L { left } B { bottom })-(R { right } T { top }) }}</DisplayString>
+				<Expand>
+						<Item Name="left" ExcludeView="simple">left</Item>
+						<Item Name="bottom" ExcludeView="simple">bottom</Item>
+						<Item Name="right" ExcludeView="simple">right</Item>
+						<Item Name="top" ExcludeView="simple">top</Item>
+						<Item Name="width" ExcludeView="simple">right - left</Item>
+						<Item Name="height" ExcludeView="simple">top - bottom</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::Vertex">
+				<DisplayString>{{ x: { x } y: { y } z: { z } c: { color } u: { tu } v: { tv }}</DisplayString>
+		</Type>
+
+		<Type Name="o2::Color4">
+				<DisplayString>{{ { r } { g } { b } { a }}</DisplayString>
+		</Type>
+
+		<Type Name="o2::Mesh">
+				<DisplayString>{{ vertx = { vertexCount }/{ mMaxVertexCount } poly = { polyCount }/{ mMaxPolyCount } tex = { mTexture.mTexture } }}</DisplayString>
+				<Expand>
+						<Item Name="texture" ExcludeView="simple">mTexture.mTexture</Item>
+
+						<Synthetic Name="verticies">
+								<DisplayString>{ vertexCount }/{ mMaxVertexCount }</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>vertexCount</Size>
+												<ValuePointer>vertices</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="indexes">
+								<DisplayString>{ polyCount }/{ mMaxPolyCount }</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>polyCount*3</Size>
+												<ValuePointer>indexes</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+				</Expand>
+		</Type>
+
+		<Type Name="o2::KeyValuePair&lt;*&gt;">
+				<DisplayString>{{ { mKey } { mValue } }}</DisplayString>
+				<Expand>
+						<Item Name="key" ExcludeView="simple">mKey</Item>
+						<Item Name="value" ExcludeView="simple">mValue</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::Type">
+				<DisplayString>{{ { mName } }}</DisplayString>
+				<Expand>
+						<Item Name="name" ExcludeView="simple">mName</Item>
+						<Item Name="id" ExcludeView="simple">mId</Item>
+						<Item Name="base types" ExcludeView="simple">mBaseTypes</Item>
+						<Item Name="fields" ExcludeView="simple">mFields</Item>
+						<Item Name="functions" ExcludeView="simple">mFunctions</Item>
+						<Item Name="pointer" ExcludeView="simple">mPtrType</Item>
+						<Item Name="size" ExcludeView="simple">mSize</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::Dictionary&lt;*&gt;">
+				<DisplayString>{{ size={ mPairs._Mypair._Myval2._Mylast - mPairs._Mypair._Myval2._Myfirst } }}</DisplayString>
+				<Expand>
+						<Item Name="size" ExcludeView="simple">mPairs._Mypair._Myval2._Mylast - mPairs._Mypair._Myval2._Myfirst</Item>
+						<Item Name="capacity" ExcludeView="simple">mPairs._Mypair._Myval2._Myend - mPairs._Mypair._Myval2._Myfirst</Item>
+						<ArrayItems>
+								<Size>mPairs._Mypair._Myval2._Mylast - mPairs._Mypair._Myval2._Myfirst</Size>
+								<ValuePointer>mPairs._Mypair._Myval2._Myfirst</ValuePointer>
+						</ArrayItems>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::FieldInfo&lt;*&gt;">
+				<DisplayString>{{ name={ mName } value={ mFieldRef } }}</DisplayString>
+				<Expand>
+						<Item Name="name">mName</Item>
+						<Item Name="value">mFieldRef</Item>
+						<Item Name="owner">mOwner</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::DataMember">
+				<DisplayString>{{{ name }:{ value } }}</DisplayString>
+		</Type>
+
+		<Type Name="o2::BaseRef&lt;*&gt;">
+				<DisplayString>{ mPtr }</DisplayString>
+				<Expand>
+						<ExpandedItem>mPtr</ExpandedItem>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::BaseWeakRef&lt;*&gt;">
+				<DisplayString Condition="(mPtr != 0)">{ mPtr }</DisplayString>
+				<DisplayString Condition="(mPtr == 0)">empty</DisplayString>
+				
+				<Expand>
+						<ExpandedItem Condition="(mPtr != 0)">mPtr</ExpandedItem>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::DataValue">
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Null) == o2::DataValue::Flags::Null">null</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::BoolTrue) == o2::DataValue::Flags::BoolTrue">true</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::BoolFalse) == o2::DataValue::Flags::BoolFalse">false</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::ShortString) == o2::DataValue::Flags::ShortString">{(const char*)mData.shortStringData.stringValue,na}</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::StringRef) == o2::DataValue::Flags::StringRef">{(const char*)mData.stringPtrData.stringPtr,na}</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::StringCopy) == o2::DataValue::Flags::StringCopy">{(const char*)mData.stringPtrData.stringPtr,na}</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Int) == o2::DataValue::Flags::Int">{mData.intData.intValue}</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::UInt) == o2::DataValue::Flags::UInt">{mData.intData.uintValue}</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Int64) == o2::DataValue::Flags::Int64">{mData.int64Data.intValue}</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::UInt64) == o2::DataValue::Flags::UInt64">{mData.int64Data.uintValue}</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Double) == o2::DataValue::Flags::Double">{mData.doubleData.value}</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Object) == o2::DataValue::Flags::Object">Object members={mData.objectData.count}</DisplayString>
+				<DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Array) == o2::DataValue::Flags::Array">Array elements={mData.arrayData.count}</DisplayString>
+				<Expand>
+						<Item Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Object) == o2::DataValue::Flags::Object" Name="[size]">mData.objectData.count</Item>
+						<Item Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Object) == o2::DataValue::Flags::Object" Name="[capacity]">mData.objectData.capacity</Item>
+						<ArrayItems Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Object) == o2::DataValue::Flags::Object">
+								<Size>mData.objectData.count</Size>
+								<ValuePointer>mData.objectData.members</ValuePointer>
+						</ArrayItems>
+
+						<Item Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Array) == o2::DataValue::Flags::Array" Name="[size]">mData.arrayData.count</Item>
+						<Item Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Array) == o2::DataValue::Flags::Array" Name="[capacity]">mData.arrayData.capacity</Item>
+						<ArrayItems Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Array) == o2::DataValue::Flags::Array">
+								<Size>mData.arrayData.count</Size>
+								<ValuePointer>mData.arrayData.elements</ValuePointer>
+						</ArrayItems>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::Widget">
+				<DisplayString>Widget "{ mName }" ({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
+				<Expand>
+						<Item Name="id" ExcludeView="simple">mId</Item>
+						<Item Name="name" ExcludeView="simple">mName</Item>
+						<Item Name="layout" ExcludeView="simple">layout</Item>
+						<Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+						<Item Name="layer" ExcludeView="simple">Actor::mLayerName</Item>
+						<Item Name="layer ptr" ExcludeView="simple">Actor::mLayer</Item>
+						<Item Name="tags" ExcludeView="simple">tags</Item>
+						<Item Name="alpha" ExcludeView="simple">mTransparency</Item>
+						<Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
+						<Item Name="children rect" ExcludeView="simple">layout->mData->childrenWorldRect</Item>
+						<Item Name="state" ExcludeView="simple">Actor::mState</Item>
+
+						<Synthetic Name="prototype">
+								<DisplayString>({ mPrototype })</DisplayString>
+								<Expand>
+										<ExpandedItem>mPrototype</ExpandedItem>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="prototype link">
+								<DisplayString>({ mPrototypeLink.mActor })</DisplayString>
+								<Expand>
+										<ExpandedItem>mPrototypeLink.mActor</ExpandedItem>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="components">
+								<DisplayString>count={mComponents._Mypair._Myval2._Mylast - mComponents._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mComponents._Mypair._Myval2._Mylast - mComponents._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mComponents._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Item Name="parent" ExcludeView="simple">mParent</Item>
+						<Synthetic Name="children">
+								<DisplayString>count={mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mChildren._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="internal children">
+								<DisplayString>count={mInternalWidgets._Mypair._Myval2._Mylast - mInternalWidgets._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mInternalWidgets._Mypair._Myval2._Mylast - mInternalWidgets._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mInternalWidgets._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="layers">
+								<DisplayString>count={mLayers._Mypair._Myval2._Mylast - mLayers._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mLayers._Mypair._Myval2._Mylast - mLayers._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mLayers._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="states">
+								<DisplayString>count={mStates._Mypair._Myval2._Mylast - mStates._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mStates._Mypair._Myval2._Mylast - mStates._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mStates._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Item Name="locked" ExcludeView="simple">mLocked</Item>
+						<Item Name="enabled in hierarchy" ExcludeView="simple">mResEnabledInHierarchy</Item>
+						<Item Name="res enabled" ExcludeView="simple">mResEnabled</Item>
+						<Item Name="res alpha" ExcludeView="simple">mResTransparency</Item>
+						<Item Name="override depth" ExcludeView="simple">mOverrideDepth</Item>
+						<Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
+						<Item Name="asset id" ExcludeView="simple">mAssetId</Item>
+
+						<Synthetic Name="draw layers">
+								<DisplayString>count={mDrawingLayers._Mypair._Myval2._Mylast - mDrawingLayers._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mDrawingLayers._Mypair._Myval2._Mylast - mDrawingLayers._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mDrawingLayers._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="top draw layers">
+								<DisplayString>count={mTopDrawingLayers._Mypair._Myval2._Mylast - mTopDrawingLayers._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mTopDrawingLayers._Mypair._Myval2._Mylast - mTopDrawingLayers._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mTopDrawingLayers._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="draw children">
+								<DisplayString>count={mDrawingChildren._Mypair._Myval2._Mylast - mDrawingChildren._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mDrawingChildren._Mypair._Myval2._Mylast - mDrawingChildren._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mDrawingChildren._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::Actor">
+				<DisplayString>Actor "{ mName }":{ mId }</DisplayString>
+				<Expand>
+						<Item Name="name" ExcludeView="simple">mName</Item>
+						<Item Name="id" ExcludeView="simple">mId</Item>
+						<Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+
+						<Synthetic Name="prototype">
+								<DisplayString>({ mPrototype })</DisplayString>
+								<Expand>
+										<ExpandedItem>mPrototype</ExpandedItem>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="prototype link">
+								<DisplayString>({ mPrototypeLink.mActor })</DisplayString>
+								<Expand>
+										<ExpandedItem>mPrototypeLink.mActor</ExpandedItem>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="transform">
+								<DisplayString>(positon={ transform->mData->position }, size={ transform->mData->size }, scale={ transform->mData->scale }, pivot={ transform->mData->pivot }, angle={ transform->mData->angle })</DisplayString>
+								<Expand>
+										<ExpandedItem>transform->mData</ExpandedItem>
+								</Expand>
+						</Synthetic>
+
+						<Synthetic Name="components">
+								<DisplayString>count={mComponents._Mypair._Myval2._Mylast - mComponents._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mComponents._Mypair._Myval2._Mylast - mComponents._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mComponents._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Item Name="parent" ExcludeView="simple">mParent</Item>
+
+						<Synthetic Name="children">
+								<DisplayString>count={mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst}</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst</Size>
+												<ValuePointer>mChildren._Mypair._Myval2._Myfirst</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Item Name="locked" ExcludeView="simple">mLocked</Item>
+						<Item Name="layer" ExcludeView="simple">mLayerName</Item>
+						<Item Name="layer ptr" ExcludeView="simple">mLayer</Item>
+						<Item Name="tags" ExcludeView="simple">tags</Item>
+						<Item Name="state" ExcludeView="simple">mState</Item>
+						<Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
+						<Item Name="asset id" ExcludeView="simple">mAssetId</Item>
+
+				</Expand>
+		</Type>
+
+		<Type Name="o2::ImageComponent">
+				<DisplayString>(ImageComponent ID:{ mId })</DisplayString>
+				<Expand>
+						<Item Name="id" ExcludeView="simple">mId</Item>
+						<Item Name="owner" ExcludeView="simple">mOwner</Item>
+						<Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+						<Item Name="sprite" ExcludeView="simple">mSprite</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::WidgetLayout">
+				<DisplayString>Widget layout ({ (int)mData->worldRectangle.left }, { (int)mData->worldRectangle.bottom }, { (int)mData->worldRectangle.right }, { (int)mData->worldRectangle.top })</DisplayString>
+				<Expand>
+						<Item Name="pivot" ExcludeView="simple">mData->pivot</Item>
+						<Item Name="anchor min" ExcludeView="simple">mData->anchorMin</Item>
+						<Item Name="anchor max" ExcludeView="simple">mData->anchorMax</Item>
+						<Item Name="offset min" ExcludeView="simple">mData->offsetMin</Item>
+						<Item Name="offset max" ExcludeView="simple">mData->offsetMax</Item>
+						<Item Name="min size" ExcludeView="simple">mData->minSize</Item>
+						<Item Name="max size" ExcludeView="simple">mData->maxSize</Item>
+						<Item Name="weight" ExcludeView="simple">mData->weight</Item>
+						<Item Name="driven by parent" ExcludeView="simple">mData->drivenByParent</Item>
+						<Item Name="position" ExcludeView="simple">mData->position</Item>
+						<Item Name="pivot" ExcludeView="simple">mData->pivot</Item>
+						<Item Name="size" ExcludeView="simple">mData->size</Item>
+						<Item Name="scale" ExcludeView="simple">mData->scale</Item>
+						<Item Name="angle" ExcludeView="simple">mData->angle</Item>
+						<Item Name="shear" ExcludeView="simple">mData->shear</Item>
+						<Item Name="rectangle" ExcludeView="simple">mData->rectangle</Item>
+						<Item Name="parent rectangle" ExcludeView="simple">mData->parentRectangle</Item>
+						<Item Name="parent rectange position" ExcludeView="simple">mData->parentRectangePosition</Item>
+						<Item Name="world rectangle" ExcludeView="simple">mData->worldRectangle</Item>
+						<Item Name="transform" ExcludeView="simple">mData->transform</Item>
+						<Item Name="non sized transform" ExcludeView="simple">mData->nonSizedTransform</Item>
+						<Item Name="world non sized transform" ExcludeView="simple">mData->worldNonSizedTransform</Item>
+						<Item Name="world transform" ExcludeView="simple">mData->worldTransform</Item>
+						<Item Name="parent inverted transform" ExcludeView="simple">mData->parentInvertedTransform</Item>
+						<Item Name="parent transform" ExcludeView="simple">mData->parentTransform</Item>
+						<Item Name="parent inv transform actual frame" ExcludeView="simple">mData->parentInvTransformActualFrame</Item>
+						<Item Name="owner" ExcludeView="simple">mData->owner</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::WidgetLayerLayout">
+				<DisplayString>({ mAnchorMin }, { mAnchorMax }, { mOffsetMin }, { mOffsetMax })</DisplayString>
+				<Expand>
+						<Item Name="anchor min" ExcludeView="simple">mAnchorMin</Item>
+						<Item Name="anchor max" ExcludeView="simple">mAnchorMax</Item>
+						<Item Name="offset min" ExcludeView="simple">mOffsetMin</Item>
+						<Item Name="offset max" ExcludeView="simple">mOffsetMax</Item>
+						<Item Name="owner" ExcludeView="simple">mWidgetLayer</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::WidgetLayer">
+				<DisplayString>Widget Layer "{ name }" ({ (int)mAbsolutePosition.left }, { (int)mAbsolutePosition.bottom }, { (int)mAbsolutePosition.right }, { (int)mAbsolutePosition.top })</DisplayString>
+				<Expand>
+						<Item Name="layout" ExcludeView="simple">layout</Item>
+						<Item Name="name" ExcludeView="simple">name</Item>
+						<Item Name="drawable" ExcludeView="simple">mDrawable</Item>
+						<Item Name="prototype link" ExcludeView="simple">mPrototypeLink</Item>
+						<Item Name="transparency" ExcludeView="simple">mTransparency</Item>
+						<Item Name="absolute rect" ExcludeView="simple">mAbsolutePosition</Item>
+						<Item Name="owner" ExcludeView="simple">mOwnerWidget</Item>
+						<Item Name="parent" ExcludeView="simple">mParent</Item>
+						<Item Name="children" ExcludeView="simple">mChildren</Item>
+						<Item Name="interactable layout" ExcludeView="simple">interactableLayout</Item>
+						<Item Name="res transparency" ExcludeView="simple">mResTransparency</Item>
+						<Item Name="depth" ExcludeView="simple">mDepth</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::Transform">
+				<DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
+				<Expand>
+						<Item Name="position" ExcludeView="simple">mPosition</Item>
+						<Item Name="pivot" ExcludeView="simple">mPivot</Item>
+						<Item Name="size" ExcludeView="simple">mSize</Item>
+						<Item Name="scale" ExcludeView="simple">mScale</Item>
+						<Item Name="angle" ExcludeView="simple">mAngle</Item>
+						<Item Name="shear" ExcludeView="simple">mShear</Item>
+						<Item Name="transform" ExcludeView="simple">mTransform</Item>
+						<Item Name="non sized transform" ExcludeView="simple">mNonSizedTransform</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::TimeStamp">
+				<DisplayString>({ mHour }:{ mMinute}:{ mSecond } { mDay }.{ mMonth }.{ mYear })</DisplayString>
+				<Expand>
+						<Item Name="year" ExcludeView="simple">mYear</Item>
+						<Item Name="month" ExcludeView="simple">mMonth</Item>
+						<Item Name="day" ExcludeView="simple">mDay</Item>
+						<Item Name="hout" ExcludeView="simple">mHour</Item>
+						<Item Name="minute" ExcludeView="simple">mMinute</Item>
+						<Item Name="secont" ExcludeView="simple">mSecond</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::Curve">
+				<DisplayString>(keys count={ mKeys._Mypair._Myval2._Mylast - mKeys._Mypair._Myval2._Myfirst })</DisplayString>
+				<Expand>
+						<ArrayItems>
+								<Size>mKeys._Mypair._Myval2._Mylast - mKeys._Mypair._Myval2._Myfirst</Size>
+								<ValuePointer>mKeys._Mypair._Myval2._Myfirst</ValuePointer>
+						</ArrayItems>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::Curve::Key">
+				<DisplayString>({ position }:{ value })</DisplayString>
+				<Expand>
+						<Item Name="value" ExcludeView="simple">value</Item>
+						<Item Name="position" ExcludeView="simple">position</Item>
+						<Item Name="leftCoef" ExcludeView="simple">leftCoef</Item>
+						<Item Name="leftCoefPosition" ExcludeView="simple">leftCoefPosition</Item>
+						<Item Name="rightCoef" ExcludeView="simple">rightCoef</Item>
+						<Item Name="rightCoefPosition" ExcludeView="simple">rightCoefPosition</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::Sprite">
+				<DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
+				<Expand>
+						<Item Name="image" ExcludeView="simple">mImageAsset.mAssetPtr->mPath</Item>
+						<Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+						<Item Name="position" ExcludeView="simple">mPosition</Item>
+						<Item Name="pivot" ExcludeView="simple">mPivot</Item>
+						<Item Name="size" ExcludeView="simple">mSize</Item>
+						<Item Name="scale" ExcludeView="simple">mScale</Item>
+						<Item Name="angle" ExcludeView="simple">mAngle</Item>
+						<Item Name="shear" ExcludeView="simple">mShear</Item>
+						<Item Name="alpha" ExcludeView="simple">mColor.a</Item>
+						<Item Name="color" ExcludeView="simple">mColor</Item>
+						<Item Name="texture src" ExcludeView="simple">mTextureSrcRect</Item>
+						<Item Name="mode" ExcludeView="simple">mMode</Item>
+						<Item Name="slices" ExcludeView="simple">mSlices</Item>
+						<Item Name="fill" ExcludeView="simple">mFill</Item>
+						<Item Name="asset" ExcludeView="simple">mImageAsset</Item>
+						<Item Name="mesh" ExcludeView="simple">mMesh</Item>
+
+						<Synthetic Name="corners' colors">
+								<DisplayString>LT { mCornersColors[0] }; RT { mCornersColors[1] }; RB { mCornersColors[2] }; LB { mCornersColors[3] }</DisplayString>
+								<Expand>
+										<ArrayItems>
+												<Size>4</Size>
+												<ValuePointer>mCornersColors</ValuePointer>
+										</ArrayItems>
+								</Expand>
+						</Synthetic>
+
+						<Item Name="transform" ExcludeView="simple">mTransform</Item>
+						<Item Name="no size transform" ExcludeView="simple">mNonSizedTransform</Item>
+				</Expand>
+		</Type>
+
+		<Type Name="o2::AssetInfo">
+				<DisplayString>({ path })</DisplayString>
+				<Expand>
+						<Item Name="tree" ExcludeView="simple">tree</Item>
+						<Item Name="path" ExcludeView="simple">path</Item>
+						<Item Name="id" ExcludeView="simple">meta->mId</Item>
+						<Item Name="editTime" ExcludeView="simple">editTime</Item>
+						<Item Name="meta" ExcludeView="simple">meta</Item>
+						<Item Name="parent" ExcludeView="simple">parent</Item>
+						<Item Name="children" ExcludeView="simple">mChildren</Item>
+						<Item Name="ownChildren" ExcludeView="simple">mOwnChildren</Item>
+				</Expand>
+		</Type>
+
+</AutoVisualizer>

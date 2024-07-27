@@ -3,7 +3,7 @@
         "Type": "Editor::ColorProperty",
         "Value": {
             "mName": "standard",
-            "Id": 7360129507769780905,
+            "Id": 6891312227034831711,
             "Transform": {
                 "minSize": {
                     "x": 0.0,
@@ -12,9 +12,10 @@
             },
             "Children": [
                 {
+                    "Type": "o2::Widget",
                     "Data": {
                         "mName": "container",
-                        "Id": 6014270947681711664,
+                        "Id": 9633488164578606313,
                         "Transform": {
                             "anchorMax": {
                                 "x": 1.0,
@@ -27,9 +28,10 @@
                         },
                         "Children": [
                             {
+                                "Type": "o2::HorizontalLayout",
                                 "Data": {
                                     "mName": "layout",
-                                    "Id": 4556791878646043709,
+                                    "Id": 1299566289218244372,
                                     "Transform": {
                                         "anchorMax": {
                                             "x": 1.0,
@@ -42,9 +44,10 @@
                                     },
                                     "Children": [
                                         {
+                                            "Type": "o2::Widget",
                                             "Data": {
                                                 "mName": "box",
-                                                "Id": 13060495727191134338,
+                                                "Id": 2520775670188356522,
                                                 "Transform": {
                                                     "anchorMax": {
                                                         "x": 1.0,
@@ -87,27 +90,24 @@
                                                                     }
                                                                 }
                                                             },
-                                                            "mUID": 1533955577870585558
+                                                            "mUID": 11203444093470542296
                                                         }
                                                     }
                                                 ],
                                                 "States": []
-                                            },
-                                            "Type": "o2::Widget"
+                                            }
                                         }
                                     ],
                                     "InternalWidgets": [],
                                     "Layers": [],
                                     "States": []
-                                },
-                                "Type": "o2::HorizontalLayout"
+                                }
                             }
                         ],
                         "InternalWidgets": [],
                         "Layers": [],
                         "States": []
-                    },
-                    "Type": "o2::Widget"
+                    }
                 }
             ],
             "InternalWidgets": [],

@@ -7,6 +7,7 @@ option(O2_SELFPROFILE "Enable profiling o2 benchmark." OFF)
 option(O2_EDITOR "Enables o2 editor." ON)
 option(O2_ASAN "Enables ASAN (address sanitizer)." OFF)
 option(O2_TRACY "Enables Tracy profiling" ON)
+option(O2_MEMORY_ANALYZE "Enables memory analyzing (slows down)" OFF)
 
 # Common definitions
 set(O2_COMPILE_DEFINITIONS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
@@ -36,6 +37,10 @@ endif()
 
 if (O2_TRACY)
     list(APPEND O2_COMPILE_DEFINITIONS TRACY_ENABLE)
+endif()
+
+if (O2_MEMORY_ANALYZE)
+    list(APPEND O2_COMPILE_DEFINITIONS MEMORY_ANALYZE_ENABLE)
 endif()
 
 if (UNIX)

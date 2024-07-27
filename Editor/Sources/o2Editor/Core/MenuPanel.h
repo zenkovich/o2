@@ -99,6 +99,11 @@ namespace Editor
 		// On View/Game pressed in menu
 		void OnShowGamePressed();
 
+#if ENABLE_MEMORY_ANALYZE
+		// On View/Memory analyzer pressed in menu
+		void OnShowMemoryAnalyzerPressed();
+#endif
+
 		// On View/Reset layout pressed in menu
 		void OnResetLayoutPressed();
 

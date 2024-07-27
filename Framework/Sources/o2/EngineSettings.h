@@ -6,10 +6,8 @@
 // Enables memory managing
 #if defined DEBUG
 #define ENABLE_MEMORY_MANAGE true
-#define ENABLE_REFS_MANAGE true
 #else
 #define ENABLE_MEMORY_MANAGE false
-#define ENABLE_REFS_MANAGE false
 #endif
 
 // Enables render debugging
@@ -17,6 +15,12 @@
 #define RENDER_DEBUG true
 #else
 #define RENDER_DEBUG true
+#endif
+
+#if defined MEMORY_ANALYZE_ENABLE
+#define ENABLE_MEMORY_ANALYZE true
+#else
+#define ENABLE_MEMORY_ANALYZE false
 #endif
 
 // Describes that engine running as editor or not

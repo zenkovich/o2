@@ -2,31 +2,13 @@
 #include "MemoryAnalyzer.h"
 
 #include "xutility"
+#include "o2/Utils/Memory/MemoryAnalyzeableObject.h"
 #include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
     int MemoryAnalyzer::mCurrentBuildMemoryTreeIdx = 0;
     bool MemoryAnalyzer::enabledObjectsTracking = true;
-
-    MemoryAnalyzeObject::MemoryAnalyzeObject()
-    {
-        MemoryAnalyzer::OnObjectCreated(this);
-        createIndex = GetNextCreateIndex();
-    }
-
-    MemoryAnalyzeObject::~MemoryAnalyzeObject()
-    {
-        MemoryAnalyzer::OnObjectDestroyed(this);
-    }
-
-    int MemoryAnalyzeObject::GetNextCreateIndex()
-    {
-        static int idx = 0;
-        idx++;
-
-        return idx;
-    }
 
     void MemoryAnalyzer::MemoryNode::SummarizeSize()
     {

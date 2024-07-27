@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "Containers/Vector.h"
-#include "o2/Utils/Memory/MemoryAnalyzer.h"
+#include "o2/Utils/Memory/MemoryAnalyzeableObject.h"
 
 namespace o2
 {
@@ -129,7 +129,7 @@ namespace o2
 #define REF_COUNTERABLE_IMPL(BASE_CLASS, ...) \
         REF_COUNTERABLE_IMPL_TEMPLATE(typename std::remove_pointer<decltype(this)>::type, BASE_CLASS, ##__VA_ARGS__)
 
-#if ENABLE_REFS_MANAGE
+#if ENABLE_MEMORY_ANALYZE
     class IObject;
 
 #define OPTIONAL_BASE_REF : public MemoryAnalyzeObject
@@ -230,7 +230,7 @@ namespace o2
     protected:
         _type* mPtr = nullptr; // Pointer to object
 
-#if ENABLE_REFS_MANAGE
+#if ENABLE_MEMORY_ANALYZE
         std::byte* GetMemory() const override;
         IObject* GetIObject() const override;
         const std::type_info& GetTypeInfo() const override;
@@ -628,7 +628,7 @@ namespace o2
 
 namespace o2
 {
-#if ENABLE_REFS_MANAGE
+#if ENABLE_MEMORY_ANALYZE
     template<typename _type>
     std::byte* Ref<_type>::GetMemory() const
     {

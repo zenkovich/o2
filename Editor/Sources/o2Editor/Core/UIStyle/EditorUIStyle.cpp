@@ -3504,7 +3504,7 @@ namespace Editor
         addressCaptionLayerText->color = Color4(96, 125, 139);
         addressCaptionLayerText->horAlign = HorAlign::Left;
         addressCaptionLayerText->verAlign = VerAlign::Middle;
-        addressCaptionLayerText->dotsEngings = true;
+		addressCaptionLayerText->dotsEngings = true;
 		layersRoot->AddChildLayer("address", addressCaptionLayerText, Layout::VerStretch(HorAlign::Right, 0, 0, 150, 85));
 
         // Size

@@ -3,11 +3,11 @@
         "Type": "Editor::SceneLayerRefProperty",
         "Value": {
             "Prototype": {
-                "id": "378b46ce2672532b0eef2b160cf6068a",
+                "id": "4030780e6062429900d337ac2f93557c",
                 "path": "Editor UI styles/Scene Layer Ref Property standard.proto"
             },
-            "PrototypeLink": 2547871647727447099,
-            "Id": 4761038039790351149,
+            "PrototypeLink": 15032625729189442095,
+            "Id": 16687173679198879937,
             "mName": "with caption",
             "mBorder": {
                 "left": 10.0,
@@ -20,11 +20,11 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "7d5f55e1507d5e0059862ed85c5712ad",
+                            "id": "600c5d7115982cf031d7455a13bb0e45",
                             "path": "Editor UI styles/Label standard.proto"
                         },
-                        "PrototypeLink": 4272162365707740014,
-                        "Id": 7587407341564981530,
+                        "PrototypeLink": 9613259363390956959,
+                        "Id": 11742765151002027399,
                         "Transform": {
                             "weight": {
                                 "x": 0.6000000238418579,
@@ -51,8 +51,8 @@
                                         "mDotsEndings": true
                                     }
                                 },
-                                "mUID": 18096202633507884553,
-                                "PrototypeLink": 12527839538318321895
+                                "mUID": 15933662404080537962,
+                                "PrototypeLink": 11511876723386816904
                             }
                         ]
                     }
@@ -60,24 +60,24 @@
                 {
                     "Type": "o2::Widget",
                     "Data": {
-                        "PrototypeLink": 7089334903379379514,
-                        "Id": 8873059871491664073,
+                        "PrototypeLink": 1759391139862117748,
+                        "Id": 13347988686382179100,
                         "Children": [
                             {
                                 "Type": "o2::HorizontalLayout",
                                 "Data": {
-                                    "PrototypeLink": 8308195040129457298,
-                                    "Id": 4193710166910541977,
+                                    "PrototypeLink": 10794695855070890750,
+                                    "Id": 7065026031610001127,
                                     "Children": [
                                         {
                                             "Type": "o2::DropDown",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "404203580cf378040a2e427610d46ab1",
+                                                    "id": "229e05e016d441202dda13bf0e004c1f",
                                                     "path": "Editor UI styles/Drop Down standard.proto"
                                                 },
-                                                "PrototypeLink": 1540258212617552850,
-                                                "Id": 896554236889581452,
+                                                "PrototypeLink": 7994248275887245107,
+                                                "Id": 5497444438896845338,
                                                 "InternalWidgets": [
                                                     {
                                                         "Type": "o2::CustomList",
@@ -108,11 +108,11 @@
                                                                 "Type": "o2::Label",
                                                                 "Value": {
                                                                     "Prototype": {
-                                                                        "id": "7d5f55e1507d5e0059862ed85c5712ad",
+                                                                        "id": "600c5d7115982cf031d7455a13bb0e45",
                                                                         "path": "Editor UI styles/Label standard.proto"
                                                                     },
-                                                                    "PrototypeLink": 4272162365707740014,
-                                                                    "Id": 9307308235882176954,
+                                                                    "PrototypeLink": 9613259363390956959,
+                                                                    "Id": 15062263977964918493,
                                                                     "mName": "empty label",
                                                                     "Layers": [
                                                                         {
@@ -135,7 +135,7 @@
                                                                                     "mDotsEndings": true
                                                                                 }
                                                                             },
-                                                                            "mUID": 7071373637744944168
+                                                                            "mUID": 7069337103561603450
                                                                         }
                                                                     ]
                                                                 }
@@ -219,7 +219,7 @@
                                                                     "y": 16.0
                                                                 }
                                                             },
-                                                            "Id": 14798660925970308496,
+                                                            "Id": 4665387464177637917,
                                                             "Transform": {
                                                                 "anchorMax": {
                                                                     "x": 1.0,
@@ -240,12 +240,13 @@
                                                             },
                                                             "Children": [
                                                                 {
+                                                                    "Type": "o2::VerticalLayout",
                                                                     "Data": {
                                                                         "mName": "layout",
                                                                         "mBaseCorner": "LeftTop",
                                                                         "mExpandHeight": false,
                                                                         "mFitByChildren": true,
-                                                                        "Id": 13062386221244188698,
+                                                                        "Id": 16306212134507364563,
                                                                         "Transform": {
                                                                             "anchorMax": {
                                                                                 "x": 1.0,
@@ -263,8 +264,7 @@
                                                                         "InternalWidgets": [],
                                                                         "Layers": [],
                                                                         "States": []
-                                                                    },
-                                                                    "Type": "o2::VerticalLayout"
+                                                                    }
                                                                 }
                                                             ],
                                                             "InternalWidgets": [
@@ -272,11 +272,11 @@
                                                                     "Type": "o2::HorizontalScrollBar",
                                                                     "Value": {
                                                                         "Prototype": {
-                                                                            "id": "61e9496f05f24fc81018330f2c60124f",
+                                                                            "id": "2b1f57f00bb66b90352d1889164a3516",
                                                                             "path": "Editor UI styles/Horizontal Scroll Bar standard.proto"
                                                                         },
-                                                                        "PrototypeLink": 10492944459780109401,
-                                                                        "Id": 12001793706811843217,
+                                                                        "PrototypeLink": 2396346607982954160,
+                                                                        "Id": 14601322146137818570,
                                                                         "Transform": {
                                                                             "anchorMax": {
                                                                                 "x": 1.0,
@@ -315,7 +315,7 @@
                                                                                         "y": 4.0
                                                                                     }
                                                                                 },
-                                                                                "mUID": 6266133974165928720,
+                                                                                "mUID": 7690853585558183180,
                                                                                 "Children": [
                                                                                     {
                                                                                         "Type": "o2::WidgetLayer",
@@ -361,7 +361,7 @@
                                                                                                     }
                                                                                                 }
                                                                                             },
-                                                                                            "mUID": 3649915945182654444
+                                                                                            "mUID": 11859223833193802853
                                                                                         }
                                                                                     }
                                                                                 ]
@@ -386,7 +386,7 @@
                                                                                         "y": 4.0
                                                                                     }
                                                                                 },
-                                                                                "mUID": 9349425643141532249,
+                                                                                "mUID": 3949105747435732137,
                                                                                 "mDepth": 1.0,
                                                                                 "Children": [
                                                                                     {
@@ -433,7 +433,7 @@
                                                                                                     }
                                                                                                 }
                                                                                             },
-                                                                                            "mUID": 17538389239659474355,
+                                                                                            "mUID": 11386636614956999161,
                                                                                             "mDepth": 1.0
                                                                                         }
                                                                                     },
@@ -481,7 +481,7 @@
                                                                                                     }
                                                                                                 }
                                                                                             },
-                                                                                            "mUID": 7279218395378607487,
+                                                                                            "mUID": 12455078296618936696,
                                                                                             "mTransparency": 0.0,
                                                                                             "mDepth": 2.0
                                                                                         }
@@ -530,7 +530,7 @@
                                                                                                     }
                                                                                                 }
                                                                                             },
-                                                                                            "mUID": 10781473261291045468,
+                                                                                            "mUID": 11086926433173262486,
                                                                                             "mTransparency": 0.0,
                                                                                             "mDepth": 3.0
                                                                                         }
@@ -556,11 +556,11 @@
                                                                     "Type": "o2::VerticalScrollBar",
                                                                     "Value": {
                                                                         "Prototype": {
-                                                                            "id": "26f83f081652018e0f4c176231d74aad",
+                                                                            "id": "7e8a245340f85b8e1ece1d0b398866c6",
                                                                             "path": "Editor UI styles/Vertical Scroll Bar standard.proto"
                                                                         },
-                                                                        "PrototypeLink": 1546231510864932275,
-                                                                        "Id": 11188637437140022209,
+                                                                        "PrototypeLink": 8311025582170325613,
+                                                                        "Id": 6388282807066315751,
                                                                         "Transform": {
                                                                             "anchorMin": {
                                                                                 "x": 1.0,
@@ -603,7 +603,7 @@
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "mUID": 15840053590631467023,
+                                                                                "mUID": 14671831310413600286,
                                                                                 "Children": [
                                                                                     {
                                                                                         "Type": "o2::WidgetLayer",
@@ -649,7 +649,7 @@
                                                                                                     }
                                                                                                 }
                                                                                             },
-                                                                                            "mUID": 16979950894441104543
+                                                                                            "mUID": 9088100421074142180
                                                                                         }
                                                                                     }
                                                                                 ]
@@ -684,7 +684,7 @@
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "mUID": 13850532727280951921,
+                                                                                "mUID": 6541636989581919908,
                                                                                 "mDepth": 1.0,
                                                                                 "Children": [
                                                                                     {
@@ -731,7 +731,7 @@
                                                                                                     }
                                                                                                 }
                                                                                             },
-                                                                                            "mUID": 5268237013639841846,
+                                                                                            "mUID": 14297355649070903597,
                                                                                             "mDepth": 1.0
                                                                                         }
                                                                                     },
@@ -779,7 +779,7 @@
                                                                                                     }
                                                                                                 }
                                                                                             },
-                                                                                            "mUID": 14698656826171541068,
+                                                                                            "mUID": 4368277707017212553,
                                                                                             "mTransparency": 0.0,
                                                                                             "mDepth": 2.0
                                                                                         }
@@ -828,7 +828,7 @@
                                                                                                     }
                                                                                                 }
                                                                                             },
-                                                                                            "mUID": 2633564739302864987,
+                                                                                            "mUID": 15584426435977787108,
                                                                                             "mTransparency": 0.0,
                                                                                             "mDepth": 3.0
                                                                                         }
@@ -888,7 +888,7 @@
                                                                                 }
                                                                             }
                                                                         },
-                                                                        "mUID": 1727067778331321303
+                                                                        "mUID": 7047410920114077195
                                                                     }
                                                                 }
                                                             ],
@@ -914,13 +914,13 @@
                                                                                                             "Value": {
                                                                                                                 "mKeys": [
                                                                                                                     {
-                                                                                                                        "uid": 7365005821172540756,
+                                                                                                                        "uid": 1115496406322576861,
                                                                                                                         "value": 5.0,
                                                                                                                         "rightSupportPosition": 0.08000000566244126,
                                                                                                                         "supportsType": "Broken"
                                                                                                                     },
                                                                                                                     {
-                                                                                                                        "uid": 9719143538824843582,
+                                                                                                                        "uid": 7365005821172540756,
                                                                                                                         "value": 15.0,
                                                                                                                         "position": 0.20000000298023225,
                                                                                                                         "leftSupportPosition": -0.20000000298023225,
@@ -940,7 +940,7 @@
                                                                             "meta": {
                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                 "Value": {
-                                                                                    "mId": "0f8f11b96f7945ce3bfb3a3520ca252a"
+                                                                                    "mId": "4a046a8c01b53bb80ec33c1b00eb5c70"
                                                                                 }
                                                                             }
                                                                         }
@@ -967,13 +967,13 @@
                                                                                                             "Value": {
                                                                                                                 "mKeys": [
                                                                                                                     {
-                                                                                                                        "uid": 7688593058560344202,
+                                                                                                                        "uid": 9719143538824843582,
                                                                                                                         "value": -5.0,
                                                                                                                         "rightSupportPosition": 0.08000000566244126,
                                                                                                                         "supportsType": "Broken"
                                                                                                                     },
                                                                                                                     {
-                                                                                                                        "uid": 12116926311361553006,
+                                                                                                                        "uid": 7688593058560344202,
                                                                                                                         "value": -15.0,
                                                                                                                         "position": 0.20000000298023225,
                                                                                                                         "leftSupportPosition": -0.20000000298023225,
@@ -993,7 +993,7 @@
                                                                             "meta": {
                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                 "Value": {
-                                                                                    "mId": "42b1405203e2102047dc475d1b652fff"
+                                                                                    "mId": "5f4d5b6861dc4943791d2e53132a6f5f"
                                                                                 }
                                                                             }
                                                                         }
@@ -1021,12 +1021,12 @@
                                                                                                             "Value": {
                                                                                                                 "mKeys": [
                                                                                                                     {
-                                                                                                                        "uid": 11584063820759865392,
+                                                                                                                        "uid": 12116926311361553006,
                                                                                                                         "rightSupportPosition": 0.08000000566244126,
                                                                                                                         "supportsType": "Broken"
                                                                                                                     },
                                                                                                                     {
-                                                                                                                        "uid": 5386155521216286786,
+                                                                                                                        "uid": 11584063820759865392,
                                                                                                                         "value": 1.0,
                                                                                                                         "position": 0.20000000298023225,
                                                                                                                         "leftSupportPosition": -0.20000000298023225,
@@ -1046,7 +1046,7 @@
                                                                             "meta": {
                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                 "Value": {
-                                                                                    "mId": "09680bb66bbb31d33f151d787bc0762f"
+                                                                                    "mId": "74a3699a338b0e7b5b6b423f281d4342"
                                                                                 }
                                                                             }
                                                                         }
@@ -1074,12 +1074,12 @@
                                                                                                             "Value": {
                                                                                                                 "mKeys": [
                                                                                                                     {
-                                                                                                                        "uid": 7962558717637734324,
+                                                                                                                        "uid": 5386155521216286786,
                                                                                                                         "rightSupportPosition": 0.08000000566244126,
                                                                                                                         "supportsType": "Broken"
                                                                                                                     },
                                                                                                                     {
-                                                                                                                        "uid": 285686994513496970,
+                                                                                                                        "uid": 7962558717637734324,
                                                                                                                         "value": 1.0,
                                                                                                                         "position": 0.20000000298023225,
                                                                                                                         "leftSupportPosition": -0.20000000298023225,
@@ -1099,7 +1099,7 @@
                                                                             "meta": {
                                                                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                 "Value": {
-                                                                                    "mId": "40ca2e5c4dbd6e2a672d76db649849a8"
+                                                                                    "mId": "621d1e7137a527156596793c16f42c5e"
                                                                                 }
                                                                             }
                                                                         }
@@ -1127,8 +1127,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 3650796235126114490,
-                                                        "PrototypeLink": 10838776767044328615
+                                                        "mUID": 17054906072321639444,
+                                                        "PrototypeLink": 4460179136211489896
                                                     },
                                                     {
                                                         "mDrawable": {
@@ -1153,8 +1153,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 11173064941603392783,
-                                                        "PrototypeLink": 16189492456486568257
+                                                        "mUID": 1498849075136001445,
+                                                        "PrototypeLink": 11998856682166775202
                                                     },
                                                     {
                                                         "mDrawable": {
@@ -1179,8 +1179,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 15194650293058247779,
-                                                        "PrototypeLink": 8653377237679906410
+                                                        "mUID": 8903745636097306290,
+                                                        "PrototypeLink": 15815759891836448951
                                                     },
                                                     {
                                                         "mDrawable": {
@@ -1192,8 +1192,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 14953206682486118581,
-                                                        "PrototypeLink": 8068946602178429935
+                                                        "mUID": 2366072647125211699,
+                                                        "PrototypeLink": 1556360362395738891
                                                     }
                                                 ],
                                                 "States": [

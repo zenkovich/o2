@@ -7,11 +7,11 @@
                 "Type": "o2::Label",
                 "Value": {
                     "Prototype": {
-                        "id": "7d5f55e1507d5e0059862ed85c5712ad",
+                        "id": "600c5d7115982cf031d7455a13bb0e45",
                         "path": "Editor UI styles/Label standard.proto"
                     },
-                    "PrototypeLink": 4272162365707740014,
-                    "Id": 6634093205073566444,
+                    "PrototypeLink": 9613259363390956959,
+                    "Id": 3285677765020636295,
                     "mName": "unknown label",
                     "mHorOverflow": "Expand",
                     "mExpandBorder": {
@@ -38,8 +38,8 @@
                                     "mHorAlign": "Middle"
                                 }
                             },
-                            "mUID": 6195320051928623169,
-                            "PrototypeLink": 12527839538318321895
+                            "mUID": 9627091495425297654,
+                            "PrototypeLink": 11511876723386816904
                         }
                     ]
                 }
@@ -81,16 +81,17 @@
                     "y": 16.0
                 }
             },
-            "Id": 18233092539257903640,
+            "Id": 2179578737244419730,
             "Transform": {},
             "Children": [
                 {
+                    "Type": "o2::HorizontalLayout",
                     "Data": {
                         "mName": "unnamed",
                         "mBaseCorner": "LeftTop",
                         "mExpandWidth": false,
                         "mFitByChildren": true,
-                        "Id": 14092520708925915766,
+                        "Id": 8574783407018242541,
                         "Transform": {
                             "anchorMax": {
                                 "x": 1.0,
@@ -104,8 +105,7 @@
                         "InternalWidgets": [],
                         "Layers": [],
                         "States": []
-                    },
-                    "Type": "o2::HorizontalLayout"
+                    }
                 }
             ],
             "InternalWidgets": [],
@@ -140,7 +140,7 @@
                                 }
                             }
                         },
-                        "mUID": 3285677765020636295
+                        "mUID": 1848761175361486982
                     }
                 }
             ],
@@ -167,12 +167,12 @@
                                                             "Value": {
                                                                 "mKeys": [
                                                                     {
-                                                                        "uid": 3240521660734120316,
+                                                                        "uid": 6195320051928623169,
                                                                         "rightSupportPosition": 0.08000000566244126,
                                                                         "supportsType": "Broken"
                                                                     },
                                                                     {
-                                                                        "uid": 3854385740524066487,
+                                                                        "uid": 3240521660734120316,
                                                                         "value": 1.0,
                                                                         "position": 0.20000000298023225,
                                                                         "leftSupportPosition": -0.20000000298023225,
@@ -192,7 +192,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "41be1cad2288419a1828152c4a306ceb"
+                                    "mId": "2cd42abf37802209072021860651427e"
                                 }
                             }
                         }
@@ -220,12 +220,12 @@
                                                             "Value": {
                                                                 "mKeys": [
                                                                     {
-                                                                        "uid": 16697136099318949700,
+                                                                        "uid": 3854385740524066487,
                                                                         "rightSupportPosition": 0.08000000566244126,
                                                                         "supportsType": "Broken"
                                                                     },
                                                                     {
-                                                                        "uid": 12458768260958270773,
+                                                                        "uid": 16697136099318949700,
                                                                         "value": 1.0,
                                                                         "position": 0.20000000298023225,
                                                                         "leftSupportPosition": -0.20000000298023225,
@@ -245,7 +245,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "07b601a37b1261a5388d360c67877b30"
+                                    "mId": "1bfe1fc032262f045e9b39ce625b3019"
                                 }
                             }
                         }

@@ -6,7 +6,7 @@
 
 namespace o2
 {
-#if ENABLE_REFS_MANAGE
+#if ENABLE_MEMORY_ANALYZE
 #define OPTIONAL_BASE_MAP , public MemoryAnalyzeObject
 #else
 #define OPTIONAL_BASE_MAP
@@ -164,7 +164,7 @@ namespace o2
         // Returns constant end iterator
         ConstIterator End() const { return std::map<_key_type, _value_type>::cend(); }
 
-#if ENABLE_REFS_MANAGE
+#if ENABLE_MEMORY_ANALYZE
         void IterateChildren(const std::function<void(MemoryAnalyzeObject*)>& callback) override
         {
             if constexpr (std::is_base_of_v<MemoryAnalyzeObject, _key_type> || std::is_base_of_v<MemoryAnalyzeObject, _value_type>)

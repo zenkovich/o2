@@ -3,7 +3,7 @@
         "Type": "Editor::IntegerProperty",
         "Value": {
             "mName": "standard",
-            "Id": 316777427865851809,
+            "Id": 3819065268812624422,
             "Transform": {
                 "minSize": {
                     "x": 0.0,
@@ -12,9 +12,10 @@
             },
             "Children": [
                 {
+                    "Type": "o2::Widget",
                     "Data": {
                         "mName": "container",
-                        "Id": 9938119080545962690,
+                        "Id": 14435511521314925280,
                         "Transform": {
                             "anchorMax": {
                                 "x": 1.0,
@@ -27,9 +28,10 @@
                         },
                         "Children": [
                             {
+                                "Type": "o2::HorizontalLayout",
                                 "Data": {
                                     "mName": "layout",
-                                    "Id": 1743006431639257408,
+                                    "Id": 15641188409314967600,
                                     "Transform": {
                                         "anchorMax": {
                                             "x": 1.0,
@@ -42,13 +44,14 @@
                                     },
                                     "Children": [
                                         {
+                                            "Type": "o2::EditBox",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "046c25fd1bb333ba3c5a410d76fa3ed3",
+                                                    "id": "7c313f9e5ad13886486b25c163214b2c",
                                                     "path": "Editor UI styles/Edit Box singleline with arrows.proto"
                                                 },
-                                                "PrototypeLink": 13996767208301055700,
-                                                "Id": 5428925145260731420,
+                                                "PrototypeLink": 13957372915397512110,
+                                                "Id": 4202365852104358680,
                                                 "Transform": {
                                                     "anchorMax": {
                                                         "x": 1.0,
@@ -148,8 +151,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 1257707085843488634,
-                                                        "PrototypeLink": 14409586897712148455
+                                                        "mUID": 15166584538635783645,
+                                                        "PrototypeLink": 9870245982790006633
                                                     },
                                                     {
                                                         "mDrawable": {
@@ -174,8 +177,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 10719277967860793002,
-                                                        "PrototypeLink": 3611835327872739041
+                                                        "mUID": 10527240517549911003,
+                                                        "PrototypeLink": 17780265500988598915
                                                     },
                                                     {
                                                         "mDrawable": {
@@ -200,8 +203,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 11753365551606492469,
-                                                        "PrototypeLink": 18305791969019392688
+                                                        "mUID": 10548394949372825111,
+                                                        "PrototypeLink": 2132920985005650082
                                                     },
                                                     {
                                                         "mDrawable": {
@@ -213,8 +216,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 12013797497340260764,
-                                                        "PrototypeLink": 14799113875568282661
+                                                        "mUID": 5276105822769498427,
+                                                        "PrototypeLink": 949053511853586531
                                                     }
                                                 ],
                                                 "States": [
@@ -225,22 +228,19 @@
                                                         "name": "focused"
                                                     }
                                                 ]
-                                            },
-                                            "Type": "o2::EditBox"
+                                            }
                                         }
                                     ],
                                     "InternalWidgets": [],
                                     "Layers": [],
                                     "States": []
-                                },
-                                "Type": "o2::HorizontalLayout"
+                                }
                             }
                         ],
                         "InternalWidgets": [],
                         "Layers": [],
                         "States": []
-                    },
-                    "Type": "o2::Widget"
+                    }
                 }
             ],
             "InternalWidgets": [],
