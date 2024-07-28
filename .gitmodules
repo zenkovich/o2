@@ -1,3 +1,36 @@
 [submodule "Framework/3rdPartyLibs/tracy"]
 	path = Framework/3rdPartyLibs/tracy
 	url = https://github.com/wolfpld/tracy
+[submodule "Framework/3rdPartyLibs/boost/stacktrace"]
+	path = Framework/3rdPartyLibs/boost/stacktrace
+	url = https://github.com/boostorg/stacktrace.git
+[submodule "Framework/3rdPartyLibs/boost/config"]
+	path = Framework/3rdPartyLibs/boost/config
+	url = https://github.com/boostorg/config.git
+[submodule "Framework/3rdPartyLibs/boost/container_hash"]
+	path = Framework/3rdPartyLibs/boost/container_hash
+	url = https://github.com/boostorg/container_hash.git
+[submodule "Framework/3rdPartyLibs/boost/core"]
+	path = Framework/3rdPartyLibs/boost/core
+	url = https://github.com/boostorg/core.git
+[submodule "Framework/3rdPartyLibs/boost/predef"]
+	path = Framework/3rdPartyLibs/boost/predef
+	url = https://github.com/boostorg/predef.git
+[submodule "Framework/3rdPartyLibs/boost/winapi"]
+	path = Framework/3rdPartyLibs/boost/winapi
+	url = https://github.com/boostorg/winapi.git
+[submodule "Framework/3rdPartyLibs/boost/describe"]
+	path = Framework/3rdPartyLibs/boost/describe
+	url = https://github.com/boostorg/describe.git
+[submodule "Framework/3rdPartyLibs/boost/mp11"]
+	path = Framework/3rdPartyLibs/boost/mp11
+	url = https://github.com/boostorg/mp11.git
+[submodule "Framework/3rdPartyLibs/boost/assert"]
+	path = Framework/3rdPartyLibs/boost/assert
+	url = https://github.com/boostorg/assert.git
+[submodule "Framework/3rdPartyLibs/boost/static_assert"]
+	path = Framework/3rdPartyLibs/boost/static_assert
+	url = https://github.com/boostorg/static_assert.git
+[submodule "Framework/3rdPartyLibs/boost/throw_exception"]
+	path = Framework/3rdPartyLibs/boost/throw_exception
+	url = https://github.com/boostorg/throw_exception.git
