@@ -88,13 +88,18 @@ file(GLOB_RECURSE o2Framework_SOURCES "Framework/Sources/*.cpp" "Framework/Sourc
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${o2Framework_SOURCES})
 
 set(o2Framework_INCLUDES 
-    "Framework/Sources"
-    "Framework/3rdPartyLibs"
-    "Framework/3rdPartyLibs/rapidjson/include"
-    "Framework/3rdPartyLibs/FreeType/include"
-    "Framework/3rdPartyLibs/jerryscript/jerry-core/include"
-    "Framework/3rdPartyLibs/jerryscript"
-    "Framework/"
+        "Framework/Sources"
+        "Framework/3rdPartyLibs"
+        "Framework/3rdPartyLibs/rapidjson/include"
+        "Framework/3rdPartyLibs/FreeType/include"
+        "Framework/3rdPartyLibs/jerryscript/jerry-core/include"
+        "Framework/3rdPartyLibs/jerryscript"
+        "Framework/3rdPartyLibs/boost/stacktrace/include"
+        "Framework/3rdPartyLibs/boost/config/include"
+        "Framework/3rdPartyLibs/boost/predef/include"
+        "Framework/3rdPartyLibs/boost/core/include"
+        "Framework/3rdPartyLibs/boost/container_hash/include"
+        "Framework/"
 )
 
 target_sources(o2Framework PRIVATE ${o2Framework_SOURCES})
@@ -112,14 +117,19 @@ target_link_libraries(o2Framework
         jerry-core 
         jerry-ext 
         jerry-port-default
-        boost_stacktrace_basic
-        boost_stacktrace_noop
-        boost_stacktrace_windbg
 )
 
 if (O2_TRACY)
     list(APPEND o2Framework_INCLUDES "Framework/3rdPartyLibs/tracy/public")
     target_link_libraries(o2Framework PUBLIC Tracy::TracyClient)
+endif()
+
+if (O2_MEMORY_ANALYZE)
+    target_link_libraries(o2Framework PUBLIC boost_stacktrace_basic)
+
+    if(WIN32)
+        target_link_libraries(o2Framework PUBLIC boost_stacktrace_windbg boost_stacktrace_noop)
+    endif()
 endif()
 
 if (UNIX)

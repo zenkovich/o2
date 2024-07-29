@@ -1,7 +1,6 @@
 #include "o2/stdafx.h"
 #include "MemoryAnalyzer.h"
 
-#include "xutility"
 #include "o2/Utils/Memory/MemoryAnalyzeableObject.h"
 #include "o2/Utils/Types/Ref.h"
 
