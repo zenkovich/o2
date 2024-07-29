@@ -89,6 +89,7 @@ add_subdirectory(libpng)
 add_subdirectory(zlib)
 add_subdirectory(FreeType)
 add_subdirectory(pugixml)
+add_subdirectory(boost)
 
 if(MSVC)
     target_compile_options(Box2D PRIVATE "/MP")

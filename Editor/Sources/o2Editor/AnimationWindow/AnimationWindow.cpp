@@ -19,7 +19,7 @@ DECLARE_SINGLETON(Editor::AnimationWindow);
 namespace Editor
 {
 	AnimationWindow::AnimationWindow(RefCounter* refCounter):
-		IEditorWindow(refCounter)
+		IEditorWindow(refCounter), Singleton<AnimationWindow>(refCounter)
 	{
 		InitializeWindow();
 	}
@@ -135,7 +135,12 @@ namespace Editor
 		return mCurves->IsEnabled();
 	}
 
-	void AnimationWindow::OnClosed()
+    Ref<RefCounterable> AnimationWindow::CastToRefCounterable(const Ref<AnimationWindow>& ref)
+    {
+		return DynamicCast<Singleton<AnimationWindow>>(ref);
+    }
+
+    void AnimationWindow::OnClosed()
 	{
 		SetAnimation(nullptr);
 		SetAnimationEditable(nullptr);
@@ -172,7 +177,7 @@ namespace Editor
 
 		SetCurvesMode(false);
 
-		 PropertiesListDlg::InitializeSingleton();
+		PropertiesListDlg::InitializeSingleton();
 	}
 
 	void AnimationWindow::InitializeHandlesSheet()

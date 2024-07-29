@@ -13,11 +13,11 @@ namespace Editor
 	// -----------------
 	// Editor menu panel
 	// -----------------
-	class MenuPanel: public Singleton<MenuPanel>, public RefCounterable
+	class MenuPanel: public Singleton<MenuPanel>
 	{
 	public:
 		// Default constructor. Initializes basic menu items
-		MenuPanel();
+		MenuPanel(RefCounter* refCounter);
 
 		// Destructor
 		~MenuPanel();
@@ -98,6 +98,11 @@ namespace Editor
 
 		// On View/Game pressed in menu
 		void OnShowGamePressed();
+
+#if ENABLE_MEMORY_ANALYZE
+		// On View/Memory analyzer pressed in menu
+		void OnShowMemoryAnalyzerPressed();
+#endif
 
 		// On View/Reset layout pressed in menu
 		void OnResetLayoutPressed();

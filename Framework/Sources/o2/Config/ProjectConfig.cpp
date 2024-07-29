@@ -8,8 +8,8 @@ namespace o2
 {
     DECLARE_SINGLETON(ProjectConfig);
 
-    ProjectConfig::ProjectConfig():
-        mPlatform(GetEnginePlatform())
+    ProjectConfig::ProjectConfig(RefCounter* refCounter):
+        Singleton<ProjectConfig>(refCounter), mPlatform(GetEnginePlatform())
     {
         Load();
     }

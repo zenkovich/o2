@@ -46,8 +46,8 @@ namespace o2
         task->doTask = func;
     }
 
-    TaskManager::TaskManager():
-        mLastTaskId(0)
+    TaskManager::TaskManager(RefCounter* refCounter):
+        Singleton<TaskManager>(refCounter), mLastTaskId(0)
     {}
 
     TaskManager::~TaskManager()

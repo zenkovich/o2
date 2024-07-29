@@ -1174,7 +1174,69 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "backless");
 	}
 
-	void BasicUIStyleBuilder::RebuildSinglelineEditbox()
+    void BasicUIStyleBuilder::RebuildBacklessMultilineEditbox()
+    {
+        Ref<EditBox> sample = mmake<EditBox>();
+        sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
+        sample->SetViewLayout(Layout::BothStretch(0, 0, 2, 0));
+        sample->SetCaretBlinkingDelay(1.15f);
+        sample->SetSelectionColor(Color4(0, 156, 141, 120));
+		sample->layout->minSize = Vec2F(30, 40);
+
+        Ref<HorizontalScrollBar> horScrollBar = o2UI.CreateHorScrollBar();
+        horScrollBar->layout->anchorMin = Vec2F(0, 0);
+        horScrollBar->layout->anchorMax = Vec2F(1, 0);
+        horScrollBar->layout->offsetMin = Vec2F(5, 0);
+        horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+        sample->SetHorizontalScrollBar(horScrollBar);
+
+        Ref<VerticalScrollBar> verScrollBar = o2UI.CreateVerScrollBar();
+        verScrollBar->layout->anchorMin = Vec2F(1, 0);
+        verScrollBar->layout->anchorMax = Vec2F(1, 1);
+        verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+        verScrollBar->layout->offsetMax = Vec2F(0, -5);
+        sample->SetVerticalScrollBar(verScrollBar);
+
+        auto enableHorScrollAnim = mmake<AnimationClip>();
+        *enableHorScrollAnim->AddTrack<float>("mVerScrollBar/layout/offsetBottom") =
+            AnimationTrack<float>::EaseInOut(5, 15, 0.2f);
+
+        *enableHorScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMin") =
+            AnimationTrack<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
+
+        auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
+
+        auto enableVerScrollAnim = mmake<AnimationClip>();
+        *enableVerScrollAnim->AddTrack<float>("mHorScrollBar/layout/offsetRight") =
+            AnimationTrack<float>::EaseInOut(-5, -15, 0.2f);
+
+        *enableVerScrollAnim->AddTrack<Vec2F>("mViewAreaLayout/offsetMax") =
+            AnimationTrack<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
+
+        auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
+
+        sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        sample->AddState("focused", AnimationClip::EaseInOut("layer/focused/transparency", 0.0f, 1.0f, 0.05f))
+            ->offStateAnimationSpeed = 0.5f;
+
+        Ref<Text> textDrawable = sample->GetTextDrawable();
+        textDrawable->verAlign = VerAlign::Top;
+        textDrawable->horAlign = HorAlign::Left;
+        textDrawable->color = Color4(96, 125, 139);
+        textDrawable->SetFontAsset(AssetRef<FontAsset>("stdFont.ttf"));
+
+        Ref<Sprite> caretDrawable = sample->GetCaretDrawable();
+        *caretDrawable = Sprite();
+        caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetFontHeight())*1.7f);
+        caretDrawable->pivot = Vec2F(0, 0.16f);
+        caretDrawable->color = Color4::Black();
+
+        o2UI.AddWidgetStyle(sample, "backless multiline");
+    }
+
+    void BasicUIStyleBuilder::RebuildSinglelineEditbox()
 	{
 		Ref<EditBox> sample = mmake<EditBox>();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));

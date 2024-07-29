@@ -13,6 +13,7 @@
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 #include "o2/Utils/Math/Curve.h"
+#include "o2/Utils/Memory/MemoryAnalyzer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
@@ -28,6 +29,7 @@
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/GameWindow/GameWindow.h"
 #include "o2Editor/LogWindow/LogWindow.h"
+#include "o2Editor/MemoryAnalyzerWindow/MemoryAnalyzerWindow.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneWindow.h"
 #include "o2Editor/TreeWindow/SceneHierarchyTree.h"
@@ -37,7 +39,8 @@ DECLARE_SINGLETON(Editor::MenuPanel);
 
 namespace Editor
 {
-	MenuPanel::MenuPanel()
+	MenuPanel::MenuPanel(RefCounter* refCounter):
+		Singleton<MenuPanel>(refCounter)
 	{
 		mMenuPanel = o2UI.CreateWidget<o2::MenuPanel>();
 		*mMenuPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
@@ -77,9 +80,14 @@ namespace Editor
 		mMenuPanel->AddItem("View/Show Properties", [&]() { OnShowPropertiesPressed(); });
 		mMenuPanel->AddItem("View/Show Animation", [&]() { OnShowAnimationPressed(); });
 		mMenuPanel->AddItem("View/Show Log", [&]() { OnShowLogPressed(); });
-		mMenuPanel->AddItem("View/Show Game", [&]() { OnShowGamePressed(); });
+        mMenuPanel->AddItem("View/Show Game", [&]() { OnShowGamePressed(); });
+
+#if ENABLE_MEMORY_ANALYZE
+        mMenuPanel->AddItem("View/Show memory analyzer", [&]() { OnShowMemoryAnalyzerPressed(); });
+#endif
+
 		mMenuPanel->AddItem("View/---");
-		mMenuPanel->AddItem("View/Reset layout", [&]() { OnResetLayoutPressed(); });
+        mMenuPanel->AddItem("View/Reset layout", [&]() { OnResetLayoutPressed(); });
 
 		// BUILD
 		mMenuPanel->AddItem("Run/Connect scripts debugger", [&]() { o2Scripts.ConnectDebugger(); }, AssetRef<ImageAsset>(), ShortcutKeys(VK_F5));
@@ -324,7 +332,22 @@ namespace Editor
 			window->Show();
 	}
 
-	void MenuPanel::OnResetLayoutPressed()
+#if ENABLE_MEMORY_ANALYZE
+    void MenuPanel::OnShowMemoryAnalyzerPressed()
+    {
+        auto appRef = DynamicCast<RefCounterable>(Ref(Application::InstancePtr()));
+
+        std::vector<MemoryAnalyzeObject*> objects = { &appRef };
+
+        for (auto& singleton : GetSingletonsList())
+            objects.push_back(&singleton);
+
+        auto data = MemoryAnalyzer::BuildMemoryTree(objects);
+        MemoryAnalyzerWindow::Show(data);
+    }
+#endif
+
+    void MenuPanel::OnResetLayoutPressed()
 	{
 		o2EditorWindows.SetDefaultWindowsLayout();
 	}

@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "Containers/Vector.h"
+#include "o2/Utils/Memory/MemoryAnalyzeableObject.h"
 
 namespace o2
 {
@@ -76,8 +77,8 @@ namespace o2
 
         friend struct RefMaker;
 
-		template<typename _object_type>
-		friend struct RefCountersSetter;
+        template<typename _object_type>
+        friend struct RefCountersSetter;
     };
 
     // ---------------------------------------------------------------------------------
@@ -98,7 +99,7 @@ namespace o2
         template<typename _type>
         friend RefCounter* GetRefCounterImpl(_type* ptr);
 
-		template<typename _object_type>
+        template<typename _object_type>
         friend struct RefCountersSetter;
     };
 
@@ -115,7 +116,6 @@ namespace o2
         }
     };
 
-
     // Reference counterable implementation to override GetRefCounter method
 #define REF_COUNTERABLE_IMPL_TEMPLATE(THIS_CLASS, BASE_CLASS, ...)                                                                                \
         RefCounter* GetRefCounter() const { return BASE_CLASS::GetRefCounter(); }                                                                 \
@@ -129,11 +129,29 @@ namespace o2
 #define REF_COUNTERABLE_IMPL(BASE_CLASS, ...) \
         REF_COUNTERABLE_IMPL_TEMPLATE(typename std::remove_pointer<decltype(this)>::type, BASE_CLASS, ##__VA_ARGS__)
 
+#if ENABLE_MEMORY_ANALYZE
+    class IObject;
+
+#define OPTIONAL_BASE_REF : public MemoryAnalyzeObject
+#define OPTIONAL_REFS_MANAGE_FORWARD(CLASS)          \
+    o2::IObject* GetIObjectPtrFwd(CLASS* obj);       \
+    const std::type_info& GetTypeInfoFwd(CLASS* obj)
+     
+#define OPTIONAL_REFS_MANAGE_FORWARD_IMPL(CLASS)                                      \
+    o2::IObject* GetIObjectPtrFwd(CLASS* obj) { return dynamic_cast<IObject*>(obj); } \
+    const std::type_info& GetTypeInfoFwd(CLASS* obj) { return typeid(*obj); }
+
+#else
+#define OPTIONAL_BASE_REF
+#define OPTIONAL_REFS_MANAGE_FORWARD(CLASS)
+#define OPTIONAL_REFS_MANAGE_FORWARD_IMPL(CLASS)
+#endif
+
     // ----------------
     // Strong reference
     // ----------------
     template<typename _type>
-    class Ref
+    class Ref OPTIONAL_BASE_REF
     {
     public:
         // Default constructor
@@ -212,6 +230,14 @@ namespace o2
     protected:
         _type* mPtr = nullptr; // Pointer to object
 
+#if ENABLE_MEMORY_ANALYZE
+        std::byte* GetMemory() const override;
+        IObject* GetIObject() const override;
+        const std::type_info& GetTypeInfo() const override;
+
+        friend class MemoryAnalyzer;
+#endif 
+
     protected:
         void IncrementRef(); // Increments reference counter
         void DecrementRef(); // Decrements reference counter
@@ -268,7 +294,8 @@ namespace o2
     // Forward declaration of class and reference counter implementation
 #define FORWARD_REF(CLASS)                        \
 	o2::RefCounter* GetRefCounterFwd(CLASS* ptr); \
-	void DestructObjectFwd(CLASS* obj) 
+	void DestructObjectFwd(CLASS* obj);           \
+    OPTIONAL_REFS_MANAGE_FORWARD(CLASS)
 
     // Forward declaration of class and reference counter implementation
 #define FORWARD_CLASS_REF(CLASS) \
@@ -278,25 +305,26 @@ namespace o2
     // Implementation of forward declared reference counter 
 #define FORWARD_REF_IMPL(CLASS)                                                     \
 	o2::RefCounter* GetRefCounterFwd(CLASS* ptr) { return GetRefCounterImpl(ptr); } \
-	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }
+	void DestructObjectFwd(CLASS* obj) { DestructObjectImpl(obj); }                 \
+    OPTIONAL_REFS_MANAGE_FORWARD_IMPL(CLASS)
 
     // Declares friend function for creating new object
 #define FRIEND_REF_MAKE()  \
     friend struct RefMaker
 
-	// Dynamic cast from one reference type to another
-	template<typename _to_type, typename _from_type>
-	Ref<_to_type> DynamicCast(const Ref<_from_type>& from)
-	{
-		return Ref<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
-	}
+    // Dynamic cast from one reference type to another
+    template<typename _to_type, typename _from_type>
+    Ref<_to_type> DynamicCast(const Ref<_from_type>& from)
+    {
+        return Ref<_to_type>(dynamic_cast<_to_type*>(const_cast<_from_type*>(from.Get())));
+    }
 
-	// Dynamic cast from one references vector type to another
-	template<typename _to_type, typename _from_type>
-	Vector<Ref<_to_type>> DynamicCastVector(const _from_type& from)
-	{
-		return from.template Convert<Ref<_to_type>>([](auto& ref) { return DynamicCast<_to_type>(ref); });
-	}
+    // Dynamic cast from one references vector type to another
+    template<typename _to_type, typename _from_type>
+    Vector<Ref<_to_type>> DynamicCastVector(const _from_type& from)
+    {
+        return from.template Convert<Ref<_to_type>>([](auto& ref) { return DynamicCast<_to_type>(ref); });
+    }
 
     // Static cast from one reference type to another
     template<typename _to_type, typename _from_type>
@@ -348,7 +376,7 @@ namespace o2
         const char* location;
         int line;
 
-        RefMaker(const char* location, int line):location(location), line(line) {}
+        RefMaker(const char* location, int line) :location(location), line(line) {}
 
         void* allocate(std::size_t size) const
         {
@@ -398,8 +426,10 @@ namespace o2
     };
 
     // BaseRef implementation
+
     template<typename _type>
-    Ref<_type>::Ref() = default;
+    Ref<_type>::Ref()
+    {}
 
     template<typename _type>
     Ref<_type>::Ref(_type* ptr) :
@@ -563,7 +593,10 @@ namespace o2
     void Ref<_type>::IncrementRef()
     {
         if (mPtr)
-            GetRefCounter(mPtr)->strongReferences++;
+        {
+            auto refCounter = GetRefCounter(mPtr);
+            refCounter->strongReferences++;
+        }
     }
 
     template<typename _type>
@@ -589,4 +622,63 @@ namespace o2
             }
         }
     }
+}
+
+#include "o2/Utils/Basic/IObject.h"
+
+namespace o2
+{
+#if ENABLE_MEMORY_ANALYZE
+    template<typename _type>
+    std::byte* Ref<_type>::GetMemory() const
+    {
+        if (mPtr)
+            return reinterpret_cast<std::byte*>(GetRefCounter(mPtr));
+
+        return nullptr;
+    }
+
+    template<typename _type>
+    IObject* GetIObjectPtrImpl(_type* ptr)
+    {
+        return dynamic_cast<IObject*>(ptr);
+    }
+
+    template<typename _type>
+    IObject* GetIObjectPtr(_type* ptr)
+    {
+        if constexpr (IsCompleteRef<_type>::value)
+            return GetIObjectPtrImpl(ptr);
+        else
+            return GetIObjectPtrFwd(ptr);
+    }
+
+    template<typename _type>
+    IObject* Ref<_type>::GetIObject() const
+    {
+        return GetIObjectPtr(mPtr);
+    }
+
+    template<typename _type>
+    const std::type_info& GetTypeInfoImpl(_type* ptr)
+    {
+        return typeid(*ptr);
+    }
+
+    template<typename _type>
+    const std::type_info& GetTypeInfo(_type* ptr)
+    {
+        if constexpr (IsCompleteRef<_type>::value)
+            return GetTypeInfoImpl(ptr);
+        else
+            return GetTypeInfoFwd(ptr);
+    }
+
+    template<typename _type>
+    const std::type_info& Ref<_type>::GetTypeInfo() const 
+    { 
+        return o2::GetTypeInfo(mPtr);
+    }
+
+#endif
 }

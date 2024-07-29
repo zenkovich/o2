@@ -13,13 +13,6 @@ namespace Editor
 		IEditorWindow(nullptr)
 	{}
 
-	IEditorWindow::IEditorWindow(const IEditorWindow& other):
-		mWindow(other.mWindow->CloneAsRef<DockableWindow>())
-	{
-		if (mWindow)
-			EditorUIRoot.AddWidget(mWindow);
-	}
-
     IEditorWindow::IEditorWindow(RefCounter* refCounter):
 		RefCounterable(refCounter)
     {
@@ -30,6 +23,17 @@ namespace Editor
 
         EditorUIRoot.AddWidget(mWindow);
     }
+
+    IEditorWindow::IEditorWindow(RefCounter* refCounter, const IEditorWindow& other) :
+		RefCounterable(refCounter), mWindow(other.mWindow->CloneAsRef<DockableWindow>())
+    {
+        if (mWindow)
+            EditorUIRoot.AddWidget(mWindow);
+    }
+
+    IEditorWindow::IEditorWindow(const IEditorWindow& other):
+		IEditorWindow(nullptr, other)
+    {}
 
     IEditorWindow::~IEditorWindow()
 	{}

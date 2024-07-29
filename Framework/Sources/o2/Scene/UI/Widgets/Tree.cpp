@@ -918,6 +918,9 @@ namespace o2
                 if (mIsDraggingNodes && mSelectedObjects.Contains(child))
                     continue;
 
+                if (parentNode->object == child)
+                    continue;
+
                 auto node = CreateNode(child, parentNode);
 
                 mAllNodes.Insert(node, position++);

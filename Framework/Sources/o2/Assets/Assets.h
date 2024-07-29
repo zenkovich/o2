@@ -24,7 +24,7 @@ namespace o2
     // ----------------
     // Assets utilities
     // ----------------
-    class Assets : public Singleton<Assets>, public RefCounterable
+    class Assets : public Singleton<Assets>
     {
     public:
         PROPERTIES(Assets);
@@ -35,7 +35,7 @@ namespace o2
 
     public:
         // Default constructor
-        Assets();
+        Assets(RefCounter* refCounter);
 
         // Destructor
         ~Assets();

@@ -2,18 +2,25 @@
 
 #include "o2/Utils/Debug/Assert.h"
 #include "o2/Utils/Function/Function.h"
-#include "o2/Utils/Memory/MemoryManager.h"
 #include "o2/Utils/Math/Math.h"
-#include <vector>
+#include "o2/Utils/Memory/MemoryAnalyzeableObject.h"
+#include "o2/Utils/Memory/MemoryManager.h"
 #include <algorithm>
+#include <vector>
 
 namespace o2
 {
+#if ENABLE_MEMORY_ANALYZE
+#define OPTIONAL_BASE_VECTOR , public MemoryAnalyzeObject
+#else
+#define OPTIONAL_BASE_VECTOR
+#endif
+
     // --------------------
     // Dynamic linear array
     // --------------------
     template<typename _type>
-    class Vector : public std::vector<_type>
+    class Vector : public std::vector<_type> OPTIONAL_BASE_VECTOR
     {
     public:
         typedef typename std::vector<_type>::iterator Iterator;
@@ -276,6 +283,13 @@ namespace o2
 
         // Returns constant end iterator
         ConstIterator End() const;
+
+#if ENABLE_MEMORY_ANALYZE
+        std::byte* GetMemory() const override { return const_cast<std::byte*>(reinterpret_cast<const std::byte*>(std::vector<_type>::data())); }
+        size_t GetMemorySize() const { return Count() * sizeof(_type) + sizeof(*this); }
+        //void IterateChildren(const std::function<void(const String&, MemoryAnalyzeObject*)>& callback) {}
+        const std::type_info& GetTypeInfo() const override { return typeid(Vector<_type>); }
+#endif
     };
 
     template<typename _type>

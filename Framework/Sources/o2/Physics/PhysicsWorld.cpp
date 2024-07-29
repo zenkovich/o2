@@ -11,8 +11,8 @@ namespace o2
 {
     DECLARE_SINGLETON(PhysicsWorld);
 
-    PhysicsWorld::PhysicsWorld():
-        mWorld(Vec2F())
+    PhysicsWorld::PhysicsWorld(RefCounter* refCounter):
+        Singleton<PhysicsWorld>(refCounter), mWorld(Vec2F())
     {
         auto debugDraw = mnew PhysicsDebugDraw();
         mWorld.SetDebugDraw(debugDraw);

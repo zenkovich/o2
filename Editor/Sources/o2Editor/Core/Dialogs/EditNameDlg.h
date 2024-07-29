@@ -34,7 +34,9 @@ namespace Editor
 		// Shows name editing window. Delegate onCompleted is called when ok pressed and onCancelled when cancel
 		static void Show(const String& name, 
 						 Function<void(const String&)> onCompleted,
-						 Function<void()> onCancelled = Function<void()>());
+                         Function<void()> onCancelled = Function<void()>());
+
+        REF_COUNTERABLE_IMPL(Singleton<NameEditDlg>, CursorEventsListener);
 
 	protected:
 		Function<void(const String&)> mOnCompletedCallback; // On completed callback

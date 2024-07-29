@@ -25,14 +25,14 @@ namespace Editor
     // ------------------------------------------------------------------------------
     // Editor properties building utility. Can cache, build and reuse property fields
     // ------------------------------------------------------------------------------
-    class Properties : public Singleton<Properties>, public RefCounterable
+    class Properties : public Singleton<Properties>
     {
     public:
         Function<void(const Ref<IPropertyField>&)> onFieldChanged; // Some field changed event
 
     public:
         // Default constructor. Initializes properties samples and fills pools
-        Properties();
+        Properties(RefCounter* refCounter);
 
         // Destructor
         ~Properties();

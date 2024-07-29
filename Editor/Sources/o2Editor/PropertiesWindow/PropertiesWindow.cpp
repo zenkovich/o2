@@ -17,8 +17,8 @@ DECLARE_SINGLETON(Editor::PropertiesWindow);
 
 namespace Editor
 {
-	PropertiesWindow::PropertiesWindow():
-		mCurrentViewer(nullptr)
+	PropertiesWindow::PropertiesWindow(RefCounter* refCounter):
+		IEditorWindow(refCounter), Singleton<PropertiesWindow>(refCounter), mCurrentViewer(nullptr)
 	{
 		InitializeWindow();
 		InitializeViewers();
@@ -166,6 +166,12 @@ namespace Editor
 	{
 		return mTargetsChanged;
 	}
+
+    Ref<RefCounterable> PropertiesWindow::CastToRefCounterable(const Ref<PropertiesWindow>& ref)
+    {
+		return DynamicCast<Singleton<PropertiesWindow>>(ref);
+    }
+
 }
 // --- META ---
 

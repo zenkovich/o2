@@ -36,13 +36,14 @@ DECLARE_SINGLETON(Editor::TreeWindow);
 
 namespace Editor
 {
-    TreeWindow::TreeWindow()
+    TreeWindow::TreeWindow(RefCounter* refCounter):
+        Singleton<TreeWindow>(refCounter), IEditorWindow(refCounter)
     {
         InitializeWindow();
     }
 
-    TreeWindow::TreeWindow(const TreeWindow& other) :
-        IEditorWindow(other)
+    TreeWindow::TreeWindow(RefCounter* refCounter, const TreeWindow& other) :
+        Singleton<TreeWindow>(refCounter), IEditorWindow(refCounter, other)
     {
         InitializeWindow();
     }
@@ -118,6 +119,11 @@ namespace Editor
     bool TreeWindow::IsWidgetsInternalChildrenVisible() const
     {
         return Widget::isEditorInternalChildrenVisible;
+    }
+
+    Ref<RefCounterable> TreeWindow::CastToRefCounterable(const Ref<TreeWindow>& ref)
+    {
+        return DynamicCast<Singleton<TreeWindow>>(ref);
     }
 
     void TreeWindow::InitializeWindow()

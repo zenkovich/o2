@@ -512,6 +512,7 @@ namespace o2
         for (auto& child : mChildWidgets)
             child->MoveAndCheckClipping(widgetsMove, mAbsoluteClipArea);
 
+        UpdateLayersLayouts();
         UpdateScrollParams();
     }
 

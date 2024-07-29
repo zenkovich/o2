@@ -24,7 +24,7 @@ namespace Editor
 	class PropertiesListDlg : public Singleton<PropertiesListDlg>
 	{
 	public:
-		PropertiesListDlg();
+		PropertiesListDlg(RefCounter* refCounter);
 		~PropertiesListDlg();
 
 		// Shows animation properties window for actor and animation

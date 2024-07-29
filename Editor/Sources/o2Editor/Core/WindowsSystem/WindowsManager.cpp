@@ -4,21 +4,23 @@
 #include "o2/Render/Render.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Dialogs/ColorPickerDlg.h"
 #include "o2Editor/Core/Dialogs/CurveEditorDlg.h"
 #include "o2Editor/Core/Dialogs/EditNameDlg.h"
 #include "o2Editor/Core/Dialogs/KeyEditDlg.h"
 #include "o2Editor/Core/EditorConfig.h"
-#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/UIStyle/EditorUIStyle.h"
 #include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
 #include "o2Editor/Core/WindowsSystem/DockableWindow.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
+#include "o2Editor/MemoryAnalyzerWindow/MemoryAnalyzerWindow.h"
 
 namespace Editor
 {
-	WindowsManager::WindowsManager()
+	WindowsManager::WindowsManager(RefCounter* refCounter):
+		Singleton<WindowsManager>(refCounter)
 	{
 		PushEditorScopeOnStack scope;
 
@@ -50,6 +52,8 @@ namespace Editor
 
 		for (auto& wnd : mEditorWindows)
 			wnd->PostInitializeWindow();
+
+        MemoryAnalyzerWindow::InitializeSingleton();
 	}
 
 	void WindowsManager::InitializeDock()

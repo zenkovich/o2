@@ -47,7 +47,7 @@ namespace o2
     // -----------
     // Application
     // -----------
-    class Application: public Singleton<Application>, public ApplicationBase
+    class Application: public Singleton<Application>, public IObject, public ApplicationBase
     {
     public:
         PROPERTIES(Application);
@@ -72,7 +72,7 @@ namespace o2
 
     public:
         // Default constructor
-        Application();
+        Application(RefCounter* refCounter);
 
         // Destructor 
         virtual ~Application();
@@ -154,6 +154,8 @@ namespace o2
 
         // Returns is application ready to use
         static bool IsReady();
+
+        IOBJECT(Application);
 
 #if defined PLATFORM_WINDOWS
         // Initializes engine application
@@ -318,3 +320,135 @@ namespace o2
         friend class WndProcFunc;
     };
 }
+// --- META ---
+
+CLASS_BASES_META(o2::Application)
+{
+    BASE_CLASS(o2::Singleton<Application>);
+    BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::ApplicationBase);
+}
+END_META;
+CLASS_FIELDS_META(o2::Application)
+{
+    FIELD().PUBLIC().NAME(fullscreen);
+    FIELD().PUBLIC().NAME(resizible);
+    FIELD().PUBLIC().NAME(windowSize);
+    FIELD().PUBLIC().NAME(windowContentSize);
+    FIELD().PUBLIC().NAME(windowPosition);
+    FIELD().PUBLIC().NAME(windowCaption);
+    FIELD().PUBLIC().NAME(onActivated);
+    FIELD().PUBLIC().NAME(onDeactivated);
+    FIELD().PUBLIC().NAME(onStarted);
+    FIELD().PUBLIC().NAME(onClosing);
+    FIELD().PUBLIC().NAME(onResizing);
+    FIELD().PUBLIC().NAME(onMoving);
+    FIELD().PUBLIC().DEFAULT_VALUE(600).NAME(maxFPS);
+    FIELD().PUBLIC().DEFAULT_VALUE(60).NAME(fixedFPS);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mReady);
+    FIELD().PROTECTED().NAME(mAssets);
+    FIELD().PROTECTED().NAME(mEventSystem);
+    FIELD().PROTECTED().NAME(mFileSystem);
+    FIELD().PROTECTED().NAME(mInput);
+    FIELD().PROTECTED().NAME(mLog);
+    FIELD().PROTECTED().NAME(mPhysics);
+    FIELD().PROTECTED().NAME(mProjectConfig);
+    FIELD().PROTECTED().NAME(mRender);
+    FIELD().PROTECTED().NAME(mScene);
+    FIELD().PROTECTED().NAME(mTaskManager);
+    FIELD().PROTECTED().NAME(mTime);
+    FIELD().PROTECTED().NAME(mUIManager);
+#if  IS_SCRIPTING_SUPPORTED
+    FIELD().PROTECTED().NAME(mScriptingEngine);
+#endif
+    FIELD().PROTECTED().NAME(mTimer);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mCursorInfiniteModeEnabled);
+    FIELD().PROTECTED().NAME(mCursorCorrectionDelta);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mAccumulatedDT);
+    FIELD().PROTECTED().NAME(mMainListenersLayer);
+    FIELD().PROTECTED().DEFAULT_VALUE(1.0f).NAME(mGraphicsScale);
+}
+END_META;
+CLASS_METHODS_META(o2::Application)
+{
+
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().SIGNATURE(void, InitializePlatform);
+    FUNCTION().PUBLIC().SIGNATURE(const Ref<LogStream>&, GetLog);
+    FUNCTION().PUBLIC().SIGNATURE(void, Shutdown);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetFullscreen, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsFullScreen);
+    FUNCTION().PUBLIC().SIGNATURE(void, Maximize);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsMaximized);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetResizible, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsResizible);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetWindowSize, const Vec2I&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetWindowSize);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetWindowPosition, const Vec2I&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetWindowPosition);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetWindowCaption, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetWindowCaption);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetContentSize, const Vec2I&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetContentSize);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetScreenResolution);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCursor, CursorType);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCursorPosition, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetCursorInfiniteMode, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsCursorInfiniteModeOn);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsEditor);
+    FUNCTION().PUBLIC().SIGNATURE(String, GetBinPath);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetGraphicsScale);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsReady);
+#if  defined PLATFORM_WINDOWS
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize);
+    FUNCTION().PUBLIC().SIGNATURE(void, Launch);
+#endif
+#if  defined PLATFORM_ANDROID
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize, JNIEnv*, jobject, AAssetManager*, String, const Vec2I&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Launch);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update);
+#endif
+#if  defined PLATFORM_MAC
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize);
+    FUNCTION().PUBLIC().SIGNATURE(void, Launch);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update);
+#endif
+#if  defined PLATFORM_IOS
+    FUNCTION().PUBLIC().SIGNATURE(void, Run, int, char);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update);
+    FUNCTION().PUBLIC().SIGNATURE(void, Launch);
+#endif
+#if  defined PLATFORM_LINUX
+    FUNCTION().PUBLIC().SIGNATURE(void, Initialize);
+    FUNCTION().PUBLIC().SIGNATURE(void, Launch);
+#endif
+    FUNCTION().PROTECTED().SIGNATURE(void, BasicInitialize);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnResized, const Vec2I&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateScene, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, FixedUpdateScene, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, PreUpdatePhysics);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdatePhysics, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostUpdatePhysics);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawScene);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateEventSystem);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostUpdateEventSystem);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawUIManager);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawDebug);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateDebug, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnUpdate, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnFixedUpdate, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetupGraphicsScaledCamera);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraw);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnActivated);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeactivated);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnStarted);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnClosing);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnResizing);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMoved);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitalizeSystems);
+    FUNCTION().PROTECTED().SIGNATURE(void, DeinitializeSystems);
+    FUNCTION().PROTECTED().SIGNATURE(void, ProcessFrame);
+    FUNCTION().PROTECTED().SIGNATURE(void, CheckCursorInfiniteMode);
+}
+END_META;
+// --- END META ---

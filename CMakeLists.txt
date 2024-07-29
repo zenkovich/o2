@@ -7,6 +7,7 @@ option(O2_SELFPROFILE "Enable profiling o2 benchmark." OFF)
 option(O2_EDITOR "Enables o2 editor." ON)
 option(O2_ASAN "Enables ASAN (address sanitizer)." OFF)
 option(O2_TRACY "Enables Tracy profiling" ON)
+option(O2_MEMORY_ANALYZE "Enables memory analyzing (slows down)" OFF)
 
 # Common definitions
 set(O2_COMPILE_DEFINITIONS SCRIPTING_BACKEND_JERRYSCRIPT _CRT_SECURE_NO_WARNINGS)
@@ -36,6 +37,10 @@ endif()
 
 if (O2_TRACY)
     list(APPEND O2_COMPILE_DEFINITIONS TRACY_ENABLE)
+endif()
+
+if (O2_MEMORY_ANALYZE)
+    list(APPEND O2_COMPILE_DEFINITIONS MEMORY_ANALYZE_ENABLE)
 endif()
 
 if (UNIX)
@@ -83,13 +88,18 @@ file(GLOB_RECURSE o2Framework_SOURCES "Framework/Sources/*.cpp" "Framework/Sourc
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${o2Framework_SOURCES})
 
 set(o2Framework_INCLUDES 
-    "Framework/Sources"
-    "Framework/3rdPartyLibs"
-    "Framework/3rdPartyLibs/rapidjson/include"
-    "Framework/3rdPartyLibs/FreeType/include"
-    "Framework/3rdPartyLibs/jerryscript/jerry-core/include"
-    "Framework/3rdPartyLibs/jerryscript"
-    "Framework/"
+        "Framework/Sources"
+        "Framework/3rdPartyLibs"
+        "Framework/3rdPartyLibs/rapidjson/include"
+        "Framework/3rdPartyLibs/FreeType/include"
+        "Framework/3rdPartyLibs/jerryscript/jerry-core/include"
+        "Framework/3rdPartyLibs/jerryscript"
+        "Framework/3rdPartyLibs/boost/stacktrace/include"
+        "Framework/3rdPartyLibs/boost/config/include"
+        "Framework/3rdPartyLibs/boost/predef/include"
+        "Framework/3rdPartyLibs/boost/core/include"
+        "Framework/3rdPartyLibs/boost/container_hash/include"
+        "Framework/"
 )
 
 target_sources(o2Framework PRIVATE ${o2Framework_SOURCES})
@@ -114,6 +124,14 @@ if (O2_TRACY)
     target_link_libraries(o2Framework PUBLIC Tracy::TracyClient)
 endif()
 
+if (O2_MEMORY_ANALYZE)
+    target_link_libraries(o2Framework PUBLIC boost_stacktrace_basic)
+
+    if(WIN32)
+        target_link_libraries(o2Framework PUBLIC boost_stacktrace_windbg boost_stacktrace_noop)
+    endif()
+endif()
+
 if (UNIX)
     find_package(X11 REQUIRED)
     target_link_libraries(o2Framework PUBLIC ${X11_LIBRARIES})
@@ -131,28 +149,19 @@ endif()
 if(WIN32)
     target_link_libraries(o2Framework PRIVATE Shlwapi.lib)
     target_link_libraries(o2Framework PRIVATE opengl32.lib)  
-
-    add_subdirectory(Framework/3rdPartyLibs/StackWalker)
-    add_dependencies(o2Framework StackWalker)
-    target_link_libraries(o2Framework PRIVATE StackWalker)
-    set_target_properties(StackWalker PROPERTIES FOLDER o2/3rdPartyLibs) 
 endif()
 
 if (UNIX)
     target_compile_options(o2Framework PRIVATE -Wno-pedantic)
 elseif(MSVC)
-    target_compile_options(o2Framework PUBLIC "/MP" "/Zc:__cplusplus")
+    target_compile_options(o2Framework PUBLIC "/MP" "/Zc:__cplusplus" "/bigobj")
     target_sources(o2Framework PRIVATE "Framework/Platforms/Windows/Framework.natvis")
 endif()
 
 # Codegen
 add_custom_target(o2FrameworkCodegen
-                  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool 
-                        -project o2Framework 
-                        -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2"
-                  COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool "
-                         "-project o2Framework "
-                         "-sources \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2\""
+                  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -project o2Framework -sources "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2"
+                  COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -project o2Framework -sources \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2\""
 )
 add_dependencies(o2FrameworkCodegen o2CodeTool)
 
@@ -181,19 +190,13 @@ if (O2_EDITOR)
     target_link_libraries(o2Editor PUBLIC o2Framework)
 
     if(MSVC)
-        target_compile_options(o2Editor PRIVATE "/MP" "/Zc:__cplusplus")
+        target_compile_options(o2Editor PRIVATE "/MP" "/Zc:__cplusplus" "/bigobj")
     endif()
 
     # Codegen
     add_custom_target(o2EditorCodegen
-                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool 
-                              -project o2Editor 
-                              -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" 
-                              -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml"
-                      COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool "
-                              "-project o2Editor "
-                              "-sources \"${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor\" "
-                              "-parent_projects \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml\""
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -project o2Editor -sources "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor" -parent_projects "${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml"
+                      COMMENT "Run CodeTool: ${CMAKE_CURRENT_SOURCE_DIR}/CodeTool/Bin/o2CodeTool -project o2Editor -sources \"${CMAKE_CURRENT_SOURCE_DIR}/Editor/Sources/o2Editor\" -parent_projects \"${CMAKE_CURRENT_SOURCE_DIR}/Framework/Sources/o2/CodeToolCache.xml\""
     )
     add_dependencies(o2EditorCodegen o2CodeTool)
 

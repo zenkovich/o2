@@ -38,7 +38,7 @@ namespace Editor
 
 	public:
 		// Default constructor. Initializes all editor components
-		EditorApplication();
+        EditorApplication(RefCounter* refCounter);
 
 		// Destructor
 		~EditorApplication();
@@ -65,7 +65,13 @@ namespace Editor
 		void SetPlaying(bool playing);
 
 		// Is scene playing
-		bool IsPlaying() const;
+        bool IsPlaying() const;
+
+        // Dynamic cast to RefCounterable via Application
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<EditorApplication>& ref);
+
+        IOBJECT(EditorApplication);
+		REF_COUNTERABLE_IMPL(Application, ActionsList);
 
 	protected:
         Ref<Sprite> mBackground; // Background sprite
@@ -161,3 +167,71 @@ namespace Editor
 		void CheckPlayingSwitch();
 	};
 }
+// --- META ---
+
+CLASS_BASES_META(Editor::EditorApplication)
+{
+    BASE_CLASS(o2::Application);
+    BASE_CLASS(Editor::ActionsList);
+}
+END_META;
+CLASS_FIELDS_META(Editor::EditorApplication)
+{
+    FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isPaused);
+    FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(step);
+    FIELD().PROTECTED().NAME(mBackground);
+    FIELD().PROTECTED().NAME(mBackSign);
+    FIELD().PROTECTED().NAME(mUIRoot);
+    FIELD().PROTECTED().NAME(mWindowsManager);
+    FIELD().PROTECTED().NAME(mConfig);
+    FIELD().PROTECTED().NAME(mToolsPanel);
+    FIELD().PROTECTED().NAME(mMenuPanel);
+    FIELD().PROTECTED().NAME(mProperties);
+    FIELD().PROTECTED().NAME(mLoadedScene);
+    FIELD().PROTECTED().NAME(mSceneDump);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsPlaying);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPlayingChanged);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdateStep);
+    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mDrawCalls);
+    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mDrawnPrimitives);
+}
+END_META;
+CLASS_METHODS_META(Editor::EditorApplication)
+{
+
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().SIGNATURE(const String&, GetLoadedSceneName);
+    FUNCTION().PUBLIC().SIGNATURE(void, LoadScene, const AssetRef<SceneAsset>&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SaveScene);
+    FUNCTION().PUBLIC().SIGNATURE(void, SaveSceneAs, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, MakeNewScene);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsSceneChanged);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPlaying, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsPlaying);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<EditorApplication>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, InitalizeSystems);
+    FUNCTION().PROTECTED().SIGNATURE(void, LoadUIStyle);
+    FUNCTION().PROTECTED().SIGNATURE(void, PreUpdatePhysics);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdatePhysics, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostUpdatePhysics);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateScene, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, FixedUpdateScene, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawScene);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawUIManager);
+    FUNCTION().PROTECTED().SIGNATURE(void, DrawDebug);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateDebug, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateEventSystem);
+    FUNCTION().PROTECTED().SIGNATURE(void, PostUpdateEventSystem);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnUpdate, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraw);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnActivated);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDeactivated);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnStarted);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnClosing);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnResizing);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnMoved);
+    FUNCTION().PROTECTED().SIGNATURE(void, ProcessFrame);
+    FUNCTION().PROTECTED().SIGNATURE(void, CheckPlayingSwitch);
+}
+END_META;
+// --- END META ---

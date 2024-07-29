@@ -40,13 +40,12 @@
 
 namespace Editor
 {
-	EditorApplication::EditorApplication()
-	{
-	}
+	EditorApplication::EditorApplication(RefCounter* refCounter):
+		Application(refCounter)
+	{}
 
 	EditorApplication::~EditorApplication()
-	{
-	}
+	{}
 
 	const String& EditorApplication::GetLoadedSceneName() const
 	{
@@ -126,7 +125,12 @@ namespace Editor
 		return mIsPlaying;
 	}
 
-	void EditorApplication::OnStarted()
+    Ref<RefCounterable> EditorApplication::CastToRefCounterable(const Ref<EditorApplication>& ref)
+    {
+		return DynamicCast<Application>(ref);
+    }
+
+    void EditorApplication::OnStarted()
     {
         PROFILE_SAMPLE_FUNC();
 
@@ -581,3 +585,7 @@ namespace Editor
 	{
 	}
 }
+// --- META ---
+
+DECLARE_CLASS(Editor::EditorApplication, Editor__EditorApplication);
+// --- END META ---

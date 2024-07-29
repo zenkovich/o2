@@ -13,7 +13,7 @@ DECLARE_SINGLETON(Editor::CurveEditorDlg);
 namespace Editor
 {
 	CurveEditorDlg::CurveEditorDlg(RefCounter* refCounter):
-		CursorEventsListener(refCounter)
+		Singleton<CurveEditorDlg>(refCounter), CursorEventsListener(refCounter)
 	{
 		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
 

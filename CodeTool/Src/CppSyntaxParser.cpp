@@ -659,11 +659,14 @@ void CppSyntaxParser::ParseElseMacros(SyntaxSection& section, int& caret,
     caret += (int)strlen("#else");
     ReadWord(section.mData, caret, "\n", "");
 
-    SyntaxDefineIf* newDefine = new SyntaxDefineIf();
-    newDefine->mDefintion = "!(" + mCurrentDefine->mDefintion + ")";
+    if (mCurrentDefine)
+    {
+        SyntaxDefineIf* newDefine = new SyntaxDefineIf();
+        newDefine->mDefintion = "!(" + mCurrentDefine->mDefintion + ")";
 
-    section.mDefines.push_back(newDefine);
-    mCurrentDefine = newDefine;
+        section.mDefines.push_back(newDefine);
+        mCurrentDefine = newDefine;
+    }
 }
 
 void CppSyntaxParser::ParseMetaClass(SyntaxSection& section, int& caret,

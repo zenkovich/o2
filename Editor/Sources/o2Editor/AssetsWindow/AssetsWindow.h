@@ -32,11 +32,11 @@ namespace Editor
 	// -------------
 	// Assets window
 	// -------------
-	class AssetsWindow: public IEditorWindow, public Singleton<AssetsWindow>
+	class AssetsWindow: public Singleton<AssetsWindow>, public IEditorWindow
 	{
 	public:
 		// Default constructor. Initializes window
-		AssetsWindow();
+		AssetsWindow(RefCounter* refCounter);
 
 		// Destructor
 		~AssetsWindow();
@@ -99,20 +99,24 @@ namespace Editor
 		void DeleteAssets(const Vector<String>& assetsPaths);
 
 		// Creates and returns an icon sprite for the asset
-		static Ref<Sprite> GetAssetIconSprite(const AssetRef<Asset>& asset);
-		 
-		IOBJECT(AssetsWindow);
+        static Ref<Sprite> GetAssetIconSprite(const AssetRef<Asset>& asset);
 
-		protected:
+        // Dynamic cast to RefCounterable via Singleton<AssetsWindow>
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<AssetsWindow>& ref);
+		 
+        IOBJECT(AssetsWindow);
+        REF_COUNTERABLE_IMPL(Singleton<AssetsWindow>, IEditorWindow);
+
+	protected:
 		float mFoldersTreeShowCoef = 1.0f; // Animation show folders tree coefficient (0...1)
 
 		Ref<Button>  mFilterButton;           // Search filter button
 		Ref<EditBox> mSearchEditBox;          // Search edit box
 		Ref<Label>   mSelectedAssetPathLabel; // Selected asset path label
 
-		Ref<AssetsFoldersTree>   mFoldersTree;                                    // Folders tree			
-		Ref<AnimationPlayer> mFoldersTreeShowAnim = mmake<AnimationPlayer>(); // Folders tree visible animation
-		bool                 mFoldersTreeVisible;                             // Is folders tree visible
+		Ref<AssetsFoldersTree> mFoldersTree;                                    // Folders tree			
+        Ref<AnimationPlayer>   mFoldersTreeShowAnim = mmake<AnimationPlayer>(); // Folders tree visible animation
+        bool                   mFoldersTreeVisible;                             // Is folders tree visible
 
 		Ref<AssetsIconsScrollArea> mAssetsGridScroll; // Assets grid scroll
 
@@ -168,8 +172,8 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AssetsWindow)
 {
-    BASE_CLASS(Editor::IEditorWindow);
     BASE_CLASS(o2::Singleton<AssetsWindow>);
+    BASE_CLASS(Editor::IEditorWindow);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AssetsWindow)
@@ -191,7 +195,7 @@ END_META;
 CLASS_METHODS_META(Editor::AssetsWindow)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const UID&);
     FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const String&);
@@ -212,6 +216,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
     FUNCTION().PUBLIC().SIGNATURE(void, PasteAssets, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, DeleteAssets, const Vector<String>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<Sprite>, GetAssetIconSprite, const AssetRef<Asset>&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<AssetsWindow>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeSeparator);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeFoldersTreeVisibleState);

@@ -12,6 +12,7 @@ extern void __RegisterClass__o2__AnimationTrack_o2__Vec2F_();
 extern void __RegisterClass__o2__AnimationTrack_o2__Vec2F___Player();
 extern void __RegisterClass__o2__IAnimationTrack();
 extern void __RegisterClass__o2__IAnimationTrack__IPlayer();
+extern void __RegisterClass__o2__Application();
 extern void __RegisterClass__o2__Asset();
 extern void __RegisterClass__o2__AssetInfo();
 extern void __RegisterClass__o2__BaseAssetRef();
@@ -153,6 +154,7 @@ extern void InitializeTypeso2Framework()
     __RegisterClass__o2__AnimationTrack_o2__Vec2F___Player();
     __RegisterClass__o2__IAnimationTrack();
     __RegisterClass__o2__IAnimationTrack__IPlayer();
+    __RegisterClass__o2__Application();
     __RegisterClass__o2__Asset();
     __RegisterClass__o2__AssetInfo();
     __RegisterClass__o2__BaseAssetRef();

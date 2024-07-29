@@ -9,6 +9,10 @@ namespace o2
 {
     CREATE_SINGLETON(ActorRefResolver);
 
+    ActorRefResolver::ActorRefResolver(RefCounter* refCounter):
+        Singleton<ActorRefResolver>(refCounter)
+    {}
+
     void ActorRefResolver::RequireResolve(BaseActorLinkRef& ref, SceneUID actorId)
     {
         if (!mInstance)

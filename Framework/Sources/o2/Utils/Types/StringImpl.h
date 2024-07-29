@@ -810,8 +810,8 @@ namespace o2
     template<typename T>
     TString<T> TString<T>::Format(const TString format, va_list vlist)
     {
-        int maxSize = 2048;
-        char* buffer = mnew char[maxSize];
+        const int maxSize = 2048;
+        char buffer[maxSize];
         vsnprintf(buffer, maxSize, TString<char>(format).c_str(), vlist);
 
         return TString<T>(buffer);

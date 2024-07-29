@@ -50,7 +50,6 @@ namespace o2
     FORWARD_REF_IMPL(List);
     FORWARD_REF_IMPL(ScrollArea);
     FORWARD_REF_IMPL(Toggle);
-    FORWARD_REF_IMPL(VerticalLayout);
     FORWARD_REF_IMPL(VerticalProgress);
     FORWARD_REF_IMPL(VerticalScrollBar);
     FORWARD_REF_IMPL(Widget);
@@ -72,7 +71,8 @@ namespace o2
         Instance().mFocusableWidgets.RemoveFirst([&](auto& x) { return x == widget; });
     }
 
-    UIManager::UIManager()
+    UIManager::UIManager(RefCounter* refCounter):
+        Singleton<UIManager>(refCounter)
     {
         mLog = mmake<LogStream>("UI");
         o2Debug.GetLog()->BindStream(mLog);

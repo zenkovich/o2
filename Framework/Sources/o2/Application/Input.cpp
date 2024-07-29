@@ -9,7 +9,8 @@ namespace o2
 {
     DECLARE_SINGLETON(Input);
 
-    Input::Input()
+    Input::Input(RefCounter* refCounter):
+        Singleton<Input>(refCounter)
     {
         if (GetDeviceType() == DeviceType::PC)
         {

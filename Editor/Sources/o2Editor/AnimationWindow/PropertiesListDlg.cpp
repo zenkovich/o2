@@ -16,7 +16,8 @@ DECLARE_SINGLETON(Editor::PropertiesListDlg);
 
 namespace Editor
 {	
-	PropertiesListDlg::PropertiesListDlg()
+	PropertiesListDlg::PropertiesListDlg(RefCounter* refCounter):
+		Singleton<PropertiesListDlg>(refCounter)
 	{
 		InitializeWindow();
 	}

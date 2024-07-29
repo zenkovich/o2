@@ -23,11 +23,11 @@ namespace Editor
 	// ------------------
 	// Editor tools panel
 	// ------------------
-	class ToolsPanel : public Singleton<ToolsPanel>, public RefCounterable
+	class ToolsPanel : public Singleton<ToolsPanel>
 	{
     public:
         // Default constructor. Initializes all panel
-        ToolsPanel();
+        ToolsPanel(RefCounter* refCounter);
 
         // Destructor
         ~ToolsPanel();

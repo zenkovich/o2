@@ -15,7 +15,8 @@
 
 namespace Editor
 {
-	EditorConfig::EditorConfig()
+	EditorConfig::EditorConfig(RefCounter* refCounter):
+		Singleton<EditorConfig>(refCounter)
 	{}
 
 	EditorConfig::~EditorConfig()

@@ -31,8 +31,9 @@ namespace o2
 		void RebuildWindowStyle();
 		void RebuildTreeStyle();
 		void RebuildMenuPanelStyle();
-		void RebuildBacklessDropdown();
-		void RebuildBacklessEditbox();
+        void RebuildBacklessDropdown();
+        void RebuildBacklessEditbox();
+        void RebuildBacklessMultilineEditbox();
 		void RebuildSinglelineEditbox();
 		void RebuildBacklessScrollarea();
 		void RebuildContextMenuStyle();
@@ -83,6 +84,7 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildMenuPanelStyle);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildBacklessDropdown);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildBacklessEditbox);
+    FUNCTION().PUBLIC().SIGNATURE(void, RebuildBacklessMultilineEditbox);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildSinglelineEditbox);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildBacklessScrollarea);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildContextMenuStyle);

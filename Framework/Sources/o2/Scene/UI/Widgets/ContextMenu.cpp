@@ -16,6 +16,8 @@
 
 namespace o2
 {
+	FORWARD_REF_IMPL(VerticalLayout);
+
 	bool ContextMenu::Item::operator==(const Item& other) const
 	{
 		return text == other.text && mShortcut == other.mShortcut && icon == other.icon;

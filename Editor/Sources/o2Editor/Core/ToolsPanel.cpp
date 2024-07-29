@@ -68,8 +68,8 @@ namespace Editor
 		mPauseToggle->value = o2EditorApplication.isPaused;
 	}
 
-	ToolsPanel::ToolsPanel():
-		mToolsTogglesGroup(mmake<ToggleGroup>(ToggleGroup::Type::OnlySingleTrue))
+	ToolsPanel::ToolsPanel(RefCounter* refCounter):
+		Singleton<ToolsPanel>(refCounter), mToolsTogglesGroup(mmake<ToggleGroup>(ToggleGroup::Type::OnlySingleTrue))
 	{
 		mPanelRoot = mmake<Widget>();
 		mPanelRoot->name = "tools panel";

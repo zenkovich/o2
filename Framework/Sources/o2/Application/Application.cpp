@@ -48,7 +48,8 @@ namespace o2
 
     DECLARE_SINGLETON(Application);
 
-    Application::Application()
+    Application::Application(RefCounter* refCounter):
+        Singleton<Application>(refCounter)
     {}
 
     Application::~Application()
@@ -347,6 +348,10 @@ namespace o2
     }
 
     MemoryManager* MemoryManager::mInstance = new MemoryManager();
-    template<> Debug* Singleton<Debug>::mInstance = mnew Debug();
-    template<> FileSystem* Singleton<FileSystem>::mInstance = mnew FileSystem();
+    CREATE_SINGLETON(Debug);
+    CREATE_SINGLETON(FileSystem);
 }
+// --- META ---
+
+DECLARE_CLASS(o2::Application, o2__Application);
+// --- END META ---

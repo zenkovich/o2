@@ -13,6 +13,9 @@ namespace o2
     class ActorRefResolver : public Singleton<ActorRefResolver>
     {
     public:
+        // Default constructor
+        ActorRefResolver(RefCounter* refCounter);
+
         // Requires to resolve actor reference by actor id
         static void RequireResolve(BaseActorLinkRef& ref, SceneUID actorId);
 

@@ -18,7 +18,8 @@
 
 namespace o2
 {
-    Debug::Debug()
+    Debug::Debug(RefCounter* refCounter):
+        Singleton<Debug>(refCounter)
     {
         mFileLogStream = mmake<FileLogStream>("", "log.txt");
         mLogStream = mmake<ConsoleLogStream>("");

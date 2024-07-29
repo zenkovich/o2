@@ -13,11 +13,11 @@ namespace o2
     // -------------------
     // Box2D Physics world
     // -------------------
-    class PhysicsWorld : public Singleton<PhysicsWorld>, public RefCounterable
+    class PhysicsWorld : public Singleton<PhysicsWorld>
     {
     public:
         // Default constructor
-        PhysicsWorld();
+        PhysicsWorld(RefCounter* refCounter);
 
         // Synchronize physics bodies with actors
         void PreUpdate();

@@ -6,11 +6,17 @@
 
 namespace o2
 {
+#if ENABLE_MEMORY_ANALYZE
+#define OPTIONAL_BASE_MAP , public MemoryAnalyzeObject
+#else
+#define OPTIONAL_BASE_MAP
+#endif
+
     // ----------
     // Dictionary
     // ----------
     template<typename _key_type, typename _value_type>
-    class Map : public std::map<_key_type, _value_type>
+    class Map : public std::map<_key_type, _value_type> OPTIONAL_BASE_MAP
     {
     public:
         using KeyValuePair = typename std::map<_key_type, _value_type>::value_type;
@@ -157,6 +163,36 @@ namespace o2
 
         // Returns constant end iterator
         ConstIterator End() const { return std::map<_key_type, _value_type>::cend(); }
+
+#if ENABLE_MEMORY_ANALYZE
+        void IterateChildren(const std::function<void(MemoryAnalyzeObject*)>& callback) override
+        {
+            if constexpr (std::is_base_of_v<MemoryAnalyzeObject, _key_type> || std::is_base_of_v<MemoryAnalyzeObject, _value_type>)
+            {
+                for (auto& pair : *this)
+                {
+                     if constexpr (std::is_base_of_v<MemoryAnalyzeObject, _key_type>)
+                         callback(const_cast<_key_type*>(&pair.first));
+
+                    if constexpr (std::is_base_of_v<MemoryAnalyzeObject, _value_type>)
+                        callback(&pair.second);
+                }
+            }
+        }
+
+        void IterateAllocations(const std::function<void(std::byte*, size_t)>& callback) override
+        {
+            for (auto& pair : *this)
+            {
+               callback(reinterpret_cast<std::byte*>(&pair), sizeof(pair));
+            }
+        }
+
+        std::byte* GetMemory() const override { return const_cast<std::byte*>(reinterpret_cast<const std::byte*>(this)); }
+        size_t GetMemorySize() const override { return sizeof(*this); }
+
+        const std::type_info& GetTypeInfo() const override { return typeid(Map<_key_type, _value_type>); }
+#endif
     };
 
     template<typename _key_type, typename _value_type>

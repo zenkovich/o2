@@ -27,11 +27,18 @@ namespace Editor
 	// -----------------------------------------------------------------
 	// Actors tree window. Shows scene hierarchy tree or draw order tree
 	// -----------------------------------------------------------------
-	class TreeWindow: public IEditorWindow, public Singleton<TreeWindow>
+	class TreeWindow: public Singleton<TreeWindow>, public IEditorWindow
 	{
-		IOBJECT(TreeWindow);
+    public:
+        // Default constructor
+        explicit TreeWindow(RefCounter* refCounter);
 
-	public:
+        // Copy-constructor
+        TreeWindow(RefCounter* refCounter, const TreeWindow& other);
+
+        // Destructor
+        ~TreeWindow();
+
 		// Returns actors tree widget
 		const Ref<SceneHierarchyTree>& GetSceneTree() const;
 
@@ -63,7 +70,13 @@ namespace Editor
 		void SetWidgetsInternalChildrenVisible(bool visible);
 
 		// Returns widgets internal children visibility in hierarchy
-		bool IsWidgetsInternalChildrenVisible() const;
+        bool IsWidgetsInternalChildrenVisible() const;
+
+        // Dynamic cast to RefCounterable via Singleton<TreeWindow>
+        static Ref<RefCounterable> CastToRefCounterable(const Ref<TreeWindow>& ref);
+
+        IOBJECT(TreeWindow);
+        REF_COUNTERABLE_IMPL(IEditorWindow, Singleton<TreeWindow>);
 
 	protected:
         Ref<Toggle>  mListTreeToggle; // Toggle between list and tree views
@@ -76,16 +89,6 @@ namespace Editor
 
         Vector<Ref<SceneEditableObject>> mSearchObjects;    // Array of searched objects
         bool                             mInSearch = false; // True when searching objects (mSearchEditBox isn't empty)
-
-	public:
-		// Default constructor
-		TreeWindow();
-
-		// Copy-constructor
-		TreeWindow(const TreeWindow& other);
-
-		// Destructor
-		~TreeWindow();
 
 	protected:
 		// Initializes window
@@ -202,8 +205,8 @@ namespace Editor
 
 CLASS_BASES_META(Editor::TreeWindow)
 {
-    BASE_CLASS(Editor::IEditorWindow);
     BASE_CLASS(o2::Singleton<TreeWindow>);
+    BASE_CLASS(Editor::IEditorWindow);
 }
 END_META;
 CLASS_FIELDS_META(Editor::TreeWindow)
@@ -220,6 +223,8 @@ END_META;
 CLASS_METHODS_META(Editor::TreeWindow)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const TreeWindow&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<SceneHierarchyTree>&, GetSceneTree);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<DrawOrderTree>&, GetDrawOrderTree);
     FUNCTION().PUBLIC().SIGNATURE(void, FocusTree);
@@ -231,8 +236,7 @@ CLASS_METHODS_META(Editor::TreeWindow)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsWidgetsLayersVisible);
     FUNCTION().PUBLIC().SIGNATURE(void, SetWidgetsInternalChildrenVisible, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsWidgetsInternalChildrenVisible);
-    FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const TreeWindow&);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<TreeWindow>&);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeSceneTree);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeDrawOrderTree);

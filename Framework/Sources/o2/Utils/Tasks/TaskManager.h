@@ -15,11 +15,11 @@ namespace o2
     // -----------------------
     // Tasks manager singleton
     // -----------------------
-    class TaskManager: public Singleton<TaskManager>, public RefCounterable
+    class TaskManager: public Singleton<TaskManager>
     {
     public:
         // Default constructor
-        TaskManager();
+        TaskManager(RefCounter* refCounter);
 
         // Destructor. Destroys all tasks
         ~TaskManager();

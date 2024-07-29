@@ -16,7 +16,8 @@ DECLARE_SINGLETON(Editor::KeyEditDlg);
 namespace Editor
 {
 
-	KeyEditDlg::KeyEditDlg()
+	KeyEditDlg::KeyEditDlg(RefCounter* refCounter):
+		Singleton<KeyEditDlg>(refCounter)
 	{
 		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
 

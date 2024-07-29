@@ -17,6 +17,12 @@
 #define RENDER_DEBUG true
 #endif
 
+#if defined MEMORY_ANALYZE_ENABLE
+#define ENABLE_MEMORY_ANALYZE true
+#else
+#define ENABLE_MEMORY_ANALYZE false
+#endif
+
 // Describes that engine running as editor or not
 #if defined O2_EDITOR_ENABLED
 #define IS_EDITOR true
