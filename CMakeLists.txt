@@ -99,6 +99,7 @@ set(o2Framework_INCLUDES
         "Framework/3rdPartyLibs/boost/predef/include"
         "Framework/3rdPartyLibs/boost/core/include"
         "Framework/3rdPartyLibs/boost/container_hash/include"
+        "Framework/3rdPartyLibs/boost/winapi/include"
         "Framework/"
 )
 
