@@ -1,0 +1,230 @@
+{
+    "mActor": {
+        "Type": "Editor::BooleanProperty",
+        "Value": {
+            "Prototype": {
+                "id": "7c525ebf4a6415765bbd68bc62be4851",
+                "path": "Editor UI styles/Editor  Boolean Property standard.proto"
+            },
+            "PrototypeLink": 9216893112020445241,
+            "Id": 17866519068439962800,
+            "mName": "with caption",
+            "mBorder": {
+                "left": 10.0,
+                "bottom": 0.0,
+                "right": 0.0,
+                "top": 0.0
+            },
+            "Children": [
+                {
+                    "Type": "o2::Label",
+                    "Data": {
+                        "Prototype": {
+                            "id": "00e61abd278d74112db62c5524647215",
+                            "path": "Editor UI styles/O2  Label standard.proto"
+                        },
+                        "PrototypeLink": 9613259363390956959,
+                        "Id": 18006725409332124668,
+                        "Transform": {
+                            "weight": {
+                                "x": 0.6000000238418579,
+                                "y": 1.0
+                            }
+                        },
+                        "mName": "propertyName",
+                        "Layers": [
+                            {
+                                "mDrawable": {
+                                    "Type": "o2::Text",
+                                    "Value": {
+                                        "mColor": {
+                                            "r": 96,
+                                            "g": 125,
+                                            "b": 139,
+                                            "a": 255
+                                        },
+                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                        "mHeight": 11,
+                                        "mSymbolsDistCoef": 1.0,
+                                        "mLinesDistanceCoef": 1.0,
+                                        "mVerAlign": "Middle",
+                                        "mDotsEndings": true
+                                    }
+                                },
+                                "mUID": 13857629541224199057,
+                                "PrototypeLink": 11511876723386816904
+                            }
+                        ]
+                    }
+                },
+                {
+                    "Type": "o2::Widget",
+                    "Data": {
+                        "PrototypeLink": 12880511514873215881,
+                        "Id": 1821732428180560989,
+                        "Children": [
+                            {
+                                "Type": "o2::HorizontalLayout",
+                                "Data": {
+                                    "PrototypeLink": 591639611587243770,
+                                    "Id": 10089946271438923712,
+                                    "Children": [
+                                        {
+                                            "Type": "o2::Toggle",
+                                            "Data": {
+                                                "Prototype": {
+                                                    "id": "1cb71a1a5f267fe84d7409246c1d2d59",
+                                                    "path": "Editor UI styles/O2  Toggle without caption.proto"
+                                                },
+                                                "PrototypeLink": 15619060417063818118,
+                                                "Id": 7433482704315132950,
+                                                "Transform": {
+                                                    "minSize": {
+                                                        "x": 20.0,
+                                                        "y": 10.0
+                                                    }
+                                                },
+                                                "mValueUnknown": true,
+                                                "Layers": [
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mImageAsset": {
+                                                                    "id": "28ea75e86ebe4d45722a4aa63c471559",
+                                                                    "path": "ui/UI4_Check_bk.png"
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 11320441180308389259,
+                                                        "PrototypeLink": 17297085474258249745
+                                                    },
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "5fb07cdf72db68ec2383741603480b53",
+                                                                    "path": "ui/UI4_Check_bk_select.png"
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 14443213814652662134,
+                                                        "PrototypeLink": 881519848892038797
+                                                    },
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "4f0c3185756751f601600a741a761dd6",
+                                                                    "path": "ui/UI4_Check_bk_pressed.png"
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 10452304877150167025,
+                                                        "PrototypeLink": 995711986783122735
+                                                    },
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "04d6224a54773744177e575760953423",
+                                                                    "path": "ui/UI4_Check_bk_focus.png"
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 14966196972528967893,
+                                                        "PrototypeLink": 380335510419570575
+                                                    },
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "7167574c690f33d1144a07d126c80813",
+                                                                    "path": "ui/UI4_Ckeck.png"
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 10639636620210064095,
+                                                        "PrototypeLink": 12571059672056986311
+                                                    },
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "6b283ee32c6032f821dd699566a924bc",
+                                                                    "path": "ui/UI4_Check_unknown.png"
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 17414264874819079811,
+                                                        "PrototypeLink": 11042747150512242791
+                                                    }
+                                                ],
+                                                "States": [
+                                                    {
+                                                        "name": "hover"
+                                                    },
+                                                    {
+                                                        "name": "value"
+                                                    },
+                                                    {
+                                                        "name": "unknown",
+                                                        "mState": true
+                                                    },
+                                                    {
+                                                        "name": "pressed"
+                                                    },
+                                                    {
+                                                        "name": "focused"
+                                                    },
+                                                    {
+                                                        "name": "visible"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

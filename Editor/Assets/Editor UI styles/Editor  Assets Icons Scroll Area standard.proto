@@ -1,0 +1,821 @@
+{
+    "mActor": {
+        "Type": "Editor::AssetsIconsScrollArea",
+        "Value": {
+            "mName": "standard",
+            "mViewAreaLayout": {
+                "offsetMin": {
+                    "x": 5.0,
+                    "y": 5.0
+                },
+                "offsetMax": {
+                    "x": -5.0,
+                    "y": -5.0
+                }
+            },
+            "mClipAreaLayout": {
+                "offsetMin": {
+                    "x": 1.0,
+                    "y": 2.0
+                },
+                "offsetMax": {
+                    "x": -1.0,
+                    "y": -1.0
+                }
+            },
+            "mItemSample": {
+                "Type": "Editor::AssetIcon",
+                "Value": {
+                    "Prototype": {
+                        "id": "2e590f23284163c7391612b718322c62",
+                        "path": "Editor UI styles/Editor  Asset Icon standard.proto"
+                    },
+                    "PrototypeLink": 15841308182507754441,
+                    "Id": 16751532860653371745,
+                    "Children": [
+                        {
+                            "Type": "o2::Label",
+                            "Data": {
+                                "Prototype": {
+                                    "id": "00e61abd278d74112db62c5524647215",
+                                    "path": "Editor UI styles/O2  Label standard.proto"
+                                },
+                                "PrototypeLink": 9677850849705343020,
+                                "Id": 10185831380811557789,
+                                "Layers": [
+                                    {
+                                        "mDrawable": {
+                                            "Type": "o2::Text",
+                                            "Value": {
+                                                "mColor": {
+                                                    "r": 96,
+                                                    "g": 125,
+                                                    "b": 139,
+                                                    "a": 255
+                                                },
+                                                "mText": "file name",
+                                                "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                "mHeight": 8,
+                                                "mSymbolsDistCoef": 1.0,
+                                                "mLinesDistanceCoef": 0.699999988079071,
+                                                "mHorAlign": "Middle",
+                                                "mWordWrap": true
+                                            }
+                                        },
+                                        "mUID": 14850795372854064174,
+                                        "PrototypeLink": 5752800624831521372
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Type": "o2::EditBox",
+                            "Data": {
+                                "PrototypeLink": 5376435068157228597,
+                                "Id": 8326396435843065528,
+                                "mTextDrawable": {
+                                    "Type": "o2::Text",
+                                    "Value": {
+                                        "mPosition": {
+                                            "x": -1.0,
+                                            "y": 11.0
+                                        },
+                                        "mSize": {
+                                            "x": 2.0,
+                                            "y": 22.0
+                                        },
+                                        "mScale": {
+                                            "x": 1.0,
+                                            "y": 1.0
+                                        },
+                                        "mPivot": {
+                                            "x": 0.5,
+                                            "y": 0.5
+                                        },
+                                        "mColor": {
+                                            "r": 96,
+                                            "g": 125,
+                                            "b": 139,
+                                            "a": 255
+                                        },
+                                        "mText": "",
+                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                        "mHeight": 8,
+                                        "mSymbolsDistCoef": 1.0,
+                                        "mLinesDistanceCoef": 1.0
+                                    }
+                                },
+                                "mCaretDrawable": {
+                                    "Type": "o2::Sprite",
+                                    "Value": {
+                                        "mPosition": {
+                                            "x": -2.0,
+                                            "y": 14.0
+                                        },
+                                        "mSize": {
+                                            "x": 1.0,
+                                            "y": 13.600000381469727
+                                        },
+                                        "mScale": {
+                                            "x": 1.0,
+                                            "y": 1.0
+                                        },
+                                        "mPivot": {
+                                            "x": 0.0,
+                                            "y": 0.25999999046325686
+                                        },
+                                        "mColor": {
+                                            "r": 0,
+                                            "g": 0,
+                                            "b": 0,
+                                            "a": 255
+                                        },
+                                        "mTextureSrcRect": {
+                                            "left": 0,
+                                            "bottom": 0,
+                                            "right": 0,
+                                            "top": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "Layers": [
+                        {
+                            "mUID": 13127749209578625361,
+                            "PrototypeLink": 8341755219798590155,
+                            "Children": [
+                                {
+                                    "mDrawable": {
+                                        "Type": "o2::Sprite",
+                                        "Value": {
+                                            "mColor": {
+                                                "r": 255,
+                                                "g": 255,
+                                                "b": 255,
+                                                "a": 0
+                                            },
+                                            "mImageAsset": {
+                                                "id": "422043c2736f09560c6d21e658ee7683",
+                                                "path": "ui/UI4_Context_menu_select.png"
+                                            },
+                                            "mMode": "Sliced",
+                                            "mSlices": {
+                                                "left": 14,
+                                                "bottom": 20,
+                                                "right": 15,
+                                                "top": 20
+                                            }
+                                        }
+                                    },
+                                    "mUID": 16075904329050055781,
+                                    "PrototypeLink": 13876156967040449711
+                                },
+                                {
+                                    "mDrawable": {
+                                        "Type": "o2::Sprite",
+                                        "Value": {
+                                            "mColor": {
+                                                "r": 255,
+                                                "g": 255,
+                                                "b": 255,
+                                                "a": 0
+                                            },
+                                            "mImageAsset": {
+                                                "id": "5fff73d414ad467e03685d0a6614095a",
+                                                "path": "ui/UI4_Context_menu_white.png"
+                                            },
+                                            "mMode": "Sliced",
+                                            "mSlices": {
+                                                "left": 14,
+                                                "bottom": 20,
+                                                "right": 15,
+                                                "top": 20
+                                            }
+                                        }
+                                    },
+                                    "mUID": 6063253061287434692,
+                                    "PrototypeLink": 2026590822132185598
+                                }
+                            ]
+                        },
+                        {
+                            "mDrawable": {
+                                "Type": "o2::Sprite",
+                                "Value": {
+                                    "mImageAsset": {
+                                        "id": "538858b561c55f5768b558d868a1494f",
+                                        "path": "ui/UI4_big_file_icon.png"
+                                    }
+                                }
+                            },
+                            "mUID": 11992560839421659134,
+                            "PrototypeLink": 2024389358639213066
+                        },
+                        {
+                            "mDrawable": {
+                                "Type": "o2::Sprite",
+                                "Value": {
+                                    "mColor": {
+                                        "r": 255,
+                                        "g": 255,
+                                        "b": 255,
+                                        "a": 0
+                                    },
+                                    "mImageAsset": {
+                                        "id": "5fff73d414ad467e03685d0a6614095a",
+                                        "path": "ui/UI4_Context_menu_white.png"
+                                    },
+                                    "mMode": "Sliced",
+                                    "mSlices": {
+                                        "left": 14,
+                                        "bottom": 20,
+                                        "right": 15,
+                                        "top": 20
+                                    }
+                                }
+                            },
+                            "mUID": 17982552860101652051,
+                            "PrototypeLink": 4978474963501463052
+                        }
+                    ],
+                    "States": [
+                        {
+                            "name": "edit"
+                        },
+                        {
+                            "name": "focused"
+                        },
+                        {
+                            "name": "halfHide"
+                        },
+                        {
+                            "name": "selected"
+                        },
+                        {
+                            "name": "hover"
+                        }
+                    ]
+                }
+            },
+            "mItemsSpacing": {
+                "x": 5.0,
+                "y": 5.0
+            },
+            "mHighlighClip": {
+                "Type": "o2::AnimationClip",
+                "Value": {
+                    "mTracks": [
+                        {
+                            "Type": "o2::AnimationTrack<o2::Color4>",
+                            "Value": {
+                                "path": "color",
+                                "mKeys": [
+                                    {
+                                        "uid": 1401350494568507065,
+                                        "value": {
+                                            "r": 255,
+                                            "g": 255,
+                                            "b": 255,
+                                            "a": 0
+                                        }
+                                    },
+                                    {
+                                        "uid": 1401350494568507065,
+                                        "position": 0.30000001192092898,
+                                        "value": {
+                                            "r": 255,
+                                            "g": 255,
+                                            "b": 255,
+                                            "a": 0
+                                        }
+                                    },
+                                    {
+                                        "uid": 5702560517661802431,
+                                        "position": 0.5
+                                    },
+                                    {
+                                        "uid": 5702560517661802431,
+                                        "position": 1.5
+                                    },
+                                    {
+                                        "uid": 18358494469529357531,
+                                        "position": 1.7000000476837159,
+                                        "value": {
+                                            "r": 255,
+                                            "g": 255,
+                                            "b": 255,
+                                            "a": 0
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Type": "o2::AnimationTrack<float>",
+                            "Value": {
+                                "path": "scaleX",
+                                "curve": {
+                                    "Type": "o2::Curve",
+                                    "Value": {
+                                        "mKeys": [
+                                            {
+                                                "uid": 10828592303538904868,
+                                                "value": 1.5,
+                                                "supportsType": "Free"
+                                            },
+                                            {
+                                                "uid": 10828592303538904868,
+                                                "value": 1.5,
+                                                "position": 0.30000001192092898,
+                                                "supportsType": "Free"
+                                            },
+                                            {
+                                                "uid": 4866879053546571662,
+                                                "value": 1.0,
+                                                "position": 0.5,
+                                                "supportsType": "Free"
+                                            },
+                                            {
+                                                "uid": 4866879053546571662,
+                                                "value": 1.0,
+                                                "position": 1.5,
+                                                "supportsType": "Free"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "Type": "o2::AnimationTrack<float>",
+                            "Value": {
+                                "path": "scaleY",
+                                "curve": {
+                                    "Type": "o2::Curve",
+                                    "Value": {
+                                        "mKeys": [
+                                            {
+                                                "uid": 7634858266438818867,
+                                                "value": 1.5,
+                                                "supportsType": "Free"
+                                            },
+                                            {
+                                                "uid": 7634858266438818867,
+                                                "value": 1.5,
+                                                "position": 0.30000001192092898,
+                                                "supportsType": "Free"
+                                            },
+                                            {
+                                                "uid": 13996767208301055700,
+                                                "value": 1.0,
+                                                "position": 0.5,
+                                                "supportsType": "Free"
+                                            },
+                                            {
+                                                "uid": 13996767208301055700,
+                                                "value": 1.0,
+                                                "position": 1.5,
+                                                "supportsType": "Free"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "mDuration": 1.7000000476837159
+                }
+            },
+            "mHighlightSprite": {
+                "Type": "o2::Sprite",
+                "Value": {
+                    "mSize": {
+                        "x": 100.0,
+                        "y": 100.0
+                    },
+                    "mScale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    },
+                    "mPivot": {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    "mImageAsset": {
+                        "id": "42de0d960e43186b233a053066245c1d",
+                        "path": "ui/UI4_selection_frame.png"
+                    },
+                    "mMode": "Sliced",
+                    "mSlices": {
+                        "left": 4,
+                        "bottom": 5,
+                        "right": 7,
+                        "top": 5
+                    }
+                }
+            },
+            "mSelectionSprite": {
+                "Type": "o2::Sprite",
+                "Value": {
+                    "mSize": {
+                        "x": 100.0,
+                        "y": 100.0
+                    },
+                    "mScale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    },
+                    "mPivot": {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    "mImageAsset": {
+                        "id": "42de0d960e43186b233a053066245c1d",
+                        "path": "ui/UI4_selection_frame.png"
+                    },
+                    "mMode": "Sliced",
+                    "mSlices": {
+                        "left": 4,
+                        "bottom": 5,
+                        "right": 7,
+                        "top": 5
+                    }
+                }
+            },
+            "Id": 12486067863266261493,
+            "Transform": {
+                "minSize": {
+                    "x": 20.0,
+                    "y": 20.0
+                }
+            },
+            "InternalWidgets": [
+                {
+                    "Type": "o2::HorizontalScrollBar",
+                    "Value": {
+                        "Prototype": {
+                            "id": "08a52b2f2160650f112027f10be410a1",
+                            "path": "Editor UI styles/O2  Horizontal Scroll Bar standard.proto"
+                        },
+                        "PrototypeLink": 2396346607982954160,
+                        "Id": 3441635648843492040,
+                        "Transform": {
+                            "anchorMax": {
+                                "x": 1.0,
+                                "y": 0.0
+                            },
+                            "offsetMin": {
+                                "x": 5.0,
+                                "y": 0.0
+                            },
+                            "offsetMax": {
+                                "x": -15.0,
+                                "y": 15.0
+                            }
+                        },
+                        "mName": "horScrollBar",
+                        "mMaxValue": 0.0,
+                        "Layers": [
+                            {
+                                "mUID": 18305791969019392688,
+                                "PrototypeLink": 219554440621438051,
+                                "Children": [
+                                    {
+                                        "mDrawable": {
+                                            "Type": "o2::Sprite",
+                                            "Value": {
+                                                "mImageAsset": {
+                                                    "id": "560f6bd82c4c4ef635813018768d064b",
+                                                    "path": "ui/UI4_Hor_scrollbar_bk.png"
+                                                },
+                                                "mMode": "Sliced",
+                                                "mSlices": {
+                                                    "left": 4,
+                                                    "bottom": 0,
+                                                    "right": 4,
+                                                    "top": 0
+                                                }
+                                            }
+                                        },
+                                        "mUID": 14799113875568282661,
+                                        "PrototypeLink": 6218815181136940951
+                                    }
+                                ]
+                            },
+                            {
+                                "layout": {
+                                    "mAnchorMax": {
+                                        "x": 1.0,
+                                        "y": 1.0
+                                    }
+                                },
+                                "mUID": 7825601585626397317,
+                                "PrototypeLink": 2991735439098915774,
+                                "Children": [
+                                    {
+                                        "mDrawable": {
+                                            "Type": "o2::Sprite",
+                                            "Value": {
+                                                "mImageAsset": {
+                                                    "id": "2476549e78e44b98719b14da5c4134db",
+                                                    "path": "ui/UI4_Hor_scrollhandle_regular.png"
+                                                },
+                                                "mMode": "Sliced",
+                                                "mSlices": {
+                                                    "left": 4,
+                                                    "bottom": 0,
+                                                    "right": 4,
+                                                    "top": 0
+                                                }
+                                            }
+                                        },
+                                        "mUID": 13445165203618675005,
+                                        "PrototypeLink": 14651963641468118678
+                                    },
+                                    {
+                                        "mDrawable": {
+                                            "Type": "o2::Sprite",
+                                            "Value": {
+                                                "mColor": {
+                                                    "r": 255,
+                                                    "g": 255,
+                                                    "b": 255,
+                                                    "a": 0
+                                                },
+                                                "mImageAsset": {
+                                                    "id": "7112354647cc3b075496797f0e634a33",
+                                                    "path": "ui/UI4_Hor_scrollhandle_select.png"
+                                                },
+                                                "mMode": "Sliced",
+                                                "mSlices": {
+                                                    "left": 4,
+                                                    "bottom": 0,
+                                                    "right": 4,
+                                                    "top": 0
+                                                }
+                                            }
+                                        },
+                                        "mUID": 9193000972711085456,
+                                        "PrototypeLink": 5740904173463435848
+                                    },
+                                    {
+                                        "mDrawable": {
+                                            "Type": "o2::Sprite",
+                                            "Value": {
+                                                "mColor": {
+                                                    "r": 255,
+                                                    "g": 255,
+                                                    "b": 255,
+                                                    "a": 0
+                                                },
+                                                "mImageAsset": {
+                                                    "id": "455655bc15fd1b43025130401fee2903",
+                                                    "path": "ui/UI4_Hor_scrollhandle_pressed.png"
+                                                },
+                                                "mMode": "Sliced",
+                                                "mSlices": {
+                                                    "left": 4,
+                                                    "bottom": 0,
+                                                    "right": 4,
+                                                    "top": 0
+                                                }
+                                            }
+                                        },
+                                        "mUID": 14923236375203918904,
+                                        "PrototypeLink": 9749715492755466736
+                                    }
+                                ]
+                            }
+                        ],
+                        "States": [
+                            {
+                                "name": "hover"
+                            },
+                            {
+                                "name": "pressed"
+                            },
+                            {
+                                "name": "visible",
+                                "mState": false
+                            }
+                        ]
+                    }
+                },
+                {
+                    "Type": "o2::VerticalScrollBar",
+                    "Value": {
+                        "Prototype": {
+                            "id": "541c211761b76f2346aa5f2c0408124c",
+                            "path": "Editor UI styles/O2  Vertical Scroll Bar standard.proto"
+                        },
+                        "PrototypeLink": 8311025582170325613,
+                        "Id": 6576429167716561432,
+                        "Transform": {
+                            "anchorMin": {
+                                "x": 1.0,
+                                "y": 0.0
+                            },
+                            "anchorMax": {
+                                "x": 1.0,
+                                "y": 1.0
+                            },
+                            "offsetMin": {
+                                "x": -15.0,
+                                "y": 15.0
+                            },
+                            "offsetMax": {
+                                "x": 0.0,
+                                "y": -5.0
+                            }
+                        },
+                        "mName": "verScrollBar",
+                        "mMaxValue": 0.0,
+                        "Layers": [
+                            {
+                                "mUID": 16790001948820402353,
+                                "PrototypeLink": 16848100563557725058,
+                                "Children": [
+                                    {
+                                        "mDrawable": {
+                                            "Type": "o2::Sprite",
+                                            "Value": {
+                                                "mImageAsset": {
+                                                    "id": "0d1a159f71725db57bc8657c7a34211a",
+                                                    "path": "ui/UI4_Ver_scrollbar_bk.png"
+                                                },
+                                                "mMode": "Sliced",
+                                                "mSlices": {
+                                                    "left": 0,
+                                                    "bottom": 6,
+                                                    "right": 0,
+                                                    "top": 5
+                                                }
+                                            }
+                                        },
+                                        "mUID": 3574350539327060222,
+                                        "PrototypeLink": 2810878285747130284
+                                    }
+                                ]
+                            },
+                            {
+                                "layout": {
+                                    "mAnchorMax": {
+                                        "x": 1.0,
+                                        "y": 0.0
+                                    }
+                                },
+                                "mUID": 7975777945281049284,
+                                "PrototypeLink": 15233634382488319399,
+                                "Children": [
+                                    {
+                                        "mDrawable": {
+                                            "Type": "o2::Sprite",
+                                            "Value": {
+                                                "mImageAsset": {
+                                                    "id": "733601084caf34553ee648723c4f35be",
+                                                    "path": "ui/UI4_Ver_scrollhandle_regular.png"
+                                                },
+                                                "mMode": "Sliced",
+                                                "mSlices": {
+                                                    "left": 0,
+                                                    "bottom": 6,
+                                                    "right": 0,
+                                                    "top": 5
+                                                }
+                                            }
+                                        },
+                                        "mUID": 13819557766322084364,
+                                        "PrototypeLink": 9930665080254198632
+                                    },
+                                    {
+                                        "mDrawable": {
+                                            "Type": "o2::Sprite",
+                                            "Value": {
+                                                "mColor": {
+                                                    "r": 255,
+                                                    "g": 255,
+                                                    "b": 255,
+                                                    "a": 0
+                                                },
+                                                "mImageAsset": {
+                                                    "id": "038d77b825c407256b1a319e5c182af9",
+                                                    "path": "ui/UI4_Ver_scrollhandle_select.png"
+                                                },
+                                                "mMode": "Sliced",
+                                                "mSlices": {
+                                                    "left": 0,
+                                                    "bottom": 6,
+                                                    "right": 0,
+                                                    "top": 5
+                                                }
+                                            }
+                                        },
+                                        "mUID": 722826167250033572,
+                                        "PrototypeLink": 18375442159614878768
+                                    },
+                                    {
+                                        "mDrawable": {
+                                            "Type": "o2::Sprite",
+                                            "Value": {
+                                                "mColor": {
+                                                    "r": 255,
+                                                    "g": 255,
+                                                    "b": 255,
+                                                    "a": 0
+                                                },
+                                                "mImageAsset": {
+                                                    "id": "2db22e592f981ca01e47235a71625654",
+                                                    "path": "ui/UI4_Ver_scrollhandle_pressed.png"
+                                                },
+                                                "mMode": "Sliced",
+                                                "mSlices": {
+                                                    "left": 0,
+                                                    "bottom": 6,
+                                                    "right": 0,
+                                                    "top": 5
+                                                }
+                                            }
+                                        },
+                                        "mUID": 17456614886670929982,
+                                        "PrototypeLink": 1442083973936008388
+                                    }
+                                ]
+                            }
+                        ],
+                        "States": [
+                            {
+                                "name": "hover"
+                            },
+                            {
+                                "name": "pressed"
+                            },
+                            {
+                                "name": "visible",
+                                "mState": false
+                            }
+                        ]
+                    }
+                }
+            ],
+            "Layers": [],
+            "States": [
+                {
+                    "Type": "o2::WidgetState",
+                    "Value": {
+                        "name": "visible",
+                        "offStateAnimationSpeed": 0.5,
+                        "mState": true,
+                        "mAnimation": {
+                            "instance": {
+                                "Type": "o2::AnimationAsset",
+                                "Value": {
+                                    "animation": {
+                                        "Type": "o2::AnimationClip",
+                                        "Value": {
+                                            "mTracks": [
+                                                {
+                                                    "Type": "o2::AnimationTrack<float>",
+                                                    "Value": {
+                                                        "path": "transparency",
+                                                        "curve": {
+                                                            "Type": "o2::Curve",
+                                                            "Value": {
+                                                                "mKeys": [
+                                                                    {
+                                                                        "uid": 14087286368165507974,
+                                                                        "rightSupportPosition": 0.08000000566244126,
+                                                                        "supportsType": "Broken"
+                                                                    },
+                                                                    {
+                                                                        "uid": 10308419703624405921,
+                                                                        "value": 1.0,
+                                                                        "position": 0.20000000298023225,
+                                                                        "leftSupportPosition": -0.20000000298023225,
+                                                                        "supportsType": "Broken"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ],
+                                            "mDuration": 0.20000000298023225
+                                        }
+                                    }
+                                }
+                            },
+                            "meta": {
+                                "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
+                                "Value": {
+                                    "mId": "08274ec50044713b62e4169033b803ec"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

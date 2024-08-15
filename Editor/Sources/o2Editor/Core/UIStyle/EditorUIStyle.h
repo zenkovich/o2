@@ -130,6 +130,7 @@ namespace Editor
 		void RebuildAnimationStateViewerProgressBar();
 		void RebuildAnimationSpoiler();
 
+		void RebuildBacklessDropdownButton();
         void RebuildMemoryAnalyzerTree();
 
 		void RebuildEditorUIManager(const String& stylesFolder, bool saveStyle = true, bool checkEditedDate = true);
@@ -276,6 +277,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildAnimationStateViewerLoopToggle);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildAnimationStateViewerProgressBar);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildAnimationSpoiler);
+    FUNCTION().PUBLIC().SIGNATURE(void, RebuildBacklessDropdownButton);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildMemoryAnalyzerTree);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildEditorUIManager, const String&, bool, bool);
 }

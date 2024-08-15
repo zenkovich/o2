@@ -40,6 +40,9 @@ namespace Editor
 
 	void EditorConfig::SaveProjectConfigs()
 	{
+		if (!WindowsManager::IsSingletonInitialzed())
+			return;
+			
 		projectConfig.mLayout = o2EditorWindows.GetWindowsLayout();
 
 		DataDocument data;

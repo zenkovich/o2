@@ -1,0 +1,241 @@
+{
+    "mActor": {
+        "Type": "Editor::StringProperty",
+        "Value": {
+            "Prototype": {
+                "id": "512b1e235fd0565e2ea15c8a69c2653a",
+                "path": "Editor UI styles/Editor  String Property standard.proto"
+            },
+            "PrototypeLink": 16683340417802061457,
+            "Id": 3846558963228884916,
+            "mName": "with caption",
+            "mBorder": {
+                "left": 10.0,
+                "bottom": 0.0,
+                "right": 0.0,
+                "top": 0.0
+            },
+            "Children": [
+                {
+                    "Type": "o2::Label",
+                    "Data": {
+                        "Prototype": {
+                            "id": "00e61abd278d74112db62c5524647215",
+                            "path": "Editor UI styles/O2  Label standard.proto"
+                        },
+                        "PrototypeLink": 9613259363390956959,
+                        "Id": 7269736121462356038,
+                        "Transform": {
+                            "weight": {
+                                "x": 0.6000000238418579,
+                                "y": 1.0
+                            }
+                        },
+                        "mName": "propertyName",
+                        "Layers": [
+                            {
+                                "mDrawable": {
+                                    "Type": "o2::Text",
+                                    "Value": {
+                                        "mColor": {
+                                            "r": 96,
+                                            "g": 125,
+                                            "b": 139,
+                                            "a": 255
+                                        },
+                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                        "mHeight": 11,
+                                        "mSymbolsDistCoef": 1.0,
+                                        "mLinesDistanceCoef": 1.0,
+                                        "mVerAlign": "Middle",
+                                        "mDotsEndings": true
+                                    }
+                                },
+                                "mUID": 6302828279425115058,
+                                "PrototypeLink": 11511876723386816904
+                            }
+                        ]
+                    }
+                },
+                {
+                    "Type": "o2::Widget",
+                    "Data": {
+                        "PrototypeLink": 11657506855087261397,
+                        "Id": 12282343242211699067,
+                        "Children": [
+                            {
+                                "Type": "o2::HorizontalLayout",
+                                "Data": {
+                                    "PrototypeLink": 18109699390758951834,
+                                    "Id": 17955040743312493004,
+                                    "Children": [
+                                        {
+                                            "Type": "o2::EditBox",
+                                            "Data": {
+                                                "Prototype": {
+                                                    "id": "583a21315392007c566f1aee55bb34db",
+                                                    "path": "Editor UI styles/O2  Edit Box singleline.proto"
+                                                },
+                                                "PrototypeLink": 12589121913592147605,
+                                                "Id": 11486784227804782605,
+                                                "mText": "--",
+                                                "mTextDrawable": {
+                                                    "Type": "o2::Text",
+                                                    "Value": {
+                                                        "mPosition": {
+                                                            "x": 0.0,
+                                                            "y": 1.0
+                                                        },
+                                                        "mSize": {
+                                                            "x": 6.0,
+                                                            "y": 0.0
+                                                        },
+                                                        "mScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0
+                                                        },
+                                                        "mPivot": {
+                                                            "x": 0.5,
+                                                            "y": 0.5
+                                                        },
+                                                        "mColor": {
+                                                            "r": 96,
+                                                            "g": 125,
+                                                            "b": 139,
+                                                            "a": 255
+                                                        },
+                                                        "mText": "--",
+                                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                        "mHeight": 11,
+                                                        "mSymbolsDistCoef": 1.0,
+                                                        "mLinesDistanceCoef": 1.0,
+                                                        "mVerAlign": "Middle"
+                                                    }
+                                                },
+                                                "mCaretDrawable": {
+                                                    "Type": "o2::Sprite",
+                                                    "Value": {
+                                                        "mPosition": {
+                                                            "x": -3.0,
+                                                            "y": -4.0
+                                                        },
+                                                        "mSize": {
+                                                            "x": 1.0,
+                                                            "y": 18.700000762939454
+                                                        },
+                                                        "mScale": {
+                                                            "x": 1.0,
+                                                            "y": 1.0
+                                                        },
+                                                        "mPivot": {
+                                                            "x": 0.0,
+                                                            "y": 0.25999999046325686
+                                                        },
+                                                        "mColor": {
+                                                            "r": 0,
+                                                            "g": 0,
+                                                            "b": 0,
+                                                            "a": 255
+                                                        },
+                                                        "mTextureSrcRect": {
+                                                            "left": 0,
+                                                            "bottom": 0,
+                                                            "right": 0,
+                                                            "top": 0
+                                                        }
+                                                    }
+                                                },
+                                                "Layers": [
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mImageAsset": {
+                                                                    "id": "41516f7f0265318f5f6d731f16f66682",
+                                                                    "path": "ui/UI4_Editbox_regular.png"
+                                                                },
+                                                                "mMode": "Sliced",
+                                                                "mSlices": {
+                                                                    "left": 13,
+                                                                    "bottom": 14,
+                                                                    "right": 14,
+                                                                    "top": 14
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 3066799576538204645,
+                                                        "PrototypeLink": 1549273597060455454
+                                                    },
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "4fc26f8f22f13b4d2b45412a54061211",
+                                                                    "path": "ui/UI4_Editbox_select.png"
+                                                                },
+                                                                "mMode": "Sliced",
+                                                                "mSlices": {
+                                                                    "left": 13,
+                                                                    "bottom": 14,
+                                                                    "right": 14,
+                                                                    "top": 14
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 4266327587258100278,
+                                                        "PrototypeLink": 4617328692226145816
+                                                    },
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mColor": {
+                                                                    "r": 255,
+                                                                    "g": 255,
+                                                                    "b": 255,
+                                                                    "a": 0
+                                                                },
+                                                                "mImageAsset": {
+                                                                    "id": "7c09624e7daa45ef4dd24628717942d5",
+                                                                    "path": "ui/UI4_Editbox_focus.png"
+                                                                },
+                                                                "mMode": "Sliced",
+                                                                "mSlices": {
+                                                                    "left": 13,
+                                                                    "bottom": 14,
+                                                                    "right": 14,
+                                                                    "top": 14
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 963079303581864441,
+                                                        "PrototypeLink": 14966703410005173935
+                                                    }
+                                                ],
+                                                "States": [
+                                                    {
+                                                        "name": "visible"
+                                                    },
+                                                    {
+                                                        "name": "focused"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -64,24 +64,20 @@ namespace Editor
 		mHeaderContainer->expandHeight = false;
 		mCaption->AddChildWidget(mHeaderContainer);
 
-		mTypeCaption = o2UI.CreateLabel("nullptr");
-		*mTypeCaption->layout = WidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
-		mTypeCaption->horOverflow = Label::HorOverflow::Dots;
-		mTypeCaption->horAlign = HorAlign::Left;
-		mTypeCaption->verAlign = VerAlign::Bottom;
-		mTypeCaption->height = 8;
-		mTypeCaption->transparency = 0.6f;
-		mHeaderContainer->AddInternalWidget(mTypeCaption);
-
-		mCreateDeleteButton = o2UI.CreateButton("Create");
-		mCreateDeleteButton->layout->maxWidth = 75;
-		mCreateDeleteButton->layout->minHeight = 15;
-		mCreateDeleteButton->layout->height = 15;
-		mCreateDeleteButton->onClick = THIS_FUNC(OnCreateOrDeletePressed);
-		mHeaderContainer->AddChild(mCreateDeleteButton);
+		mCreateOrRemoveButton = o2UI.CreateButton("Create");
+		mCreateOrRemoveButton->layout->maxWidth = 75;
+		mCreateOrRemoveButton->layout->minHeight = 15;
+		mCreateOrRemoveButton->layout->height = 15;
+		mCreateOrRemoveButton->onClick = THIS_FUNC(OnCreateOrRemovePressed);
+		mHeaderContainer->AddChild(mCreateOrRemoveButton);
 
 		mCreateMenu = o2UI.CreateWidget<ContextMenu>();
-		mCreateDeleteButton->AddChild(mCreateMenu);
+		mCreateOrRemoveButton->AddChild(mCreateMenu);
+
+		mTypeButton = o2UI.CreateWidget<Button>("backless dropdown");
+		mTypeButton->onClick = THIS_FUNC(OnCreatePressed);
+		mTypeButton->caption = "nullptr";
+		mHeaderContainer->AddChild(mTypeButton);
 
 		expandHeight = true;
 		expandWidth = true;
@@ -103,7 +99,9 @@ namespace Editor
 		{
 			auto object = GetProxy(mValuesProxies[0].first);
 			if (object)
+			{
 				mCurrentObjectType = dynamic_cast<const ObjectType*>(&object->GetType());
+			}
 			else if (mFieldInfo)
 			{
 				if (auto defaultTypeAttr = mFieldInfo->GetAttribute<DefaultTypeAttribute>())
@@ -141,11 +139,11 @@ namespace Editor
 				mCaption->SetEnabledForcible(false);
 				mHeaderContainer->SetInternalParent(mObjectViewer->GetSpoiler());
 
-				mTypeCaption->text = mCurrentObjectType->GetName();
-				mTypeCaption->SetEnabledForcible(mAvailableMultipleTypes && !mNoHeader);
+				mTypeButton->caption = mCurrentObjectType->GetName();
+				mTypeButton->SetEnabledForcible(mAvailableMultipleTypes && !mNoHeader);
 
-				mCreateDeleteButton->caption = "Delete";
-				mCreateDeleteButton->enabledForcibly = !mDontDeleteEnabled;
+				mCreateOrRemoveButton->caption = "Delete";
+				mCreateOrRemoveButton->enabledForcibly = !mDontDeleteEnabled;
 
 				borderLeft = 0;
 
@@ -153,10 +151,9 @@ namespace Editor
 			}
 			else
 			{
-				mTypeCaption->SetEnabledForcible(true);
-				mTypeCaption->text = "nullptr";
-				mCreateDeleteButton->caption = "Create";
-				mCreateDeleteButton->enabledForcibly = true;
+				mTypeButton->caption = "nullptr";
+				mCreateOrRemoveButton->caption = "Create";
+				mCreateOrRemoveButton->enabledForcibly = true;
 			}
 		}
 
@@ -251,39 +248,45 @@ namespace Editor
 		return mExpanded;
 	}
 
-	void ObjectPtrProperty::OnCreateOrDeletePressed()
+	void ObjectPtrProperty::OnCreateOrRemovePressed()
 	{
 		PushEditorScopeOnStack scope;
 
 		bool hasObject = !mValuesProxies.IsEmpty() && GetProxy(mValuesProxies[0].first) != nullptr;
 		if (hasObject)
+			RemoveObject();
+		else
+			OnCreatePressed();
+	}
+
+	void ObjectPtrProperty::OnCreatePressed()
+	{
+		CheckCreateContextMenu();
+
+		if (mImmediateCreateObject)
+			CreateObject(mBasicObjectType);
+		else
+			mCreateMenu->Show();
+	}
+
+	void ObjectPtrProperty::RemoveObject()
+	{
+		for (auto& targetObj : mValuesProxies)
 		{
-			for (auto& targetObj : mValuesProxies)
+			IObject* object = GetProxy(targetObj.first);
+
+			if (object != nullptr)
 			{
-				IObject* object = GetProxy(targetObj.first);
-
-				if (object != nullptr)
-				{
-					SetProxy(targetObj.first, nullptr);
-				}
-			}
-
-			Refresh();
-
-			if (mObjectViewer)
-			{
-				mObjectViewer->GetSpoiler()->SetLayoutDirty();
-				mObjectViewer->GetSpoiler()->Collapse();
+				SetProxy(targetObj.first, nullptr);
 			}
 		}
-		else
-		{
-			CheckCreateContextMenu();
 
-			if (mImmediateCreateObject)
-				CreateObject(mBasicObjectType);
-			else
-				mCreateMenu->Show();
+		Refresh();
+
+		if (mObjectViewer)
+		{
+			mObjectViewer->GetSpoiler()->SetLayoutDirty();
+			mObjectViewer->GetSpoiler()->Collapse();
 		}
 	}
 
@@ -333,8 +336,16 @@ namespace Editor
 		StoreValues(mBeforeChangeValues);
 		for (auto& targetObj : mValuesProxies)
 		{
-			if (GetProxy(targetObj.first) == nullptr)
-				SetProxy(targetObj.first, dynamic_cast<IObject*>(type->CreateSampleRef().Get()));
+			DataDocument doc;
+			if (auto previousSerializable = dynamic_cast<ISerializable*>(GetProxy(targetObj.first)))
+				previousSerializable->Serialize(doc);
+
+			auto newObject = type->CreateSampleRef();
+
+			SetProxy(targetObj.first, dynamic_cast<IObject*>(newObject.Get()));
+
+			if (auto newSerializableRef = dynamic_cast<ISerializable*>(newObject.Get()))
+				newSerializableRef->Deserialize(doc);
 		}
 
 		CheckValueChangeCompleted();

@@ -1,0 +1,207 @@
+{
+    "mActor": {
+        "Type": "Editor::ColorProperty",
+        "Value": {
+            "Prototype": {
+                "id": "247e262f01a3407f744730f06d627a3c",
+                "path": "Editor UI styles/Editor  Color Property standard.proto"
+            },
+            "PrototypeLink": 17321549759208016025,
+            "Id": 2633564739302864987,
+            "mName": "with caption",
+            "mBorder": {
+                "left": 10.0,
+                "bottom": 0.0,
+                "right": 0.0,
+                "top": 0.0
+            },
+            "Children": [
+                {
+                    "Type": "o2::Label",
+                    "Data": {
+                        "Prototype": {
+                            "id": "00e61abd278d74112db62c5524647215",
+                            "path": "Editor UI styles/O2  Label standard.proto"
+                        },
+                        "PrototypeLink": 9613259363390956959,
+                        "Id": 9091573361690945319,
+                        "Transform": {
+                            "weight": {
+                                "x": 0.6000000238418579,
+                                "y": 1.0
+                            }
+                        },
+                        "mName": "propertyName",
+                        "Layers": [
+                            {
+                                "mDrawable": {
+                                    "Type": "o2::Text",
+                                    "Value": {
+                                        "mColor": {
+                                            "r": 96,
+                                            "g": 125,
+                                            "b": 139,
+                                            "a": 255
+                                        },
+                                        "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                        "mHeight": 11,
+                                        "mSymbolsDistCoef": 1.0,
+                                        "mLinesDistanceCoef": 1.0,
+                                        "mVerAlign": "Middle",
+                                        "mDotsEndings": true
+                                    }
+                                },
+                                "mUID": 4814563384358847988,
+                                "PrototypeLink": 11511876723386816904
+                            }
+                        ]
+                    }
+                },
+                {
+                    "Type": "o2::Widget",
+                    "Data": {
+                        "PrototypeLink": 57013270228433297,
+                        "Id": 9307308235882176954,
+                        "Children": [
+                            {
+                                "Type": "o2::HorizontalLayout",
+                                "Data": {
+                                    "PrototypeLink": 420561259627042168,
+                                    "Id": 11265204305598640854,
+                                    "Children": [
+                                        {
+                                            "Type": "o2::Widget",
+                                            "Data": {
+                                                "PrototypeLink": 9986217434630111533,
+                                                "Id": 12982758271657860473,
+                                                "Transform": {
+                                                    "minSize": {
+                                                        "x": 0.0,
+                                                        "y": 10.0
+                                                    }
+                                                },
+                                                "Children": [
+                                                    {
+                                                        "Type": "o2::Image",
+                                                        "Data": {
+                                                            "mName": "unnamed",
+                                                            "Id": 13839582866316497162,
+                                                            "Transform": {
+                                                                "anchorMax": {
+                                                                    "x": 1.0,
+                                                                    "y": 1.0
+                                                                },
+                                                                "offsetMin": {
+                                                                    "x": 1.0,
+                                                                    "y": 1.0
+                                                                },
+                                                                "offsetMax": {
+                                                                    "x": -1.0,
+                                                                    "y": -1.0
+                                                                }
+                                                            },
+                                                            "InternalWidgets": [],
+                                                            "Layers": [
+                                                                {
+                                                                    "Type": "o2::WidgetLayer",
+                                                                    "Value": {
+                                                                        "name": "image",
+                                                                        "mDrawable": {
+                                                                            "Type": "o2::Sprite",
+                                                                            "Value": {
+                                                                                "mMode": "Tiled",
+                                                                                "mTextureSrcRect": {
+                                                                                    "left": 0,
+                                                                                    "bottom": 0,
+                                                                                    "right": 20,
+                                                                                    "top": 20
+                                                                                },
+                                                                                "textureFileName": ""
+                                                                            }
+                                                                        },
+                                                                        "mUID": 1775070406439201927
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "States": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "Type": "o2::Image",
+                                                        "Data": {
+                                                            "mName": "unnamed",
+                                                            "Id": 7094289493370783042,
+                                                            "Transform": {
+                                                                "anchorMax": {
+                                                                    "x": 1.0,
+                                                                    "y": 1.0
+                                                                },
+                                                                "offsetMin": {
+                                                                    "x": 1.0,
+                                                                    "y": 1.0
+                                                                },
+                                                                "offsetMax": {
+                                                                    "x": -1.0,
+                                                                    "y": -1.0
+                                                                }
+                                                            },
+                                                            "InternalWidgets": [],
+                                                            "Layers": [
+                                                                {
+                                                                    "Type": "o2::WidgetLayer",
+                                                                    "Value": {
+                                                                        "name": "image",
+                                                                        "mDrawable": {
+                                                                            "Type": "o2::Sprite",
+                                                                            "Value": {
+                                                                                "mTextureSrcRect": {
+                                                                                    "left": 0,
+                                                                                    "bottom": 0,
+                                                                                    "right": 20,
+                                                                                    "top": 20
+                                                                                },
+                                                                                "textureFileName": ""
+                                                                            }
+                                                                        },
+                                                                        "mUID": 18015673169909385777
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "States": []
+                                                        }
+                                                    }
+                                                ],
+                                                "Layers": [
+                                                    {
+                                                        "mDrawable": {
+                                                            "Type": "o2::Sprite",
+                                                            "Value": {
+                                                                "mImageAsset": {
+                                                                    "id": "41516f7f0265318f5f6d731f16f66682",
+                                                                    "path": "ui/UI4_Editbox_regular.png"
+                                                                },
+                                                                "mMode": "Sliced",
+                                                                "mSlices": {
+                                                                    "left": 13,
+                                                                    "bottom": 14,
+                                                                    "right": 14,
+                                                                    "top": 14
+                                                                }
+                                                            }
+                                                        },
+                                                        "mUID": 16367513378126650279,
+                                                        "PrototypeLink": 6236563607412139031
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

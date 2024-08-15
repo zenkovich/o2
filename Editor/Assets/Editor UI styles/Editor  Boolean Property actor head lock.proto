@@ -1,0 +1,164 @@
+{
+    "mActor": {
+        "Type": "Editor::BooleanProperty",
+        "Value": {
+            "mName": "actor head lock",
+            "Id": 14123761054456157844,
+            "Transform": {},
+            "Children": [
+                {
+                    "Type": "o2::Widget",
+                    "Data": {
+                        "mName": "container",
+                        "Id": 14206886300248376483,
+                        "Transform": {
+                            "anchorMax": {
+                                "x": 1.0,
+                                "y": 1.0
+                            },
+                            "offsetMax": {
+                                "x": -0.0,
+                                "y": -0.0
+                            }
+                        },
+                        "Children": [
+                            {
+                                "Type": "o2::HorizontalLayout",
+                                "Data": {
+                                    "mName": "layout",
+                                    "Id": 7306329954966175172,
+                                    "Transform": {
+                                        "anchorMax": {
+                                            "x": 1.0,
+                                            "y": 1.0
+                                        },
+                                        "offsetMax": {
+                                            "x": -0.0,
+                                            "y": -0.0
+                                        }
+                                    },
+                                    "Children": [
+                                        {
+                                            "Type": "o2::Toggle",
+                                            "Data": {
+                                                "Prototype": {
+                                                    "id": "22930be60a0a4d0e00cb460150486e0f",
+                                                    "path": "Editor UI styles/O2  Toggle actor head lock.proto"
+                                                },
+                                                "PrototypeLink": 15097453855338158344,
+                                                "Id": 681906439569974470,
+                                                "Transform": {
+                                                    "anchorMax": {
+                                                        "x": 1.0,
+                                                        "y": 1.0
+                                                    },
+                                                    "offsetMax": {
+                                                        "x": -20.0,
+                                                        "y": -0.0
+                                                    },
+                                                    "minSize": {
+                                                        "x": 0.0,
+                                                        "y": 0.0
+                                                    }
+                                                },
+                                                "mName": "toggle",
+                                                "Layers": [
+                                                    {
+                                                        "mUID": 2729469387642265655,
+                                                        "PrototypeLink": 6103532167796824905,
+                                                        "Children": [
+                                                            {
+                                                                "mUID": 2728173085404879874,
+                                                                "PrototypeLink": 7594344219723516345,
+                                                                "Children": [
+                                                                    {
+                                                                        "mDrawable": {
+                                                                            "Type": "o2::Sprite",
+                                                                            "Value": {
+                                                                                "mImageAsset": {
+                                                                                    "id": "2cfd7d0d00a7628202907e0d10d33253",
+                                                                                    "path": "ui/UI4_big_lock_open.png"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "mUID": 13001709760859627875,
+                                                                        "PrototypeLink": 14646829932371674693
+                                                                    },
+                                                                    {
+                                                                        "mDrawable": {
+                                                                            "Type": "o2::Sprite",
+                                                                            "Value": {
+                                                                                "mColor": {
+                                                                                    "r": 255,
+                                                                                    "g": 255,
+                                                                                    "b": 255,
+                                                                                    "a": 0
+                                                                                },
+                                                                                "mImageAsset": {
+                                                                                    "id": "699270fa415802b04fdb6f4c53fc365c",
+                                                                                    "path": "ui/UI4_big_lock_close.png"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "mUID": 7028089882327596244,
+                                                                        "PrototypeLink": 6331074133777104669
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "mDrawable": {
+                                                                    "Type": "o2::Sprite",
+                                                                    "Value": {
+                                                                        "mColor": {
+                                                                            "r": 255,
+                                                                            "g": 255,
+                                                                            "b": 255,
+                                                                            "a": 0
+                                                                        },
+                                                                        "mImageAsset": {
+                                                                            "id": "2b72590d15f550c512e446de2cd73200",
+                                                                            "path": "ui/UI4_big_lock_unknown.png"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "mUID": 1409542336347408791,
+                                                                "PrototypeLink": 8533588138908224246
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "States": [
+                                                    {
+                                                        "name": "hover"
+                                                    },
+                                                    {
+                                                        "name": "value"
+                                                    },
+                                                    {
+                                                        "name": "unknown"
+                                                    },
+                                                    {
+                                                        "name": "visible"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ],
+                                    "InternalWidgets": [],
+                                    "Layers": [],
+                                    "States": []
+                                }
+                            }
+                        ],
+                        "InternalWidgets": [],
+                        "Layers": [],
+                        "States": []
+                    }
+                }
+            ],
+            "InternalWidgets": [],
+            "Layers": [],
+            "States": []
+        }
+    }
+}

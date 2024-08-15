@@ -89,12 +89,12 @@ namespace Editor
 
 		Ref<IObjectPropertiesViewer> mObjectViewer; // Object viewer
 
-		Ref<Label>            mCaption;            // Property caption, used when object is empty and there are no spoiler
-		Ref<HorizontalLayout> mHeaderContainer;    // Type caption and create/delete button container widget, placed on spoiler head
-		Ref<Label>            mTypeCaption;        // Caption that shows type of object or nullptr
-		Ref<Button>           mCreateDeleteButton; // Create and delete button. Create - when value is nullptr, delete - when not
-		Ref<ContextMenu>      mCreateMenu;         // Create object context menu. Initializes with types derived from mObjectType 
-												   // when this type changing and create button were pressed
+		Ref<Label>            mCaption;              // Property caption, used when object is empty and there are no spoiler
+		Ref<HorizontalLayout> mHeaderContainer;      // Type caption and create/delete button container widget, placed on spoiler head
+		Ref<Button>           mTypeButton;           // Caption that shows type of object or nullptr, opens context menu when pressed
+		Ref<Button>           mCreateOrRemoveButton; // Create and delete button. Create - when value is nullptr, delete - when not
+		Ref<ContextMenu>      mCreateMenu;           // Create object context menu. Initializes with types derived from mObjectType 
+												     // when this type changing and create button were pressed
 
 		bool mContextInitialized = false;    // True when context menu initialized with available types of objects. 
 		                                     // Context menu initializes when type changed and create button pressed
@@ -111,8 +111,14 @@ namespace Editor
 		// Updates viewer header caption and header container 
 		void UpdateViewerHeader();
 
-		// Called when create button pressed and shows create object menu
-		void OnCreateOrDeletePressed();
+		// Called when create or remove button pressed
+		void OnCreateOrRemovePressed();
+
+		// Called when create button pressed
+		void OnCreatePressed();
+
+		// Removes object from property
+		void RemoveObject();
 
 		// Creates object by type
 		void CreateObject(const ObjectType* type);
@@ -149,8 +155,8 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
     FIELD().PROTECTED().NAME(mObjectViewer);
     FIELD().PROTECTED().NAME(mCaption);
     FIELD().PROTECTED().NAME(mHeaderContainer);
-    FIELD().PROTECTED().NAME(mTypeCaption);
-    FIELD().PROTECTED().NAME(mCreateDeleteButton);
+    FIELD().PROTECTED().NAME(mTypeButton);
+    FIELD().PROTECTED().NAME(mCreateOrRemoveButton);
     FIELD().PROTECTED().NAME(mCreateMenu);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mContextInitialized);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mImmediateCreateObject);
@@ -177,7 +183,9 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
     FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateViewerHeader);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnCreateOrDeletePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCreateOrRemovePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnCreatePressed);
+    FUNCTION().PROTECTED().SIGNATURE(void, RemoveObject);
     FUNCTION().PROTECTED().SIGNATURE(void, CreateObject, const ObjectType*);
     FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
     FUNCTION().PROTECTED().SIGNATURE(IObject*, GetProxy, const Ref<IAbstractValueProxy>&);

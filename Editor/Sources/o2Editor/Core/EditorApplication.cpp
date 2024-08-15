@@ -45,7 +45,10 @@ namespace Editor
 	{}
 
 	EditorApplication::~EditorApplication()
-	{}
+	{
+		o2EditorConfig.SaveProjectConfigs();
+		o2EditorConfig.SaveGlobalConfigs();
+	}
 
 	const String& EditorApplication::GetLoadedSceneName() const
 	{

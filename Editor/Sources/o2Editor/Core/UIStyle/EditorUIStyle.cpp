@@ -3446,6 +3446,35 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "animation state");
 	}
 
+	void EditorUIStyleBuilder::RebuildBacklessDropdownButton()
+	{
+		auto sample = mmake<Button>();
+		sample->layout->minSize = Vec2F(20, 20);
+
+		Ref<Text> captionText = mmake<Text>("stdFont.ttf");
+		captionText->text = "Button";
+		captionText->horAlign = HorAlign::Right;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		captionText->wordWrap = true;
+		captionText->color = Color4(96, 125, 139, 175);
+		sample->AddLayer("caption", captionText, Layout::BothStretch(0, 0, 20, 0));
+
+		auto arrowLayer = sample->AddLayer("arrow", mmake<Sprite>("ui/UI4_Down_icn.png"),
+			Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F()));
+
+		sample->AddState("hover", AnimationClip::EaseInOut("layer/caption/transparency", 0.6f, 0.8f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", AnimationClip::EaseInOut("layer/caption/transparency", 0.8f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "backless dropdown");
+	}
+
     void EditorUIStyleBuilder::RebuildMemoryAnalyzerTree()
     {
         // basics
