@@ -6,32 +6,32 @@
 namespace o2
 {
     FileLogStream::FileLogStream(const String& fileName):
-        LogStream(), filename(fileName)
+        LogStream()
     {
-        std::fstream ofs(filename, std::ios::out);
-        if (ofs) 
-            ofs.close();
+        OpenStream(fileName);
     }
 
     FileLogStream::FileLogStream(const WString& id, const String& fileName):
-        LogStream(id), filename(fileName)
+        LogStream(id)
     {
-        std::fstream ofs(filename, std::ios::out);
-        if (ofs)
-            ofs.close();
+        OpenStream(fileName);
     }
 
     FileLogStream::~FileLogStream()
     {
+        if (mStream)
+            mStream.close();
+    }
+
+    void FileLogStream::OpenStream(const String& fileName)
+    {
+        mStream.open(fileName, std::ios::out);
+        Assert(mStream, "Can't open file for logging");
     }
 
     void FileLogStream::OutStrEx(const WString& str)
     {
-        /*std::fstream ofs(mFilename, std::ios::app);
-        if (ofs)
-        {
-            ofs << ((String)str).Data() << std::endl;
-            ofs.close();
-        }*/
+        if (mStream)
+            mStream << (String)str << std::endl;
     }
 }

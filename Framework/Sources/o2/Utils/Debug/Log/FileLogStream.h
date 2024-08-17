@@ -9,8 +9,6 @@ namespace o2
     // ----------------------------------------
     class FileLogStream:public LogStream
     {
-        String filename; // Target file
-
     public:
         // Constructor with file name
         FileLogStream(const String& fileName);
@@ -22,6 +20,12 @@ namespace o2
         ~FileLogStream();
 
     protected:
+        std::ofstream mStream; // Output stream
+
+    protected:
+        // Opens file stream
+        void OpenStream(const String& fileName);
+
         // Outs string into file
         void OutStrEx(const WString& str);
     };
