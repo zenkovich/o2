@@ -1,10 +1,9 @@
 #pragma once
 
-#include "Types/Containers/Vector.h"
-#include "Types/Ref.h"
 #include "o2/Utils/Debug/Assert.h"
 #include "o2/Utils/Memory/MemoryManager.h"
-
+#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 { 
@@ -37,10 +36,10 @@ namespace o2
         static bool IsSingletonInitialzed();
 
     public:
-        static _class_type* mInstance;
+        static _class_type* mInstance; // Instance of singleton
     };
 
-    // Returns list of all singletons
+    // Returns list of all created singletons
     Vector<Ref<RefCounterable>>& GetSingletonsList();
 
     // Declaring singleton macros
@@ -49,6 +48,9 @@ namespace o2
     // Declaring and initializing singleton macros
 #define CREATE_SINGLETON(CLASS)  template<> CLASS* Singleton<CLASS>::mInstance = nullptr; SingletonInitializer<CLASS> gSingleton##CLASS
 
+    // -------------------------------------------------------------------------------------------
+    // Singleton initializer helper. Declared as temporary global variable to initialize singleton
+    // -------------------------------------------------------------------------------------------
     template <typename _class_type>
     struct SingletonInitializer
     {
