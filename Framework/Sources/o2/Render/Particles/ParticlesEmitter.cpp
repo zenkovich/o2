@@ -8,7 +8,7 @@
 namespace o2
 {
     ParticlesEmitter::ParticlesEmitter():
-        IRectDrawable(), mParticlesMesh(TextureRef::Null(), mParticlesNumLimit*4, mParticlesNumLimit*2), mShape(mmake<CircleParticlesEmitterShape>())
+        IRectDrawable(), mShape(mmake<CircleParticlesEmitterShape>())
     {
         mLastTransform = mTransform;
     }
@@ -18,7 +18,8 @@ namespace o2
     }
 
     ParticlesEmitter::ParticlesEmitter(const ParticlesEmitter& other):
-        IRectDrawable(other), mImageAsset(other.mImageAsset), mShape(other.mShape->CloneAsRef<ParticlesEmitterShape>()), 
+        IRectDrawable(other), mParticlesSource(other.mParticlesSource->CloneAsRef<ParticleSource>()), 
+        mShape(other.mShape->CloneAsRef<ParticlesEmitterShape>()),
         mParticlesNumLimit(other.mParticlesNumLimit), mPlaying(other.mPlaying), 
         mEmittingCoefficient(other.mEmittingCoefficient), mIsLooped(other.mIsLooped),
         mIsParticlesRelative(other.mIsParticlesRelative), mDuration(other.mDuration),
@@ -32,7 +33,7 @@ namespace o2
         duration(this), particlesLifetime(this), emitParticlesPerSecond(this), emitParticlesAngle(this), emitParticlesAngleRange(this),
         emitParticlesSize(this), emitParticlesSizeRange(this), emitParticlesSpeed(this), emitParticlesAngleSpeedRange(this), emitParticlesAngleSpeed(this),
         emitParticlesSpeedRange(this), emitParticlesMoveDir(this), emitParticlesMoveDirRange(this), emitParticlesColorA(this), emitParticlesColorB(this),
-        image(this), shape(this), mParticlesMesh(TextureRef::Null(), mParticlesNumLimit * 4, mParticlesNumLimit * 2)
+        particlesSource(this), shape(this)
     {
         for (auto& effect : other.mEffects)
             AddEffect(effect->CloneAsRef<ParticlesEffect>());
@@ -60,7 +61,9 @@ namespace o2
 
         IRectDrawable::operator=(other);
 
-        mImageAsset = other.mImageAsset;
+        mParticlesSource = other.mParticlesSource;
+        CreateParticlesContainer();
+
         mShape = other.mShape->CloneAsRef<ParticlesEmitterShape>();
 
         for (auto& effect : other.mEffects)
@@ -93,10 +96,6 @@ namespace o2
         mEmitParticlesColorA = other.mEmitParticlesColorA;
         mEmitParticlesColorB = other.mEmitParticlesColorB;
 
-        mParticlesMesh.vertexCount = 0;
-        mParticlesMesh.polyCount = 0;
-        mParticlesMesh.Resize(mParticlesNumLimit*4, mParticlesNumLimit*2);
-
         mLastTransform = mTransform;
 
         return *this;
@@ -104,7 +103,8 @@ namespace o2
 
     void ParticlesEmitter::Draw()
     {
-        mParticlesMesh.Draw();
+        if (mParticlesContainer)
+            mParticlesContainer->Draw();
     }
 
     void ParticlesEmitter::Update(float dt)
@@ -126,10 +126,25 @@ namespace o2
         UpdateEmitting(dt);
         UpdateEffects(dt);
         UpdateParticles(dt);
-        UpdateMesh();
+
+        if (!mParticlesContainer)
+            CreateParticlesContainer();
+
+		mParticlesContainer->Update(mParticles, mParticlesNumLimit);
     }
 
-    void ParticlesEmitter::UpdateEmitting(float dt)
+	void ParticlesEmitter::OnDeserialized(const DataValue& node)
+	{
+        CreateParticlesContainer();
+	}
+
+	void ParticlesEmitter::CreateParticlesContainer()
+	{
+        mParticlesContainer = mParticlesSource->CreateContainer();
+        mParticlesContainer->emitter = this;
+	}
+
+	void ParticlesEmitter::UpdateEmitting(float dt)
     {
         mEmitTimeBuffer += dt;
 
@@ -147,6 +162,8 @@ namespace o2
         float halfSpeedRange = mEmitParticlesSpeedRangle*0.5f;
         float halfDirRange = mEmitParticlesMoveDirectionRange*0.5f;
         float halfAngleSpeedRange = mEmitParticlesAngleSpeedRange*0.5f;
+		float halfLifetimeRange = mParticlesLifetimeRange * 0.5f;
+
         while (mEmitTimeBuffer > particlesDelay)
         {
             if (mNumAliveParticles < mParticlesNumLimit)
@@ -175,7 +192,8 @@ namespace o2
                 p->color.g = Math::Random(mEmitParticlesColorA.g, mEmitParticlesColorB.g);
                 p->color.b = Math::Random(mEmitParticlesColorA.b, mEmitParticlesColorB.b);
                 p->color.a = Math::Random(mEmitParticlesColorA.a, mEmitParticlesColorB.a);
-                p->time = mParticlesLifetime;
+                p->timeLeft = mParticlesLifetime + Math::Random(-halfLifetimeRange, halfLifetimeRange);
+                p->lifetime = p->timeLeft;
                 p->alive = true;
 
                 mNumAliveParticles++;
@@ -207,9 +225,9 @@ namespace o2
 
             particle.position += particle.velocity*dt;
             particle.angle += particle.angleSpeed*dt;
-            particle.time -= dt;
+            particle.timeLeft -= dt;
 
-            if (particle.time < 0)
+            if (particle.timeLeft < 0)
             {
                 particle.alive = false;
                 mDeadParticles.Add(idx);
@@ -217,59 +235,6 @@ namespace o2
             }
 
             idx++;
-        }
-    }
-
-    void ParticlesEmitter::UpdateMesh()
-    {
-        if (mParticlesMesh.GetMaxVertexCount() < (UInt)mParticlesNumLimit*4)
-            mParticlesMesh.Resize(mParticlesNumLimit*4, mParticlesNumLimit*2);
-
-        mParticlesMesh.vertexCount = 0;
-        mParticlesMesh.polyCount = 0;
-        int polyIndex = 0;
-
-        Vec2F invTexSize(1.0f, 1.0f);
-        if (mParticlesMesh.GetTexture())
-        {
-            invTexSize.Set(1.0f/mParticlesMesh.GetTexture()->GetSize().x,
-                           1.0f/mParticlesMesh.GetTexture()->GetSize().y);
-        }
-
-        RectF textureSrcRect;
-        if (mImageAsset)
-            textureSrcRect = mImageAsset->GetAtlasRect();
-
-        float uvLeft = textureSrcRect.left*invTexSize.x;
-        float uvRight = textureSrcRect.right*invTexSize.x;
-        float uvUp = 1.0f - textureSrcRect.bottom*invTexSize.y;
-        float uvDown = 1.0f - textureSrcRect.top*invTexSize.y;
-
-        for (auto& particle : mParticles)
-        {
-            if (!particle.alive)
-                continue;
-
-            float sn = Math::Sin(particle.angle), cs = Math::Cos(particle.angle);
-            Vec2F hs = particle.size*0.5f;
-            Vec2F xv(cs*hs.x, sn*hs.x);
-            Vec2F yv(-sn*hs.y, cs*hs.y);
-            Vec2F o(particle.position);
-            ULong colr = particle.color.ARGB();
-
-            mParticlesMesh.vertices[mParticlesMesh.vertexCount++].Set(o - xv + yv, colr, uvLeft, uvUp);
-            mParticlesMesh.vertices[mParticlesMesh.vertexCount++].Set(o + xv + yv, colr, uvRight, uvUp);
-            mParticlesMesh.vertices[mParticlesMesh.vertexCount++].Set(o + xv - yv, colr, uvRight, uvDown);
-            mParticlesMesh.vertices[mParticlesMesh.vertexCount++].Set(o - xv - yv, colr, uvLeft, uvDown);
-
-            mParticlesMesh.indexes[polyIndex++] = mParticlesMesh.vertexCount - 4;
-            mParticlesMesh.indexes[polyIndex++] = mParticlesMesh.vertexCount - 3;
-            mParticlesMesh.indexes[polyIndex++] = mParticlesMesh.vertexCount - 2;
-
-            mParticlesMesh.indexes[polyIndex++] = mParticlesMesh.vertexCount - 4;
-            mParticlesMesh.indexes[polyIndex++] = mParticlesMesh.vertexCount - 2;
-            mParticlesMesh.indexes[polyIndex++] = mParticlesMesh.vertexCount - 1;
-            mParticlesMesh.polyCount += 2;
         }
     }
 
@@ -305,7 +270,18 @@ namespace o2
         mPlaying = false;
     }
 
-    void ParticlesEmitter::SetEmittingCoef(float coef)
+	void ParticlesEmitter::SetParticlesSource(const Ref<ParticleSource>& source)
+	{
+		mParticlesSource = source;
+        CreateParticlesContainer();
+	}
+
+	const Ref<ParticleSource>& ParticlesEmitter::GetParticlesSource() const
+	{
+        return mParticlesSource;
+	}
+
+	void ParticlesEmitter::SetEmittingCoef(float coef)
     {
         mEmittingCoefficient = coef;
     }
@@ -313,21 +289,6 @@ namespace o2
     float ParticlesEmitter::GetEmittingCoef() const
     {
         return mEmittingCoefficient;
-    }
-
-    void ParticlesEmitter::SetImage(const AssetRef<ImageAsset>& image)
-    {
-        mImageAsset = image;
-
-        if (mImageAsset)
-            mParticlesMesh.SetTexture(TextureRef(mImageAsset->GetAtlasUID(), mImageAsset->GetAtlasPage()));
-        else
-            mParticlesMesh.SetTexture(TextureRef::Null());
-    }
-
-    AssetRef<ImageAsset> ParticlesEmitter::GetImage() const
-    {
-        return mImageAsset;
     }
 
     void ParticlesEmitter::SetShape(const Ref<ParticlesEmitterShape>& shape)
