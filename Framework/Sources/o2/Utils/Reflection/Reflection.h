@@ -29,6 +29,14 @@ namespace o2
     template<typename _return_type, typename _accessor_type>
     class TStringPointerAccessorType;
 
+    template<typename _type, typename _getter>
+    const Type& GetTypeOf();
+
+    template<typename _type>
+    class Ref;
+
+    class RefCounterable;
+
     typedef UInt TypeId;
 
     // ------------------------------
@@ -149,74 +157,76 @@ namespace o2
 #include "o2/Utils/Reflection/FieldInfo.h"
 #include "o2/Utils/Reflection/FunctionInfo.h"
 #include "o2/Utils/Reflection/TypeTraits.h"
+#include "o2/Utils/Types/Ref.h"
 
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptEngine.h"
+#include "o2/Utils/Reflection/BaseTypeProcessor.h"
 #endif
 
-namespace o2
-{
-
-    class ReflectionInitializationTypeProcessor : public BaseTypeProcessor
-    {
+namespace o2 {
+    class ReflectionInitializationTypeProcessor : public BaseTypeProcessor {
     public:
-        struct FieldProcessor
-        {
-            Vector<IAttribute*> attributes;
-            IDefaultValue* defaultValue = nullptr;
+        struct FieldProcessor {
+            Vector<IAttribute *> attributes;
+            IDefaultValue *defaultValue = nullptr;
             ProtectSection section = ProtectSection::Public;
 
             template<typename _attribute_type, typename ... _args>
-            FieldProcessor& AddAttribute(_args ... args);
+            FieldProcessor &AddAttribute(_args ... args);
 
             template<typename _type>
-            FieldProcessor& SetDefaultValue(const _type& value);
+            FieldProcessor &SetDefaultValue(const _type &value);
 
             template<typename _object_type, typename _field_type>
-            FieldInfo& FieldBasics(_object_type* object, Type* type, const char* name, void* (*pointerGetter)(void*),
-                                   _field_type& field);
+            FieldInfo &FieldBasics(_object_type *object, Type *type, const char *name, void *(*pointerGetter)(void *),
+                                   _field_type &field);
 
-            FieldProcessor& SetProtectSection(ProtectSection section);
+            FieldProcessor &SetProtectSection(ProtectSection section);
         };
 
-        struct FunctionProcessor
-        {
-            Vector<IAttribute*> attributes;
+        struct FunctionProcessor {
+            Vector<IAttribute *> attributes;
             ProtectSection section = ProtectSection::Public;
 
             template<typename _attribute_type, typename ... _args>
-            FunctionProcessor& AddAttribute(_args ... args);
+            FunctionProcessor &AddAttribute(_args ... args);
 
-            FunctionProcessor& SetProtectSection(ProtectSection section);
+            FunctionProcessor &SetProtectSection(ProtectSection section);
 
             template<typename _object_type, typename ... _args>
-            void Constructor(_object_type* object, Type* type) {}
+            void Constructor(_object_type *object, Type *type) {}
 
             template<typename _object_type, typename _res_type, typename ... _args>
-            void Signature(_object_type* object, Type* type, const char* name,
+            void Signature(_object_type *object, Type *type, const char *name,
                            _res_type(_object_type::* pointer)(_args ...));
 
             template<typename _object_type, typename _res_type, typename ... _args>
-            void Signature(_object_type* object, Type* type, const char* name,
+            void Signature(_object_type *object, Type *type, const char *name,
                            _res_type(_object_type::* pointer)(_args ...) const);
 
             template<typename _object_type, typename _res_type, typename ... _args>
-            void SignatureStatic(_object_type* object, Type* type, const char* name,
+            void SignatureStatic(_object_type *object, Type *type, const char *name,
                                  _res_type(*pointer)(_args ...));
         };
 
         template<typename _object_type, typename _base_type>
-        void BaseType(_object_type* object, Type* type, const char* name);
+        void BaseType(_object_type *object, Type *type, const char *name);
 
         FieldProcessor StartField();
 
         FunctionProcessor StartFunction();
     };
+}
 
+#include "o2/Utils/Reflection/Type.h"
+
+namespace o2
+{
     template<typename _type>
     _type Reflection::GetEnumValue(const String& name)
     {
-        EnumType* type = (EnumType*)(&TypeOf(_type));
+        EnumType* type = (EnumType*)(&GetTypeOf<_type>());
         auto& entries = type->GetEntries();
 
         if (entries.ContainsValue(name))
@@ -230,7 +240,7 @@ namespace o2
     {
         String res;
 
-        EnumType* type = (EnumType*)(&TypeOf(_type));
+        EnumType* type = (EnumType*)(&GetTypeOf<_type>());
         auto& entries = type->GetEntries();
 
         entries.TryGetValue((int)value, res);
@@ -275,7 +285,7 @@ namespace o2
     template<typename _type>
     const Type* Reflection::GetPointerType()
     {
-        const Type* baseType = &TypeOf(_type);
+        const Type* baseType = &GetTypeOf<_type>();
 
         if (baseType->mPtrType)
             return baseType->mPtrType;
@@ -293,7 +303,7 @@ namespace o2
     template<typename _type>
     const Type* Reflection::GetReferenceType()
     {
-        const Type* baseType = &TypeOf(_type);
+        const Type* baseType = &GetTypeOf<_type>();
 
         if (baseType->mRefType)
             return baseType->mRefType;
@@ -510,5 +520,4 @@ namespace o2
         funcInfo->mAttributes = attributes;
         type->mStaticFunctions.Add(funcInfo);
     }
-
 }

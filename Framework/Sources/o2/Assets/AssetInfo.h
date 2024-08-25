@@ -1,6 +1,7 @@
 #pragma once
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/System/Time/TimeStamp.h"
+#include "o2/Utils/Basic/ICloneable.h"
 
 namespace o2
 {

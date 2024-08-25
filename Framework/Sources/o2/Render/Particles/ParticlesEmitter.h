@@ -263,6 +263,9 @@ namespace o2
 		Basis            mLastTransform;         // Last transformation
 
 	protected:
+        // Beginning serialization callback
+        void OnSerialize(DataValue& node) const override;
+
 		// Completion deserialization callback, initializes particles container
         void OnDeserialized(const DataValue& node) override;
 
@@ -403,6 +406,7 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesMoveDirection);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesMoveDirectionRange, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesMoveDirectionRange);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, CreateParticlesContainer);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateEmitting, float);

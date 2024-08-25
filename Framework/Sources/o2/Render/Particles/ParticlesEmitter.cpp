@@ -120,6 +120,11 @@ namespace o2
 		mParticlesContainer->Update(mParticles, mParticlesNumLimit);
 	}
 
+    void ParticlesEmitter::OnSerialize(o2::DataValue &node) const
+    {
+        IRectDrawable::OnSerialize(node);
+    }
+
 	void ParticlesEmitter::OnDeserialized(const DataValue& node)
 	{
 		CreateParticlesContainer();

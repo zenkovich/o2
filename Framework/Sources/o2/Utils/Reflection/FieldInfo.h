@@ -10,6 +10,7 @@ namespace o2
 {
     class Type;
     class DataValue;
+    struct ITypeSerializer;
 
     struct IDefaultValue
     {

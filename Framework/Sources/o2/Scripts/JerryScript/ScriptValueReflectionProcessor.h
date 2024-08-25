@@ -2,6 +2,7 @@
 
 #include "o2/Utils/Editor/Attributes/ScriptableAttribute.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Reflection/BaseTypeProcessor.h"
 
 namespace o2
 {
