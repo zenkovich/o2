@@ -20,7 +20,7 @@ namespace o2
 	ParticlesEmitter::ParticlesEmitter(const ParticlesEmitter& other) :
 		IRectDrawable(other), mParticlesSource(other.mParticlesSource->CloneAsRef<ParticleSource>()),
 		mShape(other.mShape->CloneAsRef<ParticlesEmitterShape>()),
-		mParticlesNumLimit(other.mParticlesNumLimit), mPlaying(other.mPlaying),
+		mParticlesNumLimit(other.mParticlesNumLimit),
 		mEmittingCoefficient(other.mEmittingCoefficient), mIsLooped(other.mIsLooped),
 		mIsParticlesRelative(other.mIsParticlesRelative), mDuration(other.mDuration),
 		mParticlesLifetime(other.mParticlesLifetime), mEmitParticlesPerSecond(other.mEmitParticlesPerSecond),
@@ -108,16 +108,7 @@ namespace o2
 		if (!mEnabled)
 			return;
 
-		if (mPlaying)
-		{
-			mCurrentTime += dt;
-
-			if (!mIsLooped && mCurrentTime > mDuration)
-			{
-				mPlaying = false;
-				mCurrentTime = mDuration;
-			}
-		}
+		IAnimation::Update(dt);
 
 		UpdateEmitting(dt);
 		UpdateEffects(dt);
@@ -271,26 +262,16 @@ namespace o2
 		mLastTransform = mTransform;
 	}
 
-	void ParticlesEmitter::SetPlaying(bool playing)
-	{
-		mPlaying = playing;
-	}
-
-	bool ParticlesEmitter::IsPlaying() const
-	{
-		return mPlaying;
-	}
-
 	void ParticlesEmitter::Play()
 	{
-		mPlaying = true;
+		IAnimation::Play();
 
 		mEmitTimeBuffer = 0.0f;
 	}
 
 	void ParticlesEmitter::Stop()
 	{
-		mPlaying = false;
+		IAnimation::Stop();
 	}
 
 	void ParticlesEmitter::SetParticlesSource(const Ref<ParticleSource>& source)

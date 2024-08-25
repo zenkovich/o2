@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Animation/IAnimation.h"
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/Particles/Particle.h"
 #include "o2/Render/Particles/ParticlesContainer.h"
@@ -17,20 +18,20 @@ namespace o2
     // ------------------------------------------------------
     // Particles emitter. Emits, updates and manage particles
     // ------------------------------------------------------
-    class ParticlesEmitter: public IRectDrawable
+    class ParticlesEmitter: public IRectDrawable, public IAnimation
     {
     public:
 		PROPERTIES(ParticlesEmitter);
 
-		PROPERTY(bool, playing, SetPlaying, IsPlaying);      // Is particles playing property
-		PROPERTY(bool, looped, SetLoop, IsLooped);           // Is emitter looped property
-		PROPERTY(float, duration, SetDuration, GetDuration); // Working duration in seconds property @RANGE(0, 10)
+		PROPERTY(bool, playing, SetPlaying, IsPlaying);                                 // Is particles playing property
+		PROPERTY(bool, looped, SetLoop, IsLooped);                                      // Is emitter looped property
+		PROPERTY(float, duration, SetDuration, GetDuration);                            // Working duration in seconds property @RANGE(0, 10)
+		PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter
 
 		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape);                        // Emitting shape property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::CircleParticlesEmitterShape)
 		PROPERTY(Ref<ParticleSource>, particlesSource, SetParticlesSource, GetParticlesSource); // Particles source property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::SingleSpriteParticleSource)
 
-        PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter
-        PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles);                  // Number of maximum particles in emitter property
+        PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles); // Number of maximum particles in emitter property
 
         PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);    // Particles lifetime in seconds property @RANGE(0, 10)
 		PROPERTY(float, particlesPerSecond, SetParticlesPerSecond, GetParticlesPerSecond); // Amount of particles emitting in one second property 
@@ -71,17 +72,11 @@ namespace o2
         // Updates particles
         void Update(float dt);
 
-        // Set playing
-        void SetPlaying(bool playing);
-
-        // Returns is playing
-        bool IsPlaying() const;
-
         // Starts playing
-        void Play();
+        void Play() override;
 
         // Stops playing
-        void Stop();
+        void Stop() override;
 
         // Sets particles source
 		void SetParticlesSource(const Ref<ParticleSource>& source);
@@ -236,7 +231,6 @@ namespace o2
                                                                          
         int mParticlesNumLimit = 100; // Max available visible particles @SERIALIZABLE
                                        
-        bool  mPlaying = true;             // Is playing @SERIALIZABLE
         float mEmittingCoefficient = 1.0f; // Emitting particles number coefficient (0...1) @SERIALIZABLE
         bool  mIsParticlesRelative = true; // Is particles relative to emitter or global @SERIALIZABLE
         bool  mIsLooped = false;           // Is emitter looped @SERIALIZABLE
@@ -262,7 +256,6 @@ namespace o2
         float mInitialAngleSpeed = 0;      // Emitting particles angle speed in radians/sec
         float mInitialAngleSpeedRange = 0; // Emitting particles angle speed range in radians/sec
 
-		float            mCurrentTime = 0;       // Current working time in seconds
 		float            mEmitTimeBuffer = 0;    // Emitting next particle time buffer
 		Vector<Particle> mParticles;             // Working particles
 		Vector<int>      mDeadParticles;         // Dead particles indexes
@@ -302,6 +295,7 @@ namespace o2
 CLASS_BASES_META(o2::ParticlesEmitter)
 {
     BASE_CLASS(o2::IRectDrawable);
+    BASE_CLASS(o2::IAnimation);
 }
 END_META;
 CLASS_FIELDS_META(o2::ParticlesEmitter)
@@ -309,9 +303,9 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PUBLIC().NAME(playing);
     FIELD().PUBLIC().NAME(looped);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 10).NAME(duration);
+    FIELD().PUBLIC().NAME(particlesRelative);
     FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::CircleParticlesEmitterShape).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(shape);
     FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::SingleSpriteParticleSource).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(particlesSource);
-    FIELD().PUBLIC().NAME(particlesRelative);
     FIELD().PUBLIC().NAME(maxParticles);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 10).NAME(particlesLifetime);
     FIELD().PUBLIC().NAME(particlesPerSecond);
@@ -331,7 +325,6 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mShape);
     FIELD().PROTECTED().DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mEffects);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(100).NAME(mParticlesNumLimit);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mPlaying);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mEmittingCoefficient);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mIsParticlesRelative);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mIsLooped);
@@ -349,7 +342,6 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(45.0f).NAME(mInitialMoveDirectionRange);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mInitialAngleSpeed);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mInitialAngleSpeedRange);
-    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mCurrentTime);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mEmitTimeBuffer);
     FIELD().PROTECTED().NAME(mParticles);
     FIELD().PROTECTED().NAME(mDeadParticles);
@@ -364,8 +356,6 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().CONSTRUCTOR(const ParticlesEmitter&);
     FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetPlaying, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsPlaying);
     FUNCTION().PUBLIC().SIGNATURE(void, Play);
     FUNCTION().PUBLIC().SIGNATURE(void, Stop);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesSource, const Ref<ParticleSource>&);

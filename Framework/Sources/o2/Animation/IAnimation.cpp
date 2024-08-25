@@ -5,9 +5,7 @@
 
 namespace o2
 {
-    IAnimation::IAnimation():
-        mTime(0), mDuration(0), mBeginTime(0), mEndTime(0), mDirection(1.0f), mSpeed(1.0f), mLoop(Loop::None),
-        mPlaying(false), mInDurationTime(0)
+    IAnimation::IAnimation()
     {}
 
     IAnimation::IAnimation(const IAnimation& other) :
@@ -69,6 +67,7 @@ namespace o2
 
                 onStopEvent();
                 onPlayedEvent();
+                OnStop();
             }
             else if (mTime < mBeginTime)
             {
@@ -78,7 +77,8 @@ namespace o2
                 Evaluate();
 
                 onStopEvent();
-                onPlayedEvent();
+				onPlayedEvent();
+				OnStop();
             }
             else
             {
@@ -121,17 +121,21 @@ namespace o2
     void IAnimation::Play()
     {
         if (mPlaying)
-            return;
+			return;
+
+		Evaluate();
 
         mPlaying = true;
+
         onPlayEvent();
-        Evaluate();
+		OnPlay();
     }
 
     void IAnimation::PlayInBounds(float beginTime, float endTime)
     {
         mBeginTime = beginTime;
         mEndTime = endTime;
+
         Play();
     }
 
@@ -139,6 +143,7 @@ namespace o2
     {
         mBeginTime = beginTime;
         mEndTime = endTime;
+
         PlayBack();
     }
 
@@ -160,7 +165,11 @@ namespace o2
             return;
 
         Evaluate();
+
         mPlaying = false;
+
+        onStopEvent();
+        OnStop();
     }
 
     void IAnimation::SetBeginBound(float time)
@@ -187,8 +196,10 @@ namespace o2
     {
         mBeginTime = Math::Min(beginTime, endTime);
         mEndTime = Math::Max(beginTime, endTime);
+
         SetReverse(beginTime > endTime);
         mTime = Math::Clamp(mTime, mBeginTime, mEndTime);
+
         Evaluate();
     }
 
@@ -200,8 +211,10 @@ namespace o2
 
     void IAnimation::SetPlaying(bool playing)
     {
-        mPlaying = playing;
-        Evaluate();
+        if (playing)
+			Play();
+		else
+			Stop();
     }
 
     bool IAnimation::IsPlaying() const
@@ -313,7 +326,7 @@ namespace o2
 
     void IAnimation::RemoveTimeEvent(float time)
     {
-        mTimeEvents.RemoveAll([&](auto& x) { return x.first == time; });
+        mTimeEvents.RemoveAll([&](auto& x) { return Math::Equals(x.first, time); });
     }
 
     void IAnimation::RemoveTimeEvent(const Function<void()>& eventFunc)

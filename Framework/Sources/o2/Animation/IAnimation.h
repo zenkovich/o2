@@ -1,8 +1,8 @@
 #pragma once
 
-#include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Property.h"
+#include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Containers/Map.h"
 
 namespace o2
@@ -10,7 +10,7 @@ namespace o2
     // -------------------------
     // Basic animation interface
     // -------------------------
-    class IAnimation : public IObject
+    class IAnimation : public ISerializable
     {
     public:
         PROPERTIES(IAnimation);
@@ -151,15 +151,15 @@ namespace o2
         IOBJECT(IAnimation);
 
     protected:
-        float mTime;           // Current animation time, can be out of bounds
-        float mInDurationTime; // In duration time
-        float mDuration;       // Animation duration
-        float mBeginTime;      // Begin time
-        float mEndTime;        // End time
-        float mDirection;      // Animation direction: 1 - forward, -1 - reversed
-        float mSpeed;          // Animation speed, 1 is default
-        Loop  mLoop;           // Loop type
-        bool  mPlaying;        // True if animation playing
+        float mTime = 0.0f;            // Current animation time, can be out of bounds
+        float mInDurationTime = 0.0f ; // In duration time
+		float mDuration = 0.0f;        // Animation duration @SERIALIZABLE
+		float mBeginTime = 0.0f;       // Begin time @SERIALIZABLE
+		float mEndTime = 0.0f;         // End time @SERIALIZABLE
+		float mDirection = 1.0f;       // Animation direction: 1 - forward, -1 - reversed
+		float mSpeed = 1.0f;           // Animation speed, 1 is default @SERIALIZABLE
+        Loop  mLoop = Loop::None;      // Loop type @SERIALIZABLE
+        bool  mPlaying = false;        // True if animation playing @SERIALIZABLE
 
         Vector<Pair<float, Function<void()>>> mTimeEvents; // Animation time events
 
@@ -169,13 +169,19 @@ namespace o2
 
         // Called for updating animated object, after updating time
         virtual void Evaluate();
+
+		// Called when animation starts playing
+		virtual void OnPlay() {}
+
+		// Called when animation stops playing
+		virtual void OnStop() {}
     };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::IAnimation)
 {
-    BASE_CLASS(o2::IObject);
+    BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(o2::IAnimation)
@@ -193,15 +199,15 @@ CLASS_FIELDS_META(o2::IAnimation)
     FIELD().PUBLIC().NAME(onStopEvent);
     FIELD().PUBLIC().NAME(onPlayedEvent);
     FIELD().PUBLIC().NAME(onUpdate);
-    FIELD().PROTECTED().NAME(mTime);
-    FIELD().PROTECTED().NAME(mInDurationTime);
-    FIELD().PROTECTED().NAME(mDuration);
-    FIELD().PROTECTED().NAME(mBeginTime);
-    FIELD().PROTECTED().NAME(mEndTime);
-    FIELD().PROTECTED().NAME(mDirection);
-    FIELD().PROTECTED().NAME(mSpeed);
-    FIELD().PROTECTED().NAME(mLoop);
-    FIELD().PROTECTED().NAME(mPlaying);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mTime);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mInDurationTime);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDuration);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mBeginTime);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mEndTime);
+    FIELD().PROTECTED().DEFAULT_VALUE(1.0f).NAME(mDirection);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mSpeed);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Loop::None).NAME(mLoop);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mPlaying);
     FIELD().PROTECTED().NAME(mTimeEvents);
 }
 END_META;
@@ -247,6 +253,8 @@ CLASS_METHODS_META(o2::IAnimation)
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllTimeEvents);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateTime);
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPlay);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnStop);
 }
 END_META;
 // --- END META ---
