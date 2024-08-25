@@ -12,8 +12,9 @@ namespace o2
 		float minRange = 0;
 		float maxRange = 1;
 
-        RangeAttribute() {}
-        RangeAttribute(float minRange, float maxRange):minRange(minRange), maxRange(maxRange) {}
+		RangeAttribute() {}
+		RangeAttribute(float minRange, float maxRange) :minRange(minRange), maxRange(maxRange) {}
+		RangeAttribute(int minRange, int maxRange) :minRange((float)minRange), maxRange((float)maxRange) {}
     };
 
 #define RANGE_ATTRIBUTE(MIN_VALUE, MAX_VALUE) \

@@ -7,539 +7,530 @@
 
 namespace o2
 {
-    ParticlesEmitter::ParticlesEmitter():
-        IRectDrawable(), mShape(mmake<CircleParticlesEmitterShape>())
-    {
-        mLastTransform = mTransform;
-    }
+	ParticlesEmitter::ParticlesEmitter() :
+		IRectDrawable(), mShape(mmake<CircleParticlesEmitterShape>())
+	{
+		mLastTransform = mTransform;
+	}
 
-    ParticlesEmitter::~ParticlesEmitter()
-    {
-    }
+	ParticlesEmitter::~ParticlesEmitter()
+	{
+	}
 
-    ParticlesEmitter::ParticlesEmitter(const ParticlesEmitter& other):
-        IRectDrawable(other), mParticlesSource(other.mParticlesSource->CloneAsRef<ParticleSource>()), 
-        mShape(other.mShape->CloneAsRef<ParticlesEmitterShape>()),
-        mParticlesNumLimit(other.mParticlesNumLimit), mPlaying(other.mPlaying), 
-        mEmittingCoefficient(other.mEmittingCoefficient), mIsLooped(other.mIsLooped),
-        mIsParticlesRelative(other.mIsParticlesRelative), mDuration(other.mDuration),
-        mParticlesLifetime(other.mParticlesLifetime), mEmitParticlesPerSecond(other.mEmitParticlesPerSecond),
-        mEmitParticlesAngle(other.mEmitParticlesAngle), mEmitParticlesAngleRange(other.mEmitParticlesAngleRange),
-        mEmitParticlesSize(other.mEmitParticlesSize), mEmitParticlesSizeRange(other.mEmitParticlesSizeRange),
-        mEmitParticlesSpeed(other.mEmitParticlesSpeed), mEmitParticlesSpeedRangle(other.mEmitParticlesSpeedRangle),
-        mEmitParticlesMoveDirection(other.mEmitParticlesMoveDirection), mEmitParticlesMoveDirectionRange(other.mEmitParticlesMoveDirectionRange),
-        mEmitParticlesColorA(other.mEmitParticlesColorA), mEmitParticlesColorB(other.mEmitParticlesColorB),
-        playing(this), emittingCoefficient(this), particlesRelative(this), looped(this), maxParticles(this),
-        duration(this), particlesLifetime(this), emitParticlesPerSecond(this), emitParticlesAngle(this), emitParticlesAngleRange(this),
-        emitParticlesSize(this), emitParticlesSizeRange(this), emitParticlesSpeed(this), emitParticlesAngleSpeedRange(this), emitParticlesAngleSpeed(this),
-        emitParticlesSpeedRange(this), emitParticlesMoveDir(this), emitParticlesMoveDirRange(this), emitParticlesColorA(this), emitParticlesColorB(this),
-        particlesSource(this), shape(this)
-    {
-        for (auto& effect : other.mEffects)
-            AddEffect(effect->CloneAsRef<ParticlesEffect>());
+	ParticlesEmitter::ParticlesEmitter(const ParticlesEmitter& other) :
+		IRectDrawable(other), mParticlesSource(other.mParticlesSource->CloneAsRef<ParticleSource>()),
+		mShape(other.mShape->CloneAsRef<ParticlesEmitterShape>()),
+		mParticlesNumLimit(other.mParticlesNumLimit), mPlaying(other.mPlaying),
+		mEmittingCoefficient(other.mEmittingCoefficient), mIsLooped(other.mIsLooped),
+		mIsParticlesRelative(other.mIsParticlesRelative), mDuration(other.mDuration),
+		mParticlesLifetime(other.mParticlesLifetime), mEmitParticlesPerSecond(other.mEmitParticlesPerSecond),
+		mInitialAngle(other.mInitialAngle), mInitialAngleRange(other.mInitialAngleRange),
+		mInitialSize(other.mInitialSize), mInitialSizeRange(other.mInitialSizeRange),
+		mInitialSpeed(other.mInitialSpeed), mInitialSpeedRangle(other.mInitialSpeedRangle),
+		mInitialMoveDirection(other.mInitialMoveDirection), mInitialMoveDirectionRange(other.mInitialMoveDirectionRange),
+		playing(this), emittingCoefficient(this), particlesRelative(this), looped(this), maxParticles(this),
+		duration(this), particlesLifetime(this), particlesPerSecond(this), initialAngle(this), initialAngleRange(this),
+		initialSize(this), initialSizeRange(this), initialSpeed(this), initialSpeedRange(this), initialAngleSpeed(this),
+		initialAngleSpeedRange(this), moveDirection(this), moveDirectionRange(this),
+		particlesSource(this), shape(this)
+	{
+		for (auto& effect : other.mEffects)
+			AddEffect(effect->CloneAsRef<ParticlesEffect>());
 
-        mLastTransform = mTransform;
-    }
+		mLastTransform = mTransform;
+	}
 
-    ParticlesEmitter& ParticlesEmitter::operator=(const ParticlesEmitter& other)
-    {
-        RemoveAllEffects();
-        mShape = nullptr;
+	ParticlesEmitter& ParticlesEmitter::operator=(const ParticlesEmitter& other)
+	{
+		RemoveAllEffects();
+		mShape = nullptr;
 
-        int idx = 0;
-        for (auto& particle : mParticles)
-        {
-            if (particle.alive)
-            {
-                mDeadParticles.Add(idx);
-                particle.alive = false;
-            }
+		int idx = 0;
+		for (auto& particle : mParticles)
+		{
+			if (particle.alive)
+			{
+				mDeadParticles.Add(idx);
+				particle.alive = false;
+			}
 
-            idx++;
-        }
-        mNumAliveParticles = 0;
+			idx++;
+		}
+		mNumAliveParticles = 0;
 
-        IRectDrawable::operator=(other);
+		IRectDrawable::operator=(other);
 
-        mParticlesSource = other.mParticlesSource;
-        CreateParticlesContainer();
+		mParticlesSource = other.mParticlesSource;
+		CreateParticlesContainer();
 
-        mShape = other.mShape->CloneAsRef<ParticlesEmitterShape>();
+		mShape = other.mShape->CloneAsRef<ParticlesEmitterShape>();
 
-        for (auto& effect : other.mEffects)
-            AddEffect(effect->CloneAsRef<ParticlesEffect>());
+		for (auto& effect : other.mEffects)
+			AddEffect(effect->CloneAsRef<ParticlesEffect>());
 
-        mParticlesNumLimit = other.mParticlesNumLimit;
+		mParticlesNumLimit = other.mParticlesNumLimit;
 
-        mPlaying = other.mPlaying;
-        mEmittingCoefficient = other.mEmittingCoefficient;
-        mIsParticlesRelative = other.mIsParticlesRelative;
-        mIsLooped = other.mIsLooped;
+		mPlaying = other.mPlaying;
+		mEmittingCoefficient = other.mEmittingCoefficient;
+		mIsParticlesRelative = other.mIsParticlesRelative;
+		mIsLooped = other.mIsLooped;
 
-        mDuration = other.mDuration;
+		mDuration = other.mDuration;
 
-        mParticlesLifetime = other.mParticlesLifetime;
-        mEmitParticlesPerSecond = other.mEmitParticlesPerSecond;
+		mParticlesLifetime = other.mParticlesLifetime;
+		mEmitParticlesPerSecond = other.mEmitParticlesPerSecond;
 
-        mEmitParticlesAngle = other.mEmitParticlesAngle;
-        mEmitParticlesAngleRange = other.mEmitParticlesAngleRange;
+		mInitialAngle = other.mInitialAngle;
+		mInitialAngleRange = other.mInitialAngleRange;
 
-        mEmitParticlesSize = other.mEmitParticlesSize;
-        mEmitParticlesSizeRange = other.mEmitParticlesSizeRange;
+		mInitialSize = other.mInitialSize;
+		mInitialSizeRange = other.mInitialSizeRange;
 
-        mEmitParticlesSpeed = other.mEmitParticlesSpeed;
-        mEmitParticlesSpeedRangle = other.mEmitParticlesSpeedRangle;
+		mInitialSpeed = other.mInitialSpeed;
+		mInitialSpeedRangle = other.mInitialSpeedRangle;
 
-        mEmitParticlesMoveDirection = other.mEmitParticlesMoveDirection;
-        mEmitParticlesMoveDirectionRange = other.mEmitParticlesMoveDirectionRange;
+		mInitialMoveDirection = other.mInitialMoveDirection;
+		mInitialMoveDirectionRange = other.mInitialMoveDirectionRange;
 
-        mEmitParticlesColorA = other.mEmitParticlesColorA;
-        mEmitParticlesColorB = other.mEmitParticlesColorB;
+		mLastTransform = mTransform;
 
-        mLastTransform = mTransform;
+		return *this;
+	}
 
-        return *this;
-    }
+	void ParticlesEmitter::Draw()
+	{
+		if (mParticlesContainer)
+			mParticlesContainer->Draw();
+	}
 
-    void ParticlesEmitter::Draw()
-    {
-        if (mParticlesContainer)
-            mParticlesContainer->Draw();
-    }
+	void ParticlesEmitter::Update(float dt)
+	{
+		if (!mEnabled)
+			return;
 
-    void ParticlesEmitter::Update(float dt)
-    {
-        if (!mEnabled)
-            return;
+		if (mPlaying)
+		{
+			mCurrentTime += dt;
 
-        if (mPlaying)
-        {
-            mCurrentTime += dt;
+			if (!mIsLooped && mCurrentTime > mDuration)
+			{
+				mPlaying = false;
+				mCurrentTime = mDuration;
+			}
+		}
 
-            if (!mIsLooped && mCurrentTime > mDuration)
-            {
-                mPlaying = false;
-                mCurrentTime = mDuration;
-            }
-        }
+		UpdateEmitting(dt);
+		UpdateEffects(dt);
+		UpdateParticles(dt);
 
-        UpdateEmitting(dt);
-        UpdateEffects(dt);
-        UpdateParticles(dt);
-
-        if (!mParticlesContainer)
-            CreateParticlesContainer();
+		if (!mParticlesContainer)
+			CreateParticlesContainer();
 
 		mParticlesContainer->Update(mParticles, mParticlesNumLimit);
-    }
+	}
 
 	void ParticlesEmitter::OnDeserialized(const DataValue& node)
 	{
-        CreateParticlesContainer();
+		CreateParticlesContainer();
 	}
 
 	void ParticlesEmitter::CreateParticlesContainer()
 	{
-        mParticlesContainer = mParticlesSource->CreateContainer();
-        mParticlesContainer->emitter = this;
+		mParticlesContainer = mParticlesSource->CreateContainer();
+		mParticlesContainer->emitter = this;
 	}
 
 	void ParticlesEmitter::UpdateEmitting(float dt)
-    {
-        mEmitTimeBuffer += dt;
+	{
+		if (!mPlaying)
+			return;
 
-        float currentParticlesPerSecond = mEmitParticlesPerSecond*mEmittingCoefficient;
-        if (!mPlaying)
-            currentParticlesPerSecond = 0;
+		mEmitTimeBuffer += dt;
 
-        if (currentParticlesPerSecond < FLT_EPSILON)
-            currentParticlesPerSecond = FLT_EPSILON;
+		float currentParticlesPerSecond = mEmitParticlesPerSecond*mEmittingCoefficient;
+		float particlesDelay = 1.0f/mEmitParticlesPerSecond;
 
-        float particlesDelay = 1.0f/mEmitParticlesPerSecond;
-
-        float halfAngleRange = mEmitParticlesAngleRange*0.5f;
-        Vec2F halfSizeRange = mEmitParticlesSizeRange*0.5f;
-        float halfSpeedRange = mEmitParticlesSpeedRangle*0.5f;
-        float halfDirRange = mEmitParticlesMoveDirectionRange*0.5f;
-        float halfAngleSpeedRange = mEmitParticlesAngleSpeedRange*0.5f;
+		float halfAngleRange = Math::Deg2rad(mInitialAngleRange)*0.5f;
+		Vec2F halfSizeRange = mInitialSizeRange*0.5f;
+		float halfSpeedRange = mInitialSpeedRangle*0.5f;
+		float halfDirRange = mInitialMoveDirectionRange*0.5f;
+		float halfAngleSpeedRange = Math::Deg2rad(mInitialAngleSpeedRange)*0.5f;
 		float halfLifetimeRange = mParticlesLifetimeRange * 0.5f;
 
-        while (mEmitTimeBuffer > particlesDelay)
-        {
-            if (mNumAliveParticles < mParticlesNumLimit)
-            {
-                Particle* p;
+		while (mEmitTimeBuffer > particlesDelay)
+		{
+			if (mNumAliveParticles < mParticlesNumLimit)
+			{
+				Particle* particle;
+				int particleIndex;
 
-                if (mDeadParticles.IsEmpty())
-                {
-                    mParticles.Add(Particle());
-                    p = &mParticles.Last();
-                }
-                else p = &mParticles[mDeadParticles.PopBack()];
+				// Allocate particle
+				if (mDeadParticles.IsEmpty())
+				{
+					mParticles.Add(Particle());
+					particle = &mParticles.Last();
+					particleIndex = mParticles.Count() - 1;
+				}
+				else
+				{
+					particleIndex = mDeadParticles.PopBack();
+					particle = &mParticles[particleIndex];
+				}
 
-                p->position = Local2WorldPoint(mShape->GetEmittinPoint());
-                p->angle = mEmitParticlesAngle + Math::Random(-halfAngleRange, halfAngleRange);
+				// Initialize particle
+				particle->index = particleIndex;
 
-                p->size.Set(mEmitParticlesSize.x + Math::Random(-halfSizeRange.x, halfSizeRange.x),
-                            mEmitParticlesSize.y + Math::Random(-halfSizeRange.y, halfSizeRange.y));
+				particle->position = Local2WorldPoint(mShape->GetEmittinPoint());
+				particle->angle = mInitialAngle + Math::Random(-halfAngleRange, halfAngleRange);
 
-                p->velocity = Vec2F::Rotated(mEmitParticlesMoveDirection + Math::Random(-halfDirRange, halfDirRange))*
-                    (mEmitParticlesSpeed + Math::Random(-halfSpeedRange, halfSpeedRange));
+				particle->size.Set(mInitialSize.x + Math::Random(-halfSizeRange.x, halfSizeRange.x),
+								   mInitialSize.y + Math::Random(-halfSizeRange.y, halfSizeRange.y));
 
-                p->angleSpeed = mEmitParticlesAngleSpeed + Math::Random(-halfAngleSpeedRange, halfAngleSpeedRange);
+				particle->velocity = Vec2F::Rotated(mInitialMoveDirection + Math::Random(-halfDirRange, halfDirRange))*
+					(mInitialSpeed + Math::Random(-halfSpeedRange, halfSpeedRange));
 
-                p->color.r = Math::Random(mEmitParticlesColorA.r, mEmitParticlesColorB.r);
-                p->color.g = Math::Random(mEmitParticlesColorA.g, mEmitParticlesColorB.g);
-                p->color.b = Math::Random(mEmitParticlesColorA.b, mEmitParticlesColorB.b);
-                p->color.a = Math::Random(mEmitParticlesColorA.a, mEmitParticlesColorB.a);
-                p->timeLeft = mParticlesLifetime + Math::Random(-halfLifetimeRange, halfLifetimeRange);
-                p->lifetime = p->timeLeft;
-                p->alive = true;
+				particle->angleSpeed = mInitialAngleSpeed + Math::Random(-halfAngleSpeedRange, halfAngleSpeedRange);
 
-                mNumAliveParticles++;
-            }
+				particle->color = Color4::White();
 
-            mEmitTimeBuffer -= particlesDelay;
-        }
-    }
+				particle->timeLeft = mParticlesLifetime + Math::Random(-halfLifetimeRange, halfLifetimeRange);
+				particle->lifetime = particle->timeLeft;
 
-    void ParticlesEmitter::UpdateEffects(float dt)
-    {
-        for (auto& effect : mEffects)
-        {
-            if (effect)
-                effect->Update(dt, this);
-        }
-    }
+				particle->alive = true;
 
-    void ParticlesEmitter::UpdateParticles(float dt)
-    {
-        int idx = 0;
-        for (auto& particle : mParticles)
-        {
-            if (!particle.alive)
-            {
-                idx++;
-                continue;
-            }
+				// Notify container and effects
+				mParticlesContainer->OnParticleEmitted(*particle);
 
-            particle.position += particle.velocity*dt;
-            particle.angle += particle.angleSpeed*dt;
-            particle.timeLeft -= dt;
+				for (auto& effect : mEffects)
+				{
+					if (effect)
+						effect->OnParticleEmitted(*particle);
+				}
 
-            if (particle.timeLeft < 0)
-            {
-                particle.alive = false;
-                mDeadParticles.Add(idx);
-                mNumAliveParticles--;
-            }
+				mNumAliveParticles++;
+			}
 
-            idx++;
-        }
-    }
+			mEmitTimeBuffer -= particlesDelay;
+		}
+	}
 
-    void ParticlesEmitter::BasisChanged()
-    {
-        if (!mIsParticlesRelative)
-            return;
+	void ParticlesEmitter::UpdateEffects(float dt)
+	{
+		for (auto& effect : mEffects)
+		{
+			if (effect)
+				effect->Update(dt, this);
+		}
+	}
 
-        Basis change = mLastTransform.Inverted()*mTransform;
-        for (auto& particle : mParticles)
-            particle.position = change.Transform(particle.position);
+	void ParticlesEmitter::UpdateParticles(float dt)
+	{
+		int idx = 0;
+		for (auto& particle : mParticles)
+		{
+			if (!particle.alive)
+			{
+				idx++;
+				continue;
+			}
 
-        mLastTransform = mTransform;
-    }
+			particle.position += particle.velocity*dt;
+			particle.angle += particle.angleSpeed*dt;
 
-    void ParticlesEmitter::SetPlaying(bool playing)
-    {
-        mPlaying = playing;
-    }
+			particle.timeLeft -= dt;
 
-    bool ParticlesEmitter::IsPlaying() const
-    {
-        return mPlaying;
-    }
+			if (particle.timeLeft < 0)
+			{
+				particle.alive = false;
 
-    void ParticlesEmitter::Play()
-    {
-        mPlaying = true;
-    }
+				mParticlesContainer->OnParticleDied(particle);
 
-    void ParticlesEmitter::Stop()
-    {
-        mPlaying = false;
-    }
+				for (auto& effect : mEffects)
+				{
+					if (effect)
+						effect->OnParticleDied(particle);
+				}
+
+				mDeadParticles.Add(idx);
+				mNumAliveParticles--;
+			}
+
+			idx++;
+		}
+	}
+
+	void ParticlesEmitter::BasisChanged()
+	{
+		if (!mIsParticlesRelative)
+			return;
+
+		Basis change = mLastTransform.Inverted()*mTransform;
+		for (auto& particle : mParticles)
+			particle.position = change.Transform(particle.position);
+
+		mLastTransform = mTransform;
+	}
+
+	void ParticlesEmitter::SetPlaying(bool playing)
+	{
+		mPlaying = playing;
+	}
+
+	bool ParticlesEmitter::IsPlaying() const
+	{
+		return mPlaying;
+	}
+
+	void ParticlesEmitter::Play()
+	{
+		mPlaying = true;
+
+		mEmitTimeBuffer = 0.0f;
+	}
+
+	void ParticlesEmitter::Stop()
+	{
+		mPlaying = false;
+	}
 
 	void ParticlesEmitter::SetParticlesSource(const Ref<ParticleSource>& source)
 	{
 		mParticlesSource = source;
-        CreateParticlesContainer();
+		CreateParticlesContainer();
 	}
 
 	const Ref<ParticleSource>& ParticlesEmitter::GetParticlesSource() const
 	{
-        return mParticlesSource;
+		return mParticlesSource;
 	}
 
 	void ParticlesEmitter::SetEmittingCoef(float coef)
-    {
-        mEmittingCoefficient = coef;
-    }
+	{
+		mEmittingCoefficient = coef;
+	}
 
-    float ParticlesEmitter::GetEmittingCoef() const
-    {
-        return mEmittingCoefficient;
-    }
+	float ParticlesEmitter::GetEmittingCoef() const
+	{
+		return mEmittingCoefficient;
+	}
 
-    void ParticlesEmitter::SetShape(const Ref<ParticlesEmitterShape>& shape)
-    {
-        mShape = shape;
-    }
+	void ParticlesEmitter::SetShape(const Ref<ParticlesEmitterShape>& shape)
+	{
+		mShape = shape;
+	}
 
-    const Ref<ParticlesEmitterShape>& ParticlesEmitter::GetShape() const
-    {
-        return mShape;
-    }
+	const Ref<ParticlesEmitterShape>& ParticlesEmitter::GetShape() const
+	{
+		return mShape;
+	}
 
-    void ParticlesEmitter::AddEffect(const Ref<ParticlesEffect>& effect)
-    {
-        mEffects.Add(effect);
-    }
+	void ParticlesEmitter::AddEffect(const Ref<ParticlesEffect>& effect)
+	{
+		mEffects.Add(effect);
+	}
 
-    const Vector<Ref<ParticlesEffect>>& ParticlesEmitter::GetEffects() const
-    {
-        return mEffects;
-    }
+	const Vector<Ref<ParticlesEffect>>& ParticlesEmitter::GetEffects() const
+	{
+		return mEffects;
+	}
 
-    void ParticlesEmitter::RemoveEffect(const Ref<ParticlesEffect>& effect)
-    {
-        mEffects.Remove(effect);
-    }
+	void ParticlesEmitter::RemoveEffect(const Ref<ParticlesEffect>& effect)
+	{
+		mEffects.Remove(effect);
+	}
 
-    void ParticlesEmitter::RemoveAllEffects()
-    {
-        mEffects.Clear();
-    }
+	void ParticlesEmitter::RemoveAllEffects()
+	{
+		mEffects.Clear();
+	}
 
-    void ParticlesEmitter::SetMaxParticles(int count)
-    {
-        mParticlesNumLimit = count;
+	void ParticlesEmitter::SetMaxParticles(int count)
+	{
+		mParticlesNumLimit = count;
 
-        int idx = 0;
-        while (mNumAliveParticles > mParticlesNumLimit)
-        {
-            if (mParticles[idx].alive)
-            {
-                mParticles[idx].alive = false;
-                mDeadParticles.Add(idx);
-                mNumAliveParticles--;
-            }
+		int idx = 0;
+		while (mNumAliveParticles > mParticlesNumLimit)
+		{
+			if (mParticles[idx].alive)
+			{
+				mParticles[idx].alive = false;
+				mDeadParticles.Add(idx);
+				mNumAliveParticles--;
+			}
 
-            idx++;
-        }
-    }
+			idx++;
+		}
+	}
 
-    int ParticlesEmitter::GetMaxParticles() const
-    {
-        return mParticlesNumLimit;
-    }
+	int ParticlesEmitter::GetMaxParticles() const
+	{
+		return mParticlesNumLimit;
+	}
 
-    int ParticlesEmitter::GetParticlesCount() const
-    {
-        return mNumAliveParticles;
-    }
+	int ParticlesEmitter::GetParticlesCount() const
+	{
+		return mNumAliveParticles;
+	}
 
-    bool ParticlesEmitter::IsAliveParticles() const
-    {
-        return mNumAliveParticles > 0;
-    }
+	bool ParticlesEmitter::IsAliveParticles() const
+	{
+		return mNumAliveParticles > 0;
+	}
 
-    const Vector<Particle>& ParticlesEmitter::GetParticles() const
-    {
-        return mParticles;
-    }
+	const Vector<Particle>& ParticlesEmitter::GetParticles() const
+	{
+		return mParticles;
+	}
 
-    void ParticlesEmitter::SetParticlesRelativity(bool relative)
-    {
-        mIsParticlesRelative = relative;
-    }
+	void ParticlesEmitter::SetParticlesRelativity(bool relative)
+	{
+		mIsParticlesRelative = relative;
+	}
 
-    bool ParticlesEmitter::IsParticlesRelative() const
-    {
-        return mIsParticlesRelative;
-    }
+	bool ParticlesEmitter::IsParticlesRelative() const
+	{
+		return mIsParticlesRelative;
+	}
 
-    void ParticlesEmitter::SetLoop(bool looped)
-    {
-        mIsLooped = looped;
-    }
+	void ParticlesEmitter::SetLoop(bool looped)
+	{
+		mIsLooped = looped;
+	}
 
-    bool ParticlesEmitter::IsLooped() const
-    {
-        return mIsLooped;
-    }
+	bool ParticlesEmitter::IsLooped() const
+	{
+		return mIsLooped;
+	}
 
-    void ParticlesEmitter::SetDuration(float duration)
-    {
-        mDuration = duration;
-    }
+	void ParticlesEmitter::SetDuration(float duration)
+	{
+		mDuration = duration;
+	}
 
-    float ParticlesEmitter::GetDuration() const
-    {
-        return mDuration;
-    }
+	float ParticlesEmitter::GetDuration() const
+	{
+		return mDuration;
+	}
 
-    void ParticlesEmitter::SetParticlesLifetime(float lifetime)
-    {
-        mParticlesLifetime = lifetime;
-    }
+	void ParticlesEmitter::SetParticlesLifetime(float lifetime)
+	{
+		mParticlesLifetime = lifetime;
+	}
 
-    float ParticlesEmitter::GetParticlesLifetime() const
-    {
-        return mParticlesLifetime;
-    }
+	float ParticlesEmitter::GetParticlesLifetime() const
+	{
+		return mParticlesLifetime;
+	}
 
-    void ParticlesEmitter::SetEmitParticlesPerSecond(float numParticles)
-    {
-        mEmitParticlesPerSecond = numParticles;
-    }
+	void ParticlesEmitter::SetParticlesPerSecond(float numParticles)
+	{
+		mEmitParticlesPerSecond = numParticles;
+	}
 
-    float ParticlesEmitter::GetEmitParticlesPerSecond() const
-    {
-        return mEmitParticlesPerSecond;
-    }
+	float ParticlesEmitter::GetParticlesPerSecond() const
+	{
+		return mEmitParticlesPerSecond;
+	}
 
-    void ParticlesEmitter::SetEmitParticlesAngle(float angle)
-    {
-        mEmitParticlesAngle = Math::Deg2rad(angle);
-    }
+	void ParticlesEmitter::SetInitialAngle(float angle)
+	{
+		mInitialAngle = Math::Deg2rad(angle);
+	}
 
-    float ParticlesEmitter::GetEmitParticlesAngle() const
-    {
-        return Math::Rad2deg(mEmitParticlesAngle);
-    }
+	float ParticlesEmitter::GetInitialAngle() const
+	{
+		return Math::Rad2deg(mInitialAngle);
+	}
 
-    void ParticlesEmitter::SetEmitParticlesAngleRange(float range)
-    {
-        mEmitParticlesAngleRange = Math::Deg2rad(angle);
-    }
+	void ParticlesEmitter::SetInitialAngleRange(float range)
+	{
+		mInitialAngleRange = initialAngle;
+	}
 
-    float ParticlesEmitter::GetEmitParticlesAngleRange() const
-    {
-        return Math::Rad2deg(mEmitParticlesAngleRange);
-    }
+	float ParticlesEmitter::GetInitialAngleRange() const
+	{
+		return mInitialAngleRange;
+	}
 
-    void ParticlesEmitter::SetEmitParticlesSize(const Vec2F& size)
-    {
-        mEmitParticlesSize = size;
-    }
+	void ParticlesEmitter::SetInitialSize(const Vec2F& size)
+	{
+		mInitialSize = size;
+	}
 
-    Vec2F ParticlesEmitter::GetEmitParticlesSize() const
-    {
-        return mEmitParticlesSize;
-    }
+	Vec2F ParticlesEmitter::GetInitialSize() const
+	{
+		return mInitialSize;
+	}
 
-    void ParticlesEmitter::SetEmitParticlesSizeRange(const Vec2F& range)
-    {
-        mEmitParticlesSizeRange = range;
-    }
+	void ParticlesEmitter::SetInitialSizeRange(const Vec2F& range)
+	{
+		mInitialSizeRange = range;
+	}
 
-    Vec2F ParticlesEmitter::GetEmitParticlesSizeRange() const
-    {
-        return mEmitParticlesSizeRange;
-    }
+	Vec2F ParticlesEmitter::GetInitialSizeRange() const
+	{
+		return mInitialSizeRange;
+	}
 
-    void ParticlesEmitter::SetEmitParticlesAngleSpeed(float speed)
-    {
-        mEmitParticlesAngleSpeed = Math::Deg2rad(speed);
-    }
+	void ParticlesEmitter::SetInitialAngleSpeed(float speed)
+	{
+		mInitialAngleSpeed = speed;
+	}
 
-    float ParticlesEmitter::GetEmitParticlesAngleSpeed() const
-    {
-        return Math::Rad2deg(mEmitParticlesAngleSpeed);
-    }
+	float ParticlesEmitter::GetInitialAngleSpeed() const
+	{
+		return mInitialAngleSpeed;
+	}
 
-    void ParticlesEmitter::SetEmitParticlesAngleSpeedRange(float speedRange)
-    {
-        mEmitParticlesAngleSpeedRange = Math::Deg2rad(speedRange);
-    }
+	void ParticlesEmitter::SetInitialAngleSpeedRange(float speedRange)
+	{
+		mInitialAngleSpeedRange = Math::Deg2rad(speedRange);
+	}
 
-    float ParticlesEmitter::GetEmitParticlesAngleSpeedRange() const
-    {
-        return Math::Rad2deg(mEmitParticlesAngleSpeedRange);
-    }
+	float ParticlesEmitter::GetInitialAngleSpeedRange() const
+	{
+		return Math::Rad2deg(mInitialAngleSpeedRange);
+	}
 
-    void ParticlesEmitter::SetEmitParticlesSpeed(float speed)
-    {
-        mEmitParticlesSpeed = speed;
-    }
+	void ParticlesEmitter::SetInitialSpeed(float speed)
+	{
+		mInitialSpeed = speed;
+	}
 
-    float ParticlesEmitter::GetEmitParticlesSpeed() const
-    {
-        return mEmitParticlesSpeed;
-    }
+	float ParticlesEmitter::GetInitialSpeed() const
+	{
+		return mInitialSpeed;
+	}
 
-    void ParticlesEmitter::SetEmitParticlesSpeedRange(float speedRange)
-    {
-        mEmitParticlesSpeedRangle = speedRange;
-    }
+	void ParticlesEmitter::SetInitialSpeedRange(float speedRange)
+	{
+		mInitialSpeedRangle = speedRange;
+	}
 
-    float ParticlesEmitter::GetEmitParticlesSpeedRange() const
-    {
-        return mEmitParticlesSpeed;
-    }
+	float ParticlesEmitter::GetInitialSpeedRange() const
+	{
+		return mInitialSpeed;
+	}
 
-    void ParticlesEmitter::SetEmitParticlesMoveDirection(float direction)
-    {
-        mEmitParticlesMoveDirection = Math::Deg2rad(direction);
-    }
+	void ParticlesEmitter::SetEmitParticlesMoveDirection(float direction)
+	{
+		mInitialMoveDirection = Math::Deg2rad(direction);
+	}
 
-    float ParticlesEmitter::GetEmitParticlesMoveDirection() const
-    {
-        return Math::Rad2deg(mEmitParticlesMoveDirection);
-    }
+	float ParticlesEmitter::GetEmitParticlesMoveDirection() const
+	{
+		return Math::Rad2deg(mInitialMoveDirection);
+	}
 
-    void ParticlesEmitter::SetEmitParticlesMoveDirectionRange(float directionRange)
-    {
-        mEmitParticlesMoveDirectionRange = Math::Deg2rad(directionRange);
-    }
+	void ParticlesEmitter::SetEmitParticlesMoveDirectionRange(float directionRange)
+	{
+		mInitialMoveDirectionRange = Math::Deg2rad(directionRange);
+	}
 
-    float ParticlesEmitter::GetEmitParticlesMoveDirectionRange() const
-    {
-        return Math::Rad2deg(mEmitParticlesMoveDirectionRange);
-    }
-
-    void ParticlesEmitter::SetEmitParticlesColorA(const Color4& color)
-    {
-        mEmitParticlesColorA = color;
-    }
-
-    Color4 ParticlesEmitter::GetEmitParticlesColorA() const
-    {
-        return mEmitParticlesColorA;
-    }
-
-    void ParticlesEmitter::SetEmitParticlesColorB(const Color4& color)
-    {
-        mEmitParticlesColorB = color;
-    }
-
-    Color4 ParticlesEmitter::GetEmitParticlesColorB() const
-    {
-        return mEmitParticlesColorB;
-    }
-
-    void ParticlesEmitter::SetEmitParticlesColor(const Color4& color)
-    {
-        mEmitParticlesColorA = color;
-        mEmitParticlesColorB = color;
-    }
-
-    void ParticlesEmitter::SetEmitParticlesColor(const Color4& colorA, const Color4& colorB)
-    {
-        mEmitParticlesColorA = colorA;
-        mEmitParticlesColorB = colorB;
-    }
+	float ParticlesEmitter::GetEmitParticlesMoveDirectionRange() const
+	{
+		return Math::Rad2deg(mInitialMoveDirectionRange);
+	}
 }
 // --- META ---
 

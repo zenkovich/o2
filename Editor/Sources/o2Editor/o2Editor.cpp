@@ -68,6 +68,7 @@ extern void __RegisterClass__Editor__VectorFontAssetViewer();
 extern void __RegisterClass__Editor__CameraActorViewer();
 extern void __RegisterClass__Editor__AnimationStateViewer();
 extern void __RegisterClass__Editor__MeshComponentViewer();
+extern void __RegisterClass__Editor__ParticlesEmitterComponentViewer();
 extern void __RegisterClass__Editor__SkinningMeshBoneComponentViewer();
 extern void __RegisterClass__Editor__SkinningMeshComponentViewer();
 extern void __RegisterClass__Editor__DefaultObjectPropertiesViewer();
@@ -217,6 +218,7 @@ extern void InitializeTypeso2Editor()
     __RegisterClass__Editor__CameraActorViewer();
     __RegisterClass__Editor__AnimationStateViewer();
     __RegisterClass__Editor__MeshComponentViewer();
+    __RegisterClass__Editor__ParticlesEmitterComponentViewer();
     __RegisterClass__Editor__SkinningMeshBoneComponentViewer();
     __RegisterClass__Editor__SkinningMeshComponentViewer();
     __RegisterClass__Editor__DefaultObjectPropertiesViewer();

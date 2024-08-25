@@ -3,14 +3,6 @@
 
 namespace o2
 {
-	int SingleSpriteParticlesContainer::GetNextParticleIndex()
-	{
-		return 0;
-	}
-
-	void SingleSpriteParticlesContainer::FreeParticleIndex(int idx)
-	{}
-
 	void SingleSpriteParticlesContainer::Update(Vector<Particle>& particles, int maxParticles)
 	{
 		if (mParticlesMesh.GetMaxVertexCount() < (UInt)maxParticles * 4)
@@ -81,14 +73,6 @@ namespace o2
 		container->source = Ref(this);
 		return container;
 	}
-
-	int MultiSpriteParticlesContainer::GetNextParticleIndex()
-	{
-		return 0;
-	}
-
-	void MultiSpriteParticlesContainer::FreeParticleIndex(int idx)
-	{}
 
 	void MultiSpriteParticlesContainer::Update(Vector<Particle>& particles, int maxParticles)
 	{

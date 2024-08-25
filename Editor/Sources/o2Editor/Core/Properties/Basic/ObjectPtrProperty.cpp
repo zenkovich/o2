@@ -71,13 +71,13 @@ namespace Editor
 		mCreateOrRemoveButton->onClick = THIS_FUNC(OnCreateOrRemovePressed);
 		mHeaderContainer->AddChild(mCreateOrRemoveButton);
 
-		mCreateMenu = o2UI.CreateWidget<ContextMenu>();
-		mCreateOrRemoveButton->AddChild(mCreateMenu);
-
 		mTypeButton = o2UI.CreateWidget<Button>("backless dropdown");
 		mTypeButton->onClick = THIS_FUNC(OnCreatePressed);
 		mTypeButton->caption = "nullptr";
 		mHeaderContainer->AddChild(mTypeButton);
+
+		mCreateMenu = o2UI.CreateWidget<ContextMenu>();
+		mTypeButton->AddChild(mCreateMenu);
 
 		expandHeight = true;
 		expandWidth = true;

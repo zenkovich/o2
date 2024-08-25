@@ -3764,15 +3764,15 @@ namespace Editor
 		layout->spacing = 5;
 		layoutContainer->AddChild(layout);
 
-		auto editBox = o2UI.CreateEditBox("singleline with arrows");
-		editBox->name = "editBox";
-		*editBox->layout = WidgetLayout::BothStretch();
-		layout->AddChild(editBox);
-
 		auto progress = o2UI.CreateHorProgress();
 		progress->name = "progress";
 		*progress->layout = WidgetLayout::BothStretch();
 		layout->AddChild(progress);
+
+		auto editBox = o2UI.CreateEditBox("singleline with arrows");
+		editBox->name = "editBox";
+		*editBox->layout = WidgetLayout::BothStretch();
+		layout->AddChild(editBox);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}

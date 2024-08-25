@@ -1,8 +1,9 @@
 #pragma once
 
 #include "o2/Render/IDrawable.h"
-#include "o2/Utils/Math/Transform.h"
+#include "o2/Utils/Editor/Attributes/RangeAttribute.h"
 #include "o2/Utils/Math/Color.h"
+#include "o2/Utils/Math/Transform.h"
 #include "o2/Utils/Property.h"
 
 namespace o2
@@ -15,7 +16,7 @@ namespace o2
     public:
         PROPERTIES(IRectDrawable);
         PROPERTY(Color4, color, SetColor, GetColor);                     // Color property @SCRIPTABLE
-        PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property, changing alpha in color @SCRIPTABLE
+		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property, changing alpha in color @SCRIPTABLE @RANGE(0, 1)
         PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property @SCRIPTABLE
 
     public:
@@ -118,7 +119,7 @@ END_META;
 CLASS_FIELDS_META(o2::IRectDrawable)
 {
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(color);
-    FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(transparency);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 1).SCRIPTABLE_ATTRIBUTE().NAME(transparency);
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(enabled);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mColor);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled);

@@ -7,6 +7,7 @@
 #include "o2/Render/Particles/ParticlesEmitterShapes.h"
 #include "o2/Render/RectDrawable.h"
 #include "o2/Utils/Editor/Attributes/RangeAttribute.h"
+#include "o2/Utils/Math/ColorGradient.h"
 #include "o2/Utils/Math/Curve.h"
 
 namespace o2
@@ -21,34 +22,35 @@ namespace o2
     public:
 		PROPERTIES(ParticlesEmitter);
 
-		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape);                        // Emitting shape property 
-		PROPERTY(Ref<ParticleSource>, particlesSource, SetParticlesSource, GetParticlesSource); // Particles source property
+		PROPERTY(bool, playing, SetPlaying, IsPlaying);      // Is particles playing property
+		PROPERTY(bool, looped, SetLoop, IsLooped);           // Is emitter looped property
+		PROPERTY(float, duration, SetDuration, GetDuration); // Working duration in seconds property @RANGE(0, 10)
 
-        PROPERTY(bool, playing, SetPlaying, IsPlaying);                                 // Is particles playing property
-        PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef);         // Particles emitting coefficient property (0...1) @RANGE(0, 1)
+		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape);                        // Emitting shape property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::CircleParticlesEmitterShape)
+		PROPERTY(Ref<ParticleSource>, particlesSource, SetParticlesSource, GetParticlesSource); // Particles source property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::SingleSpriteParticleSource)
+
         PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter
-        PROPERTY(bool, looped, SetLoop, IsLooped);                                      // Is emitter looped property
         PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles);                  // Number of maximum particles in emitter property
-        PROPERTY(float, duration, SetDuration, GetDuration);                            // Working duration in seconds property @RANGE(0, 10)
 
-        PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);                   // Particles lifetime in seconds property @RANGE(0, 10)
-        PROPERTY(float, emitParticlesPerSecond, SetEmitParticlesPerSecond, GetEmitParticlesPerSecond);    // Amount of particles emitting in one second property 
-        PROPERTY(float, emitParticlesAngle, SetEmitParticlesAngle, GetEmitParticlesAngle);                // Emitting particle angle property in degrees @RANGE(0, 360)
-        PROPERTY(float, emitParticlesAngleRange, SetEmitParticlesAngleRange, GetEmitParticlesAngleRange); // Emitting particle angle range property in degrees @RANGE(0, 360)
-        PROPERTY(Vec2F, emitParticlesSize, SetEmitParticlesSize, GetEmitParticlesSize);                   // Emitting particle size property
-        PROPERTY(Vec2F, emitParticlesSizeRange, SetEmitParticlesSizeRange, GetEmitParticlesSizeRange);    // Emitting particle size range property
-        PROPERTY(float, emitParticlesSpeed, SetEmitParticlesSpeed, GetEmitParticlesSpeed);                // Emitting particle angle speed property in degrees/sec
+        PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);    // Particles lifetime in seconds property @RANGE(0, 10)
+		PROPERTY(float, particlesPerSecond, SetParticlesPerSecond, GetParticlesPerSecond); // Amount of particles emitting in one second property 
+		
+		PROPERTY(float, initialAngle, SetInitialAngle, GetInitialAngle);                // Emitting particle angle property in degrees @RANGE(0, 360)
+		PROPERTY(float, initialAngleRange, SetInitialAngleRange, GetInitialAngleRange); // Emitting particle angle range property in degrees @RANGE(0, 360)
+		
+		PROPERTY(Vec2F, initialSize, SetInitialSize, GetInitialSize);                // Emitting particle size property
+		PROPERTY(Vec2F, initialSizeRange, SetInitialSizeRange, GetInitialSizeRange); // Emitting particle size range property
+		
+		PROPERTY(float, initialSpeed, SetInitialSpeed, GetInitialSpeed);                // Emitting particle angle speed property in degrees/sec
+		PROPERTY(float, initialSpeedRange, SetInitialSpeedRange, GetInitialSpeedRange); // Emitting particle angle speed range in degrees/sec
+        
+		PROPERTY(float, initialAngleSpeed, SetInitialAngleSpeed, GetInitialAngleSpeed);                // Emitting particle speed property
+		PROPERTY(float, initialAngleSpeedRange, SetInitialAngleSpeedRange, GetInitialAngleSpeedRange); // Emitting particle speed range
+       
+        PROPERTY(float, moveDirection, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);                // Emitting particle moving direction in degrees property
+        PROPERTY(float, moveDirectionRange, SetEmitParticlesMoveDirectionRange, GetEmitParticlesMoveDirectionRange); // Emitting particle moving direction range in degrees property 
 
-        PROPERTY(float, emitParticlesAngleSpeedRange, SetEmitParticlesSpeedRange, GetEmitParticlesSpeedRange);              // Emitting particle angle speed range in degrees/sec
-        PROPERTY(float, emitParticlesAngleSpeed, SetEmitParticlesAngleSpeed, GetEmitParticlesAngleSpeed);                   // Emitting particle speed property
-        PROPERTY(float, emitParticlesSpeedRange, SetEmitParticlesAngleSpeedRange, GetEmitParticlesAngleSpeedRange);         // Emitting particle speed range
-        PROPERTY(float, emitParticlesMoveDir, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);                // Emitting particle moving direction in degrees property
-        PROPERTY(float, emitParticlesMoveDirRange, SetEmitParticlesMoveDirectionRange, GetEmitParticlesMoveDirectionRange); // Emitting particle moving direction range in degrees property
-
-        PROPERTY(Color4, emitParticlesColorA, SetEmitParticlesColorA, GetEmitParticlesColorA); // Emitting particle color A property
-        PROPERTY(Color4, emitParticlesColorB, SetEmitParticlesColorB, GetEmitParticlesColorB); // Emitting particle color B property   
-
-    public:
+		PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef); // Particles emitting coefficient property (0...1) @RANGE(0, 1)
 
     public:
         // Default constructor
@@ -155,58 +157,58 @@ namespace o2
         float GetParticlesLifetime() const;
 
         // Sets number of particles emitting per second
-        void SetEmitParticlesPerSecond(float numParticles);
+        void SetParticlesPerSecond(float numParticles);
 
         // Returns number of particles emitting per second
-        float GetEmitParticlesPerSecond() const;
+        float GetParticlesPerSecond() const;
 
         // Sets emitting particles rotation angle in degrees
-        void SetEmitParticlesAngle(float angle);
+        void SetInitialAngle(float angle);
 
         // Returns emitting particles rotation angle in degrees
-        float GetEmitParticlesAngle() const;
+        float GetInitialAngle() const;
 
         // Sets emitting particles rotation angle range in degrees
-        void SetEmitParticlesAngleRange(float range);
+        void SetInitialAngleRange(float range);
 
         // Returns emitting particles rotation angle range in degrees
-        float GetEmitParticlesAngleRange() const;
+        float GetInitialAngleRange() const;
 
         // Sets emitting particles size
-        void SetEmitParticlesSize(const Vec2F& size);
+        void SetInitialSize(const Vec2F& size);
 
         // Returns emitting particles size
-        Vec2F GetEmitParticlesSize() const;
+        Vec2F GetInitialSize() const;
 
         // Sets emitting particles size range
-        void SetEmitParticlesSizeRange(const Vec2F& range);
+        void SetInitialSizeRange(const Vec2F& range);
 
         // Returns emitting particles size range
-        Vec2F GetEmitParticlesSizeRange() const;
+        Vec2F GetInitialSizeRange() const;
 
         // Sets emitting particles angle speed in degrees/sec
-        void SetEmitParticlesAngleSpeed(float speed);
+        void SetInitialAngleSpeed(float speed);
 
         // Returns emitting particles angle speed in degrees/sec
-        float GetEmitParticlesAngleSpeed() const;
+        float GetInitialAngleSpeed() const;
 
         // Sets emitting particles angle speed range in degrees/sec
-        void SetEmitParticlesAngleSpeedRange(float speedRange);
+        void SetInitialAngleSpeedRange(float speedRange);
 
         // Returns emitting particles angle speed range in degrees/sec
-        float GetEmitParticlesAngleSpeedRange() const;
+        float GetInitialAngleSpeedRange() const;
 
         // Sets emitting particles speed
-        void SetEmitParticlesSpeed(float speed);
+        void SetInitialSpeed(float speed);
 
         // Returns emitting particles speed
-        float GetEmitParticlesSpeed() const;
+        float GetInitialSpeed() const;
 
         // Sets emitting particles speed range
-        void SetEmitParticlesSpeedRange(float speedRange);
+        void SetInitialSpeedRange(float speedRange);
 
         // Returns emitting particles speed range
-        float GetEmitParticlesSpeedRange() const;
+        float GetInitialSpeedRange() const;
 
         // Sets emitting particles moving direction angle in degrees
         void SetEmitParticlesMoveDirection(float direction);
@@ -220,24 +222,6 @@ namespace o2
         // Returns emitting particles moving direction angle range in degrees
         float GetEmitParticlesMoveDirectionRange() const;
 
-        // Sets emitting particles color A
-        void SetEmitParticlesColorA(const Color4& color);
-
-        // Returns emitting particles color A
-        Color4 GetEmitParticlesColorA() const;
-
-        // Sets emitting particles color B
-        void SetEmitParticlesColorB(const Color4& color);
-
-        // Returns emitting particles color B
-        Color4 GetEmitParticlesColorB() const;
-
-        // Sets emitting color A and B to color
-        void SetEmitParticlesColor(const Color4& color);
-
-        // Sets emitting color A and B
-        void SetEmitParticlesColor(const Color4& colorA, const Color4& colorB);
-
         SERIALIZABLE(ParticlesEmitter);
         CLONEABLE_REF(ParticlesEmitter);
 
@@ -248,7 +232,7 @@ namespace o2
 
         Ref<ParticlesEmitterShape> mShape = nullptr; // Particles emitting shape @SERIALIZABLE 
 
-        Vector<Ref<ParticlesEffect>> mEffects; // Particles effect @SERIALIZABLE @EDITOR_PROPERTY 
+        Vector<Ref<ParticlesEffect>> mEffects; // Particles effect @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT @DONT_DELETE
                                                                          
         int mParticlesNumLimit = 100; // Max available visible particles @SERIALIZABLE
                                        
@@ -259,34 +243,31 @@ namespace o2
                                                                   
         float mDuration = 1; // Duration of working time @SERIALIZABLE
                                                                   
-		float mParticlesLifetime = 0.5f;    // Particles lifetime in seconds @SERIALIZABLE
+		float mParticlesLifetime = 0.5f;      // Particles lifetime in seconds @SERIALIZABLE
 		float mParticlesLifetimeRange = 0.0f; // Particles lifetime range in seconds @SERIALIZABLE
-        float mEmitParticlesPerSecond = 10; // Number of particles emitting in one second @SERIALIZABLE
+        float mEmitParticlesPerSecond = 10;   // Number of particles emitting in one second @SERIALIZABLE
                                                           
-        float mEmitParticlesAngle = 0;          // Emitting particles angle in radians @SERIALIZABLE
-        float mEmitParticlesAngleRange = 45.0f; // Emitting particles angle in radians randomize range @SERIALIZABLE
+        float mInitialAngle = 0;          // Emitting particles angle in radians @SERIALIZABLE
+        float mInitialAngleRange = 45.0f; // Emitting particles angle in radians randomize range @SERIALIZABLE
                                                         
-        Vec2F mEmitParticlesSize = Vec2F(10, 10); // Emitting particles size @SERIALIZABLE
-        Vec2F mEmitParticlesSizeRange;            // Emitting particles size randomize range @SERIALIZABLE
+        Vec2F mInitialSize = Vec2F(10, 10); // Emitting particles size @SERIALIZABLE
+        Vec2F mInitialSizeRange;            // Emitting particles size randomize range @SERIALIZABLE
                                                         
-        float mEmitParticlesSpeed = 10;      // Emitting particles speed @SERIALIZABLE
-        float mEmitParticlesSpeedRangle = 5; // Emitting particles speed range @SERIALIZABLE
+        float mInitialSpeed = 10;      // Emitting particles speed @SERIALIZABLE
+        float mInitialSpeedRangle = 5; // Emitting particles speed range @SERIALIZABLE
                                                         
-        float mEmitParticlesMoveDirection = 0;          // Emitting particles direction in radians @SERIALIZABLE
-        float mEmitParticlesMoveDirectionRange = 45.0f; // Emitting particles direction range in radians @SERIALIZABLE
+        float mInitialMoveDirection = 0;          // Emitting particles direction in radians @SERIALIZABLE
+        float mInitialMoveDirectionRange = 45.0f; // Emitting particles direction range in radians @SERIALIZABLE
               
-        float mEmitParticlesAngleSpeed = 0;      // Emitting particles angle speed in radians/sec
-        float mEmitParticlesAngleSpeedRange = 0; // Emitting particles angle speed range in radians/sec
-                     
-        Color4 mEmitParticlesColorA; // Emitting particles color A (particle emitting with color in range from this and ColorB)  @SERIALIZABLE
-        Color4 mEmitParticlesColorB; // Emitting particles color B (particle emitting with color in range from this and ColorA) @SERIALIZABLE
+        float mInitialAngleSpeed = 0;      // Emitting particles angle speed in radians/sec
+        float mInitialAngleSpeedRange = 0; // Emitting particles angle speed range in radians/sec
 
-        float            mCurrentTime = 0;         // Current working time in seconds
-        float            mEmitTimeBuffer = 0;      // Emitting next particle time buffer
-        Vector<Particle> mParticles;               // Working particles
-        Vector<int>      mDeadParticles;           // Dead particles indexes
-        int              mNumAliveParticles = 0;   // Count of current alive particles
-        Basis            mLastTransform;           // Last transformation
+		float            mCurrentTime = 0;       // Current working time in seconds
+		float            mEmitTimeBuffer = 0;    // Emitting next particle time buffer
+		Vector<Particle> mParticles;             // Working particles
+		Vector<int>      mDeadParticles;         // Dead particles indexes
+		int              mNumAliveParticles = 0; // Count of current alive particles
+		Basis            mLastTransform;         // Last transformation
 
 	protected:
 		// Completion deserialization callback, initializes particles container
@@ -325,32 +306,30 @@ CLASS_BASES_META(o2::ParticlesEmitter)
 END_META;
 CLASS_FIELDS_META(o2::ParticlesEmitter)
 {
-    FIELD().PUBLIC().NAME(shape);
-    FIELD().PUBLIC().NAME(particlesSource);
     FIELD().PUBLIC().NAME(playing);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 1).NAME(emittingCoefficient);
-    FIELD().PUBLIC().NAME(particlesRelative);
     FIELD().PUBLIC().NAME(looped);
-    FIELD().PUBLIC().NAME(maxParticles);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 10).NAME(duration);
+    FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::CircleParticlesEmitterShape).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(shape);
+    FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::SingleSpriteParticleSource).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(particlesSource);
+    FIELD().PUBLIC().NAME(particlesRelative);
+    FIELD().PUBLIC().NAME(maxParticles);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 10).NAME(particlesLifetime);
-    FIELD().PUBLIC().NAME(emitParticlesPerSecond);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(emitParticlesAngle);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(emitParticlesAngleRange);
-    FIELD().PUBLIC().NAME(emitParticlesSize);
-    FIELD().PUBLIC().NAME(emitParticlesSizeRange);
-    FIELD().PUBLIC().NAME(emitParticlesSpeed);
-    FIELD().PUBLIC().NAME(emitParticlesAngleSpeedRange);
-    FIELD().PUBLIC().NAME(emitParticlesAngleSpeed);
-    FIELD().PUBLIC().NAME(emitParticlesSpeedRange);
-    FIELD().PUBLIC().NAME(emitParticlesMoveDir);
-    FIELD().PUBLIC().NAME(emitParticlesMoveDirRange);
-    FIELD().PUBLIC().NAME(emitParticlesColorA);
-    FIELD().PUBLIC().NAME(emitParticlesColorB);
+    FIELD().PUBLIC().NAME(particlesPerSecond);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialAngle);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialAngleRange);
+    FIELD().PUBLIC().NAME(initialSize);
+    FIELD().PUBLIC().NAME(initialSizeRange);
+    FIELD().PUBLIC().NAME(initialSpeed);
+    FIELD().PUBLIC().NAME(initialSpeedRange);
+    FIELD().PUBLIC().NAME(initialAngleSpeed);
+    FIELD().PUBLIC().NAME(initialAngleSpeedRange);
+    FIELD().PUBLIC().NAME(moveDirection);
+    FIELD().PUBLIC().NAME(moveDirectionRange);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 1).NAME(emittingCoefficient);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<SingleSpriteParticleSource>()).NAME(mParticlesSource);
     FIELD().PROTECTED().NAME(mParticlesContainer);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mShape);
-    FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mEffects);
+    FIELD().PROTECTED().DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mEffects);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(100).NAME(mParticlesNumLimit);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mPlaying);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mEmittingCoefficient);
@@ -360,18 +339,16 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.5f).NAME(mParticlesLifetime);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mParticlesLifetimeRange);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mEmitParticlesPerSecond);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mEmitParticlesAngle);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(45.0f).NAME(mEmitParticlesAngleRange);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(10, 10)).NAME(mEmitParticlesSize);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mEmitParticlesSizeRange);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mEmitParticlesSpeed);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(5).NAME(mEmitParticlesSpeedRangle);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mEmitParticlesMoveDirection);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(45.0f).NAME(mEmitParticlesMoveDirectionRange);
-    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mEmitParticlesAngleSpeed);
-    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mEmitParticlesAngleSpeedRange);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mEmitParticlesColorA);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mEmitParticlesColorB);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mInitialAngle);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(45.0f).NAME(mInitialAngleRange);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(10, 10)).NAME(mInitialSize);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mInitialSizeRange);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mInitialSpeed);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(5).NAME(mInitialSpeedRangle);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mInitialMoveDirection);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(45.0f).NAME(mInitialMoveDirectionRange);
+    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mInitialAngleSpeed);
+    FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mInitialAngleSpeedRange);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mCurrentTime);
     FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mEmitTimeBuffer);
     FIELD().PROTECTED().NAME(mParticles);
@@ -414,34 +391,28 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesLifetime, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetParticlesLifetime);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesPerSecond, float);
-    FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesPerSecond);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesAngle, float);
-    FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesAngle);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesAngleRange, float);
-    FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesAngleRange);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesSize, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmitParticlesSize);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesSizeRange, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmitParticlesSizeRange);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesAngleSpeed, float);
-    FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesAngleSpeed);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesAngleSpeedRange, float);
-    FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesAngleSpeedRange);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesSpeed, float);
-    FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesSpeed);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesSpeedRange, float);
-    FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesSpeedRange);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesPerSecond, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetParticlesPerSecond);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialAngle, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialAngle);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialAngleRange, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialAngleRange);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialSize, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetInitialSize);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialSizeRange, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetInitialSizeRange);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialAngleSpeed, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialAngleSpeed);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialAngleSpeedRange, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialAngleSpeedRange);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialSpeed, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialSpeed);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialSpeedRange, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialSpeedRange);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesMoveDirection, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesMoveDirection);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesMoveDirectionRange, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesMoveDirectionRange);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesColorA, const Color4&);
-    FUNCTION().PUBLIC().SIGNATURE(Color4, GetEmitParticlesColorA);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesColorB, const Color4&);
-    FUNCTION().PUBLIC().SIGNATURE(Color4, GetEmitParticlesColorB);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesColor, const Color4&);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesColor, const Color4&, const Color4&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, CreateParticlesContainer);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateEmitting, float);

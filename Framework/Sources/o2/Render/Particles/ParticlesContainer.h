@@ -21,8 +21,9 @@ namespace o2
 		ParticlesEmitter* emitter = nullptr; // Emitter that uses this source
 
     public:
-        virtual int GetNextParticleIndex() = 0;
-        virtual void FreeParticleIndex(int idx) = 0;
+		virtual void OnParticleEmitted(Particle& particle) {}
+		virtual void OnParticleDied(Particle& particle) {}
+
         virtual void Update(Vector<Particle>& particles, int maxParticles) = 0;
         virtual void Draw() = 0;
     };
@@ -65,8 +66,6 @@ namespace o2
 		Ref<SingleSpriteParticleSource> source; // Source of particles
 
 	public:
-		int GetNextParticleIndex() override;
-		void FreeParticleIndex(int idx) override;
 		void Update(Vector<Particle>& particles, int maxParticles) override;
 		void Draw() override;
 
@@ -98,8 +97,6 @@ namespace o2
 		Ref<MultiSpriteParticleSource> source; // Source of particles
 
 	public:
-		int GetNextParticleIndex() override;
-		void FreeParticleIndex(int idx) override;
 		void Update(Vector<Particle>& particles, int maxParticles) override;
 		void Draw() override;
 

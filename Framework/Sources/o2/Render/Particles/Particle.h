@@ -8,16 +8,22 @@ namespace o2
     class Particle
     {
     public:
-        int    index;      // Index of particle in container
-        Vec2F  position;   // Position of particle center
-        Vec2F  velocity;   // Particle velocity
-        float  angle;      // Particle angle in radians
-        float  angleSpeed; // Angle speed in radians/sec
-        Vec2F  size;       // Size of particle
-        Color4 color;      // Particle's color
-        float  timeLeft;   // Estimate life time
-		float  lifetime;   // Total life time
-        bool   alive;      // Is particle alive
+		int index = 0; // Index of particle in container
+
+		Vec2F position; // Position of particle center
+		Vec2F velocity; // Particle velocity
+
+		float angle = 0;      // Particle angle in radians
+		float angleSpeed = 0; // Angle speed in radians/sec
+
+		Vec2F size; // Size of particle
+
+        Color4 color; // Particle's color
+
+		float timeLeft = 0; // Estimate life time
+		float lifetime = 0; // Total life time
+
+        bool alive = false; // Is particle alive
 
         bool operator==(const Particle& other) const
         {

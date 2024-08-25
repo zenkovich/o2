@@ -6,7 +6,8 @@
 
 namespace o2
 {
-    ColorGradient::ColorGradient()
+    ColorGradient::ColorGradient():
+		ColorGradient(Color4::White(), Color4::White())
     { }
 
     ColorGradient::ColorGradient(const Color4& beginColor, const Color4& endColor)

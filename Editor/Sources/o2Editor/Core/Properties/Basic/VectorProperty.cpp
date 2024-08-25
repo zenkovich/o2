@@ -205,7 +205,7 @@ namespace Editor
 
 				for (; i < mValueProperties.Count(); i++)
 				{
-					mSpoiler->RemoveChild(mValueProperties[i], false);
+					mSpoiler->RemoveChild(mValueProperties[i]);
 					FreeValueProperty(mValueProperties[i]);
 				}
 
