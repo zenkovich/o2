@@ -10,6 +10,7 @@ namespace Editor
 
 	ParticlesEmitterComponentViewer::~ParticlesEmitterComponentViewer()
 	{
+		o2EditorSceneScreen.RemoveEditorLayer(mSceneLayer);
 	}
 
 	ParticlesEmitterComponentViewer& ParticlesEmitterComponentViewer::operator=(const ParticlesEmitterComponentViewer& other)
@@ -34,21 +35,24 @@ namespace Editor
 		playControls->spacing = 5;
 		mControls->AddChild(playControls);
 
-		auto playPauseToggle = o2UI.CreateWidget<Toggle>("animation state play-stop");
-		playPauseToggle->name = "play-stop";
-		playPauseToggle->layout->minSize = Vec2F(20, 20);
-		playPauseToggle->layout->maxSize = Vec2F(20, 20);
-		playControls->AddChild(playPauseToggle);
+		mPlayPauseToggle = o2UI.CreateWidget<Toggle>("animation state play-stop");
+		mPlayPauseToggle->name = "play-stop";
+		mPlayPauseToggle->layout->minSize = Vec2F(20, 20);
+		mPlayPauseToggle->layout->maxSize = Vec2F(20, 20);
+		mPlayPauseToggle->onToggleByUser = [&](bool play) { OnPlayPauseTogglePressed(play); };
+		playControls->AddChild(mPlayPauseToggle);
 
-		auto timeProgress = o2UI.CreateWidget<HorizontalProgress>("animation state bar");
-		timeProgress->name = "bar";
-		timeProgress->layout->maxHeight = 3;
-		playControls->AddChild(timeProgress);
+		mTimeProgress = o2UI.CreateWidget<HorizontalProgress>("animation state bar");
+		mTimeProgress->name = "bar";
+		mTimeProgress->layout->maxHeight = 3;
+		mTimeProgress->onChangeByUser = [&](float value) { SetTimeProgress(value); };
+		playControls->AddChild(mTimeProgress);
 
 		auto loopedToggle = o2UI.CreateWidget<Toggle>("animation state loop");
 		loopedToggle->name = "loop";
 		loopedToggle->layout->minSize = Vec2F(20, 20);
 		loopedToggle->layout->maxSize = Vec2F(20, 20);
+		loopedToggle->onToggleByUser = [&](bool loop) { OnLoopTogglePressed(loop); };
 		playControls->AddChild(loopedToggle);
 
 		auto horSeparatorContainer = mmake<Widget>();
@@ -61,6 +65,9 @@ namespace Editor
 
 		o2EditorProperties.BuildObjectProperties(mSpoiler, &TypeOf(ParticlesEmitterComponent), mPropertiesContext, "",
 												 mOnChildFieldChangeCompleted, onChanged);
+
+		mSceneLayer = mmake<SceneLayer>();
+		mSceneLayer->viewer = Ref(this);
 	}
 
 	void ParticlesEmitterComponentViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
@@ -72,11 +79,105 @@ namespace Editor
 
 	void ParticlesEmitterComponentViewer::OnEnabled()
 	{
+		o2EditorSceneScreen.AddEditorLayer(mSceneLayer);
 	}
 
 	void ParticlesEmitterComponentViewer::OnDisabled()
 	{
+		o2EditorSceneScreen.RemoveEditorLayer(mSceneLayer);
 	}
+
+	Vector<Pair<ParticlesEmitterComponent*, ParticlesEmitterComponent*>>& ParticlesEmitterComponentViewer::GetTargetObjects()
+	{
+		return mTypeTargetObjects;
+	}
+
+	void ParticlesEmitterComponentViewer::OnPlayPauseTogglePressed(bool play)
+	{
+		for (auto& pair : GetTargetObjects())
+		{
+			auto emitter = pair.first;
+			if (emitter)
+			{
+				emitter->SetPlaying(play);
+				emitter->SetParticlesPause(!play);
+			}
+		}
+	}
+
+	void ParticlesEmitterComponentViewer::OnLoopTogglePressed(bool loop)
+	{
+		for (auto& pair : GetTargetObjects())
+		{
+			auto emitter = pair.first;
+			if (emitter)
+				emitter->SetLoop(loop ? Loop::Repeat : Loop::None);
+		}
+	}
+
+	void ParticlesEmitterComponentViewer::SetTimeProgress(float time)
+	{
+		for (auto& pair : GetTargetObjects())
+		{
+			auto emitter = pair.first;
+			if (emitter)
+			{
+				emitter->SetPlaying(false);
+				emitter->SetParticlesPause(true);
+				emitter->SetTime(time);
+			}
+		}
+	}
+
+	void ParticlesEmitterComponentViewer::SceneLayer::DrawOverScene()
+	{}
+
+	void ParticlesEmitterComponentViewer::SceneLayer::Update(float dt)
+	{
+		bool first = true;
+		auto viewer = this->viewer.Lock();
+		for (auto& pair : viewer->GetTargetObjects())
+		{
+			auto emitter = pair.first;
+			if (emitter)
+			{
+				emitter->Update(dt);
+
+				if (first)
+				{
+					viewer->mTimeProgress->SetValue(emitter->GetTime());
+
+					bool isPlaying = emitter->IsPlaying();
+					viewer->mPlayPauseToggle->SetValue(isPlaying);
+					viewer->mTimeProgress->maxValue = emitter->GetDuration();
+
+					first = false;
+				}
+			}
+		}
+	}
+
+	int ParticlesEmitterComponentViewer::SceneLayer::GetOrder() const
+	{
+		return 0;
+	}
+
+	bool ParticlesEmitterComponentViewer::SceneLayer::IsEnabled() const
+	{
+		return true;
+	}
+
+	const String& ParticlesEmitterComponentViewer::SceneLayer::GetName() const
+	{
+		static String name = "Particles Emitter";
+		return name;
+	}
+
+	const String& ParticlesEmitterComponentViewer::SceneLayer::GetIconName() const
+	{
+		return String::empty;
+	}
+
 }
 
 DECLARE_TEMPLATE_CLASS(Editor::TObjectPropertiesViewer<ParticlesEmitterComponent>);

@@ -123,6 +123,9 @@ namespace o2
         if (mPlaying)
 			return;
 
+		if (Math::Equals(mInDurationTime, mTime))
+			GoToBegin();
+
 		Evaluate();
 
         mPlaying = true;
@@ -262,7 +265,7 @@ namespace o2
         SetTime(Math::Lerp(mBeginTime, mEndTime, relTime));
     }
 
-    float IAnimation::GetRelTime() const
+    float IAnimation::GetRelativeTime() const
     {
         return mTime/(mEndTime - mBeginTime);
     }

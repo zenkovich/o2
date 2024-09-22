@@ -3,7 +3,7 @@
         "Type": "Editor::FloatProperty",
         "Value": {
             "Prototype": {
-                "id": "439f4ca44540211e49e0572c6bb84e08",
+                "id": "548c73b87c2c013706c77d1e6ac75e7b",
                 "path": "Editor UI styles/Editor  Float Property standard.proto"
             },
             "PrototypeLink": 8335615307801933253,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "00e61abd278d74112db62c5524647215",
+                            "id": "18e679c6470c3621584b112313247eba",
                             "path": "Editor UI styles/O2  Label standard.proto"
                         },
                         "PrototypeLink": 9613259363390956959,
@@ -70,14 +70,156 @@
                                     "Id": 1305357746281318544,
                                     "Children": [
                                         {
-                                            "Type": "o2::EditBox",
+                                            "Type": "o2::HorizontalProgress",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "0ef013a9216c0a882a6809e8152956be",
-                                                    "path": "Editor UI styles/O2  Edit Box singleline with arrows.proto"
+                                                    "id": "566b2add636c4ab415eb693854040bba",
+                                                    "path": "Editor UI styles/O2  Horizontal Progress standard.proto"
                                                 },
                                                 "PrototypeLink": 6794873802875439462,
                                                 "Id": 17059040284813613893,
+                                                "mTransparency": 0.0,
+                                                "Layers": [
+                                                    {
+                                                        "mUID": 12916872677421934854,
+                                                        "PrototypeLink": 15293382226588566865,
+                                                        "Children": [
+                                                            {
+                                                                "mDrawable": {
+                                                                    "Type": "o2::Sprite",
+                                                                    "Value": {
+                                                                        "mColor": {
+                                                                            "r": 255,
+                                                                            "g": 255,
+                                                                            "b": 255,
+                                                                            "a": 0
+                                                                        },
+                                                                        "mImageAsset": {
+                                                                            "id": "560f6bd82c4c4ef635813018768d064b",
+                                                                            "path": "ui/UI4_Hor_scrollbar_bk.png"
+                                                                        },
+                                                                        "mMode": "Sliced",
+                                                                        "mSlices": {
+                                                                            "left": 4,
+                                                                            "bottom": 0,
+                                                                            "right": 4,
+                                                                            "top": 0
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "mUID": 7301301066173685176,
+                                                                "PrototypeLink": 11558563438258461787
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "mUID": 1566216164775199775,
+                                                        "PrototypeLink": 9938119080545962690,
+                                                        "Children": [
+                                                            {
+                                                                "mDrawable": {
+                                                                    "Type": "o2::Sprite",
+                                                                    "Value": {
+                                                                        "mColor": {
+                                                                            "r": 255,
+                                                                            "g": 255,
+                                                                            "b": 255,
+                                                                            "a": 0
+                                                                        },
+                                                                        "mImageAsset": {
+                                                                            "id": "2476549e78e44b98719b14da5c4134db",
+                                                                            "path": "ui/UI4_Hor_scrollhandle_regular.png"
+                                                                        },
+                                                                        "mMode": "Sliced",
+                                                                        "mSlices": {
+                                                                            "left": 4,
+                                                                            "bottom": 0,
+                                                                            "right": 4,
+                                                                            "top": 0
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "mUID": 3956436798225584049,
+                                                                "PrototypeLink": 11999747864034775998
+                                                            },
+                                                            {
+                                                                "mDrawable": {
+                                                                    "Type": "o2::Sprite",
+                                                                    "Value": {
+                                                                        "mColor": {
+                                                                            "r": 255,
+                                                                            "g": 255,
+                                                                            "b": 255,
+                                                                            "a": 0
+                                                                        },
+                                                                        "mImageAsset": {
+                                                                            "id": "7112354647cc3b075496797f0e634a33",
+                                                                            "path": "ui/UI4_Hor_scrollhandle_select.png"
+                                                                        },
+                                                                        "mMode": "Sliced",
+                                                                        "mSlices": {
+                                                                            "left": 4,
+                                                                            "bottom": 0,
+                                                                            "right": 4,
+                                                                            "top": 0
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "mUID": 4589529543821920713,
+                                                                "PrototypeLink": 13403948981747423122
+                                                            },
+                                                            {
+                                                                "mDrawable": {
+                                                                    "Type": "o2::Sprite",
+                                                                    "Value": {
+                                                                        "mColor": {
+                                                                            "r": 255,
+                                                                            "g": 255,
+                                                                            "b": 255,
+                                                                            "a": 0
+                                                                        },
+                                                                        "mImageAsset": {
+                                                                            "id": "455655bc15fd1b43025130401fee2903",
+                                                                            "path": "ui/UI4_Hor_scrollhandle_pressed.png"
+                                                                        },
+                                                                        "mMode": "Sliced",
+                                                                        "mSlices": {
+                                                                            "left": 4,
+                                                                            "bottom": 0,
+                                                                            "right": 4,
+                                                                            "top": 0
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "mUID": 4181012429795612668,
+                                                                "PrototypeLink": 1743006431639257408
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "States": [
+                                                    {
+                                                        "name": "hover"
+                                                    },
+                                                    {
+                                                        "name": "pressed"
+                                                    },
+                                                    {
+                                                        "name": "visible",
+                                                        "mState": false
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "Type": "o2::EditBox",
+                                            "Data": {
+                                                "Prototype": {
+                                                    "id": "32a94b9034372e755a89522d0cd90aea",
+                                                    "path": "Editor UI styles/O2  Edit Box singleline with arrows.proto"
+                                                },
+                                                "PrototypeLink": 16188381784564775579,
+                                                "Id": 12968142194483403422,
                                                 "mText": "--",
                                                 "mAvailableSymbols": "-1234567890.,",
                                                 "mTextDrawable": {
@@ -164,8 +306,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 12916872677421934854,
-                                                        "PrototypeLink": 15293382226588566865
+                                                        "mUID": 10209967089397497715,
+                                                        "PrototypeLink": 3318843692993383463
                                                     },
                                                     {
                                                         "mDrawable": {
@@ -190,8 +332,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 7301301066173685176,
-                                                        "PrototypeLink": 11558563438258461787
+                                                        "mUID": 11632014879738911023,
+                                                        "PrototypeLink": 17087113331402031421
                                                     },
                                                     {
                                                         "mDrawable": {
@@ -216,8 +358,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 1566216164775199775,
-                                                        "PrototypeLink": 9938119080545962690
+                                                        "mUID": 18178472040957028512,
+                                                        "PrototypeLink": 1257707085843488634
                                                     },
                                                     {
                                                         "mDrawable": {
@@ -229,8 +371,8 @@
                                                                 }
                                                             }
                                                         },
-                                                        "mUID": 3956436798225584049,
-                                                        "PrototypeLink": 11999747864034775998
+                                                        "mUID": 11700367728975153384,
+                                                        "PrototypeLink": 10719277967860793002
                                                     }
                                                 ],
                                                 "States": [
@@ -239,148 +381,6 @@
                                                     },
                                                     {
                                                         "name": "focused"
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "Type": "o2::HorizontalProgress",
-                                            "Data": {
-                                                "Prototype": {
-                                                    "id": "5eeb294f7d84084a1f6c1a0445fa502b",
-                                                    "path": "Editor UI styles/O2  Horizontal Progress standard.proto"
-                                                },
-                                                "PrototypeLink": 13403948981747423122,
-                                                "Id": 4589529543821920713,
-                                                "mTransparency": 0.0,
-                                                "Layers": [
-                                                    {
-                                                        "mUID": 13911659735685441580,
-                                                        "PrototypeLink": 264934767011773341,
-                                                        "Children": [
-                                                            {
-                                                                "mDrawable": {
-                                                                    "Type": "o2::Sprite",
-                                                                    "Value": {
-                                                                        "mColor": {
-                                                                            "r": 255,
-                                                                            "g": 255,
-                                                                            "b": 255,
-                                                                            "a": 0
-                                                                        },
-                                                                        "mImageAsset": {
-                                                                            "id": "560f6bd82c4c4ef635813018768d064b",
-                                                                            "path": "ui/UI4_Hor_scrollbar_bk.png"
-                                                                        },
-                                                                        "mMode": "Sliced",
-                                                                        "mSlices": {
-                                                                            "left": 4,
-                                                                            "bottom": 0,
-                                                                            "right": 4,
-                                                                            "top": 0
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "mUID": 10095656463744355170,
-                                                                "PrototypeLink": 5428925145260731420
-                                                            }
-                                                        ]
-                                                    },
-                                                    {
-                                                        "mUID": 10209967089397497715,
-                                                        "PrototypeLink": 3318843692993383463,
-                                                        "Children": [
-                                                            {
-                                                                "mDrawable": {
-                                                                    "Type": "o2::Sprite",
-                                                                    "Value": {
-                                                                        "mColor": {
-                                                                            "r": 255,
-                                                                            "g": 255,
-                                                                            "b": 255,
-                                                                            "a": 0
-                                                                        },
-                                                                        "mImageAsset": {
-                                                                            "id": "2476549e78e44b98719b14da5c4134db",
-                                                                            "path": "ui/UI4_Hor_scrollhandle_regular.png"
-                                                                        },
-                                                                        "mMode": "Sliced",
-                                                                        "mSlices": {
-                                                                            "left": 4,
-                                                                            "bottom": 0,
-                                                                            "right": 4,
-                                                                            "top": 0
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "mUID": 11632014879738911023,
-                                                                "PrototypeLink": 17087113331402031421
-                                                            },
-                                                            {
-                                                                "mDrawable": {
-                                                                    "Type": "o2::Sprite",
-                                                                    "Value": {
-                                                                        "mColor": {
-                                                                            "r": 255,
-                                                                            "g": 255,
-                                                                            "b": 255,
-                                                                            "a": 0
-                                                                        },
-                                                                        "mImageAsset": {
-                                                                            "id": "7112354647cc3b075496797f0e634a33",
-                                                                            "path": "ui/UI4_Hor_scrollhandle_select.png"
-                                                                        },
-                                                                        "mMode": "Sliced",
-                                                                        "mSlices": {
-                                                                            "left": 4,
-                                                                            "bottom": 0,
-                                                                            "right": 4,
-                                                                            "top": 0
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "mUID": 18178472040957028512,
-                                                                "PrototypeLink": 1257707085843488634
-                                                            },
-                                                            {
-                                                                "mDrawable": {
-                                                                    "Type": "o2::Sprite",
-                                                                    "Value": {
-                                                                        "mColor": {
-                                                                            "r": 255,
-                                                                            "g": 255,
-                                                                            "b": 255,
-                                                                            "a": 0
-                                                                        },
-                                                                        "mImageAsset": {
-                                                                            "id": "455655bc15fd1b43025130401fee2903",
-                                                                            "path": "ui/UI4_Hor_scrollhandle_pressed.png"
-                                                                        },
-                                                                        "mMode": "Sliced",
-                                                                        "mSlices": {
-                                                                            "left": 4,
-                                                                            "bottom": 0,
-                                                                            "right": 4,
-                                                                            "top": 0
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "mUID": 11700367728975153384,
-                                                                "PrototypeLink": 10719277967860793002
-                                                            }
-                                                        ]
-                                                    }
-                                                ],
-                                                "States": [
-                                                    {
-                                                        "name": "hover"
-                                                    },
-                                                    {
-                                                        "name": "pressed"
-                                                    },
-                                                    {
-                                                        "name": "visible",
-                                                        "mState": false
                                                     }
                                                 ]
                                             }

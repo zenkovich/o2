@@ -1,15 +1,20 @@
 #pragma once
 
 #define NOMINMAX
+
+#include "o2/Animation/AnimationClip.h"
+#include "o2/Animation/Tracks/AnimationColor4Track.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
+#include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Text.h"
 #include "o2/Render/Texture.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Render/VectorFont.h"
-#include "o2/Scene/SceneLayer.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Component.h"
+#include "o2/Scene/SceneLayer.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Debug/Debug.h"

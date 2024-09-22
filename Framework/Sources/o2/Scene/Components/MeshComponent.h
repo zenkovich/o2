@@ -4,6 +4,7 @@
 #include "o2/Render/Mesh.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Scene/DrawableComponent.h"
+#include "o2/Utils/Math/Spline.h"
 #include "o2/Utils/Types/UID.h"
 
 namespace o2

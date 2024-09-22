@@ -27,7 +27,7 @@
                 "Type": "Editor::AssetIcon",
                 "Value": {
                     "Prototype": {
-                        "id": "2e590f23284163c7391612b718322c62",
+                        "id": "7c8457ce06676a2527ab58e07c1074d9",
                         "path": "Editor UI styles/Editor  Asset Icon standard.proto"
                     },
                     "PrototypeLink": 15841308182507754441,
@@ -37,7 +37,7 @@
                             "Type": "o2::Label",
                             "Data": {
                                 "Prototype": {
-                                    "id": "00e61abd278d74112db62c5524647215",
+                                    "id": "18e679c6470c3621584b112313247eba",
                                     "path": "Editor UI styles/O2  Label standard.proto"
                                 },
                                 "PrototypeLink": 9677850849705343020,
@@ -456,7 +456,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "08a52b2f2160650f112027f10be410a1",
+                            "id": "68c508d73dcd36c7422c664677bd44bb",
                             "path": "Editor UI styles/O2  Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 2396346607982954160,
@@ -607,7 +607,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "541c211761b76f2346aa5f2c0408124c",
+                            "id": "069119756f9442746491468b330527ec",
                             "path": "Editor UI styles/O2  Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 8311025582170325613,
@@ -809,7 +809,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "08274ec50044713b62e4169033b803ec"
+                                    "mId": "7e6e386b1660161c6ff8725e67c90a9b"
                                 }
                             }
                         }

@@ -1,16 +1,17 @@
 #pragma once
 
-#include "AnimationKeyDragHandle.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Scene/UI/Widget.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/AnimationWindow/AnimationKeysActions.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/AnimationWindow/KeyHandlesSheet.h"
 #include "o2Editor/AnimationWindow/Timeline.h"
+#include "o2Editor/AnimationWindow/TrackControls/AnimationKeyDragHandle.h"
+#include "o2Editor/AnimationWindow/TrackControls/AnimationTrackWrapper.h"
 #include "o2Editor/AnimationWindow/TrackControls/ITrackControl.h"
 #include "o2Editor/Core/Actions/ActionsList.h"
-#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
-#include "AnimationTrackWrapper.h"
 
 using namespace o2;
 

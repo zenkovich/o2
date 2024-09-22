@@ -112,7 +112,7 @@ namespace o2
 			mImagesCache.push_back(info);
 		}
 
-		float maxImageIdx = mImagesCache.Count() - 1;
+		float maxImageIdx = (float)(mImagesCache.Count() - 1);
 
 		for (auto& particle : particles)
 		{

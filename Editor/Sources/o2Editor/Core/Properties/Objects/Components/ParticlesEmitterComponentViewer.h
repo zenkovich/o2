@@ -1,7 +1,8 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2/Scene/Components/ParticlesEmitterComponent.h"
+#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
+#include "o2Editor/SceneWindow/SceneEditorLayer.h"
 
 using namespace o2;
 
@@ -30,7 +31,39 @@ namespace Editor
 		IOBJECT(ParticlesEmitterComponentViewer);
 
 	protected:
-		Ref<VerticalLayout> mControls; // Play/Pause/Reset buttons, timeline, etc.
+		// ------------------------------------
+		// Scene layer for draw texture overlay
+		// ------------------------------------
+		struct SceneLayer : public SceneEditorLayer
+		{
+			WeakRef<ParticlesEmitterComponentViewer> viewer; // Reference to viewer
+
+		public:
+			// Draws editor over scene
+			void DrawOverScene() override;
+
+			// Updates editor
+			void Update(float dt) override;
+
+			// Returns order of layer
+			int GetOrder() const override;
+
+			// Returns true if layer is enabled
+			bool IsEnabled() const override;
+
+			// Returns name of layer
+			const String& GetName() const override;
+
+			// Returns icon name of layer
+			const String& GetIconName() const override;
+		};
+
+	protected:
+		Ref<VerticalLayout> mControls;   // Play/Pause/Reset buttons, timeline, etc.
+		Ref<SceneLayer>     mSceneLayer; // Scene layer for draw handles and update emitter
+
+		Ref<HorizontalProgress> mTimeProgress;    // Time progress bar
+		Ref<Toggle>             mPlayPauseToggle; // Play/Pause button
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -44,6 +77,18 @@ namespace Editor
 
 		// Disable viewer event function
 		void OnDisabled() override;
+
+		// Returns target objects
+		Vector<Pair<ParticlesEmitterComponent*, ParticlesEmitterComponent*>>& GetTargetObjects();
+
+		// Called when play/pause button pressed, start or stop emitter
+		void OnPlayPauseTogglePressed(bool play);
+
+		// Called when loop button pressed, enable or disable loop
+		void OnLoopTogglePressed(bool loop);
+
+		// Called when time progress changed, sets emitter time 
+		void SetTimeProgress(float time);
 	};
 }
 // --- META ---
@@ -56,6 +101,9 @@ END_META;
 CLASS_FIELDS_META(Editor::ParticlesEmitterComponentViewer)
 {
     FIELD().PROTECTED().NAME(mControls);
+    FIELD().PROTECTED().NAME(mSceneLayer);
+    FIELD().PROTECTED().NAME(mTimeProgress);
+    FIELD().PROTECTED().NAME(mPlayPauseToggle);
 }
 END_META;
 CLASS_METHODS_META(Editor::ParticlesEmitterComponentViewer)
@@ -63,12 +111,17 @@ CLASS_METHODS_META(Editor::ParticlesEmitterComponentViewer)
 
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
+    typedef Vector<Pair<ParticlesEmitterComponent*, ParticlesEmitterComponent*>>& _tmp3;
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(_tmp3, GetTargetObjects);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPlayPauseTogglePressed, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLoopTogglePressed, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, SetTimeProgress, float);
 }
 END_META;
 // --- END META ---

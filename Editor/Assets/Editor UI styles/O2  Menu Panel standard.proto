@@ -7,7 +7,7 @@
                 "Type": "o2::Label",
                 "Value": {
                     "Prototype": {
-                        "id": "00e61abd278d74112db62c5524647215",
+                        "id": "18e679c6470c3621584b112313247eba",
                         "path": "Editor UI styles/O2  Label standard.proto"
                     },
                     "PrototypeLink": 9613259363390956959,
@@ -192,7 +192,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "1566410a18dc28d912e475ec218b2d33"
+                                    "mId": "29624c4d544160f468c658fe37e371a2"
                                 }
                             }
                         }
@@ -245,7 +245,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "3f166f7b454b29be45dd68460bc82335"
+                                    "mId": "173b1bfb7bbd15c411a64dcb5d9e0634"
                                 }
                             }
                         }

@@ -27,7 +27,7 @@
                 "Type": "o2::Label",
                 "Value": {
                     "Prototype": {
-                        "id": "00e61abd278d74112db62c5524647215",
+                        "id": "18e679c6470c3621584b112313247eba",
                         "path": "Editor UI styles/O2  Label standard.proto"
                     },
                     "PrototypeLink": 9613259363390956959,
@@ -184,7 +184,7 @@
                     "Type": "o2::HorizontalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "08a52b2f2160650f112027f10be410a1",
+                            "id": "68c508d73dcd36c7422c664677bd44bb",
                             "path": "Editor UI styles/O2  Horizontal Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 2396346607982954160,
@@ -335,7 +335,7 @@
                     "Type": "o2::VerticalScrollBar",
                     "Value": {
                         "Prototype": {
-                            "id": "541c211761b76f2346aa5f2c0408124c",
+                            "id": "069119756f9442746491468b330527ec",
                             "path": "Editor UI styles/O2  Vertical Scroll Bar standard.proto"
                         },
                         "PrototypeLink": 8311025582170325613,
@@ -570,7 +570,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "03ae0eb35efc6d3d404c26ab66d00b0c"
+                                    "mId": "517251185ba6127544ba24137c0f032d"
                                 }
                             }
                         }
@@ -623,7 +623,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "2a1677eb590330ca71b92f8f28427f81"
+                                    "mId": "686b1bea13603c360eeb5af555cc3d19"
                                 }
                             }
                         }
@@ -676,7 +676,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "7e6f11af289a6bd61e5b439000bd6ca3"
+                                    "mId": "69e770ec6cd44b3d04cc77f615d219c7"
                                 }
                             }
                         }
@@ -729,7 +729,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "16891b627a1b60f07d5501a4486a710f"
+                                    "mId": "02907d3a21f41d9117d55145616268cc"
                                 }
                             }
                         }
@@ -783,7 +783,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "437440aa0f1f20e30508490110b26da3"
+                                    "mId": "384d50310ff0057676c0534e04fd41fd"
                                 }
                             }
                         }

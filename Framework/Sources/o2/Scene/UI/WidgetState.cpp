@@ -100,8 +100,8 @@ namespace o2
     {
         if (mState == state)
         {
-            if ((state && Math::Equals(mPlayer->GetRelTime(), 1.0f)) ||
-                (!state && Math::Equals(mPlayer->GetRelTime(), 0.0f)))
+            if ((state && Math::Equals(mPlayer->GetRelativeTime(), 1.0f)) ||
+                (!state && Math::Equals(mPlayer->GetRelativeTime(), 0.0f)))
             {
                 return;
             }

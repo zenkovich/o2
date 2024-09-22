@@ -10,17 +10,17 @@ namespace o2
     // -------------------------
     // Basic animation interface
     // -------------------------
-    class IAnimation : public ISerializable
+    class IAnimation : virtual public ISerializable
     {
     public:
         PROPERTIES(IAnimation);
         PROPERTY(bool, playing, SetPlaying, IsPlaying);            // Is animation playing property
-        PROPERTY(bool, reversed, SetReverse, IsReversed);          // Is animation reversed property
-        PROPERTY(float, speed, SetSpeed, GetSpeed);                // Animation speed. 1.0 is default
-        PROPERTY(float, time, SetTime, GetTime);                   // Animation time
-        PROPERTY(float, relTime, SetRelTime, GetRelTime);          // Animation relative time. 0 - is start of animation, 1 - time at duration
-        PROPERTY(float, beginBound, SetBeginBound, GetBeginBound); // Begin playing time bound property
-        PROPERTY(float, endBound, SetEndBound, GetEndBound);       // End playing time bound property
+        PROPERTY(bool, reversed, SetReverse, IsReversed);          // Is animation reversed property @EDITOR_IGNORE
+        PROPERTY(float, speed, SetSpeed, GetSpeed);                // Animation speed. 1.0 is default @EDITOR_IGNORE
+        PROPERTY(float, time, SetTime, GetTime);                   // Animation time @EDITOR_IGNORE
+        PROPERTY(float, relTime, SetRelTime, GetRelativeTime);          // Animation relative time. 0 - is start of animation, 1 - time at duration @EDITOR_IGNORE
+        PROPERTY(float, beginBound, SetBeginBound, GetBeginBound); // Begin playing time bound property @EDITOR_IGNORE
+        PROPERTY(float, endBound, SetEndBound, GetEndBound);       // End playing time bound property @EDITOR_IGNORE
         PROPERTY(Loop, loop, SetLoop, GetLoop);                    // Loop animation property
         GETTER(float, duration, GetDuration);                      // Animation duration property
 
@@ -104,7 +104,7 @@ namespace o2
         virtual void SetRelTime(float relTime);
 
         // Returns relative time: 0 - is start of animation, 1 - time at duration
-        virtual float GetRelTime() const;
+        virtual float GetRelativeTime() const;
 
         // Sets animation time to begin
         virtual void GoToBegin();
@@ -148,7 +148,7 @@ namespace o2
         // Removes all events
         virtual void RemoveAllTimeEvents();
 
-        IOBJECT(IAnimation);
+        SERIALIZABLE(IAnimation);
 
     protected:
         float mTime = 0.0f;            // Current animation time, can be out of bounds
@@ -187,12 +187,12 @@ END_META;
 CLASS_FIELDS_META(o2::IAnimation)
 {
     FIELD().PUBLIC().NAME(playing);
-    FIELD().PUBLIC().NAME(reversed);
-    FIELD().PUBLIC().NAME(speed);
-    FIELD().PUBLIC().NAME(time);
-    FIELD().PUBLIC().NAME(relTime);
-    FIELD().PUBLIC().NAME(beginBound);
-    FIELD().PUBLIC().NAME(endBound);
+    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(reversed);
+    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(speed);
+    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(time);
+    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(relTime);
+    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(beginBound);
+    FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(endBound);
     FIELD().PUBLIC().NAME(loop);
     FIELD().PUBLIC().NAME(duration);
     FIELD().PUBLIC().NAME(onPlayEvent);
@@ -236,7 +236,7 @@ CLASS_METHODS_META(o2::IAnimation)
     FUNCTION().PUBLIC().SIGNATURE(float, GetLoopTime);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
     FUNCTION().PUBLIC().SIGNATURE(void, SetRelTime, float);
-    FUNCTION().PUBLIC().SIGNATURE(float, GetRelTime);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetRelativeTime);
     FUNCTION().PUBLIC().SIGNATURE(void, GoToBegin);
     FUNCTION().PUBLIC().SIGNATURE(void, GoToEnd);
     FUNCTION().PUBLIC().SIGNATURE(void, PlayForward);

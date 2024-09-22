@@ -9,6 +9,7 @@
 #endif
 
 #include "o2/Utils/Types/StringDef.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2 {
     // ------------------------------------------------------------------------------

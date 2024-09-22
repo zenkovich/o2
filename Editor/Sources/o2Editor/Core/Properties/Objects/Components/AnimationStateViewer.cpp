@@ -82,7 +82,7 @@ namespace Editor
 	{
 		if (auto subscribedPlayer = mSubscribedPlayer.Lock())
 		{
-			if (play && subscribedPlayer->GetRelTime() >= 1.0f - FLT_EPSILON)
+			if (play && subscribedPlayer->GetRelativeTime() >= 1.0f - FLT_EPSILON)
 				subscribedPlayer->SetRelTime(0.0f);
 
 			subscribedPlayer->SetPlaying(play);

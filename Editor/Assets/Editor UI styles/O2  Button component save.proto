@@ -174,7 +174,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "6ed00b3d55522911628561b5438121d9"
+                                    "mId": "39815fea662710345b1908d832107d89"
                                 }
                             }
                         }
@@ -227,7 +227,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "49fb01683ada1b9071ae1f0d18426bd1"
+                                    "mId": "1da8664b71ac32e31e24688e079f52e1"
                                 }
                             }
                         }
