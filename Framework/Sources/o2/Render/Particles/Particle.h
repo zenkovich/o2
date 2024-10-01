@@ -25,6 +25,7 @@ namespace o2
 
         bool alive = false; // Is particle alive
 
+    public:
         bool operator==(const Particle& other) const
         {
             return position == position && velocity == velocity && Math::Equals(angle, other.angle) &&

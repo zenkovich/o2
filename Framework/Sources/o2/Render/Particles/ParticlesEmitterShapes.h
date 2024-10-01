@@ -5,16 +5,30 @@
 
 namespace o2
 {
+	class ParticlesEmitter;
+
     // --------------------------------------
     // Particles emitter shape base interface
     // --------------------------------------
     class ParticlesEmitterShape: public ISerializable, public RefCounterable, public ICloneableRef
     {
-        SERIALIZABLE(ParticlesEmitterShape);
-
     public:
+		// Virtual destructor
         virtual ~ParticlesEmitterShape() {}
-        virtual Vec2F GetEmittinPoint();
+
+		// Returns random emitting point in shape
+		virtual Vec2F GetEmittinPoint(const Basis& transform, bool fromShell);
+
+		SERIALIZABLE(ParticlesEmitterShape);
+
+	protected:
+		WeakRef<ParticlesEmitter> mEmitter; // Owning emitter
+
+	protected:
+		// Called  when particle effect parameters are changed, used to invalidate baked frames
+		void OnChanged();
+
+		friend class ParticlesEmitter;
     };
 
     // ---------------------------------
@@ -22,13 +36,12 @@ namespace o2
     // ---------------------------------
     class CircleParticlesEmitterShape: public ParticlesEmitterShape
     {
-        SERIALIZABLE(CircleParticlesEmitterShape);
-        CLONEABLE_REF(CircleParticlesEmitterShape);
-
     public:
-        float radius = 0;
+		// Returns random emitting point in circle
+		Vec2F GetEmittinPoint(const Basis& transform, bool fromShell) override;
 
-        Vec2F GetEmittinPoint() override;
+		SERIALIZABLE(CircleParticlesEmitterShape);
+		CLONEABLE_REF(CircleParticlesEmitterShape);
     };
 
     // ---------------------------------
@@ -36,13 +49,12 @@ namespace o2
     // ---------------------------------
     class SquareParticlesEmitterShape: public ParticlesEmitterShape
     {
-        SERIALIZABLE(SquareParticlesEmitterShape);
-        CLONEABLE_REF(SquareParticlesEmitterShape);
+	public:
+		// Returns random emitting point in square
+		Vec2F GetEmittinPoint(const Basis& transform, bool fromShell) override;
 
-    public:
-        Vec2F size;
-
-        Vec2F GetEmittinPoint() override;
+		SERIALIZABLE(SquareParticlesEmitterShape);
+		CLONEABLE_REF(SquareParticlesEmitterShape);
     };
 }
 // --- META ---
@@ -56,12 +68,14 @@ CLASS_BASES_META(o2::ParticlesEmitterShape)
 END_META;
 CLASS_FIELDS_META(o2::ParticlesEmitterShape)
 {
+    FIELD().PROTECTED().NAME(mEmitter);
 }
 END_META;
 CLASS_METHODS_META(o2::ParticlesEmitterShape)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint, const Basis&, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChanged);
 }
 END_META;
 
@@ -72,13 +86,12 @@ CLASS_BASES_META(o2::CircleParticlesEmitterShape)
 END_META;
 CLASS_FIELDS_META(o2::CircleParticlesEmitterShape)
 {
-    FIELD().PUBLIC().DEFAULT_VALUE(0).NAME(radius);
 }
 END_META;
 CLASS_METHODS_META(o2::CircleParticlesEmitterShape)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint, const Basis&, bool);
 }
 END_META;
 
@@ -89,13 +102,12 @@ CLASS_BASES_META(o2::SquareParticlesEmitterShape)
 END_META;
 CLASS_FIELDS_META(o2::SquareParticlesEmitterShape)
 {
-    FIELD().PUBLIC().NAME(size);
 }
 END_META;
 CLASS_METHODS_META(o2::SquareParticlesEmitterShape)
 {
 
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint, const Basis&, bool);
 }
 END_META;
 // --- END META ---

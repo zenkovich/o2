@@ -64,6 +64,7 @@ namespace Editor
 
 		Ref<HorizontalProgress> mTimeProgress;    // Time progress bar
 		Ref<Toggle>             mPlayPauseToggle; // Play/Pause button
+		Ref<Button>             mReplayButton;    // Replay button
 
 	protected:
 		// Called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
@@ -87,6 +88,9 @@ namespace Editor
 		// Called when loop button pressed, enable or disable loop
 		void OnLoopTogglePressed(bool loop);
 
+		// Called when replay button pressed, reset emitter and start it
+		void OnReplayPressed();
+
 		// Called when time progress changed, sets emitter time 
 		void SetTimeProgress(float time);
 	};
@@ -104,6 +108,7 @@ CLASS_FIELDS_META(Editor::ParticlesEmitterComponentViewer)
     FIELD().PROTECTED().NAME(mSceneLayer);
     FIELD().PROTECTED().NAME(mTimeProgress);
     FIELD().PROTECTED().NAME(mPlayPauseToggle);
+    FIELD().PROTECTED().NAME(mReplayButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::ParticlesEmitterComponentViewer)
@@ -121,6 +126,7 @@ CLASS_METHODS_META(Editor::ParticlesEmitterComponentViewer)
     FUNCTION().PROTECTED().SIGNATURE(_tmp3, GetTargetObjects);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPlayPauseTogglePressed, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, OnLoopTogglePressed, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnReplayPressed);
     FUNCTION().PROTECTED().SIGNATURE(void, SetTimeProgress, float);
 }
 END_META;

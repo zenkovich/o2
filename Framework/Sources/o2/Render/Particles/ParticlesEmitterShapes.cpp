@@ -1,22 +1,53 @@
 #include "o2/stdafx.h"
 #include "ParticlesEmitterShapes.h"
 
+#include "o2/Render/Particles/ParticlesEmitter.h"
+
 namespace o2
 {
-    Vec2F ParticlesEmitterShape::GetEmittinPoint()
+    Vec2F ParticlesEmitterShape::GetEmittinPoint(const Basis& transform, bool fromShell)
     {
         return Vec2F();
     }
 
-    Vec2F CircleParticlesEmitterShape::GetEmittinPoint()
+	void ParticlesEmitterShape::OnChanged()
+	{
+        if (mEmitter)
+		    mEmitter.Lock()->InvalidateBakedFrames();
+	}
+
+    Vec2F CircleParticlesEmitterShape::GetEmittinPoint(const Basis& transform, bool fromShell)
     {
-        return Vec2F::Rotated(Math::Random(0.0f, Math::PI()*2.0f))*radius;
+        if (fromShell)
+		{
+			Vec2F localPoint = Vec2F::Rotated(Math::Random(0.0f, Math::PI()*2.0f))*0.5f + Vec2F(0.5f, 0.5f);
+			return localPoint*transform;
+        }
+        else
+        {
+            Vec2F localPoint = Vec2F::Rotated(Math::Random(0.0f, Math::PI()*2.0f))*Math::Random(0.0f, 0.5f) + Vec2F(0.5f, 0.5f);
+			return localPoint*transform;
+        }
     }
 
-    Vec2F SquareParticlesEmitterShape::GetEmittinPoint()
+	Vec2F SquareParticlesEmitterShape::GetEmittinPoint(const Basis& transform, bool fromShell)
     {
-        Vec2F hs = size*0.5f;
-        return Vec2F(Math::Random(-hs.x, hs.x), Math::Random(-hs.y, hs.y));
+        if (fromShell)
+        {
+			Vec2F localPoint = Vec2F(Math::Random(0.0f, 1.0f), Math::Random(0.0f, 1.0f));
+
+			if (Math::Random(0, 100) > 50)
+			    localPoint.x = Math::Round(localPoint.x);
+            else
+			    localPoint.y = Math::Round(localPoint.y);
+
+			return localPoint*transform;
+        }
+        else
+        {
+			Vec2F localPoint = Vec2F(Math::Random(0.0f, 1.0f), Math::Random(0.0f, 1.0f));
+			return localPoint*transform;
+        }
     }
 }
 // --- META ---

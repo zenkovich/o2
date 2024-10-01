@@ -27,7 +27,9 @@ namespace o2
 
 		PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter
 
-		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape);                        // Emitting shape property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::CircleParticlesEmitterShape)
+		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape);                    // Emitting shape property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::CircleParticlesEmitterShape)
+		PROPERTY(bool, emitFromShell, SetParticlesEmitFromShell, IsParticlesEmitFromShell); // Emitting particles from shell of shape property
+
 		PROPERTY(Ref<ParticleSource>, particlesSource, SetParticlesSource, GetParticlesSource); // Particles source property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::SingleSpriteParticleSource)
 
 		PROPERTY(float, particlesPerSecond, SetParticlesPerSecond, GetParticlesPerSecond); // Amount of particles emitting in one second property @RANGE(0, 100)
@@ -37,8 +39,11 @@ namespace o2
 		PROPERTY(float, initialAngle, SetInitialAngle, GetInitialAngle);                // Emitting particle angle property in degrees @RANGE(0, 360)
 		PROPERTY(float, initialAngleRange, SetInitialAngleRange, GetInitialAngleRange); // Emitting particle angle range property in degrees @RANGE(0, 360)
 		
-		PROPERTY(Vec2F, initialSize, SetInitialSize, GetInitialSize);                // Emitting particle size property
-		PROPERTY(Vec2F, initialSizeRange, SetInitialSizeRange, GetInitialSizeRange); // Emitting particle size range property
+		PROPERTY(float, initialSize, SetInitialSize, GetInitialSize);                // Emitting particle size property @RANGE(0, 3)
+		PROPERTY(float, initialSizeRange, SetInitialSizeRange, GetInitialSizeRange); // Emitting particle size range property @RANGE(0, 2)
+
+		PROPERTY(float, initialWidthScale, SetInitialWidthScale, GetInitialWidthScale);                // Emitting particle width scale property @RANGE(0, 3)
+		PROPERTY(float, initialWidthScaleRange, SetInitialWidthScaleRange, GetInitialWidthScaleRange); // Emitting particle width scale range property @RANGE(0, 2)
 		
 		PROPERTY(float, initialSpeed, SetInitialSpeed, GetInitialSpeed);                // Emitting particle angle speed property in degrees/sec @RANGE(0, 360)
 		PROPERTY(float, initialSpeedRange, SetInitialSpeedRange, GetInitialSpeedRange); // Emitting particle angle speed range in degrees/sec @RANGE(0, 360)
@@ -134,6 +139,12 @@ namespace o2
         // Is particles relative to emitter
         bool IsParticlesRelative() const;
 
+		// Sets particles emit from shell
+		void SetParticlesEmitFromShell(bool fromShell);
+
+		// Is particles emit from shell
+		bool IsParticlesEmitFromShell() const;
+
         // Sets particles lifetime in seconds
         void SetParticlesLifetime(float lifetime);
 
@@ -159,16 +170,28 @@ namespace o2
         float GetInitialAngleRange() const;
 
         // Sets emitting particles size
-        void SetInitialSize(const Vec2F& size);
+        void SetInitialSize(float size);
 
         // Returns emitting particles size
-        Vec2F GetInitialSize() const;
+        float GetInitialSize() const;
 
         // Sets emitting particles size range
-        void SetInitialSizeRange(const Vec2F& range);
+        void SetInitialSizeRange(float range);
 
         // Returns emitting particles size range
-        Vec2F GetInitialSizeRange() const;
+        float GetInitialSizeRange() const;
+
+		// Sets emitting particles width scale
+		void SetInitialWidthScale(float scale);
+
+		// Returns emitting particles width scale
+		float GetInitialWidthScale() const;
+
+		// Sets emitting particles width scale range
+		void SetInitialWidthScaleRange(float scaleRange);
+
+		// Returns emitting particles width scale range
+		float GetInitialWidthScaleRange() const;
 
         // Sets emitting particles angle speed in degrees/sec
         void SetInitialAngleSpeed(float speed);
@@ -216,6 +239,8 @@ namespace o2
 
         Ref<ParticlesEmitterShape> mShape = nullptr; // Particles emitting shape @SERIALIZABLE 
 
+		bool mEmitParticlesFromShell = false; // Emitting particles from shell of shape @SERIALIZABLE
+
         Vector<Ref<ParticlesEffect>> mEffects; // Particles effect @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT @DONT_DELETE @INVOKE_ON_CHANGED(OnEffectsListChanged)
                                                                          
         int mParticlesNumLimit = 100; // Max available visible particles @SERIALIZABLE
@@ -230,8 +255,11 @@ namespace o2
         float mInitialAngle = 0;          // Emitting particles angle in degrees @SERIALIZABLE
         float mInitialAngleRange = 45.0f; // Emitting particles angle in degrees randomize range @SERIALIZABLE
                                                         
-        Vec2F mInitialSize = Vec2F(10, 10); // Emitting particles size @SERIALIZABLE
-        Vec2F mInitialSizeRange;            // Emitting particles size randomize range @SERIALIZABLE
+        float mInitialSize = 1.0f;      // Emitting particles size @SERIALIZABLE
+        float mInitialSizeRange = 0.3f; // Emitting particles size randomize range @SERIALIZABLE
+
+		float mInitialWidthScale = 1.0f;  // Emitting particles width scale @SERIALIZABLE
+		float mInitialWidthScaleRange = 0; // Emitting particles width scale randomize range @SERIALIZABLE
                                                         
         float mInitialSpeed = 10;      // Emitting particles speed @SERIALIZABLE
         float mInitialSpeedRangle = 5; // Emitting particles speed range @SERIALIZABLE
@@ -276,13 +304,14 @@ namespace o2
         // Called when basis was changed, updates particles positions from last transform
 		void BasisChanged() override;
 
-		// Invalidates baked frames
-		void InvalidateBakedFrames();
-
 		// Called when effects list changed, updates emitter reference in effects
 		void OnEffectsListChanged();
 
+		// Called when something changed, invalidates baked frames when particles paused
+        void OnChanged();
+
         friend class ParticlesEffect;
+        friend class ParticlesEmitterShape;
 
 #if IS_EDITOR
     public:
@@ -310,7 +339,10 @@ namespace o2
 		bool mIsUpdating = false;      // Is updating particles now. Used to detect separated Evaluate calls when time changed
 		bool mParticlesPaused = false; // Is particles paused for editor
 
-    protected:
+	protected:
+		// Invalidates baked frames
+		void InvalidateBakedFrames();
+
 		// Called when updated or time changed, updates baked particles for editor
 		void Evaluate() override;
 
@@ -344,14 +376,17 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 5).NAME(duration);
     FIELD().PUBLIC().NAME(particlesRelative);
     FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::CircleParticlesEmitterShape).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(shape);
+    FIELD().PUBLIC().NAME(emitFromShell);
     FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::SingleSpriteParticleSource).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(particlesSource);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 100).NAME(particlesPerSecond);
     FIELD().PUBLIC().NAME(maxParticles);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 10).NAME(particlesLifetime);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialAngle);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialAngleRange);
-    FIELD().PUBLIC().NAME(initialSize);
-    FIELD().PUBLIC().NAME(initialSizeRange);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 3).NAME(initialSize);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 2).NAME(initialSizeRange);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 3).NAME(initialWidthScale);
+    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 2).NAME(initialWidthScaleRange);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialSpeed);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialSpeedRange);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 720).NAME(initialAngleSpeed);
@@ -362,6 +397,7 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<SingleSpriteParticleSource>()).NAME(mParticlesSource);
     FIELD().PROTECTED().NAME(mParticlesContainer);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mShape);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mEmitParticlesFromShell);
     FIELD().PROTECTED().DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mEffects);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(100).NAME(mParticlesNumLimit);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mEmittingCoefficient);
@@ -371,8 +407,10 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mEmitParticlesPerSecond);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mInitialAngle);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(45.0f).NAME(mInitialAngleRange);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(10, 10)).NAME(mInitialSize);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mInitialSizeRange);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mInitialSize);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.3f).NAME(mInitialSizeRange);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mInitialWidthScale);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mInitialWidthScaleRange);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mInitialSpeed);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(5).NAME(mInitialSpeedRangle);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mInitialMoveDirection);
@@ -419,6 +457,8 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Particle>&, GetParticles);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesRelativity, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsParticlesRelative);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesEmitFromShell, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsParticlesEmitFromShell);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesLifetime, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetParticlesLifetime);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesPerSecond, float);
@@ -427,10 +467,14 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(float, GetInitialAngle);
     FUNCTION().PUBLIC().SIGNATURE(void, SetInitialAngleRange, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetInitialAngleRange);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialSize, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetInitialSize);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialSizeRange, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetInitialSizeRange);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialSize, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialSize);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialSizeRange, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialSizeRange);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialWidthScale, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialWidthScale);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetInitialWidthScaleRange, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetInitialWidthScaleRange);
     FUNCTION().PUBLIC().SIGNATURE(void, SetInitialAngleSpeed, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetInitialAngleSpeed);
     FUNCTION().PUBLIC().SIGNATURE(void, SetInitialAngleSpeedRange, float);
@@ -452,10 +496,11 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateEffects, float);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateParticles, float);
     FUNCTION().PROTECTED().SIGNATURE(void, BasisChanged);
-    FUNCTION().PROTECTED().SIGNATURE(void, InvalidateBakedFrames);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEffectsListChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnChanged);
 #if  IS_EDITOR
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesPause, bool);
+    FUNCTION().PROTECTED().SIGNATURE(void, InvalidateBakedFrames);
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
     FUNCTION().PROTECTED().SIGNATURE(int, GetBakedFrameIndex, float);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckBakedFrames, int);

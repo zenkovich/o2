@@ -42,6 +42,13 @@ namespace Editor
 		mPlayPauseToggle->onToggleByUser = [&](bool play) { OnPlayPauseTogglePressed(play); };
 		playControls->AddChild(mPlayPauseToggle);
 
+		mReplayButton = o2UI.CreateWidget<Button>("revert prototype");
+		mReplayButton->name = "revert";
+		mReplayButton->layout->minSize = Vec2F(20, 20);
+		mReplayButton->layout->maxSize = Vec2F(20, 20);
+		mReplayButton->onClick = [&]() { OnReplayPressed(); };
+		playControls->AddChild(mReplayButton);
+
 		mTimeProgress = o2UI.CreateWidget<HorizontalProgress>("animation state bar");
 		mTimeProgress->name = "bar";
 		mTimeProgress->layout->maxHeight = 3;
@@ -112,6 +119,16 @@ namespace Editor
 			auto emitter = pair.first;
 			if (emitter)
 				emitter->SetLoop(loop ? Loop::Repeat : Loop::None);
+		}
+	}
+
+	void ParticlesEmitterComponentViewer::OnReplayPressed()
+	{
+		for (auto& pair : GetTargetObjects())
+		{
+			auto emitter = pair.first;
+			if (emitter)
+				emitter->RewindAndPlay();
 		}
 	}
 

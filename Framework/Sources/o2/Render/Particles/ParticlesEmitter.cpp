@@ -92,7 +92,7 @@ namespace o2
 
 		mLastTransform = mTransform;
 
-		InvalidateBakedFrames();
+		OnChanged();
 
 		return *this;
 	}
@@ -151,7 +151,7 @@ namespace o2
 		IRectDrawable::OnDeserialized(node);
 		IAnimation::OnDeserialized(node);
 		OnEffectsListChanged();
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	void ParticlesEmitter::OnSerializeDelta(DataValue& node, const IObject& origin) const
@@ -166,7 +166,7 @@ namespace o2
 		IRectDrawable::OnDeserializedDelta(node, origin);
 		IAnimation::OnDeserializedDelta(node, origin);
 		OnEffectsListChanged();
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	void ParticlesEmitter::CreateParticlesContainer()
@@ -188,7 +188,9 @@ namespace o2
 		float initialAngle = Math::Deg2rad(mInitialAngle);
 		float halfAngleRange = Math::Deg2rad(mInitialAngleRange)*0.5f;
 
-		Vec2F halfSizeRange = mInitialSizeRange*0.5f;
+		float halfSizeRange = mInitialSizeRange*0.5f;
+		float halfWidthScaleRange = mInitialWidthScaleRange*0.5f;
+
 		float halfSpeedRange = mInitialSpeedRangle*0.5f;
 
 		float initialMoveDirection = Math::Deg2rad(mInitialMoveDirection);
@@ -222,11 +224,12 @@ namespace o2
 				// Initialize particle
 				particle->index = particleIndex;
 
-				particle->position = Local2WorldPoint(mShape->GetEmittinPoint());
+				particle->position = mShape->GetEmittinPoint(mTransform, mEmitParticlesFromShell);
 				particle->angle = initialAngle + Math::Random(-halfAngleRange, halfAngleRange);
 
-				particle->size.Set(mInitialSize.x + Math::Random(-halfSizeRange.x, halfSizeRange.x),
-								   mInitialSize.y + Math::Random(-halfSizeRange.y, halfSizeRange.y));
+				float randomSize = mInitialSize + Math::Random(-halfSizeRange, halfSizeRange);
+				float randomWidthScale = mInitialWidthScale + Math::Random(-halfWidthScaleRange, halfWidthScaleRange);
+				particle->size = Vec2F(randomSize, randomSize*randomWidthScale);
 
 				particle->velocity = Vec2F::Rotated(initialMoveDirection + Math::Random(-halfDirRange, halfDirRange))*
 					(mInitialSpeed + Math::Random(-halfSpeedRange, halfSpeedRange));
@@ -318,6 +321,7 @@ namespace o2
 		IAnimation::Play();
 
 		mEmitTimeBuffer = 0.0f;
+		mBakedFrames.Clear();
 	}
 
 	void ParticlesEmitter::Stop()
@@ -329,14 +333,14 @@ namespace o2
 	{
 		mDuration = duration;
 		ResetBounds();
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	void ParticlesEmitter::SetParticlesSource(const Ref<ParticleSource>& source)
 	{
 		mParticlesSource = source;
 		CreateParticlesContainer();
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	const Ref<ParticleSource>& ParticlesEmitter::GetParticlesSource() const
@@ -347,7 +351,7 @@ namespace o2
 	void ParticlesEmitter::SetEmittingCoef(float coef)
 	{
 		mEmittingCoefficient = coef;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetEmittingCoef() const
@@ -358,7 +362,7 @@ namespace o2
 	void ParticlesEmitter::SetShape(const Ref<ParticlesEmitterShape>& shape)
 	{
 		mShape = shape;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	const Ref<ParticlesEmitterShape>& ParticlesEmitter::GetShape() const
@@ -369,7 +373,7 @@ namespace o2
 	void ParticlesEmitter::AddEffect(const Ref<ParticlesEffect>& effect)
 	{
 		mEffects.Add(effect);
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	const Vector<Ref<ParticlesEffect>>& ParticlesEmitter::GetEffects() const
@@ -380,13 +384,13 @@ namespace o2
 	void ParticlesEmitter::RemoveEffect(const Ref<ParticlesEffect>& effect)
 	{
 		mEffects.Remove(effect);
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	void ParticlesEmitter::RemoveAllEffects()
 	{
 		mEffects.Clear();
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	void ParticlesEmitter::SetMaxParticles(int count)
@@ -406,7 +410,7 @@ namespace o2
 			idx++;
 		}
 
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	int ParticlesEmitter::GetMaxParticles() const
@@ -432,7 +436,7 @@ namespace o2
 	void ParticlesEmitter::SetParticlesRelativity(bool relative)
 	{
 		mIsParticlesRelative = relative;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	bool ParticlesEmitter::IsParticlesRelative() const
@@ -440,10 +444,21 @@ namespace o2
 		return mIsParticlesRelative;
 	}
 
+	void ParticlesEmitter::SetParticlesEmitFromShell(bool fromShell)
+	{
+		mEmitParticlesFromShell = fromShell;
+		OnChanged();
+	}
+
+	bool ParticlesEmitter::IsParticlesEmitFromShell() const
+	{
+		return mEmitParticlesFromShell;
+	}
+
 	void ParticlesEmitter::SetParticlesLifetime(float lifetime)
 	{
 		mParticlesLifetime = lifetime;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetParticlesLifetime() const
@@ -454,7 +469,7 @@ namespace o2
 	void ParticlesEmitter::SetParticlesPerSecond(float numParticles)
 	{
 		mEmitParticlesPerSecond = numParticles;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetParticlesPerSecond() const
@@ -465,7 +480,7 @@ namespace o2
 	void ParticlesEmitter::SetInitialAngle(float angle)
 	{
 		mInitialAngle = angle;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetInitialAngle() const
@@ -476,7 +491,7 @@ namespace o2
 	void ParticlesEmitter::SetInitialAngleRange(float range)
 	{
 		mInitialAngleRange = initialAngle;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetInitialAngleRange() const
@@ -484,32 +499,54 @@ namespace o2
 		return mInitialAngleRange;
 	}
 
-	void ParticlesEmitter::SetInitialSize(const Vec2F& size)
+	void ParticlesEmitter::SetInitialSize(float size)
 	{
 		mInitialSize = size;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
-	Vec2F ParticlesEmitter::GetInitialSize() const
+	float ParticlesEmitter::GetInitialSize() const
 	{
 		return mInitialSize;
 	}
 
-	void ParticlesEmitter::SetInitialSizeRange(const Vec2F& range)
+	void ParticlesEmitter::SetInitialSizeRange(float range)
 	{
 		mInitialSizeRange = range;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
-	Vec2F ParticlesEmitter::GetInitialSizeRange() const
+	float ParticlesEmitter::GetInitialSizeRange() const
 	{
 		return mInitialSizeRange;
+	}
+
+	void ParticlesEmitter::SetInitialWidthScale(float scale)
+	{
+		mInitialWidthScale = scale;
+		OnChanged();
+	}
+
+	float ParticlesEmitter::GetInitialWidthScale() const
+	{
+		return mInitialWidthScale;
+	}
+
+	void ParticlesEmitter::SetInitialWidthScaleRange(float scaleRange)
+	{
+		mInitialWidthScaleRange = scaleRange;
+		OnChanged();
+	}
+
+	float ParticlesEmitter::GetInitialWidthScaleRange() const
+	{
+		return mInitialWidthScaleRange;
 	}
 
 	void ParticlesEmitter::SetInitialAngleSpeed(float speed)
 	{
 		mInitialAngleSpeed = speed;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetInitialAngleSpeed() const
@@ -520,7 +557,7 @@ namespace o2
 	void ParticlesEmitter::SetInitialAngleSpeedRange(float speedRange)
 	{
 		mInitialAngleSpeedRange = speedRange;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetInitialAngleSpeedRange() const
@@ -531,7 +568,7 @@ namespace o2
 	void ParticlesEmitter::SetInitialSpeed(float speed)
 	{
 		mInitialSpeed = speed;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetInitialSpeed() const
@@ -542,7 +579,7 @@ namespace o2
 	void ParticlesEmitter::SetInitialSpeedRange(float speedRange)
 	{
 		mInitialSpeedRangle = speedRange;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetInitialSpeedRange() const
@@ -553,7 +590,7 @@ namespace o2
 	void ParticlesEmitter::SetEmitParticlesMoveDirection(float direction)
 	{
 		mInitialMoveDirection = direction;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetEmitParticlesMoveDirection() const
@@ -564,23 +601,12 @@ namespace o2
 	void ParticlesEmitter::SetEmitParticlesMoveDirectionRange(float directionRange)
 	{
 		mInitialMoveDirectionRange = directionRange;
-		InvalidateBakedFrames();
+		OnChanged();
 	}
 
 	float ParticlesEmitter::GetEmitParticlesMoveDirectionRange() const
 	{
 		return mInitialMoveDirectionRange;
-	}
-
-	void ParticlesEmitter::InvalidateBakedFrames()
-	{
-#if IS_EDITOR
-		mBakedFrames.Clear();
-
-		srand(mRandomSeed);
-
-		RestoreBakedFrame(GetBakedFrameIndex(mTime));
-#endif
 	}
 
 	void ParticlesEmitter::OnEffectsListChanged()
@@ -590,15 +616,39 @@ namespace o2
 			if (effect)
 				effect->mEmitter = Ref(this);
 		}
+
+		if (mShape)
+			mShape->mEmitter = Ref(this);
+	}
+
+	void ParticlesEmitter::OnChanged()
+	{
+#if IS_EDITOR
+		InvalidateBakedFrames();
+#endif
 	}
 
 #if IS_EDITOR
-
 	int ParticlesEmitter::mBakedFPS = 60;
 
 	void ParticlesEmitter::SetParticlesPause(bool paused)
 	{
 		mParticlesPaused = paused;
+	}
+
+	void ParticlesEmitter::InvalidateBakedFrames()
+	{
+		mBakedFrames.Clear();
+
+		if (!mPlaying)
+		{
+			srand(mRandomSeed);
+
+			if (mLoop == Loop::Repeat && GetRelativeTime() > 1.0f)
+				mTime = Math::Mod(mTime, GetDuration());
+
+			RestoreBakedFrame(GetBakedFrameIndex(mTime));
+		}
 	}
 
 	void ParticlesEmitter::Evaluate()
@@ -615,7 +665,7 @@ namespace o2
 			mBakedFrames[frameIdx].numAliveParticles = mNumAliveParticles;
 			mBakedFrames[frameIdx].emitTimeBuffer = mEmitTimeBuffer;
 
-			o2Debug.Log("Baked frame %i with %i particles, time: %f", frameIdx, mParticles.Count(), mTime);
+			//o2Debug.Log("Baked frame %i with %i particles, time: %f", frameIdx, mParticles.Count(), mTime);
 		}
 		else
 		{
@@ -633,7 +683,7 @@ namespace o2
 		if (mBakedFrames.Count() > maxFrameIdx || maxFrameIdx < 1)
 			return;
 
-		o2Debug.Log("Baked frames count: %i, max frame index: %i", mBakedFrames.Count(), maxFrameIdx);
+		//o2Debug.Log("Baked frames count: %i, max frame index: %i", mBakedFrames.Count(), maxFrameIdx);
 
 		int startIdx = mBakedFrames.Count() - 1;
 		mBakedFrames.Resize(maxFrameIdx + 1);

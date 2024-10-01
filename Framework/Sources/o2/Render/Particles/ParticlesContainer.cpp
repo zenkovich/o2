@@ -19,11 +19,11 @@ namespace o2
 		auto imageAsset = source->image;
 		if (imageAsset)
 		{
-			auto texture = TextureRef(imageAsset->GetAtlasUID(), imageAsset->GetAtlasPage());
-			mParticlesMesh.SetTexture(texture);
+			auto textureSource = imageAsset->GetTextureSource();
+			mParticlesMesh.SetTexture(textureSource.texture);
 
-			invTexSize = Vec2F(1.0f / texture->GetSize().x, 1.0f / texture->GetSize().y);
-			textureSrcRect = imageAsset->GetAtlasRect();
+			invTexSize = Vec2F(1.0f / textureSource.texture->GetSize().x, 1.0f / textureSource.texture->GetSize().y);
+			textureSrcRect = textureSource.sourceRect;
 			imageSize = imageAsset->GetSize();
 		}
 		else
@@ -44,7 +44,7 @@ namespace o2
 			Vec2F xv(cs * hs.x, sn * hs.x);
 			Vec2F yv(-sn * hs.y, cs * hs.y);
 			Vec2F o(particle.position);
-			ULong colr = particle.color.ARGB();
+			ULong colr = particle.color.ABGR();
 
 			mParticlesMesh.vertices[mParticlesMesh.vertexCount++].Set(o - xv + yv, colr, uvLeft, uvUp);
 			mParticlesMesh.vertices[mParticlesMesh.vertexCount++].Set(o + xv + yv, colr, uvRight, uvUp);
@@ -127,7 +127,7 @@ namespace o2
 			Vec2F xv(cs * hs.x, sn * hs.x);
 			Vec2F yv(-sn * hs.y, cs * hs.y);
 			Vec2F o(particle.position);
-			ULong colr = particle.color.ARGB();
+			ULong colr = particle.color.ABGR();
 
 			mParticlesMesh.vertices[mParticlesMesh.vertexCount++].Set(o - xv + yv, colr, imageInfo.uv.left, imageInfo.uv.top);
 			mParticlesMesh.vertices[mParticlesMesh.vertexCount++].Set(o + xv + yv, colr, imageInfo.uv.right, imageInfo.uv.top);
