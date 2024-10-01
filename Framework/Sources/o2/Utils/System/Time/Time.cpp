@@ -9,8 +9,6 @@
 
 namespace o2
 {
-    //TimeStuff& Time = TimeStuff::Instance();
-
     DECLARE_SINGLETON(Time);
 
     Time::Time(RefCounter* refCounter):

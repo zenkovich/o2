@@ -28,9 +28,6 @@ namespace o2
                                         
         // Initializes singleton
         static void InitializeSingleton();
-
-        // Deinitializes singleton
-        static void DeinitializeSingleton();
                                 
         // Returns true if singleton was initialized
         static bool IsSingletonInitialzed();
@@ -90,12 +87,6 @@ namespace o2
     { 
         if (!mInstance) 
             mInstance = mmake<_class_type>().Get(); 
-    }
-
-    template <typename _class_type>
-    void Singleton<_class_type>::DeinitializeSingleton() 
-    { 
-        delete mInstance; 
     }
 
     template <typename _class_type>

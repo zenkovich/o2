@@ -20,13 +20,7 @@ namespace Editor
 	{}
 
 	EditorConfig::~EditorConfig()
-	{
-		if (mConfigsLoaded)
-		{
-			SaveProjectConfigs();
-			SaveGlobalConfigs();
-		}
-	}
+	{}
 
 	void EditorConfig::SaveGlobalConfigs()
 	{

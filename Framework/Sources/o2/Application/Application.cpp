@@ -150,8 +150,6 @@ namespace o2
 
     void Application::DeinitializeSystems()
 	{
-		GetSingletonsList().Clear();
-
         mScene = nullptr;
         mInput = nullptr;
         mProjectConfig = nullptr;

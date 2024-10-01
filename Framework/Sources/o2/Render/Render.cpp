@@ -49,9 +49,6 @@ namespace o2
         if (!mReady)
             return;
 
-        if (IsDevMode())
-            o2Assets.onAssetsRebuilt -= MakeFunction(this, &Render::OnAssetsRebuilt);
-
         mSolidLineTexture = nullptr;
         mDashLineTexture = nullptr;
 
