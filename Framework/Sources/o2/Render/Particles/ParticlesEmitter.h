@@ -7,6 +7,8 @@
 #include "o2/Render/Particles/ParticlesEffects.h"
 #include "o2/Render/Particles/ParticlesEmitterShapes.h"
 #include "o2/Render/RectDrawable.h"
+#include "o2/Utils/Editor/Attributes/GroupAttribute.h"
+#include "o2/Utils/Editor/Attributes/NameAttribute.h"
 #include "o2/Utils/Editor/Attributes/RangeAttribute.h"
 #include "o2/Utils/Math/ColorGradient.h"
 #include "o2/Utils/Math/Curve.h"
@@ -25,36 +27,36 @@ namespace o2
 
         PROPERTY(float, duration, SetDuration, GetDuration); // Animation duration property @RANGE(0, 5)
 
-		PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter
+		PROPERTY(Ref<ParticleSource>, particlesSource, SetParticlesSource, GetParticlesSource); // Particles source property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::SingleSpriteParticleSource) @GROUP("Emission")
 
-		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape);                    // Emitting shape property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::CircleParticlesEmitterShape)
-		PROPERTY(bool, emitFromShell, SetParticlesEmitFromShell, IsParticlesEmitFromShell); // Emitting particles from shell of shape property
+		PROPERTY(Ref<ParticlesEmitterShape>, shape, SetShape, GetShape);                    // Emitting shape property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::CircleParticlesEmitterShape) @GROUP("Emission")
+		PROPERTY(bool, emitFromShell, SetParticlesEmitFromShell, IsParticlesEmitFromShell); // Emitting particles from shell of shape property @GROUP("Emission")
+        		
+		PROPERTY(float, particlesPerSecond, SetParticlesPerSecond, GetParticlesPerSecond); // Amount of particles emitting in one second property @RANGE(0, 100) @GROUP("Emission")
+        PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles);                     // Number of maximum particles in emitter property @GROUP("Emission")
+		PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);    // Particles lifetime in seconds property @RANGE(0, 10) @GROUP("Emission")
 
-		PROPERTY(Ref<ParticleSource>, particlesSource, SetParticlesSource, GetParticlesSource); // Particles source property @EXPANDED_BY_DEFAULT @DONT_DELETE @DEFAULT_TYPE(o2::SingleSpriteParticleSource)
+		PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter @GROUP("Emission")
 
-		PROPERTY(float, particlesPerSecond, SetParticlesPerSecond, GetParticlesPerSecond); // Amount of particles emitting in one second property @RANGE(0, 100)
-        PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles);                     // Number of maximum particles in emitter property
-        PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);    // Particles lifetime in seconds property @RANGE(0, 10)
+		PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef); // Particles emitting coefficient property (0...1) @RANGE(0, 1) @GROUP("Emission")
 		
-		PROPERTY(float, initialAngle, SetInitialAngle, GetInitialAngle);                // Emitting particle angle property in degrees @RANGE(0, 360)
-		PROPERTY(float, initialAngleRange, SetInitialAngleRange, GetInitialAngleRange); // Emitting particle angle range property in degrees @RANGE(0, 360)
+		PROPERTY(float, initialAngle, SetInitialAngle, GetInitialAngle);                // Emitting particle angle property in degrees @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Angle")
+		PROPERTY(float, initialAngleRange, SetInitialAngleRange, GetInitialAngleRange); // Emitting particle angle range property in degrees @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Angle range")
 		
-		PROPERTY(float, initialSize, SetInitialSize, GetInitialSize);                // Emitting particle size property @RANGE(0, 3)
-		PROPERTY(float, initialSizeRange, SetInitialSizeRange, GetInitialSizeRange); // Emitting particle size range property @RANGE(0, 2)
+		PROPERTY(float, initialSize, SetInitialSize, GetInitialSize);                // Emitting particle size property @RANGE(0, 3) @GROUP("Initial parameters") @NAME("Size")
+		PROPERTY(float, initialSizeRange, SetInitialSizeRange, GetInitialSizeRange); // Emitting particle size range property @RANGE(0, 2) @GROUP("Initial parameters") @NAME("Size range")
 
-		PROPERTY(float, initialWidthScale, SetInitialWidthScale, GetInitialWidthScale);                // Emitting particle width scale property @RANGE(0, 3)
-		PROPERTY(float, initialWidthScaleRange, SetInitialWidthScaleRange, GetInitialWidthScaleRange); // Emitting particle width scale range property @RANGE(0, 2)
+		PROPERTY(float, initialWidthScale, SetInitialWidthScale, GetInitialWidthScale);                // Emitting particle width scale property @RANGE(0, 3) @GROUP("Initial parameters") @NAME("Width scale")
+		PROPERTY(float, initialWidthScaleRange, SetInitialWidthScaleRange, GetInitialWidthScaleRange); // Emitting particle width scale range property @RANGE(0, 2) @GROUP("Initial parameters") @NAME("Width scale range")
 		
-		PROPERTY(float, initialSpeed, SetInitialSpeed, GetInitialSpeed);                // Emitting particle angle speed property in degrees/sec @RANGE(0, 360)
-		PROPERTY(float, initialSpeedRange, SetInitialSpeedRange, GetInitialSpeedRange); // Emitting particle angle speed range in degrees/sec @RANGE(0, 360)
+		PROPERTY(float, initialSpeed, SetInitialSpeed, GetInitialSpeed);                // Emitting particle angle speed property in degrees/sec @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Speed")
+		PROPERTY(float, initialSpeedRange, SetInitialSpeedRange, GetInitialSpeedRange); // Emitting particle angle speed range in degrees/sec @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Speed range")
         
-		PROPERTY(float, initialAngleSpeed, SetInitialAngleSpeed, GetInitialAngleSpeed);                // Emitting particle speed property @RANGE(0, 720)
-		PROPERTY(float, initialAngleSpeedRange, SetInitialAngleSpeedRange, GetInitialAngleSpeedRange); // Emitting particle speed range @RANGE(0, 720)
+		PROPERTY(float, initialAngleSpeed, SetInitialAngleSpeed, GetInitialAngleSpeed);                // Emitting particle speed property @RANGE(0, 720) @GROUP("Initial parameters") @NAME("Angle speed")
+		PROPERTY(float, initialAngleSpeedRange, SetInitialAngleSpeedRange, GetInitialAngleSpeedRange); // Emitting particle speed range @RANGE(0, 720) @GROUP("Initial parameters") @NAME("Angle speed range")
        
-        PROPERTY(float, moveDirection, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);                // Emitting particle moving direction in degrees @RANGE(0, 360)
-        PROPERTY(float, moveDirectionRange, SetEmitParticlesMoveDirectionRange, GetEmitParticlesMoveDirectionRange); // Emitting particle moving direction range in degrees property @RANGE(0, 360)
-
-		PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef); // Particles emitting coefficient property (0...1) @RANGE(0, 1)
+        PROPERTY(float, moveDirection, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);                // Emitting particle moving direction in degrees @RANGE(0, 360) @GROUP("Initial parameters")
+        PROPERTY(float, moveDirectionRange, SetEmitParticlesMoveDirectionRange, GetEmitParticlesMoveDirectionRange); // Emitting particle moving direction range in degrees property @RANGE(0, 360) @GROUP("Initial parameters")
 
     public:
         // Default constructor
@@ -277,6 +279,9 @@ namespace o2
 		Basis            mLastTransform;         // Last transformation
 
 	protected:
+		// Called when blend mode was changed
+		void BlendModeChanged() override;
+
         // Beginning serialization callback
         void OnSerialize(DataValue& node) const override;
 
@@ -374,26 +379,26 @@ END_META;
 CLASS_FIELDS_META(o2::ParticlesEmitter)
 {
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 5).NAME(duration);
-    FIELD().PUBLIC().NAME(particlesRelative);
-    FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::CircleParticlesEmitterShape).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(shape);
-    FIELD().PUBLIC().NAME(emitFromShell);
-    FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::SingleSpriteParticleSource).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(particlesSource);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 100).NAME(particlesPerSecond);
-    FIELD().PUBLIC().NAME(maxParticles);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 10).NAME(particlesLifetime);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialAngle);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialAngleRange);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 3).NAME(initialSize);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 2).NAME(initialSizeRange);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 3).NAME(initialWidthScale);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 2).NAME(initialWidthScaleRange);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialSpeed);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(initialSpeedRange);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 720).NAME(initialAngleSpeed);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 720).NAME(initialAngleSpeedRange);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(moveDirection);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 360).NAME(moveDirectionRange);
-    FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 1).NAME(emittingCoefficient);
+    FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::SingleSpriteParticleSource).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().GROUP_ATTRIBUTE("Emission").NAME(particlesSource);
+    FIELD().PUBLIC().DEFAULT_TYPE_ATTRIBUTE(o2::CircleParticlesEmitterShape).DONT_DELETE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().GROUP_ATTRIBUTE("Emission").NAME(shape);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").NAME(emitFromShell);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 100).NAME(particlesPerSecond);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").NAME(maxParticles);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 10).NAME(particlesLifetime);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").NAME(particlesRelative);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 1).NAME(emittingCoefficient);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Angle").RANGE_ATTRIBUTE(0, 360).NAME(initialAngle);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Angle range").RANGE_ATTRIBUTE(0, 360).NAME(initialAngleRange);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Size").RANGE_ATTRIBUTE(0, 3).NAME(initialSize);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Size range").RANGE_ATTRIBUTE(0, 2).NAME(initialSizeRange);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Width scale").RANGE_ATTRIBUTE(0, 3).NAME(initialWidthScale);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Width scale range").RANGE_ATTRIBUTE(0, 2).NAME(initialWidthScaleRange);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Speed").RANGE_ATTRIBUTE(0, 360).NAME(initialSpeed);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Speed range").RANGE_ATTRIBUTE(0, 360).NAME(initialSpeedRange);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Angle speed").RANGE_ATTRIBUTE(0, 720).NAME(initialAngleSpeed);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Angle speed range").RANGE_ATTRIBUTE(0, 720).NAME(initialAngleSpeedRange);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").RANGE_ATTRIBUTE(0, 360).NAME(moveDirection);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").RANGE_ATTRIBUTE(0, 360).NAME(moveDirectionRange);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(mmake<SingleSpriteParticleSource>()).NAME(mParticlesSource);
     FIELD().PROTECTED().NAME(mParticlesContainer);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mShape);
@@ -487,6 +492,7 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesMoveDirection);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesMoveDirectionRange, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesMoveDirectionRange);
+    FUNCTION().PROTECTED().SIGNATURE(void, BlendModeChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);

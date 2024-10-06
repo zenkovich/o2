@@ -49,6 +49,8 @@ namespace o2
         Fill360CW, Fill360CCW
     };
 
+    enum class BlendMode { Normal, Add };
+
     enum class VerAlign { Top, Middle, Bottom, Both };
     enum class HorAlign { Left, Middle, Right, Both };
 
@@ -83,6 +85,8 @@ PRE_ENUM_META(o2::Corner);
 PRE_ENUM_META(o2::TwoDirection);
 
 PRE_ENUM_META(o2::SpriteMode);
+
+PRE_ENUM_META(o2::BlendMode);
 
 PRE_ENUM_META(o2::VerAlign);
 

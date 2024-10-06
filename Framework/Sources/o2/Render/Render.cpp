@@ -133,7 +133,8 @@ namespace o2
     }
 
     void Render::DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
-                            VertexIndex* indexes, UInt elementsCount, const TextureRef& texture)
+                            VertexIndex* indexes, UInt elementsCount, const TextureRef& texture,
+                            BlendMode blendMode)
     {
         //PROFILE_SAMPLE_FUNC();
 
@@ -154,12 +155,14 @@ namespace o2
         if (mCurrentDrawTexture != texture ||
             mLastDrawVertex + verticesCount >= mVertexBufferSize ||
             mLastDrawIdx + indexesCount >= mIndexBufferSize ||
-            mCurrentPrimitiveType != primitiveType)
+            mCurrentPrimitiveType != primitiveType ||
+            mCurrentBlendMode != blendMode)
         {
             DrawPrimitives();
 
             mCurrentDrawTexture = texture;
             mCurrentPrimitiveType = primitiveType;
+			mCurrentBlendMode = blendMode;
         }
 
         PlatformUploadBuffers(vertices, verticesCount, indexes, indexesCount);
@@ -1072,7 +1075,7 @@ namespace o2
         if (mesh->polyCount > 0)
         {
             DrawBuffer(PrimitiveType::Polygon, mesh->vertices, mesh->vertexCount,
-                       mesh->indexes, mesh->polyCount, mesh->mTexture);
+                       mesh->indexes, mesh->polyCount, mesh->mTexture, mesh->blendMode);
         }
     }
 
@@ -1101,7 +1104,7 @@ namespace o2
 
     void Render::DrawPolyLine(Vertex* vertices, int count, float width /*= 1.0f*/)
     {
-        DrawBuffer(PrimitiveType::Line, vertices, count, mHardLinesIndexData, count - 1, mSolidLineTexture);
+        DrawBuffer(PrimitiveType::Line, vertices, count, mHardLinesIndexData, count - 1, mSolidLineTexture, BlendMode::Normal);
     }
 
     void Render::DrawAAPolyLine(Vertex* vertices, int count, float width /*= 1.0f*/,

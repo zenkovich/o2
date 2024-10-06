@@ -79,6 +79,13 @@ ENUM_META(o2::SpriteMode)
 }
 END_ENUM_META;
 
+ENUM_META(o2::BlendMode)
+{
+    ENUM_ENTRY(Add);
+    ENUM_ENTRY(Normal);
+}
+END_ENUM_META;
+
 ENUM_META(o2::VerAlign)
 {
     ENUM_ENTRY(Both);

@@ -139,6 +139,12 @@ namespace o2
 #endif
 	}
 
+	void ParticlesEmitter::BlendModeChanged()
+	{
+		if (mParticlesContainer)
+			mParticlesContainer->SetBlendMode(mBlendMode);
+	}
+
 	void ParticlesEmitter::OnSerialize(o2::DataValue& node) const
 	{
 		IRectDrawable::OnSerialize(node);
@@ -490,7 +496,7 @@ namespace o2
 
 	void ParticlesEmitter::SetInitialAngleRange(float range)
 	{
-		mInitialAngleRange = initialAngle;
+		mInitialAngleRange = range;
 		OnChanged();
 	}
 

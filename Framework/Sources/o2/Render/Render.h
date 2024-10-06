@@ -267,7 +267,8 @@ namespace o2
 
         // Draws data from buffer with specified texture and primitive type
         void DrawBuffer(PrimitiveType primitiveType, Vertex* vertices, UInt verticesCount,
-                        VertexIndex* indexes, UInt elementsCount, const TextureRef& texture);
+                        VertexIndex* indexes, UInt elementsCount, const TextureRef& texture,
+                        BlendMode blendMode);
 
         // Platform specific upload vertex and index buffers
         void PlatformUploadBuffers(Vertex* vertices, UInt verticesCount,
@@ -303,6 +304,7 @@ namespace o2
 
     protected:
         PrimitiveType mCurrentPrimitiveType = PrimitiveType::Polygon; // Type of drawing primitives for next DIP
+		BlendMode     mCurrentBlendMode = BlendMode::Normal;          // Current blend mode for next DIP
 
         TextureRef mCurrentDrawTexture = nullptr; // Stored texture ptr from last DIP
         UInt       mLastDrawVertex;               // Last vertex idx for next DIP

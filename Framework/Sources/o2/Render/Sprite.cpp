@@ -429,7 +429,12 @@ namespace o2
         UpdateMesh();
     }
 
-    void Sprite::UpdateMesh()
+	void Sprite::BlendModeChanged()
+	{
+		mMesh.blendMode = mBlendMode;
+	}
+
+	void Sprite::UpdateMesh()
     {
         (this->*mMeshBuildFunc)();
     }

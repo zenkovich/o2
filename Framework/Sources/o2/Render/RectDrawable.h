@@ -17,6 +17,7 @@ namespace o2
         PROPERTIES(IRectDrawable);
         PROPERTY(Color4, color, SetColor, GetColor);                     // Color property @SCRIPTABLE
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property, changing alpha in color @SCRIPTABLE @RANGE(0, 1)
+		PROPERTY(BlendMode, blendMode, SetBlendMode, GetBlendMode);      // Blend mode property @SCRIPTABLE
         PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property @SCRIPTABLE
 
     public:
@@ -55,6 +56,12 @@ namespace o2
         // Returns transparency(color alpha)
         virtual float GetTransparency() const;
 
+		// Sets blend mode
+		virtual void SetBlendMode(BlendMode blendMode);
+
+		// Returns blend mode
+		virtual BlendMode GetBlendMode() const;
+
         // Sets enabled
         virtual void SetEnabled(bool enabled);
 
@@ -68,12 +75,16 @@ namespace o2
         CLONEABLE_REF(IRectDrawable);
 
     protected:
-        Color4 mColor;          // Color @SERIALIZABLE
-        bool   mEnabled = true; // True, when drawable enabled and needs to draw @SERIALIZABLE
+        Color4    mColor;                         // Color @SERIALIZABLE
+		BlendMode mBlendMode = BlendMode::Normal; // Blend mode @SERIALIZABLE
+        bool      mEnabled = true;                // True, when drawable enabled and needs to draw @SERIALIZABLE
 
     protected:
         // Called when color was changed
         virtual void ColorChanged() {}
+
+		// Called when blend mode was changed
+		virtual void BlendModeChanged() {}
 
         // Called when enabling changed
         virtual void EnableChanged() {}
@@ -120,8 +131,10 @@ CLASS_FIELDS_META(o2::IRectDrawable)
 {
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(color);
     FIELD().PUBLIC().RANGE_ATTRIBUTE(0, 1).SCRIPTABLE_ATTRIBUTE().NAME(transparency);
+    FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(blendMode);
     FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(enabled);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mColor);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(BlendMode::Normal).NAME(mBlendMode);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled);
 }
 END_META;
@@ -135,10 +148,13 @@ CLASS_METHODS_META(o2::IRectDrawable)
     FUNCTION().PUBLIC().SIGNATURE(Color4, GetColor);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTransparency, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetTransparency);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetBlendMode, BlendMode);
+    FUNCTION().PUBLIC().SIGNATURE(BlendMode, GetBlendMode);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PROTECTED().SIGNATURE(void, ColorChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, BlendModeChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, EnableChanged);
 }
 END_META;

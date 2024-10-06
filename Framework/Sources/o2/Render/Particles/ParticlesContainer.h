@@ -23,6 +23,7 @@ namespace o2
     public:
 		virtual void OnParticleEmitted(Particle& particle) {}
 		virtual void OnParticleDied(Particle& particle) {}
+		virtual void SetBlendMode(BlendMode blendMode) {}
 
         virtual void Update(Vector<Particle>& particles, int maxParticles) = 0;
         virtual void Draw() = 0;
@@ -66,6 +67,7 @@ namespace o2
 		Ref<SingleSpriteParticleSource> source; // Source of particles
 
 	public:
+		void SetBlendMode(BlendMode blendMode) override;
 		void Update(Vector<Particle>& particles, int maxParticles) override;
 		void Draw() override;
 
@@ -97,6 +99,7 @@ namespace o2
 		Ref<MultiSpriteParticleSource> source; // Source of particles
 
 	public:
+		void SetBlendMode(BlendMode blendMode) override;
 		void Update(Vector<Particle>& particles, int maxParticles) override;
 		void Draw() override;
 

@@ -3,6 +3,11 @@
 
 namespace o2
 {
+	void SingleSpriteParticlesContainer::SetBlendMode(BlendMode blendMode)
+	{
+		mParticlesMesh.blendMode = blendMode;
+	}
+
 	void SingleSpriteParticlesContainer::Update(Vector<Particle>& particles, int maxParticles)
 	{
 		if (mParticlesMesh.GetMaxVertexCount() < (UInt)maxParticles * 4)
@@ -72,6 +77,11 @@ namespace o2
 		auto container = mmake<SingleSpriteParticlesContainer>();
 		container->source = Ref(this);
 		return container;
+	}
+
+	void MultiSpriteParticlesContainer::SetBlendMode(BlendMode blendMode)
+	{
+		mParticlesMesh.blendMode = blendMode;
 	}
 
 	void MultiSpriteParticlesContainer::Update(Vector<Particle>& particles, int maxParticles)
