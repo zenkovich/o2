@@ -106,6 +106,9 @@ namespace Editor
 			auto emitter = pair.first;
 			if (emitter)
 			{
+				if (play && Math::Equals(emitter->GetRelativeTime(), 1.0f))
+					emitter->GoToBegin();
+
 				emitter->SetPlaying(play);
 				emitter->SetParticlesPause(!play);
 			}
