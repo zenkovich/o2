@@ -123,9 +123,6 @@ namespace o2
         if (mPlaying)
 			return;
 
-		if (Math::Equals(mInDurationTime, mTime))
-			GoToBegin();
-
 		Evaluate();
 
         mPlaying = true;
