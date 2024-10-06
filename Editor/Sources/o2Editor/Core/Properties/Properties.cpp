@@ -6,7 +6,9 @@
 #include "o2/Scene/UI/Widgets/Label.h"
 #include "o2/Scene/UI/Widgets/Spoiler.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
+#include "o2/Utils/Editor/Attributes/GroupAttribute.h"
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
+#include "o2/Utils/Editor/Attributes/NameAttribute.h"
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/StringUtils.h"
 #include "o2/Utils/System/Time/Timer.h"
@@ -98,7 +100,12 @@ namespace Editor
 		Timer timer;
 
 		const Type* fieldType = fieldInfo->GetType();
-		String propertyName = GetSmartName(fieldInfo->GetName());
+		String propertyName;
+		
+		if (auto nameAttribute = fieldInfo->GetAttribute<NameAttribute>())
+			propertyName = nameAttribute->name;
+		else
+			propertyName = GetSmartName(fieldInfo->GetName());
 
 		auto fieldWidget = CreateFieldProperty(fieldType, propertyName, onChangeCompleted, onChanged);
 		if (!fieldWidget)
@@ -145,8 +152,37 @@ namespace Editor
 	{
 		Timer timer; 
 
-		for (auto& fieldInfo : fields)
-			BuildField(layout, fieldInfo, context, path, onChangeCompleted, onChanged);
+		const String emptyGroupName = "AFIRST";
+
+		Map<String, Vector<const FieldInfo*>> groupedFields;
+		for (auto& field : fields)
+		{
+			String fieldGroup = emptyGroupName;
+			if (auto groupAttribute = field->GetAttribute<GroupAttribute>())
+				fieldGroup = groupAttribute->name;
+
+			groupedFields[fieldGroup].Add(field);
+		}
+
+		for (auto& group : groupedFields)
+		{
+			if (group.first != emptyGroupName)
+			{
+				auto spoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
+				spoiler->SetCaption(group.first);
+				spoiler->Expand();
+				spoiler->borderTop = 5;
+				layout->AddChild(spoiler);
+
+				for (auto& fieldInfo : group.second)
+					BuildField(spoiler, fieldInfo, context, path, onChangeCompleted, onChanged);
+			}
+			else
+			{
+				for (auto& fieldInfo : group.second)
+					BuildField(layout, fieldInfo, context, path, onChangeCompleted, onChanged);
+			}
+		}
 
 		//o2Debug.Log(">>> Fields created for " + (String)timer.GetDeltaTime());
 	}
