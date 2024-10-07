@@ -245,7 +245,7 @@ namespace o2
         }
     }
 
-    void Color4::ToHSL(float& hue, float& saturation, float& lightness)
+    void Color4::ToHSL(float& hue, float& saturation, float& lightness) const 
     {
         float r = this->r/255.0f;
         float g = this->g/255.0f;

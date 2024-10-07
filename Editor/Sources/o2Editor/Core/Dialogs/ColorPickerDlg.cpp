@@ -20,480 +20,348 @@ DECLARE_SINGLETON(Editor::ColorPickerDlg);
 
 namespace Editor
 {
-    ColorPickerDlg::ColorPickerDlg(RefCounter* refCounter):
-        CursorEventsListener(refCounter), Singleton<ColorPickerDlg>(refCounter)
-    {
-        mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
-
-        InitializeControls();
-
-        mWindow->Hide(true);
-        mWindow->layout->size = Vec2F(400, 600);
-        mWindow->layout->worldPosition = Vec2F();
-
-        mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
-        mWindow->onHide = MakeFunction(this, &ColorPickerDlg::OnHide);
-    }
-
-    ColorPickerDlg::~ColorPickerDlg()
-    {}
-
-    void ColorPickerDlg::Show(const Color4& color, const Function<void(const Color4&)>& onChanged,
-                              const Function<void()>& onCompleted/* = Function<void()>()*/)
-    {
-        mInstance->mColorValue = color;
-        mInstance->mWindow->ShowModal();
-        mInstance->mOnChangedCallback = onChanged;
-        mInstance->mOnCompletedCallback = onCompleted;
-        mInstance->UpdateHandlesValues();
-    }
-
-    void ColorPickerDlg::OnHide()
-    {
-        mOnCompletedCallback();
-    }
-
-    void ColorPickerDlg::InitializeControls()
-    {
-        InitializeColorPreview();
-        InitializePickArea();
-        InitializeColorParams();
-    }
-
-    void ColorPickerDlg::InitializeColorPreview()
-    {
-        auto colorPreviewContainer = mmake<Widget>();
-        *colorPreviewContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 30, 0);
-
-        auto colorPreview = o2UI.CreateWidget<Widget>("colorProperty");
-        *colorPreview->layout = WidgetLayout::BothStretch(5, 5, 5, 5);
-
-        auto backImage = mmake<Image>();
-        backImage->image = mmake<Sprite>(CommonTextures::checkedBackground, RectI(0, 0, 20, 20));
-        backImage->GetImage()->mode = SpriteMode::Tiled;
-        *backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
-        colorPreview->AddChild(backImage);
-
-        Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
-        colorLayerBitmap.Fill(Color4::White());
-        mColorSampleImage = mmake<Image>();
-        mColorSampleImage->image = mmake<Sprite>(colorLayerBitmap);
-        *mColorSampleImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
-        colorPreview->AddChild(mColorSampleImage);
-        colorPreviewContainer->AddChild(colorPreview);
-
-        mWindow->AddChild(colorPreviewContainer);
-    }
-
-    void ColorPickerDlg::InitializePickArea()
-    {
-        auto pickAreaContainer = mmake<Widget>();
-        *pickAreaContainer->layout = WidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 1.0f), Vec2F(0, 0), Vec2F(0, -30));
-
-        auto pickArea = mmake<Widget>();
-        *pickArea->layout = WidgetLayout::BothStretch(5, 5, 30, 5);
-
-        pickArea->AddLayer("back", mmake<Sprite>("ui/UI4_Editbox_regular.png"),
-                           Layout::BothStretch(-9, -9, -9, -9));
-
-        mColorPickAreaBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2I(80, 80));
-        mColorPickAreaBitmap->Clear(Color4::White());
-        mColorPickAreaTexture = TextureRef(*mColorPickAreaBitmap);
-        mColorPickAreaColor = pickArea->AddLayer("color", mmake<Sprite>(mColorPickAreaTexture, RectI(0, 0, 80, 80)),
-                                                 Layout::BothStretch(1, 1, 1, 1));
-
-        mColorPickAreaHandle = o2UI.CreateImage("ui/circle_hole_handle.png");
-        *mColorPickAreaHandle->layout = WidgetLayout::Based(BaseCorner::Center, Vec2F(15, 15));
-        pickArea->AddChild(mColorPickAreaHandle);
-
-        pickAreaContainer->AddChild(pickArea);
-
-        mHUEBar = o2UI.CreateWidget<VerticalProgress>("wide");
-        *mHUEBar->layout = WidgetLayout::VerStretch(HorAlign::Right, 5, 5, 20, 5);
-
-        mHUEBarBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2I(20, 256));
-        InitHUEBarBitmap();
-        mHUEBarTexture = TextureRef(*mHUEBarBitmap);
-        mHUEBar->AddLayer("color", mmake<Sprite>(mHUEBarTexture, RectI(0, 0, 20, 256)), Layout::BothStretch(1, 1, 1, 1),
-                          0.5f);
-
-        mHUEBar->onChange = MakeFunction(this, &ColorPickerDlg::OnHUEEdited);
-
-        pickAreaContainer->AddChild(mHUEBar);
-
-        mWindow->AddChild(pickAreaContainer);
+	ColorPickerDlg::ColorPickerDlg(RefCounter* refCounter) :
+		CursorEventsListener(refCounter), Singleton<ColorPickerDlg>(refCounter)
+	{
+		mWindow = DynamicCast<o2::Window>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
+
+		InitializeControls();
+
+		mWindow->Hide(true);
+		mWindow->layout->size = Vec2F(400, 600);
+		mWindow->layout->worldPosition = Vec2F();
+
+		mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
+		mWindow->onHide = MakeFunction(this, &ColorPickerDlg::OnHide);
+	}
+
+	ColorPickerDlg::~ColorPickerDlg()
+	{}
+
+	void ColorPickerDlg::Show(const Color4& color, const Function<void(const Color4&)>& onChanged,
+							  const Function<void()>& onCompleted/* = Function<void()>()*/)
+	{
+		mInstance->mColorValue = color;
+
+		mInstance->mWindow->ShowModal();
+
+		mInstance->mOnChangedCallback = onChanged;
+		mInstance->mOnCompletedCallback = onCompleted;
+
+		mInstance->UpdateValues(ParameterType::Any);
+	}
+
+	void ColorPickerDlg::OnHide()
+	{
+		mOnCompletedCallback();
+	}
+
+	void ColorPickerDlg::InitializeControls()
+	{
+		InitializeChessBackTexture();
+		InitializeColorPreview();
+		InitializePickArea();
+		InitializeColorParams();
+	}
+
+	void ColorPickerDlg::InitializeChessBackTexture()
+	{
+		Color4 color1(1.0f, 1.0f, 1.0f, 1.0f), color2(0.7f, 0.7f, 0.7f, 1.0f);
+		Bitmap backLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
+		backLayerBitmap.Fill(color1);
+		backLayerBitmap.FillRect(0, 10, 10, 0, color2);
+		backLayerBitmap.FillRect(10, 20, 20, 10, color2);
+
+		mChessBackTexture = TextureRef(backLayerBitmap);
+	}
+
+	void ColorPickerDlg::InitializeColorPreview()
+	{
+		auto colorPreviewContainer = mmake<Widget>();
+		*colorPreviewContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 30, 0);
+
+		auto colorPreview = o2UI.CreateWidget<Widget>("colorProperty");
+		*colorPreview->layout = WidgetLayout::BothStretch(5, 5, 5, 5);
+
+		auto backImage = mmake<Image>();
+		backImage->image = mmake<Sprite>(CommonTextures::checkedBackground, RectI(0, 0, 20, 20));
+		backImage->GetImage()->mode = SpriteMode::Tiled;
+		*backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
+		colorPreview->AddChild(backImage);
+
+		Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
+		colorLayerBitmap.Fill(Color4::White());
+		mColorSampleImage = mmake<Image>();
+		mColorSampleImage->image = mmake<Sprite>(colorLayerBitmap);
+		*mColorSampleImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
+		colorPreview->AddChild(mColorSampleImage);
+		colorPreviewContainer->AddChild(colorPreview);
+
+		mWindow->AddChild(colorPreviewContainer);
+	}
+
+	void ColorPickerDlg::InitializePickArea()
+	{
+		auto pickAreaContainer = mmake<Widget>();
+		*pickAreaContainer->layout = WidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 1.0f), Vec2F(0, 0), Vec2F(0, -30));
+
+		auto pickArea = mmake<Widget>();
+		*pickArea->layout = WidgetLayout::BothStretch(5, 5, 5, 5);
+
+		pickArea->AddLayer("back", mmake<Sprite>("ui/UI4_Editbox_regular.png"),
+						   Layout::BothStretch(-9, -9, -9, -9));
+
+		mColorPickAreaBitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2I(80, 80));
+		mColorPickAreaBitmap->Clear(Color4::White());
+		mColorPickAreaTexture = TextureRef(*mColorPickAreaBitmap);
+		mColorPickAreaColor = pickArea->AddLayer("color", mmake<Sprite>(mColorPickAreaTexture, RectI(0, 0, 80, 80)),
+												 Layout::BothStretch(1, 1, 1, 1));
+
+		mColorPickAreaHandle = o2UI.CreateImage("ui/circle_hole_handle.png");
+		*mColorPickAreaHandle->layout = WidgetLayout::Based(BaseCorner::Center, Vec2F(15, 15));
+		pickArea->AddChild(mColorPickAreaHandle);
+
+		pickAreaContainer->AddChild(pickArea);
+
+		mWindow->AddChild(pickAreaContainer);
+
+		mColorPickHandle = mmake<CursorEventsArea>();
+		mColorPickAreaHandle->onDraw += [&]() { mColorPickHandle->OnDrawn(); };
+		mColorPickHandle->isUnderPoint = [&](const Vec2F& point) { return mColorPickAreaColor->IsUnderPoint(point); };
+		mColorPickHandle->onMoved = MakeFunction(this, &ColorPickerDlg::OnColorPickHandleMoved);
+	}
+
+	void ColorPickerDlg::InitializeColorParams()
+	{
+		auto colorParamsArea = mmake<VerticalLayout>();
+		*colorParamsArea->layout = WidgetLayout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 0.5f), Vec2F(0, 0), Vec2F(0, -20));
+		colorParamsArea->border = BorderF(5, 5, 5, 5);
+
+		auto hParamWidget = mColorHProperty.Initialize("Hue", ParameterType::H, Ref(this),
+													   [](float value, Color4& color) { float h, s, l; color.ToHSL(h, s, l); h = value; color.SetHSL(h, s, l); },
+													   [](const Color4& color) { float h, s, l; color.ToHSL(h, s, l); return h; },
+													   [this](int x) { Color4 color; float h = x/255.0f, s = 1.0f, l = 0.5f; color.SetHSL(h, s, l); return color; });
+
+		auto sParamWidget = mColorSProperty.Initialize("Saturation", ParameterType::S, Ref(this),
+													   [](float value, Color4& color) { float h, s, l; color.ToHSL(h, s, l); s = value; color.SetHSL(h, s, l); },
+													   [](const Color4& color) { float h, s, l; color.ToHSL(h, s, l); return s; },
+													   [this](int x) { Color4 color = mColorValue; float h, s, l; color.ToHSL(h, s, l); s = x/255.0f; color.SetHSL(h, s, l); return color; });
+
+		auto lParamWidget = mColorLProperty.Initialize("Lightness", ParameterType::L, Ref(this),
+													   [](float value, Color4& color) { float h, s, l; color.ToHSL(h, s, l); l = value; color.SetHSL(h, s, l); },
+													   [](const Color4& color) { float h, s, l; color.ToHSL(h, s, l); return l; },
+													   [this](int x) { Color4 color = mColorValue; float h, s, l; color.ToHSL(h, s, l); l = x/255.0f; color.SetHSL(h, s, l); return color; });
+
+		auto rParamWidget = mColorRProperty.Initialize("Red", ParameterType::R, Ref(this),
+													   [](float value, Color4& color) { color.r = (int)(value*255.0f); },
+													   [](const Color4& color) { return color.r/255.0f; },
+													   [this](int x) { return Color4(x, mColorValue.g, mColorValue.b, mColorValue.a); });
+
+		auto gParamWidget = mColorGProperty.Initialize("Green", ParameterType::G, Ref(this),
+													   [](float value, Color4& color) { color.g = (int)(value*255.0f); },
+													   [](const Color4& color) { return color.g/255.0f; },
+													   [this](int x) { return Color4(mColorValue.r, x, mColorValue.b, mColorValue.a); });
+
+		auto bParamWidget = mColorBProperty.Initialize("Blue", ParameterType::B, Ref(this),
+													   [](float value, Color4& color) { color.b = (int)(value*255.0f); },
+													   [](const Color4& color) { return color.b/255.0f; },
+													   [this](int x) { return Color4(mColorValue.r, mColorValue.g, x, mColorValue.a); });
+
+		auto aParamWidget = mColorAProperty.Initialize("Alpha", ParameterType::A, Ref(this),
+													   [](float value, Color4& color) { color.a = (int)(value*255.0f); },
+													   [](const Color4& color) { return color.a/255.0f; },
+													   [this](int x) { return Color4(mColorValue.r, mColorValue.g, mColorValue.b, x); });
+
+		colorParamsArea->AddChild(hParamWidget);
+		colorParamsArea->AddChild(sParamWidget);
+		colorParamsArea->AddChild(lParamWidget);
+		colorParamsArea->AddChild(rParamWidget);
+		colorParamsArea->AddChild(gParamWidget);
+		colorParamsArea->AddChild(bParamWidget);
+		colorParamsArea->AddChild(aParamWidget);
+
+		mWindow->AddChild(colorParamsArea);
+	}
+
+	void ColorPickerDlg::OnColorPickHandleMoved(const Input::Cursor& cursor)
+	{
+		auto rt = mColorPickAreaColor->GetRect();
+
+		Vec2F anchorPos = (cursor.position - rt.LeftBottom())/rt.Size();
+		anchorPos.x = Math::Clamp01(anchorPos.x);
+		anchorPos.y = Math::Clamp01(anchorPos.y);
+
+		mColorPickAreaHandle->layout->anchorMin = anchorPos;
+		mColorPickAreaHandle->layout->anchorMax = anchorPos;
+
+		mColorValue.SetHSL(mColorHProperty.progressBar->value, anchorPos.y, anchorPos.x);
+		UpdateValues(ParameterType::Picker);
+	}
+
+	void ColorPickerDlg::UpdateColorPickHandle()
+	{
+		auto rt = mColorPickAreaColor->GetRect();
+		float h, s, l; mColorValue.ToHSL(h, s, l);
+		Vec2F anchorPos = Vec2F(l, s);
+		anchorPos.x = Math::Clamp01(anchorPos.x);
+		anchorPos.y = Math::Clamp01(anchorPos.y);
+
+		mColorPickAreaHandle->layout->anchorMin = anchorPos;
+		mColorPickAreaHandle->layout->anchorMax = anchorPos;
+	}
+
+	void ColorPickerDlg::OnColorChanged(ParameterType changedParameter)
+	{
+		mOnChangedCallback(mColorValue);
+		UpdateValues(changedParameter);
+	}
+
+	void ColorPickerDlg::UpdateValues(ParameterType changedParameter)
+	{
+		mColorSampleImage->GetImage()->SetColor(mColorValue);
+
+		if (changedParameter != ParameterType::S && changedParameter != ParameterType::L && changedParameter != ParameterType::Picker)
+			mColorHProperty.UpdateValue(mColorValue);
+
+		if (changedParameter != ParameterType::H && changedParameter != ParameterType::L)
+			mColorSProperty.UpdateValue(mColorValue);
+
+		if (changedParameter != ParameterType::H && changedParameter != ParameterType::S)
+			mColorLProperty.UpdateValue(mColorValue);
+
+		mColorRProperty.UpdateValue(mColorValue);
+		mColorGProperty.UpdateValue(mColorValue);
+		mColorBProperty.UpdateValue(mColorValue);
+		mColorAProperty.UpdateValue(mColorValue);
+
+		if (changedParameter == ParameterType::H || changedParameter == ParameterType::S || changedParameter == ParameterType::L)
+			mColorValue.SetHSL(mColorHProperty.progressBar->value, mColorSProperty.progressBar->value, mColorLProperty.progressBar->value);
+
+		UpdateColorPickBitmap();
+
+		if (changedParameter != ParameterType::Picker)
+			UpdateColorPickHandle();
+	}
+
+	void ColorPickerDlg::UpdateColorPickBitmap()
+	{
+		float h = mColorHProperty.progressBar->value;
+		Vec2I sz = mColorPickAreaBitmap->GetSize();
+
+		for (int i = 0; i < sz.x; i++)
+		{
+			for (int j = 0; j < sz.y; j++)
+			{
+				Color4 c; c.SetHSL(h, (float)i/(float)sz.x, (float)j/(float)sz.y);
+				UInt cc = c.ABGR();
+				memcpy(mColorPickAreaBitmap->GetData() + 4*i*sz.x + 4*j, &cc, 4);
+			}
+		}
+
+		mColorPickAreaTexture->SetData(*mColorPickAreaBitmap);
+	}
+
+	void ColorPickerDlg::OnCursorPressedOutside()
+	{
+		mOnChangedCallback(mColorValue);
+		mWindow->Hide();
+	}
+
+	Ref<Widget> ColorPickerDlg::ColorProperty::Initialize(const String& name, ParameterType type, const Ref<ColorPickerDlg>& dialog,
+														  const Function<void(float value, Color4& color)>& setValue,
+														  const Function<float(const Color4& value)>& getValue,
+														  const Function<Color4(int x)>& updateBitmap)
+	{
+		this->dialog = dialog;
+		this->type = type;
+		this->setValue = setValue;
+		this->getValue = getValue;
+		this->updateBitmap = updateBitmap;
+
+		auto resLayout = mmake<Widget>();
+		nameLabel = o2UI.CreateLabel(name);
+		*nameLabel->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(100, 20));
+		nameLabel->horAlign = HorAlign::Left;
+		resLayout->AddChild(nameLabel);
+
+		progressBar = o2UI.CreateWidget<HorizontalProgress>("wide");
+		*progressBar->layout = WidgetLayout::HorStretch(VerAlign::Middle, 100, 50, 20);
+		progressBar->onChangeByUser = [&](float v) { OnProgressBarChanged(v); };
+
+		bitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2F(256, 256));
+		progressBarTexture = TextureRef(*bitmap);
+		progressBar->AddLayer("color", mmake<Sprite>(progressBarTexture, RectI(0, 0, 256, 256)), Layout::BothStretch(1, 1, 1, 1), 0.5f);
+
+		auto backSprite = mmake<Sprite>(dialog->mChessBackTexture, RectI(0, 0, 20, 20));
+		backSprite->mode = SpriteMode::Tiled;
+		progressBar->AddLayer("colorBack", backSprite, Layout::BothStretch(1, 1, 1, 1), 0.4f);
+
+		resLayout->AddChild(progressBar);
+
+		editBox = o2UI.CreateEditBox("singleline");
+		*editBox->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(45, 20));
+		editBox->SetFilterInteger();
+
+		editBox->onChangeCompleted = [&](const WString& text) { progressBar->SetValue(((float)text/255.0f)); };
+
+		resLayout->AddChild(editBox);
+
+		return resLayout;
+	}
+
+	void ColorPickerDlg::ColorProperty::UpdateValue(const Color4& value)
+	{
+		if (mChanging)
+			return;
+
+		progressBar->SetValue(getValue(value));
+		editBox->text = (WString)(int)(getValue(value)*255.0f);
+
+		UpdateBitmap();
+	}
+
+	void ColorPickerDlg::ColorProperty::OnProgressBarChanged(float value)
+	{
+		mChanging = true;
+
+		if (auto dialog = this->dialog.Lock()) {
+			setValue(value, dialog->mColorValue);
+			dialog->OnColorChanged(type);
+		}
+
+		mChanging = false;
+	}
+
+	void ColorPickerDlg::ColorProperty::UpdateBitmap()
+	{
+		int bpp = 4;
+		UInt8* c1 = bitmap->GetData();
+		int h = bitmap->GetSize().y;
+		int w = bitmap->GetSize().x;
+
+		for (int i = 0; i < 256; i++)
+			*(ULong*)(c1 + bpp*i) = updateBitmap(i).ABGR();
+
+		for (int i = 1; i < h; i++)
+			memcpy(c1 + bpp*w*i, c1, bpp*w);
+
+		progressBarTexture->SetData(*bitmap);
+	}
 
-        mColorPickHandle = mmake<CursorEventsArea>();
-        mColorPickAreaHandle->onDraw += [&]() { mColorPickHandle->OnDrawn(); };
-        mColorPickHandle->isUnderPoint = [&](const Vec2F& point) { return mColorPickAreaColor->IsUnderPoint(point); };
-        mColorPickHandle->onMoved = MakeFunction(this, &ColorPickerDlg::OnColorPickHandleMoved);
-    }
-
-    void ColorPickerDlg::InitializeColorParams()
-    {
-        mTypeDropdown = o2UI.CreateDropdown();
-        *mTypeDropdown->layout = WidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -20), Vec2F(0, 0));
-
-        Vector<WString> colorTypes;
-        for (auto& kv : EnumTypeContainer<ColorType>::GetEntries())
-            colorTypes.Add(kv.second);
-
-        mTypeDropdown->AddItems(colorTypes);
-        mTypeDropdown->onSelectedText = MakeFunction(this, &ColorPickerDlg::OnColorTypeSelected);
-
-        mWindow->AddChild(mTypeDropdown);
-
-        auto colorParamsArea = mmake<VerticalLayout>();
-        *colorParamsArea->layout = WidgetLayout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 0.5f), Vec2F(0, 0), Vec2F(0, -20));
-        colorParamsArea->border = BorderF(5, 5, 5, 5);
-
-        colorParamsArea->AddChild(InitializeColorParameter(mColor1ParamName, mColor1ParamBar,
-                                                           mColor1ParamEdit, mColor1ParamBarBitmap, mColor1ParamBarTexture,
-                                                           MakeFunction(this, &ColorPickerDlg::OnColor1ParameterEdited)));
-
-        colorParamsArea->AddChild(InitializeColorParameter(mColor2ParamName, mColor2ParamBar,
-                                                           mColor2ParamEdit, mColor2ParamBarBitmap, mColor2ParamBarTexture,
-                                                           MakeFunction(this, &ColorPickerDlg::OnColor2ParameterEdited)));
-
-        colorParamsArea->AddChild(InitializeColorParameter(mColor3ParamName, mColor3ParamBar,
-                                                           mColor3ParamEdit, mColor3ParamBarBitmap, mColor3ParamBarTexture,
-                                                           MakeFunction(this, &ColorPickerDlg::OnColor3ParameterEdited)));
-
-        colorParamsArea->AddChild(InitializeColorParameter(mColorAParamName, mColorAParamBar,
-                                                           mColorAParamEdit, mColorAParamBarBitmap, mColorAParamBarTexture,
-                                                           MakeFunction(this, &ColorPickerDlg::OnColorAParameterEdited)));
-
-        mWindow->AddChild(colorParamsArea);
-
-        mColorAParamName->text = "A";
-        mTypeDropdown->value = "RGB";
-    }
-
-    Ref<Widget> ColorPickerDlg::InitializeColorParameter(Ref<Label>& name, Ref<HorizontalProgress>& bar,
-                                                     Ref<EditBox>& edit, Ref<Bitmap>& bitmap, TextureRef& texture,
-                                                     const Function<void(float)>& changeCallback)
-    {
-        auto resLayout = mmake<Widget>();
-        name = o2UI.CreateLabel("R");
-        *name->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(30, 20));
-        name->horAlign = HorAlign::Left;
-        resLayout->AddChild(name);
-
-        bar = o2UI.CreateWidget<HorizontalProgress>("wide");
-        *bar->layout = WidgetLayout::HorStretch(VerAlign::Middle, 30, 50, 20);
-        bar->onChange = changeCallback;
-
-        bitmap = mmake<Bitmap>(PixelFormat::R8G8B8A8, Vec2F(256, 256));
-        texture = TextureRef(*bitmap);
-        bar->AddLayer("color", mmake<Sprite>(texture, RectI(0, 0, 256, 256)), Layout::BothStretch(1, 1, 1, 1), 0.5f);
-
-        auto backSprite = mmake<Sprite>(mChessBackTexture, RectI(0, 0, 20, 20));
-        backSprite->mode = SpriteMode::Tiled;
-        bar->AddLayer("colorBack", backSprite, Layout::BothStretch(1, 1, 1, 1), 0.4f);
-
-        resLayout->AddChild(bar);
-
-        edit = o2UI.CreateEditBox("singleline");
-        *edit->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(45, 20));
-        edit->SetFilterInteger();
-
-        edit->onChangeCompleted = [&](const WString& text) { bar->SetValue(((float)text/255.0f)); };
-
-        resLayout->AddChild(edit);
-
-        return resLayout;
-    }
-
-    void ColorPickerDlg::InitHUEBarBitmap()
-    {
-        for (int i = 0; i < 256; i++)
-        {
-            Color4 c; c.SetHSL(1.0f - (float)i/255.0f, 1.0f, 0.5f);
-            UInt cl = c.ABGR();
-
-            for (int j = 0; j < 20; j++)
-                memcpy(mHUEBarBitmap->GetData() + 4*20*i + j*4, &cl, 4);
-        }
-    }
-
-    void ColorPickerDlg::OnColorPickHandleMoved(const Input::Cursor& cursor)
-    {
-        auto rt = mColorPickAreaColor->GetRect();
-
-        Vec2F anchorPos = (cursor.position - rt.LeftBottom())/rt.Size();
-        anchorPos.x = Math::Clamp01(anchorPos.x);
-        anchorPos.y = Math::Clamp01(anchorPos.y);
-
-        mColorPickAreaHandle->layout->anchorMin = anchorPos;
-        mColorPickAreaHandle->layout->anchorMax = anchorPos;
-
-        mColorValue.SetHSL(mHUEBar->value, anchorPos.y, anchorPos.x);
-        UpdateHandlesValues();
-        UpdateHandlesBitmaps();
-    }
-
-    void ColorPickerDlg::OnColorTypeSelected(const WString& name)
-    {
-        mColorType = o2Reflection.GetEnumValue<ColorType>(name);
-
-        switch (mColorType)
-        {
-        case ColorType::RGB:
-        mColor1ParamName->text = "R";
-        mColor2ParamName->text = "G";
-        mColor3ParamName->text = "B";
-        break;
-
-        case ColorType::HSL:
-        mColor1ParamName->text = "H";
-        mColor2ParamName->text = "S";
-        mColor3ParamName->text = ":";
-        break;
-        }
-
-        UpdateHandlesValues();
-        UpdateHandlesBitmaps();
-    }
-
-    void ColorPickerDlg::OnColor1ParameterEdited(float value)
-    {
-        switch (mColorType)
-        {
-        case ColorType::RGB:
-        mColorValue.SetRF(value);
-        break;
-
-        case ColorType::HSL:
-        float h, s, l;
-        mColorValue.ToHSL(h, s, l);
-        h = value;
-        mColorValue.SetHSL(h, s, l);
-        mHUEBar->value = value;
-        break;
-        }
-
-        mColor1ParamEdit->text = (WString)(int)(value*255.0f);
-        mOnChangedCallback(mColorValue);
-        UpdateHandlesBitmaps();
-        UpdateColorPickBitmap();
-    }
-
-    void ColorPickerDlg::OnColor2ParameterEdited(float value)
-    {
-        switch (mColorType)
-        {
-        case ColorType::RGB:
-        mColorValue.SetGF(value);
-        break;
-
-        case ColorType::HSL:
-        float h, s, l;
-        mColorValue.ToHSL(h, s, l);
-        s = value;
-        mColorValue.SetHSL(h, s, l);
-        break;
-        }
-
-        mColor2ParamEdit->text = (WString)(int)(value*255.0f);
-        mOnChangedCallback(mColorValue);
-        UpdateHandlesBitmaps();
-    }
-
-    void ColorPickerDlg::OnColor3ParameterEdited(float value)
-    {
-        switch (mColorType)
-        {
-        case ColorType::RGB:
-        mColorValue.SetBF(value);
-        break;
-
-        case ColorType::HSL:
-        float h, s, l;
-        mColorValue.ToHSL(h, s, l);
-        l = value;
-        mColorValue.SetHSL(h, s, l);
-        break;
-        }
-
-        mColor3ParamEdit->text = (WString)(int)(value*255.0f);
-        mOnChangedCallback(mColorValue);
-        UpdateHandlesBitmaps();
-    }
-
-    void ColorPickerDlg::OnColorAParameterEdited(float value)
-    {
-        mColorValue.SetAF(value);
-        mColorAParamEdit->text = (WString)(int)(value*255.0f);
-        mOnChangedCallback(mColorValue);
-        UpdateHandlesBitmaps();
-    }
-
-    void ColorPickerDlg::OnHUEEdited(float value)
-    {
-        static bool hueLocked = false;
-        if (hueLocked)
-            return;
-
-        float h, s, l;
-        mColorValue.ToHSL(h, s, l);
-        h = value;
-        mColorValue.SetHSL(h, s, l);
-
-        mOnChangedCallback(mColorValue);
-
-        hueLocked = true;
-        UpdateHandlesValues();
-        hueLocked = false;
-
-        UpdateHandlesBitmaps();
-        UpdateColorPickBitmap();
-    }
-
-    void ColorPickerDlg::UpdateHandlesBitmaps()
-    {
-        mColorSampleImage->GetImage()->SetColor(mColorValue);
-
-        switch (mColorType)
-        {
-        case ColorType::RGB:
-        UpdateRGBABitmaps();
-        break;
-
-        case ColorType::HSL:
-        UpdateHSLABitmaps();
-        break;
-        }
-    }
-
-    void ColorPickerDlg::UpdateRGBABitmaps()
-    {
-        int bpp = 4;
-        UInt8* c1 = mColor1ParamBarBitmap->GetData();
-        UInt8* c2 = mColor2ParamBarBitmap->GetData();
-        UInt8* c3 = mColor3ParamBarBitmap->GetData();
-        UInt8* cA = mColorAParamBarBitmap->GetData();
-        int h = mColorAParamBarBitmap->GetSize().y;
-        int w = mColorAParamBarBitmap->GetSize().x;
-
-        for (int i = 0; i < 256; i++)
-        {
-            int off = bpp*i;
-
-            *(ULong*)(c1 + off) = Color4(i, mColorValue.g, mColorValue.b, mColorValue.a).ABGR();
-            *(ULong*)(c2 + off) = Color4(mColorValue.r, i, mColorValue.b, mColorValue.a).ABGR();
-            *(ULong*)(c3 + off) = Color4(mColorValue.r, mColorValue.g, i, mColorValue.a).ABGR();
-            *(ULong*)(cA + off) = Color4(mColorValue.r, mColorValue.g, mColorValue.b, i).ABGR();
-        }
-
-        for (int i = 1; i < h; i++)
-        {
-            memcpy(c1 + bpp*w*i, c1, bpp*w);
-            memcpy(c2 + bpp*w*i, c2, bpp*w);
-            memcpy(c3 + bpp*w*i, c3, bpp*w);
-            memcpy(cA + bpp*w*i, cA, bpp*w);
-        }
-
-        mColor1ParamBarTexture->SetData(*mColor1ParamBarBitmap);
-        mColor2ParamBarTexture->SetData(*mColor2ParamBarBitmap);
-        mColor3ParamBarTexture->SetData(*mColor3ParamBarBitmap);
-        mColorAParamBarTexture->SetData(*mColorAParamBarBitmap);
-    }
-
-    void ColorPickerDlg::UpdateHSLABitmaps()
-    {
-        int bpp = 4;
-        UInt8* c1 = mColor1ParamBarBitmap->GetData();
-        UInt8* c2 = mColor2ParamBarBitmap->GetData();
-        UInt8* c3 = mColor3ParamBarBitmap->GetData();
-        UInt8* cA = mColorAParamBarBitmap->GetData();
-        int h = mColorAParamBarBitmap->GetSize().y;
-        int w = mColorAParamBarBitmap->GetSize().x;
-
-        float hue, sat, light;
-        mColorValue.ToHSL(hue, sat, light);
-
-        for (int i = 0; i < 256; i++)
-        {
-            int off = bpp*i;
-
-            Color4 h; h.SetHSL((float)i/255.0f, 1.0f, 0.5f);
-            Color4 s; s.SetHSL(hue, (float)i/255.0f, light);
-            Color4 l; l.SetHSL(hue, sat, (float)i/255.0f);
-
-            *(ULong*)(c1 + off) = h.ABGR();
-            *(ULong*)(c2 + off) = s.ABGR();
-            *(ULong*)(c3 + off) = l.ABGR();
-            *(ULong*)(cA + off) = Color4(mColorValue.r, mColorValue.g, mColorValue.b, i).ABGR();
-        }
-
-        for (int i = 1; i < h; i++)
-        {
-            memcpy(c1 + bpp*w*i, c1, bpp*w);
-            memcpy(c2 + bpp*w*i, c2, bpp*w);
-            memcpy(c3 + bpp*w*i, c3, bpp*w);
-            memcpy(cA + bpp*w*i, cA, bpp*w);
-        }
-
-        mColor1ParamBarTexture->SetData(*mColor1ParamBarBitmap);
-        mColor2ParamBarTexture->SetData(*mColor2ParamBarBitmap);
-        mColor3ParamBarTexture->SetData(*mColor3ParamBarBitmap);
-        mColorAParamBarTexture->SetData(*mColorAParamBarBitmap);
-    }
-
-    void ColorPickerDlg::UpdateColorPickBitmap()
-    {
-        float h, s, l;
-        mColorValue.ToHSL(h, s, l);
-        Vec2I sz = mColorPickAreaBitmap->GetSize();
-
-        for (int i = 0; i < sz.x; i++)
-        {
-            for (int j = 0; j < sz.y; j++)
-            {
-                Color4 c; c.SetHSL(h, (float)i/(float)sz.x, (float)j/(float)sz.y);
-                UInt cc = c.ABGR();
-                memcpy(mColorPickAreaBitmap->GetData() + 4*i*sz.x + 4*j, &cc, 4);
-            }
-        }
-
-        mColorPickAreaTexture->SetData(*mColorPickAreaBitmap);
-    }
-
-    void ColorPickerDlg::UpdateHandlesValues()
-    {
-        switch (mColorType)
-        {
-        case ColorType::RGB:
-        mColor1ParamBar->value = mColorValue.RF();
-        mColor2ParamBar->value = mColorValue.GF();
-        mColor3ParamBar->value = mColorValue.BF();
-        break;
-
-        case ColorType::HSL:
-        float h, s, l;
-        mColorValue.ToHSL(h, s, l);
-        mColor1ParamBar->value = h;
-        mColor2ParamBar->value = s;
-        mColor3ParamBar->value = l;
-        break;
-        }
-
-        mColorAParamBar->value = mColorValue.AF();
-        mOnChangedCallback(mColorValue);
-    }
-
-    void ColorPickerDlg::OnCursorPressedOutside()
-    {
-        mOnChangedCallback(mColorValue);
-        mWindow->Hide();
-    }
 }
 // --- META ---
 
-ENUM_META(Editor::ColorPickerDlg::ColorType)
+ENUM_META(Editor::ColorPickerDlg::ParameterType)
 {
-    ENUM_ENTRY(HSL);
-    ENUM_ENTRY(RGB);
+    ENUM_ENTRY(A);
+    ENUM_ENTRY(Any);
+    ENUM_ENTRY(B);
+    ENUM_ENTRY(G);
+    ENUM_ENTRY(H);
+    ENUM_ENTRY(L);
+    ENUM_ENTRY(Picker);
+    ENUM_ENTRY(R);
+    ENUM_ENTRY(S);
 }
 END_ENUM_META;
 // --- END META ---

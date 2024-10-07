@@ -67,7 +67,7 @@ namespace o2
         void SetRGBA(Color32Bit color);
 
         void SetHSL(float hue, float saturation, float lightness);
-        void ToHSL(float& hue, float& saturation, float& lightness);
+        void ToHSL(float& hue, float& saturation, float& lightness) const;
 
         Color4& ChangeHue(float offset);
         Color4& ChangeSaturation(float offset);
