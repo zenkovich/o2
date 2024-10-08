@@ -48,7 +48,7 @@ namespace Editor
 		mInstance->mOnChangedCallback = onChanged;
 		mInstance->mOnCompletedCallback = onCompleted;
 
-		mInstance->UpdateValues(ParameterType::Any);
+		mInstance->UpdateValues(ParameterType::General);
 	}
 
 	void ColorPickerDlg::OnHide()
@@ -134,9 +134,10 @@ namespace Editor
 	void ColorPickerDlg::InitializeColorParams()
 	{
 		auto colorParamsArea = mmake<VerticalLayout>();
-		*colorParamsArea->layout = WidgetLayout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 0.5f), Vec2F(0, 0), Vec2F(0, -20));
+		*colorParamsArea->layout = WidgetLayout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 0.5f), Vec2F(0, 0), Vec2F(0, 0));
 		colorParamsArea->border = BorderF(5, 5, 5, 5);
 
+		// HSL/RGB sliders
 		auto hParamWidget = mColorHProperty.Initialize("Hue", ParameterType::H, Ref(this),
 													   [](float value, Color4& color) { float h, s, l; color.ToHSL(h, s, l); h = value; color.SetHSL(h, s, l); },
 													   [](const Color4& color) { float h, s, l; color.ToHSL(h, s, l); return h; },
@@ -172,6 +173,32 @@ namespace Editor
 													   [](const Color4& color) { return color.a/255.0f; },
 													   [this](int x) { return Color4(mColorValue.r, mColorValue.g, mColorValue.b, x); });
 
+		// RGBA
+		auto rgbaContainer = mmake<Widget>();
+
+		auto rgbaLabel = o2UI.CreateLabel("RGBA");
+		*rgbaLabel->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(100, 20));
+		rgbaLabel->horAlign = HorAlign::Left;
+		rgbaContainer->AddChild(rgbaLabel);
+
+		mRGBAEditBox = o2UI.CreateEditBox("singleline");
+		*mRGBAEditBox->layout = WidgetLayout::HorStretch(VerAlign::Middle, 100, 0, 20);
+		mRGBAEditBox->onChangeCompleted = [&](const WString& text) { OnColorEditBoxRGBAChanged((String)text); };
+		rgbaContainer->AddChild(mRGBAEditBox);
+
+		// HEX
+		auto hexContainer = mmake<Widget>();
+
+		auto hexLabel = o2UI.CreateLabel("HEX");
+		*hexLabel->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(100, 20));
+		hexLabel->horAlign = HorAlign::Left;
+		hexContainer->AddChild(hexLabel);
+
+		mHEXEditBox = o2UI.CreateEditBox("singleline");
+		*mHEXEditBox->layout = WidgetLayout::HorStretch(VerAlign::Middle, 100, 0, 20);
+		mHEXEditBox->onChangeCompleted = [&](const WString& text) { OnColorEditBoxHEXChanged((String)text); };
+		hexContainer->AddChild(mHEXEditBox);
+
 		colorParamsArea->AddChild(hParamWidget);
 		colorParamsArea->AddChild(sParamWidget);
 		colorParamsArea->AddChild(lParamWidget);
@@ -179,6 +206,8 @@ namespace Editor
 		colorParamsArea->AddChild(gParamWidget);
 		colorParamsArea->AddChild(bParamWidget);
 		colorParamsArea->AddChild(aParamWidget);
+		colorParamsArea->AddChild(rgbaContainer);
+		colorParamsArea->AddChild(hexContainer);
 
 		mWindow->AddChild(colorParamsArea);
 	}
@@ -208,6 +237,75 @@ namespace Editor
 
 		mColorPickAreaHandle->layout->anchorMin = anchorPos;
 		mColorPickAreaHandle->layout->anchorMax = anchorPos;
+	}
+
+	void ColorPickerDlg::UpdateColorEditBoxeRGBA()
+	{
+		String rgbaText = String::Format("%d, %d, %d, %d", mColorValue.r, mColorValue.g, mColorValue.b, mColorValue.a);
+		mRGBAEditBox->text = (WString)rgbaText;
+	}
+
+	void ColorPickerDlg::UpdateColorEditBoxHEX()
+	{
+		String hexText = String::Format("#%02X%02X%02X%02X", mColorValue.r, mColorValue.g, mColorValue.b, mColorValue.a);
+		mHEXEditBox->text = (WString)hexText;
+	}
+
+	void ColorPickerDlg::OnColorEditBoxRGBAChanged(const String& text)
+	{
+		Vector<String> splitText;
+
+		// Split string by any non-digit character
+		String buffer;
+		for (int i = 0; i < text.Length(); i++)
+		{
+			if (text[i] >= '0' && text[i] <= '9')
+				buffer += text[i];
+			else
+			{
+				if (buffer.Length() > 0)
+					splitText.Add(buffer);
+
+				buffer.Clear();
+			}
+		}
+
+		// Get available values
+		float r = splitText.Count() > 0 ? (float)splitText[0]/255.0f : 1.0f;
+		float g = splitText.Count() > 1 ? (float)splitText[1]/255.0f : 1.0f;
+		float b = splitText.Count() > 2 ? (float)splitText[2]/255.0f : 1.0f;
+		float a = splitText.Count() > 3 ? (float)splitText[3]/255.0f : 1.0f;
+
+		// Update color value
+		mColorValue = Color4(r, g, b, a);
+		UpdateValues(ParameterType::RGBABox);
+	}
+
+	void ColorPickerDlg::OnColorEditBoxHEXChanged(const String& text)
+	{
+		// Extract hex string
+		String hexText = text.Length() > 0 && text[0] == '#' ? text.SubStr(1) : text;
+		UInt32 hexValue = 0;
+
+		// Convert hex string to integer
+		for (int i = 0; i < hexText.Length(); i++)
+		{
+			hexValue <<= 4;
+			if (hexText[i] >= '0' && hexText[i] <= '9')
+				hexValue += hexText[i] - '0';
+			else if (hexText[i] >= 'A' && hexText[i] <= 'F')
+				hexValue += hexText[i] - 'A' + 10;
+			else if (hexText[i] >= 'a' && hexText[i] <= 'f')
+				hexValue += hexText[i] - 'a' + 10;
+		}
+
+		// Update color value
+		mColorValue.r = (hexValue >> 24) & 0xFF;
+		mColorValue.g = (hexValue >> 16) & 0xFF;
+		mColorValue.b = (hexValue >> 8) & 0xFF;
+		mColorValue.a = hexValue & 0xFF;
+
+		UpdateValues(ParameterType::HEXBox);
 	}
 
 	void ColorPickerDlg::OnColorChanged(ParameterType changedParameter)
@@ -241,6 +339,12 @@ namespace Editor
 
 		if (changedParameter != ParameterType::Picker)
 			UpdateColorPickHandle();
+
+		if (changedParameter != ParameterType::RGBABox)
+			UpdateColorEditBoxeRGBA();
+
+		if (changedParameter != ParameterType::HEXBox)
+			UpdateColorEditBoxHEX();
 	}
 
 	void ColorPickerDlg::UpdateColorPickBitmap()
@@ -326,6 +430,7 @@ namespace Editor
 
 		if (auto dialog = this->dialog.Lock()) {
 			setValue(value, dialog->mColorValue);
+			editBox->text = (WString)(int)(value*255.0f);
 			dialog->OnColorChanged(type);
 		}
 
@@ -354,13 +459,15 @@ namespace Editor
 ENUM_META(Editor::ColorPickerDlg::ParameterType)
 {
     ENUM_ENTRY(A);
-    ENUM_ENTRY(Any);
     ENUM_ENTRY(B);
     ENUM_ENTRY(G);
+    ENUM_ENTRY(General);
     ENUM_ENTRY(H);
+    ENUM_ENTRY(HEXBox);
     ENUM_ENTRY(L);
     ENUM_ENTRY(Picker);
     ENUM_ENTRY(R);
+    ENUM_ENTRY(RGBABox);
     ENUM_ENTRY(S);
 }
 END_ENUM_META;

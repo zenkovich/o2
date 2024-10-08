@@ -31,7 +31,7 @@ namespace Editor
 	class ColorPickerDlg : public Singleton<ColorPickerDlg>, public CursorEventsListener
 	{
 	public:
-		enum class ParameterType { H, S, L, R, G, B, A, Any, Picker };
+		enum class ParameterType { H, S, L, R, G, B, A, General, Picker, RGBABox, HEXBox };
 
 	public:
 		// Default constructor
@@ -96,6 +96,9 @@ namespace Editor
 		TextureRef            mColorPickAreaTexture;
 		Ref<CursorEventsArea> mColorPickHandle;
 
+		Ref<EditBox> mRGBAEditBox;
+		Ref<EditBox> mHEXEditBox;
+
 		ColorProperty mColorHProperty;
 		ColorProperty mColorSProperty;
 		ColorProperty mColorLProperty;
@@ -137,6 +140,18 @@ namespace Editor
 
 		// Updates color pick handle position
 		void UpdateColorPickHandle();
+
+		// Updates color edit box RGBA
+		void UpdateColorEditBoxeRGBA();
+
+		// Updates color edit box HEX
+		void UpdateColorEditBoxHEX();
+
+		// Called when color edit box RGBA changed, updates color value
+		void OnColorEditBoxRGBAChanged(const String& text);
+
+		// Called when color edit box HEX changed, updates color value
+		void OnColorEditBoxHEXChanged(const String& text);
 
 		// Called when cursor pressed outside of color picking dialog, closes it
 		void OnCursorPressedOutside();
