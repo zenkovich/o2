@@ -15,6 +15,9 @@ namespace Editor
 	{
 		mSprite = mmake<Sprite>();
 		AddLayer("image", mSprite);
+
+		mMesh = mmake<Mesh>();
+		mMesh->Resize(4, 2);
 	}
 
 	CurvePreview::CurvePreview(RefCounter* refCounter, const CurvePreview& other):
@@ -22,6 +25,9 @@ namespace Editor
 	{
 		mSprite = GetLayerDrawable<Sprite>("image");
 		RetargetStatesAnimations();
+
+		mMesh = mmake<Mesh>();
+		mMesh->Resize(4, 2);
 	}
 
 	CurvePreview& CurvePreview::operator=(const CurvePreview& other)
@@ -121,13 +127,37 @@ namespace Editor
 
 		for (auto& key : mCurve->GetKeys())
 		{
-			auto points = key.GetApproximatedPoints();
-			auto lastPoint = points[0]*transform;
+			auto topPoints = key.GetTopApproximatedPoints();
+			auto bottomPoints = key.GetBottomApproximatedPoints();
+
+			auto lastTopPoint = topPoints[0]*transform;
+			auto lastBottomPoint = bottomPoints[0]*transform;
+
 			for (int i = 1; i < key.GetApproximatedPointsCount(); i++)
 			{
-				auto point = points[i]*transform;
-				o2Render.DrawAALine(lastPoint, point, mCurveColor, 1.5f);
-				lastPoint = point;
+				auto topPoint = topPoints[i]*transform;
+				auto bottomPoint = bottomPoints[i]*transform;
+
+				Color4 meshColor = mCurveColor; meshColor.a /= 2;
+
+				mMesh->vertices[0] = Vertex(lastTopPoint, meshColor.ABGR(), 0, 0);
+				mMesh->vertices[1] = Vertex(lastBottomPoint, meshColor.ABGR(), 0, 0);
+				mMesh->vertices[2] = Vertex(topPoint, meshColor.ABGR(), 0, 0);
+				mMesh->vertices[3] = Vertex(bottomPoint, meshColor.ABGR(), 0, 0);
+
+				mMesh->indexes[0] = 0; mMesh->indexes[1] = 1; mMesh->indexes[2] = 2;
+				mMesh->indexes[3] = 2; mMesh->indexes[4] = 1; mMesh->indexes[5] = 3;
+
+				mMesh->vertexCount = 4;
+				mMesh->polyCount = 2;
+
+				mMesh->Draw();
+
+				o2Render.DrawAALine(lastTopPoint, topPoint, mCurveColor, 1.5f);
+				o2Render.DrawAALine(lastBottomPoint, bottomPoint, mCurveColor, 1.5f);
+
+				lastTopPoint = topPoint;
+				lastBottomPoint = bottomPoint;
 			}
 		}
 

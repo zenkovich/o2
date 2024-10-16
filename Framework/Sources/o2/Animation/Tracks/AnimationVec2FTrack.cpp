@@ -42,7 +42,7 @@ namespace o2
     Vec2F AnimationTrack<Vec2F>::GetValue(float position, bool direction, int& cacheTimeKey, int& cacheTimeKeyApprox,
                                           int& cacheSplineKey, int& cacheSplineKeyApprox) const
     {
-        float timePos = timeCurve->Evaluate(position, direction, cacheTimeKey, cacheTimeKeyApprox);
+        float timePos = timeCurve->Evaluate(position, 0.0f, direction, cacheTimeKey, cacheTimeKeyApprox);
         return spline->Evaluate(timePos*spline->Length(), direction, cacheSplineKey, cacheTimeKeyApprox);
     }
 

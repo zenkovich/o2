@@ -78,6 +78,7 @@ namespace o2
             layer->Draw();
 
         IDrawable::OnDrawn();
+        mWindowCursorArea->OnDrawn();
 
         o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -86,7 +87,7 @@ namespace o2
 
         o2Render.DisableScissorTest();
 
-        CursorAreaEventsListener::OnDrawn();
+        ScrollArea::OnDrawn();
 
         mHeadDragHandle->OnDrawn();
         mTopDragHandle->OnDrawn();
@@ -226,6 +227,9 @@ namespace o2
         mBackCursorArea = mmake<CursorEventsArea>();
         mBackCursorArea->isUnderPoint = [&](const Vec2F& point) { return true; };
         mBackCursorArea->interactable = false;
+
+		mWindowCursorArea = mmake<CursorEventsArea>();
+		mWindowCursorArea->isUnderPoint = [&](const Vec2F& point) { return IsUnderPoint(point); };
 
         mHeadDragHandle = mmake<CursorEventsArea>();
         mHeadDragHandle->isUnderPoint = [&](const Vec2F& point) { return mHeadDragAreaRect.IsInside(point); };

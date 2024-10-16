@@ -11,8 +11,8 @@ namespace o2
 
     Curve::Curve(float beginCoef, float beginCoefPosition, float endCoef, float endCoefPosition)
     {
-        mKeys.Add(Key(0.0f, 0.0f, 0.0f, 0.0f, beginCoef, beginCoefPosition));
-        mKeys.Add(Key(1.0f, 1.0f, endCoef - 1.0f, -endCoefPosition, 0.0f, 0.0f));
+        mKeys.Add(Key(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, beginCoef, beginCoefPosition));
+        mKeys.Add(Key(1.0f, 1.0f, 0.0f, endCoef - 1.0f, -endCoefPosition, 0.0f, 0.0f));
         UpdateApproximation();
     }
 
@@ -61,13 +61,13 @@ namespace o2
         return *this;
     }
 
-    float Curve::Evaluate(float position) const
+    float Curve::Evaluate(float position, float randomRangeCoef /*= 0.0f*/) const
     {
         int cacheKey = 0, cacheKeyApprox = 0;
-        return Evaluate(position, true, cacheKey, cacheKeyApprox);
+        return Evaluate(position, randomRangeCoef, true, cacheKey, cacheKeyApprox);
     }
 
-    float Curve::Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
+    float Curve::Evaluate(float position, float randomRangeCoef, bool direction, int& cacheKey, int& cacheKeyApprox) const
     {
         int count = mKeys.Count();
 
@@ -83,6 +83,7 @@ namespace o2
         if (keyLeftIdx < 0)
             return 0.0f;
 
+		const Key& leftKey = mKeys[keyLeftIdx];
         const Key& rightKey = mKeys[keyRightIdx];
 
         int segLeftIdx = 0;
@@ -91,15 +92,21 @@ namespace o2
         if (keyLeftIdx != prevCacheKey)
             cacheKeyApprox = 0;
 
-        SearchKey(rightKey.mApproxValues, Key::mApproxValuesCount, position, segLeftIdx, segRightIdx, direction, cacheKeyApprox);
+        SearchKey(rightKey.mApproxTopValues, Key::mApproxValuesCount, position, segLeftIdx, segRightIdx, direction, cacheKeyApprox);
 
-        const ApproximationValue& segLeft = rightKey.mApproxValues[segLeftIdx];
-        const ApproximationValue& segRight = rightKey.mApproxValues[segRightIdx];
+        const ApproximationValue& segTopLeft = rightKey.mApproxTopValues[segLeftIdx];
+        const ApproximationValue& segTopRight = rightKey.mApproxTopValues[segRightIdx];
 
-        float dist = segRight.position - segLeft.position;
-        float coef = (position - segLeft.position) / dist;
+		const ApproximationValue& segBottomLeft = rightKey.mApproxBottomValues[segLeftIdx];
+		const ApproximationValue& segBottomRight = rightKey.mApproxBottomValues[segRightIdx];
 
-        return Math::Lerp(segLeft.value, segRight.value, coef);
+        float dist = segTopRight.position - segTopLeft.position;
+        float coef = (position - segTopLeft.position) / dist;
+
+		float topSegValue = Math::Lerp(segTopLeft.value, segTopRight.value, coef);
+		float bottomSegValue = Math::Lerp(segBottomLeft.value, segBottomRight.value, coef);
+
+		return Math::Lerp(topSegValue, bottomSegValue, randomRangeCoef);
     }
 
     void Curve::BeginKeysBatchChange()
@@ -157,7 +164,7 @@ namespace o2
     void Curve::AppendKeys(const Vector<Vec2F>& values, bool smooth /*= true*/)
     {
         AppendKeys(values.Convert<Key>([=](const Vec2F& v) {
-            Key res(v.x, v.y, 0, 0, 0, 0);
+            Key res(v.x, v.y, 0.0f, 0, 0, 0, 0);
             res.supportsType = smooth ? Key::Type::Smooth : Key::Type::Broken;
             return res;
         }));
@@ -187,7 +194,7 @@ namespace o2
     void Curve::PrependKeys(const Vector<Vec2F>& values, bool smooth /*= true*/)
     {
         PrependKeys(values.Convert<Key>([=](const Vec2F& v) {
-            Key res(v.x, v.y, 0, 0, 0, 0);
+            Key res(v.x, v.y, 0.0f, 0, 0, 0, 0);
             res.supportsType = smooth ? Key::Type::Smooth : Key::Type::Broken;
             return res;
         }));
@@ -217,7 +224,7 @@ namespace o2
     void Curve::InsertKeys(const Vector<Vec2F>& values, float position, bool smooth /*= true*/)
     {
         InsertKeys(values.Convert<Key>([=](const Vec2F& v) {
-            Key res(v.x, v.y, 0, 0, 0, 0);
+            Key res(v.x, v.y, 0.0f, 0, 0, 0, 0);
             res.supportsType = smooth ? Key::Type::Smooth : Key::Type::Broken;
             return res;
         }), position);
@@ -281,13 +288,13 @@ namespace o2
         return pos;
     }
 
-    int Curve::InsertKey(float position, float value, float leftCoef, float leftCoefPosition,
+    int Curve::InsertKey(float position, float value, float valueRange, float leftCoef, float leftCoefPosition,
                          float rightCoef, float rightCoefPosition)
     {
-        return InsertKey(Key(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition));
+        return InsertKey(Key(position, value, valueRange, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition));
     }
 
-    int Curve::InsertKey(float position, float value, float smooth /*= 1.0f*/)
+    int Curve::InsertKey(float position, float value, float valueRange /*= 0.0f*/, float smooth /*= 1.0f*/)
     {
         int pos = mKeys.Count();
         for (int i = 0; i < mKeys.Count(); i++)
@@ -300,7 +307,7 @@ namespace o2
         }
 
         pos = Math::Clamp(pos, 0, mKeys.Count());
-        mKeys.Insert(Key(value, position), pos);
+        mKeys.Insert(Key(position, value, valueRange), pos);
         SmoothKey(position, smooth);
 
         if (mBatchChange)
@@ -311,7 +318,7 @@ namespace o2
         return pos;
     }
 
-    int Curve::InsertFlatKey(float position, float value)
+    int Curve::InsertFlatKey(float position, float value, float valueRange /*= 0.0f*/)
     {
         int pos = mKeys.Count();
         for (int i = 0; i < mKeys.Count(); i++)
@@ -333,7 +340,7 @@ namespace o2
         if (pos < mKeys.Count() - 1)
             rightSupport = (mKeys[pos + 1] - position)*supportCoef;
 
-        mKeys.Insert(Key(position, value, value, leftSupport, value, rightSupport), pos);
+        mKeys.Insert(Key(position, value, valueRange, value, leftSupport, value, rightSupport), pos);
 
         CheckSmoothKeys();
 
@@ -345,10 +352,10 @@ namespace o2
         return pos;
     }
 
-    int Curve::AppendKey(float offset, float value, float leftCoef, float leftCoefPosition,
+    int Curve::AppendKey(float offset, float value, float valueRange, float leftCoef, float leftCoefPosition,
                          float rightCoef, float rightCoefPosition)
     {
-        Key newKey((mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset, value, leftCoef, leftCoefPosition,
+        Key newKey((mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset, value, valueRange, leftCoef, leftCoefPosition,
                    rightCoef, rightCoefPosition);
 
         newKey.supportsType = Key::Type::Broken;
@@ -364,9 +371,9 @@ namespace o2
         return mKeys.Count() - 1;
     }
 
-    int Curve::AppendKey(float offset, float value, float smoothCoef /*= 1.0f*/)
+    int Curve::AppendKey(float offset, float value, float valueRange /*= 0.0f*/, float smoothCoef /*= 1.0f*/)
     {
-        Key newKey((mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset, value, value, 0, value, 0);
+        Key newKey((mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset, value, valueRange, value, 0, value, 0);
         newKey.supportsType = Key::Type::Smooth;
 
         mKeys.Add(newKey);
@@ -380,9 +387,9 @@ namespace o2
         return mKeys.Count() - 1;
     }
 
-    int Curve::AppendKey(float offset, float value)
+    int Curve::AppendKey(float offset, float value, float valueRange /*= 0.0f*/)
     {
-        Key newKey((mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset, value, value, 0, value, 0);
+        Key newKey((mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset, value, valueRange, value, 0, value, 0);
         newKey.supportsType = Key::Type::Broken;
 
         mKeys.Add(newKey);
@@ -396,7 +403,7 @@ namespace o2
         return mKeys.Count() - 1;
     }
 
-    int Curve::PrependKey(float offset, float value, float leftCoef, float leftCoefPosition,
+    int Curve::PrependKey(float offset, float value, float valueRange, float leftCoef, float leftCoefPosition,
                           float rightCoef, float rightCoefPosition)
     {
         float begin = mKeys.IsEmpty() ? 0.0f : mKeys[0].position;
@@ -404,7 +411,7 @@ namespace o2
         for (auto& key : mKeys)
             key.position += offset;
 
-        Key newKey(begin, value, leftCoef, leftCoefPosition,
+        Key newKey(begin, value, valueRange, leftCoef, leftCoefPosition,
                    rightCoef, rightCoefPosition);
 
         newKey.supportsType = Key::Type::Broken;
@@ -420,14 +427,14 @@ namespace o2
         return 0;
     }
 
-    int Curve::PrependKey(float offset, float value, float smoothCoef /*= 1.0f*/)
+    int Curve::PrependKey(float offset, float value, float valueRange /*= 0.0f*/, float smoothCoef /*= 1.0f*/)
     {
         float begin = mKeys.IsEmpty() ? 0.0f : mKeys[0].position;
 
         for (auto& key : mKeys)
             key.position += offset;
 
-        Key newKey(begin, value, value, 0, value, 0);
+        Key newKey(begin, value, valueRange, value, 0, value, 0);
         newKey.supportsType = Key::Type::Smooth;
 
         mKeys.Add(newKey);
@@ -441,14 +448,14 @@ namespace o2
         return 0;
     }
 
-    int Curve::PrependKey(float offset, float value)
+    int Curve::PrependKey(float offset, float value, float valueRange /*= 0.0f*/)
     {
         float begin = mKeys.IsEmpty() ? 0.0f : mKeys[0].position;
 
         for (auto& key : mKeys)
             key.position += offset;
 
-        Key newKey(begin, value, value, 0, value, 0);
+        Key newKey(begin, value, valueRange, value, 0, value, 0);
         newKey.supportsType = Key::Type::Broken;
 
         mKeys.Add(newKey);
@@ -634,18 +641,23 @@ namespace o2
         if (mKeys.Count() < 2)
             return res;
 
-        res.left = mKeys[1].mApproxValues[0].position; res.right = mKeys[1].mApproxValues[0].position;
-        res.top = mKeys[1].mApproxValues[0].value; res.bottom = mKeys[1].mApproxValues[0].value;
+        res.left = mKeys[1].mApproxTopValues[0].position; res.right = mKeys[1].mApproxTopValues[0].position;
+        res.top = mKeys[1].mApproxTopValues[0].value; res.bottom = mKeys[1].mApproxTopValues[0].value;
 
         for (int k = 1; k < mKeys.Count(); k++)
         {
             auto& key = mKeys[k];
             for (int i = 0; i < Key::mApproxValuesCount; i++)
             {
-                res.left = Math::Min(key.mApproxValues[i].position, res.left);
-                res.right = Math::Max(key.mApproxValues[i].position, res.right);
-                res.top = Math::Max(key.mApproxValues[i].value, res.top);
-                res.bottom = Math::Min(key.mApproxValues[i].value, res.bottom);
+                res.left = Math::Min(key.mApproxTopValues[i].position, res.left);
+                res.right = Math::Max(key.mApproxTopValues[i].position, res.right);
+                res.top = Math::Max(key.mApproxTopValues[i].value, res.top);
+                res.bottom = Math::Min(key.mApproxTopValues[i].value, res.bottom);
+
+				res.left = Math::Min(key.mApproxBottomValues[i].position, res.left);
+				res.right = Math::Max(key.mApproxBottomValues[i].position, res.right);
+				res.top = Math::Max(key.mApproxBottomValues[i].value, res.top);
+				res.bottom = Math::Min(key.mApproxBottomValues[i].value, res.bottom);
             }
         }
 
@@ -667,8 +679,8 @@ namespace o2
                             float beginCoef, float beginCoefPosition, float endCoef, float endCoefPosition)
     {
         Curve res;
-        res.InsertKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef) - begin, beginCoefPosition*duration);
-        res.InsertKey(duration, end, Math::Lerp(begin, end, endCoef) - end, -endCoefPosition*duration, 0.0f, 0.0f);
+        res.InsertKey(0.0f, begin, 0.0f, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef) - begin, beginCoefPosition*duration);
+        res.InsertKey(duration, end, 0.0f, Math::Lerp(begin, end, endCoef) - end, -endCoefPosition*duration, 0.0f, 0.0f);
         return res;
     }
 
@@ -705,39 +717,56 @@ namespace o2
     {
         for (int i = 1; i < mKeys.Count(); i++)
         {
-            Key& beginKey = mKeys[i - 1];
-            Key& endKey = mKeys[i];
+            Key& leftKey = mKeys[i - 1];
+            Key& rightKey = mKeys[i];
 
-            Vec2F rightSupport(beginKey.rightSupportPosition, beginKey.rightSupportValue);
-            Vec2F leftSupport(endKey.leftSupportPosition, endKey.leftSupportValue);
+            Vec2F rightSupport(leftKey.rightSupportPosition, leftKey.rightSupportValue);
+            Vec2F leftSupport(rightKey.leftSupportPosition, rightKey.leftSupportValue);
 
             if (rightSupport.x < 0.0f)
                 rightSupport.x = 0;
 
-            if (rightSupport.x > endKey.position - beginKey.position && rightSupport.x != 0.0f)
-                rightSupport *= (endKey.position - beginKey.position) / rightSupport.x;
+            if (rightSupport.x > rightKey.position - leftKey.position && rightSupport.x != 0.0f)
+                rightSupport *= (rightKey.position - leftKey.position) / rightSupport.x;
 
             if (leftSupport.x > 0.0f)
                 leftSupport.x = 0;
 
-            if (leftSupport.x < beginKey.position - endKey.position && leftSupport.x != 0.0f)
-                leftSupport *= (beginKey.position - endKey.position) / leftSupport.x;
+            if (leftSupport.x < leftKey.position - rightKey.position && leftSupport.x != 0.0f)
+                leftSupport *= (leftKey.position - rightKey.position) / leftSupport.x;
 
-            Vec2F a(beginKey.position, beginKey.value);
-            Vec2F d(endKey.position, endKey.value);
-            Vec2F b = a + rightSupport;
-            Vec2F c = d + leftSupport;
+			float leftHalfRange = leftKey.valueRange * 0.5f;
+			float rightHalfRange = rightKey.valueRange * 0.5f;
 
-            endKey.mApproxValuesBounds.Set(a, a);
+            Vec2F leftOriginTop(leftKey.position, leftKey.value + leftHalfRange);
+            Vec2F rightOriginTop(rightKey.position, rightKey.value + rightHalfRange);
+            Vec2F leftSupportTop = leftOriginTop + rightSupport;
+            Vec2F rightSupportTop = rightOriginTop + leftSupport;
+
+			Vec2F leftOriginBottom(leftKey.position, leftKey.value - leftHalfRange);
+			Vec2F rightOriginBottom(rightKey.position, rightKey.value - rightHalfRange);
+			Vec2F leftSupportBottom = leftOriginBottom + rightSupport;
+			Vec2F rightSupportBottom = rightOriginBottom + leftSupport;
+
+            rightKey.mApproxValuesBounds.Set(leftOriginTop, leftOriginTop);
             for (int j = 0; j < Key::mApproxValuesCount; j++)
             {
                 float coef = (float)j / (float)(Key::mApproxValuesCount - 1);
-                Vec2F p = Bezier(a, b, c, d, coef);
-                endKey.mApproxValues[j] = p;
-                endKey.mApproxValuesBounds.left = Math::Min(endKey.mApproxValuesBounds.left, p.x);
-                endKey.mApproxValuesBounds.right = Math::Max(endKey.mApproxValuesBounds.right, p.x);
-                endKey.mApproxValuesBounds.top = Math::Max(endKey.mApproxValuesBounds.top, p.y);
-                endKey.mApproxValuesBounds.bottom = Math::Min(endKey.mApproxValuesBounds.bottom, p.y);
+                Vec2F pointTop = Bezier(leftOriginTop, leftSupportTop, rightSupportTop, rightOriginTop, coef);
+				Vec2F pointBottom = Bezier(leftOriginBottom, leftSupportBottom, rightSupportBottom, rightOriginBottom, coef);
+
+                rightKey.mApproxTopValues[j] = pointTop;
+				rightKey.mApproxBottomValues[j] = pointBottom;
+
+                rightKey.mApproxValuesBounds.left = Math::Min(rightKey.mApproxValuesBounds.left, pointTop.x);
+                rightKey.mApproxValuesBounds.right = Math::Max(rightKey.mApproxValuesBounds.right, pointTop.x);
+                rightKey.mApproxValuesBounds.top = Math::Max(rightKey.mApproxValuesBounds.top, pointTop.y);
+                rightKey.mApproxValuesBounds.bottom = Math::Min(rightKey.mApproxValuesBounds.bottom, pointTop.y);
+
+				rightKey.mApproxValuesBounds.left = Math::Min(rightKey.mApproxValuesBounds.left, pointBottom.x);
+				rightKey.mApproxValuesBounds.right = Math::Max(rightKey.mApproxValuesBounds.right, pointBottom.x);
+				rightKey.mApproxValuesBounds.top = Math::Max(rightKey.mApproxValuesBounds.top, pointBottom.y);
+				rightKey.mApproxValuesBounds.bottom = Math::Min(rightKey.mApproxValuesBounds.bottom, pointBottom.y);
             }
         }
 
@@ -818,27 +847,28 @@ namespace o2
     }
 
     Curve::Key::Key() :
-        uid(Math::Random()), value(0), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0), rightSupportPosition(0),
+        uid(Math::Random()), value(0), valueRange(0), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0), rightSupportPosition(0),
         supportsType(Type::Smooth)
     { }
 
-    Curve::Key::Key(float position, float value, float leftSupportValue, float leftSupportPosition,
+    Curve::Key::Key(float position, float value, float valueRange, float leftSupportValue, float leftSupportPosition,
                     float rightSupportValue, float rightSupportPosition) :
-        uid(Math::Random()), value(value), position(position), leftSupportValue(leftSupportValue), leftSupportPosition(leftSupportPosition),
+        uid(Math::Random()), value(value), valueRange(valueRange), position(position), leftSupportValue(leftSupportValue), leftSupportPosition(leftSupportPosition),
         rightSupportValue(rightSupportValue), rightSupportPosition(rightSupportPosition), supportsType(Type::Broken)
     { }
 
-    Curve::Key::Key(float value, float position) :
-        uid(Math::Random()), value(value), position(position), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0),
+    Curve::Key::Key(float position, float value, float valueRange) :
+        uid(Math::Random()), value(value), valueRange(valueRange), position(position), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0),
         rightSupportPosition(0), supportsType(Type::Smooth)
     { }
 
     Curve::Key::Key(const Key& other) :
-        uid(other.uid), value(other.value), position(other.position), leftSupportValue(other.leftSupportValue),
+        uid(other.uid), value(other.value), valueRange(other.valueRange), position(other.position), leftSupportValue(other.leftSupportValue),
         leftSupportPosition(other.leftSupportPosition), rightSupportValue(other.rightSupportValue),
         rightSupportPosition(other.rightSupportPosition), supportsType(other.supportsType), mApproxValuesBounds(other.mApproxValuesBounds)
     {
-        memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount * sizeof(ApproximationValue));
+        memcpy(mApproxTopValues, other.mApproxTopValues, mApproxValuesCount * sizeof(ApproximationValue));
+		memcpy(mApproxBottomValues, other.mApproxBottomValues, mApproxValuesCount * sizeof(ApproximationValue));
     }
 
     Curve::Key::operator float() const
@@ -846,12 +876,17 @@ namespace o2
         return value;
     }
 
-    const ApproximationValue* Curve::Key::GetApproximatedPoints() const
+    const ApproximationValue* Curve::Key::GetTopApproximatedPoints() const
     {
-        return mApproxValues;
+        return mApproxTopValues;
     }
 
-    int Curve::Key::GetApproximatedPointsCount() const
+	const ApproximationValue* Curve::Key::GetBottomApproximatedPoints() const
+	{
+        return mApproxBottomValues;
+	}
+
+	int Curve::Key::GetApproximatedPointsCount() const
     {
         return mApproxValuesCount;
     }
@@ -871,6 +906,7 @@ namespace o2
     {
         uid = other.uid;
         value = other.value;
+		valueRange = other.valueRange;
         position = other.position;
         leftSupportValue = other.leftSupportValue;
         leftSupportPosition = other.leftSupportPosition;
@@ -878,7 +914,9 @@ namespace o2
         rightSupportPosition = other.rightSupportPosition;
         supportsType = other.supportsType;
         mApproxValuesBounds = other.mApproxValuesBounds;
-        memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount * sizeof(Vec2F));
+
+        memcpy(mApproxTopValues, other.mApproxTopValues, mApproxValuesCount * sizeof(Vec2F));
+		memcpy(mApproxBottomValues, other.mApproxBottomValues, mApproxValuesCount * sizeof(Vec2F));
 
         return *this;
     }
@@ -890,7 +928,9 @@ namespace o2
 
     bool Curve::Key::operator==(const Key& other) const
     {
-        return Math::Equals(position, other.position) && Math::Equals(value, other.value) &&
+        return Math::Equals(position, other.position) && 
+            Math::Equals(value, other.value) &&
+            Math::Equals(valueRange, other.valueRange) &&
             Math::Equals(leftSupportPosition, other.leftSupportPosition) &&
             Math::Equals(leftSupportValue, other.leftSupportValue) &&
             Math::Equals(rightSupportPosition, other.rightSupportPosition) &&

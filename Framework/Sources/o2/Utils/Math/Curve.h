@@ -52,10 +52,10 @@ namespace o2
         Curve& operator+=(const Curve& other);
 
         // Returns value by position @SCRIPTABLE
-        float Evaluate(float position) const;
+        float Evaluate(float position, float randomRangeCoef = 0.0f) const;
 
         // Returns value by position
-        float Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
+        float Evaluate(float position, float randomRangeCoef, bool direction, int& cacheKey, int& cacheKeyApprox) const;
 
         // Called when beginning keys batch change. After this call all keys modifications will not be update approximation
         // Used for optimizing many keys change
@@ -101,34 +101,34 @@ namespace o2
         int InsertKey(const Key& key);
 
         // Inserts key and returns index
-        int InsertKey(float position, float value, float leftCoef, float leftCoefPosition,
+        int InsertKey(float position, float value, float valueRange, float leftCoef, float leftCoefPosition,
                       float rightCoef, float rightCoefPosition);
 
         // Inserts value at position with smoothing and returns index
-        int InsertKey(float position, float value, float smoothCoef = 1.0f);
+        int InsertKey(float position, float value, float valueRange = 0.0f, float smoothCoef = 1.0f);
 
         // Inserts flat key
-        int InsertFlatKey(float position, float value);
+        int InsertFlatKey(float position, float value, float valueRange = 0.0f);
 
         // Appends key at end with offset and returns index
-        int AppendKey(float offset, float value, float leftCoef, float leftCoefPosition,
+        int AppendKey(float offset, float value, float valueRange, float leftCoef, float leftCoefPosition,
                       float rightCoef, float rightCoefPosition);
 
         // Appends key at end with offset and smoothing and returns index
-        int AppendKey(float offset, float value, float smoothCoef = 1.0f);
+        int AppendKey(float offset, float value, float valueRange = 0.0f, float smoothCoef = 1.0f);
 
         // Appends flat key at end with offset
-        int AppendKey(float offset, float value);
+        int AppendKey(float offset, float value, float valueRange = 0.0f);
 
         // Prepends key at beginning with offset and returns index
-        int PrependKey(float offset, float value, float leftCoef, float leftCoefPosition,
+        int PrependKey(float offset, float value, float valueRange, float leftCoef, float leftCoefPosition,
                        float rightCoef, float rightCoefPosition);
 
         // Prepends key at beginning with offset and smoothing and returns index
-        int PrependKey(float offset, float value, float smoothCoef = 1.0f);
+        int PrependKey(float offset, float value, float valueRange = 0.0f, float smoothCoef = 1.0f);
 
         // Prepends flat key at beginning with offset
-        int PrependKey(float offset, float value);
+        int PrependKey(float offset, float value, float valueRange = 0.0f);
 
         // Removes key at position
         bool RemoveKey(float position);
@@ -213,6 +213,7 @@ namespace o2
         public:
             UInt64 uid;                  // Random unique id @SERIALIZABLE
             float  value;                // Value @SERIALIZABLE
+			float  valueRange;           // Value range @SERIALIZABLE
             float  position;             // Position @SERIALIZABLE
             float  leftSupportValue;     // Left bezier support value, relative to key value @SERIALIZABLE
             float  leftSupportPosition;  // Left bezier support position, relative to key position @SERIALIZABLE
@@ -225,10 +226,10 @@ namespace o2
             Key();
 
             // Constructor from value and position
-            Key(float value, float position);
+            Key(float position, float value, float valueRange);
 
             // Constructor
-            Key(float position, float value, float leftSupportValue, float leftSupportPosition,
+            Key(float position, float value, float valueRange, float leftSupportValue, float leftSupportPosition,
                 float rightSupportValue, float rightSupportPosition);
 
             // Copy-constructor
@@ -247,10 +248,13 @@ namespace o2
             bool operator==(const Key& other) const;
 
             // Check not equals operator
-            bool operator!=(const Key& other) const;
+			bool operator!=(const Key& other) const;
 
-            // Returns approximated points
-            const ApproximationValue* GetApproximatedPoints() const;
+			// Returns approximated points for top range
+			const ApproximationValue* GetTopApproximatedPoints() const;
+
+			// Returns approximated points for bottom range
+			const ApproximationValue* GetBottomApproximatedPoints() const;
 
             // Returns approximated points count
             int GetApproximatedPointsCount() const;
@@ -261,9 +265,10 @@ namespace o2
             SERIALIZABLE(Key);
 
         public:
-            static const int   mApproxValuesCount = 20;           // Approximation values count
-            ApproximationValue mApproxValues[mApproxValuesCount]; // Approximation values 
-            RectF              mApproxValuesBounds;               // Bounds of approximation values
+			static const int   mApproxValuesCount = 20;                 // Approximation values count
+			ApproximationValue mApproxTopValues[mApproxValuesCount];    // Approximation values for top range
+			ApproximationValue mApproxBottomValues[mApproxValuesCount]; // Approximation values for top range
+            RectF              mApproxValuesBounds;                     // Bounds of approximation values
 
             friend class Curve;
         };
@@ -321,8 +326,8 @@ CLASS_METHODS_META(o2::Curve)
     FUNCTION().PUBLIC().CONSTRUCTOR(float, float, float, float);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Vec2F>&, bool);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Curve&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, Evaluate, float);
-    FUNCTION().PUBLIC().SIGNATURE(float, Evaluate, float, bool, int&, int&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, Evaluate, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, Evaluate, float, float, bool, int&, int&);
     FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
     FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
     FUNCTION().PUBLIC().SIGNATURE(void, MoveKeys, float);
@@ -337,15 +342,15 @@ CLASS_METHODS_META(o2::Curve)
     FUNCTION().PUBLIC().SIGNATURE(void, InsertKeys, const Vector<Vec2F>&, float, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertKeys, const Vector<Key>&, float);
     FUNCTION().PUBLIC().SIGNATURE(int, InsertKey, const Key&);
-    FUNCTION().PUBLIC().SIGNATURE(int, InsertKey, float, float, float, float, float, float);
-    FUNCTION().PUBLIC().SIGNATURE(int, InsertKey, float, float, float);
-    FUNCTION().PUBLIC().SIGNATURE(int, InsertFlatKey, float, float);
-    FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, float, float, float, float, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(int, InsertKey, float, float, float, float, float, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(int, InsertKey, float, float, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(int, InsertFlatKey, float, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, float, float, float, float, float, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, float, float, float, float);
     FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, float, float, float);
-    FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, float, float);
-    FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, float, float, float, float, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, float, float, float, float, float, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, float, float, float, float);
     FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, float, float, float);
-    FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, float, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKey, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKeyAt, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllKeys);
@@ -385,13 +390,15 @@ CLASS_FIELDS_META(o2::Curve::Key)
 {
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(uid);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(value);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(valueRange);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(position);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportValue);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportPosition);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportValue);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportPosition);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(supportsType);
-    FIELD().PUBLIC().NAME(mApproxValues);
+    FIELD().PUBLIC().NAME(mApproxTopValues);
+    FIELD().PUBLIC().NAME(mApproxBottomValues);
     FIELD().PUBLIC().NAME(mApproxValuesBounds);
 }
 END_META;
@@ -399,10 +406,11 @@ CLASS_METHODS_META(o2::Curve::Key)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(float, float);
-    FUNCTION().PUBLIC().CONSTRUCTOR(float, float, float, float, float, float);
+    FUNCTION().PUBLIC().CONSTRUCTOR(float, float, float);
+    FUNCTION().PUBLIC().CONSTRUCTOR(float, float, float, float, float, float, float);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Key&);
-    FUNCTION().PUBLIC().SIGNATURE(const ApproximationValue*, GetApproximatedPoints);
+    FUNCTION().PUBLIC().SIGNATURE(const ApproximationValue*, GetTopApproximatedPoints);
+    FUNCTION().PUBLIC().SIGNATURE(const ApproximationValue*, GetBottomApproximatedPoints);
     FUNCTION().PUBLIC().SIGNATURE(int, GetApproximatedPointsCount);
     FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetGetApproximatedPointsBounds);
 }

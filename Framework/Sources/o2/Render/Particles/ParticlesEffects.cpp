@@ -146,7 +146,7 @@ namespace o2
 			int particleIndex = p.index;
 
 			auto& sizeData = mSizeData[particleIndex];
-			p.size = sizeData.initialSize*sizeCurve->Evaluate(1.0f - p.timeLeft/p.lifetime, true, sizeData.cacheKey, sizeData.cacheKeyApprox);
+			p.size = sizeData.initialSize*sizeCurve->Evaluate(1.0f - p.timeLeft/p.lifetime, 0.0f, true, sizeData.cacheKey, sizeData.cacheKeyApprox);
 		}
 	}
 
@@ -161,6 +161,59 @@ namespace o2
 		sizeCurve->onKeysChanged += [this]() { OnChanged(); };
 	}
 
+	ParticlesRandomSizeEffect::ParticlesRandomSizeEffect()
+	{
+		sizeCurveA = mmake<Curve>(Curve::Linear(1.0f, 1.0f));
+		sizeCurveB = mmake<Curve>(Curve::Linear(1.0f, 1.0f));
+
+		sizeCurveA->onKeysChanged += [this]() { OnChanged(); };
+		sizeCurveB->onKeysChanged += [this]() { OnChanged(); };
+
+	}
+
+	void ParticlesRandomSizeEffect::OnParticleEmitted(Particle& particle)
+	{
+		int particleIndex = particle.index;
+
+		CheckDataBufferSize(particleIndex);
+
+		auto& sizeData = mSizeData[particleIndex];
+		sizeData.initialSize = particle.size;
+		sizeData.cacheKeyA = 0;
+		sizeData.cacheKeyB = 0;
+		sizeData.coef = Math::Random(0.0f, 1.0f);
+	}
+
+	void ParticlesRandomSizeEffect::Update(float dt, ParticlesEmitter* emitter)
+	{
+		auto& particles = GetParticlesDirect(emitter);
+
+		CheckDataBufferSize(particles.Count());
+
+		for (auto& p : particles)
+		{
+			int particleIndex = p.index;
+
+			auto& sizeData = mSizeData[particleIndex];
+			auto lifeTimeCoef = 1.0f - p.timeLeft / p.lifetime;
+			auto sizeA = sizeData.initialSize*sizeCurveA->Evaluate(lifeTimeCoef, 0.0f, true, sizeData.cacheKeyA, sizeData.cacheKeyApproxA);
+			auto sizeB = sizeData.initialSize*sizeCurveB->Evaluate(lifeTimeCoef, 0.0f, true, sizeData.cacheKeyB, sizeData.cacheKeyApproxB);
+			p.size = Math::Lerp(sizeA, sizeB, sizeData.coef);
+		}
+	}
+
+	void ParticlesRandomSizeEffect::CheckDataBufferSize(int particlesCount)
+	{
+		for (int i = mSizeData.size(); i <= particlesCount; i++)
+			mSizeData.Add(ParticleSizeData());
+	}
+
+	void ParticlesRandomSizeEffect::OnDeserialized(const DataValue& node)
+	{
+		sizeCurveA->onKeysChanged += [this]() { OnChanged(); };
+		sizeCurveB->onKeysChanged += [this]() { OnChanged(); };
+	}
+
 }
 // --- META ---
 
@@ -173,4 +226,6 @@ DECLARE_CLASS(o2::ParticlesColorEffect, o2__ParticlesColorEffect);
 DECLARE_CLASS(o2::ParticlesRandomColorEffect, o2__ParticlesRandomColorEffect);
 
 DECLARE_CLASS(o2::ParticlesSizeEffect, o2__ParticlesSizeEffect);
+
+DECLARE_CLASS(o2::ParticlesRandomSizeEffect, o2__ParticlesRandomSizeEffect);
 // --- END META ---

@@ -599,7 +599,7 @@ namespace o2
 			return;
 
 		auto item = DynamicCast<ContextMenuItem>(mItemsLayout->mChildren[position]);
-		if (item->IsCheckable())
+		if (item && item->IsCheckable())
 			item->SetChecked(checked);
 	}
 

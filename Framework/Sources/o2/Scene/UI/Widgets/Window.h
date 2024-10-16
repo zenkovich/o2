@@ -94,7 +94,8 @@ namespace o2
 
         Ref<ContextMenu> mOptionsMenu; // Window options context menu
 
-        Ref<CursorEventsArea> mBackCursorArea; // Cursor area listener at back of window, for catching events
+		Ref<CursorEventsArea> mBackCursorArea;   // Cursor area listener at back of window, for catching events
+		Ref<CursorEventsArea> mWindowCursorArea; // Cursor area listener for window frame
 
         Ref<CursorEventsArea> mHeadDragHandle;     // Head drag handle, for moving window
         Layout                mHeadDragAreaLayout; // Head drag handle layout @SERIALIZABLE
@@ -187,6 +188,7 @@ CLASS_FIELDS_META(o2::Window)
     FIELD().PUBLIC().NAME(onClosed);
     FIELD().PROTECTED().NAME(mOptionsMenu);
     FIELD().PROTECTED().NAME(mBackCursorArea);
+    FIELD().PROTECTED().NAME(mWindowCursorArea);
     FIELD().PROTECTED().NAME(mHeadDragHandle);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mHeadDragAreaLayout);
     FIELD().PROTECTED().NAME(mHeadDragAreaRect);

@@ -58,6 +58,11 @@ namespace Editor
 											  AssetRef<ImageAsset>("ui/CurveSupportHandlePressed.png"),
 											  AssetRef<ImageAsset>("ui/CurveSupportHandleSelected.png"));
 
+		mEditorWidget->SetRangeHandleImages(AssetRef<ImageAsset>("ui/UI2_handle_side_regular.png"),
+											  AssetRef<ImageAsset>("ui/UI2_handle_side_select.png"),
+											  AssetRef<ImageAsset>("ui/UI2_handle_side_pressed.png"),
+											  AssetRef<ImageAsset>("ui/UI2_handle_side_select.png"));
+
 		mEditorWidget->SetSelectionSpriteImage(AssetRef<ImageAsset>("ui/UI_Window_place.png"));
 
 		mWindow->AddChild(mEditorWidget);

@@ -394,9 +394,7 @@ namespace Editor
 			Ref<Curve> curve = mmake<Curve>();
 
 			for (int j = 0; j < testKeys; j++)
-			{
-				curve->AppendKey(Math::Random(0.1f, 2.0f), Math::Random(-1.0f, 1.0f), 1.0f);
-			}
+				curve->AppendKey(Math::Random(0.1f, 2.0f), Math::Random(-1.0f, 1.0f), 0.0f, 1.0f);
 
 			CurveEditorDlg::AddEditingCurve("test" + (String)i, curve);
 		}

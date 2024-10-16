@@ -78,15 +78,14 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
-		mBackCursorArea->OnDrawn();
-
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		for (auto& layer : mDrawingLayers)
 			layer->Draw();
 
-		IDrawable::OnDrawn();
+		mBackCursorArea->OnDrawn();
+		ScrollArea::OnDrawn();
 
 		if (!mTabState || mTabActive)
 		{

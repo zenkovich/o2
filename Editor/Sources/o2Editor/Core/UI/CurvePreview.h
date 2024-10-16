@@ -57,6 +57,7 @@ namespace Editor
 		bool mNeedRedraw = false; // Need redraw flag
 
 		Ref<Sprite> mSprite; // Image sprite, used for drawing
+		Ref<Mesh>   mMesh;   // Curves range mesh, used for drawing
 
 		Color4 mBackColor = Color4(225, 232, 232); // Background color
 		Color4 mCurveColor = Color4(44, 62, 80);   // Curve color
@@ -84,6 +85,7 @@ CLASS_FIELDS_META(Editor::CurvePreview)
     FIELD().PROTECTED().NAME(mCurve);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
     FIELD().PROTECTED().NAME(mSprite);
+    FIELD().PROTECTED().NAME(mMesh);
     FIELD().PROTECTED().DEFAULT_VALUE(Color4(225, 232, 232)).NAME(mBackColor);
     FIELD().PROTECTED().DEFAULT_VALUE(Color4(44, 62, 80)).NAME(mCurveColor);
 }

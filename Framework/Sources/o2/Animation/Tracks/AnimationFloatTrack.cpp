@@ -36,7 +36,7 @@ namespace o2
 
     float AnimationTrack<float>::GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
     {
-        return curve->Evaluate(position, direction, cacheKey, cacheKeyApprox);
+        return curve->Evaluate(position, 0.0f, direction, cacheKey, cacheKeyApprox);
     }
 
     void AnimationTrack<float>::BeginKeysBatchChange()
@@ -84,12 +84,12 @@ namespace o2
     int AnimationTrack<float>::AddKey(float position, float value, float leftCoef, float leftCoefPosition,
                                       float rightCoef, float rightCoefPosition)
     {
-        return curve->InsertKey(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
+        return curve->InsertKey(position, value, 0.0f, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
     }
 
     int AnimationTrack<float>::AddKey(float position, float value, float smooth /*= 1.0f*/)
     {
-        return curve->InsertKey(position, value, smooth);
+        return curve->InsertKey(position, value, 0.0f, smooth);
     }
 
     bool AnimationTrack<float>::RemoveKey(float position)
@@ -287,7 +287,7 @@ namespace o2
         if (!mTrack)
             return;
 
-        mCurrentValue = mTrack->curve->Evaluate(mInDurationTime, mInDurationTime > mPrevInDurationTime, mPrevKey, mPrevKeyApproximation);
+        mCurrentValue = mTrack->curve->Evaluate(mInDurationTime, 0.0f, mInDurationTime > mPrevInDurationTime, mPrevKey, mPrevKeyApproximation);
         mPrevInDurationTime = mInDurationTime;
 
         if (mTarget)

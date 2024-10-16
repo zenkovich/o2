@@ -695,6 +695,7 @@ namespace o2
     void ScrollArea::OnDrawn()
     {
         CursorAreaEventsListener::OnDrawn();
+        Widget::OnDrawn();
     }
 
     void ScrollArea::OnDeserialized(const DataValue& node)

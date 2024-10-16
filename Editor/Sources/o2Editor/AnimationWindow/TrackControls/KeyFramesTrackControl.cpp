@@ -86,7 +86,7 @@ namespace Editor
 								   timeline->LocalToWorld(key.position) - 3,
 								   layout->GetWorldBottom() + 5));
 
-			DrawCurveInCoords(key.GetApproximatedPoints(), key.GetApproximatedPointsCount(),
+			DrawCurveInCoords(key.GetTopApproximatedPoints(), key.GetApproximatedPointsCount(),
 							  key.GetGetApproximatedPointsBounds(), drawCoords, Color4(44, 62, 80));
 		}
 

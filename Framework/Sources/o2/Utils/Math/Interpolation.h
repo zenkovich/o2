@@ -22,6 +22,11 @@ namespace o2
         return v < 0 ? Math::Pow(-v, 1.0f/3.0f) : Math::Pow(v, 1.0f/3.0f);
     }
 
+	inline float SinErp(float begin, float end, float coef)
+	{
+		return begin + (end - begin) * Math::Sin(coef * Math::PI() * 0.5f);
+	}
+
     inline float SolveBezier(float p0, float p1, float p2, float p3, float x)
     {
         p0 -= x;

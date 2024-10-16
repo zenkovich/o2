@@ -195,6 +195,55 @@ namespace o2
 		// Called when deserialization is done, used to subscribe to size curve changes
 		void OnDeserialized(const DataValue& node) override;
 	};
+
+	// -------------------------------
+	// Particles size over time effect
+	// -------------------------------
+	class ParticlesRandomSizeEffect : public ParticlesEffect
+	{
+	public:
+		Ref<Curve> sizeCurveA; // Size curve A @SERIALIZABLE
+		Ref<Curve> sizeCurveB; // Size curve A @SERIALIZABLE
+
+	public:
+		// Default constructor
+		ParticlesRandomSizeEffect();
+
+		// Called when particle is emitted, used to initialize effect data
+		void OnParticleEmitted(Particle& particle) override;
+
+		// Update particles size over time
+		void Update(float dt, ParticlesEmitter* emitter) override;
+
+		SERIALIZABLE(ParticlesRandomSizeEffect);
+		CLONEABLE_REF(ParticlesRandomSizeEffect);
+
+	private:
+		struct ParticleSizeData
+		{
+			Vec2F initialSize;
+			float coef = 0.0f;
+
+			int cacheKeyA = 0;
+			int cacheKeyApproxA = 0;
+
+			int cacheKeyB = 0;
+			int cacheKeyApproxB = 0;
+
+			bool operator==(const ParticleSizeData& other) const
+			{
+				return cacheKeyA == other.cacheKeyA && cacheKeyB == other.cacheKeyB;
+			}
+		};
+
+		Vector<ParticleSizeData> mSizeData; // Size data buffer
+
+	private:
+		void CheckDataBufferSize(int particlesCount);
+
+		// Called when deserialization is done, used to subscribe to size curve changes
+		void OnDeserialized(const DataValue& node) override;
+	};
 }
 // --- META ---
 
@@ -298,6 +347,29 @@ CLASS_FIELDS_META(o2::ParticlesSizeEffect)
 }
 END_META;
 CLASS_METHODS_META(o2::ParticlesSizeEffect)
+{
+
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, OnParticleEmitted, Particle&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float, ParticlesEmitter*);
+    FUNCTION().PRIVATE().SIGNATURE(void, CheckDataBufferSize, int);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
+}
+END_META;
+
+CLASS_BASES_META(o2::ParticlesRandomSizeEffect)
+{
+    BASE_CLASS(o2::ParticlesEffect);
+}
+END_META;
+CLASS_FIELDS_META(o2::ParticlesRandomSizeEffect)
+{
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(sizeCurveA);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(sizeCurveB);
+    FIELD().PRIVATE().NAME(mSizeData);
+}
+END_META;
+CLASS_METHODS_META(o2::ParticlesRandomSizeEffect)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
