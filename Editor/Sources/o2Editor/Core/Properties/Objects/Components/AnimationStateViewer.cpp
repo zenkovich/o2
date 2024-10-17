@@ -105,7 +105,8 @@ namespace Editor
 		{
 			auto animationState = dynamic_cast<AnimationState*>(mTargetObjects.Last().first);
 			auto animationRef = animationState->GetAnimation();
-			if (!animationRef) {
+			if (!animationRef) 
+			{
 				animationRef.CreateInstance();
 				animationState->SetAnimation(animationRef);
 

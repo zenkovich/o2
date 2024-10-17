@@ -447,18 +447,18 @@ namespace o2
 	template<typename _asset_type>
 	void AssetRef<_asset_type>::CreateInstance()
 	{
-		_asset_type* asset;
+		Ref<_asset_type> asset;
 		if (mPtr)
 		{
-			asset = dynamic_cast<_asset_type*>(mPtr->template CloneAs<Asset>());
+			asset = DynamicCast<_asset_type>(mPtr->template CloneAsRef<Asset>());
 		}
 		else
 		{
 			auto objectType = dynamic_cast<const ObjectType*>(&GetAssetType());
-			asset = dynamic_cast<_asset_type*>(objectType->DynamicCastToIObject(objectType->CreateSample()));
+			asset = DynamicCast<_asset_type>(objectType->CreateSampleRef());
 		}
 
-		SetInstance(asset);
+		SetInstance(asset.Get());
 	}
 
 	template<typename _asset_type>

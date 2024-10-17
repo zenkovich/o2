@@ -39,6 +39,8 @@ namespace o2
 		PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter @GROUP("Emission")
 
 		PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef); // Particles emitting coefficient property (0...1) @RANGE(0, 1) @GROUP("Emission")
+
+		PROPERTY(float, prewarmTime, SetPrewarmTime, GetPrewarmTime); // Emitting particles prewarm time property @RANGE(0, 1) @GROUP("Emission")
 		
 		PROPERTY(float, initialAngle, SetInitialAngle, GetInitialAngle);                // Emitting particle angle property in degrees @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Angle")
 		PROPERTY(float, initialAngleRange, SetInitialAngleRange, GetInitialAngleRange); // Emitting particle angle range property in degrees @RANGE(0, 360) @GROUP("Initial parameters") @NAME("Angle range")
@@ -159,6 +161,12 @@ namespace o2
         // Returns number of particles emitting per second
         float GetParticlesPerSecond() const;
 
+		// Sets emitting particles prewarm time
+		void SetPrewarmTime(float time);
+
+		// Returns emitting particles prewarm time
+		float GetPrewarmTime() const;
+
         // Sets emitting particles rotation angle in degrees
         void SetInitialAngle(float angle);
 
@@ -253,6 +261,9 @@ namespace o2
 		float mParticlesLifetime = 0.5f;      // Particles lifetime in seconds @SERIALIZABLE
 		float mParticlesLifetimeRange = 0.0f; // Particles lifetime range in seconds @SERIALIZABLE
         float mEmitParticlesPerSecond = 10;   // Number of particles emitting in one second @SERIALIZABLE
+
+		float mPrewarmTime = 0.0f;    // Particles prewarm time (updates particles before start) @SERIALIZABLE
+		float mPrewarmTimeout = 0.0f; // Particles prewarm timeout. Starts from prewarm time and decreases to 0
                                                           
         float mInitialAngle = 0;          // Emitting particles angle in degrees @SERIALIZABLE
         float mInitialAngleRange = 45.0f; // Emitting particles angle in degrees randomize range @SERIALIZABLE
@@ -387,6 +398,7 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 10).NAME(particlesLifetime);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").NAME(particlesRelative);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 1).NAME(emittingCoefficient);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 1).NAME(prewarmTime);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Angle").RANGE_ATTRIBUTE(0, 360).NAME(initialAngle);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Angle range").RANGE_ATTRIBUTE(0, 360).NAME(initialAngleRange);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Initial parameters").NAME_ATTRIBUTE("Size").RANGE_ATTRIBUTE(0, 3).NAME(initialSize);
@@ -410,6 +422,8 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.5f).NAME(mParticlesLifetime);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mParticlesLifetimeRange);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mEmitParticlesPerSecond);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mPrewarmTime);
+    FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrewarmTimeout);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mInitialAngle);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(45.0f).NAME(mInitialAngleRange);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mInitialSize);
@@ -468,6 +482,8 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(float, GetParticlesLifetime);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesPerSecond, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetParticlesPerSecond);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPrewarmTime, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetPrewarmTime);
     FUNCTION().PUBLIC().SIGNATURE(void, SetInitialAngle, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetInitialAngle);
     FUNCTION().PUBLIC().SIGNATURE(void, SetInitialAngleRange, float);

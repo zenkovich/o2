@@ -115,7 +115,7 @@ namespace Editor
 
 	public:
 		// Default constructor
-		SplineTool();
+		SplineTool(RefCounter* refCounter);
 
 		// Empty copy operator
 		SplineTool& operator=(const SplineTool& other) { return *this; }
@@ -156,7 +156,7 @@ END_META;
 CLASS_METHODS_META(Editor::SplineTool)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSpline, const Ref<Spline>&, const Function<Vec2F()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Reset);
     FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);

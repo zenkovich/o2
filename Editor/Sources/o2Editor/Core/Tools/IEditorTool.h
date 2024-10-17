@@ -18,9 +18,16 @@ namespace Editor
 	// ---------------------
 	// Editor tool interface
 	// ---------------------
-	class IEditTool: public IObject, virtual public RefCounterable
+	class IEditTool: public IObject, public RefCounterable
 	{
 	public:
+		// Default constructor
+		IEditTool() {}
+
+		// Constructor with ref counter
+		IEditTool(RefCounter* refCounter) : RefCounterable(refCounter) {}
+
+		// Destructor
 		virtual ~IEditTool() {}
 
 		// Creates if required and returns toggle button for menu panel
@@ -135,6 +142,8 @@ END_META;
 CLASS_METHODS_META(Editor::IEditTool)
 {
 
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<Toggle>&, GetPanelToggle);
     FUNCTION().PROTECTED().SIGNATURE(Ref<Toggle>, CreatePanelToggle);
     FUNCTION().PROTECTED().SIGNATURE(String, GetPanelIcon);

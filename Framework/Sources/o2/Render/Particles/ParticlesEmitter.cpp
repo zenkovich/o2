@@ -124,6 +124,15 @@ namespace o2
 		if (!mParticlesPaused)
 #endif
 		{
+			float prewardDt = 1.0f / 30.0f;
+			while (mPrewarmTimeout > 0.0f)
+			{
+				UpdateEmitting(prewardDt);
+				UpdateEffects(prewardDt);
+				UpdateParticles(prewardDt);
+				mPrewarmTimeout -= prewardDt;
+			}
+
 			UpdateEmitting(dt);
 			UpdateEffects(dt);
 			UpdateParticles(dt);
@@ -327,6 +336,7 @@ namespace o2
 		IAnimation::Play();
 
 		mEmitTimeBuffer = 0.0f;
+		mPrewarmTimeout = mPrewarmTime;
 		mBakedFrames.Clear();
 	}
 
@@ -481,6 +491,17 @@ namespace o2
 	float ParticlesEmitter::GetParticlesPerSecond() const
 	{
 		return mEmitParticlesPerSecond;
+	}
+
+	void ParticlesEmitter::SetPrewarmTime(float time)
+	{
+		mPrewarmTime = time;
+		OnChanged();
+	}
+
+	float ParticlesEmitter::GetPrewarmTime() const
+	{
+		return mPrewarmTime;
 	}
 
 	void ParticlesEmitter::SetInitialAngle(float angle)
@@ -724,6 +745,9 @@ namespace o2
 
 		bool prevPaused = mParticlesPaused;
 		mParticlesPaused = false;
+
+		if (startIdx == 0)
+			mPrewarmTimeout = mPrewarmTime;
 
 		// Update and bake frames
 		for (int i = startIdx; i <= maxFrameIdx; i++)

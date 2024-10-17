@@ -7,20 +7,20 @@ namespace Editor
 	{
 		mSelectionSprite = mmake<Sprite>("ui/UI_Window_place.png");
 
-		mHandlesSample.position = DragHandle(mmake<Sprite>("ui/CurveHandle.png"),
-											 mmake<Sprite>("ui/CurveHandleHover.png"),
-											 mmake<Sprite>("ui/CurveHandlePressed.png"),
-											 mmake<Sprite>("ui/CurveHandleSelected.png"));
+		mHandlesSample.position = mmake<DragHandle>(mmake<Sprite>("ui/CurveHandle.png"),
+													mmake<Sprite>("ui/CurveHandleHover.png"),
+													mmake<Sprite>("ui/CurveHandlePressed.png"),
+													mmake<Sprite>("ui/CurveHandleSelected.png"));
 
-		mHandlesSample.prevSupport = DragHandle(mmake<Sprite>("ui/CurveSupportHandle.png"),
-												mmake<Sprite>("ui/CurveSupportHandleHover.png"),
-												mmake<Sprite>("ui/CurveSupportHandlePressed.png"),
-												mmake<Sprite>("ui/CurveSupportHandleSelected.png"));
+		mHandlesSample.prevSupport = mmake<DragHandle>(mmake<Sprite>("ui/CurveSupportHandle.png"),
+													   mmake<Sprite>("ui/CurveSupportHandleHover.png"),
+													   mmake<Sprite>("ui/CurveSupportHandlePressed.png"),
+													   mmake<Sprite>("ui/CurveSupportHandleSelected.png"));
 
-		mHandlesSample.nextSupport = DragHandle(mmake<Sprite>("ui/CurveSupportHandle.png"),
-												mmake<Sprite>("ui/CurveSupportHandleHover.png"),
-												mmake<Sprite>("ui/CurveSupportHandlePressed.png"),
-												mmake<Sprite>("ui/CurveSupportHandleSelected.png"));
+		mHandlesSample.nextSupport = mmake<DragHandle>(mmake<Sprite>("ui/CurveSupportHandle.png"),
+													   mmake<Sprite>("ui/CurveSupportHandleHover.png"),
+													   mmake<Sprite>("ui/CurveSupportHandlePressed.png"),
+													   mmake<Sprite>("ui/CurveSupportHandleSelected.png"));
 
 		mSplineColor = Color4(44, 62, 80, 255);
 		mSplineSupportColor = Color4(190, 190, 190, 255);
@@ -64,20 +64,20 @@ namespace Editor
 		{
 			if (handles->IsSupportsVisible())
 			{
-				handles->prevSupport.UpdateScreenPosition();
-				handles->nextSupport.UpdateScreenPosition();
+				handles->prevSupport->UpdateScreenPosition();
+				handles->nextSupport->UpdateScreenPosition();
 
 				bool broken = (o2Input.IsKeyDown(VK_MENU) || handles->startDragFromZero) && o2Input.IsCursorDown();
 
 				if (!handles->isFirst || mSplineWrapper->IsClosed())
 				{
-					o2Render.DrawAALine(handles->position.GetScreenPosition(), handles->prevSupport.GetScreenPosition(),
+					o2Render.DrawAALine(handles->position->GetScreenPosition(), handles->prevSupport->GetScreenPosition(),
 										mSplineSupportColor, 1.0f, broken ? LineType::Dash : LineType::Solid);
 				}
 
 				if (!handles->isLast || mSplineWrapper->IsClosed())
 				{
-					o2Render.DrawAALine(handles->position.GetScreenPosition(), handles->nextSupport.GetScreenPosition(),
+					o2Render.DrawAALine(handles->position->GetScreenPosition(), handles->nextSupport->GetScreenPosition(),
 										mSplineSupportColor, 1.0f, broken ? LineType::Dash : LineType::Solid);
 				}
 			}
@@ -113,8 +113,8 @@ namespace Editor
 		Vec2F worldXV = mSplineWrapper->LocalToWorld(mTransformFrameBasis.xv + mTransformFrameBasis.origin) - worldOrig;
 		Vec2F worldYV = mSplineWrapper->LocalToWorld(mTransformFrameBasis.yv + mTransformFrameBasis.origin) - worldOrig;
 		mTransformFrame.SetBasis(Basis(worldOrig - mTransformBasisOffet,
-								 worldXV + Vec2F(mTransformBasisOffet.x*2.0f, 0),
-								 worldYV + Vec2F(0, mTransformBasisOffet.y*2.0f)));
+									   worldXV + Vec2F(mTransformBasisOffet.x*2.0f, 0),
+									   worldYV + Vec2F(0, mTransformBasisOffet.y*2.0f)));
 
 		mTransformFrame.Draw();
 	}
@@ -122,7 +122,7 @@ namespace Editor
 	void SplineEditor::DrawMainHandles()
 	{
 		for (auto& handles : mSplineHandles)
-			handles->position.Draw();
+			handles->position->Draw();
 	}
 
 	void SplineEditor::DrawSupportHandles()
@@ -132,10 +132,10 @@ namespace Editor
 			if (handles->IsSupportsVisible())
 			{
 				if (!handles->isFirst || mSplineWrapper->IsClosed())
-					handles->prevSupport.Draw();
+					handles->prevSupport->Draw();
 
 				if (!handles->isLast || mSplineWrapper->IsClosed())
-					handles->nextSupport.Draw();
+					handles->nextSupport->Draw();
 			}
 		}
 	}
@@ -194,35 +194,35 @@ namespace Editor
 			handles->isFirst = i == 0;
 			handles->isLast = i == mSplineWrapper->GetPointsCount() - 1;
 
-			handles->position = mHandlesSample.position;
-			handles->position.SetPosition(mSplineWrapper->GetPointPos(i));
-			handles->position.SetSelectionGroup(Ref(this));
-			handles->position.onPressed = [=]() { handles->positionDragged = false; };
-			handles->position.onBeganDragging = [=]() { handles->positionDragged = true; };
-			handles->position.onReleased = [=]() { if (!handles->positionDragged) OnMainHandleReleasedNoDrag(i, handles); };
-			handles->position.onChangedPos = [=](const Vec2F& pos) { OnMainHandleMoved(i, pos, handles); };
-			handles->position.localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
-			handles->position.screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
+			handles->position = mHandlesSample.position->CloneAsRef<DragHandle>();
+			handles->position->SetPosition(mSplineWrapper->GetPointPos(i));
+			handles->position->SetSelectionGroup(Ref(this));
+			handles->position->onPressed = [=]() { handles->positionDragged = false; };
+			handles->position->onBeganDragging = [=]() { handles->positionDragged = true; };
+			handles->position->onReleased = [=]() { if (!handles->positionDragged) OnMainHandleReleasedNoDrag(i, handles); };
+			handles->position->onChangedPos = [=](const Vec2F& pos) { OnMainHandleMoved(i, pos, handles); };
+			handles->position->localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
+			handles->position->screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
 
-			handles->prevSupport = mHandlesSample.prevSupport;
-			handles->prevSupport.SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
-			handles->prevSupport.SetSelectionGroup(mSupportHandlesGroup);
-			handles->prevSupport.onChangedPos = [=](const Vec2F& pos) { OnPrevHandleMoved(i, pos, handles); };
-			handles->prevSupport.onPressed = [=]() { handles->prevSupportDragged = false; CheckDragFromZero(i, handles); };
-			handles->prevSupport.onBeganDragging = [=]() { handles->prevSupportDragged = true; };
-			handles->prevSupport.onReleased = [=]() { if (!handles->prevSupportDragged) OnPrevHandleReleasedNoDrag(i, handles); };
-			handles->prevSupport.localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
-			handles->prevSupport.screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
+			handles->prevSupport = mHandlesSample.prevSupport->CloneAsRef<DragHandle>();
+			handles->prevSupport->SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
+			handles->prevSupport->SetSelectionGroup(mSupportHandlesGroup);
+			handles->prevSupport->onChangedPos = [=](const Vec2F& pos) { OnPrevHandleMoved(i, pos, handles); };
+			handles->prevSupport->onPressed = [=]() { handles->prevSupportDragged = false; CheckDragFromZero(i, handles); };
+			handles->prevSupport->onBeganDragging = [=]() { handles->prevSupportDragged = true; };
+			handles->prevSupport->onReleased = [=]() { if (!handles->prevSupportDragged) OnPrevHandleReleasedNoDrag(i, handles); };
+			handles->prevSupport->localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
+			handles->prevSupport->screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
 
-			handles->nextSupport = mHandlesSample.nextSupport;
-			handles->nextSupport.SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
-			handles->nextSupport.SetSelectionGroup(mSupportHandlesGroup);
-			handles->nextSupport.onChangedPos = [=](const Vec2F& pos) { OnNextHandleMoved(i, pos, handles); };
-			handles->nextSupport.onPressed = [=]() { handles->nextSupportDragged = false; CheckDragFromZero(i, handles); };
-			handles->nextSupport.onBeganDragging = [=]() { handles->nextSupportDragged = true; };
-			handles->nextSupport.onReleased = [=]() { if (!handles->nextSupportDragged) OnNextHandleReleasedNoDrag(i, handles); };
-			handles->nextSupport.localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
-			handles->nextSupport.screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
+			handles->nextSupport = mHandlesSample.nextSupport->CloneAsRef<DragHandle>();
+			handles->nextSupport->SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
+			handles->nextSupport->SetSelectionGroup(mSupportHandlesGroup);
+			handles->nextSupport->onChangedPos = [=](const Vec2F& pos) { OnNextHandleMoved(i, pos, handles); };
+			handles->nextSupport->onPressed = [=]() { handles->nextSupportDragged = false; CheckDragFromZero(i, handles); };
+			handles->nextSupport->onBeganDragging = [=]() { handles->nextSupportDragged = true; };
+			handles->nextSupport->onReleased = [=]() { if (!handles->nextSupportDragged) OnNextHandleReleasedNoDrag(i, handles); };
+			handles->nextSupport->localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
+			handles->nextSupport->screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
 
 			mSplineHandles.Add(handles);
 		}
@@ -241,7 +241,7 @@ namespace Editor
 			Vec2F symmetricNextPos = (curr - pos).Normalized()*(nextDistance + distanceDiff) + curr;
 			mSplineWrapper->SetPointNextSupportPos(i, symmetricNextPos);
 
-			handles->nextSupport.SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
+			handles->nextSupport->SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
 		}
 
 		mSplineWrapper->SetPointPrevSupportPos(i, pos);
@@ -262,7 +262,7 @@ namespace Editor
 			Vec2F symmetricPrevPos = (curr - pos).Normalized()*(prevDistance + distanceDiff) + curr;
 			mSplineWrapper->SetPointPrevSupportPos(i, symmetricPrevPos);
 
-			handles->prevSupport.SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
+			handles->prevSupport->SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
 		}
 
 		mSplineWrapper->SetPointNextSupportPos(i, pos);
@@ -273,8 +273,8 @@ namespace Editor
 	void SplineEditor::OnMainHandleMoved(int i, const Vec2F& pos, const Ref<PointHandles>& handles)
 	{
 		mSplineWrapper->SetPointPos(i, pos);
-		handles->prevSupport.SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
-		handles->nextSupport.SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
+		handles->prevSupport->SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
+		handles->nextSupport->SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
 
 		UpdateTransformFrame();
 		mSplineWrapper->OnChanged();
@@ -286,7 +286,7 @@ namespace Editor
 		if (o2Input.IsKeyDown(VK_MENU))
 		{
 			mSplineWrapper->SetPointPrevSupportPos(i, mSplineWrapper->GetPointPos(i));
-			handles->prevSupport.SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
+			handles->prevSupport->SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
 
 			UpdateTransformFrame();
 			mSplineWrapper->OnChanged();
@@ -299,7 +299,7 @@ namespace Editor
 		if (o2Input.IsKeyDown(VK_MENU))
 		{
 			mSplineWrapper->SetPointNextSupportPos(i, mSplineWrapper->GetPointPos(i));
-			handles->nextSupport.SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
+			handles->nextSupport->SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
 
 			UpdateTransformFrame();
 			mSplineWrapper->OnChanged();
@@ -314,8 +314,8 @@ namespace Editor
 			mSplineWrapper->SetPointNextSupportPos(i, mSplineWrapper->GetPointPos(i));
 			mSplineWrapper->SetPointPrevSupportPos(i, mSplineWrapper->GetPointPos(i));
 
-			handles->nextSupport.SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
-			handles->prevSupport.SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
+			handles->nextSupport->SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
+			handles->prevSupport->SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
 
 			UpdateTransformFrame();
 			mSplineWrapper->OnChanged();
@@ -495,7 +495,7 @@ namespace Editor
 
 		for (auto& handles : mSplineHandles)
 		{
-			if (handles->position.IsSelected())
+			if (handles->position->IsSelected())
 				selectedMainHandles++;
 		}
 
@@ -581,7 +581,7 @@ namespace Editor
 
 	bool SplineEditor::PointHandles::IsSupportsVisible() const
 	{
-		return position.IsSelected() || prevSupport.IsSelected() ||nextSupport.IsSelected() || o2Input.IsKeyDown(VK_MENU);
+		return position->IsSelected() || prevSupport->IsSelected() ||nextSupport->IsSelected() || o2Input.IsKeyDown(VK_MENU);
 	}
 
 }

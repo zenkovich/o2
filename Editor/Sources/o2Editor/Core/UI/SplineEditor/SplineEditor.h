@@ -109,9 +109,9 @@ namespace Editor
 		// -----------------------
 		struct PointHandles : public RefCounterable
 		{
-			DragHandle position;    // Position handle
-			DragHandle prevSupport; // Previous support handle
-			DragHandle nextSupport; // Next support handle
+			Ref<DragHandle> position;    // Position handle
+			Ref<DragHandle> prevSupport; // Previous support handle
+			Ref<DragHandle> nextSupport; // Next support handle
 
 			bool positionDragged = false;    // Is position handle dragged
 			bool prevSupportDragged = false; // Is previous support handle dragged 

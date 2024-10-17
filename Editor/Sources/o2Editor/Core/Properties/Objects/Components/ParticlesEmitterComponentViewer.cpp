@@ -131,7 +131,10 @@ namespace Editor
 		{
 			auto emitter = pair.first;
 			if (emitter)
+			{
+				emitter->SetParticlesPause(false);
 				emitter->RewindAndPlay();
+			}
 		}
 	}
 

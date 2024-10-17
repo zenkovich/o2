@@ -342,14 +342,15 @@ namespace Editor
 		mName = GetLayerDrawable<Text>("name");
 		mIcon = GetLayerDrawable<Sprite>("icon");
 
-		auto tree = mTree.Lock();
-		auto data = mData.Lock();
 
 		mAddButton = GetChildByType<Button>("addButton");
 		if (mAddButton)
 		{
-			mAddButton->onClick = [&]()
+			mAddButton->onClick = [=]()
 			{
+				auto tree = mTree.Lock();
+				auto data = mData.Lock();
+
 				tree->mAnimation->AddTrack(data->path, *data->type);
 				data->used = true;
 				tree->OnObjectsChanged({ (void*)data.Get() });
@@ -359,7 +360,10 @@ namespace Editor
 		mRemoveButton = GetChildByType<Button>("removeButton");
 		if (mRemoveButton)
 		{
-			mRemoveButton->onClick = [&]() { 
+			mRemoveButton->onClick = [=]() {
+				auto tree = mTree.Lock();
+				auto data = mData.Lock();
+
 				tree->mAnimation->RemoveTrack(data->path);
 				data->used = false;
 				tree->OnObjectsChanged({ (void*)data.Get() });

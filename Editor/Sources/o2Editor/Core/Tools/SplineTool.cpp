@@ -5,8 +5,8 @@
 
 namespace Editor
 {
-	SplineTool::SplineTool():
-		splineEditor(mmake<SplineEditor>()), sceneLayer(mmake<SplineSceneLayer>())
+	SplineTool::SplineTool(RefCounter* refCounter) :
+		IEditTool(refCounter), splineEditor(mmake<SplineEditor>()), sceneLayer(mmake<SplineSceneLayer>())
 	{
 		sceneLayer->tool = Ref(this);
 	}
