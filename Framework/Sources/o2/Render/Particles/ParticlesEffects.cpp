@@ -120,8 +120,8 @@ namespace o2
 
 	ParticlesSizeEffect::ParticlesSizeEffect()
 	{
-		sizeCurve = mmake<Curve>(Curve::Linear(1.0f, 1.0f));
-		sizeCurve->onKeysChanged += [this]() { OnChanged(); };
+		curve = mmake<Curve>(Curve::Linear(0.0f, 1.0f));
+		curve->onKeysChanged += [this]() { OnChanged(); };
 	}
 
 	void ParticlesSizeEffect::OnParticleEmitted(Particle& particle)
@@ -130,9 +130,10 @@ namespace o2
 
 		CheckDataBufferSize(particleIndex);
 
-		mSizeData[particleIndex].initialSize = particle.size;
-		mSizeData[particleIndex].cacheKey = 0;
-		mSizeData[particleIndex].cacheKeyApprox = 0;
+		mData[particleIndex].initialSize = particle.size;
+		mData[particleIndex].cacheKey = 0;
+		mData[particleIndex].cacheKeyApprox = 0;
+		mData[particleIndex].randomCoef = Math::Random(0.0f, 1.0f);
 	}
 
 	void ParticlesSizeEffect::Update(float dt, ParticlesEmitter* emitter)
@@ -145,46 +146,41 @@ namespace o2
 		{
 			int particleIndex = p.index;
 
-			auto& sizeData = mSizeData[particleIndex];
-			p.size = sizeData.initialSize*sizeCurve->Evaluate(1.0f - p.timeLeft/p.lifetime, 0.0f, true, sizeData.cacheKey, sizeData.cacheKeyApprox);
+			auto& sizeData = mData[particleIndex];
+			p.size = sizeData.initialSize*curve->Evaluate(1.0f - p.timeLeft/p.lifetime, sizeData.randomCoef, true, sizeData.cacheKey, sizeData.cacheKeyApprox);
 		}
 	}
 
 	void ParticlesSizeEffect::CheckDataBufferSize(int particlesCount)
 	{
-		for (int i = mSizeData.size(); i <= particlesCount; i++)
-			mSizeData.Add(ParticleSizeData());
+		for (int i = mData.size(); i <= particlesCount; i++)
+			mData.Add(ParticleData());
 	}
 
 	void ParticlesSizeEffect::OnDeserialized(const DataValue& node)
 	{
-		sizeCurve->onKeysChanged += [this]() { OnChanged(); };
+		curve->onKeysChanged += [this]() { OnChanged(); };
 	}
 
-	ParticlesRandomSizeEffect::ParticlesRandomSizeEffect()
+	ParticlesAngleEffect::ParticlesAngleEffect()
 	{
-		sizeCurveA = mmake<Curve>(Curve::Linear(1.0f, 1.0f));
-		sizeCurveB = mmake<Curve>(Curve::Linear(1.0f, 1.0f));
-
-		sizeCurveA->onKeysChanged += [this]() { OnChanged(); };
-		sizeCurveB->onKeysChanged += [this]() { OnChanged(); };
-
+		curve = mmake<Curve>(Curve::Linear(0.0f, 360.0f));
+		curve->onKeysChanged += [this]() { OnChanged(); };
 	}
 
-	void ParticlesRandomSizeEffect::OnParticleEmitted(Particle& particle)
+	void ParticlesAngleEffect::OnParticleEmitted(Particle& particle)
 	{
 		int particleIndex = particle.index;
 
 		CheckDataBufferSize(particleIndex);
 
-		auto& sizeData = mSizeData[particleIndex];
-		sizeData.initialSize = particle.size;
-		sizeData.cacheKeyA = 0;
-		sizeData.cacheKeyB = 0;
-		sizeData.coef = Math::Random(0.0f, 1.0f);
+		mData[particleIndex].initialAngle = particle.angle;
+		mData[particleIndex].cacheKey = 0;
+		mData[particleIndex].cacheKeyApprox = 0;
+		mData[particleIndex].randomCoef = Math::Random(0.0f, 1.0f);
 	}
 
-	void ParticlesRandomSizeEffect::Update(float dt, ParticlesEmitter* emitter)
+	void ParticlesAngleEffect::Update(float dt, ParticlesEmitter* emitter)
 	{
 		auto& particles = GetParticlesDirect(emitter);
 
@@ -194,26 +190,122 @@ namespace o2
 		{
 			int particleIndex = p.index;
 
-			auto& sizeData = mSizeData[particleIndex];
-			auto lifeTimeCoef = 1.0f - p.timeLeft / p.lifetime;
-			auto sizeA = sizeData.initialSize*sizeCurveA->Evaluate(lifeTimeCoef, 0.0f, true, sizeData.cacheKeyA, sizeData.cacheKeyApproxA);
-			auto sizeB = sizeData.initialSize*sizeCurveB->Evaluate(lifeTimeCoef, 0.0f, true, sizeData.cacheKeyB, sizeData.cacheKeyApproxB);
-			p.size = Math::Lerp(sizeA, sizeB, sizeData.coef);
+			auto& data = mData[particleIndex];
+			p.angle = data.initialAngle + curve->Evaluate(1.0f - p.timeLeft/p.lifetime, data.randomCoef, true, data.cacheKey, data.cacheKeyApprox);
 		}
 	}
 
-	void ParticlesRandomSizeEffect::CheckDataBufferSize(int particlesCount)
+	void ParticlesAngleEffect::CheckDataBufferSize(int particlesCount)
 	{
-		for (int i = mSizeData.size(); i <= particlesCount; i++)
-			mSizeData.Add(ParticleSizeData());
+		for (int i = mData.size(); i <= particlesCount; i++)
+			mData.Add(ParticleData());
 	}
 
-	void ParticlesRandomSizeEffect::OnDeserialized(const DataValue& node)
+	void ParticlesAngleEffect::OnDeserialized(const DataValue& node)
 	{
-		sizeCurveA->onKeysChanged += [this]() { OnChanged(); };
-		sizeCurveB->onKeysChanged += [this]() { OnChanged(); };
+		curve->onKeysChanged += [this]() { OnChanged(); };
 	}
 
+	ParticlesAngleSpeedEffect::ParticlesAngleSpeedEffect()
+	{
+		curve = mmake<Curve>(Curve::Linear(0.0f, 360.0f));
+		curve->onKeysChanged += [this]() { OnChanged(); };
+	}
+
+	void ParticlesAngleSpeedEffect::OnParticleEmitted(Particle& particle)
+	{
+		int particleIndex = particle.index;
+
+		CheckDataBufferSize(particleIndex);
+
+		mData[particleIndex].initialSpeed = particle.angleSpeed;
+		mData[particleIndex].cacheKey = 0;
+		mData[particleIndex].cacheKeyApprox = 0;
+		mData[particleIndex].randomCoef = Math::Random(0.0f, 1.0f);
+	}
+
+	void ParticlesAngleSpeedEffect::Update(float dt, ParticlesEmitter* emitter)
+	{
+		auto& particles = GetParticlesDirect(emitter);
+
+		CheckDataBufferSize(particles.Count());
+
+		for (auto& p : particles)
+		{
+			int particleIndex = p.index;
+
+			auto& data = mData[particleIndex];
+			p.angleSpeed = data.initialSpeed + curve->Evaluate(1.0f - p.timeLeft/p.lifetime, data.randomCoef, true, data.cacheKey, data.cacheKeyApprox);
+		}
+	}
+
+	void ParticlesAngleSpeedEffect::CheckDataBufferSize(int particlesCount)
+	{
+		for (int i = mData.size(); i <= particlesCount; i++)
+			mData.Add(ParticleData());
+	}
+
+	void ParticlesAngleSpeedEffect::OnDeserialized(const DataValue& node)
+	{
+		curve->onKeysChanged += [this]() { OnChanged(); };
+	}
+
+
+	ParticlesVelocityEffect::ParticlesVelocityEffect()
+	{
+		XCurve = mmake<Curve>(Curve::Linear(0.0f, 10.0f));
+		XCurve->onKeysChanged += [this]() { OnChanged(); };
+
+		YCurve = mmake<Curve>(Curve::Linear(0.0f, 10.0f));
+		YCurve->onKeysChanged += [this]() { OnChanged(); };
+	}
+
+	void ParticlesVelocityEffect::OnParticleEmitted(Particle& particle)
+	{
+		int particleIndex = particle.index;
+
+		CheckDataBufferSize(particleIndex);
+
+		mData[particleIndex].initialVelocity = particle.velocity;
+
+		mData[particleIndex].cacheXKey = 0;
+		mData[particleIndex].cacheXKeyApprox = 0;
+		mData[particleIndex].randomXCoef = Math::Random(0.0f, 1.0f);
+
+		mData[particleIndex].cacheYKey = 0;
+		mData[particleIndex].cacheYKeyApprox = 0;
+		mData[particleIndex].randomYCoef = Math::Random(0.0f, 1.0f);
+	}
+
+	void ParticlesVelocityEffect::Update(float dt, ParticlesEmitter* emitter)
+	{
+		auto& particles = GetParticlesDirect(emitter);
+
+		CheckDataBufferSize(particles.Count());
+
+		for (auto& p : particles)
+		{
+			int particleIndex = p.index;
+
+			auto& data = mData[particleIndex];
+			float x = XCurve->Evaluate(1.0f - p.timeLeft/p.lifetime, data.randomXCoef, true, data.cacheXKey, data.cacheXKeyApprox);
+			float y = YCurve->Evaluate(1.0f - p.timeLeft/p.lifetime, data.randomYCoef, true, data.cacheYKey, data.cacheYKeyApprox);
+
+			p.velocity = data.initialVelocity + Vec2F(x, y);
+		}
+	}
+
+	void ParticlesVelocityEffect::CheckDataBufferSize(int particlesCount)
+	{
+		for (int i = mData.size(); i <= particlesCount; i++)
+			mData.Add(ParticleData());
+	}
+
+	void ParticlesVelocityEffect::OnDeserialized(const DataValue& node)
+	{
+		XCurve->onKeysChanged += [this]() { OnChanged(); };
+		YCurve->onKeysChanged += [this]() { OnChanged(); };
+	}
 }
 // --- META ---
 
@@ -227,5 +319,9 @@ DECLARE_CLASS(o2::ParticlesRandomColorEffect, o2__ParticlesRandomColorEffect);
 
 DECLARE_CLASS(o2::ParticlesSizeEffect, o2__ParticlesSizeEffect);
 
-DECLARE_CLASS(o2::ParticlesRandomSizeEffect, o2__ParticlesRandomSizeEffect);
+DECLARE_CLASS(o2::ParticlesAngleEffect, o2__ParticlesAngleEffect);
+
+DECLARE_CLASS(o2::ParticlesAngleSpeedEffect, o2__ParticlesAngleSpeedEffect);
+
+DECLARE_CLASS(o2::ParticlesVelocityEffect, o2__ParticlesVelocityEffect);
 // --- END META ---

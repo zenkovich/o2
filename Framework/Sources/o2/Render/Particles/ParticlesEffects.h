@@ -158,7 +158,7 @@ namespace o2
 	class ParticlesSizeEffect : public ParticlesEffect
 	{
 	public:
-		Ref<Curve> sizeCurve; // Size curve @SERIALIZABLE
+		Ref<Curve> curve; // Size curve @SERIALIZABLE
 
 	public:
 		// Default constructor
@@ -174,20 +174,22 @@ namespace o2
 		CLONEABLE_REF(ParticlesSizeEffect);
 
 	private:
-		struct ParticleSizeData
+		struct ParticleData
 		{
 			Vec2F initialSize;
 
 			int cacheKey = 0;
 			int cacheKeyApprox = 0;
 
-			bool operator==(const ParticleSizeData& other) const
+			float randomCoef = 0.0f;
+
+			bool operator==(const ParticleData& other) const
 			{
 				return cacheKey == other.cacheKey;
 			}
 		};
 
-		Vector<ParticleSizeData> mSizeData; // Size data buffer
+		Vector<ParticleData> mData; // Particles data buffer
 
 	private:
 		void CheckDataBufferSize(int particlesCount);
@@ -197,17 +199,16 @@ namespace o2
 	};
 
 	// -------------------------------
-	// Particles size over time effect
+	// Particles angle over time effect
 	// -------------------------------
-	class ParticlesRandomSizeEffect : public ParticlesEffect
+	class ParticlesAngleEffect : public ParticlesEffect
 	{
 	public:
-		Ref<Curve> sizeCurveA; // Size curve A @SERIALIZABLE
-		Ref<Curve> sizeCurveB; // Size curve A @SERIALIZABLE
+		Ref<Curve> curve; // Angle curve @SERIALIZABLE
 
 	public:
 		// Default constructor
-		ParticlesRandomSizeEffect();
+		ParticlesAngleEffect();
 
 		// Called when particle is emitted, used to initialize effect data
 		void OnParticleEmitted(Particle& particle) override;
@@ -215,28 +216,122 @@ namespace o2
 		// Update particles size over time
 		void Update(float dt, ParticlesEmitter* emitter) override;
 
-		SERIALIZABLE(ParticlesRandomSizeEffect);
-		CLONEABLE_REF(ParticlesRandomSizeEffect);
+		SERIALIZABLE(ParticlesAngleEffect);
+		CLONEABLE_REF(ParticlesAngleEffect);
 
 	private:
-		struct ParticleSizeData
+		struct ParticleData
 		{
-			Vec2F initialSize;
-			float coef = 0.0f;
+			float initialAngle = 0.0f;
 
-			int cacheKeyA = 0;
-			int cacheKeyApproxA = 0;
+			int cacheKey = 0;
+			int cacheKeyApprox = 0;
 
-			int cacheKeyB = 0;
-			int cacheKeyApproxB = 0;
+			float randomCoef = 0.0f;
 
-			bool operator==(const ParticleSizeData& other) const
+			bool operator==(const ParticleData& other) const
 			{
-				return cacheKeyA == other.cacheKeyA && cacheKeyB == other.cacheKeyB;
+				return cacheKey == other.cacheKey;
 			}
 		};
 
-		Vector<ParticleSizeData> mSizeData; // Size data buffer
+		Vector<ParticleData> mData; // Particles data buffer
+
+	private:
+		void CheckDataBufferSize(int particlesCount);
+
+		// Called when deserialization is done, used to subscribe to size curve changes
+		void OnDeserialized(const DataValue& node) override;
+	};
+
+	// --------------------------------------
+	// Particles angle speed over time effect
+	// --------------------------------------
+	class ParticlesAngleSpeedEffect : public ParticlesEffect
+	{
+	public:
+		Ref<Curve> curve; // Angle speed curve @SERIALIZABLE
+
+	public:
+		// Default constructor
+		ParticlesAngleSpeedEffect();
+
+		// Called when particle is emitted, used to initialize effect data
+		void OnParticleEmitted(Particle& particle) override;
+
+		// Update particles size over time
+		void Update(float dt, ParticlesEmitter* emitter) override;
+
+		SERIALIZABLE(ParticlesAngleSpeedEffect);
+		CLONEABLE_REF(ParticlesAngleSpeedEffect);
+
+	private:
+		struct ParticleData
+		{
+			float initialSpeed = 0.0f;
+
+			int cacheKey = 0;
+			int cacheKeyApprox = 0;
+
+			float randomCoef = 0.0f;
+
+			bool operator==(const ParticleData& other) const
+			{
+				return cacheKey == other.cacheKey;
+			}
+		};
+
+		Vector<ParticleData> mData; // Particles data buffer
+
+	private:
+		void CheckDataBufferSize(int particlesCount);
+
+		// Called when deserialization is done, used to subscribe to size curve changes
+		void OnDeserialized(const DataValue& node) override;
+	};
+
+	// --------------------------------------
+	// Particles velocity over time effect
+	// --------------------------------------
+	class ParticlesVelocityEffect : public ParticlesEffect
+	{
+	public:
+		Ref<Curve> XCurve; // Velocity by X curve @SERIALIZABLE
+		Ref<Curve> YCurve; // Velocity by X curve @SERIALIZABLE
+
+	public:
+		// Default constructor
+		ParticlesVelocityEffect();
+
+		// Called when particle is emitted, used to initialize effect data
+		void OnParticleEmitted(Particle& particle) override;
+
+		// Update particles size over time
+		void Update(float dt, ParticlesEmitter* emitter) override;
+
+		SERIALIZABLE(ParticlesVelocityEffect);
+		CLONEABLE_REF(ParticlesVelocityEffect);
+
+	private:
+		struct ParticleData
+		{
+			Vec2F initialVelocity;
+
+			int cacheXKey = 0;
+			int cacheXKeyApprox = 0;
+			float randomXCoef = 0.0f;
+
+			int cacheYKey = 0;
+			int cacheYKeyApprox = 0;
+			float randomYCoef = 0.0f;
+
+			bool operator==(const ParticleData& other) const
+			{
+				return cacheXKey == other.cacheXKey && cacheYKey == other.cacheYKey;
+			}
+		};
+
+		Vector<ParticleData> mData; // Particles data buffer
 
 	private:
 		void CheckDataBufferSize(int particlesCount);
@@ -342,8 +437,8 @@ CLASS_BASES_META(o2::ParticlesSizeEffect)
 END_META;
 CLASS_FIELDS_META(o2::ParticlesSizeEffect)
 {
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(sizeCurve);
-    FIELD().PRIVATE().NAME(mSizeData);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(curve);
+    FIELD().PRIVATE().NAME(mData);
 }
 END_META;
 CLASS_METHODS_META(o2::ParticlesSizeEffect)
@@ -357,19 +452,63 @@ CLASS_METHODS_META(o2::ParticlesSizeEffect)
 }
 END_META;
 
-CLASS_BASES_META(o2::ParticlesRandomSizeEffect)
+CLASS_BASES_META(o2::ParticlesAngleEffect)
 {
     BASE_CLASS(o2::ParticlesEffect);
 }
 END_META;
-CLASS_FIELDS_META(o2::ParticlesRandomSizeEffect)
+CLASS_FIELDS_META(o2::ParticlesAngleEffect)
 {
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(sizeCurveA);
-    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(sizeCurveB);
-    FIELD().PRIVATE().NAME(mSizeData);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(curve);
+    FIELD().PRIVATE().NAME(mData);
 }
 END_META;
-CLASS_METHODS_META(o2::ParticlesRandomSizeEffect)
+CLASS_METHODS_META(o2::ParticlesAngleEffect)
+{
+
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, OnParticleEmitted, Particle&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float, ParticlesEmitter*);
+    FUNCTION().PRIVATE().SIGNATURE(void, CheckDataBufferSize, int);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
+}
+END_META;
+
+CLASS_BASES_META(o2::ParticlesAngleSpeedEffect)
+{
+    BASE_CLASS(o2::ParticlesEffect);
+}
+END_META;
+CLASS_FIELDS_META(o2::ParticlesAngleSpeedEffect)
+{
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(curve);
+    FIELD().PRIVATE().NAME(mData);
+}
+END_META;
+CLASS_METHODS_META(o2::ParticlesAngleSpeedEffect)
+{
+
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, OnParticleEmitted, Particle&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float, ParticlesEmitter*);
+    FUNCTION().PRIVATE().SIGNATURE(void, CheckDataBufferSize, int);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
+}
+END_META;
+
+CLASS_BASES_META(o2::ParticlesVelocityEffect)
+{
+    BASE_CLASS(o2::ParticlesEffect);
+}
+END_META;
+CLASS_FIELDS_META(o2::ParticlesVelocityEffect)
+{
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(XCurve);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(YCurve);
+    FIELD().PRIVATE().NAME(mData);
+}
+END_META;
+CLASS_METHODS_META(o2::ParticlesVelocityEffect)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
