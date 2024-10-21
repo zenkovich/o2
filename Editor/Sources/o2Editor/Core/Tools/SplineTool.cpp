@@ -45,7 +45,7 @@ namespace Editor
 	void SplineTool::SplineWrapper::AddPoint(int idx, const Vec2F& position,
 											 const Vec2F& prevSupport, const Vec2F& nextSupport)
 	{
-		spline->InsertKey(idx, position, prevSupport, nextSupport);
+		spline->InsertKey(idx, position, 0.0f, prevSupport, nextSupport);
 	}
 
 	void SplineTool::SplineWrapper::RemovePoint(int idx)
@@ -63,6 +63,18 @@ namespace Editor
 		auto key = spline->GetKey(idx);
 		key.value = pos;
 		spline->SetKey(key, idx);
+	}
+
+	void SplineTool::SplineWrapper::SetPointRangeValue(int idx, float value)
+	{
+		auto key = spline->GetKey(idx);
+		key.valueRange = value;
+		spline->SetKey(key, idx);
+	}
+
+	float SplineTool::SplineWrapper::GetPointRangeValue(int idx) const
+	{
+		return spline->GetKey(idx).valueRange;
 	}
 
 	Vec2F SplineTool::SplineWrapper::GetPointPrevSupportPos(int idx) const
@@ -91,25 +103,14 @@ namespace Editor
 		spline->SetKey(key, idx);
 	}
 
-	Vector<Vec2F> SplineTool::SplineWrapper::GetDrawPoints() const
+	const ApproximationVec2F* SplineTool::SplineWrapper::GetPointApproximationLeft(int idx) const
 	{
-		Vector<Vec2F> res;
-		auto& keys = spline->GetKeys();
-		for (int i = 1; i < keys.Count(); i++)
-		{
-			for (int j = 0; j < keys[i].GetApproximatedPointsCount() - 1; j++)
-				res.Add(LocalToWorld(keys[i].GetApproximatedPoints()[j].value));
-
-			if (i == keys.Count() - 1)
-				res.Add(LocalToWorld(keys[i].value));
-		}
-
-		return res;
+		return spline->GetKeys()[idx].GetApproximatedPointsLeft();
 	}
 
-	const ApproximationVec2F* SplineTool::SplineWrapper::GetPointApproximation(int idx) const
+	const ApproximationVec2F* SplineTool::SplineWrapper::GetPointApproximationRight(int idx) const
 	{
-		return spline->GetKeys()[idx].GetApproximatedPoints();
+		return spline->GetKeys()[idx].GetApproximatedPointsRight();
 	}
 
 	int SplineTool::SplineWrapper::GetPointApproximationCount(int idx) const

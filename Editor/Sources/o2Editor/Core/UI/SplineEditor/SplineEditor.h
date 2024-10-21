@@ -47,6 +47,12 @@ namespace Editor
 			// Sets position of point
 			virtual void SetPointPos(int idx, const Vec2F& pos) = 0;
 
+			// Sets point range value
+			virtual void SetPointRangeValue(int idx, float value) = 0;
+
+			// Returns point range value
+			virtual float GetPointRangeValue(int idx) const = 0;
+
 			// Returns previous support position of point
 			virtual Vec2F GetPointPrevSupportPos(int idx) const = 0;
 
@@ -59,11 +65,17 @@ namespace Editor
 			// Sets next support position of point
 			virtual void SetPointNextSupportPos(int idx, const Vec2F& pos) = 0;
 
-			// Returns list of points for drawing
-			virtual Vector<Vec2F> GetDrawPoints() const;
+			// Returns list of points for drawing of left range
+			virtual Vector<Vec2F> GetDrawPointsLeftRange() const;
+
+			// Returns list of points for drawing of right range
+			virtual Vector<Vec2F> GetDrawPointsRightRange() const;
 
 			// Returns pointer to approximation array
-			virtual const ApproximationVec2F* GetPointApproximation(int idx) const = 0;
+			virtual const ApproximationVec2F* GetPointApproximationLeft(int idx) const = 0;
+
+			// Returns pointer to approximation array
+			virtual const ApproximationVec2F* GetPointApproximationRight(int idx) const = 0;
 
 			// Returns count of approximation points
 			virtual int GetPointApproximationCount(int idx) const = 0;
@@ -109,9 +121,11 @@ namespace Editor
 		// -----------------------
 		struct PointHandles : public RefCounterable
 		{
-			Ref<DragHandle> position;    // Position handle
-			Ref<DragHandle> prevSupport; // Previous support handle
-			Ref<DragHandle> nextSupport; // Next support handle
+			Ref<DragHandle> position;         // Position handle
+			Ref<DragHandle> prevSupport;      // Previous support handle
+			Ref<DragHandle> nextSupport;      // Next support handle
+			Ref<DragHandle> leftRangeHandle;  // Left range handle
+			Ref<DragHandle> rightRangeHandle; // Right range handle
 
 			bool positionDragged = false;    // Is position handle dragged
 			bool prevSupportDragged = false; // Is previous support handle dragged 
@@ -133,6 +147,8 @@ namespace Editor
 		PointHandles              mHandlesSample; // Samples of handles for cloning
 		Vector<Ref<PointHandles>> mSplineHandles; // Spline handles
 
+		Ref<Mesh> mCurvesMesh; // Mesh for drawing curves ranges
+
 		Color4 mSplineColor;        // Color of spline line
 		Color4 mSplineSupportColor; // Color of support handles lines
 
@@ -141,10 +157,10 @@ namespace Editor
 
 		Vector<Ref<DragHandle>> mSelectingHandlesBuf; // Potentially selecting handles while selecting
 
-		FrameHandles mTransformFrame;                      // Keys transformation frame
-		bool         mTransformFrameVisible = false;       // Is transform frame visible. it visible when 2 or more main handles was selected
-		Basis        mTransformFrameBasis;                 // Basis of transform frame in screen space
-		Vec2F        mTransformBasisOffet = Vec2F(10, 10); // Border between side points and frame
+		Ref<FrameHandles> mTransformFrame;                      // Keys transformation frame
+		bool              mTransformFrameVisible = false;       // Is transform frame visible. it visible when 2 or more main handles was selected
+		Basis             mTransformFrameBasis;                 // Basis of transform frame in screen space
+		Vec2F             mTransformBasisOffet = Vec2F(10, 10); // Border between side points and frame
 
 		Ref<SelectableDragHandlesGroup> mSupportHandlesGroup = mmake<SelectableDragHandlesGroup>(); // Support points handles selection group. They are must be selectable separately from main handles
 
@@ -157,6 +173,18 @@ namespace Editor
 
 		// Checks that support handles are in same position for dragging symmteric
 		void CheckDragFromZero(int i, const Ref<PointHandles>& handles);
+
+		// Called when left range value was changed
+		void OnRangeValueChanged(int i, const Ref<PointHandles>& handles, bool isLeft);
+
+		// Returns position of left range handle
+		Vec2F GetRangeHandlePos(int i, const Ref<PointHandles>& handles, bool isLeft) const;
+
+		// Returns normal of range handles
+		Vec2F GetRangeHandlesNormal(int i, const Ref<PointHandles>& handles) const;
+
+		// Checks and corrects range handle position
+		Vec2F CheckRangeHandlePos(int i, const Ref<PointHandles>& handles, const Vec2F& pos);
 
 		// Draws handles
 		void DrawHandles();
@@ -202,6 +230,9 @@ namespace Editor
 
 		// Called when next support handle was released without dragging, just clicking; removes support handle
 		void OnNextHandleReleasedNoDrag(int i, const Ref<PointHandles>& handles);
+
+		// Called when position handle was pressed, checks range value
+		void OnMainHandlePressed(int i, const Ref<PointHandles>& handles);
 
 		// Called when position handle was released without dragging, just clicking; removes both support handles
 		void OnMainHandleReleasedNoDrag(int i, const Ref<PointHandles>& handles);

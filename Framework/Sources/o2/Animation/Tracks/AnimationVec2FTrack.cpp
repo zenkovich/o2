@@ -43,7 +43,7 @@ namespace o2
                                           int& cacheSplineKey, int& cacheSplineKeyApprox) const
     {
         float timePos = timeCurve->Evaluate(position, 0.0f, direction, cacheTimeKey, cacheTimeKeyApprox);
-        return spline->Evaluate(timePos*spline->Length(), direction, cacheSplineKey, cacheTimeKeyApprox);
+        return spline->Evaluate(timePos*spline->Length(), 0.0f, direction, cacheSplineKey, cacheTimeKeyApprox);
     }
 
     void AnimationTrack<Vec2F>::BeginKeysBatchChange()
@@ -78,7 +78,7 @@ namespace o2
                                                           float endCoef, float endCoefPosition)
     {
         AnimationTrack<Vec2F> res;
-        res.spline->SetKeys({ Spline::Key(begin, Vec2F(), Vec2F()), Spline::Key(end, Vec2F(), Vec2F()) });
+        res.spline->SetKeys({ Spline::Key(begin, 0.0f, Vec2F(), Vec2F()), Spline::Key(end, 0.0f, Vec2F(), Vec2F()) });
         res.timeCurve = mmake<Curve>(Curve::Parametric(0.0f, 1.0f, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition));
         return res;
     }

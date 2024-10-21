@@ -48,10 +48,10 @@ namespace o2
         Spline& operator+=(const Spline& other);
 
         // Returns value by position
-        Vec2F Evaluate(float position) const;
+        Vec2F Evaluate(float position, float randomRangeCoef = 0.0f) const;
 
         // Returns value by position
-        Vec2F Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
+        Vec2F Evaluate(float position, float randomRangeCoef, bool direction, int& cacheKey, int& cacheKeyApprox) const;
 
         // Called when beginning keys batch change. After this call all keys modifications will not be update approximation
         // Used for optimizing many keys change
@@ -63,7 +63,7 @@ namespace o2
         // Sets spline closed or not
         void SetClosed(bool closed);
 
-        // Reutnrs is spline closed
+        // Returns is spline closed
         bool IsClosed() const;
 
         // Appends Spline at end
@@ -97,22 +97,22 @@ namespace o2
         void InsertKey(const Key& key, int idx);
 
         // Inserts key and returns index
-        void InsertKey(int idx, const Vec2F& position, const Vec2F& prevSupport, const Vec2F& nextSupport);
+        void InsertKey(int idx, const Vec2F& position, float rangeValue, const Vec2F& prevSupport, const Vec2F& nextSupport);
 
         // Inserts value at position with smoothing and returns index
-        void InsertKey(int idx, const Vec2F& position, float smoothCoef = 1.0f);
+        void InsertKey(int idx, const Vec2F&, float rangeValue = 0.0f, float smoothCoef = 1.0f);
 
         // Appends key at end with offset and returns index
-        int AppendKey(const Vec2F& position, const Vec2F& prevSupport, const Vec2F& nextSupport);
+        int AppendKey(const Vec2F&, float rangeValue, const Vec2F& prevSupport, const Vec2F& nextSupport);
 
         // Appends key at end with offset and smoothing and returns index
-        int AppendKey(const Vec2F& position, float smoothCoef = 1.0f);
+        int AppendKey(const Vec2F&, float rangeValue = 0.0f, float smoothCoef = 1.0f);
 
         // Prepends key at beginning with offset and returns index
-        int PrependKey(const Vec2F& position, const Vec2F& prevSupport, const Vec2F& nextSupport);
+        int PrependKey(const Vec2F&, float rangeValue, const Vec2F& prevSupport, const Vec2F& nextSupport);
 
          // Prepends key at beginning with offset and smoothing and returns index
-        int PrependKey(const Vec2F& position, float smoothCoef = 1.0f);
+        int PrependKey(const Vec2F&, float rangeValue = 0.0f, float smoothCoef = 1.0f);
 
         // Removes key at index
         bool RemoveKey(int idx);
@@ -171,6 +171,7 @@ namespace o2
             UInt64 uid = Math::Random();        // Random unique id @SERIALIZABLE
             float  position = 0.0f;             // Position from start, or length @SERIALIZABLE
             Vec2F  value;                       // Main position @SERIALIZABLE
+			float  valueRange = 0.0f;           // Value range @SERIALIZABLE
             Vec2F  prevSupport;                 // Previous support point @SERIALIZABLE
             Vec2F  nextSupport;                 // Next support point @SERIALIZABLE
             Type   supportsType = Type::Smooth; // Type of support points @SERIALIZABLE
@@ -180,7 +181,7 @@ namespace o2
             Key();
 
             // Constructor
-            Key(const Vec2F& value, const Vec2F& prevSupport, const Vec2F& nextSupport);
+            Key(const Vec2F& value, float valueRange, const Vec2F& prevSupport, const Vec2F& nextSupport);
 
             // Copy-constructor
             Key(const Key& other);
@@ -198,10 +199,13 @@ namespace o2
             bool operator==(const Key& other) const;
 
             // Check not equals operator
-            bool operator!=(const Key& other) const;
+			bool operator!=(const Key& other) const;
 
-            // Returns approximated points
-            const ApproximationVec2F* GetApproximatedPoints() const;
+			// Returns approximated points
+			const ApproximationVec2F* GetApproximatedPointsLeft() const;
+
+			// Returns approximated points
+			const ApproximationVec2F* GetApproximatedPointsRight() const;
 
             // Returns approximated points count
             int GetApproximatedPointsCount() const;
@@ -209,12 +213,16 @@ namespace o2
             // Returns bounds of approximation values
             const RectF& GetGetApproximatedPointsBounds() const;
 
+			// Returns range normal. Prev and next can be nullptr
+			static Vec2F GetRangeNormal(const Vec2F& position, Vec2F* prev, Vec2F* next);
+
             SERIALIZABLE(Key);
 
         public:
-            static const int   mApproxValuesCount = 20;           // Approximation values count
-            ApproximationVec2F mApproxValues[mApproxValuesCount]; // Approximation values 
-            RectF              mApproxValuesBounds;               // Bounds of approximation values
+            static const int   mApproxValuesCount = 20;                // Approximation values count
+			ApproximationVec2F mLeftApproxValues[mApproxValuesCount];  // Approximation values from left side
+			ApproximationVec2F mRightApproxValues[mApproxValuesCount]; // Approximation values from right side
+            RectF              mApproxValuesBounds;                    // Bounds of approximation values
 
             friend class Spline;
         };
@@ -271,8 +279,8 @@ CLASS_METHODS_META(o2::Spline)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Vec2F>&, bool);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Spline&);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, Evaluate, float);
-    FUNCTION().PUBLIC().SIGNATURE(Vec2F, Evaluate, float, bool, int&, int&);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, Evaluate, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(Vec2F, Evaluate, float, float, bool, int&, int&);
     FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
     FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
     FUNCTION().PUBLIC().SIGNATURE(void, SetClosed, bool);
@@ -287,12 +295,12 @@ CLASS_METHODS_META(o2::Spline)
     FUNCTION().PUBLIC().SIGNATURE(void, InsertKeys, const Vector<Vec2F>&, int, bool);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertKeys, const Vector<Key>&, int);
     FUNCTION().PUBLIC().SIGNATURE(void, InsertKey, const Key&, int);
-    FUNCTION().PUBLIC().SIGNATURE(void, InsertKey, int, const Vec2F&, const Vec2F&, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(void, InsertKey, int, const Vec2F&, float);
-    FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, const Vec2F&, const Vec2F&, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, const Vec2F&, float);
-    FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, const Vec2F&, const Vec2F&, const Vec2F&);
-    FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, const Vec2F&, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, InsertKey, int, const Vec2F&, float, const Vec2F&, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(void, InsertKey, int, const Vec2F&, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, const Vec2F&, float, const Vec2F&, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, const Vec2F&, float, float);
+    FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, const Vec2F&, float, const Vec2F&, const Vec2F&);
+    FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, const Vec2F&, float, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKey, int);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllKeys);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Key>&, GetKeys);
@@ -323,10 +331,12 @@ CLASS_FIELDS_META(o2::Spline::Key)
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Math::Random()).NAME(uid);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(position);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(value);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(valueRange);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(prevSupport);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(nextSupport);
     FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Type::Smooth).NAME(supportsType);
-    FIELD().PUBLIC().NAME(mApproxValues);
+    FIELD().PUBLIC().NAME(mLeftApproxValues);
+    FIELD().PUBLIC().NAME(mRightApproxValues);
     FIELD().PUBLIC().NAME(mApproxValuesBounds);
 }
 END_META;
@@ -334,11 +344,13 @@ CLASS_METHODS_META(o2::Spline::Key)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, const Vec2F&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, float, const Vec2F&, const Vec2F&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const Key&);
-    FUNCTION().PUBLIC().SIGNATURE(const ApproximationVec2F*, GetApproximatedPoints);
+    FUNCTION().PUBLIC().SIGNATURE(const ApproximationVec2F*, GetApproximatedPointsLeft);
+    FUNCTION().PUBLIC().SIGNATURE(const ApproximationVec2F*, GetApproximatedPointsRight);
     FUNCTION().PUBLIC().SIGNATURE(int, GetApproximatedPointsCount);
     FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetGetApproximatedPointsBounds);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Vec2F, GetRangeNormal, const Vec2F&, Vec2F*, Vec2F*);
 }
 END_META;
 // --- END META ---

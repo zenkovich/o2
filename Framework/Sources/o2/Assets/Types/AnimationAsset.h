@@ -17,7 +17,7 @@ namespace o2
 
     public:
         // Default constructor
-        AnimationAsset() = default;
+        AnimationAsset();
 
         // Copy-constructor
         AnimationAsset(const AnimationAsset& asset);

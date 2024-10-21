@@ -5,15 +5,20 @@
 
 namespace o2
 {
+	AnimationAsset::AnimationAsset()
+	{
+		animation = mmake<AnimationClip>();
+	}
+
     AnimationAsset::AnimationAsset(const AnimationAsset& other):
-        AssetWithDefaultMeta<AnimationAsset>(other), animation(other.animation)
+        AssetWithDefaultMeta<AnimationAsset>(other), animation(other.animation->CloneAsRef<AnimationClip>())
     {}
 
     AnimationAsset::AnimationAsset(const Ref<AnimationClip>& clip):
         AssetWithDefaultMeta<AnimationAsset>(), animation(clip)
     {}
 
-    AnimationAsset& AnimationAsset::operator=(const AnimationAsset& other)
+	AnimationAsset& AnimationAsset::operator=(const AnimationAsset& other)
     {
         Asset::operator=(other);
         animation = other.animation->CloneAsRef<AnimationClip>();

@@ -22,17 +22,35 @@ namespace Editor
 													   mmake<Sprite>("ui/CurveSupportHandlePressed.png"),
 													   mmake<Sprite>("ui/CurveSupportHandleSelected.png"));
 
+		mHandlesSample.leftRangeHandle = mmake<DragHandle>(mmake<Sprite>("ui/UI2_handle_side_regular.png"),
+														   mmake<Sprite>("ui/UI2_handle_side_select.png"),
+														   mmake<Sprite>("ui/UI2_handle_side_pressed.png"),
+														   mmake<Sprite>("ui/UI2_handle_side_select.png"));
+
+		mHandlesSample.rightRangeHandle = mmake<DragHandle>(mmake<Sprite>("ui/UI2_handle_side_regular.png"),
+															mmake<Sprite>("ui/UI2_handle_side_select.png"),
+															mmake<Sprite>("ui/UI2_handle_side_pressed.png"),
+															mmake<Sprite>("ui/UI2_handle_side_select.png"));
+
 		mSplineColor = Color4(44, 62, 80, 255);
 		mSplineSupportColor = Color4(190, 190, 190, 255);
 
 		typedef SplineEditor thisclass;
 
-		mTransformFrame.SetPivotEnabled(false);
-		mTransformFrame.SetRotationEnabled(false);
-		mTransformFrame.onTransformed = THIS_FUNC(OnTransformFrameTransformed);
-		mTransformFrame.onPressed = THIS_FUNC(OnTransformBegin);
-		mTransformFrame.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
-		mTransformFrame.isInputTransparent = true;
+		mTransformFrame = mmake<FrameHandles>();
+		mTransformFrame->SetPivotEnabled(false);
+		mTransformFrame->SetRotationEnabled(false);
+		mTransformFrame->onTransformed = THIS_FUNC(OnTransformFrameTransformed);
+		mTransformFrame->onPressed = THIS_FUNC(OnTransformBegin);
+		mTransformFrame->onChangeCompleted = THIS_FUNC(OnTransformCompleted);
+		mTransformFrame->isInputTransparent = true;
+
+		mCurvesMesh = mmake<Mesh>();
+		mCurvesMesh->Resize(4, 2);
+		mCurvesMesh->vertexCount = 4;
+		mCurvesMesh->polyCount = 2;
+		mCurvesMesh->indexes[0] = 0; mCurvesMesh->indexes[1] = 1; mCurvesMesh->indexes[2] = 2;
+		mCurvesMesh->indexes[3] = 2; mCurvesMesh->indexes[4] = 1; mCurvesMesh->indexes[5] = 3;
 	}
 
 	SplineEditor::~SplineEditor()
@@ -50,8 +68,24 @@ namespace Editor
 
 		OnDrawn();
 
-		auto drawPoints = mSplineWrapper->GetDrawPoints();
-		o2Render.DrawAALine(drawPoints, mSplineColor);
+		auto leftRange = mSplineWrapper->GetDrawPointsLeftRange();
+		auto rightRange = mSplineWrapper->GetDrawPointsRightRange();
+
+		Color4 meshColor = mSplineColor;
+		meshColor.a /= 2;
+
+		for (int i = 1; i < leftRange.Count(); i++)
+		{
+			mCurvesMesh->vertices[0] = Vertex(leftRange[i - 1], meshColor.ABGR(), 0, 0);
+			mCurvesMesh->vertices[1] = Vertex(leftRange[i], meshColor.ABGR(), 0, 0);
+			mCurvesMesh->vertices[2] = Vertex(rightRange[i - 1], meshColor.ABGR(), 0, 0);
+			mCurvesMesh->vertices[3] = Vertex(rightRange[i], meshColor.ABGR(), 0, 0);
+
+			mCurvesMesh->Draw();
+		}
+
+		o2Render.DrawAALine(leftRange, mSplineColor);
+		o2Render.DrawAALine(rightRange, mSplineColor);
 
 		DrawTransformFrame();
 		DrawHandles();
@@ -112,17 +146,36 @@ namespace Editor
 		Vec2F worldOrig = mSplineWrapper->LocalToWorld(mTransformFrameBasis.origin);
 		Vec2F worldXV = mSplineWrapper->LocalToWorld(mTransformFrameBasis.xv + mTransformFrameBasis.origin) - worldOrig;
 		Vec2F worldYV = mSplineWrapper->LocalToWorld(mTransformFrameBasis.yv + mTransformFrameBasis.origin) - worldOrig;
-		mTransformFrame.SetBasis(Basis(worldOrig - mTransformBasisOffet,
-									   worldXV + Vec2F(mTransformBasisOffet.x*2.0f, 0),
-									   worldYV + Vec2F(0, mTransformBasisOffet.y*2.0f)));
+		mTransformFrame->SetBasis(Basis(worldOrig - mTransformBasisOffet,
+										worldXV + Vec2F(mTransformBasisOffet.x*2.0f, 0),
+										worldYV + Vec2F(0, mTransformBasisOffet.y*2.0f)));
 
-		mTransformFrame.Draw();
+		mTransformFrame->Draw();
 	}
 
 	void SplineEditor::DrawMainHandles()
 	{
+		int idx = 0;
 		for (auto& handles : mSplineHandles)
+		{
 			handles->position->Draw();
+
+			bool rangeHandlesVisible = !Math::Equals(mSplineWrapper->GetPointRangeValue(idx), 0.0f);
+
+			if (rangeHandlesVisible)
+			{
+				Vec2F normal = GetRangeHandlesNormal(mSplineHandles.IndexOf(handles), handles);
+				float angle = -normal.Angle(Vec2F(1, 0));
+
+				handles->leftRangeHandle->angle = angle + Math::PI();
+				handles->rightRangeHandle->angle = angle;
+
+				handles->leftRangeHandle->Draw();
+				handles->rightRangeHandle->Draw();
+			}
+
+			idx++;
+		}
 	}
 
 	void SplineEditor::DrawSupportHandles()
@@ -197,7 +250,7 @@ namespace Editor
 			handles->position = mHandlesSample.position->CloneAsRef<DragHandle>();
 			handles->position->SetPosition(mSplineWrapper->GetPointPos(i));
 			handles->position->SetSelectionGroup(Ref(this));
-			handles->position->onPressed = [=]() { handles->positionDragged = false; };
+			handles->position->onPressed = [=]() { OnMainHandlePressed(i, handles); };
 			handles->position->onBeganDragging = [=]() { handles->positionDragged = true; };
 			handles->position->onReleased = [=]() { if (!handles->positionDragged) OnMainHandleReleasedNoDrag(i, handles); };
 			handles->position->onChangedPos = [=](const Vec2F& pos) { OnMainHandleMoved(i, pos, handles); };
@@ -223,6 +276,20 @@ namespace Editor
 			handles->nextSupport->onReleased = [=]() { if (!handles->nextSupportDragged) OnNextHandleReleasedNoDrag(i, handles); };
 			handles->nextSupport->localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
 			handles->nextSupport->screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
+
+			handles->leftRangeHandle = mHandlesSample.leftRangeHandle->CloneAsRef<DragHandle>();
+			handles->leftRangeHandle->SetPosition(GetRangeHandlePos(i, handles, true));
+			handles->leftRangeHandle->onChangedPos = [=](const Vec2F& pos) { OnRangeValueChanged(i, handles, true); };
+			handles->leftRangeHandle->checkPositionFunc = [=](const Vec2F& pos) { return CheckRangeHandlePos(i, handles, pos); };
+			handles->leftRangeHandle->localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
+			handles->leftRangeHandle->screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
+
+			handles->rightRangeHandle = mHandlesSample.rightRangeHandle->CloneAsRef<DragHandle>();
+			handles->rightRangeHandle->SetPosition(GetRangeHandlePos(i, handles, false));
+			handles->rightRangeHandle->onChangedPos = [=](const Vec2F& pos) { OnRangeValueChanged(i, handles, false); };
+			handles->rightRangeHandle->checkPositionFunc = [=](const Vec2F& pos) { return CheckRangeHandlePos(i, handles, pos); };
+			handles->rightRangeHandle->localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
+			handles->rightRangeHandle->screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
 
 			mSplineHandles.Add(handles);
 		}
@@ -273,8 +340,24 @@ namespace Editor
 	void SplineEditor::OnMainHandleMoved(int i, const Vec2F& pos, const Ref<PointHandles>& handles)
 	{
 		mSplineWrapper->SetPointPos(i, pos);
+
 		handles->prevSupport->SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
 		handles->nextSupport->SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
+
+		handles->leftRangeHandle->SetPosition(GetRangeHandlePos(i, handles, true));
+		handles->rightRangeHandle->SetPosition(GetRangeHandlePos(i, handles, false));
+
+		if (i > 0)
+		{
+			mSplineHandles[i - 1]->leftRangeHandle->SetPosition(GetRangeHandlePos(i - 1, mSplineHandles[i - 1], true));
+			mSplineHandles[i - 1]->rightRangeHandle->SetPosition(GetRangeHandlePos(i - 1, mSplineHandles[i - 1], false));
+		}
+
+		if (i < mSplineHandles.Count() - 1)
+		{
+			mSplineHandles[i + 1]->leftRangeHandle->SetPosition(GetRangeHandlePos(i + 1, mSplineHandles[i + 1], true));
+			mSplineHandles[i + 1]->rightRangeHandle->SetPosition(GetRangeHandlePos(i + 1, mSplineHandles[i + 1], false));
+		}
 
 		UpdateTransformFrame();
 		mSplineWrapper->OnChanged();
@@ -307,6 +390,24 @@ namespace Editor
 		}
 	}
 
+	void SplineEditor::OnMainHandlePressed(int i, const Ref<PointHandles>& handles)
+	{
+		handles->positionDragged = false;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float rangeValue = mSplineWrapper->GetPointRangeValue(i);
+
+			if (Math::Equals(rangeValue, 0.0f))
+				mSplineWrapper->SetPointRangeValue(i, 10.0f);
+			else
+				mSplineWrapper->SetPointRangeValue(i, 0.0f);
+
+			handles->leftRangeHandle->SetPosition(GetRangeHandlePos(i, handles, true));
+			handles->rightRangeHandle->SetPosition(GetRangeHandlePos(i, handles, false));
+		}
+	}
+
 	void SplineEditor::OnMainHandleReleasedNoDrag(int i, const Ref<PointHandles>& handles)
 	{
 		if (o2Input.IsKeyDown(VK_MENU))
@@ -335,7 +436,7 @@ namespace Editor
 		{
 			bool found = false;
 
-			const ApproximationVec2F* points = mSplineWrapper->GetPointApproximation(i);
+			const ApproximationVec2F* points = mSplineWrapper->GetPointApproximationLeft(i);
 			for (int j = 1; j < mSplineWrapper->GetPointApproximationCount(i); j++)
 			{
 				Vec2F a = mSplineWrapper->LocalToWorld(points[j - 1].value);
@@ -461,6 +562,65 @@ namespace Editor
 		handles->startDragFromZero = (next - prev).Length() < threshold;
 	}
 
+	void SplineEditor::OnRangeValueChanged(int i, const Ref<PointHandles>& handles, bool isLeft)
+	{
+		Vec2F normal = GetRangeHandlesNormal(i, handles);
+
+		o2Debug.DrawLine(mSplineWrapper->GetPointPos(i), mSplineWrapper->GetPointPos(i) + normal*100.0f);
+
+		if (isLeft)
+		{
+			Vec2F handlePos = handles->leftRangeHandle->GetPosition();
+			float value = (handlePos - mSplineWrapper->GetPointPos(i)).Dot(normal);
+			mSplineWrapper->SetPointRangeValue(i, -value);
+
+			handles->rightRangeHandle->SetPosition(GetRangeHandlePos(i, handles, false));
+		}
+		else
+		{
+			Vec2F handlePos = handles->rightRangeHandle->GetPosition();
+			float value = (handlePos - mSplineWrapper->GetPointPos(i)).Dot(normal);
+			mSplineWrapper->SetPointRangeValue(i, value);
+
+			handles->leftRangeHandle->SetPosition(GetRangeHandlePos(i, handles, true));
+		}
+	}
+
+	Vec2F SplineEditor::GetRangeHandlePos(int i, const Ref<PointHandles>& handles, bool isLeft) const
+	{
+		Vec2F normal = GetRangeHandlesNormal(i, handles);
+
+		if (isLeft)
+		{
+			float value = mSplineWrapper->GetPointRangeValue(i);
+			return mSplineWrapper->GetPointPos(i) - normal*value;
+		}
+		else
+		{
+			float value = mSplineWrapper->GetPointRangeValue(i);
+			return mSplineWrapper->GetPointPos(i) + normal*value;
+		}
+	}
+
+	Vec2F SplineEditor::GetRangeHandlesNormal(int i, const Ref<PointHandles>& handles) const
+	{
+		bool hasPrev = i > 0;
+		bool hasNext = i < mSplineWrapper->GetPointsCount() - 1;
+
+		Vec2F prev = hasPrev ? mSplineWrapper->GetPointPos(i - 1) : Vec2F();
+		Vec2F next = hasNext ? mSplineWrapper->GetPointPos(i + 1) : Vec2F();
+
+		return Spline::Key::GetRangeNormal(mSplineWrapper->GetPointPos(i),
+										   hasPrev ? &prev : nullptr,
+										   hasNext ? &next : nullptr);
+	}
+
+	Vec2F SplineEditor::CheckRangeHandlePos(int i, const Ref<PointHandles>& handles, const Vec2F& pos)
+	{
+		Vec2F normal = GetRangeHandlesNormal(i, handles);
+		return mSplineWrapper->GetPointPos(i) + normal*(normal.Dot(pos - mSplineWrapper->GetPointPos(i)));
+	}
+
 	void SplineEditor::UpdateTransformFrame()
 	{
 		mTransformFrameVisible = IsTransformFrameVisible();
@@ -559,21 +719,27 @@ namespace Editor
 		return point;
 	}
 
-	Vector<Vec2F> SplineEditor::ISplineWrapper::GetDrawPoints() const
+	Vector<Vec2F> SplineEditor::ISplineWrapper::GetDrawPointsLeftRange() const
 	{
 		Vector<Vec2F> res;
-		int segmentPoints = 20;
 
 		for (int i = 1; i < GetPointsCount(); i++)
 		{
-			Vec2F prevPos = GetPointPos(i - 1);
-			Vec2F currPos = GetPointPos(i);
+			for (int j = 0; j < GetPointApproximationCount(i) - 1; j++)
+				res.Add(LocalToWorld(GetPointApproximationLeft(i)[j].value));
+		}
 
-			Vec2F prevNextSupportPos = GetPointNextSupportPos(i - 1) + currPos;
-			Vec2F currPrevSupportPos = GetPointPrevSupportPos(i) + currPos;
+		return res;
+	}
 
-			for (int j = 0; j < segmentPoints - 1; j++)
-				res.Add(LocalToWorld(Bezier(prevPos, prevNextSupportPos, currPrevSupportPos, currPos, (float)j/(float)segmentPoints)));
+	Vector<Vec2F> SplineEditor::ISplineWrapper::GetDrawPointsRightRange() const
+	{
+		Vector<Vec2F> res;
+
+		for (int i = 1; i < GetPointsCount(); i++)
+		{
+			for (int j = 0; j < GetPointApproximationCount(i) - 1; j++)
+				res.Add(LocalToWorld(GetPointApproximationRight(i)[j].value));
 		}
 
 		return res;

@@ -52,6 +52,12 @@ namespace Editor
 			// Sets position of point
 			void SetPointPos(int idx, const Vec2F& pos) override;
 
+			// Sets point range value
+			void SetPointRangeValue(int idx, float value) override;
+
+			// Returns point range value
+			float GetPointRangeValue(int idx) const override;
+
 			// Returns previous support position of point
 			Vec2F GetPointPrevSupportPos(int idx) const override;
 
@@ -64,11 +70,11 @@ namespace Editor
 			// Sets next support position of point
 			void SetPointNextSupportPos(int idx, const Vec2F& pos) override;
 
-			// Returns draw points of spline
-			Vector<Vec2F> GetDrawPoints() const override;
+			// Returns approximation points
+			const ApproximationVec2F* GetPointApproximationLeft(int idx) const override;
 
 			// Returns approximation points
-			const ApproximationVec2F* GetPointApproximation(int idx) const override;
+			const ApproximationVec2F* GetPointApproximationRight(int idx) const override;
 
 			// Returns count of approximation points
 			int GetPointApproximationCount(int idx) const override;

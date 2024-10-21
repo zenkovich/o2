@@ -167,7 +167,7 @@ namespace o2
             if (!(key.prevSupport.Length() < noSupportsThreshold && prevKey.nextSupport.Length() < noSupportsThreshold))
             {
                 for (int j = 1; j < key.GetApproximatedPointsCount() - 1; j++)
-                    pushVertex(key.GetApproximatedPoints()[j].value);
+                    pushVertex(key.GetApproximatedPointsLeft()[j].value);
             }
 
             pushVertex(key.value);
