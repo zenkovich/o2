@@ -52,24 +52,24 @@ namespace Editor
 		virtual bool IsEmpty() const;
 
 		// Sets viewer enabled
-		void SetEnabled(bool enabled);
+		void SetPropertiesEnabled(bool enabled);
 
 		// Returns is viewer enabled
-		bool IsEnabled() const;
+		bool IsPropertiesEnabled() const;
 
 		IOBJECT(IActorPropertiesViewer);
 
 	protected:
 		Ref<SpoilerWithHead> mSpoiler;
 
-		bool mEnabled = false; // Is viewer enabled 
+		bool mPropertiesEnabled = false; // Is viewer enabled 
 
 	protected:
 		// Enable viewer event function
-		virtual void OnEnabled() {}
+		virtual void OnPropertiesEnabled() {}
 
 		// Disable viewer event function
-		virtual void OnDisabled() {}
+		virtual void OnPropertiesDisabled() {}
 
 		friend class ActorViewer;
 	};
@@ -85,7 +85,7 @@ END_META;
 CLASS_FIELDS_META(Editor::IActorPropertiesViewer)
 {
     FIELD().PROTECTED().NAME(mSpoiler);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPropertiesEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorPropertiesViewer)
@@ -99,10 +99,10 @@ CLASS_METHODS_META(Editor::IActorPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPropertiesEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
 }
 END_META;
 // --- END META ---

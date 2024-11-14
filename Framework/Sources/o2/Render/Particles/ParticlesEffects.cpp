@@ -250,7 +250,6 @@ namespace o2
 		curve->onKeysChanged += [this]() { OnChanged(); };
 	}
 
-
 	ParticlesVelocityEffect::ParticlesVelocityEffect()
 	{
 		XCurve = mmake<Curve>(Curve::Linear(0.0f, 10.0f));
@@ -306,6 +305,60 @@ namespace o2
 		XCurve->onKeysChanged += [this]() { OnChanged(); };
 		YCurve->onKeysChanged += [this]() { OnChanged(); };
 	}
+
+	ParticlesSplineEffect::ParticlesSplineEffect()
+	{
+		timeCurve = mmake<Curve>(Curve::EaseInOut());
+		timeCurve->onKeysChanged += [this]() { OnChanged(); };
+
+		spline = mmake<Spline>(Vector<Vec2F>{ Vec2F(), Vec2F(100, 0) });
+		spline->onKeysChanged += [this]() { OnChanged(); };
+	}
+
+	void ParticlesSplineEffect::OnParticleEmitted(Particle& particle)
+	{
+		int particleIndex = particle.index;
+
+		CheckDataBufferSize(particleIndex);
+
+		mData[particleIndex].initialPosition = particle.position;
+
+		mData[particleIndex].timeCacheKey = 0;
+		mData[particleIndex].timeCacheKeyApprox = 0;
+		mData[particleIndex].timeRandomCoef = Math::Random(0.0f, 1.0f);
+
+		mData[particleIndex].splineCacheKey = 0;
+		mData[particleIndex].splineCacheKeyApprox = 0;
+		mData[particleIndex].splineRandomCoef = Math::Random(0.0f, 1.0f);
+	}
+
+	void ParticlesSplineEffect::Update(float dt, ParticlesEmitter* emitter)
+	{
+		auto& particles = GetParticlesDirect(emitter);
+
+		CheckDataBufferSize(particles.Count());
+
+		for (auto& p : particles)
+		{
+			int particleIndex = p.index;
+
+			auto& data = mData[particleIndex];
+			float t = timeCurve->Evaluate(1.0f - p.timeLeft/p.lifetime, data.timeRandomCoef, true, data.timeCacheKey, data.timeCacheKeyApprox);
+			p.position = data.initialPosition + spline->Evaluate(t, data.splineRandomCoef, true, data.splineCacheKey, data.splineCacheKeyApprox);
+		}
+	}
+
+	void ParticlesSplineEffect::CheckDataBufferSize(int particlesCount)
+	{
+		for (int i = mData.size(); i <= particlesCount; i++)
+			mData.Add(ParticleData());
+	}
+
+	void ParticlesSplineEffect::OnDeserialized(const DataValue& node)
+	{
+		timeCurve->onKeysChanged += [this]() { OnChanged(); };
+		spline->onKeysChanged += [this]() { OnChanged(); };
+	}
 }
 // --- META ---
 
@@ -324,4 +377,6 @@ DECLARE_CLASS(o2::ParticlesAngleEffect, o2__ParticlesAngleEffect);
 DECLARE_CLASS(o2::ParticlesAngleSpeedEffect, o2__ParticlesAngleSpeedEffect);
 
 DECLARE_CLASS(o2::ParticlesVelocityEffect, o2__ParticlesVelocityEffect);
+
+DECLARE_CLASS(o2::ParticlesSplineEffect, o2__ParticlesSplineEffect);
 // --- END META ---

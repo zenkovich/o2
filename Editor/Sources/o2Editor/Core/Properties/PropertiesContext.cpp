@@ -72,4 +72,10 @@ namespace Editor
 		return properties;
 	}
 
+	void PropertiesContext::SetPropertiesEnabled(bool enabled)
+	{
+		for (auto& kv : properties)
+			kv.second->SetPropertyEnabled(enabled);
+	}
+
 }

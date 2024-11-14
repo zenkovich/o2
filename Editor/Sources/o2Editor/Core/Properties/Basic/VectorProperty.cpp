@@ -31,6 +31,18 @@ namespace Editor
 		return *this;
 	}
 
+	void VectorProperty::OnPropertyEnabled()
+	{
+		for (auto& property : mValueProperties)
+			property->SetPropertyEnabled(true);
+	}
+
+	void VectorProperty::OnPropertyDisabled()
+	{
+		for (auto& property : mValueProperties)
+			property->SetPropertyEnabled(false);
+	}
+
 	void VectorProperty::InitializeControls()
 	{
 		// Spoiler

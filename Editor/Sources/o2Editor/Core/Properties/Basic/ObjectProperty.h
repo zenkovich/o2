@@ -96,6 +96,12 @@ namespace Editor
 		// Called when property puts in buffer. Here you can release your shared resources
 		void OnFreeProperty() override;
 
+		// Enable viewer event function
+		void OnPropertyEnabled() override;
+
+		// Disable viewer event function
+		void OnPropertyDisabled() override;
+
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
@@ -144,6 +150,8 @@ CLASS_METHODS_META(Editor::ObjectProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void, CheckViewer);
     FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, const Ref<IAbstractValueProxy>&);

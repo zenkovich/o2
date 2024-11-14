@@ -69,7 +69,7 @@ namespace Editor
 		}
 	}
 
-	void MeshComponentViewer::OnEnabled()
+	void MeshComponentViewer::OnPropertiesEnabled()
 	{
 		o2EditorSceneScreen.AddTool(mSplineTool);
 		o2EditorSceneScreen.AddTool(mFrameTool);
@@ -81,7 +81,7 @@ namespace Editor
 		o2EditorSceneScreen.AddEditorLayer(mFrameTetxureLayer);
 	}
 
-	void MeshComponentViewer::OnDisabled()
+	void MeshComponentViewer::OnPropertiesDisabled()
 	{
 		auto selectedTool = o2EditorSceneScreen.GetSelectedTool();
 		if (selectedTool == mSplineTool || selectedTool == mFrameTool || selectedTool == mTopologyTool)

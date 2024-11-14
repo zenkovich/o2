@@ -43,6 +43,18 @@ namespace Editor
 		mObjectViewer = nullptr;
 	}
 
+	void ObjectProperty::OnPropertyEnabled()
+	{
+		if (mObjectViewer)
+			mObjectViewer->OnPropertiesEnabled();
+	}
+
+	void ObjectProperty::OnPropertyDisabled()
+	{
+		if (mObjectViewer)
+			mObjectViewer->OnPropertiesDisabled();
+	}
+
 	void ObjectProperty::InitializeControls()
 	{
 		expandHeight = true;

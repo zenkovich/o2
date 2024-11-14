@@ -52,6 +52,9 @@ namespace Editor
 		template<typename _type>
 		_type* FindOnStack() const;
 
+		// Sets properties enabled or disabled
+		void SetPropertiesEnabled(bool enabled);
+
 		friend class Properties;
 	};
 

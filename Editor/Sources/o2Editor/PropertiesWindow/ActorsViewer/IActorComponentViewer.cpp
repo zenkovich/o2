@@ -70,22 +70,22 @@ namespace Editor
 	void IActorComponentViewer::Refresh()
 	{	}
 
-	void IActorComponentViewer::SetEnabled(bool enabled)
+	void IActorComponentViewer::SetPropertiesEnabled(bool enabled)
 	{
-		if (mEnabled == enabled)
+		if (mPropertiesEnabled == enabled)
 			return;
 
-		mEnabled = enabled;
+		mPropertiesEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
+		if (mPropertiesEnabled)
+			OnPropertiesEnabled();
 		else
-			OnDisabled();
+			OnPropertiesDisabled();
 	}
 
-	bool IActorComponentViewer::IsEnabled() const
+	bool IActorComponentViewer::IsPropertiesEnabled() const
 	{
-		return mEnabled;
+		return mPropertiesEnabled;
 	}
 
 	void IActorComponentViewer::RemoveTargetComponents()

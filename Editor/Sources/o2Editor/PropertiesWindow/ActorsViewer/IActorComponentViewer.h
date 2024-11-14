@@ -51,10 +51,10 @@ namespace Editor
 		virtual void Refresh();
 
 		// Sets viewer enabled
-		void SetEnabled(bool enabled);
+		void SetPropertiesEnabled(bool enabled);
 
 		// Returns is viewer enabled
-		bool IsEnabled() const;
+		bool IsPropertiesEnabled() const;
 
 		IOBJECT(IActorComponentViewer);
 
@@ -64,17 +64,17 @@ namespace Editor
 		Ref<SpoilerWithHead> mSpoiler;      // Component's spoiler
 		Ref<Button>          mRemoveButton; // Remove component button
 
-		bool mEnabled = false; // Is viewer enabled 
+		bool mPropertiesEnabled = false; // Is viewer enabled 
 
 	protected:
 		// Removes target components
 		void RemoveTargetComponents();
 
 		// Enable viewer event function
-		virtual void OnEnabled() {}
+		virtual void OnPropertiesEnabled() {}
 
 		// Disable viewer event function
-		virtual void OnDisabled() {}
+		virtual void OnPropertiesDisabled() {}
 
 		friend class ActorViewer;
 	};
@@ -92,7 +92,7 @@ CLASS_FIELDS_META(Editor::IActorComponentViewer)
     FIELD().PROTECTED().NAME(mTargetComponents);
     FIELD().PROTECTED().NAME(mSpoiler);
     FIELD().PROTECTED().NAME(mRemoveButton);
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPropertiesEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorComponentViewer)
@@ -105,11 +105,11 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, Expand);
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPropertiesEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsPropertiesEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, RemoveTargetComponents);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
 }
 END_META;
 // --- END META ---

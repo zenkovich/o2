@@ -113,6 +113,12 @@ namespace Editor
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
 	protected:
+		// Enable property event function
+		void OnPropertyEnabled() override;
+
+		// Disable property event function
+		void OnPropertyDisabled() override;
+
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
@@ -191,6 +197,8 @@ CLASS_METHODS_META(Editor::VectorProperty)
     FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
     FUNCTION().PROTECTED().SIGNATURE(void*, GetProxyValuePointer, const Ref<IAbstractValueProxy>&);
     FUNCTION().PROTECTED().SIGNATURE(Ref<IPropertyField>, GetFreeValueProperty);

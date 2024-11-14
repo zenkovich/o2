@@ -84,10 +84,10 @@ namespace Editor
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
 		// Enable viewer event function
-		void OnEnabled() override;
+		void OnPropertiesEnabled() override;
 
 		// Disable viewer event function
-		void OnDisabled() override;
+		void OnPropertiesDisabled() override;
 
 		// Called when button pressed
 		void FitAndCenterize();
@@ -119,8 +119,8 @@ CLASS_METHODS_META(Editor::MeshComponentViewer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, FitAndCenterize);
 }
 END_META;

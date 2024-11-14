@@ -48,6 +48,18 @@ namespace Editor
 		mObjectViewer = nullptr;
 	}
 
+	void ObjectPtrProperty::OnPropertyEnabled()
+	{
+		if (mObjectViewer)
+			mObjectViewer->OnPropertiesEnabled();
+	}
+
+	void ObjectPtrProperty::OnPropertyDisabled()
+	{
+		if (mObjectViewer)
+			mObjectViewer->OnPropertiesDisabled();
+	}
+
 	void ObjectPtrProperty::InitializeControls()
 	{
 		PushEditorScopeOnStack scope;

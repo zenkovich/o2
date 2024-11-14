@@ -5,22 +5,22 @@
 
 namespace Editor
 {
-	void IActorHeaderViewer::SetEnabled(bool enabled)
+	void IActorHeaderViewer::SetPropertiesEnabled(bool enabled)
 	{
-		if (mEnabled == enabled)
+		if (mPropertiesEnabled == enabled)
 			return;
 
-		mEnabled = enabled;
+		mPropertiesEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
+		if (mPropertiesEnabled)
+			OnPropertiesEnabled();
 		else
-			OnDisabled();
+			OnPropertiesDisabled();
 	}
 
-	bool IActorHeaderViewer::IsEnabled() const
+	bool IActorHeaderViewer::IsPropertiesEnabled() const
 	{
-		return mEnabled;
+		return mPropertiesEnabled;
 	}
 }
 // --- META ---

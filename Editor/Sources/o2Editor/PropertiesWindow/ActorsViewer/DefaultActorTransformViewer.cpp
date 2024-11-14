@@ -169,13 +169,13 @@ namespace Editor
 		*offsetIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		rightTopOffsetPropertyContainer->AddChild(offsetIcon);
 
-		moffsetRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*moffsetRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		moffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "R";
-		moffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "T";
-		moffsetRightTopProperty->SetValuePath("layout/offsetMax");
-		moffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
-		rightTopOffsetPropertyContainer->AddChild(moffsetRightTopProperty);
+		mOffsetRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
+		*mOffsetRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		mOffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "R";
+		mOffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "T";
+		mOffsetRightTopProperty->SetValuePath("layout/offsetMax");
+		mOffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
+		rightTopOffsetPropertyContainer->AddChild(mOffsetRightTopProperty);
 
 		// Left bottom
 		auto leftBottomOffsetPropertyContainer = mmake<Widget>();
@@ -285,7 +285,7 @@ namespace Editor
 			mAnchorLeftBottomProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::anchorMin)>(
 				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->anchorMin; });
 
-			moffsetRightTopProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::offsetMax)>(
+			mOffsetRightTopProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::offsetMax)>(
 				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->offsetMax; });
 
 			mOffsetLeftBottomProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::offsetMin)>(
@@ -304,7 +304,6 @@ namespace Editor
 
 	void DefaultActorTransformViewer::Refresh()
 	{
-
 		mPositionProperty->Refresh();
 		mPivotProperty->Refresh();
 		mScaleProperty->Refresh();
@@ -316,12 +315,46 @@ namespace Editor
 		{
 			mAnchorRightTopProperty->Refresh();
 			mAnchorLeftBottomProperty->Refresh();
-			moffsetRightTopProperty->Refresh();
+			mOffsetRightTopProperty->Refresh();
 			mOffsetLeftBottomProperty->Refresh();
 			mMinSizeProperty->Refresh();
 			mMaxSizeProperty->Refresh();
 			mWeightProperty->Refresh();
 		}
+	}
+
+	void DefaultActorTransformViewer::OnPropertiesEnabled()
+	{
+		mPositionProperty->SetPropertyEnabled(true);
+		mPivotProperty->SetPropertyEnabled(true);
+		mScaleProperty->SetPropertyEnabled(true);
+		mSizeProperty->SetPropertyEnabled(true);
+		mRotationProperty->SetPropertyEnabled(true);
+		mShearProperty->SetPropertyEnabled(true);
+		mAnchorRightTopProperty->SetPropertyEnabled(true);
+		mAnchorLeftBottomProperty->SetPropertyEnabled(true);
+		mOffsetRightTopProperty->SetPropertyEnabled(true);
+		mOffsetLeftBottomProperty->SetPropertyEnabled(true);
+		mMinSizeProperty->SetPropertyEnabled(true);
+		mMaxSizeProperty->SetPropertyEnabled(true);
+		mWeightProperty->SetPropertyEnabled(true);
+	}
+
+	void DefaultActorTransformViewer::OnPropertiesDisabled()
+	{
+		mPositionProperty->SetPropertyEnabled(false);
+		mPivotProperty->SetPropertyEnabled(false);
+		mScaleProperty->SetPropertyEnabled(false);
+		mSizeProperty->SetPropertyEnabled(false);
+		mRotationProperty->SetPropertyEnabled(false);
+		mShearProperty->SetPropertyEnabled(false);
+		mAnchorRightTopProperty->SetPropertyEnabled(false);
+		mAnchorLeftBottomProperty->SetPropertyEnabled(false);
+		mOffsetRightTopProperty->SetPropertyEnabled(false);
+		mOffsetLeftBottomProperty->SetPropertyEnabled(false);
+		mMinSizeProperty->SetPropertyEnabled(false);
+		mMaxSizeProperty->SetPropertyEnabled(false);
+		mWeightProperty->SetPropertyEnabled(false);
 	}
 
 	void DefaultActorTransformViewer::OnPropertyChangeCompleted(const String& path,

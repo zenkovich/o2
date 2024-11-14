@@ -33,22 +33,22 @@ namespace Editor
 		virtual void Refresh() {}
 
 		// Sets viewer enabled
-		void SetEnabled(bool enabled);
+		void SetPropertiesEnabled(bool enabled);
 
 		// Returns is viewer enabled
-		bool IsEnabled() const;
+		bool IsPropertiesEnabled() const;
 
 		IOBJECT(IWidgetLayerHeaderViewer);
 
 	protected:
-		bool mEnabled = false; // Is viewer enabled 
+		bool mPropertiesEnabled = false; // Is viewer enabled 
 
 	protected:
 		// Enable viewer event function
-		virtual void OnEnabled() {}
+		virtual void OnPropertiesEnabled() {}
 
 		// Disable viewer event function
-		virtual void OnDisabled() {}
+		virtual void OnPropertiesDisabled() {}
 	};
 }
 // --- META ---
@@ -61,7 +61,7 @@ CLASS_BASES_META(Editor::IWidgetLayerHeaderViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerHeaderViewer)
 {
-    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPropertiesEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerHeaderViewer)
@@ -70,10 +70,10 @@ CLASS_METHODS_META(Editor::IWidgetLayerHeaderViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-    FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPropertiesEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
 }
 END_META;
 // --- END META ---

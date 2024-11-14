@@ -61,16 +61,16 @@ namespace Editor
 		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);
 	}
 
-	void DefaultActorComponentViewer::OnEnabled()
+	void DefaultActorComponentViewer::OnPropertiesEnabled()
 	{
 		if (mViewer)
-			mViewer->OnEnabled();
+			mViewer->OnPropertiesEnabled();
 	}
 
-	void DefaultActorComponentViewer::OnDisabled()
+	void DefaultActorComponentViewer::OnPropertiesDisabled()
 	{
 		if (mViewer)
-			mViewer->OnDisabled();
+			mViewer->OnPropertiesDisabled();
 	}
 
 }

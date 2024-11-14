@@ -55,6 +55,18 @@ namespace Editor
 		return mSpoiler->GetChildren().Count() == 0;
 	}
 
+	void DefaultWidgetLayerPropertiesViewer::OnPropertiesEnabled()
+	{
+		if (mViewer)
+			mViewer->OnPropertiesEnabled();
+	}
+
+	void DefaultWidgetLayerPropertiesViewer::OnPropertiesDisabled()
+	{
+		if (mViewer)
+			mViewer->OnPropertiesDisabled();
+	}
+
 	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
 	{
 		auto action = mmake<TransformAction>(mLayers.Convert<Ref<SceneEditableObject>>([](WidgetLayer* layer) { return Ref(dynamic_cast<SceneEditableObject*>(layer)); }));

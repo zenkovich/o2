@@ -73,6 +73,20 @@ namespace Editor
 		mLockProperty->Refresh();
 	}
 
+	void DefaultWidgetLayerHeaderViewer::OnPropertiesEnabled()
+	{
+		mEnableProperty->SetPropertyEnabled(true);
+		mNameProperty->SetPropertyEnabled(true);
+		mLockProperty->SetPropertyEnabled(true);
+	}
+
+	void DefaultWidgetLayerHeaderViewer::OnPropertiesDisabled()
+	{
+		mEnableProperty->SetPropertyEnabled(false);
+		mNameProperty->SetPropertyEnabled(false);
+		mLockProperty->SetPropertyEnabled(false);
+	}
+
 	void DefaultWidgetLayerHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue,
 														   const Vector<DataDocument>& newValue)
 	{

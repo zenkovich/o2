@@ -74,10 +74,10 @@ namespace Editor
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
 		// Enable viewer event function
-		void OnEnabled() override;
+		void OnPropertiesEnabled() override;
 
 		// Disable viewer event function
-		void OnDisabled() override;
+		void OnPropertiesDisabled() override;
 
 		// Returns target objects
 		Vector<Pair<ParticlesEmitterComponent*, ParticlesEmitterComponent*>>& GetTargetObjects();
@@ -121,8 +121,8 @@ CLASS_METHODS_META(Editor::ParticlesEmitterComponentViewer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
     FUNCTION().PROTECTED().SIGNATURE(_tmp3, GetTargetObjects);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPlayPauseTogglePressed, bool);
     FUNCTION().PROTECTED().SIGNATURE(void, OnLoopTogglePressed, bool);

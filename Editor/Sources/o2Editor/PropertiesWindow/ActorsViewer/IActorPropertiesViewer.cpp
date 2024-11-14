@@ -51,22 +51,22 @@ namespace Editor
 		return true;
 	}
 
-	void IActorPropertiesViewer::SetEnabled(bool enabled)
+	void IActorPropertiesViewer::SetPropertiesEnabled(bool enabled)
 	{
-		if (mEnabled == enabled)
+		if (mPropertiesEnabled == enabled)
 			return;
 
-		mEnabled = enabled;
+		mPropertiesEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
+		if (mPropertiesEnabled)
+			OnPropertiesEnabled();
 		else
-			OnDisabled();
+			OnPropertiesDisabled();
 	}
 
-	bool IActorPropertiesViewer::IsEnabled() const
+	bool IActorPropertiesViewer::IsPropertiesEnabled() const
 	{
-		return mEnabled;
+		return mPropertiesEnabled;
 	}
 
 }

@@ -2,22 +2,22 @@
 #include "IWidgetLayerHeadViewer.h"
 namespace Editor
 {
-	void IWidgetLayerHeaderViewer::SetEnabled(bool enabled)
+	void IWidgetLayerHeaderViewer::SetPropertiesEnabled(bool enabled)
 	{
-		if (mEnabled == enabled)
+		if (mPropertiesEnabled == enabled)
 			return;
 
-		mEnabled = enabled;
+		mPropertiesEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
+		if (mPropertiesEnabled)
+			OnPropertiesEnabled();
 		else
-			OnDisabled();
+			OnPropertiesDisabled();
 	}
 
-	bool IWidgetLayerHeaderViewer::IsEnabled() const
+	bool IWidgetLayerHeaderViewer::IsPropertiesEnabled() const
 	{
-		return mEnabled;
+		return mPropertiesEnabled;
 	}
 }
 // --- META ---

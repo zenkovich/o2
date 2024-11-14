@@ -27,7 +27,7 @@ namespace Editor
 	PropertiesWindow::~PropertiesWindow()
 	{
 		if (mCurrentViewer)
-			mCurrentViewer->SetEnabled(false);
+			mCurrentViewer->SetPropertiesEnabled(false);
 	}
 
 	void PropertiesWindow::ResetTargets()
@@ -112,7 +112,7 @@ namespace Editor
 			if (mCurrentViewer)
 			{
 				mCurrentViewer->mContentWidget->Hide(true);
-				mCurrentViewer->SetEnabled(false);
+				mCurrentViewer->SetPropertiesEnabled(false);
 			}
 
 			mCurrentViewer = objectViewer;
@@ -130,7 +130,7 @@ namespace Editor
 		if (mCurrentViewer)
 		{
 			mCurrentViewer->SetTargets(mTargets);
-			mCurrentViewer->SetEnabled(true);
+			mCurrentViewer->SetPropertiesEnabled(true);
 		}
 
 		mOnTargetsChangedDelegate = targetsChangedDelegate;

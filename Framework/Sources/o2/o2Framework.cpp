@@ -51,6 +51,7 @@ extern void __RegisterClass__o2__ParticlesSizeEffect();
 extern void __RegisterClass__o2__ParticlesAngleEffect();
 extern void __RegisterClass__o2__ParticlesAngleSpeedEffect();
 extern void __RegisterClass__o2__ParticlesVelocityEffect();
+extern void __RegisterClass__o2__ParticlesSplineEffect();
 extern void __RegisterClass__o2__ParticlesEmitter();
 extern void __RegisterClass__o2__ParticlesEmitterShape();
 extern void __RegisterClass__o2__CircleParticlesEmitterShape();
@@ -202,6 +203,7 @@ extern void InitializeTypeso2Framework()
     __RegisterClass__o2__ParticlesAngleEffect();
     __RegisterClass__o2__ParticlesAngleSpeedEffect();
     __RegisterClass__o2__ParticlesVelocityEffect();
+    __RegisterClass__o2__ParticlesSplineEffect();
     __RegisterClass__o2__ParticlesEmitter();
     __RegisterClass__o2__ParticlesEmitterShape();
     __RegisterClass__o2__CircleParticlesEmitterShape();

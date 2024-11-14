@@ -176,6 +176,28 @@ namespace Editor
 		RefreshLayer();
 	}
 
+	void DefaultActorHeaderViewer::OnPropertiesEnabled()
+	{
+		mEnableProperty->SetPropertyEnabled(true);
+		mNameProperty->SetPropertyEnabled(true);
+		mLockProperty->SetPropertyEnabled(true);
+		mPrototypeProperty->SetPropertyEnabled(true);
+		mTagsProperty->SetPropertyEnabled(true);
+		mLayerProperty->SetPropertyEnabled(true);
+		mDepthProperty->SetPropertyEnabled(true);
+	}
+
+	void DefaultActorHeaderViewer::OnPropertiesDisabled()
+	{
+		mEnableProperty->SetPropertyEnabled(false);
+		mNameProperty->SetPropertyEnabled(false);
+		mLockProperty->SetPropertyEnabled(false);
+		mPrototypeProperty->SetPropertyEnabled(false);
+		mTagsProperty->SetPropertyEnabled(false);
+		mLayerProperty->SetPropertyEnabled(false);
+		mDepthProperty->SetPropertyEnabled(false);
+	}
+
 	void DefaultActorHeaderViewer::RefreshLayer()
 	{
 		mLayerProperty->Refresh();

@@ -41,13 +41,19 @@ namespace Editor
 		Ref<Spoiler>       mLayoutSpoiler;
 		Ref<Vec2FProperty> mAnchorRightTopProperty;
 		Ref<Vec2FProperty> mAnchorLeftBottomProperty;
-		Ref<Vec2FProperty> moffsetRightTopProperty;
+		Ref<Vec2FProperty> mOffsetRightTopProperty;
 		Ref<Vec2FProperty> mOffsetLeftBottomProperty;
 		Ref<Vec2FProperty> mMinSizeProperty;
 		Ref<Vec2FProperty> mMaxSizeProperty;
 		Ref<Vec2FProperty> mWeightProperty;
 
 	protected:
+		// Enable viewer event function
+		void OnPropertiesEnabled() override;
+
+		// Disable viewer event function
+		void OnPropertiesDisabled() override;
+
 		// Called when some property changed, stores action for undo
 		void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
 									   const Vector<DataDocument>& newValue);
@@ -73,7 +79,7 @@ CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
     FIELD().PROTECTED().NAME(mLayoutSpoiler);
     FIELD().PROTECTED().NAME(mAnchorRightTopProperty);
     FIELD().PROTECTED().NAME(mAnchorLeftBottomProperty);
-    FIELD().PROTECTED().NAME(moffsetRightTopProperty);
+    FIELD().PROTECTED().NAME(mOffsetRightTopProperty);
     FIELD().PROTECTED().NAME(mOffsetLeftBottomProperty);
     FIELD().PROTECTED().NAME(mMinSizeProperty);
     FIELD().PROTECTED().NAME(mMaxSizeProperty);
@@ -86,6 +92,8 @@ CLASS_METHODS_META(Editor::DefaultActorTransformViewer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

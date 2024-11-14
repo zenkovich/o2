@@ -42,10 +42,10 @@ namespace Editor
 							   const Vector<DataDocument>& after);
 
 		// Enable viewer event function
-		void OnEnabled() override;
+		void OnPropertiesEnabled() override;
 
 		// Disable viewer event function
-		void OnDisabled() override;
+		void OnPropertiesDisabled() override;
 	};
 
 	template<typename _component_type>
@@ -98,8 +98,8 @@ CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
 }
 END_META;
 

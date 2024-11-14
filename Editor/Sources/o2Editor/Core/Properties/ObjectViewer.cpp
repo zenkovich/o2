@@ -80,20 +80,16 @@ namespace Editor
 		return "UI/Editor";
 	}
 
-	void ObjectViewer::OnEnabled()
+	void ObjectViewer::OnPropertiesEnabled()
 	{
-		VerticalLayout::OnEnabled();
-
 		if (mPropertiesViewer)
-			mPropertiesViewer->OnEnabled();
+			mPropertiesViewer->OnPropertiesEnabled();
 	}
 
-	void ObjectViewer::OnDisabled()
+	void ObjectViewer::OnPropertiesDisabled()
 	{
-		VerticalLayout::OnDisabled();
-
 		if (mPropertiesViewer)
-			mPropertiesViewer->OnDisabled();
+			mPropertiesViewer->OnPropertiesDisabled();
 	}
 
 }

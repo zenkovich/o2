@@ -62,6 +62,12 @@ namespace Editor
 		Ref<Button> mPrototypeBreakBtn;
 
 	protected:
+		// Enable viewer event function
+		void OnPropertiesEnabled() override;
+
+		// Disable viewer event function
+		void OnPropertiesDisabled() override;
+
 		// Refreshes layer property
 		void RefreshLayer();
 
@@ -115,6 +121,8 @@ CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, RefreshLayer);
     FUNCTION().PROTECTED().SIGNATURE(void, OnApplyPrototypePressed);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRevertPrototypePressed);

@@ -102,6 +102,12 @@ namespace Editor
         // Returns is property revertable - it's able to check difference between origin value and prototype
         bool IsRevertable() const;
 
+		// Sets property enabled or disabled
+		void SetPropertyEnabled(bool enabled);
+
+		// Returns is property enabled
+		bool IsPropertyEnabled() const;
+
         // Specializes field info
         virtual void SetFieldInfo(const FieldInfo* fieldInfo);
 
@@ -148,6 +154,8 @@ namespace Editor
         CLONEABLE_REF(IPropertyField);
 
     protected:
+		bool mPropertyEnabled = false; // Is property enabled
+
         const FieldInfo*           mFieldInfo = nullptr; // Specialized field info
         WeakRef<PropertiesContext> mParentContext;       // Parent context
         bool                       mRevertable = true;   // Is property can be reverted
@@ -183,7 +191,13 @@ namespace Editor
         virtual bool IsValueRevertable() const;
 
         // Called when field value changed
-        virtual void OnValueChanged();
+		virtual void OnValueChanged();
+
+		// Enable property event function
+		virtual void OnPropertyEnabled() {}
+
+		// Disable property event function
+		virtual void OnPropertyDisabled() {}
 
         // Frees values proxies
         void FreeValuesProxies();
@@ -596,6 +610,7 @@ CLASS_FIELDS_META(Editor::IPropertyField)
 {
     FIELD().PUBLIC().NAME(onChanged);
     FIELD().PUBLIC().NAME(onChangeCompleted);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPropertyEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFieldInfo);
     FIELD().PROTECTED().NAME(mParentContext);
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mRevertable);
@@ -631,6 +646,8 @@ CLASS_METHODS_META(Editor::IPropertyField)
     FUNCTION().PUBLIC().SIGNATURE(const Ref<Label>&, GetCaptionLabel);
     FUNCTION().PUBLIC().SIGNATURE(void, SetRevertable, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsRevertable);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetPropertyEnabled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsPropertyEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);
@@ -640,6 +657,8 @@ CLASS_METHODS_META(Editor::IPropertyField)
     FUNCTION().PROTECTED().SIGNATURE(void, CheckRevertableState);
     FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
     FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, FreeValuesProxies);
     FUNCTION().PROTECTED().SIGNATURE(void, BeginUserChanging);
     FUNCTION().PROTECTED().SIGNATURE(void, EndUserChanging);

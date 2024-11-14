@@ -39,7 +39,7 @@ namespace Editor
 		}
 	}
 
-	void SkinningMeshBoneComponentViewer::OnEnabled()
+	void SkinningMeshBoneComponentViewer::OnPropertiesEnabled()
 	{
 		o2EditorSceneScreen.AddTool(mWeightsTool);
 		o2EditorSceneScreen.SelectTool<MeshWeightsTool>();
@@ -47,7 +47,7 @@ namespace Editor
 		o2EditorSceneScreen.AddEditorLayer(mFrameTetxureLayer);
 	}
 
-	void SkinningMeshBoneComponentViewer::OnDisabled()
+	void SkinningMeshBoneComponentViewer::OnPropertiesDisabled()
 	{
 		o2EditorSceneScreen.RemoveTool(mWeightsTool);
 		o2EditorSceneScreen.RemoveEditorLayer(mFrameTetxureLayer);

@@ -37,16 +37,16 @@ namespace Editor
 		Refresh();
 	}
 
-	void DefaultPropertiesViewer::OnEnabled()
+	void DefaultPropertiesViewer::OnPropertiesEnabled()
 	{
 		if (mViewer)
-			mViewer->OnEnabled();
+			mViewer->OnPropertiesEnabled();
 	}
 
-	void DefaultPropertiesViewer::OnDisabled()
+	void DefaultPropertiesViewer::OnPropertiesDisabled()
 	{
 		if (mViewer)
-			mViewer->OnDisabled();
+			mViewer->OnPropertiesDisabled();
 	}
 
 }

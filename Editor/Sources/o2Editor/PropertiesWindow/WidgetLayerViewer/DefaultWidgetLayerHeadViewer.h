@@ -49,6 +49,12 @@ namespace Editor
 		Ref<BooleanProperty> mLockProperty;
 
 	protected:
+		// Enable viewer event function
+		void OnPropertiesEnabled() override;
+
+		// Disable viewer event function
+		void OnPropertiesDisabled() override;
+
 		// Called when some property changed, stores action for undo
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue, 
 							   const Vector<DataDocument>& newValue);
@@ -77,6 +83,8 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerHeaderViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<Widget>, GetWidget);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

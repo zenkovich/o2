@@ -27,7 +27,7 @@ namespace Editor
 		typedef Function<void(const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)> OnChangeCompletedFunc;
 
 	public:
-		OnChangedFunc onChanged;                 // Immediate change value by user event
+		OnChangedFunc         onChanged;         // Immediate change value by user event
 		OnChangeCompletedFunc onChangeCompleted; // Change completed by user event
 
 		String path; // Path to viewing object fields
@@ -73,10 +73,10 @@ namespace Editor
 		bool IsEmpty() const;
 
 		// ThCalled when object viewer enabled
-		virtual void OnEnabled() {}
+		virtual void OnPropertiesEnabled();
 
 		// ThCalled when object viewer disabled
-		virtual void OnDisabled() {}
+		virtual void OnPropertiesDisabled();
 
 		IOBJECT(IObjectPropertiesViewer);
 
@@ -204,8 +204,8 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
     FUNCTION().PUBLIC().SIGNATURE(const WString&, GetCaption);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnPropertiesDisabled);
     FUNCTION().PROTECTED().SIGNATURE(Ref<Spoiler>, CreateSpoiler);
     FUNCTION().PROTECTED().SIGNATURE(void, OnHeaderEnableChanged, bool);
     FUNCTION().PROTECTED().SIGNATURE(bool, CheckBuildProperties, _tmp2);

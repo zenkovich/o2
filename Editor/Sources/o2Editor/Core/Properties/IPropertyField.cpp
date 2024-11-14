@@ -172,6 +172,24 @@ namespace Editor
 		return mRevertable;
 	}
 
+	void IPropertyField::SetPropertyEnabled(bool enabled)
+	{
+		if (enabled == mPropertyEnabled)
+			return;
+
+		mPropertyEnabled = enabled;
+
+		if (mPropertyEnabled)
+			OnPropertyEnabled();
+		else
+			OnPropertyDisabled();
+	}
+
+	bool IPropertyField::IsPropertyEnabled() const
+	{
+		return mPropertyEnabled;
+	}
+
 	void IPropertyField::SetFieldInfo(const FieldInfo* fieldInfo)
 	{
 		mFieldInfo = fieldInfo;

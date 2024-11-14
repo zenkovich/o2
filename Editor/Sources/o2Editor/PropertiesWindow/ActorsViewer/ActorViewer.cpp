@@ -306,32 +306,32 @@ namespace Editor
 		}
 
 		for (auto& viewer : lastComponentViewers)
-			viewer->SetEnabled(false);
+			viewer->SetPropertiesEnabled(false);
 
 		for (auto& viewer : enableComponentViewers)
-			viewer->SetEnabled(true);
+			viewer->SetPropertiesEnabled(true);
 	}
 
-	void ActorViewer::OnEnabled()
+	void ActorViewer::OnPropertiesEnabled()
 	{
-		mHeaderViewer->SetEnabled(true);
-		mTransformViewer->SetEnabled(true);
+		mHeaderViewer->SetPropertiesEnabled(true);
+		mTransformViewer->SetPropertiesEnabled(true);
 
 		if (mActorPropertiesViewer)
-			mActorPropertiesViewer->SetEnabled(true);
+			mActorPropertiesViewer->SetPropertiesEnabled(true);
 
-		mComponentsViewers.ForEach([](auto x) { x->SetEnabled(true); });
+		mComponentsViewers.ForEach([](auto x) { x->SetPropertiesEnabled(true); });
 	}
 
-	void ActorViewer::OnDisabled()
+	void ActorViewer::OnPropertiesDisabled()
 	{
-		mHeaderViewer->SetEnabled(false);
-		mTransformViewer->SetEnabled(false);
+		mHeaderViewer->SetPropertiesEnabled(false);
+		mTransformViewer->SetPropertiesEnabled(false);
 
 		if (mActorPropertiesViewer)
-			mActorPropertiesViewer->SetEnabled(false);
+			mActorPropertiesViewer->SetPropertiesEnabled(false);
 
-		mComponentsViewers.ForEach([](auto x) { x->SetEnabled(false); });
+		mComponentsViewers.ForEach([](auto x) { x->SetPropertiesEnabled(false); });
 
 		mTargetActors.Clear();
 	}

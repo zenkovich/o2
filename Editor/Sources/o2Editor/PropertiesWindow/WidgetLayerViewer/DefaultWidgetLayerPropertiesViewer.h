@@ -47,6 +47,12 @@ namespace Editor
 		Ref<Button>                  mFitSizeButton; // Fit size of layer by drawable size
 
 	protected:
+		// Enable viewer event function
+		void OnPropertiesEnabled() override;
+
+		// Disable viewer event function
+		void OnPropertiesDisabled() override;
+
 		// Fits layer size by drawable size, Called when mFitSizeButton were pressed
 		void FitLayerByDrawable();
 	};
@@ -74,6 +80,8 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetDrawableType);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, FitLayerByDrawable);
 }
 END_META;

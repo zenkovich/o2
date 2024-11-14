@@ -116,6 +116,16 @@ namespace Editor
 		return mSpoiler->GetChildren().IsEmpty();
 	}
 
+	void IObjectPropertiesViewer::OnPropertiesEnabled()
+	{
+		mPropertiesContext->SetPropertiesEnabled(true);
+	}
+
+	void IObjectPropertiesViewer::OnPropertiesDisabled()
+	{
+		mPropertiesContext->SetPropertiesEnabled(false);
+	}
+
 	Ref<Spoiler> IObjectPropertiesViewer::CreateSpoiler()
 	{
 		return o2UI.CreateWidget<Spoiler>("expand with caption");

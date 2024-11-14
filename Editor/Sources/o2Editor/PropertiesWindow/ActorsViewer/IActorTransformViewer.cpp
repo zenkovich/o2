@@ -50,22 +50,22 @@ namespace Editor
 	void IActorTransformViewer::Refresh()
 	{}
 
-	void IActorTransformViewer::SetEnabled(bool enabled)
+	void IActorTransformViewer::SetPropertiesEnabled(bool enabled)
 	{
-		if (mEnabled == enabled)
+		if (mPropertiesEnabled == enabled)
 			return;
 
-		mEnabled = enabled;
+		mPropertiesEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
+		if (mPropertiesEnabled)
+			OnPropertiesEnabled();
 		else
-			OnDisabled();
+			OnPropertiesDisabled();
 	}
 
-	bool IActorTransformViewer::IsEnabled() const
+	bool IActorTransformViewer::IsPropertiesEnabled() const
 	{
-		return mEnabled;
+		return mPropertiesEnabled;
 	}
 
 }

@@ -75,7 +75,7 @@ namespace Editor
 		}
 	}
 
-	void SkinningMeshComponentViewer::OnEnabled()
+	void SkinningMeshComponentViewer::OnPropertiesEnabled()
 	{
 		o2EditorSceneScreen.AddTool(mSplineTool);
 		o2EditorSceneScreen.AddTool(mFrameTool);
@@ -92,7 +92,7 @@ namespace Editor
 		UpdateEditSkeletonButtonCaption();
 	}
 
-	void SkinningMeshComponentViewer::OnDisabled()
+	void SkinningMeshComponentViewer::OnPropertiesDisabled()
 	{
 		o2EditorSceneScreen.RemoveTool(mSplineTool);
 		o2EditorSceneScreen.RemoveTool(mFrameTool);

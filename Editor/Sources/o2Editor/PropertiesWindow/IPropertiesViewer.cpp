@@ -24,22 +24,22 @@ namespace Editor
 	void IPropertiesViewer::Refresh()
 	{}
 
-	void IPropertiesViewer::SetEnabled(bool enabled)
+	void IPropertiesViewer::SetPropertiesEnabled(bool enabled)
 	{
-		if (mEnabled == enabled)
+		if (mPropertiesEnabled == enabled)
 			return;
 
-		mEnabled = enabled;
+		mPropertiesEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
+		if (mPropertiesEnabled)
+			OnPropertiesEnabled();
 		else
-			OnDisabled();
+			OnPropertiesDisabled();
 	}
 
 	bool IPropertiesViewer::IsEnabled() const
 	{
-		return mEnabled;
+		return mPropertiesEnabled;
 	}
 
 }

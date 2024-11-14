@@ -95,10 +95,10 @@ namespace Editor
 		Vector<Pair<const Type*, Vector<Ref<Component>>>> GetGroupedComponents() const;
 
 		// Enable viewer event function
-		void OnEnabled() override;
+		void OnPropertiesEnabled() override;
 
 		// Disable viewer event function
-		void OnDisabled() override;
+		void OnPropertiesDisabled() override;
 
 		friend class AddComponentPanel;
 	};
@@ -146,8 +146,8 @@ CLASS_METHODS_META(Editor::ActorViewer)
     FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsActorProperties, const Vector<IObject*>&, Vector<Ref<Widget>>&);
     FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsComponents, const Vector<IObject*>&, Vector<Ref<Widget>>&);
     FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetGroupedComponents);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
 }
 END_META;
 // --- END META ---

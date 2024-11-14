@@ -100,7 +100,7 @@ namespace Editor
 		}
 
 		viewer->SetTargets(viewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
-		viewer->OnEnabled();
+		viewer->OnPropertiesEnabled();
 	}
 
 	void AddComponentPanel::OnNodeDblClick(const Ref<TreeNode>& nodeWidget)

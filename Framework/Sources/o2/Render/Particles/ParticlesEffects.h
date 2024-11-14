@@ -339,6 +339,56 @@ namespace o2
 		// Called when deserialization is done, used to subscribe to size curve changes
 		void OnDeserialized(const DataValue& node) override;
 	};
+
+	// ---------------------------------------------
+	// Particles position over time on spline effect
+	// ---------------------------------------------
+	class ParticlesSplineEffect : public ParticlesEffect
+	{
+	public:
+		Ref<Curve>  timeCurve; // Time movement curve @SERIALIZABLE
+		Ref<Spline> spline;    // Trajectory spline @SERIALIZABLE
+
+	public:
+		// Default constructor
+		ParticlesSplineEffect();
+
+		// Called when particle is emitted, used to initialize effect data
+		void OnParticleEmitted(Particle& particle) override;
+
+		// Update particles size over time
+		void Update(float dt, ParticlesEmitter* emitter) override;
+
+		SERIALIZABLE(ParticlesSplineEffect);
+		CLONEABLE_REF(ParticlesSplineEffect);
+
+	private:
+		struct ParticleData
+		{
+			Vec2F initialPosition;
+
+			int timeCacheKey = 0;
+			int timeCacheKeyApprox = 0;
+			float timeRandomCoef = 0.0f;
+
+			int splineCacheKey = 0;
+			int splineCacheKeyApprox = 0;
+			float splineRandomCoef = 0.0f;
+
+			bool operator==(const ParticleData& other) const
+			{
+				return timeCacheKey == other.timeCacheKey && splineCacheKey == other.splineCacheKey;
+			}
+		};
+
+		Vector<ParticleData> mData; // Particles data buffer
+
+	private:
+		void CheckDataBufferSize(int particlesCount);
+
+		// Called when deserialization is done, used to subscribe to size curve changes
+		void OnDeserialized(const DataValue& node) override;
+	};
 }
 // --- META ---
 
@@ -509,6 +559,29 @@ CLASS_FIELDS_META(o2::ParticlesVelocityEffect)
 }
 END_META;
 CLASS_METHODS_META(o2::ParticlesVelocityEffect)
+{
+
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().SIGNATURE(void, OnParticleEmitted, Particle&);
+    FUNCTION().PUBLIC().SIGNATURE(void, Update, float, ParticlesEmitter*);
+    FUNCTION().PRIVATE().SIGNATURE(void, CheckDataBufferSize, int);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
+}
+END_META;
+
+CLASS_BASES_META(o2::ParticlesSplineEffect)
+{
+    BASE_CLASS(o2::ParticlesEffect);
+}
+END_META;
+CLASS_FIELDS_META(o2::ParticlesSplineEffect)
+{
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(timeCurve);
+    FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(spline);
+    FIELD().PRIVATE().NAME(mData);
+}
+END_META;
+CLASS_METHODS_META(o2::ParticlesSplineEffect)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();

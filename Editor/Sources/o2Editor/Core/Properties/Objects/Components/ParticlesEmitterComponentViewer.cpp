@@ -84,12 +84,12 @@ namespace Editor
 		TObjectPropertiesViewer<ParticlesEmitterComponent>::OnRefreshed(targetObjets);
 	}
 
-	void ParticlesEmitterComponentViewer::OnEnabled()
+	void ParticlesEmitterComponentViewer::OnPropertiesEnabled()
 	{
 		o2EditorSceneScreen.AddEditorLayer(mSceneLayer);
 	}
 
-	void ParticlesEmitterComponentViewer::OnDisabled()
+	void ParticlesEmitterComponentViewer::OnPropertiesDisabled()
 	{
 		o2EditorSceneScreen.RemoveEditorLayer(mSceneLayer);
 	}

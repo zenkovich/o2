@@ -99,12 +99,20 @@ namespace Editor
 		mPropertiesViewer->SetTargetLayers(mTargetLayers);
 	}
 
-	void WidgetLayerViewer::OnEnabled()
-	{}
+	void WidgetLayerViewer::OnPropertiesEnabled()
+	{
+		mHeaderViewer->SetPropertiesEnabled(true);
+		mLayoutViewer->SetPropertiesEnabled(true);
+		mPropertiesViewer->SetPropertiesEnabled(true);
+	}
 
-	void WidgetLayerViewer::OnDisabled()
+	void WidgetLayerViewer::OnPropertiesDisabled()
 	{
 		mTargetLayers.Clear();
+
+		mHeaderViewer->SetPropertiesEnabled(false);
+		mLayoutViewer->SetPropertiesEnabled(false);
+		mPropertiesViewer->SetPropertiesEnabled(false);
 	}
 
 	void WidgetLayerViewer::Update(float dt)

@@ -27,10 +27,10 @@ namespace Editor
 		void SetParentContext(const Ref<PropertiesContext>& context);
 
 		// Enable viewer event function
-		void OnEnabled() override;
+		virtual void OnPropertiesEnabled();
 
 		// Disable viewer event function
-		void OnDisabled() override;
+		virtual void OnPropertiesDisabled();
 
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const;
@@ -69,8 +69,8 @@ CLASS_METHODS_META(Editor::ObjectViewer)
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh, const Vector<IObject*>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, const Ref<PropertiesContext>&);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
-    FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PUBLIC().SIGNATURE(void, OnPropertiesDisabled);
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }

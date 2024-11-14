@@ -100,14 +100,14 @@ namespace Editor
 		*offsetIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		rightTopOffsetPropertyContainer->AddChild(offsetIcon);
 
-		moffsetRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*moffsetRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		moffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "R";
-		moffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "T";
-		moffsetRightTopProperty->SetValuePath("layout/offsetMax");
-		moffsetRightTopProperty->onChanged = THIS_FUNC(OnPropertyChanged);
-		moffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
-		rightTopOffsetPropertyContainer->AddChild(moffsetRightTopProperty);
+		mOffsetRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
+		*mOffsetRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		mOffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "R";
+		mOffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "T";
+		mOffsetRightTopProperty->SetValuePath("layout/offsetMax");
+		mOffsetRightTopProperty->onChanged = THIS_FUNC(OnPropertyChanged);
+		mOffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
+		rightTopOffsetPropertyContainer->AddChild(mOffsetRightTopProperty);
 
 		// Left bottom
 		auto leftBottomOffsetPropertyContainer = mmake<Widget>();
@@ -146,7 +146,7 @@ namespace Editor
 		mAnchorLeftBottomProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::anchorMin)>(
 			layers, prototypes, [](WidgetLayer* x) { return &x->layout.anchorMin; });
 
-		moffsetRightTopProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::offsetMax)>(
+		mOffsetRightTopProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::offsetMax)>(
 			layers, prototypes, [](WidgetLayer* x) { return &x->layout.offsetMax; });
 
 		mOffsetLeftBottomProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::offsetMin)>(
@@ -157,8 +157,28 @@ namespace Editor
 	{
 		mAnchorRightTopProperty->Refresh();
 		mAnchorLeftBottomProperty->Refresh();
-		moffsetRightTopProperty->Refresh();
+		mOffsetRightTopProperty->Refresh();
 		mOffsetLeftBottomProperty->Refresh();
+	}
+
+	void DefaultWidgetLayerLayoutViewer::OnPropertiesEnabled()
+	{
+		mPositionProperty->SetPropertyEnabled(true);
+		mSizeProperty->SetPropertyEnabled(true);
+		mAnchorRightTopProperty->SetPropertyEnabled(true);
+		mAnchorLeftBottomProperty->SetPropertyEnabled(true);
+		mOffsetRightTopProperty->SetPropertyEnabled(true);
+		mOffsetLeftBottomProperty->SetPropertyEnabled(true);
+	}
+
+	void DefaultWidgetLayerLayoutViewer::OnPropertiesDisabled()
+	{
+		mPositionProperty->SetPropertyEnabled(false);
+		mSizeProperty->SetPropertyEnabled(false);
+		mAnchorRightTopProperty->SetPropertyEnabled(false);
+		mAnchorLeftBottomProperty->SetPropertyEnabled(false);
+		mOffsetRightTopProperty->SetPropertyEnabled(false);
+		mOffsetLeftBottomProperty->SetPropertyEnabled(false);
 	}
 
 	void DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,

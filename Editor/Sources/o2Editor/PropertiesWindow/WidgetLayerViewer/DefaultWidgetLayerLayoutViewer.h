@@ -35,10 +35,16 @@ namespace Editor
 		Ref<Vec2FProperty> mSizeProperty;
 		Ref<Vec2FProperty> mAnchorRightTopProperty;
 		Ref<Vec2FProperty> mAnchorLeftBottomProperty;
-		Ref<Vec2FProperty> moffsetRightTopProperty;
+		Ref<Vec2FProperty> mOffsetRightTopProperty;
 		Ref<Vec2FProperty> mOffsetLeftBottomProperty;
 
 	protected:
+		// Enable viewer event function
+		void OnPropertiesEnabled() override;
+
+		// Disable viewer event function
+		void OnPropertiesDisabled() override;
+
 		// Called when some property change completed, stores action for undo
 		void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue, 
 									   const Vector<DataDocument>& newValue);
@@ -61,7 +67,7 @@ CLASS_FIELDS_META(Editor::DefaultWidgetLayerLayoutViewer)
     FIELD().PROTECTED().NAME(mSizeProperty);
     FIELD().PROTECTED().NAME(mAnchorRightTopProperty);
     FIELD().PROTECTED().NAME(mAnchorLeftBottomProperty);
-    FIELD().PROTECTED().NAME(moffsetRightTopProperty);
+    FIELD().PROTECTED().NAME(mOffsetRightTopProperty);
     FIELD().PROTECTED().NAME(mOffsetLeftBottomProperty);
 }
 END_META;
@@ -71,6 +77,8 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnPropertiesDisabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const Ref<IPropertyField>&);
 }

@@ -42,22 +42,22 @@ namespace Editor
 	void IWidgetLayerLayoutViewer::Refresh()
 	{}
 
-	void IWidgetLayerLayoutViewer::SetEnabled(bool enabled)
+	void IWidgetLayerLayoutViewer::SetPropertiesEnabled(bool enabled)
 	{
-		if (mEnabled == enabled)
+		if (mPropertiesEnabled == enabled)
 			return;
 
-		mEnabled = enabled;
+		mPropertiesEnabled = enabled;
 
-		if (mEnabled)
-			OnEnabled();
+		if (mPropertiesEnabled)
+			OnPropertiesEnabled();
 		else
-			OnDisabled();
+			OnPropertiesDisabled();
 	}
 
-	bool IWidgetLayerLayoutViewer::IsEnabled() const
+	bool IWidgetLayerLayoutViewer::IsPropertiesEnabled() const
 	{
-		return mEnabled;
+		return mPropertiesEnabled;
 	}
 
 }
