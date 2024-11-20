@@ -48,7 +48,7 @@
                                             "Type": "o2::HorizontalProgress",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "566b2add636c4ab415eb693854040bba",
+                                                    "id": "63950d8a2b7b0f9e6cbc38a911cc03e0",
                                                     "path": "Editor UI styles/O2  Horizontal Progress standard.proto"
                                                 },
                                                 "PrototypeLink": 17695803339813000106,
@@ -191,7 +191,7 @@
                                             "Type": "o2::EditBox",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "32a94b9034372e755a89522d0cd90aea",
+                                                    "id": "649f57d924b5201a647c1c72181a7ec8",
                                                     "path": "Editor UI styles/O2  Edit Box singleline with arrows.proto"
                                                 },
                                                 "PrototypeLink": 18363384242936881972,

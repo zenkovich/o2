@@ -3,7 +3,7 @@
         "Type": "Editor::BooleanProperty",
         "Value": {
             "Prototype": {
-                "id": "6eae3ff3769b15dd1400402e01946b19",
+                "id": "3b1d59d40fd66e581b18787c75a711c6",
                 "path": "Editor UI styles/Editor  Boolean Property standard.proto"
             },
             "PrototypeLink": 9216893112020445241,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "18e679c6470c3621584b112313247eba",
+                            "id": "74906c13225f176933416da70302684f",
                             "path": "Editor UI styles/O2  Label standard.proto"
                         },
                         "PrototypeLink": 9613259363390956959,
@@ -73,7 +73,7 @@
                                             "Type": "o2::Toggle",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "063a0eb66ca20eb549255f7321f14dd2",
+                                                    "id": "29675318230e60346b75276e43764419",
                                                     "path": "Editor UI styles/O2  Toggle without caption.proto"
                                                 },
                                                 "PrototypeLink": 15619060417063818118,

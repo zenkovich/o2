@@ -27,6 +27,9 @@ namespace o2
 		// Get particles directly from emitter
         Vector<Particle>& GetParticlesDirect(ParticlesEmitter* emitter);
 
+		// Returns owning emitter	
+		Ref<ParticlesEmitter> GetEmitter() const;
+
 		SERIALIZABLE(ParticlesEffect);
 		CLONEABLE_REF(ParticlesEffect);
 
@@ -411,6 +414,7 @@ CLASS_METHODS_META(o2::ParticlesEffect)
     FUNCTION().PUBLIC().SIGNATURE(void, OnParticleDied, Particle&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float, ParticlesEmitter*);
     FUNCTION().PUBLIC().SIGNATURE(Vector<Particle>&, GetParticlesDirect, ParticlesEmitter*);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<ParticlesEmitter>, GetEmitter);
     FUNCTION().PROTECTED().SIGNATURE(void, OnChanged);
 }
 END_META;

@@ -21,7 +21,7 @@
                     "Type": "o2::Button",
                     "Value": {
                         "Prototype": {
-                            "id": "4126745d412931d22c137bc01dda6d06",
+                            "id": "36ad642b4fff0e63775f4d9d27801478",
                             "path": "Editor UI styles/O2  Button expand white.proto"
                         },
                         "PrototypeLink": 2007336637936081033,
@@ -287,7 +287,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "56ad7887365c74294dd0187f3c1458e1"
+                                    "mId": "4daf256d5000220b63d94db21be341db"
                                 }
                             }
                         }

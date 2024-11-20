@@ -87,11 +87,15 @@ namespace Editor
 	void ParticlesEmitterComponentViewer::OnPropertiesEnabled()
 	{
 		o2EditorSceneScreen.AddEditorLayer(mSceneLayer);
+
+		TObjectPropertiesViewer<ParticlesEmitterComponent>::OnPropertiesEnabled();
 	}
 
 	void ParticlesEmitterComponentViewer::OnPropertiesDisabled()
 	{
 		o2EditorSceneScreen.RemoveEditorLayer(mSceneLayer);
+
+		TObjectPropertiesViewer<ParticlesEmitterComponent>::OnPropertiesDisabled();
 	}
 
 	Vector<Pair<ParticlesEmitterComponent*, ParticlesEmitterComponent*>>& ParticlesEmitterComponentViewer::GetTargetObjects()

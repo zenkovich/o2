@@ -280,7 +280,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "486b2006733b053d047228961d164f43"
+                                    "mId": "424135bb74dc72e004e63011111f553e"
                                 }
                             }
                         }
@@ -333,7 +333,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "52554eae19513ad932c71e9115f03874"
+                                    "mId": "67800bdc506421414fb5267821c90fc0"
                                 }
                             }
                         }
@@ -386,7 +386,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "2bd2748006a9228f368a661704c9032c"
+                                    "mId": "160c00935ac94488746f279630cf0e53"
                                 }
                             }
                         }
@@ -440,7 +440,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "1e4a0a5877f4442519f44d166da434bd"
+                                    "mId": "6a4f1bbd3bbd6b7b404c40591d320d4c"
                                 }
                             }
                         }

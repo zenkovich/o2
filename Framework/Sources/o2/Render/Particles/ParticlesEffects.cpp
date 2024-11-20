@@ -13,6 +13,11 @@ namespace o2
         return emitter->mParticles;
     }
 
+	Ref<ParticlesEmitter> ParticlesEffect::GetEmitter() const
+	{
+		return mEmitter.Lock();
+	}
+
 	void ParticlesEffect::OnChanged()
 	{
 		if (mEmitter)
@@ -338,13 +343,17 @@ namespace o2
 
 		CheckDataBufferSize(particles.Count());
 
+		float splineLength = spline->Length();
+
 		for (auto& p : particles)
 		{
 			int particleIndex = p.index;
 
 			auto& data = mData[particleIndex];
 			float t = timeCurve->Evaluate(1.0f - p.timeLeft/p.lifetime, data.timeRandomCoef, true, data.timeCacheKey, data.timeCacheKeyApprox);
-			p.position = data.initialPosition + spline->Evaluate(t, data.splineRandomCoef, true, data.splineCacheKey, data.splineCacheKeyApprox);
+
+			p.position = data.initialPosition + spline->Evaluate(t*splineLength, data.splineRandomCoef, true, 
+																 data.splineCacheKey, data.splineCacheKeyApprox);
 		}
 	}
 

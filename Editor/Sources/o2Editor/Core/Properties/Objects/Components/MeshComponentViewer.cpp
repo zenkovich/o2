@@ -6,7 +6,13 @@
 
 namespace Editor
 {
-	MeshComponentViewer::MeshComponentViewer() = default;
+	MeshComponentViewer::MeshComponentViewer()
+	{
+		mSplineTool = mmake<SplineTool>();
+		mFrameTool = mmake<CustomFrameTool>();
+		mTopologyTool = mmake<MeshTopologyTool>();
+		mFrameTetxureLayer = mmake<SceneLayer>();
+	}
 
 	MeshComponentViewer::~MeshComponentViewer()
 	{
