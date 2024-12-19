@@ -56,10 +56,10 @@ namespace o2
         PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE @ANIMATABLE
         GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is actor enabled in hierarchy getter
 
-        GETTER(Vector<Ref<Actor>>, children, GetChildren);             // Children array getter
+        GETTER(Vector<Ref<Actor>>, children, GetChildren);         // Children array getter
         GETTER(Vector<Ref<Component>>, components, GetComponents); // Components array getter
 
-        ACCESSOR(Ref<Actor>, child, String, GetChild, GetAllChilds);                     // Children accessor
+        ACCESSOR(Ref<Actor>, child, String, GetChild, GetAllChilds);                 // Children accessor
         ACCESSOR(Ref<Component>, component, String, GetComponent, GetAllComponents); // Component accessor by type name
 
     public:

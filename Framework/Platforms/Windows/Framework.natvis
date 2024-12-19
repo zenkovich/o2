@@ -103,14 +103,14 @@
 				<DisplayString>{{{ name }:{ value } }}</DisplayString>
 		</Type>
 
-		<Type Name="o2::BaseRef&lt;*&gt;">
+		<Type Name="o2::Ref&lt;*&gt;">
 				<DisplayString>{ mPtr }</DisplayString>
 				<Expand>
 						<ExpandedItem>mPtr</ExpandedItem>
 				</Expand>
 		</Type>
 
-		<Type Name="o2::BaseWeakRef&lt;*&gt;">
+		<Type Name="o2::WeakRef&lt;*&gt;">
 				<DisplayString Condition="(mPtr != 0)">{ mPtr }</DisplayString>
 				<DisplayString Condition="(mPtr == 0)">empty</DisplayString>
 				

@@ -2,6 +2,7 @@
 
 #include "o2/Animation/AnimationClip.h"
 #include "o2/Animation/Editor/EditableAnimation.h"
+#include "o2/Animation/Tracks/AnimationSubTrack.h"
 #include "o2/Animation/Tracks/AnimationTrack.h"
 #include "o2/Scene/Component.h"
 #include "o2/Utils/Debug/Debug.h"
@@ -19,6 +20,10 @@ namespace o2
     // -------------------
     class AnimationComponent: public Component, public IEditableAnimation
     {
+    public:
+        PROPERTIES(AnimationComponent);
+		ACCESSOR(Ref<AnimationState>, state, String, GetState, GetAllStates); // Animation states accessor by name
+
     public:
         // Default constructor @SCRIPTABLE
         AnimationComponent();
@@ -58,7 +63,10 @@ namespace o2
         Ref<AnimationState> GetState(const String& name);
 
         // Returns all states array
-        const Vector<Ref<AnimationState>>& GetStates() const;
+		const Vector<Ref<AnimationState>>& GetStates() const;
+
+		// Returns all states
+		Map<String, Ref<AnimationState>> GetAllStates() const;
 
         // Creates new state and plays him
         Ref<AnimationState> Play(const Ref<AnimationClip>& animation, const String& name);
@@ -105,7 +113,7 @@ namespace o2
         SERIALIZABLE(AnimationComponent);
         CLONEABLE_REF(AnimationComponent);
 
-    protected:
+    public:
         // -------------------------------
         // Value assigning agent interface
         // -------------------------------
@@ -150,7 +158,29 @@ namespace o2
 
             // Returns is agent hasn't no values
             bool IsEmpty() const override;
-        };
+		};
+
+		// ------------------------------
+		// Template value assigning agent
+		// ------------------------------
+		struct SubTrackMixer : public ITrackMixer
+		{
+		public:
+			Vector<Pair<AnimationState*, typename AnimationSubTrack::Player*>> tracks; // Animation tracks associated with animation states
+
+		public:
+			// Destructor
+			~SubTrackMixer();
+
+			// Updates value and blend
+			void Update() override;
+
+			// Removes Animation track from agent
+			void RemoveTrack(IAnimationTrack::IPlayer* track) override;
+
+			// Returns is agent hasn't no values
+			bool IsEmpty() const override;
+		};
 
         // ----------------------
         // Blend state parameters
@@ -169,7 +199,7 @@ namespace o2
         };
 
     protected:
-        Vector<Ref<AnimationState>> mStates; // Animation states array @SERIALIZABLE @EDITOR_PROPERTY @DEFAULT_TYPE(o2::AnimationState) @INVOKE_ON_CHANGE(OnStatesListChanged) @DONT_DELETE
+        Vector<Ref<AnimationState>> mStates; // Animation states array @SERIALIZABLE @EDITOR_PROPERTY @DEFAULT_TYPE(o2::AnimationState) @INVOKE_ON_CHANGE(ReattachAnimationStates) @DONT_DELETE
         Vector<Ref<ITrackMixer>>    mValues; // Assigning value agents
 
         BlendState mBlend;  // Current blend parameters
@@ -178,11 +208,18 @@ namespace o2
 
     protected:
         // Called when component started, checks states auto play
-        void OnStart();
+		void OnStart() override;
 
-        // Registers value by path and state
-        template<typename _type>
-        void RegTrack(const Ref<typename AnimationTrack<_type>::Player>& player, const String& path, const Ref<AnimationState>& state);
+		// Registers track by path and state
+		template<typename _valueType, typename _trackType, typename _mixerType>
+		void RegTrack(const Ref<typename _trackType::Player>& player, const String& path, const Ref<AnimationState>& state);
+
+		// Registers value track by path and state
+		template<typename _valueType>
+		void RegValueTrack(const Ref<typename AnimationTrack<_valueType>::Player>& player, const String& path, const Ref<AnimationState>& state);
+
+		// Registers sub track by path and state
+		void RegSubTrack(const Ref<AnimationSubTrack::Player>& player, const String& path, const Ref<AnimationState>& state);
 
         // Removes Animation track from agent by path
         void UnregTrack(const Ref<IAnimationTrack::IPlayer>& player, const String& path);
@@ -204,6 +241,8 @@ namespace o2
 
         template<typename _type>
         friend class AnimationTrack;
+
+		friend class AnimationSubTrack;
     };
 }
 
@@ -211,14 +250,14 @@ namespace o2
 
 namespace o2
 {
-    template<typename _type>
-    void AnimationComponent::RegTrack(const Ref<typename AnimationTrack<_type>::Player>& player, const String& path, const Ref<AnimationState>& state)
+	template<typename _valueType, typename _trackType, typename _mixerType>
+	void AnimationComponent::RegTrack(const Ref<typename _trackType::Player>& player, const String& path, const Ref<AnimationState>& state)
     {
         for (auto& val : mValues)
         {
             if (val->path == path)
             {
-                auto agent = DynamicCast<TrackMixer<_type>>(val);
+                auto agent = DynamicCast<_mixerType>(val);
 
                 if (!agent)
                 {
@@ -231,7 +270,7 @@ namespace o2
             }
         }
 
-        auto newAgent = mmake<TrackMixer<_type>>();
+        auto newAgent = mmake<_mixerType>();
         mValues.Add(newAgent);
         newAgent->path = path;
         newAgent->tracks.Add({ state.Get(), player.Get() });
@@ -246,10 +285,17 @@ namespace o2
             return;
         }
 
-        newAgent->target = DynamicCast<IValueProxy<_type>>(fieldInfo->GetType()->GetValueProxy(fieldPtr));
+        if constexpr (!std::is_same<_valueType, void>::value)
+            newAgent->target = DynamicCast<IValueProxy<_valueType>>(fieldInfo->GetType()->GetValueProxy(fieldPtr));
     }
 
-    template<typename _type>
+	template<typename _valueType>
+	void AnimationComponent::RegValueTrack(const Ref<typename AnimationTrack<_valueType>::Player>& player, const String& path, const Ref<AnimationState>& state)
+	{
+		RegTrack<_valueType, AnimationTrack<_valueType>, TrackMixer<_valueType>>(player, path, state);
+	}
+
+	template<typename _type>
     AnimationComponent::TrackMixer<_type>::~TrackMixer()
     {}
 
@@ -296,7 +342,7 @@ namespace o2
     template<typename _type>
     void AnimationTrack<_type>::Player::RegMixer(const Ref<AnimationState>& state, const String& path)
     {
-        state->mOwner.Lock()->RegTrack<_type>(Ref(this), path, state);
+        state->mOwner.Lock()->RegValueTrack<_type>(Ref(this), path, state);
     }
 }
 // --- META ---
@@ -309,7 +355,8 @@ CLASS_BASES_META(o2::AnimationComponent)
 END_META;
 CLASS_FIELDS_META(o2::AnimationComponent)
 {
-    FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).SERIALIZABLE_ATTRIBUTE().NAME(mStates);
+    FIELD().PUBLIC().NAME(state);
+    FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(ReattachAnimationStates).SERIALIZABLE_ATTRIBUTE().NAME(mStates);
     FIELD().PROTECTED().NAME(mValues);
     FIELD().PROTECTED().NAME(mBlend);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mInEditMode);
@@ -317,6 +364,8 @@ CLASS_FIELDS_META(o2::AnimationComponent)
 END_META;
 CLASS_METHODS_META(o2::AnimationComponent)
 {
+
+    typedef Map<String, Ref<AnimationState>> _tmp1;
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationComponent&);
@@ -329,6 +378,7 @@ CLASS_METHODS_META(o2::AnimationComponent)
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllStates);
     FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, GetState, const String&);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AnimationState>>&, GetStates);
+    FUNCTION().PUBLIC().SIGNATURE(_tmp1, GetAllStates);
     FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, Play, const Ref<AnimationClip>&, const String&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, Play, const Ref<AnimationClip>&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<AnimationState>, Play, const String&);
@@ -344,6 +394,7 @@ CLASS_METHODS_META(o2::AnimationComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
+    FUNCTION().PROTECTED().SIGNATURE(void, RegSubTrack, const Ref<AnimationSubTrack::Player>&, const String&, const Ref<AnimationState>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UnregTrack, const Ref<IAnimationTrack::IPlayer>&, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackAdded, const Ref<AnimationState>&, const Ref<IAnimationTrack::IPlayer>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackRemoved, const Ref<AnimationState>&, const Ref<IAnimationTrack::IPlayer>&);

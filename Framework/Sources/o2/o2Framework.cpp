@@ -8,6 +8,8 @@ extern void __RegisterClass__o2__AnimationTrack_o2__Color4___Player();
 extern void __RegisterClass__o2__AnimationTrack_o2__Color4___Key();
 extern void __RegisterClass__o2__AnimationTrack_float_();
 extern void __RegisterClass__o2__AnimationTrack_float___Player();
+extern void __RegisterClass__o2__AnimationSubTrack();
+extern void __RegisterClass__o2__AnimationSubTrack__Player();
 extern void __RegisterClass__o2__AnimationTrack_o2__Vec2F_();
 extern void __RegisterClass__o2__AnimationTrack_o2__Vec2F___Player();
 extern void __RegisterClass__o2__IAnimationTrack();
@@ -160,6 +162,8 @@ extern void InitializeTypeso2Framework()
     __RegisterClass__o2__AnimationTrack_o2__Color4___Key();
     __RegisterClass__o2__AnimationTrack_float_();
     __RegisterClass__o2__AnimationTrack_float___Player();
+    __RegisterClass__o2__AnimationSubTrack();
+    __RegisterClass__o2__AnimationSubTrack__Player();
     __RegisterClass__o2__AnimationTrack_o2__Vec2F_();
     __RegisterClass__o2__AnimationTrack_o2__Vec2F___Player();
     __RegisterClass__o2__IAnimationTrack();

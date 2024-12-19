@@ -3,7 +3,7 @@
         "Type": "Editor::ColorProperty",
         "Value": {
             "Prototype": {
-                "id": "042910fc67ae0ea1375845d812a22712",
+                "id": "4525348e3c12107c442841af5f1a3d81",
                 "path": "Editor UI styles/Editor  Color Property standard.proto"
             },
             "PrototypeLink": 17321549759208016025,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "74906c13225f176933416da70302684f",
+                            "id": "52422d7940b0288b7d092c7254f87e60",
                             "path": "Editor UI styles/O2  Label standard.proto"
                         },
                         "PrototypeLink": 9613259363390956959,

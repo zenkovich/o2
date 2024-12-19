@@ -398,7 +398,7 @@ namespace o2
 
     void AnimationTrack<Color4>::Player::RegMixer(const Ref<AnimationState>& state, const String& path)
     {
-        state->mOwner.Lock()->RegTrack<Color4>(Ref(this), path, state);
+        state->mOwner.Lock()->RegValueTrack<Color4>(Ref(this), path, state);
     }
 }
 // --- META ---

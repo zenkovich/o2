@@ -34,6 +34,7 @@ namespace o2
         		
 		PROPERTY(float, particlesPerSecond, SetParticlesPerSecond, GetParticlesPerSecond); // Amount of particles emitting in one second property @RANGE(0, 100) @GROUP("Emission")
         PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles);                     // Number of maximum particles in emitter property @GROUP("Emission")
+		PROPERTY(float, emissionDuration, SetEmissionDuration, GetEmissionDuration);       // Emitting particles duration in seconds property @RANGE(0, 10) @GROUP("Emission")
 		PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);    // Particles lifetime in seconds property @RANGE(0, 10) @GROUP("Emission")
 
 		PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter @GROUP("Emission")
@@ -85,8 +86,11 @@ namespace o2
         // Stops playing
         void Stop();
 
-		// Sets duration of emitting particles
+		// Sets duration of emitter (emission duration + particles lifetime)
 		void SetDuration(float duration);
+
+		// Returns duration (emission duration + particles lifetime)
+		float GetDuration() const override;
 
         // Sets particles source
 		void SetParticlesSource(const Ref<ParticleSource>& source);
@@ -148,6 +152,12 @@ namespace o2
 
 		// Is particles emit from shell
 		bool IsParticlesEmitFromShell() const;
+
+		// Sets emitting particles duration in seconds
+		void SetEmissionDuration(float duration);
+
+		// Returns emitting particles duration in seconds
+		float GetEmissionDuration() const;
 
         // Sets particles lifetime in seconds
         void SetParticlesLifetime(float lifetime);
@@ -257,6 +267,8 @@ namespace o2
                                        
         float mEmittingCoefficient = 1.0f; // Emitting particles number coefficient (0...1) @SERIALIZABLE
         bool  mIsParticlesRelative = true; // Is particles relative to emitter or global @SERIALIZABLE
+
+		float mEmissionDuration = 0.1f; // Emission duration in seconds @SERIALIZABLE
                                                                   
 		float mParticlesLifetime = 0.5f;      // Particles lifetime in seconds @SERIALIZABLE
 		float mParticlesLifetimeRange = 0.0f; // Particles lifetime range in seconds @SERIALIZABLE
@@ -395,6 +407,7 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").NAME(emitFromShell);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 100).NAME(particlesPerSecond);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").NAME(maxParticles);
+    FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 10).NAME(emissionDuration);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 10).NAME(particlesLifetime);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").NAME(particlesRelative);
     FIELD().PUBLIC().GROUP_ATTRIBUTE("Emission").RANGE_ATTRIBUTE(0, 1).NAME(emittingCoefficient);
@@ -419,6 +432,7 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(100).NAME(mParticlesNumLimit);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mEmittingCoefficient);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mIsParticlesRelative);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.1f).NAME(mEmissionDuration);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.5f).NAME(mParticlesLifetime);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mParticlesLifetimeRange);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(10).NAME(mEmitParticlesPerSecond);
@@ -459,6 +473,7 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(void, Play);
     FUNCTION().PUBLIC().SIGNATURE(void, Stop);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDuration, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesSource, const Ref<ParticleSource>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<ParticleSource>&, GetParticlesSource);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEmittingCoef, float);
@@ -478,6 +493,8 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsParticlesRelative);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesEmitFromShell, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsParticlesEmitFromShell);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetEmissionDuration, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetEmissionDuration);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesLifetime, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetParticlesLifetime);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesPerSecond, float);

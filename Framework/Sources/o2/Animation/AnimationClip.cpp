@@ -96,11 +96,19 @@ namespace o2
 
     Ref<IAnimationTrack> AnimationClip::AddTrack(const String& path, const Type& type)
     {
-        auto animTypeName = "o2::AnimationTrack<" + type.GetName() + ">";
-        auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
+		const Type* animType = nullptr;
+
+        if (type.IsBasedOn(TypeOf(IAnimation)))
+            animType = &TypeOf(AnimationSubTrack);
+        else
+        {
+            auto animTypeName = "o2::AnimationTrack<" + type.GetName() + ">";
+            auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
+        }
+
         if (!animType)
         {
-            o2Debug.LogWarning("Can't create Animation track: can't find animation type " + animTypeName);
+            o2Debug.LogWarning("Can't create Animation track: can't find animation type " + type.GetName());
             return nullptr;
         }
 

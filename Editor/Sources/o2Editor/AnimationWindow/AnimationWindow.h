@@ -27,12 +27,6 @@ namespace Editor
     FORWARD_CLASS_REF(CurvesSheet);
     FORWARD_CLASS_REF(KeyHandlesSheet);
 
-	// TODO
-	// - Добавить вывод трека цвета, булевого, вектора
-	// - Добавить assign акторов
-	// - Добавить "запись" изменения полей
-	// - Сделать редактор кривых для Vec2F
-
 	class AnimationWindow : public Singleton<AnimationWindow>, public IEditorWindow
 	{
 	public:
@@ -67,7 +61,7 @@ namespace Editor
         REF_COUNTERABLE_IMPL(IEditorWindow, Singleton<AnimationWindow>);
 
 	protected:
-		float mTreeViewWidth = 325.0f;    // Width of tree area. Changed by dragable separator
+		float mTreeViewWidth = 325.0f;    // Width of tree area. Changed by draggable separator
 		float mMinTreeViewWidth = 250.0f; // Minimal tree width
 
 		Ref<Actor>           mTargetActor;       // Target actor on animation

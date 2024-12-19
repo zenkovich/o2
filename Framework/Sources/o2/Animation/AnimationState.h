@@ -74,6 +74,8 @@ namespace o2
 
         template<typename _type>
         friend class AnimationTrack;
+
+		friend class AnimationSubTrack;
     };
 }
 // --- META ---

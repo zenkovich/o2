@@ -3,7 +3,7 @@
         "Type": "Editor::TagsProperty",
         "Value": {
             "Prototype": {
-                "id": "63de749f03966c2b5f6b550e59ac3234",
+                "id": "6bc860112066398f4282528e7d18700f",
                 "path": "Editor UI styles/Editor  Tags Property standard.proto"
             },
             "PrototypeLink": 14445680043820864299,
@@ -20,7 +20,7 @@
                     "Type": "o2::Label",
                     "Data": {
                         "Prototype": {
-                            "id": "74906c13225f176933416da70302684f",
+                            "id": "52422d7940b0288b7d092c7254f87e60",
                             "path": "Editor UI styles/O2  Label standard.proto"
                         },
                         "PrototypeLink": 9613259363390956959,
@@ -73,7 +73,7 @@
                                             "Type": "o2::EditBox",
                                             "Data": {
                                                 "Prototype": {
-                                                    "id": "016828941dc558543209638353f40166",
+                                                    "id": "22822d053084659d47a8565a142527ff",
                                                     "path": "Editor UI styles/O2  Edit Box singleline.proto"
                                                 },
                                                 "PrototypeLink": 14657587801362630252,
@@ -150,7 +150,7 @@
                                                         "Type": "o2::ContextMenu",
                                                         "Data": {
                                                             "Prototype": {
-                                                                "id": "113a3152398d36384ab457501bcf7eab",
+                                                                "id": "424e4a506d696eb0763d62d43c2447b6",
                                                                 "path": "Editor UI styles/O2  Context Menu standard.proto"
                                                             },
                                                             "PrototypeLink": 13673723803847221809,
@@ -390,7 +390,7 @@
                                                                                     "meta": {
                                                                                         "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                                                                         "Value": {
-                                                                                            "mId": "59db604362c62e7d67c50c0c5dbd102a"
+                                                                                            "mId": "363321566f3c469f0d9952f27ed070f8"
                                                                                         }
                                                                                     }
                                                                                 }
@@ -512,7 +512,7 @@
                                                                                             "Type": "o2::EditBox",
                                                                                             "Data": {
                                                                                                 "Prototype": {
-                                                                                                    "id": "016828941dc558543209638353f40166",
+                                                                                                    "id": "22822d053084659d47a8565a142527ff",
                                                                                                     "path": "Editor UI styles/O2  Edit Box singleline.proto"
                                                                                                 },
                                                                                                 "PrototypeLink": 15992041256513684999,
@@ -732,7 +732,7 @@
                                                                     "Type": "o2::HorizontalScrollBar",
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "7d3d2dc043967bc82082428a35361c50",
+                                                                            "id": "0692262812827c0756ab79b2151f10d0",
                                                                             "path": "Editor UI styles/O2  Horizontal Scroll Bar standard.proto"
                                                                         },
                                                                         "PrototypeLink": 2396346607982954160,
@@ -1016,7 +1016,7 @@
                                                                     "Type": "o2::VerticalScrollBar",
                                                                     "Data": {
                                                                         "Prototype": {
-                                                                            "id": "184f219c1ad91aa1424a155908f77c5a",
+                                                                            "id": "2d5360a62b9b390a672d11f65d144766",
                                                                             "path": "Editor UI styles/O2  Vertical Scroll Bar standard.proto"
                                                                         },
                                                                         "PrototypeLink": 8311025582170325613,

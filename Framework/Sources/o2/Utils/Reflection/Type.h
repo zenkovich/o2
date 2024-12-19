@@ -1359,7 +1359,15 @@ namespace o2
 
         _accessor_type* accessor = (_accessor_type*)object;
         if (_return_type value = accessor->Get(pathPart))
+        {
+            if constexpr (IsRef<_return_type>::value)
+            {
+                if (delPos < 0)
+                    return value.Get();
+            }
+
             return mReturnType->GetFieldPtr(&value, path.SubStr(delPos + 1), fieldInfo);
+        }
 
         return nullptr;
     }

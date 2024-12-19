@@ -11,7 +11,7 @@ namespace o2
 		IRectDrawable(), mShape(mmake<CircleParticlesEmitterShape>())
 	{
 		mLastTransform = mTransform;
-		mDuration = 1.0f;
+		mDuration = mEmissionDuration + mParticlesLifetime;
 	}
 
 	ParticlesEmitter::~ParticlesEmitter()
@@ -75,6 +75,7 @@ namespace o2
 
 		mDuration = other.mDuration;
 
+		mEmissionDuration = other.mEmissionDuration;
 		mParticlesLifetime = other.mParticlesLifetime;
 		mEmitParticlesPerSecond = other.mEmitParticlesPerSecond;
 
@@ -163,8 +164,13 @@ namespace o2
 	void ParticlesEmitter::OnDeserialized(const DataValue& node)
 	{
 		CreateParticlesContainer();
+
 		IRectDrawable::OnDeserialized(node);
 		IAnimation::OnDeserialized(node);
+
+		mDuration = mEmissionDuration + mParticlesLifetime;
+		ResetBounds();
+
 		OnEffectsListChanged();
 		OnChanged();
 	}
@@ -192,7 +198,7 @@ namespace o2
 
 	void ParticlesEmitter::UpdateEmitting(float dt)
 	{
-		if (!mPlaying)
+		if (!mPlaying || mTime > mEmissionDuration)
 			return;
 
 		mEmitTimeBuffer += dt;
@@ -348,8 +354,14 @@ namespace o2
 	void ParticlesEmitter::SetDuration(float duration)
 	{
 		mDuration = duration;
+		mEmissionDuration = duration - mParticlesLifetime;
 		ResetBounds();
 		OnChanged();
+	}
+
+	float ParticlesEmitter::GetDuration() const
+	{
+		return mEmissionDuration + mParticlesLifetime;
 	}
 
 	void ParticlesEmitter::SetParticlesSource(const Ref<ParticleSource>& source)
@@ -471,9 +483,24 @@ namespace o2
 		return mEmitParticlesFromShell;
 	}
 
+	void ParticlesEmitter::SetEmissionDuration(float duration)
+	{
+		mEmissionDuration = duration;
+		mDuration = mEmissionDuration + mParticlesLifetime;
+		ResetBounds();
+		OnChanged();
+	}
+
+	float ParticlesEmitter::GetEmissionDuration() const
+	{
+		return mEmissionDuration;
+	}
+
 	void ParticlesEmitter::SetParticlesLifetime(float lifetime)
 	{
 		mParticlesLifetime = lifetime;
+		mDuration = mEmissionDuration + mParticlesLifetime;
+		ResetBounds();
 		OnChanged();
 	}
 

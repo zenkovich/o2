@@ -204,7 +204,7 @@ namespace o2
 
     void AnimationTrack<Vec2F>::Player::RegMixer(const Ref<AnimationState>& state, const String& path)
     {
-        state->mOwner.Lock()->RegTrack<Vec2F>(Ref(this), path, state);
+        state->mOwner.Lock()->RegValueTrack<Vec2F>(Ref(this), path, state);
     }
 }
 // --- META ---

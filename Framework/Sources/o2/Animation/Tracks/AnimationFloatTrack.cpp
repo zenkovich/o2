@@ -301,7 +301,7 @@ namespace o2
 
     void AnimationTrack<float>::Player::RegMixer(const Ref<AnimationState>& state, const String& path)
     {
-        state->mOwner.Lock()->RegTrack<float>(Ref(this), path, state);
+        state->mOwner.Lock()->RegValueTrack<float>(Ref(this), path, state);
     }
 }
 // --- META ---

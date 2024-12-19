@@ -113,7 +113,17 @@ namespace o2
         return mStates;
     }
 
-    Ref<AnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation, const String& name)
+	Map<String, Ref<o2::AnimationState>> AnimationComponent::GetAllStates() const
+	{
+        Map<String, Ref<o2::AnimationState>> result;
+
+		for (auto& state : mStates)
+			result[state->name] = state;
+
+		return result;
+	}
+
+	Ref<AnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation, const String& name)
     {
         Ref<AnimationState> state = AddState(name, animation, AnimationMask(), 1.0f);
         state->player->Play();
@@ -243,7 +253,13 @@ namespace o2
         }
     }
 
-    void AnimationComponent::UnregTrack(const Ref<IAnimationTrack::IPlayer>& player, const String& path)
+	void AnimationComponent::RegSubTrack(const Ref<AnimationSubTrack::Player>& player, const String& path, 
+                                         const Ref<AnimationState>& state)
+	{
+		RegTrack<void, AnimationSubTrack, SubTrackMixer>(player, path, state);
+	}
+
+	void AnimationComponent::UnregTrack(const Ref<IAnimationTrack::IPlayer>& player, const String& path)
     {
         for (auto& val : mValues)
         {
@@ -336,6 +352,24 @@ namespace o2
         bool resValue = (valueSum / weightsSum) > 0.5f;
         target->SetValue(resValue);
     }
+
+	AnimationComponent::SubTrackMixer::~SubTrackMixer()
+	{}
+
+	void AnimationComponent::SubTrackMixer::Update()
+	{
+	}
+
+	void AnimationComponent::SubTrackMixer::RemoveTrack(IAnimationTrack::IPlayer* track)
+	{
+		tracks.RemoveAll([&](const auto& x) { return x.second == track; });
+	}
+
+	bool AnimationComponent::SubTrackMixer::IsEmpty() const
+	{
+		return tracks.IsEmpty();
+	}
+
 }
 
 DECLARE_TEMPLATE_CLASS(o2::LinkRef<o2::AnimationComponent>);

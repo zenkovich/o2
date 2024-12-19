@@ -40,9 +40,6 @@ namespace Editor
 		mWindow->SetIcon(mmake<Sprite>("ui/UI4_tree_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 
-// 		mWindow->GetInternalWidget("closeButton")->layout->position -= Vec2F(2, -2);
-// 		mWindow->GetInternalWidget("optionsButton")->layout->position -= Vec2F(2, -2);
-
 		auto upPanel = mmake<Widget>();
 		upPanel->name = "up panel";
 		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, -1);
@@ -161,13 +158,12 @@ namespace Editor
 	{
 		static Vector<const Type*> availableTypes({ &TypeOf(float), &TypeOf(Color4), &TypeOf(Vec2F), &TypeOf(bool) });
 
-		if (type->GetUsage() == Type::Usage::Object)
+		if (type->GetUsage() == Type::Usage::Object && object)
 		{
 			auto fieldObjectType = dynamic_cast<const ObjectType*>(type);
 			InitializeObjectTreeNode(fieldObjectType, object, name, node);
-
 		}
-		else if (type->GetUsage() == Type::Usage::Pointer)
+		else if (type->GetUsage() == Type::Usage::Pointer && object)
 		{
 			auto pointerType = dynamic_cast<const PointerType*>(type);
 			auto unpointedType = pointerType->GetBaseType();
@@ -177,19 +173,33 @@ namespace Editor
 				InitializeObjectTreeNode(fieldObjectType, object, name, node);
 			}
 		}
-		else if (type->GetUsage() == Type::Usage::Property)
+		else if (type->GetUsage() == Type::Usage::Reference && object)
+		{
+			auto referenceType = dynamic_cast<const ReferenceType*>(type);
+			auto unpointedType = referenceType->GetBaseType();
+			if (unpointedType->GetUsage() == Type::Usage::Object)
+			{
+				auto fieldObjectType = dynamic_cast<const ObjectType*>(unpointedType);
+				InitializeObjectTreeNode(fieldObjectType, referenceType->GetObjectRawPtr(object), name, node);
+			}
+		}
+		else if (type->GetUsage() == Type::Usage::Property && object)
 		{
 			auto propertyType = dynamic_cast<const PropertyType*>(type);
 			ProcessTreeNode(propertyType->GetValueAsPtr(object), propertyType->GetValueType(), name, node);
 		}
-		else if (type->GetUsage() == Type::Usage::StringAccessor)
+		else if (type->GetUsage() == Type::Usage::StringAccessor && object)
 		{
 			auto accessorType = dynamic_cast<const StringPointerAccessorType*>(type);
 			auto newNode = node->AddChild(name, type);
 			auto allValues = accessorType->GetAllValues(object);
 
+			auto valueType = accessorType->GetReturnType();
+			if (valueType->GetUsage() == Type::Usage::Reference)
+				valueType = dynamic_cast<const ReferenceType*>(valueType)->GetBaseType();
+
 			for (auto& kv : allValues)
-				ProcessTreeNode(kv.second, accessorType->GetReturnType(), kv.first, newNode);
+				ProcessTreeNode(kv.second, valueType, kv.first, newNode);
 
 			if (newNode->children.empty()) {
 				node->children.Remove(newNode);
@@ -208,6 +218,18 @@ namespace Editor
 
 		auto newNode = node->AddChild(name, type);
 		newNode->used = mAnimation->ContainsTrack(newNode->path);
+	}
+
+	void AnimationPropertiesTree::InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object,
+														   const String& name, const Ref<NodeData>& node)
+	{
+		auto fieldObject = fieldObjectType->DynamicCastToIObject(object);
+		auto& realType = fieldObject->GetType();
+		auto newNode = node->AddChild(name, &realType);
+		InitializeTreeNode(newNode, fieldObject);
+
+		if (newNode->children.IsEmpty())
+			node->children.Remove(newNode);
 	}
 
 	void AnimationPropertiesTree::UpdateVisibleNodes()
@@ -267,19 +289,6 @@ namespace Editor
 
 	}
 
-	void AnimationPropertiesTree::InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, 
-														   const String& name, const Ref<NodeData>& node)
-	{
-		auto fieldObject = fieldObjectType->DynamicCastToIObject(object);
-		auto newNode = node->AddChild(name, fieldObjectType);
-		InitializeTreeNode(newNode, fieldObject);
-
-		if (newNode->children.IsEmpty())
-		{
-			node->children.Remove(newNode);
-		}
-	}
-
 	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode(RefCounter* refCounter):
         TreeNode(refCounter)
 	{
@@ -310,20 +319,29 @@ namespace Editor
 		};
 
 		static String otherIcon = "ui/UI4_other_type.png";
+		static String animIcon = "ui/UI4_anim_type.png";
 
 		mName->text = data->name;
+
+		bool ableToAddTrack = data->children.IsEmpty();
 
 		String iconPath;
 		if (!icons.TryGetValue(data->type, iconPath))
 			iconPath = otherIcon;
+
+		if (data->type->IsBasedOn(TypeOf(IAnimation)))
+		{
+			ableToAddTrack = true;
+			iconPath = animIcon;
+		}
 
 		*mIcon = Sprite(iconPath);
 
 		mData = data;
 		mTree = tree;
 
-		mAddButton->SetEnabledForcible(!data->used && data->children.IsEmpty());
-		mRemoveButton->SetEnabledForcible(data->used && data->children.IsEmpty());
+		mAddButton->SetEnabledForcible(!data->used && ableToAddTrack);
+		mRemoveButton->SetEnabledForcible(data->used && ableToAddTrack);
 	}
 
 	String AnimationPropertiesTreeNode::GetCreateMenuCategory()

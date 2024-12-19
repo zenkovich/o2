@@ -2040,6 +2040,51 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "break prototype");
 	}
 
+	void EditorUIStyleBuilder::RebuildPlayGreenBtn()
+	{
+		Ref<Toggle> sample = mmake<Toggle>();
+		auto playRootIconLayer = sample->AddLayer("playRootIcon", nullptr);
+		auto stopRootIconLayer = sample->AddLayer("stopRootIcon", nullptr);
+
+		auto playIconLayer = playRootIconLayer->AddChildLayer("regular", mmake<Sprite>("ui/UI4_play_green.png"),
+															  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto playSelectIconLayer = playRootIconLayer->AddChildLayer("hover", mmake<Sprite>("ui/UI4_play_green_selected.png"),
+																	Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto playPressedIconLayer = playRootIconLayer->AddChildLayer("pressed", mmake<Sprite>("ui/UI4_play_green_pressed.png"),
+																	 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto stopIconLayer = stopRootIconLayer->AddChildLayer("regular", mmake<Sprite>("ui/UI4_pause_green.png"),
+															  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto stopSelectIconLayer = stopRootIconLayer->AddChildLayer("hover", mmake<Sprite>("ui/UI4_pause_green_selected.png"),
+																	Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto stopPressedIconLayer = stopRootIconLayer->AddChildLayer("pressed", mmake<Sprite>("ui/UI4_pause_green_pressed.png"),
+																	 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto playBtnSelectAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnSelectAnim->AddTrack<float>("layer/stopRootIcon/child/hover/transparency") =
+			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("hover", playBtnSelectAnim)->offStateAnimationSpeed = 0.25f;
+
+		auto playBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnPressAnim->AddTrack<float>("layer/stopRootIcon/child/pressed/transparency") =
+			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+
+		sample->AddState("pressed", playBtnPressAnim)->offStateAnimationSpeed = 0.5f;
+
+		auto valueBtnPressAnim = AnimationClip::EaseInOut("layer/playRootIcon/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnPressAnim->AddTrack<float>("layer/stopRootIcon/transparency") =
+			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueBtnPressAnim);
+
+		o2UI.AddWidgetStyle(sample, "green play-stop");
+	}
+
 	void EditorUIStyleBuilder::RebuildComponentOptionsBtn()
 	{
 		Ref<Button> sample = mmake<Button>();

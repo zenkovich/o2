@@ -14,18 +14,18 @@
             "mExpandHeight": false,
             "mFitByChildren": true,
             "mHeadHeight": 18.0,
-            "Id": 15692764320076449268,
+            "Id": 13389933609414332981,
             "Transform": {},
             "InternalWidgets": [
                 {
                     "Type": "o2::Button",
                     "Value": {
                         "Prototype": {
-                            "id": "36ad642b4fff0e63775f4d9d27801478",
+                            "id": "32063b1e3ebf27a337073cc700436fec",
                             "path": "Editor UI styles/O2  Button expand white.proto"
                         },
                         "PrototypeLink": 2007336637936081033,
-                        "Id": 8783629172843870842,
+                        "Id": 4931959964534722299,
                         "Transform": {
                             "anchorMin": {
                                 "x": 0.0,
@@ -60,7 +60,7 @@
                                         }
                                     }
                                 },
-                                "mUID": 9287076057074822671,
+                                "mUID": 8774286710825381715,
                                 "PrototypeLink": 2477458706962062508
                             },
                             {
@@ -79,7 +79,7 @@
                                         }
                                     }
                                 },
-                                "mUID": 14181356465528121943,
+                                "mUID": 14484769222435284660,
                                 "PrototypeLink": 1818740009787597558
                             },
                             {
@@ -98,7 +98,7 @@
                                         }
                                     }
                                 },
-                                "mUID": 7158895136387296872,
+                                "mUID": 2410096505128287664,
                                 "PrototypeLink": 2619940227908599002
                             }
                         ],
@@ -122,7 +122,7 @@
                     "Type": "o2::Image",
                     "Value": {
                         "mName": "icon",
-                        "Id": 8361157618513868263,
+                        "Id": 947346046459549220,
                         "Transform": {
                             "anchorMin": {
                                 "x": 0.0,
@@ -156,7 +156,7 @@
                                             }
                                         }
                                     },
-                                    "mUID": 10426781157224794682
+                                    "mUID": 2512347223254638696
                                 }
                             }
                         ],
@@ -199,7 +199,7 @@
                                 }
                             }
                         },
-                        "mUID": 9085238628503869149
+                        "mUID": 9884718479957933203
                     }
                 },
                 {
@@ -235,7 +235,7 @@
                                 "mDotsEndings": true
                             }
                         },
-                        "mUID": 17850319276865873763,
+                        "mUID": 15294369231185190645,
                         "mDepth": 1.0
                     }
                 }
@@ -262,12 +262,12 @@
                                                             "Value": {
                                                                 "mKeys": [
                                                                     {
-                                                                        "uid": 14387481109481177721,
+                                                                        "uid": 3141011784854436339,
                                                                         "rightSupportPosition": 0.1600000113248825,
                                                                         "supportsType": "Broken"
                                                                     },
                                                                     {
-                                                                        "uid": 12938458274604955138,
+                                                                        "uid": 12248974309664939605,
                                                                         "value": 1.0,
                                                                         "position": 0.4000000059604645,
                                                                         "leftSupportPosition": -0.4000000059604645,
@@ -287,7 +287,7 @@
                             "meta": {
                                 "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
                                 "Value": {
-                                    "mId": "4daf256d5000220b63d94db21be341db"
+                                    "mId": "68150fda14d77db44e296e9e27144996"
                                 }
                             }
                         }

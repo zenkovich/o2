@@ -35,7 +35,7 @@ namespace Editor
 		playControls->spacing = 5;
 		mControls->AddChild(playControls);
 
-		mPlayPauseToggle = o2UI.CreateWidget<Toggle>("animation state play-stop");
+		mPlayPauseToggle = o2UI.CreateWidget<Toggle>("green play-stop");
 		mPlayPauseToggle->name = "play-stop";
 		mPlayPauseToggle->layout->minSize = Vec2F(20, 20);
 		mPlayPauseToggle->layout->maxSize = Vec2F(20, 20);

@@ -109,6 +109,7 @@ namespace Editor
 		void RebuildAcceptPrototypeBtn();
 		void RebuildRevertPrototypeBtn();
 		void RebuildBreakPrototypeBtn();
+		void RebuildPlayGreenBtn();
 		void RebuildComponentOptionsBtn();
 		void RebuildComponentSaveBtn();
 		void RebuildHorWideScrollbar();
@@ -261,6 +262,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildAcceptPrototypeBtn);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildRevertPrototypeBtn);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildBreakPrototypeBtn);
+    FUNCTION().PUBLIC().SIGNATURE(void, RebuildPlayGreenBtn);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildComponentOptionsBtn);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildComponentSaveBtn);
     FUNCTION().PUBLIC().SIGNATURE(void, RebuildHorWideScrollbar);
