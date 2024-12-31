@@ -553,8 +553,8 @@ namespace o2
 
     Vector<UID> Assets::ReloadAssetsTree()
     {
-        AssetsTree newBuiltAssetsTree;
-        newBuiltAssetsTree.DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
+		Ref<AssetsTree> newBuiltAssetsTree = mmake<AssetsTree>();
+        newBuiltAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
 
         Vector<UID> changedAssetsUIDs;
 
@@ -610,7 +610,7 @@ namespace o2
             }
         };
 
-        processFolder(nullptr, mMainAssetsTree->rootAssets, nullptr, newBuiltAssetsTree.rootAssets);
+        processFolder(nullptr, mMainAssetsTree->rootAssets, nullptr, newBuiltAssetsTree->rootAssets);
 
         auto oldAllAssets = mMainAssetsTree->allAssets;
         mMainAssetsTree->allAssets.Clear();

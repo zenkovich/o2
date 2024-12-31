@@ -253,7 +253,13 @@ namespace o2
         }
     }
 
-	void AnimationComponent::RegSubTrack(const Ref<AnimationSubTrack::Player>& player, const String& path, 
+	void AnimationComponent::OnEnabled()
+	{
+		ReattachAnimationStates();
+		Component::OnEnabled();
+	}
+
+	void AnimationComponent::RegSubTrack(const Ref<AnimationSubTrack::Player>& player, const String& path,
                                          const Ref<AnimationState>& state)
 	{
 		RegTrack<void, AnimationSubTrack, SubTrackMixer>(player, path, state);

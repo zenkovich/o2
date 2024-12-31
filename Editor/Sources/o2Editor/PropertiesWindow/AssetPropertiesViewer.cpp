@@ -31,19 +31,17 @@ namespace Editor
 
 	const Type* AssetPropertiesViewer::GetViewingObjectType() const
 	{
-		return &TypeOf(AssetRef<Asset>);
+		return &TypeOf(Asset);
 	}
 
 	void AssetPropertiesViewer::SetTargets(const Vector<IObject*>& targets)
 	{
-		DefaultPropertiesViewer::SetTargets(targets.Convert<IObject*>([](IObject* x) {
-			return dynamic_cast<AssetRef<Asset>*>(x)->Get();
-		}));
+		DefaultPropertiesViewer::SetTargets(targets);
 
 		if (targets.Count() == 1)
 		{
-			if (AssetRef<Asset>* assetRef = dynamic_cast<AssetRef<Asset>*>(targets[0]))
-				mAssetNameLabel->text = assetRef->Get()->GetPath();
+			if (Asset* asset = dynamic_cast<Asset*>(targets[0]))
+				mAssetNameLabel->text = asset->GetPath();
 		}
 		else
 		{

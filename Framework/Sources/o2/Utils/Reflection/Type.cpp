@@ -179,7 +179,7 @@ namespace o2
         for (auto kv : Reflection::GetTypes())
         {
             auto baseTypes = kv.second->GetBaseTypes();
-            for (auto baseType : baseTypes)
+            for (auto& baseType : baseTypes)
             {
                 if (baseType.type->mId == mId)
                     res.Add(kv.second);
@@ -209,10 +209,11 @@ namespace o2
         for (auto& field : mFields)
         {
             if (field.mName == pathPart)
-            {
+			{
+				fieldInfo = &field;
+
                 if (delPos == -1)
                 {
-                    fieldInfo = &field;
                     return field.GetValuePtrStrong(object);
                 }
                 else

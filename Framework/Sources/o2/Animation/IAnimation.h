@@ -46,6 +46,12 @@ namespace o2
         // Updates animation mTime and mInDurationTime, stops and calls events
         virtual void Update(float dt);
 
+		// Sets sub controlled flag
+        virtual void SetSubControlled(bool subControlled);
+
+		// Returns true if animation is sub controlled
+		virtual bool IsSubControlled() const;
+
         // Starting playing animation 
         virtual void Play();
 
@@ -160,6 +166,7 @@ namespace o2
 		float mSpeed = 1.0f;           // Animation speed, 1 is default @SERIALIZABLE
         Loop  mLoop = Loop::None;      // Loop type @SERIALIZABLE
         bool  mPlaying = false;        // True if animation playing @SERIALIZABLE
+		bool  mSubControlled = false;  // True if animation is controlled by parent animation
 
         Vector<Pair<float, Function<void()>>> mTimeEvents; // Animation time events
 
@@ -208,6 +215,7 @@ CLASS_FIELDS_META(o2::IAnimation)
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mSpeed);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Loop::None).NAME(mLoop);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mPlaying);
+    FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSubControlled);
     FIELD().PROTECTED().NAME(mTimeEvents);
 }
 END_META;
@@ -217,6 +225,8 @@ CLASS_METHODS_META(o2::IAnimation)
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const IAnimation&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetSubControlled, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsSubControlled);
     FUNCTION().PUBLIC().SIGNATURE(void, Play);
     FUNCTION().PUBLIC().SIGNATURE(void, PlayInBounds, float, float);
     FUNCTION().PUBLIC().SIGNATURE(void, PlayBackInBounds, float, float);

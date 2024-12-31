@@ -10,6 +10,7 @@
 #include "o2Editor/AnimationWindow/TrackControls/MapKeyFramesTrackControl.h"
 #include "o2Editor/AnimationWindow/TrackControls/Vec2KeyFramesTrackControl.h"
 #include "o2Editor/AnimationWindow/Tree.h"
+#include "TrackControls/SubTrackControl.h"
 
 namespace Editor
 {
@@ -434,14 +435,23 @@ namespace Editor
 		}
 		else
 		{
+			const Type* trackControlType = nullptr;
+
 			auto trackType = &mData->track->GetType();
-			if (!trackToControlTrackTypes.ContainsKey(trackType))
+			if (trackType == &TypeOf(AnimationSubTrack))
+			{
+				trackControlType = &TypeOf(SubTrackControl);
+			}
+			else if (trackToControlTrackTypes.ContainsKey(trackType))
+			{
+				trackControlType = dynamic_cast<const ObjectType*>(trackToControlTrackTypes[trackType]);
+			}
+			else
 			{
 				o2Debug.LogWarning("Can't create control track for type:" + trackType->GetName());
 				return;
 			}
 
-			auto trackControlType = dynamic_cast<const ObjectType*>(trackToControlTrackTypes[trackType]);
 			if (mTrackControlsCache.ContainsKey(trackControlType) && !mTrackControlsCache[trackControlType].IsEmpty())
 				mTrackControl = mTrackControlsCache[trackControlType].PopBack();
 			else

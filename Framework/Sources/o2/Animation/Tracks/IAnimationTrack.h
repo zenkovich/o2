@@ -37,6 +37,9 @@ namespace o2
             // Sets animation track
             virtual void SetTrack(const Ref<IAnimationTrack>& track);
 
+			// Adjusts target type to correct one
+			virtual void* AdjustTargetType(void* target, const Type& type) { return target; }
+
             // Returns animation track
             virtual Ref<IAnimationTrack> GetTrack() const { return nullptr; }
 
@@ -152,6 +155,7 @@ CLASS_METHODS_META(o2::IAnimationTrack::IPlayer)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
+    FUNCTION().PUBLIC().SIGNATURE(void*, AdjustTargetType, void*, const Type&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PUBLIC().SIGNATURE(void, RegMixer, const Ref<AnimationState>&, const String&);
     FUNCTION().PUBLIC().SIGNATURE(void, ForceSetTime, float, float);

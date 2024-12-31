@@ -105,6 +105,8 @@ namespace o2
             trackPlayer->SetTrack(track);
             trackPlayer->mOwnerPlayer = WeakRef(this);
 
+			targetPtr = trackPlayer->AdjustTargetType(targetPtr, *fieldInfo->GetType());
+
             if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
                 trackPlayer->SetTargetProxy(fieldInfo->GetType()->GetValueProxy(targetPtr));
             else

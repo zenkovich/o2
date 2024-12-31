@@ -88,7 +88,7 @@ namespace Editor
         CLONEABLE_REF(KeyHandlesSheet);
 
 	private:
-		RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);
+		RectF mSelectionFrameOffsets = RectF(-6, -5, 7, 2);
 		RectF mSelectionFrameCursorOffsets = RectF(-2, -3, 2, 2);
 
 		WeakRef<AnimationWindow> mAnimationWindow; // Animation window
@@ -234,7 +234,7 @@ CLASS_BASES_META(Editor::KeyHandlesSheet)
 END_META;
 CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
-    FIELD().PRIVATE().DEFAULT_VALUE(RectF(-9, -3, 5, 2)).NAME(mSelectionFrameOffsets);
+    FIELD().PRIVATE().DEFAULT_VALUE(RectF(-6, -5, 7, 2)).NAME(mSelectionFrameOffsets);
     FIELD().PRIVATE().DEFAULT_VALUE(RectF(-2, -3, 2, 2)).NAME(mSelectionFrameCursorOffsets);
     FIELD().PRIVATE().NAME(mAnimationWindow);
     FIELD().PRIVATE().NAME(mTrackControls);

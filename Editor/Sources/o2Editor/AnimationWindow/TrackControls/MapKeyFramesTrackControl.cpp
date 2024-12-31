@@ -76,11 +76,11 @@ namespace Editor
 			if (auto animatedValue = DynamicCast<AnimationTrack<float>>(valueNode.track))
 				newGroup = mmake<HandlesGroup<AnimationTrack<float>>>();
 			else if (auto animatedValue = DynamicCast<AnimationTrack<bool>>(valueNode.track))
-				newGroup = mmake < HandlesGroup<AnimationTrack<bool>>>();
+				newGroup = mmake<HandlesGroup<AnimationTrack<bool>>>();
 			else if (auto animatedValue = DynamicCast<AnimationTrack<Vec2F>>(valueNode.track))
-				newGroup = mmake < HandlesGroup<AnimationTrack<Vec2F>>>();
+				newGroup = mmake<HandlesGroup<AnimationTrack<Vec2F>>>();
 			else if (auto animatedValue = DynamicCast<AnimationTrack<Color4>>(valueNode.track))
-				newGroup = mmake < HandlesGroup<AnimationTrack<Color4>>>();
+				newGroup = mmake<HandlesGroup<AnimationTrack<Color4>>>();
 
 			if (newGroup)
 			{
@@ -152,7 +152,7 @@ namespace Editor
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
-		handle->SetDrawablesSizePivot(Vec2F(7, 2));
+		handle->SetDrawablesSizePivot(Vec2F(4, 2));
 
 		handle->checkPositionFunc = [&](const Vec2F& pos) {
 			float position = pos.x;

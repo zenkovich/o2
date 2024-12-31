@@ -10,6 +10,7 @@ extern void __RegisterClass__Editor__AnimationTimeline();
 extern void __RegisterClass__Editor__AnimationKeyDragHandle();
 extern void __RegisterClass__Editor__ITrackControl();
 extern void __RegisterClass__Editor__MapKeyFramesTrackControl();
+extern void __RegisterClass__Editor__SubTrackControl();
 extern void __RegisterClass__Editor__Vec2KeyFramesTrackControl();
 extern void __RegisterClass__Editor__AnimationTree();
 extern void __RegisterClass__Editor__AnimationTreeNode();
@@ -161,6 +162,7 @@ extern void InitializeTypeso2Editor()
     __RegisterClass__Editor__AnimationKeyDragHandle();
     __RegisterClass__Editor__ITrackControl();
     __RegisterClass__Editor__MapKeyFramesTrackControl();
+    __RegisterClass__Editor__SubTrackControl();
     __RegisterClass__Editor__Vec2KeyFramesTrackControl();
     __RegisterClass__Editor__AnimationTree();
     __RegisterClass__Editor__AnimationTreeNode();

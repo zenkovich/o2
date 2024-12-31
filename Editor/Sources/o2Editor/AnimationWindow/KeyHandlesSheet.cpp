@@ -65,15 +65,23 @@ namespace Editor
         {
             auto offsets = mIsFrameSelecting ? mSelectionFrameCursorOffsets : mSelectionFrameOffsets;
             auto animationWindow = mAnimationWindow.Lock();
-            mSelectionFrame->SetRect(RectF(animationWindow->mTimeline->LocalToWorld(mSelectionRect.left) + offsets.left,
-                                           animationWindow->mTree->GetLineWorldPosition(mSelectionRect.top) + offsets.top,
-                                           animationWindow->mTimeline->LocalToWorld(mSelectionRect.right) + offsets.right,
-                                           animationWindow->mTree->GetLineWorldPosition(mSelectionRect.bottom) + offsets.bottom));
+			RectF selectionFrameRect = RectF(animationWindow->mTimeline->LocalToWorld(mSelectionRect.left) + offsets.left,
+											 animationWindow->mTree->GetLineWorldPosition(mSelectionRect.top) + offsets.top,
+											 animationWindow->mTimeline->LocalToWorld(mSelectionRect.right) + offsets.right,
+											 animationWindow->mTree->GetLineWorldPosition(mSelectionRect.bottom) + offsets.bottom);
+
+            mSelectionFrame->SetRect(selectionFrameRect);
             mSelectionFrame->Draw();
 
-            mCenterFrameDragHandle->Draw();
-            mLeftFrameDragHandle->Draw();
-            mRightFrameDragHandle->Draw();
+			mLeftFrameDragHandle->SetDrawablesSize(Vec2F(10, selectionFrameRect.Height()));
+			mRightFrameDragHandle->SetDrawablesSize(Vec2F(10, selectionFrameRect.Height()));
+
+            if (!mIsFrameSelecting)
+            {
+                mCenterFrameDragHandle->Draw();
+                mLeftFrameDragHandle->Draw();
+                mRightFrameDragHandle->Draw();
+            }
         }
 
         o2Render.DisableScissorTest();
@@ -107,7 +115,9 @@ namespace Editor
     }
 
     void KeyHandlesSheet::SetAnimation(const Ref<AnimationClip>& animation)
-    {}
+    {
+        mHandlesGroups.Clear();
+    }
 
     bool KeyHandlesSheet::IsUnderPoint(const Vec2F& point)
     {
@@ -311,7 +321,11 @@ namespace Editor
 
     void KeyHandlesSheet::InitializeLeftHandle()
     {
-        mLeftFrameDragHandle = mmake<DragHandle>();
+        mLeftFrameDragHandle = mmake<DragHandle>(mmake<Sprite>("ui/UI4_keys_select border.png"),
+                                                 mmake<Sprite>("ui/UI4_keys_select border_hover.png"),
+                                                 mmake<Sprite>("ui/UI4_keys_select border_pressed.png"));
+
+        mLeftFrameDragHandle->SetDrawablesSizePivot(Vec2F(7, 21));
 
         mLeftFrameDragHandle->localToScreenTransformFunc = [&](const Vec2F& point)
             {
@@ -364,8 +378,12 @@ namespace Editor
 
     void KeyHandlesSheet::InitializeRightHandle()
     {
+		mRightFrameDragHandle = mmake<DragHandle>(mmake<Sprite>("ui/UI4_keys_select border.png"),
+												  mmake<Sprite>("ui/UI4_keys_select border_hover.png"),
+												  mmake<Sprite>("ui/UI4_keys_select border_pressed.png"));
 
-        mRightFrameDragHandle = mmake<DragHandle>();
+        mRightFrameDragHandle->SetDrawablesSizePivot(Vec2F(6, 19));
+		mRightFrameDragHandle->angle = Math::Deg2rad(180.0f);
 
         mRightFrameDragHandle->localToScreenTransformFunc = [&](const Vec2F& point)
             {
@@ -442,10 +460,7 @@ namespace Editor
     {
         mNeedUpdateSelectionFrame = false;
 
-        if (mIsFrameSelecting)
-            return;
-
-        if (mSelectedHandles.Count() > 0)
+        if (!mIsFrameSelecting && mSelectedHandles.Count() > 0)
         {
             mSelectionFrame->enabled = true;
 
@@ -472,7 +487,8 @@ namespace Editor
             mLeftFrameDragHandle->position = Vec2F(mSelectionRect.left, mSelectionRect.Center().y);
             mRightFrameDragHandle->position = Vec2F(mSelectionRect.right, mSelectionRect.Center().y);
         }
-        else mSelectionFrame->enabled = false;
+        else 
+            mSelectionFrame->enabled = false;
     }
 
     void KeyHandlesSheet::SerializeKeys(DataValue& data, const Map<String, Vector<UInt64>>& keys, float relativeTime)

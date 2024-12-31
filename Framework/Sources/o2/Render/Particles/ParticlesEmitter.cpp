@@ -112,32 +112,35 @@ namespace o2
 #if IS_EDITOR
 		mIsUpdating = true;
 
-		if (mRandomSeed == 0)
+		if (mRandomSeed == 0 || true)
 		{
 			mRandomSeed = ::time(0);
 			srand(mRandomSeed);
 		}
 #endif
 
-		IAnimation::Update(dt);
-
-#if IS_EDITOR
-		if (!mParticlesPaused)
-#endif
+		if (!mSubControlled)
 		{
-			float prewardDt = 1.0f / 30.0f;
-			while (mPrewarmTimeout > 0.0f)
+#if IS_EDITOR
+			if (!mParticlesPaused)
+#endif
 			{
-				UpdateEmitting(prewardDt);
-				UpdateEffects(prewardDt);
-				UpdateParticles(prewardDt);
-				mPrewarmTimeout -= prewardDt;
-			}
+				float prewardDt = 1.0f / 30.0f;
+				while (mPrewarmTimeout > 0.0f)
+				{
+					UpdateEmitting(prewardDt);
+					UpdateEffects(prewardDt);
+					UpdateParticles(prewardDt);
+					mPrewarmTimeout -= prewardDt;
+				}
 
-			UpdateEmitting(dt);
-			UpdateEffects(dt);
-			UpdateParticles(dt);
+				UpdateEmitting(dt);
+				UpdateEffects(dt);
+				UpdateParticles(dt);
+			}
 		}
+
+		IAnimation::Update(dt);
 
 		if (!mParticlesContainer)
 			CreateParticlesContainer();
@@ -362,6 +365,12 @@ namespace o2
 	float ParticlesEmitter::GetDuration() const
 	{
 		return mEmissionDuration + mParticlesLifetime;
+	}
+
+	void ParticlesEmitter::SetTime(float time)
+	{
+		mTime = time;
+		UpdateTime();
 	}
 
 	void ParticlesEmitter::SetParticlesSource(const Ref<ParticleSource>& source)
@@ -719,7 +728,7 @@ namespace o2
 			mBakedFrames[frameIdx].numAliveParticles = mNumAliveParticles;
 			mBakedFrames[frameIdx].emitTimeBuffer = mEmitTimeBuffer;
 
-			//o2Debug.Log("Baked frame %i with %i particles, time: %f", frameIdx, mParticles.Count(), mTime);
+			o2Debug.Log("Baked frame %i with %i particles, time: %f", frameIdx, mParticles.Count(), mTime);
 		}
 		else
 		{
@@ -734,12 +743,14 @@ namespace o2
 
 	void ParticlesEmitter::CheckBakedFrames(int maxFrameIdx)
 	{
+		o2Debug.Log("Baked frames count: %i, max frame index: %i", mBakedFrames.Count(), maxFrameIdx);
+
 		if (mBakedFrames.Count() > maxFrameIdx || maxFrameIdx < 1)
 			return;
 
 		//o2Debug.Log("Baked frames count: %i, max frame index: %i", mBakedFrames.Count(), maxFrameIdx);
 
-		int startIdx = mBakedFrames.Count() - 1;
+		int startIdx = Math::Max(0, mBakedFrames.Count() - 1);
 		mBakedFrames.Resize(maxFrameIdx + 1);
 
 		float prevTime = mTime;
@@ -750,6 +761,7 @@ namespace o2
 		auto prevDeadParticles = mDeadParticles;
 		auto prevNumAliveParticles = mNumAliveParticles;
 		auto prevEmitTimeBuffer = mEmitTimeBuffer;
+		auto prevSubControlled = mSubControlled;
 
 		if (startIdx >= 0)
 		{
@@ -757,6 +769,10 @@ namespace o2
 			mDeadParticles = mBakedFrames[startIdx].deadParticles;
 			mNumAliveParticles = mBakedFrames[startIdx].numAliveParticles;
 			mEmitTimeBuffer = mBakedFrames[startIdx].emitTimeBuffer;
+
+			o2Debug.Log("Setup particles: %i", mNumAliveParticles);
+			for (auto& p : mParticles)
+				o2Debug.Log("   Particle: %i, %f, %f", p.index, p.timeLeft, p.lifetime);
 		}
 		else
 		{
@@ -765,6 +781,8 @@ namespace o2
 			mNumAliveParticles = 0;
 			mEmitTimeBuffer = 0.0f;
 		}
+
+		o2Debug.Log("Start baked frame index: %i, time: %f", startIdx, mTime);
 
 		// Prepare to update particles
 		bool prevPlaying = mPlaying;
@@ -776,9 +794,14 @@ namespace o2
 		if (startIdx == 0)
 			mPrewarmTimeout = mPrewarmTime;
 
+		mSubControlled = false;
+
 		// Update and bake frames
 		for (int i = startIdx; i <= maxFrameIdx; i++)
+		{
+			o2Debug.Log("To bake frame: %i", i);
 			Update(1.0f/(float)mBakedFPS);
+		}
 
 		// Restore previous state
 		mTime = prevTime;
@@ -788,10 +811,13 @@ namespace o2
 		mDeadParticles = prevDeadParticles;
 		mNumAliveParticles = prevNumAliveParticles;
 		mEmitTimeBuffer = prevEmitTimeBuffer;
+		mSubControlled = prevSubControlled;
 	}
 
 	void ParticlesEmitter::RestoreBakedFrame(int frameIdx)
 	{
+		o2Debug.Log("\n------------------------\nRestore baked frame %i", frameIdx);
+
 		CheckBakedFrames(frameIdx);
 
 		if (frameIdx == 0)

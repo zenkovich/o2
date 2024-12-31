@@ -210,6 +210,9 @@ namespace o2
         // Called when component started, checks states auto play
 		void OnStart() override;
 
+		// Called when actor enabled in hierarchy
+        void OnEnabled() override;
+
 		// Registers track by path and state
 		template<typename _valueType, typename _trackType, typename _mixerType>
 		void RegTrack(const Ref<typename _trackType::Player>& player, const String& path, const Ref<AnimationState>& state);
@@ -394,6 +397,7 @@ CLASS_METHODS_META(o2::AnimationComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, RegSubTrack, const Ref<AnimationSubTrack::Player>&, const String&, const Ref<AnimationState>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UnregTrack, const Ref<IAnimationTrack::IPlayer>&, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackAdded, const Ref<AnimationState>&, const Ref<IAnimationTrack::IPlayer>&);

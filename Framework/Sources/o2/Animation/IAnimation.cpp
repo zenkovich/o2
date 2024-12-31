@@ -36,7 +36,7 @@ namespace o2
 
     void IAnimation::Update(float dt)
     {
-        if (!mPlaying)
+        if (!mPlaying || mSubControlled)
             return;
 
         mTime += mDirection*dt*mSpeed;
@@ -54,7 +54,17 @@ namespace o2
         }
     }
 
-    void IAnimation::UpdateTime()
+	void IAnimation::SetSubControlled(bool subControlled)
+	{
+		mSubControlled = subControlled;
+	}
+
+	bool IAnimation::IsSubControlled() const
+	{
+		return mSubControlled;
+	}
+
+	void IAnimation::UpdateTime()
     {
         if (mLoop == Loop::None)
         {

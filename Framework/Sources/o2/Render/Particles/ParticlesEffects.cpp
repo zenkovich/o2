@@ -57,7 +57,9 @@ namespace o2
 			int particleIndex = p.index;
 
 			auto& colorData = mColorData[particleIndex];
-			p.color = colorGradient->Evaluate(1.0f - p.timeLeft/p.lifetime, true, colorData.cacheKey);
+			float lifeTimeCoef = 1.0f - p.timeLeft / p.lifetime;
+			//o2Debug.Log("lifeTimeCoef: %f (%f, %f), particle id: %i", lifeTimeCoef, p.timeLeft, p.lifetime, particleIndex);
+			p.color = colorGradient->Evaluate(lifeTimeCoef, true, colorData.cacheKey);
 		}
 	}
 

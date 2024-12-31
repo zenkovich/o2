@@ -12,7 +12,7 @@ namespace o2
     public:
         PROPERTIES(AnimationSubTrack);
 		PROPERTY(float, beginTime, SetBeginTime, GetBeginTime);                               // Begin time
-		PROPERTY(float, subTrackDuration, SetSubTrackDuration, GetSubTrackDuration)           // Sub track duration    
+		GETTER(float, subTrackDuration, GetSubTrackDuration)                                  // Sub track duration    
 		PROPERTY(float, subTrackBeginOffset, SetSubTrackBeginOffset, GetSubTrackBeginOffset); // Sub track begin offset
 		PROPERTY(float, subTrackEndOffset, SetSubTrackEndOffset, GetSubTrackEndOffset);       // Sub track end offset
 
@@ -37,9 +37,6 @@ namespace o2
 
 		// Returns track begin time
 		float GetBeginTime() const;
-
-		// Sets sub track duration
-		void SetSubTrackDuration(float duration);
 
 		// Returns sub track duration
 		float GetSubTrackDuration() const;
@@ -99,7 +96,10 @@ namespace o2
 			void SetTargetProxy(const Ref<IAbstractValueProxy>& targetProxy) override;
 
             // Sets animation track
-            void SetTrack(const Ref<IAnimationTrack>& track) override;
+			void SetTrack(const Ref<IAnimationTrack>& track) override;
+
+			// Adjusts target type to correct one. Casts to IAnimation
+            void* AdjustTargetType(void* target, const Type& type) override;
 
             // Returns animation track
             Ref<IAnimationTrack> GetTrack() const override;
@@ -120,11 +120,14 @@ namespace o2
 
             // Registering this in value mixer
             void RegMixer(const Ref<AnimationState>& state, const String& path) override;
+
+			// CHecks and updates sub track time
+			void UpdateSubTrackDuration();
         };
 
     protected:
-		float mBeginTime = 0.0f;           // Begin time @SERIALIZABLE
-		float mDuration = 1.0f;            // Sub track duration @SERIALIZABLE
+		float mSubTrackBeginTime = 0.0f;   // Begin sub tracktime @SERIALIZABLE
+		float mSubTrackDuration = 1.0f;    // Sub track duration @SERIALIZABLE
 		float mSubTrackBeginOffset = 0.0f; // Sub track begin offset @SERIALIZABLE
 		float mSubTrackEndOffset = 0.0f;   // Sub track end offset @SERIALIZABLE
 
@@ -145,8 +148,8 @@ CLASS_FIELDS_META(o2::AnimationSubTrack)
     FIELD().PUBLIC().NAME(beginTime);
     FIELD().PUBLIC().NAME(subTrackDuration);
     FIELD().PUBLIC().NAME(subTrackEndOffset);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mBeginTime);
-    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mDuration);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mSubTrackBeginTime);
+    FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mSubTrackDuration);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mSubTrackBeginOffset);
     FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mSubTrackEndOffset);
 }
@@ -160,7 +163,6 @@ CLASS_METHODS_META(o2::AnimationSubTrack)
     FUNCTION().PUBLIC().SIGNATURE(Ref<IPlayer>, CreatePlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, SetBeginTime, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetBeginTime);
-    FUNCTION().PUBLIC().SIGNATURE(void, SetSubTrackDuration, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetSubTrackDuration);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSubTrackBeginOffset, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetSubTrackBeginOffset);
@@ -198,9 +200,11 @@ CLASS_METHODS_META(o2::AnimationSubTrack::Player)
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, const Ref<IAbstractValueProxy>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, const Ref<IAnimationTrack>&);
+    FUNCTION().PUBLIC().SIGNATURE(void*, AdjustTargetType, void*, const Type&);
     FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationTrack>, GetTrack);
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
     FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, const Ref<AnimationState>&, const String&);
+    FUNCTION().PROTECTED().SIGNATURE(void, UpdateSubTrackDuration);
 }
 END_META;
 // --- END META ---

@@ -590,6 +590,9 @@ namespace o2
 
     void DragHandle::SetSelectionGroup(const Ref<ISelectableDragHandlesGroup>& group)
     {
+		if (mSelectGroup == group)
+			return;
+
         if (mSelectGroup)
             mSelectGroup->RemoveHandle(this);
 

@@ -92,6 +92,9 @@ namespace o2
 		// Returns duration (emission duration + particles lifetime)
 		float GetDuration() const override;
 
+		// Sets time of emitter
+		void SetTime(float time) override;
+
         // Sets particles source
 		void SetParticlesSource(const Ref<ParticleSource>& source);
 
@@ -474,6 +477,7 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(void, Stop);
     FUNCTION().PUBLIC().SIGNATURE(void, SetDuration, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTime, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParticlesSource, const Ref<ParticleSource>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<ParticleSource>&, GetParticlesSource);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEmittingCoef, float);
