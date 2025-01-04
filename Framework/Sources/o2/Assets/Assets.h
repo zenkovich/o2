@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Assets/AssetsTree.h"
+#include "o2/Render/Spine/SpineManager.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
@@ -156,6 +157,8 @@ namespace o2
         Vector<AssetRef<Asset>>      mCachedAssets;       // Current cached assets
         Map<String, AssetRef<Asset>> mCachedAssetsByPath; // Current cached assets by path
         Map<UID, AssetRef<Asset>>    mCachedAssetsByUID;  // Current cached assets by uid
+
+		Ref<SpineManager> mSpineManager; // Spine manager
 
     protected:
         // Loads asset infos

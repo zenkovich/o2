@@ -159,9 +159,10 @@ namespace o2
         mEventSystem = nullptr;
         mRender = nullptr;
         mFileSystem = nullptr;
-        mAssets = nullptr;
         mTime = nullptr;
         mLog = nullptr;
+
+        Assets::DestroySingleton(mAssets);
     }
     
     void Application::SetupGraphicsScaledCamera()

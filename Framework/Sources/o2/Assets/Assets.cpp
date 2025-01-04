@@ -21,11 +21,19 @@ namespace o2
         o2Debug.GetLog()->BindStream(mLog);
 
         LoadAssetsTree();
+
+		mSpineManager = mmake<SpineManager>();
     }
 
     Assets::~Assets()
     {
-        mInstance = nullptr;
+		mCachedAssets.Clear();
+		mCachedAssetsByPath.Clear();
+		mCachedAssetsByUID.Clear();
+		mAssetsTrees.Clear();
+		mMainAssetsTree = nullptr;
+
+        SpineManager::DestroySingleton(mSpineManager);
     }
 
     String Assets::GetAssetsPath() const

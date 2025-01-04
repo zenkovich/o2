@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	CREATE_SINGLETON(SpineManager);
+	DECLARE_SINGLETON(SpineManager);
 
 	SpineManager::SpineManager(RefCounter* refCounter):
 		Singleton(refCounter)
