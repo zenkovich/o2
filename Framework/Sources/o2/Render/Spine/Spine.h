@@ -23,17 +23,69 @@ namespace o2
         PROPERTIES(Spine);
 
     public:
+		// ---------------------
+		// Spine animation track
+		// ---------------------
+		class Track: public RefCounterable
+        {
+        public:
+			// Default constructor
+            Track(const Ref<Spine>& owner, int trackIndex, const String& name);
+
+			// Starts playing animation
+            void Play();
+
+			// Stops playing animation
+            void Stop();
+
+			// Starts or stops playing animation
+			void SetPlaying(bool playing);
+
+            // Returns true if animation is playing
+			bool IsPlaying() const; 
+
+			// Sets animation loop
+			void SetLoop(bool loop);
+
+			// Returns true if animation is looped
+			bool IsLooped() const;
+
+			// Sets animation time
+			void SetTime(float time);
+
+			// Returns animation time
+			float GetTime() const;
+
+			// Sets animation weight for blending
+			void SetWeight(float weight);
+
+			// Returns animation weight
+			float GetWeight() const;
+
+		private:
+			WeakRef<Spine> mOwner; // Spine reference
+
+			String mAnimationName;   // Animation name
+			int    mTrackIndex = -1; // Spine track index
+
+			bool mPlaying = false; // Is animation playing
+			bool mLooped = false;  // Is animation looped
+
+			spine::TrackEntry* mTrackEntry = nullptr; // Spine track entry
+        };
+
+    public:
         Basis transform; // Root transform                                       
 
     public:
         // Constructor
-        Spine();
+        explicit Spine(RefCounter* refCounter);
 
 		// Constructor with spine asset
-		Spine(const AssetRef<SpineAsset>& spine);
+		Spine(RefCounter* refCounter, const AssetRef<SpineAsset>& spine);
 
         // Copy-constructor
-        Spine(const Spine& other);
+        Spine(RefCounter* refCounter, const Spine& other);
 
         // Destructor
         ~Spine();
@@ -53,6 +105,12 @@ namespace o2
 		// Updates spine animation
 		void Update(float dt);
 
+		// Returns spine animation names
+		const Vector<String>& GetAnimationNames() const;
+
+		// Returns spine animation track
+		Ref<Track> GetTrack(const String& name);
+
         CLONEABLE_REF(Spine);
 
     protected:
@@ -61,8 +119,12 @@ namespace o2
 		spine::Skeleton*       mSkeleton = nullptr;       // Spine skeleton
 		spine::AnimationState* mAnimationState = nullptr; // Spine animation state
 
+		Vector<String> mAnimationNames; // Animation names
+
 		Vector<Vertex>      mVertices; // Vertices buffer
 		Vector<VertexIndex> mIndices;  // Indices buffer
+
+		Ref<Track> mTestTrack; // Test track
 
         friend class Render;
     };

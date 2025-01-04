@@ -5,17 +5,20 @@
 #include "o2/Render/Render.h"
 
 #include "3rdPartyLibs/Spine/spine-cpp/include/spine/SkeletonRenderer.h"
+#include "3rdPartyLibs/Spine/spine-cpp/include/spine/Animation.h"
 
 namespace o2
 {
-    Spine::Spine()
+    Spine::Spine(RefCounter* refCounter):
+		RefCounterable(refCounter)
     {}
 
-    Spine::Spine(const Spine& other):
-		Spine(other.mSpineAsset)
+    Spine::Spine(RefCounter* refCounter, const Spine& other):
+		Spine(refCounter, other.mSpineAsset)
     {}
 
-	Spine::Spine(const AssetRef<SpineAsset>& spine)
+	Spine::Spine(RefCounter* refCounter, const AssetRef<SpineAsset>& spine):
+		RefCounterable(refCounter)
 	{
 		Load(spine);
 	}
@@ -37,14 +40,28 @@ namespace o2
         Unload();
 
 		mSpineAsset = spine;
+
 		if (!mSpineAsset || !mSpineAsset->GetSpineSkeletonData() || !mSpineAsset->GetSpineAnimationStateData())
 			return;
 
+		// Load skeleton and animation state
 		mSkeleton = mnew spine::Skeleton(mSpineAsset->GetSpineSkeletonData());
 		mAnimationState = mnew spine::AnimationState(mSpineAsset->GetSpineAnimationStateData());
 
+		// Setup pose
 		mAnimationState->apply(*mSkeleton);
 		mSkeleton->updateWorldTransform(spine::Physics::Physics_None);
+
+		// Get animation names
+		mAnimationNames.Clear();
+		auto animations = mSkeleton->getData()->getAnimations();
+		for (int i = 0; i < animations.size(); ++i)
+			mAnimationNames.Add(animations[i]->getName().buffer());
+
+		// Test track
+		mTestTrack = GetTrack("idle");
+		mTestTrack->SetLoop(true);
+		mTestTrack->Play();
 	}
 
 	void Spine::Unload()
@@ -125,7 +142,103 @@ namespace o2
 		mAnimationState->apply(*mSkeleton);
 
 		mSkeleton->update(dt);
-		mSkeleton->updateWorldTransform(spine::Physics::Physics_None);
+		mSkeleton->updateWorldTransform(spine::Physics::Physics_Update);
 	}
 
+	const Vector<String>& Spine::GetAnimationNames() const
+	{
+		return mAnimationNames;
+	}
+
+	Ref<Spine::Track> Spine::GetTrack(const String& name)
+	{
+		int trackIndex = mAnimationNames.IndexOf(name);
+		if (trackIndex == -1)
+		{
+			o2Debug.LogError("Spine animation %s not found", name.Data());
+			return nullptr;
+		}
+
+		return mmake<Track>(Ref(this), trackIndex, name);
+	}
+
+	Spine::Track::Track(const Ref<Spine>& owner, int trackIndex, const String& name)
+	{
+		mOwner = owner;
+		mAnimationName = name;
+		mTrackIndex = trackIndex;
+	}
+
+	void Spine::Track::Play()
+	{
+		if (!mOwner)
+			return;
+
+		mTrackEntry = mOwner.Lock()->mAnimationState->setAnimation(mTrackIndex, mAnimationName.Data(), mLooped);
+	}
+
+	void Spine::Track::Stop()
+	{
+		if (!mOwner)
+			return;
+
+		mOwner.Lock()->mAnimationState->clearTrack(mTrackIndex);
+	}
+
+	void Spine::Track::SetPlaying(bool playing)
+	{
+		if (mPlaying == playing)
+			return;
+
+		if (playing)
+			Play();
+		else
+			Stop();
+	}
+
+	bool Spine::Track::IsPlaying() const
+	{
+		return mPlaying;
+	}
+
+	void Spine::Track::SetLoop(bool loop)
+	{
+		mLooped = loop;
+
+		if (mOwner && mTrackEntry)
+			mTrackEntry->setLoop(loop);
+	}
+
+	bool Spine::Track::IsLooped() const
+	{
+		return mLooped;
+	}
+
+	void Spine::Track::SetTime(float time)
+	{
+		if (mOwner && mTrackEntry)
+			mTrackEntry->setTrackTime(time);
+	}
+
+	float Spine::Track::GetTime() const
+	{
+		if (mOwner && mTrackEntry)
+			return mTrackEntry->getTrackTime();
+
+		return 0.0f;
+	}
+
+	void Spine::Track::SetWeight(float weight)
+	{
+		if (mOwner && mTrackEntry)
+			mTrackEntry->setAlpha(weight);
+	}
+
+	float Spine::Track::GetWeight() const
+	{
+		if (mOwner && mTrackEntry)
+			return mTrackEntry->getAlpha();
+
+		return 0.0f;
+	}
 }
