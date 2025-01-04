@@ -94,6 +94,9 @@ namespace Editor
 
     void KeyHandlesSheet::UpdateInputDrawOrder()
     {
+        if (!mResEnabledInHierarchy)
+            return;
+
         CursorAreaEventsListener::OnDrawn();
 
         for (auto& handle : mHandles)
@@ -321,9 +324,7 @@ namespace Editor
 
     void KeyHandlesSheet::InitializeLeftHandle()
     {
-        mLeftFrameDragHandle = mmake<DragHandle>(mmake<Sprite>("ui/UI4_keys_select border.png"),
-                                                 mmake<Sprite>("ui/UI4_keys_select border_hover.png"),
-                                                 mmake<Sprite>("ui/UI4_keys_select border_pressed.png"));
+        mLeftFrameDragHandle = mmake<DragHandle>();
 
         mLeftFrameDragHandle->SetDrawablesSizePivot(Vec2F(7, 21));
 
@@ -378,9 +379,7 @@ namespace Editor
 
     void KeyHandlesSheet::InitializeRightHandle()
     {
-		mRightFrameDragHandle = mmake<DragHandle>(mmake<Sprite>("ui/UI4_keys_select border.png"),
-												  mmake<Sprite>("ui/UI4_keys_select border_hover.png"),
-												  mmake<Sprite>("ui/UI4_keys_select border_pressed.png"));
+		mRightFrameDragHandle = mmake<DragHandle>();
 
         mRightFrameDragHandle->SetDrawablesSizePivot(Vec2F(6, 19));
 		mRightFrameDragHandle->angle = Math::Deg2rad(180.0f);

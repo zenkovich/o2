@@ -228,6 +228,8 @@ namespace o2
     {
         PROFILE_SAMPLE_FUNC();
 
+        OnDraw();
+
         for (auto& component : mDrawComponents)
             component->Draw();
 
@@ -868,7 +870,10 @@ namespace o2
     void Actor::OnDestroy()
     {}
 
-    void Actor::OnUpdate(float dt)
+	void Actor::OnDraw()
+	{}
+
+	void Actor::OnUpdate(float dt)
     {}
 
     void Actor::OnFixedUpdate(float dt)

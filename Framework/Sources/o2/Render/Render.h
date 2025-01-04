@@ -277,6 +277,10 @@ namespace o2
         // Draws mesh wire
         void DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
 
+		// Draws mesh buffer wire
+		void DrawMeshBufferWire(Vertex* vertices, UInt verticesCount, VertexIndex* indexes, UInt elementsCount,
+								const Color4& color = Color4::White());
+
         // Draws hard poly line. Vertices - buffer of vertex pairs for each line
         void DrawPolyLine(Vertex* vertices, int count, float width = 1.0f);
 

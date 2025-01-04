@@ -81,9 +81,9 @@ namespace Editor
 			auto& key = track->GetKeys()[i];
 			auto& prevKey = track->GetKeys()[i - 1];
 
-			Basis drawCoords(RectF(timeline->LocalToWorld(prevKey.position) - 3,
+			Basis drawCoords(RectF(timeline->LocalToWorld(prevKey.position) - 1,
 								   layout->GetWorldTop() - 5,
-								   timeline->LocalToWorld(key.position) - 3,
+								   timeline->LocalToWorld(key.position) - 1,
 								   layout->GetWorldBottom() + 5));
 
 			DrawCurveInCoords(key.GetTopApproximatedPoints(), key.GetApproximatedPointsCount(),

@@ -152,7 +152,7 @@ namespace Editor
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
-		handle->SetDrawablesSizePivot(Vec2F(4, 2));
+		handle->SetDrawablesSizePivot(Vec2F(4, 1));
 
 		handle->checkPositionFunc = [&](const Vec2F& pos) {
 			float position = pos.x;

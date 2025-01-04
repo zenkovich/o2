@@ -549,7 +549,14 @@ namespace o2
             {
                 if (auto valueNode = data.FindMember("Value"))
                 {
-                    auto type = Reflection::GetType(*typeNode);
+					String typeName = *typeNode;
+                    auto type = Reflection::GetType(typeName);
+					if (!type)
+					{
+						o2Debug.LogError("Failed to deserialize unknown type: " + typeName);
+						return;
+					}
+
                     auto sample = type->CreateSampleRef();
                     value = DynamicCast<_ref_type>(sample);
 

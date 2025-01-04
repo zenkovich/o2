@@ -118,6 +118,7 @@ target_link_libraries(o2Framework
         jerry-core 
         jerry-ext 
         jerry-port-default
+        spine-cpp
 )
 
 if (O2_TRACY)

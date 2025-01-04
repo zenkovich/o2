@@ -37,7 +37,7 @@ namespace Editor
 		{
 			if (mPropertiesViewer)
 			{
-				RemoveChild(mPropertiesViewer->GetSpoiler(), false);
+				RemoveChild(mPropertiesViewer->GetSpoiler());
 				o2EditorProperties.FreeObjectViewer(mPropertiesViewer);
 			}
 

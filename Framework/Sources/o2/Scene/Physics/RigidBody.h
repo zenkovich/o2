@@ -31,7 +31,7 @@ namespace o2
 
     public:
         // Default constructor
-        RigidBody(RefCounter* refCounter);
+        explicit RigidBody(RefCounter* refCounter);
 
         // Copy-constructor
         RigidBody(RefCounter* refCounter, const RigidBody& other);

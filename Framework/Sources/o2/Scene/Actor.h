@@ -439,6 +439,9 @@ namespace o2
         // Called when actor will be destroyed
         virtual void OnDestroy();
 
+		// Called when actor is drawing
+		virtual void OnDraw();
+
         // Called on update with frame dt
         virtual void OnUpdate(float dt);
 
@@ -921,6 +924,7 @@ CLASS_METHODS_META(o2::Actor)
     FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDestroy);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraw);
     FUNCTION().PROTECTED().SIGNATURE(void, OnUpdate, float);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFixedUpdate, float);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
