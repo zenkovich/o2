@@ -117,4 +117,7 @@ set_target_properties(zlib PROPERTIES FOLDER o2/3rdPartyLibs)
 set_target_properties(FreeType PROPERTIES FOLDER o2/3rdPartyLibs)
 set_target_properties(pugixml PROPERTIES FOLDER o2/3rdPartyLibs)
 set_target_properties(spine-cpp PROPERTIES FOLDER o2/3rdPartyLibs)
-set_target_properties(boost_stacktrace_windbg_cached PROPERTIES FOLDER o2/3rdPartyLibs)
+
+if(MSVC)
+    set_target_properties(boost_stacktrace_windbg_cached PROPERTIES FOLDER o2/3rdPartyLibs)
+endif()
