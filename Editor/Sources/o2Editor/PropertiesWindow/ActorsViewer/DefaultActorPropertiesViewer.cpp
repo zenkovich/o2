@@ -43,8 +43,8 @@ namespace Editor
 				o2EditorProperties.FreeObjectViewer(mViewer);
 
 			mViewer = o2EditorProperties.CreateObjectViewer(mActorType, "", THIS_FUNC(OnPropertyChanged));
+			mViewer->CreateSpoiler(mSpoiler);
 			mViewer->SetHeaderEnabled(false);
-			mSpoiler->AddChild(mViewer->GetSpoiler());
 		}
 
 		if (mViewer)

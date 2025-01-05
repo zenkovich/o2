@@ -51,6 +51,9 @@ namespace Editor
 		// Returns view widget
 		const Ref<Spoiler>& GetSpoiler();
 
+		// Creates spoiler for properties
+		virtual Ref<Spoiler> CreateSpoiler(const Ref<Widget>& parent);
+
 		// Sets is header enabled and properties can be collapsed in spoiler
 		virtual void SetHeaderEnabled(bool enabled);
 
@@ -94,9 +97,6 @@ namespace Editor
 		                                                    // inChangeCompleted from this with full combined path
 
 	protected:
-		// Creates spoiler for properties
-		virtual Ref<Spoiler> CreateSpoiler();
-
 		// Called when header enable changed
 		virtual void OnHeaderEnableChanged(bool enabled) {}
 
@@ -197,6 +197,7 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
     FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, const Ref<PropertiesContext>&);
     FUNCTION().PUBLIC().SIGNATURE(const Ref<Spoiler>&, GetSpoiler);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Spoiler>, CreateSpoiler, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderEnabled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsHeaderEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
@@ -206,7 +207,6 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
     FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
     FUNCTION().PUBLIC().SIGNATURE(void, OnPropertiesEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnPropertiesDisabled);
-    FUNCTION().PROTECTED().SIGNATURE(Ref<Spoiler>, CreateSpoiler);
     FUNCTION().PROTECTED().SIGNATURE(void, OnHeaderEnableChanged, bool);
     FUNCTION().PROTECTED().SIGNATURE(bool, CheckBuildProperties, _tmp2);
     FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp3);

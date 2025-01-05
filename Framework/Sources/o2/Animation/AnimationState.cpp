@@ -8,13 +8,24 @@ namespace o2
     FORWARD_REF_IMPL(AnimationComponent);
 
     AnimationState::AnimationState(const String& name):
-        name(name)
+        IAnimationState(name)
     {
         player->onTrackPlayerAdded = [&](auto track) { OnTrackPlayerAdded(track); };
         player->onTrackPlayerRemove = [&](auto track) { OnTrackPlayerRemove(track); };
     }
 
-    void AnimationState::SetWeight(float weight)
+	void AnimationState::Update(float dt)
+	{
+        if (mAnimation)
+			player->Update(dt);
+	}
+
+	IAnimation& AnimationState::GetPlayer()
+	{
+		return *player;
+	}
+
+	void AnimationState::SetWeight(float weight)
     {
         mWeight = weight;
     }
@@ -35,7 +46,27 @@ namespace o2
         return mAnimation;
     }
 
-    void AnimationState::OnAnimationChanged()
+	void AnimationState::Register(const Ref<AnimationComponent>& owner)
+	{
+		IAnimationState::Register(owner);
+
+		player->SetTarget(mOwner.Lock()->GetOwnerActor().Get());
+		player->SetPlaying(autoPlay);
+		player->mAnimationState = Ref(this);
+
+		for (auto& trackPlayer : player->mTrackPlayers)
+			trackPlayer->RegMixer(Ref(this), trackPlayer->GetTrack()->path);
+	}
+
+	void AnimationState::Unregister()
+	{
+        auto owner = mOwner.Lock();
+
+		for (auto& trackPlayer : player->mTrackPlayers)
+            owner->UnregTrack(trackPlayer, trackPlayer->GetTrack()->path);
+	}
+
+	void AnimationState::OnAnimationChanged()
     {
         player->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
@@ -57,8 +88,38 @@ namespace o2
         player->SetClip(mAnimation ? mAnimation->animation : nullptr);
     }
 
+    IAnimationState::IAnimationState(const String& name) :
+        name(name)
+    {}
+
+	void IAnimationState::Update(float dt)
+	{}
+
+	IAnimation& IAnimationState::GetPlayer()
+	{
+		static IAnimation empty;
+		return empty;
+	}
+
+	void IAnimationState::SetWeight(float weight)
+	{}
+
+	float IAnimationState::GetWeight() const
+	{
+        return 1.0f;
+    }
+
+	void IAnimationState::Register(const Ref<AnimationComponent>& owner)
+	{
+        mOwner = owner;
+	}
+
+	void IAnimationState::Unregister()
+	{}
 }
 // --- META ---
+
+DECLARE_CLASS(o2::IAnimationState, o2__IAnimationState);
 
 DECLARE_CLASS(o2::AnimationState, o2__AnimationState);
 // --- END META ---

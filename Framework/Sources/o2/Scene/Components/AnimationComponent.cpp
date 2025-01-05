@@ -35,10 +35,7 @@ namespace o2
             return;
 
         for (auto& state : mStates)
-        {
-            if (state->mAnimation)
-                state->player->Update(dt);
-        }
+			state->Update(dt);
 
         for (auto& val : mValues)
             val->Update();
@@ -47,22 +44,15 @@ namespace o2
             mBlend.Update(dt);
     }
 
-    Ref<AnimationState> AnimationComponent::AddState(const Ref<AnimationState>& state)
+    Ref<IAnimationState> AnimationComponent::AddState(const Ref<IAnimationState>& state)
     {
-        state->player->SetTarget(mOwner.Lock().Get());
-        state->player->SetPlaying(state->autoPlay);
-        state->player->mAnimationState = state;
-        state->mOwner = WeakRef(this);
-
-        for (auto& trackPlayer : state->player->mTrackPlayers)
-            trackPlayer->RegMixer(state, trackPlayer->GetTrack()->path);
-
+		state->Register(Ref(this));
         mStates.Add(state);
 
         return state;
     }
 
-    Ref<AnimationState> AnimationComponent::AddState(const String& name, const Ref<AnimationClip>& animation, const AnimationMask& mask,
+    Ref<IAnimationState> AnimationComponent::AddState(const String& name, const Ref<AnimationClip>& animation, const AnimationMask& mask,
                                                      float weight)
     {
         Ref<AnimationState> res = mmake<AnimationState>(name);
@@ -72,17 +62,15 @@ namespace o2
         return AddState(res);
     }
 
-    Ref<AnimationState> AnimationComponent::AddState(const String& name)
+    Ref<IAnimationState> AnimationComponent::AddState(const String& name)
     {
         Ref<AnimationState> res = mmake<AnimationState>(name);
         return AddState(res);
     }
 
-    void AnimationComponent::RemoveState(const Ref<AnimationState>& state)
+    void AnimationComponent::RemoveState(const Ref<IAnimationState>& state)
     {
-        for (auto& trackPlayer : state->player->mTrackPlayers)
-            UnregTrack(trackPlayer, trackPlayer->GetTrack()->path);
-
+		state->Unregister();
         mStates.Remove(state);
     }
 
@@ -97,7 +85,7 @@ namespace o2
         mValues.Clear();
     }
 
-    Ref<AnimationState> AnimationComponent::GetState(const String& name)
+    Ref<IAnimationState> AnimationComponent::GetState(const String& name)
     {
         for (auto& state : mStates)
         {
@@ -108,14 +96,14 @@ namespace o2
         return nullptr;
     }
 
-    const Vector<Ref<AnimationState>>& AnimationComponent::GetStates() const
+    const Vector<Ref<IAnimationState>>& AnimationComponent::GetStates() const
     {
         return mStates;
     }
 
-	Map<String, Ref<o2::AnimationState>> AnimationComponent::GetAllStates() const
+	Map<String, Ref<IAnimationState>> AnimationComponent::GetAllStates() const
 	{
-        Map<String, Ref<o2::AnimationState>> result;
+        Map<String, Ref<IAnimationState>> result;
 
 		for (auto& state : mStates)
 			result[state->name] = state;
@@ -123,49 +111,49 @@ namespace o2
 		return result;
 	}
 
-	Ref<AnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation, const String& name)
+	Ref<IAnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation, const String& name)
     {
-        Ref<AnimationState> state = AddState(name, animation, AnimationMask(), 1.0f);
-        state->player->Play();
+        auto state = AddState(name, animation, AnimationMask(), 1.0f);
+        state->GetPlayer().Play();
         return state;
     }
 
-    Ref<AnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation)
+    Ref<IAnimationState> AnimationComponent::Play(const Ref<AnimationClip>& animation)
     {
-        Ref<AnimationState> state = AddState("unknown", animation, AnimationMask(), 1.0f);
-        state->player->Play();
+        auto state = AddState("unknown", animation, AnimationMask(), 1.0f);
+        state->GetPlayer().Play();
         return state;
     }
 
-    Ref<AnimationState> AnimationComponent::Play(const String& name)
+    Ref<IAnimationState> AnimationComponent::Play(const String& name)
     {
-        Ref<AnimationState> state = GetState(name);
-        if (!state || !state->mAnimation)
+        auto state = GetState(name);
+        if (!state)
         {
             o2Debug.LogWarning("Can't play animation: " + name);
             return nullptr;
         }
 
-        state->player->Play();
+		state->GetPlayer().Play();
 
         return state;
     }
 
-    Ref<AnimationState> AnimationComponent::BlendTo(const Ref<AnimationClip>& animation, const String& name, float duration /*= 1.0f*/)
+    Ref<IAnimationState> AnimationComponent::BlendTo(const Ref<AnimationClip>& animation, const String& name, float duration /*= 1.0f*/)
     {
-        Ref<AnimationState> state = AddState(name, animation, AnimationMask(), 1.0f);
+        auto state = AddState(name, animation, AnimationMask(), 1.0f);
         return BlendTo(state, duration);
     }
 
-    Ref<AnimationState> AnimationComponent::BlendTo(const Ref<AnimationClip>& animation, float duration /*= 1.0f*/)
+    Ref<IAnimationState> AnimationComponent::BlendTo(const Ref<AnimationClip>& animation, float duration /*= 1.0f*/)
     {
-        Ref<AnimationState> state = AddState("unknown", animation, AnimationMask(), 1.0f);
+        auto state = AddState("unknown", animation, AnimationMask(), 1.0f);
         return BlendTo(state, duration);
     }
 
-    Ref<AnimationState> AnimationComponent::BlendTo(const String& name, float duration /*= 1.0f*/)
+    Ref<IAnimationState> AnimationComponent::BlendTo(const String& name, float duration /*= 1.0f*/)
     {
-        Ref<AnimationState> state = GetState(name);
+        auto state = GetState(name);
         if (!state)
         {
             o2Debug.LogWarning("Can't blend animation: " + name);
@@ -174,45 +162,41 @@ namespace o2
         return BlendTo(state, duration);
     }
 
-    Ref<AnimationState> AnimationComponent::BlendTo(const Ref<AnimationState>& state, float duration /*= 1.0f*/)
+    Ref<IAnimationState> AnimationComponent::BlendTo(const Ref<IAnimationState>& state, float duration /*= 1.0f*/)
     {
         mBlend.blendOffStates.Clear();
 
         for (auto& state : mStates)
         {
-            if (state->mAnimation)
-            {
-                if (state->player->IsPlaying())
-                    mBlend.blendOffStates.Add(state);
-            }
+            if (state->GetPlayer().IsPlaying())
+                mBlend.blendOffStates.Add(state);
         }
 
         mBlend.blendOnState = state;
         mBlend.duration = duration;
         mBlend.time = duration;
 
-        if (state->mAnimation)
-            state->player->Play();
+        state->GetPlayer().Play();
 
         return state;
     }
 
     void AnimationComponent::Stop(const String& animationName)
     {
-        Ref<AnimationState> state = GetState(animationName);
+        Ref<IAnimationState> state = GetState(animationName);
         if (!state)
         {
             o2Debug.LogWarning("Can't stop animation: " + animationName);
             return;
         }
 
-        state->player->Stop();
+        state->GetPlayer().Stop();
     }
 
     void AnimationComponent::StopAll()
     {
         for (auto& state : mStates)
-            state->player->Stop();
+            state->GetPlayer().Stop();
 
         mBlend.time = -1;
     }
@@ -249,7 +233,7 @@ namespace o2
         for (auto& state : mStates)
         {
             if (state->autoPlay)
-                state->player->Play();
+                state->GetPlayer().Play();
         }
     }
 
@@ -307,12 +291,12 @@ namespace o2
     void AnimationComponent::BlendState::Update(float dt)
     {
         time -= dt;
-        float cf = Math::Max(0.0f, time) / duration;
+        float coef = Math::Max(0.0f, time) / duration;
 
         for (auto& state : blendOffStates)
-            state->blend = cf;
+            state->SetWeight(coef);
 
-        blendOnState->blend = 1.0f - cf;
+        blendOnState->SetWeight(1.0f - coef);
     }
 
     template<>
@@ -321,7 +305,7 @@ namespace o2
         AnimationState* firstValueState = tracks[0].first;
         AnimationTrack<int>::Player* firstValue = tracks[0].second;
 
-        float weightsSum = firstValueState->mWeight*firstValueState->blend*firstValueState->mask.GetNodeWeight(path);
+        float weightsSum = firstValueState->mWeight*firstValueState->mask.GetNodeWeight(path);
         float valueSum = (float)firstValue->GetValue();
 
         for (int i = 1; i < tracks.Count(); i++)
@@ -329,7 +313,7 @@ namespace o2
             AnimationState* valueState = tracks[i].first;
             AnimationTrack<int>::Player* value = tracks[i].second;
 
-            weightsSum += valueState->mWeight*valueState->blend*valueState->mask.GetNodeWeight(path);
+            weightsSum += valueState->mWeight*valueState->mask.GetNodeWeight(path);
             valueSum += (float)value->GetValue();
         }
 
@@ -343,7 +327,7 @@ namespace o2
         AnimationState* firstValueState = tracks[0].first;
         AnimationTrack<bool>::Player* firstValue = tracks[0].second;
 
-        float weightsSum = firstValueState->mWeight*firstValueState->blend*firstValueState->mask.GetNodeWeight(path);
+        float weightsSum = firstValueState->mWeight*firstValueState->mask.GetNodeWeight(path);
         float valueSum = firstValue->GetValue() ? 1.0f : 0.0f;
 
         for (int i = 1; i < tracks.Count(); i++)
@@ -351,7 +335,7 @@ namespace o2
             AnimationState* valueState = tracks[i].first;
             AnimationTrack<bool>::Player* value = tracks[i].second;
 
-            weightsSum += valueState->mWeight*valueState->blend*valueState->mask.GetNodeWeight(path);
+            weightsSum += valueState->mWeight*valueState->mask.GetNodeWeight(path);
             valueSum += value->GetValue() ? 1.0f : 0.0f;
         }
 

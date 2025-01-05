@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "SpineManager.h"
 
-#include <3rdPartyLibs/Spine/spine-cpp/include/spine/Extension.h>
+#include <spine/Extension.h>
 
 namespace o2
 {

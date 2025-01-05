@@ -67,10 +67,12 @@ namespace Editor
 		borderLeft = 11;
 
 		mCaption = o2UI.CreateLabel("Caption");
+		mCaption->name = "caption";
 		mCaption->SetHorAlign(HorAlign::Left);
 		AddChild(mCaption);
 
 		mHeaderContainer = mmake<HorizontalLayout>();
+		mHeaderContainer->name = "header";
 		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 19, 0);
 		mHeaderContainer->baseCorner = BaseCorner::Right;
 		mHeaderContainer->expandHeight = false;
@@ -84,6 +86,7 @@ namespace Editor
 		mHeaderContainer->AddChild(mCreateOrRemoveButton);
 
 		mTypeButton = o2UI.CreateWidget<Button>("backless dropdown");
+		mTypeButton->name = "type";
 		mTypeButton->onClick = THIS_FUNC(OnCreatePressed);
 		mTypeButton->caption = "nullptr";
 		mHeaderContainer->AddChild(mTypeButton);
@@ -143,10 +146,10 @@ namespace Editor
 				mObjectViewer = o2EditorProperties.CreateObjectViewer(mBuiltObjectType, mValuesPath, onChangeCompleted,
 																	  onChanged);
 
+				mObjectViewer->CreateSpoiler(Ref(this));
 				mObjectViewer->SetParentContext(mParentContext.Lock());
 				mObjectViewer->SetHeaderEnabled(!mNoHeader);
 				mObjectViewer->SetExpanded(mExpanded);
-				AddChild(mObjectViewer->GetSpoiler());
 
 				mCaption->SetEnabledForcible(false);
 				mHeaderContainer->SetInternalParent(mObjectViewer->GetSpoiler());

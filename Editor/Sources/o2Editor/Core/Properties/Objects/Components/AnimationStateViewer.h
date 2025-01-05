@@ -23,6 +23,9 @@ namespace Editor
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
 
+		// Creates spoiler for properties
+		Ref<Spoiler> CreateSpoiler(const Ref<Widget>& parent) override;
+
 		// Returns viewing objects base type by static function
 		static const Type* GetViewingObjectTypeStatic();
 
@@ -38,9 +41,6 @@ namespace Editor
 		WeakRef<AnimationPlayer> mSubscribedPlayer;
 
 	private:
-		// Creates spoiler for properties
-		Ref<Spoiler> CreateSpoiler() override;
-
 		// Called when viewer is refreshed
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
@@ -85,8 +85,8 @@ CLASS_METHODS_META(Editor::AnimationStateViewer)
     typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
     FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<Spoiler>, CreateSpoiler, const Ref<Widget>&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
-    FUNCTION().PRIVATE().SIGNATURE(Ref<Spoiler>, CreateSpoiler);
     FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp1);
     FUNCTION().PRIVATE().SIGNATURE(void, OnFree);
     FUNCTION().PRIVATE().SIGNATURE(void, OnPlayPauseToggled, bool);

@@ -12,7 +12,7 @@
 
 namespace o2
 {
-    class AnimationState;
+    class IAnimationState;
     class AnimationMask;
     
     // -------------------
@@ -22,7 +22,7 @@ namespace o2
     {
     public:
         PROPERTIES(AnimationComponent);
-		ACCESSOR(Ref<AnimationState>, state, String, GetState, GetAllStates); // Animation states accessor by name
+		ACCESSOR(Ref<IAnimationState>, state, String, GetState, GetAllStates); // Animation states accessor by name
 
     public:
         // Default constructor @SCRIPTABLE
@@ -41,17 +41,17 @@ namespace o2
         void OnUpdate(float dt) override;
 
         // Adds new animation state and returns him
-        Ref<AnimationState> AddState(const Ref<AnimationState>& state);
+        Ref<IAnimationState> AddState(const Ref<IAnimationState>& state);
 
         // Adds new animation state and returns him
-        Ref<AnimationState> AddState(const String& name, const Ref<AnimationClip>& animation,
+        Ref<IAnimationState> AddState(const String& name, const Ref<AnimationClip>& animation,
                                      const AnimationMask& mask, float weight);
 
         // Adds new animation state and returns him
-        Ref<AnimationState> AddState(const String& name);
+        Ref<IAnimationState> AddState(const String& name);
 
         // Removes animation state
-        void RemoveState(const Ref<AnimationState>& state);
+        void RemoveState(const Ref<IAnimationState>& state);
 
         // Removes animation state by name
         void RemoveState(const String& name);
@@ -60,34 +60,34 @@ namespace o2
         void RemoveAllStates();
 
         // Returns state with specified name. Returns nullptr if can't find state with specified name
-        Ref<AnimationState> GetState(const String& name);
+        Ref<IAnimationState> GetState(const String& name);
 
         // Returns all states array
-		const Vector<Ref<AnimationState>>& GetStates() const;
+		const Vector<Ref<IAnimationState>>& GetStates() const;
 
 		// Returns all states
-		Map<String, Ref<AnimationState>> GetAllStates() const;
+		Map<String, Ref<IAnimationState>> GetAllStates() const;
 
         // Creates new state and plays him
-        Ref<AnimationState> Play(const Ref<AnimationClip>& animation, const String& name);
+        Ref<IAnimationState> Play(const Ref<AnimationClip>& animation, const String& name);
 
         // Creates new state and plays him
-        Ref<AnimationState> Play(const Ref<AnimationClip>& animation);
+        Ref<IAnimationState> Play(const Ref<AnimationClip>& animation);
 
         // Searches animation state with name and plays him @SCRIPTABLE
-        Ref<AnimationState> Play(const String& name);
+        Ref<IAnimationState> Play(const String& name);
 
         // Creates new state, and blends animation with duration
-        Ref<AnimationState> BlendTo(const Ref<AnimationClip>& animation, const String& name, float duration = 1.0f);
+        Ref<IAnimationState> BlendTo(const Ref<AnimationClip>& animation, const String& name, float duration = 1.0f);
 
         // Creates new state, and blends animation with duration
-        Ref<AnimationState> BlendTo(const Ref<AnimationClip>& animation, float duration = 1.0f);
+        Ref<IAnimationState> BlendTo(const Ref<AnimationClip>& animation, float duration = 1.0f);
 
         // Creates new state, and blends animation with duration @SCRIPTABLE
-        Ref<AnimationState> BlendTo(const String& name, float duration = 1.0f);
+        Ref<IAnimationState> BlendTo(const String& name, float duration = 1.0f);
 
         // Plays state and blends animation with duration
-        Ref<AnimationState> BlendTo(const Ref<AnimationState>& state, float duration = 1.0f);
+        Ref<IAnimationState> BlendTo(const Ref<IAnimationState>& state, float duration = 1.0f);
 
         // Stops animation with name @SCRIPTABLE
         void Stop(const String& animationName);
@@ -187,8 +187,8 @@ namespace o2
         // ----------------------
         struct BlendState
         {
-            Vector<Ref<AnimationState>> blendOffStates; // Turning off states
-            Ref<AnimationState>         blendOnState;   // Turning on state
+            Vector<Ref<IAnimationState>> blendOffStates; // Turning off states
+            Ref<IAnimationState>         blendOnState;   // Turning on state
 
             float duration;     // Blending duration
             float time = -1.0f; // Current blending remaining time
@@ -199,8 +199,8 @@ namespace o2
         };
 
     protected:
-        Vector<Ref<AnimationState>> mStates; // Animation states array @SERIALIZABLE @EDITOR_PROPERTY @DEFAULT_TYPE(o2::AnimationState) @INVOKE_ON_CHANGE(ReattachAnimationStates) @DONT_DELETE
-        Vector<Ref<ITrackMixer>>    mValues; // Assigning value agents
+        Vector<Ref<IAnimationState>> mStates; // Animation states array @SERIALIZABLE @EDITOR_PROPERTY @DEFAULT_TYPE(o2::AnimationState) @INVOKE_ON_CHANGE(ReattachAnimationStates) @DONT_DELETE
+        Vector<Ref<ITrackMixer>>     mValues; // Assigning value agents
 
         BlendState mBlend;  // Current blend parameters
 
@@ -326,7 +326,7 @@ namespace o2
         auto firstValueState = tracks[0].first;
         auto firstValue = tracks[0].second;
 
-        float weightsSum = firstValueState->mWeight*firstValueState->blend*firstValueState->mask.GetNodeWeight(path);
+        float weightsSum = firstValueState->mWeight*firstValueState->mask.GetNodeWeight(path);
         _type valueSum = firstValue->GetValue();
 
         for (int i = 1; i < tracks.Count(); i++)
@@ -334,8 +334,8 @@ namespace o2
             auto valueState = tracks[i].first;
             auto value = tracks[i].second;
 
-            weightsSum += valueState->mWeight*valueState->blend*valueState->mask.GetNodeWeight(path);
-            valueSum += value->GetValue();
+			weightsSum += valueState->mWeight*valueState->mask.GetNodeWeight(path);
+			valueSum += value->GetValue();
         }
 
         _type resValue = valueSum / weightsSum;
@@ -368,27 +368,27 @@ END_META;
 CLASS_METHODS_META(o2::AnimationComponent)
 {
 
-    typedef Map<String, Ref<AnimationState>> _tmp1;
+    typedef Map<String, Ref<IAnimationState>> _tmp1;
 
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationComponent&);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, AddState, const Ref<AnimationState>&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, AddState, const String&, const Ref<AnimationClip>&, const AnimationMask&, float);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, AddState, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, const Ref<AnimationState>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, AddState, const Ref<IAnimationState>&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, AddState, const String&, const Ref<AnimationClip>&, const AnimationMask&, float);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, AddState, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, const Ref<IAnimationState>&);
     FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllStates);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, GetState, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<AnimationState>>&, GetStates);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, GetState, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(const Vector<Ref<IAnimationState>>&, GetStates);
     FUNCTION().PUBLIC().SIGNATURE(_tmp1, GetAllStates);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, Play, const Ref<AnimationClip>&, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, Play, const Ref<AnimationClip>&);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<AnimationState>, Play, const String&);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, BlendTo, const Ref<AnimationClip>&, const String&, float);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, BlendTo, const Ref<AnimationClip>&, float);
-    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<AnimationState>, BlendTo, const String&, float);
-    FUNCTION().PUBLIC().SIGNATURE(Ref<AnimationState>, BlendTo, const Ref<AnimationState>&, float);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, Play, const Ref<AnimationClip>&, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, Play, const Ref<AnimationClip>&);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<IAnimationState>, Play, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, BlendTo, const Ref<AnimationClip>&, const String&, float);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, BlendTo, const Ref<AnimationClip>&, float);
+    FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Ref<IAnimationState>, BlendTo, const String&, float);
+    FUNCTION().PUBLIC().SIGNATURE(Ref<IAnimationState>, BlendTo, const Ref<IAnimationState>&, float);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Stop, const String&);
     FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, StopAll);
     FUNCTION().PUBLIC().SIGNATURE(void, BeginAnimationEdit);

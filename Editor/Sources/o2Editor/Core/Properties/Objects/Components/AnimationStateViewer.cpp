@@ -18,9 +18,9 @@ namespace Editor
 		return &TypeOf(AnimationState);
 	}
 
-	Ref<Spoiler> AnimationStateViewer::CreateSpoiler()
+	Ref<Spoiler> AnimationStateViewer::CreateSpoiler(const Ref<Widget>& parent)
 	{
-		mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
+		mSpoiler = IObjectPropertiesViewer::CreateSpoiler(parent);
 
 		mPlayPause = o2UI.CreateWidget<Toggle>("animation state play-stop");
 		mPlayPause->name = "play-stop";
@@ -51,6 +51,13 @@ namespace Editor
 			textLayer->layout.offsetLeft = 27;
 			textLayer->layout.offsetBottom = -19;
 			textLayer->layout.offsetTop = 1;
+		}
+
+		if (auto header = parent->GetChildByType<Widget>("caption/header"))
+		{
+			auto spacer = mmake<Widget>();
+			spacer->layout->maxWidth = 40;
+			header->AddChild(spacer, 1);
 		}
 
 		return mSpoiler;

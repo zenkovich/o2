@@ -9,8 +9,8 @@
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Types/CommonTypes.h"
 
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/Skeleton.h"
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/AnimationState.h"
+#include "spine/Skeleton.h"
+#include "spine/AnimationState.h"
 
 namespace o2
 {
@@ -123,8 +123,6 @@ namespace o2
 
 		Vector<Vertex>      mVertices; // Vertices buffer
 		Vector<VertexIndex> mIndices;  // Indices buffer
-
-		Ref<Track> mTestTrack; // Test track
 
         friend class Render;
     };

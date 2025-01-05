@@ -5,7 +5,7 @@
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/SkeletonJson.h"
+#include "spine/SkeletonJson.h"
 
 namespace o2
 {

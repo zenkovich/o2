@@ -3,8 +3,8 @@
 #include "o2/Utils/Singleton.h"
 #include "o2/Render/TextureRef.h"
 
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/TextureLoader.h"
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/Atlas.h"
+#include "spine/TextureLoader.h"
+#include "spine/Atlas.h"
 
 namespace o2
 {

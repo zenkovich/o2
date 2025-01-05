@@ -3,7 +3,7 @@
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetRef.h"
 
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/Atlas.h"
+#include "spine/Atlas.h"
 
 namespace o2
 {

@@ -80,14 +80,6 @@ namespace Editor
 
 	const Ref<Spoiler>& IObjectPropertiesViewer::GetSpoiler()
 	{
-		if (!mSpoiler)
-		{
-			mSpoiler = CreateSpoiler();
-			mSpoiler->onExpand = [&]() { 
-				Refresh(mTargetObjects);
-			};
-		}
-
 		return mSpoiler;
 	}
 
@@ -126,9 +118,13 @@ namespace Editor
 		mPropertiesContext->SetPropertiesEnabled(false);
 	}
 
-	Ref<Spoiler> IObjectPropertiesViewer::CreateSpoiler()
+	Ref<Spoiler> IObjectPropertiesViewer::CreateSpoiler(const Ref<Widget>& parent)
 	{
-		return o2UI.CreateWidget<Spoiler>("expand with caption");
+		mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
+		mSpoiler->onExpand = [&]() { Refresh(mTargetObjects); };
+		parent->AddChild(mSpoiler);
+
+		return mSpoiler;
 	}
 
 	bool IObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)

@@ -39,6 +39,7 @@ namespace Editor
 			mViewer = o2EditorProperties.CreateObjectViewer(mComponentType, (String)"component:" + mComponentType->GetName() + "/",
 															THIS_FUNC(OnPropertyChanged));
 
+			mViewer->CreateSpoiler(mSpoiler);
 			mViewer->SetHeaderEnabled(false);
 		}
 
@@ -47,8 +48,6 @@ namespace Editor
 			mViewer->Refresh(mTargetComponents.Convert<Pair<IObject*, IObject*>>([](const Ref<Component>& x) {
 				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x.Get()), dynamic_cast<IObject*>(x->GetPrototypeLink().Lock().Get()));
 			}));
-
-			mSpoiler->AddChild(mViewer->GetSpoiler());
 		}
 	}
 

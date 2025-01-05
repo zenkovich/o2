@@ -1,6 +1,7 @@
 extern void __RegisterClass__o2__AnimationClip();
 extern void __RegisterClass__o2__AnimationMask();
 extern void __RegisterClass__o2__AnimationPlayer();
+extern void __RegisterClass__o2__IAnimationState();
 extern void __RegisterClass__o2__AnimationState();
 extern void __RegisterClass__o2__IAnimation();
 extern void __RegisterClass__o2__AnimationTrack_o2__Color4_();
@@ -158,6 +159,7 @@ extern void InitializeTypeso2Framework()
     __RegisterClass__o2__AnimationClip();
     __RegisterClass__o2__AnimationMask();
     __RegisterClass__o2__AnimationPlayer();
+    __RegisterClass__o2__IAnimationState();
     __RegisterClass__o2__AnimationState();
     __RegisterClass__o2__IAnimation();
     __RegisterClass__o2__AnimationTrack_o2__Color4_();

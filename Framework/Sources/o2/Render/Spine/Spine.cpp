@@ -4,8 +4,8 @@
 #include "o2/Application/Input.h"
 #include "o2/Render/Render.h"
 
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/SkeletonRenderer.h"
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/Animation.h"
+#include "spine/SkeletonRenderer.h"
+#include "spine/Animation.h"
 
 namespace o2
 {
@@ -57,11 +57,6 @@ namespace o2
 		auto animations = mSkeleton->getData()->getAnimations();
 		for (int i = 0; i < animations.size(); ++i)
 			mAnimationNames.Add(animations[i]->getName().buffer());
-
-		// Test track
-		mTestTrack = GetTrack("idle");
-		mTestTrack->SetLoop(true);
-		mTestTrack->Play();
 	}
 
 	void Spine::Unload()

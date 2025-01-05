@@ -42,9 +42,9 @@ namespace Editor
 			}
 
 			mPropertiesViewer = o2EditorProperties.CreateObjectViewer(objectType, "");
+			mPropertiesViewer->CreateSpoiler(Ref(this));
 			mPropertiesViewer->SetHeaderEnabled(false);
 			mPropertiesViewer->SetParentContext(mParentContext);
-			AddChild(mPropertiesViewer->GetSpoiler());
 		}
 
 		if (mPropertiesViewer)

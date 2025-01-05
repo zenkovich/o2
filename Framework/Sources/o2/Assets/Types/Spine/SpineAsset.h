@@ -4,8 +4,8 @@
 #include "o2/Assets/AssetRef.h"
 #include "SpineAtlasAsset.h"
 
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/SkeletonData.h"
-#include "3rdPartyLibs/Spine/spine-cpp/include/spine/AnimationStateData.h"
+#include "spine/SkeletonData.h"
+#include "spine/AnimationStateData.h"
 
 namespace o2
 {
