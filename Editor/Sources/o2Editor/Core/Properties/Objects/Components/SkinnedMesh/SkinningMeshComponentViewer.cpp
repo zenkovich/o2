@@ -8,7 +8,14 @@
 
 namespace Editor
 {
-	SkinningMeshComponentViewer::SkinningMeshComponentViewer() = default;
+	SkinningMeshComponentViewer::SkinningMeshComponentViewer()
+	{
+		mSplineTool = mmake<SplineTool>();
+		mFrameTool = mmake<CustomFrameTool>();
+		mTopologyTool = mmake<MeshTopologyTool>();
+		mSkeletonTool = mmake<SkeletonTool>();
+		mFrameTetxureLayer = mmake<SkinningMeshEditorLayer>();
+	}
 
 	SkinningMeshComponentViewer::~SkinningMeshComponentViewer()
 	{
@@ -56,7 +63,7 @@ namespace Editor
 
 			// Frame tool
 			mFrameTool->SetFrame(Basis(mTypeTargetObjects[0].first->GetMappingFrame()));
-			mFrameTool->frameHandles.SetRotationEnabled(false);
+			mFrameTool->frameHandles->SetRotationEnabled(false);
 			mFrameTool->getOrigin = getOrigin;
 			mFrameTool->onChanged = [&](const Basis& b) {
 				mTypeTargetObjects[0].first->SetMappingFrame(b.AABB());

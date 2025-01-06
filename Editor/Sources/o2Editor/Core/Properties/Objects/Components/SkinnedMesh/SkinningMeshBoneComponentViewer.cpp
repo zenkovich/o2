@@ -6,7 +6,11 @@
 
 namespace Editor
 {
-	SkinningMeshBoneComponentViewer::SkinningMeshBoneComponentViewer() = default;
+	SkinningMeshBoneComponentViewer::SkinningMeshBoneComponentViewer()
+	{
+		mWeightsTool = mmake<MeshWeightsTool>();
+		mFrameTetxureLayer = mmake<SkinningMeshEditorLayer>();
+	}
 
 	SkinningMeshBoneComponentViewer::~SkinningMeshBoneComponentViewer()
 	{

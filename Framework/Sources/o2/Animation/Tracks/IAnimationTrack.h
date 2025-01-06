@@ -19,7 +19,7 @@ namespace o2
         // --------------------------------
         // Animation track player interface
         // --------------------------------
-        class IPlayer: public IAnimation, public RefCounterable
+        class IPlayer: public IAnimation
         {
         public:
             // Sets target changing delegate
@@ -139,7 +139,6 @@ END_META;
 CLASS_BASES_META(o2::IAnimationTrack::IPlayer)
 {
     BASE_CLASS(o2::IAnimation);
-    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::IAnimationTrack::IPlayer)

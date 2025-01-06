@@ -86,7 +86,7 @@ namespace Editor
 
 	public:
 		// Default constructor
-		SkeletonTool();
+		explicit SkeletonTool(RefCounter* refCounter);
 
 		// Returns toggle in menu panel icon name
 		String GetPanelIcon() const override;
@@ -132,7 +132,7 @@ END_META;
 CLASS_METHODS_META(Editor::SkeletonTool)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);

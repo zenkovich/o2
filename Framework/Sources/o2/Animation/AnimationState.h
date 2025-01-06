@@ -45,6 +45,12 @@ namespace o2
 		// Returns state weight (0...1) of blending
 		virtual float GetWeight() const;
 
+		// Sets looped state
+        virtual void SetLooped(bool looped);
+
+		// Returns looped state
+		virtual bool IsLooped() const;
+
 		SERIALIZABLE(IAnimationState);
 		CLONEABLE_REF(IAnimationState);
 
@@ -87,7 +93,13 @@ namespace o2
         void SetWeight(float weight) override;
 
         // Returns state weight
-        float GetWeight() const override;
+		float GetWeight() const override;
+
+		// Sets looped state
+		void SetLooped(bool looped) override;
+
+		// Returns looped state
+		bool IsLooped() const override;
 
         // Sets animation
         void SetAnimation(const AssetRef<AnimationAsset>& animationAsset);
@@ -157,6 +169,8 @@ CLASS_METHODS_META(o2::IAnimationState)
     FUNCTION().PUBLIC().SIGNATURE(IAnimation&, GetPlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, SetWeight, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetWeight);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetLooped, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsLooped);
     FUNCTION().PROTECTED().SIGNATURE(void, Register, const Ref<AnimationComponent>&);
     FUNCTION().PROTECTED().SIGNATURE(void, Unregister);
 }
@@ -184,6 +198,8 @@ CLASS_METHODS_META(o2::AnimationState)
     FUNCTION().PUBLIC().SIGNATURE(IAnimation&, GetPlayer);
     FUNCTION().PUBLIC().SIGNATURE(void, SetWeight, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetWeight);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetLooped, bool);
+    FUNCTION().PUBLIC().SIGNATURE(bool, IsLooped);
     FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const AssetRef<AnimationAsset>&);
     FUNCTION().PUBLIC().SIGNATURE(const AssetRef<AnimationAsset>&, GetAnimation);
     FUNCTION().PROTECTED().SIGNATURE(void, Register, const Ref<AnimationComponent>&);

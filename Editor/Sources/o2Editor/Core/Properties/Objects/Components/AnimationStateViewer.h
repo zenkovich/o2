@@ -38,7 +38,7 @@ namespace Editor
 
 		Ref<HorizontalProgress> mTimeProgress;
 
-		WeakRef<AnimationPlayer> mSubscribedPlayer;
+		WeakRef<IAnimation> mSubscribedPlayer;
 
 	private:
 		// Called when viewer is refreshed

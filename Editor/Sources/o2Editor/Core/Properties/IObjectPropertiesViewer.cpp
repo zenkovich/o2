@@ -60,11 +60,17 @@ namespace Editor
 			mPropertiesContext->Set(targetObjets, force);
 		}
 
+		if (!targetObjets.IsEmpty())
+			mRealObjectType = &(targetObjets[0].first)->GetType();
+
 		OnRefreshed(targetObjets);
 	}
 
 	const Type* IObjectPropertiesViewer::GetViewingObjectType() const
 	{
+		if (mRealObjectType)
+			return mRealObjectType;
+
 		return GetViewingObjectTypeStatic();
 	}
 
@@ -140,7 +146,7 @@ namespace Editor
 		return true;
 	}
 
-	void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before, 
+	void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before,
 														 const Vector<DataDocument>& after)
 	{
 		onChangeCompleted(this->path + "/" + path, before, after);

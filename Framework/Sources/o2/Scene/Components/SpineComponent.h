@@ -40,10 +40,10 @@ namespace o2
 			float GetWeight() const override;
 
 			// Sets state looped
-			void SetLooped(bool looped);
+			void SetLooped(bool looped) override;
 
 			// Returns state looped
-			bool IsLooped() const;
+			bool IsLooped() const override;
 
 			SERIALIZABLE(AnimationState);
 			CLONEABLE_REF(AnimationState);

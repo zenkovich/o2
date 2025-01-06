@@ -26,14 +26,17 @@ namespace o2
 		// ---------------------
 		// Spine animation track
 		// ---------------------
-		class Track: public RefCounterable, public IAnimation
+		class Track: public IAnimation
         {
         public:
 			// Default constructor
 			Track() = default;
 
 			// Constructor
-            Track(const Ref<Spine>& owner, int trackIndex, const String& name);
+			Track(const Ref<Spine>& owner, int trackIndex, const String& name);
+
+			// Sets time
+			void SetTime(float time) override;
 
 			// Sets animation weight for blending
 			void SetWeight(float weight);
@@ -122,7 +125,6 @@ namespace o2
 
 CLASS_BASES_META(o2::Spine::Track)
 {
-    BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::IAnimation);
 }
 END_META;
@@ -139,6 +141,7 @@ CLASS_METHODS_META(o2::Spine::Track)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Spine>&, int, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetTime, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetWeight, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetWeight);
     FUNCTION().PRIVATE().SIGNATURE(void, Evaluate);

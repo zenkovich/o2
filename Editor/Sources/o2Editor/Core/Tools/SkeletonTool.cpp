@@ -6,7 +6,8 @@
 
 namespace Editor
 {
-	SkeletonTool::SkeletonTool()
+	SkeletonTool::SkeletonTool(RefCounter* refCounter):
+		IEditTool(refCounter)
 	{
 		sceneLayer->tool = Ref(this);
 	}

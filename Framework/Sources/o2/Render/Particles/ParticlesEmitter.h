@@ -250,10 +250,15 @@ namespace o2
         void SetEmitParticlesMoveDirectionRange(float directionRange);
 
         // Returns emitting particles moving direction angle range in degrees
-        float GetEmitParticlesMoveDirectionRange() const;
+		float GetEmitParticlesMoveDirectionRange() const;
+
+		// Dynamic cast to RefCounterable via IAnimation
+		static Ref<RefCounterable> CastToRefCounterable(const Ref<ParticlesEmitter>& ref);
 
         SERIALIZABLE(ParticlesEmitter);
         CLONEABLE_REF(ParticlesEmitter);
+
+        REF_COUNTERABLE_IMPL(IRectDrawable, IAnimation);
 
 	protected:
 		Ref<ParticleSource> mParticlesSource = mmake<SingleSpriteParticleSource>(); // Source of particles @SERIALIZABLE 
@@ -529,6 +534,7 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
     FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesMoveDirection);
     FUNCTION().PUBLIC().SIGNATURE(void, SetEmitParticlesMoveDirectionRange, float);
     FUNCTION().PUBLIC().SIGNATURE(float, GetEmitParticlesMoveDirectionRange);
+    FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<ParticlesEmitter>&);
     FUNCTION().PROTECTED().SIGNATURE(void, BlendModeChanged);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

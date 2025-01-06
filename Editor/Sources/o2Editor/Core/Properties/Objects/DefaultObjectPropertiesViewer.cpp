@@ -38,17 +38,6 @@ namespace Editor
 
 		return false;
 	}
-
-	void DefaultObjectPropertiesViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		if (!targetObjets.IsEmpty())
-			mRealObjectType = &(targetObjets[0].first)->GetType();
-	}
-
-	const Type* DefaultObjectPropertiesViewer::GetViewingObjectType() const
-	{
-		return mRealObjectType;
-	}
 }
 // --- META ---
 

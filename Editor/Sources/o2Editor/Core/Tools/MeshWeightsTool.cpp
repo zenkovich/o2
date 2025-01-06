@@ -7,7 +7,8 @@
 
 namespace Editor
 {
-	MeshWeightsTool::MeshWeightsTool()
+	MeshWeightsTool::MeshWeightsTool(RefCounter* refCounter):
+		IEditTool(refCounter)
 	{
 		sceneLayer->tool = Ref(this);
 	}

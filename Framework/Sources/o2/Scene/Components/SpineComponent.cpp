@@ -102,7 +102,10 @@ namespace o2
 	{}
 
 	void SpineComponent::AnimationState::Update(float dt)
-	{}
+	{
+		if (mTrack)
+			mTrack->Update(dt);
+	}
 
 	IAnimation& SpineComponent::AnimationState::GetPlayer()
 	{

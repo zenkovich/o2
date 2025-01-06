@@ -121,7 +121,7 @@ namespace Editor
 
 	public:
 		// Default constructor
-		SplineTool(RefCounter* refCounter);
+		explicit SplineTool(RefCounter* refCounter);
 
 		// Empty copy operator
 		SplineTool& operator=(const SplineTool& other) { return *this; }

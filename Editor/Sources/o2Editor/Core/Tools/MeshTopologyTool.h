@@ -50,7 +50,7 @@ namespace Editor
 
     public:
         // Default constructor
-        MeshTopologyTool();
+        explicit MeshTopologyTool(RefCounter* refCounter);
 
         // Default constructor
         MeshTopologyTool(const MeshTopologyTool& other);
@@ -192,7 +192,7 @@ CLASS_METHODS_META(Editor::MeshTopologyTool)
 
     typedef const Function<void(int, Vec2F)>& _tmp1;
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const MeshTopologyTool&);
     FUNCTION().PUBLIC().SIGNATURE(void, Setup, const Function<Vector<Vec2F>()>&, _tmp1, const Function<Basis()>&, const Function<void(Vec2F)>&, const Function<void(int)>&);
     FUNCTION().PUBLIC().SIGNATURE(void, Reset);

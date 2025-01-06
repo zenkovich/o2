@@ -54,7 +54,7 @@ namespace Editor
 
 	public:
 		// Default constructor
-		MeshWeightsTool();
+		explicit MeshWeightsTool(RefCounter* refCounter);
 
 		// Empty copy operator
 		MeshWeightsTool& operator=(const MeshWeightsTool& other) { return *this; }
@@ -117,7 +117,7 @@ END_META;
 CLASS_METHODS_META(Editor::MeshWeightsTool)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
     FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
     FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);

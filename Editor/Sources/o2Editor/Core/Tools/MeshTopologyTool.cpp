@@ -5,8 +5,8 @@
 
 namespace Editor
 {
-	MeshTopologyTool::MeshTopologyTool():
-		mSelectionSprite("ui/UI_Window_place.png")
+	MeshTopologyTool::MeshTopologyTool(RefCounter* refCounter):
+		IEditTool(refCounter), SelectableDragHandlesGroup(refCounter), mSelectionSprite("ui/UI_Window_place.png")
 	{
 		sceneLayer->tool = Ref(this);
 

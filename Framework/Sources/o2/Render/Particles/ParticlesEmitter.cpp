@@ -672,6 +672,11 @@ namespace o2
 		return mInitialMoveDirectionRange;
 	}
 
+	Ref<RefCounterable> ParticlesEmitter::CastToRefCounterable(const Ref<ParticlesEmitter>& ref)
+	{
+		return DynamicCast<IAnimation>(ref);
+	}
+
 	void ParticlesEmitter::OnEffectsListChanged()
 	{
 		for (auto& effect : mEffects)

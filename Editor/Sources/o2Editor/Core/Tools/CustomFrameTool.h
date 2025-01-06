@@ -41,15 +41,15 @@ namespace Editor
 	public:
 		Ref<SceneLayer> sceneLayer = mmake<SceneLayer>(); // Scene layer for drawing spline
 
-		FrameHandles frameHandles;      // Frame handles 
-		bool         isEnabled = false; // Is tool enabled now
+		Ref<FrameHandles> frameHandles;      // Frame handles 
+		bool              isEnabled = false; // Is tool enabled now
 
 		Function<void(const Basis&)> onChanged; // Called when frame changes
 		Function<Vec2F()>            getOrigin; // Returns origin of frame         
 
 	public:
 		// Default constructor
-		CustomFrameTool();
+		explicit CustomFrameTool(RefCounter* refCounter);
 
 		// Empty copy operator
 		CustomFrameTool& operator=(const CustomFrameTool& other) { return *this; }
@@ -98,7 +98,7 @@ END_META;
 CLASS_METHODS_META(Editor::CustomFrameTool)
 {
 
-    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().SIGNATURE(void, SetFrame, const Basis&);
     FUNCTION().PUBLIC().SIGNATURE(const Basis&, GetFrame);
     FUNCTION().PUBLIC().SIGNATURE(void, Reset);

@@ -5,11 +5,14 @@
 
 namespace Editor
 {
-	CustomFrameTool::CustomFrameTool()
+	CustomFrameTool::CustomFrameTool(RefCounter* refCounter):
+		IEditTool(refCounter)
 	{
 		sceneLayer->tool = Ref(this);
-		frameHandles.isInputTransparent = true;
-		frameHandles.onTransformed = [&](const Basis& x) {
+
+		frameHandles = mmake<FrameHandles>();
+		frameHandles->isInputTransparent = true;
+		frameHandles->onTransformed = [&](const Basis& x) {
 			auto b = x*o2EditorSceneScreen.GetScreenToLocalTransform();
 			b.origin -= getOrigin();
 			mBasis = b;
@@ -24,8 +27,8 @@ namespace Editor
 		Basis b = toolRef->mBasis;
 		b.origin += toolRef->getOrigin();
 
-		toolRef->frameHandles.SetBasis(b*o2EditorSceneScreen.GetLocalToScreenTransform());
-		toolRef->frameHandles.Draw();
+		toolRef->frameHandles->SetBasis(b*o2EditorSceneScreen.GetLocalToScreenTransform());
+		toolRef->frameHandles->Draw();
 	}
 
 	void CustomFrameTool::SceneLayer::Update(float dt)

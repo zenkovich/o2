@@ -10,7 +10,7 @@ namespace o2
     // -------------------------
     // Basic animation interface
     // -------------------------
-    class IAnimation : virtual public ISerializable
+    class IAnimation : virtual public ISerializable, public RefCounterable
     {
     public:
         PROPERTIES(IAnimation);
@@ -34,8 +34,14 @@ namespace o2
         // Default constructor
         IAnimation();
 
-        // Copy-constructor
-        IAnimation(const IAnimation& other);
+		// Default constructor with ref counter
+		explicit IAnimation(RefCounter* refCounter);
+
+		// Copy-constructor
+		IAnimation(const IAnimation& other);
+
+		// Copy-constructor with ref counter
+		IAnimation(RefCounter* refCounter, const IAnimation& other);
 
         // Virtual destructor
         virtual ~IAnimation();
@@ -192,6 +198,7 @@ namespace o2
 CLASS_BASES_META(o2::IAnimation)
 {
     BASE_CLASS(o2::ISerializable);
+    BASE_CLASS(o2::RefCounterable);
 }
 END_META;
 CLASS_FIELDS_META(o2::IAnimation)
@@ -226,7 +233,9 @@ CLASS_METHODS_META(o2::IAnimation)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*);
     FUNCTION().PUBLIC().CONSTRUCTOR(const IAnimation&);
+    FUNCTION().PUBLIC().CONSTRUCTOR(RefCounter*, const IAnimation&);
     FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
     FUNCTION().PUBLIC().SIGNATURE(void, SetSubControlled, bool);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsSubControlled);

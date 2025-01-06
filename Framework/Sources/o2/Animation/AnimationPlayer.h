@@ -12,7 +12,7 @@ namespace o2
     // ---------------------
     // Animation clip player
     // ---------------------
-    class AnimationPlayer: public IAnimation, public RefCounterable, public ICloneableRef
+    class AnimationPlayer: public IAnimation, public ICloneableRef
     {
     public:
         Function<void(const Ref<IAnimationTrack::IPlayer>&)> onTrackPlayerAdded;  // Called when new track added
@@ -81,7 +81,6 @@ namespace o2
 CLASS_BASES_META(o2::AnimationPlayer)
 {
     BASE_CLASS(o2::IAnimation);
-    BASE_CLASS(o2::RefCounterable);
     BASE_CLASS(o2::ICloneableRef);
 }
 END_META;

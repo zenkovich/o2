@@ -91,6 +91,8 @@ namespace Editor
 
 		Vector<Pair<IObject*, IObject*>> mTargetObjects; // Target objects
 
+		const Type* mRealObjectType = &TypeOf(IObject);  // Specialized viewing object type
+
 		Ref<PropertiesContext> mPropertiesContext; // Field properties information
 
 		OnChangeCompletedFunc mOnChildFieldChangeCompleted; // Default field change completed callback, calls
@@ -179,6 +181,7 @@ CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mHeaderEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPropertiesBuilt);
     FIELD().PROTECTED().NAME(mTargetObjects);
+    FIELD().PROTECTED().DEFAULT_VALUE(&TypeOf(IObject)).NAME(mRealObjectType);
     FIELD().PROTECTED().NAME(mPropertiesContext);
     FIELD().PROTECTED().NAME(mOnChildFieldChangeCompleted);
 }

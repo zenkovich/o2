@@ -10,12 +10,15 @@ namespace Editor
 {
 	const Type* AnimationStateViewer::GetViewingObjectType() const
 	{
+		if (mRealObjectType)
+			return mRealObjectType;
+
 		return GetViewingObjectTypeStatic();
 	}
 
 	const Type* AnimationStateViewer::GetViewingObjectTypeStatic()
 	{
-		return &TypeOf(AnimationState);
+		return &TypeOf(IAnimationState);
 	}
 
 	Ref<Spoiler> AnimationStateViewer::CreateSpoiler(const Ref<Widget>& parent)
@@ -72,8 +75,10 @@ namespace Editor
 
 		if (!targetObjets.IsEmpty())
 		{
-			mSubscribedPlayer = dynamic_cast<AnimationState*>(targetObjets.Last().first)->player;
-			mSubscribedPlayer.Lock()->onUpdate += THIS_FUNC(OnAnimationUpdated);
+			mSubscribedPlayer = Ref(&dynamic_cast<IAnimationState*>(targetObjets.Last().first)->GetPlayer());
+
+			if (mSubscribedPlayer)
+				mSubscribedPlayer.Lock()->onUpdate += THIS_FUNC(OnAnimationUpdated);
 		}
 	}
 
@@ -100,36 +105,48 @@ namespace Editor
 
 	void AnimationStateViewer::OnLoopToggled(bool looped)
 	{
-		if (mSubscribedPlayer)
-			mSubscribedPlayer.Lock()->SetLoop(looped ? Loop::Repeat : Loop::None);
+		for (auto& targets : mTargetObjects)
+		{
+			if (!targets.first)
+				continue;
+
+			auto animationState = dynamic_cast<IAnimationState*>(targets.first);
+			if (!animationState)
+				continue;
+
+			animationState->SetLooped(looped);
+		}
 
 		o2Scene.OnObjectChanged(o2EditorSceneScreen.GetSelectedObjects().First());
 	}
 
 	void AnimationStateViewer::OnEditPressed()
 	{
-		if (!mTargetObjects.IsEmpty())
+		if (mTargetObjects.IsEmpty())
+			return;
+
+		auto animationState = dynamic_cast<AnimationState*>(mTargetObjects.Last().first);
+		if (!animationState)
+			return;
+
+		auto animationRef = animationState->GetAnimation();
+		if (!animationRef)
 		{
-			auto animationState = dynamic_cast<AnimationState*>(mTargetObjects.Last().first);
-			auto animationRef = animationState->GetAnimation();
-			if (!animationRef) 
-			{
-				animationRef.CreateInstance();
-				animationState->SetAnimation(animationRef);
+			animationRef.CreateInstance();
+			animationState->SetAnimation(animationRef);
 
-				GetSpoiler()->Expand();
-			}
+			GetSpoiler()->Expand();
+		}
 
-			if (animationRef)
-			{
-				o2EditorAnimationWindow.SetAnimation(animationRef->animation);
+		if (animationRef)
+		{
+			o2EditorAnimationWindow.SetAnimation(animationRef->animation);
 
-				if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
-					o2EditorAnimationWindow.SetTarget(DynamicCast<Actor>(o2EditorSceneScreen.GetSelectedObjects().Last()));
+			if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
+				o2EditorAnimationWindow.SetTarget(DynamicCast<Actor>(o2EditorSceneScreen.GetSelectedObjects().Last()));
 
-				o2EditorAnimationWindow.SetAnimationEditable(Ref(mPropertiesContext->FindOnStack<IEditableAnimation>()));
-				o2EditorAnimationWindow.GetWindow()->Focus();
-			}
+			o2EditorAnimationWindow.SetAnimationEditable(Ref(mPropertiesContext->FindOnStack<IEditableAnimation>()));
+			o2EditorAnimationWindow.GetWindow()->Focus();
 		}
 	}
 

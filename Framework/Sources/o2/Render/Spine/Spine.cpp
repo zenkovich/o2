@@ -164,6 +164,18 @@ namespace o2
 		mTrackIndex = trackIndex;
 	}
 
+	void Spine::Track::SetTime(float time)
+	{
+		auto tmpTrackEntry = mTrackEntry;
+		mTrackEntry = nullptr;
+
+		IAnimation::SetTime(time);
+
+		mTrackEntry = tmpTrackEntry;
+		if (mOwner && mTrackEntry)
+			mTrackEntry->setTrackTime(time);
+	}
+
 	void Spine::Track::SetWeight(float weight)
 	{
 		if (mOwner && mTrackEntry)
@@ -181,7 +193,7 @@ namespace o2
 	void Spine::Track::Evaluate()
 	{
 		if (mOwner && mTrackEntry)
-			mTrackEntry->setTrackTime(mInDurationTime);
+			mInDurationTime = mTrackEntry->getTrackTime();
 	}
 
 	void Spine::Track::OnPlay()

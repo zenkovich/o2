@@ -35,7 +35,17 @@ namespace o2
         return mWeight;
     }
 
-    void AnimationState::SetAnimation(const AssetRef<AnimationAsset>& animationAsset)
+	void AnimationState::SetLooped(bool looped)
+	{
+		player->SetLoop(looped ? Loop::Repeat : Loop::None);
+	}
+
+	bool AnimationState::IsLooped() const
+	{
+		return player->GetLoop() == Loop::Repeat;
+	}
+
+	void AnimationState::SetAnimation(const AssetRef<AnimationAsset>& animationAsset)
     {
         mAnimation = animationAsset;
         player->SetClip(mAnimation ? mAnimation->animation : nullptr);
@@ -108,6 +118,14 @@ namespace o2
 	{
         return 1.0f;
     }
+
+	void IAnimationState::SetLooped(bool looped)
+	{}
+
+	bool IAnimationState::IsLooped() const
+	{
+		return false;
+	}
 
 	void IAnimationState::Register(const Ref<AnimationComponent>& owner)
 	{
