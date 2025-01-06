@@ -15,7 +15,7 @@ namespace o2
 {
 	class Sprite;
 	class SceneEditableObject;
-	class DrawableComponent;
+	class Component;
 	class Tree;
 }
 

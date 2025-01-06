@@ -1,13 +1,13 @@
 #pragma once
 
-#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Component.h"
 
 namespace o2
 {
     // -----------------------------------------------------------------------------------------
     // Scissor clipping component. Clips children and inherited drawables by parent actor bounds
     // -----------------------------------------------------------------------------------------
-    class ScissorClippingComponent : public DrawableComponent
+    class ScissorClippingComponent : public Component
     {
     public:
         bool enableClipping = true; // Is clipping enabled @SERIALIZABLE
@@ -19,18 +19,19 @@ namespace o2
         // Destructor
         ~ScissorClippingComponent();
 
-        // Draws content of scene
-        void Draw() override;
-
         SERIALIZABLE(ScissorClippingComponent);
         CLONEABLE_REF(ScissorClippingComponent);
+
+	private:
+		// Draws content of scene
+		void OnDraw() override;
     };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::ScissorClippingComponent)
 {
-    BASE_CLASS(o2::DrawableComponent);
+    BASE_CLASS(o2::Component);
 }
 END_META;
 CLASS_FIELDS_META(o2::ScissorClippingComponent)
@@ -42,7 +43,7 @@ CLASS_METHODS_META(o2::ScissorClippingComponent)
 {
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnDraw);
 }
 END_META;
 // --- END META ---

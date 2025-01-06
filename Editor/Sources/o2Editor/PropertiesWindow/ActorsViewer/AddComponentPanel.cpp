@@ -148,7 +148,7 @@ namespace Editor
 		mRoot = mmake<NodeData>();
 
 		auto componentsTypes = TypeOf(Component).GetDerivedTypes();
-		componentsTypes.Remove(&TypeOf(DrawableComponent));
+		componentsTypes.Remove(&TypeOf(Component));
 
 		String filterStrLower = mFilterStr.ToLowerCase();
 

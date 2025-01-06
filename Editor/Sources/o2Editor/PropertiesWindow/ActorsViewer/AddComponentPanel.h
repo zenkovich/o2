@@ -48,7 +48,7 @@ namespace Editor
 		// Returns create menu category in editor
         static String GetCreateMenuCategory();
 
-        // Dynamic cast to RefCounterable via DrawableComponent
+        // Dynamic cast to RefCounterable via Component
         static Ref<RefCounterable> CastToRefCounterable(const Ref<AddComponentPanel>& ref);
 
         SERIALIZABLE(AddComponentPanel);

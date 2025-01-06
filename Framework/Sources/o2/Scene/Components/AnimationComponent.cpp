@@ -208,7 +208,7 @@ namespace o2
 
     String AnimationComponent::GetCategory()
     {
-        return "Basic";
+        return "Animation";
     }
 
     String AnimationComponent::GetIcon()
@@ -228,8 +228,6 @@ namespace o2
 
     void AnimationComponent::OnStart()
     {
-        ReattachAnimationStates();
-
         for (auto& state : mStates)
         {
             if (state->autoPlay)
@@ -237,10 +235,10 @@ namespace o2
         }
     }
 
-	void AnimationComponent::OnEnabled()
+	void AnimationComponent::OnInitialized()
 	{
 		ReattachAnimationStates();
-		Component::OnEnabled();
+		Component::OnInitialized();
 	}
 
 	void AnimationComponent::RegSubTrack(const Ref<AnimationSubTrack::Player>& player, const String& path,

@@ -17,7 +17,7 @@ namespace o2
 {
     class Scene;
 
-    FORWARD_CLASS_REF(DrawableComponent);
+    FORWARD_CLASS_REF(Component);
 
 #if IS_EDITOR
     typedef SceneEditableObject ActorBase;
@@ -349,9 +349,7 @@ namespace o2
         WeakRef<Actor>     mParent;   // Parent actor
         Vector<Ref<Actor>> mChildren; // Children actors 
 
-        Vector<Ref<Component>> mComponents; // Components vector 
-
-        Vector<Ref<DrawableComponent>> mDrawComponents; // Drawable components vector
+        Vector<Ref<Component>> mComponents; // Components vector
 
         // Actor can be logically disabled, but actually stay enabled and be in transition to really disabled state
         // mResEnabled and mResEnabledInHierarchy are disabled by default to get enabled after initialization
@@ -651,7 +649,7 @@ namespace o2
         friend class BaseActorLinkRef;
         friend class BaseComponentLinkRef;
         friend class Component;
-        friend class DrawableComponent;
+        friend class Component;
         friend class ISceneDrawable;
         friend class Scene;
         friend class Tag;
@@ -800,7 +798,6 @@ CLASS_FIELDS_META(o2::Actor)
     FIELD().PROTECTED().NAME(mParent);
     FIELD().PROTECTED().NAME(mChildren);
     FIELD().PROTECTED().NAME(mComponents);
-    FIELD().PROTECTED().NAME(mDrawComponents);
     FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mResEnabled);
     FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mResEnabledInHierarchy);

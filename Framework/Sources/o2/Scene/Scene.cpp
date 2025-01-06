@@ -12,7 +12,7 @@
 #include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/CameraActor.h"
 #include "o2/Scene/Component.h"
-#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Component.h"
 #include "o2/Scene/SceneLayer.h"
 #include "o2/Scene/Tags.h"
 #include "o2/Scene/UI/Widget.h"

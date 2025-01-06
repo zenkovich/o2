@@ -4,7 +4,7 @@
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/ISceneDrawable.h"
 #include "o2/Render/Render.h"
-#include "DrawableComponent.h"
+#include "Component.h"
 
 namespace o2
 {
@@ -70,8 +70,8 @@ namespace o2
                     auto actor = DynamicCast<Actor>(drawable);
                     if (!actor)
                     {
-                        if (auto drawableComponent = DynamicCast<DrawableComponent>(drawable))
-                            actor = drawableComponent->GetOwnerActor();
+                        if (auto Component = DynamicCast<Component>(drawable))
+                            actor = Component->GetOwnerActor();
                     }
 
                     while (actor)

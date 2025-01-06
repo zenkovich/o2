@@ -4,14 +4,13 @@
 #include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/Components/ScriptableComponent.h"
-#include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Debug/Debug.h"
 
 namespace o2
 {
-    FORWARD_REF_IMPL(DrawableComponent);
+    FORWARD_REF_IMPL(Component);
 
     ActorCreateMode Actor::mDefaultCreationMode = ActorCreateMode::InScene;
 
@@ -230,8 +229,8 @@ namespace o2
 
         OnDraw();
 
-        for (auto& component : mDrawComponents)
-            component->Draw();
+        for (auto& component : mComponents)
+            component->OnDraw();
 
         ISceneDrawable::Draw();
     }
@@ -689,9 +688,6 @@ namespace o2
         if (mIsOnScene && mState == State::Default)
             component->AddToScene();
 
-        if (auto drawableComponent = DynamicCast<DrawableComponent>(component))
-            mDrawComponents.Add(drawableComponent);
-
         OnComponentAdded(component);
 
         component->OnTransformUpdated();
@@ -707,9 +703,6 @@ namespace o2
     {
         if (mIsOnScene)
             component->RemoveFromScene();
-
-        if (auto drawableComponent = DynamicCast<DrawableComponent>(component))
-            mDrawComponents.Remove(drawableComponent);
 
         OnComponentRemoving(component);
 

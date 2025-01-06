@@ -109,7 +109,7 @@ namespace Editor
         // Returns context menu
         const Ref<ContextMenu>& GetContextMenu() const;
 
-        // Dynamic cast to RefCounterable via DrawableComponent
+        // Dynamic cast to RefCounterable via Component
         static Ref<RefCounterable> CastToRefCounterable(const Ref<CurvesEditor>& ref);
 
         SERIALIZABLE(CurvesEditor);

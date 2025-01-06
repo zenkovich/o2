@@ -164,65 +164,6 @@ namespace o2
 		mTrackIndex = trackIndex;
 	}
 
-	void Spine::Track::Play()
-	{
-		if (!mOwner)
-			return;
-
-		mTrackEntry = mOwner.Lock()->mAnimationState->setAnimation(mTrackIndex, mAnimationName.Data(), mLooped);
-	}
-
-	void Spine::Track::Stop()
-	{
-		if (!mOwner)
-			return;
-
-		mOwner.Lock()->mAnimationState->clearTrack(mTrackIndex);
-	}
-
-	void Spine::Track::SetPlaying(bool playing)
-	{
-		if (mPlaying == playing)
-			return;
-
-		if (playing)
-			Play();
-		else
-			Stop();
-	}
-
-	bool Spine::Track::IsPlaying() const
-	{
-		return mPlaying;
-	}
-
-	void Spine::Track::SetLoop(bool loop)
-	{
-		mLooped = loop;
-
-		if (mOwner && mTrackEntry)
-			mTrackEntry->setLoop(loop);
-	}
-
-	bool Spine::Track::IsLooped() const
-	{
-		return mLooped;
-	}
-
-	void Spine::Track::SetTime(float time)
-	{
-		if (mOwner && mTrackEntry)
-			mTrackEntry->setTrackTime(time);
-	}
-
-	float Spine::Track::GetTime() const
-	{
-		if (mOwner && mTrackEntry)
-			return mTrackEntry->getTrackTime();
-
-		return 0.0f;
-	}
-
 	void Spine::Track::SetWeight(float weight)
 	{
 		if (mOwner && mTrackEntry)
@@ -236,4 +177,39 @@ namespace o2
 
 		return 0.0f;
 	}
+
+	void Spine::Track::Evaluate()
+	{
+		if (mOwner && mTrackEntry)
+			mTrackEntry->setTrackTime(mInDurationTime);
+	}
+
+	void Spine::Track::OnPlay()
+	{
+		if (!mOwner)
+			return;
+
+		mTrackEntry = mOwner.Lock()->mAnimationState->setAnimation(mTrackIndex, mAnimationName.Data(), mLoop == Loop::Repeat);
+		mDuration = mTrackEntry->getAnimation()->getDuration();
+		ResetBounds();
+	}
+
+	void Spine::Track::OnStop()
+	{
+		if (!mOwner)
+			return;
+
+		mOwner.Lock()->mAnimationState->clearTrack(mTrackIndex);
+	}
+
+	void Spine::Track::OnLoopChanged()
+	{
+		if (mOwner && mTrackEntry)
+			mTrackEntry->setLoop(mLoop == Loop::Repeat);
+	}
+
 }
+// --- META ---
+
+DECLARE_CLASS(o2::Spine::Track, o2__Spine__Track);
+// --- END META ---

@@ -322,6 +322,7 @@ namespace o2
     void IAnimation::SetLoop(Loop loop /*= Loop::Repeat*/)
     {
         mLoop = loop;
+        OnLoopChanged();
     }
 
     Loop IAnimation::GetLoop() const
@@ -348,9 +349,6 @@ namespace o2
     {
         mTimeEvents.Clear();
     }
-
-    void IAnimation::Evaluate()
-    {}
 }
 // --- META ---
 

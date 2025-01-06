@@ -175,13 +175,16 @@ namespace o2
         void UpdateTime();
 
         // Called for updating animated object, after updating time
-        virtual void Evaluate();
+        virtual void Evaluate() {}
 
 		// Called when animation starts playing
 		virtual void OnPlay() {}
 
 		// Called when animation stops playing
 		virtual void OnStop() {}
+
+		// Called when animation loop state changed
+        virtual void OnLoopChanged() {}
     };
 }
 // --- META ---
@@ -265,6 +268,7 @@ CLASS_METHODS_META(o2::IAnimation)
     FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
     FUNCTION().PROTECTED().SIGNATURE(void, OnPlay);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStop);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnLoopChanged);
 }
 END_META;
 // --- END META ---

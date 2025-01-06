@@ -1,22 +1,28 @@
 #pragma once
 
 #include "o2/Render/Particles/ParticlesEmitter.h"
-#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Component.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 
 namespace o2
 {
-    class ParticlesEmitterComponent: public DrawableComponent, public ParticlesEmitter
+	// ---------------------------
+	// Particles emitter component
+	// ---------------------------
+    class ParticlesEmitterComponent: public Component, public ParticlesEmitter
     {
     public:
+		// Default constructor
         ParticlesEmitterComponent();
+
+		// Copy constructor
         ParticlesEmitterComponent(const ParticlesEmitterComponent& other);
+
+		// Destructor
         ~ParticlesEmitterComponent();
 
+		// Assign operator
         ParticlesEmitterComponent& operator=(const ParticlesEmitterComponent& other);
-
-        // Draw particle system
-        void Draw() override;
 
         // Updates component
         void OnUpdate(float dt) override;
@@ -33,14 +39,17 @@ namespace o2
         // Returns name of component icon
 		static String GetIcon();
 
-		// Dynamic cast to RefCounterable via DrawableComponent
+		// Dynamic cast to RefCounterable via Component
 		static Ref<RefCounterable> CastToRefCounterable(const Ref<ParticlesEmitterComponent>& ref);
 
         SERIALIZABLE(ParticlesEmitterComponent);
 		CLONEABLE_REF(ParticlesEmitterComponent);
-		REF_COUNTERABLE_IMPL(DrawableComponent, ParticlesEmitter);
+		REF_COUNTERABLE_IMPL(Component, ParticlesEmitter);
 
-    protected:
+	protected:
+		// Draw particle system
+		void OnDraw() override;
+
         // Called when actor's transform was changed
         void OnTransformUpdated() override;
 
@@ -61,7 +70,7 @@ namespace o2
 
 CLASS_BASES_META(o2::ParticlesEmitterComponent)
 {
-    BASE_CLASS(o2::DrawableComponent);
+    BASE_CLASS(o2::Component);
     BASE_CLASS(o2::ParticlesEmitter);
 }
 END_META;
@@ -74,13 +83,13 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const ParticlesEmitterComponent&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<ParticlesEmitterComponent>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraw);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

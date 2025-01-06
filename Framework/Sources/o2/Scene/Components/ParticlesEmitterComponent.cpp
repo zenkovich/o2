@@ -10,7 +10,7 @@ namespace o2
     {}
 
     ParticlesEmitterComponent::ParticlesEmitterComponent(const ParticlesEmitterComponent& other):
-        DrawableComponent(other), ParticlesEmitter(other)
+        Component(other), ParticlesEmitter(other)
     {}
 
     ParticlesEmitterComponent::~ParticlesEmitterComponent()
@@ -18,12 +18,12 @@ namespace o2
 
     ParticlesEmitterComponent& ParticlesEmitterComponent::operator=(const ParticlesEmitterComponent& other)
     {
-        DrawableComponent::operator=(other);
+        Component::operator=(other);
         ParticlesEmitter::operator=(other);
         return *this;
     }
 
-    void ParticlesEmitterComponent::Draw()
+    void ParticlesEmitterComponent::OnDraw()
     {
         ParticlesEmitter::Draw();
     }
@@ -55,7 +55,7 @@ namespace o2
 
 	Ref<o2::RefCounterable> ParticlesEmitterComponent::CastToRefCounterable(const Ref<ParticlesEmitterComponent>& ref)
 	{
-        return DynamicCast<DrawableComponent>(ref);
+        return DynamicCast<Component>(ref);
 	}
 
 	void ParticlesEmitterComponent::OnTransformUpdated()
@@ -65,25 +65,25 @@ namespace o2
 
     void ParticlesEmitterComponent::OnSerialize(DataValue& node) const
     {
-        DrawableComponent::OnSerialize(node);
+        Component::OnSerialize(node);
         ParticlesEmitter::OnSerialize(node);
     }
 
     void ParticlesEmitterComponent::OnDeserialized(const DataValue& node)
     {
-        DrawableComponent::OnDeserialized(node);
+        Component::OnDeserialized(node);
         ParticlesEmitter::OnDeserialized(node);
     }
 
     void ParticlesEmitterComponent::OnSerializeDelta(DataValue& node, const IObject& origin) const
     {
-        DrawableComponent::OnSerializeDelta(node, origin);
+        Component::OnSerializeDelta(node, origin);
         ParticlesEmitter::OnSerializeDelta(node, origin);
     }
 
     void ParticlesEmitterComponent::OnDeserializedDelta(const DataValue& node, const IObject& origin)
     {
-        DrawableComponent::OnDeserializedDelta(node, origin);
+        Component::OnDeserializedDelta(node, origin);
         ParticlesEmitter::OnDeserializedDelta(node, origin);
     }
 }

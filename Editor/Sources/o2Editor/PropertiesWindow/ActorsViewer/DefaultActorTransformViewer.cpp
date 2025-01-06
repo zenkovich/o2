@@ -2,7 +2,7 @@
 #include "DefaultActorTransformViewer.h"
 
 #include "o2/Scene/Actor.h"
-#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Component.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/WidgetLayout.h"

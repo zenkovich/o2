@@ -258,7 +258,7 @@ namespace o2
         friend class Application;
         friend class CameraActor;
         friend class Component;
-        friend class DrawableComponent;
+        friend class Component;
         friend class SceneLayer;
         friend class Widget;
 		friend class WidgetLayer;

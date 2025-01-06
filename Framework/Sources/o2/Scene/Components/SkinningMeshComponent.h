@@ -3,7 +3,7 @@
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/SkinningMesh.h"
 #include "o2/Render/TextureRef.h"
-#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Component.h"
 #include "o2/Utils/Math/Spline.h"
 #include "o2/Utils/Types/UID.h"
 
@@ -14,7 +14,7 @@ namespace o2
     // ------------------------
     // Skinning mesh component
     // ------------------------
-    class SkinningMeshComponent: public DrawableComponent
+    class SkinningMeshComponent: public Component
     {
     public:
         PROPERTIES(SkinningMeshComponent);
@@ -37,9 +37,6 @@ namespace o2
 
         // Assign operator
         SkinningMeshComponent& operator=(const SkinningMeshComponent& other);
-
-        // Draws sprite 
-        void Draw() override;
 
         // Updates mesh bones and reskins
         void OnUpdate(float dt) override;
@@ -117,7 +114,10 @@ namespace o2
         bool mNeedUpdateMesh = false;  // True, when mesh data is dirty and need to rebuild
         bool mNeedUpdateBones = false; // True, when bones need to be updated
 
-    protected:
+	protected:
+		// Draws sprite 
+		void OnDraw() override;
+
         // Called when component starts, updates bones
         void OnStart() override;
 
@@ -147,7 +147,7 @@ namespace o2
 
 CLASS_BASES_META(o2::SkinningMeshComponent)
 {
-    BASE_CLASS(o2::DrawableComponent);
+    BASE_CLASS(o2::Component);
 }
 END_META;
 CLASS_FIELDS_META(o2::SkinningMeshComponent)
@@ -175,7 +175,6 @@ CLASS_METHODS_META(o2::SkinningMeshComponent)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const SkinningMeshComponent&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
     FUNCTION().PUBLIC().SIGNATURE(void, UpdateBonesTransforms);
     FUNCTION().PUBLIC().SIGNATURE(const SkinningMesh&, GetMesh);
@@ -195,6 +194,7 @@ CLASS_METHODS_META(o2::SkinningMeshComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraw);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);

@@ -149,6 +149,9 @@ namespace o2 {
         // Updates component
         virtual void OnUpdate(float dt) {}
 
+		// Draws component
+		virtual void OnDraw() {}
+
         // Updates component with fixed delta time
         virtual void OnFixedUpdate(float dt) {}
 
@@ -281,6 +284,7 @@ CLASS_METHODS_META(o2::Component)
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDestroy);
     FUNCTION().PROTECTED().SIGNATURE(void, OnUpdate, float);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraw);
     FUNCTION().PROTECTED().SIGNATURE(void, OnFixedUpdate, float);
     FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);

@@ -3,7 +3,7 @@
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/TextureRef.h"
-#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Component.h"
 #include "o2/Utils/Types/UID.h"
 
 namespace o2
@@ -11,7 +11,7 @@ namespace o2
     // ---------------
     // Image component
     // ---------------
-    class ImageComponent: public DrawableComponent, public Sprite
+    class ImageComponent: public Component, public Sprite
     {
     public:
         PROPERTIES(ImageComponent);
@@ -50,9 +50,6 @@ namespace o2
         // Assign operator
         ImageComponent& operator=(const ImageComponent& other);
 
-        // Draws sprite 
-        void Draw() override;
-
         // Sets actor's size as image size
         void FitActorByImage() const;
 
@@ -68,7 +65,7 @@ namespace o2
         // Returns name of component icon
 		static String GetIcon();
 
-		// Dynamic cast to RefCounterable via DrawableComponent
+		// Dynamic cast to RefCounterable via Component
 		static Ref<RefCounterable> CastToRefCounterable(const Ref<ImageComponent>& ref);
 
         SERIALIZABLE(ImageComponent);
@@ -76,7 +73,10 @@ namespace o2
 
         using Sprite::onDraw;
 
-    protected:
+	protected:
+		// Draws sprite 
+		void OnDraw() override;
+
         // Called when actor's transform was changed
         void OnTransformUpdated() override;
 
@@ -95,14 +95,14 @@ namespace o2
         // Completion deserialization delta callback
         void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;    
 
-		REF_COUNTERABLE_IMPL(DrawableComponent, Sprite);
+		REF_COUNTERABLE_IMPL(Component, Sprite);
     };
 }
 // --- META ---
 
 CLASS_BASES_META(o2::ImageComponent)
 {
-    BASE_CLASS(o2::DrawableComponent);
+    BASE_CLASS(o2::Component);
     BASE_CLASS(o2::Sprite);
 }
 END_META;
@@ -122,13 +122,13 @@ CLASS_METHODS_META(o2::ImageComponent)
     FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
     FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
     FUNCTION().PUBLIC().CONSTRUCTOR(const ImageComponent&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, FitActorByImage);
     FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<RefCounterable>, CastToRefCounterable, const Ref<ImageComponent>&);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraw);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

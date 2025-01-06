@@ -10,14 +10,14 @@
 namespace o2
 {
     SkinningMeshComponent::SkinningMeshComponent():
-        DrawableComponent()
+        Component()
     {
         spline->onKeysChanged = THIS_FUNC(UpdateMesh);
         spline->SetClosed(true);
     }
 
     SkinningMeshComponent::SkinningMeshComponent(const SkinningMeshComponent& other):
-        DrawableComponent(other), mMesh(other.mMesh), spline(other.spline)
+        Component(other), mMesh(other.mMesh), spline(other.spline)
     {
         spline->onKeysChanged = THIS_FUNC(UpdateMesh);
         spline->SetClosed(true);
@@ -28,13 +28,13 @@ namespace o2
 
     SkinningMeshComponent& SkinningMeshComponent::operator=(const SkinningMeshComponent& other)
     {
-        DrawableComponent::operator=(other);
+        Component::operator=(other);
         spline = other.spline;
         mMesh = other.mMesh;
         return *this;
     }
 
-    void SkinningMeshComponent::Draw()
+    void SkinningMeshComponent::OnDraw()
     {
         if (mNeedUpdateMesh)
             UpdateMesh();
@@ -319,18 +319,18 @@ namespace o2
 
     void SkinningMeshComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
-        DrawableComponent::SetOwnerActor(actor);
+        Component::SetOwnerActor(actor);
     }
 
     void SkinningMeshComponent::OnDeserialized(const DataValue& node)
     {
-        DrawableComponent::OnDeserialized(node);
+        Component::OnDeserialized(node);
         UpdateMesh();
     }
 
     void SkinningMeshComponent::OnDeserializedDelta(const DataValue& node, const IObject& origin)
     {
-        DrawableComponent::OnDeserializedDelta(node, origin);
+        Component::OnDeserializedDelta(node, origin);
         UpdateMesh();
     }
 

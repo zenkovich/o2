@@ -1,14 +1,14 @@
 #pragma once
 
 #include "o2/Render/Particles/ParticlesEmitter.h"
-#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Component.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 
 namespace o2
 {
     class SkinningMeshComponent;
 
-    class SkinningMeshBoneComponent: public DrawableComponent
+    class SkinningMeshBoneComponent: public Component
     {
     public:
         Vector<Pair<int, float>> vertexWeights; // Weights of vertices dependent on this bone. index - weight @SERIALIZABLE
@@ -28,9 +28,6 @@ namespace o2
         // Copy operator
         SkinningMeshBoneComponent& operator=(const SkinningMeshBoneComponent& other);
 
-        // Draw particle system
-        void Draw() override;
-
         // Updates component
         void OnUpdate(float dt) override;
 
@@ -49,7 +46,10 @@ namespace o2
         SERIALIZABLE(SkinningMeshBoneComponent);
         CLONEABLE_REF(SkinningMeshBoneComponent);
 
-    protected:
+	protected:
+		// Draw particle system
+		void OnDraw() override;
+
         // Called when actor's transform was changed
         void OnTransformUpdated() override;
 
@@ -64,7 +64,7 @@ namespace o2
 
 CLASS_BASES_META(o2::SkinningMeshBoneComponent)
 {
-    BASE_CLASS(o2::DrawableComponent);
+    BASE_CLASS(o2::Component);
 }
 END_META;
 CLASS_FIELDS_META(o2::SkinningMeshBoneComponent)
@@ -78,12 +78,12 @@ CLASS_METHODS_META(o2::SkinningMeshBoneComponent)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const SkinningMeshBoneComponent&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(void, OnUpdate, float);
     FUNCTION().PUBLIC().SIGNATURE(Ref<SkinningMeshComponent>, FindSkinningMesh);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraw);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
     FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);

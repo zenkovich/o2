@@ -3,7 +3,7 @@
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/TextureRef.h"
-#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Component.h"
 #include "o2/Utils/Math/Spline.h"
 #include "o2/Utils/Types/UID.h"
 
@@ -12,7 +12,7 @@ namespace o2
     // --------------
     // Mesh component
     // --------------
-    class MeshComponent: public DrawableComponent
+    class MeshComponent: public Component
     {
     public:
         PROPERTIES(MeshComponent);
@@ -35,9 +35,6 @@ namespace o2
 
         // Assign operator
         MeshComponent& operator=(const MeshComponent& other);
-
-        // Draws sprite 
-        void Draw() override;
 
         // Returns mesh
         const Mesh& GetMesh() const;
@@ -100,7 +97,10 @@ namespace o2
 
         bool mNeedUpdateMesh = false; // True, when mesh data is dirty and need to rebuild
 
-    protected:
+	protected:
+		// Draws sprite 
+		void OnDraw() override;
+
         // Called when actor's transform was changed
         void OnTransformUpdated() override;
 
@@ -121,7 +121,7 @@ namespace o2
 
 CLASS_BASES_META(o2::MeshComponent)
 {
-    BASE_CLASS(o2::DrawableComponent);
+    BASE_CLASS(o2::Component);
 }
 END_META;
 CLASS_FIELDS_META(o2::MeshComponent)
@@ -145,7 +145,6 @@ CLASS_METHODS_META(o2::MeshComponent)
 
     FUNCTION().PUBLIC().CONSTRUCTOR();
     FUNCTION().PUBLIC().CONSTRUCTOR(const MeshComponent&);
-    FUNCTION().PUBLIC().SIGNATURE(void, Draw);
     FUNCTION().PUBLIC().SIGNATURE(const Mesh&, GetMesh);
     FUNCTION().PUBLIC().SIGNATURE(void, SetExtraPoints, const Vector<Vec2F>&);
     FUNCTION().PUBLIC().SIGNATURE(const Vector<Vec2F>&, GetExtraPoints);
@@ -161,6 +160,7 @@ CLASS_METHODS_META(o2::MeshComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnDraw);
     FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
     FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
     FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, const Ref<Actor>&);

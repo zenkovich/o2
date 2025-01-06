@@ -210,8 +210,8 @@ namespace o2
         // Called when component started, checks states auto play
 		void OnStart() override;
 
-		// Called when actor enabled in hierarchy
-        void OnEnabled() override;
+		// Called when actor initialized, reattaches animation states
+        void OnInitialized() override;
 
 		// Registers track by path and state
 		template<typename _valueType, typename _trackType, typename _mixerType>
@@ -233,8 +233,8 @@ namespace o2
         // Called when track is removing from animation state, unregisters track player from mixer
         void OnStateAnimationTrackRemoved(const Ref<AnimationState>& state, const Ref<IAnimationTrack::IPlayer>& player);
 
-        // Called from editor, refreshes states
-        void ReattachAnimationStates();
+		// Reattaches animation states to component, used to start and update animations
+        virtual void ReattachAnimationStates();
 
 		REF_COUNTERABLE_IMPL(Component);
 
@@ -397,7 +397,7 @@ CLASS_METHODS_META(o2::AnimationComponent)
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
     FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStart);
-    FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+    FUNCTION().PROTECTED().SIGNATURE(void, OnInitialized);
     FUNCTION().PROTECTED().SIGNATURE(void, RegSubTrack, const Ref<AnimationSubTrack::Player>&, const String&, const Ref<AnimationState>&);
     FUNCTION().PROTECTED().SIGNATURE(void, UnregTrack, const Ref<IAnimationTrack::IPlayer>&, const String&);
     FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackAdded, const Ref<AnimationState>&, const Ref<IAnimationTrack::IPlayer>&);

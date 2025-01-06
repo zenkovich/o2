@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "o2/Assets/Types/Spine/SpineAsset.h"
 #include "o2/Assets/Types/Spine/SpineAtlasAsset.h"
@@ -18,7 +18,7 @@ namespace o2
     // EsotericSoftware Spine animation
     // --------------------------------
     class Spine : public virtual IDrawable, public virtual RefCounterable, public ICloneableRef
-    {
+	{
     public:
         PROPERTIES(Spine);
 
@@ -26,35 +26,14 @@ namespace o2
 		// ---------------------
 		// Spine animation track
 		// ---------------------
-		class Track: public RefCounterable
+		class Track: public RefCounterable, public IAnimation
         {
         public:
 			// Default constructor
+			Track() = default;
+
+			// Constructor
             Track(const Ref<Spine>& owner, int trackIndex, const String& name);
-
-			// Starts playing animation
-            void Play();
-
-			// Stops playing animation
-            void Stop();
-
-			// Starts or stops playing animation
-			void SetPlaying(bool playing);
-
-            // Returns true if animation is playing
-			bool IsPlaying() const; 
-
-			// Sets animation loop
-			void SetLoop(bool loop);
-
-			// Returns true if animation is looped
-			bool IsLooped() const;
-
-			// Sets animation time
-			void SetTime(float time);
-
-			// Returns animation time
-			float GetTime() const;
 
 			// Sets animation weight for blending
 			void SetWeight(float weight);
@@ -62,16 +41,28 @@ namespace o2
 			// Returns animation weight
 			float GetWeight() const;
 
+			SERIALIZABLE(Track);
+
 		private:
 			WeakRef<Spine> mOwner; // Spine reference
 
 			String mAnimationName;   // Animation name
 			int    mTrackIndex = -1; // Spine track index
 
-			bool mPlaying = false; // Is animation playing
-			bool mLooped = false;  // Is animation looped
-
 			spine::TrackEntry* mTrackEntry = nullptr; // Spine track entry
+
+		private:
+			// Called for updating animated object, after updating time
+			void Evaluate() override;
+
+			// Called when animation starts playing
+			void OnPlay() override;
+
+			// Called when animation stops playing
+			void OnStop() override;
+
+			// Called when animation loop state changed
+			void OnLoopChanged() override;
         };
 
     public:
@@ -127,3 +118,33 @@ namespace o2
         friend class Render;
     };
 }
+// --- META ---
+
+CLASS_BASES_META(o2::Spine::Track)
+{
+    BASE_CLASS(o2::RefCounterable);
+    BASE_CLASS(o2::IAnimation);
+}
+END_META;
+CLASS_FIELDS_META(o2::Spine::Track)
+{
+    FIELD().PRIVATE().NAME(mOwner);
+    FIELD().PRIVATE().NAME(mAnimationName);
+    FIELD().PRIVATE().DEFAULT_VALUE(-1).NAME(mTrackIndex);
+    FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTrackEntry);
+}
+END_META;
+CLASS_METHODS_META(o2::Spine::Track)
+{
+
+    FUNCTION().PUBLIC().CONSTRUCTOR();
+    FUNCTION().PUBLIC().CONSTRUCTOR(const Ref<Spine>&, int, const String&);
+    FUNCTION().PUBLIC().SIGNATURE(void, SetWeight, float);
+    FUNCTION().PUBLIC().SIGNATURE(float, GetWeight);
+    FUNCTION().PRIVATE().SIGNATURE(void, Evaluate);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnPlay);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnStop);
+    FUNCTION().PRIVATE().SIGNATURE(void, OnLoopChanged);
+}
+END_META;
+// --- END META ---

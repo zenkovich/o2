@@ -59,7 +59,7 @@ namespace o2
 
         friend class Actor;
         friend class CameraActor;
-        friend class DrawableComponent;
+        friend class Component;
         friend class Scene;
         friend class ISceneDrawable;
         friend class Widget;

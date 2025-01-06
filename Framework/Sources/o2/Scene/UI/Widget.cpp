@@ -3,7 +3,7 @@
 
 #include "o2/Application/Input.h"
 #include "o2/Render/Render.h"
-#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Component.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/SceneLayer.h"
 #include "o2/Scene/UI/UIManager.h"

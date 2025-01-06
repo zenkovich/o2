@@ -6,56 +6,55 @@
 
 namespace o2
 {
-    ImageComponent::ImageComponent():
-        DrawableComponent(), Sprite()
+    ImageComponent::ImageComponent()
     {
         mSerializeEnabled = false;
     }
 
     ImageComponent::ImageComponent(const AssetRef<ImageAsset>& image) :
-        DrawableComponent(), Sprite(image)
+        Sprite(image)
     {
         mSerializeEnabled = false;
     }
 
     ImageComponent::ImageComponent(const String& imagePath) :
-        DrawableComponent(), Sprite(imagePath)
+        Sprite(imagePath)
     {
         mSerializeEnabled = false;
     }
 
     ImageComponent::ImageComponent(const UID& imageId) :
-        DrawableComponent(), Sprite(imageId)
+        Sprite(imageId)
     {
         mSerializeEnabled = false;
     }
 
     ImageComponent::ImageComponent(TextureRef texture, const RectI& srcRect) :
-        DrawableComponent(), Sprite(texture, srcRect)
+        Sprite(texture, srcRect)
     {
         mSerializeEnabled = false;
     }
 
     ImageComponent::ImageComponent(const Color4& color) :
-        DrawableComponent(), Sprite(color)
+        Sprite(color)
     {
         mSerializeEnabled = false;
     }
 
     ImageComponent::ImageComponent(const Bitmap& bitmap) :
-        DrawableComponent(), Sprite(bitmap)
+        Sprite(bitmap)
     {
         mSerializeEnabled = false;
     }
 
     ImageComponent::ImageComponent(const Sprite& sprite) :
-        DrawableComponent(), Sprite(sprite)
+        Sprite(sprite)
     {
         mSerializeEnabled = false;
     }
 
     ImageComponent::ImageComponent(const ImageComponent& other) :
-        DrawableComponent(other), Sprite(other)
+        Component(other), Sprite(other)
     {
         mSerializeEnabled = false;
     }
@@ -65,12 +64,12 @@ namespace o2
 
     ImageComponent& ImageComponent::operator=(const ImageComponent& other)
     {
-        DrawableComponent::operator=(other);
+        Component::operator=(other);
         Sprite::operator=(other);
         return *this;
     }
 
-    void ImageComponent::Draw()
+    void ImageComponent::OnDraw()
     {
         //PROFILE_SAMPLE_FUNC();
 
@@ -105,7 +104,7 @@ namespace o2
 
 	Ref<o2::RefCounterable> ImageComponent::CastToRefCounterable(const Ref<ImageComponent>& ref)
 	{
-        return DynamicCast<DrawableComponent>(ref);
+        return DynamicCast<Component>(ref);
 	}
 
 	void ImageComponent::OnTransformUpdated()
@@ -115,30 +114,30 @@ namespace o2
 
     void ImageComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
-        DrawableComponent::SetOwnerActor(actor);
+        Component::SetOwnerActor(actor);
     }
 
     void ImageComponent::OnDeserialized(const DataValue& node)
     {
-        DrawableComponent::OnDeserialized(node);
+        Component::OnDeserialized(node);
         Sprite::OnDeserialized(node);
     }
 
     void ImageComponent::OnSerialize(DataValue& node) const
     {
-        DrawableComponent::OnSerialize(node);
+        Component::OnSerialize(node);
         Sprite::OnSerialize(node);
     }
 
     void ImageComponent::OnSerializeDelta(DataValue& node, const IObject& origin) const
     {
-        DrawableComponent::OnSerializeDelta(node, origin);
+        Component::OnSerializeDelta(node, origin);
         Sprite::OnSerializeDelta(node, origin);
     }
 
     void ImageComponent::OnDeserializedDelta(const DataValue& node, const IObject& origin)
     {
-        DrawableComponent::OnDeserializedDelta(node, origin);
+        Component::OnDeserializedDelta(node, origin);
         Sprite::OnDeserializedDelta(node, origin);
     }
 

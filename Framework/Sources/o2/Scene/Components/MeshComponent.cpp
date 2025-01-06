@@ -8,15 +8,14 @@
 
 namespace o2
 {
-    MeshComponent::MeshComponent():
-        DrawableComponent()
+    MeshComponent::MeshComponent()
     {
         spline->onKeysChanged = THIS_FUNC(UpdateMesh);
         spline->SetClosed(true);
     }
 
     MeshComponent::MeshComponent(const MeshComponent& other):
-        DrawableComponent(other), mMesh(other.mMesh), spline(other.spline)
+        Component(other), mMesh(other.mMesh), spline(other.spline)
     {
         spline->onKeysChanged = THIS_FUNC(UpdateMesh);
         spline->SetClosed(true);
@@ -27,13 +26,13 @@ namespace o2
 
     MeshComponent& MeshComponent::operator=(const MeshComponent& other)
     {
-        DrawableComponent::operator=(other);
+        Component::operator=(other);
         spline = other.spline;
         mMesh = other.mMesh;
         return *this;
     }
 
-    void MeshComponent::Draw()
+    void MeshComponent::OnDraw()
     {
         if (mNeedUpdateMesh)
             UpdateMesh();
@@ -219,18 +218,18 @@ namespace o2
 
     void MeshComponent::SetOwnerActor(const Ref<Actor>& actor)
     {
-        DrawableComponent::SetOwnerActor(actor);
+        Component::SetOwnerActor(actor);
     }
 
     void MeshComponent::OnDeserialized(const DataValue& node)
     {
-        DrawableComponent::OnDeserialized(node);
+        Component::OnDeserialized(node);
         UpdateMesh();
     }
 
     void MeshComponent::OnDeserializedDelta(const DataValue& node, const IObject& origin)
     {
-        DrawableComponent::OnDeserializedDelta(node, origin);
+        Component::OnDeserializedDelta(node, origin);
         UpdateMesh();
     }
 

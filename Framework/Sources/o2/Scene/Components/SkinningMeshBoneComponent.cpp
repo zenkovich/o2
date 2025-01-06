@@ -11,7 +11,7 @@ namespace o2
     {}
 
     SkinningMeshBoneComponent::SkinningMeshBoneComponent(const SkinningMeshBoneComponent& other):
-        DrawableComponent(other)
+        Component(other)
     {}
 
     SkinningMeshBoneComponent::~SkinningMeshBoneComponent()
@@ -19,11 +19,11 @@ namespace o2
 
     SkinningMeshBoneComponent& SkinningMeshBoneComponent::operator=(const SkinningMeshBoneComponent& other)
     {
-        DrawableComponent::operator=(other);
+        Component::operator=(other);
         return *this;
     }
 
-    void SkinningMeshBoneComponent::Draw()
+    void SkinningMeshBoneComponent::OnDraw()
     {
 //         o2Render.DrawArrow(mOwner->transform->GetWorldPivot(),
 //                            mOwner->transform->Local2WorldPoint(Vec2F(length, 0) + mOwner->transform->GetSizePivot()));
