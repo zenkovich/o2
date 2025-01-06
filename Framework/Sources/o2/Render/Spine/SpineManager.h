@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "o2/Utils/Singleton.h"
 #include "o2/Render/TextureRef.h"
