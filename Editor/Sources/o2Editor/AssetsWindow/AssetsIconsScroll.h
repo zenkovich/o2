@@ -29,8 +29,7 @@ namespace Editor
     // ------------------------
     // Assets icons scroll area
     // ------------------------
-    class AssetsIconsScrollArea: public GridLayoutScrollArea, public DragDropArea, public KeyboardEventsListener, 
-        public ISelectableDragableObjectsGroup
+    class AssetsIconsScrollArea: public GridLayoutScrollArea, public DragDropArea, public KeyboardEventsListener,  public ISelectableDragableObjectsGroup
     {
     public:
         Function<void(const Vector<String>&)> onAssetsSelected; // Assets selected event
